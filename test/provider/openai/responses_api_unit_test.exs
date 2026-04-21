@@ -680,6 +680,62 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
       assert part.text == "Let me check that. Here is the result."
     end
 
+    test "preserves single-message phase metadata" do
+      response_body = %{
+        "id" => "resp_123",
+        "model" => "gpt-5.4",
+        "output" => [
+          %{
+            "type" => "message",
+            "phase" => "final_answer",
+            "content" => [%{"type" => "output_text", "text" => "Root cause found."}]
+          }
+        ],
+        "usage" => %{"input_tokens" => 5, "output_tokens" => 10}
+      }
+
+      {_req, resp} = ResponsesAPI.decode_response(build_response(200, response_body))
+
+      assert resp.body.message.metadata[:response_id] == "resp_123"
+      assert resp.body.message.metadata[:phase] == "final_answer"
+      refute Map.has_key?(resp.body.message.metadata, :phase_items)
+    end
+
+    test "preserves ordered phase_items for multi-segment phased output" do
+      response_body = %{
+        "id" => "resp_123",
+        "model" => "gpt-5.4",
+        "output" => [
+          %{
+            "type" => "message",
+            "phase" => "commentary",
+            "content" => [%{"type" => "output_text", "text" => "Inspecting logs. "}]
+          },
+          %{
+            "type" => "message",
+            "phase" => "final_answer",
+            "content" => [%{"type" => "output_text", "text" => "Cache race confirmed."}]
+          }
+        ],
+        "usage" => %{"input_tokens" => 5, "output_tokens" => 10}
+      }
+
+      {_req, resp} = ResponsesAPI.decode_response(build_response(200, response_body))
+
+      assert resp.body.message.metadata[:response_id] == "resp_123"
+
+      assert resp.body.message.metadata[:phase_items] == [
+               %{
+                 "phase" => "commentary",
+                 "content" => [%{"type" => "output_text", "text" => "Inspecting logs. "}]
+               },
+               %{
+                 "phase" => "final_answer",
+                 "content" => [%{"type" => "output_text", "text" => "Cache race confirmed."}]
+               }
+             ]
+    end
+
     test "decodes response with direct output_text segments" do
       response_body = %{
         "id" => "resp_123",
@@ -1162,6 +1218,44 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
       assert chunk.metadata.finish_reason == :stop
     end
 
+    test "extracts phase metadata from completed event output items", %{model: model} do
+      event = %{
+        data: %{
+          "event" => "response.completed",
+          "response" => %{
+            "id" => "resp_123",
+            "output" => [
+              %{
+                "type" => "message",
+                "phase" => "commentary",
+                "content" => [%{"type" => "output_text", "text" => "Inspecting logs. "}]
+              },
+              %{
+                "type" => "message",
+                "phase" => "final_answer",
+                "content" => [%{"type" => "output_text", "text" => "Cache race confirmed."}]
+              }
+            ]
+          }
+        }
+      }
+
+      assert [chunk] = ResponsesAPI.decode_stream_event(event, model)
+      assert chunk.type == :meta
+      assert chunk.metadata.response_id == "resp_123"
+
+      assert chunk.metadata.phase_items == [
+               %{
+                 "phase" => "commentary",
+                 "content" => [%{"type" => "output_text", "text" => "Inspecting logs. "}]
+               },
+               %{
+                 "phase" => "final_answer",
+                 "content" => [%{"type" => "output_text", "text" => "Cache race confirmed."}]
+               }
+             ]
+    end
+
     test "decodes incomplete event", %{model: model} do
       event = %{data: %{"event" => "response.incomplete", "reason" => "length"}}
 
@@ -1627,6 +1721,122 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
     end
   end
 
+  describe "phase replay - encode_body/1" do
+    test "includes phase when assistant metadata has a single phase" do
+      assistant_msg = %ReqLLM.Message{
+        role: :assistant,
+        content: [%ReqLLM.Message.ContentPart{type: :text, text: "Root cause found"}],
+        metadata: %{phase: "final_answer", response_id: "resp_prev_123"}
+      }
+
+      user_msg = %ReqLLM.Message{
+        role: :user,
+        content: [%ReqLLM.Message.ContentPart{type: :text, text: "Continue"}]
+      }
+
+      context = %ReqLLM.Context{messages: [assistant_msg, user_msg]}
+      request = build_request(context: context, provider_options: [store: false])
+
+      encoded = ResponsesAPI.encode_body(request)
+      body = Jason.decode!(encoded.body)
+
+      assert Enum.at(body["input"], 0) == %{
+               "role" => "assistant",
+               "phase" => "final_answer",
+               "content" => [%{"type" => "output_text", "text" => "Root cause found"}]
+             }
+    end
+
+    test "replays ordered phase_items from assistant metadata" do
+      assistant_msg = %ReqLLM.Message{
+        role: :assistant,
+        content: [
+          %ReqLLM.Message.ContentPart{
+            type: :text,
+            text: "Inspecting logs. Cache race confirmed."
+          }
+        ],
+        metadata: %{
+          phase_items: [
+            %{
+              "phase" => "commentary",
+              "content" => [%{"type" => "output_text", "text" => "Inspecting logs. "}]
+            },
+            %{
+              "phase" => "final_answer",
+              "content" => [%{"type" => "output_text", "text" => "Cache race confirmed."}]
+            }
+          ]
+        }
+      }
+
+      user_msg = %ReqLLM.Message{
+        role: :user,
+        content: [%ReqLLM.Message.ContentPart{type: :text, text: "Continue"}]
+      }
+
+      context = %ReqLLM.Context{messages: [assistant_msg, user_msg]}
+      request = build_request(context: context, provider_options: [store: false])
+
+      encoded = ResponsesAPI.encode_body(request)
+      body = Jason.decode!(encoded.body)
+
+      assert Enum.take(body["input"], 2) == [
+               %{
+                 "role" => "assistant",
+                 "phase" => "commentary",
+                 "content" => [%{"type" => "output_text", "text" => "Inspecting logs. "}]
+               },
+               %{
+                 "role" => "assistant",
+                 "phase" => "final_answer",
+                 "content" => [%{"type" => "output_text", "text" => "Cache race confirmed."}]
+               }
+             ]
+    end
+
+    test "round-trips phased output through decode and encode" do
+      response_body = %{
+        "id" => "resp_123",
+        "model" => "gpt-5.4",
+        "output" => [
+          %{
+            "type" => "message",
+            "phase" => "commentary",
+            "content" => [%{"type" => "output_text", "text" => "Inspecting logs. "}]
+          },
+          %{
+            "type" => "message",
+            "phase" => "final_answer",
+            "content" => [%{"type" => "output_text", "text" => "Cache race confirmed."}]
+          }
+        ],
+        "usage" => %{"input_tokens" => 5, "output_tokens" => 10}
+      }
+
+      {_req, decoded_resp} = ResponsesAPI.decode_response(build_response(200, response_body))
+
+      request =
+        build_request(context: decoded_resp.body.context, provider_options: [store: false])
+
+      encoded = ResponsesAPI.encode_body(request)
+      body = Jason.decode!(encoded.body)
+
+      assert body["input"] == [
+               %{
+                 "role" => "assistant",
+                 "phase" => "commentary",
+                 "content" => [%{"type" => "output_text", "text" => "Inspecting logs. "}]
+               },
+               %{
+                 "role" => "assistant",
+                 "phase" => "final_answer",
+                 "content" => [%{"type" => "output_text", "text" => "Cache race confirmed."}]
+               }
+             ]
+    end
+  end
+
   defp build_request(opts) do
     context = Keyword.get(opts, :context, %ReqLLM.Context{messages: []})
     provider_opts = Keyword.get(opts, :provider_options, [])
@@ -1804,6 +2014,46 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
 
       assert response.message.metadata[:response_id] == "resp_abc123"
       assert length(response.message.reasoning_details) == 1
+    end
+
+    test "propagates phase replay metadata to message metadata" do
+      {:ok, model} = ReqLLM.model("openai:gpt-4o")
+      context = %ReqLLM.Context{messages: []}
+
+      chunks = [
+        ReqLLM.StreamChunk.text("Inspecting logs. Cache race confirmed.")
+      ]
+
+      metadata = %{
+        finish_reason: :stop,
+        response_id: "resp_abc123",
+        phase_items: [
+          %{
+            "phase" => "commentary",
+            "content" => [%{"type" => "output_text", "text" => "Inspecting logs. "}]
+          },
+          %{
+            "phase" => "final_answer",
+            "content" => [%{"type" => "output_text", "text" => "Cache race confirmed."}]
+          }
+        ]
+      }
+
+      {:ok, response} =
+        ResponseBuilder.build_response(chunks, metadata, context: context, model: model)
+
+      assert response.message.metadata[:response_id] == "resp_abc123"
+
+      assert response.message.metadata[:phase_items] == [
+               %{
+                 "phase" => "commentary",
+                 "content" => [%{"type" => "output_text", "text" => "Inspecting logs. "}]
+               },
+               %{
+                 "phase" => "final_answer",
+                 "content" => [%{"type" => "output_text", "text" => "Cache race confirmed."}]
+               }
+             ]
     end
 
     test "attaches reasoning_details to context messages" do

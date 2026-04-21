@@ -74,6 +74,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     "mcp_call" => :mcp_call,
     "x_search_call" => :x_search_call
   }
+  @assistant_phases ["commentary", "final_answer"]
 
   @impl true
   def path, do: "/responses"
@@ -207,6 +208,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   defp capture_completion_metadata(data, meta) do
     usage_data = get_in(data, ["response", "usage"])
     response_id = get_in(data, ["response", "id"])
+    response_output = get_in(data, ["response", "output"]) || []
 
     meta =
       if response_id do
@@ -231,6 +233,8 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
       else
         meta
       end
+
+    meta = Map.merge(meta, extract_assistant_phase_metadata(response_output))
 
     [ReqLLM.StreamChunk.meta(meta)]
   end
@@ -528,23 +532,14 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
 
           :assistant ->
             new_reasoning = encode_reasoning_details_from_message(msg)
-            content_type = "output_text"
+            assistant_items = encode_assistant_message_items(msg)
+            function_calls = encode_tool_calls_as_function_calls(msg.tool_calls || [])
 
-            content =
-              Enum.flat_map(msg.content, fn part ->
-                encode_input_content_part(part, content_type)
-              end)
-
-            if content == [] and msg.tool_calls == nil do
+            if assistant_items == [] and function_calls == [] do
               {input_acc, tool_acc, reasoning_acc ++ new_reasoning}
             else
-              if msg.tool_calls != nil and msg.tool_calls != [] do
-                function_calls = encode_tool_calls_as_function_calls(msg.tool_calls)
-                {input_acc ++ function_calls, tool_acc, reasoning_acc ++ new_reasoning}
-              else
-                {input_acc ++ [%{"role" => "assistant", "content" => content}], tool_acc,
-                 reasoning_acc ++ new_reasoning}
-              end
+              {input_acc ++ assistant_items ++ function_calls, tool_acc,
+               reasoning_acc ++ new_reasoning}
             end
 
           _ ->
@@ -656,6 +651,54 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
       }
     end
   end
+
+  defp encode_assistant_message_items(%ReqLLM.Message{} = msg) do
+    phase_items = encode_phase_items_from_metadata(msg.metadata)
+
+    if phase_items == [] do
+      content =
+        Enum.flat_map(msg.content, fn part ->
+          encode_input_content_part(part, "output_text")
+        end)
+
+      if content == [] do
+        []
+      else
+        [
+          %{"role" => "assistant", "content" => content}
+          |> maybe_put_assistant_phase(msg.metadata)
+        ]
+      end
+    else
+      phase_items
+    end
+  end
+
+  defp encode_phase_items_from_metadata(%{phase_items: items}) when is_list(items) do
+    items
+    |> Enum.flat_map(fn item ->
+      phase = item[:phase] || item["phase"]
+      content = normalize_phase_item_content(item[:content] || item["content"])
+
+      if valid_assistant_phase?(phase) and content != [] do
+        [%{"role" => "assistant", "phase" => phase, "content" => content}]
+      else
+        []
+      end
+    end)
+  end
+
+  defp encode_phase_items_from_metadata(_), do: []
+
+  defp maybe_put_assistant_phase(item, %{phase: phase}) when is_binary(phase) do
+    if valid_assistant_phase?(phase) do
+      Map.put(item, "phase", phase)
+    else
+      item
+    end
+  end
+
+  defp maybe_put_assistant_phase(item, _), do: item
 
   defp has_image_content?(content) when is_list(content) do
     Enum.any?(content, fn
@@ -1224,13 +1267,14 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     finish_reason = determine_finish_reason(body, tool_calls)
 
     content_parts = build_content_parts(text, thinking)
+    message_metadata = build_message_metadata(body["id"], output_segments)
 
     msg = %ReqLLM.Message{
       role: :assistant,
       content: content_parts,
       tool_calls: if(tool_calls != [], do: tool_calls),
       reasoning_details: if(reasoning_details != [], do: reasoning_details),
-      metadata: %{response_id: body["id"]}
+      metadata: message_metadata
     }
 
     {object, object_meta} = maybe_extract_object(req, text, tool_calls) || {nil, %{}}
@@ -1257,6 +1301,11 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     merged_response = %{response | context: ReqLLM.Context.append(ctx, msg)}
 
     {req, %{resp | body: merged_response}}
+  end
+
+  defp build_message_metadata(response_id, output_segments) do
+    %{response_id: response_id}
+    |> Map.merge(extract_assistant_phase_metadata(output_segments))
   end
 
   defp maybe_extract_object(req, text, tool_calls) do
@@ -1386,6 +1435,49 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
 
   defp dedupe_phased_messages(messages), do: messages
 
+  defp extract_assistant_phase_metadata(segments) when is_list(segments) do
+    message_segments =
+      segments
+      |> Enum.filter(&assistant_message_segment?/1)
+      |> dedupe_phased_messages()
+
+    if message_segments != [] and
+         Enum.all?(message_segments, &valid_assistant_phase?(Map.get(&1, "phase"))) do
+      phase_items =
+        message_segments
+        |> Enum.map(&phase_item_from_segment/1)
+        |> Enum.reject(&is_nil/1)
+
+      case phase_items do
+        [] ->
+          %{}
+
+        [%{"phase" => phase}] ->
+          %{phase: phase}
+
+        items ->
+          %{phase_items: items}
+      end
+    else
+      %{}
+    end
+  end
+
+  defp extract_assistant_phase_metadata(_), do: %{}
+
+  defp assistant_message_segment?(%{"type" => "message"}), do: true
+  defp assistant_message_segment?(_), do: false
+
+  defp phase_item_from_segment(segment) when is_map(segment) do
+    content = normalize_phase_item_content(segment["content"])
+
+    if content == [] do
+      nil
+    else
+      %{"phase" => segment["phase"], "content" => content}
+    end
+  end
+
   defp extract_direct_output_text(segments) do
     segments
     |> Enum.filter(&(&1["type"] == "output_text"))
@@ -1399,6 +1491,30 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   defp extract_text_field(%{"text" => text}) when is_binary(text), do: text
   defp extract_text_field(%{"content" => content}) when is_binary(content), do: content
   defp extract_text_field(_), do: ""
+
+  defp normalize_phase_item_content(content) when is_list(content) do
+    Enum.flat_map(content, fn
+      %ReqLLM.Message.ContentPart{type: :text, text: text} when is_binary(text) and text != "" ->
+        [%{"type" => "output_text", "text" => text}]
+
+      %{type: :text, text: text} when is_binary(text) and text != "" ->
+        [%{"type" => "output_text", "text" => text}]
+
+      %{"type" => type} = part when type in ["output_text", "text"] ->
+        text = extract_text_field(part)
+
+        if text == "" do
+          []
+        else
+          [%{"type" => "output_text", "text" => text}]
+        end
+
+      _ ->
+        []
+    end)
+  end
+
+  defp normalize_phase_item_content(_), do: []
 
   defp aggregate_reasoning_segments(segments) do
     reasoning_parts = [
@@ -1801,6 +1917,9 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
 
   defp maybe_put_response_id(state, nil), do: state
   defp maybe_put_response_id(state, id), do: %{state | response_id: id}
+
+  defp valid_assistant_phase?(phase) when phase in @assistant_phases, do: true
+  defp valid_assistant_phase?(_), do: false
 
   defp thinking_metadata(data) do
     %{

@@ -338,7 +338,18 @@ defmodule ReqLLM.Provider.Defaults.ResponseBuilder do
         base
       end
 
-    base
+    base =
+      if metadata[:phase] do
+        Map.put(base, :phase, metadata[:phase])
+      else
+        base
+      end
+
+    if metadata[:phase_items] do
+      Map.put(base, :phase_items, metadata[:phase_items])
+    else
+      base
+    end
   end
 
   defp generate_response_id do
