@@ -139,6 +139,25 @@ defmodule ReqLLM.SchemaTest do
 
       assert result["required"] == ["c", "a", "b"]
     end
+
+    test "emits nullable types for {:or, [type, nil]} fields" do
+      schema = [
+        name: [type: {:or, [:string, nil]}, doc: "Full name"],
+        skip: [type: {:or, [:boolean, nil]}, doc: "Skip introduction"]
+      ]
+
+      result = Schema.to_json(schema)
+
+      assert result["properties"]["name"] == %{
+               "type" => ["string", "null"],
+               "description" => "Full name"
+             }
+
+      assert result["properties"]["skip"] == %{
+               "type" => ["boolean", "null"],
+               "description" => "Skip introduction"
+             }
+    end
   end
 
   describe "nimble_type_to_json_schema/2" do
@@ -302,6 +321,73 @@ defmodule ReqLLM.SchemaTest do
                "type" => "array",
                "items" => %{"type" => "string", "enum" => [:urgent, :normal, :low]},
                "description" => "List of priority levels"
+             }
+    end
+
+    test "converts {:or, [type, nil]} to nullable JSON Schema" do
+      assert Schema.nimble_type_to_json_schema({:or, [:string, nil]}, []) == %{
+               "type" => ["string", "null"]
+             }
+
+      assert Schema.nimble_type_to_json_schema({:or, [:boolean, nil]}, []) == %{
+               "type" => ["boolean", "null"]
+             }
+
+      assert Schema.nimble_type_to_json_schema({:or, [:integer, nil]}, []) == %{
+               "type" => ["integer", "null"]
+             }
+
+      assert Schema.nimble_type_to_json_schema({:or, [:pos_integer, nil]}, []) == %{
+               "type" => ["integer", "null"],
+               "minimum" => 1
+             }
+    end
+
+    test "accepts nil in any position within {:or, [...]}" do
+      assert Schema.nimble_type_to_json_schema({:or, [nil, :string]}, []) == %{
+               "type" => ["string", "null"]
+             }
+    end
+
+    test "{:or, [type]} (single type, no nil) returns just the type" do
+      assert Schema.nimble_type_to_json_schema({:or, [:string]}, []) == %{"type" => "string"}
+    end
+
+    test "multi-type {:or, [...]} without nil produces anyOf" do
+      assert Schema.nimble_type_to_json_schema({:or, [:string, :integer]}, []) == %{
+               "anyOf" => [%{"type" => "string"}, %{"type" => "integer"}]
+             }
+    end
+
+    test "multi-type {:or, [...]} with nil appends null variant to anyOf" do
+      assert Schema.nimble_type_to_json_schema({:or, [:string, :integer, nil]}, []) == %{
+               "anyOf" => [
+                 %{"type" => "string"},
+                 %{"type" => "integer"},
+                 %{"type" => "null"}
+               ]
+             }
+    end
+
+    test "preserves doc on {:or, [type, nil]}" do
+      assert Schema.nimble_type_to_json_schema({:or, [:string, nil]}, doc: "User name") ==
+               %{
+                 "type" => ["string", "null"],
+                 "description" => "User name"
+               }
+    end
+
+    test "nullable list of strings via {:or, [{:list, :string}, nil]}" do
+      assert Schema.nimble_type_to_json_schema({:or, [{:list, :string}, nil]}, []) == %{
+               "type" => ["array", "null"],
+               "items" => %{"type" => "string"}
+             }
+    end
+
+    test "list with nullable items via {:list, {:or, [type, nil]}}" do
+      assert Schema.nimble_type_to_json_schema({:list, {:or, [:string, nil]}}, []) == %{
+               "type" => "array",
+               "items" => %{"type" => ["string", "null"]}
              }
     end
   end

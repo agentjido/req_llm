@@ -62,6 +62,8 @@ defmodule ReqLLM.Schema do
   - `:boolean` - Boolean type
   - `{:list, type}` - Array of specified type
   - `:map` - Object type
+  - `{:or, subtypes}` - Union type. `{:or, [type, nil]}` collapses to `["type", "null"]`
+    (nullable). Multi-type unions produce `anyOf`.
   - Custom types fall back to string
 
   ## Nested Schemas
@@ -368,6 +370,12 @@ defmodule ReqLLM.Schema do
       iex> ReqLLM.Schema.nimble_type_to_json_schema(:pos_integer, doc: "Positive number")
       %{"type" => "integer", "minimum" => 1, "description" => "Positive number"}
 
+      iex> ReqLLM.Schema.nimble_type_to_json_schema({:or, [:string, nil]}, [])
+      %{"type" => ["string", "null"]}
+
+      iex> ReqLLM.Schema.nimble_type_to_json_schema({:or, [:string, :integer]}, [])
+      %{"anyOf" => [%{"type" => "string"}, %{"type" => "integer"}]}
+
   """
   @spec nimble_type_to_json_schema(atom() | tuple(), keyword()) :: map()
   def nimble_type_to_json_schema(type, opts) do
@@ -483,6 +491,9 @@ defmodule ReqLLM.Schema do
             _ -> %{"type" => "string"}
           end
 
+        {:or, subtypes} ->
+          build_or_schema(subtypes)
+
         # Fallback to string for unknown types
         _ ->
           %{"type" => "string"}
@@ -492,6 +503,35 @@ defmodule ReqLLM.Schema do
     case opts[:doc] do
       nil -> base_schema
       doc -> Map.put(base_schema, "description", doc)
+    end
+  end
+
+  defp build_or_schema(subtypes) do
+    nullable? = Enum.any?(subtypes, &is_nil/1)
+    non_nil = Enum.reject(subtypes, &is_nil/1)
+
+    case {non_nil, nullable?} do
+      {[single], true} ->
+        base = nimble_type_to_json_schema(single, [])
+
+        nullable_type =
+          case base["type"] do
+            t when is_binary(t) -> [t, "null"]
+            ts when is_list(ts) -> ts ++ ["null"]
+            other -> other
+          end
+
+        Map.put(base, "type", nullable_type)
+
+      {[single], false} ->
+        nimble_type_to_json_schema(single, [])
+
+      {many, true} ->
+        variants = Enum.map(many, &nimble_type_to_json_schema(&1, []))
+        %{"anyOf" => variants ++ [%{"type" => "null"}]}
+
+      {many, false} ->
+        %{"anyOf" => Enum.map(many, &nimble_type_to_json_schema(&1, []))}
     end
   end
 
