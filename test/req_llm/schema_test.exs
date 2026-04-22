@@ -390,6 +390,18 @@ defmodule ReqLLM.SchemaTest do
                "items" => %{"type" => ["string", "null"]}
              }
     end
+
+    test "nullable enum via {:or, [{:in, choices}, nil]} permits null" do
+      assert Schema.nimble_type_to_json_schema({:or, [{:in, [:red, :green]}, nil]}, []) == %{
+               "type" => ["string", "null"],
+               "enum" => [:red, :green, nil]
+             }
+
+      schema =
+        Schema.to_json(color: [type: {:or, [{:in, [:red, :green]}, nil]}, required: true])
+
+      assert {:ok, %{"color" => nil}} = Schema.validate(%{"color" => nil}, schema)
+    end
   end
 
   describe "to_anthropic_format/1" do

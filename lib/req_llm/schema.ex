@@ -521,7 +521,9 @@ defmodule ReqLLM.Schema do
             other -> other
           end
 
-        Map.put(base, "type", nullable_type)
+        base
+        |> Map.put("type", nullable_type)
+        |> nullable_enum_schema()
 
       {[single], false} ->
         nimble_type_to_json_schema(single, [])
@@ -534,6 +536,12 @@ defmodule ReqLLM.Schema do
         %{"anyOf" => Enum.map(many, &nimble_type_to_json_schema(&1, []))}
     end
   end
+
+  defp nullable_enum_schema(%{"enum" => enum} = schema) when is_list(enum) do
+    Map.put(schema, "enum", Enum.uniq(enum ++ [nil]))
+  end
+
+  defp nullable_enum_schema(schema), do: schema
 
   @doc """
   Format a tool into Anthropic tool schema format.
