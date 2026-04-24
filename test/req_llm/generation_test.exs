@@ -449,6 +449,25 @@ defmodule ReqLLM.GenerationTest do
                Generation.generate_object("invalid:model", "Return a person", [])
     end
 
+    test "returns an error before HTTP for Anthropic object contexts ending with assistant" do
+      Req.Test.stub(FailingHTTP, fn _conn ->
+        raise "HTTP request should not execute for invalid Anthropic object context"
+      end)
+
+      {:error, error} =
+        Generation.generate_object(
+          "anthropic:claude-sonnet-4-5-20250929",
+          [Context.assistant("I will inform the user if I support context pre-filling")],
+          [answer: [type: :boolean, required: true]],
+          api_key: "test-key",
+          req_http_options: [plug: {Req.Test, FailingHTTP}]
+        )
+
+      assert %ReqLLM.Error.Invalid.Parameter{} = error
+      assert error.parameter =~ "does not support contexts ending with an assistant message"
+      assert error.parameter =~ "Append a user message requesting the structured output"
+    end
+
     test "returns schema compilation errors" do
       assert {:error, %ReqLLM.Error.Invalid.Parameter{}} =
                Generation.generate_object(@chat_model, "Return a person", "invalid")
