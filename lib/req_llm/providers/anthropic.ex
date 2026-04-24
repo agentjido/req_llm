@@ -209,14 +209,16 @@ defmodule ReqLLM.Providers.Anthropic do
     compiled_schema = Keyword.fetch!(opts, :compiled_schema)
     {:ok, model} = ReqLLM.model(model_spec)
 
-    mode = determine_output_mode(model, opts)
+    with :ok <- validate_object_context(prompt) do
+      mode = determine_output_mode(model, opts)
 
-    case mode do
-      :json_schema ->
-        prepare_json_schema_request(model_spec, prompt, compiled_schema, opts)
+      case mode do
+        :json_schema ->
+          prepare_json_schema_request(model_spec, prompt, compiled_schema, opts)
 
-      :tool_strict ->
-        prepare_strict_tool_request(model_spec, prompt, compiled_schema, opts)
+        :tool_strict ->
+          prepare_strict_tool_request(model_spec, prompt, compiled_schema, opts)
+      end
     end
   end
 
@@ -265,6 +267,28 @@ defmodule ReqLLM.Providers.Anthropic do
       |> Keyword.put(:operation, :object)
 
     prepare_request(:chat, model_spec, prompt, opts_with_format)
+  end
+
+  defp validate_object_context(prompt) do
+    with {:ok, context} <- ReqLLM.Context.normalize(prompt, []) do
+      case last_non_system_message(context) do
+        %{role: :assistant} ->
+          {:error,
+           ReqLLM.Error.Invalid.Parameter.exception(
+             parameter:
+               "Anthropic generate_object/4 does not support contexts ending with an assistant message. Append a user message requesting the structured output."
+           )}
+
+        _message ->
+          :ok
+      end
+    end
+  end
+
+  defp last_non_system_message(%ReqLLM.Context{messages: messages}) do
+    messages
+    |> Enum.reject(&(&1.role == :system))
+    |> List.last()
   end
 
   @spec prepare_strict_tool_request(LLMDB.Model.t() | String.t(), any(), any(), keyword()) ::

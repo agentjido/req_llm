@@ -1913,6 +1913,47 @@ defmodule ReqLLM.Providers.AnthropicTest do
     end
   end
 
+  describe "prepare_request(:object) - context validation" do
+    test "rejects json_schema structured output when context ends with assistant" do
+      {:ok, schema} =
+        ReqLLM.Schema.compile(answer: [type: :boolean, required: true])
+
+      context =
+        ReqLLM.Context.new([
+          ReqLLM.Context.assistant("I will inform the user if I support context pre-filling")
+        ])
+
+      {:error, error} =
+        Anthropic.prepare_request(:object, "anthropic:claude-sonnet-4-5-20250929", context,
+          compiled_schema: schema
+        )
+
+      assert %ReqLLM.Error.Invalid.Parameter{} = error
+      assert error.parameter =~ "does not support contexts ending with an assistant message"
+      assert error.parameter =~ "Append a user message requesting the structured output"
+    end
+
+    test "rejects tool_strict structured output when context ends with assistant" do
+      {:ok, schema} =
+        ReqLLM.Schema.compile(answer: [type: :boolean, required: true])
+
+      context =
+        ReqLLM.Context.new([
+          ReqLLM.Context.assistant("I will inform the user if I support context pre-filling")
+        ])
+
+      {:error, error} =
+        Anthropic.prepare_request(:object, "anthropic:claude-sonnet-4-5-20250929", context,
+          compiled_schema: schema,
+          provider_options: [anthropic_structured_output_mode: :tool_strict]
+        )
+
+      assert %ReqLLM.Error.Invalid.Parameter{} = error
+      assert error.parameter =~ "does not support contexts ending with an assistant message"
+      assert error.parameter =~ "Append a user message requesting the structured output"
+    end
+  end
+
   describe "prepare_request(:object) - schema constraint stripping" do
     test "strips minimum constraint from pos_integer schema in json_schema mode" do
       {:ok, schema} =
