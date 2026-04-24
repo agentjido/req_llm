@@ -767,19 +767,69 @@ defmodule ReqLLM.Providers.OpenRouterTest do
       {:ok, model} = ReqLLM.model("openrouter:openai/gpt-4")
       context = context_fixture()
 
-      # Test unsupported operation for 3-arg version
-      {:error, error} = OpenRouter.prepare_request(:embedding, model, context, [])
+      {:error, error} = OpenRouter.prepare_request(:moderation, model, context, [])
       assert %ReqLLM.Error.Invalid.Parameter{} = error
-      assert error.parameter =~ "operation: :embedding not supported"
+      assert error.parameter =~ "operation: :moderation not supported"
 
-      # Test unsupported operation for object with schema
       {:ok, schema} = ReqLLM.Schema.compile([])
 
       {:error, error} =
-        OpenRouter.prepare_request(:embedding, model, context, compiled_schema: schema)
+        OpenRouter.prepare_request(:moderation, model, context, compiled_schema: schema)
 
       assert %ReqLLM.Error.Invalid.Parameter{} = error
-      assert error.parameter =~ "operation: :embedding not supported"
+      assert error.parameter =~ "operation: :moderation not supported"
+    end
+
+    test "prepare_request creates configured embedding request" do
+      model =
+        LLMDB.Model.new!(%{
+          provider: :openrouter,
+          id: "openai/text-embedding-3-small",
+          capabilities: %{embeddings: true}
+        })
+
+      opts = [
+        dimensions: 16,
+        encoding_format: "float",
+        provider_options: [input_type: "search_query"]
+      ]
+
+      {:ok, request} = OpenRouter.prepare_request(:embedding, model, "Hello", opts)
+
+      assert request.url.path == "/embeddings"
+      assert request.method == :post
+      assert request.options[:operation] == :embedding
+      assert request.options[:model] == "openai/text-embedding-3-small"
+      assert request.options[:text] == "Hello"
+      assert request.options[:dimensions] == 16
+      assert request.options[:encoding_format] == "float"
+      assert request.options[:input_type] == "search_query"
+    end
+
+    test "encode_body includes OpenRouter embedding options" do
+      mock_request = %Req.Request{
+        options: [
+          operation: :embedding,
+          model: "openai/text-embedding-3-small",
+          text: "Hello",
+          dimensions: 16,
+          encoding_format: "float",
+          input_type: "search_query",
+          openrouter_provider: %{order: ["openai"]},
+          user: "test-user"
+        ]
+      }
+
+      updated_request = OpenRouter.encode_body(mock_request)
+      decoded = Jason.decode!(updated_request.body)
+
+      assert decoded["model"] == "openai/text-embedding-3-small"
+      assert decoded["input"] == "Hello"
+      assert decoded["dimensions"] == 16
+      assert decoded["encoding_format"] == "float"
+      assert decoded["input_type"] == "search_query"
+      assert decoded["provider"] == %{"order" => ["openai"]}
+      assert decoded["user"] == "test-user"
     end
   end
 

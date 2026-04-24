@@ -109,6 +109,18 @@ defmodule ReqLLM.Providers.OpenRouter do
     openrouter_plugins: [
       type: {:list, :map},
       doc: "OpenRouter plugins. Example: [%{id: \"web\"}]"
+    ],
+    dimensions: [
+      type: :pos_integer,
+      doc: "Number of dimensions for embedding models"
+    ],
+    encoding_format: [
+      type: {:in, ["float", "base64"]},
+      doc: "Format for embedding output"
+    ],
+    input_type: [
+      type: :string,
+      doc: "Embedding input type, such as search_query or search_document"
     ]
   ]
 
@@ -186,17 +198,6 @@ defmodule ReqLLM.Providers.OpenRouter do
       prompt,
       opts
     )
-  end
-
-  # Override to reject unsupported operations
-  def prepare_request(:embedding, _model_spec, _input, _opts) do
-    supported_operations = [:chat, :object]
-
-    {:error,
-     ReqLLM.Error.Invalid.Parameter.exception(
-       parameter:
-         "operation: :embedding not supported by #{inspect(__MODULE__)}. Supported operations: #{inspect(supported_operations)}"
-     )}
   end
 
   # Delegate other operations to default implementation
@@ -293,6 +294,7 @@ defmodule ReqLLM.Providers.OpenRouter do
   @impl ReqLLM.Provider
   def build_body(request) do
     ReqLLM.Provider.Defaults.default_build_body(request)
+    |> add_embedding_options(request.options)
     |> translate_tool_choice_format()
     |> encode_reasoning_details_in_messages()
     |> maybe_put(:models, request.options[:openrouter_models])
@@ -309,6 +311,25 @@ defmodule ReqLLM.Providers.OpenRouter do
     |> maybe_put(:plugins, request.options[:openrouter_plugins])
     |> add_openrouter_specific_options(request.options)
     |> add_stream_options(request.options)
+  end
+
+  defp add_embedding_options(body, request_options) do
+    if request_options[:operation] == :embedding do
+      put_embedding_options(body, request_options)
+    else
+      body
+    end
+  end
+
+  defp put_embedding_options(body, request_options) do
+    body
+    |> maybe_put(:dimensions, embedding_option(request_options, :dimensions))
+    |> maybe_put(:encoding_format, embedding_option(request_options, :encoding_format))
+    |> maybe_put(:input_type, embedding_option(request_options, :input_type))
+  end
+
+  defp embedding_option(request_options, key) do
+    request_options[key] || get_in(request_options, [:provider_options, key])
   end
 
   # Helper function for adding OpenRouter-specific body options not covered by defaults

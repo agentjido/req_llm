@@ -276,6 +276,53 @@ defmodule ReqLLM.EmbeddingTest do
     end
   end
 
+  describe "embed/3 - OpenRouter embeddings" do
+    setup do
+      Req.Test.stub(__MODULE__.OpenRouterEmbedUsage, fn conn ->
+        Req.Test.json(conn, %{
+          "data" => [
+            %{
+              "embedding" => [0.1, -0.2, 0.3],
+              "index" => 0,
+              "object" => "embedding"
+            }
+          ],
+          "model" => "text-embedding-3-small",
+          "object" => "list",
+          "usage" => %{
+            "prompt_tokens" => 1,
+            "total_tokens" => 1
+          }
+        })
+      end)
+
+      :ok
+    end
+
+    test "embeds unverified OpenRouter embedding models with inline specs" do
+      model =
+        LLMDB.Model.new!(%{
+          provider: :openrouter,
+          id: "openai/text-embedding-3-small",
+          capabilities: %{embeddings: true}
+        })
+
+      {:ok, %{embedding: embedding, usage: usage}} =
+        Embedding.embed(
+          model,
+          "Hello world",
+          api_key: "test-key",
+          dimensions: 16,
+          return_usage: true,
+          req_http_options: [plug: {Req.Test, __MODULE__.OpenRouterEmbedUsage}]
+        )
+
+      assert embedding == [0.1, -0.2, 0.3]
+      assert usage.input == 1
+      assert usage.total_tokens == 1
+    end
+  end
+
   describe "embed_many/3 - basic functionality" do
     test "validates model before attempting embedding" do
       case Embedding.validate_model("openai:text-embedding-3-small") do
