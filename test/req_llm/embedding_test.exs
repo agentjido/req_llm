@@ -279,6 +279,18 @@ defmodule ReqLLM.EmbeddingTest do
   describe "embed/3 - OpenRouter embeddings" do
     setup do
       Req.Test.stub(__MODULE__.OpenRouterEmbedUsage, fn conn ->
+        body = conn.body_params
+
+        assert conn.method == "POST"
+        assert conn.request_path == "/api/v1/embeddings"
+        assert body["model"] == "openai/text-embedding-3-small"
+        assert body["input"] == "Hello world"
+        assert body["dimensions"] == 16
+        assert body["encoding_format"] == "float"
+        assert body["input_type"] == "search_query"
+        assert body["provider"] == %{"order" => ["openai"]}
+        assert Plug.Conn.get_req_header(conn, "authorization") == ["Bearer test-key"]
+
         Req.Test.json(conn, %{
           "data" => [
             %{
@@ -313,6 +325,10 @@ defmodule ReqLLM.EmbeddingTest do
           "Hello world",
           api_key: "test-key",
           dimensions: 16,
+          provider_options: [
+            input_type: "search_query",
+            openrouter_provider: %{order: ["openai"]}
+          ],
           return_usage: true,
           req_http_options: [plug: {Req.Test, __MODULE__.OpenRouterEmbedUsage}]
         )
