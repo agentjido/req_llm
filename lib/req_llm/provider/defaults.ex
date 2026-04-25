@@ -836,9 +836,21 @@ defmodule ReqLLM.Provider.Defaults do
          reasoning_details: rd,
          metadata: metadata
        }) do
+    {thinking_texts, content_without_thinking} =
+      Enum.split_with(c, fn
+        %ReqLLM.Message.ContentPart{type: :thinking} -> true
+        _ -> false
+      end)
+
+    reasoning_content =
+      case thinking_texts do
+        [] -> nil
+        parts -> parts |> Enum.map(& &1.text) |> Enum.join("")
+      end
+
     base_message = %{
       role: to_string(r),
-      content: encode_openai_content(c)
+      content: encode_openai_content(content_without_thinking)
     }
 
     base_message
@@ -847,6 +859,7 @@ defmodule ReqLLM.Provider.Defaults do
     |> maybe_add_field(:name, name)
     |> maybe_add_field(:reasoning_details, rd)
     |> maybe_add_field(:metadata, metadata)
+    |> maybe_add_field(:reasoning_content, reasoning_content)
   end
 
   defp maybe_add_field(message, _key, nil), do: message
