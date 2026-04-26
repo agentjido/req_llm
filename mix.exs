@@ -204,7 +204,7 @@ defmodule ReqLLM.MixProject do
       {:nimble_options, "~> 1.1"},
       {:req, "~> 0.5"},
       {:ex_aws_auth, "~> 1.3"},
-      {:server_sent_events, "~> 0.2"},
+      {:server_sent_events, "~> 1.0.0"},
       {:splode, "~> 0.3.0"},
       {:uniq, "~> 0.6"},
       {:websockex, "~> 0.5.1"},

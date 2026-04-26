@@ -928,6 +928,11 @@ defmodule ReqLLM.Providers.GoogleVertex do
   end
 
   @impl ReqLLM.Provider
+  def parse_stream_protocol(chunk, state) do
+    ReqLLM.Providers.Google.parse_stream_protocol(chunk, state)
+  end
+
+  @impl ReqLLM.Provider
   def decode_stream_event(event, model) do
     formatter = get_formatter(model)
 

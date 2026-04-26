@@ -62,6 +62,48 @@ defmodule ReqLLM.Providers.GoogleTest do
     end
   end
 
+  describe "stream protocol parsing" do
+    test "parses JSON array protocol chunks" do
+      first = ~s([{"text":"hello"})
+      second = ~s(,{"text":"world"}])
+
+      assert {:incomplete, state} = Google.parse_stream_protocol(first, nil)
+
+      assert {:ok, events, nil} = Google.parse_stream_protocol(second, state)
+
+      assert events == [
+               %{data: %{"text" => "hello"}},
+               %{data: %{"text" => "world"}}
+             ]
+    end
+
+    test "waits for complete JSON array when strings contain delimiters" do
+      first = ~s([{"text":"look ] here and \\"quote\\"")
+      second = ~s(}])
+
+      assert {:incomplete, state} = Google.parse_stream_protocol(first, nil)
+
+      assert {:ok, [%{data: %{"text" => ~s(look ] here and "quote")}}], nil} =
+               Google.parse_stream_protocol(second, state)
+    end
+
+    test "returns an error for complete malformed JSON array streams" do
+      chunk = ~s([{"text":}])
+
+      assert {:error, {:invalid_json_array_stream, %Jason.DecodeError{}}} =
+               Google.parse_stream_protocol(chunk, nil)
+    end
+
+    test "delegates SSE chunks to SSE parser" do
+      chunk = ~s(data: {"text":"hello"}\n\n)
+
+      assert {:ok, [%{data: ~s({"text":"hello"})}], state} =
+               Google.parse_stream_protocol(chunk, nil)
+
+      assert %ServerSentEvents.Parser{} = state
+    end
+  end
+
   describe "request preparation & pipeline wiring" do
     test "prepare_request creates configured request" do
       {:ok, model} = ReqLLM.model("google:gemini-1.5-flash")

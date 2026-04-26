@@ -2,6 +2,7 @@ defmodule ReqLLM.Providers.GoogleVertex.GeminiTest do
   use ExUnit.Case, async: true
 
   alias ReqLLM.Context
+  alias ReqLLM.Providers.GoogleVertex
   alias ReqLLM.Providers.GoogleVertex.Gemini
 
   defp context_fixture(user_message \\ "Hello, how are you?") do
@@ -9,6 +10,16 @@ defmodule ReqLLM.Providers.GoogleVertex.GeminiTest do
       Context.system("You are a helpful assistant."),
       Context.user(user_message)
     ])
+  end
+
+  describe "stream protocol parsing" do
+    test "uses Google JSON array protocol parsing for Gemini chunks" do
+      assert {:incomplete, state} =
+               GoogleVertex.parse_stream_protocol(~s([{"text":"vertex"}), nil)
+
+      assert {:ok, [%{data: %{"text" => "vertex"}}], nil} =
+               GoogleVertex.parse_stream_protocol("]", state)
+    end
   end
 
   describe "format_request/3 grounding" do

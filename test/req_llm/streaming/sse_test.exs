@@ -6,91 +6,75 @@ defmodule ReqLLM.Streaming.SSETest do
   describe "accumulate_and_parse/2" do
     test "parses complete SSE event in single chunk" do
       chunk = ~s(data: {"message": "hello"}\n\n)
-      buffer = ""
 
-      {events, remaining} = SSE.accumulate_and_parse(chunk, buffer)
+      {events, state} = SSE.accumulate_and_parse(chunk, nil)
 
       assert length(events) == 1
       assert [%{data: ~s({"message": "hello"})}] = events
-      assert remaining == ""
+      assert_parser_state(state)
+      refute_flush_events(state)
     end
 
     test "handles incomplete event across multiple chunks" do
-      # First chunk contains incomplete event
       chunk1 = "data: {\"partial"
-      {events1, buffer1} = SSE.accumulate_and_parse(chunk1, "")
+      {events1, state1} = SSE.accumulate_and_parse(chunk1, nil)
 
       assert events1 == []
-      assert buffer1 == "data: {\"partial"
+      assert_parser_state(state1)
 
-      # Second chunk completes the event
       chunk2 = " event\"}\n\n"
-      {events2, buffer2} = SSE.accumulate_and_parse(chunk2, buffer1)
+      {events2, state2} = SSE.accumulate_and_parse(chunk2, state1)
 
       assert length(events2) == 1
       assert [%{data: "{\"partial event\"}"}] = events2
-      assert buffer2 == ""
+      assert_parser_state(state2)
+      refute_flush_events(state2)
     end
 
     test "handles multiple events in single chunk" do
       chunk = ~s(data: {"first": 1}\n\ndata: {"second": 2}\n\n)
-      {events, remaining} = SSE.accumulate_and_parse(chunk, "")
+      {events, state} = SSE.accumulate_and_parse(chunk, nil)
 
       assert length(events) == 2
       assert [%{data: "{\"first\": 1}"}, %{data: "{\"second\": 2}"}] = events
-      assert remaining == ""
+      assert_parser_state(state)
+      refute_flush_events(state)
     end
 
     test "preserves incomplete data at end of chunk" do
       chunk = "data: {\"complete\"}\n\ndata: {\"incomplete"
-      {events, remaining} = SSE.accumulate_and_parse(chunk, "")
+      {events, state} = SSE.accumulate_and_parse(chunk, nil)
 
       assert length(events) == 1
       assert [%{data: "{\"complete\"}"}] = events
-      assert remaining == "data: {\"incomplete"
+      assert_parser_state(state)
     end
 
-    test "handles mixed complete and incomplete events with buffer" do
-      # Start with some buffered incomplete data
-      buffer = "data: {\"start"
+    test "handles mixed complete and incomplete events with parser state" do
+      {[], state} = SSE.accumulate_and_parse("data: {\"start", nil)
       chunk = ~s(ed"}\n\ndata: {"new"}\n\ndata: {"partial)
 
-      {events, new_buffer} = SSE.accumulate_and_parse(chunk, buffer)
+      {events, new_state} = SSE.accumulate_and_parse(chunk, state)
 
       assert length(events) == 2
       assert [%{data: "{\"started\"}"}, %{data: "{\"new\"}"}] = events
-      assert new_buffer == "data: {\"partial"
+      assert_parser_state(new_state)
     end
 
     test "handles empty chunks" do
-      {events, remaining} = SSE.accumulate_and_parse("", "some buffer")
+      {events, state} = SSE.accumulate_and_parse("", nil)
       assert events == []
-      assert remaining == "some buffer"
+      assert_parser_state(state)
     end
 
     test "handles events with id and event type" do
       chunk = ~s(id: 123\nevent: delta\ndata: {"text": "hi"}\n\n)
-      {events, remaining} = SSE.accumulate_and_parse(chunk, "")
+      {events, state} = SSE.accumulate_and_parse(chunk, nil)
 
       assert length(events) == 1
       assert [%{id: "123", event: "delta", data: ~s({"text": "hi"})}] = events
-      assert remaining == ""
-    end
-
-    test "parses complete JSON array chunks as SSE-style events" do
-      chunk = ~s([{"text":"hello"},{"text":"world"}])
-      {events, remaining} = SSE.accumulate_and_parse(chunk, "")
-
-      assert events == [%{data: %{"text" => "hello"}}, %{data: %{"text" => "world"}}]
-      assert remaining == ""
-    end
-
-    test "extracts complete objects from partially invalid JSON arrays" do
-      chunk = ~s([{"text":"hello"},{"text":}])
-      {events, remaining} = SSE.accumulate_and_parse(chunk, "")
-
-      assert events == [%{data: %{"text" => "hello"}}]
-      assert remaining != ""
+      assert_parser_state(state)
+      refute_flush_events(state)
     end
   end
 
@@ -134,12 +118,10 @@ defmodule ReqLLM.Streaming.SSETest do
     end
 
     test "handles special SSE data values" do
-      # [DONE] marker common in OpenAI streams
       event = %{data: "[DONE]"}
       result = SSE.process_sse_event(event)
       assert result == event
 
-      # Empty data
       event = %{data: ""}
       result = SSE.process_sse_event(event)
       assert result == event
@@ -191,7 +173,6 @@ defmodule ReqLLM.Streaming.SSETest do
     test "processes valid SSE events with invalid JSON data" do
       stream = [
         "data: {\"valid\": true}\n\n",
-        # Valid SSE event but invalid JSON
         "data: invalid json format\n\n",
         ~s(data: {"another": "valid"}\n\n)
       ]
@@ -201,12 +182,10 @@ defmodule ReqLLM.Streaming.SSETest do
         |> SSE.parse_sse_stream()
         |> Enum.to_list()
 
-      # Should get all 3 events (invalid JSON preserved as string)
       assert length(events) == 3
 
       assert [
                %{data: %{"valid" => true}},
-               # Invalid JSON preserved as string
                %{data: "invalid json format"},
                %{data: %{"another" => "valid"}}
              ] = events
@@ -295,12 +274,11 @@ defmodule ReqLLM.Streaming.SSETest do
 
   describe "edge cases and error handling" do
     test "handles malformed SSE format gracefully" do
-      # Missing double newline
       chunk = "data: {\"incomplete\": true}"
-      {events, buffer} = SSE.accumulate_and_parse(chunk, "")
+      {events, state} = SSE.accumulate_and_parse(chunk, nil)
 
       assert events == []
-      assert buffer == chunk
+      assert_parser_state(state)
     end
 
     test "handles very large JSON payloads" do
@@ -308,19 +286,20 @@ defmodule ReqLLM.Streaming.SSETest do
       large_json = Jason.encode!(large_data)
       chunk = "data: #{large_json}\n\n"
 
-      {events, remaining} = SSE.accumulate_and_parse(chunk, "")
+      {events, state} = SSE.accumulate_and_parse(chunk, nil)
 
       assert length(events) == 1
       processed = SSE.process_sse_event(hd(events))
       assert %{data: ^large_data} = processed
-      assert remaining == ""
+      assert_parser_state(state)
+      refute_flush_events(state)
     end
 
     test "handles Unicode content in JSON" do
       unicode_content = ~s({"message": "Hello 👋 世界"})
       chunk = "data: #{unicode_content}\n\n"
 
-      {events, _} = SSE.accumulate_and_parse(chunk, "")
+      {events, _state} = SSE.accumulate_and_parse(chunk, nil)
       processed = SSE.process_sse_event(hd(events))
 
       assert %{data: %{"message" => "Hello 👋 世界"}} = processed
@@ -329,11 +308,18 @@ defmodule ReqLLM.Streaming.SSETest do
     test "preserves raw data when JSON decode fails" do
       chunk = "data: {\"unclosed\": \"quote}\n\n"
 
-      {events, _} = SSE.accumulate_and_parse(chunk, "")
+      {events, _state} = SSE.accumulate_and_parse(chunk, nil)
       processed = SSE.process_sse_event(hd(events))
 
-      # Should preserve original malformed JSON string
       assert %{data: "{\"unclosed\": \"quote}"} = processed
     end
+  end
+
+  defp assert_parser_state(state) do
+    assert %ServerSentEvents.Parser{} = state
+  end
+
+  defp refute_flush_events(state) do
+    assert {[], _state} = SSE.flush(state)
   end
 end

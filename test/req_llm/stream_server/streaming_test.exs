@@ -153,7 +153,7 @@ defmodule ReqLLM.StreamServer.StreamingTest do
       assert :halt = StreamServer.next(server, 100)
     end
 
-    test "noop when sse_buffer is empty at finalize" do
+    test "noop when protocol state is empty at finalize" do
       server = start_server()
 
       sse_data = ~s(data: {"choices": [{"delta": {"content": "complete"}}]}\n\n)

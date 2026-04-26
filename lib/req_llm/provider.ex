@@ -469,26 +469,25 @@ defmodule ReqLLM.Provider do
   ## Parameters
 
     * `chunk` - Raw binary chunk from the HTTP stream
-    * `buffer` - Accumulated buffer from previous incomplete chunks
+    * `state` - Opaque parser state from previous incomplete chunks
 
   ## Returns
 
-    * `{:ok, events, rest}` - Successfully parsed events with remaining buffer data
-    * `{:incomplete, buffer}` - Need more data, return the accumulated buffer
+    * `{:ok, events, state}` - Successfully parsed events with updated parser state
+    * `{:incomplete, state}` - Need more data, return updated parser state
     * `{:error, reason}` - Parse error
 
   ## Examples
 
       # Default SSE implementation (provided automatically)
-      def parse_stream_protocol(chunk, buffer) do
-        data = buffer <> chunk
-        {events, new_buffer} = ReqLLM.Streaming.SSE.accumulate_and_parse(data, "")
-        {:ok, events, new_buffer}
+      def parse_stream_protocol(chunk, state) do
+        {events, new_state} = ReqLLM.Streaming.SSE.accumulate_and_parse(chunk, state)
+        {:ok, events, new_state}
       end
 
       # Custom binary protocol (e.g., AWS Event Stream)
-      def parse_stream_protocol(chunk, buffer) do
-        data = buffer <> chunk
+      def parse_stream_protocol(chunk, state) do
+        data = (state || "") <> chunk
         case ReqLLM.AWSEventStream.parse_binary(data) do
           {:ok, events, rest} -> {:ok, events, rest}
           {:incomplete, data} -> {:incomplete, data}
@@ -497,8 +496,8 @@ defmodule ReqLLM.Provider do
       end
 
   """
-  @callback parse_stream_protocol(binary(), binary()) ::
-              {:ok, [map()], binary()} | {:incomplete, binary()} | {:error, term()}
+  @callback parse_stream_protocol(binary(), term()) ::
+              {:ok, [map()], term()} | {:incomplete, term()} | {:error, term()}
 
   @doc """
   Build complete Finch request for streaming operations.
@@ -713,10 +712,9 @@ defmodule ReqLLM.Provider do
 
   Providers can override this to implement custom streaming protocols.
   """
-  def parse_stream_protocol(chunk, buffer) do
-    _data = buffer <> chunk
-    {events, new_buffer} = ReqLLM.Streaming.SSE.accumulate_and_parse(chunk, buffer)
-    {:ok, events, new_buffer}
+  def parse_stream_protocol(chunk, state) do
+    {events, new_state} = ReqLLM.Streaming.SSE.accumulate_and_parse(chunk, state)
+    {:ok, events, new_state}
   end
 
   @doc """

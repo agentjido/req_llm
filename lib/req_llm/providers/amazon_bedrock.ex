@@ -634,16 +634,13 @@ defmodule ReqLLM.Providers.AmazonBedrock do
 
   @impl ReqLLM.Provider
   def parse_stream_protocol(chunk, buffer) do
-    # Bedrock uses AWS Event Stream protocol
-    data = buffer <> chunk
+    data = (buffer || "") <> chunk
 
     case AWSEventStream.parse_binary(data) do
       {:ok, events, rest} ->
-        # Return parsed events and remaining buffer
         {:ok, events, rest}
 
       {:incomplete, incomplete_data} ->
-        # Need more data
         {:incomplete, incomplete_data}
 
       {:error, reason} ->

@@ -3,9 +3,11 @@ defmodule ReqLLM.Streaming.WebSocketProtocol do
 
   @terminal_types ["response.completed", "response.incomplete"]
 
-  @spec parse_message(binary(), binary()) ::
-          {:ok, [map()], binary()} | {:incomplete, binary()} | {:error, term()}
+  @spec parse_message(binary(), binary() | nil) ::
+          {:ok, [map()], binary()} | {:incomplete, binary() | nil} | {:error, term()}
   def parse_message(chunk, buffer \\ "")
+
+  def parse_message(chunk, nil), do: parse_message(chunk, "")
 
   def parse_message(chunk, buffer) when is_binary(chunk) and is_binary(buffer) do
     payload = buffer <> chunk

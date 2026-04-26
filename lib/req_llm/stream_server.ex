@@ -43,7 +43,7 @@ defmodule ReqLLM.StreamServer do
   - `provider_mod`: Provider module for event decoding
   - `model`: ReqLLM.Model struct for provider context
   - `provider_state`: Optional provider-specific state for stateful transformations
-  - `sse_buffer`: Binary buffer for SSE parsing across chunks
+  - `protocol_state`: Opaque parser state across chunks
   - `queue`: Token chunks awaiting consumer retrieval
   - `status`: Current session status (`:init`, `:streaming`, `:done`, `{:error, reason}`)
   - `http_task`: HTTP task reference for monitoring
@@ -78,9 +78,9 @@ defmodule ReqLLM.StreamServer do
     :http_context,
     :canonical_json,
     :protocol_parser,
+    :protocol_state,
     :provider_state,
     :telemetry,
-    sse_buffer: "",
     queue: :queue.new(),
     status: :init,
     consumer_refs: MapSet.new(),
@@ -658,27 +658,24 @@ defmodule ReqLLM.StreamServer do
   end
 
   defp parse_protocol_events(chunk, state) do
-    # Call the injected protocol parser
-    case state.protocol_parser.(chunk, state.sse_buffer) do
-      {:ok, events, new_buffer} ->
-        {events, new_buffer}
+    case state.protocol_parser.(chunk, state.protocol_state) do
+      {:ok, events, new_protocol_state} ->
+        {events, new_protocol_state}
 
-      {:incomplete, new_buffer} ->
-        {[], new_buffer}
+      {:incomplete, new_protocol_state} ->
+        {[], new_protocol_state}
 
       {:error, reason} ->
         Logger.warning("Protocol parse error: #{inspect(reason)}")
-        {[], state.sse_buffer}
+        {[], state.protocol_state}
     end
   end
 
   defp process_data_chunk(chunk, state) do
-    # Capture raw chunk for fixture - accumulate in state
     state =
       if state.fixture_path && is_binary(chunk) do
         new_bytes = state.raw_bytes + byte_size(chunk)
 
-        # Warn if fixture is growing unexpectedly large (>100MB)
         if new_bytes > 100_000_000 and state.raw_bytes <= 100_000_000 do
           Logger.warning(
             "Streaming fixture exceeded 100MB at #{state.fixture_path} - consider reviewing test data size"
@@ -690,29 +687,17 @@ defmodule ReqLLM.StreamServer do
         state
       end
 
-    # Use provider's protocol parser (defaults to SSE if not overridden)
-    {events, new_buffer} = parse_protocol_events(chunk, state)
+    {events, new_protocol_state} = parse_protocol_events(chunk, state)
 
-    # Decode events using provider (with optional state threading)
-    {stream_chunks, new_provider_state} =
-      events
-      |> Enum.map(&SSE.process_sse_event/1)
-      |> Enum.reduce({[], state.provider_state}, fn event, {chunks_acc, prov_state} ->
-        {new_chunks, updated_prov_state} =
-          decode_provider_event(event, state.provider_mod, state.model, prov_state)
+    {stream_chunks, new_provider_state} = decode_protocol_events(events, state)
 
-        {chunks_acc ++ new_chunks, updated_prov_state}
-      end)
-
-    # Enqueue chunks and check for completion
     new_state =
       enqueue_chunks(stream_chunks, %{
         state
-        | sse_buffer: new_buffer,
+        | protocol_state: new_protocol_state,
           provider_state: new_provider_state
       })
 
-    # Check if any events signaled completion
     terminated? = Enum.any?(events, &termination_event?/1)
 
     new_state =
@@ -722,9 +707,30 @@ defmodule ReqLLM.StreamServer do
         new_state
       end
 
-    # Reply to waiting callers if queue has data
     new_state = reply_to_waiting_callers(new_state)
     {:reply, :ok, new_state}
+  end
+
+  defp decode_protocol_events(events, state) do
+    {stream_chunks, provider_state} =
+      Enum.reduce(events, {[], state.provider_state}, fn event, {chunks_acc, prov_state} ->
+        case SSE.process_sse_event(event) do
+          nil ->
+            {chunks_acc, prov_state}
+
+          processed_event ->
+            {new_chunks, updated_prov_state} =
+              decode_provider_event(processed_event, state.provider_mod, state.model, prov_state)
+
+            {prepend_chunks(new_chunks, chunks_acc), updated_prov_state}
+        end
+      end)
+
+    {Enum.reverse(stream_chunks), provider_state}
+  end
+
+  defp prepend_chunks(chunks, acc) do
+    Enum.reduce(chunks, acc, fn chunk, chunk_acc -> [chunk | chunk_acc] end)
   end
 
   defp decode_provider_event(event, provider_mod, model, provider_state) do
@@ -820,10 +826,7 @@ defmodule ReqLLM.StreamServer do
   end
 
   defp finalize_stream(state) do
-    # Flush any remaining SSE buffer content before finalizing.
-    # The last SSE event may be buffered if the terminating blank line
-    # arrived in a separate HTTP chunk or was missing entirely.
-    state = flush_sse_buffer(state)
+    state = flush_protocol_state(state)
 
     {flush_chunks, new_provider_state} =
       if function_exported?(state.provider_mod, :flush_stream_state, 2) do
@@ -870,34 +873,22 @@ defmodule ReqLLM.StreamServer do
     |> maybe_emit_stream_stop(metadata[:finish_reason] || :unknown)
   end
 
-  defp flush_sse_buffer(%{sse_buffer: buffer} = state) when byte_size(buffer) > 0 do
-    # Force-parse the buffer by appending a terminating blank line.
-    # This handles the case where the server closed the connection
-    # without a trailing \n\n after the last SSE event.
-    {events, _remaining} = parse_protocol_events("\n\n", state)
+  defp flush_protocol_state(state) do
+    {events, new_protocol_state} = SSE.flush(state.protocol_state)
     terminated? = Enum.any?(events, &termination_event?/1)
 
     if events != [] do
-      {stream_chunks, new_provider_state} =
-        events
-        |> Enum.map(&SSE.process_sse_event/1)
-        |> Enum.reduce({[], state.provider_state}, fn event, {chunks_acc, prov_state} ->
-          {new_chunks, updated_prov_state} =
-            decode_provider_event(event, state.provider_mod, state.model, prov_state)
-
-          {chunks_acc ++ new_chunks, updated_prov_state}
-        end)
+      {stream_chunks, new_provider_state} = decode_protocol_events(events, state)
 
       state
       |> Map.put(:provider_state, new_provider_state)
+      |> Map.put(:protocol_state, new_protocol_state)
       |> Map.put(:terminated?, state.terminated? or terminated?)
       |> then(&enqueue_chunks(stream_chunks, &1))
     else
-      state
+      %{state | protocol_state: new_protocol_state}
     end
   end
-
-  defp flush_sse_buffer(state), do: state
 
   defp finalize_stream_with_fixture(state) do
     Debug.dbug(

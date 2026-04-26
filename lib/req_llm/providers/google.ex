@@ -2029,6 +2029,22 @@ defmodule ReqLLM.Providers.Google do
   end
 
   @impl ReqLLM.Provider
+  def parse_stream_protocol(chunk, {:json_array, buffer}) do
+    parse_json_array_protocol(buffer <> chunk)
+  end
+
+  def parse_stream_protocol(chunk, state) do
+    if json_array_protocol_start?(chunk, state) do
+      state
+      |> json_array_buffer()
+      |> Kernel.<>(chunk)
+      |> parse_json_array_protocol()
+    else
+      ReqLLM.Provider.parse_stream_protocol(chunk, state)
+    end
+  end
+
+  @impl ReqLLM.Provider
   def decode_stream_event(event, model) do
     case event do
       %{data: data} when is_map(data) -> decode_google_event(data, model)
@@ -2589,6 +2605,91 @@ defmodule ReqLLM.Providers.Google do
       _ ->
         []
     end
+  end
+
+  defp json_array_protocol_start?(chunk, nil) do
+    chunk |> String.trim_leading() |> String.starts_with?("[")
+  end
+
+  defp json_array_protocol_start?(chunk, "") do
+    chunk |> String.trim_leading() |> String.starts_with?("[")
+  end
+
+  defp json_array_protocol_start?(chunk, buffer) when is_binary(buffer) do
+    (buffer <> chunk) |> String.trim_leading() |> String.starts_with?("[")
+  end
+
+  defp json_array_protocol_start?(_chunk, _state), do: false
+
+  defp json_array_buffer(buffer) when is_binary(buffer), do: buffer
+  defp json_array_buffer(_state), do: ""
+
+  defp parse_json_array_protocol(data) do
+    if json_array_complete?(data) do
+      decode_json_array_protocol(data)
+    else
+      {:incomplete, {:json_array, data}}
+    end
+  end
+
+  defp decode_json_array_protocol(data) do
+    case Jason.decode(data) do
+      {:ok, events} when is_list(events) ->
+        {:ok, Enum.map(events, &%{data: &1}), nil}
+
+      {:ok, _other} ->
+        {:error, :invalid_json_array_stream}
+
+      {:error, reason} ->
+        {:error, {:invalid_json_array_stream, reason}}
+    end
+  end
+
+  defp json_array_complete?(data) do
+    case String.trim_leading(data) do
+      <<"[", rest::binary>> -> json_array_complete?(rest, 1, false, false)
+      _ -> false
+    end
+  end
+
+  defp json_array_complete?(<<>>, _depth, _in_string?, _escaped?), do: false
+
+  defp json_array_complete?(<<_byte, rest::binary>>, depth, true, true) do
+    json_array_complete?(rest, depth, true, false)
+  end
+
+  defp json_array_complete?(<<?\\, rest::binary>>, depth, true, false) do
+    json_array_complete?(rest, depth, true, true)
+  end
+
+  defp json_array_complete?(<<?", rest::binary>>, depth, true, false) do
+    json_array_complete?(rest, depth, false, false)
+  end
+
+  defp json_array_complete?(<<_byte, rest::binary>>, depth, true, false) do
+    json_array_complete?(rest, depth, true, false)
+  end
+
+  defp json_array_complete?(<<?", rest::binary>>, depth, false, false) do
+    json_array_complete?(rest, depth, true, false)
+  end
+
+  defp json_array_complete?(<<byte, rest::binary>>, depth, false, false)
+       when byte in [?[, ?{] do
+    json_array_complete?(rest, depth + 1, false, false)
+  end
+
+  defp json_array_complete?(<<byte, rest::binary>>, depth, false, false)
+       when byte in [?\], ?}] do
+    case depth - 1 do
+      0 -> String.trim_leading(rest) == ""
+      next_depth when next_depth > 0 -> json_array_complete?(rest, next_depth, false, false)
+      _ -> false
+    end
+  end
+
+  defp json_array_complete?(<<_byte, rest::binary>>, depth, false, false) do
+    json_array_complete?(rest, depth, false, false)
   end
 
   defp extract_chunks_from_parts(parts) do
