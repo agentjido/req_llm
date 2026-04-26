@@ -127,6 +127,13 @@ defmodule ReqLLM.Streaming.SSETest do
       assert result == event
     end
 
+    test "leaves non-object JSON data unchanged" do
+      for data <- ["[]", "true", "false", "null", "123", ~s("text")] do
+        event = %{data: data}
+        assert SSE.process_sse_event(event) == event
+      end
+    end
+
     test "handles complex nested JSON" do
       json_data = """
       {

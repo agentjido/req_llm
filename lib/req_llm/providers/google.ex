@@ -2607,11 +2607,7 @@ defmodule ReqLLM.Providers.Google do
     end
   end
 
-  defp json_array_protocol_start?(chunk, nil) do
-    chunk |> String.trim_leading() |> String.starts_with?("[")
-  end
-
-  defp json_array_protocol_start?(chunk, "") do
+  defp json_array_protocol_start?(chunk, state) when state in [nil, ""] do
     chunk |> String.trim_leading() |> String.starts_with?("[")
   end
 
