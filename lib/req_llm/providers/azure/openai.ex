@@ -53,7 +53,9 @@ defmodule ReqLLM.Providers.Azure.OpenAI do
     "text-embedding",
     "deepseek",
     "mai-ds",
-    "grok"
+    "grok",
+    "Kimi",
+    "kimi"
   ]
 
   @anthropic_specific_options [

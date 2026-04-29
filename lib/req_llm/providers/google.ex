@@ -628,8 +628,8 @@ defmodule ReqLLM.Providers.Google do
 
     output =
       case Map.get(usage_metadata, "candidatesTokenCount") do
-        nil -> max(0, total - input - reasoning)
-        count -> count
+        nil -> max(0, total - input)
+        count -> count + reasoning
       end
 
     %{
@@ -637,8 +637,7 @@ defmodule ReqLLM.Providers.Google do
       output_tokens: output,
       total_tokens: total,
       cached_tokens: cached,
-      reasoning_tokens: reasoning,
-      add_reasoning_to_cost: true
+      reasoning_tokens: reasoning
     }
   end
 
@@ -1885,8 +1884,10 @@ defmodule ReqLLM.Providers.Google do
     cached = usage["cachedContentTokenCount"] || 0
 
     completion =
-      usage["candidatesTokenCount"] ||
-        max(0, total - prompt - thoughts)
+      case usage["candidatesTokenCount"] do
+        nil -> max(0, total - prompt)
+        count -> count + thoughts
+      end
 
     base = %{
       "prompt_tokens" => prompt,

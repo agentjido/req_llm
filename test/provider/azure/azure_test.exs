@@ -1846,6 +1846,67 @@ defmodule ReqLLM.Providers.AzureTest do
     end
   end
 
+  describe "Kimi family routing" do
+    import ExUnit.CaptureLog
+
+    test "resolves Kimi family for lowercase model id from LLMDB" do
+      {:ok, model} = ReqLLM.model("azure:kimi-k2.5")
+
+      assert model.provider == :azure
+      assert model.id == "kimi-k2.5"
+
+      {:ok, _request} =
+        Azure.prepare_request(
+          :chat,
+          model,
+          "Hello",
+          base_url: "https://my-resource.services.ai.azure.com/openai/v1",
+          deployment: "kimi-k2.5"
+        )
+    end
+
+    test "resolves Kimi family for uppercase Azure deployment id" do
+      model = %LLMDB.Model{
+        id: "Kimi-K2.6",
+        provider: :azure,
+        capabilities: %{chat: true},
+        extra: %{}
+      }
+
+      {:ok, _request} =
+        Azure.prepare_request(
+          :chat,
+          model,
+          "Hello",
+          api_key: "test-key",
+          base_url: "https://my-resource.services.ai.azure.com/openai/v1",
+          deployment: "Kimi-K2.6"
+        )
+    end
+
+    test "format_request does not warn for Kimi models (lowercase)" do
+      context = ReqLLM.Context.new([ReqLLM.Context.user("Hello")])
+
+      log =
+        capture_log(fn ->
+          _body = Azure.OpenAI.format_request("kimi-k2.5", context, stream: false)
+        end)
+
+      refute log =~ "does not appear to be OpenAI-compatible"
+    end
+
+    test "format_request does not warn for Kimi models (uppercase)" do
+      context = ReqLLM.Context.new([ReqLLM.Context.user("Hello")])
+
+      log =
+        capture_log(fn ->
+          _body = Azure.OpenAI.format_request("Kimi-K2.6", context, stream: false)
+        end)
+
+      refute log =~ "does not appear to be OpenAI-compatible"
+    end
+  end
+
   defp traditional_openai_model do
     %LLMDB.Model{
       id: "gpt-4o",

@@ -310,7 +310,7 @@ defmodule ReqLLM.Provider.DefaultsTest do
       refute Map.has_key?(encoded_message, :reasoning_details)
     end
 
-    test "strips :thinking content parts from encoding" do
+    test "strips :thinking content parts from encoding and emits reasoning_content for assistant" do
       message = %Message{
         role: :assistant,
         content: [
@@ -325,9 +325,45 @@ defmodule ReqLLM.Provider.DefaultsTest do
       [encoded_message] = result.messages
       # :thinking part stripped, single text part flattened to string
       assert encoded_message.content == "Here is the answer."
+      assert encoded_message.reasoning_content == "Let me reason about this..."
     end
 
-    test "collapses to empty string when all content parts are :thinking" do
+    test "joins multiple thinking parts into single reasoning_content" do
+      message = %Message{
+        role: :assistant,
+        content: [
+          %ContentPart{type: :thinking, text: "Step 1: analyze"},
+          %ContentPart{type: :thinking, text: "Step 2: conclude"},
+          %ContentPart{type: :text, text: "Final answer."}
+        ]
+      }
+
+      context = %Context{messages: [message]}
+      result = Defaults.encode_context_to_openai_format(context, "gpt-4")
+
+      [encoded_message] = result.messages
+      assert encoded_message.content == "Final answer."
+      assert encoded_message.reasoning_content == "Step 1: analyzeStep 2: conclude"
+    end
+
+    test "does not emit reasoning_content for non-assistant roles" do
+      message = %Message{
+        role: :user,
+        content: [
+          %ContentPart{type: :thinking, text: "User-provided thought"},
+          %ContentPart{type: :text, text: "Hello"}
+        ]
+      }
+
+      context = %Context{messages: [message]}
+      result = Defaults.encode_context_to_openai_format(context, "gpt-4")
+
+      [encoded_message] = result.messages
+      assert encoded_message.content == "Hello"
+      refute Map.has_key?(encoded_message, :reasoning_content)
+    end
+
+    test "preserves tool_calls alongside reasoning_content for assistant" do
       message = %Message{
         role: :assistant,
         content: [
@@ -350,6 +386,8 @@ defmodule ReqLLM.Provider.DefaultsTest do
       assert encoded_message.content == ""
       # Tool calls still present
       assert length(encoded_message.tool_calls) == 1
+      # reasoning_content emitted for assistant
+      assert encoded_message.reasoning_content == "Internal chain-of-thought"
     end
 
     test "collapses empty content list to empty string" do

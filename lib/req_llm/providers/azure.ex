@@ -277,7 +277,9 @@ defmodule ReqLLM.Providers.Azure do
     "deepseek" => __MODULE__.OpenAI,
     "mai-ds" => __MODULE__.OpenAI,
     "claude" => __MODULE__.Anthropic,
-    "grok" => __MODULE__.OpenAI
+    "grok" => __MODULE__.OpenAI,
+    "Kimi" => __MODULE__.OpenAI,
+    "kimi" => __MODULE__.OpenAI
   }
 
   @model_family_prefixes @model_families |> Map.keys() |> Enum.sort_by(&String.length/1, :desc)
@@ -295,7 +297,9 @@ defmodule ReqLLM.Providers.Azure do
     "o3" => "AZURE_OPENAI_BASE_URL",
     "o4" => "AZURE_OPENAI_BASE_URL",
     "deepseek" => "AZURE_DEEPSEEK_BASE_URL",
-    "mai-ds" => "AZURE_MAI_BASE_URL"
+    "mai-ds" => "AZURE_MAI_BASE_URL",
+    "Kimi" => "AZURE_KIMI_BASE_URL",
+    "kimi" => "AZURE_KIMI_BASE_URL"
   }
 
   @family_api_key_env_vars %{
@@ -307,7 +311,9 @@ defmodule ReqLLM.Providers.Azure do
     "o3" => "AZURE_OPENAI_API_KEY",
     "o4" => "AZURE_OPENAI_API_KEY",
     "deepseek" => "AZURE_DEEPSEEK_API_KEY",
-    "mai-ds" => "AZURE_MAI_API_KEY"
+    "mai-ds" => "AZURE_MAI_API_KEY",
+    "Kimi" => "AZURE_KIMI_API_KEY",
+    "kimi" => "AZURE_KIMI_API_KEY"
   }
 
   @doc """
