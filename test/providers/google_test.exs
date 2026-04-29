@@ -771,6 +771,47 @@ defmodule ReqLLM.Providers.GoogleTest do
       assert response.usage.total_tokens == 1550
     end
 
+    test "decode_response includes thought tokens in output usage" do
+      google_response = %{
+        "candidates" => [
+          %{
+            "content" => %{
+              "parts" => [%{"text" => "The answer is 42."}],
+              "role" => "model"
+            },
+            "finishReason" => "STOP"
+          }
+        ],
+        "usageMetadata" => %{
+          "promptTokenCount" => 10,
+          "candidatesTokenCount" => 15,
+          "thoughtsTokenCount" => 5,
+          "totalTokenCount" => 30
+        }
+      }
+
+      mock_resp = %Req.Response{
+        status: 200,
+        body: google_response
+      }
+
+      {:ok, model} = ReqLLM.model("google:gemini-2.5-flash")
+      context = context_fixture()
+
+      mock_req = %Req.Request{
+        options: [context: context, stream: false, model: model.model]
+      }
+
+      {_req, resp} = Google.decode_response({mock_req, mock_resp})
+
+      assert %ReqLLM.Response{} = resp.body
+      response = resp.body
+      assert response.usage.input_tokens == 10
+      assert response.usage.output_tokens == 20
+      assert response.usage.total_tokens == 30
+      assert response.usage.reasoning_tokens == 5
+    end
+
     test "decode_response preserves tool calls" do
       google_response = %{
         "candidates" => [
@@ -957,6 +998,27 @@ defmodule ReqLLM.Providers.GoogleTest do
       assert meta_chunk.metadata[:finish_reason] == "stop"
       assert meta_chunk.metadata[:terminal?] == true
       assert meta_chunk.metadata[:usage][:input_tokens] == 10
+    end
+
+    test "streaming usageMetadata includes thought tokens in output usage", %{model: model} do
+      event = %{
+        data: %{
+          "candidates" => [%{"finishReason" => "STOP", "index" => 0}],
+          "usageMetadata" => %{
+            "promptTokenCount" => 10,
+            "candidatesTokenCount" => 15,
+            "thoughtsTokenCount" => 5,
+            "totalTokenCount" => 30
+          }
+        }
+      }
+
+      [meta_chunk] = Google.decode_stream_event(event, model)
+      assert meta_chunk.type == :meta
+      assert meta_chunk.metadata[:usage][:input_tokens] == 10
+      assert meta_chunk.metadata[:usage][:output_tokens] == 20
+      assert meta_chunk.metadata[:usage][:total_tokens] == 30
+      assert meta_chunk.metadata[:usage][:reasoning_tokens] == 5
     end
 
     test "finishReason on candidate without content.parts (no usage)", %{model: model} do
