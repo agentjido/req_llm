@@ -192,6 +192,18 @@ defmodule ReqLLM.Providers.OpenAI do
       doc:
         "Streaming transport for Responses models. Use :websocket for OpenAI WebSocket mode; SSE remains the default."
     ],
+    openai_reuse_websocket: [
+      type: :boolean,
+      default: false,
+      doc:
+        "Request that higher-level agent runtimes reuse one Responses API WebSocket across multiple response.create turns."
+    ],
+    openai_websocket_session: [
+      type: :any,
+      doc:
+        "Existing ReqLLM.Streaming.WebSocketSession pid to reuse for Responses API streams. " <>
+          "When set, ReqLLM sends the response.create event on that socket and leaves socket ownership to the caller."
+    ],
     openai_compatible_backend: [
       type: {:or, [{:in, [:ollama]}, {:in, ["ollama"]}]},
       doc:
@@ -713,6 +725,10 @@ defmodule ReqLLM.Providers.OpenAI do
            "OpenAI WebSocket mode is only supported for Responses models. #{LLMDB.Model.spec(model)} routes to #{inspect(api_mod)}."
        )}
     end
+  end
+
+  def start_responses_session(%LLMDB.Model{} = model, opts \\ []) do
+    ReqLLM.Providers.OpenAI.WebSocket.start_responses_session(model, opts)
   end
 
   def stream_transport(_model, opts) do

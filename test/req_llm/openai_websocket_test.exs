@@ -147,6 +147,42 @@ defmodule ReqLLM.OpenAIWebSocketTest do
     assert Enum.any?(request["input"], fn item -> item["role"] == "user" end)
   end
 
+  test "stream_text can reuse caller-owned OpenAI responses websocket sessions", %{
+    base_url: base_url
+  } do
+    {:ok, model} = ReqLLM.model("openai:gpt-5")
+
+    {:ok, session} =
+      ReqLLM.Providers.OpenAI.WebSocket.start_responses_session(model,
+        base_url: base_url,
+        api_key: "test-key-12345"
+      )
+
+    try do
+      for prompt <- ["Say hello", "Say hello again"] do
+        {:ok, stream_response} =
+          ReqLLM.stream_text(
+            model,
+            prompt,
+            base_url: base_url,
+            receive_timeout: 5_000,
+            provider_options: [
+              openai_stream_transport: :websocket,
+              openai_websocket_session: session
+            ]
+          )
+
+        assert ReqLLM.StreamResponse.text(stream_response) == "Hello"
+        assert Process.alive?(session)
+      end
+    after
+      ReqLLM.Streaming.WebSocketSession.close(session)
+    end
+
+    assert_received {:responses_socket_message, %{"type" => "response.create"}}
+    assert_received {:responses_socket_message, %{"type" => "response.create"}}
+  end
+
   test "Realtime session can connect, send events, and receive events", %{base_url: base_url} do
     {:ok, session} =
       Realtime.connect("gpt-realtime",

@@ -2,6 +2,7 @@ defmodule ReqLLM.Providers.OpenAI.WebSocket do
   @moduledoc false
 
   alias ReqLLM.Streaming.Fixtures.HTTPContext
+  alias ReqLLM.Streaming.WebSocketSession
 
   @spec headers(LLMDB.Model.t(), keyword()) :: [{String.t(), String.t()}]
   def headers(%LLMDB.Model{} = model, opts) do
@@ -11,6 +12,11 @@ defmodule ReqLLM.Providers.OpenAI.WebSocket do
       ReqLLM.Providers.OpenAI.resolve_request_credential!(model, opts)
     ) ++
       custom_headers
+  end
+
+  @spec start_responses_session(LLMDB.Model.t(), keyword()) :: GenServer.on_start()
+  def start_responses_session(%LLMDB.Model{} = model, opts \\ []) do
+    WebSocketSession.start_link(responses_url(model, opts), headers: headers(model, opts))
   end
 
   @spec responses_url(LLMDB.Model.t(), keyword()) :: String.t()

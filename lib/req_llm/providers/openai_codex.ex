@@ -84,6 +84,23 @@ defmodule ReqLLM.Providers.OpenAICodex do
       type: {:or, [:atom, :string]},
       doc: "Service tier for request prioritization"
     ],
+    openai_stream_transport: [
+      type: {:in, [:sse, :websocket, "sse", "websocket"]},
+      default: :sse,
+      doc: "Streaming transport for the Codex Responses endpoint"
+    ],
+    openai_reuse_websocket: [
+      type: :boolean,
+      default: false,
+      doc:
+        "Request that higher-level agent runtimes reuse one Codex Responses WebSocket across multiple response.create turns."
+    ],
+    openai_websocket_session: [
+      type: :any,
+      doc:
+        "Existing ReqLLM.Streaming.WebSocketSession pid to reuse for Codex Responses streams. " <>
+          "When set, ReqLLM sends the response.create event on that socket and leaves socket ownership to the caller."
+    ],
     verbosity: [
       type: {:or, [:atom, :string]},
       doc: "Text verbosity. Defaults to medium."
@@ -240,6 +257,15 @@ defmodule ReqLLM.Providers.OpenAICodex do
     ResponsesAPI.decode_stream_event(normalized_event, model, state)
   end
 
+  def stream_transport(_model, opts) do
+    provider_opts = Keyword.get(opts, :provider_options, [])
+
+    case Keyword.get(provider_opts, :openai_stream_transport, :sse) do
+      transport when transport in [:websocket, "websocket"] -> :websocket
+      _ -> :http
+    end
+  end
+
   @impl ReqLLM.Provider
   def attach_stream(model, context, opts, _finch_name) do
     opts = normalize_stream_opts(opts)
@@ -279,6 +305,58 @@ defmodule ReqLLM.Providers.OpenAICodex do
        ReqLLM.Error.API.Request.exception(
          reason: "Failed to build OpenAI Codex streaming request: #{Exception.message(error)}"
        )}
+  end
+
+  def attach_websocket_stream(model, context, opts) do
+    opts = normalize_stream_opts(opts)
+    ensure_oauth_mode!(opts)
+
+    credential = ReqLLM.Auth.resolve!(model, opts)
+    account_id = resolve_account_id!(credential, opts)
+    base_url = ReqLLM.Provider.Options.effective_base_url(__MODULE__, model, opts)
+    headers = websocket_headers(credential.token, account_id, opts)
+    url = codex_websocket_url(base_url)
+
+    cleaned_opts =
+      opts
+      |> Keyword.delete(:finch_name)
+      |> Keyword.delete(:compiled_schema)
+      |> Keyword.put(:provider_options, Keyword.get(opts, :provider_options, []))
+      |> Keyword.put(:stream, nil)
+      |> Keyword.put(:model, model.id)
+      |> Keyword.put(:context, context)
+      |> Keyword.put(:base_url, base_url)
+
+    body = build_codex_body(context, model.id, cleaned_opts, nil)
+    create_event = Map.put(body, "type", "response.create")
+
+    {:ok,
+     %{
+       url: url,
+       headers: headers,
+       initial_messages: [Jason.encode!(create_event)],
+       http_context: ReqLLM.Providers.OpenAI.WebSocket.http_context(url, headers),
+       canonical_json: body
+     }}
+  rescue
+    error ->
+      {:error,
+       ReqLLM.Error.API.Request.exception(
+         reason: "Failed to build OpenAI Codex websocket request: #{Exception.message(error)}"
+       )}
+  end
+
+  def start_responses_session(%LLMDB.Model{} = model, opts \\ []) do
+    opts = normalize_stream_opts(opts)
+    ensure_oauth_mode!(opts)
+
+    credential = ReqLLM.Auth.resolve!(model, opts)
+    account_id = resolve_account_id!(credential, opts)
+    base_url = ReqLLM.Provider.Options.effective_base_url(__MODULE__, model, opts)
+
+    ReqLLM.Streaming.WebSocketSession.start_link(codex_websocket_url(base_url),
+      headers: websocket_headers(credential.token, account_id, opts)
+    )
   end
 
   defp build_codex_body(context, model_name, opts, request) do
@@ -483,6 +561,31 @@ defmodule ReqLLM.Providers.OpenAICodex do
       String.ends_with?(normalized, "/codex") -> normalized <> "/responses"
       true -> normalized <> codex_path()
     end
+  end
+
+  defp codex_websocket_url(base_url) do
+    base_url
+    |> codex_url()
+    |> ReqLLM.Providers.OpenAI.WebSocket.websocket_url("")
+  end
+
+  defp websocket_headers(token, account_id, opts) do
+    request_id = codex_request_id(opts)
+
+    [
+      {"authorization", "Bearer " <> token},
+      {"chatgpt-account-id", account_id},
+      {"originator", codex_originator(opts)},
+      {"openai-beta", "responses_websockets=2026-02-06"},
+      {"x-client-request-id", request_id},
+      {"session_id", request_id}
+    ] ++ ReqLLM.Provider.Utils.extract_custom_headers(opts[:req_http_options])
+  end
+
+  defp codex_request_id(opts) do
+    opts
+    |> provider_options()
+    |> Keyword.get_lazy(:session_id, fn -> "req_#{System.unique_integer([:positive])}" end)
   end
 
   defp normalize_stream_opts(opts) when is_list(opts) do

@@ -105,17 +105,15 @@ defmodule ReqLLM.Streaming.WebSocketClient do
   defp start_streaming_task(config, stream_server_pid, opts) do
     task_pid =
       Task.Supervisor.async(ReqLLM.TaskSupervisor, fn ->
-        case WebSocketSession.start_link(
-               config.url,
-               headers: config.headers,
-               initial_messages: config.initial_messages
-             ) do
-          {:ok, session_pid} ->
-            await_connect_and_stream(session_pid, stream_server_pid, opts)
+        case reusable_session(opts) do
+          nil ->
+            start_owned_session(config, stream_server_pid, opts)
 
-          {:error, reason} ->
-            safe_http_event(stream_server_pid, {:error, reason})
-            {:error, reason}
+          session_pid when is_pid(session_pid) ->
+            await_connect_and_stream(session_pid, stream_server_pid, opts,
+              initial_messages: config.initial_messages,
+              close_on_terminal?: false
+            )
         end
       end)
 
@@ -126,15 +124,14 @@ defmodule ReqLLM.Streaming.WebSocketClient do
       {:error, {:task_start_failed, error}}
   end
 
-  defp await_connect_and_stream(session_pid, stream_server_pid, opts) do
-    connect_timeout =
-      Keyword.get(opts, :connect_timeout, Keyword.get(opts, :receive_timeout, 30_000))
-
-    case WebSocketSession.await_connected(session_pid, connect_timeout) do
-      :ok ->
-        safe_http_event(stream_server_pid, {:status, 101})
-        safe_http_event(stream_server_pid, {:headers, [{"upgrade", "websocket"}]})
-        relay_messages(session_pid, stream_server_pid, opts)
+  defp start_owned_session(config, stream_server_pid, opts) do
+    case WebSocketSession.start_link(
+           config.url,
+           headers: config.headers,
+           initial_messages: config.initial_messages
+         ) do
+      {:ok, session_pid} ->
+        await_connect_and_stream(session_pid, stream_server_pid, opts, close_on_terminal?: true)
 
       {:error, reason} ->
         safe_http_event(stream_server_pid, {:error, reason})
@@ -142,7 +139,33 @@ defmodule ReqLLM.Streaming.WebSocketClient do
     end
   end
 
-  defp relay_messages(session_pid, stream_server_pid, opts) do
+  defp await_connect_and_stream(session_pid, stream_server_pid, opts, session_opts) do
+    connect_timeout =
+      Keyword.get(opts, :connect_timeout, Keyword.get(opts, :receive_timeout, 30_000))
+
+    case WebSocketSession.await_connected(session_pid, connect_timeout) do
+      :ok ->
+        safe_http_event(stream_server_pid, {:status, 101})
+        safe_http_event(stream_server_pid, {:headers, [{"upgrade", "websocket"}]})
+
+        case send_initial_messages(session_pid, Keyword.get(session_opts, :initial_messages, [])) do
+          :ok ->
+            relay_messages(session_pid, stream_server_pid, opts,
+              close_on_terminal?: Keyword.get(session_opts, :close_on_terminal?, true)
+            )
+
+          {:error, reason} ->
+            safe_http_event(stream_server_pid, {:error, reason})
+            {:error, reason}
+        end
+
+      {:error, reason} ->
+        safe_http_event(stream_server_pid, {:error, reason})
+        {:error, reason}
+    end
+  end
+
+  defp relay_messages(session_pid, stream_server_pid, opts, relay_opts) do
     receive_timeout = Keyword.get(opts, :receive_timeout, 30_000)
 
     case WebSocketSession.next_message(session_pid, receive_timeout) do
@@ -156,10 +179,12 @@ defmodule ReqLLM.Streaming.WebSocketClient do
               safe_http_event(stream_server_pid, {:data, message})
 
               if WebSocketProtocol.terminal_event?(%{data: decoded}) do
-                :ok = WebSocketSession.close(session_pid)
-                :ok
+                maybe_close_session(
+                  session_pid,
+                  Keyword.get(relay_opts, :close_on_terminal?, true)
+                )
               else
-                relay_messages(session_pid, stream_server_pid, opts)
+                relay_messages(session_pid, stream_server_pid, opts, relay_opts)
               end
             end
 
@@ -179,6 +204,24 @@ defmodule ReqLLM.Streaming.WebSocketClient do
         {:error, reason}
     end
   end
+
+  defp reusable_session(opts) do
+    opts
+    |> Keyword.get(:provider_options, [])
+    |> Keyword.get(:openai_websocket_session)
+  end
+
+  defp send_initial_messages(session_pid, messages) do
+    Enum.reduce_while(messages, :ok, fn message, :ok ->
+      case WebSocketSession.send_text(session_pid, message) do
+        :ok -> {:cont, :ok}
+        {:error, reason} -> {:halt, {:error, reason}}
+      end
+    end)
+  end
+
+  defp maybe_close_session(session_pid, true), do: WebSocketSession.close(session_pid)
+  defp maybe_close_session(_session_pid, false), do: :ok
 
   defp maybe_replay_fixture(model, opts) do
     case Code.ensure_loaded(ReqLLM.Test.Fixtures) do
