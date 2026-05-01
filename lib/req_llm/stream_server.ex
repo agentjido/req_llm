@@ -698,7 +698,9 @@ defmodule ReqLLM.StreamServer do
           provider_state: new_provider_state
       })
 
-    terminated? = Enum.any?(events, &termination_event?/1)
+    terminated? =
+      Enum.any?(events, &termination_event?/1) or
+        Enum.any?(stream_chunks, &terminal_chunk?/1)
 
     new_state =
       if terminated? do
@@ -753,6 +755,13 @@ defmodule ReqLLM.StreamServer do
   defp termination_event?(%{data: %{"type" => "message_stop"}}), do: true
   defp termination_event?(%{data: %{"type" => "response.completed"}}), do: true
   defp termination_event?(_), do: false
+
+  defp terminal_chunk?(%ReqLLM.StreamChunk{type: :meta, metadata: metadata})
+       when is_map(metadata) do
+    Map.get(metadata, :terminal?) == true or Map.get(metadata, "terminal?") == true
+  end
+
+  defp terminal_chunk?(_chunk), do: false
 
   defp enqueue_chunks(chunks, state) do
     {new_queue, updated_metadata, new_obj_acc, telemetry} =

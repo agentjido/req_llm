@@ -114,6 +114,20 @@ defmodule ReqLLM.StreamServer.MetadataTest do
       StreamServer.cancel(server)
     end
 
+    test "terminal? flag from provider meta completes without transport done" do
+      server = start_server()
+      _task = mock_http_task(server)
+
+      payload = Jason.encode!(%{"event" => "terminal"})
+      StreamServer.http_event(server, {:data, "data: #{payload}\n\n"})
+
+      assert {:ok, metadata} = StreamServer.await_metadata(server, 200)
+      assert metadata.finish_reason == :stop
+      refute Map.has_key?(metadata, :terminal?)
+
+      StreamServer.cancel(server)
+    end
+
     test "explicit finish_reason from provider wins over terminal? fallback" do
       server = start_server()
       _task = mock_http_task(server)
