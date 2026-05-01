@@ -787,6 +787,67 @@ defmodule ReqLLM.Provider.DefaultsTest do
       assert finish_chunk.metadata.finish_reason == :stop
       assert finish_chunk.metadata.terminal? == true
     end
+
+    test "emits terminal error chunk for SSE error event with nested message", %{model: model} do
+      # OpenAI-compatible providers (LMStudio, OpenRouter on overflow, Ollama, vLLM)
+      # return errors mid-stream as `data: {"error": {"message": "..."}}`. Without
+      # an explicit clause these were silently dropped, leaving downstream code
+      # with a finish_reason of `:incomplete` and no diagnostic.
+      error_event = %{
+        data: %{
+          "error" => %{
+            "message" =>
+              "The number of tokens to keep from the initial prompt is greater than the context length (n_keep: 6141 >= n_ctx: 4096)"
+          }
+        }
+      }
+
+      assert [chunk] = Defaults.default_decode_stream_event(error_event, model)
+      assert chunk.type == :meta
+      assert chunk.metadata.finish_reason == :error
+      assert chunk.metadata.terminal? == true
+
+      assert chunk.metadata.error =~
+               "The number of tokens to keep from the initial prompt is greater than the context length"
+    end
+
+    test "emits terminal error chunk for SSE error event with bare string", %{model: model} do
+      # Some OpenAI-compatible providers send `data: {"error": "message"}` directly
+      # without the nested `message` key. Tolerate that variant too.
+      error_event = %{data: %{"error" => "rate limit exceeded"}}
+
+      assert [chunk] = Defaults.default_decode_stream_event(error_event, model)
+      assert chunk.type == :meta
+      assert chunk.metadata.finish_reason == :error
+      assert chunk.metadata.error == "rate limit exceeded"
+      assert chunk.metadata.terminal? == true
+    end
+
+    test "error event takes precedence over choices in same payload", %{model: model} do
+      # Defensive: even if a malformed payload contains both `error` and `choices`,
+      # the error must win because `error` is terminal by definition.
+      mixed_event = %{
+        data: %{
+          "error" => %{"message" => "boom"},
+          "choices" => [%{"delta" => %{"content" => "ignored"}}]
+        }
+      }
+
+      assert [chunk] = Defaults.default_decode_stream_event(mixed_event, model)
+      assert chunk.type == :meta
+      assert chunk.metadata.finish_reason == :error
+      assert chunk.metadata.error == "boom"
+    end
+
+    test "does not match error event when message is non-string and no fallback hits",
+         %{model: model} do
+      # Guard regression: the new clause must require `message` to be a binary.
+      # A non-string `message` (rare but possible from malformed providers) should
+      # fall through to the regular `is_map(data)` clause, which returns [].
+      weird_event = %{data: %{"error" => %{"message" => %{"nested" => "thing"}}}}
+
+      assert Defaults.default_decode_stream_event(weird_event, model) == []
+    end
   end
 
   describe "ResponseBuilder reasoning_details accumulation" do

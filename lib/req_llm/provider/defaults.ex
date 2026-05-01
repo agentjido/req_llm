@@ -1100,6 +1100,15 @@ defmodule ReqLLM.Provider.Defaults do
   Provider.Defaults for the protocol removal refactoring.
   """
   @spec default_decode_stream_event(map(), LLMDB.Model.t()) :: [ReqLLM.StreamChunk.t()]
+  def default_decode_stream_event(%{data: %{"error" => %{"message" => msg}}}, _model)
+      when is_binary(msg) do
+    [ReqLLM.StreamChunk.meta(%{finish_reason: :error, error: msg, terminal?: true})]
+  end
+
+  def default_decode_stream_event(%{data: %{"error" => msg}}, _model) when is_binary(msg) do
+    [ReqLLM.StreamChunk.meta(%{finish_reason: :error, error: msg, terminal?: true})]
+  end
+
   def default_decode_stream_event(%{data: data}, model) when is_map(data) do
     # 1. Handle choices (content + finish_reason + reasoning_details)
     choices_chunks =
