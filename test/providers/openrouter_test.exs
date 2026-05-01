@@ -369,7 +369,9 @@ defmodule ReqLLM.Providers.OpenRouterTest do
          fn json -> assert json["repetition_penalty"] == 1.1 end},
         {[openrouter_min_p: 0.05], fn json -> assert json["min_p"] == 0.05 end},
         {[openrouter_top_a: 0.2], fn json -> assert json["top_a"] == 0.2 end},
-        {[openrouter_top_logprobs: 5], fn json -> assert json["top_logprobs"] == 5 end}
+        {[openrouter_top_logprobs: 5], fn json -> assert json["top_logprobs"] == 5 end},
+        {[openrouter_session_id: "req-llm-test-session"],
+         fn json -> assert json["session_id"] == "req-llm-test-session" end}
       ]
 
       for {opts, assertion} <- test_cases do
