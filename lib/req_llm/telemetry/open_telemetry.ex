@@ -381,7 +381,7 @@ defmodule ReqLLM.Telemetry.OpenTelemetry do
       end
     end)
     |> Enum.reverse()
-    |> Enum.join("")
+    |> Enum.join()
   end
 
   defp content_mode(opts) do
