@@ -146,6 +146,17 @@ defmodule ReqLLM.Providers.AnthropicTest do
       assert body["max_tokens"] == model.limits.output
     end
 
+    test "attach_stream preserves explicit max_tokens" do
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
+      context = ReqLLM.Context.new([ReqLLM.Context.user("Write a detailed answer")])
+
+      {:ok, finch_request} =
+        Anthropic.attach_stream(model, context, [api_key: "test-key", max_tokens: 123], nil)
+
+      body = Jason.decode!(finch_request.body)
+      assert body["max_tokens"] == 123
+    end
+
     test "prepare_request for :object defaults max_tokens from model output limit" do
       {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
       context = ReqLLM.Context.new([ReqLLM.Context.user("Generate a person")])

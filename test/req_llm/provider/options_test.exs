@@ -302,6 +302,30 @@ defmodule ReqLLM.Provider.OptionsTest do
       refute Keyword.has_key?(processed, :max_tokens)
     end
 
+    test "does not synthesize max_tokens when provider_options already include a token limit" do
+      model = %LLMDB.Model{provider: :mock, id: "test-model", limits: %{output: 1000}}
+
+      processed =
+        Options.put_model_max_tokens_default(
+          [provider_options: [max_completion_tokens: 123]],
+          model,
+          fallback: 4096
+        )
+
+      assert processed[:provider_options][:max_completion_tokens] == 123
+      refute Keyword.has_key?(processed, :max_tokens)
+
+      processed =
+        Options.put_model_max_tokens_default(
+          [provider_options: %{"max_output_tokens" => 456}],
+          model,
+          fallback: 4096
+        )
+
+      assert processed[:provider_options]["max_output_tokens"] == 456
+      refute Keyword.has_key?(processed, :max_tokens)
+    end
+
     test "public max token default helper uses metadata before fallback" do
       model = %LLMDB.Model{provider: :mock, id: "test-model", limits: %{output: 1000}}
 
@@ -311,6 +335,34 @@ defmodule ReqLLM.Provider.OptionsTest do
 
       assert Options.put_model_max_tokens_default([], fallback_model, fallback: 4096)[:max_tokens] ==
                4096
+    end
+
+    test "process_stream strips prepared request options before validation" do
+      model = %LLMDB.Model{provider: :mock, id: "test-model", limits: %{output: 1000}}
+      context = ReqLLM.Context.new([ReqLLM.Context.user("Hello")])
+
+      processed =
+        Options.process_stream!(
+          MockProvider,
+          :chat,
+          model,
+          context,
+          auth: {:bearer, "token"},
+          finch: ReqLLM.Finch,
+          json: %{},
+          model: model,
+          plug: {Req.Test, []},
+          retry: :transient,
+          temperature: 0.3
+        )
+
+      assert processed[:context] == context
+      assert processed[:stream] == true
+      assert processed[:max_tokens] == 1000
+      assert processed[:temperature] == 0.3
+      refute Keyword.has_key?(processed, :auth)
+      refute Keyword.has_key?(processed, :json)
+      refute Keyword.has_key?(processed, :retry)
     end
   end
 

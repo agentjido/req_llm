@@ -631,9 +631,16 @@ defmodule ReqLLM.Provider.Options do
   end
 
   defp provider_option_present?(opts, key) do
-    provider_options = Keyword.get(opts, :provider_options, [])
+    case Keyword.get(opts, :provider_options, []) do
+      provider_options when is_list(provider_options) ->
+        Keyword.keyword?(provider_options) and Keyword.has_key?(provider_options, key)
 
-    Keyword.keyword?(provider_options) and Keyword.has_key?(provider_options, key)
+      provider_options when is_map(provider_options) ->
+        Map.has_key?(provider_options, key) or Map.has_key?(provider_options, Atom.to_string(key))
+
+      _ ->
+        false
+    end
   end
 
   defp put_fallback_max_tokens_default(opts, options) do

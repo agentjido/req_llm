@@ -117,6 +117,17 @@ defmodule ReqLLM.Providers.OpenAITest do
       assert body["max_tokens"] == model.limits.output
     end
 
+    test "attach_stream preserves explicit chat max_tokens" do
+      {:ok, model} = ReqLLM.model("openai:gpt-4")
+      context = context_fixture()
+
+      {:ok, request} =
+        OpenAI.attach_stream(model, context, [api_key: "test-key", max_tokens: 123], nil)
+
+      body = Jason.decode!(request.body)
+      assert body["max_tokens"] == 123
+    end
+
     test "attach_stream defaults responses max_output_tokens from model output limit" do
       {:ok, model} = ReqLLM.model("openai:gpt-4o")
       context = context_fixture()
@@ -125,6 +136,22 @@ defmodule ReqLLM.Providers.OpenAITest do
 
       body = Jason.decode!(request.body)
       assert body["max_output_tokens"] == model.limits.output
+    end
+
+    test "attach_stream preserves explicit responses max_completion_tokens" do
+      {:ok, model} = ReqLLM.model("openai:gpt-4o")
+      context = context_fixture()
+
+      {:ok, request} =
+        OpenAI.attach_stream(
+          model,
+          context,
+          [api_key: "test-key", max_completion_tokens: 456],
+          nil
+        )
+
+      body = Jason.decode!(request.body)
+      assert body["max_output_tokens"] == 456
     end
 
     test "prepare_request for :object defaults token limit from model output limit" do
