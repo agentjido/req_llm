@@ -98,11 +98,14 @@ defmodule ReqLLM.Providers.Zenmux do
       |> Keyword.put(:tool_choice, %{type: "function", function: %{name: "structured_output"}})
 
     opts_with_tokens =
-      case Keyword.get(opts_with_tool, :max_tokens) do
-        nil -> Keyword.put(opts_with_tool, :max_tokens, 4096)
-        tokens when tokens < 200 -> Keyword.put(opts_with_tool, :max_tokens, 200)
-        _tokens -> opts_with_tool
-      end
+      opts_with_tool
+      |> ReqLLM.Provider.Options.put_model_max_tokens_default(model_spec, fallback: 4096)
+      |> then(fn opts ->
+        case Keyword.get(opts, :max_tokens) do
+          tokens when is_integer(tokens) and tokens < 200 -> Keyword.put(opts, :max_tokens, 200)
+          _tokens -> opts
+        end
+      end)
 
     opts_with_operation = Keyword.put(opts_with_tokens, :operation, :object)
 

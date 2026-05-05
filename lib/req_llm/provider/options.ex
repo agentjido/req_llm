@@ -232,6 +232,20 @@ defmodule ReqLLM.Provider.Options do
     :context
   ]
 
+  @stream_request_option_keys [
+    :api_mod,
+    :auth,
+    :finch,
+    :json,
+    :model,
+    :params,
+    :plug,
+    :pool_timeout,
+    :retry,
+    :retry_log_level,
+    :telemetry_original_opts
+  ]
+
   @doc """
   Returns the core generation options schema.
   """
@@ -337,6 +351,25 @@ defmodule ReqLLM.Provider.Options do
     final_opts
     |> Keyword.put(:telemetry_original_opts, telemetry_original_opts)
   end
+
+  @doc """
+  Processes options for provider streaming callbacks.
+
+  Streaming can receive options copied from prepared `Req.Request` structs, so this
+  trims request-only keys before running the normal generation option pipeline.
+  """
+  @spec process_stream!(module(), atom(), LLMDB.Model.t(), ReqLLM.Context.t(), keyword()) ::
+          keyword()
+  def process_stream!(provider_mod, operation, model, context, opts) do
+    opts
+    |> strip_stream_request_options()
+    |> Keyword.merge(stream: true, context: context, operation: operation)
+    |> then(&process!(provider_mod, operation, model, &1))
+  end
+
+  @doc false
+  @spec strip_stream_request_options(keyword()) :: keyword()
+  def strip_stream_request_options(opts), do: Keyword.drop(opts, @stream_request_option_keys)
 
   # Public utility functions
 
@@ -524,6 +557,47 @@ defmodule ReqLLM.Provider.Options do
     result
   end
 
+  @doc """
+  Adds a default generated-token limit from model metadata.
+
+  Explicit `:max_tokens`, `:max_completion_tokens`, `:max_output_tokens`, or matching
+  nested `:provider_options` values are preserved. When model metadata does not expose
+  an output limit, `:fallback` is used if provided.
+  """
+  @spec put_model_max_tokens_default(keyword(), LLMDB.Model.t() | ReqLLM.model_input(), keyword()) ::
+          keyword()
+  def put_model_max_tokens_default(opts, model_input, options \\ [])
+
+  def put_model_max_tokens_default(opts, %LLMDB.Model{} = model, options) do
+    key = Keyword.get(options, :key, :max_tokens)
+    fallback = Keyword.get(options, :fallback)
+    output_limit = model_output_limit(model)
+
+    cond do
+      token_limit_present?(opts) ->
+        opts
+
+      is_integer(output_limit) and output_limit > 0 ->
+        Keyword.put(opts, key, output_limit)
+
+      is_integer(fallback) and fallback > 0 ->
+        Keyword.put(opts, key, fallback)
+
+      true ->
+        opts
+    end
+  end
+
+  def put_model_max_tokens_default(opts, model_input, options) do
+    case ReqLLM.model(model_input) do
+      {:ok, %LLMDB.Model{} = model} ->
+        put_model_max_tokens_default(opts, model, options)
+
+      _ ->
+        put_fallback_max_tokens_default(opts, options)
+    end
+  end
+
   # Private helper functions
 
   defp normalize_legacy_options(opts) do
@@ -547,25 +621,37 @@ defmodule ReqLLM.Provider.Options do
     do: extract_model_options(model, opts)
 
   defp maybe_extract_max_tokens(%LLMDB.Model{} = model, opts) do
-    cond do
-      Keyword.has_key?(opts, :max_tokens) or
-        Keyword.has_key?(opts, :max_completion_tokens) or
-          provider_option_present?(opts, :max_completion_tokens) ->
-        opts
+    put_model_max_tokens_default(opts, model)
+  end
 
-      is_map(model.limits) and is_integer(model.limits[:output]) and model.limits[:output] > 0 ->
-        Keyword.put(opts, :max_tokens, model.limits.output)
-
-      true ->
-        opts
-    end
+  defp token_limit_present?(opts) do
+    Enum.any?([:max_tokens, :max_completion_tokens, :max_output_tokens], fn key ->
+      Keyword.has_key?(opts, key) or provider_option_present?(opts, key)
+    end)
   end
 
   defp provider_option_present?(opts, key) do
-    opts
-    |> Keyword.get(:provider_options, [])
-    |> Keyword.has_key?(key)
+    provider_options = Keyword.get(opts, :provider_options, [])
+
+    Keyword.keyword?(provider_options) and Keyword.has_key?(provider_options, key)
   end
+
+  defp put_fallback_max_tokens_default(opts, options) do
+    key = Keyword.get(options, :key, :max_tokens)
+    fallback = Keyword.get(options, :fallback)
+
+    if token_limit_present?(opts) or !is_integer(fallback) or fallback <= 0 do
+      opts
+    else
+      Keyword.put(opts, key, fallback)
+    end
+  end
+
+  defp model_output_limit(%LLMDB.Model{limits: limits}) when is_map(limits) do
+    limits[:output] || limits["output"]
+  end
+
+  defp model_output_limit(%LLMDB.Model{}), do: nil
 
   defp maybe_extract_model_base_url(opts, %LLMDB.Model{} = model) do
     if is_bitstring(model.base_url) do

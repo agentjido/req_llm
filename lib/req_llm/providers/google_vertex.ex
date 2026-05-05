@@ -873,6 +873,7 @@ defmodule ReqLLM.Providers.GoogleVertex do
   @impl ReqLLM.Provider
   def attach_stream(model, context, opts, _finch_name) do
     # Process and validate options
+    opts = ReqLLM.Provider.Options.strip_stream_request_options(opts)
     operation = opts[:operation] || :chat
 
     {gcp_creds, other_opts, model_family, formatter} =

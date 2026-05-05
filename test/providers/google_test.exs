@@ -1422,7 +1422,7 @@ defmodule ReqLLM.Providers.GoogleTest do
       opts = [compiled_schema: schema]
       {:ok, request} = Google.prepare_request(:object, model, context, opts)
 
-      assert request.options[:max_tokens] == 4096
+      assert request.options[:max_tokens] == model.limits.output
     end
 
     test "prepare_request for :object with sufficient max_tokens unchanged" do

@@ -111,6 +111,7 @@ defmodule ReqLLM.Providers.OpenAICodexTest do
       assert body["include"] == ["reasoning.encrypted_content"]
       assert body["text"] == %{"verbosity" => "medium"}
       refute Map.has_key?(body, "max_output_tokens")
+      assert body["max_completion_tokens"] == model.limits.output
       assert Enum.all?(body["input"], &(&1["role"] != "system"))
     end
 
@@ -140,6 +141,7 @@ defmodule ReqLLM.Providers.OpenAICodexTest do
       assert payload["model"] == "gpt-5.3-codex-spark"
       assert payload["store"] == false
       assert payload["stream"] == true
+      assert payload["max_completion_tokens"] == model.limits.output
       refute Map.has_key?(payload, "response")
     end
 

@@ -93,7 +93,22 @@ defmodule ReqLLM.Providers.ZaiCodingPlan do
 
   @impl ReqLLM.Provider
   def attach_stream(model, context, opts, finch_name) do
-    ReqLLM.Provider.Defaults.default_attach_stream(__MODULE__, model, context, opts, finch_name)
+    processed_opts =
+      ReqLLM.Provider.Options.process_stream!(
+        __MODULE__,
+        opts[:operation] || :chat,
+        model,
+        context,
+        opts
+      )
+
+    ReqLLM.Provider.Defaults.default_attach_stream(
+      __MODULE__,
+      model,
+      context,
+      processed_opts,
+      finch_name
+    )
   end
 
   defdelegate decode_stream_event(event, model), to: ReqLLM.Providers.ZaiCoder

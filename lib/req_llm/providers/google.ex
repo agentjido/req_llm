@@ -284,10 +284,15 @@ defmodule ReqLLM.Providers.Google do
       with {:ok, model} <- ReqLLM.model(model_spec),
            {:ok, context} <- ReqLLM.Context.normalize(prompt, opts) do
         opts_with_tokens =
-          case Keyword.get(opts, :max_tokens) do
-            nil -> Keyword.put(opts, :max_tokens, 4096)
-            tokens when tokens < 200 -> Keyword.put(opts, :max_tokens, 200)
-            _tokens -> opts
+          ReqLLM.Provider.Options.put_model_max_tokens_default(opts, model, fallback: 4096)
+
+        opts_with_tokens =
+          case Keyword.get(opts_with_tokens, :max_tokens) do
+            tokens when is_integer(tokens) and tokens < 200 ->
+              Keyword.put(opts_with_tokens, :max_tokens, 200)
+
+            _tokens ->
+              opts_with_tokens
           end
 
         opts_with_context =
@@ -1985,11 +1990,17 @@ defmodule ReqLLM.Providers.Google do
     {req_opts, user_opts} = Keyword.split(opts, req_only_keys)
 
     operation = Keyword.get(user_opts, :operation, :chat)
-    opts_to_process = Keyword.merge(user_opts, context: context, stream: true)
 
-    with {:ok, processed_opts0} <-
-           ReqLLM.Provider.Options.process(__MODULE__, operation, model, opts_to_process),
-         :ok <- validate_version_feature_compat(processed_opts0) do
+    processed_opts0 =
+      ReqLLM.Provider.Options.process_stream!(
+        __MODULE__,
+        operation,
+        model,
+        context,
+        user_opts
+      )
+
+    with :ok <- validate_version_feature_compat(processed_opts0) do
       require Logger
 
       Logger.debug(

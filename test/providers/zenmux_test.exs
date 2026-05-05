@@ -256,9 +256,8 @@ defmodule ReqLLM.Providers.ZenmuxTest do
       context = context_fixture()
       {:ok, schema} = ReqLLM.Schema.compile(name: [type: :string])
 
-      # Case 1: No max_tokens -> 4096
       {:ok, req1} = Zenmux.prepare_request(:object, model, context, compiled_schema: schema)
-      assert req1.options[:max_completion_tokens] == 4096
+      assert req1.options[:max_completion_tokens] == model.limits.output
 
       # Case 2: Low max_tokens -> 200
       {:ok, req2} =

@@ -186,11 +186,12 @@ defmodule ReqLLM.Providers.Alibaba.Shared do
   """
   def attach_stream(provider_mod, model, context, opts, finch_name) do
     processed_opts =
-      ReqLLM.Provider.Options.process!(
+      ReqLLM.Provider.Options.process_stream!(
         provider_mod,
         :chat,
         model,
-        Keyword.merge(opts, stream: true, context: context)
+        context,
+        opts
       )
 
     ReqLLM.Provider.Defaults.default_attach_stream(

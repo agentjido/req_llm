@@ -155,7 +155,7 @@ defmodule ReqLLM.Providers.XAI do
     compiled_schema = Keyword.fetch!(opts, :compiled_schema)
     {:ok, model} = ReqLLM.model(model_spec)
 
-    opts_with_tokens = ensure_min_tokens(opts)
+    opts_with_tokens = ensure_min_tokens(model, opts)
     mode = determine_output_mode(model, opts_with_tokens)
 
     case mode do
@@ -346,13 +346,11 @@ defmodule ReqLLM.Providers.XAI do
     end)
   end
 
-  defp ensure_min_tokens(opts) do
+  defp ensure_min_tokens(model, opts) do
+    opts = ReqLLM.Provider.Options.put_model_max_tokens_default(opts, model, fallback: 4096)
     max_tokens = Keyword.get(opts, :max_tokens) || Keyword.get(opts, :max_completion_tokens)
 
     case max_tokens do
-      nil ->
-        Keyword.put(opts, :max_tokens, 4096)
-
       tokens when tokens < 200 ->
         Keyword.put(opts, :max_tokens, 200)
 
@@ -665,9 +663,17 @@ defmodule ReqLLM.Providers.XAI do
   """
   @impl ReqLLM.Provider
   def attach_stream(model, context, opts, finch_name) do
-    {translated_opts, _warnings} = translate_options(:chat, model, opts)
-    base_url = ReqLLM.Provider.Options.effective_base_url(__MODULE__, model, translated_opts)
-    opts_with_base_url = Keyword.put(translated_opts, :base_url, base_url)
+    processed_opts =
+      ReqLLM.Provider.Options.process_stream!(
+        __MODULE__,
+        opts[:operation] || :chat,
+        model,
+        context,
+        opts
+      )
+
+    base_url = ReqLLM.Provider.Options.effective_base_url(__MODULE__, model, processed_opts)
+    opts_with_base_url = Keyword.put(processed_opts, :base_url, base_url)
     use_responses = use_responses_api?(opts_with_base_url)
 
     opts_with_base_url =

@@ -536,8 +536,7 @@ defmodule ReqLLM.Providers.GroqTest do
       opts = [compiled_schema: schema]
       {:ok, request} = Groq.prepare_request(:object, model, prompt, opts)
 
-      # Should get default of 4096
-      assert request.options[:max_tokens] == 4096
+      assert request.options[:max_tokens] == model.limits.output
     end
 
     test "prepare_request for :object with sufficient max_tokens unchanged" do

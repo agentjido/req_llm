@@ -287,6 +287,31 @@ defmodule ReqLLM.Provider.OptionsTest do
 
       refute log =~ "Renamed :max_tokens to :max_completion_tokens"
     end
+
+    test "does not synthesize max_tokens when max_output_tokens is already provided" do
+      model = %LLMDB.Model{provider: :mock, id: "test-model", limits: %{output: 1000}}
+
+      processed =
+        Options.put_model_max_tokens_default(
+          [max_output_tokens: 123],
+          model,
+          fallback: 4096
+        )
+
+      assert processed[:max_output_tokens] == 123
+      refute Keyword.has_key?(processed, :max_tokens)
+    end
+
+    test "public max token default helper uses metadata before fallback" do
+      model = %LLMDB.Model{provider: :mock, id: "test-model", limits: %{output: 1000}}
+
+      assert Options.put_model_max_tokens_default([], model, fallback: 4096)[:max_tokens] == 1000
+
+      fallback_model = %LLMDB.Model{provider: :mock, id: "fallback-model"}
+
+      assert Options.put_model_max_tokens_default([], fallback_model, fallback: 4096)[:max_tokens] ==
+               4096
+    end
   end
 
   describe "Options.process/4 - req_http_options handling" do

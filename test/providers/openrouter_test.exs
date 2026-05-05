@@ -475,7 +475,7 @@ defmodule ReqLLM.Providers.OpenRouterTest do
 
       refute Map.has_key?(request.options, :tools)
       refute Map.has_key?(request.options, :tool_choice)
-      assert request.options[:max_tokens] == 4096
+      assert request.options[:max_tokens] == model.limits.output
     end
 
     test "prepare_request for :object with json_schema mode respects custom max_tokens" do
@@ -527,7 +527,7 @@ defmodule ReqLLM.Providers.OpenRouterTest do
              }
 
       refute Map.has_key?(request.options, :response_format)
-      assert request.options[:max_tokens] == 4096
+      assert request.options[:max_tokens] == model.limits.output
     end
 
     test "decode_response handles streaming responses" do
@@ -749,8 +749,7 @@ defmodule ReqLLM.Providers.OpenRouterTest do
       opts = [compiled_schema: schema]
       {:ok, request} = OpenRouter.prepare_request(:object, model, context, opts)
 
-      # Should get default of 4096
-      assert request.options[:max_tokens] == 4096
+      assert request.options[:max_tokens] == model.limits.output
     end
 
     test "prepare_request for :object with sufficient max_tokens unchanged" do

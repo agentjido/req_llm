@@ -178,11 +178,20 @@ defmodule ReqLLM.Provider.Defaults do
       """
       @impl ReqLLM.Provider
       def attach_stream(model, context, opts, finch_name) do
+        processed_opts =
+          ReqLLM.Provider.Options.process_stream!(
+            __MODULE__,
+            opts[:operation] || :chat,
+            model,
+            context,
+            opts
+          )
+
         ReqLLM.Provider.Defaults.default_attach_stream(
           __MODULE__,
           model,
           context,
-          opts,
+          processed_opts,
           finch_name
         )
       end
@@ -299,7 +308,7 @@ defmodule ReqLLM.Provider.Defaults do
       opts
       |> Keyword.update(:tools, [structured_output_tool], &[structured_output_tool | &1])
       |> Keyword.put(:tool_choice, tool_choice)
-      |> Keyword.put_new(:max_tokens, 4096)
+      |> ReqLLM.Provider.Options.put_model_max_tokens_default(model_spec, fallback: 4096)
       |> Keyword.put(:operation, :object)
 
     prepare_chat_request(provider_mod, model_spec, prompt, opts_with_tool)

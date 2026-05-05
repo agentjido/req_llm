@@ -79,11 +79,14 @@ defmodule ReqLLM.Providers.Groq do
 
     # Adjust max_tokens for structured output with Groq-specific minimums
     opts_with_tokens =
-      case Keyword.get(opts_with_tool, :max_tokens) do
-        nil -> Keyword.put(opts_with_tool, :max_tokens, 4096)
-        tokens when tokens < 200 -> Keyword.put(opts_with_tool, :max_tokens, 200)
-        _tokens -> opts_with_tool
-      end
+      opts_with_tool
+      |> ReqLLM.Provider.Options.put_model_max_tokens_default(model_spec, fallback: 4096)
+      |> then(fn opts ->
+        case Keyword.get(opts, :max_tokens) do
+          tokens when is_integer(tokens) and tokens < 200 -> Keyword.put(opts, :max_tokens, 200)
+          _tokens -> opts
+        end
+      end)
 
     # Preserve the :object operation for response decoding
     opts_with_operation = Keyword.put(opts_with_tokens, :operation, :object)
@@ -197,9 +200,17 @@ defmodule ReqLLM.Providers.Groq do
   """
   @impl ReqLLM.Provider
   def attach_stream(model, context, opts, finch_name) do
-    {translated_opts, _warnings} = translate_options(:chat, model, opts)
-    base_url = ReqLLM.Provider.Options.effective_base_url(__MODULE__, model, translated_opts)
-    opts_with_base_url = Keyword.put(translated_opts, :base_url, base_url)
+    processed_opts =
+      ReqLLM.Provider.Options.process_stream!(
+        __MODULE__,
+        opts[:operation] || :chat,
+        model,
+        context,
+        opts
+      )
+
+    base_url = ReqLLM.Provider.Options.effective_base_url(__MODULE__, model, processed_opts)
+    opts_with_base_url = Keyword.put(processed_opts, :base_url, base_url)
     ReqLLM.Providers.OpenAI.ChatAPI.attach_stream(model, context, opts_with_base_url, finch_name)
   end
 

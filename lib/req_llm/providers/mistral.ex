@@ -130,9 +130,17 @@ defmodule ReqLLM.Providers.Mistral do
 
   @impl ReqLLM.Provider
   def attach_stream(model, context, opts, finch_name) do
-    {translated_opts, _warnings} = translate_options(:chat, model, opts)
-    base_url = ReqLLM.Provider.Options.effective_base_url(__MODULE__, model, translated_opts)
-    opts_with_base_url = Keyword.put(translated_opts, :base_url, base_url)
+    processed_opts =
+      ReqLLM.Provider.Options.process_stream!(
+        __MODULE__,
+        opts[:operation] || :chat,
+        model,
+        context,
+        opts
+      )
+
+    base_url = ReqLLM.Provider.Options.effective_base_url(__MODULE__, model, processed_opts)
+    opts_with_base_url = Keyword.put(processed_opts, :base_url, base_url)
 
     ReqLLM.Provider.Defaults.default_attach_stream(
       __MODULE__,

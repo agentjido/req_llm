@@ -107,6 +107,41 @@ defmodule ReqLLM.Providers.OpenAITest do
       assert request.method == :post
     end
 
+    test "attach_stream defaults chat max_tokens from model output limit" do
+      {:ok, model} = ReqLLM.model("openai:gpt-4")
+      context = context_fixture()
+
+      {:ok, request} = OpenAI.attach_stream(model, context, [api_key: "test-key"], nil)
+
+      body = Jason.decode!(request.body)
+      assert body["max_tokens"] == model.limits.output
+    end
+
+    test "attach_stream defaults responses max_output_tokens from model output limit" do
+      {:ok, model} = ReqLLM.model("openai:gpt-4o")
+      context = context_fixture()
+
+      {:ok, request} = OpenAI.attach_stream(model, context, [api_key: "test-key"], nil)
+
+      body = Jason.decode!(request.body)
+      assert body["max_output_tokens"] == model.limits.output
+    end
+
+    test "prepare_request for :object defaults token limit from model output limit" do
+      {:ok, model} = ReqLLM.model("openai:gpt-4o-mini")
+      context = context_fixture()
+      {:ok, schema} = ReqLLM.Schema.compile(name: [type: :string, required: true])
+
+      {:ok, request} = OpenAI.prepare_request(:object, model, context, compiled_schema: schema)
+
+      body = request |> OpenAI.encode_body() |> Map.fetch!(:body) |> Jason.decode!()
+
+      token_limit =
+        body["max_tokens"] || body["max_completion_tokens"] || body["max_output_tokens"]
+
+      assert token_limit == model.limits.output
+    end
+
     test "prepare_request honors explicit string-key openai_chat wire protocol" do
       {:ok, model} =
         ReqLLM.model(%{

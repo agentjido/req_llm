@@ -39,6 +39,10 @@ defmodule ReqLLM.Providers.OpenAICodex do
       type: :string,
       doc: "Explicit ChatGPT account id override for Codex requests"
     ],
+    session_id: [
+      type: :string,
+      doc: "Stable request/session id used for Codex websocket headers"
+    ],
     codex_originator: [
       type: :string,
       default: "pi",
@@ -268,7 +272,22 @@ defmodule ReqLLM.Providers.OpenAICodex do
 
   @impl ReqLLM.Provider
   def attach_stream(model, context, opts, _finch_name) do
-    opts = normalize_stream_opts(opts)
+    opts =
+      opts
+      |> normalize_stream_opts()
+      |> ReqLLM.Provider.Options.put_model_max_tokens_default(model,
+        key: :max_completion_tokens
+      )
+      |> then(fn opts ->
+        ReqLLM.Provider.Options.process_stream!(
+          __MODULE__,
+          opts[:operation] || :chat,
+          model,
+          context,
+          opts
+        )
+      end)
+
     ensure_oauth_mode!(opts)
 
     credential = ReqLLM.Auth.resolve!(model, opts)
@@ -308,7 +327,22 @@ defmodule ReqLLM.Providers.OpenAICodex do
   end
 
   def attach_websocket_stream(model, context, opts) do
-    opts = normalize_stream_opts(opts)
+    opts =
+      opts
+      |> normalize_stream_opts()
+      |> ReqLLM.Provider.Options.put_model_max_tokens_default(model,
+        key: :max_completion_tokens
+      )
+      |> then(fn opts ->
+        ReqLLM.Provider.Options.process_stream!(
+          __MODULE__,
+          opts[:operation] || :chat,
+          model,
+          context,
+          opts
+        )
+      end)
+
     ensure_oauth_mode!(opts)
 
     credential = ReqLLM.Auth.resolve!(model, opts)
@@ -375,6 +409,7 @@ defmodule ReqLLM.Providers.OpenAICodex do
     body
     |> Map.put("input", Enum.reject(List.wrap(body["input"]), &system_input?/1))
     |> Map.delete("max_output_tokens")
+    |> maybe_put_max_completion_tokens(opts)
     |> Map.put("store", false)
     |> Map.put("stream", true)
     |> Map.put("include", ["reasoning.encrypted_content"])
@@ -468,6 +503,13 @@ defmodule ReqLLM.Providers.OpenAICodex do
 
   defp maybe_put_event(event, nil), do: event
   defp maybe_put_event(event, type), do: Map.put(event, :event, type)
+
+  defp maybe_put_max_completion_tokens(map, opts) do
+    case Keyword.get(opts, :max_completion_tokens) || Keyword.get(opts, :max_tokens) do
+      nil -> map
+      tokens -> Map.put(map, "max_completion_tokens", tokens)
+    end
+  end
 
   defp normalize_response_payload(data) do
     update_in(data, ["response"], fn
@@ -674,7 +716,11 @@ defmodule ReqLLM.Providers.OpenAICodex do
           |> Keyword.put(:openai_parallel_tool_calls, false)
         end
       )
-      |> put_default_max_tokens_for_model(model_spec)
+      |> ReqLLM.Provider.Options.put_model_max_tokens_default(
+        model_spec,
+        key: :max_completion_tokens,
+        fallback: 4096
+      )
       |> Keyword.put(:operation, :object)
 
     prepare_request(:chat, model_spec, prompt, opts_with_format)
@@ -702,20 +748,14 @@ defmodule ReqLLM.Providers.OpenAICodex do
         [],
         &Keyword.put(&1, :openai_parallel_tool_calls, false)
       )
-      |> put_default_max_tokens_for_model(model_spec)
+      |> ReqLLM.Provider.Options.put_model_max_tokens_default(
+        model_spec,
+        key: :max_completion_tokens,
+        fallback: 4096
+      )
       |> Keyword.put(:operation, :object)
 
     prepare_request(:chat, model_spec, prompt, opts_with_tool)
-  end
-
-  defp put_default_max_tokens_for_model(opts, model_spec) do
-    case ReqLLM.model(model_spec) do
-      {:ok, _model} ->
-        Keyword.put_new(opts, :max_completion_tokens, 4096)
-
-      _ ->
-        Keyword.put_new(opts, :max_completion_tokens, 4096)
-    end
   end
 
   defp enforce_strict_schema_requirements(schema) do

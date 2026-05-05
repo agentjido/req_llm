@@ -263,7 +263,7 @@ defmodule ReqLLM.Providers.Anthropic do
           })
         end
       )
-      |> Keyword.put_new(:max_tokens, 4096)
+      |> ReqLLM.Provider.Options.put_model_max_tokens_default(model_spec, fallback: 4096)
       |> Keyword.put(:operation, :object)
 
     prepare_request(:chat, model_spec, prompt, opts_with_format)
@@ -312,7 +312,7 @@ defmodule ReqLLM.Providers.Anthropic do
           opts
           |> Keyword.update(:tools, [structured_output_tool], &[structured_output_tool | &1])
           |> Keyword.put(:tool_choice, %{type: "tool", name: "structured_output"})
-          |> Keyword.put_new(:max_tokens, 4096)
+          |> ReqLLM.Provider.Options.put_model_max_tokens_default(model_spec, fallback: 4096)
           |> Keyword.put(:operation, :object)
 
         prepare_request(:chat, model_spec, prompt, opts_with_tool)
@@ -521,14 +521,17 @@ defmodule ReqLLM.Providers.Anthropic do
 
   @impl ReqLLM.Provider
   def attach_stream(model, context, opts, _finch_name) do
-    # Extract and merge provider_options for translation
-    {provider_options, standard_opts} = Keyword.pop(opts, :provider_options, [])
-    flattened_opts = Keyword.merge(standard_opts, provider_options)
+    operation = opts[:operation] || :chat
 
-    # Translate provider options (including reasoning_effort) before building body
-    {translated_opts, _warnings} = translate_options(:chat, model, flattened_opts)
+    translated_opts =
+      ReqLLM.Provider.Options.process_stream!(
+        __MODULE__,
+        operation,
+        model,
+        context,
+        opts
+      )
 
-    # Set default timeout for reasoning models
     default_timeout =
       if Keyword.has_key?(translated_opts, :thinking) do
         Application.get_env(:req_llm, :thinking_timeout, 300_000)
@@ -541,14 +544,14 @@ defmodule ReqLLM.Providers.Anthropic do
     base_url = ReqLLM.Provider.Options.effective_base_url(__MODULE__, model, translated_opts)
     translated_opts = Keyword.put(translated_opts, :base_url, base_url)
 
-    # Build request using shared helpers
     headers = build_request_headers(model, translated_opts)
     streaming_headers = [{"Accept", "text/event-stream"} | headers]
     beta_headers = build_beta_headers(translated_opts)
-    custom_headers = ReqLLM.Provider.Utils.extract_custom_headers(opts[:req_http_options])
-    all_headers = streaming_headers ++ beta_headers ++ custom_headers
 
-    operation = opts[:operation] || :chat
+    custom_headers =
+      ReqLLM.Provider.Utils.extract_custom_headers(translated_opts[:req_http_options])
+
+    all_headers = streaming_headers ++ beta_headers ++ custom_headers
 
     context =
       ReqLLM.ToolCallIdCompat.apply_context(

@@ -136,6 +136,27 @@ defmodule ReqLLM.Providers.AnthropicTest do
       assert headers["anthropic-beta"] == "tools-2024-05-16"
     end
 
+    test "attach_stream defaults max_tokens from model output limit" do
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
+      context = ReqLLM.Context.new([ReqLLM.Context.user("Write a detailed answer")])
+
+      {:ok, finch_request} = Anthropic.attach_stream(model, context, [api_key: "test-key"], nil)
+
+      body = Jason.decode!(finch_request.body)
+      assert body["max_tokens"] == model.limits.output
+    end
+
+    test "prepare_request for :object defaults max_tokens from model output limit" do
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
+      context = ReqLLM.Context.new([ReqLLM.Context.user("Generate a person")])
+      {:ok, schema} = ReqLLM.Schema.compile(name: [type: :string, required: true])
+
+      {:ok, request} = Anthropic.prepare_request(:object, model, context, compiled_schema: schema)
+
+      body = request |> Anthropic.encode_body() |> Map.fetch!(:body) |> Jason.decode!()
+      assert body["max_tokens"] == model.limits.output
+    end
+
     test "error handling for invalid configurations" do
       {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
       prompt = "Hello world"

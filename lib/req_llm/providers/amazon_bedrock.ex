@@ -534,12 +534,16 @@ defmodule ReqLLM.Providers.AmazonBedrock do
     # Validate we have necessary AWS credentials
     validate_aws_credentials!(aws_creds)
 
-    # Apply pre-validation (reasoning params, etc.) - streaming bypasses Options.process
-    {pre_validated_opts, _warnings} = pre_validate_options(:chat, model, other_opts)
+    operation = other_opts[:operation] || :chat
 
-    # Apply option translation (temperature/top_p conflicts, etc.)
-    # This is critical for streaming requests which bypass the normal Options.process pipeline
-    {translated_opts, _warnings} = translate_options(:chat, model, pre_validated_opts)
+    translated_opts =
+      ReqLLM.Provider.Options.process_stream!(
+        __MODULE__,
+        operation,
+        model,
+        context,
+        other_opts
+      )
 
     # Get model ID - use provider_model_id if set (for models requiring specific API format),
     # otherwise fall back to canonical model ID
@@ -578,7 +582,7 @@ defmodule ReqLLM.Providers.AmazonBedrock do
     context =
       ReqLLM.ToolCallIdCompat.apply_context(
         __MODULE__,
-        :chat,
+        operation,
         model,
         context,
         translated_opts

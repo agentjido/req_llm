@@ -384,12 +384,16 @@ defmodule ReqLLM.Providers.XAITest do
   end
 
   describe "token limit enforcement" do
-    test "sets default max_tokens to 4096 when not specified", %{compiled_schema: schema} do
+    test "sets default max_tokens from model output limit when not specified", %{
+      compiled_schema: schema
+    } do
+      {:ok, model} = ReqLLM.model("xai:grok-3")
+
       {:ok, request} =
-        XAI.prepare_request(:object, "xai:grok-3", "Generate data", compiled_schema: schema)
+        XAI.prepare_request(:object, model, "Generate data", compiled_schema: schema)
 
       max_tokens = request.options[:max_completion_tokens] || request.options[:max_tokens]
-      assert max_tokens == 4096
+      assert max_tokens == model.limits.output
     end
 
     test "enforces minimum 200 tokens", %{compiled_schema: schema} do

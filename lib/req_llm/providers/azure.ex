@@ -339,7 +339,7 @@ defmodule ReqLLM.Providers.Azure do
 
     opts_for_object =
       opts
-      |> Keyword.put_new(:max_tokens, 4096)
+      |> ReqLLM.Provider.Options.put_model_max_tokens_default(model, fallback: 4096)
       |> Keyword.put(:operation, :object)
 
     case model_family do
@@ -677,18 +677,16 @@ defmodule ReqLLM.Providers.Azure do
     model_family = get_model_family(model_id)
     resolved_base_url = resolve_base_url(model_family, opts)
 
-    opts_with_context =
-      opts
-      |> Keyword.put(:context, context)
-      |> Keyword.put(:base_url, resolved_base_url)
-
-    {:ok, processed_opts} =
-      ReqLLM.Provider.Options.process(__MODULE__, :chat, model, opts_with_context)
-
     operation = opts[:operation] || :chat
 
     processed_opts =
-      processed_opts
+      ReqLLM.Provider.Options.process_stream!(
+        __MODULE__,
+        operation,
+        model,
+        context,
+        Keyword.put(opts, :base_url, resolved_base_url)
+      )
       |> maybe_clean_thinking_after_translation(model_family, operation)
       |> maybe_warn_service_tier(model_family, model_id)
 
