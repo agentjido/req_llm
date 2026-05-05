@@ -171,7 +171,7 @@ defmodule ReqLLM.Providers.AmazonBedrock.Cohere do
   end
 
   defp extract_embeddings(%{embeddings: embeddings}) when is_map(embeddings) do
-    float_embeddings = Map.get(embeddings, :float) || Map.get(embeddings, "float")
+    float_embeddings = embeddings[:float]
 
     if is_list(float_embeddings) do
       data = build_embedding_data(float_embeddings)

@@ -478,7 +478,7 @@ defmodule ReqLLM.Providers.OpenAICodex do
   defp normalize_stream_event!(event), do: event
 
   defp stream_event_type(event, data) do
-    Map.get(event, :event) || Map.get(event, "event") || data["event"] || data["type"]
+    event[:event] || data["event"] || data["type"]
   end
 
   defp put_event_type(event, data, type) do
@@ -804,8 +804,7 @@ defmodule ReqLLM.Providers.OpenAICodex do
   defp extract_metadata(chunks) do
     Enum.reduce(chunks, %{}, fn
       %ReqLLM.StreamChunk{type: :meta, metadata: meta}, acc when is_map(meta) ->
-        usage =
-          Map.get(meta, :usage) || Map.get(meta, "usage")
+        usage = meta[:usage]
 
         acc =
           if is_map(usage) do

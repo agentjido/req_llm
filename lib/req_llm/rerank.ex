@@ -169,10 +169,9 @@ defmodule ReqLLM.Rerank do
   end
 
   defp rerank_enabled?(capabilities) when is_map(capabilities) do
-    case capabilities[:rerank] || capabilities["rerank"] do
+    case capabilities[:rerank] do
       true -> true
       %{enabled: true} -> true
-      %{"enabled" => true} -> true
       _ -> false
     end
   end

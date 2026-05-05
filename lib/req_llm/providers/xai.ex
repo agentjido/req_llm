@@ -345,7 +345,7 @@ defmodule ReqLLM.Providers.XAI do
     xai_tools = Keyword.get(opts, :xai_tools, [])
 
     Enum.any?(xai_tools, fn tool ->
-      tool_type = normalize_tool_type(Map.get(tool, "type") || Map.get(tool, :type))
+      tool_type = normalize_tool_type(Map.get(tool, :type))
       tool_type in ["web_search", "x_search"]
     end)
   end
@@ -459,7 +459,6 @@ defmodule ReqLLM.Providers.XAI do
   defp maybe_add_xai_tool_usage(usage, body) when is_map(usage) do
     sources =
       Map.get(usage, "num_sources_used") ||
-        Map.get(usage, :num_sources_used) ||
         extract_server_tool_usage(body)
 
     web_search_calls = extract_web_search_calls(usage)
@@ -484,20 +483,14 @@ defmodule ReqLLM.Providers.XAI do
   defp extract_server_tool_usage(body) when is_map(body) do
     tool_usage =
       Map.get(body, "server_side_tool_usage") ||
-        Map.get(body, :server_side_tool_usage) ||
-        Map.get(body, "server_side_tool_use") ||
-        Map.get(body, :server_side_tool_use)
+        Map.get(body, "server_side_tool_use")
 
     case tool_usage do
       %{} = usage ->
         Map.get(usage, "web_search") ||
-          Map.get(usage, :web_search) ||
           Map.get(usage, "SERVER_SIDE_TOOL_WEB_SEARCH") ||
-          Map.get(usage, :SERVER_SIDE_TOOL_WEB_SEARCH) ||
           Map.get(usage, "x_search") ||
-          Map.get(usage, :x_search) ||
-          Map.get(usage, "SERVER_SIDE_TOOL_X_SEARCH") ||
-          Map.get(usage, :SERVER_SIDE_TOOL_X_SEARCH)
+          Map.get(usage, "SERVER_SIDE_TOOL_X_SEARCH")
 
       _ ->
         nil
@@ -823,7 +816,7 @@ defmodule ReqLLM.Providers.XAI do
   defp split_xai_tools(tools) when is_list(tools) do
     tools =
       Enum.reject(tools, fn tool ->
-        tool_type = normalize_tool_type(Map.get(tool, "type") || Map.get(tool, :type))
+        tool_type = normalize_tool_type(Map.get(tool, :type))
         tool_type == "live_search"
       end)
 
@@ -834,7 +827,7 @@ defmodule ReqLLM.Providers.XAI do
   defp split_xai_tools(tool), do: split_xai_tools([tool])
 
   defp xai_tool_entry?(%{} = tool) do
-    tool_type = normalize_tool_type(Map.get(tool, "type") || Map.get(tool, :type))
+    tool_type = normalize_tool_type(Map.get(tool, :type))
     tool_type in ["web_search", "x_search"]
   end
 
@@ -853,7 +846,7 @@ defmodule ReqLLM.Providers.XAI do
   end
 
   defp live_search_tool?(%{} = tool) do
-    tool_type = normalize_tool_type(Map.get(tool, "type") || Map.get(tool, :type))
+    tool_type = normalize_tool_type(Map.get(tool, :type))
     tool_type == "live_search"
   end
 

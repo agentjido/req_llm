@@ -777,7 +777,7 @@ defmodule ReqLLM.StreamServer do
                 chunk_meta = chunk.metadata || %{}
 
                 # Extract usage for normalization
-                usage = Map.get(chunk_meta, :usage) || Map.get(chunk_meta, "usage")
+                usage = Map.get(chunk_meta, :usage)
 
                 meta_with_usage =
                   if usage do

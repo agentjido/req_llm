@@ -249,10 +249,7 @@ defmodule ReqLLM.Provider.Defaults.ResponseBuilder do
   end
 
   defp normalize_tool_call(other) when is_map(other) do
-    id = Map.get(other, :id) || Map.get(other, "id")
-    name = Map.get(other, :name) || Map.get(other, "name")
-    args = Map.get(other, :arguments) || Map.get(other, "arguments")
-    ToolCall.new(id, name, encode_tool_args(args))
+    ToolCall.new(other[:id], other[:name], encode_tool_args(other[:arguments]))
   end
 
   defp encode_tool_args(args) when is_binary(args), do: args

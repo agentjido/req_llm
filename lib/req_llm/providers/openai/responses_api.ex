@@ -119,7 +119,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
 
   def decode_stream_event(%{data: data} = event, model) when is_map(data) do
     event_type =
-      Map.get(event, :event) || Map.get(event, "event") || data["event"] || data["type"]
+      Map.get(event, :event) || data["event"] || data["type"]
 
     Debug.dbug(
       fn ->
@@ -307,7 +307,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   defp track_text_delta_event(state, _event_type, _data), do: state
 
   defp stream_event_type(%{data: data} = event) when is_map(data) do
-    type = Map.get(event, :event) || Map.get(event, "event") || data["event"] || data["type"]
+    type = Map.get(event, :event) || data["event"] || data["type"]
     {type, data}
   end
 
@@ -344,8 +344,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   defp track_tool_call(state, _event_type, _data), do: state
 
   defp maybe_add_tool_call_from_item(state, item) do
-    item_type = item["type"] || item[:type]
-    item_type = if is_atom(item_type), do: Atom.to_string(item_type), else: item_type
+    item_type = item["type"]
 
     if is_binary(item_type) do
       case tool_usage_key_from_call_type(item_type) do
@@ -384,8 +383,8 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   defp extract_tool_call_id(data, call_type) when is_map(data) do
     call_type = if is_atom(call_type), do: Atom.to_string(call_type), else: call_type
 
-    data["id"] || data[:id] || data["call_id"] || data[:call_id] || data["item_id"] ||
-      data[:item_id] || get_in(data, ["item", "id"]) || get_in(data, [:item, :id]) ||
+    data["id"] || data["call_id"] || data["item_id"] ||
+      get_in(data, ["item", "id"]) ||
       extract_tool_call_id_from_payload(data, call_type)
   end
 
@@ -393,7 +392,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     call_data = Map.get(data, call_type) || maybe_get_call_atom_key(data, call_type)
 
     if is_map(call_data) do
-      call_data["id"] || call_data[:id] || call_data["call_id"] || call_data[:call_id]
+      call_data["id"] || call_data["call_id"]
     end
   end
 
@@ -465,8 +464,8 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   defp maybe_merge_tool_usage(meta, counts, emitted?)
        when is_map(meta) and is_map(counts) and map_size(counts) > 0 do
     cond do
-      Map.has_key?(meta, :usage) or Map.has_key?(meta, "usage") ->
-        usage = Map.get(meta, :usage) || Map.get(meta, "usage") || %{}
+      Map.has_key?(meta, :usage) ->
+        usage = Map.get(meta, :usage) || %{}
         updated_usage = merge_tool_usage_counts(usage, counts)
         {Map.put(meta, :usage, updated_usage), true}
 
@@ -491,9 +490,9 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
 
   defp merge_tool_usage_count(usage, tool, count)
        when is_map(usage) and is_number(count) and count > 0 do
-    tool_usage = Map.get(usage, :tool_usage) || Map.get(usage, "tool_usage") || %{}
+    tool_usage = Map.get(usage, :tool_usage) || %{}
     existing = tool_usage_entry(tool_usage, tool) || %{}
-    existing_count = Map.get(existing, :count) || Map.get(existing, "count") || 0
+    existing_count = Map.get(existing, :count) || 0
     final_count = max(existing_count, count)
     key = tool_usage_key_for_merge(tool_usage, tool)
     updated_tool_usage = Map.put(tool_usage, key, %{count: final_count, unit: :call})
@@ -745,8 +744,8 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   defp encode_phase_items_from_metadata(%{phase_items: items}) when is_list(items) do
     items
     |> Enum.flat_map(fn item ->
-      phase = item[:phase] || item["phase"]
-      content = normalize_phase_item_content(item[:content] || item["content"])
+      phase = item["phase"]
+      content = normalize_phase_item_content(item["content"])
 
       if valid_assistant_phase?(phase) and content != [] do
         [%{"role" => "assistant", "phase" => phase, "content" => content}]
@@ -1174,8 +1173,8 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
 
   defp encode_tool_outputs(outputs) when is_list(outputs) do
     Enum.map(outputs, fn output ->
-      call_id = output[:call_id] || output["call_id"]
-      raw_output = output[:output] || output["output"]
+      call_id = output[:call_id]
+      raw_output = output[:output]
 
       output_string =
         cond do
@@ -1283,20 +1282,20 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   end
 
   defp encode_tool_for_responses_api(tool_schema) when is_map(tool_schema) do
-    tool_type = tool_schema["type"] || tool_schema[:type]
+    tool_schema = stringify_keys(tool_schema)
+    tool_type = tool_schema["type"]
     tool_type = if is_atom(tool_type), do: Atom.to_string(tool_type), else: tool_type
 
     if tool_type in @builtin_tool_types do
-      tool_schema
-      |> stringify_keys()
-      |> Map.put("type", tool_type)
+      Map.put(tool_schema, "type", tool_type)
     else
-      function_def = tool_schema["function"] || tool_schema[:function]
+      function_def = tool_schema["function"]
 
       if function_def do
-        name = function_def["name"] || function_def[:name]
-        description = function_def["description"] || function_def[:description]
-        raw_params = function_def["parameters"] || function_def[:parameters]
+        function_def = stringify_keys(function_def)
+        name = function_def["name"]
+        description = function_def["description"]
+        raw_params = function_def["parameters"]
         params = normalize_parameters_for_strict(raw_params)
 
         %{
@@ -1307,9 +1306,9 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
           "strict" => true
         }
       else
-        name = tool_schema["name"] || tool_schema[:name]
-        description = tool_schema["description"] || tool_schema[:description]
-        raw_params = tool_schema["parameters"] || tool_schema[:parameters]
+        name = tool_schema["name"]
+        description = tool_schema["description"]
+        raw_params = tool_schema["parameters"]
         params = normalize_parameters_for_strict(raw_params)
 
         %{
@@ -1346,8 +1345,9 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   end
 
   defp normalize_parameters(params) when is_map(params) do
-    properties = params[:properties] || params["properties"] || %{}
-    ordering = params[:propertyOrdering] || params["propertyOrdering"]
+    params = stringify_keys(params)
+    properties = params["properties"] || %{}
+    ordering = params["propertyOrdering"]
 
     result = %{
       "type" => "object",
@@ -1402,19 +1402,20 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   end
 
   def encode_text_format(response_format, verbosity) when is_map(response_format) do
-    type = response_format[:type] || response_format["type"]
+    response_format = stringify_keys(response_format)
+    type = response_format["type"]
 
     base =
       case type do
         "json_schema" ->
-          json_schema = response_format[:json_schema] || response_format["json_schema"]
-          schema = ReqLLM.Schema.to_json(json_schema[:schema] || json_schema["schema"])
+          json_schema = stringify_keys(response_format["json_schema"])
+          schema = ReqLLM.Schema.to_json(json_schema["schema"])
 
           %{
             "format" => %{
               "type" => "json_schema",
-              "name" => json_schema[:name] || json_schema["name"],
-              "strict" => json_schema[:strict] || json_schema["strict"],
+              "name" => json_schema["name"],
+              "strict" => json_schema["strict"],
               "schema" => schema
             }
           }
@@ -1878,11 +1879,10 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   end
 
   defp count_tool_calls_from_output(response_data) do
-    output = response_data["output"] || response_data[:output] || []
+    output = response_data["output"] || []
 
     Enum.reduce(output, %{}, fn item, acc ->
-      item_type = item["type"] || item[:type]
-      item_type = if is_atom(item_type), do: Atom.to_string(item_type), else: item_type
+      item_type = item["type"]
 
       if is_binary(item_type) do
         tool = tool_usage_key_from_call_type(item_type)
@@ -1899,16 +1899,14 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   end
 
   defp extract_tool_calls_from_usage(response_data) do
-    usage = response_data["usage"] || response_data[:usage] || %{}
+    usage = response_data["usage"] || %{}
 
     details =
       Map.get(usage, "server_side_tool_usage_details") ||
-        Map.get(usage, :server_side_tool_usage_details) ||
         Map.get(usage, "server_side_tool_usage") ||
-        Map.get(usage, :server_side_tool_usage) ||
         %{}
 
-    server_tool_use = Map.get(usage, "server_tool_use") || Map.get(usage, :server_tool_use) || %{}
+    server_tool_use = Map.get(usage, "server_tool_use") || %{}
 
     counts_from_details = extract_tool_counts_from_map(details, "_calls")
     counts_from_requests = extract_tool_counts_from_map(server_tool_use, "_requests")

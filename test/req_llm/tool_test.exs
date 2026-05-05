@@ -695,8 +695,7 @@ defmodule ReqLLM.ToolTest do
           parameter_schema: json_schema,
           callback: fn args ->
             # Handle both string and atom keys
-            query = args["query"] || args[:query]
-            {:ok, "Found: #{query}"}
+            {:ok, "Found: #{args["query"] || args[:query]}"}
           end
         )
 

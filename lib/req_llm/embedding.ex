@@ -136,10 +136,9 @@ defmodule ReqLLM.Embedding do
   end
 
   defp embeddings_enabled?(capabilities) when is_map(capabilities) do
-    case capabilities[:embeddings] || capabilities["embeddings"] do
+    case capabilities[:embeddings] do
       true -> true
       %{enabled: true} -> true
-      %{"enabled" => true} -> true
       _ -> false
     end
   end

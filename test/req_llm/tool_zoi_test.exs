@@ -8,14 +8,11 @@ defmodule ReqLLM.Tool.ZoiTest do
     def simple_callback(args), do: {:ok, "Received: #{inspect(args)}"}
 
     def weather_callback(args) do
-      location = args["location"] || args[:location]
-      units = args["units"] || args[:units] || "celsius"
-      {:ok, %{location: location, temperature: 72, units: units}}
+      {:ok, %{location: args["location"], temperature: 72, units: args["units"] || "celsius"}}
     end
 
     def nested_callback(args) do
-      user = args["user"] || args[:user]
-      {:ok, "User: #{inspect(user)}"}
+      {:ok, "User: #{inspect(args["user"])}"}
     end
   end
 
@@ -829,8 +826,7 @@ defmodule ReqLLM.Tool.ZoiTest do
           description: "Send message",
           parameter_schema: schema,
           callback: fn args ->
-            msg = args["message"] || args[:message]
-            {:ok, "Sent: #{msg}"}
+            {:ok, "Sent: #{args["message"]}"}
           end
         )
 
@@ -851,9 +847,7 @@ defmodule ReqLLM.Tool.ZoiTest do
           description: "Flexible tool",
           parameter_schema: schema,
           callback: fn args ->
-            req = args["required"] || args[:required]
-            opt = args["optional"] || args[:optional]
-            {:ok, %{required: req, optional: opt}}
+            {:ok, %{required: args["required"], optional: args["optional"]}}
           end
         )
 

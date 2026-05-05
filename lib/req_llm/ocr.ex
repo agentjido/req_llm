@@ -218,16 +218,15 @@ defmodule ReqLLM.OCR do
   def ocr_capable_model?(_), do: false
 
   defp ocr_enabled?(capabilities) when is_map(capabilities) do
-    case capabilities[:ocr] || capabilities["ocr"] do
+    case capabilities[:ocr] do
       true -> true
       %{enabled: true} -> true
-      %{"enabled" => true} -> true
       _ -> false
     end
   end
 
   defp ocr_enabled?(_), do: false
 
-  defp get_extra_family(extra) when is_map(extra), do: extra[:family] || extra["family"]
+  defp get_extra_family(extra) when is_map(extra), do: extra[:family]
   defp get_extra_family(_), do: nil
 end

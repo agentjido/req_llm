@@ -128,9 +128,7 @@ defmodule ReqLLM.Coverage.CrossProvider.ToolCallIdCompatIntegrationTest do
     path = ReqLLM.Test.FixturePath.file(model, fixture_name)
     transcript = ReqLLM.Test.VCR.load!(path)
 
-    Map.get(transcript.request, "canonical_json") ||
-      Map.get(transcript.request, :canonical_json) ||
-      %{}
+    Map.get(transcript.request, "canonical_json", %{})
   end
 
   defp anthropic_tool_ids(body) do

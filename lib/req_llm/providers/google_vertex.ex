@@ -503,9 +503,7 @@ defmodule ReqLLM.Providers.GoogleVertex do
 
   defp extract_model_id(model) do
     Map.get(model, :provider_model_id) ||
-      Map.get(model, "provider_model_id") ||
-      Map.get(model, :id) ||
-      Map.get(model, "id")
+      Map.get(model, :id)
   end
 
   defp mistral_model?(model_id) do
@@ -513,8 +511,8 @@ defmodule ReqLLM.Providers.GoogleVertex do
   end
 
   defp resolve_family_from_metadata(model, model_id) do
-    extra = Map.get(model, :extra) || Map.get(model, "extra") || %{}
-    extra_family = Map.get(extra, :family) || Map.get(extra, "family")
+    extra = model.extra || %{}
+    extra_family = extra[:family]
 
     cond do
       is_binary(extra_family) and String.starts_with?(extra_family, "claude") ->

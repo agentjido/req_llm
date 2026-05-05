@@ -167,8 +167,8 @@ defmodule ReqLLM.Providers.Groq do
 
     case tool_choice do
       map when is_map(map) ->
-        type = Map.get(tool_choice, :type) || Map.get(tool_choice, "type")
-        name = Map.get(tool_choice, :name) || Map.get(tool_choice, "name")
+        type = tool_choice[:type]
+        name = tool_choice[:name]
 
         if type == "tool" && name do
           replacement =

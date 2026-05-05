@@ -542,8 +542,8 @@ defmodule Mix.Tasks.ReqLlm.Gen do
   defp calculate_estimated_cost(model_spec, input_tokens, output_tokens) do
     case ReqLLM.model(model_spec) do
       {:ok, %LLMDB.Model{cost: cost_map}} when is_map(cost_map) ->
-        input_rate = cost_map[:input] || cost_map["input"] || 0.0
-        output_rate = cost_map[:output] || cost_map["output"] || 0.0
+        input_rate = cost_map[:input] || 0.0
+        output_rate = cost_map[:output] || 0.0
 
         input_cost = input_tokens / 1_000_000 * input_rate
         output_cost = output_tokens / 1_000_000 * output_rate

@@ -8,7 +8,7 @@ defmodule ReqLLM.Providers.OpenAI.OAuth do
   @spec refresh(map(), keyword()) :: {:ok, map()} | {:error, String.t()}
   def refresh(credentials, opts) when is_map(credentials) do
     http_options = Keyword.get(opts, :oauth_http_options, [])
-    refresh_token = credentials[:refresh] || credentials["refresh"]
+    refresh_token = credentials[:refresh]
 
     case Req.post(
            [

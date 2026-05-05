@@ -80,10 +80,9 @@ defmodule ReqLLM.Providers.OpenAI.ParamProfiles do
   end
 
   defp has_reasoning_capability?(caps) do
-    case caps[:reasoning] || caps["reasoning"] do
+    case caps[:reasoning] do
       true -> true
       %{enabled: true} -> true
-      %{"enabled" => true} -> true
       _ -> false
     end
   end
