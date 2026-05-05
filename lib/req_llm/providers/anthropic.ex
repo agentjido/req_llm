@@ -158,6 +158,7 @@ defmodule ReqLLM.Providers.Anthropic do
   @default_anthropic_version "2023-06-01"
   @anthropic_beta_tools "tools-2024-05-16"
   @anthropic_beta_prompt_caching "prompt-caching-2024-07-31"
+  @anthropic_beta_files_api "files-api-2025-04-14"
   @claude_subscription_betas ["oauth-2025-04-20", "interleaved-thinking-2025-05-14"]
   @claude_subscription_user_agent "claude-cli/2.1.112 (external, cli)"
   @claude_subscription_x_app "claude-code"
@@ -737,7 +738,7 @@ defmodule ReqLLM.Providers.Anthropic do
     credential = ReqLLM.Auth.resolve!(model, translated_opts)
     headers = build_request_headers(translated_opts, credential)
     streaming_headers = [{"Accept", "text/event-stream"} | headers]
-    beta_headers = build_beta_headers(translated_opts, credential)
+    beta_headers = build_beta_headers(Keyword.put(translated_opts, :context, context), credential)
 
     custom_headers =
       ReqLLM.Provider.Utils.extract_custom_headers(translated_opts[:req_http_options])
@@ -868,6 +869,13 @@ defmodule ReqLLM.Providers.Anthropic do
         beta_features
       end
 
+    beta_features =
+      if has_files_api_reference?(opts) do
+        [@anthropic_beta_files_api | beta_features]
+      else
+        beta_features
+      end
+
     Enum.uniq(beta_features)
   end
 
@@ -904,6 +912,43 @@ defmodule ReqLLM.Providers.Anthropic do
   def has_prompt_caching?(opts) do
     get_option(opts, :anthropic_prompt_cache, false) == true
   end
+
+  defp has_files_api_reference?(opts) do
+    opts
+    |> get_option(:context)
+    |> context_has_files_api_reference?()
+  end
+
+  defp context_has_files_api_reference?(%ReqLLM.Context{messages: messages}) do
+    Enum.any?(messages, &message_has_files_api_reference?/1)
+  end
+
+  defp context_has_files_api_reference?(_context), do: false
+
+  defp message_has_files_api_reference?(%ReqLLM.Message{content: content}) do
+    content
+    |> List.wrap()
+    |> Enum.any?(&content_part_has_file_id?/1)
+  end
+
+  defp message_has_files_api_reference?(_message), do: false
+
+  defp content_part_has_file_id?(%ReqLLM.Message.ContentPart{file_id: file_id}) do
+    is_binary(file_id) and file_id != ""
+  end
+
+  defp content_part_has_file_id?(part) when is_map(part) do
+    source = Map.get(part, :source) || Map.get(part, "source")
+
+    file_id =
+      Map.get(part, :file_id) ||
+        Map.get(part, "file_id") ||
+        if(is_map(source), do: Map.get(source, :file_id) || Map.get(source, "file_id"))
+
+    is_binary(file_id) and file_id != ""
+  end
+
+  defp content_part_has_file_id?(_part), do: false
 
   @doc false
   def cache_control_meta(opts) do

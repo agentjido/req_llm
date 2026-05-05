@@ -22,6 +22,9 @@ defmodule ReqLLM.MessagingTest do
 
       assert %ContentPart{type: :file, data: ^data, filename: "doc.txt", media_type: "text/plain"} =
                ContentPart.file(data, "doc.txt", "text/plain")
+
+      assert %ContentPart{type: :file, file_id: "file_123", media_type: "application/pdf"} =
+               ContentPart.file_id("file_123")
     end
 
     test "inspect protocol shows compact representation" do

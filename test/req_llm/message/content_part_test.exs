@@ -137,6 +137,41 @@ defmodule ReqLLM.Message.ContentPartTest do
                media_type: "text/plain"
              } = part
     end
+
+    test "creates file reference content part with default media type" do
+      part = ContentPart.file_id("file_011CNha8iCJcU1wXNR6q4V8w")
+
+      assert %ContentPart{
+               type: :file,
+               file_id: "file_011CNha8iCJcU1wXNR6q4V8w",
+               media_type: "application/pdf",
+               data: nil
+             } = part
+    end
+
+    test "creates file reference with custom media type and metadata" do
+      metadata = %{title: "Quarterly report", citations: %{enabled: true}}
+      part = ContentPart.file_id("file_011CPMxVD3fHLUhvTqtsQA5w", "image/png", metadata)
+
+      assert %ContentPart{
+               type: :file,
+               file_id: "file_011CPMxVD3fHLUhvTqtsQA5w",
+               media_type: "image/png",
+               metadata: ^metadata
+             } = part
+    end
+
+    test "creates file reference with metadata as second argument" do
+      metadata = %{title: "Quarterly report"}
+      part = ContentPart.file_id("file_011CNha8iCJcU1wXNR6q4V8w", metadata)
+
+      assert %ContentPart{
+               type: :file,
+               file_id: "file_011CNha8iCJcU1wXNR6q4V8w",
+               media_type: "application/pdf",
+               metadata: ^metadata
+             } = part
+    end
   end
 
   describe "struct validation and edge cases" do
@@ -258,6 +293,13 @@ defmodule ReqLLM.Message.ContentPartTest do
       assert output =~ "text/plain (0 bytes)"
     end
 
+    test "inspects file reference content part" do
+      part = ContentPart.file_id("file_011CNha8iCJcU1wXNR6q4V8w")
+      output = inspect(part)
+
+      assert output =~ "file_id: file_011CNha8iCJcU1wXNR6q4V8w"
+    end
+
     test "handles nil text in inspect" do
       part = struct!(ContentPart, %{type: :text, text: nil})
       output = inspect(part)
@@ -274,7 +316,8 @@ defmodule ReqLLM.Message.ContentPartTest do
         ContentPart.image_url("https://example.com/pic.jpg"),
         ContentPart.video_url("https://example.com/clip.mp4"),
         ContentPart.image(<<1, 2, 3>>, "image/png"),
-        ContentPart.file("data", "file.txt", "text/plain")
+        ContentPart.file("data", "file.txt", "text/plain"),
+        ContentPart.file_id("file_011CNha8iCJcU1wXNR6q4V8w")
       ]
 
       for part <- parts do

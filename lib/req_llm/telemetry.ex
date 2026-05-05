@@ -799,6 +799,7 @@ defmodule ReqLLM.Telemetry do
   defp sanitize_content_part(%ContentPart{type: :file} = part) do
     %{
       type: :file,
+      file_id: part.file_id,
       filename: part.filename,
       media_type: part.media_type,
       bytes: binary_size_or_nil(part.data),
@@ -817,11 +818,12 @@ defmodule ReqLLM.Telemetry do
 
   defp sanitize_content_part(%{type: :file} = part) when is_map(part) do
     %{
-      type: part.type,
-      filename: part[:filename],
-      media_type: part[:media_type],
-      bytes: binary_size_or_nil(part[:data]),
-      metadata: Map.get(part, :metadata, %{})
+      type: Map.get(part, :type) || Map.get(part, "type"),
+      file_id: Map.get(part, :file_id) || Map.get(part, "file_id"),
+      filename: Map.get(part, :filename) || Map.get(part, "filename"),
+      media_type: Map.get(part, :media_type) || Map.get(part, "media_type"),
+      bytes: binary_size_or_nil(Map.get(part, :data) || Map.get(part, "data")),
+      metadata: Map.get(part, :metadata) || Map.get(part, "metadata", %{})
     }
   end
 

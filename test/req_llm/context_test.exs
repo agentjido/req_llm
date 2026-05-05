@@ -1112,6 +1112,60 @@ defmodule ReqLLM.ContextTest do
       assert Enum.map(message.content, & &1.media_type) == ["image/png", "video/mp4"]
     end
 
+    test "normalizes file_id content maps" do
+      input = [
+        %{
+          "role" => "user",
+          "content" => [
+            %{
+              "type" => "document",
+              "source" => %{
+                "type" => "file",
+                "file_id" => "file_011CNha8iCJcU1wXNR6q4V8w"
+              },
+              "media_type" => "application/pdf"
+            }
+          ]
+        }
+      ]
+
+      {:ok, context} = Context.normalize(input, validate: false)
+
+      [message] = context.messages
+
+      assert [%ContentPart{type: :file, file_id: "file_011CNha8iCJcU1wXNR6q4V8w"}] =
+               message.content
+
+      assert hd(message.content).media_type == "application/pdf"
+    end
+
+    test "normalizes Anthropic image file source content maps" do
+      input = [
+        %{
+          "role" => "user",
+          "content" => [
+            %{
+              "type" => "image",
+              "source" => %{
+                "type" => "file",
+                "file_id" => "file_011CPMxVD3fHLUhvTqtsQA5w",
+                "media_type" => "image/png"
+              }
+            }
+          ]
+        }
+      ]
+
+      {:ok, context} = Context.normalize(input, validate: false)
+
+      [message] = context.messages
+
+      assert [%ContentPart{type: :file, file_id: "file_011CPMxVD3fHLUhvTqtsQA5w"}] =
+               message.content
+
+      assert hd(message.content).media_type == "image/png"
+    end
+
     test "raises for invalid direct tool call normalization inputs" do
       assert_raise ArgumentError, ~r/invalid tool_call/, fn ->
         Context.assistant("", tool_calls: [:invalid])

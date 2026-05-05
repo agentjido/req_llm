@@ -7,7 +7,7 @@ defmodule ReqLLM.Message.ContentPart do
   - `:image_url` - Image from URL
   - `:video_url` - Video from URL
   - `:image` - Image from binary data
-  - `:file` - File attachment
+  - `:file` - File attachment or uploaded file reference
   - `:thinking` - Chain-of-thought thinking content
 
   ## See also
@@ -20,6 +20,7 @@ defmodule ReqLLM.Message.ContentPart do
             text: Zoi.string() |> Zoi.nullable() |> Zoi.default(nil),
             url: Zoi.string() |> Zoi.nullable() |> Zoi.default(nil),
             data: Zoi.any() |> Zoi.nullable() |> Zoi.default(nil),
+            file_id: Zoi.string() |> Zoi.nullable() |> Zoi.default(nil),
             media_type: Zoi.string() |> Zoi.nullable() |> Zoi.default(nil),
             filename: Zoi.string() |> Zoi.nullable() |> Zoi.default(nil),
             metadata: Zoi.map() |> Zoi.default(%{})
@@ -74,6 +75,22 @@ defmodule ReqLLM.Message.ContentPart do
   def file(data, filename, media_type \\ "application/octet-stream"),
     do: %__MODULE__{type: :file, data: data, filename: filename, media_type: media_type}
 
+  @spec file_id(String.t()) :: t()
+  @spec file_id(String.t(), String.t() | map()) :: t()
+  @spec file_id(String.t(), String.t(), map()) :: t()
+  def file_id(file_id, media_type_or_metadata \\ "application/pdf", metadata \\ %{})
+
+  def file_id(file_id, metadata, %{}) when is_map(metadata),
+    do: %__MODULE__{
+      type: :file,
+      file_id: file_id,
+      media_type: "application/pdf",
+      metadata: metadata
+    }
+
+  def file_id(file_id, media_type, metadata),
+    do: %__MODULE__{type: :file, file_id: file_id, media_type: media_type, metadata: metadata}
+
   defimpl Inspect do
     def inspect(%{type: type} = part, opts) do
       content_desc =
@@ -82,8 +99,8 @@ defmodule ReqLLM.Message.ContentPart do
           :thinking -> inspect_text(part.text, opts)
           :image_url -> "url: #{part.url}"
           :video_url -> "url: #{part.url}"
-          :image -> "#{part.media_type} (#{byte_size(part.data)} bytes)"
-          :file -> "#{part.media_type} (#{byte_size(part.data || <<>>)} bytes)"
+          :image -> "#{part.media_type} (#{byte_size(part.data || <<>>)} bytes)"
+          :file -> inspect_file(part)
         end
 
       Inspect.Algebra.concat([
@@ -101,6 +118,12 @@ defmodule ReqLLM.Message.ContentPart do
       truncated = String.slice(text, 0, 30)
       if String.length(text) > 30, do: "\"#{truncated}...\"", else: "\"#{truncated}\""
     end
+
+    defp inspect_file(%{file_id: file_id}) when is_binary(file_id) and file_id != "" do
+      "file_id: #{file_id}"
+    end
+
+    defp inspect_file(part), do: "#{part.media_type} (#{byte_size(part.data || <<>>)} bytes)"
   end
 
   defimpl Jason.Encoder do

@@ -20,6 +20,7 @@ defmodule ReqLLM.ContextRoundTripTest do
             text: part_data["text"],
             url: part_data["url"],
             data: decoded_data,
+            file_id: part_data["file_id"],
             media_type: part_data["media_type"],
             filename: part_data["filename"],
             metadata: part_data["metadata"] || %{}

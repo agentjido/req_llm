@@ -1030,6 +1030,12 @@ defmodule ReqLLM.Context do
           :error -> []
         end
 
+      type when type in ["file", "file_id", "document", "image"] ->
+        case file_content_part(part) do
+          {:ok, file_part} -> [file_part]
+          :error -> []
+        end
+
       _ ->
         []
     end
@@ -1064,6 +1070,13 @@ defmodule ReqLLM.Context do
       :video_url ->
         case url_content_part(part, :video_url) do
           {:ok, url_part} -> [url_part]
+          :error -> []
+        end
+
+      type
+      when type in [:file, "file", :file_id, "file_id", :document, "document", :image, "image"] ->
+        case file_content_part(part) do
+          {:ok, file_part} -> [file_part]
           :error -> []
         end
 
@@ -1132,6 +1145,61 @@ defmodule ReqLLM.Context do
   end
 
   defp maybe_put_url_media_type(%ContentPart{} = part, _media_type), do: part
+
+  defp file_content_part(part) do
+    metadata = file_content_metadata(part)
+
+    nested =
+      Map.get(part, :file) ||
+        Map.get(part, "file") ||
+        Map.get(part, :document) ||
+        Map.get(part, "document") ||
+        Map.get(part, :source) ||
+        Map.get(part, "source")
+
+    file_id =
+      Map.get(part, :file_id) ||
+        Map.get(part, "file_id") ||
+        if(is_map(nested), do: Map.get(nested, :file_id) || Map.get(nested, "file_id"))
+
+    media_type =
+      Map.get(part, :media_type) ||
+        Map.get(part, "media_type") ||
+        if(is_map(nested), do: Map.get(nested, :media_type) || Map.get(nested, "media_type"))
+
+    filename =
+      Map.get(part, :filename) ||
+        Map.get(part, "filename") ||
+        if(is_map(nested), do: Map.get(nested, :filename) || Map.get(nested, "filename"))
+
+    if is_binary(file_id) and file_id != "" do
+      file_part = ContentPart.file_id(file_id, media_type || "application/pdf", metadata)
+      {:ok, maybe_put_file_filename(file_part, filename)}
+    else
+      :error
+    end
+  end
+
+  defp maybe_put_file_filename(%ContentPart{} = part, filename)
+       when is_binary(filename) and filename != "" do
+    %{part | filename: filename}
+  end
+
+  defp maybe_put_file_filename(%ContentPart{} = part, _filename), do: part
+
+  defp file_content_metadata(part) do
+    metadata = Map.get(part, :metadata) || Map.get(part, "metadata") || %{}
+
+    Enum.reduce([:title, :context, :citations], metadata, fn key, acc ->
+      value = Map.get(part, key) || Map.get(part, Atom.to_string(key))
+
+      if is_nil(value) do
+        acc
+      else
+        Map.put_new(acc, key, value)
+      end
+    end)
+  end
 
   defp convert_loose_role_list_content(role, content, metadata, reasoning_details) do
     case role do

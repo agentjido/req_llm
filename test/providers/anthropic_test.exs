@@ -185,6 +185,45 @@ defmodule ReqLLM.Providers.AnthropicTest do
       assert request.headers["anthropic-beta"] == ["advanced-tool-use-test"]
     end
 
+    test "prepare_request adds files beta header for uploaded file references" do
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
+
+      context =
+        ReqLLM.Context.new([
+          ReqLLM.Context.user([
+            ContentPart.text("Summarize this document."),
+            ContentPart.file_id("file_011CNha8iCJcU1wXNR6q4V8w")
+          ])
+        ])
+
+      {:ok, request} = Anthropic.prepare_request(:chat, model, context, api_key: "test-key")
+
+      assert request.headers["anthropic-beta"] == ["files-api-2025-04-14"]
+    end
+
+    test "prepare_request combines files beta header with manual beta headers" do
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
+
+      context =
+        ReqLLM.Context.new([
+          ReqLLM.Context.user([
+            ContentPart.text("Summarize this document."),
+            ContentPart.file_id("file_011CNha8iCJcU1wXNR6q4V8w")
+          ])
+        ])
+
+      {:ok, request} =
+        Anthropic.prepare_request(:chat, model, context,
+          api_key: "test-key",
+          provider_options: [anthropic_beta: ["manual-beta-flag"]]
+        )
+
+      [beta_header] = request.headers["anthropic-beta"]
+
+      assert beta_header =~ "files-api-2025-04-14"
+      assert beta_header =~ "manual-beta-flag"
+    end
+
     test "attach combines Claude subscription and manual beta headers" do
       {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
 
@@ -273,6 +312,24 @@ defmodule ReqLLM.Providers.AnthropicTest do
 
       headers = Map.new(finch_request.headers)
       assert headers["anthropic-beta"] == "tools-2024-05-16"
+    end
+
+    test "attach_stream adds files beta header for uploaded file references" do
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
+
+      context =
+        ReqLLM.Context.new([
+          ReqLLM.Context.user([
+            ContentPart.text("Summarize this document."),
+            ContentPart.file_id("file_011CNha8iCJcU1wXNR6q4V8w")
+          ])
+        ])
+
+      {:ok, finch_request} =
+        Anthropic.attach_stream(model, context, [api_key: "anthropic-test-key"], nil)
+
+      headers = Map.new(finch_request.headers)
+      assert headers["anthropic-beta"] == "files-api-2025-04-14"
     end
 
     test "attach_stream shapes oauth requests" do
@@ -465,6 +522,61 @@ defmodule ReqLLM.Providers.AnthropicTest do
 
       assert Enum.any?(content_blocks, fn block -> block["type"] == "image" end)
       assert Enum.any?(content_blocks, fn block -> block["type"] == "document" end)
+    end
+
+    test "encode_body converts file_id content parts to Anthropic file sources" do
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
+
+      document_part =
+        ContentPart.file_id("file_011CNha8iCJcU1wXNR6q4V8w", "application/pdf", %{
+          title: "Quarterly report",
+          context: "Uploaded once through the Anthropic Files API",
+          citations: %{enabled: true}
+        })
+
+      image_part = ContentPart.file_id("file_011CPMxVD3fHLUhvTqtsQA5w", "image/png")
+
+      context =
+        ReqLLM.Context.new([
+          ReqLLM.Context.user([
+            ContentPart.text("Compare these files."),
+            document_part,
+            image_part
+          ])
+        ])
+
+      mock_request = %Req.Request{
+        options: [
+          context: context,
+          model: model.model,
+          stream: false
+        ]
+      }
+
+      updated_request = Anthropic.encode_body(mock_request)
+      decoded = Jason.decode!(updated_request.body)
+
+      [user_message] = decoded["messages"]
+      [_text_block, document_block, image_block] = user_message["content"]
+
+      assert document_block == %{
+               "type" => "document",
+               "source" => %{
+                 "type" => "file",
+                 "file_id" => "file_011CNha8iCJcU1wXNR6q4V8w"
+               },
+               "title" => "Quarterly report",
+               "context" => "Uploaded once through the Anthropic Files API",
+               "citations" => %{"enabled" => true}
+             }
+
+      assert image_block == %{
+               "type" => "image",
+               "source" => %{
+                 "type" => "file",
+                 "file_id" => "file_011CPMxVD3fHLUhvTqtsQA5w"
+               }
+             }
     end
 
     test "encode_body without tools" do
