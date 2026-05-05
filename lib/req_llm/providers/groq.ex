@@ -148,47 +148,13 @@ defmodule ReqLLM.Providers.Groq do
   @impl ReqLLM.Provider
   def build_body(request) do
     ReqLLM.Provider.Defaults.default_build_body(request)
-    |> translate_tool_choice_format()
+    |> ReqLLM.Providers.OpenAI.AdapterHelpers.translate_tool_choice_format()
     |> maybe_put_skip(:service_tier, request.options[:service_tier], ["auto"])
     |> maybe_put_skip(:reasoning_effort, request.options[:reasoning_effort], ["default"])
     |> maybe_put(:reasoning_format, request.options[:reasoning_format])
     |> maybe_put(:search_settings, request.options[:search_settings])
     |> maybe_put(:compound_custom, request.options[:compound_custom])
     |> maybe_put(:logit_bias, request.options[:logit_bias])
-  end
-
-  defp translate_tool_choice_format(body) do
-    {tool_choice, body_key} =
-      cond do
-        Map.has_key?(body, :tool_choice) -> {Map.get(body, :tool_choice), :tool_choice}
-        Map.has_key?(body, "tool_choice") -> {Map.get(body, "tool_choice"), "tool_choice"}
-        true -> {nil, nil}
-      end
-
-    case tool_choice do
-      map when is_map(map) ->
-        type = Map.get(tool_choice, :type) || Map.get(tool_choice, "type")
-        name = Map.get(tool_choice, :name) || Map.get(tool_choice, "name")
-
-        if type == "tool" && name do
-          replacement =
-            if is_map_key(tool_choice, :type) do
-              %{type: "function", function: %{name: name}}
-            else
-              %{"type" => "function", "function" => %{"name" => name}}
-            end
-
-          Map.put(body, body_key, replacement)
-        else
-          body
-        end
-
-      atom when not is_nil(atom) and is_atom(atom) ->
-        Map.put(body, body_key, to_string(atom))
-
-      _ ->
-        body
-    end
   end
 
   @doc """

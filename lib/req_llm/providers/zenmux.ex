@@ -202,7 +202,7 @@ defmodule ReqLLM.Providers.Zenmux do
       end
 
     body
-    |> translate_tool_choice_format()
+    |> ReqLLM.Providers.OpenAI.AdapterHelpers.translate_tool_choice_format()
     |> maybe_put(:max_completion_tokens, request.options[:max_completion_tokens])
     |> maybe_put(:provider, request.options[:provider])
     |> maybe_put(:model_routing_config, request.options[:model_routing_config])
@@ -218,40 +218,6 @@ defmodule ReqLLM.Providers.Zenmux do
       maybe_put(body, :stream_options, %{include_usage: true})
     else
       body
-    end
-  end
-
-  defp translate_tool_choice_format(body) do
-    {tool_choice, body_key} =
-      cond do
-        Map.has_key?(body, :tool_choice) -> {Map.get(body, :tool_choice), :tool_choice}
-        Map.has_key?(body, "tool_choice") -> {Map.get(body, "tool_choice"), "tool_choice"}
-        true -> {nil, nil}
-      end
-
-    case tool_choice do
-      map when is_map(map) ->
-        type = Map.get(tool_choice, :type) || Map.get(tool_choice, "type")
-        name = Map.get(tool_choice, :name) || Map.get(tool_choice, "name")
-
-        if type == "tool" && name do
-          replacement =
-            if is_map_key(tool_choice, :type) do
-              %{type: "function", function: %{name: name}}
-            else
-              %{"type" => "function", "function" => %{"name" => name}}
-            end
-
-          Map.put(body, body_key, replacement)
-        else
-          body
-        end
-
-      atom when not is_nil(atom) and is_atom(atom) ->
-        Map.put(body, body_key, to_string(atom))
-
-      _ ->
-        body
     end
   end
 

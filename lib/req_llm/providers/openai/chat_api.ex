@@ -113,7 +113,7 @@ defmodule ReqLLM.Providers.OpenAI.ChatAPI do
         |> add_response_format(opts_map)
         |> add_parallel_tool_calls(opts_map)
         |> add_logprobs(opts_map)
-        |> translate_tool_choice_format()
+        |> ReqLLM.Providers.OpenAI.AdapterHelpers.translate_tool_choice_format()
         |> add_strict_to_tools()
     end
   end
@@ -215,40 +215,6 @@ defmodule ReqLLM.Providers.OpenAI.ChatAPI do
   defp normalize_verbosity(nil), do: nil
   defp normalize_verbosity(v) when is_atom(v), do: Atom.to_string(v)
   defp normalize_verbosity(v) when is_binary(v), do: v
-
-  defp translate_tool_choice_format(body) do
-    {tool_choice, body_key} =
-      cond do
-        Map.has_key?(body, :tool_choice) -> {Map.get(body, :tool_choice), :tool_choice}
-        Map.has_key?(body, "tool_choice") -> {Map.get(body, "tool_choice"), "tool_choice"}
-        true -> {nil, nil}
-      end
-
-    case tool_choice do
-      map when is_map(map) ->
-        type = Map.get(tool_choice, :type) || Map.get(tool_choice, "type")
-        name = Map.get(tool_choice, :name) || Map.get(tool_choice, "name")
-
-        if type == "tool" && name do
-          replacement =
-            if is_map_key(tool_choice, :type) do
-              %{type: "function", function: %{name: name}}
-            else
-              %{"type" => "function", "function" => %{"name" => name}}
-            end
-
-          Map.put(body, body_key, replacement)
-        else
-          body
-        end
-
-      atom when not is_nil(atom) and is_atom(atom) ->
-        Map.put(body, body_key, to_string(atom))
-
-      _ ->
-        body
-    end
-  end
 
   defp add_response_format(body, request_options) do
     provider_opts = request_options[:provider_options] || []
