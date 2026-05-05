@@ -146,6 +146,10 @@ defmodule ReqLLM.Providers.OpenAI do
       type: :integer,
       doc: "Maximum completion tokens (required for reasoning models like o1, o3, gpt-5)"
     ],
+    max_output_tokens: [
+      type: :integer,
+      doc: "Maximum output tokens for Responses API models"
+    ],
     openai_structured_output_mode: [
       type: {:in, [:auto, :json_schema, :tool_strict]},
       default: :auto,

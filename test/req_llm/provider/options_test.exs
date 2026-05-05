@@ -364,6 +364,32 @@ defmodule ReqLLM.Provider.OptionsTest do
       refute Keyword.has_key?(processed, :json)
       refute Keyword.has_key?(processed, :retry)
     end
+
+    test "accepts max_output_tokens for responses-style providers" do
+      {:ok, openai_model} = ReqLLM.model("openai:gpt-4o")
+
+      assert {:ok, processed} =
+               Options.process(OpenAI, :chat, openai_model, max_output_tokens: 123)
+
+      assert processed[:max_output_tokens] == 123
+      refute Keyword.has_key?(processed, :max_tokens)
+
+      azure_model = %LLMDB.Model{provider: :azure, id: "gpt-4o", limits: %{output: 1000}}
+
+      assert {:ok, processed} =
+               Options.process(ReqLLM.Providers.Azure, :chat, azure_model, max_output_tokens: 456)
+
+      assert processed[:max_output_tokens] == 456
+      refute Keyword.has_key?(processed, :max_tokens)
+
+      xai_model = %LLMDB.Model{provider: :xai, id: "grok-4", limits: %{output: 1000}}
+
+      assert {:ok, processed} =
+               Options.process(ReqLLM.Providers.XAI, :chat, xai_model, max_output_tokens: 789)
+
+      assert processed[:max_output_tokens] == 789
+      refute Keyword.has_key?(processed, :max_tokens)
+    end
   end
 
   describe "Options.process/4 - req_http_options handling" do

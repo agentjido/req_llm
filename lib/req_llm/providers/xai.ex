@@ -111,6 +111,10 @@ defmodule ReqLLM.Providers.XAI do
       type: :integer,
       doc: "Maximum completion tokens (preferred over max_tokens for Grok-4)"
     ],
+    max_output_tokens: [
+      type: :integer,
+      doc: "Maximum output tokens for Responses API requests"
+    ],
     search_parameters: [
       type: :map,
       doc:

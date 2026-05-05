@@ -259,6 +259,10 @@ defmodule ReqLLM.Providers.Azure do
       type: :any,
       doc: "Maximum completion tokens (OpenAI reasoning models)"
     ],
+    max_output_tokens: [
+      type: :any,
+      doc: "Maximum output tokens (OpenAI Responses API models)"
+    ],
     verbosity: [
       type: {:or, [:atom, :string]},
       doc:
