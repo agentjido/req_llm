@@ -180,18 +180,30 @@ Polish + Langfuse-friendly additions.
 
 ## Cross-cutting decisions to lock in
 
-- [ ] **Non-spec providers** (`alibaba`, `cerebras`, `meta`, `openrouter`,
+- [x] **Non-spec providers** (`alibaba`, `cerebras`, `meta`, `openrouter`,
       `vllm`, `zai`, `zenmux`, `venice`, `minimax`): keep
-      `Atom.to_string/1` fallback. Document in
-      `guides/telemetry.md` so users know what to expect.
-- [ ] **Non-spec operations** (`speech`, `transcription`, `rerank`):
-      keep stringified atom names today. Revisit if/when the spec adds
-      enum values.
-- [ ] **Back-compat:** every change is additive; existing
+      `Atom.to_string/1` fallback. Implemented in
+      `ReqLLM.OpenTelemetry.SemConv.provider_name/1` (default branch on
+      `Map.get/3`) and documented in the "Provider name mapping" table of
+      `guides/telemetry.md`.
+- [x] **Non-spec operations** (`speech`, `transcription`, `rerank`):
+      keep stringified atom names today. Implemented in
+      `ReqLLM.OpenTelemetry.SemConv.operation_name/1` and documented in the
+      "Operation name mapping" table of `guides/telemetry.md` (with the
+      footnote: "Revisit if the spec adds enum values for them later").
+- [x] **Back-compat:** every change is additive; existing
       `[:req_llm, :request, *]` consumers keep working. New metadata fields
-      (`request_options`, `server`) are optional map keys.
+      (`request_options`, `server`, `streaming`) are optional map keys.
+      Existing keys (`request_id`, `operation`, `mode`, `provider`, `model`,
+      `transport`, `reasoning`, `request_summary`, `response_summary`,
+      `http_status`, `finish_reason`, `usage`, `request_payload`,
+      `response_payload`) are unchanged. Public function signatures on
+      `ReqLLM.Telemetry`, `ReqLLM.OpenTelemetry`, and
+      `ReqLLM.Telemetry.OpenTelemetry` are unchanged. The only behaviour
+      delta is that `error.type` is now also set on `:stop` spans for
+      `http_status >= 400` (previously only on `:exception`).
 - [ ] After every phase: `mix format`, `mix credo --strict`, `mix dialyzer`,
-      `mix test` clean.
+      `mix test` clean. *(Recurring gate — re-run before merge.)*
 
 ---
 

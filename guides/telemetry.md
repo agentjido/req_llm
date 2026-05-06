@@ -39,8 +39,17 @@ Every request lifecycle event includes these core metadata fields:
 - `http_status`
 - `finish_reason`
 - `usage`
+- `request_options`
+- `server`
+- `streaming`
 
 When payload capture is enabled, request lifecycle events also include `request_payload` and `response_payload`.
+
+`request_options` is a compact map of normalized inference parameters extracted from the original call: `temperature`, `top_p`, `top_k`, `max_tokens`, `frequency_penalty`, `presence_penalty`, `stop_sequences`, `seed`, `n` (choice count), `stream?`, `encoding_formats`, `conversation_id`, and `service_tier`. Keys whose value is `nil` are dropped.
+
+`server` is a map of the resolved upstream endpoint: `address`, `port`, and `path`. It is empty before the request is dispatched and populated by the time `:stop` or `:exception` fires.
+
+`streaming` is set on streaming requests only and exposes `first_chunk_at` (a `System.monotonic_time/0` reading) and `time_to_first_chunk` (in `:native` units, measured from request start to the first non-empty content chunk). Both are `nil` until ReqLLM observes the first content chunk via `ReqLLM.Telemetry.observe_stream_chunk/2`.
 
 Typical request metadata looks like this:
 
@@ -87,6 +96,21 @@ Typical request metadata looks like this:
     output_tokens: 133,
     total_tokens: 157,
     reasoning_tokens: 812
+  },
+  request_options: %{
+    temperature: 0.7,
+    max_tokens: 1024,
+    stream?: true,
+    conversation_id: "thread-42"
+  },
+  server: %{
+    address: "api.anthropic.com",
+    port: 443,
+    path: "/v1/messages"
+  },
+  streaming: %{
+    first_chunk_at: -576_460_751_000_000_000,
+    time_to_first_chunk: 412_300_000
   }
 }
 ```
@@ -254,6 +278,12 @@ ReqLLM.stream_text("openai:gpt-5-mini", "Hello", telemetry: [payloads: :raw])
 
 Payload mode only affects request lifecycle events. Reasoning events stay metadata-only.
 
+The `telemetry:` option also accepts a `:conversation_id` string, which flows through to `request_options.conversation_id` and to the `gen_ai.conversation.id` span attribute on the OpenTelemetry bridge:
+
+```elixir
+ReqLLM.generate_text(model, prompt, telemetry: [conversation_id: "thread-42"])
+```
+
 Raw payload mode is still sanitized:
 
 - reasoning and thinking text is redacted from payloads
@@ -343,17 +373,28 @@ the bridge silently skips metrics emission while continuing to record spans.
 #### Capturing message content (opt-in)
 
 By default the bridge does **not** attach prompt or response content. To
-promote structured messages, system instructions, and tool definitions onto
-the span, pass `include_content: true` and enable raw payload capture on the
-calls you want to record:
+promote structured messages, system instructions, and tool definitions, pass
+the `:content` option and enable raw payload capture on the calls you want
+to record:
 
 ```elixir
-ReqLLM.OpenTelemetry.attach("req-llm-otel", include_content: true)
+ReqLLM.OpenTelemetry.attach("req-llm-otel", content: :attributes)
 
 ReqLLM.generate_text(model, prompt, telemetry: [payloads: :raw])
 ```
 
-When `:include_content` is on, the bridge sets:
+The `:content` option matches the dependency-free mapper:
+
+- `:none` (default) — no message, instructions, or tool definitions are
+  emitted.
+- `:attributes` (alias: `true`) — sets `gen_ai.input.messages`,
+  `gen_ai.system_instructions`, `gen_ai.tool.definitions`, and
+  `gen_ai.output.messages` as span attributes.
+- `:event` — bundles the same payload into a single
+  `gen_ai.client.inference.operation.details` span event on the terminal
+  lifecycle event instead of attaching it to attributes.
+
+The captured fields are:
 
 - `gen_ai.system_instructions` — text-only parts from system messages
 - `gen_ai.input.messages` — non-system input messages with tool calls and
@@ -468,7 +509,7 @@ For minimum-friction integration, attach with both content and Langfuse:
 
 ```elixir
 ReqLLM.OpenTelemetry.attach("req-llm-otel",
-  include_content: true,
+  content: :attributes,
   langfuse: true
 )
 ```
