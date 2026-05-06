@@ -126,7 +126,7 @@ defmodule ReqLLM.OpenTelemetry do
   """
 
   alias ReqLLM.MapAccess
-  alias ReqLLM.OpenTelemetry.{Attributes, SemConv}
+  alias ReqLLM.OpenTelemetry.{Attributes, Content, SemConv}
 
   @events [
     [:req_llm, :request, :start],
@@ -137,7 +137,11 @@ defmodule ReqLLM.OpenTelemetry do
   @span_table :req_llm_open_telemetry_spans
   @default_adapter ReqLLM.OpenTelemetry.OTelAdapter
 
-  @type attach_opt :: {:adapter, module()} | {:handler_id, term()} | {atom(), term()}
+  @type attach_opt ::
+          {:adapter, module()}
+          | {:handler_id, term()}
+          | {:include_content, boolean()}
+          | {atom(), term()}
 
   @doc """
   Returns the request lifecycle events used by the bridge.
@@ -196,7 +200,12 @@ defmodule ReqLLM.OpenTelemetry do
     ensure_span_table()
 
     if request_id = MapAccess.get(metadata, :request_id) do
-      attributes = atomize(Attributes.start(metadata))
+      attributes =
+        metadata
+        |> Attributes.start()
+        |> merge_content(metadata, config, :request)
+        |> atomize()
+
       span = adapter(config).start_span(span_name(metadata), attributes, config)
       :ets.insert(@span_table, {span_key(config, request_id), span})
     end
@@ -207,7 +216,13 @@ defmodule ReqLLM.OpenTelemetry do
   def handle_event([:req_llm, :request, :stop], _measurements, metadata, config) do
     with request_id when is_binary(request_id) <- MapAccess.get(metadata, :request_id),
          {:ok, span} <- take_span(config, request_id) do
-      adapter(config).set_attributes(span, atomize(Attributes.terminal(metadata)), config)
+      attributes =
+        metadata
+        |> Attributes.terminal()
+        |> merge_content(metadata, config, :both)
+        |> atomize()
+
+      adapter(config).set_attributes(span, attributes, config)
 
       case Attributes.error_status(metadata) do
         nil ->
@@ -226,7 +241,13 @@ defmodule ReqLLM.OpenTelemetry do
   def handle_event([:req_llm, :request, :exception], _measurements, metadata, config) do
     with request_id when is_binary(request_id) <- MapAccess.get(metadata, :request_id),
          {:ok, span} <- take_span(config, request_id) do
-      adapter(config).set_attributes(span, atomize(Attributes.exception(metadata)), config)
+      attributes =
+        metadata
+        |> Attributes.exception()
+        |> merge_content(metadata, config, :request)
+        |> atomize()
+
+      adapter(config).set_attributes(span, attributes, config)
 
       adapter(config).add_event(
         span,
@@ -255,6 +276,20 @@ defmodule ReqLLM.OpenTelemetry do
   end
 
   defp adapter(opts), do: Keyword.get(opts, :adapter, @default_adapter)
+
+  defp merge_content(attributes, metadata, config, scope) do
+    if Keyword.get(config, :include_content, false) do
+      Map.merge(attributes, content_attributes(metadata, scope))
+    else
+      attributes
+    end
+  end
+
+  defp content_attributes(metadata, :request), do: Content.request_attributes(metadata)
+
+  defp content_attributes(metadata, :both) do
+    Map.merge(Content.request_attributes(metadata), Content.response_attributes(metadata))
+  end
 
   defp ensure_span_table do
     case :ets.whereis(@span_table) do

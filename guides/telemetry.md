@@ -310,6 +310,33 @@ On span exception it sets `error.type` and adds an exception event.
 
 [otel-gen-ai]: https://opentelemetry.io/docs/specs/semconv/gen-ai/
 
+#### Capturing message content (opt-in)
+
+By default the bridge does **not** attach prompt or response content. To
+promote structured messages, system instructions, and tool definitions onto
+the span, pass `include_content: true` and enable raw payload capture on the
+calls you want to record:
+
+```elixir
+ReqLLM.OpenTelemetry.attach("req-llm-otel", include_content: true)
+
+ReqLLM.generate_text(model, prompt, telemetry: [payloads: :raw])
+```
+
+When `:include_content` is on, the bridge sets:
+
+- `gen_ai.system_instructions` — text-only parts from system messages
+- `gen_ai.input.messages` — non-system input messages with tool calls and
+  tool results expressed as part records
+- `gen_ai.tool.definitions` — `[%{"type" => "function", "name" => …, …}, …]`
+  derived from `Context.tools`
+- `gen_ai.output.messages` — assistant response with `finish_reason`
+
+Reasoning text never appears in any of these, even if the underlying model
+returned thinking parts. ReqLLM's payload sanitizer redacts reasoning before
+the bridge sees the messages, and the OTel content mapper additionally
+filters part types to `text` and `image_url` only.
+
 #### Provider name mapping
 
 For non-spec providers (`alibaba`, `cerebras`, `meta`, `openrouter`, `vllm`,
@@ -368,12 +395,23 @@ HTTP error type), plus richer normalized response and content metadata such as:
 
 - `gen_ai.response.id`
 - `gen_ai.response.model`
-- `gen_ai.input.messages` and `gen_ai.output.messages` when content capture is enabled
+- `gen_ai.input.messages` (without system messages — those move to
+  `gen_ai.system_instructions`)
+- `gen_ai.system_instructions` and `gen_ai.tool.definitions`
+- `gen_ai.output.messages` with finish reasons
 - tool call and tool result payloads in message parts
 - exception event payloads for manual span finishing
 
-Both surfaces share the name table in `ReqLLM.OpenTelemetry.SemConv` so
-provider/operation/output values stay consistent regardless of which one a
+Pass one of three content modes:
+
+- `content: :none` (default) — only scalar `gen_ai.*` attributes
+- `content: :attributes` — content fields above are set on the span
+- `content: :event` — same payload, but bundled into a single
+  `gen_ai.client.inference.operation.details` span event instead of attributes
+
+Both surfaces share the name table in `ReqLLM.OpenTelemetry.SemConv` and the
+content shaper in `ReqLLM.OpenTelemetry.Content`, so provider/operation/output
+values and message/tool layouts stay consistent regardless of which one a
 host integrates with.
 
 ## Coverage Across APIs

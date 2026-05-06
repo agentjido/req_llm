@@ -31,11 +31,11 @@ defmodule ReqLLM.TelemetryOpenTelemetryTest do
     assert start_stub.attributes["gen_ai.operation.name"] == "chat"
     assert start_stub.attributes["gen_ai.request.model"] == "gpt-5"
 
+    assert start_stub.attributes["gen_ai.system_instructions"] == [
+             %{"type" => "text", "content" => "You are a helpful bot"}
+           ]
+
     assert start_stub.attributes["gen_ai.input.messages"] == [
-             %{
-               "role" => "system",
-               "parts" => [%{"type" => "text", "content" => "You are a helpful bot"}]
-             },
              %{
                "role" => "user",
                "parts" => [%{"type" => "text", "content" => "Weather in Paris?"}]
@@ -62,6 +62,8 @@ defmodule ReqLLM.TelemetryOpenTelemetryTest do
                ]
              }
            ]
+
+    assert start_stub.events == []
   end
 
   test "maps terminal response metadata, usage, and finish reasons" do
@@ -253,5 +255,209 @@ defmodule ReqLLM.TelemetryOpenTelemetryTest do
                }
              }
            ]
+  end
+
+  describe "content capture" do
+    test "defaults to :none — no content attributes or events" do
+      metadata = %{
+        operation: :chat,
+        provider: :openai,
+        model: %LLMDB.Model{provider: :openai, id: "gpt-5"},
+        request_payload: %{
+          messages: [system("you are helpful"), user("hi")],
+          tools: [%{name: "get_weather", description: "fetch", parameter_schema: %{}}]
+        }
+      }
+
+      start_stub = OpenTelemetry.request_start(metadata)
+
+      refute Map.has_key?(start_stub.attributes, "gen_ai.input.messages")
+      refute Map.has_key?(start_stub.attributes, "gen_ai.system_instructions")
+      refute Map.has_key?(start_stub.attributes, "gen_ai.tool.definitions")
+      assert start_stub.events == []
+    end
+
+    test "emits gen_ai.tool.definitions when tools are present" do
+      metadata = %{
+        operation: :chat,
+        provider: :openai,
+        model: %LLMDB.Model{provider: :openai, id: "gpt-5"},
+        request_payload: %{
+          messages: [user("ping")],
+          tools: [
+            %{
+              name: "get_weather",
+              description: "fetch the weather",
+              strict: true,
+              parameter_schema: %{
+                "type" => "object",
+                "properties" => %{"location" => %{"type" => "string"}}
+              }
+            }
+          ]
+        }
+      }
+
+      start_stub = OpenTelemetry.request_start(metadata, content: :attributes)
+
+      assert start_stub.attributes["gen_ai.tool.definitions"] == [
+               %{
+                 "type" => "function",
+                 "name" => "get_weather",
+                 "description" => "fetch the weather",
+                 "strict" => true,
+                 "parameters" => %{
+                   "type" => "object",
+                   "properties" => %{"location" => %{"type" => "string"}}
+                 }
+               }
+             ]
+    end
+
+    test "preserves strict: false on tool definitions (regression: false was being dropped)" do
+      metadata = %{
+        operation: :chat,
+        provider: :openai,
+        model: %LLMDB.Model{provider: :openai, id: "gpt-5"},
+        request_payload: %{
+          messages: [user("ping")],
+          tools: [
+            %{
+              name: "get_weather",
+              description: "fetch",
+              strict: false,
+              parameter_schema: %{"type" => "object"}
+            }
+          ]
+        }
+      }
+
+      start_stub = OpenTelemetry.request_start(metadata, content: :attributes)
+
+      assert [tool] = start_stub.attributes["gen_ai.tool.definitions"]
+      assert tool["strict"] == false
+    end
+
+    test "content: :event places content on a single span event, not on attributes" do
+      tool_call = ToolCall.new("call_weather", "get_weather", ~s({"location":"Paris"}))
+
+      metadata = %{
+        operation: :chat,
+        provider: :openai,
+        model: %LLMDB.Model{provider: :openai, id: "gpt-5"},
+        request_payload: %{
+          messages: [
+            system("you are helpful"),
+            user("Weather in Paris?"),
+            assistant("", tool_calls: [tool_call])
+          ],
+          tools: [%{name: "get_weather", description: "fetch", parameter_schema: %{}}]
+        }
+      }
+
+      start_stub = OpenTelemetry.request_start(metadata, content: :event)
+
+      refute Map.has_key?(start_stub.attributes, "gen_ai.input.messages")
+      refute Map.has_key?(start_stub.attributes, "gen_ai.system_instructions")
+      refute Map.has_key?(start_stub.attributes, "gen_ai.tool.definitions")
+
+      assert [event] = start_stub.events
+      assert event.name == "gen_ai.client.inference.operation.details"
+      assert is_list(event.attributes["gen_ai.input.messages"])
+      assert event.attributes["gen_ai.system_instructions"] != nil
+      assert is_list(event.attributes["gen_ai.tool.definitions"])
+    end
+
+    test "content: :event on stop bundles input AND output messages into the same event" do
+      metadata = %{
+        operation: :chat,
+        provider: :openai,
+        model: %LLMDB.Model{provider: :openai, id: "gpt-5"},
+        finish_reason: :stop,
+        usage: %{tokens: %{input: 10, output: 20}},
+        request_payload: %{
+          messages: [system("you are helpful"), user("hi")],
+          tools: []
+        },
+        response_payload: %ReqLLM.Response{
+          id: "resp_x",
+          model: "gpt-5",
+          context: nil,
+          message: assistant("hello back"),
+          object: nil,
+          stream?: false,
+          stream: nil,
+          usage: nil,
+          finish_reason: :stop,
+          provider_meta: %{},
+          error: nil
+        }
+      }
+
+      stop_stub = OpenTelemetry.request_stop(metadata, content: :event)
+
+      refute Map.has_key?(stop_stub.attributes, "gen_ai.input.messages")
+      refute Map.has_key?(stop_stub.attributes, "gen_ai.output.messages")
+
+      assert [event] = stop_stub.events
+      assert event.name == "gen_ai.client.inference.operation.details"
+      assert is_list(event.attributes["gen_ai.input.messages"])
+      assert is_list(event.attributes["gen_ai.output.messages"])
+    end
+
+    test "reasoning text is not included in content attributes even with :attributes mode" do
+      reasoning_part = %ReqLLM.Message.ContentPart{type: :thinking, text: "secret reasoning"}
+
+      assistant_message = %ReqLLM.Message{
+        role: :assistant,
+        content: [
+          reasoning_part,
+          %ReqLLM.Message.ContentPart{type: :text, text: "the public answer"}
+        ]
+      }
+
+      metadata = %{
+        operation: :chat,
+        provider: :openai,
+        model: %LLMDB.Model{provider: :openai, id: "gpt-5"},
+        finish_reason: :stop,
+        usage: %{tokens: %{input: 1, output: 1}},
+        request_payload: %{
+          messages: [
+            system("system prompt with secret <thinking>not really</thinking>"),
+            user("hi")
+          ]
+        },
+        response_payload: %ReqLLM.Response{
+          id: "resp_x",
+          model: "gpt-5",
+          context: nil,
+          message: assistant_message,
+          object: nil,
+          stream?: false,
+          stream: nil,
+          usage: nil,
+          finish_reason: :stop,
+          provider_meta: %{},
+          error: nil
+        }
+      }
+
+      stop_stub = OpenTelemetry.request_stop(metadata, content: :attributes)
+
+      output = stop_stub.attributes["gen_ai.output.messages"]
+
+      assert output == [
+               %{
+                 "role" => "assistant",
+                 "parts" => [%{"type" => "text", "content" => "the public answer"}],
+                 "finish_reason" => "stop"
+               }
+             ]
+
+      refute Enum.any?(output, fn message ->
+               Enum.any?(message["parts"], fn part -> part["type"] == "thinking" end)
+             end)
+    end
   end
 end

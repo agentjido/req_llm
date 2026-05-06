@@ -67,30 +67,30 @@ Adds spec-shaped content payloads. Existing redaction guarantees are preserved.
 
 ### Work
 
-- [ ] Split system messages out of `gen_ai.input.messages` into a separate
+- [x] Split system messages out of `gen_ai.input.messages` into a separate
       `gen_ai.system_instructions` attribute (text-only parts).
-- [ ] Emit `gen_ai.tool.definitions` from sanitized `request_payload.tools`
+- [x] Emit `gen_ai.tool.definitions` from sanitized `request_payload.tools`
       (already stable-keyed: `name`, `description`, `strict`,
       `parameter_schema`).
-- [ ] Add `:include_content` (default `false`) to
+- [x] Add `:include_content` (default `false`) to
       `ReqLLM.OpenTelemetry.attach/2` so the auto-bridge can promote
       structured messages, system instructions, and tool definitions when
       the host opts in.
-- [ ] Add `content: :event` mode to `ReqLLM.Telemetry.OpenTelemetry` that
+- [x] Add `content: :event` mode to `ReqLLM.Telemetry.OpenTelemetry` that
       returns a `gen_ai.client.inference.operation.details` event stub
       instead of attaching the content as span attributes.
 
 ### How to verify
 
-- [ ] Tests assert that with a `Context` containing system + user + assistant
+- [x] Tests assert that with a `Context` containing system + user + assistant
       + tool-call + tool-result messages, the request stub contains:
       - `gen_ai.system_instructions` only with the system content,
       - `gen_ai.input.messages` without the system message,
       - `gen_ai.tool.definitions` matching `Context.tools`.
-- [ ] Tests confirm `:include_content` defaults to off (back-compat) and that
+- [x] Tests confirm `:include_content` defaults to off (back-compat) and that
       reasoning text never appears in any content attribute even when content
       capture is on.
-- [ ] Tests confirm `content: :event` returns a single
+- [x] Tests confirm `content: :event` returns a single
       `gen_ai.client.inference.operation.details` event with the same
       structured payload, and that `attributes` no longer contain
       `gen_ai.input.messages`.

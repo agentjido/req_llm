@@ -396,4 +396,173 @@ defmodule ReqLLM.OpenTelemetryTest do
     assert_receive {:set_status, ^span, :error, "HTTP 503"}
     assert_receive {:end_span, ^span}
   end
+
+  describe ":include_content option" do
+    alias ReqLLM.{Message, ToolCall}
+    alias ReqLLM.Message.ContentPart
+
+    test "default (off) does not attach content attributes" do
+      handler_id = "req-llm-otel-#{System.unique_integer([:positive])}"
+      request_id = "req-#{System.unique_integer([:positive])}"
+
+      assert :ok = OpenTelemetry.attach(handler_id, adapter: FakeAdapter, test_pid: self())
+
+      on_exit(fn ->
+        OpenTelemetry.detach(handler_id)
+      end)
+
+      :telemetry.execute(
+        [:req_llm, :request, :start],
+        %{system_time: System.system_time()},
+        %{
+          request_id: request_id,
+          operation: :chat,
+          provider: :openai,
+          model: %LLMDB.Model{id: "gpt-5", provider: :openai},
+          request_payload: %{
+            messages: [
+              %Message{role: :system, content: [%ContentPart{type: :text, text: "be helpful"}]},
+              %Message{role: :user, content: [%ContentPart{type: :text, text: "hi"}]}
+            ],
+            tools: [%{name: "get_weather", description: "x", parameter_schema: %{}}]
+          }
+        }
+      )
+
+      assert_receive {:start_span, _span, _name, attributes}
+      refute Map.has_key?(attributes, :"gen_ai.input.messages")
+      refute Map.has_key?(attributes, :"gen_ai.system_instructions")
+      refute Map.has_key?(attributes, :"gen_ai.tool.definitions")
+    end
+
+    test "include_content: true promotes messages, system_instructions, tool definitions onto the span" do
+      handler_id = "req-llm-otel-#{System.unique_integer([:positive])}"
+      request_id = "req-#{System.unique_integer([:positive])}"
+
+      assert :ok =
+               OpenTelemetry.attach(handler_id,
+                 adapter: FakeAdapter,
+                 include_content: true,
+                 test_pid: self()
+               )
+
+      on_exit(fn ->
+        OpenTelemetry.detach(handler_id)
+      end)
+
+      tool_call = ToolCall.new("call_w", "get_weather", ~s({"city":"Paris"}))
+
+      :telemetry.execute(
+        [:req_llm, :request, :start],
+        %{system_time: System.system_time()},
+        %{
+          request_id: request_id,
+          operation: :chat,
+          provider: :openai,
+          model: %LLMDB.Model{id: "gpt-5", provider: :openai},
+          request_payload: %{
+            messages: [
+              %Message{role: :system, content: [%ContentPart{type: :text, text: "be helpful"}]},
+              %Message{role: :user, content: [%ContentPart{type: :text, text: "weather?"}]},
+              %Message{role: :assistant, content: [], tool_calls: [tool_call]}
+            ],
+            tools: [
+              %{
+                name: "get_weather",
+                description: "fetch",
+                strict: true,
+                parameter_schema: %{"type" => "object"}
+              }
+            ]
+          }
+        }
+      )
+
+      assert_receive {:start_span, _span, _name, attributes}
+
+      assert attributes[:"gen_ai.system_instructions"] == [
+               %{"type" => "text", "content" => "be helpful"}
+             ]
+
+      assert [
+               %{"role" => "user"},
+               %{"role" => "assistant"}
+             ] = attributes[:"gen_ai.input.messages"]
+
+      assert [
+               %{
+                 "type" => "function",
+                 "name" => "get_weather",
+                 "description" => "fetch",
+                 "strict" => true,
+                 "parameters" => %{"type" => "object"}
+               }
+             ] = attributes[:"gen_ai.tool.definitions"]
+    end
+
+    test "include_content: true attaches gen_ai.output.messages on stop" do
+      handler_id = "req-llm-otel-#{System.unique_integer([:positive])}"
+      request_id = "req-#{System.unique_integer([:positive])}"
+
+      assert :ok =
+               OpenTelemetry.attach(handler_id,
+                 adapter: FakeAdapter,
+                 include_content: true,
+                 test_pid: self()
+               )
+
+      on_exit(fn ->
+        OpenTelemetry.detach(handler_id)
+      end)
+
+      model = %LLMDB.Model{id: "gpt-5", provider: :openai}
+
+      :telemetry.execute(
+        [:req_llm, :request, :start],
+        %{system_time: System.system_time()},
+        %{request_id: request_id, operation: :chat, provider: :openai, model: model}
+      )
+
+      assert_receive {:start_span, span, _name, _attrs}
+
+      :telemetry.execute(
+        [:req_llm, :request, :stop],
+        %{duration: 1, system_time: System.system_time()},
+        %{
+          request_id: request_id,
+          operation: :chat,
+          provider: :openai,
+          model: model,
+          finish_reason: :stop,
+          usage: %{tokens: %{input: 1, output: 1}},
+          response_payload: %ReqLLM.Response{
+            id: "resp_x",
+            model: "gpt-5",
+            context: nil,
+            message: %Message{
+              role: :assistant,
+              content: [%ContentPart{type: :text, text: "hi back"}]
+            },
+            object: nil,
+            stream?: false,
+            stream: nil,
+            usage: nil,
+            finish_reason: :stop,
+            provider_meta: %{},
+            error: nil
+          }
+        }
+      )
+
+      assert_receive {:set_attributes, ^span, attributes}
+
+      assert attributes[:"gen_ai.output.messages"] == [
+               %{
+                 "role" => "assistant",
+                 "parts" => [%{"type" => "text", "content" => "hi back"}],
+                 "finish_reason" => "stop"
+               }
+             ]
+    end
+  end
 end
