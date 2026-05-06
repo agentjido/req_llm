@@ -298,7 +298,7 @@ defmodule ReqLLM.Step.Fixture.Backend do
       rescue
         e ->
           Logger.error("VCR.record exception: #{Exception.format(:error, e, __STACKTRACE__)}")
-          {:error, e}
+          reraise e, __STACKTRACE__
       end
 
     case result do

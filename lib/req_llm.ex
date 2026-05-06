@@ -554,9 +554,7 @@ defmodule ReqLLM do
 
   defp normalize_google_cost(cost, tiered_rates) do
     baseline_cost =
-      Enum.reduce(tiered_rates, %{}, fn {key, {standard_rate, _long_context_rate}}, acc ->
-        Map.put(acc, key, standard_rate)
-      end)
+      Map.new(tiered_rates, fn {key, {standard_rate, _}} -> {key, standard_rate} end)
 
     if is_map(cost), do: Map.merge(cost, baseline_cost), else: baseline_cost
   end
