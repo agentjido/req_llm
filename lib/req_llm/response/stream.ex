@@ -63,8 +63,8 @@ defmodule ReqLLM.Response.Stream do
     tool_calls = reconstruct_tool_calls(acc)
 
     %{
-      text: acc.text_content |> Enum.reverse() |> Enum.join(""),
-      thinking: acc.thinking_content |> Enum.reverse() |> Enum.join(""),
+      text: acc.text_content |> Enum.reverse() |> Enum.join(),
+      thinking: acc.thinking_content |> Enum.reverse() |> Enum.join(),
       tool_calls: tool_calls,
       finish_reason: normalize_finish_reason(acc.finish_reason),
       usage: acc.usage

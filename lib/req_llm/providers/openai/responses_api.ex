@@ -1598,7 +1598,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
 
     texts
     |> Enum.reject(&is_nil/1)
-    |> Enum.join("")
+    |> Enum.join()
   end
 
   defp extract_from_message_segments(segments) do
@@ -1610,7 +1610,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
       |> Enum.filter(&(&1["type"] in ["output_text", "text"]))
       |> Enum.map(&extract_text_field/1)
     end)
-    |> Enum.join("")
+    |> Enum.join()
     |> case do
       "" -> nil
       text -> text
@@ -1715,7 +1715,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
 
     reasoning_parts
     |> Enum.reject(&is_nil/1)
-    |> Enum.join("")
+    |> Enum.join()
   end
 
   defp extract_reasoning_summary(segments) do
@@ -1724,7 +1724,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     |> Enum.map(& &1["summary"])
     |> Enum.map(&extract_summary_text/1)
     |> Enum.reject(&is_nil/1)
-    |> Enum.join("")
+    |> Enum.join()
     |> case do
       "" -> nil
       text -> text
@@ -1739,7 +1739,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
       |> Enum.map(& &1["text"])
       |> Enum.reject(&is_nil/1)
     end)
-    |> Enum.join("")
+    |> Enum.join()
     |> case do
       "" -> nil
       text -> text
@@ -1784,7 +1784,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     |> Enum.filter(&(&1["type"] == "summary_text"))
     |> Enum.map(& &1["text"])
     |> Enum.reject(&is_nil/1)
-    |> Enum.join("")
+    |> Enum.join()
     |> case do
       "" -> nil
       text -> text

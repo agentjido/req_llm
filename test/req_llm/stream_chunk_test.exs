@@ -285,7 +285,7 @@ defmodule ReqLLM.StreamChunkTest do
       many_keys = %{a: 1, b: 2, c: 3, d: 4, e: 5}
       multi_chunk = StreamChunk.meta(many_keys)
       multi_inspect = inspect(multi_chunk)
-      comma_count = multi_inspect |> String.graphemes() |> Enum.count(&(&1 == ","))
+      comma_count = multi_inspect |> String.codepoints() |> Enum.count(&(&1 == ","))
       # 5 keys = 4 commas
       assert comma_count == 4
     end

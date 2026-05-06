@@ -382,11 +382,11 @@ defmodule ReqLLM.ResponseTest do
       streamed_text =
         response
         |> Response.text_stream()
-        |> Enum.join("")
+        |> Enum.join()
 
       # Property: both methods should produce the same result
       assert joined_text == streamed_text
-      assert joined_text == Enum.join(text_parts, "")
+      assert joined_text == Enum.join(text_parts)
     end
   end
 

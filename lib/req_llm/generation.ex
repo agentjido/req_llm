@@ -88,9 +88,6 @@ defmodule ReqLLM.Generation do
             cache_ref
           )
       end
-    else
-      {:error, error} ->
-        {:error, error}
     end
   end
 
@@ -272,9 +269,6 @@ defmodule ReqLLM.Generation do
             cache_ref
           )
       end
-    else
-      {:error, error} ->
-        {:error, error}
     end
   end
 

@@ -168,7 +168,7 @@ defmodule ReqLLM.StreamResponse do
   def text(%__MODULE__{} = stream_response) do
     stream_response
     |> tokens()
-    |> Enum.join("")
+    |> Enum.join()
   end
 
   @doc """

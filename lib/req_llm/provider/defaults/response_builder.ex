@@ -55,8 +55,8 @@ defmodule ReqLLM.Provider.Defaults.ResponseBuilder do
     normalized_tool_calls = normalize_tool_calls(reconstructed_tool_calls)
 
     # Build message content
-    text_content = acc_data.text_content |> Enum.reverse() |> Enum.join("")
-    thinking_content = acc_data.thinking_content |> Enum.reverse() |> Enum.join("")
+    text_content = acc_data.text_content |> Enum.reverse() |> Enum.join()
+    thinking_content = acc_data.thinking_content |> Enum.reverse() |> Enum.join()
     content_parts = build_content_parts(text_content, thinking_content, normalized_tool_calls)
 
     # Build reasoning_details: prefer from meta chunks, fall back to extraction from thinking chunks

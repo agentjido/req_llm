@@ -49,15 +49,8 @@ defmodule ReqLLM.OpenAI.Realtime do
 
   @spec next_event(Session.t(), non_neg_integer()) :: {:ok, map()} | :halt | {:error, term()}
   def next_event(%Session{pid: pid}, timeout \\ 30_000) do
-    with {:ok, message} <- WebSocketSession.next_message(pid, timeout),
-         {:ok, event} <- Jason.decode(message) do
-      {:ok, event}
-    else
-      :halt ->
-        :halt
-
-      {:error, reason} ->
-        {:error, reason}
+    with {:ok, message} <- WebSocketSession.next_message(pid, timeout) do
+      Jason.decode(message)
     end
   end
 

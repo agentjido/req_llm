@@ -1113,7 +1113,7 @@ defmodule ReqLLM.StreamResponseTest do
 
       # Collect via tokens/1 stream (need fresh stream_response)
       stream_response2 = create_stream_response(stream: chunks)
-      streamed_text = StreamResponse.tokens(stream_response2) |> Enum.join("")
+      streamed_text = StreamResponse.tokens(stream_response2) |> Enum.join()
 
       # Property: both methods should produce same result
       assert direct_text == streamed_text
