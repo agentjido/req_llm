@@ -41,6 +41,53 @@ defmodule ReqLLM.OpenTelemetryTest do
     end
   end
 
+  defmodule FakeMetricsAdapter do
+    @behaviour ReqLLM.OpenTelemetry.Adapter
+
+    @impl true
+    def available?, do: true
+
+    @impl true
+    def start_span(name, attributes, config) do
+      span = make_ref()
+      send(config[:test_pid], {:start_span, span, name, attributes})
+      span
+    end
+
+    @impl true
+    def set_attributes(span, attributes, config) do
+      send(config[:test_pid], {:set_attributes, span, attributes})
+      :ok
+    end
+
+    @impl true
+    def add_event(span, name, attributes, config) do
+      send(config[:test_pid], {:add_event, span, name, attributes})
+      :ok
+    end
+
+    @impl true
+    def set_status(span, status, message, config) do
+      send(config[:test_pid], {:set_status, span, status, message})
+      :ok
+    end
+
+    @impl true
+    def end_span(span, config) do
+      send(config[:test_pid], {:end_span, span})
+      :ok
+    end
+
+    @impl true
+    def metrics_available?, do: true
+
+    @impl true
+    def record_histogram(record, config) do
+      send(config[:test_pid], {:record_histogram, record})
+      :ok
+    end
+  end
+
   test "attaches a GenAI client span for request lifecycle events" do
     handler_id = "req-llm-otel-#{System.unique_integer([:positive])}"
     request_id = "req-#{System.unique_integer([:positive])}"
@@ -563,6 +610,196 @@ defmodule ReqLLM.OpenTelemetryTest do
                  "finish_reason" => "stop"
                }
              ]
+    end
+  end
+
+  describe "metrics emission" do
+    defp millisecond_to_native(ms),
+      do: System.convert_time_unit(ms, :millisecond, :native)
+
+    defp marker_model do
+      id = "metric-test-#{System.unique_integer([:positive, :monotonic])}"
+      %LLMDB.Model{id: id, provider: :openai}
+    end
+
+    defp drain_records(model_id, records \\ []) do
+      receive do
+        {:record_histogram, %{attributes: %{"gen_ai.request.model" => ^model_id}} = record} ->
+          drain_records(model_id, [record | records])
+
+        {:record_histogram, _other} ->
+          drain_records(model_id, records)
+      after
+        50 -> Enum.reverse(records)
+      end
+    end
+
+    defp by_name(records, name), do: Enum.filter(records, &(&1.name == name))
+
+    test "emits duration + token histograms on stop" do
+      handler_id = "req-llm-otel-#{System.unique_integer([:positive])}"
+      request_id = "req-#{System.unique_integer([:positive])}"
+
+      assert :ok =
+               OpenTelemetry.attach(handler_id, adapter: FakeMetricsAdapter, test_pid: self())
+
+      on_exit(fn -> OpenTelemetry.detach(handler_id) end)
+
+      model = marker_model()
+
+      :telemetry.execute(
+        [:req_llm, :request, :start],
+        %{system_time: System.system_time()},
+        %{request_id: request_id, operation: :chat, provider: :openai, model: model}
+      )
+
+      :telemetry.execute(
+        [:req_llm, :request, :stop],
+        %{duration: millisecond_to_native(750), system_time: System.system_time()},
+        %{
+          request_id: request_id,
+          operation: :chat,
+          provider: :openai,
+          model: model,
+          mode: :sync,
+          server: %{address: "api.openai.com", port: 443},
+          finish_reason: :stop,
+          usage: %{tokens: %{input: 100, output: 200}}
+        }
+      )
+
+      records = drain_records(model.id)
+
+      duration = by_name(records, "gen_ai.client.operation.duration") |> hd()
+      assert_in_delta(duration.value, 0.75, 0.05)
+
+      assert duration.attributes == %{
+               "gen_ai.operation.name" => "chat",
+               "gen_ai.provider.name" => "openai",
+               "gen_ai.request.model" => model.id,
+               "gen_ai.response.model" => model.id,
+               "server.address" => "api.openai.com",
+               "server.port" => 443
+             }
+
+      tokens = by_name(records, "gen_ai.client.token.usage")
+      assert length(tokens) == 2
+
+      assert by_name(records, "gen_ai.client.operation.time_to_first_chunk") == []
+      assert by_name(records, "gen_ai.client.operation.time_per_output_chunk") == []
+    end
+
+    test "emits TTFC + TPOC and gen_ai.response.time_to_first_chunk attribute on streaming stop" do
+      handler_id = "req-llm-otel-#{System.unique_integer([:positive])}"
+      request_id = "req-#{System.unique_integer([:positive])}"
+
+      assert :ok =
+               OpenTelemetry.attach(handler_id, adapter: FakeMetricsAdapter, test_pid: self())
+
+      on_exit(fn -> OpenTelemetry.detach(handler_id) end)
+
+      model = marker_model()
+      ttfc_native = millisecond_to_native(150)
+      duration_native = millisecond_to_native(1200)
+
+      :telemetry.execute(
+        [:req_llm, :request, :start],
+        %{system_time: System.system_time()},
+        %{request_id: request_id, operation: :chat, provider: :openai, model: model}
+      )
+
+      :telemetry.execute(
+        [:req_llm, :request, :stop],
+        %{duration: duration_native, system_time: System.system_time()},
+        %{
+          request_id: request_id,
+          operation: :chat,
+          provider: :openai,
+          model: model,
+          mode: :stream,
+          streaming: %{first_chunk_at: 0, time_to_first_chunk: ttfc_native},
+          finish_reason: :stop,
+          usage: %{tokens: %{input: 30, output: 50}}
+        }
+      )
+
+      assert_receive {:set_attributes, _span, attributes}
+      assert_in_delta(attributes[:"gen_ai.response.time_to_first_chunk"], 0.15, 0.001)
+
+      records = drain_records(model.id)
+
+      ttfc = by_name(records, "gen_ai.client.operation.time_to_first_chunk") |> hd()
+      assert_in_delta(ttfc.value, 0.15, 0.001)
+
+      tpoc = by_name(records, "gen_ai.client.operation.time_per_output_chunk") |> hd()
+      assert_in_delta(tpoc.value, (1.2 - 0.15) / 50, 0.001)
+    end
+
+    test "emits duration with error.type on exception" do
+      handler_id = "req-llm-otel-#{System.unique_integer([:positive])}"
+      request_id = "req-#{System.unique_integer([:positive])}"
+
+      assert :ok =
+               OpenTelemetry.attach(handler_id, adapter: FakeMetricsAdapter, test_pid: self())
+
+      on_exit(fn -> OpenTelemetry.detach(handler_id) end)
+
+      model = marker_model()
+
+      :telemetry.execute(
+        [:req_llm, :request, :start],
+        %{system_time: System.system_time()},
+        %{request_id: request_id, operation: :chat, provider: :openai, model: model}
+      )
+
+      :telemetry.execute(
+        [:req_llm, :request, :exception],
+        %{duration: millisecond_to_native(80), system_time: System.system_time()},
+        %{
+          request_id: request_id,
+          operation: :chat,
+          provider: :openai,
+          model: model,
+          error: %RuntimeError{message: "boom"}
+        }
+      )
+
+      records = drain_records(model.id)
+      assert [duration] = records
+      assert duration.name == "gen_ai.client.operation.duration"
+      assert duration.attributes["error.type"] == "RuntimeError"
+    end
+
+    test "skips metrics when adapter does not implement metrics callbacks" do
+      handler_id = "req-llm-otel-#{System.unique_integer([:positive])}"
+      request_id = "req-#{System.unique_integer([:positive])}"
+
+      assert :ok = OpenTelemetry.attach(handler_id, adapter: FakeAdapter, test_pid: self())
+      on_exit(fn -> OpenTelemetry.detach(handler_id) end)
+
+      model = marker_model()
+
+      :telemetry.execute(
+        [:req_llm, :request, :start],
+        %{system_time: System.system_time()},
+        %{request_id: request_id, operation: :chat, provider: :openai, model: model}
+      )
+
+      :telemetry.execute(
+        [:req_llm, :request, :stop],
+        %{duration: 1, system_time: System.system_time()},
+        %{
+          request_id: request_id,
+          operation: :chat,
+          provider: :openai,
+          model: model,
+          mode: :sync,
+          finish_reason: :stop,
+          usage: %{tokens: %{input: 10, output: 20}}
+        }
+      )
+
+      assert drain_records(model.id) == []
     end
   end
 end

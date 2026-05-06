@@ -207,4 +207,72 @@ defmodule ReqLLM.OpenTelemetry.AttributesTest do
       assert Attributes.error_status(%{http_status: 503}) == {"503", "HTTP 503"}
     end
   end
+
+  describe "provider_name/1 + request_model/1" do
+    test "provider_name resolves the spec enum" do
+      metadata = %{
+        provider: :anthropic,
+        model: %LLMDB.Model{id: "claude-sonnet-4-6", provider: :anthropic}
+      }
+
+      assert Attributes.provider_name(metadata) == "anthropic"
+    end
+
+    test "provider_name falls back to model.provider when metadata.provider is nil" do
+      metadata = %{model: %LLMDB.Model{id: "gpt-5", provider: :openai}}
+      assert Attributes.provider_name(metadata) == "openai"
+    end
+
+    test "provider_name returns nil when neither source is present" do
+      assert Attributes.provider_name(%{}) == nil
+    end
+
+    test "request_model returns the model id" do
+      metadata = %{model: %LLMDB.Model{id: "gpt-5", provider: :openai}}
+      assert Attributes.request_model(metadata) == "gpt-5"
+    end
+
+    test "request_model returns nil when model is missing" do
+      assert Attributes.request_model(%{}) == nil
+    end
+  end
+
+  describe "streaming_ttfc_seconds/1" do
+    test "converts native time-to-first-chunk to seconds" do
+      native = System.convert_time_unit(250, :millisecond, :native)
+      metadata = %{mode: :stream, streaming: %{time_to_first_chunk: native}}
+      assert_in_delta(Attributes.streaming_ttfc_seconds(metadata), 0.25, 0.001)
+    end
+
+    test "returns nil for sync requests" do
+      assert Attributes.streaming_ttfc_seconds(%{mode: :sync}) == nil
+    end
+
+    test "returns nil when streaming map has no first chunk" do
+      assert Attributes.streaming_ttfc_seconds(%{
+               mode: :stream,
+               streaming: %{time_to_first_chunk: nil}
+             }) == nil
+    end
+  end
+
+  describe "terminal/1 streaming attribute" do
+    test "emits gen_ai.response.time_to_first_chunk for streaming requests" do
+      native = System.convert_time_unit(120, :millisecond, :native)
+
+      attrs =
+        Attributes.terminal(%{
+          finish_reason: :stop,
+          mode: :stream,
+          streaming: %{first_chunk_at: 0, time_to_first_chunk: native}
+        })
+
+      assert_in_delta(attrs["gen_ai.response.time_to_first_chunk"], 0.12, 0.001)
+    end
+
+    test "omits gen_ai.response.time_to_first_chunk for sync requests" do
+      attrs = Attributes.terminal(%{finish_reason: :stop, mode: :sync})
+      refute Map.has_key?(attrs, "gen_ai.response.time_to_first_chunk")
+    end
+  end
 end

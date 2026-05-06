@@ -613,4 +613,50 @@ defmodule ReqLLM.TelemetryTest do
 
   defp restore_app_env(app, key, nil), do: Application.delete_env(app, key)
   defp restore_app_env(app, key, value), do: Application.put_env(app, key, value)
+
+  describe "observe_stream_chunk/2 first-chunk timing" do
+    defp streaming_context do
+      ReqLLM.Telemetry.new_context(
+        %LLMDB.Model{id: "gpt-5", provider: :openai},
+        [],
+        operation: :chat,
+        mode: :stream
+      )
+      |> Map.put(:started_at, System.monotonic_time())
+    end
+
+    test "stamps first_chunk_at on the first non-empty content chunk" do
+      context =
+        streaming_context()
+        |> ReqLLM.Telemetry.observe_stream_chunk(ReqLLM.StreamChunk.text("Hi"))
+
+      assert is_integer(context.first_chunk_at)
+    end
+
+    test "does not stamp on empty content chunks" do
+      context =
+        streaming_context()
+        |> ReqLLM.Telemetry.observe_stream_chunk(ReqLLM.StreamChunk.text(""))
+
+      assert context.first_chunk_at == nil
+    end
+
+    test "does not stamp on thinking or meta chunks" do
+      context =
+        streaming_context()
+        |> ReqLLM.Telemetry.observe_stream_chunk(ReqLLM.StreamChunk.thinking("reasoning"))
+        |> ReqLLM.Telemetry.observe_stream_chunk(ReqLLM.StreamChunk.meta(%{usage: %{output: 1}}))
+
+      assert context.first_chunk_at == nil
+    end
+
+    test "does not overwrite first_chunk_at on subsequent chunks" do
+      context = streaming_context()
+      context = ReqLLM.Telemetry.observe_stream_chunk(context, ReqLLM.StreamChunk.text("first"))
+      first = context.first_chunk_at
+
+      context = ReqLLM.Telemetry.observe_stream_chunk(context, ReqLLM.StreamChunk.text("second"))
+      assert context.first_chunk_at == first
+    end
+  end
 end

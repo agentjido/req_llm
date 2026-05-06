@@ -31,11 +31,12 @@ defmodule ReqLLM.Telemetry.OpenTelemetry do
   """
 
   alias ReqLLM.MapAccess
-  alias ReqLLM.OpenTelemetry.{Attributes, Content, SemConv}
+  alias ReqLLM.OpenTelemetry.{Attributes, Content, Metrics, SemConv}
 
   @type content_mode :: :none | :attributes | :event
   @type span_status :: :ok | {:error, String.t()}
   @type otel_event :: %{name: String.t(), attributes: map()}
+  @type metric_record :: Metrics.record()
 
   @type request_start_stub :: %{
           name: String.t(),
@@ -47,7 +48,8 @@ defmodule ReqLLM.Telemetry.OpenTelemetry do
   @type request_terminal_stub :: %{
           attributes: map(),
           status: span_status(),
-          events: [otel_event()]
+          events: [otel_event()],
+          metrics: [metric_record()]
         }
 
   @inference_event_name "gen_ai.client.inference.operation.details"
@@ -73,10 +75,14 @@ defmodule ReqLLM.Telemetry.OpenTelemetry do
 
   @doc """
   Builds terminal span data for a `[:req_llm, :request, :stop]` event.
+
+  Pass `measurements: %{duration: native}` to populate `metrics` and the
+  `gen_ai.response.time_to_first_chunk` span attribute on streaming requests.
   """
   @spec request_stop(map(), keyword()) :: request_terminal_stub()
   def request_stop(metadata, opts \\ []) when is_map(metadata) do
     mode = content_mode(opts)
+    measurements = measurements(opts)
 
     content_payload =
       Map.merge(Content.request_attributes(metadata), Content.response_attributes(metadata))
@@ -88,7 +94,8 @@ defmodule ReqLLM.Telemetry.OpenTelemetry do
         |> Map.merge(Attributes.terminal(metadata))
         |> merge_when(mode == :attributes, content_payload),
       status: span_status(metadata),
-      events: maybe_inference_event(mode, content_payload)
+      events: maybe_inference_event(mode, content_payload),
+      metrics: Metrics.stop(metadata, MapAccess.get(measurements, :duration))
     }
   end
 
@@ -98,6 +105,7 @@ defmodule ReqLLM.Telemetry.OpenTelemetry do
   @spec request_exception(map(), keyword()) :: request_terminal_stub()
   def request_exception(metadata, opts \\ []) when is_map(metadata) do
     mode = content_mode(opts)
+    measurements = measurements(opts)
     request_content = Content.request_attributes(metadata)
 
     %{
@@ -107,7 +115,8 @@ defmodule ReqLLM.Telemetry.OpenTelemetry do
         |> Map.merge(Attributes.exception(metadata))
         |> merge_when(mode == :attributes, request_content),
       status: span_status(metadata),
-      events: exception_events(metadata) ++ maybe_inference_event(mode, request_content)
+      events: exception_events(metadata) ++ maybe_inference_event(mode, request_content),
+      metrics: Metrics.exception(metadata, MapAccess.get(measurements, :duration))
     }
   end
 
@@ -124,6 +133,13 @@ defmodule ReqLLM.Telemetry.OpenTelemetry do
       :event -> :event
       true -> :attributes
       _ -> :none
+    end
+  end
+
+  defp measurements(opts) do
+    case Keyword.get(opts, :measurements) do
+      map when is_map(map) -> map
+      _ -> %{}
     end
   end
 

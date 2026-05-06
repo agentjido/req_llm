@@ -105,31 +105,32 @@ Adds the four spec metrics and a span attribute for time-to-first-chunk.
 
 ### Work
 
-- [ ] Add an OTel metrics availability probe to
+- [x] Add an OTel metrics availability probe to
       `ReqLLM.OpenTelemetry.OTelAdapter` mirroring the tracer probe (check
       for `:otel_meter`, `:otel_meter_provider`, `:otel_histogram`).
-- [ ] Emit `gen_ai.client.operation.duration` (seconds histogram) on `:stop`
+- [x] Emit `gen_ai.client.operation.duration` (seconds histogram) on `:stop`
       and `:exception`.
-- [ ] Emit `gen_ai.client.token.usage` (token histogram) on `:stop`, once for
+- [x] Emit `gen_ai.client.token.usage` (token histogram) on `:stop`, once for
       `gen_ai.token.type=input` and once for `gen_ai.token.type=output`.
-- [ ] In `ReqLLM.Telemetry.observe_stream_chunk/2`, record the monotonic
+- [x] In `ReqLLM.Telemetry.observe_stream_chunk/2`, record the monotonic
       time of the first non-empty content chunk and stash it in the context.
-- [ ] Emit `gen_ai.client.operation.time_to_first_chunk` (seconds histogram)
+- [x] Emit `gen_ai.client.operation.time_to_first_chunk` (seconds histogram)
       for streaming requests.
-- [ ] Emit `gen_ai.client.operation.time_per_output_chunk` (seconds histogram)
-      derived from streaming duration / output-token count.
-- [ ] Add `gen_ai.response.time_to_first_chunk` span attribute on streaming
+- [x] Emit `gen_ai.client.operation.time_per_output_chunk` (seconds histogram)
+      computed as `(duration − time_to_first_chunk) / output_tokens` —
+      reflects the per-token rate after the first chunk arrives.
+- [x] Add `gen_ai.response.time_to_first_chunk` span attribute on streaming
       `:stop` events.
 
 ### How to verify
 
-- [ ] Test with a fake metrics adapter that captures histogram emissions.
+- [x] Test with a fake metrics adapter that captures histogram emissions.
       Assert that for sync requests only `operation.duration` and
       `token.usage` are recorded; for streaming requests
       `time_to_first_chunk` and `time_per_output_chunk` are recorded too.
-- [ ] Assert error path records `operation.duration` with `error.type`
+- [x] Assert error path records `operation.duration` with `error.type`
       attribute set.
-- [ ] Assert metric attributes include `gen_ai.operation.name`,
+- [x] Assert metric attributes include `gen_ai.operation.name`,
       `gen_ai.provider.name`, `gen_ai.request.model`,
       `gen_ai.response.model`, `server.address`, `server.port` per spec.
 - [ ] Manual: enable a Prometheus exporter and confirm histograms exist

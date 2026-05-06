@@ -7,12 +7,18 @@ defmodule ReqLLM.OpenTelemetry.Adapter do
   @callback add_event(term(), atom() | String.t(), map(), keyword()) :: :ok
   @callback set_status(term(), :ok | :error, String.t() | nil, keyword()) :: :ok
   @callback end_span(term(), keyword()) :: :ok
+  @callback metrics_available?() :: boolean()
+  @callback record_histogram(map(), keyword()) :: :ok
+
+  @optional_callbacks metrics_available?: 0, record_histogram: 2
 end
 
 defmodule ReqLLM.OpenTelemetry.OTelAdapter do
   @moduledoc false
 
   @behaviour ReqLLM.OpenTelemetry.Adapter
+
+  @instrument_table :req_llm_open_telemetry_instruments
 
   @impl true
   def available? do
@@ -25,6 +31,21 @@ defmodule ReqLLM.OpenTelemetry.OTelAdapter do
         {:otel_span, :set_status, 2},
         {:otel_span, :set_status, 3},
         {:otel_span, :end_span, 1}
+      ],
+      fn {module, function, arity} ->
+        Code.ensure_loaded?(module) and function_exported?(module, function, arity)
+      end
+    )
+  end
+
+  @impl true
+  def metrics_available? do
+    Enum.all?(
+      [
+        {:otel_meter_provider, :get_meter, 3},
+        {:otel_meter, :create_histogram, 3},
+        {:otel_histogram, :record, 4},
+        {:otel_ctx, :get_current, 0}
       ],
       fn {module, function, arity} ->
         Code.ensure_loaded?(module) and function_exported?(module, function, arity)
@@ -74,6 +95,88 @@ defmodule ReqLLM.OpenTelemetry.OTelAdapter do
   def end_span(span, _config) do
     call(:otel_span, :end_span, [span])
     :ok
+  end
+
+  @impl true
+  def record_histogram(record, _config) do
+    instrument = ensure_instrument(record)
+    ctx = call(:otel_ctx, :get_current, [])
+
+    call(:otel_histogram, :record, [
+      ctx,
+      instrument,
+      record.value,
+      atomize_keys(record.attributes)
+    ])
+
+    :ok
+  end
+
+  defp ensure_instrument(%{name: name} = record) do
+    ensure_instrument_table()
+
+    case :ets.lookup(@instrument_table, name) do
+      [{^name, instrument}] ->
+        instrument
+
+      [] ->
+        instrument =
+          call(:otel_meter, :create_histogram, [
+            meter(),
+            name,
+            instrument_config(record)
+          ])
+
+        :ets.insert(@instrument_table, {name, instrument})
+        instrument
+    end
+  end
+
+  defp ensure_instrument_table do
+    case :ets.whereis(@instrument_table) do
+      :undefined ->
+        :ets.new(@instrument_table, [
+          :named_table,
+          :public,
+          :set,
+          {:read_concurrency, true},
+          {:write_concurrency, true}
+        ])
+
+      _ ->
+        @instrument_table
+    end
+
+    :ok
+  rescue
+    ArgumentError -> :ok
+  end
+
+  defp instrument_config(record) do
+    %{
+      description: Map.get(record, :description, ""),
+      unit: Map.get(record, :unit, ""),
+      explicit_bucket_boundaries: Map.get(record, :boundaries, [])
+    }
+  end
+
+  defp atomize_keys(map) when is_map(map) do
+    Map.new(map, fn
+      {key, value} when is_atom(key) -> {key, value}
+      {key, value} when is_binary(key) -> {String.to_atom(key), value}
+    end)
+  end
+
+  defp meter do
+    call(
+      :otel_meter_provider,
+      :get_meter,
+      [
+        :req_llm,
+        application_version(),
+        "https://opentelemetry.io/schemas/1.37.0"
+      ]
+    )
   end
 
   defp tracer do
@@ -126,7 +229,7 @@ defmodule ReqLLM.OpenTelemetry do
   """
 
   alias ReqLLM.MapAccess
-  alias ReqLLM.OpenTelemetry.{Attributes, Content, SemConv}
+  alias ReqLLM.OpenTelemetry.{Attributes, Content, Metrics, SemConv}
 
   @events [
     [:req_llm, :request, :start],
@@ -213,7 +316,7 @@ defmodule ReqLLM.OpenTelemetry do
     :ok
   end
 
-  def handle_event([:req_llm, :request, :stop], _measurements, metadata, config) do
+  def handle_event([:req_llm, :request, :stop], measurements, metadata, config) do
     with request_id when is_binary(request_id) <- MapAccess.get(metadata, :request_id),
          {:ok, span} <- take_span(config, request_id) do
       attributes =
@@ -233,12 +336,13 @@ defmodule ReqLLM.OpenTelemetry do
       end
 
       adapter(config).end_span(span, config)
+      record_metrics(:stop, metadata, measurements, config)
     end
 
     :ok
   end
 
-  def handle_event([:req_llm, :request, :exception], _measurements, metadata, config) do
+  def handle_event([:req_llm, :request, :exception], measurements, metadata, config) do
     with request_id when is_binary(request_id) <- MapAccess.get(metadata, :request_id),
          {:ok, span} <- take_span(config, request_id) do
       attributes =
@@ -264,18 +368,28 @@ defmodule ReqLLM.OpenTelemetry do
       )
 
       adapter(config).end_span(span, config)
+      record_metrics(:exception, metadata, measurements, config)
     end
 
     :ok
   end
 
   defp config(handler_id, opts) do
+    adapter = Keyword.get(opts, :adapter, @default_adapter)
+
     opts
-    |> Keyword.put_new(:adapter, @default_adapter)
+    |> Keyword.put(:adapter, adapter)
     |> Keyword.put(:handler_id, handler_id)
+    |> Keyword.put(:metrics_enabled?, metrics_enabled?(adapter))
   end
 
   defp adapter(opts), do: Keyword.get(opts, :adapter, @default_adapter)
+
+  defp metrics_enabled?(adapter) do
+    function_exported?(adapter, :metrics_available?, 0) and
+      function_exported?(adapter, :record_histogram, 2) and
+      adapter.metrics_available?()
+  end
 
   defp merge_content(attributes, metadata, config, scope) do
     if Keyword.get(config, :include_content, false) do
@@ -289,6 +403,23 @@ defmodule ReqLLM.OpenTelemetry do
 
   defp content_attributes(metadata, :both) do
     Map.merge(Content.request_attributes(metadata), Content.response_attributes(metadata))
+  end
+
+  defp record_metrics(kind, metadata, measurements, config) do
+    if Keyword.get(config, :metrics_enabled?, false) do
+      adapter = adapter(config)
+      duration = MapAccess.get(measurements || %{}, :duration)
+
+      records =
+        case kind do
+          :stop -> Metrics.stop(metadata, duration)
+          :exception -> Metrics.exception(metadata, duration)
+        end
+
+      Enum.each(records, &adapter.record_histogram(&1, config))
+    end
+
+    :ok
   end
 
   defp ensure_span_table do

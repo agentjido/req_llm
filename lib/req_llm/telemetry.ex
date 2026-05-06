@@ -66,6 +66,7 @@ defmodule ReqLLM.Telemetry do
           request_stopped?: boolean(),
           started_at: integer() | nil,
           request_measurement: map() | nil,
+          first_chunk_at: integer() | nil,
           requested_reasoning: map(),
           effective_reasoning: map(),
           reasoning_started?: boolean(),
@@ -113,6 +114,7 @@ defmodule ReqLLM.Telemetry do
       request_stopped?: false,
       started_at: nil,
       request_measurement: nil,
+      first_chunk_at: nil,
       requested_reasoning: requested_reasoning,
       effective_reasoning: disable_effective_reasoning(requested_reasoning),
       reasoning_started?: false,
@@ -203,13 +205,21 @@ defmodule ReqLLM.Telemetry do
   """
   @spec observe_stream_chunk(context(), ReqLLM.StreamChunk.t()) :: context()
   def observe_stream_chunk(context, %ReqLLM.StreamChunk{} = chunk) do
-    context =
-      context
-      |> update_response_summary_state(chunk)
-      |> observe_stream_chunk_reasoning(chunk)
-
     context
+    |> maybe_mark_first_chunk(chunk)
+    |> update_response_summary_state(chunk)
+    |> observe_stream_chunk_reasoning(chunk)
   end
+
+  defp maybe_mark_first_chunk(%{first_chunk_at: at} = context, _chunk) when not is_nil(at),
+    do: context
+
+  defp maybe_mark_first_chunk(context, %ReqLLM.StreamChunk{type: :content, text: text})
+       when is_binary(text) and text != "" do
+    %{context | first_chunk_at: System.monotonic_time()}
+  end
+
+  defp maybe_mark_first_chunk(context, _chunk), do: context
 
   @doc """
   Observes a terminal response and updates response and reasoning state.
@@ -406,6 +416,7 @@ defmodule ReqLLM.Telemetry do
       reasoning: reasoning_snapshot(context),
       request_options: context.request_options,
       server: context.server,
+      streaming: streaming_snapshot(context),
       request_summary: context.request_summary,
       response_summary: extra[:response_summary],
       http_status: extra[:http_status],
@@ -418,6 +429,24 @@ defmodule ReqLLM.Telemetry do
     |> maybe_put(:response_payload, extra[:response_payload], include_payloads?(context))
     |> maybe_put(:error, extra[:error], not is_nil(extra[:error]))
   end
+
+  defp streaming_snapshot(%{
+         mode: :stream,
+         started_at: started_at,
+         first_chunk_at: first_chunk_at
+       })
+       when is_integer(started_at) and is_integer(first_chunk_at) do
+    %{
+      first_chunk_at: first_chunk_at,
+      time_to_first_chunk: first_chunk_at - started_at
+    }
+  end
+
+  defp streaming_snapshot(%{mode: :stream, first_chunk_at: first_chunk_at}) do
+    %{first_chunk_at: first_chunk_at, time_to_first_chunk: nil}
+  end
+
+  defp streaming_snapshot(_context), do: %{first_chunk_at: nil, time_to_first_chunk: nil}
 
   @doc """
   Returns the normalized metadata map for reasoning lifecycle events.

@@ -308,7 +308,36 @@ On span stop it sets:
 
 On span exception it sets `error.type` and adds an exception event.
 
+For streaming requests, the bridge also sets
+`gen_ai.response.time_to_first_chunk` (seconds) on the stop span — measured
+from request start to the first non-empty content chunk observed by
+`ReqLLM.Telemetry.observe_stream_chunk/2`.
+
 [otel-gen-ai]: https://opentelemetry.io/docs/specs/semconv/gen-ai/
+
+#### Metrics
+
+When the OpenTelemetry metrics API is available alongside the tracer, the
+bridge also records spec histograms via the same adapter. No extra
+configuration is needed beyond a working OTel meter provider in your host
+app:
+
+| Metric                                              | When        | Notes                                    |
+|-----------------------------------------------------|-------------|------------------------------------------|
+| `gen_ai.client.operation.duration` (s)              | stop + ex   | sets `error.type` on failures            |
+| `gen_ai.client.token.usage` ({token})               | stop        | one record per `gen_ai.token.type`       |
+| `gen_ai.client.operation.time_to_first_chunk` (s)   | streaming   | from first non-empty content chunk       |
+| `gen_ai.client.operation.time_per_output_chunk` (s) | streaming   | `(duration − TTFC) / output_tokens`      |
+
+Each histogram is created lazily with the OpenTelemetry GenAI spec bucket
+boundaries — `[0.01, 0.02, 0.04, …, 81.92]` for durations and
+`[1, 4, 16, …, 67_108_864]` for token counts. Per-record attributes follow
+the spec: `gen_ai.operation.name`, `gen_ai.provider.name`,
+`gen_ai.request.model`, `gen_ai.response.model`, `server.address`,
+`server.port`.
+
+If the meter API is unavailable (e.g. you only depend on the tracer SDK),
+the bridge silently skips metrics emission while continuing to record spans.
 
 #### Capturing message content (opt-in)
 
@@ -408,6 +437,27 @@ Pass one of three content modes:
 - `content: :attributes` — content fields above are set on the span
 - `content: :event` — same payload, but bundled into a single
   `gen_ai.client.inference.operation.details` span event instead of attributes
+
+Pass `measurements: %{duration: native}` to populate the `metrics` field on
+the returned stub. Records use the same shape and bucket boundaries as the
+auto-bridge:
+
+```elixir
+def handle_event([:req_llm, :request, :stop], measurements, metadata, _config) do
+  stub =
+    OpenTelemetry.request_stop(metadata,
+      content: :attributes,
+      measurements: measurements
+    )
+
+  Enum.each(stub.metrics, &MyApp.Tracing.record_genai_histogram/1)
+  MyApp.Tracing.finish_gen_ai_span(metadata.request_id, stub)
+end
+```
+
+Streaming requests also surface `gen_ai.response.time_to_first_chunk` in
+`stub.attributes` when ReqLLM observed a non-empty content chunk during the
+stream.
 
 Both surfaces share the name table in `ReqLLM.OpenTelemetry.SemConv` and the
 content shaper in `ReqLLM.OpenTelemetry.Content`, so provider/operation/output

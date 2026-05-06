@@ -15,12 +15,11 @@ defmodule ReqLLM.OpenTelemetry.Attributes do
   @spec start(map()) :: %{optional(String.t()) => term()}
   def start(metadata) do
     operation = MapAccess.get(metadata, :operation)
-    model = MapAccess.get(metadata, :model)
 
     %{
-      "gen_ai.provider.name" => provider_name(metadata, model),
+      "gen_ai.provider.name" => provider_name(metadata),
       "gen_ai.operation.name" => SemConv.operation_name(operation),
-      "gen_ai.request.model" => request_model(model),
+      "gen_ai.request.model" => request_model(metadata),
       "gen_ai.output.type" => SemConv.output_type(operation),
       "req_llm.request_id" => MapAccess.get(metadata, :request_id)
     }
@@ -37,7 +36,8 @@ defmodule ReqLLM.OpenTelemetry.Attributes do
   @spec terminal(map()) :: %{optional(String.t()) => term()}
   def terminal(metadata) do
     %{
-      "gen_ai.response.finish_reasons" => finish_reasons(MapAccess.get(metadata, :finish_reason))
+      "gen_ai.response.finish_reasons" => finish_reasons(MapAccess.get(metadata, :finish_reason)),
+      "gen_ai.response.time_to_first_chunk" => streaming_ttfc_seconds(metadata)
     }
     |> Map.merge(usage(MapAccess.get(metadata, :usage)))
     |> Map.merge(
@@ -49,6 +49,44 @@ defmodule ReqLLM.OpenTelemetry.Attributes do
     |> Map.merge(embeddings(metadata))
     |> Map.merge(http_error(metadata))
     |> compact()
+  end
+
+  @doc """
+  Resolves the GenAI provider name from request metadata, falling back to the
+  model's provider when `metadata.provider` is absent.
+  """
+  @spec provider_name(map()) :: String.t() | nil
+  def provider_name(metadata) do
+    metadata
+    |> MapAccess.get(:provider)
+    |> case do
+      nil -> MapAccess.get(MapAccess.get(metadata, :model) || %{}, :provider)
+      provider -> provider
+    end
+    |> SemConv.provider_name()
+  end
+
+  @doc """
+  Returns the requested model id, e.g. `"gpt-5"`.
+  """
+  @spec request_model(map()) :: String.t() | nil
+  def request_model(metadata) do
+    request_model_for(MapAccess.get(metadata, :model))
+  end
+
+  @doc """
+  Returns `gen_ai.response.time_to_first_chunk` as seconds, or `nil` for
+  non-streaming requests or streams that never observed a content chunk.
+  """
+  @spec streaming_ttfc_seconds(map()) :: float() | nil
+  def streaming_ttfc_seconds(metadata) do
+    with :stream <- MapAccess.get(metadata, :mode),
+         streaming when is_map(streaming) <- MapAccess.get(metadata, :streaming),
+         native when is_integer(native) <- MapAccess.get(streaming, :time_to_first_chunk) do
+      System.convert_time_unit(native, :native, :microsecond) / 1_000_000
+    else
+      _ -> nil
+    end
   end
 
   @doc """
@@ -87,16 +125,6 @@ defmodule ReqLLM.OpenTelemetry.Attributes do
       _ ->
         nil
     end
-  end
-
-  defp provider_name(metadata, model) do
-    metadata
-    |> MapAccess.get(:provider)
-    |> case do
-      nil -> MapAccess.get(model || %{}, :provider)
-      provider -> provider
-    end
-    |> SemConv.provider_name()
   end
 
   defp request_options(nil), do: %{}
@@ -178,14 +206,15 @@ defmodule ReqLLM.OpenTelemetry.Attributes do
   defp response(%Response{id: id, model: response_model}, model) do
     %{
       "gen_ai.response.id" => present(id),
-      "gen_ai.response.model" => present(response_model) || request_model(model)
+      "gen_ai.response.model" => present(response_model) || request_model_for(model)
     }
   end
 
   defp response(payload, model) when is_map(payload) do
     %{
       "gen_ai.response.id" => present(MapAccess.get(payload, :id)),
-      "gen_ai.response.model" => present(MapAccess.get(payload, :model)) || request_model(model)
+      "gen_ai.response.model" =>
+        present(MapAccess.get(payload, :model)) || request_model_for(model)
     }
   end
 
@@ -239,9 +268,9 @@ defmodule ReqLLM.OpenTelemetry.Attributes do
   defp finish_reason_to_string(reason) when is_binary(reason), do: reason
   defp finish_reason_to_string(reason), do: inspect(reason)
 
-  defp request_model(%LLMDB.Model{id: id}) when is_binary(id), do: id
-  defp request_model(model) when is_map(model), do: MapAccess.get(model, :id)
-  defp request_model(_), do: nil
+  defp request_model_for(%LLMDB.Model{id: id}) when is_binary(id), do: id
+  defp request_model_for(model) when is_map(model), do: MapAccess.get(model, :id)
+  defp request_model_for(_), do: nil
 
   defp error_type(metadata) do
     case {MapAccess.get(metadata, :error), MapAccess.get(metadata, :http_status)} do

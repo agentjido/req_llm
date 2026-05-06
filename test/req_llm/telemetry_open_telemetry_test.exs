@@ -460,4 +460,82 @@ defmodule ReqLLM.TelemetryOpenTelemetryTest do
              end)
     end
   end
+
+  describe "metrics + streaming timings" do
+    defp millisecond_to_native(ms),
+      do: System.convert_time_unit(ms, :millisecond, :native)
+
+    defp by_name(records, name), do: Enum.filter(records, &(&1.name == name))
+
+    test "request_stop/2 returns empty metrics when measurements are absent" do
+      stub =
+        ReqLLM.Telemetry.OpenTelemetry.request_stop(%{
+          request_id: "1",
+          operation: :chat,
+          mode: :sync,
+          provider: :openai,
+          model: %LLMDB.Model{id: "gpt-5", provider: :openai},
+          usage: %{tokens: %{input: 10, output: 20}}
+        })
+
+      assert stub.metrics == []
+    end
+
+    test "request_stop/2 builds duration + token records and TTFC span attribute" do
+      ttfc_native = millisecond_to_native(120)
+      duration_native = millisecond_to_native(900)
+
+      stub =
+        ReqLLM.Telemetry.OpenTelemetry.request_stop(
+          %{
+            request_id: "1",
+            operation: :chat,
+            mode: :stream,
+            provider: :openai,
+            model: %LLMDB.Model{id: "gpt-5", provider: :openai},
+            server: %{address: "api.openai.com", port: 443},
+            streaming: %{first_chunk_at: 0, time_to_first_chunk: ttfc_native},
+            usage: %{tokens: %{input: 25, output: 50}}
+          },
+          measurements: %{duration: duration_native}
+        )
+
+      assert_in_delta(
+        stub.attributes["gen_ai.response.time_to_first_chunk"],
+        0.12,
+        0.001
+      )
+
+      assert [duration] = by_name(stub.metrics, "gen_ai.client.operation.duration")
+      assert_in_delta(duration.value, 0.9, 0.05)
+
+      tokens = by_name(stub.metrics, "gen_ai.client.token.usage")
+      assert length(tokens) == 2
+
+      assert [ttfc] = by_name(stub.metrics, "gen_ai.client.operation.time_to_first_chunk")
+      assert_in_delta(ttfc.value, 0.12, 0.001)
+
+      assert [tpoc] = by_name(stub.metrics, "gen_ai.client.operation.time_per_output_chunk")
+      assert_in_delta(tpoc.value, (0.9 - 0.12) / 50, 0.001)
+    end
+
+    test "request_exception/2 records duration with error.type" do
+      stub =
+        ReqLLM.Telemetry.OpenTelemetry.request_exception(
+          %{
+            request_id: "1",
+            operation: :chat,
+            mode: :sync,
+            provider: :openai,
+            model: %LLMDB.Model{id: "gpt-5", provider: :openai},
+            error: %RuntimeError{message: "boom"}
+          },
+          measurements: %{duration: millisecond_to_native(50)}
+        )
+
+      assert [duration] = stub.metrics
+      assert duration.name == "gen_ai.client.operation.duration"
+      assert duration.attributes["error.type"] == "RuntimeError"
+    end
+  end
 end
