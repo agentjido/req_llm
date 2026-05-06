@@ -47,6 +47,8 @@ defmodule ReqLLM.Providers.OpenRouter do
 
   import ReqLLM.Provider.Utils, only: [maybe_put: 3]
 
+  alias ReqLLM.Message.ContentPart
+
   require Logger
 
   @provider_schema [
@@ -302,6 +304,7 @@ defmodule ReqLLM.Providers.OpenRouter do
   @impl ReqLLM.Provider
   def build_body(request) do
     ReqLLM.Provider.Defaults.default_build_body(request)
+    |> encode_file_parser_pdf_files(request.options)
     |> add_embedding_options(request.options)
     |> translate_tool_choice_format()
     |> encode_reasoning_details_in_messages()
@@ -321,6 +324,195 @@ defmodule ReqLLM.Providers.OpenRouter do
     |> add_openrouter_specific_options(request.options)
     |> add_stream_options(request.options)
   end
+
+  defp encode_file_parser_pdf_files(body, request_options) do
+    context = request_options[:context]
+    plugins = request_options[:openrouter_plugins]
+
+    if file_parser_plugin?(plugins) and match?(%ReqLLM.Context{}, context) do
+      replace_file_parser_messages(body, context)
+    else
+      body
+    end
+  end
+
+  defp file_parser_plugin?(plugins) when is_list(plugins) do
+    Enum.any?(plugins, fn
+      %{id: "file-parser"} -> true
+      %{"id" => "file-parser"} -> true
+      _ -> false
+    end)
+  end
+
+  defp file_parser_plugin?(_plugins), do: false
+
+  defp replace_file_parser_messages(%{messages: encoded_messages} = body, context)
+       when is_list(encoded_messages) do
+    Map.put(body, :messages, encode_file_parser_messages(encoded_messages, context.messages))
+  end
+
+  defp replace_file_parser_messages(%{"messages" => encoded_messages} = body, context)
+       when is_list(encoded_messages) do
+    Map.put(body, "messages", encode_file_parser_messages(encoded_messages, context.messages))
+  end
+
+  defp replace_file_parser_messages(body, _context), do: body
+
+  defp encode_file_parser_messages(encoded_messages, context_messages)
+       when length(encoded_messages) == length(context_messages) do
+    encoded_messages
+    |> Enum.zip(context_messages)
+    |> Enum.map(fn {encoded_message, context_message} ->
+      encode_file_parser_message(encoded_message, context_message)
+    end)
+  end
+
+  defp encode_file_parser_messages(encoded_messages, _context_messages), do: encoded_messages
+
+  defp encode_file_parser_message(encoded_message, %ReqLLM.Message{content: content})
+       when is_list(content) do
+    if Enum.any?(content, &openrouter_pdf_file_part?/1) do
+      put_message_content(encoded_message, encode_openrouter_content(content))
+    else
+      encoded_message
+    end
+  end
+
+  defp encode_file_parser_message(encoded_message, _message), do: encoded_message
+
+  defp put_message_content(%{content: _} = message, content),
+    do: Map.put(message, :content, content)
+
+  defp put_message_content(%{"content" => _} = message, content),
+    do: Map.put(message, "content", content)
+
+  defp put_message_content(message, content), do: Map.put(message, :content, content)
+
+  defp encode_openrouter_content(content) do
+    content
+    |> Enum.map(&encode_openrouter_content_part/1)
+    |> Enum.reject(&is_nil/1)
+    |> normalize_openrouter_content()
+  end
+
+  defp normalize_openrouter_content([]), do: ""
+
+  defp normalize_openrouter_content([%{type: "text", text: text} = block]) do
+    if map_size(block) == 2, do: text, else: [block]
+  end
+
+  defp normalize_openrouter_content(content), do: content
+
+  defp encode_openrouter_content_part(%ContentPart{type: :text, text: text, metadata: metadata}) do
+    %{type: "text", text: text}
+    |> merge_content_metadata(metadata)
+  end
+
+  defp encode_openrouter_content_part(%ContentPart{
+         type: :image,
+         data: data,
+         media_type: media_type,
+         metadata: metadata
+       })
+       when is_binary(data) do
+    data
+    |> image_url_content_part(media_type)
+    |> merge_content_metadata(metadata)
+  end
+
+  defp encode_openrouter_content_part(%ContentPart{
+         type: :image_url,
+         url: url,
+         media_type: media_type,
+         metadata: metadata
+       }) do
+    image_url_map = %{url: url}
+
+    image_url_map =
+      if is_binary(media_type) and media_type != "" do
+        Map.put(image_url_map, :media_type, media_type)
+      else
+        image_url_map
+      end
+
+    %{type: "image_url", image_url: image_url_map}
+    |> merge_content_metadata(metadata)
+  end
+
+  defp encode_openrouter_content_part(%ContentPart{type: :file, data: data} = part)
+       when is_binary(data) do
+    if openrouter_pdf_file_part?(part) do
+      %{
+        type: "file",
+        file: %{
+          filename: openrouter_file_filename(part),
+          file_data: "data:#{openrouter_file_media_type(part)};base64,#{Base.encode64(data)}"
+        }
+      }
+    else
+      image_url_content_part(data, part.media_type)
+    end
+  end
+
+  defp encode_openrouter_content_part(%ContentPart{type: :thinking}), do: nil
+  defp encode_openrouter_content_part(_part), do: nil
+
+  defp image_url_content_part(data, media_type) do
+    %{
+      type: "image_url",
+      image_url: %{
+        url: "data:#{media_type};base64,#{Base.encode64(data)}"
+      }
+    }
+  end
+
+  defp openrouter_pdf_file_part?(%ContentPart{type: :file, data: data} = part)
+       when is_binary(data) do
+    part.media_type == "application/pdf" or openrouter_pdf_filename?(part.filename)
+  end
+
+  defp openrouter_pdf_file_part?(_part), do: false
+
+  defp openrouter_pdf_filename?(filename) when is_binary(filename) do
+    filename
+    |> String.downcase()
+    |> String.ends_with?(".pdf")
+  end
+
+  defp openrouter_pdf_filename?(_filename), do: false
+
+  defp openrouter_file_filename(%ContentPart{filename: filename})
+       when is_binary(filename) and filename != "" do
+    filename
+  end
+
+  defp openrouter_file_filename(_part), do: "document.pdf"
+
+  defp openrouter_file_media_type(%ContentPart{media_type: media_type, filename: filename}) do
+    cond do
+      openrouter_pdf_filename?(filename) -> "application/pdf"
+      is_binary(media_type) and media_type != "" -> media_type
+      true -> "application/pdf"
+    end
+  end
+
+  defp openrouter_file_media_type(_part), do: "application/pdf"
+
+  @passthrough_content_metadata_keys [:cache_control, "cache_control"]
+
+  defp merge_content_metadata(base, metadata) when is_map(metadata) and map_size(metadata) > 0 do
+    passthrough =
+      metadata
+      |> Map.take(@passthrough_content_metadata_keys)
+      |> Map.new(fn
+        {"cache_control", value} -> {:cache_control, value}
+        {key, value} -> {key, value}
+      end)
+
+    Map.merge(base, passthrough)
+  end
+
+  defp merge_content_metadata(base, _metadata), do: base
 
   defp add_embedding_options(body, request_options) do
     if request_options[:operation] == :embedding do

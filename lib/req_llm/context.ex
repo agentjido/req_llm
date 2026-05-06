@@ -1176,9 +1176,66 @@ defmodule ReqLLM.Context do
       file_part = ContentPart.file_id(file_id, media_type || "application/pdf", metadata)
       {:ok, maybe_put_file_filename(file_part, filename)}
     else
-      :error
+      case file_content_data(part, nested, media_type) do
+        {:ok, data, media_type} ->
+          file_part =
+            data
+            |> ContentPart.file(filename || "file", media_type)
+            |> Map.put(:metadata, metadata)
+
+          {:ok, file_part}
+
+        :error ->
+          :error
+      end
     end
   end
+
+  defp file_content_data(part, nested, media_type) do
+    data =
+      Map.get(part, :file_data) ||
+        Map.get(part, "file_data") ||
+        if(is_map(nested), do: Map.get(nested, :file_data) || Map.get(nested, "file_data"))
+
+    case data do
+      data when is_binary(data) ->
+        decode_file_data(data, media_type)
+
+      _ ->
+        :error
+    end
+  end
+
+  defp decode_file_data("data:" <> _ = data_uri, media_type) do
+    case Regex.run(~r/^data:([^;,]*)(?:;[^,]*)*;base64,(.*)$/s, data_uri) do
+      [_, uri_media_type, encoded] ->
+        decoded = String.replace(encoded, ~r/\s+/, "")
+
+        case Base.decode64(decoded) do
+          {:ok, data} -> {:ok, data, file_data_media_type(uri_media_type, media_type)}
+          :error -> :error
+        end
+
+      _ ->
+        :error
+    end
+  end
+
+  defp decode_file_data(data, media_type) when is_binary(data) do
+    {:ok, data, media_type || "application/octet-stream"}
+  end
+
+  defp file_data_media_type(uri_media_type, _media_type)
+       when is_binary(uri_media_type) and uri_media_type != "" do
+    uri_media_type
+  end
+
+  defp file_data_media_type(_uri_media_type, media_type)
+       when is_binary(media_type) and media_type != "" do
+    media_type
+  end
+
+  defp file_data_media_type(_uri_media_type, _media_type), do: "application/octet-stream"
 
   defp maybe_put_file_filename(%ContentPart{} = part, filename)
        when is_binary(filename) and filename != "" do

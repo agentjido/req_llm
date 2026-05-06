@@ -9,6 +9,7 @@ defmodule ReqLLM.Providers.OpenRouterTest do
   use ReqLLM.ProviderCase, provider: ReqLLM.Providers.OpenRouter
 
   alias ReqLLM.Context
+  alias ReqLLM.Message.ContentPart
   alias ReqLLM.Providers.OpenRouter
 
   describe "provider contract" do
@@ -327,6 +328,113 @@ defmodule ReqLLM.Providers.OpenRouterTest do
       decoded = Jason.decode!(updated_request.body)
 
       assert decoded["plugins"] == [%{"id" => "web"}, %{"id" => "code"}]
+    end
+
+    test "encode_body with file-parser plugin encodes PDF files in OpenRouter format" do
+      {:ok, model} = ReqLLM.model("openrouter:openai/gpt-4")
+      pdf_data = "%PDF test"
+
+      context =
+        Context.new([
+          Context.user([
+            ContentPart.text("Summarize this PDF"),
+            ContentPart.file(pdf_data, "document.pdf", "application/pdf")
+          ])
+        ])
+
+      mock_request = %Req.Request{
+        options: [
+          context: context,
+          model: model.model,
+          stream: false,
+          openrouter_plugins: [%{id: "file-parser", pdf: %{engine: "mistral-ocr"}}]
+        ]
+      }
+
+      updated_request = OpenRouter.encode_body(mock_request)
+      decoded = Jason.decode!(updated_request.body)
+
+      [message] = decoded["messages"]
+      [text_part, file_part] = message["content"]
+
+      assert text_part == %{"type" => "text", "text" => "Summarize this PDF"}
+
+      assert file_part == %{
+               "type" => "file",
+               "file" => %{
+                 "filename" => "document.pdf",
+                 "file_data" => "data:application/pdf;base64,#{Base.encode64(pdf_data)}"
+               }
+             }
+    end
+
+    test "encode_body without file-parser keeps OpenAI-compatible file encoding" do
+      {:ok, model} = ReqLLM.model("openrouter:openai/gpt-4")
+      pdf_data = "%PDF test"
+
+      context =
+        Context.new([
+          Context.user([
+            ContentPart.text("Summarize this PDF"),
+            ContentPart.file(pdf_data, "document.pdf", "application/pdf")
+          ])
+        ])
+
+      mock_request = %Req.Request{
+        options: [
+          context: context,
+          model: model.model,
+          stream: false
+        ]
+      }
+
+      updated_request = OpenRouter.encode_body(mock_request)
+      decoded = Jason.decode!(updated_request.body)
+
+      [message] = decoded["messages"]
+      [_, file_part] = message["content"]
+
+      assert file_part == %{
+               "type" => "image_url",
+               "image_url" => %{
+                 "url" => "data:application/pdf;base64,#{Base.encode64(pdf_data)}"
+               }
+             }
+    end
+
+    test "attach_stream with file-parser plugin encodes PDF files in OpenRouter format" do
+      model = ReqLLM.model!("openrouter:openai/gpt-4")
+      pdf_data = "%PDF stream"
+
+      context =
+        Context.new([
+          Context.user([
+            ContentPart.text("Summarize this PDF"),
+            ContentPart.file(pdf_data, "stream.pdf", "application/pdf")
+          ])
+        ])
+
+      opts = [openrouter_plugins: [%{id: "file-parser", pdf: %{engine: "mistral-ocr"}}]]
+
+      {:ok, finch_request} = OpenRouter.attach_stream(model, context, opts, MyApp.Finch)
+
+      decoded = Jason.decode!(finch_request.body)
+      [message] = decoded["messages"]
+      [_, file_part] = message["content"]
+
+      assert decoded["stream"] == true
+
+      assert decoded["plugins"] == [
+               %{"id" => "file-parser", "pdf" => %{"engine" => "mistral-ocr"}}
+             ]
+
+      assert file_part == %{
+               "type" => "file",
+               "file" => %{
+                 "filename" => "stream.pdf",
+                 "file_data" => "data:application/pdf;base64,#{Base.encode64(pdf_data)}"
+               }
+             }
     end
 
     test "encode_body with response_format" do
