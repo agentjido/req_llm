@@ -2,6 +2,7 @@ name: CI
 
 on:
   pull_request:
+  merge_group:
   push:
     branches:
       - main
@@ -10,18 +11,20 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-jobs:
-  lint:
-    name: Lint
-    uses: agentjido/github-actions/.github/workflows/elixir-lint.yml@v3
-    with:
-      otp_version: "28"
-      elixir_version: "1.19"
+permissions:
+  actions: read
+  contents: read
 
-  test:
-    name: Test
-    uses: agentjido/github-actions/.github/workflows/elixir-test.yml@v3
+jobs:
+  ci:
+    name: CI
+    uses: agentjido/github-actions/.github/workflows/jido-ci.yml@v4
+    secrets: inherit
     with:
       otp_versions: '["27", "28"]'
       elixir_versions: '["1.18", "1.19"]'
+      experimental_compile_elixir_versions: '["v1.20.0-rc.4"]'
+      experimental_compile_otp_versions: '["28.4.1"]'
+      experimental_compile_otp_name: '28'
+      docs_command: mix docs -f html
       test_command: mix test
