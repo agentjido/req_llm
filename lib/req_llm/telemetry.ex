@@ -58,6 +58,8 @@ defmodule ReqLLM.Telemetry do
           payload_mode: payload_mode(),
           reasoning_contract: reasoning_contract(),
           original_opts: keyword(),
+          request_options: map(),
+          server: map(),
           request_summary: map(),
           request_payload: any(),
           request_started?: boolean(),
@@ -103,6 +105,8 @@ defmodule ReqLLM.Telemetry do
       payload_mode: payload_mode,
       reasoning_contract: reasoning_contract,
       original_opts: opts,
+      request_options: extract_request_options(operation, mode, opts),
+      server: %{},
       request_summary: summarize_request(operation, request_input),
       request_payload: request_payload(operation, request_input, payload_mode),
       request_started?: false,
@@ -163,6 +167,7 @@ defmodule ReqLLM.Telemetry do
       |> Map.put(:reasoning_contract, reasoning_contract)
       |> Map.put(:requested_reasoning, requested_reasoning)
       |> Map.put(:effective_reasoning, effective_reasoning)
+      |> Map.put(:server, extract_server(request_source))
 
     :telemetry.execute(
       @request_start_event,
@@ -399,6 +404,8 @@ defmodule ReqLLM.Telemetry do
       model: context.model,
       transport: context.transport,
       reasoning: reasoning_snapshot(context),
+      request_options: context.request_options,
+      server: context.server,
       request_summary: context.request_summary,
       response_summary: extra[:response_summary],
       http_status: extra[:http_status],
@@ -435,40 +442,32 @@ defmodule ReqLLM.Telemetry do
   end
 
   defp payload_mode(opts) do
-    global_payload_mode =
-      Application.get_env(:req_llm, :telemetry, [])
-      |> normalize_telemetry_opts()
-      |> Map.get(:payloads, :none)
-
     case Keyword.fetch(opts, :telemetry) do
-      {:ok, telemetry_opts} ->
-        telemetry_opts
-        |> normalize_telemetry_opts()
-        |> Map.get(:payloads, :none)
+      {:ok, value} ->
+        Map.get(parse_telemetry_opt(value), :payloads, :none)
 
       :error ->
-        global_payload_mode
+        :req_llm
+        |> Application.get_env(:telemetry, [])
+        |> parse_telemetry_opt()
+        |> Map.get(:payloads, :none)
     end
   end
 
-  defp normalize_telemetry_opts(opts) when is_list(opts) do
-    opts
-    |> Enum.into(%{})
-    |> normalize_telemetry_opts()
+  defp parse_telemetry_opt(opts) when is_list(opts), do: parse_telemetry_opt(Map.new(opts))
+
+  defp parse_telemetry_opt(opts) when is_map(opts) do
+    %{
+      payloads: parse_payload_mode(Map.get(opts, :payloads, Map.get(opts, "payloads"))),
+      conversation_id: Map.get(opts, :conversation_id, Map.get(opts, "conversation_id"))
+    }
   end
 
-  defp normalize_telemetry_opts(opts) when is_map(opts) do
-    payloads =
-      case Map.get(opts, :payloads, Map.get(opts, "payloads", :none)) do
-        :raw -> :raw
-        "raw" -> :raw
-        _ -> :none
-      end
+  defp parse_telemetry_opt(_), do: %{payloads: :none, conversation_id: nil}
 
-    %{payloads: payloads}
-  end
-
-  defp normalize_telemetry_opts(_), do: %{payloads: :none}
+  defp parse_payload_mode(:raw), do: :raw
+  defp parse_payload_mode("raw"), do: :raw
+  defp parse_payload_mode(_), do: :none
 
   defp request_input(:embedding, opts) do
     opts[:text]
@@ -501,6 +500,56 @@ defmodule ReqLLM.Telemetry do
   defp request_input(_operation, opts) do
     opts[:context] || opts[:messages] || opts[:text]
   end
+
+  defp extract_request_options(_operation, mode, opts) do
+    telemetry_meta =
+      case Keyword.fetch(opts, :telemetry) do
+        {:ok, value} -> parse_telemetry_opt(value)
+        :error -> %{}
+      end
+
+    %{
+      temperature: opts[:temperature],
+      top_p: opts[:top_p],
+      top_k: opts[:top_k],
+      max_tokens: opts[:max_tokens],
+      frequency_penalty: opts[:frequency_penalty],
+      presence_penalty: opts[:presence_penalty],
+      stop_sequences: normalize_string_list(opts[:stop] || opts[:stop_sequences]),
+      seed: opts[:seed],
+      n: normalize_choice_count(opts[:n]),
+      stream?: mode == :stream,
+      encoding_formats: normalize_string_list(opts[:encoding_format]),
+      conversation_id: telemetry_meta[:conversation_id]
+    }
+    |> Enum.reject(fn {_key, value} -> is_nil(value) end)
+    |> Map.new()
+  end
+
+  defp normalize_string_list(nil), do: nil
+  defp normalize_string_list(value) when is_binary(value), do: [value]
+  defp normalize_string_list(values) when is_list(values), do: values
+  defp normalize_string_list(_), do: nil
+
+  defp normalize_choice_count(nil), do: nil
+  defp normalize_choice_count(value) when is_integer(value) and value >= 1, do: value
+  defp normalize_choice_count(_), do: nil
+
+  defp extract_server(%Req.Request{url: %URI{} = uri}) do
+    %{}
+    |> maybe_put_present(:address, uri.host)
+    |> maybe_put_present(:port, uri.port)
+  end
+
+  defp extract_server(%Req.Request{url: url}) when is_binary(url) do
+    extract_server(%Req.Request{url: URI.parse(url)})
+  end
+
+  defp extract_server(_), do: %{}
+
+  defp maybe_put_present(map, _key, nil), do: map
+  defp maybe_put_present(map, _key, ""), do: map
+  defp maybe_put_present(map, key, value), do: Map.put(map, key, value)
 
   defp summarize_request(operation, %Context{} = context)
        when operation in [:chat, :object, :image] do

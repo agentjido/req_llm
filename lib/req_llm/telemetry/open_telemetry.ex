@@ -21,8 +21,9 @@ defmodule ReqLLM.Telemetry.OpenTelemetry do
   content attributes.
   """
 
-  alias ReqLLM.{MapAccess, Message, Response, ToolCall, ToolResult, Usage}
+  alias ReqLLM.{MapAccess, Message, Response, ToolCall, ToolResult}
   alias ReqLLM.Message.ContentPart
+  alias ReqLLM.OpenTelemetry.{Attributes, SemConv}
 
   @type content_mode :: :none | :attributes
   @type span_status :: :ok | {:error, String.t()}
@@ -50,9 +51,8 @@ defmodule ReqLLM.Telemetry.OpenTelemetry do
       kind: :client,
       attributes:
         metadata
-        |> common_attributes()
+        |> Attributes.start()
         |> Map.merge(request_content_attributes(metadata, content_mode(opts)))
-        |> compact_map()
     }
   end
 
@@ -64,11 +64,10 @@ defmodule ReqLLM.Telemetry.OpenTelemetry do
     %{
       attributes:
         metadata
-        |> common_attributes()
+        |> Attributes.start()
+        |> Map.merge(Attributes.terminal(metadata))
         |> Map.merge(request_content_attributes(metadata, content_mode(opts)))
-        |> Map.merge(response_attributes(metadata))
-        |> Map.merge(response_content_attributes(metadata, content_mode(opts)))
-        |> compact_map(),
+        |> Map.merge(response_content_attributes(metadata, content_mode(opts))),
       status: span_status(metadata),
       events: []
     }
@@ -82,59 +81,19 @@ defmodule ReqLLM.Telemetry.OpenTelemetry do
     %{
       attributes:
         metadata
-        |> common_attributes()
-        |> Map.merge(request_content_attributes(metadata, content_mode(opts)))
-        |> Map.merge(error_attributes(metadata))
-        |> compact_map(),
+        |> Attributes.start()
+        |> Map.merge(Attributes.exception(metadata))
+        |> Map.merge(request_content_attributes(metadata, content_mode(opts))),
       status: span_status(metadata),
       events: exception_events(metadata)
     }
   end
 
   defp span_name(metadata) do
-    operation = operation_name(MapAccess.get(metadata, :operation))
-    model_id = requested_model_id(MapAccess.get(metadata, :model))
-    String.trim("#{operation} #{model_id}")
-  end
-
-  defp common_attributes(metadata) do
-    model = MapAccess.get(metadata, :model)
-
-    %{
-      "gen_ai.provider.name" => provider_name(metadata, model),
-      "gen_ai.operation.name" => operation_name(MapAccess.get(metadata, :operation)),
-      "gen_ai.request.model" => requested_model_id(model)
-    }
-  end
-
-  defp response_attributes(metadata) do
-    response_payload = MapAccess.get(metadata, :response_payload)
-    requested_model = requested_model_id(MapAccess.get(metadata, :model))
-
-    %{}
-    |> maybe_put("gen_ai.response.id", response_id(response_payload))
-    |> maybe_put("gen_ai.response.model", response_model(response_payload, requested_model))
-    |> Map.merge(usage_attributes(MapAccess.get(metadata, :usage)))
-    |> maybe_put(
-      "gen_ai.response.finish_reasons",
-      finish_reasons(MapAccess.get(metadata, :finish_reason))
+    SemConv.span_name(
+      MapAccess.get(metadata, :operation),
+      requested_model_id(MapAccess.get(metadata, :model))
     )
-  end
-
-  defp usage_attributes(nil), do: %{}
-
-  defp usage_attributes(usage) when is_map(usage) do
-    usage_source =
-      case MapAccess.get(usage, :tokens) do
-        tokens when is_map(tokens) -> tokens
-        _ -> usage
-      end
-
-    normalized = Usage.normalize(usage_source)
-
-    %{}
-    |> maybe_put("gen_ai.usage.input_tokens", MapAccess.get(normalized, :input_tokens))
-    |> maybe_put("gen_ai.usage.output_tokens", MapAccess.get(normalized, :output_tokens))
   end
 
   defp request_content_attributes(_metadata, :none), do: %{}
@@ -392,128 +351,46 @@ defmodule ReqLLM.Telemetry.OpenTelemetry do
     end
   end
 
-  defp provider_name(metadata, model) do
-    metadata
-    |> MapAccess.get(:provider)
-    |> case do
-      nil -> MapAccess.get(model || %{}, :provider)
-      provider -> provider
-    end
-    |> atom_to_string()
-  end
-
-  defp operation_name(nil), do: ""
-  defp operation_name(operation) when is_atom(operation), do: Atom.to_string(operation)
-  defp operation_name(operation) when is_binary(operation), do: operation
-  defp operation_name(operation), do: inspect(operation)
-
   defp requested_model_id(%{id: id}) when is_binary(id), do: id
   defp requested_model_id(_), do: ""
-
-  defp response_id(%Response{id: id}) when is_binary(id), do: id
-
-  defp response_id(response_payload) when is_map(response_payload) do
-    MapAccess.get(response_payload, :id)
-  end
-
-  defp response_id(_), do: nil
-
-  defp response_model(%Response{model: model}, _requested_model)
-       when is_binary(model) and model != "" do
-    model
-  end
-
-  defp response_model(response_payload, requested_model) when is_map(response_payload) do
-    case MapAccess.get(response_payload, :model) do
-      model when is_binary(model) and model != "" -> model
-      _ -> requested_model
-    end
-  end
-
-  defp response_model(_response_payload, requested_model), do: requested_model
-
-  defp finish_reasons(nil), do: nil
-
-  defp finish_reasons(reasons) when is_list(reasons) do
-    reasons
-    |> Enum.map(&finish_reason_to_string/1)
-    |> Enum.reject(&is_nil/1)
-    |> case do
-      [] -> nil
-      values -> values
-    end
-  end
-
-  defp finish_reasons(reason) do
-    case finish_reason_to_string(reason) do
-      nil -> nil
-      value -> [value]
-    end
-  end
-
-  defp finish_reason_to_string(nil), do: nil
-  defp finish_reason_to_string(reason) when is_atom(reason), do: Atom.to_string(reason)
-  defp finish_reason_to_string(reason) when is_binary(reason), do: reason
-  defp finish_reason_to_string(reason), do: inspect(reason)
-
-  defp message_finish_reason(:tool_calls), do: "tool_call"
-  defp message_finish_reason("tool_calls"), do: "tool_call"
-  defp message_finish_reason(reason), do: finish_reason_to_string(reason)
 
   defp normalize_role(role) when is_atom(role), do: Atom.to_string(role)
   defp normalize_role(role) when is_binary(role), do: role
   defp normalize_role(_role), do: nil
+
+  defp message_finish_reason(:tool_calls), do: "tool_call"
+  defp message_finish_reason("tool_calls"), do: "tool_call"
+  defp message_finish_reason(nil), do: nil
+  defp message_finish_reason(reason) when is_atom(reason), do: Atom.to_string(reason)
+  defp message_finish_reason(reason) when is_binary(reason), do: reason
+  defp message_finish_reason(reason), do: inspect(reason)
 
   defp span_status(metadata) do
     error = MapAccess.get(metadata, :error)
     http_status = MapAccess.get(metadata, :http_status)
     finish_reason = MapAccess.get(metadata, :finish_reason)
 
-    case {error, http_status, finish_reason} do
-      {error, _http_status, _finish_reason} when not is_nil(error) ->
+    cond do
+      not is_nil(error) ->
         {:error, error_message(error)}
 
-      {_error, http_status, _finish_reason} when is_integer(http_status) and http_status >= 400 ->
+      is_integer(http_status) and http_status >= 400 ->
         {:error, "HTTP #{http_status}"}
 
-      {_error, _http_status, finish_reason} when finish_reason in [:error, "error"] ->
+      finish_reason in [:error, "error"] ->
         {:error, "request failed"}
 
-      _ ->
+      true ->
         :ok
-    end
-  end
-
-  defp error_attributes(metadata) do
-    case MapAccess.get(metadata, :error) do
-      nil -> %{}
-      error -> %{"error.type" => error_type(error)}
     end
   end
 
   defp exception_events(metadata) do
     case MapAccess.get(metadata, :error) do
-      nil ->
-        []
-
-      error ->
-        [
-          %{
-            name: "exception",
-            attributes:
-              %{
-                "exception.type" => error_type(error),
-                "exception.message" => error_message(error)
-              }
-              |> compact_map()
-          }
-        ]
+      nil -> []
+      _error -> [%{name: "exception", attributes: Attributes.exception_event(metadata)}]
     end
   end
-
-  defp error_type(%{__struct__: module}) when is_atom(module), do: inspect(module)
-  defp error_type(error) when is_atom(error), do: Atom.to_string(error)
-  defp error_type(_error), do: "error"
 
   defp error_message(%{__exception__: true} = error), do: Exception.message(error)
   defp error_message(error) when is_binary(error), do: error
@@ -529,17 +406,6 @@ defmodule ReqLLM.Telemetry.OpenTelemetry do
 
   defp decode_tool_arguments(arguments), do: arguments
 
-  defp atom_to_string(nil), do: nil
-  defp atom_to_string(value) when is_atom(value), do: Atom.to_string(value)
-  defp atom_to_string(value) when is_binary(value), do: value
-  defp atom_to_string(value), do: inspect(value)
-
   defp maybe_put(map, _key, nil), do: map
   defp maybe_put(map, key, value), do: Map.put(map, key, value)
-
-  defp compact_map(map) do
-    map
-    |> Enum.reject(fn {_key, value} -> is_nil(value) end)
-    |> Map.new()
-  end
 end

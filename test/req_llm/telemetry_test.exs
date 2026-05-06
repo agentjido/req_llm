@@ -497,6 +497,39 @@ defmodule ReqLLM.TelemetryTest do
     assert event_count(events, [:req_llm, :request, :exception]) == 0
   end
 
+  test "captures spec request options into request_options metadata on start" do
+    model = %LLMDB.Model{provider: :openai, id: "gpt-5"}
+
+    opts = [
+      temperature: 0.6,
+      top_p: 0.9,
+      max_tokens: 128,
+      stop: ["END", "STOP"],
+      seed: 7,
+      telemetry: [conversation_id: "session-xyz"]
+    ]
+
+    fake_request = %Req.Request{url: URI.parse("https://api.openai.com:443/v1/chat/completions")}
+
+    model
+    |> ReqLLM.Telemetry.new_context(opts, operation: :chat)
+    |> ReqLLM.Telemetry.start_request(fake_request)
+
+    assert_receive {:telemetry_event, [:req_llm, :request, :start], _measurements, metadata}
+
+    assert %{
+             temperature: 0.6,
+             top_p: 0.9,
+             max_tokens: 128,
+             stop_sequences: ["END", "STOP"],
+             seed: 7,
+             stream?: false,
+             conversation_id: "session-xyz"
+           } = metadata.request_options
+
+    assert metadata.server == %{address: "api.openai.com", port: 443}
+  end
+
   defp reasoning_model(provider, id) do
     %LLMDB.Model{
       provider: provider,

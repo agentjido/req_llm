@@ -125,6 +125,9 @@ defmodule ReqLLM.OpenTelemetry do
   `ReqLLM.Telemetry.OpenTelemetry`.
   """
 
+  alias ReqLLM.MapAccess
+  alias ReqLLM.OpenTelemetry.{Attributes, SemConv}
+
   @events [
     [:req_llm, :request, :start],
     [:req_llm, :request, :stop],
@@ -133,26 +136,6 @@ defmodule ReqLLM.OpenTelemetry do
   @default_handler_id "req-llm-open-telemetry"
   @span_table :req_llm_open_telemetry_spans
   @default_adapter ReqLLM.OpenTelemetry.OTelAdapter
-  @provider_names %{
-    amazon_bedrock: "aws.bedrock",
-    anthropic: "anthropic",
-    google: "gcp.gen_ai",
-    google_vertex: "gcp.vertex_ai",
-    openai: "openai"
-  }
-  @output_types %{
-    chat: "text",
-    object: "json",
-    image: "image",
-    speech: "audio",
-    transcription: "text"
-  }
-  @operation_names %{
-    chat: "chat",
-    embedding: "embeddings",
-    image: "generate_content",
-    object: "chat"
-  }
 
   @type attach_opt :: {:adapter, module()} | {:handler_id, term()} | {atom(), term()}
 
@@ -204,7 +187,7 @@ defmodule ReqLLM.OpenTelemetry do
   """
   @spec span_name(map()) :: String.t()
   def span_name(metadata) do
-    "#{operation_name(metadata)} #{request_model(metadata) || "unknown"}"
+    SemConv.span_name(MapAccess.get(metadata, :operation), request_model(metadata) || "unknown")
   end
 
   @doc false
@@ -212,8 +195,9 @@ defmodule ReqLLM.OpenTelemetry do
   def handle_event([:req_llm, :request, :start], _measurements, metadata, config) do
     ensure_span_table()
 
-    if request_id = metadata[:request_id] do
-      span = adapter(config).start_span(span_name(metadata), start_attributes(metadata), config)
+    if request_id = MapAccess.get(metadata, :request_id) do
+      attributes = atomize(Attributes.start(metadata))
+      span = adapter(config).start_span(span_name(metadata), attributes, config)
       :ets.insert(@span_table, {span_key(config, request_id), span})
     end
 
@@ -221,9 +205,18 @@ defmodule ReqLLM.OpenTelemetry do
   end
 
   def handle_event([:req_llm, :request, :stop], _measurements, metadata, config) do
-    with request_id when is_binary(request_id) <- metadata[:request_id],
+    with request_id when is_binary(request_id) <- MapAccess.get(metadata, :request_id),
          {:ok, span} <- take_span(config, request_id) do
-      adapter(config).set_attributes(span, stop_attributes(metadata), config)
+      adapter(config).set_attributes(span, atomize(Attributes.terminal(metadata)), config)
+
+      case Attributes.error_status(metadata) do
+        nil ->
+          :ok
+
+        {_error_type, message} ->
+          adapter(config).set_status(span, :error, message, config)
+      end
+
       adapter(config).end_span(span, config)
     end
 
@@ -231,11 +224,24 @@ defmodule ReqLLM.OpenTelemetry do
   end
 
   def handle_event([:req_llm, :request, :exception], _measurements, metadata, config) do
-    with request_id when is_binary(request_id) <- metadata[:request_id],
+    with request_id when is_binary(request_id) <- MapAccess.get(metadata, :request_id),
          {:ok, span} <- take_span(config, request_id) do
-      adapter(config).set_attributes(span, exception_attributes(metadata), config)
-      adapter(config).add_event(span, :exception, exception_event_attributes(metadata), config)
-      adapter(config).set_status(span, :error, error_message(metadata[:error]), config)
+      adapter(config).set_attributes(span, atomize(Attributes.exception(metadata)), config)
+
+      adapter(config).add_event(
+        span,
+        :exception,
+        atomize(Attributes.exception_event(metadata)),
+        config
+      )
+
+      adapter(config).set_status(
+        span,
+        :error,
+        exception_message(MapAccess.get(metadata, :error)),
+        config
+      )
+
       adapter(config).end_span(span, config)
     end
 
@@ -287,60 +293,9 @@ defmodule ReqLLM.OpenTelemetry do
     end
   end
 
-  defp start_attributes(metadata) do
-    %{
-      :"gen_ai.provider.name" => provider_name(metadata[:provider]),
-      :"gen_ai.operation.name" => operation_name(metadata),
-      :"gen_ai.request.model" => request_model(metadata),
-      :"gen_ai.output.type" => output_type(metadata[:operation]),
-      :"req_llm.request_id" => metadata[:request_id]
-    }
-    |> compact_attributes()
+  defp atomize(map) do
+    Map.new(map, fn {key, value} -> {String.to_atom(key), value} end)
   end
-
-  defp stop_attributes(metadata) do
-    usage = usage_tokens(metadata[:usage])
-
-    %{
-      :"gen_ai.response.finish_reasons" => finish_reasons(metadata[:finish_reason]),
-      :"gen_ai.usage.input_tokens" => usage_value(usage, :input),
-      :"gen_ai.usage.output_tokens" => usage_value(usage, :output),
-      :"gen_ai.usage.cache_read.input_tokens" => usage_value(usage, :cached_input),
-      :"gen_ai.usage.cache_creation.input_tokens" => usage_value(usage, :cache_creation)
-    }
-    |> compact_attributes()
-  end
-
-  defp exception_attributes(metadata) do
-    %{
-      :"error.type" => error_type(metadata),
-      :"req_llm.request_id" => metadata[:request_id]
-    }
-    |> compact_attributes()
-  end
-
-  defp exception_event_attributes(metadata) do
-    %{
-      :"exception.type" => error_type(metadata),
-      :"exception.message" => error_message(metadata[:error])
-    }
-    |> compact_attributes()
-  end
-
-  defp provider_name(provider) when is_atom(provider) do
-    Map.get(@provider_names, provider, Atom.to_string(provider))
-  end
-
-  defp provider_name(provider) when is_binary(provider), do: provider
-  defp provider_name(_), do: nil
-
-  defp operation_name(metadata) do
-    metadata
-    |> Map.get(:operation)
-    |> then(&Map.get(@operation_names, &1, to_string(&1 || "chat")))
-  end
-
-  defp output_type(operation), do: Map.get(@output_types, operation)
 
   defp request_model(%{model: %LLMDB.Model{id: id}}), do: id
 
@@ -349,31 +304,7 @@ defmodule ReqLLM.OpenTelemetry do
 
   defp request_model(_), do: nil
 
-  defp finish_reasons(nil), do: nil
-  defp finish_reasons(reason), do: [to_string(reason)]
-
-  defp usage_tokens(%{tokens: tokens}) when is_map(tokens), do: tokens
-  defp usage_tokens(tokens) when is_map(tokens), do: tokens
-  defp usage_tokens(_), do: %{}
-
-  defp usage_value(usage, key) when is_map(usage) do
-    usage[key] || usage[Atom.to_string(key)]
-  end
-
-  defp error_type(%{http_status: status}) when is_integer(status), do: Integer.to_string(status)
-
-  defp error_type(%{error: %{__struct__: module}}), do: inspect(module)
-  defp error_type(%{error: error}) when is_atom(error), do: Atom.to_string(error)
-  defp error_type(%{error: {kind, _reason}}) when is_atom(kind), do: Atom.to_string(kind)
-  defp error_type(_), do: "_OTHER"
-
-  defp error_message(nil), do: nil
-  defp error_message(%{__struct__: _} = error), do: Exception.message(error)
-  defp error_message(error), do: inspect(error)
-
-  defp compact_attributes(attributes) do
-    attributes
-    |> Enum.reject(fn {_key, value} -> is_nil(value) or value == [] end)
-    |> Map.new()
-  end
+  defp exception_message(nil), do: nil
+  defp exception_message(%{__struct__: _} = error), do: Exception.message(error)
+  defp exception_message(error), do: inspect(error)
 end

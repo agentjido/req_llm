@@ -142,10 +142,10 @@ defmodule ReqLLM.OpenTelemetryTest do
     )
 
     assert_receive {:set_attributes, ^span, exception_attributes}
-    assert exception_attributes[:"error.type"] == "504"
+    assert exception_attributes[:"error.type"] == "RuntimeError"
     assert exception_attributes[:"req_llm.request_id"] == request_id
     assert_receive {:add_event, ^span, :exception, event_attributes}
-    assert event_attributes[:"exception.type"] == "504"
+    assert event_attributes[:"exception.type"] == "RuntimeError"
     assert event_attributes[:"exception.message"] == "request timed out"
     assert_receive {:set_status, ^span, :error, "request timed out"}
     assert_receive {:end_span, ^span}
@@ -156,5 +156,244 @@ defmodule ReqLLM.OpenTelemetryTest do
              operation: :embedding,
              model: %LLMDB.Model{id: "text-embedding-3-small", provider: :openai}
            }) == "embeddings text-embedding-3-small"
+  end
+
+  test "emits gen_ai.request.* and server.* attributes on start" do
+    handler_id = "req-llm-otel-#{System.unique_integer([:positive])}"
+    request_id = "req-#{System.unique_integer([:positive])}"
+
+    assert :ok = OpenTelemetry.attach(handler_id, adapter: FakeAdapter, test_pid: self())
+
+    on_exit(fn ->
+      OpenTelemetry.detach(handler_id)
+    end)
+
+    model = %LLMDB.Model{id: "gpt-5", provider: :openai}
+
+    :telemetry.execute(
+      [:req_llm, :request, :start],
+      %{system_time: System.system_time()},
+      %{
+        request_id: request_id,
+        operation: :chat,
+        provider: :openai,
+        model: model,
+        request_options: %{
+          temperature: 0.7,
+          top_p: 0.95,
+          max_tokens: 256,
+          stop_sequences: ["END"],
+          seed: 42,
+          stream?: false,
+          conversation_id: "session-abc"
+        },
+        server: %{address: "api.openai.com", port: 443}
+      }
+    )
+
+    assert_receive {:start_span, _span, "chat gpt-5", attributes}
+    assert attributes[:"gen_ai.request.temperature"] == 0.7
+    assert attributes[:"gen_ai.request.top_p"] == 0.95
+    assert attributes[:"gen_ai.request.max_tokens"] == 256
+    assert attributes[:"gen_ai.request.stop_sequences"] == ["END"]
+    assert attributes[:"gen_ai.request.seed"] == 42
+    assert attributes[:"gen_ai.request.stream"] == false
+    assert attributes[:"gen_ai.conversation.id"] == "session-abc"
+    assert attributes[:"server.address"] == "api.openai.com"
+    assert attributes[:"server.port"] == 443
+  end
+
+  test "emits gen_ai.request.choice.count when n is set" do
+    handler_id = "req-llm-otel-#{System.unique_integer([:positive])}"
+    request_id = "req-#{System.unique_integer([:positive])}"
+
+    assert :ok = OpenTelemetry.attach(handler_id, adapter: FakeAdapter, test_pid: self())
+
+    on_exit(fn ->
+      OpenTelemetry.detach(handler_id)
+    end)
+
+    :telemetry.execute(
+      [:req_llm, :request, :start],
+      %{system_time: System.system_time()},
+      %{
+        request_id: request_id,
+        operation: :chat,
+        provider: :openai,
+        model: %LLMDB.Model{id: "gpt-5", provider: :openai},
+        request_options: %{n: 3}
+      }
+    )
+
+    assert_receive {:start_span, _span, _name, attributes}
+    assert attributes[:"gen_ai.request.choice.count"] == 3
+  end
+
+  test "emits gen_ai.embeddings.dimension.count for embedding responses" do
+    handler_id = "req-llm-otel-#{System.unique_integer([:positive])}"
+    request_id = "req-#{System.unique_integer([:positive])}"
+
+    assert :ok = OpenTelemetry.attach(handler_id, adapter: FakeAdapter, test_pid: self())
+
+    on_exit(fn ->
+      OpenTelemetry.detach(handler_id)
+    end)
+
+    model = %LLMDB.Model{id: "text-embedding-3-small", provider: :openai}
+
+    :telemetry.execute(
+      [:req_llm, :request, :start],
+      %{system_time: System.system_time()},
+      %{request_id: request_id, operation: :embedding, provider: :openai, model: model}
+    )
+
+    assert_receive {:start_span, span, _name, _attrs}
+
+    :telemetry.execute(
+      [:req_llm, :request, :stop],
+      %{duration: 1, system_time: System.system_time()},
+      %{
+        request_id: request_id,
+        operation: :embedding,
+        provider: :openai,
+        model: model,
+        finish_reason: nil,
+        usage: %{input_tokens: 4, output_tokens: 0},
+        response_summary: %{dimensions: 1536}
+      }
+    )
+
+    assert_receive {:set_attributes, ^span, attributes}
+    assert attributes[:"gen_ai.embeddings.dimension.count"] == 1536
+  end
+
+  test "emits reasoning output tokens when usage exposes them" do
+    handler_id = "req-llm-otel-#{System.unique_integer([:positive])}"
+    request_id = "req-#{System.unique_integer([:positive])}"
+
+    assert :ok = OpenTelemetry.attach(handler_id, adapter: FakeAdapter, test_pid: self())
+
+    on_exit(fn ->
+      OpenTelemetry.detach(handler_id)
+    end)
+
+    model = %LLMDB.Model{id: "gpt-5", provider: :openai}
+
+    :telemetry.execute(
+      [:req_llm, :request, :start],
+      %{system_time: System.system_time()},
+      %{request_id: request_id, operation: :chat, provider: :openai, model: model}
+    )
+
+    assert_receive {:start_span, span, _name, _attrs}
+
+    :telemetry.execute(
+      [:req_llm, :request, :stop],
+      %{duration: 1, system_time: System.system_time()},
+      %{
+        request_id: request_id,
+        operation: :chat,
+        provider: :openai,
+        model: model,
+        finish_reason: :stop,
+        usage: %{input_tokens: 12, output_tokens: 8, reasoning_tokens: 64}
+      }
+    )
+
+    assert_receive {:set_attributes, ^span, attributes}
+    assert attributes[:"gen_ai.usage.reasoning.output_tokens"] == 64
+  end
+
+  test "emits gen_ai.response.id and gen_ai.response.model when response payload is present" do
+    handler_id = "req-llm-otel-#{System.unique_integer([:positive])}"
+    request_id = "req-#{System.unique_integer([:positive])}"
+
+    assert :ok = OpenTelemetry.attach(handler_id, adapter: FakeAdapter, test_pid: self())
+
+    on_exit(fn ->
+      OpenTelemetry.detach(handler_id)
+    end)
+
+    model = %LLMDB.Model{id: "gpt-5", provider: :openai}
+
+    response_payload = %ReqLLM.Response{
+      id: "resp_42",
+      model: "gpt-5-2026-03-01",
+      context: nil,
+      message: nil,
+      object: nil,
+      stream?: false,
+      stream: nil,
+      usage: nil,
+      finish_reason: :stop,
+      provider_meta: %{},
+      error: nil
+    }
+
+    :telemetry.execute(
+      [:req_llm, :request, :start],
+      %{system_time: System.system_time()},
+      %{request_id: request_id, operation: :chat, provider: :openai, model: model}
+    )
+
+    assert_receive {:start_span, span, _name, _attrs}
+
+    :telemetry.execute(
+      [:req_llm, :request, :stop],
+      %{duration: 1, system_time: System.system_time()},
+      %{
+        request_id: request_id,
+        operation: :chat,
+        provider: :openai,
+        model: model,
+        finish_reason: :stop,
+        usage: %{tokens: %{input: 1, output: 2}},
+        response_payload: response_payload
+      }
+    )
+
+    assert_receive {:set_attributes, ^span, attributes}
+    assert attributes[:"gen_ai.response.id"] == "resp_42"
+    assert attributes[:"gen_ai.response.model"] == "gpt-5-2026-03-01"
+  end
+
+  test "marks span as error on stop with HTTP >= 400" do
+    handler_id = "req-llm-otel-#{System.unique_integer([:positive])}"
+    request_id = "req-#{System.unique_integer([:positive])}"
+
+    assert :ok = OpenTelemetry.attach(handler_id, adapter: FakeAdapter, test_pid: self())
+
+    on_exit(fn ->
+      OpenTelemetry.detach(handler_id)
+    end)
+
+    model = %LLMDB.Model{id: "gpt-5", provider: :openai}
+
+    :telemetry.execute(
+      [:req_llm, :request, :start],
+      %{system_time: System.system_time()},
+      %{request_id: request_id, operation: :chat, provider: :openai, model: model}
+    )
+
+    assert_receive {:start_span, span, _name, _attrs}
+
+    :telemetry.execute(
+      [:req_llm, :request, :stop],
+      %{duration: 1, system_time: System.system_time()},
+      %{
+        request_id: request_id,
+        operation: :chat,
+        provider: :openai,
+        model: model,
+        finish_reason: nil,
+        usage: nil,
+        http_status: 503
+      }
+    )
+
+    assert_receive {:set_attributes, ^span, stop_attrs}
+    assert stop_attrs[:"error.type"] == "503"
+    assert_receive {:set_status, ^span, :error, "HTTP 503"}
+    assert_receive {:end_span, ^span}
   end
 end

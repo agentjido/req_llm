@@ -281,17 +281,46 @@ case ReqLLM.OpenTelemetry.attach() do
 end
 ```
 
-The bridge uses:
+The bridge follows the [OpenTelemetry GenAI semantic conventions][otel-gen-ai].
+On span start it sets:
 
-- `gen_ai.provider.name`
-- `gen_ai.operation.name`
+- `gen_ai.provider.name` (spec enum where defined; stringified atom otherwise)
+- `gen_ai.operation.name` (`chat`, `embeddings`, `generate_content`, …)
 - `gen_ai.request.model`
-- `gen_ai.output.type`
+- `gen_ai.output.type` (`text`, `json`, `image`, `speech` — operation-dependent)
+- `gen_ai.request.temperature`, `top_p`, `top_k`, `max_tokens`
+- `gen_ai.request.frequency_penalty`, `presence_penalty`
+- `gen_ai.request.stop_sequences`, `seed`
+- `gen_ai.request.choice.count` (from the `:n` option)
+- `gen_ai.request.stream` (`true` for `stream_text`/`stream_object`)
+- `gen_ai.request.encoding_formats` (embeddings)
+- `gen_ai.conversation.id` when the caller passes `telemetry: [conversation_id: …]`
+- `server.address` and `server.port` resolved from the underlying `Req.Request.url`
+
+On span stop it sets:
+
 - `gen_ai.response.finish_reasons`
-- `gen_ai.usage.input_tokens`
-- `gen_ai.usage.output_tokens`
-- cache read and cache creation token attributes when available
-- `error.type` for failed requests
+- `gen_ai.usage.input_tokens`, `gen_ai.usage.output_tokens`
+- `gen_ai.usage.cache_read.input_tokens`, `gen_ai.usage.cache_creation.input_tokens` when available
+- `gen_ai.usage.reasoning.output_tokens` when reasoning tokens are reported
+- `gen_ai.embeddings.dimension.count` for embedding responses
+- `error.type` and span status `:error` when the response carries `http_status >= 400`
+
+On span exception it sets `error.type` and adds an exception event.
+
+[otel-gen-ai]: https://opentelemetry.io/docs/specs/semconv/gen-ai/
+
+#### Provider name mapping
+
+For non-spec providers (`alibaba`, `cerebras`, `meta`, `openrouter`, `vllm`,
+`zai`, `zenmux`, `venice`, `minimax`, …) the provider atom is stringified
+verbatim. Spec-mapped providers today are: `amazon_bedrock → aws.bedrock`,
+`anthropic → anthropic`, `azure → azure.ai.openai`, `deepseek → deepseek`,
+`google → gcp.gen_ai`, `google_vertex → gcp.vertex_ai`, `groq → groq`,
+`openai → openai`, `xai → x_ai`. See `ReqLLM.OpenTelemetry.SemConv`.
+
+Non-spec operations (`speech`, `transcription`, `rerank`) are stringified
+unchanged for `gen_ai.operation.name`.
 
 ReqLLM does not configure an SDK or exporter for you. To export traces, your host
 application still needs normal OpenTelemetry setup, such as `:opentelemetry`
@@ -332,13 +361,20 @@ defmodule MyApp.ReqLLMOpenTelemetry do
 end
 ```
 
-The low-level mapper includes richer normalized GenAI metadata such as:
+The low-level mapper emits the same `gen_ai.*` and `server.*` attribute set as
+the auto-attach bridge (provider/operation/output type, request parameters,
+server, usage, finish reasons, reasoning tokens, embedding dimension count,
+HTTP error type), plus richer normalized response and content metadata such as:
 
 - `gen_ai.response.id`
 - `gen_ai.response.model`
 - `gen_ai.input.messages` and `gen_ai.output.messages` when content capture is enabled
 - tool call and tool result payloads in message parts
 - exception event payloads for manual span finishing
+
+Both surfaces share the name table in `ReqLLM.OpenTelemetry.SemConv` so
+provider/operation/output values stay consistent regardless of which one a
+host integrates with.
 
 ## Coverage Across APIs
 

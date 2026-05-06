@@ -109,6 +109,127 @@ defmodule ReqLLM.TelemetryOpenTelemetryTest do
            ]
   end
 
+  test "emits gen_ai.request.* and server.* attributes from request_options/server metadata" do
+    metadata = %{
+      operation: :chat,
+      provider: :openai,
+      model: %LLMDB.Model{provider: :openai, id: "gpt-5"},
+      request_options: %{
+        temperature: 0.7,
+        top_p: 0.95,
+        top_k: 40,
+        max_tokens: 256,
+        frequency_penalty: 0.1,
+        presence_penalty: 0.2,
+        stop_sequences: ["END"],
+        seed: 42,
+        stream?: true,
+        encoding_formats: ["float"],
+        conversation_id: "session-abc"
+      },
+      server: %{address: "api.openai.com", port: 443}
+    }
+
+    stub = OpenTelemetry.request_start(metadata)
+
+    assert stub.attributes["gen_ai.request.temperature"] == 0.7
+    assert stub.attributes["gen_ai.request.top_p"] == 0.95
+    assert stub.attributes["gen_ai.request.top_k"] == 40
+    assert stub.attributes["gen_ai.request.max_tokens"] == 256
+    assert stub.attributes["gen_ai.request.frequency_penalty"] == 0.1
+    assert stub.attributes["gen_ai.request.presence_penalty"] == 0.2
+    assert stub.attributes["gen_ai.request.stop_sequences"] == ["END"]
+    assert stub.attributes["gen_ai.request.seed"] == 42
+    assert stub.attributes["gen_ai.request.stream"] == true
+    assert stub.attributes["gen_ai.request.encoding_formats"] == ["float"]
+    assert stub.attributes["gen_ai.conversation.id"] == "session-abc"
+    assert stub.attributes["server.address"] == "api.openai.com"
+    assert stub.attributes["server.port"] == 443
+    assert stub.attributes["gen_ai.output.type"] == "text"
+  end
+
+  test "emits gen_ai.request.choice.count when n is set" do
+    metadata = %{
+      operation: :chat,
+      provider: :openai,
+      model: %LLMDB.Model{provider: :openai, id: "gpt-5"},
+      request_options: %{n: 3}
+    }
+
+    stub = OpenTelemetry.request_start(metadata)
+
+    assert stub.attributes["gen_ai.request.choice.count"] == 3
+  end
+
+  test "emits gen_ai.embeddings.dimension.count for embedding responses" do
+    metadata = %{
+      operation: :embedding,
+      provider: :openai,
+      model: %LLMDB.Model{provider: :openai, id: "text-embedding-3-small"},
+      finish_reason: nil,
+      usage: %{input_tokens: 4, output_tokens: 0},
+      response_summary: %{dimensions: 1536}
+    }
+
+    stub = OpenTelemetry.request_stop(metadata)
+
+    assert stub.attributes["gen_ai.embeddings.dimension.count"] == 1536
+  end
+
+  test "emits cache read and creation token attributes when present in usage" do
+    metadata = %{
+      operation: :chat,
+      provider: :openai,
+      model: %LLMDB.Model{provider: :openai, id: "gpt-5"},
+      finish_reason: :stop,
+      usage: %{
+        tokens: %{
+          input: 10,
+          output: 20,
+          cached_input: 4,
+          cache_creation: 3
+        }
+      }
+    }
+
+    stub = OpenTelemetry.request_stop(metadata)
+
+    assert stub.attributes["gen_ai.usage.input_tokens"] == 10
+    assert stub.attributes["gen_ai.usage.output_tokens"] == 20
+    assert stub.attributes["gen_ai.usage.cache_read.input_tokens"] == 4
+    assert stub.attributes["gen_ai.usage.cache_creation.input_tokens"] == 3
+  end
+
+  test "emits gen_ai.usage.reasoning.output_tokens" do
+    metadata = %{
+      operation: :chat,
+      provider: :openai,
+      model: %LLMDB.Model{provider: :openai, id: "gpt-5"},
+      finish_reason: :stop,
+      usage: %{input_tokens: 12, output_tokens: 8, reasoning_tokens: 64}
+    }
+
+    stub = OpenTelemetry.request_stop(metadata)
+
+    assert stub.attributes["gen_ai.usage.reasoning.output_tokens"] == 64
+  end
+
+  test "sets error.type and error span status on stop with HTTP failure" do
+    metadata = %{
+      operation: :chat,
+      provider: :openai,
+      model: %LLMDB.Model{provider: :openai, id: "gpt-5"},
+      finish_reason: nil,
+      http_status: 503,
+      usage: nil
+    }
+
+    stub = OpenTelemetry.request_stop(metadata)
+
+    assert stub.attributes["error.type"] == "503"
+    assert stub.status == {:error, "HTTP 503"}
+  end
+
   test "builds exception status and event payloads" do
     metadata = %{
       operation: :chat,
