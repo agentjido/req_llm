@@ -149,11 +149,19 @@ defmodule ReqLLM.ToolCall do
 
   def from_map(%__MODULE__{} = tc, opts), do: to_map(tc, opts)
 
+  def from_map(%{"name" => _} = map, opts) do
+    %{
+      id: map["id"] || generate_id(),
+      name: map["name"],
+      arguments: parse_arguments(map["arguments"] || %{}, opts)
+    }
+  end
+
   def from_map(map, opts) when is_map(map) do
     %{
-      id: map[:id] || map["id"] || generate_id(),
-      name: map[:name] || map["name"],
-      arguments: parse_arguments(map[:arguments] || map["arguments"] || %{}, opts)
+      id: map[:id] || generate_id(),
+      name: map[:name],
+      arguments: parse_arguments(map[:arguments] || %{}, opts)
     }
   end
 

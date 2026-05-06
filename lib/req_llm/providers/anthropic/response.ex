@@ -402,15 +402,11 @@ defmodule ReqLLM.Providers.Anthropic.Response do
     }
 
   defp anthropic_tool_usage(usage) when is_map(usage) do
-    server_tool_use = Map.get(usage, "server_tool_use") || Map.get(usage, :server_tool_use) || %{}
+    server_tool_use = Map.get(usage, "server_tool_use", %{})
 
-    web_search =
-      Map.get(server_tool_use, "web_search_requests") ||
-        Map.get(server_tool_use, :web_search_requests)
+    web_search = Map.get(server_tool_use, "web_search_requests")
 
-    web_fetch =
-      Map.get(server_tool_use, "web_fetch_requests") ||
-        Map.get(server_tool_use, :web_fetch_requests)
+    web_fetch = Map.get(server_tool_use, "web_fetch_requests")
 
     %{}
     |> maybe_put_tool_usage(:web_search, web_search)

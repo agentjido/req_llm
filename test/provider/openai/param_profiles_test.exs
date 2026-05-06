@@ -39,11 +39,11 @@ defmodule Provider.OpenAI.ParamProfilesTest do
       refute Enum.any?(steps, &match?({:drop, :top_p, _}, &1))
     end
 
-    test "adds reasoning profile from string-key capabilities map" do
+    test "adds reasoning profile from capabilities map" do
       steps =
         ParamProfiles.steps_for(
           :chat,
-          raw_model(id: "custom-openai", capabilities: %{"reasoning" => %{"enabled" => true}})
+          raw_model(id: "custom-openai", capabilities: %{reasoning: %{enabled: true}})
         )
 
       assert Enum.any?(steps, &match?({:rename, :max_tokens, :max_completion_tokens, _}, &1))

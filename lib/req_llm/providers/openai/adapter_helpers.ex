@@ -25,8 +25,7 @@ defmodule ReqLLM.Providers.OpenAI.AdapterHelpers do
 
     {type, name} =
       if is_map(tool_choice) do
-        {Map.get(tool_choice, :type) || Map.get(tool_choice, "type"),
-         Map.get(tool_choice, :name) || Map.get(tool_choice, "name")}
+        {tool_choice[:type], tool_choice[:name]}
       else
         {nil, nil}
       end
@@ -54,14 +53,14 @@ defmodule ReqLLM.Providers.OpenAI.AdapterHelpers do
   """
   @spec add_strict_to_tools(map()) :: map()
   def add_strict_to_tools(body) do
-    tools = body[:tools] || body["tools"]
+    tools = body[:tools]
 
     if tools && is_list(tools) do
       updated_tools =
         Enum.map(tools, fn tool ->
-          function = tool[:function] || tool["function"]
+          function = tool["function"]
 
-          if function && (function[:strict] || function["strict"]) do
+          if function && function["strict"] do
             function_with_strict =
               if is_map_key(tool, :function) do
                 function
@@ -100,7 +99,7 @@ defmodule ReqLLM.Providers.OpenAI.AdapterHelpers do
   """
   @spec ensure_all_properties_required(map()) :: map()
   def ensure_all_properties_required(function) do
-    params = function[:parameters] || function["parameters"]
+    params = function["parameters"]
 
     if params do
       updated_params = enforce_strict_recursive(params)

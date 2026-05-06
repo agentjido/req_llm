@@ -714,12 +714,9 @@ defmodule ReqLLM.Telemetry do
     %{
       name: name,
       description: description,
-      strict: Map.get(tool, :strict) || Map.get(tool, "strict", false),
+      strict: Map.get(tool, :strict, false),
       parameter_schema:
-        sanitize_tool_schema(
-          Map.get(tool, :parameter_schema) || Map.get(tool, "parameter_schema") ||
-            Map.get(tool, :input_schema) || Map.get(tool, "input_schema")
-        )
+        sanitize_tool_schema(Map.get(tool, :parameter_schema) || Map.get(tool, :input_schema))
     }
   end
 
@@ -811,20 +808,20 @@ defmodule ReqLLM.Telemetry do
 
   defp sanitize_content_part(%{type: :image} = part) when is_map(part) do
     %{
-      type: Map.get(part, :type) || Map.get(part, "type"),
-      media_type: Map.get(part, :media_type) || Map.get(part, "media_type"),
-      bytes: binary_size_or_nil(Map.get(part, :data) || Map.get(part, "data")),
-      metadata: Map.get(part, :metadata) || Map.get(part, "metadata", %{})
+      type: part.type,
+      media_type: part[:media_type],
+      bytes: binary_size_or_nil(part[:data]),
+      metadata: Map.get(part, :metadata, %{})
     }
   end
 
   defp sanitize_content_part(%{type: :file} = part) when is_map(part) do
     %{
-      type: Map.get(part, :type) || Map.get(part, "type"),
-      filename: Map.get(part, :filename) || Map.get(part, "filename"),
-      media_type: Map.get(part, :media_type) || Map.get(part, "media_type"),
-      bytes: binary_size_or_nil(Map.get(part, :data) || Map.get(part, "data")),
-      metadata: Map.get(part, :metadata) || Map.get(part, "metadata", %{})
+      type: part.type,
+      filename: part[:filename],
+      media_type: part[:media_type],
+      bytes: binary_size_or_nil(part[:data]),
+      metadata: Map.get(part, :metadata, %{})
     }
   end
 
@@ -2018,9 +2015,7 @@ defmodule ReqLLM.Telemetry do
 
   defp extract_reasoning_tokens(usage) when is_map(usage) do
     usage[:reasoning] ||
-      usage["reasoning"] ||
       usage[:reasoning_tokens] ||
-      usage["reasoning_tokens"] ||
       fetch_value(usage, :completion_tokens_details, :reasoning_tokens) ||
       fetch_value(usage, :output_tokens_details, :reasoning_tokens) ||
       0
@@ -2033,12 +2028,12 @@ defmodule ReqLLM.Telemetry do
   defp token_usage_measurements(usage) when is_map(usage) do
     %{
       tokens: usage,
-      cost: usage[:total_cost] || usage["total_cost"]
+      cost: usage[:total_cost]
     }
-    |> maybe_put(:input_cost, usage[:input_cost] || usage["input_cost"])
-    |> maybe_put(:output_cost, usage[:output_cost] || usage["output_cost"])
-    |> maybe_put(:reasoning_cost, usage[:reasoning_cost] || usage["reasoning_cost"])
-    |> maybe_put(:total_cost, usage[:total_cost] || usage["total_cost"])
+    |> maybe_put(:input_cost, usage[:input_cost])
+    |> maybe_put(:output_cost, usage[:output_cost])
+    |> maybe_put(:reasoning_cost, usage[:reasoning_cost])
+    |> maybe_put(:total_cost, usage[:total_cost])
   end
 
   defp token_usage_measurements(_), do: %{tokens: %{}, cost: nil}

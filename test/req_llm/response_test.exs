@@ -199,10 +199,10 @@ defmodule ReqLLM.ResponseTest do
 
     test "extracts reasoning tokens from alternate usage shapes" do
       response =
-        create_response(usage: %{"completion_tokens_details" => %{"reasoning_tokens" => 17}})
+        create_response(usage: %{completion_tokens_details: %{reasoning_tokens: 17}})
 
       assert Response.reasoning_tokens(response) == 17
-      assert Response.reasoning_tokens(create_response(usage: %{"reasoning" => 11})) == 11
+      assert Response.reasoning_tokens(create_response(usage: %{reasoning: 11})) == 11
       assert Response.reasoning_tokens(create_response(usage: nil)) == 0
     end
   end

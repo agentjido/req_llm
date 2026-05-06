@@ -182,8 +182,8 @@ defmodule ReqLLM.Test.Transcript do
 
   defp build_streaming_response_map(t) do
     %{
-      "status" => t.response_meta[:status] || t.response_meta["status"],
-      "headers" => headers_to_map(t.response_meta[:headers] || t.response_meta["headers"] || []),
+      "status" => t.response_meta[:status],
+      "headers" => headers_to_map(t.response_meta[:headers] || []),
       "body" => nil
     }
   end
@@ -198,8 +198,8 @@ defmodule ReqLLM.Test.Transcript do
       end
 
     %{
-      "status" => t.response_meta[:status] || t.response_meta["status"],
-      "headers" => headers_to_map(t.response_meta[:headers] || t.response_meta["headers"] || []),
+      "status" => t.response_meta[:status],
+      "headers" => headers_to_map(t.response_meta[:headers] || []),
       "body" => parsed_body
     }
   end

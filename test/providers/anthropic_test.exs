@@ -787,27 +787,21 @@ defmodule ReqLLM.Providers.AnthropicTest do
       messages = request[:messages]
 
       assert Enum.any?(messages, fn msg ->
-               role = Map.get(msg, "role") || Map.get(msg, :role)
-               content = Map.get(msg, "content") || Map.get(msg, :content)
-
-               role == "assistant" and
-                 Enum.any?(List.wrap(content), fn block ->
+               msg[:role] == "assistant" and
+                 Enum.any?(List.wrap(msg[:content]), fn block ->
                    is_map(block) and
-                     (Map.get(block, "type") || Map.get(block, :type)) == "tool_use" and
-                     (Map.get(block, "name") || Map.get(block, :name)) == "get_time" and
-                     (Map.get(block, "input") || Map.get(block, :input)) == %{"zone" => "UTC"}
+                     block[:type] == "tool_use" and
+                     block[:name] == "get_time" and
+                     block[:input] == %{"zone" => "UTC"}
                  end)
              end)
 
       assert Enum.any?(messages, fn msg ->
-               role = Map.get(msg, "role") || Map.get(msg, :role)
-               content = Map.get(msg, "content") || Map.get(msg, :content)
-
-               role == "user" and
-                 Enum.any?(List.wrap(content), fn block ->
+               msg[:role] == "user" and
+                 Enum.any?(List.wrap(msg[:content]), fn block ->
                    is_map(block) and
-                     (Map.get(block, "type") || Map.get(block, :type)) == "tool_result" and
-                     (Map.get(block, "tool_use_id") || Map.get(block, :tool_use_id)) == "call_123"
+                     block[:type] == "tool_result" and
+                     block[:tool_use_id] == "call_123"
                  end)
              end)
     end

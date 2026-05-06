@@ -250,7 +250,7 @@ defmodule ReqLLM.Provider.Utils do
   end
 
   def extract_custom_headers(req_http_options) when is_map(req_http_options) do
-    case Map.get(req_http_options, :headers) || Map.get(req_http_options, "headers") do
+    case Map.get(req_http_options, :headers) do
       headers when is_list(headers) -> headers
       _ -> []
     end

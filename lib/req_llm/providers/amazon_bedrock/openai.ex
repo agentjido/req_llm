@@ -61,7 +61,7 @@ defmodule ReqLLM.Providers.AmazonBedrock.OpenAI do
       |> Defaults.default_build_body()
       |> AdapterHelpers.translate_tool_choice_format()
 
-    messages = body[:messages] || body["messages"]
+    messages = body[:messages]
 
     updated_body =
       if is_list(messages) do
@@ -81,7 +81,7 @@ defmodule ReqLLM.Providers.AmazonBedrock.OpenAI do
 
   defp strip_name_from_tool_messages(messages) when is_list(messages) do
     Enum.map(messages, fn message ->
-      role = message[:role] || message["role"]
+      role = message[:role]
 
       if role == "tool" do
         message

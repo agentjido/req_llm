@@ -426,15 +426,11 @@ defmodule ReqLLM.Providers.Anthropic do
   def extract_usage(_, _), do: {:error, :invalid_body}
 
   defp maybe_add_anthropic_tool_usage(usage) when is_map(usage) do
-    server_tool_use = Map.get(usage, "server_tool_use") || Map.get(usage, :server_tool_use) || %{}
+    server_tool_use = Map.get(usage, "server_tool_use", %{})
 
-    web_search =
-      Map.get(server_tool_use, "web_search_requests") ||
-        Map.get(server_tool_use, :web_search_requests)
+    web_search = Map.get(server_tool_use, "web_search_requests")
 
-    web_fetch =
-      Map.get(server_tool_use, "web_fetch_requests") ||
-        Map.get(server_tool_use, :web_fetch_requests)
+    web_fetch = Map.get(server_tool_use, "web_fetch_requests")
 
     usage
     |> maybe_put_tool_usage(:web_search, web_search)
@@ -1024,7 +1020,7 @@ defmodule ReqLLM.Providers.Anthropic do
   end
 
   defp add_cache_to_message_content(msg, cache_meta) do
-    content = Map.get(msg, :content) || Map.get(msg, "content")
+    content = Map.get(msg, :content)
 
     updated_content =
       case content do
@@ -1247,7 +1243,7 @@ defmodule ReqLLM.Providers.Anthropic do
   defp maybe_put_server_tool_opt(tool, key, value), do: Map.put(tool, key, value)
 
   defp maybe_put_tool_usage(usage, tool, count) when is_number(count) and count > 0 do
-    tool_usage = Map.get(usage, :tool_usage) || Map.get(usage, "tool_usage") || %{}
+    tool_usage = Map.get(usage, :tool_usage, %{})
     updated_tool_usage = Map.merge(tool_usage, ReqLLM.Usage.Tool.build(tool, count))
     Map.put(usage, :tool_usage, updated_tool_usage)
   end

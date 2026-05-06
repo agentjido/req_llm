@@ -259,14 +259,14 @@ defmodule ReqLLM.Providers.OpenAI.ChatAPI do
   end
 
   defp add_strict_to_tools(body) do
-    tools = body[:tools] || body["tools"]
+    tools = body[:tools]
 
     if tools && is_list(tools) do
       updated_tools =
         Enum.map(tools, fn tool ->
-          function = tool[:function] || tool["function"]
+          function = tool["function"]
 
-          if function && (function[:strict] || function["strict"]) do
+          if function && function["strict"] do
             function_with_strict =
               if is_map_key(tool, :function) do
                 function
@@ -299,7 +299,7 @@ defmodule ReqLLM.Providers.OpenAI.ChatAPI do
   end
 
   defp ensure_all_properties_required(function) do
-    params = function[:parameters] || function["parameters"]
+    params = function["parameters"]
 
     if params do
       updated_params = ReqLLM.Providers.OpenAI.AdapterHelpers.enforce_strict_recursive(params)

@@ -132,7 +132,7 @@ defmodule ReqLLM.Providers.Cohere do
   def extract_usage(%{"meta" => meta}, _model) when is_map(meta) do
     tokens = Map.get(meta, "tokens") || %{}
     billed_units = Map.get(meta, "billed_units") || %{}
-    search_units = Map.get(billed_units, "search_units") || Map.get(billed_units, :search_units)
+    search_units = Map.get(billed_units, "search_units")
 
     usage =
       tokens

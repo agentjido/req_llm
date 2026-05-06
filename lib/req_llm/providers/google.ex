@@ -902,7 +902,7 @@ defmodule ReqLLM.Providers.Google do
             |> normalize_context_video_urls()
             |> ReqLLM.Provider.Defaults.encode_context_to_openai_format(model_name)
 
-          messages = encoded[:messages] || encoded["messages"] || []
+          messages = encoded[:messages] || []
           split_messages_for_gemini(messages)
 
         _ ->
@@ -1079,7 +1079,7 @@ defmodule ReqLLM.Providers.Google do
             |> normalize_context_video_urls()
             |> ReqLLM.Provider.Defaults.encode_context_to_openai_format(model_name)
 
-          messages = encoded[:messages] || encoded["messages"] || []
+          messages = encoded[:messages] || []
           split_messages_for_gemini(messages)
 
         _ ->
@@ -1172,7 +1172,7 @@ defmodule ReqLLM.Providers.Google do
             |> normalize_context_video_urls()
             |> ReqLLM.Provider.Defaults.encode_context_to_openai_format(model_name)
 
-          messages = encoded[:messages] || encoded["messages"] || []
+          messages = encoded[:messages] || []
           split_messages_for_gemini(messages)
 
         _ ->
@@ -2484,10 +2484,9 @@ defmodule ReqLLM.Providers.Google do
   end
 
   defp content_part_url(part) do
-    Map.get(part, :url) ||
-      Map.get(part, "url") ||
-      nested_url(Map.get(part, :image_url) || Map.get(part, "image_url")) ||
-      nested_url(Map.get(part, :video_url) || Map.get(part, "video_url"))
+    part[:url] || part["url"] ||
+      nested_url(part[:image_url] || part["image_url"]) ||
+      nested_url(part[:video_url] || part["video_url"])
   end
 
   defp nested_url(%{url: url}) when is_binary(url), do: url

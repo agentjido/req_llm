@@ -227,7 +227,7 @@ defmodule ReqLLM.Response.Stream do
     |> Enum.filter(&(&1.type == :meta))
     |> Enum.reduce(existing_usage, fn chunk, acc ->
       usage =
-        Map.get(chunk.metadata || %{}, :usage) || Map.get(chunk.metadata || %{}, "usage") || %{}
+        Map.get(chunk.metadata || %{}, :usage, %{})
 
       ReqLLM.Usage.merge(acc || %{}, usage)
     end)

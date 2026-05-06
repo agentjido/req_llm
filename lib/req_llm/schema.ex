@@ -281,14 +281,13 @@ defmodule ReqLLM.Schema do
 
   defp inject_zoi_metadata(%Zoi.Types.Map{meta: meta, fields: fields}, json)
        when is_list(fields) do
-    properties = Map.get(json, :properties) || Map.get(json, "properties") || %{}
+    properties = Map.get(json, :properties) || %{}
     property_ordering = Enum.map(fields, fn {key, _field_schema} -> to_string(key) end)
 
     updated_props =
       Enum.reduce(fields, %{}, fn {key, field_schema}, acc ->
-        key_str = to_string(key)
-        field_json = Map.get(properties, key) || Map.get(properties, key_str) || %{}
-        Map.put(acc, key_str, inject_zoi_metadata(field_schema, field_json))
+        field_json = Map.get(properties, key) || %{}
+        Map.put(acc, to_string(key), inject_zoi_metadata(field_schema, field_json))
       end)
 
     json
@@ -299,7 +298,7 @@ defmodule ReqLLM.Schema do
   end
 
   defp inject_zoi_metadata(%Zoi.Types.Array{meta: meta, inner: inner}, json) do
-    items = Map.get(json, :items) || Map.get(json, "items") || %{}
+    items = Map.get(json, :items) || %{}
 
     json
     |> maybe_put_description(meta)

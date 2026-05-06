@@ -345,7 +345,7 @@ defmodule ReqLLM.OpenTelemetry do
   defp request_model(%{model: %LLMDB.Model{id: id}}), do: id
 
   defp request_model(%{model: model}) when is_map(model),
-    do: Map.get(model, :id) || Map.get(model, "id")
+    do: Map.get(model, :id)
 
   defp request_model(_), do: nil
 
