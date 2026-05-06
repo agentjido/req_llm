@@ -270,13 +270,16 @@ defmodule ReqLLM.Test.ChunkCollectorTest do
 
   describe "timestamps" do
     test "first chunk has timestamp close to 0" do
+      started_at = System.monotonic_time(:microsecond)
       {:ok, collector} = ChunkCollector.start_link()
 
       ChunkCollector.add_chunk(collector, "first")
       chunks = ChunkCollector.get_chunks(collector)
+      elapsed_us = System.monotonic_time(:microsecond) - started_at
 
       assert [%{t_us: t}] = chunks
-      assert t < 1_000
+      assert t >= 0
+      assert t <= elapsed_us
 
       ChunkCollector.stop(collector)
     end
