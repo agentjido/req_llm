@@ -444,11 +444,11 @@ defmodule ReqLLM.OpenTelemetryTest do
     assert_receive {:end_span, ^span}
   end
 
-  describe ":include_content option" do
+  describe ":content option" do
     alias ReqLLM.{Message, ToolCall}
     alias ReqLLM.Message.ContentPart
 
-    test "default (off) does not attach content attributes" do
+    test "default (:none) does not attach content attributes" do
       handler_id = "req-llm-otel-#{System.unique_integer([:positive])}"
       request_id = "req-#{System.unique_integer([:positive])}"
 
@@ -482,14 +482,14 @@ defmodule ReqLLM.OpenTelemetryTest do
       refute Map.has_key?(attributes, :"gen_ai.tool.definitions")
     end
 
-    test "include_content: true promotes messages, system_instructions, tool definitions onto the span" do
+    test "content: :attributes promotes messages, system_instructions, tool definitions onto the span" do
       handler_id = "req-llm-otel-#{System.unique_integer([:positive])}"
       request_id = "req-#{System.unique_integer([:positive])}"
 
       assert :ok =
                OpenTelemetry.attach(handler_id,
                  adapter: FakeAdapter,
-                 include_content: true,
+                 content: :attributes,
                  test_pid: self()
                )
 
@@ -547,14 +547,14 @@ defmodule ReqLLM.OpenTelemetryTest do
              ] = attributes[:"gen_ai.tool.definitions"]
     end
 
-    test "include_content: true attaches gen_ai.output.messages on stop" do
+    test "content: :attributes attaches gen_ai.output.messages on stop" do
       handler_id = "req-llm-otel-#{System.unique_integer([:positive])}"
       request_id = "req-#{System.unique_integer([:positive])}"
 
       assert :ok =
                OpenTelemetry.attach(handler_id,
                  adapter: FakeAdapter,
-                 include_content: true,
+                 content: :attributes,
                  test_pid: self()
                )
 
@@ -610,6 +610,126 @@ defmodule ReqLLM.OpenTelemetryTest do
                  "finish_reason" => "stop"
                }
              ]
+    end
+
+    test "content: :event emits a single inference event on stop without attaching content attrs" do
+      handler_id = "req-llm-otel-#{System.unique_integer([:positive])}"
+      request_id = "req-#{System.unique_integer([:positive])}"
+
+      assert :ok =
+               OpenTelemetry.attach(handler_id,
+                 adapter: FakeAdapter,
+                 content: :event,
+                 test_pid: self()
+               )
+
+      on_exit(fn -> OpenTelemetry.detach(handler_id) end)
+
+      model = %LLMDB.Model{id: "gpt-5", provider: :openai}
+
+      :telemetry.execute(
+        [:req_llm, :request, :start],
+        %{system_time: System.system_time()},
+        %{
+          request_id: request_id,
+          operation: :chat,
+          provider: :openai,
+          model: model,
+          request_payload: %{
+            messages: [
+              %Message{role: :system, content: [%ContentPart{type: :text, text: "be helpful"}]},
+              %Message{role: :user, content: [%ContentPart{type: :text, text: "hi"}]}
+            ]
+          }
+        }
+      )
+
+      assert_receive {:start_span, span, _name, start_attrs}
+      refute Map.has_key?(start_attrs, :"gen_ai.input.messages")
+      refute Map.has_key?(start_attrs, :"gen_ai.system_instructions")
+
+      :telemetry.execute(
+        [:req_llm, :request, :stop],
+        %{duration: 1, system_time: System.system_time()},
+        %{
+          request_id: request_id,
+          operation: :chat,
+          provider: :openai,
+          model: model,
+          finish_reason: :stop,
+          usage: %{tokens: %{input: 1, output: 1}},
+          request_payload: %{
+            messages: [
+              %Message{role: :system, content: [%ContentPart{type: :text, text: "be helpful"}]},
+              %Message{role: :user, content: [%ContentPart{type: :text, text: "hi"}]}
+            ]
+          },
+          response_payload: %ReqLLM.Response{
+            id: "resp_x",
+            model: "gpt-5",
+            context: nil,
+            message: %Message{
+              role: :assistant,
+              content: [%ContentPart{type: :text, text: "hi back"}]
+            },
+            object: nil,
+            stream?: false,
+            stream: nil,
+            usage: nil,
+            finish_reason: :stop,
+            provider_meta: %{},
+            error: nil
+          }
+        }
+      )
+
+      assert_receive {:set_attributes, ^span, stop_attrs}
+      refute Map.has_key?(stop_attrs, :"gen_ai.input.messages")
+      refute Map.has_key?(stop_attrs, :"gen_ai.output.messages")
+
+      assert_receive {:add_event, ^span, :"gen_ai.client.inference.operation.details",
+                      event_attrs}
+
+      assert event_attrs[:"gen_ai.system_instructions"] == [
+               %{"type" => "text", "content" => "be helpful"}
+             ]
+
+      assert [%{"role" => "user"}] = event_attrs[:"gen_ai.input.messages"]
+
+      assert [%{"role" => "assistant"}] = event_attrs[:"gen_ai.output.messages"]
+    end
+
+    test "content: true is accepted as an alias for :attributes" do
+      handler_id = "req-llm-otel-#{System.unique_integer([:positive])}"
+      request_id = "req-#{System.unique_integer([:positive])}"
+
+      assert :ok =
+               OpenTelemetry.attach(handler_id,
+                 adapter: FakeAdapter,
+                 content: true,
+                 test_pid: self()
+               )
+
+      on_exit(fn -> OpenTelemetry.detach(handler_id) end)
+
+      :telemetry.execute(
+        [:req_llm, :request, :start],
+        %{system_time: System.system_time()},
+        %{
+          request_id: request_id,
+          operation: :chat,
+          provider: :openai,
+          model: %LLMDB.Model{id: "gpt-5", provider: :openai},
+          request_payload: %{
+            messages: [
+              %Message{role: :user, content: [%ContentPart{type: :text, text: "hi"}]}
+            ]
+          }
+        }
+      )
+
+      assert_receive {:start_span, _span, _name, attributes}
+      assert [%{"role" => "user"}] = attributes[:"gen_ai.input.messages"]
     end
   end
 
@@ -800,6 +920,318 @@ defmodule ReqLLM.OpenTelemetryTest do
       )
 
       assert drain_records(model.id) == []
+    end
+  end
+
+  describe "cost capture" do
+    test "emits gen_ai.usage.cost on stop when total_cost is present" do
+      handler_id = "req-llm-otel-#{System.unique_integer([:positive])}"
+      request_id = "req-#{System.unique_integer([:positive])}"
+
+      assert :ok = OpenTelemetry.attach(handler_id, adapter: FakeAdapter, test_pid: self())
+      on_exit(fn -> OpenTelemetry.detach(handler_id) end)
+
+      model = %LLMDB.Model{id: "gpt-5", provider: :openai}
+
+      :telemetry.execute(
+        [:req_llm, :request, :start],
+        %{system_time: System.system_time()},
+        %{request_id: request_id, operation: :chat, provider: :openai, model: model}
+      )
+
+      assert_receive {:start_span, span, _name, _attrs}
+
+      :telemetry.execute(
+        [:req_llm, :request, :stop],
+        %{duration: 1, system_time: System.system_time()},
+        %{
+          request_id: request_id,
+          operation: :chat,
+          provider: :openai,
+          model: model,
+          finish_reason: :stop,
+          usage: %{
+            input_tokens: 100,
+            output_tokens: 50,
+            input_cost: 0.001,
+            output_cost: 0.002,
+            total_cost: 0.003
+          }
+        }
+      )
+
+      assert_receive {:set_attributes, ^span, attrs}
+      assert attrs[:"gen_ai.usage.cost"] == 0.003
+      refute Map.has_key?(attrs, :"langfuse.observation.cost_details")
+    end
+
+    test "skips gen_ai.usage.cost when total_cost is missing" do
+      handler_id = "req-llm-otel-#{System.unique_integer([:positive])}"
+      request_id = "req-#{System.unique_integer([:positive])}"
+
+      assert :ok = OpenTelemetry.attach(handler_id, adapter: FakeAdapter, test_pid: self())
+      on_exit(fn -> OpenTelemetry.detach(handler_id) end)
+
+      model = %LLMDB.Model{id: "gpt-5", provider: :openai}
+
+      :telemetry.execute(
+        [:req_llm, :request, :start],
+        %{system_time: System.system_time()},
+        %{request_id: request_id, operation: :chat, provider: :openai, model: model}
+      )
+
+      assert_receive {:start_span, span, _name, _attrs}
+
+      :telemetry.execute(
+        [:req_llm, :request, :stop],
+        %{duration: 1, system_time: System.system_time()},
+        %{
+          request_id: request_id,
+          operation: :chat,
+          provider: :openai,
+          model: model,
+          finish_reason: :stop,
+          usage: %{input_tokens: 100, output_tokens: 50}
+        }
+      )
+
+      assert_receive {:set_attributes, ^span, attrs}
+      refute Map.has_key?(attrs, :"gen_ai.usage.cost")
+    end
+
+    test "langfuse: true adds langfuse.observation.cost_details JSON" do
+      handler_id = "req-llm-otel-#{System.unique_integer([:positive])}"
+      request_id = "req-#{System.unique_integer([:positive])}"
+
+      assert :ok =
+               OpenTelemetry.attach(handler_id,
+                 adapter: FakeAdapter,
+                 test_pid: self(),
+                 langfuse: true
+               )
+
+      on_exit(fn -> OpenTelemetry.detach(handler_id) end)
+
+      model = %LLMDB.Model{id: "gpt-5", provider: :openai}
+
+      :telemetry.execute(
+        [:req_llm, :request, :start],
+        %{system_time: System.system_time()},
+        %{request_id: request_id, operation: :chat, provider: :openai, model: model}
+      )
+
+      assert_receive {:start_span, span, _name, _attrs}
+
+      :telemetry.execute(
+        [:req_llm, :request, :stop],
+        %{duration: 1, system_time: System.system_time()},
+        %{
+          request_id: request_id,
+          operation: :chat,
+          provider: :openai,
+          model: model,
+          finish_reason: :stop,
+          usage: %{
+            input_tokens: 100,
+            output_tokens: 50,
+            input_cost: 0.001,
+            output_cost: 0.002,
+            reasoning_cost: 0.0005,
+            total_cost: 0.0035
+          }
+        }
+      )
+
+      assert_receive {:set_attributes, ^span, attrs}
+      assert attrs[:"gen_ai.usage.cost"] == 0.0035
+
+      assert {:ok, decoded} = Jason.decode(attrs[:"langfuse.observation.cost_details"])
+
+      assert decoded == %{
+               "input" => 0.001,
+               "output" => 0.002,
+               "reasoning" => 0.0005,
+               "total" => 0.0035
+             }
+    end
+  end
+
+  describe "OpenAI extensions" do
+    test "emits openai.api.type and openai.request.service_tier on start" do
+      handler_id = "req-llm-otel-#{System.unique_integer([:positive])}"
+      request_id = "req-#{System.unique_integer([:positive])}"
+
+      assert :ok = OpenTelemetry.attach(handler_id, adapter: FakeAdapter, test_pid: self())
+      on_exit(fn -> OpenTelemetry.detach(handler_id) end)
+
+      model = %LLMDB.Model{id: "gpt-5", provider: :openai}
+
+      :telemetry.execute(
+        [:req_llm, :request, :start],
+        %{system_time: System.system_time()},
+        %{
+          request_id: request_id,
+          operation: :chat,
+          provider: :openai,
+          model: model,
+          request_options: %{service_tier: "priority"},
+          server: %{address: "api.openai.com", port: 443, path: "/v1/chat/completions"}
+        }
+      )
+
+      assert_receive {:start_span, _span, _name, attrs}
+      assert attrs[:"openai.api.type"] == "chat_completions"
+      assert attrs[:"openai.request.service_tier"] == "priority"
+    end
+
+    test "emits openai.response.{service_tier,system_fingerprint} on stop" do
+      handler_id = "req-llm-otel-#{System.unique_integer([:positive])}"
+      request_id = "req-#{System.unique_integer([:positive])}"
+
+      assert :ok = OpenTelemetry.attach(handler_id, adapter: FakeAdapter, test_pid: self())
+      on_exit(fn -> OpenTelemetry.detach(handler_id) end)
+
+      model = %LLMDB.Model{id: "gpt-5", provider: :openai}
+
+      :telemetry.execute(
+        [:req_llm, :request, :start],
+        %{system_time: System.system_time()},
+        %{request_id: request_id, operation: :chat, provider: :openai, model: model}
+      )
+
+      assert_receive {:start_span, span, _name, _attrs}
+
+      :telemetry.execute(
+        [:req_llm, :request, :stop],
+        %{duration: 1, system_time: System.system_time()},
+        %{
+          request_id: request_id,
+          operation: :chat,
+          provider: :openai,
+          model: model,
+          finish_reason: :stop,
+          usage: %{input_tokens: 1, output_tokens: 1},
+          response_payload: %{
+            provider_meta: %{
+              "service_tier" => "default",
+              "system_fingerprint" => "fp_abc123"
+            }
+          }
+        }
+      )
+
+      assert_receive {:set_attributes, ^span, attrs}
+      assert attrs[:"openai.response.service_tier"] == "default"
+      assert attrs[:"openai.response.system_fingerprint"] == "fp_abc123"
+    end
+
+    test "skips openai.* attributes for non-OpenAI providers" do
+      handler_id = "req-llm-otel-#{System.unique_integer([:positive])}"
+      request_id = "req-#{System.unique_integer([:positive])}"
+
+      assert :ok = OpenTelemetry.attach(handler_id, adapter: FakeAdapter, test_pid: self())
+      on_exit(fn -> OpenTelemetry.detach(handler_id) end)
+
+      model = %LLMDB.Model{id: "claude-haiku-4-5", provider: :anthropic}
+
+      :telemetry.execute(
+        [:req_llm, :request, :start],
+        %{system_time: System.system_time()},
+        %{
+          request_id: request_id,
+          operation: :chat,
+          provider: :anthropic,
+          model: model,
+          request_options: %{service_tier: "priority"},
+          server: %{address: "api.anthropic.com", port: 443, path: "/v1/messages"}
+        }
+      )
+
+      assert_receive {:start_span, _span, _name, attrs}
+      refute Map.has_key?(attrs, :"openai.api.type")
+      refute Map.has_key?(attrs, :"openai.request.service_tier")
+    end
+  end
+
+  describe "prune_stale_spans/2" do
+    test "removes entries older than the TTL and leaves recent ones intact" do
+      handler_id = "req-llm-otel-#{System.unique_integer([:positive])}"
+      stale_id = "stale-#{System.unique_integer([:positive])}"
+      fresh_id = "fresh-#{System.unique_integer([:positive])}"
+
+      assert :ok = OpenTelemetry.attach(handler_id, adapter: FakeAdapter, test_pid: self())
+
+      on_exit(fn -> OpenTelemetry.detach(handler_id) end)
+
+      :telemetry.execute(
+        [:req_llm, :request, :start],
+        %{system_time: System.system_time()},
+        %{
+          request_id: stale_id,
+          operation: :chat,
+          provider: :openai,
+          model: %LLMDB.Model{id: "gpt-5", provider: :openai}
+        }
+      )
+
+      assert_receive {:start_span, _stale_span, _name, _attrs}
+
+      Process.sleep(20)
+
+      :telemetry.execute(
+        [:req_llm, :request, :start],
+        %{system_time: System.system_time()},
+        %{
+          request_id: fresh_id,
+          operation: :chat,
+          provider: :openai,
+          model: %LLMDB.Model{id: "gpt-5", provider: :openai}
+        }
+      )
+
+      assert_receive {:start_span, _fresh_span, _name, _attrs}
+
+      assert OpenTelemetry.prune_stale_spans(handler_id, 10) == 1
+
+      table = :req_llm_open_telemetry_spans
+      refute :ets.member(table, {handler_id, stale_id})
+      assert :ets.member(table, {handler_id, fresh_id})
+    end
+
+    test "scopes pruning to the matching handler id" do
+      handler_a = "req-llm-otel-a-#{System.unique_integer([:positive])}"
+      handler_b = "req-llm-otel-b-#{System.unique_integer([:positive])}"
+
+      assert :ok = OpenTelemetry.attach(handler_a, adapter: FakeAdapter, test_pid: self())
+      assert :ok = OpenTelemetry.attach(handler_b, adapter: FakeAdapter, test_pid: self())
+
+      on_exit(fn ->
+        OpenTelemetry.detach(handler_a)
+        OpenTelemetry.detach(handler_b)
+      end)
+
+      shared_id = "req-#{System.unique_integer([:positive])}"
+
+      :telemetry.execute(
+        [:req_llm, :request, :start],
+        %{system_time: System.system_time()},
+        %{
+          request_id: shared_id,
+          operation: :chat,
+          provider: :openai,
+          model: %LLMDB.Model{id: "gpt-5", provider: :openai}
+        }
+      )
+
+      assert_receive {:start_span, _, _, _}
+      assert_receive {:start_span, _, _, _}
+
+      Process.sleep(20)
+      assert OpenTelemetry.prune_stale_spans(handler_a, 10) == 1
+
+      table = :req_llm_open_telemetry_spans
+      refute :ets.member(table, {handler_a, shared_id})
+      assert :ets.member(table, {handler_b, shared_id})
     end
   end
 end

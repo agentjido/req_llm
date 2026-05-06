@@ -537,6 +537,12 @@ defmodule ReqLLM.Telemetry do
         :error -> %{}
       end
 
+    provider_opts =
+      case opts[:provider_options] do
+        list when is_list(list) -> list
+        _ -> []
+      end
+
     %{
       temperature: opts[:temperature],
       top_p: opts[:top_p],
@@ -549,7 +555,8 @@ defmodule ReqLLM.Telemetry do
       n: normalize_choice_count(opts[:n]),
       stream?: mode == :stream,
       encoding_formats: normalize_string_list(opts[:encoding_format]),
-      conversation_id: telemetry_meta[:conversation_id]
+      conversation_id: telemetry_meta[:conversation_id],
+      service_tier: opts[:service_tier] || provider_opts[:service_tier]
     }
     |> Enum.reject(fn {_key, value} -> is_nil(value) end)
     |> Map.new()
@@ -568,6 +575,7 @@ defmodule ReqLLM.Telemetry do
     %{}
     |> maybe_put_present(:address, uri.host)
     |> maybe_put_present(:port, uri.port)
+    |> maybe_put_present(:path, uri.path)
   end
 
   defp extract_server(%Req.Request{url: url}) when is_binary(url) do

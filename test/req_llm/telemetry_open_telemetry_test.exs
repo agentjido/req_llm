@@ -538,4 +538,203 @@ defmodule ReqLLM.TelemetryOpenTelemetryTest do
       assert duration.attributes["error.type"] == "RuntimeError"
     end
   end
+
+  describe "cost capture" do
+    test "emits gen_ai.usage.cost when usage carries total_cost" do
+      metadata = %{
+        operation: :chat,
+        provider: :openai,
+        model: %LLMDB.Model{provider: :openai, id: "gpt-5"},
+        finish_reason: :stop,
+        usage: %{
+          input_tokens: 100,
+          output_tokens: 50,
+          input_cost: 0.001,
+          output_cost: 0.002,
+          total_cost: 0.003
+        }
+      }
+
+      stub = OpenTelemetry.request_stop(metadata)
+
+      assert stub.attributes["gen_ai.usage.cost"] == 0.003
+    end
+
+    test "omits gen_ai.usage.cost when total_cost is missing" do
+      metadata = %{
+        operation: :chat,
+        provider: :openai,
+        model: %LLMDB.Model{provider: :openai, id: "gpt-5"},
+        finish_reason: :stop,
+        usage: %{input_tokens: 100, output_tokens: 50}
+      }
+
+      stub = OpenTelemetry.request_stop(metadata)
+
+      refute Map.has_key?(stub.attributes, "gen_ai.usage.cost")
+    end
+
+    test "langfuse: true emits langfuse.observation.cost_details JSON" do
+      metadata = %{
+        operation: :chat,
+        provider: :openai,
+        model: %LLMDB.Model{provider: :openai, id: "gpt-5"},
+        finish_reason: :stop,
+        usage: %{
+          input_tokens: 100,
+          output_tokens: 50,
+          input_cost: 0.001,
+          output_cost: 0.002,
+          reasoning_cost: 0.0005,
+          total_cost: 0.0035
+        }
+      }
+
+      stub = OpenTelemetry.request_stop(metadata, langfuse: true)
+
+      assert {:ok, decoded} = Jason.decode(stub.attributes["langfuse.observation.cost_details"])
+
+      assert decoded == %{
+               "input" => 0.001,
+               "output" => 0.002,
+               "reasoning" => 0.0005,
+               "total" => 0.0035
+             }
+    end
+
+    test "langfuse: true is a no-op when no cost data is available" do
+      metadata = %{
+        operation: :chat,
+        provider: :openai,
+        model: %LLMDB.Model{provider: :openai, id: "gpt-5"},
+        finish_reason: :stop,
+        usage: %{input_tokens: 100, output_tokens: 50}
+      }
+
+      stub = OpenTelemetry.request_stop(metadata, langfuse: true)
+
+      refute Map.has_key?(stub.attributes, "langfuse.observation.cost_details")
+    end
+  end
+
+  describe "OpenAI extensions" do
+    test "emits openai.api.type and openai.request.service_tier on chat completions" do
+      metadata = %{
+        operation: :chat,
+        provider: :openai,
+        model: %LLMDB.Model{provider: :openai, id: "gpt-5"},
+        request_options: %{service_tier: "priority"},
+        server: %{address: "api.openai.com", port: 443, path: "/v1/chat/completions"}
+      }
+
+      stub = OpenTelemetry.request_start(metadata)
+
+      assert stub.attributes["openai.api.type"] == "chat_completions"
+      assert stub.attributes["openai.request.service_tier"] == "priority"
+    end
+
+    test "infers openai.api.type=responses from /responses path" do
+      metadata = %{
+        operation: :chat,
+        provider: :openai,
+        model: %LLMDB.Model{provider: :openai, id: "gpt-5"},
+        server: %{address: "api.openai.com", port: 443, path: "/v1/responses"}
+      }
+
+      stub = OpenTelemetry.request_start(metadata)
+
+      assert stub.attributes["openai.api.type"] == "responses"
+    end
+
+    test "emits openai.response.{service_tier,system_fingerprint} from response payload provider_meta" do
+      metadata = %{
+        operation: :chat,
+        provider: :openai,
+        model: %LLMDB.Model{provider: :openai, id: "gpt-5"},
+        finish_reason: :stop,
+        usage: %{input_tokens: 1, output_tokens: 1},
+        response_payload: %{
+          provider_meta: %{
+            "service_tier" => "default",
+            "system_fingerprint" => "fp_abc123"
+          }
+        }
+      }
+
+      stub = OpenTelemetry.request_stop(metadata)
+
+      assert stub.attributes["openai.response.service_tier"] == "default"
+      assert stub.attributes["openai.response.system_fingerprint"] == "fp_abc123"
+    end
+
+    test "skips OpenAI extensions for non-OpenAI providers" do
+      metadata = %{
+        operation: :chat,
+        provider: :anthropic,
+        model: %LLMDB.Model{provider: :anthropic, id: "claude-haiku-4-5"},
+        request_options: %{service_tier: "priority"},
+        server: %{address: "api.anthropic.com", port: 443, path: "/v1/messages"}
+      }
+
+      stub = OpenTelemetry.request_start(metadata)
+
+      refute Map.has_key?(stub.attributes, "openai.api.type")
+      refute Map.has_key?(stub.attributes, "openai.request.service_tier")
+    end
+
+    test "applies OpenAI extensions to azure provider" do
+      metadata = %{
+        operation: :chat,
+        provider: :azure,
+        model: %LLMDB.Model{provider: :azure, id: "gpt-5"},
+        request_options: %{service_tier: "priority"},
+        server: %{
+          address: "my-resource.openai.azure.com",
+          port: 443,
+          path: "/openai/deployments/gpt-5/chat/completions"
+        }
+      }
+
+      stub = OpenTelemetry.request_start(metadata)
+
+      assert stub.attributes["openai.api.type"] == "chat_completions"
+      assert stub.attributes["openai.request.service_tier"] == "priority"
+    end
+
+    test "decoded OpenAI response carries service_tier/system_fingerprint through to OTel attrs" do
+      model = %LLMDB.Model{provider: :openai, id: "gpt-5"}
+
+      raw_body = %{
+        "id" => "chatcmpl-abc",
+        "model" => "gpt-5-2026-03-01",
+        "service_tier" => "default",
+        "system_fingerprint" => "fp_4fae27f477",
+        "choices" => [
+          %{"message" => %{"content" => "ok"}, "finish_reason" => "stop"}
+        ],
+        "usage" => %{"prompt_tokens" => 4, "completion_tokens" => 2, "total_tokens" => 6}
+      }
+
+      {:ok, decoded} =
+        ReqLLM.Provider.Defaults.decode_response_body_openai_format(raw_body, model)
+
+      assert decoded.provider_meta["service_tier"] == "default"
+      assert decoded.provider_meta["system_fingerprint"] == "fp_4fae27f477"
+
+      stub =
+        OpenTelemetry.request_stop(%{
+          operation: :chat,
+          provider: :openai,
+          model: model,
+          finish_reason: :stop,
+          usage: decoded.usage,
+          response_payload: decoded,
+          server: %{address: "api.openai.com", port: 443, path: "/v1/chat/completions"}
+        })
+
+      assert stub.attributes["openai.response.service_tier"] == "default"
+      assert stub.attributes["openai.response.system_fingerprint"] == "fp_4fae27f477"
+      assert stub.attributes["openai.api.type"] == "chat_completions"
+    end
+  end
 end

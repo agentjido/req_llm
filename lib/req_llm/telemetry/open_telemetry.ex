@@ -30,13 +30,15 @@ defmodule ReqLLM.Telemetry.OpenTelemetry do
   intentionally omitted from `gen_ai.input.messages` / `gen_ai.output.messages`.
   """
 
+  require Logger
+
   alias ReqLLM.MapAccess
   alias ReqLLM.OpenTelemetry.{Attributes, Content, Metrics, SemConv}
 
   @type content_mode :: :none | :attributes | :event
   @type span_status :: :ok | {:error, String.t()}
   @type otel_event :: %{name: String.t(), attributes: map()}
-  @type metric_record :: Metrics.record()
+  @type metric_record :: map()
 
   @type request_start_stub :: %{
           name: String.t(),
@@ -78,6 +80,8 @@ defmodule ReqLLM.Telemetry.OpenTelemetry do
 
   Pass `measurements: %{duration: native}` to populate `metrics` and the
   `gen_ai.response.time_to_first_chunk` span attribute on streaming requests.
+  Pass `langfuse: true` to add `langfuse.observation.cost_details` (JSON-encoded)
+  whenever ReqLLM has computed a cost breakdown.
   """
   @spec request_stop(map(), keyword()) :: request_terminal_stub()
   def request_stop(metadata, opts \\ []) when is_map(metadata) do
@@ -92,7 +96,8 @@ defmodule ReqLLM.Telemetry.OpenTelemetry do
         metadata
         |> Attributes.start()
         |> Map.merge(Attributes.terminal(metadata))
-        |> merge_when(mode == :attributes, content_payload),
+        |> merge_when(mode == :attributes, content_payload)
+        |> merge_langfuse(metadata, opts),
       status: span_status(metadata),
       events: maybe_inference_event(mode, content_payload),
       metrics: Metrics.stop(metadata, MapAccess.get(measurements, :duration))
@@ -145,6 +150,32 @@ defmodule ReqLLM.Telemetry.OpenTelemetry do
 
   defp merge_when(map, true, addition), do: Map.merge(map, addition)
   defp merge_when(map, false, _addition), do: map
+
+  defp merge_langfuse(attributes, metadata, opts) do
+    if Keyword.get(opts, :langfuse, false) do
+      case Attributes.cost_breakdown(metadata) do
+        %{} = breakdown -> put_langfuse_cost(attributes, breakdown)
+        _ -> attributes
+      end
+    else
+      attributes
+    end
+  end
+
+  defp put_langfuse_cost(attributes, breakdown) do
+    case Jason.encode(breakdown) do
+      {:ok, json} ->
+        Map.put(attributes, "langfuse.observation.cost_details", json)
+
+      {:error, reason} ->
+        Logger.debug(fn ->
+          "ReqLLM.Telemetry.OpenTelemetry: dropping langfuse.observation.cost_details — " <>
+            "Jason.encode failed: #{inspect(reason)}"
+        end)
+
+        attributes
+    end
+  end
 
   defp maybe_inference_event(:event, payload) when map_size(payload) > 0 do
     [%{name: @inference_event_name, attributes: payload}]

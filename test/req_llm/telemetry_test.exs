@@ -527,7 +527,31 @@ defmodule ReqLLM.TelemetryTest do
              conversation_id: "session-xyz"
            } = metadata.request_options
 
-    assert metadata.server == %{address: "api.openai.com", port: 443}
+    assert metadata.server == %{
+             address: "api.openai.com",
+             port: 443,
+             path: "/v1/chat/completions"
+           }
+  end
+
+  test "captures service_tier into request_options for OpenAI extension attributes" do
+    model = %LLMDB.Model{provider: :openai, id: "gpt-5"}
+
+    opts = [
+      service_tier: "priority",
+      temperature: 0.5
+    ]
+
+    fake_request = %Req.Request{url: URI.parse("https://api.openai.com/v1/responses")}
+
+    model
+    |> ReqLLM.Telemetry.new_context(opts, operation: :chat)
+    |> ReqLLM.Telemetry.start_request(fake_request)
+
+    assert_receive {:telemetry_event, [:req_llm, :request, :start], _measurements, metadata}
+
+    assert metadata.request_options[:service_tier] == "priority"
+    assert metadata.server[:path] == "/v1/responses"
   end
 
   defp reasoning_model(provider, id) do

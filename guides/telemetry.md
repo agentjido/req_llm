@@ -303,6 +303,7 @@ On span stop it sets:
 - `gen_ai.usage.input_tokens`, `gen_ai.usage.output_tokens`
 - `gen_ai.usage.cache_read.input_tokens`, `gen_ai.usage.cache_creation.input_tokens` when available
 - `gen_ai.usage.reasoning.output_tokens` when reasoning tokens are reported
+- `gen_ai.usage.cost` (USD) when ReqLLM has computed a cost breakdown
 - `gen_ai.embeddings.dimension.count` for embedding responses
 - `error.type` and span status `:error` when the response carries `http_status >= 400`
 
@@ -366,17 +367,125 @@ returned thinking parts. ReqLLM's payload sanitizer redacts reasoning before
 the bridge sees the messages, and the OTel content mapper additionally
 filters part types to `text` and `image_url` only.
 
+#### OpenAI provider extensions
+
+For OpenAI-family providers (`openai`, `openai_codex`, `azure`) the bridge
+also emits the spec's [OpenAI extension attributes][otel-openai] when ReqLLM
+has the data:
+
+- `openai.api.type` — `"chat_completions"`, `"responses"`, or `"embeddings"`,
+  inferred from the request URL path
+- `openai.request.service_tier` — when the caller passed `service_tier:` (or
+  `provider_options: [service_tier: …]`)
+- `openai.response.service_tier` — when the response body carried it
+- `openai.response.system_fingerprint` — when the response body carried it
+
+Capturing the response-side fields requires `telemetry: [payloads: :raw]` on
+the call so the bridge can read `provider_meta` from the parsed response.
+
+[otel-openai]: https://opentelemetry.io/docs/specs/semconv/gen-ai/openai/
+
+#### Cost capture
+
+When ReqLLM has computed a USD cost breakdown for a request, the bridge sets
+`gen_ai.usage.cost` (number, USD total) on the stop span. Cost lookup uses
+the same model pricing tables as `[:req_llm, :token_usage]`.
+
+Pass `langfuse: true` to `attach/2` to additionally emit
+`langfuse.observation.cost_details` — a JSON string with the per-bucket
+breakdown (`input`, `output`, `reasoning`, `total`). Langfuse uses this to
+render cost details on a generation. The attribute is dropped silently when
+no cost data is available, so it's safe to leave on globally:
+
+```elixir
+ReqLLM.OpenTelemetry.attach("req-llm-otel", langfuse: true)
+```
+
 #### Provider name mapping
 
-For non-spec providers (`alibaba`, `cerebras`, `meta`, `openrouter`, `vllm`,
-`zai`, `zenmux`, `venice`, `minimax`, …) the provider atom is stringified
-verbatim. Spec-mapped providers today are: `amazon_bedrock → aws.bedrock`,
-`anthropic → anthropic`, `azure → azure.ai.openai`, `deepseek → deepseek`,
-`google → gcp.gen_ai`, `google_vertex → gcp.vertex_ai`, `groq → groq`,
-`openai → openai`, `xai → x_ai`. See `ReqLLM.OpenTelemetry.SemConv`.
+| ReqLLM provider | `gen_ai.provider.name` |
+|-----------------|------------------------|
+| `:openai`       | `openai`               |
+| `:anthropic`    | `anthropic`            |
+| `:azure`        | `azure.ai.openai`      |
+| `:google`       | `gcp.gen_ai`           |
+| `:google_vertex`| `gcp.vertex_ai`        |
+| `:amazon_bedrock` | `aws.bedrock`        |
+| `:groq`         | `groq`                 |
+| `:xai`          | `x_ai`                 |
+| `:deepseek`     | `deepseek`             |
 
-Non-spec operations (`speech`, `transcription`, `rerank`) are stringified
-unchanged for `gen_ai.operation.name`.
+Other providers (`alibaba`, `cerebras`, `meta`, `openrouter`, `vllm`, `zai`,
+`zenmux`, `venice`, `minimax`, …) are stringified verbatim from their atom
+name.
+
+#### Operation name mapping
+
+| ReqLLM operation | `gen_ai.operation.name` | `gen_ai.output.type` |
+|------------------|-------------------------|----------------------|
+| `:chat`          | `chat`                  | `text`               |
+| `:object`        | `chat`                  | `json`               |
+| `:embedding`     | `embeddings`            | _(not set)_          |
+| `:image`         | `generate_content`      | `image`              |
+| `:speech`        | `speech` *              | `speech`             |
+| `:transcription` | `transcription` *       | `text`               |
+
+\* Non-spec operations (`speech`, `transcription`, `rerank`) are stringified
+unchanged. Revisit if the spec adds enum values for them later.
+
+#### Sending traces to Langfuse
+
+[Langfuse][langfuse-otel] consumes ReqLLM's GenAI spans natively over OTLP
+HTTP. ReqLLM does not configure the SDK for you — you point your existing
+OTel pipeline at one of Langfuse's endpoints:
+
+| Region   | OTLP HTTP endpoint                                         |
+|----------|------------------------------------------------------------|
+| EU       | `https://cloud.langfuse.com/api/public/otel`               |
+| US       | `https://us.cloud.langfuse.com/api/public/otel`            |
+| Japan    | `https://jp.cloud.langfuse.com/api/public/otel`            |
+| HIPAA US | `https://hipaa.cloud.langfuse.com/api/public/otel`         |
+
+Langfuse only accepts OTLP/HTTP today — gRPC is not supported.
+
+Auth uses HTTP basic auth with your project keys, base64-encoded:
+
+```elixir
+auth = "Basic " <> Base.encode64("#{public_key}:#{secret_key}")
+
+config :opentelemetry_exporter,
+  otlp_protocol: :http_protobuf,
+  otlp_traces_endpoint: "https://us.cloud.langfuse.com/api/public/otel/v1/traces",
+  otlp_traces_headers: [{"authorization", auth}]
+```
+
+For per-trace user/session attribution, install the OpenTelemetry
+`BaggageSpanProcessor` in your tracer setup so OTel baggage entries like
+`langfuse.user.id` and `langfuse.session.id` are copied onto the spans
+ReqLLM emits. ReqLLM itself does not set them — they're caller context.
+
+For minimum-friction integration, attach with both content and Langfuse:
+
+```elixir
+ReqLLM.OpenTelemetry.attach("req-llm-otel",
+  include_content: true,
+  langfuse: true
+)
+```
+
+Then make calls with raw payload telemetry on:
+
+```elixir
+ReqLLM.generate_text(model, prompt,
+  telemetry: [payloads: :raw, conversation_id: "thread-42"]
+)
+```
+
+Langfuse will then show model, cost (with breakdown), input/output token
+counts, conversation/session ids, and the structured input/output messages
+including tool calls.
+
+[langfuse-otel]: https://langfuse.com/integrations/native/opentelemetry
 
 ReqLLM does not configure an SDK or exporter for you. To export traces, your host
 application still needs normal OpenTelemetry setup, such as `:opentelemetry`
@@ -438,6 +547,9 @@ Pass one of three content modes:
 - `content: :event` — same payload, but bundled into a single
   `gen_ai.client.inference.operation.details` span event instead of attributes
 
+Pass `langfuse: true` to also emit `langfuse.observation.cost_details` (a
+JSON string) on the stop span when ReqLLM has computed a cost breakdown.
+
 Pass `measurements: %{duration: native}` to populate the `metrics` field on
 the returned stub. Records use the same shape and bucket boundaries as the
 auto-bridge:
@@ -459,10 +571,9 @@ Streaming requests also surface `gen_ai.response.time_to_first_chunk` in
 `stub.attributes` when ReqLLM observed a non-empty content chunk during the
 stream.
 
-Both surfaces share the name table in `ReqLLM.OpenTelemetry.SemConv` and the
-content shaper in `ReqLLM.OpenTelemetry.Content`, so provider/operation/output
-values and message/tool layouts stay consistent regardless of which one a
-host integrates with.
+Both surfaces share the same internal name table and content shaper, so
+provider/operation/output values and message/tool layouts stay consistent
+regardless of which one a host integrates with.
 
 ## Coverage Across APIs
 

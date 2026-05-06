@@ -25,6 +25,7 @@ defmodule ReqLLM.OpenTelemetry.Attributes do
     }
     |> Map.merge(request_options(MapAccess.get(metadata, :request_options)))
     |> Map.merge(server(MapAccess.get(metadata, :server)))
+    |> Map.merge(openai_request_extensions(metadata))
     |> compact()
   end
 
@@ -47,6 +48,7 @@ defmodule ReqLLM.OpenTelemetry.Attributes do
       )
     )
     |> Map.merge(embeddings(metadata))
+    |> Map.merge(openai_response_extensions(metadata))
     |> Map.merge(http_error(metadata))
     |> compact()
   end
@@ -178,8 +180,47 @@ defmodule ReqLLM.OpenTelemetry.Attributes do
         token_value(tokens, [:cached_input, :cache_read_input_tokens]),
       "gen_ai.usage.cache_creation.input_tokens" =>
         token_value(tokens, [:cache_creation, :cache_creation_input_tokens]),
-      "gen_ai.usage.reasoning.output_tokens" => reasoning_tokens(usage)
+      "gen_ai.usage.reasoning.output_tokens" => reasoning_tokens(usage),
+      "gen_ai.usage.cost" => total_cost(usage)
     }
+  end
+
+  @doc """
+  Returns the normalized cost breakdown map for `langfuse.observation.cost_details`,
+  or `nil` when no cost info is present. Result is suitable for `Jason.encode!/1`.
+  """
+  @spec cost_breakdown(map()) :: %{optional(String.t()) => number()} | nil
+  def cost_breakdown(metadata) when is_map(metadata) do
+    case MapAccess.get(metadata, :usage) do
+      usage when is_map(usage) -> cost_breakdown_from_usage(usage)
+      _ -> nil
+    end
+  end
+
+  def cost_breakdown(_), do: nil
+
+  defp cost_breakdown_from_usage(usage) do
+    [
+      {"input", MapAccess.get(usage, :input_cost)},
+      {"output", MapAccess.get(usage, :output_cost)},
+      {"reasoning", MapAccess.get(usage, :reasoning_cost)},
+      {"total", total_cost(usage)}
+    ]
+    |> Enum.reduce(%{}, fn
+      {key, value}, acc when is_number(value) -> Map.put(acc, key, value)
+      _, acc -> acc
+    end)
+    |> case do
+      empty when map_size(empty) == 0 -> nil
+      breakdown -> breakdown
+    end
+  end
+
+  defp total_cost(usage) when is_map(usage) do
+    case MapAccess.get(usage, :total_cost) do
+      value when is_number(value) -> value
+      _ -> nil
+    end
   end
 
   defp token_value(tokens, keys) do
@@ -198,8 +239,6 @@ defmodule ReqLLM.OpenTelemetry.Attributes do
         value
     end
   end
-
-  defp reasoning_tokens(_), do: nil
 
   defp response(nil, _model), do: %{}
 
@@ -220,9 +259,14 @@ defmodule ReqLLM.OpenTelemetry.Attributes do
 
   defp response(_, _), do: %{}
 
-  defp present(nil), do: nil
-  defp present(""), do: nil
-  defp present(value), do: value
+  @doc """
+  Returns `nil` for empty strings and `nil`, otherwise returns the value.
+  Used by metric and attribute builders to drop blank-but-present fields.
+  """
+  @spec present(any()) :: any()
+  def present(nil), do: nil
+  def present(""), do: nil
+  def present(value), do: value
 
   defp embeddings(metadata) do
     with :embedding <- MapAccess.get(metadata, :operation),
@@ -230,6 +274,82 @@ defmodule ReqLLM.OpenTelemetry.Attributes do
          dim when is_integer(dim) <- MapAccess.get(summary, :dimensions) do
       %{"gen_ai.embeddings.dimension.count" => dim}
     else
+      _ -> %{}
+    end
+  end
+
+  @openai_providers [:openai, :openai_codex, :azure]
+
+  defp openai_request_extensions(metadata) do
+    if openai_family?(metadata) do
+      service_tier =
+        case MapAccess.get(metadata, :request_options) do
+          options when is_map(options) -> MapAccess.get(options, :service_tier)
+          _ -> nil
+        end
+
+      %{
+        "openai.api.type" => openai_api_type(MapAccess.get(metadata, :server)),
+        "openai.request.service_tier" => service_tier
+      }
+    else
+      %{}
+    end
+  end
+
+  defp openai_response_extensions(metadata) do
+    if openai_family?(metadata) do
+      meta = response_provider_meta(metadata)
+
+      %{
+        "openai.response.service_tier" => present(MapAccess.get(meta, :service_tier)),
+        "openai.response.system_fingerprint" => present(MapAccess.get(meta, :system_fingerprint))
+      }
+    else
+      %{}
+    end
+  end
+
+  defp openai_family?(metadata) do
+    case raw_provider(metadata) do
+      provider when is_atom(provider) -> provider in @openai_providers
+      _ -> false
+    end
+  end
+
+  defp raw_provider(metadata) do
+    case MapAccess.get(metadata, :provider) do
+      nil ->
+        case MapAccess.get(metadata, :model) do
+          %{provider: provider} -> provider
+          _ -> nil
+        end
+
+      provider ->
+        provider
+    end
+  end
+
+  defp openai_api_type(server) when is_map(server) do
+    case MapAccess.get(server, :path) do
+      path when is_binary(path) ->
+        cond do
+          String.contains?(path, "/responses") -> "responses"
+          String.contains?(path, "/chat/completions") -> "chat_completions"
+          true -> nil
+        end
+
+      _ ->
+        nil
+    end
+  end
+
+  defp openai_api_type(_), do: nil
+
+  defp response_provider_meta(metadata) do
+    case MapAccess.get(metadata, :response_payload) do
+      %{provider_meta: meta} when is_map(meta) -> meta
+      %{"provider_meta" => meta} when is_map(meta) -> meta
       _ -> %{}
     end
   end
@@ -272,7 +392,12 @@ defmodule ReqLLM.OpenTelemetry.Attributes do
   defp request_model_for(model) when is_map(model), do: MapAccess.get(model, :id)
   defp request_model_for(_), do: nil
 
-  defp error_type(metadata) do
+  @doc """
+  Resolves a `error.type` string from request metadata. Falls back to
+  `"_OTHER"` when nothing is recognizable.
+  """
+  @spec error_type(map()) :: String.t()
+  def error_type(metadata) do
     case {MapAccess.get(metadata, :error), MapAccess.get(metadata, :http_status)} do
       {%{__struct__: module}, _} when is_atom(module) ->
         inspect(module)

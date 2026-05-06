@@ -228,6 +228,8 @@ defmodule ReqLLM.OpenTelemetry do
   `ReqLLM.Telemetry.OpenTelemetry`.
   """
 
+  require Logger
+
   alias ReqLLM.MapAccess
   alias ReqLLM.OpenTelemetry.{Attributes, Content, Metrics, SemConv}
 
@@ -239,11 +241,15 @@ defmodule ReqLLM.OpenTelemetry do
   @default_handler_id "req-llm-open-telemetry"
   @span_table :req_llm_open_telemetry_spans
   @default_adapter ReqLLM.OpenTelemetry.OTelAdapter
+  @inference_event_name :"gen_ai.client.inference.operation.details"
+
+  @type content_mode :: :none | :attributes | :event
 
   @type attach_opt ::
           {:adapter, module()}
           | {:handler_id, term()}
-          | {:include_content, boolean()}
+          | {:content, content_mode() | boolean()}
+          | {:langfuse, boolean()}
           | {atom(), term()}
 
   @doc """
@@ -262,6 +268,29 @@ defmodule ReqLLM.OpenTelemetry do
 
   @doc """
   Attaches the OpenTelemetry bridge to ReqLLM request lifecycle events.
+
+  Options:
+
+  - `:adapter` — alternate adapter module (defaults to
+    `ReqLLM.OpenTelemetry.OTelAdapter`).
+  - `:content` — content capture mode. `:none` (default) emits no message
+    payloads; `:attributes` promotes `gen_ai.input.messages`,
+    `gen_ai.system_instructions`, `gen_ai.tool.definitions`, and
+    `gen_ai.output.messages` onto the span; `:event` emits the same payload
+    as a single `gen_ai.client.inference.operation.details` span event on
+    the terminal lifecycle event. `true` is accepted as an alias for
+    `:attributes`.
+  - `:langfuse` — when `true`, also adds `langfuse.observation.cost_details`
+    (JSON-encoded breakdown) when ReqLLM has computed a cost.
+
+  Content capture additionally requires `telemetry: [payloads: :raw]` on the
+  call so the request/response payloads are available to map.
+
+  In-flight spans are tracked in a named ETS table keyed by handler id and
+  request id. If a `:start` event is observed but no `:stop`/`:exception`
+  follows (e.g. the calling process crashed before emission), the entry stays
+  in the table until `detach/1` runs. Long-running hosts can call
+  `prune_stale_spans/2` periodically to clear out entries older than a TTL.
   """
   @spec attach(term(), keyword()) :: :ok | {:error, :already_exists | :opentelemetry_unavailable}
   def attach(handler_id \\ @default_handler_id, opts \\ []) do
@@ -285,8 +314,34 @@ defmodule ReqLLM.OpenTelemetry do
   @spec detach(term()) :: :ok
   def detach(handler_id \\ @default_handler_id) do
     ensure_span_table()
-    :ets.match_delete(@span_table, {{handler_id, :_}, :_})
+    :ets.match_delete(@span_table, {{handler_id, :_}, :_, :_})
     :telemetry.detach(handler_id)
+  end
+
+  @doc """
+  Removes in-flight span entries older than `ttl_ms` for `handler_id`.
+
+  Returns the number of entries pruned. Use this from a host-side scheduler
+  (e.g. an `:erlang.send_after/3` loop or a periodic GenServer tick) to
+  contain the ETS table when requests start without a matching stop or
+  exception event.
+  """
+  @spec prune_stale_spans(term(), non_neg_integer()) :: non_neg_integer()
+  def prune_stale_spans(handler_id \\ @default_handler_id, ttl_ms)
+      when is_integer(ttl_ms) and ttl_ms >= 0 do
+    ensure_span_table()
+    cutoff_ms = System.monotonic_time(:millisecond) - ttl_ms
+
+    @span_table
+    |> :ets.match_object({{handler_id, :_}, :_, :_})
+    |> Enum.reduce(0, fn {key, _span, inserted_at_ms}, acc ->
+      if inserted_at_ms <= cutoff_ms do
+        :ets.delete(@span_table, key)
+        acc + 1
+      else
+        acc
+      end
+    end)
   end
 
   @doc """
@@ -310,7 +365,11 @@ defmodule ReqLLM.OpenTelemetry do
         |> atomize()
 
       span = adapter(config).start_span(span_name(metadata), attributes, config)
-      :ets.insert(@span_table, {span_key(config, request_id), span})
+
+      :ets.insert(
+        @span_table,
+        {span_key(config, request_id), span, System.monotonic_time(:millisecond)}
+      )
     end
 
     :ok
@@ -323,9 +382,11 @@ defmodule ReqLLM.OpenTelemetry do
         metadata
         |> Attributes.terminal()
         |> merge_content(metadata, config, :both)
+        |> merge_langfuse(metadata, config)
         |> atomize()
 
       adapter(config).set_attributes(span, attributes, config)
+      maybe_emit_inference_event(span, metadata, config, :both)
 
       case Attributes.error_status(metadata) do
         nil ->
@@ -352,6 +413,7 @@ defmodule ReqLLM.OpenTelemetry do
         |> atomize()
 
       adapter(config).set_attributes(span, attributes, config)
+      maybe_emit_inference_event(span, metadata, config, :request)
 
       adapter(config).add_event(
         span,
@@ -392,10 +454,55 @@ defmodule ReqLLM.OpenTelemetry do
   end
 
   defp merge_content(attributes, metadata, config, scope) do
-    if Keyword.get(config, :include_content, false) do
-      Map.merge(attributes, content_attributes(metadata, scope))
+    case content_mode(config) do
+      :attributes -> Map.merge(attributes, content_attributes(metadata, scope))
+      _ -> attributes
+    end
+  end
+
+  defp maybe_emit_inference_event(span, metadata, config, scope) do
+    with :event <- content_mode(config),
+         payload when map_size(payload) > 0 <- content_attributes(metadata, scope) do
+      adapter(config).add_event(span, @inference_event_name, atomize(payload), config)
+    else
+      _ -> :ok
+    end
+  end
+
+  defp content_mode(config) do
+    case Keyword.get(config, :content, :none) do
+      :attributes -> :attributes
+      :event -> :event
+      :none -> :none
+      true -> :attributes
+      false -> :none
+      _ -> :none
+    end
+  end
+
+  defp merge_langfuse(attributes, metadata, config) do
+    if Keyword.get(config, :langfuse, false) do
+      case Attributes.cost_breakdown(metadata) do
+        %{} = breakdown -> put_langfuse_cost(attributes, breakdown)
+        _ -> attributes
+      end
     else
       attributes
+    end
+  end
+
+  defp put_langfuse_cost(attributes, breakdown) do
+    case Jason.encode(breakdown) do
+      {:ok, json} ->
+        Map.put(attributes, "langfuse.observation.cost_details", json)
+
+      {:error, reason} ->
+        Logger.debug(fn ->
+          "ReqLLM.OpenTelemetry: dropping langfuse.observation.cost_details — " <>
+            "Jason.encode failed: #{inspect(reason)}"
+        end)
+
+        attributes
     end
   end
 
@@ -450,7 +557,7 @@ defmodule ReqLLM.OpenTelemetry do
     key = span_key(config, request_id)
 
     case :ets.lookup(@span_table, key) do
-      [{^key, span}] ->
+      [{^key, span, _inserted_at}] ->
         :ets.delete(@span_table, key)
         {:ok, span}
 

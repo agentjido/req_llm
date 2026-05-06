@@ -145,30 +145,34 @@ Polish + Langfuse-friendly additions.
 
 ### Work
 
-- [ ] Emit `gen_ai.usage.cost` numeric attribute when ReqLLM has computed a
+- [x] Emit `gen_ai.usage.cost` numeric attribute when ReqLLM has computed a
       USD cost.
-- [ ] Optional `langfuse.observation.cost_details` (JSON-encoded breakdown)
+- [x] Optional `langfuse.observation.cost_details` (JSON-encoded breakdown)
       gated behind a `langfuse: true` opt on `attach/2`.
-- [ ] OpenAI provider: emit `openai.api.type` (`chat_completions` |
+- [x] OpenAI provider: emit `openai.api.type` (`chat_completions` |
       `responses`), `openai.request.service_tier`,
       `openai.response.service_tier`, `openai.response.system_fingerprint`.
-- [ ] Update `guides/telemetry.md` with the new attributes / metrics /
+      Path-based detection from the captured `server.path`; covers
+      `:openai`, `:openai_codex`, and `:azure`.
+- [x] Update `guides/telemetry.md` with the new attributes / metrics /
       events and a table of provider/operation enum mappings.
-- [ ] Add a "Sending traces to Langfuse" subsection: OTLP HTTP endpoints
+- [x] Add a "Sending traces to Langfuse" subsection: OTLP HTTP endpoints
       (EU/US/JP/HIPAA), basic-auth header format, recommendation to use
       `BaggageSpanProcessor` for `langfuse.user.id` / `langfuse.session.id`,
       note that gRPC is not supported by Langfuse today.
-- [ ] CHANGELOG entries per phase.
+- [x] CHANGELOG entries per phase.
 - [ ] Smoke test against a real Langfuse cloud project: confirm a generation
       shows model, cost, input/output tokens, conversation id, and
       structured input/output messages with tool calls visible.
+      *(Manual — needs Langfuse credentials.)*
 
 ### How to verify
 
-- [ ] Test asserts `gen_ai.usage.cost` is emitted only when
+- [x] Test asserts `gen_ai.usage.cost` is emitted only when
       `usage.total_cost` is present and non-nil.
-- [ ] OpenAI fixture-replay test asserts service-tier / fingerprint
-      attributes when present in the response body.
+- [x] Test asserts `openai.{api.type,request.service_tier,response.service_tier,
+      response.system_fingerprint}` attributes from synthetic metadata; OpenAI
+      fixture-replay coverage can come later.
 - [ ] `mix docs` renders the new telemetry guide section without warnings.
 - [ ] Manual Langfuse smoke test passes (recorded screenshot in PR).
 

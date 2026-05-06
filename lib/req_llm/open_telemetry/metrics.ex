@@ -237,7 +237,8 @@ defmodule ReqLLM.OpenTelemetry.Metrics do
     end
   end
 
-  defp error_attributes(metadata, base), do: Map.put(base, "error.type", error_type(metadata))
+  defp error_attributes(metadata, base),
+    do: Map.put(base, "error.type", Attributes.error_type(metadata))
 
   defp http_error_type(metadata) do
     case MapAccess.get(metadata, :http_status) do
@@ -246,36 +247,13 @@ defmodule ReqLLM.OpenTelemetry.Metrics do
     end
   end
 
-  defp error_type(metadata) do
-    case {MapAccess.get(metadata, :error), MapAccess.get(metadata, :http_status)} do
-      {%{__struct__: module}, _} when is_atom(module) ->
-        inspect(module)
-
-      {error, _} when is_atom(error) and not is_nil(error) ->
-        Atom.to_string(error)
-
-      {{kind, _reason}, _} when is_atom(kind) ->
-        Atom.to_string(kind)
-
-      {_, status} when is_integer(status) ->
-        Integer.to_string(status)
-
-      _ ->
-        "_OTHER"
-    end
-  end
-
   defp response_model(metadata) do
     case MapAccess.get(metadata, :response_payload) do
       %ReqLLM.Response{model: model} when is_binary(model) and model != "" -> model
-      payload when is_map(payload) -> present(MapAccess.get(payload, :model))
+      payload when is_map(payload) -> Attributes.present(MapAccess.get(payload, :model))
       _ -> nil
     end
   end
-
-  defp present(nil), do: nil
-  defp present(""), do: nil
-  defp present(value), do: value
 
   defp to_seconds(nil), do: nil
   defp to_seconds(0), do: 0.0
