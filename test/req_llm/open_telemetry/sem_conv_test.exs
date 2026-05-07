@@ -16,6 +16,10 @@ defmodule ReqLLM.OpenTelemetry.SemConvTest do
       assert SemConv.provider_name(:deepseek) == "deepseek"
     end
 
+    test "maps :openai_codex to openai (same provider, different model line)" do
+      assert SemConv.provider_name(:openai_codex) == "openai"
+    end
+
     test "stringifies non-spec providers" do
       assert SemConv.provider_name(:openrouter) == "openrouter"
       assert SemConv.provider_name(:cerebras) == "cerebras"

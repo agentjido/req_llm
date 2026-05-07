@@ -228,10 +228,8 @@ defmodule ReqLLM.OpenTelemetry do
   `ReqLLM.Telemetry.OpenTelemetry`.
   """
 
-  require Logger
-
   alias ReqLLM.MapAccess
-  alias ReqLLM.OpenTelemetry.{Attributes, Content, Metrics, SemConv}
+  alias ReqLLM.OpenTelemetry.{Attributes, Content, Metrics, SemConv, Shared}
 
   @events [
     [:req_llm, :request, :start],
@@ -382,7 +380,7 @@ defmodule ReqLLM.OpenTelemetry do
         metadata
         |> Attributes.terminal()
         |> merge_content(metadata, config, :both)
-        |> merge_langfuse(metadata, config)
+        |> Shared.merge_langfuse(metadata, config)
         |> atomize()
 
       adapter(config).set_attributes(span, attributes, config)
@@ -425,7 +423,7 @@ defmodule ReqLLM.OpenTelemetry do
       adapter(config).set_status(
         span,
         :error,
-        exception_message(MapAccess.get(metadata, :error)),
+        Shared.error_message(MapAccess.get(metadata, :error)),
         config
       )
 
@@ -454,55 +452,18 @@ defmodule ReqLLM.OpenTelemetry do
   end
 
   defp merge_content(attributes, metadata, config, scope) do
-    case content_mode(config) do
+    case Shared.content_mode(config) do
       :attributes -> Map.merge(attributes, content_attributes(metadata, scope))
       _ -> attributes
     end
   end
 
   defp maybe_emit_inference_event(span, metadata, config, scope) do
-    with :event <- content_mode(config),
+    with :event <- Shared.content_mode(config),
          payload when map_size(payload) > 0 <- content_attributes(metadata, scope) do
       adapter(config).add_event(span, @inference_event_name, atomize(payload), config)
     else
       _ -> :ok
-    end
-  end
-
-  defp content_mode(config) do
-    case Keyword.get(config, :content, :none) do
-      :attributes -> :attributes
-      :event -> :event
-      :none -> :none
-      true -> :attributes
-      false -> :none
-      _ -> :none
-    end
-  end
-
-  defp merge_langfuse(attributes, metadata, config) do
-    if Keyword.get(config, :langfuse, false) do
-      case Attributes.cost_breakdown(metadata) do
-        %{} = breakdown -> put_langfuse_cost(attributes, breakdown)
-        _ -> attributes
-      end
-    else
-      attributes
-    end
-  end
-
-  defp put_langfuse_cost(attributes, breakdown) do
-    case Jason.encode(breakdown) do
-      {:ok, json} ->
-        Map.put(attributes, "langfuse.observation.cost_details", json)
-
-      {:error, reason} ->
-        Logger.debug(fn ->
-          "ReqLLM.OpenTelemetry: dropping langfuse.observation.cost_details — " <>
-            "Jason.encode failed: #{inspect(reason)}"
-        end)
-
-        attributes
     end
   end
 
@@ -576,8 +537,4 @@ defmodule ReqLLM.OpenTelemetry do
     do: Map.get(model, :id)
 
   defp request_model(_), do: nil
-
-  defp exception_message(nil), do: nil
-  defp exception_message(%{__struct__: _} = error), do: Exception.message(error)
-  defp exception_message(error), do: inspect(error)
 end

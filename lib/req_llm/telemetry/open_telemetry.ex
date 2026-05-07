@@ -30,10 +30,8 @@ defmodule ReqLLM.Telemetry.OpenTelemetry do
   intentionally omitted from `gen_ai.input.messages` / `gen_ai.output.messages`.
   """
 
-  require Logger
-
   alias ReqLLM.MapAccess
-  alias ReqLLM.OpenTelemetry.{Attributes, Content, Metrics, SemConv}
+  alias ReqLLM.OpenTelemetry.{Attributes, Content, Metrics, SemConv, Shared}
 
   @type content_mode :: :none | :attributes | :event
   @type span_status :: :ok | {:error, String.t()}
@@ -61,7 +59,7 @@ defmodule ReqLLM.Telemetry.OpenTelemetry do
   """
   @spec request_start(map(), keyword()) :: request_start_stub()
   def request_start(metadata, opts \\ []) when is_map(metadata) do
-    mode = content_mode(opts)
+    mode = Shared.content_mode(opts)
     request_content = Content.request_attributes(metadata)
 
     %{
@@ -85,7 +83,7 @@ defmodule ReqLLM.Telemetry.OpenTelemetry do
   """
   @spec request_stop(map(), keyword()) :: request_terminal_stub()
   def request_stop(metadata, opts \\ []) when is_map(metadata) do
-    mode = content_mode(opts)
+    mode = Shared.content_mode(opts)
     measurements = measurements(opts)
 
     content_payload =
@@ -97,7 +95,7 @@ defmodule ReqLLM.Telemetry.OpenTelemetry do
         |> Attributes.start()
         |> Map.merge(Attributes.terminal(metadata))
         |> merge_when(mode == :attributes, content_payload)
-        |> merge_langfuse(metadata, opts),
+        |> Shared.merge_langfuse(metadata, opts),
       status: span_status(metadata),
       events: maybe_inference_event(mode, content_payload),
       metrics: Metrics.stop(metadata, MapAccess.get(measurements, :duration))
@@ -109,7 +107,7 @@ defmodule ReqLLM.Telemetry.OpenTelemetry do
   """
   @spec request_exception(map(), keyword()) :: request_terminal_stub()
   def request_exception(metadata, opts \\ []) when is_map(metadata) do
-    mode = content_mode(opts)
+    mode = Shared.content_mode(opts)
     measurements = measurements(opts)
     request_content = Content.request_attributes(metadata)
 
@@ -132,15 +130,6 @@ defmodule ReqLLM.Telemetry.OpenTelemetry do
     )
   end
 
-  defp content_mode(opts) do
-    case Keyword.get(opts, :content, :none) do
-      :attributes -> :attributes
-      :event -> :event
-      true -> :attributes
-      _ -> :none
-    end
-  end
-
   defp measurements(opts) do
     case Keyword.get(opts, :measurements) do
       map when is_map(map) -> map
@@ -150,32 +139,6 @@ defmodule ReqLLM.Telemetry.OpenTelemetry do
 
   defp merge_when(map, true, addition), do: Map.merge(map, addition)
   defp merge_when(map, false, _addition), do: map
-
-  defp merge_langfuse(attributes, metadata, opts) do
-    if Keyword.get(opts, :langfuse, false) do
-      case Attributes.cost_breakdown(metadata) do
-        %{} = breakdown -> put_langfuse_cost(attributes, breakdown)
-        _ -> attributes
-      end
-    else
-      attributes
-    end
-  end
-
-  defp put_langfuse_cost(attributes, breakdown) do
-    case Jason.encode(breakdown) do
-      {:ok, json} ->
-        Map.put(attributes, "langfuse.observation.cost_details", json)
-
-      {:error, reason} ->
-        Logger.debug(fn ->
-          "ReqLLM.Telemetry.OpenTelemetry: dropping langfuse.observation.cost_details — " <>
-            "Jason.encode failed: #{inspect(reason)}"
-        end)
-
-        attributes
-    end
-  end
 
   defp maybe_inference_event(:event, payload) when map_size(payload) > 0 do
     [%{name: @inference_event_name, attributes: payload}]
@@ -193,7 +156,7 @@ defmodule ReqLLM.Telemetry.OpenTelemetry do
 
     cond do
       not is_nil(error) ->
-        {:error, error_message(error)}
+        {:error, Shared.error_message(error)}
 
       is_integer(http_status) and http_status >= 400 ->
         {:error, "HTTP #{http_status}"}
@@ -212,9 +175,4 @@ defmodule ReqLLM.Telemetry.OpenTelemetry do
       _error -> [%{name: "exception", attributes: Attributes.exception_event(metadata)}]
     end
   end
-
-  defp error_message(%{__exception__: true} = error), do: Exception.message(error)
-  defp error_message(error) when is_binary(error), do: error
-  defp error_message(error) when is_atom(error), do: Atom.to_string(error)
-  defp error_message(error), do: inspect(error)
 end

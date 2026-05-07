@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Behavioural changes (OpenTelemetry):
+
+The OpenTelemetry bridge now follows the GenAI semantic conventions verbatim. The values below changed from previous stringified-atom output to spec enums. Downstream OTel dashboards or alerts that filtered on the old values need to be updated.
+
+* `gen_ai.provider.name`: `:amazon_bedrock` → `aws.bedrock`, `:azure` → `azure.ai.openai`, `:google` → `gcp.gen_ai`, `:google_vertex` → `gcp.vertex_ai`, `:xai` → `x_ai`, `:openai_codex` → `openai` (was `openai_codex`). Other providers continue to stringify their atom name.
+* `gen_ai.operation.name`: `:embedding` → `embeddings` (plural, per spec).
+* `error.type` is now also set on `:stop` spans when `http_status >= 400` (previously only on `:exception` spans).
+
 ### Features:
 
 * opentelemetry: full conformance with the [GenAI semantic conventions][otel-gen-ai] across the auto-bridge (`ReqLLM.OpenTelemetry`) and dependency-free mapper (`ReqLLM.Telemetry.OpenTelemetry`). Spans now carry `gen_ai.request.{temperature,top_p,top_k,max_tokens,frequency_penalty,presence_penalty,stop_sequences,seed,choice.count,stream,encoding_formats}`, `gen_ai.conversation.id`, `server.address`/`server.port`, `gen_ai.usage.reasoning.output_tokens`, and `gen_ai.embeddings.dimension.count`. Provider names are normalized to spec enums (`anthropic`, `openai`, `azure.ai.openai`, `aws.bedrock`, `gcp.gen_ai`, `gcp.vertex_ai`, `groq`, `x_ai`, `deepseek`).

@@ -219,6 +219,10 @@ defmodule ReqLLM.Telemetry do
     %{context | first_chunk_at: System.monotonic_time()}
   end
 
+  defp maybe_mark_first_chunk(context, %ReqLLM.StreamChunk{type: :tool_call}) do
+    %{context | first_chunk_at: System.monotonic_time()}
+  end
+
   defp maybe_mark_first_chunk(context, _chunk), do: context
 
   @doc """

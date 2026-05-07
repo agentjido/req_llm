@@ -646,6 +646,19 @@ defmodule ReqLLM.TelemetryOpenTelemetryTest do
       assert stub.attributes["openai.api.type"] == "responses"
     end
 
+    test "infers openai.api.type=embeddings from /embeddings path" do
+      metadata = %{
+        operation: :embedding,
+        provider: :openai,
+        model: %LLMDB.Model{provider: :openai, id: "text-embedding-3-small"},
+        server: %{address: "api.openai.com", port: 443, path: "/v1/embeddings"}
+      }
+
+      stub = OpenTelemetry.request_start(metadata)
+
+      assert stub.attributes["openai.api.type"] == "embeddings"
+    end
+
     test "emits openai.response.{service_tier,system_fingerprint} from response payload provider_meta" do
       metadata = %{
         operation: :chat,

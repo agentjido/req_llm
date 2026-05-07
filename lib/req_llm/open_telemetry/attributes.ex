@@ -336,6 +336,7 @@ defmodule ReqLLM.OpenTelemetry.Attributes do
         cond do
           String.contains?(path, "/responses") -> "responses"
           String.contains?(path, "/chat/completions") -> "chat_completions"
+          String.contains?(path, "/embeddings") -> "embeddings"
           true -> nil
         end
 

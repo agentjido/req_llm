@@ -657,6 +657,16 @@ defmodule ReqLLM.TelemetryTest do
       assert is_integer(context.first_chunk_at)
     end
 
+    test "stamps first_chunk_at on the first tool_call chunk (tool-only responses)" do
+      context =
+        streaming_context()
+        |> ReqLLM.Telemetry.observe_stream_chunk(
+          ReqLLM.StreamChunk.tool_call("get_weather", %{"city" => "Berlin"}, %{id: "call_1"})
+        )
+
+      assert is_integer(context.first_chunk_at)
+    end
+
     test "does not stamp on empty content chunks" do
       context =
         streaming_context()

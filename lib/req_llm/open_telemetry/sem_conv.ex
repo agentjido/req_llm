@@ -10,6 +10,7 @@ defmodule ReqLLM.OpenTelemetry.SemConv do
     google_vertex: "gcp.vertex_ai",
     groq: "groq",
     openai: "openai",
+    openai_codex: "openai",
     xai: "x_ai"
   }
 
