@@ -1,5 +1,24 @@
 defmodule ReqLLM.OpenTelemetry.SemConv do
-  @moduledoc false
+  @moduledoc """
+  Spec name tables for the OpenTelemetry GenAI semantic conventions —
+  `gen_ai.provider.name`, `gen_ai.operation.name`, `gen_ai.output.type`,
+  and the canonical span name.
+
+  Shared between `ReqLLM.OpenTelemetry` and `ReqLLM.Telemetry.OpenTelemetry`
+  so they translate ReqLLM atoms to spec enum values identically.
+
+      iex> ReqLLM.OpenTelemetry.SemConv.provider_name(:amazon_bedrock)
+      "aws.bedrock"
+
+      iex> ReqLLM.OpenTelemetry.SemConv.operation_name(:embedding)
+      "embeddings"
+
+      iex> ReqLLM.OpenTelemetry.SemConv.span_name(:chat, "gpt-5")
+      "chat gpt-5"
+
+  Providers and operations not covered by the spec stringify their atom name
+  unchanged.
+  """
 
   @provider_names %{
     amazon_bedrock: "aws.bedrock",

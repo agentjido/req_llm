@@ -1,5 +1,32 @@
 defmodule ReqLLM.OpenTelemetry.Attributes do
-  @moduledoc false
+  @moduledoc """
+  Builds the scalar `gen_ai.*` / `server.*` / `error.*` attribute maps
+  emitted on GenAI client spans, from ReqLLM request lifecycle metadata.
+
+  Shared between the live bridge (`ReqLLM.OpenTelemetry`) and the
+  dependency-free mapper (`ReqLLM.Telemetry.OpenTelemetry`) so both emit
+  identical payloads. See `ReqLLM.OpenTelemetry` for the end-to-end flow.
+
+  `start/1` runs on `[:req_llm, :request, :start]` and returns roughly:
+
+      %{
+        "gen_ai.provider.name" => "openai",
+        "gen_ai.operation.name" => "chat",
+        "gen_ai.request.model" => "gpt-5",
+        "gen_ai.request.temperature" => 0.7,
+        "server.address" => "api.openai.com",
+        "server.port" => 443,
+        "req_llm.request_id" => "2184"
+      }
+
+  `terminal/1` is merged on top at `:stop` (response id, finish reasons,
+  usage, embedding dims, OpenAI extension fields, streaming TTFC).
+  `exception/1` and `exception_event/1` cover the error path.
+
+  Keys are binary spec names; the live bridge atomizes them at the adapter
+  boundary. `nil` and empty-list values are dropped so OTel backends never
+  see blank-but-present attributes.
+  """
 
   alias ReqLLM.MapAccess
   alias ReqLLM.OpenTelemetry.SemConv

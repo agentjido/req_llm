@@ -1,5 +1,26 @@
 defmodule ReqLLM.OpenTelemetry.Shared do
-  @moduledoc false
+  @moduledoc """
+  Cross-cutting helpers shared by `ReqLLM.OpenTelemetry` and
+  `ReqLLM.Telemetry.OpenTelemetry` — option parsing, Langfuse cost-details
+  merging, error rendering.
+
+  Both surfaces accept the same `:content` and `:langfuse` options and need
+  to render error values the same way. This module is where that small but
+  easy-to-drift logic lives.
+
+  `content_mode/1` resolves the user-facing option to a canonical mode:
+
+      content_mode(content: :attributes)  #=> :attributes
+      content_mode(content: true)         #=> :attributes
+      content_mode(content: :event)       #=> :event
+      content_mode([])                    #=> :none
+
+  `merge_langfuse/3` adds `"langfuse.observation.cost_details"` (a
+  JSON-encoded `input`/`output`/`reasoning`/`total` breakdown) to an
+  attribute map when `langfuse: true` is set and ReqLLM has cost data. If
+  encoding fails it logs at debug and drops the attribute rather than
+  raising — span emission keeps working.
+  """
 
   require Logger
 

@@ -500,10 +500,10 @@ config :opentelemetry_exporter,
   otlp_traces_headers: [{"authorization", auth}]
 ```
 
-For per-trace user/session attribution, install the OpenTelemetry
-`BaggageSpanProcessor` in your tracer setup so OTel baggage entries like
-`langfuse.user.id` and `langfuse.session.id` are copied onto the spans
-ReqLLM emits. ReqLLM itself does not set them — they're caller context.
+For per-trace user/session attribution (`langfuse.user.id`,
+`langfuse.session.id`, `langfuse.tags`, …), see
+[Adding caller-context attributes](#adding-caller-context-attributes)
+below. ReqLLM itself does not set them — they're caller context.
 
 For minimum-friction integration, attach with both content and Langfuse:
 
@@ -531,6 +531,111 @@ including tool calls.
 ReqLLM does not configure an SDK or exporter for you. To export traces, your host
 application still needs normal OpenTelemetry setup, such as `:opentelemetry`
 and an exporter dependency.
+
+#### Adding caller-context attributes
+
+`langfuse.user.id`, `langfuse.session.id`, and similar caller-context
+attributes are not set by ReqLLM. Three patterns to add them:
+
+##### Option 1 — Wrap the call in a parent span (recommended)
+
+Set the attributes on a span you already control; ReqLLM's client span
+becomes a child, and Langfuse picks them up at the trace root:
+
+```elixir
+require OpenTelemetry.Tracer, as: Tracer
+
+Tracer.with_span "chat.handle_message" do
+  Tracer.set_attributes([
+    {"langfuse.user.id", current_user.id},
+    {"langfuse.session.id", session_id}
+  ])
+
+  ReqLLM.generate_text(model, prompt, telemetry: [conversation_id: session_id])
+end
+```
+
+##### Option 2 — Baggage with a copy-on-start span processor
+
+For attributes that should flow across many call sites, set OTel baggage
+and register a span processor that copies it onto every span:
+
+```elixir
+OpenTelemetry.Baggage.set(%{"langfuse.user.id" => user.id})
+ReqLLM.generate_text(model, prompt)
+```
+
+The Erlang OpenTelemetry SDK does **not** ship a `BaggageSpanProcessor`
+out of the box. You can either pull a community implementation from
+hex or write a small `:otel_span_processor` that copies baggage onto
+every span on start. The skeleton is roughly:
+
+```elixir
+defmodule MyApp.BaggageSpanProcessor do
+  @behaviour :otel_span_processor
+
+  @impl true
+  def processor_init(_resource, config), do: {:ok, config}
+
+  @impl true
+  def on_start(ctx, span, _config) do
+    attrs =
+      for {key, {value, _meta}} <- :otel_baggage.get_all(ctx), into: %{} do
+        {key, value}
+      end
+
+    if map_size(attrs) > 0, do: :otel_span.set_attributes(span, attrs)
+    span
+  end
+
+  @impl true
+  def on_end(_span, _config), do: true
+
+  @impl true
+  def force_flush(_config), do: :ok
+end
+```
+
+Register it in `config.exs` ahead of your batch processor.
+
+##### Option 3 — Custom adapter
+
+To inject attributes only on ReqLLM client spans (e.g. from
+`Process.get/1` or a `Plug.Conn` assign), wrap `OTelAdapter` and pass
+your module via the `:adapter` option to `attach/2`:
+
+```elixir
+defmodule MyApp.ReqLLMAdapter do
+  @behaviour ReqLLM.OpenTelemetry.Adapter
+
+  defdelegate available?(), to: ReqLLM.OpenTelemetry.OTelAdapter
+  defdelegate metrics_available?(), to: ReqLLM.OpenTelemetry.OTelAdapter
+  defdelegate set_attributes(s, a, c), to: ReqLLM.OpenTelemetry.OTelAdapter
+  defdelegate add_event(s, n, a, c), to: ReqLLM.OpenTelemetry.OTelAdapter
+  defdelegate set_status(s, k, m, c), to: ReqLLM.OpenTelemetry.OTelAdapter
+  defdelegate end_span(s, c), to: ReqLLM.OpenTelemetry.OTelAdapter
+  defdelegate record_histogram(r, c), to: ReqLLM.OpenTelemetry.OTelAdapter
+
+  def start_span(name, attrs, config) do
+    extras = %{"langfuse.user.id" => Process.get(:current_user_id)}
+    ReqLLM.OpenTelemetry.OTelAdapter.start_span(name, Map.merge(attrs, extras), config)
+  end
+end
+
+ReqLLM.OpenTelemetry.attach("req-llm-otel", adapter: MyApp.ReqLLMAdapter)
+```
+
+Required callbacks: `available?/0`, `start_span/3`, `set_attributes/3`,
+`add_event/4`, `set_status/4`, `end_span/2`. Optional (metrics only):
+`metrics_available?/0`, `record_histogram/2`.
+
+##### Picking an option
+
+| Use case | Option |
+|----------|--------|
+| Request handler with logged-in user | 1 |
+| Cross-process fan-out, async jobs | 2 |
+| Pattern you can't easily move into baggage | 3 |
 
 For advanced integrations, ReqLLM also exposes a dependency-free mapper in
 `ReqLLM.Telemetry.OpenTelemetry`. It builds span stubs from ReqLLM telemetry

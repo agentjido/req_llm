@@ -7,29 +7,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Behavioural changes (OpenTelemetry):
-
-The OpenTelemetry bridge now follows the GenAI semantic conventions verbatim. The values below changed from previous stringified-atom output to spec enums. Downstream OTel dashboards or alerts that filtered on the old values need to be updated.
-
-* `gen_ai.provider.name`: `:amazon_bedrock` → `aws.bedrock`, `:azure` → `azure.ai.openai`, `:google` → `gcp.gen_ai`, `:google_vertex` → `gcp.vertex_ai`, `:xai` → `x_ai`, `:openai_codex` → `openai` (was `openai_codex`). Other providers continue to stringify their atom name.
-* `gen_ai.operation.name`: `:embedding` → `embeddings` (plural, per spec).
-* `error.type` is now also set on `:stop` spans when `http_status >= 400` (previously only on `:exception` spans).
-
-### Features:
-
-* opentelemetry: full conformance with the [GenAI semantic conventions][otel-gen-ai] across the auto-bridge (`ReqLLM.OpenTelemetry`) and dependency-free mapper (`ReqLLM.Telemetry.OpenTelemetry`). Spans now carry `gen_ai.request.{temperature,top_p,top_k,max_tokens,frequency_penalty,presence_penalty,stop_sequences,seed,choice.count,stream,encoding_formats}`, `gen_ai.conversation.id`, `server.address`/`server.port`, `gen_ai.usage.reasoning.output_tokens`, and `gen_ai.embeddings.dimension.count`. Provider names are normalized to spec enums (`anthropic`, `openai`, `azure.ai.openai`, `aws.bedrock`, `gcp.gen_ai`, `gcp.vertex_ai`, `groq`, `x_ai`, `deepseek`).
-
-* opentelemetry: opt-in content capture with `content: :none | :attributes | :event` on both the auto-bridge (`attach/2`) and the dependency-free mapper. Emits `gen_ai.input.messages`, `gen_ai.system_instructions`, `gen_ai.tool.definitions`, and `gen_ai.output.messages` as span attributes, or bundles them into a single `gen_ai.client.inference.operation.details` span event in `:event` mode. Reasoning text stays redacted in every mode.
-
-* opentelemetry: GenAI client metrics — `gen_ai.client.operation.duration`, `gen_ai.client.token.usage`, `gen_ai.client.operation.time_to_first_chunk`, and `gen_ai.client.operation.time_per_output_chunk` — recorded with spec bucket boundaries when an OTel meter provider is available. Streaming requests also surface `gen_ai.response.time_to_first_chunk` as a span attribute.
-
-* opentelemetry: cost capture (`gen_ai.usage.cost`) on the stop span whenever ReqLLM has a USD total. Pass `langfuse: true` to `attach/2` (or to the mapper) to also emit `langfuse.observation.cost_details` (JSON-encoded `input`/`output`/`reasoning`/`total` breakdown) for native [Langfuse OpenTelemetry][langfuse-otel] ingestion.
-
-* opentelemetry: OpenAI-family extension attributes (`openai.api.type`, `openai.request.service_tier`, `openai.response.service_tier`, `openai.response.system_fingerprint`) emitted for `:openai`, `:openai_codex`, and `:azure` providers when the request URL or response payload exposes them.
-
-[otel-gen-ai]: https://opentelemetry.io/docs/specs/semconv/gen-ai/
-[langfuse-otel]: https://langfuse.com/integrations/native/opentelemetry
-
 <!-- changelog -->
 
 ## [v1.11.0](https://github.com/agentjido/req_llm/compare/v1.10.0...v1.11.0) (2026-05-01)

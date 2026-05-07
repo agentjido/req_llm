@@ -1,5 +1,58 @@
 defmodule ReqLLM.OpenTelemetry.Metrics do
-  @moduledoc false
+  @moduledoc """
+  Builds histogram records for the four OpenTelemetry GenAI client metrics:
+  `gen_ai.client.operation.duration`, `gen_ai.client.token.usage`,
+  `gen_ai.client.operation.time_to_first_chunk`, and
+  `gen_ai.client.operation.time_per_output_chunk`.
+
+  Shared between `ReqLLM.OpenTelemetry` (which feeds them to an OTel meter)
+  and `ReqLLM.Telemetry.OpenTelemetry` (which returns them in the span stub).
+
+  `stop/2` returns a list of records like:
+
+      %{
+        name: "gen_ai.client.operation.duration",
+        value: 0.412,
+        unit: "s",
+        description: "GenAI operation duration.",
+        boundaries: [0.01, 0.02, 0.04, ...],
+        attributes: %{
+          "gen_ai.operation.name" => "chat",
+          "gen_ai.provider.name" => "openai",
+          "gen_ai.request.model" => "gpt-5",
+          "gen_ai.response.model" => "gpt-5-2025-04-01",
+          "server.address" => "api.openai.com",
+          "server.port" => 443
+        }
+      }
+
+  TTFC and TPOC records are only emitted for `mode: :stream` requests that
+  observed at least one non-empty content chunk. Token histograms emit on
+  `:stop` only; `exception/2` emits the duration record with `error.type`
+  populated so failures stay visible in latency charts.
+
+  ## Bucket boundaries
+
+  The bucket boundaries on each record (`@duration_boundaries`,
+  `@token_boundaries`) are mandated by the OpenTelemetry GenAI metrics
+  spec, not chosen by ReqLLM. Backends like Prometheus need fixed
+  boundaries baked into the instrument at creation time, and the spec
+  defines them up-front so different GenAI clients produce histograms a
+  dashboard can compare apples-to-apples.
+
+  The two scales reflect what LLM workloads actually look like:
+
+    * **Durations** double from 10 ms up to ~82 s
+      (`[0.01, 0.02, 0.04, …, 81.92]`) — short embeddings calls and long
+      reasoning streams both fit in the same histogram with useful
+      resolution.
+    * **Token counts** quadruple from 1 up to ~67 M
+      (`[1, 4, 16, …, 67_108_864]`) — single-token completions and
+      multi-million-token context windows both stay on-scale.
+
+  Exposed via `duration_boundaries/0` and `token_boundaries/0` for hosts
+  that wire up custom histogram instruments themselves.
+  """
 
   alias ReqLLM.MapAccess
   alias ReqLLM.OpenTelemetry.{Attributes, SemConv}

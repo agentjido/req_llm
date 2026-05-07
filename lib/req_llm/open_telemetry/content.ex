@@ -1,5 +1,33 @@
 defmodule ReqLLM.OpenTelemetry.Content do
-  @moduledoc false
+  @moduledoc """
+  Shapes ReqLLM request and response payloads into the GenAI content
+  attributes — `gen_ai.input.messages`, `gen_ai.system_instructions`,
+  `gen_ai.tool.definitions`, `gen_ai.output.messages`.
+
+  Used by both `ReqLLM.OpenTelemetry` and `ReqLLM.Telemetry.OpenTelemetry`
+  when content capture is opted in (`content: :attributes` or `:event` —
+  default is `:none`). The caller must also have raw payload telemetry on
+  (`telemetry: [payloads: :raw]`) for the request payload to be available.
+
+  `request_attributes/1` returns roughly:
+
+      %{
+        "gen_ai.system_instructions" => [
+          %{"type" => "text", "content" => "You are a helpful assistant."}
+        ],
+        "gen_ai.input.messages" => [
+          %{"role" => "user", "parts" => [%{"type" => "text", "content" => "Hi"}]}
+        ],
+        "gen_ai.tool.definitions" => [
+          %{"type" => "function", "name" => "get_weather", "parameters" => %{...}}
+        ]
+      }
+
+  Reasoning text is excluded in every mode — ReqLLM's payload sanitizer
+  redacts it before this module sees the messages, and content parts are
+  filtered to spec-friendly types (`text`, `image`, `image_url`,
+  `video_url`, `file`) so thinking output cannot leak through.
+  """
 
   alias ReqLLM.{MapAccess, Message, Response, ToolCall, ToolResult}
   alias ReqLLM.Message.ContentPart
