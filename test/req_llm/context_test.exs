@@ -1139,6 +1139,34 @@ defmodule ReqLLM.ContextTest do
       assert hd(message.content).media_type == "application/pdf"
     end
 
+    test "normalizes OpenRouter file_data content maps" do
+      pdf_data = "%PDF test"
+
+      input = [
+        %{
+          "role" => "user",
+          "content" => [
+            %{
+              "type" => "file",
+              "file" => %{
+                "filename" => "document.pdf",
+                "file_data" => "data:application/pdf;base64,#{Base.encode64(pdf_data)}"
+              }
+            }
+          ]
+        }
+      ]
+
+      {:ok, context} = Context.normalize(input, validate: false)
+
+      [message] = context.messages
+
+      assert [%ContentPart{type: :file, data: ^pdf_data, filename: "document.pdf"}] =
+               message.content
+
+      assert hd(message.content).media_type == "application/pdf"
+    end
+
     test "normalizes Anthropic image file source content maps" do
       input = [
         %{
