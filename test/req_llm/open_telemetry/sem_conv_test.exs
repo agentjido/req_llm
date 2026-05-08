@@ -56,12 +56,13 @@ defmodule ReqLLM.OpenTelemetry.SemConvTest do
       assert SemConv.output_type(:chat) == "text"
       assert SemConv.output_type(:object) == "json"
       assert SemConv.output_type(:image) == "image"
+      assert SemConv.output_type(:embedding) == "embedding"
       assert SemConv.output_type(:speech) == "speech"
       assert SemConv.output_type(:transcription) == "text"
     end
 
     test "returns nil for unknown operations" do
-      assert SemConv.output_type(:embedding) == nil
+      assert SemConv.output_type(:custom_op) == nil
       assert SemConv.output_type(nil) == nil
     end
   end

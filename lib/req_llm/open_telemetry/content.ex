@@ -9,17 +9,21 @@ defmodule ReqLLM.OpenTelemetry.Content do
   default is `:none`). The caller must also have raw payload telemetry on
   (`telemetry: [payloads: :raw]`) for the request payload to be available.
 
-  `request_attributes/1` returns roughly:
+  Each entry is JSON-encoded before being returned, so attribute values
+  are `[String.t()]` (an array of primitives — what the OpenTelemetry
+  attribute spec accepts and what GenAI-aware backends like Langfuse,
+  Honeycomb, and Grafana decode for display). `request_attributes/1`
+  returns roughly:
 
       %{
         "gen_ai.system_instructions" => [
-          %{"type" => "text", "content" => "You are a helpful assistant."}
+          ~s({"type":"text","content":"You are a helpful assistant."})
         ],
         "gen_ai.input.messages" => [
-          %{"role" => "user", "parts" => [%{"type" => "text", "content" => "Hi"}]}
+          ~s({"role":"user","parts":[{"type":"text","content":"Hi"}]})
         ],
         "gen_ai.tool.definitions" => [
-          %{"type" => "function", "name" => "get_weather", "parameters" => %{...}}
+          ~s({"type":"function","name":"get_weather","parameters":{...}})
         ]
       }
 
@@ -34,34 +38,42 @@ defmodule ReqLLM.OpenTelemetry.Content do
 
   @doc """
   Returns the input-message list for `gen_ai.input.messages`, excluding any
-  system messages (which are exposed via `system_instructions/1`).
+  system messages (which are exposed via `system_instructions/1`). Each
+  message is JSON-encoded so the result is a primitive-array attribute
+  value.
   """
-  @spec input_messages(map()) :: [map()]
+  @spec input_messages(map()) :: [String.t()]
   def input_messages(metadata) do
     metadata
     |> request_messages()
     |> Enum.reject(&system_message?/1)
     |> Enum.map(&message_to_otel/1)
     |> Enum.reject(&is_nil/1)
+    |> Enum.map(&Jason.encode!/1)
   end
 
   @doc """
   Returns the `gen_ai.system_instructions` part list extracted from system
   messages in the request payload. Reasoning text is intentionally excluded.
+  Each part is JSON-encoded so the result is a primitive-array attribute
+  value.
   """
-  @spec system_instructions(map()) :: [map()]
+  @spec system_instructions(map()) :: [String.t()]
   def system_instructions(metadata) do
     metadata
     |> request_messages()
     |> Enum.filter(&system_message?/1)
     |> Enum.flat_map(&system_message_parts/1)
+    |> Enum.map(&Jason.encode!/1)
   end
 
   @doc """
   Returns tool definitions for `gen_ai.tool.definitions` from the request
-  payload. The shape is `[%{"type" => "function", "name" => ..., ...}, ...]`.
+  payload. Each tool is JSON-encoded so the result is a primitive-array
+  attribute value (entries decode to
+  `%{"type" => "function", "name" => ..., ...}`).
   """
-  @spec tool_definitions(map()) :: [map()]
+  @spec tool_definitions(map()) :: [String.t()]
   def tool_definitions(metadata) do
     metadata
     |> MapAccess.get(:request_payload)
@@ -69,12 +81,15 @@ defmodule ReqLLM.OpenTelemetry.Content do
     |> List.wrap()
     |> Enum.map(&tool_to_otel/1)
     |> Enum.reject(&is_nil/1)
+    |> Enum.map(&Jason.encode!/1)
   end
 
   @doc """
-  Returns the response message list for `gen_ai.output.messages`.
+  Returns the response message list for `gen_ai.output.messages`. Each
+  message is JSON-encoded so the result is a primitive-array attribute
+  value.
   """
-  @spec output_messages(map()) :: [map()]
+  @spec output_messages(map()) :: [String.t()]
   def output_messages(metadata) do
     finish_reason = MapAccess.get(metadata, :finish_reason)
 
@@ -83,6 +98,7 @@ defmodule ReqLLM.OpenTelemetry.Content do
     |> extract_response_messages()
     |> Enum.map(&message_to_otel(&1, finish_reason))
     |> Enum.reject(&is_nil/1)
+    |> Enum.map(&Jason.encode!/1)
   end
 
   @doc """
@@ -136,14 +152,23 @@ defmodule ReqLLM.OpenTelemetry.Content do
 
   defp tool_to_otel(tool) when is_map(tool) do
     name = fetch_field(tool, :name)
+    type = fetch_field(tool, :type)
 
-    if is_binary(name) and name != "" do
-      base = %{"type" => "function", "name" => name}
+    cond do
+      is_binary(name) and name != "" ->
+        %{"type" => "function", "name" => name}
+        |> maybe_put("description", fetch_field(tool, :description))
+        |> maybe_put("strict", fetch_field(tool, :strict))
+        |> maybe_put("parameters", fetch_field(tool, :parameter_schema))
 
-      base
-      |> maybe_put("description", fetch_field(tool, :description))
-      |> maybe_put("strict", fetch_field(tool, :strict))
-      |> maybe_put("parameters", fetch_field(tool, :parameter_schema))
+      is_binary(type) and type != "" ->
+        %{"type" => type}
+
+      is_atom(type) and not is_nil(type) ->
+        %{"type" => Atom.to_string(type)}
+
+      true ->
+        nil
     end
   end
 

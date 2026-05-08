@@ -114,20 +114,24 @@ defmodule ReqLLM.OpenTelemetry.OTelAdapter do
 
   defp ensure_instrument(%{name: name} = record) do
     ensure_instrument_table()
+    # The Erlang OTel SDK rejects non-atom instrument names. Records keep
+    # spec-shaped string names (which the bridge relays as-is); we only
+    # convert when handing them to :otel_meter.
+    instrument_name = if is_atom(name), do: name, else: String.to_atom(name)
 
-    case :ets.lookup(@instrument_table, name) do
-      [{^name, instrument}] ->
+    case :ets.lookup(@instrument_table, instrument_name) do
+      [{^instrument_name, instrument}] ->
         instrument
 
       [] ->
         instrument =
           call(:otel_meter, :create_histogram, [
             meter(),
-            name,
+            instrument_name,
             instrument_config(record)
           ])
 
-        :ets.insert(@instrument_table, {name, instrument})
+        :ets.insert(@instrument_table, {instrument_name, instrument})
         instrument
     end
   end
@@ -153,11 +157,19 @@ defmodule ReqLLM.OpenTelemetry.OTelAdapter do
   end
 
   defp instrument_config(record) do
-    %{
+    base = %{
       description: Map.get(record, :description, ""),
-      unit: Map.get(record, :unit, ""),
-      explicit_bucket_boundaries: Map.get(record, :boundaries, [])
+      unit: Map.get(record, :unit, "")
     }
+
+    # The Erlang OTel API expects explicit bucket boundaries under
+    # :advisory_params per the OTel spec — putting them at the top level of
+    # the opts map silently falls back to default histogram buckets.
+    case Map.get(record, :boundaries, []) do
+      [] -> base
+      [_ | _] = boundaries ->
+        Map.put(base, :advisory_params, %{explicit_bucket_boundaries: boundaries})
+    end
   end
 
   defp atomize_keys(map) when is_map(map) do

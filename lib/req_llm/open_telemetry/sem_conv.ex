@@ -37,6 +37,7 @@ defmodule ReqLLM.OpenTelemetry.SemConv do
     chat: "text",
     object: "json",
     image: "image",
+    embedding: "embedding",
     speech: "speech",
     transcription: "text"
   }

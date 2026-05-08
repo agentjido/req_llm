@@ -278,7 +278,8 @@ defmodule ReqLLM.OpenTelemetry.Attributes do
 
   defp response(payload, model) when is_map(payload) do
     %{
-      "gen_ai.response.id" => present(MapAccess.get(payload, :id)),
+      "gen_ai.response.id" =>
+        present(MapAccess.get(payload, :id)) || present(MapAccess.get(payload, :response_id)),
       "gen_ai.response.model" =>
         present(MapAccess.get(payload, :model)) || request_model_for(model)
     }
@@ -412,6 +413,8 @@ defmodule ReqLLM.OpenTelemetry.Attributes do
   end
 
   defp finish_reason_to_string(nil), do: nil
+  defp finish_reason_to_string(:unknown), do: nil
+  defp finish_reason_to_string("unknown"), do: nil
   defp finish_reason_to_string(reason) when is_atom(reason), do: Atom.to_string(reason)
   defp finish_reason_to_string(reason) when is_binary(reason), do: reason
   defp finish_reason_to_string(reason), do: inspect(reason)

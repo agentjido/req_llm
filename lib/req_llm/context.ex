@@ -134,17 +134,19 @@ defmodule ReqLLM.Context do
     validate? = Keyword.get(opts, :validate, true)
     system_prompt = Keyword.get(opts, :system_prompt)
     convert_loose? = Keyword.get(opts, :convert_loose, true)
+    opts_tools = Keyword.get(opts, :tools)
 
     with {:ok, ctx0} <- to_context(prompt, convert_loose?) do
       ctx1 = maybe_add_system(ctx0, system_prompt)
+      ctx2 = %{ctx1 | tools: persist_tools(ctx1.tools, opts_tools)}
 
       if validate? do
-        case validate(ctx1) do
-          {:ok, ctx1} -> {:ok, ctx1}
+        case validate(ctx2) do
+          {:ok, ctx2} -> {:ok, ctx2}
           {:error, _} = error -> error
         end
       else
-        {:ok, ctx1}
+        {:ok, ctx2}
       end
     end
   end

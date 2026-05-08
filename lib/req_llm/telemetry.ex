@@ -169,7 +169,7 @@ defmodule ReqLLM.Telemetry do
       |> Map.put(:reasoning_contract, reasoning_contract)
       |> Map.put(:requested_reasoning, requested_reasoning)
       |> Map.put(:effective_reasoning, effective_reasoning)
-      |> Map.put(:server, extract_server(request_source))
+      |> merge_server(extract_server(request_source))
 
     :telemetry.execute(
       @request_start_event,
@@ -421,6 +421,7 @@ defmodule ReqLLM.Telemetry do
       request_options: context.request_options,
       server: context.server,
       streaming: streaming_snapshot(context),
+      request_measurement: context.request_measurement,
       request_summary: context.request_summary,
       response_summary: extra[:response_summary],
       http_status: extra[:http_status],
@@ -586,7 +587,32 @@ defmodule ReqLLM.Telemetry do
     extract_server(%Req.Request{url: URI.parse(url)})
   end
 
+  defp extract_server(%ReqLLM.Streaming.Fixtures.HTTPContext{url: url}) when is_binary(url) do
+    extract_server(%Req.Request{url: URI.parse(url)})
+  end
+
   defp extract_server(_), do: %{}
+
+  defp merge_server(context, %{} = new) when map_size(new) > 0 do
+    Map.put(context, :server, new)
+  end
+
+  defp merge_server(context, _empty) do
+    Map.put_new(context, :server, %{})
+  end
+
+  @doc """
+  Pre-populates `context.server` from a request source that `start_request`
+  cannot read directly (e.g. an HTTPContext for streaming flows). Has no
+  effect if the source yields no server info.
+  """
+  @spec put_server_from_source(context(), any()) :: context()
+  def put_server_from_source(context, source) do
+    case extract_server(source) do
+      server when map_size(server) > 0 -> Map.put(context, :server, server)
+      _ -> context
+    end
+  end
 
   defp maybe_put_present(map, _key, nil), do: map
   defp maybe_put_present(map, _key, ""), do: map

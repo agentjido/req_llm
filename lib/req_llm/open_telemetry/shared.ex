@@ -27,6 +27,7 @@ defmodule ReqLLM.OpenTelemetry.Shared do
   alias ReqLLM.OpenTelemetry.Attributes
 
   @langfuse_cost_attr "langfuse.observation.cost_details"
+  @langfuse_completion_start_attr "langfuse.observation.completion_start_time"
 
   @type content_mode :: :none | :attributes | :event
 
@@ -55,12 +56,46 @@ defmodule ReqLLM.OpenTelemetry.Shared do
   @spec merge_langfuse(map(), map(), keyword()) :: map()
   def merge_langfuse(attributes, metadata, opts) do
     if Keyword.get(opts, :langfuse, false) do
-      case Attributes.cost_breakdown(metadata) do
-        %{} = breakdown -> put_langfuse_cost(attributes, breakdown)
-        _ -> attributes
-      end
+      attributes
+      |> maybe_merge_cost(metadata)
+      |> maybe_merge_completion_start_time(metadata)
     else
       attributes
+    end
+  end
+
+  defp maybe_merge_cost(attributes, metadata) do
+    case Attributes.cost_breakdown(metadata) do
+      %{} = breakdown -> put_langfuse_cost(attributes, breakdown)
+      _ -> attributes
+    end
+  end
+
+  defp maybe_merge_completion_start_time(attributes, metadata) do
+    case completion_start_time_iso(metadata) do
+      iso when is_binary(iso) ->
+        Map.put(attributes, @langfuse_completion_start_attr, iso)
+
+      _ ->
+        attributes
+    end
+  end
+
+  defp completion_start_time_iso(metadata) do
+    with %{first_chunk_at: first_chunk_at, time_to_first_chunk: ttfc}
+         when is_integer(first_chunk_at) and is_integer(ttfc) <-
+           Map.get(metadata, :streaming) || %{},
+         %{system_time: start_system_time} when is_integer(start_system_time) <-
+           Map.get(metadata, :request_measurement) || %{} do
+      first_chunk_microseconds =
+        start_system_time
+        |> System.convert_time_unit(:native, :microsecond)
+        |> Kernel.+(System.convert_time_unit(ttfc, :native, :microsecond))
+
+      DateTime.from_unix!(first_chunk_microseconds, :microsecond)
+      |> DateTime.to_iso8601()
+    else
+      _ -> nil
     end
   end
 

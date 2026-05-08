@@ -125,6 +125,7 @@ defmodule ReqLLM.Streaming do
               canonical_json
             )
         )
+        |> ReqLLM.Telemetry.put_server_from_source(http_context)
         |> ReqLLM.Telemetry.start_request(canonical_json)
 
       :ok = StreamServer.set_telemetry_context(server_pid, stream_context)

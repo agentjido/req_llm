@@ -6,6 +6,8 @@ defmodule ReqLLM.TelemetryOpenTelemetryTest do
   alias ReqLLM.Telemetry.OpenTelemetry
   alias ReqLLM.ToolCall
 
+  defp decode_all(entries) when is_list(entries), do: Enum.map(entries, &Jason.decode!/1)
+
   test "maps chat telemetry metadata into GenAI span attributes" do
     tool_call = ToolCall.new("call_weather", "get_weather", ~s({"location":"Paris"}))
 
@@ -31,11 +33,11 @@ defmodule ReqLLM.TelemetryOpenTelemetryTest do
     assert start_stub.attributes["gen_ai.operation.name"] == "chat"
     assert start_stub.attributes["gen_ai.request.model"] == "gpt-5"
 
-    assert start_stub.attributes["gen_ai.system_instructions"] == [
+    assert decode_all(start_stub.attributes["gen_ai.system_instructions"]) == [
              %{"type" => "text", "content" => "You are a helpful bot"}
            ]
 
-    assert start_stub.attributes["gen_ai.input.messages"] == [
+    assert decode_all(start_stub.attributes["gen_ai.input.messages"]) == [
              %{
                "role" => "user",
                "parts" => [%{"type" => "text", "content" => "Weather in Paris?"}]
@@ -97,7 +99,7 @@ defmodule ReqLLM.TelemetryOpenTelemetryTest do
     assert stop_stub.attributes["gen_ai.usage.output_tokens"] == 52
     assert stop_stub.attributes["gen_ai.response.finish_reasons"] == ["stop"]
 
-    assert stop_stub.attributes["gen_ai.output.messages"] == [
+    assert decode_all(stop_stub.attributes["gen_ai.output.messages"]) == [
              %{
                "role" => "assistant",
                "parts" => [
@@ -300,7 +302,7 @@ defmodule ReqLLM.TelemetryOpenTelemetryTest do
 
       start_stub = OpenTelemetry.request_start(metadata, content: :attributes)
 
-      assert start_stub.attributes["gen_ai.tool.definitions"] == [
+      assert decode_all(start_stub.attributes["gen_ai.tool.definitions"]) == [
                %{
                  "type" => "function",
                  "name" => "get_weather",
@@ -334,7 +336,7 @@ defmodule ReqLLM.TelemetryOpenTelemetryTest do
 
       start_stub = OpenTelemetry.request_start(metadata, content: :attributes)
 
-      assert [tool] = start_stub.attributes["gen_ai.tool.definitions"]
+      assert [tool] = decode_all(start_stub.attributes["gen_ai.tool.definitions"])
       assert tool["strict"] == false
     end
 
@@ -445,7 +447,7 @@ defmodule ReqLLM.TelemetryOpenTelemetryTest do
 
       stop_stub = OpenTelemetry.request_stop(metadata, content: :attributes)
 
-      output = stop_stub.attributes["gen_ai.output.messages"]
+      output = decode_all(stop_stub.attributes["gen_ai.output.messages"])
 
       assert output == [
                %{

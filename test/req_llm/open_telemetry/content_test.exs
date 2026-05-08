@@ -5,6 +5,8 @@ defmodule ReqLLM.OpenTelemetry.ContentTest do
   alias ReqLLM.Message.ContentPart
   alias ReqLLM.OpenTelemetry.Content
 
+  defp decode_all(entries), do: Enum.map(entries, &Jason.decode!/1)
+
   describe "input_messages/1 — content part rendering" do
     test "renders :text parts as %{type: text, content: ...}" do
       messages = [
@@ -12,7 +14,9 @@ defmodule ReqLLM.OpenTelemetry.ContentTest do
       ]
 
       assert [%{"role" => "user", "parts" => parts}] =
-               Content.input_messages(%{request_payload: %{messages: messages}})
+               %{request_payload: %{messages: messages}}
+               |> Content.input_messages()
+               |> decode_all()
 
       assert parts == [%{"type" => "text", "content" => "hello"}]
     end
@@ -26,7 +30,9 @@ defmodule ReqLLM.OpenTelemetry.ContentTest do
       ]
 
       assert [%{"parts" => parts}] =
-               Content.input_messages(%{request_payload: %{messages: messages}})
+               %{request_payload: %{messages: messages}}
+               |> Content.input_messages()
+               |> decode_all()
 
       assert parts == [
                %{"type" => "uri", "uri" => "https://example.com/cat.png", "modality" => "image"}
@@ -42,7 +48,9 @@ defmodule ReqLLM.OpenTelemetry.ContentTest do
       ]
 
       assert [%{"parts" => parts}] =
-               Content.input_messages(%{request_payload: %{messages: messages}})
+               %{request_payload: %{messages: messages}}
+               |> Content.input_messages()
+               |> decode_all()
 
       assert parts == [
                %{"type" => "uri", "uri" => "https://example.com/clip.mp4", "modality" => "video"}
@@ -55,7 +63,9 @@ defmodule ReqLLM.OpenTelemetry.ContentTest do
       messages = [%Message{role: :user, content: [sanitized_part]}]
 
       assert [%{"parts" => parts}] =
-               Content.input_messages(%{request_payload: %{messages: messages}})
+               %{request_payload: %{messages: messages}}
+               |> Content.input_messages()
+               |> decode_all()
 
       assert parts == [
                %{
@@ -79,7 +89,9 @@ defmodule ReqLLM.OpenTelemetry.ContentTest do
       messages = [%Message{role: :user, content: [sanitized_part]}]
 
       assert [%{"parts" => parts}] =
-               Content.input_messages(%{request_payload: %{messages: messages}})
+               %{request_payload: %{messages: messages}}
+               |> Content.input_messages()
+               |> decode_all()
 
       assert parts == [
                %{
@@ -102,7 +114,9 @@ defmodule ReqLLM.OpenTelemetry.ContentTest do
       messages = [%Message{role: :user, content: [raw_part]}]
 
       assert [%{"parts" => parts}] =
-               Content.input_messages(%{request_payload: %{messages: messages}})
+               %{request_payload: %{messages: messages}}
+               |> Content.input_messages()
+               |> decode_all()
 
       assert [part] = parts
       assert part["type"] == "image"
@@ -123,7 +137,9 @@ defmodule ReqLLM.OpenTelemetry.ContentTest do
       messages = [%Message{role: :user, content: [raw_part]}]
 
       assert [%{"parts" => parts}] =
-               Content.input_messages(%{request_payload: %{messages: messages}})
+               %{request_payload: %{messages: messages}}
+               |> Content.input_messages()
+               |> decode_all()
 
       assert [part] = parts
       assert part["type"] == "file"
@@ -144,7 +160,9 @@ defmodule ReqLLM.OpenTelemetry.ContentTest do
       ]
 
       assert [%{"parts" => parts}] =
-               Content.input_messages(%{request_payload: %{messages: messages}})
+               %{request_payload: %{messages: messages}}
+               |> Content.input_messages()
+               |> decode_all()
 
       assert parts == [%{"type" => "text", "content" => "the answer"}]
     end
@@ -168,7 +186,9 @@ defmodule ReqLLM.OpenTelemetry.ContentTest do
         %Message{role: :user, content: [%ContentPart{type: :text, text: "hi"}]}
       ]
 
-      assert Content.system_instructions(%{request_payload: %{messages: messages}}) == [
+      assert %{request_payload: %{messages: messages}}
+             |> Content.system_instructions()
+             |> decode_all() == [
                %{"type" => "text", "content" => "you are helpful"}
              ]
     end
@@ -179,7 +199,9 @@ defmodule ReqLLM.OpenTelemetry.ContentTest do
         %Message{role: :system, content: [%ContentPart{type: :text, text: "rule two"}]}
       ]
 
-      assert Content.system_instructions(%{request_payload: %{messages: messages}}) == [
+      assert %{request_payload: %{messages: messages}}
+             |> Content.system_instructions()
+             |> decode_all() == [
                %{"type" => "text", "content" => "rule one"},
                %{"type" => "text", "content" => "rule two"}
              ]
@@ -197,7 +219,9 @@ defmodule ReqLLM.OpenTelemetry.ContentTest do
         }
       ]
 
-      assert Content.system_instructions(%{request_payload: %{messages: messages}}) == [
+      assert %{request_payload: %{messages: messages}}
+             |> Content.system_instructions()
+             |> decode_all() == [
                %{"type" => "text", "content" => "be helpful"}
              ]
     end
@@ -211,7 +235,9 @@ defmodule ReqLLM.OpenTelemetry.ContentTest do
       ]
 
       assert [tool_a, tool_b] =
-               Content.tool_definitions(%{request_payload: %{tools: tools}})
+               %{request_payload: %{tools: tools}}
+               |> Content.tool_definitions()
+               |> decode_all()
 
       assert tool_a["strict"] == false
       assert tool_b["strict"] == true
@@ -224,8 +250,24 @@ defmodule ReqLLM.OpenTelemetry.ContentTest do
         %{name: "ok", description: "fine", parameter_schema: %{}}
       ]
 
-      assert [tool] = Content.tool_definitions(%{request_payload: %{tools: tools}})
+      assert [tool] =
+               %{request_payload: %{tools: tools}}
+               |> Content.tool_definitions()
+               |> decode_all()
+
       assert tool["name"] == "ok"
+    end
+
+    test "captures builtin tools that have :type but no :name" do
+      tools = [
+        %{type: "web_search_preview", search_context_size: "medium"},
+        %{type: :file_search}
+      ]
+
+      assert [%{"type" => "web_search_preview"}, %{"type" => "file_search"}] =
+               %{request_payload: %{tools: tools}}
+               |> Content.tool_definitions()
+               |> decode_all()
     end
   end
 end

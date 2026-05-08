@@ -3,6 +3,8 @@ defmodule ReqLLM.OpenTelemetryTest do
 
   alias ReqLLM.OpenTelemetry
 
+  defp decode_all(entries) when is_list(entries), do: Enum.map(entries, &Jason.decode!/1)
+
   defmodule FakeAdapter do
     @behaviour ReqLLM.OpenTelemetry.Adapter
 
@@ -527,14 +529,14 @@ defmodule ReqLLM.OpenTelemetryTest do
 
       assert_receive {:start_span, _span, _name, attributes}
 
-      assert attributes[:"gen_ai.system_instructions"] == [
+      assert decode_all(attributes[:"gen_ai.system_instructions"]) == [
                %{"type" => "text", "content" => "be helpful"}
              ]
 
       assert [
                %{"role" => "user"},
                %{"role" => "assistant"}
-             ] = attributes[:"gen_ai.input.messages"]
+             ] = decode_all(attributes[:"gen_ai.input.messages"])
 
       assert [
                %{
@@ -544,7 +546,7 @@ defmodule ReqLLM.OpenTelemetryTest do
                  "strict" => true,
                  "parameters" => %{"type" => "object"}
                }
-             ] = attributes[:"gen_ai.tool.definitions"]
+             ] = decode_all(attributes[:"gen_ai.tool.definitions"])
     end
 
     test "content: :attributes attaches gen_ai.output.messages on stop" do
@@ -603,7 +605,7 @@ defmodule ReqLLM.OpenTelemetryTest do
 
       assert_receive {:set_attributes, ^span, attributes}
 
-      assert attributes[:"gen_ai.output.messages"] == [
+      assert decode_all(attributes[:"gen_ai.output.messages"]) == [
                %{
                  "role" => "assistant",
                  "parts" => [%{"type" => "text", "content" => "hi back"}],
@@ -690,13 +692,13 @@ defmodule ReqLLM.OpenTelemetryTest do
       assert_receive {:add_event, ^span, :"gen_ai.client.inference.operation.details",
                       event_attrs}
 
-      assert event_attrs[:"gen_ai.system_instructions"] == [
+      assert decode_all(event_attrs[:"gen_ai.system_instructions"]) == [
                %{"type" => "text", "content" => "be helpful"}
              ]
 
-      assert [%{"role" => "user"}] = event_attrs[:"gen_ai.input.messages"]
+      assert [%{"role" => "user"}] = decode_all(event_attrs[:"gen_ai.input.messages"])
 
-      assert [%{"role" => "assistant"}] = event_attrs[:"gen_ai.output.messages"]
+      assert [%{"role" => "assistant"}] = decode_all(event_attrs[:"gen_ai.output.messages"])
     end
 
     test "content: true is accepted as an alias for :attributes" do
@@ -729,7 +731,7 @@ defmodule ReqLLM.OpenTelemetryTest do
       )
 
       assert_receive {:start_span, _span, _name, attributes}
-      assert [%{"role" => "user"}] = attributes[:"gen_ai.input.messages"]
+      assert [%{"role" => "user"}] = decode_all(attributes[:"gen_ai.input.messages"])
     end
   end
 

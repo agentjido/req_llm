@@ -260,9 +260,31 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
       end
 
     meta = Map.merge(meta, extract_assistant_phase_metadata(response_output))
+    meta = merge_response_provider_meta(meta, data["response"] || %{})
 
     [ReqLLM.StreamChunk.meta(meta)]
   end
+
+  defp merge_response_provider_meta(meta, response) when is_map(response) do
+    extras =
+      %{}
+      |> put_present(:service_tier, Map.get(response, "service_tier"))
+      |> put_present(:system_fingerprint, Map.get(response, "system_fingerprint"))
+
+    if map_size(extras) > 0 do
+      Map.update(meta, :provider_meta, extras, fn existing when is_map(existing) ->
+        Map.merge(existing, extras)
+      end)
+    else
+      meta
+    end
+  end
+
+  defp merge_response_provider_meta(meta, _), do: meta
+
+  defp put_present(map, _key, nil), do: map
+  defp put_present(map, _key, ""), do: map
+  defp put_present(map, key, value), do: Map.put(map, key, value)
 
   defp ensure_stream_state(nil), do: init_stream_state()
 

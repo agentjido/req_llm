@@ -100,7 +100,8 @@ defmodule ReqLLM.StreamServer do
     fixture_saved?: false,
     raw_iodata: [],
     raw_bytes: 0,
-    terminated?: false
+    terminated?: false,
+    message_acc: %{text: [], tool_calls: []}
   ]
 
   @doc """
@@ -764,11 +765,11 @@ defmodule ReqLLM.StreamServer do
   defp terminal_chunk?(_chunk), do: false
 
   defp enqueue_chunks(chunks, state) do
-    {new_queue, updated_metadata, new_obj_acc, telemetry} =
+    {new_queue, updated_metadata, new_obj_acc, telemetry, message_acc} =
       Enum.reduce(
         chunks,
-        {state.queue, state.metadata, state.object_acc, state.telemetry},
-        fn chunk, {queue, metadata, obj_acc, telemetry} ->
+        {state.queue, state.metadata, state.object_acc, state.telemetry, state.message_acc},
+        fn chunk, {queue, metadata, obj_acc, telemetry, msg_acc} ->
           new_queue = :queue.in(chunk, queue)
 
           updated_metadata =
@@ -804,13 +805,15 @@ defmodule ReqLLM.StreamServer do
               obj_acc
             end
 
+          msg_acc = accumulate_message(msg_acc, chunk)
+
           telemetry =
             case telemetry do
               nil -> nil
               context -> ReqLLM.Telemetry.observe_stream_chunk(context, chunk)
             end
 
-          {new_queue, updated_metadata, obj_acc, telemetry}
+          {new_queue, updated_metadata, obj_acc, telemetry, msg_acc}
         end
       )
 
@@ -819,8 +822,72 @@ defmodule ReqLLM.StreamServer do
       | queue: new_queue,
         metadata: updated_metadata,
         object_acc: new_obj_acc,
-        telemetry: telemetry
+        telemetry: telemetry,
+        message_acc: message_acc
     }
+  end
+
+  # Accumulate streamed content/tool_call chunks into a %ReqLLM.Message{} that
+  # the OTel bridge can promote into `gen_ai.output.messages`. Reasoning chunks
+  # are intentionally excluded — the PR's content-capture guarantees no
+  # reasoning text leaks into the output attributes.
+  defp accumulate_message(acc, %ReqLLM.StreamChunk{type: :content, text: text})
+       when is_binary(text) and text != "" do
+    %{acc | text: [acc.text, text]}
+  end
+
+  defp accumulate_message(acc, %ReqLLM.StreamChunk{type: :tool_call} = chunk) do
+    args = chunk.arguments || %{}
+    name = chunk.name || (chunk.metadata && Map.get(chunk.metadata, :name))
+    id = (chunk.metadata && Map.get(chunk.metadata, :id)) || generate_tool_call_id()
+
+    args_json =
+      cond do
+        is_binary(args) -> args
+        is_map(args) -> Jason.encode!(args)
+        true -> "{}"
+      end
+
+    if is_binary(name) and name != "" do
+      tool_call = ReqLLM.ToolCall.new(id, name, args_json)
+      %{acc | tool_calls: acc.tool_calls ++ [tool_call]}
+    else
+      acc
+    end
+  end
+
+  defp accumulate_message(acc, _chunk), do: acc
+
+  defp generate_tool_call_id, do: "call_#{Uniq.UUID.uuid7()}"
+
+  # Materialize the accumulated assistant message into the metadata map so the
+  # OTel bridge's response_payload extractor can find it under :message.
+  defp finalize_message_metadata(state) do
+    %{text: text_iodata, tool_calls: tool_calls} = state.message_acc
+    text = IO.iodata_to_binary(text_iodata)
+
+    content_parts =
+      if text == "" do
+        []
+      else
+        [%ReqLLM.Message.ContentPart{type: :text, text: text, metadata: %{}}]
+      end
+
+    if content_parts == [] and tool_calls == [] do
+      state
+    else
+      message = %ReqLLM.Message{
+        role: :assistant,
+        content: content_parts,
+        name: nil,
+        tool_call_id: nil,
+        tool_calls: if(tool_calls == [], do: nil, else: tool_calls),
+        metadata: %{},
+        reasoning_details: nil
+      }
+
+      %{state | metadata: Map.put(state.metadata, :message, message)}
+    end
   end
 
   defp dequeue_chunk(state) do
@@ -1166,6 +1233,7 @@ defmodule ReqLLM.StreamServer do
   defp maybe_emit_stream_stop(%{telemetry: nil} = state, _finish_reason), do: state
 
   defp maybe_emit_stream_stop(%{telemetry: telemetry} = state, finish_reason) do
+    state = finalize_message_metadata(state)
     usage = state.metadata[:usage]
 
     telemetry =

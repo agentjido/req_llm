@@ -766,6 +766,73 @@ defmodule ReqLLM.ContextTest do
 
       assert reason == :empty_context
     end
+
+    test "lifts opts[:tools] onto Context.tools" do
+      tool =
+        ReqLLM.Tool.new!(
+          name: "weather",
+          description: "Look up weather",
+          parameter_schema: [],
+          callback: fn _ -> {:ok, "sunny"} end
+        )
+
+      {:ok, context} = Context.normalize("Hello", tools: [tool])
+
+      assert [%ReqLLM.Tool{name: "weather"}] = context.tools
+    end
+
+    test "opts[:tools] override tools already on the inbound Context" do
+      original_tool =
+        ReqLLM.Tool.new!(
+          name: "old",
+          description: "Stale tool",
+          parameter_schema: [],
+          callback: fn _ -> {:ok, ""} end
+        )
+
+      new_tool =
+        ReqLLM.Tool.new!(
+          name: "new",
+          description: "Fresh tool",
+          parameter_schema: [],
+          callback: fn _ -> {:ok, ""} end
+        )
+
+      original = %Context{messages: [Context.user("Hello")], tools: [original_tool]}
+      {:ok, context} = Context.normalize(original, tools: [new_tool], validate: false)
+
+      assert [%ReqLLM.Tool{name: "new"}] = context.tools
+    end
+
+    test "opts[:tools] = [] explicitly clears Context.tools" do
+      tool =
+        ReqLLM.Tool.new!(
+          name: "weather",
+          description: "Look up weather",
+          parameter_schema: [],
+          callback: fn _ -> {:ok, "sunny"} end
+        )
+
+      original = %Context{messages: [Context.user("Hello")], tools: [tool]}
+      {:ok, context} = Context.normalize(original, tools: [], validate: false)
+
+      assert context.tools == []
+    end
+
+    test "missing opts[:tools] preserves Context.tools" do
+      tool =
+        ReqLLM.Tool.new!(
+          name: "weather",
+          description: "Look up weather",
+          parameter_schema: [],
+          callback: fn _ -> {:ok, "sunny"} end
+        )
+
+      original = %Context{messages: [Context.user("Hello")], tools: [tool]}
+      {:ok, context} = Context.normalize(original, validate: false)
+
+      assert [%ReqLLM.Tool{name: "weather"}] = context.tools
+    end
   end
 
   describe "normalize!/2" do
