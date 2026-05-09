@@ -1177,6 +1177,32 @@ defmodule ReqLLM.StreamResponseTest do
       assert result.finish_reason == :stop
     end
 
+    test "classifies builtin-only stream tool calls as final answers" do
+      chunks = [
+        StreamChunk.text("I searched the web."),
+        StreamChunk.tool_call("web_search_call", %{}, %{id: "ws_1", index: 0, builtin?: true}),
+        StreamChunk.meta(%{tool_call_args: %{index: 0, fragment: ~s({"query":"elixir"})}}),
+        StreamChunk.meta(%{finish_reason: "stop"})
+      ]
+
+      stream_response = create_stream_response(stream: chunks)
+      result = StreamResponse.classify(stream_response)
+
+      assert result.type == :final_answer
+      assert result.text == "I searched the web."
+
+      assert result.tool_calls == [
+               %{
+                 id: "ws_1",
+                 name: "web_search_call",
+                 arguments: %{"query" => "elixir"},
+                 builtin?: true
+               }
+             ]
+
+      assert result.finish_reason == :stop
+    end
+
     test "handles multiple parallel tool calls" do
       chunks = [
         StreamChunk.tool_call("get_weather", %{}, %{id: "call_1", index: 0}),

@@ -131,6 +131,57 @@ defmodule ReqLLM.ToolCallIdCompatTest do
   end
 
   describe "apply_context_with_policy/3 with :strict" do
+    test "ignores builtin tool calls during strict ID validation and turn-boundary checks" do
+      context = %Context{
+        messages: [
+          %Message{
+            role: :assistant,
+            content: [],
+            tool_calls: [ToolCall.new_builtin("bad:id", "web_search_call", ~s({"query":"x"}))]
+          }
+        ]
+      }
+
+      updated =
+        ToolCallIdCompat.apply_context_with_policy(
+          context,
+          %{
+            mode: :strict,
+            invalid_chars_regex: ~r/[^A-Za-z0-9_-]/,
+            enforce_turn_boundary: true
+          },
+          tool_call_id_compat: :auto
+        )
+
+      assert updated == context
+    end
+
+    test "ignores builtin map tool calls during turn-boundary checks" do
+      context = %Context{
+        messages: [
+          %Message{
+            role: :assistant,
+            content: [],
+            tool_calls: [
+              %{
+                "id" => "bad:id",
+                "function" => %{"name" => "web_search_call", "builtin?" => true}
+              }
+            ]
+          }
+        ]
+      }
+
+      updated =
+        ToolCallIdCompat.apply_context_with_policy(
+          context,
+          %{mode: :passthrough, enforce_turn_boundary: true},
+          tool_call_id_compat: :auto
+        )
+
+      assert updated == context
+    end
+
     test "raises when context contains incompatible IDs" do
       context =
         %Context{

@@ -101,7 +101,7 @@ defmodule ReqLLM.StreamServer do
     raw_iodata: [],
     raw_bytes: 0,
     terminated?: false,
-    message_acc: %{text: [], tool_calls: []}
+    message_acc: %{text: [], tool_calls: [], arg_fragments: %{}}
   ]
 
   @doc """
@@ -777,7 +777,6 @@ defmodule ReqLLM.StreamServer do
               :meta ->
                 chunk_meta = chunk.metadata || %{}
 
-                # Extract usage for normalization
                 usage = Map.get(chunk_meta, :usage)
 
                 meta_with_usage =
@@ -791,7 +790,6 @@ defmodule ReqLLM.StreamServer do
                     metadata
                   end
 
-                # Merge remaining metadata (like finish_reason)
                 Map.merge(meta_with_usage, Map.drop(chunk_meta, [:usage, "usage"]))
 
               _ ->
@@ -827,43 +825,112 @@ defmodule ReqLLM.StreamServer do
     }
   end
 
-  # Accumulate streamed content/tool_call chunks into a %ReqLLM.Message{} that
-  # the OTel bridge can promote into `gen_ai.output.messages`. Reasoning chunks
-  # are intentionally excluded — the PR's content-capture guarantees no
-  # reasoning text leaks into the output attributes.
   defp accumulate_message(acc, %ReqLLM.StreamChunk{type: :content, text: text})
        when is_binary(text) and text != "" do
     %{acc | text: [acc.text, text]}
   end
 
   defp accumulate_message(acc, %ReqLLM.StreamChunk{type: :tool_call} = chunk) do
+    metadata = chunk.metadata || %{}
     args = chunk.arguments || %{}
-    name = chunk.name || (chunk.metadata && Map.get(chunk.metadata, :name))
-    id = (chunk.metadata && Map.get(chunk.metadata, :id)) || generate_tool_call_id()
-
-    args_json =
-      cond do
-        is_binary(args) -> args
-        is_map(args) -> Jason.encode!(args)
-        true -> "{}"
-      end
+    name = chunk.name || Map.get(metadata, :name) || Map.get(metadata, "name")
+    id = Map.get(metadata, :id) || Map.get(metadata, "id") || generate_tool_call_id()
+    index = Map.get(metadata, :index, Map.get(metadata, "index", 0))
 
     if is_binary(name) and name != "" do
-      tool_call = ReqLLM.ToolCall.new(id, name, args_json)
+      tool_call =
+        %{
+          id: id,
+          name: name,
+          arguments: args,
+          index: index
+        }
+        |> maybe_put_builtin_flag(ReqLLM.ToolCall.builtin?(metadata))
+
       %{acc | tool_calls: acc.tool_calls ++ [tool_call]}
     else
       acc
     end
   end
 
+  defp accumulate_message(acc, %ReqLLM.StreamChunk{type: :meta, metadata: metadata})
+       when is_map(metadata) do
+    case tool_call_args_fragment(metadata) do
+      {index, fragment} ->
+        %{acc | arg_fragments: Map.update(acc.arg_fragments, index, fragment, &(&1 <> fragment))}
+
+      nil ->
+        acc
+    end
+  end
+
   defp accumulate_message(acc, _chunk), do: acc
+
+  defp tool_call_args_fragment(metadata) do
+    args = Map.get(metadata, :tool_call_args) || Map.get(metadata, "tool_call_args")
+
+    with args when is_map(args) <- args,
+         fragment when is_binary(fragment) and fragment != "" <-
+           Map.get(args, :fragment) || Map.get(args, "fragment") do
+      {Map.get(args, :index, Map.get(args, "index", 0)), fragment}
+    else
+      _ -> nil
+    end
+  end
+
+  defp reconstruct_message_tool_calls(%{tool_calls: tool_calls, arg_fragments: arg_fragments}) do
+    Enum.map(tool_calls, &message_tool_call_to_struct(&1, arg_fragments))
+  end
+
+  defp message_tool_call_to_struct(tool_call, arg_fragments) do
+    args = message_tool_call_args(tool_call, arg_fragments)
+
+    constructor =
+      if ReqLLM.ToolCall.builtin?(tool_call),
+        do: &ReqLLM.ToolCall.new_builtin/3,
+        else: &ReqLLM.ToolCall.new/3
+
+    constructor.(tool_call.id, tool_call.name, encode_tool_call_args(args))
+  end
+
+  defp message_tool_call_args(%{index: index, arguments: arguments}, arg_fragments) do
+    case Map.get(arg_fragments, index) do
+      fragment when is_binary(fragment) ->
+        case Jason.decode(fragment) do
+          {:ok, decoded} -> decoded
+          {:error, _reason} -> arguments
+        end
+
+      _ ->
+        arguments
+    end
+  end
+
+  defp maybe_put_builtin_flag(map, true), do: Map.put(map, :builtin?, true)
+  defp maybe_put_builtin_flag(map, _), do: map
+
+  defp encode_tool_call_args(args) when is_binary(args), do: args
+
+  defp encode_tool_call_args(args) when is_map(args) or is_list(args) do
+    case Jason.encode(args) do
+      {:ok, json} -> json
+      {:error, _reason} -> "{}"
+    end
+  end
+
+  defp encode_tool_call_args(_args), do: "{}"
 
   defp generate_tool_call_id, do: "call_#{Uniq.UUID.uuid7()}"
 
-  # Materialize the accumulated assistant message into the metadata map so the
-  # OTel bridge's response_payload extractor can find it under :message.
+  # Synthesizes a partial assistant `%Message{}` from the accumulated stream
+  # chunks for OTel content capture (`gen_ai.output.messages`). The canonical
+  # response message — with reasoning_details, provider metadata, and object
+  # extraction — is still built by `ReqLLM.Provider.Defaults.ResponseBuilder`
+  # from the full chunk list. Reasoning is intentionally `nil` here because
+  # OTel content capture redacts reasoning text anyway.
   defp finalize_message_metadata(state) do
-    %{text: text_iodata, tool_calls: tool_calls} = state.message_acc
+    %{text: text_iodata} = state.message_acc
+    tool_calls = reconstruct_message_tool_calls(state.message_acc)
     text = IO.iodata_to_binary(text_iodata)
 
     content_parts =

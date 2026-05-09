@@ -576,22 +576,7 @@ defmodule ReqLLM.Telemetry do
   defp normalize_choice_count(value) when is_integer(value) and value >= 1, do: value
   defp normalize_choice_count(_), do: nil
 
-  defp extract_server(%Req.Request{url: %URI{} = uri}) do
-    %{}
-    |> maybe_put_present(:address, uri.host)
-    |> maybe_put_present(:port, uri.port)
-    |> maybe_put_present(:path, uri.path)
-  end
-
-  defp extract_server(%Req.Request{url: url}) when is_binary(url) do
-    extract_server(%Req.Request{url: URI.parse(url)})
-  end
-
-  defp extract_server(%ReqLLM.Streaming.Fixtures.HTTPContext{url: url}) when is_binary(url) do
-    extract_server(%Req.Request{url: URI.parse(url)})
-  end
-
-  defp extract_server(_), do: %{}
+  defp extract_server(source), do: ReqLLM.Telemetry.RequestSource.server(source)
 
   defp merge_server(context, %{} = new) when map_size(new) > 0 do
     Map.put(context, :server, new)
@@ -613,10 +598,6 @@ defmodule ReqLLM.Telemetry do
       _ -> context
     end
   end
-
-  defp maybe_put_present(map, _key, nil), do: map
-  defp maybe_put_present(map, _key, ""), do: map
-  defp maybe_put_present(map, key, value), do: Map.put(map, key, value)
 
   defp summarize_request(operation, %Context{} = context)
        when operation in [:chat, :object, :image] do

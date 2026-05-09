@@ -272,9 +272,10 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
       |> put_present(:system_fingerprint, Map.get(response, "system_fingerprint"))
 
     if map_size(extras) > 0 do
-      Map.update(meta, :provider_meta, extras, fn existing when is_map(existing) ->
-        Map.merge(existing, extras)
-      end)
+      case Map.get(meta, :provider_meta) do
+        existing when is_map(existing) -> Map.put(meta, :provider_meta, Map.merge(existing, extras))
+        _ -> Map.put(meta, :provider_meta, extras)
+      end
     else
       meta
     end
@@ -1049,6 +1050,9 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
           []
         end
 
+      type when is_binary(type) ->
+        []
+
       _ ->
         []
     end
@@ -1070,9 +1074,50 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
 
   defp handle_output_item_done_item(item, data, state) do
     case item["type"] || item[:type] do
-      "function_call" -> handle_function_call_item_done(item, data, state)
-      "message" -> handle_message_item_done(item, data, state)
-      _ -> []
+      "function_call" ->
+        handle_function_call_item_done(item, data, state)
+
+      "message" ->
+        handle_message_item_done(item, data, state)
+
+      type when is_binary(type) ->
+        if Map.has_key?(@tool_call_atom_keys, type),
+          do: handle_builtin_call_item_done(item, data, state, type),
+          else: []
+
+      _ ->
+        []
+    end
+  end
+
+  defp handle_builtin_call_item_done(item, data, state, type) do
+    index = stream_output_index(data)
+
+    if tool_call_emitted?(state, index) do
+      args =
+        item
+        |> Map.drop(["id", "call_id", "type", "status"])
+        |> Jason.encode!()
+
+      [
+        ReqLLM.StreamChunk.meta(%{
+          tool_call_args: %{index: index, fragment: args, builtin?: true}
+        })
+      ]
+    else
+      id = item["id"] || item["call_id"]
+
+      args_map =
+        item
+        |> Map.drop(["id", "call_id", "type", "status"])
+
+      [
+        ReqLLM.StreamChunk.tool_call(
+          type,
+          args_map,
+          %{id: id, index: index, builtin?: true}
+        )
+      ]
     end
   end
 
@@ -1216,7 +1261,9 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   defp encode_tool_outputs(_), do: []
 
   defp encode_tool_calls_as_function_calls(tool_calls) do
-    Enum.map(tool_calls, fn tc ->
+    tool_calls
+    |> Enum.reject(&ReqLLM.ToolCall.builtin?/1)
+    |> Enum.map(fn tc ->
       %{
         "type" => "function_call",
         "call_id" => tc.id,
@@ -1477,7 +1524,8 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
 
     usage = normalize_responses_usage(base_usage, body)
 
-    finish_reason = determine_finish_reason(body, tool_calls)
+    finish_reason =
+      determine_finish_reason(body, Enum.reject(tool_calls, &ReqLLM.ToolCall.builtin?/1))
 
     content_parts = build_content_parts(text, thinking)
     message_metadata = build_message_metadata(body["id"], output_segments)
@@ -1769,14 +1817,36 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   end
 
   defp extract_tool_calls_from_segments(segments) do
-    segments
-    |> Enum.filter(&(&1["type"] == "function_call"))
-    |> Enum.map(fn seg ->
-      args_json = normalize_arguments_json(seg["arguments"])
-      id = seg["call_id"] || seg["id"]
-      name = seg["name"] || "unknown"
-      ReqLLM.ToolCall.new(id, name, args_json)
+    Enum.flat_map(segments, fn
+      %{"type" => "function_call"} = seg ->
+        [function_call_segment_to_tool_call(seg)]
+
+      %{"type" => type} = seg when is_binary(type) ->
+        if Map.has_key?(@tool_call_atom_keys, type),
+          do: [builtin_call_segment_to_tool_call(seg, type)],
+          else: []
+
+      _ ->
+        []
     end)
+  end
+
+  defp function_call_segment_to_tool_call(seg) do
+    args_json = normalize_arguments_json(seg["arguments"])
+    id = seg["call_id"] || seg["id"]
+    name = seg["name"] || "unknown"
+    ReqLLM.ToolCall.new(id, name, args_json)
+  end
+
+  defp builtin_call_segment_to_tool_call(seg, type) do
+    id = seg["id"] || seg["call_id"]
+
+    args_json =
+      seg
+      |> Map.drop(["id", "call_id", "type", "status"])
+      |> Jason.encode!()
+
+    ReqLLM.ToolCall.new_builtin(id, type, args_json)
   end
 
   defp extract_reasoning_details_from_segments(segments) do

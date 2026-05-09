@@ -295,9 +295,11 @@ defmodule ReqLLM.StreamResponse do
   def classify(%__MODULE__{stream: stream}) do
     summary = ResponseStream.summarize(stream)
 
+    actionable_tool_calls = Enum.reject(summary.tool_calls, &builtin_tool_call?/1)
+
     type =
       cond do
-        summary.tool_calls != [] -> :tool_calls
+        actionable_tool_calls != [] -> :tool_calls
         summary.finish_reason == :tool_calls -> :tool_calls
         true -> :final_answer
       end
@@ -310,6 +312,12 @@ defmodule ReqLLM.StreamResponse do
       finish_reason: summary.finish_reason
     }
   end
+
+  defp builtin_tool_call?(map) when is_map(map) do
+    Map.get(map, :builtin?) == true or Map.get(map, "builtin?") == true
+  end
+
+  defp builtin_tool_call?(_), do: false
 
   @doc """
   Process a stream with real-time callbacks for chunk activity and visible output.

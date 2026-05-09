@@ -114,10 +114,7 @@ defmodule ReqLLM.OpenTelemetry.OTelAdapter do
 
   defp ensure_instrument(%{name: name} = record) do
     ensure_instrument_table()
-    # The Erlang OTel SDK rejects non-atom instrument names. Records keep
-    # spec-shaped string names (which the bridge relays as-is); we only
-    # convert when handing them to :otel_meter.
-    instrument_name = if is_atom(name), do: name, else: String.to_atom(name)
+    instrument_name = otel_instrument_name(name)
 
     case :ets.lookup(@instrument_table, instrument_name) do
       [{^instrument_name, instrument}] ->
@@ -131,8 +128,12 @@ defmodule ReqLLM.OpenTelemetry.OTelAdapter do
             instrument_config(record)
           ])
 
-        :ets.insert(@instrument_table, {instrument_name, instrument})
-        instrument
+        if :ets.insert_new(@instrument_table, {instrument_name, instrument}) do
+          instrument
+        else
+          [{^instrument_name, existing}] = :ets.lookup(@instrument_table, instrument_name)
+          existing
+        end
     end
   end
 
@@ -162,16 +163,21 @@ defmodule ReqLLM.OpenTelemetry.OTelAdapter do
       unit: Map.get(record, :unit, "")
     }
 
-    # The Erlang OTel API expects explicit bucket boundaries under
-    # :advisory_params per the OTel spec — putting them at the top level of
-    # the opts map silently falls back to default histogram buckets.
     case Map.get(record, :boundaries, []) do
-      [] -> base
+      [] ->
+        base
+
       [_ | _] = boundaries ->
         Map.put(base, :advisory_params, %{explicit_bucket_boundaries: boundaries})
     end
   end
 
+  defp otel_instrument_name(name) when is_atom(name), do: name
+  defp otel_instrument_name(name), do: String.to_atom(name)
+
+  # Keys come from the closed `gen_ai.*` / `server.*` / `error.*` set defined in
+  # `ReqLLM.OpenTelemetry.{Attributes,Content,Metrics}` — not from caller-supplied
+  # input — so `String.to_atom/1` is safe here. Do not pass user-supplied keys through.
   defp atomize_keys(map) when is_map(map) do
     Map.new(map, fn
       {key, value} when is_atom(key) -> {key, value}
@@ -539,6 +545,9 @@ defmodule ReqLLM.OpenTelemetry do
     end
   end
 
+  # Keys come from the closed `gen_ai.*` / `server.*` / `error.*` / `req_llm.*` /
+  # `openai.*` / `langfuse.*` set defined in `Attributes`, `Content`, and `Shared`
+  # — not caller-supplied — so `String.to_atom/1` is safe. Do not feed user input here.
   defp atomize(map) do
     Map.new(map, fn {key, value} -> {String.to_atom(key), value} end)
   end

@@ -216,9 +216,11 @@ defmodule ReqLLM.Response do
       |> reason_to_string_for_classify()
       |> normalize_finish_reason_for_classify()
 
+    actionable_tool_calls = Enum.reject(normalized_tool_calls, &builtin_tool_call?/1)
+
     type =
       cond do
-        normalized_tool_calls != [] -> :tool_calls
+        actionable_tool_calls != [] -> :tool_calls
         normalized_finish_reason == :tool_calls -> :tool_calls
         true -> :final_answer
       end
@@ -603,30 +605,66 @@ defmodule ReqLLM.Response do
   end
 
   defp normalize_tool_call_for_classify(%ToolCall{} = tool_call) do
-    ToolCall.to_map(tool_call)
+    tool_call
+    |> ToolCall.to_map()
+    |> maybe_put_builtin_flag(ToolCall.builtin?(tool_call))
   end
 
-  defp normalize_tool_call_for_classify(%{id: id, name: name, arguments: args}) do
-    %{id: normalize_tool_call_id(id), name: name, arguments: parse_tool_call_arguments(args)}
+  defp normalize_tool_call_for_classify(%{id: id, name: name, arguments: args} = m) do
+    %{
+      id: normalize_tool_call_id(id),
+      name: name,
+      arguments: parse_tool_call_arguments(args)
+    }
+    |> maybe_put_builtin_flag(builtin_flag(m))
   end
 
-  defp normalize_tool_call_for_classify(%{"id" => id, "name" => name, "arguments" => args}) do
-    %{id: normalize_tool_call_id(id), name: name, arguments: parse_tool_call_arguments(args)}
-  end
-
-  defp normalize_tool_call_for_classify(%{function: %{name: name, arguments: args}} = tool_call) do
-    id = Map.get(tool_call, :id)
-    %{id: normalize_tool_call_id(id), name: name, arguments: parse_tool_call_arguments(args)}
+  defp normalize_tool_call_for_classify(%{"id" => id, "name" => name, "arguments" => args} = m) do
+    %{
+      id: normalize_tool_call_id(id),
+      name: name,
+      arguments: parse_tool_call_arguments(args)
+    }
+    |> maybe_put_builtin_flag(builtin_flag(m))
   end
 
   defp normalize_tool_call_for_classify(
-         %{"function" => %{"name" => name, "arguments" => args}} = tool_call
+         %{function: %{name: name, arguments: args} = function} = tool_call
+       ) do
+    id = Map.get(tool_call, :id)
+
+    %{
+      id: normalize_tool_call_id(id),
+      name: name,
+      arguments: parse_tool_call_arguments(args)
+    }
+    |> maybe_put_builtin_flag(builtin_flag(tool_call) or builtin_flag(function))
+  end
+
+  defp normalize_tool_call_for_classify(
+         %{"function" => %{"name" => name, "arguments" => args} = function} = tool_call
        ) do
     id = Map.get(tool_call, "id")
-    %{id: normalize_tool_call_id(id), name: name, arguments: parse_tool_call_arguments(args)}
+
+    %{
+      id: normalize_tool_call_id(id),
+      name: name,
+      arguments: parse_tool_call_arguments(args)
+    }
+    |> maybe_put_builtin_flag(builtin_flag(tool_call) or builtin_flag(function))
   end
 
   defp normalize_tool_call_for_classify(_), do: nil
+
+  defp maybe_put_builtin_flag(map, true), do: Map.put(map, :builtin?, true)
+  defp maybe_put_builtin_flag(map, _), do: map
+
+  defp builtin_flag(map) do
+    Map.get(map, :builtin?) == true or Map.get(map, "builtin?") == true
+  end
+
+  defp builtin_tool_call?(map) when is_map(map), do: Map.get(map, :builtin?) == true
+  defp builtin_tool_call?(_), do: false
 
   defp normalize_tool_call_id(nil), do: ""
   defp normalize_tool_call_id(id) when is_binary(id), do: id

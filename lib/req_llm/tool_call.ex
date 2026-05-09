@@ -76,6 +76,55 @@ defmodule ReqLLM.ToolCall do
     }
   end
 
+  @doc """
+  Create a ToolCall representing a server-side builtin invocation that the
+  provider executed on the model's behalf (e.g. OpenAI Responses API
+  `web_search_call`, `file_search_call`).
+
+  These calls are exposed in `message.tool_calls` for inspection and
+  observability — the OTel GenAI bridge surfaces them as `tool_call` parts
+  in `gen_ai.output.messages`. They are **not replayable**: the provider
+  already executed them, and the OpenAI Responses request schema rejects
+  them in `input`. Request encoders, `finish_reason` derivation, and tool
+  call ID sanitisers must skip entries where `builtin?(tc)` is true.
+
+  `arguments_json` should be a JSON-encoded string capturing whatever
+  per-call payload the provider returned (action, query, result URLs, etc.).
+  """
+  @spec new_builtin(String.t() | nil, String.t(), String.t()) :: t()
+  def new_builtin(id, name, arguments_json) do
+    %__MODULE__{
+      id: id || generate_id(),
+      type: "function",
+      function: %{
+        name: name,
+        arguments: arguments_json,
+        builtin?: true
+      }
+    }
+  end
+
+  @doc """
+  Returns true when the ToolCall represents a server-side builtin invocation
+  (see `new_builtin/3`). Returns false for regular user-defined function
+  calls.
+  """
+  @spec builtin?(t() | map()) :: boolean()
+  def builtin?(%__MODULE__{function: function}) when is_map(function), do: builtin_flag?(function)
+
+  def builtin?(map) when is_map(map) do
+    function = Map.get(map, :function) || Map.get(map, "function") || %{}
+    builtin_flag?(map) or builtin_flag?(function)
+  end
+
+  def builtin?(_), do: false
+
+  defp builtin_flag?(map) when is_map(map) do
+    Map.get(map, :builtin?) == true or Map.get(map, "builtin?") == true
+  end
+
+  defp builtin_flag?(_), do: false
+
   defp generate_id do
     "call_#{Uniq.UUID.uuid7()}"
   end
@@ -197,18 +246,32 @@ defmodule ReqLLM.ToolCall do
 
   defimpl Jason.Encoder do
     def encode(%{id: id, type: type, function: function}, opts) do
+      function_map =
+        %{
+          "name" => function.name,
+          "arguments" => function.arguments
+        }
+        |> maybe_put_builtin(function)
+
       Jason.Encode.map(
         %{
           "id" => id,
           "type" => type,
-          "function" => %{
-            "name" => function.name,
-            "arguments" => function.arguments
-          }
+          "function" => function_map
         },
         opts
       )
     end
+
+    defp maybe_put_builtin(map, function) when is_map(function) do
+      if Map.get(function, :builtin?) == true or Map.get(function, "builtin?") == true do
+        Map.put(map, "builtin?", true)
+      else
+        map
+      end
+    end
+
+    defp maybe_put_builtin(map, _function), do: map
   end
 
   defimpl Inspect do

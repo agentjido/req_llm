@@ -1211,9 +1211,7 @@ defmodule ReqLLM.Context do
   defp decode_file_data("data:" <> _ = data_uri, media_type) do
     case Regex.run(~r/^data:([^;,]*)(?:;[^,]*)*;base64,(.*)$/s, data_uri) do
       [_, uri_media_type, encoded] ->
-        decoded = String.replace(encoded, ~r/\s+/, "")
-
-        case Base.decode64(decoded) do
+        case Base.decode64(encoded, ignore: :whitespace) do
           {:ok, data} -> {:ok, data, file_data_media_type(uri_media_type, media_type)}
           :error -> :error
         end

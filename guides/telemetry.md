@@ -370,6 +370,36 @@ the spec: `gen_ai.operation.name`, `gen_ai.provider.name`,
 If the meter API is unavailable (e.g. you only depend on the tracer SDK),
 the bridge silently skips metrics emission while continuing to record spans.
 
+#### Pruning stale in-flight spans
+
+The bridge tracks in-flight spans in a named ETS table keyed by handler id
+and request id. Each `:start` event inserts an entry; the matching `:stop`
+or `:exception` removes it. If a request never produces a terminal event
+(for example, the calling process crashes mid-request before
+`:telemetry.span/3` emits the terminating event), the entry stays in the
+table until `ReqLLM.OpenTelemetry.detach/1` runs.
+
+Long-running hosts can call `ReqLLM.OpenTelemetry.prune_stale_spans/2`
+periodically to drop entries older than a TTL. The simplest way is to wire
+it into [`:telemetry_poller`][telemetry-poller]:
+
+```elixir
+# In your application supervision tree:
+children = [
+  {:telemetry_poller,
+   measurements: [
+     {ReqLLM.OpenTelemetry, :prune_stale_spans, ["req-llm-otel", :timer.minutes(5)]}
+   ],
+   period: :timer.minutes(1)}
+]
+```
+
+`prune_stale_spans/2` returns the number of entries it removed. The default
+handler id is `"req-llm-open-telemetry"` if you call
+`ReqLLM.OpenTelemetry.attach/0` without an explicit handler id.
+
+[telemetry-poller]: https://hexdocs.pm/telemetry_poller/
+
 #### Capturing message content (opt-in)
 
 By default the bridge does **not** attach prompt or response content. To
@@ -405,8 +435,9 @@ The captured fields are:
 
 Reasoning text never appears in any of these, even if the underlying model
 returned thinking parts. ReqLLM's payload sanitizer redacts reasoning before
-the bridge sees the messages, and the OTel content mapper additionally
-filters part types to `text` and `image_url` only.
+the bridge sees the messages, and the OTel content mapper additionally keeps
+only spec-friendly text, URI, media-descriptor, file-descriptor, tool-call,
+and tool-result parts.
 
 #### OpenAI provider extensions
 

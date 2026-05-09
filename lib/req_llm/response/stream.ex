@@ -80,12 +80,14 @@ defmodule ReqLLM.Response.Stream do
   end
 
   defp accumulate_chunk(%StreamChunk{type: :tool_call} = chunk, acc) do
-    tool_call = %{
-      id: Map.get(chunk.metadata, :id) || "call_#{:erlang.unique_integer()}",
-      name: chunk.name,
-      arguments: chunk.arguments || %{},
-      index: Map.get(chunk.metadata, :index, 0)
-    }
+    tool_call =
+      %{
+        id: Map.get(chunk.metadata, :id) || "call_#{:erlang.unique_integer()}",
+        name: chunk.name,
+        arguments: chunk.arguments || %{},
+        index: Map.get(chunk.metadata, :index, 0)
+      }
+      |> maybe_put_builtin_flag(builtin_metadata?(chunk.metadata))
 
     %{acc | tool_calls: [tool_call | acc.tool_calls]}
   end
@@ -97,6 +99,15 @@ defmodule ReqLLM.Response.Stream do
   end
 
   defp accumulate_chunk(_chunk, acc), do: acc
+
+  defp maybe_put_builtin_flag(map, true), do: Map.put(map, :builtin?, true)
+  defp maybe_put_builtin_flag(map, _), do: map
+
+  defp builtin_metadata?(map) when is_map(map) do
+    Map.get(map, :builtin?) == true or Map.get(map, "builtin?") == true
+  end
+
+  defp builtin_metadata?(_), do: false
 
   defp handle_tool_call_args(%{tool_call_args: %{index: index, fragment: fragment}}, acc) do
     existing = Map.get(acc.arg_fragments, index, "")

@@ -215,6 +215,48 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
       assert Jason.decode!(tool_output["output"]) == %{"temp" => 72}
     end
 
+    test "skips builtin tool calls when replaying assistant context" do
+      contexts = [
+        %ReqLLM.Context{
+          messages: [
+            %ReqLLM.Message{
+              role: :assistant,
+              content: [],
+              tool_calls: [
+                ReqLLM.ToolCall.new_builtin("ws_1", "web_search_call", ~s({"query":"elixir"}))
+              ]
+            }
+          ]
+        },
+        %ReqLLM.Context{
+          messages: [
+            %ReqLLM.Message{
+              role: :assistant,
+              content: [],
+              tool_calls: [
+                %{
+                  "id" => "ws_1",
+                  "function" => %{
+                    "name" => "web_search_call",
+                    "arguments" => ~s({"query":"elixir"}),
+                    "builtin?" => true
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+
+      for context <- contexts do
+        request = build_request(context: context)
+        encoded = ResponsesAPI.encode_body(request)
+        body = Jason.decode!(encoded.body)
+
+        refute Enum.any?(body["input"], &(&1["type"] == "function_call"))
+      end
+    end
+
     test "encodes multimodal tool results as array function_call_output" do
       tool_call = %ReqLLM.ToolCall{
         id: "call_1",
@@ -857,6 +899,37 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
       assert tool_call.id == "call_abc"
       assert tool_call.function.name == "get_weather"
       assert Jason.decode!(tool_call.function.arguments) == %{"location" => "NYC"}
+    end
+
+    test "decodes builtin tool calls as non-actionable final answers" do
+      response_body = %{
+        "id" => "resp_123",
+        "model" => "gpt-5",
+        "status" => "completed",
+        "output" => [
+          %{
+            "type" => "web_search_call",
+            "id" => "ws_1",
+            "status" => "completed",
+            "action" => %{"type" => "search", "query" => "elixir"}
+          }
+        ],
+        "usage" => %{"input_tokens" => 5, "output_tokens" => 10}
+      }
+
+      {_req, resp} = ResponsesAPI.decode_response(build_response(200, response_body))
+
+      assert resp.body.finish_reason == :stop
+      assert [tool_call] = resp.body.message.tool_calls
+      assert ReqLLM.ToolCall.builtin?(tool_call)
+      assert tool_call.id == "ws_1"
+      assert tool_call.function.name == "web_search_call"
+
+      assert Jason.decode!(tool_call.function.arguments) == %{
+               "action" => %{"type" => "search", "query" => "elixir"}
+             }
+
+      assert ReqLLM.Response.classify(resp.body).type == :final_answer
     end
 
     test "handles malformed tool call arguments" do
@@ -2037,6 +2110,30 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
 
       assert response.finish_reason == :tool_calls
       assert [%ReqLLM.ToolCall{function: %{name: "get_weather"}}] = response.message.tool_calls
+    end
+
+    test "preserves stop finish reason when only builtin tool chunks are present" do
+      {:ok, model} = ReqLLM.model("openai:gpt-4o")
+      context = %ReqLLM.Context{messages: []}
+
+      chunks = [
+        ReqLLM.StreamChunk.tool_call("web_search_call", %{"query" => "docs"}, %{
+          id: "ws_1",
+          builtin?: true
+        })
+      ]
+
+      {:ok, response} =
+        ResponseBuilder.build_response(
+          chunks,
+          %{finish_reason: :stop},
+          context: context,
+          model: model
+        )
+
+      assert response.finish_reason == :stop
+      assert [%ReqLLM.ToolCall{} = tool_call] = response.message.tool_calls
+      assert ReqLLM.ToolCall.builtin?(tool_call)
     end
 
     test "upgrades string stop finish reason to tool_calls when tool chunks are present" do

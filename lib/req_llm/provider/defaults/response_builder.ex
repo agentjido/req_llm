@@ -45,28 +45,20 @@ defmodule ReqLLM.Provider.Defaults.ResponseBuilder do
     context = Keyword.fetch!(opts, :context)
     model = Keyword.fetch!(opts, :model)
 
-    # Accumulate data from chunks
     acc_data = accumulate_chunks(chunks)
-
-    # Reconstruct tool calls with merged argument fragments
     reconstructed_tool_calls = reconstruct_tool_calls(acc_data)
-
-    # Normalize to ToolCall structs
     normalized_tool_calls = normalize_tool_calls(reconstructed_tool_calls)
 
-    # Build message content
     text_content = acc_data.text_content |> Enum.reverse() |> Enum.join()
     thinking_content = acc_data.thinking_content |> Enum.reverse() |> Enum.join()
     content_parts = build_content_parts(text_content, thinking_content, normalized_tool_calls)
 
-    # Build reasoning_details: prefer from meta chunks, fall back to extraction from thinking chunks
     reasoning_details =
       case acc_data.reasoning_details do
         [] -> extract_reasoning_from_thinking_chunks(chunks, model.provider)
         details -> details
       end
 
-    # Build message
     message = %Message{
       role: :assistant,
       content: content_parts,
@@ -75,16 +67,9 @@ defmodule ReqLLM.Provider.Defaults.ResponseBuilder do
       reasoning_details: reasoning_details
     }
 
-    # Extract structured object if present
     object = extract_object_from_message(message)
-
-    # Normalize usage
     usage = normalize_usage_fields(metadata[:usage])
-
-    # Normalize finish_reason to atom (providers may emit strings)
     finish_reason = normalize_finish_reason(metadata[:finish_reason])
-
-    # Merge streaming logprobs into provider_meta
     base_provider_meta = metadata[:provider_meta] || %{}
 
     provider_meta =
@@ -93,7 +78,6 @@ defmodule ReqLLM.Provider.Defaults.ResponseBuilder do
         tokens -> Map.put(base_provider_meta, :logprobs, tokens)
       end
 
-    # Build response
     base_response = %Response{
       id: metadata[:response_id] || generate_response_id(),
       model: model.id,
@@ -108,7 +92,6 @@ defmodule ReqLLM.Provider.Defaults.ResponseBuilder do
       error: nil
     }
 
-    # Merge context with new assistant message
     merged_response = Context.merge_response(context, base_response)
 
     {:ok, merged_response}
@@ -145,12 +128,14 @@ defmodule ReqLLM.Provider.Defaults.ResponseBuilder do
   end
 
   defp accumulate_chunk(%StreamChunk{type: :tool_call} = chunk, acc) do
-    tool_call = %{
-      id: Map.get(chunk.metadata, :id) || "call_#{:erlang.unique_integer()}",
-      name: chunk.name,
-      arguments: chunk.arguments || %{},
-      index: Map.get(chunk.metadata, :index, 0)
-    }
+    tool_call =
+      %{
+        id: Map.get(chunk.metadata, :id) || "call_#{:erlang.unique_integer()}",
+        name: chunk.name,
+        arguments: chunk.arguments || %{},
+        index: Map.get(chunk.metadata, :index, 0)
+      }
+      |> maybe_put_builtin_flag(builtin?(chunk.metadata))
 
     %{acc | tool_calls: [tool_call | acc.tool_calls]}
   end
@@ -217,6 +202,15 @@ defmodule ReqLLM.Provider.Defaults.ResponseBuilder do
     end
   end
 
+  defp maybe_put_builtin_flag(map, true), do: Map.put(map, :builtin?, true)
+  defp maybe_put_builtin_flag(map, _), do: map
+
+  defp builtin?(map) when is_map(map) do
+    Map.get(map, :builtin?) == true or Map.get(map, "builtin?") == true
+  end
+
+  defp builtin?(_), do: false
+
   # ============================================================================
   # Tool Call Normalization
   # ============================================================================
@@ -240,16 +234,19 @@ defmodule ReqLLM.Provider.Defaults.ResponseBuilder do
 
   defp normalize_tool_call(%ToolCall{} = call), do: call
 
-  defp normalize_tool_call(%{id: id, name: name, arguments: args}) do
-    ToolCall.new(id, name, encode_tool_args(args))
+  defp normalize_tool_call(%{id: id, name: name, arguments: args} = m) do
+    constructor = if builtin?(m), do: &ToolCall.new_builtin/3, else: &ToolCall.new/3
+    constructor.(id, name, encode_tool_args(args))
   end
 
-  defp normalize_tool_call(%{"id" => id, "name" => name, "arguments" => args}) do
-    ToolCall.new(id, name, encode_tool_args(args))
+  defp normalize_tool_call(%{"id" => id, "name" => name, "arguments" => args} = m) do
+    constructor = if builtin?(m), do: &ToolCall.new_builtin/3, else: &ToolCall.new/3
+    constructor.(id, name, encode_tool_args(args))
   end
 
   defp normalize_tool_call(other) when is_map(other) do
-    ToolCall.new(other[:id], other[:name], encode_tool_args(other[:arguments]))
+    constructor = if builtin?(other), do: &ToolCall.new_builtin/3, else: &ToolCall.new/3
+    constructor.(other[:id], other[:name], encode_tool_args(other[:arguments]))
   end
 
   defp encode_tool_args(args) when is_binary(args), do: args

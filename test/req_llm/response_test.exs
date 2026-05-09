@@ -525,6 +525,25 @@ defmodule ReqLLM.ResponseTest do
       assert result.finish_reason == :stop
     end
 
+    test "classifies builtin-only tool calls as final answers" do
+      tool_call = ToolCall.new_builtin("ws_1", "web_search_call", ~s({"query":"elixir"}))
+      response = create_response(message: tool_message([tool_call]), finish_reason: :stop)
+      result = Response.classify(response)
+
+      assert result.type == :final_answer
+
+      assert result.tool_calls == [
+               %{
+                 id: "ws_1",
+                 name: "web_search_call",
+                 arguments: %{"query" => "elixir"},
+                 builtin?: true
+               }
+             ]
+
+      assert result.finish_reason == :stop
+    end
+
     test "classifies as :tool_calls when finish_reason indicates tool calls" do
       response = create_response(message: text_message(""), finish_reason: "tool_use")
       result = Response.classify(response)

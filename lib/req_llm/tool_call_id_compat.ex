@@ -151,6 +151,7 @@ defmodule ReqLLM.ToolCallIdCompat do
     from_tool_calls =
       message.tool_calls
       |> List.wrap()
+      |> Enum.reject(&builtin_tool_call?/1)
       |> Enum.map(&tool_call_id/1)
 
     from_content_parts =
@@ -203,7 +204,11 @@ defmodule ReqLLM.ToolCallIdCompat do
 
   defp sanitize_message_tool_calls(tool_calls, state, policy) when is_list(tool_calls) do
     Enum.map_reduce(tool_calls, state, fn tool_call, acc ->
-      sanitize_tool_call(tool_call, acc, policy)
+      if builtin_tool_call?(tool_call) do
+        {tool_call, acc}
+      else
+        sanitize_tool_call(tool_call, acc, policy)
+      end
     end)
   end
 
@@ -219,8 +224,6 @@ defmodule ReqLLM.ToolCallIdCompat do
     {tool_call, state} = sanitize_map_key(tool_call, "id", state, policy)
     sanitize_map_tool_id(tool_call, state, policy)
   end
-
-  defp sanitize_tool_call(other, state, _policy), do: {other, state}
 
   defp sanitize_content_parts(content, state, policy) when is_list(content) do
     Enum.map_reduce(content, state, fn part, acc ->
@@ -383,6 +386,7 @@ defmodule ReqLLM.ToolCallIdCompat do
     tool_call_ids =
       message.tool_calls
       |> List.wrap()
+      |> Enum.reject(&builtin_tool_call?/1)
       |> Enum.map(&tool_call_id/1)
 
     tool_result_ids =
@@ -458,4 +462,6 @@ defmodule ReqLLM.ToolCallIdCompat do
   end
 
   defp drop_function_call_ids(body), do: body
+
+  defp builtin_tool_call?(tool_call), do: ReqLLM.ToolCall.builtin?(tool_call)
 end
