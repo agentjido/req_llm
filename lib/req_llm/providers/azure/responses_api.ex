@@ -15,6 +15,12 @@ defmodule ReqLLM.Providers.Azure.ResponsesAPI do
   Models with `"api": "responses"` in their metadata:
   - codex-mini, gpt-5-codex, gpt-5.1-codex-mini
   - Future models that use the Responses API format
+
+  ## Reasoning Effort
+
+  Accepts the top-level `:reasoning_effort` option (`:minimal | :low | :medium |
+  :high | :xhigh | :none` or the equivalent string) and forwards it to the
+  Responses API as `"reasoning": {"effort": <level>}`.
   """
 
   alias ReqLLM.Providers.OpenAI.ResponsesAPI
