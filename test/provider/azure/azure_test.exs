@@ -841,6 +841,33 @@ defmodule ReqLLM.Providers.AzureTest do
       refute Map.has_key?(body, "reasoning")
     end
 
+    test "Responses API models forward openai_parallel_tool_calls from provider_options" do
+      context = ReqLLM.Context.new([ReqLLM.Context.user("Hello")])
+      opts = [stream: false, provider_options: [openai_parallel_tool_calls: false]]
+
+      body = Azure.ResponsesAPI.format_request("gpt-5-codex", context, opts)
+
+      assert body["parallel_tool_calls"] == false
+    end
+
+    test "Responses API models accept parallel_tool_calls alias in provider_options" do
+      context = ReqLLM.Context.new([ReqLLM.Context.user("Hello")])
+      opts = [stream: false, provider_options: [parallel_tool_calls: true]]
+
+      body = Azure.ResponsesAPI.format_request("gpt-5-codex", context, opts)
+
+      assert body["parallel_tool_calls"] == true
+    end
+
+    test "Responses API models omit parallel_tool_calls when not provided" do
+      context = ReqLLM.Context.new([ReqLLM.Context.user("Hello")])
+      opts = [stream: false]
+
+      body = Azure.ResponsesAPI.format_request("gpt-5-codex", context, opts)
+
+      refute Map.has_key?(body, "parallel_tool_calls")
+    end
+
     test "Claude reasoning models override temperature to 1.0" do
       model = %LLMDB.Model{
         id: "claude-3-5-sonnet-20241022",
