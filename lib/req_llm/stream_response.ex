@@ -72,6 +72,7 @@ defmodule ReqLLM.StreamResponse do
   alias ReqLLM.Response
   alias ReqLLM.Response.Stream, as: ResponseStream
   alias ReqLLM.StreamResponse.MetadataHandle
+  alias ReqLLM.ToolCall
 
   @schema Zoi.struct(__MODULE__, %{
             stream: Zoi.any() |> Zoi.required(),
@@ -295,7 +296,7 @@ defmodule ReqLLM.StreamResponse do
   def classify(%__MODULE__{stream: stream}) do
     summary = ResponseStream.summarize(stream)
 
-    actionable_tool_calls = Enum.reject(summary.tool_calls, &builtin_tool_call?/1)
+    actionable_tool_calls = Enum.reject(summary.tool_calls, &ToolCall.builtin_flag?/1)
 
     type =
       cond do
@@ -312,12 +313,6 @@ defmodule ReqLLM.StreamResponse do
       finish_reason: summary.finish_reason
     }
   end
-
-  defp builtin_tool_call?(map) when is_map(map) do
-    Map.get(map, :builtin?) == true or Map.get(map, "builtin?") == true
-  end
-
-  defp builtin_tool_call?(_), do: false
 
   @doc """
   Process a stream with real-time callbacks for chunk activity and visible output.

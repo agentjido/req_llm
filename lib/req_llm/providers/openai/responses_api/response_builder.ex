@@ -16,6 +16,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI.ResponseBuilder do
 
   alias ReqLLM.Provider.Defaults.ResponseBuilder, as: DefaultBuilder
   alias ReqLLM.StreamChunk
+  alias ReqLLM.ToolCall
 
   @impl true
   def build_response(chunks, metadata, opts) do
@@ -38,7 +39,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI.ResponseBuilder do
   defp finish_reason_is_stop?(_), do: false
 
   defp actionable_tool_call_chunk?(%StreamChunk{type: :tool_call, metadata: meta}) do
-    not (is_map(meta) and (Map.get(meta, :builtin?) == true or Map.get(meta, "builtin?") == true))
+    not ToolCall.builtin_flag?(meta)
   end
 
   defp actionable_tool_call_chunk?(_), do: false

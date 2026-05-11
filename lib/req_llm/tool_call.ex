@@ -119,11 +119,27 @@ defmodule ReqLLM.ToolCall do
 
   def builtin?(_), do: false
 
-  defp builtin_flag?(map) when is_map(map) do
+  @doc """
+  Returns true when the given map carries a truthy `:builtin?` (or
+  `"builtin?"`) flag directly on it. Unlike `builtin?/1`, this does not
+  unwrap a nested `:function` map — use it for chunk metadata or raw
+  tool-call shapes that don't have the OpenAI `function` nesting.
+  """
+  @spec builtin_flag?(any()) :: boolean()
+  def builtin_flag?(map) when is_map(map) do
     Map.get(map, :builtin?) == true or Map.get(map, "builtin?") == true
   end
 
-  defp builtin_flag?(_), do: false
+  def builtin_flag?(_), do: false
+
+  @doc """
+  Sets `:builtin? => true` on `map` when `flag` is `true`; otherwise returns
+  `map` unchanged. Used by stream/response builders that propagate the
+  builtin marker onto plain tool-call maps before they reach `new_builtin/3`.
+  """
+  @spec put_builtin_flag(map(), boolean()) :: map()
+  def put_builtin_flag(map, true), do: Map.put(map, :builtin?, true)
+  def put_builtin_flag(map, _), do: map
 
   defp generate_id do
     "call_#{Uniq.UUID.uuid7()}"

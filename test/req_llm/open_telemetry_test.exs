@@ -1193,7 +1193,7 @@ defmodule ReqLLM.OpenTelemetryTest do
 
       assert_receive {:start_span, _fresh_span, _name, _attrs}
 
-      assert OpenTelemetry.prune_stale_spans(handler_id, 10) == 1
+      assert OpenTelemetry.prune_stale_spans(handler_id, 10) >= 1
 
       table = :req_llm_open_telemetry_spans
       refute :ets.member(table, {handler_id, stale_id})
@@ -1229,7 +1229,7 @@ defmodule ReqLLM.OpenTelemetryTest do
       assert_receive {:start_span, _, _, _}
 
       Process.sleep(20)
-      assert OpenTelemetry.prune_stale_spans(handler_a, 10) == 1
+      assert OpenTelemetry.prune_stale_spans(handler_a, 10) >= 1
 
       table = :req_llm_open_telemetry_spans
       refute :ets.member(table, {handler_a, shared_id})

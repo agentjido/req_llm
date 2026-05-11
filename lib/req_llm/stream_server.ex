@@ -845,7 +845,7 @@ defmodule ReqLLM.StreamServer do
           arguments: args,
           index: index
         }
-        |> maybe_put_builtin_flag(ReqLLM.ToolCall.builtin?(metadata))
+        |> ReqLLM.ToolCall.put_builtin_flag(ReqLLM.ToolCall.builtin_flag?(metadata))
 
       %{acc | tool_calls: acc.tool_calls ++ [tool_call]}
     else
@@ -905,9 +905,6 @@ defmodule ReqLLM.StreamServer do
         arguments
     end
   end
-
-  defp maybe_put_builtin_flag(map, true), do: Map.put(map, :builtin?, true)
-  defp maybe_put_builtin_flag(map, _), do: map
 
   defp encode_tool_call_args(args) when is_binary(args), do: args
 

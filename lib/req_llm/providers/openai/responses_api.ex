@@ -273,8 +273,11 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
 
     if map_size(extras) > 0 do
       case Map.get(meta, :provider_meta) do
-        existing when is_map(existing) -> Map.put(meta, :provider_meta, Map.merge(existing, extras))
-        _ -> Map.put(meta, :provider_meta, extras)
+        existing when is_map(existing) ->
+          Map.put(meta, :provider_meta, Map.merge(existing, extras))
+
+        _ ->
+          Map.put(meta, :provider_meta, extras)
       end
     else
       meta

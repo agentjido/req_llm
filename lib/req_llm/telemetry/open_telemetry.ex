@@ -60,7 +60,7 @@ defmodule ReqLLM.Telemetry.OpenTelemetry do
   @spec request_start(map(), keyword()) :: request_start_stub()
   def request_start(metadata, opts \\ []) when is_map(metadata) do
     mode = Shared.content_mode(opts)
-    request_content = Content.request_attributes(metadata)
+    request_content = content_for(mode, metadata, :request)
 
     %{
       name: span_name(metadata),
@@ -85,9 +85,7 @@ defmodule ReqLLM.Telemetry.OpenTelemetry do
   def request_stop(metadata, opts \\ []) when is_map(metadata) do
     mode = Shared.content_mode(opts)
     measurements = measurements(opts)
-
-    content_payload =
-      Map.merge(Content.request_attributes(metadata), Content.response_attributes(metadata))
+    content_payload = content_for(mode, metadata, :both)
 
     %{
       attributes:
@@ -109,7 +107,7 @@ defmodule ReqLLM.Telemetry.OpenTelemetry do
   def request_exception(metadata, opts \\ []) when is_map(metadata) do
     mode = Shared.content_mode(opts)
     measurements = measurements(opts)
-    request_content = Content.request_attributes(metadata)
+    request_content = content_for(mode, metadata, :request)
 
     %{
       attributes:
@@ -135,6 +133,13 @@ defmodule ReqLLM.Telemetry.OpenTelemetry do
       map when is_map(map) -> map
       _ -> %{}
     end
+  end
+
+  defp content_for(:none, _metadata, _scope), do: %{}
+  defp content_for(_mode, metadata, :request), do: Content.request_attributes(metadata)
+
+  defp content_for(_mode, metadata, :both) do
+    Map.merge(Content.request_attributes(metadata), Content.response_attributes(metadata))
   end
 
   defp merge_when(map, true, addition), do: Map.merge(map, addition)

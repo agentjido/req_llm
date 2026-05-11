@@ -216,7 +216,7 @@ defmodule ReqLLM.Response do
       |> reason_to_string_for_classify()
       |> normalize_finish_reason_for_classify()
 
-    actionable_tool_calls = Enum.reject(normalized_tool_calls, &builtin_tool_call?/1)
+    actionable_tool_calls = Enum.reject(normalized_tool_calls, &ToolCall.builtin_flag?/1)
 
     type =
       cond do
@@ -607,7 +607,7 @@ defmodule ReqLLM.Response do
   defp normalize_tool_call_for_classify(%ToolCall{} = tool_call) do
     tool_call
     |> ToolCall.to_map()
-    |> maybe_put_builtin_flag(ToolCall.builtin?(tool_call))
+    |> ToolCall.put_builtin_flag(ToolCall.builtin?(tool_call))
   end
 
   defp normalize_tool_call_for_classify(%{id: id, name: name, arguments: args} = m) do
@@ -616,7 +616,7 @@ defmodule ReqLLM.Response do
       name: name,
       arguments: parse_tool_call_arguments(args)
     }
-    |> maybe_put_builtin_flag(builtin_flag(m))
+    |> ToolCall.put_builtin_flag(ToolCall.builtin_flag?(m))
   end
 
   defp normalize_tool_call_for_classify(%{"id" => id, "name" => name, "arguments" => args} = m) do
@@ -625,7 +625,7 @@ defmodule ReqLLM.Response do
       name: name,
       arguments: parse_tool_call_arguments(args)
     }
-    |> maybe_put_builtin_flag(builtin_flag(m))
+    |> ToolCall.put_builtin_flag(ToolCall.builtin_flag?(m))
   end
 
   defp normalize_tool_call_for_classify(
@@ -638,7 +638,9 @@ defmodule ReqLLM.Response do
       name: name,
       arguments: parse_tool_call_arguments(args)
     }
-    |> maybe_put_builtin_flag(builtin_flag(tool_call) or builtin_flag(function))
+    |> ToolCall.put_builtin_flag(
+      ToolCall.builtin_flag?(tool_call) or ToolCall.builtin_flag?(function)
+    )
   end
 
   defp normalize_tool_call_for_classify(
@@ -651,20 +653,12 @@ defmodule ReqLLM.Response do
       name: name,
       arguments: parse_tool_call_arguments(args)
     }
-    |> maybe_put_builtin_flag(builtin_flag(tool_call) or builtin_flag(function))
+    |> ToolCall.put_builtin_flag(
+      ToolCall.builtin_flag?(tool_call) or ToolCall.builtin_flag?(function)
+    )
   end
 
   defp normalize_tool_call_for_classify(_), do: nil
-
-  defp maybe_put_builtin_flag(map, true), do: Map.put(map, :builtin?, true)
-  defp maybe_put_builtin_flag(map, _), do: map
-
-  defp builtin_flag(map) do
-    Map.get(map, :builtin?) == true or Map.get(map, "builtin?") == true
-  end
-
-  defp builtin_tool_call?(map) when is_map(map), do: Map.get(map, :builtin?) == true
-  defp builtin_tool_call?(_), do: false
 
   defp normalize_tool_call_id(nil), do: ""
   defp normalize_tool_call_id(id) when is_binary(id), do: id

@@ -135,7 +135,7 @@ defmodule ReqLLM.Provider.Defaults.ResponseBuilder do
         arguments: chunk.arguments || %{},
         index: Map.get(chunk.metadata, :index, 0)
       }
-      |> maybe_put_builtin_flag(builtin?(chunk.metadata))
+      |> ToolCall.put_builtin_flag(ToolCall.builtin_flag?(chunk.metadata))
 
     %{acc | tool_calls: [tool_call | acc.tool_calls]}
   end
@@ -202,15 +202,6 @@ defmodule ReqLLM.Provider.Defaults.ResponseBuilder do
     end
   end
 
-  defp maybe_put_builtin_flag(map, true), do: Map.put(map, :builtin?, true)
-  defp maybe_put_builtin_flag(map, _), do: map
-
-  defp builtin?(map) when is_map(map) do
-    Map.get(map, :builtin?) == true or Map.get(map, "builtin?") == true
-  end
-
-  defp builtin?(_), do: false
-
   # ============================================================================
   # Tool Call Normalization
   # ============================================================================
@@ -235,17 +226,19 @@ defmodule ReqLLM.Provider.Defaults.ResponseBuilder do
   defp normalize_tool_call(%ToolCall{} = call), do: call
 
   defp normalize_tool_call(%{id: id, name: name, arguments: args} = m) do
-    constructor = if builtin?(m), do: &ToolCall.new_builtin/3, else: &ToolCall.new/3
+    constructor = if ToolCall.builtin_flag?(m), do: &ToolCall.new_builtin/3, else: &ToolCall.new/3
     constructor.(id, name, encode_tool_args(args))
   end
 
   defp normalize_tool_call(%{"id" => id, "name" => name, "arguments" => args} = m) do
-    constructor = if builtin?(m), do: &ToolCall.new_builtin/3, else: &ToolCall.new/3
+    constructor = if ToolCall.builtin_flag?(m), do: &ToolCall.new_builtin/3, else: &ToolCall.new/3
     constructor.(id, name, encode_tool_args(args))
   end
 
   defp normalize_tool_call(other) when is_map(other) do
-    constructor = if builtin?(other), do: &ToolCall.new_builtin/3, else: &ToolCall.new/3
+    constructor =
+      if ToolCall.builtin_flag?(other), do: &ToolCall.new_builtin/3, else: &ToolCall.new/3
+
     constructor.(other[:id], other[:name], encode_tool_args(other[:arguments]))
   end
 
