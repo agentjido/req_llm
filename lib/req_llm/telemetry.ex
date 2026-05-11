@@ -1,15 +1,65 @@
 defmodule ReqLLM.Telemetry do
   @moduledoc """
-  Shared telemetry helpers for ReqLLM request lifecycle instrumentation.
+  Native `:telemetry` emitter for ReqLLM request and reasoning lifecycle.
 
-  This module owns:
+  Every event for a logical request shares the same `request_id`, so request
+  lifecycle, reasoning lifecycle, and token usage can be correlated without
+  provider-specific parsing. The OpenTelemetry bridge (`ReqLLM.OpenTelemetry`)
+  is built on top of these events — attach handlers here for billing, tenant
+  attribution, or any integration that should not depend on an OpenTelemetry
+  SDK.
 
-  - request correlation IDs
-  - request lifecycle events
-  - reasoning lifecycle events
-  - summary extraction
-  - payload policy
-  - compatibility emission for `[:req_llm, :token_usage]`
+  ## Event families
+
+  | Event                                | Measurements                   |
+  |--------------------------------------|--------------------------------|
+  | `[:req_llm, :request, :start]`       | `system_time`                  |
+  | `[:req_llm, :request, :stop]`        | `duration`, `system_time`      |
+  | `[:req_llm, :request, :exception]`   | `duration`, `system_time`      |
+  | `[:req_llm, :reasoning, :start]`     | `system_time`                  |
+  | `[:req_llm, :reasoning, :update]`    | `system_time`                  |
+  | `[:req_llm, :reasoning, :stop]`      | `duration`, `system_time`      |
+  | `[:req_llm, :token_usage]`           | token + cost counters          |
+
+  `duration` is in native monotonic time units — convert with
+  `System.convert_time_unit/3` if you want milliseconds.
+
+  ## Request metadata
+
+  All request lifecycle events carry the same metadata map: `request_id`,
+  `operation`, `mode`, `provider`, `model`, `transport`, `reasoning`,
+  `request_summary`, `response_summary`, `http_status`, `finish_reason`,
+  `usage`, `request_options`, `server`, `streaming`. The full shape and a
+  worked example live in the [Telemetry guide](https://hexdocs.pm/req_llm/telemetry.html).
+
+  Reasoning events never include raw thinking text — they are metadata-only
+  even with payload capture enabled.
+
+  ## Payload modes
+
+  Default is metadata-only. Opt into raw payloads globally or per call:
+
+      config :req_llm, telemetry: [payloads: :raw]
+
+      ReqLLM.generate_text(model, prompt, telemetry: [payloads: :raw])
+
+  Raw payloads are still sanitized — reasoning text is redacted, binary parts
+  are summarized by byte size and media type, embeddings report vector counts
+  rather than vectors. Use with care in multi-tenant systems.
+
+  ## Token usage compatibility
+
+  `[:req_llm, :token_usage]` remains available for existing consumers and now
+  fires for streaming as well as non-streaming requests. For new integrations,
+  prefer `[:req_llm, :request, :stop]` — it includes duration, finish reason,
+  summaries, and normalized reasoning metadata alongside usage.
+
+  ## See also
+
+  - [Telemetry guide](https://hexdocs.pm/req_llm/telemetry.html) — full event
+    shapes, reasoning normalization, payload capture, attach examples
+  - `ReqLLM.OpenTelemetry` — the auto-attached GenAI client span bridge
+  - `ReqLLM.Telemetry.OpenTelemetry` — dependency-free OTel mapper
   """
 
   alias ReqLLM.Context
@@ -201,7 +251,28 @@ defmodule ReqLLM.Telemetry do
   end
 
   @doc """
-  Observes a streaming chunk and emits milestone-based reasoning updates.
+  Folds a streaming chunk into the telemetry context and emits milestone
+  reasoning events when applicable.
+
+  Called by ReqLLM's streaming pipeline (`ReqLLM.StreamServer`) for every
+  chunk produced during a streaming request. Returns an updated context
+  with:
+
+  - `first_chunk_at` set to `System.monotonic_time/0` on the first non-empty
+    content chunk or first tool call — this feeds
+    `streaming.time_to_first_chunk` on the request lifecycle metadata and
+    `gen_ai.client.operation.time_to_first_chunk` on the OpenTelemetry
+    bridge.
+  - `response_summary` counters incremented for text bytes, thinking bytes,
+    tool calls, etc.
+  - A `[:req_llm, :reasoning, :update]` event emitted with
+    `milestone: :content_started` the first time a reasoning chunk is
+    observed.
+
+  Hosts integrating against the low-level streaming API (`ReqLLM.Streaming`)
+  do not normally call this directly — ReqLLM threads it through the
+  streaming pipeline. The high-level `stream_text/3` / `stream_object/4`
+  APIs use it transparently.
   """
   @spec observe_stream_chunk(context(), ReqLLM.StreamChunk.t()) :: context()
   def observe_stream_chunk(context, %ReqLLM.StreamChunk{} = chunk) do

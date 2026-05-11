@@ -301,6 +301,8 @@ response.usage.cost
 #=> %{tokens: 0.002, tools: 0.02, images: 0.0, total: 0.022}
 ```
 
+Responses API server-side tools may also appear in `response.message.tool_calls` as builtin records (for example `web_search_call` or `file_search_call`). They are preserved for observability, but the provider already executed them: do not replay them as local tool calls. `ReqLLM.Response.classify/1` and `ReqLLM.StreamResponse.classify/1` treat builtin-only responses as final answers.
+
 ### Image Generation
 
 Image generation costs are tracked separately:

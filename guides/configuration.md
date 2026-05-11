@@ -183,38 +183,22 @@ Both mechanisms can be combined. The config-level adapter is applied first, then
 
 ## Telemetry Configuration
 
-ReqLLM emits native `:telemetry` events for request lifecycle, reasoning lifecycle, and token usage. By default, those events are metadata-only:
+ReqLLM emits native `:telemetry` events for every request. The only application-level setting is the payload capture mode:
 
 ```elixir
-config :req_llm, telemetry: [payloads: :none]
+config :req_llm, telemetry: [payloads: :none]   # default — metadata only
+config :req_llm, telemetry: [payloads: :raw]    # include sanitized payloads
 ```
 
-To include sanitized request and response payloads on request lifecycle events:
+Raw payloads are sanitized (reasoning text redacted, binaries summarized, tools reduced to stable metadata) — `:none` is the safer default for multi-tenant systems.
 
-```elixir
-config :req_llm, telemetry: [payloads: :raw]
-```
-
-Per-request override:
+Override per request via the `telemetry:` option:
 
 ```elixir
 ReqLLM.generate_text("anthropic:claude-haiku-4-5", "Hello", telemetry: [payloads: :raw])
-
-ReqLLM.stream_text("openai:gpt-5-mini", "Hello", telemetry: [payloads: :raw])
 ```
 
-Notes:
-
-- Payload capture only applies to request lifecycle events. Reasoning events are always metadata-only.
-- Thinking and reasoning text is redacted from payloads.
-- Tools are summarized to stable metadata and binary attachments are reduced to byte and media summaries.
-- Unknown payload shapes are recursively sanitized so opaque binaries are summarized instead of passed through.
-- Embedding and audio operations stay summarized rather than emitting raw vectors or audio bytes.
-- Requested and effective reasoning telemetry are tracked separately, so provider translation can be observed when a reasoning setting is dropped or rewritten.
-- If callers provide conflicting reasoning controls, explicit disable signals win in the normalized telemetry snapshot.
-- The default is `:none`, which is the safer choice for multi-tenant systems.
-
-See the [Telemetry Guide](telemetry.md) for the event model and payload semantics.
+See the [Telemetry Guide](telemetry.md) for the full event model, payload semantics, and the OpenTelemetry bridge.
 
 ## API Key Configuration
 

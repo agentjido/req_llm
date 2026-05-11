@@ -197,6 +197,10 @@ Defines callable functions (aka "tools" or "function calling") with validation.
   output for adapters and local consumers, but it should not be the only source
   of meaning for follow-up model turns.
 
+### Tool calls and provider-executed builtins
+
+`ReqLLM.ToolCall` represents assistant tool-call requests. Most tool calls are local work your app should execute, but some providers also return server-side builtin calls (for example OpenAI Responses API `web_search_call`). ReqLLM preserves those with `ReqLLM.ToolCall.new_builtin/3`; detect them with `ReqLLM.ToolCall.builtin?/1` and do not replay them as local tools.
+
 ## 6) ReqLLM.StreamChunk
 
 Unified streaming event payloads emitted during `stream_text`.

@@ -129,6 +129,8 @@ defmodule ReqLLM.MixProject do
             ReqLLM.Telemetry,
             ReqLLM.Telemetry.OpenTelemetry,
             ReqLLM.OpenTelemetry,
+            ReqLLM.OpenTelemetry.Adapter,
+            ReqLLM.OpenTelemetry.OTelAdapter,
             ReqLLM.Capability,
             ReqLLM.Keys,
             ReqLLM.Usage,

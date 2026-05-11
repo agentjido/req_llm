@@ -324,6 +324,12 @@ A native ReqLLM telemetry surface is published for every request, including stre
 
 All events share a `request_id` so you can correlate request lifecycle, reasoning lifecycle, and billing data across providers.
 
+For OpenTelemetry, attach `ReqLLM.OpenTelemetry` once to emit GenAI client spans, optional GenAI metrics, cost attributes, and Langfuse-friendly message capture.
+
+```elixir
+ReqLLM.OpenTelemetry.attach("req-llm-otel", content: :attributes, langfuse: true)
+```
+
 See `examples/scripts/usage_cost_search_image.exs` and run it from `examples/` with `mix run scripts/usage_cost_search_image.exs` for a multi-provider smoke test that validates search tool and image generation cost metadata. For comprehensive documentation, see the [Telemetry Guide](guides/telemetry.md) and [Usage & Billing Guide](guides/usage-and-billing.md).
 
 ## Streaming Configuration

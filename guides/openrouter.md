@@ -102,6 +102,28 @@ Passed via `:provider_options` keyword:
 - **Purpose**: Enable OpenRouter plugins (e.g., web search)
 - **Example**: `provider_options: [openrouter_plugins: [%{id: "web"}]]`
 
+#### File parser PDFs
+
+When the `file-parser` plugin is enabled, ReqLLM encodes PDF `ContentPart.file/3` inputs in OpenRouter's expected file format:
+
+```elixir
+alias ReqLLM.Context
+alias ReqLLM.Message.ContentPart
+
+context = Context.new([
+  Context.user([
+    ContentPart.text("Summarize this PDF."),
+    ContentPart.file(pdf_bytes, "paper.pdf", "application/pdf")
+  ])
+])
+
+ReqLLM.generate_text("openrouter:anthropic/claude-sonnet-4-20250514", context,
+  provider_options: [openrouter_plugins: [%{id: "file-parser"}]]
+)
+```
+
+Without `file-parser`, PDF parts use the normal OpenAI-compatible file encoding.
+
 ### App Attribution
 
 #### `app_referer`

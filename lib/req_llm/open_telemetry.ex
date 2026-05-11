@@ -1,5 +1,55 @@
 defmodule ReqLLM.OpenTelemetry.Adapter do
-  @moduledoc false
+  @moduledoc """
+  Behaviour the OpenTelemetry bridge uses to talk to a tracer.
+
+  `ReqLLM.OpenTelemetry` ships `ReqLLM.OpenTelemetry.OTelAdapter` as the
+  default implementation, which calls the standard `:otel_tracer` and
+  `:otel_span` API. Implement this behaviour to swap in a different tracer,
+  inject extra attributes on every span (e.g. caller-context like
+  `langfuse.user.id`), or run the bridge in test mode without an OpenTelemetry
+  SDK.
+
+  Pass your module via `:adapter`:
+
+      ReqLLM.OpenTelemetry.attach("req-llm-otel", adapter: MyApp.ReqLLMAdapter)
+
+  ## Required callbacks
+
+  `available?/0`, `start_span/3`, `set_attributes/3`, `add_event/4`,
+  `set_status/4`, `end_span/2`.
+
+  ## Optional callbacks (metrics)
+
+  `metrics_available?/0`, `record_histogram/2`. The bridge only invokes
+  these when both `available?/0` and `metrics_available?/0` return `true`.
+
+  ## Example — inject caller-context on every ReqLLM span
+
+  The cleanest way to wrap the default adapter is to delegate everything and
+  override just `start_span/3` to merge in extra attributes:
+
+      defmodule MyApp.ReqLLMAdapter do
+        @behaviour ReqLLM.OpenTelemetry.Adapter
+
+        defdelegate available?(), to: ReqLLM.OpenTelemetry.OTelAdapter
+        defdelegate metrics_available?(), to: ReqLLM.OpenTelemetry.OTelAdapter
+        defdelegate set_attributes(s, a, c), to: ReqLLM.OpenTelemetry.OTelAdapter
+        defdelegate add_event(s, n, a, c), to: ReqLLM.OpenTelemetry.OTelAdapter
+        defdelegate set_status(s, k, m, c), to: ReqLLM.OpenTelemetry.OTelAdapter
+        defdelegate end_span(s, c), to: ReqLLM.OpenTelemetry.OTelAdapter
+        defdelegate record_histogram(r, c), to: ReqLLM.OpenTelemetry.OTelAdapter
+
+        def start_span(name, attrs, config) do
+          extras = %{"langfuse.user.id" => Process.get(:current_user_id)}
+          ReqLLM.OpenTelemetry.OTelAdapter.start_span(name, Map.merge(attrs, extras), config)
+        end
+      end
+
+      ReqLLM.OpenTelemetry.attach("req-llm-otel", adapter: MyApp.ReqLLMAdapter)
+
+  See the Telemetry guide's caller-context section for when to use this
+  versus a parent span or OTel baggage.
+  """
 
   @callback available?() :: boolean()
   @callback start_span(String.t(), map(), keyword()) :: term()
@@ -14,7 +64,14 @@ defmodule ReqLLM.OpenTelemetry.Adapter do
 end
 
 defmodule ReqLLM.OpenTelemetry.OTelAdapter do
-  @moduledoc false
+  @moduledoc """
+  Default `ReqLLM.OpenTelemetry.Adapter` implementation, backed by the
+  Erlang OpenTelemetry SDK (`:otel_tracer`, `:otel_span`, `:otel_meter`).
+
+  Used automatically by `ReqLLM.OpenTelemetry.attach/2`. Public so that
+  custom adapters can `defdelegate` the callbacks they don't need to
+  override — see `ReqLLM.OpenTelemetry.Adapter` for the wrapping pattern.
+  """
 
   @behaviour ReqLLM.OpenTelemetry.Adapter
 
