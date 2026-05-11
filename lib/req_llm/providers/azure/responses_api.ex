@@ -36,6 +36,7 @@ defmodule ReqLLM.Providers.Azure.ResponsesAPI do
         max_tokens: opts[:max_tokens],
         max_output_tokens: opts[:max_output_tokens],
         max_completion_tokens: opts[:max_completion_tokens],
+        reasoning_effort: opts[:reasoning_effort],
         tools: opts[:tools],
         tool_choice: opts[:tool_choice],
         provider_options: provider_opts
