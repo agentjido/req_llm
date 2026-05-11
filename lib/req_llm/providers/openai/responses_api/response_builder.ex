@@ -39,7 +39,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI.ResponseBuilder do
   defp finish_reason_is_stop?(_), do: false
 
   defp actionable_tool_call_chunk?(%StreamChunk{type: :tool_call, metadata: meta}) do
-    not ToolCall.builtin_flag?(meta)
+    not ToolCall.flagged_builtin?(meta)
   end
 
   defp actionable_tool_call_chunk?(_), do: false

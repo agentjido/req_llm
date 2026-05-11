@@ -105,32 +105,42 @@ defmodule ReqLLM.ToolCall do
   end
 
   @doc """
-  Returns true when the ToolCall represents a server-side builtin invocation
-  (see `new_builtin/3`). Returns false for regular user-defined function
-  calls.
+  Returns true when the ToolCall (or tool-call-shaped map) represents a
+  server-side builtin invocation. Handles both OpenAI-shaped wrappers and
+  bare maps: unwraps a nested `:function` map when present.
+
+  Prefer this over `flagged_builtin?/1` whenever you have a `%ToolCall{}`
+  or a map that may carry the OpenAI `function:` nesting.
   """
   @spec builtin?(t() | map()) :: boolean()
-  def builtin?(%__MODULE__{function: function}) when is_map(function), do: builtin_flag?(function)
+  def builtin?(%__MODULE__{function: function}) when is_map(function),
+    do: flagged_builtin?(function)
 
   def builtin?(map) when is_map(map) do
     function = Map.get(map, :function) || Map.get(map, "function") || %{}
-    builtin_flag?(map) or builtin_flag?(function)
+    flagged_builtin?(map) or flagged_builtin?(function)
   end
 
   def builtin?(_), do: false
 
   @doc """
   Returns true when the given map carries a truthy `:builtin?` (or
-  `"builtin?"`) flag directly on it. Unlike `builtin?/1`, this does not
-  unwrap a nested `:function` map — use it for chunk metadata or raw
-  tool-call shapes that don't have the OpenAI `function` nesting.
+  `"builtin?"`) flag **directly on it**. Does not unwrap a nested
+  `:function` map — use it for chunk metadata or raw tool-call shapes
+  that don't have the OpenAI `function` nesting.
+
+  For structured `%ToolCall{}` or OpenAI-wrapped maps, prefer `builtin?/1`.
   """
-  @spec builtin_flag?(any()) :: boolean()
-  def builtin_flag?(map) when is_map(map) do
+  @spec flagged_builtin?(any()) :: boolean()
+  def flagged_builtin?(map) when is_map(map) do
     Map.get(map, :builtin?) == true or Map.get(map, "builtin?") == true
   end
 
-  def builtin_flag?(_), do: false
+  def flagged_builtin?(_), do: false
+
+  @deprecated "Use flagged_builtin?/1 instead — the rename makes the flag-only semantics explicit"
+  @spec builtin_flag?(any()) :: boolean()
+  def builtin_flag?(map), do: flagged_builtin?(map)
 
   @doc """
   Sets `:builtin? => true` on `map` when `flag` is `true`; otherwise returns

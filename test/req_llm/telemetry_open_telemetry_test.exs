@@ -340,7 +340,7 @@ defmodule ReqLLM.TelemetryOpenTelemetryTest do
       assert tool["strict"] == false
     end
 
-    test "content: :event places content on a single span event, not on attributes" do
+    test "content: :event keeps content off start_stub attributes and defers the event to terminal" do
       tool_call = ToolCall.new("call_weather", "get_weather", ~s({"location":"Paris"}))
 
       metadata = %{
@@ -363,11 +363,9 @@ defmodule ReqLLM.TelemetryOpenTelemetryTest do
       refute Map.has_key?(start_stub.attributes, "gen_ai.system_instructions")
       refute Map.has_key?(start_stub.attributes, "gen_ai.tool.definitions")
 
-      assert [event] = start_stub.events
-      assert event.name == "gen_ai.client.inference.operation.details"
-      assert is_list(event.attributes["gen_ai.input.messages"])
-      assert event.attributes["gen_ai.system_instructions"] != nil
-      assert is_list(event.attributes["gen_ai.tool.definitions"])
+      # Per the GenAI spec, gen_ai.client.inference.operation.details is one
+      # event per call — emitted on the terminal lifecycle event, not on start.
+      assert start_stub.events == []
     end
 
     test "content: :event on stop bundles input AND output messages into the same event" do

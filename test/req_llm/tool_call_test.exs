@@ -47,6 +47,26 @@ defmodule ReqLLM.ToolCallTest do
     end
   end
 
+  describe "flagged_builtin?/1" do
+    test "checks the flag on the given map without unwrapping :function" do
+      assert ToolCall.flagged_builtin?(%{builtin?: true})
+      assert ToolCall.flagged_builtin?(%{"builtin?" => true})
+      refute ToolCall.flagged_builtin?(%{function: %{builtin?: true}})
+      refute ToolCall.flagged_builtin?(%{builtin?: false})
+      refute ToolCall.flagged_builtin?(%{})
+      refute ToolCall.flagged_builtin?(nil)
+    end
+  end
+
+  describe "builtin_flag?/1 (deprecated alias)" do
+    test "delegates to flagged_builtin?/1" do
+      assert ToolCall.builtin_flag?(%{builtin?: true}) ==
+               ToolCall.flagged_builtin?(%{builtin?: true})
+
+      refute ToolCall.builtin_flag?(%{function: %{builtin?: true}})
+    end
+  end
+
   describe "name/1" do
     test "extracts function name from ToolCall" do
       tool_call = ToolCall.new("call_123", "get_weather", "{}")

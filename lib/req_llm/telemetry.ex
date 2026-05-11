@@ -115,7 +115,7 @@ defmodule ReqLLM.Telemetry do
           request_started?: boolean(),
           request_stopped?: boolean(),
           started_at: integer() | nil,
-          request_measurement: map() | nil,
+          request_started_system_time: integer() | nil,
           first_chunk_at: integer() | nil,
           requested_reasoning: map(),
           effective_reasoning: map(),
@@ -156,14 +156,14 @@ defmodule ReqLLM.Telemetry do
       payload_mode: payload_mode,
       reasoning_contract: reasoning_contract,
       original_opts: opts,
-      request_options: extract_request_options(operation, mode, opts),
+      request_options: ReqLLM.Telemetry.RequestOptions.extract(mode, opts),
       server: %{},
       request_summary: summarize_request(operation, request_input),
       request_payload: request_payload(operation, request_input, payload_mode),
       request_started?: false,
       request_stopped?: false,
       started_at: nil,
-      request_measurement: nil,
+      request_started_system_time: nil,
       first_chunk_at: nil,
       requested_reasoning: requested_reasoning,
       effective_reasoning: disable_effective_reasoning(requested_reasoning),
@@ -190,7 +190,8 @@ defmodule ReqLLM.Telemetry do
 
   def start_request(context, request_source) do
     now = System.monotonic_time()
-    measurement = %{system_time: System.system_time()}
+    started_system_time = System.system_time()
+    measurement = %{system_time: started_system_time}
 
     reasoning_contract =
       reasoning_contract_for(context.model, context.original_opts, request_source)
@@ -215,7 +216,7 @@ defmodule ReqLLM.Telemetry do
       context
       |> Map.put(:request_started?, true)
       |> Map.put(:started_at, now)
-      |> Map.put(:request_measurement, measurement)
+      |> Map.put(:request_started_system_time, started_system_time)
       |> Map.put(:reasoning_contract, reasoning_contract)
       |> Map.put(:requested_reasoning, requested_reasoning)
       |> Map.put(:effective_reasoning, effective_reasoning)
@@ -491,8 +492,7 @@ defmodule ReqLLM.Telemetry do
       reasoning: reasoning_snapshot(context),
       request_options: context.request_options,
       server: context.server,
-      streaming: streaming_snapshot(context),
-      request_measurement: context.request_measurement,
+      request_started_system_time: context.request_started_system_time,
       request_summary: context.request_summary,
       response_summary: extra[:response_summary],
       http_status: extra[:http_status],
@@ -501,6 +501,7 @@ defmodule ReqLLM.Telemetry do
     }
 
     base
+    |> maybe_put(:streaming, streaming_snapshot(context), context.mode == :stream)
     |> maybe_put(:request_payload, context.request_payload, include_payloads?(context))
     |> maybe_put(:response_payload, extra[:response_payload], include_payloads?(context))
     |> maybe_put(:error, extra[:error], not is_nil(extra[:error]))
@@ -522,7 +523,7 @@ defmodule ReqLLM.Telemetry do
     %{first_chunk_at: first_chunk_at, time_to_first_chunk: nil}
   end
 
-  defp streaming_snapshot(_context), do: %{first_chunk_at: nil, time_to_first_chunk: nil}
+  defp streaming_snapshot(_context), do: nil
 
   @doc """
   Returns the normalized metadata map for reasoning lifecycle events.
@@ -605,47 +606,6 @@ defmodule ReqLLM.Telemetry do
   defp request_input(_operation, opts) do
     opts[:context] || opts[:messages] || opts[:text]
   end
-
-  defp extract_request_options(_operation, mode, opts) do
-    telemetry_meta =
-      case Keyword.fetch(opts, :telemetry) do
-        {:ok, value} -> parse_telemetry_opt(value)
-        :error -> %{}
-      end
-
-    provider_opts =
-      case opts[:provider_options] do
-        list when is_list(list) -> list
-        _ -> []
-      end
-
-    %{
-      temperature: opts[:temperature],
-      top_p: opts[:top_p],
-      top_k: opts[:top_k],
-      max_tokens: opts[:max_tokens],
-      frequency_penalty: opts[:frequency_penalty],
-      presence_penalty: opts[:presence_penalty],
-      stop_sequences: normalize_string_list(opts[:stop] || opts[:stop_sequences]),
-      seed: opts[:seed],
-      n: normalize_choice_count(opts[:n]),
-      stream?: mode == :stream,
-      encoding_formats: normalize_string_list(opts[:encoding_format]),
-      conversation_id: telemetry_meta[:conversation_id],
-      service_tier: opts[:service_tier] || provider_opts[:service_tier]
-    }
-    |> Enum.reject(fn {_key, value} -> is_nil(value) end)
-    |> Map.new()
-  end
-
-  defp normalize_string_list(nil), do: nil
-  defp normalize_string_list(value) when is_binary(value), do: [value]
-  defp normalize_string_list(values) when is_list(values), do: values
-  defp normalize_string_list(_), do: nil
-
-  defp normalize_choice_count(nil), do: nil
-  defp normalize_choice_count(value) when is_integer(value) and value >= 1, do: value
-  defp normalize_choice_count(_), do: nil
 
   defp extract_server(source), do: ReqLLM.Telemetry.RequestSource.server(source)
 

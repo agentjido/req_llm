@@ -109,7 +109,7 @@ When payload capture is enabled, `request_payload` and `response_payload` are al
 
 `server` is the resolved upstream endpoint (`address`, `port`, `path`). It is populated as soon as ReqLLM has a request URL and may be empty when the URL is unavailable.
 
-`streaming` is always present. For streaming requests, it exposes `first_chunk_at` (a `System.monotonic_time/0` reading) and `time_to_first_chunk` (in `:native` units, measured from request start to the first non-empty content chunk). Values remain `nil` for sync requests or until ReqLLM observes the first content chunk via `ReqLLM.Telemetry.observe_stream_chunk/2`.
+`streaming` is set on streaming requests only and is absent from sync-request metadata. It exposes `first_chunk_at` (a `System.monotonic_time/0` reading) and `time_to_first_chunk` (in `:native` units, measured from request start to the first non-empty content chunk). Both values stay `nil` until ReqLLM observes the first content chunk via `ReqLLM.Telemetry.observe_stream_chunk/2`.
 
 A typical metadata payload:
 

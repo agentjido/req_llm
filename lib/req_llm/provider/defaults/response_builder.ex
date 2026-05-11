@@ -34,6 +34,7 @@ defmodule ReqLLM.Provider.Defaults.ResponseBuilder do
   alias ReqLLM.Context
   alias ReqLLM.Message
   alias ReqLLM.Message.ContentPart
+  alias ReqLLM.Provider.ChunkAccumulator
   alias ReqLLM.Response
   alias ReqLLM.StreamChunk
   alias ReqLLM.ToolCall
@@ -45,16 +46,16 @@ defmodule ReqLLM.Provider.Defaults.ResponseBuilder do
     context = Keyword.fetch!(opts, :context)
     model = Keyword.fetch!(opts, :model)
 
-    acc_data = accumulate_chunks(chunks)
-    reconstructed_tool_calls = reconstruct_tool_calls(acc_data)
+    acc = ChunkAccumulator.reduce(ChunkAccumulator.new(), chunks)
+    reconstructed_tool_calls = ChunkAccumulator.finalize_tool_calls_for_response(acc)
     normalized_tool_calls = normalize_tool_calls(reconstructed_tool_calls)
 
-    text_content = acc_data.text_content |> Enum.reverse() |> Enum.join()
-    thinking_content = acc_data.thinking_content |> Enum.reverse() |> Enum.join()
+    text_content = ChunkAccumulator.finalize_text(acc)
+    thinking_content = ChunkAccumulator.finalize_thinking(acc)
     content_parts = build_content_parts(text_content, thinking_content, normalized_tool_calls)
 
     reasoning_details =
-      case acc_data.reasoning_details do
+      case ChunkAccumulator.finalize_reasoning_details(acc) do
         [] -> extract_reasoning_from_thinking_chunks(chunks, model.provider)
         details -> details
       end
@@ -73,7 +74,7 @@ defmodule ReqLLM.Provider.Defaults.ResponseBuilder do
     base_provider_meta = metadata[:provider_meta] || %{}
 
     provider_meta =
-      case acc_data.logprobs do
+      case ChunkAccumulator.finalize_logprobs(acc) do
         [] -> base_provider_meta
         tokens -> Map.put(base_provider_meta, :logprobs, tokens)
       end
@@ -100,109 +101,6 @@ defmodule ReqLLM.Provider.Defaults.ResponseBuilder do
   end
 
   # ============================================================================
-  # Chunk Accumulation
-  # ============================================================================
-
-  @doc false
-  def accumulate_chunks(chunks) do
-    Enum.reduce(
-      chunks,
-      %{
-        text_content: [],
-        thinking_content: [],
-        tool_calls: [],
-        arg_fragments: %{},
-        reasoning_details: [],
-        logprobs: []
-      },
-      &accumulate_chunk/2
-    )
-  end
-
-  defp accumulate_chunk(%StreamChunk{type: :content, text: text}, acc) do
-    %{acc | text_content: [text | acc.text_content]}
-  end
-
-  defp accumulate_chunk(%StreamChunk{type: :thinking, text: text}, acc) do
-    %{acc | thinking_content: [text | acc.thinking_content]}
-  end
-
-  defp accumulate_chunk(%StreamChunk{type: :tool_call} = chunk, acc) do
-    tool_call =
-      %{
-        id: Map.get(chunk.metadata, :id) || "call_#{:erlang.unique_integer()}",
-        name: chunk.name,
-        arguments: chunk.arguments || %{},
-        index: Map.get(chunk.metadata, :index, 0)
-      }
-      |> ToolCall.put_builtin_flag(ToolCall.builtin_flag?(chunk.metadata))
-
-    %{acc | tool_calls: [tool_call | acc.tool_calls]}
-  end
-
-  defp accumulate_chunk(%StreamChunk{type: :meta, metadata: meta}, acc) do
-    acc =
-      case meta do
-        %{tool_call_args: %{index: index, fragment: fragment}} ->
-          existing = Map.get(acc.arg_fragments, index, "")
-          %{acc | arg_fragments: Map.put(acc.arg_fragments, index, existing <> fragment)}
-
-        _ ->
-          acc
-      end
-
-    acc =
-      case meta do
-        %{reasoning_details: details} when is_list(details) ->
-          %{acc | reasoning_details: acc.reasoning_details ++ details}
-
-        _ ->
-          acc
-      end
-
-    case meta do
-      %{logprobs: tokens} when is_list(tokens) ->
-        %{acc | logprobs: acc.logprobs ++ tokens}
-
-      _ ->
-        acc
-    end
-  end
-
-  defp accumulate_chunk(_chunk, acc), do: acc
-
-  # ============================================================================
-  # Tool Call Reconstruction
-  # ============================================================================
-
-  @doc false
-  def reconstruct_tool_calls(%{tool_calls: []}), do: []
-
-  def reconstruct_tool_calls(acc_data) do
-    acc_data.tool_calls
-    |> Enum.reverse()
-    |> Enum.map(&merge_tool_call_arguments(&1, acc_data.arg_fragments))
-  end
-
-  defp merge_tool_call_arguments(tool_call, arg_fragments) do
-    case Map.get(arg_fragments, tool_call.index) do
-      nil ->
-        Map.delete(tool_call, :index)
-
-      json_str ->
-        case Jason.decode(json_str) do
-          {:ok, args} ->
-            tool_call
-            |> Map.put(:arguments, args)
-            |> Map.delete(:index)
-
-          {:error, _} ->
-            Map.delete(tool_call, :index)
-        end
-    end
-  end
-
-  # ============================================================================
   # Tool Call Normalization
   # ============================================================================
 
@@ -226,18 +124,22 @@ defmodule ReqLLM.Provider.Defaults.ResponseBuilder do
   defp normalize_tool_call(%ToolCall{} = call), do: call
 
   defp normalize_tool_call(%{id: id, name: name, arguments: args} = m) do
-    constructor = if ToolCall.builtin_flag?(m), do: &ToolCall.new_builtin/3, else: &ToolCall.new/3
+    constructor =
+      if ToolCall.flagged_builtin?(m), do: &ToolCall.new_builtin/3, else: &ToolCall.new/3
+
     constructor.(id, name, encode_tool_args(args))
   end
 
   defp normalize_tool_call(%{"id" => id, "name" => name, "arguments" => args} = m) do
-    constructor = if ToolCall.builtin_flag?(m), do: &ToolCall.new_builtin/3, else: &ToolCall.new/3
+    constructor =
+      if ToolCall.flagged_builtin?(m), do: &ToolCall.new_builtin/3, else: &ToolCall.new/3
+
     constructor.(id, name, encode_tool_args(args))
   end
 
   defp normalize_tool_call(other) when is_map(other) do
     constructor =
-      if ToolCall.builtin_flag?(other), do: &ToolCall.new_builtin/3, else: &ToolCall.new/3
+      if ToolCall.flagged_builtin?(other), do: &ToolCall.new_builtin/3, else: &ToolCall.new/3
 
     constructor.(other[:id], other[:name], encode_tool_args(other[:arguments]))
   end

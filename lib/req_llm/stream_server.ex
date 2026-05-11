@@ -101,7 +101,7 @@ defmodule ReqLLM.StreamServer do
     raw_iodata: [],
     raw_bytes: 0,
     terminated?: false,
-    message_acc: %{text: [], tool_calls: [], arg_fragments: %{}}
+    message_acc: %ReqLLM.Provider.ChunkAccumulator{}
   ]
 
   @doc """
@@ -803,7 +803,7 @@ defmodule ReqLLM.StreamServer do
               obj_acc
             end
 
-          msg_acc = accumulate_message(msg_acc, chunk)
+          msg_acc = ReqLLM.Provider.ChunkAccumulator.push(msg_acc, chunk)
 
           telemetry =
             case telemetry do
@@ -825,100 +825,6 @@ defmodule ReqLLM.StreamServer do
     }
   end
 
-  defp accumulate_message(acc, %ReqLLM.StreamChunk{type: :content, text: text})
-       when is_binary(text) and text != "" do
-    %{acc | text: [acc.text, text]}
-  end
-
-  defp accumulate_message(acc, %ReqLLM.StreamChunk{type: :tool_call} = chunk) do
-    metadata = chunk.metadata || %{}
-    args = chunk.arguments || %{}
-    name = chunk.name || Map.get(metadata, :name) || Map.get(metadata, "name")
-    id = Map.get(metadata, :id) || Map.get(metadata, "id") || generate_tool_call_id()
-    index = Map.get(metadata, :index, Map.get(metadata, "index", 0))
-
-    if is_binary(name) and name != "" do
-      tool_call =
-        %{
-          id: id,
-          name: name,
-          arguments: args,
-          index: index
-        }
-        |> ReqLLM.ToolCall.put_builtin_flag(ReqLLM.ToolCall.builtin_flag?(metadata))
-
-      %{acc | tool_calls: acc.tool_calls ++ [tool_call]}
-    else
-      acc
-    end
-  end
-
-  defp accumulate_message(acc, %ReqLLM.StreamChunk{type: :meta, metadata: metadata})
-       when is_map(metadata) do
-    case tool_call_args_fragment(metadata) do
-      {index, fragment} ->
-        %{acc | arg_fragments: Map.update(acc.arg_fragments, index, fragment, &(&1 <> fragment))}
-
-      nil ->
-        acc
-    end
-  end
-
-  defp accumulate_message(acc, _chunk), do: acc
-
-  defp tool_call_args_fragment(metadata) do
-    args = Map.get(metadata, :tool_call_args) || Map.get(metadata, "tool_call_args")
-
-    with args when is_map(args) <- args,
-         fragment when is_binary(fragment) and fragment != "" <-
-           Map.get(args, :fragment) || Map.get(args, "fragment") do
-      {Map.get(args, :index, Map.get(args, "index", 0)), fragment}
-    else
-      _ -> nil
-    end
-  end
-
-  defp reconstruct_message_tool_calls(%{tool_calls: tool_calls, arg_fragments: arg_fragments}) do
-    Enum.map(tool_calls, &message_tool_call_to_struct(&1, arg_fragments))
-  end
-
-  defp message_tool_call_to_struct(tool_call, arg_fragments) do
-    args = message_tool_call_args(tool_call, arg_fragments)
-
-    constructor =
-      if ReqLLM.ToolCall.builtin?(tool_call),
-        do: &ReqLLM.ToolCall.new_builtin/3,
-        else: &ReqLLM.ToolCall.new/3
-
-    constructor.(tool_call.id, tool_call.name, encode_tool_call_args(args))
-  end
-
-  defp message_tool_call_args(%{index: index, arguments: arguments}, arg_fragments) do
-    case Map.get(arg_fragments, index) do
-      fragment when is_binary(fragment) ->
-        case Jason.decode(fragment) do
-          {:ok, decoded} -> decoded
-          {:error, _reason} -> arguments
-        end
-
-      _ ->
-        arguments
-    end
-  end
-
-  defp encode_tool_call_args(args) when is_binary(args), do: args
-
-  defp encode_tool_call_args(args) when is_map(args) or is_list(args) do
-    case Jason.encode(args) do
-      {:ok, json} -> json
-      {:error, _reason} -> "{}"
-    end
-  end
-
-  defp encode_tool_call_args(_args), do: "{}"
-
-  defp generate_tool_call_id, do: "call_#{Uniq.UUID.uuid7()}"
-
   # Synthesizes a partial assistant `%Message{}` from the accumulated stream
   # chunks for OTel content capture (`gen_ai.output.messages`). The canonical
   # response message — with reasoning_details, provider metadata, and object
@@ -926,31 +832,9 @@ defmodule ReqLLM.StreamServer do
   # from the full chunk list. Reasoning is intentionally `nil` here because
   # OTel content capture redacts reasoning text anyway.
   defp finalize_message_metadata(state) do
-    %{text: text_iodata} = state.message_acc
-    tool_calls = reconstruct_message_tool_calls(state.message_acc)
-    text = IO.iodata_to_binary(text_iodata)
-
-    content_parts =
-      if text == "" do
-        []
-      else
-        [%ReqLLM.Message.ContentPart{type: :text, text: text, metadata: %{}}]
-      end
-
-    if content_parts == [] and tool_calls == [] do
-      state
-    else
-      message = %ReqLLM.Message{
-        role: :assistant,
-        content: content_parts,
-        name: nil,
-        tool_call_id: nil,
-        tool_calls: if(tool_calls == [], do: nil, else: tool_calls),
-        metadata: %{},
-        reasoning_details: nil
-      }
-
-      %{state | metadata: Map.put(state.metadata, :message, message)}
+    case ReqLLM.Provider.ChunkAccumulator.finalize_message(state.message_acc) do
+      nil -> state
+      message -> %{state | metadata: Map.put(state.metadata, :message, message)}
     end
   end
 
@@ -1296,6 +1180,9 @@ defmodule ReqLLM.StreamServer do
 
   defp maybe_emit_stream_stop(%{telemetry: nil} = state, _finish_reason), do: state
 
+  # Partial assistant messages are attached on stream stop only — not on
+  # exception. This matches the OTel GenAI spec: errors do not populate
+  # `gen_ai.output.messages` because the response is not well-formed.
   defp maybe_emit_stream_stop(%{telemetry: telemetry} = state, finish_reason) do
     state = finalize_message_metadata(state)
     usage = state.metadata[:usage]

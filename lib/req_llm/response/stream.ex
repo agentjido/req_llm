@@ -6,7 +6,8 @@ defmodule ReqLLM.Response.Stream do
   particularly for joining stream chunks into complete responses.
   """
 
-  alias ReqLLM.{Message, Response, StreamChunk, ToolCall}
+  alias ReqLLM.Provider.ChunkAccumulator
+  alias ReqLLM.{Message, Response}
 
   @typedoc """
   Summary of accumulated stream data.
@@ -33,6 +34,8 @@ defmodule ReqLLM.Response.Stream do
   - `usage` - Token usage statistics from metadata chunks
 
   This function is the shared core for both `join/2` and `ReqLLM.Stream.ToolCalls`.
+  It delegates accumulation to `ReqLLM.Provider.ChunkAccumulator` so the
+  streaming chunk reducer stays a single source of truth.
 
   ## Examples
 
@@ -42,108 +45,18 @@ defmodule ReqLLM.Response.Stream do
       summary.tool_calls  #=> [%{id: "call_123", name: "get_weather", arguments: %{...}}]
 
   """
-  @spec summarize(Enumerable.t(StreamChunk.t())) :: summary()
+  @spec summarize(Enumerable.t()) :: summary()
   def summarize(chunks) do
     chunks_list = if is_list(chunks), do: chunks, else: Enum.to_list(chunks)
-
-    acc =
-      Enum.reduce(
-        chunks_list,
-        %{
-          text_content: [],
-          thinking_content: [],
-          tool_calls: [],
-          arg_fragments: %{},
-          finish_reason: nil,
-          usage: nil
-        },
-        &accumulate_chunk/2
-      )
-
-    tool_calls = reconstruct_tool_calls(acc)
+    acc = ChunkAccumulator.reduce(ChunkAccumulator.new(), chunks_list)
 
     %{
-      text: acc.text_content |> Enum.reverse() |> Enum.join(),
-      thinking: acc.thinking_content |> Enum.reverse() |> Enum.join(),
-      tool_calls: tool_calls,
-      finish_reason: normalize_finish_reason(acc.finish_reason),
-      usage: acc.usage
+      text: ChunkAccumulator.finalize_text(acc),
+      thinking: ChunkAccumulator.finalize_thinking(acc),
+      tool_calls: ChunkAccumulator.finalize_tool_calls_for_response(acc),
+      finish_reason: normalize_finish_reason(ChunkAccumulator.finalize_finish_reason(acc)),
+      usage: ChunkAccumulator.finalize_usage(acc)
     }
-  end
-
-  defp accumulate_chunk(%StreamChunk{type: :content, text: text}, acc) do
-    %{acc | text_content: [text | acc.text_content]}
-  end
-
-  defp accumulate_chunk(%StreamChunk{type: :thinking, text: text}, acc) do
-    %{acc | thinking_content: [text | acc.thinking_content]}
-  end
-
-  defp accumulate_chunk(%StreamChunk{type: :tool_call} = chunk, acc) do
-    tool_call =
-      %{
-        id: Map.get(chunk.metadata, :id) || "call_#{:erlang.unique_integer()}",
-        name: chunk.name,
-        arguments: chunk.arguments || %{},
-        index: Map.get(chunk.metadata, :index, 0)
-      }
-      |> ToolCall.put_builtin_flag(ToolCall.builtin_flag?(chunk.metadata))
-
-    %{acc | tool_calls: [tool_call | acc.tool_calls]}
-  end
-
-  defp accumulate_chunk(%StreamChunk{type: :meta, metadata: meta}, acc) do
-    acc = handle_tool_call_args(meta, acc)
-    acc = handle_finish_reason(meta, acc)
-    handle_usage(meta, acc)
-  end
-
-  defp accumulate_chunk(_chunk, acc), do: acc
-
-  defp handle_tool_call_args(%{tool_call_args: %{index: index, fragment: fragment}}, acc) do
-    existing = Map.get(acc.arg_fragments, index, "")
-    %{acc | arg_fragments: Map.put(acc.arg_fragments, index, existing <> fragment)}
-  end
-
-  defp handle_tool_call_args(_meta, acc), do: acc
-
-  defp handle_finish_reason(%{finish_reason: reason}, acc) when not is_nil(reason) do
-    %{acc | finish_reason: reason}
-  end
-
-  defp handle_finish_reason(_meta, acc), do: acc
-
-  defp handle_usage(%{usage: usage}, acc) when is_map(usage) do
-    merged = ReqLLM.Usage.merge(acc.usage || %{}, usage)
-    %{acc | usage: merged}
-  end
-
-  defp handle_usage(_meta, acc), do: acc
-
-  defp reconstruct_tool_calls(%{tool_calls: []}), do: []
-
-  defp reconstruct_tool_calls(acc) do
-    acc.tool_calls
-    |> Enum.reverse()
-    |> Enum.map(&merge_tool_call_arguments(&1, acc.arg_fragments))
-  end
-
-  defp merge_tool_call_arguments(tool_call, arg_fragments) do
-    case Map.get(arg_fragments, tool_call.index) do
-      nil ->
-        Map.delete(tool_call, :index)
-
-      json_str ->
-        case Jason.decode(json_str) do
-          {:ok, args} ->
-            tool_call
-            |> Map.put(:arguments, args)
-            |> Map.delete(:index)
-
-          {:error, _} ->
-            Map.delete(tool_call, :index)
-        end
-    end
   end
 
   defp normalize_finish_reason(nil), do: nil

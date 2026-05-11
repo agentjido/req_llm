@@ -872,7 +872,9 @@ defmodule ReqLLM.Providers.OpenAITest do
 
       assert response.finish_reason == nil
       # http_task removed after fix for issue #42 (no duplicate request execution)
-      assert response.provider_meta == %{}
+      # The OpenAI dispatcher stamps the API surface so the OTel bridge can
+      # surface `openai.api.type` without URL-path spelunking.
+      assert response.provider_meta == %{"api_type" => "chat_completions"}
     end
 
     test "decode_response for embedding returns raw body" do

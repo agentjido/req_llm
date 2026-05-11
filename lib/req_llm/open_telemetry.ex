@@ -76,6 +76,7 @@ defmodule ReqLLM.OpenTelemetry.OTelAdapter do
   @behaviour ReqLLM.OpenTelemetry.Adapter
 
   @instrument_table :req_llm_open_telemetry_instruments
+  @otel_schema_url "https://opentelemetry.io/schemas/1.37.0"
 
   @impl true
   def available? do
@@ -249,7 +250,7 @@ defmodule ReqLLM.OpenTelemetry.OTelAdapter do
       [
         :req_llm,
         application_version(),
-        "https://opentelemetry.io/schemas/1.37.0"
+        @otel_schema_url
       ]
     )
   end
@@ -261,7 +262,7 @@ defmodule ReqLLM.OpenTelemetry.OTelAdapter do
       [
         :req_llm,
         application_version(),
-        "https://opentelemetry.io/schemas/1.37.0"
+        @otel_schema_url
       ]
     )
   end
@@ -304,7 +305,8 @@ defmodule ReqLLM.OpenTelemetry do
   """
 
   alias ReqLLM.MapAccess
-  alias ReqLLM.OpenTelemetry.{Attributes, Content, Metrics, SemConv, Shared}
+  alias ReqLLM.OpenTelemetry.{Attributes, SemConv, Translator}
+  alias ReqLLM.Telemetry.OpenTelemetry, as: Mapper
 
   @events [
     [:req_llm, :request, :start],
@@ -314,7 +316,6 @@ defmodule ReqLLM.OpenTelemetry do
   @default_handler_id "req-llm-open-telemetry"
   @span_table :req_llm_open_telemetry_spans
   @default_adapter ReqLLM.OpenTelemetry.OTelAdapter
-  @inference_event_name :"gen_ai.client.inference.operation.details"
 
   @type content_mode :: :none | :attributes | :event
 
@@ -422,7 +423,10 @@ defmodule ReqLLM.OpenTelemetry do
   """
   @spec span_name(map()) :: String.t()
   def span_name(metadata) do
-    SemConv.span_name(MapAccess.get(metadata, :operation), request_model(metadata) || "unknown")
+    SemConv.span_name(
+      MapAccess.get(metadata, :operation),
+      Attributes.request_model(metadata) || "unknown"
+    )
   end
 
   @doc false
@@ -431,13 +435,8 @@ defmodule ReqLLM.OpenTelemetry do
     ensure_span_table()
 
     if request_id = MapAccess.get(metadata, :request_id) do
-      attributes =
-        metadata
-        |> Attributes.start()
-        |> merge_content(metadata, config, :request)
-        |> atomize()
-
-      span = adapter(config).start_span(span_name(metadata), attributes, config)
+      stub = Mapper.request_start(metadata, config)
+      span = Translator.apply_start(stub, adapter(config), config)
 
       :ets.insert(
         @span_table,
@@ -451,26 +450,8 @@ defmodule ReqLLM.OpenTelemetry do
   def handle_event([:req_llm, :request, :stop], measurements, metadata, config) do
     with request_id when is_binary(request_id) <- MapAccess.get(metadata, :request_id),
          {:ok, span} <- take_span(config, request_id) do
-      attributes =
-        metadata
-        |> Attributes.terminal()
-        |> merge_content(metadata, config, :both)
-        |> Shared.merge_langfuse(metadata, config)
-        |> atomize()
-
-      adapter(config).set_attributes(span, attributes, config)
-      maybe_emit_inference_event(span, metadata, config, :both)
-
-      case Attributes.error_status(metadata) do
-        nil ->
-          :ok
-
-        {_error_type, message} ->
-          adapter(config).set_status(span, :error, message, config)
-      end
-
-      adapter(config).end_span(span, config)
-      record_metrics(:stop, metadata, measurements, config)
+      stub = Mapper.request_stop(metadata, terminal_opts(config, measurements))
+      Translator.apply_terminal(span, stub, adapter(config), config)
     end
 
     :ok
@@ -479,31 +460,8 @@ defmodule ReqLLM.OpenTelemetry do
   def handle_event([:req_llm, :request, :exception], measurements, metadata, config) do
     with request_id when is_binary(request_id) <- MapAccess.get(metadata, :request_id),
          {:ok, span} <- take_span(config, request_id) do
-      attributes =
-        metadata
-        |> Attributes.exception()
-        |> merge_content(metadata, config, :request)
-        |> atomize()
-
-      adapter(config).set_attributes(span, attributes, config)
-      maybe_emit_inference_event(span, metadata, config, :request)
-
-      adapter(config).add_event(
-        span,
-        :exception,
-        atomize(Attributes.exception_event(metadata)),
-        config
-      )
-
-      adapter(config).set_status(
-        span,
-        :error,
-        Shared.error_message(MapAccess.get(metadata, :error)),
-        config
-      )
-
-      adapter(config).end_span(span, config)
-      record_metrics(:exception, metadata, measurements, config)
+      stub = Mapper.request_exception(metadata, terminal_opts(config, measurements))
+      Translator.apply_terminal(span, stub, adapter(config), config)
     end
 
     :ok
@@ -526,43 +484,8 @@ defmodule ReqLLM.OpenTelemetry do
       adapter.metrics_available?()
   end
 
-  defp merge_content(attributes, metadata, config, scope) do
-    case Shared.content_mode(config) do
-      :attributes -> Map.merge(attributes, content_attributes(metadata, scope))
-      _ -> attributes
-    end
-  end
-
-  defp maybe_emit_inference_event(span, metadata, config, scope) do
-    with :event <- Shared.content_mode(config),
-         payload when map_size(payload) > 0 <- content_attributes(metadata, scope) do
-      adapter(config).add_event(span, @inference_event_name, atomize(payload), config)
-    else
-      _ -> :ok
-    end
-  end
-
-  defp content_attributes(metadata, :request), do: Content.request_attributes(metadata)
-
-  defp content_attributes(metadata, :both) do
-    Map.merge(Content.request_attributes(metadata), Content.response_attributes(metadata))
-  end
-
-  defp record_metrics(kind, metadata, measurements, config) do
-    if Keyword.get(config, :metrics_enabled?, false) do
-      adapter = adapter(config)
-      duration = MapAccess.get(measurements || %{}, :duration)
-
-      records =
-        case kind do
-          :stop -> Metrics.stop(metadata, duration)
-          :exception -> Metrics.exception(metadata, duration)
-        end
-
-      Enum.each(records, &adapter.record_histogram(&1, config))
-    end
-
-    :ok
+  defp terminal_opts(config, measurements) do
+    Keyword.put(config, :measurements, measurements || %{})
   end
 
   defp ensure_span_table do
@@ -601,18 +524,4 @@ defmodule ReqLLM.OpenTelemetry do
         :error
     end
   end
-
-  # Keys come from the closed `gen_ai.*` / `server.*` / `error.*` / `req_llm.*` /
-  # `openai.*` / `langfuse.*` set defined in `Attributes`, `Content`, and `Shared`
-  # — not caller-supplied — so `String.to_atom/1` is safe. Do not feed user input here.
-  defp atomize(map) do
-    Map.new(map, fn {key, value} -> {String.to_atom(key), value} end)
-  end
-
-  defp request_model(%{model: %LLMDB.Model{id: id}}), do: id
-
-  defp request_model(%{model: model}) when is_map(model),
-    do: Map.get(model, :id)
-
-  defp request_model(_), do: nil
 end

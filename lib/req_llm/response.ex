@@ -216,7 +216,7 @@ defmodule ReqLLM.Response do
       |> reason_to_string_for_classify()
       |> normalize_finish_reason_for_classify()
 
-    actionable_tool_calls = Enum.reject(normalized_tool_calls, &ToolCall.builtin_flag?/1)
+    actionable_tool_calls = Enum.reject(normalized_tool_calls, &ToolCall.flagged_builtin?/1)
 
     type =
       cond do
@@ -616,7 +616,7 @@ defmodule ReqLLM.Response do
       name: name,
       arguments: parse_tool_call_arguments(args)
     }
-    |> ToolCall.put_builtin_flag(ToolCall.builtin_flag?(m))
+    |> ToolCall.put_builtin_flag(ToolCall.flagged_builtin?(m))
   end
 
   defp normalize_tool_call_for_classify(%{"id" => id, "name" => name, "arguments" => args} = m) do
@@ -625,7 +625,7 @@ defmodule ReqLLM.Response do
       name: name,
       arguments: parse_tool_call_arguments(args)
     }
-    |> ToolCall.put_builtin_flag(ToolCall.builtin_flag?(m))
+    |> ToolCall.put_builtin_flag(ToolCall.flagged_builtin?(m))
   end
 
   defp normalize_tool_call_for_classify(
@@ -639,7 +639,7 @@ defmodule ReqLLM.Response do
       arguments: parse_tool_call_arguments(args)
     }
     |> ToolCall.put_builtin_flag(
-      ToolCall.builtin_flag?(tool_call) or ToolCall.builtin_flag?(function)
+      ToolCall.flagged_builtin?(tool_call) or ToolCall.flagged_builtin?(function)
     )
   end
 
@@ -654,7 +654,7 @@ defmodule ReqLLM.Response do
       arguments: parse_tool_call_arguments(args)
     }
     |> ToolCall.put_builtin_flag(
-      ToolCall.builtin_flag?(tool_call) or ToolCall.builtin_flag?(function)
+      ToolCall.flagged_builtin?(tool_call) or ToolCall.flagged_builtin?(function)
     )
   end
 

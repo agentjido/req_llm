@@ -56,6 +56,13 @@ defmodule ReqLLM.Telemetry.OpenTelemetry do
 
   @doc """
   Builds span creation data for a `[:req_llm, :request, :start]` event.
+
+  In `content: :event` mode the inference event payload is intentionally
+  deferred to the terminal stub (`request_stop/2` / `request_exception/2`)
+  so the host emits exactly one `gen_ai.client.inference.operation.details`
+  event per span, carrying both request and response content. Start-side
+  request content is still attached as span attributes when
+  `content: :attributes`.
   """
   @spec request_start(map(), keyword()) :: request_start_stub()
   def request_start(metadata, opts \\ []) when is_map(metadata) do
@@ -69,7 +76,7 @@ defmodule ReqLLM.Telemetry.OpenTelemetry do
         metadata
         |> Attributes.start()
         |> merge_when(mode == :attributes, request_content),
-      events: maybe_inference_event(mode, request_content)
+      events: []
     }
   end
 

@@ -797,7 +797,14 @@ defmodule ReqLLM.Providers.OpenAI do
   @impl ReqLLM.Provider
   def decode_response({req, resp}) do
     api_mod = req.options[:api_mod] || detect_api_from_response(resp)
-    api_mod.decode_response({req, resp})
+
+    case api_mod.decode_response({req, resp}) do
+      {req2, %Req.Response{} = resp2} ->
+        {req2, stamp_api_type_on_response(resp2, api_type_for_mod(api_mod))}
+
+      other ->
+        other
+    end
   end
 
   defp detect_api_from_response(resp) do
@@ -812,6 +819,32 @@ defmodule ReqLLM.Providers.OpenAI do
   rescue
     _ -> ReqLLM.Providers.OpenAI.ChatAPI
   end
+
+  # Surfaces the OpenAI API surface to the OTel bridge as
+  # `openai.api.type` (chat_completions / responses / embeddings). Stamping
+  # at the dispatcher is cheap and avoids brittle URL-path inference.
+  defp api_type_for_mod(ReqLLM.Providers.OpenAI.ResponsesAPI), do: "responses"
+  defp api_type_for_mod(ReqLLM.Providers.OpenAI.ChatAPI), do: "chat_completions"
+  defp api_type_for_mod(_), do: nil
+
+  defp stamp_api_type_on_response(resp, nil), do: resp
+
+  defp stamp_api_type_on_response(%Req.Response{body: %ReqLLM.Response{} = body} = resp, type) do
+    meta = body.provider_meta || %{}
+
+    if has_api_type?(meta) do
+      resp
+    else
+      %{resp | body: %{body | provider_meta: Map.put(meta, "api_type", type)}}
+    end
+  end
+
+  defp stamp_api_type_on_response(resp, _type), do: resp
+
+  defp has_api_type?(meta) when is_map(meta),
+    do: Map.has_key?(meta, "api_type") or Map.has_key?(meta, :api_type)
+
+  defp has_api_type?(_), do: false
 
   @doc """
   Custom decode_stream_event to route based on model API type.

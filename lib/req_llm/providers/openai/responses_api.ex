@@ -265,11 +265,21 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     [ReqLLM.StreamChunk.meta(meta)]
   end
 
+  # Mirrors the drop-list used by the non-streaming response builder (see
+  # `decode_response_body/4` ~line 1546) so streaming and non-streaming
+  # `provider_meta` capture the same set of OpenAI response fields
+  # (service_tier, system_fingerprint, plus anything else OpenAI surfaces).
+  @response_provider_meta_drop ["id", "model", "output_text", "output", "usage"]
+
   defp merge_response_provider_meta(meta, response) when is_map(response) do
+    # `api_type` is stamped centrally by the OpenAI dispatcher
+    # (`ReqLLM.Providers.OpenAI.decode_response/1`), so this path stays
+    # focused on the response fields we pull out of stream `response.*`
+    # events.
     extras =
-      %{}
-      |> put_present(:service_tier, Map.get(response, "service_tier"))
-      |> put_present(:system_fingerprint, Map.get(response, "system_fingerprint"))
+      response
+      |> Map.drop(@response_provider_meta_drop)
+      |> drop_blanks()
 
     if map_size(extras) > 0 do
       case Map.get(meta, :provider_meta) do
@@ -286,9 +296,11 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
 
   defp merge_response_provider_meta(meta, _), do: meta
 
-  defp put_present(map, _key, nil), do: map
-  defp put_present(map, _key, ""), do: map
-  defp put_present(map, key, value), do: Map.put(map, key, value)
+  defp drop_blanks(map) do
+    map
+    |> Enum.reject(fn {_key, value} -> value in [nil, ""] end)
+    |> Map.new()
+  end
 
   defp ensure_stream_state(nil), do: init_stream_state()
 
@@ -1543,7 +1555,16 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
 
     {object, object_meta} = maybe_extract_object(req, text, tool_calls) || {nil, %{}}
 
-    base_provider_meta = Map.drop(body, ["id", "model", "output_text", "output", "usage"])
+    # Stamp `api_type` so Azure Responses (which calls this decoder
+    # directly via `Azure.ResponsesAPI.parse_response/3`, bypassing the
+    # OpenAI dispatcher) also surfaces `openai.api.type` on OTel spans.
+    # The dispatcher's `has_api_type?/1` guard prevents double-stamping
+    # when the OpenAI path runs through it.
+    base_provider_meta =
+      body
+      |> Map.drop(["id", "model", "output_text", "output", "usage"])
+      |> Map.put("api_type", "responses")
+
     provider_meta = Map.merge(base_provider_meta, object_meta)
 
     response = %ReqLLM.Response{

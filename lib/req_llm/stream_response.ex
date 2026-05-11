@@ -296,7 +296,7 @@ defmodule ReqLLM.StreamResponse do
   def classify(%__MODULE__{stream: stream}) do
     summary = ResponseStream.summarize(stream)
 
-    actionable_tool_calls = Enum.reject(summary.tool_calls, &ToolCall.builtin_flag?/1)
+    actionable_tool_calls = Enum.reject(summary.tool_calls, &ToolCall.flagged_builtin?/1)
 
     type =
       cond do

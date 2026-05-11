@@ -51,6 +51,7 @@ defmodule ReqLLM.OpenTelemetry.Attributes do
       "req_llm.request_id" => MapAccess.get(metadata, :request_id)
     }
     |> Map.merge(request_options(MapAccess.get(metadata, :request_options)))
+    |> Map.merge(request_reasoning(MapAccess.get(metadata, :reasoning)))
     |> Map.merge(server(MapAccess.get(metadata, :server)))
     |> Map.merge(openai_request_extensions(metadata))
     |> compact()
@@ -183,6 +184,22 @@ defmodule ReqLLM.OpenTelemetry.Attributes do
       "server.port" => option(server, :port)
     }
   end
+
+  defp request_reasoning(nil), do: %{}
+
+  defp request_reasoning(reasoning) when is_map(reasoning) do
+    %{
+      "gen_ai.request.reasoning.effort" =>
+        reasoning_effort_to_string(MapAccess.get(reasoning, :requested_effort)),
+      "gen_ai.request.reasoning.budget_tokens" =>
+        MapAccess.get(reasoning, :requested_budget_tokens)
+    }
+  end
+
+  defp reasoning_effort_to_string(nil), do: nil
+  defp reasoning_effort_to_string(effort) when is_atom(effort), do: Atom.to_string(effort)
+  defp reasoning_effort_to_string(effort) when is_binary(effort), do: effort
+  defp reasoning_effort_to_string(_), do: nil
 
   defp option(map, key) when is_atom(key) do
     case Map.fetch(map, key) do
@@ -317,7 +334,7 @@ defmodule ReqLLM.OpenTelemetry.Attributes do
         end
 
       %{
-        "openai.api.type" => openai_api_type(MapAccess.get(metadata, :server)),
+        "openai.api.type" => openai_api_type(metadata),
         "openai.request.service_tier" => service_tier
       }
     else
@@ -358,7 +375,25 @@ defmodule ReqLLM.OpenTelemetry.Attributes do
     end
   end
 
-  defp openai_api_type(server) when is_map(server) do
+  # Prefers an explicit `api_type` hint stamped on the response's
+  # `provider_meta` by the OpenAI provider dispatcher. Falls back to URL-path
+  # inference when the hint is absent (e.g. providers we haven't wired yet,
+  # or response payload not promoted via `telemetry: [payloads: :raw]`).
+  defp openai_api_type(metadata) do
+    case provider_meta_api_type(metadata) do
+      type when is_binary(type) and type != "" -> type
+      _ -> openai_api_type_from_server(MapAccess.get(metadata, :server))
+    end
+  end
+
+  defp provider_meta_api_type(metadata) do
+    case response_provider_meta(metadata) do
+      %{} = meta -> MapAccess.get(meta, :api_type) || MapAccess.get(meta, "api_type")
+      _ -> nil
+    end
+  end
+
+  defp openai_api_type_from_server(server) when is_map(server) do
     case MapAccess.get(server, :path) do
       path when is_binary(path) ->
         cond do
@@ -373,7 +408,7 @@ defmodule ReqLLM.OpenTelemetry.Attributes do
     end
   end
 
-  defp openai_api_type(_), do: nil
+  defp openai_api_type_from_server(_), do: nil
 
   defp response_provider_meta(metadata) do
     case MapAccess.get(metadata, :response_payload) do

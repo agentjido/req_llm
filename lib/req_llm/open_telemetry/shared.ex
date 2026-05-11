@@ -85,8 +85,8 @@ defmodule ReqLLM.OpenTelemetry.Shared do
     with %{first_chunk_at: first_chunk_at, time_to_first_chunk: ttfc}
          when is_integer(first_chunk_at) and is_integer(ttfc) <-
            Map.get(metadata, :streaming) || %{},
-         %{system_time: start_system_time} when is_integer(start_system_time) <-
-           Map.get(metadata, :request_measurement) || %{} do
+         start_system_time when is_integer(start_system_time) <-
+           Map.get(metadata, :request_started_system_time) do
       first_chunk_microseconds =
         start_system_time
         |> System.convert_time_unit(:native, :microsecond)
