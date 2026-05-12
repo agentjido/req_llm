@@ -1,9 +1,9 @@
 defmodule ReqLLM.Provider.ChunkAccumulatorTest do
   use ExUnit.Case, async: true
 
-  alias ReqLLM.Provider.ChunkAccumulator
   alias ReqLLM.{Message, StreamChunk, ToolCall}
   alias ReqLLM.Message.ContentPart
+  alias ReqLLM.Provider.ChunkAccumulator
 
   describe "push/2 - text" do
     test "accumulates text content as iodata" do

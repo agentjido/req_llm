@@ -387,10 +387,8 @@ defmodule ReqLLM.OpenTelemetry.Attributes do
   end
 
   defp provider_meta_api_type(metadata) do
-    case response_provider_meta(metadata) do
-      %{} = meta -> MapAccess.get(meta, :api_type) || MapAccess.get(meta, "api_type")
-      _ -> nil
-    end
+    meta = response_provider_meta(metadata)
+    MapAccess.get(meta, :api_type) || MapAccess.get(meta, "api_type")
   end
 
   defp openai_api_type_from_server(server) when is_map(server) do

@@ -41,9 +41,9 @@ defmodule ReqLLM.Provider.ChunkAccumulator do
   costs O(N) total work, not O(N²).
   """
 
-  alias ReqLLM.StreamChunk
   alias ReqLLM.{Message, ToolCall}
   alias ReqLLM.Message.ContentPart
+  alias ReqLLM.StreamChunk
 
   @type tool_call_record :: %{
           id: String.t(),

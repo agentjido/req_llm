@@ -6,8 +6,8 @@ defmodule ReqLLM.Response.Stream do
   particularly for joining stream chunks into complete responses.
   """
 
-  alias ReqLLM.Provider.ChunkAccumulator
   alias ReqLLM.{Message, Response}
+  alias ReqLLM.Provider.ChunkAccumulator
 
   @typedoc """
   Summary of accumulated stream data.
