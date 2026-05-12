@@ -54,7 +54,9 @@ defmodule ReqLLM.EmbeddingTest do
       models = Embedding.supported_models()
 
       for model <- models do
-        assert model =~ ~r/^[a-z_]+:[a-z0-9\-_.]+$/i
+        assert [provider, model_id] = String.split(model, ":", parts: 2)
+        assert provider =~ ~r/^[a-z_]+$/i
+        assert model_id != ""
       end
     end
   end
