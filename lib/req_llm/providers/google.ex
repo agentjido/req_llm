@@ -626,23 +626,77 @@ defmodule ReqLLM.Providers.Google do
   def extract_usage(_, _), do: {:error, :invalid_body}
 
   defp normalize_google_usage(usage_metadata) do
-    input = Map.get(usage_metadata, "promptTokenCount", 0)
-    total = Map.get(usage_metadata, "totalTokenCount", 0)
-    cached = Map.get(usage_metadata, "cachedContentTokenCount", 0)
-    reasoning = Map.get(usage_metadata, "thoughtsTokenCount", 0)
+    google_usage_from_metadata(usage_metadata)
+  end
 
-    output =
-      case Map.get(usage_metadata, "candidatesTokenCount") do
-        nil -> max(0, total - input)
-        count -> count + reasoning
-      end
+  defp google_usage_from_metadata(usage_metadata) when is_map(usage_metadata) do
+    input =
+      google_metadata_count(usage_metadata, "promptTokenCount") ||
+        google_token_details_count(usage_metadata["promptTokensDetails"]) ||
+        0
+
+    total = google_metadata_count(usage_metadata, "totalTokenCount")
+    reasoning = google_metadata_count(usage_metadata, "thoughtsTokenCount") || 0
+    cached = google_metadata_count(usage_metadata, "cachedContentTokenCount") || 0
+    candidates = google_metadata_count(usage_metadata, "candidatesTokenCount")
+    output = google_output_tokens(candidates, reasoning, total, input)
 
     %{
       input_tokens: input,
       output_tokens: output,
-      total_tokens: total,
+      total_tokens: total || input + output,
       cached_tokens: cached,
       reasoning_tokens: reasoning
+    }
+  end
+
+  defp google_usage_from_metadata(_usage_metadata), do: google_zero_usage()
+
+  defp google_metadata_count(usage_metadata, key) do
+    case Map.get(usage_metadata, key) do
+      count when is_integer(count) and count >= 0 -> count
+      _ -> nil
+    end
+  end
+
+  defp google_token_details_count(details) when is_list(details) do
+    Enum.reduce(details, nil, fn detail, total ->
+      case detail do
+        %{"tokenCount" => count} when is_integer(count) and count >= 0 ->
+          add_google_token_count(total, count)
+
+        _ ->
+          total
+      end
+    end)
+  end
+
+  defp google_token_details_count(_details), do: nil
+
+  defp add_google_token_count(nil, count), do: count
+  defp add_google_token_count(total, count), do: total + count
+
+  defp google_output_tokens(candidates, reasoning, _total, _input) when is_integer(candidates) do
+    candidates + reasoning
+  end
+
+  defp google_output_tokens(_candidates, _reasoning, total, input) when is_integer(total) do
+    max(0, total - input)
+  end
+
+  defp google_output_tokens(_candidates, reasoning, _total, _input) when reasoning > 0 do
+    reasoning
+  end
+
+  defp google_output_tokens(_candidates, _reasoning, _total, _input), do: 0
+
+  defp google_zero_usage do
+    %{
+      input_tokens: 0,
+      output_tokens: 0,
+      total_tokens: 0,
+      cached_tokens: 0,
+      reasoning_tokens: 0
     }
   end
 
@@ -1884,31 +1938,26 @@ defmodule ReqLLM.Providers.Google do
   defp normalize_google_finish_reason("OTHER"), do: "error"
   defp normalize_google_finish_reason(_), do: "error"
 
-  defp convert_google_usage(%{"promptTokenCount" => prompt, "totalTokenCount" => total} = usage) do
-    thoughts = usage["thoughtsTokenCount"] || 0
-    cached = usage["cachedContentTokenCount"] || 0
-
-    completion =
-      case usage["candidatesTokenCount"] do
-        nil -> max(0, total - prompt)
-        count -> count + thoughts
-      end
+  defp convert_google_usage(usage) when is_map(usage) do
+    normalized = normalize_google_usage(usage)
 
     base = %{
-      "prompt_tokens" => prompt,
-      "completion_tokens" => completion,
-      "total_tokens" => total
+      "prompt_tokens" => normalized.input_tokens,
+      "completion_tokens" => normalized.output_tokens,
+      "total_tokens" => normalized.total_tokens
     }
 
     base =
-      if thoughts > 0 do
-        Map.put(base, "completion_tokens_details", %{"reasoning_tokens" => thoughts})
+      if normalized.reasoning_tokens > 0 do
+        Map.put(base, "completion_tokens_details", %{
+          "reasoning_tokens" => normalized.reasoning_tokens
+        })
       else
         base
       end
 
-    if cached > 0 do
-      Map.put(base, "prompt_tokens_details", %{"cached_tokens" => cached})
+    if normalized.cached_tokens > 0 do
+      Map.put(base, "prompt_tokens_details", %{"cached_tokens" => normalized.cached_tokens})
     else
       base
     end

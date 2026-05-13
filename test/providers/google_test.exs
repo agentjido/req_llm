@@ -854,6 +854,90 @@ defmodule ReqLLM.Providers.GoogleTest do
       assert response.usage.reasoning_tokens == 5
     end
 
+    test "decode_response derives usage from partial usageMetadata" do
+      google_response = %{
+        "candidates" => [
+          %{
+            "content" => %{
+              "parts" => [%{"text" => "The answer is 42."}],
+              "role" => "model"
+            },
+            "finishReason" => "STOP"
+          }
+        ],
+        "usageMetadata" => %{
+          "candidatesTokenCount" => 486,
+          "thoughtsTokenCount" => 4297,
+          "serviceTier" => "standard"
+        }
+      }
+
+      mock_resp = %Req.Response{
+        status: 200,
+        body: google_response
+      }
+
+      {:ok, model} = ReqLLM.model("google:gemini-2.5-flash")
+      context = context_fixture()
+
+      mock_req = %Req.Request{
+        options: [context: context, stream: false, model: model.model]
+      }
+
+      {_req, resp} = Google.decode_response({mock_req, mock_resp})
+
+      assert %ReqLLM.Response{} = resp.body
+      response = resp.body
+      assert response.usage.input_tokens == 0
+      assert response.usage.output_tokens == 4783
+      assert response.usage.total_tokens == 4783
+      assert response.usage.reasoning_tokens == 4297
+    end
+
+    test "decode_response derives prompt tokens from usage detail entries" do
+      google_response = %{
+        "candidates" => [
+          %{
+            "content" => %{
+              "parts" => [%{"text" => ~s({"summary":"ok"})}],
+              "role" => "model"
+            },
+            "finishReason" => "STOP"
+          }
+        ],
+        "usageMetadata" => %{
+          "promptTokensDetails" => [
+            %{"modality" => "TEXT", "tokenCount" => 12},
+            %{"modality" => "IMAGE", "tokenCount" => 5}
+          ],
+          "candidatesTokenCount" => 3,
+          "thoughtsTokenCount" => 2
+        }
+      }
+
+      mock_resp = %Req.Response{
+        status: 200,
+        body: google_response
+      }
+
+      {:ok, model} = ReqLLM.model("google:gemini-2.5-flash")
+      context = context_fixture()
+
+      mock_req = %Req.Request{
+        options: [context: context, stream: false, operation: :object, model: model.model]
+      }
+
+      {_req, resp} = Google.decode_response({mock_req, mock_resp})
+
+      assert %ReqLLM.Response{} = resp.body
+      response = resp.body
+      assert response.object == %{"summary" => "ok"}
+      assert response.usage.input_tokens == 17
+      assert response.usage.output_tokens == 5
+      assert response.usage.total_tokens == 22
+      assert response.usage.reasoning_tokens == 2
+    end
+
     test "decode_response preserves tool calls" do
       google_response = %{
         "candidates" => [
@@ -1061,6 +1145,25 @@ defmodule ReqLLM.Providers.GoogleTest do
       assert meta_chunk.metadata[:usage][:output_tokens] == 20
       assert meta_chunk.metadata[:usage][:total_tokens] == 30
       assert meta_chunk.metadata[:usage][:reasoning_tokens] == 5
+    end
+
+    test "streaming usageMetadata derives totals from partial counts", %{model: model} do
+      event = %{
+        data: %{
+          "candidates" => [%{"finishReason" => "STOP", "index" => 0}],
+          "usageMetadata" => %{
+            "candidatesTokenCount" => 486,
+            "thoughtsTokenCount" => 4297
+          }
+        }
+      }
+
+      [meta_chunk] = Google.decode_stream_event(event, model)
+      assert meta_chunk.type == :meta
+      assert meta_chunk.metadata[:usage][:input_tokens] == 0
+      assert meta_chunk.metadata[:usage][:output_tokens] == 4783
+      assert meta_chunk.metadata[:usage][:total_tokens] == 4783
+      assert meta_chunk.metadata[:usage][:reasoning_tokens] == 4297
     end
 
     test "finishReason on candidate without content.parts (no usage)", %{model: model} do
