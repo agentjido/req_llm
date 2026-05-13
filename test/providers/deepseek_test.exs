@@ -33,9 +33,14 @@ defmodule ReqLLM.Providers.DeepseekTest do
       assert Deepseek.default_env_key() == "DEEPSEEK_API_KEY"
     end
 
-    test "provider schema is empty (pure OpenAI-compatible)" do
-      schema_keys = Deepseek.provider_schema().schema |> Keyword.keys()
-      assert schema_keys == []
+    test "provider schema includes thinking option" do
+      schema = Deepseek.provider_schema().schema
+      schema_keys = Keyword.keys(schema)
+
+      assert :thinking in schema_keys
+
+      thinking_schema = Keyword.get(schema, :thinking)
+      assert thinking_schema[:type] == :map
     end
 
     test "provider_extended_generation_schema includes all core keys" do
@@ -63,6 +68,19 @@ defmodule ReqLLM.Providers.DeepseekTest do
       assert %Req.Request{} = request
       assert request.url.path == "/chat/completions"
       assert request.method == :post
+    end
+
+    test "prepare_request accepts reasoning_effort: :xhigh and encodes it as max" do
+      model = deepseek_model("deepseek-reasoner")
+      prompt = "Hello world"
+      opts = [reasoning_effort: :xhigh]
+
+      {:ok, request} = Deepseek.prepare_request(:chat, model, prompt, opts)
+      assert request.options[:reasoning_effort] == "max"
+
+      encoded = Deepseek.encode_body(request)
+      body = ReqLLM.Test.Helpers.json_body(encoded)
+      assert body["reasoning_effort"] == "max"
     end
 
     test "prepare_request rejects unsupported operations" do
@@ -225,6 +243,141 @@ defmodule ReqLLM.Providers.DeepseekTest do
 
       assert %ReqLLM.Error.API.Response{} = error
       assert error.status == 401
+    end
+  end
+
+  describe "translate_options" do
+    test "maps reasoning_effort atoms to correct string values" do
+      model = deepseek_model()
+
+      assert {opts, []} = Deepseek.translate_options(:chat, model, reasoning_effort: :low)
+      assert opts[:reasoning_effort] == "high"
+
+      assert {opts, []} = Deepseek.translate_options(:chat, model, reasoning_effort: :medium)
+      assert opts[:reasoning_effort] == "high"
+
+      assert {opts, []} = Deepseek.translate_options(:chat, model, reasoning_effort: :high)
+      assert opts[:reasoning_effort] == "high"
+
+      assert {opts, []} = Deepseek.translate_options(:chat, model, reasoning_effort: :max)
+      assert opts[:reasoning_effort] == "max"
+
+      assert {opts, []} = Deepseek.translate_options(:chat, model, reasoning_effort: :xhigh)
+      assert opts[:reasoning_effort] == "max"
+    end
+
+    test "passes through string reasoning_effort values unchanged" do
+      model = deepseek_model()
+
+      assert {opts, []} = Deepseek.translate_options(:chat, model, reasoning_effort: "high")
+      assert opts[:reasoning_effort] == "high"
+
+      assert {opts, []} = Deepseek.translate_options(:chat, model, reasoning_effort: "max")
+      assert opts[:reasoning_effort] == "max"
+    end
+
+    test "handles nil reasoning_effort" do
+      model = deepseek_model()
+
+      assert {opts, []} = Deepseek.translate_options(:chat, model, reasoning_effort: nil)
+      refute Keyword.has_key?(opts, :reasoning_effort)
+
+      assert {opts, []} = Deepseek.translate_options(:chat, model, [])
+      refute Keyword.has_key?(opts, :reasoning_effort)
+    end
+  end
+
+  describe "build_body" do
+    test "includes thinking in body when provided via provider_options" do
+      model = deepseek_model()
+      context = context_fixture()
+
+      mock_request = %Req.Request{
+        options: [
+          context: context,
+          model: model.model,
+          stream: false,
+          provider_options: [thinking: %{type: "enabled"}]
+        ]
+      }
+
+      body = Deepseek.build_body(mock_request)
+
+      assert body[:thinking] == %{type: "enabled"}
+    end
+
+    test "normalizes thinking type from atom to string" do
+      model = deepseek_model()
+      context = context_fixture()
+
+      mock_request = %Req.Request{
+        options: [
+          context: context,
+          model: model.model,
+          stream: false,
+          provider_options: [thinking: %{type: :disabled}]
+        ]
+      }
+
+      body = Deepseek.build_body(mock_request)
+
+      assert body[:thinking] == %{type: "disabled"}
+    end
+
+    test "includes reasoning_effort in body when provided" do
+      model = deepseek_model()
+      context = context_fixture()
+
+      mock_request = %Req.Request{
+        options: [
+          context: context,
+          model: model.model,
+          stream: false,
+          reasoning_effort: "high"
+        ]
+      }
+
+      body = Deepseek.build_body(mock_request)
+
+      assert body[:reasoning_effort] == "high"
+    end
+
+    test "includes both thinking and reasoning_effort when both provided" do
+      model = deepseek_model()
+      context = context_fixture()
+
+      mock_request = %Req.Request{
+        options: [
+          context: context,
+          model: model.model,
+          stream: false,
+          provider_options: [thinking: %{type: "enabled"}],
+          reasoning_effort: "max"
+        ]
+      }
+
+      body = Deepseek.build_body(mock_request)
+
+      assert body[:thinking] == %{type: "enabled"}
+      assert body[:reasoning_effort] == "max"
+    end
+
+    test "does not include thinking or reasoning_effort when not provided" do
+      model = deepseek_model()
+      context = context_fixture()
+
+      mock_request = %Req.Request{
+        options: [
+          context: context,
+          model: model.model,
+          stream: false
+        ]
+      }
+
+      body = Deepseek.build_body(mock_request)
+
+      refute Map.has_key?(body, :thinking)
+      refute Map.has_key?(body, :reasoning_effort)
     end
   end
 
