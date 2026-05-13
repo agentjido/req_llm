@@ -24,7 +24,7 @@ defmodule ReqLLM.Providers.AmazonBedrock do
 
       # Option 2: Pass directly in options
       ReqLLM.generate_text(
-        "bedrock:anthropic.claude-3-sonnet-20240229-v1:0",
+        "amazon_bedrock:anthropic.claude-3-sonnet-20240229-v1:0",
         "Hello",
         api_key: "your-api-key",
         region: "us-east-1"
@@ -44,7 +44,7 @@ defmodule ReqLLM.Providers.AmazonBedrock do
 
       # Option 2: Pass directly in options
       ReqLLM.generate_text(
-        "bedrock:anthropic.claude-3-sonnet-20240229-v1:0",
+        "amazon_bedrock:anthropic.claude-3-sonnet-20240229-v1:0",
         "Hello",
         access_key_id: "AKIA...",
         secret_access_key: "...",
@@ -81,7 +81,7 @@ defmodule ReqLLM.Providers.AmazonBedrock do
   ## Examples
 
       # Simple text generation with Claude on Bedrock
-      model = ReqLLM.model("bedrock:anthropic.claude-3-sonnet-20240229-v1:0")
+      model = ReqLLM.model("amazon_bedrock:anthropic.claude-3-sonnet-20240229-v1:0")
       {:ok, response} = ReqLLM.generate_text(model, "Hello!")
 
       # Streaming

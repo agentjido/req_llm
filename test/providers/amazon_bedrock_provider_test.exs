@@ -584,6 +584,22 @@ defmodule ReqLLM.Providers.AmazonBedrockProviderTest do
       assert request.url.path == "/model/global.anthropic.claude-opus-4-6-v1/invoke"
     end
 
+    test "global prefix is preserved for Claude Sonnet 4.6" do
+      {:ok, model} = ReqLLM.model("amazon_bedrock:global.anthropic.claude-sonnet-4-6")
+      context = context_fixture()
+
+      opts = [
+        api_key: "test-api-key",
+        region: "us-east-1"
+      ]
+
+      {:ok, request} = AmazonBedrock.prepare_request(:chat, model, context, opts)
+
+      assert model.provider == :amazon_bedrock
+      assert model.provider_model_id == "global.anthropic.claude-sonnet-4-6"
+      assert request.url.path == "/model/global.anthropic.claude-sonnet-4-6/invoke"
+    end
+
     test "us prefix is preserved in URL when model spec includes it" do
       {:ok, model} =
         ReqLLM.model("amazon_bedrock:us.anthropic.claude-opus-4-1-20250805-v1:0")

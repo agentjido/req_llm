@@ -21,13 +21,13 @@ AWS_REGION=us-east-1
 
 For the full model-spec workflow, see [Model Specs](model-specs.md).
 
-Use exact Bedrock IDs from [LLMDB.xyz](https://llmdb.xyz) when possible. For inference profiles, custom deployments, or new Bedrock model IDs, use a full explicit model spec when the registry has not caught up yet.
+Use exact Bedrock IDs from [LLMDB.xyz](https://llmdb.xyz) when possible. The canonical ReqLLM provider prefix is `amazon_bedrock:`. For inference profiles, custom deployments, or new Bedrock model IDs, use a full explicit model spec when the registry has not caught up yet.
 
 **Provider Options:**
 
 ```elixir
 ReqLLM.generate_text(
-  "bedrock:anthropic.claude-3-sonnet-20240229-v1:0",
+  "amazon_bedrock:anthropic.claude-3-sonnet-20240229-v1:0",
   "Hello",
   provider_options: [api_key: "your-api-key", region: "us-east-1"]
 )
@@ -63,7 +63,7 @@ ReqLLM.put_key(:aws_bedrock, %{
 
 ```elixir
 ReqLLM.generate_text(
-  "bedrock:anthropic.claude-3-sonnet-20240229-v1:0",
+  "amazon_bedrock:anthropic.claude-3-sonnet-20240229-v1:0",
   "Hello",
   provider_options: [
     region: "us-east-1",
@@ -160,27 +160,27 @@ Passed via `:provider_options` keyword:
 - **All capabilities**: Tool calling, streaming with tools, attachments, reasoning, prompt caching
 - **Inference profiles**: Supports region-specific routing (`global.`, `us.`, `eu.`)
 - **Models**: Claude 3.x, 4.x (Sonnet, Opus, Haiku)
-- **Example**: `bedrock:global.anthropic.claude-sonnet-4-5-20250929-v1:0`
+- **Example**: `amazon_bedrock:global.anthropic.claude-sonnet-4-6`
 
 ### Cohere Command R/R+
 
 - **Tool calling**: Full support including streaming with tools
 - **RAG-optimized**: Excellent for production RAG workloads with citations
 - **Works with Converse API** directly without custom formatter
-- **Example**: `bedrock:cohere.command-r-plus-v1:0`
+- **Example**: `amazon_bedrock:cohere.command-r-plus-v1:0`
 
 ### OpenAI OSS
 
 - **Smart routing**: Native `/invoke` for simple requests, `/converse` when tools present
 - **Tool calling**: Full support in non-streaming mode
 - **Models**: gpt-oss-20b, gpt-oss-120b
-- **Example**: `bedrock:openai.gpt-oss-120b-1:0`
+- **Example**: `amazon_bedrock:openai.gpt-oss-120b-1:0`
 
 ### Meta Llama
 
 - **Inference profiles only**: us.meta.llama3-2-3b-instruct-v1:0
 - **No tool calling**: Basic text generation only
-- **Example**: `bedrock:us.meta.llama3-2-3b-instruct-v1:0`
+- **Example**: `amazon_bedrock:us.meta.llama3-2-3b-instruct-v1:0`
 
 ## Wire Format Notes
 
