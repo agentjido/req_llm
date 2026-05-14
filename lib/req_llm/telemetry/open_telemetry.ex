@@ -32,11 +32,21 @@ defmodule ReqLLM.Telemetry.OpenTelemetry do
 
   alias ReqLLM.MapAccess
   alias ReqLLM.OpenTelemetry.{Attributes, Content, Metrics, SemConv, Shared}
+  alias ReqLLM.{Response, ToolCall}
 
   @type content_mode :: :none | :attributes | :event
   @type span_status :: :ok | {:error, String.t()}
   @type otel_event :: %{name: String.t(), attributes: map()}
   @type metric_record :: map()
+
+  @type tool_span_stub :: %{
+          name: String.t(),
+          kind: :internal,
+          attributes: map(),
+          status: span_status(),
+          start_time: integer() | nil,
+          end_time: integer() | nil
+        }
 
   @type request_start_stub :: %{
           name: String.t(),
@@ -49,7 +59,8 @@ defmodule ReqLLM.Telemetry.OpenTelemetry do
           attributes: map(),
           status: span_status(),
           events: [otel_event()],
-          metrics: [metric_record()]
+          metrics: [metric_record()],
+          tool_spans: [tool_span_stub()]
         }
 
   @inference_event_name "gen_ai.client.inference.operation.details"
@@ -103,7 +114,8 @@ defmodule ReqLLM.Telemetry.OpenTelemetry do
       status: span_status(metadata),
       events:
         maybe_inference_event(mode, content_payload, Map.merge(base_attributes, content_payload)),
-      metrics: Metrics.stop(metadata, MapAccess.get(measurements, :duration))
+      metrics: Metrics.stop(metadata, MapAccess.get(measurements, :duration)),
+      tool_spans: tool_spans(metadata, opts)
     }
   end
 
@@ -129,9 +141,74 @@ defmodule ReqLLM.Telemetry.OpenTelemetry do
             request_content,
             Map.merge(base_attributes, request_content)
           ),
-      metrics: Metrics.exception(metadata, MapAccess.get(measurements, :duration))
+      metrics: Metrics.exception(metadata, MapAccess.get(measurements, :duration)),
+      # Tool execution timing is unreliable on exception — skip sub-spans.
+      tool_spans: []
     }
   end
+
+  @doc """
+  Builds `gen_ai.execute_tool` sub-span stubs for server-side builtin
+  tool calls present on the response message.
+
+  Only entries flagged via `ReqLLM.ToolCall.builtin?/1` are surfaced —
+  user-defined function tool execution happens in the caller's process
+  and must be instrumented there.
+
+  When `metadata.builtin_tool_timing` carries wall-clock nanoseconds for
+  a given call id (streaming path), the stub propagates `start_time` /
+  `end_time` so the translator can emit a span with the measured
+  duration. Otherwise the fields are `nil`, and the translator falls
+  back to "start span / end span" back-to-back — effectively a
+  zero-width marker recording that the invocation occurred inside the
+  parent's lifetime.
+  """
+  @spec tool_spans(map(), keyword()) :: [tool_span_stub()]
+  def tool_spans(metadata, _opts \\ []) when is_map(metadata) do
+    metadata
+    |> response_tool_calls()
+    |> Enum.filter(&ToolCall.builtin?/1)
+    |> Enum.map(&build_tool_span_stub(&1, metadata))
+  end
+
+  defp response_tool_calls(metadata) do
+    case MapAccess.get(metadata, :response_payload) do
+      %Response{message: %{tool_calls: calls}} when is_list(calls) -> calls
+      %{message: %{tool_calls: calls}} when is_list(calls) -> calls
+      _ -> []
+    end
+  end
+
+  defp build_tool_span_stub(%ToolCall{} = tc, metadata) do
+    name = ToolCall.name(tc)
+    timing = MapAccess.get(metadata, :builtin_tool_timing) || %{}
+    entry = Map.get(timing, tc.id) || Map.get(timing, to_string(tc.id)) || %{}
+
+    %{
+      name: "execute_tool " <> name,
+      kind: :internal,
+      status: :ok,
+      start_time: MapAccess.get(entry, :start_unix_nano),
+      end_time: MapAccess.get(entry, :end_unix_nano),
+      attributes:
+        %{
+          "gen_ai.operation.name" => "execute_tool",
+          "gen_ai.tool.name" => name,
+          "gen_ai.tool.type" => "builtin",
+          "gen_ai.tool.call.id" => tc.id
+        }
+        |> maybe_put_arguments(ToolCall.args_map(tc))
+    }
+  end
+
+  defp maybe_put_arguments(attrs, args) when is_map(args) and map_size(args) > 0 do
+    case Jason.encode(args) do
+      {:ok, json} -> Map.put(attrs, "gen_ai.tool.call.arguments", json)
+      _ -> attrs
+    end
+  end
+
+  defp maybe_put_arguments(attrs, _), do: attrs
 
   defp span_name(metadata) do
     SemConv.span_name(

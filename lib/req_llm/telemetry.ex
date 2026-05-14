@@ -358,7 +358,8 @@ defmodule ReqLLM.Telemetry do
         finish_reason: finish_reason,
         usage: usage,
         response_summary: response_summary,
-        response_payload: response_payload
+        response_payload: response_payload,
+        builtin_tool_timing: Keyword.get(opts, :builtin_tool_timing)
       })
     )
 
@@ -505,6 +506,7 @@ defmodule ReqLLM.Telemetry do
     |> maybe_put(:request_payload, context.request_payload, include_payloads?(context))
     |> maybe_put(:response_payload, extra[:response_payload], include_payloads?(context))
     |> maybe_put(:error, extra[:error], not is_nil(extra[:error]))
+    |> maybe_put(:builtin_tool_timing, extra[:builtin_tool_timing])
   end
 
   defp streaming_snapshot(%{

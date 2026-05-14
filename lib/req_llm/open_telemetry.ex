@@ -23,6 +23,15 @@ defmodule ReqLLM.OpenTelemetry.Adapter do
   `metrics_available?/0`, `record_histogram/2`. The bridge only invokes
   these when both `available?/0` and `metrics_available?/0` return `true`.
 
+  ## Optional callbacks (child spans for server-side tool execution)
+
+  `start_child_span/5`, `end_span_at/3`. The bridge invokes these to emit
+  `gen_ai.execute_tool` child spans for server-side builtin tool calls
+  (e.g. `web_search_call` on the OpenAI Responses API). Adapters that
+  don't implement them get a fallback: the bridge calls `start_span/3` +
+  `end_span/2` instead, which records the same data but loses the
+  parent-child relationship (the sub-spans appear as siblings).
+
   ## Example — inject caller-context on every ReqLLM span
 
   The cleanest way to wrap the default adapter is to delegate everything and
@@ -59,8 +68,22 @@ defmodule ReqLLM.OpenTelemetry.Adapter do
   @callback end_span(term(), keyword()) :: :ok
   @callback metrics_available?() :: boolean()
   @callback record_histogram(map(), keyword()) :: :ok
+  @callback start_child_span(
+              parent :: term(),
+              name :: String.t(),
+              attributes :: map(),
+              opts :: %{
+                optional(:kind) => atom(),
+                optional(:start_time) => integer()
+              },
+              config :: keyword()
+            ) :: term()
+  @callback end_span_at(span :: term(), end_time :: integer(), config :: keyword()) :: :ok
 
-  @optional_callbacks metrics_available?: 0, record_histogram: 2
+  @optional_callbacks metrics_available?: 0,
+                      record_histogram: 2,
+                      start_child_span: 5,
+                      end_span_at: 3
 end
 
 defmodule ReqLLM.OpenTelemetry.OTelAdapter do
@@ -154,6 +177,39 @@ defmodule ReqLLM.OpenTelemetry.OTelAdapter do
     call(:otel_span, :end_span, [span])
     :ok
   end
+
+  @impl true
+  def start_child_span(parent, name, attributes, opts, _config) do
+    # Erlang OTel conveys the parent via the Ctx argument of
+    # `:otel_tracer.start_span/4`, not via the start_opts map. We derive a
+    # child Ctx from the current one (preserving baggage / propagators)
+    # and override its current-span slot with the supplied parent. The
+    # span returned by `:otel_tracer.start_span/4` will pick that up as
+    # its parent.
+    ctx = call(:otel_ctx, :get_current, [])
+    child_ctx = call(:otel_tracer, :set_current_span, [ctx, parent])
+
+    span_opts =
+      %{
+        kind: Map.get(opts, :kind, :internal),
+        attributes: attributes
+      }
+      |> maybe_put(:start_time, Map.get(opts, :start_time))
+
+    call(:otel_tracer, :start_span, [child_ctx, tracer(), name, span_opts])
+  end
+
+  @impl true
+  def end_span_at(span, end_time, _config) when is_integer(end_time) do
+    # `:otel_span.end_span/2` accepts an explicit end timestamp in nanos
+    # since epoch. Used when the caller has measured execution timing
+    # (e.g. SSE event arrivals for streaming builtin tool calls).
+    call(:otel_span, :end_span, [span, end_time])
+    :ok
+  end
+
+  defp maybe_put(map, _key, nil), do: map
+  defp maybe_put(map, key, value), do: Map.put(map, key, value)
 
   @impl true
   def record_histogram(record, _config) do
