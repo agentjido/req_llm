@@ -389,6 +389,22 @@ defmodule ReqLLM.Providers.FireworksAITest do
       assert body["response_format"]["json_schema"]["strict"] == false
     end
 
+    test "provider_options fireworks_json_schema_strict: false leaves schema untouched", %{
+      model: model,
+      compiled: compiled
+    } do
+      {:ok, request} =
+        FireworksAI.prepare_request(:object, model, "Make a person",
+          compiled_schema: compiled,
+          temperature: 0.0,
+          provider_options: [fireworks_json_schema_strict: false]
+        )
+
+      body = Jason.decode!(FireworksAI.encode_body(request).body)
+
+      assert body["response_format"]["json_schema"]["strict"] == false
+    end
+
     test ":tool mode falls back to tool-call workaround", %{model: model, compiled: compiled} do
       {:ok, request} =
         FireworksAI.prepare_request(:object, model, "Make a person",

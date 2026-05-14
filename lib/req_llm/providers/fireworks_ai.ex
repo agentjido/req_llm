@@ -169,21 +169,24 @@ defmodule ReqLLM.Providers.FireworksAI do
   end
 
   defp structured_output_mode(opts) do
+    provider_option(opts, :fireworks_structured_output_mode, :auto)
+  end
+
+  defp provider_option(opts, key, default) do
     provider_opts = Keyword.get(opts, :provider_options, [])
 
-    Keyword.get(provider_opts, :fireworks_structured_output_mode) ||
-      Keyword.get(opts, :fireworks_structured_output_mode, :auto)
+    cond do
+      Keyword.has_key?(provider_opts, key) -> Keyword.fetch!(provider_opts, key)
+      Keyword.has_key?(opts, key) -> Keyword.fetch!(opts, key)
+      true -> default
+    end
   end
 
   defp prepare_object_via_json_schema(model_spec, prompt, compiled_schema, opts) do
     schema_name = Map.get(compiled_schema, :name, "output_schema")
     json_schema = ReqLLM.Schema.to_json(compiled_schema.schema)
 
-    provider_opts = Keyword.get(opts, :provider_options, [])
-
-    strict =
-      Keyword.get(provider_opts, :fireworks_json_schema_strict) ||
-        Keyword.get(opts, :fireworks_json_schema_strict, true)
+    strict = provider_option(opts, :fireworks_json_schema_strict, true)
 
     json_schema =
       if strict do
