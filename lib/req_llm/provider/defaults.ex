@@ -626,6 +626,7 @@ defmodule ReqLLM.Provider.Defaults do
       :auth_file,
       :oauth_http_options,
       :provider_options,
+      :extra_body,
       :on_unsupported,
       :n,
       :tools,
@@ -685,6 +686,7 @@ defmodule ReqLLM.Provider.Defaults do
   def encode_body_from_map(request, body) do
     encoded_body =
       body
+      |> merge_extra_body(request.options[:extra_body])
       |> ReqLLM.Schema.apply_property_ordering()
       |> Jason.encode!()
 
@@ -695,6 +697,28 @@ defmodule ReqLLM.Provider.Defaults do
     error ->
       reraise error, __STACKTRACE__
   end
+
+  @doc """
+  Deep-merges extra JSON object fields into a provider request body.
+
+  Provider-generated fields are used as the base and `extra_body` wins on
+  conflicts, allowing callers to pass through provider extensions that ReqLLM
+  does not model yet.
+  """
+  @spec merge_extra_body(map(), map() | nil) :: map()
+  def merge_extra_body(body, extra_body) when is_map(body) and is_map(extra_body) do
+    deep_merge(body, extra_body)
+  end
+
+  def merge_extra_body(body, _extra_body), do: body
+
+  defp deep_merge(left, right) when is_map(left) and is_map(right) do
+    Map.merge(left, right, fn _key, left_value, right_value ->
+      deep_merge(left_value, right_value)
+    end)
+  end
+
+  defp deep_merge(_left, right), do: right
 
   @doc """
   Default response decoding with success/error handling.

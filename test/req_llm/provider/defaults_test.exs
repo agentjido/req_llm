@@ -8,6 +8,41 @@ defmodule ReqLLM.Provider.DefaultsTest do
   alias ReqLLM.Provider.Defaults.ResponseBuilder
   alias ReqLLM.StreamChunk
 
+  describe "encode_body_from_map/2" do
+    test "deep-merges extra_body into JSON request bodies" do
+      request =
+        Req.Request.new(
+          method: :post,
+          url: "https://example.com",
+          options: [
+            extra_body: %{
+              "generationConfig" => %{"thinkingConfig" => %{"thinkingLevel" => "medium"}},
+              "metadata" => %{"source" => "test"},
+              "temperature" => 0.4
+            }
+          ]
+        )
+
+      body = %{
+        "model" => "test-model",
+        "temperature" => 0.2,
+        "generationConfig" => %{"maxOutputTokens" => 128}
+      }
+
+      encoded = Defaults.encode_body_from_map(request, body)
+      decoded = Jason.decode!(encoded.body)
+
+      assert decoded["model"] == "test-model"
+      assert decoded["temperature"] == 0.4
+      assert decoded["metadata"] == %{"source" => "test"}
+
+      assert decoded["generationConfig"] == %{
+               "maxOutputTokens" => 128,
+               "thinkingConfig" => %{"thinkingLevel" => "medium"}
+             }
+    end
+  end
+
   describe "encode_context_to_openai_format/2" do
     test "encodes text content correctly" do
       test_cases = [

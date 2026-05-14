@@ -393,6 +393,44 @@ defmodule ReqLLM.Provider.OptionsTest do
   end
 
   describe "Options.process/4 - req_http_options handling" do
+    test "preserves extra_body for request body customization" do
+      model = %LLMDB.Model{provider: :mock, id: "test-model"}
+
+      extra_body = %{
+        "generationConfig" => %{
+          "thinkingConfig" => %{"thinkingLevel" => "medium"}
+        }
+      }
+
+      assert {:ok, processed} =
+               Options.process(MockProvider, :chat, model,
+                 temperature: 0.7,
+                 extra_body: extra_body
+               )
+
+      assert processed[:temperature] == 0.7
+      assert processed[:extra_body] == extra_body
+    end
+
+    test "preserves extra_body for streaming option processing" do
+      model = %LLMDB.Model{provider: :mock, id: "test-model", limits: %{output: 1000}}
+      context = ReqLLM.Context.new([ReqLLM.Context.user("Hello")])
+      extra_body = %{"provider" => %{"only" => ["bedrock"]}}
+
+      processed =
+        Options.process_stream!(
+          MockProvider,
+          :chat,
+          model,
+          context,
+          extra_body: extra_body
+        )
+
+      assert processed[:stream] == true
+      assert processed[:context] == context
+      assert processed[:extra_body] == extra_body
+    end
+
     test "preserves req_http_options for merging into Req request" do
       model = %LLMDB.Model{provider: :mock, id: "test-model"}
 

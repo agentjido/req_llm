@@ -200,6 +200,67 @@ defmodule ReqLLM.Providers.AmazonBedrock.AdditionalTest do
       assert body["system"] == "Be helpful"
       assert [%{"role" => "user", "content" => _}] = body["messages"]
     end
+
+    test "merges extra_body before signing streaming requests" do
+      model = %LLMDB.Model{
+        id: "anthropic.claude-3-haiku-20240307-v1:0",
+        provider: :amazon_bedrock
+      }
+
+      context = Context.new([Context.user("Hello")])
+
+      opts = [
+        access_key_id: "AKIATEST",
+        secret_access_key: "secretTEST",
+        region: "us-east-1",
+        extra_body: %{
+          "generationConfig" => %{
+            "thinkingConfig" => %{"thinkingLevel" => "medium"}
+          },
+          "metadata" => %{"source" => "extra-body-test"}
+        }
+      ]
+
+      {:ok, request} = AmazonBedrock.attach_stream(model, context, opts, __MODULE__.TestFinch)
+
+      body = Jason.decode!(request.body)
+      headers_map = Map.new(request.headers)
+
+      assert body["generationConfig"] == %{
+               "thinkingConfig" => %{"thinkingLevel" => "medium"}
+             }
+
+      assert body["metadata"] == %{"source" => "extra-body-test"}
+      assert headers_map["authorization"] =~ "AWS4-HMAC-SHA256"
+    end
+
+    test "merges extra_body for non-streaming requests" do
+      model = %LLMDB.Model{
+        id: "anthropic.claude-3-haiku-20240307-v1:0",
+        provider: :amazon_bedrock
+      }
+
+      context = Context.new([Context.user("Hello")])
+
+      opts = [
+        access_key_id: "AKIATEST",
+        secret_access_key: "secretTEST",
+        region: "us-east-1",
+        extra_body: %{
+          "generationConfig" => %{
+            "thinkingConfig" => %{"thinkingLevel" => "medium"}
+          }
+        }
+      ]
+
+      {:ok, request} = AmazonBedrock.prepare_request(:chat, model, context, opts)
+
+      body = Jason.decode!(request.body)
+
+      assert body["generationConfig"] == %{
+               "thinkingConfig" => %{"thinkingLevel" => "medium"}
+             }
+    end
   end
 
   describe "parse_stream_protocol" do

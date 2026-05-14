@@ -448,6 +448,8 @@ defmodule ReqLLM.Providers.AmazonBedrock do
         model_body
       end
 
+    model_body = ReqLLM.Provider.Defaults.merge_extra_body(model_body, opts[:extra_body])
+
     request_with_body =
       updated_request
       |> Req.Request.put_header("content-type", "application/json")
@@ -598,6 +600,8 @@ defmodule ReqLLM.Providers.AmazonBedrock do
       else
         body
       end
+
+    body = ReqLLM.Provider.Defaults.merge_extra_body(body, translated_opts[:extra_body])
 
     json_body = body |> ReqLLM.Schema.apply_property_ordering() |> Jason.encode!()
 

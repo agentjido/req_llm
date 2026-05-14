@@ -174,6 +174,11 @@ defmodule ReqLLM.Provider.Options do
                                  type: {:list, :any},
                                  doc: "Provider-specific options (nested under this key)"
                                ],
+                               extra_body: [
+                                 type: :any,
+                                 doc:
+                                   "Additional JSON object fields to deep-merge into the provider request body before encoding"
+                               ],
 
                                # Streaming request hook
                                on_finch_request: [
