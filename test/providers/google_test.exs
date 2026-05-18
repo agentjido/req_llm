@@ -374,6 +374,206 @@ defmodule ReqLLM.Providers.GoogleTest do
       assert function_response["response"]["temperature"] == 72
     end
 
+    test "encode_body nests file content in functionResponse.parts for Gemini 3+" do
+      {:ok, model} = ReqLLM.model("google:gemini-3-pro-preview")
+
+      pdf_bytes = <<37, 80, 68, 70, 1, 2, 3>>
+
+      tool_result = %ReqLLM.Message{
+        role: :tool,
+        name: "extract_pdf",
+        tool_call_id: "call_1",
+        content: [
+          ReqLLM.Message.ContentPart.text("Here is the file:"),
+          ReqLLM.Message.ContentPart.file(pdf_bytes, "doc.pdf", "application/pdf")
+        ],
+        metadata: %{}
+      }
+
+      context =
+        Context.new([
+          Context.user("Summarise this PDF."),
+          Context.assistant("",
+            tool_calls: [
+              %ReqLLM.ToolCall{
+                id: "call_1",
+                type: "function",
+                function: %{name: "extract_pdf", arguments: ~s({"path":"doc.pdf"})}
+              }
+            ]
+          ),
+          tool_result
+        ])
+
+      mock_request = %Req.Request{
+        options: [
+          context: context,
+          model: model.model,
+          stream: false,
+          operation: :chat
+        ]
+      }
+
+      updated_request = Google.encode_body(mock_request)
+      decoded = Jason.decode!(updated_request.body)
+
+      tool_user_msg =
+        decoded["contents"]
+        |> Enum.find(fn entry ->
+          entry["role"] == "user" and
+            Enum.any?(entry["parts"], &Map.has_key?(&1, "functionResponse"))
+        end)
+
+      assert tool_user_msg, "expected a user message carrying functionResponse"
+
+      function_response_parts =
+        Enum.filter(tool_user_msg["parts"], &Map.has_key?(&1, "functionResponse"))
+
+      assert [function_response_part] = function_response_parts
+
+      function_response = function_response_part["functionResponse"]
+      assert function_response["name"] == "extract_pdf"
+
+      assert is_list(function_response["parts"]),
+             "functionResponse must carry a nested parts array on Gemini 3+"
+
+      assert Enum.any?(function_response["parts"], fn
+               %{"inline_data" => %{"mime_type" => "application/pdf", "data" => data}} ->
+                 Base.decode64!(data) == pdf_bytes
+
+               _ ->
+                 false
+             end),
+             "PDF payload must live inside functionResponse.parts"
+
+      refute Enum.any?(tool_user_msg["parts"], &Map.has_key?(&1, "inline_data")),
+             "PDF must not be emitted as a sibling inline_data part on Gemini 3+"
+
+      assert function_response["response"]["content"] =~ "Here is the file:",
+             "accompanying text must survive into functionResponse.response.content"
+    end
+
+    test "encode_body keeps legacy shape for Gemini 2.5 multimodal tool results" do
+      {:ok, model} = ReqLLM.model("google:gemini-1.5-flash")
+
+      pdf_bytes = <<37, 80, 68, 70, 1, 2, 3>>
+
+      tool_result = %ReqLLM.Message{
+        role: :tool,
+        name: "extract_pdf",
+        tool_call_id: "call_1",
+        content: [
+          ReqLLM.Message.ContentPart.text("Here is the file:"),
+          ReqLLM.Message.ContentPart.file(pdf_bytes, "doc.pdf", "application/pdf")
+        ],
+        metadata: %{}
+      }
+
+      context =
+        Context.new([
+          Context.user("Summarise this PDF."),
+          Context.assistant("",
+            tool_calls: [
+              %ReqLLM.ToolCall{
+                id: "call_1",
+                type: "function",
+                function: %{name: "extract_pdf", arguments: ~s({"path":"doc.pdf"})}
+              }
+            ]
+          ),
+          tool_result
+        ])
+
+      mock_request = %Req.Request{
+        options: [
+          context: context,
+          model: model.model,
+          stream: false,
+          operation: :chat
+        ]
+      }
+
+      updated_request = Google.encode_body(mock_request)
+      decoded = Jason.decode!(updated_request.body)
+
+      tool_user_msg =
+        decoded["contents"]
+        |> Enum.find(fn entry ->
+          entry["role"] == "user" and
+            Enum.any?(entry["parts"], &Map.has_key?(&1, "functionResponse"))
+        end)
+
+      assert tool_user_msg
+
+      function_response_parts =
+        Enum.filter(tool_user_msg["parts"], &Map.has_key?(&1, "functionResponse"))
+
+      assert [function_response_part] = function_response_parts
+
+      refute Map.has_key?(function_response_part["functionResponse"], "parts"),
+             "Gemini 2.5 must not emit functionResponse.parts"
+
+      assert Enum.any?(tool_user_msg["parts"], fn
+               %{"inline_data" => %{"mime_type" => "application/pdf"}} -> true
+               _ -> false
+             end),
+             "Gemini 2.5 must keep the file as a sibling inline_data part (legacy behavior)"
+    end
+
+    test "encode_body keeps text-only tool results unchanged on Gemini 3+" do
+      {:ok, model} = ReqLLM.model("google:gemini-3-pro-preview")
+
+      tool_result = %ReqLLM.Message{
+        role: :tool,
+        name: "get_weather",
+        tool_call_id: "call_1",
+        content: [ReqLLM.Message.ContentPart.text("just text")],
+        metadata: %{}
+      }
+
+      context =
+        Context.new([
+          Context.user("Weather?"),
+          Context.assistant("",
+            tool_calls: [
+              %ReqLLM.ToolCall{
+                id: "call_1",
+                type: "function",
+                function: %{name: "get_weather", arguments: ~s({"location":"SF"})}
+              }
+            ]
+          ),
+          tool_result
+        ])
+
+      mock_request = %Req.Request{
+        options: [
+          context: context,
+          model: model.model,
+          stream: false,
+          operation: :chat
+        ]
+      }
+
+      updated_request = Google.encode_body(mock_request)
+      decoded = Jason.decode!(updated_request.body)
+
+      tool_user_msg =
+        decoded["contents"]
+        |> Enum.find(fn entry ->
+          entry["role"] == "user" and
+            Enum.any?(entry["parts"], &Map.has_key?(&1, "functionResponse"))
+        end)
+
+      assert tool_user_msg
+
+      [function_response_part] =
+        Enum.filter(tool_user_msg["parts"], &Map.has_key?(&1, "functionResponse"))
+
+      refute Map.has_key?(function_response_part["functionResponse"], "parts"),
+             "text-only tool results must not gain a functionResponse.parts field"
+    end
+
     test "encode_body excludes id from functionCall parts" do
       {:ok, model} = ReqLLM.model("google:gemini-1.5-flash")
 

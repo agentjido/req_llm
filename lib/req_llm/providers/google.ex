@@ -946,21 +946,21 @@ defmodule ReqLLM.Providers.Google do
   end
 
   defp encode_gemini_image_body(request) do
+    model_name = request.options[:model]
+
     {system_instruction, contents} =
       case request.options[:context] do
         %ReqLLM.Context{} = ctx ->
-          model_name = request.options[:model]
-
           encoded =
             ctx
             |> normalize_context_video_urls()
             |> ReqLLM.Provider.Defaults.encode_context_to_openai_format(model_name)
 
           messages = encoded[:messages] || []
-          split_messages_for_gemini(messages)
+          split_messages_for_gemini(messages, model_name)
 
         _ ->
-          split_messages_for_gemini(request.options[:messages] || [])
+          split_messages_for_gemini(request.options[:messages] || [], model_name)
       end
 
     # Note: We intentionally keep the role field in contents.
@@ -1123,10 +1123,11 @@ defmodule ReqLLM.Providers.Google do
   end
 
   defp encode_chat_body(request) do
+    model_name = request.options[:model]
+
     {system_instruction, contents} =
       case request.options[:context] do
         %ReqLLM.Context{} = ctx ->
-          model_name = request.options[:model]
           # Convert OpenAI-style context to Gemini format
           encoded =
             ctx
@@ -1134,10 +1135,10 @@ defmodule ReqLLM.Providers.Google do
             |> ReqLLM.Provider.Defaults.encode_context_to_openai_format(model_name)
 
           messages = encoded[:messages] || []
-          split_messages_for_gemini(messages)
+          split_messages_for_gemini(messages, model_name)
 
         _ ->
-          split_messages_for_gemini(request.options[:messages] || [])
+          split_messages_for_gemini(request.options[:messages] || [], model_name)
       end
 
     tool_config = build_google_tool_config(request.options[:tool_choice])
@@ -1216,21 +1217,21 @@ defmodule ReqLLM.Providers.Google do
   end
 
   defp encode_object_body(request) do
+    model_name = request.options[:model]
+
     {system_instruction, contents} =
       case request.options[:context] do
         %ReqLLM.Context{} = ctx ->
-          model_name = request.options[:model]
-
           encoded =
             ctx
             |> normalize_context_video_urls()
             |> ReqLLM.Provider.Defaults.encode_context_to_openai_format(model_name)
 
           messages = encoded[:messages] || []
-          split_messages_for_gemini(messages)
+          split_messages_for_gemini(messages, model_name)
 
         _ ->
-          split_messages_for_gemini(request.options[:messages] || [])
+          split_messages_for_gemini(request.options[:messages] || [], model_name)
       end
 
     compiled_schema =
@@ -1242,8 +1243,6 @@ defmodule ReqLLM.Providers.Google do
     if !compiled_schema do
       raise ArgumentError, "Missing :compiled_schema in request options for :object operation"
     end
-
-    model_name = request.options[:model]
 
     generation_config =
       %{
@@ -2115,7 +2114,7 @@ defmodule ReqLLM.Providers.Google do
   end
 
   # Split messages into system instruction and contents for Google Gemini
-  defp split_messages_for_gemini(messages) do
+  defp split_messages_for_gemini(messages, model) do
     {system_msgs, chat_msgs} =
       Enum.split_with(messages, fn message ->
         case message do
@@ -2140,18 +2139,18 @@ defmodule ReqLLM.Providers.Google do
           %{parts: [%{text: combined_text}]}
       end
 
-    contents = convert_messages_to_gemini(chat_msgs)
+    contents = convert_messages_to_gemini(chat_msgs, model)
 
     {system_instruction, contents}
   end
 
-  defp convert_messages_to_gemini(messages) do
+  defp convert_messages_to_gemini(messages, model) do
     messages
-    |> Enum.map(&convert_single_message_to_gemini/1)
+    |> Enum.map(&convert_single_message_to_gemini(&1, model))
     |> merge_consecutive_roles()
   end
 
-  defp convert_single_message_to_gemini(message) do
+  defp convert_single_message_to_gemini(message, model) do
     raw_role =
       case message do
         %{role: role} -> role
@@ -2182,10 +2181,24 @@ defmodule ReqLLM.Providers.Google do
 
     thought_parts = encode_reasoning_details_for_gemini(message)
 
+    tool_result? = tool_result_message?(message)
+
+    nest_multimodal? =
+      tool_result? and multimodal_tool_result?(raw_content) and gemini_3_or_later?(model)
+
     content_parts =
-      case raw_content do
-        content when is_binary(content) -> [%{text: content}]
-        parts when is_list(parts) -> Enum.map(parts, &convert_content_part/1)
+      cond do
+        nest_multimodal? ->
+          []
+
+        is_binary(raw_content) ->
+          [%{text: raw_content}]
+
+        is_list(raw_content) ->
+          Enum.map(raw_content, &convert_content_part/1)
+
+        true ->
+          []
       end
 
     tool_call_parts =
@@ -2201,24 +2214,36 @@ defmodule ReqLLM.Providers.Google do
       end
 
     tool_result_parts =
-      case message do
-        %{tool_call_id: _call_id, role: "tool"} ->
-          [build_tool_result_part(message, raw_content)]
-
-        %{"tool_call_id" => _call_id, "role" => "tool"} ->
-          [build_tool_result_part(message, raw_content)]
-
-        %{tool_call_id: _call_id, role: :tool} ->
-          [build_tool_result_part(message, raw_content)]
-
-        _ ->
-          []
+      if tool_result? do
+        [build_tool_result_part(message, raw_content, nest_multimodal?)]
+      else
+        []
       end
 
     parts = thought_parts ++ content_parts ++ tool_call_parts ++ tool_result_parts
 
     %{role: role, parts: parts}
   end
+
+  defp tool_result_message?(%{tool_call_id: _, role: "tool"}), do: true
+  defp tool_result_message?(%{tool_call_id: _, role: :tool}), do: true
+  defp tool_result_message?(%{"tool_call_id" => _, "role" => "tool"}), do: true
+  defp tool_result_message?(_), do: false
+
+  defp multimodal_tool_result?(content) when is_list(content) do
+    Enum.any?(content, &multimodal_part?/1)
+  end
+
+  defp multimodal_tool_result?(_), do: false
+
+  defp multimodal_part?(%ReqLLM.Message.ContentPart{type: type})
+       when type in [:file, :image, :image_url],
+       do: true
+
+  defp multimodal_part?(%{type: type}) when type in [:file, :image, :image_url], do: true
+  defp multimodal_part?(%{type: type}) when type in ["file", "image", "image_url"], do: true
+  defp multimodal_part?(%{"type" => type}) when type in ["file", "image", "image_url"], do: true
+  defp multimodal_part?(_), do: false
 
   # Gemini requires that consecutive messages with the same role are merged
   # into a single entry. This is critical for parallel tool calls: N separate
@@ -2323,6 +2348,7 @@ defmodule ReqLLM.Providers.Google do
     |> Enum.map_join("", fn
       %{"type" => "text", "text" => text} -> text
       %{type: :text, text: text} -> text
+      %{type: "text", text: text} -> text
       text when is_binary(text) -> text
       _ -> ""
     end)
@@ -2330,11 +2356,26 @@ defmodule ReqLLM.Providers.Google do
 
   defp extract_content_text(_), do: ""
 
-  defp build_tool_result_part(message, raw_content) do
+  defp build_tool_result_part(message, raw_content, false) do
     %{
       functionResponse: %{
         name: tool_result_name(message),
         response: tool_result_response(message, raw_content)
+      }
+    }
+  end
+
+  defp build_tool_result_part(message, raw_content, true) do
+    media_parts =
+      raw_content
+      |> Enum.filter(&multimodal_part?/1)
+      |> Enum.map(&convert_content_part/1)
+
+    %{
+      functionResponse: %{
+        name: tool_result_name(message),
+        response: tool_result_response(message, raw_content),
+        parts: media_parts
       }
     }
   end
