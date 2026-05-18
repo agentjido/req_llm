@@ -25,31 +25,8 @@
 - Return `{:ok, result}` / `{:error, reason}` tuples
 - Run `mix format` before committing
 
-## Issue Tracking with bd
-
-**CRITICAL**: This project uses **bd** for ALL task tracking. Do NOT create markdown TODO lists.
-
-### Essential Commands
-
-```bash
-bd ready --json                    # Unblocked issues
-bd create "Title" -t bug|feature|task -p 0-4 --json
-bd update <id> --status in_progress --json
-bd close <id> --reason "Done" --json
-```
-
-### Workflow
-
-1. **Check ready work**: `bd ready --json`
-2. **Claim task**: `bd update <id> --status in_progress`
-3. **Work on it**: Implement, test, document
-4. **Complete**: `bd close <id> --reason "Done" --json`
-5. **Commit together**: Always commit `.beads/issues.jsonl` with code changes
-
 ## Important Rules
 
-- ✅ Use bd for ALL task tracking
-- ✅ Always use `--json` flag for programmatic use
 - ✅ Run `mix quality` before committing
 - ❌ Do NOT create markdown TODO lists
 - ❌ Do NOT add comments inside function bodies
