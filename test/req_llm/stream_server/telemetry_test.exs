@@ -93,6 +93,7 @@ defmodule ReqLLM.StreamServer.TelemetryTest do
   test "buffers fast HTTP events until streaming telemetry context is installed" do
     model = reasoning_model()
     server = start_server(provider_mod: ReqLLM.StreamServer.TelemetryProvider, model: model)
+    task = mock_http_task(server)
 
     :sys.replace_state(server, fn state ->
       %{state | telemetry_pending?: true, status: :streaming}
@@ -111,6 +112,7 @@ defmodule ReqLLM.StreamServer.TelemetryTest do
     )
 
     StreamServer.http_event(server, :done)
+    send(server, {:EXIT, task.pid, :normal})
 
     refute_receive {:telemetry_event, [:req_llm, :request, :start], _, _}, 50
     refute_receive {:telemetry_event, [:req_llm, :request, :stop], _, _}, 50

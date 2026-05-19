@@ -81,6 +81,7 @@ defmodule ReqLLM.StreamServer do
     :protocol_state,
     :provider_state,
     :telemetry,
+    :pending_http_exit,
     pending_http_events: [],
     telemetry_pending?: false,
     queue: :queue.new(),
@@ -551,25 +552,13 @@ defmodule ReqLLM.StreamServer do
   end
 
   @impl GenServer
+  def handle_info({:EXIT, pid, reason}, %{http_task: pid, telemetry_pending?: true} = state) do
+    {:noreply, store_pending_http_exit(state, reason)}
+  end
+
+  @impl GenServer
   def handle_info({:EXIT, pid, reason}, %{http_task: pid} = state) do
-    new_state =
-      case reason do
-        :normal ->
-          finalize_stream_with_fixture(state)
-
-        :shutdown ->
-          finalize_stream_with_fixture(state)
-
-        {:shutdown, _} ->
-          finalize_stream_with_fixture(state)
-
-        _ ->
-          state
-          |> Map.put(:status, {:error, {:http_task_failed, reason}})
-          |> maybe_emit_stream_exception({:http_task_failed, reason})
-      end
-
-    new_state = reply_to_waiting_callers(new_state)
+    new_state = state |> process_http_task_exit(reason) |> reply_to_waiting_callers()
 
     case finalize_lifecycle(new_state) do
       {:stop, final_state} -> {:stop, :normal, final_state}
@@ -583,19 +572,16 @@ defmodule ReqLLM.StreamServer do
   end
 
   @impl GenServer
+  def handle_info(
+        {:DOWN, _ref, :process, pid, reason},
+        %{http_task: pid, telemetry_pending?: true} = state
+      ) do
+    {:noreply, store_pending_http_exit(state, reason)}
+  end
+
+  @impl GenServer
   def handle_info({:DOWN, _ref, :process, pid, reason}, %{http_task: pid} = state) do
-    new_state =
-      case reason do
-        :normal ->
-          finalize_stream_with_fixture(state)
-
-        _ ->
-          state
-          |> Map.put(:status, {:error, {:http_task_failed, reason}})
-          |> maybe_emit_stream_exception({:http_task_failed, reason})
-      end
-
-    new_state = reply_to_waiting_callers(new_state)
+    new_state = state |> process_http_task_exit(reason) |> reply_to_waiting_callers()
 
     case finalize_lifecycle(new_state) do
       {:stop, final_state} -> {:stop, :normal, final_state}
@@ -686,7 +672,9 @@ defmodule ReqLLM.StreamServer do
   end
 
   defp drain_pending_http_events(%{pending_http_events: []} = state) do
-    %{state | telemetry_pending?: false}
+    state
+    |> Map.put(:telemetry_pending?, false)
+    |> drain_pending_http_exit()
   end
 
   defp drain_pending_http_events(state) do
@@ -697,6 +685,38 @@ defmodule ReqLLM.StreamServer do
       {:reply, _reply, new_acc} = process_http_event(event, acc)
       new_acc
     end)
+    |> drain_pending_http_exit()
+  end
+
+  defp drain_pending_http_exit(%{pending_http_exit: nil} = state), do: state
+
+  defp drain_pending_http_exit(state) do
+    state
+    |> Map.put(:pending_http_exit, nil)
+    |> process_http_task_exit(state.pending_http_exit)
+    |> reply_to_waiting_callers()
+  end
+
+  defp store_pending_http_exit(%{pending_http_exit: nil} = state, reason) do
+    %{state | pending_http_exit: reason}
+  end
+
+  defp store_pending_http_exit(state, _reason), do: state
+
+  defp process_http_task_exit(%{status: :done} = state, _reason), do: state
+
+  defp process_http_task_exit(state, reason) when reason in [:normal, :shutdown] do
+    finalize_stream_with_fixture(state)
+  end
+
+  defp process_http_task_exit(state, {:shutdown, _}) do
+    finalize_stream_with_fixture(state)
+  end
+
+  defp process_http_task_exit(state, reason) do
+    state
+    |> Map.put(:status, {:error, {:http_task_failed, reason}})
+    |> maybe_emit_stream_exception({:http_task_failed, reason})
   end
 
   defp parse_protocol_events(chunk, state) do
