@@ -1699,7 +1699,7 @@ defmodule ReqLLM.Providers.Anthropic do
 
   defp strip_constraints_recursive(schema) when is_map(schema) do
     schema
-    |> Map.drop(["minimum", "maximum", "minLength", "maxLength"])
+    |> Map.drop(["minimum", "maximum", "minLength", "maxLength", "minItems", "maxItems"])
     |> Map.new(fn
       {"properties", props} when is_map(props) ->
         {"properties", Map.new(props, fn {k, v} -> {k, strip_constraints_recursive(v)} end)}
