@@ -1475,6 +1475,40 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
              ]
     end
 
+    test "extracts encrypted reasoning details from completed event output items", %{model: model} do
+      event = %{
+        data: %{
+          "event" => "response.completed",
+          "response" => %{
+            "id" => "resp_123",
+            "output" => [
+              %{
+                "id" => "rs_123",
+                "type" => "reasoning",
+                "summary" => [%{"type" => "summary_text", "text" => "Checked constraints."}],
+                "encrypted_content" => "encrypted_reasoning_payload"
+              },
+              %{
+                "type" => "message",
+                "content" => [%{"type" => "output_text", "text" => "OK"}]
+              }
+            ]
+          }
+        }
+      }
+
+      assert [chunk] = ResponsesAPI.decode_stream_event(event, model)
+      assert chunk.type == :meta
+      assert [detail] = chunk.metadata.reasoning_details
+      assert detail.text == "Checked constraints."
+      assert detail.signature == "encrypted_reasoning_payload"
+      assert detail.encrypted? == true
+      assert detail.provider == :openai
+      assert detail.format == "openai-responses-v1"
+      assert detail.index == 0
+      assert detail.provider_data == %{"id" => "rs_123", "type" => "reasoning"}
+    end
+
     test "decodes incomplete event", %{model: model} do
       event = %{data: %{"event" => "response.incomplete", "reason" => "length"}}
 

@@ -261,10 +261,18 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
       end
 
     meta = Map.merge(meta, extract_assistant_phase_metadata(response_output))
+
+    meta =
+      maybe_put_reasoning_details(meta, extract_reasoning_details_from_segments(response_output))
+
     meta = merge_response_provider_meta(meta, data["response"] || %{})
 
     [ReqLLM.StreamChunk.meta(meta)]
   end
+
+  defp maybe_put_reasoning_details(meta, []), do: meta
+
+  defp maybe_put_reasoning_details(meta, details), do: Map.put(meta, :reasoning_details, details)
 
   # Mirrors the drop-list used by the non-streaming response builder (see
   # `decode_response_body/4` ~line 1546) so streaming and non-streaming
