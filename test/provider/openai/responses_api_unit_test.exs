@@ -445,6 +445,43 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
       refute Map.has_key?(body, "reasoning")
     end
 
+    test "passes explicit include through unchanged" do
+      include = ["reasoning.encrypted_content", "file_search_call.results"]
+      request = build_request(provider_options: [include: include])
+
+      encoded = ResponsesAPI.encode_body(request)
+      body = Jason.decode!(encoded.body)
+
+      assert body["include"] == include
+    end
+
+    test "defaults include for reasoning models" do
+      request = build_request(id: "gpt-5-mini")
+
+      encoded = ResponsesAPI.encode_body(request)
+      body = Jason.decode!(encoded.body)
+
+      assert body["include"] == ["reasoning.encrypted_content"]
+    end
+
+    test "respects empty include override for reasoning models" do
+      request = build_request(id: "gpt-5-mini", provider_options: [include: []])
+
+      encoded = ResponsesAPI.encode_body(request)
+      body = Jason.decode!(encoded.body)
+
+      assert body["include"] == []
+    end
+
+    test "does not default include for non-reasoning Responses models" do
+      request = build_request(id: "gpt-4o-mini")
+
+      encoded = ResponsesAPI.encode_body(request)
+      body = Jason.decode!(encoded.body)
+
+      refute Map.has_key?(body, "include")
+    end
+
     test "encodes input messages correctly" do
       msg1 = %ReqLLM.Message{
         role: :user,

@@ -150,6 +150,11 @@ defmodule ReqLLM.Providers.OpenAI do
       type: :integer,
       doc: "Maximum output tokens for Responses API models"
     ],
+    include: [
+      type: {:list, :string},
+      doc:
+        "Responses API include values, such as reasoning.encrypted_content for reasoning signatures"
+    ],
     openai_structured_output_mode: [
       type: {:in, [:auto, :json_schema, :tool_strict]},
       default: :auto,
