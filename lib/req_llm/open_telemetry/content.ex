@@ -9,10 +9,11 @@ defmodule ReqLLM.OpenTelemetry.Content do
   default is `:none`). The caller must also have raw payload telemetry on
   (`telemetry: [payloads: :raw]`) for the request payload to be available.
 
-  Each entry is JSON-encoded before being returned, so attribute values
-  are `[String.t()]` (an array of primitives — what the OpenTelemetry
-  attribute spec accepts and what GenAI-aware backends like Langfuse,
-  Honeycomb, and Grafana decode for display). `request_attributes/1`
+  Span attribute content is JSON-encoded before being returned, so attribute
+  values are `[String.t()]` (an array of primitives — what the OpenTelemetry
+  attribute spec accepts and what GenAI-aware backends like Langfuse, Honeycomb,
+  and Grafana decode for display). Event content remains structured for the
+  `gen_ai.client.inference.operation.details` event. `request_attributes/1`
   returns roughly:
 
       %{
@@ -45,11 +46,8 @@ defmodule ReqLLM.OpenTelemetry.Content do
   @spec input_messages(map()) :: [String.t()]
   def input_messages(metadata) do
     metadata
-    |> request_messages()
-    |> Enum.reject(&system_message?/1)
-    |> Enum.map(&message_to_otel/1)
-    |> Enum.reject(&is_nil/1)
-    |> Enum.map(&Jason.encode!/1)
+    |> structured_input_messages()
+    |> encode_all()
   end
 
   @doc """
@@ -61,10 +59,8 @@ defmodule ReqLLM.OpenTelemetry.Content do
   @spec system_instructions(map()) :: [String.t()]
   def system_instructions(metadata) do
     metadata
-    |> request_messages()
-    |> Enum.filter(&system_message?/1)
-    |> Enum.flat_map(&system_message_parts/1)
-    |> Enum.map(&Jason.encode!/1)
+    |> structured_system_instructions()
+    |> encode_all()
   end
 
   @doc """
@@ -76,12 +72,8 @@ defmodule ReqLLM.OpenTelemetry.Content do
   @spec tool_definitions(map()) :: [String.t()]
   def tool_definitions(metadata) do
     metadata
-    |> MapAccess.get(:request_payload)
-    |> tools_from_payload()
-    |> List.wrap()
-    |> Enum.map(&tool_to_otel/1)
-    |> Enum.reject(&is_nil/1)
-    |> Enum.map(&Jason.encode!/1)
+    |> structured_tool_definitions()
+    |> encode_all()
   end
 
   @doc """
@@ -91,14 +83,9 @@ defmodule ReqLLM.OpenTelemetry.Content do
   """
   @spec output_messages(map()) :: [String.t()]
   def output_messages(metadata) do
-    finish_reason = MapAccess.get(metadata, :finish_reason)
-
     metadata
-    |> MapAccess.get(:response_payload)
-    |> extract_response_messages()
-    |> Enum.map(&message_to_otel(&1, finish_reason))
-    |> Enum.reject(&is_nil/1)
-    |> Enum.map(&Jason.encode!/1)
+    |> structured_output_messages()
+    |> encode_all()
   end
 
   @doc """
@@ -120,6 +107,61 @@ defmodule ReqLLM.OpenTelemetry.Content do
   def response_attributes(metadata) do
     maybe_put(%{}, "gen_ai.output.messages", output_messages(metadata))
   end
+
+  @doc """
+  Builds the request-side content-event map with structured values.
+  """
+  @spec request_event_attributes(map()) :: %{optional(String.t()) => term()}
+  def request_event_attributes(metadata) do
+    %{}
+    |> maybe_put("gen_ai.input.messages", structured_input_messages(metadata))
+    |> maybe_put("gen_ai.system_instructions", structured_system_instructions(metadata))
+    |> maybe_put("gen_ai.tool.definitions", structured_tool_definitions(metadata))
+  end
+
+  @doc """
+  Builds the response-side content-event map with structured values.
+  """
+  @spec response_event_attributes(map()) :: %{optional(String.t()) => term()}
+  def response_event_attributes(metadata) do
+    maybe_put(%{}, "gen_ai.output.messages", structured_output_messages(metadata))
+  end
+
+  defp structured_input_messages(metadata) do
+    metadata
+    |> request_messages()
+    |> Enum.reject(&system_message?/1)
+    |> Enum.map(&message_to_otel/1)
+    |> Enum.reject(&is_nil/1)
+  end
+
+  defp structured_system_instructions(metadata) do
+    metadata
+    |> request_messages()
+    |> Enum.filter(&system_message?/1)
+    |> Enum.flat_map(&system_message_parts/1)
+  end
+
+  defp structured_tool_definitions(metadata) do
+    metadata
+    |> MapAccess.get(:request_payload)
+    |> tools_from_payload()
+    |> List.wrap()
+    |> Enum.map(&tool_to_otel/1)
+    |> Enum.reject(&is_nil/1)
+  end
+
+  defp structured_output_messages(metadata) do
+    finish_reason = MapAccess.get(metadata, :finish_reason)
+
+    metadata
+    |> MapAccess.get(:response_payload)
+    |> extract_response_messages()
+    |> Enum.map(&message_to_otel(&1, finish_reason))
+    |> Enum.reject(&is_nil/1)
+  end
+
+  defp encode_all(entries), do: Enum.map(entries, &Jason.encode!/1)
 
   defp request_messages(metadata) do
     metadata

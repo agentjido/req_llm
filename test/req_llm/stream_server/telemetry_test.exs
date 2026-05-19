@@ -90,6 +90,53 @@ defmodule ReqLLM.StreamServer.TelemetryTest do
     :ok
   end
 
+  test "buffers fast HTTP events until streaming telemetry context is installed" do
+    model = reasoning_model()
+    server = start_server(provider_mod: ReqLLM.StreamServer.TelemetryProvider, model: model)
+
+    :sys.replace_state(server, fn state ->
+      %{state | telemetry_pending?: true, status: :streaming}
+    end)
+
+    StreamServer.http_event(server, {:status, 200})
+
+    StreamServer.http_event(
+      server,
+      {:data, "data: #{Jason.encode!(%{"type" => "content", "text" => "answer"})}\n\n"}
+    )
+
+    StreamServer.http_event(
+      server,
+      {:data, "data: #{Jason.encode!(%{"type" => "finish", "finish_reason" => "stop"})}\n\n"}
+    )
+
+    StreamServer.http_event(server, :done)
+
+    refute_receive {:telemetry_event, [:req_llm, :request, :start], _, _}, 50
+    refute_receive {:telemetry_event, [:req_llm, :request, :stop], _, _}, 50
+
+    telemetry_context =
+      model
+      |> ReqLLM.Telemetry.new_context(
+        [context: ReqLLM.Context.new([user("hello")])],
+        mode: :stream,
+        transport: :finch,
+        operation: :chat
+      )
+      |> ReqLLM.Telemetry.start_request(%{})
+
+    assert :ok = StreamServer.set_telemetry_context(server, telemetry_context)
+    assert {:ok, metadata} = StreamServer.await_metadata(server, 500)
+    assert metadata.finish_reason == :stop
+
+    assert_receive {:telemetry_event, [:req_llm, :request, :start], _, start_meta}
+    assert_receive {:telemetry_event, [:req_llm, :request, :stop], _, stop_meta}
+    assert stop_meta.request_id == start_meta.request_id
+    assert stop_meta.finish_reason == :stop
+
+    StreamServer.cancel(server)
+  end
+
   test "emits streaming request, reasoning, and token usage events with shared request_id" do
     model = reasoning_model()
     server = start_server(provider_mod: ReqLLM.StreamServer.TelemetryProvider, model: model)

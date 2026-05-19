@@ -7,6 +7,28 @@ defmodule ReqLLM.OpenTelemetry.ContentTest do
 
   defp decode_all(entries), do: Enum.map(entries, &Jason.decode!/1)
 
+  describe "event attributes" do
+    test "returns structured values without JSON encoding" do
+      messages = [
+        %Message{role: :system, content: [%ContentPart{type: :text, text: "be helpful"}]},
+        %Message{role: :user, content: [%ContentPart{type: :text, text: "hello"}]}
+      ]
+
+      attrs = Content.request_event_attributes(%{request_payload: %{messages: messages}})
+
+      assert attrs["gen_ai.system_instructions"] == [
+               %{"type" => "text", "content" => "be helpful"}
+             ]
+
+      assert attrs["gen_ai.input.messages"] == [
+               %{
+                 "role" => "user",
+                 "parts" => [%{"type" => "text", "content" => "hello"}]
+               }
+             ]
+    end
+  end
+
   describe "input_messages/1 — content part rendering" do
     test "renders :text parts as %{type: text, content: ...}" do
       messages = [

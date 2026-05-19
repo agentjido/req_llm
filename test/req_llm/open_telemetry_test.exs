@@ -692,13 +692,20 @@ defmodule ReqLLM.OpenTelemetryTest do
       assert_receive {:add_event, ^span, :"gen_ai.client.inference.operation.details",
                       event_attrs}
 
-      assert decode_all(event_attrs[:"gen_ai.system_instructions"]) == [
+      assert event_attrs[:"gen_ai.operation.name"] == "chat"
+      assert event_attrs[:"gen_ai.provider.name"] == "openai"
+      assert event_attrs[:"gen_ai.request.model"] == "gpt-5"
+      assert event_attrs[:"gen_ai.response.finish_reasons"] == ["stop"]
+
+      assert event_attrs[:"gen_ai.system_instructions"] == [
                %{"type" => "text", "content" => "be helpful"}
              ]
 
-      assert [%{"role" => "user"}] = decode_all(event_attrs[:"gen_ai.input.messages"])
+      assert [%{"role" => "user"}] = event_attrs[:"gen_ai.input.messages"]
 
-      assert [%{"role" => "assistant"}] = decode_all(event_attrs[:"gen_ai.output.messages"])
+      assert [%{"role" => "assistant"}] = event_attrs[:"gen_ai.output.messages"]
+      refute Enum.any?(event_attrs[:"gen_ai.input.messages"], &is_binary/1)
+      refute Enum.any?(event_attrs[:"gen_ai.output.messages"], &is_binary/1)
     end
 
     test "content: true is accepted as an alias for :attributes" do

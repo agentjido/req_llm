@@ -362,13 +362,10 @@ defmodule ReqLLM.TelemetryOpenTelemetryTest do
       refute Map.has_key?(start_stub.attributes, "gen_ai.input.messages")
       refute Map.has_key?(start_stub.attributes, "gen_ai.system_instructions")
       refute Map.has_key?(start_stub.attributes, "gen_ai.tool.definitions")
-
-      # Per the GenAI spec, gen_ai.client.inference.operation.details is one
-      # event per call — emitted on the terminal lifecycle event, not on start.
       assert start_stub.events == []
     end
 
-    test "content: :event on stop bundles input AND output messages into the same event" do
+    test "content: :event on stop emits operation attributes and structured content" do
       metadata = %{
         operation: :chat,
         provider: :openai,
@@ -401,8 +398,14 @@ defmodule ReqLLM.TelemetryOpenTelemetryTest do
 
       assert [event] = stop_stub.events
       assert event.name == "gen_ai.client.inference.operation.details"
-      assert is_list(event.attributes["gen_ai.input.messages"])
-      assert is_list(event.attributes["gen_ai.output.messages"])
+      assert event.attributes["gen_ai.operation.name"] == "chat"
+      assert event.attributes["gen_ai.provider.name"] == "openai"
+      assert event.attributes["gen_ai.request.model"] == "gpt-5"
+      assert event.attributes["gen_ai.response.finish_reasons"] == ["stop"]
+      assert [%{"role" => "user"}] = event.attributes["gen_ai.input.messages"]
+      assert [%{"role" => "assistant"}] = event.attributes["gen_ai.output.messages"]
+      refute Enum.any?(event.attributes["gen_ai.input.messages"], &is_binary/1)
+      refute Enum.any?(event.attributes["gen_ai.output.messages"], &is_binary/1)
     end
 
     test "reasoning text is not included in content attributes even with :attributes mode" do

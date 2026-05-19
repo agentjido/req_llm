@@ -93,16 +93,16 @@ defmodule ReqLLM.Telemetry.OpenTelemetry do
     mode = Shared.content_mode(opts)
     measurements = measurements(opts)
     content_payload = content_for(mode, metadata, :both)
+    base_attributes = metadata |> Attributes.start() |> Map.merge(Attributes.terminal(metadata))
 
     %{
       attributes:
-        metadata
-        |> Attributes.start()
-        |> Map.merge(Attributes.terminal(metadata))
+        base_attributes
         |> merge_when(mode == :attributes, content_payload)
         |> Shared.merge_langfuse(metadata, opts),
       status: span_status(metadata),
-      events: maybe_inference_event(mode, content_payload),
+      events:
+        maybe_inference_event(mode, content_payload, Map.merge(base_attributes, content_payload)),
       metrics: Metrics.stop(metadata, MapAccess.get(measurements, :duration))
     }
   end
@@ -115,15 +115,20 @@ defmodule ReqLLM.Telemetry.OpenTelemetry do
     mode = Shared.content_mode(opts)
     measurements = measurements(opts)
     request_content = content_for(mode, metadata, :request)
+    base_attributes = metadata |> Attributes.start() |> Map.merge(Attributes.exception(metadata))
 
     %{
       attributes:
-        metadata
-        |> Attributes.start()
-        |> Map.merge(Attributes.exception(metadata))
+        base_attributes
         |> merge_when(mode == :attributes, request_content),
       status: span_status(metadata),
-      events: exception_events(metadata) ++ maybe_inference_event(mode, request_content),
+      events:
+        exception_events(metadata) ++
+          maybe_inference_event(
+            mode,
+            request_content,
+            Map.merge(base_attributes, request_content)
+          ),
       metrics: Metrics.exception(metadata, MapAccess.get(measurements, :duration))
     }
   end
@@ -143,6 +148,16 @@ defmodule ReqLLM.Telemetry.OpenTelemetry do
   end
 
   defp content_for(:none, _metadata, _scope), do: %{}
+
+  defp content_for(:event, metadata, :request), do: Content.request_event_attributes(metadata)
+
+  defp content_for(:event, metadata, :both) do
+    Map.merge(
+      Content.request_event_attributes(metadata),
+      Content.response_event_attributes(metadata)
+    )
+  end
+
   defp content_for(_mode, metadata, :request), do: Content.request_attributes(metadata)
 
   defp content_for(_mode, metadata, :both) do
@@ -152,11 +167,12 @@ defmodule ReqLLM.Telemetry.OpenTelemetry do
   defp merge_when(map, true, addition), do: Map.merge(map, addition)
   defp merge_when(map, false, _addition), do: map
 
-  defp maybe_inference_event(:event, payload) when map_size(payload) > 0 do
-    [%{name: @inference_event_name, attributes: payload}]
+  defp maybe_inference_event(:event, content_payload, event_payload)
+       when map_size(content_payload) > 0 do
+    [%{name: @inference_event_name, attributes: event_payload}]
   end
 
-  defp maybe_inference_event(_mode, _payload), do: []
+  defp maybe_inference_event(_mode, _content_payload, _event_payload), do: []
 
   defp requested_model_id(%{id: id}) when is_binary(id), do: id
   defp requested_model_id(_), do: ""

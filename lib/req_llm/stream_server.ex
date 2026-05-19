@@ -81,6 +81,8 @@ defmodule ReqLLM.StreamServer do
     :protocol_state,
     :provider_state,
     :telemetry,
+    pending_http_events: [],
+    telemetry_pending?: false,
     queue: :queue.new(),
     status: :init,
     consumer_refs: MapSet.new(),
@@ -375,6 +377,11 @@ defmodule ReqLLM.StreamServer do
   end
 
   @impl GenServer
+  def handle_call({:http_event, event}, _from, %{telemetry_pending?: true} = state) do
+    {:reply, :ok, %{state | pending_http_events: state.pending_http_events ++ [event]}}
+  end
+
+  @impl GenServer
   def handle_call({:http_event, event}, _from, state) do
     {:reply, reply, new_state} = process_http_event(event, state)
 
@@ -423,13 +430,23 @@ defmodule ReqLLM.StreamServer do
 
   @impl GenServer
   def handle_call({:start_http, provider_mod, model, context, opts, finch_name}, _from, state) do
+    defer_events? = Keyword.get(opts, :defer_http_events_until_telemetry?, false)
+    streamer_opts = Keyword.delete(opts, :defer_http_events_until_telemetry?)
+
     streamer_mod =
-      case Keyword.get(opts, :stream_transport) do
+      case Keyword.get(streamer_opts, :stream_transport) do
         :websocket -> ReqLLM.Streaming.WebSocketClient
         _ -> ReqLLM.Streaming.FinchClient
       end
 
-    case streamer_mod.start_stream(provider_mod, model, context, opts, self(), finch_name) do
+    case streamer_mod.start_stream(
+           provider_mod,
+           model,
+           context,
+           streamer_opts,
+           self(),
+           finch_name
+         ) do
       {:ok, task_pid, http_context, canonical_json} ->
         Process.monitor(task_pid)
 
@@ -447,7 +464,9 @@ defmodule ReqLLM.StreamServer do
             http_context: http_context,
             canonical_json: canonical_json,
             object_json_mode?: json_mode?,
-            object_acc: []
+            object_acc: [],
+            pending_http_events: [],
+            telemetry_pending?: defer_events?
         }
 
         {:reply, {:ok, task_pid, http_context, canonical_json}, new_state}
@@ -485,7 +504,15 @@ defmodule ReqLLM.StreamServer do
 
   @impl GenServer
   def handle_call({:set_telemetry_context, telemetry_context}, _from, state) do
-    {:reply, :ok, %{state | telemetry: telemetry_context}}
+    new_state =
+      state
+      |> Map.put(:telemetry, telemetry_context)
+      |> drain_pending_http_events()
+
+    case finalize_lifecycle(new_state) do
+      {:stop, final_state} -> {:stop, :normal, :ok, final_state}
+      {:continue, final_state} -> {:reply, :ok, final_state}
+    end
   end
 
   @impl GenServer
@@ -656,6 +683,20 @@ defmodule ReqLLM.StreamServer do
       |> reply_to_waiting_callers()
 
     {:reply, :ok, new_state}
+  end
+
+  defp drain_pending_http_events(%{pending_http_events: []} = state) do
+    %{state | telemetry_pending?: false}
+  end
+
+  defp drain_pending_http_events(state) do
+    pending_events = state.pending_http_events
+    state = %{state | telemetry_pending?: false, pending_http_events: []}
+
+    Enum.reduce(pending_events, state, fn event, acc ->
+      {:reply, _reply, new_acc} = process_http_event(event, acc)
+      new_acc
+    end)
   end
 
   defp parse_protocol_events(chunk, state) do
