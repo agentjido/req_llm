@@ -61,6 +61,7 @@ defmodule ReqLLM.StreamServer do
 
   use GenServer
 
+  alias ReqLLM.MapAccess
   alias ReqLLM.StreamChunk
   alias ReqLLM.Streaming.SSE
 
@@ -947,9 +948,16 @@ defmodule ReqLLM.StreamServer do
   # with `builtin? == true` records the end.
   defp update_builtin_timing(timing, %ReqLLM.StreamChunk{type: :meta, metadata: meta})
        when is_map(meta) do
-    case Map.get(meta, :builtin_tool_started) || Map.get(meta, "builtin_tool_started") do
-      %{id: id, started_at_unix_nano: t} when not is_nil(id) and is_integer(t) ->
-        Map.update(timing, id, %{start_unix_nano: t}, &Map.put(&1, :start_unix_nano, t))
+    case MapAccess.get(meta, :builtin_tool_started) do
+      started when is_map(started) ->
+        id = MapAccess.get(started, :id)
+        t = MapAccess.get(started, :started_at_unix_nano)
+
+        if not is_nil(id) and is_integer(t) do
+          Map.update(timing, id, %{start_unix_nano: t}, &Map.put(&1, :start_unix_nano, t))
+        else
+          timing
+        end
 
       _ ->
         timing
@@ -958,15 +966,11 @@ defmodule ReqLLM.StreamServer do
 
   defp update_builtin_timing(timing, %ReqLLM.StreamChunk{type: :tool_call, metadata: meta})
        when is_map(meta) do
-    if Map.get(meta, :builtin?) == true and is_integer(Map.get(meta, :done_at_unix_nano)) do
-      id = Map.get(meta, :id)
+    id = MapAccess.get(meta, :id)
+    t = MapAccess.get(meta, :done_at_unix_nano)
 
-      if is_nil(id) do
-        timing
-      else
-        t = Map.get(meta, :done_at_unix_nano)
-        Map.update(timing, id, %{end_unix_nano: t}, &Map.put(&1, :end_unix_nano, t))
-      end
+    if MapAccess.get(meta, :builtin?) == true and not is_nil(id) and is_integer(t) do
+      Map.update(timing, id, %{end_unix_nano: t}, &Map.put(&1, :end_unix_nano, t))
     else
       timing
     end

@@ -1403,6 +1403,45 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
       assert is_integer(chunk.metadata.done_at_unix_nano)
     end
 
+    test "decodes atom-keyed builtin output item events", %{model: model} do
+      added = %{
+        event: "response.output_item.added",
+        data: %{
+          output_index: 0,
+          item: %{
+            id: "ws_1",
+            type: "web_search_call"
+          }
+        }
+      }
+
+      done = %{
+        event: "response.output_item.done",
+        data: %{
+          output_index: 0,
+          item: %{
+            id: "ws_1",
+            type: "web_search_call",
+            action: %{"query" => "elixir telemetry"},
+            status: "completed"
+          }
+        }
+      }
+
+      assert [%ReqLLM.StreamChunk{type: :meta, metadata: start_meta}] =
+               ResponsesAPI.decode_stream_event(added, model)
+
+      assert start_meta.builtin_tool_started.id == "ws_1"
+
+      assert [%ReqLLM.StreamChunk{type: :tool_call} = chunk] =
+               ResponsesAPI.decode_stream_event(done, model)
+
+      assert chunk.arguments == %{action: %{"query" => "elixir telemetry"}}
+      assert chunk.metadata.id == "ws_1"
+      assert chunk.metadata.builtin? == true
+      assert is_integer(chunk.metadata.done_at_unix_nano)
+    end
+
     test "stateful decoding avoids duplicate completed output items", %{model: model} do
       added = %{
         data: %{

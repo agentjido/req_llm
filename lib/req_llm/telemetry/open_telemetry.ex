@@ -187,7 +187,7 @@ defmodule ReqLLM.Telemetry.OpenTelemetry do
   defp build_tool_span_stub(tool_call, metadata) when is_map(tool_call) do
     function = MapAccess.get(tool_call, :function, %{})
     name = MapAccess.get(function, :name) || MapAccess.get(tool_call, :name)
-    args = args_from_map_tool_call(function)
+    args = args_from_map_tool_call(tool_call, function)
     id = MapAccess.get(tool_call, :id)
 
     build_tool_span_stub(name, args, id, metadata)
@@ -196,13 +196,14 @@ defmodule ReqLLM.Telemetry.OpenTelemetry do
   defp build_tool_span_stub(name, args, id, metadata) when is_binary(name) do
     timing = MapAccess.get(metadata, :builtin_tool_timing) || %{}
     entry = timing_entry(timing, id)
+    {start_time, end_time} = span_timing(entry)
 
     %{
       name: "execute_tool " <> name,
       kind: :internal,
       status: :ok,
-      start_time: MapAccess.get(entry, :start_unix_nano),
-      end_time: MapAccess.get(entry, :end_unix_nano),
+      start_time: start_time,
+      end_time: end_time,
       attributes:
         %{
           "gen_ai.operation.name" => "execute_tool",
@@ -219,8 +220,19 @@ defmodule ReqLLM.Telemetry.OpenTelemetry do
   defp timing_entry(timing, nil), do: timing_entry(timing, "")
   defp timing_entry(timing, id), do: Map.get(timing, id) || Map.get(timing, to_string(id)) || %{}
 
-  defp args_from_map_tool_call(function) do
-    case MapAccess.get(function, :arguments) do
+  defp span_timing(entry) do
+    start_time = MapAccess.get(entry, :start_unix_nano)
+    end_time = MapAccess.get(entry, :end_unix_nano)
+
+    if is_integer(start_time) and is_integer(end_time) and end_time >= start_time do
+      {start_time, end_time}
+    else
+      {nil, nil}
+    end
+  end
+
+  defp args_from_map_tool_call(tool_call, function) do
+    case MapAccess.get(function, :arguments) || MapAccess.get(tool_call, :arguments) do
       args when is_binary(args) -> decode_arguments(args)
       args when is_map(args) -> args
       _ -> %{}

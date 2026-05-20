@@ -202,6 +202,44 @@ defmodule ReqLLM.TelemetryOpenTelemetryTest do
     assert Jason.decode!(attrs["gen_ai.tool.call.arguments"]) == %{"query" => "handbook"}
   end
 
+  test "builds child span stubs from top-level map arguments without partial timing" do
+    metadata = %{
+      operation: :chat,
+      provider: :openai,
+      model: %LLMDB.Model{provider: :openai, id: "gpt-5"},
+      finish_reason: :stop,
+      response_payload: %{
+        message: %{
+          tool_calls: [
+            %{
+              "id" => "ws_partial",
+              "name" => "web_search_call",
+              "arguments" => %{"query" => "handbook"},
+              "builtin?" => true
+            }
+          ]
+        }
+      },
+      builtin_tool_timing: %{
+        "ws_partial" => %{"end_unix_nano" => 4_000}
+      }
+    }
+
+    stop_stub = OpenTelemetry.request_stop(metadata)
+
+    assert [
+             %{
+               name: "execute_tool web_search_call",
+               start_time: nil,
+               end_time: nil,
+               attributes: attrs
+             }
+           ] = stop_stub.tool_spans
+
+    assert attrs["gen_ai.tool.call.id"] == "ws_partial"
+    assert Jason.decode!(attrs["gen_ai.tool.call.arguments"]) == %{"query" => "handbook"}
+  end
+
   test "emits gen_ai.request.* and server.* attributes from request_options/server metadata" do
     metadata = %{
       operation: :chat,

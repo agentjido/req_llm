@@ -506,8 +506,15 @@ defmodule ReqLLM.Telemetry do
     |> maybe_put(:request_payload, context.request_payload, include_payloads?(context))
     |> maybe_put(:response_payload, extra[:response_payload], include_payloads?(context))
     |> maybe_put(:error, extra[:error], not is_nil(extra[:error]))
-    |> maybe_put(:builtin_tool_timing, extra[:builtin_tool_timing])
+    |> maybe_put(
+      :builtin_tool_timing,
+      extra[:builtin_tool_timing],
+      include_builtin_tool_timing?(extra[:builtin_tool_timing])
+    )
   end
+
+  defp include_builtin_tool_timing?(timing) when is_map(timing), do: map_size(timing) > 0
+  defp include_builtin_tool_timing?(_timing), do: false
 
   defp streaming_snapshot(%{
          mode: :stream,
