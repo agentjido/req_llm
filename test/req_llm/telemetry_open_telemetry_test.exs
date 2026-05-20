@@ -113,6 +113,95 @@ defmodule ReqLLM.TelemetryOpenTelemetryTest do
            ]
   end
 
+  test "builds child span stubs for builtin response tool calls" do
+    builtin_tool_call =
+      ToolCall.new_builtin("ws_1", "web_search_call", ~s({"query":"elixir telemetry"}))
+
+    user_tool_call = ToolCall.new("call_weather", "get_weather", ~s({"location":"Paris"}))
+
+    metadata = %{
+      operation: :chat,
+      provider: :openai,
+      model: %LLMDB.Model{provider: :openai, id: "gpt-5"},
+      finish_reason: :stop,
+      response_payload: %ReqLLM.Response{
+        id: "resp_123",
+        model: "gpt-5",
+        context: nil,
+        message: assistant("", tool_calls: [builtin_tool_call, user_tool_call]),
+        object: nil,
+        stream?: false,
+        stream: nil,
+        usage: nil,
+        finish_reason: :stop,
+        provider_meta: %{},
+        error: nil
+      },
+      builtin_tool_timing: %{
+        "ws_1" => %{start_unix_nano: 1_000, end_unix_nano: 2_000}
+      }
+    }
+
+    stop_stub = OpenTelemetry.request_stop(metadata)
+
+    assert [
+             %{
+               name: "execute_tool web_search_call",
+               kind: :internal,
+               status: :ok,
+               start_time: 1_000,
+               end_time: 2_000,
+               attributes: attrs
+             }
+           ] = stop_stub.tool_spans
+
+    assert attrs["gen_ai.operation.name"] == "execute_tool"
+    assert attrs["gen_ai.tool.name"] == "web_search_call"
+    assert attrs["gen_ai.tool.type"] == "builtin"
+    assert attrs["gen_ai.tool.call.id"] == "ws_1"
+    assert Jason.decode!(attrs["gen_ai.tool.call.arguments"]) == %{"query" => "elixir telemetry"}
+  end
+
+  test "builds child span stubs from map-shaped builtin tool calls" do
+    metadata = %{
+      operation: :chat,
+      provider: :openai,
+      model: %LLMDB.Model{provider: :openai, id: "gpt-5"},
+      finish_reason: :stop,
+      response_payload: %{
+        "message" => %{
+          "tool_calls" => [
+            %{
+              "id" => "fs_1",
+              "function" => %{
+                "name" => "file_search_call",
+                "arguments" => ~s({"query":"handbook"}),
+                "builtin?" => true
+              }
+            }
+          ]
+        }
+      },
+      builtin_tool_timing: %{
+        "fs_1" => %{"start_unix_nano" => 3_000, "end_unix_nano" => 4_000}
+      }
+    }
+
+    stop_stub = OpenTelemetry.request_stop(metadata)
+
+    assert [
+             %{
+               name: "execute_tool file_search_call",
+               start_time: 3_000,
+               end_time: 4_000,
+               attributes: attrs
+             }
+           ] = stop_stub.tool_spans
+
+    assert attrs["gen_ai.tool.call.id"] == "fs_1"
+    assert Jason.decode!(attrs["gen_ai.tool.call.arguments"]) == %{"query" => "handbook"}
+  end
+
   test "emits gen_ai.request.* and server.* attributes from request_options/server metadata" do
     metadata = %{
       operation: :chat,

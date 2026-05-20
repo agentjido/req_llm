@@ -840,7 +840,13 @@ defmodule ReqLLM.StreamServer do
         {state.queue, state.metadata, state.object_acc, state.telemetry, state.message_acc,
          state.builtin_tool_timing},
         fn chunk, {queue, metadata, obj_acc, telemetry, msg_acc, timing} ->
-          new_queue = :queue.in(chunk, queue)
+          public_chunk = public_stream_chunk(chunk)
+
+          new_queue =
+            case public_chunk do
+              nil -> queue
+              chunk -> :queue.in(chunk, queue)
+            end
 
           updated_metadata =
             case chunk.type do
@@ -877,18 +883,23 @@ defmodule ReqLLM.StreamServer do
           timing = update_builtin_timing(timing, chunk)
 
           obj_acc =
-            if state.object_json_mode? and chunk.type == :content and is_binary(chunk.text) do
+            if state.object_json_mode? and content_chunk?(public_chunk) do
               [obj_acc, chunk.text]
             else
               obj_acc
             end
 
-          msg_acc = ReqLLM.Provider.ChunkAccumulator.push(msg_acc, chunk)
+          msg_acc =
+            case public_chunk do
+              nil -> msg_acc
+              chunk -> ReqLLM.Provider.ChunkAccumulator.push(msg_acc, chunk)
+            end
 
           telemetry =
-            case telemetry do
-              nil -> nil
-              context -> ReqLLM.Telemetry.observe_stream_chunk(context, chunk)
+            case {telemetry, public_chunk} do
+              {nil, _chunk} -> nil
+              {context, nil} -> context
+              {context, chunk} -> ReqLLM.Telemetry.observe_stream_chunk(context, chunk)
             end
 
           {new_queue, updated_metadata, obj_acc, telemetry, msg_acc, timing}
@@ -905,6 +916,29 @@ defmodule ReqLLM.StreamServer do
         builtin_tool_timing: builtin_timing
     }
   end
+
+  defp public_stream_chunk(%ReqLLM.StreamChunk{type: :meta, metadata: meta} = chunk)
+       when is_map(meta) do
+    metadata = Map.drop(meta, [:builtin_tool_started, "builtin_tool_started"])
+
+    if map_size(metadata) == 0 do
+      nil
+    else
+      %{chunk | metadata: metadata}
+    end
+  end
+
+  defp public_stream_chunk(%ReqLLM.StreamChunk{type: :tool_call, metadata: meta} = chunk)
+       when is_map(meta) do
+    %{chunk | metadata: Map.drop(meta, [:done_at_unix_nano, "done_at_unix_nano"])}
+  end
+
+  defp public_stream_chunk(chunk), do: chunk
+
+  defp content_chunk?(%ReqLLM.StreamChunk{type: :content, text: text}) when is_binary(text),
+    do: true
+
+  defp content_chunk?(_chunk), do: false
 
   # Captures `:added → :done` wall-clock timestamps for server-side
   # builtin tool calls (e.g. web_search_call on the Responses API).
@@ -924,20 +958,17 @@ defmodule ReqLLM.StreamServer do
 
   defp update_builtin_timing(timing, %ReqLLM.StreamChunk{type: :tool_call, metadata: meta})
        when is_map(meta) do
-    cond do
-      Map.get(meta, :builtin?) == true and
-          is_integer(Map.get(meta, :done_at_unix_nano)) ->
-        id = Map.get(meta, :id)
+    if Map.get(meta, :builtin?) == true and is_integer(Map.get(meta, :done_at_unix_nano)) do
+      id = Map.get(meta, :id)
 
-        if is_nil(id) do
-          timing
-        else
-          t = Map.get(meta, :done_at_unix_nano)
-          Map.update(timing, id, %{end_unix_nano: t}, &Map.put(&1, :end_unix_nano, t))
-        end
-
-      true ->
+      if is_nil(id) do
         timing
+      else
+        t = Map.get(meta, :done_at_unix_nano)
+        Map.update(timing, id, %{end_unix_nano: t}, &Map.put(&1, :end_unix_nano, t))
+      end
+    else
+      timing
     end
   end
 

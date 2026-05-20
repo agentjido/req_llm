@@ -33,6 +33,36 @@ defmodule ReqLLM.StreamServer.TelemetryProvider do
   end
 
   def decode_stream_event(
+        %{data: %{"type" => "builtin_start", "id" => id, "started_at" => started_at}},
+        _model
+      ) do
+    [
+      StreamChunk.meta(%{
+        builtin_tool_started: %{
+          id: id,
+          name: "web_search_call",
+          index: 0,
+          started_at_unix_nano: started_at
+        }
+      })
+    ]
+  end
+
+  def decode_stream_event(
+        %{data: %{"type" => "builtin_done", "id" => id, "done_at" => done_at}},
+        _model
+      ) do
+    [
+      StreamChunk.tool_call("web_search_call", %{"query" => "elixir telemetry"}, %{
+        id: id,
+        index: 0,
+        builtin?: true,
+        done_at_unix_nano: done_at
+      })
+    ]
+  end
+
+  def decode_stream_event(
         %{data: %{"type" => "finish", "finish_reason" => finish_reason}},
         _model
       ) do
@@ -288,6 +318,66 @@ defmodule ReqLLM.StreamServer.TelemetryTest do
            } in output_message["parts"]
 
     StreamServer.cancel(server)
+  end
+
+  test "emits builtin tool timing without leaking internal timing chunks" do
+    model = reasoning_model()
+    server = start_server(provider_mod: ReqLLM.StreamServer.TelemetryProvider, model: model)
+    _task = mock_http_task(server)
+
+    telemetry_context =
+      model
+      |> ReqLLM.Telemetry.new_context(
+        [context: ReqLLM.Context.new([user("search docs")]), telemetry: [payloads: :raw]],
+        mode: :stream,
+        transport: :finch,
+        operation: :chat
+      )
+      |> ReqLLM.Telemetry.start_request(%{})
+
+    assert :ok = StreamServer.set_telemetry_context(server, telemetry_context)
+
+    StreamServer.http_event(
+      server,
+      {:data,
+       "data: #{Jason.encode!(%{"type" => "builtin_start", "id" => "ws_1", "started_at" => 1_000})}\n\n"}
+    )
+
+    StreamServer.http_event(
+      server,
+      {:data,
+       "data: #{Jason.encode!(%{"type" => "builtin_done", "id" => "ws_1", "done_at" => 2_000})}\n\n"}
+    )
+
+    StreamServer.http_event(
+      server,
+      {:data, "data: #{Jason.encode!(%{"type" => "finish", "finish_reason" => "stop"})}\n\n"}
+    )
+
+    StreamServer.http_event(server, :done)
+
+    assert {:ok, metadata} = StreamServer.await_metadata(server, 500)
+    refute Map.has_key?(metadata, :builtin_tool_started)
+    assert_receive {:telemetry_event, [:req_llm, :request, :start], _, _}
+    assert_receive {:telemetry_event, [:req_llm, :request, :stop], _, stop_meta}
+
+    assert stop_meta.builtin_tool_timing == %{
+             "ws_1" => %{start_unix_nano: 1_000, end_unix_nano: 2_000}
+           }
+
+    [tool_call] = stop_meta.response_payload.message.tool_calls
+    assert ReqLLM.ToolCall.builtin?(tool_call)
+
+    assert {:ok, %ReqLLM.StreamChunk{type: :tool_call, metadata: tool_meta}} =
+             StreamServer.next(server)
+
+    refute Map.has_key?(tool_meta, :done_at_unix_nano)
+
+    assert {:ok, %ReqLLM.StreamChunk{type: :meta, metadata: finish_meta}} =
+             StreamServer.next(server)
+
+    assert finish_meta.finish_reason == "stop"
+    assert :halt = StreamServer.next(server)
   end
 
   test "emits cancelled terminal events without request exception" do

@@ -142,7 +142,6 @@ defmodule ReqLLM.Telemetry.OpenTelemetry do
             Map.merge(base_attributes, request_content)
           ),
       metrics: Metrics.exception(metadata, MapAccess.get(measurements, :duration)),
-      # Tool execution timing is unreliable on exception — skip sub-spans.
       tool_spans: []
     }
   end
@@ -169,20 +168,34 @@ defmodule ReqLLM.Telemetry.OpenTelemetry do
     |> response_tool_calls()
     |> Enum.filter(&ToolCall.builtin?/1)
     |> Enum.map(&build_tool_span_stub(&1, metadata))
+    |> Enum.reject(&is_nil/1)
   end
 
   defp response_tool_calls(metadata) do
     case MapAccess.get(metadata, :response_payload) do
       %Response{message: %{tool_calls: calls}} when is_list(calls) -> calls
       %{message: %{tool_calls: calls}} when is_list(calls) -> calls
+      %{"message" => %{"tool_calls" => calls}} when is_list(calls) -> calls
       _ -> []
     end
   end
 
   defp build_tool_span_stub(%ToolCall{} = tc, metadata) do
-    name = ToolCall.name(tc)
+    build_tool_span_stub(ToolCall.name(tc), ToolCall.args_map(tc), tc.id, metadata)
+  end
+
+  defp build_tool_span_stub(tool_call, metadata) when is_map(tool_call) do
+    function = MapAccess.get(tool_call, :function, %{})
+    name = MapAccess.get(function, :name) || MapAccess.get(tool_call, :name)
+    args = args_from_map_tool_call(function)
+    id = MapAccess.get(tool_call, :id)
+
+    build_tool_span_stub(name, args, id, metadata)
+  end
+
+  defp build_tool_span_stub(name, args, id, metadata) when is_binary(name) do
     timing = MapAccess.get(metadata, :builtin_tool_timing) || %{}
-    entry = Map.get(timing, tc.id) || Map.get(timing, to_string(tc.id)) || %{}
+    entry = timing_entry(timing, id)
 
     %{
       name: "execute_tool " <> name,
@@ -195,10 +208,30 @@ defmodule ReqLLM.Telemetry.OpenTelemetry do
           "gen_ai.operation.name" => "execute_tool",
           "gen_ai.tool.name" => name,
           "gen_ai.tool.type" => "builtin",
-          "gen_ai.tool.call.id" => tc.id
+          "gen_ai.tool.call.id" => id
         }
-        |> maybe_put_arguments(ToolCall.args_map(tc))
+        |> maybe_put_arguments(args)
     }
+  end
+
+  defp build_tool_span_stub(_name, _args, _id, _metadata), do: nil
+
+  defp timing_entry(timing, nil), do: timing_entry(timing, "")
+  defp timing_entry(timing, id), do: Map.get(timing, id) || Map.get(timing, to_string(id)) || %{}
+
+  defp args_from_map_tool_call(function) do
+    case MapAccess.get(function, :arguments) do
+      args when is_binary(args) -> decode_arguments(args)
+      args when is_map(args) -> args
+      _ -> %{}
+    end
+  end
+
+  defp decode_arguments(args) do
+    case ReqLLM.JSON.decode(args) do
+      {:ok, map} when is_map(map) -> map
+      _ -> %{}
+    end
   end
 
   defp maybe_put_arguments(attrs, args) when is_map(args) and map_size(args) > 0 do

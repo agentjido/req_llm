@@ -1090,13 +1090,6 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
         end
 
       type when is_binary(type) ->
-        # Builtin server-side calls (web_search_call, file_search_call, ...)
-        # carry their full argument payload in `output_item.done`, not via
-        # fragment events. We emit a `:meta` marker carrying the wall-clock
-        # start timestamp so `stream_server` can pair it with `done` for an
-        # honest `gen_ai.execute_tool` child span duration. The marker is
-        # inert in `ChunkAccumulator.push/2` (unknown :meta key), so it
-        # doesn't pollute the assistant message.
         if Map.has_key?(@tool_call_atom_keys, type) do
           [
             ReqLLM.StreamChunk.meta(%{
@@ -1178,10 +1171,6 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
             id: id,
             index: index,
             builtin?: true,
-            # Paired with `builtin_tool_started.started_at_unix_nano`
-            # from the matching `output_item.added` event so the bridge
-            # can emit a `gen_ai.execute_tool` child span with a real,
-            # wire-observed duration.
             done_at_unix_nano: System.system_time(:nanosecond)
           }
         )

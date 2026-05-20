@@ -1358,6 +1358,51 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
       assert chunk.text == "Final answer"
     end
 
+    test "marks builtin output item starts for stream server timing", %{model: model} do
+      event = %{
+        data: %{
+          "event" => "response.output_item.added",
+          "output_index" => 0,
+          "item" => %{
+            "id" => "ws_1",
+            "type" => "web_search_call"
+          }
+        }
+      }
+
+      assert [%ReqLLM.StreamChunk{type: :meta, metadata: metadata}] =
+               ResponsesAPI.decode_stream_event(event, model)
+
+      assert metadata.builtin_tool_started.id == "ws_1"
+      assert metadata.builtin_tool_started.name == "web_search_call"
+      assert metadata.builtin_tool_started.index == 0
+      assert is_integer(metadata.builtin_tool_started.started_at_unix_nano)
+    end
+
+    test "marks builtin output item completions for stream server timing", %{model: model} do
+      event = %{
+        data: %{
+          "event" => "response.output_item.done",
+          "output_index" => 0,
+          "item" => %{
+            "id" => "ws_1",
+            "type" => "web_search_call",
+            "action" => %{"query" => "elixir telemetry"},
+            "status" => "completed"
+          }
+        }
+      }
+
+      assert [%ReqLLM.StreamChunk{type: :tool_call} = chunk] =
+               ResponsesAPI.decode_stream_event(event, model)
+
+      assert chunk.name == "web_search_call"
+      assert chunk.arguments == %{"action" => %{"query" => "elixir telemetry"}}
+      assert chunk.metadata.id == "ws_1"
+      assert chunk.metadata.builtin? == true
+      assert is_integer(chunk.metadata.done_at_unix_nano)
+    end
+
     test "stateful decoding avoids duplicate completed output items", %{model: model} do
       added = %{
         data: %{

@@ -179,33 +179,46 @@ defmodule ReqLLM.OpenTelemetry.OTelAdapter do
   end
 
   @impl true
-  def start_child_span(parent, name, attributes, opts, _config) do
-    # Erlang OTel conveys the parent via the Ctx argument of
-    # `:otel_tracer.start_span/4`, not via the start_opts map. We derive a
-    # child Ctx from the current one (preserving baggage / propagators)
-    # and override its current-span slot with the supplied parent. The
-    # span returned by `:otel_tracer.start_span/4` will pick that up as
-    # its parent.
-    ctx = call(:otel_ctx, :get_current, [])
-    child_ctx = call(:otel_tracer, :set_current_span, [ctx, parent])
+  def start_child_span(parent, name, attributes, opts, config) do
+    if child_span_available?() do
+      ctx = call(:otel_ctx, :get_current, [])
+      child_ctx = call(:otel_tracer, :set_current_span, [ctx, parent])
 
-    span_opts =
-      %{
-        kind: Map.get(opts, :kind, :internal),
-        attributes: attributes
-      }
-      |> maybe_put(:start_time, Map.get(opts, :start_time))
+      span_opts =
+        %{
+          kind: Map.get(opts, :kind, :internal),
+          attributes: attributes
+        }
+        |> maybe_put(:start_time, Map.get(opts, :start_time))
 
-    call(:otel_tracer, :start_span, [child_ctx, tracer(), name, span_opts])
+      call(:otel_tracer, :start_span, [child_ctx, tracer(), name, span_opts])
+    else
+      start_span(name, attributes, config)
+    end
   end
 
   @impl true
-  def end_span_at(span, end_time, _config) when is_integer(end_time) do
-    # `:otel_span.end_span/2` accepts an explicit end timestamp in nanos
-    # since epoch. Used when the caller has measured execution timing
-    # (e.g. SSE event arrivals for streaming builtin tool calls).
-    call(:otel_span, :end_span, [span, end_time])
+  def end_span_at(span, end_time, config) when is_integer(end_time) do
+    if Code.ensure_loaded?(:otel_span) and function_exported?(:otel_span, :end_span, 2) do
+      call(:otel_span, :end_span, [span, end_time])
+    else
+      end_span(span, config)
+    end
+
     :ok
+  end
+
+  defp child_span_available? do
+    Enum.all?(
+      [
+        {:otel_ctx, :get_current, 0},
+        {:otel_tracer, :set_current_span, 2},
+        {:otel_tracer, :start_span, 4}
+      ],
+      fn {module, function, arity} ->
+        Code.ensure_loaded?(module) and function_exported?(module, function, arity)
+      end
+    )
   end
 
   defp maybe_put(map, _key, nil), do: map
