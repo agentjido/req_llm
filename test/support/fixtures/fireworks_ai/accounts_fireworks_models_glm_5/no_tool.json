@@ -1,0 +1,324 @@
+{
+  "model_spec": "fireworks_ai:accounts/fireworks/models/glm-5",
+  "provider": "fireworks_ai",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjo0MDk2LCJtZXNzYWdlcyI6W3siY29udGVudCI6IlRlbGwgbWUgYSBqb2tlIGFib3V0IGNhdHMiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJhY2NvdW50cy9maXJld29ya3MvbW9kZWxzL2dsbS01IiwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 4096,
+      "messages": [
+        {
+          "content": "Tell me a joke about cats",
+          "role": "user"
+        }
+      ],
+      "model": "accounts/fireworks/models/glm-5",
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0,
+      "tools": [
+        {
+          "function": {
+            "description": "Get current weather information for a location",
+            "name": "get_weather",
+            "parameters": {
+              "additionalProperties": false,
+              "properties": {
+                "location": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "location"
+              ],
+              "type": "object"
+            }
+          },
+          "type": "function"
+        }
+      ]
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.17"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.fireworks.ai/inference/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "content": "Here's a cat joke for you:\n\nWhy don't cats play poker in the jungle?\n\nToo many cheetahs! 🐱",
+            "reasoning_content": "The user is asking for a joke about cats. This is a simple request that doesn't require any tools - I can just tell them a cat joke directly. The weather function isn't relevant here.",
+            "role": "assistant"
+          },
+          "token_ids": null
+        }
+      ],
+      "created": 1778466105,
+      "id": "chatcmpl-9669809822274a96b03aedba295f00d2",
+      "model": "accounts/fireworks/models/glm-5",
+      "object": "chat.completion",
+      "prompt_token_ids": [
+        154822,
+        154824,
+        154826,
+        198,
+        2,
+        13843,
+        271,
+        2610,
+        1231,
+        1618,
+        825,
+        476,
+        803,
+        5746,
+        311,
+        7789,
+        448,
+        279,
+        1196,
+        3239,
+        382,
+        2610,
+        525,
+        3897,
+        448,
+        729,
+        32479,
+        2878,
+        366,
+        15906,
+        1472,
+        15906,
+        29,
+        11868,
+        9488,
+        510,
+        27,
+        15906,
+        397,
+        4913,
+        1313,
+        788,
+        330,
+        1688,
+        497,
+        330,
+        1688,
+        788,
+        5212,
+        606,
+        788,
+        330,
+        455,
+        68852,
+        497,
+        330,
+        4684,
+        788,
+        330,
+        1949,
+        1482,
+        9101,
+        1995,
+        369,
+        264,
+        3728,
+        497,
+        330,
+        13777,
+        788,
+        5212,
+        35323,
+        7903,
+        788,
+        895,
+        11,
+        330,
+        13185,
+        788,
+        5212,
+        2527,
+        788,
+        5212,
+        1313,
+        788,
+        330,
+        917,
+        9204,
+        2137,
+        330,
+        6279,
+        788,
+        4383,
+        2527,
+        7914,
+        330,
+        1313,
+        788,
+        330,
+        1700,
+        30849,
+        532,
+        522,
+        15906,
+        1339,
+        2461,
+        1817,
+        729,
+        1618,
+        11,
+        2550,
+        279,
+        729,
+        829,
+        323,
+        5977,
+        2878,
+        279,
+        2701,
+        11868,
+        3561,
+        510,
+        154843,
+        90,
+        1688,
+        11489,
+        92,
+        154847,
+        90,
+        858,
+        16159,
+        12,
+        16,
+        92,
+        154848,
+        154849,
+        90,
+        858,
+        19048,
+        12,
+        16,
+        92,
+        154850,
+        154847,
+        90,
+        858,
+        16159,
+        12,
+        17,
+        92,
+        154848,
+        154849,
+        90,
+        858,
+        19048,
+        12,
+        17,
+        92,
+        154850,
+        1112,
+        154844,
+        154827,
+        40229,
+        752,
+        264,
+        21594,
+        911,
+        19386,
+        154828,
+        154841
+      ],
+      "usage": {
+        "completion_tokens": 70,
+        "prompt_tokens": 170,
+        "prompt_tokens_details": {
+          "cached_tokens": 64
+        },
+        "total_tokens": 240
+      }
+    },
+    "headers": {
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Mon, 11 May 2026 02:21:45 GMT"
+      ],
+      "fireworks-cached-prompt-tokens": [
+        "64"
+      ],
+      "fireworks-prompt-tokens": [
+        "170"
+      ],
+      "fireworks-sampling-options": [
+        "{\"max_tokens\": 4096, \"temperature\": 0.0, \"top_k\": 0, \"top_p\": 0.95, \"min_p\": 0.0, \"typical_p\": 1.0, \"frequency_penalty\": 0.0, \"presence_penalty\": 0.0, \"repetition_penalty\": 1.0, \"mirostat_target\": null, \"mirostat_lr\": 0.1, \"cycle_multiplier\": 0.0, \"cycle_base\": 0.0, \"cycle_allowed_length\": 0, \"cycle_sequence_breakers\": []}"
+      ],
+      "fireworks-server-processing-time": [
+        "1.546"
+      ],
+      "fireworks-server-received-timestamp": [
+        "1778466105.2260785"
+      ],
+      "fireworks-server-time-to-first-token": [
+        "0.484"
+      ],
+      "fireworks-speculation-prompt-matched-tokens": [
+        "0"
+      ],
+      "server": [
+        "istio-envoy"
+      ],
+      "vary": [
+        "Origin"
+      ],
+      "via": [
+        "1.1 google"
+      ],
+      "x-envoy-upstream-service-time": [
+        "1548"
+      ],
+      "x-ratelimit-limit-requests": [
+        "60"
+      ],
+      "x-ratelimit-limit-tokens-generated": [
+        "12000"
+      ],
+      "x-ratelimit-limit-tokens-prompt": [
+        "60000"
+      ],
+      "x-ratelimit-over-limit": [
+        "no"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "59"
+      ],
+      "x-ratelimit-remaining-tokens-generated": [
+        "12000"
+      ],
+      "x-ratelimit-remaining-tokens-prompt": [
+        "59830"
+      ],
+      "x-request-id": [
+        "chatcmpl-9669809822274a96b03aedba295f00d2"
+      ]
+    },
+    "status": 200
+  }
+}

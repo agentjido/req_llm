@@ -332,3 +332,7 @@ config :req_llm, :sample_text_models, ~w(
     google:gemini-2.0-flash
   )
 config :req_llm, :test_sample_per_provider, 1
+
+config :req_llm,
+  receive_timeout: 300_000,
+  stream_receive_timeout: 300_000

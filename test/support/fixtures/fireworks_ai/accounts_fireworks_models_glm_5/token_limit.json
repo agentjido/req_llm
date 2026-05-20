@@ -1,0 +1,146 @@
+{
+  "model_spec": "fireworks_ai:accounts/fireworks/models/glm-5",
+  "provider": "fireworks_ai",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjozMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IldyaXRlIGEgdmVyeSBsb25nIHN0b3J5IGFib3V0IGRyYWdvbnMgYW5kIGFkdmVudHVyZXMiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJhY2NvdW50cy9maXJld29ya3MvbW9kZWxzL2dsbS01IiwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjV9"
+    },
+    "canonical_json": {
+      "max_tokens": 3000,
+      "messages": [
+        {
+          "content": "Write a very long story about dragons and adventures",
+          "role": "user"
+        }
+      ],
+      "model": "accounts/fireworks/models/glm-5",
+      "reasoning_effort": "low",
+      "stream": false,
+      "temperature": 0.5
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.17"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.fireworks.ai/inference/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "length",
+          "index": 0,
+          "message": {
+            "content": "The wind atop the Spire of Caelum did not simply blow; it shrieked, a constant, mournful wail that stripped the rock bare of snow and scouring the skin of any foolish enough to climb there. Elara pulled her woolen scarf tighter across her face, her eyes narrowed against the biting gale. Below her, the world was a patchwork quilt of green valleys and brown rivers, but up here, there was only grey stone and the endless, empty sky.\n\nShe was a cartographer by trade, though lately, she felt more like an archaeologist of the impossible. Her leather satchel, battered and stained with ink and soot, hung heavy against her hip. Inside lay the reason for her ascent: a fragment of vellum, brittle as a dead leaf, depicting a coastline that no longer existed, leading to a mountain that wasn't supposed to be there.\n\nAccording to the Guild, dragons had been extinct for three hundred years. They were the stuff of nursery rhymes and tavern songs—beasts of greed and fire, slain by the heroes of the Golden Age. But Elara had seen things in the ink. She had traced the flight paths of migrating birds and found anomalies. She had mapped thermal currents that rose from cold stone. The world was still breathing, and something vast was exhaling in the forgotten places.\n\nShe reached the summit, a flat plateau of obsidian that shimmered with a faint, internal heat. The air here was different—thick, sulfurous, and humming with a low vibration that rattled her teeth. Elara unrolled her map. The ink seemed to pulse.\n\n\"I know you’re here,\" she whispered, her voice swallowed by the wind.\n\nShe didn't hear the creature approach; the sound of its movement was simply replaced by a sudden, terrifying silence. The wind died. The air pressure spiked, popping her ears. A shadow, vast and sudden as a solar eclipse, fell over the plateau.\n\nElara looked up.\n\nIt was not the wyrm of legend, the snarling, hunch-backed beast hoarding gold. It was a creature of terrifying elegance. Its scales were the color of a bruised sky—indigo and violet, shifting as it moved. Its wings were vast, leathery sails that blocked out the sun, and its eyes… its eyes were pools of molten copper, ancient and weary.\n\nThe dragon landed with a sound like a collapsing cathedral. The impact threw Elara to her knees, but she didn't scream. She stared.\n\nThe beast lowered its head, its snout longer than Elara was tall. Smoke curled from its nostrils, smelling of ozone and burning cedar.\n\n*A cartographer,* a voice echoed in her mind. It was not a sound, but a presence, a deep baritone that resonated in her bones. *Why do you disturb the silence of the Last Aerie?*\n\nElara stood, her legs trembling. \"I... I found the map. The Flight of the Ash-Walker.\"\n\nThe dragon’s copper eyes narrowed. *Kaelthorn. That was the name men gave me, before they forgot my kind. You hold a map to a grave, little human. Why seek the dead?*\n\n\"Because the world is dying,\" Elara said, her voice gaining strength. \"The rains have stopped in the South. The crops are turning to dust. The Guild says it’s a natural cycle, but I know it isn’t. The winds have changed. You... you are the wind. You are the fire. The legends say the dragons regulated the seasons. You’ve been hiding, and the world is breaking.\"\n\nThe dragon, Kaelthorn, pulled back, hissing. A jet of flame, white-hot, erupted from his jaws, charring the stone ten feet from Elara. She flinched but held her ground.\n\n*You speak of the Great Balance,* Kaelthorn rumbled. *We did not hide. We were hunted. The Knights of the Sun swore to exterminate us to steal our hearts for their forges. We retreated to the edges of the map to save ourselves. If the world suffers, it is the price of your kind’s greed.*\n\n\"And if you stay here,\" Elara countered, \"the world will die, and you will starve. There will be no prey, no water, no sky left to fly in. I didn't climb this mountain to slay you. I climbed to ask for a pilot.\"\n\nKaelthorn stared at her. For a long moment, the only sound was the cracking of cooling stone where he had breathed fire. Then, a sound emerged from his throat—a low, rumbling chuckle that sounded like grinding tectonic plates.\n\n*You have the audacity of your ancestors, Map-Maker. Very well. You seek the Sunken City of Aethelgard? That is where the heart of the drought lies. But the path is barred by the Obsidian Gate, guarded by the Hollow King.*\n\n\"I know the stories,\" Elara said. \"I have the coordinates.\"\n\n*Coordinates are not courage,* the dragon snapped. *But I am tired of this silence. Climb upon my neck, Elara the Cartographer. Let us see if your ink dries before your blood does.*\n\n***\n\nThe flight was a baptism by violence. Elara had ridden horses, had sailed ships through typhoons, but nothing prepared her for the dragon. They broke the cloud layer, ascending into the stratosphere where the air was thin and freezing. She clung to a ridge of spinal scales, her fingers numb, her stomach lurching as Kaelthorn banked sharply.\n\n*Look,* Kaelthorn commanded in her mind.\n\nBelow them, the world unspooled. Elara saw the devastation clearly now. The Great Forest of the East was a skeleton of grey branches. The Blue Lake was a shrinking puddle of mud. It was a scar tissue world.\n\n\"The Hollow King,\" Elara shouted over the roar of the wind. \"What is he?\"\n\n*He is what remains of a Knight of the Sun,* Kaelthorn replied, his mental voice laced with disgust. *He slew my sister, Vaela. He carved the magic from her bones and grafted it to his own armor. He is immortal, but empty. He guards the Obsidian Gate because he feeds on the magic that leaks from the Well of Eternity beneath it. He blocks the flow to keep the world thirsty.*\n\nThey flew for three days and three nights. They slept in the crags of the Teeth of the World mountains, where Kaelthorn curled around her like a furnace to keep her from freezing. They spoke in the dark. Elara showed him her maps, tracing the ley lines of the earth. Kaelthorn spoke of the old flights, of the symphonies the dragons sang to bring the rain, of the heat they breathed to warm the winters.\n\n\"You are not monsters,\" Elara said one night, watching the stars wheel overhead.\n\n*We are power,* Kaelthorn said. *And power frightens those who wish to control everything. Men build walls. We break them. That is why they hated us.*\n\nOn the fourth day, they reached the Obsidian Gate.\n\nIt was a canyon carved from black glass, a wound in the earth that led deep underground. The air above it shimmered with heat and malice. A fortress hung suspended over the chasm by massive chains, a dark citadel of iron and bone.\n\n*The Hollow King senses us,* Kaelthorn growled.\n\nFrom the fortress, a swarm of black shapes rose. They were not dragons, but machines—clockwork abominations built in the shape of dragons, powered by steam and stolen magic. They hissed and clicked, their metal wings slicing the air.\n\n\"Hold on!\" Kaelthorn roared.\n\nThe dragon folded his wings and dove.\n\nElara screamed as the world inverted. They plummeted like a stone, the wind tearing the breath from her lungs. Kaelthorn plummeted straight through the swarm of clockwork drakes. He opened his jaws and unleashed a torrent of violet flame. The machines melted like wax, raining debris down into the canyon.\n\n*The Gate!* Kaelthorn shouted. *We must break the chains!*\n\n\"I can't blow up chains!\" Elara yelled, fumbling for her crossbow, a pitiful weapon against such iron.\n\n*You are the Cartographer! Find the anchor point! The mechanism is hidden in the rock!*\n\nKaelthorn leveled out,",
+            "reasoning_content": "1.  **Analyze the Request:**\n    *   **Topic:** Dragons and adventures.\n    *   **Format:** A story.\n    *   **Constraint:** \"Very long.\"\n\n2.  **Determine the Scope and Tone:**\n    *   *Length:* To make it \"very long,\" I need multiple chapters or distinct arcs, a large cast of characters, world-building details, and a complex plot. It shouldn't just be a single scene stretched out.\n    *   *Tone:* Epic fantasy. High stakes, ancient lore, magic, diverse landscapes, and character growth.\n    *   *Theme:* The bond between humans and dragons (a classic but effective trope), or perhaps a conflict between them. Let's go with a \"lost bond\" theme—dragons have withdrawn, and a protagonist seeks to restore the connection to save the world from a looming shadow.\n\n3.  **Outline the Narrative Arc:**\n    *   **Introduction:** Introduce the protagonist, Elara, in a quiet setting that feels the weight of the world's decay. Establish the lore (The Age of Ash vs. The Age of Silence).\n    *   **Inciting Incident:** Elara finds an artifact or a sign of a dragon. A dragon scale? A map? Let's go with a dormant dragon egg or a relic that leads to one. She meets a mentor figure (an old scholar or knight).\n    *   **Rising Action:**\n        *   *Journey Begins:* Leaving home. The world is dangerous.\n        *   *First Challenge:* Encountering the antagonist's forces (The Obsidian Order? The Shadow-kin?). Let's call them the \"Hollows\" – corrupted beings.\n        *   *Meeting the Companion:* She needs a foil. A cynical mercenary or a disgraced knight. Let's go with Kaelen, a \"Drake-Hunter\" who has lost his purpose.\n        *   *The Discovery:* They find a sanctuary. They encounter the first dragon. It's not friendly. It's ancient and wary.\n    *   **Midpoint Climax:** A major battle. The dragon is awakened or persuaded. The bond is formed, but at a cost (mentor dies or Kaelen is injured).\n    *   **Falling Action / Deepening:** Traveling to the Dragon Spine (the ultimate destination). Learning the true history. The villain is revealed to be a fallen Dragon-Rider or a corrupted dragon.\n    *   **Climax:** The Siege of the Sky Citadel. Elara and her dragon (let's name him Ignis or Vaelthorn... Vaelthorn sounds majestic) face the Big Bad.\n    *   **Resolution:** The world is saved, but changed. The dragons return, but they are not rulers; they are partners. Elara becomes a guardian.\n\n4.  **Drafting - Section by Section (Mental Sandbox):**\n\n    *   *Setting the Scene:* Start with the wind. The Whispering Peaks. Elara is a mapmaker or an archivist. She finds a scale that hums.\n    *   *The World:* The \"Skyfire War\" ended centuries ago. Dragons are myths.\n    *   *The Call:* The scale leads her to the Forbidden Archives. She steals a map. She is caught by Kaelen.\n    *   *The Journey:* They travel through the Sunken Swamps and the Glass Desert.\n    *   *The Dragon:* Vaelthorn. He is the last of the Sun-Breakers. He is sleeping, encased in stone.\n    *   *The Villain:* Malakor, a sorcerer who drains dragon magic to sustain his life.\n\n5.  **Writing the Story (Iterative Refinement):**\n    *   *Focus on sensory details:* The smell of ozone, the heat of dragon fire, the cold of the mountains.\n    *   *Pacing:* Slow down for emotional moments. Speed up for action.\n    *   *Length Check:* Keep expanding on descriptions and dialogue to meet the \"very long\" requirement. Use chapter breaks to organize.\n\n    *(Self-Correction during drafting)*: I need to make sure the dragon has a personality, not just be a pet. Vaelthorn needs to be arrogant, ancient, and wise. The relationship should be a negotiation, not just ownership.\n\n6.  **Detailed Plot Points for the \"Very Long\" aspect:**\n    *   *Chapter 1: The Silence of the Peaks.* Establish Elara's longing.\n    *   *Chapter 2: The Relic.* Finding the \"Heart of the Mountain.\"\n    *   *Chapter 3: The Hunter.* Meeting Kaelen. The uneasy alliance.\n    *   *Chapter 4: The Glass Wastes.* A survival section. Environmental hazards.\n    *   *Chapter 5: The Ruins of Aethelgard.* Lore dump. The history of the betrayal.\n    *   *Chapter 6: Awakening.* Waking Vaelthorn. The mental link.\n    *   *Chapter 7: The Shadow Approaches.* Malakor's minions attack.\n    *   *Chapter 8: Flight.* The first flight sequence. The joy of freedom.\n    *   *Chapter 9: The Siege.* The final battle.\n    *   *Chapter 10: A New Dawn.* Epilogue.\n\n7.  **Refining the Prose:** Use elevated vocabulary (e.g., \"scintillating,\" \"cacophony,\" \"ancient\"). Ensure the dialogue sounds distinct for each character.\n\n8.  **Final Polish:** Check for consistency in names and places. Ensure the emotional arc lands. (Elara starts timid, ends brave. Kaelen starts cynical, ends hopeful. Vaelthorn starts bitter, ends purposeful).\n\n**(Proceeding to generate the story based on this structure.)**",
+            "role": "assistant"
+          },
+          "token_ids": null
+        }
+      ],
+      "created": 1778466059,
+      "id": "chatcmpl-9b3aa98d0db34462adb3663d4ca7e4d8",
+      "model": "accounts/fireworks/models/glm-5",
+      "object": "chat.completion",
+      "prompt_token_ids": [
+        154822,
+        154824,
+        154827,
+        7984,
+        264,
+        1602,
+        1293,
+        3364,
+        911,
+        50106,
+        323,
+        30852,
+        154828,
+        154841
+      ],
+      "usage": {
+        "completion_tokens": 3000,
+        "prompt_tokens": 14,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "total_tokens": 3014
+      }
+    },
+    "headers": {
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Mon, 11 May 2026 02:20:59 GMT"
+      ],
+      "fireworks-cached-prompt-tokens": [
+        "0"
+      ],
+      "fireworks-prompt-tokens": [
+        "14"
+      ],
+      "fireworks-sampling-options": [
+        "{\"max_tokens\": 3000, \"temperature\": 0.5, \"top_k\": 0, \"top_p\": 0.95, \"min_p\": 0.0, \"typical_p\": 1.0, \"frequency_penalty\": 0.0, \"presence_penalty\": 0.0, \"repetition_penalty\": 1.0, \"mirostat_target\": null, \"mirostat_lr\": 0.1, \"cycle_multiplier\": 0.0, \"cycle_base\": 0.0, \"cycle_allowed_length\": 0, \"cycle_sequence_breakers\": []}"
+      ],
+      "fireworks-server-processing-time": [
+        "43.913"
+      ],
+      "fireworks-server-received-timestamp": [
+        "1778466059.1763105"
+      ],
+      "fireworks-server-time-to-first-token": [
+        "0.672"
+      ],
+      "fireworks-speculation-prompt-matched-tokens": [
+        "0"
+      ],
+      "server": [
+        "istio-envoy"
+      ],
+      "vary": [
+        "Origin"
+      ],
+      "via": [
+        "1.1 google"
+      ],
+      "x-envoy-upstream-service-time": [
+        "43915"
+      ],
+      "x-ratelimit-limit-requests": [
+        "60"
+      ],
+      "x-ratelimit-limit-tokens-generated": [
+        "12000"
+      ],
+      "x-ratelimit-limit-tokens-prompt": [
+        "60000"
+      ],
+      "x-ratelimit-over-limit": [
+        "no"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "59"
+      ],
+      "x-ratelimit-remaining-tokens-generated": [
+        "12000"
+      ],
+      "x-ratelimit-remaining-tokens-prompt": [
+        "59986"
+      ],
+      "x-request-id": [
+        "chatcmpl-9b3aa98d0db34462adb3663d4ca7e4d8"
+      ]
+    },
+    "status": 200
+  }
+}

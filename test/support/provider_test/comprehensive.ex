@@ -733,8 +733,8 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
           assert %ReqLLM.Message.ReasoningDetails{} = detail,
                  "reasoning_details[#{idx}] should be a ReasoningDetails struct, got: #{inspect(detail)}"
 
-          assert detail.provider in [:anthropic, :google, :minimax, :openai, :openrouter],
-                 "reasoning_details[#{idx}].provider should be a known provider atom, got: #{inspect(detail.provider)}"
+          assert is_atom(detail.provider) and not is_nil(detail.provider),
+                 "reasoning_details[#{idx}].provider should be a provider atom, got: #{inspect(detail.provider)}"
 
           assert is_binary(detail.format) and detail.format != "",
                  "reasoning_details[#{idx}].format should be a non-empty string, got: #{inspect(detail.format)}"

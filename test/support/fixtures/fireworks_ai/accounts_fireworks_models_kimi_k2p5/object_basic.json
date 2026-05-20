@@ -1,0 +1,183 @@
+{
+  "model_spec": "fireworks_ai:accounts/fireworks/models/kimi-k2p5",
+  "provider": "fireworks_ai",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjo1MDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiR2VuZXJhdGUgYSBzb2Z0d2FyZSBlbmdpbmVlciBwcm9maWxlIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiYWNjb3VudHMvZmlyZXdvcmtzL21vZGVscy9raW1pLWsycDUiLCJyZWFzb25pbmdfZWZmb3J0IjoibG93IiwicmVzcG9uc2VfZm9ybWF0Ijp7Impzb25fc2NoZW1hIjp7Im5hbWUiOiJvdXRwdXRfc2NoZW1hIiwic2NoZW1hIjp7ImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjpmYWxzZSwicHJvcGVydGllcyI6eyJhZ2UiOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBhZ2UgaW4geWVhcnMiLCJtaW5pbXVtIjoxLCJ0eXBlIjoiaW50ZWdlciJ9LCJuYW1lIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3MgZnVsbCBuYW1lIiwidHlwZSI6InN0cmluZyJ9LCJvY2N1cGF0aW9uIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3Mgam9iIG9yIHByb2Zlc3Npb24iLCJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJhZ2UiLCJuYW1lIiwib2NjdXBhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In0sInN0cmljdCI6dHJ1ZX0sInR5cGUiOiJqc29uX3NjaGVtYSJ9LCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+    },
+    "canonical_json": {
+      "max_tokens": 500,
+      "messages": [
+        {
+          "content": "Generate a software engineer profile",
+          "role": "user"
+        }
+      ],
+      "model": "accounts/fireworks/models/kimi-k2p5",
+      "reasoning_effort": "low",
+      "response_format": {
+        "json_schema": {
+          "name": "output_schema",
+          "schema": {
+            "additionalProperties": false,
+            "properties": {
+              "age": {
+                "description": "Person's age in years",
+                "minimum": 1,
+                "type": "integer"
+              },
+              "name": {
+                "description": "Person's full name",
+                "type": "string"
+              },
+              "occupation": {
+                "description": "Person's job or profession",
+                "type": "string"
+              }
+            },
+            "required": [
+              "age",
+              "name",
+              "occupation"
+            ],
+            "type": "object"
+          },
+          "strict": true
+        },
+        "type": "json_schema"
+      },
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.17"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.fireworks.ai/inference/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "content": "{\"name\": \"Alex Chen\", \"age\": 28, \"occupation\": \"Senior Software Engineer at Stripe (previously at Dropbox, interned at Google)\"}",
+            "role": "assistant"
+          },
+          "token_ids": null
+        }
+      ],
+      "created": 1778470670,
+      "id": "chatcmpl-5a644a22cb7f4dc3ba3ad7693416fd48",
+      "model": "accounts/fireworks/models/kimi-k2p5",
+      "object": "chat.completion",
+      "prompt_token_ids": [
+        163587,
+        2482,
+        163601,
+        28635,
+        261,
+        4023,
+        33570,
+        9082,
+        163586,
+        163588,
+        69702,
+        163601,
+        163606,
+        163607
+      ],
+      "usage": {
+        "completion_tokens": 36,
+        "prompt_tokens": 14,
+        "prompt_tokens_details": {
+          "cached_tokens": 13
+        },
+        "total_tokens": 50
+      }
+    },
+    "headers": {
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Mon, 11 May 2026 03:37:50 GMT"
+      ],
+      "fireworks-cached-prompt-tokens": [
+        "13"
+      ],
+      "fireworks-prompt-tokens": [
+        "14"
+      ],
+      "fireworks-sampling-options": [
+        "{\"max_tokens\": 500, \"temperature\": 0.0, \"top_k\": 0, \"top_p\": 0.95, \"min_p\": 0.0, \"typical_p\": 1.0, \"frequency_penalty\": 0.0, \"presence_penalty\": 0.0, \"repetition_penalty\": 1.0, \"mirostat_target\": null, \"mirostat_lr\": 0.1, \"cycle_multiplier\": 0.0, \"cycle_base\": 0.0, \"cycle_allowed_length\": 0, \"cycle_sequence_breakers\": []}"
+      ],
+      "fireworks-server-processing-time": [
+        "1.784"
+      ],
+      "fireworks-server-received-timestamp": [
+        "1778470670.3373818"
+      ],
+      "fireworks-server-time-to-first-token": [
+        "0.169"
+      ],
+      "fireworks-speculation-prompt-matched-tokens": [
+        "0"
+      ],
+      "server": [
+        "istio-envoy"
+      ],
+      "vary": [
+        "Origin"
+      ],
+      "via": [
+        "1.1 google"
+      ],
+      "x-envoy-upstream-service-time": [
+        "1786"
+      ],
+      "x-ratelimit-limit-requests": [
+        "60"
+      ],
+      "x-ratelimit-limit-tokens-cache-adjusted-prompt": [
+        "60000"
+      ],
+      "x-ratelimit-limit-tokens-generated": [
+        "12000"
+      ],
+      "x-ratelimit-limit-tokens-prompt": [
+        "60000"
+      ],
+      "x-ratelimit-over-limit": [
+        "no"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "59"
+      ],
+      "x-ratelimit-remaining-tokens-cache-adjusted-prompt": [
+        "60000"
+      ],
+      "x-ratelimit-remaining-tokens-generated": [
+        "12000"
+      ],
+      "x-ratelimit-remaining-tokens-prompt": [
+        "59986"
+      ],
+      "x-request-id": [
+        "chatcmpl-5a644a22cb7f4dc3ba3ad7693416fd48"
+      ]
+    },
+    "status": 200
+  }
+}

@@ -643,6 +643,7 @@ defmodule ReqLLM.Provider.Defaults do
       :system_prompt,
       :json_repair,
       :top_p,
+      :top_k,
       :presence_penalty,
       :seed,
       :stop,
@@ -1610,6 +1611,7 @@ defmodule ReqLLM.Provider.Defaults do
     body_options = [
       :temperature,
       :top_p,
+      :top_k,
       :frequency_penalty,
       :presence_penalty,
       :user,

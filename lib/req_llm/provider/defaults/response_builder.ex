@@ -291,7 +291,7 @@ defmodule ReqLLM.Provider.Defaults.ResponseBuilder do
   # Fallback to :unknown for any unrecognized values to prevent atom table exhaustion
   defp normalize_finish_reason(_other), do: :unknown
 
-  defp extract_reasoning_from_thinking_chunks(chunks, _provider) do
+  defp extract_reasoning_from_thinking_chunks(chunks, provider) do
     thinking_chunks =
       Enum.filter(chunks, fn
         %StreamChunk{type: :thinking} -> true
@@ -311,9 +311,9 @@ defmodule ReqLLM.Provider.Defaults.ResponseBuilder do
           %Message.ReasoningDetails{
             text: chunk.text,
             signature: meta[:signature],
-            encrypted?: meta[:encrypted?],
-            provider: meta[:provider],
-            format: meta[:format],
+            encrypted?: meta[:encrypted?] || false,
+            provider: meta[:provider] || provider,
+            format: meta[:format] || "openai-reasoning-content-v1",
             index: index,
             provider_data: meta[:provider_data]
           }

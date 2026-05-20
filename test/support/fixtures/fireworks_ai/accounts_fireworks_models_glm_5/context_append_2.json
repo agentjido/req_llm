@@ -1,0 +1,160 @@
+{
+  "model_spec": "fireworks_ai:accounts/fireworks/models/glm-5",
+  "provider": "fireworks_ai",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoxMDI0LCJtZXNzYWdlcyI6W3siY29udGVudCI6IlJlc3BvbmQgd2l0aCBhIHNpbmdsZSB3b3JkICdIaScuIiwicm9sZSI6InVzZXIifSx7ImNvbnRlbnQiOiJIaSIsInJlYXNvbmluZ19jb250ZW50IjoiVGhlIHVzZXIgd2FudHMgYSBzaW5nbGUgd29yZCByZXNwb25zZTogXCJIaVwiLlxuVGhpcyBpcyBhIHZlcnkgc2ltcGxlIGFuZCBkaXJlY3QgaW5zdHJ1Y3Rpb24uXG5JIG5lZWQgdG8gb3V0cHV0IGV4YWN0bHkgXCJIaVwiIGFuZCBub3RoaW5nIGVsc2UuIiwicm9sZSI6ImFzc2lzdGFudCJ9LHsiY29udGVudCI6IkhpIGFnYWluIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiYWNjb3VudHMvZmlyZXdvcmtzL21vZGVscy9nbG0tNSIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 1024,
+      "messages": [
+        {
+          "content": "Respond with a single word 'Hi'.",
+          "role": "user"
+        },
+        {
+          "content": "Hi",
+          "reasoning_content": "The user wants a single word response: \"Hi\".\nThis is a very simple and direct instruction.\nI need to output exactly \"Hi\" and nothing else.",
+          "role": "assistant"
+        },
+        {
+          "content": "Hi again",
+          "role": "user"
+        }
+      ],
+      "model": "accounts/fireworks/models/glm-5",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.17"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.fireworks.ai/inference/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "content": "Hello! How can I help you today?",
+            "reasoning_content": "The user is greeting me again with \"Hi again\".\nMy previous instruction was to respond with a single word 'Hi'.\nHowever, that instruction applied to the *first* prompt (\"Respond with a single word 'Hi'.\").\nThe current prompt is just \"Hi again\".\nUsually, when a user greets, a polite conversational response is expected, or I should follow the persona of a helpful assistant.\nIf I strictly follow the pattern of the previous turn (single word), I might say \"Hi\".\nBut \"Hi again\" implies a conversation is starting.\nLet's look at the context.\nTurn 1 User: \"Respond with a single word 'Hi'.\"\nTurn 1 Model: \"Hi\"\nTurn 2 User: \"Hi again\"\nTurn 2 Model: ?\n\nIf I just say \"Hi\", it's a bit repetitive and ignores the \"again\" part.\nIf I say \"Hello\", it's standard.\nIf I say \"How can I help you?\", it's standard assistant behavior.\n\nHowever, sometimes users test adherence to previous constraints. But the constraint \"Respond with a single word 'Hi'\" was specific to that specific prompt. It wasn't a standing order for the whole conversation (e.g., \"From now on, only say 'Hi'\").\n\nSo, I should respond naturally to the greeting.\nCommon responses: \"Hello!\", \"Hi there!\", \"How can I help you today?\"\n\nLet's stick to a simple, polite greeting.\n\"Hello!\" or \"Hi there!\" seems appropriate.\nActually, looking at the simplicity of the user's input, a simple \"Hello\" or \"Hi\" is fine.\nLet's go with a friendly, standard assistant greeting.\n\nWait, looking at the user's first prompt again: \"Respond with a single word 'Hi'.\"\nThe user might be testing if I am still \"stuck\" in that mode or if I can handle a normal conversation now.\nSince the constraint was for a specific response, I am free to respond normally now.\n\nI will respond with a standard greeting.",
+            "role": "assistant"
+          },
+          "token_ids": null
+        }
+      ],
+      "created": 1778466028,
+      "id": "chatcmpl-69b34eca82994337b7a38a3276f35a66",
+      "model": "accounts/fireworks/models/glm-5",
+      "object": "chat.completion",
+      "prompt_token_ids": [
+        154822,
+        154824,
+        154827,
+        64877,
+        448,
+        264,
+        3175,
+        3409,
+        364,
+        13041,
+        4427,
+        154828,
+        154842,
+        13041,
+        154827,
+        13041,
+        1549,
+        154828,
+        154841
+      ],
+      "usage": {
+        "completion_tokens": 425,
+        "prompt_tokens": 19,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "total_tokens": 444
+      }
+    },
+    "headers": {
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Mon, 11 May 2026 02:20:27 GMT"
+      ],
+      "fireworks-cached-prompt-tokens": [
+        "0"
+      ],
+      "fireworks-prompt-tokens": [
+        "19"
+      ],
+      "fireworks-sampling-options": [
+        "{\"max_tokens\": 1024, \"temperature\": 0.0, \"top_k\": 0, \"top_p\": 0.95, \"min_p\": 0.0, \"typical_p\": 1.0, \"frequency_penalty\": 0.0, \"presence_penalty\": 0.0, \"repetition_penalty\": 1.0, \"mirostat_target\": null, \"mirostat_lr\": 0.1, \"cycle_multiplier\": 0.0, \"cycle_base\": 0.0, \"cycle_allowed_length\": 0, \"cycle_sequence_breakers\": []}"
+      ],
+      "fireworks-server-processing-time": [
+        "7.779"
+      ],
+      "fireworks-server-received-timestamp": [
+        "1778466028.0187228"
+      ],
+      "fireworks-server-time-to-first-token": [
+        "0.673"
+      ],
+      "fireworks-speculation-prompt-matched-tokens": [
+        "0"
+      ],
+      "server": [
+        "istio-envoy"
+      ],
+      "vary": [
+        "Origin"
+      ],
+      "via": [
+        "1.1 google"
+      ],
+      "x-envoy-upstream-service-time": [
+        "7781"
+      ],
+      "x-ratelimit-limit-requests": [
+        "60"
+      ],
+      "x-ratelimit-limit-tokens-generated": [
+        "12000"
+      ],
+      "x-ratelimit-limit-tokens-prompt": [
+        "60000"
+      ],
+      "x-ratelimit-over-limit": [
+        "no"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "59"
+      ],
+      "x-ratelimit-remaining-tokens-generated": [
+        "12000"
+      ],
+      "x-ratelimit-remaining-tokens-prompt": [
+        "59981"
+      ],
+      "x-request-id": [
+        "chatcmpl-69b34eca82994337b7a38a3276f35a66"
+      ]
+    },
+    "status": 200
+  }
+}

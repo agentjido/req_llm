@@ -1,0 +1,173 @@
+{
+  "model_spec": "fireworks_ai:accounts/fireworks/models/glm-5",
+  "provider": "fireworks_ai",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjo1MDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiR2VuZXJhdGUgYSBzb2Z0d2FyZSBlbmdpbmVlciBwcm9maWxlIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiYWNjb3VudHMvZmlyZXdvcmtzL21vZGVscy9nbG0tNSIsInJlYXNvbmluZ19lZmZvcnQiOiJsb3ciLCJyZXNwb25zZV9mb3JtYXQiOnsianNvbl9zY2hlbWEiOnsibmFtZSI6Im91dHB1dF9zY2hlbWEiLCJzY2hlbWEiOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7ImFnZSI6eyJkZXNjcmlwdGlvbiI6IlBlcnNvbidzIGFnZSBpbiB5ZWFycyIsIm1pbmltdW0iOjEsInR5cGUiOiJpbnRlZ2VyIn0sIm5hbWUiOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBmdWxsIG5hbWUiLCJ0eXBlIjoic3RyaW5nIn0sIm9jY3VwYXRpb24iOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBqb2Igb3IgcHJvZmVzc2lvbiIsInR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImFnZSIsIm5hbWUiLCJvY2N1cGF0aW9uIl0sInR5cGUiOiJvYmplY3QifSwic3RyaWN0Ijp0cnVlfSwidHlwZSI6Impzb25fc2NoZW1hIn0sInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 500,
+      "messages": [
+        {
+          "content": "Generate a software engineer profile",
+          "role": "user"
+        }
+      ],
+      "model": "accounts/fireworks/models/glm-5",
+      "reasoning_effort": "low",
+      "response_format": {
+        "json_schema": {
+          "name": "output_schema",
+          "schema": {
+            "additionalProperties": false,
+            "properties": {
+              "age": {
+                "description": "Person's age in years",
+                "minimum": 1,
+                "type": "integer"
+              },
+              "name": {
+                "description": "Person's full name",
+                "type": "string"
+              },
+              "occupation": {
+                "description": "Person's job or profession",
+                "type": "string"
+              }
+            },
+            "required": [
+              "age",
+              "name",
+              "occupation"
+            ],
+            "type": "object"
+          },
+          "strict": true
+        },
+        "type": "json_schema"
+      },
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.17"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.fireworks.ai/inference/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "length",
+          "index": 0,
+          "message": {
+            "content": "The user wants a \"software engineer profile.\"\nThis is a bit open-ended. A profile could mean:\n1.  A resume/CV summary.\n2.  A LinkedIn profile summary.\n3.  A fictional character profile for a story or game.\n4.  A template for a job description (though usually, that's called a \"job description,\" not a \"profile\").\n\nGiven the context of general AI assistance, the most likely request is for a *fictional but realistic* profile that can serve as an example or a template for a resume/LinkedIn. I should create a comprehensive profile that covers:\n*   **Name & Title:** Basic identity.\n*   **Summary/Headline:** The \"elevator pitch.\"\n*   **Skills:** Technical and soft skills.\n*   **Experience:** Work history with achievements.\n*   **Education:** Background.\n*   **Projects:** Portfolio highlights.\n\nI will create a \"Mid-to-Senior Level Full-Stack Engineer\" profile because it's the most common archetype and covers a wide range of skills. I'll structure it so it can be used as a template or an example.\n\n**Drafting the Profile:**\n\n*   **Name:** Alex Chen (generic but professional).\n*   **Role:** Senior Software Engineer (Full Stack).\n*   **Location:** San Francisco, CA (or Remote).\n*   **Summary:** Needs to be punchy. Focus on problem-solving, scalability, and specific tech stacks.\n*   **Tech Stack:**\n    *   *Frontend:* React, TypeScript, Next.js.\n    *   *Backend:* Node.js, Python (Django/Flask), Go.\n    *   *Database:* PostgreSQL, Redis, MongoDB.\n    *   *Cloud/DevOps:* AWS, Docker, Kubernetes, CI/CD.\n*   **Experience:**\n    *   *Current Role:* Tech lead or senior dev at a mid-sized tech company. Focus on architecture and mentorship.\n    *   *Previous Role:* Software Engineer at a startup. Focus on feature delivery and scaling.\n*   **Education:** BS in Computer Science.\n*   **Soft Skills:** Communication, Mentorship, Agile.\n\n**Refining the Output:**\nI will present this in a clean, readable format, perhaps offering a few variations (e.g., a \"Junior\" profile vs. a \"Senior\" profile) or just one very strong, detailed example. Let's stick to one detailed example but",
+            "role": "assistant"
+          },
+          "token_ids": null
+        }
+      ],
+      "created": 1778470661,
+      "id": "chatcmpl-eba19ebc2e594ea1b7c6ee99e467cf38",
+      "model": "accounts/fireworks/models/glm-5",
+      "object": "chat.completion",
+      "prompt_token_ids": [
+        154822,
+        154824,
+        154827,
+        30989,
+        264,
+        3162,
+        23511,
+        5526,
+        154828,
+        154841
+      ],
+      "usage": {
+        "completion_tokens": 500,
+        "prompt_tokens": 10,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "total_tokens": 510
+      }
+    },
+    "headers": {
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Mon, 11 May 2026 03:37:39 GMT"
+      ],
+      "fireworks-cached-prompt-tokens": [
+        "0"
+      ],
+      "fireworks-prompt-tokens": [
+        "10"
+      ],
+      "fireworks-sampling-options": [
+        "{\"max_tokens\": 500, \"temperature\": 0.0, \"top_k\": 0, \"top_p\": 0.95, \"min_p\": 0.0, \"typical_p\": 1.0, \"frequency_penalty\": 0.0, \"presence_penalty\": 0.0, \"repetition_penalty\": 1.0, \"mirostat_target\": null, \"mirostat_lr\": 0.1, \"cycle_multiplier\": 0.0, \"cycle_base\": 0.0, \"cycle_allowed_length\": 0, \"cycle_sequence_breakers\": []}"
+      ],
+      "fireworks-server-processing-time": [
+        "7.894"
+      ],
+      "fireworks-server-received-timestamp": [
+        "1778470660.5428338"
+      ],
+      "fireworks-server-time-to-first-token": [
+        "0.719"
+      ],
+      "fireworks-speculation-prompt-matched-tokens": [
+        "0"
+      ],
+      "server": [
+        "istio-envoy"
+      ],
+      "vary": [
+        "Origin"
+      ],
+      "via": [
+        "1.1 google"
+      ],
+      "x-envoy-upstream-service-time": [
+        "7895"
+      ],
+      "x-ratelimit-limit-requests": [
+        "60"
+      ],
+      "x-ratelimit-limit-tokens-generated": [
+        "12000"
+      ],
+      "x-ratelimit-limit-tokens-prompt": [
+        "60000"
+      ],
+      "x-ratelimit-over-limit": [
+        "no"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "59"
+      ],
+      "x-ratelimit-remaining-tokens-generated": [
+        "12000"
+      ],
+      "x-ratelimit-remaining-tokens-prompt": [
+        "59990"
+      ],
+      "x-request-id": [
+        "chatcmpl-eba19ebc2e594ea1b7c6ee99e467cf38"
+      ]
+    },
+    "status": 200
+  }
+}

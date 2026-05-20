@@ -1,0 +1,152 @@
+{
+  "model_spec": "fireworks_ai:accounts/fireworks/models/glm-5",
+  "provider": "fireworks_ai",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjo0MDk2LCJtZXNzYWdlcyI6W3siY29udGVudCI6IlNvbHZlIDEyKjcgYW5kIHNob3cgeW91ciBpbnRlcm5hbCB0aGlua2luZyAoYnJpZWYpLiIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImFjY291bnRzL2ZpcmV3b3Jrcy9tb2RlbHMvZ2xtLTUiLCJyZWFzb25pbmdfZWZmb3J0IjoibG93Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjoxLjB9"
+    },
+    "canonical_json": {
+      "max_tokens": 4096,
+      "messages": [
+        {
+          "content": "Solve 12*7 and show your internal thinking (brief).",
+          "role": "user"
+        }
+      ],
+      "model": "accounts/fireworks/models/glm-5",
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 1.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.17"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.fireworks.ai/inference/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "content": "**Calculation:** 12 × 7\n**Thinking:** I break 12 into 10 and 2.\n1. 10 × 7 = 70\n2. 2 × 7 = 14\n3. 70 + 14 = 84.\n\n**Answer:** 84",
+            "reasoning_content": "Calculating $12 \\times 7$.\n\nMethod 1: Standard multiplication.\n$10 \\times 7 = 70$.\n$2 \\times 7 = 14$.\n$70 + 14 = 84$.\n\nMethod 2: Times tables recall.\nDirect retrieval: 12 times 7 is 84.\n\nResult: 84.",
+            "role": "assistant"
+          },
+          "token_ids": null
+        }
+      ],
+      "created": 1778466049,
+      "id": "chatcmpl-5bc1fa12e8a24b9ca7c843523849e3d6",
+      "model": "accounts/fireworks/models/glm-5",
+      "object": "chat.completion",
+      "prompt_token_ids": [
+        154822,
+        154824,
+        154827,
+        50,
+        3948,
+        220,
+        98886,
+        9,
+        22,
+        323,
+        1473,
+        697,
+        5306,
+        7274,
+        320,
+        6658,
+        568,
+        154828,
+        154841
+      ],
+      "usage": {
+        "completion_tokens": 138,
+        "prompt_tokens": 19,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "total_tokens": 157
+      }
+    },
+    "headers": {
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Mon, 11 May 2026 02:20:49 GMT"
+      ],
+      "fireworks-cached-prompt-tokens": [
+        "0"
+      ],
+      "fireworks-prompt-tokens": [
+        "19"
+      ],
+      "fireworks-sampling-options": [
+        "{\"max_tokens\": 4096, \"temperature\": 1.0, \"top_k\": 0, \"top_p\": 0.95, \"min_p\": 0.0, \"typical_p\": 1.0, \"frequency_penalty\": 0.0, \"presence_penalty\": 0.0, \"repetition_penalty\": 1.0, \"mirostat_target\": null, \"mirostat_lr\": 0.1, \"cycle_multiplier\": 0.0, \"cycle_base\": 0.0, \"cycle_allowed_length\": 0, \"cycle_sequence_breakers\": []}"
+      ],
+      "fireworks-server-processing-time": [
+        "2.677"
+      ],
+      "fireworks-server-received-timestamp": [
+        "1778466049.4233267"
+      ],
+      "fireworks-server-time-to-first-token": [
+        "0.611"
+      ],
+      "fireworks-speculation-prompt-matched-tokens": [
+        "0"
+      ],
+      "server": [
+        "istio-envoy"
+      ],
+      "vary": [
+        "Origin"
+      ],
+      "via": [
+        "1.1 google"
+      ],
+      "x-envoy-upstream-service-time": [
+        "2679"
+      ],
+      "x-ratelimit-limit-requests": [
+        "60"
+      ],
+      "x-ratelimit-limit-tokens-generated": [
+        "12000"
+      ],
+      "x-ratelimit-limit-tokens-prompt": [
+        "60000"
+      ],
+      "x-ratelimit-over-limit": [
+        "no"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "59"
+      ],
+      "x-ratelimit-remaining-tokens-generated": [
+        "12000"
+      ],
+      "x-ratelimit-remaining-tokens-prompt": [
+        "59981"
+      ],
+      "x-request-id": [
+        "chatcmpl-5bc1fa12e8a24b9ca7c843523849e3d6"
+      ]
+    },
+    "status": 200
+  }
+}

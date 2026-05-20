@@ -1,0 +1,259 @@
+{
+  "model_spec": "fireworks_ai:accounts/fireworks/models/glm-5",
+  "provider": "fireworks_ai",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjo0MDk2LCJtZXNzYWdlcyI6W3siY29udGVudCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInJvbGUiOiJ1c2VyIn0seyJjb250ZW50IjoiIiwicmVhc29uaW5nX2NvbnRlbnQiOiJUaGUgdXNlciB3YW50cyBtZSB0byB1c2UgdGhlIGFkZCB0b29sIHRvIGNvbXB1dGUgMiArIDMsIGFuZCB0aGVuIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nIHdoZXJlIDx2YWx1ZT4gaXMgdGhlIHJlc3VsdCBmcm9tIHRoZSB0b29sLlxuXG5JIG5lZWQgdG8gY2FsbCB0aGUgYWRkIGZ1bmN0aW9uIHdpdGggcGFyYW1ldGVycyBhPTIgYW5kIGI9My4iLCJyb2xlIjoiYXNzaXN0YW50IiwidG9vbF9jYWxscyI6W3siZnVuY3Rpb24iOnsiYXJndW1lbnRzIjoie1wiYVwiOjIsXCJiXCI6M30iLCJuYW1lIjoiYWRkIn0sImlkIjoiY2hhdGNtcGwtdG9vbC1iMWQ5OTgyNmFjOWQ2MzcyIiwidHlwZSI6ImZ1bmN0aW9uIn1dfSx7ImNvbnRlbnQiOiI1IiwibmFtZSI6ImFkZCIsInJvbGUiOiJ0b29sIiwidG9vbF9jYWxsX2lkIjoiY2hhdGNtcGwtdG9vbC1iMWQ5OTgyNmFjOWQ2MzcyIn1dLCJtb2RlbCI6ImFjY291bnRzL2ZpcmV3b3Jrcy9tb2RlbHMvZ2xtLTUiLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+    },
+    "canonical_json": {
+      "max_tokens": 4096,
+      "messages": [
+        {
+          "content": "Use the add tool to compute 2 + 3. After the tool result arrives, respond with 'sum=<value>'.",
+          "role": "user"
+        },
+        {
+          "content": "",
+          "reasoning_content": "The user wants me to use the add tool to compute 2 + 3, and then respond with 'sum=<value>' where <value> is the result from the tool.\n\nI need to call the add function with parameters a=2 and b=3.",
+          "role": "assistant",
+          "tool_calls": [
+            {
+              "function": {
+                "arguments": "{\"a\":2,\"b\":3}",
+                "name": "add"
+              },
+              "id": "chatcmpl-tool-b1d99826ac9d6372",
+              "type": "function"
+            }
+          ]
+        },
+        {
+          "content": "5",
+          "name": "add",
+          "role": "tool",
+          "tool_call_id": "chatcmpl-tool-b1d99826ac9d6372"
+        }
+      ],
+      "model": "accounts/fireworks/models/glm-5",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.17"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.fireworks.ai/inference/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "content": "sum=5",
+            "reasoning_content": "The tool returned 5. Now I need to respond with 'sum=5' as requested.",
+            "role": "assistant"
+          },
+          "token_ids": null
+        }
+      ],
+      "created": 1778466025,
+      "id": "chatcmpl-c635a8be38fc4817892edf9743225340",
+      "model": "accounts/fireworks/models/glm-5",
+      "object": "chat.completion",
+      "prompt_token_ids": [
+        154822,
+        154824,
+        154827,
+        10248,
+        279,
+        912,
+        5392,
+        311,
+        12558,
+        220,
+        17,
+        488,
+        220,
+        18,
+        13,
+        4636,
+        279,
+        5392,
+        1102,
+        29569,
+        11,
+        5889,
+        448,
+        364,
+        1242,
+        38490,
+        957,
+        44430,
+        154828,
+        154841,
+        785,
+        1196,
+        6801,
+        752,
+        311,
+        990,
+        279,
+        912,
+        5392,
+        311,
+        12558,
+        220,
+        17,
+        488,
+        220,
+        18,
+        11,
+        323,
+        1221,
+        5889,
+        448,
+        364,
+        1242,
+        38490,
+        957,
+        5592,
+        1380,
+        366,
+        957,
+        29,
+        374,
+        279,
+        1102,
+        504,
+        279,
+        5392,
+        382,
+        40,
+        1184,
+        311,
+        1618,
+        279,
+        912,
+        729,
+        448,
+        5029,
+        264,
+        28,
+        17,
+        323,
+        293,
+        28,
+        18,
+        13,
+        154842,
+        154843,
+        718,
+        154847,
+        64,
+        154848,
+        154849,
+        17,
+        154850,
+        154847,
+        65,
+        154848,
+        154849,
+        18,
+        154850,
+        154844,
+        154829,
+        154845,
+        20,
+        154846,
+        154828,
+        154841
+      ],
+      "usage": {
+        "completion_tokens": 25,
+        "prompt_tokens": 106,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "total_tokens": 131
+      }
+    },
+    "headers": {
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Mon, 11 May 2026 02:20:24 GMT"
+      ],
+      "fireworks-cached-prompt-tokens": [
+        "0"
+      ],
+      "fireworks-prompt-tokens": [
+        "106"
+      ],
+      "fireworks-sampling-options": [
+        "{\"max_tokens\": 4096, \"temperature\": 0.0, \"top_k\": 0, \"top_p\": 0.95, \"min_p\": 0.0, \"typical_p\": 1.0, \"frequency_penalty\": 0.0, \"presence_penalty\": 0.0, \"repetition_penalty\": 1.0, \"mirostat_target\": null, \"mirostat_lr\": 0.1, \"cycle_multiplier\": 0.0, \"cycle_base\": 0.0, \"cycle_allowed_length\": 0, \"cycle_sequence_breakers\": []}"
+      ],
+      "fireworks-server-processing-time": [
+        "0.739"
+      ],
+      "fireworks-server-received-timestamp": [
+        "1778466025.0925817"
+      ],
+      "fireworks-server-time-to-first-token": [
+        "0.476"
+      ],
+      "fireworks-speculation-prompt-matched-tokens": [
+        "0"
+      ],
+      "server": [
+        "istio-envoy"
+      ],
+      "vary": [
+        "Origin"
+      ],
+      "via": [
+        "1.1 google"
+      ],
+      "x-envoy-upstream-service-time": [
+        "741"
+      ],
+      "x-ratelimit-limit-requests": [
+        "60"
+      ],
+      "x-ratelimit-limit-tokens-generated": [
+        "12000"
+      ],
+      "x-ratelimit-limit-tokens-prompt": [
+        "60000"
+      ],
+      "x-ratelimit-over-limit": [
+        "no"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "59"
+      ],
+      "x-ratelimit-remaining-tokens-generated": [
+        "12000"
+      ],
+      "x-ratelimit-remaining-tokens-prompt": [
+        "59894"
+      ],
+      "x-request-id": [
+        "chatcmpl-c635a8be38fc4817892edf9743225340"
+      ]
+    },
+    "status": 200
+  }
+}

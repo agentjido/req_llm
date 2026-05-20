@@ -1,0 +1,155 @@
+{
+  "model_spec": "fireworks_ai:accounts/fireworks/models/kimi-k2p5",
+  "provider": "fireworks_ai",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjozMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IldyaXRlIGEgdmVyeSBsb25nIHN0b3J5IGFib3V0IGRyYWdvbnMgYW5kIGFkdmVudHVyZXMiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJhY2NvdW50cy9maXJld29ya3MvbW9kZWxzL2tpbWktazJwNSIsInJlYXNvbmluZ19lZmZvcnQiOiJsb3ciLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC41fQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 3000,
+      "messages": [
+        {
+          "content": "Write a very long story about dragons and adventures",
+          "role": "user"
+        }
+      ],
+      "model": "accounts/fireworks/models/kimi-k2p5",
+      "reasoning_effort": "low",
+      "stream": false,
+      "temperature": 0.5
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.17"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.fireworks.ai/inference/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "length",
+          "index": 0,
+          "message": {
+            "content": "The Chronicles of the Last Scale\n\n**Part I: The Ash Archive**\n\nKael had spent seventeen years in the shadows of the Obsidian Spire, breathing dust and copying ancient texts until his fingers stained permanently gray. As an apprentice to the Grand Archivist, he had learned to read twelve dead languages, navigate the labyrinthine stacks where the ceiling vanished into darkness, and identify the subtle scent of parchment decay—sweet, like rotting flowers.\n\nBut on the morning of the Autumn Equinox, Kael found something that changed the weight of the air in his lungs.\n\nHe was cataloguing the Forbidden Annex, a section of the library sealed behind iron doors and silence spells, when his lantern flickered across a crate that had not been touched in three centuries. The wood had petrified to stone-like density, and when he pried open the lid with his bronze letter knife, the scent that emerged was not musty or sweet.\n\nIt was sulfur. And something else—ozone, like the air before lightning strikes.\n\nInside, nestled in velvet that had rotted to black gauze, lay a scale the size of his palm. It shimmered with colors that had no names, shifting between deep indigo and burning copper depending on how the light struck it. But it was warm. Alive. And etched into its surface, in a script that made Kael's eyes water to look upon it directly, were coordinates.\n\n\"Dragon's work,\" whispered a voice behind him.\n\nKael spun, knocking over his inkpot. The liquid spread across the floor like a living thing, avoiding the crate entirely.\n\nElara stood in the doorway, her dark hair escaping its braid, her leather armor incongruous among the scholarly silence. She was the Spire's resident thief—or \"acquisition specialist,\" as she preferred—hired to retrieve books that debtors refused to return. She was twenty, sharp-eyed, and had once spent three days hiding in the ventilation shafts to avoid the Chief Inquisitor.\n\n\"How did you get in?\" Kael hissed, frantically blotting at the ink.\n\n\"Door was open,\" she lied smoothly, stepping closer. Her eyes fixed on the scale. \"You know what that is, scribe?\"\n\n\"A relic,\" Kael said, though his hands trembled. \"The dragons are extinct. The Purification saw to that two hundred years ago.\"\n\n\"The Purification saw to the *adult* dragons,\" Elara corrected, crouching beside him. Her fingers hovered over the scale without touching it. \"But eggs endure. Scales endure. Memory endures.\" She looked up, and for once, her perpetual smirk was gone. \"This is a map key, Kael. And if I'm reading the thermal resonance correctly—and I am, because I stole a thaumaturgical lens last Tuesday—it's still connected to a living source.\"\n\n\"That's impossible,\" Kael said, but even as he spoke, the scale pulsed. Once. Twice. A heartbeat.\n\nThat night, they fled the Obsidian Spire.\n\n**Part II: The Glass Desert**\n\nThey traveled south for three weeks, following the scale's guidance. It grew warmer as they approached the source, and at night, when Kael slept with it clutched against his chest, he dreamed of flight—impossible sensations of wind tearing past scales, of seeing heat radiating from living things in brilliant auroras, of a voice like grinding tectonic plates singing in a language of earthquakes.\n\nThe Glass Desert marked the boundary of the known world. Once, it had been the Dragon's Cradle, a valley of fertile black soil where the great wyrms had nested. The Purification had changed that. The Inquisitors had used weapons of compressed starlight, burning the land to silica, fusing sand into jagged crystal formations that rose like frozen lightning.\n\n\"Beautiful,\" Elara said, standing at the precipice. The desert stretched to the horizon, a sea of prismatic edges that would shred flesh and metal alike. \"And lethal. We'll need to cross at dawn, when the thermal currents are stable.\"\n\n\"We'll die,\" Kael said, adjusting his spectacles. He was not built for adventure. He had soft hands, a stoop from hunching over manuscripts, and a tendency to sneeze when startled.\n\n\"We'll die if we stay,\" Elara replied. \"Vane knows we took the scale. He's probably three days behind us.\"\n\nHigh Inquisitor Vane. The name alone made Kael's stomach clench. Vane had purged the last known dragon nest fifteen years ago, personally crushing the eggs with his warhammer, *Oblivion*. He was tall, skeletal, and rumored to have replaced his heart with a clockwork mechanism so he would never know fear or mercy.\n\nThey fashioned shoes from wood and rope, walking on stilts across the razor landscape. The sun turned the glass into a furnace, mirages dancing ahead of them—cities of ice, oceans of wine, armies of ghosts. On the third day, when their water ran low and Kael's stilts cracked beneath him, they found the cave.\n\nIt wasn't on any map. The entrance yawned between two crystal spires, breathing cool air that smelled of wet stone and ancient magic.\n\nInside, the darkness was absolute. Elara struck a sunrod, and the illumination revealed a cavern that could have swallowed a cathedral. Stalactites hung like dragon's teeth, and the floor...\n\nThe floor was covered in eggs.\n\nNot hundreds. Thousands. They ranged from the size of melons to massive, car-sized ovoids of obsidian and pearl. And they were humming.\n\n\"Gods preserve us,\" Elara breathed. \"The Cradle wasn't destroyed. It was hidden.\"\n\nA shadow moved in the depths. Something vast. The air pressure changed, pressing against Kael's eardrums, and a voice—not auditory, but resonating directly in his mind—shook his consciousness like a bell.\n\n*You carry my daughter's scale, little mammal.*\n\nThe dragon emerged from the gloom.\n\nShe was the color of twilight, scales shifting between deep purple and starlight silver. One wing hung at a wrong angle, bound with crude splints and dried resin. Her eyes—vertical pupils surrounded by gold—fixed on Kael with an intelligence that made him feel transparent.\n\n\"I am Nyxara,\" she said, her physical voice like avalanches colliding. \"Last of the Star-Descended. And you have come to finish what the butchers started, or to save what remains?\"\n\n**Part III: The Wound in the World**\n\nNyxara's story took three days to tell, punctuated by her labored breathing and the occasional spasm of pain that made the cave walls tremble. She was ancient—over eight centuries old—and had been the guardian of the Cradle when the Purification began.\n\n\"The Inquisitors did not merely kill,\" she explained, her massive head resting near Kael as he worked to clean her infected wing wound. \"They severed the connection. Dragons are not merely beasts of flesh. We are anchors for the ley lines, the magical currents that keep the world from unraveling. Each dragon death was a nail in the coffin of reality.\"\n\nShe showed them, then. With a claw, she pierced the membrane of reality itself, revealing the rot beneath. The world was fraying. In the distance, through the tear, Kael saw the Obsidian Spire—not as it was, but as it would be in months: crumbling, consumed by void where physics had failed.\n\n\"The eggs must hatch,\" Nyxara said. \"But not naturally. The Purification poisoned the aether. If they hatch now, they will be mindless, hungry things—wyrms of destruction, not wisdom. They need the Song of Binding, performed at the Convergence Spire, to anchor their souls properly.\"\n\n\"Where is the Convergence Spire?\" Elara asked. She had not slept, watching the eggs with a hunger in her eyes that Kael didn't understand.\n\n\"North,\" Nyxara rumbled. \"Beyond the Storm Peaks. In the heart of the Inquisitor's Citadel.\"\n\nKael laughed, then stopped when he realized she was serious. \"That's suicide. Vane's fortress is impregnable. The Spire is where they process dragon scales into weapons. It's where they—\"\n\n\"Where they keep the Heart of the First,\" Nyxara finished. \"The first dragon, who sang the world into shape. His heart still beats, imprisoned, powering their engines of war. If we free him, if we return him to the Cradle, he can sing the binding song. He can save us all.\"\n\nThey rested, then prepared. Nyxara gave them each a scale—Elara's was black as oil, Kael's retained the shifting colors of the one he'd found. \"They will hide you from scrying,\" she said. \"And in moments of desperation, they will lend you our strength. But the price is steep. To use a dragon's power is to invite the dragon into your soul.\"\n\nThey left at dawn, crossing the desert again, this time with purpose burning in their chests. Behind them, the cave sealed itself, Nyxara's magic hiding the eggs once more. She would hold the line, she promised, until they returned or until she died.\n\n**Part IV: The Singing Woods**\n\nNorth of the Glass Desert lay the Singing Woods, where the trees had grown in the shadow of dragons and absorbed their magic. The forest sang constantly—a wordless harmony that changed based on the traveler's intent. To those with murder in their hearts, it was a shriek of nails on slate. To the pure of purpose, it was lullabies.\n\nKael heard something between the two: a lament.\n\nThey were not alone in the woods. Three days in, they found the first corpse—a tracker from the Inquisitor's army, his armor pristine but his eyes melted, streams of solidified silver trailing down his cheeks. The trees had judged him.\n\n\"We're being hunted,\" Elara said, examining the body. \"Vane sent his Hounds. Elite trackers, modified with dragon scale implants. They can smell magic.\"\n\nThat night, they climbed into the canopy, hiding among branches that glowed with bioluminescent sap. Below, the Hounds passed—men and women with too many joints in their legs, eyes reflecting green in the darkness, nostrils flaring as they sniffed the air. They wore armor made from dragon bone.\n\nOne stopped directly beneath their tree. Looked up. Smiled.\n\n\"Found you,\" it whispered.\n\nThe battle was brief and brutal. Elara fought like a dervish, her knives finding gaps in the bone armor, but there were six Hounds and two of them. Kael did the only thing he could think of—he clutching his scale and *thought* of Nyxara, of her majesty, of her pain.\n\nFire erupted from his hands. Not normal fire, but star-fire, white and cold. It caught two Hounds, consuming them without burning the forest, leaving only ash that the roots drank greedily.\n\nThe remaining four fled, but not before one hurled a javelin. It caught Elara in the shoulder, pinning her to the trunk.\n\nShe didn't scream. She broke the shaft, pulled the head free, and bandaged the wound with leaves that the trees offered, lowering branches like helping hands.\n\n\"They know our path now,\" she gasped, pale but conscious. \"We can't outrun them to the Peaks.\"\n\n\"Then we go through the Hollow,\" Kael said, surprising himself. He had read about it in the archives—a fold in space, a shortcut created by a dying dragon's last breath. Dangerous, disorienting, but fast.\n\n\"You've never been adventurous a day in your life,\" Elara said, grinning through the pain.\n\n\"I'm making up for lost time,\" he replied, helping her walk.\n\nThe Hollow was a cave that smelled of rain despite being dry. Inside, gravity shifted. They walked on walls,",
+            "reasoning_content": "The user wants a very long story about dragons and adventures. This is a creative writing request. I should aim for a substantial length - perhaps several thousand words - with a cohesive narrative arc, character development, world-building, and multiple plot threads.\n\nKey elements to include:\n- Dragons (obviously) - maybe different types, personalities, relationships with humans\n- Adventure - quests, journeys, battles, discoveries\n- A protagonist with depth\n- Supporting characters\n- A rich fantasy world\n- Conflict and stakes\n- Themes of friendship, courage, legacy\n\nStructure ideas:\n- Protagonist: Maybe a young person who discovers a connection to dragons\n- Setting: A world where dragons are feared/hunted or perhaps nearly extinct\n- Inciting incident: Discovery of an egg, or a dragon in distress, or a call to adventure\n- Journey: Travel across varied landscapes\n- Antagonist: Could be a dragon hunter, a corrupt kingdom, or a greater threat affecting both humans and dragons\n- Climax: Major battle or confrontation\n- Resolution: New understanding between species\n\nI'll aim for around 3,000-4,000 words to ensure it's \"very long\" as requested. I'll write in an immersive, descriptive style suitable for high fantasy.\n\nLet me outline:\n1. Opening: Kael, a scribe's apprentice in the city of Obsidian Spire, discovers something in the archives\n2. The world: Dragons are thought extinct, hunted by the Draconate Order\n3. Inciting incident: Finding a map and a dragon scale\n4. Meeting: Encounter with Nyxara, a wounded dragon\n5. The quest: Journey to the Dragon's Cradle to prevent the hatching of an ancient weaponized dragon\n6. Companions: Elara (rogue/scholar), Thorn (warrior with secret)\n7. Journey through: The Glass Desert, the Singing Woods, the Storm Peaks\n8. Conflict: Pursued by High Inquisitor Vane\n9. Revelation: The \"weapon\" is actually a bridge between species\n10. Climax: Battle at the Cradle, choice to trust rather than destroy\n11. Epilogue: New era of cooperation\n\nI'll write this with rich detail, dialogue, and emotional beats. Let's begin.",
+            "role": "assistant"
+          },
+          "token_ids": null
+        }
+      ],
+      "created": 1778465889,
+      "id": "chatcmpl-cb95738adc444802a7ba4506ff15501d",
+      "model": "accounts/fireworks/models/kimi-k2p5",
+      "object": "chat.completion",
+      "prompt_token_ids": [
+        163587,
+        2482,
+        163601,
+        9570,
+        261,
+        2098,
+        2021,
+        5511,
+        1215,
+        115716,
+        316,
+        37429,
+        163586,
+        163588,
+        69702,
+        163601,
+        163606
+      ],
+      "usage": {
+        "completion_tokens": 3000,
+        "prompt_tokens": 17,
+        "prompt_tokens_details": {
+          "cached_tokens": 16
+        },
+        "total_tokens": 3017
+      }
+    },
+    "headers": {
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Mon, 11 May 2026 02:18:08 GMT"
+      ],
+      "fireworks-cached-prompt-tokens": [
+        "16"
+      ],
+      "fireworks-prompt-tokens": [
+        "17"
+      ],
+      "fireworks-sampling-options": [
+        "{\"max_tokens\": 3000, \"temperature\": 0.5, \"top_k\": 0, \"top_p\": 0.95, \"min_p\": 0.0, \"typical_p\": 1.0, \"frequency_penalty\": 0.0, \"presence_penalty\": 0.0, \"repetition_penalty\": 1.0, \"mirostat_target\": null, \"mirostat_lr\": 0.1, \"cycle_multiplier\": 0.0, \"cycle_base\": 0.0, \"cycle_allowed_length\": 0, \"cycle_sequence_breakers\": []}"
+      ],
+      "fireworks-server-processing-time": [
+        "94.750"
+      ],
+      "fireworks-server-received-timestamp": [
+        "1778465888.69085"
+      ],
+      "fireworks-server-time-to-first-token": [
+        "4.154"
+      ],
+      "fireworks-speculation-prompt-matched-tokens": [
+        "0"
+      ],
+      "server": [
+        "istio-envoy"
+      ],
+      "vary": [
+        "Origin"
+      ],
+      "via": [
+        "1.1 google"
+      ],
+      "x-envoy-upstream-service-time": [
+        "94753"
+      ],
+      "x-ratelimit-limit-requests": [
+        "60"
+      ],
+      "x-ratelimit-limit-tokens-cache-adjusted-prompt": [
+        "60000"
+      ],
+      "x-ratelimit-limit-tokens-generated": [
+        "12000"
+      ],
+      "x-ratelimit-limit-tokens-prompt": [
+        "60000"
+      ],
+      "x-ratelimit-over-limit": [
+        "no"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "59"
+      ],
+      "x-ratelimit-remaining-tokens-cache-adjusted-prompt": [
+        "60000"
+      ],
+      "x-ratelimit-remaining-tokens-generated": [
+        "12000"
+      ],
+      "x-ratelimit-remaining-tokens-prompt": [
+        "59983"
+      ],
+      "x-request-id": [
+        "chatcmpl-cb95738adc444802a7ba4506ff15501d"
+      ]
+    },
+    "status": 200
+  }
+}

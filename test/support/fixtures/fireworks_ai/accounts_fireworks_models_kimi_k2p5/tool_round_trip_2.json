@@ -1,0 +1,276 @@
+{
+  "model_spec": "fireworks_ai:accounts/fireworks/models/kimi-k2p5",
+  "provider": "fireworks_ai",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjo0MDk2LCJtZXNzYWdlcyI6W3siY29udGVudCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInJvbGUiOiJ1c2VyIn0seyJjb250ZW50IjoiIiwicmVhc29uaW5nX2NvbnRlbnQiOiJUaGUgdXNlciB3YW50cyBtZSB0byB1c2UgdGhlIGFkZCB0b29sIHRvIGNvbXB1dGUgMiArIDMsIGFuZCB0aGVuIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nIGFmdGVyIGdldHRpbmcgdGhlIHJlc3VsdC5cblxuTGV0IG1lIGNhbGwgdGhlIGFkZCBmdW5jdGlvbiB3aXRoIGE9MiBhbmQgYj0zLiIsInJvbGUiOiJhc3Npc3RhbnQiLCJ0b29sX2NhbGxzIjpbeyJmdW5jdGlvbiI6eyJhcmd1bWVudHMiOiJ7XCJhXCI6MixcImJcIjozfSIsIm5hbWUiOiJhZGQifSwiaWQiOiJmdW5jdGlvbnMuYWRkOjAiLCJ0eXBlIjoiZnVuY3Rpb24ifV19LHsiY29udGVudCI6IjUiLCJuYW1lIjoiYWRkIiwicm9sZSI6InRvb2wiLCJ0b29sX2NhbGxfaWQiOiJmdW5jdGlvbnMuYWRkOjAifV0sIm1vZGVsIjoiYWNjb3VudHMvZmlyZXdvcmtzL21vZGVscy9raW1pLWsycDUiLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+    },
+    "canonical_json": {
+      "max_tokens": 4096,
+      "messages": [
+        {
+          "content": "Use the add tool to compute 2 + 3. After the tool result arrives, respond with 'sum=<value>'.",
+          "role": "user"
+        },
+        {
+          "content": "",
+          "reasoning_content": "The user wants me to use the add tool to compute 2 + 3, and then respond with 'sum=<value>' after getting the result.\n\nLet me call the add function with a=2 and b=3.",
+          "role": "assistant",
+          "tool_calls": [
+            {
+              "function": {
+                "arguments": "{\"a\":2,\"b\":3}",
+                "name": "add"
+              },
+              "id": "functions.add:0",
+              "type": "function"
+            }
+          ]
+        },
+        {
+          "content": "5",
+          "name": "add",
+          "role": "tool",
+          "tool_call_id": "functions.add:0"
+        }
+      ],
+      "model": "accounts/fireworks/models/kimi-k2p5",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.17"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.fireworks.ai/inference/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "content": "sum=5",
+            "reasoning_content": "The tool returned 5. Now I need to respond with 'sum=5' as requested.",
+            "role": "assistant"
+          },
+          "token_ids": null
+        }
+      ],
+      "created": 1778465985,
+      "id": "chatcmpl-79abfc8eae8d45e293cb0f06181826ae",
+      "model": "accounts/fireworks/models/kimi-k2p5",
+      "object": "chat.completion",
+      "prompt_token_ids": [
+        163587,
+        2482,
+        163601,
+        8962,
+        276,
+        1239,
+        4453,
+        308,
+        18207,
+        220,
+        17,
+        715,
+        220,
+        18,
+        13,
+        6671,
+        276,
+        4453,
+        1934,
+        44570,
+        11,
+        11983,
+        472,
+        542,
+        7671,
+        51522,
+        2035,
+        29,
+        10636,
+        163586,
+        163588,
+        69702,
+        163601,
+        163606,
+        1008,
+        2742,
+        11333,
+        1019,
+        308,
+        1328,
+        276,
+        1239,
+        4453,
+        308,
+        18207,
+        220,
+        17,
+        715,
+        220,
+        18,
+        11,
+        316,
+        1780,
+        11983,
+        472,
+        542,
+        7671,
+        51522,
+        2035,
+        19244,
+        2171,
+        5186,
+        276,
+        1934,
+        1481,
+        9413,
+        1019,
+        2390,
+        276,
+        1239,
+        1527,
+        472,
+        261,
+        28,
+        17,
+        316,
+        291,
+        28,
+        18,
+        13,
+        163607,
+        163595,
+        163597,
+        41937,
+        3149,
+        25,
+        15,
+        163598,
+        8264,
+        64,
+        1289,
+        17,
+        2020,
+        65,
+        1289,
+        18,
+        92,
+        163599,
+        163596,
+        163586,
+        163594,
+        1210,
+        163601,
+        798,
+        6014,
+        318,
+        8271,
+        3149,
+        25,
+        15,
+        198,
+        20,
+        163586,
+        163588,
+        69702,
+        163601,
+        163606
+      ],
+      "usage": {
+        "completion_tokens": 25,
+        "prompt_tokens": 117,
+        "prompt_tokens_details": {
+          "cached_tokens": 3
+        },
+        "total_tokens": 142
+      }
+    },
+    "headers": {
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Mon, 11 May 2026 02:19:44 GMT"
+      ],
+      "fireworks-cached-prompt-tokens": [
+        "3"
+      ],
+      "fireworks-prompt-tokens": [
+        "117"
+      ],
+      "fireworks-sampling-options": [
+        "{\"max_tokens\": 4096, \"temperature\": 0.0, \"top_k\": 0, \"top_p\": 0.95, \"min_p\": 0.0, \"typical_p\": 1.0, \"frequency_penalty\": 0.0, \"presence_penalty\": 0.0, \"repetition_penalty\": 1.0, \"mirostat_target\": null, \"mirostat_lr\": 0.1, \"cycle_multiplier\": 0.0, \"cycle_base\": 0.0, \"cycle_allowed_length\": 0, \"cycle_sequence_breakers\": []}"
+      ],
+      "fireworks-server-processing-time": [
+        "0.585"
+      ],
+      "fireworks-server-received-timestamp": [
+        "1778465985.3876991"
+      ],
+      "fireworks-server-time-to-first-token": [
+        "0.253"
+      ],
+      "fireworks-speculation-prompt-matched-tokens": [
+        "0"
+      ],
+      "server": [
+        "istio-envoy"
+      ],
+      "vary": [
+        "Origin"
+      ],
+      "via": [
+        "1.1 google"
+      ],
+      "x-envoy-upstream-service-time": [
+        "589"
+      ],
+      "x-ratelimit-limit-requests": [
+        "60"
+      ],
+      "x-ratelimit-limit-tokens-cache-adjusted-prompt": [
+        "60000"
+      ],
+      "x-ratelimit-limit-tokens-generated": [
+        "12000"
+      ],
+      "x-ratelimit-limit-tokens-prompt": [
+        "60000"
+      ],
+      "x-ratelimit-over-limit": [
+        "no"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "59"
+      ],
+      "x-ratelimit-remaining-tokens-cache-adjusted-prompt": [
+        "60000"
+      ],
+      "x-ratelimit-remaining-tokens-generated": [
+        "12000"
+      ],
+      "x-ratelimit-remaining-tokens-prompt": [
+        "59883"
+      ],
+      "x-request-id": [
+        "chatcmpl-79abfc8eae8d45e293cb0f06181826ae"
+      ]
+    },
+    "status": 200
+  }
+}

@@ -1,0 +1,160 @@
+{
+  "model_spec": "fireworks_ai:accounts/fireworks/models/kimi-k2p5",
+  "provider": "fireworks_ai",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjo0MDk2LCJtZXNzYWdlcyI6W3siY29udGVudCI6IlNvbHZlIDEyKjcgYW5kIHNob3cgeW91ciBpbnRlcm5hbCB0aGlua2luZyAoYnJpZWYpLiIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImFjY291bnRzL2ZpcmV3b3Jrcy9tb2RlbHMva2ltaS1rMnA1IiwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MS4wfQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 4096,
+      "messages": [
+        {
+          "content": "Solve 12*7 and show your internal thinking (brief).",
+          "role": "user"
+        }
+      ],
+      "model": "accounts/fireworks/models/kimi-k2p5",
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 1.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.17"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.fireworks.ai/inference/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "content": "**Internal thinking:** Breaking 12 into 10 and 2. 10×7=70, 2×7=14. Adding them: 70+14=84.\n\n**Answer:** 84",
+            "reasoning_content": "The user wants me to solve 12*7 and show my internal thinking briefly.\n\nCalculation:\n12 * 7 = ?\n\nI can break this down:\n- 10 * 7 = 70\n- 2 * 7 = 14\n- 70 + 14 = 84\n\nOr I could think of it as:\n- 12 * 5 = 60\n- 12 * 2 = 24\n- 60 + 24 = 84\n\nOr just know it from multiplication tables: 12 * 7 = 84.\n\nI need to show the brief internal thinking and then give the answer.\n\nStructure:\n1. Brief internal thinking (the breakdown)\n2. Final answer\n\nLet me make sure it's brief as requested.",
+            "role": "assistant"
+          },
+          "token_ids": null
+        }
+      ],
+      "created": 1778465771,
+      "id": "chatcmpl-688e6f79400149e988cc24af059a271a",
+      "model": "accounts/fireworks/models/kimi-k2p5",
+      "object": "chat.completion",
+      "prompt_token_ids": [
+        163587,
+        2482,
+        163601,
+        91351,
+        220,
+        1042,
+        9,
+        22,
+        316,
+        2424,
+        651,
+        7715,
+        9545,
+        347,
+        11982,
+        1083,
+        163586,
+        163588,
+        69702,
+        163601,
+        163606
+      ],
+      "usage": {
+        "completion_tokens": 201,
+        "prompt_tokens": 21,
+        "prompt_tokens_details": {
+          "cached_tokens": 3
+        },
+        "total_tokens": 222
+      }
+    },
+    "headers": {
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Mon, 11 May 2026 02:16:14 GMT"
+      ],
+      "fireworks-cached-prompt-tokens": [
+        "3"
+      ],
+      "fireworks-prompt-tokens": [
+        "21"
+      ],
+      "fireworks-sampling-options": [
+        "{\"max_tokens\": 4096, \"temperature\": 1.0, \"top_k\": 0, \"top_p\": 0.95, \"min_p\": 0.0, \"typical_p\": 1.0, \"frequency_penalty\": 0.0, \"presence_penalty\": 0.0, \"repetition_penalty\": 1.0, \"mirostat_target\": null, \"mirostat_lr\": 0.1, \"cycle_multiplier\": 0.0, \"cycle_base\": 0.0, \"cycle_allowed_length\": 0, \"cycle_sequence_breakers\": []}"
+      ],
+      "fireworks-server-processing-time": [
+        "3.153"
+      ],
+      "fireworks-server-received-timestamp": [
+        "1778465771.4316149"
+      ],
+      "fireworks-server-time-to-first-token": [
+        "0.309"
+      ],
+      "fireworks-speculation-prompt-matched-tokens": [
+        "0"
+      ],
+      "server": [
+        "istio-envoy"
+      ],
+      "vary": [
+        "Origin"
+      ],
+      "x-envoy-upstream-service-time": [
+        "3155"
+      ],
+      "x-ratelimit-limit-requests": [
+        "60"
+      ],
+      "x-ratelimit-limit-tokens-cache-adjusted-prompt": [
+        "60000"
+      ],
+      "x-ratelimit-limit-tokens-generated": [
+        "12000"
+      ],
+      "x-ratelimit-limit-tokens-prompt": [
+        "60000"
+      ],
+      "x-ratelimit-over-limit": [
+        "no"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "59"
+      ],
+      "x-ratelimit-remaining-tokens-cache-adjusted-prompt": [
+        "60000"
+      ],
+      "x-ratelimit-remaining-tokens-generated": [
+        "11902"
+      ],
+      "x-ratelimit-remaining-tokens-prompt": [
+        "59979"
+      ],
+      "x-request-id": [
+        "chatcmpl-688e6f79400149e988cc24af059a271a"
+      ]
+    },
+    "status": 200
+  }
+}

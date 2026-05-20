@@ -18,7 +18,7 @@ LLM APIs are inconsistent. ReqLLM provides a unified, idiomatic Elixir interface
 - **High-level API** – Vercel AI SDK-inspired functions (`generate_text/3`, `stream_text/3`, `generate_object/4` and more) that work uniformly across providers. Standard features, minimal configuration.
 - **Low-level API** – Direct Req plugin access for full HTTP control. Built around OpenAI Chat Completions baseline with provider-specific callbacks for non-compatible APIs (e.g., Anthropic).
 
-**19 Supported Providers:**
+**20 Supported Providers:**
 
 | Provider | ID | Guide |
 |---|---|---|
@@ -34,6 +34,7 @@ LLM APIs are inconsistent. ReqLLM provides a unified, idiomatic Elixir interface
 | [xAI](https://x.ai) | `xai` | [Guide](guides/xai.md) |
 | [OpenRouter](https://openrouter.ai) | `openrouter` | [Guide](guides/openrouter.md) |
 | [Cerebras](https://cerebras.ai) | `cerebras` | [Guide](guides/cerebras.md) |
+| [Fireworks AI](https://fireworks.ai) | `fireworks_ai` | [Guide](guides/fireworks_ai.md) |
 | [Meta Llama](https://llama.meta.com) | `meta` | [Guide](guides/meta.md) |
 | [MiniMax](https://www.minimax.io) | `minimax` | — |
 | [Z.AI](https://z.ai) | `zai` | [Guide](guides/zai.md) |

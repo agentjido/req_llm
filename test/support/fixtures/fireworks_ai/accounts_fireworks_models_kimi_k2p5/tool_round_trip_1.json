@@ -1,0 +1,264 @@
+{
+  "model_spec": "fireworks_ai:accounts/fireworks/models/kimi-k2p5",
+  "provider": "fireworks_ai",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjo0MDk2LCJtZXNzYWdlcyI6W3siY29udGVudCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImFjY291bnRzL2ZpcmV3b3Jrcy9tb2RlbHMva2ltaS1rMnA1Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjAsInRvb2xfY2hvaWNlIjp7ImZ1bmN0aW9uIjp7Im5hbWUiOiJhZGQifSwidHlwZSI6ImZ1bmN0aW9uIn0sInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkFkZCB0d28gaW50ZWdlcnMiLCJuYW1lIjoiYWRkIiwicGFyYW1ldGVycyI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnsiYSI6eyJ0eXBlIjoiaW50ZWdlciJ9LCJiIjp7InR5cGUiOiJpbnRlZ2VyIn19LCJyZXF1aXJlZCI6WyJhIiwiYiJdLCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifV19"
+    },
+    "canonical_json": {
+      "max_tokens": 4096,
+      "messages": [
+        {
+          "content": "Use the add tool to compute 2 + 3. After the tool result arrives, respond with 'sum=<value>'.",
+          "role": "user"
+        }
+      ],
+      "model": "accounts/fireworks/models/kimi-k2p5",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0,
+      "tool_choice": {
+        "function": {
+          "name": "add"
+        },
+        "type": "function"
+      },
+      "tools": [
+        {
+          "function": {
+            "description": "Add two integers",
+            "name": "add",
+            "parameters": {
+              "additionalProperties": false,
+              "properties": {
+                "a": {
+                  "type": "integer"
+                },
+                "b": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "a",
+                "b"
+              ],
+              "type": "object"
+            }
+          },
+          "type": "function"
+        }
+      ]
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.17"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.fireworks.ai/inference/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "tool_calls",
+          "index": 0,
+          "message": {
+            "content": "",
+            "reasoning_content": "The user wants me to use the add tool to compute 2 + 3, and then respond with 'sum=<value>' after getting the result.\n\nLet me call the add function with a=2 and b=3.",
+            "role": "assistant",
+            "tool_calls": [
+              {
+                "function": {
+                  "arguments": "{\"a\": 2, \"b\": 3}",
+                  "name": "add"
+                },
+                "id": "functions.add:0",
+                "index": 0,
+                "name": null,
+                "type": "function"
+              }
+            ]
+          },
+          "token_ids": null
+        }
+      ],
+      "created": 1778465984,
+      "id": "chatcmpl-9527ea154d8d4a5a8630f9d729509a57",
+      "model": "accounts/fireworks/models/kimi-k2p5",
+      "object": "chat.completion",
+      "prompt_token_ids": [
+        163594,
+        20960,
+        35556,
+        677,
+        163601,
+        2,
+        30391,
+        382,
+        798,
+        8271,
+        198,
+        6370,
+        8271,
+        440,
+        408,
+        4200,
+        2069,
+        38789,
+        198,
+        2217,
+        1239,
+        327,
+        9600,
+        25,
+        440,
+        220,
+        261,
+        25,
+        2343,
+        422,
+        220,
+        291,
+        25,
+        2343,
+        422,
+        220,
+        793,
+        74,
+        25,
+        2204,
+        10242,
+        3949,
+        198,
+        9483,
+        1318,
+        1178,
+        303,
+        896,
+        163586,
+        163587,
+        2482,
+        163601,
+        8962,
+        276,
+        1239,
+        4453,
+        308,
+        18207,
+        220,
+        17,
+        715,
+        220,
+        18,
+        13,
+        6671,
+        276,
+        4453,
+        1934,
+        44570,
+        11,
+        11983,
+        472,
+        542,
+        7671,
+        51522,
+        2035,
+        29,
+        10636,
+        163586,
+        163588,
+        69702,
+        163601,
+        163606
+      ],
+      "usage": {
+        "completion_tokens": 69,
+        "prompt_tokens": 83,
+        "prompt_tokens_details": {
+          "cached_tokens": 64
+        },
+        "total_tokens": 152
+      }
+    },
+    "headers": {
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Mon, 11 May 2026 02:19:43 GMT"
+      ],
+      "fireworks-cached-prompt-tokens": [
+        "64"
+      ],
+      "fireworks-prompt-tokens": [
+        "83"
+      ],
+      "fireworks-sampling-options": [
+        "{\"max_tokens\": 4096, \"temperature\": 0.0, \"top_k\": 0, \"top_p\": 0.95, \"min_p\": 0.0, \"typical_p\": 1.0, \"frequency_penalty\": 0.0, \"presence_penalty\": 0.0, \"repetition_penalty\": 1.0, \"mirostat_target\": null, \"mirostat_lr\": 0.1, \"cycle_multiplier\": 0.0, \"cycle_base\": 0.0, \"cycle_allowed_length\": 0, \"cycle_sequence_breakers\": []}"
+      ],
+      "fireworks-server-processing-time": [
+        "1.081"
+      ],
+      "fireworks-server-received-timestamp": [
+        "1778465983.897434"
+      ],
+      "fireworks-server-time-to-first-token": [
+        "0.237"
+      ],
+      "fireworks-speculation-prompt-matched-tokens": [
+        "0"
+      ],
+      "server": [
+        "istio-envoy"
+      ],
+      "vary": [
+        "Origin"
+      ],
+      "via": [
+        "1.1 google"
+      ],
+      "x-envoy-upstream-service-time": [
+        "1083"
+      ],
+      "x-ratelimit-limit-requests": [
+        "60"
+      ],
+      "x-ratelimit-limit-tokens-cache-adjusted-prompt": [
+        "60000"
+      ],
+      "x-ratelimit-limit-tokens-generated": [
+        "12000"
+      ],
+      "x-ratelimit-limit-tokens-prompt": [
+        "60000"
+      ],
+      "x-ratelimit-over-limit": [
+        "no"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "59"
+      ],
+      "x-ratelimit-remaining-tokens-cache-adjusted-prompt": [
+        "60000"
+      ],
+      "x-ratelimit-remaining-tokens-generated": [
+        "11900"
+      ],
+      "x-ratelimit-remaining-tokens-prompt": [
+        "59917"
+      ],
+      "x-request-id": [
+        "chatcmpl-9527ea154d8d4a5a8630f9d729509a57"
+      ]
+    },
+    "status": 200
+  }
+}
