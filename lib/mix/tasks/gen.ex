@@ -89,6 +89,7 @@ defmodule Mix.Tasks.ReqLlm.Gen do
       anthropic   - Anthropic Claude models
       groq        - Groq models (fast inference)
       google      - Google Gemini models
+      nearai      - NEAR AI Cloud TEE inference
       openrouter  - OpenRouter (access to multiple providers)
       xai         - xAI Grok models
 
@@ -106,6 +107,7 @@ defmodule Mix.Tasks.ReqLlm.Gen do
       OPENAI_API_KEY      - For OpenAI models
       ANTHROPIC_API_KEY   - For Anthropic models
       GOOGLE_API_KEY      - For Google models
+      NEARAI_API_KEY      - For NEAR AI Cloud models
       OPENROUTER_API_KEY  - For OpenRouter
       XAI_API_KEY         - For xAI models
 
@@ -134,6 +136,7 @@ defmodule Mix.Tasks.ReqLlm.Gen do
       anthropic   - Good support, tool-based JSON generation
       groq        - Fast streaming, limited JSON support
       google      - Experimental JSON/streaming support
+      nearai      - OpenAI-compatible TEE inference
       openrouter  - Depends on underlying model
       xai         - Basic support across modes
   """
