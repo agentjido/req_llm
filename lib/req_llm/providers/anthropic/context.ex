@@ -167,7 +167,6 @@ defmodule ReqLLM.Providers.Anthropic.Context do
     messages
     |> Enum.map(&encode_system_message/1)
     |> Enum.reject(&(&1 == []))
-    |> Enum.intersperse([%{type: "text", text: "\n\n"}])
     |> List.flatten()
     |> normalize_system_content()
   end

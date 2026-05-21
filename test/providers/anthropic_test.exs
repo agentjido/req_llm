@@ -918,7 +918,7 @@ defmodule ReqLLM.Providers.AnthropicTest do
              end)
     end
 
-    test "encode_request combines multiple system messages" do
+    test "encode_request encodes multiple system messages as non-empty blocks" do
       {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
 
       context =
@@ -932,7 +932,6 @@ defmodule ReqLLM.Providers.AnthropicTest do
 
       assert request[:system] == [
                %{type: "text", text: "Talk like a pirate"},
-               %{type: "text", text: "\n\n"},
                %{type: "text", text: "Respond in verses"}
              ]
 
