@@ -35,19 +35,29 @@ defmodule ReqLLM.OpenTelemetry.Adapter do
   ## Example — inject caller-context on every ReqLLM span
 
   The cleanest way to wrap the default adapter is to delegate everything and
-  override just `start_span/3` to merge in extra attributes:
+  override just `start_span/3` to merge in extra attributes. Include the
+  optional callbacks in the delegation if your app uses tools — otherwise
+  server-side tool sub-spans render as siblings of the LLM span instead of
+  children, losing the call-tree shape Langfuse / Honeycomb / Grafana use to
+  group tool execution under its parent.
 
       defmodule MyApp.ReqLLMAdapter do
         @behaviour ReqLLM.OpenTelemetry.Adapter
 
+        # required callbacks
         defdelegate available?(), to: ReqLLM.OpenTelemetry.OTelAdapter
-        defdelegate metrics_available?(), to: ReqLLM.OpenTelemetry.OTelAdapter
         defdelegate set_attributes(s, a, c), to: ReqLLM.OpenTelemetry.OTelAdapter
         defdelegate add_event(s, n, a, c), to: ReqLLM.OpenTelemetry.OTelAdapter
         defdelegate set_status(s, k, m, c), to: ReqLLM.OpenTelemetry.OTelAdapter
         defdelegate end_span(s, c), to: ReqLLM.OpenTelemetry.OTelAdapter
-        defdelegate record_histogram(r, c), to: ReqLLM.OpenTelemetry.OTelAdapter
 
+        # optional callbacks — delegate to preserve metrics + child-span shape
+        defdelegate metrics_available?(), to: ReqLLM.OpenTelemetry.OTelAdapter
+        defdelegate record_histogram(r, c), to: ReqLLM.OpenTelemetry.OTelAdapter
+        defdelegate start_child_span(p, n, a, o, c), to: ReqLLM.OpenTelemetry.OTelAdapter
+        defdelegate end_span_at(s, t, c), to: ReqLLM.OpenTelemetry.OTelAdapter
+
+        # the one callback we actually customize
         def start_span(name, attrs, config) do
           extras = %{"langfuse.user.id" => Process.get(:current_user_id)}
           ReqLLM.OpenTelemetry.OTelAdapter.start_span(name, Map.merge(attrs, extras), config)
