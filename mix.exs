@@ -66,6 +66,7 @@ defmodule ReqLLM.MixProject do
           "guides/deepseek.md",
           "guides/fireworks_ai.md",
           "guides/meta.md",
+          "guides/nearai.md",
           "guides/zenmux.md",
           "guides/zai.md",
           "guides/zai_coder.md"
@@ -110,6 +111,7 @@ defmodule ReqLLM.MixProject do
             "guides/deepseek.md",
             "guides/fireworks_ai.md",
             "guides/meta.md",
+            "guides/nearai.md",
             "guides/zenmux.md",
             "guides/zai.md",
             "guides/zai_coder.md"
