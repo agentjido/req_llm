@@ -282,7 +282,7 @@ defmodule ReqLLM.Providers.XAI do
 
       req_keys =
         supported_provider_options() ++
-          [:context, :operation, :text, :stream, :model, :provider_options, :xai_api_type]
+          [:context, :operation, :text, :stream, :model, :provider, :provider_options, :xai_api_type]
 
       path = if use_responses, do: "/responses", else: "/chat/completions"
 
