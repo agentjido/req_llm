@@ -1243,4 +1243,74 @@ defmodule ReqLLM.OpenTelemetryTest do
       assert :ets.member(table, {handler_b, shared_id})
     end
   end
+
+  describe "handler exception resilience" do
+    defmodule RaisingAdapter do
+      @behaviour ReqLLM.OpenTelemetry.Adapter
+
+      @impl true
+      def available?, do: true
+
+      @impl true
+      def start_span(_name, _attributes, config) do
+        send(config[:test_pid], :start_span_called)
+        raise "boom"
+      end
+
+      @impl true
+      def set_attributes(_, _, _), do: :ok
+
+      @impl true
+      def add_event(_, _, _, _), do: :ok
+
+      @impl true
+      def set_status(_, _, _, _), do: :ok
+
+      @impl true
+      def end_span(_, _), do: :ok
+    end
+
+    test "survives an adapter that raises and stays attached" do
+      handler_id = "req-llm-otel-#{System.unique_integer([:positive])}"
+
+      assert :ok = OpenTelemetry.attach(handler_id, adapter: RaisingAdapter, test_pid: self())
+      on_exit(fn -> OpenTelemetry.detach(handler_id) end)
+
+      model = %LLMDB.Model{id: "gpt-5", provider: :openai}
+
+      metadata = fn ->
+        %{
+          request_id: "req-#{System.unique_integer([:positive])}",
+          operation: :chat,
+          provider: :openai,
+          model: model
+        }
+      end
+
+      log =
+        ExUnit.CaptureLog.capture_log(fn ->
+          :telemetry.execute(
+            [:req_llm, :request, :start],
+            %{system_time: System.system_time()},
+            metadata.()
+          )
+
+          assert_receive :start_span_called
+
+          # Second event proves the handler is still attached. If `:telemetry`
+          # had detached it (the default behavior on raise), no message would
+          # arrive.
+          :telemetry.execute(
+            [:req_llm, :request, :start],
+            %{system_time: System.system_time()},
+            metadata.()
+          )
+
+          assert_receive :start_span_called
+        end)
+
+      assert log =~ "ReqLLM.OpenTelemetry: handler crashed"
+      assert log =~ "boom"
+    end
+  end
 end

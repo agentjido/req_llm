@@ -383,6 +383,8 @@ defmodule ReqLLM.OpenTelemetry do
   `ReqLLM.Telemetry.OpenTelemetry`.
   """
 
+  require Logger
+
   alias ReqLLM.MapAccess
   alias ReqLLM.OpenTelemetry.{Attributes, SemConv, Translator}
   alias ReqLLM.Telemetry.OpenTelemetry, as: Mapper
@@ -516,7 +518,24 @@ defmodule ReqLLM.OpenTelemetry do
 
   @doc false
   @spec handle_event(list(atom()), map(), map(), keyword()) :: :ok
-  def handle_event([:req_llm, :request, :start], _measurements, metadata, config) do
+  def handle_event(event, measurements, metadata, config) do
+    # `:telemetry` permanently detaches a handler that raises, which would
+    # turn any data-shape surprise downstream (e.g. an unencodable payload
+    # in `Translator.apply_*`) into a BEAM-lifetime observability outage.
+    # Catch and log so a single bad event degrades to one missing span,
+    # not a dark bridge.
+    do_handle_event(event, measurements, metadata, config)
+  rescue
+    error ->
+      Logger.warning(fn ->
+        "ReqLLM.OpenTelemetry: handler crashed on #{inspect(event)} — " <>
+          Exception.format(:error, error, __STACKTRACE__)
+      end)
+
+      :ok
+  end
+
+  defp do_handle_event([:req_llm, :request, :start], _measurements, metadata, config) do
     ensure_span_table()
 
     if request_id = MapAccess.get(metadata, :request_id) do
@@ -532,7 +551,7 @@ defmodule ReqLLM.OpenTelemetry do
     :ok
   end
 
-  def handle_event([:req_llm, :request, :stop], measurements, metadata, config) do
+  defp do_handle_event([:req_llm, :request, :stop], measurements, metadata, config) do
     with request_id when is_binary(request_id) <- MapAccess.get(metadata, :request_id),
          {:ok, span} <- take_span(config, request_id) do
       stub = Mapper.request_stop(metadata, terminal_opts(config, measurements))
@@ -542,7 +561,7 @@ defmodule ReqLLM.OpenTelemetry do
     :ok
   end
 
-  def handle_event([:req_llm, :request, :exception], measurements, metadata, config) do
+  defp do_handle_event([:req_llm, :request, :exception], measurements, metadata, config) do
     with request_id when is_binary(request_id) <- MapAccess.get(metadata, :request_id),
          {:ok, span} <- take_span(config, request_id) do
       stub = Mapper.request_exception(metadata, terminal_opts(config, measurements))
