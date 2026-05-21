@@ -288,7 +288,6 @@ defmodule ReqLLM.Providers.XAI do
             :text,
             :stream,
             :model,
-            :provider,
             :provider_options,
             :xai_api_type
           ]
@@ -308,12 +307,12 @@ defmodule ReqLLM.Providers.XAI do
           Keyword.take(processed_opts, req_keys) ++
             [
               model: model.id,
-              provider: "xai",
               base_url: Keyword.get(processed_opts, :base_url, default_base_url()),
               xai_api_type: if(use_responses, do: :responses, else: :chat)
             ]
         )
         |> attach(model, processed_opts)
+        |> Req.Request.put_private(:req_llm_model, model)
 
       {:ok, request}
     end
@@ -721,7 +720,12 @@ defmodule ReqLLM.Providers.XAI do
       )
 
     base_url = ReqLLM.Provider.Options.effective_base_url(__MODULE__, model, processed_opts)
-    opts_with_base_url = Keyword.put(processed_opts, :base_url, base_url)
+
+    opts_with_base_url =
+      processed_opts
+      |> Keyword.put(:base_url, base_url)
+      |> Keyword.put(:req_llm_model, model)
+
     use_responses = use_responses_api?(opts_with_base_url)
 
     opts_with_base_url =

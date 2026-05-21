@@ -241,6 +241,51 @@ defmodule ReqLLM.Providers.XAITest do
       assert req.options[:xai_api_type] == :responses
       assert req.url.path == "/responses"
     end
+
+    test "non-streaming Responses API lookup uses xAI model metadata" do
+      warning =
+        ExUnit.CaptureIO.capture_io(:stderr, fn ->
+          {:ok, req} =
+            XAI.prepare_request(:chat, "xai:grok-4-fast-reasoning", "hi",
+              max_completion_tokens: 1024,
+              xai_tools: [%{type: "web_search"}]
+            )
+
+          encoded_req = XAI.encode_body(req)
+          decoded = Jason.decode!(encoded_req.body)
+
+          assert Enum.any?(decoded["tools"], fn tool -> tool["type"] == "web_search" end)
+        end)
+
+      refute warning =~ "Using unverified model"
+      refute warning =~ "openai:grok-4-fast-reasoning"
+    end
+
+    test "streaming Responses API lookup uses xAI model metadata" do
+      warning =
+        ExUnit.CaptureIO.capture_io(:stderr, fn ->
+          {:ok, model} = ReqLLM.model("xai:grok-4-fast-reasoning")
+          context = Context.new([Context.user("hi")])
+
+          {:ok, request} =
+            XAI.attach_stream(
+              model,
+              context,
+              [
+                max_completion_tokens: 1024,
+                xai_tools: [%{type: "web_search"}]
+              ],
+              ReqLLM.Finch
+            )
+
+          decoded = Jason.decode!(request.body)
+
+          assert Enum.any?(decoded["tools"], fn tool -> tool["type"] == "web_search" end)
+        end)
+
+      refute warning =~ "Using unverified model"
+      refute warning =~ "openai:grok-4-fast-reasoning"
+    end
   end
 
   describe "mode selection - response_format forcing" do

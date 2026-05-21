@@ -1351,27 +1351,47 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   end
 
   defp ensure_deep_research_tools(tools, request) do
+    case request_model(request) || lookup_request_model(request) do
+      %LLMDB.Model{} = model ->
+        maybe_ensure_deep_research_tools(tools, model)
+
+      _ ->
+        tools
+    end
+  end
+
+  defp request_model(%Req.Request{} = request) do
+    Req.Request.get_private(request, :req_llm_model) || request.options[:req_llm_model]
+  end
+
+  defp request_model(%{options: options}) do
+    options[:req_llm_model]
+  end
+
+  defp request_model(_), do: nil
+
+  defp lookup_request_model(request) do
     model_name = request.options[:model] || request.options[:id]
-    provider = request.options[:provider] || "openai"
 
     if is_binary(model_name) and model_name != "" do
-      case ReqLLM.model("#{provider}:#{model_name}") do
-        {:ok, model} ->
-          category = get_in(model, [Access.key(:extra, %{}), :category])
-
-          case category do
-            "deep_research" ->
-              ensure_deep_research_tool_present(tools)
-
-            _ ->
-              tools
-          end
-
-        _ ->
-          tools
+      case ReqLLM.model("openai:#{model_name}") do
+        {:ok, model} -> model
+        _ -> nil
       end
     else
-      tools
+      nil
+    end
+  end
+
+  defp maybe_ensure_deep_research_tools(tools, model) do
+    category = get_in(model, [Access.key(:extra, %{}), :category])
+
+    case category do
+      "deep_research" ->
+        ensure_deep_research_tool_present(tools)
+
+      _ ->
+        tools
     end
   end
 
