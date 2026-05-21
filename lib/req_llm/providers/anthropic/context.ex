@@ -172,7 +172,7 @@ defmodule ReqLLM.Providers.Anthropic.Context do
   end
 
   defp encode_system_message(%ReqLLM.Message{content: content}) when is_binary(content) do
-    if content == "" do
+    if String.trim(content) == "" do
       []
     else
       [%{type: "text", text: content}]
@@ -182,10 +182,18 @@ defmodule ReqLLM.Providers.Anthropic.Context do
   defp encode_system_message(%ReqLLM.Message{content: content}) when is_list(content) do
     content
     |> Enum.map(&encode_content_part/1)
-    |> Enum.reject(&is_nil/1)
+    |> Enum.reject(&blank_system_content_block?/1)
   end
 
   defp encode_system_message(_message), do: []
+
+  defp blank_system_content_block?(nil), do: true
+
+  defp blank_system_content_block?(%{type: "text", text: text}) when is_binary(text) do
+    String.trim(text) == ""
+  end
+
+  defp blank_system_content_block?(_block), do: false
 
   defp normalize_system_content([]), do: nil
   defp normalize_system_content([%{type: "text", text: text}]), do: text
