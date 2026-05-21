@@ -423,8 +423,14 @@ defmodule ReqLLM.OpenTelemetry do
     as a single `gen_ai.client.inference.operation.details` span event on
     the terminal lifecycle event. `true` is accepted as an alias for
     `:attributes`.
-  - `:langfuse` — when `true`, also adds `langfuse.observation.cost_details`
-    (JSON-encoded breakdown) when ReqLLM has computed a cost.
+  - `:langfuse` — when `true`, adds Langfuse-specific attributes the regular
+    `gen_ai.*` set doesn't cover:
+      * `langfuse.observation.cost_details` — JSON-encoded `input` / `output` /
+        `reasoning` / `total` breakdown, when ReqLLM has computed a cost.
+      * `langfuse.observation.completion_start_time` — ISO 8601 timestamp of
+        the first streamed chunk, used by Langfuse to compute time-to-first-
+        token. Only set for streaming requests that produced at least one
+        chunk.
 
   Content capture additionally requires `telemetry: [payloads: :raw]` on the
   call so the request/response payloads are available to map.
