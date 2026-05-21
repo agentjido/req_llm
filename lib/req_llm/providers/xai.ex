@@ -299,6 +299,7 @@ defmodule ReqLLM.Providers.XAI do
           Keyword.take(processed_opts, req_keys) ++
             [
               model: model.id,
+              provider: "xai",
               base_url: Keyword.get(processed_opts, :base_url, default_base_url()),
               xai_api_type: if(use_responses, do: :responses, else: :chat)
             ]

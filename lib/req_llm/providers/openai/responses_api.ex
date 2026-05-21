@@ -1352,9 +1352,10 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
 
   defp ensure_deep_research_tools(tools, request) do
     model_name = request.options[:model] || request.options[:id]
+    provider = request.options[:provider] || "openai"
 
     if is_binary(model_name) and model_name != "" do
-      case ReqLLM.model("openai:#{model_name}") do
+      case ReqLLM.model("#{provider}:#{model_name}") do
         {:ok, model} ->
           category = get_in(model, [Access.key(:extra, %{}), :category])
 
