@@ -45,6 +45,8 @@ defmodule ReqLLM.Provider.ChunkAccumulator do
   alias ReqLLM.Message.ContentPart
   alias ReqLLM.StreamChunk
 
+  require Logger
+
   @type tool_call_record :: %{
           id: String.t(),
           name: String.t(),
@@ -239,7 +241,7 @@ defmodule ReqLLM.Provider.ChunkAccumulator do
   defp response_tool_call(tool_call, fragments) do
     case Map.get(fragments, tool_call.index) do
       nil ->
-        Map.delete(tool_call, :index)
+        args_lost(tool_call, :missing_fragments)
 
       iodata ->
         json = IO.iodata_to_binary(iodata)
@@ -251,9 +253,40 @@ defmodule ReqLLM.Provider.ChunkAccumulator do
             |> Map.delete(:index)
 
           {:error, _} ->
-            Map.delete(tool_call, :index)
+            args_lost(tool_call, :json_decode_error, json)
         end
     end
+  end
+
+  defp args_lost(tool_call, reason, json \\ nil) do
+    metadata = %{
+      tool_name: tool_call.name,
+      tool_call_id: tool_call.id,
+      reason: reason
+    }
+
+    :telemetry.execute([:req_llm, :tool_call_args_lost], %{count: 1}, metadata)
+    Logger.warning(args_lost_message(metadata, json), Map.to_list(metadata))
+
+    tool_call
+    |> Map.delete(:index)
+    |> Map.update(:metadata, %{error: {:args_lost, reason}}, fn existing ->
+      Map.put(existing, :error, {:args_lost, reason})
+    end)
+  end
+
+  defp args_lost_message(%{reason: reason, tool_name: tool_name, tool_call_id: tool_call_id}, nil) do
+    "req_llm tool_call args_lost reason=#{reason} tool_name=#{tool_name} tool_call_id=#{tool_call_id}"
+  end
+
+  defp args_lost_message(
+         %{reason: reason, tool_name: tool_name, tool_call_id: tool_call_id},
+         json
+       ) do
+    json_prefix = String.slice(json, 0, 80)
+
+    "req_llm tool_call args_lost reason=#{reason} tool_name=#{tool_name} " <>
+      "tool_call_id=#{tool_call_id} json_prefix=#{json_prefix}"
   end
 
   @doc """
