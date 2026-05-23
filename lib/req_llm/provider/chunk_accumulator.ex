@@ -47,11 +47,33 @@ defmodule ReqLLM.Provider.ChunkAccumulator do
 
   require Logger
 
+  @tool_call_control_metadata_keys [
+    :id,
+    "id",
+    :index,
+    "index",
+    :name,
+    "name",
+    :builtin?,
+    "builtin?",
+    :start,
+    "start",
+    :expects_arg_fragments,
+    "expects_arg_fragments",
+    :args_fragment_expected?,
+    "args_fragment_expected?",
+    :done_at_unix_nano,
+    "done_at_unix_nano"
+  ]
+
   @type tool_call_record :: %{
-          id: String.t(),
-          name: String.t(),
-          arguments: term(),
-          index: non_neg_integer()
+          required(:id) => String.t(),
+          required(:name) => String.t(),
+          required(:arguments) => term(),
+          required(:index) => non_neg_integer(),
+          optional(:builtin?) => true,
+          optional(:expects_arg_fragments) => true,
+          optional(:metadata) => map()
         }
 
   @type t :: %__MODULE__{
@@ -116,6 +138,7 @@ defmodule ReqLLM.Provider.ChunkAccumulator do
           arguments: chunk.arguments || %{},
           index: index
         }
+        |> maybe_put_tool_call_metadata(metadata)
         |> maybe_mark_expects_arg_fragments(metadata)
         |> ToolCall.put_builtin_flag(ToolCall.flagged_builtin?(metadata))
 
@@ -188,6 +211,16 @@ defmodule ReqLLM.Provider.ChunkAccumulator do
       {Map.get(args, :index, Map.get(args, "index", 0)), fragment}
     else
       _ -> nil
+    end
+  end
+
+  defp maybe_put_tool_call_metadata(tool_call, metadata) do
+    metadata = Map.drop(metadata, @tool_call_control_metadata_keys)
+
+    if map_size(metadata) > 0 do
+      Map.put(tool_call, :metadata, metadata)
+    else
+      tool_call
     end
   end
 

@@ -616,6 +616,40 @@ defmodule ReqLLM.Providers.GoogleTest do
              "functionCall must not include 'id' — Google API rejects unknown fields"
     end
 
+    test "encode_body uses preserved tool call thought signature metadata" do
+      {:ok, model} = ReqLLM.model("google:gemini-2.5-flash")
+
+      tool_call =
+        "call_1"
+        |> ReqLLM.ToolCall.new("get_weather", ~s({"location":"SF"}))
+        |> ReqLLM.ToolCall.put_metadata(%{thought_signature: "real_signature_123"})
+
+      context =
+        Context.new([
+          Context.user("What's the weather?"),
+          Context.assistant("", tool_calls: [tool_call])
+        ])
+
+      mock_request = %Req.Request{
+        options: [
+          context: context,
+          model: model.model,
+          stream: false,
+          operation: :chat
+        ]
+      }
+
+      updated_request = Google.encode_body(mock_request)
+      decoded = Jason.decode!(updated_request.body)
+
+      [function_call_part] =
+        decoded["contents"]
+        |> Enum.flat_map(& &1["parts"])
+        |> Enum.filter(&Map.has_key?(&1, "functionCall"))
+
+      assert function_call_part["thoughtSignature"] == "real_signature_123"
+    end
+
     test "encode_body with Google-specific options" do
       {:ok, model} = ReqLLM.model("google:gemini-1.5-flash")
       context = context_fixture()

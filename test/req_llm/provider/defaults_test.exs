@@ -948,6 +948,24 @@ defmodule ReqLLM.Provider.DefaultsTest do
       assert tool_call.function.metadata.error == {:args_lost, :json_decode_error}
       assert ReqLLM.ToolCall.to_map(tool_call).metadata.error == {:args_lost, :json_decode_error}
     end
+
+    test "preserves non-error tool metadata while normalizing", %{model: model, context: context} do
+      chunks = [
+        StreamChunk.tool_call("search", %{"query" => "docs"}, %{
+          id: "call_meta",
+          index: 0,
+          thought_signature: "sig_123",
+          done_at_unix_nano: 123
+        })
+      ]
+
+      {:ok, response} =
+        ResponseBuilder.build_response(chunks, %{}, model: model, context: context)
+
+      assert [tool_call] = response.message.tool_calls
+      assert tool_call.function.metadata == %{thought_signature: "sig_123"}
+      assert ReqLLM.ToolCall.to_map(tool_call).metadata == %{thought_signature: "sig_123"}
+    end
   end
 
   describe "ResponseBuilder logprobs accumulation" do

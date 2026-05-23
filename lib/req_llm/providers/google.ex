@@ -2309,37 +2309,53 @@ defmodule ReqLLM.Providers.Google do
   # See: https://ai.google.dev/gemini-api/docs/thought-signatures
   @thought_sig_dummy Base.encode64("skip_thought_signature_validator")
 
-  defp convert_tool_call_to_function_call(%ReqLLM.ToolCall{
-         type: "function",
-         function: %{name: name, arguments: args}
-       }) do
+  defp convert_tool_call_to_function_call(
+         %ReqLLM.ToolCall{
+           type: "function",
+           function: %{name: name, arguments: args}
+         } = tool_call
+       ) do
     %{
       functionCall: %{name: name, args: Jason.decode!(args)},
-      thoughtSignature: @thought_sig_dummy
+      thoughtSignature: tool_call_thought_signature(tool_call)
     }
   end
 
-  defp convert_tool_call_to_function_call(%{
-         "type" => "function",
-         "function" => %{"name" => name, "arguments" => args}
-       }) do
+  defp convert_tool_call_to_function_call(
+         %{
+           "type" => "function",
+           "function" => %{"name" => name, "arguments" => args}
+         } = tool_call
+       ) do
     %{
       functionCall: %{name: name, args: Jason.decode!(args)},
-      thoughtSignature: @thought_sig_dummy
+      thoughtSignature: tool_call_thought_signature(tool_call)
     }
   end
 
-  defp convert_tool_call_to_function_call(%{
-         type: "function",
-         function: %{name: name, arguments: args}
-       }) do
+  defp convert_tool_call_to_function_call(
+         %{
+           type: "function",
+           function: %{name: name, arguments: args}
+         } = tool_call
+       ) do
     %{
       functionCall: %{name: name, args: Jason.decode!(args)},
-      thoughtSignature: @thought_sig_dummy
+      thoughtSignature: tool_call_thought_signature(tool_call)
     }
   end
 
   defp convert_tool_call_to_function_call(_), do: nil
+
+  defp tool_call_thought_signature(tool_call) do
+    metadata = ReqLLM.ToolCall.metadata(tool_call)
+
+    Map.get(metadata, :thought_signature) ||
+      Map.get(metadata, "thought_signature") ||
+      Map.get(tool_call, :thought_signature) ||
+      Map.get(tool_call, "thought_signature") ||
+      @thought_sig_dummy
+  end
 
   defp extract_content_text(content) when is_binary(content), do: content
 
