@@ -116,6 +116,7 @@ defmodule ReqLLM.Provider.ChunkAccumulator do
           arguments: chunk.arguments || %{},
           index: index
         }
+        |> maybe_mark_expects_arg_fragments(metadata)
         |> ToolCall.put_builtin_flag(ToolCall.flagged_builtin?(metadata))
 
       # Prepend (O(1)); finalizers reverse to restore arrival order.
@@ -190,6 +191,29 @@ defmodule ReqLLM.Provider.ChunkAccumulator do
     end
   end
 
+  defp maybe_mark_expects_arg_fragments(tool_call, metadata) do
+    if expects_arg_fragments?(metadata) do
+      Map.put(tool_call, :expects_arg_fragments, true)
+    else
+      tool_call
+    end
+  end
+
+  defp expects_arg_fragments?(metadata) do
+    [
+      :expects_arg_fragments,
+      "expects_arg_fragments",
+      :args_fragment_expected?,
+      "args_fragment_expected?",
+      :start,
+      "start"
+    ]
+    |> Enum.any?(&truthy?(Map.get(metadata, &1)))
+  end
+
+  defp truthy?(true), do: true
+  defp truthy?(_), do: false
+
   @doc "Returns the concatenated text content as a binary."
   @spec finalize_text(t()) :: String.t()
   def finalize_text(%__MODULE__{text_content: iodata}), do: IO.iodata_to_binary(iodata)
@@ -241,7 +265,11 @@ defmodule ReqLLM.Provider.ChunkAccumulator do
   defp response_tool_call(tool_call, fragments) do
     case Map.get(fragments, tool_call.index) do
       nil ->
-        args_lost(tool_call, :missing_fragments)
+        if Map.get(tool_call, :expects_arg_fragments, false) do
+          args_lost(tool_call, :missing_fragments)
+        else
+          drop_accumulator_fields(tool_call)
+        end
 
       iodata ->
         json = IO.iodata_to_binary(iodata)
@@ -250,7 +278,7 @@ defmodule ReqLLM.Provider.ChunkAccumulator do
           {:ok, args} ->
             tool_call
             |> Map.put(:arguments, args)
-            |> Map.delete(:index)
+            |> drop_accumulator_fields()
 
           {:error, _} ->
             args_lost(tool_call, :json_decode_error, json)
@@ -269,10 +297,16 @@ defmodule ReqLLM.Provider.ChunkAccumulator do
     Logger.warning(args_lost_message(metadata, json), Map.to_list(metadata))
 
     tool_call
-    |> Map.delete(:index)
+    |> drop_accumulator_fields()
     |> Map.update(:metadata, %{error: {:args_lost, reason}}, fn existing ->
       Map.put(existing, :error, {:args_lost, reason})
     end)
+  end
+
+  defp drop_accumulator_fields(tool_call) do
+    tool_call
+    |> Map.delete(:index)
+    |> Map.delete(:expects_arg_fragments)
   end
 
   defp args_lost_message(%{reason: reason, tool_name: tool_name, tool_call_id: tool_call_id}, nil) do

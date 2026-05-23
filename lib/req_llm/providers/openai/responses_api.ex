@@ -1005,7 +1005,13 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     chunks =
       case delta["name"] do
         name when is_binary(name) and name != "" ->
-          [ReqLLM.StreamChunk.tool_call(name, %{}, %{id: call_id, index: index})]
+          [
+            ReqLLM.StreamChunk.tool_call(name, %{}, %{
+              id: call_id,
+              index: index,
+              expects_arg_fragments: true
+            })
+          ]
 
         _ ->
           chunks
@@ -1074,7 +1080,13 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     index = data["output_index"] || data["index"] || 0
     call_id = data["call_id"] || data["id"] || "call_#{:erlang.unique_integer([:positive])}"
 
-    [ReqLLM.StreamChunk.tool_call(name, %{}, %{id: call_id, index: index})]
+    [
+      ReqLLM.StreamChunk.tool_call(name, %{}, %{
+        id: call_id,
+        index: index,
+        expects_arg_fragments: true
+      })
+    ]
   end
 
   defp handle_function_call_name_delta(_), do: []
@@ -1098,7 +1110,13 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
         name = item["name"] || item[:name]
 
         if name && name != "" do
-          [ReqLLM.StreamChunk.tool_call(name, %{}, %{id: call_id, index: index})]
+          [
+            ReqLLM.StreamChunk.tool_call(name, %{}, %{
+              id: call_id,
+              index: index,
+              expects_arg_fragments: true
+            })
+          ]
         else
           []
         end
@@ -1198,7 +1216,13 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
 
     chunks =
       if is_binary(name) and name != "" and not tool_call_emitted?(state, index) do
-        [ReqLLM.StreamChunk.tool_call(name, %{}, %{id: call_id, index: index})]
+        [
+          ReqLLM.StreamChunk.tool_call(name, %{}, %{
+            id: call_id,
+            index: index,
+            expects_arg_fragments: true
+          })
+        ]
       else
         []
       end

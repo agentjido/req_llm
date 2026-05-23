@@ -934,6 +934,20 @@ defmodule ReqLLM.Provider.DefaultsTest do
       assert response.message.reasoning_details == reasoning_details
       assert length(response.message.tool_calls) == 1
     end
+
+    test "preserves tool call metadata while normalizing", %{model: model, context: context} do
+      chunks = [
+        StreamChunk.tool_call("get_weather", %{}, %{id: "call_123", index: 0}),
+        StreamChunk.meta(%{tool_call_args: %{index: 0, fragment: "{not-json"}})
+      ]
+
+      {:ok, response} =
+        ResponseBuilder.build_response(chunks, %{}, model: model, context: context)
+
+      assert [tool_call] = response.message.tool_calls
+      assert tool_call.function.metadata.error == {:args_lost, :json_decode_error}
+      assert ReqLLM.ToolCall.to_map(tool_call).metadata.error == {:args_lost, :json_decode_error}
+    end
   end
 
   describe "ResponseBuilder logprobs accumulation" do

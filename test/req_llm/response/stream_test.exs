@@ -215,6 +215,7 @@ defmodule ReqLLM.Response.StreamTest do
 
       assert length(summary.tool_calls) == 1
       assert hd(summary.tool_calls).arguments == %{preset: "value"}
+      refute Map.has_key?(hd(summary.tool_calls), :metadata)
     end
 
     test "generates unique id when not provided" do

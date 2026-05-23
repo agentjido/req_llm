@@ -1312,7 +1312,11 @@ defmodule ReqLLM.Provider.Defaults do
          "function" => %{"name" => name}
        })
        when is_binary(name) do
-    ReqLLM.StreamChunk.tool_call(name, %{}, %{id: id, index: index})
+    ReqLLM.StreamChunk.tool_call(name, %{}, %{
+      id: id,
+      index: index,
+      expects_arg_fragments: true
+    })
   end
 
   # Mistral API omits "type" field - add it and delegate (must come before partial handlers)

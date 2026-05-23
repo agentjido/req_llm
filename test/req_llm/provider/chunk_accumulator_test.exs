@@ -175,7 +175,42 @@ defmodule ReqLLM.Provider.ChunkAccumulatorTest do
           metadata: %{tool_call_args: %{index: 0, fragment: "not-json"}}
         })
 
-      assert [%{arguments: %{"raw" => "args"}}] =
+      assert [
+               %{
+                 arguments: %{"raw" => "args"},
+                 metadata: %{error: {:args_lost, :json_decode_error}}
+               }
+             ] =
+               ChunkAccumulator.finalize_tool_calls_for_response(acc)
+    end
+
+    test "does not mark direct arguments as missing fragments" do
+      acc =
+        ChunkAccumulator.new()
+        |> ChunkAccumulator.push(%StreamChunk{
+          type: :tool_call,
+          name: "get_weather",
+          arguments: %{"city" => "NYC"},
+          metadata: %{id: "call_1", index: 0}
+        })
+
+      assert [%{arguments: %{"city" => "NYC"}} = tool_call] =
+               ChunkAccumulator.finalize_tool_calls_for_response(acc)
+
+      refute Map.has_key?(tool_call, :metadata)
+    end
+
+    test "marks missing expected argument fragments" do
+      acc =
+        ChunkAccumulator.new()
+        |> ChunkAccumulator.push(%StreamChunk{
+          type: :tool_call,
+          name: "get_weather",
+          arguments: %{},
+          metadata: %{id: "call_1", index: 0, start: true}
+        })
+
+      assert [%{metadata: %{error: {:args_lost, :missing_fragments}}}] =
                ChunkAccumulator.finalize_tool_calls_for_response(acc)
     end
 
