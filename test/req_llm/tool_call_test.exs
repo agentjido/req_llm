@@ -127,6 +127,21 @@ defmodule ReqLLM.ToolCallTest do
     end
   end
 
+  describe "put_metadata/2" do
+    test "merges metadata into existing metadata" do
+      tool_call =
+        "call_123"
+        |> ToolCall.new("search", "{}")
+        |> ToolCall.put_metadata(%{thought_signature: "sig_123"})
+        |> ToolCall.put_metadata(%{raw_arguments: "{}"})
+
+      assert ToolCall.metadata(tool_call) == %{
+               thought_signature: "sig_123",
+               raw_arguments: "{}"
+             }
+    end
+  end
+
   describe "args_map/1" do
     test "decodes valid JSON arguments to map" do
       args = ~s({"location":"Paris","unit":"celsius"})

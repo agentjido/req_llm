@@ -350,10 +350,8 @@ defmodule ReqLLM.Provider.ChunkAccumulator do
          %{reason: reason, tool_name: tool_name, tool_call_id: tool_call_id},
          json
        ) do
-    json_prefix = String.slice(json, 0, 80)
-
     "req_llm tool_call args_lost reason=#{reason} tool_name=#{tool_name} " <>
-      "tool_call_id=#{tool_call_id} json_prefix=#{json_prefix}"
+      "tool_call_id=#{tool_call_id} json_bytes=#{byte_size(json)}"
   end
 
   @doc """
@@ -397,15 +395,13 @@ defmodule ReqLLM.Provider.ChunkAccumulator do
   defp message_tool_call_struct(tool_call, fragments) do
     args = message_tool_call_args(tool_call, fragments)
 
-    # The accumulator stores tool calls as flat maps (no OpenAI `:function`
-    # nesting), so `flagged_builtin?/1` is the correct check — `builtin?/1`
-    # would also work but pays for the unwrap that can't match here.
     constructor =
       if ToolCall.flagged_builtin?(tool_call),
         do: &ToolCall.new_builtin/3,
         else: &ToolCall.new/3
 
     constructor.(tool_call.id, tool_call.name, encode_tool_call_args(args))
+    |> ToolCall.put_metadata(ToolCall.metadata(tool_call))
   end
 
   defp message_tool_call_args(%{index: index, arguments: arguments}, fragments) do

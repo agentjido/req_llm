@@ -168,7 +168,13 @@ defmodule ReqLLM.ToolCall do
   @spec put_metadata(t(), map()) :: t()
   def put_metadata(%__MODULE__{} = call, metadata)
       when is_map(metadata) and map_size(metadata) > 0 do
-    %{call | function: Map.put(call.function, :metadata, metadata)}
+    function =
+      Map.update(call.function, :metadata, metadata, fn
+        existing when is_map(existing) -> Map.merge(existing, metadata)
+        _existing -> metadata
+      end)
+
+    %{call | function: function}
   end
 
   def put_metadata(%__MODULE__{} = call, _metadata), do: call

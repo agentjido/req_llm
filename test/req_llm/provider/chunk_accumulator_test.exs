@@ -1,6 +1,8 @@
 defmodule ReqLLM.Provider.ChunkAccumulatorTest do
   use ExUnit.Case, async: true
 
+  import ExUnit.CaptureLog
+
   alias ReqLLM.{Message, StreamChunk, ToolCall}
   alias ReqLLM.Message.ContentPart
   alias ReqLLM.Provider.ChunkAccumulator
@@ -188,6 +190,31 @@ defmodule ReqLLM.Provider.ChunkAccumulatorTest do
       assert_receive {:args_lost, "call_invalid_json", %{count: 1}, %{reason: :json_decode_error}}
     end
 
+    test "does not log raw argument fragment content when JSON decode fails" do
+      acc =
+        ChunkAccumulator.new()
+        |> ChunkAccumulator.push(%StreamChunk{
+          type: :tool_call,
+          name: "get_secret",
+          arguments: %{},
+          metadata: %{id: "call_secret", index: 0}
+        })
+        |> ChunkAccumulator.push(%StreamChunk{
+          type: :meta,
+          metadata: %{tool_call_args: %{index: 0, fragment: ~s({"token":"secret-value")}}
+        })
+
+      log =
+        capture_log(fn ->
+          ChunkAccumulator.finalize_tool_calls_for_response(acc)
+        end)
+
+      assert log =~ "reason=json_decode_error"
+      assert log =~ "tool_call_id=call_secret"
+      assert log =~ "json_bytes="
+      refute log =~ "secret-value"
+    end
+
     test "does not mark direct arguments as missing fragments" do
       attach_args_lost_handler("call_direct_args")
 
@@ -317,6 +344,27 @@ defmodule ReqLLM.Provider.ChunkAccumulatorTest do
 
       assert %Message{tool_calls: [tool_call]} = ChunkAccumulator.finalize_message(acc)
       assert ToolCall.builtin?(tool_call)
+    end
+
+    test "preserves non-control metadata on emitted ToolCall struct" do
+      acc =
+        ChunkAccumulator.push(
+          ChunkAccumulator.new(),
+          %StreamChunk{
+            type: :tool_call,
+            name: "search",
+            arguments: %{"query" => "docs"},
+            metadata: %{
+              id: "call_meta",
+              index: 0,
+              thought_signature: "sig_123",
+              done_at_unix_nano: 123
+            }
+          }
+        )
+
+      assert %Message{tool_calls: [tool_call]} = ChunkAccumulator.finalize_message(acc)
+      assert ToolCall.metadata(tool_call) == %{thought_signature: "sig_123"}
     end
   end
 
