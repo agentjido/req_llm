@@ -96,7 +96,7 @@ defmodule ReqLLM.OpenTelemetry.Metrics do
   @ttfc_metric "gen_ai.client.operation.time_to_first_chunk"
   @tpoc_metric "gen_ai.client.operation.time_per_output_chunk"
 
-  @type record :: %{
+  @type histogram_record :: %{
           name: String.t(),
           value: number(),
           unit: String.t(),
@@ -120,7 +120,7 @@ defmodule ReqLLM.OpenTelemetry.Metrics do
   unavailable — without a duration the per-request metric set isn't
   meaningful.
   """
-  @spec stop(map(), integer() | nil) :: [record()]
+  @spec stop(map(), integer() | nil) :: [histogram_record()]
   def stop(_metadata, nil), do: []
 
   def stop(metadata, duration) when is_integer(duration) do
@@ -138,7 +138,7 @@ defmodule ReqLLM.OpenTelemetry.Metrics do
   streaming histograms are intentionally skipped — usage and chunk timings
   are not reliable on exception. Returns `[]` when `duration` is unavailable.
   """
-  @spec exception(map(), integer() | nil) :: [record()]
+  @spec exception(map(), integer() | nil) :: [histogram_record()]
   def exception(_metadata, nil), do: []
 
   def exception(metadata, duration) when is_integer(duration) do

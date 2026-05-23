@@ -37,7 +37,7 @@ defmodule ReqLLM.Telemetry.OpenTelemetry do
   @type content_mode :: :none | :attributes | :event
   @type span_status :: :ok | {:error, String.t()}
   @type otel_event :: %{name: String.t(), attributes: map()}
-  @type metric_record :: map()
+  @type metric_record :: Metrics.histogram_record()
 
   @type tool_span_stub :: %{
           name: String.t(),
