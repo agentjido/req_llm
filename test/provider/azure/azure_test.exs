@@ -1952,6 +1952,74 @@ defmodule ReqLLM.Providers.AzureTest do
     end
   end
 
+  describe "Mistral family routing" do
+    import ExUnit.CaptureLog
+
+    test "resolves Mistral family and routes through OpenAI formatter" do
+      model = %LLMDB.Model{
+        id: "mistral-large-2411",
+        provider: :azure,
+        capabilities: %{chat: true},
+        extra: %{}
+      }
+
+      {:ok, _request} =
+        Azure.prepare_request(
+          :chat,
+          model,
+          "Hello",
+          api_key: "test-key",
+          base_url: "https://my-resource.services.ai.azure.com/openai/v1",
+          deployment: "mistral-large-2411"
+        )
+    end
+
+    test "translate_options delegates Mistral to OpenAI" do
+      model = %LLMDB.Model{
+        id: "mistral-large-2411",
+        provider: :azure,
+        capabilities: %{chat: true},
+        extra: %{}
+      }
+
+      {translated, _warnings} = Azure.translate_options(:chat, model, temperature: 0.7)
+
+      assert Keyword.get(translated, :temperature) == 0.7
+    end
+
+    test "format_request does not warn for Mistral models" do
+      context = ReqLLM.Context.new([ReqLLM.Context.user("Hello")])
+
+      log =
+        capture_log(fn ->
+          _body = Azure.OpenAI.format_request("mistral-large-2411", context, stream: false)
+        end)
+
+      refute log =~ "does not appear to be OpenAI-compatible"
+    end
+
+    test "uses default 30s timeout for Mistral models" do
+      model = %LLMDB.Model{
+        id: "mistral-large-2411",
+        provider: :azure,
+        capabilities: %{chat: true},
+        extra: %{}
+      }
+
+      {:ok, request} =
+        Azure.prepare_request(
+          :chat,
+          model,
+          "Hello",
+          api_key: "test-key",
+          base_url: "https://my-resource.services.ai.azure.com/openai/v1",
+          deployment: "mistral-large-2411"
+        )
+
+      assert request.options[:receive_timeout] == 30_000
+    end
+  end
+
   defp traditional_openai_model do
     %LLMDB.Model{
       id: "gpt-4o",

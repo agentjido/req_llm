@@ -57,6 +57,10 @@ defmodule ReqLLM.Providers.Azure do
       export AZURE_ANTHROPIC_API_KEY=your-api-key
       export AZURE_ANTHROPIC_BASE_URL=https://your-anthropic-resource.openai.azure.com/openai
 
+      # For Mistral models (mistral-*)
+      export AZURE_MISTRAL_API_KEY=your-api-key
+      export AZURE_MISTRAL_BASE_URL=https://your-mistral-resource.services.ai.azure.com
+
       # Universal fallbacks (if all models share the same Azure resource)
       export AZURE_API_KEY=your-api-key
       export AZURE_BASE_URL=https://your-resource.openai.azure.com/openai
