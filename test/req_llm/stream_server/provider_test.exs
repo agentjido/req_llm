@@ -144,6 +144,51 @@ defmodule ReqLLM.StreamServer.ProviderTest do
 
       StreamServer.cancel(server)
     end
+
+    test "emits Google JSON array chunks before final array terminator" do
+      model = %LLMDB.Model{provider: :google, id: "gemini-3.1-pro-preview"}
+      server = start_server(provider_mod: ReqLLM.Providers.Google, model: model)
+      _task = mock_http_task(server)
+
+      data = ~s([{"candidates":[{"content":{"parts":[{"text":"early"}]}}]})
+
+      assert :ok = StreamServer.http_event(server, {:data, data})
+      assert {:ok, chunk} = StreamServer.next(server, 100)
+      assert chunk.type == :content
+      assert chunk.text == "early"
+
+      assert :ok = StreamServer.http_event(server, {:data, "]"})
+
+      StreamServer.cancel(server)
+    end
+
+    test "waits for Google JSON array close before terminal metadata completes stream" do
+      model = %LLMDB.Model{provider: :google, id: "gemini-3.1-pro-preview"}
+      server = start_server(provider_mod: ReqLLM.Providers.Google, model: model)
+      _task = mock_http_task(server)
+
+      first =
+        ~s([{"candidates":[{"content":{"parts":[{"text":"early"}]}}]},)
+
+      terminal =
+        ~s({"candidates":[{"content":{"parts":[{"text":"late"}]},"finishReason":"STOP"}]})
+
+      assert :ok = StreamServer.http_event(server, {:data, first})
+      assert {:ok, first_chunk} = StreamServer.next(server, 100)
+      assert first_chunk.text == "early"
+
+      assert :ok = StreamServer.http_event(server, {:data, terminal})
+      assert {:error, :timeout} = StreamServer.await_metadata(server, 50)
+
+      assert :ok = StreamServer.http_event(server, {:data, "]"})
+      assert {:ok, final_chunk} = StreamServer.next(server, 100)
+      assert final_chunk.text == "late"
+
+      assert {:ok, metadata} = StreamServer.await_metadata(server, 100)
+      assert metadata.finish_reason == :stop
+
+      StreamServer.cancel(server)
+    end
   end
 
   describe "provider state management" do

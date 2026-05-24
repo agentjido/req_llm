@@ -2089,8 +2089,12 @@ defmodule ReqLLM.Providers.Google do
   end
 
   @impl ReqLLM.Provider
-  def parse_stream_protocol(chunk, {:json_array, buffer}) do
-    parse_json_array_protocol(buffer <> chunk)
+  def parse_stream_protocol(chunk, {:json_array, %{buffer: _buffer} = state}) do
+    parse_json_array_protocol(chunk, state)
+  end
+
+  def parse_stream_protocol(chunk, {:json_array, buffer}) when is_binary(buffer) do
+    parse_json_array_protocol(chunk, %{buffer: buffer, started?: true})
   end
 
   def parse_stream_protocol(chunk, state) do
@@ -2738,17 +2742,78 @@ defmodule ReqLLM.Providers.Google do
   defp json_array_buffer(_state), do: ""
 
   defp parse_json_array_protocol(data) do
-    if json_array_complete?(data) do
-      decode_json_array_protocol(data)
-    else
-      {:incomplete, {:json_array, data}}
+    parse_json_array_protocol("", json_array_state(data, false))
+  end
+
+  defp parse_json_array_protocol(chunk, %{buffer: buffer} = state) do
+    state = normalize_json_array_state(state)
+
+    case drain_json_array_protocol(%{state | buffer: buffer <> chunk}, []) do
+      {:ok, [], nil} -> {:ok, [], nil}
+      {:ok, [], next_state} -> {:incomplete, {:json_array, next_state}}
+      {:ok, events, nil} -> {:ok, events, nil}
+      {:ok, events, next_state} -> {:ok, events, {:json_array, next_state}}
+      {:error, reason} -> {:error, reason}
     end
   end
 
-  defp decode_json_array_protocol(data) do
-    case Jason.decode(data) do
-      {:ok, events} when is_list(events) ->
-        {:ok, Enum.map(events, &%{data: &1}), nil}
+  defp json_array_state(buffer, started?) do
+    %{buffer: buffer, started?: started?, pending_events: []}
+  end
+
+  defp normalize_json_array_state(state) do
+    Map.put_new(state, :pending_events, [])
+  end
+
+  defp drain_json_array_protocol(%{buffer: buffer, started?: false} = state, events) do
+    case String.trim_leading(buffer) do
+      "" ->
+        {:ok, Enum.reverse(events), %{state | buffer: ""}}
+
+      <<?[, rest::binary>> ->
+        drain_json_array_protocol(%{state | buffer: rest, started?: true}, events)
+
+      _other ->
+        {:error, :invalid_json_array_stream}
+    end
+  end
+
+  defp drain_json_array_protocol(%{buffer: buffer, started?: true} = state, events) do
+    buffer = trim_json_array_element_prefix(buffer)
+
+    case buffer do
+      "" ->
+        {:ok, Enum.reverse(events), %{state | buffer: ""}}
+
+      <<?], rest::binary>> ->
+        if String.trim_leading(rest) == "" do
+          {:ok, complete_json_array_events(state, events), nil}
+        else
+          {:error, :invalid_json_array_stream}
+        end
+
+      _other ->
+        parse_json_array_element(buffer, state, events)
+    end
+  end
+
+  defp parse_json_array_element(buffer, state, events) do
+    case take_complete_json_container(buffer) do
+      {:ok, json, rest} ->
+        decode_json_array_element(json, rest, state, events)
+
+      :incomplete ->
+        {:ok, Enum.reverse(events), %{state | buffer: buffer}}
+
+      {:error, reason} ->
+        {:error, reason}
+    end
+  end
+
+  defp decode_json_array_element(json, rest, state, events) do
+    case Jason.decode(json) do
+      {:ok, event} when is_map(event) ->
+        queue_json_array_event(event, rest, state, events)
 
       {:ok, _other} ->
         {:error, :invalid_json_array_stream}
@@ -2758,51 +2823,104 @@ defmodule ReqLLM.Providers.Google do
     end
   end
 
-  defp json_array_complete?(data) do
-    case String.trim_leading(data) do
-      <<"[", rest::binary>> -> json_array_complete?(rest, 1, false, false)
-      _ -> false
+  defp queue_json_array_event(event, rest, state, events) do
+    wrapped_event = %{data: event}
+
+    if json_array_terminal_event?(event) or state.pending_events != [] do
+      pending_events = [wrapped_event | state.pending_events]
+      drain_json_array_protocol(%{state | buffer: rest, pending_events: pending_events}, events)
+    else
+      drain_json_array_protocol(%{state | buffer: rest}, [wrapped_event | events])
     end
   end
 
-  defp json_array_complete?(<<>>, _depth, _in_string?, _escaped?), do: false
-
-  defp json_array_complete?(<<_byte, rest::binary>>, depth, true, true) do
-    json_array_complete?(rest, depth, true, false)
+  defp complete_json_array_events(state, events) do
+    Enum.reverse(events) ++ Enum.reverse(state.pending_events)
   end
 
-  defp json_array_complete?(<<?\\, rest::binary>>, depth, true, false) do
-    json_array_complete?(rest, depth, true, true)
+  defp json_array_terminal_event?(%{
+         "candidates" => [%{"finishReason" => finish_reason} | _]
+       })
+       when finish_reason != nil,
+       do: true
+
+  defp json_array_terminal_event?(%{
+         "candidates" => [%{"content" => %{"parts" => parts}} | _]
+       })
+       when is_list(parts) do
+    false
   end
 
-  defp json_array_complete?(<<?", rest::binary>>, depth, true, false) do
-    json_array_complete?(rest, depth, false, false)
+  defp json_array_terminal_event?(%{"usageMetadata" => _usage}), do: true
+
+  defp json_array_terminal_event?(_event), do: false
+
+  defp trim_json_array_element_prefix(buffer) do
+    buffer
+    |> String.trim_leading()
+    |> drop_json_array_comma()
+    |> String.trim_leading()
   end
 
-  defp json_array_complete?(<<_byte, rest::binary>>, depth, true, false) do
-    json_array_complete?(rest, depth, true, false)
+  defp drop_json_array_comma(<<?,, rest::binary>>), do: rest
+  defp drop_json_array_comma(buffer), do: buffer
+
+  defp take_complete_json_container(<<?{, _rest::binary>> = buffer) do
+    scan_json_container(buffer, buffer, 0, 0, false, false)
   end
 
-  defp json_array_complete?(<<?", rest::binary>>, depth, false, false) do
-    json_array_complete?(rest, depth, true, false)
+  defp take_complete_json_container(<<?[, _rest::binary>> = buffer) do
+    scan_json_container(buffer, buffer, 0, 0, false, false)
   end
 
-  defp json_array_complete?(<<byte, rest::binary>>, depth, false, false)
-       when byte in [?[, ?{] do
-    json_array_complete?(rest, depth + 1, false, false)
+  defp take_complete_json_container(_buffer), do: {:error, :invalid_json_array_stream}
+
+  defp scan_json_container(_original, <<>>, _offset, _depth, _in_string?, _escaped?),
+    do: :incomplete
+
+  defp scan_json_container(original, <<_byte, rest::binary>>, offset, depth, true, true) do
+    scan_json_container(original, rest, offset + 1, depth, true, false)
   end
 
-  defp json_array_complete?(<<byte, rest::binary>>, depth, false, false)
-       when byte in [?\], ?}] do
+  defp scan_json_container(original, <<?\\, rest::binary>>, offset, depth, true, false) do
+    scan_json_container(original, rest, offset + 1, depth, true, true)
+  end
+
+  defp scan_json_container(original, <<?", rest::binary>>, offset, depth, true, false) do
+    scan_json_container(original, rest, offset + 1, depth, false, false)
+  end
+
+  defp scan_json_container(original, <<_byte, rest::binary>>, offset, depth, true, false) do
+    scan_json_container(original, rest, offset + 1, depth, true, false)
+  end
+
+  defp scan_json_container(original, <<?", rest::binary>>, offset, depth, false, false) do
+    scan_json_container(original, rest, offset + 1, depth, true, false)
+  end
+
+  defp scan_json_container(original, <<byte, rest::binary>>, offset, depth, false, false)
+       when byte in [?{, ?[] do
+    scan_json_container(original, rest, offset + 1, depth + 1, false, false)
+  end
+
+  defp scan_json_container(original, <<byte, rest::binary>>, offset, depth, false, false)
+       when byte in [?}, ?]] do
     case depth - 1 do
-      0 -> String.trim_leading(rest) == ""
-      next_depth when next_depth > 0 -> json_array_complete?(rest, next_depth, false, false)
-      _ -> false
+      0 ->
+        length = offset + 1
+        <<json::binary-size(length), remaining::binary>> = original
+        {:ok, json, remaining}
+
+      next_depth when next_depth > 0 ->
+        scan_json_container(original, rest, offset + 1, next_depth, false, false)
+
+      _other ->
+        {:error, :invalid_json_array_stream}
     end
   end
 
-  defp json_array_complete?(<<_byte, rest::binary>>, depth, false, false) do
-    json_array_complete?(rest, depth, false, false)
+  defp scan_json_container(original, <<_byte, rest::binary>>, offset, depth, false, false) do
+    scan_json_container(original, rest, offset + 1, depth, false, false)
   end
 
   defp extract_chunks_from_parts(parts) do

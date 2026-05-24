@@ -14,11 +14,10 @@ defmodule ReqLLM.Providers.GoogleVertex.GeminiTest do
 
   describe "stream protocol parsing" do
     test "uses Google JSON array protocol parsing for Gemini chunks" do
-      assert {:incomplete, state} =
+      assert {:ok, [%{data: %{"text" => "vertex"}}], state} =
                GoogleVertex.parse_stream_protocol(~s([{"text":"vertex"}), nil)
 
-      assert {:ok, [%{data: %{"text" => "vertex"}}], nil} =
-               GoogleVertex.parse_stream_protocol("]", state)
+      assert {:ok, [], nil} = GoogleVertex.parse_stream_protocol("]", state)
     end
   end
 
