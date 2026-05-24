@@ -57,6 +57,10 @@ defmodule ReqLLM.Providers.Azure do
       export AZURE_ANTHROPIC_API_KEY=your-api-key
       export AZURE_ANTHROPIC_BASE_URL=https://your-anthropic-resource.openai.azure.com/openai
 
+      # For Mistral models (mistral-*)
+      export AZURE_MISTRAL_API_KEY=your-api-key
+      export AZURE_MISTRAL_BASE_URL=https://your-mistral-resource.services.ai.azure.com
+
       # Universal fallbacks (if all models share the same Azure resource)
       export AZURE_API_KEY=your-api-key
       export AZURE_BASE_URL=https://your-resource.openai.azure.com/openai
@@ -283,7 +287,8 @@ defmodule ReqLLM.Providers.Azure do
     "claude" => __MODULE__.Anthropic,
     "grok" => __MODULE__.OpenAI,
     "Kimi" => __MODULE__.OpenAI,
-    "kimi" => __MODULE__.OpenAI
+    "kimi" => __MODULE__.OpenAI,
+    "mistral" => __MODULE__.OpenAI
   }
 
   @model_family_prefixes @model_families |> Map.keys() |> Enum.sort_by(&String.length/1, :desc)
@@ -303,7 +308,8 @@ defmodule ReqLLM.Providers.Azure do
     "deepseek" => "AZURE_DEEPSEEK_BASE_URL",
     "mai-ds" => "AZURE_MAI_BASE_URL",
     "Kimi" => "AZURE_KIMI_BASE_URL",
-    "kimi" => "AZURE_KIMI_BASE_URL"
+    "kimi" => "AZURE_KIMI_BASE_URL",
+    "mistral" => "AZURE_MISTRAL_BASE_URL"
   }
 
   @family_api_key_env_vars %{
@@ -317,7 +323,8 @@ defmodule ReqLLM.Providers.Azure do
     "deepseek" => "AZURE_DEEPSEEK_API_KEY",
     "mai-ds" => "AZURE_MAI_API_KEY",
     "Kimi" => "AZURE_KIMI_API_KEY",
-    "kimi" => "AZURE_KIMI_API_KEY"
+    "kimi" => "AZURE_KIMI_API_KEY",
+    "mistral" => "AZURE_MISTRAL_API_KEY"
   }
 
   @doc """
@@ -827,7 +834,17 @@ defmodule ReqLLM.Providers.Azure do
 
     case get_model_family(model_id) do
       family
-      when family in ["gpt", "text-embedding", "o1", "o3", "o4", "deepseek", "mai-ds", "grok"] ->
+      when family in [
+             "gpt",
+             "text-embedding",
+             "o1",
+             "o3",
+             "o4",
+             "deepseek",
+             "mai-ds",
+             "grok",
+             "mistral"
+           ] ->
         synthetic_model = %{model | provider: :openai}
         ReqLLM.Providers.OpenAI.translate_options(operation, synthetic_model, opts)
 

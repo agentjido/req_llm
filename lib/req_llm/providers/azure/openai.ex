@@ -55,7 +55,8 @@ defmodule ReqLLM.Providers.Azure.OpenAI do
     "mai-ds",
     "grok",
     "Kimi",
-    "kimi"
+    "kimi",
+    "mistral"
   ]
 
   @anthropic_specific_options [
