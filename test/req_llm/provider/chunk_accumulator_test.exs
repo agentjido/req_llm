@@ -1,6 +1,8 @@
 defmodule ReqLLM.Provider.ChunkAccumulatorTest do
   use ExUnit.Case, async: true
 
+  import ExUnit.CaptureLog
+
   alias ReqLLM.{Message, StreamChunk, ToolCall}
   alias ReqLLM.Message.ContentPart
   alias ReqLLM.Provider.ChunkAccumulator
@@ -162,21 +164,126 @@ defmodule ReqLLM.Provider.ChunkAccumulatorTest do
     end
 
     test "falls back to raw arguments when fragments fail to decode" do
+      attach_args_lost_handler("call_invalid_json")
+
       acc =
         ChunkAccumulator.new()
         |> ChunkAccumulator.push(%StreamChunk{
           type: :tool_call,
           name: "get_weather",
           arguments: %{"raw" => "args"},
-          metadata: %{id: "call_1", index: 0}
+          metadata: %{id: "call_invalid_json", index: 0}
         })
         |> ChunkAccumulator.push(%StreamChunk{
           type: :meta,
           metadata: %{tool_call_args: %{index: 0, fragment: "not-json"}}
         })
 
-      assert [%{arguments: %{"raw" => "args"}}] =
+      assert [
+               %{
+                 arguments: %{"raw" => "args"},
+                 metadata: %{error: {:args_lost, :json_decode_error}}
+               }
+             ] =
                ChunkAccumulator.finalize_tool_calls_for_response(acc)
+
+      assert_receive {:args_lost, "call_invalid_json", %{count: 1}, %{reason: :json_decode_error}}
+    end
+
+    test "does not log raw argument fragment content when JSON decode fails" do
+      acc =
+        ChunkAccumulator.new()
+        |> ChunkAccumulator.push(%StreamChunk{
+          type: :tool_call,
+          name: "get_secret",
+          arguments: %{},
+          metadata: %{id: "call_secret", index: 0}
+        })
+        |> ChunkAccumulator.push(%StreamChunk{
+          type: :meta,
+          metadata: %{tool_call_args: %{index: 0, fragment: ~s({"token":"secret-value")}}
+        })
+
+      log =
+        capture_log(fn ->
+          ChunkAccumulator.finalize_tool_calls_for_response(acc)
+        end)
+
+      assert log =~ "reason=json_decode_error"
+      assert log =~ "tool_call_id=call_secret"
+      assert log =~ "json_bytes="
+      refute log =~ "secret-value"
+    end
+
+    test "does not mark direct arguments as missing fragments" do
+      attach_args_lost_handler("call_direct_args")
+
+      acc =
+        ChunkAccumulator.new()
+        |> ChunkAccumulator.push(%StreamChunk{
+          type: :tool_call,
+          name: "get_weather",
+          arguments: %{"city" => "NYC"},
+          metadata: %{id: "call_direct_args", index: 0}
+        })
+
+      assert [%{arguments: %{"city" => "NYC"}} = tool_call] =
+               ChunkAccumulator.finalize_tool_calls_for_response(acc)
+
+      refute Map.has_key?(tool_call, :metadata)
+      refute_receive {:args_lost, "call_direct_args", _, _}
+    end
+
+    test "preserves non-control tool metadata" do
+      acc =
+        ChunkAccumulator.new()
+        |> ChunkAccumulator.push(%StreamChunk{
+          type: :tool_call,
+          name: "search",
+          arguments: %{"query" => "docs"},
+          metadata: %{
+            id: "call_meta",
+            index: 0,
+            builtin?: true,
+            done_at_unix_nano: 123,
+            thought_signature: "sig_123",
+            raw_arguments: ~s({"query":"docs"})
+          }
+        })
+
+      assert [
+               %{
+                 builtin?: true,
+                 metadata: %{
+                   thought_signature: "sig_123",
+                   raw_arguments: ~s({"query":"docs"})
+                 }
+               } = tool_call
+             ] = ChunkAccumulator.finalize_tool_calls_for_response(acc)
+
+      refute Map.has_key?(tool_call.metadata, :id)
+      refute Map.has_key?(tool_call.metadata, :index)
+      refute Map.has_key?(tool_call.metadata, :builtin?)
+      refute Map.has_key?(tool_call.metadata, :done_at_unix_nano)
+    end
+
+    test "marks missing expected argument fragments" do
+      attach_args_lost_handler("call_missing_fragments")
+
+      acc =
+        ChunkAccumulator.new()
+        |> ChunkAccumulator.push(%StreamChunk{
+          type: :tool_call,
+          name: "get_weather",
+          arguments: %{},
+          metadata: %{id: "call_missing_fragments", index: 0, start: true}
+        })
+
+      assert [%{metadata: %{error: {:args_lost, :missing_fragments}}}] =
+               ChunkAccumulator.finalize_tool_calls_for_response(acc)
+
+      assert_receive {:args_lost, "call_missing_fragments", %{count: 1},
+                      %{reason: :missing_fragments}}
     end
 
     test "returns [] for empty accumulator" do
@@ -237,6 +344,27 @@ defmodule ReqLLM.Provider.ChunkAccumulatorTest do
 
       assert %Message{tool_calls: [tool_call]} = ChunkAccumulator.finalize_message(acc)
       assert ToolCall.builtin?(tool_call)
+    end
+
+    test "preserves non-control metadata on emitted ToolCall struct" do
+      acc =
+        ChunkAccumulator.push(
+          ChunkAccumulator.new(),
+          %StreamChunk{
+            type: :tool_call,
+            name: "search",
+            arguments: %{"query" => "docs"},
+            metadata: %{
+              id: "call_meta",
+              index: 0,
+              thought_signature: "sig_123",
+              done_at_unix_nano: 123
+            }
+          }
+        )
+
+      assert %Message{tool_calls: [tool_call]} = ChunkAccumulator.finalize_message(acc)
+      assert ToolCall.metadata(tool_call) == %{thought_signature: "sig_123"}
     end
   end
 
@@ -409,5 +537,24 @@ defmodule ReqLLM.Provider.ChunkAccumulatorTest do
 
       assert ChunkAccumulator.finalize_logprobs(acc) == tokens
     end
+  end
+
+  defp attach_args_lost_handler(call_id) do
+    test_pid = self()
+    handler_id = {__MODULE__, test_pid, call_id}
+
+    :ok =
+      :telemetry.attach(
+        handler_id,
+        [:req_llm, :tool_call_args_lost],
+        fn _event, measurements, metadata, {pid, expected_call_id} ->
+          if metadata.tool_call_id == expected_call_id do
+            send(pid, {:args_lost, expected_call_id, measurements, metadata})
+          end
+        end,
+        {test_pid, call_id}
+      )
+
+    on_exit(fn -> :telemetry.detach(handler_id) end)
   end
 end

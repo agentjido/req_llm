@@ -9,6 +9,67 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- changelog -->
 
+## [v1.12.0](https://github.com/agentjido/req_llm/compare/v1.11.0...v1.12.0) (2026-05-22)
+
+
+
+
+### Features:
+
+* add NEAR AI Cloud provider by PierreLeGuen
+
+* fireworks_ai: add Fireworks AI provider by mikehostetler
+
+* add spans wrapper to OpenTelemetry by Vasilis Spilka
+
+* openai: include encrypted reasoning content by mikehostetler
+
+* OpenTelemetry GenAI semantic conventions by Vasilis Spilka
+
+* xai: expose explicit Responses API routing via xai_api provider option (#699) by mikehostetler
+
+* xai: allow reasoning_effort on Grok-4 family by Adrian Rangel
+
+* xai: expose explicit Responses API routing via xai_api provider option by acrogenesis
+
+* support Anthropic uploaded file references by mikehostetler
+
+* anthropic: gate Claude subscription OAuth shaping by Itay Adler
+
+* add MiniMax provider by Barna Kovacs
+
+### Bug Fixes:
+
+* preserve xAI model metadata in Responses API lookup by mikehostetler
+
+* anthropic: avoid blank system prompt blocks by mikehostetler
+
+* strip minItems and maxItems from Anthropic schemas (#707) by Pedro Assunção
+
+* google: nest multimodal content inside functionResponse.parts for Gemini 3+ (#701) by Dekkon
+
+* #624: introduce a small detector helper, branch on multimodal by Dekkon
+
+* preserve partial Google usage metadata by mikehostetler
+
+* bedrock: clarify canonical specs and inference profiles by mikehostetler
+
+* add Azure Responses API reasoning effort and parallel tool calls by Vasilis Spilka
+
+* openrouter: encode file-parser PDFs as files by mikehostetler
+
+* openai_codex: omit unsupported token limit by Itay Adler
+
+* default token limits from model metadata by mikehostetler
+
+### Refactoring:
+
+* deduplicate provider code by Danila Poyarkov
+
+* remove DualKeyAccess patterns across codebase by Danila Poyarkov
+
+* fix ex_slop refactoring findings by Danila Poyarkov
+
 ## [v1.11.0](https://github.com/agentjido/req_llm/compare/v1.10.0...v1.11.0) (2026-05-01)
 
 

@@ -282,7 +282,15 @@ defmodule ReqLLM.Providers.XAI do
 
       req_keys =
         supported_provider_options() ++
-          [:context, :operation, :text, :stream, :model, :provider_options, :xai_api_type]
+          [
+            :context,
+            :operation,
+            :text,
+            :stream,
+            :model,
+            :provider_options,
+            :xai_api_type
+          ]
 
       path = if use_responses, do: "/responses", else: "/chat/completions"
 
@@ -304,6 +312,7 @@ defmodule ReqLLM.Providers.XAI do
             ]
         )
         |> attach(model, processed_opts)
+        |> Req.Request.put_private(:req_llm_model, model)
 
       {:ok, request}
     end
@@ -711,7 +720,12 @@ defmodule ReqLLM.Providers.XAI do
       )
 
     base_url = ReqLLM.Provider.Options.effective_base_url(__MODULE__, model, processed_opts)
-    opts_with_base_url = Keyword.put(processed_opts, :base_url, base_url)
+
+    opts_with_base_url =
+      processed_opts
+      |> Keyword.put(:base_url, base_url)
+      |> Keyword.put(:req_llm_model, model)
+
     use_responses = use_responses_api?(opts_with_base_url)
 
     opts_with_base_url =

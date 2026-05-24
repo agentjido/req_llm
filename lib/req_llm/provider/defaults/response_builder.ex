@@ -128,6 +128,7 @@ defmodule ReqLLM.Provider.Defaults.ResponseBuilder do
       if ToolCall.flagged_builtin?(m), do: &ToolCall.new_builtin/3, else: &ToolCall.new/3
 
     constructor.(id, name, encode_tool_args(args))
+    |> put_tool_call_metadata(m)
   end
 
   defp normalize_tool_call(%{"id" => id, "name" => name, "arguments" => args} = m) do
@@ -135,6 +136,7 @@ defmodule ReqLLM.Provider.Defaults.ResponseBuilder do
       if ToolCall.flagged_builtin?(m), do: &ToolCall.new_builtin/3, else: &ToolCall.new/3
 
     constructor.(id, name, encode_tool_args(args))
+    |> put_tool_call_metadata(m)
   end
 
   defp normalize_tool_call(other) when is_map(other) do
@@ -142,6 +144,11 @@ defmodule ReqLLM.Provider.Defaults.ResponseBuilder do
       if ToolCall.flagged_builtin?(other), do: &ToolCall.new_builtin/3, else: &ToolCall.new/3
 
     constructor.(other[:id], other[:name], encode_tool_args(other[:arguments]))
+    |> put_tool_call_metadata(other)
+  end
+
+  defp put_tool_call_metadata(%ToolCall{} = call, source) do
+    ToolCall.put_metadata(call, ToolCall.metadata(source))
   end
 
   defp encode_tool_args(args) when is_binary(args), do: args

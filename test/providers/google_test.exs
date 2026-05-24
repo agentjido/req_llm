@@ -63,18 +63,74 @@ defmodule ReqLLM.Providers.GoogleTest do
   end
 
   describe "stream protocol parsing" do
-    test "parses JSON array protocol chunks" do
+    test "emits complete JSON array elements before the array is closed" do
       first = ~s([{"text":"hello"})
-      second = ~s(,{"text":"world"}])
+      second = ~s(,{"text":"world"})
+
+      assert {:ok, [%{data: %{"text" => "hello"}}], state} =
+               Google.parse_stream_protocol(first, nil)
+
+      assert {:ok, [%{data: %{"text" => "world"}}], state} =
+               Google.parse_stream_protocol(second, state)
+
+      assert {:ok, [], nil} = Google.parse_stream_protocol("]", state)
+    end
+
+    test "buffers incomplete JSON array elements across chunks" do
+      first = ~s([{"text":"hel)
+      second = ~s(lo"})
 
       assert {:incomplete, state} = Google.parse_stream_protocol(first, nil)
 
-      assert {:ok, events, nil} = Google.parse_stream_protocol(second, state)
+      assert {:ok, [%{data: %{"text" => "hello"}}], state} =
+               Google.parse_stream_protocol(second, state)
+
+      assert {:ok, [], nil} = Google.parse_stream_protocol("]", state)
+    end
+
+    test "parses multiple JSON array elements from one chunk" do
+      chunk = ~s([{"text":"hello"},{"text":"world"}])
+
+      assert {:ok, events, nil} = Google.parse_stream_protocol(chunk, nil)
 
       assert events == [
                %{data: %{"text" => "hello"}},
                %{data: %{"text" => "world"}}
              ]
+    end
+
+    test "holds terminal JSON array elements until the array is closed" do
+      first = ~s([{"text":"hello"})
+
+      terminal =
+        ~s(,{"candidates":[{"content":{"parts":[{"text":"done"}]},"finishReason":"STOP"}]})
+
+      assert {:ok, [%{data: %{"text" => "hello"}}], state} =
+               Google.parse_stream_protocol(first, nil)
+
+      assert {:incomplete, state} = Google.parse_stream_protocol(terminal, state)
+
+      assert {:ok, [event], nil} = Google.parse_stream_protocol("]", state)
+
+      assert event == %{
+               data: %{
+                 "candidates" => [
+                   %{
+                     "content" => %{"parts" => [%{"text" => "done"}]},
+                     "finishReason" => "STOP"
+                   }
+                 ]
+               }
+             }
+    end
+
+    test "holds usage-only JSON array terminal elements until the array is closed" do
+      usage = ~s([{"usageMetadata":{"totalTokenCount":12}})
+
+      assert {:incomplete, state} = Google.parse_stream_protocol(usage, nil)
+
+      assert {:ok, [%{data: %{"usageMetadata" => %{"totalTokenCount" => 12}}}], nil} =
+               Google.parse_stream_protocol("]", state)
     end
 
     test "waits for complete JSON array when strings contain delimiters" do
@@ -614,6 +670,40 @@ defmodule ReqLLM.Providers.GoogleTest do
 
       refute Map.has_key?(function_call_part["functionCall"], "id"),
              "functionCall must not include 'id' — Google API rejects unknown fields"
+    end
+
+    test "encode_body uses preserved tool call thought signature metadata" do
+      {:ok, model} = ReqLLM.model("google:gemini-2.5-flash")
+
+      tool_call =
+        "call_1"
+        |> ReqLLM.ToolCall.new("get_weather", ~s({"location":"SF"}))
+        |> ReqLLM.ToolCall.put_metadata(%{thought_signature: "real_signature_123"})
+
+      context =
+        Context.new([
+          Context.user("What's the weather?"),
+          Context.assistant("", tool_calls: [tool_call])
+        ])
+
+      mock_request = %Req.Request{
+        options: [
+          context: context,
+          model: model.model,
+          stream: false,
+          operation: :chat
+        ]
+      }
+
+      updated_request = Google.encode_body(mock_request)
+      decoded = Jason.decode!(updated_request.body)
+
+      [function_call_part] =
+        decoded["contents"]
+        |> Enum.flat_map(& &1["parts"])
+        |> Enum.filter(&Map.has_key?(&1, "functionCall"))
+
+      assert function_call_part["thoughtSignature"] == "real_signature_123"
     end
 
     test "encode_body with Google-specific options" do

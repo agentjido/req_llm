@@ -151,6 +151,34 @@ defmodule ReqLLM.ToolCall do
   def put_builtin_flag(map, true), do: Map.put(map, :builtin?, true)
   def put_builtin_flag(map, _), do: map
 
+  @doc """
+  Returns metadata attached to a tool call or tool-call-shaped map.
+  """
+  @spec metadata(term()) :: map()
+  def metadata(%__MODULE__{function: function}) when is_map(function), do: metadata(function)
+  def metadata(%{metadata: metadata}) when is_map(metadata), do: metadata
+  def metadata(%{"metadata" => metadata}) when is_map(metadata), do: metadata
+  def metadata(%{function: function}) when is_map(function), do: metadata(function)
+  def metadata(%{"function" => function}) when is_map(function), do: metadata(function)
+  def metadata(_), do: %{}
+
+  @doc """
+  Attaches metadata to a ToolCall without changing provider wire encoding.
+  """
+  @spec put_metadata(t(), map()) :: t()
+  def put_metadata(%__MODULE__{} = call, metadata)
+      when is_map(metadata) and map_size(metadata) > 0 do
+    function =
+      Map.update(call.function, :metadata, metadata, fn
+        existing when is_map(existing) -> Map.merge(existing, metadata)
+        _existing -> metadata
+      end)
+
+    %{call | function: function}
+  end
+
+  def put_metadata(%__MODULE__{} = call, _metadata), do: call
+
   defp generate_id do
     "call_#{Uniq.UUID.uuid7()}"
   end
@@ -202,6 +230,7 @@ defmodule ReqLLM.ToolCall do
       name: name,
       arguments: args_map(tc, opts) || %{}
     }
+    |> maybe_put_metadata(metadata(tc))
   end
 
   @doc """
@@ -230,6 +259,7 @@ defmodule ReqLLM.ToolCall do
       name: map["name"],
       arguments: parse_arguments(map["arguments"] || %{}, opts)
     }
+    |> maybe_put_metadata(metadata(map))
   end
 
   def from_map(map, opts) when is_map(map) do
@@ -238,7 +268,14 @@ defmodule ReqLLM.ToolCall do
       name: map[:name],
       arguments: parse_arguments(map[:arguments] || %{}, opts)
     }
+    |> maybe_put_metadata(metadata(map))
   end
+
+  defp maybe_put_metadata(map, metadata) when is_map(metadata) and map_size(metadata) > 0 do
+    Map.put(map, :metadata, metadata)
+  end
+
+  defp maybe_put_metadata(map, _metadata), do: map
 
   defp parse_arguments(args, opts) when is_binary(args) do
     case ReqLLM.JSON.decode(args, opts) do

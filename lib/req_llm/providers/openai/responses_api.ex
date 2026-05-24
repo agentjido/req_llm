@@ -1005,7 +1005,13 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     chunks =
       case delta["name"] do
         name when is_binary(name) and name != "" ->
-          [ReqLLM.StreamChunk.tool_call(name, %{}, %{id: call_id, index: index})]
+          [
+            ReqLLM.StreamChunk.tool_call(name, %{}, %{
+              id: call_id,
+              index: index,
+              expects_arg_fragments: true
+            })
+          ]
 
         _ ->
           chunks
@@ -1074,7 +1080,13 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     index = data["output_index"] || data["index"] || 0
     call_id = data["call_id"] || data["id"] || "call_#{:erlang.unique_integer([:positive])}"
 
-    [ReqLLM.StreamChunk.tool_call(name, %{}, %{id: call_id, index: index})]
+    [
+      ReqLLM.StreamChunk.tool_call(name, %{}, %{
+        id: call_id,
+        index: index,
+        expects_arg_fragments: true
+      })
+    ]
   end
 
   defp handle_function_call_name_delta(_), do: []
@@ -1098,7 +1110,13 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
         name = item["name"] || item[:name]
 
         if name && name != "" do
-          [ReqLLM.StreamChunk.tool_call(name, %{}, %{id: call_id, index: index})]
+          [
+            ReqLLM.StreamChunk.tool_call(name, %{}, %{
+              id: call_id,
+              index: index,
+              expects_arg_fragments: true
+            })
+          ]
         else
           []
         end
@@ -1198,7 +1216,13 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
 
     chunks =
       if is_binary(name) and name != "" and not tool_call_emitted?(state, index) do
-        [ReqLLM.StreamChunk.tool_call(name, %{}, %{id: call_id, index: index})]
+        [
+          ReqLLM.StreamChunk.tool_call(name, %{}, %{
+            id: call_id,
+            index: index,
+            expects_arg_fragments: true
+          })
+        ]
       else
         []
       end
@@ -1351,26 +1375,47 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   end
 
   defp ensure_deep_research_tools(tools, request) do
+    case request_model(request) || lookup_request_model(request) do
+      %LLMDB.Model{} = model ->
+        maybe_ensure_deep_research_tools(tools, model)
+
+      _ ->
+        tools
+    end
+  end
+
+  defp request_model(%Req.Request{} = request) do
+    Req.Request.get_private(request, :req_llm_model) || request.options[:req_llm_model]
+  end
+
+  defp request_model(%{options: options}) do
+    options[:req_llm_model]
+  end
+
+  defp request_model(_), do: nil
+
+  defp lookup_request_model(request) do
     model_name = request.options[:model] || request.options[:id]
 
     if is_binary(model_name) and model_name != "" do
       case ReqLLM.model("openai:#{model_name}") do
-        {:ok, model} ->
-          category = get_in(model, [Access.key(:extra, %{}), :category])
-
-          case category do
-            "deep_research" ->
-              ensure_deep_research_tool_present(tools)
-
-            _ ->
-              tools
-          end
-
-        _ ->
-          tools
+        {:ok, model} -> model
+        _ -> nil
       end
     else
-      tools
+      nil
+    end
+  end
+
+  defp maybe_ensure_deep_research_tools(tools, model) do
+    category = get_in(model, [Access.key(:extra, %{}), :category])
+
+    case category do
+      "deep_research" ->
+        ensure_deep_research_tool_present(tools)
+
+      _ ->
+        tools
     end
   end
 

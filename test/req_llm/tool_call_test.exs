@@ -111,6 +111,35 @@ defmodule ReqLLM.ToolCallTest do
 
       assert result == %{id: "call_456", name: "no_args", arguments: %{}}
     end
+
+    test "includes attached metadata" do
+      tool_call =
+        "call_123"
+        |> ToolCall.new("search", ~s({"query":"docs"}))
+        |> ToolCall.put_metadata(%{thought_signature: "sig_123"})
+
+      assert ToolCall.to_map(tool_call) == %{
+               id: "call_123",
+               name: "search",
+               arguments: %{"query" => "docs"},
+               metadata: %{thought_signature: "sig_123"}
+             }
+    end
+  end
+
+  describe "put_metadata/2" do
+    test "merges metadata into existing metadata" do
+      tool_call =
+        "call_123"
+        |> ToolCall.new("search", "{}")
+        |> ToolCall.put_metadata(%{thought_signature: "sig_123"})
+        |> ToolCall.put_metadata(%{raw_arguments: "{}"})
+
+      assert ToolCall.metadata(tool_call) == %{
+               thought_signature: "sig_123",
+               raw_arguments: "{}"
+             }
+    end
   end
 
   describe "args_map/1" do
@@ -265,6 +294,17 @@ defmodule ReqLLM.ToolCallTest do
       assert decoded["function"]["builtin?"] == true
       assert ToolCall.builtin?(decoded)
     end
+
+    test "does not encode local metadata" do
+      decoded =
+        "call_123"
+        |> ToolCall.new("search", ~s({"query":"docs"}))
+        |> ToolCall.put_metadata(%{thought_signature: "sig_123"})
+        |> Jason.encode!()
+        |> Jason.decode!()
+
+      refute Map.has_key?(decoded["function"], "metadata")
+    end
   end
 
   describe "from_map/1" do
@@ -317,6 +357,22 @@ defmodule ReqLLM.ToolCallTest do
       result = ToolCall.from_map(map)
 
       assert result == %{id: "call_bad", name: "broken", arguments: %{}}
+    end
+
+    test "preserves map metadata" do
+      map = %{
+        id: "call_meta",
+        name: "search",
+        arguments: %{"query" => "docs"},
+        metadata: %{thought_signature: "sig_123"}
+      }
+
+      assert ToolCall.from_map(map) == %{
+               id: "call_meta",
+               name: "search",
+               arguments: %{"query" => "docs"},
+               metadata: %{thought_signature: "sig_123"}
+             }
     end
   end
 

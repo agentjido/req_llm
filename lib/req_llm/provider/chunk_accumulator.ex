@@ -45,11 +45,35 @@ defmodule ReqLLM.Provider.ChunkAccumulator do
   alias ReqLLM.Message.ContentPart
   alias ReqLLM.StreamChunk
 
+  require Logger
+
+  @tool_call_control_metadata_keys [
+    :id,
+    "id",
+    :index,
+    "index",
+    :name,
+    "name",
+    :builtin?,
+    "builtin?",
+    :start,
+    "start",
+    :expects_arg_fragments,
+    "expects_arg_fragments",
+    :args_fragment_expected?,
+    "args_fragment_expected?",
+    :done_at_unix_nano,
+    "done_at_unix_nano"
+  ]
+
   @type tool_call_record :: %{
-          id: String.t(),
-          name: String.t(),
-          arguments: term(),
-          index: non_neg_integer()
+          required(:id) => String.t(),
+          required(:name) => String.t(),
+          required(:arguments) => term(),
+          required(:index) => non_neg_integer(),
+          optional(:builtin?) => true,
+          optional(:expects_arg_fragments) => true,
+          optional(:metadata) => map()
         }
 
   @type t :: %__MODULE__{
@@ -114,6 +138,8 @@ defmodule ReqLLM.Provider.ChunkAccumulator do
           arguments: chunk.arguments || %{},
           index: index
         }
+        |> maybe_put_tool_call_metadata(metadata)
+        |> maybe_mark_expects_arg_fragments(metadata)
         |> ToolCall.put_builtin_flag(ToolCall.flagged_builtin?(metadata))
 
       # Prepend (O(1)); finalizers reverse to restore arrival order.
@@ -188,6 +214,39 @@ defmodule ReqLLM.Provider.ChunkAccumulator do
     end
   end
 
+  defp maybe_put_tool_call_metadata(tool_call, metadata) do
+    metadata = Map.drop(metadata, @tool_call_control_metadata_keys)
+
+    if map_size(metadata) > 0 do
+      Map.put(tool_call, :metadata, metadata)
+    else
+      tool_call
+    end
+  end
+
+  defp maybe_mark_expects_arg_fragments(tool_call, metadata) do
+    if expects_arg_fragments?(metadata) do
+      Map.put(tool_call, :expects_arg_fragments, true)
+    else
+      tool_call
+    end
+  end
+
+  defp expects_arg_fragments?(metadata) do
+    [
+      :expects_arg_fragments,
+      "expects_arg_fragments",
+      :args_fragment_expected?,
+      "args_fragment_expected?",
+      :start,
+      "start"
+    ]
+    |> Enum.any?(&truthy?(Map.get(metadata, &1)))
+  end
+
+  defp truthy?(true), do: true
+  defp truthy?(_), do: false
+
   @doc "Returns the concatenated text content as a binary."
   @spec finalize_text(t()) :: String.t()
   def finalize_text(%__MODULE__{text_content: iodata}), do: IO.iodata_to_binary(iodata)
@@ -239,7 +298,11 @@ defmodule ReqLLM.Provider.ChunkAccumulator do
   defp response_tool_call(tool_call, fragments) do
     case Map.get(fragments, tool_call.index) do
       nil ->
-        Map.delete(tool_call, :index)
+        if Map.get(tool_call, :expects_arg_fragments, false) do
+          args_lost(tool_call, :missing_fragments)
+        else
+          drop_accumulator_fields(tool_call)
+        end
 
       iodata ->
         json = IO.iodata_to_binary(iodata)
@@ -248,12 +311,47 @@ defmodule ReqLLM.Provider.ChunkAccumulator do
           {:ok, args} ->
             tool_call
             |> Map.put(:arguments, args)
-            |> Map.delete(:index)
+            |> drop_accumulator_fields()
 
           {:error, _} ->
-            Map.delete(tool_call, :index)
+            args_lost(tool_call, :json_decode_error, json)
         end
     end
+  end
+
+  defp args_lost(tool_call, reason, json \\ nil) do
+    metadata = %{
+      tool_name: tool_call.name,
+      tool_call_id: tool_call.id,
+      reason: reason
+    }
+
+    :telemetry.execute([:req_llm, :tool_call_args_lost], %{count: 1}, metadata)
+    Logger.warning(args_lost_message(metadata, json), Map.to_list(metadata))
+
+    tool_call
+    |> drop_accumulator_fields()
+    |> Map.update(:metadata, %{error: {:args_lost, reason}}, fn existing ->
+      Map.put(existing, :error, {:args_lost, reason})
+    end)
+  end
+
+  defp drop_accumulator_fields(tool_call) do
+    tool_call
+    |> Map.delete(:index)
+    |> Map.delete(:expects_arg_fragments)
+  end
+
+  defp args_lost_message(%{reason: reason, tool_name: tool_name, tool_call_id: tool_call_id}, nil) do
+    "req_llm tool_call args_lost reason=#{reason} tool_name=#{tool_name} tool_call_id=#{tool_call_id}"
+  end
+
+  defp args_lost_message(
+         %{reason: reason, tool_name: tool_name, tool_call_id: tool_call_id},
+         json
+       ) do
+    "req_llm tool_call args_lost reason=#{reason} tool_name=#{tool_name} " <>
+      "tool_call_id=#{tool_call_id} json_bytes=#{byte_size(json)}"
   end
 
   @doc """
@@ -297,15 +395,13 @@ defmodule ReqLLM.Provider.ChunkAccumulator do
   defp message_tool_call_struct(tool_call, fragments) do
     args = message_tool_call_args(tool_call, fragments)
 
-    # The accumulator stores tool calls as flat maps (no OpenAI `:function`
-    # nesting), so `flagged_builtin?/1` is the correct check — `builtin?/1`
-    # would also work but pays for the unwrap that can't match here.
     constructor =
       if ToolCall.flagged_builtin?(tool_call),
         do: &ToolCall.new_builtin/3,
         else: &ToolCall.new/3
 
     constructor.(tool_call.id, tool_call.name, encode_tool_call_args(args))
+    |> ToolCall.put_metadata(ToolCall.metadata(tool_call))
   end
 
   defp message_tool_call_args(%{index: index, arguments: arguments}, fragments) do
