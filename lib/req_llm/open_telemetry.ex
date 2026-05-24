@@ -519,11 +519,8 @@ defmodule ReqLLM.OpenTelemetry do
   @doc false
   @spec handle_event(list(atom()), map(), map(), keyword()) :: :ok
   def handle_event(event, measurements, metadata, config) do
-    # `:telemetry` permanently detaches a handler that raises, which would
-    # turn any data-shape surprise downstream (e.g. an unencodable payload
-    # in `Translator.apply_*`) into a BEAM-lifetime observability outage.
-    # Catch and log so a single bad event degrades to one missing span,
-    # not a dark bridge.
+    # `:telemetry` permanently detaches a handler that raises — one bad
+    # event would silently kill the bridge for the BEAM lifetime.
     do_handle_event(event, measurements, metadata, config)
   rescue
     error ->

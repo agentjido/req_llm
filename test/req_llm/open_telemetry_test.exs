@@ -1297,9 +1297,6 @@ defmodule ReqLLM.OpenTelemetryTest do
 
           assert_receive :start_span_called
 
-          # Second event proves the handler is still attached. If `:telemetry`
-          # had detached it (the default behavior on raise), no message would
-          # arrive.
           :telemetry.execute(
             [:req_llm, :request, :start],
             %{system_time: System.system_time()},

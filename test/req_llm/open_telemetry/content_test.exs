@@ -293,9 +293,6 @@ defmodule ReqLLM.OpenTelemetry.ContentTest do
     end
 
     test "drops parameters that aren't JSON-encodable instead of crashing the bridge" do
-      # Mirrors what ReqLLM hands the bridge for `generate_object/3`: the
-      # synthesized tool's :parameter_schema is a NimbleOptions keyword list
-      # with tuple types — Jason cannot encode tuples.
       nimble_options_schema = [
         answer: [type: {:or, [:string, nil]}, required: true],
         tags: [type: {:list, :string}, default: []]

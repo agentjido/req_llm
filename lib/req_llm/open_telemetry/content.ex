@@ -218,13 +218,9 @@ defmodule ReqLLM.OpenTelemetry.Content do
 
   defp tool_to_otel(_), do: nil
 
-  # `:parameter_schema` is meant to be JSON Schema, but some upstreams (e.g.
-  # ReqLLM's synthesized tool for `generate_object/3`) hand us a NimbleOptions
-  # schema with tuple types like `{:or, [:string, nil]}`. That blows up the
-  # `Jason.encode!/1` in `encode_all/1`, which previously propagated out of
-  # the bridge handler and detached it for the BEAM lifetime. Drop the
-  # offending parameters with a debug log instead — a missing attribute is
-  # far better than a permanently dark bridge.
+  # `:parameter_schema` is meant to be JSON Schema, but `generate_object/3`'s
+  # synthesized tool passes a NimbleOptions keyword list with tuple types
+  # Jason can't encode. Drop the field rather than emit an unencodable payload.
   defp maybe_put_parameters(map, _name, nil), do: map
   defp maybe_put_parameters(map, _name, []), do: map
 
