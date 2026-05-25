@@ -28,8 +28,8 @@ ReqLLM.generate_text("ollama:gemma4:27b", "Hello",
 )
 
 # generate_object works out of the box
-{:ok, compiled} = ReqLLM.Schema.compile(%{type: "object", properties: %{answer: %{type: "string"}}})
-ReqLLM.generate_object("ollama:gemma4:27b", "What is 2+2?", compiled_schema: compiled)
+schema = [answer: [type: :string, required: true]]
+ReqLLM.generate_object("ollama:llama3", "What is 2+2?", schema)
 ```
 
 For jido_ai users, set a model alias in config and it resolves automatically:

@@ -11,7 +11,7 @@ defmodule ReqLLM.Providers.Ollama do
 
       # Direct usage
       ReqLLM.generate_text("ollama:llama3", "Hello!")
-      ReqLLM.generate_object("ollama:gemma4:27b", "Extract the name", compiled_schema: schema)
+      ReqLLM.generate_object("ollama:llama3", "Extract the name", schema)
 
   ## Configuration
 
@@ -46,8 +46,46 @@ defmodule ReqLLM.Providers.Ollama do
     keep_alive: [
       type: {:or, [:string, :non_neg_integer]},
       doc: "How long to keep model loaded (e.g. \"30m\", 0). Top-level body field."
+    ],
+    response_format: [
+      type: :map,
+      doc: "Response format configuration for Ollama's OpenAI-compatible API"
     ]
   ]
+
+  @impl ReqLLM.Provider
+  def prepare_request(:object, model_spec, prompt, opts) do
+    compiled_schema = Keyword.fetch!(opts, :compiled_schema)
+    schema_name = Map.get(compiled_schema, :name, "structured_output")
+
+    response_format = %{
+      type: "json_schema",
+      json_schema: %{
+        name: schema_name,
+        schema: ReqLLM.Schema.to_json(compiled_schema.schema)
+      }
+    }
+
+    opts_with_format =
+      opts
+      |> Keyword.update(:provider_options, [response_format: response_format], fn provider_opts ->
+        Keyword.put(provider_opts, :response_format, response_format)
+      end)
+      |> ReqLLM.Provider.Options.put_model_max_tokens_default(model_spec, fallback: 4096)
+      |> Keyword.put(:operation, :object)
+
+    ReqLLM.Provider.Defaults.prepare_request(
+      __MODULE__,
+      :chat,
+      model_spec,
+      prompt,
+      opts_with_format
+    )
+  end
+
+  def prepare_request(operation, model_spec, input, opts) do
+    ReqLLM.Provider.Defaults.prepare_request(__MODULE__, operation, model_spec, input, opts)
+  end
 
   @doc """
   Attaches Ollama-specific pipeline steps.
@@ -57,17 +95,53 @@ defmodule ReqLLM.Providers.Ollama do
   do not need to set any API key environment variable.
   """
   @impl ReqLLM.Provider
-  def attach(request, _model_input, user_opts) do
+  def attach(request, model_input, user_opts) do
+    {:ok, %LLMDB.Model{} = model} = ReqLLM.model(model_input)
+
+    if model.provider != provider_id() do
+      raise ReqLLM.Error.Invalid.Provider.exception(provider: model.provider)
+    end
+
     extra_keys = ReqLLM.Provider.Defaults.extra_option_keys(__MODULE__)
 
     request
     |> Req.Request.put_header("content-type", "application/json")
     |> Req.Request.register_options(extra_keys)
-    |> Req.Request.merge_options(ReqLLM.Provider.Defaults.finch_option(request) ++ user_opts)
+    |> Req.Request.merge_options(
+      ReqLLM.Provider.Defaults.finch_option(request) ++
+        [model: model.provider_model_id || model.id] ++ user_opts
+    )
     |> ReqLLM.Step.Retry.attach()
     |> ReqLLM.Step.Error.attach()
     |> Req.Request.append_request_steps(llm_encode_body: &encode_body/1)
     |> Req.Request.append_response_steps(llm_decode_response: &decode_response/1)
+    |> ReqLLM.Step.Usage.attach(model)
+    |> ReqLLM.Step.Telemetry.attach(model, user_opts)
+    |> ReqLLM.Step.Fixture.maybe_attach(model, user_opts)
+  end
+
+  @impl ReqLLM.Provider
+  def attach_stream(model, context, opts, _finch_name) do
+    operation = opts[:operation] || :chat
+
+    processed_opts =
+      ReqLLM.Provider.Options.process_stream!(__MODULE__, operation, model, context, opts)
+
+    base_url = ReqLLM.Provider.Options.effective_base_url(__MODULE__, model, processed_opts)
+    url = endpoint_url(base_url, "/chat/completions")
+    body = encode_stream_body(model, context, processed_opts)
+
+    headers =
+      [{"Content-Type", "application/json"}, {"Accept", "text/event-stream"}] ++
+        ReqLLM.Provider.Utils.extract_custom_headers(processed_opts[:req_http_options])
+
+    {:ok, Finch.build(:post, url, headers, body)}
+  rescue
+    error ->
+      {:error,
+       ReqLLM.Error.API.Request.exception(
+         reason: "Failed to build Ollama stream request: #{inspect(error)}"
+       )}
   end
 
   @doc """
@@ -89,4 +163,28 @@ defmodule ReqLLM.Providers.Ollama do
 
   defp maybe_add_keep_alive(body, nil), do: body
   defp maybe_add_keep_alive(body, keep_alive), do: Map.put(body, :keep_alive, keep_alive)
+
+  defp encode_stream_body(model, context, opts) do
+    req_opts =
+      opts
+      |> Keyword.delete(:finch_name)
+      |> Keyword.put(:model, model.provider_model_id || model.id)
+      |> Keyword.put(:context, context)
+      |> Keyword.put(:stream, true)
+
+    request =
+      Req.new(method: :post, url: "http://localhost")
+      |> Req.Request.register_options(
+        ReqLLM.Provider.Defaults.extra_option_keys(__MODULE__) ++ [:context, :operation]
+      )
+      |> Req.Request.merge_options(req_opts)
+
+    request
+    |> encode_body()
+    |> Map.fetch!(:body)
+  end
+
+  defp endpoint_url(base_url, path) do
+    String.trim_trailing(base_url, "/") <> path
+  end
 end
