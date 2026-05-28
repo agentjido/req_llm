@@ -1372,6 +1372,41 @@ defmodule ReqLLM.Providers.AnthropicTest do
       refute Keyword.has_key?(translated_opts, :top_p)
       refute Keyword.has_key?(translated_opts, :temperature)
     end
+
+    test "translate_options removes Claude Opus 4.8 sampling params without reasoning" do
+      {:ok, model} = ReqLLM.model("anthropic:claude-opus-4-8")
+
+      {translated_opts, []} =
+        Anthropic.translate_options(:chat, model,
+          max_tokens: 100,
+          temperature: 0.0,
+          top_p: 0.5,
+          top_k: 10,
+          anthropic_top_k: 10
+        )
+
+      assert Keyword.get(translated_opts, :max_tokens) == 100
+      refute Keyword.has_key?(translated_opts, :temperature)
+      refute Keyword.has_key?(translated_opts, :top_p)
+      refute Keyword.has_key?(translated_opts, :top_k)
+      refute Keyword.has_key?(translated_opts, :anthropic_top_k)
+      refute Keyword.has_key?(translated_opts, :thinking)
+      refute Keyword.has_key?(translated_opts, :output_config)
+    end
+
+    test "translate_options removes output_config when forced tool choice disables thinking" do
+      {:ok, model} = ReqLLM.model("anthropic:claude-opus-4-8")
+
+      {translated_opts, []} =
+        Anthropic.translate_options(:chat, model,
+          reasoning_effort: :low,
+          tool_choice: %{type: "tool", name: "add"}
+        )
+
+      assert Keyword.get(translated_opts, :tool_choice) == %{type: "tool", name: "add"}
+      refute Keyword.has_key?(translated_opts, :thinking)
+      refute Keyword.has_key?(translated_opts, :output_config)
+    end
   end
 
   describe "usage extraction" do

@@ -1474,7 +1474,7 @@ defmodule ReqLLM.Providers.Anthropic do
 
   defp remove_model_unsupported_parameters(opts, model) do
     if model_extra(model, [:temperature]) == false do
-      Keyword.delete(opts, :temperature)
+      Keyword.drop(opts, [:temperature, :top_p, :top_k, :anthropic_top_k])
     else
       opts
     end
@@ -1519,10 +1519,14 @@ defmodule ReqLLM.Providers.Anthropic do
         opts
 
       operation == :object and match?(%{type: "tool"}, tool_choice) ->
-        Keyword.delete(opts, :thinking)
+        opts
+        |> Keyword.delete(:thinking)
+        |> Keyword.delete(:output_config)
 
       match?(%{type: "tool"}, tool_choice) ->
-        Keyword.delete(opts, :thinking)
+        opts
+        |> Keyword.delete(:thinking)
+        |> Keyword.delete(:output_config)
 
       match?(%{type: "any"}, tool_choice) ->
         Keyword.put(opts, :tool_choice, %{type: "auto"})
