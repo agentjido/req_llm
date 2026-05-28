@@ -691,6 +691,9 @@ defmodule ReqLLM.Provider.Options do
 
       {true, rest} ->
         rest
+
+      {thinking, rest} when is_map(thinking) ->
+        Keyword.put(rest, :thinking, thinking)
     end
   end
 

@@ -112,6 +112,10 @@ defmodule ReqLLM.Providers.Anthropic do
       type: :map,
       doc: "Internal use: structured output format configuration"
     ],
+    output_config: [
+      type: :map,
+      doc: "Internal use: Anthropic output configuration"
+    ],
     anthropic_beta: [
       type: {:list, :string},
       doc: "Internal use: beta feature flags"
@@ -148,7 +152,7 @@ defmodule ReqLLM.Providers.Anthropic do
   )a
 
   @body_options ~w(
-    temperature top_p stop_sequences thinking
+    temperature top_p stop_sequences thinking output_config
   )a
 
   @unsupported_parameters ~w(
@@ -792,13 +796,15 @@ defmodule ReqLLM.Providers.Anthropic do
   end
 
   @impl ReqLLM.Provider
-  def translate_options(operation, _model, opts) do
+  def translate_options(operation, model, opts) do
     # Anthropic-specific parameter translation
     translated_opts =
       opts
       |> translate_stop_parameter()
-      |> translate_reasoning_effort()
+      |> translate_reasoning_effort(model)
+      |> normalize_thinking_for_model(model)
       |> disable_thinking_for_forced_tool_choice(operation)
+      |> remove_model_unsupported_parameters(model)
       |> remove_conflicting_sampling_params()
       |> translate_unsupported_parameters()
 
@@ -855,7 +861,7 @@ defmodule ReqLLM.Providers.Anthropic do
       end
 
     beta_features =
-      if has_thinking?(opts) do
+      if has_legacy_thinking?(opts) do
         ["interleaved-thinking-2025-05-14" | beta_features]
       else
         beta_features
@@ -905,6 +911,17 @@ defmodule ReqLLM.Providers.Anthropic do
     provider_reasoning_effort = Keyword.get(provider_options, :reasoning_effort)
 
     not is_nil(thinking) or not is_nil(reasoning_effort) or not is_nil(provider_reasoning_effort)
+  end
+
+  defp has_legacy_thinking?(user_opts) do
+    provider_options = Keyword.get(user_opts, :provider_options, [])
+
+    case Keyword.get(user_opts, :thinking) || get_option(provider_options, :thinking) do
+      %{type: "adaptive"} -> false
+      %{"type" => "adaptive"} -> false
+      nil -> has_thinking?(user_opts)
+      _ -> true
+    end
   end
 
   @doc false
@@ -1326,7 +1343,7 @@ defmodule ReqLLM.Providers.Anthropic do
   def map_reasoning_effort_to_budget("xhigh"), do: map_reasoning_effort_to_budget(:xhigh)
   def map_reasoning_effort_to_budget(_), do: @reasoning_budget_medium
 
-  defp translate_reasoning_effort(opts) do
+  defp translate_reasoning_effort(opts, model) do
     {reasoning_effort, opts} = Keyword.pop(opts, :reasoning_effort)
     {reasoning_budget, opts} = Keyword.pop(opts, :reasoning_token_budget)
 
@@ -1335,54 +1352,148 @@ defmodule ReqLLM.Providers.Anthropic do
         opts
 
       :minimal ->
-        budget = reasoning_budget || map_reasoning_effort_to_budget(:minimal)
-
-        opts
-        |> Keyword.put(:thinking, %{type: "enabled", budget_tokens: budget})
-        |> adjust_max_tokens_for_thinking(budget)
-        |> adjust_top_p_for_thinking()
+        put_reasoning_effort(opts, model, :minimal, reasoning_budget)
 
       :low ->
-        budget = reasoning_budget || map_reasoning_effort_to_budget(:low)
-
-        opts
-        |> Keyword.put(:thinking, %{type: "enabled", budget_tokens: budget})
-        |> adjust_max_tokens_for_thinking(budget)
-        |> adjust_top_p_for_thinking()
+        put_reasoning_effort(opts, model, :low, reasoning_budget)
 
       :medium ->
-        budget = reasoning_budget || map_reasoning_effort_to_budget(:medium)
-
-        opts
-        |> Keyword.put(:thinking, %{type: "enabled", budget_tokens: budget})
-        |> adjust_max_tokens_for_thinking(budget)
-        |> adjust_top_p_for_thinking()
+        put_reasoning_effort(opts, model, :medium, reasoning_budget)
 
       :high ->
-        budget = reasoning_budget || map_reasoning_effort_to_budget(:high)
-
-        opts
-        |> Keyword.put(:thinking, %{type: "enabled", budget_tokens: budget})
-        |> adjust_max_tokens_for_thinking(budget)
-        |> adjust_top_p_for_thinking()
+        put_reasoning_effort(opts, model, :high, reasoning_budget)
 
       :xhigh ->
-        budget = reasoning_budget || map_reasoning_effort_to_budget(:xhigh)
-
-        opts
-        |> Keyword.put(:thinking, %{type: "enabled", budget_tokens: budget})
-        |> adjust_max_tokens_for_thinking(budget)
-        |> adjust_top_p_for_thinking()
+        put_reasoning_effort(opts, model, :xhigh, reasoning_budget)
 
       :default ->
-        opts
-        |> Keyword.put(:thinking, %{type: "enabled"})
-        |> adjust_top_p_for_thinking()
+        put_default_reasoning_effort(opts, model)
 
       nil ->
         opts
     end
   end
+
+  defp put_reasoning_effort(opts, model, effort, reasoning_budget) do
+    if adaptive_thinking_required?(model) do
+      opts
+      |> Keyword.put(:thinking, %{type: "adaptive"})
+      |> put_output_effort(adaptive_effort(effort, model))
+      |> remove_adaptive_thinking_sampling_params()
+    else
+      budget = reasoning_budget || map_reasoning_effort_to_budget(effort)
+
+      opts
+      |> Keyword.put(:thinking, %{type: "enabled", budget_tokens: budget})
+      |> adjust_max_tokens_for_thinking(budget)
+      |> adjust_top_p_for_thinking()
+    end
+  end
+
+  defp put_default_reasoning_effort(opts, model) do
+    if adaptive_thinking_required?(model) do
+      opts
+      |> Keyword.put(:thinking, %{type: "adaptive"})
+      |> put_output_effort(adaptive_effort(:default, model))
+      |> remove_adaptive_thinking_sampling_params()
+    else
+      opts
+      |> Keyword.put(:thinking, %{type: "enabled"})
+      |> adjust_top_p_for_thinking()
+    end
+  end
+
+  defp normalize_thinking_for_model(opts, model) do
+    if adaptive_thinking_required?(model) do
+      case Keyword.get(opts, :thinking) do
+        %{type: "enabled"} = thinking ->
+          opts
+          |> Keyword.put(:thinking, %{type: "adaptive"})
+          |> put_output_effort(effort_from_thinking(thinking, model))
+          |> remove_adaptive_thinking_sampling_params()
+
+        %{"type" => "enabled"} = thinking ->
+          opts
+          |> Keyword.put(:thinking, %{type: "adaptive"})
+          |> put_output_effort(effort_from_thinking(thinking, model))
+          |> remove_adaptive_thinking_sampling_params()
+
+        %{type: "adaptive"} ->
+          remove_adaptive_thinking_sampling_params(opts)
+
+        %{"type" => "adaptive"} ->
+          remove_adaptive_thinking_sampling_params(opts)
+
+        _ ->
+          opts
+      end
+    else
+      opts
+    end
+  end
+
+  defp put_output_effort(opts, effort) do
+    Keyword.update(opts, :output_config, %{effort: effort}, fn
+      config when is_map(config) -> Map.put(config, :effort, effort)
+      config when is_list(config) -> Keyword.put(config, :effort, effort)
+      _ -> %{effort: effort}
+    end)
+  end
+
+  defp effort_from_thinking(thinking, model) do
+    thinking
+    |> get_option(:budget_tokens)
+    |> budget_to_effort(model)
+  end
+
+  defp budget_to_effort(nil, model), do: adaptive_effort(:default, model)
+  defp budget_to_effort(budget, _model) when budget >= @reasoning_budget_xhigh, do: "max"
+  defp budget_to_effort(budget, _model) when budget >= @reasoning_budget_high, do: "high"
+  defp budget_to_effort(budget, _model) when budget >= @reasoning_budget_medium, do: "medium"
+  defp budget_to_effort(_budget, _model), do: "low"
+
+  defp adaptive_effort(:minimal, _model), do: "low"
+  defp adaptive_effort(:low, _model), do: "low"
+  defp adaptive_effort(:medium, _model), do: "medium"
+  defp adaptive_effort(:high, _model), do: "high"
+  defp adaptive_effort(:xhigh, model), do: max_effort(model)
+  defp adaptive_effort(:default, _model), do: "medium"
+
+  defp max_effort(model) do
+    if model_extra(model, [:capabilities, :effort, :max, :supported]) == true do
+      "max"
+    else
+      "high"
+    end
+  end
+
+  defp adaptive_thinking_required?(model) do
+    model_extra(model, [:capabilities, :thinking, :types, :adaptive, :supported]) == true and
+      model_extra(model, [:capabilities, :thinking, :types, :enabled, :supported]) == false
+  end
+
+  defp remove_model_unsupported_parameters(opts, model) do
+    if model_extra(model, [:temperature]) == false do
+      Keyword.delete(opts, :temperature)
+    else
+      opts
+    end
+  end
+
+  defp model_extra(%LLMDB.Model{extra: extra}, path), do: get_nested(extra, path)
+  defp model_extra(_, _path), do: nil
+
+  defp get_nested(value, []), do: value
+
+  defp get_nested(value, [key | rest]) when is_map(value) do
+    cond do
+      Map.has_key?(value, key) -> get_nested(Map.get(value, key), rest)
+      Map.has_key?(value, to_string(key)) -> get_nested(Map.get(value, to_string(key)), rest)
+      true -> nil
+    end
+  end
+
+  defp get_nested(_value, _path), do: nil
 
   defp adjust_max_tokens_for_thinking(opts, budget_tokens) do
     max_tokens = Keyword.get(opts, :max_tokens)
@@ -1430,6 +1541,13 @@ defmodule ReqLLM.Providers.Anthropic do
       top_p -> top_p
     end)
     |> Keyword.delete(:temperature)
+    |> Keyword.delete(:top_k)
+  end
+
+  defp remove_adaptive_thinking_sampling_params(opts) do
+    opts
+    |> Keyword.delete(:temperature)
+    |> Keyword.delete(:top_p)
     |> Keyword.delete(:top_k)
   end
 

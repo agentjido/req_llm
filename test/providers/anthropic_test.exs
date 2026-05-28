@@ -54,6 +54,24 @@ defmodule ReqLLM.Providers.AnthropicTest do
       assert request.method == :post
     end
 
+    test "prepare_request encodes Claude Opus 4.8 adaptive reasoning" do
+      {:ok, request} =
+        Anthropic.prepare_request(:chat, "anthropic:claude-opus-4-8", "Hello world",
+          api_key: "test-key",
+          max_tokens: 100,
+          reasoning_effort: :low,
+          temperature: 0.0
+        )
+
+      decoded = request |> Anthropic.encode_body() |> ReqLLM.Test.Helpers.json_body()
+
+      assert decoded["model"] == "claude-opus-4-8"
+      assert decoded["thinking"] == %{"type" => "adaptive"}
+      assert decoded["output_config"] == %{"effort" => "low"}
+      refute Map.has_key?(decoded, "temperature")
+      refute Map.has_key?(request.headers, "anthropic-beta")
+    end
+
     test "attach configures authentication and pipeline" do
       {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
       opts = [temperature: 0.5, max_tokens: 50]
@@ -1336,6 +1354,23 @@ defmodule ReqLLM.Providers.AnthropicTest do
       assert Keyword.get(translated_opts, :frequency_penalty) == nil
       assert Keyword.get(translated_opts, :logprobs) == nil
       assert Keyword.get(translated_opts, :response_format) == nil
+    end
+
+    test "translate_options adapts Claude Opus 4.8 metadata constraints" do
+      {:ok, model} = ReqLLM.model("anthropic:claude-opus-4-8")
+
+      {translated_opts, []} =
+        Anthropic.translate_options(:chat, model,
+          reasoning_effort: :xhigh,
+          temperature: 0.0,
+          top_p: 0.5,
+          max_tokens: 100
+        )
+
+      assert Keyword.get(translated_opts, :thinking) == %{type: "adaptive"}
+      assert Keyword.get(translated_opts, :output_config) == %{effort: "max"}
+      refute Keyword.has_key?(translated_opts, :top_p)
+      refute Keyword.has_key?(translated_opts, :temperature)
     end
   end
 

@@ -365,6 +365,29 @@ defmodule ReqLLM.Provider.OptionsTest do
       refute Keyword.has_key?(processed, :retry)
     end
 
+    test "process_stream preserves map-shaped thinking options" do
+      {:ok, model} = ReqLLM.model("anthropic:claude-opus-4-8")
+      context = ReqLLM.Context.new([ReqLLM.Context.user("Hello")])
+
+      processed =
+        Options.process_stream!(
+          ReqLLM.Providers.Anthropic,
+          :chat,
+          model,
+          context,
+          thinking: %{type: "adaptive"},
+          output_config: %{effort: "low"},
+          top_p: 0.5,
+          temperature: 0.0
+        )
+
+      assert processed[:thinking] == %{type: "adaptive"}
+      assert processed[:output_config] == %{effort: "low"}
+      assert processed[:stream] == true
+      refute Keyword.has_key?(processed, :top_p)
+      refute Keyword.has_key?(processed, :temperature)
+    end
+
     test "accepts max_output_tokens for responses-style providers" do
       {:ok, openai_model} = ReqLLM.model("openai:gpt-4o")
 

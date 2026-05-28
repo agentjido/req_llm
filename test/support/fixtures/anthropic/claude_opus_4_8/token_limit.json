@@ -1,0 +1,165 @@
+{
+  "model_spec": "anthropic:claude-opus-4-8",
+  "provider": "anthropic",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjozMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IldyaXRlIGEgdmVyeSBsb25nIHN0b3J5IGFib3V0IGRyYWdvbnMgYW5kIGFkdmVudHVyZXMiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJjbGF1ZGUtb3B1cy00LTgiLCJvdXRwdXRfY29uZmlnIjp7ImVmZm9ydCI6ImxvdyJ9LCJzdHJlYW0iOmZhbHNlLCJ0aGlua2luZyI6eyJ0eXBlIjoiYWRhcHRpdmUifX0="
+    },
+    "canonical_json": {
+      "max_tokens": 3000,
+      "messages": [
+        {
+          "content": "Write a very long story about dragons and adventures",
+          "role": "user"
+        }
+      ],
+      "model": "claude-opus-4-8",
+      "output_config": {
+        "effort": "low"
+      },
+      "stream": false,
+      "thinking": {
+        "type": "adaptive"
+      }
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "anthropic-version": [
+        "2023-06-01"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ],
+      "x-api-key": "[REDACTED:x-api-key]"
+    },
+    "method": "post",
+    "url": "https://api.anthropic.com/v1/messages"
+  },
+  "response": {
+    "body": {
+      "content": [
+        {
+          "text": "# The Last Ember of Vethric\n\n## Chapter One: The Forgotten Egg\n\nIn the highland village of Thornwall, where the mountains met the clouds and the air smelled perpetually of pine and snow, there lived a girl named Elara who had never quite belonged.\n\nShe was sixteen, with hair the color of autumn wheat and eyes that shifted between gray and green depending on the light. The other villagers found her peculiar—she spent too much time alone in the forest, talked to animals as if they understood her, and possessed an uncanny ability to find things that were lost. Lost sheep, lost children, lost trinkets. They called her \"Finder\" sometimes, though rarely with affection.\n\nElara lived with her grandmother, Maven, in a crooked cottage at the edge of the village. Her parents had died when she was young—a fever that swept through Thornwall one terrible winter—and Maven had raised her with stern love and stranger stories.\n\n\"There were dragons once,\" Maven would say, her gnarled hands working at her loom. \"Great and terrible. Wise beyond measure. They ruled the skies before men ever dreamed of crowns.\"\n\n\"Where did they go?\" young Elara would ask, the same question every time.\n\n\"They were hunted,\" Maven would reply, her voice growing soft. \"Hunted until the last of them vanished from the world. Or so they say.\"\n\nElara had loved those stories as a child. Now, on the cusp of adulthood, she found herself believing them less and less. The world, she had learned, was made of stone and snow and hard work. There was no room in it for dragons.\n\nShe would soon learn how wrong she was.\n\n---\n\nIt began on the morning of the autumn storm.\n\nThe clouds had gathered over the peaks for three days, dark and swollen, and when they finally broke, they did so with a fury that shook the very foundations of the mountains. Lightning split the sky. Thunder rolled like the war drums of the gods.\n\nElara had been sent to find the goats that had wandered up the eastern slope, and the storm caught her halfway up the mountain. Rain lashed her face. The wind threatened to tear her from the rocks. She should have turned back—any sensible person would have—but something pulled her onward. A feeling, deep in her chest, like a thread tied to her heart and drawn taut.\n\nShe followed it.\n\nHigher and higher she climbed, past the treeline, past the last of the scrub grass, into the bare stone of the high peaks where even the goats dared not go. The feeling grew stronger with each step, a warmth spreading through her despite the cold rain.\n\nAnd then she found the cave.\n\nIt was hidden behind a curtain of falling water, invisible unless you knew exactly where to look. Elara squeezed through the narrow opening, grateful to be out of the storm, and found herself in a vast chamber that glittered with veins of crystal in the stone.\n\nIn the center of the chamber, resting on a bed of ancient ash, was an egg.\n\nIt was enormous—taller than Elara herself—and colored like a sunset, all reds and golds and deep oranges that seemed to shift and pulse with an inner light. Heat radiated from it, filling the cave with a comfortable warmth.\n\nElara approached slowly, hardly daring to breathe. She had heard her grandmother's stories a thousand times, but she had never truly believed. Until now.\n\n\"It can't be,\" she whispered.\n\nThe egg pulsed brighter, as if in response to her voice.\n\nShe reached out a trembling hand and placed it against the warm shell. The moment she touched it, a vision exploded behind her eyes: vast wings stretching across an endless sky, the roar of fire, the song of creatures older than memory. And a voice, ancient and powerful, speaking directly into her mind.\n\n*At last. You have come.*\n\nElara stumbled backward, her heart pounding. \"Who—who's there?\"\n\n*I am Vethric,* the voice replied. *The last of my kind. And you, child, are the one I have waited for across the long centuries.*\n\nThe egg cracked.\n\n---\n\n## Chapter Two: The Hatchling\n\nThe shell split with a sound like breaking glass, and from within emerged a creature unlike anything Elara had ever imagined.\n\nThe dragon was small—no larger than a hunting hound—but everything about it spoke of power and ancient magic. Its scales were the color of molten gold, shimmering with hints of red and orange. Its eyes were deep amber, intelligent and ancient despite the newness of its birth. Two small horns curved back from its head, and its wings, though still damp and crumpled, promised future magnificence.\n\nIt looked at Elara, and she felt the connection between them snap into place like a key turning in a lock.\n\n*Hello,* said the dragon, and though its mouth did not move, she heard the voice clearly in her mind. It was higher now, younger than the voice from the egg, full of curiosity and wonder. *You smell like wheat and rain.*\n\nElara laughed despite herself—a sound that was half wonder, half disbelief. \"You can talk?\"\n\n*Of course I can talk. I am a dragon.* The creature shook itself, scattering bits of shell. *Though I confess, I am not entirely sure what a dragon is. I have memories that are not my own. Memories of flying, of fire, of... sadness.* It tilted its head. *Are you my mother?*\n\n\"No,\" Elara said gently, kneeling beside the small creature. \"No, I'm not your mother. But I think... I think I'm meant to take care of you.\"\n\n*Yes,* the dragon agreed. *That feels right. We are bound, you and I. I felt it the moment you touched my shell.* It crawled closer, leaving the bed of ash, and pressed its warm head against her hand. *What is your name, keeper?*\n\n\"Elara.\"\n\n*Elara.* The dragon seemed to taste the word. *I like it. And I am Vethric. Or I will be. The old Vethric gave me his name, and his memories, before he passed from this world.* A note of melancholy entered its thoughts. *He was very old. The last of the great dragons. He hid his egg here, long ago, and poured the last of his magic into it, waiting for the right keeper to come along.*\n\n\"Why me?\" Elara asked.\n\n*Because you can find what is lost,* Vethric replied simply. *And dragons, dear Elara, are the most lost thing of all.*\n\n---\n\nThe storm had passed by the time they emerged from the cave. Elara had wrapped the young dragon in her cloak, hiding him from view, though Vethric protested that he was perfectly capable of walking on his own.\n\n*I am a creature of fire and sky,* he grumbled. *Not a babe to be swaddled.*\n\n\"And yet you can barely walk three steps without tumbling over your own wings,\" Elara pointed out.\n\n*A temporary condition.*\n\nShe smiled and held him closer. Despite the impossibility of the situation, despite the fear of what would happen if anyone discovered her secret, Elara felt a happiness she had never known. For the first time in her life, she wasn't alone.\n\nBut happiness, she would soon learn, was a fragile thing.\n\n---\n\n## Chapter Three: The Shadow of the Hunt\n\nFor three months, Elara kept her secret.\n\nShe hid Vethric in the old root cellar beneath the cottage, telling her grandmother that she'd taken up the study of herbs and needed privacy for her experiments. Maven, who had grown more frail with the deepening winter, did not question her.\n\nVethric grew quickly. By midwinter, he was the size of a large dog, and his wings had filled out into magnificent membranes of gold and crimson. He could not yet fly—his body was still too heavy for his developing wings—but he could glide short distances, and his fire grew stronger every day.\n\nHe was also, Elara discovered, endlessly curious and prone to mischief.\n\n*What is this?* he would ask, poking at everything in the cellar. *What does this do? Why do humans keep so many things in jars? Can I eat this? Can I eat that? Why not?*\n\n\"Because that's lamp oil, and you'll make yourself sick,\" Elara would reply, exasperated and amused in equal measure.\n\nShe taught him about the world—about humans and villages and the long history of Thornwall. He taught her about dragons, sharing the memories that the old Vethric had passed to him.\n\n*We were not always hunted,* he told her one night, as snow fell silently outside. *Once, dragons and humans lived in harmony. We shared the skies and the earth. Dragons were guardians, protectors. We kept the balance of the world.*\n\n\"What changed?\" Elara asked.\n\n*Greed,* Vethric replied, and his thoughts grew dark. *There was a king—Aldric the Conqueror, he was called. He desired the power of dragons for himself. He learned that a dragon's heart, consumed, could grant a human extraordinary abilities. Strength. Long life. Magic.* The young dragon shuddered. *He began to hunt us. And others followed. The Dragon Wars lasted a hundred years, and when they ended, only the old Vethric remained, hidden away in his mountain cave.*\n\nElara felt a chill that had nothing to do with the winter cold. \"Are there still hunters? People who would...",
+          "type": "text"
+        }
+      ],
+      "id": "msg_01EK3wfW4kYDRDx3SMCihggv",
+      "model": "claude-opus-4-8",
+      "role": "assistant",
+      "stop_details": null,
+      "stop_reason": "max_tokens",
+      "stop_sequence": null,
+      "type": "message",
+      "usage": {
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 0,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "inference_geo": "global",
+        "input_tokens": 20,
+        "output_tokens": 3000,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard"
+      }
+    },
+    "headers": {
+      "anthropic-organization-id": [
+        "a71659e7-a922-4ff7-99de-f3ba615face1"
+      ],
+      "anthropic-ratelimit-input-tokens-limit": [
+        "5000000"
+      ],
+      "anthropic-ratelimit-input-tokens-remaining": [
+        "5000000"
+      ],
+      "anthropic-ratelimit-input-tokens-reset": [
+        "2026-05-28T18:31:36Z"
+      ],
+      "anthropic-ratelimit-output-tokens-limit": [
+        "400000"
+      ],
+      "anthropic-ratelimit-output-tokens-remaining": [
+        "400000"
+      ],
+      "anthropic-ratelimit-output-tokens-reset": [
+        "2026-05-28T18:32:26Z"
+      ],
+      "anthropic-ratelimit-requests-limit": [
+        "2000"
+      ],
+      "anthropic-ratelimit-requests-remaining": [
+        "1999"
+      ],
+      "anthropic-ratelimit-requests-reset": [
+        "2026-05-28T18:31:35Z"
+      ],
+      "anthropic-ratelimit-tokens-limit": [
+        "5400000"
+      ],
+      "anthropic-ratelimit-tokens-remaining": [
+        "5400000"
+      ],
+      "anthropic-ratelimit-tokens-reset": [
+        "2026-05-28T18:31:36Z"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a02f56504e9c231c-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-security-policy": [
+        "default-src 'none'; frame-ancestors 'none'"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Thu, 28 May 2026 18:32:26 GMT"
+      ],
+      "request-id": [
+        "req_011CbVSjBWT8Kww8SW5oa5Lj"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": [
+        "_cfuvid=E7HKMN8Ydoib_X4itzieGJe_UHANp1fRVM9hD6FviiI-1779993095.7289777-1.0.1.1-qPZYp0Ni2HoAX0uKf0KDGw9Jar3KL.c13vEpXtMCK0Y; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.anthropic.com"
+      ],
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "traceresponse": [
+        "00-16ae3b4228e5a9de61019ad1274078bd-4bd949d7823dd1ed-01"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-envoy-upstream-service-time": [
+        "50320"
+      ],
+      "x-robots-tag": [
+        "none"
+      ]
+    },
+    "status": 200
+  }
+}

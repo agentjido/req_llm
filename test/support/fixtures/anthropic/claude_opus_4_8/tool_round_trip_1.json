@@ -1,0 +1,196 @@
+{
+  "model_spec": "anthropic:claude-opus-4-8",
+  "provider": "anthropic",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoxMjgwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJVc2UgdGhlIGFkZCB0b29sIHRvIGNvbXB1dGUgMiArIDMuIEFmdGVyIHRoZSB0b29sIHJlc3VsdCBhcnJpdmVzLCByZXNwb25kIHdpdGggJ3N1bT08dmFsdWU+Jy4iLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJjbGF1ZGUtb3B1cy00LTgiLCJzdHJlYW0iOmZhbHNlLCJ0b29sX2Nob2ljZSI6eyJuYW1lIjoiYWRkIiwidHlwZSI6InRvb2wifSwidG9vbHMiOlt7ImRlc2NyaXB0aW9uIjoiQWRkIHR3byBpbnRlZ2VycyIsImlucHV0X3NjaGVtYSI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnsiYSI6eyJ0eXBlIjoiaW50ZWdlciJ9LCJiIjp7InR5cGUiOiJpbnRlZ2VyIn19LCJyZXF1aXJlZCI6WyJhIiwiYiJdLCJ0eXBlIjoib2JqZWN0In0sIm5hbWUiOiJhZGQifV19"
+    },
+    "canonical_json": {
+      "max_tokens": 12800,
+      "messages": [
+        {
+          "content": "Use the add tool to compute 2 + 3. After the tool result arrives, respond with 'sum=<value>'.",
+          "role": "user"
+        }
+      ],
+      "model": "claude-opus-4-8",
+      "stream": false,
+      "tool_choice": {
+        "name": "add",
+        "type": "tool"
+      },
+      "tools": [
+        {
+          "description": "Add two integers",
+          "input_schema": {
+            "additionalProperties": false,
+            "properties": {
+              "a": {
+                "type": "integer"
+              },
+              "b": {
+                "type": "integer"
+              }
+            },
+            "required": [
+              "a",
+              "b"
+            ],
+            "type": "object"
+          },
+          "name": "add"
+        }
+      ]
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "anthropic-beta": [
+        "tools-2024-05-16"
+      ],
+      "anthropic-version": [
+        "2023-06-01"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ],
+      "x-api-key": "[REDACTED:x-api-key]"
+    },
+    "method": "post",
+    "url": "https://api.anthropic.com/v1/messages"
+  },
+  "response": {
+    "body": {
+      "content": [
+        {
+          "caller": {
+            "type": "direct"
+          },
+          "id": "toolu_01JdtEQdYewmfoxDc7HAp8xM",
+          "input": {
+            "a": 2,
+            "b": 3
+          },
+          "name": "add",
+          "type": "tool_use"
+        }
+      ],
+      "id": "msg_01JBNGU8s5YeiFVySdS7Ez7v",
+      "model": "claude-opus-4-8",
+      "role": "assistant",
+      "stop_details": null,
+      "stop_reason": "tool_use",
+      "stop_sequence": null,
+      "type": "message",
+      "usage": {
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 0,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "inference_geo": "global",
+        "input_tokens": 548,
+        "output_tokens": 53,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard"
+      }
+    },
+    "headers": {
+      "anthropic-organization-id": [
+        "a71659e7-a922-4ff7-99de-f3ba615face1"
+      ],
+      "anthropic-ratelimit-input-tokens-limit": [
+        "5000000"
+      ],
+      "anthropic-ratelimit-input-tokens-remaining": [
+        "5000000"
+      ],
+      "anthropic-ratelimit-input-tokens-reset": [
+        "2026-05-28T18:31:20Z"
+      ],
+      "anthropic-ratelimit-output-tokens-limit": [
+        "400000"
+      ],
+      "anthropic-ratelimit-output-tokens-remaining": [
+        "400000"
+      ],
+      "anthropic-ratelimit-output-tokens-reset": [
+        "2026-05-28T18:31:20Z"
+      ],
+      "anthropic-ratelimit-requests-limit": [
+        "2000"
+      ],
+      "anthropic-ratelimit-requests-remaining": [
+        "1999"
+      ],
+      "anthropic-ratelimit-requests-reset": [
+        "2026-05-28T18:31:19Z"
+      ],
+      "anthropic-ratelimit-tokens-limit": [
+        "5400000"
+      ],
+      "anthropic-ratelimit-tokens-remaining": [
+        "5400000"
+      ],
+      "anthropic-ratelimit-tokens-reset": [
+        "2026-05-28T18:31:20Z"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a02f55e76dfc223a-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-security-policy": [
+        "default-src 'none'; frame-ancestors 'none'"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Thu, 28 May 2026 18:31:20 GMT"
+      ],
+      "request-id": [
+        "req_011CbVShwihxNvBFp2V9e5Vt"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": [
+        "_cfuvid=5XGodF.EkNk_0alDbk4zua07Z91kOJoavjdJmRbc7Xs-1779993078.9415805-1.0.1.1-gw7Qdxh_qgybSKDmpmiHVIAfOKs3KgRuZQw8qMnmVwA; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.anthropic.com"
+      ],
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "traceresponse": [
+        "00-1b1a790111a3ab8902a97f25ad63723a-b328826846d6ff4d-01"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-envoy-upstream-service-time": [
+        "1418"
+      ],
+      "x-robots-tag": [
+        "none"
+      ]
+    },
+    "status": 200
+  }
+}
