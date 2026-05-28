@@ -926,7 +926,7 @@ defmodule ReqLLM.Providers.Google do
       end
 
     request
-    |> put_in([Access.key!(:options), :json], ReqLLM.Schema.apply_property_ordering(body))
+    |> put_in([Access.key!(:options), :json], body)
   end
 
   defp encode_image_body(request) do

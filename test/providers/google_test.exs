@@ -1904,6 +1904,32 @@ defmodule ReqLLM.Providers.GoogleTest do
       refute Map.has_key?(decoded["generationConfig"], "responseJsonSchema")
     end
 
+    test "encode_object_body preserves responseSchema propertyOrdering for non-2.5 models" do
+      context = context_fixture()
+
+      {:ok, schema} =
+        ReqLLM.Schema.compile(
+          summary: [type: :string, required: true],
+          answer: [type: :string, required: true],
+          confidence: [type: :integer]
+        )
+
+      mock_request = %Req.Request{
+        options: [
+          context: context,
+          id: "gemini-1.5-flash",
+          operation: :object,
+          compiled_schema: schema
+        ]
+      }
+
+      updated_request = Google.encode_body(mock_request)
+      decoded = ReqLLM.Test.Helpers.json_body(updated_request)
+
+      response_schema = decoded["generationConfig"]["responseSchema"]
+      assert response_schema["propertyOrdering"] == ["summary", "answer", "confidence"]
+    end
+
     test "encode_object_body uses responseJsonSchema for Gemini 2.5" do
       context = context_fixture()
 
@@ -1929,6 +1955,32 @@ defmodule ReqLLM.Providers.GoogleTest do
       assert response_json_schema["type"] == "object"
       assert Map.has_key?(response_json_schema, "properties")
       refute Map.has_key?(decoded["generationConfig"], "responseSchema")
+    end
+
+    test "encode_object_body preserves responseJsonSchema propertyOrdering for Gemini 2.5" do
+      context = context_fixture()
+
+      {:ok, schema} =
+        ReqLLM.Schema.compile(
+          summary: [type: :string, required: true],
+          answer: [type: :string, required: true],
+          confidence: [type: :integer]
+        )
+
+      mock_request = %Req.Request{
+        options: [
+          context: context,
+          model: "gemini-2.5-flash",
+          operation: :object,
+          compiled_schema: schema
+        ]
+      }
+
+      updated_request = Google.encode_body(mock_request)
+      decoded = ReqLLM.Test.Helpers.json_body(updated_request)
+
+      response_json_schema = decoded["generationConfig"]["responseJsonSchema"]
+      assert response_json_schema["propertyOrdering"] == ["summary", "answer", "confidence"]
     end
 
     test "encode_object_body uses responseJsonSchema for Gemini 3.1" do
