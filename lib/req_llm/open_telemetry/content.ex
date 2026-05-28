@@ -218,9 +218,6 @@ defmodule ReqLLM.OpenTelemetry.Content do
 
   defp tool_to_otel(_), do: nil
 
-  # `:parameter_schema` is meant to be JSON Schema, but `generate_object/3`'s
-  # synthesized tool passes a NimbleOptions keyword list with tuple types
-  # Jason can't encode. Drop the field rather than emit an unencodable payload.
   defp maybe_put_parameters(map, _name, nil), do: map
   defp maybe_put_parameters(map, _name, []), do: map
 

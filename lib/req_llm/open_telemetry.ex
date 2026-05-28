@@ -519,8 +519,6 @@ defmodule ReqLLM.OpenTelemetry do
   @doc false
   @spec handle_event(list(atom()), map(), map(), keyword()) :: :ok
   def handle_event(event, measurements, metadata, config) do
-    # `:telemetry` permanently detaches a handler that raises — one bad
-    # event would silently kill the bridge for the BEAM lifetime.
     do_handle_event(event, measurements, metadata, config)
   rescue
     error ->
