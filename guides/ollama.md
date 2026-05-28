@@ -14,6 +14,33 @@ For the full model-spec workflow, see [Model Specs](model-specs.md).
 
 Ollama is a good example of the full explicit model specification path: the model may not exist in LLMDB, but ReqLLM can still use it as long as the model spec includes `provider`, `id`, and `base_url`.
 
+## Native Provider (recommended)
+
+As of req_llm 1.11, Ollama ships as a built-in provider. Use the `ollama:` prefix
+directly — no custom provider setup required:
+
+```elixir
+ReqLLM.generate_text("ollama:llama3", "Hello!")
+
+# With Ollama-specific options
+ReqLLM.generate_text("ollama:gemma4:27b", "Hello",
+  provider_options: [num_ctx: 16_384, keep_alive: "30m"]
+)
+
+# generate_object works out of the box
+schema = [answer: [type: :string, required: true]]
+ReqLLM.generate_object("ollama:llama3", "What is 2+2?", schema)
+```
+
+For jido_ai users, set a model alias in config and it resolves automatically:
+
+```elixir
+config :jido_ai, model_aliases: [default: "ollama:gemma4:27b"]
+```
+
+The existing model-struct approach (`provider: :openai, base_url: "..."`) continues to
+work unchanged.
+
 ## Usage
 
 Ollama exposes an OpenAI-compatible API, so use the `:openai` provider with a custom `base_url`:
