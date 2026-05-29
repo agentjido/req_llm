@@ -156,7 +156,8 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
   defp list_models(opts) do
     models = load_registry()
     state = load_state()
-    sample_specs = if opts[:sample], do: default_specs_for_operation(:text)
+    operation = parse_operation_type(opts[:type])
+    sample_specs = if opts[:sample], do: default_specs_for_operation(operation)
     implemented_providers = get_implemented_providers()
 
     Mix.shell().info("\n#{header(opts[:sample])}\n")
@@ -642,8 +643,7 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
     suffix =
       [to_string(provider), model_id, scenario || "all", System.unique_integer([:positive])]
       |> Enum.map(&to_string/1)
-      |> Enum.map(&ReqLLM.Test.FixturePath.slug/1)
-      |> Enum.join("_")
+      |> Enum.map_join("_", &ReqLLM.Test.FixturePath.slug/1)
 
     Path.join(System.tmp_dir!(), "req_llm_fixture_record_#{suffix}")
   end
@@ -659,15 +659,13 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
   defp maybe_promote_staged_fixtures({output, 0}, stage_dir) do
     files = staged_fixture_files(stage_dir)
 
-    cond do
-      files == [] ->
-        File.rm_rf(stage_dir)
-        {output <> "\n[Fixture] ERROR no fixture files were recorded\n", 1}
-
-      true ->
-        Enum.each(files, &promote_staged_fixture(stage_dir, &1))
-        File.rm_rf(stage_dir)
-        {output <> promoted_fixture_output(files), 0}
+    if files == [] do
+      File.rm_rf(stage_dir)
+      {output <> "\n[Fixture] ERROR no fixture files were recorded\n", 1}
+    else
+      Enum.each(files, &promote_staged_fixture(stage_dir, &1))
+      File.rm_rf(stage_dir)
+      {output <> promoted_fixture_output(files), 0}
     end
   rescue
     error ->
@@ -1607,7 +1605,17 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
     end
   end
 
-  defp parse_operation_type(type), do: ReqLLM.ModelOperation.normalize(type)
+  defp parse_operation_type(type) do
+    operation = ReqLLM.ModelOperation.normalize(type)
+
+    if ReqLLM.ModelOperation.known?(operation) do
+      operation
+    else
+      Mix.raise(
+        "Unknown operation type: #{inspect(type)}. Expected one of: #{Enum.join(ReqLLM.ModelOperation.names(), ", ")}"
+      )
+    end
+  end
 
   defp operation_to_category(operation), do: ReqLLM.ModelOperation.category(operation)
 

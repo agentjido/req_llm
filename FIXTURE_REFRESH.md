@@ -419,10 +419,12 @@ MIX_ENV=test mix mc "openai:gpt-image-1.5" --type image --scenario image_basic -
 | Command | Result |
 | --- | --- |
 | `MIX_ENV=test mix compile` | passed |
-| operation/model-matrix regression suite | 37 tests, 0 failures |
+| operation/model-matrix regression suite | 44 tests, 0 failures |
 | existing OpenAI and Google image fixture replay | 2 tests, 0 failures |
 | specialty coverage file load check | 0 tests, 0 failures, 5 excluded |
 | OpenAI image `mix mc` replay | 1/1 active models passing |
+
+Hardening note: operation parsing now rejects unknown `--type` values explicitly, avoids creating atoms from arbitrary operation strings, and keeps specialty-shaped models out of text coverage even when their provider-specific specialty suite is not enabled yet.
 
 ## Conservative Refresh Model List
 

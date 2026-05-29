@@ -204,6 +204,13 @@ defmodule ReqLLM.Test.ModelMatrixTest do
 
       assert specs == []
     end
+
+    test "handles invalid operation filters gracefully" do
+      specs =
+        ModelMatrix.selected_specs([env: %{"REQ_LLM_OPERATION" => "not-real"}] ++ @opts)
+
+      assert specs == []
+    end
   end
 
   describe "models_for_provider/1" do

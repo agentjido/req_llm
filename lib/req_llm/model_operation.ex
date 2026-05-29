@@ -6,29 +6,26 @@ defmodule ReqLLM.ModelOperation do
   @speech_providers ~w(openai elevenlabs)a
   @transcription_providers ~w(openai groq elevenlabs)a
   @rerank_providers ~w(cohere)a
+  @operation_map for operation <- @operations,
+                     into: %{},
+                     do: {Atom.to_string(operation), operation}
 
   @spec operations() :: [atom()]
   def operations, do: @operations
 
+  @spec known?(atom()) :: boolean()
+  def known?(operation), do: operation in @operations
+
+  @spec names() :: [String.t()]
+  def names, do: Map.keys(@operation_map) |> Enum.sort()
+
   @spec normalize(atom() | String.t() | nil) :: atom()
   def normalize(nil), do: :text
   def normalize(operation) when operation in @operations, do: operation
+  def normalize(operation) when is_atom(operation), do: :unknown
 
   def normalize(operation) when is_binary(operation) do
-    operation
-    |> String.trim()
-    |> String.downcase()
-    |> case do
-      "text" -> :text
-      "embedding" -> :embedding
-      "image" -> :image
-      "speech" -> :speech
-      "transcription" -> :transcription
-      "rerank" -> :rerank
-      "ocr" -> :ocr
-      "all" -> :all
-      other -> String.to_atom(other)
-    end
+    Map.get(@operation_map, String.downcase(String.trim(operation)), :unknown)
   end
 
   @spec supported?(LLMDB.Model.t() | map(), atom()) :: boolean()
@@ -59,11 +56,11 @@ defmodule ReqLLM.ModelOperation do
   def type(model) do
     cond do
       embedding?(model) -> "embedding"
-      image?(model) -> "image"
-      speech?(model) -> "speech"
-      transcription?(model) -> "transcription"
-      rerank?(model) -> "rerank"
-      ocr?(model) -> "ocr"
+      image_model?(model) -> "image"
+      speech_model?(model) -> "speech"
+      transcription_model?(model) -> "transcription"
+      rerank_model?(model) -> "rerank"
+      ocr_model?(model) -> "ocr"
       true -> "text"
     end
   end
@@ -71,10 +68,11 @@ defmodule ReqLLM.ModelOperation do
   defp text?(model) do
     chat_enabled?(model) and
       not embedding?(model) and
-      not speech?(model) and
-      not transcription?(model) and
-      not rerank?(model) and
-      not ocr?(model)
+      not image_model?(model) and
+      not speech_model?(model) and
+      not transcription_model?(model) and
+      not rerank_model?(model) and
+      not ocr_model?(model)
   end
 
   defp chat_enabled?(model) do
@@ -91,42 +89,59 @@ defmodule ReqLLM.ModelOperation do
   end
 
   defp image?(model) do
-    provider?(model, @image_providers) and
-      (capability_truthy?(model, [:images]) or
-         modality?(model, :output, :image) or
-         id_contains?(model, ["image", "imagen", "dall-e"]))
+    provider?(model, @image_providers) and image_model?(model)
   end
 
   defp speech?(model) do
-    provider?(model, @speech_providers) and
-      ((modality?(model, :input, :text) and modality?(model, :output, :audio) and
-          not modality?(model, :output, :text)) or
-         id_contains?(model, ["tts", "eleven"]))
+    provider?(model, @speech_providers) and speech_model?(model)
   end
 
   defp transcription?(model) do
-    provider?(model, @transcription_providers) and
-      ((modality?(model, :input, :audio) and modality?(model, :output, :text) and
-          not modality?(model, :input, :text)) or
-         id_contains?(model, ["whisper", "scribe"]))
+    provider?(model, @transcription_providers) and transcription_model?(model)
   end
 
   defp rerank?(model) do
-    provider?(model, @rerank_providers) and
-      (capability_truthy?(model, [:rerank]) or id_contains?(model, ["rerank"]))
+    provider?(model, @rerank_providers) and rerank_model?(model)
   end
 
   defp ocr?(model) do
-    field(model, :provider) == :google_vertex and
-      (capability_truthy?(model, [:ocr]) or
-         field(model, :family) == "mistral-ocr" or
-         id_contains?(model, ["ocr"]))
+    field(model, :provider) == :google_vertex and ocr_model?(model)
+  end
+
+  defp image_model?(model) do
+    capability_truthy?(model, [:images]) or
+      id_contains?(model, ["image", "imagen", "dall-e"]) or
+      (modality?(model, :output, :image) and not modality?(model, :output, :text))
+  end
+
+  defp speech_model?(model) do
+    (modality?(model, :input, :text) and modality?(model, :output, :audio) and
+       not modality?(model, :output, :text)) or
+      id_contains?(model, ["tts", "eleven", "orpheus"])
+  end
+
+  defp transcription_model?(model) do
+    (modality?(model, :input, :audio) and modality?(model, :output, :text) and
+       not modality?(model, :input, :text)) or
+      id_contains?(model, ["whisper", "scribe", "asr", "transcribe"])
+  end
+
+  defp rerank_model?(model) do
+    capability_truthy?(model, [:rerank]) or id_contains?(model, ["rerank"])
+  end
+
+  defp ocr_model?(model) do
+    capability_truthy?(model, [:ocr]) or
+      field(model, :family) == "mistral-ocr" or
+      id_contains?(model, ["ocr"])
   end
 
   defp capability_present?(model, path) do
     case capability(model, path) do
       nil -> false
       false -> false
+      %{enabled: false} -> false
+      %{"enabled" => false} -> false
       _ -> true
     end
   end

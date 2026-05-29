@@ -1,5 +1,5 @@
 defmodule Mix.Tasks.ReqLlm.ModelCompatTest do
-  use ExUnit.Case, async: true
+  use ExUnit.Case, async: false
 
   alias Mix.Tasks.ReqLlm.ModelCompat
 
@@ -55,6 +55,16 @@ defmodule Mix.Tasks.ReqLlm.ModelCompatTest do
       assert ModelCompat.state_update?(record: true)
       assert ModelCompat.state_update?(record_all: true)
       assert ModelCompat.state_update?(update_state: true)
+    end
+  end
+
+  describe "run/1" do
+    test "raises clearly for unknown operation types" do
+      Mix.Task.reenable("req_llm.model_compat")
+
+      assert_raise Mix.Error, ~r/Unknown operation type: "not-real"/, fn ->
+        ModelCompat.run(["--available", "--type", "not-real"])
+      end
     end
   end
 end
