@@ -1,7 +1,9 @@
 {
+  "model_spec": "openai:gpt-4.1-mini",
+  "provider": "openai",
   "request": {
     "body": {
-      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IldoYXQncyB0aGUgd2VhdGhlciBsaWtlIGluIFBhcmlzLCBGcmFuY2U/IiwidHlwZSI6ImlucHV0X3RleHQifV0sInJvbGUiOiJ1c2VyIn1dLCJtYXhfb3V0cHV0X3Rva2VucyI6MzI3NiwibW9kZWwiOiJncHQtNC4xLW1pbmkiLCJzdHJlYW0iOmZhbHNlLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifSwidW5pdCI6eyJlbnVtIjpbImNlbHNpdXMiLCJmYWhyZW5oZWl0Il0sInR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIiwidW5pdCJdLCJ0eXBlIjoib2JqZWN0In0sInN0cmljdCI6dHJ1ZX0sIm5hbWUiOiJnZXRfd2VhdGhlciIsInR5cGUiOiJmdW5jdGlvbiJ9LHsiZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJUZWxsIGEgZnVubnkgam9rZSIsIm5hbWUiOiJ0ZWxsX2pva2UiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsidG9waWMiOnsiZGVzY3JpcHRpb24iOiJUb3BpYyBmb3IgdGhlIGpva2UiLCJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJ0b3BpYyJdLCJ0eXBlIjoib2JqZWN0In0sInN0cmljdCI6dHJ1ZX0sIm5hbWUiOiJ0ZWxsX2pva2UiLCJ0eXBlIjoiZnVuY3Rpb24ifSx7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IHRoZSBjdXJyZW50IHRpbWUiLCJuYW1lIjoiZ2V0X3RpbWUiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnt9LCJyZXF1aXJlZCI6W10sInR5cGUiOiJvYmplY3QifSwic3RyaWN0Ijp0cnVlfSwibmFtZSI6ImdldF90aW1lIiwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
+      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IldoYXQncyB0aGUgd2VhdGhlciBsaWtlIGluIFBhcmlzLCBGcmFuY2U/IiwidHlwZSI6ImlucHV0X3RleHQifV0sInJvbGUiOiJ1c2VyIn1dLCJtYXhfb3V0cHV0X3Rva2VucyI6MzI3NiwibW9kZWwiOiJncHQtNC4xLW1pbmkiLCJzdHJlYW0iOmZhbHNlLCJ0b29scyI6W3siZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9LCJ1bml0Ijp7ImVudW0iOlsiY2Vsc2l1cyIsImZhaHJlbmhlaXQiXSwidHlwZSI6InN0cmluZyJ9fSwidHlwZSI6Im9iamVjdCJ9LCJzdHJpY3QiOmZhbHNlLCJ0eXBlIjoiZnVuY3Rpb24ifSx7ImRlc2NyaXB0aW9uIjoiVGVsbCBhIGZ1bm55IGpva2UiLCJuYW1lIjoidGVsbF9qb2tlIiwicGFyYW1ldGVycyI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnsidG9waWMiOnsiZGVzY3JpcHRpb24iOiJUb3BpYyBmb3IgdGhlIGpva2UiLCJ0eXBlIjoic3RyaW5nIn19LCJ0eXBlIjoib2JqZWN0In0sInN0cmljdCI6ZmFsc2UsInR5cGUiOiJmdW5jdGlvbiJ9LHsiZGVzY3JpcHRpb24iOiJHZXQgdGhlIGN1cnJlbnQgdGltZSIsIm5hbWUiOiJnZXRfdGltZSIsInBhcmFtZXRlcnMiOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7fSwidHlwZSI6Im9iamVjdCJ9LCJzdHJpY3QiOmZhbHNlLCJ0eXBlIjoiZnVuY3Rpb24ifV19"
     },
     "canonical_json": {
       "input": [
@@ -20,66 +22,52 @@
       "stream": false,
       "tools": [
         {
-          "function": {
-            "description": "Get current weather information for a location",
-            "name": "get_weather",
-            "parameters": {
-              "properties": {
-                "location": {
-                  "type": "string"
-                },
-                "unit": {
-                  "enum": [
-                    "celsius",
-                    "fahrenheit"
-                  ],
-                  "type": "string"
-                }
-              },
-              "required": [
-                "location",
-                "unit"
-              ],
-              "type": "object"
-            },
-            "strict": true
-          },
+          "description": "Get current weather information for a location",
           "name": "get_weather",
-          "type": "function"
-        },
-        {
-          "function": {
-            "description": "Tell a funny joke",
-            "name": "tell_joke",
-            "parameters": {
-              "properties": {
-                "topic": {
-                  "description": "Topic for the joke",
-                  "type": "string"
-                }
+          "parameters": {
+            "additionalProperties": false,
+            "properties": {
+              "location": {
+                "type": "string"
               },
-              "required": [
-                "topic"
-              ],
-              "type": "object"
+              "unit": {
+                "enum": [
+                  "celsius",
+                  "fahrenheit"
+                ],
+                "type": "string"
+              }
             },
-            "strict": true
+            "type": "object"
           },
-          "name": "tell_joke",
+          "strict": false,
           "type": "function"
         },
         {
-          "function": {
-            "description": "Get the current time",
-            "name": "get_time",
-            "parameters": {
-              "properties": {},
-              "required": [],
-              "type": "object"
+          "description": "Tell a funny joke",
+          "name": "tell_joke",
+          "parameters": {
+            "additionalProperties": false,
+            "properties": {
+              "topic": {
+                "description": "Topic for the joke",
+                "type": "string"
+              }
             },
-            "strict": true
+            "type": "object"
           },
+          "strict": false,
+          "type": "function"
+        },
+        {
+          "description": "Get the current time",
           "name": "get_time",
+          "parameters": {
+            "additionalProperties": false,
+            "properties": {},
+            "type": "object"
+          },
+          "strict": false,
           "type": "function"
         }
       ]
@@ -93,7 +81,7 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ]
     },
     "method": "post",
@@ -102,104 +90,127 @@
   "response": {
     "body": {
       "background": false,
-      "billing": {
-        "payer": "developer"
-      },
-      "created_at": 1762105815,
-      "error": null,
-      "id": "resp_0d2ffff35a9159c400690799d7b4108196a4afd73df77f2db9",
-      "incomplete_details": null,
-      "instructions": null,
-      "max_output_tokens": 3276,
-      "max_tool_calls": null,
-      "metadata": {},
-      "model": "gpt-4.1-mini-2025-04-14",
-      "object": "response",
-      "output": [
-        {
-          "arguments": "{}",
-          "call_id": "call_3EyTFdje28yFiofe7NTFGCjp",
-          "id": "fc_0d2ffff35a9159c400690799d9d5a48196be36078fedeab82f",
-          "name": "get_weather",
-          "status": "completed",
-          "type": "function_call"
-        }
-      ],
-      "parallel_tool_calls": true,
-      "previous_response_id": null,
-      "prompt_cache_key": null,
-      "prompt_cache_retention": null,
-      "reasoning": {
-        "effort": null,
-        "summary": null
-      },
-      "safety_identifier": null,
-      "service_tier": "default",
-      "status": "completed",
-      "store": true,
-      "temperature": 1.0,
       "text": {
         "format": {
           "type": "text"
         },
         "verbosity": "medium"
       },
+      "moderation": null,
+      "top_logprobs": 0,
+      "previous_response_id": null,
       "tool_choice": "auto",
+      "service_tier": "default",
+      "status": "completed",
       "tools": [
         {
-          "description": null,
+          "description": "Get current weather information for a location",
           "name": "get_weather",
           "parameters": {
             "additionalProperties": false,
-            "properties": {},
-            "required": [],
+            "properties": {
+              "location": {
+                "type": "string"
+              },
+              "unit": {
+                "enum": [
+                  "celsius",
+                  "fahrenheit"
+                ],
+                "type": "string"
+              }
+            },
             "type": "object"
           },
-          "strict": true,
+          "strict": false,
           "type": "function"
         },
         {
-          "description": null,
+          "description": "Tell a funny joke",
           "name": "tell_joke",
           "parameters": {
             "additionalProperties": false,
-            "properties": {},
-            "required": [],
+            "properties": {
+              "topic": {
+                "description": "Topic for the joke",
+                "type": "string"
+              }
+            },
             "type": "object"
           },
-          "strict": true,
+          "strict": false,
           "type": "function"
         },
         {
-          "description": null,
+          "description": "Get the current time",
           "name": "get_time",
           "parameters": {
             "additionalProperties": false,
             "properties": {},
-            "required": [],
             "type": "object"
           },
-          "strict": true,
+          "strict": false,
           "type": "function"
         }
       ],
-      "top_logprobs": 0,
-      "top_p": 1.0,
-      "truncation": "disabled",
+      "id": "resp_071df97fa9ac3790006a19db590f2c819692342fd6563bf914",
+      "temperature": 1.0,
+      "max_output_tokens": 3276,
+      "user": null,
+      "frequency_penalty": 0.0,
+      "error": null,
+      "model": "gpt-4.1-mini-2025-04-14",
       "usage": {
-        "input_tokens": 51,
+        "input_tokens": 99,
         "input_tokens_details": {
           "cached_tokens": 0
         },
-        "output_tokens": 11,
+        "output_tokens": 22,
         "output_tokens_details": {
           "reasoning_tokens": 0
         },
-        "total_tokens": 62
+        "total_tokens": 121
       },
-      "user": null
+      "safety_identifier": null,
+      "object": "response",
+      "parallel_tool_calls": true,
+      "output": [
+        {
+          "arguments": "{\"location\":\"Paris, France\",\"unit\":\"celsius\"}",
+          "call_id": "call_cks89ApRLvV7y8Gw4K4NgU49",
+          "id": "fc_071df97fa9ac3790006a19db59e84481968d469b9c24888b66",
+          "name": "get_weather",
+          "status": "completed",
+          "type": "function_call"
+        }
+      ],
+      "instructions": null,
+      "store": true,
+      "presence_penalty": 0.0,
+      "incomplete_details": null,
+      "reasoning": {
+        "context": null,
+        "effort": null,
+        "summary": null
+      },
+      "completed_at": 1780079450,
+      "truncation": "disabled",
+      "top_p": 1.0,
+      "billing": {
+        "payer": "developer"
+      },
+      "prompt_cache_retention": "in_memory",
+      "metadata": {},
+      "prompt_cache_key": null,
+      "created_at": 1780079449,
+      "max_tool_calls": null
     },
     "headers": {
+      "access-control-expose-headers": [
+        "X-Request-ID",
+        "CF-Ray",
+        "CF-Ray"
+      ],
       "alt-svc": [
         "h3=\":443\"; ma=86400"
       ],
@@ -207,7 +218,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "998579210f1ea162-ORD"
+        "a037928c2abaff5d-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -216,13 +227,11 @@
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:50:18 GMT"
+        "Fri, 29 May 2026 18:30:50 GMT"
       ],
-      "openai-organization": [
-        "epic-creative-sogybe"
-      ],
+      "openai-organization": "[REDACTED:openai-organization]",
       "openai-processing-ms": [
-        "2438"
+        "1280"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -233,10 +242,7 @@
       "server": [
         "cloudflare"
       ],
-      "set-cookie": [
-        "__cf_bm=ITAoyzaOmtToZLGwyWtb3WKg3DTRBrXg.gdZR20rqIk-1762105818-1.0.1.1-FPLbCxOH05meD_Y_WxaJdXrOwgvd24YscJeNxewXnzhXgT33aWSx_W1L5PA6_mTBdz3I0v.uPNzE2UTEHAbSTcKQnj_xItxqiy8ie_Stz_A; path=/; expires=Sun, 02-Nov-25 18:20:18 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=mWEboFHpVKTcpWOzB77iuDJN7PTERIaXc2XZjrX3mQQ-1762105818136-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
-      ],
+      "set-cookie": "[REDACTED:set-cookie]",
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
       ],
@@ -245,9 +251,6 @@
       ],
       "x-content-type-options": [
         "nosniff"
-      ],
-      "x-envoy-upstream-service-time": [
-        "2447"
       ],
       "x-ratelimit-limit-requests": [
         "10000"
@@ -259,7 +262,7 @@
         "9999"
       ],
       "x-ratelimit-remaining-tokens": [
-        "9999732"
+        "9999684"
       ],
       "x-ratelimit-reset-requests": [
         "6ms"
@@ -268,9 +271,10 @@
         "1ms"
       ],
       "x-request-id": [
-        "req_826b752f9e864745afb43200d554b441"
+        "req_ff9a2372ab4a434694974c0adb743ec7"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

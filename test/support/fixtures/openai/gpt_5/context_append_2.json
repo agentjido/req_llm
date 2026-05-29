@@ -1,0 +1,214 @@
+{
+  "model_spec": "openai:gpt-5",
+  "provider": "openai",
+  "request": {
+    "body": {
+      "b64": "eyJpbmNsdWRlIjpbInJlYXNvbmluZy5lbmNyeXB0ZWRfY29udGVudCJdLCJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IlJlc3BvbmQgd2l0aCBhIHNpbmdsZSB3b3JkICdIaScuIiwidHlwZSI6ImlucHV0X3RleHQifV0sInJvbGUiOiJ1c2VyIn0seyJjb250ZW50IjpbeyJ0ZXh0IjoiSGkiLCJ0eXBlIjoib3V0cHV0X3RleHQifV0sInJvbGUiOiJhc3Npc3RhbnQifSx7ImNvbnRlbnQiOlt7InRleHQiOiJIaSBhZ2FpbiIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9XSwibWF4X291dHB1dF90b2tlbnMiOjEwMjQsIm1vZGVsIjoiZ3B0LTUiLCJwcmV2aW91c19yZXNwb25zZV9pZCI6InJlc3BfMDA5ZDIzZGI4MzdiY2Y5NjAwNmExOWRkODQwYjU0ODE5Mzg1N2NhYzc4OTNjNTkwMTEiLCJzdG9yZSI6dHJ1ZSwic3RyZWFtIjpmYWxzZX0="
+    },
+    "canonical_json": {
+      "include": [
+        "reasoning.encrypted_content"
+      ],
+      "input": [
+        {
+          "content": [
+            {
+              "text": "Respond with a single word 'Hi'.",
+              "type": "input_text"
+            }
+          ],
+          "role": "user"
+        },
+        {
+          "content": [
+            {
+              "text": "Hi",
+              "type": "output_text"
+            }
+          ],
+          "role": "assistant"
+        },
+        {
+          "content": [
+            {
+              "text": "Hi again",
+              "type": "input_text"
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "max_output_tokens": 1024,
+      "model": "gpt-5",
+      "previous_response_id": "resp_009d23db837bcf96006a19dd840b548193857cac7893c59011",
+      "store": true,
+      "stream": false
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.openai.com/v1/responses"
+  },
+  "response": {
+    "body": {
+      "background": false,
+      "text": {
+        "format": {
+          "type": "text"
+        },
+        "verbosity": "medium"
+      },
+      "moderation": null,
+      "top_logprobs": 0,
+      "previous_response_id": "resp_009d23db837bcf96006a19dd840b548193857cac7893c59011",
+      "tool_choice": "auto",
+      "service_tier": "default",
+      "status": "completed",
+      "tools": [],
+      "id": "resp_009d23db837bcf96006a19dd8694488193b4460bfaef3ffa0c",
+      "temperature": 1.0,
+      "max_output_tokens": 1024,
+      "user": null,
+      "frequency_penalty": 0.0,
+      "error": null,
+      "model": "gpt-5-2025-08-07",
+      "usage": {
+        "input_tokens": 46,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens": 294,
+        "output_tokens_details": {
+          "reasoning_tokens": 256
+        },
+        "total_tokens": 340
+      },
+      "safety_identifier": null,
+      "object": "response",
+      "parallel_tool_calls": true,
+      "output": [
+        {
+          "encrypted_content": "gAAAAABqGd2LdcponWV-SefsjFiQnFFB1VgBaUo9kxM46Fcazpn0GMtFpt0WZlhddC-oXwR4kjPE4BLHMZU3NLVOWhAJhoZhZ5-FCDWEXjZvWrTPfzVoO09JH0ZJLt2H9XjWHL-gfZHNfX-RxzK0kiMIk0WD_nNgTvemmy5T2nRpIbJN4Lny2lEB807zutH5BRPcw0F5_TNCmwP5fZlktH5koQRV8Vd08ZZmQZwIAQlE0VIhm_4ygd9UHLBESCY0EQjMUG2L8kWUeMtYusIstii99la4esl9y3F3t1Qxa8OagGmxdIb4wdDhPEgo40GLYv4KPf_A4SIujCYuctCHo3I6WsEYaOU8l3McUSKinYPLy7lpH3WChYThg7oDHUYOuLj5vcYqB95zWYKYtxhsbBmt51OtK8wHoSOlmRvFpytMkYSr7BjJs_MA6-YWrj9zj__vE7JuQEJWuEbyeznnEwylcQFvHQ--fzdkFWC9Eeq5BoUjFsiIfW-yS7k_LY2rNe_tfHXdwjHsscNHb6jgrvLc-b3sWu2H8yxGa5aNoeKwfu9yJ5YD9koYUS2rHS9seqIdugOt7_mpC6jMtzCbyYvn1XQJl00-o5zQ_cJadF5CSnJcfaNCYjpKaS4otIVN3bTu7-TlV5a1Krl-XNkp2enRF9NuZZLXUtE6AIKWiooiqnaRm6mquc8EdFzDREZpq75zNgrDuH6jwkL81SmMl5nVp_3_wRn31vXOjEelZ35uThb7_vZbte8L79mohHcunfQ1Zsk6o5ZdMV-_u012G4dz_5XVOQ0To2fQLbs0gxsvG6JZ1hV3trJaiN7Da1sna1XO-h9wfHBY6_4qjFZenPsJZ7mCxsBX-pmE0ue3NADzkKk0pmb_0IFdGAIleBmri06o7rUmhfcbl_G5w4VGoTU3xDpvk1OXNLQOvUsAhGCIaQPo4RRHTzhG-YcMWxMFaVaa4l0sxd9JAAnTqFVDQtZ_XIeijAlT5AYB7QhwrN0DE2XobHlfmuWA9lMMmmTufHP0vEJ02Z1_NHuduEDRWQg8G-kX17F8HT1Y3StjRlj3DLju36hKhPMjcO2u77Lg5cgXzp1v-QR7qd2VDNbJTSYWwAyRpN2qCkJqB_IO30HKy3EYgJcDj7jVAmEcy-OH4qodeqB2NGyV_UbtDSToHBMENyQ9moznQIsvUTFbbuy3FzD_y-m6wry5WBePoYaXrSBTDsv9IGO5cm3qkB1V7NxbO-JZfWi0FLvAWIAGZTYsHHyqAgtjPNy18U7tSeLKmKPk7lzJFCDIC_umm24MfOYVKUKq4Y3JDMWw_pcd_dODTDk5T_B1mYHfxBAblZo5CUYtORzqwly768s9rsxF7QaYkbsakLT8zIwQaJuFZYoIMcsfKHeytXJIdWadZJfKgI-ZHd5GGCsGCjigSOebggSL6-SMeIKMk40I0mFeAecbZoHlQPoMpEC7Sb8XaeDFTFG7HbFoV3-SEZTOlqe0-1dZO9DuaYrqYk3OBxnyokByTpGKmZPW_BGKucD2Wsz8PBE7H8acyyJ7WZgKDGf2jdJkvSU1gfgPRwMGJa7JIPNEB4k1Ltd9nItPm7qiH1dwZKtDTDq10Zl5Tsx-aHD5YdKLiSI1AFQ4hKvMqhAruRv9E-p8M93u_e0jqJw0yrm6yu9KX-zvQrJTO_o6bPzVaMujix68-XNIW07tPyZY_T29epbKkoWD8h409ri8UCBmdCLIzgrzJ4Y_mQyq1nFUVzqpnpubcRJ0LTUuMnqT5hw8IzT_MfvX8B-Zth7-v6a1HYfeYNWR9ZQh1xtMhdcgo6DD8uwGKhjbi7gW4-dcrT1QN35NhYo8eu5OmX_B0KAjEozHXROZmkixY0ySQEiWxzRtIGv8e1UaPVWJbq-kpRULXoagMl4N-HkmUXYX-0yXxfvEYzLbraPXHAt4GQLTPrLwV-Hhqs5KcK8o_anC7yhum48P6ox7aAj4G-lPKlWpPNf3zHQHhu6_Kn5lU3711TVGc6j5icMJ8mscEM3t8gw7F9o1MZSUIEyZt12mWAhVLlXjIl6QvyA2HK_kwvc31gvAW4j17EUzBy2f-Ygv2TQbsUnaIjIIcx3rYf29BstW7nGbbXyQHltj1a0_eFPXC3zD7slLgRkfx9js91iC0fbQqlldoDLMMsb1-Ga5EG8Hui_00Y7YPilNw5-6WELLdzVkCaQO-qh5z-40b-KLqNloLvSGxQleN-MJoxGjkxDC9ie1Mtk2pvIBTnGwBsMS_xqG1bx00fnb4X8skLxjxRimvEFRE_w4wxRZMPZE-Rj0y17dKXcJ5AGauBabBxOYs5iPOohEnO8DsTiO95p0V1Z4dBI3BnnKOsxQT3vbVksmIrldJ2J9m76snyAMMtop7fdV5K1gUlwWf8Hiv4AmOoODbwdIp3ZeLEgwlSELhAXAECvSRrRnBK3Tx3LKHfUbj7VIdK8kOyEXcLvTXut1OuGNeuZqEUGluFwwXrLC0yptnR8SyDQCgV6CT-MoeYgYqYeFujhNhs35akcrJvQ1HmqLrFxGXPQZXzIdmz_3nDI43CnAGHEoVGvk",
+          "id": "rs_009d23db837bcf96006a19dd8717408193ab753ff5bf7126a1",
+          "summary": [],
+          "type": "reasoning"
+        },
+        {
+          "content": [
+            {
+              "annotations": [],
+              "logprobs": [],
+              "text": "Hi!",
+              "type": "output_text"
+            }
+          ],
+          "id": "msg_009d23db837bcf96006a19dd8ae5e88193a65fd1448f4de14a",
+          "role": "assistant",
+          "status": "completed",
+          "type": "message"
+        }
+      ],
+      "instructions": null,
+      "store": true,
+      "presence_penalty": 0.0,
+      "incomplete_details": null,
+      "reasoning": {
+        "context": "current_turn",
+        "effort": "medium",
+        "summary": null
+      },
+      "completed_at": 1780080010,
+      "truncation": "disabled",
+      "top_p": 1.0,
+      "billing": {
+        "payer": "developer"
+      },
+      "prompt_cache_retention": "in_memory",
+      "metadata": {},
+      "prompt_cache_key": null,
+      "created_at": 1780080006,
+      "max_tool_calls": null
+    },
+    "headers": {
+      "access-control-expose-headers": [
+        "X-Request-ID",
+        "CF-Ray",
+        "CF-Ray"
+      ],
+      "alt-svc": [
+        "h3=\":443\"; ma=86400"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a037a0276fa58ce1-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 29 May 2026 18:40:11 GMT"
+      ],
+      "openai-organization": "[REDACTED:openai-organization]",
+      "openai-processing-ms": [
+        "4659"
+      ],
+      "openai-project": [
+        "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
+      ],
+      "openai-version": [
+        "2020-10-01"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": "[REDACTED:set-cookie]",
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-ratelimit-limit-requests": [
+        "10000"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "4000000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "9999"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "3999923"
+      ],
+      "x-ratelimit-reset-requests": [
+        "6ms"
+      ],
+      "x-ratelimit-reset-tokens": [
+        "1ms"
+      ],
+      "x-request-id": [
+        "req_9fa009c2780f4e699cf8c7610ba43a5c"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

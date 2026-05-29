@@ -1,9 +1,14 @@
 {
+  "model_spec": "openai:gpt-5-mini",
+  "provider": "openai",
   "request": {
     "body": {
-      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IldoYXQncyB0aGUgd2VhdGhlciBsaWtlIGluIFBhcmlzLCBGcmFuY2U/IiwidHlwZSI6ImlucHV0X3RleHQifV0sInJvbGUiOiJ1c2VyIn1dLCJtYXhfb3V0cHV0X3Rva2VucyI6MjU2MDAsIm1vZGVsIjoiZ3B0LTUtbWluaSIsInN0cmVhbSI6ZmFsc2UsInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9LCJ1bml0Ijp7ImVudW0iOlsiY2Vsc2l1cyIsImZhaHJlbmhlaXQiXSwidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iLCJ1bml0Il0sInR5cGUiOiJvYmplY3QifSwic3RyaWN0Ijp0cnVlfSwibmFtZSI6ImdldF93ZWF0aGVyIiwidHlwZSI6ImZ1bmN0aW9uIn0seyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IlRlbGwgYSBmdW5ueSBqb2tlIiwibmFtZSI6InRlbGxfam9rZSIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJ0b3BpYyI6eyJkZXNjcmlwdGlvbiI6IlRvcGljIGZvciB0aGUgam9rZSIsInR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbInRvcGljIl0sInR5cGUiOiJvYmplY3QifSwic3RyaWN0Ijp0cnVlfSwibmFtZSI6InRlbGxfam9rZSIsInR5cGUiOiJmdW5jdGlvbiJ9LHsiZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgdGhlIGN1cnJlbnQgdGltZSIsIm5hbWUiOiJnZXRfdGltZSIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6e30sInJlcXVpcmVkIjpbXSwidHlwZSI6Im9iamVjdCJ9LCJzdHJpY3QiOnRydWV9LCJuYW1lIjoiZ2V0X3RpbWUiLCJ0eXBlIjoiZnVuY3Rpb24ifV19"
+      "b64": "eyJpbmNsdWRlIjpbInJlYXNvbmluZy5lbmNyeXB0ZWRfY29udGVudCJdLCJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IldoYXQncyB0aGUgd2VhdGhlciBsaWtlIGluIFBhcmlzLCBGcmFuY2U/IiwidHlwZSI6ImlucHV0X3RleHQifV0sInJvbGUiOiJ1c2VyIn1dLCJtYXhfb3V0cHV0X3Rva2VucyI6MjU2MDAsIm1vZGVsIjoiZ3B0LTUtbWluaSIsInJlYXNvbmluZyI6eyJlZmZvcnQiOiJsb3cifSwic3RyZWFtIjpmYWxzZSwidG9vbHMiOlt7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsIm5hbWUiOiJnZXRfd2VhdGhlciIsInBhcmFtZXRlcnMiOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifSwidW5pdCI6eyJlbnVtIjpbImNlbHNpdXMiLCJmYWhyZW5oZWl0Il0sInR5cGUiOiJzdHJpbmcifX0sInR5cGUiOiJvYmplY3QifSwic3RyaWN0IjpmYWxzZSwidHlwZSI6ImZ1bmN0aW9uIn0seyJkZXNjcmlwdGlvbiI6IlRlbGwgYSBmdW5ueSBqb2tlIiwibmFtZSI6InRlbGxfam9rZSIsInBhcmFtZXRlcnMiOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7InRvcGljIjp7ImRlc2NyaXB0aW9uIjoiVG9waWMgZm9yIHRoZSBqb2tlIiwidHlwZSI6InN0cmluZyJ9fSwidHlwZSI6Im9iamVjdCJ9LCJzdHJpY3QiOmZhbHNlLCJ0eXBlIjoiZnVuY3Rpb24ifSx7ImRlc2NyaXB0aW9uIjoiR2V0IHRoZSBjdXJyZW50IHRpbWUiLCJuYW1lIjoiZ2V0X3RpbWUiLCJwYXJhbWV0ZXJzIjp7ImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjpmYWxzZSwicHJvcGVydGllcyI6e30sInR5cGUiOiJvYmplY3QifSwic3RyaWN0IjpmYWxzZSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
     },
     "canonical_json": {
+      "include": [
+        "reasoning.encrypted_content"
+      ],
       "input": [
         {
           "content": [
@@ -17,69 +22,58 @@
       ],
       "max_output_tokens": 25600,
       "model": "gpt-5-mini",
+      "reasoning": {
+        "effort": "low"
+      },
       "stream": false,
       "tools": [
         {
-          "function": {
-            "description": "Get current weather information for a location",
-            "name": "get_weather",
-            "parameters": {
-              "properties": {
-                "location": {
-                  "type": "string"
-                },
-                "unit": {
-                  "enum": [
-                    "celsius",
-                    "fahrenheit"
-                  ],
-                  "type": "string"
-                }
-              },
-              "required": [
-                "location",
-                "unit"
-              ],
-              "type": "object"
-            },
-            "strict": true
-          },
+          "description": "Get current weather information for a location",
           "name": "get_weather",
-          "type": "function"
-        },
-        {
-          "function": {
-            "description": "Tell a funny joke",
-            "name": "tell_joke",
-            "parameters": {
-              "properties": {
-                "topic": {
-                  "description": "Topic for the joke",
-                  "type": "string"
-                }
+          "parameters": {
+            "additionalProperties": false,
+            "properties": {
+              "location": {
+                "type": "string"
               },
-              "required": [
-                "topic"
-              ],
-              "type": "object"
+              "unit": {
+                "enum": [
+                  "celsius",
+                  "fahrenheit"
+                ],
+                "type": "string"
+              }
             },
-            "strict": true
+            "type": "object"
           },
-          "name": "tell_joke",
+          "strict": false,
           "type": "function"
         },
         {
-          "function": {
-            "description": "Get the current time",
-            "name": "get_time",
-            "parameters": {
-              "properties": {},
-              "required": [],
-              "type": "object"
+          "description": "Tell a funny joke",
+          "name": "tell_joke",
+          "parameters": {
+            "additionalProperties": false,
+            "properties": {
+              "topic": {
+                "description": "Topic for the joke",
+                "type": "string"
+              }
             },
-            "strict": true
+            "type": "object"
           },
+          "strict": false,
+          "type": "function"
+        },
+        {
+          "description": "Get the current time",
           "name": "get_time",
+          "parameters": {
+            "additionalProperties": false,
+            "properties": {},
+            "type": "object"
+          },
+          "strict": false,
           "type": "function"
         }
       ]
@@ -93,7 +87,7 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ]
     },
     "method": "post",
@@ -102,109 +96,133 @@
   "response": {
     "body": {
       "background": false,
-      "billing": {
-        "payer": "developer"
-      },
-      "created_at": 1762105843,
-      "error": null,
-      "id": "resp_03942fa7e7572c2500690799f3256081968da7ff369ff20d6c",
-      "incomplete_details": null,
-      "instructions": null,
-      "max_output_tokens": 25600,
-      "max_tool_calls": null,
-      "metadata": {},
-      "model": "gpt-5-mini-2025-08-07",
-      "object": "response",
-      "output": [
-        {
-          "id": "rs_03942fa7e7572c2500690799f398e481969176479199241fee",
-          "summary": [],
-          "type": "reasoning"
-        },
-        {
-          "arguments": "{}",
-          "call_id": "call_vnb7COMI6oLIMA4uPF9mReXf",
-          "id": "fc_03942fa7e7572c2500690799f463988196bc229f40653101e0",
-          "name": "get_weather",
-          "status": "completed",
-          "type": "function_call"
-        }
-      ],
-      "parallel_tool_calls": true,
-      "previous_response_id": null,
-      "prompt_cache_key": null,
-      "prompt_cache_retention": null,
-      "reasoning": {
-        "effort": "medium",
-        "summary": null
-      },
-      "safety_identifier": null,
-      "service_tier": "default",
-      "status": "completed",
-      "store": true,
-      "temperature": 1.0,
       "text": {
         "format": {
           "type": "text"
         },
         "verbosity": "medium"
       },
+      "moderation": null,
+      "top_logprobs": 0,
+      "previous_response_id": null,
       "tool_choice": "auto",
+      "service_tier": "default",
+      "status": "completed",
       "tools": [
         {
-          "description": null,
+          "description": "Get current weather information for a location",
           "name": "get_weather",
           "parameters": {
             "additionalProperties": false,
-            "properties": {},
-            "required": [],
+            "properties": {
+              "location": {
+                "type": "string"
+              },
+              "unit": {
+                "enum": [
+                  "celsius",
+                  "fahrenheit"
+                ],
+                "type": "string"
+              }
+            },
             "type": "object"
           },
-          "strict": true,
+          "strict": false,
           "type": "function"
         },
         {
-          "description": null,
+          "description": "Tell a funny joke",
           "name": "tell_joke",
           "parameters": {
             "additionalProperties": false,
-            "properties": {},
-            "required": [],
+            "properties": {
+              "topic": {
+                "description": "Topic for the joke",
+                "type": "string"
+              }
+            },
             "type": "object"
           },
-          "strict": true,
+          "strict": false,
           "type": "function"
         },
         {
-          "description": null,
+          "description": "Get the current time",
           "name": "get_time",
           "parameters": {
             "additionalProperties": false,
             "properties": {},
-            "required": [],
             "type": "object"
           },
-          "strict": true,
+          "strict": false,
           "type": "function"
         }
       ],
-      "top_logprobs": 0,
-      "top_p": 1.0,
-      "truncation": "disabled",
+      "id": "resp_00a98cc4fe2c0913006a19dcb07204819dbd30c5ce572d77f8",
+      "temperature": 1.0,
+      "max_output_tokens": 25600,
+      "user": null,
+      "frequency_penalty": 0.0,
+      "error": null,
+      "model": "gpt-5-mini-2025-08-07",
       "usage": {
-        "input_tokens": 55,
+        "input_tokens": 104,
         "input_tokens_details": {
           "cached_tokens": 0
         },
-        "output_tokens": 16,
+        "output_tokens": 68,
         "output_tokens_details": {
           "reasoning_tokens": 0
         },
-        "total_tokens": 71
+        "total_tokens": 172
       },
-      "user": null
+      "safety_identifier": null,
+      "object": "response",
+      "parallel_tool_calls": true,
+      "output": [
+        {
+          "encrypted_content": "gAAAAABqGdyxZTObxrOUFtuy1aKYheQ92aL6Sf0dp2yi3nvJMqKo_NG6Y37D9uF4fJ00K4Qr7nzTEyZiAnuNIqKd1YwsCbkbI_Jd6dsfo4W5aEa1Ot1dmcJIJgiXG8wG33J7F8bADcVjzuAe29y-1-u2kDEihFfNyRYxtjVuKky5voom_UAuythoJt7Si5yVbdj8Dd79ONs7ym8OclUGU7M9pg3S5SkhgMk2iCNQhgjBNThkfdG-hTFMAB0L4yPfM6wR0EQ8Tr7fIRyZXjntX5a4OjegL2oOFfTH7c3LnABO82EPYxvho8czI6v3L_YT9vx-ld3qytiThJPIJEc1BPed1cVo9Yc1iOqGpZtp77b48pmUz74AeqdtZB_jtKL_L-LZNaErE41eTHlcQw36klFiWQLaVk9j6mOpRUVG0DDENTFMvzV19Cq5kKPZPqqYON9nb1PUd8Wv-RBLPT1wBmhjO7egTB76scU4oRhwsSJOhrzge1efYLqpMHFB0thTYSpdEJAnOJSlFEM_RZdZiO6eisJh9IE0Pxq4o_QEEi0OB6coE82Q1C4HdJrEHp8p6BLpaTyfXgT--jU81ZbRav8PtCgFiNR7bJIcLYUovdBB3tjRgyDObH7emLTRV33ur4fUL1m-vlbJJc0-boTwKl82Hijoehf-8r3ev-l_M35h_swfMM-6m5ojuQE91Cv6Pe1a-ZTdAVMe89ugx0ptQ_MQTh9wGEW-GSD7zP6mQ9FKRExMraCVscC11PiCdE8Uq25HgczSNXhqGqz2WiBcoNn3H95fLWXeHA00iMnaW4axEMHIXOwbd-BDDw8Vf353V6nPe2FAusKD_6h1Cbvfimwff9AMD1qrIXn_r2ciOo5F7H8r0TD4yAWB5G4E774-gYT58rhujdgYIKfTYlkT9dCh14jSiAB-WzYLht8m1c8P1W4IRYLmuxML0gRRpdtrz1OvLF1T91b8f0kfzr8ERy3PN_JM6DJM1fyqMwXBO94SV451oD5yXhfYYHFCRFrSObZTsFu9O-L6vCE7vQUJlcN3cyxVXsSqJL3AQau0PMFIO2ma0VBSM6u-JYb9bKl-ymoV9dCJhl88Du4JZ3WiuUUQ2IpnBLx3EzfyQpe-lFaVoCqG8ByDZLHgkWiTROiqDFwLUEyB2bTqF_9W1nO7bPuVU8RbGXnzVovGA5KhVArzQBG6vXqvOVLMJ938pHklxx7ziNgB1T1G",
+          "id": "rs_00a98cc4fe2c0913006a19dcb0d8dc819d969856610e4b49d4",
+          "summary": [],
+          "type": "reasoning"
+        },
+        {
+          "arguments": "{\"location\":\"Paris, France\",\"unit\":\"celsius\"}",
+          "call_id": "call_icniKijHkbQQf17Egkm2iQnn",
+          "id": "fc_00a98cc4fe2c0913006a19dcb18884819d8a9f5aeefcd9dc31",
+          "name": "get_weather",
+          "status": "completed",
+          "type": "function_call"
+        }
+      ],
+      "instructions": null,
+      "store": true,
+      "presence_penalty": 0.0,
+      "incomplete_details": null,
+      "reasoning": {
+        "context": "current_turn",
+        "effort": "low",
+        "summary": null
+      },
+      "completed_at": 1780079793,
+      "truncation": "disabled",
+      "top_p": 1.0,
+      "billing": {
+        "payer": "developer"
+      },
+      "prompt_cache_retention": "in_memory",
+      "metadata": {},
+      "prompt_cache_key": null,
+      "created_at": 1780079792,
+      "max_tool_calls": null
     },
     "headers": {
+      "access-control-expose-headers": [
+        "X-Request-ID",
+        "CF-Ray",
+        "CF-Ray"
+      ],
       "alt-svc": [
         "h3=\":443\"; ma=86400"
       ],
@@ -212,7 +230,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "998579cf488711cd-ORD"
+        "a0379aee5fe66215-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -221,13 +239,11 @@
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:50:44 GMT"
+        "Fri, 29 May 2026 18:36:33 GMT"
       ],
-      "openai-organization": [
-        "epic-creative-sogybe"
-      ],
+      "openai-organization": "[REDACTED:openai-organization]",
       "openai-processing-ms": [
-        "1582"
+        "1387"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -238,10 +254,7 @@
       "server": [
         "cloudflare"
       ],
-      "set-cookie": [
-        "__cf_bm=kJhtYAwUjBcmJXOV0uyBSXHJUm7D9wFKxBW1Lyql8hs-1762105844-1.0.1.1-oP516joWPR_6o.spJW6eLQEeby2.WiMxpotnMipdLjsnE6gEIp8eymGBSfuE5bnnCfztVmJxuNuaEHnfaARw7DzLN0YHcpXT5hF2jiIj9wU; path=/; expires=Sun, 02-Nov-25 18:20:44 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=9JVRDJiZizSooSljv2RbEgrAwXZo1KaXNX5o02dnAwA-1762105844739-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
-      ],
+      "set-cookie": "[REDACTED:set-cookie]",
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
       ],
@@ -250,9 +263,6 @@
       ],
       "x-content-type-options": [
         "nosniff"
-      ],
-      "x-envoy-upstream-service-time": [
-        "1589"
       ],
       "x-ratelimit-limit-requests": [
         "10000"
@@ -273,9 +283,10 @@
         "0s"
       ],
       "x-request-id": [
-        "req_bcd2d6d402964dde9480a91a62060427"
+        "req_6e4bb8fceea44a24834a413f09a99990"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

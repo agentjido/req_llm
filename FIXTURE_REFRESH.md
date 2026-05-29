@@ -42,7 +42,7 @@ The fixture tree has 2232 JSON fixture files under `test/support/fixtures`.
 | google_vertex | 0 | 0 | 0 | 40 |
 | groq | 7 | 0 | 0 | 11 |
 | minimax | 6 | 0 | 0 | 0 |
-| openai | 22 | 2 | 0 | 107 |
+| openai | 13 | 2 | 0 | 71 |
 | openrouter | 45 | 0 | 0 | 319 |
 | venice | 0 | 0 | 0 | 67 |
 | xai | 10 | 0 | 0 | 16 |
@@ -51,7 +51,7 @@ The fixture tree has 2232 JSON fixture files under `test/support/fixtures`.
 | zai_coding_plan | 0 | 0 | 0 | 5 |
 | zenmux | 0 | 0 | 0 | 149 |
 
-The provider sections currently sum to 146 passing, fixture-backed, current-registry models. The active refresh scope excludes Azure, leaving 120 in-scope candidate passing models. Amazon Bedrock has no passing models in the current provider sections and stays out of triage for this pass. Minimax remains in the conservative candidate list; the earlier `429` was resolved by a balance update, but it was not retested during the tooling smoke slice. The task's overall line reports `169/1263` because the overall calculation also counts legacy `priv/supported_models.json` pass entries that are no longer in the current provider sections. Treat the in-scope model list below as the candidate refresh set.
+The provider sections currently sum to 137 passing, fixture-backed, current-registry models after the OpenAI deprecated-model cleanup. The active refresh scope excludes Azure, leaving 111 in-scope candidate passing models. Amazon Bedrock has no passing models in the current provider sections and stays out of triage for this pass. Minimax remains in the conservative candidate list; the earlier `429` was resolved by a balance update, but it was not retested during the tooling smoke slice. The task's overall line can be higher because the overall calculation also counts legacy `priv/supported_models.json` pass entries that are no longer in the current provider sections. Treat the in-scope model list below as the candidate refresh set.
 
 ## Date Findings
 
@@ -83,7 +83,7 @@ Fixture file mtimes show the oldest fixture files from 2025-10-07. The newest re
 | google | 2026-05-20 |
 | minimax | 2026-05-05 |
 | google_vertex | 2026-05-01 |
-| openai | 2026-05-01 |
+| openai | 2026-05-29 |
 | xai | 2026-04-26 |
 
 This is stale enough that the refresh should start with a small live smoke test before broad recording.
@@ -278,7 +278,7 @@ MIX_ENV=test mix mc "google:text-embedding-004" --type embedding --record
 
 ### Phase 1: Refresh Current Passing Coverage
 
-Conservative candidate target: re-record the 120 in-scope passing, fixture-backed, current-registry models listed below. This excludes Azure and Amazon Bedrock by scope. Minimax stays in the candidate list after the balance update, but should be refreshed in its own small provider pass. Amazon Bedrock has no passing models in the current provider-section count and stays out of triage for this pass.
+Conservative candidate target: re-record the 111 in-scope passing, fixture-backed, current-registry models listed below. This excludes Azure and Amazon Bedrock by scope. Minimax stays in the candidate list after the balance update, but should be refreshed in its own small provider pass. Amazon Bedrock has no passing models in the current provider-section count and stays out of triage for this pass.
 
 For one model:
 
@@ -313,7 +313,7 @@ Current failing fixture-backed models:
 | amazon_bedrock | `anthropic.claude-haiku-4-5-20251001-v1:0`, `anthropic.claude-opus-4-1-20250805-v1:0`, `anthropic.claude-sonnet-4-5-20250929-v1:0`, `meta.llama3-3-70b-instruct-v1:0` |
 | openai | `gpt-5-pro`, `o3-pro` |
 
-Skip the Amazon Bedrock failures for this pass. For OpenAI pro models, check whether current account access and model endpoint expectations still match ReqLLM's implementation before treating them as regressions.
+Skip the Amazon Bedrock failures for this pass. For OpenAI pro models, current account access and routing now work for `basic`, but full comprehensive coverage has not been recorded yet. Keep `gpt-5-pro` and `o3-pro` as focused follow-up items rather than treating their whole-model status as resolved.
 
 ### Phase 3: Expand Beyond Existing Fixtures
 
@@ -532,6 +532,56 @@ Result: 11/11 active Anthropic models passing, 0 failing, 0 untested.
 
 Fixture hygiene note: live and legacy Anthropic fixtures were scanned for raw cookie values after recording. Any `set-cookie` values under `test/support/fixtures/anthropic` are now normalized to `[REDACTED:set-cookie]`.
 
+OpenAI focused refresh:
+
+```bash
+set -a && source ./.env && set +a && MIX_ENV=test mix mc "openai:gpt-4o" --record --max-concurrency 1
+MIX_ENV=test mix mc "openai:gpt-4o" --max-concurrency 1
+set -a && source ./.env && set +a && MIX_ENV=test mix mc "openai:gpt-4.1-mini" --record --max-concurrency 1
+MIX_ENV=test mix mc "openai:gpt-4.1-mini" --max-concurrency 1
+set -a && source ./.env && set +a && MIX_ENV=test mix mc "openai:gpt-4.1" --record --max-concurrency 1
+MIX_ENV=test mix mc "openai:gpt-4.1" --max-concurrency 1
+set -a && source ./.env && set +a && MIX_ENV=test mix mc "openai:gpt-5-nano" --record --max-concurrency 1
+MIX_ENV=test mix mc "openai:gpt-5-nano" --max-concurrency 1
+set -a && source ./.env && set +a && MIX_ENV=test mix mc "openai:gpt-5-mini" --record --max-concurrency 1
+MIX_ENV=test mix mc "openai:gpt-5-mini" --max-concurrency 1
+set -a && source ./.env && set +a && MIX_ENV=test mix mc "openai:gpt-5" --record --max-concurrency 1
+MIX_ENV=test mix mc "openai:gpt-5" --max-concurrency 1
+set -a && source ./.env && set +a && MIX_ENV=test mix mc "openai:o3" --record --max-concurrency 1
+MIX_ENV=test mix mc "openai:o3" --max-concurrency 1
+set -a && source ./.env && set +a && MIX_ENV=test mix mc "openai:gpt-5-pro" --scenario basic --record --max-concurrency 1
+MIX_ENV=test mix mc "openai:gpt-5-pro" --scenario basic --max-concurrency 1
+set -a && source ./.env && set +a && MIX_ENV=test mix mc "openai:o3-pro" --scenario basic --record --max-concurrency 1
+MIX_ENV=test mix mc "openai:o3-pro" --scenario basic --max-concurrency 1
+```
+
+| Model | Record result | Replay result | Fixtures promoted |
+| --- | --- | --- | ---: |
+| `openai:gpt-4o-mini` | passed | passed | 12 |
+| `openai:gpt-4o` | passed | passed | 12 |
+| `openai:gpt-4.1-mini` | passed after Responses include fix | passed | 12 |
+| `openai:gpt-4.1` | passed | passed | 12 |
+| `openai:gpt-5-nano` | passed after streaming reasoning option fix | passed | 14 |
+| `openai:gpt-5-mini` | passed | passed | 14 |
+| `openai:gpt-5` | passed | passed | 14 |
+| `openai:o3` | passed | passed | 14 |
+| `openai:gpt-5-pro` | `basic` passed after high-effort fix | `basic` passed | 1 |
+| `openai:o3-pro` | `basic` passed | `basic` passed | 1 |
+
+OpenAI implementation findings from this pass:
+
+1. `gpt-4.1` and `gpt-4.1-mini` use the Responses API but do not support `include: ["reasoning.encrypted_content"]`. ReqLLM now routes them through Responses without treating them as reasoning models.
+2. Streaming fixture paths can re-enter option validation with already-translated reasoning effort strings. OpenAI now normalizes those strings before validation.
+3. `gpt-5-pro` only accepts `reasoning.effort: "high"`. OpenAI parameter profiles now default and fix GPT-5 Pro reasoning effort to high.
+4. A broad `mix mc "openai:*"` replay is still a discovery command, not a gate: it expands to many untested active registry models and is too broad for fixture refresh commits.
+5. Deprecated OpenAI fixtures were removed for `codex_mini_latest`, `gpt_3_5_turbo`, `gpt_4`, `gpt_4_turbo`, `gpt_4_1_nano`, `gpt_4o_2024_05_13`, `gpt_5_chat_latest`, `gpt_5_codex`, `gpt_image_1`, `o1`, `o3_mini`, and `o4_mini`.
+
+OpenAI follow-up:
+
+1. Decide whether `gpt-5-pro` and `o3-pro` should get full comprehensive suites in this branch or remain basic-probe coverage because of cost and runtime.
+2. Refresh or remove stale dated aliases such as `gpt-4o-2024-08-06`, `gpt-4o-2024-11-20`, and current dated GPT-5 aliases in a separate alias-focused pass.
+3. Refresh OpenAI embedding, image, speech, and transcription fixtures with `--type`-specific commands rather than mixing them into text coverage.
+
 ## Conservative Refresh Model List
 
 These are the in-scope current-registry, passing, fixture-backed models from the provider sections of `MIX_ENV=test mix mc`. Azure entries are deliberately omitted for this pass. Minimax remains listed as a candidate provider but should be skipped until the provider-side `429` clears.
@@ -586,28 +636,24 @@ These are the in-scope current-registry, passing, fixture-backed models from the
 
 ### openai
 
-- `openai:gpt-4`
-- `openai:gpt-4-turbo`
 - `openai:gpt-4.1`
 - `openai:gpt-4.1-mini`
-- `openai:gpt-4.1-nano`
 - `openai:gpt-4o`
-- `openai:gpt-4o-2024-05-13`
 - `openai:gpt-4o-2024-08-06`
 - `openai:gpt-4o-2024-11-20`
 - `openai:gpt-4o-mini`
 - `openai:gpt-5`
-- `openai:gpt-5-chat-latest`
-- `openai:gpt-5-codex`
 - `openai:gpt-5-mini`
 - `openai:gpt-5-nano`
-- `openai:o1`
 - `openai:o3`
-- `openai:o3-mini`
-- `openai:o4-mini`
 - `openai:text-embedding-3-large`
 - `openai:text-embedding-3-small`
 - `openai:text-embedding-ada-002`
+
+OpenAI pro follow-up candidates with only `basic` fixtures refreshed so far:
+
+- `openai:gpt-5-pro`
+- `openai:o3-pro`
 
 ### openrouter
 
@@ -728,10 +774,10 @@ Fixture cleanup rule for this branch: keep passing replay-validated fixture upda
 
 Before recording broadly, decide:
 
-1. Whether the first pass should refresh only the 117 in-scope current-registry candidate passing models, or intentionally expand into untested registry models.
+1. Whether the first pass should refresh only the 111 in-scope current-registry candidate passing models, or intentionally expand into untested registry models.
 2. Whether to add Fireworks, Mistral, Zenmux, and Venice expansion smoke tests after the conservative pass.
 3. Whether ElevenLabs speech/TTS and Cohere rerank fixture coverage should be refreshed separately from text model compatibility.
-4. Whether to triage OpenAI `gpt-5-pro` and `o3-pro` now or leave them failing until account access is confirmed.
+4. Whether to run full comprehensive suites for OpenAI `gpt-5-pro` and `o3-pro`; account access is confirmed for `basic`.
 5. Whether to leave Minimax paused until the provider-side `429` clears.
 6. Whether to adjust the mix task so it can select "currently passing fixture-backed models" directly, avoiding hand-running many individual specs.
 7. Whether the next PR should implement scenario-first `mix mc` support before any more broad fixture recording.

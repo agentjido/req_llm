@@ -1,7 +1,9 @@
 {
+  "model_spec": "openai:gpt-4.1-mini",
+  "provider": "openai",
   "request": {
     "body": {
-      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9LHsiY2FsbF9pZCI6ImNhbGxfYU9CbktLVVBlYU04MkhNaThIem9kMHNDIiwib3V0cHV0Ijoie1wiZXJyb3JcIjpcIlRvb2wgZXhlY3V0aW9uIGZhaWxlZFwifSIsInR5cGUiOiJmdW5jdGlvbl9jYWxsX291dHB1dCJ9XSwibWF4X291dHB1dF90b2tlbnMiOjMyNzYsIm1vZGVsIjoiZ3B0LTQuMS1taW5pIiwicHJldmlvdXNfcmVzcG9uc2VfaWQiOiJyZXNwXzAwYTYxODQ2NmEyOTVlNDIwMDY5MDc5OWRiOTVlMDgxOTdiNDExODI4M2QxZDdmMjJmIiwic3RyZWFtIjpmYWxzZX0="
+      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9LHsiYXJndW1lbnRzIjoie1wiYVwiOjIsXCJiXCI6M30iLCJjYWxsX2lkIjoiY2FsbF9uRnZKRDNBaGphWXFtY01VSm51amlwclQiLCJuYW1lIjoiYWRkIiwidHlwZSI6ImZ1bmN0aW9uX2NhbGwifSx7ImNhbGxfaWQiOiJjYWxsX25GdkpEM0FoamFZcW1jTVVKbnVqaXByVCIsIm91dHB1dCI6IjUiLCJ0eXBlIjoiZnVuY3Rpb25fY2FsbF9vdXRwdXQifV0sIm1heF9vdXRwdXRfdG9rZW5zIjozMjc2LCJtb2RlbCI6ImdwdC00LjEtbWluaSIsInByZXZpb3VzX3Jlc3BvbnNlX2lkIjoicmVzcF8wOWQzZjI2MjcyZDRlZDAzMDA2YTE5ZGI2MGQ5MzA4MTkxOTc3ODk2N2JlZTU3MmFhZCIsInN0b3JlIjp0cnVlLCJzdHJlYW0iOmZhbHNlfQ=="
     },
     "canonical_json": {
       "input": [
@@ -15,14 +17,21 @@
           "role": "user"
         },
         {
-          "call_id": "call_aOBnKKUPeaM82HMi8Hzod0sC",
-          "output": "{\"error\":\"Tool execution failed\"}",
+          "arguments": "{\"a\":2,\"b\":3}",
+          "call_id": "call_nFvJD3AhjaYqmcMUJnujiprT",
+          "name": "add",
+          "type": "function_call"
+        },
+        {
+          "call_id": "call_nFvJD3AhjaYqmcMUJnujiprT",
+          "output": "5",
           "type": "function_call_output"
         }
       ],
       "max_output_tokens": 3276,
       "model": "gpt-4.1-mini",
-      "previous_response_id": "resp_00a618466a295e4200690799db95e08197b4118283d1d7f22f",
+      "previous_response_id": "resp_09d3f26272d4ed03006a19db60d93081919778967bee572aad",
+      "store": true,
       "stream": false
     },
     "headers": {
@@ -34,7 +43,7 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ]
     },
     "method": "post",
@@ -43,73 +52,83 @@
   "response": {
     "body": {
       "background": false,
-      "billing": {
-        "payer": "developer"
-      },
-      "created_at": 1762105820,
-      "error": null,
-      "id": "resp_00a618466a295e4200690799dcb854819791316462c8f33539",
-      "incomplete_details": null,
-      "instructions": null,
-      "max_output_tokens": 3276,
-      "max_tool_calls": null,
-      "metadata": {},
-      "model": "gpt-4.1-mini-2025-04-14",
-      "object": "response",
-      "output": [
-        {
-          "content": [
-            {
-              "annotations": [],
-              "logprobs": [],
-              "text": "It seems there was an issue with the add tool. However, I can tell you that 2 + 3 = 5. \n\nsum=5",
-              "type": "output_text"
-            }
-          ],
-          "id": "msg_00a618466a295e4200690799dd275c8197b11d8f26c767640d",
-          "role": "assistant",
-          "status": "completed",
-          "type": "message"
-        }
-      ],
-      "parallel_tool_calls": true,
-      "previous_response_id": "resp_00a618466a295e4200690799db95e08197b4118283d1d7f22f",
-      "prompt_cache_key": null,
-      "prompt_cache_retention": null,
-      "reasoning": {
-        "effort": null,
-        "summary": null
-      },
-      "safety_identifier": null,
-      "service_tier": "default",
-      "status": "completed",
-      "store": true,
-      "temperature": 1.0,
       "text": {
         "format": {
           "type": "text"
         },
         "verbosity": "medium"
       },
-      "tool_choice": "auto",
-      "tools": [],
+      "moderation": null,
       "top_logprobs": 0,
-      "top_p": 1.0,
-      "truncation": "disabled",
+      "previous_response_id": "resp_09d3f26272d4ed03006a19db60d93081919778967bee572aad",
+      "tool_choice": "auto",
+      "service_tier": "default",
+      "status": "completed",
+      "tools": [],
+      "id": "resp_09d3f26272d4ed03006a19db62b24081918a47e7ccd41453db",
+      "temperature": 1.0,
+      "max_output_tokens": 3276,
+      "user": null,
+      "frequency_penalty": 0.0,
+      "error": null,
+      "model": "gpt-4.1-mini-2025-04-14",
       "usage": {
-        "input_tokens": 85,
+        "input_tokens": 104,
         "input_tokens_details": {
           "cached_tokens": 0
         },
-        "output_tokens": 32,
+        "output_tokens": 4,
         "output_tokens_details": {
           "reasoning_tokens": 0
         },
-        "total_tokens": 117
+        "total_tokens": 108
       },
-      "user": null
+      "safety_identifier": null,
+      "object": "response",
+      "parallel_tool_calls": true,
+      "output": [
+        {
+          "content": [
+            {
+              "annotations": [],
+              "logprobs": [],
+              "text": "sum=5",
+              "type": "output_text"
+            }
+          ],
+          "id": "msg_09d3f26272d4ed03006a19db6319588191b8c036176a51de84",
+          "role": "assistant",
+          "status": "completed",
+          "type": "message"
+        }
+      ],
+      "instructions": null,
+      "store": true,
+      "presence_penalty": 0.0,
+      "incomplete_details": null,
+      "reasoning": {
+        "context": null,
+        "effort": null,
+        "summary": null
+      },
+      "completed_at": 1780079459,
+      "truncation": "disabled",
+      "top_p": 1.0,
+      "billing": {
+        "payer": "developer"
+      },
+      "prompt_cache_retention": "in_memory",
+      "metadata": {},
+      "prompt_cache_key": null,
+      "created_at": 1780079458,
+      "max_tool_calls": null
     },
     "headers": {
+      "access-control-expose-headers": [
+        "X-Request-ID",
+        "CF-Ray",
+        "CF-Ray"
+      ],
       "alt-svc": [
         "h3=\":443\"; ma=86400"
       ],
@@ -117,7 +136,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "998579432c63a162-ORD"
+        "a03792c889ddeb04-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -126,13 +145,11 @@
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:50:21 GMT"
+        "Fri, 29 May 2026 18:30:59 GMT"
       ],
-      "openai-organization": [
-        "epic-creative-sogybe"
-      ],
+      "openai-organization": "[REDACTED:openai-organization]",
       "openai-processing-ms": [
-        "1040"
+        "647"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -143,10 +160,7 @@
       "server": [
         "cloudflare"
       ],
-      "set-cookie": [
-        "__cf_bm=t3oL8VW7skElJi4XHykTLDHi2N8CIrgHGal6KmD_IiY-1762105821-1.0.1.1-uEl3NQFtboyFWvhuEpKZDl7iPibw2EkB2xjzNhAg99Ks7HOzir9pCvTo.MXXhYCLl8cDgJdHtVGbtW0Ou99QULH9C4TKJeSQwoWim.GwUuE; path=/; expires=Sun, 02-Nov-25 18:20:21 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=yCaMCE14ZlBp5AnL.cq1_JTF7g8CUQDTpYDdNGJTBTg-1762105821768-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
-      ],
+      "set-cookie": "[REDACTED:set-cookie]",
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
       ],
@@ -155,9 +169,6 @@
       ],
       "x-content-type-options": [
         "nosniff"
-      ],
-      "x-envoy-upstream-service-time": [
-        "1044"
       ],
       "x-ratelimit-limit-requests": [
         "10000"
@@ -169,7 +180,7 @@
         "9999"
       ],
       "x-ratelimit-remaining-tokens": [
-        "9999896"
+        "9999877"
       ],
       "x-ratelimit-reset-requests": [
         "6ms"
@@ -178,9 +189,10 @@
         "0s"
       ],
       "x-request-id": [
-        "req_f7c46616171f4f1cb9a40fa366f836a0"
+        "req_4b05a30a74fe44659fa338244ab9eee0"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

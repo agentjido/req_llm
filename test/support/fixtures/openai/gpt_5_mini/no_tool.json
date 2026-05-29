@@ -1,9 +1,14 @@
 {
+  "model_spec": "openai:gpt-5-mini",
+  "provider": "openai",
   "request": {
     "body": {
-      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IlRlbGwgbWUgYSBqb2tlIGFib3V0IGNhdHMiLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjoyNTYwMCwibW9kZWwiOiJncHQtNS1taW5pIiwic3RyZWFtIjpmYWxzZSwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsIm5hbWUiOiJnZXRfd2VhdGhlciIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In0sInN0cmljdCI6dHJ1ZX0sIm5hbWUiOiJnZXRfd2VhdGhlciIsInR5cGUiOiJmdW5jdGlvbiJ9XX0="
+      "b64": "eyJpbmNsdWRlIjpbInJlYXNvbmluZy5lbmNyeXB0ZWRfY29udGVudCJdLCJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IlRlbGwgbWUgYSBqb2tlIGFib3V0IGNhdHMiLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjoyNTYwMCwibW9kZWwiOiJncHQtNS1taW5pIiwicmVhc29uaW5nIjp7ImVmZm9ydCI6ImxvdyJ9LCJzdHJlYW0iOmZhbHNlLCJ0b29scyI6W3siZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9fSwidHlwZSI6Im9iamVjdCJ9LCJzdHJpY3QiOmZhbHNlLCJ0eXBlIjoiZnVuY3Rpb24ifV19"
     },
     "canonical_json": {
+      "include": [
+        "reasoning.encrypted_content"
+      ],
       "input": [
         {
           "content": [
@@ -17,26 +22,24 @@
       ],
       "max_output_tokens": 25600,
       "model": "gpt-5-mini",
+      "reasoning": {
+        "effort": "low"
+      },
       "stream": false,
       "tools": [
         {
-          "function": {
-            "description": "Get current weather information for a location",
-            "name": "get_weather",
-            "parameters": {
-              "properties": {
-                "location": {
-                  "type": "string"
-                }
-              },
-              "required": [
-                "location"
-              ],
-              "type": "object"
-            },
-            "strict": true
-          },
+          "description": "Get current weather information for a location",
           "name": "get_weather",
+          "parameters": {
+            "additionalProperties": false,
+            "properties": {
+              "location": {
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "strict": false,
           "type": "function"
         }
       ]
@@ -50,7 +53,7 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ]
     },
     "method": "post",
@@ -59,22 +62,60 @@
   "response": {
     "body": {
       "background": false,
-      "billing": {
-        "payer": "developer"
+      "text": {
+        "format": {
+          "type": "text"
+        },
+        "verbosity": "medium"
       },
-      "created_at": 1762105815,
-      "error": null,
-      "id": "resp_02b70f96fdc5230800690799d6fd148197a3fa1d324f5cea62",
-      "incomplete_details": null,
-      "instructions": null,
+      "moderation": null,
+      "top_logprobs": 0,
+      "previous_response_id": null,
+      "tool_choice": "auto",
+      "service_tier": "default",
+      "status": "completed",
+      "tools": [
+        {
+          "description": "Get current weather information for a location",
+          "name": "get_weather",
+          "parameters": {
+            "additionalProperties": false,
+            "properties": {
+              "location": {
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "strict": false,
+          "type": "function"
+        }
+      ],
+      "id": "resp_024e5e7a2608ea83006a19dcae78b081a2873bb70046e4fb42",
+      "temperature": 1.0,
       "max_output_tokens": 25600,
-      "max_tool_calls": null,
-      "metadata": {},
+      "user": null,
+      "frequency_penalty": 0.0,
+      "error": null,
       "model": "gpt-5-mini-2025-08-07",
+      "usage": {
+        "input_tokens": 50,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens": 124,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 174
+      },
+      "safety_identifier": null,
       "object": "response",
+      "parallel_tool_calls": true,
       "output": [
         {
-          "id": "rs_02b70f96fdc5230800690799d7b3888197a23e3e916d0a3976",
+          "encrypted_content": "gAAAAABqGdywO4fzRp-oB7sOp-4pfVoCPPNQCfNwd7A8kUZjyAomVwZJKs8fLeR2zCjmNP-dwJCnUB7yXJJ9ItEdUkgXen4U0S-MCucFUy3_9CT0ifN2oqpsbWRh8Nw4ZPdaZ6XwGLZvysa9sroBldehSWdUZPZTHcJk-26B9p7iog_OCsD_9hHENFo2bxOPadItn95PQ5n9SgBwLNdnL4za3H7y0DmfPW58DQeKpVWVK69Ewyzqd8qbQ8p34A1PBa9VSekvGsFfUPhl39xMTj6obAahdhgIhkrBsUdPhDSMOjEdhlYta0u7r7hM9WvOiVy-B7cRYiCmcfE6noxNMYnntddTlgIrD1EaC5PQaBKnQi-z7C3CjrGmpfGnBTkJNr_3oUVpEk0r9QaljRQpL_Xh4U1YQEA8dEE3mmeLllnGMZq6OqxK6Eeqf6k0-NC9R5GikGSPD_MH99aN-HFkBxxyPttqZ_Kg-pFYnZOjkeDF7MG80l56942K4t_3nnOT_aBLNkWeiISIPhdvzNkoAr24MQpdodUCLqPlEOdxXPfFajrV4j4OSvSlhh2HPnWqNITnnubK8Y7ae7_C3ekL_dTSbdpv-yxDyZfZdmOFsX3OOmo7yHYJgus4Uqg_A3w3dHarvTlzv_CXsCWWut3LB5awAslIxm60XCt3Lhd73noJl3GyGpjGpTtsDXNjpozzvlyprnKM40qkQvMdI7Psa8ocVk29q0GLPWjxPy98C2sE9T-cs_qJbKJ_is9PJ5mzJKV_WIAdkcY5tt--KGuVCmjyUEugZ1kpAxJB0IFefYxFB_emhjwVdL4lzeMoRtzp0evcJfdT4w97nUa7XJJIYPUilxISQYJQldtnv8rBZSWmiR9hoZOVzpk6Pz9T9AEzZZRwMtoUM8stmtyiFmy-AGU_rjrQRMVuNS530RZQgW49fpmHQaQN1gG6gBva1ODU-3Mdo0kIxMOLIN8AArhZBN9FsNvfPzbpqycVrzemu8nYDZ8lOPWbP2mRNqDnKv2QvnHGxI-EGbjU1tCSx27pa8ICaW8_EdFB3yoEow9zP5AnrwjQmlihDPz6auefXDTy1uddVPIztcn7fsODUM3l-wnJHwVcyxrWH3UkfDMzFkj0yeeHK6KNwWg=",
+          "id": "rs_024e5e7a2608ea83006a19dcaef5d881a2a31cb48fb55622bc",
           "summary": [],
           "type": "reasoning"
         },
@@ -83,67 +124,43 @@
             {
               "annotations": [],
               "logprobs": [],
-              "text": "Why did the cat sit on the computer? It wanted to keep an eye on the mouse.",
+              "text": "Sure — here are a few cat jokes:\n\n1. Why did the cat sit on the computer?  \n   It wanted to keep an eye on the mouse.\n\n2. What do you call a pile of kittens?  \n   A meowntain.\n\n3. Why was the cat so good at video games?  \n   Because it had nine lives!\n\nWant more or a punny one-liner?",
               "type": "output_text"
             }
           ],
-          "id": "msg_02b70f96fdc5230800690799da85b88197b27de42c6e3e629e",
+          "id": "msg_024e5e7a2608ea83006a19dcaf4f1c81a2b1b03191b5c8b93b",
           "role": "assistant",
           "status": "completed",
           "type": "message"
         }
       ],
-      "parallel_tool_calls": true,
-      "previous_response_id": null,
-      "prompt_cache_key": null,
-      "prompt_cache_retention": null,
+      "instructions": null,
+      "store": true,
+      "presence_penalty": 0.0,
+      "incomplete_details": null,
       "reasoning": {
-        "effort": "medium",
+        "context": "current_turn",
+        "effort": "low",
         "summary": null
       },
-      "safety_identifier": null,
-      "service_tier": "default",
-      "status": "completed",
-      "store": true,
-      "temperature": 1.0,
-      "text": {
-        "format": {
-          "type": "text"
-        },
-        "verbosity": "medium"
-      },
-      "tool_choice": "auto",
-      "tools": [
-        {
-          "description": null,
-          "name": "get_weather",
-          "parameters": {
-            "additionalProperties": false,
-            "properties": {},
-            "required": [],
-            "type": "object"
-          },
-          "strict": true,
-          "type": "function"
-        }
-      ],
-      "top_logprobs": 0,
-      "top_p": 1.0,
+      "completed_at": 1780079792,
       "truncation": "disabled",
-      "usage": {
-        "input_tokens": 35,
-        "input_tokens_details": {
-          "cached_tokens": 0
-        },
-        "output_tokens": 153,
-        "output_tokens_details": {
-          "reasoning_tokens": 128
-        },
-        "total_tokens": 188
+      "top_p": 1.0,
+      "billing": {
+        "payer": "developer"
       },
-      "user": null
+      "prompt_cache_retention": "in_memory",
+      "metadata": {},
+      "prompt_cache_key": null,
+      "created_at": 1780079790,
+      "max_tool_calls": null
     },
     "headers": {
+      "access-control-expose-headers": [
+        "X-Request-ID",
+        "CF-Ray",
+        "CF-Ray"
+      ],
       "alt-svc": [
         "h3=\":443\"; ma=86400"
       ],
@@ -151,7 +168,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "9985791c5af511cd-ORD"
+        "a0379ae21902928a-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -160,13 +177,11 @@
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:50:20 GMT"
+        "Fri, 29 May 2026 18:36:32 GMT"
       ],
-      "openai-organization": [
-        "epic-creative-sogybe"
-      ],
+      "openai-organization": "[REDACTED:openai-organization]",
       "openai-processing-ms": [
-        "5353"
+        "1877"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -177,10 +192,7 @@
       "server": [
         "cloudflare"
       ],
-      "set-cookie": [
-        "__cf_bm=hIswzn8L7bYG679VyyYXaPikSIBHTSLvgbrL.M5oOLc-1762105820-1.0.1.1-eMbLGu5eXzuzds10NZUNn.4eImpqRidw3ilbaTVEG_E.vrJd25xs9UZ40WR5Sv5EAQFnboRT9lpNDJJVyTBxOUJpJ3b3VfmOUoAUVulQe_I; path=/; expires=Sun, 02-Nov-25 18:20:20 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=wJBj_jq6WN_Sji3.cwafhtWJxZDACeHV1cI5Ek83Vpk-1762105820356-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
-      ],
+      "set-cookie": "[REDACTED:set-cookie]",
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
       ],
@@ -189,9 +201,6 @@
       ],
       "x-content-type-options": [
         "nosniff"
-      ],
-      "x-envoy-upstream-service-time": [
-        "5357"
       ],
       "x-ratelimit-limit-requests": [
         "10000"
@@ -212,9 +221,10 @@
         "0s"
       ],
       "x-request-id": [
-        "req_d97b603a15214595af03581af015536d"
+        "req_fe67792c30df4e8c9994dc27697ad847"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

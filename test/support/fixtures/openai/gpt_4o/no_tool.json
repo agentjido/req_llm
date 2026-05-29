@@ -1,38 +1,39 @@
 {
+  "model_spec": "openai:gpt-4o",
+  "provider": "openai",
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoxNjM4LCJtZXNzYWdlcyI6W3siY29udGVudCI6IlRlbGwgbWUgYSBqb2tlIGFib3V0IGNhdHMiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJncHQtNG8iLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMCwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsIm5hbWUiOiJnZXRfd2VhdGhlciIsInBhcmFtZXRlcnMiOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9XX0="
+      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IlRlbGwgbWUgYSBqb2tlIGFib3V0IGNhdHMiLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjoxNjM4LCJtb2RlbCI6ImdwdC00byIsInN0cmVhbSI6ZmFsc2UsInRvb2xzIjpbeyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJwYXJhbWV0ZXJzIjp7ImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjpmYWxzZSwicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJ0eXBlIjoic3RyaW5nIn19LCJ0eXBlIjoib2JqZWN0In0sInN0cmljdCI6ZmFsc2UsInR5cGUiOiJmdW5jdGlvbiJ9XX0="
     },
     "canonical_json": {
-      "max_tokens": 1638,
-      "messages": [
+      "input": [
         {
-          "content": "Tell me a joke about cats",
+          "content": [
+            {
+              "text": "Tell me a joke about cats",
+              "type": "input_text"
+            }
+          ],
           "role": "user"
         }
       ],
+      "max_output_tokens": 1638,
       "model": "gpt-4o",
-      "seed": 42,
       "stream": false,
-      "temperature": 0.0,
       "tools": [
         {
-          "function": {
-            "description": "Get current weather information for a location",
-            "name": "get_weather",
-            "parameters": {
-              "additionalProperties": false,
-              "properties": {
-                "location": {
-                  "type": "string"
-                }
-              },
-              "required": [
-                "location"
-              ],
-              "type": "object"
-            }
+          "description": "Get current weather information for a location",
+          "name": "get_weather",
+          "parameters": {
+            "additionalProperties": false,
+            "properties": {
+              "location": {
+                "type": "string"
+              }
+            },
+            "type": "object"
           },
+          "strict": false,
           "type": "function"
         }
       ]
@@ -46,52 +47,107 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ]
     },
     "method": "post",
-    "url": "https://api.openai.com/v1/chat/completions"
+    "url": "https://api.openai.com/v1/responses"
   },
   "response": {
     "body": {
-      "choices": [
+      "background": false,
+      "text": {
+        "format": {
+          "type": "text"
+        },
+        "verbosity": "medium"
+      },
+      "moderation": null,
+      "top_logprobs": 0,
+      "previous_response_id": null,
+      "tool_choice": "auto",
+      "service_tier": "default",
+      "status": "completed",
+      "tools": [
         {
-          "finish_reason": "stop",
-          "index": 0,
-          "logprobs": null,
-          "message": {
-            "annotations": [],
-            "content": "Why was the cat sitting on the computer?\n\nBecause it wanted to keep an eye on the mouse! 🐱💻🐭",
-            "refusal": null,
-            "role": "assistant"
-          }
+          "description": "Get current weather information for a location",
+          "name": "get_weather",
+          "parameters": {
+            "additionalProperties": false,
+            "properties": {
+              "location": {
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "strict": false,
+          "type": "function"
         }
       ],
-      "created": 1762105818,
-      "id": "chatcmpl-CXWVWoFgzFlxZSzGid3GsehaNXmWa",
+      "id": "resp_063bf0867c7ea6b9006a19da45abc48194b7760aeaa901c7e5",
+      "temperature": 1.0,
+      "max_output_tokens": 1638,
+      "user": null,
+      "frequency_penalty": 0.0,
+      "error": null,
       "model": "gpt-4o-2024-08-06",
-      "object": "chat.completion",
-      "service_tier": "default",
-      "system_fingerprint": "fp_cbf1785567",
       "usage": {
-        "completion_tokens": 28,
-        "completion_tokens_details": {
-          "accepted_prediction_tokens": 0,
-          "audio_tokens": 0,
-          "reasoning_tokens": 0,
-          "rejected_prediction_tokens": 0
-        },
-        "prompt_tokens": 51,
-        "prompt_tokens_details": {
-          "audio_tokens": 0,
+        "input_tokens": 45,
+        "input_tokens_details": {
           "cached_tokens": 0
         },
-        "total_tokens": 79
-      }
+        "output_tokens": 24,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 69
+      },
+      "safety_identifier": null,
+      "object": "response",
+      "parallel_tool_calls": true,
+      "output": [
+        {
+          "content": [
+            {
+              "annotations": [],
+              "logprobs": [],
+              "text": "Why did the cat sit on the computer?\n\nBecause it wanted to keep an eye on the mouse! 😺",
+              "type": "output_text"
+            }
+          ],
+          "id": "msg_063bf0867c7ea6b9006a19da4683648194b2081ca44ada72eb",
+          "role": "assistant",
+          "status": "completed",
+          "type": "message"
+        }
+      ],
+      "instructions": null,
+      "store": true,
+      "presence_penalty": 0.0,
+      "incomplete_details": null,
+      "reasoning": {
+        "context": null,
+        "effort": null,
+        "summary": null
+      },
+      "completed_at": 1780079174,
+      "truncation": "disabled",
+      "top_p": 1.0,
+      "billing": {
+        "payer": "developer"
+      },
+      "prompt_cache_retention": "in_memory",
+      "metadata": {},
+      "prompt_cache_key": null,
+      "created_at": 1780079173,
+      "max_tool_calls": null
     },
     "headers": {
       "access-control-expose-headers": [
-        "X-Request-ID"
+        "X-Request-ID",
+        "CF-Ray",
+        "CF-Ray"
       ],
       "alt-svc": [
         "h3=\":443\"; ma=86400"
@@ -100,7 +156,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "99857935bc1ef83e-ORD"
+        "a0378bd318576087-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -109,13 +165,11 @@
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:50:19 GMT"
+        "Fri, 29 May 2026 18:26:14 GMT"
       ],
-      "openai-organization": [
-        "epic-creative-sogybe"
-      ],
+      "openai-organization": "[REDACTED:openai-organization]",
       "openai-processing-ms": [
-        "497"
+        "1152"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -126,10 +180,7 @@
       "server": [
         "cloudflare"
       ],
-      "set-cookie": [
-        "__cf_bm=PQPI.xcQZevD1igCkj0qZ8H_w.xKJZUrMJ0udaYkV6k-1762105819-1.0.1.1-j4sysu8gELWUaeD_vtO41nTJUDWwjQ35auKKxbFqRvXT9t5cfC4BGT0Kg6BdHuqqHDJeNSxULD.j1U3E80uQFHnj.zXI3hYRNe2yWWzCK.E; path=/; expires=Sun, 02-Nov-25 18:20:19 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=.CJDfCcnlufkYRqjluM6LZQJ607NNHLAOhnMSZtxQTE-1762105819085-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
-      ],
+      "set-cookie": "[REDACTED:set-cookie]",
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
       ],
@@ -138,12 +189,6 @@
       ],
       "x-content-type-options": [
         "nosniff"
-      ],
-      "x-envoy-upstream-service-time": [
-        "510"
-      ],
-      "x-openai-proxy-wasm": [
-        "v0.1"
       ],
       "x-ratelimit-limit-requests": [
         "10000"
@@ -155,18 +200,19 @@
         "9999"
       ],
       "x-ratelimit-remaining-tokens": [
-        "1999991"
+        "1999737"
       ],
       "x-ratelimit-reset-requests": [
         "6ms"
       ],
       "x-ratelimit-reset-tokens": [
-        "0s"
+        "7ms"
       ],
       "x-request-id": [
-        "req_c07e78d9f4f048ec976bd68c37e5fe46"
+        "req_e081222c8cf54a628fcc570d3cf30f3b"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

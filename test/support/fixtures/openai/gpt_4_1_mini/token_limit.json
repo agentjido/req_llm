@@ -1,4 +1,6 @@
 {
+  "model_spec": "openai:gpt-4.1-mini",
+  "provider": "openai",
   "request": {
     "body": {
       "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IldyaXRlIGEgdmVyeSBsb25nIHN0b3J5IGFib3V0IGRyYWdvbnMgYW5kIGFkdmVudHVyZXMiLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjoxMDAsIm1vZGVsIjoiZ3B0LTQuMS1taW5pIiwic3RyZWFtIjpmYWxzZX0="
@@ -28,7 +30,7 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ]
     },
     "method": "post",
@@ -37,61 +39,26 @@
   "response": {
     "body": {
       "background": false,
-      "billing": {
-        "payer": "developer"
-      },
-      "created_at": 1762105821,
-      "error": null,
-      "id": "resp_0179855277ec8ae900690799dde67c8197a315e00bc8bb8103",
-      "incomplete_details": {
-        "reason": "max_output_tokens"
-      },
-      "instructions": null,
-      "max_output_tokens": 100,
-      "max_tool_calls": null,
-      "metadata": {},
-      "model": "gpt-4.1-mini-2025-04-14",
-      "object": "response",
-      "output": [
-        {
-          "content": [
-            {
-              "annotations": [],
-              "logprobs": [],
-              "text": "Certainly! Here is a very long story about dragons and adventures:\n\n---\n\n### The Dragon’s Covenant: A Tale of Fire and Destiny\n\nIn a time long forgotten by humankind, before the rise of kingdoms and the spread of empires, the world was wild and untamed, ruled by elemental forces and ancient creatures. Among these, none were as revered or as feared as the dragons—colossal beings whose wings spanned the sky, whose breath ignited mountains, and whose wisdom shaped the very",
-              "type": "output_text"
-            }
-          ],
-          "id": "msg_0179855277ec8ae900690799de9d148197ad8d8e20f3725544",
-          "role": "assistant",
-          "status": "incomplete",
-          "type": "message"
-        }
-      ],
-      "parallel_tool_calls": true,
-      "previous_response_id": null,
-      "prompt_cache_key": null,
-      "prompt_cache_retention": null,
-      "reasoning": {
-        "effort": null,
-        "summary": null
-      },
-      "safety_identifier": null,
-      "service_tier": "default",
-      "status": "incomplete",
-      "store": true,
-      "temperature": 1.0,
       "text": {
         "format": {
           "type": "text"
         },
         "verbosity": "medium"
       },
-      "tool_choice": "auto",
-      "tools": [],
+      "moderation": null,
       "top_logprobs": 0,
-      "top_p": 1.0,
-      "truncation": "disabled",
+      "previous_response_id": null,
+      "tool_choice": "auto",
+      "service_tier": "default",
+      "status": "incomplete",
+      "tools": [],
+      "id": "resp_0411f0fd25f8b314006a19db636dfc81a3aceb458734ca783d",
+      "temperature": 1.0,
+      "max_output_tokens": 100,
+      "user": null,
+      "frequency_penalty": 0.0,
+      "error": null,
+      "model": "gpt-4.1-mini-2025-04-14",
       "usage": {
         "input_tokens": 16,
         "input_tokens_details": {
@@ -103,9 +70,54 @@
         },
         "total_tokens": 116
       },
-      "user": null
+      "safety_identifier": null,
+      "object": "response",
+      "parallel_tool_calls": true,
+      "output": [
+        {
+          "content": [
+            {
+              "annotations": [],
+              "logprobs": [],
+              "text": "Certainly! Here’s an epic, long story about dragons and adventures:\n\n---\n\n### The Legend of Drakoria: The Chronicles of the Dragonbound\n\nLong ago, when the world was young and the skies shimmered with the glow of ancient magic, dragons ruled the lands and seas. These magnificent creatures—lords of fire and flight—were not mere beasts but majestic beings imbued with intelligence, spirit, and wisdom beyond that of mortal men. Their scales sparkled like precious gemstones, their wings beat",
+              "type": "output_text"
+            }
+          ],
+          "id": "msg_0411f0fd25f8b314006a19db63c31081a39283867e97f2b5ca",
+          "role": "assistant",
+          "status": "incomplete",
+          "type": "message"
+        }
+      ],
+      "instructions": null,
+      "store": true,
+      "presence_penalty": 0.0,
+      "incomplete_details": {
+        "reason": "max_output_tokens"
+      },
+      "reasoning": {
+        "context": null,
+        "effort": null,
+        "summary": null
+      },
+      "completed_at": null,
+      "truncation": "disabled",
+      "top_p": 1.0,
+      "billing": {
+        "payer": "developer"
+      },
+      "prompt_cache_retention": "in_memory",
+      "metadata": {},
+      "prompt_cache_key": null,
+      "created_at": 1780079459,
+      "max_tool_calls": null
     },
     "headers": {
+      "access-control-expose-headers": [
+        "X-Request-ID",
+        "CF-Ray",
+        "CF-Ray"
+      ],
       "alt-svc": [
         "h3=\":443\"; ma=86400"
       ],
@@ -113,7 +125,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "9985794a8c70a162-ORD"
+        "a03792cd0d9beb04-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -122,13 +134,11 @@
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:50:25 GMT"
+        "Fri, 29 May 2026 18:31:01 GMT"
       ],
-      "openai-organization": [
-        "epic-creative-sogybe"
-      ],
+      "openai-organization": "[REDACTED:openai-organization]",
       "openai-processing-ms": [
-        "3916"
+        "1906"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -139,10 +149,7 @@
       "server": [
         "cloudflare"
       ],
-      "set-cookie": [
-        "__cf_bm=WkSrrNsvJFQ7mkbjxStL_quUXrTsvvo0lyv0EQETXc4-1762105825-1.0.1.1-kUWmliR3xfh1__eEKGP649GS._e5e4MjOpsaE0JDGmKUjp5oPV8vT8sr4nsZrOTeu55SkeZapIEvSwwwLDv4NuShFnEZRk7IzMsFgrg91QY; path=/; expires=Sun, 02-Nov-25 18:20:25 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=7hJadzJU60bqEwr4tTSUm6QNNB.mQVgcnH9Q4ux_1rQ-1762105825840-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
-      ],
+      "set-cookie": "[REDACTED:set-cookie]",
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
       ],
@@ -151,9 +158,6 @@
       ],
       "x-content-type-options": [
         "nosniff"
-      ],
-      "x-envoy-upstream-service-time": [
-        "3920"
       ],
       "x-ratelimit-limit-requests": [
         "10000"
@@ -174,9 +178,10 @@
         "0s"
       ],
       "x-request-id": [
-        "req_271f8548502e4a8887b0e49e01e5d89f"
+        "req_ff7c1c356d434ca4925ec01af5b9058c"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

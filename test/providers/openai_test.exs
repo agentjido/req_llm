@@ -96,6 +96,17 @@ defmodule ReqLLM.Providers.OpenAITest do
       assert request.method == :post
     end
 
+    test "prepare_request routes gpt-4.1 models to Responses API" do
+      {:ok, model} = ReqLLM.model("openai:gpt-4.1-mini")
+      context = context_fixture()
+
+      {:ok, request} = OpenAI.prepare_request(:chat, model, context, [])
+
+      assert %Req.Request{} = request
+      assert request.url.path == "/responses"
+      assert request.method == :post
+    end
+
     test "prepare_request routes codex models to Responses API" do
       {:ok, model} = ReqLLM.model("openai:gpt-5.3-codex")
       context = context_fixture()
@@ -108,7 +119,13 @@ defmodule ReqLLM.Providers.OpenAITest do
     end
 
     test "attach_stream defaults chat max_tokens from model output limit" do
-      {:ok, model} = ReqLLM.model("openai:gpt-4")
+      model = %LLMDB.Model{
+        provider: :openai,
+        id: "chat-test-model",
+        limits: %{output: 4096},
+        extra: %{wire: %{protocol: "openai_chat"}}
+      }
+
       context = context_fixture()
 
       {:ok, request} = OpenAI.attach_stream(model, context, [api_key: "test-key"], nil)
@@ -118,7 +135,13 @@ defmodule ReqLLM.Providers.OpenAITest do
     end
 
     test "attach_stream preserves explicit chat max_tokens" do
-      {:ok, model} = ReqLLM.model("openai:gpt-4")
+      model = %LLMDB.Model{
+        provider: :openai,
+        id: "chat-test-model",
+        limits: %{output: 4096},
+        extra: %{wire: %{protocol: "openai_chat"}}
+      }
+
       context = context_fixture()
 
       {:ok, request} =
@@ -163,6 +186,17 @@ defmodule ReqLLM.Providers.OpenAITest do
 
       body = ReqLLM.Test.Helpers.json_body(request)
       assert body["max_output_tokens"] == 789
+    end
+
+    test "attach_stream accepts translated reasoning effort strings" do
+      {:ok, model} = ReqLLM.model("openai:gpt-5-nano")
+      context = context_fixture()
+
+      {:ok, request} =
+        OpenAI.attach_stream(model, context, [api_key: "test-key", reasoning_effort: "low"], nil)
+
+      body = ReqLLM.Test.Helpers.json_body(request)
+      assert body["reasoning"] == %{"effort" => "low"}
     end
 
     test "prepare_request for :object defaults token limit from model output limit" do
@@ -1027,6 +1061,26 @@ defmodule ReqLLM.Providers.OpenAITest do
       assert Enum.any?(warnings, &(&1 =~ "sampling parameters"))
     end
 
+    test "translate_options for gpt-5-pro forces high reasoning effort" do
+      {:ok, model} = ReqLLM.model("openai:gpt-5-pro")
+      opts = [max_tokens: 2500, reasoning_effort: :low]
+      {translated_opts, warnings} = OpenAI.translate_options(:chat, model, opts)
+
+      assert translated_opts[:max_completion_tokens] == 2500
+      assert translated_opts[:reasoning_effort] == "high"
+      refute Keyword.has_key?(translated_opts, :max_tokens)
+      assert Enum.any?(warnings, &(&1 =~ "GPT-5 Pro only supports"))
+    end
+
+    test "translate_options for gpt-5-pro defaults reasoning effort to high" do
+      {:ok, model} = ReqLLM.model("openai:gpt-5-pro")
+      opts = [max_tokens: 2500]
+      {translated_opts, warnings} = OpenAI.translate_options(:chat, model, opts)
+
+      assert translated_opts[:reasoning_effort] == "high"
+      assert Enum.any?(warnings, &(&1 =~ "Set :reasoning_effort to high"))
+    end
+
     test "translate_options for o4 models renames max_tokens and drops temperature" do
       {:ok, model} = ReqLLM.model("openai:o4-mini")
       opts = [max_tokens: 3000, temperature: 0.8]
@@ -1154,7 +1208,40 @@ defmodule ReqLLM.Providers.OpenAITest do
     end
   end
 
+  describe "OpenAI adapter classification" do
+    test "classifies gpt-4.1 as Responses without reasoning defaults" do
+      refute ReqLLM.Providers.OpenAI.AdapterHelpers.reasoning_model?("gpt-4.1-mini")
+      assert ReqLLM.Providers.OpenAI.AdapterHelpers.responses_model?("gpt-4.1-mini")
+    end
+  end
+
   describe "ResponsesAPI json_schema support" do
+    test "ResponsesAPI omits encrypted reasoning include for non-reasoning models" do
+      request = %Req.Request{
+        url: URI.parse("https://api.openai.com/v1/responses"),
+        method: :post,
+        options: [context: context_fixture(), model: "gpt-4.1-mini"]
+      }
+
+      encoded_request = ReqLLM.Providers.OpenAI.ResponsesAPI.encode_body(request)
+      body = ReqLLM.Test.Helpers.json_body(encoded_request)
+
+      refute Map.has_key?(body, "include")
+    end
+
+    test "ResponsesAPI includes encrypted reasoning content for reasoning models" do
+      request = %Req.Request{
+        url: URI.parse("https://api.openai.com/v1/responses"),
+        method: :post,
+        options: [context: context_fixture(), model: "gpt-5-nano"]
+      }
+
+      encoded_request = ReqLLM.Providers.OpenAI.ResponsesAPI.encode_body(request)
+      body = ReqLLM.Test.Helpers.json_body(encoded_request)
+
+      assert body["include"] == ["reasoning.encrypted_content"]
+    end
+
     test "ResponsesAPI encode_text_format transforms response_format to flattened text.format" do
       schema = [
         name: [type: :string, required: true],

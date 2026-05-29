@@ -11,7 +11,7 @@ defmodule ReqLLM.Providers.OpenAI do
     for models like GPT-4, GPT-3.5, and other chat-based models.
 
   - **ResponsesAPI** (`ReqLLM.Providers.OpenAI.ResponsesAPI`) - Handles `/v1/responses` endpoint
-    for reasoning models (o1, o3, o4, GPT-4.1, GPT-5) with extended thinking capabilities.
+    for models such as GPT-4.1, GPT-4o, o-series, and GPT-5.
 
   - **ImagesAPI** (`ReqLLM.Providers.OpenAI.ImagesAPI`) - Handles `/v1/images/generations` endpoint
     for image generation models (DALL-E 2, DALL-E 3, gpt-image-*).
@@ -32,7 +32,7 @@ defmodule ReqLLM.Providers.OpenAI do
   - Full OpenAI Chat API compatibility
 
   ### Responses API (ResponsesAPI)
-  - Extended reasoning for o1/o3/o4/GPT-4.1/GPT-5 models
+  - Extended reasoning for o-series and GPT-5 models
   - Reasoning effort control (minimal, low, medium, high)
   - Streaming with reasoning token tracking
   - Tool calling with responses-specific format
@@ -308,6 +308,23 @@ defmodule ReqLLM.Providers.OpenAI do
         get_timeout_for_operation(:chat, opts)
     end
   end
+
+  @doc false
+  def pre_validate_options(_operation, _model, opts) do
+    case Keyword.fetch(opts, :reasoning_effort) do
+      {:ok, value} -> Keyword.put(opts, :reasoning_effort, normalize_reasoning_effort(value))
+      :error -> opts
+    end
+  end
+
+  defp normalize_reasoning_effort("none"), do: :none
+  defp normalize_reasoning_effort("minimal"), do: :minimal
+  defp normalize_reasoning_effort("low"), do: :low
+  defp normalize_reasoning_effort("medium"), do: :medium
+  defp normalize_reasoning_effort("high"), do: :high
+  defp normalize_reasoning_effort("xhigh"), do: :xhigh
+  defp normalize_reasoning_effort("default"), do: :default
+  defp normalize_reasoning_effort(value), do: value
 
   @impl ReqLLM.Provider
   @doc """

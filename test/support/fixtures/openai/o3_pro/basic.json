@@ -1,9 +1,14 @@
 {
+  "model_spec": "openai:o3-pro",
+  "provider": "openai",
   "request": {
     "body": {
-      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IkhlbGxvIHdvcmxkISIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9XSwibWF4X291dHB1dF90b2tlbnMiOjIwMDAsIm1vZGVsIjoibzMtcHJvIiwic3RyZWFtIjpmYWxzZX0="
+      "b64": "eyJpbmNsdWRlIjpbInJlYXNvbmluZy5lbmNyeXB0ZWRfY29udGVudCJdLCJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IkhlbGxvIHdvcmxkISIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9XSwibWF4X291dHB1dF90b2tlbnMiOjIwMDAsIm1vZGVsIjoibzMtcHJvIiwicmVhc29uaW5nIjp7ImVmZm9ydCI6ImxvdyJ9LCJzdHJlYW0iOmZhbHNlfQ=="
     },
     "canonical_json": {
+      "include": [
+        "reasoning.encrypted_content"
+      ],
       "input": [
         {
           "content": [
@@ -17,6 +22,9 @@
       ],
       "max_output_tokens": 2000,
       "model": "o3-pro",
+      "reasoning": {
+        "effort": "low"
+      },
       "stream": false
     },
     "headers": {
@@ -28,7 +36,7 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ]
     },
     "method": "post",
@@ -37,22 +45,44 @@
   "response": {
     "body": {
       "background": false,
-      "billing": {
-        "payer": "developer"
+      "text": {
+        "format": {
+          "type": "text"
+        },
+        "verbosity": "medium"
       },
-      "created_at": 1762105858,
-      "error": null,
-      "id": "resp_0908988d11aeec9a0069079a01f940819596369cc2733b3ddc",
-      "incomplete_details": null,
-      "instructions": null,
+      "moderation": null,
+      "top_logprobs": 0,
+      "previous_response_id": null,
+      "tool_choice": "auto",
+      "service_tier": "default",
+      "status": "completed",
+      "tools": [],
+      "id": "resp_0139fb50906e98d6006a19dd64d03c81938dec8844e01da7fc",
+      "temperature": 1.0,
       "max_output_tokens": 2000,
-      "max_tool_calls": null,
-      "metadata": {},
+      "user": null,
+      "frequency_penalty": 0.0,
+      "error": null,
       "model": "o3-pro-2025-06-10",
+      "usage": {
+        "input_tokens": 9,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens": 42,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 51
+      },
+      "safety_identifier": null,
       "object": "response",
+      "parallel_tool_calls": true,
       "output": [
         {
-          "id": "rs_0908988d11aeec9a0069079a0d99408195a0ddee2d3a50c125",
+          "encrypted_content": "gAAAAABqGd1reB3IYG3x2D2tD9fKJ4RrDPuIR49GPekd5f9uuLsi2Kj3m40b3rwQBJ-9jSFVYHMe1c3uDV4llGZT1qK68Ral707TpUPS1Yfbhn69O_MVkLZogilY9TAmoHTnIyhFMZOgBvJKfeGARbF4cth-_4Z2pgCFnCdwmH_p4SdrZTUXPcV7OAAFO0oMELIwvR6B9xOcV1pX6jW6m5Qad6s-g0STn_BDr3RBn4cBhK4Y8IT22WJN2urNF6_lhrz1LovtXKK13RqrIfoU-IuRZ3p2ERmF-IYY5ZLZyreCT4_xmM2BhdSy_OwWCLLZUNHTDigc60nFEDaU6YTHhkey68EB43Gm6q50DcWFORQOPcn6EPeJYzk8ivsGAtEYcaJh4PUTT2Vyp-aB7GOLuH9irxrio_0xaQ2Tmo526rfHEPaX1LYHKaWN-bH2iKjEnToSwGsPVL7eZyiCWHMjLScTaQjCR_BExUshSyBL9C5x4Q5l-kvWWjKGwqpdh5-RaP4t9LpedNBfXGRezcZWF7fT08zRftpGeVk7S-yWEQPHiHQAGJLD_fFIOdowUj1GyEQtwPM5QP2FeYJwJY0Yvh9LyuB2ERTjqbTG5KFf4B1N70AxplbUpOsDffvB7CxgCGTcnVkmJxk6LxWn7r6aXO0kz8s3Tn-fiZbqbc4IhvndFTW5JH1KEwblzjnbyOE0ADEMpqR5abNsVDM1obo13v5i1qgILxqe0ZJOQl9jR-e0-EhTVTj6CpYRcUwTDrQN961AK4B_MEmFNoSgObE3zZGAbSLRdKZzPAbVB3esXwW-Rxr65M9oPlttxiOSxtdywHYMqJI5FdYgvstEzoo3BcVZOTK9o5PklBjW3KUi9DJUgPI3ZsVIbzuOmruYbkxkzCFd40QH1yxZILHkJncGbfEQVnKg2al0BIgA42PH0jvHiVkWa0uxODzVVS1fEuqGvZwP_CkaW6aJg1VwHZx68Xv8kejFcsLjFpuLuJhKDiGTrTT6aaremBjlh8pCfLfwdgRMe5KICiW-tO8zi49TS0U-lvgQc9NHRPribmNrXIj_ssQEV0qya9E=",
+          "id": "rs_0139fb50906e98d6006a19dd6b593481939e1042db997d73e3",
           "summary": [],
           "type": "reasoning"
         },
@@ -65,50 +95,39 @@
               "type": "output_text"
             }
           ],
-          "id": "msg_0908988d11aeec9a0069079a0d9c8481959550f0fb4130b4c0",
+          "id": "msg_0139fb50906e98d6006a19dd6b5a848193acafc7dfd4ce63d0",
           "role": "assistant",
           "status": "completed",
           "type": "message"
         }
       ],
-      "parallel_tool_calls": true,
-      "previous_response_id": null,
-      "prompt_cache_key": null,
-      "prompt_cache_retention": null,
+      "instructions": null,
+      "store": true,
+      "presence_penalty": 0.0,
+      "incomplete_details": null,
       "reasoning": {
-        "effort": "medium",
+        "context": "current_turn",
+        "effort": "low",
         "summary": null
       },
-      "safety_identifier": null,
-      "service_tier": "default",
-      "status": "completed",
-      "store": true,
-      "temperature": 1.0,
-      "text": {
-        "format": {
-          "type": "text"
-        },
-        "verbosity": "medium"
-      },
-      "tool_choice": "auto",
-      "tools": [],
-      "top_logprobs": 0,
-      "top_p": 1.0,
+      "completed_at": 1780079979,
       "truncation": "disabled",
-      "usage": {
-        "input_tokens": 9,
-        "input_tokens_details": {
-          "cached_tokens": 0
-        },
-        "output_tokens": 18,
-        "output_tokens_details": {
-          "reasoning_tokens": 0
-        },
-        "total_tokens": 27
+      "top_p": 1.0,
+      "billing": {
+        "payer": "developer"
       },
-      "user": null
+      "prompt_cache_retention": "in_memory",
+      "metadata": {},
+      "prompt_cache_key": null,
+      "created_at": 1780079972,
+      "max_tool_calls": null
     },
     "headers": {
+      "access-control-expose-headers": [
+        "X-Request-ID",
+        "CF-Ray",
+        "CF-Ray"
+      ],
       "alt-svc": [
         "h3=\":443\"; ma=86400"
       ],
@@ -116,7 +135,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "99857a2a5abfe148-ORD"
+        "a0379f552bff5f00-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -125,13 +144,11 @@
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:51:09 GMT"
+        "Fri, 29 May 2026 18:39:39 GMT"
       ],
-      "openai-organization": [
-        "epic-creative-sogybe"
-      ],
+      "openai-organization": "[REDACTED:openai-organization]",
       "openai-processing-ms": [
-        "12068"
+        "6893"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -142,10 +159,7 @@
       "server": [
         "cloudflare"
       ],
-      "set-cookie": [
-        "__cf_bm=pUvuuSlhh.OsXWG2yRvqP14gNqGmNnOZVjt.Pad5wJg-1762105869-1.0.1.1-9L0aoiB3nb5.SU_udLdqT2Vzbv8kxxSkYLQRgQ11iL6Q3TR7JDXGvdBMG_suRwLiNTgjw5fvxYNUWeyEWkG1hnmKgFKhNcgQavorDUSiF5Q; path=/; expires=Sun, 02-Nov-25 18:21:09 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=hKS1zF0D_S6U673Ute.KZdgHjmlQxa0bIBVi1Dh9g4Y-1762105869934-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
-      ],
+      "set-cookie": "[REDACTED:set-cookie]",
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
       ],
@@ -154,9 +168,6 @@
       ],
       "x-content-type-options": [
         "nosniff"
-      ],
-      "x-envoy-upstream-service-time": [
-        "12178"
       ],
       "x-ratelimit-limit-requests": [
         "10000"
@@ -168,7 +179,7 @@
         "9999"
       ],
       "x-ratelimit-remaining-tokens": [
-        "1999306"
+        "1999734"
       ],
       "x-ratelimit-reset-requests": [
         "0s"
@@ -177,9 +188,10 @@
         "0s"
       ],
       "x-request-id": [
-        "req_26038673ed5b4c2d97924db842431252"
+        "req_deb491d71a8e4d49a59d76b99b6bdb43"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

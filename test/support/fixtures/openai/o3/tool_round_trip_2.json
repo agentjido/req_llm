@@ -1,9 +1,14 @@
 {
+  "model_spec": "openai:o3",
+  "provider": "openai",
   "request": {
     "body": {
-      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9LHsiY2FsbF9pZCI6ImNhbGxfSkpOeUljUFI4QmxBdERmYkZFdVhEU3dZIiwib3V0cHV0Ijoie1wiZXJyb3JcIjpcIlRvb2wgZXhlY3V0aW9uIGZhaWxlZFwifSIsInR5cGUiOiJmdW5jdGlvbl9jYWxsX291dHB1dCJ9XSwibWF4X291dHB1dF90b2tlbnMiOjEwMDAwLCJtb2RlbCI6Im8zIiwicHJldmlvdXNfcmVzcG9uc2VfaWQiOiJyZXNwXzAwOGFiYmM3ZmVjMmFmNjAwMDY5MDc5YTYxOWFiYzgxOTdhYzc5NTM5ZmViNGJkYjc0Iiwic3RyZWFtIjpmYWxzZX0="
+      "b64": "eyJpbmNsdWRlIjpbInJlYXNvbmluZy5lbmNyeXB0ZWRfY29udGVudCJdLCJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9LHsiYXJndW1lbnRzIjoie1wiYVwiOjIsXCJiXCI6M30iLCJjYWxsX2lkIjoiY2FsbF9QcmozTnUyeXZZVXdSQnVoeVkycXU5UFgiLCJuYW1lIjoiYWRkIiwidHlwZSI6ImZ1bmN0aW9uX2NhbGwifSx7ImNhbGxfaWQiOiJjYWxsX1ByajNOdTJ5dllVd1JCdWh5WTJxdTlQWCIsIm91dHB1dCI6IjUiLCJ0eXBlIjoiZnVuY3Rpb25fY2FsbF9vdXRwdXQifV0sIm1heF9vdXRwdXRfdG9rZW5zIjoxMDAwMCwibW9kZWwiOiJvMyIsInByZXZpb3VzX3Jlc3BvbnNlX2lkIjoicmVzcF8wMjE5MGEwZDE2MGZkYzJkMDA2YTE5ZGUyZGM3ZDA4MWEwOThlOTU3NjUyOWFiYjE4MyIsInN0b3JlIjp0cnVlLCJzdHJlYW0iOmZhbHNlfQ=="
     },
     "canonical_json": {
+      "include": [
+        "reasoning.encrypted_content"
+      ],
       "input": [
         {
           "content": [
@@ -15,14 +20,21 @@
           "role": "user"
         },
         {
-          "call_id": "call_JJNyIcPR8BlAtDfbFEuXDSwY",
-          "output": "{\"error\":\"Tool execution failed\"}",
+          "arguments": "{\"a\":2,\"b\":3}",
+          "call_id": "call_Prj3Nu2yvYUwRBuhyY2qu9PX",
+          "name": "add",
+          "type": "function_call"
+        },
+        {
+          "call_id": "call_Prj3Nu2yvYUwRBuhyY2qu9PX",
+          "output": "5",
           "type": "function_call_output"
         }
       ],
       "max_output_tokens": 10000,
       "model": "o3",
-      "previous_response_id": "resp_008abbc7fec2af600069079a619abc8197ac79539feb4bdb74",
+      "previous_response_id": "resp_02190a0d160fdc2d006a19de2dc7d081a098e9576529abb183",
+      "store": true,
       "stream": false
     },
     "headers": {
@@ -34,7 +46,7 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ]
     },
     "method": "post",
@@ -43,45 +55,41 @@
   "response": {
     "body": {
       "background": false,
-      "billing": {
-        "payer": "developer"
+      "text": {
+        "format": {
+          "type": "text"
+        },
+        "verbosity": "medium"
       },
-      "created_at": 1762105956,
-      "error": null,
-      "id": "resp_008abbc7fec2af600069079a64690481978e25b7a0fed5c7d9",
-      "incomplete_details": null,
-      "instructions": null,
+      "moderation": null,
+      "top_logprobs": 0,
+      "previous_response_id": "resp_02190a0d160fdc2d006a19de2dc7d081a098e9576529abb183",
+      "tool_choice": "auto",
+      "service_tier": "default",
+      "status": "completed",
+      "tools": [],
+      "id": "resp_02190a0d160fdc2d006a19de2f95d081a0b9d06b4dd1e05f59",
+      "temperature": 1.0,
       "max_output_tokens": 10000,
-      "max_tool_calls": null,
-      "metadata": {},
+      "user": null,
+      "frequency_penalty": 0.0,
+      "error": null,
       "model": "o3-2025-04-16",
+      "usage": {
+        "input_tokens": 112,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens": 7,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 119
+      },
+      "safety_identifier": null,
       "object": "response",
+      "parallel_tool_calls": true,
       "output": [
-        {
-          "id": "rs_008abbc7fec2af600069079a6538348197a7f2b624985cfb90",
-          "summary": [],
-          "type": "reasoning"
-        },
-        {
-          "id": "rs_008abbc7fec2af600069079a6bbe3c819782a24dc270f8c837",
-          "summary": [],
-          "type": "reasoning"
-        },
-        {
-          "id": "rs_008abbc7fec2af600069079a6bd99c8197ba6858ba7109ef74",
-          "summary": [],
-          "type": "reasoning"
-        },
-        {
-          "id": "rs_008abbc7fec2af600069079a6c04f08197a986b8156114ff2e",
-          "summary": [],
-          "type": "reasoning"
-        },
-        {
-          "id": "rs_008abbc7fec2af600069079a6c1a488197b34ba4563d0a2504",
-          "summary": [],
-          "type": "reasoning"
-        },
         {
           "content": [
             {
@@ -91,50 +99,39 @@
               "type": "output_text"
             }
           ],
-          "id": "msg_008abbc7fec2af600069079a6c3ce08197b091d8cd016d770a",
+          "id": "msg_02190a0d160fdc2d006a19de30b67881a0970ead3b7b8d2814",
           "role": "assistant",
           "status": "completed",
           "type": "message"
         }
       ],
-      "parallel_tool_calls": true,
-      "previous_response_id": "resp_008abbc7fec2af600069079a619abc8197ac79539feb4bdb74",
-      "prompt_cache_key": null,
-      "prompt_cache_retention": null,
+      "instructions": null,
+      "store": true,
+      "presence_penalty": 0.0,
+      "incomplete_details": null,
       "reasoning": {
+        "context": "current_turn",
         "effort": "medium",
         "summary": null
       },
-      "safety_identifier": null,
-      "service_tier": "default",
-      "status": "completed",
-      "store": true,
-      "temperature": 1.0,
-      "text": {
-        "format": {
-          "type": "text"
-        },
-        "verbosity": "medium"
-      },
-      "tool_choice": "auto",
-      "tools": [],
-      "top_logprobs": 0,
-      "top_p": 1.0,
+      "completed_at": 1780080176,
       "truncation": "disabled",
-      "usage": {
-        "input_tokens": 274,
-        "input_tokens_details": {
-          "cached_tokens": 0
-        },
-        "output_tokens": 201,
-        "output_tokens_details": {
-          "reasoning_tokens": 192
-        },
-        "total_tokens": 475
+      "top_p": 1.0,
+      "billing": {
+        "payer": "developer"
       },
-      "user": null
+      "prompt_cache_retention": "in_memory",
+      "metadata": {},
+      "prompt_cache_key": null,
+      "created_at": 1780080175,
+      "max_tool_calls": null
     },
     "headers": {
+      "access-control-expose-headers": [
+        "X-Request-ID",
+        "CF-Ray",
+        "CF-Ray"
+      ],
       "alt-svc": [
         "h3=\":443\"; ma=86400"
       ],
@@ -142,7 +139,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "99857c932de3da7a-ORD"
+        "a037a4491d015553-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -151,13 +148,11 @@
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:52:44 GMT"
+        "Fri, 29 May 2026 18:42:57 GMT"
       ],
-      "openai-organization": [
-        "epic-creative-sogybe"
-      ],
+      "openai-organization": "[REDACTED:openai-organization]",
       "openai-processing-ms": [
-        "8243"
+        "1669"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -168,10 +163,7 @@
       "server": [
         "cloudflare"
       ],
-      "set-cookie": [
-        "__cf_bm=rEUrlh1VdTu5YiGOXSJkCKijdATlFgTzMQvXaB1CUec-1762105964-1.0.1.1-_nelPQsb.9xOA6HEt6Xj3V_w3vUqrzrmwe_OvRdbYMSIhhSWW0Zxq9oTXWfVOjvkkl7__OFFHuVf0ufhw1g93r2nN3Oxmy7VEaFqMk3UXYY; path=/; expires=Sun, 02-Nov-25 18:22:44 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=2r0QzRJqt_gQzGvTAB2owUodUv7psJGYcmti1z0qoGI-1762105964670-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
-      ],
+      "set-cookie": "[REDACTED:set-cookie]",
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
       ],
@@ -180,9 +172,6 @@
       ],
       "x-content-type-options": [
         "nosniff"
-      ],
-      "x-envoy-upstream-service-time": [
-        "8248"
       ],
       "x-ratelimit-limit-requests": [
         "10000"
@@ -194,18 +183,19 @@
         "9999"
       ],
       "x-ratelimit-remaining-tokens": [
-        "1999519"
+        "1999681"
       ],
       "x-ratelimit-reset-requests": [
         "6ms"
       ],
       "x-ratelimit-reset-tokens": [
-        "14ms"
+        "9ms"
       ],
       "x-request-id": [
-        "req_db7b356b2284434e876e0c5492b23091"
+        "req_a23def5f45034280a7625496a0dd58f7"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

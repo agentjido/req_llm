@@ -294,6 +294,17 @@
       }
     }
   },
+  "openai:gpt-4.1-mini": {
+    "scenarios": {
+      "context_append": {
+        "error": null,
+        "fixtures": [],
+        "last_checked": "2026-05-29T18:43:47Z",
+        "mode": "replay",
+        "status": "pass"
+      }
+    }
+  },
   "openai:gpt-4o-mini": {
     "scenarios": {
       "basic": {
@@ -302,6 +313,43 @@
           "basic"
         ],
         "last_checked": "2026-05-29T16:16:55Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openai:gpt-5-nano": {
+    "scenarios": {
+      "object_streaming": {
+        "error": null,
+        "fixtures": [],
+        "last_checked": "2026-05-29T18:43:47Z",
+        "mode": "replay",
+        "status": "pass"
+      }
+    }
+  },
+  "openai:gpt-5-pro": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T18:39:08Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openai:o3-pro": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T18:39:39Z",
         "mode": "record",
         "status": "pass"
       }

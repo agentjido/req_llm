@@ -1,9 +1,14 @@
 {
+  "model_spec": "openai:gpt-5-mini",
+  "provider": "openai",
   "request": {
     "body": {
-      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IldyaXRlIGEgdmVyeSBsb25nIHN0b3J5IGFib3V0IGRyYWdvbnMgYW5kIGFkdmVudHVyZXMiLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjoxMDAsIm1vZGVsIjoiZ3B0LTUtbWluaSIsInN0cmVhbSI6ZmFsc2V9"
+      "b64": "eyJpbmNsdWRlIjpbInJlYXNvbmluZy5lbmNyeXB0ZWRfY29udGVudCJdLCJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IldyaXRlIGEgdmVyeSBsb25nIHN0b3J5IGFib3V0IGRyYWdvbnMgYW5kIGFkdmVudHVyZXMiLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjozMDAwLCJtb2RlbCI6ImdwdC01LW1pbmkiLCJyZWFzb25pbmciOnsiZWZmb3J0IjoibG93In0sInN0cmVhbSI6ZmFsc2V9"
     },
     "canonical_json": {
+      "include": [
+        "reasoning.encrypted_content"
+      ],
       "input": [
         {
           "content": [
@@ -15,8 +20,11 @@
           "role": "user"
         }
       ],
-      "max_output_tokens": 100,
+      "max_output_tokens": 3000,
       "model": "gpt-5-mini",
+      "reasoning": {
+        "effort": "low"
+      },
       "stream": false
     },
     "headers": {
@@ -28,7 +36,7 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ]
     },
     "method": "post",
@@ -37,65 +45,91 @@
   "response": {
     "body": {
       "background": false,
-      "billing": {
-        "payer": "developer"
-      },
-      "created_at": 1759698853,
-      "error": null,
-      "id": "resp_0191dcd42ce13ccb0068e2dfa552b48199bedc6bf5f89f5d9e",
-      "incomplete_details": {
-        "reason": "max_output_tokens"
-      },
-      "instructions": null,
-      "max_output_tokens": 100,
-      "max_tool_calls": null,
-      "metadata": {},
-      "model": "gpt-5-mini-2025-08-07",
-      "object": "response",
-      "output": [
-        {
-          "id": "rs_0191dcd42ce13ccb0068e2dfa5e03c8199a36dbc3b1ca24107",
-          "summary": [],
-          "type": "reasoning"
-        }
-      ],
-      "parallel_tool_calls": true,
-      "previous_response_id": null,
-      "prompt_cache_key": null,
-      "reasoning": {
-        "effort": "medium",
-        "summary": null
-      },
-      "safety_identifier": null,
-      "service_tier": "default",
-      "status": "incomplete",
-      "store": true,
-      "temperature": 1.0,
       "text": {
         "format": {
           "type": "text"
         },
         "verbosity": "medium"
       },
-      "tool_choice": "auto",
-      "tools": [],
+      "moderation": null,
       "top_logprobs": 0,
-      "top_p": 1.0,
-      "truncation": "disabled",
+      "previous_response_id": null,
+      "tool_choice": "auto",
+      "service_tier": "default",
+      "status": "incomplete",
+      "tools": [],
+      "id": "resp_008b5e98eb7a4524006a19dc7aeb208190ae4a4ba4213b89d9",
+      "temperature": 1.0,
+      "max_output_tokens": 3000,
+      "user": null,
+      "frequency_penalty": 0.0,
+      "error": null,
+      "model": "gpt-5-mini-2025-08-07",
       "usage": {
         "input_tokens": 15,
         "input_tokens_details": {
           "cached_tokens": 0
         },
-        "output_tokens": 64,
+        "output_tokens": 3000,
         "output_tokens_details": {
           "reasoning_tokens": 64
         },
-        "total_tokens": 79
+        "total_tokens": 3015
       },
-      "user": null
+      "safety_identifier": null,
+      "object": "response",
+      "parallel_tool_calls": true,
+      "output": [
+        {
+          "encrypted_content": "gAAAAABqGdykq8efQ8OeE6P3UHfzgdalWNTnWoWQCB2AhmvMyC3HwRYoBTh1r2yVqjOh0Hnp2Slr8B6Mc6yBY85jGwPTXI2raLsO_luYw3JCXbPt6430fCNnJGMXXEfbsUA8oIXGTA5CubKXX6c24xAeCO43G5JaL5pcrBT50TKd_BdqJ7Ws7tAhLbmHYBjDZrlwIOLQYLzXVLwxEnN05RTVY0GwzbYxChNvW0tYkeX2KlR9VeLKd-rACwWX6L2TyV_dMaDC4AlAnnbgGJ_8E2M9IqyWkZtD9HkcS6gOaHMSRu7jXqKxXtv6SI-SweV37vplJgJaSo-RxaFWqV8DB_JCWP1zsYnl5Rmm746xDeL1R8Ne_lugYU3Y4MKEhKmN8jV_jG7LWQMeMju2SQ55O1Yhxvc7jb1YaXoCLA1L7G-aSGYPIq8iOLCCvPOXtLQW0ejbuwBJSRAlzglvylYLNqM7WCb3YLlBqKv6lZUe229ry5yk8HfALf-b-OzHB_ZAPnTPiaezmWsgxO1iRQBFHMuHKfCAJgbZIbmy0KeAfDWppZknJSKmwtzyxNJVndcayCnlWxLW0WuVtzKojhJtiRXX-qnKSlnlHphzcXOnuQIofJ1yF89iZ6ILE9j0JH59Xcu8pTupWsEMpRGcCYG35nnj5Vw7idWR1vvgWmZHK03yGsFlrmfaCyv6Q_HthiC0eHe4PORjKPeviDtEz92cESU7cu_JrZ7q-ogU5bjvMPi8B5TmILOxnAsGwAd8obuuLWM16wyifxSpEc02yz4YcUJ98CWN4_g5wsfVqItgdNXgmVb0_1U12x8yzIbudEcWB5AjuOhuTeoMJQ3qG7wHDevAebFU0BXIF4ipDtaNjmANeNjfC9jZ6B7N_tBFkk04cBGG2AtCgSozWjmNbBTNDsNZJGCqmhQECf2J-Sv7KlIbY79DR6EbgwTRKCg34ZL7L7cF_ccmmb_8s-s2Gs4D9doFDBQnN99iRtYyP-LjRmsHsqxcQYqaIrUccx44-eVgXR-D7mVeH1SQzjbs2LJrcLhMA79bMm4ixEWSpcFhvZ6pXi3L-Krr7yXCywJWC9Kr9erInPRhiR6_3yYy-i5gmmeDGPXrXrzGykrDwhR8uzrTsi71y6cuqUnD87qd0txqsr5J7xaiPxMWYmEEAe7jKyTjrCC5kbsMJAcZmafN3J_iRUlDmYT8fcQx4WR_01SmpWoXm6GGDgUS3Xb2bhAJ0yBv36cCwPEZlX-WRMV4SwEAytom3LQoYODfaiq7AqvUHEgby5KI9NsfFolUv1LpaoA9TGrU0qYBLWR7VTC932AUvuDq3t4U-Yah-RBrVYl9hKJLh3NOtqJWKVegG4KFFWpYg75qLsjcf9X_8QHvE0puTRmI-gbLqynnT7gErA-cpvJRg6MgkOepGA-ukeidQiMoJ0mTFexXahvtHLK0vwTxIVrJM49HYlp5YqHKQzgIv8kAUptp5-pcQiG6heCMnQ-iZLCRnXuTmwxPdZJQn6FvQaaFmx6uKwyUjvQ-AeUM-hcoDRejWZoVnN19-rlBifUgeFJU8F-TMS2fTrP0-1FQDTXc1XSge0F4-Z56rtIJHg7tRb2TmQW0200mc2zxWiOPcGmWWuHwRZwg1rxC3dFhmV7oUbW3ZYU=",
+          "id": "rs_008b5e98eb7a4524006a19dc7b56648190a9ecad2263ee1e91",
+          "summary": [],
+          "type": "reasoning"
+        },
+        {
+          "content": [
+            {
+              "annotations": [],
+              "logprobs": [],
+              "text": "Prologue\n\nFor as long as memory is kept in the stones of the world, dragons were the breath that drew the sky together. They slept beneath mountain roots and in the hollow ribs of drowned atolls; they rode the jet-streams like sailors and unfurled their wings to block the moon when they desired secrecy. People grew up with dragons as a fact of life: the crack of a wainwright’s hammer, the bitter tang of smoke on the wind, the legend told to children at night. In some valleys, dragon-fire warmed the forges and fed the baker’s oven; in others, dragons' shadow spelled doom and harvestless years.\n\nThe Age of Tongues—when dragons and men struck laws and oaths—had ended centuries before the tale that follows, but its echoes remained. The last pact had been made with a dragon named Auraxen the Golden, who taught the mountain clans the language of stone: how to ask a cliff to let a mineral vein be cut and how to promise a forest that only a single tree would fall. After Auraxen vanished into the mists beyond the north glaciers, human governance spread, and dragonkind retreated into the hinterlands and the stories told by firelight.\n\nThis is a story about what happens when one such lingering oath is forgotten, and when the world must learn again how to speak with beasts who remember the first names of the stars.\n\nChapter One: The Mapmaker’s Daughter\n\nLiora of Greybridge had a laugh like wind through chimneys—quick and sharp, with a tendency to unsettle anyone within earshot. Greybridge itself was a sprawl of houses clinging to a river’s elbow, a place of whetstones and dye-mills, of taverns where fishermen swapped lies. Liora’s life should have been ordinary: help her father at the mapshop, learn to sew, marry a boy from the cooper’s yard and give him a brood of sons. Instead she learned to read the sky.\n\nHer father, Master Thane, had an old habit. At dawn, when the fog lay thick in the valley, he would unfurl the maps he had drawn in his youth and speak quietly to the lines. He traced the course of a forgotten road with a finger and said, “These paths remember those who walked them.” Liora was a daughter of ears rather than of hands; she listened more than she did. One morning, while cleaning the shelves, she found a roll of parchment hidden beneath the counter, wrapped in leather and bound with a ribbon of silver. When she unrolled it, the ink shimmered in a way she had never seen: not merely black but threaded with a faint, living light, like the underside of a fish’s scale. The map showed a place no one in Greybridge spoke of: the Blue Hollow, an isolated basin ringed with cliffs that wore curtains of ice even in midsummer.\n\n“This is a dragon’s place,” her father said when she showed him. His voice trembled for reasons Liora did not understand—memory or superstition, perhaps. “We didn't make this cartography for trade. It was made as a promise.”\n\n“A promise to whom?” Liora asked. She was nineteen and impatient with omens.\n\n“To the ones who keep their names in the wind,” Master Thane said. “Auraxen’s people. We once swore not to cut the hollow’s heart. City men broke their oaths elsewhere and the dragons withdrew. But some maps are made in trust; some are made to be returned.”\n\nThat night Liora dreamed of a creature with scales like stained glass and eyes like lanterns. It spoke, not in words but as if someone had turned a bell and filled the room with one clear note. She woke with the silver ribbon clenched in her fist and a resolve she had never owned: she would find the Blue Hollow. If there were dragons left, she wanted to hear one speak.\n\nChapter Two: The Road North\n\nGreybridge is a place of bargains, but the map traveled poorly in public. Word drew the curious and the dangerous: a tax-collector who wanted to see if a king could lay claim; a traveling scholar who suspected a lost library; a gang of highwaymen who believed treasures lay in dragon lairs. Liora, who knew the alleys as well as the faces that frequented them, gathered a small party.\n\nThere was Malen, a former soldier with a scar across his cheek and a temper that matched the scar’s jag; Selwyn, a young hedge-witch who braided dry herbs into her hair and burned trouble away with saucings of salt; and Jori, a goat-skin-drunk poet who carried a lute but knew how to pick a lock when the need pressed. They left in the half-dark of a market morning, with Master Thane’s blessing that looked like a blessing only because it trembled less than his fear.\n\nThe road north was a beginner’s test of weather and nerves. They passed towns that had put up iron lightning-rods at their borders, houses rimed with frost even when the sunlight warmed the way, and bridges under which jackdaws claimed the water like a coven. On the fifth night a storm turned their camp into a small theater of misfortune: lightning struck a tree and set the bark glowing like embers; they sheltered in a cave and found, to their surprise, that the cave’s mouth opened onto a lake as flat as glass. On the lake lay a small skiff with a name carved under the beer-and-pine tar: AURELIA—brave wordwork for a name now as rare as a smile in a tax office.\n\n“We are on the path of the old sagas,” Malen said, slapping the skiff’s hull with satisfaction. “If the songs are to be believed, we’ll find either buried gold or a dragon hoard.”\n\nSelwyn looked at the water and whispered a charm that tasted of lavender and iron. When she was done, the lake’s surface broke in gentle waves as if something large had breathed beneath it and was amused. A ripple grew, and from the depth rose a creature like a log at first—brown skin, a curved back—but it was a turtle of prodigious size, its shell plated like old shields and encrusted with barnacles that hummed faintly. The turtle blinked and regarded them as if deciding whether men were worth a conversation. It then balanced the skiff on its back and, with a groaning delight, began to move.\n\n“You have a way with tides,” Liora said to Selwyn, who only smiled. Selwyn had learned river-songs from an aunt and moonlit nettings from older women in the marshes; to her, addressing water was the same as addressing a shrew: awkward but occasionally productive.\n\nThe turtle carried them north as if it were impatient to deliver a parcel. For days the land opened into ridges, and the air grew thinner. They passed a village where the roofs had been upturned by a gust like a hand; a woman there told them half a story about a winged shadow that had flown over the wheat when the moon was new. “They say the dragons have returned to eating the sky,” she muttered. The curse of the old kingdom seemed to come with a rust.\n\nChapter Three: The Hollow’s Edge\n\nWhen at last the valley widened and the Blue Hollow lay before them, it took their breath in a way that had nothing to do with altitude. The basin was vast, ringed with cliffs whose sides sheered like knife-edges; between them, the ground fell into a blue so deep it looked plasma—sapphire lakes, rivers that glittered, flowers whose petals were deep like ink and lighter than glass. The air tasted of metal and lilies; every step hummed underfoot. They met no people save for two figures huddled by the path, an old man and a girl who watched the sky with a pair of lenses made from polished horn.\n\n“Auraxen’s watch,” the old man said when Liora showed him the silver-bound map. His voice was papery, and though his body was withered his eyes were sharp as cliff-ice. “I remember the pact. Men were to leave this hollow’s heart untouched. We kept the watch until well after the last dragon left. Time is a traitor; it erodes promises.”\n\n“How many dragons are left?” Malen blurted.\n\nThe old man laughed a sound like itself falling through a well. “A few, perhaps. Enough. Enough that you would do well to ask before you step where ancient scales have lain.”\n\nThey camped at the hollow’s rim, a place where wind carved songs out of pinched stones. That night Liora woke to a sound like the unwrapping of great paper. A shape moved in the dark: elongated, patient, with eyes that lit as two slow lanterns. The dragon’s scales glinted with the pale light of a distant star. It did not touch the tent; it stood where the grass met the cliff and inhaled as if tasting them.\n\nLiora stepped out. The dragon’s head turned with an elegance that was older than the laws written by men. It spoke—a small word, but Liora felt it rush through her like an opened channel.\n\n“You are a listener,” the dragon said.\n\nLiora did not know if she should answer in common speech or some old tongue. She chose honesty. “I am Liora of Greybridge. I read the maps.”\n\nThe dragon’s laugh rolled. “Maps are promises put to parchment. Have you come to tear it?”\n\n“No.” She held the silver-bound roll to her chest. “I came to listen.”\n\nThe dragon’s eyes narrowed. Light pooled on its scales and showed Liora a thousand tiny maps—river bends, mountain scars, patterns of nests. “Listen, then. Hear this: a promise was made by your kin once. For a space of time we guarded the borders of storms, and in return we were given one valley. That valley we called our hollow. It was to be ours alone to feed, to birth, to die in as we chose. We were to be left. Humans have a habit of emptying the world of secrets. When that happens, the tongues of mountains forget. The old pacts fray.”\n\n“Are you… are you Auraxen?” Liora asked, her heart pushing against its cage.\n\nThe dragon made a sound like a sigh. “I am one who remembers him. Names are like embers between us; some are kept, some are allowed to die. I carry many names on my back. Call me Rheth—the hollow remembers me.”\n\nRheth spoke of slow things: the way glaciers spoke to stone, the manner by which rivers cut not out of hunger but out of time, and the terrible care of keeping a pact. It told them that for generations, outsiders had come to the hollow to take bits of it—an herb, a scale, a shard—and that every taking unbalanced a thread. “Someone seeks the hollow’s heart,” Rheth said finally. “There is a man who would cut out a silence and turn it into coin.”\n\n“You mean a king?” Malen asked. The name slipped on his tongue like a stone.\n\nRheth’s head turned toward the valley where the river braided into luminous fingers. “Not a king that calls his lands a country. A man with no country, who collects old things and trades them for influence. He has a machine—something he calls a bell—that sings through stone. It has already shaken the bones of their rest. If it sounds again, it will pull the hollow’s heart out of the ground and nothing will close the wound.”\n\nChapter Four: The Man with No Country\n\nThe man with no country called himself Lord Harrow. He wore a collar of polished metal and a cloak that glittered with woven wires. He arrived with a retinue of engineers and a glänz of men whose mouths were polite but whose hands were rough. Harrow built his bell on the shoulder of the cliff—a black thing of iron and plate, with tongues of metal that could be struck to vibrate through rock. He said it was for finding ore, but what a bell finds it can also force to remember. The bell’s voice was a hunger given shape: when struck, the hollow answered in a chorus of low moans as if something deep were being translated into pain.\n\nHarrow offered coin to anyone who would betray the hollow: a farmer who would dig at the base of a particular rock, a covetous lord who owed debts, even a scholar unsatiated by the shapes of maps. He was persuasive, and he was patient. Selwyn read the weave of his words and called them a net. “There are men,” she said, “who collect nations like trinkets. He smells of such.”\n\nLiora watched Harrow with the bright horror of someone whose map had been made as a trust and was now to be misread. She and Rheth convened in secret. The dragon’s patience deepened by nights of watching the bell sing, telling them that the hollow had spirits lodged in its heart, small things older than human fame: unborn dragons, river-sprites, a root-herd of trees that glowed at night. Harrow’s bell did not locate; it took.\n\n“You cannot simply pull up a heart,” Rheth said, smoke curling from nostrils like thought. “It will have seeds. You will change not only us but the pattern of rain on markets far away.”\n\n“We will not let him,” Liora said. The words were a stave, held with hands stronger than she knew.\n\nTheir plan was made of small things. They would not face a bell of iron with swords; iron fights metal and loses more. Instead, they used tricks. Jori, who knew about locks and about the soft mercy of poetry, talked to Harrow’s men with flattery until one soldier became convinced the poet’s boasts were prophecies. Malen gathered wages in",
+              "type": "output_text"
+            }
+          ],
+          "id": "msg_008b5e98eb7a4524006a19dc7c980481909a911cecd7bd332c",
+          "role": "assistant",
+          "status": "incomplete",
+          "type": "message"
+        }
+      ],
+      "instructions": null,
+      "store": true,
+      "presence_penalty": 0.0,
+      "incomplete_details": {
+        "reason": "max_output_tokens"
+      },
+      "reasoning": {
+        "context": "current_turn",
+        "effort": "low",
+        "summary": null
+      },
+      "completed_at": null,
+      "truncation": "disabled",
+      "top_p": 1.0,
+      "billing": {
+        "payer": "developer"
+      },
+      "prompt_cache_retention": "in_memory",
+      "metadata": {},
+      "prompt_cache_key": null,
+      "created_at": 1780079738,
+      "max_tool_calls": null
     },
     "headers": {
+      "access-control-expose-headers": [
+        "X-Request-ID",
+        "CF-Ray",
+        "CF-Ray"
+      ],
       "alt-svc": [
         "h3=\":443\"; ma=86400"
       ],
@@ -103,7 +137,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "989fed68fe41ead8-ORD"
+        "a037999fb81f8722-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -112,13 +146,11 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 21:14:15 GMT"
+        "Fri, 29 May 2026 18:36:20 GMT"
       ],
-      "openai-organization": [
-        "epic-creative-sogybe"
-      ],
+      "openai-organization": "[REDACTED:openai-organization]",
       "openai-processing-ms": [
-        "2120"
+        "41645"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -129,10 +161,7 @@
       "server": [
         "cloudflare"
       ],
-      "set-cookie": [
-        "__cf_bm=fOJulv5TnTCnczqB3aRHiOsXWphZjtLe_KR38Rv0QP0-1759698855-1.0.1.1-H4z_mBQ09Zjx4MliitNozGwu1PwJdNKFfWyl3eP531mr4a8JNrXwrngCO5eJqefsscFEPVR1l7sFga9DTdE0kJR78g0gb.zW4cexurfdjm8; path=/; expires=Sun, 05-Oct-25 21:44:15 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=uV3pPC3yzzQSgNjLKAYv8y09i2UI1xGlcHSu4Y.9k8o-1759698855466-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
-      ],
+      "set-cookie": "[REDACTED:set-cookie]",
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
       ],
@@ -142,31 +171,11 @@
       "x-content-type-options": [
         "nosniff"
       ],
-      "x-envoy-upstream-service-time": [
-        "2123"
-      ],
-      "x-ratelimit-limit-requests": [
-        "5000"
-      ],
-      "x-ratelimit-limit-tokens": [
-        "4000000"
-      ],
-      "x-ratelimit-remaining-requests": [
-        "4999"
-      ],
-      "x-ratelimit-remaining-tokens": [
-        "3999768"
-      ],
-      "x-ratelimit-reset-requests": [
-        "12ms"
-      ],
-      "x-ratelimit-reset-tokens": [
-        "3ms"
-      ],
       "x-request-id": [
-        "req_9497201a09a51a5b903d55ad342ed814"
+        "req_86c023dcdca9430cae777b76edcec06d"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

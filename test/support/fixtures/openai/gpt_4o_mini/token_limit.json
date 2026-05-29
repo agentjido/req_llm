@@ -1,19 +1,25 @@
 {
+  "model_spec": "openai:gpt-4o-mini",
+  "provider": "openai",
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoxMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiV3JpdGUgYSB2ZXJ5IGxvbmcgc3RvcnkgYWJvdXQgZHJhZ29ucyBhbmQgYWR2ZW50dXJlcyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImdwdC00by1taW5pIiwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuNX0="
+      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IldyaXRlIGEgdmVyeSBsb25nIHN0b3J5IGFib3V0IGRyYWdvbnMgYW5kIGFkdmVudHVyZXMiLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjoxMDAsIm1vZGVsIjoiZ3B0LTRvLW1pbmkiLCJzdHJlYW0iOmZhbHNlfQ=="
     },
     "canonical_json": {
-      "max_tokens": 100,
-      "messages": [
+      "input": [
         {
-          "content": "Write a very long story about dragons and adventures",
+          "content": [
+            {
+              "text": "Write a very long story about dragons and adventures",
+              "type": "input_text"
+            }
+          ],
           "role": "user"
         }
       ],
+      "max_output_tokens": 100,
       "model": "gpt-4o-mini",
-      "stream": false,
-      "temperature": 0.5
+      "stream": false
     },
     "headers": {
       "accept-encoding": [
@@ -24,52 +30,93 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ]
     },
     "method": "post",
-    "url": "https://api.openai.com/v1/chat/completions"
+    "url": "https://api.openai.com/v1/responses"
   },
   "response": {
     "body": {
-      "choices": [
-        {
-          "finish_reason": "length",
-          "index": 0,
-          "logprobs": null,
-          "message": {
-            "annotations": [],
-            "content": "**Title: The Chronicles of Eldoria: The Rise of the Dragonkin**\n\n**Chapter 1: The Awakening of Eldoria**\n\nIn the mythical land of Eldoria, where emerald valleys kissed the azure skies and mountains towered like ancient sentinels, dragons once soared majestically. For centuries, they were the guardians of balance, keeping harmony between the realms of humans, elves, and other mystical beings. However, a dark shadow loomed on the horizon, threatening to disrupt this fragile",
-            "refusal": null,
-            "role": "assistant"
-          }
-        }
-      ],
-      "created": 1762105821,
-      "id": "chatcmpl-CXWVZE3k3s2QXIKl7iXEVGX7aiIfU",
-      "model": "gpt-4o-mini-2024-07-18",
-      "object": "chat.completion",
-      "service_tier": "default",
-      "system_fingerprint": "fp_560af6e559",
-      "usage": {
-        "completion_tokens": 100,
-        "completion_tokens_details": {
-          "accepted_prediction_tokens": 0,
-          "audio_tokens": 0,
-          "reasoning_tokens": 0,
-          "rejected_prediction_tokens": 0
+      "background": false,
+      "text": {
+        "format": {
+          "type": "text"
         },
-        "prompt_tokens": 16,
-        "prompt_tokens_details": {
-          "audio_tokens": 0,
+        "verbosity": "medium"
+      },
+      "moderation": null,
+      "top_logprobs": 0,
+      "previous_response_id": null,
+      "tool_choice": "auto",
+      "service_tier": "default",
+      "status": "incomplete",
+      "tools": [],
+      "id": "resp_098c86914d80d6b8006a19d91e782881a291356a6523185a0a",
+      "temperature": 1.0,
+      "max_output_tokens": 100,
+      "user": null,
+      "frequency_penalty": 0.0,
+      "error": null,
+      "model": "gpt-4o-mini-2024-07-18",
+      "usage": {
+        "input_tokens": 16,
+        "input_tokens_details": {
           "cached_tokens": 0
         },
+        "output_tokens": 100,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
         "total_tokens": 116
-      }
+      },
+      "safety_identifier": null,
+      "object": "response",
+      "parallel_tool_calls": true,
+      "output": [
+        {
+          "content": [
+            {
+              "annotations": [],
+              "logprobs": [],
+              "text": "**Title: The Chronicles of the Skybound Realms**\n\n---\n\n**Chapter 1: A World on Fire**\n\nIn a time long past, when the world was still young and magic flowed like rivers through the valleys, there existed a realm called Eldoria—a place where the skies were painted with the hues of sunset and the earth teemed with creatures of astonishing wonder. Among them, the most revered were the dragons, majestic beings whose scales sparkled like gemstones under the sun. They soared above the",
+              "type": "output_text"
+            }
+          ],
+          "id": "msg_098c86914d80d6b8006a19d91f364081a2b4d142be383065e7",
+          "role": "assistant",
+          "status": "incomplete",
+          "type": "message"
+        }
+      ],
+      "instructions": null,
+      "store": true,
+      "presence_penalty": 0.0,
+      "incomplete_details": {
+        "reason": "max_output_tokens"
+      },
+      "reasoning": {
+        "context": null,
+        "effort": null,
+        "summary": null
+      },
+      "completed_at": null,
+      "truncation": "disabled",
+      "top_p": 1.0,
+      "billing": {
+        "payer": "developer"
+      },
+      "prompt_cache_retention": "in_memory",
+      "metadata": {},
+      "prompt_cache_key": null,
+      "created_at": 1780078878,
+      "max_tool_calls": null
     },
     "headers": {
       "access-control-expose-headers": [
-        "X-Request-ID"
+        "X-Request-ID",
+        "CF-Ray",
+        "CF-Ray"
       ],
       "alt-svc": [
         "h3=\":443\"; ma=86400"
@@ -78,7 +125,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "99857945d96f6184-ORD"
+        "a0378499ba9a80ba-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -87,13 +134,11 @@
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:50:23 GMT"
+        "Fri, 29 May 2026 18:21:20 GMT"
       ],
-      "openai-organization": [
-        "epic-creative-sogybe"
-      ],
+      "openai-organization": "[REDACTED:openai-organization]",
       "openai-processing-ms": [
-        "2188"
+        "2055"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -104,10 +149,7 @@
       "server": [
         "cloudflare"
       ],
-      "set-cookie": [
-        "__cf_bm=BB0JKRzpK83_y6HpSM3fxUVk0Tz1KhH9xuTe_DyGnyY-1762105823-1.0.1.1-jKN2X8tdRYS55UY.ZMvOJMXt_AJJ47uVnOAQQvFZth0iNJxH0z8EEJRGkzaOwLZUviBBSWU0v2mgoaXGbBgtWDTq0NGwt.dy_sDC_eiaIlY; path=/; expires=Sun, 02-Nov-25 18:20:23 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=j0OcRSlwm9X7jI1w56vkMDVyXCr4sQ3AKNHjVAB1kYw-1762105823358-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
-      ],
+      "set-cookie": "[REDACTED:set-cookie]",
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
       ],
@@ -116,12 +158,6 @@
       ],
       "x-content-type-options": [
         "nosniff"
-      ],
-      "x-envoy-upstream-service-time": [
-        "2203"
-      ],
-      "x-openai-proxy-wasm": [
-        "v0.1"
       ],
       "x-ratelimit-limit-requests": [
         "10000"
@@ -133,7 +169,7 @@
         "9999"
       ],
       "x-ratelimit-remaining-tokens": [
-        "9999985"
+        "9999965"
       ],
       "x-ratelimit-reset-requests": [
         "6ms"
@@ -142,9 +178,10 @@
         "0s"
       ],
       "x-request-id": [
-        "req_e0d02f0e40b34f988c46d8369a47591c"
+        "req_f18844ef5e614599b50779cc0e674fce"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

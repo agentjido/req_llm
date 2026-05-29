@@ -1,9 +1,14 @@
 {
+  "model_spec": "openai:gpt-5-nano",
+  "provider": "openai",
   "request": {
     "body": {
-      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IldyaXRlIGEgdmVyeSBsb25nIHN0b3J5IGFib3V0IGRyYWdvbnMgYW5kIGFkdmVudHVyZXMiLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjozMDAwLCJtb2RlbCI6ImdwdC01LW5hbm8iLCJzdHJlYW0iOmZhbHNlfQ=="
+      "b64": "eyJpbmNsdWRlIjpbInJlYXNvbmluZy5lbmNyeXB0ZWRfY29udGVudCJdLCJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IldyaXRlIGEgdmVyeSBsb25nIHN0b3J5IGFib3V0IGRyYWdvbnMgYW5kIGFkdmVudHVyZXMiLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjozMDAwLCJtb2RlbCI6ImdwdC01LW5hbm8iLCJyZWFzb25pbmciOnsiZWZmb3J0IjoibG93In0sInN0cmVhbSI6ZmFsc2V9"
     },
     "canonical_json": {
+      "include": [
+        "reasoning.encrypted_content"
+      ],
       "input": [
         {
           "content": [
@@ -17,6 +22,9 @@
       ],
       "max_output_tokens": 3000,
       "model": "gpt-5-nano",
+      "reasoning": {
+        "effort": "low"
+      },
       "stream": false
     },
     "headers": {
@@ -28,7 +36,7 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ]
     },
     "method": "post",
@@ -37,24 +45,44 @@
   "response": {
     "body": {
       "background": false,
-      "billing": {
-        "payer": "developer"
+      "text": {
+        "format": {
+          "type": "text"
+        },
+        "verbosity": "medium"
       },
-      "created_at": 1762105827,
-      "error": null,
-      "id": "resp_04544e8a8990970a00690799e3f3a481969a1ae50b511fd144",
-      "incomplete_details": {
-        "reason": "max_output_tokens"
-      },
-      "instructions": null,
+      "moderation": null,
+      "top_logprobs": 0,
+      "previous_response_id": null,
+      "tool_choice": "auto",
+      "service_tier": "default",
+      "status": "incomplete",
+      "tools": [],
+      "id": "resp_0f2c6e788d888fc9006a19dc2dd194819cb7a446d53cba0d4d",
+      "temperature": 1.0,
       "max_output_tokens": 3000,
-      "max_tool_calls": null,
-      "metadata": {},
+      "user": null,
+      "frequency_penalty": 0.0,
+      "error": null,
       "model": "gpt-5-nano-2025-08-07",
+      "usage": {
+        "input_tokens": 15,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens": 3000,
+        "output_tokens_details": {
+          "reasoning_tokens": 128
+        },
+        "total_tokens": 3015
+      },
+      "safety_identifier": null,
       "object": "response",
+      "parallel_tool_calls": true,
       "output": [
         {
-          "id": "rs_04544e8a8990970a00690799e4645081968d23f7126a3a7916",
+          "encrypted_content": "gAAAAABqGdw_oHlvn62aRuw009FlShQmDQGvo1H_ljhS7LhZR1SAT5Wv0B5YhTgMAkC_0t7metXsGIPLYAVXdaUIy2rs7VW3_0CgAoEwVoDU5vcLoq9GHaDQ4i0SQYsxqPkVhXEGplWR169q5boIcrF4vmn7Yyd1MRb_vKObj_r-j1K5aNuAitKeeXmxhmlxWdGQKPP2-AIYi3QT93ztsJ-8y9TQDEgDGUFcrlBnr2P2HWh9WufQ_nvrBhp8YZTGa3_0NlYM_rpvPtqxwWaFduSz7-Cl2XnxRaH5AUbqReeh0kG47D0T-8NZaWaG5ahEfRgWWPYMOR0ppGRMyVwHEsQdl7C2MpWaRrKtbZtbn5reHSInG42fzacues0w6kiY6l6WS0puXYCtCkJZZoDQN-sNHROV5tfdf01Fkp00pT27h8Thb--JKd8A9Hn2nN3aMsF01BTINB0EtPOK9UvDebRA5DOpUlaQ_a8pW2bdzoxhCrh9eSe_XRiPaG9A0VLPwOk89gcaGACN1VhcK2nCR-vJwzI-MEIIuYOejLcAKaT30q6uC_CUv9nTuXcutNRylfiMXwuRIjufHtPUqXoK80v7CUbkksmu-8h3Js5e8DOAhr1u2uxn6zYwxHdz_h4vqap0XLRgtsJifL8ENUSw9QuJdUrb1goPNl73HHwsfK0OuG4n9C_Bcej-QOs6Haay8AqQ-4f7ytR62Zr2YxTeEQfhdku83yTyhqLP2Rt4qepnNs6Ziiv1HwHur8Kq1NqPFV-nAPu8JqNkdPBiFBeLCYcmgYECHXyOrhsAHWnRWJv4BmzQJbhBV5LRPMkoeX5PyoLWyqRhx0h8naPDdjCbj7wgGmVL2u-fNGcUMGBT9rRjvXu_FVJ2t3fRMyCfhrEzV3s4HS8s1hXgrtdOU3Ihs01kSr7w8Ui5UFiQ6kh2oo1EqYSF8v7Pn5qyUo2bTsR9ubpesN0MnaMlsabPfZoSjRijC_d1gYjOjDPa8M4rWm8C64JCwUSoAhXl-Xu8KotzVNpoM8RTJ0svrzmWAiRYINJTdt5_I-r63nnBJDRrYLuI4731yjmyqBnRR07-QTnizyi2by3Y-LicyAhqNYfSCdsCfIYMPL3P8au4K_RDicR7fuAI3R9oa3ygtK-iRulCi0PwevRV2bMn4IGPIWTCXeQi2T3InLvFEG3pc9-aXljB7Yy4BBQGmYYhgAgA5L9YddwrEN3UVxTEHix0rqm4Fktvve3E109hffiML-7sanGxm0e9EtINhHEW7kIo9u5AbgbT8_wcuJtGEhhYP7nHUD4kTR3o7XA3yDwi8s1O1-cj80Hhov8slLtdDKWU_igFe7BTgRZrlAp5D6OlCb3ddlLCoOE9wc7Z6S-2p25Hwo_i5nQRyTaE7OkdJLwYWSVYP6UsZgK6wDh96iCT9gnnLXaqATUFgIFJDT7Jq14PNz3PPqDgSm_RMF5Qjx3bWlz0zm7P7nqN0sjsYoma3uP6aW44MNIeETZ8qKM0Hm5ohkU-lF4BoaQTa8tz1APIr-RdI1bD1qdTptKHp-MFsccEAhJiB0jKtnlZHNIJT6XoUEAqc92dVmYV424m0GvL7CHb38yA6kBDaKkKE6diPbCrWyPUZFBU8io6tsHMuGeVRPxunl8dj1cACBHLUx94BPntxRjg1pbguZi1kAeLRi_3z0cNQQdG9z49GeZElbl0hY3cjWoHZOX0BkiduhgLjaUQSJuqkQw52PqzxW9NK-dfv1ww3xPsH9ndg7ifpIftL06V3py8t8UaBMwNiIms6uDjwqQ9PZKDcp7HF_UgnAIKNo9NPQR8vhZ8eMonz48X6VykOj_geuaG2twHXixOgE46v-OIllv_ati5b5IVCo7G7bGwb2A59hYYw-WaI_Ww_f1IJSVjyDMrd_seE02juRYpVHeVG_MWZqqsvIClDIuMbsCf4OohX80sDZvkuJk92v-ovpWSqJxSCNd1J-hKihMXKtp79oRg26HWVtT2Mo_pvDuS0dWX5xM-VIkXrde1FzbHpB3FKlhNJjAM7iSBgBhe1bJnIJknT-Kwjj5OQbu9mLF1c8wUuC9YhzojHt7SKagaOCoIGCLMDp8=",
+          "id": "rs_0f2c6e788d888fc9006a19dc2e0f70819c8144e25dbf3c37c6",
           "summary": [],
           "type": "reasoning"
         },
@@ -63,54 +91,45 @@
             {
               "annotations": [],
               "logprobs": [],
-              "text": "Chapter 1: The Whispering Map\n\nMira Calder did not pretend she could control the weather, only that she could read it. The harbor of Gaelport—the city carved into white limestone cliffs that watched over the Sea of Glass—was a choir of gulls and rigging and the dull, patient murmur of tides. It was in this chorus that Mira learned to listen for something more delicate: lines of a map that breathed.\n\nHer studio was a small room above a lace of market stalls, where she laid out vellum and ink the color of new rain. The atlas she kept at the center seemed to shimmer when a warm breeze found its way between the shutters, as if the pages themselves remembered where they had traveled and where they longed to go again. Some maps showed you places; Mira’s maps sang of paths. Tiny rivers glowed faintly with a pale blue, not water but memory—threads of routes dragons might have taken when they slept in the sky.\n\nOn the morning the courier arrived, Mira was tracing a sea-lane that stitched Gaelport to the far eastern coast, a line that would become a spine through which future maps could grow. The courier—a lean man with four-days’ beard and a coat the color of slate—pulled a sealed parchment from his pack and handed it to her without ceremony.\n\n“From the Guild of Cartographers,” he said, voice steady as a compass needle. “A commission. It’s time you came closer to the edge of the world, Miss Calder.”\n\nHer heart gave a quiet, skeptical jump. People often spoke of the edge of the world as if it were a cliff, but in Mira’s experience the edge was more a rumor—a line drawn in ink that drifted when you blinked. She pried the seal and found a single request, written in careful strokes that suggested a practiced hand rather than a fan of a bookish wish.\n\n“Chart the northern gradients beyond the Ember Gate. Return before the season of ash thickens the sky.” The signature was not a name but a symbol: a looped dragon’s tail encircling a star. The Guild did not sign with names when a place could do the talking for them.\n\nShe turned the parchment over and found a second note, tucked in at the back like a forgotten memory. It was not from the Guild but from someone who claimed to have known the lines Mira traced in her sleep. It read: Listen for the whispers of stone. They know the old routes still.\n\nThe message was not a warning, exactly. It was a door—one Mira had trained most of her life to open with nerve and patience.\n\nThat evening, as the sun bled orange along the Sea of Glass, Mira packed a light bag. Maps, inks, a set of small compasses, and a peculiar little object she kept tucked in her coat: a bronze pendant",
+              "text": "In the land of Virelia, where mountains wore crowns of snow and rivers sang old songs to the moon, dragons were not merely beasts of legend but living memory. Their scales held the color of dawn—ruby, gold, emerald, sapphire—and when they breathed, the air itself remembered the first day of creation. The people of Virelia lived in a careful accord with these ancient creatures, trading stories and silences for safe passage and guarded secrets.\n\nOur tale begins in the village of Thornwatch, perched on the edge of a great cliff that jutted out over a valley wrapped in perpetual twilight. Thornwatch wasn’t large, but it kept the bones of history well-polished: wind-worn towers, a library carved into living stone, and a market where hawkers hawked curiosities from beyond the clouds. Here lived a girl named Kael, quick of mind and stubborn of spirit, who wore her hair the color of autumn ash and carried a lute that had once belonged to a minstrel who could charm a storm into listening.\n\nKael’s father, Miro, had been a dragon hunter once, though he would never admit it aloud. He had wandered with a company of rangers who tracked the shadow-dragons—a rare breed whose scales drank light and whose flights left the sky dim as if the night had washed over it. Miro had returned to Thornwatch with more questions than answers, and a scar that mapped the inside of his shoulder blade with a jagged line of memory. After his return, he walked the cliff path at dawn, speaking to the wind as if it were a wary friend, while Kael practiced melodies on her lute and dreamed of skies not yet charted.\n\nOn the morning of Kael’s sixteenth summer, a storm came to Thornwatch in a way that felt less like weather and more like a listening. The first thunder rumbled without rain, and the second echoed softly, as if a distant drumbeat were being whispered through the world. The villagers spoke in hushed tones of a prophecy that had begun to hum again—one that Older Voices might still recall from their own childhoods but had not stirred in the last hundred years. The prophecy claimed that a “Heart of Flame” would rekindle the bonds between dragons and men, a bond that had frayed after a century of skirmishes and careless battles. Some believed the Heart lay in the caverns beneath the Woven Mountains; others swore it slept inside a dragon’s own chest, waiting for the true rider to awaken it. Either way, the storm had a purpose, and it was not merely weather.\n\nThat evening, as the storm’s rain carved silver rivers down the streets of Thornwatch, Kael found a visitor waiting at the bend of the cliff road—an old woman draped in a cloak of starlight and rain, with eyes like polished onyx and a voice that sounded of rivers forming new channels. The woman introduced herself as Seraphine, keeper of paths between worlds, and claimed to have come from a place that existed only in the memory of winds. She carried no map but a compass that spun in slow, deliberate arcs, always pointing toward something the eye could not yet perceive.\n\n“Kael,” the old woman said, as if naming an old thought aloud, “the time has come to learn the old songs anew. The dragons that sleep in this world dream for a chorus. Will you be the one to wake them, or shall you remain a listener to the echoing silence?”\n\nKael rose from the lip of the cliff where she had been tuning her lute. Her fingers trembled with both fear and the fierce joy of a decision that could not be undone. “I am no rider,” she admitted, “yet every dream I’ve ever had has learned to climb the sky when called. If there is a chorus to wake, then I will learn its beat.”\n\nSeraphine smiled with the knowledge of someone who had watched many dawns break open the same old door. “Riders are not born from fearlessness alone, child. They are born from choices. Tonight, you may begin the first of many, in a place where the moon forgets to blink.”\n\nWhat followed was not a path of safety but a route carved from the very teeth of fate. Kael joined Seraphine on a voyage that began by foot at the edge of the village, then soared through the opening that the old woman called the “sky-wound”—a seam in reality where the constellations bled into rivers of air. There, the world widened, and the truth of dragons rose from rumor into reality: dragons were not mere beasts to be hunted or worshiped; they were living archives, preserving the histories of worlds in the constellations their scales copied in living light.\n\nTheir first stop was the Great Library of Sable Spires, a city of towers tangled like the branches of a sleeping forest, whose streets shimmered with motes of magic and the air smelled faintly of old parchment and rain. The library’s guardian was a dragon named Luminara, a creature of iridescent scales that shifted with every step she took, as if she wore the sky itself on her back. Luminara had served as a keeper for a hundred generations, watching civilizations rise and fall with the exactness of a clockmaker measuring gears.\n\n“Bringing the Heart of Flame to Thornwatch will require more than courage,” Luminara said in a voice that rang like bells underwater. “It will require listening to the quiet places—the creases between choices where you can still hear the way the world should be.”\n\nLuminara guided Kael toward the library’s lower catacombs, where the air tasted of copper and rain and the light crawled along the walls like patient fireflies. There, carved into a stone table as old as the first dawn, lay a map—no ordinary map, but a living thing that pulsed with a slow heartbeat. The map depicted not territories but risks and opportunities: rifts in reality, places where the sky had grown thin and the breath of dragons could be heard from far away. When Kael placed her palm on the map, it warmed as if recognition passed between skin and stone.\n\n“This map will not show you the way alone,” Luminara explained. “It will show you the right way only if your heart desires not for glory but for restoration. The dragons you seek are scattered across the world, bound to different duties and memories. You must learn to listen to each of them, not command them.”\n\nThus began Kael’s first true adventure: a quest across a world that teemed with danger and wonder, where every mountain held a different dragon’s memory, and every sea was a recipe in a cookbook of tides. With Seraphine at her side and Luminara’s map in her hand, Kael learned to ride the wind before she could ride a dragon, to trust the strange voices of distant storms, and to see that dragons came in more colors than the spectrum could name.\n\nTheir voyage carried them first to the Gorge of Echoes, where winds twisted through caverns like serpent tongues and spoke in the language of old songs. The dragon who dwelled there was named Brinecrest, a sea dragon who slept within a tidepool of amber and coral. Brinecrest did not fly in the way that other dragons did; he moved as if the ocean itself were breathing through him, curling the air into ripples that could cradle ships in their folds. Kael found him not through force but through the sound of a lullaby—one of her own melodies, refracted through a thousand-year-old memory of a dragon minstrel who had sung the sea to sleep.\n\n“Child of Thornwatch,” Brinecrest rumbled when Kael finally found him, his voice a mix of surf and thunder, “you seek the Heart because you fear the quiet that comes after a storm. The Heart is not a prize to own but a chorus to join. Do you know the tune, or will you improvise it on the way?” The question was less about music and more about intention.\n\nKael met his gaze with the resolve she hadn’t known she possessed. She hummed a simple, ancient line she had learned from a grandmother who had once been a seamstress of stars. Brinecrest listened, and for a long moment the sea around them paused as though listening to the breath of something vast waking. Then he unfurled the shimmering wings that lay against the surface of the pool, and the water trembled with awe.\n\n“I will ride with you, if you promise to be patient,” Brinecrest said. “The Heart cannot be hurried into a chorus that must be learned line by line, note by note. And you will need help you have not yet met.”\n\nThus Kael learned to ride a dragon not by brute courage but by compatibility and trust. Brinecrest could carry her across the sea of clouds with a whisper, guiding her to an island that moved with the tide of the moon. There, the dragon who slept was named Sylrene, a dragon of wind and memory who could steal a memory from a person’s heart and weave it into a new story. Sylrene had a habit of speaking in riddles that sounded like the rustle of dry leaves, and she would only lend her strength to those who could hear the verses hidden within those riddles.\n\n“Remember,” Sylrene told Kael, “a dragon’s memory is not a map but a mapmaker. They do not show you where to go; they reveal the path you would choose if you truly understood your own longing.”\n\nUnder Brinecrest’s counsel and Sylrene’s riddling wisdom, Kael began to see how the Heart of Flame might come to life—not as a single spark but as a chorus formed by many voices, each dragon offering a phrase to an unwritten song. They learned to seek out other dragons, who guarded other memories: a mountain dragon who kept the patience of stone; a coral dragon who navigated the forests of reefs and roots; a dragon of ash who wore the hue of embers and remembered every ember that ever sparked a new idea. Each encounter taught Kael something new about strength, about mercy, and about the way a chorus requires more than beauty—it requires harmony and sometimes sacrifice.\n\nThe road led them to the Sky City of Aisling, a fortress of glass perched upon the edge of a wind-riven canyon. Here, the dragon of time, named Oathkeeper, kept watch over a clockwork heart that beat in the core of the city, regulating seasons and tides with an older, kinder rhythm than any human calendar. Oathkeeper was a patient dragon, scales like pale ivory lacquer and eyes that held the memory of countless dawns. He spoke less than the others, but when he spoke, the air hummed with a gravity that could ground storms.\n\n“Child of Thornwatch,” Oathkeeper began in a measured tone, as if laying a single step of a staircase with surgical precision, “to awaken the Heart of Flame you must learn to bend your fear toward hope. The Heart is not a weapon for battle but a chorus for healing. It will require you to open your hands and let go of what you cling to most tightly—the idea that you are the hero of this tale.”\n\nKael did not yet know what she had to let go, only that the possibility trembled like a fragile egg within her chest. She asked questions instead of answering, and Oathkeeper answered with careful insights, guiding her toward a decision that would not be easy in Thornwatch’s eyes but would be essential for the world’s balance.\n\nAlong the journey, they encountered a shadow dragon—a dragon whose scales absorbed light and whose breath could snuff a star, a creature named Umbra who walked the line between the living and the remembered. Umbra had no interest in the Heart of Flame for its own sake; he sought to understand why dragons and humans fought at all. He spoke softly and rarely, but his wisdom was stark: the deepest darkness is not the night that falls, but the fear that follows when the light is gone and people forget how to begin again.\n\n“Fear creates cages,” Umbra warned Kael, “and cages are the stubborn heat that prevents flames from rising. If you want the Heart to sing, you must teach your world to listen to the other voices in the room—the dragons’ memories, the ancient fears that become courage when faced honestly, and the quiet bravery of choosing mercy over victory.”\n\nThese encounters braided Kael’s heart with a new courage—the courage to lose something she feared losing in order to gain something greater. She began to understand that the Heart of Flame might not be a single artifact but a tapestry woven from every dragon she met, each thread representing a memory, a longing, a sacrifice, a lesson learned under a sky uncountable in its possibilities.\n\nThe greatest test came when Thornwatch itself trembled under the approach of a storm no one could name. The sky darkened unnaturally, the rain fell in patterns that resembled writing, and a tremor shook the cliff where the village sat. The storm was not a natural phenomenon; it was a dragon’s lament, a chorus of dragons who had learned to fear what they could not control: a human world that kept trying to own them rather than share space with them.\n\nIn the heart of the storm rode a dragon named Marrowdeep, whose scales looked like the inside of a blackened cavern, and whose breath carried the scent of mineral dust and old bones. He carried a sorrow so heavy it pressed against the air, bending light away from Thornwatch. When Kael finally faced him at the edge of",
               "type": "output_text"
             }
           ],
-          "id": "msg_04544e8a8990970a00690799f756848196a8941215fb19448b",
+          "id": "msg_0f2c6e788d888fc9006a19dc2f11a8819ca521cf4253e33c86",
           "role": "assistant",
           "status": "incomplete",
           "type": "message"
         }
       ],
-      "parallel_tool_calls": true,
-      "previous_response_id": null,
-      "prompt_cache_key": null,
-      "prompt_cache_retention": null,
+      "instructions": null,
+      "store": true,
+      "presence_penalty": 0.0,
+      "incomplete_details": {
+        "reason": "max_output_tokens"
+      },
       "reasoning": {
-        "effort": "medium",
+        "context": "current_turn",
+        "effort": "low",
         "summary": null
       },
-      "safety_identifier": null,
-      "service_tier": "default",
-      "status": "incomplete",
-      "store": true,
-      "temperature": 1.0,
-      "text": {
-        "format": {
-          "type": "text"
-        },
-        "verbosity": "medium"
-      },
-      "tool_choice": "auto",
-      "tools": [],
-      "top_logprobs": 0,
-      "top_p": 1.0,
+      "completed_at": null,
       "truncation": "disabled",
-      "usage": {
-        "input_tokens": 15,
-        "input_tokens_details": {
-          "cached_tokens": 0
-        },
-        "output_tokens": 2959,
-        "output_tokens_details": {
-          "reasoning_tokens": 2368
-        },
-        "total_tokens": 2974
+      "top_p": 1.0,
+      "billing": {
+        "payer": "developer"
       },
-      "user": null
+      "prompt_cache_retention": "in_memory",
+      "metadata": {},
+      "prompt_cache_key": null,
+      "created_at": 1780079661,
+      "max_tool_calls": null
     },
     "headers": {
+      "access-control-expose-headers": [
+        "X-Request-ID",
+        "CF-Ray",
+        "CF-Ray"
+      ],
       "alt-svc": [
         "h3=\":443\"; ma=86400"
       ],
@@ -118,7 +137,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "998579704e9ce800-ORD"
+        "a03797bd6a62fa06-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -127,13 +146,11 @@
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:50:51 GMT"
+        "Fri, 29 May 2026 18:34:39 GMT"
       ],
-      "openai-organization": [
-        "epic-creative-sogybe"
-      ],
+      "openai-organization": "[REDACTED:openai-organization]",
       "openai-processing-ms": [
-        "23664"
+        "17708"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -144,10 +161,7 @@
       "server": [
         "cloudflare"
       ],
-      "set-cookie": [
-        "__cf_bm=N32N0R1BZISIdOo.8U2N6Mm80IRGxl7zB2cnzB0TN8s-1762105851-1.0.1.1-1LHL_lergFd1HDSlcY.eqESzIi72Pr6JxTpu5350UQLHfb8yg0OHYN0YwlAencHbcFWliqkI8Gz4NMmwo1Q0CqOyjIzHsWBdxKyvuNc_BYU; path=/; expires=Sun, 02-Nov-25 18:20:51 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=nqZpf164BgkZki.7Oj6FMxSmKOhvAeOxIitlv8S4e6A-1762105851630-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
-      ],
+      "set-cookie": "[REDACTED:set-cookie]",
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
       ],
@@ -157,13 +171,11 @@
       "x-content-type-options": [
         "nosniff"
       ],
-      "x-envoy-upstream-service-time": [
-        "23672"
-      ],
       "x-request-id": [
-        "req_6760c88662534ca28006ee9b268d3e3c"
+        "req_5179b18c29214619b27222ab8e25ecf7"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

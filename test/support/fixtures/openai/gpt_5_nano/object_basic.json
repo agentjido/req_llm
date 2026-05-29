@@ -1,9 +1,14 @@
 {
+  "model_spec": "openai:gpt-5-nano",
+  "provider": "openai",
   "request": {
     "body": {
-      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IkdlbmVyYXRlIGEgc29mdHdhcmUgZW5naW5lZXIgcHJvZmlsZSIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9XSwibWF4X291dHB1dF90b2tlbnMiOjQwOTYsIm1vZGVsIjoiZ3B0LTUtbmFubyIsInN0cmVhbSI6ZmFsc2UsInRleHQiOnsiZm9ybWF0Ijp7Im5hbWUiOiJvdXRwdXRfc2NoZW1hIiwic2NoZW1hIjp7ImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjpmYWxzZSwicHJvcGVydGllcyI6eyJhZ2UiOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBhZ2UgaW4geWVhcnMiLCJtaW5pbXVtIjoxLCJ0eXBlIjoiaW50ZWdlciJ9LCJuYW1lIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3MgZnVsbCBuYW1lIiwidHlwZSI6InN0cmluZyJ9LCJvY2N1cGF0aW9uIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3Mgam9iIG9yIHByb2Zlc3Npb24iLCJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJhZ2UiLCJuYW1lIiwib2NjdXBhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In0sInN0cmljdCI6dHJ1ZSwidHlwZSI6Impzb25fc2NoZW1hIn19fQ=="
+      "b64": "eyJpbmNsdWRlIjpbInJlYXNvbmluZy5lbmNyeXB0ZWRfY29udGVudCJdLCJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IkdlbmVyYXRlIGEgc29mdHdhcmUgZW5naW5lZXIgcHJvZmlsZSIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9XSwibWF4X291dHB1dF90b2tlbnMiOjUwMCwibW9kZWwiOiJncHQtNS1uYW5vIiwicmVhc29uaW5nIjp7ImVmZm9ydCI6ImxvdyJ9LCJzdHJlYW0iOmZhbHNlLCJ0ZXh0Ijp7ImZvcm1hdCI6eyJuYW1lIjoib3V0cHV0X3NjaGVtYSIsInNjaGVtYSI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnsiYWdlIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3MgYWdlIGluIHllYXJzIiwibWluaW11bSI6MSwidHlwZSI6ImludGVnZXIifSwibmFtZSI6eyJkZXNjcmlwdGlvbiI6IlBlcnNvbidzIGZ1bGwgbmFtZSIsInR5cGUiOiJzdHJpbmcifSwib2NjdXBhdGlvbiI6eyJkZXNjcmlwdGlvbiI6IlBlcnNvbidzIGpvYiBvciBwcm9mZXNzaW9uIiwidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsiYWdlIiwibmFtZSIsIm9jY3VwYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9LCJzdHJpY3QiOnRydWUsInR5cGUiOiJqc29uX3NjaGVtYSJ9fX0="
     },
     "canonical_json": {
+      "include": [
+        "reasoning.encrypted_content"
+      ],
       "input": [
         {
           "content": [
@@ -15,8 +20,11 @@
           "role": "user"
         }
       ],
-      "max_output_tokens": 4096,
+      "max_output_tokens": 500,
       "model": "gpt-5-nano",
+      "reasoning": {
+        "effort": "low"
+      },
       "stream": false,
       "text": {
         "format": {
@@ -59,7 +67,7 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ]
     },
     "method": "post",
@@ -68,53 +76,6 @@
   "response": {
     "body": {
       "background": false,
-      "billing": {
-        "payer": "developer"
-      },
-      "created_at": 1762105816,
-      "error": null,
-      "id": "resp_0c25b72c059f2b1000690799d842908195ab8133a2c9eaa2e6",
-      "incomplete_details": null,
-      "instructions": null,
-      "max_output_tokens": 4096,
-      "max_tool_calls": null,
-      "metadata": {},
-      "model": "gpt-5-nano-2025-08-07",
-      "object": "response",
-      "output": [
-        {
-          "id": "rs_0c25b72c059f2b1000690799d8f0a88195919bf27ada3815f2",
-          "summary": [],
-          "type": "reasoning"
-        },
-        {
-          "content": [
-            {
-              "annotations": [],
-              "logprobs": [],
-              "text": "{\"age\":34,\"name\":\"Alex Chen\",\"occupation\":\"Senior Software Engineer\"}",
-              "type": "output_text"
-            }
-          ],
-          "id": "msg_0c25b72c059f2b1000690799dc359481958b00ce80d7683bff",
-          "role": "assistant",
-          "status": "completed",
-          "type": "message"
-        }
-      ],
-      "parallel_tool_calls": true,
-      "previous_response_id": null,
-      "prompt_cache_key": null,
-      "prompt_cache_retention": null,
-      "reasoning": {
-        "effort": "medium",
-        "summary": null
-      },
-      "safety_identifier": null,
-      "service_tier": "default",
-      "status": "completed",
-      "store": true,
-      "temperature": 1.0,
       "text": {
         "format": {
           "description": null,
@@ -148,25 +109,83 @@
         },
         "verbosity": "medium"
       },
-      "tool_choice": "auto",
-      "tools": [],
+      "moderation": null,
       "top_logprobs": 0,
-      "top_p": 1.0,
-      "truncation": "disabled",
+      "previous_response_id": null,
+      "tool_choice": "auto",
+      "service_tier": "default",
+      "status": "completed",
+      "tools": [],
+      "id": "resp_01f55a79eba491b1006a19dc3fbbec819799560a7fa3011753",
+      "temperature": 1.0,
+      "max_output_tokens": 500,
+      "user": null,
+      "frequency_penalty": 0.0,
+      "error": null,
+      "model": "gpt-5-nano-2025-08-07",
       "usage": {
         "input_tokens": 70,
         "input_tokens_details": {
           "cached_tokens": 0
         },
-        "output_tokens": 538,
+        "output_tokens": 153,
         "output_tokens_details": {
-          "reasoning_tokens": 512
+          "reasoning_tokens": 64
         },
-        "total_tokens": 608
+        "total_tokens": 223
       },
-      "user": null
+      "safety_identifier": null,
+      "object": "response",
+      "parallel_tool_calls": true,
+      "output": [
+        {
+          "encrypted_content": "gAAAAABqGdxBMHe1_4A6oHzIjuz0w0CJELriHgxQz-9-BP4DAy3Vdg3TVEpNsQRSi-q9dNmK8NDHnevs6dvEHIcU1UrKAzrATimtRHy6GcfjxZdaLEtWUODlTTipRLmtvWDI2v386DKd1Y5gdYUjRe8ktwgi4ckZE8noD4ZXNHKE936fxHxCRgK3THAVi4oCEWBHh9d1LYmIkV0GKzT6YN7DC5gIldt0yfv_2pqLlSENT_XO33117icJV27g0shmVt9PvVo6SVqOfaEukKvuBvdGTffVdgB0U8_f76d1vuADKM_1GGvix1hBuffwfjGYBrPxZ8-zOzdDkblF1oZOWPkyEgtizU1OmAOAhf1PyqqchB3E9ABaVuHx7cCzsxT_w-8blHMjWkRurdnVMO-UpyCjBgoaWQcb5K8fCq3lgfs0Yf4Zo1qpvs5KdOI1I3bHTbuN8a2ThqXT10QyGiDovtaM1OXKsZYYrEFvI2CCcEIX8Kdn7_bHELTPC-1eeJK5IWvCj1qhAo_oZkuZfAQFBOzBpUtbwOxrwG9cqm1yLLZ8fOUbkuAgk7JP0ue9L7kS-7YfkLThwfYRdykVI1X5nUvx3di74PojvGSVKNQR8dsTC2pVl4pS7WK88kWW-0k2mkO3tRiatLNZ2SIQha84PAB5GBmLpnBzy6ZocVvU2fJuDKcCFrXmtE9zJf9IgdeWxq39_ek0nob6ROlp-RY63jawD_jUyWAHlLqfnCdBjOKayIXsxkGIvGeA4XxeNwJSVcYE1QblQ5aQlseXuBufd4ZiXMasnromSJoEVrTCVatjXOL0urmi8jos7ZsuLSuyH_jQqQp-z8mKFmpO6czWhPIlwd-HCffSBBQdU0nA7WgcIZam3MZ1LnA7MGOmnJdIm08XgEm2N2_gWa2a7BtgDuxvxiBQGYWmMVAvQSXH6-fajq6irBM2Ra152fpFvfkbswTOSSrozVi-XnT4gEnIhgtOpA0Mg4RGD8krf-yiiVT-EzLch7wurLnjXMRvNqLevzSG2EUq_nVKho610yVFZChMrHtdCdiJZVvVkay9iJBkIog5n1JXBPai6v-Z-LuItmIXmwobuS4MdbP2dO-IrnXVxRE5woc5WcpVGSul8p09Rum_h__lOqktqJ7S4-ykxLJsox0OMJLfYbJCm1zfbnzfjjPvO3-OAZqeQSFqkQW_0u28mHV5soJFOmRE-gjs4C7RCWISa-bZd49kii7GDIX-yDR7W-eWhIPOsb4YJMx3E8DMSOd4ZAeR3jk69W4nAgxADV4q0zWKKcs_iibYyD-rhfdc7ZCbYwpXpD9p-zOS53BViLCwihIs-6d6Wlr0yiF-AUE5_kaDsK856nq_Z5zmn1YtdVzHQv1H7ElSbxnAJMpcNvZZYfS7aHV1cSRXpUb2qFwWbgK4qaWGUaji-0drtOwcwxvexRy45oPB4JW-JpCJZYzpXJymAarR9wndyWR90SYwqSAyAd6b4fZuGKmEzK-tNq5u_nWg2rpB2QPNZaoTzO8pWWiBP178kfYU-O5G8ppPW2UZVvZ32QRdLA1nHCIe8bApSDnz3cq1ezSuCVZEYcDcw97SpSVO9VDmzb_ql7SsazWy9usHhIVsigm4KVIOlCvNiwIVTquK1nr88_JXpsx_qHaj_5OwHBZH7VnjkE39Cr0k9jtKS-FBEv1CwStjqbg2jiAyk5_-7vvMsXxxYADXHj_Bz20xXNvtzpLnkLJblWXukAoJK92AF36trogi7ei4q62l6Hh9Yq72Eib4Til5T-g=",
+          "id": "rs_01f55a79eba491b1006a19dc4038788197b7628331583f4751",
+          "summary": [],
+          "type": "reasoning"
+        },
+        {
+          "content": [
+            {
+              "annotations": [],
+              "logprobs": [],
+              "text": "{\"name\":\"Alex Chen\",\"age\":32,\"occupation\":\"Senior Software Engineer\"}",
+              "type": "output_text"
+            }
+          ],
+          "id": "msg_01f55a79eba491b1006a19dc40f7b88197934e436d176f6035",
+          "role": "assistant",
+          "status": "completed",
+          "type": "message"
+        }
+      ],
+      "instructions": null,
+      "store": true,
+      "presence_penalty": 0.0,
+      "incomplete_details": null,
+      "reasoning": {
+        "context": "current_turn",
+        "effort": "low",
+        "summary": null
+      },
+      "completed_at": 1780079681,
+      "truncation": "disabled",
+      "top_p": 1.0,
+      "billing": {
+        "payer": "developer"
+      },
+      "prompt_cache_retention": "in_memory",
+      "metadata": {},
+      "prompt_cache_key": null,
+      "created_at": 1780079679,
+      "max_tool_calls": null
     },
     "headers": {
+      "access-control-expose-headers": [
+        "X-Request-ID",
+        "CF-Ray",
+        "CF-Ray"
+      ],
       "alt-svc": [
         "h3=\":443\"; ma=86400"
       ],
@@ -174,7 +193,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "9985792288cde800-ORD"
+        "a037982deccfeadc-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -183,13 +202,11 @@
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:50:20 GMT"
+        "Fri, 29 May 2026 18:34:41 GMT"
       ],
-      "openai-organization": [
-        "epic-creative-sogybe"
-      ],
+      "openai-organization": "[REDACTED:openai-organization]",
       "openai-processing-ms": [
-        "4404"
+        "1897"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -200,10 +217,7 @@
       "server": [
         "cloudflare"
       ],
-      "set-cookie": [
-        "__cf_bm=eEeJacLG3q7evq2tE2YkkF0mRfGCnV9rLO21FifUCb0-1762105820-1.0.1.1-5sNXq0eWOnXjFhSex8smxX6Cs6n5j20zUDUxkORgfBOtLzSj71Dq7I6V3z2eKAGHBd1vKtlDeWHJFVd1Y7BGR0t8HzY5N3RFZSG4lC87p2k; path=/; expires=Sun, 02-Nov-25 18:20:20 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=1dJCUqFX1YRabVCN8H86BKTn76nYoMfwRDOxkCNxK54-1762105820683-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
-      ],
+      "set-cookie": "[REDACTED:set-cookie]",
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
       ],
@@ -212,9 +226,6 @@
       ],
       "x-content-type-options": [
         "nosniff"
-      ],
-      "x-envoy-upstream-service-time": [
-        "4411"
       ],
       "x-ratelimit-limit-requests": [
         "10000"
@@ -226,18 +237,19 @@
         "9999"
       ],
       "x-ratelimit-remaining-tokens": [
-        "9999679"
+        "10000000"
       ],
       "x-ratelimit-reset-requests": [
         "6ms"
       ],
       "x-ratelimit-reset-tokens": [
-        "1ms"
+        "0s"
       ],
       "x-request-id": [
-        "req_6e90e90edff84747bdbe7ef5cde289ef"
+        "req_77b68df0013640b297463e01e1d986e0"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

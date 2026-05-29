@@ -1,9 +1,14 @@
 {
+  "model_spec": "openai:gpt-5-nano",
+  "provider": "openai",
   "request": {
     "body": {
-      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IlRlbGwgbWUgYSBqb2tlIGFib3V0IGNhdHMiLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjoyNTYwMCwibW9kZWwiOiJncHQtNS1uYW5vIiwic3RyZWFtIjpmYWxzZSwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsIm5hbWUiOiJnZXRfd2VhdGhlciIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In0sInN0cmljdCI6dHJ1ZX0sIm5hbWUiOiJnZXRfd2VhdGhlciIsInR5cGUiOiJmdW5jdGlvbiJ9XX0="
+      "b64": "eyJpbmNsdWRlIjpbInJlYXNvbmluZy5lbmNyeXB0ZWRfY29udGVudCJdLCJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IlRlbGwgbWUgYSBqb2tlIGFib3V0IGNhdHMiLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjoyNTYwMCwibW9kZWwiOiJncHQtNS1uYW5vIiwicmVhc29uaW5nIjp7ImVmZm9ydCI6ImxvdyJ9LCJzdHJlYW0iOmZhbHNlLCJ0b29scyI6W3siZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9fSwidHlwZSI6Im9iamVjdCJ9LCJzdHJpY3QiOmZhbHNlLCJ0eXBlIjoiZnVuY3Rpb24ifV19"
     },
     "canonical_json": {
+      "include": [
+        "reasoning.encrypted_content"
+      ],
       "input": [
         {
           "content": [
@@ -17,26 +22,24 @@
       ],
       "max_output_tokens": 25600,
       "model": "gpt-5-nano",
+      "reasoning": {
+        "effort": "low"
+      },
       "stream": false,
       "tools": [
         {
-          "function": {
-            "description": "Get current weather information for a location",
-            "name": "get_weather",
-            "parameters": {
-              "properties": {
-                "location": {
-                  "type": "string"
-                }
-              },
-              "required": [
-                "location"
-              ],
-              "type": "object"
-            },
-            "strict": true
-          },
+          "description": "Get current weather information for a location",
           "name": "get_weather",
+          "parameters": {
+            "additionalProperties": false,
+            "properties": {
+              "location": {
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "strict": false,
           "type": "function"
         }
       ]
@@ -50,7 +53,7 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ]
     },
     "method": "post",
@@ -59,22 +62,60 @@
   "response": {
     "body": {
       "background": false,
-      "billing": {
-        "payer": "developer"
+      "text": {
+        "format": {
+          "type": "text"
+        },
+        "verbosity": "medium"
       },
-      "created_at": 1762105858,
-      "error": null,
-      "id": "resp_03f5999cd59f7b4a0069079a02c6cc8194a81a0dc49630ba4a",
-      "incomplete_details": null,
-      "instructions": null,
+      "moderation": null,
+      "top_logprobs": 0,
+      "previous_response_id": null,
+      "tool_choice": "auto",
+      "service_tier": "default",
+      "status": "completed",
+      "tools": [
+        {
+          "description": "Get current weather information for a location",
+          "name": "get_weather",
+          "parameters": {
+            "additionalProperties": false,
+            "properties": {
+              "location": {
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "strict": false,
+          "type": "function"
+        }
+      ],
+      "id": "resp_0d996c2306e97374006a19dc41c0e8819ca073b8d92d11a0e4",
+      "temperature": 1.0,
       "max_output_tokens": 25600,
-      "max_tool_calls": null,
-      "metadata": {},
+      "user": null,
+      "frequency_penalty": 0.0,
+      "error": null,
       "model": "gpt-5-nano-2025-08-07",
+      "usage": {
+        "input_tokens": 50,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens": 124,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 174
+      },
+      "safety_identifier": null,
       "object": "response",
+      "parallel_tool_calls": true,
       "output": [
         {
-          "id": "rs_03f5999cd59f7b4a0069079a031fec8194978f1120c50709fa",
+          "encrypted_content": "gAAAAABqGdxDSJY1qLllPUwR5-VLU1U1gcoz5YHv4AdNqePbCPKLMSpxaeCvf_qxP6VWk3X9v5rxQmgWJwefeiR4eWESDUKIJ_M2YFNcRzdRE3sbZYi83On_LWJgqauk7Y32kMZWNrXbvxaFgPfcSd6rqxmXkKgkFXfXUzV3F9cj1CpAp3B_dn0ib2dh6CYBSTzMQshcjwIAtsNQCUctiq7TFjmVRXYroeeN-zt25MK5qHeXBXE1cJu-9nMctCVuzajzQ0ZipJ-4tBDNV2lnIFoMIHvtIkr-JsSBudIJvInDOauJl6v5pSamQ83LA2Uq4Hb0FgRgOWuhV968A_BF5x1bjkC9Ir7HDx992lbZ1pc8XcgGr6eNdIbpvbmETDg28yA_0VPzLlCrpS0WnrmHrqYJyms1G5nHFWj8yrZHlsk6oH14ZpLLvcSC9RW2tKN-Ckjn5iOq7z0KTtRUt49sZwJVEDR_xE49BX2Nz9SoonNRhmwjBUentzM2_qWbOl_9SnM3IZGowbg7YYFn0aHAMOsBxiJ9h8i-lDSM03hsHYRaV3b-pP5TJyptOy_yiLv3LMeIqB3McjdTeLc4YsRNtJtKYZC9jgkwtTR4Y-gyQQVjueBpZVt5CSOX7mxNykH9jm6uwyMiwRsQki5u7yeTbCH2cMgsxkLYmMg0r6dpWZ-PDFFR1We5JYeYg4lqR3FuQRAI6dOuthbkWUIlvs2lwg7vxLBnIe7C83V6qZDJ9dgvnhrPaIHg6Gh3uKxnl0cz60zJYVZWoHPlDmvy_ahVhS87kH7DKTlSny3wzrj1Ot_fgiKFd1UWANsVYG8v1Jz064_80tSlhzDU5a19QFt_JLhs03joFwEK_gv8bjvD_p0WyouNH2ELQBEgB7aXt6DUs6AVKG52xGg37onu78aCTXok3zepuww90i2dYRz8lQKLZt4oQGr81BU1ogBeoJH5VsW8H329hWBt-Ni5ApTcZXCWgKcN5kpUTG6OjbJE4L4EAZ53JWaDXh5wLzIKui_Baj_9kiR1qyU2JWh7g5lKS6yNSlczoq6HsS9j-n3yy89P5sVMwgLD2Cmp8sboYPqTxcJp0g0Jed_fji4Gn7PBXQ1buR8G5Tp_aERBoaOj8eEsQGOeIu0RcuiT0EKJq8XSzjq4zUONb7F7zJY3f4XqUXj6Rlx89xsyt-JfGOKnAKRYk7fb293dC1IPhKW1V_cFmd4FBEr-SG-9zDDB3RJUtpz0vJU7cd0_xA==",
+          "id": "rs_0d996c2306e97374006a19dc425738819c87ba3fff070a2dd8",
           "summary": [],
           "type": "reasoning"
         },
@@ -83,67 +124,43 @@
             {
               "annotations": [],
               "logprobs": [],
-              "text": "Here are a few cat jokes:\n\n- Why don’t cats play poker in the jungle? Too many cheetahs.\n- Why was the cat sitting on the computer? It wanted to keep an eye on the mouse.\n- What do you call a pile of cats? A meowtain.\n\nWant more, or a specific cat vibe (cute, punny, dark)?",
+              "text": "Here are a few cat jokes you can pick from:\n\n- Why was the cat sitting on the computer? It wanted to keep an eye on the mouse.\n- What do you call a pile of cats? A meow-tain.\n- Why don’t cats play poker in the jungle? Too many cheetahs.",
               "type": "output_text"
             }
           ],
-          "id": "msg_03f5999cd59f7b4a0069079a05d1b0819480ca4a9feca8f292",
+          "id": "msg_0d996c2306e97374006a19dc42a520819cbb63cc588cc7125c",
           "role": "assistant",
           "status": "completed",
           "type": "message"
         }
       ],
-      "parallel_tool_calls": true,
-      "previous_response_id": null,
-      "prompt_cache_key": null,
-      "prompt_cache_retention": null,
+      "instructions": null,
+      "store": true,
+      "presence_penalty": 0.0,
+      "incomplete_details": null,
       "reasoning": {
-        "effort": "medium",
+        "context": "current_turn",
+        "effort": "low",
         "summary": null
       },
-      "safety_identifier": null,
-      "service_tier": "default",
-      "status": "completed",
-      "store": true,
-      "temperature": 1.0,
-      "text": {
-        "format": {
-          "type": "text"
-        },
-        "verbosity": "medium"
-      },
-      "tool_choice": "auto",
-      "tools": [
-        {
-          "description": null,
-          "name": "get_weather",
-          "parameters": {
-            "additionalProperties": false,
-            "properties": {},
-            "required": [],
-            "type": "object"
-          },
-          "strict": true,
-          "type": "function"
-        }
-      ],
-      "top_logprobs": 0,
-      "top_p": 1.0,
+      "completed_at": 1780079683,
       "truncation": "disabled",
-      "usage": {
-        "input_tokens": 35,
-        "input_tokens_details": {
-          "cached_tokens": 0
-        },
-        "output_tokens": 529,
-        "output_tokens_details": {
-          "reasoning_tokens": 448
-        },
-        "total_tokens": 564
+      "top_p": 1.0,
+      "billing": {
+        "payer": "developer"
       },
-      "user": null
+      "prompt_cache_retention": "in_memory",
+      "metadata": {},
+      "prompt_cache_key": null,
+      "created_at": 1780079681,
+      "max_tool_calls": null
     },
     "headers": {
+      "access-control-expose-headers": [
+        "X-Request-ID",
+        "CF-Ray",
+        "CF-Ray"
+      ],
       "alt-svc": [
         "h3=\":443\"; ma=86400"
       ],
@@ -151,7 +168,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "99857a310af9e800-ORD"
+        "a037983a9bcdfa06-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -160,13 +177,11 @@
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:51:02 GMT"
+        "Fri, 29 May 2026 18:34:43 GMT"
       ],
-      "openai-organization": [
-        "epic-creative-sogybe"
-      ],
+      "openai-organization": "[REDACTED:openai-organization]",
       "openai-processing-ms": [
-        "3788"
+        "1604"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -177,10 +192,7 @@
       "server": [
         "cloudflare"
       ],
-      "set-cookie": [
-        "__cf_bm=CWbrwpejZzqLTHm0tv9BzpG4Gq90FAA6JKg2LVGZ3z0-1762105862-1.0.1.1-foEC95e7CexZJ6u.zygsPtkNS6eOplcX0_gZuRHMSR1nAncBeFoi8Z20UcQuVZ.U3mPIFtDLRR86blA6YSWiziZ8irExyA0s69bK3GPJgU8; path=/; expires=Sun, 02-Nov-25 18:21:02 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=GjotYgxQ3_ZhNTTUsYBNVlOJhJYV7txqE32gochus9s-1762105862586-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
-      ],
+      "set-cookie": "[REDACTED:set-cookie]",
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
       ],
@@ -189,9 +201,6 @@
       ],
       "x-content-type-options": [
         "nosniff"
-      ],
-      "x-envoy-upstream-service-time": [
-        "3792"
       ],
       "x-ratelimit-limit-requests": [
         "10000"
@@ -203,7 +212,7 @@
         "9999"
       ],
       "x-ratelimit-remaining-tokens": [
-        "9999961"
+        "10000000"
       ],
       "x-ratelimit-reset-requests": [
         "6ms"
@@ -212,9 +221,10 @@
         "0s"
       ],
       "x-request-id": [
-        "req_1fb95859d6b54644b15a4d8dff7c8f2c"
+        "req_605244db8a4a4f5a88141c2c811b2ec1"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

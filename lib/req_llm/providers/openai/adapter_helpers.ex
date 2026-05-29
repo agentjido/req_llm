@@ -153,12 +153,12 @@ defmodule ReqLLM.Providers.OpenAI.AdapterHelpers do
   @doc """
   Checks if a model ID should default to the Responses API.
 
-  This includes reasoning/codex families plus GPT-4o models, which support
-  Responses even when older metadata has not been updated yet.
+  This includes reasoning/codex families plus GPT-4.1 and GPT-4o models, which
+  support Responses even when older metadata has not been updated yet.
   """
   @spec responses_model?(term()) :: boolean()
   def responses_model?(model_id) when is_binary(model_id) do
-    reasoning_model?(model_id) || gpt4o_model?(model_id)
+    reasoning_model?(model_id) || gpt41_model?(model_id) || gpt4o_model?(model_id)
   end
 
   def responses_model?(_), do: false
@@ -166,7 +166,7 @@ defmodule ReqLLM.Providers.OpenAI.AdapterHelpers do
   @doc """
   Checks if a model ID corresponds to an OpenAI reasoning model.
 
-  Reasoning models (o-series, gpt-4.1, gpt-5, codex) require special handling:
+  Reasoning models (o-series, gpt-5, codex) require special handling:
   - Use `max_completion_tokens` instead of `max_tokens`
   - Support `reasoning_effort` parameter
 
@@ -174,8 +174,7 @@ defmodule ReqLLM.Providers.OpenAI.AdapterHelpers do
   """
   @spec reasoning_model?(term()) :: boolean()
   def reasoning_model?(model_id) when is_binary(model_id) do
-    o_series_model?(model_id) || gpt41_model?(model_id) || gpt5_model?(model_id) ||
-      codex_model?(model_id)
+    o_series_model?(model_id) || gpt5_model?(model_id) || codex_model?(model_id)
   end
 
   def reasoning_model?(_), do: false
@@ -204,6 +203,11 @@ defmodule ReqLLM.Providers.OpenAI.AdapterHelpers do
   def gpt5_model?(<<"gpt-5", _::binary>>), do: true
   def gpt5_model?(_), do: false
 
+  @doc "Checks if model is a GPT-5 Pro model."
+  @spec gpt5_pro_model?(term()) :: boolean()
+  def gpt5_pro_model?(<<"gpt-5", rest::binary>>), do: String.contains?(rest, "-pro")
+  def gpt5_pro_model?(_), do: false
+
   @doc "Checks if model is a Codex model (codex-mini, gpt-5-codex, etc.)."
   @spec codex_model?(term()) :: boolean()
   def codex_model?(<<"codex", _::binary>>), do: true
@@ -218,7 +222,7 @@ defmodule ReqLLM.Providers.OpenAI.AdapterHelpers do
   @doc """
   Adds appropriate token limit parameters based on model type.
 
-  For reasoning models (o1, o3, o4, gpt-4.1, gpt-5):
+  For reasoning models (o1, o3, o4, gpt-5):
   - Uses `max_completion_tokens` instead of `max_tokens`
   - Falls back to `max_tokens` value if `max_completion_tokens` not specified
 

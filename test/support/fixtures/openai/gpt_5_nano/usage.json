@@ -1,9 +1,14 @@
 {
+  "model_spec": "openai:gpt-5-nano",
+  "provider": "openai",
   "request": {
     "body": {
-      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IkhpIHRoZXJlISIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9XSwibWF4X291dHB1dF90b2tlbnMiOjUwMCwibW9kZWwiOiJncHQtNS1uYW5vIiwic3RyZWFtIjpmYWxzZX0="
+      "b64": "eyJpbmNsdWRlIjpbInJlYXNvbmluZy5lbmNyeXB0ZWRfY29udGVudCJdLCJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IkhpIHRoZXJlISIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9XSwibWF4X291dHB1dF90b2tlbnMiOjIwMCwibW9kZWwiOiJncHQtNS1uYW5vIiwic3RyZWFtIjpmYWxzZX0="
     },
     "canonical_json": {
+      "include": [
+        "reasoning.encrypted_content"
+      ],
       "input": [
         {
           "content": [
@@ -15,7 +20,7 @@
           "role": "user"
         }
       ],
-      "max_output_tokens": 500,
+      "max_output_tokens": 200,
       "model": "gpt-5-nano",
       "stream": false
     },
@@ -28,7 +33,7 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ]
     },
     "method": "post",
@@ -37,78 +42,77 @@
   "response": {
     "body": {
       "background": false,
-      "billing": {
-        "payer": "developer"
-      },
-      "created_at": 1762105871,
-      "error": null,
-      "id": "resp_03a3f19ac69d86580069079a0f5e88819095823afbb83c40db",
-      "incomplete_details": null,
-      "instructions": null,
-      "max_output_tokens": 500,
-      "max_tool_calls": null,
-      "metadata": {},
-      "model": "gpt-5-nano-2025-08-07",
-      "object": "response",
-      "output": [
-        {
-          "id": "rs_03a3f19ac69d86580069079a10832881909185332d11477c95",
-          "summary": [],
-          "type": "reasoning"
-        },
-        {
-          "content": [
-            {
-              "annotations": [],
-              "logprobs": [],
-              "text": "Hi there! How can I help today? If you’re not sure where to start, tell me your goal and I can assist with explanations, writing, problem-solving, planning, coding help, or just a friendly chat. Here are a few ideas:\n- Explain a concept in simple terms\n- Draft or edit a document, email, or message\n- Debug or brainstorm code\n- Plan a trip, meal, or project\n- Summarize a text or generate ideas\n\nWhat would you like to do?",
-              "type": "output_text"
-            }
-          ],
-          "id": "msg_03a3f19ac69d86580069079a11a0908190b327b24155b1e5fc",
-          "role": "assistant",
-          "status": "completed",
-          "type": "message"
-        }
-      ],
-      "parallel_tool_calls": true,
-      "previous_response_id": null,
-      "prompt_cache_key": null,
-      "prompt_cache_retention": null,
-      "reasoning": {
-        "effort": "medium",
-        "summary": null
-      },
-      "safety_identifier": null,
-      "service_tier": "default",
-      "status": "completed",
-      "store": true,
-      "temperature": 1.0,
       "text": {
         "format": {
           "type": "text"
         },
         "verbosity": "medium"
       },
-      "tool_choice": "auto",
-      "tools": [],
+      "moderation": null,
       "top_logprobs": 0,
-      "top_p": 1.0,
-      "truncation": "disabled",
+      "previous_response_id": null,
+      "tool_choice": "auto",
+      "service_tier": "default",
+      "status": "incomplete",
+      "tools": [],
+      "id": "resp_0472ebf6e0a443ee006a19dc53cc78819fb774e810d1afa51c",
+      "temperature": 1.0,
+      "max_output_tokens": 200,
+      "user": null,
+      "frequency_penalty": 0.0,
+      "error": null,
+      "model": "gpt-5-nano-2025-08-07",
       "usage": {
         "input_tokens": 9,
         "input_tokens_details": {
           "cached_tokens": 0
         },
-        "output_tokens": 302,
+        "output_tokens": 192,
         "output_tokens_details": {
           "reasoning_tokens": 192
         },
-        "total_tokens": 311
+        "total_tokens": 201
       },
-      "user": null
+      "safety_identifier": null,
+      "object": "response",
+      "parallel_tool_calls": true,
+      "output": [
+        {
+          "encrypted_content": "gAAAAABqGdxV1aaCr13miu9Q2OVyFhqHx-hWa8vimAQ7Rn9AQ_c_SOm9VAwDzBww1LXF85hB0LcS5XpCIWjseHAd_12D-fsbJgEWhz_MZDzanIaaryGRxBdl4MgE0rpMHUyVkFS0z1auFpfnr6_oKQxokvdSffA3kfW7mTvhc0QOXRSIrtbeJuLdLkPilPHj6OVQpHtdE-T3H7tnaVBxrUHOIoNIwg3zjhKGsc9ehTQFDwcybzL2kG0hltx_3Nxd4abENGu4MIkBthyyAFnh11NHGAagDpagjCphZjot7Xjf1IVvVm73yT5jcavdcbnr40SrwPe8DI_qwVwZKmkrMe_dRs75jtX3PIIPnMWjyAbOQ4tGFelemdpyT_PAM5zhLGQWJ_oMpnQQFYVJKiGnZ2ir_O7aFAF6XmCOB44L_7vwHHx65Uj7ZhUYWiDCOuRAGLBH5L3raunDFZy97Ri4rsjIOuc3oVNGlaEJ-kyqFKzxDU_pO3J1nqOKia3tyikZHBXhvBhyX3Oqgd2lwPbjiz_3hw7YbKIdsUSw7AL4ut3An1rXoDAChfAWnB3GgkUXPxHuoXzWtWacfG2urENmzjYfcFDvnsWqzFoDM911uNQ71eWnvZT--3jIcPw3-OhlU7bv6k7F3dPxuVDc5C7vWRYuJGif_1jrAiCbARzoiqD-qiDJnbN6cGXA_E8zhnKarvP_j312KW2oW8ibxogtHwbCEC1RN9QI_fU16EdRvN8q-oUSe1cD5FHfZgw4jaRka_-Gjld9ITHFz27lNFBQDcswnFoAuA7TmZ1hO4GFH0wi1A6zbozq2DgX6qhZ2lOMLJZViICT06w1Rms8pPnnQQalcB5AlZ9RQcKZn-RSe9BapfLWr9uSVuNwQAuRzJZzOn2ScBOzcafcJDrHRc7oFtbd9A8jS5Zcq6nB81VKXRjGRN4ATotyu1beCo_M1Vz3vTBA-kYWTcrccKj-zfzn-7N2FV-n7qpobwXFBk_4Y887lCFU6NtDOanWDQuz2gNaOigPCx1RDItrZhax5fw9w4hPGgtHLVQNn_YyCmavv4mEiMBisl1z6menQhTCzBpqNNAfDLg6PyE8Uh7OriNdM3dNw1oRzjDrSftMe9Azv-HRe0dHkBML9MiVsCH67cWMhUxyDYpVgy3Vrue8yFSx8DF2Asl3UtZy2CYifB3pSsrGoyjitEelsr70Uu6yXQq0ggrlpmF5LXxljtI82Ee3QpyaJWRbAyGvmxFYvHpAYJ1bq-6z2yaDexMQdwSw2FPlrrLmpJ5YZ7Js04Bjjf8diBeDhRXNSjkm7xyV9QpCGKSsG4jLVR1CthsSeYq52qSjm4YVneQDfTRbXn-0VZ2_YHOUR8E_xDqimGe102NXInBoNMbIHDIqIiba99PrFBtsRbMQOXolDR-p7fSt96mjg1WUxj7ElfS0s7onSuJciB4wauNebIdVUMe6RjVfoEwwPHOd3_1IYUWsaQJpqGUqzaWg5X60LBUWpZW3rVNvidmpVxOb-JcUDsYRFY0Iyig979UxVrqFANJKJYrBPqLb0cEQ-ne8Sdnh-ZhkWdit5-ubE4Z364wOXiih3EjhvEdsryRBwbfdya6yhHjeGviNzhnu_k9Jk8Dv-F_M_6JY17ARieg0GhBXmBRUW0YaxKMwzr4PVH93TtmTmsj3S0vboHmTI7MP9Ih8efiX3AB26qEg1c0xSdWqdmwHjuTkuCxAippULuBNPa0ZwEWyI_X1ewClufdQL-PkpjWBduSEfJAAnXSSd3qfeK2CbbTmqqtBWn-U8Qtsc-4H0OA30fFaCoxlkFUPvSJrJnm6dG2gjVVqg1yV8wJYTD9zgCRcstNkzdQoH6V7fiO2UuBgmVx6OpJVBIAMDjiriRPDDQhS0gA0QDHuri3lfVtVWG6UybgO5M86CITB3seBUFuU-c1YzFl_RmGR-iktcjsLfaId5Oo_3sVhnUCY4xidFrA_jwFGp1Yhbc-wOhriS7vefIcAT27Wpw8KduujUkOROZaiuPCscOQhIupJ0hqabUCLGJH93qmzOdfE5XbqfVzUpnw4vOPWufnE8CmcLN6N7SNzbKCcIz6PtalMSA2q7dZ9QiXlFL35kkPzeuf4Oe-HxVnNiWhDvGRAAPDzHQ==",
+          "id": "rs_0472ebf6e0a443ee006a19dc541e08819fb24745e84065337d",
+          "summary": [],
+          "type": "reasoning"
+        }
+      ],
+      "instructions": null,
+      "store": true,
+      "presence_penalty": 0.0,
+      "incomplete_details": {
+        "reason": "max_output_tokens"
+      },
+      "reasoning": {
+        "context": "current_turn",
+        "effort": "medium",
+        "summary": null
+      },
+      "completed_at": null,
+      "truncation": "disabled",
+      "top_p": 1.0,
+      "billing": {
+        "payer": "developer"
+      },
+      "prompt_cache_retention": "in_memory",
+      "metadata": {},
+      "prompt_cache_key": null,
+      "created_at": 1780079699,
+      "max_tool_calls": null
     },
     "headers": {
+      "access-control-expose-headers": [
+        "X-Request-ID",
+        "CF-Ray",
+        "CF-Ray"
+      ],
       "alt-svc": [
         "h3=\":443\"; ma=86400"
       ],
@@ -116,7 +120,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "99857a7ccce2e800-ORD"
+        "a03798ab7e41eadc-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -125,13 +129,11 @@
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:51:14 GMT"
+        "Fri, 29 May 2026 18:35:01 GMT"
       ],
-      "openai-organization": [
-        "epic-creative-sogybe"
-      ],
+      "openai-organization": "[REDACTED:openai-organization]",
       "openai-processing-ms": [
-        "3554"
+        "1549"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -142,10 +144,7 @@
       "server": [
         "cloudflare"
       ],
-      "set-cookie": [
-        "__cf_bm=XWa_aPn4qSK2mUSbdiUecV5CIg4AkYgM32LzLQGPG5Q-1762105874-1.0.1.1-knl5ndaFCqcmPoSjAAIRvR8ANIdAQk7Bj1D8OPn_r8AWQ50h1SLyyUX7PE9QtOy2gbpTnnCYadZvvB6lfX8hM6jGSDidCtyHf1mCEUOgaWo; path=/; expires=Sun, 02-Nov-25 18:21:14 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=gtKEU2ze8VWBs9e6FPc.h61V6pXk7KmEdbxjh1alGqY-1762105874626-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
-      ],
+      "set-cookie": "[REDACTED:set-cookie]",
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
       ],
@@ -155,31 +154,11 @@
       "x-content-type-options": [
         "nosniff"
       ],
-      "x-envoy-upstream-service-time": [
-        "3718"
-      ],
-      "x-ratelimit-limit-requests": [
-        "10000"
-      ],
-      "x-ratelimit-limit-tokens": [
-        "10000000"
-      ],
-      "x-ratelimit-remaining-requests": [
-        "9999"
-      ],
-      "x-ratelimit-remaining-tokens": [
-        "9999915"
-      ],
-      "x-ratelimit-reset-requests": [
-        "6ms"
-      ],
-      "x-ratelimit-reset-tokens": [
-        "0s"
-      ],
       "x-request-id": [
-        "req_b6d0f4f439114acdacd59787a5f3af2e"
+        "req_2d8096133cb64d7e91989792cc03f988"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

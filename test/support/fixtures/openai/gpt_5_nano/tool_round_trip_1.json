@@ -1,9 +1,14 @@
 {
+  "model_spec": "openai:gpt-5-nano",
+  "provider": "openai",
   "request": {
     "body": {
-      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9XSwibWF4X291dHB1dF90b2tlbnMiOjEyODAwLCJtb2RlbCI6ImdwdC01LW5hbm8iLCJzdHJlYW0iOmZhbHNlLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJBZGQgdHdvIGludGVnZXJzIiwibmFtZSI6ImFkZCIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJhIjp7InR5cGUiOiJpbnRlZ2VyIn0sImIiOnsidHlwZSI6ImludGVnZXIifX0sInJlcXVpcmVkIjpbImEiLCJiIl0sInR5cGUiOiJvYmplY3QifSwic3RyaWN0Ijp0cnVlfSwibmFtZSI6ImFkZCIsInR5cGUiOiJmdW5jdGlvbiJ9XX0="
+      "b64": "eyJpbmNsdWRlIjpbInJlYXNvbmluZy5lbmNyeXB0ZWRfY29udGVudCJdLCJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9XSwibWF4X291dHB1dF90b2tlbnMiOjEyODAwLCJtb2RlbCI6ImdwdC01LW5hbm8iLCJzdHJlYW0iOmZhbHNlLCJ0b29scyI6W3siZGVzY3JpcHRpb24iOiJBZGQgdHdvIGludGVnZXJzIiwibmFtZSI6ImFkZCIsInBhcmFtZXRlcnMiOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7ImEiOnsidHlwZSI6ImludGVnZXIifSwiYiI6eyJ0eXBlIjoiaW50ZWdlciJ9fSwidHlwZSI6Im9iamVjdCJ9LCJzdHJpY3QiOmZhbHNlLCJ0eXBlIjoiZnVuY3Rpb24ifV19"
     },
     "canonical_json": {
+      "include": [
+        "reasoning.encrypted_content"
+      ],
       "input": [
         {
           "content": [
@@ -20,27 +25,21 @@
       "stream": false,
       "tools": [
         {
-          "function": {
-            "description": "Add two integers",
-            "name": "add",
-            "parameters": {
-              "properties": {
-                "a": {
-                  "type": "integer"
-                },
-                "b": {
-                  "type": "integer"
-                }
-              },
-              "required": [
-                "a",
-                "b"
-              ],
-              "type": "object"
-            },
-            "strict": true
-          },
+          "description": "Add two integers",
           "name": "add",
+          "parameters": {
+            "additionalProperties": false,
+            "properties": {
+              "a": {
+                "type": "integer"
+              },
+              "b": {
+                "type": "integer"
+              }
+            },
+            "type": "object"
+          },
+          "strict": false,
           "type": "function"
         }
       ]
@@ -54,7 +53,7 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ]
     },
     "method": "post",
@@ -63,85 +62,102 @@
   "response": {
     "body": {
       "background": false,
-      "billing": {
-        "payer": "developer"
-      },
-      "created_at": 1762105823,
-      "error": null,
-      "id": "resp_0ad7c707561d9d0700690799dfab6c819590179ed6c1dd1312",
-      "incomplete_details": null,
-      "instructions": null,
-      "max_output_tokens": 12800,
-      "max_tool_calls": null,
-      "metadata": {},
-      "model": "gpt-5-nano-2025-08-07",
-      "object": "response",
-      "output": [
-        {
-          "id": "rs_0ad7c707561d9d0700690799e03c388195960df3a401367e5c",
-          "summary": [],
-          "type": "reasoning"
-        },
-        {
-          "arguments": "{}",
-          "call_id": "call_TcdO1Jpud2ShyRaH5Dq5nCCp",
-          "id": "fc_0ad7c707561d9d0700690799e158048195bf87d12963b2b603",
-          "name": "add",
-          "status": "completed",
-          "type": "function_call"
-        }
-      ],
-      "parallel_tool_calls": true,
-      "previous_response_id": null,
-      "prompt_cache_key": null,
-      "prompt_cache_retention": null,
-      "reasoning": {
-        "effort": "medium",
-        "summary": null
-      },
-      "safety_identifier": null,
-      "service_tier": "default",
-      "status": "completed",
-      "store": true,
-      "temperature": 1.0,
       "text": {
         "format": {
           "type": "text"
         },
         "verbosity": "medium"
       },
+      "moderation": null,
+      "top_logprobs": 0,
+      "previous_response_id": null,
       "tool_choice": "auto",
+      "service_tier": "default",
+      "status": "completed",
       "tools": [
         {
-          "description": null,
+          "description": "Add two integers",
           "name": "add",
           "parameters": {
             "additionalProperties": false,
-            "properties": {},
-            "required": [],
+            "properties": {
+              "a": {
+                "type": "integer"
+              },
+              "b": {
+                "type": "integer"
+              }
+            },
             "type": "object"
           },
-          "strict": true,
+          "strict": false,
           "type": "function"
         }
       ],
-      "top_logprobs": 0,
-      "top_p": 1.0,
-      "truncation": "disabled",
+      "id": "resp_007afb55c0759d49006a19dc493ce88195824378f59aa90b40",
+      "temperature": 1.0,
+      "max_output_tokens": 12800,
+      "user": null,
+      "frequency_penalty": 0.0,
+      "error": null,
+      "model": "gpt-5-nano-2025-08-07",
       "usage": {
-        "input_tokens": 53,
+        "input_tokens": 68,
         "input_tokens_details": {
           "cached_tokens": 0
         },
-        "output_tokens": 207,
+        "output_tokens": 126,
         "output_tokens_details": {
-          "reasoning_tokens": 192
+          "reasoning_tokens": 64
         },
-        "total_tokens": 260
+        "total_tokens": 194
       },
-      "user": null
+      "safety_identifier": null,
+      "object": "response",
+      "parallel_tool_calls": true,
+      "output": [
+        {
+          "encrypted_content": "gAAAAABqGdxKk5TsYVeWdh4gxKSXoO0dxpenVOYSHfPiDqW_au09ea-jSOObvPZtQsOimgdCXyGoFVDAXm0NJAxz3zMgvPnOTpzM9-I7hVd0-aQi8h7rSFcsa-qekl6rLUo_sVDagSCueu6LiFM7lGqT677_Uelt8ZIrsm5NSmKnFWJ2pSAed-QkHf9J5JM6brFaz5L33jW_kY_HK_Tvin8PYD4kQr6Y5tBDB6aC0mVziIzVS8aU1ikUFrEJnbkl2325RBIjMaokDkNGmbtaKYYrrKcQ3UCuK8Baho0huQfHIdpog2uyDFVruxMLctqXARRBh_5_PwvcNQlfW1q1CCyxJ9ox8iulh9NiPCntyKfR4HzoUrlHccvHcDmUJ2zhGPq5sGzh9eLXcrUwoD4V-RKmO_W5OTIgh4mqqqicgjLagKHuOE6u7zJHHxasNwW6NlhQDwXIH9ctEWqmTlOsWLfwwlUG7em39X1SF6vqHS9GEhSji_LDSzvjgfBFbJZKkajL_jJzJWBf9OF0Nn6GLt1PgnCc2cmLWs8_KfUg_r_bfK7-ZvOxkFeomi0INPH3KaSb1fq9Pb7FTYfnk5Ceubbaum240pi9diR1_f82O8ue23oeXVf7bbxNZ0g6crdenO4JbUP9mf9s8GS_ntHXvswYznAGNuWgA-8V8pGwlnHmal74tvM5U9KJFMWMsrnBDk1SZnN1W66YvAiBt_eSpoLGHxwhyKM-2_X1ZuBLe3BTTQABHkDATQMUXKOjnCRA458cDD-K-NQxJPixz-MWtiD2OL6y44tE-6SmHkRFgVcLTLgSAtuGdgdvXwq0A4Td6_pvgarsAmQ0Z8e-GTGWYGizIXidXpUQo5EZGC1hlEbgcT9AktNc2_maO07VHGcpOyTdsS0Yoc6EgTfQxpb4UGml7g0AFGuHJmluCwSukA6A05CYWHcKl5ep19a1wpPQuGMxtS1BaxQE_d-nilgvPIvfLszm5LR9nmu3epXamnL9L1tT4DUWUJcr4hUxpJjsdCAyTNgz8xFX4lm1CT2IK34eJY71mwjC-yTwcneh-xJm2nlH2Dbkx1nDksP-dgAlb9Pn0PGJU_rpyzVlpoAjFsUmS_2VmtZfWLUYoRgpv0Ny-E8_-in_Vj4u-fm61gYNrMilZZwDZFJYujvDPVemA4bds_U2F4Pj56QN3Xvfd7ama9C8VJIrFyFgWwaKut4uVBdNOydtFQquztmf4H_F1fRMHvFszsXhxGyt65HexSp8WzGrS6JE4D1H3ULdLt7v9CN_poKtHIIelxdfBW3YPNBh_R87BpGPnVq4n20XWUoV32e8LDepVw-8Qcbq6uLSZh5BdGyzxkN1q-CKzjk-0ltiYaksQw7YESZ9dlGAbMG4zJ_qKmT3HHvrTFzA6Ig900molvTtu99Obykl1zJxUYLPx1FTc1J-oJdviE6xOt49xsZYt0yPqe2uXRsrLQRav5KRKAnXLPenAqe7bSdhjCeAP4N6iO9Qzw==",
+          "id": "rs_007afb55c0759d49006a19dc49a1908195a75dbfa857ac0fd9",
+          "summary": [],
+          "type": "reasoning"
+        },
+        {
+          "arguments": "{\"a\":2,\"b\":3}",
+          "call_id": "call_YxqnLMGkMPuTJW9yY3mnqwtH",
+          "id": "fc_007afb55c0759d49006a19dc4a646881958226f3e9ed6e1d41",
+          "name": "add",
+          "status": "completed",
+          "type": "function_call"
+        }
+      ],
+      "instructions": null,
+      "store": true,
+      "presence_penalty": 0.0,
+      "incomplete_details": null,
+      "reasoning": {
+        "context": "current_turn",
+        "effort": "medium",
+        "summary": null
+      },
+      "completed_at": 1780079690,
+      "truncation": "disabled",
+      "top_p": 1.0,
+      "billing": {
+        "payer": "developer"
+      },
+      "prompt_cache_retention": "in_memory",
+      "metadata": {},
+      "prompt_cache_key": null,
+      "created_at": 1780079689,
+      "max_tool_calls": null
     },
     "headers": {
+      "access-control-expose-headers": [
+        "X-Request-ID",
+        "CF-Ray",
+        "CF-Ray"
+      ],
       "alt-svc": [
         "h3=\":443\"; ma=86400"
       ],
@@ -149,7 +165,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "998579557ae9e800-ORD"
+        "a03798696b9aeadc-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -158,13 +174,11 @@
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:50:25 GMT"
+        "Fri, 29 May 2026 18:34:50 GMT"
       ],
-      "openai-organization": [
-        "epic-creative-sogybe"
-      ],
+      "openai-organization": "[REDACTED:openai-organization]",
       "openai-processing-ms": [
-        "1998"
+        "1505"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -175,10 +189,7 @@
       "server": [
         "cloudflare"
       ],
-      "set-cookie": [
-        "__cf_bm=g_Zdydy7yCavYhx0uKl6kyi_CujEcZz.SPQxbuX7Li4-1762105825-1.0.1.1-AjWgDi6rA8Q1K9V3DtasvKkY3hD_AoMiIQUR6JwDOQzsr0z6pVl.lR4_L7pKuiap20tQA.6w.pRf9E01UDoqcHM8BCIyCNEapsfo0z5le8I; path=/; expires=Sun, 02-Nov-25 18:20:25 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=cqrNR1gZEYiSyzrJAOzL5ClBPQwwJ4c5A4gJqi3kAas-1762105825672-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
-      ],
+      "set-cookie": "[REDACTED:set-cookie]",
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
       ],
@@ -187,9 +198,6 @@
       ],
       "x-content-type-options": [
         "nosniff"
-      ],
-      "x-envoy-upstream-service-time": [
-        "2004"
       ],
       "x-ratelimit-limit-requests": [
         "10000"
@@ -210,9 +218,10 @@
         "0s"
       ],
       "x-request-id": [
-        "req_9dbda77d507b4c79baaafaf570ae5509"
+        "req_a9c61d896e3942f9a0f84a9d81c21e8d"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

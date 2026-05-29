@@ -25,6 +25,11 @@ defmodule ReqLLM.Providers.OpenAI.ParamProfiles do
       {:drop, :temperature, "This model does not support sampling parameters – dropped"},
       {:drop, :top_p, "This model does not support sampling parameters – dropped"},
       {:drop, :top_k, "This model does not support sampling parameters – dropped"}
+    ],
+    gpt5_pro_reasoning: [
+      {:set_default, :reasoning_effort, "high", "Set :reasoning_effort to high for GPT-5 Pro"},
+      {:enforce_constant, :reasoning_effort, "high", :fix,
+       "GPT-5 Pro only supports :reasoning_effort high – using high"}
     ]
   }
 
@@ -66,6 +71,7 @@ defmodule ReqLLM.Providers.OpenAI.ParamProfiles do
     |> add_if(no_sampling_params?(model), :no_sampling_params)
     |> add_if(temperature_unsupported?(model), :no_temperature)
     |> add_if(temperature_fixed_one?(model), :temperature_fixed_1)
+    |> add_if(gpt5_pro_model?(model), :gpt5_pro_reasoning)
     |> Enum.uniq()
   end
 
@@ -89,6 +95,10 @@ defmodule ReqLLM.Providers.OpenAI.ParamProfiles do
 
   defp no_sampling_params?(%LLMDB.Model{id: model_name}) do
     AdapterHelpers.gpt5_model?(model_name) || AdapterHelpers.o_series_model?(model_name)
+  end
+
+  defp gpt5_pro_model?(%LLMDB.Model{id: model_name}) do
+    AdapterHelpers.gpt5_pro_model?(model_name)
   end
 
   defp temperature_unsupported?(%LLMDB.Model{id: model_name}) do

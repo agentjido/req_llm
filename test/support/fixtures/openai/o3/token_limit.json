@@ -1,9 +1,14 @@
 {
+  "model_spec": "openai:o3",
+  "provider": "openai",
   "request": {
     "body": {
-      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IldyaXRlIGEgdmVyeSBsb25nIHN0b3J5IGFib3V0IGRyYWdvbnMgYW5kIGFkdmVudHVyZXMiLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjozMDAwLCJtb2RlbCI6Im8zIiwic3RyZWFtIjpmYWxzZX0="
+      "b64": "eyJpbmNsdWRlIjpbInJlYXNvbmluZy5lbmNyeXB0ZWRfY29udGVudCJdLCJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IldyaXRlIGEgdmVyeSBsb25nIHN0b3J5IGFib3V0IGRyYWdvbnMgYW5kIGFkdmVudHVyZXMiLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjozMDAwLCJtb2RlbCI6Im8zIiwicmVhc29uaW5nIjp7ImVmZm9ydCI6ImxvdyJ9LCJzdHJlYW0iOmZhbHNlfQ=="
     },
     "canonical_json": {
+      "include": [
+        "reasoning.encrypted_content"
+      ],
       "input": [
         {
           "content": [
@@ -17,6 +22,9 @@
       ],
       "max_output_tokens": 3000,
       "model": "o3",
+      "reasoning": {
+        "effort": "low"
+      },
       "stream": false
     },
     "headers": {
@@ -28,7 +36,7 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ]
     },
     "method": "post",
@@ -37,22 +45,44 @@
   "response": {
     "body": {
       "background": false,
-      "billing": {
-        "payer": "developer"
+      "text": {
+        "format": {
+          "type": "text"
+        },
+        "verbosity": "medium"
       },
-      "created_at": 1762105918,
-      "error": null,
-      "id": "resp_02c82d0669b414960069079a3ebefc8197840c36265ceec3d3",
-      "incomplete_details": null,
-      "instructions": null,
+      "moderation": null,
+      "top_logprobs": 0,
+      "previous_response_id": null,
+      "tool_choice": "auto",
+      "service_tier": "default",
+      "status": "completed",
+      "tools": [],
+      "id": "resp_0b27809ea58ff51e006a19de09b07c81969542322b42913a45",
+      "temperature": 1.0,
       "max_output_tokens": 3000,
-      "max_tool_calls": null,
-      "metadata": {},
+      "user": null,
+      "frequency_penalty": 0.0,
+      "error": null,
       "model": "o3-2025-04-16",
+      "usage": {
+        "input_tokens": 15,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens": 2455,
+        "output_tokens_details": {
+          "reasoning_tokens": 64
+        },
+        "total_tokens": 2470
+      },
+      "safety_identifier": null,
       "object": "response",
+      "parallel_tool_calls": true,
       "output": [
         {
-          "id": "rs_02c82d0669b414960069079a3fbb1c8197a913089819acf485",
+          "encrypted_content": "gAAAAABqGd4tcltrAcSWQqPgqGA_FR4-HiEc6Pv42I8kPomfEtSTw60p0RG0hdkrRK5Vt2SlA7Phvoqnu9HPw5aFNiOwye_o0mvYo6zg9NuDi77O6meQxV6nYldqHU91ECnNH5X2bxDOjyRVI2H7xTiKpizP3zHkJrB7Pzpl-IosefcwFq5pYYYR2LF7qH5IXXrCJVZMRS5rH-lCJJGXyh2XdZLPhtQkeUS2tTa5QEm7D3sGIsFzFc08SbkS1pEk_PWBpnY9pe3ZxwswxNFB2Ii88KYyXdBMl_SxdBoWekS5fs8vDrCjjGzyFwNitlUW-R7wEEI9zas2O5DfREs_2KlZbH8uhRWR_DLSJuXWQjm23ooEkv7iq7d6M5WtmSg1mRiZJss4bz1e2SlYORvhld50sz2S7Co_lZrj8Z88CbKaFoK78VLs3iTfry47QtSQAvXhL8qCZpOqmjDHaqEedlSzZFU7YYPZwkHrIgx0nSdT7qGJRfbz7jJ7iosW2Udyzew8_M4zSkT1agyTF1-Lc25objPt2z5rqEvtKHJUIYA6iP8IdXPnMcbSDcY7A-EgsSyNywQHHwYLlwYSz7wmrxAEro31YH2YUsIMOKQAxebGkcrd777jMENjnEmO2llBB4NSNefm8qhQVvl6J-WuYc5YlGCLz7-__j9hY_OyuVP0H8Jnpx45-qt9Xq_w9NNvD0j-T5-TQu2WFU0vfdYNSxBXG5eo0YJeIkj0DGfWPLwcBCWyzFlx4mq-prZboHG4UoUU3C83Kxh9g2X6Xlr250FfPi1YbRqeoPBvYwUzoU-_79pd86Gc0RyjFZv0TYLpuBA8Xhx-5vH-kTWq_1euJyRfi68xZaJdT1X1g2AJA198qKlRr_PGpkOmmz_zSxQu8knyYE-gLueogtOWE9JU_EyFqvelcQPsbTE_9YEr30AgngNZxZl6e3s9RDxGiApCfrvfBrNunaylQ_vGfejdCVX0sRVyu0fmtdSoIisk42GeCeAyXJ8VrYgrmXkCCwg2Gk72SdbB5Z3-CiupUR6jjeJ3YvSjccVpTYXHAD_x9MjDAcF18ZId-ppeUUK5EUCo3MVtN7QoxK_lm2DgeIj8ktaVrgn2NGMFKsHEGIJ6fRnq6kW0R0DCbfzeDzAAzvnDSAl_d5RIVsj5ayqpGBH2fOtpgOyF4he_yKcRMN9EzwUj64oPRQAwrogMPWiOxLuyfNf_IRFaET4SRf_pmaRjWsvq2ofFYyxPo-Jgbz_074UxEqD73HNua1DxtrQq6RrWpDHDu0VS0xVkS-R5u46fMZsuAoO3t7eZGYWDgkCEjFIH6T4IGmqQyPnsd3JcFC272tVueYpFofkwIYjJ2nfXngYkhSCV2d8ui4HePX_ZrEALkP8nw-DPkZULEs_U91fJzGRXg6Mru7D3kgX9pq4A68-4nHidIkUkPHUP52_T4oHpcuCljafDeWum_rhpzzRGd9MSMCvD7ALg",
+          "id": "rs_0b27809ea58ff51e006a19de0a06c08196be8a096afe6cfe58",
           "summary": [],
           "type": "reasoning"
         },
@@ -61,54 +91,43 @@
             {
               "annotations": [],
               "logprobs": [],
-              "text": "Embers of the Sky  \nA Chronicle in Twelve Flights  \n\nPrologue – The Burnt Map  \nBefore the cataclysm, the continent of Hytherra was a fresco of serenity. Its rivers ran silver with dragon-scale dust, and its mountains trembled faintly with the heartbeat of buried wyrms. All was peaceful until the night the sky cracked and a shard of crimson flame fell upon the royal librarium in Vael. Come morning, only ash remained—ash and a half-burned map inked in an ancient, serpentine script that none but the dragons should have been able to write.\n\nChapter I – The Squire of Broken Oaths  \nCalian Brand, a seventeen-year-old stable squire with more bruises than coins, found the map while scraping soot from the stone floor. Though the royal marshal ordered him to toss it in the refuse, Calian slipped it beneath his tunic. A single phrase shimmered amid the scorch marks:\n\n“Where mountains kiss the moon, the First Fire wakes.”\n\nThat was enough to braid wonder and dread together in the boy’s mind. Dragons, according to the legends, were extinct. Yet the rune-laced parchment pulsed with warmth, as if some hidden heart still beat inside. Calian, raised on half-truths about noble births and lost heirs, felt destiny’s claws hooking under his ribs.\n\nChapter II – The Knife-Singer  \nThree nights later, Calian headed east, the map guiding him beyond Vael’s watch-towers. At the river ferry he met Vesha the Knife-Singer, a wandering duelist whose daggers hummed like chimes when she fought. Vesha was older—perhaps twenty-five—and covered in faint, silver scars that resembled scale patterns. She offered him passage for a single copper. He paid with the last coin he owned and the promise of a story worth hearing. Vesha loved stories nearly as much as she loved fighting. When Calian showed her the map, her eyes flared like struck flint.\n\n“I’ve seen those glyphs before,” she whispered. “They belong to the Sky-Heirs, the brood queens who ruled this world when we crawled in mud.”\n\nThus a squire and a duelist struck an accord: she would guard his life; he would lead her toward a legend.\n\nChapter III – The Howling Vale  \nThe map led them into the Howling Vale, a canyon where wind shrieked day and night. Buried in that wind were voices—fragments of draconic songs said to drive mortals mad. Calian tied wads of wool over his ears. Vesha chose to face the roar bare-headed, claiming she wanted to hear the words beneath the gale. At dusk, the wind parted long enough for them to glimpse an obsidian arch. Glyphs glowed along its spine; the air above it shimmered like heated glass. They stepped through.\n\nChapter IV – The Sleepers Under Stone  \nOn the arch’s far side lay a subterranean amphitheater roofed by glistening quartz. Dragons, dozens of them, slumbered in rings like sleepers around a dying hearth—red, bronze, emerald, and midnight blue. Ropes of molten gold bound their wings. A single figure paced between them: a man in scaled armor, face hidden by a helm shaped like a dragon’s skull. He held a scepter topped by a ruby the size of a clenched fist. Every time the ruby pulsed, the dragons’ chains tightened.\n\nCalian, awed, crept forward. The helm turned.\n\n“I wondered when the map would find another pair of hands,” the stranger said, voice echoing off the quartz. “Come closer, child of cinder.”\n\nThe scepter glowed. Calian’s chest burned, as if his heart tried to escape. Vesha hurled a dagger. It struck the helm’s cheek and shattered, releasing a peal like a struck bell. The man laughed.\n\nChapter V – Revelations of Ash  \nHe called himself Seron Drakengarde, last Magister of the Sky-Heirs. The Sky-Heirs, he claimed, were not dragons but the first humans, gifted heritage by the scale-gods. When dragons rebelled, Magisters chained them beneath the earth. Seron aimed to finish what his order began: siphon the dragons’ magic, fuse it to his blood, and ascend. The map was bait, scattered in fragments so that “those brave enough or foolish enough” might feed his ritual with fresh souls.\n\nVesha spat. “Your order failed because you mistake dominion for strength.”\n\nCalian asked, “Why me?”\n\nSeron raised the scepter. “Because your line is woven with dragon-fire. Hear it.”\n\nFlames erupted around Calian’s hands—white, not red. In their light, he saw scaled patterns on his wrists that mirrored Vesha’s scars.\n\n“You are wyrmblood,” Seron said. “Two halves of a broken egg. Come, stand beside me.”\n\nChapter VI – The Severed Chain  \nCalian almost obeyed—the pull was intoxicating—but Vesha’s shout cleaved the trance. She clamped his wrist. Instead of burning her, the white fire arced into her daggers, coating their blades with light. Together they smashed the scepter’s ruby. A sound like mountains cracking filled the cavern. Gold chains unraveled; the dragons stirred.\n\nSeron staggered, helm splintering, revealing eyes black as void. “Fools,” he hissed as quartz columns shattered. Dust swallowed everything.\n\nChapter VII – Flight of the Bronze Matron  \nCalian awoke upon a bronze dragon’s back, air icy against his cheeks. The matron introduced herself as Harethix. Freed from bonds, she carried the two humans skyward, away from Seron’s wrath. Dragons all around burst from the earth like living geysers, painting streaks across the dusk. Below, Seron gathered shards of his broken ruby, chanting.\n\nHarethix explained: “A Magister unbound by dragon-law grows stronger with each shard of soul he claims. He will hunt you, wyrmblood, until either he shatters or you do.”\n\nCalian looked at his glowing palm and felt very small.\n\nChapter VIII – The Academy in the Clouds  \nThe dragons ferried them to Caelus Spire, a floating citadel hidden in thunderheads where a handful of dragonkind had raised a sanctuary with cloudstone and breath-magic. Here, Calian learned the ancient dialect of roses and embers—the language of creation. He trained with Harethix’s brood, sparring mid-air on transparent terraces. Vesha earned the title Skyblade after besting a crimson drake in ritual combat. Even so, every sunset they scanned the horizons for Seron’s omen: a spiral of black smoke marbling the heavens.\n\nChapter IX – The Choir of Embers  \nOne eve, the sky bled at the horizon. Dragons sensed it first—wings jittering, tails lashing. Seron had forged the shards into a diadem. With each pulse, mortal villages below flickered out like snuffed candles. He harvested lives to fuel a final spell: the Sundering Roar, capable of silencing every dragon’s fire-heart.\n\nThe remaining elders convened a Choir: nine dragons, nine wyrmbloods. Calian and Vesha were chosen for the Ninth Seat. To weave the counter-song, each singer had to bare their memories—joy, grief, love, shame—transmuting them into notes of living flame. Calian poured in the ache of a parentless childhood; Vesha added the harmony of surviving a hundred duels and fearing none yet longing for one worthy death. The Choir’s song rose, braiding into aurora-bright ribbons.\n\nChapter X – Battle Above the Rift  \nThey met Seron over the Rift of Khar—an abyss where the planet’s mantle glimmered like molten gold. Dragons clashed like living comets. Harethix rammed Seron head-on. His diadem deflected her, shearing wing membrane, sending her spiraling. Calian leapt from her back onto Seron’s floating basalt dais. Around him, the eight other wyrmbloods danced and died. Vesha fought Seron at Calian’s side, her daggers singing an aria of sparks.\n\nSeron, bleeding prismatic light, mocked them. “You fight to preserve a world that will feed on you. Let me end hunger, sorrow, death!”\n\nCalian answered by hurling white fire into the diadem. It cracked but did not break. Vesha’s last dagger punched through Seron’s ribs. He caught her by the throat, smile serene. Calian screamed, flames surging uncontrollably. Winds roared. Rift fire licked the platform’s edges.\n\nChapter XI – The White Pyre  \nIn that instant, Calian glimpsed a memory not his own: a nest of eggs, one pale as pearl and one silver as moon. Dragon mothers wept as Magisters stole them. He understood—he and Vesha were those eggs, given mortal form. Twin vessels of wildfire meant either to rule or redeem. Vesha, choking, met his gaze and mouthed one word: “Together.”\n\nCalian pressed his palm to her chest. Their fires merged—white and silver coiling into a spear of radiant dusk. Vesha laughed, a pure, bell-bright sound, even as her body dissolved into the light. Calian aimed the spear at the diadem. It shattered in a silent blossom.\n\nSeron, bereft of stolen souls, seemed suddenly frail, a husk of ambition. Rift winds dragged him downward. He fell, whispering a prayer to a god long dead.\n\nChapter XII – The New Dawn  \nMorning over Hytherra was born anew. Dragons soared unchained, their shadows painting patchwork patterns on fields that had known only plows and fear. At Caelus Spire, songs of mourning and triumph interwove: nine Choir seats, one empty. Calian stood alone on a crystal balcony. The scaled marks on his wrists had faded to pale scars. Where Vesha had dissolved, a single dagger remained, its blade now white as pearl, its edge singing softly with her voice.\n\nHarethix alighted beside him. “The world is changed,” she said. “It will need a keeper.”\n\n“I am no Magister,” Calian replied.\n\n“Nor a squire,” she countered. “You are ember and wing, hope and blade. Will you be our bridge?”\n\nHe looked to the horizon, where new-hatched dragons practiced clumsy loops. “Yes,” he said, gripping the pearl dagger. “But first, teach me to fly on my own.”\n\nEpilogue – The Archivist’s Ink  \nYears later, in the rebuilt librarium of Vael, an anonymous archivist penned the closing lines of a fresh chronicle:\n\n“Here ends the first age after Chains, and here begins the Age of Open Skies. Let it be known that dragons yet live, that humans yet dare, and that sometimes the smallest hearth-fires ignite the firmament itself. Should you doubt, look upward. The proof is written in flame upon the clouds.”\n\nAnd so the story spins onward, on wings of ember and echoes of song, for any traveler brave enough to follow a burnt map into the wide, perilous skies.",
+              "text": "Part I: Cinders in the North\n\nIn the uncharted tundras beyond the Frost-Grim Peaks, campfire talk spoke of a scarlet shimmer that crossed the night sky once every generation. Villagers called it “Cinder-Wing,” assuming it was an omen or a comet. It was neither. It was a dragon—a leviathan of ember-colored iron scales whose wings billowed sparks, and whose breath melted the glacial rivers into steam.\n\nNo one knew this better than Corin Tallow, a young mapwright from the town of Havenglade. Corin had traced the burns Cinder-Wing left on the ice and, on a night of twin moons, saw the great beast alight atop Mount Galdurra. The sight planted an irrepressible question in Corin’s mind: What secret keeps a creature of fire alive in a kingdom of snow?\n\nAfter two frost-bitten seasons of study, Corin assembled an expedition. He hired Amara Dawnspear—a former knight-errant whose sword was as bright as her laugh—along with Thistle, a green-skinned goblin locksmith who never met a padlock he couldn’t flirt into opening, and Brother Simeon, a monk whose prayer beads were fashioned from volcanic glass. Together they aimed to cross the Frost-Grim Peaks and approach Mount Galdurra before the next Shimmering Night, when Cinder-Wing would return.\n\nThe climb was brutal. Avalanches roared like drums of stone. Yet each hardship knitted the companions closer: Amara taught Corin to read storms by the angle of falling snow; Thistle traded jokes for dried meat with Simeon, who in return sang lullabies in an ancient tongue that settled everyone’s nerves. They reached a plateau where petrified trees jutted from ice like blackened fingers—and there, hidden beneath a drift, they found a rune-carved archway of obsidian.\n\nThistle’s lantern revealed symbols older than any script Corin had cataloged. Brother Simeon whispered, “Draconic prayers. They speak of a Furnace Heart beneath the mountain.” Corin realized the answer to his riddle might lie not with the dragon itself but with what the dragon guarded.\n\nPart II: The Furnace Heart\n\nBeyond the archway a spiral stair plunged into warm darkness. Frost evaporated, and the clang of dripping water echoed. After hours they emerged into a cavern so vast that its ceiling disappeared into murk. At its center pulsed a glowing orb of molten crystal, suspended above a caldera of basalt. Heat radiated in soothing waves. Corin’s compass needle spun as though confused by the very notion of direction.\n\n“The Furnace Heart,” Simeon confirmed, awestruck. “A shard of the world’s first dawn. Dragons are born from its embers.” As if summoned by his words, the cavern trembled, and a titanic shape descended from the shadows: Cinder-Wing, wings unfurled like banners of flame. The beast surveyed the intruders with eyes the color of sunrise.\n\nAmara stepped forward, sword lowered in salute. “We didn’t come to steal,” she said. “We came to understand.”\n\nCinder-Wing’s voice rumbled in their minds rather than their ears. “Then listen.”\n\nImages flooded them: millennia ago, dragons wove the ley lines that warm the planet’s core. When their dominion waned, they entrusted the Furnace Heart to guardianship, vowing to rekindle it each century with a single breath. Without that rite, the Heart would cool—and winter would swallow every shore. The next rekindling was due in two nights, yet Cinder-Wing was wounded by a mysterious blight. One more flight might cost its life.\n\nCorin, Amara, Thistle, and Simeon knelt before the dragon. They offered to be its claws and wings. The dragon agreed, binding them with a pact of ember and oath. To complete the rite, they must gather three ingredients: storm-glass from the Eye of Tempests, sun-orchid nectar from the Hanging Gardens of Zarith, and an echo of thunder caught in an unbroken bell. They had forty-eight hours before the Heart dimmed beyond salvation.\n\nPart III: Collecting Storm-Glass\n\nThe Eye of Tempests—a perpetual cyclone on the western sea—lay a hundred leagues away. A normal journey of weeks had to be achieved in hours. Cinder-Wing directed them to a stabled cloudship buried in ice: an ancient draconic skiff whose sails were spun from lightning silk. Thistle’s nimble hands coaxed life into the dormant helm, and, propelled by wind runes, they streaked across the sky.\n\nThe cyclone’s core glittered with shards of translucent crystal: storm-glass, frozen lightning that forms where pressure, wind, and raw magic intersect. Amara lashed herself to the mast, while Corin and Simeon balanced along the prow with nets fashioned from dragon-hair rope. They navigated whirlwinds that could snap stone. At the storm’s eye, gravity wavered; rain fell upward; thunder spiraled like serpents. A bolt of white fire scorched the mainmast, and Corin was flung overboard. Only Thistle’s quick thinking—firing a harpoon line tied around his own waist—saved Corin from plummeting into the roaring sea below.\n\nThey captured three shards of storm-glass, each humming with static. The moment the last shard touched their deck, the cyclone spat them out in a streak of rainbow spray, and the cloudship dove back over the peaks toward their next objective.\n\nPart IV: The Sun-Orchids of Zarith\n\nZarith floated above a desert of mirror-sand, its gardens dangling beneath a chain of crystal anchors. The air city welcomed pilgrims but forbade plucking the sacred sun-orchids that bloom exactly at noon. With sunset only hours away, the companions knew diplomacy would outrun time. Thistle posed as a wandering minstrel, weaving a song that drew crowds and distracted guards while Corin and Amara scaled silken ladders into the gardens. Simeon prayed for forgiveness even before the theft occurred.\n\nThe orchids opened like golden suns as the hoursglass tipped toward noon. With careful respect, Amara cut just one blossom, causing the vines to hum as if mourning. Alarms chimed. Sky-wardens in bronze wingsuits swooped. An aerial chase erupted among terraces of glass lilies and cascades of living waterfalls. Simeon, refusing violence, shattered a vial of blessed mist that cloaked the wardens’ visors in dew, buying seconds. The cloudship snagged the fugitives mid-leap, sails snapping open as Zarith shrank behind them, a jewel in glaring sand.\n\nPart V: The Bell of Thunder\n\nThe final ingredient, an echo of thunder, could be trapped only in the Bell of Caer-Shaal—a monolith cast from meteoric iron and hidden inside a ruin populated by crystal menhir that amplified sound. Legends warned that striking the bell drew phantoms forged from echoes of ancient wars.\n\nThey arrived at dusk. The bell stood silent in a courtyard of shattered statues. Amara approached with a dragonbone mallet while the others formed a circle, each holding a storm-glass shard that would store the thunderclap. When Amara struck, the earth buckled. A resonance boomed so deep it seemed to rearrange their heartbeats. Spectral warriors coalesced: knights in cracked helms, archers with translucent arrows, all born of remembered violence.\n\nFighting memories is like swinging at fog; every blow passes through. Brother Simeon instead chanted a hymn of stillness, threading calm through cacophony. The phantoms flickered, losing shape. Thistle rang the bell a second time, and Corin inverted the storm-glass shards; each inhaled the rolling thunder, sealing it like wine in crystal. The ghosts dispersed, their war forgotten for another century.\n\nPart VI: Rekindling the Heart\n\nThey returned to Mount Galdurra, muscles aching, deadline looming. The Furnace Heart was dimming; its surface, once liquid fire, now cracked with black fissures. Cinder-Wing lay beside it, talons trembling.\n\nSimeon poured the sun-orchid nectar onto the Heart, where it boiled into shimmering vapor. Corin set the storm-glass shards around the caldera, points inward. Amara positioned the thunder-filled shard upon the Heart’s apex. At the dragon’s nod, Thistle smashed the shard with a hammer of rune-steel.\n\nThe explosion was silent—sound compressed into a single heartbeat—and then released in a spherical roar that shook the mountain. Lightning threaded through the nectar mist, igniting it into a corona of molten gold. The cracks healed. The Heart brightened from smolder to sunrise to blinding noon. Heat flooded the cavern; ice above the mountain began to melt in glittering waterfalls.\n\nCinder-Wing rose. The wound in its flank cauterized closed. It circled the Heart once, then exhaled a line of pure white fire that sealed the rekindling rite. Snowfields miles away hissed into blossoming meadows of steam.\n\nPart VII: Aftermath and New Paths\n\nMorning bathed the world in colors sharper than memory. The companions stood at the mountain’s mouth, watching rivers freed from ice thread the valleys. Cinder-Wing landed beside them, folding its wings with a rustle like banked coals.\n\n“You have balanced the scales,” it said. “Each of you is owed a boon.”\n\nAmara asked for nothing but freedom from the shadows of past battlefields; Cinder-Wing’s fire seared the regret from her mind, leaving her heart light. Thistle wished for a key that could open any lock; the dragon gifted a single scale, hard as diamond, etched with shifting grooves. Simeon requested that the bell phantoms be laid to rest forever; Cinder-Wing murmured a spell of final silence over Caer-Shaal. Corin, gaze drifting toward the horizon, asked only for wings of knowledge. The dragon touched its snout to his brow, and symbols flooded his thoughts: maps of wind, tide, and hidden passageways stitched through the bones of the earth.\n\nThey parted at the foothills. Amara and Thistle sailed the cloudship south to trade, seeking new skylines. Simeon returned to his monastery, scrolls in tow, intent on teaching that bravery sometimes looks like compassion. Corin traveled far and wide, charting territories once considered void, his newly dragon-touched quills inscribing paths of wonder onto parchment.\n\nAnd once every year, on the Shimmering Night, four silhouettes would meet atop Mount Galdurra: a knight with laughter bright as steel, a goblin bearing a kaleidoscopic key, a monk humming quiet hymns, and a cartographer whose maps glowed faintly red. They would share stories beneath the outstretched wings of a dragon who was no longer merely an omen, but an eternal friend.\n\nSo the Furnace Heart burned, winter kept at bay by the trust of unlikely allies, and the tale of their adventure spread across taverns and temples, reminding all who listened that even in realms of ice, courage can kindle a fire big enough for dragons to call home.",
               "type": "output_text"
             }
           ],
-          "id": "msg_02c82d0669b414960069079a4226248197bfad02089ad8e2c6",
+          "id": "msg_0b27809ea58ff51e006a19de0adc8081968589dafedb02540c",
           "role": "assistant",
           "status": "completed",
           "type": "message"
         }
       ],
-      "parallel_tool_calls": true,
-      "previous_response_id": null,
-      "prompt_cache_key": null,
-      "prompt_cache_retention": null,
+      "instructions": null,
+      "store": true,
+      "presence_penalty": 0.0,
+      "incomplete_details": null,
       "reasoning": {
-        "effort": "medium",
+        "context": "current_turn",
+        "effort": "low",
         "summary": null
       },
-      "safety_identifier": null,
-      "service_tier": "default",
-      "status": "completed",
-      "store": true,
-      "temperature": 1.0,
-      "text": {
-        "format": {
-          "type": "text"
-        },
-        "verbosity": "medium"
-      },
-      "tool_choice": "auto",
-      "tools": [],
-      "top_logprobs": 0,
-      "top_p": 1.0,
+      "completed_at": 1780080173,
       "truncation": "disabled",
-      "usage": {
-        "input_tokens": 15,
-        "input_tokens_details": {
-          "cached_tokens": 0
-        },
-        "output_tokens": 2571,
-        "output_tokens_details": {
-          "reasoning_tokens": 192
-        },
-        "total_tokens": 2586
+      "top_p": 1.0,
+      "billing": {
+        "payer": "developer"
       },
-      "user": null
+      "prompt_cache_retention": "in_memory",
+      "metadata": {},
+      "prompt_cache_key": null,
+      "created_at": 1780080137,
+      "max_tool_calls": null
     },
     "headers": {
+      "access-control-expose-headers": [
+        "X-Request-ID",
+        "CF-Ray",
+        "CF-Ray"
+      ],
       "alt-svc": [
         "h3=\":443\"; ma=86400"
       ],
@@ -116,7 +135,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "99857ba79c0dda7a-ORD"
+        "a037a35c4ba89d03-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -125,13 +144,11 @@
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:52:28 GMT"
+        "Fri, 29 May 2026 18:42:53 GMT"
       ],
-      "openai-organization": [
-        "epic-creative-sogybe"
-      ],
+      "openai-organization": "[REDACTED:openai-organization]",
       "openai-processing-ms": [
-        "29596"
+        "35994"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -142,10 +159,7 @@
       "server": [
         "cloudflare"
       ],
-      "set-cookie": [
-        "__cf_bm=aRR6Bq9u.cp8721msBPrG.x9BUW0jVP8_ae9NreEceQ-1762105948-1.0.1.1-ISHd8_W9hiM_b0QXJuf6T5FQ.vO.2Y4B.bWilMXDtETqhY0Fn1YMwMGwOGgKS8AnoLBDO8pVw7jLWG2gFAGVgypCs7L.ZDODlqhose5m5mE; path=/; expires=Sun, 02-Nov-25 18:22:28 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=ovjutU8qjxxScil1FG3gH6RYtixg3agNDouOlE4vgoE-1762105948358-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
-      ],
+      "set-cookie": "[REDACTED:set-cookie]",
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
       ],
@@ -154,9 +168,6 @@
       ],
       "x-content-type-options": [
         "nosniff"
-      ],
-      "x-envoy-upstream-service-time": [
-        "29601"
       ],
       "x-ratelimit-limit-requests": [
         "10000"
@@ -177,9 +188,10 @@
         "6ms"
       ],
       "x-request-id": [
-        "req_32c23654e73245808059f458d0e5e979"
+        "req_3a537aed1ffe40838fc5aa173caa1d1a"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

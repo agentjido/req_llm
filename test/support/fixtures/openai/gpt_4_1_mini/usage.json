@@ -1,4 +1,6 @@
 {
+  "model_spec": "openai:gpt-4.1-mini",
+  "provider": "openai",
   "request": {
     "body": {
       "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IkhpIHRoZXJlISIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9XSwibWF4X291dHB1dF90b2tlbnMiOjE2LCJtb2RlbCI6ImdwdC00LjEtbWluaSIsInN0cmVhbSI6ZmFsc2V9"
@@ -28,7 +30,7 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ]
     },
     "method": "post",
@@ -37,59 +39,26 @@
   "response": {
     "body": {
       "background": false,
-      "billing": {
-        "payer": "developer"
-      },
-      "created_at": 1762105828,
-      "error": null,
-      "id": "resp_0eb6103533c4d2ae00690799e4b82c8196817b6529677f4cf4",
-      "incomplete_details": null,
-      "instructions": null,
-      "max_output_tokens": 16,
-      "max_tool_calls": null,
-      "metadata": {},
-      "model": "gpt-4.1-mini-2025-04-14",
-      "object": "response",
-      "output": [
-        {
-          "content": [
-            {
-              "annotations": [],
-              "logprobs": [],
-              "text": "Hello! How can I help you today?",
-              "type": "output_text"
-            }
-          ],
-          "id": "msg_0eb6103533c4d2ae00690799e50cfc8196a537e23cc2a7dea6",
-          "role": "assistant",
-          "status": "completed",
-          "type": "message"
-        }
-      ],
-      "parallel_tool_calls": true,
-      "previous_response_id": null,
-      "prompt_cache_key": null,
-      "prompt_cache_retention": null,
-      "reasoning": {
-        "effort": null,
-        "summary": null
-      },
-      "safety_identifier": null,
-      "service_tier": "default",
-      "status": "completed",
-      "store": true,
-      "temperature": 1.0,
       "text": {
         "format": {
           "type": "text"
         },
         "verbosity": "medium"
       },
-      "tool_choice": "auto",
-      "tools": [],
+      "moderation": null,
       "top_logprobs": 0,
-      "top_p": 1.0,
-      "truncation": "disabled",
+      "previous_response_id": null,
+      "tool_choice": "auto",
+      "service_tier": "default",
+      "status": "completed",
+      "tools": [],
+      "id": "resp_071194821c563749006a19db537f24819d963a1454b7ade600",
+      "temperature": 1.0,
+      "max_output_tokens": 16,
+      "user": null,
+      "frequency_penalty": 0.0,
+      "error": null,
+      "model": "gpt-4.1-mini-2025-04-14",
       "usage": {
         "input_tokens": 10,
         "input_tokens_details": {
@@ -101,9 +70,52 @@
         },
         "total_tokens": 20
       },
-      "user": null
+      "safety_identifier": null,
+      "object": "response",
+      "parallel_tool_calls": true,
+      "output": [
+        {
+          "content": [
+            {
+              "annotations": [],
+              "logprobs": [],
+              "text": "Hello! How can I assist you today?",
+              "type": "output_text"
+            }
+          ],
+          "id": "msg_071194821c563749006a19db543090819d943cf43e62a32e96",
+          "role": "assistant",
+          "status": "completed",
+          "type": "message"
+        }
+      ],
+      "instructions": null,
+      "store": true,
+      "presence_penalty": 0.0,
+      "incomplete_details": null,
+      "reasoning": {
+        "context": null,
+        "effort": null,
+        "summary": null
+      },
+      "completed_at": 1780079444,
+      "truncation": "disabled",
+      "top_p": 1.0,
+      "billing": {
+        "payer": "developer"
+      },
+      "prompt_cache_retention": "in_memory",
+      "metadata": {},
+      "prompt_cache_key": null,
+      "created_at": 1780079443,
+      "max_tool_calls": null
     },
     "headers": {
+      "access-control-expose-headers": [
+        "X-Request-ID",
+        "CF-Ray",
+        "CF-Ray"
+      ],
       "alt-svc": [
         "h3=\":443\"; ma=86400"
       ],
@@ -111,7 +123,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "998579752dc2a162-ORD"
+        "a0379268fef02279-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -120,13 +132,11 @@
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:50:29 GMT"
+        "Fri, 29 May 2026 18:30:44 GMT"
       ],
-      "openai-organization": [
-        "epic-creative-sogybe"
-      ],
+      "openai-organization": "[REDACTED:openai-organization]",
       "openai-processing-ms": [
-        "667"
+        "973"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -137,10 +147,7 @@
       "server": [
         "cloudflare"
       ],
-      "set-cookie": [
-        "__cf_bm=49now3FXMZZ3q5eoyCOZ0W.yDc6MHVsDglozmExR6rU-1762105829-1.0.1.1-64JrVn0GPVyq2m5qiJsfrd2J6QAcT6RwyXcA9aagbgdc.NdN48uBwffp2ySJ9IJgTpgUt1.geaDb4akeow6Pkciebem9Erl7fmCeyA21fnY; path=/; expires=Sun, 02-Nov-25 18:20:29 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=kBr3ZNq46IrhfOf4i88wR.UXBcgC5zex64yrCdI39jA-1762105829410-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
-      ],
+      "set-cookie": "[REDACTED:set-cookie]",
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
       ],
@@ -149,9 +156,6 @@
       ],
       "x-content-type-options": [
         "nosniff"
-      ],
-      "x-envoy-upstream-service-time": [
-        "674"
       ],
       "x-ratelimit-limit-requests": [
         "10000"
@@ -172,9 +176,10 @@
         "0s"
       ],
       "x-request-id": [
-        "req_c1dd3a7e274b4420817b60a7cdce14d9"
+        "req_047d33975d7f41da82be0bbc639a6812"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

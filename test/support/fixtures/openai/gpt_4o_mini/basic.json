@@ -52,7 +52,7 @@
       "service_tier": "default",
       "status": "completed",
       "tools": [],
-      "id": "resp_0d3f1ae5617e4337006a19bbf63100819cbfc5708a0c793d4c",
+      "id": "resp_06fb99a70a8e67c2006a19d924554c8193b464df5a964c148c",
       "temperature": 1.0,
       "max_output_tokens": 50,
       "user": null,
@@ -83,7 +83,7 @@
               "type": "output_text"
             }
           ],
-          "id": "msg_0d3f1ae5617e4337006a19bbf6f994819c8b2e9a1af8b18181",
+          "id": "msg_06fb99a70a8e67c2006a19d925050881939d47a3b3ee5a89db",
           "role": "assistant",
           "status": "completed",
           "type": "message"
@@ -98,7 +98,7 @@
         "effort": null,
         "summary": null
       },
-      "completed_at": 1780071415,
+      "completed_at": 1780078885,
       "truncation": "disabled",
       "top_p": 1.0,
       "billing": {
@@ -107,7 +107,7 @@
       "prompt_cache_retention": "in_memory",
       "metadata": {},
       "prompt_cache_key": null,
-      "created_at": 1780071414,
+      "created_at": 1780078884,
       "max_tool_calls": null
     },
     "headers": {
@@ -123,7 +123,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "a036ce61ac626154-ORD"
+        "a03784c2ae17eb07-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -132,11 +132,11 @@
         "application/json"
       ],
       "date": [
-        "Fri, 29 May 2026 16:16:55 GMT"
+        "Fri, 29 May 2026 18:21:25 GMT"
       ],
       "openai-organization": "[REDACTED:openai-organization]",
       "openai-processing-ms": [
-        "1070"
+        "928"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -176,7 +176,7 @@
         "0s"
       ],
       "x-request-id": [
-        "req_b055800fafd04d4b917b7f051d79c916"
+        "req_0c34b766e4d34a918bad9ab9873188b4"
       ]
     },
     "status": 200

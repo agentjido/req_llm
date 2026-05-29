@@ -1,57 +1,58 @@
 {
+  "model_spec": "openai:gpt-4o",
+  "provider": "openai",
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjo1MDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiR2VuZXJhdGUgYSBzb2Z0d2FyZSBlbmdpbmVlciBwcm9maWxlIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiZ3B0LTRvIiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjAsInRvb2xfY2hvaWNlIjp7ImZ1bmN0aW9uIjp7Im5hbWUiOiJzdHJ1Y3R1cmVkX291dHB1dCJ9LCJ0eXBlIjoiZnVuY3Rpb24ifSwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2VuZXJhdGUgc3RydWN0dXJlZCBvdXRwdXQgbWF0Y2hpbmcgdGhlIHByb3ZpZGVkIHNjaGVtYSIsIm5hbWUiOiJzdHJ1Y3R1cmVkX291dHB1dCIsInBhcmFtZXRlcnMiOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7ImFnZSI6eyJkZXNjcmlwdGlvbiI6IlBlcnNvbidzIGFnZSBpbiB5ZWFycyIsIm1pbmltdW0iOjEsInR5cGUiOiJpbnRlZ2VyIn0sIm5hbWUiOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBmdWxsIG5hbWUiLCJ0eXBlIjoic3RyaW5nIn0sIm9jY3VwYXRpb24iOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBqb2Igb3IgcHJvZmVzc2lvbiIsInR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImFnZSIsIm5hbWUiLCJvY2N1cGF0aW9uIl0sInR5cGUiOiJvYmplY3QifSwic3RyaWN0Ijp0cnVlfSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
+      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IkdlbmVyYXRlIGEgc29mdHdhcmUgZW5naW5lZXIgcHJvZmlsZSIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9XSwibWF4X291dHB1dF90b2tlbnMiOjUwMCwibW9kZWwiOiJncHQtNG8iLCJzdHJlYW0iOmZhbHNlLCJ0b29sX2Nob2ljZSI6eyJuYW1lIjoic3RydWN0dXJlZF9vdXRwdXQiLCJ0eXBlIjoiZnVuY3Rpb24ifSwidG9vbHMiOlt7ImRlc2NyaXB0aW9uIjoiR2VuZXJhdGUgc3RydWN0dXJlZCBvdXRwdXQgbWF0Y2hpbmcgdGhlIHByb3ZpZGVkIHNjaGVtYSIsIm5hbWUiOiJzdHJ1Y3R1cmVkX291dHB1dCIsInBhcmFtZXRlcnMiOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7ImFnZSI6eyJkZXNjcmlwdGlvbiI6IlBlcnNvbidzIGFnZSBpbiB5ZWFycyIsIm1pbmltdW0iOjEsInR5cGUiOiJpbnRlZ2VyIn0sIm5hbWUiOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBmdWxsIG5hbWUiLCJ0eXBlIjoic3RyaW5nIn0sIm9jY3VwYXRpb24iOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBqb2Igb3IgcHJvZmVzc2lvbiIsInR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImFnZSIsIm5hbWUiLCJvY2N1cGF0aW9uIl0sInR5cGUiOiJvYmplY3QifSwic3RyaWN0Ijp0cnVlLCJ0eXBlIjoiZnVuY3Rpb24ifV19"
     },
     "canonical_json": {
-      "max_tokens": 500,
-      "messages": [
+      "input": [
         {
-          "content": "Generate a software engineer profile",
+          "content": [
+            {
+              "text": "Generate a software engineer profile",
+              "type": "input_text"
+            }
+          ],
           "role": "user"
         }
       ],
+      "max_output_tokens": 500,
       "model": "gpt-4o",
-      "seed": 42,
       "stream": false,
-      "temperature": 0.0,
       "tool_choice": {
-        "function": {
-          "name": "structured_output"
-        },
+        "name": "structured_output",
         "type": "function"
       },
       "tools": [
         {
-          "function": {
-            "description": "Generate structured output matching the provided schema",
-            "name": "structured_output",
-            "parameters": {
-              "additionalProperties": false,
-              "properties": {
-                "age": {
-                  "description": "Person's age in years",
-                  "minimum": 1,
-                  "type": "integer"
-                },
-                "name": {
-                  "description": "Person's full name",
-                  "type": "string"
-                },
-                "occupation": {
-                  "description": "Person's job or profession",
-                  "type": "string"
-                }
+          "description": "Generate structured output matching the provided schema",
+          "name": "structured_output",
+          "parameters": {
+            "additionalProperties": false,
+            "properties": {
+              "age": {
+                "description": "Person's age in years",
+                "minimum": 1,
+                "type": "integer"
               },
-              "required": [
-                "age",
-                "name",
-                "occupation"
-              ],
-              "type": "object"
+              "name": {
+                "description": "Person's full name",
+                "type": "string"
+              },
+              "occupation": {
+                "description": "Person's job or profession",
+                "type": "string"
+              }
             },
-            "strict": true
+            "required": [
+              "age",
+              "name",
+              "occupation"
+            ],
+            "type": "object"
           },
+          "strict": true,
           "type": "function"
         }
       ]
@@ -65,62 +66,119 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ]
     },
     "method": "post",
-    "url": "https://api.openai.com/v1/chat/completions"
+    "url": "https://api.openai.com/v1/responses"
   },
   "response": {
     "body": {
-      "choices": [
+      "background": false,
+      "text": {
+        "format": {
+          "type": "text"
+        },
+        "verbosity": "medium"
+      },
+      "moderation": null,
+      "top_logprobs": 0,
+      "previous_response_id": null,
+      "tool_choice": {
+        "name": "structured_output",
+        "type": "function"
+      },
+      "service_tier": "default",
+      "status": "completed",
+      "tools": [
         {
-          "finish_reason": "stop",
-          "index": 0,
-          "logprobs": null,
-          "message": {
-            "annotations": [],
-            "content": null,
-            "refusal": null,
-            "role": "assistant",
-            "tool_calls": [
-              {
-                "function": {
-                  "arguments": "{\"age\":30,\"name\":\"Alex Johnson\",\"occupation\":\"Software Engineer\"}",
-                  "name": "structured_output"
-                },
-                "id": "call_jpI0xd0V9KFsXaybhXhVwEQC",
-                "type": "function"
+          "description": "Generate structured output matching the provided schema",
+          "name": "structured_output",
+          "parameters": {
+            "additionalProperties": false,
+            "properties": {
+              "age": {
+                "description": "Person's age in years",
+                "minimum": 1,
+                "type": "integer"
+              },
+              "name": {
+                "description": "Person's full name",
+                "type": "string"
+              },
+              "occupation": {
+                "description": "Person's job or profession",
+                "type": "string"
               }
-            ]
-          }
+            },
+            "required": [
+              "age",
+              "name",
+              "occupation"
+            ],
+            "type": "object"
+          },
+          "strict": true,
+          "type": "function"
         }
       ],
-      "created": 1762105818,
-      "id": "chatcmpl-CXWVWrtNCstcjJrCmgnU49j6avMOi",
+      "id": "resp_08a4faa2f3ff78b0006a19da46f61481968d42e0024f43407f",
+      "temperature": 1.0,
+      "max_output_tokens": 500,
+      "user": null,
+      "frequency_penalty": 0.0,
+      "error": null,
       "model": "gpt-4o-2024-08-06",
-      "object": "chat.completion",
-      "service_tier": "default",
-      "system_fingerprint": "fp_a788c5aef0",
       "usage": {
-        "completion_tokens": 15,
-        "completion_tokens_details": {
-          "accepted_prediction_tokens": 0,
-          "audio_tokens": 0,
-          "reasoning_tokens": 0,
-          "rejected_prediction_tokens": 0
-        },
-        "prompt_tokens": 93,
-        "prompt_tokens_details": {
-          "audio_tokens": 0,
+        "input_tokens": 87,
+        "input_tokens_details": {
           "cached_tokens": 0
         },
-        "total_tokens": 108
-      }
+        "output_tokens": 16,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 103
+      },
+      "safety_identifier": null,
+      "object": "response",
+      "parallel_tool_calls": true,
+      "output": [
+        {
+          "arguments": "{\"name\":\"Jordan Smith\",\"age\":29,\"occupation\":\"Software Engineer\"}",
+          "call_id": "call_3dhBO3EKU0FT7oxwcWeiCaEC",
+          "id": "fc_08a4faa2f3ff78b0006a19da47a7a08196881fdc6e02b8b5a8",
+          "name": "structured_output",
+          "status": "completed",
+          "type": "function_call"
+        }
+      ],
+      "instructions": null,
+      "store": true,
+      "presence_penalty": 0.0,
+      "incomplete_details": null,
+      "reasoning": {
+        "context": null,
+        "effort": null,
+        "summary": null
+      },
+      "completed_at": 1780079175,
+      "truncation": "disabled",
+      "top_p": 1.0,
+      "billing": {
+        "payer": "developer"
+      },
+      "prompt_cache_retention": "in_memory",
+      "metadata": {},
+      "prompt_cache_key": null,
+      "created_at": 1780079174,
+      "max_tool_calls": null
     },
     "headers": {
       "access-control-expose-headers": [
-        "X-Request-ID"
+        "X-Request-ID",
+        "CF-Ray",
+        "CF-Ray"
       ],
       "alt-svc": [
         "h3=\":443\"; ma=86400"
@@ -129,7 +187,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "998579339d4af83e-ORD"
+        "a0378bdb2b0690c6-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -138,13 +196,11 @@
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:50:18 GMT"
+        "Fri, 29 May 2026 18:26:16 GMT"
       ],
-      "openai-organization": [
-        "epic-creative-sogybe"
-      ],
+      "openai-organization": "[REDACTED:openai-organization]",
       "openai-processing-ms": [
-        "241"
+        "1205"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -155,10 +211,7 @@
       "server": [
         "cloudflare"
       ],
-      "set-cookie": [
-        "__cf_bm=NBWUrnOHxG6F8LZkUviud40dQEp3gyNvHFuDJ.5wyFQ-1762105818-1.0.1.1-_nlvTGG7rbadEVF4IziJx6918989duBn6R5.0bZdzMshnMBpsMOf0sVnBNOSSW2uzh8FwQi5MWRPG7V.bwE02cwWTbe8cKE67jY8In7Xjd8; path=/; expires=Sun, 02-Nov-25 18:20:18 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=OIGxDBZjpeMlaZPiyefJebH1wMsfedNaYnO0Z1rCN1M-1762105818481-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
-      ],
+      "set-cookie": "[REDACTED:set-cookie]",
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
       ],
@@ -167,12 +220,6 @@
       ],
       "x-content-type-options": [
         "nosniff"
-      ],
-      "x-envoy-upstream-service-time": [
-        "254"
-      ],
-      "x-openai-proxy-wasm": [
-        "v0.1"
       ],
       "x-ratelimit-limit-requests": [
         "10000"
@@ -184,18 +231,19 @@
         "9999"
       ],
       "x-ratelimit-remaining-tokens": [
-        "1999989"
+        "1999696"
       ],
       "x-ratelimit-reset-requests": [
         "6ms"
       ],
       "x-ratelimit-reset-tokens": [
-        "0s"
+        "9ms"
       ],
       "x-request-id": [
-        "req_78f443591ec0400993ae7e0502a4fc02"
+        "req_aa2acb138dfb404294dda721ca1d8b4b"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

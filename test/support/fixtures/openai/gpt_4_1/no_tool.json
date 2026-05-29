@@ -1,7 +1,9 @@
 {
+  "model_spec": "openai:gpt-4.1",
+  "provider": "openai",
   "request": {
     "body": {
-      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IlRlbGwgbWUgYSBqb2tlIGFib3V0IGNhdHMiLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjozMjc2LCJtb2RlbCI6ImdwdC00LjEiLCJzdHJlYW0iOmZhbHNlLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifSwic3RyaWN0Ijp0cnVlfSwibmFtZSI6ImdldF93ZWF0aGVyIiwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
+      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IlRlbGwgbWUgYSBqb2tlIGFib3V0IGNhdHMiLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjozMjc2LCJtb2RlbCI6ImdwdC00LjEiLCJzdHJlYW0iOmZhbHNlLCJ0b29scyI6W3siZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9fSwidHlwZSI6Im9iamVjdCJ9LCJzdHJpY3QiOmZhbHNlLCJ0eXBlIjoiZnVuY3Rpb24ifV19"
     },
     "canonical_json": {
       "input": [
@@ -20,23 +22,18 @@
       "stream": false,
       "tools": [
         {
-          "function": {
-            "description": "Get current weather information for a location",
-            "name": "get_weather",
-            "parameters": {
-              "properties": {
-                "location": {
-                  "type": "string"
-                }
-              },
-              "required": [
-                "location"
-              ],
-              "type": "object"
-            },
-            "strict": true
-          },
+          "description": "Get current weather information for a location",
           "name": "get_weather",
+          "parameters": {
+            "additionalProperties": false,
+            "properties": {
+              "location": {
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "strict": false,
           "type": "function"
         }
       ]
@@ -50,7 +47,7 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ]
     },
     "method": "post",
@@ -59,19 +56,56 @@
   "response": {
     "body": {
       "background": false,
-      "billing": {
-        "payer": "developer"
+      "text": {
+        "format": {
+          "type": "text"
+        },
+        "verbosity": "medium"
       },
-      "created_at": 1762105817,
-      "error": null,
-      "id": "resp_05548dd26328863f00690799d98994819097102429e448758d",
-      "incomplete_details": null,
-      "instructions": null,
+      "moderation": null,
+      "top_logprobs": 0,
+      "previous_response_id": null,
+      "tool_choice": "auto",
+      "service_tier": "default",
+      "status": "completed",
+      "tools": [
+        {
+          "description": "Get current weather information for a location",
+          "name": "get_weather",
+          "parameters": {
+            "additionalProperties": false,
+            "properties": {
+              "location": {
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "strict": false,
+          "type": "function"
+        }
+      ],
+      "id": "resp_0f5f563475344c12006a19db866a7081918a06a9106446de4b",
+      "temperature": 1.0,
       "max_output_tokens": 3276,
-      "max_tool_calls": null,
-      "metadata": {},
+      "user": null,
+      "frequency_penalty": 0.0,
+      "error": null,
       "model": "gpt-4.1-2025-04-14",
+      "usage": {
+        "input_tokens": 45,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens": 29,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 74
+      },
+      "safety_identifier": null,
       "object": "response",
+      "parallel_tool_calls": true,
       "output": [
         {
           "content": [
@@ -82,63 +116,39 @@
               "type": "output_text"
             }
           ],
-          "id": "msg_05548dd26328863f00690799db2e708190a487ba50b0b3e770",
+          "id": "msg_0f5f563475344c12006a19db86c1608191a063bf2fbc38e285",
           "role": "assistant",
           "status": "completed",
           "type": "message"
         }
       ],
-      "parallel_tool_calls": true,
-      "previous_response_id": null,
-      "prompt_cache_key": null,
-      "prompt_cache_retention": null,
+      "instructions": null,
+      "store": true,
+      "presence_penalty": 0.0,
+      "incomplete_details": null,
       "reasoning": {
+        "context": null,
         "effort": null,
         "summary": null
       },
-      "safety_identifier": null,
-      "service_tier": "default",
-      "status": "completed",
-      "store": true,
-      "temperature": 1.0,
-      "text": {
-        "format": {
-          "type": "text"
-        },
-        "verbosity": "medium"
-      },
-      "tool_choice": "auto",
-      "tools": [
-        {
-          "description": null,
-          "name": "get_weather",
-          "parameters": {
-            "additionalProperties": false,
-            "properties": {},
-            "required": [],
-            "type": "object"
-          },
-          "strict": true,
-          "type": "function"
-        }
-      ],
-      "top_logprobs": 0,
-      "top_p": 1.0,
+      "completed_at": 1780079494,
       "truncation": "disabled",
-      "usage": {
-        "input_tokens": 31,
-        "input_tokens_details": {
-          "cached_tokens": 0
-        },
-        "output_tokens": 29,
-        "output_tokens_details": {
-          "reasoning_tokens": 0
-        },
-        "total_tokens": 60
+      "top_p": 1.0,
+      "billing": {
+        "payer": "developer"
       },
-      "user": null
+      "prompt_cache_retention": "in_memory",
+      "metadata": {},
+      "prompt_cache_key": null,
+      "created_at": 1780079494,
+      "max_tool_calls": null
     },
     "headers": {
+      "access-control-expose-headers": [
+        "X-Request-ID",
+        "CF-Ray",
+        "CF-Ray"
+      ],
       "alt-svc": [
         "h3=\":443\"; ma=86400"
       ],
@@ -146,7 +156,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "9985792f3ba4fa19-ORD"
+        "a03793a7ce5889f7-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -155,13 +165,11 @@
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:50:19 GMT"
+        "Fri, 29 May 2026 18:31:35 GMT"
       ],
-      "openai-organization": [
-        "epic-creative-sogybe"
-      ],
+      "openai-organization": "[REDACTED:openai-organization]",
       "openai-processing-ms": [
-        "2217"
+        "645"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -172,10 +180,7 @@
       "server": [
         "cloudflare"
       ],
-      "set-cookie": [
-        "__cf_bm=wLq79krlrdmF2TyA5O3KzLv9h4BvxQf8Iym3hmwcwPY-1762105819-1.0.1.1-IZJ2kPU6VPlPzQ1jFukKHEFK1.Y0Yq8eeAy50kDtue0aMz6rxL8FPjmZ4ZuoFakxvQn2qcFEzhf7x_GaRYC2Ofo1opvFgAlVz6ebcTUQHXA; path=/; expires=Sun, 02-Nov-25 18:20:19 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=RSKtUVh4vm2w1bPCvV.aW89kd7cdgvxu_2o7nWZB46k-1762105819774-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
-      ],
+      "set-cookie": "[REDACTED:set-cookie]",
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
       ],
@@ -184,9 +189,6 @@
       ],
       "x-content-type-options": [
         "nosniff"
-      ],
-      "x-envoy-upstream-service-time": [
-        "2222"
       ],
       "x-ratelimit-limit-requests": [
         "10000"
@@ -198,18 +200,19 @@
         "9999"
       ],
       "x-ratelimit-remaining-tokens": [
-        "1999752"
+        "2000000"
       ],
       "x-ratelimit-reset-requests": [
         "6ms"
       ],
       "x-ratelimit-reset-tokens": [
-        "7ms"
+        "0s"
       ],
       "x-request-id": [
-        "req_341b1d1dae114a0cbae8850b37657d4f"
+        "req_415f231b0da246f8834e53123682f4fb"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

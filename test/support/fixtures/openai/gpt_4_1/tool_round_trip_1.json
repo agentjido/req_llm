@@ -1,7 +1,9 @@
 {
+  "model_spec": "openai:gpt-4.1",
+  "provider": "openai",
   "request": {
     "body": {
-      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9XSwibWF4X291dHB1dF90b2tlbnMiOjMyNzYsIm1vZGVsIjoiZ3B0LTQuMSIsInN0cmVhbSI6ZmFsc2UsInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkFkZCB0d28gaW50ZWdlcnMiLCJuYW1lIjoiYWRkIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7ImEiOnsidHlwZSI6ImludGVnZXIifSwiYiI6eyJ0eXBlIjoiaW50ZWdlciJ9fSwicmVxdWlyZWQiOlsiYSIsImIiXSwidHlwZSI6Im9iamVjdCJ9LCJzdHJpY3QiOnRydWV9LCJuYW1lIjoiYWRkIiwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
+      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9XSwibWF4X291dHB1dF90b2tlbnMiOjMyNzYsIm1vZGVsIjoiZ3B0LTQuMSIsInN0cmVhbSI6ZmFsc2UsInRvb2xzIjpbeyJkZXNjcmlwdGlvbiI6IkFkZCB0d28gaW50ZWdlcnMiLCJuYW1lIjoiYWRkIiwicGFyYW1ldGVycyI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnsiYSI6eyJ0eXBlIjoiaW50ZWdlciJ9LCJiIjp7InR5cGUiOiJpbnRlZ2VyIn19LCJ0eXBlIjoib2JqZWN0In0sInN0cmljdCI6ZmFsc2UsInR5cGUiOiJmdW5jdGlvbiJ9XX0="
     },
     "canonical_json": {
       "input": [
@@ -20,27 +22,21 @@
       "stream": false,
       "tools": [
         {
-          "function": {
-            "description": "Add two integers",
-            "name": "add",
-            "parameters": {
-              "properties": {
-                "a": {
-                  "type": "integer"
-                },
-                "b": {
-                  "type": "integer"
-                }
-              },
-              "required": [
-                "a",
-                "b"
-              ],
-              "type": "object"
-            },
-            "strict": true
-          },
+          "description": "Add two integers",
           "name": "add",
+          "parameters": {
+            "additionalProperties": false,
+            "properties": {
+              "a": {
+                "type": "integer"
+              },
+              "b": {
+                "type": "integer"
+              }
+            },
+            "type": "object"
+          },
+          "strict": false,
           "type": "function"
         }
       ]
@@ -54,7 +50,7 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ]
     },
     "method": "post",
@@ -63,80 +59,96 @@
   "response": {
     "body": {
       "background": false,
-      "billing": {
-        "payer": "developer"
-      },
-      "created_at": 1762105825,
-      "error": null,
-      "id": "resp_0cab9c20bd329c3100690799e16c5081909a10aaaa67735b72",
-      "incomplete_details": null,
-      "instructions": null,
-      "max_output_tokens": 3276,
-      "max_tool_calls": null,
-      "metadata": {},
-      "model": "gpt-4.1-2025-04-14",
-      "object": "response",
-      "output": [
-        {
-          "arguments": "{}",
-          "call_id": "call_Nr6WjVoamTuoT15SqXP7y9JX",
-          "id": "fc_0cab9c20bd329c3100690799e2354c8190b0b29c849f6d4a0d",
-          "name": "add",
-          "status": "completed",
-          "type": "function_call"
-        }
-      ],
-      "parallel_tool_calls": true,
-      "previous_response_id": null,
-      "prompt_cache_key": null,
-      "prompt_cache_retention": null,
-      "reasoning": {
-        "effort": null,
-        "summary": null
-      },
-      "safety_identifier": null,
-      "service_tier": "default",
-      "status": "completed",
-      "store": true,
-      "temperature": 1.0,
       "text": {
         "format": {
           "type": "text"
         },
         "verbosity": "medium"
       },
+      "moderation": null,
+      "top_logprobs": 0,
+      "previous_response_id": null,
       "tool_choice": "auto",
+      "service_tier": "default",
+      "status": "completed",
       "tools": [
         {
-          "description": null,
+          "description": "Add two integers",
           "name": "add",
           "parameters": {
             "additionalProperties": false,
-            "properties": {},
-            "required": [],
+            "properties": {
+              "a": {
+                "type": "integer"
+              },
+              "b": {
+                "type": "integer"
+              }
+            },
             "type": "object"
           },
-          "strict": true,
+          "strict": false,
           "type": "function"
         }
       ],
-      "top_logprobs": 0,
-      "top_p": 1.0,
-      "truncation": "disabled",
+      "id": "resp_0354ec10f6bf0b41006a19db8519f481a2b5e6362d23fef173",
+      "temperature": 1.0,
+      "max_output_tokens": 3276,
+      "user": null,
+      "frequency_penalty": 0.0,
+      "error": null,
+      "model": "gpt-4.1-2025-04-14",
       "usage": {
-        "input_tokens": 49,
+        "input_tokens": 63,
         "input_tokens_details": {
           "cached_tokens": 0
         },
-        "output_tokens": 10,
+        "output_tokens": 18,
         "output_tokens_details": {
           "reasoning_tokens": 0
         },
-        "total_tokens": 59
+        "total_tokens": 81
       },
-      "user": null
+      "safety_identifier": null,
+      "object": "response",
+      "parallel_tool_calls": true,
+      "output": [
+        {
+          "arguments": "{\"a\":2,\"b\":3}",
+          "call_id": "call_w04lsLARiRpiqlHC07TL4Cnt",
+          "id": "fc_0354ec10f6bf0b41006a19db85749881a29062593bc451b3e2",
+          "name": "add",
+          "status": "completed",
+          "type": "function_call"
+        }
+      ],
+      "instructions": null,
+      "store": true,
+      "presence_penalty": 0.0,
+      "incomplete_details": null,
+      "reasoning": {
+        "context": null,
+        "effort": null,
+        "summary": null
+      },
+      "completed_at": 1780079493,
+      "truncation": "disabled",
+      "top_p": 1.0,
+      "billing": {
+        "payer": "developer"
+      },
+      "prompt_cache_retention": "in_memory",
+      "metadata": {},
+      "prompt_cache_key": null,
+      "created_at": 1780079493,
+      "max_tool_calls": null
     },
     "headers": {
+      "access-control-expose-headers": [
+        "X-Request-ID",
+        "CF-Ray",
+        "CF-Ray"
+      ],
       "alt-svc": [
         "h3=\":443\"; ma=86400"
       ],
@@ -144,7 +156,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "998579607db4fa19-ORD"
+        "a037939f8fe689f7-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -153,13 +165,11 @@
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:50:26 GMT"
+        "Fri, 29 May 2026 18:31:33 GMT"
       ],
-      "openai-organization": [
-        "epic-creative-sogybe"
-      ],
+      "openai-organization": "[REDACTED:openai-organization]",
       "openai-processing-ms": [
-        "967"
+        "634"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -170,10 +180,7 @@
       "server": [
         "cloudflare"
       ],
-      "set-cookie": [
-        "__cf_bm=vBUhA3UcEO2a1.160fgeop.ZZAExg.IwjbyKLVW3QLc-1762105826-1.0.1.1-Pisid1NZTdON2aXJZCrulPylww4UjLS5zXXa5wX8_1YVeQDMqsKCJyqgGITG7yV2Sm3S3j_SFrgv2xj5Rd.1cKspyEjrsx4NG0zEDS7ve.Q; path=/; expires=Sun, 02-Nov-25 18:20:26 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=eQeu_7fxQaMm6wGvNSQJ3Gpg3Dw2AE0giKEtBGTJjvA-1762105826397-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
-      ],
+      "set-cookie": "[REDACTED:set-cookie]",
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
       ],
@@ -182,9 +189,6 @@
       ],
       "x-content-type-options": [
         "nosniff"
-      ],
-      "x-envoy-upstream-service-time": [
-        "972"
       ],
       "x-ratelimit-limit-requests": [
         "10000"
@@ -196,18 +200,19 @@
         "9999"
       ],
       "x-ratelimit-remaining-tokens": [
-        "1999734"
+        "2000000"
       ],
       "x-ratelimit-reset-requests": [
         "6ms"
       ],
       "x-ratelimit-reset-tokens": [
-        "7ms"
+        "0s"
       ],
       "x-request-id": [
-        "req_9f5eb401380a4a769f8004b96e9f7745"
+        "req_149eec737eb841d29043831eef756138"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

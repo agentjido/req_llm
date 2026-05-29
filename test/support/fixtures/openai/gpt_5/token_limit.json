@@ -1,9 +1,14 @@
 {
+  "model_spec": "openai:gpt-5",
+  "provider": "openai",
   "request": {
     "body": {
-      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IldyaXRlIGEgdmVyeSBsb25nIHN0b3J5IGFib3V0IGRyYWdvbnMgYW5kIGFkdmVudHVyZXMiLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjoxMDAsIm1vZGVsIjoiZ3B0LTUiLCJzdHJlYW0iOmZhbHNlfQ=="
+      "b64": "eyJpbmNsdWRlIjpbInJlYXNvbmluZy5lbmNyeXB0ZWRfY29udGVudCJdLCJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IldyaXRlIGEgdmVyeSBsb25nIHN0b3J5IGFib3V0IGRyYWdvbnMgYW5kIGFkdmVudHVyZXMiLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjozMDAwLCJtb2RlbCI6ImdwdC01IiwicmVhc29uaW5nIjp7ImVmZm9ydCI6ImxvdyJ9LCJzdHJlYW0iOmZhbHNlfQ=="
     },
     "canonical_json": {
+      "include": [
+        "reasoning.encrypted_content"
+      ],
       "input": [
         {
           "content": [
@@ -15,8 +20,11 @@
           "role": "user"
         }
       ],
-      "max_output_tokens": 100,
+      "max_output_tokens": 3000,
       "model": "gpt-5",
+      "reasoning": {
+        "effort": "low"
+      },
       "stream": false
     },
     "headers": {
@@ -28,7 +36,7 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ]
     },
     "method": "post",
@@ -37,65 +45,91 @@
   "response": {
     "body": {
       "background": false,
-      "billing": {
-        "payer": "developer"
-      },
-      "created_at": 1759698860,
-      "error": null,
-      "id": "resp_01a17079e25286970068e2dfacb3888196b352afbabddcae34",
-      "incomplete_details": {
-        "reason": "max_output_tokens"
-      },
-      "instructions": null,
-      "max_output_tokens": 100,
-      "max_tool_calls": null,
-      "metadata": {},
-      "model": "gpt-5-2025-08-07",
-      "object": "response",
-      "output": [
-        {
-          "id": "rs_01a17079e25286970068e2dfad4f1081968e23dcf8d3151e5b",
-          "summary": [],
-          "type": "reasoning"
-        }
-      ],
-      "parallel_tool_calls": true,
-      "previous_response_id": null,
-      "prompt_cache_key": null,
-      "reasoning": {
-        "effort": "medium",
-        "summary": null
-      },
-      "safety_identifier": null,
-      "service_tier": "default",
-      "status": "incomplete",
-      "store": true,
-      "temperature": 1.0,
       "text": {
         "format": {
           "type": "text"
         },
         "verbosity": "medium"
       },
-      "tool_choice": "auto",
-      "tools": [],
+      "moderation": null,
       "top_logprobs": 0,
-      "top_p": 1.0,
-      "truncation": "disabled",
+      "previous_response_id": null,
+      "tool_choice": "auto",
+      "service_tier": "default",
+      "status": "incomplete",
+      "tools": [],
+      "id": "resp_0def6921f3779b58006a19dd9a8a6881a39c6d73359a7f8ac1",
+      "temperature": 1.0,
+      "max_output_tokens": 3000,
+      "user": null,
+      "frequency_penalty": 0.0,
+      "error": null,
+      "model": "gpt-5-2025-08-07",
       "usage": {
         "input_tokens": 15,
         "input_tokens_details": {
           "cached_tokens": 0
         },
-        "output_tokens": 64,
+        "output_tokens": 3000,
         "output_tokens_details": {
-          "reasoning_tokens": 64
+          "reasoning_tokens": 256
         },
-        "total_tokens": 79
+        "total_tokens": 3015
       },
-      "user": null
+      "safety_identifier": null,
+      "object": "response",
+      "parallel_tool_calls": true,
+      "output": [
+        {
+          "encrypted_content": "gAAAAABqGd3SKSBQqv4qh_lPgCLRBKeVswudUIemzKokAoibGE8L8XGY_E5V5vfqbEWukGBzHoauHX4cY1BwV3F-nKaTRVd0my2BYm5YXRDbQT05GLsH3oDHUy6zPIek6PGQTXZH11i3FrtLFC4VcLPoo31a04a0clYysBzkJgUlKZNHOD3VM5PB2if5Mta9WFSkQUtnMXBaIl3kx_NSsS1HBi2qUNtbfYwZhS4hTXOIwac2V59oocsh8aP6y7kHukoNY26tfbRS295vHuDYQYhnwqPKdaHLfWf2wTC9q8nyyM7OCFh8CGj9P43aOB-PPDRrRJgOeBeZI5cJ6Wt7F7b8OgIJjKeADdXIdN3KhXQ9XJymjCAGHOr0jN-KWtxEqyO_QbbEPswo1ASrRufs9dcOQXBgmfDTbdAjnvyGdSI6xvSBRIdy1iy-yzPHZ0j7X7mnh_XUSm9AxKiEG_6rQPnSVlvx-XbvZaj2JYGX8CNovAKdQErXoNdcprYt_ePIgsTL7gVSmwseFe-9mB6VSrA1IMNJFI9l6K7F1i2Ng5b8lwbfMwoHxomAiri2PQyyYIqrA3boBgMojYvpNglXJpIY1xn100uWEYimLFL5TjorfpmjvHOfIu16Sgk6CqdB7PdpkRvpXIyHE4jlfjtuqauotvwibLKfvkT_5Kv_GwvgMc19wpgUnnRjRwtuESLRMDM4ChsMMolhdzW6XDnzeYV0uXsWeao49ZZ3eDGcdBTyxVgSAGgHdXlJuMF_hAjmd0Jwn1QFeO8gBv8SX61w-ZJb3nSqpCQNbFVTv08woBvwo5Mtf3wJlfba8QxD9FkmpJU7xTfRT5gshqYRp4Vy9BkoKD7WFte8dadCUehkhkIQN7sfE1zjRb7TcD5FI1V0B_rmor-PDp0efK--Jst86Bs8cw9bKg0gS6FhGSewTS2N7y8Q-wgbgwBnNj3PF3FPzb5Wa53kPnbyD8Zd-dgWm-iqG_N7o_YRSNAFU3vgh_c_R3vVxoIeTPfFATuC_ZSi5KiVSG_XPK09dGXQPAWtGnsLO7o5YEk8GIfLblnNzc4wxqrc4XhkyCwaMsB3a94dwgtUXJN2Zvbz6TYDWWjaauKhOvfiZ8MmUQlEzkOaocQpfrDCMOvBLOTv4QwFOfs9H05afC9CaGHVZP7illTvAHSzimewd8ODIxvCoN91yhO6nkAWqVa6ErJ5PxNQ0PP_jBapIkJukZFwK2WCkT3cXLeyu2zHGqe87PG_Qwksbu1KkaEguJWo77wAEqZTHa94S-ir09-oPNpmMroINwbwkUlzg-MKzqWvQP48q4nbKVDZCj2q7nUzTMvM1FX8nWYTaVcVII70t06EXy7OKaEpmNNV-dQxNPIfXC6G5TyIcOvNNEmEN7TD2W61WWAG7fjn8riKYiJGHcSKymJVM4GFtgAchyBQH5rDm8RiwANZNY54Ej41AvR3x478mqNoZEs8GsJ_IdumGhOtg2TIwKJ4a6sMqXV5hM6c1vIEWD-gI1Af2Ci_1UwpuMDJtg8JkBl4y-OHXCHyTKTKcdDxCybOwrUI4JDknuV83nuqAJjHzQNMSomWw61Oqtnjyvwb_OETEGfgWz-vBQJ5Zaz_QDlpQGXOsLq_44VeSK7cghIe1sPm6GkR7NtNSzEup1kqQUQwwYnMT0VZdDt6dil_F-Ebr1fxemyAFQLUC0D_OhtHkFg-_lw0d8FMDLzew1Xy7byHGzAkJyj1usOUzG6ssglI6spQRSjRtaoamU3_F5cq_tyoTnqdYA5sI8nq_EN0ySZ--m57eteOi4p4zIyM6rhCLD5Buvs5R39-8CaXCkC4rlYrKnE5Mkk92INFVJsAeq5YsP_LqvOWuSmkNO3ZBEdHt2dBg3J_Lk7tTtFEzE7HbqfMPsG3dNH4hrwzRfLIsHxCryuoDM9bJf361JYNfA5OokURl3g9snpLpxzv9eQiNpDS0RuA3HVoQOhF_neheMYNwKn1q81Je0UWP2zsFgzKXmdLVcnqqBzX0f792AIkJZnBynyA-nMsFqa-XHA90JcfojZQ4UWGyuWiRjzI8N-zdvjc1TRuMHimuEd8Iqdknjo7P8pGhswxyW5NoKjzocmFIky8Tctut7mJdKKKwnK-tR07MkE92wP5sTv418MlG8HZeFQq2TDOXw3598Gf-i7H6BU5ReYN_Jvp-Axu8wVNNdm6V4GcXGMyQLqdBFsy3xNbxsWRKw30rlqWOHRytJ-YFj-R4ALUJUADpNKOr5ssIdlq3t-EniLWNiFc014wbf0EqZY6kTmZ3j3Fqz38NaF_1K2lwR_LNMcHCPbqHmN5cGsNKyDyUprNMjQPyLk5CPpeyyvvLus9oTNqvVb_HyWngBYVkZ_Rq8-z--b4xuCwYhFsUCzFhaJumc3pnUfT4wifCZmESXAbeqdQ_QJHw5zO91iOKPTX8l91hTisIuDsF3miWmH1SOd-riuJHB9Zb3GoU36W5vyIP24Bv9D0XfuSX8_NYF9ZsGixGAARWwpj06hr0Ftd6ejjs_ixoXf6yeiwa4rDvKCWYQTXQjSv6YMlsf1AnLbKU1Q9Qb0R14cNzWLcnma9UjWL5N5q20M2PRpEUfogPmen4h_1urAmp1qiwR2UcZsAye1sPyRKheromzrMnZAEfYJSYDdCCK6E9BoEK5Kno5dVZA4nkvFmOdWr9Uj2IaC09VxV9FfegeiITDMFhm8hxPw4JXZ2QNn1r9M8Fhmovsbrp8s=",
+          "id": "rs_0def6921f3779b58006a19dd9b728081a397922b0f4af5b744",
+          "summary": [],
+          "type": "reasoning"
+        },
+        {
+          "content": [
+            {
+              "annotations": [],
+              "logprobs": [],
+              "text": "On the night that the green star fell, the valley’s sheep panicked and the marshlights rose from the reeds like a hundred ghostly lanterns. Children woke from their cots insisting they heard a low song running under the earth, old men swore they smelled iron and rain, and every bird in the cherry orchards took flight at once and went shrieking in the direction of the mountains.\n\nLio sat up in his loft, heart thundering. The old rafters thrummed around him as though the house itself had a heartbeat. He swung his legs over the side of the bed, and the hair on his arms stood on end as somewhere far away, beneath strata of granite and time, something gave a single, resounding knock, as big as the sky.\n\n“Not again,” his grandmother muttered downstairs, and Lio scrambled down the ladder just in time to catch the kettle before it boiled over.\n\nHis grandmother, Mora, was already wrapping a shawl around her shoulders and reaching for the ladder that led up to the loft above the hearth. Most folks’ hearth-lofts were for drying herbs. Theirs hid a trunk bound in iron bands. Lio had never seen it open. Mora had eyes only for that trunk now, and he said, too quickly, “I’ll go see to the sheep.”\n\n“Leave them to Harn. He’s got his dogs. There are things in these hills that will not be soothed by a shepherd’s whistle.” Mora’s fingers were steady on the trunk’s lock, but Lio could hear the tremor in her voice. She had stories, his grandmother: about kings who kissed their blades for luck, about trees so old they remembered their first seeds, about dragons like stormclouds strapped with thunder. She also had silences, and they stretched longest around this trunk.\n\nThe lock turned. Inside, on velvet black as a moonless bog, lay a folded banner, a rolled leather case, a palm-sized disc of hammered gold, and a length of chain with a single link of blue-green metal that seemed to drink the light: a dragon-link. Lio had seen pictures: bonds forged from star-metals to seal pacts between human and dragon. But those were from another age. Dragons belonged to Mora’s stories the way thunder belonged to a painting of a storm.\n\n“You think I didn’t know you were listening?” Mora asked without looking up. “You think I missed the way your feet go quiet on the ladder when I tell the good parts?”\n\nHe’d never known how to answer questions like that.\n\nShe lifted the coin and the chain. The coin’s face had been rubbed almost smooth by countless thumbs, but the image of a wing, unfurled and tipped with fire, still showed. “The earth-song isn’t for us. It will pass, as all songs do,” Mora said. But her thumb pressed the wing and her eyes were not on him. They were on the door. On the night. On the silence gathering above the mountains beyond the orchard where the birds had gone.\n\n“Put your boots on,” she said. “We’re going to the peak of Old Bitter.”\n\n“Now?”\n\n“Now.”\n\n“And the sheep?”\n\n“Harn.”\n\n“And if he asks—”\n\n“If he asks, tell him I’m done pretending the world is not singing.”\n\nThey walked out into wind sweet with plums and river-mud, shoes finding the paths Mora’s feet had memorized decades ago. Above them, the green star still glowed faintly where it had scored its line across the sky. It hadn’t fallen. It had slowed. It had taken its time.\n\nOld Bitter was the oldest mountain in the valley’s mind. He wore a cap of cloud the color of old iron and kneeled his knee into the place where three rivers met like a king leaning into his map. The village boys climbed his knees on summer days and swore they had touched the cloud-cap. Mora and Lio took his goat-paths, more careful, following cairns that had been there before Mora’s mother’s mother had breathed her first.\n\nThe mountain breathed too. The wind beat its heart. Up there, the world’s noises seem to separate into layers. The faint hiss of grasses rolled one way, the distant rush of water another, and somewhere beneath those, beneath rock itself, the same resonant hum Lio had heard in his bed—the earth-song, a long single note that opened like a door to something deeper.\n\nThey reached the spur the old maps called Dragon Crown just as the dull green of dawn bellied up behind the teeth of the far range. Crows sketched themselves along the ridge. The air tasted of rain and stone and old, old smoke, and Mora took the dragon-link and held it out to the wind.\n\n“Old friend,” she said.\n\nAfter a time, thirty breaths or sixty, the wind changed. It carried instead a taste like copper on the tongue and the smell of a forge hot enough to blur the air. Something moved in the cloud-cap. Lio felt it like heat lapping the back of his neck. He turned, and the silhouette broke from the cloud like a second dawn rising.\n\nIts scales were the color of wet ash shot with quicksilver, its wings webbed like opal. It spilled from the cloud, folds of itself unfolding and unfolding until Lio could not remember if he had ever thought of dragons as small things. It did not roar. The wind bent around its passing with a brief, astonished cry.\n\nIt was singing.\n\nLio did not know if it made sound in the human range at all, because what he heard was inside his bones. The song had a name curled around it, but he could not grasp it. Mora could. “By the broken spur and the oleander, by the spilled milk on the kitchen floor,” she said, smiling through tears, as if any of that meant anything to anyone but her and the dragon.\n\n“Khatil,” she said, and the dragon bowed its horned head.\n\n“You’re late,” came Mora’s voice and another voice under and through it in Lio’s skull, dry as sage-fire and warm as an oven in winter. Lio staggered. The dragon’s gaze held him the way the sea looks at a pebble and then looked away, a mercy he felt like being allowed to keep breathing.\n\n“I got old,” Mora said mildly. “You were always late.”\n\n“You were always early,” said Khatil, and laughter flared like a chimney catching. Then that laughter went thin and long and a shadow crossed the dragon’s face. “The song woke me.”\n\n“The green star,” said Mora.\n\n“The keystone,” Khatil agreed.\n\nKeystone. Lio knew the word from archways. Pull one stone and the whole thing fell. “Keystone of what?” he said, though he had not been invited to speak.\n\nKhatil regarded him. Dragons didn’t blink the way humans did; their membranes slid over their eyes like thin slow clouds. Maybe that was why it felt so much like being kept. “Of the vault,” said Khatil. “Of the old bindings. Of the promises we heaped like firewood and forgot were hot.”\n\nMora tucked the chain into her palm, thumb on the coin. “Spit it out. He hears humming and will not forgive me for not translating.”\n\nKhatil sighed, a wind that sank to Lio’s knees. “Tell your boy the world holds more inside it than will fit. We made a place to keep the extra. A house of nowhere, a vault, a library with no doors, a stomach where we put all the hunger we did not have time for. Call it what you wish. We locked it with a keystone when the sea was still young. The keystone just fell. Or rather: it started to fall a thousand years ago and it is now inconveniently arriving.”\n\n“And now the vault opens,” Mora said.\n\n“The vault opens,” the dragon said, and something like fear—no, not fear; dragons were storms; storms did not fear—something like care braided with warning moved through that great voice. “And so will those who have been patient.”\n\nMora’s mouth tightened. “How many?”\n\nKhatil hung in the air on his vast wings and listened in a way that showed listening could be a thing with its own edges. “More than you can count on your hands and feet. Fewer than you could scatter with a single word.”\n\n“Which word?”\n\n“The one you forgot,” Khatil said gently. “The one your child will need, if he insists on asking questions to which he is not invited.”\n\nLio bristled and then, to his own surprise, laughed. “And if I am invited?”\n\n“Then you will not ask,” Khatil said, amused. “Because you will already know. Names are like that.”\n\n“What are we to do?” Mora asked, a human question abrading against an ancient problem.\n\n“Go into the vault,” Khatil said simply. “Be doors where there are none. Be mouths that do not swallow but speak. Be hinges that creak old syllables awake.”\n\n“We are old hinges,” Mora agreed, a line at the corner of her mouth that had not been there yesterday. “We will creak.”\n\n“You will sing,” Khatil said. “And you will not go alone.”\n\nFor a heartbeat, Lio thought Khatil meant them. Then the air changed again and the cloud on Bitter’s head disgorged a second body, smaller, the color of peat-dark water, with eyes the color of smoke. Her landing was less like sunrise and more like a cat deciding a fence could be a throne if arranged properly. Her name came off her like steam. “Brisha,” Mora said, and something in her loosened that Lio had not known was tight. “I haven’t heard you since the river froze so long it forgot it could move.”\n\n“The rivers remember when the frogs gossip at them and the frogs are never quiet,” Brisha said, a voice fast and dry and light as a swallow. She tipped her head at Lio. “This one has hands that like to take broken things apart to see how they broke.”\n\n“He has his mother’s hands,” Mora said softly. Brisha looked away, and the thousand small words under that silence did not need to be spoken for Lio to hear them.\n\nThey did not put it off till tea. Dragons were not ones for calendars and the vault did not keep hours. They left that day, when dawn was still in the middle of its long untying of night’s knots, and walked into the spine of the range. Khatil took the sky in long straight strokes. Brisha flew above and then ahead and then beside, like a thought that could not sit still. Mora walked, and Lio walked. “You could ride,” Khatil offered once, almost absentmindedly, without looking at Lio.\n\n“I’d fall off,” Lio said.\n\n“You would,” Khatil agreed, perhaps more pleased than he had any right to be.\n\nThey went through places Lio had known only as names. The Cut, where the land had been split like bread and frozen when the knife was two fingers into the loaf. The Ladders, shelves of stone stacked as if the sky had been persuaded to kneel for a while. On the third day, they crossed a plain of glass the color of bottle-bottoms, and Khatil told Lio, across the bright fractures underfoot, about the day a dragon had died there and had not caught her own fire in time. “She is still singing,” said Khatil, and if Lio listened, he could hear it: the thin high cry wind makes when it slices the edges of something too clean.\n\nThe vault was where three old faults met, and because old faults are proud and do not like to admit they met anywhere, it was hard, even standing there, to say where it was. Lio knew only that there was a place where the sun knelt like a supplicant at different hours than it should, that the air shook with quiet, that the smell of iron and rain was so strong it stained your teeth. Water did not fall right here; it swayed, reconsidered, gathered itself and asked questions.\n\nThis was where the keystone would pass through the air, Khatil said, not like a falling stone but like a book being slid back onto a shelf that refused to take it. This was where the lock would think about letting go and need persuading either way.\n\nMora drew out the coin and the link. Brisha lowered her head to look at them, her smoke eyes gone hard as flint. “I’d forgotten how small they are,” she said, with a tenderness Lio had seen in old men when they held their war medals—toward the smallness and the weight together.\n\nLio pulled the rolled leather case from the trunk. It held a flat ribbon of steel, notched at the top with teeth that were bevels of light and shadow rather than metal. The song of the ribbon set the hair up on his arms. “Is that a key",
+              "type": "output_text"
+            }
+          ],
+          "id": "msg_0def6921f3779b58006a19dda0e7dc81a3a28fecb944463bac",
+          "role": "assistant",
+          "status": "incomplete",
+          "type": "message"
+        }
+      ],
+      "instructions": null,
+      "store": true,
+      "presence_penalty": 0.0,
+      "incomplete_details": {
+        "reason": "max_output_tokens"
+      },
+      "reasoning": {
+        "context": "current_turn",
+        "effort": "low",
+        "summary": null
+      },
+      "completed_at": null,
+      "truncation": "disabled",
+      "top_p": 1.0,
+      "billing": {
+        "payer": "developer"
+      },
+      "prompt_cache_retention": "in_memory",
+      "metadata": {},
+      "prompt_cache_key": null,
+      "created_at": 1780080026,
+      "max_tool_calls": null
     },
     "headers": {
+      "access-control-expose-headers": [
+        "X-Request-ID",
+        "CF-Ray",
+        "CF-Ray"
+      ],
       "alt-svc": [
         "h3=\":443\"; ma=86400"
       ],
@@ -103,7 +137,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "989fed9729c610b7-ORD"
+        "a037a0a59ba78ce1-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -112,13 +146,11 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 21:14:23 GMT"
+        "Fri, 29 May 2026 18:41:22 GMT"
       ],
-      "openai-organization": [
-        "epic-creative-sogybe"
-      ],
+      "openai-organization": "[REDACTED:openai-organization]",
       "openai-processing-ms": [
-        "2908"
+        "55707"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -129,10 +161,7 @@
       "server": [
         "cloudflare"
       ],
-      "set-cookie": [
-        "__cf_bm=JobW9n1W.RWPGP.ne6EKxFtBl3clgw3CgDanInlNB98-1759698863-1.0.1.1-eZ7v7sjMTCHv31JysM8kA6YnvGzN4r9HYPhA.TRbBzB9CkGQpVLWtVa4CX8LS1yvwHokB6OnPbtyn12qtK4wi97NtIArM1QzxLgpEWRYL2Q; path=/; expires=Sun, 05-Oct-25 21:44:23 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=spiuT6cMRcbAA7PbnYDr._jPJF8eOlxqswt0bkAJjZc-1759698863631-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
-      ],
+      "set-cookie": "[REDACTED:set-cookie]",
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
       ],
@@ -142,13 +171,11 @@
       "x-content-type-options": [
         "nosniff"
       ],
-      "x-envoy-upstream-service-time": [
-        "2913"
-      ],
       "x-request-id": [
-        "req_7abe8432209d0a13da748d383be01328"
+        "req_6f47fb60d4f34a6db72f826a00db1c2f"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

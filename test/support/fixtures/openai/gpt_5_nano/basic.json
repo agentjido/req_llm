@@ -1,9 +1,14 @@
 {
+  "model_spec": "openai:gpt-5-nano",
+  "provider": "openai",
   "request": {
     "body": {
-      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IkhlbGxvIHdvcmxkISIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9XSwibWF4X291dHB1dF90b2tlbnMiOjIwMDAsIm1vZGVsIjoiZ3B0LTUtbmFubyIsInN0cmVhbSI6ZmFsc2V9"
+      "b64": "eyJpbmNsdWRlIjpbInJlYXNvbmluZy5lbmNyeXB0ZWRfY29udGVudCJdLCJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IkhlbGxvIHdvcmxkISIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9XSwibWF4X291dHB1dF90b2tlbnMiOjIwMDAsIm1vZGVsIjoiZ3B0LTUtbmFubyIsInJlYXNvbmluZyI6eyJlZmZvcnQiOiJsb3cifSwic3RyZWFtIjpmYWxzZX0="
     },
     "canonical_json": {
+      "include": [
+        "reasoning.encrypted_content"
+      ],
       "input": [
         {
           "content": [
@@ -17,6 +22,9 @@
       ],
       "max_output_tokens": 2000,
       "model": "gpt-5-nano",
+      "reasoning": {
+        "effort": "low"
+      },
       "stream": false
     },
     "headers": {
@@ -28,7 +36,7 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ]
     },
     "method": "post",
@@ -37,22 +45,44 @@
   "response": {
     "body": {
       "background": false,
-      "billing": {
-        "payer": "developer"
+      "text": {
+        "format": {
+          "type": "text"
+        },
+        "verbosity": "medium"
       },
-      "created_at": 1762105862,
-      "error": null,
-      "id": "resp_0b64311c4c2ce4570069079a06b8108193b85b2e7501c8ab7b",
-      "incomplete_details": null,
-      "instructions": null,
+      "moderation": null,
+      "top_logprobs": 0,
+      "previous_response_id": null,
+      "tool_choice": "auto",
+      "service_tier": "default",
+      "status": "completed",
+      "tools": [],
+      "id": "resp_0a710f93cba31fbe006a19dc44bd7481a3a9bc32a111aa2251",
+      "temperature": 1.0,
       "max_output_tokens": 2000,
-      "max_tool_calls": null,
-      "metadata": {},
+      "user": null,
+      "frequency_penalty": 0.0,
+      "error": null,
       "model": "gpt-5-nano-2025-08-07",
+      "usage": {
+        "input_tokens": 9,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens": 139,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 148
+      },
+      "safety_identifier": null,
       "object": "response",
+      "parallel_tool_calls": true,
       "output": [
         {
-          "id": "rs_0b64311c4c2ce4570069079a07764c819394e91e9c3e8dee9a",
+          "encrypted_content": "gAAAAABqGdxGmTk7tvwbFUhHLdZXON7FPZJgj5ntQnJJoMpMJbZQI9axfbxWqDirehD3GNvqhxyO8l4oDcql7MgG4BBayzuw76LO61THD_v4xR_1QxEYTBH4nCFsgaMYID26PvEWJkQ4p7KW4mPzN3i3QU6sM-p0IVAZGJSy2sJH_4bRMvk-W15U70LCnjAtYP_39MW1gChOUUmnQF_GjjVcriGXrFEYckUkft7pUlofI0Ek3PxvvVD4Yw9hN9Ah5AeUErHkAwZARh1qsRar6mrYcgSqhSykVzflhGKwiCDF5C89Wol7T2zzbYJ0G4NUtLFUMUWV3O-33ymdBzCdrHcBQ8go4QrOEq8AnfW1nPRe06qRpboMxUJMh1uQcCV5uCPrem8tjxF7yHhpffbaMRkhZLweZVm5DO2yG7LxbtaLt176lPw8MmaUQ6F-Ytag2bg-TpXTdoAiC_dMAJy7a6_9qNOn3HRosdrwswSws__fn6DYHPofttaY74RlC7aTAu9PfcYQiNpqPo4VcwZ7FWYI19u6pcisHIzeupI02jZM9u8Xi9IYMGgJ_Pv-p9JrZRiOulqz0DE_GB7b-WcEP2N_zEnTtnJLxwZHeOC1E51_oIUrIGdYweHQwDdGTd0gCj1Z_TnmMc2NJXqCcDoFdkD27-ynuhMdyGBVzoP7KcAlp6mxMqzy9US5KWKjiuCivx7sqxJRuRJCgYCKYid91RKvl2RDbKMHZROLQEo-NDBy0Gc394-_SzEpK4IJA1vmqjvlm7rn8Tb0qXpwH7aMsMiJ8wA1D-oNPlfdFdFcaeod71dUarc9a0kPRlTDMqMxZnveyWwEWZEmMKHarFvHpJnSNn62LALFModc7Qzx8LrO3i72M8V9Qubn7Ay7L8_QiHRDJftILnnlFPek3TT61Hacxim8-ucNc8be016ep6_pV1OhbFYYU_-wmU4yWAUD_22KTrwT3ss3XNVPiDRm3sNbs1C6ZeZiQbpZnSzBs4E4yRLCoRCX3z_qAYGnSffrwAFTNHMx8Np2bcm-VKo6GHkwSN2W0rLsOg6382ATVJGUjhIWXs8J1K999ccuRc29IZ9a5eei3ox4_eAel7bIfhnY7e2Tzv5JTAi21FZ9VbgVb0oh3gRMq6qHYZSpXSJi-WWKOR-i-tn_MLHQG6DQINnJG0kBA_kTTjqjSjeCzcnlRHqkDWbYervytN8Maccg7BeTcbtdBrO28bBJVyJyGnhMRpUzrg9Jn3PnZlIBQY572boCJc6z4BmW7m8pEfwyO1NSvCY9v8zk9BFsozaC_2zSnOei4TlSiw==",
+          "id": "rs_0a710f93cba31fbe006a19dc45120081a389c7dfd59baa43e2",
           "summary": [],
           "type": "reasoning"
         },
@@ -61,54 +91,43 @@
             {
               "annotations": [],
               "logprobs": [],
-              "text": "Hi there! Nice to meet you. How can I help today?\n\nIf you’re learning programming, here are a few Hello, World examples:\n- Python: print(\"Hello, World!\")\n- JavaScript: console.log(\"Hello, World!\")\n- C: printf(\"Hello, World!\\\\n\");\n- Java: System.out.println(\"Hello, World!\");\n\nTell me what you'd like to do, and I’ll tailor help.",
+              "text": "Hello! Nice to meet you. What would you like to do today? I can help with, for example:\n- Answering questions or explaining concepts\n- Writing help (emails, essays, code, etc.)\n- Troubleshooting or learning something new\n- Generating ideas or planning a project\n\nTell me your goal and any details, and I’ll dive in.",
               "type": "output_text"
             }
           ],
-          "id": "msg_0b64311c4c2ce4570069079a0dff2c81938060020627ab9126",
+          "id": "msg_0a710f93cba31fbe006a19dc45793081a38b19141d7cea4a29",
           "role": "assistant",
           "status": "completed",
           "type": "message"
         }
       ],
-      "parallel_tool_calls": true,
-      "previous_response_id": null,
-      "prompt_cache_key": null,
-      "prompt_cache_retention": null,
+      "instructions": null,
+      "store": true,
+      "presence_penalty": 0.0,
+      "incomplete_details": null,
       "reasoning": {
-        "effort": "medium",
+        "context": "current_turn",
+        "effort": "low",
         "summary": null
       },
-      "safety_identifier": null,
-      "service_tier": "default",
-      "status": "completed",
-      "store": true,
-      "temperature": 1.0,
-      "text": {
-        "format": {
-          "type": "text"
-        },
-        "verbosity": "medium"
-      },
-      "tool_choice": "auto",
-      "tools": [],
-      "top_logprobs": 0,
-      "top_p": 1.0,
+      "completed_at": 1780079686,
       "truncation": "disabled",
-      "usage": {
-        "input_tokens": 9,
-        "input_tokens_details": {
-          "cached_tokens": 0
-        },
-        "output_tokens": 988,
-        "output_tokens_details": {
-          "reasoning_tokens": 896
-        },
-        "total_tokens": 997
+      "top_p": 1.0,
+      "billing": {
+        "payer": "developer"
       },
-      "user": null
+      "prompt_cache_retention": "in_memory",
+      "metadata": {},
+      "prompt_cache_key": null,
+      "created_at": 1780079684,
+      "max_tool_calls": null
     },
     "headers": {
+      "access-control-expose-headers": [
+        "X-Request-ID",
+        "CF-Ray",
+        "CF-Ray"
+      ],
       "alt-svc": [
         "h3=\":443\"; ma=86400"
       ],
@@ -116,7 +135,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "99857a498ad1e800-ORD"
+        "a037984d4e37fa06-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -125,13 +144,11 @@
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:51:10 GMT"
+        "Fri, 29 May 2026 18:34:46 GMT"
       ],
-      "openai-organization": [
-        "epic-creative-sogybe"
-      ],
+      "openai-organization": "[REDACTED:openai-organization]",
       "openai-processing-ms": [
-        "8093"
+        "1529"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -142,10 +159,7 @@
       "server": [
         "cloudflare"
       ],
-      "set-cookie": [
-        "__cf_bm=N2K8gdaNlB_cZvq_4qQEBmlMfkupghoVcoQ3SO7iIJ0-1762105870-1.0.1.1-sTfBnGAa4ChuVQ4r.pXq3uH2_TlV3EcrlRzPAo9jOcwNClQSxhAs10AN_lX6SsiN6NCdoRFJRLCdArOQwqhRBCVndlfdRB9lnzwu8jEf7Tg; path=/; expires=Sun, 02-Nov-25 18:21:10 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=R4c_BMIO8J_wIMBua0SVdqnxPHef3LY3AdtuUhUsIz8-1762105870822-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
-      ],
+      "set-cookie": "[REDACTED:set-cookie]",
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
       ],
@@ -154,9 +168,6 @@
       ],
       "x-content-type-options": [
         "nosniff"
-      ],
-      "x-envoy-upstream-service-time": [
-        "8101"
       ],
       "x-ratelimit-limit-requests": [
         "10000"
@@ -168,18 +179,19 @@
         "9999"
       ],
       "x-ratelimit-remaining-tokens": [
-        "9999229"
+        "10000000"
       ],
       "x-ratelimit-reset-requests": [
         "6ms"
       ],
       "x-ratelimit-reset-tokens": [
-        "4ms"
+        "0s"
       ],
       "x-request-id": [
-        "req_a791ed212394482596ad56f21506bcc0"
+        "req_e0556f0be2b941508550294b42feba5e"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

@@ -1,9 +1,14 @@
 {
+  "model_spec": "openai:o3",
+  "provider": "openai",
   "request": {
     "body": {
-      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9XSwibWF4X291dHB1dF90b2tlbnMiOjEwMDAwLCJtb2RlbCI6Im8zIiwic3RyZWFtIjpmYWxzZSwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiQWRkIHR3byBpbnRlZ2VycyIsIm5hbWUiOiJhZGQiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsiYSI6eyJ0eXBlIjoiaW50ZWdlciJ9LCJiIjp7InR5cGUiOiJpbnRlZ2VyIn19LCJyZXF1aXJlZCI6WyJhIiwiYiJdLCJ0eXBlIjoib2JqZWN0In0sInN0cmljdCI6dHJ1ZX0sIm5hbWUiOiJhZGQiLCJ0eXBlIjoiZnVuY3Rpb24ifV19"
+      "b64": "eyJpbmNsdWRlIjpbInJlYXNvbmluZy5lbmNyeXB0ZWRfY29udGVudCJdLCJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9XSwibWF4X291dHB1dF90b2tlbnMiOjEwMDAwLCJtb2RlbCI6Im8zIiwic3RyZWFtIjpmYWxzZSwidG9vbHMiOlt7ImRlc2NyaXB0aW9uIjoiQWRkIHR3byBpbnRlZ2VycyIsIm5hbWUiOiJhZGQiLCJwYXJhbWV0ZXJzIjp7ImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjpmYWxzZSwicHJvcGVydGllcyI6eyJhIjp7InR5cGUiOiJpbnRlZ2VyIn0sImIiOnsidHlwZSI6ImludGVnZXIifX0sInR5cGUiOiJvYmplY3QifSwic3RyaWN0IjpmYWxzZSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
     },
     "canonical_json": {
+      "include": [
+        "reasoning.encrypted_content"
+      ],
       "input": [
         {
           "content": [
@@ -20,27 +25,21 @@
       "stream": false,
       "tools": [
         {
-          "function": {
-            "description": "Add two integers",
-            "name": "add",
-            "parameters": {
-              "properties": {
-                "a": {
-                  "type": "integer"
-                },
-                "b": {
-                  "type": "integer"
-                }
-              },
-              "required": [
-                "a",
-                "b"
-              ],
-              "type": "object"
-            },
-            "strict": true
-          },
+          "description": "Add two integers",
           "name": "add",
+          "parameters": {
+            "additionalProperties": false,
+            "properties": {
+              "a": {
+                "type": "integer"
+              },
+              "b": {
+                "type": "integer"
+              }
+            },
+            "type": "object"
+          },
+          "strict": false,
           "type": "function"
         }
       ]
@@ -54,7 +53,7 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ]
     },
     "method": "post",
@@ -63,85 +62,102 @@
   "response": {
     "body": {
       "background": false,
-      "billing": {
-        "payer": "developer"
-      },
-      "created_at": 1762105953,
-      "error": null,
-      "id": "resp_008abbc7fec2af600069079a619abc8197ac79539feb4bdb74",
-      "incomplete_details": null,
-      "instructions": null,
-      "max_output_tokens": 10000,
-      "max_tool_calls": null,
-      "metadata": {},
-      "model": "o3-2025-04-16",
-      "object": "response",
-      "output": [
-        {
-          "id": "rs_008abbc7fec2af600069079a623eac8197aab91246f0bd5c7b",
-          "summary": [],
-          "type": "reasoning"
-        },
-        {
-          "arguments": "{}",
-          "call_id": "call_JJNyIcPR8BlAtDfbFEuXDSwY",
-          "id": "fc_008abbc7fec2af600069079a63f1188197889ad89640de5aa7",
-          "name": "add",
-          "status": "completed",
-          "type": "function_call"
-        }
-      ],
-      "parallel_tool_calls": true,
-      "previous_response_id": null,
-      "prompt_cache_key": null,
-      "prompt_cache_retention": null,
-      "reasoning": {
-        "effort": "medium",
-        "summary": null
-      },
-      "safety_identifier": null,
-      "service_tier": "default",
-      "status": "completed",
-      "store": true,
-      "temperature": 1.0,
       "text": {
         "format": {
           "type": "text"
         },
         "verbosity": "medium"
       },
+      "moderation": null,
+      "top_logprobs": 0,
+      "previous_response_id": null,
       "tool_choice": "auto",
+      "service_tier": "default",
+      "status": "completed",
       "tools": [
         {
-          "description": null,
+          "description": "Add two integers",
           "name": "add",
           "parameters": {
             "additionalProperties": false,
-            "properties": {},
-            "required": [],
+            "properties": {
+              "a": {
+                "type": "integer"
+              },
+              "b": {
+                "type": "integer"
+              }
+            },
             "type": "object"
           },
-          "strict": true,
+          "strict": false,
           "type": "function"
         }
       ],
-      "top_logprobs": 0,
-      "top_p": 1.0,
-      "truncation": "disabled",
+      "id": "resp_02190a0d160fdc2d006a19de2dc7d081a098e9576529abb183",
+      "temperature": 1.0,
+      "max_output_tokens": 10000,
+      "user": null,
+      "frequency_penalty": 0.0,
+      "error": null,
+      "model": "o3-2025-04-16",
       "usage": {
-        "input_tokens": 51,
+        "input_tokens": 65,
         "input_tokens_details": {
           "cached_tokens": 0
         },
-        "output_tokens": 143,
+        "output_tokens": 105,
         "output_tokens_details": {
-          "reasoning_tokens": 128
+          "reasoning_tokens": 64
         },
-        "total_tokens": 194
+        "total_tokens": 170
       },
-      "user": null
+      "safety_identifier": null,
+      "object": "response",
+      "parallel_tool_calls": true,
+      "output": [
+        {
+          "encrypted_content": "gAAAAABqGd4vAtU_jh5ebORUxek2uJvAHQjj7LPSZgcDOyqNmZCTQcYwH1yZw0zLD5lcTqochraeVxaQGxg7C9TnWzTx1eP3HbPzcyVjTUZnunBg6M7KEA5EXpGxEdlNkECItufqXhjUcso54di0tpEiPbLmOO5GN83eAGz_AXe33niAul3jYnTWhkswSx3XmdG5Me8c2BYYPlzpICyEbGaIyvbMvC2aje9Zh_3FuiXH8_rgZmBmsRMnoVaAmJ_gMh5nQibnilgFtzUHSe3HnaRX83TIU1trt7ATlweiOCnsOzOSWePE2paNoKTVrUSK3rqAP8_q_BzVu5cNIbP8QZ5VqQbyw8Ib40-tL4wg-8ktDqOGaprRzcInxj1j93Gdh2UYCr_wWVkLZf_A6wrgUT2ypQr1nw6AHTVkvIV5YH_MafSTvuI8lK5u9a6B7F2gH_c79nRDutRjSNMdEmoDyhLCKY9N6Iygz6ocoHXNpCXunxdxR_72sFg7MeLZ0IVbWEC2fX3HJlCtCKzlcTJ_8anBKMmFTSdHBmz_Twc4LYyOcqXUAQ3VkUggps5MY-5PVp3Z3VGZVkggNW3XadDEcOBpYy6i0sFB35WhHG7iqfYvJWGjpDVqEYzvUKbBOE5SUlEomcoB_-m8ptwoYBBzPovUSYtgcbVWjx2HedRoIqSCYiFLMQQPQXjzQrX_YK96mUJ_7OjZ2wxfF9vxMEeQ3plL1WmwFJLfqYz7M-H_oDG_ZDJl1kBWanHOfJSnitbsBpzvov4CuUAyGEaBhN1wu4Ux3AGTlRIIvAdxbAytSHHj_3oJCPWL5ph6mET8bWP2zgrwsEvdwS-jHlFuJCm7wxUv4gpqyPt-21_nE4vjwC3fh4CcMe0t4vBCvkcTVdct_wUVhXL6cQ0oH0jTsZ2J2wY1vYaYMl8tdHet8smBBzav_u_WHqUYVid7FMXj8fYZRJkVNsbrHloHshtqmoDqXX91BIx6OCzsPHdz7Q7GJ11uXI85fmfxdOH9Rq3e7ni3_GL_mABGKYNeMwoVlpKYuUcCgB3lrvejpQ4PQovonPxTLs5g-BuNsIpjuPoKQPB8uT7y0tnmO5CBdSINzg_h3M1rAWsws65lrveL0H6PNYI15Bic_MYWUMM6tZa4WH3DBpCDS6rDRYy4IKfZjtRTno51VyeboCe6mczkqsbWU3QexPLg7FLtemahq3AXoY-FEDi36c4TW5LThPkARSQJi52z-3yCn1r3wN44aHkH68QcyTYgdk_VmQ3LL92H_0Cc6_bi7gBc9wqwo3u0GP1LzGGNNQ5O4MA53k_O1jxdbZH3d7rFg6DtXWHv3eXRrlydiXB4ko8QVaVyaee8J9u9D4sP8FgHIL1x2Q==",
+          "id": "rs_02190a0d160fdc2d006a19de2eb1b881a0a3950b6c714587c1",
+          "summary": [],
+          "type": "reasoning"
+        },
+        {
+          "arguments": "{\"a\":2,\"b\":3}",
+          "call_id": "call_Prj3Nu2yvYUwRBuhyY2qu9PX",
+          "id": "fc_02190a0d160fdc2d006a19de2f417c81a09107e8bb1a64a802",
+          "name": "add",
+          "status": "completed",
+          "type": "function_call"
+        }
+      ],
+      "instructions": null,
+      "store": true,
+      "presence_penalty": 0.0,
+      "incomplete_details": null,
+      "reasoning": {
+        "context": "current_turn",
+        "effort": "medium",
+        "summary": null
+      },
+      "completed_at": 1780080175,
+      "truncation": "disabled",
+      "top_p": 1.0,
+      "billing": {
+        "payer": "developer"
+      },
+      "prompt_cache_retention": "in_memory",
+      "metadata": {},
+      "prompt_cache_key": null,
+      "created_at": 1780080173,
+      "max_tool_calls": null
     },
     "headers": {
+      "access-control-expose-headers": [
+        "X-Request-ID",
+        "CF-Ray",
+        "CF-Ray"
+      ],
       "alt-svc": [
         "h3=\":443\"; ma=86400"
       ],
@@ -149,7 +165,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "99857c8198ecda7a-ORD"
+        "a037a43ddde09d03-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -158,13 +174,11 @@
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:52:36 GMT"
+        "Fri, 29 May 2026 18:42:55 GMT"
       ],
-      "openai-organization": [
-        "epic-creative-sogybe"
-      ],
+      "openai-organization": "[REDACTED:openai-organization]",
       "openai-processing-ms": [
-        "2668"
+        "1727"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -175,10 +189,7 @@
       "server": [
         "cloudflare"
       ],
-      "set-cookie": [
-        "__cf_bm=_EGW2AGFhfXg1_AyLLUwoBTzRd5XdmLxv3Sokusi7p0-1762105956-1.0.1.1-vT5Sqmui45vS4jrYj8WLzDgQmmDbKNymscezPmww7B3lGY_HpQr.VXKPyORzHpW8GlEA728PtK8UD5_E9uWjlOf8X1fbgzqL7qHb2UTTGOI; path=/; expires=Sun, 02-Nov-25 18:22:36 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=7M9xNuVaXZkP5K9fXuuzeLm38fTi5wsN4eBJCj8enJU-1762105956281-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
-      ],
+      "set-cookie": "[REDACTED:set-cookie]",
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
       ],
@@ -187,9 +198,6 @@
       ],
       "x-content-type-options": [
         "nosniff"
-      ],
-      "x-envoy-upstream-service-time": [
-        "2674"
       ],
       "x-ratelimit-limit-requests": [
         "10000"
@@ -201,7 +209,7 @@
         "9999"
       ],
       "x-ratelimit-remaining-tokens": [
-        "1999686"
+        "1999672"
       ],
       "x-ratelimit-reset-requests": [
         "6ms"
@@ -210,9 +218,10 @@
         "9ms"
       ],
       "x-request-id": [
-        "req_7aa151bbbfdf43b597011010ac7d5eb9"
+        "req_3511320d67664c4e8d5020a358d7cfdd"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

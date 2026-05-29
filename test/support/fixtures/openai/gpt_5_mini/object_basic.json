@@ -1,9 +1,14 @@
 {
+  "model_spec": "openai:gpt-5-mini",
+  "provider": "openai",
   "request": {
     "body": {
-      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IkdlbmVyYXRlIGEgc29mdHdhcmUgZW5naW5lZXIgcHJvZmlsZSIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9XSwibWF4X291dHB1dF90b2tlbnMiOjQwOTYsIm1vZGVsIjoiZ3B0LTUtbWluaSIsInN0cmVhbSI6ZmFsc2UsInRleHQiOnsiZm9ybWF0Ijp7Im5hbWUiOiJvdXRwdXRfc2NoZW1hIiwic2NoZW1hIjp7ImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjpmYWxzZSwicHJvcGVydGllcyI6eyJhZ2UiOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBhZ2UgaW4geWVhcnMiLCJtaW5pbXVtIjoxLCJ0eXBlIjoiaW50ZWdlciJ9LCJuYW1lIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3MgZnVsbCBuYW1lIiwidHlwZSI6InN0cmluZyJ9LCJvY2N1cGF0aW9uIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3Mgam9iIG9yIHByb2Zlc3Npb24iLCJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJhZ2UiLCJuYW1lIiwib2NjdXBhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In0sInN0cmljdCI6dHJ1ZSwidHlwZSI6Impzb25fc2NoZW1hIn19fQ=="
+      "b64": "eyJpbmNsdWRlIjpbInJlYXNvbmluZy5lbmNyeXB0ZWRfY29udGVudCJdLCJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IkdlbmVyYXRlIGEgc29mdHdhcmUgZW5naW5lZXIgcHJvZmlsZSIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9XSwibWF4X291dHB1dF90b2tlbnMiOjUwMCwibW9kZWwiOiJncHQtNS1taW5pIiwicmVhc29uaW5nIjp7ImVmZm9ydCI6ImxvdyJ9LCJzdHJlYW0iOmZhbHNlLCJ0ZXh0Ijp7ImZvcm1hdCI6eyJuYW1lIjoib3V0cHV0X3NjaGVtYSIsInNjaGVtYSI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnsiYWdlIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3MgYWdlIGluIHllYXJzIiwibWluaW11bSI6MSwidHlwZSI6ImludGVnZXIifSwibmFtZSI6eyJkZXNjcmlwdGlvbiI6IlBlcnNvbidzIGZ1bGwgbmFtZSIsInR5cGUiOiJzdHJpbmcifSwib2NjdXBhdGlvbiI6eyJkZXNjcmlwdGlvbiI6IlBlcnNvbidzIGpvYiBvciBwcm9mZXNzaW9uIiwidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsiYWdlIiwibmFtZSIsIm9jY3VwYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9LCJzdHJpY3QiOnRydWUsInR5cGUiOiJqc29uX3NjaGVtYSJ9fX0="
     },
     "canonical_json": {
+      "include": [
+        "reasoning.encrypted_content"
+      ],
       "input": [
         {
           "content": [
@@ -15,8 +20,11 @@
           "role": "user"
         }
       ],
-      "max_output_tokens": 4096,
+      "max_output_tokens": 500,
       "model": "gpt-5-mini",
+      "reasoning": {
+        "effort": "low"
+      },
       "stream": false,
       "text": {
         "format": {
@@ -59,7 +67,7 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ]
     },
     "method": "post",
@@ -68,53 +76,6 @@
   "response": {
     "body": {
       "background": false,
-      "billing": {
-        "payer": "developer"
-      },
-      "created_at": 1762105844,
-      "error": null,
-      "id": "resp_0c27c2397a25f82a00690799f4f5988196903f1ef5071ccf0f",
-      "incomplete_details": null,
-      "instructions": null,
-      "max_output_tokens": 4096,
-      "max_tool_calls": null,
-      "metadata": {},
-      "model": "gpt-5-mini-2025-08-07",
-      "object": "response",
-      "output": [
-        {
-          "id": "rs_0c27c2397a25f82a00690799f5675481968bd9dfc49715fd3f",
-          "summary": [],
-          "type": "reasoning"
-        },
-        {
-          "content": [
-            {
-              "annotations": [],
-              "logprobs": [],
-              "text": "{\"age\":31,\"name\":\"Daniel Kim\",\"occupation\":\"Senior Software Engineer (Full-Stack)\"}",
-              "type": "output_text"
-            }
-          ],
-          "id": "msg_0c27c2397a25f82a00690799f84254819694513c369d3d26f4",
-          "role": "assistant",
-          "status": "completed",
-          "type": "message"
-        }
-      ],
-      "parallel_tool_calls": true,
-      "previous_response_id": null,
-      "prompt_cache_key": null,
-      "prompt_cache_retention": null,
-      "reasoning": {
-        "effort": "medium",
-        "summary": null
-      },
-      "safety_identifier": null,
-      "service_tier": "default",
-      "status": "completed",
-      "store": true,
-      "temperature": 1.0,
       "text": {
         "format": {
           "description": null,
@@ -148,25 +109,83 @@
         },
         "verbosity": "medium"
       },
-      "tool_choice": "auto",
-      "tools": [],
+      "moderation": null,
       "top_logprobs": 0,
-      "top_p": 1.0,
-      "truncation": "disabled",
+      "previous_response_id": null,
+      "tool_choice": "auto",
+      "service_tier": "default",
+      "status": "completed",
+      "tools": [],
+      "id": "resp_0c4b3d5cf01b95b1006a19dc73e4bc8193a33f29acf1a9eac3",
+      "temperature": 1.0,
+      "max_output_tokens": 500,
+      "user": null,
+      "frequency_penalty": 0.0,
+      "error": null,
+      "model": "gpt-5-mini-2025-08-07",
       "usage": {
         "input_tokens": 70,
         "input_tokens_details": {
           "cached_tokens": 0
         },
-        "output_tokens": 223,
+        "output_tokens": 141,
         "output_tokens_details": {
-          "reasoning_tokens": 192
+          "reasoning_tokens": 64
         },
-        "total_tokens": 293
+        "total_tokens": 211
       },
-      "user": null
+      "safety_identifier": null,
+      "object": "response",
+      "parallel_tool_calls": true,
+      "output": [
+        {
+          "encrypted_content": "gAAAAABqGdx1rvtj7UEIm-reIti0ik95snupOfi_3lSNF6LISf3d5OdeTNzZzhVRBtdw0_qtfu_GlPLj_IuGiEU52iBKRfUgQ_ermZMQtUDKxnrIWq6yl09SPXjxvUWDwWcwlIwpxX7Nil_ogBivSMYuNpwLceHf3hI108aojFyQcA62eWVAaN8z1PCs8atfuD5AOCrawlvBR1hrEAGNd9CGsD3wYHd8MNNzFyUkuWGDviQ57pXStUAuTCWhgJMlgNGgmM8VT1E2Hx-gUtDKphYG9DLmDY8vScweWPWg8B2EOgK9rIqlDDwBcdNvlZbxsjkSQ10Owe7yGWkEcuczyZN-t4qxPEjTsyn_4Mft0FmW8biRLzDOwORi-nADhXrj-HfkR6dPwSGYw9-4t_LxepL5EBRDubNEDz7cuYP3qgT8AlEhxDnnpz4bRBn8EkIhojVxjpv-bkbD7NUN17TDOX7Yaf5pUR8i4l4ADK94Fer730-kmqE4ieWcjKgolFaMulNHjaTC7Nzg4pCWgXgK69u40I_5Z5RPHFAvXWhdVbA3t-F4blCZTcFXtW-3NiQmDYqfA4f9pIDqmveBAgwSxiBIF8TTqfj0ro53JPnEAqQZONSx6wFXDQidkKpKwk06lu_JvwpRIdISf2KpnmppEX9NgFP_RdP1nt2CwEzWkzRvbpTHF0sbjwfSA6d9BkGTKxF3F6O6QHHkpLgVAOc943tXYmEeSeCNPU4IieFUyRFTzUvgUtT7llUVX-B67siTlUbHmjxG0NVzFpyIYGH9x5PZBNzC1_Hzy3miqHq4-DFFN8z_8rC40Bfr16Ozr-1hkzdZ5Ox8hftQm_p11tiZYovYyFBZ20eAsFhNZ7FSXFK7jfvOobQ2yxImSd0R4uYC9S-iefpiM_xXfc_obflmMzY0QW4qcCdvzjAwylSwkts_RTwZ74UKcLSG-zMHKySwCq7uWSr5hhnNTG6FAbBVgH6rJXygBDN_2U3jRk0aU11RDx7ZPvrAetxIi2W6N90aN0mv27ANdzdLvfbzT1EIGQlQOMjaFF5GSTAXk9PbLzDaZgf7U7Dac7qPU90LSbuadiJMbfOh4u8wY9Xy0Fn2olQyX9XbERbdihxvpfZVaSdTzuxLDKHrWGEn2LPWh3KfFoflCWOIG52quEQJrDzyuUcyGKmQA_PGvYopg-t98ODDavdEgii3ZDOCKz9sWlgcYucsIaNorl2cyP4Jj_P-Ap433HPRkPl5cMr6oL_Ujz5Ao1s-Gs_aiSja7a5-Fu_6muAOYY27pPRBh9kFdSoXt193ROmZ6wz23juMVCPLgV_cvD9rEBJGyQSXGJ2fHWnhRZEhOupqDEkjoPcdKEiTxaWENMsHSnwlKuEf44Y4tT-IGLMWhJ8ybSwoHTVhwQMvurtMq9J8ExQbcF1VQY5SLgJvMeRqQalloxAEZuuc-_tqyPdrTp3gxctQC3y-BI9n1Uk3Au74hgD5HBGYlZ1Km50ZT87INXk8CrB3sQTuizK80Q8P5xSvLBvW7pJl0X0N-UcRU9W0mpHLHWS6oyLZmJx6ffbhJGdraUVxADqVA6D_U2QBwsPfEkUveP_pMmEreyVaKpzodJzJFDEatx19QKW4OsxjmudNVEgdij7RqKYylSK0xUwSpg4Z8jMi_wNoyI6b1u9FYm_E",
+          "id": "rs_0c4b3d5cf01b95b1006a19dc74402c819397e74da3c18e55a6",
+          "summary": [],
+          "type": "reasoning"
+        },
+        {
+          "content": [
+            {
+              "annotations": [],
+              "logprobs": [],
+              "text": "{\"name\":\"Aaliyah Chen\",\"age\":29,\"occupation\":\"Senior Software Engineer\"}",
+              "type": "output_text"
+            }
+          ],
+          "id": "msg_0c4b3d5cf01b95b1006a19dc754e4c8193b2942badd7361fad",
+          "role": "assistant",
+          "status": "completed",
+          "type": "message"
+        }
+      ],
+      "instructions": null,
+      "store": true,
+      "presence_penalty": 0.0,
+      "incomplete_details": null,
+      "reasoning": {
+        "context": "current_turn",
+        "effort": "low",
+        "summary": null
+      },
+      "completed_at": 1780079733,
+      "truncation": "disabled",
+      "top_p": 1.0,
+      "billing": {
+        "payer": "developer"
+      },
+      "prompt_cache_retention": "in_memory",
+      "metadata": {},
+      "prompt_cache_key": null,
+      "created_at": 1780079731,
+      "max_tool_calls": null
     },
     "headers": {
+      "access-control-expose-headers": [
+        "X-Request-ID",
+        "CF-Ray",
+        "CF-Ray"
+      ],
       "alt-svc": [
         "h3=\":443\"; ma=86400"
       ],
@@ -174,7 +193,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "998579dab85411cd-ORD"
+        "a03799740b13928a-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -183,13 +202,11 @@
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:50:49 GMT"
+        "Fri, 29 May 2026 18:35:33 GMT"
       ],
-      "openai-organization": [
-        "epic-creative-sogybe"
-      ],
+      "openai-organization": "[REDACTED:openai-organization]",
       "openai-processing-ms": [
-        "4685"
+        "1995"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -200,10 +217,7 @@
       "server": [
         "cloudflare"
       ],
-      "set-cookie": [
-        "__cf_bm=lNQYEc1YczX9wz91cBlySSX_P_6GVaR3gxj3ph0zkaw-1762105849-1.0.1.1-vEMosa1NkvsNStXqpi3OeFGYBM3zB4NCbkcJKVKc0hA02UzGk1l_GwfkgKBLKVK_nlDDEJzyEfC2mBDW9aF2_5kFK_wkoAy5XPiAC6uQ_9w; path=/; expires=Sun, 02-Nov-25 18:20:49 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=aNhuwMX5AFn_O__u7pRH8RP_E8W.dGwgPNq8ZXB6qcE-1762105849660-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
-      ],
+      "set-cookie": "[REDACTED:set-cookie]",
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
       ],
@@ -212,9 +226,6 @@
       ],
       "x-content-type-options": [
         "nosniff"
-      ],
-      "x-envoy-upstream-service-time": [
-        "4695"
       ],
       "x-ratelimit-limit-requests": [
         "10000"
@@ -226,7 +237,7 @@
         "9999"
       ],
       "x-ratelimit-remaining-tokens": [
-        "9999994"
+        "10000000"
       ],
       "x-ratelimit-reset-requests": [
         "6ms"
@@ -235,9 +246,10 @@
         "0s"
       ],
       "x-request-id": [
-        "req_215fe9ee33ca440cbba736088f8a1557"
+        "req_6df28dd97d0c4fe890edaa5e003a98ed"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

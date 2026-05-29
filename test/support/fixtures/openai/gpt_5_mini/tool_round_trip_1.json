@@ -1,9 +1,14 @@
 {
+  "model_spec": "openai:gpt-5-mini",
+  "provider": "openai",
   "request": {
     "body": {
-      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9XSwibWF4X291dHB1dF90b2tlbnMiOjEyODAwLCJtb2RlbCI6ImdwdC01LW1pbmkiLCJzdHJlYW0iOmZhbHNlLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJBZGQgdHdvIGludGVnZXJzIiwibmFtZSI6ImFkZCIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJhIjp7InR5cGUiOiJpbnRlZ2VyIn0sImIiOnsidHlwZSI6ImludGVnZXIifX0sInJlcXVpcmVkIjpbImEiLCJiIl0sInR5cGUiOiJvYmplY3QifSwic3RyaWN0Ijp0cnVlfSwibmFtZSI6ImFkZCIsInR5cGUiOiJmdW5jdGlvbiJ9XX0="
+      "b64": "eyJpbmNsdWRlIjpbInJlYXNvbmluZy5lbmNyeXB0ZWRfY29udGVudCJdLCJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9XSwibWF4X291dHB1dF90b2tlbnMiOjEyODAwLCJtb2RlbCI6ImdwdC01LW1pbmkiLCJzdHJlYW0iOmZhbHNlLCJ0b29scyI6W3siZGVzY3JpcHRpb24iOiJBZGQgdHdvIGludGVnZXJzIiwibmFtZSI6ImFkZCIsInBhcmFtZXRlcnMiOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7ImEiOnsidHlwZSI6ImludGVnZXIifSwiYiI6eyJ0eXBlIjoiaW50ZWdlciJ9fSwidHlwZSI6Im9iamVjdCJ9LCJzdHJpY3QiOmZhbHNlLCJ0eXBlIjoiZnVuY3Rpb24ifV19"
     },
     "canonical_json": {
+      "include": [
+        "reasoning.encrypted_content"
+      ],
       "input": [
         {
           "content": [
@@ -20,27 +25,21 @@
       "stream": false,
       "tools": [
         {
-          "function": {
-            "description": "Add two integers",
-            "name": "add",
-            "parameters": {
-              "properties": {
-                "a": {
-                  "type": "integer"
-                },
-                "b": {
-                  "type": "integer"
-                }
-              },
-              "required": [
-                "a",
-                "b"
-              ],
-              "type": "object"
-            },
-            "strict": true
-          },
+          "description": "Add two integers",
           "name": "add",
+          "parameters": {
+            "additionalProperties": false,
+            "properties": {
+              "a": {
+                "type": "integer"
+              },
+              "b": {
+                "type": "integer"
+              }
+            },
+            "type": "object"
+          },
+          "strict": false,
           "type": "function"
         }
       ]
@@ -54,7 +53,7 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ]
     },
     "method": "post",
@@ -63,85 +62,102 @@
   "response": {
     "body": {
       "background": false,
-      "billing": {
-        "payer": "developer"
-      },
-      "created_at": 1762105849,
-      "error": null,
-      "id": "resp_0ad1be01e56c662e00690799f9c4988196b55150351f7aa277",
-      "incomplete_details": null,
-      "instructions": null,
-      "max_output_tokens": 12800,
-      "max_tool_calls": null,
-      "metadata": {},
-      "model": "gpt-5-mini-2025-08-07",
-      "object": "response",
-      "output": [
-        {
-          "id": "rs_0ad1be01e56c662e00690799fa34b8819685a69dc0dd8e562f",
-          "summary": [],
-          "type": "reasoning"
-        },
-        {
-          "arguments": "{}",
-          "call_id": "call_bJzPaa0GXPoRb9z0IR0ClTtr",
-          "id": "fc_0ad1be01e56c662e00690799fbf27c819695203a01a63af90e",
-          "name": "add",
-          "status": "completed",
-          "type": "function_call"
-        }
-      ],
-      "parallel_tool_calls": true,
-      "previous_response_id": null,
-      "prompt_cache_key": null,
-      "prompt_cache_retention": null,
-      "reasoning": {
-        "effort": "medium",
-        "summary": null
-      },
-      "safety_identifier": null,
-      "service_tier": "default",
-      "status": "completed",
-      "store": true,
-      "temperature": 1.0,
       "text": {
         "format": {
           "type": "text"
         },
         "verbosity": "medium"
       },
+      "moderation": null,
+      "top_logprobs": 0,
+      "previous_response_id": null,
       "tool_choice": "auto",
+      "service_tier": "default",
+      "status": "completed",
       "tools": [
         {
-          "description": null,
+          "description": "Add two integers",
           "name": "add",
           "parameters": {
             "additionalProperties": false,
-            "properties": {},
-            "required": [],
+            "properties": {
+              "a": {
+                "type": "integer"
+              },
+              "b": {
+                "type": "integer"
+              }
+            },
             "type": "object"
           },
-          "strict": true,
+          "strict": false,
           "type": "function"
         }
       ],
-      "top_logprobs": 0,
-      "top_p": 1.0,
-      "truncation": "disabled",
+      "id": "resp_0f4d74e68a8e572d006a19dc6e29e0819fae81960cba8d5311",
+      "temperature": 1.0,
+      "max_output_tokens": 12800,
+      "user": null,
+      "frequency_penalty": 0.0,
+      "error": null,
+      "model": "gpt-5-mini-2025-08-07",
       "usage": {
-        "input_tokens": 53,
+        "input_tokens": 68,
         "input_tokens_details": {
           "cached_tokens": 0
         },
-        "output_tokens": 143,
+        "output_tokens": 142,
         "output_tokens_details": {
-          "reasoning_tokens": 128
+          "reasoning_tokens": 64
         },
-        "total_tokens": 196
+        "total_tokens": 210
       },
-      "user": null
+      "safety_identifier": null,
+      "object": "response",
+      "parallel_tool_calls": true,
+      "output": [
+        {
+          "encrypted_content": "gAAAAABqGdxwFDf7KRf8h9IU169jS9HQPT6SFyXtkFomi3mwuUn4vP3UdXkGZbp2xwbe8vLi0eUoKlBpjm9M_pK1eD5zBX88p6J2vIIrY8XkwuQ1AdpPLc5b8YJWNBsffwKJI8WBe1JWJP95u4UUtP0-6orPmV5cCl3UbPJIGZTDGrUD-s0DS3JFYI0DBFlD4A_K2UWiL7QuBIVseLkcMuwjZxzuZsLjRIDbHzgzNnMhknzeIR3mzempKWCUupm2Ga-p1j1zMtB1pQate99kAk1ftA5esnlc5JNMvTZjs1L1HB-bSpWdOoCZLKNID1Py_guiPJpeP58y_JFK8IadUGFiCpC-2DSeKMXfMeX4c8elZLF7KuKeFL_BnxrpC3GxReJfCiOVw0YcWYa2L3JHyr3HjgriFo_NmG4L_2DraoDqJkOnUTR1z8yMNgBN4-8mTJ7E3VgDRCAw2rzHpVJun7IeliI8pU71RYHNJc6p-LjoEoOgxyBSdj_ulmYV14ODhY8--WCKqchShhq3GDK8aArxhCbIYFjuEjzBGgRZF38VPTe9KPGjsUnOkMLD4rO3rvCofCUdOZVVBL5e6qkQ7d8F3qqco9CzfjoFeMfFtAyltGvx5bHCPiIrH_KQeUUTJXr_g4G0E3rGW0tChCDy06DwqiT8iXZb3GVSVbQzZ-DrQucGCkX2tQwCE8d7parWwbDXOuW0-mHIx3B7kfHxJz2mU9bEXY1Q18jG30YDrnq6bq7Cjnixg-ezWEk5hMKHDwBmgvjSHuwAVwD4Nu4FsLhlMxuklzGdHkDNoA1Y4-moQPqeHMSsCTPZwWqqrDFQrrTPQuamZj906QRyXKwxMfuqK5vPHhZN6BGuFrmPc6SN0V1_xVxfEMsVwE98ubgpQ3WhFpXBTruRhVG4E9cutT03NVzbr2EgILqK1CawXWLOX3MZ5rJEX2E-_8MPsF9xvdf9e3qqYtE2-DrGkUbMd7XphAPJq38dqXnE7ihFvV-3opYMFe9EPN1Zit6M17qWrjMv9X5nM2jw7SLF4RVekmY2Q8sGmKctiVl-345JXAMuzbO1G3m90QMkuV-A4_hlZJgSMtg_Olx-240sd_c0XCIoHuuHfjgW006mu_0ySOU2hc5dzXpBiPxRXDCD2CwQL0HIcpV1fCTnWOBt6osRbXbyk9sxR5hFyAVfwbmIk-fwiEe6dmEqdpsAXgKDPbitE_lFfTYSawJdsx6j_KmaOljwWl-DQGwaQNQNzDtCEtKVDovvlHUXbsaaM-E6CU6IbKFqvMpfmqoXenNtt8OMnKKsBi0Ul71l-hlRZQkdNhFa3AgdECgX6fLeozvDtiyddp5Uv2twuE-XYRxAIXcd6CmOY5aA5_iHWziI9zVuxKgoE39DvMH9HR4qUMwUxnkSnQQkD7985Ik4FBhRE_-dZVdduwsGBRuv81xqoV_4uhpUbFM0snBB6qJWRrnciMg5F20-otpSzsN6p5tHFkzc4QEhp-ph2JstZDungrn3BGJc7BHoOW0DXcoQPgFiK7liPOt4oVC-dlL888KG0xgB1m_KbaWItOx5edfNCc3Uto7AllfToTi935-cfmRfvUtqW-6x3g1zGe8Nycs1z5QDjDWNTGgkhmR_KQ==",
+          "id": "rs_0f4d74e68a8e572d006a19dc6e8d48819fa818e41a4ba314ac",
+          "summary": [],
+          "type": "reasoning"
+        },
+        {
+          "arguments": "{\"a\":2,\"b\":3}",
+          "call_id": "call_keg3MXyzpi6MF4F4YNDwjI3o",
+          "id": "fc_0f4d74e68a8e572d006a19dc700824819fb64563b3523faff9",
+          "name": "add",
+          "status": "completed",
+          "type": "function_call"
+        }
+      ],
+      "instructions": null,
+      "store": true,
+      "presence_penalty": 0.0,
+      "incomplete_details": null,
+      "reasoning": {
+        "context": "current_turn",
+        "effort": "medium",
+        "summary": null
+      },
+      "completed_at": 1780079728,
+      "truncation": "disabled",
+      "top_p": 1.0,
+      "billing": {
+        "payer": "developer"
+      },
+      "prompt_cache_retention": "in_memory",
+      "metadata": {},
+      "prompt_cache_key": null,
+      "created_at": 1780079726,
+      "max_tool_calls": null
     },
     "headers": {
+      "access-control-expose-headers": [
+        "X-Request-ID",
+        "CF-Ray",
+        "CF-Ray"
+      ],
       "alt-svc": [
         "h3=\":443\"; ma=86400"
       ],
@@ -149,7 +165,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "998579f8ac6c11cd-ORD"
+        "a037994f7ca3928a-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -158,13 +174,11 @@
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:50:52 GMT"
+        "Fri, 29 May 2026 18:35:28 GMT"
       ],
-      "openai-organization": [
-        "epic-creative-sogybe"
-      ],
+      "openai-organization": "[REDACTED:openai-organization]",
       "openai-processing-ms": [
-        "2591"
+        "2299"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -175,10 +189,7 @@
       "server": [
         "cloudflare"
       ],
-      "set-cookie": [
-        "__cf_bm=lfGzf7XfKvpMp0XtPC0Di2xcTX3y1IXMytUytPHEXrc-1762105852-1.0.1.1-jO0_dK3kdbAi2i.iCJzHGbwMhJzf8lirjwDUhdVKiraGqoPb7xuD0ChLwA2xQy76Xfkqv_WyMP99wooR0WhtCvpR2MYmgYpCtTRI7Cq0U1k; path=/; expires=Sun, 02-Nov-25 18:20:52 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=S4TJQYt2sGifvan60VdYP7ZjkiDD2e0BRJ6.6Ud9pmc-1762105852373-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
-      ],
+      "set-cookie": "[REDACTED:set-cookie]",
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
       ],
@@ -187,9 +198,6 @@
       ],
       "x-content-type-options": [
         "nosniff"
-      ],
-      "x-envoy-upstream-service-time": [
-        "2596"
       ],
       "x-ratelimit-limit-requests": [
         "10000"
@@ -210,9 +218,10 @@
         "0s"
       ],
       "x-request-id": [
-        "req_c9d5c261d60741c89c78b7a0892ddcbd"
+        "req_688341af367e4999aca432085ebbcf05"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

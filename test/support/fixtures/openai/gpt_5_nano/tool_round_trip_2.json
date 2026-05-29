@@ -1,9 +1,14 @@
 {
+  "model_spec": "openai:gpt-5-nano",
+  "provider": "openai",
   "request": {
     "body": {
-      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9LHsiY2FsbF9pZCI6ImNhbGxfVGNkTzFKcHVkMlNoeVJhSDVEcTVuQ0NwIiwib3V0cHV0Ijoie1wiZXJyb3JcIjpcIlRvb2wgZXhlY3V0aW9uIGZhaWxlZFwifSIsInR5cGUiOiJmdW5jdGlvbl9jYWxsX291dHB1dCJ9XSwibWF4X291dHB1dF90b2tlbnMiOjEyODAwLCJtb2RlbCI6ImdwdC01LW5hbm8iLCJwcmV2aW91c19yZXNwb25zZV9pZCI6InJlc3BfMGFkN2M3MDc1NjFkOWQwNzAwNjkwNzk5ZGZhYjZjODE5NTkwMTc5ZWQ2YzFkZDEzMTIiLCJzdHJlYW0iOmZhbHNlfQ=="
+      "b64": "eyJpbmNsdWRlIjpbInJlYXNvbmluZy5lbmNyeXB0ZWRfY29udGVudCJdLCJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9LHsiYXJndW1lbnRzIjoie1wiYVwiOjIsXCJiXCI6M30iLCJjYWxsX2lkIjoiY2FsbF9ZeHFuTE1Ha01QdVRKVzl5WTNtbnF3dEgiLCJuYW1lIjoiYWRkIiwidHlwZSI6ImZ1bmN0aW9uX2NhbGwifSx7ImNhbGxfaWQiOiJjYWxsX1l4cW5MTUdrTVB1VEpXOXlZM21ucXd0SCIsIm91dHB1dCI6IjUiLCJ0eXBlIjoiZnVuY3Rpb25fY2FsbF9vdXRwdXQifV0sIm1heF9vdXRwdXRfdG9rZW5zIjoxMjgwMCwibW9kZWwiOiJncHQtNS1uYW5vIiwicHJldmlvdXNfcmVzcG9uc2VfaWQiOiJyZXNwXzAwN2FmYjU1YzA3NTlkNDkwMDZhMTlkYzQ5M2NlODgxOTU4MjQzNzhmNTlhYTkwYjQwIiwic3RvcmUiOnRydWUsInN0cmVhbSI6ZmFsc2V9"
     },
     "canonical_json": {
+      "include": [
+        "reasoning.encrypted_content"
+      ],
       "input": [
         {
           "content": [
@@ -15,14 +20,21 @@
           "role": "user"
         },
         {
-          "call_id": "call_TcdO1Jpud2ShyRaH5Dq5nCCp",
-          "output": "{\"error\":\"Tool execution failed\"}",
+          "arguments": "{\"a\":2,\"b\":3}",
+          "call_id": "call_YxqnLMGkMPuTJW9yY3mnqwtH",
+          "name": "add",
+          "type": "function_call"
+        },
+        {
+          "call_id": "call_YxqnLMGkMPuTJW9yY3mnqwtH",
+          "output": "5",
           "type": "function_call_output"
         }
       ],
       "max_output_tokens": 12800,
       "model": "gpt-5-nano",
-      "previous_response_id": "resp_0ad7c707561d9d0700690799dfab6c819590179ed6c1dd1312",
+      "previous_response_id": "resp_007afb55c0759d49006a19dc493ce88195824378f59aa90b40",
+      "store": true,
       "stream": false
     },
     "headers": {
@@ -34,7 +46,7 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ]
     },
     "method": "post",
@@ -43,22 +55,44 @@
   "response": {
     "body": {
       "background": false,
-      "billing": {
-        "payer": "developer"
+      "text": {
+        "format": {
+          "type": "text"
+        },
+        "verbosity": "medium"
       },
-      "created_at": 1762105825,
-      "error": null,
-      "id": "resp_0ad7c707561d9d0700690799e1c5d481959c8870e6d3ff9b81",
-      "incomplete_details": null,
-      "instructions": null,
+      "moderation": null,
+      "top_logprobs": 0,
+      "previous_response_id": "resp_007afb55c0759d49006a19dc493ce88195824378f59aa90b40",
+      "tool_choice": "auto",
+      "service_tier": "default",
+      "status": "completed",
+      "tools": [],
+      "id": "resp_007afb55c0759d49006a19dc4e034481958ceea43aa3deb611",
+      "temperature": 1.0,
       "max_output_tokens": 12800,
-      "max_tool_calls": null,
-      "metadata": {},
+      "user": null,
+      "frequency_penalty": 0.0,
+      "error": null,
       "model": "gpt-5-nano-2025-08-07",
+      "usage": {
+        "input_tokens": 112,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens": 112,
+        "output_tokens_details": {
+          "reasoning_tokens": 64
+        },
+        "total_tokens": 224
+      },
+      "safety_identifier": null,
       "object": "response",
+      "parallel_tool_calls": true,
       "output": [
         {
-          "id": "rs_0ad7c707561d9d0700690799e239c08195ad40634f5a414948",
+          "encrypted_content": "gAAAAABqGdxPGReifeSMkysdnbDNsmPUEsjoNGVK1-w98vveBAiuPWZ61--HdBTKqBCBrhBYDh-YuFZKRgkF8S2tev30JXF8Ia1hcYt3JttW_VyKy7QKxL7nq5K6rUQwfEz1ZqCZ7yUSSahcP707a2417G4W8xLnGrnlgPNSe20fXOo0mWXdHy7z-zrMMlcFzwc1dszZ5ptMdLLCd4-m5lL9oQGW3bCJXO_iFS_x_nyoCSwtKNRrRgMnOP35Tg-xajkXranTFg31AR82cQnOLU0xwAGWz_lwvJEiANe_0oTrm-N9RVB32U2MsoptDACLQVA_Bc0nTKwH-gydb2-S6iMSLYCfZtCVHDNTDceiP436NDoIcNSRv2f9b1kyNbAQI_PP90pZ4wsRnLYbjImESDVE5-iKYeOqkMB1A0TQcqQXdZataG7eIwEBYsg8myLXwWen-x2Q19z6idmrLrK7qkP04fWHlZ7s8c-r1_O9pMFnISN9On8u7W3XL8lXIWuuXW7QwF3Hp9b7QykarXZ_eZLnBSKXt8_N0p8vl9rq4wELa12-jRRPd5xaHwUXXewZWzfN3caZiff-2pUkdZt-xEFxKmrTh-67c4ywveMD2fzu-goFrVfbWYRC80Rf4jJlWKe7CgZQfXXd4blz37luLVKSD8zjVnGxGltJusv-gdsZAKxIbZVtMFKxBptts2AeP5_5QHLx4Bfh0R0eLNnal_ED_nQYFLQV7TzESeLnAQwfFOx6NIIqboallbqlXBGu6w5STrnVoaeAX-bDb0G1BfOl4OZlcwlaWlif3Fy-J430EsZyO4TH2Rh6p4RZ1nwEptuoIGVyIEnMHN6_yhEJLo9EMm9LSYSneR4UwsORwYUgwo3EgbtA5tOuIPnNrpLa3xascldyA8UBYqmxnw33RrhJAXxPnkdSFM9jaEbk5rO0knRi62NCgPL_kMnOZLU1f89f0gW2FvsiNdi1dxYZxI6mK2c5oR1f4_3rjv8GNNszVCoZmdiWdPYdVyug24jfXXzDLq4nonebl9561aCTXtlLZb8AYAWYql_tHrPEuEGLiMpHcd_oWmwF5RqRk_3hDh9Merf3KqtHTmazDIbH35Xssi34k8E76BBx9RScL7VySv5iqOKiB6XWvqvH0IDGBbvqjzgYTr0W81KTSEFMsDAf4lRjuzaepxth81q1ENzXOgOMnSNMiXoeBzzBP7n57kfmdF1OzDyDjXzcwWltJDdBDw0ZqJ5_sLWmtsH-vnVhe1J_Rh29cKe-VgEwPIJyN6yhsFYKYU7y2AoPKY4BldxSA635ixb6p3vcLBUaka0mcOKXUGzb3B-c1d_F4RnH-k4Eed1EjLpVOM9tpPxJ3BLzBke8dMGpYw1IpTb3D00Z7P8_jIDeg4OzA3SyscBh_veJ8pmu999w_A8bJD8VdNBrk2MCy7V0Mym78HHR7Ik2ORAfR3p6Axk=",
+          "id": "rs_007afb55c0759d49006a19dc4ecd80819587e2e0978922f6cc",
           "summary": [],
           "type": "reasoning"
         },
@@ -67,68 +101,43 @@
             {
               "annotations": [],
               "logprobs": [],
-              "text": "{\"error\":\"Tool execution failed\"}",
+              "text": "sum=5",
               "type": "output_text"
             }
           ],
-          "id": "msg_0ad7c707561d9d0700690799e3459c8195b82345daa6af0890",
-          "role": "assistant",
-          "status": "completed",
-          "type": "message"
-        },
-        {
-          "content": [
-            {
-              "annotations": [],
-              "logprobs": [],
-              "text": "I couldn't run the add tool due to an error, but the result of 2 + 3 is 5. Therefore, sum=5.",
-              "type": "output_text"
-            }
-          ],
-          "id": "msg_0ad7c707561d9d0700690799e35b00819592f9b96c03d208bf",
+          "id": "msg_007afb55c0759d49006a19dc4f69cc81959f530128b522cb7d",
           "role": "assistant",
           "status": "completed",
           "type": "message"
         }
       ],
-      "parallel_tool_calls": true,
-      "previous_response_id": "resp_0ad7c707561d9d0700690799dfab6c819590179ed6c1dd1312",
-      "prompt_cache_key": null,
-      "prompt_cache_retention": null,
+      "instructions": null,
+      "store": true,
+      "presence_penalty": 0.0,
+      "incomplete_details": null,
       "reasoning": {
+        "context": "current_turn",
         "effort": "medium",
         "summary": null
       },
-      "safety_identifier": null,
-      "service_tier": "default",
-      "status": "completed",
-      "store": true,
-      "temperature": 1.0,
-      "text": {
-        "format": {
-          "type": "text"
-        },
-        "verbosity": "medium"
-      },
-      "tool_choice": "auto",
-      "tools": [],
-      "top_logprobs": 0,
-      "top_p": 1.0,
+      "completed_at": 1780079695,
       "truncation": "disabled",
-      "usage": {
-        "input_tokens": 301,
-        "input_tokens_details": {
-          "cached_tokens": 0
-        },
-        "output_tokens": 179,
-        "output_tokens_details": {
-          "reasoning_tokens": 128
-        },
-        "total_tokens": 480
+      "top_p": 1.0,
+      "billing": {
+        "payer": "developer"
       },
-      "user": null
+      "prompt_cache_retention": "in_memory",
+      "metadata": {},
+      "prompt_cache_key": null,
+      "created_at": 1780079694,
+      "max_tool_calls": null
     },
     "headers": {
+      "access-control-expose-headers": [
+        "X-Request-ID",
+        "CF-Ray",
+        "CF-Ray"
+      ],
       "alt-svc": [
         "h3=\":443\"; ma=86400"
       ],
@@ -136,7 +145,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "99857962be5be800-ORD"
+        "a0379873ce74d234-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -145,13 +154,11 @@
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:50:27 GMT"
+        "Fri, 29 May 2026 18:34:55 GMT"
       ],
-      "openai-organization": [
-        "epic-creative-sogybe"
-      ],
+      "openai-organization": "[REDACTED:openai-organization]",
       "openai-processing-ms": [
-        "2064"
+        "2055"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -162,10 +169,7 @@
       "server": [
         "cloudflare"
       ],
-      "set-cookie": [
-        "__cf_bm=rdL4lMxlG.ZIz0BFAQlTD3v7U9tptYJOBn7rLyakoTw-1762105827-1.0.1.1-GbjkEbqXK0SNG843_YnudMZGUeOHCidUbaMOkf3fHJgMtEqT0SaocxKdEHbzahIMlO94VtxdKYSngSVFUgowskysU6wJG.wCwlmOD_PzPN8; path=/; expires=Sun, 02-Nov-25 18:20:27 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=VvFiUgdnkcyQf.XAWnLplh3WPBD5H5ktgdnPlKGkS1g-1762105827848-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
-      ],
+      "set-cookie": "[REDACTED:set-cookie]",
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
       ],
@@ -174,9 +178,6 @@
       ],
       "x-content-type-options": [
         "nosniff"
-      ],
-      "x-envoy-upstream-service-time": [
-        "2069"
       ],
       "x-ratelimit-limit-requests": [
         "10000"
@@ -197,9 +198,10 @@
         "0s"
       ],
       "x-request-id": [
-        "req_2d724308d80845dcb52a4c1b37b7699a"
+        "req_8cdb098647bf47958665eafe1477bf1a"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

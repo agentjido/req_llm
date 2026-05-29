@@ -1,6 +1,6 @@
 defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   @moduledoc """
-  OpenAI Responses API driver for reasoning models.
+  OpenAI Responses API driver for Responses endpoint models.
 
   Implements the `ReqLLM.Providers.OpenAI.API` behaviour for OpenAI's Responses endpoint,
   which provides extended reasoning capabilities for advanced models.
@@ -18,7 +18,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
 
   ## Capabilities
 
-  - **Reasoning**: Extended thinking with explicit reasoning token tracking
+  - **Reasoning**: Extended thinking with explicit reasoning token tracking when supported
   - **Streaming**: SSE-based streaming with reasoning deltas and usage events
   - **Tools**: Function calling with responses-specific format
   - **Reasoning effort**: Control computation intensity (minimal, low, medium, high)
