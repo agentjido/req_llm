@@ -308,9 +308,9 @@ defmodule ReqLLM.Test.VCR do
   end
 
   @doc """
-  Replay a transcript as a raw response body (JSON decoded).
+  Replay a transcript as a raw response body.
 
-  For non-streaming fixtures, decodes the single data event as JSON.
+  For non-streaming fixtures, decodes JSON bodies and preserves binary bodies.
   Useful for Step API compatibility.
 
   ## Examples
@@ -319,7 +319,7 @@ defmodule ReqLLM.Test.VCR do
       body = VCR.replay_response_body(transcript)
       # => %{"content" => [...], "model" => "..."}
   """
-  @spec replay_response_body(Transcript.t()) :: map()
+  @spec replay_response_body(Transcript.t()) :: term()
   def replay_response_body(%Transcript{} = transcript) do
     if Transcript.streaming?(transcript) do
       raise ArgumentError, """
@@ -328,9 +328,12 @@ defmodule ReqLLM.Test.VCR do
       """
     end
 
-    transcript
-    |> Transcript.joined_data()
-    |> Jason.decode!()
+    body = Transcript.joined_data(transcript)
+
+    case Jason.decode(body) do
+      {:ok, decoded} -> decoded
+      {:error, _error} -> body
+    end
   end
 
   @doc """

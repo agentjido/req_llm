@@ -1,0 +1,131 @@
+{
+  "model_spec": "openai:whisper-1",
+  "provider": "openai",
+  "request": {
+    "body": {
+      "b64": "eyJfZml4dHVyZV9ib2R5Ijoibm9uX2pzb24iLCJieXRlX3NpemUiOjMxNjk2LCJjb250ZW50X3R5cGUiOiJtdWx0aXBhcnQvZm9ybS1kYXRhOyBib3VuZGFyeT0zNDU3Y2QyMDRjYTE4YjY1NjFmYjNiZDI2ZTdlOWYxNSJ9"
+    },
+    "canonical_json": {
+      "_fixture_body": "non_json",
+      "byte_size": 31696,
+      "content_type": "multipart/form-data; boundary=3457cd204ca18b6561fb3bd26e7e9f15"
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-length": [
+        "31696"
+      ],
+      "content-type": [
+        "multipart/form-data; boundary=3457cd204ca18b6561fb3bd26e7e9f15"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.openai.com/v1/audio/transcriptions"
+  },
+  "response": {
+    "body": {
+      "duration": 0.8399999737739563,
+      "language": "english",
+      "segments": [
+        {
+          "avg_logprob": -0.6972020864486694,
+          "compression_ratio": 0.6190476417541504,
+          "end": 2.0,
+          "id": 0,
+          "no_speech_prob": 0.013854512944817543,
+          "seek": 0,
+          "start": 0.0,
+          "temperature": 0.0,
+          "text": " Hello, world.",
+          "tokens": [
+            50364,
+            2425,
+            11,
+            1002,
+            13,
+            50464
+          ]
+        }
+      ],
+      "task": "transcribe",
+      "text": "Hello, world.",
+      "usage": {
+        "seconds": 1,
+        "type": "duration"
+      }
+    },
+    "headers": {
+      "access-control-expose-headers": [
+        "X-Request-ID",
+        "CF-Ray"
+      ],
+      "alt-svc": [
+        "h3=\":443\"; ma=86400"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a0385688bc0e3eb5-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 29 May 2026 20:44:37 GMT"
+      ],
+      "openai-organization": "[REDACTED:openai-organization]",
+      "openai-processing-ms": [
+        "426"
+      ],
+      "openai-project": [
+        "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
+      ],
+      "openai-version": [
+        "2020-10-01"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": "[REDACTED:set-cookie]",
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "via": [
+        "envoy-router-55cfc5c8fd-rzv7p"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-openai-proxy-wasm": [
+        "v0.1"
+      ],
+      "x-ratelimit-limit-requests": [
+        "7500"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "7499"
+      ],
+      "x-ratelimit-reset-requests": [
+        "8ms"
+      ],
+      "x-request-id": [
+        "req_35319820383447f28075ee36533d275c"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

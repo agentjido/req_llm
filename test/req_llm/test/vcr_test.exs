@@ -233,6 +233,57 @@ defmodule ReqLLM.Test.VCRTest do
     end
   end
 
+  describe "replay_response_body/1" do
+    test "decodes JSON bodies" do
+      path = Path.join(@fixture_dir, "response_json.json")
+      body = ~s({"choices":[{"message":{"content":"Hello"}}],"id":"chatcmpl-123"})
+
+      :ok =
+        VCR.record(path,
+          provider: :openai,
+          model: "gpt-4",
+          request: %{
+            method: "POST",
+            url: "https://api.openai.com/v1/chat/completions",
+            headers: [],
+            canonical_json: %{}
+          },
+          response: %{status: 200, headers: [{"content-type", "application/json"}]},
+          body: body
+        )
+
+      transcript = VCR.load!(path)
+
+      assert VCR.replay_response_body(transcript) == %{
+               "choices" => [%{"message" => %{"content" => "Hello"}}],
+               "id" => "chatcmpl-123"
+             }
+    end
+
+    test "preserves raw non-JSON binary bodies" do
+      path = Path.join(@fixture_dir, "response_audio.json")
+      body = <<255, 251, 144, 68, 0, 1, 2, 3>>
+
+      :ok =
+        VCR.record(path,
+          provider: :openai,
+          model: "tts-1",
+          request: %{
+            method: "POST",
+            url: "https://api.openai.com/v1/audio/speech",
+            headers: [],
+            canonical_json: %{}
+          },
+          response: %{status: 200, headers: [{"content-type", "audio/mpeg"}]},
+          body: body
+        )
+
+      transcript = VCR.load!(path)
+
+      assert VCR.replay_response_body(transcript) == body
+    end
+  end
+
   describe "replay_stream/1" do
     test "streams data chunks in order" do
       {:ok, collector} = ChunkCollector.start_link()

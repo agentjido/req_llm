@@ -184,7 +184,7 @@ defmodule ReqLLM.Step.Fixture.Backend do
         {:ok,
          %Req.Response{
            status: ReqLLM.Test.VCR.status(transcript),
-           headers: ReqLLM.Test.VCR.headers(transcript),
+           headers: req_response_headers(ReqLLM.Test.VCR.headers(transcript)),
            body: body
          }}
 
@@ -197,6 +197,12 @@ defmodule ReqLLM.Step.Fixture.Backend do
   end
 
   defp provider_module(provider), do: ReqLLM.Providers.get!(provider)
+
+  defp req_response_headers(headers) do
+    Map.new(headers, fn {key, value} ->
+      {String.downcase(to_string(key)), List.wrap(value)}
+    end)
+  end
 
   # ---------------------------------------------------------------------------
   # Response step for saving fixtures in LIVE mode
@@ -251,20 +257,43 @@ defmodule ReqLLM.Step.Fixture.Backend do
 
   defp capture_request_body_payload(%Req.Request{body: {:json, json_map}}), do: json_map
 
-  defp capture_request_body_payload(%Req.Request{body: body}) when is_binary(body) do
-    case Jason.decode(body) do
-      {:ok, decoded} -> decoded
-      {:error, _} -> %{body: %{b64: Base.encode64(body)}}
-    end
+  defp capture_request_body_payload(%Req.Request{body: body, headers: headers})
+       when is_binary(body) do
+    decode_request_body(body, headers)
   end
 
-  defp capture_request_body_payload(%Req.Request{body: body}) when is_list(body) do
+  defp capture_request_body_payload(%Req.Request{body: body, headers: headers})
+       when is_list(body) do
     body
     |> IO.iodata_to_binary()
-    |> then(fn binary -> capture_request_body_payload(%Req.Request{body: binary}) end)
+    |> decode_request_body(headers)
   end
 
   defp capture_request_body_payload(%Req.Request{body: body}), do: body
+
+  defp decode_request_body(body, headers) do
+    case Jason.decode(body) do
+      {:ok, decoded} -> decoded
+      {:error, _error} -> non_json_request_body(body, headers)
+    end
+  end
+
+  defp non_json_request_body(body, headers) do
+    %{
+      "_fixture_body" => "non_json",
+      "byte_size" => byte_size(body),
+      "content_type" => request_header(headers, "content-type")
+    }
+  end
+
+  defp request_header(headers, target) do
+    headers
+    |> Enum.find_value(fn {key, value} ->
+      if String.downcase(to_string(key)) == target do
+        value |> List.wrap() |> Enum.join("; ")
+      end
+    end)
+  end
 
   defp maybe_put_fixture_canonical_json(%Req.Request{private: private} = request) do
     if Map.has_key?(private, :llm_canonical_json) do
