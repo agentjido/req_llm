@@ -1,4 +1,56 @@
 {
+  "openai:gpt-5-2025-08-07": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T18:58:08Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openai:gpt-realtime-whisper": {
+    "scenarios": {
+      "transcription_basic": {
+        "error": "     ** (MatchError) no match of right hand side value:\n          %ReqLLM.Error.API.Request{",
+        "fixtures": [
+          "transcription_basic"
+        ],
+        "last_checked": "2026-05-29T21:20:41Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "openai:gpt-4o-transcribe-diarize": {
+    "scenarios": {
+      "transcription_basic": {
+        "error": null,
+        "fixtures": [
+          "transcription_basic"
+        ],
+        "last_checked": "2026-05-29T21:23:56Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openai:gpt-4.1-mini-2025-04-14": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T18:57:38Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
   "anthropic:claude-haiku-4-5-20251001": {
     "scenarios": {
       "basic": {
@@ -30,45 +82,64 @@
       }
     }
   },
-  "anthropic:claude-opus-4-1-20250805": {
+  "openai:chatgpt-image-latest": {
     "scenarios": {
-      "basic": {
+      "image_basic": {
         "error": null,
         "fixtures": [
-          "basic"
+          "image_basic"
         ],
-        "last_checked": "2026-05-29T17:11:25Z",
-        "mode": "record",
-        "status": "pass"
-      },
-      "token_limit": {
-        "error": null,
-        "fixtures": [
-          "token_limit"
-        ],
-        "last_checked": "2026-05-29T17:11:25Z",
-        "mode": "record",
-        "status": "pass"
-      },
-      "usage": {
-        "error": null,
-        "fixtures": [
-          "usage"
-        ],
-        "last_checked": "2026-05-29T17:11:25Z",
+        "last_checked": "2026-05-29T21:24:36Z",
         "mode": "record",
         "status": "pass"
       }
     }
   },
-  "anthropic:claude-opus-4-20250514": {
+  "openai:gpt-5-search-api": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (400): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T19:09:22Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "openai:gpt-5-nano": {
+    "scenarios": {
+      "object_streaming": {
+        "error": null,
+        "fixtures": [],
+        "last_checked": "2026-05-29T18:43:47Z",
+        "mode": "replay",
+        "status": "pass"
+      }
+    }
+  },
+  "openai:gpt-4-0125-preview": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (404): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T19:05:48Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "anthropic:claude-sonnet-4-5-20250929": {
     "scenarios": {
       "basic": {
         "error": null,
         "fixtures": [
           "basic"
         ],
-        "last_checked": "2026-05-29T17:13:32Z",
+        "last_checked": "2026-05-29T17:17:58Z",
         "mode": "record",
         "status": "pass"
       },
@@ -77,7 +148,7 @@
         "fixtures": [
           "token_limit"
         ],
-        "last_checked": "2026-05-29T17:13:32Z",
+        "last_checked": "2026-05-29T17:17:58Z",
         "mode": "record",
         "status": "pass"
       },
@@ -86,38 +157,263 @@
         "fixtures": [
           "usage"
         ],
-        "last_checked": "2026-05-29T17:13:32Z",
+        "last_checked": "2026-05-29T17:17:58Z",
         "mode": "record",
         "status": "pass"
       }
     }
   },
-  "anthropic:claude-opus-4-5": {
+  "zai_coder:glm-4.5-flash": {
     "scenarios": {
       "basic": {
         "error": null,
         "fixtures": [
           "basic"
         ],
-        "last_checked": "2026-05-29T17:20:43Z",
+        "last_checked": "2026-05-29T16:28:19Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openai:gpt-4o-mini-tts": {
+    "scenarios": {
+      "speech_basic": {
+        "error": null,
+        "fixtures": [
+          "speech_basic"
+        ],
+        "last_checked": "2026-05-29T21:17:40Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openai:gpt-5-mini-2025-08-07": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T18:58:21Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openai:gpt-image-1-mini": {
+    "scenarios": {
+      "image_basic": {
+        "error": null,
+        "fixtures": [
+          "image_basic"
+        ],
+        "last_checked": "2026-05-29T21:25:04Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openai:gpt-5.2-pro": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T19:01:09Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openai:gpt-4o-mini-transcribe": {
+    "scenarios": {
+      "transcription_basic": {
+        "error": null,
+        "fixtures": [
+          "transcription_basic"
+        ],
+        "last_checked": "2026-05-29T21:19:21Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openai:gpt-5.2-chat-latest": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T19:00:53Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openai:tts-1-1106": {
+    "scenarios": {
+      "speech_basic": {
+        "error": null,
+        "fixtures": [
+          "speech_basic"
+        ],
+        "last_checked": "2026-05-29T21:18:14Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openai:gpt-5.4-mini": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T19:06:44Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openai:davinci-002": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (404): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T19:05:29Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "openai:gpt-audio": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T21:37:41Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openai:gpt-5.4-nano-2026-03-17": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T19:07:10Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openai:babbage-002": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (404): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T19:05:19Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "openai:o3-2025-04-16": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T18:58:41Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openai:chat-latest": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T21:30:52Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "fireworks_ai:accounts/fireworks/models/gpt-oss-20b": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T16:18:31Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openai:gpt-5-pro": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T18:59:05Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openai:gpt-5-nano-2025-08-07": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T18:58:31Z",
         "mode": "record",
         "status": "pass"
       },
-      "token_limit": {
+      "streaming": {
         "error": null,
         "fixtures": [
-          "token_limit"
+          "streaming"
         ],
-        "last_checked": "2026-05-29T17:20:43Z",
+        "last_checked": "2026-05-29T19:19:08Z",
         "mode": "record",
         "status": "pass"
-      },
-      "usage": {
+      }
+    }
+  },
+  "openai:gpt-5.4-2026-03-05": {
+    "scenarios": {
+      "basic": {
         "error": null,
         "fixtures": [
-          "usage"
+          "basic"
         ],
-        "last_checked": "2026-05-29T17:20:43Z",
+        "last_checked": "2026-05-29T19:06:35Z",
         "mode": "record",
         "status": "pass"
       }
@@ -185,76 +481,6 @@
       }
     }
   },
-  "anthropic:claude-sonnet-4-5-20250929": {
-    "scenarios": {
-      "basic": {
-        "error": null,
-        "fixtures": [
-          "basic"
-        ],
-        "last_checked": "2026-05-29T17:17:58Z",
-        "mode": "record",
-        "status": "pass"
-      },
-      "token_limit": {
-        "error": null,
-        "fixtures": [
-          "token_limit"
-        ],
-        "last_checked": "2026-05-29T17:17:58Z",
-        "mode": "record",
-        "status": "pass"
-      },
-      "usage": {
-        "error": null,
-        "fixtures": [
-          "usage"
-        ],
-        "last_checked": "2026-05-29T17:17:58Z",
-        "mode": "record",
-        "status": "pass"
-      }
-    }
-  },
-  "cerebras:gpt-oss-120b": {
-    "scenarios": {
-      "basic": {
-        "error": null,
-        "fixtures": [
-          "basic"
-        ],
-        "last_checked": "2026-05-29T16:18:00Z",
-        "mode": "record",
-        "status": "pass"
-      }
-    }
-  },
-  "cohere:rerank-v3.5": {
-    "scenarios": {
-      "rerank_basic": {
-        "error": null,
-        "fixtures": [
-          "rerank_basic"
-        ],
-        "last_checked": "2026-05-29T16:19:22Z",
-        "mode": "record",
-        "status": "pass"
-      }
-    }
-  },
-  "fireworks_ai:accounts/fireworks/models/gpt-oss-20b": {
-    "scenarios": {
-      "basic": {
-        "error": null,
-        "fixtures": [
-          "basic"
-        ],
-        "last_checked": "2026-05-29T16:18:31Z",
-        "mode": "record",
-        "status": "pass"
-      }
-    }
-  },
   "google:gemini-2.0-flash": {
     "scenarios": {
       "basic": {
@@ -268,39 +494,111 @@
       }
     }
   },
-  "groq:llama-3.1-8b-instant": {
+  "openai:gpt-5.2-pro-2025-12-11": {
     "scenarios": {
       "basic": {
         "error": null,
         "fixtures": [
           "basic"
         ],
-        "last_checked": "2026-05-29T16:17:19Z",
+        "last_checked": "2026-05-29T19:01:31Z",
         "mode": "record",
         "status": "pass"
       }
     }
   },
-  "minimax:MiniMax-M2.1": {
+  "openai:gpt-5.3-codex": {
     "scenarios": {
       "basic": {
-        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (429): ",
+        "error": null,
         "fixtures": [
           "basic"
         ],
-        "last_checked": "2026-05-29T16:18:48Z",
+        "last_checked": "2026-05-29T19:06:08Z",
         "mode": "record",
-        "status": "fail"
+        "status": "pass"
       }
     }
   },
-  "openai:gpt-4.1-mini": {
+  "openai:gpt-5.5": {
     "scenarios": {
-      "context_append": {
+      "basic": {
         "error": null,
-        "fixtures": [],
-        "last_checked": "2026-05-29T18:43:47Z",
-        "mode": "replay",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T19:08:33Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openai:gpt-5.1": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T19:00:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openai:whisper-1": {
+    "scenarios": {
+      "transcription_basic": {
+        "error": null,
+        "fixtures": [
+          "transcription_basic"
+        ],
+        "last_checked": "2026-05-29T20:44:37Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openai:gpt-5-pro-2025-10-06": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T18:59:35Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "anthropic:claude-opus-4-20250514": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T17:13:32Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "token_limit": {
+        "error": null,
+        "fixtures": [
+          "token_limit"
+        ],
+        "last_checked": "2026-05-29T17:13:32Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "usage": {
+        "error": null,
+        "fixtures": [
+          "usage"
+        ],
+        "last_checked": "2026-05-29T17:13:32Z",
+        "mode": "record",
         "status": "pass"
       }
     }
@@ -318,64 +616,102 @@
       }
     }
   },
-  "openai:gpt-5-nano": {
-    "scenarios": {
-      "object_streaming": {
-        "error": null,
-        "fixtures": [],
-        "last_checked": "2026-05-29T18:43:47Z",
-        "mode": "replay",
-        "status": "pass"
-      }
-    }
-  },
-  "openai:gpt-5-pro": {
+  "openai:gpt-5.3-chat-latest": {
     "scenarios": {
       "basic": {
         "error": null,
         "fixtures": [
           "basic"
         ],
-        "last_checked": "2026-05-29T18:39:08Z",
+        "last_checked": "2026-05-29T19:05:58Z",
         "mode": "record",
         "status": "pass"
       }
     }
   },
-  "openai:o3-pro": {
+  "openai:gpt-5.2": {
     "scenarios": {
       "basic": {
         "error": null,
         "fixtures": [
           "basic"
         ],
-        "last_checked": "2026-05-29T18:39:39Z",
+        "last_checked": "2026-05-29T19:00:35Z",
         "mode": "record",
         "status": "pass"
       }
     }
   },
-  "openrouter:openai/gpt-4o-mini": {
+  "anthropic:claude-opus-4-5": {
     "scenarios": {
       "basic": {
         "error": null,
         "fixtures": [
           "basic"
         ],
-        "last_checked": "2026-05-29T16:17:31Z",
+        "last_checked": "2026-05-29T17:20:43Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "token_limit": {
+        "error": null,
+        "fixtures": [
+          "token_limit"
+        ],
+        "last_checked": "2026-05-29T17:20:43Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "usage": {
+        "error": null,
+        "fixtures": [
+          "usage"
+        ],
+        "last_checked": "2026-05-29T17:20:43Z",
         "mode": "record",
         "status": "pass"
       }
     }
   },
-  "xai:grok-3-mini": {
+  "anthropic:claude-opus-4-1-20250805": {
     "scenarios": {
       "basic": {
         "error": null,
         "fixtures": [
           "basic"
         ],
-        "last_checked": "2026-05-29T16:17:48Z",
+        "last_checked": "2026-05-29T17:11:25Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "token_limit": {
+        "error": null,
+        "fixtures": [
+          "token_limit"
+        ],
+        "last_checked": "2026-05-29T17:11:25Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "usage": {
+        "error": null,
+        "fixtures": [
+          "usage"
+        ],
+        "last_checked": "2026-05-29T17:11:25Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openai:gpt-5.4": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T19:06:26Z",
         "mode": "record",
         "status": "pass"
       }
@@ -394,14 +730,441 @@
       }
     }
   },
-  "zai_coder:glm-4.5-flash": {
+  "openai:gpt-5.4-mini-2026-03-17": {
     "scenarios": {
       "basic": {
         "error": null,
         "fixtures": [
           "basic"
         ],
-        "last_checked": "2026-05-29T16:28:19Z",
+        "last_checked": "2026-05-29T19:06:53Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openai:gpt-audio-mini": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T21:37:57Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openai:tts-1-hd-1106": {
+    "scenarios": {
+      "speech_basic": {
+        "error": null,
+        "fixtures": [
+          "speech_basic"
+        ],
+        "last_checked": "2026-05-29T21:18:50Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:openai/gpt-4o-mini": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T16:17:31Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openai:gpt-4o-transcribe": {
+    "scenarios": {
+      "transcription_basic": {
+        "error": null,
+        "fixtures": [
+          "transcription_basic"
+        ],
+        "last_checked": "2026-05-29T21:20:10Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openai:gpt-4o-mini-transcribe-2025-12-15": {
+    "scenarios": {
+      "transcription_basic": {
+        "error": null,
+        "fixtures": [
+          "transcription_basic"
+        ],
+        "last_checked": "2026-05-29T21:23:38Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openai:gpt-4o-2024-08-06": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T18:57:48Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openai:gpt-4.1-2025-04-14": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T18:57:28Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openai:gpt-5.4-pro-2026-03-05": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T19:08:23Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openai:gpt-4o-2024-11-20": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T18:57:58Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openai:gpt-5.3-codex-spark": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (400): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T21:26:57Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "openai:gpt-5.4-nano": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T19:07:01Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openai:gpt-5.2-2025-12-11": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T19:00:43Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "groq:llama-3.1-8b-instant": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T16:17:19Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openai:gpt-5.5-2026-04-23": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T19:08:42Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "minimax:MiniMax-M2.1": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (429): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T16:18:48Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "openai:gpt-5-search-api-2025-10-14": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (400): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T19:09:31Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "openai:gpt-4o-mini-tts-2025-12-15": {
+    "scenarios": {
+      "speech_basic": {
+        "error": null,
+        "fixtures": [
+          "speech_basic"
+        ],
+        "last_checked": "2026-05-29T21:17:57Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openai:gpt-4.1-mini": {
+    "scenarios": {
+      "context_append": {
+        "error": null,
+        "fixtures": [],
+        "last_checked": "2026-05-29T18:43:47Z",
+        "mode": "replay",
+        "status": "pass"
+      }
+    }
+  },
+  "openai:gpt-4o-mini-transcribe-2025-03-20": {
+    "scenarios": {
+      "transcription_basic": {
+        "error": null,
+        "fixtures": [
+          "transcription_basic"
+        ],
+        "last_checked": "2026-05-29T21:23:21Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openai:tts-1-hd": {
+    "scenarios": {
+      "speech_basic": {
+        "error": null,
+        "fixtures": [
+          "speech_basic"
+        ],
+        "last_checked": "2026-05-29T21:18:32Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openai:gpt-5.5-pro-2026-04-23": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T19:09:14Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openai:gpt-5.1-2025-11-13": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T19:00:26Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openai:gpt-5.4-pro": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T19:07:49Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openai:gpt-image-2": {
+    "scenarios": {
+      "image_basic": {
+        "error": null,
+        "fixtures": [
+          "image_basic"
+        ],
+        "last_checked": "2026-05-29T21:25:32Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "cohere:rerank-v3.5": {
+    "scenarios": {
+      "rerank_basic": {
+        "error": null,
+        "fixtures": [
+          "rerank_basic"
+        ],
+        "last_checked": "2026-05-29T16:19:22Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openai:o3-pro-2025-06-10": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T19:00:08Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openai:gpt-5.5-pro": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T19:08:53Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "cerebras:gpt-oss-120b": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T16:18:00Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openai:gpt-image-2-2026-04-21": {
+    "scenarios": {
+      "image_basic": {
+        "error": null,
+        "fixtures": [
+          "image_basic"
+        ],
+        "last_checked": "2026-05-29T21:26:05Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openai:tts-1": {
+    "scenarios": {
+      "speech_basic": {
+        "error": null,
+        "fixtures": [
+          "speech_basic"
+        ],
+        "last_checked": "2026-05-29T20:40:07Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "xai:grok-3-mini": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T16:17:48Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openai:gpt-image-1.5": {
+    "scenarios": {
+      "image_basic": {
+        "error": null,
+        "fixtures": [
+          "image_basic"
+        ],
+        "last_checked": "2026-05-29T20:45:07Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openai:o3-pro": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T18:59:52Z",
         "mode": "record",
         "status": "pass"
       }

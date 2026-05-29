@@ -1,0 +1,181 @@
+{
+  "model_spec": "openai:gpt-5-nano-2025-08-07",
+  "provider": "openai",
+  "request": {
+    "body": {
+      "b64": "eyJpbmNsdWRlIjpbInJlYXNvbmluZy5lbmNyeXB0ZWRfY29udGVudCJdLCJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IldyaXRlIGEgdmVyeSBsb25nIHN0b3J5IGFib3V0IGRyYWdvbnMgYW5kIGFkdmVudHVyZXMiLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjozMDAwLCJtb2RlbCI6ImdwdC01LW5hbm8tMjAyNS0wOC0wNyIsInJlYXNvbmluZyI6eyJlZmZvcnQiOiJsb3cifSwic3RyZWFtIjpmYWxzZX0="
+    },
+    "canonical_json": {
+      "include": [
+        "reasoning.encrypted_content"
+      ],
+      "input": [
+        {
+          "content": [
+            {
+              "text": "Write a very long story about dragons and adventures",
+              "type": "input_text"
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "max_output_tokens": 3000,
+      "model": "gpt-5-nano-2025-08-07",
+      "reasoning": {
+        "effort": "low"
+      },
+      "stream": false
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.openai.com/v1/responses"
+  },
+  "response": {
+    "body": {
+      "background": false,
+      "text": {
+        "format": {
+          "type": "text"
+        },
+        "verbosity": "medium"
+      },
+      "moderation": null,
+      "top_logprobs": 0,
+      "previous_response_id": null,
+      "tool_choice": "auto",
+      "service_tier": "default",
+      "status": "incomplete",
+      "tools": [],
+      "id": "resp_07b9a603cb2da080006a19e74295208195b9a3246178310185",
+      "temperature": 1.0,
+      "max_output_tokens": 3000,
+      "user": null,
+      "frequency_penalty": 0.0,
+      "error": null,
+      "model": "gpt-5-nano-2025-08-07",
+      "usage": {
+        "input_tokens": 15,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens": 3000,
+        "output_tokens_details": {
+          "reasoning_tokens": 128
+        },
+        "total_tokens": 3015
+      },
+      "safety_identifier": null,
+      "object": "response",
+      "parallel_tool_calls": true,
+      "output": [
+        {
+          "encrypted_content": "gAAAAABqGedTJSFyShPp8Zj7IVUrbiqfdSzk50ajNHNZeUIe2oGLPFo6VjGsPJ8Lq3FzG_-lOPo6_6yF2x-YPrgvCdITM4jMKAqt8oHbm7lZZPlsUQwuT14uZ1uIMrQv7CYpAsT_7vq3McJr18B9ChW6DglOeRP1T7Qz32wYdgUXrcZPDAlSF53ofYIqZIUpirXCYpSYMDhIjLfbCzekyCVts245cYKC2t0jitqQFPRC2wOaFBwzCzAl0wMYxbaRcwoKPd5_TqThi0ez204KUs1QvGJB6O_M2-2t8TJgzn5nJhgKrSsJU3e-WW2XhIlNBGBjgBbMtjFuYujK7QmMYXwbg1UX2lZO6C4LhsFYU8v3_6GoVOzhwyh6pYurJyt6POo4cVL6Yg1PBV-CJjxZdxJzGXM-oqAyjuJdf1O8D_4r8b2yKVBdZqsrti8nw7_VdLDiUNXE_RAvHTB4dSQqcp2Hz6TCme31HKcWRklizzfaLg6c_WU3ymDx1qLr1v9lx00o40q_8qePKGXYAkFjJu3nARMLzoTRjbjY5z_em5HYB4Fo2__7KMEt1M5pGeoa6G6U0hHpE-d4gMn21h9n5uplG6a8_vy4ewEtQSpwOoo4g_vGn88AgHxQmP-CmxYf-AFi3dv2NKU-GYdPHZJFanb1BfDMlsrUHsG1RKE4VYIvCfo-McCm2oCfCY_jJRoG2Fbss6AMs5xiLT6wTSKxrrmBK8F8cvys5EuPKzVXqR5Fwn08Rei7wrbsYHRhx9xcrWcjtEoh06eILpubDFabEnBL-QeJxfSTlu9wa5Dra2lXZRyefmpAJY3IdbcSA9qGBNX3RalcN16ZnEExkBUKnYwYOY4dz1xqoJRdmsT1x2g3V_ZKWvWAxXbBvbTXa89rwifZ5qx2p3Ky7F1VN38ToygJZmjpq68Wffqa3tnUUUuKnavtwPrvnrMr16ps2rsS1KUbnZgwMPXp3eg2oGOHOTiHM6vE7Kt7LFZzfxr0ZKPpqNskgxsa4KbTegd6e0XfBQTYB9D_jOg_oevfZyVt4Gc4XAd4HhEjZvfUTTrr3LfyYUyCWL0zC5gxyESKnFCJyYmRweLmuQbxZgpuvWfgW8-FfAPGAYQ8tk354JglwrTrPQzD2eA7HiE3NQtkFhofZZltr8FBjcsgGvxtg8TCJAHMVzhDNcTsgFa-KEP9epby-6XqmbyDvidYvZuFDreL0s8UK2vlqTnwYKeC7pm-QhIQwbmWunFxFwg0A9Pg-kuANQGp7UFe5GdnU6HYIcXWHIp_C3Tvy6v868t73QTNHuT_i2vvLI5tyhoFEO7JysvJhYMmz46jJWoddk0rfTVdNy1e2DrV_v3ekvpsnapsZBJmI10I_00lPmRMg6gHwcAmmJWVEQb0b_JPpsRx0rm-yaJ2BNBCoCngG7ScXnr0pLOkvFFH9c7OoHLLr7ml8y8Qb9m0qJWRiQYWz46VCz15JaKuJczMKIXrX8BdVZdaaWj3n2zKcSINvTvibR3oyj5CtpHFRCBZvyNsD81lZdvQZT3r_cvh24YzqUhtEU5xs-mJcGDShrw51281wrer0Xc2m9HibcbEBVBhow2x_c5WidqwSc3noiMxiT7MsmrLOAH5YOo4VjLnrAlcJt81YpjLkVD-oiENSoqkGhxYldgB-_mtHFnz-50FQk4SPiktAbH_6tJxt-wzYH0DEyNJI3XSbjWl8Qkwv_T1ZrHwTA16qV9waC82tndLBWeyw0_VMfdmYm5AcnrATNOP5fETyxf_P0_Fk3WD4cWrYqupvOAeI4pQ2bQK2DCYxgniLj5gygEQ2ZbhEIK_rIBS_8K3JzR2vmkHQAjVTN8=",
+          "id": "rs_07b9a603cb2da080006a19e7430f14819592e7a16f9296cd80",
+          "summary": [],
+          "type": "reasoning"
+        },
+        {
+          "content": [
+            {
+              "annotations": [],
+              "logprobs": [],
+              "text": "The world had a memory for dragons, but mostly in their bones: ash and glitter, wingbeat and wind-scorched cliff. Humans forgot more of dragons than they remembered, and what they remembered often turned into songs that told of bravery but forgot the breath that shaped the dawn. On the edge of the world, where the sea learned to bite the shore and the cliffs wore their rain like a crown, there was a valley not on any map, where the old stones hummed with heat and the trees wore scales of emerald moss.\n\nIn that valley lived a girl named Lyrin. She had the kind of courage that did not shout but kept itself close, the way a lute player keeps distance from their own instrument until the right moment to let the strings sing. She lived with her grandmother, Mirren, a woman who could hear the weather in the bones of birds and could coax water from stone if you asked nicely and pressed your ear to the ground to listen to the river’s memory. It was Mirren who told Lyrin tales of dragons—tales that began with a whisper and ended with a storm.\n\n“Dragons,” Mirren would say, “are not just beasts with scales and teeth. They are the world’s old librarians, hoarding the knowledge of all days that have passed and all days that will come. They judge, they remember, and sometimes they forget to forgive.”\n\nLyrin did not forget. She grew up with knives of wind at the door and the smell of thunder in the pantry, for Mirren’s house was built at the foot of a cliff carved by rain and time, its windows facing the sea, its door opening onto a path that curled through a hedgerow of hawthorn and bramble toward a field where the sun struck the ground as if it were gold leaf fallen from the sky. On a dawn that felt etched from a dream, Lyrin found a feather—not a feather from any bird she knew, but a dragon feather, iridescent in the pale light, glowing faintly with heat that warmed her fingertips even through her glove. It was soft as silk, and when she pressed it to her lips, she could hear, faint as a whisper, the tremor of wings behind her eyes.\n\nThat morning, as if the valley itself had chosen to wake, a storm came not from the sea but from within the mountains themselves. The air crackled with heat and rain came not as water, but as shards of colored glass that rang when they struck the roof. In the distance, a shape appeared against the jagged rim of the peak: a dragon, larger than any house, scales that shifted like oil on water, eyes bright as copper in a forge. It descended with the measured grandeur of a river cutting through rock. The storm roiled above it, and the valley exhaled as if it had been holding its breath for a thousand years and could finally let go.\n\nThe dragon landed in the field with a rain of dry leaves and a crack that sounded like thunder broken into syllables. Its head lowered, not in threat but curiosity. The travelers in the village—fishermen, shepherds, and children who knew the road to the cliff by heart—fell still, then gathered, half afraid, half enchanted, around the dragon.\n\n“Who speaks for the world?” the dragon asked, and the voice came not as speech but as a wave of heat that warmed the bones. It spoke in a language older than the stones, but Lyrin understood it as if it had always lived in her chest.\n\n“I do not speak for the world,” Lyrin said after a heartbeat that stretched like a blade of light. “I speak for the valley where the old stones remember rain. And for my grandmother, who teaches me to listen to the dragon’s memory.”\n\nThe dragon lowered its head until the tip of its snout rested near Lyrin’s shoulder. Its breath smelled of rain and copper and the taste of iron and mint. In that breath there was a spark—an invitation and a warning together, as fragile as a glass orb and as dangerous as a storm.\n\n“You carry a feather,” the dragon said, turning its gaze toward the hill beyond Mirren’s house, where the hawthorn grew thick and the path wound toward a gate etched with runes. “That feather belongs to a dragon who is not yet asleep. It is a compass, a map in disguise, and a key. If you wish to unlock the door to the long-remembered days, you will need to gather a party worthy of the tale that will follow.”\n\nLyrin’s heart—which had grown fierce with years of living close to the edge of the world—turned, then steadied. The old stories spoke of such invitations, and of the courage that follows when the invitation becomes a summons. She nodded, though the storm still roared in her blood.\n\nMirren, who had stepped from the doorway to stand in the corridor of light that spilled from the dragon’s fire in the morning sun, did not smile, did not tremble. She simply looked at Lyrin and then looked at the dragon, as if reading both the future and the wind at once.\n\n“You will need more than courage to traverse what lies ahead,” Mirren said, the lines of age and weather on her face smoothing into a look of quiet determination. “There are things hidden in the world that would stay hidden if not for a dragon’s desire to be remembered and a human’s willingness to remember the dragon. Lyrin, you have a way with listening. Do not forget to act upon what you hear.”\n\nThus began a quest that would bend the valley’s memory into a new shape, and bend Lyrin’s life into a direction she had not anticipated—the direction that leads to dragons and adventures not merely in the air, but in the very core of time.\n\nThe dragon introduced itself with a name that sounded like wind through a cavern: Kaelthorn. It was a dragon of the ash and salt, born from a volcanic eruption that had painted the sky with smoke and the sea with its shadow. Its scales bore the color of old bone and embers, and its eyes held the blue of deep ice, the green of moss after rain, and the gold of coins spent in joy and fear. Kaelthorn spoke to Lyrin not only through words but with a geography of thoughts: places, passages, and doors that existed in more than one world at once.\n\n“You will travel,” Kaelthorn said, “not to kill or to conquer, but to mend what has been torn. A rift has opened in the space between days, a seam where the past and the future touch. The seam breathes like a sleeping animal and sometimes calls to dragons for help, because dragons remember, and when other creatures forget, the seam forgets too. You will gather three others—the kind of people who can hold up a story when the world wants to swallow it. Each one carries a thread that will form a rope strong enough to pull a door shut against the dark.”\n\nLyrin looked toward the village, toward the cliff, toward the sea, then back to Kaelthorn, and asked what the three threads might be. The dragon did not answer with a list, but with a journey.\n\n“You will begin at the Gate of Rain,” Kaelthorn said. “It is a gateway rumored to lie beneath a waterfall that never dries, inside a cavern where the air tastes like copper and the sound of your heartbeat is outsung by the drip of water. In that cavern waits a woman who can sew wind into sails and turn sorrow to salt. She calls herself Mire.” The name was as precise as a blade.\n\nMire, a seamstress who stitched banners from the weather itself, lived in a village a day’s ride away, a place where the sea sang from the shore, not in words but in patterns of spray and spray-light on the wind. She had once woven a sail from the dawn and a rope from the night’s edge, and in exchange she asked for stories in return. When Lyrin approached Mire at the gate of the waterfall, the woman greeted her with a smile that seemed to have been carved from the light at dawn and then worn away by fatigue and hope in equal measure.\n\n“You came for a thread,” Mire said, studying Lyrin’s eyes as if she were reading the lines of a map. “Most come for a robe of power, or a sword that shines with a god’s intention. You came for a thread. Good. A thread can bind a wound, but only if you hold it with honest hands.”\n\nThe second thread, as Kaelthorn had implied, belonged to a rider who no longer rode with a saddle but with a song. This rider, a young man named Corin, had once ridden a bronze mare across plains that rolled like a sea. Corin’s voice could coax even stubborn metal to bend toward mercy, and his ears could hear the whisper of a dragon’s sigh in the spaces between thunder and rain. He had left his homeland after a council of elders declared it tainted with a magic too dangerous to trust, and he went into exile carrying a lute that had survived a thousand storms and a heart that remembered a homeland that was no longer there to remember.\n\nThe third thread belonged to a child who would later reveal a courage that could thunder through a mountain. Her name was Nara, and she had once saved a whole village by listening to a millstone’s grumble and learning how to read the language of rivers. Nara did not know she would be needed until the day a flood rose in the valley and, when the dam burst, she stood beneath the torrent with a jar of wind and learned to turn the force of the water aside with nothing but quiet hands and a stubborn will. She was not the strongest by strength, but as the dragon’s breath can bend a storm, so too could she bend a moment to the direction of hope.\n\nTogether, the quartet moved through places that felt both ancient and newly minted, as if time itself were a road being repaved. They went to the Gate of Rain, stepping through a veil of mist that tasted of copper and seaweed, and found Mire waiting, not alone but with a staff of weather-woven cloth in her hands. The Gate was not a gate so much as a space—a chamber under a waterfall whose water did not fall so much as flow upward and create a wind that sounded like bells when it moved. In that chamber, Mire taught them the first lesson: that to mend a seam you must understand the weather that made the tear. She showed them how the seam between days was caused by choices made in fear, and how the choice to hope, to weave, and to offer forgiveness could rethread the fabric of time.\n\nIn Mire’s workshop, a room hung with sails that shimmered with distant tides, Lyrin learned one of the old crafts: how to sew wind into cloth and how to stitch a map that could be read only when the mouth opens and the heart speaks. The lesson was not a simple trick but a discipline: to work with elements rather than against them, to trust that a thread of mercy could hold even the load of a dragon’s memory.\n\nCorin, for his part, learned to listen to the pulse of mountains and to recognize when a song belonged to a place and when a song belonged to a person. He taught them the art of turning a story into a bridge, and a bridge into a passage that could carry people through fear to a place where they could choose courage again. Nara, who had once saved a flood with quiet hands, learned to see how a river can be both a danger and a guide, how it could be coaxed to carry a burden if one approached it with patience and a vow to return what had been taken.\n\nThe Dragon’s Gate did not simply present trials; it offered choices. Each candidate carried a burden that could become a gift if wielded with care. Lyrin’s burden was the fear of losing the intimate memory of a dragon’s memory—the fear that to love a dragon is to invite loss. Mire’s burden was the memory that the weather never forgets a betrayal, and so she learned to weave not merely wind but also forgiveness into her sails. Corin carried the weight of exile: the sense that homeland could vanish if one did not gather strength from the world that remained. Nara bore the memory of a village’s survival as a child, and the fear that the village might vanish again if she did not act when asked by fate.\n\nThe trio and Lyrin rode upon Kaelthorn’s back, which had grown not less than a mountain of living flame but steadier, a hull that could bear their weight without buckling. They crossed skies that burned with the blue-white glass of dawn and the pink of twilight, where clouds moved like ships through a sea of air. They landed on a plateau where a city lay in the slope of a hillside, a city that did not sleep but slept with its eyes open, watching the horizon for signs of the seam’s widening.\n\nThis city, the name of which was spoken by the wind but remembered by no living mouth, slept under a shield of runes that glowed at night and dimmed by day, as if the city itself were breathing. Its towers were carved from obsidian, and its streets wound like threads through a woven fabric of stone and light. In the center of the city stood a great archive temple where scrolls sang to one another when the lighting struck the spires just so, and the air thrummed with the memory of thousands of years packed into a single room.\n\nIn that archive, Lyrin discovered a map of the seam itself, drawn by the hands of people who had learned to live at the edge of a tear in time. The map was not a conventional map but a map of possible futures—paths",
+              "type": "output_text"
+            }
+          ],
+          "id": "msg_07b9a603cb2da080006a19e743ddd881959132efff89ba1d1d",
+          "role": "assistant",
+          "status": "incomplete",
+          "type": "message"
+        }
+      ],
+      "instructions": null,
+      "store": true,
+      "presence_penalty": 0.0,
+      "incomplete_details": {
+        "reason": "max_output_tokens"
+      },
+      "reasoning": {
+        "context": "current_turn",
+        "effort": "low",
+        "summary": null
+      },
+      "completed_at": null,
+      "truncation": "disabled",
+      "top_p": 1.0,
+      "billing": {
+        "payer": "developer"
+      },
+      "prompt_cache_retention": "in_memory",
+      "metadata": {},
+      "prompt_cache_key": null,
+      "created_at": 1780082498,
+      "max_tool_calls": null
+    },
+    "headers": {
+      "access-control-expose-headers": [
+        "X-Request-ID",
+        "CF-Ray",
+        "CF-Ray"
+      ],
+      "alt-svc": [
+        "h3=\":443\"; ma=86400"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a037dcffc9f2f4ae-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 29 May 2026 19:21:55 GMT"
+      ],
+      "openai-organization": "[REDACTED:openai-organization]",
+      "openai-processing-ms": [
+        "16861"
+      ],
+      "openai-project": [
+        "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
+      ],
+      "openai-version": [
+        "2020-10-01"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": "[REDACTED:set-cookie]",
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-request-id": [
+        "req_b78c6405cd1e432dbc0a92bacbb39046"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

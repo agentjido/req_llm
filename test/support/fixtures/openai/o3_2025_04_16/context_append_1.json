@@ -1,0 +1,194 @@
+{
+  "model_spec": "openai:o3-2025-04-16",
+  "provider": "openai",
+  "request": {
+    "body": {
+      "b64": "eyJpbmNsdWRlIjpbInJlYXNvbmluZy5lbmNyeXB0ZWRfY29udGVudCJdLCJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IlJlc3BvbmQgd2l0aCBhIHNpbmdsZSB3b3JkICdIaScuIiwidHlwZSI6ImlucHV0X3RleHQifV0sInJvbGUiOiJ1c2VyIn1dLCJtYXhfb3V0cHV0X3Rva2VucyI6MTAyNCwibW9kZWwiOiJvMy0yMDI1LTA0LTE2Iiwic3RyZWFtIjpmYWxzZX0="
+    },
+    "canonical_json": {
+      "include": [
+        "reasoning.encrypted_content"
+      ],
+      "input": [
+        {
+          "content": [
+            {
+              "text": "Respond with a single word 'Hi'.",
+              "type": "input_text"
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "max_output_tokens": 1024,
+      "model": "o3-2025-04-16",
+      "stream": false
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.openai.com/v1/responses"
+  },
+  "response": {
+    "body": {
+      "background": false,
+      "text": {
+        "format": {
+          "type": "text"
+        },
+        "verbosity": "medium"
+      },
+      "moderation": null,
+      "top_logprobs": 0,
+      "previous_response_id": null,
+      "tool_choice": "auto",
+      "service_tier": "default",
+      "status": "completed",
+      "tools": [],
+      "id": "resp_0538c683848400c9006a19e5c3655881a0b19b6dde1de7dda1",
+      "temperature": 1.0,
+      "max_output_tokens": 1024,
+      "user": null,
+      "frequency_penalty": 0.0,
+      "error": null,
+      "model": "o3-2025-04-16",
+      "usage": {
+        "input_tokens": 14,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens": 67,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 81
+      },
+      "safety_identifier": null,
+      "object": "response",
+      "parallel_tool_calls": true,
+      "output": [
+        {
+          "encrypted_content": "gAAAAABqGeXEzIhu1CmuuaOt8g-l4Y1I9D8eTBH0q7DS3qedJJWV2piezNk9i79hX_6G37aY80v9-VOVi1ob4TeRj6GZ6Xg4OwFaz-g-RlSkGE3qOSyD5yzc7Wn2P5FFijh6IuKaHHlroo3F6W7HXD62GGPlv9UMUEIuk6IQt0P1gPg4aOYB9eblVKy8K9jKn_r_26gRekiM2PxTBwOGaAQIb2phg6GdLiwVtV27dJWlPwEA_hPdmpB_na5FD6HwHxoxaC77Hj7OUfRIbPTexpMgRx6mJ5jEDCyXCVYA_2O_CJXaeF67jmh89WWL5w1eMKVvlzFveuCGfNG1OlNuA6KG3upRJy0irI2iDbQSGYclPauUbtjrW8Z1PucTT6sFSMygfCofPXz8vBxw68bn2keRhUFJsnHYiNWWOsJGmGrKgkwenxTcDE1Fm6O1ogAfQD0zzSTCXq9EeCUU8OujHoUHu8KrUjuSqhqvfackE9QEP7oMN4ERVgW_6w83d1GZh5LVD81_SweAQclxjOoEmUHy8EE-SnZwESeC74YL1PFHpSjufJP5sS_I0pEOyvcsjFoDvblqfjRXGEhl-bTB8mlPhpIjocpoCXAEbT6nsPhasezauiUN5-nDcbu5Vf1zDSVXBZe2J4ABTnpcBkh_JMXImNB1T31DDWcg56khxQgpazWXcKMtl0yJ8z6SndEuVNK9xSD6a2Z4yJGEk6-gksNrQpbSyEvQyVkE9ZWIX5IeRl562-dVql8_PFGftkTM4z282gikHx1gMQanToI0KRkEn05_khIpb-rOka0McSOkgdASS7aeCccWei-2x_tkx3HLDEMmJGeQVB7ihvo9gn89ZeuoXp2VvL445HH_aztbr5DbTneOnrWR_Z5FqdCiaJpMDUlNnuET57UkNKoGaW9HrY_bDJnOgpz1Xj1c_jky2PCNyrgwQuSqPp3-EvUcrbV4nj4_7dUeY7xoxe5m0Ngl8_VvttayzxYA7Yzbe43ORWn5ePHgFbttinR_riXiEJSGNa5wYN69655VMbkPlETsSQ4KZGa6Y4V_VJfjIvNMG4uTwn1oXnOA6Jvac1Wt0GWFZhVZt9iAYQI_M1fpXF2ePdtf2tqYV7U1CWG_QmJW-RmdusJcD5IZgsLaGy4hlgzs0biXA0mbPYjZhPMMYhInTorCUYx90EHF5sE1kO4gOWdL2j5lJFLB0cBVm35BZc30ddGo2eH6IxZIvJT5vT1iT06IDLHFzA79fAUuquqzVz-ERUS58J4=",
+          "id": "rs_0538c683848400c9006a19e5c3e4b481a09db0d8dbab195846",
+          "summary": [],
+          "type": "reasoning"
+        },
+        {
+          "content": [
+            {
+              "annotations": [],
+              "logprobs": [],
+              "text": "Hi",
+              "type": "output_text"
+            }
+          ],
+          "id": "msg_0538c683848400c9006a19e5c4306481a08976b692490f042e",
+          "role": "assistant",
+          "status": "completed",
+          "type": "message"
+        }
+      ],
+      "instructions": null,
+      "store": true,
+      "presence_penalty": 0.0,
+      "incomplete_details": null,
+      "reasoning": {
+        "context": "current_turn",
+        "effort": "medium",
+        "summary": null
+      },
+      "completed_at": 1780082116,
+      "truncation": "disabled",
+      "top_p": 1.0,
+      "billing": {
+        "payer": "developer"
+      },
+      "prompt_cache_retention": "in_memory",
+      "metadata": {},
+      "prompt_cache_key": null,
+      "created_at": 1780082115,
+      "max_tool_calls": null
+    },
+    "headers": {
+      "access-control-expose-headers": [
+        "X-Request-ID",
+        "CF-Ray",
+        "CF-Ray"
+      ],
+      "alt-svc": [
+        "h3=\":443\"; ma=86400"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a037d3a4de65d258-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 29 May 2026 19:15:16 GMT"
+      ],
+      "openai-organization": "[REDACTED:openai-organization]",
+      "openai-processing-ms": [
+        "1099"
+      ],
+      "openai-project": [
+        "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
+      ],
+      "openai-version": [
+        "2020-10-01"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": "[REDACTED:set-cookie]",
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-ratelimit-limit-requests": [
+        "10000"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "2000000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "9999"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "1999779"
+      ],
+      "x-ratelimit-reset-requests": [
+        "6ms"
+      ],
+      "x-ratelimit-reset-tokens": [
+        "6ms"
+      ],
+      "x-request-id": [
+        "req_0e5c39fc540c4f11a9c2283a91cf382e"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

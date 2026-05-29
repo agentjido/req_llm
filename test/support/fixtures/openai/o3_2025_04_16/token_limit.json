@@ -1,0 +1,182 @@
+{
+  "model_spec": "openai:o3-2025-04-16",
+  "provider": "openai",
+  "request": {
+    "body": {
+      "b64": "eyJpbmNsdWRlIjpbInJlYXNvbmluZy5lbmNyeXB0ZWRfY29udGVudCJdLCJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IldyaXRlIGEgdmVyeSBsb25nIHN0b3J5IGFib3V0IGRyYWdvbnMgYW5kIGFkdmVudHVyZXMiLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjoxMDAsIm1vZGVsIjoibzMtMjAyNS0wNC0xNiIsInN0cmVhbSI6ZmFsc2V9"
+    },
+    "canonical_json": {
+      "include": [
+        "reasoning.encrypted_content"
+      ],
+      "input": [
+        {
+          "content": [
+            {
+              "text": "Write a very long story about dragons and adventures",
+              "type": "input_text"
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "max_output_tokens": 100,
+      "model": "o3-2025-04-16",
+      "stream": false
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.openai.com/v1/responses"
+  },
+  "response": {
+    "body": {
+      "background": false,
+      "text": {
+        "format": {
+          "type": "text"
+        },
+        "verbosity": "medium"
+      },
+      "moderation": null,
+      "top_logprobs": 0,
+      "previous_response_id": null,
+      "tool_choice": "auto",
+      "service_tier": "default",
+      "status": "incomplete",
+      "tools": [],
+      "id": "resp_0a7836a8cf79d818006a19e5bddf0081a3a4c2bc5c6c2bfd9f",
+      "temperature": 1.0,
+      "max_output_tokens": 100,
+      "user": null,
+      "frequency_penalty": 0.0,
+      "error": null,
+      "model": "o3-2025-04-16",
+      "usage": {
+        "input_tokens": 15,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens": 64,
+        "output_tokens_details": {
+          "reasoning_tokens": 64
+        },
+        "total_tokens": 79
+      },
+      "safety_identifier": null,
+      "object": "response",
+      "parallel_tool_calls": true,
+      "output": [
+        {
+          "encrypted_content": "gAAAAABqGeW_XeZFop-JAwNspsBPuiwkafW28F9JrujR29Ybt8hy7V4Vc_RIqvZgG4Ub_kJBSJM8uYlV1Gk8wVHgkJVo18-7kG2UarQfuvCl-jB9jE_hp0xgrqMc37I-nkDF3HqxTwH8bQS8jISE6cCYlOyfNUkKlTDbSyuBrkLu9eZAANI55JBerOsEVJAdRY8mtOENvEg00fyajq_xlgRCUictGp-wEnJ5L1Uy48cCamn-Ll5UkxhTcKnWg6gzLuhXRjnRIXp1dE8DEpxQTxRyxnPkUY_uVBoBdju-IaeZYr8MEouXUthXYShYOnjy9GDmRT0ZUaRQMaAgvHG0xD5ygES3nDDqNoP2hzTLK5H-LYVypO6eeFHXKVNlcLPi0JFKdCWEWo9AcKqm0d1gMY6QV2hz8gGwXXw8Wan6e0kBFjR3_qhKbdQ1iiQji-tcAEhJtVrg3I-X_EJH41wvCf5b4KRRPpzbIutJghpgmjG5o5qXqEw8Nj4YdIRJ8zWUb4Flo6LbB2l1Xy2opfU4GU8GyKoI0bZFXwnlj3owJayrVwv9cIS_bD5mWZz2ciQAyH7dCIWI1QkmnoXR5wQXf5_kjkVhpKubogyNxFSDVP5wTh8rk_b5qvrDVKrB7Pi8wBSLJlsbr7lBXRUKWjWnlLx5qXL6Cgr-t_NGZTHSd_bq_LlVwYOh7xvOCYp6xzbW0et3BrVBFOBRILHoXTBLYZUc8BIvwwi86qPmZ7YHD74E6dgAR8kMa3r51f8rQfjiaDE9oP7_KsrvBkH7apOZZRjqv5s0VjbBbREORh79xsKZM6fwSzhaI-MJocB8iFDdpXmnR2UyDUUkPrZ1NsR8MWw4ZPNePEurV98akWNinDBQybTtmxTgh2yelseR5F2AN0ld-VtcUQcgyxySlrQouTHM6NLsrqMNyx1r-Xesaj1zYkPgIsSdwsF06KFGZGsilDuWmY3Vr8cQUexPQIVPPKOw9lgCOE6_-Wirdvu0Ot3jUPs5cgiAihRY0L3CxxbglFujGRYmBa7G4KzIVdNjl_B65M7afKkAzzUXL-0sDkjPVU1-zdB7oRw1jX4fKvGfDNmOSfxHSmYKMDGN6p4-7iRAOMvnSVt_GTj9ynEIH6zgL_7YN-JzHjDEw4vmhycoN9JCDjp29kvN4c6hpgxCFdKkYLq4NWG__bkP2p-vw-iMFCOJQUhaNv5vCYK0EViYLLKB2GJj4Lz_4QfY5Hnlc3xnDnJSF-Jt0_EoEdSxREIpBbAwmyOSO6K21mjgRmRYxLmcSMMDOMG0GCgosTGXffZ7iktrLCsca3_LyG5tQYHVphx9zezY4x-sOEUD_z9tMiMywH2juxsivVl23yjydjmRRdCEydSNC5v6MI13_l9ktyKoKceFiCYAJX59qG9UW1mBxPoSnMkGzriiPBx1XxbSD4n7eE-wcG3Clin2bZtdDboVk1dUuwEXTaaxXRsK_aGlNrjDL73VadEtf1jnhA04UsKoZHtyGsKaNnhQyrAm09qOXxZHbYlqLVLd1bjrqqepH1HInNMgBZpoZNKZC12HqVqvpi3YbbrZn6gDHspriD2RNbFvJNs=",
+          "id": "rs_0a7836a8cf79d818006a19e5be8b3481a38f33e23868d485ba",
+          "summary": [],
+          "type": "reasoning"
+        }
+      ],
+      "instructions": null,
+      "store": true,
+      "presence_penalty": 0.0,
+      "incomplete_details": {
+        "reason": "max_output_tokens"
+      },
+      "reasoning": {
+        "context": "current_turn",
+        "effort": "medium",
+        "summary": null
+      },
+      "completed_at": null,
+      "truncation": "disabled",
+      "top_p": 1.0,
+      "billing": {
+        "payer": "developer"
+      },
+      "prompt_cache_retention": "in_memory",
+      "metadata": {},
+      "prompt_cache_key": null,
+      "created_at": 1780082109,
+      "max_tool_calls": null
+    },
+    "headers": {
+      "access-control-expose-headers": [
+        "X-Request-ID",
+        "CF-Ray",
+        "CF-Ray"
+      ],
+      "alt-svc": [
+        "h3=\":443\"; ma=86400"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a037d3825dfbb165-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 29 May 2026 19:15:11 GMT"
+      ],
+      "openai-organization": "[REDACTED:openai-organization]",
+      "openai-processing-ms": [
+        "1941"
+      ],
+      "openai-project": [
+        "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
+      ],
+      "openai-version": [
+        "2020-10-01"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": "[REDACTED:set-cookie]",
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-ratelimit-limit-requests": [
+        "10000"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "2000000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "9999"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "1999778"
+      ],
+      "x-ratelimit-reset-requests": [
+        "6ms"
+      ],
+      "x-ratelimit-reset-tokens": [
+        "6ms"
+      ],
+      "x-request-id": [
+        "req_ab6c132ab9ac44c8ac223330b79c1b18"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

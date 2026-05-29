@@ -1,19 +1,27 @@
 {
+  "model_spec": "openai:gpt-4o-2024-11-20",
+  "provider": "openai",
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjo1MDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiR2VuZXJhdGUgYSBzb2Z0d2FyZSBlbmdpbmVlciBwcm9maWxlIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiZ3B0LTRvLTIwMjQtMTEtMjAiLCJyZXNwb25zZV9mb3JtYXQiOnsianNvbl9zY2hlbWEiOnsibmFtZSI6Im91dHB1dF9zY2hlbWEiLCJzY2hlbWEiOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7ImFnZSI6eyJkZXNjcmlwdGlvbiI6IlBlcnNvbidzIGFnZSBpbiB5ZWFycyIsIm1pbmltdW0iOjEsInR5cGUiOiJpbnRlZ2VyIn0sIm5hbWUiOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBmdWxsIG5hbWUiLCJ0eXBlIjoic3RyaW5nIn0sIm9jY3VwYXRpb24iOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBqb2Igb3IgcHJvZmVzc2lvbiIsInR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImFnZSIsIm5hbWUiLCJvY2N1cGF0aW9uIl0sInR5cGUiOiJvYmplY3QifSwic3RyaWN0Ijp0cnVlfSwidHlwZSI6Impzb25fc2NoZW1hIn0sInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IkdlbmVyYXRlIGEgc29mdHdhcmUgZW5naW5lZXIgcHJvZmlsZSIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9XSwibWF4X291dHB1dF90b2tlbnMiOjUwMCwibW9kZWwiOiJncHQtNG8tMjAyNC0xMS0yMCIsInN0cmVhbSI6ZmFsc2UsInRleHQiOnsiZm9ybWF0Ijp7Im5hbWUiOiJvdXRwdXRfc2NoZW1hIiwic2NoZW1hIjp7ImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjpmYWxzZSwicHJvcGVydGllcyI6eyJhZ2UiOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBhZ2UgaW4geWVhcnMiLCJtaW5pbXVtIjoxLCJ0eXBlIjoiaW50ZWdlciJ9LCJuYW1lIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3MgZnVsbCBuYW1lIiwidHlwZSI6InN0cmluZyJ9LCJvY2N1cGF0aW9uIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3Mgam9iIG9yIHByb2Zlc3Npb24iLCJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJhZ2UiLCJuYW1lIiwib2NjdXBhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In0sInN0cmljdCI6dHJ1ZSwidHlwZSI6Impzb25fc2NoZW1hIn19fQ=="
     },
     "canonical_json": {
-      "max_tokens": 500,
-      "messages": [
+      "input": [
         {
-          "content": "Generate a software engineer profile",
+          "content": [
+            {
+              "text": "Generate a software engineer profile",
+              "type": "input_text"
+            }
+          ],
           "role": "user"
         }
       ],
+      "max_output_tokens": 500,
       "model": "gpt-4o-2024-11-20",
-      "response_format": {
-        "json_schema": {
+      "stream": false,
+      "text": {
+        "format": {
           "name": "output_schema",
           "schema": {
             "additionalProperties": false,
@@ -39,13 +47,10 @@
             ],
             "type": "object"
           },
-          "strict": true
-        },
-        "type": "json_schema"
-      },
-      "seed": 42,
-      "stream": false,
-      "temperature": 0.0
+          "strict": true,
+          "type": "json_schema"
+        }
+      }
     },
     "headers": {
       "accept-encoding": [
@@ -56,52 +61,118 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ]
     },
     "method": "post",
-    "url": "https://api.openai.com/v1/chat/completions"
+    "url": "https://api.openai.com/v1/responses"
   },
   "response": {
     "body": {
-      "choices": [
-        {
-          "finish_reason": "stop",
-          "index": 0,
-          "logprobs": null,
-          "message": {
-            "annotations": [],
-            "content": "{\"age\":29,\"name\":\"Alex Johnson\",\"occupation\":\"Software Engineer\"}",
-            "refusal": null,
-            "role": "assistant"
-          }
-        }
-      ],
-      "created": 1762105816,
-      "id": "chatcmpl-CXWVU0lCkCYVEtJXa9LJvKkyRDqHe",
-      "model": "gpt-4o-2024-11-20",
-      "object": "chat.completion",
-      "service_tier": "default",
-      "system_fingerprint": "fp_8488db5e34",
-      "usage": {
-        "completion_tokens": 15,
-        "completion_tokens_details": {
-          "accepted_prediction_tokens": 0,
-          "audio_tokens": 0,
-          "reasoning_tokens": 0,
-          "rejected_prediction_tokens": 0
+      "background": false,
+      "text": {
+        "format": {
+          "description": null,
+          "name": "output_schema",
+          "schema": {
+            "additionalProperties": false,
+            "properties": {
+              "age": {
+                "description": "Person's age in years",
+                "minimum": 1,
+                "type": "integer"
+              },
+              "name": {
+                "description": "Person's full name",
+                "type": "string"
+              },
+              "occupation": {
+                "description": "Person's job or profession",
+                "type": "string"
+              }
+            },
+            "required": [
+              "age",
+              "name",
+              "occupation"
+            ],
+            "type": "object"
+          },
+          "strict": true,
+          "type": "json_schema"
         },
-        "prompt_tokens": 79,
-        "prompt_tokens_details": {
-          "audio_tokens": 0,
+        "verbosity": "medium"
+      },
+      "moderation": null,
+      "top_logprobs": 0,
+      "previous_response_id": null,
+      "tool_choice": "auto",
+      "service_tier": "default",
+      "status": "completed",
+      "tools": [],
+      "id": "resp_0297cc431b485ba6006a19e559e6c08197a41f2eeda36c4804",
+      "temperature": 1.0,
+      "max_output_tokens": 500,
+      "user": null,
+      "frequency_penalty": 0.0,
+      "error": null,
+      "model": "gpt-4o-2024-11-20",
+      "usage": {
+        "input_tokens": 72,
+        "input_tokens_details": {
           "cached_tokens": 0
         },
-        "total_tokens": 94
-      }
+        "output_tokens": 16,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 88
+      },
+      "safety_identifier": null,
+      "object": "response",
+      "parallel_tool_calls": true,
+      "output": [
+        {
+          "content": [
+            {
+              "annotations": [],
+              "logprobs": [],
+              "text": "{\"name\":\"Alex Johnson\",\"age\":28,\"occupation\":\"Software Engineer\"}",
+              "type": "output_text"
+            }
+          ],
+          "id": "msg_0297cc431b485ba6006a19e55aa0cc81979ba1a24d8c6afc58",
+          "role": "assistant",
+          "status": "completed",
+          "type": "message"
+        }
+      ],
+      "instructions": null,
+      "store": true,
+      "presence_penalty": 0.0,
+      "incomplete_details": null,
+      "reasoning": {
+        "context": null,
+        "effort": null,
+        "summary": null
+      },
+      "completed_at": 1780082010,
+      "truncation": "disabled",
+      "top_p": 1.0,
+      "billing": {
+        "payer": "developer"
+      },
+      "prompt_cache_retention": "in_memory",
+      "metadata": {},
+      "prompt_cache_key": null,
+      "created_at": 1780082009,
+      "max_tool_calls": null
     },
     "headers": {
       "access-control-expose-headers": [
-        "X-Request-ID"
+        "X-Request-ID",
+        "CF-Ray",
+        "CF-Ray"
       ],
       "alt-svc": [
         "h3=\":443\"; ma=86400"
@@ -110,7 +181,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "99857929be4275e4-ORD"
+        "a037d1117906d836-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -119,13 +190,11 @@
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:50:16 GMT"
+        "Fri, 29 May 2026 19:13:30 GMT"
       ],
-      "openai-organization": [
-        "epic-creative-sogybe"
-      ],
+      "openai-organization": "[REDACTED:openai-organization]",
       "openai-processing-ms": [
-        "277"
+        "1059"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -136,10 +205,7 @@
       "server": [
         "cloudflare"
       ],
-      "set-cookie": [
-        "__cf_bm=LdGGKUsKq1WhU4OB.SLdtKfe16R6BWexorovHwtk_B0-1762105816-1.0.1.1-d4pcNMIWHml7a6Fd3esCfr.W4.nfADVUep1MvEKat7fUG0TyV3jqSDNDS6Od27iU6PfYXTczt6YJXoouaRUbbdKdQHpcEOxvEmqcqRU.A6g; path=/; expires=Sun, 02-Nov-25 18:20:16 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=shsfLNC7bTfS48SfpfqlVIeYrjKaZwkZ6_J55o10pYM-1762105816958-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
-      ],
+      "set-cookie": "[REDACTED:set-cookie]",
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
       ],
@@ -148,12 +214,6 @@
       ],
       "x-content-type-options": [
         "nosniff"
-      ],
-      "x-envoy-upstream-service-time": [
-        "287"
-      ],
-      "x-openai-proxy-wasm": [
-        "v0.1"
       ],
       "x-ratelimit-limit-requests": [
         "10000"
@@ -165,18 +225,19 @@
         "9999"
       ],
       "x-ratelimit-remaining-tokens": [
-        "1999989"
+        "1999909"
       ],
       "x-ratelimit-reset-requests": [
         "6ms"
       ],
       "x-ratelimit-reset-tokens": [
-        "0s"
+        "2ms"
       ],
       "x-request-id": [
-        "req_e5f5d25f9ecc45a4884711f858858041"
+        "req_2b4517c63fef4ca4a2983000f06a1378"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

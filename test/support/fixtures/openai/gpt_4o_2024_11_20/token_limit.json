@@ -1,19 +1,25 @@
 {
+  "model_spec": "openai:gpt-4o-2024-11-20",
+  "provider": "openai",
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoxMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiV3JpdGUgYSB2ZXJ5IGxvbmcgc3RvcnkgYWJvdXQgZHJhZ29ucyBhbmQgYWR2ZW50dXJlcyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImdwdC00by0yMDI0LTExLTIwIiwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuNX0="
+      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IldyaXRlIGEgdmVyeSBsb25nIHN0b3J5IGFib3V0IGRyYWdvbnMgYW5kIGFkdmVudHVyZXMiLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjoxMDAsIm1vZGVsIjoiZ3B0LTRvLTIwMjQtMTEtMjAiLCJzdHJlYW0iOmZhbHNlfQ=="
     },
     "canonical_json": {
-      "max_tokens": 100,
-      "messages": [
+      "input": [
         {
-          "content": "Write a very long story about dragons and adventures",
+          "content": [
+            {
+              "text": "Write a very long story about dragons and adventures",
+              "type": "input_text"
+            }
+          ],
           "role": "user"
         }
       ],
+      "max_output_tokens": 100,
       "model": "gpt-4o-2024-11-20",
-      "stream": false,
-      "temperature": 0.5
+      "stream": false
     },
     "headers": {
       "accept-encoding": [
@@ -24,52 +30,93 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ]
     },
     "method": "post",
-    "url": "https://api.openai.com/v1/chat/completions"
+    "url": "https://api.openai.com/v1/responses"
   },
   "response": {
     "body": {
-      "choices": [
-        {
-          "finish_reason": "length",
-          "index": 0,
-          "logprobs": null,
-          "message": {
-            "annotations": [],
-            "content": "Here’s a long story about dragons and adventures! I’ll try to make it engaging and detailed for you:\n\n---\n\n### The Chronicles of Embervale: Rise of the Dragonkin\n\nIn the land of Embervale, nestled between jagged mountain ranges and dense, ancient forests, legends spoke of dragons—beings of immense power who had once ruled the skies and lands with wisdom and fire. For centuries, they had vanished, leaving behind only myths and ruins scattered across the world. But whispers of their",
-            "refusal": null,
-            "role": "assistant"
-          }
-        }
-      ],
-      "created": 1762105817,
-      "id": "chatcmpl-CXWVVJvwT7IPHXLfyFQSk79vs96Zn",
-      "model": "gpt-4o-2024-11-20",
-      "object": "chat.completion",
-      "service_tier": "default",
-      "system_fingerprint": "fp_8488db5e34",
-      "usage": {
-        "completion_tokens": 100,
-        "completion_tokens_details": {
-          "accepted_prediction_tokens": 0,
-          "audio_tokens": 0,
-          "reasoning_tokens": 0,
-          "rejected_prediction_tokens": 0
+      "background": false,
+      "text": {
+        "format": {
+          "type": "text"
         },
-        "prompt_tokens": 16,
-        "prompt_tokens_details": {
-          "audio_tokens": 0,
+        "verbosity": "medium"
+      },
+      "moderation": null,
+      "top_logprobs": 0,
+      "previous_response_id": null,
+      "tool_choice": "auto",
+      "service_tier": "default",
+      "status": "incomplete",
+      "tools": [],
+      "id": "resp_080e2c27f1bca4a2006a19e55dbbc48196a38a530c91cfe8f2",
+      "temperature": 1.0,
+      "max_output_tokens": 100,
+      "user": null,
+      "frequency_penalty": 0.0,
+      "error": null,
+      "model": "gpt-4o-2024-11-20",
+      "usage": {
+        "input_tokens": 16,
+        "input_tokens_details": {
           "cached_tokens": 0
         },
+        "output_tokens": 100,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
         "total_tokens": 116
-      }
+      },
+      "safety_identifier": null,
+      "object": "response",
+      "parallel_tool_calls": true,
+      "output": [
+        {
+          "content": [
+            {
+              "annotations": [],
+              "logprobs": [],
+              "text": "### The Chronicles of Elarion: The Dragon and the Flame  \n\n---\n\nIn a land where time flowed like a whisper through ancient woods and over jagged peaks, where the sky burned with the hues of a forgotten sun, there thrived a kingdom called Elarion. Hemmed in by towering mountains to the north and endless dunes to the south, Elarion was a land of magic, mystery, and stories—stories of dragons, tales that fed hearthside conversations and filled the hearts of",
+              "type": "output_text"
+            }
+          ],
+          "id": "msg_080e2c27f1bca4a2006a19e55e184c81969a4a3fe4abb73686",
+          "role": "assistant",
+          "status": "incomplete",
+          "type": "message"
+        }
+      ],
+      "instructions": null,
+      "store": true,
+      "presence_penalty": 0.0,
+      "incomplete_details": {
+        "reason": "max_output_tokens"
+      },
+      "reasoning": {
+        "context": null,
+        "effort": null,
+        "summary": null
+      },
+      "completed_at": null,
+      "truncation": "disabled",
+      "top_p": 1.0,
+      "billing": {
+        "payer": "developer"
+      },
+      "prompt_cache_retention": "in_memory",
+      "metadata": {},
+      "prompt_cache_key": null,
+      "created_at": 1780082013,
+      "max_tool_calls": null
     },
     "headers": {
       "access-control-expose-headers": [
-        "X-Request-ID"
+        "X-Request-ID",
+        "CF-Ray",
+        "CF-Ray"
       ],
       "alt-svc": [
         "h3=\":443\"; ma=86400"
@@ -78,7 +125,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "99857931cf4c75e4-ORD"
+        "a037d1297915c0a8-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -87,13 +134,11 @@
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:50:19 GMT"
+        "Fri, 29 May 2026 19:13:36 GMT"
       ],
-      "openai-organization": [
-        "epic-creative-sogybe"
-      ],
+      "openai-organization": "[REDACTED:openai-organization]",
       "openai-processing-ms": [
-        "1548"
+        "2303"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -104,10 +149,7 @@
       "server": [
         "cloudflare"
       ],
-      "set-cookie": [
-        "__cf_bm=qPTayD5kNBBdKVCabd9b4uOst7oVhmcaxUTbvyfKz6k-1762105819-1.0.1.1-ZENGXtDeeiwfvEmpMQ1Aa.OL83KBObGWBlv6JDcDCpbAhmZHiz8IUsV3l0TsY0mwu_PqaSsvNX5i7bR_jgwHcMXPP1uaxdgwcaio3f0Epws; path=/; expires=Sun, 02-Nov-25 18:20:19 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=7Mx6OIMnPwHbhw9c7l0j2o94kjv2RNSMfL9u.mjpLaQ-1762105819525-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
-      ],
+      "set-cookie": "[REDACTED:set-cookie]",
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
       ],
@@ -116,12 +158,6 @@
       ],
       "x-content-type-options": [
         "nosniff"
-      ],
-      "x-envoy-upstream-service-time": [
-        "1568"
-      ],
-      "x-openai-proxy-wasm": [
-        "v0.1"
       ],
       "x-ratelimit-limit-requests": [
         "10000"
@@ -133,18 +169,19 @@
         "9999"
       ],
       "x-ratelimit-remaining-tokens": [
-        "1999985"
+        "1999965"
       ],
       "x-ratelimit-reset-requests": [
         "6ms"
       ],
       "x-ratelimit-reset-tokens": [
-        "0s"
+        "1ms"
       ],
       "x-request-id": [
-        "req_7a85f6bb34e747968cf86a22c475d218"
+        "req_8f8d2466a87c478da345a02a1134ae8f"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

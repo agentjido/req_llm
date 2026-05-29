@@ -1,0 +1,197 @@
+{
+  "model_spec": "openai:gpt-5-mini-2025-08-07",
+  "provider": "openai",
+  "request": {
+    "body": {
+      "b64": "eyJpbmNsdWRlIjpbInJlYXNvbmluZy5lbmNyeXB0ZWRfY29udGVudCJdLCJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IkhlbGxvIHdvcmxkISIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9XSwibWF4X291dHB1dF90b2tlbnMiOjIwMDAsIm1vZGVsIjoiZ3B0LTUtbWluaS0yMDI1LTA4LTA3IiwicmVhc29uaW5nIjp7ImVmZm9ydCI6ImxvdyJ9LCJzdHJlYW0iOmZhbHNlfQ=="
+    },
+    "canonical_json": {
+      "include": [
+        "reasoning.encrypted_content"
+      ],
+      "input": [
+        {
+          "content": [
+            {
+              "text": "Hello world!",
+              "type": "input_text"
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "max_output_tokens": 2000,
+      "model": "gpt-5-mini-2025-08-07",
+      "reasoning": {
+        "effort": "low"
+      },
+      "stream": false
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.openai.com/v1/responses"
+  },
+  "response": {
+    "body": {
+      "background": false,
+      "text": {
+        "format": {
+          "type": "text"
+        },
+        "verbosity": "medium"
+      },
+      "moderation": null,
+      "top_logprobs": 0,
+      "previous_response_id": null,
+      "tool_choice": "auto",
+      "service_tier": "default",
+      "status": "completed",
+      "tools": [],
+      "id": "resp_00bc844d1d2342b7006a19e73390a081948acf30e9072b8e56",
+      "temperature": 1.0,
+      "max_output_tokens": 2000,
+      "user": null,
+      "frequency_penalty": 0.0,
+      "error": null,
+      "model": "gpt-5-mini-2025-08-07",
+      "usage": {
+        "input_tokens": 9,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens": 49,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 58
+      },
+      "safety_identifier": null,
+      "object": "response",
+      "parallel_tool_calls": true,
+      "output": [
+        {
+          "encrypted_content": "gAAAAABqGec0fzoOTZ25BNilsl6peSoO0hsgVHPqZP39oitIm5UPCVxuzhweMp_owActpoalEI4rAWjtxZbUe9bmuTfKCkPZyJyByLczCEpEGWChDV-vmXoTle_bX_rIWTI4Csb1TLd0yt-9Cah0lbswfgGsE1Z6LxVlEoQOzkAKE_Dewyl402gMW660hv829DUJTJA4cuK7dDNXjtadyNLlP3ciboInB3mq2AYsJrnvlATRTdlt7gTiqJg7EkVt6JtdVT_PX7HfWrd4lqX6PM4FnMEKW6GEf_LBirhu2Qfxcb4I2ZZPOrfn6oJe_LWYWlCuW9GAWU3V2RZ7SOQIIsqDy5hK94xCYPST-UsEIkE9VxkuH7Ub85fnzi1Bg0wWSV0KEGKK9CO1qrK7fUpS-_gYl-ncU8gpaYsLXaTERxCaBtNuR_a7m-fbWvOS7encQQLpLwaW0hZM2Y_G86V80sDEbDe-fwNFUYzQzAB67AXfiQ50qTPnP0nGRVU3E1yTaY4XSrBvsKcwY7MngW4OSrPddh9-oTEBZ3niC4WIsBx99xr1AttrLHTsU9A8TZdguCJxED6oGebbctQKUN2j-T2Lk4Vo8KQxZ9FJsA4n-yapFmB6avOPq6FDVweEjI4RSAQuzPJGP4CYWshSZCwh-6MthXM-QhnFAmEEd-HJAifucH4c8FYwbxsB2JyM2pD3z-ar2lo2T4xnJCKw3kYD5MsGgn2SEPmQeWf0vhsn0zq4fcmw3IziS-Y75xEYRi-nfoeuBVwAYGvcsQ9QLk-FhfHZhNs5NFULtGXeOu1wdu62h0R5IhyqRsAupaJhLqBsStEhHFT6zymOlNkTo0i4tqsF3TL3SvCh5QfM9KxEMSurde-ZQ4HjnUgnauhnS2G6pVtb4UaqxDLUifFXw_WyMtrZGxkOV6XHymHxFJWyi4MjhJCR33ofi-LDFUaHQE-krpj_u18MWftr4cMOgMdDH5TDir5vbNAZ-fkhcxm1ZngiF2iESqHZM3M8C19BzrrMwpvfMQyGHC5LzLaZZ_ed2YB6CnxuKQeRzkfpk0CqlHWcZ-rpGvPi6uTGLaxf47FheQkhxaQdBAeKYTQ2gb1bKotq_-KyPOVbYBiFYseiTrtAUP_nzg3ztZk=",
+          "id": "rs_00bc844d1d2342b7006a19e733e118819496f9b7da0c7cfccf",
+          "summary": [],
+          "type": "reasoning"
+        },
+        {
+          "content": [
+            {
+              "annotations": [],
+              "logprobs": [],
+              "text": "Hello! 👋 How can I help you today?",
+              "type": "output_text"
+            }
+          ],
+          "id": "msg_00bc844d1d2342b7006a19e7343e4c8194bef447b8702a9ca1",
+          "role": "assistant",
+          "status": "completed",
+          "type": "message"
+        }
+      ],
+      "instructions": null,
+      "store": true,
+      "presence_penalty": 0.0,
+      "incomplete_details": null,
+      "reasoning": {
+        "context": "current_turn",
+        "effort": "low",
+        "summary": null
+      },
+      "completed_at": 1780082484,
+      "truncation": "disabled",
+      "top_p": 1.0,
+      "billing": {
+        "payer": "developer"
+      },
+      "prompt_cache_retention": "in_memory",
+      "metadata": {},
+      "prompt_cache_key": null,
+      "created_at": 1780082483,
+      "max_tool_calls": null
+    },
+    "headers": {
+      "access-control-expose-headers": [
+        "X-Request-ID",
+        "CF-Ray",
+        "CF-Ray"
+      ],
+      "alt-svc": [
+        "h3=\":443\"; ma=86400"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a037dca1ef8aeacf-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 29 May 2026 19:21:24 GMT"
+      ],
+      "openai-organization": "[REDACTED:openai-organization]",
+      "openai-processing-ms": [
+        "1154"
+      ],
+      "openai-project": [
+        "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
+      ],
+      "openai-version": [
+        "2020-10-01"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": "[REDACTED:set-cookie]",
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-ratelimit-limit-requests": [
+        "10000"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "10000000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "9999"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "10000000"
+      ],
+      "x-ratelimit-reset-requests": [
+        "6ms"
+      ],
+      "x-ratelimit-reset-tokens": [
+        "0s"
+      ],
+      "x-request-id": [
+        "req_aed0caea26094e7bbb9db4bfb70f68f0"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

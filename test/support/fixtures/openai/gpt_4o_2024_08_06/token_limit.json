@@ -1,19 +1,25 @@
 {
+  "model_spec": "openai:gpt-4o-2024-08-06",
+  "provider": "openai",
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoxMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiV3JpdGUgYSB2ZXJ5IGxvbmcgc3RvcnkgYWJvdXQgZHJhZ29ucyBhbmQgYWR2ZW50dXJlcyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImdwdC00by0yMDI0LTA4LTA2Iiwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuNX0="
+      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IldyaXRlIGEgdmVyeSBsb25nIHN0b3J5IGFib3V0IGRyYWdvbnMgYW5kIGFkdmVudHVyZXMiLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjoxMDAsIm1vZGVsIjoiZ3B0LTRvLTIwMjQtMDgtMDYiLCJzdHJlYW0iOmZhbHNlfQ=="
     },
     "canonical_json": {
-      "max_tokens": 100,
-      "messages": [
+      "input": [
         {
-          "content": "Write a very long story about dragons and adventures",
+          "content": [
+            {
+              "text": "Write a very long story about dragons and adventures",
+              "type": "input_text"
+            }
+          ],
           "role": "user"
         }
       ],
+      "max_output_tokens": 100,
       "model": "gpt-4o-2024-08-06",
-      "stream": false,
-      "temperature": 0.5
+      "stream": false
     },
     "headers": {
       "accept-encoding": [
@@ -24,52 +30,93 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ]
     },
     "method": "post",
-    "url": "https://api.openai.com/v1/chat/completions"
+    "url": "https://api.openai.com/v1/responses"
   },
   "response": {
     "body": {
-      "choices": [
-        {
-          "finish_reason": "length",
-          "index": 0,
-          "logprobs": null,
-          "message": {
-            "annotations": [],
-            "content": "**Title: The Chronicles of Eldoria: The Dragon's Quest**\n\n**Chapter 1: The Whispering Winds**\n\nIn the heart of Eldoria, a realm untouched by time and teeming with magic, the legend of dragons was as old as the mountains themselves. These majestic creatures, with scales that shimmered like precious gems and wings that could eclipse the sun, were said to be the guardians of ancient wisdom and untold power. Yet, for centuries, they had vanished from the skies,",
-            "refusal": null,
-            "role": "assistant"
-          }
-        }
-      ],
-      "created": 1762105820,
-      "id": "chatcmpl-CXWVYZwQSE0VgUjjgnl5sRXoEMqeM",
-      "model": "gpt-4o-2024-08-06",
-      "object": "chat.completion",
-      "service_tier": "default",
-      "system_fingerprint": "fp_a788c5aef0",
-      "usage": {
-        "completion_tokens": 100,
-        "completion_tokens_details": {
-          "accepted_prediction_tokens": 0,
-          "audio_tokens": 0,
-          "reasoning_tokens": 0,
-          "rejected_prediction_tokens": 0
+      "background": false,
+      "text": {
+        "format": {
+          "type": "text"
         },
-        "prompt_tokens": 16,
-        "prompt_tokens_details": {
-          "audio_tokens": 0,
+        "verbosity": "medium"
+      },
+      "moderation": null,
+      "top_logprobs": 0,
+      "previous_response_id": null,
+      "tool_choice": "auto",
+      "service_tier": "default",
+      "status": "incomplete",
+      "tools": [],
+      "id": "resp_00489a1b59977a26006a19e53a2e4881969be88469d03d14e9",
+      "temperature": 1.0,
+      "max_output_tokens": 100,
+      "user": null,
+      "frequency_penalty": 0.0,
+      "error": null,
+      "model": "gpt-4o-2024-08-06",
+      "usage": {
+        "input_tokens": 16,
+        "input_tokens_details": {
           "cached_tokens": 0
         },
+        "output_tokens": 100,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
         "total_tokens": 116
-      }
+      },
+      "safety_identifier": null,
+      "object": "response",
+      "parallel_tool_calls": true,
+      "output": [
+        {
+          "content": [
+            {
+              "annotations": [],
+              "logprobs": [],
+              "text": "Title: **Whispers of the Dragon Realm**\n\n---\n\nIn the ancient land of Eldoria, where emerald forests kissed the skies and rivers sang a melody of crystal notes, there lay a hidden realm whispered only in the tales of old - the Dragon Realm. Eldoria was a place of magic and mystery, its beauty unmatched and guarded fiercely by its creatures. But none were as revered, nor as feared, as the dragons.\n\nLegends spoke of towering mountains draped in ethereal mists, where",
+              "type": "output_text"
+            }
+          ],
+          "id": "msg_00489a1b59977a26006a19e53ade9081969cbcc934d7183990",
+          "role": "assistant",
+          "status": "incomplete",
+          "type": "message"
+        }
+      ],
+      "instructions": null,
+      "store": true,
+      "presence_penalty": 0.0,
+      "incomplete_details": {
+        "reason": "max_output_tokens"
+      },
+      "reasoning": {
+        "context": null,
+        "effort": null,
+        "summary": null
+      },
+      "completed_at": null,
+      "truncation": "disabled",
+      "top_p": 1.0,
+      "billing": {
+        "payer": "developer"
+      },
+      "prompt_cache_retention": "in_memory",
+      "metadata": {},
+      "prompt_cache_key": null,
+      "created_at": 1780081978,
+      "max_tool_calls": null
     },
     "headers": {
       "access-control-expose-headers": [
-        "X-Request-ID"
+        "X-Request-ID",
+        "CF-Ray",
+        "CF-Ray"
       ],
       "alt-svc": [
         "h3=\":443\"; ma=86400"
@@ -78,7 +125,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "99857941b8c4b6cc-ORD"
+        "a037d04b3acdc5db-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -87,13 +134,11 @@
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:50:21 GMT"
+        "Fri, 29 May 2026 19:13:01 GMT"
       ],
-      "openai-organization": [
-        "epic-creative-sogybe"
-      ],
+      "openai-organization": "[REDACTED:openai-organization]",
       "openai-processing-ms": [
-        "1428"
+        "2993"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -104,10 +149,7 @@
       "server": [
         "cloudflare"
       ],
-      "set-cookie": [
-        "__cf_bm=XyT6oOEwoI7CbU7BYyGt7xiixCnc9ptEZ1MH8g6DBPQ-1762105821-1.0.1.1-LSun8aCH4MiMedmarzPtVLIVYbj3QSRSMCC0LIR.0im1l51AaS9wmGfuLo5XBcdepaXPFIqUAEl0wRYsxbZL.qFrLa8rvvYSinAVA9JAw5g; path=/; expires=Sun, 02-Nov-25 18:20:21 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=kzCFOiOOT_Ceo.JFtKky1f1oj_dbz3FFO6CGAXuJAKk-1762105821942-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
-      ],
+      "set-cookie": "[REDACTED:set-cookie]",
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
       ],
@@ -116,12 +158,6 @@
       ],
       "x-content-type-options": [
         "nosniff"
-      ],
-      "x-envoy-upstream-service-time": [
-        "1441"
-      ],
-      "x-openai-proxy-wasm": [
-        "v0.1"
       ],
       "x-ratelimit-limit-requests": [
         "10000"
@@ -133,18 +169,19 @@
         "9999"
       ],
       "x-ratelimit-remaining-tokens": [
-        "1999985"
+        "1999965"
       ],
       "x-ratelimit-reset-requests": [
         "6ms"
       ],
       "x-ratelimit-reset-tokens": [
-        "0s"
+        "1ms"
       ],
       "x-request-id": [
-        "req_f2860e602681461ca3b0264e050db6cc"
+        "req_d6b6c61511bc4a81b0a586bd71ead0ee"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

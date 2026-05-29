@@ -1,0 +1,198 @@
+{
+  "model_spec": "openai:gpt-5.4-pro-2026-03-05",
+  "provider": "openai",
+  "request": {
+    "body": {
+      "b64": "eyJpbmNsdWRlIjpbInJlYXNvbmluZy5lbmNyeXB0ZWRfY29udGVudCJdLCJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IkhlbGxvIHdvcmxkISIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9XSwibWF4X291dHB1dF90b2tlbnMiOjUwLCJtb2RlbCI6ImdwdC01LjQtcHJvLTIwMjYtMDMtMDUiLCJyZWFzb25pbmciOnsiZWZmb3J0IjoiaGlnaCJ9LCJzdHJlYW0iOmZhbHNlfQ=="
+    },
+    "canonical_json": {
+      "include": [
+        "reasoning.encrypted_content"
+      ],
+      "input": [
+        {
+          "content": [
+            {
+              "text": "Hello world!",
+              "type": "input_text"
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "max_output_tokens": 50,
+      "model": "gpt-5.4-pro-2026-03-05",
+      "reasoning": {
+        "effort": "high"
+      },
+      "stream": false
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.openai.com/v1/responses"
+  },
+  "response": {
+    "body": {
+      "background": false,
+      "text": {
+        "format": {
+          "type": "text"
+        },
+        "verbosity": "medium"
+      },
+      "moderation": null,
+      "top_logprobs": 0,
+      "previous_response_id": null,
+      "tool_choice": "auto",
+      "service_tier": "default",
+      "status": "completed",
+      "tools": [],
+      "id": "resp_07880709735cc4cc006a19e40d59c08197a0af826f218a59c4",
+      "temperature": 1.0,
+      "max_output_tokens": 50,
+      "user": null,
+      "frequency_penalty": 0.0,
+      "error": null,
+      "model": "gpt-5.4-pro-2026-03-05",
+      "usage": {
+        "input_tokens": 9,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens": 42,
+        "output_tokens_details": {
+          "reasoning_tokens": 27
+        },
+        "total_tokens": 51
+      },
+      "safety_identifier": null,
+      "object": "response",
+      "parallel_tool_calls": true,
+      "output": [
+        {
+          "encrypted_content": "gAAAAABqGeQncMoAUFVOtwcgfFRKGTOOJ9hLx_Ocq1fHyoRuhEUoj0Z1yVFJSS1zT612VtxmAphY3hwM1Ui0zvPX6FQnkT5ZRgzY8Pf_E72xg8qr9XsuaPibEQDllkWNIGm1cv3hc9S_fxnksTmZjQvVXNSV8GBRWtxKSdDK3YRfccpsPEzvP0qM46wNgeqgBa17EUS87Y8_J8SjVzRd7SX49gbAlWbfeiu34kDKsSah1M_RA3Jk9GvP2jxNtB7AcfowNtlt3KiZGLKCkdnDok3PSpQmuq5ON3qB-MtoOiND6D08XrqPtsg5YcKgldeomAPz35o0nHm79XHPzbz8aSfcIwOnNmqOeY2138nP7AxNePpQbxN0PfDmVN3HNkY0_ixK8s6roUuxVcytDefu5TFSLtNFcgyU4NlQDjwc1BmbBUW9zKJ5SL2qYtMRs-LLUioEg9K0eDiosml8OE1oDAl5b5FEWFckKKEJGHOsY38pthKJA_3yu5SeJF86E0fDPZ201MrX4uf2K2zihm_LCUKWCNHJ9I5GbpwOmvzQNAycj-lZc-3cCLIiL71acHL8zQaWKDK409MAMZejXNzBXz_tYKyZzaCZW6N9nFCCacq-3zhaizbbYq2LexNoVkV2LNeGQd5u9RAJuMyyAd5Jfbph6h1AFXPuibPndi_PuMi3okh1AHPcyyU-CKD2HRXxmgHR7OFury_e5FI_zk2heDE9M4BlV650aglbG-bhfuoPeGpKuAC_4PqvVMG0SM0M5DI2mhH4z_rokoCDEKeyjcy46TzkDQzVey6YHpSDMTvS8_lwvpq9dHrQ9NJZEQQkrGCmeR-3RT4D2ewpxVrWzbk_e4KN6izhgCDXB1Ec7b5_mS1xtMkFxD1eEkKxutROncfQL4EGxRogiq-Kh6e1WKoHM9WUhzqH26cnkhlijrVInPtp9skTXhGMY3GlMqnpN5ocQoVHrvkfv_S30XlEzZPzAwryXV6U0F7xOLIzhDv1wXgbI9Omt2PFX2ktvpd7wS3FuSrzITzkH07rL7kME3rW75lYJUCpaBAU0Yqgxn9cGPYfaJFO_j3rFQR_NrRAvAurk6b2bQru",
+          "id": "rs_07880709735cc4cc006a19e42796988197a8ff057d0e725750",
+          "summary": [],
+          "type": "reasoning"
+        },
+        {
+          "content": [
+            {
+              "annotations": [],
+              "logprobs": [],
+              "text": "Hello! How can I help you today?",
+              "type": "output_text"
+            }
+          ],
+          "id": "msg_07880709735cc4cc006a19e42798208197b221dcd7ad7b1089",
+          "phase": "final_answer",
+          "role": "assistant",
+          "status": "completed",
+          "type": "message"
+        }
+      ],
+      "instructions": null,
+      "store": true,
+      "presence_penalty": 0.0,
+      "incomplete_details": null,
+      "reasoning": {
+        "context": "current_turn",
+        "effort": "high",
+        "summary": null
+      },
+      "completed_at": 1780081703,
+      "truncation": "disabled",
+      "top_p": 0.98,
+      "billing": {
+        "payer": "developer"
+      },
+      "prompt_cache_retention": "in_memory",
+      "metadata": {},
+      "prompt_cache_key": null,
+      "created_at": 1780081677,
+      "max_tool_calls": null
+    },
+    "headers": {
+      "access-control-expose-headers": [
+        "X-Request-ID",
+        "CF-Ray",
+        "CF-Ray"
+      ],
+      "alt-svc": [
+        "h3=\":443\"; ma=86400"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a037c8f2bba649d8-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 29 May 2026 19:08:23 GMT"
+      ],
+      "openai-organization": "[REDACTED:openai-organization]",
+      "openai-processing-ms": [
+        "26525"
+      ],
+      "openai-project": [
+        "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
+      ],
+      "openai-version": [
+        "2020-10-01"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": "[REDACTED:set-cookie]",
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-ratelimit-limit-requests": [
+        "10000"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "4000000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "9999"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "4000000"
+      ],
+      "x-ratelimit-reset-requests": [
+        "6ms"
+      ],
+      "x-ratelimit-reset-tokens": [
+        "0s"
+      ],
+      "x-request-id": [
+        "req_a89008b19f5c48c5b9bebb709bc046e8"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

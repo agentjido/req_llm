@@ -1,0 +1,197 @@
+{
+  "model_spec": "openai:gpt-5-nano-2025-08-07",
+  "provider": "openai",
+  "request": {
+    "body": {
+      "b64": "eyJpbmNsdWRlIjpbInJlYXNvbmluZy5lbmNyeXB0ZWRfY29udGVudCJdLCJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IkhlbGxvIHdvcmxkISIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9XSwibWF4X291dHB1dF90b2tlbnMiOjIwMDAsIm1vZGVsIjoiZ3B0LTUtbmFuby0yMDI1LTA4LTA3IiwicmVhc29uaW5nIjp7ImVmZm9ydCI6ImxvdyJ9LCJzdHJlYW0iOmZhbHNlfQ=="
+    },
+    "canonical_json": {
+      "include": [
+        "reasoning.encrypted_content"
+      ],
+      "input": [
+        {
+          "content": [
+            {
+              "text": "Hello world!",
+              "type": "input_text"
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "max_output_tokens": 2000,
+      "model": "gpt-5-nano-2025-08-07",
+      "reasoning": {
+        "effort": "low"
+      },
+      "stream": false
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.openai.com/v1/responses"
+  },
+  "response": {
+    "body": {
+      "background": false,
+      "text": {
+        "format": {
+          "type": "text"
+        },
+        "verbosity": "medium"
+      },
+      "moderation": null,
+      "top_logprobs": 0,
+      "previous_response_id": null,
+      "tool_choice": "auto",
+      "service_tier": "default",
+      "status": "completed",
+      "tools": [],
+      "id": "resp_0ff804b92cf09b3c006a19e7556cbc819fa5ded0f8ab0bbc3e",
+      "temperature": 1.0,
+      "max_output_tokens": 2000,
+      "user": null,
+      "frequency_penalty": 0.0,
+      "error": null,
+      "model": "gpt-5-nano-2025-08-07",
+      "usage": {
+        "input_tokens": 9,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens": 162,
+        "output_tokens_details": {
+          "reasoning_tokens": 64
+        },
+        "total_tokens": 171
+      },
+      "safety_identifier": null,
+      "object": "response",
+      "parallel_tool_calls": true,
+      "output": [
+        {
+          "encrypted_content": "gAAAAABqGedXPmnwaFrOLTCbph4RUle21BPG1PuCOMO4UolGevcJg51ixBagfSRKW1COIH_6cWaeGe2UgQzRRqo3BZ-WFUl4s-viYU7Rv7alvQDSoBSu16xcXbQTVf-Cnyooe8xs7vxuMNHkgVX9L-VdeU4xxzx73PUJc5Qpwk7HfO8qy0jfrYEXPyJC_OXKoN8JNeg-PEkcPwCfdNFhjc-jptFghms4vkWeTXBmtUILd9ns7twkFywY_EKrKAqbD7Ic8nlQGSf7eprRcBQDlxBVsQX_XJ-U1UaAQdVcbtvuIG6hKZ5bJmIQwlU5FcNHMmPKJmYacKExhKfBFQ-m5sbRek7BdMN577b1tSeRfqhYEgY3sFPJYPr6TBu6a1tHk3bCd79ys0iM1owU5ovVnzuBqw76Wrr1UbdcgwNDvSQMc1bbXZKOeDZowhgR9D_he7sPp6bymSGWG-C84ISw1evc__jcBZ9NunGnNd6p0ZFmNEKS3T30Hc30aIERAGBKfUnH-ZIi4GiNKBzMVJQhUx4xreL4hrhiMNko0vLm7d95WQ-PzgcP7E2iZWBbckHU7xUR-t-qaQNrkKfJr-f8LAnQhGBUy7CPz4caIwzwzdJ_IGT3bFLw97hzLa9Di5hnn1KS_AkGewv3n3gEUmsoq--3GkVp12iVOc-EXWo4V9bNs2Vu5-eQAVSrgvOSqLrxzciubjDU3oT4klyojtvqM-vSWjzO2dZ1r7_CPex8_hEe3W6hGGs3qSuob_757ETfvhPuHkW5oB4au6TxRTRSlVTQgio1JgIBzVojOxmQaaZWaXUKfsn3JPJITKtaH1zHeRSEzWei0KP3r1W3OSE62jqawVarna9Slb31jnD9XqQbLiInG9WbI_w6NMjSaiUxmVpObVkcKk5gC7OBxZNBXZp9fB0IM_lfQBBilabQTF46EHC-zWjcsS5V8_SGDM2vac5p3Ou5GoCgEhe_biY23YfGp9PU44uDRb6-aQeTymCJmCAqoqU9mGMIOw54LEetrVIQZ4Lf32Jwo5xowVk66YjXYbOvhAOdZW7PaKFPWFjXoJ8SQzyieQklNVmzA_xmdEdTkHOvMdIH3zZJ2trVZSgU_22Ij-4hvDtGq_cb9prHUCx63WVEcdos3DiQb0mhNKgY3EkymW3gr-OpMFFzz1_wO7eesgDvjogDLr7d-ZhvFKzWDv6oCSPMVwRylY8coAKU3to7eFlvdqM0BBy5Lsz3CBhpJSFausPyzmismDDIytrh-_zooh3kAzj-wRLovii0xiRo5q13_e6zd_0iWz5ZX5fVH__h8AdcIBnc3YF5qoEQTdgnD-FPGOiWdzkNo0ocZdn8FlgL-Ao5EfliLrEVFGjkHoCuJYBg84pr9DssB8bx50GjuCc6PCLHFAtL-Fme9t3CLgzP5kdZrWi5Y49mJu3r6Lj9zu9QpWo-0YZA1Pvr_n-YBP-zXp8xxJQpjCRNaWi3MGVb4WqEia4hmwKFJTdECARD_C9Du50B57fzlNPKxyU_W00=",
+          "id": "rs_0ff804b92cf09b3c006a19e755ee9c819f89dddf1f0d98cffa",
+          "summary": [],
+          "type": "reasoning"
+        },
+        {
+          "content": [
+            {
+              "annotations": [],
+              "logprobs": [],
+              "text": "Hello! Nice to meet you. What would you like to do today? I can answer questions, explain concepts, write or edit text, help with coding, brainstorm ideas, or assist with planning and more. If you want, tell me a topic and I’ll dive in.",
+              "type": "output_text"
+            }
+          ],
+          "id": "msg_0ff804b92cf09b3c006a19e75694ac819fb83d735b02012e45",
+          "role": "assistant",
+          "status": "completed",
+          "type": "message"
+        }
+      ],
+      "instructions": null,
+      "store": true,
+      "presence_penalty": 0.0,
+      "incomplete_details": null,
+      "reasoning": {
+        "context": "current_turn",
+        "effort": "low",
+        "summary": null
+      },
+      "completed_at": 1780082519,
+      "truncation": "disabled",
+      "top_p": 1.0,
+      "billing": {
+        "payer": "developer"
+      },
+      "prompt_cache_retention": "in_memory",
+      "metadata": {},
+      "prompt_cache_key": null,
+      "created_at": 1780082517,
+      "max_tool_calls": null
+    },
+    "headers": {
+      "access-control-expose-headers": [
+        "X-Request-ID",
+        "CF-Ray",
+        "CF-Ray"
+      ],
+      "alt-svc": [
+        "h3=\":443\"; ma=86400"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a037dd7588ff70c4-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 29 May 2026 19:21:59 GMT"
+      ],
+      "openai-organization": "[REDACTED:openai-organization]",
+      "openai-processing-ms": [
+        "1911"
+      ],
+      "openai-project": [
+        "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
+      ],
+      "openai-version": [
+        "2020-10-01"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": "[REDACTED:set-cookie]",
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-ratelimit-limit-requests": [
+        "10000"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "10000000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "9999"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "10000000"
+      ],
+      "x-ratelimit-reset-requests": [
+        "6ms"
+      ],
+      "x-ratelimit-reset-tokens": [
+        "0s"
+      ],
+      "x-request-id": [
+        "req_83c3361c88bf44b6aa6baf768ef3f2d5"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

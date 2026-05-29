@@ -1,0 +1,181 @@
+{
+  "model_spec": "openai:gpt-5-2025-08-07",
+  "provider": "openai",
+  "request": {
+    "body": {
+      "b64": "eyJpbmNsdWRlIjpbInJlYXNvbmluZy5lbmNyeXB0ZWRfY29udGVudCJdLCJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IldyaXRlIGEgdmVyeSBsb25nIHN0b3J5IGFib3V0IGRyYWdvbnMgYW5kIGFkdmVudHVyZXMiLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjozMDAwLCJtb2RlbCI6ImdwdC01LTIwMjUtMDgtMDciLCJyZWFzb25pbmciOnsiZWZmb3J0IjoibG93In0sInN0cmVhbSI6ZmFsc2V9"
+    },
+    "canonical_json": {
+      "include": [
+        "reasoning.encrypted_content"
+      ],
+      "input": [
+        {
+          "content": [
+            {
+              "text": "Write a very long story about dragons and adventures",
+              "type": "input_text"
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "max_output_tokens": 3000,
+      "model": "gpt-5-2025-08-07",
+      "reasoning": {
+        "effort": "low"
+      },
+      "stream": false
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.openai.com/v1/responses"
+  },
+  "response": {
+    "body": {
+      "background": false,
+      "text": {
+        "format": {
+          "type": "text"
+        },
+        "verbosity": "medium"
+      },
+      "moderation": null,
+      "top_logprobs": 0,
+      "previous_response_id": null,
+      "tool_choice": "auto",
+      "service_tier": "default",
+      "status": "incomplete",
+      "tools": [],
+      "id": "resp_0be16b8f378ac880006a19e6c0fd988191b16de914d37f4d82",
+      "temperature": 1.0,
+      "max_output_tokens": 3000,
+      "user": null,
+      "frequency_penalty": 0.0,
+      "error": null,
+      "model": "gpt-5-2025-08-07",
+      "usage": {
+        "input_tokens": 15,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens": 3000,
+        "output_tokens_details": {
+          "reasoning_tokens": 256
+        },
+        "total_tokens": 3015
+      },
+      "safety_identifier": null,
+      "object": "response",
+      "parallel_tool_calls": true,
+      "output": [
+        {
+          "encrypted_content": "gAAAAABqGebxy6CuR5c19r1b2jZneHcIl3lZC4hExi9frmQNpJWiDKjepeWEXC_7nmhyoBZ_g_BYquGMAOGrU0Lg1s483Aa_WHJ8SI-LEqbc_kuQgY55PsdeHFklj88vgps0xA6hlXvLBEWaCZhm-TP66Vg0GOt2p8sMXOleG1e8vEORxj165aPeystupPZICZq6rDOFiLX0MBU-zwRxgy_eVcoftzuesgAMTtBVTF6g3OL-ArG0_uvV15IM9fhS6Eti29a1s3qvofLk8VyxXzPjH-8RnYQfmRi8S9Oeup3gE92KOr2pFGyXZ759otZC53HT74y_36iXxZYNmtqV0AZ-2xFkfU5gI1pkOD6R-UQE1uOvNJRLY9LU_IgMYmIgqOP8Cmxuv8iXTUfGJ-6zG4nTlx__ygvdFYhffgSynRsoZxzuYDJNXj2yHxvgPdROJisAcH8xZSxdBX2t2WBcCw_ORyWjrWKHgqacVVHJ9gixbZPIAd9TNoGgLGlk7NBhtKo9Rckw6oAxJ-1E57tDAjbu_nzgbArCVMVqFxkRl2Jb5T3QxbOO_2VYi2zK5YQGuk_77re72LkcU6TS-Z00nv8koKqtTy9Y8_CDtWBKorg0AjQNJqCn33VvEKYp5DiTvfr3QcXFdmTA2ZUWHoalGVmqo_25WNgB31wi9AGEiE72A7Y0332IEH8bv9DNpVpAsYLAgHu7QrPUb8af9IV7EvnuC8jMjrsLzEEW_tucfNOei-kLekwHi1WdZ5uuR_84QnzRO2cBn9hwyTSHvXMX7v6AwekQK5gfeaBrDyhwPcXlYwyHDUC3o9Y0xeNx_68Xe6wvGlwQiFXsql1Dci36oveQpXGhlN15Vr_XEYGMCwhbpiEwslbVFKepdPcRutAFcfYnaJ7691GLD6avXk0OR35MTVMImKdJOuhtq9JNjo7gwrNTaPA7cjaEll4ZF6uDG-QVDmZeHOM-QDFfNkfQz9dO9pi9dhI9XUUysFRZVK3Mx1ahwXhd1XWutKLsQsMn3Q1qUA6E85tZWu-MYrtbLGjZ-4RKZzbu57Bc6BIJxZ4rxpHuHA24u-U_abPn0rvGaHBs6LyyN4bfbaxfb3lNSOsecXKVxjZN2YRxberAVVUrkO9vpRcPerOiRD0aahsidwpyYXwKYzWJ_pPgorgOBsiWR1BFQ7mcbJdyDNKAwHjwjZg9KYK6n9XDO4BPbi-HAUr7C9CZM9t1oUk1KBIRL_4GDjK5mH1hw4O85pyfUb93zrxi_3HbtL9QFdUzKNzVLGgiRL-VzcWw7MuN12y6JIs2gItd3Of5wyiAqpB0EUlgTjbVSGT6Yt2LDyCZtIUqOAYj3syfzcI-TF-ijFhrIc3qRMc2X4sZ3O8enqXhun7HoP1raP5YLkto64wNhF0OGaKNj0fYy38D1SCKdMDRHxm5RuhexaOI4KvtyF83Yl6B7v_XIgInUYkdQM_sCe_NvN5vtllPzCz8oexqdd2xY9AWJXH3mvvrEQqm1GTHQJ60_1NXaw17_IpF8YpwvKw7hZhbIa_fZiUoY9h0fiZUCpgqhS-Lzc0Kyt5-UuPeuJSbNpTpqK8e8en2F4copHKP-IAAV4tubCKuXtXM1H7nfKeodJZpDRwNVA9BD6RKTk7qs4M6UKl5WdvLFCHQDtfxU41lUwrUCT9skpTtbZEaNWE2TgIX0FB1-jFC9E2DlAfA6HdRBHG4pxatbmZ0UTTs_S4rEFqJpx_M88mKfeXxqLu2X6_Tf_Ki7WMTK7YjiHu4L2nSXcI4E3kf48r_0BuYugT4oPhevyxaB0N-bNspbqsqwGVN5APB1lUdJSBaQ_1gpvIYcF_mEPE1gDNl9qPrbs0p2REf8BqrJ34aeTyTRkvErWPDaLlrJH5o0lnh-XPilbS7x1VJ-SGRUO48oNL1gxMxi-QqTytTxJsgoo7QWDhU68gItVeXwKoK5PmV2dGgLaTwQ9nPM0WXIZCgVJjDZw_oHe5zINf0eRLhDQxbr7ts-DmcyOfZj7o_jFdEiEmTM2W3l_cbJrq1YxPpXs2xTyoOWRunlm0R449bPyJ_smEA0lkwP34KjY2y9cBn2Cy59dTp7_gTwdfva7AMKdz8Ai5DndjOAtHyBSYe1jHLPxwY5GS8JgP544NJLUo-qB7oaQaLgw7HyQvi8Xm-kAC-QaLZVK1IpfJ3KHB4Y17cl3hK6Sk2Rj-vP3IpNs7BkSOm_TN4yQ9iYqFQTIf0PjwwYCPiIHXrFd_nEVZ8PbaV-ivqe53nI9ji-wYdVnCEIrvDZHc4eu9MKR1yqyqkphk89xmbNw0r0Cbmm5HVd9nr0gHEUxFXyh97lDwk0RHNlG5haY3FI9Xlb0wkoxRSj6r1suGG1Tn50Q1jDHJf4shCqOROsYtbM0StU5AuPQ3Ed6UcNP_nj69cT7TgNHirtXrVXsCJBtuRVFunXIjeVn4_XI797VP7JR_wmyu41td8xMz63yADyPeMcmZgGWJNOSW4r_Lq5srNMOaPD3sbeWEQKuJfTQE9EFVy1UwZwIt_Q8L7AYTtD3qJNdZLZrqhissYdORImC9mY62lRbThOtnrEb7QqNXndYozUCfIOvrniMRGM2enuUzWbRjQEnZw0Ab3KWhYCGxuUoSUAY744Jww86maSqd5Uux6s4hCf7_Pokn-wBK614BYLARXuhx3H01SGpJH5_UprMfl",
+          "id": "rs_0be16b8f378ac880006a19e6c1550c8191829d01507cae14b0",
+          "summary": [],
+          "type": "reasoning"
+        },
+        {
+          "content": [
+            {
+              "annotations": [],
+              "logprobs": [],
+              "text": "By the time the village bells tolled the amber hour, when the last sunbeam slanted across the thatch and the marsh reeds flashed like golden needles, Ara had already decided to leave. The map, unrolled on her table and pinned at the corners with mugs, had made that choice for her. She had drawn it herself—rivers and roads in careful ink, small curling letters for place names, the patient compass rose pointing outward with a hunger that matched her own. It wasn’t just a picture of the realm; it was a record of where she had not yet gone. Between mountain ranges, whole realms had only a penciled cloud. Somewhere beyond them, it was said, the dragons sang.\n\nHer grandmother had taught her to listen, to trace the warp of the world under the weft of wind and rumor. Dragons were stories the way trees were timber: a thing with memory inside. When the late frost ruined the barley and the fish leapt dead in the normally sweet river, the village elders muttered about ice rising late and storms rioting early. Ara thought of old songs about covenants and flame, of something broken that had once been whole. She thought of a canyon carved by a dragon’s breath, and a title older than kings: the Concord of Scales.\n\nFolk had stopped putting offerings on the cairn by the willow. The old truce language, carved in a spiral birthday-cake of lichen and respect, was unread by anyone in Riverwyck save Ara, who had learned to trace the old script with her fingertips. Once, the story said, dragons had set the wind on a leash and moored the seasons to a post. In exchange, humans swore to learn—to measure, to listen, to keep the edges of their farms from gnawing the wild into skeletons. It had held, for a while. Then the High Chancellor had burned the guild of singers in favor of iron.\n\nAra packed food, flint, and a wrapped bundle of pens and ink—not for marking roads, but for discovering them. She left a note under the bell—a map, really, with a dotted line arcing away from Riverwyck toward blank paper. In the morning’s gray, the line swallowed her.\n\nShe was not long alone. The road was short on villages and long on sky, and the first night out she camped in a wind-scraped meadow where the grass lay flat as if a giant had slept there. While she boiled water on a stuttering fire, a man approached with a sailor’s gait and a cloak patched in squares like sails. His beard was like sea foam; his smile had flotsam in it.\n\n“Storm said you’d be along,” he said, dropping his pack and settling as if the invitation did not need words.\n\n“Storm?”\n\n“The wind my ship’s named for and my only faithful lie-maker. Name’s Pell. I’ve got a boat moored where the river remembers the sea. Folks say there’s a rift past Westcape where lightning holds hands with itself and won’t stop. They say it’s dragon business. Stories bother me. I go where they fester and pick the splinters out.”\n\n“My stories are older,” Ara said. “And nearer. But maybe they share a root.”\n\nPell watched her draw the embers into a circle with a stick. “You draw the shape you want the world to fall into and expect it’ll mind you?”\n\n“I draw the world so I can ask it questions. If it answers, it’s polite. If not, I know I’ve misheard.”\n\nPell cocked his head, grinned, and shared his last apple. In the morning they shifted east together, to where the river’s shoulders grew broader and its voice deepened into a song Pell said any sailor knew from cradle to grave: the song of leaving and returning, which were the same thing.\n\nThey passed through towns garlanded in kelp, over bridges that had been mended with driftwood and prayer. On the fourth day they reached Westcape, where the cliff wore a permanent bruise of thunderheads and the gulls were white knives honed by wind. There, on the scoured rock above the moaning sea, a woman waited with a staff wound round with metal like a lightning-struck tree that had not learned its lesson. Her hair was streaked with storm. Her eyes were dark wells of tired.\n\n“You’re late,” she said to Ara, without pretense.\n\nAra, who had never seen her before, did not bother to ask how the woman knew she would come. “You’re an Arcanist,” she said instead. “Court-bonded. You smell like iron and sorcery and the refusal to sleep.”\n\n“Worse, I’m efficient,” the woman said drily. “Eron, Third Arcanist of the Crown. If you’ve come to rebuke me for harnessing storms, don’t. If you’ve come to help, do.”\n\nPell snorted. “I didn’t come to help you bind lightning in bottles, Arcanist. I came because there’s too much storm, and it isn’t listening to sailors the way it used to.”\n\nEron’s staff hummed as if in rebuke. “The storms listen to nothing. The dragons withdrew. The wind is unparented. The Queen—” her mouth thinned “—has ordered me to bridle it. So far, the horse throws me. I thought a cartographer would bring rope. Or at least a drawing of a better knot.”\n\nAra looked out over the roiling wrack of cloud and water. Lightning stitched between anvil-shaped towers, finished its seam, then carefully picked it out with a thunderous seam-ripper and began again. She closed her eyes and listened. Under the tempest, a second sound: a distant note as if a flute were being played very slowly by someone the size of a mountain. Someone not pleased.\n\n“The dragons didn’t withdraw,” Ara said softly. “They were uninvited. Look.” She took Eron’s hand, placed it on the rock beneath them. It was warm, like breath. The way of listening her grandmother had taught her went through bone and foot and stone. She whispered the old words in the old spiral cadence, forgetting Pell and Eron were there. The hum rose. The lightning found a different seam and sewed soft rain.\n\nEron drew back. “You speak the Concord tongue.”\n\n“I can read it. Speaking it is guesswork. But the guess worked.”\n\n“Don’t preen,” Pell said, though he looked relieved. “We still need to find the seamstress.”\n\n“And apologize,” Ara said. “Before we ask for help.”\n\nThey did not find a dragon at Westcape. They found a little boy on the third day, clinging to a smashed bit of barrel, more fish than child after so long in the water. Pell hauled him out like a netted miracle and wrapped him in sail. He coughed up the sea and opened eyes as pale as salt.\n\n“Kai,” he said when Ara asked his name. “M’Ma said the wind used to sing you to sleep. Now it rips dreams out your ears. She called it the Twister.” His lower lip trembled, but he did not cry. He was small and stubborn as a nail bent double by a hammer and then hammered straight again.\n\n“Where is your mother?” Pell asked softly.\n\n“She fell back in,” he said, and stared at the horizon with a grown face for one long second. “I want to bite the wind.”\n\nEron crouched. “If you help me, we can. But we must learn its language. Or find someone who still speaks it.”\n\nThey put up a mast of promises. They sailed Pell’s Storm down the seam Ara had coaxed into being, then upriver toward mountains that wore their clouds like hats and elders like secrets. Eron argued with the weather, which was in a contrary mood. Kai listened hard to everything and repeated what pleased him at inconvenient moments, which meant often.\n\nIn the foothills they found the Library of Singing Stone. It was less library than cliff: a place where limestone jutted pale as a dragon’s tooth and the wind drummed hollows into a scale pattern. A child could have run up and down those shelves and thought them made for legs and laughter. Ara, who was not a child, ran her fingers along them and found, in the whorls and pits, letters no ink could confine.\n\nA librarian of indeterminate age and a deliberate tilt to their head emerged from a rock door. A shawl of mothwing softness slipped around shoulders more resilient than stone. “Cartographer,” the librarian said mildly. “You took your time.”\n\n“Everyone keeps saying that,” Ara said, a bit breathless; the ache in her chest was not from climbing. “Do you hoard greetings here with the books?”\n\n“We hoard questions. Greetings are simply the easier ones. Call me Quen. You seek dragons. They seek you. They seek all of us, to be precise. But we forgot our shapes and so they forgot our names, except as the names of mistakes.”\n\n“We would make amends,” Eron said with a soldier’s posture, as if apology could be advanced in formation.\n\n“Dragons do not doubt apologies if they are sung right,” Quen murmured. “Nor do they accept them if sung wrong. And of course, they bite. But not always. Come. Bring your sailor and your small hurricane.”\n\nInside, papers fluttered in drafts that hummed with a keyhole’s patience. Hanging from the ceiling like a chest of drawers set on its end was a polyphonic chime of bones and shells. Quen struck it with a soft hammer. The room shifted its hearing. Ara listened too, and heard, hidden in the tumble of overtone, a melody like the shape of a path.\n\n“Once,” Quen said, “we kept the Concord by keeping a memory of their language alive. Not to command them, not to lock their breath in flasks. We remembered their names and the promises those names were anchored to. When the court burned the guild and replaced it with order and tally, the dragons closed their throats. The world became loud, and we, deaf. But not entirely.” Quen touched Kai’s brow gently. “Some children still learn in their sleep. Some sailors leave room in their sails for story. Some cartographers have hands that think stone.”\n\nEron closed her eyes, clenched the long muscle in her jaw. “I came here to fight the storm,” she said, and when she looked up, she was different in a way Ara could not name. “I will go where the storm springs from and apologize for fighting. Then I will ask for help fighting those who will never apologize.”\n\n“You will need a different staff,” Quen said wryly. “That one was built to trap, not to dance.” They wrestled an object from a case beneath a hanging vine of vellum: a rod of wood etched with the first rain to ever drench this part of the world. When Ara touched it, the rooms of the library turned and turned as if to face her. She let go.\n\nQuen smiled with only the ends of their mouth. “Do not lick it.”\n\n“I wasn’t going to.”\n\n“You were absolutely going to.”\n\nWith Quen’s map—not paper, but a braided strap of reeds into which directions had been woven like gossip—they found a dragon. Or at least a nest. It lay in a hollow protected by peaks that slouched like old men pretending to be asleep and not hearing perfectly well. The nest’s rim was built of carved glass and black stone. Its occupant—if it had one—was nowhere to be seen. The place smelled of cinnamon bark left too close to a fire, and the breath in the air was very old.\n\n“Be polite,” Quen warned. “If you must be anything else, be predictable.”\n\nIt was not the adult who met them. It was a hatchling, no larger than a carriage horse, who blinked from a ledge and pinned them with pupils like vertical knife-slits. The hatchling’s scales were the color of charcoal dusted with ash. When it stretched its neck, the webbing between head-spines glowed as if moonlight, trapped there, had forgotten how to run.\n\n“…hello,” Kai said solemnly, the syllables hanging evenly like laundry. He held out a fish he had refused to eat at breakfast. He wobbled it humbly. “I’m Kai. I brought a snack. Sorry we’re late?”\n\nThe hatchling leaned down. Its nostrils trembled. It made a sound like a curved blade dragged across slate. Pell, having been informed not to startle dragons nor to run, stood very still and let his hands twitch only a little.\n\nAra spoke the Concord words, the ones that said: I came with bare hands, my mouth full of water, my name soft and unraveled. I came to listen. I came because there is a knot in the thread between us, and I have a good needle.\n\nThe",
+              "type": "output_text"
+            }
+          ],
+          "id": "msg_0be16b8f378ac880006a19e6c5c2cc8191a5b0d3f168f8d14e",
+          "role": "assistant",
+          "status": "incomplete",
+          "type": "message"
+        }
+      ],
+      "instructions": null,
+      "store": true,
+      "presence_penalty": 0.0,
+      "incomplete_details": {
+        "reason": "max_output_tokens"
+      },
+      "reasoning": {
+        "context": "current_turn",
+        "effort": "low",
+        "summary": null
+      },
+      "completed_at": null,
+      "truncation": "disabled",
+      "top_p": 1.0,
+      "billing": {
+        "payer": "developer"
+      },
+      "prompt_cache_retention": "in_memory",
+      "metadata": {},
+      "prompt_cache_key": null,
+      "created_at": 1780082369,
+      "max_tool_calls": null
+    },
+    "headers": {
+      "access-control-expose-headers": [
+        "X-Request-ID",
+        "CF-Ray",
+        "CF-Ray"
+      ],
+      "alt-svc": [
+        "h3=\":443\"; ma=86400"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a037d9d5cf0460a7-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 29 May 2026 19:20:17 GMT"
+      ],
+      "openai-organization": "[REDACTED:openai-organization]",
+      "openai-processing-ms": [
+        "48489"
+      ],
+      "openai-project": [
+        "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
+      ],
+      "openai-version": [
+        "2020-10-01"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": "[REDACTED:set-cookie]",
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-request-id": [
+        "req_4d301102b6954c7ba5862eed0934461b"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

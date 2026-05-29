@@ -1,0 +1,181 @@
+{
+  "model_spec": "openai:gpt-5-mini-2025-08-07",
+  "provider": "openai",
+  "request": {
+    "body": {
+      "b64": "eyJpbmNsdWRlIjpbInJlYXNvbmluZy5lbmNyeXB0ZWRfY29udGVudCJdLCJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IldyaXRlIGEgdmVyeSBsb25nIHN0b3J5IGFib3V0IGRyYWdvbnMgYW5kIGFkdmVudHVyZXMiLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjozMDAwLCJtb2RlbCI6ImdwdC01LW1pbmktMjAyNS0wOC0wNyIsInJlYXNvbmluZyI6eyJlZmZvcnQiOiJsb3cifSwic3RyZWFtIjpmYWxzZX0="
+    },
+    "canonical_json": {
+      "include": [
+        "reasoning.encrypted_content"
+      ],
+      "input": [
+        {
+          "content": [
+            {
+              "text": "Write a very long story about dragons and adventures",
+              "type": "input_text"
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "max_output_tokens": 3000,
+      "model": "gpt-5-mini-2025-08-07",
+      "reasoning": {
+        "effort": "low"
+      },
+      "stream": false
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.openai.com/v1/responses"
+  },
+  "response": {
+    "body": {
+      "background": false,
+      "text": {
+        "format": {
+          "type": "text"
+        },
+        "verbosity": "medium"
+      },
+      "moderation": null,
+      "top_logprobs": 0,
+      "previous_response_id": null,
+      "tool_choice": "auto",
+      "service_tier": "default",
+      "status": "incomplete",
+      "tools": [],
+      "id": "resp_0b296d6b3e25839a006a19e70705dc819c8d7813ec0758544b",
+      "temperature": 1.0,
+      "max_output_tokens": 3000,
+      "user": null,
+      "frequency_penalty": 0.0,
+      "error": null,
+      "model": "gpt-5-mini-2025-08-07",
+      "usage": {
+        "input_tokens": 15,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens": 3000,
+        "output_tokens_details": {
+          "reasoning_tokens": 64
+        },
+        "total_tokens": 3015
+      },
+      "safety_identifier": null,
+      "object": "response",
+      "parallel_tool_calls": true,
+      "output": [
+        {
+          "encrypted_content": "gAAAAABqGecsD4O_EjJPiVcpwubuXXvn3UafhRkTeLdutnvlOCcK1imXH0piLSto0DTtwm_DwLP71bMmfYMrxhcgeHfYMI38weGdSlV7T3eOEbUi10ykvT9AwoPVgGzIe1OAP3oJ8jywu1lQKje902i2-E15ML1RIPHS4HYiHtgbLhiwjL1SFoZrXUmACECNoXC7N94KY2yavgZUFoj88Y0a3fe2CTaqwgbiWwSqZQh7yNWKzpmu7-M5pIStLwT24CW_scemm4Nsb5O6szUA1fY2N8zHWR2vhb6LU8jG1nUT4mTxdIO4nU3GY7e9hNyP6uHP2ql3D9qzStY7U7i8LbMcVTTnofdx8K1uvuaiC90d48Pkcr6Gl3eWS1l2uRGPxeEiwiD3NE3Jf2XuRA5eHQpb1GGCMqUZgr2BYA43geT7Bn4bAUvxyoa-uoLUJaBr2b7Tb-APZ0zsP9VMHan2a9cxyAW1vtkGcBMSb_qQYAjLlDuii9stwG4LZ9FqTW0lpLCjAeTTU4Am2Z6VW2XPCgrXuz5KhDi9LbFEvJModWn13a5kHS05Zm5n6sB86Nn-uSJUvpcsZAB0c1r98uEnPiRlfvnLPwtvR3hEuY5IAOg99ExJYGtJGWesCAbMp1ZM-eBAKaSVuR1A4qoSSsxUURuTD58DGKKfwK3CSOV5JnU8HoDGAQdSf8Vtoh4eM7c4D8_0VJg54_lkBzfy0zKKniuZNc5AxW7KzbgV7lQt4SUH0t6n4BD2JdZkKBBTE2MS4MBZgz9eFzHd3_NHr6nfnyUOBszeC1f_1WaIfLIxvzPiN16mvCYFgWEcWKII7mlp6ruCfI0kMJfwzULmWvXx7ARzc4-pZm2Q8kmptP6StZ_UW-5z0nG1JS8hE5E2IZMudRHcWze6leWmX3JS7KViJVBLdZovcpyvJfCQNuBButcBYp_-Gl8-lcNJM-HNRchLsNoxNVX8jY5O9qKTw3qjzgW9ZoGfSCXqinrcTUaLN6oTfwCgQMQ_jaWOD_sZe2LxTQ88IsJco7SOuXAbQyq_Vn4nIxhhNQehRCNV97JuGMXORzyub4wX148_xo7w3LQyK9b4d2lN2wRWjdvtX_Q9SYn2EI1JJgBcX7VS3fSKSj8gyG4sI5Lhf5rT0mykYP7bhJnl3Kx0BDtBXwVqi-PjhAqpYIIhXbgoNa-W98S8Jb2wD4A2ZyqqYf-E0f6d_XS52UxoH4_YCPt2FtBFseRxvG5hnlHZsWM3Z7nQa5zUWlPgt9P8mLbP2zEtT7lkfwobmLWxEigV-KPtyDkJtP7Yx_syF09al9e-SNVpV_qs-IXF_auXGZUKmarr-p8CGHbUN1ywgZ3FPo0fTEkzcqK4VGAzLu95jzZalPwJiUhtCF1FrlXghuHMG2YzElXTYl5RB7uUfnajFg43",
+          "id": "rs_0b296d6b3e25839a006a19e7077230819c8cfc688fc62c36b7",
+          "summary": [],
+          "type": "reasoning"
+        },
+        {
+          "content": [
+            {
+              "annotations": [],
+              "logprobs": [],
+              "text": "When the first ash fell from the sky, no one thought it meant the end. Ash came with mountains, with the burnt offerings of a thousand campfires and with the last breaths of comets. But this ash was different: thin as lace and cold as old silver, it sifted through the long grasses of the Borderlands and whispered against the windows of the port city of Mael, leaving trace patterns like the filigree of some unseen hand. The fishermen muttered that the gods were displeased; the scholars in the temple of Kethar said premonitions; children chased the flakes with outstretched palms until they dampened and turned to dust.\n\nOnly Orinne watched the ash and felt in it a language older than the written word. She was a mapmaker by trade, though few called her that exactly. She collected scars and routes, charted ruined towers and fresh burial mounds, traced the most honest lines through the world that no merchant or noble required. Her maps were more than directions: they were stories — the shape of a valley remembered as an old woman's face, or a river described as a braided silver fretboard you might play like a lyre. On the morning the ash fell, Orinne stood at the prow of the Sea-Sparrow, her long hair knotted against the wind, and let the flakes cling to the leather of her gloves. She tasted salt and smoke and felt, absurdly, that a god had just coughed.\n\n\"Keep your eyes on the horizon,\" called Halimar, the captain, his voice curt as an oar. The Sea-Sparrow was bound for the Stagreach Isles to chart a new fishing course and verify maps that traders had insisted were phantom. Surveys kept food in Mael’s markets; food kept her pens moving. The ash was a nuisance, not an omen. Yet as the coast of Mael receded and the sky gloomed to pewter, Orinne found her pens uneasy in the pocket of her satchel.\n\nThe first of the dragons came without herald. It was a long thing the color of old coin, wings like split sails and eyes like furnace-glass. It folded itself above the ocean, then shuddered. No sound carried over the waves. The Sea-Sparrow's men shouted and threw their arms out to brace the mast. The dragon dove and passed between the ship and the sun, and for a breath the world seemed too full of blood-gold. When it vanished behind storm, it left a wake in the air — not a path of smoke, but a hunger. Later, Halimar would tell tales of how his men saw schools of flying fish scatter like silver confetti beneath that dragon, and how one of them, a boy named Jor, turned white and became a carpenter's apprentice on the spot.\n\nWhat most people in Mael called the Return began that week. Dragons that had slumbered since the first seasons of human arrogance rose up as if at a summons. They came from places that the maps had not visited for centuries: the Ringed Steeps, the glass deserts, the lonely mountain called Stonewatch. Some of them were young and hot-breathed, their scales like green blades that flashed in the sunlight; some were old and so dark they seemed like shadows living. They did not speak at first. They drifted like beasts searching for the taste of the world.\n\nThe first terrible thing was not their fire but their memory. Elders said that dragons carried the scent of old wars like clothing. They remembered every chain that had been forged, every oath broken. The people who had once tried to bind the dragons had been clever and cruel. They carved the dragons' names into iron collars and read out laws with a trembling hand. In the retellings, dragons had helped build the high stone cities and taught humans to harness the currents of storm. People had used those lessons to make themselves gods, then shackled the teachers they had learned from. So when the dragons returned, even those who had not been shackled smelt the old injustice in the air and made a list in their minds.\n\nNot all dragons wished to punish. Some came with the timidity of animals finding a ruin where the hearth had long gone cold. Others carried in their lungs a wind that had the faint tang of healing. But fear is a quicker thing than trust. The first village that saw a dragon was a hill village called Narl. They sent farmers and boys with pitchforks to chase it, and one farmer's fool gesture — a torch flung into the air — led to a day of loss. The dragon, startled, breathed out a line of heat that took the thatch and the wooden beams like dry laundry. Narl burned. The survivors sang about the dragon's eyes afterward, how they were not wholly monstrous but not altogether innocent either; they said the dragon had looked at them as if he recognized the smell of wood smoke and hunger.\n\nYet it was not the burning that broke the world. It was the storms. With dragons came weather that remembered older geometries: lightning that hung like a curtain in the air, rain that fell upward, fog that filled a valley for days. Crops failed here and grew strange there. The sea became restless with a million unseen mouths. Trade slowed; guilds worried. The priests of Kethar declared a fast and burned incense so thick the temple's windows became opaque with their prayers. Princes poured over treaties. People closed their doors and, more quietly, wished aloud that dragons would please be done with their drama.\n\nIt was in the middle of that uneasy year that Orinne met Kerrek.\n\nHe was not a companion she would have chosen: he smelled of wolves and of journeys, his beard tangled with small braids that held beads made of fossilized amber. He claimed to be a courier for a guild that no one in Mael had heard of. He had a knack for arriving when things seemed at their worst, as if he were the hinge on which calamity swung. The first time she saw him he was standing in the rain beneath the public notice board, handing out rough, hand-drawn flyers. \"Wanted,\" he said, as if the word itself were a currency, \"for a mapmaker, someone who can read the world like it’s a second skin. Great pay. Larger cause.\"\n\nOrinne had been skeptical. Maps don't like causes. But the world was changing beneath her feet, and maps were a way of ordering it, of reading the language of ash and dragon-scar as though it were grammar. Kerrek had a way of speaking that made danger an intriguing riddle. He also had a patience for listening — the kind of patience that is less about silence and more about letting someone talk until they show the true shape beneath their thoughts. He wanted to go to Stonewatch, said the flyers. A dragon had nested there once, written in children's fable as the Mountain That Sings. The new creatures had been sighted. Men had taken to making offerings at Stonewatch's base: livestock, trinkets, chains formed anew. Kerrek wanted a map, and he wanted a companion who knew the old signs.\n\nOrinne followed him because of the ash. She believed the ash had a grammar; maybe dragons were the verbs. She signed on, practically, and found herself leaving Mael for the first time in years with nothing but blankets, potions for ink, and a compass whose needle she had sanded down to be more honest in mountains. They rode west through the Borderlands, through ridges that tried to swallow up the sky and farmlands where the wheat knelt under a strange cold. Their party was small: Kerrek, Orinne, Jor — the boy from Halimar's ship whose hands steadied the map-board — and a woman named Myra whose laugh was like a bell and whose bow sang better than most men's words.\n\nThey found ruins along the way: towers whose stairwells spiraled into nothing, roads studded with fist-sized teeth of glass left by some old enchantment. Old names rose as ghosts at campfires: the Black Cartographers, the Order of the Folded Line, the Warbinders. Kerrek told stories by the fire of the time when the Warbinders had attempted to put chains of thought around a dragon’s wings and had failed because thought cannot be fenced. He spoke as if he were telling a fable, but Orinne felt the memory of real sorrow in his tone. Each ruined place taught Orinne new marks to put on her maps: the map of how grief could change a plain into swamp, or how fear turned a pass into a place for bandits.\n\nNear Stonewatch the land grew strange. The trees were tall and thin as watchmen, and their leaves hummed faintly in a tone that could be felt more than heard. Nights were thick with stars. They saw small dragons there, the size of barn doors, playing in the upper air like dogs — small enough to be curious and large enough to make the bravest men uneasy. Once, a child from a nearby village stood too near a nest and was nearly flung into the air by a feeding dragon. The villagers let them pass with a wary blessing: “Keep your eyes light and your steps less loud.”\n\nStonewatch rose like an old god from the earth: a mountain whose top seemed flattened as if by a nail. On its slopes men had carved steps and amphitheaters for some forgotten audience and set iron hooks at intervals like, perhaps, the relics of a past in which men had danced with dragons. The base of Stonewatch was a small town of travelers, prophets, and the poor who couldn't afford to look elsewhere. They made a living telling tales of what the mountain had swallowed. Kerrek paused at a shrine and offered a coin with a smile. \"For luck,\" he said.\n\nThey climbed.\n\nThe ascent tested more than muscle. Stonewatch was against familiarity. Paths bent like questions. Sometimes the mountain seemed to rename itself beneath their feet: a path would become a stair, a stair would become a tunnel. Orinne charted all of it, because the only way to understand dragons was to listen to the world they had been part of. When they reached the halfway ledge, they found a pool where the water did not ripple despite wind. The surface held a reflected sky in which no birds moved. Orinne saw, suddenly and clearly, the pattern in the ash: loops and angles that made a word she almost trusted and then lost.\n\nIt was here they met the dragon. He appeared above them, curled around the narrow summit like an old ribbon, scales dull as riverstone, eyes deeply turned in. He was neither the color of coin nor of flame. He seemed to have been carved of cold night and full of the patience of granite. He landed and folded himself into a smaller, impossible ball, and when his head turned they smelled him: old leather, ocean brine, the faint scent of lavender the villagers left as offerings.\n\n\"My name is Ansel,\" the dragon said, and his voice was a bell inside a cave. The fact that his voice was clear and shaped into a name made even the men who had siled themselves on swords fall silent. Dragons could speak, but with names they spoke the world anew. He had a voice that could make the story of a place true just by adding emphasis.\n\nAnsel had been in Stonewatch long enough to remember the hands that had once reached for him. He did not seem angrier than one who had been made prisoner. He seemed old and, in a way that chilled Orinne, resigned. He told them he remembered a pact once made between dragons and men — a pact of balancing fire and harvest, of letting storms pass and letting seeds sleep. That pact had been broken when men tried to bind dragons for their own profit. Ansel said that dragons had withdrawn, not to punish, but to heal in their own way. \"We tried to teach you the shape of storms,\" he said. \"You turned them into weapons.\"\n\nKerrek was not the sort to plead. He listened, though. \"Is that why the ash came?\" he asked, hands folded.\n\n\"The ash is old bones,\" said Ansel. \"What fell from the sky this year was not a sign but the tiredness of a world that had been made to wear too many clothes. The dragons remember what it is to have your lungs filled by the earth. We do not burn for joy. We burn for release.\"\n\nOrinne wrote down what he said and felt the map grow heavier. A pact sounded an office one could return to. A pact suggested negotiation. Ansel offered terms that were neither just nor wholly cruel: the dragons wanted their names unspoken in coils of iron; they wanted fewer fires in the world; they wanted for children to be taught not simply to conquer but to listen. \"We will not leave,\" Ansel said. \"We will live with you if you learn to live with us.\"\n\nThe problem was that people are not eager to unlearn the easiest skill: fear. News of the dragon's words traveled like wind up and down Stonewatch. Some listened and went away with gentler hands. Others gathered arms. A priest from Kethar arrived and declared the dragon a demon. A man with a wooden leg, whose family had burned near Stonewatch years ago, came with a torch and a face like a thunderhead. The world bristled with opinions.\n\nIt came to a head in a small valley called Fenrun where a band of mercenaries — men who had nothing now to lose and much to make from the wrongs of old — set up a trap. They thought the dragons were animal and thus could be ambushed with steel and trick. They had a net woven of iron and words — oaths bound on the net's edge and salts to dull the dragon's senses. They planned to chain a dragon and sell the chain to the highest bidder. If they had succeeded, it would have been the simple continuation of a cruel history.\n\nThey almost did.\n\nThe mercenaries lured an adolescent dragon into the pit with screams and a light. Myra's arrow",
+              "type": "output_text"
+            }
+          ],
+          "id": "msg_0b296d6b3e25839a006a19e7089e3c819c97270dd3c309946e",
+          "role": "assistant",
+          "status": "incomplete",
+          "type": "message"
+        }
+      ],
+      "instructions": null,
+      "store": true,
+      "presence_penalty": 0.0,
+      "incomplete_details": {
+        "reason": "max_output_tokens"
+      },
+      "reasoning": {
+        "context": "current_turn",
+        "effort": "low",
+        "summary": null
+      },
+      "completed_at": null,
+      "truncation": "disabled",
+      "top_p": 1.0,
+      "billing": {
+        "payer": "developer"
+      },
+      "prompt_cache_retention": "in_memory",
+      "metadata": {},
+      "prompt_cache_key": null,
+      "created_at": 1780082439,
+      "max_tool_calls": null
+    },
+    "headers": {
+      "access-control-expose-headers": [
+        "X-Request-ID",
+        "CF-Ray",
+        "CF-Ray"
+      ],
+      "alt-svc": [
+        "h3=\":443\"; ma=86400"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a037db8aefce10df-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 29 May 2026 19:21:16 GMT"
+      ],
+      "openai-organization": "[REDACTED:openai-organization]",
+      "openai-processing-ms": [
+        "37949"
+      ],
+      "openai-project": [
+        "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
+      ],
+      "openai-version": [
+        "2020-10-01"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": "[REDACTED:set-cookie]",
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-request-id": [
+        "req_96a0361f0abc41e5a3926d8acaca0140"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

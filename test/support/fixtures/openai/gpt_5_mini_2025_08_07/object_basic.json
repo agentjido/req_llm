@@ -1,0 +1,255 @@
+{
+  "model_spec": "openai:gpt-5-mini-2025-08-07",
+  "provider": "openai",
+  "request": {
+    "body": {
+      "b64": "eyJpbmNsdWRlIjpbInJlYXNvbmluZy5lbmNyeXB0ZWRfY29udGVudCJdLCJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IkdlbmVyYXRlIGEgc29mdHdhcmUgZW5naW5lZXIgcHJvZmlsZSIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9XSwibWF4X291dHB1dF90b2tlbnMiOjUwMCwibW9kZWwiOiJncHQtNS1taW5pLTIwMjUtMDgtMDciLCJyZWFzb25pbmciOnsiZWZmb3J0IjoibG93In0sInN0cmVhbSI6ZmFsc2UsInRleHQiOnsiZm9ybWF0Ijp7Im5hbWUiOiJvdXRwdXRfc2NoZW1hIiwic2NoZW1hIjp7ImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjpmYWxzZSwicHJvcGVydGllcyI6eyJhZ2UiOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBhZ2UgaW4geWVhcnMiLCJtaW5pbXVtIjoxLCJ0eXBlIjoiaW50ZWdlciJ9LCJuYW1lIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3MgZnVsbCBuYW1lIiwidHlwZSI6InN0cmluZyJ9LCJvY2N1cGF0aW9uIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3Mgam9iIG9yIHByb2Zlc3Npb24iLCJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJhZ2UiLCJuYW1lIiwib2NjdXBhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In0sInN0cmljdCI6dHJ1ZSwidHlwZSI6Impzb25fc2NoZW1hIn19fQ=="
+    },
+    "canonical_json": {
+      "include": [
+        "reasoning.encrypted_content"
+      ],
+      "input": [
+        {
+          "content": [
+            {
+              "text": "Generate a software engineer profile",
+              "type": "input_text"
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "max_output_tokens": 500,
+      "model": "gpt-5-mini-2025-08-07",
+      "reasoning": {
+        "effort": "low"
+      },
+      "stream": false,
+      "text": {
+        "format": {
+          "name": "output_schema",
+          "schema": {
+            "additionalProperties": false,
+            "properties": {
+              "age": {
+                "description": "Person's age in years",
+                "minimum": 1,
+                "type": "integer"
+              },
+              "name": {
+                "description": "Person's full name",
+                "type": "string"
+              },
+              "occupation": {
+                "description": "Person's job or profession",
+                "type": "string"
+              }
+            },
+            "required": [
+              "age",
+              "name",
+              "occupation"
+            ],
+            "type": "object"
+          },
+          "strict": true,
+          "type": "json_schema"
+        }
+      }
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.openai.com/v1/responses"
+  },
+  "response": {
+    "body": {
+      "background": false,
+      "text": {
+        "format": {
+          "description": null,
+          "name": "output_schema",
+          "schema": {
+            "additionalProperties": false,
+            "properties": {
+              "age": {
+                "description": "Person's age in years",
+                "minimum": 1,
+                "type": "integer"
+              },
+              "name": {
+                "description": "Person's full name",
+                "type": "string"
+              },
+              "occupation": {
+                "description": "Person's job or profession",
+                "type": "string"
+              }
+            },
+            "required": [
+              "age",
+              "name",
+              "occupation"
+            ],
+            "type": "object"
+          },
+          "strict": true,
+          "type": "json_schema"
+        },
+        "verbosity": "medium"
+      },
+      "moderation": null,
+      "top_logprobs": 0,
+      "previous_response_id": null,
+      "tool_choice": "auto",
+      "service_tier": "default",
+      "status": "completed",
+      "tools": [],
+      "id": "resp_0f609aaec9a40c9d006a19e734cbc88197a1ee323b860ddc11",
+      "temperature": 1.0,
+      "max_output_tokens": 500,
+      "user": null,
+      "frequency_penalty": 0.0,
+      "error": null,
+      "model": "gpt-5-mini-2025-08-07",
+      "usage": {
+        "input_tokens": 70,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens": 108,
+        "output_tokens_details": {
+          "reasoning_tokens": 64
+        },
+        "total_tokens": 178
+      },
+      "safety_identifier": null,
+      "object": "response",
+      "parallel_tool_calls": true,
+      "output": [
+        {
+          "encrypted_content": "gAAAAABqGec2Va3NrzTN0tUsL6mJe5jpvH75Nl2je39e01_wiCc-ownvmC4EOu8-0MREziTWbVaocCHMyGswl7pgjNjxntxDvGFOVtGItsI7WFwZD0YU4nctmbb-uZjqFhlHBU-berbAC05JxofAt3PBNGfO5Xbb-FG46SoQ_Ornw6PJhSg6JTE8drP7RACLhfFp6XrbtUsx7ytgfqx9TNKJZIjIrNEClEVi8dwoVyMXXQlD6YWVJ5U1fq_JZXWw8pWleJfHQEiSr35yRtNcQ4b7XcQn2AmaKoe2mMJkm_KxQ5k3WSYt9QRzaO2mXWfiGQ5BVkQWU3JgdIYsL6Zg0nzficSDIric80axEZNw9rkXKOrKgkeIyW1CknJ0JSdBN9S_f9w3uylGVcQogZ4cfk4d5_hduM4923elVv7ghMFuG8Szme-FK0mPcpHb-Qnpc9YLFA24ZsAVbSzx4SnL0KFK8c4CRuJXJ99gZMHGJ_YkfqEnepDkugWMbikwGS_gZyvhx0oHkVIqRO3_hoe-Z2ilOzrsJzUKUW1s0m2o0M9kdFNyQ2er5jfHqXrbPIXaXipvN7rMUuMlOHGFQOxo7sibTfL_dNtAeHW2VMj-tW7W9B_4uR2kUlfkwcKFZUhGpR-Uc43gAt_yglfUSBLJgufil8H0ihtj9-EJyT5-SbNBFJ6Bl9xU-FjTLsQnbDKarXUyv6lfq3vxFB2pANIDigNgGTED9t_XRsMJnmWCDxMm4Z30Y3BmUej8DR014fvLCjFEHjVP9X50TA7-rankgnoUQs6pIwUHwGwYKbExwbSaFggbAlyi2HMcypduwZ9rXMrjzdTt-a3sBAf3Ubjk-mS83UqQgoFtMjlbPmwfLp9N1LWbJ2jFKshq-o1_m0DsYU9uHVzO0d6ei-qurIr69wUS_1IqrTYbMIncG5XDxgAFzixAEHXgBAhDOLNk8Yeg_lUM-8CWX-dzmIpbrNDV1NP-e2lNvR1gIDnXzmHSIgk0bv2XS_RhKvLhWMKi9vzEU2ayyP7yMYBr8qAWGzUOeKhQtzgLkTGKou618VDydg6O2oiUnCgaYvLMS0r0BObZLbTe3Z2TX9V2363ziiyhDYv5CnnQPX18ts8Z56Py-7z0nqfO9fl5W63w-cmbBA0F37T7WGHHKIFhS3J70ergsZtB6TN6WFU8xAQSo95A29wri7ofo-tuOopLB1bm5Kw3E2viaaYr9whzoHMvW_5j10PxYMVTJWsGhRf0y0ql_jjIzqK-o8QpE_j8vMQG2iXPZ3tjqTdDXF7aWThBNsH0JHbqv9uW6WQ7Bsu8CqcGJOzfT0MWV9Qia9x5TDvyQf9oI802C8MbOH3xgwV8bZvga5YyAerDUT6rBqkUDT-oP4svax3dpYVVGWtoO56f9AOetlKIqqbCYoTWrHek4W1AaRUW4lBQpiqrRA==",
+          "id": "rs_0f609aaec9a40c9d006a19e73527608197a57dc9fd5c9698a2",
+          "summary": [],
+          "type": "reasoning"
+        },
+        {
+          "content": [
+            {
+              "annotations": [],
+              "logprobs": [],
+              "text": "{\"name\":\"Aisha Rahman\",\"age\":29,\"occupation\":\"Senior Software Engineer\"}",
+              "type": "output_text"
+            }
+          ],
+          "id": "msg_0f609aaec9a40c9d006a19e735f0c0819786dd03617dbbbf1a",
+          "role": "assistant",
+          "status": "completed",
+          "type": "message"
+        }
+      ],
+      "instructions": null,
+      "store": true,
+      "presence_penalty": 0.0,
+      "incomplete_details": null,
+      "reasoning": {
+        "context": "current_turn",
+        "effort": "low",
+        "summary": null
+      },
+      "completed_at": 1780082486,
+      "truncation": "disabled",
+      "top_p": 1.0,
+      "billing": {
+        "payer": "developer"
+      },
+      "prompt_cache_retention": "in_memory",
+      "metadata": {},
+      "prompt_cache_key": null,
+      "created_at": 1780082484,
+      "max_tool_calls": null
+    },
+    "headers": {
+      "access-control-expose-headers": [
+        "X-Request-ID",
+        "CF-Ray",
+        "CF-Ray"
+      ],
+      "alt-svc": [
+        "h3=\":443\"; ma=86400"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a037dca9afb0b33f-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 29 May 2026 19:21:26 GMT"
+      ],
+      "openai-organization": "[REDACTED:openai-organization]",
+      "openai-processing-ms": [
+        "1604"
+      ],
+      "openai-project": [
+        "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
+      ],
+      "openai-version": [
+        "2020-10-01"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": "[REDACTED:set-cookie]",
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-ratelimit-limit-requests": [
+        "10000"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "10000000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "9999"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "10000000"
+      ],
+      "x-ratelimit-reset-requests": [
+        "6ms"
+      ],
+      "x-ratelimit-reset-tokens": [
+        "0s"
+      ],
+      "x-request-id": [
+        "req_e24cbfb64dd345e8878f2e9c6eae03ed"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

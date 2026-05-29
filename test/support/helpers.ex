@@ -575,49 +575,15 @@ defmodule ReqLLM.Test.Helpers do
   """
   def reasoning_overlay(model_spec, base_opts, min_tokens \\ nil) do
     case ReqLLM.model(model_spec) do
-      {:ok, %{capabilities: %{reasoning: %{enabled: true}}, provider: provider_id}} ->
-        cfg = param_bundles()
-        opts = Keyword.put(base_opts, :reasoning_effort, cfg.reasoning[:reasoning_effort] || :low)
-
-        # Check if provider has thinking constraints
-        case ReqLLM.provider(provider_id) do
-          {:ok, provider_module} ->
-            if function_exported?(provider_module, :thinking_constraints, 0) do
-              case provider_module.thinking_constraints() do
-                %{required_temperature: temp, min_max_tokens: min_max_tokens} ->
-                  # Apply provider-specific constraints
-                  effective_min = max(min_tokens || min_max_tokens, min_max_tokens)
-
-                  opts
-                  |> Keyword.put(:temperature, temp)
-                  |> Keyword.update(:max_tokens, effective_min, fn current ->
-                    max(current, effective_min)
-                  end)
-
-                :none ->
-                  # No constraints, just apply min_tokens if specified
-                  if is_integer(min_tokens) and (opts[:max_tokens] || 0) < min_tokens do
-                    Keyword.put(opts, :max_tokens, min_tokens)
-                  else
-                    opts
-                  end
-              end
-            else
-              # Provider doesn't implement thinking_constraints, use default behavior
-              if is_integer(min_tokens) and (opts[:max_tokens] || 0) < min_tokens do
-                Keyword.put(opts, :max_tokens, min_tokens)
-              else
-                opts
-              end
-            end
-
-          _ ->
-            # Provider not found, use default behavior
-            if is_integer(min_tokens) and (opts[:max_tokens] || 0) < min_tokens do
-              Keyword.put(opts, :max_tokens, min_tokens)
-            else
-              opts
-            end
+      {:ok, model} ->
+        if reasoning_control_model?(model) do
+          param_bundles()
+          |> Map.fetch!(:reasoning)
+          |> Keyword.get(:reasoning_effort, :low)
+          |> then(&Keyword.put_new(base_opts, :reasoning_effort, &1))
+          |> apply_reasoning_constraints(model.provider, min_tokens)
+        else
+          base_opts
         end
 
       _ ->
@@ -626,9 +592,67 @@ defmodule ReqLLM.Test.Helpers do
   end
 
   def reasoning_overlay(model_spec, _provider, base_opts, min_tokens) do
-    # Delegate to 3-arity version which now handles all provider-specific constraints
     reasoning_overlay(model_spec, base_opts, min_tokens)
   end
+
+  defp reasoning_control_model?(%{capabilities: capabilities, extra: extra}) do
+    reasoning_capable?(capabilities) or reasoning_effort_required?(extra)
+  end
+
+  defp reasoning_control_model?(_), do: false
+
+  defp reasoning_capable?(capabilities) when is_map(capabilities) do
+    case capabilities[:reasoning] || capabilities["reasoning"] do
+      true -> true
+      %{enabled: true} -> true
+      %{"enabled" => true} -> true
+      _ -> false
+    end
+  end
+
+  defp reasoning_capable?(_), do: false
+
+  defp reasoning_effort_required?(extra) when is_map(extra) do
+    constraints = extra[:constraints] || extra["constraints"] || %{}
+    value = constraints[:reasoning_effort] || constraints["reasoning_effort"]
+    value in [:required, "required", true]
+  end
+
+  defp reasoning_effort_required?(_), do: false
+
+  defp apply_reasoning_constraints(opts, provider_id, min_tokens) do
+    case ReqLLM.provider(provider_id) do
+      {:ok, provider_module} ->
+        apply_provider_reasoning_constraints(opts, provider_module, min_tokens)
+
+      _ ->
+        bump_max_tokens(opts, min_tokens)
+    end
+  end
+
+  defp apply_provider_reasoning_constraints(opts, provider_module, min_tokens) do
+    if function_exported?(provider_module, :thinking_constraints, 0) do
+      case provider_module.thinking_constraints() do
+        %{required_temperature: temp, min_max_tokens: min_max_tokens} ->
+          effective_min = max(min_tokens || min_max_tokens, min_max_tokens)
+
+          opts
+          |> Keyword.put(:temperature, temp)
+          |> bump_max_tokens(effective_min)
+
+        _ ->
+          bump_max_tokens(opts, min_tokens)
+      end
+    else
+      bump_max_tokens(opts, min_tokens)
+    end
+  end
+
+  defp bump_max_tokens(opts, min_tokens) when is_integer(min_tokens) do
+    Keyword.update(opts, :max_tokens, min_tokens, &max(&1, min_tokens))
+  end
+
+  defp bump_max_tokens(opts, _min_tokens), do: opts
 
   @doc """
   Check if a response was truncated due to length limit.

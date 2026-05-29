@@ -63,5 +63,25 @@ defmodule ReqLLM.Test.HelpersTest do
 
       assert result == base_opts
     end
+
+    test "applies token constraints for models with required reasoning metadata" do
+      model_spec = "openai:gpt-5-nano-2025-08-07"
+      base_opts = [max_tokens: 100, temperature: 0.9]
+
+      result = reasoning_overlay(model_spec, base_opts, 2000)
+
+      assert result[:max_tokens] == 2000
+      assert result[:reasoning_effort] == :low
+    end
+
+    test "preserves explicit reasoning effort" do
+      model_spec = "openai:gpt-5-nano-2025-08-07"
+      base_opts = [max_tokens: 100, reasoning_effort: :medium]
+
+      result = reasoning_overlay(model_spec, base_opts, 2000)
+
+      assert result[:max_tokens] == 2000
+      assert result[:reasoning_effort] == :medium
+    end
   end
 end

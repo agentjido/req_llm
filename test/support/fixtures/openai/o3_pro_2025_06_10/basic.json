@@ -1,0 +1,196 @@
+{
+  "model_spec": "openai:o3-pro-2025-06-10",
+  "provider": "openai",
+  "request": {
+    "body": {
+      "b64": "eyJpbmNsdWRlIjpbInJlYXNvbmluZy5lbmNyeXB0ZWRfY29udGVudCJdLCJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IkhlbGxvIHdvcmxkISIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9XSwibWF4X291dHB1dF90b2tlbnMiOjUwLCJtb2RlbCI6Im8zLXByby0yMDI1LTA2LTEwIiwic3RyZWFtIjpmYWxzZX0="
+    },
+    "canonical_json": {
+      "include": [
+        "reasoning.encrypted_content"
+      ],
+      "input": [
+        {
+          "content": [
+            {
+              "text": "Hello world!",
+              "type": "input_text"
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "max_output_tokens": 50,
+      "model": "o3-pro-2025-06-10",
+      "stream": false
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.openai.com/v1/responses"
+  },
+  "response": {
+    "body": {
+      "background": false,
+      "text": {
+        "format": {
+          "type": "text"
+        },
+        "verbosity": "medium"
+      },
+      "moderation": null,
+      "top_logprobs": 0,
+      "previous_response_id": null,
+      "tool_choice": "auto",
+      "service_tier": "default",
+      "status": "incomplete",
+      "tools": [],
+      "id": "resp_0cecda434b265e3f006a19e2309d848190b48962c57df8b7ec",
+      "temperature": 1.0,
+      "max_output_tokens": 50,
+      "user": null,
+      "frequency_penalty": 0.0,
+      "error": null,
+      "model": "o3-pro-2025-06-10",
+      "usage": {
+        "input_tokens": 9,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens": 50,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 59
+      },
+      "safety_identifier": null,
+      "object": "response",
+      "parallel_tool_calls": true,
+      "output": [
+        {
+          "encrypted_content": "gAAAAABqGeI4R_PvzlO4elIUoUoM7I0w6XQ30aYvOmnCuxXqEksziPYHumMt2SHVe8tpmMxQpcVa06cx3pqT-EEijP-JUosfdbtvvH5BS48ujVDWPci5WIn8XFvXv7f6XH1iMW8rw2X12MQzBPCFMNO-uegEDlebCxbj2Ib_trqz0WUYLo58nsf9m_4PdTF68Os6rTsbSVl9mx8eIvCbDmlZeqnOTiM3FHfoiQhx5lDFLPBHQqtEcTR9ltuQLGwAD1CQG40Llnh71N1tC-eRi1Q7NmyikGqzgmCFHHwoL8LkPt9nM-mvbPsSkG6SbLKAgzSmTTxqNohGQ7ZzlEIezcVNThT2RbtP49pTzA-JiTkNcLXhaXL0qnExHZj-dLm8k0Koa4VMVKZReqL30NuKs9YvuhBpPxO6of93lI0-ntYHzR3wGqocIo2gutZNQh8fYQOQVPEiBcOU1fM2IWr46vk2HRxZPHawpMLvoxgKvsEZv0NaMLBoG42B9_A7ErKNHFOErmM3eqWCQpizeOn7o7nlYGX6b6LIIdwlRwxs00lbsDk2zsKHY1h-R5-IBSLpsigBudO4GoQ7WEfubApkwd5d7vBOloMr5HHdpR5kvkPCTL2eBhBXweooQlCVR-8rBpefCG9CggazrdPKCEiKKYALBQ0yrrY8uRK2ZjGUiJbpIvwK4P0VAWfeMMkHuB0vPqg85rmjYDOykOvyX7b_OnwqCRpNztYtSJ6jbN43zoccD5eqzUmlSkzAzGvJzwN3tgv5gdlny0dH_Z60ET5_qbCxWNsVCgMLOn6FqAFm5_3iyN2MsNRhZmeZ2TUaYH-bdnJxjdBwp2rQoDLxxyKPLlVXgWV_r5hRwiPzwp6XYR6tneHTH9G2LL_0h7sKNrc5FselkMWEnW_F9Tq2usteWSS9ZsT7Dk-4RGagq0VId_fJjUco03euIEjL7Dj7RG__oIs4BfZswvIzTwZ8Uwa4Hsoyi6002DucSU-peVlgRdn9MK2H8mD5hpCk1421k05wm2CzZjPnyV5dt2m6kKRUtZiOHzu1L2xeXmXYH8gKIUEuSAGIYhu7InbdhpBcwW9jjzASyVUdxTAWNXhF2Bw4BwnGIZk4IQB23SqnWtwy8O72mlUFNXm2C5U=",
+          "id": "rs_0cecda434b265e3f006a19e237ed5c819093c4956b3d8afa3c",
+          "summary": [],
+          "type": "reasoning"
+        },
+        {
+          "content": [
+            {
+              "annotations": [],
+              "logprobs": [],
+              "text": "Hello! 👋  \nHow can I help you today?",
+              "type": "output_text"
+            }
+          ],
+          "id": "msg_0cecda434b265e3f006a19e237eea88190a8d94c7c1cffcf22",
+          "role": "assistant",
+          "status": "incomplete",
+          "type": "message"
+        }
+      ],
+      "instructions": null,
+      "store": true,
+      "presence_penalty": 0.0,
+      "incomplete_details": {
+        "reason": "max_output_tokens"
+      },
+      "reasoning": {
+        "context": "current_turn",
+        "effort": "medium",
+        "summary": null
+      },
+      "completed_at": null,
+      "truncation": "disabled",
+      "top_p": 1.0,
+      "billing": {
+        "payer": "developer"
+      },
+      "prompt_cache_retention": "in_memory",
+      "metadata": {},
+      "prompt_cache_key": null,
+      "created_at": 1780081200,
+      "max_tool_calls": null
+    },
+    "headers": {
+      "access-control-expose-headers": [
+        "X-Request-ID",
+        "CF-Ray",
+        "CF-Ray"
+      ],
+      "alt-svc": [
+        "h3=\":443\"; ma=86400"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a037bd4f3806233f-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 29 May 2026 19:00:08 GMT"
+      ],
+      "openai-organization": "[REDACTED:openai-organization]",
+      "openai-processing-ms": [
+        "7604"
+      ],
+      "openai-project": [
+        "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
+      ],
+      "openai-version": [
+        "2020-10-01"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": "[REDACTED:set-cookie]",
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-ratelimit-limit-requests": [
+        "10000"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "2000000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "9999"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "1999735"
+      ],
+      "x-ratelimit-reset-requests": [
+        "0s"
+      ],
+      "x-ratelimit-reset-tokens": [
+        "0s"
+      ],
+      "x-request-id": [
+        "req_020811a6b8b54f21894297a375a197e5"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}
