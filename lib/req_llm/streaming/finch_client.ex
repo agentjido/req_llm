@@ -288,7 +288,7 @@ defmodule ReqLLM.Streaming.FinchClient do
   # Validate that HTTP/2 pools won't fail with large request bodies
   # See: https://github.com/sneako/finch/issues/265
   defp validate_http2_body_size(finch_request, finch_name) do
-    body_size = byte_size(finch_request.body || "")
+    body_size = request_body_size(finch_request.body)
 
     # Only check if body is potentially problematic (>64KB threshold from Finch #265)
     if body_size > 65_535 do
@@ -323,4 +323,8 @@ defmodule ReqLLM.Streaming.FinchClient do
   rescue
     _ -> {:error, :config_error}
   end
+
+  defp request_body_size(nil), do: 0
+  defp request_body_size({:stream, _}), do: 0
+  defp request_body_size(body), do: IO.iodata_length(body)
 end

@@ -231,6 +231,24 @@ defmodule ReqLLM.Streaming.FinchClientTest do
       end
     end
 
+    defmodule IodataBodyProvider do
+      def attach_stream(_model, _context, _opts, _finch_name) do
+        body =
+          Jason.encode_to_iodata!(%{
+            messages: [%{role: "user", content: "Test"}],
+            stream: true
+          })
+
+        {:ok,
+         Finch.build(
+           :post,
+           "https://example.com/stream",
+           [{"content-type", "application/json"}],
+           body
+         )}
+      end
+    end
+
     defmodule LiveStreamProvider do
       def attach_stream(_model, _context, opts, _finch_name) do
         body =
@@ -287,6 +305,26 @@ defmodule ReqLLM.Streaming.FinchClientTest do
       assert String.ends_with?(http_context.url, "/chat/completions")
       assert http_context.method == :post
       assert is_map(http_context.req_headers)
+    end
+
+    test "accepts iodata request bodies from provider attach_stream" do
+      {:ok, stream_server} = MockStreamServer.start_link()
+      {:ok, context} = Context.normalize("Test")
+
+      assert {:ok, task_pid, http_context, canonical_json} =
+               FinchClient.start_stream(
+                 IodataBodyProvider,
+                 %LLMDB.Model{provider: :test, id: "test"},
+                 context,
+                 [receive_timeout: 10, max_retries: 0],
+                 stream_server,
+                 ReqLLM.MissingFinch
+               )
+
+      assert is_pid(task_pid)
+      assert %HTTPContext{} = http_context
+      assert canonical_json["stream"] == true
+      assert canonical_json["messages"] == [%{"role" => "user", "content" => "Test"}]
     end
 
     test "returns provider_build_failed when provider attach_stream returns an error" do

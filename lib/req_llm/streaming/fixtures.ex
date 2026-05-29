@@ -135,18 +135,27 @@ defmodule ReqLLM.Streaming.Fixtures do
         %{}
 
       binary when is_binary(binary) ->
-        case Jason.decode(binary) do
-          {:ok, json} -> json
-          {:error, _} -> %{raw_body: binary}
-        end
+        decode_json_body(binary)
 
       {:stream, _} ->
         %{streaming_body: true}
+
+      iodata when is_list(iodata) ->
+        iodata
+        |> IO.iodata_to_binary()
+        |> decode_json_body()
 
       other ->
         %{unknown_body: inspect(other)}
     end
   rescue
     _ -> %{}
+  end
+
+  defp decode_json_body(binary) do
+    case Jason.decode(binary) do
+      {:ok, json} -> json
+      {:error, _} -> %{raw_body: binary}
+    end
   end
 end
