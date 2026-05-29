@@ -15,11 +15,19 @@ defmodule ReqLLM.Providers.OpenAI.ParamProfiles do
       {:rename, :max_tokens, :max_completion_tokens,
        "Renamed :max_tokens to :max_completion_tokens for reasoning models"}
     ],
+    max_completion_tokens: [
+      {:rename, :max_tokens, :max_completion_tokens,
+       "Renamed :max_tokens to :max_completion_tokens for this model"}
+    ],
     no_temperature: [
       {:drop, :temperature, "This model does not support :temperature – dropped"}
     ],
     temperature_fixed_1: [
       {:drop, :temperature, "This model only supports temperature=1 (default) – dropped"}
+    ],
+    audio_output_chat: [
+      {:set_default, :modalities, ["text", "audio"], nil},
+      {:set_default, :audio, %{voice: "alloy", format: "mp3"}, nil}
     ],
     no_sampling_params: [
       {:drop, :temperature, "This model does not support sampling parameters – dropped"},
@@ -68,9 +76,12 @@ defmodule ReqLLM.Providers.OpenAI.ParamProfiles do
   defp profiles_for(:chat, %LLMDB.Model{} = model) do
     []
     |> add_if(reasoning_model?(model), :reasoning)
+    |> add_if(max_completion_tokens_required?(model), :max_completion_tokens)
     |> add_if(no_sampling_params?(model), :no_sampling_params)
     |> add_if(temperature_unsupported?(model), :no_temperature)
     |> add_if(temperature_fixed_one?(model), :temperature_fixed_1)
+    |> add_if(chat_latest_model?(model), :temperature_fixed_1)
+    |> add_if(audio_output_chat_model?(model), :audio_output_chat)
     |> add_if(gpt5_pro_model?(model), :gpt5_pro_reasoning)
     |> Enum.uniq()
   end
@@ -84,6 +95,13 @@ defmodule ReqLLM.Providers.OpenAI.ParamProfiles do
   defp reasoning_model?(%LLMDB.Model{id: model_name}) do
     AdapterHelpers.reasoning_model?(model_name)
   end
+
+  defp max_completion_tokens_required?(%LLMDB.Model{id: "chat-latest"}), do: true
+  defp max_completion_tokens_required?(%LLMDB.Model{}), do: false
+  defp chat_latest_model?(%LLMDB.Model{id: "chat-latest"}), do: true
+  defp chat_latest_model?(%LLMDB.Model{}), do: false
+  defp audio_output_chat_model?(%LLMDB.Model{id: "gpt-audio" <> _}), do: true
+  defp audio_output_chat_model?(%LLMDB.Model{}), do: false
 
   defp has_reasoning_capability?(caps) do
     case caps[:reasoning] do

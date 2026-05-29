@@ -1211,6 +1211,11 @@ defmodule ReqLLM.Provider.Defaults do
     |> Enum.reject(&is_nil/1)
   end
 
+  defp decode_openai_content(%{"audio" => %{"transcript" => transcript}})
+       when is_binary(transcript) and transcript != "" do
+    [ReqLLM.StreamChunk.text(transcript)]
+  end
+
   defp decode_openai_content(_), do: []
 
   defp decode_openai_reasoning(%{"reasoning" => reasoning})

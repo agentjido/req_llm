@@ -113,6 +113,7 @@ defmodule ReqLLM.Providers.OpenAI.ChatAPI do
         |> add_response_format(opts_map)
         |> add_parallel_tool_calls(opts_map)
         |> add_logprobs(opts_map)
+        |> add_audio_output(opts_map)
         |> ReqLLM.Providers.OpenAI.AdapterHelpers.translate_tool_choice_format()
         |> add_strict_to_tools()
     end
@@ -256,6 +257,14 @@ defmodule ReqLLM.Providers.OpenAI.ChatAPI do
         provider_opts[:parallel_tool_calls]
 
     maybe_put(body, :parallel_tool_calls, ptc)
+  end
+
+  defp add_audio_output(body, request_options) do
+    provider_opts = request_options[:provider_options] || []
+
+    body
+    |> maybe_put(:modalities, request_options[:modalities] || provider_opts[:modalities])
+    |> maybe_put(:audio, request_options[:audio] || provider_opts[:audio])
   end
 
   defp add_strict_to_tools(body) do

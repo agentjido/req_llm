@@ -118,6 +118,44 @@ defmodule ReqLLM.Providers.OpenAITest do
       assert request.method == :post
     end
 
+    test "prepare_request uses json transcription format for gpt-4o transcribe variants" do
+      model_ids = [
+        "gpt-4o-transcribe",
+        "gpt-4o-transcribe-diarize",
+        "gpt-4o-mini-transcribe",
+        "gpt-4o-mini-transcribe-2025-03-20",
+        "gpt-4o-mini-transcribe-2025-12-15"
+      ]
+
+      for model_id <- model_ids do
+        {:ok, model} = ReqLLM.model("openai:#{model_id}")
+        {:ok, request} = OpenAI.prepare_request(:transcription, model, "audio", [])
+
+        assert Keyword.get(request.options[:form_multipart], :response_format) == "json"
+      end
+    end
+
+    test "prepare_request preserves verbose transcription format for whisper" do
+      {:ok, model} = ReqLLM.model("openai:whisper-1")
+
+      {:ok, request} = OpenAI.prepare_request(:transcription, model, "audio", [])
+
+      assert Keyword.get(request.options[:form_multipart], :response_format) == "verbose_json"
+    end
+
+    test "prepare_request defaults audio output fields for gpt-audio chat models" do
+      {:ok, model} = ReqLLM.model("openai:gpt-audio-mini")
+
+      {:ok, request} =
+        OpenAI.prepare_request(:chat, model, "Reply with exactly: pong", api_key: "test-key")
+
+      encoded_request = ReqLLM.Providers.OpenAI.ChatAPI.encode_body(request)
+      body = ReqLLM.Test.Helpers.json_body(encoded_request)
+
+      assert body["modalities"] == ["text", "audio"]
+      assert body["audio"] == %{"format" => "mp3", "voice" => "alloy"}
+    end
+
     test "attach_stream defaults chat max_tokens from model output limit" do
       model = %LLMDB.Model{
         provider: :openai,
@@ -1034,6 +1072,30 @@ defmodule ReqLLM.Providers.OpenAITest do
       assert warnings == []
     end
 
+    test "translate_options for chat-latest renames max_tokens" do
+      {:ok, model} = ReqLLM.model("openai:chat-latest")
+
+      opts = [max_tokens: 1000, temperature: 0.7]
+      {translated_opts, warnings} = OpenAI.translate_options(:chat, model, opts)
+
+      assert translated_opts[:max_completion_tokens] == 1000
+      refute Keyword.has_key?(translated_opts, :temperature)
+      refute Keyword.has_key?(translated_opts, :max_tokens)
+      assert length(warnings) == 2
+      assert Enum.any?(warnings, &(&1 =~ "max_tokens"))
+      assert Enum.any?(warnings, &(&1 =~ "temperature=1"))
+    end
+
+    test "translate_options defaults audio output for gpt-audio chat models" do
+      {:ok, model} = ReqLLM.model("openai:gpt-audio-mini")
+
+      {translated_opts, warnings} = OpenAI.translate_options(:chat, model, max_tokens: 1000)
+
+      assert translated_opts[:modalities] == ["text", "audio"]
+      assert translated_opts[:audio] == %{voice: "alloy", format: "mp3"}
+      assert warnings == []
+    end
+
     test "translate_options for gpt-5 models renames max_tokens and drops sampling params" do
       {:ok, model} = ReqLLM.model("openai:gpt-5")
       opts = [max_tokens: 1500, temperature: 0.7, top_p: 0.9]
@@ -1627,6 +1689,38 @@ defmodule ReqLLM.Providers.OpenAITest do
 
       assert %ReqLLM.Response{} = resp.body
       refute Map.has_key?(resp.body.provider_meta, :logprobs)
+    end
+
+    test "decode_response extracts audio transcript as response text" do
+      mock_response_body = %{
+        "id" => "chatcmpl-audio",
+        "object" => "chat.completion",
+        "created" => 1_677_652_288,
+        "model" => "gpt-audio-mini",
+        "choices" => [
+          %{
+            "index" => 0,
+            "message" => %{
+              "role" => "assistant",
+              "content" => nil,
+              "audio" => %{"id" => "audio-1", "data" => "abc", "transcript" => "pong"}
+            },
+            "finish_reason" => "stop"
+          }
+        ],
+        "usage" => %{"prompt_tokens" => 10, "completion_tokens" => 2, "total_tokens" => 12}
+      }
+
+      mock_resp = %Req.Response{status: 200, body: mock_response_body}
+
+      {:ok, model} = ReqLLM.model("openai:gpt-audio-mini")
+      context = context_fixture()
+      mock_req = %Req.Request{options: [context: context, stream: false, model: model.id]}
+
+      {_req, resp} = OpenAI.decode_response({mock_req, mock_resp})
+
+      assert %ReqLLM.Response{} = resp.body
+      assert ReqLLM.Response.text(resp.body) == "pong"
     end
 
     test "openai_logprobs schema option is valid" do

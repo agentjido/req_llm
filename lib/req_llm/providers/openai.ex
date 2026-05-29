@@ -240,6 +240,14 @@ defmodule ReqLLM.Providers.OpenAI do
       type: {:in, 0..20},
       doc:
         "Number of most likely tokens to return at each position (0–20, requires openai_logprobs: true)"
+    ],
+    modalities: [
+      type: {:list, :string},
+      doc: "Chat Completions output modalities, such as [\"text\", \"audio\"]"
+    ],
+    audio: [
+      type: {:or, [:map, :keyword_list]},
+      doc: "Chat Completions audio output options, such as voice and format"
     ]
   ]
 
@@ -488,13 +496,7 @@ defmodule ReqLLM.Providers.OpenAI do
       ext = ReqLLM.Provider.Defaults.media_type_to_extension(media_type)
       filename = "audio.#{ext}"
 
-      # Determine response_format based on model
-      response_format =
-        if model.id in ["gpt-4o-transcribe", "gpt-4o-mini-transcribe"] do
-          "json"
-        else
-          "verbose_json"
-        end
+      response_format = transcription_response_format(model)
 
       form_parts =
         [
@@ -975,6 +977,14 @@ defmodule ReqLLM.Providers.OpenAI do
              "OpenAI Responses API supports image and PDF attachments. " <>
                "Found unsupported file types: #{mimes}."
          )}
+    end
+  end
+
+  defp transcription_response_format(%LLMDB.Model{id: model_id}) do
+    cond do
+      String.starts_with?(model_id, "gpt-4o-transcribe") -> "json"
+      String.starts_with?(model_id, "gpt-4o-mini-transcribe") -> "json"
+      true -> "verbose_json"
     end
   end
 

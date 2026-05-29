@@ -1,14 +1,14 @@
 {
-  "model_spec": "openai:whisper-1",
+  "model_spec": "openai:gpt-4o-mini-transcribe-2025-12-15",
   "provider": "openai",
   "request": {
     "body": {
-      "b64": "eyJfZml4dHVyZV9ib2R5Ijoibm9uX2pzb24iLCJieXRlX3NpemUiOjMxNjk2LCJjb250ZW50X3R5cGUiOiJtdWx0aXBhcnQvZm9ybS1kYXRhOyBib3VuZGFyeT1iM2QzZjczNTdjMmNiNGViYWZhZGVhOTM4OWZmN2Y5YiJ9"
+      "b64": "eyJfZml4dHVyZV9ib2R5Ijoibm9uX2pzb24iLCJieXRlX3NpemUiOjMxNzEyLCJjb250ZW50X3R5cGUiOiJtdWx0aXBhcnQvZm9ybS1kYXRhOyBib3VuZGFyeT00MjVmNDdlNjlhZGQzZTc5YzZmOTliNjY2MDNmOGRiYyJ9"
     },
     "canonical_json": {
       "_fixture_body": "non_json",
-      "byte_size": 31696,
-      "content_type": "multipart/form-data; boundary=b3d3f7357c2cb4ebafadea9389ff7f9b"
+      "byte_size": 31712,
+      "content_type": "multipart/form-data; boundary=425f47e69add3e79c6f99b66603f8dbc"
     },
     "headers": {
       "accept-encoding": [
@@ -16,10 +16,10 @@
       ],
       "authorization": "[REDACTED:authorization]",
       "content-length": [
-        "31696"
+        "31712"
       ],
       "content-type": [
-        "multipart/form-data; boundary=b3d3f7357c2cb4ebafadea9389ff7f9b"
+        "multipart/form-data; boundary=425f47e69add3e79c6f99b66603f8dbc"
       ],
       "user-agent": [
         "req/0.5.18"
@@ -30,34 +30,16 @@
   },
   "response": {
     "body": {
-      "duration": 0.8399999737739563,
-      "language": "english",
-      "segments": [
-        {
-          "avg_logprob": -0.6972020864486694,
-          "compression_ratio": 0.6190476417541504,
-          "end": 2.0,
-          "id": 0,
-          "no_speech_prob": 0.013854512944817543,
-          "seek": 0,
-          "start": 0.0,
-          "temperature": 0.0,
-          "text": " Hello, world.",
-          "tokens": [
-            50364,
-            2425,
-            11,
-            1002,
-            13,
-            50464
-          ]
-        }
-      ],
-      "task": "transcribe",
-      "text": "Hello, world.",
+      "text": "Hello, world!",
       "usage": {
-        "seconds": 1,
-        "type": "duration"
+        "input_token_details": {
+          "audio_tokens": 8,
+          "text_tokens": 1
+        },
+        "input_tokens": 9,
+        "output_tokens": 6,
+        "total_tokens": 15,
+        "type": "tokens"
       }
     },
     "headers": {
@@ -72,7 +54,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "a0388bfaaa3c35b5-ORD"
+        "a0388fa9ab786095-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -81,11 +63,11 @@
         "application/json"
       ],
       "date": [
-        "Fri, 29 May 2026 21:21:06 GMT"
+        "Fri, 29 May 2026 21:23:38 GMT"
       ],
       "openai-organization": "[REDACTED:openai-organization]",
       "openai-processing-ms": [
-        "468"
+        "1460"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -103,9 +85,6 @@
       "transfer-encoding": [
         "chunked"
       ],
-      "via": [
-        "envoy-router-68c448d87d-pmtn8"
-      ],
       "x-content-type-options": [
         "nosniff"
       ],
@@ -113,16 +92,16 @@
         "v0.1"
       ],
       "x-ratelimit-limit-requests": [
-        "7500"
+        "10000"
       ],
       "x-ratelimit-remaining-requests": [
-        "7499"
+        "9999"
       ],
       "x-ratelimit-reset-requests": [
-        "8ms"
+        "6ms"
       ],
       "x-request-id": [
-        "req_09f2a183ae3d41a8ac3d1dc07fe48d46"
+        "req_8f5ee9ca110549139005ca4379f6f6dc"
       ]
     },
     "status": 200

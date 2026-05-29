@@ -34,6 +34,7 @@ Committed fixture-refresh slices:
 | `84f38a47` | Hardened model operation selection so specialty models do not leak into text refreshes. |
 | `74c92f75` | Refreshed Anthropic coverage, removed deprecated Claude 3-family fixtures, and normalized Anthropic fixture cookies. |
 | `a4f7f64d` | Refreshed current OpenAI text coverage, removed deprecated OpenAI fixtures, and fixed OpenAI Responses/reasoning profile issues found during recording. |
+| `27688e8c` | Refreshed base OpenAI non-text fixtures and hardened binary/multipart fixture replay. |
 
 Current completed provider status:
 
@@ -41,22 +42,27 @@ Current completed provider status:
 - OpenAI current core text baselines are refreshed and replay-clean for `gpt-4o-mini`, `gpt-4o`, `gpt-4.1-mini`, `gpt-4.1`, `gpt-5-nano`, `gpt-5-mini`, `gpt-5`, and `o3`.
 - OpenAI dated text aliases are refreshed and replay-clean for `gpt-4.1-2025-04-14`, `gpt-4.1-mini-2025-04-14`, `gpt-4o-2024-08-06`, `gpt-4o-2024-11-20`, `gpt-5-2025-08-07`, `gpt-5-mini-2025-08-07`, `gpt-5-nano-2025-08-07`, and `o3-2025-04-16`.
 - OpenAI Pro access is confirmed and fixture-backed for `basic` on `gpt-5-pro`, `gpt-5-pro-2025-10-06`, `o3-pro`, and `o3-pro-2025-06-10`; full comprehensive Pro coverage is still an explicit decision because of cost and runtime.
-- OpenAI non-text base coverage is refreshed and replay-clean for embeddings (`text-embedding-3-small`, `text-embedding-3-large`, `text-embedding-ada-002`), image generation (`gpt-image-1.5`), speech (`tts-1`), and transcription (`whisper-1`).
+- OpenAI non-text expansion reached the conservative target: fixture-file verification is 64/86 OpenAI models, with embeddings 3/3, images 5/5, speech 6/6, transcription 6/7, and text/audio-chat 44/65.
+- OpenAI image generation is refreshed and replay-clean for `gpt-image-1.5`, `chatgpt-image-latest`, `gpt-image-1-mini`, `gpt-image-2`, and `gpt-image-2-2026-04-21`.
+- OpenAI speech is refreshed and replay-clean for `tts-1`, `tts-1-1106`, `tts-1-hd`, `tts-1-hd-1106`, `gpt-4o-mini-tts`, and `gpt-4o-mini-tts-2025-12-15`.
+- OpenAI transcription is refreshed and replay-clean for `whisper-1`, `gpt-4o-transcribe`, `gpt-4o-transcribe-diarize`, `gpt-4o-mini-transcribe`, `gpt-4o-mini-transcribe-2025-03-20`, and `gpt-4o-mini-transcribe-2025-12-15`.
+- OpenAI audio-chat basic fixtures are refreshed and replay-clean for `gpt-audio` and `gpt-audio-mini`. These require Chat Completions audio output defaults and transcript decoding; the dated audio-chat aliases remain a later expansion.
 - Deprecated OpenAI and Anthropic fixture directories have been removed from package scope.
 - Minimax key and balance are no longer blocking key work. Keep Minimax as a later provider-specific fixture pass rather than retesting credentials now.
 
 ## Next Recommended Pass
 
-1. Decide OpenAI Pro depth: either run full `gpt-5-pro`, `gpt-5-pro-2025-10-06`, `o3-pro`, and `o3-pro-2025-06-10` suites now, or intentionally keep them at basic probe coverage and move to the next provider.
-2. Decide OpenAI non-text expansion depth: base coverage is clean, but optional expansion remains for `tts-1-hd`, `gpt-4o-mini-tts`, `gpt-4o-transcribe`, `gpt-4o-mini-transcribe`, `gpt-image-1-mini`, and `gpt-image-2`.
-3. Decide whether the basic-probed future/current OpenAI families (`gpt-5.1+`, `gpt-5.2+`, `gpt-5.3+`, `gpt-5.4+`, `gpt-5.5+`) should get full text suites now or stay as access probes until the next OpenAI pass.
-4. Move provider-by-provider to `google`, `groq`, `xai`, and `cerebras`; then `zai`, `zai_coder`, and `minimax`; then expansion providers `fireworks_ai`, `zenmux`, `venice`, `elevenlabs`, and `cohere`.
-5. Before broad recording, add or decide on a "currently fixture-backed passing models" selector so we can rerun the conservative set without hand-running individual specs or accidentally selecting every active LLMDB model.
-6. Keep Azure, Amazon Bedrock, Alibaba, and Google Vertex out of this pass until the user explicitly reopens those credential/provider tracks.
+1. Decide whether to broaden beyond the 64 OpenAI target with dated audio-chat aliases: `gpt-audio-1.5`, `gpt-audio-2025-08-28`, and `gpt-audio-mini-2025-12-15`.
+2. Treat OpenAI realtime, Sora, moderation, search, and legacy completions as separate endpoint/capability work, not normal text fixture refreshes.
+3. Decide OpenAI Pro depth: either run full `gpt-5-pro`, `gpt-5-pro-2025-10-06`, `o3-pro`, and `o3-pro-2025-06-10` suites now, or intentionally keep them at basic probe coverage and move to the next provider.
+4. Decide whether the basic-probed future/current OpenAI families (`gpt-5.1+`, `gpt-5.2+`, `gpt-5.3+`, `gpt-5.4+`, `gpt-5.5+`) should get full text suites now or stay as access probes until the next OpenAI pass.
+5. Move provider-by-provider to `google`, `groq`, `xai`, and `cerebras`; then `zai`, `zai_coder`, and `minimax`; then expansion providers `fireworks_ai`, `zenmux`, `venice`, `elevenlabs`, and `cohere`.
+6. Before broad recording, add or decide on a "currently fixture-backed passing models" selector so we can rerun the conservative set without hand-running individual specs or accidentally selecting every active LLMDB model.
+7. Keep Azure, Amazon Bedrock, Alibaba, and Google Vertex out of this pass until the user explicitly reopens those credential/provider tracks.
 
 ## Current Fixture State
 
-The fixture tree has 2195 JSON fixture files under `test/support/fixtures`.
+The fixture tree has 2212 JSON fixture files under `test/support/fixtures`.
 
 `MIX_ENV=test mix mc` reports:
 
@@ -75,7 +81,7 @@ The fixture tree has 2195 JSON fixture files under `test/support/fixtures`.
 | google_vertex | 0 | 0 | 0 | 40 |
 | groq | 7 | 0 | 0 | 11 |
 | minimax | 6 | 0 | 0 | 0 |
-| openai | 19 | 2 | 1 | 64 |
+| openai | 19 | 2 | 0 | 65 |
 | openrouter | 45 | 0 | 0 | 319 |
 | venice | 0 | 0 | 0 | 67 |
 | xai | 10 | 0 | 0 | 16 |
@@ -85,6 +91,18 @@ The fixture tree has 2195 JSON fixture files under `test/support/fixtures`.
 | zenmux | 0 | 0 | 0 | 149 |
 
 The provider sections currently sum to 143 passing, fixture-backed, current-registry models after the OpenAI and Anthropic deprecated-model cleanup and the OpenAI dated-alias pass. The active refresh scope excludes Azure, leaving 117 in-scope candidate passing models. Amazon Bedrock stays out of triage for this pass. Minimax remains in the candidate list after the balance update, but should be refreshed in its own provider-specific pass. The task's overall line is currently higher because the overall calculation also counts legacy `priv/supported_models.json` pass entries that are no longer in the current provider sections. Treat the in-scope model list below as the provider-by-provider refresh backlog, not as one broad recording batch.
+
+OpenAI scenario/fixture-file verification is more current than the model-level `mix mc` table because this branch records targeted scenarios without promoting every scenario result to `priv/supported_models.json`. The current OpenAI fixture-file count is 64/86:
+
+| OpenAI operation bucket | Passing fixtures | Catalog models |
+| --- | ---: | ---: |
+| embedding | 3 | 3 |
+| image | 5 | 5 |
+| speech | 6 | 6 |
+| transcription | 6 | 7 |
+| text/audio-chat | 44 | 65 |
+
+Remaining OpenAI catalog gaps are intentionally split by endpoint family: realtime (`gpt-realtime*`, `gpt-realtime-whisper`), Sora (`sora-2*`), moderation (`omni-moderation-*`), search (`gpt-5-search-api*`), legacy completions (`babbage-002`, `davinci-002`), older preview text (`gpt-4-0125-preview`, `o1-mini`), inaccessible current catalog (`gpt-5.3-codex-spark`), and deferred dated audio-chat aliases (`gpt-audio-1.5`, `gpt-audio-2025-08-28`, `gpt-audio-mini-2025-12-15`).
 
 ## Date Findings
 
