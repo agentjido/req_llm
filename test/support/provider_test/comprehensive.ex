@@ -39,10 +39,11 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
         # 2. Model supports JSON schemas (json.schema)
         # 3. Model has strict tool calling (tools.strict = true)
         # 4. Model has regular tool calling (tools.enabled = true) - req_llm has workaround
-        get_in(caps, [:json, :native]) ||
-          get_in(caps, [:json, :schema]) ||
-          get_in(caps, [:tools, :strict]) == true ||
-          get_in(caps, [:tools, :enabled]) == true
+        structured_outputs_supported?(model) and
+          (get_in(caps, [:json, :native]) ||
+             get_in(caps, [:json, :schema]) ||
+             get_in(caps, [:tools, :strict]) == true ||
+             get_in(caps, [:tools, :enabled]) == true)
 
       {:error, _} ->
         false
@@ -85,6 +86,15 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
       {:error, _} -> true
     end
   end
+
+  defp structured_outputs_supported?(%LLMDB.Model{provider: :anthropic, extra: extra}) do
+    case get_in(extra || %{}, [:capabilities, :structured_outputs, :supported]) do
+      false -> false
+      _ -> true
+    end
+  end
+
+  defp structured_outputs_supported?(_model), do: true
 
   defmacro __using__(opts) do
     provider = Keyword.fetch!(opts, :provider)

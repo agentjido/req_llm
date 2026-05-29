@@ -47,11 +47,11 @@
     "body": {
       "content": [
         {
-          "text": "Hello! 👋 How are you doing today? Is there anything I can help you with?",
+          "text": "Hello! 👋\n\nHow are you doing today? Is there something I can help you with, or did you just want to say hi? Either way, I'm happy to chat!",
           "type": "text"
         }
       ],
-      "id": "msg_01J5R5adwtdYv4fgyDncTLr4",
+      "id": "msg_016YZY9rGwwg1vFoZzYLwbks",
       "model": "claude-opus-4-8",
       "role": "assistant",
       "stop_details": null,
@@ -67,7 +67,7 @@
         "cache_read_input_tokens": 0,
         "inference_geo": "global",
         "input_tokens": 11,
-        "output_tokens": 28,
+        "output_tokens": 50,
         "output_tokens_details": {
           "thinking_tokens": 0
         },
@@ -75,9 +75,7 @@
       }
     },
     "headers": {
-      "anthropic-organization-id": [
-        "a71659e7-a922-4ff7-99de-f3ba615face1"
-      ],
+      "anthropic-organization-id": "[REDACTED:anthropic-organization-id]",
       "anthropic-ratelimit-input-tokens-limit": [
         "5000000"
       ],
@@ -85,7 +83,7 @@
         "5000000"
       ],
       "anthropic-ratelimit-input-tokens-reset": [
-        "2026-05-28T18:31:28Z"
+        "2026-05-29T17:13:40Z"
       ],
       "anthropic-ratelimit-output-tokens-limit": [
         "400000"
@@ -94,7 +92,7 @@
         "400000"
       ],
       "anthropic-ratelimit-output-tokens-reset": [
-        "2026-05-28T18:31:29Z"
+        "2026-05-29T17:13:41Z"
       ],
       "anthropic-ratelimit-requests-limit": [
         "2000"
@@ -103,7 +101,7 @@
         "1999"
       ],
       "anthropic-ratelimit-requests-reset": [
-        "2026-05-28T18:31:27Z"
+        "2026-05-29T17:13:39Z"
       ],
       "anthropic-ratelimit-tokens-limit": [
         "5400000"
@@ -112,13 +110,13 @@
         "5400000"
       ],
       "anthropic-ratelimit-tokens-reset": [
-        "2026-05-28T18:31:28Z"
+        "2026-05-29T17:13:40Z"
       ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "a02f561eabd58114-ORD"
+        "a03721882a90258c-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -130,22 +128,20 @@
         "application/json"
       ],
       "date": [
-        "Thu, 28 May 2026 18:31:29 GMT"
+        "Fri, 29 May 2026 17:13:41 GMT"
       ],
       "request-id": [
-        "req_011CbVSibYYAbrAqXzKNA5Jb"
+        "req_011CbXEbRHooYgPqM3gRpo4F"
       ],
       "server": [
         "cloudflare"
       ],
-      "set-cookie": [
-        "_cfuvid=FdS.QGGkhcGkKwMgd9dUoFOebnhSQAaOBnFiK43BCwQ-1779993087.7888079-1.0.1.1-vv8guWOZJYpBa2WbnCn5ErKIUdO62HHBURcq76o0pH0; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.anthropic.com"
-      ],
+      "set-cookie": "[REDACTED:set-cookie]",
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
       ],
       "traceresponse": [
-        "00-2ab6d9a352518446a830ed8c6105eabb-cdadee07f81dcb13-01"
+        "00-afff5caed0cb89f82802ee4ee94b37e0-1f16acc90647f959-01"
       ],
       "transfer-encoding": [
         "chunked"
@@ -153,13 +149,11 @@
       "vary": [
         "Accept-Encoding"
       ],
-      "x-envoy-upstream-service-time": [
-        "1248"
-      ],
       "x-robots-tag": [
         "none"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

@@ -1,0 +1,151 @@
+{
+  "model_spec": "anthropic:claude-opus-4-6",
+  "provider": "anthropic",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoxMDI0LCJtZXNzYWdlcyI6W3siY29udGVudCI6IlJlc3BvbmQgd2l0aCBhIHNpbmdsZSB3b3JkICdIaScuIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiY2xhdWRlLW9wdXMtNC02Iiwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+    },
+    "canonical_json": {
+      "max_tokens": 1024,
+      "messages": [
+        {
+          "content": "Respond with a single word 'Hi'.",
+          "role": "user"
+        }
+      ],
+      "model": "claude-opus-4-6",
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "anthropic-version": [
+        "2023-06-01"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ],
+      "x-api-key": "[REDACTED:x-api-key]"
+    },
+    "method": "post",
+    "url": "https://api.anthropic.com/v1/messages"
+  },
+  "response": {
+    "body": {
+      "content": [
+        {
+          "text": "Hi",
+          "type": "text"
+        }
+      ],
+      "id": "msg_01W42qNdjXj9mr5GxVQmbqca",
+      "model": "claude-opus-4-6",
+      "role": "assistant",
+      "stop_details": null,
+      "stop_reason": "end_turn",
+      "stop_sequence": null,
+      "type": "message",
+      "usage": {
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 0,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "inference_geo": "global",
+        "input_tokens": 17,
+        "output_tokens": 4,
+        "service_tier": "standard"
+      }
+    },
+    "headers": {
+      "anthropic-organization-id": "[REDACTED:anthropic-organization-id]",
+      "anthropic-ratelimit-input-tokens-limit": [
+        "5000000"
+      ],
+      "anthropic-ratelimit-input-tokens-remaining": [
+        "5000000"
+      ],
+      "anthropic-ratelimit-input-tokens-reset": [
+        "2026-05-29T17:45:30Z"
+      ],
+      "anthropic-ratelimit-output-tokens-limit": [
+        "400000"
+      ],
+      "anthropic-ratelimit-output-tokens-remaining": [
+        "400000"
+      ],
+      "anthropic-ratelimit-output-tokens-reset": [
+        "2026-05-29T17:45:30Z"
+      ],
+      "anthropic-ratelimit-requests-limit": [
+        "2000"
+      ],
+      "anthropic-ratelimit-requests-remaining": [
+        "1999"
+      ],
+      "anthropic-ratelimit-requests-reset": [
+        "2026-05-29T17:45:29Z"
+      ],
+      "anthropic-ratelimit-tokens-limit": [
+        "5400000"
+      ],
+      "anthropic-ratelimit-tokens-remaining": [
+        "5400000"
+      ],
+      "anthropic-ratelimit-tokens-reset": [
+        "2026-05-29T17:45:30Z"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a037502698382322-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-security-policy": [
+        "default-src 'none'; frame-ancestors 'none'"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 29 May 2026 17:45:30 GMT"
+      ],
+      "request-id": [
+        "req_011CbXH2BFtWTTrDnxSA7CVv"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": "[REDACTED:set-cookie]",
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "traceresponse": [
+        "00-4dbf2eb2a21a2fc7d76b9d9c0c2404b3-1110a15473b42335-01"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-robots-tag": [
+        "none"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

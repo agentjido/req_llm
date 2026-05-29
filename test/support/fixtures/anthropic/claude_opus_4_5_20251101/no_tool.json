@@ -1,0 +1,183 @@
+{
+  "model_spec": "anthropic:claude-opus-4-5-20251101",
+  "provider": "anthropic",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoxMjgwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJUZWxsIG1lIGEgam9rZSBhYm91dCBjYXRzIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiY2xhdWRlLW9wdXMtNC01LTIwMjUxMTAxIiwic3RyZWFtIjpmYWxzZSwidGhpbmtpbmciOnsiYnVkZ2V0X3Rva2VucyI6MTAyNCwidHlwZSI6ImVuYWJsZWQifSwidG9vbHMiOlt7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsImlucHV0X3NjaGVtYSI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9LCJuYW1lIjoiZ2V0X3dlYXRoZXIifV19"
+    },
+    "canonical_json": {
+      "max_tokens": 12800,
+      "messages": [
+        {
+          "content": "Tell me a joke about cats",
+          "role": "user"
+        }
+      ],
+      "model": "claude-opus-4-5-20251101",
+      "stream": false,
+      "thinking": {
+        "budget_tokens": 1024,
+        "type": "enabled"
+      },
+      "tools": [
+        {
+          "description": "Get current weather information for a location",
+          "input_schema": {
+            "additionalProperties": false,
+            "properties": {
+              "location": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "location"
+            ],
+            "type": "object"
+          },
+          "name": "get_weather"
+        }
+      ]
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "anthropic-beta": [
+        "interleaved-thinking-2025-05-14,tools-2024-05-16"
+      ],
+      "anthropic-version": [
+        "2023-06-01"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ],
+      "x-api-key": "[REDACTED:x-api-key]"
+    },
+    "method": "post",
+    "url": "https://api.anthropic.com/v1/messages"
+  },
+  "response": {
+    "body": {
+      "content": [
+        {
+          "signature": "EvECCmwIDhgCKkAtYJza2k3L8BjHJ/3+cd32bLXjz3j0LDVzL7CnBcKWuiSIOet/VUOcqop+gDm5scc51COgTYJ/XGtmm9WDVJjWMhhjbGF1ZGUtb3B1cy00LTUtMjAyNTExMDE4AEIIdGhpbmtpbmcSDLpLunmYVZtRG1BpHxoMxK3Mav3EkLggBZg2IjBlHLeFwFIphwYc/lEhRmCBd+2BlkB/FdWZsR7KhopOamxCQmwh59RbfheiD6uj8bgqsgGzZGXyxa4mmL/MANE5T2zLKTZuYT/gSeuq79VqsTbsKIbtRtJPB501SBikf8S7HFqre7sZhGBuQ9Dk4zT6IfF9F9Xtbv7YTqALfg04DJB/q+WMLAiOw+lGpkeRp/t8+PbKFxKcZS9r9lT36J2b+10gbN2ERKX3q32B9snxO551f1HddYzsKeT+UU/Sj4LpDN8FPeJ9I8UltehNFEPJLxYRiegKS4D42on+C/zLl3gBVwW1GAE=",
+          "thinking": "The user is asking for a joke about cats. This doesn't require any function calls - it's just a request for me to tell a joke. Let me come up with a fun cat joke!",
+          "type": "thinking"
+        },
+        {
+          "text": "Why don't cats play poker in the jungle?\n\nToo many cheetahs! 🐱\n\nWant to hear another one?",
+          "type": "text"
+        }
+      ],
+      "id": "msg_01BMFJN7eCGBNeF6wKMJB7iH",
+      "model": "claude-opus-4-5-20251101",
+      "role": "assistant",
+      "stop_details": null,
+      "stop_reason": "end_turn",
+      "stop_sequence": null,
+      "type": "message",
+      "usage": {
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 0,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "inference_geo": "not_available",
+        "input_tokens": 749,
+        "output_tokens": 80,
+        "output_tokens_details": {
+          "thinking_tokens": 45
+        },
+        "service_tier": "standard"
+      }
+    },
+    "headers": {
+      "anthropic-organization-id": "[REDACTED:anthropic-organization-id]",
+      "anthropic-ratelimit-input-tokens-limit": [
+        "5000000"
+      ],
+      "anthropic-ratelimit-input-tokens-remaining": [
+        "5000000"
+      ],
+      "anthropic-ratelimit-input-tokens-reset": [
+        "2026-05-29T17:41:42Z"
+      ],
+      "anthropic-ratelimit-output-tokens-limit": [
+        "400000"
+      ],
+      "anthropic-ratelimit-output-tokens-remaining": [
+        "400000"
+      ],
+      "anthropic-ratelimit-output-tokens-reset": [
+        "2026-05-29T17:41:43Z"
+      ],
+      "anthropic-ratelimit-requests-limit": [
+        "2000"
+      ],
+      "anthropic-ratelimit-requests-remaining": [
+        "1999"
+      ],
+      "anthropic-ratelimit-requests-reset": [
+        "2026-05-29T17:41:41Z"
+      ],
+      "anthropic-ratelimit-tokens-limit": [
+        "5400000"
+      ],
+      "anthropic-ratelimit-tokens-remaining": [
+        "5400000"
+      ],
+      "anthropic-ratelimit-tokens-reset": [
+        "2026-05-29T17:41:42Z"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a0374a958d5b3215-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-security-policy": [
+        "default-src 'none'; frame-ancestors 'none'"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 29 May 2026 17:41:43 GMT"
+      ],
+      "request-id": [
+        "req_011CbXGjNQdh2Qr9H6VXZgtw"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": "[REDACTED:set-cookie]",
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "traceresponse": [
+        "00-5e4905b54511b3ce748e646c2c5ee69b-a50166b5d8a36142-01"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-robots-tag": [
+        "none"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

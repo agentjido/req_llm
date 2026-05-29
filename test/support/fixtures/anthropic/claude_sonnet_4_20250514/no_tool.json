@@ -1,4 +1,6 @@
 {
+  "model_spec": "anthropic:claude-sonnet-4-20250514",
+  "provider": "anthropic",
   "request": {
     "body": {
       "b64": "eyJtYXhfdG9rZW5zIjoxMjgwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJUZWxsIG1lIGEgam9rZSBhYm91dCBjYXRzIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiY2xhdWRlLXNvbm5ldC00LTIwMjUwNTE0Iiwic3RyZWFtIjpmYWxzZSwidGhpbmtpbmciOnsiYnVkZ2V0X3Rva2VucyI6MTAyNCwidHlwZSI6ImVuYWJsZWQifSwidG9vbHMiOlt7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsImlucHV0X3NjaGVtYSI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9LCJuYW1lIjoiZ2V0X3dlYXRoZXIifV19"
@@ -37,6 +39,9 @@
       ]
     },
     "headers": {
+      "accept": [
+        "application/json"
+      ],
       "accept-encoding": [
         "gzip"
       ],
@@ -50,7 +55,7 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ],
       "x-api-key": "[REDACTED:x-api-key]"
     },
@@ -61,18 +66,19 @@
     "body": {
       "content": [
         {
-          "signature": "EvICCkYICRgCKkC/G0mAsnRcEisOrPkcFCpWlpBq0JoK+/zbmlnmEwcnIxrOeMPsBxNFbtPMEiaA6xFk8ePmO01/aJOUp37Qdh3eEgyCPKaWOOSkNKEdqsoaDHqtmAQ+tSNLuAZOFiIwKGij67Zq3r86Ro4CC0EZpmGeDhBwRtgAmNfgw/c3yvklsVCPvxM0fStTHZ7j0woyKtkBErbWHIIABETkAWXBXLPRnJwN+4+AYzpwCJ5/AlYMyf01m8VU2FwLuDLUVyc2vgOTNJeSOhRcVxQLA31GWSY3VHUqlJPOcaBcPM+pDdtFM5v9TJ2jpNXld798cvpNiXfCNoHkmdOaCrZc99bUt7y83Tv9sEwx9DDMTWJIfD2KL66W0bY+i422Mtm+UDspsnixJhF72dm7E2OUjPzdGEpyaUS+/AVQxOpR5UdehzOrPr5yrKhGhRpOSt/SXj3miOxP/acVf04MeZgJwOA6CbgNfo3n9SsvfIf84BgB",
-          "thinking": "The user is asking for a joke about cats. This doesn't require any tools - it's just a request for a joke. I don't need to use the weather function for this. I can simply tell them a cat joke directly.",
+          "signature": "EpwDCmwIDhgCKkD798J5Ia43xeaZ90XyDmCkr/GLGpB14OaobY5GJjazVmYT3sJAw5H/m5LAjTKVgKe637PHAX/E/m065MCRv19cMhhjbGF1ZGUtc29ubmV0LTQtMjAyNTA1MTQ4AEIIdGhpbmtpbmcSDNJ5RZxGEP2YGm5/3RoMwSvBDVNUDA4yrleIIjBrhEuQMduXy5QpRpNSzje9A8CO/M+EVarNaiahAlPgN+a1xlRXRGQSuq1JC0Mbq/Uq3QHBFrHnhhogRCc4nEF79+iziRfdW6o9nvYJN49foPMWwkLNgmugOcnG7WYJevUBvZK72YTla1Odj8bNus5NvBpnCUUm+mRHccnBXZ36tsB5fG3f7WcHpz9vz0lyUdIpRZJK5fw4vNLaDS9XBGHhA0qKeH2OVC7/ViGXHKpYls8ShaUCY+PdvWwLx7IxK8pjy1LM882utzll3TK3uT58V2YgZRZJZNq0T4rJ74GQckuEpNxPMlSsDm4/7aM/Gc9iTAsZIWiXwQ/b6YNOf7VShnN79Yh3apZ2/AYZyWtBfBgB",
+          "thinking": "The user is asking for a joke about cats. This is a simple request that doesn't require any tools - they just want me to tell them a cat joke. I don't need to use the get_weather function for this request.",
           "type": "thinking"
         },
         {
-          "text": "Here's a cat joke for you:\n\nWhy don't cats play poker in the jungle?\n\nBecause there are too many cheetahs! 🐱\n\nOr here's another one:\n\nWhat do you call a pile of kittens?\n\nA meowtain! 😸",
+          "text": "Here's a cat joke for you:\n\nWhy don't cats play poker in the jungle?\n\nBecause there are too many cheetahs! 🐱\n\n(And also because cats prefer to knock the cards off the table anyway!)",
           "type": "text"
         }
       ],
-      "id": "msg_01SgQcuWgtXJV3g8ANNK5DAw",
+      "id": "msg_01U89Mia7HzukWM19GwP94u9",
       "model": "claude-sonnet-4-20250514",
       "role": "assistant",
+      "stop_details": null,
       "stop_reason": "end_turn",
       "stop_sequence": null,
       "type": "message",
@@ -83,88 +89,95 @@
         },
         "cache_creation_input_tokens": 0,
         "cache_read_input_tokens": 0,
-        "input_tokens": 565,
-        "output_tokens": 123,
+        "inference_geo": "not_available",
+        "input_tokens": 566,
+        "output_tokens": 109,
+        "output_tokens_details": {
+          "thinking_tokens": 53
+        },
         "service_tier": "standard"
       }
     },
     "headers": {
-      "anthropic-organization-id": [
-        "a71659e7-a922-4ff7-99de-f3ba615face1"
-      ],
+      "anthropic-organization-id": "[REDACTED:anthropic-organization-id]",
       "anthropic-ratelimit-input-tokens-limit": [
-        "450000"
+        "800000"
       ],
       "anthropic-ratelimit-input-tokens-remaining": [
-        "450000"
+        "800000"
       ],
       "anthropic-ratelimit-input-tokens-reset": [
-        "2025-11-02T17:05:13Z"
+        "2026-05-29T17:59:21Z"
       ],
       "anthropic-ratelimit-output-tokens-limit": [
-        "90000"
+        "160000"
       ],
       "anthropic-ratelimit-output-tokens-remaining": [
-        "90000"
+        "160000"
       ],
       "anthropic-ratelimit-output-tokens-reset": [
-        "2025-11-02T17:05:15Z"
+        "2026-05-29T17:59:23Z"
       ],
       "anthropic-ratelimit-requests-limit": [
-        "1000"
+        "2000"
       ],
       "anthropic-ratelimit-requests-remaining": [
-        "999"
+        "1999"
       ],
       "anthropic-ratelimit-requests-reset": [
-        "2025-11-02T17:05:12Z"
+        "2026-05-29T17:59:20Z"
       ],
       "anthropic-ratelimit-tokens-limit": [
-        "540000"
+        "960000"
       ],
       "anthropic-ratelimit-tokens-remaining": [
-        "540000"
+        "960000"
       ],
       "anthropic-ratelimit-tokens-reset": [
-        "2025-11-02T17:05:13Z"
+        "2026-05-29T17:59:21Z"
       ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "998537224d34251b-ORD"
+        "a03764731f22f15d-ORD"
       ],
       "connection": [
         "keep-alive"
+      ],
+      "content-security-policy": [
+        "default-src 'none'; frame-ancestors 'none'"
       ],
       "content-type": [
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:05:15 GMT"
+        "Fri, 29 May 2026 17:59:23 GMT"
       ],
       "request-id": [
-        "req_011CUjRhXRMtMJ5gqqRLuj8h"
-      ],
-      "retry-after": [
-        "48"
+        "req_011CbXJ5TzQjK7Q7z7gBBfjN"
       ],
       "server": [
         "cloudflare"
       ],
+      "set-cookie": "[REDACTED:set-cookie]",
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
+      ],
+      "traceresponse": [
+        "00-f5b30a20bdf191646f30ec2a47d70dc3-1d83139f86d3ec85-01"
       ],
       "transfer-encoding": [
         "chunked"
       ],
-      "x-envoy-upstream-service-time": [
-        "3123"
+      "vary": [
+        "Accept-Encoding"
       ],
       "x-robots-tag": [
         "none"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

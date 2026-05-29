@@ -28,7 +28,8 @@ config :llm_db,
     },
     deny: %{
       anthropic: [
-        "claude-3.7-sonnet"
+        "claude-3-*",
+        "claude-3.*"
       ],
       cerebras: [
         "zai-glm-4.6"

@@ -1,10 +1,12 @@
 {
+  "model_spec": "anthropic:claude-opus-4-1-20250805",
+  "provider": "anthropic",
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoyMDQ4LCJtZXNzYWdlcyI6W3siY29udGVudCI6IlNvbHZlIDEyKjcgYW5kIHNob3cgeW91ciBpbnRlcm5hbCB0aGlua2luZyAoYnJpZWYpLiIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImNsYXVkZS1vcHVzLTQtMS0yMDI1MDgwNSIsInN0cmVhbSI6ZmFsc2UsInRoaW5raW5nIjp7ImJ1ZGdldF90b2tlbnMiOjEwMjQsInR5cGUiOiJlbmFibGVkIn19"
+      "b64": "eyJtYXhfdG9rZW5zIjo1MDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IlNvbHZlIDEyKjcgYW5kIHNob3cgeW91ciBpbnRlcm5hbCB0aGlua2luZyAoYnJpZWYpLiIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImNsYXVkZS1vcHVzLTQtMS0yMDI1MDgwNSIsInN0cmVhbSI6ZmFsc2UsInRoaW5raW5nIjp7ImJ1ZGdldF90b2tlbnMiOjEwMjQsInR5cGUiOiJlbmFibGVkIn19"
     },
     "canonical_json": {
-      "max_tokens": 2048,
+      "max_tokens": 5000,
       "messages": [
         {
           "content": "Solve 12*7 and show your internal thinking (brief).",
@@ -19,6 +21,9 @@
       }
     },
     "headers": {
+      "accept": [
+        "application/json"
+      ],
       "accept-encoding": [
         "gzip"
       ],
@@ -32,7 +37,7 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ],
       "x-api-key": "[REDACTED:x-api-key]"
     },
@@ -43,18 +48,19 @@
     "body": {
       "content": [
         {
-          "signature": "ErADCkYICRgCKkDrfwoyljt/YJC/0Kh8ThHoZ03pwZUwVkThZ6JsMD/NjmZ/4uKD//EOYSURqUofy2WJ/WUA+/XY2Uf1ZjSzIrV+EgyaXYo8ddFQ4/EkzUQaDBb+ELJ+2KS1rzO9ayIwWTJ5kgBh+Tesb88EZ4Sd8cJwJFnBs1UtC3Moy/XaQjjiT5IV4d/m3BaYzWmwoj/eKpcCgUwNUcuaC7yUYdNeRw3luL5Waue/0e1AX/hbAOsKobUeKgmDQfWJAszqB5z8bOAHwEJ2E18paJS6EPet2tGAvIQFv+f7mzG4AjsomHKNChZdhS91UL92wEbXEF3M6V3kZYj/r6evuCHnqvbZIoHTNPb9nZsXIMjbrWkeCH3RBL4l8vrJ1W/RjPxrj6uTlnMkCbExfAV0PV5NiqhwDBS+PjceRCkec/ekCJ/Lueybw6q1n7WoaJDXg5FvbRaXkQeC3aRdwaeyUc8vuu3xyKOn0wX9Yv32/F+Ou5ZRM13AaqZxFWhH2frXTj1rSEByn93L/Qffd0g5Rq8qwWyVSi6JX4pJ8us7bSoyKB0fngQYSwgM5jootxP0GAE=",
-          "thinking": "Let me solve 12 * 7.\n\nI can think of this a few ways:\n1. 12 * 7 = 10 * 7 + 2 * 7 = 70 + 14 = 84\n2. Or 12 * 7 = 12 * (5 + 2) = 60 + 24 = 84\n3. Or just straight multiplication: 12 * 7 = 84\n\nLet me verify: \n- 7 * 10 = 70\n- 7 * 2 = 14\n- 70 + 14 = 84\n\nYes, 12 * 7 = 84",
+          "signature": "EsADCmwIDhgCKkCk1936vH7VH+WDVJuerZefIdrHuy2CCunSPvHZcX42gOqbIBveI3ySm7HQFB1O+8mkG7+0nkuF9YBmxsJtA+uEMhhjbGF1ZGUtb3B1cy00LTEtMjAyNTA4MDU4AEIIdGhpbmtpbmcSDPgNAn5Rl44eUJdDfBoMuzItV8Y5KYQYYYK/IjD6h+6bA5ZvyIcN77MrZzW/09JyyrI0TVWHxw0fo1ivdli4t7Z5ET7/qvcQJkv6nEgqgQL81pdmxiKlJ/3EnrNBMyY5YaMK92yCdJyeLf6r1ZHXvc0GinIoORjnEF8NrHsmugJ3EZxalXY9Ibws9l+RjS1+g9vu01OMSSxhKfKQpHgX0FVhLuib5X3YszZYvBrO9OgWvnA3I6lseO2wOvtLDcJ/VSxtkKyrZ0rxW2GMQvs403Baanb1bqymA5eww+EmCCJnz+muet7oexqZkkAWEcvS2Z7G8SPy8mmqde4dcE5ZU3r0ZxduVUXPxBxVGkT3xv/7t1bIMODjkmXUqd8eG8PV8xnljKSLTBr1OiZUJ7rD/9+468LBak2QtObmZQAOQlWhhXP/9GgH4NxNibCRFLtuFxgB",
+          "thinking": "I need to solve 12 × 7.\n\nLet me think about this:\n12 × 7 = (10 + 2) × 7\n= 10 × 7 + 2 × 7\n= 70 + 14\n= 84\n\nOr I could think of it as:\n12 × 7 = 12 × (5 + 2)\n= 12 × 5 + 12 × 2\n= 60 + 24\n= 84\n\nOr simply:\n12 × 7 = 84\n\nYes, 84 is correct.",
           "type": "thinking"
         },
         {
-          "text": "**Internal thinking:**\nBreaking down 12 × 7 using the distributive property:\n- 12 × 7 = (10 + 2) × 7\n- = 10 × 7 + 2 × 7\n- = 70 + 14\n- = 84\n\n**Answer: 84**",
+          "text": "**Internal thinking:**\nBreaking down 12 × 7:\n- Method: 12 × 7 = (10 + 2) × 7\n- Distribute: 10 × 7 = 70, and 2 × 7 = 14\n- Add: 70 + 14 = 84\n\n**Answer: 84**",
           "type": "text"
         }
       ],
-      "id": "msg_0172wNcmUcu5zC5QvAdpK3P7",
+      "id": "msg_012WDPvQrDZQnMkTnKPKwKR9",
       "model": "claude-opus-4-1-20250805",
       "role": "assistant",
+      "stop_details": null,
       "stop_reason": "end_turn",
       "stop_sequence": null,
       "type": "message",
@@ -65,88 +71,95 @@
         },
         "cache_creation_input_tokens": 0,
         "cache_read_input_tokens": 0,
-        "input_tokens": 50,
-        "output_tokens": 254,
+        "inference_geo": "not_available",
+        "input_tokens": 51,
+        "output_tokens": 238,
+        "output_tokens_details": {
+          "thinking_tokens": 148
+        },
         "service_tier": "standard"
       }
     },
     "headers": {
-      "anthropic-organization-id": [
-        "a71659e7-a922-4ff7-99de-f3ba615face1"
-      ],
+      "anthropic-organization-id": "[REDACTED:anthropic-organization-id]",
       "anthropic-ratelimit-input-tokens-limit": [
-        "450000"
+        "5000000"
       ],
       "anthropic-ratelimit-input-tokens-remaining": [
-        "450000"
+        "5000000"
       ],
       "anthropic-ratelimit-input-tokens-reset": [
-        "2025-11-02T17:04:50Z"
+        "2026-05-29T17:50:32Z"
       ],
       "anthropic-ratelimit-output-tokens-limit": [
-        "90000"
+        "400000"
       ],
       "anthropic-ratelimit-output-tokens-remaining": [
-        "90000"
+        "400000"
       ],
       "anthropic-ratelimit-output-tokens-reset": [
-        "2025-11-02T17:04:55Z"
+        "2026-05-29T17:50:37Z"
       ],
       "anthropic-ratelimit-requests-limit": [
-        "1000"
+        "2000"
       ],
       "anthropic-ratelimit-requests-remaining": [
-        "999"
+        "1999"
       ],
       "anthropic-ratelimit-requests-reset": [
-        "2025-11-02T17:04:49Z"
+        "2026-05-29T17:50:31Z"
       ],
       "anthropic-ratelimit-tokens-limit": [
-        "540000"
+        "5400000"
       ],
       "anthropic-ratelimit-tokens-remaining": [
-        "540000"
+        "5400000"
       ],
       "anthropic-ratelimit-tokens-reset": [
-        "2025-11-02T17:04:50Z"
+        "2026-05-29T17:50:32Z"
       ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "998536966922e1f7-ORD"
+        "a0375784c8cbe450-ORD"
       ],
       "connection": [
         "keep-alive"
+      ],
+      "content-security-policy": [
+        "default-src 'none'; frame-ancestors 'none'"
       ],
       "content-type": [
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:04:55 GMT"
+        "Fri, 29 May 2026 17:50:37 GMT"
       ],
       "request-id": [
-        "req_011CUjRfsmv9eh7conHUZjth"
-      ],
-      "retry-after": [
-        "10"
+        "req_011CbXHQRYjaxEthR7aEWjB3"
       ],
       "server": [
         "cloudflare"
       ],
+      "set-cookie": "[REDACTED:set-cookie]",
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
+      ],
+      "traceresponse": [
+        "00-f3519cf6b21514d8a67580cf6fd99138-9a5fa043c88e3927-01"
       ],
       "transfer-encoding": [
         "chunked"
       ],
-      "x-envoy-upstream-service-time": [
-        "6112"
+      "vary": [
+        "Accept-Encoding"
       ],
       "x-robots-tag": [
         "none"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

@@ -1,4 +1,6 @@
 {
+  "model_spec": "google:gemini-2.0-flash",
+  "provider": "google",
   "request": {
     "body": {
       "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJIZWxsbyB3b3JsZCEifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7ImNhbmRpZGF0ZUNvdW50IjoxLCJtYXhPdXRwdXRUb2tlbnMiOjUwLCJ0ZW1wZXJhdHVyZSI6MC4wfX0="
@@ -21,6 +23,9 @@
       }
     },
     "headers": {
+      "accept": [
+        "application/json"
+      ],
       "accept-encoding": [
         "gzip"
       ],
@@ -28,17 +33,17 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ]
     },
     "method": "post",
-    "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=%5BREDACTED%3Akey%5D"
+    "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=[REDACTED]"
   },
   "response": {
     "body": {
       "candidates": [
         {
-          "avgLogprobs": -0.010325216434218666,
+          "avgLogprobs": -0.012235707857392052,
           "content": {
             "parts": [
               {
@@ -51,7 +56,7 @@
         }
       ],
       "modelVersion": "gemini-2.0-flash",
-      "responseId": "AMYHaaaNIvje_uMP4eW5gAo",
+      "responseId": "BLwZaqfyAtuo1MkPrPiw6Aw",
       "usageMetadata": {
         "candidatesTokenCount": 11,
         "candidatesTokensDetails": [
@@ -67,6 +72,7 @@
             "tokenCount": 3
           }
         ],
+        "serviceTier": "standard",
         "totalTokenCount": 14
       }
     },
@@ -78,13 +84,13 @@
         "application/json; charset=UTF-8"
       ],
       "date": [
-        "Sun, 02 Nov 2025 20:58:40 GMT"
+        "Fri, 29 May 2026 16:17:08 GMT"
       ],
       "server": [
         "scaffolding on HTTPServer2"
       ],
       "server-timing": [
-        "gfet4t7; dur=321"
+        "gfet4t7; dur=621"
       ],
       "transfer-encoding": [
         "chunked"
@@ -100,10 +106,14 @@
       "x-frame-options": [
         "SAMEORIGIN"
       ],
+      "x-gemini-service-tier": [
+        "standard"
+      ],
       "x-xss-protection": [
         "0"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

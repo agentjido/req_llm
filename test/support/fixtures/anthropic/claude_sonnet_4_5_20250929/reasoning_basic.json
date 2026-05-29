@@ -1,10 +1,12 @@
 {
+  "model_spec": "anthropic:claude-sonnet-4-5-20250929",
+  "provider": "anthropic",
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoyMDQ4LCJtZXNzYWdlcyI6W3siY29udGVudCI6IlNvbHZlIDEyKjcgYW5kIHNob3cgeW91ciBpbnRlcm5hbCB0aGlua2luZyAoYnJpZWYpLiIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImNsYXVkZS1zb25uZXQtNC01LTIwMjUwOTI5Iiwic3RyZWFtIjpmYWxzZSwidGhpbmtpbmciOnsiYnVkZ2V0X3Rva2VucyI6MTAyNCwidHlwZSI6ImVuYWJsZWQifX0="
+      "b64": "eyJtYXhfdG9rZW5zIjo1MDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IlNvbHZlIDEyKjcgYW5kIHNob3cgeW91ciBpbnRlcm5hbCB0aGlua2luZyAoYnJpZWYpLiIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImNsYXVkZS1zb25uZXQtNC01LTIwMjUwOTI5Iiwic3RyZWFtIjpmYWxzZSwidGhpbmtpbmciOnsiYnVkZ2V0X3Rva2VucyI6MTAyNCwidHlwZSI6ImVuYWJsZWQifX0="
     },
     "canonical_json": {
-      "max_tokens": 2048,
+      "max_tokens": 5000,
       "messages": [
         {
           "content": "Solve 12*7 and show your internal thinking (brief).",
@@ -19,6 +21,9 @@
       }
     },
     "headers": {
+      "accept": [
+        "application/json"
+      ],
       "accept-encoding": [
         "gzip"
       ],
@@ -32,7 +37,7 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ],
       "x-api-key": "[REDACTED:x-api-key]"
     },
@@ -43,18 +48,19 @@
     "body": {
       "content": [
         {
-          "signature": "EpMDCkYICRgCKkAFMw9NhWPNNzj3b8lEGtocALcC6S+Nv1HyWeqfMl3lUM92pGIPaSHn4ynWgR7bXZ9tkYRXqxsY7Z7M7ScPlNbGEgyIW8PrAeLWlfGhfysaDO2HpWKYihozQx+23CIwqMDuRDzocw4t3eP+TOlP/3ed5AOg9O1IbqanLHzrfAWAWC10qvhwPpwNWXRAk1yEKvoBQjx5nsPHKkRoa2rHTmTKDMDhPNnpTvI7ThlsqTPuz1JwF4nys2OnNDGwwqI6Uxiz75CTHF4vr4Mu20BIu+deYCbU7qwZDbQDtmYA23aAWXJizU23PzyqjfmbmW7Iy2oGAArZgI+zIDzUkFkmOLlLgEahMEEzbYJIiuBl9BQMHM+p8mxyUjDeanHr0DnuXdYPjeW2v9WiSRG7cSDz3X9t7Mp/bscBrkd3BJlwKvQKzcAYTPOVT6LY83vG6zyncr1Dlff3P08AIn1GgbpNj1A0eZn7yKnqlQH1IiTeY7H1+Gni5PW1z+q2ih7tXN8+mfnHNE/8rxTh64UA0hgB",
-          "thinking": "I need to solve 12 * 7.\n\n12 * 7 = (10 + 2) * 7 = 10 * 7 + 2 * 7 = 70 + 14 = 84\n\nAlternatively, I could think of it as:\n12 * 7 = 12 * (5 + 2) = 12 * 5 + 12 * 2 = 60 + 24 = 84\n\nOr just recall from multiplication tables that 12 * 7 = 84.",
+          "signature": "ErwCCm4IDhgCKkBkLGvSOL6VEkNKcvzYOcmKv0VGtxi+ZNJ5qeOo7Ovk0hXTVd3rRyTvzoFdpMhCOL21h2UOkHjFnn5JFNFT+roAMhpjbGF1ZGUtc29ubmV0LTQtNS0yMDI1MDkyOTgAQgh0aGlua2luZxIMLAZTi31xCgVwTlf5Ggx0pRh3iR7bzjylDhwiMB/164ctYG8LPn6QqKKZDt36BSohu7QbaG/WCjNLgR44+b6NgzXeL7un3iv16dQ1kCp8PVv14LR0udvJWSOVa1Jy99cDWRKsKm3Hmpb8v6heiJePni/4QCS5pBMkpbJmJb9xsg067japqIAHWtA66ysyPrkqgKKiquYW5GDVci55us2rIfiCAhDGBZ1RXWACCj6yTflTKuIO/DbEfsy6Ac0ySWDo2wV/E8KuXJb1gBgB",
+          "thinking": "12 * 7\n\nI can calculate this as:\n12 * 7 = (10 + 2) * 7 = 70 + 14 = 84\n\nOr I can just recall that 12 * 7 = 84",
           "type": "thinking"
         },
         {
-          "text": "# 12 × 7 = 84\n\n**Internal thinking:**\n- Break down: 12 × 7 = (10 + 2) × 7\n- 10 × 7 = 70\n- 2 × 7 = 14\n- 70 + 14 = **84**",
+          "text": "12 × 7 = **84**\n\n**Internal thinking:**\n- 10 × 7 = 70\n- 2 × 7 = 14  \n- 70 + 14 = 84",
           "type": "text"
         }
       ],
-      "id": "msg_01Pgo5LmEBGvhap8K7zE9quE",
+      "id": "msg_014CunR9JUbSv4wMjRhDvdx9",
       "model": "claude-sonnet-4-5-20250929",
       "role": "assistant",
+      "stop_details": null,
       "stop_reason": "end_turn",
       "stop_sequence": null,
       "type": "message",
@@ -65,88 +71,95 @@
         },
         "cache_creation_input_tokens": 0,
         "cache_read_input_tokens": 0,
-        "input_tokens": 50,
-        "output_tokens": 221,
+        "inference_geo": "not_available",
+        "input_tokens": 51,
+        "output_tokens": 122,
+        "output_tokens_details": {
+          "thinking_tokens": 65
+        },
         "service_tier": "standard"
       }
     },
     "headers": {
-      "anthropic-organization-id": [
-        "a71659e7-a922-4ff7-99de-f3ba615face1"
-      ],
+      "anthropic-organization-id": "[REDACTED:anthropic-organization-id]",
       "anthropic-ratelimit-input-tokens-limit": [
-        "450000"
+        "800000"
       ],
       "anthropic-ratelimit-input-tokens-remaining": [
-        "450000"
+        "800000"
       ],
       "anthropic-ratelimit-input-tokens-reset": [
-        "2025-11-02T17:04:55Z"
+        "2026-05-29T18:02:52Z"
       ],
       "anthropic-ratelimit-output-tokens-limit": [
-        "90000"
+        "160000"
       ],
       "anthropic-ratelimit-output-tokens-remaining": [
-        "90000"
+        "160000"
       ],
       "anthropic-ratelimit-output-tokens-reset": [
-        "2025-11-02T17:04:57Z"
+        "2026-05-29T18:02:55Z"
       ],
       "anthropic-ratelimit-requests-limit": [
-        "1000"
+        "2000"
       ],
       "anthropic-ratelimit-requests-remaining": [
-        "999"
+        "1999"
       ],
       "anthropic-ratelimit-requests-reset": [
-        "2025-11-02T17:04:53Z"
+        "2026-05-29T18:02:51Z"
       ],
       "anthropic-ratelimit-tokens-limit": [
-        "540000"
+        "960000"
       ],
       "anthropic-ratelimit-tokens-remaining": [
-        "540000"
+        "960000"
       ],
       "anthropic-ratelimit-tokens-reset": [
-        "2025-11-02T17:04:55Z"
+        "2026-05-29T18:02:52Z"
       ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "998536ad6cdc9d42-ORD"
+        "a03769969e5835c0-ORD"
       ],
       "connection": [
         "keep-alive"
+      ],
+      "content-security-policy": [
+        "default-src 'none'; frame-ancestors 'none'"
       ],
       "content-type": [
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:04:57 GMT"
+        "Fri, 29 May 2026 18:02:55 GMT"
       ],
       "request-id": [
-        "req_011CUjRg9Sk4JsDgWG65sW1w"
-      ],
-      "retry-after": [
-        "5"
+        "req_011CbXJLzsT4umHPaZJWhRUp"
       ],
       "server": [
         "cloudflare"
       ],
+      "set-cookie": "[REDACTED:set-cookie]",
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
+      ],
+      "traceresponse": [
+        "00-0220091b31b8978495a0a7ea3d87c98e-6e6fe824409cb289-01"
       ],
       "transfer-encoding": [
         "chunked"
       ],
-      "x-envoy-upstream-service-time": [
-        "4229"
+      "vary": [
+        "Accept-Encoding"
       ],
       "x-robots-tag": [
         "none"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

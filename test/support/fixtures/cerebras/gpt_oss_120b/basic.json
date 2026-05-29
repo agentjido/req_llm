@@ -1,4 +1,6 @@
 {
+  "model_spec": "cerebras:gpt-oss-120b",
+  "provider": "cerebras",
   "request": {
     "body": {
       "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImdwdC1vc3MtMTIwYiIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
@@ -17,6 +19,9 @@
       "temperature": 0.0
     },
     "headers": {
+      "accept": [
+        "application/json"
+      ],
       "accept-encoding": [
         "gzip"
       ],
@@ -25,7 +30,7 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ]
     },
     "method": "post",
@@ -38,31 +43,36 @@
           "finish_reason": "stop",
           "index": 0,
           "message": {
-            "content": "Hello! 👋 How can I assist you today?",
-            "reasoning": "The user says \"Hello world!\" Likely a greeting. Respond friendly.",
+            "content": "Hello! 👋 How can I help you today?",
+            "reasoning": "The user says \"Hello world!\" Likely a greeting. Should respond friendly. No special instructions. Just respond.",
             "role": "assistant"
           }
         }
       ],
-      "created": 1762103516,
-      "id": "chatcmpl-4ea2e2c0-ea0a-41ef-b143-aca81d4570fd",
+      "created": 1780071479,
+      "id": "chatcmpl-5ff9e5ce-7d0d-4805-804b-4f92733a196a",
       "model": "gpt-oss-120b",
       "object": "chat.completion",
-      "system_fingerprint": "fp_c5eb0443f84076c16415",
+      "system_fingerprint": "fp_46358675aa6b1ba4d98d",
       "time_info": {
-        "completion_time": 0.025556192,
-        "created": 1762103516.7956793,
-        "prompt_time": 0.002460193,
-        "queue_time": 0.252263711,
-        "total_time": 0.28199124336242676
+        "completion_time": 0.019577454,
+        "created": 1780071479.99353,
+        "prompt_time": 0.007612067,
+        "queue_time": 0.003947654,
+        "total_time": 0.03292036056518555
       },
       "usage": {
-        "completion_tokens": 36,
+        "completion_tokens": 44,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "reasoning_tokens": 23,
+          "rejected_prediction_tokens": 0
+        },
         "prompt_tokens": 70,
         "prompt_tokens_details": {
           "cached_tokens": 0
         },
-        "total_tokens": 106
+        "total_tokens": 114
       }
     },
     "headers": {
@@ -73,7 +83,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "998541039dd310c2-ORD"
+        "a036cffdaca42717-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -82,10 +92,10 @@
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:11:57 GMT"
+        "Fri, 29 May 2026 16:18:00 GMT"
       ],
       "inference-id": [
-        "chatcmpl-4ea2e2c0-ea0a-41ef-b143-aca81d4570fd"
+        "chatcmpl-5ff9e5ce-7d0d-4805-804b-4f92733a196a"
       ],
       "referrer-policy": [
         "strict-origin-when-cross-origin"
@@ -93,15 +103,9 @@
       "server": [
         "cloudflare"
       ],
-      "server-timing": [
-        "cfCacheStatus;desc=\"DYNAMIC\"",
-        "cfEdge;dur=5,cfOrigin;dur=429"
-      ],
-      "set-cookie": [
-        "__cf_bm=w_LioYKOzxE13SaSBphF1MjxrtHkdrQk1k4CVO8ih40-1762103516.7366846-1.0.1.1-xou8XbKLYqaFWN1xLVAIr5OkzbDudiVAbeiQ8yoEeVc23nhX.GglPMXvLED1BUjB0UbTsGVM6JODqquc5b0mcPynKR.B7Qb8g8.FtmGShJ0WCTV7RRDe1edY8rY_HlJZ; HttpOnly; Secure; Path=/; Domain=cerebras-sandbox.net; Expires=Sun, 02 Nov 2025 17:41:57 GMT"
-      ],
+      "set-cookie": "[REDACTED:set-cookie]",
       "strict-transport-security": [
-        "max-age=3600; includeSubDomains"
+        "max-age=15552000; includeSubDomains; preload"
       ],
       "transfer-encoding": [
         "chunked"
@@ -112,25 +116,44 @@
       "x-ratelimit-limit-requests-day": [
         "1440000"
       ],
+      "x-ratelimit-limit-requests-hour": [
+        "60000"
+      ],
+      "x-ratelimit-limit-requests-minute": [
+        "1000"
+      ],
+      "x-ratelimit-limit-tokens-day": [
+        "2000000000"
+      ],
+      "x-ratelimit-limit-tokens-hour": [
+        "120000000"
+      ],
       "x-ratelimit-limit-tokens-minute": [
         "1000000"
       ],
       "x-ratelimit-remaining-requests-day": [
-        "1439998"
+        "1439999"
+      ],
+      "x-ratelimit-remaining-requests-hour": [
+        "59999"
+      ],
+      "x-ratelimit-remaining-requests-minute": [
+        "999"
+      ],
+      "x-ratelimit-remaining-tokens-day": [
+        "1999997997"
+      ],
+      "x-ratelimit-remaining-tokens-hour": [
+        "119997997"
       ],
       "x-ratelimit-remaining-tokens-minute": [
-        "999583"
-      ],
-      "x-ratelimit-reset-requests-day": [
-        "24482.894107818604"
-      ],
-      "x-ratelimit-reset-tokens-minute": [
-        "2.8941078186035156"
+        "997997"
       ],
       "x-request-id": [
-        "998541039dd310c2-ORD"
+        "a036cffdaca42717-ORD"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

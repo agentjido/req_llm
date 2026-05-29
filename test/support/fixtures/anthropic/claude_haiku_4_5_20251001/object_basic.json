@@ -3,7 +3,7 @@
   "provider": "anthropic",
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoxMjI1LCJtZXNzYWdlcyI6W3siY29udGVudCI6IkdlbmVyYXRlIGEgc29mdHdhcmUgZW5naW5lZXIgcHJvZmlsZSIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImNsYXVkZS1oYWlrdS00LTUtMjAyNTEwMDEiLCJvdXRwdXRfZm9ybWF0Ijp7InNjaGVtYSI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnsiYWdlIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3MgYWdlIGluIHllYXJzIiwibWluaW11bSI6MSwidHlwZSI6ImludGVnZXIifSwibmFtZSI6eyJkZXNjcmlwdGlvbiI6IlBlcnNvbidzIGZ1bGwgbmFtZSIsInR5cGUiOiJzdHJpbmcifSwib2NjdXBhdGlvbiI6eyJkZXNjcmlwdGlvbiI6IlBlcnNvbidzIGpvYiBvciBwcm9mZXNzaW9uIiwidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsiYWdlIiwibmFtZSIsIm9jY3VwYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9LCJ0eXBlIjoianNvbl9zY2hlbWEifSwic3RyZWFtIjpmYWxzZSwidGhpbmtpbmciOnsiYnVkZ2V0X3Rva2VucyI6MTAyNCwidHlwZSI6ImVuYWJsZWQifX0="
+      "b64": "eyJtYXhfdG9rZW5zIjoxMjI1LCJtZXNzYWdlcyI6W3siY29udGVudCI6IkdlbmVyYXRlIGEgc29mdHdhcmUgZW5naW5lZXIgcHJvZmlsZSIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImNsYXVkZS1oYWlrdS00LTUtMjAyNTEwMDEiLCJvdXRwdXRfZm9ybWF0Ijp7InNjaGVtYSI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnsiYWdlIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3MgYWdlIGluIHllYXJzIiwidHlwZSI6ImludGVnZXIifSwibmFtZSI6eyJkZXNjcmlwdGlvbiI6IlBlcnNvbidzIGZ1bGwgbmFtZSIsInR5cGUiOiJzdHJpbmcifSwib2NjdXBhdGlvbiI6eyJkZXNjcmlwdGlvbiI6IlBlcnNvbidzIGpvYiBvciBwcm9mZXNzaW9uIiwidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsiYWdlIiwibmFtZSIsIm9jY3VwYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9LCJ0eXBlIjoianNvbl9zY2hlbWEifSwic3RyZWFtIjpmYWxzZSwidGhpbmtpbmciOnsiYnVkZ2V0X3Rva2VucyI6MTAyNCwidHlwZSI6ImVuYWJsZWQifX0="
     },
     "canonical_json": {
       "max_tokens": 1225,
@@ -20,7 +20,6 @@
           "properties": {
             "age": {
               "description": "Person's age in years",
-              "minimum": 1,
               "type": "integer"
             },
             "name": {
@@ -48,6 +47,9 @@
       }
     },
     "headers": {
+      "accept": [
+        "application/json"
+      ],
       "accept-encoding": [
         "gzip"
       ],
@@ -61,7 +63,7 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.17"
+        "req/0.5.18"
       ],
       "x-api-key": "[REDACTED:x-api-key]"
     },
@@ -70,51 +72,120 @@
   },
   "response": {
     "body": {
-      "error": {
-        "message": "output_format.schema: For 'integer' type, property 'minimum' is not supported",
-        "type": "invalid_request_error"
-      },
-      "request_id": "req_011CXJRNCd3fBn9HB8B4DM9Y",
-      "type": "error"
+      "content": [
+        {
+          "signature": "EuAFCm0IDhgCKkB1o6vGgjy6heGsQtuwAoKhYe+8ApZD2DaGbykgK6bUmV7mxViDRfluQfDy8Wc3F+Y8iyOhNNTtyLJwNFUC9VkIMhljbGF1ZGUtaGFpa3UtNC01LTIwMjUxMDAxOABCCHRoaW5raW5nEgxy0ibTxf6RDDkJspEaDF8nNRHyboOAw6SrOyIwFZI4S+92ygKi4pM25FWR/O0T6ATR45vDAs3F2pLNrPoSLTgTtOkgtln/nOoR6qIyKqAETN9mthwQTd3cyfOOUBsbykIEyRXHYvvNZMxN1kMqBs/mvY47GTWYMqjXb+lO7x5/E3zD2GbRDzzEHjhF3YthwO5hC8qrB5gPJqZBg4CufSIQc/su4xxi+SeZl/Hq0TAOb6FUUmb7wBYNFkRRGmRYjPu7PhftkFwP8C7OQuJkeVVahLpBQI2iwEVYWSPykwbBfYNAufAyRrmdXCgVO6AGov+2CFaFmxBXzWLKyBBGpT0DPKOS6JD1MleSKHNd9DYdznBCuN3I7+P5VjKVL0HuZCLVfRZXSwh4Ns5VQko8jYOKYaRNE0G+0/E3HADcwvp1p8vrEsC6u00hbtUjT8mRFP1U2aj7l0hdNdG/IwSmViegHGUc8C3lDco17cqs592i9VZJu77IXfoSInvYTDeG+HSqIW5Emdvq/POAtcdOV7HyWVDomISsIw9iNmAGFBbozhDi9st3RTCxUFztT0XtPELFBWIa/fDWQMDfUZqf8ufEwCmye+5VY3FU9CSj5oGwtAZ645Kz0d9sHXMt0y8IKb04kpBsHLNzUzf2Ci5jl7/P9YKyPGdFfIPIccGxoaDG+6Kr7tSFXThuH5c6hH191YUtSTOYIVK0F97BYnEMdQZE4S9WSJmVL28gDVwrGhuCS7RcFOBpBlFNEm3yr3piXpgVaxObU5/oGixpFw1AMc5CtJep+AZw3/8Z8SkfHBqBEYH1MFNdIx4nEncWtGJvJhgB",
+          "thinking": "The user wants me to generate a software engineer profile that matches the JSON schema provided. The schema requires:\n- name (string): Person's full name\n- age (integer): Person's age in years\n- occupation (string): Person's job or profession\n\nI need to create a valid JSON object with these three required fields. The occupation should be something like \"Software Engineer\".\n\nLet me create a realistic profile:\n- name: \"Sarah Chen\"\n- age: 32\n- occupation: \"Software Engineer\"\n\nThis should be valid JSON that matches the schema.",
+          "type": "thinking"
+        },
+        {
+          "text": "{\"name\":\"Sarah Chen\",\"age\":32,\"occupation\":\"Software Engineer\"}",
+          "type": "text"
+        }
+      ],
+      "id": "msg_01KpRkNotNgx344ykebAQDAh",
+      "model": "claude-haiku-4-5-20251001",
+      "role": "assistant",
+      "stop_details": null,
+      "stop_reason": "end_turn",
+      "stop_sequence": null,
+      "type": "message",
+      "usage": {
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 0,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "inference_geo": "not_available",
+        "input_tokens": 262,
+        "output_tokens": 145,
+        "output_tokens_details": {
+          "thinking_tokens": 124
+        },
+        "service_tier": "standard"
+      }
     },
     "headers": {
-      "anthropic-organization-id": [
-        "8a3ada71-45d7-4ed6-aaaf-279ffd490a4a"
+      "anthropic-organization-id": "[REDACTED:anthropic-organization-id]",
+      "anthropic-ratelimit-input-tokens-limit": [
+        "1000000"
+      ],
+      "anthropic-ratelimit-input-tokens-remaining": [
+        "1000000"
+      ],
+      "anthropic-ratelimit-input-tokens-reset": [
+        "2026-05-29T16:30:09Z"
+      ],
+      "anthropic-ratelimit-output-tokens-limit": [
+        "200000"
+      ],
+      "anthropic-ratelimit-output-tokens-remaining": [
+        "200000"
+      ],
+      "anthropic-ratelimit-output-tokens-reset": [
+        "2026-05-29T16:30:10Z"
+      ],
+      "anthropic-ratelimit-requests-limit": [
+        "2000"
+      ],
+      "anthropic-ratelimit-requests-remaining": [
+        "1999"
+      ],
+      "anthropic-ratelimit-requests-reset": [
+        "2026-05-29T16:30:07Z"
+      ],
+      "anthropic-ratelimit-tokens-limit": [
+        "1200000"
+      ],
+      "anthropic-ratelimit-tokens-remaining": [
+        "1200000"
+      ],
+      "anthropic-ratelimit-tokens-reset": [
+        "2026-05-29T16:30:09Z"
       ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "9c0da951cc513009-PRG"
+        "a036e1c1bc5ae252-ORD"
       ],
       "connection": [
         "keep-alive"
+      ],
+      "content-security-policy": [
+        "default-src 'none'; frame-ancestors 'none'"
       ],
       "content-type": [
         "application/json"
       ],
       "date": [
-        "Tue, 20 Jan 2026 09:49:21 GMT"
+        "Fri, 29 May 2026 16:30:10 GMT"
       ],
       "request-id": [
-        "req_011CXJRNCd3fBn9HB8B4DM9Y"
+        "req_011CbXBGruJSUZxVP1Emkifu"
       ],
       "server": [
         "cloudflare"
       ],
+      "set-cookie": "[REDACTED:set-cookie]",
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
       ],
-      "x-envoy-upstream-service-time": [
-        "152"
+      "traceresponse": [
+        "00-ac924916415af9ee806480147debb7ae-fc1c74c6405e6e9b-01"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
       ],
       "x-robots-tag": [
         "none"
-      ],
-      "x-should-retry": [
-        "false"
       ]
     },
-    "status": 400
-  }
+    "status": 200
+  },
+  "streaming": false
 }

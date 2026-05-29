@@ -1,0 +1,165 @@
+{
+  "model_spec": "anthropic:claude-opus-4-6",
+  "provider": "anthropic",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjozMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IldyaXRlIGEgdmVyeSBsb25nIHN0b3J5IGFib3V0IGRyYWdvbnMgYW5kIGFkdmVudHVyZXMiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJjbGF1ZGUtb3B1cy00LTYiLCJzdHJlYW0iOmZhbHNlLCJ0aGlua2luZyI6eyJidWRnZXRfdG9rZW5zIjoxMDI0LCJ0eXBlIjoiZW5hYmxlZCJ9fQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 3000,
+      "messages": [
+        {
+          "content": "Write a very long story about dragons and adventures",
+          "role": "user"
+        }
+      ],
+      "model": "claude-opus-4-6",
+      "stream": false,
+      "thinking": {
+        "budget_tokens": 1024,
+        "type": "enabled"
+      }
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "anthropic-beta": [
+        "interleaved-thinking-2025-05-14"
+      ],
+      "anthropic-version": [
+        "2023-06-01"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ],
+      "x-api-key": "[REDACTED:x-api-key]"
+    },
+    "method": "post",
+    "url": "https://api.anthropic.com/v1/messages"
+  },
+  "response": {
+    "body": {
+      "content": [
+        {
+          "signature": "EooDCmMIDhgCKkBbGW2PF2kEkVE345P8+dNK6GiopKN2XN4eFOOwa8IF/gp8sCcXgrKXYhIsEe7/U/xDaF32dn8NzeNkqbk83E9WMg9jbGF1ZGUtb3B1cy00LTY4AEIIdGhpbmtpbmcSDMEn7NMFWi5QD+ynlBoMkialK4akHw0bZMD8IjBefrGYWUlrl6Br2muE9mlVNZ8JCkpHiJ6uq5A2rc7Cge9fgiMWQJpxaKkkGeuOa9kq1AF0N/TQenV3zVuVHiwqLRMa9Weqog+yrDxQPXugkO7eJcmxUA+eUeZtK5hjb2/gGaYCDy+AfEs0o35QJNxj2fq+w9nbCpdko6ocEWeieuMpnPdVMlqulQyR3yMAKVE014SsGXUQk/0hTOI7RggMKtARj1GXKsrwSAABn2ZqRm7cFcl8QlEoEgUw4Igb15rtJ86HJeG0iwuZ/2ekL8kgocPARw+yAT4z2Q7WonzdS8AYGygDqgCkK2LwT/xfpivQUd+ITjw8GkTDZXi64r5BXEnn3MisbhgB",
+          "thinking": "The user wants a very long story about dragons and adventures. Let me write an epic, detailed fantasy story with rich world-building, compelling characters, and plenty of dragon-related adventure.",
+          "type": "thinking"
+        },
+        {
+          "text": "# The Last Ember of Valdris\n\n## A Tale of Dragons and Adventures\n\n---\n\n# Part One: The Shepherd's Son\n\n## Chapter One: Ashes on the Wind\n\nThe morning Kael Thornwood's life changed forever began like any other in the village of Briarhollow — with the bleating of sheep and the pale gray light of dawn creeping over the Thornspire Mountains.\n\nKael was seventeen, lean and weather-beaten for his age, with dark hair that fell across his forehead in an unruly mess and eyes the color of storm clouds. He had the calloused hands of a shepherd and the restless heart of someone who had spent too many nights staring at the stars and wondering what lay beyond the jagged peaks that encircled his world like the teeth of some great beast.\n\nHe stood at the edge of the north pasture, his crook resting against his shoulder, watching as the flock of thirty-two sheep — he knew each one by name, by the pattern of their wool, by the peculiar way they walked — spread out across the dew-soaked grass. Below him, Briarhollow was waking up. Smoke curled from chimneys. The baker, old Maren, would be pulling the first loaves from her stone oven. The blacksmith, Torgun, would be stoking his forge, the rhythmic clang of his hammer soon to echo through the valley like a second heartbeat.\n\nIt was peaceful. It was predictable. And Kael hated it.\n\nNot the village itself — he loved Briarhollow and its people with a fierce, protective loyalty that surprised even himself. What he hated was the certainty of it all. He could see his entire life stretched out before him like a road with no turns: he would tend sheep, as his father had, and his father before him. He would marry, probably Elara the tanner's daughter, who smiled at him during the autumn festivals. He would grow old. He would die. And the mountains would never move, and he would never know what lay on the other side of them.\n\nHis father, Bram Thornwood, had always told him the same thing when Kael voiced these restless thoughts. \"There's nothing beyond those mountains worth dying for, boy. Everything you need is right here.\" Then he would gesture broadly at the valley, at the patchwork of green fields and stone cottages, at the silver ribbon of the Briarbrook winding through it all, and Kael would feel guilty for wanting more.\n\nBut the wanting never stopped.\n\nThis particular morning, however, something was different. Kael noticed it first in the sheep. Old Moss, the great ram with the curling horns who led the flock with the quiet dignity of a general, had stopped eating. His head was raised, nostrils flaring, and his body was rigid with a tension Kael had never seen in him before. One by one, the other sheep followed suit, lifting their heads, turning to face the same direction — north, toward the high passes of the Thornspire range.\n\nKael felt the hair on the back of his neck rise.\n\nHe followed their gaze. The mountains stood as they always had, ancient and immovable, their peaks dusted with eternal snow. But something was wrong with the sky above them. It was too dark for morning, the clouds gathering with unnatural speed, swirling in a pattern that looked almost deliberate, almost like—\n\nA sound reached him then. It was distant, muffled by miles of stone and air, but it was unlike anything he had ever heard. It was low and resonant, like thunder, but it didn't fade. It grew. It built upon itself in layers, a sound that was felt as much as heard, vibrating in his chest, in his bones, in the earth beneath his feet.\n\nThe sheep bolted.\n\nKael didn't try to stop them. He couldn't move. He stood rooted to the spot, his crook forgotten on the ground, staring at the sky above the northern peaks as the clouds parted — no, were *torn* apart — by something enormous and dark that burst through them like a stone through parchment.\n\nWings. Vast, impossible wings, spanning what seemed like the entire width of the sky, black as obsidian and edged with a faint, pulsing glow like dying embers. A body followed, serpentine and massive, armored in scales that caught the weak morning light and threw it back in fragments of crimson and shadow. A head, crowned with horns that curved like scimitars, with eyes that burned like twin furnaces even from this impossible distance.\n\nA dragon.\n\nKael's mind went blank. Dragons were stories. Dragons were the tales old Henrick told by the fire during the long winter nights, tales of an age so ancient it might as well have been myth. The Age of Fire, they called it, when dragons ruled the skies and the world burned at their pleasure. But that was a thousand years ago. More. The dragons were gone, dead or sleeping or vanished into whatever darkness had spawned them. Everyone knew that. Everyone *knew* that.\n\nThe dragon banked, turning in a great arc above the mountains, and Kael saw something that made his stomach drop. Clutched in the creature's massive talons was a shape — no, a figure. A person. Even from this distance, Kael could see the limp way the body hung, like a doll in the grip of a child.\n\nThen the dragon screamed.\n\nThe sound hit Briarhollow like a physical force. Windows shattered. Horses screamed in their stables. Kael was thrown to his knees, hands clamped over his ears, but it did nothing — the sound was inside him, reverberating through every fiber of his being, a sound of rage and anguish so profound it brought tears to his eyes.\n\nAnd then, as suddenly as it had appeared, the dragon was gone. It dove behind the northern peaks, disappearing into the labyrinth of stone and ice, and the sky began to heal itself, the clouds drifting back together as though nothing had happened.\n\nKael knelt in the wet grass, shaking, his ears ringing, his heart hammering against his ribs. Below him, Briarhollow was in chaos — he could hear shouting, the crash of things falling, a child crying.\n\nBut above all of that, above the fear and the shock and the impossibility of what he had just witnessed, one thought burned in Kael's mind with a clarity that frightened him:\n\n*I have to follow it.*\n\n---\n\n## Chapter Two: The Village Council\n\nBy the time Kael had gathered most of his scattered flock and driven them back to the family pen, Briarhollow was in an uproar. The entire village — all two hundred and forty-three souls — had gathered in the square before the Meeting Hall, a sturdy stone building that served as council chamber, courthouse, and, during festivals, dance hall. Elder Maren stood on the steps, trying to restore order, but the crowd was having none of it.\n\n\"We saw it!\" shouted Torgun the blacksmith, his massive arms folded across his chest. \"A dragon, plain as day. Don't tell me it was a trick of the light.\"\n\n\"No one is saying that,\" Elder Maren replied, her voice carrying the authority of her sixty-odd years and the respect she had earned through decades of fair leadership. She was a small woman, white-haired and sharp-eyed, with a mind like a steel trap. \"What I am saying is that we need to discuss this calmly and rationally before anyone does anything foolish.\"\n\n\"Calmly?\" This from Gareth the miller, a portly man whose face was the color of raw dough. \"There's a dragon in the mountains! A *dragon*! What's to discuss? We need to leave. Pack up everything and head south to Ashenmere.\"\n\nA murmur of agreement rippled through the crowd, but it was far from unanimous. Briarhollow was home. These people had been born here, had built their lives here, had buried their dead in the small cemetery on the eastern hill. Leaving was not a simple thing.\n\nKael pushed through the crowd until he found his father. Bram Thornwood was a big man, broad-shouldered and quiet, with the same gray eyes as his son but none of the restlessness. He stood near the back of the gathering, arms folded, face unreadable.\n\n\"Da,\" Kael said, slightly out of breath. \"You saw it?\"\n\nBram nodded slowly. \"Aye. I saw it.\"\n\n\"It was carrying someone. Did you see that? It had a person in its claws.\"\n\nHis father's expression didn't change, but something shifted behind his eyes. \"I saw.\"\n\n\"We have to—\"\n\n\"We don't have to do anything, Kael.\" Bram's voice was low and firm. \"Whatever that thing is, whatever it wants, it's not our concern. Our concern is the flock, the farm, and this family.\"\n\nKael opened his mouth to argue, but his father's hand landed on his shoulder — heavy, warm, and final. \"Not now,\" Bram said, and turned his attention back to the council.\n\nThe debate raged for hours. Elder Maren called for order repeatedly, and repeatedly the crowd dissolved into shouting matches. Factions formed: those who wanted to flee, those who wanted to stay and fortify, and a small but vocal group led by Torgun who wanted to organize a hunting party to go into the mountains and deal with the threat.\n\n\"And what exactly do you plan to hunt it with?\" demanded Elara's father, Corwin the tanner, a thin, nervous man who was wringing his leather apron into knots. \"Your hammer? A few bows and some kitchen knives? This is a *dragon*, Torgun, not a wolf.\"\n\n\"So we do nothing?\" Torgun shot back. \"We sit here and wait for it to come down and burn us alive?\"\n\n\"We send riders south,\" Elder Maren said, cutting through the argument with practiced authority. \"To Ashenmere, to Ironhaven, to the capital if necessary. This is a matter for the King's forces, not for farmers and shepherds.\"\n\nThis seemed to satisfy most of the crowd, or at least exhaust them into agreement. Riders would be dispatched at first light. In the meantime, watches would be set, and no one was to venture north of the village boundary.\n\nAs the crowd dispersed, Kael lingered. He watched the northern mountains, dark against the fading sky, and felt that burning certainty again. He thought about the figure in the dragon's claws, the limpness of that body, and wondered if they were still alive. If they were waiting for someone to come. If they would die waiting while Briarhollow argued about what to do.\n\n\"You have that look.\"\n\nKael turned to find Sera Brightwater standing behind him, her arms crossed and one eyebrow raised in the expression she reserved for moments when she thought he was about to do something spectacularly stupid.\n\nSera was his oldest friend, the closest thing he had to a sister, though they shared no blood. She was the daughter of the village healer, a girl of seventeen with copper-red hair cropped short — impractical length got in the way of her work, she said — and green eyes that missed nothing. She was clever, sharp-tongued, and utterly fearless, and she knew Kael better than anyone alive.\n\n\"What look?\" he asked, unconvincingly.\n\n\"The look that says you're about to do something heroically idiotic. You want to go after it.\"\n\n\"Someone's up there, Sera. Someone alive, maybe. And we're just going to wait for riders to reach Ashenmere — that's three days at best, and another week before anyone comes back. If that person is alive—\"\n\n\"They probably aren't.\"\n\n\"But if they are.\"\n\nSera studied him for a long moment. The wind picked up, carrying the scent of pine and snow from the mountains. \"You know,\" she said slowly, \"my mother has a book. Old, very old — she inherited it from her teacher, who got it from hers, going back generations. It's a healer's manual, but there's a section in the back about dragons. Burns, venom, that sort of thing. Practical information for an age when dragons were real.\"\n\nKael felt a spark of hope. \"And?\"\n\n\"And it mentions something interesting. Dragons, according to this book, don't just grab people randomly. They're intelligent — more intelligent than humans, possibly. If this dragon took someone, it had a reason.\"\n\n\"What reason?\"\n\n\"The book doesn't say. But it does say that dragons have lairs, and that those lairs are always near sources of deep heat — volcanic vents, hot springs, places where the earth's fire comes close to the surface.\"\n\nKael's mind raced. \"The Boiling Pools. In the high",
+          "type": "text"
+        }
+      ],
+      "id": "msg_01QogUjpWUK2zLnXHydHLxPw",
+      "model": "claude-opus-4-6",
+      "role": "assistant",
+      "stop_details": null,
+      "stop_reason": "max_tokens",
+      "stop_sequence": null,
+      "type": "message",
+      "usage": {
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 0,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "inference_geo": "global",
+        "input_tokens": 45,
+        "output_tokens": 3000,
+        "output_tokens_details": {
+          "thinking_tokens": 43
+        },
+        "service_tier": "standard"
+      }
+    },
+    "headers": {
+      "anthropic-organization-id": "[REDACTED:anthropic-organization-id]",
+      "anthropic-ratelimit-input-tokens-limit": [
+        "5000000"
+      ],
+      "anthropic-ratelimit-input-tokens-remaining": [
+        "5000000"
+      ],
+      "anthropic-ratelimit-input-tokens-reset": [
+        "2026-05-29T17:43:51Z"
+      ],
+      "anthropic-ratelimit-output-tokens-limit": [
+        "400000"
+      ],
+      "anthropic-ratelimit-output-tokens-remaining": [
+        "400000"
+      ],
+      "anthropic-ratelimit-output-tokens-reset": [
+        "2026-05-29T17:45:08Z"
+      ],
+      "anthropic-ratelimit-requests-limit": [
+        "2000"
+      ],
+      "anthropic-ratelimit-requests-remaining": [
+        "1999"
+      ],
+      "anthropic-ratelimit-requests-reset": [
+        "2026-05-29T17:43:49Z"
+      ],
+      "anthropic-ratelimit-tokens-limit": [
+        "5400000"
+      ],
+      "anthropic-ratelimit-tokens-remaining": [
+        "5400000"
+      ],
+      "anthropic-ratelimit-tokens-reset": [
+        "2026-05-29T17:43:51Z"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a0374db629801923-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-security-policy": [
+        "default-src 'none'; frame-ancestors 'none'"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 29 May 2026 17:45:08 GMT"
+      ],
+      "request-id": [
+        "req_011CbXGtp7DHkH1P9NzjSLTs"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": "[REDACTED:set-cookie]",
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "traceresponse": [
+        "00-dc75782467f914e678c959d62f3f8292-562e0e3cf7b2c7af-01"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-robots-tag": [
+        "none"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

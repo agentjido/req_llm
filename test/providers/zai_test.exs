@@ -8,6 +8,26 @@ defmodule ReqLLM.Providers.ZaiTest do
   alias ReqLLM.Context
   alias ReqLLM.Message.ContentPart
   alias ReqLLM.Providers.Zai
+  alias ReqLLM.Providers.ZaiCoder
+
+  describe "request preparation" do
+    test "zai_coder uses the coding endpoint instead of registry metadata" do
+      {:ok, request} =
+        ZaiCoder.prepare_request(:chat, "zai_coder:glm-4.5-flash", "Hello", api_key: "test")
+
+      assert request.options[:base_url] == "https://api.z.ai/api/coding/paas/v4"
+    end
+
+    test "zai_coder preserves explicit base_url overrides" do
+      {:ok, request} =
+        ZaiCoder.prepare_request(:chat, "zai_coder:glm-4.5-flash", "Hello",
+          api_key: "test",
+          base_url: "https://proxy.example.com/v1"
+        )
+
+      assert request.options[:base_url] == "https://proxy.example.com/v1"
+    end
+  end
 
   describe "encode_body/1" do
     test "drops assistant thinking parts when encoding history" do

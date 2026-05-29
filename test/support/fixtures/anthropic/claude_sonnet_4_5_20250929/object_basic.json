@@ -1,7 +1,9 @@
 {
+  "model_spec": "anthropic:claude-sonnet-4-5-20250929",
+  "provider": "anthropic",
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoxMjI1LCJtZXNzYWdlcyI6W3siY29udGVudCI6IkdlbmVyYXRlIGEgc29mdHdhcmUgZW5naW5lZXIgcHJvZmlsZSIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImNsYXVkZS1zb25uZXQtNC01LTIwMjUwOTI5Iiwic3RyZWFtIjpmYWxzZSwidG9vbF9jaG9pY2UiOnsibmFtZSI6InN0cnVjdHVyZWRfb3V0cHV0IiwidHlwZSI6InRvb2wifSwidG9vbHMiOlt7ImRlc2NyaXB0aW9uIjoiR2VuZXJhdGUgc3RydWN0dXJlZCBvdXRwdXQgbWF0Y2hpbmcgdGhlIHByb3ZpZGVkIHNjaGVtYSIsImlucHV0X3NjaGVtYSI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnsiYWdlIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3MgYWdlIGluIHllYXJzIiwibWluaW11bSI6MSwidHlwZSI6ImludGVnZXIifSwibmFtZSI6eyJkZXNjcmlwdGlvbiI6IlBlcnNvbidzIGZ1bGwgbmFtZSIsInR5cGUiOiJzdHJpbmcifSwib2NjdXBhdGlvbiI6eyJkZXNjcmlwdGlvbiI6IlBlcnNvbidzIGpvYiBvciBwcm9mZXNzaW9uIiwidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibmFtZSIsImFnZSJdLCJ0eXBlIjoib2JqZWN0In0sIm5hbWUiOiJzdHJ1Y3R1cmVkX291dHB1dCJ9XX0="
+      "b64": "eyJtYXhfdG9rZW5zIjoxMjI1LCJtZXNzYWdlcyI6W3siY29udGVudCI6IkdlbmVyYXRlIGEgc29mdHdhcmUgZW5naW5lZXIgcHJvZmlsZSIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImNsYXVkZS1zb25uZXQtNC01LTIwMjUwOTI5Iiwib3V0cHV0X2Zvcm1hdCI6eyJzY2hlbWEiOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7ImFnZSI6eyJkZXNjcmlwdGlvbiI6IlBlcnNvbidzIGFnZSBpbiB5ZWFycyIsInR5cGUiOiJpbnRlZ2VyIn0sIm5hbWUiOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBmdWxsIG5hbWUiLCJ0eXBlIjoic3RyaW5nIn0sIm9jY3VwYXRpb24iOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBqb2Igb3IgcHJvZmVzc2lvbiIsInR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImFnZSIsIm5hbWUiLCJvY2N1cGF0aW9uIl0sInR5cGUiOiJvYmplY3QifSwidHlwZSI6Impzb25fc2NoZW1hIn0sInN0cmVhbSI6ZmFsc2UsInRoaW5raW5nIjp7ImJ1ZGdldF90b2tlbnMiOjEwMjQsInR5cGUiOiJlbmFibGVkIn19"
     },
     "canonical_json": {
       "max_tokens": 1225,
@@ -12,47 +14,47 @@
         }
       ],
       "model": "claude-sonnet-4-5-20250929",
-      "stream": false,
-      "tool_choice": {
-        "name": "structured_output",
-        "type": "tool"
-      },
-      "tools": [
-        {
-          "description": "Generate structured output matching the provided schema",
-          "input_schema": {
-            "additionalProperties": false,
-            "properties": {
-              "age": {
-                "description": "Person's age in years",
-                "minimum": 1,
-                "type": "integer"
-              },
-              "name": {
-                "description": "Person's full name",
-                "type": "string"
-              },
-              "occupation": {
-                "description": "Person's job or profession",
-                "type": "string"
-              }
+      "output_format": {
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "age": {
+              "description": "Person's age in years",
+              "type": "integer"
             },
-            "required": [
-              "name",
-              "age"
-            ],
-            "type": "object"
+            "name": {
+              "description": "Person's full name",
+              "type": "string"
+            },
+            "occupation": {
+              "description": "Person's job or profession",
+              "type": "string"
+            }
           },
-          "name": "structured_output"
-        }
-      ]
+          "required": [
+            "age",
+            "name",
+            "occupation"
+          ],
+          "type": "object"
+        },
+        "type": "json_schema"
+      },
+      "stream": false,
+      "thinking": {
+        "budget_tokens": 1024,
+        "type": "enabled"
+      }
     },
     "headers": {
+      "accept": [
+        "application/json"
+      ],
       "accept-encoding": [
         "gzip"
       ],
       "anthropic-beta": [
-        "tools-2024-05-16"
+        "interleaved-thinking-2025-05-14,structured-outputs-2025-11-13"
       ],
       "anthropic-version": [
         "2023-06-01"
@@ -61,7 +63,7 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ],
       "x-api-key": "[REDACTED:x-api-key]"
     },
@@ -72,20 +74,20 @@
     "body": {
       "content": [
         {
-          "id": "toolu_018gUS1eiNDncYndNYE4tUpU",
-          "input": {
-            "age": 29,
-            "name": "Alex Chen",
-            "occupation": "Software Engineer"
-          },
-          "name": "structured_output",
-          "type": "tool_use"
+          "signature": "EucGCm4IDhgCKkCD9QN4rqDG/FfIAFTY3eTIu+rp0tkpJMW0l57H0ReL/1AX6s893visnyw2lYBJoUkLPwcNsrkCMynCXTIZBqCYMhpjbGF1ZGUtc29ubmV0LTQtNS0yMDI1MDkyOTgAQgh0aGlua2luZxIM/FJLbwMneEDpJfmjGgzWFlHZ8oAxt8q/xwAiMEhK/68aGUCgS4BN7FP4si8DuYDtjdudXHyb3qzQF/AMoWtOD8FYZKD7o7uLTGznWyqmBeBosE36jVJdaWp0p1mmL8iMlTs41RT+o8Sv3AWTnABWZqOEtl7k5PRoVHau4JJ88DZYi84aFiV5P6IMMDFbUy8KGOwEPsGE0Nm7gJj8aT4aQqPQ6JeNcd/QSdF4LdXTSYyv5NMGpu+qcZSyAceMz8RrPmloNFeagLZzHV3iz1DBjx5mYCJIRM1HbQy0WeuXJhZmu4yE2NHkNCqN0k6EFin0ve+aTLSmbO/kWRA4XGqrGHMNpIS728diHKoRzB2rU8t/YbbKGy3keq/c6faNnXAsGqxCyMMrPq0kt70ljErD3ODY72huKiVib3llKf29py+umQyIx1MkAJWSG56Kwt6zmLzVLsAyMSWvunMq8XxRsYGpjwnSfawiyASKANiMEcEIw2zsWcsvatQQoBKTDulyk6N7ztpV+EQ5Yelo4/icA8pM0verXIHfdpfXPbxhxYkj8zPkvUwr9QWFNYBjY7zHkpAwUV13PoqtPjXJfOe8A9uoHAi0F1TYLmQXhCVmjJgwJboQacr/4yGManK+5bmoAITSXGdTC1gNAuyN1SeH05A6l+ZRQ9cxnQQm6w9V7t0A86vosJ7frplsn4L1Cls7BIk+zm1qI85h7k7gZ4DEl9FjXb6hZitZsbWbrFw5hWxyagLM5v817RwgCZpIppFDZhrQ1/jj40o3B59LDH1b5Ae+7WcmKwRgQzbddvYjAMDXku1SRibN7WosGwIeSk4GLrWg8mRJQxbXFuJBRLLrGOi9K07gTe/YQBjE1FbMhJHslMAGk4Cw37dMWA/Uz+q6ojUauZd5fI5obo6Dkh6P+1x4KXXLKJF7ZD5mJ6FVzmDzAmCTZj3BOd5JR8AAry+h1uNpF31ttEmyTAZJBezFoARwpJpp0d5T1PizZQiCtEcgU9zVbxgB",
+          "thinking": "The user wants me to generate a profile for a software engineer. I need to return valid JSON that matches the schema provided. The schema requires:\n- name (string): Person's full name\n- age (integer): Person's age in years\n- occupation (string): Person's job or profession\n\nAll three fields are required. I need to create a realistic profile for a software engineer and return it as a single line of JSON without any markdown formatting or extra text.\n\nLet me create a plausible software engineer profile:\n- Name: Something realistic\n- Age: A reasonable age for a software engineer (typically 25-45)\n- Occupation: \"Software Engineer\" or similar\n\nHere's the JSON:",
+          "type": "thinking"
+        },
+        {
+          "text": "{\"name\": \"Alex Chen\", \"age\": 29, \"occupation\": \"Software Engineer\"}",
+          "type": "text"
         }
       ],
-      "id": "msg_01HLqzphCpbg4zNn5mR85Uap",
+      "id": "msg_011YdjmchFcRWLbH13W1V3pk",
       "model": "claude-sonnet-4-5-20250929",
       "role": "assistant",
-      "stop_reason": "tool_use",
+      "stop_details": null,
+      "stop_reason": "end_turn",
       "stop_sequence": null,
       "type": "message",
       "usage": {
@@ -95,88 +97,95 @@
         },
         "cache_creation_input_tokens": 0,
         "cache_read_input_tokens": 0,
-        "input_tokens": 725,
-        "output_tokens": 69,
+        "inference_geo": "not_available",
+        "input_tokens": 262,
+        "output_tokens": 180,
+        "output_tokens_details": {
+          "thinking_tokens": 154
+        },
         "service_tier": "standard"
       }
     },
     "headers": {
-      "anthropic-organization-id": [
-        "a71659e7-a922-4ff7-99de-f3ba615face1"
-      ],
+      "anthropic-organization-id": "[REDACTED:anthropic-organization-id]",
       "anthropic-ratelimit-input-tokens-limit": [
-        "450000"
+        "800000"
       ],
       "anthropic-ratelimit-input-tokens-remaining": [
-        "450000"
+        "800000"
       ],
       "anthropic-ratelimit-input-tokens-reset": [
-        "2025-11-02T17:05:07Z"
+        "2026-05-29T18:03:01Z"
       ],
       "anthropic-ratelimit-output-tokens-limit": [
-        "90000"
+        "160000"
       ],
       "anthropic-ratelimit-output-tokens-remaining": [
-        "90000"
+        "160000"
       ],
       "anthropic-ratelimit-output-tokens-reset": [
-        "2025-11-02T17:05:07Z"
+        "2026-05-29T18:03:04Z"
       ],
       "anthropic-ratelimit-requests-limit": [
-        "1000"
+        "2000"
       ],
       "anthropic-ratelimit-requests-remaining": [
-        "999"
+        "1999"
       ],
       "anthropic-ratelimit-requests-reset": [
-        "2025-11-02T17:05:05Z"
+        "2026-05-29T18:02:59Z"
       ],
       "anthropic-ratelimit-tokens-limit": [
-        "540000"
+        "960000"
       ],
       "anthropic-ratelimit-tokens-remaining": [
-        "540000"
+        "960000"
       ],
       "anthropic-ratelimit-tokens-reset": [
-        "2025-11-02T17:05:07Z"
+        "2026-05-29T18:03:01Z"
       ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "998536f80863876c-ORD"
+        "a03769c7dd10a7ae-ORD"
       ],
       "connection": [
         "keep-alive"
+      ],
+      "content-security-policy": [
+        "default-src 'none'; frame-ancestors 'none'"
       ],
       "content-type": [
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:05:07 GMT"
+        "Fri, 29 May 2026 18:03:04 GMT"
       ],
       "request-id": [
-        "req_011CUjRh2WJmomks24fancYd"
-      ],
-      "retry-after": [
-        "54"
+        "req_011CbXJMZfvDZezj9TxNULbH"
       ],
       "server": [
         "cloudflare"
       ],
+      "set-cookie": "[REDACTED:set-cookie]",
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
+      ],
+      "traceresponse": [
+        "00-da2fd4feb1fe8033143e1778a7a85f53-94fa049793f25028-01"
       ],
       "transfer-encoding": [
         "chunked"
       ],
-      "x-envoy-upstream-service-time": [
-        "2425"
+      "vary": [
+        "Accept-Encoding"
       ],
       "x-robots-tag": [
         "none"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

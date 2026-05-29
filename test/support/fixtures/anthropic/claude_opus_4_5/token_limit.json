@@ -1,0 +1,165 @@
+{
+  "model_spec": "anthropic:claude-opus-4-5",
+  "provider": "anthropic",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjozMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IldyaXRlIGEgdmVyeSBsb25nIHN0b3J5IGFib3V0IGRyYWdvbnMgYW5kIGFkdmVudHVyZXMiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJjbGF1ZGUtb3B1cy00LTUiLCJzdHJlYW0iOmZhbHNlLCJ0aGlua2luZyI6eyJidWRnZXRfdG9rZW5zIjoxMDI0LCJ0eXBlIjoiZW5hYmxlZCJ9fQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 3000,
+      "messages": [
+        {
+          "content": "Write a very long story about dragons and adventures",
+          "role": "user"
+        }
+      ],
+      "model": "claude-opus-4-5",
+      "stream": false,
+      "thinking": {
+        "budget_tokens": 1024,
+        "type": "enabled"
+      }
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "anthropic-beta": [
+        "interleaved-thinking-2025-05-14"
+      ],
+      "anthropic-version": [
+        "2023-06-01"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ],
+      "x-api-key": "[REDACTED:x-api-key]"
+    },
+    "method": "post",
+    "url": "https://api.anthropic.com/v1/messages"
+  },
+  "response": {
+    "body": {
+      "content": [
+        {
+          "signature": "EsEECmwIDhgCKkDuBsbg895jbKYgUGEDu+2xr1/fz/aG2uxWx+SicPeFv5tc82ww55rEq/fcUZ677s+CwCy9t/5JYUUqJxg58LtXMhhjbGF1ZGUtb3B1cy00LTUtMjAyNTExMDE4AEIIdGhpbmtpbmcSDKNoPy3qzI69N2ag/BoMkxYGITjT7WIAzyxyIjA5kivNDoVlpCQJeqVcAKFZuT6uBJVTLPqG/t10q2bmCfp/keJwSizXko5vmmLpXLIqggMPTscFp7863lCmIMcdyu/7P/b8NsnaQWgRzwS6Ni28Ko1dDUQW14aOK+z/Z2AXzddHDygQqgehNXp3J8Uvp7d9qzkLTIp/46E1sOM+8AMgffAfiwZ2oNBUwVsXYZNi9RR6PmJiIorFwqbu+Kkmyfe0LqwHZTraE75RefZrQbnQlkOEvAA/NsERBCKLR8ymapcDuvVI1VtQ25XTOO0TRri1BHleSu+4q+4ntz4L1FljKk+ccYcVG7F4IuLo0smICqSPrIHoMmn6SEdaSNIMARKvzvNkijGDA/G/trVV1NYEDTyjZIAvcQ5n2Apcgnxud6WS/pBL3MEspZlURFyAhMCgvW00MYGvBnWvNhXtjRT763bfWkjaVugiS2ZFxruQqCoOQvW6b9BWuQChkQRUjm0kbAIKxkM2RprVbI06UiQ1G1ErnyeQjU6QaOwCADZrQwoIGMAIOtddMcve8jA63tg+LZcKOPyaQKtBP5x8VqUlyDSVlrEmRvGN6NAQkeFdaGCP8xgB",
+          "thinking": "The user wants a very long story about dragons and adventures. I'll create an epic fantasy tale with multiple characters, detailed world-building, various dragon types, and an adventure-filled plot. I'll make it engaging with character development, conflict, and resolution. Let me create a comprehensive story with multiple chapters to make it truly long and immersive.",
+          "type": "thinking"
+        },
+        {
+          "text": "# The Last Dragonkeeper\n\n## A Tale of Fire, Friendship, and Forgotten Magic\n\n---\n\n# Part One: The Beginning of All Things\n\n## Chapter One: The Village at the Edge of the World\n\nThe village of Thornhaven sat nestled in a valley so remote that mapmakers had long since stopped trying to include it on their charts. Surrounded by the jagged peaks of the Ironspine Mountains on three sides and a dense, ancient forest called the Whisperwood on the fourth, the village existed in a state of peaceful isolation that its inhabitants had maintained for generations.\n\nElara Stormwind had lived all seventeen years of her life within sight of those mountains. She knew every cobblestone in the village square, every creaking board in her grandmother's cottage, and every face that passed through the modest market on trading days. But what she knew better than anything else was the sky.\n\nEvery morning, before the sun crested the eastern peaks, Elara would climb to the highest point she could find—usually the ancient watchtower at the village's northern edge—and watch. She watched the clouds paint themselves pink and gold. She watched the hawks circle lazily on thermal currents. And she watched for something else, something her grandmother had told her stories about since she was old enough to listen.\n\nDragons.\n\n\"You're going to catch your death up there one of these days,\" her grandmother, Mira, would say whenever Elara returned home with wind-tangled hair and frost on her cloak. \"The cold in those heights isn't natural. There's old magic in those mountains, child. Old and dangerous.\"\n\nBut Elara never stopped climbing. The stories her grandmother told were too vivid, too real to be mere fancy. Tales of creatures vast as castles, with scales that shimmered like living gemstones and eyes that held the wisdom of ages. Tales of a time when dragons and humans lived side by side, when the world was younger and magic flowed as freely as water.\n\n\"They're still out there,\" Elara would insist. \"I can feel it.\"\n\nMira would only shake her head, her weathered hands never pausing in their work—mending clothes, grinding herbs, stirring the perpetual pot of stew that hung over the hearth. \"Feeling and knowing are different things, child. The dragons left this world long ago. What remains are only echoes.\"\n\nBut on the morning that would change everything, Elara saw something that was no echo.\n\nShe had risen earlier than usual, driven from her bed by a dream she couldn't quite remember. Something about fire and wings and a voice calling her name across an impossible distance. The watchtower's steps were slick with pre-dawn dew, and she climbed them carefully, her breath misting in the cold air.\n\nThe sun hadn't yet appeared, but the sky was lightening, shifting from deep indigo to pale lavender at the horizon. Stars still glittered overhead, stubbornly clinging to the fading night. Elara wrapped her cloak tighter around her shoulders and settled into her usual spot, a worn groove in the stone where generations of watchers had sat before her.\n\nFor a long while, there was nothing unusual. The familiar silhouettes of the mountains stood stark against the brightening sky. A family of deer moved through the meadow below, their careful steps barely disturbing the tall grass. Somewhere in the village, a rooster crowed, signaling the approach of another ordinary day.\n\nThen she saw it.\n\nAt first, she thought it was a cloud—a strange, dark mass moving against the wind, coming from the direction of the highest peak, the one the villagers called the Throne of Gods. But clouds didn't move like that. Clouds didn't have wings.\n\nElara's heart stopped. Then it began to race, pounding so hard she could feel it in her temples. She rose to her feet, her cloak slipping forgotten from her shoulders, her eyes fixed on the impossible sight before her.\n\nThe creature was still distant, but even from here, she could see its massive wingspan, the way it caught the first rays of sunlight and seemed to drink them in. Its scales—she could see scales, she was certain of it—gleamed with a deep, burnished gold that shifted to copper and bronze as it moved. It was descending, spiraling down from the heights in wide, lazy circles, and with each pass, it drew closer to the valley.\n\nCloser to Thornhaven.\n\nElara didn't remember making the decision to run. One moment she was standing frozen on the watchtower, and the next she was flying down the steps, her feet barely touching the worn stone. She burst out of the tower's base and sprinted toward the meadow, toward the creature that was even now dropping lower, its shadow beginning to fall across the sleeping village.\n\nShe should have been afraid. Any sensible person would have been afraid. But the only thing Elara felt was a fierce, burning joy that threatened to burst out of her chest. The stories were true. The dragons were real. And one of them was coming here, to her village, to her.\n\nThe dragon landed in the meadow with a grace that seemed impossible for something so large. Up close, it was even more magnificent than she had imagined. Its body was easily the size of the village's largest barn, its neck long and serpentine, its head crowned with a crest of golden horns that caught the morning light like a crown of flames. Its eyes—huge, slitted, ancient—were the deep amber of fossilized tree sap, and they were looking directly at her.\n\nElara stumbled to a halt a dozen paces away, suddenly aware of how small she was, how fragile. The dragon could kill her with a single breath, a single swipe of its massive claws. But it made no move to attack. Instead, it lowered its great head until its eyes were level with hers, and she heard a voice in her mind, deep and resonant as a temple bell.\n\n*Elara Stormwind. I have traveled far to find you.*\n\nShe opened her mouth, but no sound came out. The voice came again, patient and warm.\n\n*Do not try to speak aloud. Simply think your words, and I will hear them.*\n\n*Who are you?* Elara thought, her mental voice trembling. *What do you want with me?*\n\nThe dragon's eyes seemed to smile. *I am Aurelion, last of the Golden Flight. And I have come because the world is dying, young one. The old magic fades, the darkness rises, and you—you are the one the prophecies spoke of. The last Dragonkeeper.*\n\nBefore Elara could respond, she heard shouting behind her. She turned to see villagers pouring out of their homes, many of them carrying whatever weapons they could find—pitchforks, axes, rusty swords that hadn't been drawn in generations. At their head was the village elder, a stern man named Aldric who had always looked at Elara with suspicion, as if he knew she was different and didn't approve.\n\n\"Get away from that creature, girl!\" Aldric shouted, his voice cracking with fear. \"Men, form a line! We'll drive it off before it—\"\n\n*Peace, mortal.* Aurelion's mental voice boomed out, and every villager stopped in their tracks, their weapons falling to their sides. *I have not come to harm you. I have come to claim what is mine by right of prophecy. This girl is a Dragonkeeper, the first born in a thousand years. She belongs with us now.*\n\nThe villagers stared, their faces a mixture of awe and terror. Aldric found his voice first, though it was weak and quavering. \"Dragonkeeper? There's no such thing. The dragons are gone. The Keepers died out ages ago.\"\n\n*And yet here I stand,* Aurelion replied, a hint of dry amusement in his tone. *And here she stands—Elara Stormwind, granddaughter of Mira the Wise, descended from the line of Keepers who served my kind since the world was young. The blood runs true in her, stronger than it has in generations. Can you not feel it, elder? Can you not sense the power that sleeps within her?*\n\nElara turned back to the dragon, her mind reeling. \"My grandmother? She's a... she knows about this?\"\n\nAurelion's great head swung toward the crowd, and Elara followed his gaze to see her grandmother pushing through the gathered villagers. Mira's face was pale, but her eyes were dry and determined. She walked past Aldric without a glance and came to stand beside Elara, her gaze fixed on the dragon.\n\n\"So,\" Mira said quietly. \"It's finally come.\"\n\n*It has been long, Mira of the Hidden Line. Too long. We had almost given up hope that a true Keeper would ever be born again.*\n\n\"I knew it would happen eventually,\" Mira said. \"I felt it the moment she was born. The mark on her shoulder, the way animals flocked to her, the dreams she has every night but never remembers. All the signs were there.\" She turned to look at Elara, and her eyes glistened with unshed tears. \"I'm sorry, child. I should have told you. But I hoped... I hoped if I said nothing, if I kept you hidden, you might be spared this burden.\"\n\n\"Burden?\" Elara repeated. \"Grandmother, I don't understand any of this. What is a Dragonkeeper? What does it mean?\"\n\nMira took a deep breath. \"It means, my darling girl, that your life is no longer your own. It means you have a destiny greater than anything this village could ever hold. It means you must leave everything you know and go with this dragon, to a place where humans rarely tread.\" She reached out and cupped Elara's face in her hands. \"It means you are going to save the world.\"\n\n## Chapter Two: The Journey Begins\n\nThree days later, Elara stood at the edge of the village she had called home her entire life, a pack of supplies on her back and her grandmother's blessing warm in her heart. The villagers had gathered to see her off, their earlier fear replaced by a kind of reverent awe. Whatever the Dragonkeeper was, it was clearly important, and their own Elara had been chosen for the role. Even Aldric had grumbled something that might have been a blessing.\n\nAurelion waited patiently in the meadow, his golden scales gleaming in the morning sun. In the days since his arrival, Elara had learned much about him—how he was over three thousand years old, how he was one of only a handful of dragons left in the world, how he had spent the last century searching for the one the prophecies had foretold.\n\n\"The Dragonkeepers were the bridge between our kinds,\" he had explained during their many conversations. \"Humans blessed with the ability to communicate with dragons, to understand us, to share in our power. In the old days, every flight had its Keeper, and together, we maintained the balance of the world. But when the Great Darkness came, the Keepers were the first to fall. They sacrificed themselves to seal away the evil, and without them, we dragons retreated from the world, hibernating in the deep places of the earth.\"\n\n\"But now the Darkness is returning?\" Elara had asked.\n\n\"The seals are weakening. The magic that holds them in place fades a little more each year. In my dreams, I see the shadows stirring, testing the barriers, searching for cracks. If the Darkness breaks free before a new Keeper is trained and ready, there will be nothing to stop it from consuming everything.\"\n\nNow, as Elara approached the great dragon, she felt the weight of that responsibility settling on her shoulders. She was a girl from a village so small it didn't appear on maps. How was she supposed to save the world?\n\n*One step at a time,* Aurelion's voice came, gentle and reassuring. *The first Keepers were no different from you—ordinary people called to extraordinary purposes. What matters is not where you begin, but where you choose to go.*\n\nElara smiled despite her nerves. \"You heard that thought, didn't you?\"\n\n*I hear all your thoughts, young Keeper. The bond between us grows stronger with each passing moment. In time, you will learn to shield your mind when you wish for privacy. But for now, know that you need not face your doubts alone.*\n\nShe reached out and placed her hand on Aurelion's snout, marveling at the warmth of his scales, the way they seemed to pulse with an inner light. \"Where are we going?\"\n\n*To the Citadel of Wings, the last stronghold of the dragon flights. There, you will meet the others—the survivors of my kind and the few allies who still remember the",
+          "type": "text"
+        }
+      ],
+      "id": "msg_01N53JX39KVHEFyxuyGF2hoe",
+      "model": "claude-opus-4-5-20251101",
+      "role": "assistant",
+      "stop_details": null,
+      "stop_reason": "max_tokens",
+      "stop_sequence": null,
+      "type": "message",
+      "usage": {
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 0,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "inference_geo": "not_available",
+        "input_tokens": 45,
+        "output_tokens": 3000,
+        "output_tokens_details": {
+          "thinking_tokens": 77
+        },
+        "service_tier": "standard"
+      }
+    },
+    "headers": {
+      "anthropic-organization-id": "[REDACTED:anthropic-organization-id]",
+      "anthropic-ratelimit-input-tokens-limit": [
+        "5000000"
+      ],
+      "anthropic-ratelimit-input-tokens-remaining": [
+        "5000000"
+      ],
+      "anthropic-ratelimit-input-tokens-reset": [
+        "2026-05-29T17:39:36Z"
+      ],
+      "anthropic-ratelimit-output-tokens-limit": [
+        "400000"
+      ],
+      "anthropic-ratelimit-output-tokens-remaining": [
+        "400000"
+      ],
+      "anthropic-ratelimit-output-tokens-reset": [
+        "2026-05-29T17:40:43Z"
+      ],
+      "anthropic-ratelimit-requests-limit": [
+        "2000"
+      ],
+      "anthropic-ratelimit-requests-remaining": [
+        "1999"
+      ],
+      "anthropic-ratelimit-requests-reset": [
+        "2026-05-29T17:39:35Z"
+      ],
+      "anthropic-ratelimit-tokens-limit": [
+        "5400000"
+      ],
+      "anthropic-ratelimit-tokens-remaining": [
+        "5400000"
+      ],
+      "anthropic-ratelimit-tokens-reset": [
+        "2026-05-29T17:39:36Z"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a03747825fa81153-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-security-policy": [
+        "default-src 'none'; frame-ancestors 'none'"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 29 May 2026 17:40:43 GMT"
+      ],
+      "request-id": [
+        "req_011CbXGa5yQwPePXQbrqFWPv"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": "[REDACTED:set-cookie]",
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "traceresponse": [
+        "00-bc284c9e18bf25f080f38ef9f7f569da-8f6417a84c964f6c-01"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-robots-tag": [
+        "none"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

@@ -1,4 +1,6 @@
 {
+  "model_spec": "anthropic:claude-sonnet-4-5-20250929",
+  "provider": "anthropic",
   "request": {
     "body": {
       "b64": "eyJtYXhfdG9rZW5zIjozMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IldyaXRlIGEgdmVyeSBsb25nIHN0b3J5IGFib3V0IGRyYWdvbnMgYW5kIGFkdmVudHVyZXMiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJjbGF1ZGUtc29ubmV0LTQtNS0yMDI1MDkyOSIsInN0cmVhbSI6ZmFsc2UsInRoaW5raW5nIjp7ImJ1ZGdldF90b2tlbnMiOjEwMjQsInR5cGUiOiJlbmFibGVkIn19"
@@ -19,6 +21,9 @@
       }
     },
     "headers": {
+      "accept": [
+        "application/json"
+      ],
       "accept-encoding": [
         "gzip"
       ],
@@ -32,7 +37,7 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ],
       "x-api-key": "[REDACTED:x-api-key]"
     },
@@ -43,18 +48,19 @@
     "body": {
       "content": [
         {
-          "signature": "EsoDCkYICRgCKkDzbGeRaYvA2jXPZYC0pcZ3JRV4NONlWntoo7uU6zHuHDjkwsJCRI89Uw9BRPUfad0MNxAQtFc2uCLs8o4GAYp4Egy4YdbbfOHxuZ3SB9AaDHlSU3XMC4YME5YTlCIwtHmhctCj92lxA2vtf/5TPSO4wqzpAoHzlwKT9KhNdNCTJnO4YE/AVBWPaig2IjCAKrECVgohwQMna46s4pLXEYyqVblN8Hw0obT9kcDvUioqc1KzS5BVAUpZKiLS+wYPmrQxk8L3NFroYzvQvHZfShb1DbP2CPV93YKe8xCiMtZQFXXHZWLVmuPLaTLoy0QeW8+7QgB714ilt4pB+5UIssNFDrXWrOEnokYaPA69LYZj5bnn3dNh7WqyJRNncs1vkohMGK4eU1XL9jfnvl1fdkVMs5YRgj3n/SNIuU00P2/PJKQXQqOn4ufEnqBE3ZH0ABa7uqRWHxAVr7//Tni5AXRfHCP0kIAnUXBIN9vNiP9nt1LLeGDpbdsvtnut44lloOLB+mM/FYxwJM1LT5o41TvRXbe2KHki9fk3bMx63wCQXzfm4BYEtMNs088m5Vxyxq5hkhH7fllwEQXHqIb1OEGyfcwYAQ==",
-          "thinking": "The user wants a very long story about dragons and adventures. I'll create an epic fantasy tale with multiple characters, quests, dragons of different types, and exciting adventures. I'll make it detailed and engaging with proper story structure, character development, and world-building.",
+          "signature": "EtkDCm4IDhgCKkCI6DMyJjm29NgwnXzAlGRW47fckoqaRZgFLDLdv92ecxVAWMfg+w8lDJYV5SNF00cXIZwUZGPXLWhNOpDrhB6IMhpjbGF1ZGUtc29ubmV0LTQtNS0yMDI1MDkyOTgAQgh0aGlua2luZxIM4ishNrd3YCcP3l++GgyAsXbZPm2QrnojI4giMJjGO1i9HnF1osuVT7PmaDuhAxhbiwv1/AupAWXsb7wc+A3Nk6sLeAtNnO+2AGbqgSqYAuXlSxGg+6n81y1XbOqq/XPlxHgwq7t3oAmnP+eqw6OUCr7Wrhhk5oGtZAdaVjDvalXD+A7HPbgCZiuZOEq61mgAKGpMCVfOfSgslHP6GyECtsICBPw9SZ7f1l8itkzNOfz+ubb1Y6wOcxCzOphQQHi6UbX2ZZpaRaAa95luEyb00pPdLArCaSFPiwbtbLS5k6gP6MvRbm5EwXda1iKgFvvMfV9P6qA0mhw+u3iJiti4gOiTlsNeSKkI2r7gGX/qLDYVHg4eXFgv5YYl6m0j60+5mMRR/dP/TfX33S0LSoXfHHnk0Ha4Lb7BeYfUjM3RhM3VPJoMzvIEqNiH9AKyWGraur+0ALZ1QWKeLuQ67VynI6e5S3ExOOoYAQ==",
+          "thinking": "The user wants a very long story about dragons and adventures. I'll create an epic fantasy tale with multiple characters, exciting adventures, world-building, and of course, dragons. I'll make it engaging with conflict, character development, and a satisfying arc.",
           "type": "thinking"
         },
         {
-          "text": "# The Chronicles of Ember and Shadow\n\n## Part I: The Awakening\n\nThe morning mist clung to the Valley of Whispers like a silken shroud, obscuring the ancient ruins that dotted the landscape. Kael had never been this far north before, and as he urged his horse forward through the grey dawn, he couldn't shake the feeling that the stones themselves were watching him.\n\nHe was seventeen summers old, tall and lean with sun-darkened skin and hair the color of midnight. Around his neck hung a pendant—a simple thing of tarnished silver shaped like a dragon's claw—that had belonged to his mother. It was all he had left of her, all he had left of the life that had been torn away three months ago when the Shadow Riders had razed his village to the ground.\n\nKael's hands tightened on the reins as the memories threatened to overwhelm him. The screams. The flames. The terrible silence that followed. He had survived only because he'd been hunting in the eastern woods, returning to find nothing but ash and bone. The pendant had been clutched in his father's hand, thrust toward him with dying breath and a single word: \"Serpentine.\"\n\nThat word had brought him here, to these forsaken lands where dragons were said to have walked in ages past. Serpentine. He'd asked every traveling merchant, every wandering monk, every grizzled sellsword he'd encountered on his journey north. Most had laughed. Some had made signs against evil. But one—a bent old woman with eyes like chips of ice—had pointed him toward the Valley of Whispers and warned him that some answers carried prices too steep for mortal souls to bear.\n\nAs the sun finally broke through the mist, Kael caught his first glimpse of what he sought. Rising from the valley floor like the skeleton of some enormous beast was a structure of black stone, its towers twisted and broken, its walls carved with symbols that seemed to writhe in the morning light. The Serpentine Citadel. It had to be.\n\nHis horse whinnied nervously, refusing to go farther. Kael dismounted, tethered the animal to a weathered pine, and continued on foot. The ruins grew more imposing with each step, and he noticed details he'd missed from a distance—scorch marks on the stones, deep gouges that might have been made by claws, and bones. So many bones, half-buried in the earth, some as large as tree trunks.\n\nDragon bones.\n\nThe entrance to the citadel was a massive archway, its keystone carved in the shape of a serpent devouring its own tail. Kael hesitated at the threshold, every instinct screaming at him to turn back. But where would he go? His home was gone. His family was gone. The only thing he had left was this mystery, this final gift from his dying father.\n\nHe stepped inside.\n\nThe interior was darker than midnight, the air thick with dust and something else—a smell like sulfur and ancient fire. Kael fumbled for the torch he'd prepared, struck flint to steel, and ignited the oil-soaked cloth. The light pushed back the darkness, revealing a vast hall lined with pillars carved to resemble dragons in various poses—sleeping, flying, fighting. Between the pillars stood statues of warriors in archaic armor, their stone faces frozen in expressions of triumph or terror.\n\nKael's footsteps echoed as he moved deeper into the citadel. The hall branched into numerous corridors, but he was drawn toward the center, where a faint red glow emanated from what must have been the heart of the structure. The glow grew brighter as he approached, and the temperature rose until sweat beaded on his forehead.\n\nFinally, he emerged into a circular chamber so vast that his torchlight barely touched the walls. In the center of the chamber, suspended above a pit that glowed with subterranean fire, was a sphere of crystal easily twenty feet in diameter. And within that sphere, wreathed in what looked like frozen flames, was a dragon.\n\nKael's breath caught in his throat. He'd heard tales of dragons all his life—what child hadn't? But the stories described monsters, mindless beasts of destruction. The creature before him was something else entirely. Even in stasis, it radiated intelligence and purpose. Its scales were the color of molten copper, each one inscribed with runes that gleamed in the firelight. Its wings were folded against its serpentine body, and its eyes—even closed—seemed aware.\n\n\"Magnificent, isn't she?\"\n\nKael whirled, his hand dropping to the hunting knife at his belt. A figure emerged from the shadows—a woman, ancient beyond measure, her skin like parchment stretched over bone, her eyes glowing with the same red light as the pit. She wore robes that might once have been white but were now stained with ash and time.\n\n\"Who are you?\" Kael demanded, trying to keep his voice steady.\n\n\"I am the Keeper,\" the woman said, her voice like wind through dead leaves. \"Or at least, I was. I have waited here for three hundred years for someone to come, for someone with the blood-right to claim what was left in trust.\"\n\n\"Blood-right? I don't understand.\"\n\nThe Keeper moved closer, and Kael saw that she wasn't walking so much as gliding, her feet never quite touching the ground. \"Your mother was of the Draconis line, boy. The last of the Dragon Speakers, those who were bonded to the great wyrms before the Sundering. When the old empire fell and the dragons were betrayed, most were slain. A few were preserved, held in stasis against a time when they might be needed again.\"\n\nShe gestured toward the crystal sphere. \"This is Emberwing, last of the Copper Court, bound here by her own choice until one of the bloodline should come to wake her. Your mother was meant to be that person, but she chose a different life. Love, marriage, children. She hid what she was to keep you safe.\"\n\n\"The Shadow Riders,\" Kael said, the pieces falling into place. \"They knew. That's why they came.\"\n\n\"The Shadow Riders are servants of the old darkness, the force that broke the empire and cast down the dragons. They hunt any who might rekindle the ancient bonds. They found your mother, yes, but too late. She had already passed the blood-right to you.\"\n\nThe Keeper raised one skeletal hand, and the pendant around Kael's neck began to glow. He felt a warmth spreading through his chest, not painful but intense, like standing too close to a forge.\n\n\"The question is, boy, will you accept what your mother tried to spare you from? Will you wake the dragon and take up the mantle of Dragon Speaker? The bond cannot be broken once formed. You will be linked to Emberwing until one or both of you dies. You will share thoughts, share pain, share destiny. And you will be hunted for the rest of your days.\"\n\nKael looked at the dragon in her crystal prison. He thought of his village, of his family, of all the Shadow Riders had destroyed. He thought of how many others they must have killed over the centuries, how many they would kill in the years to come.\n\n\"What do I have to do?\" he asked.\n\nThe Keeper smiled, revealing teeth like yellowed ivory. \"Place your hand upon the crystal. Speak her name. Let your blood open the lock.\"\n\nKael approached the sphere. Up close, he could see that the dragon's scales rose and fell ever so slightly, as if she breathed. He pressed his palm against the crystal, which was warm to the touch, and drew his knife. The blade was sharp; it took only a small cut across his palm to draw blood.\n\nAs the red drops touched the crystal, they sizzled and evaporated into scarlet mist. The runes on the dragon's scales began to glow, brighter and brighter until Kael had to shield his eyes.\n\n\"Emberwing,\" he whispered, then louder: \"Emberwing!\"\n\nThe crystal shattered.\n\nFragments flew in all directions, dissolving into motes of light before they could strike Kael. The dragon fell, her massive body unfolding as wings snapped open with a sound like thunder. Kael stumbled back as Emberwing landed before him, shaking herself like a cat waking from sleep. She was even more magnificent in motion, her copper scales reflecting the firelight in a thousand shades of red and gold.\n\nAnd then her eyes opened. They were amber, flecked with gold, and as they focused on Kael, he felt something shift in his mind—a presence, alien yet familiar, ancient yet curious, powerful yet somehow... incomplete.\n\n*Who wakes Emberwing from her long dreaming?*\n\nThe voice resonated not in his ears but in his thoughts, and Kael realized he could sense the dragon's emotions—confusion, hope, wariness, and a deep, aching loneliness that spanned centuries.\n\n\"I am Kael,\" he said aloud, though he somehow knew she could hear his thoughts just as easily. \"Son of Maren of the Draconis line.\"\n\n*Maren.* The name carried weight, memories that weren't Kael's—a girl with hair like his own, laughing as a copper dragon soared above her, the bond between them shining like a thread of light. Then pain, severing, the girl walking away while the dragon screamed.\n\n\"My mother,\" Kael said softly. \"She was bonded to you?\"\n\n*Not to me. To Skyfire, my clutch-sister. The bond broke when Skyfire died in the Sundering, and the pain of it drove your mother mad with grief. She had the memory scoured from her mind by the white monks, chose to forget she had ever known dragons. I knew only that she lived, that the bloodline continued.*\n\n\"She's dead now,\" Kael said. \"They're all dead.\"\n\nEmberwing lowered her great head until one amber eye was level with Kael's face. *Then we are both orphans in a world that has forgotten us. But the old blood runs true, young Speaker. I feel it in you, the potential for the bond. Will you forge it? Will you accept me as yours, and be mine in return?*\n\nKael thought of saying no, of walking away, of trying to build some normal life far from magic and dragons and ancient wars. The thought lasted perhaps a heartbeat before it crumbled. There was no normal life for him now. There was only forward, only the path his mother had unknowingly set him on.\n\n\"Yes,\" he said. \"I accept.\"\n\nThe dragon inhaled deeply, and Kael smelled cinnamon and smoke. Then Emberwing breathed out, and the exhalation was not fire but light—pure golden light that enveloped Kael like a cocoon. He felt it sinking into his skin, into his bones, into the very core of his being. And with it came the dragon's essence, her memories, her power, her soul twining around his own like two trees growing together.\n\nPain. Incredible pain, as if every nerve in his body were being rewritten. He screamed, or thought he screamed, but the sound seemed distant. Then pleasure, a sense of completeness he had never known, as if he'd been half-blind his entire life and could suddenly see in full color. Power rushed through him, making his muscles spasm, his heart race, his mind expand to accommodate thoughts and senses that were utterly inhuman.\n\nAnd then it was done.\n\nKael collapsed to his knees, gasping. But he wasn't alone in his head anymore. Emberwing was there, a constant warm presence in the back of his mind, her thoughts distinct from his own yet accessible. He could feel her wings as if they were his own limbs, could sense the heat building in her throat where fire waited to be born.\n\n*Stand, my Speaker,* Emberwing said, and this time there was warmth in the words, affection even. *Our bond is forged. You are mine and I am yours until the world ends.*\n\nKael stood, and found it easier than it should have been, as if new strength flowed through his limbs. He looked at the dragon with new eyes and saw not a monster but a partner, a friend, something more profound than he had words to describe.\n\n\"The Keeper—\" he began, turning to where the ancient woman had stood. But she was gone, and where she had been was only a pile of ash, as if she had simply crumbled into dust the moment her vigil ended.\n\n*Her task is complete,* Emberwing said. *She was bound by oath to guard me, and that oath is now fulfilled. She has earned her rest.*\n\n\"What do we do now?\" Kael asked.\n\nThe dragon's thoughts took on a grim edge. *",
+          "text": "# The Last Dragonbond\n\n## Part One: The Awakening\n\nThe mountain range known as the Spine of the World had stood silent for three hundred years. Once, these peaks had echoed with the thunderous roars of dragons, when the ancient Dragonbonds united riders and their magnificent beasts in a partnership that had kept the realm of Aethermoor in balance. But those days were long past, surviving only in stories told by firelight and in the crumbling monuments scattered across the land.\n\nKael Stormwind knew these stories by heart. At seventeen, he had spent most of his life in the village of Thornhaven, nestled in the foothills of those very mountains, listening to his grandmother Elara recount tales of when she was young—when the last dragon rider, the legendary Silvaine Dawnbringer, had flown overhead on her magnificent silver dragon, Starwhisper. That had been sixty years ago, just before the dragons mysteriously vanished from the world.\n\n\"They're not gone,\" Elara would insist, her weathered hands gripping Kael's as her cloudy eyes stared into the distance. \"They're sleeping. Waiting. The world will need them again, and when it does, they'll return.\"\n\nMost people dismissed her words as the rambling of an old woman lost in nostalgia. But Kael believed. He had to believe, because the alternative—that magic and wonder had truly left the world forever—was too bleak to accept.\n\nHis life in Thornhaven was simple but fulfilling. He worked with his father Marcus in their forge, crafting horseshoes and farming tools, occasionally producing a blade for the village militia. His mother Lyra tended their small garden and sold herbs at the market. His younger sister Mira, fourteen and endlessly curious, spent her days helping the village healer, learning about medicines and poultices. It was a good life, peaceful and predictable.\n\nUntil the night the mountain spoke.\n\nKael was restless that evening, unable to sleep despite his exhaustion from a long day at the forge. The autumn air was crisp, and through his window, he could see the peaks of the Spine of the World illuminated by the full moon. Something pulled at him, an inexplicable feeling that made his chest tight and his fingers tingle.\n\nAt midnight, he gave up on sleep and dressed quietly, slipping out of the house without waking his family. The village was silent, only the occasional bark of a dog or hoot of an owl breaking the stillness. Kael walked through the empty streets, his feet carrying him toward the mountain path seemingly of their own accord.\n\nHe should have been afraid. The mountains were dangerous at night, home to wolves, bears, and worse things according to local legend. But fear never entered his mind. The pulling sensation grew stronger with each step, like an invisible thread connected to his heart, drawing him upward into the dark peaks.\n\nFor hours he climbed, far beyond where any sane person would venture at night, far beyond where he had ever been before. His breath came in white puffs, the temperature dropping as he gained altitude. The moon lit his path, and somehow his feet never stumbled, never slipped, as if something was guiding him.\n\nThen he saw it: a cave entrance, massive and ancient, carved with symbols that seemed to writhe and shift in the moonlight. The pulling sensation had become almost painful now, a desperate urgency that made his pulse race. Without hesitation, Kael entered the cave.\n\nThe interior was impossibly vast, a cathedral of stone that opened into a cavern so large he couldn't see the far walls. And there, in the center, partially buried under centuries of stone and dust, was a dragon.\n\nKael's breath caught. Even in stillness, even covered in debris, the creature was magnificent. Its scales were the deep blue-black of a midnight sky, each one the size of his hand and edged with what looked like silver starlight. The dragon's head alone was as large as his father's forge, with elegant horns that curved backward like a crown. Its wings, folded against its massive body, could have sheltered his entire house.\n\nIt wasn't breathing. For a moment, Kael's heart sank, thinking he had found only a corpse, a relic of a dead age. But then he noticed the faint glow beneath those dark scales, a rhythmic pulse of deep blue light, slow and steady.\n\nSleeping. Just as his grandmother had said.\n\nKael approached slowly, reverently, until he stood beside the dragon's enormous head. Up close, he could feel the power radiating from it, a warmth that defied the cave's chill, an energy that made the air itself seem to hum. His hand, trembling, reached out to touch the scales.\n\nThe moment his fingers made contact, the world exploded into light and sensation.\n\nImages flooded his mind: the world from above, clouds brushing past, the exhilaration of flight; battles against darkness, flames lighting up the night; the deep, unbreakable bond between dragon and rider, two souls intertwined; and then sorrow, profound and overwhelming, as dragons fell from the sky, as magic bled from the world, as those who remained chose to sleep rather than fade entirely.\n\nAnd through it all, a name: *Nethys.*\n\nThe dragon's eye opened, an orb of brilliant gold larger than Kael's head, focusing on him with an intelligence that was startlingly human and yet utterly alien. A voice resonated in his mind, deep and ancient, carrying the weight of centuries:\n\n*At last. The world calls, and I answer. You have awakened me, young one. Do you know what this means?*\n\nKael's voice shook as he whispered, \"The Dragonbond?\"\n\n*Yes. And no. The old bonds were forged through ritual and training, through tradition passed down across generations. Those ways are lost. What has happened here is rarer still—a natural bond, born of necessity and fate. Your soul called to mine across the veil of sleep. You are desperate for something, though you may not know what. And the world is desperate for protection, though it has forgotten from what.*\n\n\"I don't understand,\" Kael said, his mind reeling. \"I'm no one. Just a blacksmith's apprentice. I can't be a dragon rider.\"\n\n*You are who you are meant to be. Whether you are ready is another question entirely.* The dragon shifted, and Kael stepped back as the massive creature began to move for the first time in three centuries. Stone and dust cascaded off scales that gleamed like polished obsidian lit by starlight. Nethys rose to full height, head nearly touching the cavern ceiling, wings unfurling with a sound like thunder.\n\n*The darkness we once fought has not been destroyed, only waiting. It grows strong again, and this time, there are no Dragonbonds to stand against it. Until now.*\n\n\"What darkness?\" Kael asked, but even as the words left his mouth, he felt it—a wrongness at the edge of his new bond-enhanced awareness, something corrupt and hungry, far to the north.\n\n*The Void,* Nethys confirmed. *An ancient evil that seeks to unmake the world, to return all things to nothingness. Every few centuries, it gains enough strength to try again. The dragons and their riders have always stood as the shield against its incursions. But when the last great battle was fought three hundred years ago, we won at terrible cost. So many dragons fell. So many riders died. Those of us who survived were too few, too weak. We chose to sleep, to preserve ourselves, hoping that when the Void returned—and it always returns—the world would be ready.*\n\n\"But we're not ready,\" Kael said, understanding dawning. \"No one even believes dragons are real anymore. The fighting orders disbanded. The old fortresses are ruins.\"\n\n*Precisely. Which is why we must not only face the Void, but rebuild everything that was lost. You must find the others.*\n\n\"Others? There are more dragons?\"\n\n*Seven others sleep in hidden places across the realm. And if you have been called to wake me, others will be called to them. We must find these new riders before the Void finds them—or worse, before it finds the sleeping dragons and destroys them while they are vulnerable.*\n\nThe magnitude of what Nethys was describing threatened to overwhelm Kael. Just hours ago, his greatest concern had been whether he could perfect his father's technique for quenching steel. Now he was apparently destined to save the world from an ancient evil, to find other dragon riders, to rebuild an order that had been dead for centuries.\n\n\"I can't do this,\" he said, panic rising in his chest. \"I'm seventeen. I've never even been beyond Thornhaven. I don't know how to fight, how to use magic, how to do any of what you're describing.\"\n\n*You can. And you will. Because you must.* Despite the firmness of the words, Kael felt warmth and reassurance flowing through the bond. *You will not be alone. I will teach you what I can. And you are stronger than you know—the bond would not have formed otherwise.*\n\nKael took a shaky breath, trying to calm his racing thoughts. \"If I do this... if we do this... what happens to my family? My village? I can't just disappear.\"\n\n*You must tell them the truth. Some will believe, some will not. But the Void's corruption is already spreading. Within months, perhaps weeks, it will reach even this remote village. Your family will be safer if we act now than if we hide and wait.*\n\nThe dragon was right, Kael realized. He had felt that wrongness to the north, a sensation like frostbite in his mind. And it was growing.\n\n\"When do we start?\" he asked.\n\nFor the first time, he felt something like approval radiate from Nethys. *Now. But first, you must ride. A dragon and rider must learn to move as one.*\n\nKael looked up at the creature's towering form and couldn't help but laugh, though it came out slightly hysterical. \"I don't suppose there's a saddle?\"\n\n*Saddles are for those who lack the bond. You need only hold on and trust.*\n\nThe dragon lowered its massive body, and Kael—heart pounding, hands sweating, convinced he had gone completely insane—climbed onto Nethys's back. The scales were warm beneath his hands, and as he settled into place at the base of the dragon's neck, he felt the bond strengthen, their two hearts beating in synchronization.\n\n*Remember,* Nethys said, *the sky was our domain long before humans learned to cross it. Trust in me, and we will show you wonders you have never imagined.*\n\nAnd with that, the dragon launched forward, racing through the cave toward the entrance. Kael gripped tightly as wind rushed past his face, his stomach lurching. Then they were out of the cave, and with two massive beats of those enormous wings, they were airborne.\n\nKael couldn't help it—he screamed. But his scream transformed from terror to exhilaration as they soared upward, leaving the mountainside behind. The world spread out below him, vast and beautiful, lit by the moon and painted in shades of silver and shadow. The village was a cluster of tiny lights far below. The forests spread like a dark carpet. Mountains marched toward the horizon in every direction.\n\n*This is freedom,* Nethys said. *This is what was lost. This is what we fight to preserve.*\n\nThey flew for hours, Kael gradually learning to lean with Nethys's movements, to anticipate the shifts and rolls, to become part of the flight rather than just a passenger. The bond between them grew stronger with each passing moment, until Kael could barely tell where his senses ended and the dragon's began. He could feel the air currents as Nethys felt them, could sense the subtle adjustments of wing and tail, could even glimpse faint traces of magic in the world below—ley lines of power that had gone dormant but were not entirely dead.\n\nAs dawn began to paint the eastern sky in shades of rose and gold, Nethys turned back toward Thornhaven. *You must speak to your family. Gather what supplies you can. We leave by nightfall.*\n\n\"Where are we going?\" Kael asked.\n\n*North, to the ruins of Dragonwatch Keep. It was the center of the old Dragonbond order. If any records survived, if any knowledge remains of where the other dragons sleep, that is where we will find it.*\n\nThey landed in the forest outside the village just as the sun crested the horizon. Kael slid down from Nethys's back, his legs shaky, his mind spinning with everything that had happened. In one night, his entire life had changed.\n\n*Go,* Nethys urged. *I will wait here. The world is not ready to see a dragon in",
           "type": "text"
         }
       ],
-      "id": "msg_018wcEJu34B6m53HqCnRt8ao",
+      "id": "msg_01JECMaoNrBCHbcUAjbKwQMy",
       "model": "claude-sonnet-4-5-20250929",
       "role": "assistant",
+      "stop_details": null,
       "stop_reason": "max_tokens",
       "stop_sequence": null,
       "type": "message",
@@ -65,88 +71,95 @@
         },
         "cache_creation_input_tokens": 0,
         "cache_read_input_tokens": 0,
-        "input_tokens": 44,
+        "inference_geo": "not_available",
+        "input_tokens": 45,
         "output_tokens": 3000,
+        "output_tokens_details": {
+          "thinking_tokens": 58
+        },
         "service_tier": "standard"
       }
     },
     "headers": {
-      "anthropic-organization-id": [
-        "a71659e7-a922-4ff7-99de-f3ba615face1"
-      ],
+      "anthropic-organization-id": "[REDACTED:anthropic-organization-id]",
       "anthropic-ratelimit-input-tokens-limit": [
-        "450000"
+        "800000"
       ],
       "anthropic-ratelimit-input-tokens-remaining": [
-        "450000"
+        "800000"
       ],
       "anthropic-ratelimit-input-tokens-reset": [
-        "2025-11-02T17:05:09Z"
+        "2026-05-29T18:01:27Z"
       ],
       "anthropic-ratelimit-output-tokens-limit": [
-        "90000"
+        "160000"
       ],
       "anthropic-ratelimit-output-tokens-remaining": [
-        "87000"
+        "160000"
       ],
       "anthropic-ratelimit-output-tokens-reset": [
-        "2025-11-02T17:06:24Z"
+        "2026-05-29T18:02:45Z"
       ],
       "anthropic-ratelimit-requests-limit": [
-        "1000"
+        "2000"
       ],
       "anthropic-ratelimit-requests-remaining": [
-        "999"
+        "1999"
       ],
       "anthropic-ratelimit-requests-reset": [
-        "2025-11-02T17:05:08Z"
+        "2026-05-29T18:01:25Z"
       ],
       "anthropic-ratelimit-tokens-limit": [
-        "540000"
+        "960000"
       ],
       "anthropic-ratelimit-tokens-remaining": [
-        "537000"
+        "960000"
       ],
       "anthropic-ratelimit-tokens-reset": [
-        "2025-11-02T17:05:09Z"
+        "2026-05-29T18:01:27Z"
       ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "9985370839b49d42-ORD"
+        "a037677fecab3443-ORD"
       ],
       "connection": [
         "keep-alive"
+      ],
+      "content-security-policy": [
+        "default-src 'none'; frame-ancestors 'none'"
       ],
       "content-type": [
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:06:22 GMT"
+        "Fri, 29 May 2026 18:02:45 GMT"
       ],
       "request-id": [
-        "req_011CUjRhDbJXtBbUMSG7hJpc"
-      ],
-      "retry-after": [
-        "52"
+        "req_011CbXJEg8QiEaoa4Z2LPDSk"
       ],
       "server": [
         "cloudflare"
       ],
+      "set-cookie": "[REDACTED:set-cookie]",
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
+      ],
+      "traceresponse": [
+        "00-0cb6a986ed637f3d11c479ed80acee1f-2e1b3df3f408ed69-01"
       ],
       "transfer-encoding": [
         "chunked"
       ],
-      "x-envoy-upstream-service-time": [
-        "74219"
+      "vary": [
+        "Accept-Encoding"
       ],
       "x-robots-tag": [
         "none"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

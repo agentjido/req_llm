@@ -1,4 +1,6 @@
 {
+  "model_spec": "anthropic:claude-opus-4-1-20250805",
+  "provider": "anthropic",
   "request": {
     "body": {
       "b64": "eyJtYXhfdG9rZW5zIjo2NDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IldoYXQncyB0aGUgd2VhdGhlciBsaWtlIGluIFBhcmlzLCBGcmFuY2U/Iiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiY2xhdWRlLW9wdXMtNC0xLTIwMjUwODA1Iiwic3RyZWFtIjpmYWxzZSwidGhpbmtpbmciOnsiYnVkZ2V0X3Rva2VucyI6MTAyNCwidHlwZSI6ImVuYWJsZWQifSwidG9vbHMiOlt7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsImlucHV0X3NjaGVtYSI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9LCJ1bml0Ijp7ImVudW0iOlsiY2Vsc2l1cyIsImZhaHJlbmhlaXQiXSwidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9LCJuYW1lIjoiZ2V0X3dlYXRoZXIifSx7ImRlc2NyaXB0aW9uIjoiVGVsbCBhIGZ1bm55IGpva2UiLCJpbnB1dF9zY2hlbWEiOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7InRvcGljIjp7ImRlc2NyaXB0aW9uIjoiVG9waWMgZm9yIHRoZSBqb2tlIiwidHlwZSI6InN0cmluZyJ9fSwidHlwZSI6Im9iamVjdCJ9LCJuYW1lIjoidGVsbF9qb2tlIn0seyJkZXNjcmlwdGlvbiI6IkdldCB0aGUgY3VycmVudCB0aW1lIiwiaW5wdXRfc2NoZW1hIjp7InByb3BlcnRpZXMiOnt9LCJ0eXBlIjoib2JqZWN0In0sIm5hbWUiOiJnZXRfdGltZSJ9XX0="
@@ -66,6 +68,9 @@
       ]
     },
     "headers": {
+      "accept": [
+        "application/json"
+      ],
       "accept-encoding": [
         "gzip"
       ],
@@ -79,7 +84,7 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ],
       "x-api-key": "[REDACTED:x-api-key]"
     },
@@ -90,8 +95,8 @@
     "body": {
       "content": [
         {
-          "signature": "Eu8ECkYICRgCKkBMd7qgYQWUM+t0WY4j+14AWDzzzLJFnmodbnQ2oV6eYyr77YJNzSgy74zGQrtmjzxOphoZZWbRBBlU9g8n9E3TEgxAF8ECLIY5JfiRsX8aDOxgJ1AmoZEtuFgyCiIwhzxFkLQn87aHgvtgwUNCkc1Bi74VO8vGguDMPtZscC9xMtCqRy4TRuK8R+iTyT/SKtYDVKHbsiicQC/XwokeGRt6n+TWarAtSqD4IE+D/xXJvUPc1baA8LDLx3oG6xnlmbmnY43BIgB97holaAaDl3GJUDbfudbP9d83bqlMetIv5ZLHPIebGbCLUAYCNjEzAwc3Vn3jxAM7+6NydAKGfUl8c2l5W3YvBkSmMxbpbxyczQRpA1K8+FRHysPJ/2JjjvhwXdBLaCrUX22FhaWICEMKvqB4l4KbKeXeDnsc3ZMR5RjuGXGPtdFT8jHxxod29V4qN8N5MsxhdcfQO4/gReZwUOh690V4R9xkyTm7ZtWprHWyR1MPEUJDUgnCIiE4Sfo70LE2/g5tdmceCul3tqPr9WDvLrBe/78xYS5WCqnpnYqyMDblYx0OjfbYzPX85Je0lMbkc0hr1A/B9isJOkPhwdPBPG83eiG0vCUea+wRo0I4DAT3OmgLVLo8ihgM9cl4pSSk2hlevh3SB89VZYLN3mFr72gBHaH7f4Bnch17sRn91+4BtcD6cupFiewB+AH1Iuolmh7j7XMN0Ti8RFd10gA5J+/icKAfxJHiiPUHioq+kR6jQnhzxFFV8cAANdiRJiGlIWtKnGuWLpCNo/+k0B5G8Q7VsUgYNCtSLKCj4pjqsBeM2+EYAQ==",
-          "thinking": "The user is asking about the weather in Paris, France. I have a get_weather function available that can provide current weather information for a location. The required parameter is \"location\" and there's an optional \"unit\" parameter (celsius or fahrenheit). Since the user didn't specify a unit, I won't include it (as per the instructions about not making up values for optional parameters). I'll call the function with \"Paris, France\" as the location.",
+          "signature": "Eu8ECmwIDhgCKkCvjj3YNArQSYgkTkA7kCkmrxcWJWtBMsX4cJVX0F5QROm9nrdDQdMy9KNIJUjnkPJh//CqdKP8MZCHLrFgnaVFMhhjbGF1ZGUtb3B1cy00LTEtMjAyNTA4MDU4AEIIdGhpbmtpbmcSDI3fngwxUu11Fyw9ExoMvOdIiDbREw6fTGa1IjC1tDaemkQWnEeT8WEGphBH4+x3nTNVjFGcXcKatzs7r1hEQCPFE+SpB763CsvwN04qsAO2RCRpD5F85c8xAIeWesZqDFs3nt2RXdNpm7txUyoE3r807iBRPFAyRWVOScwYX0mKKAI68XJEJb6IOIVZ6tTDwfEQxS618L0M0LyF6N0M4skdTC1tjQ2dvVvN0KrQMUHFU+B4Dxmu5PlH/MczItohnnjVKpCHzBN+UXzbERY33Ze7+Oe+LjSusOnSn9g4qyT1x6N3Ukt2itbcixeht0EU9LhM5tAHGFnEjNdV1PmwYCCvP+wxQVoZsN+PLyL+yp8LZMmGiOdW8ZaM67VX1iNDadtvxzKyRVjaqvBpyRmwf2N4P0zNmJKgEruxr3Bz8/LRpyba/zSNGcJLB97kCdlRnuX6UnTVZEPY7G0lL1JOL39+6D9xcPsuz/pyVoUymhuOnF3XzDzkP1ELEtJrRF04kl7mFeXtPCk7vbTt3c1N4sb7xJNJb3kr+YRdAP2+ZVcCp1sx5Z9XxjordYhHpOozE9hfmE6wbQqn0HyK8N9X+k2Gb2q8QcZMv/jArGhx4xchrHl35X7XjduHm3c0CSiQ7mM32tK2TwU6rJFgIB300Ops7KCGqlbUNKVmjJc+YTQYAQ==",
+          "thinking": "The user is asking about the weather in Paris, France. I have access to the get_weather function which can provide current weather information for a location. The required parameter is \"location\" and the optional parameter is \"unit\" (celsius or fahrenheit). \n\nThe user has specified the location as \"Paris, France\", so I have all the required information to make the function call. I'll use the location as provided.",
           "type": "thinking"
         },
         {
@@ -99,7 +104,10 @@
           "type": "text"
         },
         {
-          "id": "toolu_01A763UJXurAKpKFk2oWAb17",
+          "caller": {
+            "type": "direct"
+          },
+          "id": "toolu_01CznaaRh5eCLM6UBt2z32D3",
           "input": {
             "location": "Paris, France"
           },
@@ -107,9 +115,10 @@
           "type": "tool_use"
         }
       ],
-      "id": "msg_01LPqSK1r6xahAAu2bTvjvQ3",
+      "id": "msg_01TLyriEwgM5DRqVfj1HahRF",
       "model": "claude-opus-4-1-20250805",
       "role": "assistant",
+      "stop_details": null,
       "stop_reason": "tool_use",
       "stop_sequence": null,
       "type": "message",
@@ -120,88 +129,95 @@
         },
         "cache_creation_input_tokens": 0,
         "cache_read_input_tokens": 0,
-        "input_tokens": 689,
-        "output_tokens": 173,
+        "inference_geo": "not_available",
+        "input_tokens": 690,
+        "output_tokens": 164,
+        "output_tokens_details": {
+          "thinking_tokens": 92
+        },
         "service_tier": "standard"
       }
     },
     "headers": {
-      "anthropic-organization-id": [
-        "a71659e7-a922-4ff7-99de-f3ba615face1"
-      ],
+      "anthropic-organization-id": "[REDACTED:anthropic-organization-id]",
       "anthropic-ratelimit-input-tokens-limit": [
-        "450000"
+        "5000000"
       ],
       "anthropic-ratelimit-input-tokens-remaining": [
-        "450000"
+        "5000000"
       ],
       "anthropic-ratelimit-input-tokens-reset": [
-        "2025-11-02T17:06:57Z"
+        "2026-05-29T17:52:23Z"
       ],
       "anthropic-ratelimit-output-tokens-limit": [
-        "90000"
+        "400000"
       ],
       "anthropic-ratelimit-output-tokens-remaining": [
-        "90000"
+        "400000"
       ],
       "anthropic-ratelimit-output-tokens-reset": [
-        "2025-11-02T17:07:00Z"
+        "2026-05-29T17:52:26Z"
       ],
       "anthropic-ratelimit-requests-limit": [
-        "1000"
+        "2000"
       ],
       "anthropic-ratelimit-requests-remaining": [
-        "999"
+        "1999"
       ],
       "anthropic-ratelimit-requests-reset": [
-        "2025-11-02T17:06:56Z"
+        "2026-05-29T17:52:22Z"
       ],
       "anthropic-ratelimit-tokens-limit": [
-        "540000"
+        "5400000"
       ],
       "anthropic-ratelimit-tokens-remaining": [
-        "540000"
+        "5400000"
       ],
       "anthropic-ratelimit-tokens-reset": [
-        "2025-11-02T17:06:57Z"
+        "2026-05-29T17:52:23Z"
       ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "998539ac7e3ce1f7-ORD"
+        "a0375a3aac4510d7-ORD"
       ],
       "connection": [
         "keep-alive"
+      ],
+      "content-security-policy": [
+        "default-src 'none'; frame-ancestors 'none'"
       ],
       "content-type": [
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:07:00 GMT"
+        "Fri, 29 May 2026 17:52:26 GMT"
       ],
       "request-id": [
-        "req_011CUjRqCGejgXYxeXXBrAY8"
-      ],
-      "retry-after": [
-        "3"
+        "req_011CbXHYcQJucBu81sEZ5mn8"
       ],
       "server": [
         "cloudflare"
       ],
+      "set-cookie": "[REDACTED:set-cookie]",
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
+      ],
+      "traceresponse": [
+        "00-74a95dee9d10121a31301e3fe53b39c7-aa7826b9941271ae-01"
       ],
       "transfer-encoding": [
         "chunked"
       ],
-      "x-envoy-upstream-service-time": [
-        "4001"
+      "vary": [
+        "Accept-Encoding"
       ],
       "x-robots-tag": [
         "none"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

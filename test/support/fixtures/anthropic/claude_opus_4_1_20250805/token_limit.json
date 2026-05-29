@@ -1,4 +1,6 @@
 {
+  "model_spec": "anthropic:claude-opus-4-1-20250805",
+  "provider": "anthropic",
   "request": {
     "body": {
       "b64": "eyJtYXhfdG9rZW5zIjozMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IldyaXRlIGEgdmVyeSBsb25nIHN0b3J5IGFib3V0IGRyYWdvbnMgYW5kIGFkdmVudHVyZXMiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJjbGF1ZGUtb3B1cy00LTEtMjAyNTA4MDUiLCJzdHJlYW0iOmZhbHNlLCJ0aGlua2luZyI6eyJidWRnZXRfdG9rZW5zIjoxMDI0LCJ0eXBlIjoiZW5hYmxlZCJ9fQ=="
@@ -19,6 +21,9 @@
       }
     },
     "headers": {
+      "accept": [
+        "application/json"
+      ],
       "accept-encoding": [
         "gzip"
       ],
@@ -32,7 +37,7 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ],
       "x-api-key": "[REDACTED:x-api-key]"
     },
@@ -43,18 +48,19 @@
     "body": {
       "content": [
         {
-          "signature": "ErQDCkYICRgCKkBqNaOCMmPGoCfdwjMezFAbKq4y92Znm5KkuN50TCLWyhuMPiXxJfDDvRMHaJ2cXLhSbecqWX2RjHyeh4J+nyP0EgzCSoUC6ZLo+WTlkHwaDNS3S02brd1L75qC8yIwXbmrP2eQOyg7SA5RA9WVmsBKRXr3yXvV4rfI78PUf9lduqI2DN/7suUDrtmiTnYrKpsC23WFulxefeGLMVXXceLB/EVE2CUoJzsnAXO8MR0WVNlYNiPX30dYS7xKSt4SlKAAGwxg7+Jf2gW8jD94FRHfVcughPYc+2nUVAza6jLVbh1XYcN2j4PRPPe2itzstAOCH1RpVAURHomjMff0hV6iFjqsQq/vWBuDaJKqd0iaQ/cubZfy9ls88Z10sPXFW6OW3tbi1z0/chPg36+D8Dpjv6ki5USMWv+7FKVNk23MxSfJcbRsH3qxRX1TVpvUUIu+wgqm5MyDYCNlnmnCdLQKZkJcj5Cl3WwG1WkHEYGrlIBISkpzjTeKQUGx+xGZuUfKJb5yNa3bvh8DIdnmhfParZ/RMALJZ/rboxaeX/AdpiEvJDIHQYUtH6874RgB",
-          "thinking": "The user wants a very long story about dragons and adventures. I'll create an epic fantasy tale with multiple chapters, rich world-building, character development, and various adventure elements. I'll aim for a substantial length while keeping it engaging throughout.",
+          "signature": "EtgDCmwIDhgCKkBbh8SgMhPEh3lxtZwVfmIf5ndSxSeQuFCd0J12lgQKQoq2Hqg+nlcEfyoNZRedB+X7ffBtfq6TOmCGOqLcceaGMhhjbGF1ZGUtb3B1cy00LTEtMjAyNTA4MDU4AEIIdGhpbmtpbmcSDFNBpC117+FYNl4zahoMXT4/sAT2UCqziz3GIjB52ykVJvpm9h1NUT1NfsZXE2S7uWPIB/XFNoNX+HbcukQJ8xcZ8xCwIb40+DcyhDsqmQIowiVaVihzhXN1fs9hFqIf6bbNi2BvX+rBKIO60/ELvVfqCSHpfwaaWYgP1hEwP7o927KPwbcpL2NA0mG6TRspsB8IGPBlipGYYUMNyM1u0Vb0FHY9+dq5ktH3absXH/E7q7zAd5R6+sWICRXpcDjR8Q1zsXTZxGZfyhYWrpSzCJubFuxmhxd+/6kKmLue3JPKbxxnmYVk8FUr6lFnOD7RBTneuXFMw4LQvX+nE2+B3vFZ28TA4hVlsK9O224o9n6+14Zn9OemafQRDFmaogDnGG0Tn4DTGiNddgd7LOnysfoc3x8BHVzgsyjxV4WQE4vGW6VrUF+fbIfb14SAWVHUD/ADOgN3OQE4Wvm5U/F4UvsRBJsguaYmZBgB",
+          "thinking": "The user is asking for a very long story about dragons and adventures. I'll create an engaging fantasy story with multiple chapters, interesting characters, and an epic quest involving dragons. I'll aim for a substantial length while keeping it engaging throughout.",
           "type": "thinking"
         },
         {
-          "text": "# The Chronicles of the Crimson Wing\n\n## Part One: The Awakening\n\nThe morning mist clung to the mountainside like a shroud when Kaelen first discovered the ancient map. He had been exploring the abandoned watchtower on the edge of Thornwick village, a place where local children dared each other to venture but rarely stayed long enough to truly explore. The tower had stood empty for three generations, its stone walls crumbling and overtaken by ivy, yet something about it had always called to him.\n\nKaelen was different from the other villagers. Where they saw only their small valley, their fields of barley and their modest homes, he saw the peaks beyond and wondered what lay past them. His grandmother, before she passed, had filled his head with stories of the old days—when dragons soared through the skies and heroes carried enchanted swords. The other villagers dismissed these as fairy tales, but Kaelen had always sensed truth hidden within the legends.\n\nThe map was tucked behind a loose stone in the tower's highest room, wrapped in oilcloth that had preserved it remarkably well. As he unfolded it carefully, his heart raced. The parchment showed lands he had never seen, mountains that dwarfed those surrounding Thornwick, and most remarkably, locations marked with the ancient symbol for dragons—real dragons.\n\nAccording to the map, five great dragons still lived in the world, each guarding something called a \"Shard of Eternity.\" The shards, according to the cryptic notes written in the margins, were fragments of an ancient artifact that had once maintained the balance between the realm of humans and the realm of magic. When the artifact was broken centuries ago, the magic had begun to fade from the world, and with it, the dragons had retreated into hiding.\n\nKaelen spent weeks studying the map in secret, cross-referencing it with the few geographical texts in the village elder's library. The closest dragon, according to his calculations, dwelt in the Whispering Peaks, a mountain range just three days' journey north. It was marked with a symbol of a silver dragon and the word \"Sylvara\" written in the old tongue.\n\nThe decision to leave wasn't easy. Kaelen had responsibilities—his mother ran the village inn alone since his father's death, and his younger sister Mira looked up to him. But the pull of adventure, the possibility that the stories were true, proved too strong to resist. He left a note explaining he would return, packed supplies for a week's journey, and slipped away before dawn with the map secured in a leather tube across his back.\n\nThe journey to the Whispering Peaks tested him immediately. The well-worn paths near Thornwick gave way to deer trails, then to no trails at all. He climbed rocky slopes, forded icy streams, and spent nights huddled in whatever shelter he could find. On the second night, wolves circled his campfire, their eyes glowing in the darkness. He stayed awake, feeding the fire and gripping his father's old sword, until dawn drove them away.\n\nBy the third day, he had entered the Whispering Peaks proper. The mountains earned their name from the constant wind that whistled through the narrow passes and valleys, creating an endless, ethereal song. The map led him higher and higher, past the tree line into a realm of rock and snow. His lungs burned in the thin air, and several times he had to rest, wondering if he was chasing nothing more than a fever dream.\n\nThen he saw it—a cave entrance carved into the mountainside, so perfectly concealed that he would have missed it if the map hadn't been precise in its directions. Ancient runes framed the opening, their meaning lost to time but their power still palpable. Kaelen felt the hair on his arms rise as he approached.\n\nThe cave tunnel descended at a gentle slope, and surprisingly, grew warmer rather than colder as he progressed. Luminescent crystals began to appear in the walls, providing a soft blue light that made his torch unnecessary. The tunnel opened into a vast chamber, and Kaelen's breath caught in his throat.\n\nSylvara was magnificent and terrible to behold. The dragon's scales were like liquid silver, each one catching and reflecting the crystal light in mesmerizing patterns. She was coiled in the center of the chamber, her head resting on her forelegs, but even in repose, she was larger than any building in Thornwick. Her eyes opened as Kaelen entered—ancient eyes, the color of winter storms, full of intelligence and sorrow.\n\n\"So,\" the dragon spoke, her voice resonating not just in Kaelen's ears but in his mind itself, \"after seventy years, a human finally arrives. Have you come to slay me, young one? To claim glory and gold like the heroes of old?\"\n\nKaelen found his voice, though it trembled. \"No, Lady Sylvara. I've come because I found a map. Because I believe the stories of dragons are true, and because...\" he paused, gathering courage, \"because the map speaks of Shards of Eternity, and a broken balance that needs to be restored.\"\n\nThe dragon raised her great head, studying him with those storm-cloud eyes. \"You speak of things most humans have forgotten. Things they chose to forget. Tell me, young truth-seeker, do you know what you're truly asking? Do you understand what collecting the shards would mean?\"\n\n\"I know the magic is fading from the world,\" Kaelen replied. \"I know that without it, the dragons will eventually disappear entirely, and with them, wonders we can't even imagine. I may not understand everything, but I know that something precious is being lost, and if there's a chance to save it, shouldn't we try?\"\n\nSylvara was quiet for a long moment, then she laughed—a sound like wind chimes made of silver. \"You remind me of another young human who came to me once, long ago. Very well, Kaelen of Thornwick—yes, I know your name; I can see it in your thoughts—I will tell you the true story of the Shards of Eternity, and then you can decide if you still wish to pursue this quest.\"\n\n## Part Two: The History of the Shards\n\nSylvara's tale began in an age when the world was young and the boundaries between realms were fluid. Dragons were not merely creatures then, but guardians of the cosmic balance, keepers of the ancient pact between order and chaos. The Eternal Crystal, from which the shards were later broken, was their greatest creation—a focusing lens for the raw magic that flowed between worlds.\n\n\"For a thousand years, the Crystal maintained harmony,\" Sylvara explained, her voice taking on the cadence of an ancient storyteller. \"Humans could touch magic safely, learning from it, growing with it. Dragons walked freely among your kind, sharing wisdom and protecting the innocent. It was a golden age, the likes of which the world has not seen since.\"\n\nBut golden ages, Kaelen learned, inevitably attract those who would corrupt them. A human sorcerer named Malthorion, brilliant but consumed by ambition, became convinced that the Crystal's power was being wasted. Why maintain balance, he argued, when humans could use that power to reshape the world entirely? He gathered followers, promising them godhood, and launched an assault on the Dragon Sanctum where the Crystal was kept.\n\n\"The battle was catastrophic,\" Sylvara continued, her eyes distant with memory. \"Malthorion had learned dark magic, powers that should never have been touched. In the end, the Dragon King, Aurethion the Golden, made a desperate choice. Rather than let the Crystal fall into Malthorion's hands, he shattered it into five shards and scattered them across the world. Each shard was entrusted to a different dragon, hidden away until the time came when they could be safely reunited.\"\n\nThe shattering of the Crystal had consequences neither side anticipated. Without its focusing power, raw magic became wild and dangerous. Many humans who had relied on magic were killed or driven mad by the chaotic energies. The dragons, their very existence tied to the magical realm, found themselves growing weaker. They retreated from human lands, becoming legends, then myths, then forgotten entirely except in the stories grandmothers told.\n\n\"And Malthorion?\" Kaelen asked.\n\n\"Destroyed by the very forces he sought to control,\" Sylvara replied. \"But his followers scattered, and some say their descendants still exist, still searching for the shards, still believing they can claim the power their master sought.\"\n\nKaelen absorbed this history, understanding now the weight of what he was considering. \"But if the shards were scattered to prevent their misuse, why does the map exist? Why mark their locations?\"\n\nSylvara's expression, insofar as a dragon could be said to have expressions, grew thoughtful. \"The map was created by Aurethion himself, in his final days. He foresaw that eventually, the magic would fade so much that even we dragons would perish, and with us, any hope of ever restoring the balance. The map was his contingency—a guide for someone worthy to find the shards and reunite them, but only when the need became desperate. That time, young Kaelen, is now.\"\n\nThe dragon moved for the first time since Kaelen had entered, uncoiling her massive form and revealing what she had been protecting. There, nestled in a bed of silver scales shed over decades, lay a shard of crystal no larger than Kaelen's fist. It pulsed with inner light, sometimes blue, sometimes silver, sometimes colors that had no names. Just looking at it made Kaelen's eyes water and his mind swim with possibilities.\n\n\"This is the Shard of Wisdom,\" Sylvara said. \"It has been my charge for three hundred years. But I am old now, even for a dragon, and my strength wanes. If the shards are not reunited soon, I will fade, and this shard will be lost forever. The question is: are you worthy to carry it?\"\n\n## Part Three: The Trial of Wisdom\n\nBefore Sylvara would entrust the shard to Kaelen, she insisted on testing him. Not a test of strength or combat prowess, but of character and wisdom. The trial took the form of three challenges, each designed to reveal the truth of Kaelen's heart.\n\nThe first challenge was the Mirror of Truth. Sylvara breathed upon the chamber wall, and the stone became reflective as still water. But instead of showing Kaelen's physical form, it showed his desires, his fears, his hidden thoughts laid bare.\n\n\"Look upon yourself without flinching,\" Sylvara commanded. \"See your true nature and tell me what you find.\"\n\nKaelen approached the mirror with trepidation. In its surface, he saw himself not as the would-be hero he imagined, but as he truly was—a young man filled with doubt, running from the mundane life of his village as much as running toward adventure. He saw his guilt at leaving his mother and sister, his fear that he would fail and return home in shame, his secret hope that completing this quest would make him special, important, worthy of the stories told about heroes.\n\nBut he also saw something else—a genuine love for the wonder in the world, a true desire to preserve something beautiful even if it brought him no glory, and a courage that, while imperfect, was honest.\n\n\"I see someone who is afraid but willing to act despite that fear,\" Kaelen said finally. \"I see selfishness mixed with selflessness, doubt mixed with determination. I am not pure of heart or perfect in purpose, but I am here, and I am trying.\"\n\nSylvara nodded approvingly. \"An honest answer. Those who claim to see only virtue in the Mirror of Truth are liars or fools. You have passed the first challenge.\"\n\nThe second challenge was the Riddle of Sacrifice. Sylvara presented Kaelen with a vision—an illusion so perfect it felt entirely real. In it, he stood in Thornwick as it burned. His mother and sister were trapped in the inn, calling for help. But in his other hand, he held the assembled Eternal Crystal, complete and ready to restore the world's magic. If he went to save his family, the Crystal would shatter again, lost forever. If he preserved the Crystal, his family would perish.\n\nThe vision was so vivid Kaelen could smell the smoke, hear the crackling flames, see the tears on Mira's face. His heart tore in two directions, and for a long moment, he stood paralyzed.\n\nThen he spoke: \"This is a false choice. Heroes in stories always find a third way, but sometimes in real life, there isn't one. If this were real, I would save my family. The world survived without the Crystal for centuries; it could survive longer. But I would spend the rest of my life seeking another way to restore it, another path to save the magic. Perhaps that makes me unworthy, but I cannot be the kind of person who sacrifices loved ones for an abstract greater good.\"\n\nThe vision dissolved, an",
+          "text": "# The Chronicles of the Dragonstone Prophecy\n\n## Part One: The Awakening\n\n### Chapter 1: The Village of Ashenholt\n\nThe morning mist clung to the valley of Ashenholt like a shroud, obscuring the humble wooden houses that dotted the landscape. Kael Thorne stood at the edge of his family's wheat field, watching the sun slowly burn through the fog, revealing the distant mountains that formed the natural barrier of their isolated world. At seventeen, he had lived his entire life in this quiet farming village, knowing nothing of the world beyond those peaks.\n\nBut on this particular morning, something was different. The air itself seemed to thrum with an energy he couldn't explain, making the hair on his arms stand on end. The horses in the nearby stable were restless, whinnying and stamping their hooves against the packed earth. Even the typically placid chickens seemed agitated, clustering together and clucking nervously.\n\n\"Kael!\" his mother's voice called from their cottage. \"Breakfast is ready!\"\n\nHe turned to head back, but a strange glint caught his eye from the freshly plowed field. Curious, he walked over and knelt down, brushing away the dark soil. His fingers struck something hard and smooth. As he excavated it carefully, his breath caught in his throat. It was a scale, but unlike anything he'd ever seen—as large as his palm, it shimmered with an iridescent quality that shifted from deep purple to midnight blue to emerald green as he tilted it in the morning light.\n\n\"Dragon scale,\" whispered a voice behind him.\n\nKael spun around to find an old woman standing there, though he was certain the field had been empty moments before. She wore traveling clothes of deep gray, and her silver hair was braided with beads that looked like tiny stars. Her eyes were the color of storm clouds, ancient and knowing.\n\n\"I'm sorry, what did you say?\" Kael asked, still clutching the scale.\n\n\"That's a dragon scale, boy. First one found in these parts for over three hundred years.\" The woman stepped closer, and Kael noticed she leaned on a staff carved from white wood, topped with a crystal that seemed to pulse with inner light. \"The question is, what's it doing in your field?\"\n\n\"Dragons are myths,\" Kael said automatically, though the weight of the scale in his hand seemed to argue otherwise. \"Stories to frighten children.\"\n\nThe old woman laughed, a sound like wind chimes. \"Oh, my dear boy. Dragons are as real as the sunrise. They've been sleeping, yes, hidden away from the world of men for centuries. But that scale didn't fall from a sleeping dragon.\" She pointed a gnarled finger at it. \"That's fresh. Not more than a day old.\"\n\nAs if in response to her words, a shadow passed overhead, far too large to be any bird. Kael looked up, his heart hammering, but saw only empty sky. When he looked back down, the old woman had vanished, leaving only a whisper on the wind: \"The prophecy awakens, Kael Thorne. Your destiny calls.\"\n\n### Chapter 2: The Stranger's Tale\n\nThat evening, Ashenholt's only tavern, The Weary Traveler, was more crowded than usual. Word of Kael's discovery had spread through the village like wildfire, and everyone had an opinion about what it meant. Some dismissed it as a hoax, others worried it was an ill omen, and a few of the older villagers exchanged meaningful glances and spoke in hushed whispers of ancient tales.\n\nKael sat in the corner with his best friend, Mira Strongbow, daughter of the village's blacksmith. She was examining the scale with the intense focus she usually reserved for her archery practice, her dark eyes narrowed in concentration.\n\n\"It's real,\" she said finally. \"Whatever it came from, this is no fake. Feel the edges—they're sharp enough to cut leather, but the surface is smooth as glass. No smith could craft this.\"\n\nBefore Kael could respond, the tavern door burst open, bringing with it a gust of cold wind and a stranger. He was tall and lean, dressed in worn leather armor decorated with strange symbols. A sword hung at his hip, its pommel shaped like a dragon's head, and his cloak was travel-stained and torn. But it was his eyes that drew attention—they were golden, like a cat's, and seemed to glow in the tavern's dim light.\n\nThe stranger's gaze swept the room and landed on Kael. Without hesitation, he strode over and sat down at their table uninvited.\n\n\"You're the one who found the scale,\" he said. It wasn't a question.\n\nKael nodded slowly, his hand instinctively moving to his pocket where he'd hidden it.\n\n\"My name is Darius Flameheart,\" the stranger said, lowering his voice. \"I'm a Dragon Rider, or I was, until three days ago.\" He pulled back his cloak slightly, revealing terrible burn scars across his chest. \"My dragon, Shadowmere, was killed by something that should not exist—a Void Dragon.\"\n\nMira gasped. Even in their remote village, the legends of Void Dragons were known. They were said to be dragons corrupted by dark magic, turned into creatures of pure destruction that consumed light itself.\n\n\"That's impossible,\" someone said from a nearby table. \"The Void Dragons were destroyed in the War of Shadows, a thousand years ago.\"\n\nDarius turned his golden eyes to the speaker. \"That's what we thought too. But three days ago, one emerged from a rift in the sky above the Northern Wastes. It killed Shadowmere and two other dragons before vanishing. The Dragon Council believes someone has found a way to summon them back.\"\n\n\"What does this have to do with Kael?\" Mira asked protectively.\n\nDarius looked back at them. \"That scale you found—it's from Shadowmere. But here's the strange part: I was three hundred miles north when she fell. There's no way a scale could have traveled so far, so fast, unless...\" He paused, studying Kael intently. \"Unless you're the one mentioned in the Dragonstone Prophecy.\"\n\nThe tavern had gone completely silent. Everyone was listening now.\n\n\"What prophecy?\" Kael asked, though he wasn't sure he wanted to know the answer.\n\nDarius reached into his pack and pulled out an ancient scroll. As he unrolled it, the parchment seemed to shimmer with its own light. Written in flowing script were words in the old tongue, but as Kael looked at them, they seemed to shift and change, becoming readable:\n\n*When shadow rises from the void once more,*\n*And dragons fall like rain,*\n*The bearer of the stolen scale shall stand before*\n*The gates of night and pain.*\n\n*Born of humble earth yet marked by sky,*\n*The Dragonstone shall choose its heir,*\n*To bind the realms before all dragons die,*\n*And breathe the flames of prayer.*\n\n*Three companions true shall join the quest,*\n*Through trials of scale and bone,*\n*Until the void and light contest,*\n*For the fate of the Dragonstone.*\n\n### Chapter 3: The Journey Begins\n\nBy dawn, Kael's life had irrevocably changed. His parents, though fearful, understood that their son had been chosen for something greater than a farmer's life. His mother had pressed a small leather pouch into his hands—inside was her most precious possession, a compass that had belonged to her grandfather, a merchant who had traveled the known world.\n\n\"It always points true,\" she said, tears in her eyes. \"Not north, but to where you need to go.\"\n\nMira had insisted on joining the quest, despite her father's protests. \"You'll need someone who can actually fight,\" she'd said, slinging her bow across her back. Her father had finally relented, presenting her with a quiver of arrows he'd crafted himself, each one inscribed with protective runes.\n\nTo Kael's surprise, a third companion had volunteered: Finn Silverquill, the village scribe's apprentice. Thin and bookish, with spectacles perched on his nose, he seemed an unlikely adventurer. But Darius had immediately accepted him.\n\n\"Never underestimate the power of knowledge,\" the Dragon Rider had said. \"We'll need someone who can read the old texts and understand the ancient magics.\"\n\nNow, as they stood at the village border, Kael felt the weight of what lay ahead. Darius had explained their first destination: the Monastery of the Western Winds, where the monks maintained the largest library of dragon lore in the kingdom. There, they hoped to find more information about the Dragonstone and how to stop the Void Dragons.\n\nThe journey would take them through the Thornwood, a forest that even seasoned travelers preferred to avoid. Legend spoke of trees that moved when no one was watching, paths that led in circles, and creatures that existed nowhere else in the world.\n\n\"Stay close,\" Darius warned as they entered the forest. \"Don't leave the path, no matter what you see or hear. The Thornwood feeds on the lost and the lonely.\"\n\nThe forest was immediately oppressive. The canopy was so thick that only scattered beams of sunlight penetrated to the forest floor. The air was heavy with moisture and the scent of decay. Strange sounds echoed from the depths—not quite animal, not quite human.\n\nThey had been walking for perhaps two hours when Finn suddenly stopped. \"Does anyone else feel that?\" he asked, his voice barely above a whisper.\n\nKael felt it too—a tugging sensation, as if invisible hands were trying to pull him off the path. The dragon scale in his pocket had grown warm, almost hot.\n\n\"Something's coming,\" Darius said, drawing his sword. The blade burst into flame, casting dancing shadows among the trees.\n\nThe attack came from above. A creature dropped from the canopy—something between a spider and a bat, with too many legs and leathery wings. Its eyes were clustered across its head like black pearls, and its mouth opened to reveal rows of needle-sharp teeth.\n\nMira's arrow struck it before it could reach them, but two more creatures were already descending. Darius's flaming sword cut through one, but the other landed on Finn, knocking him to the ground.\n\nWithout thinking, Kael pulled out the dragon scale and held it high. It blazed with sudden light, so bright that everyone had to shield their eyes. The creature on Finn shrieked and fled, and Kael heard the sound of many things scuttling away into the darkness.\n\nWhen the light faded, they all stared at Kael in amazement. The scale had left a mark on his palm—a dragon rune that glowed faintly blue before fading into his skin.\n\n\"The prophecy,\" Darius breathed. \"You really are the one.\"\n\n### Chapter 4: The Monastery of the Western Winds\n\nAfter three days of travel through the Thornwood, they finally emerged onto the windswept plateau where the Monastery of the Western Winds perched on a cliff edge. It was a magnificent structure, built from white stone that seemed to glow in the afternoon sun. Its towers stretched toward the sky like fingers, and prayer flags fluttered from every available surface, creating a constant whisper of fabric against wind.\n\nBrother Marcus, a monk with kind eyes and prematurely white hair, greeted them at the gates. \"Darius Flameheart,\" he said with a bow. \"Word of your coming has preceded you. The Abbot is expecting you.\"\n\nThey were led through corridors lined with tapestries depicting the history of dragons and men. Kael found himself mesmerized by one that showed dragons and humans working together to build great cities, their combined magic creating wonders that defied imagination.\n\nThe Abbot, an ancient man whose beard reached nearly to his knees, received them in a circular chamber at the monastery's heart. The walls were covered in shelves containing thousands of scrolls and books, and in the center of the room stood a pedestal holding a crystal the size of a man's head.\n\n\"The Seeing Stone,\" the Abbot explained, noting their interest. \"It shows truth to those who dare to look.\" He turned his piercing blue eyes to Kael. \"You carry Shadowmere's scale. May I see it?\"\n\nKael produced the scale, and the Abbot examined it carefully. \"Remarkable. It has already begun to bond with you. Tell me, young man, have you experienced any... unusual dreams lately?\"\n\nKael hesitated, then nodded. Since finding the scale, his dreams had been filled with flying—soaring through clouds, feeling the wind beneath wings he didn't possess, seeing the world from impossible heights.\n\n\"The dreams will intensify,\" the Abbot said. \"The scale carries",
           "type": "text"
         }
       ],
-      "id": "msg_01HwBKpNoP9q3KUa8WUVEkM2",
+      "id": "msg_01CTjAYxQD89pYie3yPtgjLx",
       "model": "claude-opus-4-1-20250805",
       "role": "assistant",
+      "stop_details": null,
       "stop_reason": "max_tokens",
       "stop_sequence": null,
       "type": "message",
@@ -65,88 +71,95 @@
         },
         "cache_creation_input_tokens": 0,
         "cache_read_input_tokens": 0,
-        "input_tokens": 44,
+        "inference_geo": "not_available",
+        "input_tokens": 45,
         "output_tokens": 3000,
+        "output_tokens_details": {
+          "thinking_tokens": 53
+        },
         "service_tier": "standard"
       }
     },
     "headers": {
-      "anthropic-organization-id": [
-        "a71659e7-a922-4ff7-99de-f3ba615face1"
-      ],
+      "anthropic-organization-id": "[REDACTED:anthropic-organization-id]",
       "anthropic-ratelimit-input-tokens-limit": [
-        "450000"
+        "5000000"
       ],
       "anthropic-ratelimit-input-tokens-remaining": [
-        "450000"
+        "5000000"
       ],
       "anthropic-ratelimit-input-tokens-reset": [
-        "2025-11-02T17:05:05Z"
+        "2026-05-29T17:50:53Z"
       ],
       "anthropic-ratelimit-output-tokens-limit": [
-        "90000"
+        "400000"
       ],
       "anthropic-ratelimit-output-tokens-remaining": [
-        "87000"
+        "400000"
       ],
       "anthropic-ratelimit-output-tokens-reset": [
-        "2025-11-02T17:06:52Z"
+        "2026-05-29T17:52:22Z"
       ],
       "anthropic-ratelimit-requests-limit": [
-        "1000"
+        "2000"
       ],
       "anthropic-ratelimit-requests-remaining": [
-        "999"
+        "1999"
       ],
       "anthropic-ratelimit-requests-reset": [
-        "2025-11-02T17:05:04Z"
+        "2026-05-29T17:50:51Z"
       ],
       "anthropic-ratelimit-tokens-limit": [
-        "540000"
+        "5400000"
       ],
       "anthropic-ratelimit-tokens-remaining": [
-        "537000"
+        "5400000"
       ],
       "anthropic-ratelimit-tokens-reset": [
-        "2025-11-02T17:05:05Z"
+        "2026-05-29T17:50:53Z"
       ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "998536f48dfce1f7-ORD"
+        "a03758059c39e450-ORD"
       ],
       "connection": [
         "keep-alive"
+      ],
+      "content-security-policy": [
+        "default-src 'none'; frame-ancestors 'none'"
       ],
       "content-type": [
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:06:50 GMT"
+        "Fri, 29 May 2026 17:52:22 GMT"
       ],
       "request-id": [
-        "req_011CUjRgz6hF6275mh5hYDQy"
-      ],
-      "retry-after": [
-        "55"
+        "req_011CbXHRweW8VHT1kuTThxgc"
       ],
       "server": [
         "cloudflare"
       ],
+      "set-cookie": "[REDACTED:set-cookie]",
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
+      ],
+      "traceresponse": [
+        "00-563b7f13adf115c670b4c3f5f9be016a-173b602f560605da-01"
       ],
       "transfer-encoding": [
         "chunked"
       ],
-      "x-envoy-upstream-service-time": [
-        "105676"
+      "vary": [
+        "Accept-Encoding"
       ],
       "x-robots-tag": [
         "none"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

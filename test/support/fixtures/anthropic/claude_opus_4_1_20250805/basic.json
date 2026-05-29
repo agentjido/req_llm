@@ -1,4 +1,6 @@
 {
+  "model_spec": "anthropic:claude-opus-4-1-20250805",
+  "provider": "anthropic",
   "request": {
     "body": {
       "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImNsYXVkZS1vcHVzLTQtMS0yMDI1MDgwNSIsInN0cmVhbSI6ZmFsc2UsInRoaW5raW5nIjp7ImJ1ZGdldF90b2tlbnMiOjEwMjQsInR5cGUiOiJlbmFibGVkIn19"
@@ -19,6 +21,9 @@
       }
     },
     "headers": {
+      "accept": [
+        "application/json"
+      ],
       "accept-encoding": [
         "gzip"
       ],
@@ -32,7 +37,7 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ],
       "x-api-key": "[REDACTED:x-api-key]"
     },
@@ -43,18 +48,19 @@
     "body": {
       "content": [
         {
-          "signature": "Eq8DCkYICRgCKkDX9mXYOJWQ4x/aURL1Sfl6oLZFzH0+pyQyXWxJqh9Y7CAFVFfIv/dsojHRuwFpQmA4lnjfTk5ym4Nljd0k+h3zEgyivXnnLb38glZRueQaDCFEKWQqFouQovFUHyIwPJ+rarv4xGxskyd47CbQog0moIEL4/JrCnrJNJnf/eC2ANwJEkkrgthBLpyOS7qaKpYCMKNUqCpM66qAQgy3Vd3hidi4uXw6rzqZeyY2FNGe39FSVbESQOzV6ylRqCSVkMYS+iwJ3ltmKMRyci5AfVa1rZgjmsEk/5sJLPEvOCw+EN4crxcE5XJK81uRwp3RRJeZtglLDGUW+7IDrNMSa3t0SUQrI81sNdW7lACoOGjx54m8XU2Gx23rd4aLeqvLEfH/CCcnwJCVqNThXYsdystdVpmeXwLnlhuhthvDkvpGYR+gq3jJP4Arh7/DpAsVOMqNEm9liwK7zIdmh2pVZAX0gD3dAQGS6sNapJAzcOKFqLUbjMUfyYGVeBNP+OzfNG+I9FPnL2D4HhnL7aua5z40Yg2LaU6xAsY8/T8Jfg5Jq6HK8qFSafsYAQ==",
-          "thinking": "The user has greeted me with \"Hello world!\" - this is a classic programming reference that's often the first program people write when learning a new programming language. It could also just be a friendly greeting. I should respond in a warm and friendly manner.",
+          "signature": "EroDCmwIDhgCKkB+nPHqeaHjw91S4YD6nIDyF9X0pXVviTF9zjkUZAo930uq/aIAAOzZVpxPl7qTY+0czlamhLqA8F9GQzxDep76MhhjbGF1ZGUtb3B1cy00LTEtMjAyNTA4MDU4AEIIdGhpbmtpbmcSDFR7/q+qNKzcnclCEhoMR+WFPOqrd7aSulWGIjBXGNX99MFlMKlfxTjmYALAyYG97h/tuee/AwvNIx8I6NYpFBTNCXClGT3mXq1lZHEq+wE/UE200+9fKRCMKAFbNWE/bT5U3KeMCGS++SVjmCbrGq5JOr+FO4vd8pwnTq6LrNuxePnOID6S8CHrT0q41kReDLRvakG7mLhspAgePwGoIzr9R7IntWp8wnUP4nzNNDtRlfW7WVBX/3nPZG8QXSP26rugQiQgEBmZuckvSMEyYNCjXJB6W7BMn+f53YomIE425oQlGjTjJWsCOCPXMzSCoVIS+QhzK5PiSinP0kCTiEXNrH/kJG2kRLK/k3hfoPAM4OuUzHy+fh8cDAGBNqde2FEpui4N/oFES3h1JeI1bUY4kbURKVAGqgKg/OaDUilrkiULqqZeaOpnUhgB",
+          "thinking": "The user has sent me a simple \"Hello world!\" greeting. This is a common phrase used in programming as a first program or test, but in this context it seems to just be a friendly greeting. I should respond in a warm and friendly manner.",
           "type": "thinking"
         },
         {
-          "text": "Hello! 👋 It's nice to meet you! Whether you're referencing the classic first program or just saying hi, I'm happy to chat. How are you doing today? Is there anything I can help you with?",
+          "text": "Hello! 👋 It's nice to meet you! How are you doing today? Is there anything I can help you with?",
           "type": "text"
         }
       ],
-      "id": "msg_014vkJ9rVxcwfN26GCDWhUPK",
+      "id": "msg_019bm7DtCenhsDDiwW8daqSV",
       "model": "claude-opus-4-1-20250805",
       "role": "assistant",
+      "stop_details": null,
       "stop_reason": "end_turn",
       "stop_sequence": null,
       "type": "message",
@@ -65,88 +71,95 @@
         },
         "cache_creation_input_tokens": 0,
         "cache_read_input_tokens": 0,
-        "input_tokens": 38,
-        "output_tokens": 112,
+        "inference_geo": "not_available",
+        "input_tokens": 39,
+        "output_tokens": 90,
+        "output_tokens_details": {
+          "thinking_tokens": 56
+        },
         "service_tier": "standard"
       }
     },
     "headers": {
-      "anthropic-organization-id": [
-        "a71659e7-a922-4ff7-99de-f3ba615face1"
-      ],
+      "anthropic-organization-id": "[REDACTED:anthropic-organization-id]",
       "anthropic-ratelimit-input-tokens-limit": [
-        "450000"
+        "5000000"
       ],
       "anthropic-ratelimit-input-tokens-remaining": [
-        "450000"
+        "5000000"
       ],
       "anthropic-ratelimit-input-tokens-reset": [
-        "2025-11-02T17:07:10Z"
+        "2026-05-29T17:50:45Z"
       ],
       "anthropic-ratelimit-output-tokens-limit": [
-        "90000"
+        "400000"
       ],
       "anthropic-ratelimit-output-tokens-remaining": [
-        "90000"
+        "400000"
       ],
       "anthropic-ratelimit-output-tokens-reset": [
-        "2025-11-02T17:07:13Z"
+        "2026-05-29T17:50:47Z"
       ],
       "anthropic-ratelimit-requests-limit": [
-        "1000"
+        "2000"
       ],
       "anthropic-ratelimit-requests-remaining": [
-        "999"
+        "1999"
       ],
       "anthropic-ratelimit-requests-reset": [
-        "2025-11-02T17:07:09Z"
+        "2026-05-29T17:50:44Z"
       ],
       "anthropic-ratelimit-tokens-limit": [
-        "540000"
+        "5400000"
       ],
       "anthropic-ratelimit-tokens-remaining": [
-        "540000"
+        "5400000"
       ],
       "anthropic-ratelimit-tokens-reset": [
-        "2025-11-02T17:07:10Z"
+        "2026-05-29T17:50:45Z"
       ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "998539fe1989e1f7-ORD"
+        "a03757d60a0cfa1b-ORD"
       ],
       "connection": [
         "keep-alive"
+      ],
+      "content-security-policy": [
+        "default-src 'none'; frame-ancestors 'none'"
       ],
       "content-type": [
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:07:13 GMT"
+        "Fri, 29 May 2026 17:50:47 GMT"
       ],
       "request-id": [
-        "req_011CUjRrAS3tLY9MN5vW2Vo4"
-      ],
-      "retry-after": [
-        "51"
+        "req_011CbXHRP6v1ERZWSmxuoiTx"
       ],
       "server": [
         "cloudflare"
       ],
+      "set-cookie": "[REDACTED:set-cookie]",
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
+      ],
+      "traceresponse": [
+        "00-00eecbb7c7caf654727984e7fe8712fa-73228086bc7fac66-01"
       ],
       "transfer-encoding": [
         "chunked"
       ],
-      "x-envoy-upstream-service-time": [
-        "4503"
+      "vary": [
+        "Accept-Encoding"
       ],
       "x-robots-tag": [
         "none"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

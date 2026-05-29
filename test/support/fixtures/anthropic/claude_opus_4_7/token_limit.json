@@ -1,0 +1,159 @@
+{
+  "model_spec": "anthropic:claude-opus-4-7",
+  "provider": "anthropic",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjozMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IldyaXRlIGEgdmVyeSBsb25nIHN0b3J5IGFib3V0IGRyYWdvbnMgYW5kIGFkdmVudHVyZXMiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJjbGF1ZGUtb3B1cy00LTciLCJvdXRwdXRfY29uZmlnIjp7ImVmZm9ydCI6ImxvdyJ9LCJzdHJlYW0iOmZhbHNlLCJ0aGlua2luZyI6eyJ0eXBlIjoiYWRhcHRpdmUifX0="
+    },
+    "canonical_json": {
+      "max_tokens": 3000,
+      "messages": [
+        {
+          "content": "Write a very long story about dragons and adventures",
+          "role": "user"
+        }
+      ],
+      "model": "claude-opus-4-7",
+      "output_config": {
+        "effort": "low"
+      },
+      "stream": false,
+      "thinking": {
+        "type": "adaptive"
+      }
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "anthropic-version": [
+        "2023-06-01"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ],
+      "x-api-key": "[REDACTED:x-api-key]"
+    },
+    "method": "post",
+    "url": "https://api.anthropic.com/v1/messages"
+  },
+  "response": {
+    "body": {
+      "content": [
+        {
+          "text": "# The Last Ember of Valdoria\n\n## Chapter One: The Whisper in the Wind\n\nIn the kingdom of Valdoria, where mist clung to mountain peaks like silver veils and rivers carved their patient way through ancient stone, there lived a young woman named Aelina Thornweaver. She was seventeen years old, with hair the color of autumn wheat and eyes that shifted between green and gold depending on the light. Most importantly, she was the daughter of the last Dragon Keeper, though she did not yet know what that meant.\n\nAelina lived in the small mountain village of Hollowmere, nestled in the Frostpeak Range. Her father, Doran Thornweaver, had raised her alone after her mother vanished during the Sundering—a catastrophic event ten years past when the great dragons of Valdoria disappeared from the skies. The villagers whispered that the dragons had died. The scholars in distant cities claimed they had migrated beyond the known world. But Doran knew the truth, and that truth weighed on him like a mountain.\n\nOn the morning of the autumn equinox, Aelina woke before dawn. She had dreamed again of fire—not destructive flames, but warm, golden fire that whispered her name. The dreams had grown more vivid in recent weeks, accompanied by a strange humming in her bones, as if something within her resonated with a song only she could hear.\n\nShe dressed quickly in her leather hunting gear, strapped her short bow across her back, and crept past her father's room. Doran had been ill for months, his once-mighty frame reduced to a shadow of itself. The village healer had no remedy for what ailed him, and Aelina suspected her father's sickness was not of the body but of the soul.\n\nThe forest beyond Hollowmere was vast and ancient, stretching from the foothills up into the perpetual snows of the higher peaks. Aelina knew these woods better than she knew her own reflection. Today, she sought game for her father's table—he had eaten little for days, and she hoped fresh meat might tempt him.\n\nBut fate, that meddlesome weaver of unexpected threads, had other plans.\n\nAs Aelina followed a deer trail deeper into the woods than she normally ventured, she heard a sound that froze her in place: a cry, high and piercing, that seemed to vibrate in her chest. It was not the call of any creature she knew. She drew her bow and crept forward, heart pounding.\n\nIn a small clearing where a stream tumbled over moss-covered stones, she found the source of the cry. There, half-hidden beneath a fallen log, was a creature she had only ever seen in old tapestries and forbidden books.\n\nA dragon. A baby dragon, no larger than a hunting dog.\n\nIts scales were the color of polished copper, shifting to deep crimson along its spine and the membranes of its small wings. One of those wings was bent at an unnatural angle, and the creature's golden eyes—startlingly intelligent eyes—were filled with pain and fear.\n\nAelina lowered her bow slowly. The humming in her bones had become a song now, and she understood, somehow, that the dragon felt it too. They were connected, she and this small wounded creature, by something older than either of them.\n\n\"Easy,\" she whispered, kneeling at the edge of the clearing. \"I won't hurt you.\"\n\nThe dragon hissed, smoke curling from its nostrils, but it did not attack. Its golden eyes searched hers, and Aelina felt something brush against her mind—a feeling rather than words. *Hurt. Alone. Hunted.*\n\n\"Hunted?\" Aelina said aloud. \"By whom?\"\n\nAs if in answer, she heard the unmistakable sound of horses crashing through the underbrush. Men's voices, harsh and commanding. Aelina's blood ran cold. She made her decision in an instant.\n\n\"Trust me,\" she whispered to the dragon, and gathered the creature into her arms. It was heavier than it looked, and warm—almost feverishly so—but it did not resist. She fled into the deepest part of the forest, where she knew of a hidden cave behind a waterfall, a secret place she had discovered as a child.\n\n## Chapter Two: The Dragon Keeper's Secret\n\nBy the time Aelina reached the hidden cave, her arms burned with exhaustion and the dragon had grown still, its breathing shallow. She laid it gently on a bed of dry leaves and examined its broken wing. The membrane was torn, and the bone clearly displaced. She had set broken bones before—on goats, on her own arm once—but never on a creature like this.\n\nThe dragon watched her with those impossibly intelligent eyes as she worked. She tore strips from her undertunic for bandages and used two straight sticks as splints. When she had finished, the small creature pressed its snout against her hand—a gesture of trust that brought unexpected tears to her eyes.\n\n\"I need to get help,\" she told the dragon. \"My father will know what to do. Stay hidden. I'll return before nightfall.\"\n\nShe raced back to Hollowmere, taking the long way to avoid the riders she had heard. The village was unusually quiet when she arrived, and she soon discovered why. Three men in black armor stood in the village square, their horses lathered with sweat. Their leader, a tall man with a scar running from his temple to his jaw, was speaking with the village elder.\n\n\"...escaped from our custody,\" the scarred man was saying. \"A dangerous creature. The Crown offers a substantial reward for information leading to its recovery.\"\n\nAelina kept to the shadows of the buildings as she made her way to her cottage. She slipped inside and found her father sitting up in bed, more alert than he had been in weeks.\n\n\"Aelina,\" he said, and his voice held something she had not heard in years—urgency, purpose. \"Come. Sit. There is much I must tell you, and little time.\"\n\n\"Father, I found—\"\n\n\"A dragon,\" he finished. \"Yes. I felt it the moment you touched it. The Keeper's bond awakens in you.\"\n\nAelina stared at him. \"How could you know that?\"\n\nDoran smiled, and for a moment he looked young again. \"Because I am the last of the Dragon Keepers, my daughter. And you are the next.\"\n\nHe told her the story then—the true story of the Sundering. Ten years ago, a sorcerer called Malachar had risen in the east, seeking to bind the great dragons to his will. He had created an artifact, the Obsidian Crown, that could enslave any dragon within its range. To save their kind, the dragons had performed the Great Sleep—a magical hibernation that scattered their essences across the world, hidden in eggs that would only hatch when the time was right.\n\n\"Your mother was a Dragon Rider,\" Doran said, and Aelina's breath caught. \"She gave her life to protect the last clutch of eggs from Malachar. I hid them where even I would forget, so that I could not betray them under torture. They have been hatching, one by one, as the world has grown ready. And now one has found you.\"\n\n\"The men in the village,\" Aelina said. \"They serve Malachar.\"\n\n\"Yes. He has grown strong again. He seeks the hatchlings to bind them before they can mature. If he succeeds, no force in this world will stop him.\" Doran's hands trembled as he reached for a wooden chest beneath his bed. \"Bring me that.\"\n\nInside the chest was a leather-bound book, a curved dagger with a hilt of dragon-bone, and a pendant in the shape of a dragon's eye, carved from amber.\n\n\"These are yours now,\" Doran said. \"The book contains the lore of the Keepers. The dagger has been passed down for twenty generations. And this...\" He pressed the pendant into her palm. \"This will help you communicate with your dragon. The bond is forming, but the pendant will strengthen it.\"\n\n\"My dragon,\" Aelina whispered.\n\n\"What is its name?\"\n\nAelina closed her eyes. The humming song rose within her, and a word formed in her mind—not in any language she knew, but she understood it nonetheless. \"Vyrelith,\" she said. \"His name is Vyrelith.\"\n\nDoran's eyes filled with tears. \"Ember in the old tongue. A fitting name. He will grow into great fire.\"\n\n## Chapter Three: Flight from Hollowmere\n\nThat night, Doran insisted Aelina leave the village. Malachar's hunters would not stop until they found the dragon, and they would torture every villager to do it.\n\n\"You must take Vyrelith east,\" Doran said, \"to the Forgotten Mountains. There you will find the last of the Dragon Riders in hiding, those who escaped the Sundering. Seek out a man called Kaelen Stormrider. He was my friend, long ago. He will help you.\"\n\n\"I won't leave you,\" Aelina protested.\n\n\"You must. I am dying, daughter. I have been dying for years. Without your mother, the bond that sustained me has been fading. But I have lived long enough to see you take up the mantle, and that is enough.\"\n\nThey embraced for a long time. Aelina memorized the feel of her father's arms around her, the smell of his pipe smoke and the herbs he used in his tea. Then she gathered supplies—dried meat, hard bread, a flint and steel, a warm cloak, the book",
+          "type": "text"
+        }
+      ],
+      "id": "msg_016nenAt6Db6EQpEAJ5oMcLe",
+      "model": "claude-opus-4-7",
+      "role": "assistant",
+      "stop_details": null,
+      "stop_reason": "max_tokens",
+      "stop_sequence": null,
+      "type": "message",
+      "usage": {
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 0,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "inference_geo": "global",
+        "input_tokens": 25,
+        "output_tokens": 3000,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard"
+      }
+    },
+    "headers": {
+      "anthropic-organization-id": "[REDACTED:anthropic-organization-id]",
+      "anthropic-ratelimit-input-tokens-limit": [
+        "5000000"
+      ],
+      "anthropic-ratelimit-input-tokens-remaining": [
+        "5000000"
+      ],
+      "anthropic-ratelimit-input-tokens-reset": [
+        "2026-05-29T17:46:12Z"
+      ],
+      "anthropic-ratelimit-output-tokens-limit": [
+        "400000"
+      ],
+      "anthropic-ratelimit-output-tokens-remaining": [
+        "400000"
+      ],
+      "anthropic-ratelimit-output-tokens-reset": [
+        "2026-05-29T17:47:09Z"
+      ],
+      "anthropic-ratelimit-requests-limit": [
+        "2000"
+      ],
+      "anthropic-ratelimit-requests-remaining": [
+        "1999"
+      ],
+      "anthropic-ratelimit-requests-reset": [
+        "2026-05-29T17:46:11Z"
+      ],
+      "anthropic-ratelimit-tokens-limit": [
+        "5400000"
+      ],
+      "anthropic-ratelimit-tokens-remaining": [
+        "5400000"
+      ],
+      "anthropic-ratelimit-tokens-reset": [
+        "2026-05-29T17:46:12Z"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a037512e7ee7b2dc-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-security-policy": [
+        "default-src 'none'; frame-ancestors 'none'"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 29 May 2026 17:47:09 GMT"
+      ],
+      "request-id": [
+        "req_011CbXH5Hm9FKwyaDYyxPxXA"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": "[REDACTED:set-cookie]",
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "traceresponse": [
+        "00-444cef7a94422aa1a6175636ce00e2cc-637abe40e9574b53-01"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-robots-tag": [
+        "none"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

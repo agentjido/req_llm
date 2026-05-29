@@ -1,4 +1,6 @@
 {
+  "model_spec": "anthropic:claude-opus-4-1-20250805",
+  "provider": "anthropic",
   "request": {
     "body": {
       "b64": "eyJtYXhfdG9rZW5zIjozMjAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImNsYXVkZS1vcHVzLTQtMS0yMDI1MDgwNSIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjAsInRvb2xfY2hvaWNlIjp7Im5hbWUiOiJhZGQiLCJ0eXBlIjoidG9vbCJ9LCJ0b29scyI6W3siZGVzY3JpcHRpb24iOiJBZGQgdHdvIGludGVnZXJzIiwiaW5wdXRfc2NoZW1hIjp7ImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjpmYWxzZSwicHJvcGVydGllcyI6eyJhIjp7InR5cGUiOiJpbnRlZ2VyIn0sImIiOnsidHlwZSI6ImludGVnZXIifX0sInJlcXVpcmVkIjpbImEiLCJiIl0sInR5cGUiOiJvYmplY3QifSwibmFtZSI6ImFkZCJ9XX0="
@@ -42,6 +44,9 @@
       ]
     },
     "headers": {
+      "accept": [
+        "application/json"
+      ],
       "accept-encoding": [
         "gzip"
       ],
@@ -55,7 +60,7 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ],
       "x-api-key": "[REDACTED:x-api-key]"
     },
@@ -66,7 +71,10 @@
     "body": {
       "content": [
         {
-          "id": "toolu_013eRyq34hLV2DrQZVxHpdHK",
+          "caller": {
+            "type": "direct"
+          },
+          "id": "toolu_01Ag4DFa84iag3AuN9iLdx1D",
           "input": {
             "a": 2,
             "b": 3
@@ -75,9 +83,10 @@
           "type": "tool_use"
         }
       ],
-      "id": "msg_01TLrhdfLwMUzPk7M26EQ3kE",
+      "id": "msg_012NfZUnPryrefiSrjxJmC6L",
       "model": "claude-opus-4-1-20250805",
       "role": "assistant",
+      "stop_details": null,
       "stop_reason": "tool_use",
       "stop_sequence": null,
       "type": "message",
@@ -88,88 +97,92 @@
         },
         "cache_creation_input_tokens": 0,
         "cache_read_input_tokens": 0,
+        "inference_geo": "not_available",
         "input_tokens": 423,
         "output_tokens": 50,
         "service_tier": "standard"
       }
     },
     "headers": {
-      "anthropic-organization-id": [
-        "a71659e7-a922-4ff7-99de-f3ba615face1"
-      ],
+      "anthropic-organization-id": "[REDACTED:anthropic-organization-id]",
       "anthropic-ratelimit-input-tokens-limit": [
-        "450000"
+        "5000000"
       ],
       "anthropic-ratelimit-input-tokens-remaining": [
-        "450000"
+        "5000000"
       ],
       "anthropic-ratelimit-input-tokens-reset": [
-        "2025-11-02T17:06:51Z"
+        "2026-05-29T17:50:29Z"
       ],
       "anthropic-ratelimit-output-tokens-limit": [
-        "90000"
+        "400000"
       ],
       "anthropic-ratelimit-output-tokens-remaining": [
-        "90000"
+        "400000"
       ],
       "anthropic-ratelimit-output-tokens-reset": [
-        "2025-11-02T17:06:52Z"
+        "2026-05-29T17:50:29Z"
       ],
       "anthropic-ratelimit-requests-limit": [
-        "1000"
+        "2000"
       ],
       "anthropic-ratelimit-requests-remaining": [
-        "999"
+        "1999"
       ],
       "anthropic-ratelimit-requests-reset": [
-        "2025-11-02T17:06:50Z"
+        "2026-05-29T17:50:27Z"
       ],
       "anthropic-ratelimit-tokens-limit": [
-        "540000"
+        "5400000"
       ],
       "anthropic-ratelimit-tokens-remaining": [
-        "540000"
+        "5400000"
       ],
       "anthropic-ratelimit-tokens-reset": [
-        "2025-11-02T17:06:51Z"
+        "2026-05-29T17:50:29Z"
       ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "9985398a5b5eeb04-ORD"
+        "a037576e3d73fa1b-ORD"
       ],
       "connection": [
         "keep-alive"
+      ],
+      "content-security-policy": [
+        "default-src 'none'; frame-ancestors 'none'"
       ],
       "content-type": [
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:06:52 GMT"
+        "Fri, 29 May 2026 17:50:29 GMT"
       ],
       "request-id": [
-        "req_011CUjRpnrk1DduecrRrxRvW"
-      ],
-      "retry-after": [
-        "9"
+        "req_011CbXHQA73cg5TR5wmziQQS"
       ],
       "server": [
         "cloudflare"
       ],
+      "set-cookie": "[REDACTED:set-cookie]",
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
+      ],
+      "traceresponse": [
+        "00-d90908a2eb08b846a3ea8353b5777bb0-d37b15e87a0379c3-01"
       ],
       "transfer-encoding": [
         "chunked"
       ],
-      "x-envoy-upstream-service-time": [
-        "1733"
+      "vary": [
+        "Accept-Encoding"
       ],
       "x-robots-tag": [
         "none"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

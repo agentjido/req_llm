@@ -1,0 +1,165 @@
+{
+  "model_spec": "anthropic:claude-opus-4-5-20251101",
+  "provider": "anthropic",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjozMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IldyaXRlIGEgdmVyeSBsb25nIHN0b3J5IGFib3V0IGRyYWdvbnMgYW5kIGFkdmVudHVyZXMiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJjbGF1ZGUtb3B1cy00LTUtMjAyNTExMDEiLCJzdHJlYW0iOmZhbHNlLCJ0aGlua2luZyI6eyJidWRnZXRfdG9rZW5zIjoxMDI0LCJ0eXBlIjoiZW5hYmxlZCJ9fQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 3000,
+      "messages": [
+        {
+          "content": "Write a very long story about dragons and adventures",
+          "role": "user"
+        }
+      ],
+      "model": "claude-opus-4-5-20251101",
+      "stream": false,
+      "thinking": {
+        "budget_tokens": 1024,
+        "type": "enabled"
+      }
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "anthropic-beta": [
+        "interleaved-thinking-2025-05-14"
+      ],
+      "anthropic-version": [
+        "2023-06-01"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ],
+      "x-api-key": "[REDACTED:x-api-key]"
+    },
+    "method": "post",
+    "url": "https://api.anthropic.com/v1/messages"
+  },
+  "response": {
+    "body": {
+      "content": [
+        {
+          "signature": "EuYFCmwIDhgCKkB6NEDcXv7cFD2YjnIp0AHUwd0yckzmGjguruMDNwjSEEdEj2dVkdjOIMho6IkX2v1F8vF5S9YNQxq74S5MC9I/MhhjbGF1ZGUtb3B1cy00LTUtMjAyNTExMDE4AEIIdGhpbmtpbmcSDKBXU/VPbXADPDtLxxoMiQVZ6cPGRiHx66xmIjDLwREuEQxy/KvuTCiVRZ6egIJI0YlEiKp7asNVp2HJVgA6YgryG5toD9p5BGKcBK0qpwS3MdDVac1HhLVX8bdiVGM2tqnR6eagI5sRh5L8xtom5rgu3w0TrsyChlYZwg7c/ZnPFCtTdBJXBxRZp4PBMzdPdwOa+w+PrcLG6oFomzuiFqAcZHL3aPu68mALpKryb0auQas9EVmr4pIoZXUjUmVfP8/QmGT0EscTCuRsuTVV/25pRbHt58+eSRAFOT3slXNnDwAcdbwpDXaZLcsRF3gf84jfSTtYxPkRo7PaZxrGxinjGIoKIWnc1tF8H4RDQMqpdC53HgwodkJsQQencSV+Zs/hvvn02pvT6/lfPuSTHaFEr/Y+LKlAYz7Hj+9C95w+hAajhUfbpFWHnEat2WyQORycRJEJLXgA0tMhufloRnzCdp6UxbbQjXayBjlXLf80llcY19t1mxGJaYV9jleHFYxrIYWIhiEB+Gbh7gxQQpQ/KDxvfUEtOF5Aw1mGYzeVkR6FMPpGANBGoH6FHp47G2aGYF+tFKGxw/jowCgu+CSsIIp491OzH8G4L/f37XHyLIVnEdyHiZryoKYCjIgeDgqFt8cUTdboIcyKlLQNIE3KelqVxfNrvz5m/PjEwk2nwNPLFYZ+lwRD89himOnvzyOSUPIcbWwLCNiQN/+BtVxI1e26JDKRKLORmIPGNmw+cBPxOp2N3QyGpGE3s0o8IidOOA5KaYTSGKA2pcznpa8gFmaROmWqPdxQW8siuuYm125xGJrOzykhkcmL9pwESEt13E5naxgB",
+          "thinking": "The user wants a very long story about dragons and adventures. I'll create an epic fantasy tale with multiple characters, plot twists, world-building, and of course, dragons as central figures. I'll make it engaging with different chapters or sections, character development, and exciting adventures.\n\nLet me create a comprehensive story with:\n- A detailed world\n- Multiple characters\n- Various dragon types\n- An epic quest\n- Battles and challenges\n- Character growth\n- A satisfying conclusion\n\nI'll make it quite lengthy as requested.",
+          "type": "thinking"
+        },
+        {
+          "text": "# The Last Dragonheart\n\n## A Tale of Fire, Friendship, and Fate\n\n---\n\n# PART ONE: THE AWAKENING\n\n## Chapter One: The Village at the Edge of the World\n\nThe village of Thornhaven sat nestled in the shadow of the Ironspine Mountains like a child hiding beneath its mother's skirts. For three hundred years, the people of Thornhaven had lived simple lives—farming the rocky soil, herding sheep across the windswept highlands, and telling stories of the ancient times when dragons ruled the skies.\n\nBut those were just stories now. Or so everyone believed.\n\nSeventeen-year-old Kira Ashford wiped the sweat from her brow as she swung her hammer down onto the glowing metal. Sparks flew like fireflies in the dim light of her father's forge, dancing briefly before dying on the stone floor. The rhythmic clang of metal on metal had been the soundtrack of her life for as long as she could remember.\n\n\"You're striking too hard again,\" her father, Marcus, called from across the workshop. He was a broad-shouldered man with arms like tree trunks and a beard streaked with gray. \"Let the hammer do the work. You're shaping the metal, not punishing it.\"\n\nKira relaxed her grip and adjusted her stance. \"Sorry, Father. My mind wandered.\"\n\n\"To where?\" He set down the horseshoe he'd been inspecting and walked over, his heavy boots thudding against the floor. \"You've been distracted for days now. Ever since you went up to the old ruins.\"\n\nKira felt her cheeks flush, and not from the heat of the forge. Three days ago, against her father's explicit warnings, she had climbed the forbidden path to the Ruins of Valdris—the crumbling remains of what legends claimed was once a great dragon temple. She had told herself she was just curious, just wanting to see what all the fuss was about.\n\nBut something had happened up there. Something she couldn't explain.\n\n\"I told you to stay away from that place,\" Marcus said, his voice softer now, tinged with worry rather than anger. \"The ruins are dangerous. Unstable. People have died up there.\"\n\n\"I know,\" Kira said. \"I'm sorry. I won't go back.\"\n\nIt was a lie, and she suspected her father knew it. But he simply nodded and returned to his work, leaving Kira alone with her thoughts and the memory of what she had found in the depths of the ancient temple.\n\nAn egg. Massive, easily the size of a wagon wheel, its surface covered in scales that shimmered with colors she had no names for—deep purples that shifted to midnight blue, then to a green so dark it was almost black. It had been warm to the touch, impossibly warm, as if a fire burned within.\n\nAnd when she had placed her palm against its surface, she had heard something. A voice, ancient and vast, speaking directly into her mind.\n\n*Soon*, it had said. *The time is almost here.*\n\n---\n\nThat night, as Thornhaven slept beneath a blanket of stars, Kira slipped out of her bedroom window and began the long climb up the mountain path.\n\nThe moon was full, casting silver light across the landscape and turning the familiar world into something strange and magical. The wind carried the scent of pine and something else—something older, like smoke and stone and the passage of countless years.\n\nThe path to the ruins was treacherous in daylight and nearly suicidal at night, but Kira had always been sure-footed. She climbed steadily, her muscles burning, her breath coming in short gasps as the air thinned. Twice she nearly lost her footing on loose stones, and once she had to press herself flat against the cliff face as a small avalanche of pebbles cascaded past her.\n\nBut she didn't turn back. She couldn't. The voice in her head had been calling to her ever since she left the ruins three days ago, growing stronger with each passing hour. It wasn't demanding or threatening—it was lonely. Desperately, achingly lonely. And something in Kira's heart, some part of her that had always felt out of place in her small village life, responded to that loneliness like a key fitting into a lock.\n\nThe ruins of Valdris emerged from the darkness like the bones of some massive creature. Once, according to legend, this had been the greatest temple in all the land—a place where humans and dragons had lived together in harmony, where the ancient pacts were forged and the world was kept in balance. Now it was nothing but crumbling walls and fallen columns, reclaimed by moss and ivy and the slow, patient work of time.\n\nKira made her way through the outer chambers, past faded murals depicting dragons in flight and humans riding on their backs, past altars that had once held offerings and now held only dust. The voice grew stronger with every step, guiding her deeper into the temple, down stairs that spiraled into the earth, through passages so narrow she had to turn sideways to fit.\n\nFinally, she emerged into the chamber where she had found the egg.\n\nIt was exactly as she had left it, resting on a pedestal of carved stone in the center of a circular room. But something had changed. The colors on its surface were brighter now, more vibrant, swirling and shifting like oil on water. And as Kira approached, she could see cracks forming in the shell—thin lines of golden light spreading across its surface like a web.\n\n*You came back*, the voice said, and this time it was clearer, stronger, filled with emotion that made Kira's eyes sting with tears. *I knew you would. I felt your heart when you touched me. We are the same, you and I. Lost. Searching. Incomplete.*\n\n\"Who are you?\" Kira whispered, reaching out to touch the egg. \"What are you?\"\n\n*I am what your people have forgotten. I am what this world needs to remember. I am the last of my kind—the final hope of the dragons.*\n\nThe cracks spread wider, and the golden light grew brighter, filling the chamber with warmth. Kira should have been afraid. She should have run, should have called for help, should have done anything other than stand there with her hand pressed against the shell of an egg that contained a creature from legend.\n\nBut she wasn't afraid. She had never felt less afraid in her entire life.\n\n*Will you help me?* the voice asked. *Will you be my companion, my friend, my rider? Will you stand beside me as the world burns and rebuild it from the ashes?*\n\nKira thought of her life in Thornhaven—the endless days at the forge, the expectations of her father, the knowledge that she would spend the rest of her years in that tiny village doing exactly what her mother had done, and her grandmother before her. She thought of all the nights she had spent staring up at the stars and dreaming of something more.\n\n\"Yes,\" she said. \"I will.\"\n\nThe egg exploded.\n\n---\n\n## Chapter Two: The Hatchling\n\nWhen Kira opened her eyes, she was lying on her back on the cold stone floor, staring up at a ceiling covered in ancient paintings of dragons. Her entire body ached, and her ears were ringing, and for a long moment she couldn't remember where she was or how she had gotten there.\n\nThen she heard the sound—a soft, chirping noise, like a bird but deeper, more resonant—and everything came flooding back.\n\nShe sat up slowly, wincing at the pain in her muscles, and turned toward the source of the sound.\n\nThe dragon was tiny—no bigger than a cat—and impossibly beautiful. Its scales were the same shifting purple-blue-green as the egg had been, catching the light and throwing it back in patterns that seemed to move of their own accord. Its wings, still damp and folded against its sides, were translucent, like stained glass, shot through with veins of gold. Its eyes, when they met hers, were the color of molten amber, ancient and intelligent and filled with recognition.\n\n*Mother*, it said, and the word echoed in Kira's mind with such intensity that tears sprang to her eyes.\n\n\"I'm not your mother,\" she said softly, reaching out a trembling hand. \"I'm just... I'm just a blacksmith's daughter.\"\n\nThe dragon—for it was a dragon, an actual living breathing dragon, a creature from stories and songs and the distant past—tilted its head and chirped again. Then it scrambled across the floor on legs that were too long for its body and wings that kept getting in the way, and it climbed up Kira's arm and nestled against her chest, pressing its small head into the hollow of her throat.\n\n*Not mother*, it agreed. *Better. Partner. Heart-twin. Bonded.*\n\nKira felt something shift inside her, like a door opening in a room she hadn't known existed. Suddenly she could feel the dragon's emotions as clearly as her own—its confusion, its hunger, its overwhelming joy at being alive and being here with her. She could sense its thoughts at the edge of her consciousness, not as words but as images and feelings and instincts.\n\n\"I'm Kira,\" she said, stroking the dragon's head. Its scales were warm and smooth beneath her fingers. \"What's your name?\"\n\n*I don't have one. Not yet. You must give me one. It is tradition.*\n\nKira thought for a moment, considering and discarding a dozen possibilities. The dragon waited patiently, its golden eyes fixed on her face.\n\n\"Zephyr,\" she said finally. \"It means a gentle wind. My mother used to say that great changes start with gentle winds.\"\n\nThe dragon—Zephyr—hummed with pleasure. *Zephyr. Yes. I like it. It is mine now. I am Zephyr, and you are Kira, and together we are whole.*\n\n---\n\nGetting Zephyr down the mountain proved to be a challenge that Kira hadn't anticipated. The hatchling couldn't fly yet—its wings were too new, too weak—and while it could walk, it moved with the clumsy enthusiasm of a puppy, tripping over its own feet and getting distracted by every interesting shadow and sound.\n\nBy the time they reached the base of the mountain, dawn was breaking over the eastern peaks, painting the sky in shades of pink and gold. Kira was exhausted, her arms aching from carrying Zephyr whenever the terrain became too rough for the little dragon to navigate.\n\nShe knew she couldn't take Zephyr home. Her father would never understand—might even try to kill the dragon out of fear or misguided protection. And if the rest of the village found out... she didn't even want to think about what might happen. Dragons were creatures of legend, yes, but they were also creatures of terror. The old stories spoke of fire and destruction, of villages burned and kingdoms toppled.\n\n*They don't know*, Zephyr said, sensing her fear. *They've forgotten what we truly are. What we can be when we work together.*\n\n\"What are you?\" Kira asked, finding shelter in a small cave at the mountain's base. \"What were dragons, really?\"\n\nZephyr curled up in her lap, its scales warming her chilled legs. *We were guardians. Protectors. We kept the balance between the elements, between light and dark, between chaos and order. When the world was young, dragons and humans lived as one—we shared our fire and our strength, and they shared their hearts and their hope. But something happened. Something terrible. The bond was broken, and the dragons faded away.*\n\n\"What happened?\"\n\n*I don't know. My memories are fragments, echoes of my ancestors. I know only that I am the last, and that my purpose is to restore what was lost.* Zephyr's golden eyes met hers. *That is why I called to you, Kira. Your heart is pure, your spirit is strong. You are what the ancient texts called a Dragonheart—a human capable of forming the true bond.*\n\nKira's mind reeled. \"A Dragonheart? I've never heard of such a thing.\"\n\n*Your people have forgotten much. But you will remember. We will remember together.*\n\n---\n\n## Chapter Three: The Secret\n\nFor three weeks, Kira lived a double life.\n\nDuring the days, she worked in her father's forge, hammering metal and mending tools, pretending that everything was normal. She smiled and laughed and answered questions, all while her mind was filled with Zephyr—sensing the dragon's presence in the cave, feeling its hunger and its boredom and its growing strength",
+          "type": "text"
+        }
+      ],
+      "id": "msg_01LBt4txDGXDifgjEf2UmjQt",
+      "model": "claude-opus-4-5-20251101",
+      "role": "assistant",
+      "stop_details": null,
+      "stop_reason": "max_tokens",
+      "stop_sequence": null,
+      "type": "message",
+      "usage": {
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 0,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "inference_geo": "not_available",
+        "input_tokens": 45,
+        "output_tokens": 3000,
+        "output_tokens_details": {
+          "thinking_tokens": 117
+        },
+        "service_tier": "standard"
+      }
+    },
+    "headers": {
+      "anthropic-organization-id": "[REDACTED:anthropic-organization-id]",
+      "anthropic-ratelimit-input-tokens-limit": [
+        "5000000"
+      ],
+      "anthropic-ratelimit-input-tokens-remaining": [
+        "5000000"
+      ],
+      "anthropic-ratelimit-input-tokens-reset": [
+        "2026-05-29T17:41:56Z"
+      ],
+      "anthropic-ratelimit-output-tokens-limit": [
+        "400000"
+      ],
+      "anthropic-ratelimit-output-tokens-remaining": [
+        "400000"
+      ],
+      "anthropic-ratelimit-output-tokens-reset": [
+        "2026-05-29T17:43:02Z"
+      ],
+      "anthropic-ratelimit-requests-limit": [
+        "2000"
+      ],
+      "anthropic-ratelimit-requests-remaining": [
+        "1999"
+      ],
+      "anthropic-ratelimit-requests-reset": [
+        "2026-05-29T17:41:54Z"
+      ],
+      "anthropic-ratelimit-tokens-limit": [
+        "5400000"
+      ],
+      "anthropic-ratelimit-tokens-remaining": [
+        "5400000"
+      ],
+      "anthropic-ratelimit-tokens-reset": [
+        "2026-05-29T17:41:56Z"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a0374ae9798a9991-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-security-policy": [
+        "default-src 'none'; frame-ancestors 'none'"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 29 May 2026 17:43:02 GMT"
+      ],
+      "request-id": [
+        "req_011CbXGkMsARVcFEkNfaxy14"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": "[REDACTED:set-cookie]",
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "traceresponse": [
+        "00-d3baa5890f7d22e26206fc5dc78250b0-45fb97e58f00d989-01"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-robots-tag": [
+        "none"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

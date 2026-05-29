@@ -1,0 +1,165 @@
+{
+  "model_spec": "anthropic:claude-opus-4-5",
+  "provider": "anthropic",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjo1MDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IlNvbHZlIDEyKjcgYW5kIHNob3cgeW91ciBpbnRlcm5hbCB0aGlua2luZyAoYnJpZWYpLiIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImNsYXVkZS1vcHVzLTQtNSIsInN0cmVhbSI6ZmFsc2UsInRoaW5raW5nIjp7ImJ1ZGdldF90b2tlbnMiOjEwMjQsInR5cGUiOiJlbmFibGVkIn19"
+    },
+    "canonical_json": {
+      "max_tokens": 5000,
+      "messages": [
+        {
+          "content": "Solve 12*7 and show your internal thinking (brief).",
+          "role": "user"
+        }
+      ],
+      "model": "claude-opus-4-5",
+      "stream": false,
+      "thinking": {
+        "budget_tokens": 1024,
+        "type": "enabled"
+      }
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "anthropic-beta": [
+        "interleaved-thinking-2025-05-14"
+      ],
+      "anthropic-version": [
+        "2023-06-01"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ],
+      "x-api-key": "[REDACTED:x-api-key]"
+    },
+    "method": "post",
+    "url": "https://api.anthropic.com/v1/messages"
+  },
+  "response": {
+    "body": {
+      "content": [
+        {
+          "signature": "EuACCmwIDhgCKkAWQvvQbZEFO3E9+40JQlW/s+WDjFTA1TIcNcyD0NmDXttZdKLRLiuT85R85zv2dzLZnilm/SWvrxAmYz6sI0FLMhhjbGF1ZGUtb3B1cy00LTUtMjAyNTExMDE4AEIIdGhpbmtpbmcSDBFe5BCbKkqHRdTi3BoMJiu4hLzdtG+BE+tYIjB5EBH5LWhLEvvdyLRqaCDpBRjoNgoIg0XZOnKGIy/bfL8xETViYvjShj7Djz42+lYqoQHfOMNuo747BvAxEXQQbWi0aSjRYhB5ih6o/Il93ISBaXwtWE5JIZohzioYytn9S5KBCvQymv6hyY+yhO+2jL6Hfm4DsxpV9zH09q2oGvxk8VczrXYlrJBwy8djkUuv+mDlAy9QpWo+grxOP7Nkq1cnY5skkk0lYITlAG9ptzPes8HuggyPKp71tL+Y+QOdWrcKu3Ba9NcKnrGIfzBuYbxYfhgB",
+          "thinking": "12 * 7\n\nI can break this down:\n12 * 7 = (10 + 2) * 7 = 10*7 + 2*7 = 70 + 14 = 84\n\nOr: 12 * 7 = 12 * 7 = 84 (I know 12*6=72, so 12*7 = 72+12 = 84)",
+          "type": "thinking"
+        },
+        {
+          "text": "**Solving 12 × 7**\n\nMy thinking: Break it into easier parts\n- 10 × 7 = 70\n- 2 × 7 = 14\n- 70 + 14 = **84**",
+          "type": "text"
+        }
+      ],
+      "id": "msg_01SP736YTKKC7Ek2LdA8d9f5",
+      "model": "claude-opus-4-5-20251101",
+      "role": "assistant",
+      "stop_details": null,
+      "stop_reason": "end_turn",
+      "stop_sequence": null,
+      "type": "message",
+      "usage": {
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 0,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "inference_geo": "not_available",
+        "input_tokens": 51,
+        "output_tokens": 169,
+        "output_tokens_details": {
+          "thinking_tokens": 107
+        },
+        "service_tier": "standard"
+      }
+    },
+    "headers": {
+      "anthropic-organization-id": "[REDACTED:anthropic-organization-id]",
+      "anthropic-ratelimit-input-tokens-limit": [
+        "5000000"
+      ],
+      "anthropic-ratelimit-input-tokens-remaining": [
+        "5000000"
+      ],
+      "anthropic-ratelimit-input-tokens-reset": [
+        "2026-05-29T17:40:49Z"
+      ],
+      "anthropic-ratelimit-output-tokens-limit": [
+        "400000"
+      ],
+      "anthropic-ratelimit-output-tokens-remaining": [
+        "400000"
+      ],
+      "anthropic-ratelimit-output-tokens-reset": [
+        "2026-05-29T17:40:52Z"
+      ],
+      "anthropic-ratelimit-requests-limit": [
+        "2000"
+      ],
+      "anthropic-ratelimit-requests-remaining": [
+        "1999"
+      ],
+      "anthropic-ratelimit-requests-reset": [
+        "2026-05-29T17:40:49Z"
+      ],
+      "anthropic-ratelimit-tokens-limit": [
+        "5400000"
+      ],
+      "anthropic-ratelimit-tokens-remaining": [
+        "5400000"
+      ],
+      "anthropic-ratelimit-tokens-reset": [
+        "2026-05-29T17:40:49Z"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a037494fb9738243-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-security-policy": [
+        "default-src 'none'; frame-ancestors 'none'"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 29 May 2026 17:40:52 GMT"
+      ],
+      "request-id": [
+        "req_011CbXGfXXCZ5cWbiQAE4PaA"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": "[REDACTED:set-cookie]",
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "traceresponse": [
+        "00-0cf89ce27cae3377d68effeeb6fef2e2-9ff1f3908b4ef6f3-01"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-robots-tag": [
+        "none"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

@@ -1,0 +1,191 @@
+{
+  "model_spec": "anthropic:claude-opus-4-5",
+  "provider": "anthropic",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoxMjI1LCJtZXNzYWdlcyI6W3siY29udGVudCI6IkdlbmVyYXRlIGEgc29mdHdhcmUgZW5naW5lZXIgcHJvZmlsZSIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImNsYXVkZS1vcHVzLTQtNSIsIm91dHB1dF9mb3JtYXQiOnsic2NoZW1hIjp7ImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjpmYWxzZSwicHJvcGVydGllcyI6eyJhZ2UiOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBhZ2UgaW4geWVhcnMiLCJ0eXBlIjoiaW50ZWdlciJ9LCJuYW1lIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3MgZnVsbCBuYW1lIiwidHlwZSI6InN0cmluZyJ9LCJvY2N1cGF0aW9uIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3Mgam9iIG9yIHByb2Zlc3Npb24iLCJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJhZ2UiLCJuYW1lIiwib2NjdXBhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In0sInR5cGUiOiJqc29uX3NjaGVtYSJ9LCJzdHJlYW0iOmZhbHNlLCJ0aGlua2luZyI6eyJidWRnZXRfdG9rZW5zIjoxMDI0LCJ0eXBlIjoiZW5hYmxlZCJ9fQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 1225,
+      "messages": [
+        {
+          "content": "Generate a software engineer profile",
+          "role": "user"
+        }
+      ],
+      "model": "claude-opus-4-5",
+      "output_format": {
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "age": {
+              "description": "Person's age in years",
+              "type": "integer"
+            },
+            "name": {
+              "description": "Person's full name",
+              "type": "string"
+            },
+            "occupation": {
+              "description": "Person's job or profession",
+              "type": "string"
+            }
+          },
+          "required": [
+            "age",
+            "name",
+            "occupation"
+          ],
+          "type": "object"
+        },
+        "type": "json_schema"
+      },
+      "stream": false,
+      "thinking": {
+        "budget_tokens": 1024,
+        "type": "enabled"
+      }
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "anthropic-beta": [
+        "interleaved-thinking-2025-05-14,structured-outputs-2025-11-13"
+      ],
+      "anthropic-version": [
+        "2023-06-01"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ],
+      "x-api-key": "[REDACTED:x-api-key]"
+    },
+    "method": "post",
+    "url": "https://api.anthropic.com/v1/messages"
+  },
+  "response": {
+    "body": {
+      "content": [
+        {
+          "signature": "EqEDCmwIDhgCKkAhumlleZ1nDfbx3ueM74hhh+PGQy9cLfI024X5pe+iA4th9xWD5VC1WhVUza5+rdlvHG2aBcGOF/t9UJy+505NMhhjbGF1ZGUtb3B1cy00LTUtMjAyNTExMDE4AEIIdGhpbmtpbmcSDEhzZBj6XOgzQU13ohoMKRvp0DA7xb+BA+doIjDW1R2rReT0o2NhwinOdbMkuVZH1uhRXqpuXP++ARuiL26/zW6CJU0UJild5XiUYV0q4gG+M/+tvE3RxyylLUfm8DgYhMrogeTr0WBS63aJhOBVrtr598+mMpcbVOfrf/5n3AOCvfeXHihJPxUCnVFdti/So1IrqOBy77soEJRHsqBfT0GrVC8EA34nwedwsO/C1y4HyJxpbdttrcFUV670aDajPuTnOnYqo8vWW3h2EIsBTUnY6etn2sEVGA57T9X3eNkmzKurdIyctsOk7rJnocQScnfglnRdR5VZL820nTw+k9Z15Ig4VRItQHbQlDx8WTROi/HdfYMBXKuQKrCkwW7qccDgF7ixLs3QfdxWyNqomJqPGAE=",
+          "thinking": "The user wants me to generate a software engineer profile following the JSON schema provided. I need to create a fictional person with a name, age, and occupation (which should be software engineer or similar).",
+          "type": "thinking"
+        },
+        {
+          "text": "{\"name\":\"Sarah Chen\",\"age\":32,\"occupation\":\"Software Engineer\"}",
+          "type": "text"
+        }
+      ],
+      "id": "msg_01DEFnnMjeQo5x84DsTXMvpq",
+      "model": "claude-opus-4-5-20251101",
+      "role": "assistant",
+      "stop_details": null,
+      "stop_reason": "end_turn",
+      "stop_sequence": null,
+      "type": "message",
+      "usage": {
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 0,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "inference_geo": "not_available",
+        "input_tokens": 262,
+        "output_tokens": 66,
+        "output_tokens_details": {
+          "thinking_tokens": 46
+        },
+        "service_tier": "standard"
+      }
+    },
+    "headers": {
+      "anthropic-organization-id": "[REDACTED:anthropic-organization-id]",
+      "anthropic-ratelimit-input-tokens-limit": [
+        "5000000"
+      ],
+      "anthropic-ratelimit-input-tokens-remaining": [
+        "5000000"
+      ],
+      "anthropic-ratelimit-input-tokens-reset": [
+        "2026-05-29T17:41:14Z"
+      ],
+      "anthropic-ratelimit-output-tokens-limit": [
+        "400000"
+      ],
+      "anthropic-ratelimit-output-tokens-remaining": [
+        "400000"
+      ],
+      "anthropic-ratelimit-output-tokens-reset": [
+        "2026-05-29T17:41:15Z"
+      ],
+      "anthropic-ratelimit-requests-limit": [
+        "2000"
+      ],
+      "anthropic-ratelimit-requests-remaining": [
+        "1999"
+      ],
+      "anthropic-ratelimit-requests-reset": [
+        "2026-05-29T17:41:13Z"
+      ],
+      "anthropic-ratelimit-tokens-limit": [
+        "5400000"
+      ],
+      "anthropic-ratelimit-tokens-remaining": [
+        "5400000"
+      ],
+      "anthropic-ratelimit-tokens-reset": [
+        "2026-05-29T17:41:14Z"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a03749e6c975f60c-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-security-policy": [
+        "default-src 'none'; frame-ancestors 'none'"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 29 May 2026 17:41:15 GMT"
+      ],
+      "request-id": [
+        "req_011CbXGhJqmW7q6sBzRCb7Xr"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": "[REDACTED:set-cookie]",
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "traceresponse": [
+        "00-3bd06a577683cd70021c9b356dcef397-8128ee592914fc05-01"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-robots-tag": [
+        "none"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

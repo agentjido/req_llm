@@ -1,0 +1,165 @@
+{
+  "model_spec": "anthropic:claude-sonnet-4-6",
+  "provider": "anthropic",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjozMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IldyaXRlIGEgdmVyeSBsb25nIHN0b3J5IGFib3V0IGRyYWdvbnMgYW5kIGFkdmVudHVyZXMiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJjbGF1ZGUtc29ubmV0LTQtNiIsInN0cmVhbSI6ZmFsc2UsInRoaW5raW5nIjp7ImJ1ZGdldF90b2tlbnMiOjEwMjQsInR5cGUiOiJlbmFibGVkIn19"
+    },
+    "canonical_json": {
+      "max_tokens": 3000,
+      "messages": [
+        {
+          "content": "Write a very long story about dragons and adventures",
+          "role": "user"
+        }
+      ],
+      "model": "claude-sonnet-4-6",
+      "stream": false,
+      "thinking": {
+        "budget_tokens": 1024,
+        "type": "enabled"
+      }
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "anthropic-beta": [
+        "interleaved-thinking-2025-05-14"
+      ],
+      "anthropic-version": [
+        "2023-06-01"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ],
+      "x-api-key": "[REDACTED:x-api-key]"
+    },
+    "method": "post",
+    "url": "https://api.anthropic.com/v1/messages"
+  },
+  "response": {
+    "body": {
+      "content": [
+        {
+          "signature": "EvECCmUIDhgCKkALq4x5B6GclFiYWqyK6JZPT5y2RgCbOUojM0TLEzhn/j9SLwSkccsVk2C2olGYwySGCyE0X69ol/DNHQdpE7loMhFjbGF1ZGUtc29ubmV0LTQtNjgAQgh0aGlua2luZxIMpwxD5VBxJcr2w2ayGgxwJC/4l4moWTifCAoiMBnzhIpk8vnjUxgARiiLrh14FBNxfUEX3Cf6oeP/JZYj++o4Yv+5eMY2P1/0UrinjCq5ATzpF7muwJfcmfVX1ickw5tupc2lFxpoD8CjiDt80ehvdkpMpk2XAHnqanP+EkLIMjIM7Hh21r2XPcZTh6nhBXRuWP9soMS7SQR85yF3lSnsKvGTe4QF+OWtuQjMqVkBDahh43A6B5nn0hKUCu7bmkpx5K38FvmDJF+D6JiKnqgRol9IRSylctZX8tfpGzPuY+V+WqYyejqQ8u0hrSA9Ehujumey2612KPXorTDiyy2CIhVMDXWvghUqGAE=",
+          "thinking": "The user wants a very long story about dragons and adventures. I'll write an epic fantasy story with rich world-building, compelling characters, and exciting adventures.",
+          "type": "thinking"
+        },
+        {
+          "text": "# The Last Ember of Valdrath\n\n## An Epic Tale of Dragons, Heroes, and the Fire That Binds Them\n\n---\n\n# Part One: The World That Was\n\n## Chapter One: Ash and Memory\n\nThe village of Thornwick smelled of wood smoke and wet earth on the morning that changed everything.\n\nIt was the kind of morning that people remember in pieces — the particular gray of the sky, the way frost clung to the windowpanes like white lace, the sound of a rooster calling out from the Harlan farm even though everyone in the village had long suspected that particular rooster had gone somewhat mad. It was ordinary in all the ways that matter, and extraordinary in none.\n\nKael Dawnridge was seventeen years old, lean and dark-haired, with the kind of eyes that looked perpetually as though they were working through a problem. He sat on the stone wall outside his family's cottage, sharpening the old hunting knife his father had left him — left being a word that covered a great deal of complicated ground, as his father had not so much left willingly as been taken by a fever three winters past. Still, the knife was his, and he kept it sharp, partly out of habit and partly because a sharp knife was one of the few things in the world that made absolute, reliable sense.\n\n\"You're going to wear that blade down to nothing,\" said a voice behind him.\n\nHe turned. His grandmother, Maren, stood in the doorway, wrapped in her heavy wool shawl despite the fact that it was technically spring. She was seventy-one years old, small as a sparrow, and had the unsettling habit of being right about nearly everything. Her white hair was pinned up in a way that suggested it had been put up in a hurry and then forgotten about entirely.\n\n\"I'm being careful,\" Kael said.\n\n\"You're being anxious,\" she corrected, \"and calling it careful.\"\n\nHe couldn't argue with that, so he put the knife away.\n\nMaren came and sat beside him on the wall, something that took considerable effort at her age, though she would have denied this fiercely. She looked out over the village — the cluster of stone houses, the well at the center square, the mill that stood at the edge of the river Ash like a patient old man — and said nothing for a while. She had a gift for useful silence.\n\n\"The Harlan boy came by while you were sleeping,\" she said finally. \"Said he found something out in the eastern field.\"\n\n\"What kind of something?\"\n\n\"The kind he wouldn't describe properly.\" She glanced at him sideways. \"The kind that left a burning circle in the grass thirty feet across.\"\n\nKael straightened. \"A fire?\"\n\n\"No ash,\" she said. \"Just scorched earth. Like the ground was heated from below. Or from above.\" She paused. \"And there were tracks. He didn't know what kind. Neither does anyone else.\"\n\nKael was quiet for a moment. He looked east, as though he might be able to see across the fields and through the tree line to whatever had left its mark on the world during the night.\n\n\"I'll go look,\" he said.\n\n\"I know you will,\" said Maren. \"That's why I told you.\"\n\n---\n\nThe eastern field was a twenty-minute walk from the village center, past the old apple orchard where the trees had grown so gnarled and twisted they looked like frozen dancers, and through a stretch of pine that smelled of resin and cold stone. Kael made the walk quickly, his breath clouding in the morning air.\n\nHe wasn't alone. By the time he reached the edge of the field, four others had joined him — Lena Marsh, who was the miller's daughter and generally the most practical person Kael had ever met; the twins, Corren and Brix Aldgate, who were fifteen and approached most situations as though they were a game to be won; and old Thomas Heave, who was the closest thing Thornwick had to a scholar, which meant he had read more books than anyone else and used this fact to justify opinions on subjects he knew very little about.\n\nThey stopped at the edge of the scorched circle and stared.\n\nIt was exactly as the Harlan boy had described. A perfect circle — or near enough to perfect that the difference didn't matter — of blackened earth in the center of the field. The grass around it was unburned, crisp with morning frost. There was no smoke, no smell of char. Just the dark earth and, at the center of the circle, a depression in the ground about the size of a large wagon wheel, as though something very heavy had rested there.\n\n\"Animal?\" suggested Corren.\n\n\"What animal leaves a circle thirty feet across?\" said Lena flatly.\n\n\"A very large one,\" offered Brix.\n\n\"The tracks,\" said Thomas, who had walked around the perimeter and was now crouching at its eastern edge, peering at the ground through a pair of spectacles that were slightly too large for his face. \"Come look at these.\"\n\nThey gathered around him. The tracks were pressed into the soft earth just beyond the scorched circle, and they were unlike anything any of them had seen. Four-toed, enormous — each individual print the size of a cartwheel — with deep furrows at the tips of each toe that could only have been made by claws of considerable size. The stride between prints was vast, suggesting something that moved in great bounding leaps rather than walking.\n\nAnd then, after four such prints leading away toward the eastern hills, they simply stopped. As though whatever had made them had simply ceased to be on the ground.\n\n\"It flew,\" said Kael.\n\nNobody said anything for a moment.\n\n\"That's,\" said Thomas, and then stopped.\n\n\"Impossible,\" said Lena, but her voice had lost some of its usual certainty.\n\nKael studied the last print. Something caught the morning light at its center — a fragment of something dark and iridescent, like a piece of broken mirror. He reached in and picked it up carefully. It was roughly triangular, curved slightly, hard as stone but thinner than a thumbnail. One edge was jagged where it had broken. The other was smooth, and when the light caught it, it shifted colors — black to deep green to a flash of dark gold.\n\n\"What is that?\" said Corren, leaning in.\n\nKael turned it over in his fingers. It was warm. Not warm from the ground or from the sun — warm in itself, as though it contained some small internal fire.\n\n\"A scale,\" said Thomas, very quietly. His voice had changed completely. The bluster was gone. He looked at the fragment in Kael's hand with an expression that was equal parts wonder and something that looked disturbingly like fear.\n\n\"A scale from what?\" said Lena.\n\nThomas took off his oversized spectacles, cleaned them on his shirt — a nervous habit — and put them back on. He looked at the scorched circle, at the enormous tracks, at the scale in Kael's hand. Then he looked at the sky, which was still gray and ordinary and gave nothing away.\n\n\"A dragon,\" he said.\n\n---\n\nThe word hit the group like a stone dropped in still water.\n\nDragons were not real. Everyone knew this. Dragons were the creatures of old stories — the kind told to children to explain natural disasters, to justify the ruined fortresses found crumbling in the mountains, to account for the occasional charred stretch of ancient forest where the trees had never grown back. They were metaphors. They were legend. They were not the sort of thing that left tracks in the fields of unremarkable villages and dropped scales that felt warm in your hand.\n\n\"You're being dramatic,\" said Lena, but she was looking at the scale with an expression she couldn't quite control.\n\n\"The prints are consistent with the anatomical descriptions in Relmar's *Compendium of Mythic Beasts*,\" said Thomas, and for once nobody laughed at him for having read such a book. \"Four-clawed foot, enormous size, and then — flight. No more prints.\"\n\n\"Relmar's book is fiction,\" said Lena.\n\n\"Relmar spent forty years collecting accounts from across the known world,\" Thomas said. \"He interviewed seven people who claimed direct encounters. He documented three sites of what he described as 'scorched landing circles' nearly identical to—\" He gestured at the circle before them.\n\n\"Three sites in a book written two hundred years ago,\" said Lena. But she was looking at the scale again.\n\nKael closed his fingers around the scale. It was definitely warm. There was something else about it, too — something harder to describe. Holding it felt like standing near a fire on a cold night. It felt like recognition.\n\n\"I'm going to find it,\" he said.\n\nEveryone looked at him.\n\n\"It went east,\" he said. \"The tracks lead east before it flew. The eastern hills. I'm going to find it.\"\n\n\"You're going to find a dragon,\" said Lena, in a voice that would have been scathing if it weren't for the fact that she was already calculating something, and Kael knew that expression well.\n\n\"If it is one,\" he said.\n\n\"And if it is?\"\n\nHe looked at the scale in his hand. He didn't have a good answer to that. What do you say to a dragon? What do you do when you find the impossible made solid and warm in the morning frost of a field you've walked a hundred times?\n\n\"I'll figure that out when I get there,\" he said.\n\nIt was not a satisfying answer. It was, however, the honest one.\n\n---\n\n## Chapter Two: The Road East\n\nHe left the next morning, before dawn.\n\nMaren had, of course, known he was going. She had also, which was both unexpected and typical, prepared for it. When Kael came downstairs in the gray pre-dawn dark to collect his things, he found a pack on the kitchen table, already assembled. Inside: hard bread, dried meat, three apples, a waterskin, a coil of rope, a tinderbox, an extra pair of wool socks, and a small leather-bound book that he didn't recognize.\n\nHe picked up the book. On its cover, in faded gold lettering, were the words: *On the Nature of Draconid Creatures: A Practical Survey.* \n\nHe stared at it. Then he looked at Maren, who was standing in the kitchen doorway in her nightclothes, holding a candle.\n\n\"You had this,\" he said.\n\n\"It was your grandfather's,\" she said. \"He found it in a market in the city of Aeron, when he was young. He thought it was interesting.\"\n\n\"Did he know it was real? The subject?\"\n\nMaren was quiet for a moment. \"He thought there was something in it,\" she said carefully. \"He had reasons. We never talked about them at great length.\" She paused. \"He went east once. When your father was small. He was gone for three weeks and came back different.\"\n\n\"Different how?\"\n\n\"More certain,\" she said. \"Like he'd found something he'd been looking for without knowing he was looking.\"\n\nKael looked at the book, at the pack, at his grandmother in the candlelight. \"You're not going to tell me not to go.\"\n\n\"Would it help?\"\n\n\"No.\"\n\n\"Then there's your answer.\" She came across the kitchen and put her small hands on either side of his face. Her hands were cold. Her eyes were very clear and steady. \"You are your grandfather's kind,\" she said. \"You've always been restless in the same direction. East.\" She kissed his forehead. \"Come back.\"\n\n\"I will,\" he said.\n\nHe shouldered the pack, tucked the dragon scale into the inner pocket of his coat where it sat warm against his ribs like a coal, and stepped out into the dark.\n\n---\n\nHe had not gone a mile when he heard footsteps behind him.\n\nHe stopped and turned. Lena Marsh was walking toward him on the road, her own pack on her back, her dark red hair pulled back under a traveling hood. She carried a staff — her father's walking staff, a solid piece of ash wood — and looked entirely matter-of-fact about the whole situation.\n\n\"No,\" said Kael.\n\n\"You don't actually have the authority to tell me where I can and can't walk,\" she said pleasantly.\n\n\"This could be dangerous.\"\n\n\"Which is exactly why you shouldn't go alone.\" She fell into step beside him as though the matter were settled. \"Besides, you're going into the eastern hills without knowing where you're going or what you'll find. I'm from the eastern hills. My mother's family is from Carven, which is the last village before the mountains. I know the terrain.\"\n\nKael thought about arguing further. He thought about it for about three seconds, which was long enough to realize that she was right on every point and that he would simply be wasting breath that could be used for walking.\n\n\"Fine,\" he said.\n\n\"Also,\" she added, \"I talked to Thomas last night. He",
+          "type": "text"
+        }
+      ],
+      "id": "msg_01ENYmAY9K3cdgQdoi9yXzAJ",
+      "model": "claude-sonnet-4-6",
+      "role": "assistant",
+      "stop_details": null,
+      "stop_reason": "max_tokens",
+      "stop_sequence": null,
+      "type": "message",
+      "usage": {
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 0,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "inference_geo": "global",
+        "input_tokens": 45,
+        "output_tokens": 3000,
+        "output_tokens_details": {
+          "thinking_tokens": 37
+        },
+        "service_tier": "standard"
+      }
+    },
+    "headers": {
+      "anthropic-organization-id": "[REDACTED:anthropic-organization-id]",
+      "anthropic-ratelimit-input-tokens-limit": [
+        "800000"
+      ],
+      "anthropic-ratelimit-input-tokens-remaining": [
+        "800000"
+      ],
+      "anthropic-ratelimit-input-tokens-reset": [
+        "2026-05-29T17:47:47Z"
+      ],
+      "anthropic-ratelimit-output-tokens-limit": [
+        "160000"
+      ],
+      "anthropic-ratelimit-output-tokens-remaining": [
+        "160000"
+      ],
+      "anthropic-ratelimit-output-tokens-reset": [
+        "2026-05-29T17:48:56Z"
+      ],
+      "anthropic-ratelimit-requests-limit": [
+        "2000"
+      ],
+      "anthropic-ratelimit-requests-remaining": [
+        "1999"
+      ],
+      "anthropic-ratelimit-requests-reset": [
+        "2026-05-29T17:47:46Z"
+      ],
+      "anthropic-ratelimit-tokens-limit": [
+        "960000"
+      ],
+      "anthropic-ratelimit-tokens-remaining": [
+        "960000"
+      ],
+      "anthropic-ratelimit-tokens-reset": [
+        "2026-05-29T17:47:47Z"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a037537e8d2b140a-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-security-policy": [
+        "default-src 'none'; frame-ancestors 'none'"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 29 May 2026 17:48:56 GMT"
+      ],
+      "request-id": [
+        "req_011CbXHCGm4EawdvX3T1tDF1"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": "[REDACTED:set-cookie]",
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "traceresponse": [
+        "00-b16f9b868e91b4068e0d67ec47fcb9b3-3bf4fcfa2cc2666f-01"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-robots-tag": [
+        "none"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

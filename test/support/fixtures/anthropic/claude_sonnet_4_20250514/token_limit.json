@@ -1,4 +1,6 @@
 {
+  "model_spec": "anthropic:claude-sonnet-4-20250514",
+  "provider": "anthropic",
   "request": {
     "body": {
       "b64": "eyJtYXhfdG9rZW5zIjozMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IldyaXRlIGEgdmVyeSBsb25nIHN0b3J5IGFib3V0IGRyYWdvbnMgYW5kIGFkdmVudHVyZXMiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJjbGF1ZGUtc29ubmV0LTQtMjAyNTA1MTQiLCJzdHJlYW0iOmZhbHNlLCJ0aGlua2luZyI6eyJidWRnZXRfdG9rZW5zIjoxMDI0LCJ0eXBlIjoiZW5hYmxlZCJ9fQ=="
@@ -19,6 +21,9 @@
       }
     },
     "headers": {
+      "accept": [
+        "application/json"
+      ],
       "accept-encoding": [
         "gzip"
       ],
@@ -32,7 +37,7 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ],
       "x-api-key": "[REDACTED:x-api-key]"
     },
@@ -43,18 +48,19 @@
     "body": {
       "content": [
         {
-          "signature": "EuMDCkYICRgCKkBezDNqleDSFj4t6fCyUrLdUazddN47uD8leMLSJIpVxKjlPWRWyJdaGtkIO9rHr2OOA5OrGKUgoIYbR4WVCqOhEgzkeYo309Nvb1/wrhAaDGwbYf+Qe5r5aPWD+yIwrF2CDlo0OUPofjalgr+fOLtICcJEiaMAa4OapQ8yImPz1KYr8eL61/ZrCLfmwjHbKsoCLNDY4gVEVVJotMVHPZheRkq9zteO1Y9XnBpjqBrNH9hlhJIRUMjg0h7d83QdylK/g/5xfP8Oot6Y1cEGFoeaHqjcCG1Q7py8rI/Te727pca7RLAtNfDw2fhkQtQ6lf/rqXZMnmchk4zxKdaJOUDAPxgKcRrc02Iyh3ixv+qr68kUq88QblSuy/TFkkO791MKFg3vs8Um2uRcXZpwGib4JDrHsp9vnx9KhtpwV5qKXmHc//AXCE+NjoxO3YbrgMlyJxJ/Codpg3xs0HqfQTvF3ciiJvgWuMomVFqCwExDkF/X6wcn6W4+LAvpXYpP9ECmU0LGX+UA12sQHI5tT8Nztb+QdGBWp5z+M6A2uOcAqeBJpUTgCfvFNLDt3TwanONDvzHnodmfqbHgnl24FqGB1PG+O+b6QvpIi8QC/drzn6kv5xQrXlV5SCw0GAE=",
-          "thinking": "The user wants a very long story about dragons and adventures. I should create an engaging fantasy story with multiple characters, interesting plot developments, and rich world-building. I'll include various types of dragons, an adventure quest, and character development. Let me craft something epic and detailed.",
+          "signature": "Eu8DCmwIDhgCKkBPLTBshLaXfTkuoCdwBnhxgY2Abrx8tAa5wpfdOZWuhmWWJsq2RX46HghXBW0x3c7zhd3/MN1Dv5LdaQEsL0EtMhhjbGF1ZGUtc29ubmV0LTQtMjAyNTA1MTQ4AEIIdGhpbmtpbmcSDJcatyHcU6j+oe9ozxoMrG2UP+TnXSut3DqMIjAQBKXlyHGpnSZp2glrKtHKDOWFB/0RzOhx/JYpELnoJ3M8lmx1cojc3z2/q7N5AO0qsAICdR6gcexVn8Eww9YyHRlBW+cJdo2d9Dx+V7/MLyLjCuKAZb4Uep5VQwapQ7f9pi+3bba1/ixCXNgUjv6T5cUgYE4vdhM9xr2Fng83wfsfWm99gUp26Vkxkb/M2S6zrZBIyGsYPkawdf5IMYeJaXt9Ntx2eWK3t9qx5QHD5Ob5YqMwe6c70uz3tGLyvIlcTKOXMcGpZN1R6+kp5gXW6KuX/1wIJtxMEVoAOPANou+NHS/LmMVFq8riYJR2ccr5Gsql/eHKaLGwXbifn0phJcAGk7dtt61YgMwWOLxA4xnkFh/ZziBBYTqb/Gg0r03a2jfnEchT3um0rbcZuIJYuLLfuhZh1rPSD0ve6jZj0an1ptmM0jZ8WnT2uhpYGt48E1KaoLKJsYdIzQiz9SvIHaPWGAE=",
+          "thinking": "The user wants a very long story about dragons and adventures. I should create an engaging fantasy tale with rich characters, world-building, multiple plot threads, and exciting adventures. I'll aim for a substantial length with detailed descriptions, dialogue, and character development.",
           "type": "thinking"
         },
         {
-          "text": "# The Chronicles of the Dragonheart Realm\n\n## Chapter 1: The Last Dragonkeeper\n\nIn the mist-shrouded peaks of the Thornspire Mountains, where ancient pines twisted toward storm-darkened skies, stood the last of the great Dragon Sanctuaries. The Aethermoor Sanctuary had weathered a thousand seasons, its crystalline spires catching the first light of dawn like frozen lightning. Here, among floating gardens and chambers carved from living stone, dwelt Lyra Stormwind—the final keeper of an ancient pact between dragons and mortals.\n\nLyra's silver hair caught the morning breeze as she stood upon the Observatory Deck, her emerald eyes scanning the horizon with practiced concern. At twenty-five, she bore the weight of centuries upon her shoulders, for she was the last of her bloodline, the final guardian of secrets that could reshape the world. The Dragonmark upon her left palm—a spiraling pattern that seemed to shift and glow with its own inner fire—pulsed gently as she sensed the approach of her oldest companion.\n\nA shadow fell across the deck as Zephyr descended from the clouded heights above. The storm dragon's scales shimmered between deep blue and silver-white, each one inscribed with ancient runes that told of winds conquered and skies claimed. His wingspan stretched nearly sixty feet, and when he settled upon the reinforced perch with surprising grace, his intelligent amber eyes met Lyra's with unmistakable concern.\n\n\"The southern scouts bring troubling news, little keeper,\" Zephyr's voice resonated not through sound but through the mystical bond they shared—a connection forged when Lyra was but seven years old and had saved the dragon egg from ice raiders. \"The Void Seekers have broken free from their prison beneath Mount Obsidian.\"\n\nLyra's blood chilled. The Void Seekers—ancient beings of pure shadow and malice who had once sought to drain the life from all dragons and claim their power for themselves. They had been imprisoned three centuries ago by the combined might of all dragonkind and the Keeper Council. If they had indeed escaped...\n\n\"How many?\" she asked, though she dreaded the answer.\n\n\"Three, perhaps four. Umbros the Soul Render was seen among them.\" Zephyr's mental voice carried the weight of old nightmares. Umbros had been the most terrible of the Void Seekers, capable of turning dragons against their own kind by corrupting their very essence.\n\nBefore Lyra could respond, a crystalline chime echoed through the sanctuary—the alarm that signaled an approaching dragon. But this tone was wrong, discordant and filled with distress. Both keeper and dragon turned toward the eastern approach, where a young copper dragon spiraled downward in an erratic pattern that spoke of exhaustion and injury.\n\n\"Ember!\" Lyra recognized the adolescent dragon immediately. She was barely larger than a horse, her burnished copper scales dulled with travel and fear. The dragon crashed rather than landed upon the platform, her breathing ragged.\n\n\"Keeper... Keeper Stormwind,\" Ember gasped, her mental voice weak and fragmented. \"The village of Millbrook... they came in the night. Shadow and void... took the children first. The adults who tried to resist became... became like them. Empty shells with burning eyes.\"\n\nLyra knelt beside the injured dragon, her hands glowing with the soft green light of healing magic passed down through generations of keepers. \"Rest now, brave Ember. You've done well to bring us this warning.\"\n\nBut even as she tended to the young dragon's wounds, Lyra's mind raced. Millbrook was only two days' flight from the sanctuary—and it was the first of many settlements that lay in the path toward the great city of Drakmoor, where the last of the dragon eggs were kept in the Royal Hatchery. If the Void Seekers were moving with such speed and purpose, their target was clear: they sought to corrupt or destroy the next generation of dragons before they could hatch.\n\n## Chapter 2: The Gathering Storm\n\nAs night fell over the sanctuary, Lyra found herself in the Chamber of Echoes, a vast circular room whose walls were lined with crystals that held the memories and wisdom of every keeper who had come before. She placed her palm against the central crystal, and immediately the air filled with ghostly images and whispered voices—her grandmother Elena, her great-uncle Marcus, and dozens of others stretching back through the centuries.\n\n\"Grandmother,\" she whispered to the strongest of the presences. \"The Void Seekers have returned. Guide me.\"\n\nElena's spirit manifested more clearly than the others, her translucent form still bearing the proud bearing that had made her legendary among both dragons and humans. \"Child of my heart,\" the spirit spoke with a voice like wind through autumn leaves, \"we always knew this day might come. The prison was strong, but not eternal. You must gather the Shard Bearers.\"\n\nThe Shard Bearers—Lyra had heard the legends but had hoped never to have need of them. When the first Void Seekers had been defeated ages ago, their prison had been sealed with seven fragments of the Worldheart Crystal, each entrusted to a different group. Over the centuries, the locations of most shards had been lost to war, betrayal, and the simple passage of time.\n\n\"I know of only three possible locations,\" Lyra admitted. \"The Shard of Storms remains here in the sanctuary. The Shard of Earth is said to rest in the Dwarven Deepholds beneath the Ironback Mountains. And the Shard of Stars... if the old songs are true, it lies with the Sky Riders of the Floating Cities.\"\n\n\"Then you must find them all,\" Elena's spirit began to fade. \"But beware, granddaughter. The Void Seekers will know of your quest. They will send their champions to stop you, and they will corrupt all they touch. Trust in your dragon-bond, trust in your heritage, but most of all—trust in the courage of those who would stand beside you.\"\n\nAs the spirit faded completely, Lyra felt the weight of destiny settling upon her like a mantle of lead. But she was not alone. Zephyr's great head appeared at the chamber entrance, and behind him came another figure that made Lyra's heart leap with joy and relief.\n\nKael Ironforge strode into the chamber with the confident gait of a man who had faced death a dozen times and walked away laughing. The young dwarf warrior bore the traditional axes of his clan, but what made him special was the silver bracer on his right arm—a relic that allowed him to communicate with dragons as easily as any keeper. His dark beard was braided with small crystals that caught the light, and his brown eyes sparkled with the fierce joy of a born adventurer.\n\n\"Lyra!\" he called out, his voice booming in the crystal chamber. \"I came as soon as I heard. The Deepwatch Rangers brought word of shadow-cursed villages all along the eastern reaches. My father sends his regards and an army, but I thought you might need someone who actually knows how to handle a crisis.\"\n\nDespite everything, Lyra found herself smiling. She had met Kael three years ago when he had arrived at the sanctuary, seeking help to heal his clan's guardian dragon from a curse placed by rival mountain lords. Their partnership had blossomed into friendship, and lately into something deeper—though neither had spoken of it directly.\n\n\"The situation is worse than the rangers know,\" Lyra told him, quickly explaining what she had learned from Ember and her grandmother's spirit. \"We need to gather the Shards and reach Drakmoor before the Void Seekers can corrupt the hatchery. Are you willing to undertake such a quest?\"\n\nKael's grin was answer enough. \"Lass, I've been waiting my whole life for an adventure worthy of song. Besides,\" his expression grew more serious, \"my clan owes a debt to dragonkind. If these Void Seekers threaten all dragons, then they threaten the balance of the world itself. The Ironforge clan stands with you.\"\n\nA new voice interrupted their planning—one that carried the musical cadence of the elven folk. \"As does House Moonwhisper.\"\n\nBoth companions turned to see Thalia Moonwhisper entering the chamber. The elf was tall and graceful, her silver hair adorned with feathers and small bells that chimed softly as she moved. She wore the deep green robes of a forest mage, and her staff was carved from a branch of the Elder Oak itself. Most remarkably, perched upon her shoulder was a faerie dragon no larger than a house cat, its iridescent scales shifting through every color of the rainbow.\n\n\"Stardust brought word from the Whispering Wood,\" Thalia explained, indicating the tiny dragon. \"The corruption spreads like poison through the ley lines. Every day it advances, more of the natural world falls under shadow. The Circle of Mages has voted—we will provide what aid we can.\"\n\nLyra felt a surge of hope. With Thalia's mastery of natural magic and her connection to the forest network, their chances of success had just improved dramatically. \"Then we have our company. But we face a challenge of time. To reach the three Shards, we would normally require months of travel. The Deepholds are a fortnight's journey by conventional means, and the Floating Cities move with the wind currents—they could be anywhere.\"\n\nZephyr's great head tilted thoughtfully. \"Perhaps not as long as you think, little keeper. The ancient transit network still functions—I have felt its pulse growing stronger as the Worldheart Crystal responds to the awakening danger. If we can reach the Nexus Stones, we can travel the old paths.\"\n\nThe Nexus Stones—another half-remembered legend. They were said to be remnants of the first age of magic, when distance meant nothing to those who understood the deeper currents of the world. But the knowledge of how to use them had been lost for centuries.\n\n\"I know the way,\" Stardust piped up in a voice like tinkling bells. \"Faerie dragons remember the old paths. We never forgot, we just... got distracted by shinier things.\"\n\nThalia smiled fondly at her companion. \"The diminutive ones often possess the greatest wisdom. If Stardust can guide us to the Nexus Stones, we can indeed move swiftly between the distant realms.\"\n\n## Chapter 3: The Path of Ancient Magic\n\nDawn found the four companions preparing for departure atop the sanctuary's highest platform. Lyra had donned her keeper's traveling gear—leather armor inscribed with protective wards, a cloak that would turn aside both blade and spell, and most importantly, the Staff of Aethros, topped with a crystal that held a fragment of pure dragonfire. Around her neck hung the Shard of Storms, its surface crackling with barely contained electrical energy.\n\nKael checked his weapons one final time—twin axes forged from meteoric iron, a crossbow whose bolts were tipped with cold iron, and a dozen other tools of his dangerous trade. His pack bulged with supplies and the kind of specialized equipment that only a dwarf would think to bring on a quest to save the world.\n\nThalia stood in quiet meditation, communing with the natural forces around them. Her magic was different from Lyra's—where the keeper drew power from her bond with dragons and the ancient pacts, the elf mage worked with the living essence of wind and water, earth and growing things. Stardust buzzed around her head, occasionally diving into her hair to emerge with some small treasure—a flower petal, a interesting pebble, a beam of sunlight somehow made solid.\n\n\"The first Nexus Stone lies in the Whispering Canyon, half a day's flight to the northwest,\" Stardust reported, settling on Thalia's staff and wrapping her tail around it like a tiny snake. \"But be warned—the canyon has guardians. They do not appreciate visitors.\"\n\nZephyr spread his wings, the morning light turning his scales to liquid silver. \"Then we shall have to be very persuasive visitors. Everyone aboard—and hold tight. Storm winds are unpredictable today.\"\n\nThe flight to Whispering Canyon was unlike anything Kael had ever experienced. Though he had ridden dragons before, it had always been shorter journeys with clan dragons who were more interested in getting from one place to another safely than in exploring the limits of what was possible. Zephyr, however, was a creature of the storm itself. He danced between thunderclouds, dove through lightning strikes that would have killed lesser beings, and rode updrafts with the joy of a poet composing verses in motion.\n\nFrom her position just behind Zephyr's great head, Lyra watched the landscape flow beneath them with mixed emotions. Every mile they covered revealed new",
+          "text": "# The Chronicles of Pyrion: The Last Dragon's Song\n\n## Chapter 1: The Awakening\n\nThe morning mist clung to the ancient peaks of the Drakmoor Mountains like ghostly fingers, reluctant to release their hold on the jagged stones that had witnessed countless ages pass. Deep within the heart of Mount Pyrion, in a cavern that had remained sealed for three thousand years, something stirred.\n\nKael Thornwick adjusted his leather pack and squinted through the dim light filtering down from the cavern's entrance far above. As the youngest member of the Royal Archaeological Society, he had been assigned what his colleagues considered a fool's errand – investigating reports of strange lights and sounds emanating from the supposedly empty dragon caves of Pyrion.\n\n\"Dragons,\" he muttered to himself, his voice echoing off the crystalline walls. \"As if any have been seen in centuries.\"\n\nHis boots crunched on the scattered gemstones that littered the floor – remnants of a hoard that had been picked clean by treasure hunters long ago. Yet something felt different about this cave. The air itself seemed to hum with an energy that made the fine hairs on his arms stand on end.\n\nAs Kael rounded a bend in the tunnel, his torch illuminated something that made his heart stop. There, in a vast circular chamber, lay a dragon.\n\nBut this was no skeleton or statue. The magnificent creature's scales shimmered with an inner light that seemed to pulse like a heartbeat. Each scale was the size of a dinner plate, shifting between deep emerald and brilliant gold as they caught the torchlight. The dragon's massive head rested on crossed forelegs, and its breathing – yes, breathing – caused small whirlwinds of dust to dance across the cavern floor.\n\nKael stumbled backward, his torch clattering to the ground. The flame sputtered but held, casting wild shadows on the walls. He had found what he thought was impossible: a living dragon.\n\nThe creature's eyes opened.\n\nThey were not the fierce, predatory orbs of legend, but ancient wells of wisdom tinged with profound sadness. When the dragon spoke, its voice resonated like distant thunder, yet carried the gentle warmth of a summer evening.\n\n\"So,\" the dragon said, lifting its great head, \"the long sleep ends at last. Tell me, young seeker, what age has dawned while I dreamed?\"\n\nKael's mouth moved soundlessly for several moments before he managed to croak, \"You... you can speak?\"\n\nA sound like distant laughter rumbled from the dragon's throat. \"Child, my kind were speaking when your ancestors were still learning to walk upright. I am Pyrion, once called the Keeper of Songs, Guardian of the Eternal Flame. And you are?\"\n\n\"Kael,\" he whispered, then cleared his throat. \"Kael Thornwick, of the Royal Archaeological Society.\"\n\n\"Royal Archaeological Society,\" Pyrion mused, settling back on his haunches. The movement was graceful despite his enormous size – easily sixty feet from snout to tail. \"How wonderfully scholarly. Tell me, Kael Thornwick, do men still tell stories of dragons?\"\n\n\"Well, yes, but—\" Kael began.\n\n\"But they are merely stories now,\" Pyrion finished, a note of melancholy creeping into his voice. \"I suspected as much. The magic has grown thin in this world, hasn't it? I can feel it, like a song sung in a distant room.\"\n\nKael found himself moving closer despite every instinct screaming at him to flee. \"You've been sleeping for three thousand years, according to our records. Why are you awaking now?\"\n\nPyrion's great eyes fixed on him with an intensity that seemed to peer into his very soul. \"Because, young Kael, the Shadowmarch has begun anew. I feel it stirring in the deep places of the world, gnawing at the roots of reality itself. The ancient enemy wakes, and I fear that this time, there may be no one left with the knowledge to stand against it.\"\n\n## Chapter 2: The Scholar and the Dragon\n\nOver the following days, Kael found himself returning to the cavern again and again, drawn by a fascination he couldn't explain. He told no one at the Society of his discovery – partly because he feared they wouldn't believe him, and partly because something in Pyrion's manner suggested this knowledge was dangerous.\n\nThe dragon seemed pleased by his visits, eager for news of the outside world. Kael learned that Pyrion was indeed ancient beyond human comprehension. He had been present at the founding of the first human kingdoms, had watched empires rise and fall like waves upon a shore.\n\n\"Your people have forgotten so much,\" Pyrion said during one of their conversations, his massive form coiled around a pillar of natural stone that jutted up from the cavern floor. \"They remember dragons as monsters to be slain, beasts that hoarded gold and devoured maidens. But once, long ago, we were partners. Your kind and mine worked together to keep the darkness at bay.\"\n\n\"What darkness?\" Kael asked, settling cross-legged on a smooth boulder that served as his usual seat.\n\nPyrion's eyes grew distant. \"The Void Spawn. Creatures from between the spaces of reality, beings of pure hunger and malice. Every few millennia, they attempt to break through into our world, drawn by the warmth of life and light. In ages past, dragons and humans united our powers – your adaptability and creativity combined with our magical might and ancient knowledge.\"\n\n\"But humans have no magic now,\" Kael protested. \"It's been centuries since the last recorded mage died.\"\n\n\"Haven't they?\" Pyrion's head tilted, studying the young man intently. \"Tell me, how did you find this cavern? My lair was hidden by spells that should have lasted until the end of time.\"\n\nKael thought about it. He had been researching old texts in the Society's archives when he'd come across a fragment of a map that seemed to call to him. Following it had led him through a maze of passages that he somehow navigated perfectly, as if guided by instinct.\n\n\"I... I just knew where to go,\" he admitted.\n\n\"And the magical wards that guard this place? They should have turned you away, filled your mind with fear and confusion.\"\n\n\"I did feel something,\" Kael said slowly. \"But it felt more like... recognition? As if the mountain itself was welcoming me.\"\n\nPyrion's eyes gleamed with something that might have been hope. \"Perhaps the gift has not died out entirely. Perhaps it merely sleeps, like I did, waiting for the time of greatest need.\"\n\nTheir conversation was interrupted by a sound that made Pyrion's great head snap toward the cavern entrance – a sound like breaking glass mixed with screaming wind.\n\n\"No,\" the dragon breathed, his voice filled with dread. \"It is too soon. I had hoped for more time.\"\n\n\"What's wrong?\" Kael scrambled to his feet as Pyrion uncoiled himself with fluid grace.\n\n\"The Void Spawn come,\" Pyrion said grimly. \"I can hear their hunting cries. They have found a way through the barriers between worlds.\"\n\nAs if summoned by his words, a horrific shriek echoed down from the cavern entrance, followed by another, and another. The sound made Kael's teeth ache and his vision blur at the edges.\n\n\"You must leave,\" Pyrion commanded, but even as he spoke, the sounds of pursuit grew closer. \"No, too late. Stay behind me and whatever happens, do not look directly at them. The sight of the Void Spawn can drive mortals mad.\"\n\n## Chapter 3: First Contact\n\nThe creatures that poured into the cavern defied easy description. They seemed to be made of living shadow, constantly shifting and changing shape. One moment they resembled twisted humanoids, the next they were writhing masses of tentacles and eyes. The only constant was their eyes – burning pinpricks of malevolent red that seemed to sear themselves into Kael's vision even when he looked away.\n\nPyrion rose to his full height, his massive wings spreading wide. The scales along his neck began to glow with increasing intensity, and when he opened his mouth, streams of golden fire erupted forth. Where the flames touched the shadow creatures, they shrieked and writhed, but they did not fall.\n\n\"Fire alone will not banish them,\" Pyrion called over the sound of battle. \"They have grown stronger during their exile. We need the old magic, the binding spells that your ancestors knew.\"\n\n\"I don't know any spells!\" Kael shouted back, pressing himself against the cavern wall as one of the creatures lunged toward him. Pyrion's tail swept it aside with bone-crushing force, but it reformed almost immediately.\n\n\"Look within yourself,\" the dragon urged, breathing another gout of flame that forced the creatures back temporarily. \"Feel for the power that brought you here, that guided your steps through my wards.\"\n\nKael closed his eyes and tried to concentrate despite the chaos around him. He thought of the moment he'd first seen the map fragment, the way it had seemed to glow on the page. He remembered the sensation of the mountain welcoming him, of knowing instinctively which passages to take.\n\nAnd suddenly, he felt it – a warmth spreading through his chest, like sunlight breaking through clouds. When he opened his eyes, his hands were glowing with a soft silver radiance.\n\n\"Yes!\" Pyrion trumpeted. \"Now, speak these words: 'Umbras revertere ad nihilum!'\"\n\nKael repeated the phrase, not understanding the meaning but feeling power flow through the syllables. The silver light around his hands intensified and spread outward. Where it touched the Void Spawn, they began to dissolve like mist before the dawn.\n\nWorking together, dragon and human drove the creatures back. Pyrion's flames and Kael's newly awakened light magic proved to be a potent combination. One by one, the shadow creatures were banished, their dying screams echoing through the cavern.\n\nWhen the last of them had faded, Kael sank to his knees, utterly exhausted. The silver light around his hands flickered and died.\n\n\"Well done, young mage,\" Pyrion said, settling back on his haunches. \"You have just cast your first banishment spell.\"\n\n\"I'm a mage?\" Kael looked at his hands in wonder.\n\n\"You always were,\" the dragon replied. \"Magic is not something that can be given or taken away – it is part of the very fabric of certain souls. Your bloodline has simply kept it dormant for generations, waiting for the moment when it would be needed again.\"\n\n\"But if the Void Spawn are returning, we need more than just one beginning mage and one dragon,\" Kael pointed out.\n\nPyrion nodded gravely. \"Indeed. We must seek out others – those who carry the old blood, descendants of the mage families who once stood with dragonkind. And we must find them quickly, for what we just faced was merely a scouting party. The true invasion has yet to begin.\"\n\n## Chapter 4: The Gathering Storm\n\nWord of Kael's discovery couldn't be kept secret for long. Within a week of the first Void Spawn attack, similar incursions were reported across the kingdom. Shadow creatures materialized in the dead of night, terrorizing villages and leaving behind only empty husks where people once lived.\n\nKing Aldric convened an emergency session of his war council, and for the first time in recorded history, a dragon was formally invited to attend. Pyrion, magnificent and terrible in the great hall of Castle Valdris, caused quite a stir among the assembled nobles and military commanders.\n\n\"Your Majesty,\" Pyrion began, his voice carefully modulated to avoid shattering the hall's stained glass windows, \"the situation is dire. The Void Spawn are not merely monsters to be fought with sword and spear. They are parasites from the spaces between realities, and they feast upon the life force of all living things.\"\n\nGeneral Marcus Blackwood, the king's chief military advisor, stepped forward. \"Dragon or not, this creature asks us to believe in fairy tales and children's stories. Void Spawn? Magic? Surely there must be a rational explanation—\"\n\nHis words were cut off as every window in the hall suddenly exploded inward. Through the shattered openings poured a dozen of the shadow creatures, their red eyes blazing with hunger.\n\nThe guards' weapons passed harmlessly through the beings, and several soldiers simply collapsed as the creatures drained their life force with a touch. Panic erupted throughout the hall as nobles scrambled for the exits.\n\nPyrion roared and unleashed a torrent of flame, but these creatures seemed stronger than those in his cavern. Kael, who had been standing near the throne, felt the familiar warmth building in his chest. He raised his hands and silver light blazed forth, but he was too inexperienced to banish more",
           "type": "text"
         }
       ],
-      "id": "msg_01ABSiKLsQ6rvCSWzF69ocu5",
+      "id": "msg_01BTG46167sBSY9mX5xbW3wu",
       "model": "claude-sonnet-4-20250514",
       "role": "assistant",
+      "stop_details": null,
       "stop_reason": "max_tokens",
       "stop_sequence": null,
       "type": "message",
@@ -65,88 +71,95 @@
         },
         "cache_creation_input_tokens": 0,
         "cache_read_input_tokens": 0,
-        "input_tokens": 44,
+        "inference_geo": "not_available",
+        "input_tokens": 45,
         "output_tokens": 3000,
+        "output_tokens_details": {
+          "thinking_tokens": 57
+        },
         "service_tier": "standard"
       }
     },
     "headers": {
-      "anthropic-organization-id": [
-        "a71659e7-a922-4ff7-99de-f3ba615face1"
-      ],
+      "anthropic-organization-id": "[REDACTED:anthropic-organization-id]",
       "anthropic-ratelimit-input-tokens-limit": [
-        "450000"
+        "800000"
       ],
       "anthropic-ratelimit-input-tokens-remaining": [
-        "450000"
+        "800000"
       ],
       "anthropic-ratelimit-input-tokens-reset": [
-        "2025-11-02T17:05:25Z"
+        "2026-05-29T17:59:47Z"
       ],
       "anthropic-ratelimit-output-tokens-limit": [
-        "90000"
+        "160000"
       ],
       "anthropic-ratelimit-output-tokens-remaining": [
-        "87000"
+        "160000"
       ],
       "anthropic-ratelimit-output-tokens-reset": [
-        "2025-11-02T17:06:46Z"
+        "2026-05-29T18:00:59Z"
       ],
       "anthropic-ratelimit-requests-limit": [
-        "1000"
+        "2000"
       ],
       "anthropic-ratelimit-requests-remaining": [
-        "999"
+        "1999"
       ],
       "anthropic-ratelimit-requests-reset": [
-        "2025-11-02T17:05:24Z"
+        "2026-05-29T17:59:47Z"
       ],
       "anthropic-ratelimit-tokens-limit": [
-        "540000"
+        "960000"
       ],
       "anthropic-ratelimit-tokens-remaining": [
-        "537000"
+        "960000"
       ],
       "anthropic-ratelimit-tokens-reset": [
-        "2025-11-02T17:05:25Z"
+        "2026-05-29T17:59:47Z"
       ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "9985376e883d251b-ORD"
+        "a0376515ba67f15d-ORD"
       ],
       "connection": [
         "keep-alive"
+      ],
+      "content-security-policy": [
+        "default-src 'none'; frame-ancestors 'none'"
       ],
       "content-type": [
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:06:44 GMT"
+        "Fri, 29 May 2026 18:00:59 GMT"
       ],
       "request-id": [
-        "req_011CUjRiRd8nV5UiStCFPpcq"
-      ],
-      "retry-after": [
-        "35"
+        "req_011CbXJ7PGxAF27E1mfVv9T6"
       ],
       "server": [
         "cloudflare"
       ],
+      "set-cookie": "[REDACTED:set-cookie]",
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
+      ],
+      "traceresponse": [
+        "00-208d734af68f3901c271f9d5f3f267bb-593a7dea288c1688-01"
       ],
       "transfer-encoding": [
         "chunked"
       ],
-      "x-envoy-upstream-service-time": [
-        "79964"
+      "vary": [
+        "Accept-Encoding"
       ],
       "x-robots-tag": [
         "none"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

@@ -1,4 +1,6 @@
 {
+  "model_spec": "anthropic:claude-sonnet-4-5-20250929",
+  "provider": "anthropic",
   "request": {
     "body": {
       "b64": "eyJtYXhfdG9rZW5zIjoxMjgwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJUZWxsIG1lIGEgam9rZSBhYm91dCBjYXRzIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiY2xhdWRlLXNvbm5ldC00LTUtMjAyNTA5MjkiLCJzdHJlYW0iOmZhbHNlLCJ0aGlua2luZyI6eyJidWRnZXRfdG9rZW5zIjoxMDI0LCJ0eXBlIjoiZW5hYmxlZCJ9LCJ0b29scyI6W3siZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwiaW5wdXRfc2NoZW1hIjp7ImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjpmYWxzZSwicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In0sIm5hbWUiOiJnZXRfd2VhdGhlciJ9XX0="
@@ -37,6 +39,9 @@
       ]
     },
     "headers": {
+      "accept": [
+        "application/json"
+      ],
       "accept-encoding": [
         "gzip"
       ],
@@ -50,7 +55,7 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ],
       "x-api-key": "[REDACTED:x-api-key]"
     },
@@ -61,18 +66,19 @@
     "body": {
       "content": [
         {
-          "signature": "EvECCkYICRgCKkBCIcp4BZ5QNB/RxOovGZMne/6GLwEZrmbQvkVfOgnuc7zKTHSF5grm2v9VygRNRJB76H5gHXQLlZIrlSiaspPHEgxk4J0dQc+IXUyOPpUaDCenJFq8lyObg4bfICIwyiEWjpwZeQXwhm/MqcSM7dhPExKU/0ui8+g/WaDvzo1xxvVMh9XhiiwGDJLBYdFYKtgB0H1EezSI0qFgxBsLTAe3OCuUY03eZZ/u/ZBprSdFCQSAOCmnbhCyMlU9JlZH+XZeznctGSF1qp9feGuxYgkMzcR+RccsJ6h+sxv06u7ZrypgaHbv33hppu2RZ0AGFPO9OT8R4kKS3g9XemMUpWEXy+t+57OqAiaDv6DtmtSdce6j2cUxvL71pCN0Qt307hqJYXd2QNvFJCQBsBBj/vsYBW0+dPcqX5h3bY5cH/B68ZsmxuK0XmQ6CZVNKqlX2ds6IWipvjDaOdTtpA/Ws0CL4Z+DV752bOvVGAE=",
-          "thinking": "The user is asking for a joke about cats. This is a simple request that doesn't require any function calls - they just want to hear a cat joke. I should tell them a fun, light-hearted joke about cats.",
+          "signature": "Eo0DCm4IDhgCKkAUdybhr/TxLv7qLX/QTeN0oCwkWiNBK3pjaLbIzQI8QCd2C17wpFOkVAEzP/KRAOMmzUGWsb9MmluzLdptU0LvMhpjbGF1ZGUtc29ubmV0LTQtNS0yMDI1MDkyOTgAQgh0aGlua2luZxIMNccaaLiVaK2CrPVFGgxNY3qvU00SavwXUW0iMMFKvVNeIpIfosJNBKn7oSOU48JzA5pbtsM8GFags0JLChs6phop4PVEz9Jn2jVfmSrMAXZrg5G+0Sec0kOdZiWjlbO/tAVqjIYGHWUMnsH0k8QzDYK8FMJH8JF0a9Ks9yjLKuXUw3vgulj2L8N671SS0hTY+AkTnSjo5gsSI5M8b8bXMfcc9EF63EWitUA5k/lzbwU3VO9jREOHuO1WTuL8AQNg3JNcpCbryqcaeFThea8lr9pF1BPgxsedrxdI5w13V2CtmjXg830PV2unjDyYp5WX3ebD3lg0jZB7EBxLHFs1uwt4ncQhqysuoowJYSN2HZIOAbGWQM93h8O7UhgB",
+          "thinking": "The user is asking for a joke about cats. This is a simple request that doesn't require any function calls - they just want to hear a cat joke. I should just tell them a cat joke directly.",
           "type": "thinking"
         },
         {
-          "text": "Here's a cat joke for you:\n\nWhy don't cats play poker in the jungle?\n\nToo many cheetahs!\n\n🐱 😄\n\nWant to hear another one, or is there something else I can help you with?",
+          "text": "Here's a cat joke for you:\n\nWhy don't cats play poker in the jungle?\n\nToo many cheetahs! 🐱\n\nWant to hear another one, or is there something else I can help you with?",
           "type": "text"
         }
       ],
-      "id": "msg_01JkxTdN9gXi8UbT4VcnaXj4",
+      "id": "msg_01GYSWeVLE8deNvoyk18KL7M",
       "model": "claude-sonnet-4-5-20250929",
       "role": "assistant",
+      "stop_details": null,
       "stop_reason": "end_turn",
       "stop_sequence": null,
       "type": "message",
@@ -83,88 +89,95 @@
         },
         "cache_creation_input_tokens": 0,
         "cache_read_input_tokens": 0,
-        "input_tokens": 748,
-        "output_tokens": 111,
+        "inference_geo": "not_available",
+        "input_tokens": 749,
+        "output_tokens": 102,
+        "output_tokens_details": {
+          "thinking_tokens": 47
+        },
         "service_tier": "standard"
       }
     },
     "headers": {
-      "anthropic-organization-id": [
-        "a71659e7-a922-4ff7-99de-f3ba615face1"
-      ],
+      "anthropic-organization-id": "[REDACTED:anthropic-organization-id]",
       "anthropic-ratelimit-input-tokens-limit": [
-        "450000"
+        "800000"
       ],
       "anthropic-ratelimit-input-tokens-remaining": [
-        "450000"
+        "800000"
       ],
       "anthropic-ratelimit-input-tokens-reset": [
-        "2025-11-02T17:04:51Z"
+        "2026-05-29T18:03:12Z"
       ],
       "anthropic-ratelimit-output-tokens-limit": [
-        "90000"
+        "160000"
       ],
       "anthropic-ratelimit-output-tokens-remaining": [
-        "90000"
+        "160000"
       ],
       "anthropic-ratelimit-output-tokens-reset": [
-        "2025-11-02T17:04:53Z"
+        "2026-05-29T18:03:13Z"
       ],
       "anthropic-ratelimit-requests-limit": [
-        "1000"
+        "2000"
       ],
       "anthropic-ratelimit-requests-remaining": [
-        "999"
+        "1999"
       ],
       "anthropic-ratelimit-requests-reset": [
-        "2025-11-02T17:04:50Z"
+        "2026-05-29T18:03:11Z"
       ],
       "anthropic-ratelimit-tokens-limit": [
-        "540000"
+        "960000"
       ],
       "anthropic-ratelimit-tokens-remaining": [
-        "540000"
+        "960000"
       ],
       "anthropic-ratelimit-tokens-reset": [
-        "2025-11-02T17:04:51Z"
+        "2026-05-29T18:03:12Z"
       ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "99853699cb039d42-ORD"
+        "a0376a159dc8cc3a-ORD"
       ],
       "connection": [
         "keep-alive"
+      ],
+      "content-security-policy": [
+        "default-src 'none'; frame-ancestors 'none'"
       ],
       "content-type": [
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:04:53 GMT"
+        "Fri, 29 May 2026 18:03:13 GMT"
       ],
       "request-id": [
-        "req_011CUjRfv1MR3228RHLVCURj"
-      ],
-      "retry-after": [
-        "9"
+        "req_011CbXJNUmGiwAJX1eWWhB7Q"
       ],
       "server": [
         "cloudflare"
       ],
+      "set-cookie": "[REDACTED:set-cookie]",
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
+      ],
+      "traceresponse": [
+        "00-c98106032181f8ac6a3dd8d8fcafcc80-db27700df53a9f4a-01"
       ],
       "transfer-encoding": [
         "chunked"
       ],
-      "x-envoy-upstream-service-time": [
-        "3069"
+      "vary": [
+        "Accept-Encoding"
       ],
       "x-robots-tag": [
         "none"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

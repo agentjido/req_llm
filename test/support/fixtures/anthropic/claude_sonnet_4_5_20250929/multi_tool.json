@@ -1,4 +1,6 @@
 {
+  "model_spec": "anthropic:claude-sonnet-4-5-20250929",
+  "provider": "anthropic",
   "request": {
     "body": {
       "b64": "eyJtYXhfdG9rZW5zIjoxMjgwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJXaGF0J3MgdGhlIHdlYXRoZXIgbGlrZSBpbiBQYXJpcywgRnJhbmNlPyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImNsYXVkZS1zb25uZXQtNC01LTIwMjUwOTI5Iiwic3RyZWFtIjpmYWxzZSwidGhpbmtpbmciOnsiYnVkZ2V0X3Rva2VucyI6MTAyNCwidHlwZSI6ImVuYWJsZWQifSwidG9vbHMiOlt7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsImlucHV0X3NjaGVtYSI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9LCJ1bml0Ijp7ImVudW0iOlsiY2Vsc2l1cyIsImZhaHJlbmhlaXQiXSwidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9LCJuYW1lIjoiZ2V0X3dlYXRoZXIifSx7ImRlc2NyaXB0aW9uIjoiVGVsbCBhIGZ1bm55IGpva2UiLCJpbnB1dF9zY2hlbWEiOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7InRvcGljIjp7ImRlc2NyaXB0aW9uIjoiVG9waWMgZm9yIHRoZSBqb2tlIiwidHlwZSI6InN0cmluZyJ9fSwidHlwZSI6Im9iamVjdCJ9LCJuYW1lIjoidGVsbF9qb2tlIn0seyJkZXNjcmlwdGlvbiI6IkdldCB0aGUgY3VycmVudCB0aW1lIiwiaW5wdXRfc2NoZW1hIjp7InByb3BlcnRpZXMiOnt9LCJ0eXBlIjoib2JqZWN0In0sIm5hbWUiOiJnZXRfdGltZSJ9XX0="
@@ -66,6 +68,9 @@
       ]
     },
     "headers": {
+      "accept": [
+        "application/json"
+      ],
       "accept-encoding": [
         "gzip"
       ],
@@ -79,7 +84,7 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ],
       "x-api-key": "[REDACTED:x-api-key]"
     },
@@ -90,12 +95,15 @@
     "body": {
       "content": [
         {
-          "signature": "Et8DCkYICRgCKkD/DnXLnk+V3IJhhGhyEAodAr+eI/NR7oszMRfDK3LyePn6QvZnjm9QdGAgsmMREP95HLs025BLhU18p/qXCFCPEgw95gnBuOoN4/cbzAcaDBKNmyahv5VxjcC58iIwncf4Iiif4mMiMds6lo+gnEeWZlp2ZpAv3ggRdamqrbIpWMUBdL2jFBkNJpZ7vmmkKsYCA2PsGQKDPvNuVwbJ3c/1ulw4gCPZva6QDWERbksSubNp+6FyRJLAUNhmO59POY7mDNkL0/EbacEVXrEFym4CbmT92feqixrY774a5ZvBLleAysrRHqg9W2js4cVl0BLzS37IwbbMh1YlNpUZkS86oZo0LlsQ/XkW/30AXfgfufVSX0at+LndZEQ/yreyGg9YX0XSwDUP/Z78mauMSrnmp3WKl6KdxYP8+pEAUC5z70M7+9JE96UTMrYGxqjeZveIskiyXpTbsvmmULUGxLtBoTaI8b/MHwYBq9xm1c8x351TLHCiOovSqJME12FrzxXsYKNoMoMVGaw1/yyEOB8sADMdcQqSfS8bDmDByWoaU3w3tjFfg+3k/luHVOQCCOFBQK0BNS9ZAuvmlqceKIbRdUTKhAsZAXd+663oWvzoE+CyVFW5dWUYAQ==",
-          "thinking": "The user is asking about the weather in Paris, France. I have a function called `get_weather` that can provide this information. Let me check the parameters:\n- location (required): \"Paris, France\"\n- unit (optional): not specified, so I won't include it\n\nI'll make the function call with the location parameter.",
+          "signature": "ErAECm4IDhgCKkAd50kYn7xmUOob5lWjKEB87s6Gl8oxUUnuuv4xNOlknK1Qfjl3OCEYrzvAiNoDF9qx5MQjG8yymAn9IJMAffaAMhpjbGF1ZGUtc29ubmV0LTQtNS0yMDI1MDkyOTgAQgh0aGlua2luZxIMIzLokIjlpnm3y4U+GgxW5ExKp7zrOcowbBoiMIQENSLzitixtHb5b8Wnv7SEGS54vnNl5+ynarPl4w4nF3e5YxgGVR0M9jnIZcRUyCrvApkUDglYCoF9OC9T8Ce3urUeS8VmTJBujsndhMBdow5P720mPxYioAuKJKn5obx8wSBlCVvXTRaQIPeocq4xzJXEO4cZTUllqJwUtoG+/vWnvT9TqzyM9Y6L2sjfnL0j54XmsgviLT95tt+Z8hiAbYISS/8W8kokYvh1wlcsMJh5ijNyulRg5PDoLfBX0MRm798S0gH7gTKefdos66UyzUEfXYaFpDlQIZJ0paNUiynEyJn4jd4WK8icopp33KGWWrCOqRQEqM10+T3xd+ny+5JgT79IXFmC3Y20e5tuvV7C0iLofjnp6bK3zxUvwZPPFyITZmwM4W2IB0SfG6z5FYa8PaB7qvSyO2RTWkBIDjVOrPmNMDWcsaC+X13CsD1f1xtBBErpJzps5Ugq5OPfacqj/BOmzxEKj3ulm7jfE3M/T6yqfJRO55TijKtV8ArsfzCaDbPcLMpep7JasVunTfsMr5lNNAnDc5/s3CbEUaIYAQ==",
+          "thinking": "The user is asking about the weather in Paris, France. I have access to the get_weather function which can provide current weather information for a location. I need to call this function with \"Paris, France\" as the location parameter. The unit parameter is optional, so I don't need to specify it unless the user requests a specific temperature unit.",
           "type": "thinking"
         },
         {
-          "id": "toolu_01E68DKHzrR5WvjNwRs2Fhu4",
+          "caller": {
+            "type": "direct"
+          },
+          "id": "toolu_01RGemRudZdJVf5Ci7DTw67e",
           "input": {
             "location": "Paris, France"
           },
@@ -103,9 +111,10 @@
           "type": "tool_use"
         }
       ],
-      "id": "msg_01Q8sNx4HJjTwkdyx2dxE4S2",
+      "id": "msg_01Q6GMBYz4J7zS1ZUAEVKQM8",
       "model": "claude-sonnet-4-5-20250929",
       "role": "assistant",
+      "stop_details": null,
       "stop_reason": "tool_use",
       "stop_sequence": null,
       "type": "message",
@@ -116,88 +125,95 @@
         },
         "cache_creation_input_tokens": 0,
         "cache_read_input_tokens": 0,
-        "input_tokens": 872,
-        "output_tokens": 136,
+        "inference_geo": "not_available",
+        "input_tokens": 873,
+        "output_tokens": 134,
+        "output_tokens_details": {
+          "thinking_tokens": 76
+        },
         "service_tier": "standard"
       }
     },
     "headers": {
-      "anthropic-organization-id": [
-        "a71659e7-a922-4ff7-99de-f3ba615face1"
-      ],
+      "anthropic-organization-id": "[REDACTED:anthropic-organization-id]",
       "anthropic-ratelimit-input-tokens-limit": [
-        "450000"
+        "800000"
       ],
       "anthropic-ratelimit-input-tokens-remaining": [
-        "450000"
+        "800000"
       ],
       "anthropic-ratelimit-input-tokens-reset": [
-        "2025-11-02T17:05:03Z"
+        "2026-05-29T18:03:17Z"
       ],
       "anthropic-ratelimit-output-tokens-limit": [
-        "90000"
+        "160000"
       ],
       "anthropic-ratelimit-output-tokens-remaining": [
-        "90000"
+        "160000"
       ],
       "anthropic-ratelimit-output-tokens-reset": [
-        "2025-11-02T17:05:05Z"
+        "2026-05-29T18:03:19Z"
       ],
       "anthropic-ratelimit-requests-limit": [
-        "1000"
+        "2000"
       ],
       "anthropic-ratelimit-requests-remaining": [
-        "999"
+        "1999"
       ],
       "anthropic-ratelimit-requests-reset": [
-        "2025-11-02T17:05:01Z"
+        "2026-05-29T18:03:16Z"
       ],
       "anthropic-ratelimit-tokens-limit": [
-        "540000"
+        "960000"
       ],
       "anthropic-ratelimit-tokens-remaining": [
-        "540000"
+        "960000"
       ],
       "anthropic-ratelimit-tokens-reset": [
-        "2025-11-02T17:05:03Z"
+        "2026-05-29T18:03:17Z"
       ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "998536e14de99d42-ORD"
+        "a0376a3518dd35c0-ORD"
       ],
       "connection": [
         "keep-alive"
+      ],
+      "content-security-policy": [
+        "default-src 'none'; frame-ancestors 'none'"
       ],
       "content-type": [
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:05:05 GMT"
+        "Fri, 29 May 2026 18:03:19 GMT"
       ],
       "request-id": [
-        "req_011CUjRgkvS7LhDiWiHTWRZu"
-      ],
-      "retry-after": [
-        "59"
+        "req_011CbXJNrK4jyLjfDnx23aGi"
       ],
       "server": [
         "cloudflare"
       ],
+      "set-cookie": "[REDACTED:set-cookie]",
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
+      ],
+      "traceresponse": [
+        "00-ac01f571ab179075864d79f1c3bb7e55-8b9966eed1ce4602-01"
       ],
       "transfer-encoding": [
         "chunked"
       ],
-      "x-envoy-upstream-service-time": [
-        "3464"
+      "vary": [
+        "Accept-Encoding"
       ],
       "x-robots-tag": [
         "none"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

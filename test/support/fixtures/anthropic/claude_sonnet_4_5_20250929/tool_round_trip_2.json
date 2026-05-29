@@ -1,7 +1,9 @@
 {
+  "model_spec": "anthropic:claude-sonnet-4-5-20250929",
+  "provider": "anthropic",
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjo2NDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInJvbGUiOiJ1c2VyIn0seyJjb250ZW50IjpbeyJpZCI6InRvb2x1XzAxNDhnc2RTTHZKTHZqMUtFNkR0SGhodSIsImlucHV0Ijp7ImEiOjIsImIiOjN9LCJuYW1lIjoiYWRkIiwidHlwZSI6InRvb2xfdXNlIn1dLCJyb2xlIjoiYXNzaXN0YW50In0seyJjb250ZW50IjpbeyJjb250ZW50IjoiNSIsInRvb2xfdXNlX2lkIjoidG9vbHVfMDE0OGdzZFNMdkpMdmoxS0U2RHRIaGh1IiwidHlwZSI6InRvb2xfcmVzdWx0In1dLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJjbGF1ZGUtc29ubmV0LTQtNS0yMDI1MDkyOSIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+      "b64": "eyJtYXhfdG9rZW5zIjo2NDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInJvbGUiOiJ1c2VyIn0seyJjb250ZW50IjpbeyJpZCI6InRvb2x1XzAxRVgxMmY5VEpVY25aWHFlTGRxbUNGSiIsImlucHV0Ijp7ImEiOjIsImIiOjN9LCJuYW1lIjoiYWRkIiwidHlwZSI6InRvb2xfdXNlIn1dLCJyb2xlIjoiYXNzaXN0YW50In0seyJjb250ZW50IjpbeyJjb250ZW50IjoiNSIsInRvb2xfdXNlX2lkIjoidG9vbHVfMDFFWDEyZjlUSlVjblpYcWVMZHFtQ0ZKIiwidHlwZSI6InRvb2xfcmVzdWx0In1dLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJjbGF1ZGUtc29ubmV0LTQtNS0yMDI1MDkyOSIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjAsInRvb2xzIjpbeyJkZXNjcmlwdGlvbiI6IkFkZCB0d28gaW50ZWdlcnMiLCJpbnB1dF9zY2hlbWEiOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7ImEiOnsidHlwZSI6ImludGVnZXIifSwiYiI6eyJ0eXBlIjoiaW50ZWdlciJ9fSwicmVxdWlyZWQiOlsiYSIsImIiXSwidHlwZSI6Im9iamVjdCJ9LCJuYW1lIjoiYWRkIn1dfQ=="
     },
     "canonical_json": {
       "max_tokens": 6400,
@@ -13,7 +15,7 @@
         {
           "content": [
             {
-              "id": "toolu_0148gsdSLvJLvj1KE6DtHhhu",
+              "id": "toolu_01EX12f9TJUcnZXqeLdqmCFJ",
               "input": {
                 "a": 2,
                 "b": 3
@@ -28,7 +30,7 @@
           "content": [
             {
               "content": "5",
-              "tool_use_id": "toolu_0148gsdSLvJLvj1KE6DtHhhu",
+              "tool_use_id": "toolu_01EX12f9TJUcnZXqeLdqmCFJ",
               "type": "tool_result"
             }
           ],
@@ -37,9 +39,34 @@
       ],
       "model": "claude-sonnet-4-5-20250929",
       "stream": false,
-      "temperature": 0.0
+      "temperature": 0.0,
+      "tools": [
+        {
+          "description": "Add two integers",
+          "input_schema": {
+            "additionalProperties": false,
+            "properties": {
+              "a": {
+                "type": "integer"
+              },
+              "b": {
+                "type": "integer"
+              }
+            },
+            "required": [
+              "a",
+              "b"
+            ],
+            "type": "object"
+          },
+          "name": "add"
+        }
+      ]
     },
     "headers": {
+      "accept": [
+        "application/json"
+      ],
       "accept-encoding": [
         "gzip"
       ],
@@ -50,7 +77,7 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ],
       "x-api-key": "[REDACTED:x-api-key]"
     },
@@ -65,9 +92,10 @@
           "type": "text"
         }
       ],
-      "id": "msg_013R9VygrPQVebACPiWSVstQ",
+      "id": "msg_019jwoS3X5U8AM7Wn1A95NpL",
       "model": "claude-sonnet-4-5-20250929",
       "role": "assistant",
+      "stop_details": null,
       "stop_reason": "end_turn",
       "stop_sequence": null,
       "type": "message",
@@ -78,88 +106,92 @@
         },
         "cache_creation_input_tokens": 0,
         "cache_read_input_tokens": 0,
-        "input_tokens": 118,
+        "inference_geo": "not_available",
+        "input_tokens": 683,
         "output_tokens": 6,
         "service_tier": "standard"
       }
     },
     "headers": {
-      "anthropic-organization-id": [
-        "a71659e7-a922-4ff7-99de-f3ba615face1"
-      ],
+      "anthropic-organization-id": "[REDACTED:anthropic-organization-id]",
       "anthropic-ratelimit-input-tokens-limit": [
-        "450000"
+        "800000"
       ],
       "anthropic-ratelimit-input-tokens-remaining": [
-        "450000"
+        "800000"
       ],
       "anthropic-ratelimit-input-tokens-reset": [
-        "2025-11-02T17:06:29Z"
+        "2026-05-29T18:03:16Z"
       ],
       "anthropic-ratelimit-output-tokens-limit": [
-        "90000"
+        "160000"
       ],
       "anthropic-ratelimit-output-tokens-remaining": [
-        "90000"
+        "160000"
       ],
       "anthropic-ratelimit-output-tokens-reset": [
-        "2025-11-02T17:06:29Z"
+        "2026-05-29T18:03:16Z"
       ],
       "anthropic-ratelimit-requests-limit": [
-        "1000"
+        "2000"
       ],
       "anthropic-ratelimit-requests-remaining": [
-        "999"
+        "1999"
       ],
       "anthropic-ratelimit-requests-reset": [
-        "2025-11-02T17:06:27Z"
+        "2026-05-29T18:03:15Z"
       ],
       "anthropic-ratelimit-tokens-limit": [
-        "540000"
+        "960000"
       ],
       "anthropic-ratelimit-tokens-remaining": [
-        "540000"
+        "960000"
       ],
       "anthropic-ratelimit-tokens-reset": [
-        "2025-11-02T17:06:29Z"
+        "2026-05-29T18:03:16Z"
       ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "998538f9b97b876c-ORD"
+        "a0376a2f6f1bcc3a-ORD"
       ],
       "connection": [
         "keep-alive"
+      ],
+      "content-security-policy": [
+        "default-src 'none'; frame-ancestors 'none'"
       ],
       "content-type": [
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:06:29 GMT"
+        "Fri, 29 May 2026 18:03:16 GMT"
       ],
       "request-id": [
-        "req_011CUjRo5xqKvaDuBRirEPAJ"
-      ],
-      "retry-after": [
-        "31"
+        "req_011CbXJNnSPw5ACaJvt2Nxaq"
       ],
       "server": [
         "cloudflare"
       ],
+      "set-cookie": "[REDACTED:set-cookie]",
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
+      ],
+      "traceresponse": [
+        "00-f3df8410b08ee6bcd2d461b1128b6948-d5f8d5e3c86e8b86-01"
       ],
       "transfer-encoding": [
         "chunked"
       ],
-      "x-envoy-upstream-service-time": [
-        "2355"
+      "vary": [
+        "Accept-Encoding"
       ],
       "x-robots-tag": [
         "none"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

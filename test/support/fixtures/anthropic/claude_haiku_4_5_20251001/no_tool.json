@@ -39,6 +39,9 @@
       ]
     },
     "headers": {
+      "accept": [
+        "application/json"
+      ],
       "accept-encoding": [
         "gzip"
       ],
@@ -52,7 +55,7 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.17"
+        "req/0.5.18"
       ],
       "x-api-key": "[REDACTED:x-api-key]"
     },
@@ -63,18 +66,19 @@
     "body": {
       "content": [
         {
-          "signature": "EpYDCkYICxgCKkDFW1kQOhTLJeJ9b48OIn5Thg9Q4bAE9e0dd5apTlKSxuFtpSiAdvt1P3PTnxazMTd7cKlyl8+F2SO6/G2oL8HdEgyk7dDTNOB38Dzf8h4aDNJiAmNnGgYRElAaliIwVaGtbNzFNj7ApKLvs9apRw3FfKw1npOKAbUXlhttIsQ5UKBhNeKXqh+rq3BI7qWzKv0BHimNMqNi4pkZJUC5+7FHBDffynlEPSYfS6edJhPqtuPSpwbDSwFeFufUpNrZGGBFAaFmbmnSJctifgmv1y9keriUN397bJPd10gEZtW7RpPwC/hkTBBE7GJoSrnV75ISe0RbdUHLpj91dmnBwXut/jACG7xDlCTk75cXMZeDKOsYnS0qhtXizSqj+fVMdfJ5H6+w0VXRiduhCrvJgx6pTXu/Ii8NbdOaoMeRJxkD+0UuKWYuM9gaCIqnydo8xMq1BJcB3D8vwyx9m9axr2wH3B6XE2UGOc0Y0ACpaKXxeyfyNoxnah4hyQwSKbw+97Wco0A+g3ym6A6fAl/V8xgB",
-          "thinking": "The user is asking me to tell a joke about cats. This is a simple request for a joke and doesn't require any tool calls. I don't have any weather or location-based tools that would be relevant here. I'll just provide a cat joke directly.",
+          "signature": "EqYDCm0IDhgCKkDIEh7Kz5LESx1kUkZ90cmcpyMZ8iLtYP1fQZ/e/+xTnZu7UaE2PODdB8mC1kY2OkXYPO55kDvdirVRWadh5tecMhljbGF1ZGUtaGFpa3UtNC01LTIwMjUxMDAxOABCCHRoaW5raW5nEgy63Yx9ufAfLgG0xPAaDLkbDCahSXO2zv9xsyIw74iEQOy+KZZywPUcjvvu5bg7FeTtc7Rn0LBJxFzwVntVC46T6B+jvm/3vOUSfj/bKuYByXC3Piy/iK0MD/q1hRbxe/kCixaKXo7MpDvgPgZTwLzlDEVIug/vXxatzaDbZII7DOvI/QgbJXa0i+aZ6HyxGo0XZXdQxkAYQulgsFMy/L/JzrrP0gJMiTOgt+Z70eH0vLWsMasYKBhpwIk5qCb/jYLTgbVe7WjSGm7idG2WEnssjYDhJ1F7ewvZ852HE3gZjW0ez8rDl8KRT1D2OcQm7RCP4tsBS0qO6r0zYziDp8QOnas0HmmUHtlwSmFZllu3+yHG1M7sOkQGIyp7sPDbsqHFmf+wrHFR5dRpJAB/oyHWNt0529kYAQ==",
+          "thinking": "The user is asking me to tell a joke about cats. This is a simple request that doesn't require any tools or function calls. I can just provide a joke directly.\n\nLet me think of a good, lighthearted joke about cats:",
           "type": "thinking"
         },
         {
-          "text": "Here's one for you:\n\nWhy don't cats play poker in the jungle?\n\nBecause there are too many cheetahs! 🐱",
+          "text": "Here's one for you:\n\nWhy was the cat sitting on the computer?\n\nBecause it wanted to keep an eye on the mouse! 🐱",
           "type": "text"
         }
       ],
-      "id": "msg_01GeT9YeBuckRSjP5S3hDRtf",
+      "id": "msg_01VRyJn8F6exCYubKR1NxgKi",
       "model": "claude-haiku-4-5-20251001",
       "role": "assistant",
+      "stop_details": null,
       "stop_reason": "end_turn",
       "stop_sequence": null,
       "type": "message",
@@ -85,15 +89,17 @@
         },
         "cache_creation_input_tokens": 0,
         "cache_read_input_tokens": 0,
+        "inference_geo": "not_available",
         "input_tokens": 749,
-        "output_tokens": 97,
+        "output_tokens": 94,
+        "output_tokens_details": {
+          "thinking_tokens": 56
+        },
         "service_tier": "standard"
       }
     },
     "headers": {
-      "anthropic-organization-id": [
-        "8a3ada71-45d7-4ed6-aaaf-279ffd490a4a"
-      ],
+      "anthropic-organization-id": "[REDACTED:anthropic-organization-id]",
       "anthropic-ratelimit-input-tokens-limit": [
         "1000000"
       ],
@@ -101,7 +107,7 @@
         "1000000"
       ],
       "anthropic-ratelimit-input-tokens-reset": [
-        "2026-01-20T09:49:25Z"
+        "2026-05-29T16:30:12Z"
       ],
       "anthropic-ratelimit-output-tokens-limit": [
         "200000"
@@ -110,7 +116,7 @@
         "200000"
       ],
       "anthropic-ratelimit-output-tokens-reset": [
-        "2026-01-20T09:49:26Z"
+        "2026-05-29T16:30:12Z"
       ],
       "anthropic-ratelimit-requests-limit": [
         "2000"
@@ -119,7 +125,7 @@
         "1999"
       ],
       "anthropic-ratelimit-requests-reset": [
-        "2026-01-20T09:49:24Z"
+        "2026-05-29T16:30:10Z"
       ],
       "anthropic-ratelimit-tokens-limit": [
         "1200000"
@@ -128,42 +134,50 @@
         "1200000"
       ],
       "anthropic-ratelimit-tokens-reset": [
-        "2026-01-20T09:49:25Z"
+        "2026-05-29T16:30:12Z"
       ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "9c0da963ad363009-PRG"
+        "a036e1d2efe2e252-ORD"
       ],
       "connection": [
         "keep-alive"
+      ],
+      "content-security-policy": [
+        "default-src 'none'; frame-ancestors 'none'"
       ],
       "content-type": [
         "application/json"
       ],
       "date": [
-        "Tue, 20 Jan 2026 09:49:26 GMT"
+        "Fri, 29 May 2026 16:30:12 GMT"
       ],
       "request-id": [
-        "req_011CXJRNQsVvSqQTiaoqchh6"
+        "req_011CbXBH4pABJPMazAvFoRkd"
       ],
       "server": [
         "cloudflare"
       ],
+      "set-cookie": "[REDACTED:set-cookie]",
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
+      ],
+      "traceresponse": [
+        "00-0abb02e786835284155ae9a24025667a-a1a0299f524ce9d2-01"
       ],
       "transfer-encoding": [
         "chunked"
       ],
-      "x-envoy-upstream-service-time": [
-        "1722"
+      "vary": [
+        "Accept-Encoding"
       ],
       "x-robots-tag": [
         "none"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

@@ -1,10 +1,12 @@
 {
+  "model_spec": "zai_coder:glm-4.5-flash",
+  "provider": "zai_coder",
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImdsbS00LjUtZmxhc2giLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+      "b64": "eyJtYXhfdG9rZW5zIjo1MCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJIZWxsbyB3b3JsZCEiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJnbG0tNC41LWZsYXNoIiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
     },
     "canonical_json": {
-      "max_tokens": 2000,
+      "max_tokens": 50,
       "messages": [
         {
           "content": "Hello world!",
@@ -25,7 +27,7 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ]
     },
     "method": "post",
@@ -35,26 +37,30 @@
     "body": {
       "choices": [
         {
-          "finish_reason": "stop",
+          "finish_reason": "length",
           "index": 0,
           "message": {
-            "content": "\nHere's a simple \"Hello World!\" program in Python:\n\n```python\nprint(\"Hello World!\")\n```\n\n**Explanation:**\n- `print()` is a built-in Python function that outputs text to the console.\n- `\"Hello World!\"` is a string literal containing the greeting text.\n- The program will display `Hello World!` when executed.\n\n**Output:**\n```\nHello World!\n```\n\n**Alternative versions:**\n1. **Using a variable:**\n   ```python\n   message = \"Hello World!\"\n   print(message)\n   ```\n\n2. **Formatted string (Python 3.6+):**\n   ```python\n   print(f\"Hello World!\")\n   ```\n\n3. **Multi-line version:**\n   ```python\n   print(\"Hello\\nWorld!\")\n   ```\n   *(Output: \"Hello\" on first line, \"World!\" on second line)*\n\nTo run this code:\n1. Save it in a file (e.g., `hello.py`)\n2. Execute with Python: `python hello.py`\n\nThis is the classic first program for learning programming languages! 🌍",
-            "reasoning_content": "We are going to create a simple \"Hello World!\" program in Python.\n Since the user just said \"Hello world!\", we can assume they want a basic program that prints \"Hello World!\".\n However, note that the user's message is \"Hello world!\" (with a lowercase 'w') but the traditional \"Hello World\" program uses \"Hello World!\" (with a capital 'W').\n We'll stick to the traditional version: \"Hello World!\" with a capital 'W' and an exclamation mark.\n\n Let's write the code accordingly.",
+            "content": "",
+            "reasoning_content": "\nWe are given a string \"Hello world!\" as input.\n The task is to output the same string, but note that the example input is in lowercase except for the first letter of \"Hello\" which is uppercase and \"world\" is lowercase",
             "role": "assistant"
           }
         }
       ],
-      "created": 1762113161,
-      "id": "2025110303515430b020bdaf194f00",
+      "created": 1780072098,
+      "id": "20260530002816c2a1f6cf5b494829",
       "model": "glm-4.5-flash",
-      "request_id": "2025110303515430b020bdaf194f00",
+      "object": "chat.completion",
+      "request_id": "20260530002816c2a1f6cf5b494829",
       "usage": {
-        "completion_tokens": 340,
+        "completion_tokens": 50,
+        "completion_tokens_details": {
+          "reasoning_tokens": 49
+        },
         "prompt_tokens": 8,
         "prompt_tokens_details": {
           "cached_tokens": 4
         },
-        "total_tokens": 348
+        "total_tokens": 58
       }
     },
     "headers": {
@@ -65,13 +71,13 @@
         "application/json; charset=UTF-8"
       ],
       "date": [
-        "Sun, 02 Nov 2025 19:52:41 GMT"
+        "Fri, 29 May 2026 16:28:19 GMT"
+      ],
+      "keep-alive": [
+        "timeout=6"
       ],
       "server": [
-        "ZenZGA/2.4"
-      ],
-      "set-cookie": [
-        "acw_tc=ac11000117621131139461380e03a2d72bf3eb2d7f7175f09a36d3609bee08;path=/;HttpOnly;Max-Age=1800"
+        "nginx"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains"
@@ -89,9 +95,10 @@
         "Access-Control-Request-Headers"
       ],
       "x-log-id": [
-        "2025110303515430b020bdaf194f00"
+        "20260530002816c2a1f6cf5b494829"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

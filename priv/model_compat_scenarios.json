@@ -6,7 +6,354 @@
         "fixtures": [
           "basic"
         ],
-        "last_checked": "2026-05-29T15:34:31Z",
+        "last_checked": "2026-05-29T17:09:16Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "token_limit": {
+        "error": null,
+        "fixtures": [
+          "token_limit"
+        ],
+        "last_checked": "2026-05-29T17:09:16Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "usage": {
+        "error": null,
+        "fixtures": [
+          "usage"
+        ],
+        "last_checked": "2026-05-29T17:09:16Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "anthropic:claude-opus-4-1-20250805": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T17:11:25Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "token_limit": {
+        "error": null,
+        "fixtures": [
+          "token_limit"
+        ],
+        "last_checked": "2026-05-29T17:11:25Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "usage": {
+        "error": null,
+        "fixtures": [
+          "usage"
+        ],
+        "last_checked": "2026-05-29T17:11:25Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "anthropic:claude-opus-4-20250514": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T17:13:32Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "token_limit": {
+        "error": null,
+        "fixtures": [
+          "token_limit"
+        ],
+        "last_checked": "2026-05-29T17:13:32Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "usage": {
+        "error": null,
+        "fixtures": [
+          "usage"
+        ],
+        "last_checked": "2026-05-29T17:13:32Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "anthropic:claude-opus-4-5": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T17:20:43Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "token_limit": {
+        "error": null,
+        "fixtures": [
+          "token_limit"
+        ],
+        "last_checked": "2026-05-29T17:20:43Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "usage": {
+        "error": null,
+        "fixtures": [
+          "usage"
+        ],
+        "last_checked": "2026-05-29T17:20:43Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "anthropic:claude-opus-4-8": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T17:14:45Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "token_limit": {
+        "error": null,
+        "fixtures": [
+          "token_limit"
+        ],
+        "last_checked": "2026-05-29T17:14:45Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "usage": {
+        "error": null,
+        "fixtures": [
+          "usage"
+        ],
+        "last_checked": "2026-05-29T17:14:45Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "anthropic:claude-sonnet-4-20250514": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T17:16:20Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "token_limit": {
+        "error": null,
+        "fixtures": [
+          "token_limit"
+        ],
+        "last_checked": "2026-05-29T17:16:20Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "usage": {
+        "error": null,
+        "fixtures": [
+          "usage"
+        ],
+        "last_checked": "2026-05-29T17:16:20Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "anthropic:claude-sonnet-4-5-20250929": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T17:17:58Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "token_limit": {
+        "error": null,
+        "fixtures": [
+          "token_limit"
+        ],
+        "last_checked": "2026-05-29T17:17:58Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "usage": {
+        "error": null,
+        "fixtures": [
+          "usage"
+        ],
+        "last_checked": "2026-05-29T17:17:58Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "cerebras:gpt-oss-120b": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T16:18:00Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "cohere:rerank-v3.5": {
+    "scenarios": {
+      "rerank_basic": {
+        "error": null,
+        "fixtures": [
+          "rerank_basic"
+        ],
+        "last_checked": "2026-05-29T16:19:22Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "fireworks_ai:accounts/fireworks/models/gpt-oss-20b": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T16:18:31Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "google:gemini-2.0-flash": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T16:17:08Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "groq:llama-3.1-8b-instant": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T16:17:19Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "minimax:MiniMax-M2.1": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (429): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T16:18:48Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "openai:gpt-4o-mini": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T16:16:55Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:openai/gpt-4o-mini": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T16:17:31Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "xai:grok-3-mini": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T16:17:48Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zai:glm-4.5-flash": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T16:18:19Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zai_coder:glm-4.5-flash": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T16:28:19Z",
         "mode": "record",
         "status": "pass"
       }

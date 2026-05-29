@@ -23,7 +23,7 @@ Historical warning: before the fixture-tooling slice, explicit `mix mc "provider
 
 ## Current Fixture State
 
-The fixture tree has 2200 JSON fixture files under `test/support/fixtures`.
+The fixture tree has 2232 JSON fixture files under `test/support/fixtures`.
 
 `MIX_ENV=test mix mc` reports:
 
@@ -32,7 +32,7 @@ The fixture tree has 2200 JSON fixture files under `test/support/fixtures`.
 | alibaba | 0 | 0 | 0 | 50 |
 | alibaba_cn | 0 | 0 | 0 | 82 |
 | amazon_bedrock | 0 | 4 | 0 | 88 |
-| anthropic | 8 | 0 | 0 | 8 |
+| anthropic | 11 | 0 | 0 | 0 |
 | azure | 26 | 0 | 0 | 77 |
 | cerebras | 3 | 0 | 0 | 2 |
 | cohere | 0 | 0 | 0 | 17 |
@@ -51,7 +51,7 @@ The fixture tree has 2200 JSON fixture files under `test/support/fixtures`.
 | zai_coding_plan | 0 | 0 | 0 | 5 |
 | zenmux | 0 | 0 | 0 | 149 |
 
-The provider sections currently sum to 143 passing, fixture-backed, current-registry models. The active refresh scope excludes Azure, leaving 117 in-scope candidate passing models. Amazon Bedrock has no passing models in the current provider sections and stays out of triage for this pass. Minimax remains in the conservative candidate list; the earlier `429` was resolved by a balance update, but it was not retested during the tooling smoke slice. The task's overall line reports `169/1268` because the overall calculation also counts legacy `priv/supported_models.json` pass entries that are no longer in the current provider sections. Treat the in-scope model list below as the candidate refresh set.
+The provider sections currently sum to 146 passing, fixture-backed, current-registry models. The active refresh scope excludes Azure, leaving 120 in-scope candidate passing models. Amazon Bedrock has no passing models in the current provider sections and stays out of triage for this pass. Minimax remains in the conservative candidate list; the earlier `429` was resolved by a balance update, but it was not retested during the tooling smoke slice. The task's overall line reports `169/1263` because the overall calculation also counts legacy `priv/supported_models.json` pass entries that are no longer in the current provider sections. Treat the in-scope model list below as the candidate refresh set.
 
 ## Date Findings
 
@@ -278,7 +278,7 @@ MIX_ENV=test mix mc "google:text-embedding-004" --type embedding --record
 
 ### Phase 1: Refresh Current Passing Coverage
 
-Conservative candidate target: re-record the 117 in-scope passing, fixture-backed, current-registry models listed below. This excludes Azure and Amazon Bedrock by scope. Minimax stays in the candidate list after the balance update, but should be refreshed in its own small provider pass. Amazon Bedrock has no passing models in the current provider-section count and stays out of triage for this pass.
+Conservative candidate target: re-record the 120 in-scope passing, fixture-backed, current-registry models listed below. This excludes Azure and Amazon Bedrock by scope. Minimax stays in the candidate list after the balance update, but should be refreshed in its own small provider pass. Amazon Bedrock has no passing models in the current provider-section count and stays out of triage for this pass.
 
 For one model:
 
@@ -426,20 +426,129 @@ MIX_ENV=test mix mc "openai:gpt-image-1.5" --type image --scenario image_basic -
 
 Hardening note: operation parsing now rejects unknown `--type` values explicitly, avoids creating atoms from arbitrary operation strings, and keeps specialty-shaped models out of text coverage even when their provider-specific specialty suite is not enabled yet.
 
+Scenario-first live smoke:
+
+```bash
+set -a && source ./.env && set +a && MIX_ENV=test mix mc "anthropic:claude-haiku-4-5-20251001" --scenario basic --record --max-concurrency 1
+set -a && source ./.env && set +a && MIX_ENV=test mix mc "openai:gpt-4o-mini" --scenario basic --record --max-concurrency 1
+set -a && source ./.env && set +a && MIX_ENV=test mix mc "google:gemini-2.0-flash" --scenario basic --record --max-concurrency 1
+set -a && source ./.env && set +a && MIX_ENV=test mix mc "groq:llama-3.1-8b-instant" --scenario basic --record --max-concurrency 1
+set -a && source ./.env && set +a && MIX_ENV=test mix mc "openrouter:openai/gpt-4o-mini" --scenario basic --record --max-concurrency 1
+set -a && source ./.env && set +a && MIX_ENV=test mix mc "xai:grok-3-mini" --scenario basic --record --max-concurrency 1
+set -a && source ./.env && set +a && MIX_ENV=test mix mc "cerebras:gpt-oss-120b" --scenario basic --record --max-concurrency 1
+set -a && source ./.env && set +a && MIX_ENV=test mix mc "zai:glm-4.5-flash" --scenario basic --record --max-concurrency 1
+set -a && source ./.env && set +a && MIX_ENV=test mix mc "fireworks_ai:accounts/fireworks/models/gpt-oss-20b" --scenario basic --record --max-concurrency 1
+set -a && source ./.env && set +a && MIX_ENV=test mix mc "cohere:rerank-v3.5" --type rerank --scenario rerank_basic --record --max-concurrency 1
+set -a && source ./.env && set +a && MIX_ENV=test mix mc "zai_coder:glm-4.5-flash" --scenario basic --record --max-concurrency 1
+```
+
+| Model | Operation | Record result | Replay result |
+| --- | --- | --- | --- |
+| `anthropic:claude-haiku-4-5-20251001` | text/basic | passed | passed |
+| `openai:gpt-4o-mini` | text/basic | passed | passed |
+| `google:gemini-2.0-flash` | text/basic | passed | passed |
+| `groq:llama-3.1-8b-instant` | text/basic | passed | passed |
+| `openrouter:openai/gpt-4o-mini` | text/basic | passed | passed |
+| `xai:grok-3-mini` | text/basic | passed | passed |
+| `cerebras:gpt-oss-120b` | text/basic | passed | passed |
+| `zai:glm-4.5-flash` | text/basic | passed | passed |
+| `fireworks_ai:accounts/fireworks/models/gpt-oss-20b` | text/basic | passed | passed |
+| `cohere:rerank-v3.5` | rerank/rerank_basic | passed | passed |
+| `zai_coder:glm-4.5-flash` | text/basic | passed after base URL fix | passed |
+
+Additional failed record attempts:
+
+| Model | Scenario | Failure signal | Fixture promotion |
+| --- | --- | --- | --- |
+| `minimax:MiniMax-M2.1` | `basic` | provider `429` | not promoted |
+
+The original `zai_coder:glm-4.5-flash` attempt failed with `non-existing domain` because LLMDB provider metadata supplied `https://api.zai.chat`, which did not resolve locally and shadowed ReqLLM's working coding endpoint default. The provider fix forces the Z.ai module default unless a caller or app config explicitly overrides `base_url`; after that change, Z.ai Coder recorded and replayed cleanly.
+
+The live record path promoted one fixture for each passing scenario, and the immediate replay path passed for the same 11 successful scenarios. `priv/model_compat_scenarios.json` records the passing scenario statuses and the remaining MiniMax failed record attempt.
+
+Single-model deep comprehensive smoke:
+
+```bash
+set -a && source ./.env && set +a && MIX_ENV=test mix mc "anthropic:claude-haiku-4-5-20251001" --record --max-concurrency 1
+MIX_ENV=test mix mc "anthropic:claude-haiku-4-5-20251001" --max-concurrency 1
+```
+
+| Model | Record result | Replay result | Fixtures promoted |
+| --- | --- | --- | ---: |
+| `anthropic:claude-haiku-4-5-20251001` | passed | passed | 14 |
+
+The full comprehensive record covered `basic`, `streaming`, `token_limit`, `usage`, `context_append_1`, `context_append_2`, `multi_tool`, `tool_round_trip_1`, `tool_round_trip_2`, `no_tool`, `object_basic`, `object_streaming`, `reasoning_basic`, and `reasoning_streaming`. `priv/supported_models.json` now marks the canonical model as passing with `last_checked` `2026-05-29T16:30:53Z`.
+
+Anthropic provider cleanup:
+
+```bash
+set -a && source ./.env && set +a && MIX_ENV=test mix mc "anthropic:claude-3-5-haiku-20241022" --capability core --record --max-concurrency 1
+set -a && source ./.env && set +a && MIX_ENV=test mix mc "anthropic:claude-3-haiku-20240307" --capability core --record --max-concurrency 1
+set -a && source ./.env && set +a && MIX_ENV=test mix mc "anthropic:claude-3-5-sonnet-20240620" --capability core --record --max-concurrency 1
+set -a && source ./.env && set +a && MIX_ENV=test mix mc "anthropic:claude-3-7-sonnet-20250219" --capability core --record --max-concurrency 1
+set -a && source ./.env && set +a && MIX_ENV=test mix mc "anthropic:claude-3-sonnet-20240229" --capability core --record --max-concurrency 1
+```
+
+| Model | Result | Decision |
+| --- | --- | --- |
+| `anthropic:claude-3-5-haiku-20241022` | provider `404` | removed Claude 3-family fixtures and denied from package candidates |
+| `anthropic:claude-3-haiku-20240307` | provider `404` | removed Claude 3-family fixtures and denied from package candidates |
+| `anthropic:claude-3-5-sonnet-20240620` | provider `404` | removed Claude 3-family state entries and denied from package candidates |
+| `anthropic:claude-3-7-sonnet-20250219` | provider `404`; registry marks deprecated with replacement `claude-sonnet-4-5-20250929` | removed Claude 3-family fixtures/state and denied from package candidates |
+| `anthropic:claude-3-sonnet-20240229` | provider `404` | removed Claude 3-family state entries and denied from package candidates |
+
+Cleanup removed the tracked fixture directories for `anthropic/claude_3_5_haiku_20241022`, `anthropic/claude_3_5_haiku_latest`, `anthropic/claude_3_7_sonnet_latest`, and `anthropic/claude_3_haiku_20240307`, deleted Claude 3-family generated state entries, and changed the Anthropic LLMDB deny filter to `claude-3-*` and `claude-3.*`.
+
+Additional Claude 4-family refresh:
+
+```bash
+set -a && source ./.env && set +a && MIX_ENV=test mix mc "anthropic:claude-opus-4-5" --capability core --record --max-concurrency 1
+MIX_ENV=test mix mc "anthropic:claude-opus-4-5" --capability core --max-concurrency 1
+```
+
+`anthropic:claude-opus-4-5` recorded and replayed `basic`, `usage`, and `token_limit` successfully. The subsequent Anthropic pass recorded full comprehensive fixtures, or the supported comprehensive subset where structured output is not available, for the remaining Claude 4-family models that lacked current coverage.
+
+| Model | Live record result | Replay result | Notes |
+| --- | --- | --- | --- |
+| `anthropic:claude-opus-4-5` | passed | passed | 14 fixtures |
+| `anthropic:claude-opus-4-5-20251101` | passed | passed | 14 fixtures |
+| `anthropic:claude-opus-4-6` | passed | passed | 14 fixtures |
+| `anthropic:claude-opus-4-7` | passed | passed | 14 fixtures |
+| `anthropic:claude-sonnet-4-6` | passed | passed | 14 fixtures |
+| `anthropic:claude-opus-4-1-20250805` | passed | passed | 14 fixtures |
+| `anthropic:claude-opus-4-20250514` | passed | passed | 12 fixtures; object scenarios skipped because Anthropic reports structured outputs unsupported |
+| `anthropic:claude-sonnet-4-20250514` | passed | passed | 12 fixtures; object scenarios skipped because Anthropic reports structured outputs unsupported |
+| `anthropic:claude-sonnet-4-5-20250929` | passed | passed | 14 fixtures |
+
+The comprehensive macro now requires Anthropic `extra.capabilities.structured_outputs.supported` to be true before enabling `object_basic` or `object_streaming`. That avoids the provider `400` response observed for `claude-opus-4-20250514` and `claude-sonnet-4-20250514`.
+
+Final Anthropic replay:
+
+```bash
+MIX_ENV=test mix mc "anthropic:*" --max-concurrency 4
+```
+
+Result: 11/11 active Anthropic models passing, 0 failing, 0 untested.
+
+Fixture hygiene note: live and legacy Anthropic fixtures were scanned for raw cookie values after recording. Any `set-cookie` values under `test/support/fixtures/anthropic` are now normalized to `[REDACTED:set-cookie]`.
+
 ## Conservative Refresh Model List
 
 These are the in-scope current-registry, passing, fixture-backed models from the provider sections of `MIX_ENV=test mix mc`. Azure entries are deliberately omitted for this pass. Minimax remains listed as a candidate provider but should be skipped until the provider-side `429` clears.
 
 ### anthropic
 
-- `anthropic:claude-3-5-haiku-20241022`
-- `anthropic:claude-3-haiku-20240307`
 - `anthropic:claude-haiku-4-5-20251001`
 - `anthropic:claude-opus-4-1-20250805`
 - `anthropic:claude-opus-4-20250514`
+- `anthropic:claude-opus-4-5`
+- `anthropic:claude-opus-4-5-20251101`
+- `anthropic:claude-opus-4-6`
+- `anthropic:claude-opus-4-7`
 - `anthropic:claude-opus-4-8`
 - `anthropic:claude-sonnet-4-20250514`
 - `anthropic:claude-sonnet-4-5-20250929`
+- `anthropic:claude-sonnet-4-6`
 
 ### cerebras
 

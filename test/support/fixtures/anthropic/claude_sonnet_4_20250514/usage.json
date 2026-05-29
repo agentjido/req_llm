@@ -1,10 +1,12 @@
 {
+  "model_spec": "anthropic:claude-sonnet-4-20250514",
+  "provider": "anthropic",
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjo1MDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiSGkgdGhlcmUhIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiY2xhdWRlLXNvbm5ldC00LTIwMjUwNTE0Iiwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+      "b64": "eyJtYXhfdG9rZW5zIjoxMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJIaSB0aGVyZSEiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJjbGF1ZGUtc29ubmV0LTQtMjAyNTA1MTQiLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
     },
     "canonical_json": {
-      "max_tokens": 500,
+      "max_tokens": 10,
       "messages": [
         {
           "content": "Hi there!",
@@ -16,6 +18,9 @@
       "temperature": 0.0
     },
     "headers": {
+      "accept": [
+        "application/json"
+      ],
       "accept-encoding": [
         "gzip"
       ],
@@ -26,7 +31,7 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ],
       "x-api-key": "[REDACTED:x-api-key]"
     },
@@ -37,14 +42,15 @@
     "body": {
       "content": [
         {
-          "text": "Hello! It's nice to meet you. How are you doing today? Is there anything I can help you with?",
+          "text": "Hello! It's nice to meet you. How",
           "type": "text"
         }
       ],
-      "id": "msg_014JJgxryRKpReiRqvN31q5F",
+      "id": "msg_019vLgr8TkgtKDnESZgnewft",
       "model": "claude-sonnet-4-20250514",
       "role": "assistant",
-      "stop_reason": "end_turn",
+      "stop_details": null,
+      "stop_reason": "max_tokens",
       "stop_sequence": null,
       "type": "message",
       "usage": {
@@ -54,88 +60,92 @@
         },
         "cache_creation_input_tokens": 0,
         "cache_read_input_tokens": 0,
+        "inference_geo": "not_available",
         "input_tokens": 10,
-        "output_tokens": 27,
+        "output_tokens": 10,
         "service_tier": "standard"
       }
     },
     "headers": {
-      "anthropic-organization-id": [
-        "a71659e7-a922-4ff7-99de-f3ba615face1"
-      ],
+      "anthropic-organization-id": "[REDACTED:anthropic-organization-id]",
       "anthropic-ratelimit-input-tokens-limit": [
-        "450000"
+        "800000"
       ],
       "anthropic-ratelimit-input-tokens-remaining": [
-        "450000"
+        "800000"
       ],
       "anthropic-ratelimit-input-tokens-reset": [
-        "2025-11-02T17:05:01Z"
+        "2026-05-29T17:59:41Z"
       ],
       "anthropic-ratelimit-output-tokens-limit": [
-        "90000"
+        "160000"
       ],
       "anthropic-ratelimit-output-tokens-remaining": [
-        "90000"
+        "160000"
       ],
       "anthropic-ratelimit-output-tokens-reset": [
-        "2025-11-02T17:05:01Z"
+        "2026-05-29T17:59:41Z"
       ],
       "anthropic-ratelimit-requests-limit": [
-        "1000"
+        "2000"
       ],
       "anthropic-ratelimit-requests-remaining": [
-        "999"
+        "1999"
       ],
       "anthropic-ratelimit-requests-reset": [
-        "2025-11-02T17:04:59Z"
+        "2026-05-29T17:59:40Z"
       ],
       "anthropic-ratelimit-tokens-limit": [
-        "540000"
+        "960000"
       ],
       "anthropic-ratelimit-tokens-remaining": [
-        "540000"
+        "960000"
       ],
       "anthropic-ratelimit-tokens-reset": [
-        "2025-11-02T17:05:01Z"
+        "2026-05-29T17:59:41Z"
       ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "998536d3587a72e8-ORD"
+        "a03764ef6e16f15d-ORD"
       ],
       "connection": [
         "keep-alive"
+      ],
+      "content-security-policy": [
+        "default-src 'none'; frame-ancestors 'none'"
       ],
       "content-type": [
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:05:01 GMT"
+        "Fri, 29 May 2026 17:59:41 GMT"
       ],
       "request-id": [
-        "req_011CUjRgbRgiA7zqBWumtPPd"
-      ],
-      "retry-after": [
-        "63"
+        "req_011CbXJ6w4rvDENMAVQEtJCL"
       ],
       "server": [
         "cloudflare"
       ],
+      "set-cookie": "[REDACTED:set-cookie]",
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
+      ],
+      "traceresponse": [
+        "00-7225b646d2bce6355b9314426fe119ca-1f405ba5a91de846-01"
       ],
       "transfer-encoding": [
         "chunked"
       ],
-      "x-envoy-upstream-service-time": [
-        "2206"
+      "vary": [
+        "Accept-Encoding"
       ],
       "x-robots-tag": [
         "none"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

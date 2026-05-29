@@ -1,4 +1,6 @@
 {
+  "model_spec": "groq:llama-3.1-8b-instant",
+  "provider": "groq",
   "request": {
     "body": {
       "b64": "eyJtYXhfdG9rZW5zIjo1MCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJIZWxsbyB3b3JsZCEiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJsbGFtYS0zLjEtOGItaW5zdGFudCIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
@@ -17,6 +19,9 @@
       "temperature": 0.0
     },
     "headers": {
+      "accept": [
+        "application/json"
+      ],
       "accept-encoding": [
         "gzip"
       ],
@@ -25,7 +30,7 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ]
     },
     "method": "post",
@@ -39,29 +44,30 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Hello world. It's nice to meet you. Is there something I can help you with or would you like to chat?",
+            "content": "Hello world. How can I assist you today?",
             "role": "assistant"
           }
         }
       ],
-      "created": 1762103726,
-      "id": "chatcmpl-636fe9a0-a225-47b9-b5e4-6fad0270460b",
+      "created": 1780071439,
+      "id": "chatcmpl-4e33712f-586c-4dbd-a157-16245e2b73b6",
       "model": "llama-3.1-8b-instant",
       "object": "chat.completion",
       "service_tier": "on_demand",
-      "system_fingerprint": "fp_9ca2574dca",
+      "system_fingerprint": "fp_020e283281",
       "usage": {
-        "completion_time": 0.026855259,
-        "completion_tokens": 26,
-        "prompt_time": 0.00189137,
+        "completion_time": 0.020189535,
+        "completion_tokens": 11,
+        "prompt_time": 0.00179833,
         "prompt_tokens": 38,
-        "queue_time": 0.07538376,
-        "total_time": 0.028746629,
-        "total_tokens": 64
+        "queue_time": 0.058201626,
+        "total_time": 0.021987865,
+        "total_tokens": 49
       },
       "usage_breakdown": null,
       "x_groq": {
-        "id": "req_01k92s24e6f8patnm8xjbwg4xj"
+        "id": "req_01kst8d6wfed5tbmgwt8nm2p56",
+        "seed": 42
       }
     },
     "headers": {
@@ -75,7 +81,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "99854622bce5e26b-ORD"
+        "a036ceff1da65e0c-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -84,22 +90,20 @@
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:15:26 GMT"
+        "Fri, 29 May 2026 16:17:19 GMT"
       ],
       "server": [
         "cloudflare"
       ],
-      "set-cookie": [
-        "__cf_bm=SOrn.0v5Jw9yWbp9ZPiJQOGzwYyCctZKOH654NKfd3g-1762103726.5151885-1.0.1.1-ctoBtZTnQdkmsXBRrDuf6XBGbSAFvoK6nuyYvS_8.WjfhWsJPD1sDx8puj5Ptx15L0M6zW9BilyHpFoTrSCwRUnRzpb5vPiDode9yoIsgfCy8f3pJZhwZqbP8laJ7bqc; HttpOnly; Secure; Path=/; Domain=groq.com; Expires=Sun, 02 Nov 2025 17:45:26 GMT"
+      "set-cookie": "[REDACTED:set-cookie]",
+      "strict-transport-security": [
+        "max-age=15552000"
       ],
       "transfer-encoding": [
         "chunked"
       ],
       "vary": [
         "Origin"
-      ],
-      "via": [
-        "1.1 google"
       ],
       "x-groq-region": [
         "yul"
@@ -111,21 +115,22 @@
         "6000"
       ],
       "x-ratelimit-remaining-requests": [
-        "14391"
+        "14399"
       ],
       "x-ratelimit-remaining-tokens": [
-        "4315"
+        "5912"
       ],
       "x-ratelimit-reset-requests": [
-        "54s"
+        "6s"
       ],
       "x-ratelimit-reset-tokens": [
-        "16.849999999s"
+        "880ms"
       ],
       "x-request-id": [
-        "req_01k92s24e6f8patnm8xjbwg4xj"
+        "req_01kst8d6wfed5tbmgwt8nm2p56"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

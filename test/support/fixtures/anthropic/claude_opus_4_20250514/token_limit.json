@@ -1,4 +1,6 @@
 {
+  "model_spec": "anthropic:claude-opus-4-20250514",
+  "provider": "anthropic",
   "request": {
     "body": {
       "b64": "eyJtYXhfdG9rZW5zIjozMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IldyaXRlIGEgdmVyeSBsb25nIHN0b3J5IGFib3V0IGRyYWdvbnMgYW5kIGFkdmVudHVyZXMiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJjbGF1ZGUtb3B1cy00LTIwMjUwNTE0Iiwic3RyZWFtIjpmYWxzZSwidGhpbmtpbmciOnsiYnVkZ2V0X3Rva2VucyI6MTAyNCwidHlwZSI6ImVuYWJsZWQifX0="
@@ -19,6 +21,9 @@
       }
     },
     "headers": {
+      "accept": [
+        "application/json"
+      ],
       "accept-encoding": [
         "gzip"
       ],
@@ -32,7 +37,7 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ],
       "x-api-key": "[REDACTED:x-api-key]"
     },
@@ -43,18 +48,19 @@
     "body": {
       "content": [
         {
-          "signature": "ErYDCkYICRgCKkB9YrUAQ7swqrKEjwJsK1k/7mWeX+dbUytGjeLRtTtGnM6NGftybaCQWL9YgDbiu/qEDkj+/kOAexKmPayKxbVBEgzb9Ko5i6D/FP64QOcaDL2+p87+V+YpxptaDyIw29ObClG8vkORagcyAaImNwTrWqbKX79G0YD1eu3lr4KsxV6yHSqd//ncpX4eApUfKp0CmU/n/ZS2LUEGdzVqj48ahhVDrrQ979sZNg+s249Syex1G50AaX0SfF+nIEmHxs5EiZwFLwPesRRsQUkXGgTEmoT4voNDKoBpKKpuRPeYHn9JhxeEQU/rcDCM/5uMP9EDEunhxvHzJ64fzghXmshKrHAps/plNT3ONNEVTQHh06Gdap/WbiSRUxKn2KkwbbitqPFqmJ358TfIDgaecZUrmZH++go8MHC+UYq+fkVWalZLvKyXUUn/DkFFeflsPI3CcBMNdFR7hhcCN3OTj8hOYQ0lZuoCcsINAEuqIdTbezwjkiuSBRZCwjRmcwS9QUDU3XS7LoTwHPYWnVjBK8xWa+GXZUFrUHZbOAP+iIBn6qHysRCkA4xCHu7lkkFoGAE=",
-          "thinking": "The user is asking for a very long story about dragons and adventures. I should create an engaging fantasy story with multiple chapters, interesting characters, plot twists, and of course, dragons. I'll aim for a substantial length while keeping it engaging throughout.",
+          "signature": "EtsDCmoIDhgCKkD29YMKcSNqIb+K7N/MB0wi+bWGG4+uoF5Js2jplFGc6Fe6kLLUk4/zc19JgYFFu4LBBPi9kncpcQD9iEJCjeQkMhZjbGF1ZGUtb3B1cy00LTIwMjUwNTE0OABCCHRoaW5raW5nEgxQ5tDo/FgY24QH0nEaDL5UscKzcceYkpFhjyIwnuvRpN11PYmwiKosmI1ZrZ/izbuqO+A+yk7SJkpRGiA5ei5THtBZoKr7KQBVFIuwKp4CCrBJi6fnkRr69LcTTtv+dchc/c8/atvWxbf1UohqzLJsPZFJ0lLiKGdI/Z0aRl25/oS57Sfrc/sPEljZPEBexRePSMiNlfSkSo0gtqdp+Xt42WVfR4T5+fnan2YfwkuRvVUGKhDtoAj3vgYFafYnUBDx4QKdb0eS1qiE2ZaAj4dNoVES+0F9ng57v5eJlK32hi91hiRo+dhQUMs1vtvOCgsqfenDsDqnWhFoe9gGdQ+i8N8n7GpxU5+oTv0+e//3Ogax6os0mqZatJD4TJoUqJTh8M4QsXdnt7jXzAJbXPTlBfaonVolG1CNisVTGeP5bueuQh+loeW+EuVPUt2sxO4zm3XTYHpxTN1wtz7AKlY0KDg3CX9J9+1naaFhAxgB",
+          "thinking": "The user is asking for a very long story about dragons and adventures. I'll create an epic fantasy adventure story with multiple chapters, rich character development, and exciting dragon encounters. I'll aim for a substantial length while keeping it engaging throughout.",
           "type": "thinking"
         },
         {
-          "text": "# The Chronicles of the Dragonheart\n\n## Chapter 1: The Prophecy Awakens\n\nThe morning mist clung to the mountainside like a silver shroud as Kira made her way up the treacherous path. Her worn leather boots found purchase on the frost-slicked stones with practiced ease, though her breath came in short puffs in the thin mountain air. She had been climbing since before dawn, driven by dreams that had plagued her for weeks—dreams of fire and shadow, of great wings that blotted out the sun, and of a voice that called to her from beyond the peaks.\n\nKira was no stranger to the Thornridge Mountains. As a shepherd's daughter from the village of Millhaven, she had spent her nineteen years wandering these slopes with her flock. But never before had she ventured this high, into the realm of legends and old wives' tales. The elders spoke of dragons that once nested in these peaks, though none had been seen for over a century. Most believed them to be extinct, hunted to oblivion during the Great Purge when King Aldric's grandfather had declared war on all magical creatures.\n\nAs she rounded a particularly narrow ledge, Kira's hand brushed against something unusual—a section of rock that felt warm to the touch despite the morning chill. She paused, examining the stone more closely. Strange symbols were etched into its surface, their lines filled with what appeared to be gold that pulsed faintly in the dim light.\n\n\"Dragon script,\" she whispered, recognizing the ancient writing from the forbidden texts she had secretly studied in the village archive. Her heart raced as she traced the symbols with trembling fingers. The warmth intensified, and suddenly the rock face began to shimmer and dissolve, revealing a hidden cave entrance.\n\nThe cave was vast, its ceiling disappearing into darkness high above. But it was what lay at the center that stole Kira's breath away—a massive crystalline formation that glowed with an inner fire, and suspended within it, perfectly preserved, was a dragon egg the size of a wine barrel. Its scales shimmed with colors that shifted like oil on water, from deep purple to emerald green to burning gold.\n\nAs Kira approached, mesmerized, the crystal began to crack. Hairline fractures spread across its surface like a spider's web, and with each crack, a note of pure music filled the air. The egg within began to move, rocking gently at first, then with increasing violence.\n\n\"By the old gods,\" Kira breathed, stumbling backward. \"It's hatching.\"\n\nThe crystal exploded outward in a shower of rainbow fragments, and Kira threw up her arms to shield her face. When she lowered them, a dragon sat before her—not the massive beast of legends, but a creature no larger than a house cat, with scales that sparkled like starlight and eyes that held the wisdom of ages.\n\nThe dragon looked at her with those ancient eyes and spoke, not with its mouth, but directly into her mind: \"Finally, you have come, Keeper of the Flame. I have waited so long.\"\n\n\"I don't understand,\" Kira said aloud, her voice echoing in the vast chamber. \"I'm just a shepherd's daughter.\"\n\nThe dragon's mental voice carried a hint of amusement. \"You are so much more than that, Kira Dragonheart. You are the last of the Keepers, and I am Shadowmere, the last of the free dragons. Together, we must restore the balance before the Void Bringer awakens.\"\n\n\"The Void Bringer?\" Kira's mind reeled with questions, but before she could voice them, the cave began to shake violently. Rocks fell from the ceiling, and a sound like thunder rolled through the mountain.\n\n\"They have found us,\" Shadowmere said urgently, spreading wings that seemed far too large for his small body. \"The King's Dragonslayers. We must flee—now!\"\n\n## Chapter 2: Flight and Pursuit\n\nKira barely had time to scoop up the small dragon before the cave entrance exploded inward. Through the settling dust marched a squad of soldiers in black armor, their breastplates bearing the symbol of the Dragonslayers—a sword piercing a dragon's heart. At their head stood Commander Marcus Blackthorne, his scarred face twisted in triumph.\n\n\"Well, well,\" Blackthorne drawled, his hand resting on the pommel of his enchanted sword, Drakebane. \"The shepherdess has found herself a pet. Hand over the wyrmling, girl, and I might let you live.\"\n\nShadowmere's voice rang in Kira's mind: \"Trust me. When I give the signal, run for the cave mouth and jump.\"\n\n\"Jump?\" Kira thought back, incredulous. \"We're on a cliff face!\"\n\n\"Trust me,\" the dragon repeated.\n\nBlackthorne took a step forward, drawing his sword. The blade glowed with a sickly green light that made Kira's skin crawl. \"This is your last warning, girl.\"\n\n\"Now!\" Shadowmere roared in her mind. At the same moment, the tiny dragon opened his mouth and unleashed a torrent of silver fire that struck the cave ceiling. The ancient stone, weakened by centuries of erosion, collapsed with a deafening crash.\n\nKira ran. Behind her, she could hear Blackthorne's curses and the shouts of his men as they struggled to avoid the falling rocks. She burst out of the cave onto the narrow ledge, glanced down at the thousand-foot drop, and—insane as it was—jumped.\n\nFor a heart-stopping moment, she plummeted through the morning air. Then Shadowmere writhed out of her arms, and in mid-air, began to grow. His body expanded rapidly, scales stretching and multiplying, until a dragon the size of a small house caught her on his back.\n\n\"Hold on!\" his mental voice commanded as his powerful wings beat against the air, carrying them up and away from the mountainside.\n\nKira gripped the ridge of scales at the base of Shadowmere's neck, exhilaration replacing her terror as they soared through the clouds. Below, she could see Blackthorne emerging from the ruined cave, his face contorted with rage. He barked orders to his men, and within moments, strange mechanical contraptions were being assembled—ballistas designed specifically for bringing down dragons.\n\n\"They came prepared,\" Shadowmere observed grimly. \"Blackthorne has hunted my kind for decades. He will not give up easily.\"\n\nThe first ballista bolt whistled past them, trailing an enchanted chain designed to entangle wings. Shadowmere banked sharply, diving toward the forest canopy below. More bolts followed, one grazing his tail and drawing a line of silver blood.\n\n\"We need to lose them in the Whisperwood,\" Shadowmere said, angling toward the vast forest that stretched beyond the mountains. \"But first, we must warn the others.\"\n\n\"Others?\" Kira asked, pressing herself flat against his neck as they dove through a hail of projectiles. \"I thought you were the last free dragon.\"\n\n\"The last free dragon, yes. But not the last dragon. The others... it's complicated. You'll understand when we reach the Sanctuary.\"\n\nThey plunged into the Whisperwood just as the sun reached its zenith, the ancient trees swallowing them in green shadow. Behind them, Kira could hear the crash of Blackthorne's forces entering the forest, but the dense canopy would make aerial pursuit impossible.\n\n## Chapter 3: The Hidden Sanctuary\n\nThe Whisperwood was older than memory, its trees so vast that entire villages could have been built in their branches. As Shadowmere wove between the massive trunks, Kira marveled at the bioluminescent fungi that painted the bark in soft blues and greens, and the strange, ethereal creatures that watched their passage with glowing eyes.\n\n\"The Whisperwood remembers the old alliance,\" Shadowmere explained as they flew deeper into the forest. \"Here, the King's law holds no sway.\"\n\nAfter what felt like hours of flight, they arrived at a grove where the trees formed a natural cathedral. Shadowmere landed gracefully on the soft moss, and Kira slid from his back on shaking legs. At the center of the grove stood a figure she had only seen in her dreams—a woman with silver hair that seemed to flow like water and eyes that held the depth of centuries.\n\n\"Lady Lyralei,\" Shadowmere said, bowing his great head. \"I have found her—the last Keeper.\"\n\nLyralei stepped forward, studying Kira with those ageless eyes. \"You have your mother's face,\" she said softly, \"and your father's courage.\"\n\n\"You knew my parents?\" Kira asked, her heart racing.\n\n\"Knew them? Child, I trained them. They were among the greatest of the Dragonkeepers before the Purge claimed them.\" Lyralei's expression grew sorrowful. \"They died protecting the location of this Sanctuary, ensuring that someday their daughter could fulfill the prophecy.\"\n\n\"What prophecy? Everyone keeps talking about prophecies and Void Bringers, but no one explains anything!\" Kira's frustration boiled over.\n\nLyralei gestured to a stone altar covered in ancient carvings. \"Sit, child. It's time you learned the truth about who you are and why the fate of the world rests on your shoulders.\"\n\nAs Kira sat, Lyralei began to weave a tale that stretched back millennia. She spoke of the First Age, when dragons and humans lived in harmony, bound together by the Dragonkeepers—humans with the rare ability to bond telepathically with dragons. She told of how this bond had created an age of unprecedented peace and prosperity, with dragon and human working together to maintain the balance of magic in the world.\n\n\"But power corrupts,\" Lyralei continued, her voice heavy with old grief. \"A Keeper named Malthorn grew jealous of the dragons' longevity and power. He delved into forbidden magic, seeking to steal the dragons' essence for himself. In doing so, he opened a rift to the Void—a realm of pure entropy that seeks to devour all life and magic.\"\n\n\"The Void Bringer,\" Kira whispered.\n\n\"Malthorn became its vessel, transformed into something neither human nor dragon, but a corruption of both. The war that followed nearly destroyed the world. In the end, the dragons made the ultimate sacrifice. They pooled their power to seal Malthorn and the rift, but the effort left them vulnerable. When humans, fearing a repeat of the catastrophe, began the Purge, the dragons were too weak to defend themselves.\"\n\n\"But the seal is weakening,\" Shadowmere added. \"The signs have been growing for years—magic becoming unstable, the barriers between realms growing thin. Without the dragons to maintain it, the seal will fail within the year.\"\n\n\"So what can I do?\" Kira asked. \"I don't know the first thing about being a Dragonkeeper.\"\n\n\"That,\" Lyralei said with a small smile, \"is why you're here. The Sanctuary isn't just a hiding place—it's a training ground. Here, you'll learn to harness your inherited abilities. But first, we must awaken the others.\"\n\nShe led them deeper into the grove, where Kira gasped at what she saw. Arranged in a perfect circle were a dozen dragon statues, each one unique in size and form, all carved from what appeared to be living crystal.\n\n\"They're not statues,\" Shadowmere said quietly. \"These are my kin, locked in crystal sleep to preserve their strength for the final battle. Only a true Keeper can awaken them.\"\n\n## Chapter 4: The Awakening\n\nThe next weeks blurred together in a haze of training and discovery. Under Lyralei's tutelage, Kira learned to expand her mental connection with Shadowmere, to share not just thoughts but sensations and even abilities. She discovered she could channel his dragon-fire through her own hands, and in turn, he could draw upon her human creativity and adaptability.\n\nBut the true test came when it was time to awaken the sleeping dragons. Each crystal prison required a different approach, a unique resonance between Keeper and dragon. The first to wake was Windwhisper, a lithe sky dragon whose scales shifted color like the aurora borealis. Her awakening was gentle, like a morning breeze stirring leaves.\n\n\"Sister,\" she said to Shadowmere, her mental voice like wind chimes, \"how long have I slept?\"\n\n\"A century and a half,\" Shadowmere replied. \"But our wait is over. The Keeper has come.\"\n\nOne by one, Kira awakened them: Ironscale the Forge",
+          "text": "# The Last Dragon Keeper\n\n## Chapter 1: The Forgotten Prophecy\n\nThe morning mist clung to the mountainside like a shroud as Lyra made her way up the treacherous path to the ancient library. Her boots, worn thin from years of use, struggled to find purchase on the dew-slicked stones. She had been making this journey every day for the past three years, ever since Master Aldric had taken her as his apprentice, but today felt different. Today, the very air seemed to hum with anticipation.\n\nThe Great Library of Thornwick stood at the peak of Mount Veridian, its towering spires reaching toward the clouds like gnarled fingers. Built over a thousand years ago, it housed the most extensive collection of knowledge in all the Seven Kingdoms. More importantly to Lyra, it contained the only remaining texts about dragons – creatures that had vanished from the world over two centuries ago.\n\nAs she pushed open the massive oak doors, their hinges groaning in protest, Lyra was greeted by the familiar scent of aged parchment and binding glue. Master Aldric stood waiting for her in the main hall, his silver beard nearly touching the floor as he hunched over an ancient tome.\n\n\"You're late,\" he said without looking up, though Lyra could hear the smile in his voice.\n\n\"The path was treacherous this morning, Master. The rains have made the stones slick as ice.\"\n\nAldric finally raised his eyes, and Lyra was struck by the intensity in them. His usually calm demeanor had been replaced by something she had never seen before – excitement, perhaps even fear.\n\n\"Lyra, my child, I've found something. Something that changes everything we thought we knew about the Dragon Wars and why the dragons disappeared.\"\n\nHe gestured for her to approach the reading podium where the ancient book lay open. The pages were so old they seemed ready to crumble at the slightest touch. The text was written in the Old Language, which few could read anymore, but Lyra had spent years studying under Aldric's tutelage.\n\nAs she began to decipher the archaic script, her eyes widened. The passage spoke of a prophecy – one that had been deliberately hidden from history. It told of a time when the dragons would return, but only when the world's need was greatest. And they would return to one who bore the Mark of the Keeper.\n\n\"Master, this says—\"\n\n\"That the dragons never truly left,\" Aldric finished. \"They merely slumber, waiting for the Keeper to awaken them. And Lyra...\" He reached out and gently pulled back the sleeve of her left arm, revealing a birthmark she had carried all her life. In the candlelight, it seemed to shimmer and move, taking the shape of a dragon in flight.\n\n\"No,\" Lyra breathed, stumbling backward. \"That's impossible. I'm nobody. I'm just an orphan you found in the village. I can't be—\"\n\nHer words were cut short by a tremendous roar that shook the very foundations of the library. Books tumbled from their shelves, and ancient dust rained from the ceiling. Through the tall windows, they could see a shadow pass over the sun – a shadow with wings.\n\n\"It seems,\" Aldric said quietly, \"that the prophecy has already begun.\"\n\n## Chapter 2: The Shadow Returns\n\nThe attack came without warning. One moment, the sky was clear save for the mysterious winged shadow; the next, the air was filled with screaming. Not the screams of people, but something far worse – the shriek of metal against scale, the roar of unnatural fire.\n\nLyra and Aldric rushed to the window, and what they saw defied belief. Creatures poured from tears in the very air itself – beings of shadow and flame that resembled dragons but were wrong in every way. Where true dragons were said to be magnificent, these were twisted. Where dragons brought wonder, these brought only terror.\n\n\"Shadow Drakes,\" Aldric whispered, his face pale. \"I thought they were only legend.\"\n\n\"What are they?\" Lyra demanded, unable to tear her eyes from the horror unfolding in the valley below. The village of Thornwick was burning, its people fleeing in panic as the shadow creatures descended upon them.\n\n\"Corrupted dragons, twisted by dark magic during the War of Shadows a thousand years ago. If they've returned...\" Aldric trailed off, but Lyra understood. If creatures from the War of Shadows had returned, then the ancient evil that had created them might have returned as well.\n\n\"We have to help them,\" Lyra said, already turning toward the door.\n\n\"No!\" Aldric grabbed her arm. \"Not yet. You're not ready. You don't understand what you are, what power you might hold. If you're truly the Dragon Keeper, then you're the only hope we have – but not if you die today.\"\n\nAs if in response to his words, the birthmark on Lyra's arm began to burn. She gasped, clutching at it, and as she did, she heard something impossible – a voice in her mind, ancient and powerful.\n\n*Keeper... at last... we have waited... come to us...*\n\n\"Master,\" she gasped. \"I can hear them. The dragons – the real dragons. They're calling to me.\"\n\nAldric's eyes widened. \"Where? Where are they calling from?\"\n\nLyra closed her eyes, letting the voice guide her thoughts. Images flashed through her mind – a great mountain split in two, a valley hidden in perpetual mist, a crystal cave where time stood still.\n\n\"The Sundering Peaks,\" she breathed. \"They're in the Sundering Peaks.\"\n\n\"That's a fortnight's journey, even if we could travel unhindered.\" Aldric moved quickly, gathering essential tomes and scrolls. \"And with these Shadow Drakes abroad, the roads will be dangerous.\"\n\nA crash shook the library as one of the shadow creatures slammed into the tower. Its corrupted eyes peered through the window, filled with malevolent intelligence. Lyra felt a surge of power flow through her, and without thinking, she raised her hand. Light erupted from her palm – pure, silver light that sent the creature shrieking away into the darkness.\n\nBoth she and Aldric stared at her hand in shock.\n\n\"How did you do that?\" he asked.\n\n\"I... I don't know. It just happened.\"\n\n\"The power of the Keeper awakens,\" Aldric murmured. \"We must leave immediately. If the Shadow Drakes are here, their master won't be far behind. And if he learns that the Dragon Keeper has been found...\"\n\nHe didn't need to finish. Lyra understood. She would become the target of every dark creature in the land.\n\nAs they prepared to flee the library that had been Lyra's home for three years, she took one last look at the burning village below. The people she had grown to know and love were suffering, and she was running away. The weight of destiny settled upon her shoulders like a lead cloak.\n\n\"I'll come back,\" she whispered to the smoke-filled air. \"I'll find the dragons, and I'll come back to save you all.\"\n\nBut even as she spoke the words, she wondered if she would live long enough to keep that promise.\n\n## Chapter 3: The Company of the Desperate\n\nThe hidden passage beneath the library led to a series of natural caves that emerged on the far side of Mount Veridian. Aldric had revealed its existence only as the Shadow Drakes had begun their assault, admitting that it was meant as an escape route for the most precious of the library's treasures – which now, apparently, included Lyra herself.\n\nThey emerged into the fading daylight to find they were not alone. A small group of refugees had gathered at the cave mouth, having fled the burning village by various means. Among them, Lyra recognized several faces.\n\n\"Gareth?\" she called out, spotting the young blacksmith's apprentice. His usually cheerful face was covered in soot and ash, his leather apron singed and torn.\n\n\"Lyra! Master Aldric! Thank the old gods you're alive.\" Gareth rushed over, his relief evident. \"When we saw the Shadow Drakes attack the library, we feared the worst.\"\n\n\"How many escaped?\" Aldric asked, surveying the ragged group of perhaps twenty souls.\n\n\"Not enough,\" came a gruff voice from the shadows. A figure stepped forward – Captain Thorne of the village guard, his armor dented and his left arm wrapped in makeshift bandages. \"Most of the village is gone. Those creatures... they didn't just kill. They consumed. The people they touched simply... ceased to exist.\"\n\nA shudder ran through the group at his words. Lyra felt the weight of responsibility pressing down on her even more heavily. These people had no idea that she might be their only hope – and she wasn't sure she wanted them to know. Not yet.\n\n\"Where will we go?\" asked a woman holding a young child. \"Is anywhere safe from those monsters?\"\n\n\"The capital—\" Captain Thorne began, but Aldric cut him off.\n\n\"No. The Shadow Drakes will spread across the land like a plague. The cities will fall first – too many people gathered in one place, too tempting a target.\" The old scholar's eyes found Lyra's. \"We must go north, to the Sundering Peaks.\"\n\n\"The Sundering Peaks?\" Gareth exclaimed. \"But that's wilderness! Nothing but monsters and madmen venture there.\"\n\n\"And dragons,\" said a new voice. \n\nEveryone turned to see a stranger sitting apart from the group. She was young, perhaps a few years older than Lyra, with silver-white hair and eyes the color of storm clouds. Her clothing marked her as a traveler from distant lands – leather and cloth of unusual cut, with strange symbols embroidered along the edges.\n\n\"Who are you?\" Captain Thorne demanded, his hand moving to his sword hilt.\n\nThe stranger stood gracefully, and Lyra noticed she moved like a fighter despite carrying no visible weapons. \"My name is Kyra Moonwhisper. I'm a Seeker of the Order of the Silver Wing.\"\n\nGasps echoed through the group. The Order of the Silver Wing was legendary – dragon riders from the age before the Great Vanishing, warriors who had bonded with dragons and fought to maintain peace across the realm. But they had disappeared along with their dragon companions two hundred years ago.\n\n\"Impossible,\" Aldric breathed. \"The Order died out—\"\n\n\"The Order adapted,\" Kyra interrupted. \"We've been searching for signs of the dragons' return for two centuries. Waiting. Preparing.\" Her storm-grey eyes fixed on Lyra. \"And if I'm not mistaken, we've finally found what we've been looking for.\"\n\nLyra felt her birthmark burn again under the stranger's gaze. \"I don't know what you mean,\" she said, but her voice wavered.\n\nKyra smiled – a knowing expression that made Lyra uncomfortable. \"The Mark of the Keeper shines like a beacon to those who know how to look. You can't hide what you are, not from me.\"\n\n\"Keeper?\" Captain Thorne looked between them, confusion evident. \"What is she talking about?\"\n\nBefore anyone could answer, a bone-chilling shriek split the air. High above, silhouetted against the darkening sky, three Shadow Drakes circled like vultures.\n\n\"They've found us,\" someone whispered.\n\n\"Into the forest!\" Captain Thorne commanded. \"Move! Now!\"\n\nAs the group scrambled for the cover of the trees, Kyra fell into step beside Lyra. \"You feel it, don't you? The pull northward? The dragons calling?\"\n\nLyra nodded reluctantly. \"But I don't understand any of this. Yesterday I was just a library apprentice. Now people are calling me the Dragon Keeper and saying I'm some kind of prophesied savior. I don't even know how to fight!\"\n\n\"Fighting isn't always about swords and strength,\" Kyra said. \"You drove off a Shadow Drake with pure light. That's not something just anyone can do.\" She paused as they ducked beneath low-hanging branches. \"I can teach you, if you'll let me. My Order has preserved the old ways, the knowledge of dragon bonding and the powers that come with it.\"\n\n\"Why would you help me?\"\n\nKyra's expression grew serious. \"Because if you're truly the Keeper, then you're the key to bringing back the dragons. And without them, we have no hope against what's coming.\"\n\n\"What's coming?\" Lyra asked, though part of her didn't want to know.\n\n\"The Shadow Lord has returned,\" Kyra said simply. \"The ancient enemy who created the Shadow Drakes, who corrupted dragons and nearly destroyed the world a thousand years ago. The dragons went into hiding to",
           "type": "text"
         }
       ],
-      "id": "msg_01Mv8i4RXd2yyCrLmeVCLFaa",
+      "id": "msg_01CWjs9NL7bW2JFHW65tTZFg",
       "model": "claude-opus-4-20250514",
       "role": "assistant",
+      "stop_details": null,
       "stop_reason": "max_tokens",
       "stop_sequence": null,
       "type": "message",
@@ -65,88 +71,95 @@
         },
         "cache_creation_input_tokens": 0,
         "cache_read_input_tokens": 0,
-        "input_tokens": 44,
+        "inference_geo": "not_available",
+        "input_tokens": 45,
         "output_tokens": 3000,
+        "output_tokens_details": {
+          "thinking_tokens": 53
+        },
         "service_tier": "standard"
       }
     },
     "headers": {
-      "anthropic-organization-id": [
-        "a71659e7-a922-4ff7-99de-f3ba615face1"
-      ],
+      "anthropic-organization-id": "[REDACTED:anthropic-organization-id]",
       "anthropic-ratelimit-input-tokens-limit": [
-        "450000"
+        "5000000"
       ],
       "anthropic-ratelimit-input-tokens-remaining": [
-        "450000"
+        "5000000"
       ],
       "anthropic-ratelimit-input-tokens-reset": [
-        "2025-11-02T17:05:26Z"
+        "2026-05-29T17:57:28Z"
       ],
       "anthropic-ratelimit-output-tokens-limit": [
-        "90000"
+        "400000"
       ],
       "anthropic-ratelimit-output-tokens-remaining": [
-        "87000"
+        "400000"
       ],
       "anthropic-ratelimit-output-tokens-reset": [
-        "2025-11-02T17:07:03Z"
+        "2026-05-29T17:58:57Z"
       ],
       "anthropic-ratelimit-requests-limit": [
-        "1000"
+        "2000"
       ],
       "anthropic-ratelimit-requests-remaining": [
-        "999"
+        "1999"
       ],
       "anthropic-ratelimit-requests-reset": [
-        "2025-11-02T17:05:25Z"
+        "2026-05-29T17:57:26Z"
       ],
       "anthropic-ratelimit-tokens-limit": [
-        "540000"
+        "5400000"
       ],
       "anthropic-ratelimit-tokens-remaining": [
-        "537000"
+        "5400000"
       ],
       "anthropic-ratelimit-tokens-reset": [
-        "2025-11-02T17:05:26Z"
+        "2026-05-29T17:57:28Z"
       ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "998537741c0595c1-ORD"
+        "a03761aa6f91106c-ORD"
       ],
       "connection": [
         "keep-alive"
+      ],
+      "content-security-policy": [
+        "default-src 'none'; frame-ancestors 'none'"
       ],
       "content-type": [
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:07:01 GMT"
+        "Fri, 29 May 2026 17:58:57 GMT"
       ],
       "request-id": [
-        "req_011CUjRiVRLeNHqcboY8z6wv"
-      ],
-      "retry-after": [
-        "34"
+        "req_011CbXHw4UaRxrdjJoHqNoSL"
       ],
       "server": [
         "cloudflare"
       ],
+      "set-cookie": "[REDACTED:set-cookie]",
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
+      ],
+      "traceresponse": [
+        "00-c3c091877e27b66711a9d2b435f61d15-17fb658896281a77-01"
       ],
       "transfer-encoding": [
         "chunked"
       ],
-      "x-envoy-upstream-service-time": [
-        "96655"
+      "vary": [
+        "Accept-Encoding"
       ],
       "x-robots-tag": [
         "none"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

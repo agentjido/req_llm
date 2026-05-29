@@ -1,4 +1,6 @@
 {
+  "model_spec": "anthropic:claude-opus-4-20250514",
+  "provider": "anthropic",
   "request": {
     "body": {
       "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImNsYXVkZS1vcHVzLTQtMjAyNTA1MTQiLCJzdHJlYW0iOmZhbHNlLCJ0aGlua2luZyI6eyJidWRnZXRfdG9rZW5zIjoxMDI0LCJ0eXBlIjoiZW5hYmxlZCJ9fQ=="
@@ -19,6 +21,9 @@
       }
     },
     "headers": {
+      "accept": [
+        "application/json"
+      ],
       "accept-encoding": [
         "gzip"
       ],
@@ -32,7 +37,7 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ],
       "x-api-key": "[REDACTED:x-api-key]"
     },
@@ -43,18 +48,19 @@
     "body": {
       "content": [
         {
-          "signature": "Er4DCkYICRgCKkClD+RnL0uydnZieVwoxy+OiY1RnVOj0yJ0PdkifrSO7vxCbK2AjJ7npyLBZ2Ivef8/m+Occ0pCT/XY1hoJsEahEgxRNDDYeVpgfOfepIUaDFRcaGBl0mWKylDEdyIwCeiRJPokiQ6ne/hU04QtsbGAqWv5g9/6EnbjT2VYTuAYIaTqRmt6AizzCHgaqQakKqUC2dD5ftKgub5TkdWmlIoQNU8UUnOlg1Z/LlmQziNt61X2R8KvzfjeEFJQMjMIOqfm+PgXZhmPdlwQCTmLm1E+q1Z8ZI1elIw4GN2ClzcNf6w98O3rxm4A92bojpb4GMK+fTks+2i7TSYrhLaHhgQ8Zw8Z0AVrz8spEee3LeNlCUauqLjgpU2ppyHXt/TsmaTtOEythg1i8QEX1qcwwczF1/VL7xD3PT6llxJelsZQSU1Rakk+fjPXzxoXrf0n+Ld79e4PYLFeZr7QD/t1Y+3GAUiz/fhKR3RP/akQKVkhI91Z8nKZwML6XfELmaVMXHWZJ6oWCWYdSa2NeZvK3CqMJr0mXiOFmzvxQ64xG4s9l5MTIPAdI2n72OLHBw/Okxha4h5m8OUYAQ==",
-          "thinking": "The user has greeted me with \"Hello world!\" - this is a classic programming phrase often used as the first output when learning a new programming language. But it could also just be a friendly greeting. I'll respond in a warm, friendly way that acknowledges both possibilities.",
+          "signature": "EpcFCmoIDhgCKkDYDVIaKRz7AX9bA+0ye06SUmFRxMhkEw66yUkLKrLumpP92vOP64gcwZdmkg+6iihJe+XcvIYEsAlZWRGmfmWbMhZjbGF1ZGUtb3B1cy00LTIwMjUwNTE0OABCCHRoaW5raW5nEgwO/hl7G1jvP2F0Zs0aDLvTN8xiL7/P429I+iIwIpbBMk6/OcC4wQ6UWj8OMeA8nEYLXYTdY3O/iI6W57b/Vy6DpYxfq7sSXdGX5qevKtoDVHaRDhgrXXZ6eSLH7GrwMpPveRMGf4KEvhNuXeThnFA0qvh61CPZ3ThhDRHHHe/YQSf0k5U80WX5Y1rsZoIrn6198g9a0iRUurZ8Akpeov/pijdBlkBBgeUd3j08yIwKzDtHX/ehdjbv1nywHWJYizC2AGGoelH2HWGFZrpGcAJb1SVZx2Djimxzz2KrUxht1Ze/kcxRhLaUECFhwpFjcB3crQ5TWHtlmqABNuyYh/z9zSJzuRLM+RARkliMGBpZ8fAfC1rQsbDwJlG4KGcjDKDjwdqGw21TSdpZHtBvhJ+60q67I7MkX4zuHT5hhbD1gKIUF3/us3/buI4AwiSTZElh71mBUKvWVRQFT12VIi30k6aSHufpZQNYCZAoiP48X2d7pwSPxCLyQ0OcAAW4/jCI1y3XSsoH8cpERe39erVz/kt+FtWKVsrAn6HEfOK1/ue5YVJOQwYnkukOt4VWA4rdj1vPA98h7+fdGf02MpjL8zCHaR45nl6fjdiqjOagoCc4OmojCbJ4t6UsEUi3AW8sy+znw6ZTpi+5u2sYh76dZORH7INMq/7Xr31NEBpj6aHZc/AyHOikdcpXe0+IbbeW9rL1Xy2K5qJcDIHb5B+hr1+Wg2n5iWk8GAE=",
+          "thinking": "The user has said \"Hello world!\" which is a common greeting in programming and computer science. It's typically the first program people write when learning a new programming language. The user might be:\n1. Just greeting me in a playful, tech-savvy way\n2. Testing to see if I'm working\n3. Starting a conversation about programming\n4. Or simply saying hello\n\nI'll respond in a friendly way that acknowledges both the greeting and its programming significance.",
           "type": "thinking"
         },
         {
-          "text": "Hello there! 👋 \n\nWhether you're testing out a new program or just saying hi, it's great to hear from you! How can I help you today?",
+          "text": "Hello! 👋 Classic greeting - whether you're testing a new program or just saying hi! How can I help you today?",
           "type": "text"
         }
       ],
-      "id": "msg_01PVs21cAetStYsYdKDXbLdM",
+      "id": "msg_01DAm75dVkLW5MLSQxw43fV4",
       "model": "claude-opus-4-20250514",
       "role": "assistant",
+      "stop_details": null,
       "stop_reason": "end_turn",
       "stop_sequence": null,
       "type": "message",
@@ -65,88 +71,95 @@
         },
         "cache_creation_input_tokens": 0,
         "cache_read_input_tokens": 0,
-        "input_tokens": 38,
-        "output_tokens": 104,
+        "inference_geo": "not_available",
+        "input_tokens": 39,
+        "output_tokens": 138,
+        "output_tokens_details": {
+          "thinking_tokens": 104
+        },
         "service_tier": "standard"
       }
     },
     "headers": {
-      "anthropic-organization-id": [
-        "a71659e7-a922-4ff7-99de-f3ba615face1"
-      ],
+      "anthropic-organization-id": "[REDACTED:anthropic-organization-id]",
       "anthropic-ratelimit-input-tokens-limit": [
-        "450000"
+        "5000000"
       ],
       "anthropic-ratelimit-input-tokens-remaining": [
-        "450000"
+        "5000000"
       ],
       "anthropic-ratelimit-input-tokens-reset": [
-        "2025-11-02T17:04:53Z"
+        "2026-05-29T17:57:14Z"
       ],
       "anthropic-ratelimit-output-tokens-limit": [
-        "90000"
+        "400000"
       ],
       "anthropic-ratelimit-output-tokens-remaining": [
-        "90000"
+        "400000"
       ],
       "anthropic-ratelimit-output-tokens-reset": [
-        "2025-11-02T17:04:56Z"
+        "2026-05-29T17:57:18Z"
       ],
       "anthropic-ratelimit-requests-limit": [
-        "1000"
+        "2000"
       ],
       "anthropic-ratelimit-requests-remaining": [
-        "999"
+        "1999"
       ],
       "anthropic-ratelimit-requests-reset": [
-        "2025-11-02T17:04:52Z"
+        "2026-05-29T17:57:13Z"
       ],
       "anthropic-ratelimit-tokens-limit": [
-        "540000"
+        "5400000"
       ],
       "anthropic-ratelimit-tokens-remaining": [
-        "540000"
+        "5400000"
       ],
       "anthropic-ratelimit-tokens-reset": [
-        "2025-11-02T17:04:53Z"
+        "2026-05-29T17:57:14Z"
       ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "998536a91d0d95c1-ORD"
+        "a037615699b3c364-ORD"
       ],
       "connection": [
         "keep-alive"
+      ],
+      "content-security-policy": [
+        "default-src 'none'; frame-ancestors 'none'"
       ],
       "content-type": [
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:04:56 GMT"
+        "Fri, 29 May 2026 17:57:18 GMT"
       ],
       "request-id": [
-        "req_011CUjRg6X8UAPYYkW3qCXbM"
-      ],
-      "retry-after": [
-        "7"
+        "req_011CbXHv5AUJXkGeK5mv3KP7"
       ],
       "server": [
         "cloudflare"
       ],
+      "set-cookie": "[REDACTED:set-cookie]",
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
+      ],
+      "traceresponse": [
+        "00-180fcde7c2e1805265420927b96dcef0-4ffa1c2bcf10d856-01"
       ],
       "transfer-encoding": [
         "chunked"
       ],
-      "x-envoy-upstream-service-time": [
-        "4019"
+      "vary": [
+        "Accept-Encoding"
       ],
       "x-robots-tag": [
         "none"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

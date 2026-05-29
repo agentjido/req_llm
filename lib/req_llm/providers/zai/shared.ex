@@ -14,6 +14,13 @@ defmodule ReqLLM.Providers.Zai.Shared do
   end
 
   def prepare_request(provider_module, operation, model_spec, input, opts) do
+    opts =
+      if base_url_configured?(provider_module.provider_id(), opts) do
+        opts
+      else
+        Keyword.put(opts, :base_url, provider_module.default_base_url())
+      end
+
     ReqLLM.Provider.Defaults.prepare_request(provider_module, operation, model_spec, input, opts)
   end
 
@@ -60,6 +67,11 @@ defmodule ReqLLM.Providers.Zai.Shared do
       _ ->
         opts
     end
+  end
+
+  defp base_url_configured?(provider_id, opts) do
+    Keyword.has_key?(opts, :base_url) or
+      Application.get_env(:req_llm, provider_id, []) |> Keyword.has_key?(:base_url)
   end
 
   def decode_response({req, %{status: 200} = resp}, provider_id) do

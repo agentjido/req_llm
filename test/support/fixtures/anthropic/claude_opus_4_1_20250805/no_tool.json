@@ -1,4 +1,6 @@
 {
+  "model_spec": "anthropic:claude-opus-4-1-20250805",
+  "provider": "anthropic",
   "request": {
     "body": {
       "b64": "eyJtYXhfdG9rZW5zIjo2NDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IlRlbGwgbWUgYSBqb2tlIGFib3V0IGNhdHMiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJjbGF1ZGUtb3B1cy00LTEtMjAyNTA4MDUiLCJzdHJlYW0iOmZhbHNlLCJ0aGlua2luZyI6eyJidWRnZXRfdG9rZW5zIjoxMDI0LCJ0eXBlIjoiZW5hYmxlZCJ9LCJ0b29scyI6W3siZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwiaW5wdXRfc2NoZW1hIjp7ImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjpmYWxzZSwicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In0sIm5hbWUiOiJnZXRfd2VhdGhlciJ9XX0="
@@ -37,6 +39,9 @@
       ]
     },
     "headers": {
+      "accept": [
+        "application/json"
+      ],
       "accept-encoding": [
         "gzip"
       ],
@@ -50,7 +55,7 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ],
       "x-api-key": "[REDACTED:x-api-key]"
     },
@@ -61,18 +66,19 @@
     "body": {
       "content": [
         {
-          "signature": "ErEDCkYICRgCKkDzNjFDqw8nVtFvMnf3xbq1yau1DaFPm2VFkPkPrYFPsi7EdtWN7SFBAmJw2CcnTqEsb/HtaLlBVJS//0L/GTtFEgwKELJa4kdl+Wh6EVMaDFxAcJzGdgBEYnxh2CIwx49Mu/slTOHsByo1ajJh2u0qzHZPFQSYnLVpVog1PEVpAf3d0ZU1W6iR1mRCNO+HKpgCwJve554fO6Y/7apBSPoh10KMaqncE/sk3z94H2mWlOSs0QVAIEL6P0G/SID3uOJ51FtI1HhjYYIZA7x4nSymfdmBL5NQ2d83zYzlGlkQKTQfnSqUdCgAuyo02advBOwxcOjz5h/XG5T/9BKUxGVybb1w4KsP3dAC2/GNiFhRZFgtGbsBnBAKkbuZTRx8ZU5TbSz5oHnKIFPVg012QViJcHzORelKCR9/96zy8yNY7nAuTQO1M+lgyDCc1NBnk6dawUdo4I+USPC//yTSi+B95pe6yjZqMnIDklNSGVRpflVyc9wBaAL7CdGdB7JEhV13aoVJLCu3JgPiXGaoLKVIwP2cJOnQDx20UIaQgEwj23r2OyuH9Z1qkhgB",
-          "thinking": "The user is asking for a joke about cats. This is a simple request that doesn't require any tools or function calls. The available function is for getting weather information, which is not relevant to telling a joke. I should just respond with a cat joke directly.",
+          "signature": "EvICCmwIDhgCKkAStj25NokcsQ1gqPfnu5pzJ/D98sDh0EvFfwAHYIy8gKA7f7bx7LvMohivgIPlzvfZB8yG3tvXrSD7rzuExngSMhhjbGF1ZGUtb3B1cy00LTEtMjAyNTA4MDU4AEIIdGhpbmtpbmcSDJ0izVa+hlCLGBmxtBoMKnjJAmRvRh+ESVrTIjCBmEEiL9eB10PkDCG5zWqmw/hRGpXTFRXlnYSUBO2c/yfXpw9Adj+ez23AX8+DLy4qswGv95of9CsbUgijbp5JahZYsnkzBOt/J4/u4YrC+4dwA1OlgrlvkTsuz/udfa7mXypoxwkjPk7ApUfza8AIzdkk7HtpRcmRfqtZTKAnEp2AZVwhS27R4w9EUUT4FqqLYGVsEYj9maQNgIgPxk7Dg8iHnknXuBqSeTftUNTuIG6BEwxYM8B/And+35uuasYehS1jRvQ5C8819izuNpHkTB3p9O6gjflvfsaT8xJulEahkpjyzhgB",
+          "thinking": "The user is asking for a joke about cats. This is not related to weather or any of the available tools. I should simply provide a cat joke without using any tools.",
           "type": "thinking"
         },
         {
-          "text": "Here's a cat joke for you:\n\nWhy don't cats play poker in the jungle?\n\nToo many cheetahs! 🐱\n\n(And if you ask a cat about it, they'll probably just say it's because they prefer to knock all the cards off the table instead!)",
+          "text": "Here's a cat joke for you:\n\nWhy don't cats play poker in the jungle?\n\nToo many cheetahs!\n\n😸",
           "type": "text"
         }
       ],
-      "id": "msg_011fkteyX57bm6KHJNr3Ehnt",
+      "id": "msg_01Azj8AyLfLVmY11G4XK3GKJ",
       "model": "claude-opus-4-1-20250805",
       "role": "assistant",
+      "stop_details": null,
       "stop_reason": "end_turn",
       "stop_sequence": null,
       "type": "message",
@@ -83,88 +89,95 @@
         },
         "cache_creation_input_tokens": 0,
         "cache_read_input_tokens": 0,
-        "input_tokens": 565,
-        "output_tokens": 127,
+        "inference_geo": "not_available",
+        "input_tokens": 566,
+        "output_tokens": 76,
+        "output_tokens_details": {
+          "thinking_tokens": 40
+        },
         "service_tier": "standard"
       }
     },
     "headers": {
-      "anthropic-organization-id": [
-        "a71659e7-a922-4ff7-99de-f3ba615face1"
-      ],
+      "anthropic-organization-id": "[REDACTED:anthropic-organization-id]",
       "anthropic-ratelimit-input-tokens-limit": [
-        "450000"
+        "5000000"
       ],
       "anthropic-ratelimit-input-tokens-remaining": [
-        "450000"
+        "5000000"
       ],
       "anthropic-ratelimit-input-tokens-reset": [
-        "2025-11-02T17:07:05Z"
+        "2026-05-29T17:50:26Z"
       ],
       "anthropic-ratelimit-output-tokens-limit": [
-        "90000"
+        "400000"
       ],
       "anthropic-ratelimit-output-tokens-remaining": [
-        "90000"
+        "400000"
       ],
       "anthropic-ratelimit-output-tokens-reset": [
-        "2025-11-02T17:07:09Z"
+        "2026-05-29T17:50:27Z"
       ],
       "anthropic-ratelimit-requests-limit": [
-        "1000"
+        "2000"
       ],
       "anthropic-ratelimit-requests-remaining": [
-        "999"
+        "1999"
       ],
       "anthropic-ratelimit-requests-reset": [
-        "2025-11-02T17:07:01Z"
+        "2026-05-29T17:50:24Z"
       ],
       "anthropic-ratelimit-tokens-limit": [
-        "540000"
+        "5400000"
       ],
       "anthropic-ratelimit-tokens-remaining": [
-        "540000"
+        "5400000"
       ],
       "anthropic-ratelimit-tokens-reset": [
-        "2025-11-02T17:07:05Z"
+        "2026-05-29T17:50:26Z"
       ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "998539d09cc0e1f7-ORD"
+        "a037575cdd4e22f8-ORD"
       ],
       "connection": [
         "keep-alive"
+      ],
+      "content-security-policy": [
+        "default-src 'none'; frame-ancestors 'none'"
       ],
       "content-type": [
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:07:09 GMT"
+        "Fri, 29 May 2026 17:50:27 GMT"
       ],
       "request-id": [
-        "req_011CUjRqcuVJHDJyzDcR9XAP"
-      ],
-      "retry-after": [
-        "60"
+        "req_011CbXHPxDgNbdPjBuhdhX7s"
       ],
       "server": [
         "cloudflare"
       ],
+      "set-cookie": "[REDACTED:set-cookie]",
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
+      ],
+      "traceresponse": [
+        "00-854d01122d1d72a0f982f0ab65b0da70-19b36b93b649d391-01"
       ],
       "transfer-encoding": [
         "chunked"
       ],
-      "x-envoy-upstream-service-time": [
-        "7197"
+      "vary": [
+        "Accept-Encoding"
       ],
       "x-robots-tag": [
         "none"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }
