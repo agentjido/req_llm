@@ -52,6 +52,10 @@ These options are supported across providers (where the model allows):
 | `quality` | atom/string | Image quality (provider-dependent) |
 | `seed` | integer | Random seed for reproducibility (provider-dependent) |
 | `negative_prompt` | string | What to avoid in the image (provider-dependent) |
+| `source_image` | binary | Source image bytes for editing or reference generation |
+| `source_image_media_type` | string | MIME type for `source_image` (default: `"image/png"`) |
+| `mask` | binary | Optional mask image bytes for inpainting/editing |
+| `mask_media_type` | string | MIME type for `mask` (default: `"image/png"`) |
 
 ## Discovering Available Models
 
@@ -72,27 +76,67 @@ OpenAI offers several image generation models through the Images API.
 
 ### Supported Models
 
-The GPT Image family provides superior instruction following, text rendering, detailed editing, and real-world knowledge. We recommend `gpt-image-1.5` for the best quality, or `gpt-image-1-mini` for cost-effective generation when image quality isn't the priority.
+The GPT Image family provides superior instruction following, text rendering, detailed editing, and real-world knowledge. We recommend `gpt-image-2` for the latest image generation model, or `gpt-image-1-mini` for cost-effective generation when image quality isn't the priority.
 
 | Model | Notes |
 |-------|-------|
+| `gpt-image-2` | Latest GPT Image model |
 | `gpt-image-1.5` | State-of-the-art, best overall quality |
-| `gpt-image-1` | High fidelity with transparency support |
+| `gpt-image-1` | Deprecated; scheduled for removal on October 23, 2026 |
 | `gpt-image-1-mini` | Cost-effective option for simpler use cases |
-| `dall-e-3` | Higher quality than DALL-E 2, larger resolutions (deprecated May 2026) |
-| `dall-e-2` | Lower cost, supports inpainting/variations (deprecated May 2026) |
+| `dall-e-3` | Removed from the OpenAI API on May 12, 2026; use GPT Image models instead |
+| `dall-e-2` | Removed from the OpenAI API on May 12, 2026; use GPT Image models instead |
+
+### Image Editing
+
+Pass `source_image` to use OpenAI's image edits endpoint. This supports reference-image generation and masked edits while returning the same canonical `ReqLLM.Response` shape as prompt-only generation.
+
+```elixir
+source_image = File.read!("source.png")
+
+{:ok, response} = ReqLLM.generate_image(
+  "openai:gpt-image-1.5",
+  "Create a polished product hero image using this as reference",
+  source_image: source_image,
+  source_image_media_type: "image/png",
+  output_format: :png
+)
+
+image_data = ReqLLM.Response.image_data(response)
+```
+
+OpenAI GPT Image quality values such as `"low"`, `"medium"`, `"high"`, and `"auto"` should be passed as strings:
+
+```elixir
+{:ok, response} = ReqLLM.generate_image(
+  "openai:gpt-image-1.5",
+  "Edit this image as a watercolor illustration",
+  source_image: File.read!("source.png"),
+  quality: "medium"
+)
+```
+
+For inpainting-style edits, include `mask`:
+
+```elixir
+{:ok, response} = ReqLLM.generate_image(
+  "openai:gpt-image-1.5",
+  "Replace the background with a snowy mountain scene",
+  source_image: File.read!("source.png"),
+  mask: File.read!("mask.png")
+)
+```
 
 ### Current Limitations
 
-ReqLLM currently supports **image generation only** via the Images API. The following OpenAI features are not yet supported:
+The following OpenAI features are not yet exposed by ReqLLM:
 
-- **Image editing** (editing with masks via the Images API)
-- **Image variations** (DALL-E 2 only)
 - **Responses API image generation tool** (generates images inline during chat)
+- **Streaming image generation/editing** via the OpenAI Images API
 
 ### Prompt Format
 
-OpenAI's image generation accepts only a **single text prompt** - it does not support multi-turn conversations or image editing via context. Be descriptive in your prompt to get the best results.
+OpenAI's Images API accepts a **single text prompt** plus optional image edit inputs. It does not support multi-turn conversations through `ReqLLM.generate_image/3`. Be descriptive in your prompt to get the best results.
 
 ```elixir
 # Good: Descriptive prompt

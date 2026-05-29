@@ -39,6 +39,27 @@ defmodule ReqLLM.ImagesTest do
     assert Keyword.get(processed, :aspect_ratio) == "16:9"
   end
 
+  test "process/4 accepts image edit source and mask options" do
+    model = %LLMDB.Model{id: "gpt-image-1.5", provider: :openai}
+
+    {:ok, processed} =
+      ReqLLM.Provider.Options.process(
+        ReqLLM.Providers.OpenAI,
+        :image,
+        model,
+        source_image: <<1, 2, 3>>,
+        source_image_media_type: "image/jpeg",
+        mask: <<4, 5, 6>>,
+        mask_media_type: "image/png",
+        context: Context.new()
+      )
+
+    assert Keyword.get(processed, :source_image) == <<1, 2, 3>>
+    assert Keyword.get(processed, :source_image_media_type) == "image/jpeg"
+    assert Keyword.get(processed, :mask) == <<4, 5, 6>>
+    assert Keyword.get(processed, :mask_media_type) == "image/png"
+  end
+
   defp google_image_model_spec do
     Images.supported_models()
     |> Enum.find(&google_image_model_spec?/1)

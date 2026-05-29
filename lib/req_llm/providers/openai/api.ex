@@ -10,10 +10,12 @@ defmodule ReqLLM.Providers.OpenAI.API do
 
   - `ReqLLM.Providers.OpenAI.ChatAPI` - Chat Completions API (`/v1/chat/completions`)
   - `ReqLLM.Providers.OpenAI.ResponsesAPI` - Responses API (`/v1/responses`)
+  - `ReqLLM.Providers.OpenAI.ImagesAPI` - Images API (`/v1/images/generations`, `/v1/images/edits`)
 
   ## Callbacks
 
-  - `path/0` - Returns the API endpoint path
+  - `path/0` - Returns the default API endpoint path
+  - `path/1` - Optionally returns a non-default API endpoint path (e.g. edits endpoint for images)
   - `encode_body/1` - Transforms request into provider-specific JSON format
   - `decode_response/1` - Parses API responses into ReqLLM structures
   - `decode_stream_event/2` - Decodes server-sent events for streaming
@@ -21,6 +23,7 @@ defmodule ReqLLM.Providers.OpenAI.API do
   """
 
   @callback path() :: String.t()
+  @callback path(:edit) :: String.t()
   @callback encode_body(Req.Request.t()) :: Req.Request.t()
   @callback decode_response({Req.Request.t(), Req.Response.t()}) ::
               {Req.Request.t(), Req.Response.t() | Exception.t()}
@@ -34,5 +37,5 @@ defmodule ReqLLM.Providers.OpenAI.API do
               atom()
             ) :: {:ok, Finch.Request.t()} | {:error, Exception.t()}
 
-  @optional_callbacks attach_websocket_stream: 3
+  @optional_callbacks path: 1, attach_websocket_stream: 3
 end

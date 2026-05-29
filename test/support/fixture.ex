@@ -86,6 +86,7 @@ defmodule ReqLLM.Step.Fixture.Backend do
         |> Req.Request.put_private(:llm_fixture_path, path)
         |> Req.Request.put_private(:llm_fixture_name, safe_fixture_name)
         |> Req.Request.put_private(:llm_fixture_model, model)
+        |> maybe_put_fixture_canonical_json()
 
       if live?() do
         dbug(
@@ -231,18 +232,56 @@ defmodule ReqLLM.Step.Fixture.Backend do
     canonical_json =
       case request.private[:llm_canonical_json] do
         nil ->
-          case request.body do
-            {:json, json_map} -> json_map
-            other when is_binary(other) -> Jason.decode!(other)
-            other when is_list(other) -> other |> IO.iodata_to_binary() |> Jason.decode!()
-            other -> other
-          end
+          capture_request_body_payload(request)
 
         json_map ->
           json_map
       end
 
     %{canonical_json: canonical_json}
+  end
+
+  defp capture_request_body_payload(%Req.Request{options: %{form_multipart: parts}})
+       when is_list(parts) do
+    Enum.map(parts, fn
+      {key, {data, opts}} when is_binary(data) and is_list(opts) ->
+        %{
+          name: to_string(key),
+          file: %{
+            filename: Keyword.get(opts, :filename),
+            content_type: Keyword.get(opts, :content_type),
+            bytes: byte_size(data)
+          }
+        }
+
+      {key, value} ->
+        %{name: to_string(key), value: to_string(value)}
+    end)
+  end
+
+  defp capture_request_body_payload(%Req.Request{body: {:json, json_map}}), do: json_map
+
+  defp capture_request_body_payload(%Req.Request{body: body}) when is_binary(body) do
+    case Jason.decode(body) do
+      {:ok, decoded} -> decoded
+      {:error, _} -> %{body: %{b64: Base.encode64(body)}}
+    end
+  end
+
+  defp capture_request_body_payload(%Req.Request{body: body}) when is_list(body) do
+    body
+    |> IO.iodata_to_binary()
+    |> then(fn binary -> capture_request_body_payload(%Req.Request{body: binary}) end)
+  end
+
+  defp capture_request_body_payload(%Req.Request{body: body}), do: body
+
+  defp maybe_put_fixture_canonical_json(%Req.Request{private: private} = request) do
+    if Map.has_key?(private, :llm_canonical_json) do
+      request
+    else
+      Req.Request.put_private(request, :llm_canonical_json, capture_request_body_payload(request))
+    end
   end
 
   # ---------------------------------------------------------------------------

@@ -18,6 +18,11 @@ defmodule ReqLLM.Providers.OpenAI.ImagesAPI do
   def path, do: "/images/generations"
 
   @impl true
+  def path(:edit), do: "/images/edits"
+
+  @impl true
+  def encode_body(%{options: %{form_multipart: _}} = request), do: request
+
   def encode_body(request) do
     opts = if is_map(request.options), do: request.options, else: Map.new(request.options)
 
@@ -38,6 +43,36 @@ defmodule ReqLLM.Providers.OpenAI.ImagesAPI do
 
     request
     |> put_in([Access.key!(:options), :json], body)
+  end
+
+  @doc """
+  Builds the Req `:form_multipart` keyword list for the `/images/edits` endpoint.
+
+  Required keys in `opts`: `:model`, `:prompt`, `:source_image`. Optional keys
+  (`:mask`, `:n`, `:size`, `:quality`, `:output_format`, `:user`, and the
+  `*_media_type` companions) are added only when present.
+  """
+  def edit_image_form_multipart(opts) do
+    model = Keyword.fetch!(opts, :model)
+    prompt = Keyword.fetch!(opts, :prompt)
+    source_image = Keyword.fetch!(opts, :source_image)
+    source_image_media_type = Keyword.get(opts, :source_image_media_type, "image/png")
+    mask_media_type = Keyword.get(opts, :mask_media_type, "image/png")
+
+    [
+      model: model,
+      prompt: prompt,
+      image:
+        {source_image,
+         filename: image_filename("source_image", source_image_media_type),
+         content_type: source_image_media_type}
+    ]
+    |> maybe_add_file_part(:mask, Keyword.get(opts, :mask), "mask", mask_media_type)
+    |> maybe_add_form_part(:n, Keyword.get(opts, :n))
+    |> maybe_add_form_part(:size, Keyword.get(opts, :size))
+    |> maybe_add_form_part(:quality, Keyword.get(opts, :quality))
+    |> maybe_add_form_part(:output_format, Keyword.get(opts, :output_format))
+    |> maybe_add_form_part(:user, Keyword.get(opts, :user))
   end
 
   @impl true
@@ -186,6 +221,37 @@ defmodule ReqLLM.Providers.OpenAI.ImagesAPI do
     do: Map.put(body, "output_format", other)
 
   defp maybe_put_output_format(body, _), do: body
+
+  defp maybe_add_file_part(parts, _key, nil, _filename_root, _media_type), do: parts
+
+  defp maybe_add_file_part(parts, key, data, filename_root, media_type) when is_binary(data) do
+    parts ++
+      [
+        {key,
+         {data, filename: image_filename(filename_root, media_type), content_type: media_type}}
+      ]
+  end
+
+  defp maybe_add_form_part(parts, _key, nil), do: parts
+
+  defp maybe_add_form_part(parts, key, value) do
+    parts ++ [{key, form_part_value(value)}]
+  end
+
+  defp form_part_value({w, h}) when is_integer(w) and is_integer(h), do: "#{w}x#{h}"
+  defp form_part_value(value) when is_atom(value), do: Atom.to_string(value)
+  defp form_part_value(value) when is_integer(value), do: Integer.to_string(value)
+  defp form_part_value(value), do: value
+
+  defp image_filename(root, media_type) do
+    extension = image_extension(media_type)
+    "#{root}.#{extension}"
+  end
+
+  defp image_extension("image/jpeg"), do: "jpg"
+  defp image_extension("image/jpg"), do: "jpg"
+  defp image_extension("image/webp"), do: "webp"
+  defp image_extension(_), do: "png"
 
   defp openai_image_size_class(size, quality) do
     size_value = normalize_image_size(size)

@@ -39,7 +39,7 @@ defmodule ReqLLM.Providers.OpenAI do
   - Enhanced usage metrics including `:reasoning_tokens`
 
   ### Images API (ImagesAPI)
-  - Image generation with DALL-E and gpt-image-* models
+  - Image generation and edit with gpt-image-* models
   - Multiple output formats: PNG, JPEG, WebP (gpt-image-* only)
   - Size and aspect ratio control
   - Quality and style options (DALL-E 3)
@@ -313,7 +313,7 @@ defmodule ReqLLM.Providers.OpenAI do
   @doc """
   Custom prepare_request to route requests to appropriate API endpoints.
 
-  - :image operations route to `/v1/images/generations` via ImagesAPI
+  - :image operations route to `/v1/images/generations` or `/v1/images/edits` via ImagesAPI
   - :chat operations detect model type and route to ChatAPI or ResponsesAPI
   - :object operations maintain OpenAI-specific token handling
   """
@@ -325,7 +325,8 @@ defmodule ReqLLM.Providers.OpenAI do
          {:ok, processed_opts} <-
            ReqLLM.Provider.Options.process(__MODULE__, :image, model, opts_with_context) do
       api_mod = ReqLLM.Providers.OpenAI.ImagesAPI
-      path = api_mod.path()
+      image_edit? = Keyword.has_key?(processed_opts, :source_image)
+      path = if image_edit?, do: api_mod.path(:edit), else: api_mod.path()
 
       req_keys =
         supported_provider_options() ++
@@ -347,10 +348,33 @@ defmodule ReqLLM.Providers.OpenAI do
             :provider_options,
             :req_http_options,
             :api_mod,
+            :source_image,
+            :source_image_media_type,
+            :mask,
+            :mask_media_type,
             :base_url
           ]
 
       timeout = get_timeout_for_operation(:image, processed_opts)
+      model_id = model.provider_model_id || model.id
+
+      image_options =
+        Keyword.take(processed_opts, req_keys) ++
+          [
+            operation: :image,
+            model: model_id,
+            prompt: prompt,
+            context: context,
+            base_url: Keyword.get(processed_opts, :base_url, base_url()),
+            api_mod: api_mod
+          ]
+
+      form_multipart_options =
+        if image_edit? do
+          [form_multipart: api_mod.edit_image_form_multipart(image_options)]
+        else
+          []
+        end
 
       request =
         Req.new(
@@ -359,20 +383,10 @@ defmodule ReqLLM.Providers.OpenAI do
             method: :post,
             receive_timeout: timeout,
             pool_timeout: timeout
-          ] ++ http_opts
+          ] ++ form_multipart_options ++ http_opts
         )
         |> Req.Request.register_options(req_keys)
-        |> Req.Request.merge_options(
-          Keyword.take(processed_opts, req_keys) ++
-            [
-              operation: :image,
-              model: model.id,
-              prompt: prompt,
-              context: context,
-              base_url: Keyword.get(processed_opts, :base_url, base_url()),
-              api_mod: api_mod
-            ]
-        )
+        |> Req.Request.merge_options(image_options)
         |> attach(model, processed_opts)
 
       {:ok, request}
@@ -687,7 +701,7 @@ defmodule ReqLLM.Providers.OpenAI do
     extra_option_keys = ReqLLM.Provider.Defaults.extra_option_keys(__MODULE__)
 
     request
-    |> Req.Request.put_header("content-type", "application/json")
+    |> maybe_put_json_content_type()
     |> maybe_put_authorization_header(credential)
     |> Req.Request.register_options(extra_option_keys)
     |> Req.Request.merge_options(
@@ -954,6 +968,14 @@ defmodule ReqLLM.Providers.OpenAI do
 
   defp maybe_put_authorization_header(request, credential) do
     Req.Request.put_header(request, "authorization", "Bearer #{credential.token}")
+  end
+
+  defp maybe_put_json_content_type(request) do
+    if request.options[:form_multipart] do
+      request
+    else
+      Req.Request.put_header(request, "content-type", "application/json")
+    end
   end
 
   defp allow_missing_api_key?(%LLMDB.Model{} = model, opts) do
