@@ -42,7 +42,9 @@ defmodule ReqLLM.Step.Fixture do
   def maybe_attach(%Req.Request{} = request, model, opts) do
     case normalize_fixture_tuple(model, opts[:fixture]) do
       {:ok, {provider, name}} ->
-        attach_fixture_step(request, provider, name)
+        request
+        |> Req.Request.put_private(:req_llm_model, model)
+        |> attach_fixture_step(provider, name)
 
       :error ->
         request

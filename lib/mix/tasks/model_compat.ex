@@ -16,13 +16,14 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
   - **type**: Filters by operation capability using registry metadata
     - `text` (default): Only text-generation models
     - `embedding`: Only embedding models
-    - `all`: Both text and embedding models
-  - **sample** (optional): Further reduces using `:sample_text_models` or `:sample_embedding_models`.
+    - `image`, `speech`, `transcription`, `rerank`, `ocr`: Specialty operation models
+    - `all`: All implemented registry models
+  - **sample** (optional): Further reduces using `:sample_*_models` config.
     If not configured, falls back to one model per provider.
 
   **Important**:
   - Only **implemented providers** are included (registry models without implementation are skipped)
-  - Config lists (`:test_models`, `:test_embedding_models`) are defaults only, not hard filters
+  - Config lists (`:sample_*_models`) are defaults only, not hard filters
   - Explicit specs like `"anthropic:*"` test ALL registry models for that provider
 
   ## Usage
@@ -37,8 +38,10 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
       mix req_llm.model_compat "*:*"              # ALL models from implemented providers
 
       ### Test by operation type
-      mix req_llm.model_compat "google:*" --type all        # Google text + embedding models
+      mix req_llm.model_compat "google:*" --type all        # Google models across operations
       mix req_llm.model_compat "google:*" --type embedding  # Google embedding models only
+      mix req_llm.model_compat "openai:*" --type image      # OpenAI image models only
+      mix req_llm.model_compat "elevenlabs:*" --type speech # ElevenLabs TTS models only
       mix req_llm.model_compat "*:*" --type text            # All implemented text models
 
       ### Sample subset testing
@@ -53,7 +56,7 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
 
       --available        List all models from models.dev API registry (no implementation filter)
       --sample           Further reduce to sample subset (see :sample_* config or fallback)
-      --type TYPE        Operation type: text (default), embedding, or all
+      --type TYPE        Operation type: text, embedding, image, speech, transcription, rerank, ocr, or all
       --record           Re-record fixtures (live API calls)
       --record-all       Force re-record all fixtures (ignores state)
       --update-state     Update generated compatibility state during replay checks
@@ -79,7 +82,12 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
     "tools" => ~w(tool_none tool_multi tool_round_trip),
     "objects" => ~w(object_basic object_streaming),
     "reasoning" => ~w(reasoning),
-    "embedding" => ~w(embed_basic embed_usage embed_batch)
+    "embedding" => ~w(embed_basic embed_usage embed_batch),
+    "image" => ~w(image_basic),
+    "speech" => ~w(speech_basic),
+    "transcription" => ~w(transcription_basic),
+    "rerank" => ~w(rerank_basic),
+    "ocr" => ~w(ocr_basic)
   }
 
   @impl Mix.Task
@@ -120,9 +128,12 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
       |> csv_values()
       |> Enum.flat_map(&capability_scenarios!/1)
 
+    operation_capability = Atom.to_string(operation)
+
     operation_defaults =
-      if operation == :embedding and opts[:capability] == "embedding" do
-        Map.fetch!(@capability_scenarios, "embedding")
+      if opts[:capability] == operation_capability and
+           Map.has_key?(@capability_scenarios, operation_capability) do
+        Map.fetch!(@capability_scenarios, operation_capability)
       else
         []
       end
@@ -506,6 +517,26 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
 
   defp base_test_args(provider, :embedding) do
     ["test", "test/coverage/#{provider}/embedding_test.exs"]
+  end
+
+  defp base_test_args(provider, :image) do
+    ["test", "test/coverage/#{provider}/image_generation_test.exs"]
+  end
+
+  defp base_test_args(provider, :speech) do
+    ["test", "test/coverage/#{provider}/speech_test.exs"]
+  end
+
+  defp base_test_args(provider, :transcription) do
+    ["test", "test/coverage/#{provider}/transcription_test.exs"]
+  end
+
+  defp base_test_args(provider, :rerank) do
+    ["test", "test/coverage/#{provider}/rerank_test.exs"]
+  end
+
+  defp base_test_args(provider, :ocr) do
+    ["test", "test/coverage/#{provider}/ocr_test.exs"]
   end
 
   defp base_test_args(provider, :text) do
@@ -1146,9 +1177,34 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
     Application.get_env(:req_llm, :sample_embedding_models, [])
   end
 
+  defp default_specs_for_operation(:image) do
+    Application.get_env(:req_llm, :sample_image_models, [])
+  end
+
+  defp default_specs_for_operation(:speech) do
+    Application.get_env(:req_llm, :sample_speech_models, [])
+  end
+
+  defp default_specs_for_operation(:transcription) do
+    Application.get_env(:req_llm, :sample_transcription_models, [])
+  end
+
+  defp default_specs_for_operation(:rerank) do
+    Application.get_env(:req_llm, :sample_rerank_models, [])
+  end
+
+  defp default_specs_for_operation(:ocr) do
+    Application.get_env(:req_llm, :sample_ocr_models, [])
+  end
+
   defp default_specs_for_operation(:all) do
     Application.get_env(:req_llm, :sample_text_models, []) ++
-      Application.get_env(:req_llm, :sample_embedding_models, [])
+      Application.get_env(:req_llm, :sample_embedding_models, []) ++
+      Application.get_env(:req_llm, :sample_image_models, []) ++
+      Application.get_env(:req_llm, :sample_speech_models, []) ++
+      Application.get_env(:req_llm, :sample_transcription_models, []) ++
+      Application.get_env(:req_llm, :sample_rerank_models, []) ++
+      Application.get_env(:req_llm, :sample_ocr_models, [])
   end
 
   defp parse_spec_tuple(spec) when is_binary(spec) do
@@ -1164,24 +1220,11 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
 
   defp model_supports_operation?(_registry, _p, _m, :all), do: true
 
-  defp model_supports_operation?(registry, provider, model_id, :embedding) do
+  defp model_supports_operation?(registry, provider, model_id, operation) do
     case find_model(registry, provider, model_id) do
       nil -> false
-      model -> embedding_model?(model)
+      model -> ReqLLM.ModelOperation.supported?(model, operation)
     end
-  end
-
-  defp model_supports_operation?(registry, provider, model_id, :text) do
-    case find_model(registry, provider, model_id) do
-      nil -> false
-      model -> not embedding_model?(model)
-    end
-  end
-
-  defp embedding_model?(model) do
-    t = Map.get(model, "type")
-    outputs = get_in(model, ["modalities", "output"]) || []
-    t == "embedding" or Enum.member?(outputs, "embedding")
   end
 
   defp expand_spec_to_candidates(registry, spec, implemented) do
@@ -1264,15 +1307,12 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
   defp sample_model_set(operation, _registry, current_candidates) do
     cfg =
       case operation do
-        :text ->
-          Application.get_env(:req_llm, :sample_text_models, [])
-
-        :embedding ->
-          Application.get_env(:req_llm, :sample_embedding_models, [])
+        operation
+        when operation in [:text, :embedding, :image, :speech, :transcription, :rerank, :ocr] ->
+          Application.get_env(:req_llm, ReqLLM.ModelOperation.config_key(operation), [])
 
         :all ->
-          Application.get_env(:req_llm, :sample_text_models, []) ++
-            Application.get_env(:req_llm, :sample_embedding_models, [])
+          default_specs_for_operation(:all)
       end
 
     sample_specs =
@@ -1317,9 +1357,13 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
 
           %{
             "id" => model.id,
+            "provider" => model.provider,
             "type" => infer_type(model),
             "tier" => tier,
-            "modalities" => model.modalities
+            "modalities" => model.modalities,
+            "capabilities" => model.capabilities,
+            "family" => model.family,
+            "provider_model_id" => model.provider_model_id
           }
         end)
 
@@ -1330,11 +1374,7 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
   end
 
   defp infer_type(model) do
-    if model.capabilities && model.capabilities.embeddings != false do
-      "embedding"
-    else
-      "text"
-    end
+    ReqLLM.ModelOperation.type(model)
   end
 
   defp extract_tier(tags) when is_list(tags) do
@@ -1567,15 +1607,9 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
     end
   end
 
-  defp parse_operation_type(nil), do: :text
-  defp parse_operation_type("all"), do: :all
-  defp parse_operation_type("text"), do: :text
-  defp parse_operation_type("embedding"), do: :embedding
-  defp parse_operation_type(type), do: String.to_atom(type)
+  defp parse_operation_type(type), do: ReqLLM.ModelOperation.normalize(type)
 
-  defp operation_to_category(:text), do: "core"
-  defp operation_to_category(:embedding), do: "embedding"
-  defp operation_to_category(_), do: "core"
+  defp operation_to_category(operation), do: ReqLLM.ModelOperation.category(operation)
 
   defp has_fixtures?(provider, model_id) do
     model_dir = model_id_to_fixture_dir(model_id)

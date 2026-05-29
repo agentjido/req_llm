@@ -11,7 +11,7 @@ defmodule ReqLLM.Test.FakeRegistry do
   @catalog %{
     anthropic: ~w(claude-sonnet-4-5-20250929 claude-3-5-haiku-20241022),
     openai: ~w(gpt-4o gpt-4o-mini),
-    google: ~w(gemini-2.0-flash-exp gemini-1.5-flash),
+    google: ~w(gemini-2.0-flash gemini-1.5-flash),
     groq: ~w(llama-3.3-70b-versatile gemma2-9b-it),
     xai: ~w(grok-2-latest grok-beta)
   }

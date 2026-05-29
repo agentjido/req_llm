@@ -19,6 +19,18 @@ defmodule Mix.Tasks.ReqLlm.ModelCompatTest do
              ]
     end
 
+    test "expands specialty capability groups" do
+      assert ModelCompat.scenarios_for_opts([capability: "image"], :image) == ["image_basic"]
+      assert ModelCompat.scenarios_for_opts([capability: "speech"], :speech) == ["speech_basic"]
+
+      assert ModelCompat.scenarios_for_opts([capability: "transcription"], :transcription) == [
+               "transcription_basic"
+             ]
+
+      assert ModelCompat.scenarios_for_opts([capability: "rerank"], :rerank) == ["rerank_basic"]
+      assert ModelCompat.scenarios_for_opts([capability: "ocr"], :ocr) == ["ocr_basic"]
+    end
+
     test "deduplicates combined scenario and capability values" do
       assert ModelCompat.scenarios_for_opts([scenario: "basic", capability: "core"], :text) == [
                "basic",

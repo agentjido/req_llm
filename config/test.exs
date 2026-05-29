@@ -325,6 +325,22 @@ config :req_llm, :sample_embedding_models, ~w(
     azure:text-embedding-3-small
     amazon_bedrock:cohere.embed-english-v3
   )
+config :req_llm, :sample_image_models, ~w(
+    openai:gpt-image-1.5
+    google:gemini-2.5-flash-image
+  )
+config :req_llm, :sample_speech_models, ~w(
+    openai:tts-1
+    elevenlabs:eleven_multilingual_v2
+  )
+config :req_llm, :sample_transcription_models, ~w(
+    openai:whisper-1
+    groq:whisper-large-v3-turbo
+  )
+config :req_llm, :sample_rerank_models, ~w(
+    cohere:rerank-v3.5
+  )
+config :req_llm, :sample_ocr_models, []
 config :req_llm, :sample_text_models, ~w(
     anthropic:claude-3-5-haiku-20241022
     anthropic:claude-haiku-4-5

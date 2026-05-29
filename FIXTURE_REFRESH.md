@@ -138,6 +138,10 @@ MIX_ENV=test mix mc "anthropic:claude-haiku-4-5" --scenario basic
 MIX_ENV=test mix mc "anthropic:claude-haiku-4-5" --scenario basic --record --max-concurrency 1
 MIX_ENV=test mix mc "openai:gpt-4o-mini" --capability core
 MIX_ENV=test mix mc "openai:gpt-4o-mini" --scenario basic --update-state
+MIX_ENV=test mix mc "openai:gpt-image-1.5" --type image --scenario image_basic
+MIX_ENV=test mix mc "openai:tts-1" --type speech --scenario speech_basic --record
+MIX_ENV=test mix mc "openai:whisper-1" --type transcription --scenario transcription_basic --record
+MIX_ENV=test mix mc "cohere:rerank-v3.5" --type rerank --scenario rerank_basic --record
 ```
 
 Important behavior:
@@ -147,11 +151,11 @@ Important behavior:
 - `mix mc --sample` runs tests for configured sample models.
 - `mix mc "provider:*" --record` records every current registry model for that implemented provider, not just models with existing fixtures.
 - `--type text` is the default.
-- Use `--type embedding` for embedding fixture refresh.
+- Use `--type embedding|image|speech|transcription|rerank|ocr` for non-text fixture refresh.
 - `--record` and `--record-all` both make live API calls for selected specs in the current task implementation.
 - Replay checks are read-only by default.
 - Use `--scenario` for one or more comma-separated scenario tags.
-- Use `--capability core|conversation|streaming|tools|objects|reasoning|embedding` for scenario groups.
+- Use `--capability core|conversation|streaming|tools|objects|reasoning|embedding|image|speech|transcription|rerank|ocr` for scenario groups.
 - Use `--update-state` when a replay run should write scenario or model state.
 - Record mode defaults to `--max-concurrency 1`; replay mode uses higher concurrency unless overridden.
 - Record mode writes fixtures into a temporary staging directory and promotes them only after the child ExUnit run passes.
@@ -238,6 +242,17 @@ Implemented tooling slice:
 7. Added explicit streaming metadata and response-header sanitization to transcripts.
 8. Added scenario-level state in `priv/model_compat_scenarios.json`.
 9. Added task-level and transcript regression tests.
+
+Implemented provider-operation expansion:
+
+1. Added a shared `ReqLLM.ModelOperation` classifier for `text`, `embedding`, `image`, `speech`, `transcription`, `rerank`, `ocr`, and `all`.
+2. Updated `ModelMatrix` and `mix mc` so operation selection is registry/capability aware for specialty model families, not just text versus embedding.
+3. Added `sample_image_models`, `sample_speech_models`, `sample_transcription_models`, `sample_rerank_models`, and `sample_ocr_models` test config entries.
+4. Replaced hand-written OpenAI and Google image coverage tests with `ReqLLM.ProviderTest.ImageGeneration`.
+5. Added provider coverage macros for image generation, text-to-speech, transcription, rerank, and OCR.
+6. Added coverage entry points for `xai` image generation, `openai` and `elevenlabs` speech, `openai` and `groq` transcription, and `cohere` rerank.
+7. Added a deterministic local WAV sample at `test/support/audio/hello_world.wav` for transcription fixture recording.
+8. Made `ReqLLM.Step.Fixture.maybe_attach/3` store the resolved model in request private data so non-chat APIs can use the same fixture backend as chat and image requests.
 
 ## Recommended Refresh Sequence
 
@@ -390,6 +405,24 @@ MIX_ENV=test mix mc "anthropic:claude-haiku-4-5" --scenario basic --max-concurre
 | Claude Haiku `basic` replay | 1 test, 0 failures |
 
 The smoke updated `test/support/fixtures/anthropic/claude_haiku_4_5_20251001/basic.json` and added `priv/model_compat_scenarios.json` with `anthropic:claude-haiku-4-5-20251001` / `basic` passing in record mode.
+
+Provider-operation tooling smoke:
+
+```bash
+MIX_ENV=test mix compile
+MIX_ENV=test mix test test/req_llm/model_operation_test.exs test/mix/tasks/model_compat_test.exs test/req_llm/test/model_matrix_test.exs
+MIX_ENV=test mix test --include coverage --only "scenario:image_basic" test/coverage/openai/image_generation_test.exs test/coverage/google/image_generation_test.exs
+MIX_ENV=test mix test test/coverage/xai/image_generation_test.exs test/coverage/openai/speech_test.exs test/coverage/elevenlabs/speech_test.exs test/coverage/openai/transcription_test.exs test/coverage/groq/transcription_test.exs test/coverage/cohere/rerank_test.exs
+MIX_ENV=test mix mc "openai:gpt-image-1.5" --type image --scenario image_basic --max-concurrency 1
+```
+
+| Command | Result |
+| --- | --- |
+| `MIX_ENV=test mix compile` | passed |
+| operation/model-matrix regression suite | 37 tests, 0 failures |
+| existing OpenAI and Google image fixture replay | 2 tests, 0 failures |
+| specialty coverage file load check | 0 tests, 0 failures, 5 excluded |
+| OpenAI image `mix mc` replay | 1/1 active models passing |
 
 ## Conservative Refresh Model List
 

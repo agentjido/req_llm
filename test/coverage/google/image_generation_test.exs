@@ -1,34 +1,3 @@
 defmodule ReqLLM.Coverage.Google.ImageGenerationTest do
-  use ExUnit.Case, async: true
-
-  import ReqLLM.Test.Helpers
-
-  @moduletag :coverage
-  @moduletag provider: "google"
-  @moduletag timeout: 180_000
-
-  @model_spec "google:gemini-2.5-flash-image"
-
-  setup_all do
-    LLMDB.load(allow: :all, custom: %{})
-    :ok
-  end
-
-  @tag scenario: :image_basic
-  @tag model: "gemini-2.5-flash-image"
-  test "generate_image/3 returns a Response with one image part and usage data" do
-    {:ok, response} =
-      ReqLLM.generate_image(
-        @model_spec,
-        "A simple blue square",
-        fixture_opts("image_basic")
-      )
-
-    [part] = ReqLLM.Response.images(response)
-    assert part.type == :image
-    assert part.media_type == "image/png"
-    assert is_binary(part.data) and byte_size(part.data) > 0
-    assert response.usage.image_usage.generated.count == 1
-    assert response.usage.cost.images > 0
-  end
+  use ReqLLM.ProviderTest.ImageGeneration, provider: :google
 end

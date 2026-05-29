@@ -14,6 +14,11 @@ defmodule ReqLLM.Test.ModelMatrix do
   - `REQ_LLM_OPERATION` - Operation type filter (default: text)
     - `"text"` - Text generation models (default)
     - `"embedding"` - Embedding models only
+    - `"image"` - Image generation models only
+    - `"speech"` - Text-to-speech models only
+    - `"transcription"` - Speech-to-text models only
+    - `"rerank"` - Reranking models only
+    - `"ocr"` - OCR models only
   - `REQ_LLM_SAMPLE` - Number of models to sample per provider
   - `REQ_LLM_EXCLUDE` - Models to exclude (space or comma separated)
 
@@ -36,7 +41,8 @@ defmodule ReqLLM.Test.ModelMatrix do
       # => ["google:text-embedding-004", "google:gemini-embedding-001"]
   """
 
-  @type operation :: :text | :embedding
+  @type operation ::
+          :text | :embedding | :image | :speech | :transcription | :rerank | :ocr | :all
   @type opts :: [
           env: %{optional(String.t()) => String.t() | nil},
           registry: module(),
@@ -47,7 +53,7 @@ defmodule ReqLLM.Test.ModelMatrix do
   Returns list of model specs to test based on configuration.
 
   Selection priority:
-  1. opts[:operation] or opts[:env]["REQ_LLM_OPERATION"] determines model set (:text or :embedding)
+  1. opts[:operation] or opts[:env]["REQ_LLM_OPERATION"] determines model set
   2. opts[:env] map or REQ_LLM_MODELS environment variable for pattern matching
   3. Default models from config for the specified operation
   4. Applies sampling if opts[:env]["REQ_LLM_SAMPLE"] or REQ_LLM_SAMPLE is set
@@ -57,7 +63,7 @@ defmodule ReqLLM.Test.ModelMatrix do
 
     * `:env` - Map of environment variables to use instead of System.get_env
     * `:registry` - Registry module to use for listing models (default: uses LLMDB directly)
-    * `:operation` - Operation type (:text or :embedding, default: :text)
+    * `:operation` - Operation type, default: :text
 
   ## Examples
 
@@ -89,6 +95,7 @@ defmodule ReqLLM.Test.ModelMatrix do
     exclude = get_env_value(env, "REQ_LLM_EXCLUDE")
 
     resolve_base_selection(pattern, operation, registry)
+    |> filter_by_operation(operation, registry)
     |> maybe_sample(sample)
     |> maybe_exclude(exclude)
     |> Enum.sort()
@@ -119,12 +126,7 @@ defmodule ReqLLM.Test.ModelMatrix do
     Map.get(env_map, key) || System.get_env(key)
   end
 
-  defp parse_operation(nil), do: :text
-  defp parse_operation(:text), do: :text
-  defp parse_operation(:embedding), do: :embedding
-  defp parse_operation("text"), do: :text
-  defp parse_operation("embedding"), do: :embedding
-  defp parse_operation(_), do: :text
+  defp parse_operation(operation), do: ReqLLM.ModelOperation.normalize(operation)
 
   defp resolve_base_selection(pattern, operation, registry) do
     case pattern do
@@ -217,6 +219,50 @@ defmodule ReqLLM.Test.ModelMatrix do
 
   defp default_model_specs(:embedding, _registry) do
     Application.get_env(:req_llm, :sample_embedding_models) || []
+  end
+
+  defp default_model_specs(:all, registry) do
+    auto_pick_from_allowed(registry)
+  end
+
+  defp default_model_specs(operation, _registry) do
+    Application.get_env(:req_llm, ReqLLM.ModelOperation.config_key(operation)) || []
+  end
+
+  defp filter_by_operation(specs, :all, _registry), do: specs
+
+  defp filter_by_operation(specs, operation, registry) do
+    Enum.filter(specs, &supports_operation?(&1, operation, registry))
+  end
+
+  defp supports_operation?(spec, operation, nil) do
+    case LLMDB.model(spec) do
+      {:ok, model} -> ReqLLM.ModelOperation.supported?(model, operation)
+      {:error, _} -> false
+    end
+  end
+
+  defp supports_operation?(spec, operation, registry) do
+    case String.split(spec, ":", parts: 2) do
+      [provider, model_id] ->
+        provider
+        |> String.to_atom()
+        |> registry_model(registry, model_id)
+        |> case do
+          nil -> false
+          model -> ReqLLM.ModelOperation.supported?(model, operation)
+        end
+
+      _ ->
+        false
+    end
+  end
+
+  defp registry_model(provider, registry, model_id) do
+    case registry.list_models(provider) do
+      {:ok, models} -> Enum.find(models, &(&1.id == model_id))
+      {:error, _} -> nil
+    end
   end
 
   defp auto_pick_from_allowed(registry) do
