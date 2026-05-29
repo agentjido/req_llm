@@ -52,10 +52,10 @@ These options are supported across providers (where the model allows):
 | `quality` | atom/string | Image quality (provider-dependent) |
 | `seed` | integer | Random seed for reproducibility (provider-dependent) |
 | `negative_prompt` | string | What to avoid in the image (provider-dependent) |
-| `source_image` | binary | Source image bytes for editing or reference generation |
-| `source_image_media_type` | string | MIME type for `source_image` (default: `"image/png"`) |
-| `mask` | binary | Optional mask image bytes for inpainting/editing |
-| `mask_media_type` | string | MIME type for `mask` (default: `"image/png"`) |
+| `source_image` | binary | Source image bytes for editing or reference generation (OpenAI image models only) |
+| `source_image_media_type` | string | MIME type for `source_image` (default: `"image/png"`; OpenAI image models only) |
+| `mask` | binary | Optional mask image bytes for inpainting/editing (OpenAI image models only) |
+| `mask_media_type` | string | MIME type for `mask` (default: `"image/png"`; OpenAI image models only) |
 
 ## Discovering Available Models
 
