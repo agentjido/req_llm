@@ -100,7 +100,11 @@ defmodule ReqLLM.Streaming.Fixtures do
         "x-auth-token",
         "bearer",
         "api-key",
-        "access-token"
+        "access-token",
+        "cookie",
+        "set-cookie",
+        "anthropic-organization-id",
+        "openai-organization"
       ]
 
       headers

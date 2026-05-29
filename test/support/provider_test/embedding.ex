@@ -48,6 +48,7 @@ defmodule ReqLLM.ProviderTest.Embedding do
 
         describe "#{model_spec}" do
           @tag category: :embedding
+          @tag scenario: :embed_basic
           test "basic embedding generation" do
             dbug(
               fn -> "\n[Embedding] model_spec=#{@model_spec}, test=basic_embed" end,
@@ -73,6 +74,7 @@ defmodule ReqLLM.ProviderTest.Embedding do
           end
 
           @tag category: :embedding
+          @tag scenario: :embed_usage
           test "return_usage includes token counts" do
             dbug(
               fn -> "\n[Embedding] model_spec=#{@model_spec}, test=embed_basic_usage" end,
@@ -104,6 +106,7 @@ defmodule ReqLLM.ProviderTest.Embedding do
           end
 
           @tag category: :embedding
+          @tag scenario: :embed_batch
           test "batch embedding generation" do
             dbug(
               fn -> "\n[Embedding] model_spec=#{@model_spec}, test=batch_embed" end,

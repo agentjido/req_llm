@@ -1117,6 +1117,7 @@ defmodule ReqLLM.StreamServer do
           )
 
           Logger.warning("Failed to save streaming fixture: #{inspect(error)}")
+          reraise error, __STACKTRACE__
       end
 
       # Mark as saved to prevent duplicate saves

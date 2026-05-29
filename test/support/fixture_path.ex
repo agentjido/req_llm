@@ -28,12 +28,25 @@ defmodule ReqLLM.Test.FixturePath do
   """
   @spec file(LLMDB.Model.t() | String.t(), String.t()) :: String.t()
   def file(%LLMDB.Model{provider: provider, id: model}, test_name) when is_binary(test_name) do
-    Path.join([@root, to_string(provider), slug(model), "#{test_name}.json"])
+    file_under(@root, provider, model, test_name)
   end
 
   def file(model_spec, test_name) when is_binary(model_spec) and is_binary(test_name) do
     {:ok, model} = ReqLLM.model(model_spec)
     file(model, test_name)
+  end
+
+  @doc "Build fixture file path under a caller-supplied root directory."
+  @spec file_under(String.t(), LLMDB.Model.t(), String.t()) :: String.t()
+  def file_under(root, %LLMDB.Model{provider: provider, id: model}, test_name)
+      when is_binary(root) and is_binary(test_name) do
+    file_under(root, provider, model, test_name)
+  end
+
+  @spec file_under(String.t(), atom(), String.t(), String.t()) :: String.t()
+  def file_under(root, provider, model, test_name)
+      when is_binary(root) and is_atom(provider) and is_binary(model) and is_binary(test_name) do
+    Path.join([Path.expand(root), to_string(provider), slug(model), "#{test_name}.json"])
   end
 
   @doc """

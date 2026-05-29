@@ -55,8 +55,8 @@ defmodule ReqLLM.Step.Fixture.Backend do
         raise ArgumentError, "Model not found in request.private[:req_llm_model]"
       end
 
-      path = ReqLLM.Test.FixturePath.file(model, safe_fixture_name)
       mode = ReqLLM.Test.Fixtures.mode()
+      path = fixture_path_for_mode(model, safe_fixture_name, mode)
 
       dbug(
         fn ->
@@ -96,8 +96,7 @@ defmodule ReqLLM.Step.Fixture.Backend do
 
         Logger.debug("Fixture RECORD mode - will save to #{Path.relative_to_cwd(path)}")
 
-        # Add credential fallback error handler FIRST
-        request = insert_credential_fallback_handler(request, path, model)
+        request = maybe_insert_credential_fallback_handler(request, path, model)
 
         # For streaming, fixture saving is handled in StreamServer callback
         # For non-streaming, save fixture BEFORE decoding to capture raw response
@@ -197,16 +196,7 @@ defmodule ReqLLM.Step.Fixture.Backend do
     end
   end
 
-  defp provider_module(:amazon_bedrock), do: ReqLLM.Providers.AmazonBedrock
-  defp provider_module(:anthropic), do: ReqLLM.Providers.Anthropic
-  defp provider_module(:cerebras), do: ReqLLM.Providers.Cerebras
-  defp provider_module(:openai), do: ReqLLM.Providers.OpenAI
-  defp provider_module(:google), do: ReqLLM.Providers.Google
-  defp provider_module(:google_vertex), do: ReqLLM.Providers.GoogleVertex
-  defp provider_module(:google_vertex_anthropic), do: ReqLLM.Providers.GoogleVertex
-  defp provider_module(:groq), do: ReqLLM.Providers.Groq
-  defp provider_module(:openrouter), do: ReqLLM.Providers.OpenRouter
-  defp provider_module(:xai), do: ReqLLM.Providers.XAI
+  defp provider_module(provider), do: ReqLLM.Providers.get!(provider)
 
   # ---------------------------------------------------------------------------
   # Response step for saving fixtures in LIVE mode
@@ -365,6 +355,8 @@ defmodule ReqLLM.Step.Fixture.Backend do
           _ ->
             Logger.error("Fixture save failed: #{inspect(reason)}")
         end
+
+        raise "Fixture save failed for #{Path.relative_to_cwd(path)}: #{inspect(reason)}"
     end
   end
 
@@ -398,11 +390,7 @@ defmodule ReqLLM.Step.Fixture.Backend do
     }
 
     if chunks in [nil, []] do
-      Logger.warning(
-        "Fixture: no chunks provided for #{Path.relative_to_cwd(path)} – skipping save"
-      )
-
-      :ok
+      raise "Fixture save failed for #{Path.relative_to_cwd(path)}: no chunks provided"
     else
       {:ok, collector} = ReqLLM.Test.ChunkCollector.start_link()
 
@@ -429,6 +417,7 @@ defmodule ReqLLM.Step.Fixture.Backend do
         {:error, reason} ->
           dbug(fn -> "[Fixture] ERROR saving: #{inspect(reason)}" end, component: :fixtures)
           Logger.error("Fixture save failed: #{inspect(reason)}")
+          raise "Fixture save failed for #{Path.relative_to_cwd(path)}: #{inspect(reason)}"
       end
     end
   end
@@ -454,14 +443,20 @@ defmodule ReqLLM.Step.Fixture.Backend do
       "x-auth-token",
       "bearer",
       "api-key",
-      "access-token"
+      "access-token",
+      "cookie",
+      "set-cookie",
+      "anthropic-organization-id",
+      "openai-organization"
     ]
 
-    Enum.reduce(sensitive_keys, headers, fn key, acc ->
-      case Map.get(acc, key) do
-        nil -> acc
-        _value -> Map.put(acc, key, ["[REDACTED:#{key}]"])
-      end
+    Enum.reduce(headers, %{}, fn {key, value}, acc ->
+      normalized_key = String.downcase(to_string(key))
+
+      sanitized_value =
+        if normalized_key in sensitive_keys, do: ["[REDACTED:#{normalized_key}]"], else: value
+
+      Map.put(acc, key, sanitized_value)
     end)
   end
 
@@ -473,6 +468,27 @@ defmodule ReqLLM.Step.Fixture.Backend do
   # ---------------------------------------------------------------------------
   # Credential fallback handler
   # ---------------------------------------------------------------------------
+  defp fixture_path_for_mode(model, fixture_name, :record) do
+    ReqLLM.Test.Fixtures.capture_path(model, fixture: fixture_name) ||
+      ReqLLM.Test.FixturePath.file(model, fixture_name)
+  end
+
+  defp fixture_path_for_mode(model, fixture_name, _mode) do
+    ReqLLM.Test.FixturePath.file(model, fixture_name)
+  end
+
+  defp maybe_insert_credential_fallback_handler(request, fixture_path, model) do
+    if credential_fallback_allowed?() do
+      insert_credential_fallback_handler(request, fixture_path, model)
+    else
+      request
+    end
+  end
+
+  defp credential_fallback_allowed? do
+    System.get_env("REQ_LLM_FIXTURE_ALLOW_CREDENTIAL_FALLBACK") in ~w(1 true yes on)
+  end
+
   defp insert_credential_fallback_handler(request, fixture_path, model) do
     # Add an error handler that catches credential errors and falls back to fixture
     Req.Request.prepend_error_steps(request,

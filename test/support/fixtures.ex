@@ -108,7 +108,7 @@ defmodule ReqLLM.Test.Fixtures do
           if mode() == :record do
             case Keyword.get(opts, :fixture) do
               test_name when is_binary(test_name) ->
-                ReqLLM.Test.FixturePath.file(model_or_spec, test_name)
+                capture_fixture_file(model_or_spec, test_name)
 
               _ ->
                 nil
@@ -141,5 +141,22 @@ defmodule ReqLLM.Test.Fixtures do
     end
 
     result
+  end
+
+  defp capture_fixture_file(model_or_spec, test_name) do
+    case System.get_env("REQ_LLM_FIXTURE_RECORD_ROOT") do
+      root when is_binary(root) and root != "" ->
+        ReqLLM.Test.FixturePath.file_under(root, normalize_model(model_or_spec), test_name)
+
+      _ ->
+        ReqLLM.Test.FixturePath.file(model_or_spec, test_name)
+    end
+  end
+
+  defp normalize_model(%LLMDB.Model{} = model), do: model
+
+  defp normalize_model(spec) when is_binary(spec) do
+    {:ok, model} = ReqLLM.model(spec)
+    model
   end
 end

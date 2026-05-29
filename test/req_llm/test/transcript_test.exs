@@ -92,6 +92,20 @@ defmodule ReqLLM.Test.TranscriptTest do
 
       assert Transcript.streaming?(transcript)
     end
+
+    test "uses explicit streaming flag for single-chunk streams" do
+      transcript = %{
+        valid_transcript()
+        | response_meta: %{status: 200, headers: [], streaming: true},
+          events: [
+            {:status, 200},
+            {:data, "single streaming chunk"},
+            {:done, :ok}
+          ]
+      }
+
+      assert Transcript.streaming?(transcript)
+    end
   end
 
   describe "Transcript.data_chunks/1" do
@@ -157,6 +171,47 @@ defmodule ReqLLM.Test.TranscriptTest do
       end
     end
 
+    test "read! derives provider from fixture path before URL heuristics" do
+      root =
+        Path.join(System.tmp_dir!(), "req-llm-transcript-#{System.unique_integer([:positive])}")
+
+      path =
+        Path.join([
+          root,
+          "fixtures",
+          "zai",
+          "glm_4_6",
+          "basic.json"
+        ])
+
+      File.mkdir_p!(Path.dirname(path))
+
+      fixture = %{
+        "request" => %{
+          "method" => "post",
+          "url" => "https://api.z.ai/api/paas/v4/chat/completions",
+          "headers" => %{},
+          "canonical_json" => %{"model" => "glm-4.6"}
+        },
+        "response" => %{
+          "status" => 200,
+          "headers" => %{},
+          "body" => %{"ok" => true}
+        }
+      }
+
+      try do
+        File.write!(path, Jason.encode!(fixture))
+
+        loaded = Transcript.read!(path)
+
+        assert loaded.provider == :zai
+        assert loaded.model_spec == "zai:glm-4.6"
+      after
+        File.rm_rf(root)
+      end
+    end
+
     test "sanitizes sensitive headers" do
       transcript = %{
         valid_transcript()
@@ -177,6 +232,29 @@ defmodule ReqLLM.Test.TranscriptTest do
       assert is_map(headers)
       assert headers["authorization"] =~ "REDACTED"
       assert headers["x-api-key"] =~ "REDACTED"
+    end
+
+    test "sanitizes sensitive response headers" do
+      transcript = %{
+        valid_transcript()
+        | response_meta: %{
+            status: 200,
+            headers: [
+              {"set-cookie", "__cf_bm=secret"},
+              {"anthropic-organization-id", "org-secret"},
+              {"content-type", "application/json"}
+            ]
+          }
+      }
+
+      json_map = Transcript.to_map(transcript)
+      headers = json_map["response"]["headers"]
+
+      assert headers["set-cookie"] =~ "REDACTED"
+      assert headers["anthropic-organization-id"] =~ "REDACTED"
+      assert headers["content-type"] == "application/json"
+      refute Jason.encode!(json_map) =~ "__cf_bm=secret"
+      refute Jason.encode!(json_map) =~ "org-secret"
     end
 
     test "sanitizes sensitive JSON fields" do

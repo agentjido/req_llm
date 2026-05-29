@@ -11,10 +11,22 @@ defmodule ReqLLM.Test.VCR do
       # Record from collected chunks (streaming)
       {:ok, collector} = ChunkCollector.start_link()
       # ... add chunks ...
-      :ok = VCR.record(path, provider, model, request, response, collector)
+      :ok = VCR.record(path,
+        provider: provider,
+        model: model,
+        request: request,
+        response: response,
+        collector: collector
+      )
 
       # Record from body (non-streaming)
-      :ok = VCR.record(path, provider, model, request, response, body)
+      :ok = VCR.record(path,
+        provider: provider,
+        model: model,
+        request: request,
+        response: response,
+        body: body
+      )
 
   ## Playback
 
@@ -80,7 +92,7 @@ defmodule ReqLLM.Test.VCR do
   @spec record(Path.t(), keyword()) :: :ok | {:error, term()}
   def record(path, opts) do
     provider = Keyword.fetch!(opts, :provider)
-    model = Keyword.fetch!(opts, :model)
+    model = normalize_model_spec(provider, Keyword.fetch!(opts, :model))
     request = Keyword.fetch!(opts, :request)
     response = Keyword.fetch!(opts, :response)
 
@@ -102,13 +114,15 @@ defmodule ReqLLM.Test.VCR do
           raise ArgumentError, "must provide either :collector or :body"
       end
 
+    response_meta = Map.put(response, :streaming, collector != nil)
+
     transcript =
       Transcript.new(
         provider: provider,
         model_spec: model,
         captured_at: DateTime.utc_now(),
         request: request,
-        response_meta: response,
+        response_meta: response_meta,
         events: events
       )
 
@@ -373,5 +387,13 @@ defmodule ReqLLM.Test.VCR do
 
   defp ensure_directory(path) do
     path |> Path.dirname() |> File.mkdir_p!()
+  end
+
+  defp normalize_model_spec(provider, model) when is_binary(model) do
+    if String.contains?(model, ":") do
+      model
+    else
+      "#{provider}:#{model}"
+    end
   end
 end

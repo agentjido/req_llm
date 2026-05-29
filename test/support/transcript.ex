@@ -37,7 +37,7 @@ defmodule ReqLLM.Test.Transcript do
 
   def schema, do: @schema
 
-  @sensitive_headers ~w(authorization x-api-key api-key)
+  @sensitive_headers ~w(authorization x-api-key api-key cookie set-cookie anthropic-organization-id openai-organization)
   # Use exact matches to avoid false positives (e.g., max_tokens matching "token")
   @sensitive_json_keys ~w(api_key apiKey authorization access_token auth_token bearer_token)
 
@@ -54,8 +54,11 @@ defmodule ReqLLM.Test.Transcript do
   end
 
   @spec streaming?(t()) :: boolean()
-  def streaming?(%__MODULE__{events: events}) do
-    Enum.count(events, &match?({:data, _}, &1)) > 1
+  def streaming?(%__MODULE__{response_meta: response_meta, events: events}) do
+    case streaming_flag(response_meta) do
+      nil -> Enum.count(events, &match?({:data, _}, &1)) > 1
+      value -> value
+    end
   end
 
   @spec data_chunks(t()) :: [binary()]
@@ -78,6 +81,11 @@ defmodule ReqLLM.Test.Transcript do
   @spec from_json!(binary()) :: t()
   def from_json!(json) do
     json |> Jason.decode!() |> from_map()
+  end
+
+  @spec from_json!(binary(), Path.t() | nil) :: t()
+  def from_json!(json, path) do
+    json |> Jason.decode!() |> from_map(path)
   end
 
   @doc "Write transcript to file as JSON"
@@ -110,11 +118,16 @@ defmodule ReqLLM.Test.Transcript do
       """
     end
 
-    from_json!(content)
+    from_json!(content, path)
   end
 
   defp extract_provider_from_path(path) do
-    path |> Path.split() |> Enum.find(&(&1 in ~w[openai anthropic google groq xai openrouter]))
+    path
+    |> provider_from_path()
+    |> case do
+      nil -> "unknown"
+      provider -> Atom.to_string(provider)
+    end
   end
 
   @spec to_map(t()) :: map()
@@ -130,6 +143,7 @@ defmodule ReqLLM.Test.Transcript do
     %{
       "provider" => Atom.to_string(t.provider),
       "model_spec" => t.model_spec,
+      "streaming" => true,
       "request" => build_request_map(t),
       "response" => build_streaming_response_map(t),
       "captured_at" => DateTime.to_iso8601(t.captured_at),
@@ -141,6 +155,7 @@ defmodule ReqLLM.Test.Transcript do
     %{
       "provider" => Atom.to_string(t.provider),
       "model_spec" => t.model_spec,
+      "streaming" => false,
       "request" => build_request_map(t),
       "response" => build_non_streaming_response_map(t)
     }
@@ -183,7 +198,7 @@ defmodule ReqLLM.Test.Transcript do
   defp build_streaming_response_map(t) do
     %{
       "status" => t.response_meta[:status],
-      "headers" => headers_to_map(t.response_meta[:headers] || []),
+      "headers" => response_headers_to_map(t.response_meta[:headers] || []),
       "body" => nil
     }
   end
@@ -199,7 +214,7 @@ defmodule ReqLLM.Test.Transcript do
 
     %{
       "status" => t.response_meta[:status],
-      "headers" => headers_to_map(t.response_meta[:headers] || []),
+      "headers" => response_headers_to_map(t.response_meta[:headers] || []),
       "body" => parsed_body
     }
   end
@@ -214,16 +229,19 @@ defmodule ReqLLM.Test.Transcript do
   end
 
   @spec from_map(map()) :: t()
-  def from_map(m) do
+  def from_map(m), do: from_map(m, nil)
+
+  @spec from_map(map(), Path.t() | nil) :: t()
+  def from_map(m, path) do
     cond do
       has_chunks?(m) ->
-        from_streaming_format(m)
+        from_streaming_format(m, path)
 
       has_events?(m) ->
         from_event_format(m)
 
       true ->
-        from_non_streaming_format(m)
+        from_non_streaming_format(m, path)
     end
   end
 
@@ -241,41 +259,41 @@ defmodule ReqLLM.Test.Transcript do
     )
   end
 
-  defp from_streaming_format(m) do
+  defp from_streaming_format(m, path) do
     request = m["request"]
     response = m["response"]
     chunks = m["chunks"] || []
 
     events = build_events_from_chunks(chunks, response)
 
-    provider = derive_provider_from_request(request)
-    model_spec = derive_model_spec_from_request(request)
+    provider = provider_from_metadata_path_or_request(m, path, request)
+    model_spec = model_spec_from_metadata_path_or_request(m, path, request, provider)
 
     new(
       provider: provider,
       model_spec: model_spec,
       captured_at: parse_datetime(m["captured_at"]),
       request: normalize_request(request),
-      response_meta: normalize_response(response),
+      response_meta: normalize_response(response, true),
       events: events
     )
   end
 
-  defp from_non_streaming_format(m) do
+  defp from_non_streaming_format(m, path) do
     request = m["request"]
     response = m["response"]
 
     events = build_events_from_response_body(response)
 
-    provider = derive_provider_from_request(request)
-    model_spec = derive_model_spec_from_request(request)
+    provider = provider_from_metadata_path_or_request(m, path, request)
+    model_spec = model_spec_from_metadata_path_or_request(m, path, request, provider)
 
     new(
       provider: provider,
       model_spec: model_spec,
       captured_at: DateTime.utc_now(),
       request: normalize_request(request),
-      response_meta: normalize_response(response),
+      response_meta: normalize_response(response, false),
       events: events
     )
   end
@@ -335,7 +353,7 @@ defmodule ReqLLM.Test.Transcript do
     end
   end
 
-  defp derive_model_spec_from_request(request) do
+  defp derive_model_spec_from_request(request, provider) do
     canonical_json = request["canonical_json"]
 
     model_name =
@@ -357,7 +375,6 @@ defmodule ReqLLM.Test.Transcript do
       if String.contains?(model_name, ":") do
         model_name
       else
-        provider = derive_provider_from_request(request)
         "#{provider}:#{model_name}"
       end
     else
@@ -374,12 +391,90 @@ defmodule ReqLLM.Test.Transcript do
     }
   end
 
-  defp normalize_response(resp) do
+  defp normalize_response(resp, streaming) do
     %{
       status: resp["status"] || 200,
-      headers: resp["headers"] || %{}
+      headers: resp["headers"] || %{},
+      streaming: streaming
     }
   end
+
+  defp provider_from_metadata_path_or_request(m, path, request) do
+    cond do
+      is_binary(m["provider"]) -> String.to_atom(m["provider"])
+      provider = provider_from_path(path) -> provider
+      true -> derive_provider_from_request(request)
+    end
+  end
+
+  defp model_spec_from_metadata_path_or_request(m, path, request, provider) do
+    cond do
+      is_binary(m["model_spec"]) ->
+        m["model_spec"]
+
+      model_name = model_name_from_request(request) ->
+        if String.contains?(model_name, ":") do
+          model_name
+        else
+          "#{provider}:#{model_name}"
+        end
+
+      model_id = model_id_from_path(path) ->
+        "#{provider}:#{model_id}"
+
+      true ->
+        derive_model_spec_from_request(request, provider)
+    end
+  end
+
+  defp provider_from_path(nil), do: nil
+
+  defp provider_from_path(path) do
+    parts = Path.split(path)
+
+    case Enum.split_while(parts, &(&1 != "fixtures")) do
+      {_, ["fixtures", provider | _]} -> String.to_atom(provider)
+      _ -> nil
+    end
+  end
+
+  defp model_id_from_path(nil), do: nil
+
+  defp model_id_from_path(path) do
+    parts = Path.split(path)
+
+    case Enum.split_while(parts, &(&1 != "fixtures")) do
+      {_, ["fixtures", _provider, model_dir | _]} -> String.replace(model_dir, "_", "-")
+      _ -> nil
+    end
+  end
+
+  defp model_name_from_request(request) do
+    canonical_json = request["canonical_json"]
+
+    cond do
+      is_binary(canonical_json) ->
+        case Jason.decode(canonical_json) do
+          {:ok, json} -> Map.get(json, "model")
+          _ -> nil
+        end
+
+      is_map(canonical_json) ->
+        Map.get(canonical_json, "model")
+
+      true ->
+        nil
+    end
+  end
+
+  defp streaming_flag(response_meta) when is_map(response_meta) do
+    case Map.get(response_meta, :streaming, Map.get(response_meta, "streaming")) do
+      value when is_boolean(value) -> value
+      _ -> nil
+    end
+  end
+
+  defp streaming_flag(_), do: nil
 
   defp decode_event(%{"type" => "status", "value" => c}), do: {:status, c}
 
@@ -404,6 +499,12 @@ defmodule ReqLLM.Test.Transcript do
 
   defp headers_to_map(headers) when is_list(headers), do: Map.new(headers)
   defp headers_to_map(headers) when is_map(headers), do: headers
+
+  defp response_headers_to_map(headers) do
+    headers
+    |> sanitize_headers()
+    |> headers_to_map()
+  end
 
   defp sanitize_headers(headers) when is_list(headers) do
     for {k, v} <- headers do
