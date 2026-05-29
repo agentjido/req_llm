@@ -21,9 +21,40 @@ MIX_ENV=test mix mc --available
 
 Historical warning: before the fixture-tooling slice, explicit `mix mc "provider:*"` replay runs rewrote `priv/supported_models.json`. The hardened task now keeps replay checks read-only by default. Use `--update-state`, `--record`, or `--record-all` only when state should change.
 
+## Branch Status
+
+Current branch: `fixture-refresh-2026-06`.
+
+Committed fixture-refresh slices:
+
+| Commit | Scope |
+| --- | --- |
+| `71c75033` | Hardened fixture compatibility tooling with scenario selection, read-only replay, staged recording, strict live record semantics, scenario state, and regression tests. |
+| `8a21dea6` | Expanded provider-operation tooling for image, speech, transcription, rerank, OCR, and non-text fixture entry points. |
+| `84f38a47` | Hardened model operation selection so specialty models do not leak into text refreshes. |
+| `74c92f75` | Refreshed Anthropic coverage, removed deprecated Claude 3-family fixtures, and normalized Anthropic fixture cookies. |
+| `a4f7f64d` | Refreshed current OpenAI text coverage, removed deprecated OpenAI fixtures, and fixed OpenAI Responses/reasoning profile issues found during recording. |
+
+Current completed provider status:
+
+- Anthropic is fully refreshed: 11/11 active Anthropic models pass replay.
+- OpenAI current core text baselines are refreshed and replay-clean for `gpt-4o-mini`, `gpt-4o`, `gpt-4.1-mini`, `gpt-4.1`, `gpt-5-nano`, `gpt-5-mini`, `gpt-5`, and `o3`.
+- OpenAI Pro access is confirmed and fixture-backed for `basic` on `gpt-5-pro` and `o3-pro`; full comprehensive Pro coverage is still an explicit decision because of cost and runtime.
+- Deprecated OpenAI and Anthropic fixture directories have been removed from package scope.
+- Minimax key and balance are no longer blocking key work. Keep Minimax as a later provider-specific fixture pass rather than retesting credentials now.
+
+## Next Recommended Pass
+
+1. Decide OpenAI Pro depth: either run full `gpt-5-pro` and `o3-pro` suites now, or intentionally keep them at basic probe coverage and move to the next provider.
+2. Refresh OpenAI non-text separately: embeddings, image, speech, and transcription should use `--type`-specific commands instead of text coverage.
+3. Refresh or remove OpenAI dated aliases in a separate alias pass so alias behavior does not muddy canonical model fixture commits.
+4. Move provider-by-provider to `google`, `groq`, `xai`, and `cerebras`; then `zai`, `zai_coder`, and `minimax`; then expansion providers `fireworks_ai`, `zenmux`, `venice`, `elevenlabs`, and `cohere`.
+5. Before broad recording, add or decide on a "currently fixture-backed passing models" selector so we can rerun the conservative set without hand-running individual specs or accidentally selecting every active LLMDB model.
+6. Keep Azure, Amazon Bedrock, Alibaba, and Google Vertex out of this pass until the user explicitly reopens those credential/provider tracks.
+
 ## Current Fixture State
 
-The fixture tree has 2232 JSON fixture files under `test/support/fixtures`.
+The fixture tree has 2145 JSON fixture files under `test/support/fixtures`.
 
 `MIX_ENV=test mix mc` reports:
 
@@ -51,7 +82,7 @@ The fixture tree has 2232 JSON fixture files under `test/support/fixtures`.
 | zai_coding_plan | 0 | 0 | 0 | 5 |
 | zenmux | 0 | 0 | 0 | 149 |
 
-The provider sections currently sum to 137 passing, fixture-backed, current-registry models after the OpenAI deprecated-model cleanup. The active refresh scope excludes Azure, leaving 111 in-scope candidate passing models. Amazon Bedrock has no passing models in the current provider sections and stays out of triage for this pass. Minimax remains in the conservative candidate list; the earlier `429` was resolved by a balance update, but it was not retested during the tooling smoke slice. The task's overall line can be higher because the overall calculation also counts legacy `priv/supported_models.json` pass entries that are no longer in the current provider sections. Treat the in-scope model list below as the candidate refresh set.
+The provider sections currently sum to 137 passing, fixture-backed, current-registry models after the OpenAI and Anthropic deprecated-model cleanup. The active refresh scope excludes Azure, leaving 111 in-scope candidate passing models. Amazon Bedrock has no passing models in the current provider sections and stays out of triage for this pass. Minimax remains in the conservative candidate list, but credential and balance checks are no longer blocking. The task's overall line is currently higher because the overall calculation also counts legacy `priv/supported_models.json` pass entries that are no longer in the current provider sections. Treat the in-scope model list below as the provider-by-provider refresh backlog, not as one broad recording batch.
 
 ## Date Findings
 
@@ -112,7 +143,7 @@ Credential status is based on direct `curl` checks after sourcing the repo-local
 | Mistral | `MISTRAL_API_KEY` | verified OK, including a minimal chat call |
 | Amazon Bedrock | `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_REGION` or `AWS_DEFAULT_REGION`; alternatively `AWS_BEARER_TOKEN_BEDROCK` | out of scope this pass |
 | Azure | `AZURE_API_KEY` + `AZURE_BASE_URL`, or family-specific key/base URL pairs | out of scope this pass |
-| Minimax | `MINIMAX_API_KEY` | auth verified OK on models endpoint; balance has been updated; no further retest in this tooling slice |
+| Minimax | `MINIMAX_API_KEY` | auth verified OK on models endpoint; balance has been updated; no further key retest needed before its provider pass |
 | Alibaba | `DASHSCOPE_API_KEY` | missing |
 | Google Vertex | `GOOGLE_APPLICATION_CREDENTIALS`, `GOOGLE_CLOUD_PROJECT` | missing |
 
@@ -278,7 +309,7 @@ MIX_ENV=test mix mc "google:text-embedding-004" --type embedding --record
 
 ### Phase 1: Refresh Current Passing Coverage
 
-Conservative candidate target: re-record the 111 in-scope passing, fixture-backed, current-registry models listed below. This excludes Azure and Amazon Bedrock by scope. Minimax stays in the candidate list after the balance update, but should be refreshed in its own small provider pass. Amazon Bedrock has no passing models in the current provider-section count and stays out of triage for this pass.
+Conservative candidate target: re-record the 111 in-scope passing, fixture-backed, current-registry models listed below. This excludes Azure and Amazon Bedrock by scope. Anthropic and current OpenAI core text are already refreshed on this branch. Minimax stays in the candidate list after the balance update, but should be refreshed in its own small provider pass. Amazon Bedrock has no passing models in the current provider-section count and stays out of triage for this pass.
 
 For one model:
 
@@ -294,15 +325,14 @@ MIX_ENV=test mix mc "openai:*" --record
 
 Recommended provider order:
 
-1. `anthropic`, `openai`, `google`: highest-value smoke path and already have keys set.
-2. `groq`, `openrouter`, `xai`, `cerebras`: keys are present, but expect provider-specific model drift.
-3. `zai`, `zai_coder`: key is verified, but provider-specific fixture smoke still needs to run.
-4. `minimax`: key is verified and balance has been updated; run it as a small provider pass rather than mixing it into the first broad core batch.
-5. `fireworks_ai`, `zenmux`, `venice`: keys are verified; treat as expansion providers because they have no passing fixture-backed models in the current conservative list.
-6. `elevenlabs`: key and TTS are verified, but it is speech/TTS coverage, not normal text `mix mc` coverage.
-7. `deepseek`: key is verified, but this checkout currently has no LLMDB models for the `deepseek` provider.
-8. `cohere`: key is verified, but this provider is rerank-only in ReqLLM.
-9. `mistral`: key is verified; treat as an expansion provider because it has no passing fixture-backed models in the current conservative list.
+1. `google`, `groq`, `openrouter`, `xai`, `cerebras`: next highest-value text providers with keys present; expect provider-specific model drift.
+2. `zai`, `zai_coder`: key is verified and the basic fixture path now works; run as provider-specific passes.
+3. `minimax`: key and balance are verified; run as a small provider pass rather than mixing it into a broad core batch.
+4. `fireworks_ai`, `zenmux`, `venice`: keys are verified; treat as expansion providers because they have no passing fixture-backed models in the current conservative list.
+5. `elevenlabs`: key and TTS are verified, but it is speech/TTS coverage, not normal text `mix mc` coverage.
+6. `deepseek`: key is verified, but this checkout currently has no LLMDB models for the `deepseek` provider.
+7. `cohere`: key is verified, but this provider is rerank-only in ReqLLM.
+8. `mistral`: key is verified; treat as an expansion provider because it has no passing fixture-backed models in the current conservative list.
 
 ### Phase 2: Triage Current Failing Fixture-Backed Models
 
@@ -584,7 +614,7 @@ OpenAI follow-up:
 
 ## Conservative Refresh Model List
 
-These are the in-scope current-registry, passing, fixture-backed models from the provider sections of `MIX_ENV=test mix mc`. Azure entries are deliberately omitted for this pass. Minimax remains listed as a candidate provider but should be skipped until the provider-side `429` clears.
+These are the in-scope current-registry, passing, fixture-backed models from the provider sections of `MIX_ENV=test mix mc`. Azure entries are deliberately omitted for this pass. Anthropic and current OpenAI core text entries are already refreshed on this branch; the remaining providers should be handled one provider at a time.
 
 ### anthropic
 
@@ -734,15 +764,15 @@ OpenAI pro follow-up candidates with only `basic` fixtures refreshed so far:
 
 ## Comprehensive Suite Cleanup Plan
 
-The 10-model process check shows that the suite needs a more formal compatibility contract before broad fixture refresh. The current comprehensive macro already uses scenario tags, but `mix mc` only drives whole-model runs and stores only model-level pass/fail state. That makes one failing advanced scenario invalidate a model after earlier scenarios have already rewritten fixtures.
+The 10-model process check showed why broad whole-model recording was too noisy. The current branch now has scenario/capability selectors, scenario-level state, and staged recording, so the remaining work is to tighten the compatibility contract and docs before large provider batches.
 
-Current suite drift to clean up:
+Current suite status:
 
 1. The comprehensive module doc says "up to 9" tests per model, but the current macro emits 11 scenario tags: `basic`, `streaming`, `token_limit`, `usage`, `context_append`, `tool_multi`, `tool_round_trip`, `tool_none`, `object_basic`, `object_streaming`, and `reasoning`.
 2. `test/AGENTS.md` documents scenario filtering, but it is missing newer scenarios such as `context_append` and `tool_round_trip`.
-3. `mix mc` does not expose a `--scenario` or `--capability` selector. Direct `mix test --only "scenario:basic"` works, but it bypasses model compatibility reporting and state updates.
-4. `priv/supported_models.json` is model-level only. It cannot tell whether a model passes core text but fails streaming, object, tools, or reasoning.
-5. Capability predicates are too broad for fixture recording. For example, object-generation tests run for any model with tool calling, even when the provider/model path may not support the specific strict or streaming object behavior the test expects.
+3. `mix mc` now exposes `--scenario` and `--capability`, so fixture refreshes can run scenario-first without bypassing model compatibility reporting.
+4. `priv/model_compat_scenarios.json` now records scenario status; `priv/supported_models.json` remains model-level state.
+5. Capability predicates still need tightening before recording advanced scenarios. For example, object-generation tests should depend on explicit strict/streaming structured-output support, not broad tool availability.
 
 Recommended compatibility contract:
 
@@ -757,27 +787,36 @@ Recommended compatibility contract:
 | Embeddings | `embed_basic`, `embed_batch` | Separate embedding compatibility path |
 | Specialty | web search, web fetch, image, TTS, rerank | Provider-specific suites outside text model compatibility |
 
-Recommended implementation sequence:
+Implemented tooling sequence:
+
+1. `mix mc --scenario` supports one or more scenario tags.
+2. `mix mc --capability` supports `core`, `conversation`, `streaming`, `tools`, `objects`, `reasoning`, `embedding`, `image`, `speech`, `transcription`, `rerank`, and `ocr`.
+3. Scenario state is tracked in `priv/model_compat_scenarios.json`.
+4. Replay is read-only by default and only writes state with `--update-state`, `--record`, or `--record-all`.
+5. Record mode stages fixtures and promotes only after the child ExUnit run passes.
+6. Record mode defaults to low concurrency and accepts `--max-concurrency`.
+7. Provider-operation selection now keeps specialty model families out of text refreshes.
+8. Provider coverage macros exist for image generation, speech, transcription, rerank, and OCR.
+
+Remaining tooling polish:
 
 1. Add a scenario manifest that defines each scenario's tag, fixture files, capability requirement, and default record order.
-2. Add `mix mc --scenario basic,usage` and `mix mc --capability core|streaming|tools|objects|reasoning` so refreshes can be scenario-first while still using model compatibility reporting.
-3. Add scenario-level state, either by expanding `priv/supported_models.json` with a `scenarios` map or by adding a separate generated artifact such as `priv/model_compat_scenarios.json`.
-4. Do not promote a model to whole-model `pass` unless all required scenarios for that model's declared capabilities pass in replay mode.
-5. Do not downgrade whole-model state after a partial scenario run. Record scenario status separately and compute whole-model status from the latest relevant scenario results.
-6. Tighten capability gating before recording advanced scenarios. Object streaming, forced tool choice, reasoning, and provider-specific parameter profiles should each have explicit checks instead of broad "tools enabled" inference.
-7. Update `test/AGENTS.md` and the comprehensive module docs so the documented scenarios match the generated tests.
-8. After recording any live scenario batch, immediately replay the same provider/model/scenario set before staging fixture files.
+2. Do not promote a model to whole-model `pass` unless all required scenarios for that model's declared capabilities pass in replay mode.
+3. Tighten capability gating before recording advanced scenarios. Object streaming, forced tool choice, reasoning, and provider-specific parameter profiles should each have explicit checks instead of broad inference.
+4. Update `test/AGENTS.md` and the comprehensive module docs so the documented scenarios match the generated tests.
+5. Add a selector for "currently passing fixture-backed models" to avoid hand-running the conservative refresh set.
+6. Add a fixture hygiene pass for older untouched OpenAI fixtures that still contain raw Cloudflare cookie values.
+7. After recording any live scenario batch, immediately replay the same provider/model/scenario set before staging fixture files.
 
 Fixture cleanup rule for this branch: keep passing replay-validated fixture updates in small commits, and discard failed partial writes unless the failing fixture is intentionally part of a documented provider behavior test.
 
 ## Review Decision Points
 
-Before recording broadly, decide:
+Before the next live batch, decide:
 
-1. Whether the first pass should refresh only the 111 in-scope current-registry candidate passing models, or intentionally expand into untested registry models.
-2. Whether to add Fireworks, Mistral, Zenmux, and Venice expansion smoke tests after the conservative pass.
-3. Whether ElevenLabs speech/TTS and Cohere rerank fixture coverage should be refreshed separately from text model compatibility.
-4. Whether to run full comprehensive suites for OpenAI `gpt-5-pro` and `o3-pro`; account access is confirmed for `basic`.
-5. Whether to leave Minimax paused until the provider-side `429` clears.
-6. Whether to adjust the mix task so it can select "currently passing fixture-backed models" directly, avoiding hand-running many individual specs.
-7. Whether the next PR should implement scenario-first `mix mc` support before any more broad fixture recording.
+1. Whether to run full comprehensive suites for OpenAI `gpt-5-pro` and `o3-pro`, or keep them at basic fixture coverage for now.
+2. Whether OpenAI aliases and non-text coverage should be next, or whether to move to `google`, `groq`, `xai`, and `cerebras`.
+3. Whether Minimax should be refreshed now that balance is updated, or deferred until after the higher-volume text providers.
+4. Whether Fireworks, Zenmux, Venice, ElevenLabs, and Cohere should be separate provider-specific PRs instead of one expansion PR.
+5. Whether to add the fixture-backed selector before more broad refresh work.
+6. Whether to run OpenAI fixture cookie hygiene globally, since older unchanged OpenAI fixtures still contain raw Cloudflare cookie values.
