@@ -241,6 +241,43 @@ defmodule ReqLLM.Test.TranscriptTest do
       refute url =~ "secret123"
       refute url =~ "abc"
     end
+
+    test "preserves list-shaped canonical_json (multipart image edit requests)" do
+      multipart_canonical = [
+        %{name: "model", value: "gpt-image-1.5"},
+        %{name: "prompt", value: "make it blue"},
+        %{name: "image", file: %{filename: "in.png", content_type: "image/png", bytes: 11_793}}
+      ]
+
+      transcript = %{
+        valid_transcript()
+        | request: %{
+            method: "POST",
+            url: "https://api.openai.com/v1/images/edits",
+            headers: [{"content-type", "multipart/form-data"}],
+            canonical_json: multipart_canonical
+          }
+      }
+
+      json_map = Transcript.to_map(transcript)
+      request = json_map["request"]
+
+      expected = [
+        %{"name" => "model", "value" => "gpt-image-1.5"},
+        %{"name" => "prompt", "value" => "make it blue"},
+        %{
+          "name" => "image",
+          "file" => %{"filename" => "in.png", "content_type" => "image/png", "bytes" => 11_793}
+        }
+      ]
+
+      assert is_list(request["canonical_json"])
+
+      assert Jason.decode!(Jason.encode!(request["canonical_json"])) == expected
+
+      decoded_body = request["body"]["b64"] |> Base.decode64!() |> Jason.decode!()
+      assert decoded_body == expected
+    end
   end
 
   defp valid_transcript do

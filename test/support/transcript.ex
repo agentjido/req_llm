@@ -157,8 +157,8 @@ defmodule ReqLLM.Test.Transcript do
             {:error, _} -> %{}
           end
 
-        m when is_map(m) ->
-          m
+        json when is_map(json) or is_list(json) ->
+          json
 
         _ ->
           %{}
@@ -167,7 +167,7 @@ defmodule ReqLLM.Test.Transcript do
     canonical_json_str =
       case req["canonical_json"] do
         s when is_binary(s) -> s
-        m when is_map(m) -> Jason.encode!(m)
+        json when is_map(json) or is_list(json) -> Jason.encode!(json)
         _ -> "{}"
       end
 
