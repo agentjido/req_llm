@@ -1,0 +1,152 @@
+{
+  "model_spec": "xai:grok-4.20-0309-non-reasoning",
+  "provider": "xai",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjEwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhpIHRoZXJlISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Imdyb2stNC4yMC0wMzA5LW5vbi1yZWFzb25pbmciLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+    },
+    "canonical_json": {
+      "max_completion_tokens": 10,
+      "messages": [
+        {
+          "content": "Hi there!",
+          "role": "user"
+        }
+      ],
+      "model": "grok-4.20-0309-non-reasoning",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.x.ai/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "content": "Hey there! What's up? 😊",
+            "refusal": null,
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1780095615,
+      "id": "ab94288a-5a3d-9852-991c-486a233a88df",
+      "model": "grok-4.20-0309-non-reasoning",
+      "object": "chat.completion",
+      "system_fingerprint": "fp_8b3f31b605",
+      "usage": {
+        "completion_tokens": 8,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "cost_in_usd_ticks": 1090500,
+        "num_sources_used": 0,
+        "prompt_tokens": 125,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 64,
+          "image_tokens": 0,
+          "text_tokens": 125
+        },
+        "total_tokens": 133
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "*"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a0391d3aac3572e2-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-security-policy-report-only": [
+        "script-src 'unsafe-inline' 'unsafe-eval'; report-uri https://csp-reporting.cloudflare.com/cdn-cgi/script_monitor/report?m=x8_5mdbKFU3f8PrVa_nRr4De91KMyCLtyLlqkbQ_iYA-1780095615.1477032-1.0.1.1-5HpYhu3OaoJ1yIX86oQgGCQlTVvgVJVL_YQYadAN1KRGWKef2sZw3RYyQDSszjE2skjeDXcNr9Y6lLO3g9Y7XTKzaj27GU27YdtPq_D6dbz6fbMQc4MUJQ.irY0.ZthY9m9ARgrYGvrbYS.kd.aWh0ESkyy9_2tDRTi2nZvNEtQ; report-to cf-csp-endpoint"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 29 May 2026 23:00:15 GMT"
+      ],
+      "report-to": [
+        "{\"group\":\"cf-csp-endpoint\",\"max_age\":86400,\"endpoints\":[{\"url\":\"https://csp-reporting.cloudflare.com/cdn-cgi/script_monitor/report?m=x8_5mdbKFU3f8PrVa_nRr4De91KMyCLtyLlqkbQ_iYA-1780095615.1477032-1.0.1.1-5HpYhu3OaoJ1yIX86oQgGCQlTVvgVJVL_YQYadAN1KRGWKef2sZw3RYyQDSszjE2skjeDXcNr9Y6lLO3g9Y7XTKzaj27GU27YdtPq_D6dbz6fbMQc4MUJQ.irY0.ZthY9m9ARgrYGvrbYS.kd.aWh0ESkyy9_2tDRTi2nZvNEtQ\"}]}"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": "[REDACTED:set-cookie]",
+      "strict-transport-security": [
+        "max-age=31536000"
+      ],
+      "traceparent": [
+        "00-8de17e7e2f89c7622a5b6cb59dd1eaae-61b033f70000bdef-01"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "origin, access-control-request-method, access-control-request-headers"
+      ],
+      "x-metrics-e2e-ms": [
+        "416.3"
+      ],
+      "x-metrics-mean-itl-ms": [
+        "7.3"
+      ],
+      "x-metrics-ttft-ms": [
+        "253.5"
+      ],
+      "x-ratelimit-limit-requests": [
+        "1800"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "10000000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "1788"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "9997117"
+      ],
+      "x-request-id": [
+        "ab94288a-5a3d-9852-991c-486a233a88df"
+      ],
+      "x-zero-data-retention": [
+        "false"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

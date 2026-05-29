@@ -1,0 +1,123 @@
+{
+  "model_spec": "google:gemini-3.1-flash-lite",
+  "provider": "google",
+  "request": {
+    "body": {
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJXcml0ZSBhIHZlcnkgbG9uZyBzdG9yeSBhYm91dCBkcmFnb25zIGFuZCBhZHZlbnR1cmVzIn1dLCJyb2xlIjoidXNlciJ9XSwiZ2VuZXJhdGlvbkNvbmZpZyI6eyJjYW5kaWRhdGVDb3VudCI6MSwibWF4T3V0cHV0VG9rZW5zIjozMDAwLCJ0ZW1wZXJhdHVyZSI6MC41LCJ0aGlua2luZ0NvbmZpZyI6eyJpbmNsdWRlVGhvdWdodHMiOnRydWUsInRoaW5raW5nTGV2ZWwiOiJsb3cifX19"
+    },
+    "canonical_json": {
+      "contents": [
+        {
+          "parts": [
+            {
+              "text": "Write a very long story about dragons and adventures"
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "generationConfig": {
+        "candidateCount": 1,
+        "maxOutputTokens": 3000,
+        "temperature": 0.5,
+        "thinkingConfig": {
+          "includeThoughts": true,
+          "thinkingLevel": "low"
+        }
+      }
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite:generateContent?key=[REDACTED]"
+  },
+  "response": {
+    "body": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "**My Approach to Crafting a Grand Narrative**\n\nOkay, here's how I'd approach this \"very long\" dragon adventure request. First, I need to really understand the scope. I see \"dragons and adventures,\" and \"very long\" – that translates to *epic*. Not just a quest, but a journey. I'm thinking a whole world, with established stakes, intriguing characters, a real journey, a serious climax, and a satisfying resolution. This won't be a short story; this needs scale.\n\nThen, the brainstorming starts. Where do I even begin with a story that has such a wide scope?\n\n*   **The Setting?** I need a solid foundation. If dragons are involved, how can I make it interesting? Ah, I have an idea! What if dragons were once revered, almost god-like, protectors of this land, but have since become...forgotten? Or perhaps dwindled in power or number? Let's call this world \"Aethelgard\" for now. That gives me a rich backdrop, a sense of history and mystery. And, it's a great seed for the story to sprout.\n\n\n",
+                "thought": true
+              },
+              {
+                "text": "The sky over the Shattered Peaks was not blue, nor was it gray; it was the color of a bruised plum, swirling with the ash of a thousand dormant volcanoes. For centuries, the people of the lowlands believed the dragons were myths—fables told to frighten children into eating their porridge or to explain the sudden, inexplicable shifts in the weather.\n\nBut Elara knew better.\n\nElara was a scavenger, a \"Scale-Hunter\" by trade, though she had never seen a scale larger than a lizard’s. She lived in the shadow of the Peaks, in a village built of driftwood and scavenged iron. She possessed a map, etched onto the inside of a cured dragon-hide scroll she’d found in the belly of a sunken merchant ship. It didn’t show landmasses or trade routes; it showed the ley lines of the world, pulsing like veins, all converging on a single, impossible point: The Spire of Cinders.\n\n\"You’re going to get yourself killed, girl,\" rumbled Old Kaelen, the village smith, his voice like grinding stones. \"The dragons didn't leave. They went to sleep. And things that sleep in the fire don't wake up happy.\"\n\n\"They aren't sleeping, Kaelen,\" Elara said, tightening the straps of her leather pack. \"They’re starving.\"\n\nShe left at dawn, the frost crunching beneath her boots. Her journey was not a simple walk; it was a climb into the throat of the world. The Shattered Peaks were treacherous, a labyrinth of obsidian spires and canyons that whispered in voices that weren't human.\n\nThree days into her ascent, the air grew thin and metallic. That was when she heard it—the first sound. It wasn't a roar. It was a hum, a low-frequency vibration that rattled her teeth and made the marrow in her bones ache. It sounded like a cello being played by a thunderstorm.\n\nShe took cover behind a jagged outcropping as a shadow passed overhead. It was massive, blotting out the sun for nearly a full minute. It wasn't a creature of flesh and blood, not entirely. It was made of shifting tectonic plates, veins of molten gold running through its wings, its eyes like twin nebulas of swirling violet gas. It was a Star-Drake, one of the Primordials. It didn't fly; it swam through the air, riding the magnetic currents of the earth.\n\nElara held her breath, her heart hammering against her ribs like a trapped bird. The drake circled the Spire of Cinders, its presence causing the very rocks to glow with heat.\n\nShe realized then that the stories were wrong. The dragons weren't monsters to be slain. They were the world’s immune system, and the world was sick. The ley lines—the veins of the earth—were clogged with a dark, necrotic residue, a corruption that had seeped into the ground over centuries of human greed and industrial rot.\n\nShe pressed on, driven by a desperate, foolish hope. She reached the base of the Spire on the seventh day. It was a cathedral of basalt, carved by wind and time. Inside, the heat was suffocating. She crawled through tunnels that smelled of ozone and ancient dust until she reached the central chamber.\n\nThere, curled around a pulsing, blackened crystal, was the Mother of Drakes. She was smaller than the one she had seen outside, but her presence was heavier, more profound. She was fading. The scales on her flank were gray and brittle, flaking away like ash. The crystal she guarded was the Heart of the Mountain, and it was dying, choked by the dark corruption.\n\nElara stepped into the light. The Mother’s eye, a vast, golden orb, snapped open. It didn't look at her with malice; it looked at her with a profound, weary sadness.\n\n\"Little spark,\" a voice echoed, not in her ears, but directly into her mind. It sounded like the cracking of glaciers. \"Why do you come to the grave?\"\n\n\"I came to help,\" Elara whispered, her voice trembling. She pulled the dragon-hide scroll from her pack. \"I found this. It says… it says the Heart can be cleansed. But it requires a conductor. Someone to bridge the gap between the earth and the sky.\"\n\nThe Mother let out a puff of smoke that smelled of cinnamon and sulfur. \"It requires a sacrifice, child. A conduit of living essence. The corruption will consume the one who touches the crystal.\"\n\nElara looked at the blackened crystal. She thought of her village, the people who had forgotten the magic of the world, who had traded wonder for comfort. She thought of the sky, once vibrant, now bruised and dying.\n\n\"I’m not a hero,\" Elara said, stepping forward, her boots crunching on the obsidian floor. \"I’m just a scavenger. I spend my life looking for things that have been thrown away. Maybe it’s time I saved something instead.\"\n\nShe placed her hand on the cold, necrotic surface of the Heart.\n\nThe pain was instantaneous. It felt like being unmade, like her very atoms were being pulled apart and re-threaded. She screamed, but the sound was swallowed by the roar of the mountain. She saw visions: the birth of the stars, the cooling of the earth, the first dragon taking flight, the rise of humanity, the slow, creeping rot of industry, and the final, beautiful silence of the end.\n\nShe poured her own life force into the crystal, acting as a filter. She felt the corruption leave the Heart and rush into her, burning her veins, turning her blood to liquid light.\n\nThe Mother of Drakes rose, her wings unfurling, filling the cavern with a blinding, iridescent light. She let out a cry that shattered the silence of the Peaks—a sound of pure, unadulterated creation.\n\nThe pulse of the mountain changed. The blackness in the crystal began to recede, replaced by a brilliant, sapphire blue. The ley lines beneath the world surged with new energy. Outside, the bruised sky began to clear, the clouds parting to reveal a tapestry of stars that hadn't been seen in a thousand years.\n\nElara fell to the floor, her body spent, her vision blurring. She felt a massive, warm weight settle beside her. The Mother of Drakes had curled around her, shielding her from the sudden, violent rush of energy.\n\n\"You are a strange creature,\" the Mother murmured, her voice now filled with a faint, resonant hum of health. \"You have broken the cycle of rot.\"\n\n\"Is it… over?\" Elara whispered, her voice barely audible.\n\n\"It is a beginning,\" the dragon replied.\n\nWhen Elara woke, she was not in the cavern. She was lying on a grassy slope at the base of the Peaks. The air was sweet and clean, filled with the scent of wildflowers. Above her, the sky was a deep, impossible blue.\n\nShe sat up, her body aching, her skin etched with faint, glowing lines that pulsed in time with the earth. She looked down at her hands. They were scarred, but they were alive.\n\nShe stood and looked toward the horizon. In the distance, she saw them—not one, but dozens of dragons, soaring through the clouds, their wings catching the morning sun. They were no longer myths. They were the guardians of a world that had been given a second chance.\n\nElara picked up her pack. She had no home to return to, and no trade to ply. She was a Scale-Hunter no more. She was a guardian, a wanderer of the ley lines, a bridge between the earth and the sky.\n\nShe turned her back on the village and began to walk, not toward the shadows, but toward the light. The adventure hadn't ended; it had only just begun. And for the first time in her life, Elara knew exactly where she was going. She was going to see the world wake up.",
+                "thoughtSignature": "EqYECqMEAQw51sfD4s3rkxOvq0cJ1gw0azwKS/hKT1ywlhmLLQJrSUvkZOIlDtSBape6/f5lcFBCv0Vm7FyMDSFvp4f00TQPXw1bsM9il6h3BkAdkXbaI56HPrW3EW+KbmPaNMwpu5JEBeNNfzerZM+zQCW1JTKtZuvJNiaZwzSELhU7BoJu7waRerFnGZmlGdP3OvcEFE5bCrRzYqGIoavtbRP7tSRa8/PL6USJDuOjISDsbVAOKEM65mlX63FfmKu/0wTKocZSb7Q0O5OFPBiqJaG3JVha2Bkk/OJAH4rxS8TkTeyfVkDc0er/ZmDRB5pQARK9JQ4aAsRnYZQHTcT3nB6x+nPwQIIG0G0m5WPHRiH62wK/W8/DCZsMQg7Yix8OkUI2VOzi2XgzFRvGs/PNzAt1nKEKLdOZnVjVcgxVTlQyq981eo7IHCoSO8OI9lyNrSl3NGuP9VLEnvRtYn7jKURJsLPznBDyDhmUm8Zqg4ZkRaZ9MzCzlzeQs0k2zaqxFYBgMtITo6By0H4NUJ3hTrvzzW4d7f7Ldi+NPJtIb6ZwrX/vB8b5txjORj1ybT08Jyyshi/9Lpaisng9MiOrNGGxZTMaIU3KZho8BsVRe90by+9Qjd/8UcRkkYXNQtqZBCVtRM00IuKD7QSHMXHJEDP0wIrZlK621dyTFpvKkGq+7JFPdYyGjO5wIHK/SkQnKXJyfgq0YRkqQoYgCPrJtVCi+xFnOw=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "modelVersion": "gemini-3.1-flash-lite",
+      "responseId": "pg4aatrLDJnF-sAP0e-Q0A4",
+      "usageMetadata": {
+        "candidatesTokenCount": 1689,
+        "promptTokenCount": 10,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 10
+          }
+        ],
+        "serviceTier": "standard",
+        "thoughtsTokenCount": 126,
+        "totalTokenCount": 1825
+      }
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "content-type": [
+        "application/json; charset=UTF-8"
+      ],
+      "date": [
+        "Fri, 29 May 2026 22:09:53 GMT"
+      ],
+      "server": [
+        "scaffolding on HTTPServer2"
+      ],
+      "server-timing": [
+        "gfet4t7; dur=11299"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-frame-options": [
+        "SAMEORIGIN"
+      ],
+      "x-gemini-service-tier": [
+        "standard"
+      ],
+      "x-xss-protection": [
+        "0"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

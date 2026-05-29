@@ -1,0 +1,147 @@
+{
+  "model_spec": "xai:grok-3-mini-fast",
+  "provider": "xai",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjEwMjQsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiUmVzcG9uZCB3aXRoIGEgc2luZ2xlIHdvcmQgJ0hpJy4iLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJncm9rLTMtbWluaS1mYXN0Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+    },
+    "canonical_json": {
+      "max_completion_tokens": 1024,
+      "messages": [
+        {
+          "content": "Respond with a single word 'Hi'.",
+          "role": "user"
+        }
+      ],
+      "model": "grok-3-mini-fast",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.x.ai/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "content": "Hi",
+            "reasoning_content": "The user said: \"Respond with a single word 'Hi'.\"\n",
+            "refusal": null,
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1780095899,
+      "id": "e6de3764-199d-9ad0-95b7-83883a6b0019",
+      "model": "grok-4.3",
+      "object": "chat.completion",
+      "system_fingerprint": "fp_eb3c003fc66c14ed",
+      "usage": {
+        "completion_tokens": 1,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "reasoning_tokens": 158,
+          "rejected_prediction_tokens": 0
+        },
+        "cost_in_usd_ticks": 4356000,
+        "num_sources_used": 0,
+        "prompt_tokens": 138,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 128,
+          "image_tokens": 0,
+          "text_tokens": 138
+        },
+        "total_tokens": 297
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "*"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a039242b2e4ef7d2-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 29 May 2026 23:05:00 GMT"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": "[REDACTED:set-cookie]",
+      "strict-transport-security": [
+        "max-age=31536000"
+      ],
+      "traceparent": [
+        "00-358bed2cdefb071883c7fcadcb7766bd-199669f600009815-01"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "origin, access-control-request-method, access-control-request-headers"
+      ],
+      "x-metrics-e2e-ms": [
+        "1140.4"
+      ],
+      "x-metrics-mean-itl-ms": [
+        "5.7"
+      ],
+      "x-metrics-ttft-ms": [
+        "163.6"
+      ],
+      "x-ratelimit-limit-requests": [
+        "1800"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "10000000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "1781"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "9991889"
+      ],
+      "x-request-id": [
+        "e6de3764-199d-9ad0-95b7-83883a6b0019"
+      ],
+      "x-zero-data-retention": [
+        "false"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

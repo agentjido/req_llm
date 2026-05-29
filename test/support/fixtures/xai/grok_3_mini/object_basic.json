@@ -1,4 +1,6 @@
 {
+  "model_spec": "xai:grok-3-mini",
+  "provider": "xai",
   "request": {
     "body": {
       "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjUwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJHZW5lcmF0ZSBhIHNvZnR3YXJlIGVuZ2luZWVyIHByb2ZpbGUiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJncm9rLTMtbWluaSIsInBhcmFsbGVsX3Rvb2xfY2FsbHMiOmZhbHNlLCJyZXNwb25zZV9mb3JtYXQiOnsianNvbl9zY2hlbWEiOnsibmFtZSI6Im91dHB1dF9zY2hlbWEiLCJzY2hlbWEiOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7ImFnZSI6eyJkZXNjcmlwdGlvbiI6IlBlcnNvbidzIGFnZSBpbiB5ZWFycyIsIm1pbmltdW0iOjEsInR5cGUiOiJpbnRlZ2VyIn0sIm5hbWUiOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBmdWxsIG5hbWUiLCJ0eXBlIjoic3RyaW5nIn0sIm9jY3VwYXRpb24iOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBqb2Igb3IgcHJvZmVzc2lvbiIsInR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbIm5hbWUiLCJhZ2UiXSwidHlwZSI6Im9iamVjdCJ9LCJzdHJpY3QiOnRydWV9LCJ0eXBlIjoianNvbl9zY2hlbWEifSwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
@@ -48,6 +50,9 @@
       "temperature": 0.0
     },
     "headers": {
+      "accept": [
+        "application/json"
+      ],
       "accept-encoding": [
         "gzip"
       ],
@@ -56,7 +61,7 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ]
     },
     "method": "post",
@@ -69,35 +74,36 @@
           "finish_reason": "stop",
           "index": 0,
           "message": {
-            "content": "{\"age\":30,\"name\":\"John Doe\",\"occupation\":\"Software Engineer\"}",
-            "reasoning_content": "First, the user input is: \"Generate a software engineer profile\". But I have to respond based on the provided schema. The schema defines an object with properties: name, age, and occupation. It's required to include name and age, and occupation is optional.\n\nThe schema is:\n\n{\n  \"additionalProperties\": false,\n  \"properties\": {\n    \"age\": {\n      \"description\": \"Person's age in years\",\n      \"minimum\": 1,\n      \"type\": \"integer\"\n    },\n    \"name\": {\n      \"description\": \"Person's full name\",\n      \"type\": \"string\"\n    },\n    \"occupation\": {\n      \"description\": \"Person's job or profession\",\n      \"type\": \"string\"\n    }\n  },\n  \"required\": [\"name\", \"age\"],\n  \"type\": \"object\"\n}\n\nSo, my response must be a single JSON string that matches this schema exactly. That means I need to output something like: {\"name\": \"Some Name\", \"age\": Some Number, \"occupation\": \"Some Occupation\"}\n\nThe user is asking to generate a software engineer profile, which aligns with the schema since occupation could be \"software engineer\".\n\nI need to make up reasonable values because this is a simulation. For example:\n\n- Name: Something like \"John Doe\"\n\n- Age: A plausible age for a software engineer, say 30\n\n- Occupation: \"Software Engineer\"\n\nRemember, the output MUST be a single JSON string, and it has to conform to the schema. No additional text, just the JSON.\n\nThe instructions say: \"Your output MUST be a single JSON string. You MUST use <user_json_schema> to format the JSON string.\"\n\nSo, I should output only the JSON object, like: {\"name\": \"John Doe\", \"age\": 30, \"occupation\": \"Software Engineer\"}\n\nMake sure it's valid JSON.\n\nSince \"occupation\" is not required, I could omit it, but the user's request is for a software engineer profile, so it's appropriate to include it.\n\nFinally, ensure that \"age\" is an integer greater than or equal to 1.",
+            "content": "{\n  \"name\": \"Alex Rivera\",\n  \"age\": 28,\n  \"occupation\": \"Software Engineer\"\n}",
+            "reasoning_content": "The task is: \"Generate a software engineer profile\"\n",
             "refusal": null,
             "role": "assistant"
           }
         }
       ],
-      "created": 1762103816,
-      "id": "175305de-6605-0dbc-5bdc-0da691bb4aad_us-east-1",
-      "model": "grok-3-mini",
+      "created": 1780095878,
+      "id": "52184f2c-f3c7-9de6-82e7-47c321ebbac3",
+      "model": "grok-4.3",
       "object": "chat.completion",
-      "system_fingerprint": "fp_4fae27f477",
+      "system_fingerprint": "fp_eb3c003fc66c14ed",
       "usage": {
-        "completion_tokens": 15,
+        "completion_tokens": 25,
         "completion_tokens_details": {
           "accepted_prediction_tokens": 0,
           "audio_tokens": 0,
-          "reasoning_tokens": 430,
+          "reasoning_tokens": 404,
           "rejected_prediction_tokens": 0
         },
+        "cost_in_usd_ticks": 11446500,
         "num_sources_used": 0,
-        "prompt_tokens": 112,
+        "prompt_tokens": 219,
         "prompt_tokens_details": {
           "audio_tokens": 0,
-          "cached_tokens": 111,
+          "cached_tokens": 192,
           "image_tokens": 0,
-          "text_tokens": 112
+          "text_tokens": 219
         },
-        "total_tokens": 557
+        "total_tokens": 648
       }
     },
     "headers": {
@@ -111,7 +117,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "99854854597c86ed-ORD"
+        "a03923a95e01fa1f-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -120,16 +126,17 @@
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:17:00 GMT"
+        "Fri, 29 May 2026 23:04:44 GMT"
       ],
       "server": [
         "cloudflare"
       ],
-      "set-cookie": [
-        "__cf_bm=aOmqvYcnRrd0fEa6_OwMHfMf7WEBk2EPAefWjm4mi4k-1762103820-1.0.1.1-Md8MUNHgfa81WrlBf6ahpbXlTyxuM6mEhA5AbB_A7B1WYtd.nYKqxmdkNBCSfxJWLlKl6yzlmM_CWNOg1vURWbQlmV5FPFGS3hRzLQgpSns; path=/; expires=Sun, 02-Nov-25 17:47:00 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
-      ],
+      "set-cookie": "[REDACTED:set-cookie]",
       "strict-transport-security": [
         "max-age=31536000"
+      ],
+      "traceparent": [
+        "00-291ea3176f16cb62e765dbfc089e469e-053d7e7b00068132-01"
       ],
       "transfer-encoding": [
         "chunked"
@@ -137,13 +144,35 @@
       "vary": [
         "origin, access-control-request-method, access-control-request-headers"
       ],
+      "x-metrics-e2e-ms": [
+        "5373.3"
+      ],
+      "x-metrics-mean-itl-ms": [
+        "11.7"
+      ],
+      "x-metrics-ttft-ms": [
+        "191.6"
+      ],
+      "x-ratelimit-limit-requests": [
+        "1800"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "10000000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "1783"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "9992745"
+      ],
       "x-request-id": [
-        "00-73841be92871e477f9dab842d8c88eae-48a78f78006e5668-01"
+        "52184f2c-f3c7-9de6-82e7-47c321ebbac3"
       ],
       "x-zero-data-retention": [
         "false"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

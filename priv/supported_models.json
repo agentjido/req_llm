@@ -1,1722 +1,1694 @@
 {
-  "amazon_bedrock:ai21.jamba-1-5-large-v1:0": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "amazon_bedrock:ai21.jamba-1-5-mini-v1:0": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "amazon_bedrock:amazon.nova-lite-v1:0": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "amazon_bedrock:amazon.nova-micro-v1:0": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "amazon_bedrock:amazon.nova-premier-v1:0": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "amazon_bedrock:amazon.nova-pro-v1:0": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "amazon_bedrock:anthropic.claude-3-5-haiku-20241022-v1:0": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "amazon_bedrock:anthropic.claude-3-5-sonnet-20240620-v1:0": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "amazon_bedrock:anthropic.claude-3-5-sonnet-20241022-v2:0": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "amazon_bedrock:anthropic.claude-3-7-sonnet-20250219-v1:0": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "amazon_bedrock:anthropic.claude-3-haiku-20240307-v1:0": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "amazon_bedrock:anthropic.claude-3-opus-20240229-v1:0": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "amazon_bedrock:anthropic.claude-3-sonnet-20240229-v1:0": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "amazon_bedrock:anthropic.claude-haiku-4-5-20251001-v1:0": {
-    "status": "fail",
-    "last_checked": "2025-11-16T06:51:43Z"
-  },
-  "amazon_bedrock:anthropic.claude-instant-v1": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "amazon_bedrock:anthropic.claude-opus-4-1-20250805-v1:0": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "amazon_bedrock:anthropic.claude-opus-4-20250514-v1:0": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "amazon_bedrock:anthropic.claude-sonnet-4-20250514-v1:0": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "amazon_bedrock:anthropic.claude-sonnet-4-5-20250929-v1:0": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "amazon_bedrock:anthropic.claude-v2": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "amazon_bedrock:anthropic.claude-v2:1": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "amazon_bedrock:cohere.command-light-text-v14": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "amazon_bedrock:cohere.command-r-plus-v1:0": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "amazon_bedrock:cohere.command-r-v1:0": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "amazon_bedrock:cohere.command-text-v14": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "amazon_bedrock:deepseek.r1-v1:0": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "amazon_bedrock:deepseek.v3-v1:0": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "amazon_bedrock:meta.llama3-1-70b-instruct-v1:0": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "amazon_bedrock:meta.llama3-1-8b-instruct-v1:0": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "amazon_bedrock:meta.llama3-2-11b-instruct-v1:0": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "amazon_bedrock:meta.llama3-2-1b-instruct-v1:0": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "amazon_bedrock:meta.llama3-2-3b-instruct-v1:0": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "amazon_bedrock:meta.llama3-2-90b-instruct-v1:0": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "amazon_bedrock:meta.llama3-3-70b-instruct-v1:0": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "amazon_bedrock:meta.llama3-70b-instruct-v1:0": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "amazon_bedrock:meta.llama3-8b-instruct-v1:0": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "amazon_bedrock:meta.llama4-maverick-17b-instruct-v1:0": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "amazon_bedrock:meta.llama4-scout-17b-instruct-v1:0": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "amazon_bedrock:qwen.qwen3-235b-a22b-2507-v1:0": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "amazon_bedrock:qwen.qwen3-32b-v1:0": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "amazon_bedrock:qwen.qwen3-coder-30b-a3b-v1:0": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "amazon_bedrock:qwen.qwen3-coder-480b-a35b-v1:0": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "anthropic:claude-1.0": {
-    "status": "excluded",
-    "last_checked": null
-  },
-  "anthropic:claude-1.1": {
-    "status": "excluded",
-    "last_checked": null
-  },
-  "anthropic:claude-1.2": {
-    "status": "excluded",
-    "last_checked": null
-  },
-  "anthropic:claude-1.3": {
-    "status": "excluded",
-    "last_checked": null
-  },
-  "anthropic:claude-2.0": {
-    "status": "excluded",
-    "last_checked": null
-  },
-  "anthropic:claude-2.1": {
-    "status": "excluded",
-    "last_checked": null
-  },
-  "anthropic:claude-haiku-4-5": {
-    "status": "pass",
-    "last_checked": "2025-11-15T18:33:31Z"
-  },
-  "anthropic:claude-haiku-4-5-20251001": {
-    "status": "pass",
-    "last_checked": "2026-05-29T16:30:53Z"
-  },
-  "anthropic:claude-haiku-4.5": {
-    "status": "pass",
-    "last_checked": "2025-11-15T18:33:43Z"
-  },
-  "anthropic:claude-instant-1.0": {
-    "status": "excluded",
-    "last_checked": null
-  },
-  "anthropic:claude-instant-1.1": {
-    "status": "excluded",
-    "last_checked": null
-  },
-  "anthropic:claude-instant-1.2": {
-    "status": "excluded",
-    "last_checked": null
-  },
-  "anthropic:claude-opus-4": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:38:43Z"
-  },
-  "anthropic:claude-opus-4-0": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "anthropic:claude-opus-4-1": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "anthropic:claude-opus-4-1-20250805": {
-    "status": "pass",
-    "last_checked": "2026-05-29T17:52:31Z"
-  },
-  "anthropic:claude-opus-4-20250514": {
-    "status": "pass",
-    "last_checked": "2026-05-29T17:58:57Z"
-  },
-  "anthropic:claude-opus-4-5": {
-    "status": "pass",
-    "last_checked": "2026-05-29T17:41:15Z"
-  },
-  "anthropic:claude-opus-4-5-20251101": {
-    "status": "pass",
-    "last_checked": "2026-05-29T17:43:21Z"
-  },
-  "anthropic:claude-opus-4-6": {
-    "status": "pass",
-    "last_checked": "2026-05-29T17:45:36Z"
-  },
-  "anthropic:claude-opus-4-7": {
-    "status": "pass",
-    "last_checked": "2026-05-29T17:47:19Z"
-  },
-  "anthropic:claude-opus-4-8": {
-    "status": "pass",
-    "last_checked": "2026-05-28T18:32:50Z"
-  },
-  "anthropic:claude-opus-4.1": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "anthropic:claude-sonnet-4": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:38:43Z"
-  },
-  "anthropic:claude-sonnet-4-0": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "anthropic:claude-sonnet-4-20250514": {
-    "status": "pass",
-    "last_checked": "2026-05-29T18:00:59Z"
-  },
-  "anthropic:claude-sonnet-4-5": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "anthropic:claude-sonnet-4-5-20250929": {
-    "status": "pass",
-    "last_checked": "2026-05-29T18:03:22Z"
-  },
-  "anthropic:claude-sonnet-4-6": {
-    "status": "pass",
-    "last_checked": "2026-05-29T17:49:21Z"
-  },
-  "anthropic:claude-sonnet-4.5": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:21Z"
-  },
-  "azure:claude-haiku-4-5": {
-    "status": "pass",
-    "last_checked": "2025-11-28T23:41:19Z"
-  },
-  "azure:claude-opus-4-1": {
-    "status": "pass",
-    "last_checked": "2025-11-28T23:41:19Z"
-  },
-  "azure:claude-opus-4-5": {
-    "status": "pass",
-    "last_checked": "2025-11-28T23:41:19Z"
-  },
-  "azure:claude-sonnet-4-5": {
-    "status": "pass",
-    "last_checked": "2025-11-28T23:41:19Z"
-  },
-  "azure:codex-mini": {
-    "status": "pass",
-    "last_checked": "2025-11-29T00:10:11Z"
-  },
-  "azure:deepseek-r1": {
-    "status": "pass",
-    "last_checked": "2025-12-02T00:12:38Z"
-  },
-  "azure:deepseek-r1-0528": {
-    "status": "pass",
-    "last_checked": "2025-12-02T00:12:38Z"
-  },
-  "azure:deepseek-v3-0324": {
-    "status": "pass",
-    "last_checked": "2025-12-02T00:12:38Z"
-  },
-  "azure:deepseek-v3.1": {
-    "status": "pass",
-    "last_checked": "2025-12-02T00:12:38Z"
-  },
-  "azure:gpt-3.5-turbo-0125": {
-    "status": "fail",
-    "last_checked": "2025-11-27T07:56:33Z"
-  },
-  "azure:gpt-3.5-turbo-0301": {
-    "status": "fail",
-    "last_checked": "2025-11-27T07:56:33Z"
-  },
-  "azure:gpt-3.5-turbo-0613": {
-    "status": "fail",
-    "last_checked": "2025-11-27T07:56:33Z"
-  },
-  "azure:gpt-3.5-turbo-1106": {
-    "status": "fail",
-    "last_checked": "2025-11-27T07:56:33Z"
-  },
-  "azure:gpt-3.5-turbo-instruct": {
-    "status": "fail",
-    "last_checked": "2025-11-27T07:56:33Z"
-  },
-  "azure:gpt-4": {
-    "status": "fail",
-    "last_checked": "2025-11-27T07:56:33Z"
-  },
-  "azure:gpt-4-32k": {
-    "status": "fail",
-    "last_checked": "2025-11-27T07:56:33Z"
-  },
-  "azure:gpt-4-turbo": {
-    "status": "fail",
-    "last_checked": "2025-11-27T07:56:33Z"
-  },
-  "azure:gpt-4-turbo-vision": {
-    "status": "fail",
-    "last_checked": "2025-11-27T07:56:33Z"
-  },
-  "azure:gpt-4.1": {
-    "status": "pass",
-    "last_checked": "2025-11-28T23:42:44Z"
-  },
-  "azure:gpt-4.1-mini": {
-    "status": "pass",
-    "last_checked": "2025-11-28T23:42:44Z"
-  },
-  "azure:gpt-4.1-nano": {
-    "status": "pass",
-    "last_checked": "2025-11-28T23:42:44Z"
-  },
-  "azure:gpt-4o": {
-    "status": "pass",
-    "last_checked": "2025-11-28T23:42:53Z"
-  },
-  "azure:gpt-4o-mini": {
-    "status": "pass",
-    "last_checked": "2025-11-28T23:42:53Z"
-  },
-  "azure:gpt-5": {
-    "status": "fail",
-    "last_checked": "2025-11-27T09:23:31Z"
-  },
-  "azure:gpt-5-chat": {
-    "status": "pass",
-    "last_checked": "2025-11-28T23:43:21Z"
-  },
-  "azure:gpt-5-codex": {
-    "status": "fail",
-    "last_checked": "2025-11-27T09:23:31Z"
-  },
-  "azure:gpt-5-mini": {
-    "status": "pass",
-    "last_checked": "2025-11-28T23:44:12Z"
-  },
-  "azure:gpt-5-nano": {
-    "status": "pass",
-    "last_checked": "2025-11-28T23:44:55Z"
-  },
-  "azure:gpt-5.1": {
-    "status": "fail",
-    "last_checked": "2025-11-27T09:23:31Z"
-  },
-  "azure:gpt-5.1-chat": {
-    "status": "pass",
-    "last_checked": "2025-11-28T23:45:19Z"
-  },
-  "azure:gpt-5.1-codex": {
-    "status": "fail",
-    "last_checked": "2025-11-27T09:23:31Z"
-  },
-  "azure:gpt-5.1-codex-mini": {
-    "status": "pass",
-    "last_checked": "2025-11-29T00:11:05Z"
-  },
-  "azure:mai-ds-r1": {
-    "status": "pass",
-    "last_checked": "2025-12-02T00:11:42Z"
-  },
-  "azure:o1": {
-    "status": "pass",
-    "last_checked": "2025-11-28T23:47:09Z"
-  },
-  "azure:o1-mini": {
-    "status": "fail",
-    "last_checked": "2025-11-27T07:56:33Z"
-  },
-  "azure:o1-preview": {
-    "status": "fail",
-    "last_checked": "2025-11-27T07:56:33Z"
-  },
-  "azure:o3": {
-    "status": "fail",
-    "last_checked": "2025-11-27T07:56:33Z"
-  },
-  "azure:o3-mini": {
-    "status": "pass",
-    "last_checked": "2025-11-28T23:47:53Z"
-  },
-  "azure:o4-mini": {
-    "status": "pass",
-    "last_checked": "2025-11-28T23:48:50Z"
-  },
-  "azure:text-embedding-3-large": {
-    "status": "pass",
-    "last_checked": "2025-12-01T20:52:06Z"
-  },
-  "azure:text-embedding-3-small": {
-    "status": "pass",
-    "last_checked": "2025-12-01T20:51:56Z"
-  },
-  "azure:text-embedding-ada-002": {
-    "status": "pass",
-    "last_checked": "2025-12-01T20:51:43Z"
-  },
-  "cerebras:gpt-oss-120b": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "cerebras:qwen-3-235b-a22b-instruct-2507": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "cerebras:qwen-3-235b-a22b-thinking-2507": {
-    "status": "excluded",
-    "last_checked": "2025-10-27T21:05:14Z"
-  },
-  "cerebras:qwen-3-coder-480b": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "cerebras:zai-glm-4.6": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:46:56Z"
-  },
-  "google-vertex-anthropic:claude-3-5-haiku@20241022": {
-    "status": "excluded",
-    "last_checked": null
+  "google:gemini-1.5-pro": {
+    "last_checked": "2025-10-03T23:26:57Z",
+    "status": "excluded"
   },
   "google-vertex-anthropic:claude-3-5-sonnet@20241022": {
-    "status": "excluded",
-    "last_checked": null
-  },
-  "google-vertex-anthropic:claude-3-7-sonnet@20250219": {
-    "status": "excluded",
-    "last_checked": null
-  },
-  "google-vertex-anthropic:claude-opus-4@20250514": {
-    "status": "excluded",
-    "last_checked": null
-  },
-  "google-vertex-anthropic:claude-sonnet-4@20250514": {
-    "status": "excluded",
-    "last_checked": null
-  },
-  "google:embedding-001": {
-    "status": "excluded",
-    "last_checked": null
-  },
-  "google:embedding-gecko-001": {
-    "status": "excluded",
-    "last_checked": null
-  },
-  "google:gemini-1.0-pro-001": {
-    "status": "excluded",
-    "last_checked": null
-  },
-  "google:gemini-1.0-pro-002": {
-    "status": "excluded",
-    "last_checked": null
-  },
-  "google:gemini-1.0-pro-vision-001": {
-    "status": "excluded",
-    "last_checked": null
-  },
-  "google:gemini-1.5-flash": {
-    "status": "excluded",
-    "last_checked": "2025-10-03T23:26:57Z"
-  },
-  "google:gemini-1.5-flash-001": {
-    "status": "excluded",
-    "last_checked": null
-  },
-  "google:gemini-1.5-flash-002": {
-    "status": "excluded",
-    "last_checked": null
-  },
-  "google:gemini-1.5-flash-8b": {
-    "status": "excluded",
-    "last_checked": "2025-10-03T23:26:57Z"
-  },
-  "google:gemini-1.5-pro": {
-    "status": "excluded",
-    "last_checked": "2025-10-03T23:26:57Z"
-  },
-  "google:gemini-1.5-pro-001": {
-    "status": "excluded",
-    "last_checked": null
-  },
-  "google:gemini-1.5-pro-002": {
-    "status": "excluded",
-    "last_checked": null
-  },
-  "google:gemini-2.0-flash": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "google:gemini-2.0-flash-001": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:42:05Z"
-  },
-  "google:gemini-2.0-flash-exp": {
-    "status": "pass",
-    "last_checked": null
-  },
-  "google:gemini-2.0-flash-exp:free": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:42:49Z"
-  },
-  "google:gemini-2.0-flash-lite": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "google:gemini-2.0-flash-lite-001": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:42:49Z"
-  },
-  "google:gemini-2.5-flash": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "google:gemini-2.5-flash-image": {
-    "status": "excluded",
-    "last_checked": "2025-10-15T16:02:32Z"
-  },
-  "google:gemini-2.5-flash-image-preview": {
-    "status": "excluded",
-    "last_checked": "2025-10-15T16:02:32Z"
-  },
-  "google:gemini-2.5-flash-lite": {
-    "status": "excluded",
-    "last_checked": "2025-10-03T23:26:57Z"
-  },
-  "google:gemini-2.5-flash-lite-preview-06-17": {
-    "status": "excluded",
-    "last_checked": "2025-10-03T23:26:57Z"
-  },
-  "google:gemini-2.5-flash-lite-preview-09-2025": {
-    "status": "excluded",
-    "last_checked": "2025-10-03T23:26:57Z"
-  },
-  "google:gemini-2.5-flash-preview-04-17": {
-    "status": "excluded",
-    "last_checked": "2025-10-03T23:26:57Z"
-  },
-  "google:gemini-2.5-flash-preview-05-20": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "google:gemini-2.5-flash-preview-09-2025": {
-    "status": "excluded",
-    "last_checked": "2025-10-03T23:26:57Z"
-  },
-  "google:gemini-2.5-flash-preview-tts": {
-    "status": "excluded",
-    "last_checked": "2025-10-15T16:02:32Z"
-  },
-  "google:gemini-2.5-pro": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "google:gemini-2.5-pro-preview": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:42:49Z"
-  },
-  "google:gemini-2.5-pro-preview-05-06": {
-    "status": "excluded",
-    "last_checked": "2025-10-03T23:26:57Z"
-  },
-  "google:gemini-2.5-pro-preview-06-05": {
-    "status": "excluded",
-    "last_checked": "2025-10-03T23:26:57Z"
-  },
-  "google:gemini-2.5-pro-preview-tts": {
-    "status": "excluded",
-    "last_checked": "2025-10-15T16:02:32Z"
-  },
-  "google:gemini-embedding-001": {
-    "status": "pass",
-    "last_checked": "2025-10-04T12:50:52Z"
-  },
-  "google:gemini-embedding-exp": {
-    "status": "excluded",
-    "last_checked": null
-  },
-  "google:gemini-embedding-exp-03-07": {
-    "status": "excluded",
-    "last_checked": null
-  },
-  "google:gemini-flash-latest": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "google:gemini-flash-lite-latest": {
-    "status": "excluded",
-    "last_checked": "2025-10-03T23:26:57Z"
-  },
-  "google:gemini-live-2.5-flash": {
-    "status": "excluded",
-    "last_checked": "2025-10-15T16:02:32Z"
-  },
-  "google:gemini-live-2.5-flash-preview-native-audio": {
-    "status": "excluded",
-    "last_checked": "2025-10-03T23:26:57Z"
-  },
-  "google:gemma-2-27b-it": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:42:05Z"
-  },
-  "google:gemma-2-9b-it": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:42:05Z"
-  },
-  "google:gemma-3-12b-it": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:42:05Z"
-  },
-  "google:gemma-3-12b-it:free": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:42:05Z"
-  },
-  "google:gemma-3-27b-it": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:42:05Z"
-  },
-  "google:gemma-3-27b-it:free": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:42:05Z"
-  },
-  "google:gemma-3-4b-it": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:42:05Z"
-  },
-  "google:gemma-3-4b-it:free": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:42:05Z"
-  },
-  "google:gemma-3n-e2b-it:free": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:42:05Z"
-  },
-  "google:gemma-3n-e4b-it": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:42:05Z"
-  },
-  "google:gemma-3n-e4b-it:free": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:42:05Z"
-  },
-  "google_vertex_anthropic:claude-3-5-haiku@20241022": {
-    "status": "fail",
-    "last_checked": "2025-11-02T20:49:11Z"
-  },
-  "google_vertex_anthropic:claude-3-5-sonnet@20241022": {
-    "status": "fail",
-    "last_checked": "2025-11-02T20:49:11Z"
-  },
-  "google_vertex_anthropic:claude-3-7-sonnet@20250219": {
-    "status": "fail",
-    "last_checked": "2025-11-02T20:49:11Z"
-  },
-  "google_vertex_anthropic:claude-haiku-4-5@20251001": {
-    "status": "fail",
-    "last_checked": "2025-11-02T20:54:33Z"
-  },
-  "google_vertex_anthropic:claude-opus-4-1@20250805": {
-    "status": "fail",
-    "last_checked": "2025-11-02T20:49:11Z"
-  },
-  "google_vertex_anthropic:claude-opus-4@20250514": {
-    "status": "fail",
-    "last_checked": "2025-11-02T20:49:11Z"
-  },
-  "google_vertex_anthropic:claude-sonnet-4-5@20250929": {
-    "status": "fail",
-    "last_checked": "2025-11-02T20:54:33Z"
-  },
-  "google_vertex_anthropic:claude-sonnet-4@20250514": {
-    "status": "fail",
-    "last_checked": "2025-11-02T20:49:11Z"
-  },
-  "groq:deepseek-r1-distill-llama-70b": {
-    "status": "excluded",
-    "last_checked": "2025-10-07T19:52:39Z"
-  },
-  "groq:deepseek-r1-distill-llama-70b-specdec": {
-    "status": "excluded",
-    "last_checked": null
-  },
-  "groq:deepseek-r1-distill-qwen-32b": {
-    "status": "excluded",
-    "last_checked": null
-  },
-  "groq:distil-whisper-large-v3-en": {
-    "status": "excluded",
-    "last_checked": null
-  },
-  "groq:gemma-7b-it": {
-    "status": "excluded",
-    "last_checked": null
-  },
-  "groq:gemma2-9b-it": {
-    "status": "excluded",
-    "last_checked": "2025-10-03T17:50:32Z"
-  },
-  "groq:llama-3.1-70b-specdec": {
-    "status": "excluded",
-    "last_checked": null
-  },
-  "groq:llama-3.1-70b-versatile": {
-    "status": "excluded",
-    "last_checked": null
-  },
-  "groq:llama-3.1-8b-instant": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "groq:llama-3.2-11b-text-preview": {
-    "status": "excluded",
-    "last_checked": null
-  },
-  "groq:llama-3.2-11b-vision-preview": {
-    "status": "excluded",
-    "last_checked": null
-  },
-  "groq:llama-3.2-1b-preview": {
-    "status": "excluded",
-    "last_checked": null
-  },
-  "groq:llama-3.2-3b-preview": {
-    "status": "excluded",
-    "last_checked": null
-  },
-  "groq:llama-3.2-90b-text-preview": {
-    "status": "excluded",
-    "last_checked": null
-  },
-  "groq:llama-3.2-90b-vision-preview": {
-    "status": "excluded",
-    "last_checked": null
-  },
-  "groq:llama-3.3-70b-specdec": {
-    "status": "excluded",
-    "last_checked": null
-  },
-  "groq:llama-3.3-70b-versatile": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "groq:llama-guard-3-8b": {
-    "status": "excluded",
-    "last_checked": "2025-10-03T17:50:32Z"
-  },
-  "groq:llama3-70b-8192": {
-    "status": "excluded",
-    "last_checked": "2025-10-03T18:07:57Z"
-  },
-  "groq:llama3-8b-8192": {
-    "status": "excluded",
-    "last_checked": "2025-10-03T17:50:32Z"
-  },
-  "groq:llama3-groq-70b-8192-tool-use-preview": {
-    "status": "excluded",
-    "last_checked": null
-  },
-  "groq:llama3-groq-8b-8192-tool-use-preview": {
-    "status": "excluded",
-    "last_checked": null
-  },
-  "groq:llava-v1.5-7b-4096-preview": {
-    "status": "excluded",
-    "last_checked": null
-  },
-  "groq:meta-llama/llama-4-maverick-17b-128e-instruct": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "groq:meta-llama/llama-4-scout-17b-16e-instruct": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:39:51Z"
-  },
-  "groq:meta-llama/llama-guard-4-12b": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:39:51Z"
-  },
-  "groq:mistral-saba-24b": {
-    "status": "excluded",
-    "last_checked": "2025-10-03T17:50:32Z"
-  },
-  "groq:mixtral-8x7b-32768": {
-    "status": "excluded",
-    "last_checked": null
-  },
-  "groq:moonshotai/kimi-k2-instruct": {
-    "status": "excluded",
-    "last_checked": "2025-10-03T17:50:32Z"
-  },
-  "groq:moonshotai/kimi-k2-instruct-0905": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "groq:openai/gpt-oss-120b": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "groq:openai/gpt-oss-20b": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "groq:qwen-2.5-32b": {
-    "status": "excluded",
-    "last_checked": null
-  },
-  "groq:qwen-2.5-coder-32b": {
-    "status": "excluded",
-    "last_checked": null
-  },
-  "groq:qwen-qwq-32b": {
-    "status": "excluded",
-    "last_checked": "2025-10-03T17:50:32Z"
-  },
-  "groq:qwen/qwen3-32b": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "minimax:MiniMax-M2": {
-    "status": "pass",
-    "last_checked": "2026-05-02T09:30:31Z"
-  },
-  "minimax:MiniMax-M2.1": {
-    "status": "pass",
-    "last_checked": "2026-05-02T09:30:31Z"
-  },
-  "minimax:MiniMax-M2.5": {
-    "status": "pass",
-    "last_checked": "2026-05-02T09:30:31Z"
-  },
-  "minimax:MiniMax-M2.5-highspeed": {
-    "status": "pass",
-    "last_checked": "2026-05-02T09:30:31Z"
-  },
-  "minimax:MiniMax-M2.7": {
-    "status": "pass",
-    "last_checked": "2026-05-02T09:30:31Z"
-  },
-  "minimax:MiniMax-M2.7-highspeed": {
-    "status": "pass",
-    "last_checked": "2026-05-02T09:30:31Z"
-  },
-  "openai:chatgpt-4o-latest": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:41:35Z"
-  },
-  "openai:gpt-3.5-turbo-0613": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:41:35Z"
-  },
-  "openai:gpt-3.5-turbo-16k": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:41:35Z"
-  },
-  "openai:gpt-3.5-turbo-instruct": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:41:35Z"
-  },
-  "openai:gpt-4-0314": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:41:35Z"
-  },
-  "openai:gpt-4-1106-preview": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:41:35Z"
-  },
-  "openai:gpt-4-turbo-preview": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:41:35Z"
-  },
-  "openai:gpt-4.1": {
-    "status": "pass",
-    "last_checked": "2026-05-29T18:31:35Z"
-  },
-  "openai:gpt-4.1-2025-04-14": {
-    "status": "pass",
-    "last_checked": "2026-05-29T19:12:30Z"
-  },
-  "openai:gpt-4.1-mini": {
-    "status": "pass",
-    "last_checked": "2026-05-29T18:31:03Z"
-  },
-  "openai:gpt-4.1-mini-2025-04-14": {
-    "status": "pass",
-    "last_checked": "2026-05-29T19:12:47Z"
-  },
-  "openai:gpt-4o": {
-    "status": "pass",
-    "last_checked": "2026-05-29T18:26:30Z"
-  },
-  "openai:gpt-4o-2024-08-06": {
-    "status": "pass",
-    "last_checked": "2026-05-29T19:13:17Z"
-  },
-  "openai:gpt-4o-2024-11-20": {
-    "status": "pass",
-    "last_checked": "2026-05-29T19:13:39Z"
-  },
-  "openai:gpt-4o-audio-preview": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:41:35Z"
-  },
-  "openai:gpt-4o-mini": {
-    "status": "pass",
-    "last_checked": "2026-05-29T18:21:38Z"
-  },
-  "openai:gpt-4o-mini-2024-07-18": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:41:35Z"
-  },
-  "openai:gpt-4o-mini-search-preview": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:41:35Z"
-  },
-  "openai:gpt-4o-search-preview": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:41:35Z"
-  },
-  "openai:gpt-4o:extended": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:41:35Z"
-  },
-  "openai:gpt-5": {
-    "status": "pass",
-    "last_checked": "2026-05-29T18:41:37Z"
-  },
-  "openai:gpt-5-2025-08-07": {
-    "status": "pass",
-    "last_checked": "2026-05-29T19:20:30Z"
-  },
-  "openai:gpt-5-chat": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:41:35Z"
-  },
-  "openai:gpt-5-image": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:41:35Z"
-  },
-  "openai:gpt-5-image-mini": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:41:35Z"
-  },
-  "openai:gpt-5-mini": {
-    "status": "pass",
-    "last_checked": "2026-05-29T18:36:35Z"
-  },
-  "openai:gpt-5-mini-2025-08-07": {
-    "status": "pass",
-    "last_checked": "2026-05-29T19:21:26Z"
-  },
-  "openai:gpt-5-nano": {
-    "status": "pass",
-    "last_checked": "2026-05-29T18:35:04Z"
-  },
-  "openai:gpt-5-nano-2025-08-07": {
-    "status": "pass",
-    "last_checked": "2026-05-29T19:22:04Z"
-  },
-  "openai:gpt-5-pro": {
-    "status": "fail",
-    "last_checked": "2025-11-14T22:28:18Z"
-  },
-  "openai:gpt-oss-120b": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:41:35Z"
-  },
-  "openai:gpt-oss-120b:exacto": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:41:35Z"
+    "last_checked": null,
+    "status": "excluded"
+  },
+  "anthropic:claude-instant-1.1": {
+    "last_checked": null,
+    "status": "excluded"
+  },
+  "amazon_bedrock:qwen.qwen3-coder-480b-a35b-v1:0": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "fail"
   },
   "openai:gpt-oss-20b": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:41:35Z"
+    "last_checked": "2025-11-14T20:41:35Z",
+    "status": "fail"
   },
-  "openai:gpt-oss-20b:free": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:41:35Z"
-  },
-  "openai:gpt-oss-safeguard-20b": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:41:35Z"
-  },
-  "openai:o1-mini": {
-    "status": "excluded",
-    "last_checked": "2025-10-05T01:24:56Z"
-  },
-  "openai:o1-preview": {
-    "status": "excluded",
-    "last_checked": "2025-10-05T01:24:56Z"
-  },
-  "openai:o1-pro": {
-    "status": "excluded",
-    "last_checked": "2025-10-15T11:48:18Z"
-  },
-  "openai:o3": {
-    "status": "pass",
-    "last_checked": "2026-05-29T18:43:00Z"
-  },
-  "openai:o3-2025-04-16": {
-    "status": "pass",
-    "last_checked": "2026-05-29T19:15:19Z"
-  },
-  "openai:o3-deep-research": {
-    "status": "excluded",
-    "last_checked": "2025-10-15T11:48:18Z"
-  },
-  "openai:o3-mini-high": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:41:35Z"
-  },
-  "openai:o3-pro": {
-    "status": "fail",
-    "last_checked": "2025-11-14T22:23:56Z"
-  },
-  "openai:o4-mini-deep-research": {
-    "status": "excluded",
-    "last_checked": "2025-10-15T11:48:18Z"
-  },
-  "openai:o4-mini-high": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:41:35Z"
-  },
-  "openai:text-embedding-3-large": {
-    "status": "pass",
-    "last_checked": "2026-05-29T20:39:25Z"
-  },
-  "openai:text-embedding-3-small": {
-    "status": "pass",
-    "last_checked": "2026-05-29T20:39:07Z"
-  },
-  "openai:text-embedding-ada-002": {
-    "status": "pass",
-    "last_checked": "2026-05-29T20:39:44Z"
-  },
-  "openrouter:anthropic/claude-3.5-haiku": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "openrouter:anthropic/claude-3.7-sonnet": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "openrouter:anthropic/claude-4.5-haiku": {
-    "status": "fail",
-    "last_checked": "2025-10-27T21:05:14Z"
-  },
-  "openrouter:anthropic/claude-haiku-4.5": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "openrouter:anthropic/claude-opus-4": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "openrouter:anthropic/claude-opus-4.1": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "openrouter:anthropic/claude-sonnet-4": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "openrouter:anthropic/claude-sonnet-4.5": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "openrouter:auto": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:42:18Z"
-  },
-  "openrouter:cognitivecomputations/dolphin3.0-mistral-24b": {
-    "status": "excluded",
-    "last_checked": "2025-10-07T14:01:22Z"
-  },
-  "openrouter:cognitivecomputations/dolphin3.0-r1-mistral-24b": {
-    "status": "excluded",
-    "last_checked": "2025-10-07T14:01:22Z"
-  },
-  "openrouter:deepseek/deepseek-chat-v3-0324": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "openrouter:deepseek/deepseek-chat-v3.1": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:42:18Z"
-  },
-  "openrouter:deepseek/deepseek-r1-0528-qwen3-8b:free": {
-    "status": "excluded",
-    "last_checked": "2025-10-07T14:19:05Z"
-  },
-  "openrouter:deepseek/deepseek-r1-0528:free": {
-    "status": "excluded",
-    "last_checked": "2025-10-07T14:39:07Z"
-  },
-  "openrouter:deepseek/deepseek-r1-distill-llama-70b": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "openrouter:deepseek/deepseek-r1-distill-qwen-14b": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "openrouter:deepseek/deepseek-r1:free": {
-    "status": "excluded",
-    "last_checked": "2025-10-07T14:01:22Z"
-  },
-  "openrouter:deepseek/deepseek-v3-base:free": {
-    "status": "excluded",
-    "last_checked": "2025-10-07T14:01:22Z"
-  },
-  "openrouter:deepseek/deepseek-v3.1-terminus": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:42:18Z"
-  },
-  "openrouter:deepseek/deepseek-v3.1-terminus:exacto": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "openrouter:featherless/qwerky-72b": {
-    "status": "excluded",
-    "last_checked": "2025-10-07T14:01:22Z"
-  },
-  "openrouter:google/gemini-2.0-flash-001": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "openrouter:google/gemini-2.0-flash-exp:free": {
-    "status": "excluded",
-    "last_checked": "2025-10-07T14:01:22Z"
-  },
-  "openrouter:google/gemini-2.5-flash": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "openrouter:google/gemini-2.5-flash-lite": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
+  "amazon_bedrock:cohere.command-text-v14": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "fail"
   },
   "openrouter:google/gemini-2.5-flash-lite-preview-09-2025": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
   },
-  "openrouter:google/gemini-2.5-flash-preview-09-2025": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
+  "azure:text-embedding-3-small": {
+    "last_checked": "2025-12-01T20:51:56Z",
+    "status": "pass"
   },
-  "openrouter:google/gemini-2.5-pro": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
+  "google:gemini-2.5-flash-preview-09-2025": {
+    "last_checked": "2025-10-03T23:26:57Z",
+    "status": "excluded"
   },
-  "openrouter:google/gemini-2.5-pro-preview-05-06": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
+  "openai:gpt-5": {
+    "last_checked": "2026-05-29T18:41:37Z",
+    "status": "pass"
+  },
+  "openai:gpt-5-2025-08-07": {
+    "last_checked": "2026-05-29T19:20:30Z",
+    "status": "pass"
   },
   "openrouter:google/gemini-2.5-pro-preview-06-05": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "openrouter:google/gemini-3-flash-preview": {
-    "status": "pass",
-    "last_checked": "2025-12-23T21:34:38Z"
-  },
-  "openrouter:google/gemma-2-9b-it:free": {
-    "status": "excluded",
-    "last_checked": "2025-10-05T13:34:46Z"
-  },
-  "openrouter:google/gemma-3-12b-it": {
-    "status": "excluded",
-    "last_checked": "2025-10-07T14:30:26Z"
-  },
-  "openrouter:google/gemma-3-27b-it": {
-    "status": "excluded",
-    "last_checked": "2025-10-07T14:30:29Z"
-  },
-  "openrouter:google/gemma-3n-e4b-it": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "openrouter:google/gemma-3n-e4b-it:free": {
-    "status": "excluded",
-    "last_checked": "2025-10-07T14:30:27Z"
-  },
-  "openrouter:meta-llama/llama-3.2-11b-vision-instruct": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "openrouter:meta-llama/llama-3.3-70b-instruct:free": {
-    "status": "excluded",
-    "last_checked": "2025-10-07T14:19:05Z"
-  },
-  "openrouter:meta-llama/llama-4-scout:free": {
-    "status": "excluded",
-    "last_checked": "2025-10-07T14:19:05Z"
-  },
-  "openrouter:microsoft/mai-ds-r1:free": {
-    "status": "excluded",
-    "last_checked": "2025-10-07T14:19:05Z"
-  },
-  "openrouter:minimax/minimax-01": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:42:18Z"
-  },
-  "openrouter:minimax/minimax-m1": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:42:18Z"
-  },
-  "openrouter:minimax/minimax-m2:free": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:42:18Z"
-  },
-  "openrouter:mistralai/codestral-2508": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "openrouter:mistralai/devstral-medium-2507": {
-    "status": "excluded",
-    "last_checked": "2025-10-15T17:00:22Z"
-  },
-  "openrouter:mistralai/devstral-small-2505": {
-    "status": "excluded",
-    "last_checked": "2025-10-15T17:00:22Z"
-  },
-  "openrouter:mistralai/devstral-small-2505:free": {
-    "status": "excluded",
-    "last_checked": "2025-10-07T14:19:05Z"
-  },
-  "openrouter:mistralai/devstral-small-2507": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "openrouter:mistralai/mistral-7b-instruct:free": {
-    "status": "excluded",
-    "last_checked": "2025-10-07T14:19:05Z"
-  },
-  "openrouter:mistralai/mistral-medium-3": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "openrouter:mistralai/mistral-medium-3.1": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "openrouter:mistralai/mistral-nemo:free": {
-    "status": "excluded",
-    "last_checked": "2025-10-07T14:19:05Z"
-  },
-  "openrouter:mistralai/mistral-small-3.1-24b-instruct": {
-    "status": "excluded",
-    "last_checked": "2025-10-15T17:00:22Z"
-  },
-  "openrouter:mistralai/mistral-small-3.2-24b-instruct": {
-    "status": "excluded",
-    "last_checked": "2025-10-15T17:00:22Z"
-  },
-  "openrouter:mistralai/mistral-small-3.2-24b-instruct:free": {
-    "status": "excluded",
-    "last_checked": "2025-10-07T14:19:05Z"
-  },
-  "openrouter:moonshotai/kimi-dev-72b:free": {
-    "status": "excluded",
-    "last_checked": "2025-10-07T14:19:05Z"
-  },
-  "openrouter:moonshotai/kimi-k2": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "openrouter:moonshotai/kimi-k2-0905": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "openrouter:moonshotai/kimi-k2-0905:exacto": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "openrouter:moonshotai/kimi-k2-thinking": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:42:18Z"
-  },
-  "openrouter:moonshotai/kimi-k2:free": {
-    "status": "excluded",
-    "last_checked": "2025-10-07T14:19:05Z"
-  },
-  "openrouter:nousresearch/deephermes-3-llama-3-8b-preview": {
-    "status": "excluded",
-    "last_checked": "2025-10-07T14:01:22Z"
-  },
-  "openrouter:nousresearch/hermes-4-405b": {
-    "status": "excluded",
-    "last_checked": "2025-10-15T17:00:22Z"
-  },
-  "openrouter:nousresearch/hermes-4-70b": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "openrouter:nvidia/nemotron-nano-9b-v2": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:42:18Z"
-  },
-  "openrouter:openai/gpt-4.1": {
-    "status": "excluded",
-    "last_checked": "2025-10-15T16:40:44Z"
-  },
-  "openrouter:openai/gpt-4.1-mini": {
-    "status": "excluded",
-    "last_checked": "2025-10-15T16:40:54Z"
-  },
-  "openrouter:openai/gpt-4o-mini": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "openrouter:openai/gpt-5": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "openrouter:openai/gpt-5-chat": {
-    "status": "excluded",
-    "last_checked": "2025-10-15T16:41:01Z"
-  },
-  "openrouter:openai/gpt-5-codex": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "openrouter:openai/gpt-5-image": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:42:18Z"
-  },
-  "openrouter:openai/gpt-5-mini": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "openrouter:openai/gpt-5-nano": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "openrouter:openai/gpt-5-pro": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "openrouter:openai/gpt-oss-120b": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "openrouter:openai/gpt-oss-120b:exacto": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:42:18Z"
-  },
-  "openrouter:openai/gpt-oss-20b": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "openrouter:openai/o4-mini": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "openrouter:openrouter/cypher-alpha:free": {
-    "status": "excluded",
-    "last_checked": "2025-10-05T13:38:18Z"
-  },
-  "openrouter:openrouter/horizon-alpha": {
-    "status": "excluded",
-    "last_checked": "2025-10-05T13:38:18Z"
-  },
-  "openrouter:openrouter/horizon-beta": {
-    "status": "excluded",
-    "last_checked": "2025-10-05T13:38:18Z"
-  },
-  "openrouter:openrouter/polaris-alpha": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:42:18Z"
-  },
-  "openrouter:openrouter/sonoma-dusk-alpha": {
-    "status": "excluded",
-    "last_checked": "2025-10-05T13:38:18Z"
-  },
-  "openrouter:openrouter/sonoma-sky-alpha": {
-    "status": "excluded",
-    "last_checked": "2025-10-05T13:38:18Z"
-  },
-  "openrouter:polaris-alpha": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:48:59Z"
-  },
-  "openrouter:qwen/qwen-2.5-coder-32b-instruct": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "openrouter:qwen/qwen2.5-vl-32b-instruct:free": {
-    "status": "excluded",
-    "last_checked": "2025-10-07T14:24:01Z"
-  },
-  "openrouter:qwen/qwen2.5-vl-72b-instruct": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "openrouter:qwen/qwen2.5-vl-72b-instruct:free": {
-    "status": "excluded",
-    "last_checked": "2025-10-07T14:24:01Z"
-  },
-  "openrouter:qwen/qwen3-14b:free": {
-    "status": "excluded",
-    "last_checked": "2025-10-07T14:24:01Z"
-  },
-  "openrouter:qwen/qwen3-235b-a22b-07-25": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "openrouter:qwen/qwen3-235b-a22b-07-25:free": {
-    "status": "excluded",
-    "last_checked": "2025-10-07T14:01:22Z"
-  },
-  "openrouter:qwen/qwen3-235b-a22b-thinking-2507": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "openrouter:qwen/qwen3-235b-a22b:free": {
-    "status": "excluded",
-    "last_checked": "2025-10-07T14:24:01Z"
-  },
-  "openrouter:qwen/qwen3-30b-a3b-instruct-2507": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "openrouter:qwen/qwen3-30b-a3b-thinking-2507": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "openrouter:qwen/qwen3-30b-a3b:free": {
-    "status": "excluded",
-    "last_checked": "2025-10-07T14:24:01Z"
-  },
-  "openrouter:qwen/qwen3-32b:free": {
-    "status": "excluded",
-    "last_checked": "2025-10-07T14:24:01Z"
-  },
-  "openrouter:qwen/qwen3-8b:free": {
-    "status": "excluded",
-    "last_checked": "2025-10-07T14:24:01Z"
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
+  },
+  "amazon_bedrock:meta.llama3-2-1b-instruct-v1:0": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "fail"
+  },
+  "minimax:MiniMax-M2.5": {
+    "last_checked": "2026-05-02T09:30:31Z",
+    "status": "pass"
   },
   "openrouter:qwen/qwen3-coder": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:42:18Z"
+    "last_checked": "2025-11-14T20:42:18Z",
+    "status": "fail"
   },
-  "openrouter:qwen/qwen3-coder:exacto": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
+  "amazon_bedrock:anthropic.claude-sonnet-4-20250514-v1:0": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "fail"
   },
-  "openrouter:qwen/qwen3-coder:free": {
-    "status": "excluded",
-    "last_checked": "2025-10-07T14:24:01Z"
+  "openrouter:deepseek/deepseek-chat-v3.1": {
+    "last_checked": "2025-11-14T20:42:18Z",
+    "status": "fail"
   },
-  "openrouter:qwen/qwen3-max": {
-    "status": "excluded",
-    "last_checked": "2025-10-15T16:41:01Z"
+  "amazon_bedrock:cohere.command-light-text-v14": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "fail"
   },
-  "openrouter:qwen/qwen3-next-80b-a3b-instruct": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:42:18Z"
+  "azure:deepseek-v3.1": {
+    "last_checked": "2025-12-02T00:12:38Z",
+    "status": "pass"
   },
-  "openrouter:qwen/qwen3-next-80b-a3b-thinking": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
+  "openai:o3": {
+    "last_checked": "2026-05-29T18:43:00Z",
+    "status": "pass"
   },
-  "openrouter:qwen/qwq-32b:free": {
-    "status": "excluded",
-    "last_checked": "2025-10-07T14:01:22Z"
-  },
-  "openrouter:rekaai/reka-flash-3": {
-    "status": "excluded",
-    "last_checked": "2025-10-15T16:40:53Z"
-  },
-  "openrouter:sarvamai/sarvam-m:free": {
-    "status": "excluded",
-    "last_checked": "2025-10-07T14:01:22Z"
-  },
-  "openrouter:thudm/glm-z1-32b:free": {
-    "status": "excluded",
-    "last_checked": "2025-10-07T14:01:22Z"
-  },
-  "openrouter:tngtech/deepseek-r1t2-chimera:free": {
-    "status": "excluded",
-    "last_checked": "2025-10-07T14:19:05Z"
-  },
-  "openrouter:x-ai/grok-3": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:42:18Z"
-  },
-  "openrouter:x-ai/grok-3-beta": {
-    "status": "fail",
-    "last_checked": "2025-11-14T20:42:18Z"
-  },
-  "openrouter:x-ai/grok-3-mini": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "openrouter:x-ai/grok-3-mini-beta": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "openrouter:x-ai/grok-4": {
-    "status": "excluded",
-    "last_checked": "2025-10-15T16:41:09Z"
-  },
-  "openrouter:x-ai/grok-4-fast": {
-    "status": "excluded",
-    "last_checked": "2025-10-15T16:28:25Z"
-  },
-  "openrouter:x-ai/grok-4-fast:free": {
-    "status": "excluded",
-    "last_checked": "2025-10-07T14:01:22Z"
-  },
-  "openrouter:x-ai/grok-code-fast-1": {
-    "status": "excluded",
-    "last_checked": "2025-10-15T16:40:53Z"
-  },
-  "openrouter:z-ai/glm-4.5": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "openrouter:z-ai/glm-4.5-air": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "openrouter:z-ai/glm-4.5-air:free": {
-    "status": "excluded",
-    "last_checked": "2025-10-07T14:19:05Z"
-  },
-  "openrouter:z-ai/glm-4.5v": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "openrouter:z-ai/glm-4.6": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "openrouter:z-ai/glm-4.6:exacto": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
+  "openrouter:mistralai/devstral-small-2507": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
   },
   "xai:grok-2": {
-    "status": "excluded",
-    "last_checked": null
+    "last_checked": null,
+    "status": "excluded"
   },
-  "xai:grok-2-1212": {
-    "status": "excluded",
-    "last_checked": "2025-10-27T21:05:14Z"
+  "openrouter:nvidia/nemotron-nano-9b-v2": {
+    "last_checked": "2025-11-14T20:42:18Z",
+    "status": "fail"
   },
-  "xai:grok-2-latest": {
-    "status": "excluded",
-    "last_checked": "2025-10-27T21:05:14Z"
+  "openrouter:deepseek/deepseek-r1-0528:free": {
+    "last_checked": "2025-10-07T14:39:07Z",
+    "status": "excluded"
   },
-  "xai:grok-2-vision": {
-    "status": "excluded",
-    "last_checked": "2025-10-27T21:05:14Z"
+  "openai:gpt-4.1-mini-2025-04-14": {
+    "last_checked": "2026-05-29T19:12:47Z",
+    "status": "pass"
   },
-  "xai:grok-2-vision-1212": {
-    "status": "excluded",
-    "last_checked": "2025-10-27T21:05:14Z"
+  "anthropic:claude-haiku-4-5-20251001": {
+    "last_checked": "2026-05-29T16:30:53Z",
+    "status": "pass"
   },
-  "xai:grok-2-vision-latest": {
-    "status": "excluded",
-    "last_checked": "2025-10-27T21:05:14Z"
+  "openrouter:openai/gpt-4.1-mini": {
+    "last_checked": "2025-10-15T16:40:54Z",
+    "status": "excluded"
   },
-  "xai:grok-3": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
+  "anthropic:claude-sonnet-4": {
+    "last_checked": "2025-11-14T20:38:43Z",
+    "status": "fail"
   },
-  "xai:grok-3-fast": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
+  "google:gemma-3n-e4b-it": {
+    "last_checked": "2025-11-14T20:42:05Z",
+    "status": "fail"
   },
-  "xai:grok-3-fast-latest": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
+  "google:gemini-2.5-flash-preview-tts": {
+    "last_checked": "2025-10-15T16:02:32Z",
+    "status": "excluded"
   },
-  "xai:grok-3-latest": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
+  "google:gemma-2-27b-it": {
+    "last_checked": "2025-11-14T20:42:05Z",
+    "status": "fail"
   },
-  "xai:grok-3-mini": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
+  "amazon_bedrock:anthropic.claude-opus-4-20250514-v1:0": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "fail"
   },
-  "xai:grok-3-mini-fast": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
+  "google_vertex_anthropic:claude-haiku-4-5@20251001": {
+    "last_checked": "2025-11-02T20:54:33Z",
+    "status": "fail"
   },
-  "xai:grok-3-mini-fast-latest": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
+  "openrouter:mistralai/devstral-medium-2507": {
+    "last_checked": "2025-10-15T17:00:22Z",
+    "status": "excluded"
+  },
+  "google:gemini-2.5-flash-image": {
+    "last_checked": "2025-10-15T16:02:32Z",
+    "status": "excluded"
+  },
+  "openrouter:minimax/minimax-m1": {
+    "last_checked": "2025-11-14T20:42:18Z",
+    "status": "fail"
+  },
+  "google:embedding-001": {
+    "last_checked": null,
+    "status": "excluded"
+  },
+  "openrouter:qwen/qwen3-30b-a3b-instruct-2507": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
+  },
+  "openai:gpt-3.5-turbo-0613": {
+    "last_checked": "2025-11-14T20:41:35Z",
+    "status": "fail"
+  },
+  "openai:gpt-5-nano": {
+    "last_checked": "2026-05-29T18:35:04Z",
+    "status": "pass"
+  },
+  "openrouter:moonshotai/kimi-k2": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
+  },
+  "google:gemma-3-4b-it:free": {
+    "last_checked": "2025-11-14T20:42:05Z",
+    "status": "fail"
+  },
+  "openrouter:openrouter/sonoma-sky-alpha": {
+    "last_checked": "2025-10-05T13:38:18Z",
+    "status": "excluded"
   },
   "xai:grok-3-mini-latest": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
+    "last_checked": "2026-05-29T23:05:54Z",
+    "status": "pass"
   },
-  "xai:grok-4": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
+  "openai:o1-mini": {
+    "last_checked": "2025-10-05T01:24:56Z",
+    "status": "excluded"
   },
-  "xai:grok-4-fast": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
+  "google:gemini-2.0-flash-lite": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
   },
-  "xai:grok-4-fast-non-reasoning": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
+  "azure:gpt-5.1": {
+    "last_checked": "2025-11-27T09:23:31Z",
+    "status": "fail"
   },
-  "xai:grok-4-fast-reasoning": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
+  "openrouter:openrouter/polaris-alpha": {
+    "last_checked": "2025-11-14T20:42:18Z",
+    "status": "fail"
   },
-  "xai:grok-beta": {
-    "status": "excluded",
-    "last_checked": null
+  "anthropic:claude-sonnet-4-5-20250929": {
+    "last_checked": "2026-05-29T18:03:22Z",
+    "status": "pass"
   },
-  "xai:grok-code-fast-1": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
+  "xai:grok-2-1212": {
+    "last_checked": "2025-10-27T21:05:14Z",
+    "status": "excluded"
   },
-  "xai:grok-vision-beta": {
-    "status": "excluded",
-    "last_checked": null
+  "openai:text-embedding-ada-002": {
+    "last_checked": "2026-05-29T20:39:44Z",
+    "status": "pass"
   },
-  "zai:glm-4.5": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
+  "google:gemini-1.5-pro-002": {
+    "last_checked": null,
+    "status": "excluded"
   },
-  "zai:glm-4.5-air": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
+  "openai:gpt-oss-120b": {
+    "last_checked": "2025-11-14T20:41:35Z",
+    "status": "fail"
   },
-  "zai:glm-4.5-flash": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
+  "amazon_bedrock:anthropic.claude-3-5-haiku-20241022-v1:0": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "fail"
   },
-  "zai:glm-4.5v": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "zai:glm-4.6": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "zai_coder:glm-4.5": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
-  },
-  "zai_coder:glm-4.5-air": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
+  "openai:gpt-4o-audio-preview": {
+    "last_checked": "2025-11-14T20:41:35Z",
+    "status": "fail"
   },
   "zai_coder:glm-4.5-flash": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
+  },
+  "amazon_bedrock:deepseek.v3-v1:0": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "fail"
+  },
+  "google:gemini-2.0-flash-001": {
+    "last_checked": "2025-11-14T20:42:05Z",
+    "status": "fail"
+  },
+  "openai:gpt-4o-mini-search-preview": {
+    "last_checked": "2025-11-14T20:41:35Z",
+    "status": "fail"
+  },
+  "openrouter:mistralai/mistral-small-3.2-24b-instruct": {
+    "last_checked": "2025-10-15T17:00:22Z",
+    "status": "excluded"
+  },
+  "openrouter:moonshotai/kimi-k2-0905:exacto": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
+  },
+  "azure:o1": {
+    "last_checked": "2025-11-28T23:47:09Z",
+    "status": "pass"
+  },
+  "openai:gpt-5-mini-2025-08-07": {
+    "last_checked": "2026-05-29T19:21:26Z",
+    "status": "pass"
+  },
+  "openrouter:z-ai/glm-4.5v": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
+  },
+  "openrouter:openai/gpt-5-mini": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
+  },
+  "azure:gpt-3.5-turbo-0613": {
+    "last_checked": "2025-11-27T07:56:33Z",
+    "status": "fail"
+  },
+  "openrouter:meta-llama/llama-4-scout:free": {
+    "last_checked": "2025-10-07T14:19:05Z",
+    "status": "excluded"
+  },
+  "anthropic:claude-opus-4-6": {
+    "last_checked": "2026-05-29T17:45:36Z",
+    "status": "pass"
+  },
+  "openrouter:x-ai/grok-3-mini": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
+  },
+  "xai:grok-build-0.1": {
+    "last_checked": "2026-05-29T23:02:40Z",
+    "status": "pass"
+  },
+  "openrouter:openrouter/horizon-alpha": {
+    "last_checked": "2025-10-05T13:38:18Z",
+    "status": "excluded"
+  },
+  "google:embedding-gecko-001": {
+    "last_checked": null,
+    "status": "excluded"
+  },
+  "zai:glm-4.6": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
+  },
+  "azure:gpt-5-chat": {
+    "last_checked": "2025-11-28T23:43:21Z",
+    "status": "pass"
+  },
+  "openrouter:anthropic/claude-4.5-haiku": {
+    "last_checked": "2025-10-27T21:05:14Z",
+    "status": "fail"
+  },
+  "openrouter:mistralai/mistral-nemo:free": {
+    "last_checked": "2025-10-07T14:19:05Z",
+    "status": "excluded"
+  },
+  "amazon_bedrock:anthropic.claude-opus-4-1-20250805-v1:0": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "fail"
+  },
+  "openrouter:anthropic/claude-opus-4.1": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
+  },
+  "amazon_bedrock:anthropic.claude-3-5-sonnet-20241022-v2:0": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "fail"
+  },
+  "minimax:MiniMax-M2.5-highspeed": {
+    "last_checked": "2026-05-02T09:30:31Z",
+    "status": "pass"
+  },
+  "openrouter:qwen/qwen2.5-vl-72b-instruct:free": {
+    "last_checked": "2025-10-07T14:24:01Z",
+    "status": "excluded"
+  },
+  "openrouter:deepseek/deepseek-r1-distill-llama-70b": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
+  },
+  "openai:o1-pro": {
+    "last_checked": "2025-10-15T11:48:18Z",
+    "status": "excluded"
+  },
+  "openai:gpt-4-1106-preview": {
+    "last_checked": "2025-11-14T20:41:35Z",
+    "status": "fail"
+  },
+  "openrouter:deepseek/deepseek-v3.1-terminus:exacto": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
+  },
+  "openrouter:moonshotai/kimi-dev-72b:free": {
+    "last_checked": "2025-10-07T14:19:05Z",
+    "status": "excluded"
+  },
+  "groq:mixtral-8x7b-32768": {
+    "last_checked": null,
+    "status": "excluded"
+  },
+  "google-vertex-anthropic:claude-sonnet-4@20250514": {
+    "last_checked": null,
+    "status": "excluded"
+  },
+  "google-vertex-anthropic:claude-3-5-haiku@20241022": {
+    "last_checked": null,
+    "status": "excluded"
+  },
+  "amazon_bedrock:anthropic.claude-3-5-sonnet-20240620-v1:0": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "fail"
+  },
+  "azure:codex-mini": {
+    "last_checked": "2025-11-29T00:10:11Z",
+    "status": "pass"
+  },
+  "openrouter:openai/gpt-5-chat": {
+    "last_checked": "2025-10-15T16:41:01Z",
+    "status": "excluded"
+  },
+  "anthropic:claude-opus-4": {
+    "last_checked": "2025-11-14T20:38:43Z",
+    "status": "fail"
+  },
+  "groq:gemma-7b-it": {
+    "last_checked": null,
+    "status": "excluded"
+  },
+  "openrouter:x-ai/grok-3-mini-beta": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
+  },
+  "openrouter:anthropic/claude-opus-4": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
+  },
+  "openrouter:openrouter/horizon-beta": {
+    "last_checked": "2025-10-05T13:38:18Z",
+    "status": "excluded"
+  },
+  "azure:o1-preview": {
+    "last_checked": "2025-11-27T07:56:33Z",
+    "status": "fail"
+  },
+  "openai:gpt-5-image": {
+    "last_checked": "2025-11-14T20:41:35Z",
+    "status": "fail"
+  },
+  "google:gemma-3n-e4b-it:free": {
+    "last_checked": "2025-11-14T20:42:05Z",
+    "status": "fail"
+  },
+  "amazon_bedrock:anthropic.claude-sonnet-4-5-20250929-v1:0": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "fail"
+  },
+  "azure:gpt-4.1": {
+    "last_checked": "2025-11-28T23:42:44Z",
+    "status": "pass"
+  },
+  "amazon_bedrock:qwen.qwen3-32b-v1:0": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "fail"
+  },
+  "google_vertex_anthropic:claude-3-5-sonnet@20241022": {
+    "last_checked": "2025-11-02T20:49:11Z",
+    "status": "fail"
+  },
+  "azure:gpt-4.1-mini": {
+    "last_checked": "2025-11-28T23:42:44Z",
+    "status": "pass"
+  },
+  "openrouter:minimax/minimax-01": {
+    "last_checked": "2025-11-14T20:42:18Z",
+    "status": "fail"
+  },
+  "openrouter:nousresearch/hermes-4-405b": {
+    "last_checked": "2025-10-15T17:00:22Z",
+    "status": "excluded"
+  },
+  "google:gemini-flash-lite-latest": {
+    "last_checked": "2025-10-03T23:26:57Z",
+    "status": "excluded"
+  },
+  "cerebras:qwen-3-235b-a22b-instruct-2507": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
+  },
+  "openai:o3-mini-high": {
+    "last_checked": "2025-11-14T20:41:35Z",
+    "status": "fail"
+  },
+  "openrouter:google/gemini-2.0-flash-001": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
+  },
+  "google:gemini-2.5-flash-preview-04-17": {
+    "last_checked": "2025-10-03T23:26:57Z",
+    "status": "excluded"
+  },
+  "anthropic:claude-opus-4.1": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
+  },
+  "azure:gpt-5-nano": {
+    "last_checked": "2025-11-28T23:44:55Z",
+    "status": "pass"
+  },
+  "openrouter:deepseek/deepseek-r1:free": {
+    "last_checked": "2025-10-07T14:01:22Z",
+    "status": "excluded"
+  },
+  "openrouter:rekaai/reka-flash-3": {
+    "last_checked": "2025-10-15T16:40:53Z",
+    "status": "excluded"
+  },
+  "openai:gpt-3.5-turbo-16k": {
+    "last_checked": "2025-11-14T20:41:35Z",
+    "status": "fail"
+  },
+  "groq:llama-3.3-70b-specdec": {
+    "last_checked": null,
+    "status": "excluded"
+  },
+  "openrouter:tngtech/deepseek-r1t2-chimera:free": {
+    "last_checked": "2025-10-07T14:19:05Z",
+    "status": "excluded"
+  },
+  "google:gemini-1.5-flash": {
+    "last_checked": "2025-10-03T23:26:57Z",
+    "status": "excluded"
+  },
+  "openrouter:qwen/qwq-32b:free": {
+    "last_checked": "2025-10-07T14:01:22Z",
+    "status": "excluded"
+  },
+  "openrouter:deepseek/deepseek-v3.1-terminus": {
+    "last_checked": "2025-11-14T20:42:18Z",
+    "status": "fail"
+  },
+  "openai:o1-preview": {
+    "last_checked": "2025-10-05T01:24:56Z",
+    "status": "excluded"
+  },
+  "zai:glm-4.5-air": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
+  },
+  "google-vertex-anthropic:claude-3-7-sonnet@20250219": {
+    "last_checked": null,
+    "status": "excluded"
+  },
+  "google_vertex_anthropic:claude-sonnet-4-5@20250929": {
+    "last_checked": "2025-11-02T20:54:33Z",
+    "status": "fail"
+  },
+  "groq:llama3-groq-8b-8192-tool-use-preview": {
+    "last_checked": null,
+    "status": "excluded"
+  },
+  "openai:gpt-3.5-turbo-instruct": {
+    "last_checked": "2025-11-14T20:41:35Z",
+    "status": "fail"
+  },
+  "openrouter:meta-llama/llama-3.2-11b-vision-instruct": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
+  },
+  "groq:moonshotai/kimi-k2-instruct": {
+    "last_checked": "2025-10-03T17:50:32Z",
+    "status": "excluded"
+  },
+  "azure:text-embedding-3-large": {
+    "last_checked": "2025-12-01T20:52:06Z",
+    "status": "pass"
+  },
+  "openrouter:z-ai/glm-4.5": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
+  },
+  "google:gemma-3n-e2b-it:free": {
+    "last_checked": "2025-11-14T20:42:05Z",
+    "status": "fail"
+  },
+  "cerebras:zai-glm-4.6": {
+    "last_checked": "2025-11-14T20:46:56Z",
+    "status": "fail"
+  },
+  "openrouter:mistralai/mistral-medium-3.1": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
+  },
+  "openrouter:x-ai/grok-4": {
+    "last_checked": "2025-10-15T16:41:09Z",
+    "status": "excluded"
+  },
+  "groq:openai/gpt-oss-20b": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
+  },
+  "openrouter:deepseek/deepseek-v3-base:free": {
+    "last_checked": "2025-10-07T14:01:22Z",
+    "status": "excluded"
+  },
+  "openrouter:x-ai/grok-4-fast:free": {
+    "last_checked": "2025-10-07T14:01:22Z",
+    "status": "excluded"
+  },
+  "openrouter:microsoft/mai-ds-r1:free": {
+    "last_checked": "2025-10-07T14:19:05Z",
+    "status": "excluded"
+  },
+  "openrouter:sarvamai/sarvam-m:free": {
+    "last_checked": "2025-10-07T14:01:22Z",
+    "status": "excluded"
+  },
+  "azure:deepseek-r1-0528": {
+    "last_checked": "2025-12-02T00:12:38Z",
+    "status": "pass"
+  },
+  "amazon_bedrock:meta.llama3-1-8b-instruct-v1:0": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "fail"
+  },
+  "openai:o3-2025-04-16": {
+    "last_checked": "2026-05-29T19:15:19Z",
+    "status": "pass"
+  },
+  "amazon_bedrock:amazon.nova-pro-v1:0": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "fail"
+  },
+  "anthropic:claude-2.0": {
+    "last_checked": null,
+    "status": "excluded"
+  },
+  "groq:mistral-saba-24b": {
+    "last_checked": "2025-10-03T17:50:32Z",
+    "status": "excluded"
+  },
+  "openrouter:google/gemma-3-27b-it": {
+    "last_checked": "2025-10-07T14:30:29Z",
+    "status": "excluded"
+  },
+  "google_vertex_anthropic:claude-3-7-sonnet@20250219": {
+    "last_checked": "2025-11-02T20:49:11Z",
+    "status": "fail"
+  },
+  "google:gemini-2.5-pro": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
+  },
+  "openrouter:openai/gpt-4.1": {
+    "last_checked": "2025-10-15T16:40:44Z",
+    "status": "excluded"
+  },
+  "openrouter:openai/gpt-5": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
+  },
+  "zai_coder:glm-4.5": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
+  },
+  "groq:moonshotai/kimi-k2-instruct-0905": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
+  },
+  "groq:openai/gpt-oss-120b": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
+  },
+  "openrouter:anthropic/claude-3.5-haiku": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
+  },
+  "openai:gpt-5-pro": {
+    "last_checked": "2025-11-14T22:28:18Z",
+    "status": "fail"
+  },
+  "openrouter:minimax/minimax-m2:free": {
+    "last_checked": "2025-11-14T20:42:18Z",
+    "status": "fail"
+  },
+  "openrouter:qwen/qwen2.5-vl-72b-instruct": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
+  },
+  "openrouter:google/gemini-2.5-flash": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
+  },
+  "google:gemini-2.5-flash-lite-preview-06-17": {
+    "last_checked": "2025-10-03T23:26:57Z",
+    "status": "excluded"
+  },
+  "openai:gpt-5-nano-2025-08-07": {
+    "last_checked": "2026-05-29T19:22:04Z",
+    "status": "pass"
+  },
+  "google:gemini-1.0-pro-002": {
+    "last_checked": null,
+    "status": "excluded"
+  },
+  "azure:o3": {
+    "last_checked": "2025-11-27T07:56:33Z",
+    "status": "fail"
+  },
+  "openrouter:openrouter/sonoma-dusk-alpha": {
+    "last_checked": "2025-10-05T13:38:18Z",
+    "status": "excluded"
+  },
+  "anthropic:claude-1.2": {
+    "last_checked": null,
+    "status": "excluded"
+  },
+  "amazon_bedrock:anthropic.claude-3-sonnet-20240229-v1:0": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "fail"
+  },
+  "anthropic:claude-2.1": {
+    "last_checked": null,
+    "status": "excluded"
+  },
+  "openai:chatgpt-4o-latest": {
+    "last_checked": "2025-11-14T20:41:35Z",
+    "status": "fail"
+  },
+  "anthropic:claude-opus-4-8": {
+    "last_checked": "2026-05-28T18:32:50Z",
+    "status": "pass"
+  },
+  "openai:gpt-oss-20b:free": {
+    "last_checked": "2025-11-14T20:41:35Z",
+    "status": "fail"
+  },
+  "groq:llama3-8b-8192": {
+    "last_checked": "2025-10-03T17:50:32Z",
+    "status": "excluded"
+  },
+  "google:gemini-1.5-flash-8b": {
+    "last_checked": "2025-10-03T23:26:57Z",
+    "status": "excluded"
+  },
+  "xai:grok-4.20-0309-reasoning": {
+    "last_checked": "2026-05-29T23:01:24Z",
+    "status": "pass"
+  },
+  "openrouter:moonshotai/kimi-k2-0905": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
+  },
+  "anthropic:claude-sonnet-4-20250514": {
+    "last_checked": "2026-05-29T18:00:59Z",
+    "status": "pass"
+  },
+  "google:gemini-2.0-flash": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
+  },
+  "openrouter:cognitivecomputations/dolphin3.0-r1-mistral-24b": {
+    "last_checked": "2025-10-07T14:01:22Z",
+    "status": "excluded"
+  },
+  "openrouter:z-ai/glm-4.5-air:free": {
+    "last_checked": "2025-10-07T14:19:05Z",
+    "status": "excluded"
+  },
+  "azure:gpt-4-32k": {
+    "last_checked": "2025-11-27T07:56:33Z",
+    "status": "fail"
+  },
+  "amazon_bedrock:anthropic.claude-haiku-4-5-20251001-v1:0": {
+    "last_checked": "2025-11-16T06:51:43Z",
+    "status": "fail"
+  },
+  "google:gemini-embedding-001": {
+    "last_checked": "2025-10-04T12:50:52Z",
+    "status": "pass"
+  },
+  "openai:o4-mini-deep-research": {
+    "last_checked": "2025-10-15T11:48:18Z",
+    "status": "excluded"
+  },
+  "openai:o3-deep-research": {
+    "last_checked": "2025-10-15T11:48:18Z",
+    "status": "excluded"
+  },
+  "openai:gpt-4o:extended": {
+    "last_checked": "2025-11-14T20:41:35Z",
+    "status": "fail"
+  },
+  "xai:grok-3-mini-fast-latest": {
+    "last_checked": "2026-05-29T23:05:33Z",
+    "status": "pass"
+  },
+  "amazon_bedrock:cohere.command-r-plus-v1:0": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
+  },
+  "groq:llama-3.2-90b-vision-preview": {
+    "last_checked": null,
+    "status": "excluded"
+  },
+  "openrouter:openai/o4-mini": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
+  },
+  "openai:gpt-5-mini": {
+    "last_checked": "2026-05-29T18:36:35Z",
+    "status": "pass"
+  },
+  "openrouter:qwen/qwen3-235b-a22b:free": {
+    "last_checked": "2025-10-07T14:24:01Z",
+    "status": "excluded"
+  },
+  "google:gemma-3-12b-it:free": {
+    "last_checked": "2025-11-14T20:42:05Z",
+    "status": "fail"
+  },
+  "anthropic:claude-1.0": {
+    "last_checked": null,
+    "status": "excluded"
+  },
+  "openrouter:google/gemma-3-12b-it": {
+    "last_checked": "2025-10-07T14:30:26Z",
+    "status": "excluded"
+  },
+  "anthropic:claude-haiku-4-5": {
+    "last_checked": "2025-11-15T18:33:31Z",
+    "status": "pass"
+  },
+  "openrouter:mistralai/devstral-small-2505": {
+    "last_checked": "2025-10-15T17:00:22Z",
+    "status": "excluded"
+  },
+  "openai:gpt-4o-mini-2024-07-18": {
+    "last_checked": "2025-11-14T20:41:35Z",
+    "status": "fail"
+  },
+  "google:gemma-3-27b-it:free": {
+    "last_checked": "2025-11-14T20:42:05Z",
+    "status": "fail"
+  },
+  "openai:gpt-oss-120b:exacto": {
+    "last_checked": "2025-11-14T20:41:35Z",
+    "status": "fail"
+  },
+  "azure:deepseek-v3-0324": {
+    "last_checked": "2025-12-02T00:12:38Z",
+    "status": "pass"
+  },
+  "openrouter:deepseek/deepseek-chat-v3-0324": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
+  },
+  "azure:gpt-4o-mini": {
+    "last_checked": "2025-11-28T23:42:53Z",
+    "status": "pass"
   },
   "zai_coder:glm-4.5v": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
+  },
+  "groq:meta-llama/llama-4-maverick-17b-128e-instruct": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
+  },
+  "xai:grok-4.20-0309-non-reasoning": {
+    "last_checked": "2026-05-29T23:00:18Z",
+    "status": "pass"
+  },
+  "google_vertex_anthropic:claude-sonnet-4@20250514": {
+    "last_checked": "2025-11-02T20:49:11Z",
+    "status": "fail"
+  },
+  "azure:gpt-3.5-turbo-0301": {
+    "last_checked": "2025-11-27T07:56:33Z",
+    "status": "fail"
+  },
+  "openrouter:nousresearch/deephermes-3-llama-3-8b-preview": {
+    "last_checked": "2025-10-07T14:01:22Z",
+    "status": "excluded"
+  },
+  "groq:deepseek-r1-distill-qwen-32b": {
+    "last_checked": null,
+    "status": "excluded"
+  },
+  "amazon_bedrock:amazon.nova-lite-v1:0": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "fail"
+  },
+  "azure:gpt-3.5-turbo-0125": {
+    "last_checked": "2025-11-27T07:56:33Z",
+    "status": "fail"
+  },
+  "anthropic:claude-opus-4-0": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
+  },
+  "google:gemini-flash-latest": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
+  },
+  "amazon_bedrock:meta.llama3-2-3b-instruct-v1:0": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "fail"
+  },
+  "openai:gpt-5-image-mini": {
+    "last_checked": "2025-11-14T20:41:35Z",
+    "status": "fail"
+  },
+  "amazon_bedrock:meta.llama4-maverick-17b-instruct-v1:0": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "fail"
+  },
+  "xai:grok-beta": {
+    "last_checked": null,
+    "status": "excluded"
+  },
+  "azure:claude-opus-4-5": {
+    "last_checked": "2025-11-28T23:41:19Z",
+    "status": "pass"
+  },
+  "openrouter:meta-llama/llama-3.3-70b-instruct:free": {
+    "last_checked": "2025-10-07T14:19:05Z",
+    "status": "excluded"
+  },
+  "openrouter:mistralai/codestral-2508": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
+  },
+  "openrouter:x-ai/grok-code-fast-1": {
+    "last_checked": "2025-10-15T16:40:53Z",
+    "status": "excluded"
+  },
+  "openrouter:deepseek/deepseek-r1-0528-qwen3-8b:free": {
+    "last_checked": "2025-10-07T14:19:05Z",
+    "status": "excluded"
+  },
+  "openrouter:openai/gpt-oss-20b": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
+  },
+  "azure:gpt-5.1-chat": {
+    "last_checked": "2025-11-28T23:45:19Z",
+    "status": "pass"
+  },
+  "openrouter:anthropic/claude-3.7-sonnet": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
+  },
+  "anthropic:claude-opus-4-20250514": {
+    "last_checked": "2026-05-29T17:58:57Z",
+    "status": "pass"
+  },
+  "minimax:MiniMax-M2": {
+    "last_checked": "2026-05-02T09:30:31Z",
+    "status": "pass"
+  },
+  "openrouter:qwen/qwen3-235b-a22b-07-25": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
+  },
+  "anthropic:claude-opus-4-5-20251101": {
+    "last_checked": "2026-05-29T17:43:21Z",
+    "status": "pass"
+  },
+  "openai:gpt-4o-mini": {
+    "last_checked": "2026-05-29T18:21:38Z",
+    "status": "pass"
+  },
+  "azure:o4-mini": {
+    "last_checked": "2025-11-28T23:48:50Z",
+    "status": "pass"
+  },
+  "amazon_bedrock:deepseek.r1-v1:0": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "fail"
+  },
+  "openrouter:anthropic/claude-sonnet-4.5": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
+  },
+  "anthropic:claude-opus-4-5": {
+    "last_checked": "2026-05-29T17:41:15Z",
+    "status": "pass"
+  },
+  "openrouter:qwen/qwen3-max": {
+    "last_checked": "2025-10-15T16:41:01Z",
+    "status": "excluded"
+  },
+  "zai:glm-4.5v": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
+  },
+  "anthropic:claude-opus-4-1-20250805": {
+    "last_checked": "2026-05-29T17:52:31Z",
+    "status": "pass"
+  },
+  "azure:o1-mini": {
+    "last_checked": "2025-11-27T07:56:33Z",
+    "status": "fail"
+  },
+  "openrouter:x-ai/grok-4-fast": {
+    "last_checked": "2025-10-15T16:28:25Z",
+    "status": "excluded"
+  },
+  "xai:grok-3-mini-fast": {
+    "last_checked": "2026-05-29T23:05:11Z",
+    "status": "pass"
+  },
+  "openai:o4-mini-high": {
+    "last_checked": "2025-11-14T20:41:35Z",
+    "status": "fail"
+  },
+  "zai:glm-4.5-flash": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
+  },
+  "openai:gpt-4.1": {
+    "last_checked": "2026-05-29T18:31:35Z",
+    "status": "pass"
+  },
+  "google:gemini-2.5-flash-lite-preview-09-2025": {
+    "last_checked": "2025-10-03T23:26:57Z",
+    "status": "excluded"
+  },
+  "openrouter:openai/gpt-5-image": {
+    "last_checked": "2025-11-14T20:42:18Z",
+    "status": "fail"
+  },
+  "anthropic:claude-1.1": {
+    "last_checked": null,
+    "status": "excluded"
+  },
+  "openrouter:qwen/qwen3-8b:free": {
+    "last_checked": "2025-10-07T14:24:01Z",
+    "status": "excluded"
+  },
+  "cerebras:qwen-3-coder-480b": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
+  },
+  "google:gemini-2.5-pro-preview": {
+    "last_checked": "2025-11-14T20:42:49Z",
+    "status": "fail"
+  },
+  "openrouter:qwen/qwen3-next-80b-a3b-thinking": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
+  },
+  "minimax:MiniMax-M2.7": {
+    "last_checked": "2026-05-02T09:30:31Z",
+    "status": "pass"
+  },
+  "openrouter:qwen/qwen-2.5-coder-32b-instruct": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
+  },
+  "openrouter:openai/gpt-oss-120b:exacto": {
+    "last_checked": "2025-11-14T20:42:18Z",
+    "status": "fail"
+  },
+  "google:gemini-1.5-flash-002": {
+    "last_checked": null,
+    "status": "excluded"
+  },
+  "openrouter:google/gemma-2-9b-it:free": {
+    "last_checked": "2025-10-05T13:34:46Z",
+    "status": "excluded"
+  },
+  "groq:deepseek-r1-distill-llama-70b": {
+    "last_checked": "2025-10-07T19:52:39Z",
+    "status": "excluded"
+  },
+  "openrouter:google/gemini-2.5-flash-preview-09-2025": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
+  },
+  "openrouter:z-ai/glm-4.6:exacto": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
+  },
+  "anthropic:claude-opus-4-1": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
+  },
+  "openrouter:mistralai/mistral-medium-3": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
+  },
+  "openrouter:openai/gpt-5-pro": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
+  },
+  "azure:gpt-4-turbo": {
+    "last_checked": "2025-11-27T07:56:33Z",
+    "status": "fail"
+  },
+  "openrouter:thudm/glm-z1-32b:free": {
+    "last_checked": "2025-10-07T14:01:22Z",
+    "status": "excluded"
+  },
+  "openai:gpt-4-turbo-preview": {
+    "last_checked": "2025-11-14T20:41:35Z",
+    "status": "fail"
+  },
+  "openrouter:google/gemini-2.5-pro": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
+  },
+  "openrouter:qwen/qwen3-30b-a3b-thinking-2507": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
+  },
+  "openrouter:qwen/qwen3-235b-a22b-thinking-2507": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
+  },
+  "google:gemini-1.5-pro-001": {
+    "last_checked": null,
+    "status": "excluded"
+  },
+  "cerebras:qwen-3-235b-a22b-thinking-2507": {
+    "last_checked": "2025-10-27T21:05:14Z",
+    "status": "excluded"
+  },
+  "google:gemini-2.0-flash-exp:free": {
+    "last_checked": "2025-11-14T20:42:49Z",
+    "status": "fail"
+  },
+  "openrouter:google/gemini-3-flash-preview": {
+    "last_checked": "2025-12-23T21:34:38Z",
+    "status": "pass"
+  },
+  "openai:text-embedding-3-large": {
+    "last_checked": "2026-05-29T20:39:25Z",
+    "status": "pass"
+  },
+  "groq:distil-whisper-large-v3-en": {
+    "last_checked": null,
+    "status": "excluded"
+  },
+  "openrouter:openai/gpt-4o-mini": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
+  },
+  "openai:gpt-oss-safeguard-20b": {
+    "last_checked": "2025-11-14T20:41:35Z",
+    "status": "fail"
+  },
+  "openrouter:qwen/qwen3-235b-a22b-07-25:free": {
+    "last_checked": "2025-10-07T14:01:22Z",
+    "status": "excluded"
+  },
+  "openrouter:qwen/qwen3-32b:free": {
+    "last_checked": "2025-10-07T14:24:01Z",
+    "status": "excluded"
+  },
+  "openrouter:deepseek/deepseek-r1-distill-qwen-14b": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
+  },
+  "google:gemini-1.5-flash-001": {
+    "last_checked": null,
+    "status": "excluded"
+  },
+  "anthropic:claude-opus-4-7": {
+    "last_checked": "2026-05-29T17:47:19Z",
+    "status": "pass"
+  },
+  "google:gemma-3-4b-it": {
+    "last_checked": "2025-11-14T20:42:05Z",
+    "status": "fail"
+  },
+  "openai:gpt-4o-2024-08-06": {
+    "last_checked": "2026-05-29T19:13:17Z",
+    "status": "pass"
+  },
+  "groq:llama-3.2-90b-text-preview": {
+    "last_checked": null,
+    "status": "excluded"
+  },
+  "openai:gpt-4.1-2025-04-14": {
+    "last_checked": "2026-05-29T19:12:30Z",
+    "status": "pass"
+  },
+  "azure:gpt-4": {
+    "last_checked": "2025-11-27T07:56:33Z",
+    "status": "fail"
+  },
+  "amazon_bedrock:meta.llama4-scout-17b-instruct-v1:0": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "fail"
+  },
+  "azure:deepseek-r1": {
+    "last_checked": "2025-12-02T00:12:38Z",
+    "status": "pass"
+  },
+  "openai:gpt-4o-search-preview": {
+    "last_checked": "2025-11-14T20:41:35Z",
+    "status": "fail"
+  },
+  "google_vertex_anthropic:claude-opus-4-1@20250805": {
+    "last_checked": "2025-11-02T20:49:11Z",
+    "status": "fail"
+  },
+  "openai:gpt-4o": {
+    "last_checked": "2026-05-29T18:26:30Z",
+    "status": "pass"
+  },
+  "google:gemma-2-9b-it": {
+    "last_checked": "2025-11-14T20:42:05Z",
+    "status": "fail"
+  },
+  "azure:gpt-4-turbo-vision": {
+    "last_checked": "2025-11-27T07:56:33Z",
+    "status": "fail"
+  },
+  "groq:qwen-2.5-32b": {
+    "last_checked": null,
+    "status": "excluded"
+  },
+  "azure:gpt-4.1-nano": {
+    "last_checked": "2025-11-28T23:42:44Z",
+    "status": "pass"
+  },
+  "openrouter:openai/gpt-oss-120b": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
+  },
+  "openai:gpt-4o-2024-11-20": {
+    "last_checked": "2026-05-29T19:13:39Z",
+    "status": "pass"
+  },
+  "openrouter:nousresearch/hermes-4-70b": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
+  },
+  "google:gemini-embedding-exp": {
+    "last_checked": null,
+    "status": "excluded"
+  },
+  "groq:llama3-70b-8192": {
+    "last_checked": "2025-10-03T18:07:57Z",
+    "status": "excluded"
+  },
+  "openrouter:polaris-alpha": {
+    "last_checked": "2025-11-14T20:48:59Z",
+    "status": "fail"
+  },
+  "azure:claude-sonnet-4-5": {
+    "last_checked": "2025-11-28T23:41:19Z",
+    "status": "pass"
+  },
+  "openrouter:google/gemini-2.5-pro-preview-05-06": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
+  },
+  "amazon_bedrock:qwen.qwen3-235b-a22b-2507-v1:0": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "fail"
+  },
+  "openrouter:moonshotai/kimi-k2:free": {
+    "last_checked": "2025-10-07T14:19:05Z",
+    "status": "excluded"
+  },
+  "google:gemini-2.5-pro-preview-tts": {
+    "last_checked": "2025-10-15T16:02:32Z",
+    "status": "excluded"
+  },
+  "xai:grok-4.3": {
+    "last_checked": "2026-05-29T22:59:25Z",
+    "status": "pass"
+  },
+  "groq:qwen/qwen3-32b": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
+  },
+  "google:gemma-3-27b-it": {
+    "last_checked": "2025-11-14T20:42:05Z",
+    "status": "fail"
+  },
+  "google_vertex_anthropic:claude-3-5-haiku@20241022": {
+    "last_checked": "2025-11-02T20:49:11Z",
+    "status": "fail"
+  },
+  "azure:gpt-5.1-codex-mini": {
+    "last_checked": "2025-11-29T00:11:05Z",
+    "status": "pass"
+  },
+  "groq:meta-llama/llama-4-scout-17b-16e-instruct": {
+    "last_checked": "2025-11-14T20:39:51Z",
+    "status": "fail"
+  },
+  "amazon_bedrock:anthropic.claude-3-haiku-20240307-v1:0": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "fail"
+  },
+  "openrouter:mistralai/mistral-small-3.1-24b-instruct": {
+    "last_checked": "2025-10-15T17:00:22Z",
+    "status": "excluded"
+  },
+  "openrouter:cognitivecomputations/dolphin3.0-mistral-24b": {
+    "last_checked": "2025-10-07T14:01:22Z",
+    "status": "excluded"
+  },
+  "openrouter:anthropic/claude-haiku-4.5": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
+  },
+  "openrouter:moonshotai/kimi-k2-thinking": {
+    "last_checked": "2025-11-14T20:42:18Z",
+    "status": "fail"
+  },
+  "anthropic:claude-1.3": {
+    "last_checked": null,
+    "status": "excluded"
+  },
+  "google:gemini-1.0-pro-vision-001": {
+    "last_checked": null,
+    "status": "excluded"
+  },
+  "minimax:MiniMax-M2.7-highspeed": {
+    "last_checked": "2026-05-02T09:30:31Z",
+    "status": "pass"
+  },
+  "amazon_bedrock:meta.llama3-3-70b-instruct-v1:0": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "fail"
+  },
+  "openrouter:mistralai/mistral-small-3.2-24b-instruct:free": {
+    "last_checked": "2025-10-07T14:19:05Z",
+    "status": "excluded"
+  },
+  "openrouter:mistralai/devstral-small-2505:free": {
+    "last_checked": "2025-10-07T14:19:05Z",
+    "status": "excluded"
+  },
+  "anthropic:claude-sonnet-4-6": {
+    "last_checked": "2026-05-29T17:49:21Z",
+    "status": "pass"
+  },
+  "groq:llama-3.1-8b-instant": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
+  },
+  "amazon_bedrock:amazon.nova-premier-v1:0": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "fail"
+  },
+  "groq:gemma2-9b-it": {
+    "last_checked": "2025-10-03T17:50:32Z",
+    "status": "excluded"
+  },
+  "openrouter:mistralai/mistral-7b-instruct:free": {
+    "last_checked": "2025-10-07T14:19:05Z",
+    "status": "excluded"
+  },
+  "azure:gpt-5-mini": {
+    "last_checked": "2025-11-28T23:44:12Z",
+    "status": "pass"
+  },
+  "minimax:MiniMax-M2.1": {
+    "last_checked": "2026-05-02T09:30:31Z",
+    "status": "pass"
+  },
+  "amazon_bedrock:anthropic.claude-v2:1": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "fail"
+  },
+  "azure:o3-mini": {
+    "last_checked": "2025-11-28T23:47:53Z",
+    "status": "pass"
+  },
+  "groq:qwen-qwq-32b": {
+    "last_checked": "2025-10-03T17:50:32Z",
+    "status": "excluded"
+  },
+  "openrouter:google/gemma-3n-e4b-it": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
+  },
+  "anthropic:claude-sonnet-4-0": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
+  },
+  "amazon_bedrock:meta.llama3-8b-instruct-v1:0": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "fail"
+  },
+  "google:gemma-3-12b-it": {
+    "last_checked": "2025-11-14T20:42:05Z",
+    "status": "fail"
+  },
+  "azure:gpt-3.5-turbo-instruct": {
+    "last_checked": "2025-11-27T07:56:33Z",
+    "status": "fail"
+  },
+  "openrouter:x-ai/grok-3-beta": {
+    "last_checked": "2025-11-14T20:42:18Z",
+    "status": "fail"
+  },
+  "openrouter:z-ai/glm-4.5-air": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
+  },
+  "amazon_bedrock:anthropic.claude-3-7-sonnet-20250219-v1:0": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "fail"
+  },
+  "openai:gpt-4.1-mini": {
+    "last_checked": "2026-05-29T18:31:03Z",
+    "status": "pass"
+  },
+  "openrouter:openai/gpt-5-nano": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
+  },
+  "azure:claude-haiku-4-5": {
+    "last_checked": "2025-11-28T23:41:19Z",
+    "status": "pass"
+  },
+  "amazon_bedrock:ai21.jamba-1-5-mini-v1:0": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "fail"
+  },
+  "azure:gpt-5": {
+    "last_checked": "2025-11-27T09:23:31Z",
+    "status": "fail"
+  },
+  "groq:llava-v1.5-7b-4096-preview": {
+    "last_checked": null,
+    "status": "excluded"
+  },
+  "azure:claude-opus-4-1": {
+    "last_checked": "2025-11-28T23:41:19Z",
+    "status": "pass"
+  },
+  "openrouter:auto": {
+    "last_checked": "2025-11-14T20:42:18Z",
+    "status": "fail"
+  },
+  "groq:deepseek-r1-distill-llama-70b-specdec": {
+    "last_checked": null,
+    "status": "excluded"
+  },
+  "google:gemini-2.0-flash-exp": {
+    "last_checked": null,
+    "status": "pass"
+  },
+  "google:gemini-2.0-flash-lite-001": {
+    "last_checked": "2025-11-14T20:42:49Z",
+    "status": "fail"
+  },
+  "azure:gpt-3.5-turbo-1106": {
+    "last_checked": "2025-11-27T07:56:33Z",
+    "status": "fail"
+  },
+  "xai:grok-4-fast": {
+    "last_checked": "2026-05-29T23:07:36Z",
+    "status": "pass"
+  },
+  "anthropic:claude-sonnet-4-5": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
+  },
+  "anthropic:claude-instant-1.0": {
+    "last_checked": null,
+    "status": "excluded"
+  },
+  "openrouter:featherless/qwerky-72b": {
+    "last_checked": "2025-10-07T14:01:22Z",
+    "status": "excluded"
+  },
+  "azure:text-embedding-ada-002": {
+    "last_checked": "2025-12-01T20:51:43Z",
+    "status": "pass"
+  },
+  "xai:grok-4.20-non-reasoning": {
+    "last_checked": "2026-05-29T23:00:00Z",
+    "status": "pass"
+  },
+  "groq:llama-3.2-1b-preview": {
+    "last_checked": null,
+    "status": "excluded"
+  },
+  "google:gemini-2.5-pro-preview-05-06": {
+    "last_checked": "2025-10-03T23:26:57Z",
+    "status": "excluded"
+  },
+  "amazon_bedrock:anthropic.claude-3-opus-20240229-v1:0": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "fail"
+  },
+  "openrouter:x-ai/grok-3": {
+    "last_checked": "2025-11-14T20:42:18Z",
+    "status": "fail"
+  },
+  "anthropic:claude-instant-1.2": {
+    "last_checked": null,
+    "status": "excluded"
+  },
+  "xai:grok-4": {
+    "last_checked": "2026-05-29T23:04:17Z",
+    "status": "pass"
+  },
+  "openrouter:anthropic/claude-sonnet-4": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
+  },
+  "azure:mai-ds-r1": {
+    "last_checked": "2025-12-02T00:11:42Z",
+    "status": "pass"
+  },
+  "zai_coder:glm-4.5-air": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
+  },
+  "openrouter:qwen/qwen3-next-80b-a3b-instruct": {
+    "last_checked": "2025-11-14T20:42:18Z",
+    "status": "fail"
+  },
+  "openrouter:google/gemma-3n-e4b-it:free": {
+    "last_checked": "2025-10-07T14:30:27Z",
+    "status": "excluded"
+  },
+  "amazon_bedrock:amazon.nova-micro-v1:0": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "fail"
+  },
+  "google:gemini-2.5-flash-lite": {
+    "last_checked": "2025-10-03T23:26:57Z",
+    "status": "excluded"
+  },
+  "openrouter:z-ai/glm-4.6": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
+  },
+  "openrouter:qwen/qwen3-coder:exacto": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
+  },
+  "azure:gpt-4o": {
+    "last_checked": "2025-11-28T23:42:53Z",
+    "status": "pass"
+  },
+  "openrouter:qwen/qwen3-coder:free": {
+    "last_checked": "2025-10-07T14:24:01Z",
+    "status": "excluded"
+  },
+  "google:gemini-embedding-exp-03-07": {
+    "last_checked": null,
+    "status": "excluded"
+  },
+  "cerebras:gpt-oss-120b": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
+  },
+  "amazon_bedrock:anthropic.claude-instant-v1": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "fail"
+  },
+  "groq:llama-3.1-70b-versatile": {
+    "last_checked": null,
+    "status": "excluded"
+  },
+  "google:gemini-2.5-flash": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
+  },
+  "google:gemini-live-2.5-flash-preview-native-audio": {
+    "last_checked": "2025-10-03T23:26:57Z",
+    "status": "excluded"
+  },
+  "anthropic:claude-haiku-4.5": {
+    "last_checked": "2025-11-15T18:33:43Z",
+    "status": "pass"
+  },
+  "openrouter:qwen/qwen3-14b:free": {
+    "last_checked": "2025-10-07T14:24:01Z",
+    "status": "excluded"
+  },
+  "amazon_bedrock:qwen.qwen3-coder-30b-a3b-v1:0": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "fail"
+  },
+  "amazon_bedrock:meta.llama3-2-11b-instruct-v1:0": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "fail"
+  },
+  "azure:gpt-5.1-codex": {
+    "last_checked": "2025-11-27T09:23:31Z",
+    "status": "fail"
+  },
+  "openai:gpt-5-chat": {
+    "last_checked": "2025-11-14T20:41:35Z",
+    "status": "fail"
+  },
+  "openrouter:google/gemini-2.0-flash-exp:free": {
+    "last_checked": "2025-10-07T14:01:22Z",
+    "status": "excluded"
+  },
+  "google:gemini-1.0-pro-001": {
+    "last_checked": null,
+    "status": "excluded"
+  },
+  "groq:llama-guard-3-8b": {
+    "last_checked": "2025-10-03T17:50:32Z",
+    "status": "excluded"
+  },
+  "google_vertex_anthropic:claude-opus-4@20250514": {
+    "last_checked": "2025-11-02T20:49:11Z",
+    "status": "fail"
+  },
+  "groq:llama-3.3-70b-versatile": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
+  },
+  "openai:gpt-4-0314": {
+    "last_checked": "2025-11-14T20:41:35Z",
+    "status": "fail"
+  },
+  "groq:llama-3.1-70b-specdec": {
+    "last_checked": null,
+    "status": "excluded"
+  },
+  "openrouter:google/gemini-2.5-flash-lite": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
+  },
+  "google:gemini-2.5-pro-preview-06-05": {
+    "last_checked": "2025-10-03T23:26:57Z",
+    "status": "excluded"
   },
   "zai_coder:glm-4.6": {
-    "status": "pass",
-    "last_checked": "2025-11-14T20:51:00Z"
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
+  },
+  "openrouter:openrouter/cypher-alpha:free": {
+    "last_checked": "2025-10-05T13:38:18Z",
+    "status": "excluded"
+  },
+  "openrouter:qwen/qwen2.5-vl-32b-instruct:free": {
+    "last_checked": "2025-10-07T14:24:01Z",
+    "status": "excluded"
+  },
+  "openrouter:qwen/qwen3-30b-a3b:free": {
+    "last_checked": "2025-10-07T14:24:01Z",
+    "status": "excluded"
+  },
+  "zai:glm-4.5": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
+  },
+  "azure:gpt-5-codex": {
+    "last_checked": "2025-11-27T09:23:31Z",
+    "status": "fail"
+  },
+  "groq:llama3-groq-70b-8192-tool-use-preview": {
+    "last_checked": null,
+    "status": "excluded"
+  },
+  "groq:llama-3.2-11b-text-preview": {
+    "last_checked": null,
+    "status": "excluded"
+  },
+  "google-vertex-anthropic:claude-opus-4@20250514": {
+    "last_checked": null,
+    "status": "excluded"
+  },
+  "amazon_bedrock:meta.llama3-2-90b-instruct-v1:0": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "fail"
+  },
+  "xai:grok-3-mini": {
+    "last_checked": "2026-05-29T23:04:49Z",
+    "status": "pass"
+  },
+  "google:gemini-live-2.5-flash": {
+    "last_checked": "2025-10-15T16:02:32Z",
+    "status": "excluded"
+  },
+  "anthropic:claude-sonnet-4.5": {
+    "last_checked": "2025-11-14T20:51:21Z",
+    "status": "pass"
+  },
+  "groq:qwen-2.5-coder-32b": {
+    "last_checked": null,
+    "status": "excluded"
+  },
+  "groq:llama-3.2-11b-vision-preview": {
+    "last_checked": null,
+    "status": "excluded"
+  },
+  "amazon_bedrock:meta.llama3-1-70b-instruct-v1:0": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "fail"
+  },
+  "amazon_bedrock:anthropic.claude-v2": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "fail"
+  },
+  "groq:llama-3.2-3b-preview": {
+    "last_checked": null,
+    "status": "excluded"
+  },
+  "amazon_bedrock:cohere.command-r-v1:0": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
+  },
+  "amazon_bedrock:meta.llama3-70b-instruct-v1:0": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "fail"
+  },
+  "openrouter:openai/gpt-5-codex": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
+  },
+  "amazon_bedrock:ai21.jamba-1-5-large-v1:0": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "fail"
+  },
+  "openai:text-embedding-3-small": {
+    "last_checked": "2026-05-29T20:39:07Z",
+    "status": "pass"
+  },
+  "openai:o3-pro": {
+    "last_checked": "2025-11-14T22:23:56Z",
+    "status": "fail"
+  },
+  "google:gemini-2.5-flash-image-preview": {
+    "last_checked": "2025-10-15T16:02:32Z",
+    "status": "excluded"
+  },
+  "groq:meta-llama/llama-guard-4-12b": {
+    "last_checked": "2025-11-14T20:39:51Z",
+    "status": "fail"
+  },
+  "google:gemini-2.5-flash-preview-05-20": {
+    "last_checked": "2025-11-14T20:51:00Z",
+    "status": "pass"
   }
 }

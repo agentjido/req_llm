@@ -1,0 +1,123 @@
+{
+  "model_spec": "google:gemini-3.1-flash-lite",
+  "provider": "google",
+  "request": {
+    "body": {
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJTb2x2ZSAxMio3IGFuZCBzaG93IHlvdXIgaW50ZXJuYWwgdGhpbmtpbmcgKGJyaWVmKS4ifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7ImNhbmRpZGF0ZUNvdW50IjoxLCJtYXhPdXRwdXRUb2tlbnMiOjUwMDAsInRlbXBlcmF0dXJlIjoxLjAsInRoaW5raW5nQ29uZmlnIjp7ImluY2x1ZGVUaG91Z2h0cyI6dHJ1ZSwidGhpbmtpbmdMZXZlbCI6ImxvdyJ9fX0="
+    },
+    "canonical_json": {
+      "contents": [
+        {
+          "parts": [
+            {
+              "text": "Solve 12*7 and show your internal thinking (brief)."
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "generationConfig": {
+        "candidateCount": 1,
+        "maxOutputTokens": 5000,
+        "temperature": 1.0,
+        "thinkingConfig": {
+          "includeThoughts": true,
+          "thinkingLevel": "low"
+        }
+      }
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite:generateContent?key=[REDACTED]"
+  },
+  "response": {
+    "body": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "**My Mental Calculation Process**\n\nOkay, so the task is simple enough: 12 multiplied by 7. I need to briefly show my thinking, which, being a seasoned professional, means I can take a couple of routes. I'm essentially breaking down how I'd approach this calculation.\n\nFirst, I consider the direct route, the rote memory approach. Is 12 * 7 a basic multiplication fact that I instantly recall? If I do, then that's the fastest way to solve the problem.\n\nIf not, it becomes an exercise in applying the distributive property. I’d break down 12 into (10 + 2), and then multiply each part by 7. That would give me (10 * 7) plus (2 * 7), which is 70 plus 14, and that equals 84. It's a quick, mentally manageable sequence. Ultimately, regardless of the method, the goal is to arrive at the solution.\n\n\n",
+                "thought": true
+              },
+              {
+                "text": "**Calculation:** 12 * 7 = 84\n\n**Internal Thinking:**\nI break the 12 into 10 and 2. \n*   First, 10 * 7 = 70.\n*   Then, 2 * 7 = 14.\n*   Finally, 70 + 14 = 84.",
+                "thoughtSignature": "Eu4DCusDAQw51sfo6BKfhH4IDFKAuqAmlIsCPuhtue0strwww0GtvCGqAmAbjxaV0nSyliDLNlnQYudlLXYMGXgU1WQOVaIb5XSRaYrZjTpWaRF+57OZ1khyzzypKYQi7DsV3KQeYjbvQsesl0w3rlPnxan5kZ9QeAETHr/vuh1QEva3TS3+sC4GNB7rbGvSlFmcEdHjPML3nwRwOdwVR6D77CGcR0KIdSGj/00T8EUIvPGPlN79VJONgsl4ep+WYc8DxiqtaiTtVbRGwsG9T95YM7on7HvYpWuubEydrK4O+f+vsYfB9/d4WlNL7gZaY+yW4WiwBe+Hk7Fc7oZFfMI2oKA03SmrW/1FbnScCKfcPlCsGuEY1+CDSRyFFEgIWXeiM1oQMeH/JDC6KxGzO0DsgJuKO5fWW/YVgKPo1AT56C6O/ktz/B1bitnHo+2BSDDdRrfCycunCilRt6tm1WSlCVXrfi67CpiKWVwHCqtoR9KpaMLrsrjQJW1/qaBsBWbKf7rO0HyYQWg/0OyZZiHSPWHQWlUyyb68pdR4BnkFxgLN+pFH49KOoQR2ggYnvdmfkuo7YO2AbraMoxTId6NZPo6kyzIiTkoGV7pEZ9cEIPYdFZ8nwDVzNar6/XKs/R0X2VThmQy9VW3soEOO9Rs="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "modelVersion": "gemini-3.1-flash-lite",
+      "responseId": "TBIaaqK3GoHD1MkPvJKSmAI",
+      "usageMetadata": {
+        "candidatesTokenCount": 82,
+        "promptTokenCount": 15,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 15
+          }
+        ],
+        "serviceTier": "standard",
+        "thoughtsTokenCount": 153,
+        "totalTokenCount": 250
+      }
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "content-type": [
+        "application/json; charset=UTF-8"
+      ],
+      "date": [
+        "Fri, 29 May 2026 22:25:19 GMT"
+      ],
+      "server": [
+        "scaffolding on HTTPServer2"
+      ],
+      "server-timing": [
+        "gfet4t7; dur=2645"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-frame-options": [
+        "SAMEORIGIN"
+      ],
+      "x-gemini-service-tier": [
+        "standard"
+      ],
+      "x-xss-protection": [
+        "0"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

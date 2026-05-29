@@ -1,0 +1,131 @@
+{
+  "model_spec": "google:gemini-3.1-pro-preview",
+  "provider": "google",
+  "request": {
+    "body": {
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJSZXNwb25kIHdpdGggYSBzaW5nbGUgd29yZCAnSGknLiJ9XSwicm9sZSI6InVzZXIifSx7InBhcnRzIjpbeyJ0ZXh0IjoiSGkifV0sInJvbGUiOiJtb2RlbCJ9LHsicGFydHMiOlt7InRleHQiOiJIaSBhZ2FpbiJ9XSwicm9sZSI6InVzZXIifV0sImdlbmVyYXRpb25Db25maWciOnsiY2FuZGlkYXRlQ291bnQiOjEsIm1heE91dHB1dFRva2VucyI6MTAyNCwidGVtcGVyYXR1cmUiOjAuMH19"
+    },
+    "canonical_json": {
+      "contents": [
+        {
+          "parts": [
+            {
+              "text": "Respond with a single word 'Hi'."
+            }
+          ],
+          "role": "user"
+        },
+        {
+          "parts": [
+            {
+              "text": "Hi"
+            }
+          ],
+          "role": "model"
+        },
+        {
+          "parts": [
+            {
+              "text": "Hi again"
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "generationConfig": {
+        "candidateCount": 1,
+        "maxOutputTokens": 1024,
+        "temperature": 0.0
+      }
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-pro-preview:generateContent?key=[REDACTED]"
+  },
+  "response": {
+    "body": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "Hello! How can I help you today?",
+                "thoughtSignature": "Es8GCswGAQw51scP1JXsXpZoxzqY2me8YONhogWIIQ18e/y9PKIAtE8euG/zO6Cnpo7Io4Sn1/iTFnPkSnnWBPDYC5sTzNZ9zyc6LKnd/EyNJWfkvQzW7XsABqeVrGw5isnGsesJ0Oc85hOSGZmGt0kNEv6/4/Zc1oOEzghAISZxBHBnh8xjpCFoxflsnU1NjKFXRpikx2pguA1413ewppisutj0H/5i72zgbyczA2TrDMZZubxYQcA0QwFJawD1Z44ZfCLLJnRzmKv/MDWPjZ8Qd0aKA1QTb7yz/grGN0nMurY8AC0HJh0v81M9XMiYtVfbpB2fmlZJggLdfX0CxiDoWJmd5akebW764CVwJlQ1Yz/QRQOpZYllTW2xJBmdbnxwS8mSA+Uolfj2PFSML/FAJfMbxYmPjHBWpsZv2DEu2mw4pSCv9/+ByFKwJ4ju/DHnoKXJoEDwvRzxMjA1KabF8zCNYpYRostKfpJJPB4pgtUR1VsAr7HmlAhMi7UiLbdnRY/MXH/cG2ZW0a8SyT+FudHI6orTqwfBwDR/ZVHG4rsqIETI17La/18duff0S6A2Pp0MncK4pbIMXWOpqA5juChgygUZKga8836rRQcbXwtJouZgUq6Zv+uh9EFPlPjJaxXhBXqEFEsYMCUbz53/DgHqWbNILGiXdz+KAzCMBDLHFMuf3VtLoqoVU0th0GiMPj3siWU2J87yRoVtFo0K/OIOG4WyY0zhegW+7fZFq8Rhq3B9OnRE+Q78I/zkE63NHTb0umKPfcmgKUKCoJWUaNVy3y4+8ROXlkvHQQSywryxFl5GG/cT4RufskCW5hR65xbBAZMWnIJgtnumokNJ0947/iigCY0+4Txv4cXOKQtRjgRFPcUVmQdfdv7GJnsEmhJR3sos+Q0brpxnO6qgWnU3d/xNJ2OG0YCeG7My99RGfei7VCTI3N0rPrQPvT2x+LqtKtVftBelAD7kBn/mnpRtaxSjy+3HltzXO220mhHvmIVfb7MNJCzh1Opi91Q2E756LDIaEIWF4D6wpTFt+gzT4rTbwwDn4A2sd7eYAINgOGWBczun1wf4HaJkSCr+smO5qNs+M3a2OTIne/hThJ4MBuIk2iAaRZyZIRZgqA=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "modelVersion": "gemini-3.1-pro-preview",
+      "responseId": "-hAaase8HdyM1MkPmq7_6AI",
+      "usageMetadata": {
+        "candidatesTokenCount": 9,
+        "promptTokenCount": 14,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 14
+          }
+        ],
+        "serviceTier": "standard",
+        "thoughtsTokenCount": 197,
+        "totalTokenCount": 220
+      }
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "content-type": [
+        "application/json; charset=UTF-8"
+      ],
+      "date": [
+        "Fri, 29 May 2026 22:19:41 GMT"
+      ],
+      "server": [
+        "scaffolding on HTTPServer2"
+      ],
+      "server-timing": [
+        "gfet4t7; dur=3396"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-frame-options": [
+        "SAMEORIGIN"
+      ],
+      "x-gemini-service-tier": [
+        "standard"
+      ],
+      "x-xss-protection": [
+        "0"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

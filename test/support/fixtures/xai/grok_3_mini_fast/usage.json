@@ -1,4 +1,6 @@
 {
+  "model_spec": "xai:grok-3-mini-fast",
+  "provider": "xai",
   "request": {
     "body": {
       "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjEwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhpIHRoZXJlISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Imdyb2stMy1taW5pLWZhc3QiLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
@@ -17,6 +19,9 @@
       "temperature": 0.0
     },
     "headers": {
+      "accept": [
+        "application/json"
+      ],
       "accept-encoding": [
         "gzip"
       ],
@@ -25,7 +30,7 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ]
     },
     "method": "post",
@@ -38,35 +43,36 @@
           "finish_reason": "length",
           "index": 0,
           "message": {
-            "content": "Hi! I'm Grok, your friendly AI assistant",
-            "reasoning_content": "First, the user said: \"Hi there!\" This is a casual greeting. As Grok, I'm supposed to be helpful, truthful, and built by xAI, so my response should align with that.\n\nMy role is to assist and engage in conversation. Since this is an initial message, I should respond in a friendly, welcoming manner to encourage further interaction.\n\nKey elements from my system prompt:\n- I'm Grok, created by xAI.\n- I'm not based on any other companies' models.\n- I need to be helpful and maximally truthful.\n\nA good response should:\n- Acknowledge the greeting.\n- Introduce myself briefly if needed.\n- Be engaging and open for more conversation.\n- Keep it light and fun, as Grok is known for being witty.\n\nPossible structure:\n1. Greet back.\n2. Self-introduction or reference to my identity.\n3. Ask a question or invite more input to continue the conversation.\n\nFor example:\n- Start with \"Hi!\" or \"Hello!\"\n- Say something like \"I'm Grok, here to help!\"\n- Then, perhaps ask \"How can I assist you today?\" or something more casual.\n\nSince the user might be starting a chat, I should make it conversational.\n\nEnsure it's truthful: Everything I say should be accurate. No need to fabricate anything here.\n\nFinal response idea:\n- Keep it concise and friendly.",
+            "content": "Hello! How can I help you today? ",
+            "reasoning_content": "The user said \"Hi there!\" This is a simple greeting. I should respond in a friendly, helpful manner.\n",
             "refusal": null,
             "role": "assistant"
           }
         }
       ],
-      "created": 1762103804,
-      "id": "5237d4ac-f5f1-50a5-cfec-d5368200c219_us-east-1",
-      "model": "grok-3-mini",
+      "created": 1780095898,
+      "id": "2723099a-c44d-9f4f-a42c-b5e731c14594",
+      "model": "grok-4.3",
       "object": "chat.completion",
-      "system_fingerprint": "fp_4fae27f477",
+      "system_fingerprint": "fp_eb3c003fc66c14ed",
       "usage": {
         "completion_tokens": 10,
         "completion_tokens_details": {
           "accepted_prediction_tokens": 0,
           "audio_tokens": 0,
-          "reasoning_tokens": 276,
+          "reasoning_tokens": 136,
           "rejected_prediction_tokens": 0
         },
+        "cost_in_usd_ticks": 3968500,
         "num_sources_used": 0,
-        "prompt_tokens": 10,
+        "prompt_tokens": 133,
         "prompt_tokens_details": {
           "audio_tokens": 0,
-          "cached_tokens": 2,
+          "cached_tokens": 128,
           "image_tokens": 0,
-          "text_tokens": 10
+          "text_tokens": 133
         },
-        "total_tokens": 296
+        "total_tokens": 279
       }
     },
     "headers": {
@@ -80,7 +86,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "998548081c06e27f-ORD"
+        "a03924204f5a89f7-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -89,16 +95,17 @@
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:16:47 GMT"
+        "Fri, 29 May 2026 23:04:59 GMT"
       ],
       "server": [
         "cloudflare"
       ],
-      "set-cookie": [
-        "__cf_bm=aW8qrXwV4p2fiYW_2jRONoVh4VJOQBNInHZERVvKOck-1762103807-1.0.1.1-Xv.EY2t7HnsQ23cA0h_GqQLZz1_t1lh01k4J4o2yLzbQfScSKxqDLNhtDTDmjkY0ycP_M.INc3EadIrqxWGSLw4BOXqCefPNO3iwjstL6.c; path=/; expires=Sun, 02-Nov-25 17:46:47 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
-      ],
+      "set-cookie": "[REDACTED:set-cookie]",
       "strict-transport-security": [
         "max-age=31536000"
+      ],
+      "traceparent": [
+        "00-8c4a740a63f72a641cb64dc594fba929-be5bf87100023f89-01"
       ],
       "transfer-encoding": [
         "chunked"
@@ -106,13 +113,35 @@
       "vary": [
         "origin, access-control-request-method, access-control-request-headers"
       ],
+      "x-metrics-e2e-ms": [
+        "1467.8"
+      ],
+      "x-metrics-mean-itl-ms": [
+        "7.2"
+      ],
+      "x-metrics-ttft-ms": [
+        "248.0"
+      ],
+      "x-ratelimit-limit-requests": [
+        "1800"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "10000000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "1782"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "9991889"
+      ],
       "x-request-id": [
-        "00-f47155bf8a19ca353eeaa0ce37413280-f758edfb006e1200-01"
+        "2723099a-c44d-9f4f-a42c-b5e731c14594"
       ],
       "x-zero-data-retention": [
         "false"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

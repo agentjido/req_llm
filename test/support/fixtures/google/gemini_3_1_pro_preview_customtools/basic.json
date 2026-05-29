@@ -1,0 +1,123 @@
+{
+  "model_spec": "google:gemini-3.1-pro-preview-customtools",
+  "provider": "google",
+  "request": {
+    "body": {
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJIZWxsbyB3b3JsZCEifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7ImNhbmRpZGF0ZUNvdW50IjoxLCJtYXhPdXRwdXRUb2tlbnMiOjIwMDAsInRlbXBlcmF0dXJlIjowLjAsInRoaW5raW5nQ29uZmlnIjp7ImluY2x1ZGVUaG91Z2h0cyI6dHJ1ZSwidGhpbmtpbmdMZXZlbCI6ImxvdyJ9fX0="
+    },
+    "canonical_json": {
+      "contents": [
+        {
+          "parts": [
+            {
+              "text": "Hello world!"
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "generationConfig": {
+        "candidateCount": 1,
+        "maxOutputTokens": 2000,
+        "temperature": 0.0,
+        "thinkingConfig": {
+          "includeThoughts": true,
+          "thinkingLevel": "low"
+        }
+      }
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-pro-preview-customtools:generateContent?key=[REDACTED]"
+  },
+  "response": {
+    "body": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "**Crafting the Response**\n\nI've determined a suitable greeting, opting for a simple and helpful response. The goal is to acknowledge the user and offer assistance. My focus now is finalizing a clear and welcoming message to establish a positive interaction.\n\n\n",
+                "thought": true
+              },
+              {
+                "text": "Hello! How can I help you today?",
+                "thoughtSignature": "EtMHCtAHAQw51sfv51NLSVnDH0kFrUZcxNmOCymCkUXaG65lwMKuVRzv4Gf8YnwB9kf9DK00c5xKuct7fyynxJDEIrwzhFg50a3w9PKDJYDy43lPaGMMsiuTWh72dXVm3yArtNugwYwSBc1VkphXHo2RzVwmedojk1Zx3LY+KxcUtIBgBYkah9sHTkQEFZsE0vwC9LBwtpAb491XcZy1jn/aCqypGO+oLYJtPfybJU0tIcYW91t4nLNEvMbdj9EQ6if/NnSe9NCPXcOqJyUvKqfuLMiTNCPCbORPrU0+qcDKHa6h6umAz2bbt1y/ca4lloD5nUhXUgFd6lh393gqHJoTICYe6buguRnXIhqEQsA+PSJVLtvOezhsSVf243HLWGMfcAvr2uP08yMegpoaz788GTFgtA2tsU06Jc0sV/HPeysezbZXSHHoRhT6EDQfrnWTQvM5t6tY1pX6EbzWiAvKvCvMmmeWmkxiTtdfrEBdyUrD56oIlqBxzFFE2emDNnn6q7J9JxhZpEoy5xltItW70izaFnYmF6w9KioCb7w8DZIFRu+5derBFi83xkVpcbciM8yDioF8PPkECeEUqv3fzOE6+NN5uRpFHA0NpiyoxLioD1fYiz/ljehjHKN0qARPjrf0zxqqKsrsTp53etJxD8rcEiyrKZs3R1qBVeoWS+yseDYcRuTgPLq62WiLu1IN9b0SDy0Fqi+Nw8Z6ViBTBYs9CrwWhoUlKwo2gFFhFmYT62DyZ1xIgVZgbiiMKoUNYOwAfDPH2BnNe21lnS4naCsSddAbyWpQnHBVGTerBWkbmSmv34SG6/j/Pd5Ls91iAU04CVKXzDaw9Tfi16Qz82W3LrVOJSrVWgDHnOqsdaKZvI6JY7tS5zmAH6OItvj+Fx7pbJGlxEVLceanjULL/Yyya+kpsg7apqepf2K2GBG9gjP7BVZCOk0Lh/s4aA9ze0GP3WR2UQZRGPOZpL3o7RCNhb389HyAM1r5SbvlTXjEg3mLkvAemIkgTlpW/lgsTkxRzV5Oj9XPFjCPXACAv5QOUqeGXQ2PLJ6sGm/lTrKp6Uf/tWlupjpv4E+OgsYyylvjmpG9iCcFLiFJ4k0NpIeilv8PtwCyEOM5iZSeopRLUkRj521ehW/MoNXmjQtM1bc0wg0LFlBgw0N/vd8XzrJoATeRrq6sCCCD2havH2XB7PkVhEmJl6LAH22NIJUONBwO+aiiAVNqfR0eFfxQ+jSJfdBHFMyN6Crv5gXuwkwKrUCWIPBK3MZ4w904czvfzAaSQP8uMrCcJibKkYuTQioMpA=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "modelVersion": "gemini-3.1-pro-preview-customtools",
+      "responseId": "9w4aasb_BLi5jMcPxNT1gQI",
+      "usageMetadata": {
+        "candidatesTokenCount": 9,
+        "promptTokenCount": 4,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 4
+          }
+        ],
+        "serviceTier": "standard",
+        "thoughtsTokenCount": 241,
+        "totalTokenCount": 254
+      }
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "content-type": [
+        "application/json; charset=UTF-8"
+      ],
+      "date": [
+        "Fri, 29 May 2026 22:11:06 GMT"
+      ],
+      "server": [
+        "scaffolding on HTTPServer2"
+      ],
+      "server-timing": [
+        "gfet4t7; dur=3818"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-frame-options": [
+        "SAMEORIGIN"
+      ],
+      "x-gemini-service-tier": [
+        "standard"
+      ],
+      "x-xss-protection": [
+        "0"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

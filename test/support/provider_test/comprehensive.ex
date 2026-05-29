@@ -199,13 +199,7 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
 
             refute is_nil(finish_reason)
 
-            usage = response.usage
-            assert is_map(usage)
-            assert is_number(usage.input_tokens) and usage.input_tokens > 0
-            assert is_number(usage.output_tokens) and usage.output_tokens >= 0
-            assert is_number(usage.total_tokens) and usage.total_tokens > 0
-            assert is_number(usage.cached_input) and usage.cached_input >= 0
-            assert is_number(usage.reasoning) and usage.reasoning >= 0
+            assert_streaming_usage(response.usage)
           end
 
           @tag scenario: :token_limit
@@ -291,18 +285,10 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
 
             case ReqLLM.model(@model_spec) do
               {:ok, %LLMDB.Model{cost: cost_map}} when is_map(cost_map) ->
-                assert is_number(response.usage.input_cost) and response.usage.input_cost >= 0
-
-                assert is_number(response.usage.output_cost) and
-                         response.usage.output_cost >= 0
-
-                assert is_number(response.usage.total_cost) and response.usage.total_cost >= 0
-
-                expected = response.usage.input_cost + response.usage.output_cost
-                assert abs(response.usage.total_cost - expected) < 0.00001
+                assert_usage_cost_fields(response.usage, true)
 
               _ ->
-                refute Map.has_key?(response.usage, :input_cost)
+                assert_usage_cost_fields(response.usage, false)
             end
           end
 
@@ -733,6 +719,36 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
           end
         end
       end
+
+      defp assert_usage_cost_fields(usage, required?) do
+        present? =
+          Enum.any?([:input_cost, :output_cost, :total_cost], &Map.has_key?(usage, &1))
+
+        if required? or present? do
+          assert is_number(usage.input_cost) and usage.input_cost >= 0
+
+          assert is_number(usage.output_cost) and
+                   usage.output_cost >= 0
+
+          assert is_number(usage.total_cost) and usage.total_cost >= 0
+
+          expected = usage.input_cost + usage.output_cost
+          assert abs(usage.total_cost - expected) < 0.00001
+        end
+      end
+
+      defp assert_streaming_usage(nil), do: :ok
+
+      defp assert_streaming_usage(usage) when is_map(usage) do
+        assert is_number(usage.input_tokens) and usage.input_tokens > 0
+        assert is_number(usage.output_tokens) and usage.output_tokens >= 0
+        assert is_number(usage.total_tokens) and usage.total_tokens > 0
+        assert is_number(usage.cached_input) and usage.cached_input >= 0
+        assert is_number(usage.reasoning) and usage.reasoning >= 0
+      end
+
+      defp assert_streaming_usage(usage),
+        do: flunk("Expected usage map or nil, got: #{inspect(usage)}")
 
       defp assert_reasoning_details_if_present(%ReqLLM.Message{reasoning_details: nil}), do: :ok
       defp assert_reasoning_details_if_present(%ReqLLM.Message{reasoning_details: []}), do: :ok

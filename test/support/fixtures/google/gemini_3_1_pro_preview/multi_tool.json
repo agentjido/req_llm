@@ -1,0 +1,186 @@
+{
+  "model_spec": "google:gemini-3.1-pro-preview",
+  "provider": "google",
+  "request": {
+    "body": {
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJXaGF0J3MgdGhlIHdlYXRoZXIgbGlrZSBpbiBQYXJpcywgRnJhbmNlPyJ9XSwicm9sZSI6InVzZXIifV0sImdlbmVyYXRpb25Db25maWciOnsiY2FuZGlkYXRlQ291bnQiOjEsIm1heE91dHB1dFRva2VucyI6MTMxMDYsInRlbXBlcmF0dXJlIjowLjAsInRoaW5raW5nQ29uZmlnIjp7ImluY2x1ZGVUaG91Z2h0cyI6dHJ1ZSwidGhpbmtpbmdMZXZlbCI6ImxvdyJ9fSwidG9vbHMiOlt7ImZ1bmN0aW9uRGVjbGFyYXRpb25zIjpbeyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9LCJ1bml0Ijp7ImVudW0iOlsiY2Vsc2l1cyIsImZhaHJlbmhlaXQiXSwidHlwZSI6InN0cmluZyJ9fSwicHJvcGVydHlPcmRlcmluZyI6WyJsb2NhdGlvbiIsInVuaXQiXSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9fSx7ImRlc2NyaXB0aW9uIjoiVGVsbCBhIGZ1bm55IGpva2UiLCJuYW1lIjoidGVsbF9qb2tlIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7InRvcGljIjp7ImRlc2NyaXB0aW9uIjoiVG9waWMgZm9yIHRoZSBqb2tlIiwidHlwZSI6InN0cmluZyJ9fSwicHJvcGVydHlPcmRlcmluZyI6WyJ0b3BpYyJdLCJ0eXBlIjoib2JqZWN0In19LHsiZGVzY3JpcHRpb24iOiJHZXQgdGhlIGN1cnJlbnQgdGltZSIsIm5hbWUiOiJnZXRfdGltZSIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6e30sInR5cGUiOiJvYmplY3QifX1dfV19"
+    },
+    "canonical_json": {
+      "contents": [
+        {
+          "parts": [
+            {
+              "text": "What's the weather like in Paris, France?"
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "generationConfig": {
+        "candidateCount": 1,
+        "maxOutputTokens": 13106,
+        "temperature": 0.0,
+        "thinkingConfig": {
+          "includeThoughts": true,
+          "thinkingLevel": "low"
+        }
+      },
+      "tools": [
+        {
+          "functionDeclarations": [
+            {
+              "description": "Get current weather information for a location",
+              "name": "get_weather",
+              "parameters": {
+                "properties": {
+                  "location": {
+                    "type": "string"
+                  },
+                  "unit": {
+                    "enum": [
+                      "celsius",
+                      "fahrenheit"
+                    ],
+                    "type": "string"
+                  }
+                },
+                "propertyOrdering": [
+                  "location",
+                  "unit"
+                ],
+                "required": [
+                  "location"
+                ],
+                "type": "object"
+              }
+            },
+            {
+              "description": "Tell a funny joke",
+              "name": "tell_joke",
+              "parameters": {
+                "properties": {
+                  "topic": {
+                    "description": "Topic for the joke",
+                    "type": "string"
+                  }
+                },
+                "propertyOrdering": [
+                  "topic"
+                ],
+                "type": "object"
+              }
+            },
+            {
+              "description": "Get the current time",
+              "name": "get_time",
+              "parameters": {
+                "properties": {},
+                "type": "object"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-pro-preview:generateContent?key=[REDACTED]"
+  },
+  "response": {
+    "body": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "**My Approach to the Paris Weather Inquiry**\n\nOkay, so the user wants the current weather in Paris, France. Simple enough. My first thought is: I need to tap into the right tool for the job. The `get_weather` tool is clearly the one designed to retrieve weather information based on location, so that's where I need to focus. Now, to use that tool, I have to figure out what parameters are required. The request is quite straightforward; I need to provide the location. It seems like the obvious choice is to specify `location` as \"Paris, France\". Temperature units haven't been requested, so I'll leave that unspecified since the system will likely default to Celsius, which is standard for France anyway. Finally, I'll package it all into a clean tool call: `get_weather(location=\"Paris, France\")`. Done.\n\n\n",
+                "thought": true
+              },
+              {
+                "functionCall": {
+                  "args": {
+                    "location": "Paris, France"
+                  },
+                  "id": "iiulsdwe",
+                  "name": "get_weather"
+                },
+                "thoughtSignature": "Ev0ECvoEAQw51sfK7af1vDORUczsALuMBK8OwrM5ZggiL5YerAwl5gQDZxJn11kljZzuEPZwhHUmhQ8j0sdqxXYHB5Gj0+bzHYORyN4qwtqxY7aqlF/D2jfKGtQoeE06tF8rp+a+HvlDje+tI6GU4byPb3TgRtB2zZVfKGrLxyT8OpopbMrS5GKQgUc85ChBPzhIH0/u5HcY0n9OvA+jb5ob/GPjA33uAZ3FtqmeqPneqlMlZA+qvcKUCPLVBXdpYlRHREBfrote0we2RGVpDB2WtQsN8UG+gcm85Fu4zGF6W8AQtC8JE1wyIS2K0VapixcjTR7+ZixpHZRPdglFyKx92ELXgzvVVbO6g9WmP3obbegekKuO19hYKchTWwPqV18qsM89J3SXGIiUtyGuCj8IYcBc4t5CUGDSc6oyVyUhfk74E1ehDJVvfye2qkmN3QN2UBnSslDzkmLV+JlNkXHXzUbSaT4OBflKdUHWsMHiNVk37gR8Dc0zBC8kMseQgfS4u7/195aiy5W9llPYJICCz2qsMOjDJuJ/e7+RAJXPDiGqt79LO6bTxtPJeg46g39vsCWgGF40q6irFP94j/EVG75OFuQxd6GP6E2QuU6W3+JmsA+Cv50KBqk40DDFquSQm1lK9MqDMzbsxsDfDdPviel7DUCF2GWKbHjklopSf0O2VfWrco177AjHogi7MlfgLa9/jfmbhsRKK1R0mJcwPkwSPt1LBtcfOIgmGvRliv6AYbjbSCUBbDePTTA7CsvvNJLku6780Gvwuq7YiCSXhL3OW1nD4HE6SmFUv53RMp1MRrRlIZ8dGdalMiz25/mRHM5fTM3P6GwAgSrdpw=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishMessage": "Model generated function call(s).",
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "modelVersion": "gemini-3.1-pro-preview",
+      "responseId": "yhEaaouMLuia9MoPtZmF6QI",
+      "usageMetadata": {
+        "candidatesTokenCount": 18,
+        "promptTokenCount": 145,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 145
+          }
+        ],
+        "serviceTier": "standard",
+        "thoughtsTokenCount": 147,
+        "totalTokenCount": 310
+      }
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "content-type": [
+        "application/json; charset=UTF-8"
+      ],
+      "date": [
+        "Fri, 29 May 2026 22:23:09 GMT"
+      ],
+      "server": [
+        "scaffolding on HTTPServer2"
+      ],
+      "server-timing": [
+        "gfet4t7; dur=3305"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-frame-options": [
+        "SAMEORIGIN"
+      ],
+      "x-gemini-service-tier": [
+        "standard"
+      ],
+      "x-xss-protection": [
+        "0"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

@@ -1,0 +1,123 @@
+{
+  "model_spec": "google:gemini-3.1-pro-preview-customtools",
+  "provider": "google",
+  "request": {
+    "body": {
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJTb2x2ZSAxMio3IGFuZCBzaG93IHlvdXIgaW50ZXJuYWwgdGhpbmtpbmcgKGJyaWVmKS4ifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7ImNhbmRpZGF0ZUNvdW50IjoxLCJtYXhPdXRwdXRUb2tlbnMiOjUwMDAsInRlbXBlcmF0dXJlIjoxLjAsInRoaW5raW5nQ29uZmlnIjp7ImluY2x1ZGVUaG91Z2h0cyI6dHJ1ZSwidGhpbmtpbmdMZXZlbCI6ImxvdyJ9fX0="
+    },
+    "canonical_json": {
+      "contents": [
+        {
+          "parts": [
+            {
+              "text": "Solve 12*7 and show your internal thinking (brief)."
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "generationConfig": {
+        "candidateCount": 1,
+        "maxOutputTokens": 5000,
+        "temperature": 1.0,
+        "thinkingConfig": {
+          "includeThoughts": true,
+          "thinkingLevel": "low"
+        }
+      }
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-pro-preview-customtools:generateContent?key=[REDACTED]"
+  },
+  "response": {
+    "body": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "**Calculating the Answer**\n\nI am now focusing on determining the most appropriate way to clearly state the answer and explain the steps used. I have decided to select one method to demonstrate the calculation, keeping the response concise and easy to understand.\n\n\n",
+                "thought": true
+              },
+              {
+                "text": "**Answer:** 84\n\n**Internal Thinking:**\nTo solve 12 * 7 quickly in my head, I break the number 12 down into easier parts: 10 and 2. \n1. Multiply 10 by 7 to get 70.\n2. Multiply 2 by 7 to get 14.\n3. Add the two results together: 70 + 14 = 84.",
+                "thoughtSignature": "EvwECvkEAQw51seUQcg9HxJBv3xihZ5eyrR8CFGfLvTtzpeL8GfVeYW5qN5KZNy+kA9ELxIEg4bx79AE77WTuAz3Jp9G5MXajZMqn4A6tAz0k6YQWkA7GF9ozX//2Lcoy9ukqn1yNiG/y56tUnjqpOpkGbLRnlG7z51wA4NbeR7dKcCOMlyBlEFnxDLx9m8L1wrd6RydZJX93Gsueq65k2HS8/+QH4byYRbaFI+D8YKKrUWc5RzRpg9Nzwuc54WBVWwDdXBt8Eq2a0xEw0L5iO9zOBTxJmgRiGUqzRNJcHkzzoYznP04K961EuLpl6ybnj3EVDbLmLpACChEOJwICgVuoI5tT5jBbjAFtOiVRgEhX8et9eeF7omDVYPoBxt2u+NFLyhCHsqtSJM4wsitXmpGWc4XUjFaL93BhOV8QNZJLl9tg5mmdN3Ax2jvCS93UZkup/XTJ62Y9Vkjbrg8WkKcDK+Wlvp4Wf9X4v1hD07/6U1GZ8iwwVVatSNXDawY62OsBN3XEVofpf4qcCsBKX3r+bWI8t8ufUlh52qKaFTDa+4EGlxFPcFKW0d3RalCTEvGWq9jCoxUZU0LidJI8APJmnDoVsWxC5EJakNLvOLi/09RjieoEqK/nAre84JofgnGNHnGcQY7bWIRVr/WRRjWZBY7Lq8NWYHHD/q5uDNHto/bpPkrad9JamUjJdyw51bDk9jNe5UifA09ds1Cj9Mr3vQ4K8JX3YebvOEqo+YxDlVyhepfRx2/dDgK+CZyjeWctTtD9n5+8PzXCISVkLyqcNpcldGBsxXXXRos5vRev/nfwXvMZ7oq8RD8z1pigJzTv66o3oTPwIfV2BTw"
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "modelVersion": "gemini-3.1-pro-preview-customtools",
+      "responseId": "aRIaao7gHeTV1MkPrtmGiQM",
+      "usageMetadata": {
+        "candidatesTokenCount": 97,
+        "promptTokenCount": 15,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 15
+          }
+        ],
+        "serviceTier": "standard",
+        "thoughtsTokenCount": 194,
+        "totalTokenCount": 306
+      }
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "content-type": [
+        "application/json; charset=UTF-8"
+      ],
+      "date": [
+        "Fri, 29 May 2026 22:25:49 GMT"
+      ],
+      "server": [
+        "scaffolding on HTTPServer2"
+      ],
+      "server-timing": [
+        "gfet4t7; dur=3679"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-frame-options": [
+        "SAMEORIGIN"
+      ],
+      "x-gemini-service-tier": [
+        "standard"
+      ],
+      "x-xss-protection": [
+        "0"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

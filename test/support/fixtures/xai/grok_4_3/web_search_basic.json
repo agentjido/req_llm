@@ -1,0 +1,296 @@
+{
+  "model_spec": "xai:grok-4.3",
+  "provider": "xai",
+  "request": {
+    "body": {
+      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IlVzZSB3ZWIgc2VhcmNoIHRvIGZpbmQgb25lIHJlY2VudCBBSSBtb2RlbCBhbm5vdW5jZW1lbnQgYW5kIGNpdGUgdGhlIHNvdXJjZS4iLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjozMDAwMCwibW9kZWwiOiJncm9rLTQuMyIsInN0cmVhbSI6ZmFsc2UsInRvb2xzIjpbeyJ0eXBlIjoid2ViX3NlYXJjaCJ9XX0="
+    },
+    "canonical_json": {
+      "input": [
+        {
+          "content": [
+            {
+              "text": "Use web search to find one recent AI model announcement and cite the source.",
+              "type": "input_text"
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "max_output_tokens": 30000,
+      "model": "grok-4.3",
+      "stream": false,
+      "tools": [
+        {
+          "type": "web_search"
+        }
+      ]
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.x.ai/v1/responses"
+  },
+  "response": {
+    "body": {
+      "background": false,
+      "completed_at": 1780096318,
+      "created_at": 1780096318,
+      "error": null,
+      "frequency_penalty": 0.0,
+      "id": "6c4e407e-958e-95b2-bad4-0d3e13ea0409",
+      "incomplete_details": null,
+      "instructions": null,
+      "max_output_tokens": 30000,
+      "max_tool_calls": null,
+      "metadata": {
+        "system_fingerprint": "fp_eb3c003fc66c14ed"
+      },
+      "model": "grok-4.3",
+      "object": "response",
+      "output": [
+        {
+          "id": "rs_6c4e407e-958e-95b2-bad4-0d3e13ea0409",
+          "status": "completed",
+          "summary": [
+            {
+              "text": "The task is: \"Use web search to find one recent AI model announcement and cite the source.\"\n",
+              "type": "summary_text"
+            }
+          ],
+          "type": "reasoning"
+        },
+        {
+          "action": {
+            "query": "recent AI model announcement 2026",
+            "sources": [
+              {
+                "type": "url",
+                "url": "https://blog.google/innovation-and-ai/technology/ai/google-ai-updates-april-2026/"
+              },
+              {
+                "type": "url",
+                "url": "https://www.newline.co/@Dipen/top-10-new-ai-models-to-explore-in-2026--b4ca6fcf"
+              },
+              {
+                "type": "url",
+                "url": "https://blog.bytebytego.com/p/whats-next-in-ai-five-trends-to-watch"
+              },
+              {
+                "type": "url",
+                "url": "https://blog.mean.ceo/new-ai-model-releases-news-april-2026/"
+              },
+              {
+                "type": "url",
+                "url": "https://www.youtube.com/watch?v=U0giyi5-374"
+              }
+            ],
+            "type": "search"
+          },
+          "id": "ws_6c4e407e-958e-95b2-bad4-0d3e13ea0409_call-54c30e66-c5a8-497b-b3e9-cc095ac2406b-0",
+          "status": "completed",
+          "type": "web_search_call"
+        },
+        {
+          "action": {
+            "query": "latest AI model release May 2026",
+            "sources": [
+              {
+                "type": "url",
+                "url": "https://www.digitalapplied.com/blog/ai-model-releases-may-2026-complete-tracker"
+              },
+              {
+                "type": "url",
+                "url": "https://blog.mean.ceo/new-ai-model-releases-news-may-2026/"
+              },
+              {
+                "type": "url",
+                "url": "https://whatllm.org/blog/new-ai-models-may-2026"
+              },
+              {
+                "type": "url",
+                "url": "https://llm-stats.com/llm-updates"
+              },
+              {
+                "type": "url",
+                "url": "https://www.reddit.com/r/ArtificialInteligence/comments/1t2md8o/coming_may_2026/"
+              }
+            ],
+            "type": "search"
+          },
+          "id": "ws_6c4e407e-958e-95b2-bad4-0d3e13ea0409_call-54c30e66-c5a8-497b-b3e9-cc095ac2406b-1",
+          "status": "completed",
+          "type": "web_search_call"
+        },
+        {
+          "id": "tco_6c4e407e-958e-95b2-bad4-0d3e13ea0409_call-54c30e66-c5a8-497b-b3e9-cc095ac2406b-1",
+          "status": "completed",
+          "summary": [],
+          "type": "reasoning"
+        },
+        {
+          "id": "tco_6c4e407e-958e-95b2-bad4-0d3e13ea0409_call-54c30e66-c5a8-497b-b3e9-cc095ac2406b-0",
+          "status": "completed",
+          "summary": [],
+          "type": "reasoning"
+        },
+        {
+          "content": [
+            {
+              "annotations": [
+                {
+                  "end_index": 95,
+                  "start_index": 55,
+                  "title": "1",
+                  "type": "url_citation",
+                  "url": "https://llm-stats.com/llm-updates"
+                }
+              ],
+              "logprobs": [],
+              "text": "**Anthropic released Claude Opus 4.8 on May 28, 2026.**[[1]](https://llm-stats.com/llm-updates)\n\nThis is one of the most recent AI model announcements as of May 29, 2026.",
+              "type": "output_text"
+            }
+          ],
+          "id": "msg_6c4e407e-958e-95b2-bad4-0d3e13ea0409",
+          "role": "assistant",
+          "status": "completed",
+          "type": "message"
+        }
+      ],
+      "parallel_tool_calls": true,
+      "presence_penalty": 0.0,
+      "previous_response_id": null,
+      "prompt_cache_key": null,
+      "reasoning": {
+        "effort": "low",
+        "summary": "detailed"
+      },
+      "safety_identifier": null,
+      "service_tier": "default",
+      "status": "completed",
+      "store": true,
+      "temperature": 0.7,
+      "text": {
+        "format": {
+          "type": "text"
+        }
+      },
+      "tool_choice": "auto",
+      "tools": [
+        {
+          "search_context_size": "medium",
+          "type": "web_search"
+        }
+      ],
+      "top_logprobs": 0,
+      "top_p": 0.95,
+      "truncation": "disabled",
+      "usage": {
+        "context_details": {
+          "input_tokens": 4475,
+          "output_tokens": 351
+        },
+        "cost_in_usd_ticks": 160490000,
+        "input_tokens": 5466,
+        "input_tokens_details": {
+          "cached_tokens": 1920
+        },
+        "num_server_side_tools_used": 2,
+        "num_sources_used": 0,
+        "output_tokens": 493,
+        "output_tokens_details": {
+          "reasoning_tokens": 437
+        },
+        "server_side_tool_usage_details": {
+          "code_interpreter_calls": 0,
+          "document_search_calls": 0,
+          "file_search_calls": 0,
+          "mcp_calls": 0,
+          "web_search_calls": 2,
+          "x_search_calls": 0
+        },
+        "total_tokens": 5959
+      },
+      "user": null
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "*"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a0392e459d9ac9c1-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 29 May 2026 23:11:58 GMT"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "server-timing": [
+        "cfCacheStatus;desc=\"DYNAMIC\"",
+        "cfEdge;dur=4,cfOrigin;dur=4970"
+      ],
+      "set-cookie": "[REDACTED:set-cookie]",
+      "strict-transport-security": [
+        "max-age=31536000"
+      ],
+      "traceparent": [
+        "00-484cda44ffd2cf565a11a739f6a3acbd-04e8056400039ed7-01"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "origin, access-control-request-method, access-control-request-headers"
+      ],
+      "x-metrics-e2e-ms": [
+        "4939.8"
+      ],
+      "x-metrics-ttft-ms": [
+        "178.9"
+      ],
+      "x-ratelimit-limit-requests": [
+        "1800"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "10000000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "1800"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "10000000"
+      ],
+      "x-request-id": [
+        "6c4e407e-958e-95b2-bad4-0d3e13ea0409"
+      ],
+      "x-zero-data-retention": [
+        "false"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

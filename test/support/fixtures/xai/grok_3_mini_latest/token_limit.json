@@ -1,4 +1,6 @@
 {
+  "model_spec": "xai:grok-3-mini-latest",
+  "provider": "xai",
   "request": {
     "body": {
       "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjEwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJXcml0ZSBhIHZlcnkgbG9uZyBzdG9yeSBhYm91dCBkcmFnb25zIGFuZCBhZHZlbnR1cmVzIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiZ3Jvay0zLW1pbmktbGF0ZXN0Iiwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuNX0="
@@ -16,6 +18,9 @@
       "temperature": 0.5
     },
     "headers": {
+      "accept": [
+        "application/json"
+      ],
       "accept-encoding": [
         "gzip"
       ],
@@ -24,7 +29,7 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ]
     },
     "method": "post",
@@ -37,35 +42,36 @@
           "finish_reason": "length",
           "index": 0,
           "message": {
-            "content": "Below is a very long story about dragons and adventures. I've crafted it as a complete, self-contained narrative with rich descriptions, character development, and a detailed plot. The story is divided into chapters for readability, but it's all one cohesive tale. I aimed for an epic feel, drawing from fantasy tropes while adding original elements. Enjoy!\n\n---\n\n# **The Emberstone Chronicles: Flames of Destiny**\n\n## Chapter 1: The Shadow of the Skies\n\nIn the ancient land of Eldoria, where",
-            "reasoning_content": "First, the user asked for a \"very long story about dragons and adventures.\" So, I need to create a detailed, lengthy narrative. It should include dragons as central elements and involve adventures, meaning quests, explorations, battles, and character development.\n\nKey elements to include:\n- **Dragons**: Make them diverse. Some could be friendly, others antagonistic. Include different types like fire-breathing, ice dragons, or wise ancient ones.\n- **Adventures**: This implies a plot with journeys, challenges, and excitement. Structure it like a classic hero's journey: introduction, call to adventure, trials, climax, and resolution.\n- **Length**: Since it's \"very long,\" aim for a substantial response. In text, that means several paragraphs, perhaps 1000-2000 words or more. But I have to balance it with what's practical.\n\nStory structure:\n1. **Introduction**: Set the scene. Introduce the world, main characters, and the initial conflict.\n2. **Rising Action**: Build up the adventure. Introduce subplots, encounters with dragons, allies, and enemies.\n3. **Climax**: The peak of the adventure, like a big battle or a critical decision.\n4. **Falling Action**: Resolve the main conflicts.\n5. **Conclusion**: Wrap up the story with lessons learned or a new beginning.\n\nMain characters:\n- Hero: A young adventurer, perhaps a dragon rider or a dragon slayer turned friend.\n- Supporting characters: Friends, mentors, villains.\n- Dragons: Make them characters too, with personalities.\n\nThemes: To make it engaging, include themes like friendship, courage, the balance between humans and dragons, or environmental messages.\n\nEnsure it's engaging:\n- Use descriptive language to paint vivid pictures.\n- Build suspense and emotion.\n- Vary sentence structure and pacing.\n- Include dialogue to make it dynamic.\n\nPotential plot outline:\n- **Beginning**: In a medieval-like world, a village is threatened by a rogue dragon. The protagonist, Elara, a young woman with a mysterious past, decides to seek help from the legendary Dragon Keepers.\n- **Middle**: Elara embarks on a journey, facing various adventures: crossing dangerous terrains, solving riddles from ancient dragons, battling bandits, and forming alliances.\n- **Climax**: They confront the rogue dragon, which is under the control of a dark sorcerer.\n- **End**: Elara and her dragon allies defeat the villain, bringing peace, and Elara discovers she's part dragon or something epic.\n\nMake it original: Avoid clichés. Add twists, like dragons having their own society or magic systems.\n\nFinally, since this is an AI response, ensure it's appropriate, fun, and error-free.",
+            "content": "**The Dragon's Legacy: Chronicles of Eldrath**\n\nIn the shadowed peaks of the Wyrmspire Mountains, where mist clung to jagged cliffs like ancient secrets, the world of Eldrath turned on the wings of dragons. For centuries, these colossal beings had been both guardians and terrors—fire-breathing titans whose scales gleamed like forged starlight. Kingdoms rose and fell beneath their gaze, but none knew the true heart of the dragons until a girl named Elara stumbled upon an egg that",
+            "reasoning_content": "The user asked: \"Write a very long story about dragons and adventures.\"\n",
             "refusal": null,
             "role": "assistant"
           }
         }
       ],
-      "created": 1762103825,
-      "id": "7890ceaf-e0dd-4273-a20e-0a226cdf5b3b_us-east-1",
-      "model": "grok-3-mini",
+      "created": 1780095950,
+      "id": "042ff1df-e545-94ac-8369-45f465520e72",
+      "model": "grok-4.3",
       "object": "chat.completion",
-      "system_fingerprint": "fp_4fae27f477",
+      "system_fingerprint": "fp_eb3c003fc66c14ed",
       "usage": {
         "completion_tokens": 100,
         "completion_tokens_details": {
           "accepted_prediction_tokens": 0,
           "audio_tokens": 0,
-          "reasoning_tokens": 543,
+          "reasoning_tokens": 345,
           "rejected_prediction_tokens": 0
         },
+        "cost_in_usd_ticks": 11518500,
         "num_sources_used": 0,
-        "prompt_tokens": 16,
+        "prompt_tokens": 139,
         "prompt_tokens_details": {
           "audio_tokens": 0,
-          "cached_tokens": 2,
+          "cached_tokens": 128,
           "image_tokens": 0,
-          "text_tokens": 16
+          "text_tokens": 139
         },
-        "total_tokens": 659
+        "total_tokens": 584
       }
     },
     "headers": {
@@ -79,7 +85,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "9985488bdfc4f852-ORD"
+        "a039256ac9391aeb-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -88,16 +94,17 @@
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:17:10 GMT"
+        "Fri, 29 May 2026 23:05:54 GMT"
       ],
       "server": [
         "cloudflare"
       ],
-      "set-cookie": [
-        "__cf_bm=Bbp0_SA6.dn505_SzpXvcJYGw5Pa.ghyTTYb8aiYD5o-1762103830-1.0.1.1-xJVTlTdhdy7TQDIs_9UI3GAG5wB8cfazdDPabEHjX6mSvgYbiQhcvkb.agHKmRol0nX2w6trbezLV4wJDixaQjc1D2iujhFQzqlSRNuB1Ek; path=/; expires=Sun, 02-Nov-25 17:47:10 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
-      ],
+      "set-cookie": "[REDACTED:set-cookie]",
       "strict-transport-security": [
         "max-age=31536000"
+      ],
+      "traceparent": [
+        "00-bfd69c82b3d29db9d07e9821b34b70ba-96c348ba00015ef6-01"
       ],
       "transfer-encoding": [
         "chunked"
@@ -105,13 +112,35 @@
       "vary": [
         "origin, access-control-request-method, access-control-request-headers"
       ],
+      "x-metrics-e2e-ms": [
+        "3670.0"
+      ],
+      "x-metrics-mean-itl-ms": [
+        "7.6"
+      ],
+      "x-metrics-ttft-ms": [
+        "159.8"
+      ],
+      "x-ratelimit-limit-requests": [
+        "1800"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "10000000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "1800"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "10000000"
+      ],
       "x-request-id": [
-        "00-2f35883479255807598ec2d3a547005a-0fd0c0e4006e2015-01"
+        "042ff1df-e545-94ac-8369-45f465520e72"
       ],
       "x-zero-data-retention": [
         "false"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

@@ -1,0 +1,123 @@
+{
+  "model_spec": "google:gemini-3.5-flash",
+  "provider": "google",
+  "request": {
+    "body": {
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJTb2x2ZSAxMio3IGFuZCBzaG93IHlvdXIgaW50ZXJuYWwgdGhpbmtpbmcgKGJyaWVmKS4ifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7ImNhbmRpZGF0ZUNvdW50IjoxLCJtYXhPdXRwdXRUb2tlbnMiOjUwMDAsInRlbXBlcmF0dXJlIjoxLjAsInRoaW5raW5nQ29uZmlnIjp7ImluY2x1ZGVUaG91Z2h0cyI6dHJ1ZSwidGhpbmtpbmdMZXZlbCI6ImxvdyJ9fX0="
+    },
+    "canonical_json": {
+      "contents": [
+        {
+          "parts": [
+            {
+              "text": "Solve 12*7 and show your internal thinking (brief)."
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "generationConfig": {
+        "candidateCount": 1,
+        "maxOutputTokens": 5000,
+        "temperature": 1.0,
+        "thinkingConfig": {
+          "includeThoughts": true,
+          "thinkingLevel": "low"
+        }
+      }
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=[REDACTED]"
+  },
+  "response": {
+    "body": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "**My Mental Calculation Process**\n\nAlright, let's break down this calculation: I need to solve $12 \\times 7$. My immediate instinct is to decompose that 12.\n\n*   First, I break down the 12 into (10 + 2).\n*   Then, I multiply each of those parts by 7. That's straightforward: $10 \\times 7$ is 70 and $2 \\times 7$ is 14.\n*   Finally, I add those products together: 70 + 14, which gives me 84.\n\nJust to be absolutely sure, let me double-check with an alternative mental shortcut: I know $12 \\times 5$ is 60. Therefore, $12 \\times 6$ is 72, and therefore, $12 \\times 7$ must be 84. The answer is verified.\n\n\n",
+                "thought": true
+              },
+              {
+                "text": "**Internal Thinking:**\n* *Goal:* Solve $12 \\times 7$.\n* *Method:* Break $12$ down into $(10 + 2)$ to make the mental math easier.\n* *Step 1:* Multiply $10 \\times 7 = 70$.\n* *Step 2:* Multiply $2 \\times 7 = 14$.\n* *Step 3:* Add the two results together ($70 + 14$).\n* *Result:* $84$.\n\n**Answer:**\n$12 \\times 7 = \\mathbf{84}$",
+                "thoughtSignature": "EuAECt0EAQw51sd3/Z8H42els/1PoOpboJgF5PfW9FC7ht31I/Yl/Tx9KYYZQH6rlOmxvntTGvA8xomXFkMeC1l03btvTIKM5QQgmTQomo8hZva4jysTyEuchZZByzCvK5t6FFEJIhOWpkUNsCwe445aevl9xzEwxcMVoEmokrMvY2HIEeY1MTkC4Mj5AG8MO+hE7EzdT5Y6uMl+yHdl+cyZwV7SjJ2qMS+Fq+RE2phKLLpmQ4shRpJdRglrz8Yynh3kgrPFDM3WPOWpmiMeRQzbM3PbyaTzJrGJR0QDSiLNm92eFxDCWgIzVyYJJxynrhQ2y8XZJDPTHmvpqgntgizHWkhYwKSlEdkipZKdpb7ewKWzbKBg7GIvadwsD85h0Z3EUXwGUPPOPSbb9CEmcgv+f5sX97mNKoB3fgQELtztq4VVQ4VhWONmGqDY+wVyZRC08qwYSrnPZfVv2kHoDX6y+xggd+KSMf7smM9wAFTxnd7afwgxx1/8qwGtiNlTI3awNckhUEv9kjbcjCdLfPjKzIC9rNwCy9tEIADvUvsdmmnJeasRf4Wq8Kus6TaUsAtOFIFgcslDxpXK33YrpE6e8SNy7mDJhy9gjvD99zrhBTfPK8R4+3oTH5IjrSENM5rP2fdafiHxkFzk7bDaM6vOA3ad1j94s53rGL+kiHbKVmyEPSi/emLjINfAmD+TEzlNcSP507xY0t3z+oc2SyijebjBYF78EBwx1wOgot6qZoMuafmaeTXbxHu4t4OSoepwIVHIcmogAfk4/eC6LZcKnkg+zwWHT3fYpUaHLIXhygQ="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "modelVersion": "gemini-3.5-flash",
+      "responseId": "dxIaarPHNNaY1MkP-PvVwQw",
+      "usageMetadata": {
+        "candidatesTokenCount": 131,
+        "promptTokenCount": 15,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 15
+          }
+        ],
+        "serviceTier": "standard",
+        "thoughtsTokenCount": 194,
+        "totalTokenCount": 340
+      }
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "content-type": [
+        "application/json; charset=UTF-8"
+      ],
+      "date": [
+        "Fri, 29 May 2026 22:26:02 GMT"
+      ],
+      "server": [
+        "scaffolding on HTTPServer2"
+      ],
+      "server-timing": [
+        "gfet4t7; dur=3058"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-frame-options": [
+        "SAMEORIGIN"
+      ],
+      "x-gemini-service-tier": [
+        "standard"
+      ],
+      "x-xss-protection": [
+        "0"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

@@ -7,7 +7,7 @@ defmodule ReqLLM.Coverage.XAI.WebSearchTest do
   @moduletag provider: "xai"
   @moduletag timeout: 180_000
 
-  @model_spec "xai:grok-4-fast-reasoning"
+  @model_spec "xai:grok-4.3"
 
   setup_all do
     LLMDB.load(allow: :all, custom: %{})
@@ -15,7 +15,7 @@ defmodule ReqLLM.Coverage.XAI.WebSearchTest do
   end
 
   @tag scenario: :web_search_basic
-  @tag model: "grok-4-fast-reasoning"
+  @tag model: "grok-4.3"
   test "web search reports tool usage and cost" do
     opts =
       fixture_opts("web_search_basic",
@@ -34,7 +34,7 @@ defmodule ReqLLM.Coverage.XAI.WebSearchTest do
   end
 
   @tag scenario: :web_search_streaming
-  @tag model: "grok-4-fast-reasoning"
+  @tag model: "grok-4.3"
   test "web search reports tool usage and cost with streaming" do
     opts =
       fixture_opts("web_search_streaming",
@@ -58,7 +58,7 @@ defmodule ReqLLM.Coverage.XAI.WebSearchTest do
   end
 
   @tag scenario: :x_search_streaming
-  @tag model: "grok-4-fast-reasoning"
+  @tag model: "grok-4.3"
   test "x search reports tool usage and cost with streaming" do
     opts =
       fixture_opts("x_search_streaming",

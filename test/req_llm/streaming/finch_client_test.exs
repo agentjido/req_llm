@@ -385,6 +385,25 @@ defmodule ReqLLM.Streaming.FinchClientTest do
       assert canonical_json[:raw_body] != nil
     end
 
+    test "accepts iodata request bodies when validating stream request size" do
+      Application.put_env(:req_llm, :finch, [])
+
+      {:ok, stream_server} = MockStreamServer.start_link()
+      {:ok, context} = Context.normalize("Test")
+
+      assert {:ok, task_pid, _http_context, canonical_json} =
+               FinchClient.start_stream(
+                 IodataBodyProvider,
+                 %LLMDB.Model{provider: :test, id: "test"},
+                 context,
+                 [receive_timeout: 10, max_retries: 0],
+                 stream_server
+               )
+
+      assert is_pid(task_pid)
+      assert canonical_json["message"] == "hello"
+    end
+
     test "allows large request bodies when finch config cannot be parsed" do
       Application.put_env(:req_llm, :finch, :invalid_config)
 

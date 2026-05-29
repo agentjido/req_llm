@@ -1,0 +1,152 @@
+{
+  "model_spec": "google:gemini-3.1-pro-preview-customtools",
+  "provider": "google",
+  "request": {
+    "body": {
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJVc2UgdGhlIGFkZCB0b29sIHRvIGNvbXB1dGUgMiArIDMuIEFmdGVyIHRoZSB0b29sIHJlc3VsdCBhcnJpdmVzLCByZXNwb25kIHdpdGggJ3N1bT08dmFsdWU+Jy4ifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7ImNhbmRpZGF0ZUNvdW50IjoxLCJtYXhPdXRwdXRUb2tlbnMiOjY1NTMsInRlbXBlcmF0dXJlIjowLjB9LCJ0b29scyI6W3siZnVuY3Rpb25EZWNsYXJhdGlvbnMiOlt7ImRlc2NyaXB0aW9uIjoiQWRkIHR3byBpbnRlZ2VycyIsIm5hbWUiOiJhZGQiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsiYSI6eyJ0eXBlIjoiaW50ZWdlciJ9LCJiIjp7InR5cGUiOiJpbnRlZ2VyIn19LCJwcm9wZXJ0eU9yZGVyaW5nIjpbImEiLCJiIl0sInJlcXVpcmVkIjpbImEiLCJiIl0sInR5cGUiOiJvYmplY3QifX1dfV19"
+    },
+    "canonical_json": {
+      "contents": [
+        {
+          "parts": [
+            {
+              "text": "Use the add tool to compute 2 + 3. After the tool result arrives, respond with 'sum=<value>'."
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "generationConfig": {
+        "candidateCount": 1,
+        "maxOutputTokens": 6553,
+        "temperature": 0.0
+      },
+      "tools": [
+        {
+          "functionDeclarations": [
+            {
+              "description": "Add two integers",
+              "name": "add",
+              "parameters": {
+                "properties": {
+                  "a": {
+                    "type": "integer"
+                  },
+                  "b": {
+                    "type": "integer"
+                  }
+                },
+                "propertyOrdering": [
+                  "a",
+                  "b"
+                ],
+                "required": [
+                  "a",
+                  "b"
+                ],
+                "type": "object"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-pro-preview-customtools:generateContent?key=[REDACTED]"
+  },
+  "response": {
+    "body": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "functionCall": {
+                  "args": {
+                    "a": 2,
+                    "b": 3
+                  },
+                  "id": "mm7e9dzk",
+                  "name": "add"
+                },
+                "thoughtSignature": "EogFCoUFAQw51sdUBDsDFfgyaPW+5zK+c0Ge7BadlXZbm9RHi+78tbljuQhTcL4cu5pHUF8HzNvP6sxjD81vD116wTxTKC1nI5d+Lsgx8etN7QvIzrHmH64S3FEkJGCykShM/K8o6F3YPi7Pu8fyJEOJYfmE8Zek3hOeNlglh/dteeH30r5Eg5TEdqbKPHBSyV5Life4HboSF/VJuEoDJh0973sOIk+g8gkzQ7zaQ5QIVgiQ63dqyiTTU1C6XY6Vrm2cLKjj3XDUXXWGPlPI3hKWq3yEDxd2hVxgAjG9hvuO161lx8niT1yc5yL4/mWRm39yVqGnMm599M82vYpaH73zKdTYCBlBYhth48rgExzQbPXr8miig3h4nB4JT/T9rGjEpviMJNzz4fWDcMo/SI2vEk6QcQvgsCldiDfh7m/V14GOqYF1KM52596FwuY0bifdmPDvmbiiws90OSLFmNUCZAAwfxVqWjhzZL6NdYrkzIBtbbr9EI3cEW2mIFMqyX6F43mAx3hhD+o1rGihRtEbfB0akMdSUjACNs2Dq6LFXSpV/xSc0hetyNFpp4xATRbDMRYCAaZ9BoUS8EDdOO7Tfs7reFoScRioh4ywnA7/FMKNO/krSKfF/wj7Ek7+QSepxLBRkMUqOwY2TQZv2jpiQcr+nWEBP1Oc835sPK8UgGkI2ueoRBMvGYOciVaLc3CmsrgMWyq5SDHi0bHZmoFQx3JzNXDXH9OSEZFLBo54m038k2d2u01nIv+4XZxFfI7CKHhcLAI75JfC4UwXQAJMnvG2JDE+0kEJkaDjH7aNQidFiVFsDvldvZZiAXAJDvDc/HzHlHiC+3sBI521anRXoxCFMk0GTlQH"
+              }
+            ],
+            "role": "model"
+          },
+          "finishMessage": "Model generated function call(s).",
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "modelVersion": "gemini-3.1-pro-preview-customtools",
+      "responseId": "_REaapm3LsuW1MkP-b6AwA8",
+      "usageMetadata": {
+        "candidatesTokenCount": 16,
+        "promptTokenCount": 77,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 77
+          }
+        ],
+        "serviceTier": "standard",
+        "thoughtsTokenCount": 145,
+        "totalTokenCount": 238
+      }
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "content-type": [
+        "application/json; charset=UTF-8"
+      ],
+      "date": [
+        "Fri, 29 May 2026 22:24:00 GMT"
+      ],
+      "server": [
+        "scaffolding on HTTPServer2"
+      ],
+      "server-timing": [
+        "gfet4t7; dur=2337"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-frame-options": [
+        "SAMEORIGIN"
+      ],
+      "x-gemini-service-tier": [
+        "standard"
+      ],
+      "x-xss-protection": [
+        "0"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

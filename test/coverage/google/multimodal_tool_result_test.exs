@@ -19,7 +19,7 @@ defmodule ReqLLM.Coverage.Google.MultimodalToolResultTest do
   @moduletag provider: "google"
   @moduletag timeout: 180_000
 
-  @model_spec "google:gemini-3-pro-preview"
+  @model_spec "google:gemini-3.1-pro-preview"
 
   setup_all do
     LLMDB.load(allow: :all, custom: %{})
@@ -27,7 +27,7 @@ defmodule ReqLLM.Coverage.Google.MultimodalToolResultTest do
   end
 
   @tag scenario: :multimodal_tool_result
-  @tag model: "gemini-3-pro-preview"
+  @tag model: "gemini-3.1-pro-preview"
   test "tool result with PDF and accompanying text reaches the model" do
     pdf_bytes = File.read!(Path.join(File.cwd!(), "priv/examples/test.pdf"))
 

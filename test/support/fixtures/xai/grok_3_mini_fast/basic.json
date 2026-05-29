@@ -1,4 +1,6 @@
 {
+  "model_spec": "xai:grok-3-mini-fast",
+  "provider": "xai",
   "request": {
     "body": {
       "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjUwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Imdyb2stMy1taW5pLWZhc3QiLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
@@ -17,6 +19,9 @@
       "temperature": 0.0
     },
     "headers": {
+      "accept": [
+        "application/json"
+      ],
       "accept-encoding": [
         "gzip"
       ],
@@ -25,7 +30,7 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ]
     },
     "method": "post",
@@ -38,35 +43,36 @@
           "finish_reason": "stop",
           "index": 0,
           "message": {
-            "content": "Hello! I'm Grok, an AI created by xAI. How can I assist you today?",
-            "reasoning_content": "First, the user said \"Hello world!\" This is a common greeting, often used as a simple test message in programming, like the first program many people write.\n\nAs Grok, an AI created by xAI, I need to respond in a helpful and truthful manner. My responses should be maximally truthful, so I won't make up information.\n\nA standard response to \"Hello world!\" could be a friendly greeting back. Since this is an initial interaction, I should introduce myself briefly to set the context.\n\nKey elements from my system prompt:\n- I'm Grok, built by xAI.\n- Not based on any other companies' models.\n- Helpful and maximally truthful.\n\nPossible response structure:\n1. Greet back to acknowledge the user's message.\n2. Introduce myself to make it clear who I am.\n3. Keep it light and engaging, as this seems casual.\n\nFor example:\n- Start with \"Hello!\" or \"Hi there!\"\n- Then, say something like \"I'm Grok, created by xAI.\"\n- Maybe add a question to continue the conversation, like \"How can I assist you today?\"\n\nEnsure the response is not verbose. The prompt says \"Keep your response to user clear; please do not make your response verbose!\" So, be concise.\n\nFinal response idea:\n- Be direct: \"Hello! I'm Grok, an AI built by xAI. How can I help you?\"\n\nThis covers greeting, introduction, and an offer for assistance.",
+            "content": "Hello! 👋 What's on your mind?",
+            "reasoning_content": "The user said \"Hello world!\" This is a classic greeting, often the first program in programming tutorials. It's friendly and casual.\n",
             "refusal": null,
             "role": "assistant"
           }
         }
       ],
-      "created": 1762103807,
-      "id": "4cd48ba2-853b-023c-033f-b587bccee065_us-east-1",
-      "model": "grok-3-mini",
+      "created": 1780095903,
+      "id": "1ec43eab-2f11-9b58-92c3-c814c155b17b",
+      "model": "grok-4.3",
       "object": "chat.completion",
-      "system_fingerprint": "fp_4fae27f477",
+      "system_fingerprint": "fp_eb3c003fc66c14ed",
       "usage": {
-        "completion_tokens": 20,
+        "completion_tokens": 9,
         "completion_tokens_details": {
           "accepted_prediction_tokens": 0,
           "audio_tokens": 0,
-          "reasoning_tokens": 294,
+          "reasoning_tokens": 140,
           "rejected_prediction_tokens": 0
         },
+        "cost_in_usd_ticks": 4043500,
         "num_sources_used": 0,
-        "prompt_tokens": 10,
+        "prompt_tokens": 133,
         "prompt_tokens_details": {
           "audio_tokens": 0,
-          "cached_tokens": 3,
+          "cached_tokens": 128,
           "image_tokens": 0,
-          "text_tokens": 10
+          "text_tokens": 133
         },
-        "total_tokens": 324
+        "total_tokens": 282
       }
     },
     "headers": {
@@ -80,7 +86,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "9985481aefbde27f-ORD"
+        "a0392443ef1eb98a-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -89,16 +95,17 @@
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:16:49 GMT"
+        "Fri, 29 May 2026 23:05:04 GMT"
       ],
       "server": [
         "cloudflare"
       ],
-      "set-cookie": [
-        "__cf_bm=XK8zy2MOYcGEqf2PrOjyCQq3qcb3dZ55SJtfVT0mnL0-1762103809-1.0.1.1-t2y_8lbJJ9VklsRVt8QvfPM.2Z_Rr0ehAMPeQG4HFnTa.Dc7se0BUkHGTK6bxWtRrXm3TNQ7vcHL_Y22ysnMDF4ceoblXn4.2qOaKr0NRis; path=/; expires=Sun, 02-Nov-25 17:46:49 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
-      ],
+      "set-cookie": "[REDACTED:set-cookie]",
       "strict-transport-security": [
         "max-age=31536000"
+      ],
+      "traceparent": [
+        "00-b4958242794ffe521dc9f115a82d094a-6387f00200024aae-01"
       ],
       "transfer-encoding": [
         "chunked"
@@ -106,13 +113,35 @@
       "vary": [
         "origin, access-control-request-method, access-control-request-headers"
       ],
+      "x-metrics-e2e-ms": [
+        "1378.6"
+      ],
+      "x-metrics-mean-itl-ms": [
+        "7.1"
+      ],
+      "x-metrics-ttft-ms": [
+        "175.7"
+      ],
+      "x-ratelimit-limit-requests": [
+        "1800"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "10000000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "1779"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "9991931"
+      ],
       "x-request-id": [
-        "00-3ccec85f0057d32bc1ca6d11588eec91-2edf4386006de614-01"
+        "1ec43eab-2f11-9b58-92c3-c814c155b17b"
       ],
       "x-zero-data-retention": [
         "false"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

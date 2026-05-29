@@ -1,4 +1,6 @@
 {
+  "model_spec": "xai:grok-4",
+  "provider": "xai",
   "request": {
     "body": {
       "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjUwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Imdyb2stNCIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
@@ -17,6 +19,9 @@
       "temperature": 0.0
     },
     "headers": {
+      "accept": [
+        "application/json"
+      ],
       "accept-encoding": [
         "gzip"
       ],
@@ -25,7 +30,7 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ]
     },
     "method": "post",
@@ -38,34 +43,36 @@
           "finish_reason": "stop",
           "index": 0,
           "message": {
-            "content": "Hello! 🌍 What's up? If that's a nod to your first programming adventure, congrats— you've just compiled a classic. How can I help today?",
+            "content": "Hello, World! 👋 How can I help you today?",
+            "reasoning_content": "The user said \"Hello world!\" This is a classic greeting, often the first program in programming tutorials. It's friendly and casual.",
             "refusal": null,
             "role": "assistant"
           }
         }
       ],
-      "created": 1762103816,
-      "id": "cbab2803-296a-24bc-f8ac-400ece77fa09_us-east-1",
-      "model": "grok-4-0709",
+      "created": 1780095855,
+      "id": "9f5e45e1-f1de-9dd4-a397-b9bd3819853d",
+      "model": "grok-4.3",
       "object": "chat.completion",
-      "system_fingerprint": "fp_794271b43e",
+      "system_fingerprint": "fp_eb3c003fc66c14ed",
       "usage": {
-        "completion_tokens": 32,
+        "completion_tokens": 13,
         "completion_tokens_details": {
           "accepted_prediction_tokens": 0,
           "audio_tokens": 0,
-          "reasoning_tokens": 105,
+          "reasoning_tokens": 125,
           "rejected_prediction_tokens": 0
         },
+        "cost_in_usd_ticks": 3768500,
         "num_sources_used": 0,
-        "prompt_tokens": 687,
+        "prompt_tokens": 133,
         "prompt_tokens_details": {
           "audio_tokens": 0,
-          "cached_tokens": 680,
+          "cached_tokens": 128,
           "image_tokens": 0,
-          "text_tokens": 687
+          "text_tokens": 133
         },
-        "total_tokens": 824
+        "total_tokens": 271
       }
     },
     "headers": {
@@ -79,7 +86,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "9985485228c8e7fa-ORD"
+        "a0392317f85690c6-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -88,16 +95,17 @@
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:17:00 GMT"
+        "Fri, 29 May 2026 23:04:16 GMT"
       ],
       "server": [
         "cloudflare"
       ],
-      "set-cookie": [
-        "__cf_bm=2sYXKVRIl5YYcs49zhRn8Etym62jYv9XGlOyqIwbOEM-1762103820-1.0.1.1-R.qY1WVb9FTOqBkx.5gkjIWw6GUHKEbK8vvCXD.bLNq9e7gNhpYYnZc3QWRsF3J5aa_GWlYSjbzIOMZkyXpqhwqNtcqPfPeGUwqxxXdPt0k; path=/; expires=Sun, 02-Nov-25 17:47:00 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
-      ],
+      "set-cookie": "[REDACTED:set-cookie]",
       "strict-transport-security": [
         "max-age=31536000"
+      ],
+      "traceparent": [
+        "00-90ccf8a8d85078960655aef8813b5227-2ba60eef000084de-01"
       ],
       "transfer-encoding": [
         "chunked"
@@ -105,13 +113,35 @@
       "vary": [
         "origin, access-control-request-method, access-control-request-headers"
       ],
+      "x-metrics-e2e-ms": [
+        "1612.1"
+      ],
+      "x-metrics-mean-itl-ms": [
+        "8.6"
+      ],
+      "x-metrics-ttft-ms": [
+        "277.5"
+      ],
+      "x-ratelimit-limit-requests": [
+        "1800"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "10000000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "1791"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "9996112"
+      ],
       "x-request-id": [
-        "00-02192c0bb76d65a3106ea275c8b7b33d-822c490e006e5738-01"
+        "9f5e45e1-f1de-9dd4-a397-b9bd3819853d"
       ],
       "x-zero-data-retention": [
         "false"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

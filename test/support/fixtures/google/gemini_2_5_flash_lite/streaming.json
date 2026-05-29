@@ -1,0 +1,67 @@
+{
+  "captured_at": "2026-05-29T22:18:43.235345Z",
+  "chunks": [
+    {
+      "b64": "ZGF0YTogeyJjYW5kaWRhdGVzIjogW3siY29udGVudCI6IHsicGFydHMiOiBbeyJ0ZXh0IjogIkdyZWV0aW5ncywgZmVsbG93In1dLCJyb2xlIjogIm1vZGVsIn0sImluZGV4IjogMH1dLCJ1c2FnZU1ldGFkYXRhIjogeyJwcm9tcHRUb2tlbkNvdW50IjogMTgsImNhbmRpZGF0ZXNUb2tlbkNvdW50IjogMywidG90YWxUb2tlbkNvdW50IjogMjEsInByb21wdFRva2Vuc0RldGFpbHMiOiBbeyJtb2RhbGl0eSI6ICJURVhUIiwidG9rZW5Db3VudCI6IDE4fV0sInNlcnZpY2VUaWVyIjogInN0YW5kYXJkIn0sIm1vZGVsVmVyc2lvbiI6ICJnZW1pbmktMi41LWZsYXNoLWxpdGUiLCJyZXNwb25zZUlkIjogInd4QWFhcUtBQThLdTFNa1BvNjZieVEwIn0NCg0K"
+    },
+    {
+      "b64": "ZGF0YTogeyJjYW5kaWRhdGVzIjogW3siY29udGVudCI6IHsicGFydHMiOiBbeyJ0ZXh0IjogIiB0cmF2ZWxlciBvbiB0aGlzIGNvc21pYyBkdXN0IG1vdGUhIn1dLCJyb2xlIjogIm1vZGVsIn0sImZpbmlzaFJlYXNvbiI6ICJTVE9QIiwiaW5kZXgiOiAwfV0sInVzYWdlTWV0YWRhdGEiOiB7InByb21wdFRva2VuQ291bnQiOiAxOCwiY2FuZGlkYXRlc1Rva2VuQ291bnQiOiAxMSwidG90YWxUb2tlbkNvdW50IjogMjksInByb21wdFRva2Vuc0RldGFpbHMiOiBbeyJtb2RhbGl0eSI6ICJURVhUIiwidG9rZW5Db3VudCI6IDE4fV0sInNlcnZpY2VUaWVyIjogInN0YW5kYXJkIn0sIm1vZGVsVmVyc2lvbiI6ICJnZW1pbmktMi41LWZsYXNoLWxpdGUiLCJyZXNwb25zZUlkIjogInd4QWFhcUtBQThLdTFNa1BvNjZieVEwIn0NCg0K"
+    }
+  ],
+  "model_spec": "google:gemini-2.5-flash-lite",
+  "provider": "google",
+  "request": {
+    "body": {
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJTYXkgaGVsbG8gaW4gb25lIHNob3J0LCBpbWFnaW5hdGl2ZSBzZW50ZW5jZS4ifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7ImNhbmRpZGF0ZUNvdW50IjoxLCJtYXhPdXRwdXRUb2tlbnMiOjEwMCwidGVtcGVyYXR1cmUiOjAuOSwidG9wUCI6MC44fSwic3lzdGVtSW5zdHJ1Y3Rpb24iOnsicGFydHMiOlt7InRleHQiOiJZb3UgYXJlIGEgaGVscGZ1bCwgY3JlYXRpdmUgYXNzaXN0YW50LiJ9XX19"
+    },
+    "canonical_json": {
+      "contents": [
+        {
+          "parts": [
+            {
+              "text": "Say hello in one short, imaginative sentence."
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "generationConfig": {
+        "candidateCount": 1,
+        "maxOutputTokens": 100,
+        "temperature": 0.9,
+        "topP": 0.8
+      },
+      "systemInstruction": {
+        "parts": [
+          {
+            "text": "You are a helpful, creative assistant."
+          }
+        ]
+      }
+    },
+    "headers": {
+      "accept": "text/event-stream",
+      "content-type": "application/json"
+    },
+    "method": "POST",
+    "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:streamGenerateContent"
+  },
+  "response": {
+    "body": null,
+    "headers": {
+      "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
+      "content-disposition": "attachment",
+      "content-type": "text/event-stream",
+      "date": "Fri, 29 May 2026 22:18:43 GMT",
+      "server": "scaffolding on HTTPServer2",
+      "server-timing": "gfet4t7; dur=306",
+      "transfer-encoding": "chunked",
+      "vary": "Referer",
+      "x-content-type-options": "nosniff",
+      "x-frame-options": "SAMEORIGIN",
+      "x-xss-protection": "0"
+    },
+    "status": 200
+  },
+  "streaming": true
+}

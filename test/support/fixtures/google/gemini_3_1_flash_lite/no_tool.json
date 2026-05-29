@@ -1,0 +1,147 @@
+{
+  "model_spec": "google:gemini-3.1-flash-lite",
+  "provider": "google",
+  "request": {
+    "body": {
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJUZWxsIG1lIGEgam9rZSBhYm91dCBjYXRzIn1dLCJyb2xlIjoidXNlciJ9XSwiZ2VuZXJhdGlvbkNvbmZpZyI6eyJjYW5kaWRhdGVDb3VudCI6MSwibWF4T3V0cHV0VG9rZW5zIjoxMzEwNiwidGVtcGVyYXR1cmUiOjAuMCwidGhpbmtpbmdDb25maWciOnsiaW5jbHVkZVRob3VnaHRzIjp0cnVlLCJ0aGlua2luZ0xldmVsIjoibG93In19LCJ0b29scyI6W3siZnVuY3Rpb25EZWNsYXJhdGlvbnMiOlt7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsIm5hbWUiOiJnZXRfd2VhdGhlciIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJ0eXBlIjoic3RyaW5nIn19LCJwcm9wZXJ0eU9yZGVyaW5nIjpbImxvY2F0aW9uIl0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX1dfV19"
+    },
+    "canonical_json": {
+      "contents": [
+        {
+          "parts": [
+            {
+              "text": "Tell me a joke about cats"
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "generationConfig": {
+        "candidateCount": 1,
+        "maxOutputTokens": 13106,
+        "temperature": 0.0,
+        "thinkingConfig": {
+          "includeThoughts": true,
+          "thinkingLevel": "low"
+        }
+      },
+      "tools": [
+        {
+          "functionDeclarations": [
+            {
+              "description": "Get current weather information for a location",
+              "name": "get_weather",
+              "parameters": {
+                "properties": {
+                  "location": {
+                    "type": "string"
+                  }
+                },
+                "propertyOrdering": [
+                  "location"
+                ],
+                "required": [
+                  "location"
+                ],
+                "type": "object"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite:generateContent?key=[REDACTED]"
+  },
+  "response": {
+    "body": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "Okay, here's my take on that line of reasoning.\n\n**Deconstructing the Joke Request**\n\nRight, let's break this down. A cat joke, got it. The core task is to produce something *funny*, *lighthearted*, and *appropriate* – no dark humor or edgy stuff today, understood. My mind immediately starts sifting through established cat tropes and stereotypes. I’ve got to mine the rich comedic vein of cat behavior to find the right angle.\n\nI immediately consider their classic traits: that air of aloofness, the inherent arrogance we find in them. Then there's their penchant for knocking things off surfaces – that's a goldmine of comedic potential. The \"nine lives\" concept is always good for a pun or a twist. And of course, there's the universally known aversion to water, and the sounds they make, purrs and meows – gotta keep those in mind as potential punchlines or setup points. Now the hunt begins for a creative combination of these elements.\n\n\n",
+                "thought": true
+              },
+              {
+                "text": "Why was the cat sitting on the computer?\n\nBecause he wanted to keep an eye on the mouse!",
+                "thoughtSignature": "ErcDCrQDAQw51sfTZrrY6gKypa6pyVxrHIFf1bszoQ+aVqbijXEvLZdN95FKT01PwIQq+oAhFXcfKSA7KVgpwYrhF+NEIi2PmKsRrGkhR7PJ1oYdEpwfMTHvcC9p4av3UAM9V49eWch33MJSqiTlx4HGm5dQ4lnS7GebUYfTei/u527oMWPsOFK5FpHRs33YjiRftTtPQPJt0jV1sP2PLIu2cTwidkt9NbljDCaG0BvwrqHQNFwan6orIYB/kcMo0PG6dX6oiAFzRDDkw1IlqNe4XCcOlTHcx3VD5CKPz2paLdxwP2h19NjIYTtFLY8aoPkrH+KV7hVwCvtzm4iqulV6MaGkZM1sUP3iFJmRddnpLFXdN2eXS/tX723mw1F4Art/jLQqTC5tuLVuolgTeeEpMT6BaB6WVW5VO+UiihaWVwBWuZD2L/aztNObcWIWr+RiCk1GNEWkI7MmrJ/S0N11MhUOGEGzHsOc45t1CnFKqmfjT9H8w10einhBd83vOJGd1EuJmZQOo7gYg9TGHNUe2MYHXefYEA7DCUfEPoEiZ5b/zz0H5L/T0wxf+adMmuBeN2BxblpKXw=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "modelVersion": "gemini-3.1-flash-lite",
+      "responseId": "oBEaasE8_pfUyQ-AnqOQAw",
+      "usageMetadata": {
+        "candidatesTokenCount": 21,
+        "promptTokenCount": 51,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 51
+          }
+        ],
+        "serviceTier": "standard",
+        "thoughtsTokenCount": 118,
+        "totalTokenCount": 190
+      }
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "content-type": [
+        "application/json; charset=UTF-8"
+      ],
+      "date": [
+        "Fri, 29 May 2026 22:22:26 GMT"
+      ],
+      "server": [
+        "scaffolding on HTTPServer2"
+      ],
+      "server-timing": [
+        "gfet4t7; dur=2254"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-frame-options": [
+        "SAMEORIGIN"
+      ],
+      "x-gemini-service-tier": [
+        "standard"
+      ],
+      "x-xss-protection": [
+        "0"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

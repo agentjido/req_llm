@@ -1,0 +1,152 @@
+{
+  "model_spec": "google:gemini-3.1-pro-preview-customtools",
+  "provider": "google",
+  "request": {
+    "body": {
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJHZW5lcmF0ZSBhIHNvZnR3YXJlIGVuZ2luZWVyIHByb2ZpbGUifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7ImNhbmRpZGF0ZUNvdW50IjoxLCJtYXhPdXRwdXRUb2tlbnMiOjUwMCwicmVzcG9uc2VKc29uU2NoZW1hIjp7ImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjpmYWxzZSwicHJvcGVydGllcyI6eyJhZ2UiOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBhZ2UgaW4geWVhcnMiLCJtaW5pbXVtIjoxLCJ0eXBlIjoiaW50ZWdlciJ9LCJuYW1lIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3MgZnVsbCBuYW1lIiwidHlwZSI6InN0cmluZyJ9LCJvY2N1cGF0aW9uIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3Mgam9iIG9yIHByb2Zlc3Npb24iLCJ0eXBlIjoic3RyaW5nIn19LCJwcm9wZXJ0eU9yZGVyaW5nIjpbIm5hbWUiLCJhZ2UiLCJvY2N1cGF0aW9uIl0sInJlcXVpcmVkIjpbIm5hbWUiLCJhZ2UiXSwidHlwZSI6Im9iamVjdCJ9LCJyZXNwb25zZU1pbWVUeXBlIjoiYXBwbGljYXRpb24vanNvbiIsInRlbXBlcmF0dXJlIjowLjAsInRoaW5raW5nQ29uZmlnIjp7ImluY2x1ZGVUaG91Z2h0cyI6dHJ1ZSwidGhpbmtpbmdMZXZlbCI6ImxvdyJ9fX0="
+    },
+    "canonical_json": {
+      "contents": [
+        {
+          "parts": [
+            {
+              "text": "Generate a software engineer profile"
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "generationConfig": {
+        "candidateCount": 1,
+        "maxOutputTokens": 500,
+        "responseJsonSchema": {
+          "additionalProperties": false,
+          "properties": {
+            "age": {
+              "description": "Person's age in years",
+              "minimum": 1,
+              "type": "integer"
+            },
+            "name": {
+              "description": "Person's full name",
+              "type": "string"
+            },
+            "occupation": {
+              "description": "Person's job or profession",
+              "type": "string"
+            }
+          },
+          "propertyOrdering": [
+            "name",
+            "age",
+            "occupation"
+          ],
+          "required": [
+            "name",
+            "age"
+          ],
+          "type": "object"
+        },
+        "responseMimeType": "application/json",
+        "temperature": 0.0,
+        "thinkingConfig": {
+          "includeThoughts": true,
+          "thinkingLevel": "low"
+        }
+      }
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-pro-preview-customtools:generateContent?key=[REDACTED]"
+  },
+  "response": {
+    "body": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "**Generating the Final Output**\n\nI am now ready to formulate the final response. I've successfully met all defined requirements. The constraints check confirms the validity, schema compliance, and absence of unwanted elements. It confirms that everything is now in good order.\n\n\n",
+                "thought": true
+              },
+              {
+                "text": "{\"name\":\"Alice Smith\",\"age\":28,\"occupation\":\"Software Engineer\"}",
+                "thoughtSignature": "ErIGCq8GAQw51sfy+XQQM49oXge/WPC1ZOVrJv1f7Yb91wq8BV6il3JbqGMYiND867S7TarTIx+q9qg7/JTA9pvUo94gBaXVPHkkLeIW0rGmiGgMhb8gyLmRWUXf1brkNkBfVWY6YG0hQYAWR1TxvTwIGzygAKtpFwbJJoZC/qlP1VMGbQVQQB+djX3F74smIITQ2M6H83fvHkOQ1E4lbzpbHELMvmM/Oe1YCPNn8/oSbBDTNf9P7Ve9ultgs3nHHl1JG8Son9qAx9/2oYNmPDzio0xv8WpzQVSyfEnMlMyr3B8/Fd+xlUU/IkgNToCHus2JiukNgGZXXQ0Qwxl9Q5GFFmTV/hyjRgSne+fsaZUgMpR2aUE/J771LsVDh4UTuyg8nK83cx7/Wj5uT7Qb4eCTNv769PAZ+HEprCXm+6K2lCZTGSNBe3GY2GoNEt+O+/bSFhWxGpRQ3K4qV6MDssOAj8CopwutIYOqLcc5H4nuCAnMGgbsRW1JkConfZ0xrnnNvWOoEi2AB20LiP6V3RAoFqCZDQBRJg32amIVmegJWACYDXzSaiLDF2hWLIGO8vfJ18WptIsNECHSI/2YIc9IGIWEzk1NdDr/UoeMeI0JfCEIWOe1pKWR8z4NB5A+t6b97WoPVdK4Cuf9E0GjDcK/tRbmk63rezC5kd04WJfU0m0r7uZ4FtC1zNMAhRH0RG+bhz36bX6WNlGjW+ud8iclX9nwy6Sf8PYuZkl30vzRmhOJtWeZq1T2J5yDoXb26+JvMUxU60vqG6pIUAEfEfU+A2fh6TuUj4OB+WgtaIH0rqBSD0VVpEW30WEkrma4QC/FaAZGQT9B80xfiKnUmuufFMgvzR8V3KseLtOywSNNtObfT57wJx34LXYLfBrUU4Js/b/xznnu3Vr/ZJZUHM46mwl9B5e7+ow0Q6mHfMEnQmX6ZAm67RJIBVgCshGO20M0gCeCBHg7EYIVLagTn0tpYyL+dL+ykMUHy638eG0BgRlOYkQ03uPScbipJF4HEOrCpPNmXzYQx3lNw2NNBsxLNCsohSHKS1E38Yl+IOqiJMIb1FLDOThigzd6GVFuhZ74PmM="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "modelVersion": "gemini-3.1-pro-preview-customtools",
+      "responseId": "ChIaapD9EtnB1MkP6vbQ6Q0",
+      "usageMetadata": {
+        "candidatesTokenCount": 16,
+        "promptTokenCount": 6,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 6
+          }
+        ],
+        "serviceTier": "standard",
+        "thoughtsTokenCount": 233,
+        "totalTokenCount": 255
+      }
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "content-type": [
+        "application/json; charset=UTF-8"
+      ],
+      "date": [
+        "Fri, 29 May 2026 22:24:13 GMT"
+      ],
+      "server": [
+        "scaffolding on HTTPServer2"
+      ],
+      "server-timing": [
+        "gfet4t7; dur=3497"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-frame-options": [
+        "SAMEORIGIN"
+      ],
+      "x-gemini-service-tier": [
+        "standard"
+      ],
+      "x-xss-protection": [
+        "0"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

@@ -1,0 +1,147 @@
+{
+  "model_spec": "xai:grok-4.3",
+  "provider": "xai",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjMwMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiV3JpdGUgYSB2ZXJ5IGxvbmcgc3RvcnkgYWJvdXQgZHJhZ29ucyBhbmQgYWR2ZW50dXJlcyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Imdyb2stNC4zIiwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjV9"
+    },
+    "canonical_json": {
+      "max_completion_tokens": 3000,
+      "messages": [
+        {
+          "content": "Write a very long story about dragons and adventures",
+          "role": "user"
+        }
+      ],
+      "model": "grok-4.3",
+      "reasoning_effort": "low",
+      "stream": false,
+      "temperature": 0.5
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.x.ai/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "content": "**The Dragon's Legacy: Chronicles of Eldrath**\n\nIn the shadowed peaks of Eldrath, where mist clung to jagged spires like ancient secrets, dragons ruled the skies. These were not mere beasts of legend but ancient beings of fire, wisdom, and storm—scales shimmering like forged starlight, eyes burning with the wisdom of millennia. For centuries, they had guarded the balance of the world, their roars echoing through valleys as both warning and song. But peace frayed when the Shadow Wyrm, Vorthak, awoke from his slumber beneath the Ashen Crater. Corrupted by forgotten curses, Vorthak sought to chain all dragons to his will, plunging the realms into eternal twilight.\n\nOur tale begins with Elara Voss, a 17-year-old orphan from the village of Thornwick at the mountain's base. Elara was no warrior—slender, with wind-tangled auburn hair and eyes the color of storm clouds—but she possessed an uncanny gift: she could hear the dragons' thoughts in whispers carried by the wind. It started as dreams of soaring through clouds, but one fateful dawn, as she gathered herbs on the slopes, a wounded silver dragon named Sylphara crashed before her. Scales torn, wing shattered, Sylphara's voice filled Elara's mind: *Child of earth, bind my wound with moonpetal and starroot. The Shadow Wyrm hunts us all.*\n\nElara's first adventure unfolded in the Whispering Glade. With trembling hands, she foraged under moonlight, evading thorn-beasts that prowled the undergrowth. Sylphara taught her the ancient tongue of scales—words that could calm storms or ignite sparks. Together, they forged a bond: Elara rode upon Sylphara's back for the first time, the wind whipping her face as they escaped a patrol of Vorthak's corrupted drakes—twisted, obsidian horrors with venomous breath. They flew to the floating isles of Aerion, where crystal spires hummed with dragon magic. There, Elara met the Council of Elders: ancient dragons like the fiery Ignar, the wise aquatic Nerath, and the elusive storm-lord Zephyrion.\n\nThe council revealed the prophecy: \"A mortal heart, unbound by scale, shall unite the flights or doom them to ash.\" Elara, reluctant hero, was chosen. Her quest began with the Trial of Flames—venturing into the Molten Depths to retrieve the Ember Heart, a gem that could shield dragons from Vorthak's corruption. Adventures multiplied like dragonfire. In the Sunken Labyrinth beneath the Sapphire Sea, Elara and Sylphara dove with Nerath's aid, battling kraken-serpents whose tentacles lashed like thunder. They uncovered lost runes revealing Vorthak's weakness: the Celestial Fang, a blade forged from a fallen star, hidden in the ruins of the First Flight.\n\nAllies joined the fray. Kael, a rogue sky-pirate with a mechanical glider and a grudge against Vorthak (who had razed his floating city), became Elara's steadfast companion. His quick wit and crossbow bolts saved them from ambushes in the Whisperwind Canyons, where sand-dragons guarded shifting dunes. Then came Mira, a young dragon-rider from the eastern clans, whose bonded beast, the emerald-scaled Thorn, clashed with Sylphara at first but forged unbreakable friendship through shared battles. Together, the quartet navigated the Eternal Storm—a perpetual tempest where lightning dragons tested their courage. Elara learned to wield rudimentary magic: summoning gusts to deflect arrows, or channeling Sylphara's fire into protective barriers.\n\nDeeper into the tale, betrayal struck. A trusted elder dragon, once a friend, revealed himself as Vorthak's spy, leading to a harrowing escape from the Crystalline Citadel. Elara's heart ached as she confronted loss—Sylphara gravely wounded again—fueling her resolve. They traversed the Forbidden Marshes, where illusionary dragons lured travelers to doom, and scaled the Spire of Echoes to commune with ancestral spirits. Visions showed Elara her own lineage: descendant of the last Dragon-Binder, a hero who sealed Vorthak centuries ago.\n\nThe grand adventure culminated in the Siege of Ashen Crater. Armies of free dragons—flights of ruby, sapphire, and gold—rallied under Elara's banner. Epic aerial battles raged: fireballs streaked like comets, claws clashed in midair, and Elara, wielding the Celestial Fang, led the charge atop Sylphara. Kael's glider fleet bombed corrupted nests; Mira and Thorn flanked from the shadows. Vorthak emerged, a colossal nightmare of shadow and flame, his roar shattering mountains. The final duel spanned chapters of desperation—Elara dodging tail-swipes that felled cliffs, channeling the Ember Heart to purify allies, and ultimately piercing Vorthak's heart with the Fang in a blaze of starlight.\n\nVictory came at cost: wounds that would scar, but also renewal. Dragons and humans forged a new pact, with Elara as the first Dragon-Queen of Eldrath. Sylphara healed, becoming her eternal guardian. Kael explored new horizons; Mira united the clans. Yet whispers hinted at greater threats beyond the stars—other worlds calling for heroes.\n\nElara's story stretched across years: further quests to mend rifts in the Veil, adventures in lost continents where crystal dragons sang prophecies, and quiet moments teaching the next generation. Through storms and sunrises, the bond of rider and dragon endured, proving that adventure's true fire lies not in conquest, but in the courage to soar together.\n\nAnd so the legends grew, told around hearths for generations, of the girl who heard dragons and the world she saved. The end... or merely the beginning of endless skies.",
+            "reasoning_content": "The user asked: \"Write a very long story about dragons and adventures.\"\n",
+            "refusal": null,
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1780095521,
+      "id": "ad4a4c64-b4e2-940c-9628-b389d2cf63c9",
+      "model": "grok-4.3",
+      "object": "chat.completion",
+      "system_fingerprint": "fp_eb3c003fc66c14ed",
+      "usage": {
+        "completion_tokens": 1195,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "reasoning_tokens": 245,
+          "rejected_prediction_tokens": 0
+        },
+        "cost_in_usd_ticks": 36393500,
+        "num_sources_used": 0,
+        "prompt_tokens": 139,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 128,
+          "image_tokens": 0,
+          "text_tokens": 139
+        },
+        "total_tokens": 1579
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "*"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a0391aee2e832ced-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 29 May 2026 22:59:01 GMT"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": "[REDACTED:set-cookie]",
+      "strict-transport-security": [
+        "max-age=31536000"
+      ],
+      "traceparent": [
+        "00-cbc05158bb5ccb090585d04445399823-d2145b0f000245f9-01"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "origin, access-control-request-method, access-control-request-headers"
+      ],
+      "x-metrics-e2e-ms": [
+        "20841.6"
+      ],
+      "x-metrics-mean-itl-ms": [
+        "14.3"
+      ],
+      "x-metrics-ttft-ms": [
+        "182.9"
+      ],
+      "x-ratelimit-limit-requests": [
+        "1800"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "10000000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "1800"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "10000000"
+      ],
+      "x-request-id": [
+        "ad4a4c64-b4e2-940c-9628-b389d2cf63c9"
+      ],
+      "x-zero-data-retention": [
+        "false"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

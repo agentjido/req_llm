@@ -3,7 +3,7 @@
   "provider": "xai",
   "request": {
     "body": {
-      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjEwMjQsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiUmVzcG9uZCB3aXRoIGEgc2luZ2xlIHdvcmQgJ0hpJy4iLCJyb2xlIjoidXNlciJ9LHsiY29udGVudCI6IkhpIiwicm9sZSI6ImFzc2lzdGFudCJ9LHsiY29udGVudCI6IkhpIGFnYWluIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiZ3Jvay00LWZhc3QiLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjEwMjQsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiUmVzcG9uZCB3aXRoIGEgc2luZ2xlIHdvcmQgJ0hpJy4iLCJyb2xlIjoidXNlciJ9LHsiY29udGVudCI6IkhpIiwicmVhc29uaW5nX2NvbnRlbnQiOiJUaGUgdXNlciBzYWlkOiBcIlJlc3BvbmQgd2l0aCBhIHNpbmdsZSB3b3JkICdIaScuXCJcbkhpXG5cblxuIyMgRXhwbGFuYXRpb25cblxuVGhlIGluc3RydWN0aW9uIGlzIHBhcnNlZCBhcyBhIGRpcmVjdCBpbXBlcmF0aXZlIHRvIG91dHB1dCBleGFjdGx5IG9uZSB3b3JkLCDigJxIaeKAnSwgd2l0aG91dCBhbnkgYWRkaXRpb25hbCB0ZXh0LCBwdW5jdHVhdGlvbiwgb3IgZWxhYm9yYXRpb24uIiwicm9sZSI6ImFzc2lzdGFudCJ9LHsiY29udGVudCI6IkhpIGFnYWluIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiZ3Jvay00LWZhc3QiLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
     },
     "canonical_json": {
       "max_completion_tokens": 1024,
@@ -14,6 +14,7 @@
         },
         {
           "content": "Hi",
+          "reasoning_content": "The user said: \"Respond with a single word 'Hi'.\"\nHi\n\n\n## Explanation\n\nThe instruction is parsed as a direct imperative to output exactly one word, “Hi”, without any additional text, punctuation, or elaboration.",
           "role": "assistant"
         },
         {
@@ -27,6 +28,9 @@
       "temperature": 0.0
     },
     "headers": {
+      "accept": [
+        "application/json"
+      ],
       "accept-encoding": [
         "gzip"
       ],
@@ -35,7 +39,7 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.16"
+        "req/0.5.18"
       ]
     },
     "method": "post",
@@ -48,34 +52,36 @@
           "finish_reason": "stop",
           "index": 0,
           "message": {
-            "content": "Hello! What's up?",
+            "content": "Hi",
+            "reasoning_content": "The user said \"Hi again\". This is a continuation from the previous interaction where they asked me to respond with a single word 'Hi', and I did.\n",
             "refusal": null,
             "role": "assistant"
           }
         }
       ],
-      "created": 1763621642,
-      "id": "5f599233-bd48-8b5e-58e0-86e68de6a6f9",
-      "model": "grok-4-fast-reasoning",
+      "created": 1780096053,
+      "id": "8873c41d-f850-9348-a432-e684cd898130",
+      "model": "grok-4.3",
       "object": "chat.completion",
-      "system_fingerprint": "fp_bfbe7bd0a2",
+      "system_fingerprint": "fp_eb3c003fc66c14ed",
       "usage": {
-        "completion_tokens": 5,
+        "completion_tokens": 1,
         "completion_tokens_details": {
           "accepted_prediction_tokens": 0,
           "audio_tokens": 0,
-          "reasoning_tokens": 202,
+          "reasoning_tokens": 204,
           "rejected_prediction_tokens": 0
         },
+        "cost_in_usd_ticks": 10296500,
         "num_sources_used": 0,
-        "prompt_tokens": 175,
+        "prompt_tokens": 575,
         "prompt_tokens_details": {
           "audio_tokens": 0,
-          "cached_tokens": 151,
+          "cached_tokens": 192,
           "image_tokens": 0,
-          "text_tokens": 175
+          "text_tokens": 575
         },
-        "total_tokens": 382
+        "total_tokens": 780
       }
     },
     "headers": {
@@ -89,7 +95,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "9a1608a22a0ceb26-SJC"
+        "a03927ed08d8dcf3-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -98,16 +104,17 @@
         "application/json"
       ],
       "date": [
-        "Thu, 20 Nov 2025 06:54:07 GMT"
+        "Fri, 29 May 2026 23:07:36 GMT"
       ],
       "server": [
         "cloudflare"
       ],
-      "set-cookie": [
-        "__cf_bm=JpkG_uechFRCc8GnX0Sbg7K9OAwBX3zA0B2h8ofUPjA-1763621647-1.0.1.1-IYxvjihSD0SA3T4ipxuUa7Q0kRXTsFv13h2t3sw890YGZDua6rmY2STAEvMA4JzhzCY2uCBmN9sjBA2c3l5LNRybsCx7hjkVKcw4mzj4dKw; path=/; expires=Thu, 20-Nov-25 07:24:07 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
-      ],
+      "set-cookie": "[REDACTED:set-cookie]",
       "strict-transport-security": [
         "max-age=31536000"
+      ],
+      "traceparent": [
+        "00-d16be2d0b17e2cd8cc85432e1b5fc18f-3783afc600009169-01"
       ],
       "transfer-encoding": [
         "chunked"
@@ -115,13 +122,35 @@
       "vary": [
         "origin, access-control-request-method, access-control-request-headers"
       ],
+      "x-metrics-e2e-ms": [
+        "2715.3"
+      ],
+      "x-metrics-mean-itl-ms": [
+        "11.6"
+      ],
+      "x-metrics-ttft-ms": [
+        "217.9"
+      ],
+      "x-ratelimit-limit-requests": [
+        "1800"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "10000000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "1795"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "9997759"
+      ],
       "x-request-id": [
-        "00-172c0843ea169564645365bfa6d1b9a5-011a4eff002a1c4c-01"
+        "8873c41d-f850-9348-a432-e684cd898130"
       ],
       "x-zero-data-retention": [
         "false"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

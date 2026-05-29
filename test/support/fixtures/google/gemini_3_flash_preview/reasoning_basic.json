@@ -1,0 +1,123 @@
+{
+  "model_spec": "google:gemini-3-flash-preview",
+  "provider": "google",
+  "request": {
+    "body": {
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJTb2x2ZSAxMio3IGFuZCBzaG93IHlvdXIgaW50ZXJuYWwgdGhpbmtpbmcgKGJyaWVmKS4ifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7ImNhbmRpZGF0ZUNvdW50IjoxLCJtYXhPdXRwdXRUb2tlbnMiOjUwMDAsInRlbXBlcmF0dXJlIjoxLjAsInRoaW5raW5nQ29uZmlnIjp7ImluY2x1ZGVUaG91Z2h0cyI6dHJ1ZSwidGhpbmtpbmdMZXZlbCI6ImxvdyJ9fX0="
+    },
+    "canonical_json": {
+      "contents": [
+        {
+          "parts": [
+            {
+              "text": "Solve 12*7 and show your internal thinking (brief)."
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "generationConfig": {
+        "candidateCount": 1,
+        "maxOutputTokens": 5000,
+        "temperature": 1.0,
+        "thinkingConfig": {
+          "includeThoughts": true,
+          "thinkingLevel": "low"
+        }
+      }
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=[REDACTED]"
+  },
+  "response": {
+    "body": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "**My Approach to a Simple Multiplication Problem**\n\nOkay, so the prompt is to \"Solve 12\\*7\" and, importantly, to show my internal thought process briefly. No problem. Let's see... the problem is straightforward: 12 multiplied by 7. I've got a couple of immediate approaches I could use here. First, I could use the distributive property, which is generally a solid way to break down these kinds of problems, especially mentally. Alternatively, I could just try to recall the answer outright through mental math or memorization. Given the constraint, the distributive property seems the more suitable and transparent route.\n\nSo, here's how I'll do it. I'll take 12 and break it into 10 and 2. Then, step by step, I'll multiply each part by 7. First: $10 \\times 7$. That's easy; that gives me 70. Next: $2 \\times 7$. That's 14. Finally, I'll add those results together: $70 + 14$. That sums to 84.\n\n\n",
+                "thought": true
+              },
+              {
+                "text": "**Internal Thinking:**\n*   Break 12 into 10 and 2 ($12 = 10 + 2$).\n*   Multiply $10 \\times 7 = 70$.\n*   Multiply $2 \\times 7 = 14$.\n*   Add the results: $70 + 14 = 84$.\n\n**Answer:**\n12 * 7 = **84**",
+                "thoughtSignature": "Es0DCsoDAQw51sdD7tYBznjX8SerdxiEiM+LKkRAYFWAKFyyrWz+aHi/OpQTIWzajEblf9pZO2Sl+pzgR56iRCbxyyT+oCUCV3ym3m4sO1tHAPgbToW22CUbKbFrDypNtBNbCljMlvU32rejKVtqxUNvj9i/bZq/nH0G3OKH0Dx/iAgitdSLbD/1/uDbRwzdSbwZEKeEl8K6xAdgvRHtgkTl3WfvntM9ZIGxBQ9ZaX9uyKloZ/FSfz62L58aoqRfiJXLu/TqZBtRLRzw0V8HN5mXPnQ/+4e8hzoRmePvGNlfe3cFWuxfqDdCnSO9PoV8VTa6az8KYoqJ7nH0iMul49GpLuomT/HDrXS7s3zEsttyH56oZA5N7hg3d+4YiKI7T8x/XbvjSG7O62Tfae7JMUXmIpmWH35msEZzvIgyRfVvZORwH4tz9e+I8iHYrd11ZLRQnPQR6EJBDJLZWCQPPLfN7C2HsYXdoVT44rBT2ARlF55/CefgVqOC3vilxLtYDgJH6dCz7ZAqAqKXz0N68kjYHJ0AvStjwC9sLhz54dZUgYukQk8K83jsFQSzyRJuNXdN98LbO7NcEDrBhA7OAjybawLsLkK79Bh3TjSq9XY="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "modelVersion": "gemini-3-flash-preview",
+      "responseId": "PxIaapWwFdnB1MkP6vbQ6Q0",
+      "usageMetadata": {
+        "candidatesTokenCount": 94,
+        "promptTokenCount": 15,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 15
+          }
+        ],
+        "serviceTier": "standard",
+        "thoughtsTokenCount": 165,
+        "totalTokenCount": 274
+      }
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "content-type": [
+        "application/json; charset=UTF-8"
+      ],
+      "date": [
+        "Fri, 29 May 2026 22:25:06 GMT"
+      ],
+      "server": [
+        "scaffolding on HTTPServer2"
+      ],
+      "server-timing": [
+        "gfet4t7; dur=2808"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-frame-options": [
+        "SAMEORIGIN"
+      ],
+      "x-gemini-service-tier": [
+        "standard"
+      ],
+      "x-xss-protection": [
+        "0"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

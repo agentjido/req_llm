@@ -1,0 +1,123 @@
+{
+  "model_spec": "google:gemini-3.1-pro-preview",
+  "provider": "google",
+  "request": {
+    "body": {
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJIZWxsbyB3b3JsZCEifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7ImNhbmRpZGF0ZUNvdW50IjoxLCJtYXhPdXRwdXRUb2tlbnMiOjIwMDAsInRlbXBlcmF0dXJlIjowLjAsInRoaW5raW5nQ29uZmlnIjp7ImluY2x1ZGVUaG91Z2h0cyI6dHJ1ZSwidGhpbmtpbmdMZXZlbCI6ImxvdyJ9fX0="
+    },
+    "canonical_json": {
+      "contents": [
+        {
+          "parts": [
+            {
+              "text": "Hello world!"
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "generationConfig": {
+        "candidateCount": 1,
+        "maxOutputTokens": 2000,
+        "temperature": 0.0,
+        "thinkingConfig": {
+          "includeThoughts": true,
+          "thinkingLevel": "low"
+        }
+      }
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-pro-preview:generateContent?key=[REDACTED]"
+  },
+  "response": {
+    "body": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "**My Response to \"Hello World!\"**\n\nOkay, so the user's input is a simple \"Hello world!\". That's a classic! It immediately flags to me that this is likely a first interaction or a test message. I need to respond in a friendly, helpful, and welcoming way. The goal is clear: build rapport and show my usefulness.\n\nI'm thinking, \"Let's formulate a response.\" I need to:\n\n*   Acknowledge the greeting. \"Hello!\" should suffice.\n*   Offer assistance. \"How can I help you today?\" is the standard go-to.\n\nI'm considering a few drafts. Option one is a basic \"Hello! How can I help you today?\". Safe, effective, and gets straight to the point. Option two might add a bit of personality: something like \"Hello world! It's great to meet you. How can I assist you today?\" Mirroring the prompt is a nice touch. I could also make a variation of it.\n\nAfter reviewing these drafts, I'm leaning toward keeping it simple. Option 1, with a slight variation, is the best route. \"Hello! Welcome to the world. How can I help you today?\" would also be fine. But, for maximum clarity and usefulness, let's keep it clean.\n\nSo, I'm settling on: \"Hello! How can I help you today?\" It's direct, polite, and sets the stage for a productive interaction.\n\n\n",
+                "thought": true
+              },
+              {
+                "text": "Hello! How can I help you today?",
+                "thoughtSignature": "EuIICt8IAQw51sftf/kzsOqFwqd1CGop7/m7RYMIGIV8RzKEzu3s3AK4g5TN9PBtta4HDmYSzvco9AmMNEhqXSha/ESTR1mI81EyMIOP77+SzGL9UB211XhocbFvG9gSXRm0iJYq3cotrpxCGGnZiVUJDzlvML5ntaYpdOd/7+5asglBJ98YRZOsx8FQ3p6k80CBfDhIMJfjQA6l0C7AMlBsEXTE1KzNwR5Kch7Bce8eiebgnXP7HkWVWUZZ2tPbbw0m8WWExabyzOSdsNAC2co3OT0n9GSWRwfCbHuHvn8/tW3NRISFm7Qj2VabYJvQmZE2THxMSvOhJ+JHYXEJsnO8oSLVEjso50vR9am/GY4zWi42frU4O0U0hM3HBLiZKtsuDChcv8fyrytw29UDMS4Arcc8lKelTzSOMDY7JB7wvuW4FZ6B8hoy0DKb7B5qBOVm4H5hmH6MjQHAH8sRqwF6qlMgpwDRrIZyDJo3BQXfI71Sgmn96ki5zkiBTvGLxQn0P8NR9kLGMWr11zlPY5ug6x/5RjOPit0/3Bccj5A2ueTG/PGIj8N6RKTymJETbx8CRngwMVrkaL7E58Dqh80NdDDyskT48BZdC8uxhf8QsMuChINZFzSfWhnnh6UEXDeMNFLUZEe22Q3YzXhc9o91cNh0u1GvUfklat/i3kR8ZazFafgtx/L3hLZSH+s6Jx9m5dlhe6B7Mqtn0Cc0RmJZLh77iDZ6LvM88yHyG3Gxc5Wz7CBC19Tajl33nfv6KswOh2bc4KoKEp/bj+Hj1re/SoASVnJqUj7s4KxZ1rBO2u97IUaCCZDysAN+ioOxAZxIQO8vregPh1TX7dwnwL111zJucjMU5ygKrmMtQ7hUqiCX7GaEfJdSNbNScrrkoNSCLVV1mG/n/ncYBP42rUytfL4AoT6MCIcuwFqM1Ypo3JxwTe/87/PkGAIReAXb0QEsBj7Bc9Jh4I1K2/c76hP02pR5QESemdOBQTEaPf7sa2g5UC2zBqj8tfn7xDssf/sjTFjZZXPbiOOmNaUd7GlhGgla60Kw+GS/Bc9UXTDi6VGdZ9MieQBebogkWu+9UozpY/kMKzLu+a4jZlrPqjzymjJHrO+yUMeJjO6/rdzbX9KtNxBKS+SU7Q1jAqEpBPotyDzJ7LCCfDZJmSlQMyg5dkV242B/EG1cC4QVvXVjeATqEn67tC6KZmkms1QzZvelFeZOeHGSre/KJ8kun0c8U7B2b7M8Fzmy1h3j/3emnC2pW7xTIYtJBHc6nobd8XGBZ5THPICM9wQLZ4U0msWdQNqGAlUDwx9nCUqs/aUh3V5t7FNRphWj9j+lOFCUmtiJ8+YnIquFvAjOaLsSQO7G4LWKqVopajKsnV8eYPd8HuvrkiTMkX24/MTvS7HMFMs5oKrPxL8OLeegjdvmCKogR61/gR2PWZyOs7xJmB3/lGuo+Tr5Z5ek9Yz0cffffIFoEMpJrODTWCqUELvTZcQRm1xm"
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "modelVersion": "gemini-3.1-pro-preview",
+      "responseId": "uQ4aauabJsOPjMcPlpza6Qs",
+      "usageMetadata": {
+        "candidatesTokenCount": 9,
+        "promptTokenCount": 4,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 4
+          }
+        ],
+        "serviceTier": "standard",
+        "thoughtsTokenCount": 292,
+        "totalTokenCount": 305
+      }
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "content-type": [
+        "application/json; charset=UTF-8"
+      ],
+      "date": [
+        "Fri, 29 May 2026 22:10:07 GMT"
+      ],
+      "server": [
+        "scaffolding on HTTPServer2"
+      ],
+      "server-timing": [
+        "gfet4t7; dur=5727"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-frame-options": [
+        "SAMEORIGIN"
+      ],
+      "x-gemini-service-tier": [
+        "standard"
+      ],
+      "x-xss-protection": [
+        "0"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

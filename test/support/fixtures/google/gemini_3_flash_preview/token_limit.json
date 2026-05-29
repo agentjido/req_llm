@@ -1,0 +1,123 @@
+{
+  "model_spec": "google:gemini-3-flash-preview",
+  "provider": "google",
+  "request": {
+    "body": {
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJXcml0ZSBhIHZlcnkgbG9uZyBzdG9yeSBhYm91dCBkcmFnb25zIGFuZCBhZHZlbnR1cmVzIn1dLCJyb2xlIjoidXNlciJ9XSwiZ2VuZXJhdGlvbkNvbmZpZyI6eyJjYW5kaWRhdGVDb3VudCI6MSwibWF4T3V0cHV0VG9rZW5zIjozMDAwLCJ0ZW1wZXJhdHVyZSI6MC41LCJ0aGlua2luZ0NvbmZpZyI6eyJpbmNsdWRlVGhvdWdodHMiOnRydWUsInRoaW5raW5nTGV2ZWwiOiJsb3cifX19"
+    },
+    "canonical_json": {
+      "contents": [
+        {
+          "parts": [
+            {
+              "text": "Write a very long story about dragons and adventures"
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "generationConfig": {
+        "candidateCount": 1,
+        "maxOutputTokens": 3000,
+        "temperature": 0.5,
+        "thinkingConfig": {
+          "includeThoughts": true,
+          "thinkingLevel": "low"
+        }
+      }
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=[REDACTED]"
+  },
+  "response": {
+    "body": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "**My Dragon-Scale Adventure: Initial Thoughts and Refinements**\n\nRight, let's see. My mind is buzzing with dragons and adventures. I'm visualizing a sprawling epic fantasy, high stakes, the whole nine yards. I'm envisioning a central character, let's call her Elara. She's a \"Scale-Seeker,\" so she's got to be more than just another dragon slayer. I think the key here is a unique ability, maybe she understands Draconic resonance – a way to truly *connect* with these creatures beyond their brute force.\n\nThen there's the dragon – Korthax, the Ember-Heart. He's not just a fire-breathing beast. I want an ancient, weary guardian, steeped in history, almost… mournful. He's the last of his kind, guarding secrets from a forgotten era, a cathedral of glass and heat. The conflict has to be significant. I'm picturing a creeping darkness – the \"Void-Blight\" – consuming magic. This forces an uneasy alliance between dragons and humans, they must band together if either are to survive.\n\nThe setting is crucial. I like the idea of the \"Floating Isles of Aethelgard\" and the \"Deep Canyons of Ash.\" They have a good contrast, a good basis for showing different landscapes.\n\nSo, the outline… Elara finds a map to the \"Sun-Eater's Peak.\" This is her starting point. I can already see the journey unfolding: the Whispering Woods, the cynical companion – Kaelen, a disgraced knight. Their first meeting is important, there's gotta be initial hostility but a tentative alliance.\n\nThen the stakes rise – the Void-Blight attacks a major city. Elara and Korthax need to find the \"Star-Forge\" to create a weapon. This is the rising action. We’ll build up to a massive battle at the Star-Forge, battling the Blight-Shadows. Then, a resolution – the world is saved, but things have changed. Dragons have to return to the skies.\n\nOkay, let's flesh this out. I'm going to start with atmosphere, with sensory details. The smell of sulfur and old parchment. Elara, in a dusty library, uncovers a hidden scroll. The journey itself needs more detail: the \"Shattered Peaks,\" the introduction of Kaelen. Minor obstacles – maybe Stone-Golems – to introduce challenges. Korthax's lair... not just a cave, but a cathedral of glass and heat. I can already picture his scales like rubies, his eyes like molten gold.\n\nDialogue is key. Korthax speaks in riddles, tired of humans. Elara has to explain the Blight. Their quest needs a specific goal – the \"Aether-Core\" in the Sunken City.\n\nThe action... a chase scene, Shadow-wraiths on the wing, Korthax navigating narrow canyons. The climax is at the Peak. The Blight is a physical manifestation of entropy. Elara needs to channel the dragon's fire through the Aether-Core. The ending has to be bittersweet. Korthax leaves, but the bond remains, a deep connection.\n\nI need to make sure the story is long enough and the pacing is right. I'm going to add more sensory details about the flight. Add in some of the history of the world. Ensure the transition from the library to the mountains feels earned. Now for the crucial part... word choice. I want *obsidian*, *resonance*, *celestial*, *primordial*, *cacophony*. Let's make this epic.\n\n\n",
+                "thought": true
+              },
+              {
+                "text": "The world of Aethelgard was not a place of maps and borders, but of heights and depths. It was a realm of floating archipelagos, suspended in a sea of endless clouds, where the only way to travel from one kingdom to another was by wing or by whim. And in Aethelgard, wings belonged to the dragons.\n\n### Part I: The Scholar of Scales\n\nElara was not a warrior, nor was she a queen. She was a Scale-Seeker, a member of an ancient order dedicated to the study and preservation of dragon-kind. While the rest of the world saw dragons as either gods to be worshipped or monsters to be slain, Elara saw them as the heartbeat of the world.\n\nShe lived in the Spire of Oros, a library carved into a needle-thin mountain that pierced the clouds. For years, she had pored over dusty scrolls, translating the \"Hum\"—the low-frequency vibration dragons emitted that kept the floating islands buoyant. But the Hum was fading. The islands were sinking, dropping inches every year into the \"Abyssal Gloom\" below the cloud layer.\n\nOne evening, while deciphering a tablet from the First Age, Elara found a reference to *Ignis Primus*—the Ember-Heart. It was said to be the first dragon, a creature of pure solar energy whose breath had forged the world. Legend claimed he had gone into a \"Stone-Sleep\" in the Sunken Canyons, far beneath the clouds.\n\n\"If the islands are to stay afloat,\" Elara whispered to her owl-cat, Pip, \"we have to wake the fire.\"\n\n### Part II: The Disgraced Knight\n\nElara couldn't reach the Sunken Canyons alone. She needed a pilot, and she needed a blade. She found both in the lowest tavern of the floating city of Sky-Reach.\n\nKaelen was a man who smelled of cheap ale and expensive regrets. Once a Captain of the Dragon-Riders, he had been stripped of his rank when his dragon, a Silver-Wing named Sylph, had been killed in a border skirmish. Kaelen hadn't flown since.\n\n\"The Sunken Canyons?\" Kaelen laughed, his voice like grinding gravel. \"That’s where the Blight lives, girl. Nothing comes back from the Gloom.\"\n\n\"The islands are sinking, Kaelen,\" Elara said, slamming the ancient tablet onto the table. \"In fifty years, Sky-Reach will be a graveyard in the mud. I have the coordinates. You have the only skyship fast enough to outrun the Shadow-Wraiths.\"\n\nKaelen looked at the tablet, then at his calloused hands. The spark of the adventurer hadn't died; it was just buried under ash. \"My ship is called the *Stellar Wind*. We leave at dawn. But if we die, I’m blaming you.\"\n\n### Part III: Into the Gloom\n\nThe descent was a nightmare of grey and cold. As the *Stellar Wind* dipped below the cloud line, the sun vanished. This was the realm of the Blight—a creeping, oily darkness that consumed magic and life alike.\n\nHuge, leathery shapes moved in the mist. \"Void-Drakes,\" Kaelen hissed, gripping the helm. These were not true dragons, but twisted, flightless scavengers corrupted by the Blight. They lunged at the ship, their shrieks tearing through the silence.\n\nElara didn't reach for a sword. She reached for a tuning fork. She struck it against the hull, sending a resonant frequency through the wood. \"The Song of the Sky-Mother,\" she chanted. The vibration acted like a physical shield, shimmering with golden light. The Void-Drakes recoiled, blinded by the pure harmonic energy.\n\n\"Not bad, Scholar,\" Kaelen shouted over the wind. \"Hold that note!\"\n\nThey plummeted deeper, passing through the \"Ribs of the World\"—massive stone arches that supported the weight of the upper islands. Finally, they saw it: a glow of dull, pulsing red at the bottom of a canyon so deep it seemed to touch the core of the planet.\n\n### Part IV: The Ember-Heart\n\nThey landed in a cavern of obsidian. The heat was immense, melting the soles of Elara’s boots. In the center of the cavern lay a mountain of stone. But as they approached, the mountain shifted.\n\nA massive eye opened. It was not a slit-pupil of a predator, but a swirling nebula of orange, gold, and white.\n\n\"Who disturbs the long dream?\" The voice didn't come from a throat; it vibrated in their very marrow.\n\nKorthax, the Ember-Heart, rose. He was gargantuan, his scales glowing like cooling lava. Every breath released a cloud of sparks that drifted upward, feeding the magic of the world above.\n\n\"Great Father,\" Elara said, bowing low. \"The world above is falling. The Blight has choked the sun, and your children are dying. We need your fire to cleanse the sky.\"\n\nKorthax let out a sound that might have been a sigh or a growl. \"The humans forgot the pact. They hunted my kin for sport and harnessed our breath for war. Why should I save a world that chose to bleed itself dry?\"\n\n\"Because not all of us forgot,\" Elara said, stepping forward. She pulled out a small, crystallized scale—the only thing she had left of her father, a dragon-healer. \"We have spent our lives trying to hear you. If you let the world fall, the Blight wins. It will consume the fire too, eventually.\"\n\nThe dragon leaned down, his snout the size of their entire ship. He sniffed Elara. He smelled the ink on her fingers, the ancient dust of the library, and the sincerity in her heart.\n\n\"The Blight is not a disease,\" Korthax rumbled. \"It is a shadow cast by the greed of men. To burn it away, I require a Vessel. A human soul to anchor the flame, or the fire will consume everything—islands and all.\"\n\nKaelen stepped forward, drawing his rusted sword. \"I’ve got nothing left to lose, lizard. Take me.\"\n\n\"No,\" Elara said firmly. \"Kaelen, you have to fly the ship. You have to lead the others. I know the Song. I can channel it.\"\n\n### Part V: The Battle of the Heavens\n\nThe ascent was not a secret. The Blight, sensing its end, sent every corrupted creature it possessed to stop them. Thousands of Void-Drakes and Shadow-Wraiths swarmed the *Stellar Wind* as it rose from the depths, with Korthax flying alongside them, his wings spanning the width of the canyon.\n\nKorthax breathed a torrent of white-hot flame, incinerating the shadows, but for every hundred he killed, a thousand more appeared.\n\n\"The Vessel!\" Korthax roared. \"Now!\"\n\nElara climbed to the highest point of the ship’s mast. She held the Aether-Core—a device she had built in the Spire—and opened her mind. Korthax leaned in and touched his forehead to the crystal.\n\nA pillar of pure, blinding light erupted from Elara. She felt her skin burning, her memories flickering like candles in a gale. She saw the birth of the stars, the cooling of the earth, and the first flight of the dragons. She became the Song.\n\nShe began to sing, her voice amplified by the dragon’s power. The melody spread across the horizon, a golden wave that disintegrated the Blight on contact. The floating islands, which had been tilting and crumbling, suddenly locked into place, buoyed by a renewed, powerful Hum.\n\n### Part VI: A New Dawn\n\nWhen the light faded, the sky was blue—a color no one in Aethelgard had seen in a century. The clouds were white and fluffy, no longer the grey shroud of the Gloom.\n\nThe *Stellar Wind* drifted toward the docks of Sky-Reach. Korthax did not follow them to the city. He hovered for a moment, his massive silhouette etched against the rising sun.\n\n*“The pact is renewed,”* his voice echoed in Elara’s mind. *“But the fire must be tended, Scholar. Do not let it go out again.”*\n\nWith a beat of wings that sent a gust of warm air through the streets of the city, the Ember-Heart turned and flew toward the horizon, where other shadows were moving—not the shadows of the Blight, but the long-lost dragons of the wild, returning to a world that could finally breathe again.\n\nElara collapsed on the deck, her hair turned silver from the stress of the magic, but her eyes were bright. Kaelen knelt beside her, offering a hand.\n\n\"So,\" the knight said, a genuine smile breaking through his rugged face. \"Where to next, Scale-Seeker?\"\n\nElara looked at the vast, open sky, filled with the distant shapes of soaring dragons. \"There are more islands out there, Kaelen. And I think they all have stories that need to be told.\"\n\nAnd so, the adventure didn't end; it simply changed altitude. In the world of Aethelgard, the age of shadows was over, and the Age of the Wing had begun.",
+                "thoughtSignature": "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"
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "modelVersion": "gemini-3-flash-preview",
+      "responseId": "eg4aaoXaE_rF-sAPjbu0gA4",
+      "usageMetadata": {
+        "candidatesTokenCount": 2006,
+        "promptTokenCount": 10,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 10
+          }
+        ],
+        "serviceTier": "standard",
+        "thoughtsTokenCount": 667,
+        "totalTokenCount": 2683
+      }
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "content-type": [
+        "application/json; charset=UTF-8"
+      ],
+      "date": [
+        "Fri, 29 May 2026 22:09:19 GMT"
+      ],
+      "server": [
+        "scaffolding on HTTPServer2"
+      ],
+      "server-timing": [
+        "gfet4t7; dur=21589"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-frame-options": [
+        "SAMEORIGIN"
+      ],
+      "x-gemini-service-tier": [
+        "standard"
+      ],
+      "x-xss-protection": [
+        "0"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

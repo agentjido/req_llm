@@ -1,0 +1,123 @@
+{
+  "model_spec": "google:gemini-3.5-flash",
+  "provider": "google",
+  "request": {
+    "body": {
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJXcml0ZSBhIHZlcnkgbG9uZyBzdG9yeSBhYm91dCBkcmFnb25zIGFuZCBhZHZlbnR1cmVzIn1dLCJyb2xlIjoidXNlciJ9XSwiZ2VuZXJhdGlvbkNvbmZpZyI6eyJjYW5kaWRhdGVDb3VudCI6MSwibWF4T3V0cHV0VG9rZW5zIjozMDAwLCJ0ZW1wZXJhdHVyZSI6MC41LCJ0aGlua2luZ0NvbmZpZyI6eyJpbmNsdWRlVGhvdWdodHMiOnRydWUsInRoaW5raW5nTGV2ZWwiOiJsb3cifX19"
+    },
+    "canonical_json": {
+      "contents": [
+        {
+          "parts": [
+            {
+              "text": "Write a very long story about dragons and adventures"
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "generationConfig": {
+        "candidateCount": 1,
+        "maxOutputTokens": 3000,
+        "temperature": 0.5,
+        "thinkingConfig": {
+          "includeThoughts": true,
+          "thinkingLevel": "low"
+        }
+      }
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=[REDACTED]"
+  },
+  "response": {
+    "body": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "**My Epic Fantasy Narrative: Dragons, Adventure, and World-Building**\n\nOkay, so the brief is clear: a *very* long, immersive fantasy story, dragons, epic adventure, rich world-building. Right, let's break this down. First, the core concept. I need to make sure the world is believable, that the dragons are not just monsters, but forces of nature, integrated deeply into the fabric of the story. Solaria, a land rent asunder by a volcanic scar, is a good start. That sets up immediate conflict and visual interest.\n\nDragons… not just fire-breathing brutes. These are elemental beings. Some bond with humans, Dragoneers, while others are wild and territorial, adding another layer of complexity. The Ash-King, Vermithrax, that corrupted shadow-dragon stirring from a thousand-year slumber beneath the Scar is a fantastic antagonist. This forces the conflict, giving my characters, and the world itself, clear stakes. I'll need a magical system. Dracoliths, crystallized dragon breath, will do nicely – powering airships and weapons, and it ties into the dragons. Excellent.\n\nNow, the characters. A disgraced cartographer who can *hear* the humming of dracoliths, Kaelen Vance, is an interesting starting point. He has a secret, he's got potential. A disgraced Dragoneer captain, Lyra Valerius, with an injured dragon, Aurelius, adds a layer of experience and baggage. Aurelius being unable to fly long distances will be compelling. And then there’s Ignis, the Ember-Whelp, a small fire-drake that Kaelen accidentally bonds with. This gives the story a heart, a touch of wonder.\n\nThe episodic plot structure gives this \"very long\" story the length it needs. Each chapter needs to build on the last to maintain the momentum and create the epic feeling. Oakhaven, the black market, a dormant dragon egg/stone… this will launch Kaelen and Lyra's journeys. The flight to the Caldera, the hatching of the dragon, the attacks from the Ash-King’s cultists… this is shaping up nicely. The wilds, the encounter with sky-pirates, the storm, the dragon sanctuary… they’re all solid elements. The massive battle and the hopeful resolution are perfect.\n\nThis story must *feel* real. Sensory details are key. The smell of ozone from dragon-fire, the heat, the creak of leather on airships… I need to make the reader *feel* it. Slow pacing to build the epic scope. Rich dialogue, internal monologues to deepen the characters. The bond between the dragon and the Dragoneer *must* be earned. Aurelius will need a strong personality – grumpy but loyal. Ignis needs to be mischievous but powerful. The tone should be high fantasy, adventurous, with a grit that grounds it, but ultimately hopeful.\n\nNow, to get drafting.\n\n\n",
+                "thought": true
+              },
+              {
+                "text": "### Chapter I: The Whispering Stones\n\nThe border-town of Oakhaven smelled of pine sap, wet slate, and, on windless days, the faint, sulfurous breath of the Wyrmtooth Mountains. It was a town built on the bones of giants, nestled in a valley where the trees grew so tall they seemed to prop up the gray northern sky.\n\nKaelen Vance did not look like an adventurer. He was nineteen, thin as a willow reed, with ink-stained fingers and a mop of unruly copper hair that refused to obey any comb. While other young men of the valley trained with broadswords or labored in the iron mines, Kaelen sat in the dusty loft of the Grand Archives, copying old maps.\n\nBut Kaelen had a secret. He could hear the stones.\n\nIt wasn’t a voice, not exactly. It was a low, vibrating hum that resonated in the marrow of his bones. The older cartographers called it \"the mountain-sickness,\" a mild inner-ear vertigo common to those who spent too much time squinting at topographical lines. But Kaelen knew better. The hum changed. When he touched the dark, glassy fragments of *dracolith*—the crystallized fire-stones mined from the deep peaks—the hum became a song.\n\n\"You’re daydreaming again, Vance,\" grunted Master Corvus, a man whose face resembled a dried peach. He dropped a heavy leather satchel onto Kaelen’s desk, sending a cloud of dust into the air. \"The Guild needs these charts of the Whispering Pass completed by sunset. The merchants won’t risk the caravans without knowing where the spring rockslides have blocked the trails.\"\n\n\"I’m nearly finished, Master,\" Kaelen said, quickly dipping his quill into the iron-gall ink.\n\n\"And mind you don't go wandering down to the lower docks tonight,\" Corvus added, leaning in, his voice dropping to a conspiratorial whisper. \"There’s a Skyship in. A military vessel. They say she’s carrying a damaged cargo. Something... volatile.\"\n\nKaelen’s heart gave a sudden, hard thump. The hum in his bones, which had been a dull murmur all morning, suddenly spiked, vibrating with a sharp, metallic ring. \"A military ship? From the capital?\"\n\n\"The *Aethelgard*,\" Corvus muttered, shaking his head. \"A heavy frigate. They’ve got a Dragoneer on board. One of the fallen ones. Now, get to work.\"\n\nCorvus shuffled away, his keys jingling like dry leaves. Kaelen pretended to focus on his map, tracing the contour lines of the Wyrmtooth range. But his mind was already slipping out the window, soaring over the pine forests toward the high docks where the great wooden airships moored.\n\nAs soon as the sun dipped below the western ridges, painting the sky in shades of bruised purple and gold, Kaelen slipped his journal into his coat, pocketed a small brass compass, and sneaked out of the Archives.\n\nThe air at the high docks was freezing. Oakhaven’s sky-port was a series of massive wooden piers jutting out from the cliffside, suspended over a thousand-foot drop. Moored at the furthest pier was the *Aethelgard*. She was a magnificent, terrifying sight—a three-masted war-galleon with a hull of dark ironwood, her massive levitation sails glowing with the faint blue light of harnessed aerolith.\n\nBut she was scarred. Great scorch marks raked across her port side, and her rigging was frayed.\n\nKaelen crept along the shadows of a timber warehouse, his eyes drawn to the stern of the ship. There, guarded by two armored sentries, was a massive iron cage covered by a heavy, wet canvas.\n\nThe hum in Kaelen’s chest was deafening now. It was a physical pressure, a rhythmic thrumming that matched his heartbeat. *Thump-thump. Thump-thump.*\n\nSuddenly, the canvas shifted. A gust of wind caught the corner, lifting it to reveal a glimpse of what lay within.\n\nIt was not a cargo of stones.\n\nIt was a dragon.\n\nIt was smaller than the legendary beasts of old, perhaps the size of a carriage, but its beauty took Kaelen’s breath away. Its scales were a polished, iridescent silver, reflecting the twilight like wet coins. But the silver was marred by cruel iron chains wrapped around its snout and wings, and its left wing was bent at a sickening, unnatural angle.\n\nThe dragon’s eyes—pools of molten gold with vertical slit pupils—turned slowly.\n\nAnd looked directly at Kaelen.\n\n*Help,* a voice whispered. It wasn’t in his ears. It was in his head, cold and sharp as an icicle.\n\nKaelen gasped, stumbling back into a stack of wooden crates. The noise clattered through the quiet docks.\n\n\"Who’s there?\" one of the sentries shouted, hand flying to the hilt of his sword.\n\nBefore Kaelen could run, a figure stepped out of the shadows behind him. A heavy hand clapped onto his shoulder, locking him in place with a grip like an iron vice.\n\n\"Just a curious local, Sergeant,\" a woman’s voice said. The voice was smooth, but carried the hard edge of command. \"I’ll handle him.\"\n\n***\n\n### Chapter II: The Disgraced Captain\n\nKaelen turned slowly, his heart hammering against his ribs.\n\nThe woman standing before him wore the dark blue coat of the Royal Dragoneer Corps, but the silver epaulets of her rank had been roughly sheared off, leaving only frayed threads. She was tall, with sharp, aristocratic features and a scar that ran from her left temple down to her jaw. Her hair was black, cropped short in a military cut, and her eyes were a piercing, stormy gray.\n\n\"You’re a long way from the library, scribe,\" she said, eyeing his ink-stained fingers.\n\n\"I... I was just looking at the ship,\" Kaelen stammered.\n\n\"You were looking at the dragon,\" she corrected, releasing her grip on his shoulder but remaining close enough to block his escape. \"And more importantly, he was looking at you. Aurelius doesn't look at anyone. Not since we fell.\"\n\nShe looked toward the silver dragon, her expression softening into a mixture of grief and fierce protectiveness.\n\n\"You're Lyra Valerius,\" Kaelen realized, his eyes widening. \"The Captain of the Silver Wing. The papers said you... they said you betrayed the Crown at the Battle of the Red Reach.\"\n\nLyra’s jaw tightened. \"The papers write what the King pays them to write. I refused to burn a city of civilians to flush out a rebel garrison. For that, they stripped my rank, broke my dragon’s wing with a ballista, and chained us like beasts to be brought back to the capital for execution.\"\n\n\"They're going to execute you?\" Kaelen whispered.\n\n\"They're going to execute *us*,\" Lyra said. \"But I have other plans. And strangely enough, you might be the key to them.\"\n\n\"Me? I'm a cartographer! I draw lines on sheepskin!\"\n\n\"You're a Sunder-singer,\" Lyra said, leaning in. \"Don't deny it. I saw your face when you looked at Aurelius. You felt him, didn't you? You heard him.\"\n\n\"I... I hear a hum. I've always heard it.\"\n\n\"That hum is the song of the Earth’s blood,\" Lyra said. \"The ancient dragons created the dracoliths. Only those with the blood of the first shapers can hear them. The King has been hunting for a Sunder-singer for years to unlock the Vault of the First Wyrm. If he finds you, you'll spend the rest of your short life in a dungeon, forced to sing stones into weapons.\"\n\nKaelen felt a cold sweat break out on his neck. \"I don't want any part of this. I just want to go back to my maps.\"\n\n\"Too late,\" Lyra said grimly. She pointed toward the town square.\n\nA horn blew—a sharp, brassy note that echoed off the cliffs. It was the alarm of the Town Guard, but underneath it came a sound that made Kaelen’s blood run cold. A screech, high and metallic, like tearing iron.\n\n\"The Cinder-Born,\" Lyra hissed, drawing a long, curved saber from her hip. \"They’ve tracked us.\"\n\n\"Who are they?\"\n\n\"The King's elite. Dragon-hunters who have traded their humanity for fire-magic. They don't want to arrest us, Kaelen. They want to burn us.\"\n\nThe sky above Oakhaven suddenly lit up with an unnatural, orange glow. From the darkness of the mountain pass, three massive shapes descended. They were not majestic like Aurelius; they were twisted, heavy beasts with scales the color of dried blood and jaws that dripped thick, black oil.\n\n\"Get to the ship,\" Lyra ordered, grabbing Kaelen’s collar and dragging him toward the pier. \"If we don't get Aurelius free now, we're all dead.\"\n\n***\n\n### Chapter III: The Hatching of the Sun\n\nThe docks were a scene of absolute chaos.\n\nThe Cinder-Born dragons swept over the sky-port, spewing streams of sticky, liquid fire that clung to the wooden piers and set the airships ablaze. Screaming sailors threw themselves into the void or scrambled for safety as the heat grew intense enough to melt iron.\n\nLyra sprinted up the gangplank of the *Aethelgard*, her saber flashing in the firelight as she cut down a panicked guard who tried to block her path. Kaelen followed close behind, his mind screaming at him to run, but his feet moving of their own accord. The hum in his chest had turned into a frantic, rhythmic pounding.\n\n\"Kaelen! The chains!\" Lyra shouted, gesturing to the massive iron collar binding Aurelius to the deck. \"The locks are made of cold-iron, reinforced with dracolith. My sword won't scratch them. You",
+                "thoughtSignature": "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"
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "MAX_TOKENS",
+          "index": 0
+        }
+      ],
+      "modelVersion": "gemini-3.5-flash",
+      "responseId": "QQ8aaonUH8XF-sAP_pPYsQ8",
+      "usageMetadata": {
+        "candidatesTokenCount": 2215,
+        "promptTokenCount": 10,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 10
+          }
+        ],
+        "serviceTier": "standard",
+        "thoughtsTokenCount": 781,
+        "totalTokenCount": 3006
+      }
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "content-type": [
+        "application/json; charset=UTF-8"
+      ],
+      "date": [
+        "Fri, 29 May 2026 22:12:39 GMT"
+      ],
+      "server": [
+        "scaffolding on HTTPServer2"
+      ],
+      "server-timing": [
+        "gfet4t7; dur=21921"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-frame-options": [
+        "SAMEORIGIN"
+      ],
+      "x-gemini-service-tier": [
+        "standard"
+      ],
+      "x-xss-protection": [
+        "0"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

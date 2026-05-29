@@ -1,10 +1,12 @@
 {
+  "model_spec": "xai:grok-4",
+  "provider": "xai",
   "request": {
     "body": {
-      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjY0MDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiVGVsbCBtZSBhIGpva2UgYWJvdXQgY2F0cyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Imdyb2stNCIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjE1MCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJUZWxsIG1lIGEgam9rZSBhYm91dCBjYXRzIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiZ3Jvay00Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjAsInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJwYXJhbWV0ZXJzIjp7ImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjpmYWxzZSwicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifV19"
     },
     "canonical_json": {
-      "max_completion_tokens": 6400,
+      "max_completion_tokens": 150,
       "messages": [
         {
           "content": "Tell me a joke about cats",
@@ -38,6 +40,9 @@
       ]
     },
     "headers": {
+      "accept": [
+        "application/json"
+      ],
       "accept-encoding": [
         "gzip"
       ],
@@ -46,7 +51,7 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ]
     },
     "method": "post",
@@ -59,34 +64,36 @@
           "finish_reason": "stop",
           "index": 0,
           "message": {
-            "content": "Why did the cat go to school?  \n\nTo improve its purr-sonal skills! 😺",
+            "content": "Why don't cats play poker in the jungle? Too many cheetahs!",
+            "reasoning_content": "The user asked: \"Tell me a joke about cats.\"\n",
             "refusal": null,
             "role": "assistant"
           }
         }
       ],
-      "created": 1762103792,
-      "id": "66715eab-0e69-a324-be34-0f8baa25b3cb_us-east-1",
-      "model": "grok-4-0709",
+      "created": 1780095847,
+      "id": "9ddbf9d5-1fa4-9bcc-ad71-ad4ba93d64b1",
+      "model": "grok-4.3",
       "object": "chat.completion",
-      "system_fingerprint": "fp_794271b43e",
+      "system_fingerprint": "fp_eb3c003fc66c14ed",
       "usage": {
-        "completion_tokens": 19,
+        "completion_tokens": 15,
         "completion_tokens_details": {
           "accepted_prediction_tokens": 0,
           "audio_tokens": 0,
-          "reasoning_tokens": 141,
+          "reasoning_tokens": 180,
           "rejected_prediction_tokens": 0
         },
+        "cost_in_usd_ticks": 5784000,
         "num_sources_used": 0,
-        "prompt_tokens": 884,
+        "prompt_tokens": 234,
         "prompt_tokens_details": {
           "audio_tokens": 0,
-          "cached_tokens": 834,
+          "cached_tokens": 192,
           "image_tokens": 0,
-          "text_tokens": 884
+          "text_tokens": 234
         },
-        "total_tokens": 1044
+        "total_tokens": 429
       }
     },
     "headers": {
@@ -100,7 +107,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "998547bdfdc6e7fa-ORD"
+        "a03922e6ae8190c6-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -109,16 +116,17 @@
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:16:37 GMT"
+        "Fri, 29 May 2026 23:04:09 GMT"
       ],
       "server": [
         "cloudflare"
       ],
-      "set-cookie": [
-        "__cf_bm=KFtgwkRDj3W9kx7DT8VDfWxtF_WemoXM_jB18InrgjE-1762103797-1.0.1.1-aw9sq1.vIvqHvwelgOtaMz1.qnziGx8yqFD2BsAwglVbN4pcFhk6kjUXu6hZqda7tqitrVuhti7m_fnGINgyUSIvxGsDjVduZQB8hjuoJuA; path=/; expires=Sun, 02-Nov-25 17:46:37 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
-      ],
+      "set-cookie": "[REDACTED:set-cookie]",
       "strict-transport-security": [
         "max-age=31536000"
+      ],
+      "traceparent": [
+        "00-74d20b2400159b6b2811116e40637e20-45c9300100004dab-01"
       ],
       "transfer-encoding": [
         "chunked"
@@ -126,13 +134,35 @@
       "vary": [
         "origin, access-control-request-method, access-control-request-headers"
       ],
+      "x-metrics-e2e-ms": [
+        "1660.7"
+      ],
+      "x-metrics-mean-itl-ms": [
+        "7.1"
+      ],
+      "x-metrics-ttft-ms": [
+        "154.6"
+      ],
+      "x-ratelimit-limit-requests": [
+        "1800"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "10000000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "1794"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "9997886"
+      ],
       "x-request-id": [
-        "00-a70a2769d9a15abb6094ba2b19dc3885-93cf5241006ea002-01"
+        "9ddbf9d5-1fa4-9bcc-ad71-ad4ba93d64b1"
       ],
       "x-zero-data-retention": [
         "false"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

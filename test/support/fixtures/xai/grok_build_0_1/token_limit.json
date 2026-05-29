@@ -1,0 +1,146 @@
+{
+  "model_spec": "xai:grok-build-0.1",
+  "provider": "xai",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjMwMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiV3JpdGUgYSB2ZXJ5IGxvbmcgc3RvcnkgYWJvdXQgZHJhZ29ucyBhbmQgYWR2ZW50dXJlcyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Imdyb2stYnVpbGQtMC4xIiwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuNX0="
+    },
+    "canonical_json": {
+      "max_completion_tokens": 3000,
+      "messages": [
+        {
+          "content": "Write a very long story about dragons and adventures",
+          "role": "user"
+        }
+      ],
+      "model": "grok-build-0.1",
+      "stream": false,
+      "temperature": 0.5
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.x.ai/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "content": "**The Eternal Flame: Chronicles of Dragons and Heroes**\n\nIn the mist-shrouded kingdom of Eldoria, where jagged mountains clawed at the sky and ancient forests whispered secrets older than time, dragons were no mere legend. They were the keepers of the world's balance—guardians of fire, storm, and earth. But centuries ago, the Great Sundering had driven most into hiding. The last free dragons slumbered in forgotten lairs, their scales tarnished by neglect, their roars silenced by fear of the Shadow King, a sorcerer who sought to chain their power for eternal dominion.\n\nElara Voss was not born for thrones or crowns. She was a cartographer's daughter from the riverside village of Thornvale, where life was measured in harvests and hearth fires. At eighteen, with auburn hair braided like a warrior's and eyes the color of storm clouds, she spent her days sketching maps of uncharted peaks and dreaming of wings. Her father, old Harlan, warned her: \"Dragons bring wonder, child, but also ruin. The last one seen near here scorched the fields a hundred years past.\"\n\nOne autumn evening, as crimson leaves danced on the wind, a stranger arrived in Thornvale—a hooded wanderer named Kael, with a scar across his cheek and a satchel heavy with scrolls. He spoke of the Prophecy of the Eternal Flame: \"When the stars align and a heart pure as dragonfire awakens, the lost shall rise, and the Shadow shall fall.\" Elara laughed it off until Kael unfurled a tattered map marked with runes that glowed faintly in moonlight. \"Your father drew this before he vanished on his last expedition. It leads to Aetherion's Cradle.\"\n\nHarlan had disappeared five years earlier, searching for dragon lore. Elara's heart ignited. She packed her father's compass, a dagger forged from meteor iron, and a journal of sketches. Kael joined her—not as a guide, but as a fellow seeker haunted by his own past: he had once served the Shadow King before fleeing with a dragon's egg that hatched into a loyal wyrmling named Ember.\n\nTheir first adventure began at dawn, riding stolen horses into the Whispering Woods. The forest was alive with illusions—trees that shifted paths, voices mimicking lost loved ones. Elara's compass spun wildly until they reached the Crystal Cave, its entrance guarded by glowing quartz formations that sang like chimes. Inside, they found not treasure, but the skeletal remains of an ancient dragon, its bones etched with prophecies. A single egg, veined with silver, pulsed in a nest of starlight moss.\n\nAs Elara touched it, the egg cracked. Out tumbled a hatchling no larger than a wolfhound—scales like polished obsidian, eyes like molten gold. It bonded instantly to her, nuzzling her palm and breathing a puff of warm smoke. \"Sylph,\" she named it, for the wind that carried its first cry. Kael explained: \"This is no ordinary dragon. It's a Skyweaver, born of storm and star. It will grow with your courage.\"\n\nBut the cave held secrets. A rival adventurer, the ruthless bounty hunter Vesper, had followed them. Vesper, armored in dragonscale stolen from slain beasts, demanded the egg for the Shadow King's reward. A fierce duel erupted amid the crystals. Sylph, though tiny, unleashed a gust that shattered quartz shards like daggers, forcing Vesper to retreat with a curse: \"The Shadow King will feast on your bones!\"\n\nEmerging from the woods, Elara, Kael, and the growing Sylph (who now fit in a saddlebag but stretched its wings daily) set course for the Frostpeak Mountains. Their second adventure unfolded there: a quest for the Heartstone, an artifact said to amplify a dragon's power tenfold. The peaks were treacherous—blizzards that howled like banshees, avalanches triggered by ice wyverns with razor wings and venomous tails.\n\nThey allied with a clan of mountain dwarves led by Thrain Ironbeard, whose ancestors had forged bonds with earth dragons. Thrain's grandfather had ridden one named Grom, now long dead. In exchange for maps of hidden passes, Elara agreed to help clear a wyvern nest blocking the dwarves' mines. The battle was epic: Sylph, now the size of a pony, soared through snowstorms, dodging ice spears while Elara clung to her back, firing arrows tipped with fire oil. Kael wielded a blade enchanted with dragon runes. Together, they felled the alpha wyvern in a clash that shook the mountains, its death cry echoing like thunder.\n\nWith the Heartstone in hand—a pulsing ruby that warmed in Sylph's claws—they pressed on. But the Shadow King, sensing their progress, unleashed his minions: shadow wraiths that drained life with icy touches. In a narrow gorge, Elara faced her first true test. A wraith possessed Kael briefly, forcing her to battle her friend. Sylph's fire breath—now a roaring inferno—banished the spirit, but not before Kael revealed his secret: he had once been the Shadow King's dragon-tamer, responsible for capturing and breaking young wyrms. \"I seek redemption,\" he said, eyes haunted. \"Your bond with Sylph... it's the key to freeing them all.\"\n\nTheir third adventure took them across the Sea of Storms aboard a rickety ship captained by the pirate queen Mirael, a half-elf with a mechanical arm and a parrot that squawked dragon lore. The voyage was a whirlwind of tempests, kraken attacks, and siren songs that nearly lured them to doom. Sylph, now large enough to carry Elara in short flights, scouted ahead, battling a sea serpent that coiled like a living hurricane. Mirael joined their cause after Elara saved her crew from the serpent's maw, revealing she sought vengeance: the Shadow King had sunk her father's fleet using stolen dragonfire.\n\nThey landed on the Isle of Echoes, a volcanic paradise where an ancient dragon named Valthor, the Flame Eternal, slumbered in a caldera. Valthor was a colossal beast, scales like forged gold, wings spanning a battlefield. Waking him required the Heartstone and a riddle contest: \"What flies without wings, burns without flame, and binds the free?\" Elara answered: \"A promise.\" Valthor stirred, ancient eyes gleaming. He spoke of the Sundering—a war where dragons fought among themselves, some allying with humans, others with the Shadow's predecessor. \"The Eternal Flame is not a weapon,\" Valthor rumbled. \"It is the bond between rider and dragon. Betray it, and all burns.\"\n\nValthor granted them a scale as a talisman and warned of the final trial: the Shadow King's fortress in the Ashen Wastes, where he had amassed an army of enslaved dragons—twisted, chained beasts whose fire was corrupted into black smoke.\n\nThe journey to the Wastes was their longest adventure yet. Through the Whispering Dunes, where sandstorms birthed mirage dragons that tested their resolve with visions of failure. Elara saw her father, alive and pleading for her to turn back; she pressed on. In the Ruins of Eldrath, they uncovered Harlan's journal: he had discovered the Shadow King's weakness—a ritual to sever his control over dragons, requiring the blood of a true bond (Elara and Sylph's) mixed with Valthor's scale.\n\nAllies gathered: Thrain and his dwarves, Mirael and her pirates, even a reformed Vesper who sought pardon after a chance encounter where Sylph spared his life. They formed the Flame Alliance.\n\nThe climax unfolded at the Obsidian Spire, the Shadow King's citadel. A massive siege: dragons clashing in the skies—Sylph leading free wyrms against the enslaved horde. Ground battles raged with dwarven hammers, elven arrows, and pirate cutlasses. Elara and Kael infiltrated the tower, facing the Shadow King himself—a gaunt figure wreathed in darkness, wielding a staff crowned with a captured dragon's heart.\n\nThe duel was cataclysmic. Sylph, now a majestic adult with wingspan like sails, battled the King's corrupted dragon, a monstrous black beast named Voidscale. Fire met shadow in explosions that lit the wastes. Elara climbed the spire, dodging traps and wraiths, confronting the King. \"Your bond is weak,\" he sneered. \"Dragons are tools!\"\n\nIn the ritual chamber, Elara performed the severance: her blood, Sylph's tear (a crystal of pure magic), and the scale ignited the Eternal Flame. A wave of golden light erupted, shattering the King's chains. Voidscale turned on its master, and the enslaved dragons rebelled. The Shadow King fell into the abyss, his scream swallowed by the roar of liberated fire.\n\nVictory came at cost. Kael was gravely wounded but survived, redeemed. Valthor, awakened fully, soared overhead, declaring a new age. Sylph chose to stay with Elara, their bond eternal.\n\nIn the aftermath, Eldoria bloomed. Thornvale rebuilt with dragon-wrought forges. Elara became the first Dragon Warden, mapping new lands with Sylph as her steed. Adventures continued: expeditions to hidden isles, alliances with distant dragon clans, battles against lingering shadow cults. Kael founded a sanctuary for broken dragons. Mirael charted safer seas. Thrain's clan unearthed ancient hoards, sharing wealth.\n\nYears later, Elara stood atop Frostpeak with her now-legendary dragon, watching the sun rise over a world where dragons flew free once more. \"The flame endures,\" she whispered. Sylph rumbled agreement, and together they dove into the winds, chasing the horizon.\n\nBut legends never truly end. Whispers spoke of new threats—forgotten gods stirring, or young heroes hearing the call. For in Eldoria, where dragons and adventures intertwined, the story was eternal, waiting for the next pure heart to awaken the flame.\n\n(And so the chronicles continued across generations: Elara's daughter, bonded to Sylph's offspring, questing against a rising tide of mechanical invaders from beyond the stars; alliances with storm dragons in the floating isles; a grand tournament where riders proved their worth in aerial duels; the rediscovery of the Dragon Council, ancient beings who judged the worth of humanity anew. Each adventure wove new threads—betrayals by ambitious kings, friendships forged in fire, treasures that granted wisdom over gold, and the eternal lesson that true power lay not in domination, but in the unbreakable bond between rider and dragon. The skies of Eldoria thundered with wings for centuries, a testament to courage, wonder, and the fire within us all.)\n\n**End of the Tale – But the Adventures Never Cease.**",
+            "reasoning_content": "The Eternal Flame: A Tale of Dragons and Heroes\n\nIn the realm of Eldoria, where mountains pierced the sky like ancient spears and rivers sang ancient songs, there lived a young woman named Elara.",
+            "refusal": null,
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1780095712,
+      "id": "754ed232-adc4-9526-a458-35c28c0aa59d",
+      "model": "grok-build-0.1",
+      "object": "chat.completion",
+      "system_fingerprint": "fp_1baab189745f3e87",
+      "usage": {
+        "completion_tokens": 2229,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "reasoning_tokens": 802,
+          "rejected_prediction_tokens": 0
+        },
+        "cost_in_usd_ticks": 61438000,
+        "num_sources_used": 0,
+        "prompt_tokens": 133,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 64,
+          "image_tokens": 0,
+          "text_tokens": 133
+        },
+        "total_tokens": 3164
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "*"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a0391f9b9e0d7dda-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 29 May 2026 23:02:16 GMT"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": "[REDACTED:set-cookie]",
+      "strict-transport-security": [
+        "max-age=31536000"
+      ],
+      "traceparent": [
+        "00-5b2a0b754f16258ba2bdf7f8170bb86b-e302f2930004bc31-01"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "origin, access-control-request-method, access-control-request-headers"
+      ],
+      "x-metrics-e2e-ms": [
+        "23032.4"
+      ],
+      "x-metrics-mean-itl-ms": [
+        "7.5"
+      ],
+      "x-metrics-ttft-ms": [
+        "142.5"
+      ],
+      "x-ratelimit-limit-requests": [
+        "1800"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "10000000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "1795"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "9997503"
+      ],
+      "x-request-id": [
+        "754ed232-adc4-9526-a458-35c28c0aa59d"
+      ],
+      "x-zero-data-retention": [
+        "false"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

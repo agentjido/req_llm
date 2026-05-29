@@ -1,0 +1,186 @@
+{
+  "model_spec": "google:gemini-3-flash-preview",
+  "provider": "google",
+  "request": {
+    "body": {
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJXaGF0J3MgdGhlIHdlYXRoZXIgbGlrZSBpbiBQYXJpcywgRnJhbmNlPyJ9XSwicm9sZSI6InVzZXIifV0sImdlbmVyYXRpb25Db25maWciOnsiY2FuZGlkYXRlQ291bnQiOjEsIm1heE91dHB1dFRva2VucyI6MTMxMDYsInRlbXBlcmF0dXJlIjowLjAsInRoaW5raW5nQ29uZmlnIjp7ImluY2x1ZGVUaG91Z2h0cyI6dHJ1ZSwidGhpbmtpbmdMZXZlbCI6ImxvdyJ9fSwidG9vbHMiOlt7ImZ1bmN0aW9uRGVjbGFyYXRpb25zIjpbeyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9LCJ1bml0Ijp7ImVudW0iOlsiY2Vsc2l1cyIsImZhaHJlbmhlaXQiXSwidHlwZSI6InN0cmluZyJ9fSwicHJvcGVydHlPcmRlcmluZyI6WyJsb2NhdGlvbiIsInVuaXQiXSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9fSx7ImRlc2NyaXB0aW9uIjoiVGVsbCBhIGZ1bm55IGpva2UiLCJuYW1lIjoidGVsbF9qb2tlIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7InRvcGljIjp7ImRlc2NyaXB0aW9uIjoiVG9waWMgZm9yIHRoZSBqb2tlIiwidHlwZSI6InN0cmluZyJ9fSwicHJvcGVydHlPcmRlcmluZyI6WyJ0b3BpYyJdLCJ0eXBlIjoib2JqZWN0In19LHsiZGVzY3JpcHRpb24iOiJHZXQgdGhlIGN1cnJlbnQgdGltZSIsIm5hbWUiOiJnZXRfdGltZSIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6e30sInR5cGUiOiJvYmplY3QifX1dfV19"
+    },
+    "canonical_json": {
+      "contents": [
+        {
+          "parts": [
+            {
+              "text": "What's the weather like in Paris, France?"
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "generationConfig": {
+        "candidateCount": 1,
+        "maxOutputTokens": 13106,
+        "temperature": 0.0,
+        "thinkingConfig": {
+          "includeThoughts": true,
+          "thinkingLevel": "low"
+        }
+      },
+      "tools": [
+        {
+          "functionDeclarations": [
+            {
+              "description": "Get current weather information for a location",
+              "name": "get_weather",
+              "parameters": {
+                "properties": {
+                  "location": {
+                    "type": "string"
+                  },
+                  "unit": {
+                    "enum": [
+                      "celsius",
+                      "fahrenheit"
+                    ],
+                    "type": "string"
+                  }
+                },
+                "propertyOrdering": [
+                  "location",
+                  "unit"
+                ],
+                "required": [
+                  "location"
+                ],
+                "type": "object"
+              }
+            },
+            {
+              "description": "Tell a funny joke",
+              "name": "tell_joke",
+              "parameters": {
+                "properties": {
+                  "topic": {
+                    "description": "Topic for the joke",
+                    "type": "string"
+                  }
+                },
+                "propertyOrdering": [
+                  "topic"
+                ],
+                "type": "object"
+              }
+            },
+            {
+              "description": "Get the current time",
+              "name": "get_time",
+              "parameters": {
+                "properties": {},
+                "type": "object"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=[REDACTED]"
+  },
+  "response": {
+    "body": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "Here's my thought process, distilled:\n\n**Weather Inquiry Processing**\n\nOkay, the user wants the weather in Paris. Simple enough. My first instinct is to find a weather data source. The `get_weather` tool appears to be the most relevant option. It's got the necessary parameters: a `location` – which I can easily set to \"Paris, France\" – and an optional `unit`, which I'll keep in mind if needed, but I'll start without specifying it and use the default. So, let's call that `get_weather` tool with \"Paris, France\" as the location. I'm ready to get this query answered.\n\n\n",
+                "thought": true
+              },
+              {
+                "functionCall": {
+                  "args": {
+                    "location": "Paris, France"
+                  },
+                  "id": "tmhujjv0",
+                  "name": "get_weather"
+                },
+                "thoughtSignature": "EtUCCtICAQw51sfj1jl+R3y03nlTJqHy9VXl4ZwVWeBm0J6SQxf6ffncXzLlKTkvgWpCHgcsOiX09xfzj/U1Qv1TfuXSTuecHGJh1YUHhp5O2d80MCsvAZUkmfR74SPVmiLfBv+5zr3YqJpXI1L+sNma56Nt0kKPB5uV7+w6Ipoj58GTewxW/BKmQC58V/FCuEugOAfN4R8G5A/M5PAbSZCXqVRWzsw9g0jfS1Cbj9LQHKPZyFFG6bjp/h9wj9dNOEopePfGD7suargSDNxW656p049nrzY5d5nCZcMbvfVisKWqtIjpXpqPLiLaZyeE6yLnRfPWqGEXZ9djYZDf0yF7mMkNwAiSK5lA56CXlIM7TPT9pNdf4GyazhP544jn3ro/9eXoZdXukoJ1X5xf5waY3R91klKU63oTu3QlZSYEmhqhOsgIb28f9iNRWkJJ+yLftv/7BGE="
+              }
+            ],
+            "role": "model"
+          },
+          "finishMessage": "Model generated function call(s).",
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "modelVersion": "gemini-3-flash-preview",
+      "responseId": "ghEaav2AG7ug1MkP8-WfuQ4",
+      "usageMetadata": {
+        "candidatesTokenCount": 18,
+        "promptTokenCount": 145,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 145
+          }
+        ],
+        "serviceTier": "standard",
+        "thoughtsTokenCount": 64,
+        "totalTokenCount": 227
+      }
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "content-type": [
+        "application/json; charset=UTF-8"
+      ],
+      "date": [
+        "Fri, 29 May 2026 22:21:56 GMT"
+      ],
+      "server": [
+        "scaffolding on HTTPServer2"
+      ],
+      "server-timing": [
+        "gfet4t7; dur=1870"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-frame-options": [
+        "SAMEORIGIN"
+      ],
+      "x-gemini-service-tier": [
+        "standard"
+      ],
+      "x-xss-protection": [
+        "0"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

@@ -1,0 +1,131 @@
+{
+  "model_spec": "google:gemini-3.5-flash",
+  "provider": "google",
+  "request": {
+    "body": {
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJSZXNwb25kIHdpdGggYSBzaW5nbGUgd29yZCAnSGknLiJ9XSwicm9sZSI6InVzZXIifSx7InBhcnRzIjpbeyJ0ZXh0IjoiSGkifV0sInJvbGUiOiJtb2RlbCJ9LHsicGFydHMiOlt7InRleHQiOiJIaSBhZ2FpbiJ9XSwicm9sZSI6InVzZXIifV0sImdlbmVyYXRpb25Db25maWciOnsiY2FuZGlkYXRlQ291bnQiOjEsIm1heE91dHB1dFRva2VucyI6MTAyNCwidGVtcGVyYXR1cmUiOjAuMH19"
+    },
+    "canonical_json": {
+      "contents": [
+        {
+          "parts": [
+            {
+              "text": "Respond with a single word 'Hi'."
+            }
+          ],
+          "role": "user"
+        },
+        {
+          "parts": [
+            {
+              "text": "Hi"
+            }
+          ],
+          "role": "model"
+        },
+        {
+          "parts": [
+            {
+              "text": "Hi again"
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "generationConfig": {
+        "candidateCount": 1,
+        "maxOutputTokens": 1024,
+        "temperature": 0.0
+      }
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=[REDACTED]"
+  },
+  "response": {
+    "body": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "Hi! How can I help you today?",
+                "thoughtSignature": "EuIFCt8FAQw51seypVZqAXtPMjMAGBuZegptdpLIiiAefJe7DT9IHqKe3pgM8GY2jo7Ap+XO/JByO7DXbssljvLAcMAPHsLDsE707mZbUv+62PAjKWGBWYbylZJadnSM4xH9coCHDmxWJ8eeIn5VbiWXv4HJ3vYDAI63eic7IyDsR6O1wfOhNpcw+N3k8b3paT0AK9bH7yaoLEZct87KJJi0g/tQvmJi1UewDGiEgQCaKy4DCx2/fgNf6Kig/ktp6LN9u/10rTPZlJLVW2YMRsKc+Soq6FNV1Yq+RCk0v0NrlETzjQPcxM8wJJWZLApf+miuECJK6mdcgDnsp6tlFm8b+IS0yN+dKJwt740TDEt6bA4YvTz94n+qg1xk5UxmkQvd6rrwJgym0NR+FGdPSxKhJsAMEXA2HEDNruzTsDt5e/jHP3B73Zx37omRPTX45Sex0pd2bDJoZiS1wngciYf6lRLTmf87WesN6/9jpMJygSGLqGu1aD7n9Ab1uL9gPe0rBRm527UqpYS5olST9/h63GnwKkuZYqSvAuSUldVI0qrar7LErCxOXe8qJdH7VJsQNU7esei6scSGmMF/POOYJkDvxMJlW+enleASFpaqq1JxWrRmsRhIWtOWzxHcK0v3nnuDVQZkKyl+mImG/DyfshMSl32qLhh6LjlJXqLBRgcOqHUkPUQ7eXybNgH+9Teq8gIARBwgZSmT2kSrpE9LxX7Y7q20laaosnDbEdFUsqleYarHmVm18+Ukj0P1AJlPKyZKmeNzCx1Rxer17sX/SU0dTg/66HsSrX12IYG1IKLHg/xSo7CKC7D8HAHFGbtnSpcuYBJspmgAYsYWgh/w5oPSi2xgGRF8DVL/nOVgLo3DMSjIbj1ki3Y9mULDja0BgWrQVoB8S3edGw1Hmy2hDtMwz0E4VPsHqLic5ec0wIcjkTeV1qXtBo+F6djheS2tccMeLLfQGlmJojHgXdXi8FGU"
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "modelVersion": "gemini-3.5-flash",
+      "responseId": "KxEaasq8F46t1MkPpaOtqAI",
+      "usageMetadata": {
+        "candidatesTokenCount": 9,
+        "promptTokenCount": 14,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 14
+          }
+        ],
+        "serviceTier": "standard",
+        "thoughtsTokenCount": 170,
+        "totalTokenCount": 193
+      }
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "content-type": [
+        "application/json; charset=UTF-8"
+      ],
+      "date": [
+        "Fri, 29 May 2026 22:20:28 GMT"
+      ],
+      "server": [
+        "scaffolding on HTTPServer2"
+      ],
+      "server-timing": [
+        "gfet4t7; dur=1459"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-frame-options": [
+        "SAMEORIGIN"
+      ],
+      "x-gemini-service-tier": [
+        "standard"
+      ],
+      "x-xss-protection": [
+        "0"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

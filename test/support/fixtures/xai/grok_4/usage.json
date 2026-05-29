@@ -1,4 +1,6 @@
 {
+  "model_spec": "xai:grok-4",
+  "provider": "xai",
   "request": {
     "body": {
       "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjEwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhpIHRoZXJlISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Imdyb2stNCIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
@@ -17,6 +19,9 @@
       "temperature": 0.0
     },
     "headers": {
+      "accept": [
+        "application/json"
+      ],
       "accept-encoding": [
         "gzip"
       ],
@@ -25,7 +30,7 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ]
     },
     "method": "post",
@@ -38,34 +43,36 @@
           "finish_reason": "length",
           "index": 0,
           "message": {
-            "content": "Hello! How can I help you today? ",
+            "content": "Hey! How's it going? What can I",
+            "reasoning_content": "The user said \"Hi there!\" This is a simple greeting. I should respond in a friendly, helpful manner.\n",
             "refusal": null,
             "role": "assistant"
           }
         }
       ],
-      "created": 1762103797,
-      "id": "80eb659d-746d-c1a2-7379-761f7c97d1af_us-east-1",
-      "model": "grok-4-0709",
+      "created": 1780095834,
+      "id": "833da94b-c357-9451-9778-62ce36c04f66",
+      "model": "grok-4.3",
       "object": "chat.completion",
-      "system_fingerprint": "fp_794271b43e",
+      "system_fingerprint": "fp_eb3c003fc66c14ed",
       "usage": {
         "completion_tokens": 10,
         "completion_tokens_details": {
           "accepted_prediction_tokens": 0,
           "audio_tokens": 0,
-          "reasoning_tokens": 125,
+          "reasoning_tokens": 134,
           "rejected_prediction_tokens": 0
         },
+        "cost_in_usd_ticks": 3918500,
         "num_sources_used": 0,
-        "prompt_tokens": 687,
+        "prompt_tokens": 133,
         "prompt_tokens_details": {
           "audio_tokens": 0,
-          "cached_tokens": 679,
+          "cached_tokens": 128,
           "image_tokens": 0,
-          "text_tokens": 687
+          "text_tokens": 133
         },
-        "total_tokens": 822
+        "total_tokens": 277
       }
     },
     "headers": {
@@ -79,25 +86,32 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "998547dbf85fe7fa-ORD"
+        "a03922957bca5eb1-ORD"
       ],
       "connection": [
         "keep-alive"
+      ],
+      "content-security-policy-report-only": [
+        "script-src 'unsafe-inline' 'unsafe-eval'; connect-src 'none'; report-uri https://csp-reporting.cloudflare.com/cdn-cgi/script_monitor/report?m=jSmKhOzp0hnHRmwQFYYEhAF_MlJUOjaBxPMKyPwyq8s-1780095834.4794211-1.0.1.1-n4JH_kTMDOM4JjyS3aAXLXMzHxlwkONeSjagSR7dXU5h1XBkKbgN4hfy0psL9b80N18SHu4Dkptmfvgz.xwunZxh6Q7iA4bwGi2.8TIcT3qB0E0so732gYfdeq7l2NhtD1KHAGcrAB_h.TipxkWx0XR76zXpv_kS6XfW1E92KIg; report-to cf-csp-endpoint"
       ],
       "content-type": [
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:16:41 GMT"
+        "Fri, 29 May 2026 23:03:55 GMT"
+      ],
+      "report-to": [
+        "{\"group\":\"cf-csp-endpoint\",\"max_age\":86400,\"endpoints\":[{\"url\":\"https://csp-reporting.cloudflare.com/cdn-cgi/script_monitor/report?m=jSmKhOzp0hnHRmwQFYYEhAF_MlJUOjaBxPMKyPwyq8s-1780095834.4794211-1.0.1.1-n4JH_kTMDOM4JjyS3aAXLXMzHxlwkONeSjagSR7dXU5h1XBkKbgN4hfy0psL9b80N18SHu4Dkptmfvgz.xwunZxh6Q7iA4bwGi2.8TIcT3qB0E0so732gYfdeq7l2NhtD1KHAGcrAB_h.TipxkWx0XR76zXpv_kS6XfW1E92KIg\"}]}"
       ],
       "server": [
         "cloudflare"
       ],
-      "set-cookie": [
-        "__cf_bm=9XSWYbW2D.C8y0N7WctAjdUm0Tng8hR4ieOUZSgglSg-1762103801-1.0.1.1-B6qgnXW8W_s_ZFsiqV1rk3cER.jpEb0hfC7zjJGAKWkUbCcb2dvALHPiN0iyJYqpl.bD5wYsEEdUZ2pcft5zmdEJIHhBp5rwhCWVBTpaqZ8; path=/; expires=Sun, 02-Nov-25 17:46:41 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
-      ],
+      "set-cookie": "[REDACTED:set-cookie]",
       "strict-transport-security": [
         "max-age=31536000"
+      ],
+      "traceparent": [
+        "00-b0aab3cfee090f803156a838069db6df-5e93ecad000660d9-01"
       ],
       "transfer-encoding": [
         "chunked"
@@ -105,13 +119,35 @@
       "vary": [
         "origin, access-control-request-method, access-control-request-headers"
       ],
+      "x-metrics-e2e-ms": [
+        "1243.8"
+      ],
+      "x-metrics-mean-itl-ms": [
+        "6.7"
+      ],
+      "x-metrics-ttft-ms": [
+        "156.3"
+      ],
+      "x-ratelimit-limit-requests": [
+        "1800"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "10000000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "1799"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "9999545"
+      ],
       "x-request-id": [
-        "00-66e68467b7e6fdc1ae1fe46e782d2517-c14353f4006e23ef-01"
+        "833da94b-c357-9451-9778-62ce36c04f66"
       ],
       "x-zero-data-retention": [
         "false"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

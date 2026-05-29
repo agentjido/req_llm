@@ -1,0 +1,152 @@
+{
+  "model_spec": "google:gemini-3.5-flash",
+  "provider": "google",
+  "request": {
+    "body": {
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJHZW5lcmF0ZSBhIHNvZnR3YXJlIGVuZ2luZWVyIHByb2ZpbGUifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7ImNhbmRpZGF0ZUNvdW50IjoxLCJtYXhPdXRwdXRUb2tlbnMiOjUwMCwicmVzcG9uc2VKc29uU2NoZW1hIjp7ImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjpmYWxzZSwicHJvcGVydGllcyI6eyJhZ2UiOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBhZ2UgaW4geWVhcnMiLCJtaW5pbXVtIjoxLCJ0eXBlIjoiaW50ZWdlciJ9LCJuYW1lIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3MgZnVsbCBuYW1lIiwidHlwZSI6InN0cmluZyJ9LCJvY2N1cGF0aW9uIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3Mgam9iIG9yIHByb2Zlc3Npb24iLCJ0eXBlIjoic3RyaW5nIn19LCJwcm9wZXJ0eU9yZGVyaW5nIjpbIm5hbWUiLCJhZ2UiLCJvY2N1cGF0aW9uIl0sInJlcXVpcmVkIjpbIm5hbWUiLCJhZ2UiXSwidHlwZSI6Im9iamVjdCJ9LCJyZXNwb25zZU1pbWVUeXBlIjoiYXBwbGljYXRpb24vanNvbiIsInRlbXBlcmF0dXJlIjowLjAsInRoaW5raW5nQ29uZmlnIjp7ImluY2x1ZGVUaG91Z2h0cyI6dHJ1ZSwidGhpbmtpbmdMZXZlbCI6ImxvdyJ9fX0="
+    },
+    "canonical_json": {
+      "contents": [
+        {
+          "parts": [
+            {
+              "text": "Generate a software engineer profile"
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "generationConfig": {
+        "candidateCount": 1,
+        "maxOutputTokens": 500,
+        "responseJsonSchema": {
+          "additionalProperties": false,
+          "properties": {
+            "age": {
+              "description": "Person's age in years",
+              "minimum": 1,
+              "type": "integer"
+            },
+            "name": {
+              "description": "Person's full name",
+              "type": "string"
+            },
+            "occupation": {
+              "description": "Person's job or profession",
+              "type": "string"
+            }
+          },
+          "propertyOrdering": [
+            "name",
+            "age",
+            "occupation"
+          ],
+          "required": [
+            "name",
+            "age"
+          ],
+          "type": "object"
+        },
+        "responseMimeType": "application/json",
+        "temperature": 0.0,
+        "thinkingConfig": {
+          "includeThoughts": true,
+          "thinkingLevel": "low"
+        }
+      }
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=[REDACTED]"
+  },
+  "response": {
+    "body": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "**My Thought Process: Crafting a Software Engineer Profile**\n\nOkay, the user wants a \"software engineer profile.\" Right, I understand the goal. My mind immediately kicks into gear, breaking down the request and formulating a plan.\n\nFirst, I need to understand what's *required*. I internally reference the implicit schema. There's a `name` which is a string and absolutely mandatory. Then there's an `age`, which has to be an integer, and importantly, it needs to be greater than or equal to 1. Finally, there's `occupation`, which is technically optional, but for a \"software engineer\" profile, it’s absolutely critical – almost a given.\n\nNow, it's time to generate some data. I'll make this up, but it's important to be realistic. Let’s go with \"Jane Doe\" for the name. For age, let's keep it around the experience level, I'll set it to 29. And, of course, the occupation is \"Software Engineer\".\n\nThe *most* important part now is formatting the output correctly. I need a single, valid JSON object that strictly adheres to the schema. No extra text, comments, or any other noise that would throw off parsing. It needs to be clean, concise, and technically accurate. It is important to the user!\n\n\n",
+                "thought": true
+              },
+              {
+                "text": "{\n  \"name\": \"Jane Doe\",\n  \"age\": 29,\n  \"occupation\": \"Software Engineer\"\n}",
+                "thoughtSignature": "EtAECs0EAQw51sfkJyK+mpEQuhEpb4L+ldLVv8+HwnuCQwXbz/TKQCK3zXwu1ToR2JErYo7bsQsdvtVaNy96cIkjvlcXOYI73PIq6MYU+MME9swSMQg4p/6vT3xcZCxDZyFbwzt93oT2VMtuK76B0ZsdjwpWmFS+6EUrvDYTS3QFboSZV9p6oekPEXWzi6yBNFpkDu15chtXuKvCNjdl+7tA+moxNuwbAJCq0MrFE+VWprU+9cuv9MKBr6GoZ9VrIusWGPudjsMVZz8r6L4/YOf0JBYWTn01rBNE4Ir0HaCzTgxDdJ8c8NAwreyRymCYZEnAtqiRGOcMgyMHGbTu/BLdA4YlQjYHRSlGydvAOBgB0igPdBg1sqybHKO2hoYwNhu7cnw6Cdo2PnAAfBkzvGEh77V9N5nouExFoB/nWq3+GQ6nHH6POfihD7l+lh0zBwcjvNJAAPO1pPY5XH5I6Hcf63b1GxM1/pFYp6ok0LrzgzDlJfBydX5A998ptO9Dxok6Sguxcmr1D6T0Hx/nTfYwNVnWoakntE6k/FB5VPcOKdakZ1n31AhbCDknfytLiAcv/8Vagfnc55otAAS+8DgCX7Kj6BqeszmcXUf8TJWh/RrwKJQ4DejActceb4qPDIGIkhS2tFLv21ZUOac+yE8kgXFu4Bw+7kRZ8drMdOFPiLIZH02OMmti3ggnVHXzoz9/bFl1zL6z4t2zUInLDAc9f2klaA/Y+QUN9oWDgyYGNGCL/L3Yre9dmxGvjO1TdpMR4EOKfyPeFzEtj1g3cxK5DQ=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "modelVersion": "gemini-3.5-flash",
+      "responseId": "LRIaateVMsu01MkP8OmykQ8",
+      "usageMetadata": {
+        "candidatesTokenCount": 30,
+        "promptTokenCount": 6,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 6
+          }
+        ],
+        "serviceTier": "standard",
+        "thoughtsTokenCount": 150,
+        "totalTokenCount": 186
+      }
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "content-type": [
+        "application/json; charset=UTF-8"
+      ],
+      "date": [
+        "Fri, 29 May 2026 22:24:48 GMT"
+      ],
+      "server": [
+        "scaffolding on HTTPServer2"
+      ],
+      "server-timing": [
+        "gfet4t7; dur=3139"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-frame-options": [
+        "SAMEORIGIN"
+      ],
+      "x-gemini-service-tier": [
+        "standard"
+      ],
+      "x-xss-protection": [
+        "0"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

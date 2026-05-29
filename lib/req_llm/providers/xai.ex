@@ -761,6 +761,13 @@ defmodule ReqLLM.Providers.XAI do
     end
   end
 
+  def pre_validate_options(_operation, _model, opts) do
+    case Keyword.fetch(opts, :reasoning_effort) do
+      {:ok, effort} -> Keyword.put(opts, :reasoning_effort, normalize_reasoning_effort(effort))
+      :error -> opts
+    end
+  end
+
   @impl ReqLLM.Provider
   def translate_options(:image, _model, opts) do
     explicit_keys = Process.delete(:req_llm_xai_image_explicit_opts) || MapSet.new()
@@ -768,7 +775,7 @@ defmodule ReqLLM.Providers.XAI do
     {opts, Enum.reverse(warnings)}
   end
 
-  def translate_options(_operation, _model, opts) do
+  def translate_options(_operation, model, opts) do
     warnings = []
 
     {stream_value, opts} = Keyword.pop(opts, :stream?)
@@ -830,15 +837,40 @@ defmodule ReqLLM.Providers.XAI do
 
     {reasoning_effort, opts} = Keyword.pop(opts, :reasoning_effort)
 
-    opts =
-      if reasoning_effort do
-        Keyword.put(opts, :reasoning_effort, reasoning_effort)
-      else
-        opts
+    {opts, warnings} =
+      cond do
+        is_nil(reasoning_effort) ->
+          {opts, warnings}
+
+        reasoning_effort_supported?(model) ->
+          {Keyword.put(opts, :reasoning_effort, reasoning_effort), warnings}
+
+        true ->
+          warning =
+            "reasoning_effort is not supported by #{model.id} and will be ignored"
+
+          {opts, [warning | warnings]}
       end
 
     {opts, Enum.reverse(warnings)}
   end
+
+  defp reasoning_effort_supported?(%{id: "grok-build-" <> _}), do: false
+  defp reasoning_effort_supported?(%{id: "grok-4.20" <> _}), do: false
+  defp reasoning_effort_supported?(%{id: "grok-3-mini" <> _}), do: true
+  defp reasoning_effort_supported?(%{id: "grok-4.3" <> _}), do: true
+  defp reasoning_effort_supported?(%{id: "grok-4-1-fast" <> _}), do: true
+  defp reasoning_effort_supported?(%{id: "grok-4" <> _}), do: true
+  defp reasoning_effort_supported?(_), do: false
+
+  defp normalize_reasoning_effort("none"), do: :none
+  defp normalize_reasoning_effort("minimal"), do: :minimal
+  defp normalize_reasoning_effort("low"), do: :low
+  defp normalize_reasoning_effort("medium"), do: :medium
+  defp normalize_reasoning_effort("high"), do: :high
+  defp normalize_reasoning_effort("xhigh"), do: :xhigh
+  defp normalize_reasoning_effort("default"), do: :default
+  defp normalize_reasoning_effort(value), do: value
 
   defp drop_image_unsupported(opts, explicit_keys) do
     unsupported_params = [:size, :output_format, :quality, :style, :negative_prompt, :seed, :user]

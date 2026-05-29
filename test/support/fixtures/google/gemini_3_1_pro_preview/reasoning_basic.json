@@ -1,0 +1,123 @@
+{
+  "model_spec": "google:gemini-3.1-pro-preview",
+  "provider": "google",
+  "request": {
+    "body": {
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJTb2x2ZSAxMio3IGFuZCBzaG93IHlvdXIgaW50ZXJuYWwgdGhpbmtpbmcgKGJyaWVmKS4ifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7ImNhbmRpZGF0ZUNvdW50IjoxLCJtYXhPdXRwdXRUb2tlbnMiOjUwMDAsInRlbXBlcmF0dXJlIjoxLjAsInRoaW5raW5nQ29uZmlnIjp7ImluY2x1ZGVUaG91Z2h0cyI6dHJ1ZSwidGhpbmtpbmdMZXZlbCI6ImxvdyJ9fX0="
+    },
+    "canonical_json": {
+      "contents": [
+        {
+          "parts": [
+            {
+              "text": "Solve 12*7 and show your internal thinking (brief)."
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "generationConfig": {
+        "candidateCount": 1,
+        "maxOutputTokens": 5000,
+        "temperature": 1.0,
+        "thinkingConfig": {
+          "includeThoughts": true,
+          "thinkingLevel": "low"
+        }
+      }
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-pro-preview:generateContent?key=[REDACTED]"
+  },
+  "response": {
+    "body": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "**Calculating 12 Times 7: A Quick Run-Through**\n\nOkay, so the task is straightforward: find the product of 12 and 7 and explain how I got there. This should be quick. I immediately think of two ways to tackle this. First, the answer might just pop into my head from memory: 12 times 7 is 84. Boom. Done. If it didn't come immediately, I'd go with decomposition. I can break down 12 into 10 + 2. Then, it’s (10 * 7) + (2 * 7), which is 70 + 14, and that also equals 84. Perfect. The answer is 84, and I used either direct recall or the distributive property for the calculation. This hits all the marks – quick, direct, and provides the breakdown.\n\n\n",
+                "thought": true
+              },
+              {
+                "text": "The answer is **84**.\n\n**Internal Thinking:**\n1. I need to multiply 12 by 7.\n2. I can break 12 down into easier numbers: 10 and 2. \n3. Multiply each part by 7: \n   * 10 * 7 = 70\n   * 2 * 7 = 14\n4. Add the results together: 70 + 14 = 84. \n*(Alternatively, I just recall the 12 times table from memory: 12 x 7 = 84).*",
+                "thoughtSignature": "EooFCocFAQw51sdw4V8HCJfY7+30VLWuL7MSI98mYqYfebUVsLkRyX9XlsAG9L+bBq8kadUZ3VnQsVPmQXVTuM85Y3nXwDZvggGnFpYUzYM8RpE7rNTuvKXNSBjIJnREsaSz+JdQnEHUpOaUmzSub239MUmCUn+VOrC2CNNoUgiY5NRdP1iXwAU7k8r5ZQXapeyVNUWTNyeXg/6R0rcwhpdsR34kBdHLN5Cq7ycnsWkTJFCzFJRK6Qd+L9uUyDRoO47ZY5SY9L6FWowYEQE/66ckSZ+S0PaLi1tPZtk87BobWM4B12TifvJnkuF2UbXVZl6mbelY4wuOcGsBkxOCvQdjsYtE6RYEXLRob/ZB0BzgM4WFL+3ieG4h1rU4QIWegdEne2XylanXtg5VwshRnmv+RKpUixJCmFPbtvGrOMDsQpLj8fUxS+I+D3jFQJzTWcgl/AlpLiasEk34iqWBBaoNCD3tgSE+UbNHZhKLxkTjKdpnp32b4yd2nP2Vbkr9jUbEEgSiuojRS+d6yMMNnr9nCVvycZgMvMMlREygTSp9Ko8qPzfeO3sVzZ3jgevvFCIyG+niXTFPVHb1dPUUAvDBTgvI4wO9mIUvZnJHq5Hzksr+y4v3zi83EKUIhbN7xK2MCg7HejOuj4PumwI9I9D8qSbkMFWWusBaAOJBXFyjwOxSZuYzV0DhQMgeXHP5rYZt3ef8f7BSxOkFL7kVz/dzMt5QEYIB04vTxxEOY+Kfvnsfv0TlQKA/kzfKWliaif7pr02lCZicOw/SdCM9JMQ/SGs0rGu77Oaul43vKGoGqsbcb0A+UbBxmbD4ONFq7TKxM/+H79K+VfjY3hukpAQ5qqk6ULQ9q4apXKs="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "modelVersion": "gemini-3.1-pro-preview",
+      "responseId": "WBIaaq7WN8LF1MkP8YWtkAI",
+      "usageMetadata": {
+        "candidatesTokenCount": 132,
+        "promptTokenCount": 15,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 15
+          }
+        ],
+        "serviceTier": "standard",
+        "thoughtsTokenCount": 189,
+        "totalTokenCount": 336
+      }
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "content-type": [
+        "application/json; charset=UTF-8"
+      ],
+      "date": [
+        "Fri, 29 May 2026 22:25:34 GMT"
+      ],
+      "server": [
+        "scaffolding on HTTPServer2"
+      ],
+      "server-timing": [
+        "gfet4t7; dur=5248"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-frame-options": [
+        "SAMEORIGIN"
+      ],
+      "x-gemini-service-tier": [
+        "standard"
+      ],
+      "x-xss-protection": [
+        "0"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

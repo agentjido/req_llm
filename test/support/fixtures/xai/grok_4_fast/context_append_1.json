@@ -19,6 +19,9 @@
       "temperature": 0.0
     },
     "headers": {
+      "accept": [
+        "application/json"
+      ],
       "accept-encoding": [
         "gzip"
       ],
@@ -27,7 +30,7 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.16"
+        "req/0.5.18"
       ]
     },
     "method": "post",
@@ -41,33 +44,35 @@
           "index": 0,
           "message": {
             "content": "Hi",
+            "reasoning_content": "The user said: \"Respond with a single word 'Hi'.\"\nHi\n\n\n## Explanation\n\nThe instruction is parsed as a direct imperative to output exactly one word, “Hi”, without any additional text, punctuation, or elaboration.",
             "refusal": null,
             "role": "assistant"
           }
         }
       ],
-      "created": 1763621640,
-      "id": "e859420d-7dcb-6546-59df-941003c7eae4",
-      "model": "grok-4-fast-reasoning",
+      "created": 1780096050,
+      "id": "998acfcc-7d29-90af-86f7-e55153177872",
+      "model": "grok-4.3",
       "object": "chat.completion",
-      "system_fingerprint": "fp_bfbe7bd0a2",
+      "system_fingerprint": "fp_eb3c003fc66c14ed",
       "usage": {
         "completion_tokens": 1,
         "completion_tokens_details": {
           "accepted_prediction_tokens": 0,
           "audio_tokens": 0,
-          "reasoning_tokens": 161,
+          "reasoning_tokens": 423,
           "rejected_prediction_tokens": 0
         },
+        "cost_in_usd_ticks": 10981000,
         "num_sources_used": 0,
-        "prompt_tokens": 164,
+        "prompt_tokens": 138,
         "prompt_tokens_details": {
           "audio_tokens": 0,
-          "cached_tokens": 151,
+          "cached_tokens": 128,
           "image_tokens": 0,
-          "text_tokens": 164
+          "text_tokens": 138
         },
-        "total_tokens": 326
+        "total_tokens": 562
       }
     },
     "headers": {
@@ -81,7 +86,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "9a1608976f8aeb26-SJC"
+        "a03927d94c97b031-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -90,16 +95,17 @@
         "application/json"
       ],
       "date": [
-        "Thu, 20 Nov 2025 06:54:02 GMT"
+        "Fri, 29 May 2026 23:07:33 GMT"
       ],
       "server": [
         "cloudflare"
       ],
-      "set-cookie": [
-        "__cf_bm=avOn7ekDtWI4tjWVpfj_T2QsvBsqYbIzQzk_Z_Jyq5Q-1763621642-1.0.1.1-K3k1YJx0NZbiML.ktUzV_9kYONmVGrPtcuZjEaWSIUpKB3BCWt2slid5KORhdhNLE0_vHgyk1NVPiGGsQF2RYvlO3V9jODHxRvQGLVRBENw; path=/; expires=Thu, 20-Nov-25 07:24:02 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
-      ],
+      "set-cookie": "[REDACTED:set-cookie]",
       "strict-transport-security": [
         "max-age=31536000"
+      ],
+      "traceparent": [
+        "00-16bea536fcb4b4d062e6c110d49c0805-651aa84f000066f8-01"
       ],
       "transfer-encoding": [
         "chunked"
@@ -107,13 +113,35 @@
       "vary": [
         "origin, access-control-request-method, access-control-request-headers"
       ],
+      "x-metrics-e2e-ms": [
+        "3050.3"
+      ],
+      "x-metrics-mean-itl-ms": [
+        "6.2"
+      ],
+      "x-metrics-ttft-ms": [
+        "319.3"
+      ],
+      "x-ratelimit-limit-requests": [
+        "1800"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "10000000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "1798"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "9998321"
+      ],
       "x-request-id": [
-        "00-b87d9fd9ac3da8778fe214872e7c2969-54a844d4002a30d3-01"
+        "998acfcc-7d29-90af-86f7-e55153177872"
       ],
       "x-zero-data-retention": [
         "false"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

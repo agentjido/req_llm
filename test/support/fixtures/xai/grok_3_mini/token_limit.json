@@ -1,4 +1,6 @@
 {
+  "model_spec": "xai:grok-3-mini",
+  "provider": "xai",
   "request": {
     "body": {
       "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjEwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJXcml0ZSBhIHZlcnkgbG9uZyBzdG9yeSBhYm91dCBkcmFnb25zIGFuZCBhZHZlbnR1cmVzIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiZ3Jvay0zLW1pbmkiLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC41fQ=="
@@ -16,6 +18,9 @@
       "temperature": 0.5
     },
     "headers": {
+      "accept": [
+        "application/json"
+      ],
       "accept-encoding": [
         "gzip"
       ],
@@ -24,7 +29,7 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ]
     },
     "method": "post",
@@ -37,35 +42,36 @@
           "finish_reason": "length",
           "index": 0,
           "message": {
-            "content": "Below is a very long, original story about dragons and adventures. I've crafted it to be engaging, detailed, and immersive, with a complete narrative arc. The story is divided into chapters for better readability, and it's set in a fantasy world filled with magic, peril, and wonder. I hope you enjoy it!\n\n---\n\n# **The Dragon's Legacy: A Tale of Fire and Fate**\n\n## **Chapter 1: The Shadow of the Skies**\n\nIn the ancient realm of Eldoria, where",
-            "reasoning_content": "First, the user asked for a \"very long story about dragons and adventures.\" I need to create a story that's detailed and extensive. Since this is a text-based response, I'll aim for a substantial length, maybe 1000-2000 words, but I'll structure it properly.\n\nKey elements:\n- **Dragons**: These should be central. I can have different types: fire-breathing, ice dragons, benevolent, or malevolent ones.\n- **Adventures**: The story needs excitement, quests, battles, explorations. Include elements like heroes, villains, treasures, and magical elements.\n\nStory structure:\n1. **Introduction**: Set the scene, introduce main characters, and establish the world. Maybe a fantasy world with kingdoms, magic, and dragons.\n2. **Rising Action**: Build up the plot with adventures, conflicts, and character development.\n3. **Climax**: The peak of the adventure, like a big battle or a major discovery.\n4. **Falling Action**: Resolve conflicts and tie up loose ends.\n5. **Conclusion**: End the story satisfyingly.\n\nMain characters:\n- Hero: A young adventurer or a dragon rider.\n- Dragon: Perhaps a loyal dragon companion or a wild one that needs taming.\n- Antagonists: Evil dragons, a dark wizard, or a rival kingdom.\n- Supporting characters: Friends, mentors, allies.\n\nPlot idea:\n- Start with a village threatened by a dragon. The hero sets out on a quest to defeat it or make peace.\n- Along the way, they discover a larger threat, like a dragon army led by a powerful entity.\n- Adventures could include exploring ancient ruins, fighting monsters, solving puzzles, and forming alliances.\n\nMake it engaging:\n- Use descriptive language to paint vivid pictures.\n- Include dialogue to make characters feel real.\n- Build suspense and emotion.\n- Since it's a long story, divide it into chapters or sections for better flow.\n\nEnsure it's original: I shouldn't copy from existing stories like \"How to Train Your Dragon\" or \"The Hobbit.\" Create something unique.\n\nLength: Aim for a story that's comprehensive but not endless. In this response, I'll write a full story, but keep it manageable.\n\nFinal outline:\n- Chapter 1: Introduction to the world and main character.\n- Chapter 2: The call to adventure.\n- Chapter 3: First encounters and challenges.\n- Chapter 4: Building alliances.\n- Chapter 5: The big confrontation.\n- Chapter 6: Resolution and aftermath.",
+            "content": "**The Chronicles of Eldrath: The Dragon's Legacy**\n\nIn the shadowed peaks of the Whispering Mountains, where mist clung to jagged cliffs like ancient secrets, there lived a young orphan named Kael. At sixteen, Kael had no family, no fortune, and no destiny—until the night a silver-scaled dragon named Veyra crashed into his village of Thornwood, her wings torn by hunters' arrows. She spoke in a voice like rumbling thunder: \"The old pact is broken",
+            "reasoning_content": "The user asked: \"Write a very long story about dragons and adventures.\"\n",
             "refusal": null,
             "role": "assistant"
           }
         }
       ],
-      "created": 1762103811,
-      "id": "0d989ee5-0263-9d38-5199-96e98f50f2bd_us-east-1",
-      "model": "grok-3-mini",
+      "created": 1780095866,
+      "id": "428540a3-6bc3-9918-871a-863ca7ebb1d3",
+      "model": "grok-4.3",
       "object": "chat.completion",
-      "system_fingerprint": "fp_4fae27f477",
+      "system_fingerprint": "fp_eb3c003fc66c14ed",
       "usage": {
         "completion_tokens": 100,
         "completion_tokens_details": {
           "accepted_prediction_tokens": 0,
           "audio_tokens": 0,
-          "reasoning_tokens": 502,
+          "reasoning_tokens": 260,
           "rejected_prediction_tokens": 0
         },
+        "cost_in_usd_ticks": 9393500,
         "num_sources_used": 0,
-        "prompt_tokens": 16,
+        "prompt_tokens": 139,
         "prompt_tokens_details": {
           "audio_tokens": 0,
-          "cached_tokens": 2,
+          "cached_tokens": 128,
           "image_tokens": 0,
-          "text_tokens": 16
+          "text_tokens": 139
         },
-        "total_tokens": 618
+        "total_tokens": 499
       }
     },
     "headers": {
@@ -79,7 +85,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "99854833d8f786ed-ORD"
+        "a039235dfe61d95e-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -88,16 +94,17 @@
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:16:56 GMT"
+        "Fri, 29 May 2026 23:04:31 GMT"
       ],
       "server": [
         "cloudflare"
       ],
-      "set-cookie": [
-        "__cf_bm=jPe9ik9qEvrZqCrAegxzx7tR9VXNL21lXNa4yS86LSA-1762103816-1.0.1.1-M8qY.KB2_i8Nt32UKpIZ0F_0yaX6s9u.hhmbyYOYyBthAZwicYy6ArQC_.mpxRo8EabAQ86Ra82KOcw68HdtjSZ.SVSaP20js8VxG4lIyuI; path=/; expires=Sun, 02-Nov-25 17:46:56 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
-      ],
+      "set-cookie": "[REDACTED:set-cookie]",
       "strict-transport-security": [
         "max-age=31536000"
+      ],
+      "traceparent": [
+        "00-692d9c85acefc5a2076af510d8b6c64b-0a1dc3e200079785-01"
       ],
       "transfer-encoding": [
         "chunked"
@@ -105,13 +112,35 @@
       "vary": [
         "origin, access-control-request-method, access-control-request-headers"
       ],
+      "x-metrics-e2e-ms": [
+        "4925.5"
+      ],
+      "x-metrics-mean-itl-ms": [
+        "12.9"
+      ],
+      "x-metrics-ttft-ms": [
+        "191.4"
+      ],
+      "x-ratelimit-limit-requests": [
+        "1800"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "10000000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "1789"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "10000000"
+      ],
       "x-request-id": [
-        "00-98875166de37cbb30d10864f953cbbb6-dfc3106d006e9447-01"
+        "428540a3-6bc3-9918-871a-863ca7ebb1d3"
       ],
       "x-zero-data-retention": [
         "false"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

@@ -1,0 +1,149 @@
+{
+  "model_spec": "google:gemini-3.5-flash",
+  "provider": "google",
+  "request": {
+    "body": {
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJVc2UgdGhlIGFkZCB0b29sIHRvIGNvbXB1dGUgMiArIDMuIEFmdGVyIHRoZSB0b29sIHJlc3VsdCBhcnJpdmVzLCByZXNwb25kIHdpdGggJ3N1bT08dmFsdWU+Jy4ifV0sInJvbGUiOiJ1c2VyIn0seyJwYXJ0cyI6W3sidGV4dCI6IiJ9LHsiZnVuY3Rpb25DYWxsIjp7ImFyZ3MiOnsiYSI6MiwiYiI6M30sIm5hbWUiOiJhZGQifSwidGhvdWdodFNpZ25hdHVyZSI6ImMydHBjRjkwYUc5MVoyaDBYM05wWjI1aGRIVnlaVjkyWVd4cFpHRjBiM0k9In1dLCJyb2xlIjoibW9kZWwifSx7InBhcnRzIjpbeyJ0ZXh0IjoiNSJ9LHsiZnVuY3Rpb25SZXNwb25zZSI6eyJuYW1lIjoiYWRkIiwicmVzcG9uc2UiOnsiY29udGVudCI6IjUifX19XSwicm9sZSI6InVzZXIifV0sImdlbmVyYXRpb25Db25maWciOnsiY2FuZGlkYXRlQ291bnQiOjEsIm1heE91dHB1dFRva2VucyI6NjU1MywidGVtcGVyYXR1cmUiOjAuMH19"
+    },
+    "canonical_json": {
+      "contents": [
+        {
+          "parts": [
+            {
+              "text": "Use the add tool to compute 2 + 3. After the tool result arrives, respond with 'sum=<value>'."
+            }
+          ],
+          "role": "user"
+        },
+        {
+          "parts": [
+            {
+              "text": ""
+            },
+            {
+              "functionCall": {
+                "args": {
+                  "a": 2,
+                  "b": 3
+                },
+                "name": "add"
+              },
+              "thoughtSignature": "c2tpcF90aG91Z2h0X3NpZ25hdHVyZV92YWxpZGF0b3I="
+            }
+          ],
+          "role": "model"
+        },
+        {
+          "parts": [
+            {
+              "text": "5"
+            },
+            {
+              "functionResponse": {
+                "name": "add",
+                "response": {
+                  "content": "5"
+                }
+              }
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "generationConfig": {
+        "candidateCount": 1,
+        "maxOutputTokens": 6553,
+        "temperature": 0.0
+      }
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=[REDACTED]"
+  },
+  "response": {
+    "body": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "sum=5",
+                "thoughtSignature": "ErgCCrUCAQw51sdUzQp6IsE7IsrQ7eSzDxQcwd40nI4RQ4qosSjjSpsncMgvftrVJmtu/rKLNl02sdgOXq6b6RbSgW+3eutQNkIyydW24TW2bkROzmyY5ILQeyyjlzYQ9Ff8RpfQD+VUbQZYFr/5aLHa0yKvbAj4KENe6Q0Lrs9rCp3TOYCqHO2JzPoYgGpeqwivP/bhtmUV5v98oWAzDB8XWW+J5gqdYtX43OSgLzF9QeeShB/HRhuXaQunqxPXzM/8P/n/9nDRUNXkrppK9nDqgzEa4eaRLM0NyZH4pd3xFTxH9nlUUwjmORpVaZaEIDcGhUTmW/f2Cj5GrWyFlBPRhU1Cp+8+x8JM2ZmgbJn/QW1ULnFPU5cL1K92wcoVMXInj7ROeKbiFVt11RbPI7hXpH18oAD8Q/IK"
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "modelVersion": "gemini-3.5-flash",
+      "responseId": "JBIaat2ZNLvU1MkP-NSImQI",
+      "usageMetadata": {
+        "candidatesTokenCount": 3,
+        "promptTokenCount": 56,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 56
+          }
+        ],
+        "serviceTier": "standard",
+        "thoughtsTokenCount": 73,
+        "totalTokenCount": 132
+      }
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "content-type": [
+        "application/json; charset=UTF-8"
+      ],
+      "date": [
+        "Fri, 29 May 2026 22:24:37 GMT"
+      ],
+      "server": [
+        "scaffolding on HTTPServer2"
+      ],
+      "server-timing": [
+        "gfet4t7; dur=870"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-frame-options": [
+        "SAMEORIGIN"
+      ],
+      "x-gemini-service-tier": [
+        "standard"
+      ],
+      "x-xss-protection": [
+        "0"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

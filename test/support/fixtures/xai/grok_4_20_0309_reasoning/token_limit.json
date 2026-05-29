@@ -1,0 +1,152 @@
+{
+  "model_spec": "xai:grok-4.20-0309-reasoning",
+  "provider": "xai",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjMwMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiV3JpdGUgYSB2ZXJ5IGxvbmcgc3RvcnkgYWJvdXQgZHJhZ29ucyBhbmQgYWR2ZW50dXJlcyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Imdyb2stNC4yMC0wMzA5LXJlYXNvbmluZyIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjV9"
+    },
+    "canonical_json": {
+      "max_completion_tokens": 3000,
+      "messages": [
+        {
+          "content": "Write a very long story about dragons and adventures",
+          "role": "user"
+        }
+      ],
+      "model": "grok-4.20-0309-reasoning",
+      "stream": false,
+      "temperature": 0.5
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.x.ai/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "length",
+          "index": 0,
+          "message": {
+            "content": "**The Ember Crown: A Dragon’s Odyssey**\n\nIn the world of Aetheria, where the sky itself was veined with living auroras and the mountains sang low songs when the wind moved through their crystal spines, dragons were not myths. They were tax collectors, philosophers, warlords, and occasionally very dramatic poets. Some hoarded gold. Others hoarded knowledge. A few simply hoarded bad opinions and arguments.\n\nOur story begins in the fractured kingdom of Vaeloria, in the year 1274 of the Second Turning, on a day when the twin suns bled orange across the horizon like two embarrassed eyes.\n\n### Chapter One: The Hatchling and the Thief\n\nDeep beneath the volcanic caldera of Mount Solace lived a dragon named **Pyraxis the Crimson**, though he preferred “Pyr” when he was feeling less imperial. He was young by dragon standards—barely two hundred years old—and possessed three things in abundance: scales the color of fresh blood, a temper like a forest fire, and an egg that refused to hatch.\n\nThe egg had been sitting in a nest of molten gold and star-iron for seventeen months. Pyr had sung to it, roared at it, read it ancient poetry, and once, in desperation, tried insulting it. Nothing. The shell remained stubbornly opalescent and quiet.\n\nOn the night everything changed, a small human girl fell through the skylight of his cavern.\n\nShe landed directly on the egg.\n\nThe impact was soft, cushioned by layers of treasure, but the sound it made was not. A single clear *crack* echoed through the mountain like a temple bell.\n\nPyr, who had been composing a sonnet about his own magnificence, whipped around with wings flared. “Who dares—”\n\nThe girl sat up, covered in gold coins, holding her head. She couldn’t have been older than fourteen. Her hair was a wild black thicket, her eyes the color of storm-lit jade, and she had the expression of someone who had just discovered that consequences were real.\n\n“Hi,” she said. “Sorry about your… rock.”\n\n“That is not a rock,” Pyr hissed, smoke curling from his nostrils. “That is the heir of the Crimson Line.”\n\nThe egg gave another *crack*. Then another. A tiny talon punched through the shell, followed by a snout the color of molten copper. The hatchling took one look at the human girl sitting in his nest and decided, with the flawless logic of newborns, that she was clearly his mother.\n\nHe let out a delighted squeak and tried to climb into her lap.\n\nPyr stared in abject horror.\n\nThe girl, whose name was **Lira Shadowstep**, professional sneak-thief and accidental dragon parent, looked down at the tiny dragonet gnawing affectionately on her sleeve and said the only thing that seemed appropriate.\n\n“Well. Shit.”\n\n### Chapter Two: The Bargain\n\nPyr did not eat her. He wanted to. He composed three different speeches about how he *should* eat her. But the hatchling—whom Lira immediately named **Ember**—had already imprinted. If Pyr harmed the girl, the little dragon would wither. Dragon psychology was inconvenient that way.\n\nSo they made a bargain.\n\nLira would help raise Ember until he was old enough to hunt for himself (roughly five years). In exchange, Pyr would not turn her into charcoal. Also, she had to stop stealing from dragon hoards. Lira negotiated an exception for “particularly rude dragons” and “anyone who hoards books instead of sharing them.” Pyr, who secretly loved libraries, pretended to be offended.\n\nFor two years they lived in uneasy alliance.\n\nLira taught Ember how to pick locks, how to move silently, and how to lie convincingly. Pyr taught them both ancient history, proper wing etiquette, and how to roast a boar in six seconds without burning the delicate skin.\n\nEmber grew fast. By age two he was the size of a pony and already showing signs of his mother’s sarcasm and his father’s arrogance. He had copper scales that shifted to gold in firelight and a habit of quoting Pyr’s own terrible poetry back at him during arguments.\n\nThe peace could not last.\n\nOn the third spring, the sky tore open.\n\n### Chapter Three: The Black Eclipse\n\nA dragon the size of a mountain descended upon Vaeloria. His name was **Vorathrax the Devourer**, an ancient black wyrm thought dead since the Godswar. He had spent centuries imprisoned in the Umbral Depths, feeding on nightmares and growing stronger. Now he was free, and he brought with him an army of corrupted dragons—those whose hearts had been twisted by shadowflame.\n\nVorathrax’s goal was simple: consume the **Ember Crown**, the ancient artifact said to contain the primal fire of creation itself. Whoever wore it could command all dragonkind. The Crown had been split into three pieces and hidden across Aetheria long ago. One piece rested in the Singing Library of the Cloud Elves. Another lay in the drowned ruins of Thalassor. The last was supposedly buried in the Grave of Stars, a desert where the very sand remembered every sin ever committed.\n\nVorathrax did not care about the difficulty. He simply burned anything in his way.\n\nWhen his shadow fell over Mount Solace, Pyr made a decision that would echo through history.\n\nHe looked at Lira, then at Ember, and said, “We are leaving. Tonight. And we are going to find the Crown before that fossil does.”\n\nLira grinned like a wolf. “Finally. I was getting bored.”\n\nEmber bounced. “Can we fight him? Can we? I’ve been practicing my roar!”\n\nPyr sighed the sigh of every parent who has ever realized their child is an idiot. “We are going to be *clever*. Clever is better than strong.”\n\n“Strong is faster,” Ember argued.\n\n“Clever lasts longer,” Lira said, already packing knives into her boots.\n\nAnd so the strange family—young dragon, older dragon, and one extremely unlicensed human—set out to save the world.\n\n### Chapter Four: The Library That Sang\n\nThe Cloud Elves did not trust dragons. They especially did not trust dragons accompanied by human children who looked like they stole silverware for fun. But they *did* respect a good story, and Pyr could tell an excellent one when properly motivated.\n\nThe head archivist, an ancient elf named Serelith who had feathers instead of hair, listened to their tale while sipping star-tea.\n\n“You seek the first piece of the Ember Crown,” she said. “It is not here for the taking. It must be earned. You must answer the Library’s three questions.”\n\nThe first question appeared in burning letters on the marble floor:\n\n**What is heavier: a ton of gold or a ton of feathers?**\n\nEmber opened his mouth. Lira kicked him.\n\n“Neither,” she said. “A ton is a ton.”\n\nThe letters dissolved. The second question rose:\n\n**If a dragon lies in the forest and no one is around to hear him, is he still insufferable?**\n\nPyr looked personally attacked.\n\nLira answered without hesitation. “Yes. But that’s not the dragon’s fault. It’s the forest’s for not having better taste.”\n\nSerelith actually laughed. The third question was the hardest.\n\n**What does a thief owe the world?**\n\nLira was quiet for a long time. Finally she said, “Nothing. But the best ones choose to give something anyway. That’s why I’m here instead of running.”\n\nThe Library sang.\n\nA section of the wall unfolded like origami, revealing a shard of crystal that burned with inner flame. The first piece of the Ember Crown.\n\nAs they left, Serelith called after them, “Tell Vorathrax that the Library remembers what he did to the Moon Grove. We are not finished with him.”\n\n### Chapter Five: The Drowned City\n\nThe second piece lay in Thalassor, a city swallowed by the sea a thousand years ago. To reach it they needed a ship. To get a ship they needed money. To get money they needed to win the Great Dragon Regatta, an illegal airborne race held once every decade above the Shattered Isles.\n\nPyr refused on principle. Ember thought it sounded amazing. Lira immediately began designing sabotage plans.\n\nThey entered under false names: Pyr as “Lord Scalesworth the Mildly Impressive,” Ember as “Sparkles McDragonface” (Lira’s idea), and Lira as their “humble human servant” who was definitely not planning to cheat.\n\nThe race was chaos.\n\nSky-pirates on mechanical wyverns. A water dragon who kept trying to flood the competition. A particularly theatrical ice dragon who kept shouting his own name during barrel rolls.\n\nEmber flew like he’d been born with lightning in his blood. Pyr flew like a professor who had been forced to attend a sports game. Lira rode on Ember’s back, throwing caltrops, smoke bombs, and the occasional well-aimed insult.\n\nThey won by a scale.\n\nThe prize was not money. It was a favor from the Queen of the Merfolk.\n\nThe Queen, a terrifyingly beautiful woman with shark teeth and bioluminescent tattoos, listened to their request with cold amusement.\n\n“You wish to enter the Drowned City. Very well. But the second piece of the Crown is guarded by my sister, the Leviathan. She has grown… lonely. Entertain her, and you may pass.”\n\nThe Leviathan turned out to be a dragon-turtle the size of a small island who wanted nothing more than to play **Cards Against Humanity: Mythological Edition**.\n\nThey played for six hours.\n\nPyr lost his dignity. Lira lost three fingers’ worth of rings. Ember won the game by playing the card “My massive ego” in response to every single prompt.\n\nThe Leviathan laughed so hard she spat up the second piece of the Crown, which had been stuck in her throat for four centuries.\n\n### Chapter Six: The Grave of Stars\n\nThe final piece was buried in the Grave of Stars, a desert where every grain of sand contained the dying scream of a fallen star. Nothing lived there except memory and regret.\n\nVorathrax reached it first.\n\nWhen the trio arrived, they found the black dragon coiled around a pit of absolute darkness, the final shard of the Crown already in his claws. His corrupted children circled overhead like vultures.\n\n“So,” Vorathrax rumbled, voice like grinding continents. “The Crimson whelp, his pet human, and their obnoxious child. How charming.”\n\nEmber growled. It was not a cute growl anymore.\n\nPyr stepped forward. “This does not have to end in death, old one. The Crown was meant to unite us, not enslave us.”\n\nVorathrax laughed. “Unity is a lie told by the weak. I will wear the Crown. I will burn every kingdom that ever chained a dragon. Starting with yours.”\n\nThe battle that followed was the stuff of legend.\n\nEmber fought like a storm given wings, darting between corrupted dragons, using his smaller size to his advantage. Lira rode him with two enchanted daggers that sang when they tasted blood. Pyr fought with ancient magic and colder fury, protecting his strange little family with every ounce of his ancient power.\n\nBut they were losing.\n\nVorathrax was simply too strong. Too old. Too full of hate.\n\nIn the final moments, as Vorathrax raised the completed Ember Crown toward his massive head, Lira did something incredibly stupid and incredibly brave.\n\nShe ran straight at him.\n\nNot to fight. To talk.\n\n“You’re lonely!” she screamed up at the mountain-sized dragon. “That’s what this is! You’ve been alone in the dark for a thousand years and you’re so *angry* about it you want to make everyone else feel the same! But you don’t have to!”\n\nFor one impossible second, Vorathrax hesitated.\n\nIn that second, Ember struck.\n\nNot with claws or fire, but with the one thing no one expected: the complete works of Pyr’s terrible poetry, recited at maximum volume directly into the black dragon’s ear using a sonic amplification spell Lira had stolen from the Cloud Elves.\n\nThe poetry was so bad it physically hurt.\n\nVorathrax roared in genuine agony.\n\nPyr saw his opening. With a cry that shook the desert, he slammed the completed Ember Crown—not onto Vorathrax’s head, but onto **Ember’s**.\n\nThe young dragon flared with impossible light. The primal fire of creation surged through him, burning away every shadow within fifty miles. The corrupted dragons screamed as the shadowflame was torn from their hearts. Many simply fled. Some fell to the sand and wept.\n\nVorathrax looked at the small copper dragon now radiating the light of newborn stars and, for the first time in a millennium, smiled.\n\n“Well,” the ancient wyrm said. “That’s one way to do it.”\n\nHe did not die. He simply shrank—slowly, painfully—until he was the size of an ordinary dragon again. Old. Tired. But free.\n\n“I think,” he said quietly, “I should like to see a library again. One that doesn’t scream.”\n\n### Chapter Seven: The New Age\n\nThe Ember Crown was not kept by any one person. It was melted down and reforged into three smaller crowns: one for the dragons, one for the humans, and one for all the other peoples of Aetheria. They were worn only during the Convocation, a new gathering held once every ten years where grievances were aired, songs were sung, and absolutely no one was allowed to start a war without filing the proper paperwork in triplicate.\n\nPyr became the first Dragon Ambassador to the mortal kingdoms. He still wrote terrible poetry. People started requesting it ironically. He pretended to hate this.\n\nLira opened the first interspecies school for wayward youths—human, dragon, elf, and otherwise. Its unofficial motto was “Stealing is wrong. Clever acquisition is an art form. Here’s how to do both ethically.”\n\nEmber grew into a dragon of legend, but he never lost his love of bad jokes or his habit of calling Lira “Mom” in front of dignitaries just to watch them malfunction.\n\nAnd sometimes, on quiet nights, the four of them—Pyr, Lira, Ember, and even the reformed Vorathrax—would sit on the cliffs above Mount Solace and watch the twin suns set. The old black dragon had taken to wearing reading glasses and writing his memoirs. The title was *I Was Evil For A Really Long Time But Then A Child Insulted Me And Now I Have Hobbies*.\n\n",
+            "reasoning_content": "The user asked: \"Write a very long story about dragons and adventures.\"\nFirst, the user asked for a very long story about dragons and adventures. I need to write a long, engaging story.\n\nKey instructions:\n\n- Speak directly as Grok answering the user's question.\n\n- Never mention thinking traces or internal reasoning.\n\n- Write the response as if you are the original model directly answering the user.",
+            "refusal": null,
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1780095651,
+      "id": "36956a07-1609-90a8-a321-7df4c29258bc",
+      "model": "grok-4.20-0309-reasoning",
+      "object": "chat.completion",
+      "system_fingerprint": "fp_cf6e10526f",
+      "usage": {
+        "completion_tokens": 3000,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "reasoning_tokens": 668,
+          "rejected_prediction_tokens": 0
+        },
+        "cost_in_usd_ticks": 92690500,
+        "num_sources_used": 0,
+        "prompt_tokens": 133,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 64,
+          "image_tokens": 0,
+          "text_tokens": 133
+        },
+        "total_tokens": 3801
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "*"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a0391e1bdf170d7b-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-security-policy-report-only": [
+        "script-src 'unsafe-inline' 'unsafe-eval'; report-uri https://csp-reporting.cloudflare.com/cdn-cgi/script_monitor/report?m=Qyh6gkqWyKldsBOF9CqD3ryMM5FTTHw3Knf4jEJJ0Qs-1780095651.1780286-1.0.1.1-OGADxVNXmrp3cAB8lsADLW48ldjkL41ZAKLQbUwR2ezWs0u6oqPr_fnNVkwqkh1AGkLvjM_qg1hSTSMKpPtWE_52hCFvB4yi.JUeMBuYPxygmbCt7U_stDYOd_PF3tmjNDt0B4MCBdEHHXmfT.b6Dtmv9bM6QYe4crHEUfnUjtI; report-to cf-csp-endpoint"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 29 May 2026 23:01:16 GMT"
+      ],
+      "report-to": [
+        "{\"group\":\"cf-csp-endpoint\",\"max_age\":86400,\"endpoints\":[{\"url\":\"https://csp-reporting.cloudflare.com/cdn-cgi/script_monitor/report?m=Qyh6gkqWyKldsBOF9CqD3ryMM5FTTHw3Knf4jEJJ0Qs-1780095651.1780286-1.0.1.1-OGADxVNXmrp3cAB8lsADLW48ldjkL41ZAKLQbUwR2ezWs0u6oqPr_fnNVkwqkh1AGkLvjM_qg1hSTSMKpPtWE_52hCFvB4yi.JUeMBuYPxygmbCt7U_stDYOd_PF3tmjNDt0B4MCBdEHHXmfT.b6Dtmv9bM6QYe4crHEUfnUjtI\"}]}"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": "[REDACTED:set-cookie]",
+      "strict-transport-security": [
+        "max-age=31536000"
+      ],
+      "traceparent": [
+        "00-05e51f435cbfe6a46712adac4dc1a88d-48988bd30000b42a-01"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "origin, access-control-request-method, access-control-request-headers"
+      ],
+      "x-metrics-e2e-ms": [
+        "24965.0"
+      ],
+      "x-metrics-mean-itl-ms": [
+        "6.7"
+      ],
+      "x-metrics-ttft-ms": [
+        "279.9"
+      ],
+      "x-ratelimit-limit-requests": [
+        "1800"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "10000000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "1800"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "9995283"
+      ],
+      "x-request-id": [
+        "36956a07-1609-90a8-a321-7df4c29258bc"
+      ],
+      "x-zero-data-retention": [
+        "false"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

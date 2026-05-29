@@ -1,4 +1,6 @@
 {
+  "model_spec": "xai:grok-3-mini-fast-latest",
+  "provider": "xai",
   "request": {
     "body": {
       "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjEwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhpIHRoZXJlISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Imdyb2stMy1taW5pLWZhc3QtbGF0ZXN0Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
@@ -17,6 +19,9 @@
       "temperature": 0.0
     },
     "headers": {
+      "accept": [
+        "application/json"
+      ],
       "accept-encoding": [
         "gzip"
       ],
@@ -25,7 +30,7 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ]
     },
     "method": "post",
@@ -38,35 +43,36 @@
           "finish_reason": "length",
           "index": 0,
           "message": {
-            "content": "Hi! I'm Grok, your AI assistant from",
-            "reasoning_content": "First, the user said, \"Hi there!\" which is a casual greeting. As an AI assistant, I should respond in a friendly and engaging manner to build rapport.\n\nMy role is to be helpful, truthful, and engaging. I need to keep my responses clear and not verbose, as per the instructions.\n\nA good response to a greeting could be:\n- A simple acknowledgment like \"Hi!\" or \"Hello!\"\n- Followed by something to continue the conversation, like asking how I can help or what they're up to.\n- Since this is the start, I should introduce myself or remind them of my purpose if it's the first interaction.\n\nThe system prompt says: \"You are Grok, a helpful and maximally truthful AI built by xAI, not based on any other companies and their models.\" So, I should incorporate that into my response if it fits naturally.\n\nKeep it concise: Avoid being verbose. Aim for a response that's friendly, direct, and invites further interaction.\n\nPossible structure:\n1. Greet back.\n2. Introduce myself briefly.\n3. Offer assistance.\n\nFor example:\n- \"Hi! I'm Grok, created by xAI. How can I help you today?\"\n\nThis covers the greeting, self-introduction, and opens the door for more conversation.\n\nIf I want to keep it lighter: \"Hey there! What's on your mind?\"\n\nBut since the prompt emphasizes being helpful and truthful, including my identity reinforces that.\n\nFinally, ensure the response is truthful: Everything I say should be accurate. I'm indeed Grok from xAI.",
+            "content": "Hey! How's it going? What's on your",
+            "reasoning_content": "The user said \"Hi there!\" This is a simple greeting. I should respond in a friendly, helpful manner.\n",
             "refusal": null,
             "role": "assistant"
           }
         }
       ],
-      "created": 1762103809,
-      "id": "7e54095f-52ce-e0e4-74fb-3cf911d83fb4_us-east-1",
-      "model": "grok-3-mini",
+      "created": 1780095927,
+      "id": "605a10d8-4abe-952a-9cd7-c1fbd8ade9b0",
+      "model": "grok-4.3",
       "object": "chat.completion",
-      "system_fingerprint": "fp_4fae27f477",
+      "system_fingerprint": "fp_eb3c003fc66c14ed",
       "usage": {
         "completion_tokens": 10,
         "completion_tokens_details": {
           "accepted_prediction_tokens": 0,
           "audio_tokens": 0,
-          "reasoning_tokens": 312,
+          "reasoning_tokens": 125,
           "rejected_prediction_tokens": 0
         },
+        "cost_in_usd_ticks": 3693500,
         "num_sources_used": 0,
-        "prompt_tokens": 10,
+        "prompt_tokens": 133,
         "prompt_tokens_details": {
           "audio_tokens": 0,
-          "cached_tokens": 2,
+          "cached_tokens": 128,
           "image_tokens": 0,
-          "text_tokens": 10
+          "text_tokens": 133
         },
-        "total_tokens": 332
+        "total_tokens": 268
       }
     },
     "headers": {
@@ -80,7 +86,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "99854826ac75eafb-ORD"
+        "a03924d92f3c11cd-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -89,16 +95,17 @@
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:16:52 GMT"
+        "Fri, 29 May 2026 23:05:28 GMT"
       ],
       "server": [
         "cloudflare"
       ],
-      "set-cookie": [
-        "__cf_bm=mMnSrG9xhklTvzyF.xJs87aRGofqTFJvJh9fHTtrCJ8-1762103812-1.0.1.1-xUkWKQlb.ZYX1JOWMtC7nLgrCf2A6kJ.CLx189nvFgEphrBdFKngrd93yB0AjyEpMK570_OmvWZY92FpPWhscEQcJBG8waJNdym5EBR6T5s; path=/; expires=Sun, 02-Nov-25 17:46:52 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
-      ],
+      "set-cookie": "[REDACTED:set-cookie]",
       "strict-transport-security": [
         "max-age=31536000"
+      ],
+      "traceparent": [
+        "00-99eee9c53d9d5ed41aba6b23107d0cd2-b42143490001d888-01"
       ],
       "transfer-encoding": [
         "chunked"
@@ -106,13 +113,35 @@
       "vary": [
         "origin, access-control-request-method, access-control-request-headers"
       ],
+      "x-metrics-e2e-ms": [
+        "1333.4"
+      ],
+      "x-metrics-mean-itl-ms": [
+        "6.5"
+      ],
+      "x-metrics-ttft-ms": [
+        "328.9"
+      ],
+      "x-ratelimit-limit-requests": [
+        "1800"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "10000000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "1784"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "9993031"
+      ],
       "x-request-id": [
-        "00-2df610e43f93879daf4ba0b27ce2a195-dcbe5135006eb380-01"
+        "605a10d8-4abe-952a-9cd7-c1fbd8ade9b0"
       ],
       "x-zero-data-retention": [
         "false"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

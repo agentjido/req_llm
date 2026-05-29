@@ -1,0 +1,152 @@
+{
+  "model_spec": "google:gemini-3-flash-preview",
+  "provider": "google",
+  "request": {
+    "body": {
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJHZW5lcmF0ZSBhIHNvZnR3YXJlIGVuZ2luZWVyIHByb2ZpbGUifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7ImNhbmRpZGF0ZUNvdW50IjoxLCJtYXhPdXRwdXRUb2tlbnMiOjUwMCwicmVzcG9uc2VKc29uU2NoZW1hIjp7ImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjpmYWxzZSwicHJvcGVydGllcyI6eyJhZ2UiOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBhZ2UgaW4geWVhcnMiLCJtaW5pbXVtIjoxLCJ0eXBlIjoiaW50ZWdlciJ9LCJuYW1lIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3MgZnVsbCBuYW1lIiwidHlwZSI6InN0cmluZyJ9LCJvY2N1cGF0aW9uIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3Mgam9iIG9yIHByb2Zlc3Npb24iLCJ0eXBlIjoic3RyaW5nIn19LCJwcm9wZXJ0eU9yZGVyaW5nIjpbIm5hbWUiLCJhZ2UiLCJvY2N1cGF0aW9uIl0sInJlcXVpcmVkIjpbIm5hbWUiLCJhZ2UiXSwidHlwZSI6Im9iamVjdCJ9LCJyZXNwb25zZU1pbWVUeXBlIjoiYXBwbGljYXRpb24vanNvbiIsInRlbXBlcmF0dXJlIjowLjAsInRoaW5raW5nQ29uZmlnIjp7ImluY2x1ZGVUaG91Z2h0cyI6dHJ1ZSwidGhpbmtpbmdMZXZlbCI6ImxvdyJ9fX0="
+    },
+    "canonical_json": {
+      "contents": [
+        {
+          "parts": [
+            {
+              "text": "Generate a software engineer profile"
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "generationConfig": {
+        "candidateCount": 1,
+        "maxOutputTokens": 500,
+        "responseJsonSchema": {
+          "additionalProperties": false,
+          "properties": {
+            "age": {
+              "description": "Person's age in years",
+              "minimum": 1,
+              "type": "integer"
+            },
+            "name": {
+              "description": "Person's full name",
+              "type": "string"
+            },
+            "occupation": {
+              "description": "Person's job or profession",
+              "type": "string"
+            }
+          },
+          "propertyOrdering": [
+            "name",
+            "age",
+            "occupation"
+          ],
+          "required": [
+            "name",
+            "age"
+          ],
+          "type": "object"
+        },
+        "responseMimeType": "application/json",
+        "temperature": 0.0,
+        "thinkingConfig": {
+          "includeThoughts": true,
+          "thinkingLevel": "low"
+        }
+      }
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=[REDACTED]"
+  },
+  "response": {
+    "body": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "**Generating a Software Engineer Profile: A Mental Checklist**\n\nAlright, let's get this profile generated. The core task is to produce a valid JSON object representing a software engineer. My constraints are pretty clear, and as an expert, I'll ensure they are met meticulously.\n\nFirst, **valid JSON** is paramount. The output *must* be parseable. Next, **double-quoted strings** are required for all string values. I'll need to remember that scalar values, booleans, and null don't get quotes. Crucially, **no comments** or any form of annotation will be included within the JSON block – that's a strict no-go. I also need to be mindful of **control tokens** like newlines or tabs; the final output must be a single, flat string, no whitespace tricks allowed.\n\nWhile it's not applicable in this specific case, I'll keep in mind that if I were to generate multiple profiles, they would need to be wrapped in a single, **parseable JSON array**. This is just good practice. Furthermore, there's a hard requirement to have **no extra text** surrounding the JSON string. It's got to be pure JSON from start to finish.\n\nThe final and most important constraint is to strictly **follow the provided schema**. The profile requires a `name` (string, required), `age` (integer, required, minimum of 1), and an optional `occupation` (string).\n\nGiven the example data, I can see I need to render the following as JSON:\n\n`{\"name\":\"Jane Doe\",\"age\":28,\"occupation\":\"Software Engineer\"}`\n\nLet me mentally check if this satisfies the constraints:\n\n*   Valid JSON? Yes, of course.\n*   Double-quoted strings? Yes, all strings are double-quoted.\n*   No comments? Yes, it's pure JSON.\n*   No control tokens? Yes, it's a single line.\n*   No extra text? Yes, the output is only JSON.\n*   Follows schema? Yes, all required fields are present and correctly typed.\n\nPerfect. That should be a clean and compliant profile.\n\n\n",
+                "thought": true
+              },
+              {
+                "text": "{\"name\":\"Alex Rivera\",\"age\":29,\"occupation\":\"Senior Software Engineer\"}",
+                "thoughtSignature": "Eo8ICowIAQw51se6nd1fYjYLDoItR77yzTMa/MIKPSxrvcev6NpPslPdEQD0v5tf6NpRvm3gNyUfG5OKvth2+PvVQSzc19pZVoCuwHf6l6d9rFbOQGYhKzs1BxuzRRVLyYcfMP4CqiTtyhTnnJZwFSR8zJIS1BdL09iYowNjvKf03KDjfWUDkevJb4hCgAAttFCoLy6LjYdexZgTS4gls+vOJOUeba8YXFHuffClKRUQFwDRPBUKm2shmEhhQQMDY87GlFKsuTD/t0tPkPwsVvlECrwl/lU+H5VDmrHmulpYgqFMh4YfD+wixb3d9uQjoV4CaddG3KyPJNYa1vfTA1MH58ZajcitpWUFgRuG9LYooM7ycTT45yaBRxl9hdznh9i6OOO+JLt3Kbbij0Id+4cTXVQcU5qN8lw7K3+IRwwoJKWtnrhyaTpKK5kRvA1g1IqX93v1SHnKPMnaDhZqvUCxfYvLMH0ne/1TXNePIJXpbVN0Bhn+Wc2uI4i0syNBVwlI2xU0guuyYlOQES/MIJ79bkHwWzpZzuVeVOB8V28lO80dfcbU7oncLNbPm5xYMmnP4rU0zA6L6FXb4m9QUSfkAXfffDqYIP2zKyv0weihdwfTE2PZPofpnTz49arANYh9MfrIX3KjmthUBlOprPak8YLbsvcht7AuppJH8Gpp7InneWwzMTkM/bfZ9m/4HQ4gRw6OxHu2mVdcChYPpNF5LgvCBUum+iraqWVAz1wQohWPsndf3FxXSVKYMvCDdWVo6s0C1eHZBNQ37X946hRzY7acU6kX2pPnMFStpfQHrxg7RBG/8rs/bNmAQKzr7h2MnrYCs5KQ3UdZTEnNTi9Mf2F3D7CukSYQKmnkX0g5E5tup1SSZro8IE5f3l75pIyf5haOm4IhNdL06ADA0M0KuszU9318YZNu6TBGHre7UxKUUXTKLubd8QNV9wrQUBSPHJlxUVyGvWh7k/Vsuzx/mPt6uFrJrjynuMplFQGRPQsYRQXUYf+lVkNRV33sGDZfIsgA3iIub59tjYMA9ULkWXCeFoD4laozewoEpUkrJz8jVvZRTzs3zS0BYkjfPbt8LxprBx/KORQarYuROiaDeWfIRYfPZbk1oXlYYiflTXBPp7p/hThhYS2vpNZZxKf86+A1npZXeNUzhWPkkiv7/wyUjOr0GgHebRdbb4v05muRovfw5AGTuWXWMeWVqDlTvfffmwLV/16vHaEM70SRKjO1s5V5rhWCj2GQa9u3lN1VJ3m0DAxSNZT1fa0GS6I4a3m38G0j7/Oq4PAtIHrym3/maANK4PDch28fs86WJL5kwDtNQAud8kOGzEjOqiO/wWLu71C6qZzw3fOl3FpGP4nOfHO3UlBgqee4Jfvb8g=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "modelVersion": "gemini-3-flash-preview",
+      "responseId": "kxEaasLYM4eb9MoP4Nze4Q0",
+      "usageMetadata": {
+        "candidatesTokenCount": 17,
+        "promptTokenCount": 6,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 6
+          }
+        ],
+        "serviceTier": "standard",
+        "thoughtsTokenCount": 290,
+        "totalTokenCount": 313
+      }
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "content-type": [
+        "application/json; charset=UTF-8"
+      ],
+      "date": [
+        "Fri, 29 May 2026 22:22:15 GMT"
+      ],
+      "server": [
+        "scaffolding on HTTPServer2"
+      ],
+      "server-timing": [
+        "gfet4t7; dur=4112"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-frame-options": [
+        "SAMEORIGIN"
+      ],
+      "x-gemini-service-tier": [
+        "standard"
+      ],
+      "x-xss-protection": [
+        "0"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

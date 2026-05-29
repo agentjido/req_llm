@@ -1,0 +1,152 @@
+{
+  "model_spec": "google:gemini-3.1-flash-lite",
+  "provider": "google",
+  "request": {
+    "body": {
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJHZW5lcmF0ZSBhIHNvZnR3YXJlIGVuZ2luZWVyIHByb2ZpbGUifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7ImNhbmRpZGF0ZUNvdW50IjoxLCJtYXhPdXRwdXRUb2tlbnMiOjUwMCwicmVzcG9uc2VKc29uU2NoZW1hIjp7ImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjpmYWxzZSwicHJvcGVydGllcyI6eyJhZ2UiOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBhZ2UgaW4geWVhcnMiLCJtaW5pbXVtIjoxLCJ0eXBlIjoiaW50ZWdlciJ9LCJuYW1lIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3MgZnVsbCBuYW1lIiwidHlwZSI6InN0cmluZyJ9LCJvY2N1cGF0aW9uIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3Mgam9iIG9yIHByb2Zlc3Npb24iLCJ0eXBlIjoic3RyaW5nIn19LCJwcm9wZXJ0eU9yZGVyaW5nIjpbIm5hbWUiLCJhZ2UiLCJvY2N1cGF0aW9uIl0sInJlcXVpcmVkIjpbIm5hbWUiLCJhZ2UiXSwidHlwZSI6Im9iamVjdCJ9LCJyZXNwb25zZU1pbWVUeXBlIjoiYXBwbGljYXRpb24vanNvbiIsInRlbXBlcmF0dXJlIjowLjAsInRoaW5raW5nQ29uZmlnIjp7ImluY2x1ZGVUaG91Z2h0cyI6dHJ1ZSwidGhpbmtpbmdMZXZlbCI6ImxvdyJ9fX0="
+    },
+    "canonical_json": {
+      "contents": [
+        {
+          "parts": [
+            {
+              "text": "Generate a software engineer profile"
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "generationConfig": {
+        "candidateCount": 1,
+        "maxOutputTokens": 500,
+        "responseJsonSchema": {
+          "additionalProperties": false,
+          "properties": {
+            "age": {
+              "description": "Person's age in years",
+              "minimum": 1,
+              "type": "integer"
+            },
+            "name": {
+              "description": "Person's full name",
+              "type": "string"
+            },
+            "occupation": {
+              "description": "Person's job or profession",
+              "type": "string"
+            }
+          },
+          "propertyOrdering": [
+            "name",
+            "age",
+            "occupation"
+          ],
+          "required": [
+            "name",
+            "age"
+          ],
+          "type": "object"
+        },
+        "responseMimeType": "application/json",
+        "temperature": 0.0,
+        "thinkingConfig": {
+          "includeThoughts": true,
+          "thinkingLevel": "low"
+        }
+      }
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite:generateContent?key=[REDACTED]"
+  },
+  "response": {
+    "body": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "Okay, let me break this down.\n\n**JSON Profile Generation - My Mental Checklist**\n\nAlright, a \"software engineer profile\" in JSON format, understood. The user is laying out some clear constraints, and I need to be meticulous. First, I need to ensure the output is *valid* JSON. That means adhering to the strict JSON grammar – no stray characters, no comments, and absolutely no whitespace shenanigans like tabs or newlines beyond what's structurally required. The goal is a *clean* and directly parseable JSON object.\n\nNext, I need to zero in on this schema they provided. It's the blueprint, my guiding star. I see two essential fields: `name` (a string, and *required*) and `age` (an integer, also *required*, and importantly, with a minimum value of 1). That `min 1` constraint on `age` is crucial, and I'll need to keep it in mind. So, I have to generate a sensible profile adhering to this format - I cannot make any mistakes! I need to ensure that the JSON I produce has these fields with appropriate datatypes and adheres to these requirements. I need to make sure I don't overlook any requirement in my response. I need to ensure this is a solid, error-free output that's ready to go.\n\n\n",
+                "thought": true
+              },
+              {
+                "text": "{\n  \"name\": \"Alex Rivera\",\n  \"age\": 29,\n  \"occupation\": \"Software Engineer\"\n}",
+                "thoughtSignature": "EskDCsYDAQw51sfR9zoGuaJmY4kQPxRUX5M3flIETRFSCD4y97PQCL4MVEZJn8UCHz0qCs9MvNer2a1WhLJ3rrmdWYdoSrMjMAElFArC/y3fGoRMeuIT2D3zZ/IWU8kemua0iHuLxIPvDJijPVpNyWmgVp2Y3L7oGuwISTNhZzMiEE7XDqixPKdGWzM9nJncztqHkIvrQveB7QRHC43mX9iK68NzbeQ8k0z7RxF6Mmpbm5rs/Vjj4QeLcttpXCEvhZsBldx6Y2ts2iFfWbIC6Q5d4Rb38I3BZxy7CFlmlcEOI5eD2NflcmozJdgdP3Yb9+3PqyRCqWxnojp9ulo0ZfaqkARG7RT9m17nQXXggHhpAvdEOnhBI9Xfqi9zed/GrFiZBX5fbZbneSMlfUfV/9wxhdpOzIWeQEW5y1Hy0xb4yyiZSMt7zByGQIP/lOWheTkrXnw0o4/Qjyf0/H2lDyYmQft3hxH+MdtS6eKdgd7UH5o8fsz+HArI9O0JqHc4k9rZ0hKFEqdUKNQrslKELiDENPPR4BNSsWbMdERyMqC7ytBG7Px58qOMjz1Eaoc0k02idyqqUaX2j/QVrp4a352nKzjybGoHZTTvCQ=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "modelVersion": "gemini-3.1-flash-lite",
+      "responseId": "thEaavvOL8Ku1MkPo66byQ0",
+      "usageMetadata": {
+        "candidatesTokenCount": 30,
+        "promptTokenCount": 6,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 6
+          }
+        ],
+        "serviceTier": "standard",
+        "thoughtsTokenCount": 119,
+        "totalTokenCount": 155
+      }
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "content-type": [
+        "application/json; charset=UTF-8"
+      ],
+      "date": [
+        "Fri, 29 May 2026 22:22:49 GMT"
+      ],
+      "server": [
+        "scaffolding on HTTPServer2"
+      ],
+      "server-timing": [
+        "gfet4t7; dur=2652"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-frame-options": [
+        "SAMEORIGIN"
+      ],
+      "x-gemini-service-tier": [
+        "standard"
+      ],
+      "x-xss-protection": [
+        "0"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

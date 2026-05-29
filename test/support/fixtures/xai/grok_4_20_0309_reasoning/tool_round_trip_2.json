@@ -1,0 +1,171 @@
+{
+  "model_spec": "xai:grok-4.20-0309-reasoning",
+  "provider": "xai",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjMwMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiVXNlIHRoZSBhZGQgdG9vbCB0byBjb21wdXRlIDIgKyAzLiBBZnRlciB0aGUgdG9vbCByZXN1bHQgYXJyaXZlcywgcmVzcG9uZCB3aXRoICdzdW09PHZhbHVlPicuIiwicm9sZSI6InVzZXIifSx7ImNvbnRlbnQiOiIiLCJyZWFzb25pbmdfY29udGVudCI6IlRoZSB0YXNrIGlzOiBcIlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLlwiXG4iLCJyb2xlIjoiYXNzaXN0YW50IiwidG9vbF9jYWxscyI6W3siZnVuY3Rpb24iOnsiYXJndW1lbnRzIjoie1wiYVwiOjIsXCJiXCI6M30iLCJuYW1lIjoiYWRkIn0sImlkIjoiY2FsbC1jMTNhMDIwZC0yN2E4LTQ5NTctYTA5MS1kZDg4MGIwOWQ2YWMtMCIsInR5cGUiOiJmdW5jdGlvbiJ9XX0seyJjb250ZW50IjoiNSIsIm1ldGFkYXRhIjp7InRvb2xfb3V0cHV0Ijo1fSwibmFtZSI6ImFkZCIsInJvbGUiOiJ0b29sIiwidG9vbF9jYWxsX2lkIjoiY2FsbC1jMTNhMDIwZC0yN2E4LTQ5NTctYTA5MS1kZDg4MGIwOWQ2YWMtMCJ9XSwibW9kZWwiOiJncm9rLTQuMjAtMDMwOS1yZWFzb25pbmciLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+    },
+    "canonical_json": {
+      "max_completion_tokens": 3000,
+      "messages": [
+        {
+          "content": "Use the add tool to compute 2 + 3. After the tool result arrives, respond with 'sum=<value>'.",
+          "role": "user"
+        },
+        {
+          "content": "",
+          "reasoning_content": "The task is: \"Use the add tool to compute 2 + 3. After the tool result arrives, respond with 'sum=<value>'.\"\n",
+          "role": "assistant",
+          "tool_calls": [
+            {
+              "function": {
+                "arguments": "{\"a\":2,\"b\":3}",
+                "name": "add"
+              },
+              "id": "call-c13a020d-27a8-4957-a091-dd880b09d6ac-0",
+              "type": "function"
+            }
+          ]
+        },
+        {
+          "content": "5",
+          "metadata": {
+            "tool_output": 5
+          },
+          "name": "add",
+          "role": "tool",
+          "tool_call_id": "call-c13a020d-27a8-4957-a091-dd880b09d6ac-0"
+        }
+      ],
+      "model": "grok-4.20-0309-reasoning",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.x.ai/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "content": "sum=5",
+            "reasoning_content": "The tool result is 5. Now, I need to respond with 'sum=<value>', so sum=5.\n",
+            "refusal": null,
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1780095650,
+      "id": "1318aeb5-7ecd-99e9-a38d-3370677b3830",
+      "model": "grok-4.20-0309-reasoning",
+      "object": "chat.completion",
+      "system_fingerprint": "fp_cf6e10526f",
+      "usage": {
+        "completion_tokens": 3,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "reasoning_tokens": 47,
+          "rejected_prediction_tokens": 0
+        },
+        "cost_in_usd_ticks": 4615500,
+        "num_sources_used": 0,
+        "prompt_tokens": 323,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 64,
+          "image_tokens": 0,
+          "text_tokens": 323
+        },
+        "total_tokens": 373
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "*"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a0391e188abdfa1f-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 29 May 2026 23:00:51 GMT"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": "[REDACTED:set-cookie]",
+      "strict-transport-security": [
+        "max-age=31536000"
+      ],
+      "traceparent": [
+        "00-3b8201a4d0279acea9a4df754ab79374-fe22d9cb0006eb66-01"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "origin, access-control-request-method, access-control-request-headers"
+      ],
+      "x-metrics-e2e-ms": [
+        "421.3"
+      ],
+      "x-metrics-mean-itl-ms": [
+        "3.7"
+      ],
+      "x-metrics-ttft-ms": [
+        "139.7"
+      ],
+      "x-ratelimit-limit-requests": [
+        "1800"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "10000000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "1793"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "10000000"
+      ],
+      "x-request-id": [
+        "1318aeb5-7ecd-99e9-a38d-3370677b3830"
+      ],
+      "x-zero-data-retention": [
+        "false"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

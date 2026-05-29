@@ -1,10 +1,12 @@
 {
+  "model_spec": "xai:grok-3-mini",
+  "provider": "xai",
   "request": {
     "body": {
-      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjgxOSwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJVc2UgdGhlIGFkZCB0b29sIHRvIGNvbXB1dGUgMiArIDMuIEFmdGVyIHRoZSB0b29sIHJlc3VsdCBhcnJpdmVzLCByZXNwb25kIHdpdGggJ3N1bT08dmFsdWU+Jy4iLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJncm9rLTMtbWluaSIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29sX2Nob2ljZSI6eyJuYW1lIjoiYWRkIiwidHlwZSI6InRvb2wifSwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiQWRkIHR3byBpbnRlZ2VycyIsIm5hbWUiOiJhZGQiLCJwYXJhbWV0ZXJzIjp7ImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjpmYWxzZSwicHJvcGVydGllcyI6eyJhIjp7InR5cGUiOiJpbnRlZ2VyIn0sImIiOnsidHlwZSI6ImludGVnZXIifX0sInJlcXVpcmVkIjpbImEiLCJiIl0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9XX0="
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjE1MCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJVc2UgdGhlIGFkZCB0b29sIHRvIGNvbXB1dGUgMiArIDMuIEFmdGVyIHRoZSB0b29sIHJlc3VsdCBhcnJpdmVzLCByZXNwb25kIHdpdGggJ3N1bT08dmFsdWU+Jy4iLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJncm9rLTMtbWluaSIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29sX2Nob2ljZSI6eyJuYW1lIjoiYWRkIiwidHlwZSI6InRvb2wifSwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiQWRkIHR3byBpbnRlZ2VycyIsIm5hbWUiOiJhZGQiLCJwYXJhbWV0ZXJzIjp7ImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjpmYWxzZSwicHJvcGVydGllcyI6eyJhIjp7InR5cGUiOiJpbnRlZ2VyIn0sImIiOnsidHlwZSI6ImludGVnZXIifX0sInJlcXVpcmVkIjpbImEiLCJiIl0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9XX0="
     },
     "canonical_json": {
-      "max_completion_tokens": 819,
+      "max_completion_tokens": 150,
       "messages": [
         {
           "content": "Use the add tool to compute 2 + 3. After the tool result arrives, respond with 'sum=<value>'.",
@@ -46,6 +48,9 @@
       ]
     },
     "headers": {
+      "accept": [
+        "application/json"
+      ],
       "accept-encoding": [
         "gzip"
       ],
@@ -54,7 +59,7 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ]
     },
     "method": "post",
@@ -67,8 +72,8 @@
           "finish_reason": "tool_calls",
           "index": 0,
           "message": {
-            "content": " ",
-            "reasoning_content": "First, the user says: \"Use the add tool to compute 2 + 3. After the tool result arrives, respond with 'sum=<value>'.\"\n\nI need to understand what the \"add tool\" is. In this context, I'm an AI assistant, and I have access to tools. The \"add tool\" is likely a way to perform addition, probably by calling an external function or just simulating it.\n\nThe instructions say: \"Use the add tool to compute 2 + 3.\" So, I should invoke this tool.\n\nAfter that, it says: \"After the tool result arrives, respond with 'sum=<value>'.\"\n\nMy response should only happen once I have the result from the tool. Then, I need to format my response as 'sum=<value>', where <value> is the result of the addition.\n\nWhat is the add tool? In this simulation, I might need to assume or pretend to use it. Since this is a text-based interaction, I'll have to simulate the tool's response.\n\nIn the previous context, it seems like I can use tools by writing something like: \"Action: add(2, 3)\"\n\nThen, the tool would respond with the result.\n\nSo, my first step is to output the action to use the tool.\n\nOnce the tool responds, I can then formulate my final response.\n\nThe user specified: \"After the tool result arrives, respond with 'sum=<value>'.\"\n\nIn this chat, I need to handle it sequentially.\n\nPerhaps in this setup, I should first output the action, and then in a subsequent step, use the result.\n\nBut since this is a single response from me, I might need to include both.\n\nLooking back at the system prompt: \"You can use the following tools: ... When you use a tool, respond only with the tool invocation.\"\n\nIn the initial setup, it says: \"You can use the following tools: ... When using a tool, make sure to use the exact following format: ...\"\n\nSo, for this interaction, I should respond with the tool invocation first.\n\nThen, presumably, the tool's response will be provided, and I can respond based on that.\n\nBut in this exercise, since I'm simulating, I need to think about what to do.\n\nThe user is instructing me to use the tool and then respond.\n\nSo, my immediate response should be to invoke the tool.\n\nLet me check the exact format from the system prompt:\n\n\"Action: <tool name> <tool input>\"\n\n\"Final Answer: <final answer>\"\n\nIn the prompt, it says: \"Make sure to use this exact format for tool usage:\"\n\nBut in my previous response, I used: \"Action: add(2, 3)\"\n\nAssuming that's correct.\n\nFor this query, I should respond with:\n\nAction: add(2, 3)\n\nThen, after that, once the result is available, I would respond with 'sum=<value>'.\n\nThe user said: \"After the tool result arrives, respond with 'sum=<value>'.\"\n\nIn this context, my response to the user should be just the action, and then later, I handle the result.\n\nThe system prompt says: \"After the tool invocation, the system will respond with the tool's output.\"\n\nI need to structure my output as per the format.\n\nPerhaps my full response should include the action, and then the final answer once I have it.\n\nTo keep it simple, since the tool hasn't been invoked yet, I should just output the action.\n\nThe user is expecting me to use the tool and then respond.\n\nIn this simulation, I can assume the tool returns 5, and then respond accordingly.\n\nThat might not be accurate. Let's think.\n\nThe best way is to follow the format strictly.\n\nSo, my response should be:\n\nFirst, the Action line.\n\nThen, perhaps in a subsequent message, the Final Answer.\n\nSince this is a single turn, I need to combine them.\n\nNo, the prompt says: \"respond only with the tool invocation if you're using a tool.\"\n\nFrom the initial prompt: \"If there is anything unclear, ask the user for clarification. When you use a tool, respond only with the tool invocation.\"\n\nSo, for this, I should respond only with: Action: add(2, 3)\n\nThen, the system or the next step will handle the result, and I can respond with the final answer.\n\nThe user specifically said: \"After the tool result arrives, respond with 'sum=<value>'.\"\n\nIn my next response, after the tool result, I should do that.\n\nSince this is the first response, I need to invoke the tool.\n\nI think the correct thing is to output:\n\nAction: add(2, 3)\n\nAnd that's it for now.\n\nTo make it complete, perhaps in this exercise, I can simulate it.\n\nFor the purpose of this chat, I'll output the action.\n\nSo, my response: Action: add(2, 3)\n\nThen, assuming the tool returns 5, my final response would be: sum=5\n\nSince the user asked to respond with that after the tool result, I need to wait.\n\nIn this text, I have to provide a single response.\n\nPerhaps the expected output is just the action.\n\nLet's look at the user's message again: \"Use the add tool to compute 2 + 3. After the tool result arrives, respond with 'sum=<value>'.\"\n\nI think I'm supposed to use the tool in my response, and then the system will handle it.\n\nTo be precise, I'll go with invoking the tool.\n\nSo, my final decision: Respond with the tool invocation.",
+            "content": "",
+            "reasoning_content": "The task is: \"Use the add tool to compute 2 + 3. After the tool result arrives, respond with 'sum=<value>'.\"\n",
             "refusal": null,
             "role": "assistant",
             "tool_calls": [
@@ -77,35 +82,36 @@
                   "arguments": "{\"a\":2,\"b\":3}",
                   "name": "add"
                 },
-                "id": "call_70263697",
+                "id": "call-cb43390d-e9f3-4ceb-90d4-fd4aa907b7ba-0",
                 "type": "function"
               }
             ]
           }
         }
       ],
-      "created": 1762103798,
-      "id": "1aae377a-4dd8-bf5a-5ccd-234878a43e30_us-east-1",
-      "model": "grok-3-mini",
+      "created": 1780095887,
+      "id": "86a7e8b9-ab99-971e-8b2a-bcbe4189a46a",
+      "model": "grok-4.3",
       "object": "chat.completion",
-      "system_fingerprint": "fp_4fae27f477",
+      "system_fingerprint": "fp_eb3c003fc66c14ed",
       "usage": {
-        "completion_tokens": 40,
+        "completion_tokens": 14,
         "completion_tokens_details": {
           "accepted_prediction_tokens": 0,
           "audio_tokens": 0,
-          "reasoning_tokens": 1141,
+          "reasoning_tokens": 180,
           "rejected_prediction_tokens": 0
         },
+        "cost_in_usd_ticks": 5896500,
         "num_sources_used": 0,
-        "prompt_tokens": 32,
+        "prompt_tokens": 245,
         "prompt_tokens_details": {
           "audio_tokens": 0,
-          "cached_tokens": 2,
+          "cached_tokens": 192,
           "image_tokens": 0,
-          "text_tokens": 32
+          "text_tokens": 245
         },
-        "total_tokens": 1213
+        "total_tokens": 439
       }
     },
     "headers": {
@@ -119,7 +125,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "998547e13e6d86ed-ORD"
+        "a03923db4c380d7b-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -128,16 +134,17 @@
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:16:48 GMT"
+        "Fri, 29 May 2026 23:04:48 GMT"
       ],
       "server": [
         "cloudflare"
       ],
-      "set-cookie": [
-        "__cf_bm=_cerhj56dZlTePwwyAUPqOLQ9noxEx.FsCTMwZoZbuo-1762103808-1.0.1.1-Te.VnCwanSWlKB.H97ymcLs1b3.pYhoRUZxzDS5Le1SntVhZEoVTqpDKL_8edDUCLNrrCGURpWEQRDZKfynHbDW4KdlFjVPg37JGU1u2imk; path=/; expires=Sun, 02-Nov-25 17:46:48 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
-      ],
+      "set-cookie": "[REDACTED:set-cookie]",
       "strict-transport-security": [
         "max-age=31536000"
+      ],
+      "traceparent": [
+        "00-f5087849367e6530a71eab72f0ae14f8-c3bc41b5000133a3-01"
       ],
       "transfer-encoding": [
         "chunked"
@@ -145,13 +152,35 @@
       "vary": [
         "origin, access-control-request-method, access-control-request-headers"
       ],
+      "x-metrics-e2e-ms": [
+        "2136.1"
+      ],
+      "x-metrics-mean-itl-ms": [
+        "9.7"
+      ],
+      "x-metrics-ttft-ms": [
+        "181.4"
+      ],
+      "x-ratelimit-limit-requests": [
+        "1800"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "10000000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "1782"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "9991580"
+      ],
       "x-request-id": [
-        "00-3f7c3ee6e42476dc09eb4545ab7e7e17-05493de4006e2375-01"
+        "86a7e8b9-ab99-971e-8b2a-bcbe4189a46a"
       ],
       "x-zero-data-retention": [
         "false"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

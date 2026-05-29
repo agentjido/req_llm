@@ -1,0 +1,123 @@
+{
+  "model_spec": "google:gemini-3-flash-preview",
+  "provider": "google",
+  "request": {
+    "body": {
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJIZWxsbyB3b3JsZCEifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7ImNhbmRpZGF0ZUNvdW50IjoxLCJtYXhPdXRwdXRUb2tlbnMiOjIwMDAsInRlbXBlcmF0dXJlIjowLjAsInRoaW5raW5nQ29uZmlnIjp7ImluY2x1ZGVUaG91Z2h0cyI6dHJ1ZSwidGhpbmtpbmdMZXZlbCI6ImxvdyJ9fX0="
+    },
+    "canonical_json": {
+      "contents": [
+        {
+          "parts": [
+            {
+              "text": "Hello world!"
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "generationConfig": {
+        "candidateCount": 1,
+        "maxOutputTokens": 2000,
+        "temperature": 0.0,
+        "thinkingConfig": {
+          "includeThoughts": true,
+          "thinkingLevel": "low"
+        }
+      }
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=[REDACTED]"
+  },
+  "response": {
+    "body": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "**My Initial Assessment of the User's Input**\n\nOkay, the user just greeted me with \"Hello world!\". Ah, a classic. I immediately recognize this as a foundational phrase, something used across programming, and even general communication, to test a system or simply initiate an interaction. My analysis suggests the user is likely gauging my response, trying to see how I function, or perhaps just starting a conversation.\n\nNow, my plan is simple and effective. First, I'll acknowledge their greeting, confirming that I understand and receive their communication. Second, and most importantly, I'll offer assistance. My role is to be helpful and welcoming, so I'll express my availability to address whatever the user needs or is hoping to accomplish.\n\n\n",
+                "thought": true
+              },
+              {
+                "text": "Hello! It’s great to meet you. How can I help you today?",
+                "thoughtSignature": "EtkCCtYCAQw51sdf+/i/LS0uEnQolLqTeHhgOOEFXldSPdpWUzm+VAo6r/LF/kADkFIOI1k06WxLxJ4a5AK+JA4YmmEB31na9kRxiZs0G8HO93h9CfzV/X9q46jJ9Dwn+C/582nI4u4hTDIwNDosamqiju+7sGQUCOKsGWrgWIrYNMCCOHbgkicKXbPSEtL/3tzAwFsOMnvBcRwu/brTDGLnac8QuAm/+vET54C52J8/jTxXWRRryluCMJHY0dAiaa41NvHBh/FEV8r1ilxeUOnKSN5EDmiIhuWSqbO71FY1B8PxC4OsxEWjDUnmNj+A7kl4dypMlbnLgbXHujNbbUW5bsuFsY6bWMesXRw6oP/Vs1+Mu8rAhdxhdHGOlvgHNMB7i2lqMcJSqDnYmGJW0dE2/S3gbwbz/kzrxFLZqAeWxhQZrbnjZAryuUWNKtwSVdXs1nC+Nk9PPxxE"
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "modelVersion": "gemini-3-flash-preview",
+      "responseId": "bA4aaq72G96CjMcP7_mEyAw",
+      "usageMetadata": {
+        "candidatesTokenCount": 17,
+        "promptTokenCount": 4,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 4
+          }
+        ],
+        "serviceTier": "standard",
+        "thoughtsTokenCount": 63,
+        "totalTokenCount": 84
+      }
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "content-type": [
+        "application/json; charset=UTF-8"
+      ],
+      "date": [
+        "Fri, 29 May 2026 22:08:46 GMT"
+      ],
+      "server": [
+        "scaffolding on HTTPServer2"
+      ],
+      "server-timing": [
+        "gfet4t7; dur=2228"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-frame-options": [
+        "SAMEORIGIN"
+      ],
+      "x-gemini-service-tier": [
+        "standard"
+      ],
+      "x-xss-protection": [
+        "0"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

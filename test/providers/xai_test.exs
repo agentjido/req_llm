@@ -286,6 +286,27 @@ defmodule ReqLLM.Providers.XAITest do
       refute warning =~ "Using unverified model"
       refute warning =~ "openai:grok-4-fast-reasoning"
     end
+
+    test "streaming strips internal xai_api_type from prepared request options" do
+      {:ok, model} = ReqLLM.model("xai:grok-4.3")
+      context = Context.new([Context.user("hi")])
+
+      assert {:ok, request} =
+               XAI.attach_stream(model, context, [xai_api_type: :chat], ReqLLM.Finch)
+
+      assert request.path == "/v1/chat/completions"
+    end
+
+    test "streaming normalizes translated reasoning effort from prepared request options" do
+      {:ok, model} = ReqLLM.model("xai:grok-4.3")
+      context = Context.new([Context.user("hi")])
+
+      assert {:ok, request} =
+               XAI.attach_stream(model, context, [reasoning_effort: "low"], ReqLLM.Finch)
+
+      body = ReqLLM.Test.Helpers.json_body(request)
+      assert body["reasoning_effort"] == "low"
+    end
   end
 
   describe "mode selection - response_format forcing" do
@@ -425,7 +446,10 @@ defmodule ReqLLM.Providers.XAITest do
   describe "tool_strict request structure" do
     setup %{compiled_schema: schema} do
       {:ok, request} =
-        XAI.prepare_request(:object, "xai:grok-2", "Generate data", compiled_schema: schema)
+        XAI.prepare_request(:object, "xai:grok-4.20-0309-non-reasoning", "Generate data",
+          compiled_schema: schema,
+          provider_options: [xai_structured_output_mode: :tool_strict]
+        )
 
       {:ok, request: request}
     end
@@ -457,8 +481,9 @@ defmodule ReqLLM.Providers.XAITest do
       }
 
       {:ok, request} =
-        XAI.prepare_request(:object, "xai:grok-2", "Generate data",
+        XAI.prepare_request(:object, "xai:grok-4.20-0309-non-reasoning", "Generate data",
           compiled_schema: schema,
+          provider_options: [xai_structured_output_mode: :tool_strict],
           tools: [other_tool]
         )
 
@@ -473,7 +498,7 @@ defmodule ReqLLM.Providers.XAITest do
     test "sets default max_tokens from model output limit when not specified", %{
       compiled_schema: schema
     } do
-      {:ok, model} = ReqLLM.model("xai:grok-3")
+      {:ok, model} = ReqLLM.model("xai:grok-4.3")
 
       {:ok, request} =
         XAI.prepare_request(:object, model, "Generate data", compiled_schema: schema)
@@ -539,6 +564,15 @@ defmodule ReqLLM.Providers.XAITest do
 
       assert %Req.Request{} = request
       assert request.url.path == "/chat/completions"
+      assert request.method == :post
+    end
+
+    test "prepare_request creates versioned request for :image" do
+      {:ok, request} = XAI.prepare_request(:image, "xai:grok-imagine-image", "red square", [])
+
+      assert %Req.Request{} = request
+      assert request.url.path == "/images/generations"
+      assert request.options[:base_url] == "https://api.x.ai/v1"
       assert request.method == :post
     end
 
@@ -716,14 +750,20 @@ defmodule ReqLLM.Providers.XAITest do
       assert Keyword.get(translated_opts, :reasoning_effort) == "high"
       assert warnings == []
 
-      # Grok-4 family now supports reasoning_effort
-      # (https://docs.x.ai/developers/model-capabilities/text/reasoning) — the
-      # parameter is forwarded to the API rather than dropped with a warning.
       {:ok, grok_4} = ReqLLM.model("xai:grok-4")
       {translated_opts, warnings} = XAI.translate_options(:chat, grok_4, opts)
 
       assert Keyword.get(translated_opts, :reasoning_effort) == "high"
       assert warnings == []
+
+      {:ok, grok_420} = ReqLLM.model("xai:grok-4.20-0309-reasoning")
+      {translated_opts, warnings} = XAI.translate_options(:chat, grok_420, opts)
+
+      refute Keyword.has_key?(translated_opts, :reasoning_effort)
+
+      assert warnings == [
+               "reasoning_effort is not supported by grok-4.20-0309-reasoning and will be ignored"
+             ]
     end
   end
 

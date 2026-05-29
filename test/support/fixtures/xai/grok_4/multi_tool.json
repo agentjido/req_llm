@@ -1,10 +1,12 @@
 {
+  "model_spec": "xai:grok-4",
+  "provider": "xai",
   "request": {
     "body": {
-      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjY0MDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiV2hhdCdzIHRoZSB3ZWF0aGVyIGxpa2UgaW4gUGFyaXMsIEZyYW5jZT8iLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJncm9rLTQiLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMCwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsIm5hbWUiOiJnZXRfd2VhdGhlciIsInBhcmFtZXRlcnMiOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifSwidW5pdCI6eyJlbnVtIjpbImNlbHNpdXMiLCJmYWhyZW5oZWl0Il0sInR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9LHsiZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJUZWxsIGEgZnVubnkgam9rZSIsIm5hbWUiOiJ0ZWxsX2pva2UiLCJwYXJhbWV0ZXJzIjp7ImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjpmYWxzZSwicHJvcGVydGllcyI6eyJ0b3BpYyI6eyJkZXNjcmlwdGlvbiI6IlRvcGljIGZvciB0aGUgam9rZSIsInR5cGUiOiJzdHJpbmcifX0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9LHsiZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgdGhlIGN1cnJlbnQgdGltZSIsIm5hbWUiOiJnZXRfdGltZSIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6e30sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9XX0="
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjE1MCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJXaGF0J3MgdGhlIHdlYXRoZXIgbGlrZSBpbiBQYXJpcywgRnJhbmNlPyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Imdyb2stNCIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9LCJ1bml0Ijp7ImVudW0iOlsiY2Vsc2l1cyIsImZhaHJlbmhlaXQiXSwidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn0seyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IlRlbGwgYSBmdW5ueSBqb2tlIiwibmFtZSI6InRlbGxfam9rZSIsInBhcmFtZXRlcnMiOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7InRvcGljIjp7ImRlc2NyaXB0aW9uIjoiVG9waWMgZm9yIHRoZSBqb2tlIiwidHlwZSI6InN0cmluZyJ9fSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn0seyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCB0aGUgY3VycmVudCB0aW1lIiwibmFtZSI6ImdldF90aW1lIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7fSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
     },
     "canonical_json": {
-      "max_completion_tokens": 6400,
+      "max_completion_tokens": 150,
       "messages": [
         {
           "content": "What's the weather like in Paris, France?",
@@ -73,6 +75,9 @@
       ]
     },
     "headers": {
+      "accept": [
+        "application/json"
+      ],
       "accept-encoding": [
         "gzip"
       ],
@@ -81,7 +86,7 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ]
     },
     "method": "post",
@@ -95,43 +100,45 @@
           "index": 0,
           "message": {
             "content": "",
+            "reasoning_content": "The question is: \"What's the weather like in Paris, France?\"\n",
             "refusal": null,
             "role": "assistant",
             "tool_calls": [
               {
                 "function": {
-                  "arguments": "{\"location\":\"Paris, France\",\"unit\":\"celsius\"}",
+                  "arguments": "{\"location\":\"Paris, France\"}",
                   "name": "get_weather"
                 },
-                "id": "call_05405707",
+                "id": "call-5b71209f-0856-428c-b850-a83f6e71e789-0",
                 "type": "function"
               }
             ]
           }
         }
       ],
-      "created": 1762103820,
-      "id": "7f95cab3-e75f-883a-8618-1adb60848ed1_us-east-1",
-      "model": "grok-4-0709",
+      "created": 1780095854,
+      "id": "c44c3c69-917f-9b9b-8a2b-ae04fb530bbe",
+      "model": "grok-4.3",
       "object": "chat.completion",
-      "system_fingerprint": "fp_794271b43e",
+      "system_fingerprint": "fp_eb3c003fc66c14ed",
       "usage": {
-        "completion_tokens": 38,
+        "completion_tokens": 13,
         "completion_tokens_details": {
           "accepted_prediction_tokens": 0,
           "audio_tokens": 0,
-          "reasoning_tokens": 169,
+          "reasoning_tokens": 124,
           "rejected_prediction_tokens": 0
         },
+        "cost_in_usd_ticks": 4327500,
         "num_sources_used": 0,
-        "prompt_tokens": 964,
+        "prompt_tokens": 341,
         "prompt_tokens_details": {
           "audio_tokens": 0,
-          "cached_tokens": 834,
+          "cached_tokens": 320,
           "image_tokens": 0,
-          "text_tokens": 964
+          "text_tokens": 341
         },
-        "total_tokens": 1171
+        "total_tokens": 478
       }
     },
     "headers": {
@@ -145,7 +152,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "9985486c0b88e7fa-ORD"
+        "a039230f0a2f98b9-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -154,16 +161,17 @@
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:17:05 GMT"
+        "Fri, 29 May 2026 23:04:15 GMT"
       ],
       "server": [
         "cloudflare"
       ],
-      "set-cookie": [
-        "__cf_bm=s5QGGpRS9Bdi8N.jJ9mEuc2_j2plOP5XSl7be_Y.WiA-1762103825-1.0.1.1-jKuPpFBfFgODJJCEXoGrsG6AOyELkVRGfHLrNidoURCzqGO1zLzn5cQ9D8isVrYMOS6hPW6M3BRxPENJO9N484ibYQx_herPX8zvGN8wTYE; path=/; expires=Sun, 02-Nov-25 17:47:05 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
-      ],
+      "set-cookie": "[REDACTED:set-cookie]",
       "strict-transport-security": [
         "max-age=31536000"
+      ],
+      "traceparent": [
+        "00-c26f4ae6f48892f6fc1fd284be6b7f75-2fe25e0e00011c27-01"
       ],
       "transfer-encoding": [
         "chunked"
@@ -171,13 +179,35 @@
       "vary": [
         "origin, access-control-request-method, access-control-request-headers"
       ],
+      "x-metrics-e2e-ms": [
+        "1349.1"
+      ],
+      "x-metrics-mean-itl-ms": [
+        "7.8"
+      ],
+      "x-metrics-ttft-ms": [
+        "152.1"
+      ],
+      "x-ratelimit-limit-requests": [
+        "1800"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "10000000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "1791"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "9996604"
+      ],
       "x-request-id": [
-        "00-442c29ec636b2f29cf5b5cf471e8e7df-f882ffb8006dd048-01"
+        "c44c3c69-917f-9b9b-8a2b-ae04fb530bbe"
       ],
       "x-zero-data-retention": [
         "false"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

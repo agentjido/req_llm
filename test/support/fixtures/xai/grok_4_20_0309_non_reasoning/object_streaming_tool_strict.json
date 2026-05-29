@@ -1,0 +1,105 @@
+{
+  "captured_at": "2026-05-29T23:13:54.819482Z",
+  "chunks": [
+    {
+      "b64": "ZGF0YTogeyJpZCI6IjE2M2QxMjI1LTA4YWItOTk3MS1hODVjLWYwNTc4ZDFjOTUwZiIsIm9iamVjdCI6ImNoYXQuY29tcGxldGlvbi5jaHVuayIsImNyZWF0ZWQiOjE3ODAwOTY0MzQsIm1vZGVsIjoiZ3Jvay00LjIwLTAzMDktbm9uLXJlYXNvbmluZyIsImNob2ljZXMiOlt7ImluZGV4IjowLCJkZWx0YSI6eyJyb2xlIjoiYXNzaXN0YW50IiwidG9vbF9jYWxscyI6W3siaWQiOiJjYWxsLWQwNWM5MzYyLTA0YTAtNDA1Yy1iYjU2LWRiZmZmYzhhZjU5ZC0wIiwiZnVuY3Rpb24iOnsibmFtZSI6InN0cnVjdHVyZWRfb3V0cHV0IiwiYXJndW1lbnRzIjoie1wibmFtZVwiOlwiQWxpY2UgSm9obnNvblwiLFwiYWdlXCI6MjgsXCJvY2N1cGF0aW9uXCI6XCJTb2Z0d2FyZSBFbmdpbmVlclwifSJ9LCJpbmRleCI6MCwidHlwZSI6ImZ1bmN0aW9uIn1dfX1dLCJzeXN0ZW1fZmluZ2VycHJpbnQiOiJmcF84YjNmMzFiNjA1In0KCmRhdGE6IHsiaWQiOiIxNjNkMTIyNS0wOGFiLTk5NzEtYTg1Yy1mMDU3OGQxYzk1MGYiLCJvYmplY3QiOiJjaGF0LmNvbXBsZXRpb24uY2h1bmsiLCJjcmVhdGVkIjoxNzgwMDk2NDM0LCJtb2RlbCI6Imdyb2stNC4yMC0wMzA5LW5vbi1yZWFzb25pbmciLCJjaG9pY2VzIjpbeyJpbmRleCI6MCwiZGVsdGEiOnt9LCJmaW5pc2hfcmVhc29uIjoidG9vbF9jYWxscyJ9XSwic3lzdGVtX2ZpbmdlcnByaW50IjoiZnBfOGIzZjMxYjYwNSJ9Cgo="
+    }
+  ],
+  "model_spec": "xai:grok-4.20-0309-non-reasoning",
+  "provider": "xai",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjUwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJHZW5lcmF0ZSBhIHNvZnR3YXJlIGVuZ2luZWVyIHByb2ZpbGUiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJncm9rLTQuMjAtMDMwOS1ub24tcmVhc29uaW5nIiwicGFyYWxsZWxfdG9vbF9jYWxscyI6ZmFsc2UsInNlZWQiOjQyLCJzdHJlYW0iOnRydWUsInN0cmVhbV9vcHRpb25zIjp7ImluY2x1ZGVfdXNhZ2UiOnRydWV9LCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29sX2Nob2ljZSI6eyJmdW5jdGlvbiI6eyJuYW1lIjoic3RydWN0dXJlZF9vdXRwdXQifSwidHlwZSI6ImZ1bmN0aW9uIn0sInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdlbmVyYXRlIHN0cnVjdHVyZWQgb3V0cHV0IG1hdGNoaW5nIHRoZSBwcm92aWRlZCBzY2hlbWEiLCJuYW1lIjoic3RydWN0dXJlZF9vdXRwdXQiLCJwYXJhbWV0ZXJzIjp7ImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjpmYWxzZSwicHJvcGVydGllcyI6eyJhZ2UiOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBhZ2UgaW4geWVhcnMiLCJtaW5pbXVtIjoxLCJ0eXBlIjoiaW50ZWdlciJ9LCJuYW1lIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3MgZnVsbCBuYW1lIiwidHlwZSI6InN0cmluZyJ9LCJvY2N1cGF0aW9uIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3Mgam9iIG9yIHByb2Zlc3Npb24iLCJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJuYW1lIiwiYWdlIl0sInR5cGUiOiJvYmplY3QifSwic3RyaWN0Ijp0cnVlfSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
+    },
+    "canonical_json": {
+      "max_completion_tokens": 500,
+      "messages": [
+        {
+          "content": "Generate a software engineer profile",
+          "role": "user"
+        }
+      ],
+      "model": "grok-4.20-0309-non-reasoning",
+      "parallel_tool_calls": false,
+      "seed": 42,
+      "stream": true,
+      "stream_options": {
+        "include_usage": true
+      },
+      "temperature": 0.0,
+      "tool_choice": {
+        "function": {
+          "name": "structured_output"
+        },
+        "type": "function"
+      },
+      "tools": [
+        {
+          "function": {
+            "description": "Generate structured output matching the provided schema",
+            "name": "structured_output",
+            "parameters": {
+              "additionalProperties": false,
+              "properties": {
+                "age": {
+                  "description": "Person's age in years",
+                  "minimum": 1,
+                  "type": "integer"
+                },
+                "name": {
+                  "description": "Person's full name",
+                  "type": "string"
+                },
+                "occupation": {
+                  "description": "Person's job or profession",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "name",
+                "age"
+              ],
+              "type": "object"
+            },
+            "strict": true
+          },
+          "type": "function"
+        }
+      ]
+    },
+    "headers": {
+      "accept": "text/event-stream",
+      "authorization": "[REDACTED:authorization]",
+      "content-type": "application/json"
+    },
+    "method": "POST",
+    "url": "https://api.x.ai/v1/chat/completions"
+  },
+  "response": {
+    "body": null,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "*",
+      "cache-control": "no-cache",
+      "cf-cache-status": "DYNAMIC",
+      "cf-ray": "a0393135dab19aed-ORD",
+      "connection": "keep-alive",
+      "content-type": "text/event-stream",
+      "date": "Fri, 29 May 2026 23:13:53 GMT",
+      "server": "cloudflare",
+      "set-cookie": "[REDACTED:set-cookie]",
+      "strict-transport-security": "max-age=31536000",
+      "traceparent": "00-0cdd75945be9f3cb213ebf93a0cdf00d-cb8f54d90000af1c-01",
+      "transfer-encoding": "chunked",
+      "vary": "origin, access-control-request-method, access-control-request-headers",
+      "x-ratelimit-limit-requests": "1800",
+      "x-ratelimit-limit-tokens": "10000000",
+      "x-ratelimit-remaining-requests": "1798",
+      "x-ratelimit-remaining-tokens": "9999394",
+      "x-request-id": "163d1225-08ab-9971-a85c-f0578d1c950f",
+      "x-zero-data-retention": "false"
+    },
+    "status": 200
+  },
+  "streaming": true
+}

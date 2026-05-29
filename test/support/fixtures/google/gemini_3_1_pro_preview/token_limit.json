@@ -1,0 +1,123 @@
+{
+  "model_spec": "google:gemini-3.1-pro-preview",
+  "provider": "google",
+  "request": {
+    "body": {
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJXcml0ZSBhIHZlcnkgbG9uZyBzdG9yeSBhYm91dCBkcmFnb25zIGFuZCBhZHZlbnR1cmVzIn1dLCJyb2xlIjoidXNlciJ9XSwiZ2VuZXJhdGlvbkNvbmZpZyI6eyJjYW5kaWRhdGVDb3VudCI6MSwibWF4T3V0cHV0VG9rZW5zIjozMDAwLCJ0ZW1wZXJhdHVyZSI6MC41LCJ0aGlua2luZ0NvbmZpZyI6eyJpbmNsdWRlVGhvdWdodHMiOnRydWUsInRoaW5raW5nTGV2ZWwiOiJsb3cifX19"
+    },
+    "canonical_json": {
+      "contents": [
+        {
+          "parts": [
+            {
+              "text": "Write a very long story about dragons and adventures"
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "generationConfig": {
+        "candidateCount": 1,
+        "maxOutputTokens": 3000,
+        "temperature": 0.5,
+        "thinkingConfig": {
+          "includeThoughts": true,
+          "thinkingLevel": "low"
+        }
+      }
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-pro-preview:generateContent?key=[REDACTED]"
+  },
+  "response": {
+    "body": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "**My Approach to Crafting This Epic Tale**\n\nAlright, let's break this down. First, I had to grasp the core of the request: dragons, adventure, epic length, fantasy setting. I needed something substantial, not just a quick little story. So, my mind immediately started building a world. Aethelgard, a land cleaved by a monumental mountain range—The Spine of the World—seemed like a solid foundation. Humans in the valleys, dragons in the peaks—classic setup, ripe for conflict.\n\nThe conflict? An old pact gone sour. The idea of a corrupted dragon faction, the Blight, attacking human settlements, that felt like the natural engine for a compelling narrative. Now, the protagonist. Forget the generic hero; I need someone interesting. Kaelen, the cartographer, a non-warrior with a thirst for knowledge and the courage to use his intellect, not brawn, felt right. His skills would be crucial to the plot.\n\nAnd the dragon companion? Forget the usual cliches—*Ignis* is too pedestrian. Let's make it more interesting with *Sylas*, a blue-scaled storm-dragon, grounded, but with the pride and power of a dragon, and a compelling reason to be sympathetic and to work with the human. His injury and inability to fly would add a powerful emotional layer to the story.\n\nThen came the characters. Kaelen’s observant nature, the grappling hook, and the journal – all for flavor. *Sylas* is proud, injured, a symbol of defiance. Elara is the seasoned pragmatist, the bow-wielding ranger, offering muscle and survival expertise to the journey. Malthazor, the antagonist, needed to be a physical threat. A corrupted, decaying monstrosity oozing the Blight to drive up the tension.\n\nWith the core, I sketched out a plot. A simple introduction would build the world. Kaelen and the destruction of the village—a true, inciting incident to show the urgency. Then, his journey into the peaks, the rescue of *Sylas*. A great bonding moment, and the introduction of *Elara*. The trio facing dangerous environments (Whispering Caverns, Glass Forest), the rise of tension as they learn of the source of the Blight. A showdown at Mount Zenith, a ritual interruption, and Kaelen shattering the corrupted crystal as the grand climax. The dragons awakening, a renewed pact, and Kaelen returning as an ambassador. The resolution is the perfect conclusion.\n\nThe key was to map this out and then to write it, section by section. Section 1 will begin with the attack on Oakhaven, setting Kaelen's character, setting up the urgency. Each section needed a purpose: introduce the characters, then develop the mechanics of working with the dragon, and the introduction of Elara. The summit will be broken into stages, and the shattering of the crystal is the end. The aftermath, the new map, and the return of the protagonist with more character, concludes the tale.\n\nAs I began drafting, I could adjust. Does it need more descriptive writing? Is the dialogue working? The quiet moments must balance the action scenes. Evocative language is crucial. I also needed to focus on the emotional resonance, so the characters are real.\n\nFinally, I could polish the text. Then, and only then, does it match the detailed plan that I formulated at the start.\n\n\n",
+                "thought": true
+              },
+              {
+                "text": "The world of Aethelgard was divided not by oceans, but by stone. The Spine of the World, a mountain range so impossibly high that its peaks pierced the clouds and vanished into the stratosphere, split the continent in two. Below lived humanity, tending their fields and building their stone cities. Above lived the dragons, lords of the sky, breathing fire and hoarding the ancient magics of the earth.\n\nFor a thousand years, the Covenant of Ash and Iron had held. Humans did not climb past the cloud-line; dragons did not hunt below it. \n\nKaelen was not a warrior. He was a cartographer, a young man with ink-stained fingers and a mind that obsessed over topography. He lived in Oakhaven, a village nestled in the foothills of the Spine. While other boys swung wooden swords, Kaelen sketched the jagged silhouettes of the peaks, dreaming of what lay beyond the clouds. \n\nHis dreams became a nightmare on the day the sky turned purple.\n\nIt began with a sound like tearing silk, followed by a roar that shook the dust from the rafters of Kaelen’s study. He rushed to his window just in time to see the beast descend. It was a dragon, but not like the majestic creatures depicted in ancient texts. Its scales were rotting, weeping a viscous, violet sludge. Its eyes burned with a mindless, chaotic fury. This was the Blight—a corruption whispered about in old tavern tales, said to drive even the noblest creatures to madness.\n\nThe dragon breathed not fire, but a torrent of corrosive purple ash. Oakhaven’s watchtower dissolved into slag. Panic erupted. \n\nKaelen didn't grab a sword; he grabbed his pack. It contained his life’s work: maps, compasses, a specialized grappling hook of his own design, and a journal. As he fled the burning village, he looked back. The beast was indiscriminately destroying everything. The Covenant was broken. If humanity was to survive, someone had to find out why. Someone had to go up.\n\n***\n\nThe ascent was brutal. For three weeks, Kaelen climbed. The air grew thin and biting cold. The familiar forests gave way to scrub brush, then to bare, unforgiving granite. He survived on dried rations and melted snow, his hands blistered and bleeding despite his leather gloves. \n\nOn the twenty-first day, he breached the cloud-line. \n\nHe pulled himself over a ridge and gasped. Before him lay a world of impossible beauty. Floating islands of stone hovered in the air, tethered by thick vines of crystalline magic. Waterfalls flowed upward, defying gravity. And the sky was a canvas of eternal twilight, swirling with auroras.\n\nBut the silence was broken by a sharp, pained hiss.\n\nKaelen crept forward, peering over a boulder. In a crater of shattered quartz lay a dragon. It was smaller than the beast that had attacked Oakhaven, perhaps the size of a large merchant's wagon. Its scales were a brilliant, iridescent cerulean, but it was in terrible shape. Its left wing was pinned beneath a massive fallen pillar of stone, the membrane torn. \n\nKaelen knew he should run. But he also saw the intelligence in the creature's reptilian eyes. It wasn't Blighted. It was just trapped.\n\nSlowly, Kaelen stepped into the open, his hands raised. The dragon snarled, a sound like grinding gears, and a spark of blue lightning arched across its teeth.\n\n\"I'm not here to hurt you,\" Kaelen said, his voice trembling. He slowly unbuckled his pack and let it fall to the ground. \n\nThe dragon watched him, wary. Kaelen approached the fallen pillar. He examined the rock, then the fulcrum point beneath it. He pulled a system of pulleys and high-tensile rope from his pack—tools meant for hauling himself up sheer cliff faces. \n\nIt took an hour of terrifying proximity to the beast, but Kaelen managed to rig the pulleys to a nearby stalagmite. With a desperate heave, he pulled. The rope groaned. The pillar shifted, lifting just enough. The dragon shrieked, yanking its mangled wing free, and scrambled backward.\n\nKaelen collapsed, exhausted. The dragon stared at him, the hostility in its eyes replaced by profound confusion. \n\n*Why?* \n\nThe voice echoed not in Kaelen's ears, but in his mind. It was deep, resonant, and sounded like thunder rolling over distant hills.\n\n\"Because,\" Kaelen panted, \"if I'm going to save my world, I figured I might need a guide in yours.\"\n\nThe dragon lowered its massive head. *I am Sylas. And you, little ape, are either very brave or very foolish.*\n\n***\n\nThey formed an unlikely alliance. Sylas, Kaelen learned, was an outcast. He had refused to bow to Malthazor, an ancient, massive dragon who had discovered a dark crystal deep within the mountains. The crystal radiated the Blight, granting immense power but twisting the mind. Malthazor was using it to subjugate the dragon clans and prepare an invasion of the human lands.\n\nSylas could not fly with his torn wing, so they walked. \n\nTheir journey took them through the Glass Forest, where the trees were made of razor-sharp obsidian. Here, they were ambushed by Blighted drakes—mindless, corrupted scavengers. Kaelen used his grappling hook to swing through the brittle canopy, causing branches to shatter and rain down like daggers on the drakes, while Sylas unleashed torrents of chain-lightning. \n\nAlong the way, Kaelen used his cartographer's mind to solve a problem. Every night, by the fire, he measured Sylas's wing. Using lightweight drake-bones they found, cured leather from his pack, and strong mountain-silk, Kaelen engineered a brace. It was a mechanical marvel, designed to hold the torn membrane taut and support the broken joint.\n\nWhen Kaelen finally strapped it onto Sylas, the dragon extended the wing. The brace clicked into place, holding the structure firm. Sylas gave a mighty flap, lifting off the ground for a few seconds before landing heavily. It wasn't perfect, but it was flight.\n\n*You have given me the sky back, Kaelen,* Sylas thought, his mental voice thick with emotion. *I owe you a life debt.*\n\n\"Then help me stop Malthazor,\" Kaelen replied.\n\n***\n\nThey reached the summit of Mount Zenith, the highest peak in Aethelgard. The air here was thick with the suffocating stench of ozone and rot. At the center of a vast, volcanic caldera stood Malthazor. \n\nHe was a nightmare made flesh. His scales were black as the void, weeping the purple Blight. Embedded in his chest was the dark crystal, pulsing like a diseased heart. Around him, dozens of corrupted dragons chanted in a guttural, earth-shaking language, preparing the ritual that would unleash the Blight upon the human valleys below.\n\n\"We can't fight them all,\" Kaelen whispered from behind a crag.\n\n*We don't have to,* Sylas replied. *The crystal is the source. Shatter it, and the Blight loses its anchor. The others will wake from the madness.*\n\n\"How do I get close enough to shatter a crystal embedded in a dragon the size of a castle?\"\n\nSylas looked at Kaelen, his blue eyes fierce. *You ride.*\n\nKaelen climbed onto Sylas’s back, securing himself to the base of the dragon's neck with his climbing ropes. Sylas roared—a pure, uncorrupted sound of thunder—and launched himself into the air. The mechanical brace hummed under the strain, but it held.\n\nThey dove into the caldera. \n\nMalthazor looked up, his eyes",
+                "thoughtSignature": "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"
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "MAX_TOKENS",
+          "index": 0
+        }
+      ],
+      "modelVersion": "gemini-3.1-pro-preview",
+      "responseId": "yw4aaszGG_XN-sAPq7GOqQ8",
+      "usageMetadata": {
+        "candidatesTokenCount": 1685,
+        "promptTokenCount": 10,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 10
+          }
+        ],
+        "serviceTier": "standard",
+        "thoughtsTokenCount": 1311,
+        "totalTokenCount": 3006
+      }
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "content-type": [
+        "application/json; charset=UTF-8"
+      ],
+      "date": [
+        "Fri, 29 May 2026 22:10:55 GMT"
+      ],
+      "server": [
+        "scaffolding on HTTPServer2"
+      ],
+      "server-timing": [
+        "gfet4t7; dur=35772"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-frame-options": [
+        "SAMEORIGIN"
+      ],
+      "x-gemini-service-tier": [
+        "standard"
+      ],
+      "x-xss-protection": [
+        "0"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

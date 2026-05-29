@@ -1,0 +1,146 @@
+{
+  "model_spec": "google:gemini-3.1-pro-preview",
+  "provider": "google",
+  "request": {
+    "body": {
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJDYWxsIGdldF9kb2N1bWVudCB3aXRoIG5hbWU9XCJ0ZXN0LnBkZlwiIHRvIGZldGNoIHRoZSBmaWxlLCB0aGVuIHF1b3RlIHRoZSB0ZXh0IGl0IGNvbnRhaW5zIGluIGZ1bGwuIn1dLCJyb2xlIjoidXNlciJ9XSwiZ2VuZXJhdGlvbkNvbmZpZyI6eyJjYW5kaWRhdGVDb3VudCI6MSwibWF4T3V0cHV0VG9rZW5zIjoyNTYsInRlbXBlcmF0dXJlIjowLjB9LCJ0b29scyI6W3siZnVuY3Rpb25EZWNsYXJhdGlvbnMiOlt7ImRlc2NyaXB0aW9uIjoiRmV0Y2ggdGhlIHJlcXVlc3RlZCBkb2N1bWVudCBhbmQgcmV0dXJuIGl0cyByYXcgY29udGVudHMuIiwibmFtZSI6ImdldF9kb2N1bWVudCIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJuYW1lIjp7InR5cGUiOiJzdHJpbmcifX0sInByb3BlcnR5T3JkZXJpbmciOlsibmFtZSJdLCJyZXF1aXJlZCI6WyJuYW1lIl0sInR5cGUiOiJvYmplY3QifX1dfV19"
+    },
+    "canonical_json": {
+      "contents": [
+        {
+          "parts": [
+            {
+              "text": "Call get_document with name=\"test.pdf\" to fetch the file, then quote the text it contains in full."
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "generationConfig": {
+        "candidateCount": 1,
+        "maxOutputTokens": 256,
+        "temperature": 0.0
+      },
+      "tools": [
+        {
+          "functionDeclarations": [
+            {
+              "description": "Fetch the requested document and return its raw contents.",
+              "name": "get_document",
+              "parameters": {
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  }
+                },
+                "propertyOrdering": [
+                  "name"
+                ],
+                "required": [
+                  "name"
+                ],
+                "type": "object"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-pro-preview:generateContent?key=[REDACTED]"
+  },
+  "response": {
+    "body": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "functionCall": {
+                  "args": {
+                    "name": "test.pdf"
+                  },
+                  "id": "ptzd9g69",
+                  "name": "get_document"
+                },
+                "thoughtSignature": "EpgFCpUFAQw51sdjUFhZn/PVtWNApA+258m9O5jsn99w+A2NvGNCGu8Mmhm4SkAkBGDtACHrR8V0Q4qaU6AeSMhrisu/wgMwOXPGDBys9h/a3UszzNrJHEJ9ULdRuvSQCc3Onh9j76Wx1wRabOROdkjHmdJAigVvazG2J8KWRAaQ8GzgwNkvXiz1AOYIe/CGwAGSwK/J223K6QLZJaTfFBxvV7Yloy7TyNV/QWHmonpdluZL2tysNySFntvYbMNVgO53mg2cJJfKR400+IRdcC3Ri8/OVpCOOfDnJkAdTVuuxNT97rcrZ0OfAJ1SqigKpML72ywspJrFSGRjRdphjca7UpnnEODk5sPQxFIXjiAW0EIAdPwNivoQHvoc9U/MWLX+2LBxJjm6UaHKdUEzZm7rTCq1GzmV/BWJp/UW8zpHvPvMcs12D7W4zWemlzswLuMq2bpsX0IdD/4KpSh2GoAlQYhv9e5ExhvDB0Xkqf11Z4TEFnMoqAG9zWmTu8uDWKj4J/xWhAMJB0zOzIN1FHYUNIy+d0U4cVS0Ba8UFT+oUm2Wa6QZWBbfn81IGdpTkv8T+ncEoP3yHLdUCY1CywPpi29UiBsQ373VAv2PEUIjQKL9ylGMG0YswC1jPOwbx8AAsKhsMzMRyJyExH/n3cF0rPROTIN6W6s89Oa/n06jb0qYl1C5DaLrCUQEfHIF2861d9FhPOY34XJM0ln//1ZGIodxlfAJrN11mSYpdGiA9jYCbDxpZZngflG6BVFMkQg1LDlblCs2FEW/Ur5l7DVRM4rUUwsLyGEjiruQyXJYw+LyieAxtiEWKnWADiFV3e0ok3L2C4E5NX9x+CF1+TBjm+qXweyhWtoROggammASz7fK43/6eux5vA=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishMessage": "Model generated function call(s).",
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "modelVersion": "gemini-3.1-pro-preview",
+      "responseId": "JQ4aauSkG8u01MkPidWzUQ",
+      "usageMetadata": {
+        "candidatesTokenCount": 18,
+        "promptTokenCount": 73,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 73
+          }
+        ],
+        "serviceTier": "standard",
+        "thoughtsTokenCount": 160,
+        "totalTokenCount": 251
+      }
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "content-type": [
+        "application/json; charset=UTF-8"
+      ],
+      "date": [
+        "Fri, 29 May 2026 22:07:36 GMT"
+      ],
+      "server": [
+        "scaffolding on HTTPServer2"
+      ],
+      "server-timing": [
+        "gfet4t7; dur=2678"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-frame-options": [
+        "SAMEORIGIN"
+      ],
+      "x-gemini-service-tier": [
+        "standard"
+      ],
+      "x-xss-protection": [
+        "0"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

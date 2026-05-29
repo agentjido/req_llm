@@ -1,4 +1,6 @@
 {
+  "model_spec": "xai:grok-4",
+  "provider": "xai",
   "request": {
     "body": {
       "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjEwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJXcml0ZSBhIHZlcnkgbG9uZyBzdG9yeSBhYm91dCBkcmFnb25zIGFuZCBhZHZlbnR1cmVzIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiZ3Jvay00Iiwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuNX0="
@@ -16,6 +18,9 @@
       "temperature": 0.5
     },
     "headers": {
+      "accept": [
+        "application/json"
+      ],
       "accept-encoding": [
         "gzip"
       ],
@@ -24,7 +29,7 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ]
     },
     "method": "post",
@@ -37,34 +42,36 @@
           "finish_reason": "length",
           "index": 0,
           "message": {
-            "content": "Below is a very long, original story about dragons and adventures. I've crafted it as an epic fantasy tale, drawing on classic elements of heroism, magic, betrayal, and wonder. It's divided into chapters for readability, but it's one continuous narrative. I aimed for length while keeping it engaging—think of it as a novella-length adventure. Enjoy!\n\n---\n\n# **The Dragon's Shadow: Chronicles of the Ember Throne**\n\n## **Chapter 1: The Village of Ashenbrook**\n\nIn the shadowed valleys",
+            "content": "**The Chronicles of Eldoria: The Dragon's Eternal Flame**\n\nIn the verdant kingdom of Eldoria, where emerald forests kissed snow-capped peaks and rivers sang ancient songs, lived a humble village called Thornvale. Here, young Elandor tended his family's fields, dreaming of adventure beyond the plow. At eighteen, with tousled brown hair and eyes like storm clouds, he was strong but restless. One stormy night, lightning split the sky, and a glowing orb crashed into the woods.",
+            "reasoning_content": "The user asked: \"Write a very long story about dragons and adventures.\"\n",
             "refusal": null,
             "role": "assistant"
           }
         }
       ],
-      "created": 1762103826,
-      "id": "a5b241b5-7448-28be-de04-63dc70b9d375_us-east-1",
-      "model": "grok-4-0709",
+      "created": 1780095836,
+      "id": "d549bd42-cc2c-91da-8fd4-49c2d2cadb5d",
+      "model": "grok-4.3",
       "object": "chat.completion",
-      "system_fingerprint": "fp_794271b43e",
+      "system_fingerprint": "fp_eb3c003fc66c14ed",
       "usage": {
         "completion_tokens": 100,
         "completion_tokens_details": {
           "accepted_prediction_tokens": 0,
           "audio_tokens": 0,
-          "reasoning_tokens": 196,
+          "reasoning_tokens": 379,
           "rejected_prediction_tokens": 0
         },
+        "cost_in_usd_ticks": 12368500,
         "num_sources_used": 0,
-        "prompt_tokens": 693,
+        "prompt_tokens": 139,
         "prompt_tokens_details": {
           "audio_tokens": 0,
-          "cached_tokens": 681,
+          "cached_tokens": 128,
           "image_tokens": 0,
-          "text_tokens": 693
+          "text_tokens": 139
         },
-        "total_tokens": 989
+        "total_tokens": 618
       }
     },
     "headers": {
@@ -78,7 +85,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "9985489099a9e7fa-ORD"
+        "a039229da95a5eb1-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -87,16 +94,17 @@
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:17:14 GMT"
+        "Fri, 29 May 2026 23:04:03 GMT"
       ],
       "server": [
         "cloudflare"
       ],
-      "set-cookie": [
-        "__cf_bm=yawoAWWUw3S2wYn_T0n2EwPFB3Q_uQv3EkFtco3ZWu8-1762103834-1.0.1.1-1OHtBCF2oqvvEPRNBCiQf7heCVU1AlPmH4cusSrGQRjtBB..i5VrioFT87U8FVSk6LZnE_Jh4lT6DLcFbY6TlzEc3jzQBaB5b3Wci_7s3lg; path=/; expires=Sun, 02-Nov-25 17:47:14 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
-      ],
+      "set-cookie": "[REDACTED:set-cookie]",
       "strict-transport-security": [
         "max-age=31536000"
+      ],
+      "traceparent": [
+        "00-ec5ee81fdcce568409417646463d4c1e-3b9dcdbc000114b1-01"
       ],
       "transfer-encoding": [
         "chunked"
@@ -104,13 +112,35 @@
       "vary": [
         "origin, access-control-request-method, access-control-request-headers"
       ],
+      "x-metrics-e2e-ms": [
+        "7265.0"
+      ],
+      "x-metrics-mean-itl-ms": [
+        "14.4"
+      ],
+      "x-metrics-ttft-ms": [
+        "189.3"
+      ],
+      "x-ratelimit-limit-requests": [
+        "1800"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "10000000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "1799"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "9998866"
+      ],
       "x-request-id": [
-        "00-1b67294aafce01658c40e9d9d434d75a-e07650eb006ea1f5-01"
+        "d549bd42-cc2c-91da-8fd4-49c2d2cadb5d"
       ],
       "x-zero-data-retention": [
         "false"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

@@ -1,0 +1,123 @@
+{
+  "model_spec": "google:gemini-3.5-flash",
+  "provider": "google",
+  "request": {
+    "body": {
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJIZWxsbyB3b3JsZCEifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7ImNhbmRpZGF0ZUNvdW50IjoxLCJtYXhPdXRwdXRUb2tlbnMiOjIwMDAsInRlbXBlcmF0dXJlIjowLjAsInRoaW5raW5nQ29uZmlnIjp7ImluY2x1ZGVUaG91Z2h0cyI6dHJ1ZSwidGhpbmtpbmdMZXZlbCI6ImxvdyJ9fX0="
+    },
+    "canonical_json": {
+      "contents": [
+        {
+          "parts": [
+            {
+              "text": "Hello world!"
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "generationConfig": {
+        "candidateCount": 1,
+        "maxOutputTokens": 2000,
+        "temperature": 0.0,
+        "thinkingConfig": {
+          "includeThoughts": true,
+          "thinkingLevel": "low"
+        }
+      }
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=[REDACTED]"
+  },
+  "response": {
+    "body": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "**My Processing of \"Hello World!\"**\n\nOkay, so the user types \"Hello world!\". Classic. That's practically a programming rite of passage! My initial analysis is that this is a simple greeting, likely intended as a test or a friendly introduction. Now, how should I respond?\n\nFirst, I need to be welcoming. I want to convey friendliness and openness. I'm going to formulate a few potential responses. Let's see... I could just say \"Hello! How can I help you today?\" Simple, direct. Or, maybe a little more flair with \"Hello, World! It's great to meet you. How can I help you today?\". Too much? Hmm, what about \"Hello! Ready to write some code, or just chatting?\".\n\nAlright, after considering those options, I am going to select \"Hello, World! How can I help you today?\". It's classic, it acknowledges the \"Hello World!\" sentiment, it's friendly, and most importantly, it's open-ended, inviting the user to specify their need. I think that's the best approach to proceed. Let's send that!\n\n\n",
+                "thought": true
+              },
+              {
+                "text": "Hello, World! How can I help you today?",
+                "thoughtSignature": "EtcECtQEAQw51sfq7AJE8kzgYgWBWG4mqo5BrnSYu8/mX0DKcNnPzxmVRBCyPZ5WDUOKBVFblfXmUeLf4Ps0dfTzYq/oLvYZL2ZLbt3vCpECUMwoYx4QNg5gOsx1XomRBlQcI6Pedcmggbs9GkHKottIanFYSu0pZGg/ipjUbaCq2g8CgaOHToY/u7jfnT9jFX8BlFQJFLW1k7B6KxTtLDV9n/j8S3LQ68DlkXnZnamQduQulDOEM6NI/ZTeHTzY2S2j0XUiAefy6haUhPNIbuJdIkF8vuQbT2UkzHbnVN1uuWz3R4ygAOcDt8WU8HCkEUAcnNKCCrMyLS/KEXQ8Qk+kVmGXVnvXmw2oP25SO1exVK4QnrpIBLfJ8rQNxclEQya892VJV739yecWe01iC0HxVDYLsbf6f/hpi/u96cXcxmG+MJPw2RbBhs3SNTCrRna6leyv5mhgL15eIJnlE4jQKHqedQ9GOdOFsWWGhWZjXqk7nNGyqBj/YdpcHLr1KZFNBs+nt69l17x5KgfGR9I+pTyO0M8YsMutj+GMmgc7Ax2jPFMxEKS2o+oDG6hbjYxjMSEJ4k8Fnf3zEpbYYJgOuc+5IEE64+X3170nVW7sDDjqduTfX0t3eHKFEYT86HZkOZQhWWYWWGj6Tut5+rR+33wpAYxTj1SbscGEPOIhbfOpv1pIyxIwo1jjhL6WK9+RmDoL2MO39mDzovmhVxccFXZLoF1NMPs5cQPdyA4HN2OW5XTSnh+JZS0k1o4kN8w+dKvKsELH/5bpkOTLl3nDdHsOFZVwo3o="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "modelVersion": "gemini-3.5-flash",
+      "responseId": "Mg8aavqjNri5jMcPxNT1gQI",
+      "usageMetadata": {
+        "candidatesTokenCount": 11,
+        "promptTokenCount": 4,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 4
+          }
+        ],
+        "serviceTier": "standard",
+        "thoughtsTokenCount": 143,
+        "totalTokenCount": 158
+      }
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "content-type": [
+        "application/json; charset=UTF-8"
+      ],
+      "date": [
+        "Fri, 29 May 2026 22:12:05 GMT"
+      ],
+      "server": [
+        "scaffolding on HTTPServer2"
+      ],
+      "server-timing": [
+        "gfet4t7; dur=2711"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-frame-options": [
+        "SAMEORIGIN"
+      ],
+      "x-gemini-service-tier": [
+        "standard"
+      ],
+      "x-xss-protection": [
+        "0"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

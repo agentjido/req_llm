@@ -1,4 +1,17 @@
 {
+  "google:gemini-1.5-pro": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (404): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T22:30:50Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
   "openai:gpt-5-2025-08-07": {
     "scenarios": {
       "basic": {
@@ -35,6 +48,19 @@
         "last_checked": "2026-05-29T21:23:56Z",
         "mode": "record",
         "status": "pass"
+      }
+    }
+  },
+  "xai:grok-2": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (400): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T22:42:31Z",
+        "mode": "record",
+        "status": "fail"
       }
     }
   },
@@ -90,6 +116,19 @@
           "image_basic"
         ],
         "last_checked": "2026-05-29T21:24:36Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "google:gemini-2.5-flash-image": {
+    "scenarios": {
+      "image_basic": {
+        "error": null,
+        "fixtures": [
+          "image_basic"
+        ],
+        "last_checked": "2026-05-29T22:27:26Z",
         "mode": "record",
         "status": "pass"
       }
@@ -163,6 +202,19 @@
       }
     }
   },
+  "xai:grok-2-1212": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (400): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T22:42:39Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
   "zai_coder:glm-4.5-flash": {
     "scenarios": {
       "basic": {
@@ -215,6 +267,19 @@
       }
     }
   },
+  "xai:grok-build-0.1": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T22:45:04Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
   "openai:gpt-5.2-pro": {
     "scenarios": {
       "basic": {
@@ -223,6 +288,103 @@
           "basic"
         ],
         "last_checked": "2026-05-29T19:01:09Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "google:gemini-3-flash-preview": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T22:09:19Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "context_append": {
+        "error": null,
+        "fixtures": [
+          "context_append_1",
+          "context_append_2"
+        ],
+        "last_checked": "2026-05-29T22:19:13Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "object_basic": {
+        "error": null,
+        "fixtures": [
+          "object_basic"
+        ],
+        "last_checked": "2026-05-29T22:22:15Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "reasoning": {
+        "error": null,
+        "fixtures": [
+          "reasoning_basic",
+          "reasoning_streaming"
+        ],
+        "last_checked": "2026-05-29T22:25:08Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "streaming": {
+        "error": null,
+        "fixtures": [
+          "streaming"
+        ],
+        "last_checked": "2026-05-29T22:19:13Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "token_limit": {
+        "error": null,
+        "fixtures": [
+          "token_limit"
+        ],
+        "last_checked": "2026-05-29T22:09:19Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "tool_multi": {
+        "error": null,
+        "fixtures": [
+          "multi_tool"
+        ],
+        "last_checked": "2026-05-29T22:22:03Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "tool_none": {
+        "error": null,
+        "fixtures": [
+          "no_tool"
+        ],
+        "last_checked": "2026-05-29T22:22:03Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "tool_round_trip": {
+        "error": null,
+        "fixtures": [
+          "tool_round_trip_1",
+          "tool_round_trip_2"
+        ],
+        "last_checked": "2026-05-29T22:22:03Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "usage": {
+        "error": null,
+        "fixtures": [
+          "usage"
+        ],
+        "last_checked": "2026-05-29T22:09:19Z",
         "mode": "record",
         "status": "pass"
       }
@@ -275,6 +437,69 @@
           "basic"
         ],
         "last_checked": "2026-05-29T19:06:44Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "google:gemini-1.5-flash": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (404): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T22:30:42Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "google:gemini-pro-latest": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T22:13:02Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "context_append": {
+        "error": null,
+        "fixtures": [
+          "context_append_1",
+          "context_append_2"
+        ],
+        "last_checked": "2026-05-29T22:20:56Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "streaming": {
+        "error": null,
+        "fixtures": [
+          "streaming"
+        ],
+        "last_checked": "2026-05-29T22:20:56Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "token_limit": {
+        "error": null,
+        "fixtures": [
+          "token_limit"
+        ],
+        "last_checked": "2026-05-29T22:13:02Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "usage": {
+        "error": null,
+        "fixtures": [
+          "usage"
+        ],
+        "last_checked": "2026-05-29T22:14:34Z",
         "mode": "record",
         "status": "pass"
       }
@@ -353,6 +578,19 @@
           "basic"
         ],
         "last_checked": "2026-05-29T21:30:52Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "xai:grok-imagine-image": {
+    "scenarios": {
+      "image_basic": {
+        "error": null,
+        "fixtures": [
+          "image_basic"
+        ],
+        "last_checked": "2026-05-29T22:50:37Z",
         "mode": "record",
         "status": "pass"
       }
@@ -450,6 +688,19 @@
       }
     }
   },
+  "xai:grok-4.20-0309-reasoning": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T22:44:19Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
   "anthropic:claude-sonnet-4-20250514": {
     "scenarios": {
       "basic": {
@@ -494,6 +745,126 @@
       }
     }
   },
+  "google:gemini-3-pro-image": {
+    "scenarios": {
+      "image_basic": {
+        "error": null,
+        "fixtures": [
+          "image_basic"
+        ],
+        "last_checked": "2026-05-29T22:29:02Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "google:gemini-3.1-pro-preview": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T22:10:55Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "context_append": {
+        "error": null,
+        "fixtures": [
+          "context_append_1",
+          "context_append_2"
+        ],
+        "last_checked": "2026-05-29T22:19:54Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "multimodal_tool_result": {
+        "error": null,
+        "fixtures": [
+          "multimodal_tool_result_1",
+          "multimodal_tool_result_2"
+        ],
+        "last_checked": "2026-05-29T22:07:39Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "object_basic": {
+        "error": null,
+        "fixtures": [
+          "object_basic"
+        ],
+        "last_checked": "2026-05-29T22:23:33Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "reasoning": {
+        "error": null,
+        "fixtures": [
+          "reasoning_basic",
+          "reasoning_streaming"
+        ],
+        "last_checked": "2026-05-29T22:25:37Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "streaming": {
+        "error": null,
+        "fixtures": [
+          "streaming"
+        ],
+        "last_checked": "2026-05-29T22:19:54Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "token_limit": {
+        "error": null,
+        "fixtures": [
+          "token_limit"
+        ],
+        "last_checked": "2026-05-29T22:10:55Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "tool_multi": {
+        "error": null,
+        "fixtures": [
+          "multi_tool"
+        ],
+        "last_checked": "2026-05-29T22:23:21Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "tool_none": {
+        "error": null,
+        "fixtures": [
+          "no_tool"
+        ],
+        "last_checked": "2026-05-29T22:23:21Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "tool_round_trip": {
+        "error": null,
+        "fixtures": [
+          "tool_round_trip_1",
+          "tool_round_trip_2"
+        ],
+        "last_checked": "2026-05-29T22:23:21Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "usage": {
+        "error": null,
+        "fixtures": [
+          "usage"
+        ],
+        "last_checked": "2026-05-29T22:10:55Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
   "openai:gpt-5.2-pro-2025-12-11": {
     "scenarios": {
       "basic": {
@@ -502,6 +873,19 @@
           "basic"
         ],
         "last_checked": "2026-05-29T19:01:31Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "google:gemini-embedding-001": {
+    "scenarios": {
+      "embed_basic": {
+        "error": null,
+        "fixtures": [
+          "embed_basic"
+        ],
+        "last_checked": "2026-05-29T22:26:56Z",
         "mode": "record",
         "status": "pass"
       }
@@ -546,6 +930,28 @@
       }
     }
   },
+  "xai:grok-4.20-0309-non-reasoning": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T22:41:43Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "object_streaming_tool_strict": {
+        "error": null,
+        "fixtures": [
+          "object_streaming_tool_strict"
+        ],
+        "last_checked": "2026-05-29T23:13:54Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
   "openai:whisper-1": {
     "scenarios": {
       "transcription_basic": {
@@ -556,6 +962,32 @@
         "last_checked": "2026-05-29T20:44:37Z",
         "mode": "record",
         "status": "pass"
+      }
+    }
+  },
+  "xai:grok-beta": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (400): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T22:42:23Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "google:aqa": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (404): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T22:31:12Z",
+        "mode": "record",
+        "status": "fail"
       }
     }
   },
@@ -704,6 +1136,103 @@
       }
     }
   },
+  "google:gemini-3.1-flash-lite": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T22:09:53Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "context_append": {
+        "error": null,
+        "fixtures": [
+          "context_append_1",
+          "context_append_2"
+        ],
+        "last_checked": "2026-05-29T22:19:28Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "object_basic": {
+        "error": null,
+        "fixtures": [
+          "object_basic"
+        ],
+        "last_checked": "2026-05-29T22:22:49Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "reasoning": {
+        "error": null,
+        "fixtures": [
+          "reasoning_basic",
+          "reasoning_streaming"
+        ],
+        "last_checked": "2026-05-29T22:25:20Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "streaming": {
+        "error": null,
+        "fixtures": [
+          "streaming"
+        ],
+        "last_checked": "2026-05-29T22:19:28Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "token_limit": {
+        "error": null,
+        "fixtures": [
+          "token_limit"
+        ],
+        "last_checked": "2026-05-29T22:09:53Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "tool_multi": {
+        "error": null,
+        "fixtures": [
+          "multi_tool"
+        ],
+        "last_checked": "2026-05-29T22:22:38Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "tool_none": {
+        "error": null,
+        "fixtures": [
+          "no_tool"
+        ],
+        "last_checked": "2026-05-29T22:22:38Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "tool_round_trip": {
+        "error": null,
+        "fixtures": [
+          "tool_round_trip_1",
+          "tool_round_trip_2"
+        ],
+        "last_checked": "2026-05-29T22:22:38Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "usage": {
+        "error": null,
+        "fixtures": [
+          "usage"
+        ],
+        "last_checked": "2026-05-29T22:09:53Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
   "openai:gpt-5.4": {
     "scenarios": {
       "basic": {
@@ -727,6 +1256,19 @@
         "last_checked": "2026-05-29T16:18:19Z",
         "mode": "record",
         "status": "pass"
+      }
+    }
+  },
+  "google:antigravity-preview-05-2026": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (400): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T22:31:06Z",
+        "mode": "record",
+        "status": "fail"
       }
     }
   },
@@ -792,6 +1334,19 @@
         "last_checked": "2026-05-29T21:20:10Z",
         "mode": "record",
         "status": "pass"
+      }
+    }
+  },
+  "google:text-embedding-004": {
+    "scenarios": {
+      "embed_basic": {
+        "error": "     Expected successful embedding, got error: %ReqLLM.Error.API.Request{reason: \"Provider response error (404): Google A",
+        "fixtures": [
+          "embed_basic"
+        ],
+        "last_checked": "2026-05-29T22:26:43Z",
+        "mode": "record",
+        "status": "fail"
       }
     }
   },
@@ -873,6 +1428,103 @@
       }
     }
   },
+  "google:gemini-3.1-pro-preview-customtools": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T22:11:54Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "context_append": {
+        "error": null,
+        "fixtures": [
+          "context_append_1",
+          "context_append_2"
+        ],
+        "last_checked": "2026-05-29T22:20:18Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "object_basic": {
+        "error": null,
+        "fixtures": [
+          "object_basic"
+        ],
+        "last_checked": "2026-05-29T22:24:13Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "reasoning": {
+        "error": null,
+        "fixtures": [
+          "reasoning_basic",
+          "reasoning_streaming"
+        ],
+        "last_checked": "2026-05-29T22:25:51Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "streaming": {
+        "error": null,
+        "fixtures": [
+          "streaming"
+        ],
+        "last_checked": "2026-05-29T22:20:18Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "token_limit": {
+        "error": null,
+        "fixtures": [
+          "token_limit"
+        ],
+        "last_checked": "2026-05-29T22:11:54Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "tool_multi": {
+        "error": null,
+        "fixtures": [
+          "multi_tool"
+        ],
+        "last_checked": "2026-05-29T22:24:02Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "tool_none": {
+        "error": null,
+        "fixtures": [
+          "no_tool"
+        ],
+        "last_checked": "2026-05-29T22:24:02Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "tool_round_trip": {
+        "error": null,
+        "fixtures": [
+          "tool_round_trip_1",
+          "tool_round_trip_2"
+        ],
+        "last_checked": "2026-05-29T22:24:02Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "usage": {
+        "error": null,
+        "fixtures": [
+          "usage"
+        ],
+        "last_checked": "2026-05-29T22:11:54Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
   "openai:gpt-5.4-nano": {
     "scenarios": {
       "basic": {
@@ -881,6 +1533,80 @@
           "basic"
         ],
         "last_checked": "2026-05-29T19:07:01Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "xai:grok-4.3": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T22:41:17Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "object_streaming_auto": {
+        "error": null,
+        "fixtures": [
+          "object_streaming_auto"
+        ],
+        "last_checked": "2026-05-29T23:12:59Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "object_streaming_json_schema": {
+        "error": null,
+        "fixtures": [
+          "object_streaming_json_schema"
+        ],
+        "last_checked": "2026-05-29T23:12:59Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "streaming": {
+        "error": null,
+        "fixtures": [],
+        "last_checked": "2026-05-29T23:08:12Z",
+        "mode": "replay",
+        "status": "pass"
+      },
+      "streaming_error_handling": {
+        "error": null,
+        "fixtures": [
+          "streaming_truncated"
+        ],
+        "last_checked": "2026-05-29T23:12:59Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "web_search_basic": {
+        "error": null,
+        "fixtures": [
+          "web_search_basic"
+        ],
+        "last_checked": "2026-05-29T23:12:24Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "web_search_streaming": {
+        "error": null,
+        "fixtures": [
+          "web_search_streaming"
+        ],
+        "last_checked": "2026-05-29T23:12:24Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "x_search_streaming": {
+        "error": null,
+        "fixtures": [
+          "x_search_streaming"
+        ],
+        "last_checked": "2026-05-29T23:12:24Z",
         "mode": "record",
         "status": "pass"
       }
@@ -964,6 +1690,19 @@
       }
     }
   },
+  "google:gemini-3-pro-image-preview": {
+    "scenarios": {
+      "image_basic": {
+        "error": null,
+        "fixtures": [
+          "image_basic"
+        ],
+        "last_checked": "2026-05-29T22:28:39Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
   "openai:gpt-4.1-mini": {
     "scenarios": {
       "context_append": {
@@ -983,6 +1722,19 @@
           "transcription_basic"
         ],
         "last_checked": "2026-05-29T21:23:21Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "google:imagen-4.0-generate-001": {
+    "scenarios": {
+      "image_basic": {
+        "error": null,
+        "fixtures": [
+          "image_basic"
+        ],
+        "last_checked": "2026-05-29T22:29:18Z",
         "mode": "record",
         "status": "pass"
       }
@@ -1053,6 +1805,19 @@
       }
     }
   },
+  "xai:grok-4.20-non-reasoning": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T22:42:00Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
   "cohere:rerank-v3.5": {
     "scenarios": {
       "rerank_basic": {
@@ -1066,6 +1831,32 @@
       }
     }
   },
+  "google:imagen-4.0-ultra-generate-001": {
+    "scenarios": {
+      "image_basic": {
+        "error": null,
+        "fixtures": [
+          "image_basic"
+        ],
+        "last_checked": "2026-05-29T22:29:47Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "google:gemini-2.5-computer-use-preview-10-2025": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (400): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T22:30:58Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
   "openai:o3-pro-2025-06-10": {
     "scenarios": {
       "basic": {
@@ -1074,6 +1865,106 @@
           "basic"
         ],
         "last_checked": "2026-05-29T19:00:08Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "google:gemini-2.5-flash-lite": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T22:08:36Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "context_append": {
+        "error": null,
+        "fixtures": [
+          "context_append_1",
+          "context_append_2"
+        ],
+        "last_checked": "2026-05-29T22:15:18Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "object_basic": {
+        "error": null,
+        "fixtures": [
+          "object_basic"
+        ],
+        "last_checked": "2026-05-29T22:21:40Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "streaming": {
+        "error": null,
+        "fixtures": [
+          "streaming"
+        ],
+        "last_checked": "2026-05-29T22:18:43Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "token_limit": {
+        "error": null,
+        "fixtures": [
+          "token_limit"
+        ],
+        "last_checked": "2026-05-29T22:08:36Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "tool_multi": {
+        "error": null,
+        "fixtures": [
+          "multi_tool"
+        ],
+        "last_checked": "2026-05-29T22:21:33Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "tool_none": {
+        "error": null,
+        "fixtures": [
+          "no_tool"
+        ],
+        "last_checked": "2026-05-29T22:21:33Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "tool_round_trip": {
+        "error": null,
+        "fixtures": [
+          "tool_round_trip_1",
+          "tool_round_trip_2"
+        ],
+        "last_checked": "2026-05-29T22:21:33Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "usage": {
+        "error": null,
+        "fixtures": [
+          "usage"
+        ],
+        "last_checked": "2026-05-29T22:08:36Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "xai:grok-imagine-image-quality": {
+    "scenarios": {
+      "image_basic": {
+        "error": null,
+        "fixtures": [
+          "image_basic"
+        ],
+        "last_checked": "2026-05-29T22:51:39Z",
         "mode": "record",
         "status": "pass"
       }
@@ -1105,6 +1996,103 @@
       }
     }
   },
+  "google:gemini-3.5-flash": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T22:12:39Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "context_append": {
+        "error": null,
+        "fixtures": [
+          "context_append_1",
+          "context_append_2"
+        ],
+        "last_checked": "2026-05-29T22:20:37Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "object_basic": {
+        "error": null,
+        "fixtures": [
+          "object_basic"
+        ],
+        "last_checked": "2026-05-29T22:24:48Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "reasoning": {
+        "error": null,
+        "fixtures": [
+          "reasoning_basic",
+          "reasoning_streaming"
+        ],
+        "last_checked": "2026-05-29T22:26:04Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "streaming": {
+        "error": null,
+        "fixtures": [
+          "streaming"
+        ],
+        "last_checked": "2026-05-29T22:20:37Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "token_limit": {
+        "error": null,
+        "fixtures": [
+          "token_limit"
+        ],
+        "last_checked": "2026-05-29T22:12:39Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "tool_multi": {
+        "error": null,
+        "fixtures": [
+          "multi_tool"
+        ],
+        "last_checked": "2026-05-29T22:24:37Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "tool_none": {
+        "error": null,
+        "fixtures": [
+          "no_tool"
+        ],
+        "last_checked": "2026-05-29T22:24:37Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "tool_round_trip": {
+        "error": null,
+        "fixtures": [
+          "tool_round_trip_1",
+          "tool_round_trip_2"
+        ],
+        "last_checked": "2026-05-29T22:24:37Z",
+        "mode": "record",
+        "status": "pass"
+      },
+      "usage": {
+        "error": null,
+        "fixtures": [
+          "usage"
+        ],
+        "last_checked": "2026-05-29T22:12:39Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
   "openai:gpt-image-2-2026-04-21": {
     "scenarios": {
       "image_basic": {
@@ -1131,6 +2119,45 @@
       }
     }
   },
+  "xai:grok-4.20-multi-agent-0309": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (400): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T22:44:27Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "google:gemini-3.1-flash-image-preview": {
+    "scenarios": {
+      "image_basic": {
+        "error": null,
+        "fixtures": [
+          "image_basic"
+        ],
+        "last_checked": "2026-05-29T22:27:52Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "google:gemini-3.1-flash-image": {
+    "scenarios": {
+      "image_basic": {
+        "error": null,
+        "fixtures": [
+          "image_basic"
+        ],
+        "last_checked": "2026-05-29T22:28:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
   "xai:grok-3-mini": {
     "scenarios": {
       "basic": {
@@ -1139,6 +2166,19 @@
           "basic"
         ],
         "last_checked": "2026-05-29T16:17:48Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "google:imagen-4.0-fast-generate-001": {
+    "scenarios": {
+      "image_basic": {
+        "error": null,
+        "fixtures": [
+          "image_basic"
+        ],
+        "last_checked": "2026-05-29T22:29:31Z",
         "mode": "record",
         "status": "pass"
       }

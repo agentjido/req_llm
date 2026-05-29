@@ -47,22 +47,28 @@ Current completed provider status:
 - OpenAI speech is refreshed and replay-clean for `tts-1`, `tts-1-1106`, `tts-1-hd`, `tts-1-hd-1106`, `gpt-4o-mini-tts`, and `gpt-4o-mini-tts-2025-12-15`.
 - OpenAI transcription is refreshed and replay-clean for `whisper-1`, `gpt-4o-transcribe`, `gpt-4o-transcribe-diarize`, `gpt-4o-mini-transcribe`, `gpt-4o-mini-transcribe-2025-03-20`, and `gpt-4o-mini-transcribe-2025-12-15`.
 - OpenAI audio-chat basic fixtures are refreshed and replay-clean for `gpt-audio` and `gpt-audio-mini`. These require Chat Completions audio output defaults and transcript decoding; the dated audio-chat aliases remain a later expansion.
-- Deprecated OpenAI and Anthropic fixture directories have been removed from package scope.
+- Google is refreshed for the current normal text/chat target set and non-text image/embedding targets we can exercise through ReqLLM: newly replay-clean text suites include `gemini-2.5-flash-lite`, `gemini-3-flash-preview`, `gemini-3.1-flash-lite`, `gemini-3.1-pro-preview`, `gemini-3.1-pro-preview-customtools`, `gemini-3.5-flash`, and `gemini-pro-latest`; Google image generation is replay-clean for all 8 catalog image models; `gemini-embedding-001` is replay-clean for embeddings.
+- Google provider-specific coverage now includes `grounding` on `gemini-3-flash-preview` and `multimodal_tool_result` retargeted from unavailable `gemini-3-pro-preview` to `gemini-3.1-pro-preview`.
+- xAI current normal text targets are replay-clean for `grok-4`, `grok-4-fast`, `grok-3-mini`, `grok-3-mini-fast`, `grok-3-mini-fast-latest`, `grok-3-mini-latest`, `grok-4.20-0309-non-reasoning`, `grok-4.20-non-reasoning`, `grok-4.20-0309-reasoning`, `grok-4.3`, and `grok-build-0.1`.
+- xAI current image generation is replay-clean for `grok-imagine-image` and `grok-imagine-image-quality`.
+- xAI provider-specific coverage is retargeted to current models and replay-clean for web search, X search, native streaming structured output, tool-strict streaming structured output, auto streaming structured output, and truncated-stream handling.
+- Deprecated OpenAI, Anthropic, Google, and xAI fixture directories have been removed from package scope.
 - Minimax key and balance are no longer blocking key work. Keep Minimax as a later provider-specific fixture pass rather than retesting credentials now.
 
 ## Next Recommended Pass
 
-1. Decide whether to broaden beyond the 64 OpenAI target with dated audio-chat aliases: `gpt-audio-1.5`, `gpt-audio-2025-08-28`, and `gpt-audio-mini-2025-12-15`.
-2. Treat OpenAI realtime, Sora, moderation, search, and legacy completions as separate endpoint/capability work, not normal text fixture refreshes.
-3. Decide OpenAI Pro depth: either run full `gpt-5-pro`, `gpt-5-pro-2025-10-06`, `o3-pro`, and `o3-pro-2025-06-10` suites now, or intentionally keep them at basic probe coverage and move to the next provider.
-4. Decide whether the basic-probed future/current OpenAI families (`gpt-5.1+`, `gpt-5.2+`, `gpt-5.3+`, `gpt-5.4+`, `gpt-5.5+`) should get full text suites now or stay as access probes until the next OpenAI pass.
-5. Move provider-by-provider to `google`, `groq`, `xai`, and `cerebras`; then `zai`, `zai_coder`, and `minimax`; then expansion providers `fireworks_ai`, `zenmux`, `venice`, `elevenlabs`, and `cohere`.
-6. Before broad recording, add or decide on a "currently fixture-backed passing models" selector so we can rerun the conservative set without hand-running individual specs or accidentally selecting every active LLMDB model.
-7. Keep Azure, Amazon Bedrock, Alibaba, and Google Vertex out of this pass until the user explicitly reopens those credential/provider tracks.
+1. Move to `groq` next, then `cerebras`; both already have some passing fixture state and should be cheaper to normalize than the larger aggregator providers.
+2. After Groq/Cerebras, run focused passes for `zai`, `zai_coder`, and `minimax`; Minimax key/balance work is no longer blocking.
+3. Then handle expansion providers by endpoint family: `fireworks_ai`, `mistral`, `cohere` rerank, `elevenlabs` speech, `zenmux`, and `venice`.
+4. Keep OpenAI deferred gaps separate: dated audio-chat aliases, Pro depth, realtime, Sora, moderation, search, and legacy completions.
+5. Keep Google deferred gaps separate: video/Veo, native audio/live, Lyria, robotics, deep research, `text-embedding-004` 404, and stale/unavailable `gemini-3-pro-preview`.
+6. Keep xAI deferred gaps separate: `grok-2`, `grok-2-1212`, and `grok-beta` currently return 400 on normal chat; `grok-4.20-multi-agent-0309` is not a normal chat target; `grok-imagine-video` needs explicit video support before fixture recording.
+7. Before broad recording, add or decide on a "currently fixture-backed passing models" selector so we can rerun the conservative set without hand-running individual specs or accidentally selecting every active LLMDB model.
+8. Keep Azure, Amazon Bedrock, Alibaba, and Google Vertex out of this pass until the user explicitly reopens those credential/provider tracks.
 
 ## Current Fixture State
 
-The fixture tree has 2212 JSON fixture files under `test/support/fixtures`.
+The fixture tree has 2309 JSON fixture files under `test/support/fixtures`.
 
 `MIX_ENV=test mix mc` reports:
 
@@ -77,20 +83,20 @@ The fixture tree has 2212 JSON fixture files under `test/support/fixtures`.
 | cohere | 0 | 0 | 0 | 17 |
 | elevenlabs | 0 | 0 | 0 | 4 |
 | fireworks_ai | 0 | 0 | 0 | 12 |
-| google | 6 | 0 | 1 | 43 |
+| google | 7 | 0 | 2 | 41 |
 | google_vertex | 0 | 0 | 0 | 40 |
 | groq | 7 | 0 | 0 | 11 |
 | minimax | 6 | 0 | 0 | 0 |
 | openai | 19 | 2 | 0 | 65 |
 | openrouter | 45 | 0 | 0 | 319 |
 | venice | 0 | 0 | 0 | 67 |
-| xai | 10 | 0 | 0 | 16 |
+| xai | 11 | 0 | 0 | 15 |
 | zai | 5 | 0 | 0 | 8 |
 | zai_coder | 5 | 0 | 0 | 0 |
 | zai_coding_plan | 0 | 0 | 0 | 5 |
 | zenmux | 0 | 0 | 0 | 149 |
 
-The provider sections currently sum to 143 passing, fixture-backed, current-registry models after the OpenAI and Anthropic deprecated-model cleanup and the OpenAI dated-alias pass. The active refresh scope excludes Azure, leaving 117 in-scope candidate passing models. Amazon Bedrock stays out of triage for this pass. Minimax remains in the candidate list after the balance update, but should be refreshed in its own provider-specific pass. The task's overall line is currently higher because the overall calculation also counts legacy `priv/supported_models.json` pass entries that are no longer in the current provider sections. Treat the in-scope model list below as the provider-by-provider refresh backlog, not as one broad recording batch.
+The provider sections currently sum to 165 passing, fixture-backed models after the Google and xAI pass. The task's model-level table still undercounts targeted non-text/provider-specific work because image, embedding, grounding, web-search, and streaming-structured scenarios are tracked by scenario fixtures rather than by full text-model state.
 
 OpenAI scenario/fixture-file verification is more current than the model-level `mix mc` table because this branch records targeted scenarios without promoting every scenario result to `priv/supported_models.json`. The current OpenAI fixture-file count is 64/86:
 
@@ -103,6 +109,10 @@ OpenAI scenario/fixture-file verification is more current than the model-level `
 | text/audio-chat | 44 | 65 |
 
 Remaining OpenAI catalog gaps are intentionally split by endpoint family: realtime (`gpt-realtime*`, `gpt-realtime-whisper`), Sora (`sora-2*`), moderation (`omni-moderation-*`), search (`gpt-5-search-api*`), legacy completions (`babbage-002`, `davinci-002`), older preview text (`gpt-4-0125-preview`, `o1-mini`), inaccessible current catalog (`gpt-5.3-codex-spark`), and deferred dated audio-chat aliases (`gpt-audio-1.5`, `gpt-audio-2025-08-28`, `gpt-audio-mini-2025-12-15`).
+
+Google scenario/fixture-file verification is more current than the model-level `mix mc` table. Current non-deprecated fixture-file coverage is 22/49 by catalog directory, with the normal chat targets and all current Google image models covered. Known Google gaps are endpoint-specific or unavailable through the current provider path: native audio/live, Veo/video, Lyria, robotics, deep research, `text-embedding-004` 404, legacy Gemini 1.5 404s, and `gemini-3-pro-preview` 404.
+
+xAI scenario/fixture-file verification is also more current than the model-level `mix mc` table. Current non-deprecated fixture-file coverage is 13/18: text 11/16 and image 2/2. Known xAI gaps are `grok-2`, `grok-2-1212`, and `grok-beta` returning 400 on normal chat, `grok-4.20-multi-agent-0309` requiring separate multi-agent handling, and `grok-imagine-video` requiring video-operation support.
 
 ## Date Findings
 

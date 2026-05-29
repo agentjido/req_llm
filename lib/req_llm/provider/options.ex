@@ -243,7 +243,8 @@ defmodule ReqLLM.Provider.Options do
     :pool_timeout,
     :retry,
     :retry_log_level,
-    :telemetry_original_opts
+    :telemetry_original_opts,
+    :xai_api_type
   ]
 
   @doc """

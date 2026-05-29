@@ -1,4 +1,6 @@
 {
+  "model_spec": "xai:grok-3-mini-fast",
+  "provider": "xai",
   "request": {
     "body": {
       "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjEwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJXcml0ZSBhIHZlcnkgbG9uZyBzdG9yeSBhYm91dCBkcmFnb25zIGFuZCBhZHZlbnR1cmVzIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiZ3Jvay0zLW1pbmktZmFzdCIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjV9"
@@ -16,6 +18,9 @@
       "temperature": 0.5
     },
     "headers": {
+      "accept": [
+        "application/json"
+      ],
       "accept-encoding": [
         "gzip"
       ],
@@ -24,7 +29,7 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ]
     },
     "method": "post",
@@ -37,35 +42,36 @@
           "finish_reason": "length",
           "index": 0,
           "message": {
-            "content": "Below is a very long story about dragons and adventures. I've crafted it as an epic fantasy tale, divided into chapters for readability. The story is original, filled with vivid descriptions, character development, and a mix of action, mystery, and wonder. It's designed to immerse you in a world of dragons, heroes, and perilous quests. Settle in—this is a lengthy read!\n\n---\n\n# **The Dragon's Ember: A Tale of Fire and Fate**\n\n## **Chapter 1: The Shadow of",
-            "reasoning_content": "First, the user asked for a \"very long story about dragons and adventures.\" I need to make this story extensive, so I'll aim for a detailed narrative with multiple chapters or sections to build it out.\n\nKey elements:\n- **Dragons**: Central characters or antagonists. I should include different types of dragons – fire-breathing, ice dragons, wise ancient ones, etc., to add variety.\n- **Adventures**: The story needs excitement, quests, battles, explorations, and character development. Think epic fantasy.\n\nStructure the story:\n1. **Introduction**: Set the scene, introduce main characters, and establish the world.\n2. **Rising Action**: Build tension with adventures, conflicts, and encounters.\n3. **Climax**: A major confrontation or event.\n4. **Falling Action**: Resolve conflicts and wrap up subplots.\n5. **Conclusion**: End the story satisfyingly.\n\nMake it long: I'll write a comprehensive story with descriptive language, dialogue, and multiple plot points. Since this is text-based, I'll ensure it's engaging and not repetitive.\n\nMain characters:\n- A young hero or heroine who discovers dragons.\n- A dragon as an ally or friend.\n- Villains, like a dark wizard or rival dragon hunters.\n- Supporting characters: friends, mentors, etc.\n\nPlot idea:\n- Start in a peaceful village threatened by a dragon.\n- The protagonist embarks on a quest to find a legendary dragon artifact.\n- Along the way, they befriend a dragon, face various challenges, and uncover a larger threat.\n- Include adventures like exploring ancient ruins, battling monsters, crossing dangerous terrains.\n\nThemes: Friendship, courage, the balance between humans and dragons, environmental messages if possible.\n\nTone: Adventurous, exciting, with elements of wonder and danger.\n\nLength: Since it's \"very long,\" I'll write several paragraphs, aiming for 1000-2000 words, but keep it manageable.\n\nFinally, ensure the story is original and creative.",
+            "content": "**The Dragon's Legacy: Chronicles of Eldrath**\n\nIn the shadowed peaks of the Whispering Mountains, where mist clung like ancient secrets and thunder rumbled like the breath of forgotten gods, there lived a young orphan named Kael. At seventeen, Kael toiled in the village of Stonehaven, mending nets for fishermen who dared the treacherous rivers below. But Kael dreamed of more—of soaring skies, hidden treasures, and the roar of dragons that legends said still roamed the world.\n\n",
+            "reasoning_content": "The user asked: \"Write a very long story about dragons and adventures.\"\n",
             "refusal": null,
             "role": "assistant"
           }
         }
       ],
-      "created": 1762103796,
-      "id": "ca1aeb86-4abd-8110-8a3f-c8258296c58d_us-east-1",
-      "model": "grok-3-mini",
+      "created": 1780095908,
+      "id": "60b87d01-68bb-987a-9e5d-67ecdbaa590f",
+      "model": "grok-4.3",
       "object": "chat.completion",
-      "system_fingerprint": "fp_4fae27f477",
+      "system_fingerprint": "fp_eb3c003fc66c14ed",
       "usage": {
         "completion_tokens": 100,
         "completion_tokens_details": {
           "accepted_prediction_tokens": 0,
           "audio_tokens": 0,
-          "reasoning_tokens": 392,
+          "reasoning_tokens": 236,
           "rejected_prediction_tokens": 0
         },
+        "cost_in_usd_ticks": 8793500,
         "num_sources_used": 0,
-        "prompt_tokens": 16,
+        "prompt_tokens": 139,
         "prompt_tokens_details": {
           "audio_tokens": 0,
-          "cached_tokens": 2,
+          "cached_tokens": 128,
           "image_tokens": 0,
-          "text_tokens": 16
+          "text_tokens": 139
         },
-        "total_tokens": 508
+        "total_tokens": 475
       }
     },
     "headers": {
@@ -79,7 +85,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "998547da0c50e27f-ORD"
+        "a039245ff9eabd1f-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -88,16 +94,17 @@
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:16:40 GMT"
+        "Fri, 29 May 2026 23:05:11 GMT"
       ],
       "server": [
         "cloudflare"
       ],
-      "set-cookie": [
-        "__cf_bm=TZuWRcpFjHeK6poKsikHbDf7Vrookc0fRInGoOpMWx0-1762103800-1.0.1.1-fGiE8ftqqdKozi2fhCYJLs9G3J348KlJ0GzjTZR3ESG3aP3RSu69dTMv6WV.NmqXI6bPZmT65qL51xxAWeCdKRbVWfDH52j2T9nMu4xjmi4; path=/; expires=Sun, 02-Nov-25 17:46:40 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
-      ],
+      "set-cookie": "[REDACTED:set-cookie]",
       "strict-transport-security": [
         "max-age=31536000"
+      ],
+      "traceparent": [
+        "00-cdde4179ef84519ddf405ce8ba6bbcdf-5402929b00051cbd-01"
       ],
       "transfer-encoding": [
         "chunked"
@@ -105,13 +112,35 @@
       "vary": [
         "origin, access-control-request-method, access-control-request-headers"
       ],
+      "x-metrics-e2e-ms": [
+        "3152.9"
+      ],
+      "x-metrics-mean-itl-ms": [
+        "8.6"
+      ],
+      "x-metrics-ttft-ms": [
+        "169.3"
+      ],
+      "x-ratelimit-limit-requests": [
+        "1800"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "10000000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "1780"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "10000000"
+      ],
       "x-request-id": [
-        "00-72ebd93be1661ed751fd23378eeb9323-af04883d006e49da-01"
+        "60b87d01-68bb-987a-9e5d-67ecdbaa590f"
       ],
       "x-zero-data-retention": [
         "false"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

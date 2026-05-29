@@ -1,17 +1,20 @@
 {
+  "model_spec": "xai:grok-4",
+  "provider": "xai",
   "request": {
     "body": {
-      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjY0MDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiVXNlIHRoZSBhZGQgdG9vbCB0byBjb21wdXRlIDIgKyAzLiBBZnRlciB0aGUgdG9vbCByZXN1bHQgYXJyaXZlcywgcmVzcG9uZCB3aXRoICdzdW09PHZhbHVlPicuIiwicm9sZSI6InVzZXIifSx7ImNvbnRlbnQiOltdLCJyb2xlIjoiYXNzaXN0YW50IiwidG9vbF9jYWxscyI6W3siZnVuY3Rpb24iOnsiYXJndW1lbnRzIjoie1wiYVwiOjIsXCJiXCI6M30iLCJuYW1lIjoiYWRkIn0sImlkIjoiY2FsbF81MTg2NTQ4MyIsInR5cGUiOiJmdW5jdGlvbiJ9XX0seyJjb250ZW50IjoiNSIsIm5hbWUiOiJhZGQiLCJyb2xlIjoidG9vbCIsInRvb2xfY2FsbF9pZCI6ImNhbGxfNTE4NjU0ODMifV0sIm1vZGVsIjoiZ3Jvay00Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjE1MCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJVc2UgdGhlIGFkZCB0b29sIHRvIGNvbXB1dGUgMiArIDMuIEFmdGVyIHRoZSB0b29sIHJlc3VsdCBhcnJpdmVzLCByZXNwb25kIHdpdGggJ3N1bT08dmFsdWU+Jy4iLCJyb2xlIjoidXNlciJ9LHsiY29udGVudCI6IiIsInJlYXNvbmluZ19jb250ZW50IjoiVGhlIHRhc2sgaXM6IFwiVXNlIHRoZSBhZGQgdG9vbCB0byBjb21wdXRlIDIgKyAzLiBBZnRlciB0aGUgdG9vbCByZXN1bHQgYXJyaXZlcywgcmVzcG9uZCB3aXRoICdzdW09PHZhbHVlPicuXCJcbiIsInJvbGUiOiJhc3Npc3RhbnQiLCJ0b29sX2NhbGxzIjpbeyJmdW5jdGlvbiI6eyJhcmd1bWVudHMiOiJ7XCJhXCI6MixcImJcIjozfSIsIm5hbWUiOiJhZGQifSwiaWQiOiJjYWxsLWY2MjAwNzExLTRkZGUtNGIzNy05Y2Q4LTA3MDM5YTY5ZGZhYi0wIiwidHlwZSI6ImZ1bmN0aW9uIn1dfSx7ImNvbnRlbnQiOiI1IiwibWV0YWRhdGEiOnsidG9vbF9vdXRwdXQiOjV9LCJuYW1lIjoiYWRkIiwicm9sZSI6InRvb2wiLCJ0b29sX2NhbGxfaWQiOiJjYWxsLWY2MjAwNzExLTRkZGUtNGIzNy05Y2Q4LTA3MDM5YTY5ZGZhYi0wIn1dLCJtb2RlbCI6Imdyb2stNCIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
     },
     "canonical_json": {
-      "max_completion_tokens": 6400,
+      "max_completion_tokens": 150,
       "messages": [
         {
           "content": "Use the add tool to compute 2 + 3. After the tool result arrives, respond with 'sum=<value>'.",
           "role": "user"
         },
         {
-          "content": [],
+          "content": "",
+          "reasoning_content": "The task is: \"Use the add tool to compute 2 + 3. After the tool result arrives, respond with 'sum=<value>'.\"\n",
           "role": "assistant",
           "tool_calls": [
             {
@@ -19,16 +22,19 @@
                 "arguments": "{\"a\":2,\"b\":3}",
                 "name": "add"
               },
-              "id": "call_51865483",
+              "id": "call-f6200711-4dde-4b37-9cd8-07039a69dfab-0",
               "type": "function"
             }
           ]
         },
         {
           "content": "5",
+          "metadata": {
+            "tool_output": 5
+          },
           "name": "add",
           "role": "tool",
-          "tool_call_id": "call_51865483"
+          "tool_call_id": "call-f6200711-4dde-4b37-9cd8-07039a69dfab-0"
         }
       ],
       "model": "grok-4",
@@ -37,6 +43,9 @@
       "temperature": 0.0
     },
     "headers": {
+      "accept": [
+        "application/json"
+      ],
       "accept-encoding": [
         "gzip"
       ],
@@ -45,7 +54,7 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ]
     },
     "method": "post",
@@ -59,33 +68,35 @@
           "index": 0,
           "message": {
             "content": "sum=5",
+            "reasoning_content": "The tool result is 5. Now, I need to respond with 'sum=<value>', which is 'sum=5'.",
             "refusal": null,
             "role": "assistant"
           }
         }
       ],
-      "created": 1762103856,
-      "id": "9ebe54cf-bb32-7e94-4c0b-38778dac77da_us-east-1",
-      "model": "grok-4-0709",
+      "created": 1780095834,
+      "id": "f8323154-f5c7-96d8-9e1d-c95c625e2668",
+      "model": "grok-4.3",
       "object": "chat.completion",
-      "system_fingerprint": "fp_794271b43e",
+      "system_fingerprint": "fp_eb3c003fc66c14ed",
       "usage": {
         "completion_tokens": 3,
         "completion_tokens_details": {
           "accepted_prediction_tokens": 0,
           "audio_tokens": 0,
-          "reasoning_tokens": 49,
+          "reasoning_tokens": 26,
           "rejected_prediction_tokens": 0
         },
+        "cost_in_usd_ticks": 3371500,
         "num_sources_used": 0,
-        "prompt_tokens": 1156,
+        "prompt_tokens": 373,
         "prompt_tokens_details": {
           "audio_tokens": 0,
-          "cached_tokens": 709,
+          "cached_tokens": 192,
           "image_tokens": 0,
-          "text_tokens": 1156
+          "text_tokens": 373
         },
-        "total_tokens": 1208
+        "total_tokens": 402
       }
     },
     "headers": {
@@ -99,7 +110,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "9985494c5efde7fa-ORD"
+        "a0392291fa880009-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -108,16 +119,17 @@
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:17:37 GMT"
+        "Fri, 29 May 2026 23:03:54 GMT"
       ],
       "server": [
         "cloudflare"
       ],
-      "set-cookie": [
-        "__cf_bm=HoUtoG2Pvrxf8w9UMfYsD_J4nxQoyjhV6D1aeEIPGqg-1762103857-1.0.1.1-rD4gxvg00O3kVQ.YGQn5GpKZU_FGqaOpdU9LiTVIkJpRY1xfeWspGgLtKlFiaS1qG5Qhf6u4ltqE8liold_QzEWjG9x3C.jpxqxZeFWbbvw; path=/; expires=Sun, 02-Nov-25 17:47:37 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
-      ],
+      "set-cookie": "[REDACTED:set-cookie]",
       "strict-transport-security": [
         "max-age=31536000"
+      ],
+      "traceparent": [
+        "00-4bcd990d4b51bb75dceafb039b925b23-1893450f00002773-01"
       ],
       "transfer-encoding": [
         "chunked"
@@ -125,13 +137,35 @@
       "vary": [
         "origin, access-control-request-method, access-control-request-headers"
       ],
+      "x-metrics-e2e-ms": [
+        "451.7"
+      ],
+      "x-metrics-mean-itl-ms": [
+        "5.8"
+      ],
+      "x-metrics-ttft-ms": [
+        "179.5"
+      ],
+      "x-ratelimit-limit-requests": [
+        "1800"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "10000000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "1800"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "10000000"
+      ],
       "x-request-id": [
-        "00-edc9294899c35d63f4a48a28fa54d52a-0bb38727006e1c8d-01"
+        "f8323154-f5c7-96d8-9e1d-c95c625e2668"
       ],
       "x-zero-data-retention": [
         "false"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

@@ -1,0 +1,115 @@
+{
+  "model_spec": "google:gemini-pro-latest",
+  "provider": "google",
+  "request": {
+    "body": {
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJSZXNwb25kIHdpdGggYSBzaW5nbGUgd29yZCAnSGknLiJ9XSwicm9sZSI6InVzZXIifV0sImdlbmVyYXRpb25Db25maWciOnsiY2FuZGlkYXRlQ291bnQiOjEsIm1heE91dHB1dFRva2VucyI6MTAyNCwidGVtcGVyYXR1cmUiOjAuMH19"
+    },
+    "canonical_json": {
+      "contents": [
+        {
+          "parts": [
+            {
+              "text": "Respond with a single word 'Hi'."
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "generationConfig": {
+        "candidateCount": 1,
+        "maxOutputTokens": 1024,
+        "temperature": 0.0
+      }
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro-latest:generateContent?key=[REDACTED]"
+  },
+  "response": {
+    "body": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "Hi",
+                "thoughtSignature": "EoMDCoADAQw51sf4szFm0xOBHgNx1asfzVBS8u4PhmjpxnE0gsD2wSmVWOV8yTJoh9+3g4RH23uIoEjUBp7k74AiFW4r9C/25x+7pXsuslJaz5w6q4DHxA4fmeRmQlyZtUplDipeu5absn1Bpb1eeGzd8B9Uizub4AuyfezjKOrnw6KD2WGCYhR1C8BptPmXhxR0e6O8Z04rNYTrdsB4zO56vmw83xovSUsoLVzlHCeOFyJcbmQ6ljjaof+t7n+f0YdFRvTXdsIaa5lPiJ0QAQxdRqVyvKPX/3l5d3Fk+w+S8COkmAebjCDL11n/fj60fmK8s+kmuhMSBLbzr3MfRaWXHTSlKIL6cFC3M89yjPZr0v1MR7aXntYu9+fHHjtMpqiA7vvHx6zddUXJ+WIFevpLDSeBsCiqxVYBloU/hShvrQEXybcFjLj9Ar508kHge26EocxFq5U9QycAr+N0sAWYIK4XEJ93r9E7a7zenot2DKp1Jag0kjs44dm6WGMbIjejCAse"
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "modelVersion": "gemini-3.1-pro-preview",
+      "responseId": "PREaarigA8u01MkPidWzUQ",
+      "usageMetadata": {
+        "candidatesTokenCount": 1,
+        "promptTokenCount": 9,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 9
+          }
+        ],
+        "serviceTier": "standard",
+        "thoughtsTokenCount": 86,
+        "totalTokenCount": 96
+      }
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "content-type": [
+        "application/json; charset=UTF-8"
+      ],
+      "date": [
+        "Fri, 29 May 2026 22:20:46 GMT"
+      ],
+      "server": [
+        "scaffolding on HTTPServer2"
+      ],
+      "server-timing": [
+        "gfet4t7; dur=1697"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-frame-options": [
+        "SAMEORIGIN"
+      ],
+      "x-gemini-service-tier": [
+        "standard"
+      ],
+      "x-xss-protection": [
+        "0"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

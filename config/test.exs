@@ -191,7 +191,7 @@ config :llm_db,
     ],
     xai: [
       name: "xAI",
-      base_url: "https://api.x.ai",
+      base_url: "https://api.x.ai/v1",
       env: ["XAI_API_KEY"],
       models: %{
         "grok-2" => %{

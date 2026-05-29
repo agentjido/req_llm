@@ -1,4 +1,6 @@
 {
+  "model_spec": "xai:grok-4-fast",
+  "provider": "xai",
   "request": {
     "body": {
       "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjEwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJXcml0ZSBhIHZlcnkgbG9uZyBzdG9yeSBhYm91dCBkcmFnb25zIGFuZCBhZHZlbnR1cmVzIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiZ3Jvay00LWZhc3QiLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC41fQ=="
@@ -16,6 +18,9 @@
       "temperature": 0.5
     },
     "headers": {
+      "accept": [
+        "application/json"
+      ],
       "accept-encoding": [
         "gzip"
       ],
@@ -24,7 +29,7 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ]
     },
     "method": "post",
@@ -37,34 +42,36 @@
           "finish_reason": "length",
           "index": 0,
           "message": {
-            "content": "# The Shadow of the Eternal Flame\n\nIn the ancient kingdom of Eldoria, where mist-shrouded mountains pierced the heavens and rivers of liquid silver wound through emerald valleys, lived a young blacksmith named Elara. She was no ordinary smith; her hands, calloused from years at the forge, crafted blades that sang with the wind and armor that gleamed like dragon scales. Elara's village, nestled at the foot of the Ironspine Peaks, had long whispered tales of the dragons—",
+            "content": "**The Dragon's Legacy: Chronicles of Eldoria**\n\nIn the shadowed valleys of Eldoria, where the Whispering Woods met the jagged peaks of Dragonspine Mountains, lived a young orphan named Elara. At seventeen, she toiled in the fields of her village, dreaming of legends whispered by elders—tales of dragons who once ruled the skies, guardians of ancient magic now hunted to near extinction by greedy kings and sorcerers. One stormy night, while foraging for herbs to ease her a",
+            "reasoning_content": "The user asked: \"Write a very long story about dragons and adventures.\"\nFirst, the user query is: \"Write a very long story about dragons and adventures.\" And there's a \"--\" which might be a separator, but in the prompt, it's presented as the query.\n\nI need to write a very long story. As Grok, I should be helpful and engaging.",
             "refusal": null,
             "role": "assistant"
           }
         }
       ],
-      "created": 1762103791,
-      "id": "f1de2749-732e-2084-6f03-520638ba6cef_us-east-1",
-      "model": "grok-4-fast-reasoning",
+      "created": 1780096042,
+      "id": "01d52039-4dd7-9c54-8838-5a89c69d0d9e",
+      "model": "grok-4.3",
       "object": "chat.completion",
-      "system_fingerprint": "fp_bfbe7bd0a2",
+      "system_fingerprint": "fp_eb3c003fc66c14ed",
       "usage": {
         "completion_tokens": 100,
         "completion_tokens_details": {
           "accepted_prediction_tokens": 0,
           "audio_tokens": 0,
-          "reasoning_tokens": 168,
+          "reasoning_tokens": 480,
           "rejected_prediction_tokens": 0
         },
+        "cost_in_usd_ticks": 14893500,
         "num_sources_used": 0,
-        "prompt_tokens": 165,
+        "prompt_tokens": 139,
         "prompt_tokens_details": {
           "audio_tokens": 0,
-          "cached_tokens": 151,
+          "cached_tokens": 128,
           "image_tokens": 0,
-          "text_tokens": 165
+          "text_tokens": 139
         },
-        "total_tokens": 433
+        "total_tokens": 719
       }
     },
     "headers": {
@@ -78,7 +85,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "998547ba8962f606-ORD"
+        "a03927a6ed89e1b4-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -87,16 +94,17 @@
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:16:33 GMT"
+        "Fri, 29 May 2026 23:07:27 GMT"
       ],
       "server": [
         "cloudflare"
       ],
-      "set-cookie": [
-        "__cf_bm=6maY.urvqZeoRs4qhQxtDQ53oFADX.uawGNi88GyMgE-1762103793-1.0.1.1-8g.hXvLYc2pJUKtWZ4Ojsmb6cqj1E9feVdpuY_NJ0pF7pb3mAY.I.TyFTMdli8yHbWEZNSArjAxRKTVH8XtXaraoTJQ22VNETThVywDesc4; path=/; expires=Sun, 02-Nov-25 17:46:33 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
-      ],
+      "set-cookie": "[REDACTED:set-cookie]",
       "strict-transport-security": [
         "max-age=31536000"
+      ],
+      "traceparent": [
+        "00-42864f1bdc73bd65313f54c930e916ec-f342b8300003ceb7-01"
       ],
       "transfer-encoding": [
         "chunked"
@@ -104,13 +112,35 @@
       "vary": [
         "origin, access-control-request-method, access-control-request-headers"
       ],
+      "x-metrics-e2e-ms": [
+        "5044.2"
+      ],
+      "x-metrics-mean-itl-ms": [
+        "8.0"
+      ],
+      "x-metrics-ttft-ms": [
+        "299.8"
+      ],
+      "x-ratelimit-limit-requests": [
+        "1800"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "10000000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "1800"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "9999609"
+      ],
       "x-request-id": [
-        "00-1f403db4b101dbf44453f7d054549bc2-ac6182d7006e1618-01"
+        "01d52039-4dd7-9c54-8838-5a89c69d0d9e"
       ],
       "x-zero-data-retention": [
         "false"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

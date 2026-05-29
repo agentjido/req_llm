@@ -1,0 +1,149 @@
+{
+  "model_spec": "google:gemini-3.1-pro-preview",
+  "provider": "google",
+  "request": {
+    "body": {
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJVc2UgdGhlIGFkZCB0b29sIHRvIGNvbXB1dGUgMiArIDMuIEFmdGVyIHRoZSB0b29sIHJlc3VsdCBhcnJpdmVzLCByZXNwb25kIHdpdGggJ3N1bT08dmFsdWU+Jy4ifV0sInJvbGUiOiJ1c2VyIn0seyJwYXJ0cyI6W3sidGV4dCI6IiJ9LHsiZnVuY3Rpb25DYWxsIjp7ImFyZ3MiOnsiYSI6MiwiYiI6M30sIm5hbWUiOiJhZGQifSwidGhvdWdodFNpZ25hdHVyZSI6ImMydHBjRjkwYUc5MVoyaDBYM05wWjI1aGRIVnlaVjkyWVd4cFpHRjBiM0k9In1dLCJyb2xlIjoibW9kZWwifSx7InBhcnRzIjpbeyJ0ZXh0IjoiNSJ9LHsiZnVuY3Rpb25SZXNwb25zZSI6eyJuYW1lIjoiYWRkIiwicmVzcG9uc2UiOnsiY29udGVudCI6IjUifX19XSwicm9sZSI6InVzZXIifV0sImdlbmVyYXRpb25Db25maWciOnsiY2FuZGlkYXRlQ291bnQiOjEsIm1heE91dHB1dFRva2VucyI6NjU1MywidGVtcGVyYXR1cmUiOjAuMH19"
+    },
+    "canonical_json": {
+      "contents": [
+        {
+          "parts": [
+            {
+              "text": "Use the add tool to compute 2 + 3. After the tool result arrives, respond with 'sum=<value>'."
+            }
+          ],
+          "role": "user"
+        },
+        {
+          "parts": [
+            {
+              "text": ""
+            },
+            {
+              "functionCall": {
+                "args": {
+                  "a": 2,
+                  "b": 3
+                },
+                "name": "add"
+              },
+              "thoughtSignature": "c2tpcF90aG91Z2h0X3NpZ25hdHVyZV92YWxpZGF0b3I="
+            }
+          ],
+          "role": "model"
+        },
+        {
+          "parts": [
+            {
+              "text": "5"
+            },
+            {
+              "functionResponse": {
+                "name": "add",
+                "response": {
+                  "content": "5"
+                }
+              }
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "generationConfig": {
+        "candidateCount": 1,
+        "maxOutputTokens": 6553,
+        "temperature": 0.0
+      }
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-pro-preview:generateContent?key=[REDACTED]"
+  },
+  "response": {
+    "body": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "sum=5",
+                "thoughtSignature": "EvsDCvgDAQw51sfCT/eolTzUBbeIs0HhE7cUCWnENYLm5BtDRSknXmJLt3PeP7Jg6BCNhWJqNtIjyBNiGL2GJuY+lveDzx1w2jCcRNdGu15zYqz091/bQcLHMGEeoPK6e3VyF12KrLFiq2ineL6xLaci55EcpQdRu/Ll/za35g0gGcWZ+/cy5lK/g0gE0TWGV4rlhc4g97jxOzQtoI7+USVIDO+tzuXpUHVIiAwN7DAvE1ShPZI2wiw3i2tx7DjJuA7ARLAR34psh7SltWxyQx+1HHcNo7pk3T8W2XXLFGR4Im0Rhyh5RbIKGtYQy3e5rWS24ou9CNQHYgynainIlzwn3kTzue1H3BpYtiZfg/0A3rEcaNfwB4qG0Q3O6+zNiDyECVddJeomGJa19CkowzqDFfaMk1rbRkYkAMqgZlYih1Berz7KhtF5x+0fPMSRZ7A0zt82hHJZoMn2Lj9yKbrDFc4RheWtw9Ngq5mj2VjfVahzd6atjJvPxAbmx6VgM51bkLblMdrpubfn+Dbjw75pZPbBIaSyOmZG2Y0ItRCWNd4jvyujOG4aTPqC1ARH4oXbzHsuBUwHTHjIErhU8gIc4nytWtW811U1yqTS0jir7c7GqYfheIzU77S+oPNXxm8oItoAcpgjJelcwJGIM2bZRm3/z+33lvKQsL/U"
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "modelVersion": "gemini-3.1-pro-preview",
+      "responseId": "1hEaasDHNNGW9MoP9rDN4AI",
+      "usageMetadata": {
+        "candidatesTokenCount": 3,
+        "promptTokenCount": 56,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 56
+          }
+        ],
+        "serviceTier": "standard",
+        "thoughtsTokenCount": 129,
+        "totalTokenCount": 188
+      }
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "content-type": [
+        "application/json; charset=UTF-8"
+      ],
+      "date": [
+        "Fri, 29 May 2026 22:23:21 GMT"
+      ],
+      "server": [
+        "scaffolding on HTTPServer2"
+      ],
+      "server-timing": [
+        "gfet4t7; dur=2235"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-frame-options": [
+        "SAMEORIGIN"
+      ],
+      "x-gemini-service-tier": [
+        "standard"
+      ],
+      "x-xss-protection": [
+        "0"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

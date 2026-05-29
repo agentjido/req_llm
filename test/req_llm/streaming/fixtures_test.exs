@@ -95,6 +95,13 @@ defmodule ReqLLM.Streaming.FixturesTest do
 
       assert Fixtures.canonical_json_from_finch_request(
                Finch.build(:post, "https://api.example.com")
+               |> Map.put(:body, ["{\"", "message", "\":\"", "hello", "\"}"])
+             ) == %{
+               "message" => "hello"
+             }
+
+      assert Fixtures.canonical_json_from_finch_request(
+               Finch.build(:post, "https://api.example.com")
                |> Map.put(:body, {:stream, Stream.iterate(0, &(&1 + 1))})
              ) == %{streaming_body: true}
 

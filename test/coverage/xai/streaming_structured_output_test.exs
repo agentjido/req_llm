@@ -30,7 +30,7 @@ defmodule ReqLLM.Coverage.XAI.StreamingStructuredOutputTest do
     :ok
   end
 
-  describe "streaming with json_schema mode (grok-4)" do
+  describe "streaming with json_schema mode (grok-4.3)" do
     @tag scenario: :object_streaming_json_schema
 
     test "streams object with native response_format json_schema" do
@@ -43,7 +43,7 @@ defmodule ReqLLM.Coverage.XAI.StreamingStructuredOutputTest do
 
       {:ok, stream_response} =
         ReqLLM.stream_object(
-          "xai:grok-4",
+          "xai:grok-4.3",
           "Generate a software engineer profile",
           @schema,
           opts
@@ -68,7 +68,7 @@ defmodule ReqLLM.Coverage.XAI.StreamingStructuredOutputTest do
     end
   end
 
-  describe "streaming with tool_strict mode (grok-2 legacy)" do
+  describe "streaming with tool_strict mode" do
     @tag scenario: :object_streaming_tool_strict
 
     test "streams object with strict tool calling fallback" do
@@ -82,7 +82,7 @@ defmodule ReqLLM.Coverage.XAI.StreamingStructuredOutputTest do
 
       {:ok, stream_response} =
         ReqLLM.stream_object(
-          "xai:grok-2",
+          "xai:grok-4.20-0309-non-reasoning",
           "Generate a software engineer profile",
           @schema,
           opts
@@ -107,14 +107,14 @@ defmodule ReqLLM.Coverage.XAI.StreamingStructuredOutputTest do
 
       tool_calls = ReqLLM.Response.tool_calls(response)
       assert is_list(tool_calls)
-      assert Enum.any?(tool_calls, fn tc -> tc.name == "structured_output" end)
+      assert Enum.any?(tool_calls, fn tc -> ReqLLM.ToolCall.name(tc) == "structured_output" end)
     end
   end
 
   describe "streaming with auto mode selection" do
     @tag scenario: :object_streaming_auto
 
-    test "auto-selects json_schema for grok-2-1212+" do
+    test "auto-selects json_schema for current Grok models" do
       opts =
         fixture_opts(
           "object_streaming_auto",
@@ -124,7 +124,7 @@ defmodule ReqLLM.Coverage.XAI.StreamingStructuredOutputTest do
 
       {:ok, stream_response} =
         ReqLLM.stream_object(
-          "xai:grok-2-1212",
+          "xai:grok-4.3",
           "Generate a software engineer profile",
           @schema,
           opts
@@ -152,7 +152,7 @@ defmodule ReqLLM.Coverage.XAI.StreamingStructuredOutputTest do
 
       result =
         ReqLLM.stream_object(
-          "xai:grok-4",
+          "xai:grok-4.3",
           "Generate a very detailed software engineer profile with extensive background",
           @schema,
           opts

@@ -1,4 +1,6 @@
 {
+  "model_spec": "xai:grok-4",
+  "provider": "xai",
   "request": {
     "body": {
       "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjUwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJHZW5lcmF0ZSBhIHNvZnR3YXJlIGVuZ2luZWVyIHByb2ZpbGUiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJncm9rLTQiLCJwYXJhbGxlbF90b29sX2NhbGxzIjpmYWxzZSwicmVzcG9uc2VfZm9ybWF0Ijp7Impzb25fc2NoZW1hIjp7Im5hbWUiOiJvdXRwdXRfc2NoZW1hIiwic2NoZW1hIjp7ImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjpmYWxzZSwicHJvcGVydGllcyI6eyJhZ2UiOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBhZ2UgaW4geWVhcnMiLCJtaW5pbXVtIjoxLCJ0eXBlIjoiaW50ZWdlciJ9LCJuYW1lIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3MgZnVsbCBuYW1lIiwidHlwZSI6InN0cmluZyJ9LCJvY2N1cGF0aW9uIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3Mgam9iIG9yIHByb2Zlc3Npb24iLCJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJuYW1lIiwiYWdlIl0sInR5cGUiOiJvYmplY3QifSwic3RyaWN0Ijp0cnVlfSwidHlwZSI6Impzb25fc2NoZW1hIn0sInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
@@ -48,6 +50,9 @@
       "temperature": 0.0
     },
     "headers": {
+      "accept": [
+        "application/json"
+      ],
       "accept-encoding": [
         "gzip"
       ],
@@ -56,7 +61,7 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ]
     },
     "method": "post",
@@ -69,34 +74,36 @@
           "finish_reason": "stop",
           "index": 0,
           "message": {
-            "content": " {\"age\":28,\"name\":\"Alex Rivera\",\"occupation\":\"Software Engineer\"}",
+            "content": "{\n  \"name\": \"Alex Rivera\",\n  \"age\": 28,\n  \"occupation\": \"Software Engineer\"\n}",
+            "reasoning_content": "The task is: \"Generate a software engineer profile\"\n",
             "refusal": null,
             "role": "assistant"
           }
         }
       ],
-      "created": 1762103834,
-      "id": "618e318d-041d-ab7f-978e-91ca884e67e5_us-east-1",
-      "model": "grok-4-0709",
+      "created": 1780095845,
+      "id": "9d60a7c5-c1d5-9381-93c1-08a950dcfeb5",
+      "model": "grok-4.3",
       "object": "chat.completion",
-      "system_fingerprint": "fp_794271b43e",
+      "system_fingerprint": "fp_eb3c003fc66c14ed",
       "usage": {
-        "completion_tokens": 15,
+        "completion_tokens": 25,
         "completion_tokens_details": {
           "accepted_prediction_tokens": 0,
           "audio_tokens": 0,
-          "reasoning_tokens": 343,
+          "reasoning_tokens": 307,
           "rejected_prediction_tokens": 0
         },
+        "cost_in_usd_ticks": 9021500,
         "num_sources_used": 0,
-        "prompt_tokens": 786,
+        "prompt_tokens": 219,
         "prompt_tokens_details": {
           "audio_tokens": 0,
-          "cached_tokens": 785,
+          "cached_tokens": 192,
           "image_tokens": 0,
-          "text_tokens": 786
+          "text_tokens": 219
         },
-        "total_tokens": 1144
+        "total_tokens": 551
       }
     },
     "headers": {
@@ -110,7 +117,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "998548c43995e7fa-ORD"
+        "a03922d83de1eb07-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -119,16 +126,17 @@
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:17:24 GMT"
+        "Fri, 29 May 2026 23:04:07 GMT"
       ],
       "server": [
         "cloudflare"
       ],
-      "set-cookie": [
-        "__cf_bm=4WAfK1UIe0RQzX5hCMvICn7LTiEcdBMYoYAcbX6pr4k-1762103844-1.0.1.1-kYzguqrJZLK03sindQoYY.KU02mgRKqgRIkfj0JhxRfFVD8H1TH2ml15tmFxOMjpmQgXldel2TQtnBm5gV6jEi.bnu8pKqIZCbo6T0tf6Y8; path=/; expires=Sun, 02-Nov-25 17:47:24 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
-      ],
+      "set-cookie": "[REDACTED:set-cookie]",
       "strict-transport-security": [
         "max-age=31536000"
+      ],
+      "traceparent": [
+        "00-3c2ef3ca264635d3eb1533385d3a1758-83ac8a4c0001f44d-01"
       ],
       "transfer-encoding": [
         "chunked"
@@ -136,13 +144,35 @@
       "vary": [
         "origin, access-control-request-method, access-control-request-headers"
       ],
+      "x-metrics-e2e-ms": [
+        "2165.5"
+      ],
+      "x-metrics-mean-itl-ms": [
+        "5.7"
+      ],
+      "x-metrics-ttft-ms": [
+        "152.2"
+      ],
+      "x-ratelimit-limit-requests": [
+        "1800"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "10000000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "1796"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "9998248"
+      ],
       "x-request-id": [
-        "00-3827be1f14e27d73adc6e587d00eaf6f-13a0c53c006e386c-01"
+        "9d60a7c5-c1d5-9381-93c1-08a950dcfeb5"
       ],
       "x-zero-data-retention": [
         "false"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

@@ -1,0 +1,123 @@
+{
+  "model_spec": "google:gemini-3.1-pro-preview-customtools",
+  "provider": "google",
+  "request": {
+    "body": {
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJXcml0ZSBhIHZlcnkgbG9uZyBzdG9yeSBhYm91dCBkcmFnb25zIGFuZCBhZHZlbnR1cmVzIn1dLCJyb2xlIjoidXNlciJ9XSwiZ2VuZXJhdGlvbkNvbmZpZyI6eyJjYW5kaWRhdGVDb3VudCI6MSwibWF4T3V0cHV0VG9rZW5zIjozMDAwLCJ0ZW1wZXJhdHVyZSI6MC41LCJ0aGlua2luZ0NvbmZpZyI6eyJpbmNsdWRlVGhvdWdodHMiOnRydWUsInRoaW5raW5nTGV2ZWwiOiJsb3cifX19"
+    },
+    "canonical_json": {
+      "contents": [
+        {
+          "parts": [
+            {
+              "text": "Write a very long story about dragons and adventures"
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "generationConfig": {
+        "candidateCount": 1,
+        "maxOutputTokens": 3000,
+        "temperature": 0.5,
+        "thinkingConfig": {
+          "includeThoughts": true,
+          "thinkingLevel": "low"
+        }
+      }
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-pro-preview-customtools:generateContent?key=[REDACTED]"
+  },
+  "response": {
+    "body": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "**Outlining the Narrative**\n\nI am now focusing on sketching out the story's main components. I am progressing towards developing the plot in segments and integrating descriptive elements to enrich the narrative. The plan is to ensure the unfolding story maintains a steady pace, builds character bonds, and delivers a very long story.\n\n\n",
+                "thought": true
+              },
+              {
+                "text": "The world of Aethelgard was old, and its history was written not in ink, but in the bones of giants and the scorched stones of ancient mountains. For three hundred years, the skies had been empty. The dragons, once the proud guardians of the realm, had faded into myth, hunted to the brink of extinction by the Iron Empire and its relentless thirst for magic. \n\nKaelen was a man of ink and parchment. As a junior cartographer in the grand library of Oakhaven, his life was measured in the scratching of quills and the smell of decaying vellum. He was not a warrior. He was not a hero. But he was curious, and in Aethelgard, curiosity was often the first step toward a very short life.\n\nIt began on a rainy Tuesday when Kaelen discovered a hidden compartment in the binding of a crumbling atlas. Inside was a map, drawn on material that felt like fine leather but shimmered like a pearl. It depicted a mountain range that didn't exist on any modern chart—the Jagged Crown—and at its center, a valley marked with a single, glowing rune: *The Cradle of Scales.*\n\nLegend spoke of the Cradle as the birthplace of the first dragons, a sanctuary of primordial magic. Kaelen knew he should turn the map over to the Empire. Instead, he packed a rucksack with dried meat, a sturdy cloak, his cartography tools, and a short sword he barely knew how to swing. He left Oakhaven under the cover of darkness.\n\n### Part I: The Ember in the Ash\n\nThe journey to the northern reaches took two grueling months. Kaelen traded his soft hands for calluses, learning to navigate the treacherous Whispering Woods and the desolate Ash Plains. When he finally saw the Jagged Crown looming on the horizon, its peaks piercing the clouds like obsidian daggers, he was nearly out of provisions.\n\nHe began the ascent. The air grew thin and bitter cold, but strangely, the rocks beneath his boots felt warm. On the third day of climbing, a sudden blizzard forced him to seek shelter in a massive cavern. \n\nHe lit a small fire, shivering. As the flames flickered, the shadows on the cavern wall seemed to move. Kaelen drew his sword, his heart hammering against his ribs.\n\n\"Put that toothpick away, little scribe. You'll only hurt yourself.\"\n\nThe voice didn't come from the air; it resonated directly inside his skull, deep and rumbling like tectonic plates grinding together. \n\nFrom the darkness at the back of the cave, two eyes opened. They were the size of carriage wheels, burning with an inner, molten gold light. A massive head, covered in crimson scales the color of dried blood, shifted into the firelight. It was a dragon. \n\nThe beast was magnificent, but broken. A massive iron harpoon, rusted but cruel, pinned its left wing to the cavern floor. \n\n\"You... you're real,\" Kaelen breathed, dropping his sword.\n\n\"I am Ignis,\" the dragon rumbled, a puff of sulfurous smoke escaping his nostrils. \"The last of the Sun-Forged line. And you are a fool to have come here.\"\n\nKaelen didn't run. Instead, he approached the harpoon. \"I can help you.\"\n\nIt took Kaelen three days of chipping at the stone and filing the rusted iron with his meager tools to free the beast. When the harpoon finally gave way, Ignis let out a roar that shook the dust from the cavern ceiling. The dragon flexed his wing; it was scarred and stiff, but unbroken.\n\n\"Why did you free me, human?\" Ignis asked, lowering his massive head until his snout was inches from Kaelen.\n\n\"I'm looking for the Cradle of Scales,\" Kaelen said, pulling out the shimmering map. \"I think you belong there.\"\n\nIgnis looked at the map, his golden eyes widening slightly. \"The Cradle... I thought it lost to time. If we can reach it, the magic there could heal my wing. But the path is guarded, Kaelen of Oakhaven. And the Iron Empire's hunters are never far behind.\"\n\n\"Then we'd better get moving,\" Kaelen said.\n\n### Part II: The Ranger and the Hounds\n\nBecause Ignis could not fly long distances, they were forced to travel by land, sticking to the deep canyons and ancient forests to hide the dragon's massive bulk. \n\nA week into their journey, they were ambushed. \n\nIron Hounds—the Empire's elite dragon hunters—descended upon them in the dense canopy of the Elderwood. They fired crossbows loaded with cold-iron bolts, designed to pierce dragon scale. Ignis fought fiercely, his breath a torrent of liquid fire that turned the trees to ash, but there were too many. Kaelen swung his sword wildly, managing to parry a blow, but was quickly knocked to the ground by a hulking hunter.\n\nBefore the hunter could deliver the killing blow, an arrow sprouted from his neck. \n\nA figure dropped from the trees—a woman clad in mottled green and brown leather, wielding twin curved blades. She moved like water, lethal and fluid, cutting down three hunters before they could even draw their swords. Seeing the tide turn, the remaining Hounds fled.\n\nThe woman wiped her blades and turned to Kaelen. \"You have terrible form, cartographer.\"\n\n\"I'm Lyra,\" she introduced herself later by the campfire. \"I track the Iron Hounds. They destroyed my village a decade ago. When I saw them tracking a dragon, I figured the enemy of my enemy is my friend.\"\n\nLyra joined their company. She was a master of the wilds, finding paths Kaelen would have missed and masking Ignis's tracks from the pursuing Empire. Around the fire, the three formed an unlikely bond. Kaelen shared tales of ancient history, Lyra taught Kaelen how to hold a sword properly, and Ignis spoke of the days when dragons and humans shared the sky, bound by mutual respect rather than fear.\n\n### Part III: The Sunken City\n\nTo reach the Jagged Crown's inner valley, the map indicated they had to pass through Aethel, a ruined elven city that had sunk beneath a massive freshwater lake centuries ago. \n\nWhen they arrived at the shores of the Lake of Tears, the water was crystal clear, revealing the drowned spires and domes of the ancient city below. \n\n\"The entrance to the mountain pass is at the center of the city,\" Kaelen said, tracing a finger over his map. \"But how do we get down there?\"\n\nIgnis stepped to the water's edge. \"Dragons of the Sun-Forged line do not just breathe fire, little scribe. We command the heat of the earth.\"\n\nIgnis waded into the lake. His scales began to glow with a blinding, white-hot intensity. The water around him boiled, hissing and churning. Slowly, a massive column of steam rose into the air, and the water level began to drop, pushed back by the sheer, radiating heat of the dragon's magic. He was creating a temporary, dry path through the center of the lake.\n\n\"Move quickly,\" Ignis grunted, his voice strained. \"I cannot hold this forever.\"\n\nKaelen and Lyra sprinted down the muddy, exposed lakebed, darting between coral-encrusted statues and ruined archways. They reached the central temple, finding a massive stone door sealed with a puzzle of rotating rings. \n\nUsing his knowledge of ancient languages, Kaelen deciphered the runes, aligning them to represent the phases of the moon. The doors ground open just as Ignis's strength gave out. The water crashed back down, but the dragon lunged through the doorway at the last second, sealing the heavy stone doors behind them.\n\nThey were in the dark, dripping tunnels beneath the mountain, but they were alive.\n\n### Part IV: The Siege of the Cradle\n\nThey navigated the subterranean labyrinth for days, emerging finally into a hidden valley. The Cradle of Scales was breathtaking. It was a massive caldera, lush with strange, glowing flora and dotted with crystal clear hot springs. At the center stood a colossal archway made of pure, uncut diamond.\n\nBut they were not alone. \n\nLord Malakor, the commander of the Iron Hounds, had found another way in. A fleet of three Imperial airships hovered over the valley, dropping ropes. Hundreds of heavily armored soldiers were repelling down. Malakor himself stood on the deck of the flagship, wielding a halberd crackling with dark, stolen magic.\n\n\"Take the beast!\" Malakor's voice echoed through a magical amplifier. \"Harvest its heart!\"\n\n\"Lyra, get Kaelen to the archway!\" Ignis roared. \"The magic of the Cradle",
+                "thoughtSignature": "EpsjCpgjAQw51sdjo167Fj5aGb99RDQXqwtbnyYB6UCWWu1j9vTri6fci3wZcF+oRowVvwy5u/bJV5nWdDt2UbqisXRTCbs2+Cef7u6zjo5j5A4+zJKFMXyx0y+B01KDKfzVuTLRmOzDITv0AI36WMEMof66RnrH+l2HGqbrqLRLLYgIh+zrbwBAdRAJoyHldnz6zh8F6HHNlscNII6sYldD8MSCY3b5Hpei6VsUt9hCuQMztg6veUAel5zRcjU2cgF3S8MpUs4loY3dQK1I+qx5grAczvq/CgRBOLSAqzPoGaZLDOXD2R6p/FsJWjyh5xqBekJ6W/fA4H/nrnOGVSHdoWuw0LVJe0XKfIIgkSXa1ZFEbv5aM98/P8sAFfKkAl+IjdxfAuhLHdAvcACe8YeAIavKHCegaEIHT+9ExaZpdxqC8krAtsBu6weRFqxqwCqGSdqW6Su0/Tdvpt03ZrQduciVtBcsAFYLRVoT/cefR9zRTz/U85Zrm1vNKkSibpwIi/QovOWNGDLytjvFMIEu9rVN9vz0mpR/lZe2pLtPtH4QgxakIiNDV8UGX9F9jBzmUSdC1UxYo0VWg2JIdqezbqgc8enDszCrOOvNBYw3PKifwz3go9Mbk3e9k6jM3vH50fyO5zmx5Oa0b7h5yBhwE/sMtVBhuXpglbkNRoCMD3tXXURbo81Oawa6TjzBmUZT3U66QS4xxlGQMPphmwLg0310Lp7hQZs2y+hUHpOhsw/qhB0+e/MpRZKqMaKTUhnXVmb9I0X5JpvGC6sKN4Y6k4rrP/UrBiiwf1Zh6hVpregbxqNVzXU/ZKbV3h2GyBLshw4JIw2h8LEioD1oJX7CEyDJdFmK3DAIXY91xPn1IjNRnLwJSvayGC8gCG2YmiKIrNYSLh6DNYe6XghEkeLYEGBU4en0UL0wwQyybKD9PZM0qCwmTT+LJrXQD9LQbimnIZ4wagil6GXZMXKN9OFP8dviuwgi8ljawby0LRFcpne5OrySw8iUuoECXf/AbPkMQMUFSHwB8uQXU7q5Gap2Wa0D1Ueg3WY1qQKcDnb1X901YVpcKZ9SoTHJfMnLUZuiGYFLX8mNsZ6CCHfxisa6vtNhMB22r9KzZ3glICMphdw/pic4IfgHvGP+ObkNhb9Yh101M0apfOib6wh48qulf3adl7udY71OkrjWQbV7R7TdL8FbIGTFJezLkOn0LJymGoD5o4VczMnjHJl+NODMxw3CL+7XJoXBgILG89HVNKEUkbomFBd7dANLUfWhwFbL56QRKh4ylnN6P19weXPlmujTH+a5R0p9NOR2YH5ZR/vmUoIE0O3NnF2RsJGGgU7A4S7UVuYwwxF+fg13VNGYOFEcV4JtJ+Xjp+pVnsMz0Ks3hOC6lGaQYcfMTlvhS2YO3vGhwhOgHRNiAYhhctYMOYfEkljTqgazC/M+C0YicVxCcyqiPDknodcvGuXbdOEcdnFsWYIDcM4xzSIcE8xfTuMUdZa9p9xhrlWsoA0zzbRnqk/h94yJdcgfW7tYYIrIxWyBLLC65dvgiGVm7LGeht+kAyxYwT0BuVpu2mm8aDJy4gXu9XK6hjMOT1n7OrYpDxkBSpc2MCgAOl5MW0qNbfNuDyGF/QjwKHZW//wndLQEHwoswrut3g67299Rpx2v4v5vuutb2UMt7xLUGyOJcxt0vtDNBWypacN5DMqhbeuum0FkUbBTXp4m4nFOV3LRhVZ04QcgSUviSRmaHljvOWoWnckm1iv3vLeFs+iFTHqoekt83zHsY7wOJnkJ89Y0y0q5KEqm5I0TJRTcMSSsS5BaZ0wchOz/HXeauzamAFybNCkSev2szr9/TEl0OaWKJfQdc9IAOU0rXNpteZsFg05leSVnh3QP1d8S8qEaKQFbWmoV5Ri709wUNZVITRUcc8CCsEa3MNRMko/o9NCI1zir87fmTqQfQNctFHk+2HvjsRR199BGSr1RqtNi7Rq5t6pRMeHARQUhwToYxnbuW1hKCMsBtom9LnBHwoMxjetoW1HaXiltAi5iQEzoMdxxIWRaZVI57VQ4sCpKpGrBSp+h/cQHwTr1zHz3zRIUdViC4WCCINnsRU7SIQAJivhdVVU9hQo4MsO4HWWMAMLfA47eBM+pF5WtiNHynUgn+Yy41awZxCCwWgyMBXzcTc4DluMvbdBIZHWPtdPz4rltFaZS2XV8T1dXY62oCqTsWv6G71tsDXRSy0SrpEMCtPo8Fu2PBrp5xRK8kDw+gi3ngDY+4MQCdB8BDrR50WIgCySlaUF4crx3dDCZ/q17NBNmZRoowWOFyOIW4eDY4RqUJk06Ozhja6R4rE46O/VT6IajMTr/QwWnkgYTyRxQwhkIkXCv2FpRxnC4MwGd+BGJ6OVlaUMevOGWy8KwPRuHitPi/dsnDjZ7/B8skZlDPvE34CYQaMaKU5k7yyLn/Sn80GBMCJ4rg9YBX7CU9wbnOCFaMxpQifG40K7uKRebVKctDcGtH2GJr171MYs8XLDZDA/6/uBx39CTNsRd34paP3fllFwYF6ZO7cn6G70GuJQhLIJRcTdMTBMmsINSiHYVqXcPWkMehuaPmMKYNafgT3Jr3E+GJFWS568SsQGPmjOvlwUpk8LXtWDHvh3PN0DjakNsW08o4iXBgYkehLvcfv0bPfBnJLtjMkDPjdPD0JdxaaOuIKSBWjNlAHOMgY6FOCoh9rpes+CNKn57kW3o5VBFCwE9NsdBqXMnKGIzm96vMeLP5cxubq21dR/jnvfdu0Xpj0DeDzCvGJtlhLybBKzXUVW0rZBAjqSHN1FxMAYnqQ/BSC4qmZ7QEVuWULlpFnYEpCRMpUQAH40EV4uQLnmVk5KtV6UubYFfJGbLEeH7f8FJ5PP4B1I0mEgHT3v+J4nt9PHMLF5DEbEWGKU+3S4uymPZK65kGZHICstUldCww4AUE2zJ0+660NsRkhi78cqSX9ojFjzCMrXlVlsjnbtGPxDbNMODvBHqhufTfBYhJgZS8qUYPAHUh+f/FvMefC7RjVWhOSvLznTTJaGVpPIxqIVM7/bg3nSUnAKlIrCe/bO6rLclNME0lMaIaGng63PceSYwOOgYJSyD6HZO+YPfD5YJ6msUHtitgT6q3m2HrqDVw9+Pnf7yJK+I3BoKBAKzv4BdaSnSyKUVcHCSQ2kcUiIwZyDKE365JSGRSjdXj9vMcyA2g8kslfMPTuGobeaCllxH3utpT8edBsva908T+kRYbwrBFK1BgCewMq9GU9ZdB6QJ54LYadg1ssXxSMLKmHSJGxV4Lae0nkpSThFlPaRXZhEWRA/eLl19rb4IzqlGrCAoPBMbwu+vZcvuTc0AEq7BkcP6HJrj2VV5bc3OVg9CV+xX8FMuwhdeibjGmFQKv8xjXSuN2Ix7UmeYjlSdwZk9+Ld8x4MFrvAYymN0iVP5GYyMlrWgmY0m0e3JQ/8gj8XixT44l4/zbbewsLUHsBnNmiJnkTlP43U+HJYqdU4SpcVAPPXgj2Ts1JhzzmuJ2eLulqjZpy5DylBnNiC3IDQmJAGLvotJRErhW1w9fCelYgsEDP5k999yqySvd3ZWHhVqIRe0iTQmB4QE4QNxi8+B6Vu4dlKV3Xm4WEvAKuLaHiM/MPgSOx4IBylUuPiw+x+0mltWaSI09vKC2UrY7DcP7H+vlkO71+yE3ucGiR9CitEPaPGKiv3IH1rdENfuYWPC2q/kWnURusrsnZxmJ8P9wlLn92uo1lUbL7RkzgpZkr1uGFw6+FvKlEMXzG8e73ZybXXoAVu+xclVD4OCTbans08xrhipnhpe6ez9XrT2hUKUfTihLOS38ClCJANx0Xeq+prF5kerYijKyo5oznJmCB5fkV1WF/i6Sf9/Ihrj22Wc+RWuV6Joj8AePoi7JU/n3YexUdLG+AxMhjv5d9FzFJrCBSrlFEBMdu3/E44Lo3i6EbJFzxntVB5liSxHE2Huw2JahiedkTSD8qpADALFaQsECUc7dGnIEDyBAxL3jsoNas4+Z1WSs79gKAIINlHuvBues3us6SJ4+WRe6b4Hb3MwbyrLgs94zianK/SDvixfuDKok9xEsQ6zgRjNaqYjni3PgXQAs2GRKmVzpgAd14c5NKQjGQP0JuAdjNJgRfLk8aW7XKwj9IcR1/SxlJNBYLicyZOD0vewxLhkeq8VISc/Jua1JQaOWm9ZtRWNAdpONI3Wr9m5J2Rw4q8fyD+TL/YVWqrXYCVGJpW1rd60CiKOWISxMsQWus5yAQ+im7OK9QL0aMIc9rOP4KuTZEpaLltn7TcqD9Ob+6kGK/yD9rrWZsoRUHaI7ZaU/BsoN7gOuO8nNbsk3XAWnNTx/9amJCX5VUhktgFna4/qGcgQ96CSP97JT0bJavdqZ2Q0QWpaTxw+jfOmDb4uJl64pumf/IPB1Kzql7oOKkjUFJGoIi2CD7acf0zGSJo8791k8GPe3ZFXkpIj4c9S3Xpy0+RaU9ELRe0apXNmM2eNxutPEuslWWqWCaqddRVIIvFQHpWNU0J2pDFZF1nkJ/OCKMTCTZvCATHYmlIng55ldg41z5IxzbxIc58U/g1eIMuwXfXXHvMOkZIcpqDZTQKk6tcHSX+0/axsiXPHZNxky9yk2B/wj3+FF4nR9zjuycMGahnr8jSGRJlMXaE4/7lGugT1frH74U6SZ39Q5pW4O49mIOmsQB7uc+iRkf7Zt8Lf+ge0Pez2zcfQrRb5SBbliPcLFPDDBQK1dx9KWl8pDpx6o9yymDuM0cMQZGxZWRPZ+J+3zzX2MExG5XPAYHV5vdB1zwiJFMyqDk0SD4/egVUbSyiok7aYXf5LcujGk3wwI+QV/7MHxmSLgkGJiUu+PhMP4MbY49YsSoS0Sjhw9b4NrAGa6zIUjTbUYbz3aHsXvadkfrk8UrgaAJV6pwfxsB/ouhM9WFvj3YsQ7fH2HbhLKcyiQA7bczrb7U2y/6/SFQykZv26CioZFxaKv6WhsOd+IQz9xohNyWl2L7NMcj356cKxnczDqblBtc+ne4ySAmTO/K974u8JjnSsfrx1qh7CrOo4inPd2es0xxBGth0wMjwMt85AmTYdCgTZ8xlw0gYvQGbxFq9eoNcoN7NxhXrVE3vnxoum9PKbaTFTzn+Filrh8/4T6lVe6Lo2a6N528H93MfzPUFb8vUJbBOyylSPsgYsfg9IVmfGLNbjBaJGaPZogpLqYKGIj545x0QvAVMLYL0DlEI/hgXgSYzsZpI3gRHkIUIEiJnKfG2TrnF8O5T9OLU03KnME1Veuy3yRlyNRv6MbhPxIP1PdcKOSvboZd15DDUZurocjrlNw98m8EyS511yfzLVG8FNgDp3N7IBxNjKhm6uT6PiTAZFUH/dnZOPlTPj/2MzAKUq0CMzj3NVHS2A+a0+nodWeD1VwKy3m7qSFLh9Mw9wUZJJb+FVEe06rVb/wMLdhInsFiMc4+NXLkGmRSAXGsf6sbC67cWFo+5YwjHYcKeA6pZ01n8BEXRrfRLA0MZbM+N40v+WsDp11AOpvsin/MtWkqvOkSIW2MlSV+BhZqT2ljWceZyEbSBp3GKH+PBSLO34+HF8DpT21yq/MXB0kPHT8TMHLv8BIohKwN/wx4dF4TFIyUwXmWsz7aESTGmVuIyx8mshPwpOdNSNFXY8E9BGGlVw8VTjObNJ1dtUfNqleqFXmiT0FJkNuG858MFi0SD4oWdO1KRxpkmX9ax4/DNV7ZfB7AjktUZYNocJaANENFEs3U5LG/OmnToAmLWTbVd7YUeNzIqj+2ZS2TLccT9eyJXzD6D3zNSZgnlyPV//kOdtz9zmeOkx7Q4GdVOPA6NWNhJjh7CUlvl/o3mgVgA5HjFwKkz4UmLVtIHhRqgDQzhnK/yOAMx+vhgxaY6aOv/85zSQzKDFqJ/9xTjtC3A9NhUAtN65lNGZVLjdnyPRGyJLNEwgx1Luiks5u8earxqxzjh8SaBNZ7I1duJr0rrGEpJTgdYzEeBs8w=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "MAX_TOKENS",
+          "index": 0
+        }
+      ],
+      "modelVersion": "gemini-3.1-pro-preview-customtools",
+      "responseId": "Bw8aar-nBMHQjMcP25-uuA8",
+      "usageMetadata": {
+        "candidatesTokenCount": 1882,
+        "promptTokenCount": 10,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 10
+          }
+        ],
+        "serviceTier": "standard",
+        "thoughtsTokenCount": 1114,
+        "totalTokenCount": 3006
+      }
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "content-type": [
+        "application/json; charset=UTF-8"
+      ],
+      "date": [
+        "Fri, 29 May 2026 22:11:54 GMT"
+      ],
+      "server": [
+        "scaffolding on HTTPServer2"
+      ],
+      "server-timing": [
+        "gfet4t7; dur=35842"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-frame-options": [
+        "SAMEORIGIN"
+      ],
+      "x-gemini-service-tier": [
+        "standard"
+      ],
+      "x-xss-protection": [
+        "0"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}
