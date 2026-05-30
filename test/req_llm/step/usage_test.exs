@@ -1077,8 +1077,12 @@ defmodule ReqLLM.Step.UsageTest do
     end
 
     test "adds cost data when missing from Response struct" do
-      # no cost map
-      {:ok, model} = ReqLLM.model("openai:gpt-4")
+      model = %LLMDB.Model{
+        provider: :openai,
+        id: "gpt-4",
+        pricing: pricing_from_cost(%{input: 0.01, output: 0.03})
+      }
+
       request = mock_request(model: model)
 
       response_body = %ReqLLM.Response{

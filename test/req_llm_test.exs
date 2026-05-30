@@ -9,9 +9,9 @@ defmodule ReqLLMTest do
                ReqLLM.model("anthropic:claude-3-5-sonnet-20240620")
     end
 
-    test "resolves anthropic model with haiku" do
-      assert {:ok, %LLMDB.Model{provider: :anthropic, id: "claude-3-haiku-20240307"}} =
-               ReqLLM.model("anthropic:claude-3-haiku")
+    test "resolves anthropic haiku alias" do
+      assert {:ok, %LLMDB.Model{provider: :anthropic, id: "claude-haiku-4-5-20251001"}} =
+               ReqLLM.model("anthropic:claude-haiku-4-5")
     end
 
     test "resolves ElevenLabs model string spec" do

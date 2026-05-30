@@ -200,8 +200,8 @@ defmodule ReqLLM.Providers.OpenAI.StructuredOutputTest do
       assert get_in(model.capabilities, [:tools, :strict]) == true
     end
 
-    test "supports_strict_tools? returns true for gpt-4" do
-      {:ok, model} = ReqLLM.model("openai:gpt-4")
+    test "supports_strict_tools? returns true for gpt-4o alias" do
+      {:ok, model} = ReqLLM.model("openai:gpt-4o")
 
       assert get_in(model.capabilities, [:tools, :strict]) == true
     end

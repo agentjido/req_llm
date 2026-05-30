@@ -690,7 +690,7 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
     suffix =
       [to_string(provider), model_id, scenario || "all", System.unique_integer([:positive])]
       |> Enum.map(&to_string/1)
-      |> Enum.map_join("_", &ReqLLM.Test.FixturePath.slug/1)
+      |> Enum.map_join("_", &fixture_path_slug/1)
 
     Path.join(System.tmp_dir!(), "req_llm_fixture_record_#{suffix}")
   end
@@ -737,9 +737,20 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
 
   defp promote_staged_fixture(stage_dir, staged_path) do
     relative = Path.relative_to(staged_path, stage_dir)
-    target = Path.join(ReqLLM.Test.FixturePath.root(), relative)
+    target = Path.join(fixture_path_root(), relative)
     target |> Path.dirname() |> File.mkdir_p!()
     File.cp!(staged_path, target)
+  end
+
+  defp fixture_path_root do
+    Path.expand("test/support/fixtures")
+  end
+
+  defp fixture_path_slug(model_name) when is_binary(model_name) do
+    model_name
+    |> String.downcase()
+    |> String.replace(~r/[^a-z0-9]+/u, "_")
+    |> String.trim("_")
   end
 
   defp promoted_fixture_output(files) do

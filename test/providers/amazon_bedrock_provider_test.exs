@@ -671,11 +671,10 @@ defmodule ReqLLM.Providers.AmazonBedrockProviderTest do
     end
 
     test "non-Bedrock alias resolution does not set provider_model_id" do
-      # Alias like anthropic:claude-3-haiku resolves to claude-3-haiku-20240307
-      # provider_model_id should NOT be set to the alias — that would break API calls
-      {:ok, model} = ReqLLM.model("anthropic:claude-3-haiku")
+      {:ok, model} = ReqLLM.model("anthropic:claude-haiku-4-5")
 
-      refute model.provider_model_id == "claude-3-haiku"
+      assert model.id == "claude-haiku-4-5-20251001"
+      assert is_nil(model.provider_model_id)
     end
   end
 end

@@ -76,7 +76,7 @@ defmodule ReqLLM.AvailabilityTest do
       models = ReqLLM.available_models()
 
       assert "openai:gpt-4o" in models
-      assert "anthropic:claude-3-haiku-20240307" in models
+      assert "anthropic:claude-haiku-4-5-20251001" in models
       refute Enum.any?(models, &String.starts_with?(&1, "groq:"))
     end
 

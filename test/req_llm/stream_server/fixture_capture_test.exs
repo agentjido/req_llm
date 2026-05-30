@@ -1,14 +1,5 @@
-# Mock backend for testing fixture capture
-# This intentionally redefines the module to intercept calls during tests
-# credo:disable-for-this-file Credo.Check.Consistency.MultiAliasImportRequireUse
-Code.compiler_options(ignore_module_conflict: true)
-
-defmodule ReqLLM.Step.Fixture.Backend do
+defmodule ReqLLM.StreamServer.FixtureCaptureTest.Backend do
   @moduledoc false
-
-  def step(_provider, _fixture_name) do
-    fn request -> request end
-  end
 
   def save_streaming_fixture(http_context, fixture_path, canonical_json, model, raw_iodata) do
     if Process.whereis(:fixture_calls) do
@@ -20,8 +11,6 @@ defmodule ReqLLM.Step.Fixture.Backend do
     :ok
   end
 end
-
-Code.compiler_options(ignore_module_conflict: false)
 
 defmodule ReqLLM.StreamServer.FixtureCaptureTest do
   use ExUnit.Case, async: false
@@ -50,7 +39,8 @@ defmodule ReqLLM.StreamServer.FixtureCaptureTest do
 
   describe "fixture capture" do
     test "saves streaming fixture exactly once" do
-      server = start_server(fixture_path: "test/fixture.json")
+      server =
+        start_server(fixture_path: "test/fixture.json", fixture_backend: __MODULE__.Backend)
 
       StreamServer.set_fixture_context(server, %{request: %{}, response: %{}}, %{})
 
@@ -72,7 +62,8 @@ defmodule ReqLLM.StreamServer.FixtureCaptureTest do
     end
 
     test "fixture_path set but no http_context does not save" do
-      server = start_server(fixture_path: "test/fixture.json")
+      server =
+        start_server(fixture_path: "test/fixture.json", fixture_backend: __MODULE__.Backend)
 
       StreamServer.http_event(server, {:data, "chunk1"})
       StreamServer.http_event(server, :done)
@@ -83,7 +74,8 @@ defmodule ReqLLM.StreamServer.FixtureCaptureTest do
     end
 
     test "accumulates raw_iodata correctly across multiple chunks" do
-      server = start_server(fixture_path: "test/fixture.json")
+      server =
+        start_server(fixture_path: "test/fixture.json", fixture_backend: __MODULE__.Backend)
 
       StreamServer.set_fixture_context(server, %{request: %{}, response: %{}}, %{})
 

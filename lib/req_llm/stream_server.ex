@@ -76,6 +76,7 @@ defmodule ReqLLM.StreamServer do
     :model,
     :http_task,
     :fixture_path,
+    :fixture_backend,
     :http_context,
     :canonical_json,
     :protocol_parser,
@@ -150,6 +151,7 @@ defmodule ReqLLM.StreamServer do
       protocol_parser: Keyword.get(opts, :protocol_parser),
       provider_state: provider_state,
       fixture_path: Keyword.get(opts, :fixture_path),
+      fixture_backend: Keyword.get(opts, :fixture_backend, ReqLLM.Step.Fixture.Backend),
       completion_cleanup_after:
         Keyword.get(
           opts,
@@ -1085,18 +1087,18 @@ defmodule ReqLLM.StreamServer do
       )
 
       try do
-        case Code.ensure_loaded(ReqLLM.Step.Fixture.Backend) do
-          {:module, ReqLLM.Step.Fixture.Backend} ->
+        fixture_backend = state.fixture_backend
+
+        case Code.ensure_loaded(fixture_backend) do
+          {:module, ^fixture_backend} ->
             Debug.dbug(
               fn -> "Calling save_streaming_fixture with #{state.raw_bytes} bytes..." end,
               component: :stream_server
             )
 
-            # Pass iodata directly - reversed because we prepended
             iodata = Enum.reverse(state.raw_iodata)
 
-            # credo:disable-for-next-line Credo.Check.Refactor.Apply
-            apply(ReqLLM.Step.Fixture.Backend, :save_streaming_fixture, [
+            apply(fixture_backend, :save_streaming_fixture, [
               state.http_context,
               state.fixture_path,
               state.canonical_json,
