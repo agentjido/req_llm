@@ -1,5 +1,5 @@
 defmodule Provider.OpenAI.ResponsesAPIUnitTest do
-  use ExUnit.Case, async: true
+  use ExUnit.Case, async: false
 
   alias ReqLLM.Providers.OpenAI.ResponsesAPI
 
