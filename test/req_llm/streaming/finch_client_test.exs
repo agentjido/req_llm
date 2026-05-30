@@ -401,7 +401,8 @@ defmodule ReqLLM.Streaming.FinchClientTest do
                )
 
       assert is_pid(task_pid)
-      assert canonical_json["message"] == "hello"
+      assert canonical_json["stream"] == true
+      assert canonical_json["messages"] == [%{"role" => "user", "content" => "Test"}]
     end
 
     test "allows large request bodies when finch config cannot be parsed" do

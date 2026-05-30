@@ -6,7 +6,7 @@ defmodule ReqLLM.ImagesTest do
   test "supported_models/0 includes known image models by heuristic" do
     models = Images.supported_models()
 
-    assert "openai:gpt-image-1" in models
+    assert "openai:gpt-image-1.5" in models
     assert Enum.any?(models, &google_image_model_spec?/1)
   end
 
@@ -21,7 +21,7 @@ defmodule ReqLLM.ImagesTest do
 
   test "generate_image/3 errors when context has no user text" do
     context = Context.new([Context.system("You are helpful.")])
-    assert {:error, _} = Images.generate_image("openai:gpt-image-1", context, fixture: "noop")
+    assert {:error, _} = Images.generate_image("openai:gpt-image-1.5", context, fixture: "noop")
   end
 
   test "process/4 accepts image options like aspect_ratio" do

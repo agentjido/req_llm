@@ -21,32 +21,35 @@ LLM APIs are inconsistent. ReqLLM provides a unified, idiomatic Elixir interface
 - **High-level API** – Vercel AI SDK-inspired functions (`generate_text/3`, `stream_text/3`, `generate_object/4` and more) that work uniformly across providers. Standard features, minimal configuration.
 - **Low-level API** – Direct Req plugin access for full HTTP control. Built around OpenAI Chat Completions baseline with provider-specific callbacks for non-compatible APIs (e.g., Anthropic).
 
-**22 Supported Providers:**
+**Model Support Snapshot**
 
-| Provider | ID | Guide |
-|---|---|---|
-| [Alibaba Cloud Bailian](https://www.alibabacloud.com/help/en/model-studio) | `alibaba` | — |
-| [Alibaba Cloud Bailian (China)](https://www.alibabacloud.com/help/en/model-studio) | `alibaba_cn` | — |
-| [Anthropic](https://anthropic.com) | `anthropic` | [Guide](guides/anthropic.md) |
-| [OpenAI](https://openai.com) | `openai` | [Guide](guides/openai.md) |
-| [Google Gemini](https://ai.google.dev) | `google` | [Guide](guides/google.md) |
-| [Google Vertex AI](https://cloud.google.com/vertex-ai) | `google_vertex` | [Guide](guides/google_vertex.md) |
-| [Amazon Bedrock](https://aws.amazon.com/bedrock/) | `amazon_bedrock` | [Guide](guides/amazon_bedrock.md) |
-| [Azure OpenAI](https://azure.microsoft.com/en-us/products/ai-services/openai-service) | `azure` | [Guide](guides/azure.md) |
-| [Groq](https://groq.com) | `groq` | [Guide](guides/groq.md) |
-| [xAI](https://x.ai) | `xai` | [Guide](guides/xai.md) |
-| [OpenRouter](https://openrouter.ai) | `openrouter` | [Guide](guides/openrouter.md) |
-| [Cerebras](https://cerebras.ai) | `cerebras` | [Guide](guides/cerebras.md) |
-| [Fireworks AI](https://fireworks.ai) | `fireworks_ai` | [Guide](guides/fireworks_ai.md) |
-| [Meta Llama](https://llama.meta.com) | `meta` | [Guide](guides/meta.md) |
-| [MiniMax](https://www.minimax.io) | `minimax` | — |
-| [NEAR AI Cloud](https://cloud.near.ai) | `nearai` | [Guide](guides/nearai.md) |
-| [Z.AI](https://z.ai) | `zai` | [Guide](guides/zai.md) |
-| [Z.AI Coder](https://z.ai) | `zai_coder` | [Guide](guides/zai_coder.md) |
-| [Zenmux](https://zenmux.ai) | `zenmux` | [Guide](guides/zenmux.md) |
-| [Ollama](https://ollama.ai) | `ollama` | [Guide](guides/ollama.md) |
-| [Venice](https://venice.ai) | `venice` | — |
-| [vLLM](https://docs.vllm.ai) | `vllm` | — |
+ReqLLM currently exposes **1,205 models across 21 implemented provider integrations** from the [models.dev](https://models.dev) catalog via `llm_db`. Counting the cataloged-but-not-separate `google_vertex_anthropic` namespace, the registry contains **1,218 models across 22 provider namespaces**.
+
+That includes **92 non-text operation models**: 39 embedding, 23 image generation, 12 text-to-speech, 11 transcription, 5 rerank, and 2 OCR models. The fixture suite currently contains **619 unique recorded model specs** across text and non-text operations.
+
+| Provider | ID | Catalog models | Operation surface | Fixture specs | Guide |
+|---|---|---:|---|---:|---|
+| [Alibaba Cloud Bailian](https://www.alibabacloud.com/help/en/model-studio) | `alibaba` | 50 | text, OCR 1, transcription 1 | 0 | — |
+| [Alibaba Cloud Bailian (China)](https://www.alibabacloud.com/help/en/model-studio) | `alibaba_cn` | 82 | text, OCR 1, transcription 1 | 0 | — |
+| [Amazon Bedrock](https://aws.amazon.com/bedrock/) | `amazon_bedrock` | 92 | text, embedding 3 | 7 | [Guide](guides/amazon_bedrock.md) |
+| [Anthropic](https://anthropic.com) | `anthropic` | 11 | text | 11 | [Guide](guides/anthropic.md) |
+| [Azure OpenAI](https://azure.microsoft.com/en-us/products/ai-services/openai-service) | `azure` | 103 | text, embedding 6 | 26 | [Guide](guides/azure.md) |
+| [Cerebras](https://cerebras.ai) | `cerebras` | 5 | text | 2 | [Guide](guides/cerebras.md) |
+| [Cohere](https://cohere.com) | `cohere` | 17 | text, rerank 5 | 5 | — |
+| [ElevenLabs](https://elevenlabs.io) | `elevenlabs` | 4 | speech 4 | 4 | — |
+| [Fireworks AI](https://fireworks.ai) | `fireworks_ai` | 12 | text | 12 | [Guide](guides/fireworks_ai.md) |
+| [Google Gemini](https://ai.google.dev) | `google` | 50 | text, embedding 2, image 8 | 24 | [Guide](guides/google.md) |
+| [Google Vertex AI](https://cloud.google.com/vertex-ai) | `google_vertex` | 40 | text | 11 | [Guide](guides/google_vertex.md) |
+| [Groq](https://groq.com) | `groq` | 18 | text, speech 2, transcription 2 | 11 | [Guide](guides/groq.md) |
+| [MiniMax](https://www.minimax.io) | `minimax` | 6 | text | 6 | — |
+| [OpenAI](https://openai.com) | `openai` | 86 | text, embedding 3, image 5, speech 6, transcription 7 | 64 | [Guide](guides/openai.md) |
+| [OpenRouter](https://openrouter.ai) | `openrouter` | 364 | text, embedding 25, image 5 | 234 | [Guide](guides/openrouter.md) |
+| [Venice](https://venice.ai) | `venice` | 67 | text | 67 | — |
+| [xAI](https://x.ai) | `xai` | 26 | text, image 3 | 21 | [Guide](guides/xai.md) |
+| [Z.AI](https://z.ai) | `zai` | 13 | text | 2 | [Guide](guides/zai.md) |
+| [Z.AI Coder](https://z.ai) | `zai_coder` | 5 | text | 1 | [Guide](guides/zai_coder.md) |
+| [Z.AI Coding Plan](https://z.ai) | `zai_coding_plan` | 5 | text | 4 | — |
+| [Zenmux](https://zenmux.ai) | `zenmux` | 149 | text, image 2 | 107 | [Guide](guides/zenmux.md) |
 
 \* _Streaming uses Finch directly due to known Req limitations with SSE responses._
 
@@ -91,12 +94,14 @@ schema = [name: [type: :string, required: true], age: [type: :pos_integer]]
 person = ReqLLM.generate_object!(model, "Generate a person", schema)
 #=> %{name: "John Doe", age: 30}
 
-{:ok, image_response} = ReqLLM.generate_image("openai:gpt-image-1", "A simple red square")
+{:ok, image_response} = ReqLLM.generate_image("openai:gpt-image-1.5", "A simple red square")
 image_bytes = ReqLLM.Response.image_data(image_response)
 File.write!("red_square.png", image_bytes)
+```
 
 Note: Google image models gemini-2.5-flash-image and gemini-3-pro-image-preview reject :n; specify the image count in the prompt.
 
+```elixir
 {:ok, response} = ReqLLM.generate_text(
   model,
   ReqLLM.Context.new([
@@ -136,7 +141,8 @@ usage = ReqLLM.StreamResponse.usage(response)
 ## Features
 
 - **Provider-agnostic model registry**
-  - 45 providers / 665+ models sourced from [models.dev](https://models.dev) via the `llm_db` dependency
+  - 21 implemented providers / 1,205 models sourced from [models.dev](https://models.dev) via the `llm_db` dependency
+  - Text, embedding, image generation, speech, transcription, rerank and OCR operation metadata
   - Cost, context length, modality, capability and deprecation metadata included
 
 - **Canonical data model**
@@ -316,7 +322,7 @@ response.usage.cost
 #=> %{tokens: 0.001, tools: 0.02, images: 0.0, total: 0.021}
 
 # Image generation usage
-{:ok, response} = ReqLLM.generate_image("openai:gpt-image-1", prompt)
+{:ok, response} = ReqLLM.generate_image("openai:gpt-image-1.5", prompt)
 
 response.usage.image_usage
 #=> %{generated: %{count: 1, size_class: "1024x1024"}}
@@ -466,7 +472,7 @@ This approach gives you full control over the Req pipeline, allowing you to add 
 - [Mix Tasks](guides/mix-tasks.md) – model sync, compatibility testing, code generation
 - [Fixture Testing](guides/fixture-testing.md) – model validation and supported models
 - [Adding a Provider](guides/adding_a_provider.md) – extend with new providers
-- Provider Guides: [Anthropic](guides/anthropic.md), [OpenAI](guides/openai.md), [Google](guides/google.md), [Google Vertex](guides/google_vertex.md), [xAI](guides/xai.md), [Groq](guides/groq.md), [OpenRouter](guides/openrouter.md), [Amazon Bedrock](guides/amazon_bedrock.md), [Azure](guides/azure.md), [Cerebras](guides/cerebras.md), [Meta](guides/meta.md), [NEAR AI Cloud](guides/nearai.md), [Ollama](guides/ollama.md), [Z.AI](guides/zai.md), [Z.AI Coder](guides/zai_coder.md), [Zenmux](guides/zenmux.md)
+- Provider Guides: [Anthropic](guides/anthropic.md), [OpenAI](guides/openai.md), [Google](guides/google.md), [Google Vertex](guides/google_vertex.md), [xAI](guides/xai.md), [Groq](guides/groq.md), [OpenRouter](guides/openrouter.md), [Amazon Bedrock](guides/amazon_bedrock.md), [Azure](guides/azure.md), [Cerebras](guides/cerebras.md), [Fireworks AI](guides/fireworks_ai.md), [Z.AI](guides/zai.md), [Z.AI Coder](guides/zai_coder.md), [Zenmux](guides/zenmux.md)
 
 ## Roadmap & Status
 
@@ -474,9 +480,9 @@ ReqLLM has now reached v1.0.0. The core API is stable and ready for production u
 
 ### Test Coverage & Quality Commitment
 
-**130+ models currently pass our comprehensive fixture-based test suite** across 10 providers. The LLM API landscape is highly dynamic. We guarantee that all supported models pass our fixture tests for basic functionality (text generation, streaming, tool calling, structured output, and embeddings where applicable).
+**159 model-compat entries currently pass our fixture-backed test suite** across 12 providers, with **619 unique recorded fixture model specs** across text and non-text operations. The LLM API landscape is highly dynamic, so catalog support and fixture-verified coverage are tracked separately.
 
-These fixture tests are regularly refreshed against live APIs to ensure accuracy and catch provider-side changes. While we can't guarantee every edge case in production, our fixture-based approach provides a reliable baseline that you can verify with `mix mc "*:*"`.
+These fixture tests are regularly refreshed against live APIs to catch provider-side changes. While we can't guarantee every edge case or every catalog model in production, the fixture-based approach provides a reliable baseline that you can verify with `mix mc "*:*"` or narrow by provider and operation type.
 
 **We welcome bug reports and feedback!** If you encounter issues with any supported model, please open a GitHub issue with details. The more feedback we receive, the stronger the code will be!
 
