@@ -1,0 +1,106 @@
+{
+  "model_spec": "zenmux:deepseek/deepseek-v3.2-exp",
+  "provider": "zenmux",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjIwMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiSGVsbG8gd29ybGQhIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiZGVlcHNlZWsvZGVlcHNlZWstdjMuMi1leHAiLCJyZWFzb25pbmdfZWZmb3J0IjoibG93Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+    },
+    "canonical_json": {
+      "max_completion_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "deepseek/deepseek-v3.2-exp",
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://zenmux.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "content": "Hello! 👋 Welcome to the world! How can I assist you today? Whether you have questions, need help with a task, or just want to chat, I'm here for you. Feel free to ask anything! 😊",
+            "reasoning": "Hmm, the user just said \"Hello world!\" which is a very common greeting, especially in programming contexts. It's likely a simple test or casual hello. \n\nSince it's a straightforward greeting, I should respond warmly but also open up the conversation for more meaningful interaction. Maybe mention my capabilities to gently guide the user toward more productive topics.\n\nI'll keep it friendly and inviting, using an exclamation point to match their energy. No need for complex analysis here - just acknowledge and encourage further engagement.",
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1780099041,
+      "id": "e1f5bb56cf564d7ca87cf93766c2e069",
+      "model": "deepseek/deepseek-v3.2-exp",
+      "object": "chat.completion",
+      "system_fingerprint": "",
+      "usage": {
+        "completion_tokens": 151,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "reasoning_tokens": 102,
+          "rejected_prediction_tokens": 0
+        },
+        "prompt_tokens": 13,
+        "prompt_tokens_details": null,
+        "total_tokens": 164
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "X-ZenMux-RequestId"
+      ],
+      "cf-ray": [
+        "a03970d87ce39bcc-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 29 May 2026 23:57:28 GMT"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-zenmux-requestid": [
+        "e1f5bb56cf564d7ca87cf93766c2e069"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

@@ -1,0 +1,185 @@
+{
+  "model_spec": "venice:openai-gpt-55",
+  "provider": "venice",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Im9wZW5haS1ncHQtNTUiLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMCwidmVuaWNlX3BhcmFtZXRlcnMiOnsiZGlzYWJsZV90aGlua2luZyI6ZmFsc2UsImVuYWJsZV93ZWJfY2l0YXRpb25zIjpmYWxzZSwiZW5hYmxlX3dlYl9zY3JhcGluZyI6ZmFsc2UsImVuYWJsZV93ZWJfc2VhcmNoIjoib2ZmIiwiaW5jbHVkZV9zZWFyY2hfcmVzdWx0c19pbl9zdHJlYW0iOmZhbHNlLCJpbmNsdWRlX3ZlbmljZV9zeXN0ZW1fcHJvbXB0Ijp0cnVlLCJzdHJpcF90aGlua2luZ19yZXNwb25zZSI6ZmFsc2V9fQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "openai-gpt-55",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0,
+      "venice_parameters": {
+        "disable_thinking": false,
+        "enable_web_citations": false,
+        "enable_web_scraping": false,
+        "enable_web_search": "off",
+        "include_search_results_in_stream": false,
+        "include_venice_system_prompt": true,
+        "strip_thinking_response": false
+      }
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.venice.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Hello! How can I help you today?",
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "completed"
+        }
+      ],
+      "created": 1780098808,
+      "id": "gen-1780098808-wMgOgNW3IkYEtY9LwOIa",
+      "model": "openai-gpt-55",
+      "object": "chat.completion",
+      "service_tier": "default",
+      "usage": {
+        "completion_tokens": 13,
+        "completion_tokens_details": {
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "reasoning_tokens": 0
+        },
+        "prompt_tokens": 1517,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "total_tokens": 1530
+      },
+      "venice_parameters": {
+        "disable_thinking": false,
+        "enable_e2ee": true,
+        "enable_web_citations": false,
+        "enable_web_scraping": false,
+        "enable_web_search": "off",
+        "enable_x_search": false,
+        "include_search_results_in_stream": false,
+        "include_venice_system_prompt": true,
+        "return_search_results_as_documents": false,
+        "strip_thinking_response": false,
+        "web_search_citations": []
+      }
+    },
+    "headers": {
+      "access-control-allow-credentials": [
+        "true"
+      ],
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "*"
+      ],
+      "cache-control": [
+        "no-store, no-cache, private, must-revalidate"
+      ],
+      "cdn-cache-control": [
+        "no-store"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a0396b336f7aeb05-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-security-policy": [
+        "default-src 'none'; frame-ancestors *; upgrade-insecure-requests"
+      ],
+      "content-type": [
+        "application/json; charset=utf-8"
+      ],
+      "date": [
+        "Fri, 29 May 2026 23:53:30 GMT"
+      ],
+      "etag": [
+        "W/\"374-UWHS7QSnPfebBwsxiYdabw0CQVk\""
+      ],
+      "permissions-policy": [
+        "geolocation=(), camera=()"
+      ],
+      "referrer-policy": [
+        "strict-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": "[REDACTED:set-cookie]",
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-cloud-trace-context": [
+        "dda3efb84afd1d7238e4eb3c65dfff28"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-frame-options": [
+        "SAMEORIGIN"
+      ],
+      "x-ratelimit-limit-requests": [
+        "1000"
+      ],
+      "x-ratelimit-remaining": [
+        "20"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "999"
+      ],
+      "x-ratelimit-reset-requests": [
+        "1780098868928"
+      ],
+      "x-ratelimit-resets": [
+        "1780098838900"
+      ],
+      "x-venice-balance-usd": [
+        "9.03444379"
+      ],
+      "x-venice-version": [
+        "outerface-api-server-us-east1-03948-9pd"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

@@ -1,0 +1,110 @@
+{
+  "model_spec": "zenmux:google/gemini-3.1-flash-lite-preview",
+  "provider": "zenmux",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjUwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Imdvb2dsZS9nZW1pbmktMy4xLWZsYXNoLWxpdGUtcHJldmlldyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+    },
+    "canonical_json": {
+      "max_completion_tokens": 50,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "google/gemini-3.1-flash-lite-preview",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://zenmux.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Hello world! How can I help you today?",
+            "refusal": null,
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1780099078,
+      "id": "04e6f09ecdb140da9f33f5492611b42f",
+      "model": "google/gemini-3.1-flash-lite-preview",
+      "object": "chat.completion",
+      "usage": {
+        "completion_tokens": 10,
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "prompt_tokens": 3,
+        "prompt_tokens_details": {
+          "audio_cached_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0
+        },
+        "tool_use": 0,
+        "total_tokens": 13,
+        "trafficType": "ON_DEMAND",
+        "web_search": 0,
+        "web_search_queries": 0
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "X-ZenMux-RequestId"
+      ],
+      "cf-ray": [
+        "a03971c1cf48eb6a-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 29 May 2026 23:57:58 GMT"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-zenmux-requestid": [
+        "04e6f09ecdb140da9f33f5492611b42f"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

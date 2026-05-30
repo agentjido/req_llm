@@ -1,4 +1,6 @@
 {
+  "model_spec": "openrouter:nousresearch/hermes-4-70b",
+  "provider": "openrouter",
   "request": {
     "body": {
       "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Im5vdXNyZXNlYXJjaC9oZXJtZXMtNC03MGIiLCJuIjoxLCJyZWFzb25pbmdfZWZmb3J0IjoibG93Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
@@ -19,6 +21,9 @@
       "temperature": 0.0
     },
     "headers": {
+      "accept": [
+        "application/json"
+      ],
       "accept-encoding": [
         "gzip"
       ],
@@ -27,7 +32,7 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ]
     },
     "method": "post",
@@ -41,40 +46,54 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "\n\nHello! 👋 It's great to meet you. If you're just starting out with coding or exploring AI, \"Hello world!\" is a classic first step. How can I assist you today? 😊",
-            "reasoning": "\nOkay, the user just said \"Hello world!\" That's a classic first message. I remember when I was first learning to code, \"Hello world!\" was the first program I wrote. It's like a rite of passage for programmers.\n\nHmm, maybe they're testing if I'm working properly. Or perhaps they're new to using AI assistants and just wanted to start with something simple. I should respond in a friendly and welcoming way. Let me make sure my response is warm and encouraging. I could mention that \"Hello world!\" is a common first program to show I understand the context. Also, maybe ask how I can assist them today to keep the conversation going. Keep it light and open-ended. Yeah, that should work.\n",
-            "reasoning_details": [
-              {
-                "format": "unknown",
-                "index": 0,
-                "text": "\nOkay, the user just said \"Hello world!\" That's a classic first message. I remember when I was first learning to code, \"Hello world!\" was the first program I wrote. It's like a rite of passage for programmers.\n\nHmm, maybe they're testing if I'm working properly. Or perhaps they're new to using AI assistants and just wanted to start with something simple. I should respond in a friendly and welcoming way. Let me make sure my response is warm and encouraging. I could mention that \"Hello world!\" is a common first program to show I understand the context. Also, maybe ask how I can assist them today to keep the conversation going. Keep it light and open-ended. Yeah, that should work.\n",
-                "type": "reasoning.text"
-              }
-            ],
+            "content": "\nOkay, the user just said \"Hello world!\" That's a classic first message. I wonder if they're testing the system or just starting a conversation. Maybe they're new to using AI assistants. I should respond in a friendly and welcoming way. Let me make sure to acknowledge their greeting and invite them to ask for help or start a conversation. Keep it simple and open-ended so they feel comfortable to proceed. Alright, let's go with a warm response.\nHello! 👋 How can I assist you today? Whether you have a question, need help with something, or just want to chat—I'm here for it! 😊",
+            "reasoning": null,
             "refusal": null,
             "role": "assistant"
           },
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1762104964,
-      "id": "gen-1762104964-OQb06wlnLHqOZmSUT1IO",
+      "created": 1780100259,
+      "id": "gen-1780100259-rd9KMK3GkQCdTaKxXKYY",
       "model": "nousresearch/hermes-4-70b",
       "object": "chat.completion",
-      "provider": "Chutes",
+      "provider": "Nebius",
+      "service_tier": null,
+      "system_fingerprint": null,
       "usage": {
-        "completion_tokens": 196,
-        "prompt_tokens": 85,
-        "prompt_tokens_details": null,
-        "total_tokens": 281
+        "completion_tokens": 132,
+        "completion_tokens_details": {
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "reasoning_tokens": 0
+        },
+        "cost": 6.398e-5,
+        "cost_details": {
+          "upstream_inference_completions_cost": 5.28e-5,
+          "upstream_inference_cost": 6.398e-5,
+          "upstream_inference_prompt_cost": 1.118e-5
+        },
+        "is_byok": false,
+        "prompt_tokens": 86,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 0,
+          "video_tokens": 0
+        },
+        "total_tokens": 218
       }
     },
     "headers": {
       "access-control-allow-origin": [
         "*"
       ],
+      "access-control-expose-headers": [
+        "X-Generation-Id,cf-ray"
+      ],
       "cf-ray": [
-        "9985645c083ae148-ORD"
+        "a0398e9f9e78b97d-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -83,7 +102,7 @@
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:36:05 GMT"
+        "Sat, 30 May 2026 00:17:40 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
@@ -97,13 +116,14 @@
       "transfer-encoding": [
         "chunked"
       ],
-      "vary": [
-        "Accept-Encoding"
-      ],
       "x-content-type-options": [
         "nosniff"
+      ],
+      "x-generation-id": [
+        "gen-1780100259-rd9KMK3GkQCdTaKxXKYY"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

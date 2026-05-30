@@ -1,0 +1,137 @@
+{
+  "model_spec": "openrouter:nvidia/nemotron-3-nano-30b-a3b",
+  "provider": "openrouter",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Im52aWRpYS9uZW1vdHJvbi0zLW5hbm8tMzBiLWEzYiIsIm4iOjEsInJlYXNvbmluZ19lZmZvcnQiOiJsb3ciLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+    },
+    "canonical_json": {
+      "max_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "nvidia/nemotron-3-nano-30b-a3b",
+      "n": 1,
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Hello! 👋 A classic \"Hello world\" greeting—nice to meet you! How can I assist you today? 😊",
+            "reasoning": "Okay, the user said \"Hello world!\" which is a classic programming greeting. I should respond in a friendly and helpful way. Let me think about how to approach this.\n\nFirst, I need to acknowledge their greeting. Maybe say something like \"Hello! 👋\" to keep it warm. Then, since they mentioned \"Hello world,\" I should connect it to programming. But wait, they might not be a programmer. Hmm, but \"Hello world\" is so iconic in coding that it's probably a reference.\n\nI should check if they want to learn programming or just say hello. But the user hasn't asked a question yet. They just greeted me. So my response should be welcoming and open-ended. Maybe ask how I can assist them today. That way, it invites them to share what they need help with.\n\nAlso, considering the user might be testing if I recognize the \"Hello world\" reference, I can mention it. Like, \"Ah, a classic 'Hello world' greeting! 😊 Are you just saying hello, or are you interested in programming?\" But maybe that's too much. Keep it simple.\n\nWait, the user might be a beginner. So I should avoid jargon. Just a friendly response. Let me make sure it's not too long. Keep it short and sweet. \"Hello! 👋 How can I assist you today?\" That's good. But maybe add a bit more to show I'm attentive.\n\nWait, the user's message is exactly \"Hello world!\" so they might be expecting a response that references that. But as an AI, I should respond appropriately. Maybe say \"Hello! 👋 I'm glad to see you. How can I help you today?\" But the \"Hello world\" part is a bit of a nod to programming, so maybe add a smiley or something.\n\nWait, the user might be a developer testing if I know the reference. So I can say \"Hello! 👋 A classic 'Hello world' greeting—nice to meet you! How can I assist you today?\" That way, it's acknowledging the reference and then moving to help.\n\nBut I should make sure not to overcomplicate it. The main thing is to be friendly and offer help. Let me check if there's any cultural nuance I'm missing. \"Hello world\" is universal in programming, so it's safe to reference. But maybe the user is just being playful. So the response should be light-hearted.\n\nAlso, the user might not have any specific request yet, so the response should encourage them to ask anything. So the best approach is to greet them back, acknowledge the \"Hello world\" reference, and ask how I can help. That covers all bases.\n\nLet me draft a response: \"Hello! 👋 A classic 'Hello world' greeting—nice to meet you! How can I assist you today?\" That sounds good. It's friendly, references the greeting, and opens the door for them to ask for help.\n\nWait, but the user might not have intended it as a programming reference. Maybe they just said \"Hello world\" as a random phrase. But in the context of interacting with an AI, it's likely a nod to programming. So it's safe to assume that. But even if they didn't, the response is still appropriate.\n\nAnother thing: the user might be testing if I'm responsive or if I can handle basic greetings. So a standard, polite response is best. No need to overthink. Just be helpful and friendly.\n\nSo finalizing the response: \"Hello! 👋 A classic 'Hello world' greeting—nice to meet you! How can I assist you today?\" That should work. It's concise, friendly, and addresses the possible reference while inviting them to ask for help.\n",
+            "reasoning_details": [
+              {
+                "format": "unknown",
+                "index": 0,
+                "text": "Okay, the user said \"Hello world!\" which is a classic programming greeting. I should respond in a friendly and helpful way. Let me think about how to approach this.\n\nFirst, I need to acknowledge their greeting. Maybe say something like \"Hello! 👋\" to keep it warm. Then, since they mentioned \"Hello world,\" I should connect it to programming. But wait, they might not be a programmer. Hmm, but \"Hello world\" is so iconic in coding that it's probably a reference.\n\nI should check if they want to learn programming or just say hello. But the user hasn't asked a question yet. They just greeted me. So my response should be welcoming and open-ended. Maybe ask how I can assist them today. That way, it invites them to share what they need help with.\n\nAlso, considering the user might be testing if I recognize the \"Hello world\" reference, I can mention it. Like, \"Ah, a classic 'Hello world' greeting! 😊 Are you just saying hello, or are you interested in programming?\" But maybe that's too much. Keep it simple.\n\nWait, the user might be a beginner. So I should avoid jargon. Just a friendly response. Let me make sure it's not too long. Keep it short and sweet. \"Hello! 👋 How can I assist you today?\" That's good. But maybe add a bit more to show I'm attentive.\n\nWait, the user's message is exactly \"Hello world!\" so they might be expecting a response that references that. But as an AI, I should respond appropriately. Maybe say \"Hello! 👋 I'm glad to see you. How can I help you today?\" But the \"Hello world\" part is a bit of a nod to programming, so maybe add a smiley or something.\n\nWait, the user might be a developer testing if I know the reference. So I can say \"Hello! 👋 A classic 'Hello world' greeting—nice to meet you! How can I assist you today?\" That way, it's acknowledging the reference and then moving to help.\n\nBut I should make sure not to overcomplicate it. The main thing is to be friendly and offer help. Let me check if there's any cultural nuance I'm missing. \"Hello world\" is universal in programming, so it's safe to reference. But maybe the user is just being playful. So the response should be light-hearted.\n\nAlso, the user might not have any specific request yet, so the response should encourage them to ask anything. So the best approach is to greet them back, acknowledge the \"Hello world\" reference, and ask how I can help. That covers all bases.\n\nLet me draft a response: \"Hello! 👋 A classic 'Hello world' greeting—nice to meet you! How can I assist you today?\" That sounds good. It's friendly, references the greeting, and opens the door for them to ask for help.\n\nWait, but the user might not have intended it as a programming reference. Maybe they just said \"Hello world\" as a random phrase. But in the context of interacting with an AI, it's likely a nod to programming. So it's safe to assume that. But even if they didn't, the response is still appropriate.\n\nAnother thing: the user might be testing if I'm responsive or if I can handle basic greetings. So a standard, polite response is best. No need to overthink. Just be helpful and friendly.\n\nSo finalizing the response: \"Hello! 👋 A classic 'Hello world' greeting—nice to meet you! How can I assist you today?\" That should work. It's concise, friendly, and addresses the possible reference while inviting them to ask for help.\n",
+                "type": "reasoning.text"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "stop"
+        }
+      ],
+      "created": 1780098258,
+      "id": "gen-1780098258-2PZMvXlZZtNb4Q6fu3yW",
+      "model": "nvidia/nemotron-3-nano-30b-a3b",
+      "object": "chat.completion",
+      "provider": "DeepInfra",
+      "service_tier": null,
+      "system_fingerprint": null,
+      "usage": {
+        "completion_tokens": 809,
+        "completion_tokens_details": {
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "reasoning_tokens": 863
+        },
+        "cost": 1.6275e-4,
+        "cost_details": {
+          "upstream_inference_completions_cost": 1.618e-4,
+          "upstream_inference_cost": 1.6275e-4,
+          "upstream_inference_prompt_cost": 9.5e-7
+        },
+        "is_byok": false,
+        "prompt_tokens": 19,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 0,
+          "video_tokens": 0
+        },
+        "total_tokens": 828
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "X-Generation-Id,cf-ray"
+      ],
+      "cf-ray": [
+        "a0395dc19a20ff5b-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 29 May 2026 23:44:18 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-generation-id": [
+        "gen-1780098258-2PZMvXlZZtNb4Q6fu3yW"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

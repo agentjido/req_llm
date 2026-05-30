@@ -1,0 +1,105 @@
+{
+  "model_spec": "zenmux:qwen/qwen3.5-flash",
+  "provider": "zenmux",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjUwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6InF3ZW4vcXdlbjMuNS1mbGFzaCIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+    },
+    "canonical_json": {
+      "max_completion_tokens": 50,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "qwen/qwen3.5-flash",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://zenmux.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "length",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "",
+            "reasoning": "Thinking Process:\n\n1.  **Analyze the Request:**\n    *   Input: \"Hello world!\"\n    *   Intent: Greeting, testing, or starting a conversation.\n    *   Context: This is likely the first",
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1780099359,
+      "id": "2e50200175794de19b50ecd5fad262b7",
+      "model": "qwen/qwen3.5-flash",
+      "object": "chat.completion",
+      "system_fingerprint": null,
+      "usage": {
+        "completion_tokens": 52,
+        "completion_tokens_details": {
+          "reasoning_tokens": 50
+        },
+        "prompt_tokens": 13,
+        "prompt_tokens_details": {
+          "text_tokens": 13
+        },
+        "total_tokens": 65
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "X-ZenMux-RequestId"
+      ],
+      "cf-ray": [
+        "a0397892de5710dd-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Sat, 30 May 2026 00:02:38 GMT"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-zenmux-requestid": [
+        "2e50200175794de19b50ecd5fad262b7"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

@@ -1,0 +1,137 @@
+{
+  "model_spec": "openrouter:mistralai/mistral-medium-3-5",
+  "provider": "openrouter",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Im1pc3RyYWxhaS9taXN0cmFsLW1lZGl1bS0zLTUiLCJuIjoxLCJyZWFzb25pbmdfZWZmb3J0IjoibG93Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+    },
+    "canonical_json": {
+      "max_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "mistralai/mistral-medium-3-5",
+      "n": 1,
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Hello! How can I assist you today?",
+            "reasoning": "Oh, a simple greeting! The user just said \"Hello world!\". That's a classic first line in programming, often used to test if a system is working. Since the user is greeting me, I should probably respond in a friendly manner. Maybe ask how they're doing or if there's anything I can help with.\n\nBut wait, the user might just be testing me out. So I should keep it simple and welcoming. A standard response would be to say hello back and perhaps offer assistance.\n\nBut also, \"Hello world!\" is a phrase often used in programming tutorials. Maybe the user is a developer or learning to code. But without more context, it's hard to tell. So I'll stick to a general, friendly response.\n\nI can say: \"Hello! How can I assist you today?\" That covers both the greeting and opens the door for them to ask something.",
+            "reasoning_details": [
+              {
+                "format": "unknown",
+                "index": 0,
+                "text": "Oh, a simple greeting! The user just said \"Hello world!\". That's a classic first line in programming, often used to test if a system is working. Since the user is greeting me, I should probably respond in a friendly manner. Maybe ask how they're doing or if there's anything I can help with.\n\nBut wait, the user might just be testing me out. So I should keep it simple and welcoming. A standard response would be to say hello back and perhaps offer assistance.\n\nBut also, \"Hello world!\" is a phrase often used in programming tutorials. Maybe the user is a developer or learning to code. But without more context, it's hard to tell. So I'll stick to a general, friendly response.\n\nI can say: \"Hello! How can I assist you today?\" That covers both the greeting and opens the door for them to ask something.",
+                "type": "reasoning.text"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "stop"
+        }
+      ],
+      "created": 1780097873,
+      "id": "gen-1780097873-1KsW42YDAcXsEIwFIA2I",
+      "model": "mistralai/mistral-medium-3.5-20260430",
+      "object": "chat.completion",
+      "provider": "Mistral",
+      "service_tier": null,
+      "system_fingerprint": null,
+      "usage": {
+        "completion_tokens": 191,
+        "completion_tokens_details": {
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "reasoning_tokens": 206
+        },
+        "cost": 0.0014595,
+        "cost_details": {
+          "upstream_inference_completions_cost": 0.0014325,
+          "upstream_inference_cost": 0.0014595,
+          "upstream_inference_prompt_cost": 2.7e-5
+        },
+        "is_byok": false,
+        "prompt_tokens": 18,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 0,
+          "video_tokens": 0
+        },
+        "total_tokens": 209
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "X-Generation-Id,cf-ray"
+      ],
+      "cf-ray": [
+        "a039545eaf3745f5-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 29 May 2026 23:37:54 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-generation-id": [
+        "gen-1780097873-1KsW42YDAcXsEIwFIA2I"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

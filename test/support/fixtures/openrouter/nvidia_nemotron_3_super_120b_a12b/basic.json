@@ -1,0 +1,137 @@
+{
+  "model_spec": "openrouter:nvidia/nemotron-3-super-120b-a12b",
+  "provider": "openrouter",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Im52aWRpYS9uZW1vdHJvbi0zLXN1cGVyLTEyMGItYTEyYiIsIm4iOjEsInJlYXNvbmluZ19lZmZvcnQiOiJsb3ciLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+    },
+    "canonical_json": {
+      "max_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "nvidia/nemotron-3-super-120b-a12b",
+      "n": 1,
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Hello! 👋 How can I assist you today? Whether you have a question, need help with something, or just want to chat—I'm here for it! 😊",
+            "reasoning": "Okay, the user sent \"Hello world!\" which is a classic programming greeting. They're probably testing if I'm responsive or just being friendly. \n\nHmm, since they kept it super simple, I should match their energy—no need for overcomplication. A warm, open-ended reply would work best to invite further conversation. \n\nNoting they didn't ask anything specific, I'll avoid assumptions and keep it welcoming. The emoji adds approachability without being pushy. \n\n...Wait, should I mention it's a common first program? Nah, might seem like I'm over-explaining unless they show coding interest. Stick to the vibe they set.\n\n",
+            "reasoning_details": [
+              {
+                "format": "unknown",
+                "index": 0,
+                "text": "Okay, the user sent \"Hello world!\" which is a classic programming greeting. They're probably testing if I'm responsive or just being friendly. \n\nHmm, since they kept it super simple, I should match their energy—no need for overcomplication. A warm, open-ended reply would work best to invite further conversation. \n\nNoting they didn't ask anything specific, I'll avoid assumptions and keep it welcoming. The emoji adds approachability without being pushy. \n\n...Wait, should I mention it's a common first program? Nah, might seem like I'm over-explaining unless they show coding interest. Stick to the vibe they set.\n\n",
+                "type": "reasoning.text"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "stop"
+        }
+      ],
+      "created": 1780098272,
+      "id": "gen-1780098272-e2Wi1C8GUV3KTBJ8FCJ4",
+      "model": "nvidia/nemotron-3-super-120b-a12b-20230311",
+      "object": "chat.completion",
+      "provider": "DeepInfra",
+      "service_tier": null,
+      "system_fingerprint": null,
+      "usage": {
+        "completion_tokens": 179,
+        "completion_tokens_details": {
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "reasoning_tokens": 161
+        },
+        "cost": 9.14e-5,
+        "cost_details": {
+          "upstream_inference_completions_cost": 8.95e-5,
+          "upstream_inference_cost": 9.14e-5,
+          "upstream_inference_prompt_cost": 1.9e-6
+        },
+        "is_byok": false,
+        "prompt_tokens": 19,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 0,
+          "video_tokens": 0
+        },
+        "total_tokens": 198
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "X-Generation-Id,cf-ray"
+      ],
+      "cf-ray": [
+        "a0395e1c1e794616-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 29 May 2026 23:44:32 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-generation-id": [
+        "gen-1780098272-e2Wi1C8GUV3KTBJ8FCJ4"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

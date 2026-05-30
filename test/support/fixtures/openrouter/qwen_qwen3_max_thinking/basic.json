@@ -1,0 +1,137 @@
+{
+  "model_spec": "openrouter:qwen/qwen3-max-thinking",
+  "provider": "openrouter",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6InF3ZW4vcXdlbjMtbWF4LXRoaW5raW5nIiwibiI6MSwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "qwen/qwen3-max-thinking",
+      "n": 1,
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Hello! 😊  \nThat's the classic *\"Hello, World!\"* — a timeless tradition in programming! 🌍✨  \n\nHow can I assist you today?  \n🔹 Need help coding your *next* program?  \n🔹 Have a question about tech, science, or anything else?  \n🔹 Just testing if I'm listening? (Spoiler: *I am!*)  \n\nLet me know! 🙌",
+            "reasoning": "We are given a very simple query: \"Hello world!\" which is a common first program or greeting.\nHowever, as an AI, I should recognize that the user might be testing if I am responsive, or they might be starting a conversation.\nSince the query is \"Hello world!\", it is likely a greeting and the user might expect a friendly response.\n\nBut note: the user might be expecting me to recognize that \"Hello world!\" is a classic programming example and perhaps respond in a way that acknowledges that.\n\nHowever, the instruction is to answer the query. The query is a greeting. Therefore, I should respond politely and redirect the user to the purpose of the AI, which is to assist with queries, especially related to the context of the system (which in this case is an AI assistant).\n\nLet me think about the context: \n- The user said \"Hello world!\" which is a standard output for a first program in many languages.\n- As an AI, I should be friendly and let the user know I'm here to help.\n\nPossible response:\n\"Hello! 👋 It looks like you're starting with the classic 'Hello, World!' program. How can I assist you today? Whether you have a programming question, need help with something else, or just want to chat, I'm here for you!\"\n\nBut wait, the user might not be referring to programming. They might just be saying hello. However, the exact phrase \"Hello world!\" (with the exclamation and without a comma) is very specific to programming.\n\nAlternatively, I can keep it simple and friendly.\n\nHowever, note that the system prompt might have set expectations. Since I am an AI assistant, I should be professional and helpful.\n\nLet me check: the user's query is exactly \"Hello world!\" (with capital H and W, and exclamation). This is the standard way the program is written.\n\nI think the best approach is to acknowledge the greeting and state my purpose.\n\nFinal decision: Respond with a friendly greeting and state that I am here to help with any queries. Also, perhaps add a note about the programming reference to show understanding.\n\nResponse draft:\n\"Hello! 😊 That's the classic first program many of us write. How can I help you today? If you have any questions or need assistance with anything, just let me know!\"\n\nBut note: the user might be testing if I recognize the reference. So including that acknowledgment is good.\n\nHowever, the user might be non-technical and just saying hello. But the phrase \"Hello world!\" is so iconic in programming that it's safe to assume it's a reference.\n\nAlternatively, to be safe, I can keep it neutral but friendly.\n\nAnother draft: \n\"Hello! 👋 Welcome. How can I assist you today? Whether you're coding your first 'Hello, World!' program or have another question, I'm here to help.\"\n\nYes, that covers both possibilities.\n\nI think that's a good response.\n\nBut wait: the user might be expecting me to output \"Hello world!\" as a program would. However, as an AI, I am not a program that only outputs that. I am an interactive assistant. So I should not just echo \"Hello world!\" because that would be missing the point of the interaction.\n\nTherefore, I will respond with a helpful message.\n\nLet me write the response.",
+            "reasoning_details": [
+              {
+                "format": "unknown",
+                "index": 0,
+                "text": "We are given a very simple query: \"Hello world!\" which is a common first program or greeting.\nHowever, as an AI, I should recognize that the user might be testing if I am responsive, or they might be starting a conversation.\nSince the query is \"Hello world!\", it is likely a greeting and the user might expect a friendly response.\n\nBut note: the user might be expecting me to recognize that \"Hello world!\" is a classic programming example and perhaps respond in a way that acknowledges that.\n\nHowever, the instruction is to answer the query. The query is a greeting. Therefore, I should respond politely and redirect the user to the purpose of the AI, which is to assist with queries, especially related to the context of the system (which in this case is an AI assistant).\n\nLet me think about the context: \n- The user said \"Hello world!\" which is a standard output for a first program in many languages.\n- As an AI, I should be friendly and let the user know I'm here to help.\n\nPossible response:\n\"Hello! 👋 It looks like you're starting with the classic 'Hello, World!' program. How can I assist you today? Whether you have a programming question, need help with something else, or just want to chat, I'm here for you!\"\n\nBut wait, the user might not be referring to programming. They might just be saying hello. However, the exact phrase \"Hello world!\" (with the exclamation and without a comma) is very specific to programming.\n\nAlternatively, I can keep it simple and friendly.\n\nHowever, note that the system prompt might have set expectations. Since I am an AI assistant, I should be professional and helpful.\n\nLet me check: the user's query is exactly \"Hello world!\" (with capital H and W, and exclamation). This is the standard way the program is written.\n\nI think the best approach is to acknowledge the greeting and state my purpose.\n\nFinal decision: Respond with a friendly greeting and state that I am here to help with any queries. Also, perhaps add a note about the programming reference to show understanding.\n\nResponse draft:\n\"Hello! 😊 That's the classic first program many of us write. How can I help you today? If you have any questions or need assistance with anything, just let me know!\"\n\nBut note: the user might be testing if I recognize the reference. So including that acknowledgment is good.\n\nHowever, the user might be non-technical and just saying hello. But the phrase \"Hello world!\" is so iconic in programming that it's safe to assume it's a reference.\n\nAlternatively, to be safe, I can keep it neutral but friendly.\n\nAnother draft: \n\"Hello! 👋 Welcome. How can I assist you today? Whether you're coding your first 'Hello, World!' program or have another question, I'm here to help.\"\n\nYes, that covers both possibilities.\n\nI think that's a good response.\n\nBut wait: the user might be expecting me to output \"Hello world!\" as a program would. However, as an AI, I am not a program that only outputs that. I am an interactive assistant. So I should not just echo \"Hello world!\" because that would be missing the point of the interaction.\n\nTherefore, I will respond with a helpful message.\n\nLet me write the response.",
+                "type": "reasoning.text"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "stop"
+        }
+      ],
+      "created": 1780097951,
+      "id": "gen-1780097951-6k8M7xtC8dS6cFWpR1Qf",
+      "model": "qwen/qwen3-max-thinking-20260123",
+      "object": "chat.completion",
+      "provider": "Alibaba",
+      "service_tier": null,
+      "system_fingerprint": null,
+      "usage": {
+        "completion_tokens": 766,
+        "completion_tokens_details": {
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "reasoning_tokens": 677
+        },
+        "cost": 0.00299754,
+        "cost_details": {
+          "upstream_inference_completions_cost": 0.0029874,
+          "upstream_inference_cost": 0.00299754,
+          "upstream_inference_prompt_cost": 1.014e-5
+        },
+        "is_byok": false,
+        "prompt_tokens": 13,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 0,
+          "video_tokens": 0
+        },
+        "total_tokens": 779
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "X-Generation-Id,cf-ray"
+      ],
+      "cf-ray": [
+        "a039564609d8e417-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 29 May 2026 23:39:12 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-generation-id": [
+        "gen-1780097951-6k8M7xtC8dS6cFWpR1Qf"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

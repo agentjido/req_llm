@@ -1,0 +1,137 @@
+{
+  "model_spec": "openrouter:google/gemini-2.5-pro-preview",
+  "provider": "openrouter",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Imdvb2dsZS9nZW1pbmktMi41LXByby1wcmV2aWV3IiwibiI6MSwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "google/gemini-2.5-pro-preview",
+      "n": 1,
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Hello there! That's the traditional first program for a reason – a great way to start things off.\n\nHow can I help you today?",
+            "reasoning": "**Processing \"Hello world!\"**\n\nI've parsed the user's input, recognizing \"Hello world!\" as a foundational programming phrase and a simple greeting. My focus is on understanding its dual significance.\n\n**Acknowledging greetings and code**\n\nI've processed your \"Hello world!\" input, understanding it as both a friendly greeting and a fundamental programming concept. I'm now considering how to best respond to acknowledge both aspects while preparing to offer assistance.\n\n",
+            "reasoning_details": [
+              {
+                "format": "google-gemini-v1",
+                "index": 0,
+                "text": "**Processing \"Hello world!\"**\n\nI've parsed the user's input, recognizing \"Hello world!\" as a foundational programming phrase and a simple greeting. My focus is on understanding its dual significance.\n\n**Acknowledging greetings and code**\n\nI've processed your \"Hello world!\" input, understanding it as both a friendly greeting and a fundamental programming concept. I'm now considering how to best respond to acknowledge both aspects while preparing to offer assistance.\n\n",
+                "type": "reasoning.text"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "STOP"
+        }
+      ],
+      "created": 1780100637,
+      "id": "gen-1780100637-sYcNYwR1KCAupwri2Bv1",
+      "model": "google/gemini-2.5-pro",
+      "object": "chat.completion",
+      "provider": "Google",
+      "service_tier": "provisioned",
+      "system_fingerprint": null,
+      "usage": {
+        "completion_tokens": 336,
+        "completion_tokens_details": {
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "reasoning_tokens": 306
+        },
+        "cost": 0.00336375,
+        "cost_details": {
+          "upstream_inference_completions_cost": 0.00336,
+          "upstream_inference_cost": 0.00336375,
+          "upstream_inference_prompt_cost": 3.75e-6
+        },
+        "is_byok": false,
+        "prompt_tokens": 3,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 0,
+          "video_tokens": 0
+        },
+        "total_tokens": 339
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "X-Generation-Id,cf-ray"
+      ],
+      "cf-ray": [
+        "a03997db2c9545f5-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Sat, 30 May 2026 00:23:59 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-generation-id": [
+        "gen-1780100637-sYcNYwR1KCAupwri2Bv1"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

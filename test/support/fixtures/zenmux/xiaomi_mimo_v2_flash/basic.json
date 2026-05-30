@@ -1,0 +1,105 @@
+{
+  "model_spec": "zenmux:xiaomi/mimo-v2-flash",
+  "provider": "zenmux",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjIwMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiSGVsbG8gd29ybGQhIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoieGlhb21pL21pbW8tdjItZmxhc2giLCJyZWFzb25pbmdfZWZmb3J0IjoibG93Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+    },
+    "canonical_json": {
+      "max_completion_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "xiaomi/mimo-v2-flash",
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://zenmux.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "content": "Hello! It's great to see you here. Welcome to the world of AI and programming! 🌍✨\n\nWhether you're just starting your coding journey, exploring artificial intelligence, or just saying hi, you've come to a great place. \n\nHow can I help you today? Feel free to ask about:\n- Programming concepts\n- AI and machine learning\n- Project ideas\n- Problem-solving\n- Or just chat about tech!\n\nWhat's on your mind? 😊",
+            "role": "assistant",
+            "tool_calls": null
+          }
+        }
+      ],
+      "created": 1780099567,
+      "id": "8d1ce335ddc94495a0e9ee56eebca267",
+      "model": "xiaomi/mimo-v2-flash",
+      "object": "chat.completion",
+      "usage": {
+        "completion_tokens": 98,
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "prompt_tokens": 29,
+        "prompt_tokens_details": {
+          "cached_tokens": 19
+        },
+        "total_tokens": 127,
+        "web_search_queries": 0
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "X-ZenMux-RequestId"
+      ],
+      "cf-ray": [
+        "a0397da0db20fa10-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Sat, 30 May 2026 00:06:07 GMT"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-zenmux-requestid": [
+        "8d1ce335ddc94495a0e9ee56eebca267"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

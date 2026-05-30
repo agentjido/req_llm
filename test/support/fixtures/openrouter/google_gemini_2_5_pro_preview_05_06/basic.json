@@ -1,4 +1,6 @@
 {
+  "model_spec": "openrouter:google/gemini-2.5-pro-preview-05-06",
+  "provider": "openrouter",
   "request": {
     "body": {
       "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Imdvb2dsZS9nZW1pbmktMi41LXByby1wcmV2aWV3LTA1LTA2IiwibiI6MSwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
@@ -19,6 +21,9 @@
       "temperature": 0.0
     },
     "headers": {
+      "accept": [
+        "application/json"
+      ],
       "accept-encoding": [
         "gzip"
       ],
@@ -27,7 +32,7 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ]
     },
     "method": "post",
@@ -41,13 +46,13 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Hello there! That's the classic first program for a reason.\n\nWhat can I help you with today?",
-            "reasoning": "**Initiating Recognition of Input**\n\nI've just processed the user's \"Hello world!\" input. It's a foundational phrase in programming, practically a rite of passage for beginners. My next step is to solidify this initial recognition and start forming connections to related concepts.\n\n\n**Assessing the Core Components**\n\nI'm now zeroing in on the essence of \"Hello, world!\" beyond its literal meaning. I see it as a symbol – a starting point, a test, and a declaration of intent. I am currently cross-referencing this phrase with my knowledge base to identify suitable responses that resonate with both its direct and implied meanings.\n\n\n**Analyzing User's Intent**\n\nI'm now weighing the user's implicit goals beyond the basic \"Hello, world!\" greeting. The phrase itself points towards a beginner's introduction to a subject or a system check. So, I'm focusing on crafting a response that welcomes, acknowledges the programming reference, and gently steers toward the real purpose. I'm choosing the best tone.\n\n\n",
+            "content": "Hello there! That's the traditional first greeting for any new program.\n\nHow can I help you today?",
+            "reasoning": "**Acknowledging Initial Input**\n\nI'm processing the classic \"Hello world!\" greeting, recognizing it as a foundational programmatic utterance and a straightforward, universal welcome. My analysis is focused on its contextual implications and immediate recognition.\n\n**Processing Universal Greeting**\n\nI've acknowledged the \"Hello world!\" input, recognizing its significance as a common programmatic starting point. My current focus is on formulating an appropriate and welcoming response that aligns with its foundational nature.\n\n**Responding to Basic Input**\n\nI've received the \"Hello world!\" greeting and am confirming its recognition as a standard introductory phrase. My current thought is to formulate a welcoming and helpful reply that acknowledges this classic starting point and offers assistance.\n\n",
             "reasoning_details": [
               {
-                "format": "unknown",
+                "format": "google-gemini-v1",
                 "index": 0,
-                "text": "**Initiating Recognition of Input**\n\nI've just processed the user's \"Hello world!\" input. It's a foundational phrase in programming, practically a rite of passage for beginners. My next step is to solidify this initial recognition and start forming connections to related concepts.\n\n\n**Assessing the Core Components**\n\nI'm now zeroing in on the essence of \"Hello, world!\" beyond its literal meaning. I see it as a symbol – a starting point, a test, and a declaration of intent. I am currently cross-referencing this phrase with my knowledge base to identify suitable responses that resonate with both its direct and implied meanings.\n\n\n**Analyzing User's Intent**\n\nI'm now weighing the user's implicit goals beyond the basic \"Hello, world!\" greeting. The phrase itself points towards a beginner's introduction to a subject or a system check. So, I'm focusing on crafting a response that welcomes, acknowledges the programming reference, and gently steers toward the real purpose. I'm choosing the best tone.\n\n\n",
+                "text": "**Acknowledging Initial Input**\n\nI'm processing the classic \"Hello world!\" greeting, recognizing it as a foundational programmatic utterance and a straightforward, universal welcome. My analysis is focused on its contextual implications and immediate recognition.\n\n**Processing Universal Greeting**\n\nI've acknowledged the \"Hello world!\" input, recognizing its significance as a common programmatic starting point. My current focus is on formulating an appropriate and welcoming response that aligns with its foundational nature.\n\n**Responding to Basic Input**\n\nI've received the \"Hello world!\" greeting and am confirming its recognition as a standard introductory phrase. My current thought is to formulate a welcoming and helpful reply that acknowledges this classic starting point and offers assistance.\n\n",
                 "type": "reasoning.text"
               }
             ],
@@ -57,30 +62,46 @@
           "native_finish_reason": "STOP"
         }
       ],
-      "created": 1762104964,
-      "id": "gen-1762104964-eQ6ZpF36Vv5qqCT1XQoQ",
+      "created": 1780100642,
+      "id": "gen-1780100642-ecg887V8WxCCg18HxMhb",
       "model": "google/gemini-2.5-pro",
       "object": "chat.completion",
       "provider": "Google",
+      "service_tier": "provisioned",
+      "system_fingerprint": null,
       "usage": {
-        "completion_tokens": 382,
+        "completion_tokens": 362,
         "completion_tokens_details": {
+          "audio_tokens": 0,
           "image_tokens": 0,
-          "reasoning_tokens": 359
+          "reasoning_tokens": 339
         },
+        "cost": 0.00362375,
+        "cost_details": {
+          "upstream_inference_completions_cost": 0.00362,
+          "upstream_inference_cost": 0.00362375,
+          "upstream_inference_prompt_cost": 3.75e-6
+        },
+        "is_byok": false,
         "prompt_tokens": 3,
         "prompt_tokens_details": {
-          "cached_tokens": 0
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 0,
+          "video_tokens": 0
         },
-        "total_tokens": 385
+        "total_tokens": 365
       }
     },
     "headers": {
       "access-control-allow-origin": [
         "*"
       ],
+      "access-control-expose-headers": [
+        "X-Generation-Id,cf-ray"
+      ],
       "cf-ray": [
-        "9985645b2d64e25b-ORD"
+        "a03997f71f05dc06-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -89,7 +110,7 @@
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:36:06 GMT"
+        "Sat, 30 May 2026 00:24:04 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
@@ -103,13 +124,14 @@
       "transfer-encoding": [
         "chunked"
       ],
-      "vary": [
-        "Accept-Encoding"
-      ],
       "x-content-type-options": [
         "nosniff"
+      ],
+      "x-generation-id": [
+        "gen-1780100642-ecg887V8WxCCg18HxMhb"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

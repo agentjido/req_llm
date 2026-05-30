@@ -1,0 +1,104 @@
+{
+  "model_spec": "zai:glm-4.7-flash",
+  "provider": "zai",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImdsbS00LjctZmxhc2giLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+    },
+    "canonical_json": {
+      "max_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "glm-4.7-flash",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.z.ai/api/paas/v4/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "content": "Hello! It's great to meet you. How can I help you today?",
+            "reasoning_content": "1.  **Analyze the user's input:** The user said \"Hello world!\".\n2.  **Identify the intent:** This is a standard, friendly greeting. It's often used as the first line of code in programming tutorials.\n3.  **Determine the appropriate response:**\n    *   Acknowledge the greeting.\n    *   Respond in kind (say hello back).\n    *   Offer assistance.\n    *   Keep it brief and welcoming.\n4.  **Drafting potential responses:**\n    *   *Option 1:* Hello world! (Too repetitive, boring).\n    *   *Option 2:* Hi there! How can I help you today? (Good, standard).\n    *   *Option 3:* Hello! Welcome. I am an AI assistant. How can I assist you? (A bit formal).\n    *   *Option 4:* Hello world! It's great to meet you. What can I do for you? (Friendly and enthusiastic).\n5.  **Selecting the best response:** Option 2 or 4 are strong. Let's go with a friendly, helpful standard response.\n6.  **Final Polish:** \"Hello! How can I help you today?\" or \"Hello world! It's great to meet you. How can I assist you today?\" Let's go with a simple, welcoming greeting.",
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1780097558,
+      "id": "202605300732178ae507c0388f419a",
+      "model": "glm-4.7-flash",
+      "object": "chat.completion",
+      "request_id": "202605300732178ae507c0388f419a",
+      "usage": {
+        "completion_tokens": 298,
+        "completion_tokens_details": {
+          "reasoning_tokens": 280
+        },
+        "prompt_tokens": 8,
+        "prompt_tokens_details": {
+          "cached_tokens": 2
+        },
+        "total_tokens": 306
+      }
+    },
+    "headers": {
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json; charset=UTF-8"
+      ],
+      "date": [
+        "Fri, 29 May 2026 23:32:38 GMT"
+      ],
+      "keep-alive": [
+        "timeout=6"
+      ],
+      "server": [
+        "nginx"
+      ],
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding",
+        "Origin",
+        "Access-Control-Request-Method",
+        "Access-Control-Request-Headers",
+        "Origin",
+        "Access-Control-Request-Method",
+        "Access-Control-Request-Headers"
+      ],
+      "x-log-id": [
+        "202605300732178ae507c0388f419a"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

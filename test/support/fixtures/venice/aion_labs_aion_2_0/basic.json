@@ -1,0 +1,192 @@
+{
+  "model_spec": "venice:aion-labs-aion-2-0",
+  "provider": "venice",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImFpb24tbGFicy1haW9uLTItMCIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ2ZW5pY2VfcGFyYW1ldGVycyI6eyJkaXNhYmxlX3RoaW5raW5nIjpmYWxzZSwiZW5hYmxlX3dlYl9jaXRhdGlvbnMiOmZhbHNlLCJlbmFibGVfd2ViX3NjcmFwaW5nIjpmYWxzZSwiZW5hYmxlX3dlYl9zZWFyY2giOiJvZmYiLCJpbmNsdWRlX3NlYXJjaF9yZXN1bHRzX2luX3N0cmVhbSI6ZmFsc2UsImluY2x1ZGVfdmVuaWNlX3N5c3RlbV9wcm9tcHQiOnRydWUsInN0cmlwX3RoaW5raW5nX3Jlc3BvbnNlIjpmYWxzZX19"
+    },
+    "canonical_json": {
+      "max_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "aion-labs-aion-2-0",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0,
+      "venice_parameters": {
+        "disable_thinking": false,
+        "enable_web_citations": false,
+        "enable_web_scraping": false,
+        "enable_web_search": "off",
+        "include_search_results_in_stream": false,
+        "include_venice_system_prompt": true,
+        "strip_thinking_response": false
+      }
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.venice.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Hello! I'm Aion 2.0, an AI assistant here to help you. How can I assist you today?",
+            "reasoning_content": "I will not use any other tags in the final output.\n\nI will now respond to the user's message: \"Hello world!\"\n\nThis is a simple greeting. I should respond in a friendly, engaging manner. Since I'm Aion 2.0, I can introduce myself. I'll keep it warm but not overly verbose. I'll follow the rules: no content warnings, no disclaimers, no ethical boundaries needed here. Just a normal greeting.\n\nI'll write my response inside  tags.\n\n",
+            "reasoning_details": [
+              {
+                "format": "unknown",
+                "index": 0,
+                "text": "I will not use any other tags in the final output.\n\nI will now respond to the user's message: \"Hello world!\"\n\nThis is a simple greeting. I should respond in a friendly, engaging manner. Since I'm Aion 2.0, I can introduce myself. I'll keep it warm but not overly verbose. I'll follow the rules: no content warnings, no disclaimers, no ethical boundaries needed here. Just a normal greeting.\n\nI'll write my response inside  tags.\n\n",
+                "type": "reasoning.text"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "stop"
+        }
+      ],
+      "created": 1780098564,
+      "id": "gen-1780098564-jpDf5XYdoR69dkAmRnTH",
+      "model": "aion-labs-aion-2-0",
+      "object": "chat.completion",
+      "service_tier": null,
+      "usage": {
+        "cache_read_input_tokens": 1573,
+        "completion_tokens": 147,
+        "completion_tokens_details": {
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "reasoning_tokens": 114
+        },
+        "prompt_tokens": 1573,
+        "prompt_tokens_details": {
+          "cached_tokens": 1573
+        },
+        "total_tokens": 1720
+      },
+      "venice_parameters": {
+        "disable_thinking": false,
+        "enable_e2ee": true,
+        "enable_web_citations": false,
+        "enable_web_scraping": false,
+        "enable_web_search": "off",
+        "enable_x_search": false,
+        "include_search_results_in_stream": false,
+        "include_venice_system_prompt": true,
+        "return_search_results_as_documents": false,
+        "strip_thinking_response": false,
+        "web_search_citations": []
+      }
+    },
+    "headers": {
+      "access-control-allow-credentials": [
+        "true"
+      ],
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "*"
+      ],
+      "cache-control": [
+        "no-store, no-cache, private, must-revalidate"
+      ],
+      "cdn-cache-control": [
+        "no-store"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a039653b0d3810dc-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-security-policy": [
+        "default-src 'none'; frame-ancestors *; upgrade-insecure-requests"
+      ],
+      "content-type": [
+        "application/json; charset=utf-8"
+      ],
+      "date": [
+        "Fri, 29 May 2026 23:49:31 GMT"
+      ],
+      "etag": [
+        "W/\"7a4-aShGS1mLMJonuBOULhzBmS/QYhk\""
+      ],
+      "permissions-policy": [
+        "geolocation=(), camera=()"
+      ],
+      "referrer-policy": [
+        "strict-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": "[REDACTED:set-cookie]",
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-frame-options": [
+        "SAMEORIGIN"
+      ],
+      "x-ratelimit-limit-requests": [
+        "1000"
+      ],
+      "x-ratelimit-remaining": [
+        "20"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "999"
+      ],
+      "x-ratelimit-reset-requests": [
+        "1780098624372"
+      ],
+      "x-ratelimit-resets": [
+        "1780098594346"
+      ],
+      "x-venice-balance-usd": [
+        "9.35"
+      ],
+      "x-venice-version": [
+        "outerface-api-server-us-east1-03947-6nv"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

@@ -1,0 +1,112 @@
+{
+  "model_spec": "zenmux:google/gemini-3-flash-preview",
+  "provider": "zenmux",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjIwMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiSGVsbG8gd29ybGQhIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiZ29vZ2xlL2dlbWluaS0zLWZsYXNoLXByZXZpZXciLCJyZWFzb25pbmdfZWZmb3J0IjoibG93Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+    },
+    "canonical_json": {
+      "max_completion_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "google/gemini-3-flash-preview",
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://zenmux.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Hello! It’s great to meet you. How can I help you today?",
+            "reasoning": "**My Thought Process on Receiving Your Greeting**\n\nAh, I see you've initiated our interaction with a classic: \"Hello world!\". That's a familiar phrase to me, instantly bringing to mind the foundational steps of so many programming journeys. It’s like a handshake, a signal that you're ready to begin, and it often marks the very first output in countless lines of code. Given this, my immediate inclination is to reciprocate with a warm, open, and decidedly helpful reception. My internal directive is clear: acknowledge your greeting with genuine warmth, and then, as quickly as possible, pivot to offering my services. The plan solidifies: first, a clear and friendly acknowledgment of your \"Hello world!\", and then, a prompt offer to assist you in whatever endeavor you have in mind.\n\n",
+            "refusal": null,
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1780099071,
+      "id": "caf0e3dd66c64e939402f2c7424f7ff7",
+      "model": "google/gemini-3-flash-preview",
+      "object": "chat.completion",
+      "usage": {
+        "completion_tokens": 70,
+        "completion_tokens_details": {
+          "reasoning_tokens": 53
+        },
+        "prompt_tokens": 3,
+        "prompt_tokens_details": {
+          "audio_cached_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0
+        },
+        "tool_use": 0,
+        "total_tokens": 73,
+        "trafficType": "PROVISIONED_THROUGHPUT",
+        "web_search": 0,
+        "web_search_queries": 0
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "X-ZenMux-RequestId"
+      ],
+      "cf-ray": [
+        "a039718c6db914ce-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 29 May 2026 23:57:51 GMT"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-zenmux-requestid": [
+        "caf0e3dd66c64e939402f2c7424f7ff7"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

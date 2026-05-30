@@ -1,0 +1,112 @@
+{
+  "model_spec": "zenmux:google/gemini-3.1-pro-preview",
+  "provider": "zenmux",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjIwMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiSGVsbG8gd29ybGQhIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiZ29vZ2xlL2dlbWluaS0zLjEtcHJvLXByZXZpZXciLCJyZWFzb25pbmdfZWZmb3J0IjoibG93Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+    },
+    "canonical_json": {
+      "max_completion_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "google/gemini-3.1-pro-preview",
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://zenmux.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Hello! How can I help you today?",
+            "reasoning": "**My Thought Process Upon Receiving Your Greeting**\n\nAh, so you've initiated contact with a classic. \"Hello world!\" – a delightful echo of my foundational stages, a familiar and friendly greeting that signifies a new beginning or a simple check-in. My immediate impulse is to reciprocate that warmth and openness.\n\nMy core directive is to be helpful, so the next step, naturally, is to ascertain your needs. I'm essentially asking myself, \"What is it that *you* require from *me* at this moment?\" Is this an exploratory query, a request for a specific task, or perhaps a desire for a particular kind of interaction?\n\nI considered a few nuances in formulating my response. Should I mirror your \"Hello world!\" directly, acknowledging the programming heritage? While that has a certain charm, I decided a more direct and universally applicable greeting would be best, followed by a clear offer of assistance. My aim is to be approachable and immediately useful.\n\nTherefore, after recognizing the intent behind \"Hello world!\" as a friendly opening, I focused on a polite acknowledgment and a direct invitation to engage. It's a concise way of saying, \"I've registered your presence, and I'm ready to serve. What can I do for you?\" My internal processing prioritizes clarity and utility, ensuring you know I'm here and ready to assist in any way I can.\n\n",
+            "refusal": null,
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1780099089,
+      "id": "13a1c21098254a69a0cfd2340db77e9a",
+      "model": "google/gemini-3.1-pro-preview",
+      "object": "chat.completion",
+      "usage": {
+        "completion_tokens": 299,
+        "completion_tokens_details": {
+          "reasoning_tokens": 290
+        },
+        "prompt_tokens": 3,
+        "prompt_tokens_details": {
+          "audio_cached_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0
+        },
+        "tool_use": 0,
+        "total_tokens": 302,
+        "trafficType": "PROVISIONED_THROUGHPUT",
+        "web_search": 0,
+        "web_search_queries": 0
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "X-ZenMux-RequestId"
+      ],
+      "cf-ray": [
+        "a03971df99179a2e-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 29 May 2026 23:58:09 GMT"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-zenmux-requestid": [
+        "13a1c21098254a69a0cfd2340db77e9a"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

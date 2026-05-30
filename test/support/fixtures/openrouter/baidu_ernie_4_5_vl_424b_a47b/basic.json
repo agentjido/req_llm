@@ -1,0 +1,137 @@
+{
+  "model_spec": "openrouter:baidu/ernie-4.5-vl-424b-a47b",
+  "provider": "openrouter",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImJhaWR1L2VybmllLTQuNS12bC00MjRiLWE0N2IiLCJuIjoxLCJyZWFzb25pbmdfZWZmb3J0IjoibG93Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+    },
+    "canonical_json": {
+      "max_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "baidu/ernie-4.5-vl-424b-a47b",
+      "n": 1,
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "To create a simple program that outputs \"Hello world!\", you can use the following Python code:\n\n```python\nprint(\"Hello world!\")\n```\n\n### How to Run:\n1. Save this code in a file named `hello.py`\n2. Open a terminal/command prompt\n3. Navigate to the directory containing `hello.py`\n4. Run: `python hello.py`\n\n### Alternative Languages:\nHere are equivalent implementations in other popular languages:\n\n**JavaScript (Browser Console/Node.js):**\n```javascript\nconsole.log(\"Hello world!\");\n```\n\n**Java:**\n```java\npublic class HelloWorld {\n    public static void main(String[] args) {\n        System.out.println(\"Hello world!\");\n    }\n}\n```\n\n**C:**\n```c\n#include <stdio.h>\n\nint main() {\n    printf(\"Hello world!\\n\");\n    return 0;\n}\n```\n\n**C++:**\n```cpp\n#include <iostream>\n\nint main() {\n    std::cout << \"Hello world!\" << std::endl;\n    return 0;\n}\n```\n\n**C#:**\n```csharp\nusing System;\n\nclass Program {\n    static void Main() {\n        Console.WriteLine(\"Hello world!\");\n    }\n}\n```\n\n**PHP:**\n```php\n<?php\necho \"Hello world!\";\n?>\n```\n\n**Ruby:**\n```ruby\nputs \"Hello world!\"\n```\n\nAll these programs will output:\n```\nHello world!\n```\n\nThis is the classic introductory program in most programming languages, demonstrating the simplest way to display text output.",
+            "reasoning": "\nWe are going to create a simple \"Hello, World!\" program in Python.\n Since the user just said \"Hello world!\", we can assume they want a program that prints that.\n However, note that the user's message is exactly \"Hello world!\" (with an exclamation mark).\n We'll write a Python script that prints \"Hello world!\".\n",
+            "reasoning_details": [
+              {
+                "format": "unknown",
+                "index": 0,
+                "text": "\nWe are going to create a simple \"Hello, World!\" program in Python.\n Since the user just said \"Hello world!\", we can assume they want a program that prints that.\n However, note that the user's message is exactly \"Hello world!\" (with an exclamation mark).\n We'll write a Python script that prints \"Hello world!\".\n",
+                "type": "reasoning.text"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "stop"
+        }
+      ],
+      "created": 1780100066,
+      "id": "gen-1780100066-mqGzepMgFX9lSqiwDoMg",
+      "model": "baidu/ernie-4.5-vl-424b-a47b",
+      "object": "chat.completion",
+      "provider": "Novita",
+      "service_tier": null,
+      "system_fingerprint": null,
+      "usage": {
+        "completion_tokens": 450,
+        "completion_tokens_details": {
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "reasoning_tokens": 75
+        },
+        "cost": 5.6376e-4,
+        "cost_details": {
+          "upstream_inference_completions_cost": 5.625e-4,
+          "upstream_inference_cost": 5.6376e-4,
+          "upstream_inference_prompt_cost": 1.26e-6
+        },
+        "is_byok": false,
+        "prompt_tokens": 3,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 0,
+          "video_tokens": 0
+        },
+        "total_tokens": 453
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "X-Generation-Id,cf-ray"
+      ],
+      "cf-ray": [
+        "a03989e9df44fa27-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Sat, 30 May 2026 00:14:27 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-generation-id": [
+        "gen-1780100066-mqGzepMgFX9lSqiwDoMg"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

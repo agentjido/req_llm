@@ -1,0 +1,105 @@
+{
+  "model_spec": "zenmux:qwen/qwen3.6-flash",
+  "provider": "zenmux",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjUwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6InF3ZW4vcXdlbjMuNi1mbGFzaCIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+    },
+    "canonical_json": {
+      "max_completion_tokens": 50,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "qwen/qwen3.6-flash",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://zenmux.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Hello! 👋 How can I help you today? Whether you have a question, need help with a project, or just want to chat, I'm here for you!",
+            "reasoning": "Here's a thinking process:\n\n1.  **Analyze User Input:**\n   - User said: \"Hello world!\"\n   - This is a standard greeting, often used as a first message or test input.\n\n2.  **Identify Intent:**\n   - The user is greeting me and likely expecting a friendly response.\n   - No specific question or task is provided.\n\n3.  **Determine Response Strategy:**\n   - Acknowledge the greeting warmly.\n   - Offer assistance.\n   - Keep it concise and open-ended to encourage further interaction.\n\n4.  **Draft Response (Mental):**\n   Hello! How can I assist you today? Feel free to ask me anything or let me know what you'd like help with!\n\n5.  **Refine Response:**\n   - Check tone: Friendly, professional, helpful.\n   - Check length: Short and direct.\n   - Matches standard AI greeting protocols.\n\n   Final version matches the draft.\n\n6.  **Output Generation:** (Proceeds to output)✅",
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1780099371,
+      "id": "939d31b9462e40a1a7985bf89eb427e4",
+      "model": "qwen/qwen3.6-flash",
+      "object": "chat.completion",
+      "system_fingerprint": null,
+      "usage": {
+        "completion_tokens": 261,
+        "completion_tokens_details": {
+          "reasoning_tokens": 221
+        },
+        "prompt_tokens": 13,
+        "prompt_tokens_details": {
+          "text_tokens": 13
+        },
+        "total_tokens": 274
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "X-ZenMux-RequestId"
+      ],
+      "cf-ray": [
+        "a03978d51b60e21b-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Sat, 30 May 2026 00:02:50 GMT"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-zenmux-requestid": [
+        "939d31b9462e40a1a7985bf89eb427e4"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

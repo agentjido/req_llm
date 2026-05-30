@@ -1,0 +1,106 @@
+{
+  "model_spec": "zenmux:xiaomi/mimo-v2.5-pro",
+  "provider": "zenmux",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjIwMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiSGVsbG8gd29ybGQhIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoieGlhb21pL21pbW8tdjIuNS1wcm8iLCJyZWFzb25pbmdfZWZmb3J0IjoibG93Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+    },
+    "canonical_json": {
+      "max_completion_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "xiaomi/mimo-v2.5-pro",
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://zenmux.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "content": "Hello there! 🌍✨  \nWelcome to this little corner of the digital world. I’m MiMo — curious, thoughtful, and here to chat, help, or explore ideas with you.  \n\nWhether you're testing, thinking out loud, or just saying hi — I’m glad you stopped by.  \nWhat’s on your mind today? 😊",
+            "reasoning": "Hmm, the user just said \"Hello world!\" which is a very common greeting in programming and casual conversations. It seems like they're testing the waters or simply being friendly. \n\nGiven the open-ended nature of the message, I should respond warmly and invite further interaction. Since they didn't specify any particular need, I'll keep it general but offer multiple directions for conversation. \n\nThe \"Hello world!\" phrasing suggests they might be familiar with programming, so I could acknowledge that with a light tech reference. But I'll also keep it broad enough for non-tech conversations. \n\nI'll end with an open question to encourage them to share what's on their mind, making sure to sound approachable and enthusiastic.",
+            "role": "assistant",
+            "tool_calls": null
+          }
+        }
+      ],
+      "created": 1780099597,
+      "id": "f690f3fb853a4696a8e11823e3e67124",
+      "model": "xiaomi/mimo-v2.5-pro",
+      "object": "chat.completion",
+      "usage": {
+        "completion_tokens": 218,
+        "completion_tokens_details": {
+          "reasoning_tokens": 143
+        },
+        "prompt_tokens": 254,
+        "prompt_tokens_details": {
+          "cached_tokens": 192
+        },
+        "total_tokens": 472,
+        "web_search_queries": 0
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "X-ZenMux-RequestId"
+      ],
+      "cf-ray": [
+        "a0397e451fa9cca4-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Sat, 30 May 2026 00:06:37 GMT"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-zenmux-requestid": [
+        "f690f3fb853a4696a8e11823e3e67124"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

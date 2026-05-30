@@ -1,0 +1,137 @@
+{
+  "model_spec": "openrouter:bytedance-seed/seed-1.6-flash",
+  "provider": "openrouter",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImJ5dGVkYW5jZS1zZWVkL3NlZWQtMS42LWZsYXNoIiwibiI6MSwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "bytedance-seed/seed-1.6-flash",
+      "n": 1,
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Hello there! 👋 It's wonderful to connect with you. Whether you have a question, need help with something, or just want to chat, feel free to share—I'm here to assist! 😊",
+            "reasoning": "\nGot it, the user said \"Hello world!\", so I should respond in a friendly and welcoming way. Maybe start by acknowledging their greeting. Let me keep it simple and warm. Something like \"Hello there! 👋 It's great to connect with you. How can I assist you today?\" That should work. Let me check if that's appropriate. Yep, it's friendly and invites them to ask for help. Alright, that's a good response.",
+            "reasoning_details": [
+              {
+                "format": "unknown",
+                "index": 0,
+                "text": "\nGot it, the user said \"Hello world!\", so I should respond in a friendly and welcoming way. Maybe start by acknowledging their greeting. Let me keep it simple and warm. Something like \"Hello there! 👋 It's great to connect with you. How can I assist you today?\" That should work. Let me check if that's appropriate. Yep, it's friendly and invites them to ask for help. Alright, that's a good response.",
+                "type": "reasoning.text"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "stop"
+        }
+      ],
+      "created": 1780100086,
+      "id": "gen-1780100086-jR2GuIlihRT6p1IruNMx",
+      "model": "bytedance-seed/seed-1.6-flash-20250625",
+      "object": "chat.completion",
+      "provider": "Seed",
+      "service_tier": null,
+      "system_fingerprint": null,
+      "usage": {
+        "completion_tokens": 140,
+        "completion_tokens_details": {
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "reasoning_tokens": 97
+        },
+        "cost": 4.8375e-5,
+        "cost_details": {
+          "upstream_inference_completions_cost": 4.2e-5,
+          "upstream_inference_cost": 4.8375e-5,
+          "upstream_inference_prompt_cost": 6.375e-6
+        },
+        "is_byok": false,
+        "prompt_tokens": 85,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 0,
+          "video_tokens": 0
+        },
+        "total_tokens": 225
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "X-Generation-Id,cf-ray"
+      ],
+      "cf-ray": [
+        "a0398a62ba991150-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Sat, 30 May 2026 00:14:46 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-generation-id": [
+        "gen-1780100086-jR2GuIlihRT6p1IruNMx"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

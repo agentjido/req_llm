@@ -1,0 +1,137 @@
+{
+  "model_spec": "openrouter:qwen/qwen3-vl-30b-a3b-thinking",
+  "provider": "openrouter",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6InF3ZW4vcXdlbjMtdmwtMzBiLWEzYi10aGlua2luZyIsIm4iOjEsInJlYXNvbmluZ19lZmZvcnQiOiJsb3ciLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+    },
+    "canonical_json": {
+      "max_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "qwen/qwen3-vl-30b-a3b-thinking",
+      "n": 1,
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Hello! 👋 It's great to hear you saying \"Hello world!\"—a classic programming tradition (and a friendly greeting too). Whether you're testing if I'm responsive, starting your coding journey, or just being playful, I'm here to help. 😊  \n\nWhat would you like to do today? Code something? Learn something new? Or just chat? Let me know!",
+            "reasoning": "Okay, the user just said \"Hello world!\" which is a classic first program in programming. I need to respond appropriately.\n\nFirst, I should recognize that \"Hello world!\" is a common greeting in programming, often used as a first example when learning a new language. The user might be a beginner, or maybe they're testing if I'm responsive.\n\nI need to be friendly and helpful. Let me respond with something that acknowledges their greeting and offers assistance. Maybe add a bit of enthusiasm to keep the interaction positive.\n\nWait, the user might not be a programmer. They could just be saying hello casually. But since they used \"Hello world!\", which is a programming reference, it's safe to assume they know a bit about coding.\n\nAlternatively, maybe they're just being playful. Either way, I should respond in a way that's open to both possibilities.\n\nLet me structure my response:\n1. Acknowledge their greeting.\n2. Mention that it's a classic programming phrase.\n3. Offer help with coding or other questions.\n\nAlso, since the user is using English, I'll respond in English.\n\nPossible response: \"Hello! Welcome to the world of programming (or just the world!). It's great to hear you're starting out. If you have any questions about coding, I'm here to help. What would you like to do today?\"\n\nWait, but the user might not be starting out. Maybe they're experienced. Let me make it more general.\n\nBetter: \"Hello! 'Hello world!' is a classic introduction, especially in programming. Whether you're just starting out or just feeling playful, I'm here to help. What would you like to explore?\"\n\nThat's better. It's inclusive and friendly.\n",
+            "reasoning_details": [
+              {
+                "format": "unknown",
+                "index": 0,
+                "text": "Okay, the user just said \"Hello world!\" which is a classic first program in programming. I need to respond appropriately.\n\nFirst, I should recognize that \"Hello world!\" is a common greeting in programming, often used as a first example when learning a new language. The user might be a beginner, or maybe they're testing if I'm responsive.\n\nI need to be friendly and helpful. Let me respond with something that acknowledges their greeting and offers assistance. Maybe add a bit of enthusiasm to keep the interaction positive.\n\nWait, the user might not be a programmer. They could just be saying hello casually. But since they used \"Hello world!\", which is a programming reference, it's safe to assume they know a bit about coding.\n\nAlternatively, maybe they're just being playful. Either way, I should respond in a way that's open to both possibilities.\n\nLet me structure my response:\n1. Acknowledge their greeting.\n2. Mention that it's a classic programming phrase.\n3. Offer help with coding or other questions.\n\nAlso, since the user is using English, I'll respond in English.\n\nPossible response: \"Hello! Welcome to the world of programming (or just the world!). It's great to hear you're starting out. If you have any questions about coding, I'm here to help. What would you like to do today?\"\n\nWait, but the user might not be starting out. Maybe they're experienced. Let me make it more general.\n\nBetter: \"Hello! 'Hello world!' is a classic introduction, especially in programming. Whether you're just starting out or just feeling playful, I'm here to help. What would you like to explore?\"\n\nThat's better. It's inclusive and friendly.\n",
+                "type": "reasoning.text"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "stop"
+        }
+      ],
+      "created": 1780098010,
+      "id": "gen-1780098010-w6B5flWuIgNDmBXxFYyw",
+      "model": "qwen/qwen3-vl-30b-a3b-thinking",
+      "object": "chat.completion",
+      "provider": "Novita",
+      "service_tier": null,
+      "system_fingerprint": null,
+      "usage": {
+        "completion_tokens": 430,
+        "completion_tokens_details": {
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "reasoning_tokens": 349
+        },
+        "cost": 4.326e-4,
+        "cost_details": {
+          "upstream_inference_completions_cost": 4.3e-4,
+          "upstream_inference_cost": 4.326e-4,
+          "upstream_inference_prompt_cost": 2.6e-6
+        },
+        "is_byok": false,
+        "prompt_tokens": 13,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 0,
+          "video_tokens": 0
+        },
+        "total_tokens": 443
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "X-Generation-Id,cf-ray"
+      ],
+      "cf-ray": [
+        "a03957b71d3be25d-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 29 May 2026 23:40:11 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-generation-id": [
+        "gen-1780098010-w6B5flWuIgNDmBXxFYyw"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

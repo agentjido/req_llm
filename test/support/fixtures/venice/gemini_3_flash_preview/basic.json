@@ -1,0 +1,194 @@
+{
+  "model_spec": "venice:gemini-3-flash-preview",
+  "provider": "venice",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImdlbWluaS0zLWZsYXNoLXByZXZpZXciLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMCwidmVuaWNlX3BhcmFtZXRlcnMiOnsiZGlzYWJsZV90aGlua2luZyI6ZmFsc2UsImVuYWJsZV93ZWJfY2l0YXRpb25zIjpmYWxzZSwiZW5hYmxlX3dlYl9zY3JhcGluZyI6ZmFsc2UsImVuYWJsZV93ZWJfc2VhcmNoIjoib2ZmIiwiaW5jbHVkZV9zZWFyY2hfcmVzdWx0c19pbl9zdHJlYW0iOmZhbHNlLCJpbmNsdWRlX3ZlbmljZV9zeXN0ZW1fcHJvbXB0Ijp0cnVlLCJzdHJpcF90aGlua2luZ19yZXNwb25zZSI6ZmFsc2V9fQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "gemini-3-flash-preview",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0,
+      "venice_parameters": {
+        "disable_thinking": false,
+        "enable_web_citations": false,
+        "enable_web_scraping": false,
+        "enable_web_search": "off",
+        "include_search_results_in_stream": false,
+        "include_venice_system_prompt": true,
+        "strip_thinking_response": false
+      }
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.venice.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Hello! I am Gemini 3 Flash Preview. How can I help you today?",
+            "reasoning_details": [
+              {
+                "data": "AY89a19Ke+qi3mpDpM/FPt0SixIh2VnTRJxD7G3lv/1vWrf39kjR1pa+tTTUaRZeuC5/mhTcso/s38mjm3q86X1XLn78wpvh657Rs+u/2dy7uQ9T8olvJvCVI0EJi9RdyRAwN/T3xrtRjClQQWQKRMGWBOqSJr5Ky8b9y/ydhWROr7u3mDpMB2GlWKpl4kOTXxOjAfQsCIb83wphURzgUcMyhCMbLHz/rsK96D4S+fdlsKwkpR5INRs7emGo/NesNbZyyvnJUdYmMXGQTevsEPmphZOiAe3rFz38U2LtwQH9V+8ELH8d5LLDXboOCbtPV4DX2RfLpcBMjXa5jFjRRxusr4zuF+4AgU/lMLB1jJSsPdqDQrNqe15fD0Byn6hoXY6nvC0C/Xph9NM2Mlq/WcoCCFlDhwci1ix/40v29g0/GLYe1gqFFt+iKPuw0OgYZeaWdlcHGG3ykDkcYUEAXlgmSgj2NJY5sxm/tr1oI9KtmEeNwXxLDe5A1T/nk6/dUbGVqSxNx6xNqz6AoCGuTl0=",
+                "format": "google-gemini-v1",
+                "index": 0,
+                "type": "reasoning.encrypted"
+              }
+            ],
+            "reasoning_encrypted": true,
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "STOP"
+        }
+      ],
+      "created": 1780098680,
+      "id": "gen-1780098680-DSt3j4Q8sdx0wA9VuIZx",
+      "model": "gemini-3-flash-preview",
+      "object": "chat.completion",
+      "service_tier": "provisioned",
+      "usage": {
+        "cache_creation_input_tokens": 1597,
+        "cache_read_input_tokens": 1597,
+        "completion_tokens": 90,
+        "completion_tokens_details": {
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "reasoning_tokens": 73
+        },
+        "prompt_tokens": 1599,
+        "prompt_tokens_details": {
+          "cache_creation_input_tokens": 1597,
+          "cached_tokens": 1597
+        },
+        "total_tokens": 1689
+      },
+      "venice_parameters": {
+        "disable_thinking": false,
+        "enable_e2ee": true,
+        "enable_web_citations": false,
+        "enable_web_scraping": false,
+        "enable_web_search": "off",
+        "enable_x_search": false,
+        "include_search_results_in_stream": false,
+        "include_venice_system_prompt": true,
+        "return_search_results_as_documents": false,
+        "strip_thinking_response": false,
+        "web_search_citations": []
+      }
+    },
+    "headers": {
+      "access-control-allow-credentials": [
+        "true"
+      ],
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "*"
+      ],
+      "cache-control": [
+        "no-store, no-cache, private, must-revalidate"
+      ],
+      "cdn-cache-control": [
+        "no-store"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a0396812eb09a5d2-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-security-policy": [
+        "default-src 'none'; frame-ancestors *; upgrade-insecure-requests"
+      ],
+      "content-type": [
+        "application/json; charset=utf-8"
+      ],
+      "date": [
+        "Fri, 29 May 2026 23:51:23 GMT"
+      ],
+      "etag": [
+        "W/\"69a-9cqcpdoR2XtnHIToryMXEOCl+A4\""
+      ],
+      "permissions-policy": [
+        "geolocation=(), camera=()"
+      ],
+      "referrer-policy": [
+        "strict-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": "[REDACTED:set-cookie]",
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-frame-options": [
+        "SAMEORIGIN"
+      ],
+      "x-ratelimit-limit-requests": [
+        "1000"
+      ],
+      "x-ratelimit-remaining": [
+        "20"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "999"
+      ],
+      "x-ratelimit-reset-requests": [
+        "1780098740834"
+      ],
+      "x-ratelimit-resets": [
+        "1780098710813"
+      ],
+      "x-venice-balance-usd": [
+        "9.08763236"
+      ],
+      "x-venice-version": [
+        "outerface-api-server-us-east1-03948-9pd"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

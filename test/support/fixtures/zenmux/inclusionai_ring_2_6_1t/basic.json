@@ -1,0 +1,100 @@
+{
+  "model_spec": "zenmux:inclusionai/ring-2.6-1t",
+  "provider": "zenmux",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjUwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImluY2x1c2lvbmFpL3JpbmctMi42LTF0Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+    },
+    "canonical_json": {
+      "max_completion_tokens": 50,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "inclusionai/ring-2.6-1t",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://zenmux.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "length",
+          "index": 0,
+          "message": {
+            "content": "Hello, World! 👋 Welcome!",
+            "reasoning": "The user is simply saying \"Hello world!\" which is a classic greeting, often the first program written when learning to code. I should respond in a friendly, conversational manner.\n",
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1780099119,
+      "id": "a53999ba7c0e4d0a895505da1c08f626",
+      "model": "inclusionai/ring-2.6-1t",
+      "object": "chat.completion",
+      "system_fingerprint": "",
+      "usage": {
+        "completion_tokens": 50,
+        "completion_tokens_details": null,
+        "prompt_tokens": 26,
+        "prompt_tokens_details": null,
+        "total_tokens": 76
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "X-ZenMux-RequestId"
+      ],
+      "cf-ray": [
+        "a03972ba7aa1454f-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 29 May 2026 23:58:39 GMT"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-zenmux-requestid": [
+        "a53999ba7c0e4d0a895505da1c08f626"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

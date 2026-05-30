@@ -1,0 +1,144 @@
+{
+  "model_spec": "groq:allam-2-7b",
+  "provider": "groq",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoxMDI0LCJtZXNzYWdlcyI6W3siY29udGVudCI6IlJlc3BvbmQgd2l0aCBhIHNpbmdsZSB3b3JkICdIaScuIiwicm9sZSI6InVzZXIifSx7ImNvbnRlbnQiOiIiLCJyb2xlIjoiYXNzaXN0YW50In0seyJjb250ZW50IjoiSGkgYWdhaW4iLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJhbGxhbS0yLTdiIiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+    },
+    "canonical_json": {
+      "max_tokens": 1024,
+      "messages": [
+        {
+          "content": "Respond with a single word 'Hi'.",
+          "role": "user"
+        },
+        {
+          "content": "",
+          "role": "assistant"
+        },
+        {
+          "content": "Hi again",
+          "role": "user"
+        }
+      ],
+      "model": "allam-2-7b",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.groq.com/openai/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "مرحبًا! كيف يمكنني مساعدتك اليوم؟ ",
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1780096851,
+      "id": "chatcmpl-24d023b0-770e-4a1c-95f7-bd8d92e41943",
+      "model": "allam-2-7b",
+      "object": "chat.completion",
+      "service_tier": "on_demand",
+      "system_fingerprint": "fp_ff744b2c7a",
+      "usage": {
+        "completion_time": 0.00701549,
+        "completion_tokens": 9,
+        "prompt_time": 0.001383408,
+        "prompt_tokens": 27,
+        "queue_time": 0.203612916,
+        "total_time": 0.008398898,
+        "total_tokens": 36
+      },
+      "usage_breakdown": null,
+      "x_groq": {
+        "id": "req_01ksv0mq2eevwvxvnxbprx8kwv",
+        "seed": 42
+      }
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=86400"
+      ],
+      "cache-control": [
+        "private, max-age=0, no-store, no-cache, must-revalidate"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a0393b66bd8b5c93-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 29 May 2026 23:20:51 GMT"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": "[REDACTED:set-cookie]",
+      "strict-transport-security": [
+        "max-age=15552000"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Origin"
+      ],
+      "x-groq-region": [
+        "yul"
+      ],
+      "x-ratelimit-limit-requests": [
+        "7000"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "6000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "6998"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "3938"
+      ],
+      "x-ratelimit-reset-requests": [
+        "24.685s"
+      ],
+      "x-ratelimit-reset-tokens": [
+        "20.62s"
+      ],
+      "x-request-id": [
+        "req_01ksv0mq2eevwvxvnxbprx8kwv"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

@@ -1,0 +1,143 @@
+{
+  "model_spec": "openrouter:google/gemini-3.1-pro-preview",
+  "provider": "openrouter",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Imdvb2dsZS9nZW1pbmktMy4xLXByby1wcmV2aWV3IiwibiI6MSwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "google/gemini-3.1-pro-preview",
+      "n": 1,
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Hello! How can I help you today?",
+            "reasoning": "**Processing Initial Greeting**\n\nMy current focus is on understanding and responding to simple, standard input. I've just processed a basic \"Hello world!\" to ensure foundational interaction capabilities are functioning as expected.\n\n",
+            "reasoning_details": [
+              {
+                "format": "google-gemini-v1",
+                "index": 0,
+                "text": "**Processing Initial Greeting**\n\nMy current focus is on understanding and responding to simple, standard input. I've just processed a basic \"Hello world!\" to ensure foundational interaction capabilities are functioning as expected.\n\n",
+                "type": "reasoning.text"
+              },
+              {
+                "data": "AY89a1+8VbFthRZbgwW21WS+trUwxUd+gF+3XNKP6G1dYg3LDILI+i5XkkGOY0jTIzhW3yNNuhsBzAAo6G64KMXHwNkZg6jgUaXMdVn6qIwWXN0QVx9tYIqOAUNViH0CHGrwwpBNsnSVl7+HNg+byWwEWB9g5yCdeT4J/eZ2936qX0pIxxBg0E/VeNSLAB6FBOaabLXrDomxLhYiVeYl7kFkpGPUML5UCKS5MnnMB1okiS0XlmeUDm7qzjjDeH6KYOpQRhfmU2o2Y3oa642liV9LbXVeZ+/l9W2am5PSaoN2iJUb+/sqkCHMBriJWSfffEW16NJbFVPF8WR/GN9gPm1cTbmYIGQE+siZdr9bZi2zcFw5hVkUDbBbQseFcrORs7AvmU4Cj+57iUKc2PuuTSj4ZnnkcSeRJoBrL2lK6lqxC+vI+DvbznrebnPJTcOrbmG1dzE1cAJoUfhIRqrvHFFRT4gAhY35QkSbD+A3PkGvfmSOTAGaBWs3FKfrehAP8HVgiC4G8tclpkq3QfR3lfFBUieqX9F13fy/4BBNlDrDGPerraOL/Wbhi52JvjqC+h+NWZeBOtcVHzt3oqfk/EcFBukAQYzb/OPupu49JkVXONGxxHDbIibyt1sWkz0kcYdwb0DQOFwyNFp4Xq13cloe9o8mvecriJlAe1CqRpH7GQBHcVAwj2nbFdTIJ3eC40s5+PGUEVDhTyuTfIncVdLvUkepWyUcaoXmieeuE4UuuwjjAx41JxEQ0YjJaRLwcefph5ekXhnd9MusNUTaGs2t8/szfo7dMHAYB3fTlmory0nSc3KledP3VGUcfc59z99rStZ2fgMIXtLRro21p1hKTwWoDrqHtInTREMuu7VcGYlSNCb7zK78rjih1SrMyfrhSb2Tv7AoXsPa+oQI6Gu11jxx2D6649qhCMjiOIZHsBPN8ctNCfT6Qi3N9ie223mUufUNJXAr0io+bHmgeurH0zeJkzCJ6XWFxTUoAi6z9wBlB6x4kgr2A1zBVSicCr/60Rad1Moo9hBw+4ZiwI4Q10yYoAbemP+DomeINXsC8RNyJIaXCAdsqGUbSNCyPcNRwRj8lTExf1l/PykP+b2p7TSZBmbSRreRrXiy2QnSiHIGdQfEIgcgl2woKGWpWxl9scljTZy9hIx2HigLePHKYUyAmfhg4i5g0voxhUis+F27wu7GLK2RHaQl9IrfSxPM9k7uto8UyBFTXu/It5Oi/SMDxAoG6dqbjXlXHzV3w499qXGo5Y+s3piD1pSQb3Wh6kzc35yAmsJv/c36PY3Ufkz7ifyDokuvUYcHcRr05XKEz9LJAvAOIM6n6QrsrecC09jri5qJnBCo2PyzxmfqCjsGQhAdvkw2eoxMR1kJfPId04seexhr5vpifGCAHpZRqcqhym3S9dNTfXkUHMiiFkujelQkNGf7CgWKkHN26ooixPMle0zSiK69AJCYHjmAtJnQc0wOQj11tf2jXbID",
+                "format": "google-gemini-v1",
+                "index": 1,
+                "type": "reasoning.encrypted"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "STOP"
+        }
+      ],
+      "created": 1780100143,
+      "id": "gen-1780100143-60Mu8Z42BrPfTuZgkM47",
+      "model": "google/gemini-3.1-pro-preview-20260219",
+      "object": "chat.completion",
+      "provider": "Google",
+      "service_tier": "provisioned",
+      "system_fingerprint": null,
+      "usage": {
+        "completion_tokens": 241,
+        "completion_tokens_details": {
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "reasoning_tokens": 232
+        },
+        "cost": 0.002898,
+        "cost_details": {
+          "upstream_inference_completions_cost": 0.002892,
+          "upstream_inference_cost": 0.002898,
+          "upstream_inference_prompt_cost": 6.0e-6
+        },
+        "is_byok": false,
+        "prompt_tokens": 3,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 0,
+          "video_tokens": 0
+        },
+        "total_tokens": 244
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "X-Generation-Id,cf-ray"
+      ],
+      "cf-ray": [
+        "a0398bc8586835b5-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Sat, 30 May 2026 00:15:47 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-generation-id": [
+        "gen-1780100143-60Mu8Z42BrPfTuZgkM47"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

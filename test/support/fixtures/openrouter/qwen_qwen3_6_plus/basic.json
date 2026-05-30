@@ -1,0 +1,137 @@
+{
+  "model_spec": "openrouter:qwen/qwen3.6-plus",
+  "provider": "openrouter",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6InF3ZW4vcXdlbjMuNi1wbHVzIiwibiI6MSwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "qwen/qwen3.6-plus",
+      "n": 1,
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Hello! 👋 How can I assist you today?",
+            "reasoning": "Here's a thinking process:\n\n1.  **Analyze User Input:**\n   - User said: \"Hello world!\"\n   - This is a standard greeting, often used as a test or initial message.\n\n2.  **Identify Intent:**\n   - The user is greeting me.\n   - No specific question or task is provided.\n   - Expected response: A friendly greeting back, possibly offering assistance.\n\n3.  **Determine Response Strategy:**\n   - Acknowledge the greeting warmly.\n   - Keep it concise.\n   - Offer help or ask how I can assist.\n   - Match the tone (friendly, professional).\n\n4.  **Draft Response (Mental):**\n   - \"Hello! 👋 How can I assist you today?\"\n   - \"Hi there! What can I help you with?\"\n   - \"Hello world to you too! 😊 How can I assist you today?\"\n\n5.  **Refine Response:**\n   - Keep it simple and open-ended.\n   - \"Hello! 👋 How can I help you today?\" works well.\n\n6.  **Final Output Generation:** (matches the refined version)\n   - \"Hello! 👋 How can I assist you today?\"✅",
+            "reasoning_details": [
+              {
+                "format": "unknown",
+                "index": 0,
+                "text": "Here's a thinking process:\n\n1.  **Analyze User Input:**\n   - User said: \"Hello world!\"\n   - This is a standard greeting, often used as a test or initial message.\n\n2.  **Identify Intent:**\n   - The user is greeting me.\n   - No specific question or task is provided.\n   - Expected response: A friendly greeting back, possibly offering assistance.\n\n3.  **Determine Response Strategy:**\n   - Acknowledge the greeting warmly.\n   - Keep it concise.\n   - Offer help or ask how I can assist.\n   - Match the tone (friendly, professional).\n\n4.  **Draft Response (Mental):**\n   - \"Hello! 👋 How can I assist you today?\"\n   - \"Hi there! What can I help you with?\"\n   - \"Hello world to you too! 😊 How can I assist you today?\"\n\n5.  **Refine Response:**\n   - Keep it simple and open-ended.\n   - \"Hello! 👋 How can I help you today?\" works well.\n\n6.  **Final Output Generation:** (matches the refined version)\n   - \"Hello! 👋 How can I assist you today?\"✅",
+                "type": "reasoning.text"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "stop"
+        }
+      ],
+      "created": 1780098109,
+      "id": "gen-1780098109-sLKlhiEU5A8qvqsFlOY7",
+      "model": "qwen/qwen3.6-plus-04-02",
+      "object": "chat.completion",
+      "provider": "Alibaba",
+      "service_tier": null,
+      "system_fingerprint": null,
+      "usage": {
+        "completion_tokens": 280,
+        "completion_tokens_details": {
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "reasoning_tokens": 264
+        },
+        "cost": 5.50225e-4,
+        "cost_details": {
+          "upstream_inference_completions_cost": 5.46e-4,
+          "upstream_inference_cost": 5.50225e-4,
+          "upstream_inference_prompt_cost": 4.225e-6
+        },
+        "is_byok": false,
+        "prompt_tokens": 13,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 0,
+          "video_tokens": 0
+        },
+        "total_tokens": 293
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "X-Generation-Id,cf-ray"
+      ],
+      "cf-ray": [
+        "a0395a2019691b04-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 29 May 2026 23:41:50 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-generation-id": [
+        "gen-1780098109-sLKlhiEU5A8qvqsFlOY7"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

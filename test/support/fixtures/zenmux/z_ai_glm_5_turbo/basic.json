@@ -1,0 +1,105 @@
+{
+  "model_spec": "zenmux:z-ai/glm-5-turbo",
+  "provider": "zenmux",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjIwMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiSGVsbG8gd29ybGQhIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiei1haS9nbG0tNS10dXJibyIsInJlYXNvbmluZ19lZmZvcnQiOiJsb3ciLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+    },
+    "canonical_json": {
+      "max_completion_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "z-ai/glm-5-turbo",
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://zenmux.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "content": "Hello! I'm GLM, trained by Z.ai. How can I assist you today? Whether you have questions, need information, or just want to chat, I'm here to help.",
+            "reasoning": "Let me consider how to respond to this greeting.\n\nThe user has sent a simple \"Hello world!\" message, which is a common programming phrase often used as a first test when learning a new language or system.\n\nI should respond in a friendly and welcoming manner, acknowledging their greeting. Since this appears to be an initial interaction, I'll keep my response concise but warm, and invite them to continue the conversation.\n\nI'll avoid overcomplicating my response since this is just a greeting. A simple, friendly reply that acknowledges their message and opens the door for further conversation would be most appropriate.",
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1780099807,
+      "id": "71fc38cac47b4006911453b4b399fa89",
+      "model": "z-ai/glm-5-turbo",
+      "object": "chat.completion",
+      "request_id": "20260530080958c3d33ee162c3435d",
+      "usage": {
+        "completion_tokens": 160,
+        "completion_tokens_details": {
+          "reasoning_tokens": 119
+        },
+        "prompt_tokens": 8,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "total_tokens": 168
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "X-ZenMux-RequestId"
+      ],
+      "cf-ray": [
+        "a03983584810eaca-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Sat, 30 May 2026 00:10:07 GMT"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-zenmux-requestid": [
+        "71fc38cac47b4006911453b4b399fa89"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

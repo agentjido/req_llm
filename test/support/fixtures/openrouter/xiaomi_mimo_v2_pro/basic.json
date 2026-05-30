@@ -1,0 +1,137 @@
+{
+  "model_spec": "openrouter:xiaomi/mimo-v2-pro",
+  "provider": "openrouter",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6InhpYW9taS9taW1vLXYyLXBybyIsIm4iOjEsInJlYXNvbmluZ19lZmZvcnQiOiJsb3ciLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+    },
+    "canonical_json": {
+      "max_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "xiaomi/mimo-v2-pro",
+      "n": 1,
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Hello! 👋 Welcome! I'm MiMo, Xiaomi's AI assistant. It's great to meet you!\n\n\"Hello world\" — the classic first step in any programmer's journey! Are you just getting started with coding, or is this more of a casual greeting? Either way, I'm here and ready to chat. What can I help you with today?",
+            "reasoning": "The user is saying \"Hello world!\" which is a classic programming greeting. I should respond warmly and in a friendly manner.",
+            "reasoning_details": [
+              {
+                "format": "unknown",
+                "index": 0,
+                "text": "The user is saying \"Hello world!\" which is a classic programming greeting. I should respond warmly and in a friendly manner.",
+                "type": "reasoning.text"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "stop"
+        }
+      ],
+      "created": 1780100556,
+      "id": "gen-1780100556-2lBxTgaKZ0i1H5IPqxNV",
+      "model": "xiaomi/mimo-v2-pro-20260318",
+      "object": "chat.completion",
+      "provider": "Xiaomi",
+      "service_tier": null,
+      "system_fingerprint": null,
+      "usage": {
+        "completion_tokens": 102,
+        "completion_tokens_details": {
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "reasoning_tokens": 25
+        },
+        "cost": 4.044e-4,
+        "cost_details": {
+          "upstream_inference_completions_cost": 3.06e-4,
+          "upstream_inference_cost": 4.044e-4,
+          "upstream_inference_prompt_cost": 9.84e-5
+        },
+        "is_byok": false,
+        "prompt_tokens": 252,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 192,
+          "video_tokens": 0
+        },
+        "total_tokens": 354
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "X-Generation-Id,cf-ray"
+      ],
+      "cf-ray": [
+        "a03995dfee1a1aeb-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Sat, 30 May 2026 00:22:37 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-generation-id": [
+        "gen-1780100556-2lBxTgaKZ0i1H5IPqxNV"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

@@ -1,0 +1,187 @@
+{
+  "model_spec": "venice:zai-org-glm-5",
+  "provider": "venice",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6InphaS1vcmctZ2xtLTUiLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMCwidmVuaWNlX3BhcmFtZXRlcnMiOnsiZGlzYWJsZV90aGlua2luZyI6ZmFsc2UsImVuYWJsZV93ZWJfY2l0YXRpb25zIjpmYWxzZSwiZW5hYmxlX3dlYl9zY3JhcGluZyI6ZmFsc2UsImVuYWJsZV93ZWJfc2VhcmNoIjoib2ZmIiwiaW5jbHVkZV9zZWFyY2hfcmVzdWx0c19pbl9zdHJlYW0iOmZhbHNlLCJpbmNsdWRlX3ZlbmljZV9zeXN0ZW1fcHJvbXB0Ijp0cnVlLCJzdHJpcF90aGlua2luZ19yZXNwb25zZSI6ZmFsc2V9fQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "zai-org-glm-5",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0,
+      "venice_parameters": {
+        "disable_thinking": false,
+        "enable_web_citations": false,
+        "enable_web_scraping": false,
+        "enable_web_search": "off",
+        "include_search_results_in_stream": false,
+        "include_venice_system_prompt": true,
+        "strip_thinking_response": false
+      }
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.venice.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Hello! 👋\n\nWelcome! I'm GLM 5, running on Venice.ai. How can I help you today? Feel free to ask me anything — I'm here to assist with questions, creative tasks, problem-solving, or just a good conversation.",
+            "name": null,
+            "reasoning_content": "The user is saying \"Hello world!\" which is a classic greeting, often used as a first program or test message in programming. I should respond in a friendly and helpful manner, greeting them back and offering assistance.",
+            "role": "assistant",
+            "tool_calls": []
+          }
+        }
+      ],
+      "created": 1780098900,
+      "id": "chatcmpl-RJmlSxNLWkKSAIJeB1QopuDP",
+      "model": "zai-org-glm-5",
+      "object": "chat.completion",
+      "usage": {
+        "cache_read_input_tokens": 832,
+        "completion_tokens": 97,
+        "prompt_tokens": 1476,
+        "prompt_tokens_details": {
+          "cached_tokens": 832
+        },
+        "total_tokens": 1573
+      },
+      "venice_parameters": {
+        "disable_thinking": false,
+        "enable_e2ee": true,
+        "enable_web_citations": false,
+        "enable_web_scraping": false,
+        "enable_web_search": "off",
+        "enable_x_search": false,
+        "include_search_results_in_stream": false,
+        "include_venice_system_prompt": true,
+        "return_search_results_as_documents": false,
+        "strip_thinking_response": false,
+        "web_search_citations": []
+      }
+    },
+    "headers": {
+      "access-control-allow-credentials": [
+        "true"
+      ],
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "*"
+      ],
+      "cache-control": [
+        "no-store, no-cache, private, must-revalidate"
+      ],
+      "cdn-cache-control": [
+        "no-store"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a0396d6488e1aca8-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-security-policy": [
+        "default-src 'none'; frame-ancestors *; upgrade-insecure-requests"
+      ],
+      "content-type": [
+        "application/json; charset=utf-8"
+      ],
+      "date": [
+        "Fri, 29 May 2026 23:55:00 GMT"
+      ],
+      "etag": [
+        "W/\"4b6-1kKs5VcK/xY2WDq67vdIvZoy+/w\""
+      ],
+      "permissions-policy": [
+        "geolocation=(), camera=()"
+      ],
+      "referrer-policy": [
+        "strict-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": "[REDACTED:set-cookie]",
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-frame-options": [
+        "SAMEORIGIN"
+      ],
+      "x-ratelimit-limit-requests": [
+        "100"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "2000000"
+      ],
+      "x-ratelimit-remaining": [
+        "20"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "99"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "2000000"
+      ],
+      "x-ratelimit-reset-requests": [
+        "1780098958705"
+      ],
+      "x-ratelimit-reset-tokens": [
+        "1780098958710"
+      ],
+      "x-ratelimit-resets": [
+        "1780098928682"
+      ],
+      "x-venice-balance-usd": [
+        "8.86006651"
+      ],
+      "x-venice-version": [
+        "outerface-api-server-us-east1-03948-9pd"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

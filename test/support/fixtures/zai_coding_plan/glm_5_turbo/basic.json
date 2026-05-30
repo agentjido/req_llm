@@ -1,0 +1,104 @@
+{
+  "model_spec": "zai_coding_plan:glm-5-turbo",
+  "provider": "zai_coding_plan",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImdsbS01LXR1cmJvIiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+    },
+    "canonical_json": {
+      "max_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "glm-5-turbo",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.z.ai/api/coding/paas/v4/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "content": "Hello! I'm GLM, trained by Z.ai. How can I assist you today? Whether you have questions, need information, or just want to chat, I'm happy to help.",
+            "reasoning_content": "Let me consider how to respond to this greeting effectively.\n\nThis appears to be a simple \"Hello world!\" greeting - a classic phrase that's often used as a first program or introductory message. I should respond in a friendly and welcoming manner.\n\nI'll craft a response that:\n1. Acknowledges the greeting warmly\n2. Introduces myself briefly as an AI assistant\n3. Offers to help with various tasks\n4. Keeps the tone friendly and approachable\n\nThe response should be concise yet inviting, encouraging further conversation while making it clear I'm here to assist with a wide range of topics.\n\nLet me structure this to be both professional and personable, avoiding technical jargon while still being clear about my capabilities.",
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1780099885,
+      "id": "202605300811225079a4c1f32345b2",
+      "model": "glm-5-turbo",
+      "object": "chat.completion",
+      "request_id": "202605300811225079a4c1f32345b2",
+      "usage": {
+        "completion_tokens": 187,
+        "completion_tokens_details": {
+          "reasoning_tokens": 146
+        },
+        "prompt_tokens": 8,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "total_tokens": 195
+      }
+    },
+    "headers": {
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json; charset=UTF-8"
+      ],
+      "date": [
+        "Sat, 30 May 2026 00:11:25 GMT"
+      ],
+      "keep-alive": [
+        "timeout=6"
+      ],
+      "server": [
+        "nginx"
+      ],
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding",
+        "Origin",
+        "Access-Control-Request-Method",
+        "Access-Control-Request-Headers",
+        "Origin",
+        "Access-Control-Request-Method",
+        "Access-Control-Request-Headers"
+      ],
+      "x-log-id": [
+        "202605300811225079a4c1f32345b2"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

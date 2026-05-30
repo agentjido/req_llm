@@ -1,0 +1,187 @@
+{
+  "model_spec": "venice:zai-org-glm-4.6",
+  "provider": "venice",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6InphaS1vcmctZ2xtLTQuNiIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ2ZW5pY2VfcGFyYW1ldGVycyI6eyJkaXNhYmxlX3RoaW5raW5nIjpmYWxzZSwiZW5hYmxlX3dlYl9jaXRhdGlvbnMiOmZhbHNlLCJlbmFibGVfd2ViX3NjcmFwaW5nIjpmYWxzZSwiZW5hYmxlX3dlYl9zZWFyY2giOiJvZmYiLCJpbmNsdWRlX3NlYXJjaF9yZXN1bHRzX2luX3N0cmVhbSI6ZmFsc2UsImluY2x1ZGVfdmVuaWNlX3N5c3RlbV9wcm9tcHQiOnRydWUsInN0cmlwX3RoaW5raW5nX3Jlc3BvbnNlIjpmYWxzZX19"
+    },
+    "canonical_json": {
+      "max_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "zai-org-glm-4.6",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0,
+      "venice_parameters": {
+        "disable_thinking": false,
+        "enable_web_citations": false,
+        "enable_web_scraping": false,
+        "enable_web_search": "off",
+        "include_search_results_in_stream": false,
+        "include_venice_system_prompt": true,
+        "strip_thinking_response": false
+      }
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.venice.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "\nHello! I'm GLM 4.6, running on Venice.ai. How can I help you today? Feel free to ask me any questions or let me know what you'd like assistance with.",
+            "name": null,
+            "reasoning_content": "The user has simply said \"Hello world!\" which is a basic greeting. This is a common way to start a conversation or test if a system is working. I should respond in a friendly manner and introduce myself as GLM 4.6 as per my instructions. I'll also mention that I'm running on Venice.ai as instructed.",
+            "role": "assistant",
+            "tool_calls": []
+          }
+        }
+      ],
+      "created": 1780098894,
+      "id": "chatcmpl-RaWbQjqsSe6rmNnjSgUOxHMj",
+      "model": "zai-org-glm-4.6",
+      "object": "chat.completion",
+      "usage": {
+        "cache_read_input_tokens": 1472,
+        "completion_tokens": 113,
+        "prompt_tokens": 1485,
+        "prompt_tokens_details": {
+          "cached_tokens": 1472
+        },
+        "total_tokens": 1598
+      },
+      "venice_parameters": {
+        "disable_thinking": false,
+        "enable_e2ee": true,
+        "enable_web_citations": false,
+        "enable_web_scraping": false,
+        "enable_web_search": "off",
+        "enable_x_search": false,
+        "include_search_results_in_stream": false,
+        "include_venice_system_prompt": true,
+        "return_search_results_as_documents": false,
+        "strip_thinking_response": false,
+        "web_search_citations": []
+      }
+    },
+    "headers": {
+      "access-control-allow-credentials": [
+        "true"
+      ],
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "*"
+      ],
+      "cache-control": [
+        "no-store, no-cache, private, must-revalidate"
+      ],
+      "cdn-cache-control": [
+        "no-store"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a0396d2f0fdceada-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-security-policy": [
+        "default-src 'none'; frame-ancestors *; upgrade-insecure-requests"
+      ],
+      "content-type": [
+        "application/json; charset=utf-8"
+      ],
+      "date": [
+        "Fri, 29 May 2026 23:54:54 GMT"
+      ],
+      "etag": [
+        "W/\"4cf-Y8Ne6RGd7gH3H1vVvxM5EgMLvdc\""
+      ],
+      "permissions-policy": [
+        "geolocation=(), camera=()"
+      ],
+      "referrer-policy": [
+        "strict-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": "[REDACTED:set-cookie]",
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-frame-options": [
+        "SAMEORIGIN"
+      ],
+      "x-ratelimit-limit-requests": [
+        "150"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "10000000"
+      ],
+      "x-ratelimit-remaining": [
+        "20"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "149"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "10000000"
+      ],
+      "x-ratelimit-reset-requests": [
+        "1780098950121"
+      ],
+      "x-ratelimit-reset-tokens": [
+        "1780098950122"
+      ],
+      "x-ratelimit-resets": [
+        "1780098920109"
+      ],
+      "x-venice-balance-usd": [
+        "8.86159538"
+      ],
+      "x-venice-version": [
+        "outerface-api-server-us-east1-03948-9pd"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

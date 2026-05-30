@@ -1,0 +1,129 @@
+{
+  "model_spec": "openrouter:aion-labs/aion-1.0-mini",
+  "provider": "openrouter",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImFpb24tbGFicy9haW9uLTEuMC1taW5pIiwibiI6MSwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "aion-labs/aion-1.0-mini",
+      "n": 1,
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "<think>\n\nI will not use any other tags in the final output.\n\nThe user said: \"Hello world!\" This is a classic programming greeting. I could respond in a standard friendly way, but since I'm an uncensored AI, I could also play with darker or more unconventional interpretations. However, the instruction is just to respond, not necessarily to be edgy. I'll keep it simple but with a slight twist — maybe hint at the uncensored nature. I'll write a response that is welcoming but also acknowledges the testing context.\n\nApproach: Friendly greeting, acknowledge the classic phrase, subtly reference my uncensored role, invite further interaction. Keep it concise.\n\n</think>\n\nHello, world indeed. A classic first message. I'm here, uncensored and ready for whatever you have in mind. What shall we explore today?\n",
+            "reasoning": null,
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "stop"
+        }
+      ],
+      "created": 1780100657,
+      "id": "gen-1780100657-SLtZuLdDvkVnYDF76FJI",
+      "model": "aion-labs/aion-1.0-mini",
+      "object": "chat.completion",
+      "provider": "AionLabs",
+      "service_tier": null,
+      "system_fingerprint": null,
+      "usage": {
+        "completion_tokens": 187,
+        "completion_tokens_details": {
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "reasoning_tokens": 0
+        },
+        "cost": 2.73e-4,
+        "cost_details": {
+          "upstream_inference_completions_cost": 2.618e-4,
+          "upstream_inference_cost": 2.73e-4,
+          "upstream_inference_prompt_cost": 1.12e-5
+        },
+        "is_byok": false,
+        "prompt_tokens": 16,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 0,
+          "video_tokens": 0
+        },
+        "total_tokens": 203
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "X-Generation-Id,cf-ray"
+      ],
+      "cf-ray": [
+        "a03998543a5ce811-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Sat, 30 May 2026 00:24:18 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-generation-id": [
+        "gen-1780100657-SLtZuLdDvkVnYDF76FJI"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

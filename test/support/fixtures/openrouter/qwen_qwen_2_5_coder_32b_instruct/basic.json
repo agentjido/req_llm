@@ -1,4 +1,6 @@
 {
+  "model_spec": "openrouter:qwen/qwen-2.5-coder-32b-instruct",
+  "provider": "openrouter",
   "request": {
     "body": {
       "b64": "eyJtYXhfdG9rZW5zIjo1MCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJIZWxsbyB3b3JsZCEiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJxd2VuL3F3ZW4tMi41LWNvZGVyLTMyYi1pbnN0cnVjdCIsIm4iOjEsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
@@ -18,6 +20,9 @@
       "temperature": 0.0
     },
     "headers": {
+      "accept": [
+        "application/json"
+      ],
       "accept-encoding": [
         "gzip"
       ],
@@ -26,7 +31,7 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ]
     },
     "method": "post",
@@ -36,36 +41,58 @@
     "body": {
       "choices": [
         {
-          "finish_reason": "length",
+          "finish_reason": "stop",
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "<think>\nOkay, the user just said \"Hello world!\" which is a classic first message. I should respond in a friendly and welcoming way. Let me make sure to acknowledge their greeting and offer assistance. Maybe add an emoji to keep it approachable",
+            "content": "Hello! How can I assist you today?",
             "reasoning": null,
             "refusal": null,
             "role": "assistant"
           },
-          "native_finish_reason": "length"
+          "native_finish_reason": "stop"
         }
       ],
-      "created": 1762105015,
-      "id": "gen-1762105015-0u8097NzZrkxi8R0OLoH",
+      "created": 1780100513,
+      "id": "gen-1780100513-iqACioSDRcLnjHRtX4og",
       "model": "qwen/qwen-2.5-coder-32b-instruct",
       "object": "chat.completion",
-      "provider": "DeepInfra",
+      "provider": "Cloudflare",
+      "service_tier": null,
+      "system_fingerprint": null,
       "usage": {
-        "completion_tokens": 50,
-        "prompt_tokens": 11,
-        "prompt_tokens_details": null,
-        "total_tokens": 61
+        "completion_tokens": 10,
+        "completion_tokens_details": {
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "reasoning_tokens": 0
+        },
+        "cost": 3.112e-5,
+        "cost_details": {
+          "upstream_inference_completions_cost": 1.0e-5,
+          "upstream_inference_cost": 3.112e-5,
+          "upstream_inference_prompt_cost": 2.112e-5
+        },
+        "is_byok": false,
+        "prompt_tokens": 32,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 0,
+          "video_tokens": 0
+        },
+        "total_tokens": 42
       }
     },
     "headers": {
       "access-control-allow-origin": [
         "*"
       ],
+      "access-control-expose-headers": [
+        "X-Generation-Id,cf-ray"
+      ],
       "cf-ray": [
-        "998565978f4e258c-ORD"
+        "a03994d21e9ccefa-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -74,7 +101,7 @@
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:36:55 GMT"
+        "Sat, 30 May 2026 00:21:53 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
@@ -88,13 +115,14 @@
       "transfer-encoding": [
         "chunked"
       ],
-      "vary": [
-        "Accept-Encoding"
-      ],
       "x-content-type-options": [
         "nosniff"
+      ],
+      "x-generation-id": [
+        "gen-1780100513-iqACioSDRcLnjHRtX4og"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

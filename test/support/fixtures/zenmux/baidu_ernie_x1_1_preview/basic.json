@@ -1,0 +1,101 @@
+{
+  "model_spec": "zenmux:baidu/ernie-x1.1-preview",
+  "provider": "zenmux",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjUwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImJhaWR1L2VybmllLXgxLjEtcHJldmlldyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+    },
+    "canonical_json": {
+      "max_completion_tokens": 50,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "baidu/ernie-x1.1-preview",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://zenmux.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "flag": 0,
+          "index": 0,
+          "message": {
+            "content": "Hello! 👋 Welcome! It's always a joy to see the classic \"Hello world!\"—a timeless greeting that sparked countless coding journeys. Whether you're here to explore ideas, share a thought, or just say hi, I'm here to chat, assist, or brighten your day. What brings you here today? 😊",
+            "reasoning": "The user just said \"Hello world!\" That's a classic starting phrase, often used in programming to test if things are working. Maybe they're a beginner in coding or just want to see a friendly response. I should acknowledge their greeting and maybe add a positive note to make them feel welcome. Since \"Hello world!\" is commonly associated with programming, I could mention that too, but keep it simple and warm. Let me make sure the response is friendly and inviting.",
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1780098985,
+      "id": "52c98d57c24949829a97b622a3ff4073",
+      "model": "baidu/ernie-x1.1-preview",
+      "object": "chat.completion",
+      "usage": {
+        "completion_tokens": 170,
+        "completion_tokens_details": {
+          "reasoning_tokens": 96
+        },
+        "prompt_tokens": 3,
+        "total_tokens": 173
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "X-ZenMux-RequestId"
+      ],
+      "cf-ray": [
+        "a0396f734b011132-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 29 May 2026 23:56:34 GMT"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-zenmux-requestid": [
+        "52c98d57c24949829a97b622a3ff4073"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

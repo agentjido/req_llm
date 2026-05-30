@@ -1,0 +1,183 @@
+{
+  "model_spec": "venice:nvidia-nemotron-cascade-2-30b-a3b",
+  "provider": "venice",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Im52aWRpYS1uZW1vdHJvbi1jYXNjYWRlLTItMzBiLWEzYiIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ2ZW5pY2VfcGFyYW1ldGVycyI6eyJkaXNhYmxlX3RoaW5raW5nIjpmYWxzZSwiZW5hYmxlX3dlYl9jaXRhdGlvbnMiOmZhbHNlLCJlbmFibGVfd2ViX3NjcmFwaW5nIjpmYWxzZSwiZW5hYmxlX3dlYl9zZWFyY2giOiJvZmYiLCJpbmNsdWRlX3NlYXJjaF9yZXN1bHRzX2luX3N0cmVhbSI6ZmFsc2UsImluY2x1ZGVfdmVuaWNlX3N5c3RlbV9wcm9tcHQiOnRydWUsInN0cmlwX3RoaW5raW5nX3Jlc3BvbnNlIjpmYWxzZX19"
+    },
+    "canonical_json": {
+      "max_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "nvidia-nemotron-cascade-2-30b-a3b",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0,
+      "venice_parameters": {
+        "disable_thinking": false,
+        "enable_web_citations": false,
+        "enable_web_scraping": false,
+        "enable_web_search": "off",
+        "include_search_results_in_stream": false,
+        "include_venice_system_prompt": true,
+        "strip_thinking_response": false
+      }
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.venice.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "\nHello! Nice to meet you. How can I help you today?",
+            "name": null,
+            "reasoning_content": "We need to respond as Nemotron Cascade 2 30B A3B, uncensored, direct, in language of prompt (English). The user says \"Hello world!\" Likely a greeting. We can respond with a friendly greeting, maybe ask how can help. No restrictions. Provide direct answer. Should not mention system. Should not give warnings. Should be concise but can be friendly. Provide maybe ask if they need anything. Use no URLs. No disallowed content. Provide answer.\n",
+            "role": "assistant",
+            "tool_calls": []
+          }
+        }
+      ],
+      "created": 1780098770,
+      "id": "chatcmpl-RsRr7Mxoh9ljhMrp8lV0e2NG",
+      "model": "nvidia-nemotron-cascade-2-30b-a3b",
+      "object": "chat.completion",
+      "usage": {
+        "completion_tokens": 119,
+        "prompt_tokens": 1597,
+        "total_tokens": 1716
+      },
+      "venice_parameters": {
+        "disable_thinking": false,
+        "enable_e2ee": true,
+        "enable_web_citations": false,
+        "enable_web_scraping": false,
+        "enable_web_search": "off",
+        "enable_x_search": false,
+        "include_search_results_in_stream": false,
+        "include_venice_system_prompt": true,
+        "return_search_results_as_documents": false,
+        "strip_thinking_response": false,
+        "web_search_citations": []
+      }
+    },
+    "headers": {
+      "access-control-allow-credentials": [
+        "true"
+      ],
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "*"
+      ],
+      "cache-control": [
+        "no-store, no-cache, private, must-revalidate"
+      ],
+      "cdn-cache-control": [
+        "no-store"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a0396a3d3ac7b07e-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-security-policy": [
+        "default-src 'none'; frame-ancestors *; upgrade-insecure-requests"
+      ],
+      "content-type": [
+        "application/json; charset=utf-8"
+      ],
+      "date": [
+        "Fri, 29 May 2026 23:52:50 GMT"
+      ],
+      "etag": [
+        "W/\"4be-Nl8bd1mTxv8J7f2BE+PRHuQU6eg\""
+      ],
+      "permissions-policy": [
+        "geolocation=(), camera=()"
+      ],
+      "referrer-policy": [
+        "strict-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": "[REDACTED:set-cookie]",
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-frame-options": [
+        "SAMEORIGIN"
+      ],
+      "x-ratelimit-limit-requests": [
+        "150"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "10000000"
+      ],
+      "x-ratelimit-remaining": [
+        "20"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "149"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "10000000"
+      ],
+      "x-ratelimit-reset-requests": [
+        "1780098829525"
+      ],
+      "x-ratelimit-reset-tokens": [
+        "1780098829527"
+      ],
+      "x-ratelimit-resets": [
+        "1780098799503"
+      ],
+      "x-venice-balance-usd": [
+        "9.0570867"
+      ],
+      "x-venice-version": [
+        "outerface-api-server-us-east1-03948-9pd"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

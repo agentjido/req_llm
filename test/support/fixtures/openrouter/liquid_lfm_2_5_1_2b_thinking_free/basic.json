@@ -1,0 +1,137 @@
+{
+  "model_spec": "openrouter:liquid/lfm-2.5-1.2b-thinking:free",
+  "provider": "openrouter",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImxpcXVpZC9sZm0tMi41LTEuMmItdGhpbmtpbmc6ZnJlZSIsIm4iOjEsInJlYXNvbmluZ19lZmZvcnQiOiJsb3ciLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+    },
+    "canonical_json": {
+      "max_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "liquid/lfm-2.5-1.2b-thinking:free",
+      "n": 1,
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Hello! How can I assist you today? 😊 Feel free to ask any question, and I'll do my best to help!",
+            "reasoning": "Okay, let's see what the user is asking here. They wrote \"Hello world!\" but then there's some other lines. Wait, maybe there's a misunderstanding. The user might have intended to ask a question but just typed \"Hello world!\"? Or perhaps there's some context missing. Looking at the history, maybe the previous interaction had some setup. Wait, the user's message is just \"Hello world!\" followed by some other lines. Hmm.\n\nWait, looking at the user's input again: they wrote \"Hello world!\" and then maybe some other lines? Wait, perhaps the user is testing if I respond appropriately. Alternatively, maybe there's a mistake here. Since the user just wrote \"Hello world!\" again, perhaps they want a standard response. But since the initial instruction might be part of a test, maybe I should just reply with \"Hello world!\" as per their input. Alternatively, maybe there's a hidden request here. Alternatively, perhaps the user intended to ask a question but forgot. Since the user's message is just \"Hello world!\", maybe I should just acknowledge that and say hello. Alternatively, maybe the user wants me to generate a response to a previous query, but since there's none, perhaps just respond with a friendly greeting. Since the user's instruction is just \"Hello world!\", I'll proceed to respond with a standard greeting. Let me check the guidelines: I should be helpful. So I'll say \"Hello! How can I assist you today?\" or similar. Alternatively, since the user might have wanted to start a conversation, I'll just say \"Hello! How can I help you?\" to be polite. Alternatively, since the user might have intended to ask something else but just typed that, I'll stick with a simple response. I'll go with \"Hello! How can I assist you today?\" to invite them to ask a question.\n",
+            "reasoning_details": [
+              {
+                "format": "unknown",
+                "index": 0,
+                "text": "Okay, let's see what the user is asking here. They wrote \"Hello world!\" but then there's some other lines. Wait, maybe there's a misunderstanding. The user might have intended to ask a question but just typed \"Hello world!\"? Or perhaps there's some context missing. Looking at the history, maybe the previous interaction had some setup. Wait, the user's message is just \"Hello world!\" followed by some other lines. Hmm.\n\nWait, looking at the user's input again: they wrote \"Hello world!\" and then maybe some other lines? Wait, perhaps the user is testing if I respond appropriately. Alternatively, maybe there's a mistake here. Since the user just wrote \"Hello world!\" again, perhaps they want a standard response. But since the initial instruction might be part of a test, maybe I should just reply with \"Hello world!\" as per their input. Alternatively, maybe there's a hidden request here. Alternatively, perhaps the user intended to ask a question but forgot. Since the user's message is just \"Hello world!\", maybe I should just acknowledge that and say hello. Alternatively, maybe the user wants me to generate a response to a previous query, but since there's none, perhaps just respond with a friendly greeting. Since the user's instruction is just \"Hello world!\", I'll proceed to respond with a standard greeting. Let me check the guidelines: I should be helpful. So I'll say \"Hello! How can I assist you today?\" or similar. Alternatively, since the user might have wanted to start a conversation, I'll just say \"Hello! How can I help you?\" to be polite. Alternatively, since the user might have intended to ask something else but just typed that, I'll stick with a simple response. I'll go with \"Hello! How can I assist you today?\" to invite them to ask a question.\n",
+                "type": "reasoning.text"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "stop"
+        }
+      ],
+      "created": 1780100193,
+      "id": "gen-1780100193-gNhObEbIFDegRQqhPnHv",
+      "model": "liquid/lfm-2.5-1.2b-thinking-20260120:free",
+      "object": "chat.completion",
+      "provider": "Liquid",
+      "service_tier": null,
+      "system_fingerprint": null,
+      "usage": {
+        "completion_tokens": 423,
+        "completion_tokens_details": {
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "reasoning_tokens": 446
+        },
+        "cost": 0,
+        "cost_details": {
+          "upstream_inference_completions_cost": 0,
+          "upstream_inference_cost": 0,
+          "upstream_inference_prompt_cost": 0
+        },
+        "is_byok": false,
+        "prompt_tokens": 12,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 0,
+          "video_tokens": 0
+        },
+        "total_tokens": 435
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "X-Generation-Id,cf-ray"
+      ],
+      "cf-ray": [
+        "a0398d010e9772e8-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Sat, 30 May 2026 00:16:36 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-generation-id": [
+        "gen-1780100193-gNhObEbIFDegRQqhPnHv"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

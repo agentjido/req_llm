@@ -20,6 +20,9 @@
       "temperature": 0.0
     },
     "headers": {
+      "accept": [
+        "application/json"
+      ],
       "accept-encoding": [
         "gzip"
       ],
@@ -28,7 +31,7 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.17"
+        "req/0.5.18"
       ]
     },
     "method": "post",
@@ -41,37 +44,23 @@
           "finish_reason": "stop",
           "index": 0,
           "message": {
-            "content": "Hello! Welcome! \n\nHow can I help you today? Whether you're looking to write some actual \"Hello World\" code, have questions about programming, need help with a project, or just want to chat about tech (or anything else), I'm here to assist.\n\nWhat would you like to explore?",
-            "reasoning_content": "The user has simply said \"Hello world!\" which is a common greeting, often used in programming tutorials as the first example. This is a very open-ended greeting, so I should respond in a friendly, welcoming manner.\n\nI should:\n1. Acknowledge the greeting\n2. Be friendly and welcoming\n3. Keep it open-ended so they can tell me what they need help with\n4. Maybe make a subtle nod to the programming context since \"Hello world\" is famously the first program many people write\n\nI don't need to overthink this - just a warm, helpful response that invites them to ask whatever they need.",
+            "content": "Hello! Nice to meet you. How can I help you today?",
+            "reasoning_content": "The user has simply said \"Hello world!\" which is a very common greeting, often used in programming tutorials as the first program one writes. This is a friendly, casual greeting.\n\nI should respond in a warm, welcoming manner. Since this is the first interaction, I should:\n1. Acknowledge the greeting\n2. Be friendly and helpful\n3. Ask how I can assist them today\n4. Keep it concise but inviting\n\nI don't need to overthink this - it's a simple greeting that deserves a simple, warm response. I should avoid being overly formal or robotic, but also not too casual.\n\nPossible responses:\n- \"Hello! How can I help you today?\"\n- \"Hi there! Welcome. What can I do for you?\"\n- \"Hello world to you too! How may I assist you today?\"\n- \"Hey! Nice to meet you. What would you like to explore?\"\n\nI'll go with something friendly that acknowledges the classic \"Hello world\" programming reference subtly while being helpful.",
             "role": "assistant"
-          },
-          "token_ids": null
+          }
         }
       ],
-      "created": 1778465619,
-      "id": "chatcmpl-dff0d22d4ae14fed86c92239e9e347d1",
+      "created": 1780097405,
+      "id": "chatcmpl-7c316604152d47c6adab02cbe30452f6",
       "model": "accounts/fireworks/models/kimi-k2p5",
       "object": "chat.completion",
-      "prompt_token_ids": [
-        163587,
-        2482,
-        163601,
-        19180,
-        2695,
-        0,
-        163586,
-        163588,
-        69702,
-        163601,
-        163606
-      ],
       "usage": {
-        "completion_tokens": 188,
+        "completion_tokens": 219,
         "prompt_tokens": 11,
         "prompt_tokens_details": {
-          "cached_tokens": 10
+          "cached_tokens": 0
         },
-        "total_tokens": 199
+        "total_tokens": 230
       }
     },
     "headers": {
@@ -79,10 +68,10 @@
         "application/json"
       ],
       "date": [
-        "Mon, 11 May 2026 02:13:39 GMT"
+        "Fri, 29 May 2026 23:30:04 GMT"
       ],
       "fireworks-cached-prompt-tokens": [
-        "10"
+        "0"
       ],
       "fireworks-prompt-tokens": [
         "11"
@@ -91,13 +80,10 @@
         "{\"max_tokens\": 2000, \"temperature\": 0.0, \"top_k\": 0, \"top_p\": 0.95, \"min_p\": 0.0, \"typical_p\": 1.0, \"frequency_penalty\": 0.0, \"presence_penalty\": 0.0, \"repetition_penalty\": 1.0, \"mirostat_target\": null, \"mirostat_lr\": 0.1, \"cycle_multiplier\": 0.0, \"cycle_base\": 0.0, \"cycle_allowed_length\": 0, \"cycle_sequence_breakers\": []}"
       ],
       "fireworks-server-processing-time": [
-        "2.570"
-      ],
-      "fireworks-server-received-timestamp": [
-        "1778465619.3193245"
+        "2.090"
       ],
       "fireworks-server-time-to-first-token": [
-        "0.215"
+        "0.163"
       ],
       "fireworks-speculation-prompt-matched-tokens": [
         "0"
@@ -111,40 +97,20 @@
       "via": [
         "1.1 google"
       ],
-      "x-envoy-upstream-service-time": [
-        "2586"
-      ],
-      "x-ratelimit-limit-requests": [
-        "60"
-      ],
-      "x-ratelimit-limit-tokens-cache-adjusted-prompt": [
-        "60000"
-      ],
-      "x-ratelimit-limit-tokens-generated": [
-        "12000"
-      ],
       "x-ratelimit-limit-tokens-prompt": [
-        "60000"
+        "3600000"
       ],
       "x-ratelimit-over-limit": [
         "no"
       ],
-      "x-ratelimit-remaining-requests": [
-        "59"
-      ],
-      "x-ratelimit-remaining-tokens-cache-adjusted-prompt": [
-        "60000"
-      ],
-      "x-ratelimit-remaining-tokens-generated": [
-        "12000"
-      ],
       "x-ratelimit-remaining-tokens-prompt": [
-        "59989"
+        "3599989"
       ],
       "x-request-id": [
-        "chatcmpl-dff0d22d4ae14fed86c92239e9e347d1"
+        "chatcmpl-7c316604152d47c6adab02cbe30452f6"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

@@ -50,8 +50,8 @@
           }
         }
       ],
-      "created": 1780071511,
-      "id": "chatcmpl-598331d85b934f1590c580bfaa1dcd1a",
+      "created": 1780097399,
+      "id": "chatcmpl-e8c11bf0948c4b9891cc78ff2159cb78",
       "model": "accounts/fireworks/models/gpt-oss-20b",
       "object": "chat.completion",
       "usage": {
@@ -68,7 +68,7 @@
         "application/json"
       ],
       "date": [
-        "Fri, 29 May 2026 16:18:30 GMT"
+        "Fri, 29 May 2026 23:29:57 GMT"
       ],
       "fireworks-cached-prompt-tokens": [
         "0"
@@ -80,10 +80,10 @@
         "{\"max_tokens\": 2000, \"temperature\": 0.0, \"top_k\": 0, \"top_p\": 1.0, \"min_p\": 0.0, \"typical_p\": 1.0, \"frequency_penalty\": 0.0, \"presence_penalty\": 0.0, \"repetition_penalty\": 1.0, \"mirostat_target\": null, \"mirostat_lr\": 0.1, \"cycle_multiplier\": 0.0, \"cycle_base\": 0.0, \"cycle_allowed_length\": 0, \"cycle_sequence_breakers\": []}"
       ],
       "fireworks-server-processing-time": [
-        "0.733"
+        "0.692"
       ],
       "fireworks-server-time-to-first-token": [
-        "0.346"
+        "0.358"
       ],
       "fireworks-speculation-prompt-matched-tokens": [
         "0"
@@ -119,7 +119,7 @@
         "59925"
       ],
       "x-request-id": [
-        "chatcmpl-598331d85b934f1590c580bfaa1dcd1a"
+        "chatcmpl-e8c11bf0948c4b9891cc78ff2159cb78"
       ]
     },
     "status": 200

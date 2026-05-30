@@ -1,0 +1,137 @@
+{
+  "model_spec": "openrouter:qwen/qwen3-30b-a3b",
+  "provider": "openrouter",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6InF3ZW4vcXdlbjMtMzBiLWEzYiIsIm4iOjEsInJlYXNvbmluZ19lZmZvcnQiOiJsb3ciLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+    },
+    "canonical_json": {
+      "max_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "qwen/qwen3-30b-a3b",
+      "n": 1,
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Hello! How can I assist you today? 😊",
+            "reasoning": "\nOkay, the user just said \"Hello world!\" which is a common first message for someone new to programming or just testing. I need to respond appropriately. Since it's a greeting, I should acknowledge it and offer help. Maybe say something like \"Hello! How can I assist you today?\" to keep it friendly and open-ended. I should make sure the response is welcoming and encourages them to ask questions or share what they need help with. Keep it simple and positive.\n",
+            "reasoning_details": [
+              {
+                "format": "unknown",
+                "index": 0,
+                "text": "\nOkay, the user just said \"Hello world!\" which is a common first message for someone new to programming or just testing. I need to respond appropriately. Since it's a greeting, I should acknowledge it and offer help. Maybe say something like \"Hello! How can I assist you today?\" to keep it friendly and open-ended. I should make sure the response is welcoming and encourages them to ask questions or share what they need help with. Keep it simple and positive.\n",
+                "type": "reasoning.text"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "stop"
+        }
+      ],
+      "created": 1780097919,
+      "id": "gen-1780097919-twChnBxXLvyxLS0K819y",
+      "model": "qwen/qwen3-30b-a3b-04-28",
+      "object": "chat.completion",
+      "provider": "Novita",
+      "service_tier": null,
+      "system_fingerprint": null,
+      "usage": {
+        "completion_tokens": 111,
+        "completion_tokens_details": {
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "reasoning_tokens": 117
+        },
+        "cost": 5.094e-5,
+        "cost_details": {
+          "upstream_inference_completions_cost": 4.995e-5,
+          "upstream_inference_cost": 5.094e-5,
+          "upstream_inference_prompt_cost": 9.9e-7
+        },
+        "is_byok": false,
+        "prompt_tokens": 11,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 0,
+          "video_tokens": 0
+        },
+        "total_tokens": 122
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "X-Generation-Id,cf-ray"
+      ],
+      "cf-ray": [
+        "a039557c8c6acca4-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 29 May 2026 23:38:40 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-generation-id": [
+        "gen-1780097919-twChnBxXLvyxLS0K819y"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

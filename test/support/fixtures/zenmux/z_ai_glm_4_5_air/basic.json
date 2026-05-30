@@ -1,0 +1,102 @@
+{
+  "model_spec": "zenmux:z-ai/glm-4.5-air",
+  "provider": "zenmux",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjIwMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiSGVsbG8gd29ybGQhIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiei1haS9nbG0tNC41LWFpciIsInJlYXNvbmluZ19lZmZvcnQiOiJsb3ciLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+    },
+    "canonical_json": {
+      "max_completion_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "z-ai/glm-4.5-air",
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://zenmux.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "content": "Hello! 👋 Here's a classic \"Hello World!\" program in Python:\n\n```python\nprint(\"Hello, World!\")\n```\n\n### Explanation:\n- `print()` is a built-in Python function that outputs text to the console.\n- `\"Hello, World!\"` is a string literal (text enclosed in quotes) that gets printed.\n\n### How to run it:\n1. Save the code in a file named `hello.py`.\n2. Run it from your terminal:  \n   ```bash\n   python hello.py\n   ```\n3. Output:  \n   ```\n   Hello, World!\n   ```\n\n### Other language examples:\n- **JavaScript**:  \n  ```javascript\n  console.log(\"Hello, World!\");\n  ```\n\n- **Java**:  \n  ```java\n  public class HelloWorld {\n      public static void main(String[] args) {\n          System.out.println(\"Hello, World!\");\n      }\n  }\n  ```\n\n- **C**:  \n  ```c\n  #include <stdio.h>\n  int main() {\n      printf(\"Hello, World!\\n\");\n      return 0;\n  }\n  ```\n\nLet me know if you'd like to explore more! 😊",
+            "reasoning": "\nWe are going to create a simple \"Hello World!\" program in Python.\n Since the user just said \"Hello world!\", we can assume they want a classic hello world program.\n However, note that the user might be testing the system or just starting a conversation.\n Let's respond with a friendly greeting and then provide the code for a hello world program in Python.",
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1780099611,
+      "id": "e6fdb385225445879db294bd2842a3a1",
+      "model": "z-ai/glm-4.5-air",
+      "object": "chat.completion",
+      "request_id": "2026053008064656ad46e086e94f41",
+      "usage": {
+        "completion_tokens": 316,
+        "prompt_tokens": 8,
+        "prompt_tokens_details": {
+          "cached_tokens": 4
+        },
+        "total_tokens": 324
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "X-ZenMux-RequestId"
+      ],
+      "cf-ray": [
+        "a0397ea3b9722252-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Sat, 30 May 2026 00:06:51 GMT"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-zenmux-requestid": [
+        "e6fdb385225445879db294bd2842a3a1"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

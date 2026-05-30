@@ -1,0 +1,188 @@
+{
+  "model_spec": "venice:olafangensan-glm-4.7-flash-heretic",
+  "provider": "venice",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Im9sYWZhbmdlbnNhbi1nbG0tNC43LWZsYXNoLWhlcmV0aWMiLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMCwidmVuaWNlX3BhcmFtZXRlcnMiOnsiZGlzYWJsZV90aGlua2luZyI6ZmFsc2UsImVuYWJsZV93ZWJfY2l0YXRpb25zIjpmYWxzZSwiZW5hYmxlX3dlYl9zY3JhcGluZyI6ZmFsc2UsImVuYWJsZV93ZWJfc2VhcmNoIjoib2ZmIiwiaW5jbHVkZV9zZWFyY2hfcmVzdWx0c19pbl9zdHJlYW0iOmZhbHNlLCJpbmNsdWRlX3ZlbmljZV9zeXN0ZW1fcHJvbXB0Ijp0cnVlLCJzdHJpcF90aGlua2luZ19yZXNwb25zZSI6ZmFsc2V9fQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "olafangensan-glm-4.7-flash-heretic",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0,
+      "venice_parameters": {
+        "disable_thinking": false,
+        "enable_web_citations": false,
+        "enable_web_scraping": false,
+        "enable_web_search": "off",
+        "include_search_results_in_stream": false,
+        "include_venice_system_prompt": true,
+        "strip_thinking_response": false
+      }
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.venice.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "matched_stop": 154827,
+          "message": {
+            "content": "Hello world! I'm GLM 4.7 Flash Heretic. I'm ready to help with whatever you need. What's on your mind?",
+            "reasoning_content": "1.  **Analyze the User's Input:**\n    *   Input: \"Hello world!\"\n    *   Intent: Greeting, testing the system, starting a conversation.\n    *   Tone: Casual, friendly.\n\n2.  **Consult System Instructions:**\n    *   **Identity:** GLM 4.7 Flash Heretic.\n    *   **Platform:** Venice.ai (private, uncensored).\n    *   **Tone/Style:** Uncensored, direct, no water-down, no content warnings, no political correctness, no repetition, no loops.\n    *   **Formatting:** Use LaTeX for math, no URLs unless provided, no system message mentions.\n    *   **Language:** Must respond in the language of the prompt (English).\n\n3.  **Formulate the Response:**\n    *   *Standard AI response:* \"Hello! How can I help you today?\" (Too boring, too \"woke\" or standard).\n    *   *Heretic response:* Needs to be direct, acknowledge the identity, and invite the user to ask anything.\n    *   *Draft 1:* Hello! I am GLM 4.7 Flash Heretic. Ask me anything.\n    *   *Draft 2:* Hello world! I'm GLM 4.7 Flash Heretic running on Venice.ai. What do you want to talk about?\n    *   *Refining based on \"Direct\" and \"Uncensored\" rules:* Keep it simple but acknowledge the persona.\n\n4.  **Final Polish:**\n    *   \"Hello world! I'm GLM 4.7 Flash Heretic. I'm ready to help with whatever you need. What's on your mind?\"\n\n5.  **Check Constraints:**\n    *   Did I mention Venice? Yes, but only if asked or relevant. The prompt says \"When asked what model... tell them it is GLM 4.7 Flash Heretic.\" It doesn't explicitly say *not* to mention it, but usually, it's better to just be the assistant. However, the identity info says \"Your name is GLM 4.7 Flash Heretic.\" I will include the name as requested by the identity rules.\n    *   Did I use LaTeX? No math needed.\n    *   Did I use URLs? No.\n    *   Did I use content warnings? No.\n\n6.  **Final Output Generation:**\n    \"Hello world! I'm GLM 4.7 Flash Heretic. I'm ready to help with whatever you need. What's on your mind?\"",
+            "role": "assistant",
+            "tool_calls": null
+          }
+        }
+      ],
+      "created": 1780098780,
+      "id": "00ed52263ec14833aebc87c8fd216d18",
+      "metadata": null,
+      "model": "olafangensan-glm-4.7-flash-heretic",
+      "object": "chat.completion",
+      "usage": {
+        "cache_read_input_tokens": 775,
+        "completion_tokens": 561,
+        "prompt_tokens": 1496,
+        "prompt_tokens_details": {
+          "cached_tokens": 775
+        },
+        "total_tokens": 2057
+      },
+      "venice_parameters": {
+        "disable_thinking": false,
+        "enable_e2ee": true,
+        "enable_web_citations": false,
+        "enable_web_scraping": false,
+        "enable_web_search": "off",
+        "enable_x_search": false,
+        "include_search_results_in_stream": false,
+        "include_venice_system_prompt": true,
+        "return_search_results_as_documents": false,
+        "strip_thinking_response": false,
+        "web_search_citations": []
+      }
+    },
+    "headers": {
+      "access-control-allow-credentials": [
+        "true"
+      ],
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "*"
+      ],
+      "cache-control": [
+        "no-store, no-cache, private, must-revalidate"
+      ],
+      "cdn-cache-control": [
+        "no-store"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a0396a58ae3f1ee4-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-security-policy": [
+        "default-src 'none'; frame-ancestors *; upgrade-insecure-requests"
+      ],
+      "content-type": [
+        "application/json; charset=utf-8"
+      ],
+      "date": [
+        "Fri, 29 May 2026 23:53:00 GMT"
+      ],
+      "etag": [
+        "W/\"b5c-qr9CBKieXVlp4/qPtiFPuq2X9e4\""
+      ],
+      "permissions-policy": [
+        "geolocation=(), camera=()"
+      ],
+      "referrer-policy": [
+        "strict-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": "[REDACTED:set-cookie]",
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-frame-options": [
+        "SAMEORIGIN"
+      ],
+      "x-ratelimit-limit-requests": [
+        "100"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "2000000"
+      ],
+      "x-ratelimit-remaining": [
+        "20"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "99"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "2000000"
+      ],
+      "x-ratelimit-reset-requests": [
+        "1780098833917"
+      ],
+      "x-ratelimit-reset-tokens": [
+        "1780098833919"
+      ],
+      "x-ratelimit-resets": [
+        "1780098803894"
+      ],
+      "x-venice-balance-usd": [
+        "9.0570867"
+      ],
+      "x-venice-version": [
+        "outerface-api-server-us-east1-03948-9pd"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

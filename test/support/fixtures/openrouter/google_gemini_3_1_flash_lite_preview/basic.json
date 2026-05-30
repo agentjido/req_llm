@@ -1,0 +1,143 @@
+{
+  "model_spec": "openrouter:google/gemini-3.1-flash-lite-preview",
+  "provider": "openrouter",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Imdvb2dsZS9nZW1pbmktMy4xLWZsYXNoLWxpdGUtcHJldmlldyIsIm4iOjEsInJlYXNvbmluZ19lZmZvcnQiOiJsb3ciLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+    },
+    "canonical_json": {
+      "max_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "google/gemini-3.1-flash-lite-preview",
+      "n": 1,
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Hello! It's great to meet you. How can I help you today?",
+            "reasoning": "**Acknowledge the Greeting**\n\nI've processed the user's \"Hello world!\" input. My analysis indicates a simple greeting, possibly a test. Now, I'm working to determine an appropriate response. I've narrowed it down to acknowledging the greeting and providing a friendly opening, which is where I am focusing.\n\n\n",
+            "reasoning_details": [
+              {
+                "format": "google-gemini-v1",
+                "index": 0,
+                "text": "**Acknowledge the Greeting**\n\nI've processed the user's \"Hello world!\" input. My analysis indicates a simple greeting, possibly a test. Now, I'm working to determine an appropriate response. I've narrowed it down to acknowledging the greeting and providing a friendly opening, which is where I am focusing.\n\n\n",
+                "type": "reasoning.text"
+              },
+              {
+                "data": "EoYHCoMHAQw51scZP0l7i9U/A1GSX68D66AGpDmp56yo2NZw/fPrngnF5v0Kf7IJnGYD/weFOOaJ4Feev76cEXCzKhcsHaOBynu6kQbs4IGEPgAcVogakdF+CFQveTnvePQqwxPbmxBY+/yEXg3rPsqhX6lhh/O4sU+vxDt6jP1yGDLJ6mINvMyVj46WAKdUc/UxZZNVopXKDkGjJsOTqSX6dyG0i0YtG1Poe9yNy2CWiJcn7GP8XIf9NLEd/WMB0RDoqe/1Vcb2jogXMtlQHv/70trfnv36Gzo7zyiR1GEpIjpF1dRJo0NAc39GbaffPeT9cDM8L5T92EpBix4Z6tZ8XCCSWQCd0idIxBTkoDGIlDbFCEU5lVFopjRwKPqHkrfIDUFOVYMgsJBSoWAZpTlO/t+xFGifgoH9ZLTllN13Fxhp/dcbAaFGtZoDXHHiQeV9AbJ9AtE25eoyu1pX41PcF3c18x3nY16/+wUDgusKG1k0xPaQg9+H3MzMnpjKgtoVg78qCjU3f1m/R2URZ/hW0MvPVJCl+W7a7wDtHcbT60prN6J27gud1NW1zYZgI3z2O2IkXWxMAz+SkJdB1K6a2qPzUkkykh2NihjYK4UWdctwwtVRmwoK4M1mMf1ep86A/bNXfplJNxAWhXh0tTORJqzh/eZyGXjnrtWdIq5cJSbTHukZxSJVCMDRTDfNVsWHl1RdwhhyuFAWT3xpoDfHm4FI5ahb9dfmrjNkKnlt/w3nOSVDZy2GB4rb3mltbknak65VHCzQ3y243R4tkx1xrF6G5h8UYjNtXDsAcCyOJFr0703dgKecKkCWwzaC71CC32IQVtLkGccXOQJD7H9lA1g1L9NDbq6l/WMZgh2uf+geCpCfZB3T63MZbGEFZsQ+xwIroZjKbeXO/YTS0emDy/g7XZfMEgtUld9Go3LDdUK5itY2dAbDHf+o9vW17+SjGXbZ5JWWDoxplHMnLBA0YXgmsUUUtvjBbv+BkxpHl4mMY649/tbbQ05RbAAa6PybarX06NUwyOtyhpbt/LWsgKdekc/r7T00GFyy6sAc2QRe34+cC+7GRsnHLqsDWMTY1Fz1EXKr0S5//99zELpdlFtMfd1dCEqhO6gp8mRa8vGHzrmCHwwipH5VMgzkpYzD4W1rCP6KZloOKmsNluYDBOa8I75eotB41VvmtEpo351OjzoYwWw=",
+                "format": "google-gemini-v1",
+                "index": 1,
+                "type": "reasoning.encrypted"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "STOP"
+        }
+      ],
+      "created": 1780100143,
+      "id": "gen-1780100143-c1I65xFaPkJqh5QWacSf",
+      "model": "google/gemini-3.1-flash-lite-preview-20260303",
+      "object": "chat.completion",
+      "provider": "Google AI Studio",
+      "service_tier": "default",
+      "system_fingerprint": null,
+      "usage": {
+        "completion_tokens": 211,
+        "completion_tokens_details": {
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "reasoning_tokens": 194
+        },
+        "cost": 3.175e-4,
+        "cost_details": {
+          "upstream_inference_completions_cost": 3.165e-4,
+          "upstream_inference_cost": 3.175e-4,
+          "upstream_inference_prompt_cost": 1.0e-6
+        },
+        "is_byok": false,
+        "prompt_tokens": 4,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 0,
+          "video_tokens": 0
+        },
+        "total_tokens": 215
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "X-Generation-Id,cf-ray"
+      ],
+      "cf-ray": [
+        "a0398bc77b9e32f4-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Sat, 30 May 2026 00:15:44 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-generation-id": [
+        "gen-1780100143-c1I65xFaPkJqh5QWacSf"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

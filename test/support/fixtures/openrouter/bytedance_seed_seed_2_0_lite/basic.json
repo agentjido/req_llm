@@ -1,0 +1,137 @@
+{
+  "model_spec": "openrouter:bytedance-seed/seed-2.0-lite",
+  "provider": "openrouter",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImJ5dGVkYW5jZS1zZWVkL3NlZWQtMi4wLWxpdGUiLCJuIjoxLCJyZWFzb25pbmdfZWZmb3J0IjoibG93Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+    },
+    "canonical_json": {
+      "max_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "bytedance-seed/seed-2.0-lite",
+      "n": 1,
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Hello there! It's great to see this classic \"Hello world!\" from you—this iconic line is the start of so many creative coding projects and fun conversations, after all 😊 Whether you want to explore coding problems, brainstorm ideas, chat about your hobbies, or work through any question you're curious about, I'm here to help!",
+            "reasoning": "Got it, the user said \"Hello world!\" That's a classic first message, right? I should respond warmly. First, greet them back, then invite them to share whatever they need—whether it's coding questions, chatting, problem-solving, whatever. Let me make that natural. Something like \"Hello there! It's great to see the classic 'Hello world!' from you, the iconic first line that kicks off all sorts of creative projects and conversations 😊 Whether you want to dive into coding, brainstorm an idea, chat about something you're passionate about, or work through any problem you're facing, I'm here to help!\" Yeah that sounds good, friendly and open.",
+            "reasoning_details": [
+              {
+                "format": "unknown",
+                "index": 0,
+                "text": "Got it, the user said \"Hello world!\" That's a classic first message, right? I should respond warmly. First, greet them back, then invite them to share whatever they need—whether it's coding questions, chatting, problem-solving, whatever. Let me make that natural. Something like \"Hello there! It's great to see the classic 'Hello world!' from you, the iconic first line that kicks off all sorts of creative projects and conversations 😊 Whether you want to dive into coding, brainstorm an idea, chat about something you're passionate about, or work through any problem you're facing, I'm here to help!\" Yeah that sounds good, friendly and open.",
+                "type": "reasoning.text"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "stop"
+        }
+      ],
+      "created": 1780100095,
+      "id": "gen-1780100095-UKvZxfnDi4t6y7NJRQrV",
+      "model": "bytedance-seed/seed-2.0-lite-20260309",
+      "object": "chat.completion",
+      "provider": "Seed",
+      "service_tier": null,
+      "system_fingerprint": null,
+      "usage": {
+        "completion_tokens": 208,
+        "completion_tokens_details": {
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "reasoning_tokens": 139
+        },
+        "cost": 4.285e-4,
+        "cost_details": {
+          "upstream_inference_completions_cost": 4.16e-4,
+          "upstream_inference_cost": 4.285e-4,
+          "upstream_inference_prompt_cost": 1.25e-5
+        },
+        "is_byok": false,
+        "prompt_tokens": 50,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 0,
+          "video_tokens": 0
+        },
+        "total_tokens": 258
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "X-Generation-Id,cf-ray"
+      ],
+      "cf-ray": [
+        "a0398a99787f3a0f-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Sat, 30 May 2026 00:14:56 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-generation-id": [
+        "gen-1780100095-UKvZxfnDi4t6y7NJRQrV"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

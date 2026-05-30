@@ -1,0 +1,113 @@
+{
+  "model_spec": "zenmux:minimax/minimax-m2.5-lightning",
+  "provider": "zenmux",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjIwMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiSGVsbG8gd29ybGQhIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoibWluaW1heC9taW5pbWF4LW0yLjUtbGlnaHRuaW5nIiwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+    },
+    "canonical_json": {
+      "max_completion_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "minimax/minimax-m2.5-lightning",
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://zenmux.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "base_resp": {
+        "status_code": 0,
+        "status_msg": ""
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "audio_content": "",
+            "content": "Hello! How can I help you today?",
+            "name": "MiniMax AI",
+            "reasoning": "The user said \"Hello world!\" That's a simple greeting. According to my instructions, I should respond with a friendly greeting and perhaps ask how I can help. There's no disallowed content. The user just says \"Hello world!\" I should respond in a friendly manner.\n\nThe user might just be testing or beginning a conversation. I can say \"Hello! How can I help you today?\" Something like that.\n\nGiven the system messages, I need to follow \"General guidelines\" - I can comply. There's no need for special policies. Just a greeting.\n\nI need to output in final channel.",
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1780099153,
+      "id": "87c6173b86bf4a87956417655456c4bf",
+      "input_sensitive": false,
+      "input_sensitive_type": 0,
+      "model": "minimax/minimax-m2.5-lightning",
+      "object": "chat.completion",
+      "output_sensitive": false,
+      "output_sensitive_int": 0,
+      "output_sensitive_type": 0,
+      "usage": {
+        "completion_tokens": 131,
+        "completion_tokens_details": {
+          "reasoning_tokens": 122
+        },
+        "prompt_tokens": 44,
+        "total_characters": 0,
+        "total_tokens": 175
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "X-ZenMux-RequestId"
+      ],
+      "cf-ray": [
+        "a039739baa79e25c-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 29 May 2026 23:59:17 GMT"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-zenmux-requestid": [
+        "87c6173b86bf4a87956417655456c4bf"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

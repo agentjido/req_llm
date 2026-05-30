@@ -1,0 +1,106 @@
+{
+  "model_spec": "zenmux:qwen/qwen3.6-plus",
+  "provider": "zenmux",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjIwMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiSGVsbG8gd29ybGQhIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoicXdlbi9xd2VuMy42LXBsdXMiLCJyZWFzb25pbmdfZWZmb3J0IjoibG93Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+    },
+    "canonical_json": {
+      "max_completion_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "qwen/qwen3.6-plus",
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://zenmux.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Hello! 👋 How can I assist you today? Whether you have a question, need help with a project, or just want to chat, I'm here for you!",
+            "reasoning": "Here's a thinking process:\n\n1.  **Analyze User Input:**\n   - User said: \"Hello world!\"\n   - This is a standard greeting, often used as a test message or simple hello.\n\n2.  **Identify Intent:**\n   - The user is greeting me. No specific question or task is provided.\n   - Expected response: A friendly, welcoming greeting in return, possibly offering assistance.\n\n3.  **Determine Response Strategy:**\n   - Acknowledge the greeting\n   - Respond warmly\n   - Offer help\n   - Keep it concise\n\n4.  **Draft Response (Mental):**\n   Hello! 👋 How can I assist you today? Whether you have a question, need help with a project, or just want to chat, I'm here for you!\n\n5.  **Refine Response:**\n   - Check tone: Friendly, professional, helpful\n   - Check length: Short and appropriate\n   - Matches standard AI greeting patterns\n   - No extra fluff\n\n   Final: \"Hello! 👋 How can I assist you today? Whether you have a question, need help with something, or just want to chat, I'm here for you!\"\n\n6.  **Self-Correction/Verification:**\n   - Does it match the user's input? Yes.\n   - Is it appropriate? Yes.\n   - Any potential issues? None.\n   - Ready.✅",
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1780099399,
+      "id": "65c40745d5a64f6fa16ef6caf668c959",
+      "model": "qwen/qwen3.6-plus",
+      "object": "chat.completion",
+      "system_fingerprint": null,
+      "usage": {
+        "completion_tokens": 342,
+        "completion_tokens_details": {
+          "reasoning_tokens": 302
+        },
+        "prompt_tokens": 13,
+        "prompt_tokens_details": {
+          "text_tokens": 13
+        },
+        "total_tokens": 355
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "X-ZenMux-RequestId"
+      ],
+      "cf-ray": [
+        "a0397968b945f479-MEM"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Sat, 30 May 2026 00:03:19 GMT"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-zenmux-requestid": [
+        "65c40745d5a64f6fa16ef6caf668c959"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

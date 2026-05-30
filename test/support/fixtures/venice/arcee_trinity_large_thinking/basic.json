@@ -1,0 +1,187 @@
+{
+  "model_spec": "venice:arcee-trinity-large-thinking",
+  "provider": "venice",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImFyY2VlLXRyaW5pdHktbGFyZ2UtdGhpbmtpbmciLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMCwidmVuaWNlX3BhcmFtZXRlcnMiOnsiZGlzYWJsZV90aGlua2luZyI6ZmFsc2UsImVuYWJsZV93ZWJfY2l0YXRpb25zIjpmYWxzZSwiZW5hYmxlX3dlYl9zY3JhcGluZyI6ZmFsc2UsImVuYWJsZV93ZWJfc2VhcmNoIjoib2ZmIiwiaW5jbHVkZV9zZWFyY2hfcmVzdWx0c19pbl9zdHJlYW0iOmZhbHNlLCJpbmNsdWRlX3ZlbmljZV9zeXN0ZW1fcHJvbXB0Ijp0cnVlLCJzdHJpcF90aGlua2luZ19yZXNwb25zZSI6ZmFsc2V9fQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "arcee-trinity-large-thinking",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0,
+      "venice_parameters": {
+        "disable_thinking": false,
+        "enable_web_citations": false,
+        "enable_web_scraping": false,
+        "enable_web_search": "off",
+        "include_search_results_in_stream": false,
+        "include_venice_system_prompt": true,
+        "strip_thinking_response": false
+      }
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.venice.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "annotations": null,
+            "audio": null,
+            "content": "\nHello! 👋 How can I assist you today?",
+            "function_call": null,
+            "reasoning_content": "Hmm, the user just said \"Hello world!\" which is a simple greeting. This is a straightforward opening message with no specific question or request. \n\nSince the user is just saying hello, I should respond in a friendly and welcoming manner. The user might be testing if I'm working or just starting a conversation. \n\nI'll keep it simple and positive, matching their casual tone. No need for complex analysis or extra information since they didn't ask for anything specific. \n\nI'll just say hello back and maybe add a smiley to keep it warm and approachable. That fits the casual \"Hello world!\" vibe.",
+            "refusal": null,
+            "role": "assistant",
+            "tool_calls": []
+          },
+          "stop_reason": null,
+          "token_ids": null
+        }
+      ],
+      "created": 1780098564,
+      "id": "chatcmpl-99b2ad31d7b86bdf",
+      "kv_transfer_params": null,
+      "model": "arcee-trinity-large-thinking",
+      "object": "chat.completion",
+      "prompt_logprobs": null,
+      "prompt_text": null,
+      "prompt_token_ids": null,
+      "service_tier": null,
+      "usage": {
+        "completion_tokens": 136,
+        "prompt_tokens": 1444,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "total_tokens": 1580
+      },
+      "venice_parameters": {
+        "disable_thinking": false,
+        "enable_e2ee": true,
+        "enable_web_citations": false,
+        "enable_web_scraping": false,
+        "enable_web_search": "off",
+        "enable_x_search": false,
+        "include_search_results_in_stream": false,
+        "include_venice_system_prompt": true,
+        "return_search_results_as_documents": false,
+        "strip_thinking_response": false,
+        "web_search_citations": []
+      }
+    },
+    "headers": {
+      "access-control-allow-credentials": [
+        "true"
+      ],
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "*"
+      ],
+      "cache-control": [
+        "no-store, no-cache, private, must-revalidate"
+      ],
+      "cdn-cache-control": [
+        "no-store"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a039653b0af6aa8f-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-security-policy": [
+        "default-src 'none'; frame-ancestors *; upgrade-insecure-requests"
+      ],
+      "content-type": [
+        "application/json; charset=utf-8"
+      ],
+      "date": [
+        "Fri, 29 May 2026 23:49:26 GMT"
+      ],
+      "etag": [
+        "W/\"641-bwI2K2Ums9L3yaM4EFBegCQwvho\""
+      ],
+      "permissions-policy": [
+        "geolocation=(), camera=()"
+      ],
+      "referrer-policy": [
+        "strict-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": "[REDACTED:set-cookie]",
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-frame-options": [
+        "SAMEORIGIN"
+      ],
+      "x-ratelimit-limit-requests": [
+        "1000"
+      ],
+      "x-ratelimit-remaining": [
+        "20"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "999"
+      ],
+      "x-ratelimit-reset-requests": [
+        "1780098624367"
+      ],
+      "x-ratelimit-resets": [
+        "1780098594349"
+      ],
+      "x-venice-balance-usd": [
+        "9.35"
+      ],
+      "x-venice-version": [
+        "outerface-api-server-us-east1-03947-6nv"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

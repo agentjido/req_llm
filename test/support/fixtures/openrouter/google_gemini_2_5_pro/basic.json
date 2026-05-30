@@ -1,4 +1,6 @@
 {
+  "model_spec": "openrouter:google/gemini-2.5-pro",
+  "provider": "openrouter",
   "request": {
     "body": {
       "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Imdvb2dsZS9nZW1pbmktMi41LXBybyIsIm4iOjEsInJlYXNvbmluZ19lZmZvcnQiOiJsb3ciLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
@@ -19,6 +21,9 @@
       "temperature": 0.0
     },
     "headers": {
+      "accept": [
+        "application/json"
+      ],
       "accept-encoding": [
         "gzip"
       ],
@@ -27,7 +32,7 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ]
     },
     "method": "post",
@@ -41,13 +46,13 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Hello there! That's the traditional first greeting for any new program.\n\nIt's nice to meet you. What can I help you with today?",
-            "reasoning": "**Defining Initial Input**\n\nI've zeroed in on the user's input: \"Hello world!\". My analysis immediately keyed into the phrase's significance within the programming world. It's that quintessential beginner's statement, a hallmark of introductory coding. I'm now exploring the implications.\n\n\n**Analyzing User's Intent**\n\nI've progressed to interpreting the user's implicit goals. I'm weighing whether it's a casual hello or a test of my functionality. The programming context of \"Hello world!\" strongly suggests a knowing user, so I am leaning toward a more sophisticated reply. I'm crafting responses now.\n\n\n**Crafting Appropriate Response**\n\nI'm now formulating potential responses, taking into account the user's possible intentions. Acknowledging the programming roots of \"Hello world!\" is crucial. I'm choosing between a direct acknowledgement of the phrase's significance and a more playful, syntax-specific response. I'm leaning toward a blend: a friendly greeting with a nod to coding.\n\n\n",
+            "content": "Hello there! That's the traditional first step in so many great programming adventures.\n\nHow can I help you today?",
+            "reasoning": "**Acknowledging greeting and purpose**\n\nI've processed your \"Hello world!\" input. My current focus is on understanding simple, foundational statements and recognizing common introductory patterns in human communication. This analysis helps me refine my ability to respond to basic conversational cues.\n\n**Processing greeting input**\n\nI've registered your \"Hello world!\" and am focusing on recognizing common introductory phrases. This helps me build a foundational understanding of conversational initiation and respond appropriately to simple greetings.\n\n",
             "reasoning_details": [
               {
-                "format": "unknown",
+                "format": "google-gemini-v1",
                 "index": 0,
-                "text": "**Defining Initial Input**\n\nI've zeroed in on the user's input: \"Hello world!\". My analysis immediately keyed into the phrase's significance within the programming world. It's that quintessential beginner's statement, a hallmark of introductory coding. I'm now exploring the implications.\n\n\n**Analyzing User's Intent**\n\nI've progressed to interpreting the user's implicit goals. I'm weighing whether it's a casual hello or a test of my functionality. The programming context of \"Hello world!\" strongly suggests a knowing user, so I am leaning toward a more sophisticated reply. I'm crafting responses now.\n\n\n**Crafting Appropriate Response**\n\nI'm now formulating potential responses, taking into account the user's possible intentions. Acknowledging the programming roots of \"Hello world!\" is crucial. I'm choosing between a direct acknowledgement of the phrase's significance and a more playful, syntax-specific response. I'm leaning toward a blend: a friendly greeting with a nod to coding.\n\n\n",
+                "text": "**Acknowledging greeting and purpose**\n\nI've processed your \"Hello world!\" input. My current focus is on understanding simple, foundational statements and recognizing common introductory patterns in human communication. This analysis helps me refine my ability to respond to basic conversational cues.\n\n**Processing greeting input**\n\nI've registered your \"Hello world!\" and am focusing on recognizing common introductory phrases. This helps me build a foundational understanding of conversational initiation and respond appropriately to simple greetings.\n\n",
                 "type": "reasoning.text"
               }
             ],
@@ -57,30 +62,46 @@
           "native_finish_reason": "STOP"
         }
       ],
-      "created": 1762104933,
-      "id": "gen-1762104933-jG3b6YQBbIxkdQVNCUrk",
+      "created": 1780100629,
+      "id": "gen-1780100629-B5eQVpOZjHVBUREUtFWD",
       "model": "google/gemini-2.5-pro",
       "object": "chat.completion",
       "provider": "Google",
+      "service_tier": "default",
+      "system_fingerprint": null,
       "usage": {
-        "completion_tokens": 382,
+        "completion_tokens": 323,
         "completion_tokens_details": {
+          "audio_tokens": 0,
           "image_tokens": 0,
-          "reasoning_tokens": 350
+          "reasoning_tokens": 298
         },
+        "cost": 0.00323375,
+        "cost_details": {
+          "upstream_inference_completions_cost": 0.00323,
+          "upstream_inference_cost": 0.00323375,
+          "upstream_inference_prompt_cost": 3.75e-6
+        },
+        "is_byok": false,
         "prompt_tokens": 3,
         "prompt_tokens_details": {
-          "cached_tokens": 0
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 0,
+          "video_tokens": 0
         },
-        "total_tokens": 385
+        "total_tokens": 326
       }
     },
     "headers": {
       "access-control-allow-origin": [
         "*"
       ],
+      "access-control-expose-headers": [
+        "X-Generation-Id,cf-ray"
+      ],
       "cf-ray": [
-        "9985639b99ebfe20-ORD"
+        "a03997a79caae81a-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -89,7 +110,7 @@
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:35:35 GMT"
+        "Sat, 30 May 2026 00:23:51 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
@@ -103,13 +124,14 @@
       "transfer-encoding": [
         "chunked"
       ],
-      "vary": [
-        "Accept-Encoding"
-      ],
       "x-content-type-options": [
         "nosniff"
+      ],
+      "x-generation-id": [
+        "gen-1780100629-B5eQVpOZjHVBUREUtFWD"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

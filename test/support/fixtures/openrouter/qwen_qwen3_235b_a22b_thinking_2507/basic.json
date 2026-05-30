@@ -1,4 +1,6 @@
 {
+  "model_spec": "openrouter:qwen/qwen3-235b-a22b-thinking-2507",
+  "provider": "openrouter",
   "request": {
     "body": {
       "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6InF3ZW4vcXdlbjMtMjM1Yi1hMjJiLXRoaW5raW5nLTI1MDciLCJuIjoxLCJyZWFzb25pbmdfZWZmb3J0IjoibG93Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
@@ -19,6 +21,9 @@
       "temperature": 0.0
     },
     "headers": {
+      "accept": [
+        "application/json"
+      ],
       "accept-encoding": [
         "gzip"
       ],
@@ -27,7 +32,7 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ]
     },
     "method": "post",
@@ -39,15 +44,15 @@
         {
           "finish_reason": "stop",
           "index": 0,
-          "logprobs": -1.7881393e-6,
+          "logprobs": null,
           "message": {
-            "content": "Hello, world! 👋 Welcome to the conversation. Ready to code some magic or just chat? 😊",
-            "reasoning": "\nOkay, the user said \"Hello world!\" which is a classic first program people write when learning to code. It's usually the first thing you print out to test if your environment is set up right.\n\nI should respond in a friendly and welcoming way. Maybe add a little humor or a reference to programming since they used that phrase. Let me think... \"Hello, world! 👋 Welcome to the conversation. Ready to code some magic or just chat?\" That sounds good. It acknowledges the programming joke, says hello back, and opens the door for them to ask for help or just talk. The emoji adds a friendly touch. I'll go with that.\n",
+            "content": "Hello world! 👋 Welcome! How can I assist you today?",
+            "reasoning": "Okay, the user said \"Hello world!\" which is a classic first program example in many programming languages. They might be testing if I recognize it or just greeting me.\n\nI should respond warmly. Since they used the programming phrase, maybe add a friendly nod to that. Keep it simple and welcoming. Let me make sure to say hello back and offer help. Something like, \"Hello world! 👋 Welcome! How can I assist you today?\" That's good—acknowledges the reference and opens the door for them to ask for help.\n",
             "reasoning_details": [
               {
-                "format": null,
+                "format": "unknown",
                 "index": 0,
-                "text": "\nOkay, the user said \"Hello world!\" which is a classic first program people write when learning to code. It's usually the first thing you print out to test if your environment is set up right.\n\nI should respond in a friendly and welcoming way. Maybe add a little humor or a reference to programming since they used that phrase. Let me think... \"Hello, world! 👋 Welcome to the conversation. Ready to code some magic or just chat?\" That sounds good. It acknowledges the programming joke, says hello back, and opens the door for them to ask for help or just talk. The emoji adds a friendly touch. I'll go with that.\n",
+                "text": "Okay, the user said \"Hello world!\" which is a classic first program example in many programming languages. They might be testing if I recognize it or just greeting me.\n\nI should respond warmly. Since they used the programming phrase, maybe add a friendly nod to that. Keep it simple and welcoming. Let me make sure to say hello back and offer help. Something like, \"Hello world! 👋 Welcome! How can I assist you today?\" That's good—acknowledges the reference and opens the door for them to ask for help.\n",
                 "type": "reasoning.text"
               }
             ],
@@ -57,23 +62,46 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1762105016,
-      "id": "gen-1762105016-9BzVWkbAoi5POMRb0HWt",
+      "created": 1780097917,
+      "id": "gen-1780097917-ACciSmc1gn36RmYjptW1",
       "model": "qwen/qwen3-235b-a22b-thinking-2507",
       "object": "chat.completion",
-      "provider": "Together",
+      "provider": "Alibaba",
+      "service_tier": null,
+      "system_fingerprint": null,
       "usage": {
-        "completion_tokens": 159,
-        "prompt_tokens": 12,
-        "total_tokens": 171
+        "completion_tokens": 128,
+        "completion_tokens_details": {
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "reasoning_tokens": 109
+        },
+        "cost": 1.930045e-4,
+        "cost_details": {
+          "upstream_inference_completions_cost": 1.9136e-4,
+          "upstream_inference_cost": 1.930045e-4,
+          "upstream_inference_prompt_cost": 1.6445e-6
+        },
+        "is_byok": false,
+        "prompt_tokens": 11,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 0,
+          "video_tokens": 0
+        },
+        "total_tokens": 139
       }
     },
     "headers": {
       "access-control-allow-origin": [
         "*"
       ],
+      "access-control-expose-headers": [
+        "X-Generation-Id,cf-ray"
+      ],
       "cf-ray": [
-        "998565a118bab838-ORD"
+        "a03955731bcfc034-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -82,7 +110,7 @@
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:36:58 GMT"
+        "Fri, 29 May 2026 23:38:38 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
@@ -96,13 +124,14 @@
       "transfer-encoding": [
         "chunked"
       ],
-      "vary": [
-        "Accept-Encoding"
-      ],
       "x-content-type-options": [
         "nosniff"
+      ],
+      "x-generation-id": [
+        "gen-1780097917-ACciSmc1gn36RmYjptW1"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

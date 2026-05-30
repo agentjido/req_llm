@@ -1,0 +1,137 @@
+{
+  "model_spec": "openrouter:minimax/minimax-m2.1",
+  "provider": "openrouter",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Im1pbmltYXgvbWluaW1heC1tMi4xIiwibiI6MSwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "minimax/minimax-m2.1",
+      "n": 1,
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Hello world! 👋\n\nGreat to meet you! I'm here to help with coding, answering questions, or whatever you need. What can I assist you with today?",
+            "reasoning": "The user has simply said \"Hello world!\" which is a classic programming greeting and often used as a simple test phrase. This is a very casual, friendly greeting that doesn't require any complex response.\n\nI should respond in a warm, friendly manner that matches their energy. Since they didn't ask me to do anything specific, I'll just greet them back warmly and offer to help with whatever they need.\n",
+            "reasoning_details": [
+              {
+                "format": "unknown",
+                "index": 0,
+                "text": "The user has simply said \"Hello world!\" which is a classic programming greeting and often used as a simple test phrase. This is a very casual, friendly greeting that doesn't require any complex response.\n\nI should respond in a warm, friendly manner that matches their energy. Since they didn't ask me to do anything specific, I'll just greet them back warmly and offer to help with whatever they need.\n",
+                "type": "reasoning.text"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "stop"
+        }
+      ],
+      "created": 1780098170,
+      "id": "gen-1780098170-XhkBuqryDzVaePMunWgU",
+      "model": "minimax/minimax-m2.1",
+      "object": "chat.completion",
+      "provider": "AtlasCloud",
+      "service_tier": null,
+      "system_fingerprint": null,
+      "usage": {
+        "completion_tokens": 115,
+        "completion_tokens_details": {
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "reasoning_tokens": 103
+        },
+        "cost": 1.1427e-4,
+        "cost_details": {
+          "upstream_inference_completions_cost": 1.0925e-4,
+          "upstream_inference_cost": 1.1427e-4,
+          "upstream_inference_prompt_cost": 5.02e-6
+        },
+        "is_byok": false,
+        "prompt_tokens": 46,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 32,
+          "video_tokens": 0
+        },
+        "total_tokens": 161
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "X-Generation-Id,cf-ray"
+      ],
+      "cf-ray": [
+        "a0395b9b28a11f93-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 29 May 2026 23:42:51 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-generation-id": [
+        "gen-1780098170-XhkBuqryDzVaePMunWgU"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

@@ -1,0 +1,121 @@
+{
+  "model_spec": "zenmux:openai/gpt-5-pro",
+  "provider": "zenmux",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjUwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Im9wZW5haS9ncHQtNS1wcm8iLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+    },
+    "canonical_json": {
+      "max_completion_tokens": 50,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "openai/gpt-5-pro",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://zenmux.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": null,
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": null,
+            "reasoning": "**Responding to a greeting**\n\nI see the user greeted me with \"Hello world!\" This seems like a friendly greeting, so I should respond politely. I want to keep my reply simple and not overly verbose. It’s a good idea to ask how I can assist them without heavy formatting. Maybe I could mention my capabilities if it fits, but mainly, I should focus on being friendly and open to helping!",
+            "reasoning_details": [
+              {
+                "format": "openai-responses-v1",
+                "index": "0",
+                "summary": "**Responding to a greeting**\n\nI see the user greeted me with \"Hello world!\" This seems like a friendly greeting, so I should respond politely. I want to keep my reply simple and not overly verbose. It’s a good idea to ask how I can assist them without heavy formatting. Maybe I could mention my capabilities if it fits, but mainly, I should focus on being friendly and open to helping!",
+                "type": "reasoning.summary"
+              },
+              {
+                "data": "gAAAAABqGii0Jyvl3oJ6_64_hkWwUrmHL4wYkJ6SB8n_7n7ur5bBlY_R-85mN1gbtDFqQED9ayPtgdy-mJ78oRQaL4Tx1ytQTpuNNaH8ze73-N8YUMIxnF_WyfWaf38Qxa73qcM0PBg8wC5T0wQRLlSOSgs72e0OMQcesyZvGbayaz2-nBbLeUQSoL5ONCBk-zYC2MY8VPRVPe0PP4EHLbNzRJTyIkL8GvHp39Xiu2lAkLTM4voo1VA6iqAwo5MUzlY16yokUxy75N3TSvs0S8qqcppIVzaBAPUXeLZB8buprFbeVxqimVlupNv6eUSWZokcmVx6eHZtK0gQk3qKWcoBYcvTCmq_Emhl8-ay0mLbzkxJRgMtJ3y7K4d1FnXDtyIDnWMMQKBK80bRptYm-jHp-6DylNh_jZ2OcDJOzelXMkL9og-yhuIvhgCx19yICfaSLEeZnzas1KzXIDVIKdteU5TNCiAKcO_3g55FATtLvJhkP_sLzxzbazZJg3kjwj7Hm25XYF21ns7sAC0qnO1JTOn-Z3yjGUCw9IW_F5iDpkj6Yt42zfxv5T29YfKhCasmkRx6hpUwV8MSjERL4rAGDqvFlvj87OjQGP9MoJt8dxoJ8kCoMdrNuDRkBZ99A0KLC7qhFJkihQBWZBmuwNryiouAS4UsgPiRNz2_MAlUDbcHcARFT-9QvoadEvUwB0CsYrf6xLWEXP-4xT5xXmIbWX02fJ2GCbIHkqJieAFtPXs3hU9qVs0sgr3gJQfuZUeqKJlA8P4KCEkdRQnventxlPgtadXbjL3WW-7xcEm78rik3jseVIgFboolvxubIxDdcD6BjgVH_OF59_Vr4I1glSpTw2Yq2vTb3tObTzEdiTjhk_eh7Rl0Tz3Yrfc4LdY0sNrxY_Hel1TdYxlTqdkcVKT6S15RfEkwvARcN0_6zxxIvXEirFaQUrK9lti269oSC9W6zjWu8m81EcqKw3g3a9zDXkzV_CB73N8FydTo_5olxfXd941nhN1TVgDhBOsDUMh_pQWG53HBZ-7W0pAYd2bfCRUgCyukx9O4he_o7TqkdkFCWLv6QGWZj1kJPHBBqnj2WGII8DWtdiyFET4Z0AIazDs1pA9KtTY_BkB8C859_66Nhuxeim1eTG7b1mRv3Hqn463AD_g2bqqTv7t95rCPTntyN-GICfLMIbg4zgFC51jUzxQGx_nKjg-2V4rmhT-N6GkE",
+                "format": "openai-responses-v1",
+                "id": "rs_07a698b24b2cf656006a1a28b3acc88196be62ebed96d37870",
+                "index": "0",
+                "type": "reasoning.encrypted"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1780099235,
+      "id": "ac9747738cee4969a39a7372f14ff15a",
+      "model": "openai/gpt-5-pro",
+      "object": "chat.completion",
+      "service_tier": "default",
+      "usage": {
+        "completion_tokens": 0,
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "prompt_tokens": 9,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "total_tokens": 9
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "X-ZenMux-RequestId"
+      ],
+      "cf-ray": [
+        "a039758f5f801107-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Sat, 30 May 2026 00:00:52 GMT"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-zenmux-requestid": [
+        "ac9747738cee4969a39a7372f14ff15a"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

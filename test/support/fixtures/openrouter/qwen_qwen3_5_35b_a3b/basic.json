@@ -1,0 +1,137 @@
+{
+  "model_spec": "openrouter:qwen/qwen3.5-35b-a3b",
+  "provider": "openrouter",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6InF3ZW4vcXdlbjMuNS0zNWItYTNiIiwibiI6MSwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "qwen/qwen3.5-35b-a3b",
+      "n": 1,
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Hello! 👋 How can I help you today?",
+            "reasoning": "Thinking Process:\n\n1.  **Analyze the Input:**\n    *   Input: \"Hello world!\"\n    *   Intent: Greeting, test message, or starting a conversation.\n    *   Tone: Friendly, casual.\n\n2.  **Determine the Appropriate Response:**\n    *   Acknowledge the greeting.\n    *   Offer assistance.\n    *   Keep it concise and friendly.\n    *   Match the tone (casual but helpful).\n\n3.  **Draft Potential Responses:**\n    *   *Option 1:* Hello! How can I help you today?\n    *   *Option 2:* Hi there! Welcome. What's on your mind?\n    *   *Option 3:* Hello world! Ready to chat.\n    *   *Option 4:* Greetings! How's it going?\n\n4.  **Select the Best Response:**\n    *   Option 1 is standard and clear.\n    *   Option 2 is warm.\n    *   Option 3 is a bit too meta (echoing \"world\").\n    *   Option 4 is good.\n    *   Let's go with a friendly greeting + offer of help.\n\n5.  **Final Polish:** \"Hello! How can I help you today?\" or \"Hi there! How's it going?\"\n    *   Let's make it slightly more engaging. \"Hello! How can I assist you today?\"\n\n6.  **Final Output Generation:** (Keep it simple)\n    \"Hello! How can I help you today?\" or \"Hi there! 👋 How can I assist you?\"\n\n    *Decision:* \"Hello! How can I help you today?\" (Classic, effective). Or maybe add an emoji for friendliness. \"Hello! 👋 How can I help you today?\"\n\n    *Refinement:* Since the user said \"Hello world!\", a playful echo might be nice, but standard assistance is safer. Let's stick to friendly assistance.\n\n    *Final Choice:* \"Hello! 👋 How can I help you today?\"\n\n7.  **Output:** (Wait, I need to make sure I don't overthink. Just a simple greeting back.)\n\n    \"Hello! How can I help you today?\"\n\n    *Self-Correction:* Keep it natural.\n\n    \"Hello! 👋 How's it going? Is there anything I can help you with?\"\n\n    *Final Decision:* Simple and direct.\n\n    \"Hello! How can I help you today?\"\n\n    (Wait, I am an AI. I should be helpful.)\n\n    \"Hello! 👋 How can I assist you today?\"\n\n    Let's go with that.cw",
+            "reasoning_details": [
+              {
+                "format": "unknown",
+                "index": 0,
+                "text": "Thinking Process:\n\n1.  **Analyze the Input:**\n    *   Input: \"Hello world!\"\n    *   Intent: Greeting, test message, or starting a conversation.\n    *   Tone: Friendly, casual.\n\n2.  **Determine the Appropriate Response:**\n    *   Acknowledge the greeting.\n    *   Offer assistance.\n    *   Keep it concise and friendly.\n    *   Match the tone (casual but helpful).\n\n3.  **Draft Potential Responses:**\n    *   *Option 1:* Hello! How can I help you today?\n    *   *Option 2:* Hi there! Welcome. What's on your mind?\n    *   *Option 3:* Hello world! Ready to chat.\n    *   *Option 4:* Greetings! How's it going?\n\n4.  **Select the Best Response:**\n    *   Option 1 is standard and clear.\n    *   Option 2 is warm.\n    *   Option 3 is a bit too meta (echoing \"world\").\n    *   Option 4 is good.\n    *   Let's go with a friendly greeting + offer of help.\n\n5.  **Final Polish:** \"Hello! How can I help you today?\" or \"Hi there! How's it going?\"\n    *   Let's make it slightly more engaging. \"Hello! How can I assist you today?\"\n\n6.  **Final Output Generation:** (Keep it simple)\n    \"Hello! How can I help you today?\" or \"Hi there! 👋 How can I assist you?\"\n\n    *Decision:* \"Hello! How can I help you today?\" (Classic, effective). Or maybe add an emoji for friendliness. \"Hello! 👋 How can I help you today?\"\n\n    *Refinement:* Since the user said \"Hello world!\", a playful echo might be nice, but standard assistance is safer. Let's stick to friendly assistance.\n\n    *Final Choice:* \"Hello! 👋 How can I help you today?\"\n\n7.  **Output:** (Wait, I need to make sure I don't overthink. Just a simple greeting back.)\n\n    \"Hello! How can I help you today?\"\n\n    *Self-Correction:* Keep it natural.\n\n    \"Hello! 👋 How's it going? Is there anything I can help you with?\"\n\n    *Final Decision:* Simple and direct.\n\n    \"Hello! How can I help you today?\"\n\n    (Wait, I am an AI. I should be helpful.)\n\n    \"Hello! 👋 How can I assist you today?\"\n\n    Let's go with that.cw",
+                "type": "reasoning.text"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "stop"
+        }
+      ],
+      "created": 1780098057,
+      "id": "gen-1780098057-1ArYTYLBnLhD2r5B1YVi",
+      "model": "qwen/qwen3.5-35b-a3b-20260224",
+      "object": "chat.completion",
+      "provider": "Alibaba",
+      "service_tier": null,
+      "system_fingerprint": null,
+      "usage": {
+        "completion_tokens": 587,
+        "completion_tokens_details": {
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "reasoning_tokens": 571
+        },
+        "cost": 7.652125e-4,
+        "cost_details": {
+          "upstream_inference_completions_cost": 7.631e-4,
+          "upstream_inference_cost": 7.652125e-4,
+          "upstream_inference_prompt_cost": 2.1125e-6
+        },
+        "is_byok": false,
+        "prompt_tokens": 13,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 0,
+          "video_tokens": 0
+        },
+        "total_tokens": 600
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "X-Generation-Id,cf-ray"
+      ],
+      "cf-ray": [
+        "a03958dc3ec31f93-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 29 May 2026 23:40:58 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-generation-id": [
+        "gen-1780098057-1ArYTYLBnLhD2r5B1YVi"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

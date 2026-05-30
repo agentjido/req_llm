@@ -1,0 +1,137 @@
+{
+  "model_spec": "openrouter:qwen/qwen3.7-max",
+  "provider": "openrouter",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6InF3ZW4vcXdlbjMuNy1tYXgiLCJuIjoxLCJyZWFzb25pbmdfZWZmb3J0IjoibG93Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+    },
+    "canonical_json": {
+      "max_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "qwen/qwen3.7-max",
+      "n": 1,
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Hello world! 👋 How can I help you today?",
+            "reasoning": "Thinking Process:\n\n1.  **Analyze the input:** The user said \"Hello world!\". This is a standard, friendly greeting, often used as a test or introductory message in programming and general interactions.\n2.  **Determine the goal:** Respond politely, acknowledge the greeting, and offer assistance.\n3.  **Draft potential responses:**\n    *   \"Hello! How can I help you today?\"\n    *   \"Hello world! How are you doing?\"\n    *   \"Hi there! What's on your mind?\"\n    *   \"Greetings! How can I assist you?\"\n4.  **Select the best response:** \"Hello! How can I help you today?\" is standard, polite, and opens the door for the user to state their needs. Adding a slight nod to the \"world\" part can be fun but keeping it simple is usually best. Let's go with a friendly, helpful greeting.\n5.  **Final Polish:** \"Hello! How can I help you today?\" or \"Hello world! How can I assist you today?\" Let's use the latter to mirror their greeting playfully. \"Hello! How can I help you today?\" is safer and universally good. Let's just say \"Hello! How can I help you today?\" or \"Hello world! How can I help you today?\"\n    *   *Self-Correction:* Mirroring \"Hello world!\" is a nice touch for tech-savvy users.\n    *   *Draft:* \"Hello world! 👋 How can I help you today?\"\n6.  **Output generation.** 🚀\n",
+            "reasoning_details": [
+              {
+                "format": "unknown",
+                "index": 0,
+                "text": "Thinking Process:\n\n1.  **Analyze the input:** The user said \"Hello world!\". This is a standard, friendly greeting, often used as a test or introductory message in programming and general interactions.\n2.  **Determine the goal:** Respond politely, acknowledge the greeting, and offer assistance.\n3.  **Draft potential responses:**\n    *   \"Hello! How can I help you today?\"\n    *   \"Hello world! How are you doing?\"\n    *   \"Hi there! What's on your mind?\"\n    *   \"Greetings! How can I assist you?\"\n4.  **Select the best response:** \"Hello! How can I help you today?\" is standard, polite, and opens the door for the user to state their needs. Adding a slight nod to the \"world\" part can be fun but keeping it simple is usually best. Let's go with a friendly, helpful greeting.\n5.  **Final Polish:** \"Hello! How can I help you today?\" or \"Hello world! How can I assist you today?\" Let's use the latter to mirror their greeting playfully. \"Hello! How can I help you today?\" is safer and universally good. Let's just say \"Hello! How can I help you today?\" or \"Hello world! How can I help you today?\"\n    *   *Self-Correction:* Mirroring \"Hello world!\" is a nice touch for tech-savvy users.\n    *   *Draft:* \"Hello world! 👋 How can I help you today?\"\n6.  **Output generation.** 🚀\n",
+                "type": "reasoning.text"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "stop"
+        }
+      ],
+      "created": 1780098117,
+      "id": "gen-1780098117-bzEesirqYG7BGFZ7spZ4",
+      "model": "qwen/qwen3.7-max-20260520",
+      "object": "chat.completion",
+      "provider": "Alibaba",
+      "service_tier": null,
+      "system_fingerprint": null,
+      "usage": {
+        "completion_tokens": 353,
+        "completion_tokens_details": {
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "reasoning_tokens": 336
+        },
+        "cost": 0.00134,
+        "cost_details": {
+          "upstream_inference_completions_cost": 0.00132375,
+          "upstream_inference_cost": 0.00134,
+          "upstream_inference_prompt_cost": 1.625e-5
+        },
+        "is_byok": false,
+        "prompt_tokens": 13,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 0,
+          "video_tokens": 0
+        },
+        "total_tokens": 366
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "X-Generation-Id,cf-ray"
+      ],
+      "cf-ray": [
+        "a0395a537fb4eadc-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 29 May 2026 23:41:58 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-generation-id": [
+        "gen-1780098117-bzEesirqYG7BGFZ7spZ4"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

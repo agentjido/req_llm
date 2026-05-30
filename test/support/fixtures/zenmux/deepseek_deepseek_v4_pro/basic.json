@@ -1,0 +1,108 @@
+{
+  "model_spec": "zenmux:deepseek/deepseek-v4-pro",
+  "provider": "zenmux",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjIwMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiSGVsbG8gd29ybGQhIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiZGVlcHNlZWsvZGVlcHNlZWstdjQtcHJvIiwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+    },
+    "canonical_json": {
+      "max_completion_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "deepseek/deepseek-v4-pro",
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://zenmux.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Hello! How can I assist you today?",
+            "reasoning": "We are asked: \"Hello world!\" The user just sent \"Hello world!\". This is a standard greeting, likely a test or a simple prompt. As a helpful AI assistant, I should respond in kind, perhaps with a friendly greeting and an offer to assist further. But I need to consider the context: The system prompt says \"You are a helpful assistant.\" So I'll respond appropriately. Since it's just \"Hello world!\", I can reply with something like \"Hello! How can I assist you today?\" or a similar friendly response. No complex task needed.",
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1780099052,
+      "id": "db6ca0ca69f14bfabf2b89c2e072fa5e",
+      "model": "deepseek/deepseek-v4-pro",
+      "object": "chat.completion",
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "usage": {
+        "completion_tokens": 125,
+        "completion_tokens_details": {
+          "reasoning_tokens": 115
+        },
+        "prompt_cache_hit_tokens": 0,
+        "prompt_cache_miss_tokens": 7,
+        "prompt_tokens": 7,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "total_tokens": 132
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "X-ZenMux-RequestId"
+      ],
+      "cf-ray": [
+        "a0397120887d1b3c-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 29 May 2026 23:57:36 GMT"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-zenmux-requestid": [
+        "db6ca0ca69f14bfabf2b89c2e072fa5e"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

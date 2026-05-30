@@ -1,0 +1,121 @@
+{
+  "model_spec": "zenmux:openai/gpt-5-nano",
+  "provider": "zenmux",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjUwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Im9wZW5haS9ncHQtNS1uYW5vIiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+    },
+    "canonical_json": {
+      "max_completion_tokens": 50,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "openai/gpt-5-nano",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://zenmux.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": null,
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": null,
+            "reasoning": "**Crafting a friendly response**\n\nI see the user simply said, \"Hello world!\" and there's an opportunity here for a friendly greeting. I could respond warmly and maybe ask how I can help. It’s possible the user is testing me, so it’s a good idea to engage positively. I might also throw in a quick example or something interesting to keep the conversation flowing. Keeping it light and friendly is the goal!",
+            "reasoning_details": [
+              {
+                "format": "openai-responses-v1",
+                "index": "0",
+                "summary": "**Crafting a friendly response**\n\nI see the user simply said, \"Hello world!\" and there's an opportunity here for a friendly greeting. I could respond warmly and maybe ask how I can help. It’s possible the user is testing me, so it’s a good idea to engage positively. I might also throw in a quick example or something interesting to keep the conversation flowing. Keeping it light and friendly is the goal!",
+                "type": "reasoning.summary"
+              },
+              {
+                "data": "gAAAAABqGiii3TWXprooiY2pnZVoGW-a1ztYsOGShp8uz290jC3hXsmKf0PCwNwgFUgil50isqmuIro2LmZwfsOXJRu-OYG61neaeWt6XWui0Te0xESot-fTMFBmCb-5BrqUrbVpditQXJVK_xgM3vXmVZsDXrlkveqJZkVQ7mpLseNygB28HHC1mjCf4ELj3pDZ8_N5jIZ-GfJ8D1DpEaMD1Q_ysFiRb2rtApTqsnso4Q_Y-vsVpm5N6BHTFqKLtMlDYgulwq9x7IXwSwbVSTSsFsB3TmIb_TwLzUx0O1MFPQBQafErrU9BCUwrsL0qzZZQyahnarzoiMB0NLR_XI_NlmRwNx8-b3F_FHgkYsbp7Im_j0ISbIWiHdyX9wzZkC1aFjfg4fr2bfNeDqo6UEbazVJpq_KnFG3DcttRChkqpuHBGGSxMfiSSxdWuaykQf-21AUL0TWsLmzGXZ3J8woUpkJOEQknHa9FwmHuAtbBrE_1fSsR2IhivFEVXkZkf_nWexdNz7pCc_WJb7Tq4i4cjSv_b9cRmUlSy2ctvZRZUhrFnGWX6GVAKp4f9XKD5N84x3JVN1uLIjdbY5xMOrfU5QvxHWEYANsLyaRy725136CC7XU_x_SmUX3_N8F3STqOLwYf0Ygu6Y_ogkV48U_6qbvJFArMs5qME0ks6tkGEPDHEuKfuKdbRPPAMCi3R2U_jIqkQ3Qd9ACi_YiW7aq2g_e7MGXGRJUZMHV3yjwSoeyRSEujxYHkXrJqtN4Ki0JLTqw1DOtpCb7tWGZfxpvRTC22rojm1JA8wD4raykMEPkQnKoBmdoQU9zEvfnhS8mqwDnsrkSRnwv1JlEx6OtZnQ0UEkjq5GErDbgjPYFJzroir3ZGJmVfSgtVfaRTsYmz5NDmLQfhXEET8Z06aD58GGoKP0kTK4i5NL6IbXZv66fi37-h1J2AXBGX-tCzm9hP1w45N3_bXO3rl6X06xZTrZe5S-Xa4-XU4PFYHnTZ2DpniV6gtWKdyySqdQXCzGogmUxe6toTO74UHyFIOVwM8X5hl9cxHBJeqpV4wFLG6ViGj_4X95Mm3fLM7IDXYbXhzwuDMJubGAqA9bFILCu9VMJpXiYSuxmZSGlbApSPLOHYc3GzrmpvoO20_PoJ762T_WwJuXr3ctMS77WOdhgv2bv23pVZodGjmNEbNc7sywBBUojzbLY2h02F8KZH-0kgwSJCZ8eP",
+                "format": "openai-responses-v1",
+                "id": "rs_0afab9f552260e30006a1a289f60608190ae8aead3869f0449",
+                "index": "0",
+                "type": "reasoning.encrypted"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1780099231,
+      "id": "0cdd8c7a1c914cbeac36e3766c8ae400",
+      "model": "openai/gpt-5-nano",
+      "object": "chat.completion",
+      "service_tier": "default",
+      "usage": {
+        "completion_tokens": 0,
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "prompt_tokens": 9,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "total_tokens": 9
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "X-ZenMux-RequestId"
+      ],
+      "cf-ray": [
+        "a039757c48719bcc-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Sat, 30 May 2026 00:00:34 GMT"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-zenmux-requestid": [
+        "0cdd8c7a1c914cbeac36e3766c8ae400"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

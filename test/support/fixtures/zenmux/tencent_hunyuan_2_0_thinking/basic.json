@@ -1,0 +1,99 @@
+{
+  "model_spec": "zenmux:tencent/hunyuan-2.0-thinking",
+  "provider": "zenmux",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjUwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6InRlbmNlbnQvaHVueXVhbi0yLjAtdGhpbmtpbmciLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+    },
+    "canonical_json": {
+      "max_completion_tokens": 50,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "tencent/hunyuan-2.0-thinking",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://zenmux.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "content": "Hello world! 🌍 It's wonderful to connect with you. Whether you're just starting your coding journey, exploring new ideas, or saying hi—I'm here to help!  \n\nWhat would you like to do today? 😊  \n- Learn something new?  \n- Solve a problem?  \n- Chat about tech, life, or anything else?  \n\nLet’s make this an amazing day! ✨\n",
+            "reasoning": "The user said \"Hello world!\". This is a classic first program or phrase in computer science. It's a simple greeting.\n\nMy response should be friendly and acknowledge the greeting. I can also play along with the \"Hello world\" theme.\n\nPossible responses:\n1. A simple \"Hello world!\" back.\n2. A more elaborate greeting, like \"Hello there! Welcome to the world of AI.\"\n3. A playful response, like \"Ah, the classic! How can I help you explore this world?\"\n\nI think a warm and welcoming response would be best. I'll go with something that acknowledges the phrase and invites further interaction.\n\nResponse idea: \"Hello world! 🌍 It's great to meet you. What adventures can we embark on today?\" \n\nThis seems friendly, uses an emoji for a bit of flair, and encourages the user to continue the conversation.\n",
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1780099445,
+      "id": "5885bbfc18b2458aaed1701d44a6c4d1",
+      "model": "tencent/hunyuan-2.0-thinking",
+      "note": "以上内容为AI生成，不代表开发者立场，请勿删除或修改本标记",
+      "object": "chat.completion",
+      "system_fingerprint": "",
+      "usage": {
+        "completion_tokens": 274,
+        "prompt_tokens": 6,
+        "total_tokens": 280
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "X-ZenMux-RequestId"
+      ],
+      "cf-ray": [
+        "a0397a970a8710d7-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Sat, 30 May 2026 00:04:05 GMT"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-zenmux-requestid": [
+        "5885bbfc18b2458aaed1701d44a6c4d1"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

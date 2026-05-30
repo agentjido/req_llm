@@ -1,0 +1,105 @@
+{
+  "model_spec": "zenmux:z-ai/glm-5.1",
+  "provider": "zenmux",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjIwMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiSGVsbG8gd29ybGQhIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiei1haS9nbG0tNS4xIiwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+    },
+    "canonical_json": {
+      "max_completion_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "z-ai/glm-5.1",
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://zenmux.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "content": "Hello world! 🌍 How can I help you today?",
+            "reasoning": "1.  **Analyze the Input:** The user said \"Hello world!\". This is a classic, simple greeting, often used as a first program or a test message.\n2.  **Determine the Intent:** The user is likely initiating a conversation, testing the system, or just being friendly.\n3.  **Formulate a Response:**\n    *   Acknowledge the greeting.\n    *   Be friendly and welcoming.\n    *   Offer assistance.\n    *   *Self-Correction/Refinement:* Keep it concise but engaging. \"Hello! How can I help you today?\" is standard and effective. Adding a slight nod to the \"Hello world\" programming context could be a nice touch, but isn't strictly necessary. Let's go with a warm, helpful, and slightly playful response.\n4.  **Drafting the response:** \"Hello! 👋 How can I help you today?\" or \"Hello world! How can I assist you today?\" Let's use the latter to mirror their greeting slightly.\n5.  **Final Polish:** \"Hello world! 🌍 How can I help you today?\" (Adding a globe emoji fits the \"world\" theme nicely).",
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1780099812,
+      "id": "36cb5df1c4f243428ed2667883aebb87",
+      "model": "z-ai/glm-5.1",
+      "object": "chat.completion",
+      "request_id": "2026053008100669192a7908174c97",
+      "usage": {
+        "completion_tokens": 257,
+        "completion_tokens_details": {
+          "reasoning_tokens": 241
+        },
+        "prompt_tokens": 8,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "total_tokens": 265
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "X-ZenMux-RequestId"
+      ],
+      "cf-ray": [
+        "a03983846e97540f-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Sat, 30 May 2026 00:10:13 GMT"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-zenmux-requestid": [
+        "36cb5df1c4f243428ed2667883aebb87"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

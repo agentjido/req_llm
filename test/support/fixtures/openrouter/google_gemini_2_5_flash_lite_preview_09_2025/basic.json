@@ -1,4 +1,6 @@
 {
+  "model_spec": "openrouter:google/gemini-2.5-flash-lite-preview-09-2025",
+  "provider": "openrouter",
   "request": {
     "body": {
       "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Imdvb2dsZS9nZW1pbmktMi41LWZsYXNoLWxpdGUtcHJldmlldy0wOS0yMDI1IiwibiI6MSwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
@@ -19,6 +21,9 @@
       "temperature": 0.0
     },
     "headers": {
+      "accept": [
+        "application/json"
+      ],
       "accept-encoding": [
         "gzip"
       ],
@@ -27,7 +32,7 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ]
     },
     "method": "post",
@@ -41,13 +46,13 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Hello there! How can I help you today?",
-            "reasoning": "**Analyzing Inputs**\n\nI'm currently processing incoming data, focusing on standard greetings like \"Hello world!\". My next step involves discerning the intent behind these common phrases and preparing a fitting, context-aware response.\n\n**Formulating Replies**\n\nI've refined my understanding of common greetings, noting the significance of \"Hello world!\" My focus has shifted to crafting appropriate, engaging responses, aiming for clarity and a welcoming tone in my next interaction.\n\n",
+            "content": "Hello! How can I help you today?",
+            "reasoning": "**Acknowledging User Input**\n\nI've processed your \"Hello world!\" greeting. My current focus is on recognizing and appropriately responding to standard conversational initiations. This seems to be a foundational step for understanding user intent.\n\n**Understanding Greetings**\n\nI've analyzed the \"Hello world!\" input. My current thought is to acknowledge and respond to simple conversational openings, a key step in grasping user intent and initiating interaction.\n\n",
             "reasoning_details": [
               {
-                "format": "unknown",
+                "format": "google-gemini-v1",
                 "index": 0,
-                "text": "**Analyzing Inputs**\n\nI'm currently processing incoming data, focusing on standard greetings like \"Hello world!\". My next step involves discerning the intent behind these common phrases and preparing a fitting, context-aware response.\n\n**Formulating Replies**\n\nI've refined my understanding of common greetings, noting the significance of \"Hello world!\" My focus has shifted to crafting appropriate, engaging responses, aiming for clarity and a welcoming tone in my next interaction.\n\n",
+                "text": "**Acknowledging User Input**\n\nI've processed your \"Hello world!\" greeting. My current focus is on recognizing and appropriately responding to standard conversational initiations. This seems to be a foundational step for understanding user intent.\n\n**Understanding Greetings**\n\nI've analyzed the \"Hello world!\" input. My current thought is to acknowledge and respond to simple conversational openings, a key step in grasping user intent and initiating interaction.\n\n",
                 "type": "reasoning.text"
               }
             ],
@@ -57,30 +62,46 @@
           "native_finish_reason": "STOP"
         }
       ],
-      "created": 1762104959,
-      "id": "gen-1762104959-RZdHdFyJJSZ0qlwJviA2",
+      "created": 1780100628,
+      "id": "gen-1780100628-NeUZ5PhpBDoeLHnttnIt",
       "model": "google/gemini-2.5-flash-lite-preview-09-2025",
       "object": "chat.completion",
       "provider": "Google",
+      "service_tier": "default",
+      "system_fingerprint": null,
       "usage": {
-        "completion_tokens": 294,
+        "completion_tokens": 268,
         "completion_tokens_details": {
+          "audio_tokens": 0,
           "image_tokens": 0,
-          "reasoning_tokens": 284
+          "reasoning_tokens": 259
         },
+        "cost": 1.075e-4,
+        "cost_details": {
+          "upstream_inference_completions_cost": 1.072e-4,
+          "upstream_inference_cost": 1.075e-4,
+          "upstream_inference_prompt_cost": 3.0e-7
+        },
+        "is_byok": false,
         "prompt_tokens": 3,
         "prompt_tokens_details": {
-          "cached_tokens": 0
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 0,
+          "video_tokens": 0
         },
-        "total_tokens": 297
+        "total_tokens": 271
       }
     },
     "headers": {
       "access-control-allow-origin": [
         "*"
       ],
+      "access-control-expose-headers": [
+        "X-Generation-Id,cf-ray"
+      ],
       "cf-ray": [
-        "9985643dc8b61b04-ORD"
+        "a039979f7a2fc6f0-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -89,7 +110,7 @@
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:36:01 GMT"
+        "Sat, 30 May 2026 00:23:49 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
@@ -103,13 +124,14 @@
       "transfer-encoding": [
         "chunked"
       ],
-      "vary": [
-        "Accept-Encoding"
-      ],
       "x-content-type-options": [
         "nosniff"
+      ],
+      "x-generation-id": [
+        "gen-1780100628-NeUZ5PhpBDoeLHnttnIt"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

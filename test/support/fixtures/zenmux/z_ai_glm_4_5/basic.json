@@ -1,0 +1,105 @@
+{
+  "model_spec": "zenmux:z-ai/glm-4.5",
+  "provider": "zenmux",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjIwMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiSGVsbG8gd29ybGQhIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiei1haS9nbG0tNC41IiwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+    },
+    "canonical_json": {
+      "max_completion_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "z-ai/glm-4.5",
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://zenmux.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "content": "Hello! It looks like you're greeting the world. Here's a classic response in the spirit of programming:\n\n```python\nprint(\"Hello, World!\")\n```\n\n**Output:**  \n`Hello, World!`\n\nThis simple program is often the first one people write when learning a new programming language. It's a tradition that dates back to the 1970s! 😊\n\nIf you meant something else by \"Hello world!\", feel free to clarify!",
+            "reasoning": "\nWe are going to create a simple \"Hello, World!\" program.\n Since the user said \"Hello world!\", we can respond with a greeting.\n However, note that the user's message is \"Hello world!\" (with an exclamation) and the classic is \"Hello, World!\" (with a comma and capital W).\n We can respond in a similar manner.\n\n Let's output: \"Hello, World!\"",
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1780099603,
+      "id": "eba9acf6684e4a31b571af2cb9616136",
+      "model": "z-ai/glm-4.5",
+      "object": "chat.completion",
+      "request_id": "20260530080639eb874d9d045b4fef",
+      "usage": {
+        "completion_tokens": 179,
+        "completion_tokens_details": {
+          "reasoning_tokens": 83
+        },
+        "prompt_tokens": 8,
+        "prompt_tokens_details": {
+          "cached_tokens": 7
+        },
+        "total_tokens": 187
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "X-ZenMux-RequestId"
+      ],
+      "cf-ray": [
+        "a0397e782f7f86ec-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Sat, 30 May 2026 00:06:43 GMT"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-zenmux-requestid": [
+        "eba9acf6684e4a31b571af2cb9616136"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

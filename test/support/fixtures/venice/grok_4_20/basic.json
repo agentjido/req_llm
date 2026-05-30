@@ -1,0 +1,190 @@
+{
+  "model_spec": "venice:grok-4-20",
+  "provider": "venice",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Imdyb2stNC0yMCIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ2ZW5pY2VfcGFyYW1ldGVycyI6eyJkaXNhYmxlX3RoaW5raW5nIjpmYWxzZSwiZW5hYmxlX3dlYl9jaXRhdGlvbnMiOmZhbHNlLCJlbmFibGVfd2ViX3NjcmFwaW5nIjpmYWxzZSwiZW5hYmxlX3dlYl9zZWFyY2giOiJvZmYiLCJpbmNsdWRlX3NlYXJjaF9yZXN1bHRzX2luX3N0cmVhbSI6ZmFsc2UsImluY2x1ZGVfdmVuaWNlX3N5c3RlbV9wcm9tcHQiOnRydWUsInN0cmlwX3RoaW5raW5nX3Jlc3BvbnNlIjpmYWxzZX19"
+    },
+    "canonical_json": {
+      "max_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "grok-4-20",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0,
+      "venice_parameters": {
+        "disable_thinking": false,
+        "enable_web_citations": false,
+        "enable_web_scraping": false,
+        "enable_web_search": "off",
+        "include_search_results_in_stream": false,
+        "include_venice_system_prompt": true,
+        "strip_thinking_response": false
+      }
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.venice.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "**Hello, world!** 🚀\n\nWhat's up? Ready to break some things, build some things, or just vibe?",
+            "reasoning_content": "The user's message is \"Hello world!\"\n\n\n__ENCRYPTED_REASONING__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",
+            "reasoning_encrypted": true,
+            "refusal": null,
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1780098701,
+      "id": "26f94f62-a805-93f9-a9ae-6e59bc5dae24",
+      "model": "grok-4-20",
+      "object": "chat.completion",
+      "usage": {
+        "cache_read_input_tokens": 64,
+        "completion_tokens": 371,
+        "completion_tokens_details": {
+          "reasoning_tokens": 345
+        },
+        "prompt_tokens": 1571,
+        "prompt_tokens_details": {
+          "cached_tokens": 64
+        },
+        "total_tokens": 1942
+      },
+      "venice_parameters": {
+        "disable_thinking": false,
+        "enable_e2ee": true,
+        "enable_web_citations": false,
+        "enable_web_scraping": false,
+        "enable_web_search": "off",
+        "enable_x_search": false,
+        "include_search_results_in_stream": false,
+        "include_venice_system_prompt": true,
+        "return_search_results_as_documents": false,
+        "strip_thinking_response": false,
+        "web_search_citations": []
+      }
+    },
+    "headers": {
+      "access-control-allow-credentials": [
+        "true"
+      ],
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "*"
+      ],
+      "cache-control": [
+        "no-store, no-cache, private, must-revalidate"
+      ],
+      "cdn-cache-control": [
+        "no-store"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a039688f4ed08052-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-security-policy": [
+        "default-src 'none'; frame-ancestors *; upgrade-insecure-requests"
+      ],
+      "content-type": [
+        "application/json; charset=utf-8"
+      ],
+      "date": [
+        "Fri, 29 May 2026 23:51:43 GMT"
+      ],
+      "etag": [
+        "W/\"bfe-wcmZaeJSNNIBqigvSlQCb69OERQ\""
+      ],
+      "permissions-policy": [
+        "geolocation=(), camera=()"
+      ],
+      "referrer-policy": [
+        "strict-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": "[REDACTED:set-cookie]",
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-frame-options": [
+        "SAMEORIGIN"
+      ],
+      "x-ratelimit-limit-requests": [
+        "500"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "10000000"
+      ],
+      "x-ratelimit-remaining": [
+        "20"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "499"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "10000000"
+      ],
+      "x-ratelimit-reset-requests": [
+        "1780098760726"
+      ],
+      "x-ratelimit-reset-tokens": [
+        "1780098760728"
+      ],
+      "x-ratelimit-resets": [
+        "1780098730715"
+      ],
+      "x-venice-balance-usd": [
+        "9.08639836"
+      ],
+      "x-venice-version": [
+        "outerface-api-server-us-east1-03948-9pd"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

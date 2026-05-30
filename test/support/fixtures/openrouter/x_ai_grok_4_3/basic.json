@@ -1,0 +1,144 @@
+{
+  "model_spec": "openrouter:x-ai/grok-4.3",
+  "provider": "openrouter",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6IngtYWkvZ3Jvay00LjMiLCJuIjoxLCJyZWFzb25pbmdfZWZmb3J0IjoibG93Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+    },
+    "canonical_json": {
+      "max_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "x-ai/grok-4.3",
+      "n": 1,
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Hello, World! 👋 What's up?",
+            "reasoning": "The user said \"Hello world!\" This is a classic greeting, often the first program in programming tutorials. It's friendly and casual.\n",
+            "reasoning_details": [
+              {
+                "format": "xai-responses-v1",
+                "index": 0,
+                "summary": "The user said \"Hello world!\" This is a classic greeting, often the first program in programming tutorials. It's friendly and casual.\n",
+                "type": "reasoning.summary"
+              },
+              {
+                "data": "2y0vH13xr++Du/slavcwF6P3cUSrpBRCJZXoyDpn7KI8+bxlK8LTrR5sDoEUlAogWELlVKC2tTbVKv1z718bT32nqBcWNTzjAwXUNoeS3wvKr+pAvLpyJVbu9FI3BMWMuxCRj9j/RsJ5zVYrIbWcCXLkwmLSjvgcsbDaV/gy9xLP44hqHg8kUMdnkISZTc56/eyE4GXySnT+QrZefYhoB+Ww5fKx4wJ9gOy7uDPbAEQEYJQd4adIl4UMoplIxpwRmYozINA9kbzeQFRUPphSzSmd7pjFu651jFI6ytUl3s/xsMFvKN+6keWp/nAnkQ3q+mFL35q/DcwIxZSj5+SNaBTUz3oU3PG1/8whyKC8zFjbhlssNrQoAnFhGJYyTSQwxRIIBw8jla0Y/c6qUcrAMUPAIPiEMw0F2DHynFk1wlgC4jyVr02gc4Eyhfg3jyM3kUO5k0q4wxNe6XckCe5eEFArc7bE0TKR+H1LJA7V0nLaWI/gLUzxIi4lmn/Ru5k35dao1asnQjH5tPwBScxMj2VdXkt1dWBqAlHOLlYu/LrUjCJEQq3Xb1XrNO1NVtScDR5aky6NNGjTYNi94lf51VgkQsfwJQNGUL2Epj5bY5emxNSZV1OmEycDnD0sH/uPrPrsKwy4xYp78//g74oDrtYf40nYNBWRMwn34MDQH8LQ6FEqLRAL/sadJwGJ5XOQoxYrFwNH8MJDJHctJoXN6rltoyRYBVlyVIC9BOhBBJbvHaSXeOzJEq8S/wX5uINKi2x/oa+xOntlii8bP2SpRj/A92VzmWaNq28sy2SLTMKpk02BaExIoWp0eevpEiFFVRsC+WpS+5aYiMlaCIuAaHsmQo08OcHXFpMLLyxXNs7WLcrGBUFOpDY79V0",
+                "format": "xai-responses-v1",
+                "id": "rs_a51c8c5c-b1a1-9101-9eb4-238b7f8a271a",
+                "index": 1,
+                "type": "reasoning.encrypted"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "completed"
+        }
+      ],
+      "created": 1780100345,
+      "id": "gen-1780100345-yHdNuqSLLWO0TO5CVbSn",
+      "model": "x-ai/grok-4.3-20260430",
+      "object": "chat.completion",
+      "provider": "xAI",
+      "service_tier": "default",
+      "system_fingerprint": null,
+      "usage": {
+        "completion_tokens": 149,
+        "completion_tokens_details": {
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "reasoning_tokens": 140
+        },
+        "cost": 4.0435e-4,
+        "cost_details": {
+          "upstream_inference_completions_cost": 3.725e-4,
+          "upstream_inference_cost": 4.0435e-4,
+          "upstream_inference_prompt_cost": 3.185e-5
+        },
+        "is_byok": false,
+        "prompt_tokens": 133,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 128,
+          "video_tokens": 0
+        },
+        "total_tokens": 282
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "X-Generation-Id,cf-ray"
+      ],
+      "cf-ray": [
+        "a03990b9ea379602-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Sat, 30 May 2026 00:19:06 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-generation-id": [
+        "gen-1780100345-yHdNuqSLLWO0TO5CVbSn"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

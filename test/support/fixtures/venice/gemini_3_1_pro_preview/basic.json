@@ -1,0 +1,201 @@
+{
+  "model_spec": "venice:gemini-3-1-pro-preview",
+  "provider": "venice",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImdlbWluaS0zLTEtcHJvLXByZXZpZXciLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMCwidmVuaWNlX3BhcmFtZXRlcnMiOnsiZGlzYWJsZV90aGlua2luZyI6ZmFsc2UsImVuYWJsZV93ZWJfY2l0YXRpb25zIjpmYWxzZSwiZW5hYmxlX3dlYl9zY3JhcGluZyI6ZmFsc2UsImVuYWJsZV93ZWJfc2VhcmNoIjoib2ZmIiwiaW5jbHVkZV9zZWFyY2hfcmVzdWx0c19pbl9zdHJlYW0iOmZhbHNlLCJpbmNsdWRlX3ZlbmljZV9zeXN0ZW1fcHJvbXB0Ijp0cnVlLCJzdHJpcF90aGlua2luZ19yZXNwb25zZSI6ZmFsc2V9fQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "gemini-3-1-pro-preview",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0,
+      "venice_parameters": {
+        "disable_thinking": false,
+        "enable_web_citations": false,
+        "enable_web_scraping": false,
+        "enable_web_search": "off",
+        "include_search_results_in_stream": false,
+        "include_venice_system_prompt": true,
+        "strip_thinking_response": false
+      }
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.venice.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Hello! How can I help you today?",
+            "reasoning_content": "**Processing Simple Greetings**\n\nMy current focus is on understanding and responding to straightforward, common phrases. I'm analyzing inputs like \"Hello world!\" to identify their core intent and formulate appropriate, direct responses.\n\n**Acknowledging Friendly Greetings**\n\nI'm currently refining my ability to process and acknowledge simple, friendly greetings. My recent efforts involve recognizing these common phrases and generating direct, helpful responses to initiate interaction.\n\n",
+            "reasoning_details": [
+              {
+                "format": "google-gemini-v1",
+                "index": 0,
+                "text": "**Processing Simple Greetings**\n\nMy current focus is on understanding and responding to straightforward, common phrases. I'm analyzing inputs like \"Hello world!\" to identify their core intent and formulate appropriate, direct responses.\n\n**Acknowledging Friendly Greetings**\n\nI'm currently refining my ability to process and acknowledge simple, friendly greetings. My recent efforts involve recognizing these common phrases and generating direct, helpful responses to initiate interaction.\n\n",
+                "type": "reasoning.text"
+              },
+              {
+                "data": "CjIBjz1rX7Knx8/18ivFbhrBAbyGwQnguS4ScwRVv4r4ZiJEC2+hYsmEC8fwK5dVd1SCsgpdAY89a18gLSrl8xUenKOVy6jaXWkl9EwNM1nDgoLyeUFj7FhaG3bIfw4bW4c1jc3XH/mgnZg7TWYD7vaqfEx2+K+oqCQZqZfHzWjXndvajALGW3YA5rUvuzm6LQaRCpABAY89a1+dDyJGfNY6yU9LndnbtzAspJtyODjSAJzoKpJgapA/bcu9VfdOsmImyrqFJxIrNBMSqWDzMP4leeKp7TthMZu2rg004tKfle3FMldBuXkH7+MmZqqJAOMq9TzWsLtFuGC4Eedsc+ARIKBHhRD+f0JcyjMH+LQQAs0+FCDmKmzR1etIij48AJpAtD7aCnQBjz1rX+V1/L9wzKKrQRWPlZaIkFK1alL9ygaUjIjvYENCtPnqegphG/BXXcpGtGpNkk16lmPsf+twDmJJ5HJzFsa7Nm2nKFjnQT75FYhszOln/kqZh6wBL9luz4rxWP0vPEYxhWzXGVkq6VXV0HIEg3griQqKAQGPPWtf/oBWQGyxqG+BYS1RygVzvXm6beqfFk4gOyhIUPsAFKJvVualv3xFMPrYYpaL00ypIPfIi70LkIPfFJAi5McYzgdYBGIDrHJRCwdcT4SDbXHfO9WNa29IWLfZuPsYy7N39nzWT1AMwSVrgW6Yk97hYvQ/sGJDTZW7VpjExoSBKWjac4tihApuAY89a1//hxElychFVZSXTA3R2+TPd7+dYXbtzHZcFmezINXdjeI9QrFsD3JS+BeukkKptwSl/W5UJxvUcvyPIdeWUDgCagfVcwPIGjfDgkHOdqqcIrmW7DuDNobX9nlZaAbCIrpcGQLK7KznF2U=",
+                "format": "google-gemini-v1",
+                "index": 1,
+                "type": "reasoning.encrypted"
+              }
+            ],
+            "reasoning_encrypted": true,
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "STOP"
+        }
+      ],
+      "created": 1780098670,
+      "id": "gen-1780098670-TOYrh7NriaFa7eA95l5P",
+      "model": "gemini-3-1-pro-preview",
+      "object": "chat.completion",
+      "service_tier": "default",
+      "usage": {
+        "cache_creation_input_tokens": 1605,
+        "cache_read_input_tokens": 1605,
+        "completion_tokens": 128,
+        "completion_tokens_details": {
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "reasoning_tokens": 119
+        },
+        "prompt_tokens": 1607,
+        "prompt_tokens_details": {
+          "cache_creation_input_tokens": 1605,
+          "cached_tokens": 1605
+        },
+        "total_tokens": 1735
+      },
+      "venice_parameters": {
+        "disable_thinking": false,
+        "enable_e2ee": true,
+        "enable_web_citations": false,
+        "enable_web_scraping": false,
+        "enable_web_search": "off",
+        "enable_x_search": false,
+        "include_search_results_in_stream": false,
+        "include_venice_system_prompt": true,
+        "return_search_results_as_documents": false,
+        "strip_thinking_response": false,
+        "web_search_citations": []
+      }
+    },
+    "headers": {
+      "access-control-allow-credentials": [
+        "true"
+      ],
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "*"
+      ],
+      "cache-control": [
+        "no-store, no-cache, private, must-revalidate"
+      ],
+      "cdn-cache-control": [
+        "no-store"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a03967d2bc756e89-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-security-policy": [
+        "default-src 'none'; frame-ancestors *; upgrade-insecure-requests"
+      ],
+      "content-type": [
+        "application/json; charset=utf-8"
+      ],
+      "date": [
+        "Fri, 29 May 2026 23:51:15 GMT"
+      ],
+      "etag": [
+        "W/\"c26-yF727weYIG2XZoyuJMjURKyXgfw\""
+      ],
+      "permissions-policy": [
+        "geolocation=(), camera=()"
+      ],
+      "referrer-policy": [
+        "strict-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": "[REDACTED:set-cookie]",
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-frame-options": [
+        "SAMEORIGIN"
+      ],
+      "x-ratelimit-limit-requests": [
+        "1000"
+      ],
+      "x-ratelimit-remaining": [
+        "20"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "999"
+      ],
+      "x-ratelimit-reset-requests": [
+        "1780098730562"
+      ],
+      "x-ratelimit-resets": [
+        "1780098700541"
+      ],
+      "x-venice-balance-usd": [
+        "9.09833276"
+      ],
+      "x-venice-version": [
+        "outerface-api-server-us-east1-03948-9pd"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

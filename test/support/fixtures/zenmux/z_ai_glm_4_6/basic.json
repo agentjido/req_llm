@@ -1,0 +1,105 @@
+{
+  "model_spec": "zenmux:z-ai/glm-4.6",
+  "provider": "zenmux",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjIwMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiSGVsbG8gd29ybGQhIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiei1haS9nbG0tNC42IiwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+    },
+    "canonical_json": {
+      "max_completion_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "z-ai/glm-4.6",
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://zenmux.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "content": "Hello there! How can I help you today?",
+            "reasoning": "\n1.  **Analyze the user's input:** The user said \"Hello world!\".\n2.  **Identify the intent:** This is a standard greeting, often used as a first test message in programming or a simple \"hello\" to an AI.\n3.  **Determine the appropriate response:**\n    *   Acknowledge the greeting.\n    *   Be polite and helpful.\n    *   Offer assistance.\n    *   Keep it concise and friendly.\n4.  **Draft potential responses:**\n    *   *Option 1 (Simple):* Hello! How can I help you today?\n    *   *Option 2 (More enthusiastic):* Hello there! Welcome! What can I do for you?\n    *   *Option 3 (Programmer-centric):* Hello world! It's great to meet you. What's on your mind?\n    *   *Option 4 (Standard AI response):* Hello! I am an AI assistant. How can I help you?\n5.  **Select the best response:** Option 1 is a classic, safe, and effective response. It's friendly and open-ended. Option 3 is also good because it acknowledges the specific phrase \"Hello world!\" which is a nod to programming. Let's combine the best elements.\n6.  **Final Polish:** \"Hello! How can I help you today?\" is perfect. It's simple, direct, and helpful. I can add a little more warmth. \"Hello there! How can I help you today?\" is even better.",
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1780099618,
+      "id": "133a2dab094041be840760cb1865b2a6",
+      "model": "z-ai/glm-4.6",
+      "object": "chat.completion",
+      "request_id": "20260530080653b1439e413b4747e1",
+      "usage": {
+        "completion_tokens": 328,
+        "completion_tokens_details": {
+          "reasoning_tokens": 316
+        },
+        "prompt_tokens": 8,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "total_tokens": 336
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "X-ZenMux-RequestId"
+      ],
+      "cf-ray": [
+        "a0397ecc2ad47b00-DEN"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Sat, 30 May 2026 00:06:58 GMT"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-zenmux-requestid": [
+        "133a2dab094041be840760cb1865b2a6"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

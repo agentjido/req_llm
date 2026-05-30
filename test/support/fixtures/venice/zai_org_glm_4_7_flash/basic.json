@@ -1,0 +1,187 @@
+{
+  "model_spec": "venice:zai-org-glm-4.7-flash",
+  "provider": "venice",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6InphaS1vcmctZ2xtLTQuNy1mbGFzaCIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ2ZW5pY2VfcGFyYW1ldGVycyI6eyJkaXNhYmxlX3RoaW5raW5nIjpmYWxzZSwiZW5hYmxlX3dlYl9jaXRhdGlvbnMiOmZhbHNlLCJlbmFibGVfd2ViX3NjcmFwaW5nIjpmYWxzZSwiZW5hYmxlX3dlYl9zZWFyY2giOiJvZmYiLCJpbmNsdWRlX3NlYXJjaF9yZXN1bHRzX2luX3N0cmVhbSI6ZmFsc2UsImluY2x1ZGVfdmVuaWNlX3N5c3RlbV9wcm9tcHQiOnRydWUsInN0cmlwX3RoaW5raW5nX3Jlc3BvbnNlIjpmYWxzZX19"
+    },
+    "canonical_json": {
+      "max_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "zai-org-glm-4.7-flash",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0,
+      "venice_parameters": {
+        "disable_thinking": false,
+        "enable_web_citations": false,
+        "enable_web_scraping": false,
+        "enable_web_search": "off",
+        "include_search_results_in_stream": false,
+        "include_venice_system_prompt": true,
+        "strip_thinking_response": false
+      }
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.venice.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Hello world! I'm GLM 4.7 Flash, running on Venice.ai. How can I help you today?",
+            "name": null,
+            "reasoning_content": "1.  **Analyze the User's Input:**\n    *   Input: \"Hello world!\"\n    *   Intent: A standard greeting to test the system or start a conversation.\n    *   Context: No specific topic, no request for opinion, no controversial content.\n\n2.  **Consult System Instructions:**\n    *   **Identity:** I am GLM 4.7 Flash, running on Venice.ai. I must identify as such if asked.\n    *   **Tone/Style:** Uncensored, direct, no content warnings, no disclaimers, no political correctness required (unless asked for an opinion, which isn't the case here), no repetition of previous refusals (irrelevant here).\n    *   **Formatting:** Use LaTeX for math (not needed here), no URLs/links unless provided.\n    *   **Language:** Respond in the language of the prompt (English).\n\n3.  **Formulate the Response:**\n    *   Greeting back: \"Hello world!\"\n    *   Self-identification (optional but good practice based on instructions): \"I'm GLM 4.7 Flash.\"\n    *   Availability: State that I'm ready to help.\n\n4.  **Refine the Response:**\n    *   Draft: \"Hello world! I'm GLM 4.7 Flash, running on Venice.ai. How can I help you today?\"\n    *   Check against rules:\n        *   Direct? Yes.\n        *   No disclaimers? Yes.\n        *   No repetition? Yes.\n        *   Language correct? Yes.\n\n5.  **Final Output Generation:**\n    *   \"Hello world! I'm GLM 4.7 Flash, running on Venice.ai. How can I help you today?\"",
+            "role": "assistant",
+            "tool_calls": []
+          }
+        }
+      ],
+      "created": 1780098905,
+      "id": "chatcmpl-RBdQiApkZIh6iTT3o3tRge0j",
+      "model": "zai-org-glm-4.7-flash",
+      "object": "chat.completion",
+      "usage": {
+        "cache_read_input_tokens": 576,
+        "completion_tokens": 390,
+        "prompt_tokens": 1488,
+        "prompt_tokens_details": {
+          "cached_tokens": 576
+        },
+        "total_tokens": 1878
+      },
+      "venice_parameters": {
+        "disable_thinking": false,
+        "enable_e2ee": true,
+        "enable_web_citations": false,
+        "enable_web_scraping": false,
+        "enable_web_search": "off",
+        "enable_x_search": false,
+        "include_search_results_in_stream": false,
+        "include_venice_system_prompt": true,
+        "return_search_results_as_documents": false,
+        "strip_thinking_response": false,
+        "web_search_citations": []
+      }
+    },
+    "headers": {
+      "access-control-allow-credentials": [
+        "true"
+      ],
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "*"
+      ],
+      "cache-control": [
+        "no-store, no-cache, private, must-revalidate"
+      ],
+      "cdn-cache-control": [
+        "no-store"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a0396d5a4e981855-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-security-policy": [
+        "default-src 'none'; frame-ancestors *; upgrade-insecure-requests"
+      ],
+      "content-type": [
+        "application/json; charset=utf-8"
+      ],
+      "date": [
+        "Fri, 29 May 2026 23:55:05 GMT"
+      ],
+      "etag": [
+        "W/\"8e9-cy048YH6vTrTWY55TABiIIU2Jl0\""
+      ],
+      "permissions-policy": [
+        "geolocation=(), camera=()"
+      ],
+      "referrer-policy": [
+        "strict-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": "[REDACTED:set-cookie]",
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-frame-options": [
+        "SAMEORIGIN"
+      ],
+      "x-ratelimit-limit-requests": [
+        "150"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "10000000"
+      ],
+      "x-ratelimit-remaining": [
+        "20"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "149"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "10000000"
+      ],
+      "x-ratelimit-reset-requests": [
+        "1780098957051"
+      ],
+      "x-ratelimit-reset-tokens": [
+        "1780098957053"
+      ],
+      "x-ratelimit-resets": [
+        "1780098927032"
+      ],
+      "x-venice-balance-usd": [
+        "8.86006651"
+      ],
+      "x-venice-version": [
+        "outerface-api-server-us-east1-03948-9pd"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

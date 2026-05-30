@@ -1,4 +1,6 @@
 {
+  "model_spec": "openrouter:openai/gpt-oss-120b",
+  "provider": "openrouter",
   "request": {
     "body": {
       "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Im9wZW5haS9ncHQtb3NzLTEyMGIiLCJuIjoxLCJyZWFzb25pbmdfZWZmb3J0IjoibG93Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
@@ -19,6 +21,9 @@
       "temperature": 0.0
     },
     "headers": {
+      "accept": [
+        "application/json"
+      ],
       "accept-encoding": [
         "gzip"
       ],
@@ -27,7 +32,7 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ]
     },
     "method": "post",
@@ -42,12 +47,12 @@
           "logprobs": null,
           "message": {
             "content": "Hello! 👋 How can I help you today?",
-            "reasoning": "The user says \"Hello world!\" Likely they want a response. Could be a greeting. Should respond friendly.",
+            "reasoning": "The user just says \"Hello world!\" Likely a greeting. Respond friendly.",
             "reasoning_details": [
               {
                 "format": "unknown",
                 "index": 0,
-                "text": "The user says \"Hello world!\" Likely they want a response. Could be a greeting. Should respond friendly.",
+                "text": "The user just says \"Hello world!\" Likely a greeting. Respond friendly.",
                 "type": "reasoning.text"
               }
             ],
@@ -57,26 +62,46 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1762105000,
-      "id": "gen-1762105000-LPSv691R7h3xjVqtoB2y",
+      "created": 1780098329,
+      "id": "gen-1780098329-6CHGXGWkeA900pQ0LIjs",
       "model": "openai/gpt-oss-120b",
       "object": "chat.completion",
-      "provider": "Novita",
-      "system_fingerprint": "",
+      "provider": "DigitalOcean",
+      "service_tier": null,
+      "system_fingerprint": null,
       "usage": {
-        "completion_tokens": 43,
-        "completion_tokens_details": null,
-        "prompt_tokens": 57,
-        "prompt_tokens_details": null,
-        "total_tokens": 100
+        "completion_tokens": 37,
+        "completion_tokens_details": {
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "reasoning_tokens": 18
+        },
+        "cost": 3.29e-5,
+        "cost_details": {
+          "upstream_inference_completions_cost": 2.59e-5,
+          "upstream_inference_cost": 3.29e-5,
+          "upstream_inference_prompt_cost": 7.0e-6
+        },
+        "is_byok": false,
+        "prompt_tokens": 70,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 0,
+          "video_tokens": 0
+        },
+        "total_tokens": 107
       }
     },
     "headers": {
       "access-control-allow-origin": [
         "*"
       ],
+      "access-control-expose-headers": [
+        "X-Generation-Id,cf-ray"
+      ],
       "cf-ray": [
-        "9985653b5e77f60e-ORD"
+        "a0395f7eceaf13f5-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -85,7 +110,7 @@
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:36:40 GMT"
+        "Fri, 29 May 2026 23:45:29 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
@@ -99,13 +124,14 @@
       "transfer-encoding": [
         "chunked"
       ],
-      "vary": [
-        "Accept-Encoding"
-      ],
       "x-content-type-options": [
         "nosniff"
+      ],
+      "x-generation-id": [
+        "gen-1780098329-6CHGXGWkeA900pQ0LIjs"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

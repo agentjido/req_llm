@@ -21,6 +21,9 @@
       "temperature": 0.0
     },
     "headers": {
+      "accept": [
+        "application/json"
+      ],
       "accept-encoding": [
         "gzip"
       ],
@@ -29,7 +32,7 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.16"
+        "req/0.5.18"
       ]
     },
     "method": "post",
@@ -44,16 +47,10 @@
           "logprobs": null,
           "message": {
             "content": "Hello! It’s great to meet you. How can I help you today?",
-            "reasoning": "**Acknowledging the Greeting**\n\nI've registered the user's \"Hello world!\" It's a clear signal of initiation, and I understand its significance. My primary goal now is to respond appropriately. I'm focusing on a friendly, helpful, and welcoming response. I'm structuring my reply to acknowledge the greeting and immediately offer assistance.\n\n\n",
+            "reasoning": null,
             "reasoning_details": [
               {
-                "format": "google-gemini-v1",
-                "index": 0,
-                "text": "**Acknowledging the Greeting**\n\nI've registered the user's \"Hello world!\" It's a clear signal of initiation, and I understand its significance. My primary goal now is to respond appropriately. I'm focusing on a friendly, helpful, and welcoming response. I'm structuring my reply to acknowledge the greeting and immediately offer assistance.\n\n\n",
-                "type": "reasoning.text"
-              },
-              {
-                "data": "CiQBjz1rX17FaT9AXNYTVjWrRpLM9PfITNZRiCcBATl8+k1z88sKdAGPPWtfErEBGmRlBci5Y690oG/fVd1UdtdoR3ayJlK08rcF+BWcW2UFaRg+litITBvpBgW2heHdwEmsIId914UT04s5U0mAM425tu5RcubK4pGr3YTvhCcyKdLe3YW+7HYxbyO2DbsxBA+14bWoLD6n3+4jCoQBAY89a1/CWbevza1xHDFEGRueCYhPwuw+VZJS+w75giihYKM0zCB4UnJT1cp6a7tXxc/3Of/9RSUjJhHnSfDAWmOIvXupAVLQXpuIIzNkrZ/nFY81cKBN3jLpRXDwjOkgUoCM25+TVUg5SK/TfMUTiAgd6nOw618+FpYTxETdwiEBV0f7CogBAY89a19YQarbVpuZMMU1GjedyocESDtDylWvJzblLnHnO4bGxQwCRElZIECIf6NPUOhx4yCmizFNyw2LUV+smE7Tbz2HJFjV1/ZsIEjQTHkMdLChV3ypl9eLA6irsTCpjsjii6BZaSrEgR4bJh5SlJRJHKiHu3Q9Vx6m4QnIb5ZmIXsHb2dC3A==",
+                "data": "AY89a18FhjCp4a9Opb5B9/lbhNnrddkqe2FYdyoB8ZDgty9A8ang3TGNq22NxuyGW13UmV0KMBmJbzY3WB0Q1TSDozzT1pLmkG+lY5WKERacKAodbfbxgqxb1+jDTow7CtABFEUU1PSftbH7FAIII+FHd0f4WqOUwby796qXcjtkooOYFzf3NdryczBpc4diOjiF99fjWgpnQQe0z2/BgQGO8pZAe9I6JZcHKNsczm7xid0rH9pv1w4gfkcfkPFZiHxLyHVlK5cBYfLeuI7cMEOvASTu/kLwJoouQUydiWPOrZPEMQrCRvWSe2VuGKEcV5TN5kFpn6u5IkqVgM/xglZP2y7a7okK5n/4ESBCixY2b0jSgRlYhb8r2qwoJkJr9H5vZkHwcnuL0tMfecDYJgKNG5MfXImbVrGPE9PyUiHhOXDuwV6RF1r63X69OrmtRxiSlfvqnCkIoIruPimg/7XXyCO8RHB9eiGrpmF+79diyJuulhPwWjGPTuRI",
                 "format": "google-gemini-v1",
                 "index": 0,
                 "type": "reasoning.encrypted"
@@ -65,39 +62,46 @@
           "native_finish_reason": "STOP"
         }
       ],
-      "created": 1766525329,
-      "id": "gen-1766525329-PwHDER4MTbKf8FPS4rah",
-      "model": "google/gemini-3-flash-preview",
+      "created": 1780100135,
+      "id": "gen-1780100135-V1QTsprufUtwdYnjMmly",
+      "model": "google/gemini-3-flash-preview-20251217",
       "object": "chat.completion",
       "provider": "Google",
+      "service_tier": "provisioned",
+      "system_fingerprint": null,
       "usage": {
-        "completion_tokens": 80,
+        "completion_tokens": 81,
         "completion_tokens_details": {
+          "audio_tokens": 0,
           "image_tokens": 0,
-          "reasoning_tokens": 63
+          "reasoning_tokens": 64
         },
-        "cost": 2.415e-4,
+        "cost": 2.445e-4,
         "cost_details": {
-          "upstream_inference_completions_cost": 2.4e-4,
-          "upstream_inference_cost": null,
+          "upstream_inference_completions_cost": 2.43e-4,
+          "upstream_inference_cost": 2.445e-4,
           "upstream_inference_prompt_cost": 1.5e-6
         },
         "is_byok": false,
         "prompt_tokens": 3,
         "prompt_tokens_details": {
           "audio_tokens": 0,
+          "cache_write_tokens": 0,
           "cached_tokens": 0,
           "video_tokens": 0
         },
-        "total_tokens": 83
+        "total_tokens": 84
       }
     },
     "headers": {
       "access-control-allow-origin": [
         "*"
       ],
+      "access-control-expose-headers": [
+        "X-Generation-Id,cf-ray"
+      ],
       "cf-ray": [
-        "9b2af36aebbb43de-TLV"
+        "a0398b950f4a78af-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -106,7 +110,7 @@
         "application/json"
       ],
       "date": [
-        "Tue, 23 Dec 2025 21:28:50 GMT"
+        "Sat, 30 May 2026 00:15:36 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
@@ -120,13 +124,14 @@
       "transfer-encoding": [
         "chunked"
       ],
-      "vary": [
-        "Accept-Encoding"
-      ],
       "x-content-type-options": [
         "nosniff"
+      ],
+      "x-generation-id": [
+        "gen-1780100135-V1QTsprufUtwdYnjMmly"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

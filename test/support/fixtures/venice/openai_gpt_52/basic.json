@@ -1,0 +1,192 @@
+{
+  "model_spec": "venice:openai-gpt-52",
+  "provider": "venice",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Im9wZW5haS1ncHQtNTIiLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMCwidmVuaWNlX3BhcmFtZXRlcnMiOnsiZGlzYWJsZV90aGlua2luZyI6ZmFsc2UsImVuYWJsZV93ZWJfY2l0YXRpb25zIjpmYWxzZSwiZW5hYmxlX3dlYl9zY3JhcGluZyI6ZmFsc2UsImVuYWJsZV93ZWJfc2VhcmNoIjoib2ZmIiwiaW5jbHVkZV9zZWFyY2hfcmVzdWx0c19pbl9zdHJlYW0iOmZhbHNlLCJpbmNsdWRlX3ZlbmljZV9zeXN0ZW1fcHJvbXB0Ijp0cnVlLCJzdHJpcF90aGlua2luZ19yZXNwb25zZSI6ZmFsc2V9fQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "openai-gpt-52",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0,
+      "venice_parameters": {
+        "disable_thinking": false,
+        "enable_web_citations": false,
+        "enable_web_scraping": false,
+        "enable_web_search": "off",
+        "include_search_results_in_stream": false,
+        "include_venice_system_prompt": true,
+        "strip_thinking_response": false
+      }
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.venice.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Hello world! What do you want to do next—chat, write some code, or ask a question?",
+            "reasoning_details": [
+              {
+                "data": "gAAAAABqGibnG5Yw9Kp6bB87H3GDro1MhjrPUJBEVlf8fTtGfAkL70WUcfZw4CHszwdb6eNf6tNIFa37JRK5g2BA1IoNSC7bqQKUDufIIf91jgvUANmpViQS_VVsX8414olxlBaGq-1qpoGM2ep3_87xt1W-CcDKoQa2hL29zjJMThpN52fresTUXbBNEgMbl711UKKuMBeCtBJrPBsJN_U2B6dbJmBpyoW58uv4AOkrshLa01STntgzQ0ESwPpMuyl7n_fas87LeUxTwMEoMov6-SNKj1pivqCUteRuUQNJx_BZSSxQRxJAOJTwFhwNaX51kGyKw2AamHDGH5rciSh26DQvxdDwFkbkAOs9mm8hg6Gv40oEQJv8JcDrAb1Tas-cTDFwrcw9hxKaPdjgrWBcYV4xfvuGevp5VBfUByEjVP9cfVPOE8Dt61gXNVKwweBTAqqpkmtZI-5ekWWiC48zZIQ93fDFm8cs1AqW3TAXl28x9OyPj-_zre_k1dJVM6cDYIMxdAxlonmbtukxUg3k_PmgQASZ6cdv-fxAOia2h5bdbmNusauv70InMY7QLmIODU4zZZKjJQDCvOEaBk2cSKHsIW8f3cEk9CsQdiY0yKkiXxbLLtTD0SCiSKXoNE8CqkRX7fvH0vq3uNv1-A18iCya86JiqTiBxBnBQ5VQ5tGzNb6zzpuq_jv-f5sVCudIadMgzFypXAvaFpEo6-ybaGGtmJXVDK0oINcbyYXS2wzQQ4Z7n_3tXfNV4nvSnCVe_1MNlZac3OvnH63LxzmhVt3ooHcmdTbRbnQjjUhxBOsdDVS0suZDuuVJE6Sq583-J25sQmprIFuz-JSTjibhd4s3bX_5l_b6LhsA848rxmcWb748TXiOt5-kVVWDMAfC-bei6lZRp1dSaRfc2hHY4S-_H1_NAvYogM4EG9tlZgIsszZ78KNVBh6TyKIyoEoMmf6uCCVT",
+                "format": "openai-responses-v1",
+                "id": "rs_0e74426997e06711016a1a26e6ec4c8197bf78820643df6131",
+                "index": 0,
+                "type": "reasoning.encrypted"
+              }
+            ],
+            "reasoning_encrypted": true,
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "completed"
+        }
+      ],
+      "created": 1780098787,
+      "id": "gen-1780098787-rn1Y2u5AI6YN2l7bh4pg",
+      "model": "openai-gpt-52",
+      "object": "chat.completion",
+      "service_tier": "default",
+      "usage": {
+        "completion_tokens": 35,
+        "completion_tokens_details": {
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "reasoning_tokens": 7
+        },
+        "prompt_tokens": 1517,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "total_tokens": 1552
+      },
+      "venice_parameters": {
+        "disable_thinking": false,
+        "enable_e2ee": true,
+        "enable_web_citations": false,
+        "enable_web_scraping": false,
+        "enable_web_search": "off",
+        "enable_x_search": false,
+        "include_search_results_in_stream": false,
+        "include_venice_system_prompt": true,
+        "return_search_results_as_documents": false,
+        "strip_thinking_response": false,
+        "web_search_citations": []
+      }
+    },
+    "headers": {
+      "access-control-allow-credentials": [
+        "true"
+      ],
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "*"
+      ],
+      "cache-control": [
+        "no-store, no-cache, private, must-revalidate"
+      ],
+      "cdn-cache-control": [
+        "no-store"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a0396aab19610cde-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-security-policy": [
+        "default-src 'none'; frame-ancestors *; upgrade-insecure-requests"
+      ],
+      "content-type": [
+        "application/json; charset=utf-8"
+      ],
+      "date": [
+        "Fri, 29 May 2026 23:53:11 GMT"
+      ],
+      "etag": [
+        "W/\"834-v+ypdFGP00MOOXJFmlqpUe+tIPQ\""
+      ],
+      "permissions-policy": [
+        "geolocation=(), camera=()"
+      ],
+      "referrer-policy": [
+        "strict-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": "[REDACTED:set-cookie]",
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-frame-options": [
+        "SAMEORIGIN"
+      ],
+      "x-ratelimit-limit-requests": [
+        "1000"
+      ],
+      "x-ratelimit-remaining": [
+        "20"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "999"
+      ],
+      "x-ratelimit-reset-requests": [
+        "1780098847106"
+      ],
+      "x-ratelimit-resets": [
+        "1780098817084"
+      ],
+      "x-venice-balance-usd": [
+        "9.05094955"
+      ],
+      "x-venice-version": [
+        "outerface-api-server-us-east1-03948-9pd"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

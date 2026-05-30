@@ -1,0 +1,198 @@
+{
+  "model_spec": "venice:gemini-3-5-flash",
+  "provider": "venice",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImdlbWluaS0zLTUtZmxhc2giLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMCwidmVuaWNlX3BhcmFtZXRlcnMiOnsiZGlzYWJsZV90aGlua2luZyI6ZmFsc2UsImVuYWJsZV93ZWJfY2l0YXRpb25zIjpmYWxzZSwiZW5hYmxlX3dlYl9zY3JhcGluZyI6ZmFsc2UsImVuYWJsZV93ZWJfc2VhcmNoIjoib2ZmIiwiaW5jbHVkZV9zZWFyY2hfcmVzdWx0c19pbl9zdHJlYW0iOmZhbHNlLCJpbmNsdWRlX3ZlbmljZV9zeXN0ZW1fcHJvbXB0Ijp0cnVlLCJzdHJpcF90aGlua2luZ19yZXNwb25zZSI6ZmFsc2V9fQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "gemini-3-5-flash",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0,
+      "venice_parameters": {
+        "disable_thinking": false,
+        "enable_web_citations": false,
+        "enable_web_scraping": false,
+        "enable_web_search": "off",
+        "include_search_results_in_stream": false,
+        "include_venice_system_prompt": true,
+        "strip_thinking_response": false
+      }
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.venice.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Hello! I am Gemini 3.5 Flash. How can I help you today?",
+            "reasoning_content": "**Acknowledging greetings**\n\nI received your \"Hello world!\" and am ready to proceed with any further instructions or queries you might have. I'm here to help!\n\n",
+            "reasoning_details": [
+              {
+                "format": "google-gemini-v1",
+                "index": 0,
+                "text": "**Acknowledging greetings**\n\nI received your \"Hello world!\" and am ready to proceed with any further instructions or queries you might have. I'm here to help!\n\n",
+                "type": "reasoning.text"
+              },
+              {
+                "data": "AY89a1/IoUlZIM8nkytWARmi06BSixOLa5zLsai3zAsSdzVUkh+vZBl9jiBbhne3ItTOSSd6B8soQJKXMydQdkIB7Vqz5UMt7kewpUSlwIrFyt2LhcH5TSFLkstcUsrVKCvYmV9QnBEai9ttyBwB7VPlmy9NvunlZwHn8KdImUOeLbtITy5erg4JbnTtOxK3Q0ReHdylKsgZ/jXWYioZPjmRiPzdg7g+RmYoDEz9DtB6CXBn3HiAyFpHdUQJyY1b29/sRidOJBpJGBiMIvOrgFzQExGFOaoxamCHM2VcHrJG04voTZ9BfNaVhjLqGaQYiuj0hCMW6JsYaFpgP0dkZn9ouRoc+JxYahOwtEqG9/4FIY4GRvSmKg6QKQyyrDDCjZ4mPdtG6iRHgCm3V8joCvppZHUnlmCs0fWZNMlZQae+QRAKcockY+4VRzAE0SkcHDvAiQEgJaR3UP9zmVclGM4E5Jo2U1rEKPTaUb4CHO8dPTvF3m8aCY2u40+yE5TAqYfHDWxeqqNuQz4RmFWffmhus1QmMz75wv8hyRlOrW8gDuY9QmlfvwSBK8OAoJ/+mPm292Vwd93Fat9YtKfOs7pDSmJfdYFVQu54teh6nyzIsZlEXgnCpNaAHf++zVviiqtJrFUY00jq4IV/0AJgjdniZehEXsDXjI/pTQkCp4zlssG68si2cY7KLgP6sVIKQ0Z/4uuL9q7PzevqgL6fRkm7DtC72GRfLDM0VWaNvlM5pXu4SgvfMGnf1O67Af4pIVE2IteqIrPXjosAA/ryuSD6r9/2FbnVuAzXdJYw3N6+i1eRAkPyU2IueS7Q0lZk+bvVXSg5HKse7XMZYw5nKoQbtui0zJ0WAwUUImKYPUiF+TZnwpOK0XjZx4jJaxpInXapQ1h7G6XF+Nrc9XbSd/zG4YYueWLQi+aniy2qCOETsId6Jv33pd3FcP5hxzqnxr72tIvyNyDG6/598LQSfxZ4aIoSRA3vI9cOA9lN+dObfm8JcZ5QX0LVlMAf2mtkY/oAhesy1gNba+quo1m4GXMRhThYJbP47tDnYBHzxX3K29oYnM+AzNyUjrEHEy44f5p5rpnHKupLyOLblUTOBEUZSJrjOh76XR3/ZFrNXYK+LVX7PB9WJBKZ0yNepXCDINEokQc7Obwzzt7WZrMbjFOeJ+uZMZ1o8mMbxOi0jcxk2V4VjPaswiN8CavobtauFvSgYJfCxecTZY7ydCvohfmOZoOpucXB9dnLwkY3Hh4RmGzsgANvdXni98/lH8szlKqEILw3/Ue1d90Asv8s/CfBpxwybMuzLBdN0u9UiBlYsZ222Nf51Gqsl3Iqg2bZBcRvCInV/BvX41sXPDdzSsHPr9AHTt18ZVbpyaW1NBoyaOpwtYWuGBc2pJ/3GTxX/yui/oumgwKbBEFk9s5grpzmKmJ3w/xraUf7RUsgrtCxc1jG9uXJeYL5qUtkolSUHxQa",
+                "format": "google-gemini-v1",
+                "index": 1,
+                "type": "reasoning.encrypted"
+              }
+            ],
+            "reasoning_encrypted": true,
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "STOP"
+        }
+      ],
+      "created": 1780098675,
+      "id": "gen-1780098675-9gKGUFuwVDnZImqZjt1F",
+      "model": "gemini-3-5-flash",
+      "object": "chat.completion",
+      "service_tier": "default",
+      "usage": {
+        "completion_tokens": 257,
+        "completion_tokens_details": {
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "reasoning_tokens": 239
+        },
+        "prompt_tokens": 1603,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "total_tokens": 1860
+      },
+      "venice_parameters": {
+        "disable_thinking": false,
+        "enable_e2ee": true,
+        "enable_web_citations": false,
+        "enable_web_scraping": false,
+        "enable_web_search": "off",
+        "enable_x_search": false,
+        "include_search_results_in_stream": false,
+        "include_venice_system_prompt": true,
+        "return_search_results_as_documents": false,
+        "strip_thinking_response": false,
+        "web_search_citations": []
+      }
+    },
+    "headers": {
+      "access-control-allow-credentials": [
+        "true"
+      ],
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "*"
+      ],
+      "cache-control": [
+        "no-store, no-cache, private, must-revalidate"
+      ],
+      "cdn-cache-control": [
+        "no-store"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a03967eec8050c7b-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-security-policy": [
+        "default-src 'none'; frame-ancestors *; upgrade-insecure-requests"
+      ],
+      "content-type": [
+        "application/json; charset=utf-8"
+      ],
+      "date": [
+        "Fri, 29 May 2026 23:51:17 GMT"
+      ],
+      "etag": [
+        "W/\"b7d-nmiq/bcbt46UHH8fNw6RB5QP3M8\""
+      ],
+      "permissions-policy": [
+        "geolocation=(), camera=()"
+      ],
+      "referrer-policy": [
+        "strict-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": "[REDACTED:set-cookie]",
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-frame-options": [
+        "SAMEORIGIN"
+      ],
+      "x-ratelimit-limit-requests": [
+        "1000"
+      ],
+      "x-ratelimit-remaining": [
+        "20"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "999"
+      ],
+      "x-ratelimit-reset-requests": [
+        "1780098735061"
+      ],
+      "x-ratelimit-resets": [
+        "1780098705038"
+      ],
+      "x-venice-balance-usd": [
+        "9.09526916"
+      ],
+      "x-venice-version": [
+        "outerface-api-server-us-east1-03948-9pd"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

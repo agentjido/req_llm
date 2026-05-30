@@ -1,4 +1,82 @@
 {
+  "zenmux:inclusionai/ring-2.6-1t": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:xiaomi/mimo-v2-flash": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:22:50Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:qwen/qwen3-vl-plus": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:44:50Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:tencent/hunyuan-2.0-thinking": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "fireworks_ai:accounts/fireworks/models/kimi-k2p5": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:30:47Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
   "google:gemini-1.5-pro": {
     "scenarios": {
       "basic": {
@@ -12,6 +90,175 @@
       }
     }
   },
+  "openrouter:aion-labs/aion-1.0-mini": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:24:39Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:google/gemma-3-4b-it": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:42:35Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:ibm-granite/granite-4.0-h-micro": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:20:36Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "venice:zai-org-glm-5": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:55:12Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:minimax/minimax-m2.1": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:42:59Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:minimax/minimax-m2.5": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "venice:claude-opus-4-6-fast": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:55:12Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:deepseek/deepseek-r1-distill-qwen-32b": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:35:21Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:google/gemini-3.1-flash-lite": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:15:55Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:google/gemini-2.5-flash-lite-preview-09-2025": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:24:06Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zai:glm-4.7-flashx": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (429): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:33:31Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "openrouter:moonshotai/kimi-k2.6:free": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:45:21Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "fireworks_ai:accounts/fireworks/models/kimi-k2p6": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:30:47Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
   "openai:gpt-5-2025-08-07": {
     "scenarios": {
       "basic": {
@@ -20,6 +267,84 @@
           "basic"
         ],
         "last_checked": "2026-05-29T18:58:08Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:microsoft/phi-4": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:17:09Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "groq:whisper-large-v3": {
+    "scenarios": {
+      "transcription_basic": {
+        "error": null,
+        "fixtures": [
+          "transcription_basic"
+        ],
+        "last_checked": "2026-05-29T23:26:29Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:qwen/qwen3-14b": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:42:04Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:z-ai/glm-4.7-flashx": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"timeout\", status: nil, response",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "zenmux:openai/gpt-5.1-chat": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "venice:claude-sonnet-4-6": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:55:12Z",
         "mode": "record",
         "status": "pass"
       }
@@ -38,6 +363,45 @@
       }
     }
   },
+  "zenmux:qwen/qwen3.7-max": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:bytedance/doubao-seed-1.8": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "venice:arcee-trinity-large-thinking": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:55:12Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
   "openai:gpt-4o-transcribe-diarize": {
     "scenarios": {
       "transcription_basic": {
@@ -46,6 +410,19 @@
           "transcription_basic"
         ],
         "last_checked": "2026-05-29T21:23:56Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "venice:z-ai-glm-5-turbo": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:55:12Z",
         "mode": "record",
         "status": "pass"
       }
@@ -61,6 +438,19 @@
         "last_checked": "2026-05-29T22:42:31Z",
         "mode": "record",
         "status": "fail"
+      }
+    }
+  },
+  "zenmux:qwen/qwen3-max": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
       }
     }
   },
@@ -108,6 +498,19 @@
       }
     }
   },
+  "zenmux:qwen/qwen3.5-plus": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
   "openai:chatgpt-image-latest": {
     "scenarios": {
       "image_basic": {
@@ -116,6 +519,162 @@
           "image_basic"
         ],
         "last_checked": "2026-05-29T21:24:36Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:qwen/qwen3-coder-flash": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:42:04Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:xiaomi/mimo-v2-flash": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:openai/gpt-5.2": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:google/gemini-2.5-flash": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:x-ai/grok-4.1-fast": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (404): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "zenmux:xiaomi/mimo-v2-omni": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:mistralai/mistral-small-2603": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:38:18Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:deepseek/deepseek-reasoner": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:google/gemini-2.5-flash-lite": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:google/gemini-2.0-flash-lite-001": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:24:06Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:meta-llama/llama-4-scout": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:37:04Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:qwen/qwen3.5-plus-02-15": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:42:04Z",
         "mode": "record",
         "status": "pass"
       }
@@ -134,6 +693,32 @@
       }
     }
   },
+  "openrouter:google/gemini-2.5-pro-preview": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:24:06Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:moonshotai/kimi-k2-thinking": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (404): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
   "openai:gpt-5-search-api": {
     "scenarios": {
       "basic": {
@@ -142,6 +727,32 @@
           "basic"
         ],
         "last_checked": "2026-05-29T19:09:22Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "openrouter:qwen/qwen3-30b-a3b-instruct-2507": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:42:04Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zai:glm-5-turbo": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (429): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:33:31Z",
         "mode": "record",
         "status": "fail"
       }
@@ -158,6 +769,84 @@
       }
     }
   },
+  "openrouter:moonshotai/kimi-k2": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:45:21Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:minimax/minimax-m2": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:42:59Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:morph/morph-v3-large": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:20:57Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:xiaomi/mimo-v2.5": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:mancer/weaver": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:25:07Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:qwen/qwen3-next-80b-a3b-instruct:free": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (429): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:42:04Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
   "openai:gpt-4-0125-preview": {
     "scenarios": {
       "basic": {
@@ -166,6 +855,58 @@
           "basic"
         ],
         "last_checked": "2026-05-29T19:05:48Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "zenmux:kuaishou/kat-coder-pro-v2": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:meta-llama/llama-guard-4-12b": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:37:04Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "venice:grok-build-0-1": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:55:12Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:anthropic/claude-3.7-sonnet": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (404): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
         "mode": "record",
         "status": "fail"
       }
@@ -215,6 +956,71 @@
       }
     }
   },
+  "zenmux:google/gemini-3.5-flash": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:inclusionai/ring-1t": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:anthropic/claude-opus-4.1": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (400): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "cohere:rerank-multilingual-v3.0": {
+    "scenarios": {
+      "rerank_basic": {
+        "error": null,
+        "fixtures": [
+          "rerank_basic"
+        ],
+        "last_checked": "2026-05-29T23:28:38Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:mistralai/mistral-large-2411": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:38:18Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
   "zai_coder:glm-4.5-flash": {
     "scenarios": {
       "basic": {
@@ -223,6 +1029,32 @@
           "basic"
         ],
         "last_checked": "2026-05-29T16:28:19Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:openai/gpt-5.2-chat": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:google/gemini-3.1-flash-lite-preview": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
         "mode": "record",
         "status": "pass"
       }
@@ -241,6 +1073,58 @@
       }
     }
   },
+  "zenmux:qwen/qwen3-coder-plus": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:moonshotai/kimi-k2.5": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (400): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "zenmux:z-ai/glm-4.5": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "venice:nvidia-nemotron-3-nano-30b-a3b": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:55:12Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
   "openai:gpt-5-mini-2025-08-07": {
     "scenarios": {
       "basic": {
@@ -249,6 +1133,58 @@
           "basic"
         ],
         "last_checked": "2026-05-29T18:58:21Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "venice:claude-opus-4-7-fast": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:55:12Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:rekaai/reka-edge": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:21:19Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:z-ai/glm-4.5v": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:44:10Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "fireworks_ai:accounts/fireworks/models/minimax-m2p7": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:30:47Z",
         "mode": "record",
         "status": "pass"
       }
@@ -267,6 +1203,136 @@
       }
     }
   },
+  "zai:glm-4.7": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (429): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:33:31Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "openrouter:xiaomi/mimo-v2.5": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:22:50Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:baidu/ernie-4.5-21b-a3b-thinking": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (429): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:14:36Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "zenmux:z-ai/glm-4.6v-flash": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "venice:gemini-3-flash-preview": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:55:12Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:sao10k/l3-euryale-70b": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:25:35Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:meta-llama/llama-3.2-3b-instruct:free": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (429): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:37:04Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "openrouter:x-ai/grok-4.20-multi-agent": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:19:11Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:x-ai/grok-3-mini": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (404): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:19:11Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "groq:whisper-large-v3-turbo": {
+    "scenarios": {
+      "transcription_basic": {
+        "error": null,
+        "fixtures": [
+          "transcription_basic"
+        ],
+        "last_checked": "2026-05-29T23:26:29Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
   "xai:grok-build-0.1": {
     "scenarios": {
       "basic": {
@@ -280,6 +1346,30 @@
       }
     }
   },
+  "zai:glm-5": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (429): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:33:31Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "cohere:c4ai-aya-expanse-32b": {
+    "scenarios": {
+      "basic": {
+        "error": "",
+        "fixtures": [],
+        "last_checked": "2026-05-29T23:28:02Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
   "openai:gpt-5.2-pro": {
     "scenarios": {
       "basic": {
@@ -288,6 +1378,108 @@
           "basic"
         ],
         "last_checked": "2026-05-29T19:01:09Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:openai/gpt-oss-safeguard-20b": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:45:45Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:mistralai/devstral-medium": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:38:18Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "cohere:c4ai-aya-expanse-8b": {
+    "scenarios": {
+      "basic": {
+        "error": "",
+        "fixtures": [],
+        "last_checked": "2026-05-29T23:28:02Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "venice:deepseek-v4-flash": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:55:12Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:minimax/minimax-m2": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zai:glm-4.6": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (429): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:33:31Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "openrouter:openrouter/bodybuilder": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:23:22Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:deepseek/deepseek-v4-pro": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:35:21Z",
         "mode": "record",
         "status": "pass"
       }
@@ -390,6 +1582,110 @@
       }
     }
   },
+  "zai_coding_plan:glm-4.5-air": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:11:52Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:qwen/qwen3-vl-30b-a3b-instruct": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:42:04Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:nousresearch/hermes-3-llama-3.1-70b": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:18:40Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:deepseek/deepseek-v3.2-exp": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:35:21Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:mistralai/mistral-large": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:38:18Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:baidu/ernie-4.5-300b-a47b": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:14:36Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:bytedance/doubao-seed-2.0-lite": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:perplexity/sonar-pro": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:19:52Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
   "openai:gpt-4o-mini-transcribe": {
     "scenarios": {
       "transcription_basic": {
@@ -403,6 +1699,240 @@
       }
     }
   },
+  "zenmux:openai/gpt-5-nano": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:mistralai/mistral-7b-instruct-v0.1": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:38:18Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:inflection/inflection-3-pi": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:24:54Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:deepseek/deepseek-r1-distill-llama-70b": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:35:21Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:qwen/qwen3.6-35b-a3b": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:42:04Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "venice:z-ai-glm-5v-turbo": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:55:12Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:nvidia/nemotron-nano-9b-v2:free": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:44:50Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:moonshotai/kimi-k2.6": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:nvidia/llama-3.3-nemotron-super-49b-v1.5": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:44:50Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:deepseek/deepseek-v3.2-exp": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "fireworks_ai:accounts/fireworks/models/minimax-m2p5": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:30:47Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "venice:qwen3-235b-a22b-instruct-2507": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:55:12Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:z-ai/glm-5.1": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:moonshotai/kimi-k2-thinking-turbo": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (404): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "openrouter:x-ai/grok-3-mini-beta": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (404): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:19:11Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "zenmux:openai/o4-mini": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "elevenlabs:eleven_multilingual_v2": {
+    "scenarios": {
+      "speech_basic": {
+        "error": null,
+        "fixtures": [
+          "speech_basic"
+        ],
+        "last_checked": "2026-05-29T23:29:10Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:minimax/minimax-m2.5": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:42:59Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
   "openai:gpt-5.2-chat-latest": {
     "scenarios": {
       "basic": {
@@ -411,6 +1941,110 @@
           "basic"
         ],
         "last_checked": "2026-05-29T19:00:53Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:qwen/qwen3-vl-30b-a3b-thinking": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:42:04Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:z-ai/glm-4.6v-flash-free": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:x-ai/grok-4.1-fast-non-reasoning": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (404): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "zenmux:z-ai/glm-4.6": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:openai/gpt-5.4-mini": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:mistralai/devstral-2512": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:38:18Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:qwen/qwen3.6-max-preview": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "venice:mercury-2": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:55:12Z",
         "mode": "record",
         "status": "pass"
       }
@@ -439,6 +2073,290 @@
         "last_checked": "2026-05-29T19:06:44Z",
         "mode": "record",
         "status": "pass"
+      }
+    }
+  },
+  "zenmux:openai/gpt-5.4": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:poolside/laguna-xs.2:free": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:21:35Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:deepseek/deepseek-v3.2-speciale": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (404): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:35:21Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "openrouter:minimax/minimax-m2.5:free": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (404): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:42:59Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "openrouter:arcee-ai/trinity-mini": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:13:54Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:x-ai/grok-4.2-fast-non-reasoning": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "cerebras:qwen-3-235b-a22b-instruct-2507": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (404): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:27:04Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "elevenlabs:eleven_flash_v2_5": {
+    "scenarios": {
+      "speech_basic": {
+        "error": null,
+        "fixtures": [
+          "speech_basic"
+        ],
+        "last_checked": "2026-05-29T23:29:10Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:google/gemini-2.0-flash-001": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:24:06Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:z-ai/glm-5-turbo": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:nousresearch/hermes-3-llama-3.1-405b:free": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (429): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:18:40Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "zenmux:baidu/ernie-5.0-thinking-preview": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:deepseek/deepseek-r1-0528": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:z-ai/glm-4.6v": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:sao10k/l3-lunaris-8b": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:25:35Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:mistralai/mistral-small-24b-instruct-2501": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:38:18Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:openai/gpt-5.4-pro": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (400): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "openrouter:cohere/command-a": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:15:25Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "venice:zai-org-glm-4.6": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:55:12Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:amazon/nova-2-lite-v1": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:13:28Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:mistralai/mistral-large-2512": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "cohere:command-r7b-arabic-02-2025": {
+    "scenarios": {
+      "basic": {
+        "error": "",
+        "fixtures": [],
+        "last_checked": "2026-05-29T23:28:02Z",
+        "mode": "record",
+        "status": "fail"
       }
     }
   },
@@ -505,6 +2423,19 @@
       }
     }
   },
+  "openrouter:microsoft/phi-4-mini-instruct": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:17:09Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
   "openai:davinci-002": {
     "scenarios": {
       "basic": {
@@ -518,6 +2449,32 @@
       }
     }
   },
+  "zenmux:openai/gpt-4.1-nano": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:bytedance/doubao-seed-code": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
   "openai:gpt-audio": {
     "scenarios": {
       "basic": {
@@ -526,6 +2483,227 @@
           "basic"
         ],
         "last_checked": "2026-05-29T21:37:41Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:openai/gpt-5-codex": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (400): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "zai:glm-4.5-air": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (429): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:33:31Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "zenmux:sapiens-ai/agnes-1.5-pro": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (404): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "openrouter:arcee-ai/trinity-large-thinking": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:13:54Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:deepseek/deepseek-v3.2": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:35:21Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "fireworks_ai:accounts/fireworks/models/qwen3p6-plus": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:30:47Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:meta-llama/llama-3.2-11b-vision-instruct": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:37:04Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:liquid/lfm-2.5-1.2b-instruct:free": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:16:50Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:openai/o1": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (404): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "openrouter:z-ai/glm-4.5": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:44:10Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:meta-llama/llama-4-maverick": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:37:04Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:ibm-granite/granite-4.1-8b": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:20:36Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:mistralai/mistral-medium-3.1": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:38:18Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "groq:openai/gpt-oss-20b": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:26:10Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:qwen/qwen3-vl-235b-a22b-instruct": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:42:04Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:qwen/qwen3-235b-a22b": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:42:04Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "venice:hermes-3-llama-3.1-405b": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:55:12Z",
         "mode": "record",
         "status": "pass"
       }
@@ -544,6 +2722,19 @@
       }
     }
   },
+  "openrouter:mistralai/mistral-saba": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:38:18Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
   "openai:babbage-002": {
     "scenarios": {
       "basic": {
@@ -557,6 +2748,71 @@
       }
     }
   },
+  "openrouter:deepseek/deepseek-r1": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:35:21Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:z-ai/glm-5-turbo": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:44:10Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:openai/gpt-oss-20b:free": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:45:45Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:x-ai/grok-4": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (404): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "zenmux:qwen/qwen3-235b-a22b-thinking-2507": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
   "openai:o3-2025-04-16": {
     "scenarios": {
       "basic": {
@@ -565,6 +2821,58 @@
           "basic"
         ],
         "last_checked": "2026-05-29T18:58:41Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:anthropic/claude-opus-4.5": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (400): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "openrouter:qwen/qwen3-vl-8b-instruct": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:42:04Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "venice:zai-org-glm-4.7-flash": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:55:12Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:z-ai/glm-4.7": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:44:10Z",
         "mode": "record",
         "status": "pass"
       }
@@ -596,6 +2904,97 @@
       }
     }
   },
+  "zenmux:x-ai/grok-code-fast-1": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (404): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "elevenlabs:eleven_v3": {
+    "scenarios": {
+      "speech_basic": {
+        "error": null,
+        "fixtures": [
+          "speech_basic"
+        ],
+        "last_checked": "2026-05-29T23:29:10Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:nvidia/nemotron-3-super-120b-a12b": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:44:50Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:meta-llama/llama-3.1-70b-instruct": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:37:04Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:z-ai/glm-5v-turbo": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:qwen/qwen3-vl-235b-a22b-thinking": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:42:04Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:inflection/inflection-3-productivity": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:24:54Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
   "fireworks_ai:accounts/fireworks/models/gpt-oss-20b": {
     "scenarios": {
       "basic": {
@@ -603,7 +3002,124 @@
         "fixtures": [
           "basic"
         ],
-        "last_checked": "2026-05-29T16:18:31Z",
+        "last_checked": "2026-05-29T23:30:47Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:xiaomi/mimo-v2-pro": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "venice:openai-gpt-4o-mini-2024-07-18": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:55:12Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "venice:venice-uncensored-1-2": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:55:12Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:openai/text-embedding-3-large": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (404): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "venice:openai-gpt-55-pro": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:55:12Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:qwen/qwen3-8b": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:42:04Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "groq:moonshotai/kimi-k2-instruct-0905": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (404): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:26:10Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "groq:openai/gpt-oss-120b": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:26:10Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "venice:openai-gpt-4o-2024-11-20": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:55:12Z",
         "mode": "record",
         "status": "pass"
       }
@@ -617,6 +3133,71 @@
           "basic"
         ],
         "last_checked": "2026-05-29T18:59:05Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "venice:qwen3-next-80b": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:55:12Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:deepseek/deepseek-chat": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:qwen/qwen3-coder-next": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:42:04Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:google/gemini-2.5-flash": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:24:06Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:perplexity/sonar": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:19:52Z",
         "mode": "record",
         "status": "pass"
       }
@@ -644,6 +3225,58 @@
       }
     }
   },
+  "zenmux:sapiens-ai/agnes-1.5-lite": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (404): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "zenmux:minimax/minimax-m2.5-lightning": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "venice:minimax-m27": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:55:12Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:meta-llama/llama-3.3-70b-instruct": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:37:04Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
   "openai:gpt-5.4-2026-03-05": {
     "scenarios": {
       "basic": {
@@ -654,6 +3287,43 @@
         "last_checked": "2026-05-29T19:06:35Z",
         "mode": "record",
         "status": "pass"
+      }
+    }
+  },
+  "venice:openai-gpt-54": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:55:12Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:bytedance-seed/seed-1.6-flash": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:15:07Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "cohere:c4ai-aya-vision-32b": {
+    "scenarios": {
+      "basic": {
+        "error": "",
+        "fixtures": [],
+        "last_checked": "2026-05-29T23:28:02Z",
+        "mode": "record",
+        "status": "fail"
       }
     }
   },
@@ -688,6 +3358,110 @@
       }
     }
   },
+  "zenmux:x-ai/grok-4.3": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "groq:llama3-8b-8192": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (400): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:26:10Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "fireworks_ai:accounts/fireworks/models/glm-5p1": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:30:47Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:moonshotai/kimi-k2.6": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:45:21Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:deepseek/deepseek-v4-flash:free": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (429): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:35:21Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "zenmux:openai/text-embedding-3-small": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (404): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "openrouter:qwen/qwen-plus-2025-07-28:thinking": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:22:16Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:openai/gpt-oss-120b:free": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:45:45Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
   "xai:grok-4.20-0309-reasoning": {
     "scenarios": {
       "basic": {
@@ -698,6 +3472,30 @@
         "last_checked": "2026-05-29T22:44:19Z",
         "mode": "record",
         "status": "pass"
+      }
+    }
+  },
+  "openrouter:moonshotai/kimi-k2-0905": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:45:21Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "cohere:command-a-vision-07-2025": {
+    "scenarios": {
+      "basic": {
+        "error": "",
+        "fixtures": [],
+        "last_checked": "2026-05-29T23:28:02Z",
+        "mode": "record",
+        "status": "fail"
       }
     }
   },
@@ -732,6 +3530,19 @@
       }
     }
   },
+  "zenmux:inclusionai/llada2.1-flash": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
   "google:gemini-2.0-flash": {
     "scenarios": {
       "basic": {
@@ -740,6 +3551,58 @@
           "basic"
         ],
         "last_checked": "2026-05-29T16:17:08Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:qwen/qwen3.5-122b-a10b": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:42:04Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:nvidia/nemotron-nano-12b-v2-vl:free": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:44:50Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:microsoft/wizardlm-2-8x22b": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:17:09Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:z-ai/glm-4.6v": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:44:10Z",
         "mode": "record",
         "status": "pass"
       }
@@ -865,6 +3728,45 @@
       }
     }
   },
+  "openrouter:qwen/qwen3.6-max-preview": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:42:04Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zai_coding_plan:glm-5-turbo": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:11:52Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:qwen/qwen3-235b-a22b-2507": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:42:04Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
   "openai:gpt-5.2-pro-2025-12-11": {
     "scenarios": {
       "basic": {
@@ -878,6 +3780,19 @@
       }
     }
   },
+  "openrouter:google/gemma-4-26b-a4b-it:free": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (429): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:42:35Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
   "google:gemini-embedding-001": {
     "scenarios": {
       "embed_basic": {
@@ -886,6 +3801,97 @@
           "embed_basic"
         ],
         "last_checked": "2026-05-29T22:26:56Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:volcengine/doubao-seed-2.0-lite": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (404): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "openrouter:bytedance-seed/seed-2.0-lite": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:15:07Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:qwen/qwen3.5-27b": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:42:04Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:inclusionai/ling-2.6-flash": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "venice:qwen3-6-27b": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:55:12Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:minimax/minimax-m2.7": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:openai/gpt-4.1-mini": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
         "mode": "record",
         "status": "pass"
       }
@@ -904,6 +3910,82 @@
       }
     }
   },
+  "openrouter:inclusionai/ring-2.6-1t": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:16:15Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:amazon/nova-micro-v1": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:13:28Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:sao10k/l3.3-euryale-70b": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:25:35Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "cohere:command-a-translate-08-2025": {
+    "scenarios": {
+      "basic": {
+        "error": "",
+        "fixtures": [],
+        "last_checked": "2026-05-29T23:28:02Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "groq:groq/compound-mini": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (400): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:26:10Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "zenmux:bytedance/doubao-seed-2.0-mini": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
   "openai:gpt-5.5": {
     "scenarios": {
       "basic": {
@@ -912,6 +3994,84 @@
           "basic"
         ],
         "last_checked": "2026-05-29T19:08:33Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "venice:kimi-k2-5": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:55:12Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:deepseek/deepseek-chat-v3-0324": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:35:21Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:meta-llama/llama-3-8b-instruct": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:37:04Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:perplexity/sonar-pro-search": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:19:52Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:google/gemma-4-26b-a4b-it": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:42:35Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "groq:openai/gpt-oss-safeguard-20b": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:26:10Z",
         "mode": "record",
         "status": "pass"
       }
@@ -927,6 +4087,19 @@
         "last_checked": "2026-05-29T19:00:17Z",
         "mode": "record",
         "status": "pass"
+      }
+    }
+  },
+  "groq:meta-llama/llama-4-maverick-17b-128e-instruct": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (404): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:26:10Z",
+        "mode": "record",
+        "status": "fail"
       }
     }
   },
@@ -952,6 +4125,108 @@
       }
     }
   },
+  "openrouter:xiaomi/mimo-v2-omni": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:22:50Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:tencent/hy3-preview": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:openai/gpt-5": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:mistralai/mistral-large-2512": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:38:18Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:openrouter/auto": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:23:22Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "cohere:command-a-03-2025": {
+    "scenarios": {
+      "basic": {
+        "error": "",
+        "fixtures": [],
+        "last_checked": "2026-05-29T23:28:02Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "openrouter:qwen/qwen3-coder-30b-a3b-instruct": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:42:04Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:openrouter/pareto-code": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:23:22Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
   "openai:whisper-1": {
     "scenarios": {
       "transcription_basic": {
@@ -962,6 +4237,45 @@
         "last_checked": "2026-05-29T20:44:37Z",
         "mode": "record",
         "status": "pass"
+      }
+    }
+  },
+  "venice:kimi-k2-6": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:55:12Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "groq:allam-2-7b": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:26:10Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:anthropic/claude-sonnet-4": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (400): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "fail"
       }
     }
   },
@@ -991,6 +4305,134 @@
       }
     }
   },
+  "openrouter:mistralai/codestral-2508": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:38:18Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:google/gemini-3.1-pro-preview-customtools": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:15:55Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:x-ai/grok-4.3": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:19:11Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:openai/gpt-oss-20b": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:45:45Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:openai/gpt-4.1": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zai:glm-5v-turbo": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (429): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:33:31Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "cohere:command-r7b-12-2024": {
+    "scenarios": {
+      "basic": {
+        "error": "",
+        "fixtures": [],
+        "last_checked": "2026-05-29T23:28:02Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "zenmux:baidu/ernie-5.1": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:qwen/qwen3.5-397b-a17b": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:42:04Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:meta-llama/llama-guard-3-8b": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (400): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:37:04Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
   "openai:gpt-5-pro-2025-10-06": {
     "scenarios": {
       "basic": {
@@ -999,6 +4441,45 @@
           "basic"
         ],
         "last_checked": "2026-05-29T18:59:35Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:google/gemini-3.1-flash-lite-preview": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:15:55Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:anthropic/claude-opus-4.8": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "venice:deepseek-v3.2": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:55:12Z",
         "mode": "record",
         "status": "pass"
       }
@@ -1061,6 +4542,32 @@
       }
     }
   },
+  "venice:openai-gpt-54-mini": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:55:12Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:cohere/command-r7b-12-2024": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:15:25Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
   "openai:gpt-5.2": {
     "scenarios": {
       "basic": {
@@ -1069,6 +4576,45 @@
           "basic"
         ],
         "last_checked": "2026-05-29T19:00:35Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "fireworks_ai:accounts/fireworks/models/deepseek-v4-pro": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:30:47Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:stepfun/step-3": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"timeout\", status: nil, response",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "openrouter:deepseek/deepseek-r1-0528": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:35:21Z",
         "mode": "record",
         "status": "pass"
       }
@@ -1105,6 +4651,19 @@
       }
     }
   },
+  "zai:glm-4.5v": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (429): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:33:31Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
   "anthropic:claude-opus-4-1-20250805": {
     "scenarios": {
       "basic": {
@@ -1133,6 +4692,32 @@
         "last_checked": "2026-05-29T17:11:25Z",
         "mode": "record",
         "status": "pass"
+      }
+    }
+  },
+  "venice:llama-3.2-3b": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:55:12Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:anthropic/claude-sonnet-4.6": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (400): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "fail"
       }
     }
   },
@@ -1233,6 +4818,32 @@
       }
     }
   },
+  "groq:groq/compound": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (400): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:26:10Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "zenmux:openai/gpt-5.3-codex": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
   "openai:gpt-5.4": {
     "scenarios": {
       "basic": {
@@ -1246,6 +4857,84 @@
       }
     }
   },
+  "venice:gemma-4-uncensored": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:55:12Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:stepfun/step-3.5-flash": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:nex-agi/deepseek-v3.1-nex-n1": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:21:08Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:z-ai/glm-4.5-air": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:mistralai/devstral-small": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:38:18Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "cohere:rerank-v4.0-pro": {
+    "scenarios": {
+      "rerank_basic": {
+        "error": null,
+        "fixtures": [
+          "rerank_basic"
+        ],
+        "last_checked": "2026-05-29T23:28:38Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
   "zai:glm-4.5-flash": {
     "scenarios": {
       "basic": {
@@ -1253,7 +4942,137 @@
         "fixtures": [
           "basic"
         ],
-        "last_checked": "2026-05-29T16:18:19Z",
+        "last_checked": "2026-05-29T23:33:31Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "elevenlabs:eleven_turbo_v2_5": {
+    "scenarios": {
+      "speech_basic": {
+        "error": null,
+        "fixtures": [
+          "speech_basic"
+        ],
+        "last_checked": "2026-05-29T23:29:10Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "fireworks_ai:accounts/fireworks/models/gpt-oss-120b": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:30:47Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "venice:grok-4-20": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:55:12Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:openai/gpt-5.3-chat": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:openai/gpt-4o-mini": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:meta/llama-3.3-70b-instruct": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:meta-llama/llama-3.1-8b-instruct": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:37:04Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:amazon/nova-pro-v1": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:13:28Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:morph/morph-v3-fast": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:20:57Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:openai/chat-latest": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
         "mode": "record",
         "status": "pass"
       }
@@ -1269,6 +5088,227 @@
         "last_checked": "2026-05-29T22:31:06Z",
         "mode": "record",
         "status": "fail"
+      }
+    }
+  },
+  "openrouter:google/gemma-4-31b-it": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:42:35Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "cerebras:qwen-3-coder-480b": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (404): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:27:04Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "openrouter:x-ai/grok-4.20": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:19:11Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "venice:claude-opus-4-6": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:55:12Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "cerebras:zai-glm-4.7": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:27:04Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:qwen/qwen3-next-80b-a3b-thinking": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:42:04Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:inclusionai/ling-2.6-1t": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:16:15Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "venice:google-gemma-4-26b-a4b-it": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:55:12Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "cohere:rerank-v4.0-fast": {
+    "scenarios": {
+      "rerank_basic": {
+        "error": null,
+        "fixtures": [
+          "rerank_basic"
+        ],
+        "last_checked": "2026-05-29T23:28:38Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:qwen/qwen-2.5-coder-32b-instruct": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:21:54Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:google/gemma-2-27b-it": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:42:35Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:qwen/qwen-2.5-72b-instruct": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:21:54Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:sao10k/l3.1-euryale-70b": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:25:35Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "venice:mistral-small-2603": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:55:12Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "venice:gemini-3-5-flash": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:55:12Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:openai/gpt-5-pro": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:qwen/qwen3-max-thinking": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:42:04Z",
+        "mode": "record",
+        "status": "pass"
       }
     }
   },
@@ -1298,6 +5338,188 @@
       }
     }
   },
+  "openrouter:arcee-ai/spotlight": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (400): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:13:54Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "venice:qwen3-5-9b": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:55:12Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:openai/gpt-4o": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:qwen/qwen3-coder": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:deepseek/deepseek-v4-flash": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:mistralai/mistral-medium-3": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:38:18Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:google/gemma-4-31b-it:free": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:42:35Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:nvidia/nemotron-3-super-120b-a12b:free": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:44:50Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "venice:openai-gpt-53-codex": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:55:12Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:qwen/qwen3.7-max": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:42:04Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:qwen/qwen-2.5-7b-instruct": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:21:54Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:anthropic/claude-opus-4.7": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (400): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "zenmux:openai/gpt-5.2-pro": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (400): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "openrouter:qwen/qwen3.5-9b": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:42:04Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
   "openai:tts-1-hd-1106": {
     "scenarios": {
       "speech_basic": {
@@ -1306,6 +5528,149 @@
           "speech_basic"
         ],
         "last_checked": "2026-05-29T21:18:50Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "venice:qwen3-vl-235b-a22b": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:55:12Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:google/gemini-2.5-pro": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:24:06Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "venice:zai-org-glm-5-1": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:55:12Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:qwen/qwen3-30b-a3b-thinking-2507": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:42:04Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:meta-llama/llama-3.2-1b-instruct": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:37:04Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "venice:qwen3-235b-a22b-thinking-2507": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:55:12Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:qwen/qwen3-235b-a22b-thinking-2507": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:42:04Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:google/gemini-3-flash-preview": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:15:55Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:qwen/qwen3.6-flash": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:42:04Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zai_coding_plan:glm-5v-turbo": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (429): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:11:52Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "openrouter:minimax/minimax-m2-her": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:42:59Z",
         "mode": "record",
         "status": "pass"
       }
@@ -1324,6 +5689,84 @@
       }
     }
   },
+  "openrouter:qwen/qwen3.5-35b-a3b": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:42:04Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:sapiens-ai/agnes-2.0-flash": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:qwen/qwen3.6-plus": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:42:04Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:qwen/qwen3-vl-32b-instruct": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:42:04Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:volcengine/doubao-seed-2.0-mini": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (404): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "venice:minimax-m25": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:55:12Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
   "openai:gpt-4o-transcribe": {
     "scenarios": {
       "transcription_basic": {
@@ -1332,6 +5775,32 @@
           "transcription_basic"
         ],
         "last_checked": "2026-05-29T21:20:10Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "groq:meta-llama/llama-prompt-guard-2-86m": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:26:10Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:nousresearch/hermes-3-llama-3.1-405b": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:18:40Z",
         "mode": "record",
         "status": "pass"
       }
@@ -1389,6 +5858,32 @@
       }
     }
   },
+  "zai:glm-5.1": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (429): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:33:31Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "openrouter:google/gemini-3.5-flash": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:15:55Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
   "openai:gpt-5.4-pro-2026-03-05": {
     "scenarios": {
       "basic": {
@@ -1399,6 +5894,69 @@
         "last_checked": "2026-05-29T19:08:23Z",
         "mode": "record",
         "status": "pass"
+      }
+    }
+  },
+  "zenmux:openai/gpt-5.1-codex-mini": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:mistralai/ministral-3b-2512": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:38:18Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "cohere:command-r-08-2024": {
+    "scenarios": {
+      "basic": {
+        "error": "",
+        "fixtures": [],
+        "last_checked": "2026-05-29T23:28:02Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "openrouter:openai/gpt-oss-120b": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:45:45Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zai:glm-4.6v": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (429): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:33:31Z",
+        "mode": "record",
+        "status": "fail"
       }
     }
   },
@@ -1415,6 +5973,45 @@
       }
     }
   },
+  "openrouter:nousresearch/hermes-4-70b": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:18:40Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:aion-labs/aion-rp-llama-3.1-8b": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:24:39Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:google/gemini-2.5-pro": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
   "openai:gpt-5.3-codex-spark": {
     "scenarios": {
       "basic": {
@@ -1425,6 +6022,32 @@
         "last_checked": "2026-05-29T21:26:57Z",
         "mode": "record",
         "status": "fail"
+      }
+    }
+  },
+  "openrouter:google/gemini-2.5-pro-preview-05-06": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:24:06Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "groq:meta-llama/llama-prompt-guard-2-22m": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:26:10Z",
+        "mode": "record",
+        "status": "pass"
       }
     }
   },
@@ -1525,6 +6148,58 @@
       }
     }
   },
+  "openrouter:amazon/nova-premier-v1": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:13:28Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:anthropic/claude-opus-4.6": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (400): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "zenmux:openai/gpt-5.5": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:deepseek/deepseek-chat-v3.1": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
   "openai:gpt-5.4-nano": {
     "scenarios": {
       "basic": {
@@ -1533,6 +6208,19 @@
           "basic"
         ],
         "last_checked": "2026-05-29T19:07:01Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:inclusionai/ling-2.6-1t": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
         "mode": "record",
         "status": "pass"
       }
@@ -1612,6 +6300,249 @@
       }
     }
   },
+  "venice:olafangensan-glm-4.7-flash-heretic": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:55:12Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "groq:qwen/qwen3-32b": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:26:10Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:openai/gpt-5.1": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:anthropic/claude-haiku-4.5": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:nvidia/nemotron-3-nano-30b-a3b": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:44:50Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:z-ai/glm-4.7-flash-free": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"timeout\", status: nil, response",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "venice:venice-uncensored-role-play": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:55:12Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:openrouter/free": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:23:22Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:baidu/ernie-4.5-vl-424b-a47b": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:14:36Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:qwen/qwen3.6-27b": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:42:04Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "cohere:c4ai-aya-vision-8b": {
+    "scenarios": {
+      "basic": {
+        "error": "",
+        "fixtures": [],
+        "last_checked": "2026-05-29T23:28:02Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "zenmux:google/gemini-3-flash-preview": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "venice:openai-gpt-55": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:55:12Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:inception/mercury-2": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:20:46Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:minimax/minimax-m2-her": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "venice:openai-gpt-54-pro": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:55:12Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:moonshotai/kimi-k2.5": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:45:21Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:sao10k/l3.1-70b-hanami-x1": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:25:35Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "cohere:command-a-reasoning-08-2025": {
+    "scenarios": {
+      "basic": {
+        "error": "",
+        "fixtures": [],
+        "last_checked": "2026-05-29T23:28:02Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
   "openai:gpt-5.2-2025-12-11": {
     "scenarios": {
       "basic": {
@@ -1625,6 +6556,188 @@
       }
     }
   },
+  "openrouter:cohere/command-r-08-2024": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:15:25Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "fireworks_ai:accounts/fireworks/routers/kimi-k2p6-turbo": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:30:47Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:z-ai/glm-4-32b": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:44:10Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "venice:google-gemma-3-27b-it": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:55:12Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:openai/gpt-5.5-pro": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (400): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "zenmux:meta/llama-4-scout-17b-16e-instruct": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:qwen/qwen3.6-plus": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "venice:google-gemma-4-31b-it": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:55:12Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "venice:nvidia-nemotron-cascade-2-30b-a3b": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:55:12Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "venice:openai-gpt-52-codex": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:55:12Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:z-ai/glm-5": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "venice:qwen3-5-35b-a3b": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:55:12Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "venice:zai-org-glm-4.7": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:55:12Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:x-ai/grok-4-fast": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (404): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
   "groq:llama-3.1-8b-instant": {
     "scenarios": {
       "basic": {
@@ -1632,7 +6745,85 @@
         "fixtures": [
           "basic"
         ],
-        "last_checked": "2026-05-29T16:17:19Z",
+        "last_checked": "2026-05-29T23:26:10Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "venice:llama-3.3-70b": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:55:12Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:stepfun/step-3.5-flash-free": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (404): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "zenmux:deepseek/deepseek-v4-pro": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:xiaomi/mimo-v2.5-pro": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:22:50Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:volcengine/doubao-seed-1.8": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (404): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "openrouter:openrouter/owl-alpha": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:23:22Z",
         "mode": "record",
         "status": "pass"
       }
@@ -1651,6 +6842,19 @@
       }
     }
   },
+  "zenmux:volcengine/doubao-seed-2.0-pro": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (404): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
   "minimax:MiniMax-M2.1": {
     "scenarios": {
       "basic": {
@@ -1661,6 +6865,45 @@
         "last_checked": "2026-05-29T16:18:48Z",
         "mode": "record",
         "status": "fail"
+      }
+    }
+  },
+  "openrouter:qwen/qwen3-32b": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:42:04Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:google/gemma-3n-e4b-it": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:42:35Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "venice:gemini-3-1-pro-preview": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:55:12Z",
+        "mode": "record",
+        "status": "pass"
       }
     }
   },
@@ -1677,6 +6920,19 @@
       }
     }
   },
+  "openrouter:arcee-ai/coder-large": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (400): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:13:54Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
   "openai:gpt-4o-mini-tts-2025-12-15": {
     "scenarios": {
       "speech_basic": {
@@ -1685,6 +6941,32 @@
           "speech_basic"
         ],
         "last_checked": "2026-05-29T21:17:57Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:mistralai/voxtral-small-24b-2507": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:38:18Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:z-ai/glm-4.5-air": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:44:10Z",
         "mode": "record",
         "status": "pass"
       }
@@ -1714,6 +6996,19 @@
       }
     }
   },
+  "zenmux:volcengine/doubao-seed-2.0-code": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (404): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
   "openai:gpt-4o-mini-transcribe-2025-03-20": {
     "scenarios": {
       "transcription_basic": {
@@ -1727,6 +7022,123 @@
       }
     }
   },
+  "openrouter:arcee-ai/virtuoso-large": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (400): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:13:54Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "openrouter:qwen/qwen3-vl-8b-thinking": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:42:04Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:perplexity/sonar-reasoning-pro": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:19:52Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:inclusionai/ling-1t": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:openai/gpt-5-chat": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:qwen/qwen3.5-plus-20260420": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:42:04Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:deepseek/deepseek-v3.2": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:qwen/qwen3-14b": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:bytedance/doubao-seed-2.0-pro": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
   "google:imagen-4.0-generate-001": {
     "scenarios": {
       "image_basic": {
@@ -1735,6 +7147,32 @@
           "image_basic"
         ],
         "last_checked": "2026-05-29T22:29:18Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:mistralai/mistral-medium-3-5": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:38:18Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "venice:mistral-small-3-2-24b-instruct": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:55:12Z",
         "mode": "record",
         "status": "pass"
       }
@@ -1805,6 +7243,19 @@
       }
     }
   },
+  "openrouter:z-ai/glm-5.1": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:44:10Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
   "xai:grok-4.20-non-reasoning": {
     "scenarios": {
       "basic": {
@@ -1818,6 +7269,123 @@
       }
     }
   },
+  "openrouter:nvidia/nemotron-3-nano-30b-a3b:free": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:44:50Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:baidu/ernie-4.5-21b-a3b": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (502): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:14:36Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "openrouter:meta-llama/llama-3-70b-instruct": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:37:04Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:liquid/lfm-2.5-1.2b-thinking:free": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:16:50Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "venice:deepseek-v4-pro": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:55:12Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "venice:qwen3-coder-480b-a35b-instruct-turbo": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:55:12Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:xiaomi/mimo-v2.5-pro": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:bytedance-seed/seed-1.6": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:15:07Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:minimax/minimax-m2.7": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:42:59Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
   "cohere:rerank-v3.5": {
     "scenarios": {
       "rerank_basic": {
@@ -1825,7 +7393,98 @@
         "fixtures": [
           "rerank_basic"
         ],
-        "last_checked": "2026-05-29T16:19:22Z",
+        "last_checked": "2026-05-29T23:28:38Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:openai/gpt-5-mini": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zai:glm-4.7-flash": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:33:31Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "venice:openai-gpt-52": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:55:12Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:z-ai/glm-4.7": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:google/gemini-3.1-flash-lite": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:mistralai/mixtral-8x22b-instruct": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:38:18Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:qwen/qwen-plus": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:22:16Z",
         "mode": "record",
         "status": "pass"
       }
@@ -1839,6 +7498,71 @@
           "image_basic"
         ],
         "last_checked": "2026-05-29T22:29:47Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:qwen/qwen3.5-flash-02-23": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (429): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:42:04Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "openrouter:z-ai/glm-5v-turbo": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:44:10Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zai_coding_plan:glm-5.1": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:11:52Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:meta-llama/llama-3.2-3b-instruct": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:37:04Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "fireworks_ai:accounts/fireworks/models/deepseek-v4-flash": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:30:47Z",
         "mode": "record",
         "status": "pass"
       }
@@ -1867,6 +7591,45 @@
         "last_checked": "2026-05-29T19:00:08Z",
         "mode": "record",
         "status": "pass"
+      }
+    }
+  },
+  "zenmux:qwen/qwen3.5-flash": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:google/gemini-3.1-pro-preview": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:sapiens-ai/agnes-1.5-flash": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (404): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "fail"
       }
     }
   },
@@ -1957,6 +7720,19 @@
       }
     }
   },
+  "venice:grok-4-20-multi-agent": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:55:12Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
   "xai:grok-imagine-image-quality": {
     "scenarios": {
       "image_basic": {
@@ -1965,6 +7741,19 @@
           "image_basic"
         ],
         "last_checked": "2026-05-29T22:51:39Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:z-ai/glm-4.6": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:44:10Z",
         "mode": "record",
         "status": "pass"
       }
@@ -1983,6 +7772,45 @@
       }
     }
   },
+  "venice:aion-labs-aion-2-0": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:55:12Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "venice:claude-opus-4-5": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:55:12Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:mistralai/ministral-14b-2512": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:38:18Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
   "cerebras:gpt-oss-120b": {
     "scenarios": {
       "basic": {
@@ -1990,7 +7818,20 @@
         "fixtures": [
           "basic"
         ],
-        "last_checked": "2026-05-29T16:18:00Z",
+        "last_checked": "2026-05-29T23:27:04Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "venice:qwen-3-7-max": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:55:12Z",
         "mode": "record",
         "status": "pass"
       }
@@ -2093,6 +7934,58 @@
       }
     }
   },
+  "venice:grok-4-3": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:55:12Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:anthropic/claude-3.5-haiku": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:moonshotai/kimi-k2-0905": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (404): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "openrouter:deepseek/deepseek-v4-flash": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:35:21Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
   "openai:gpt-image-2-2026-04-21": {
     "scenarios": {
       "image_basic": {
@@ -2101,6 +7994,71 @@
           "image_basic"
         ],
         "last_checked": "2026-05-29T21:26:05Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:anthropic/claude-sonnet-4.5": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (400): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "openrouter:amazon/nova-lite-v1": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:13:28Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:qwen/qwen3-235b-a22b-2507": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:x-ai/grok-4.2-fast": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (400): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "openrouter:poolside/laguna-m.1:free": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:21:35Z",
         "mode": "record",
         "status": "pass"
       }
@@ -2119,6 +8077,227 @@
       }
     }
   },
+  "openrouter:google/gemini-3.1-pro-preview": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:15:55Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:mistralai/pixtral-large-2411": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:38:18Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:baidu/ernie-4.5-vl-28b-a3b": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (502): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:14:36Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "zenmux:openai/gpt-4": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (404): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "openrouter:mistralai/mistral-nemo": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:38:18Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:minimax/minimax-m2.7-highspeed": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:bytedance/doubao-seed-2.0-code": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "venice:openai-gpt-oss-120b": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:55:12Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:deepseek/deepseek-chat": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:35:21Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "groq:llama-3.3-70b-versatile": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:26:10Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "fireworks_ai:accounts/fireworks/routers/glm-5p1-fast": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (503): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:30:47Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "cerebras:llama3.1-8b": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (404): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:27:04Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "openrouter:qwen/qwen3-coder-plus": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:42:04Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "venice:claude-opus-4-7": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:55:12Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:google/gemma-3-12b-it": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:aion-labs/aion-1.0": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:24:39Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:google/gemini-2.5-flash-lite": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:24:06Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
   "xai:grok-4.20-multi-agent-0309": {
     "scenarios": {
       "basic": {
@@ -2132,6 +8311,123 @@
       }
     }
   },
+  "openrouter:perplexity/sonar-deep-research": {
+    "scenarios": {
+      "basic": {
+        "error": "",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:19:52Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "openrouter:x-ai/grok-build-0.1": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:19:11Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:openai/gpt-5.4-nano": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:z-ai/glm-4.7-flash": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:44:10Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:openai/gpt-5.1-codex": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:qwen/qwen3.6-flash": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:cohere/command-r-plus-08-2024": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:15:25Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zai:glm-4.5": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (429): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:33:31Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "openrouter:mistralai/ministral-8b-2512": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:38:18Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
   "google:gemini-3.1-flash-image-preview": {
     "scenarios": {
       "image_basic": {
@@ -2140,6 +8436,19 @@
           "image_basic"
         ],
         "last_checked": "2026-05-29T22:27:52Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "venice:claude-sonnet-4-5": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:55:12Z",
         "mode": "record",
         "status": "pass"
       }
@@ -2158,6 +8467,19 @@
       }
     }
   },
+  "openrouter:liquid/lfm-2-24b-a2b": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:16:50Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
   "xai:grok-3-mini": {
     "scenarios": {
       "basic": {
@@ -2171,6 +8493,56 @@
       }
     }
   },
+  "zenmux:openai/gpt-5.2-codex": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:volcengine/doubao-seed-code": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (404): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "cohere:command-r-plus-08-2024": {
+    "scenarios": {
+      "basic": {
+        "error": "",
+        "fixtures": [],
+        "last_checked": "2026-05-29T23:28:02Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "cohere:rerank-english-v3.0": {
+    "scenarios": {
+      "rerank_basic": {
+        "error": null,
+        "fixtures": [
+          "rerank_basic"
+        ],
+        "last_checked": "2026-05-29T23:28:38Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
   "google:imagen-4.0-fast-generate-001": {
     "scenarios": {
       "image_basic": {
@@ -2179,6 +8551,188 @@
           "image_basic"
         ],
         "last_checked": "2026-05-29T22:29:31Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:mistralai/mistral-large-2407": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:38:18Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:baidu/ernie-x1.1-preview": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:inclusionai/ling-2.6-flash": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:16:15Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:z-ai/glm-5": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:44:10Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:qwen/qwen-plus-2025-07-28": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:22:16Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:xiaomi/mimo-v2-pro": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:22:50Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:qwen/qwen3-30b-a3b": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:42:04Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:aion-labs/aion-2.0": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:24:39Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "venice:qwen3-5-397b-a17b": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:55:12Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:minimax/minimax-m2.1": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "venice:qwen-3-6-plus": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-29T23:55:12Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zenmux:anthropic/claude-opus-4": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (400): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "openrouter:nousresearch/hermes-2-pro-llama-3-8b": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:18:40Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "zai_coding_plan:glm-4.7": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:11:52Z",
         "mode": "record",
         "status": "pass"
       }
@@ -2205,6 +8759,32 @@
           "basic"
         ],
         "last_checked": "2026-05-29T18:59:52Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:arcee-ai/maestro-reasoning": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (400): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:13:54Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "openrouter:bytedance-seed/seed-2.0-mini": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T00:15:07Z",
         "mode": "record",
         "status": "pass"
       }

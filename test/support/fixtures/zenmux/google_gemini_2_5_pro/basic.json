@@ -1,0 +1,112 @@
+{
+  "model_spec": "zenmux:google/gemini-2.5-pro",
+  "provider": "zenmux",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjIwMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiSGVsbG8gd29ybGQhIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiZ29vZ2xlL2dlbWluaS0yLjUtcHJvIiwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+    },
+    "canonical_json": {
+      "max_completion_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "google/gemini-2.5-pro",
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://zenmux.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Hello there! That's the traditional first step in so many great programming adventures.\n\nHow can I help you today?",
+            "reasoning": "Okay, so I just received \"Hello world!\" from the user. My internal monologue kicked in immediately, analyzing this input.\n\nFirst, I recognized it for what it is: the quintessential introductory programming statement. It's more than just a string of characters; it's a cultural touchstone, a first step into a new world for many. It's universally understood in a certain context, a friendly, almost ritualistic greeting.\n\nThen, I considered the *intent* behind it. This isn't a complex query or a request for deep analysis. It's a simple, open-ended initiation. The user is reaching out, signaling they're ready to engage. My primary objective, then, became clear: respond in kind, mirroring that friendliness and helpfulness, and most importantly, creating an opening for them to state their *actual* need or question.\n\nI began to explore potential responses. A straightforward \"Hello! How can I help?\" came to mind, but it felt a little bland, a missed opportunity. I wanted to acknowledge the specific nature of their greeting, to show I understood the subtext.\n\nThis led me to consider responses that directly referenced \"Hello world!\". Something like \"Hello world to you too!\" was a basic option. But I wanted to do more than just echo. I thought about how to make it more engaging, to hint at the shared digital space we occupy.\n\nThe idea of referencing the programming aspect became appealing. It felt appropriate, a nod to the origin of their greeting. I considered playful, context-aware replies. Perhaps something that directly mimicked a code output, like using a `print()` statement for my reply. This felt particularly fitting for an expert user who would likely appreciate that sort of meta-acknowledgment.\n\nUltimately, the goal is always to be helpful and inviting. So, while I wanted to be clever and acknowledge the specific \"Hello world!\" context, I also needed to pivot smoothly into offering my assistance. The best approach felt like a combination: acknowledge the greeting, show I understand its significance, and then immediately open the floor for them to elaborate.",
+            "refusal": null,
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1780099069,
+      "id": "1bf1b6ef0b7b4bf09150a6a1d62becf1",
+      "model": "google/gemini-2.5-pro",
+      "object": "chat.completion",
+      "usage": {
+        "completion_tokens": 323,
+        "completion_tokens_details": {
+          "reasoning_tokens": 298
+        },
+        "prompt_tokens": 3,
+        "prompt_tokens_details": {
+          "audio_cached_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0
+        },
+        "tool_use": 0,
+        "total_tokens": 326,
+        "trafficType": "ON_DEMAND",
+        "web_search": 0,
+        "web_search_queries": 0
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "X-ZenMux-RequestId"
+      ],
+      "cf-ray": [
+        "a03971625da68f4b-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 29 May 2026 23:57:49 GMT"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-zenmux-requestid": [
+        "1bf1b6ef0b7b4bf09150a6a1d62becf1"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

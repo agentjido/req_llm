@@ -1,0 +1,116 @@
+{
+  "model_spec": "fireworks_ai:accounts/fireworks/models/kimi-k2p6",
+  "provider": "fireworks_ai",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImFjY291bnRzL2ZpcmV3b3Jrcy9tb2RlbHMva2ltaS1rMnA2IiwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "accounts/fireworks/models/kimi-k2p6",
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.fireworks.ai/inference/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "content": "Hello! How can I help you today?",
+            "reasoning_content": "The user said \"Hello world!\" which is a simple greeting. I should respond in a friendly, helpful manner. Since this is a very open-ended greeting, I can acknowledge it and ask how I can help them today.\n\nNo complex reasoning needed here - just a warm, welcoming response that invites further conversation.",
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1780097412,
+      "id": "chatcmpl-05ec4202cf91414aa12e86216c2cd325",
+      "model": "accounts/fireworks/models/kimi-k2p6",
+      "object": "chat.completion",
+      "usage": {
+        "completion_tokens": 73,
+        "prompt_tokens": 11,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "total_tokens": 84
+      }
+    },
+    "headers": {
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 29 May 2026 23:30:11 GMT"
+      ],
+      "fireworks-cached-prompt-tokens": [
+        "0"
+      ],
+      "fireworks-prompt-tokens": [
+        "11"
+      ],
+      "fireworks-sampling-options": [
+        "{\"max_tokens\": 2000, \"temperature\": 0.0, \"top_k\": 0, \"top_p\": 0.95, \"min_p\": 0.0, \"typical_p\": 1.0, \"frequency_penalty\": 0.0, \"presence_penalty\": 0.0, \"repetition_penalty\": 1.0, \"mirostat_target\": null, \"mirostat_lr\": 0.1, \"cycle_multiplier\": 0.0, \"cycle_base\": 0.0, \"cycle_allowed_length\": 0, \"cycle_sequence_breakers\": []}"
+      ],
+      "fireworks-server-processing-time": [
+        "0.831"
+      ],
+      "fireworks-server-time-to-first-token": [
+        "0.198"
+      ],
+      "fireworks-speculation-prompt-matched-tokens": [
+        "0"
+      ],
+      "server": [
+        "istio-envoy"
+      ],
+      "vary": [
+        "Origin"
+      ],
+      "via": [
+        "1.1 google"
+      ],
+      "x-ratelimit-limit-tokens-prompt": [
+        "3600000"
+      ],
+      "x-ratelimit-over-limit": [
+        "no"
+      ],
+      "x-ratelimit-remaining-tokens-prompt": [
+        "3599989"
+      ],
+      "x-request-id": [
+        "chatcmpl-05ec4202cf91414aa12e86216c2cd325"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

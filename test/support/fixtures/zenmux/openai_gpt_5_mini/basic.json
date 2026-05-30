@@ -1,0 +1,121 @@
+{
+  "model_spec": "zenmux:openai/gpt-5-mini",
+  "provider": "zenmux",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjUwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Im9wZW5haS9ncHQtNS1taW5pIiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+    },
+    "canonical_json": {
+      "max_completion_tokens": 50,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "openai/gpt-5-mini",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://zenmux.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": null,
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": null,
+            "reasoning": "**Responding to a greeting**\n\nThe user just said \"Hello world!\" which I take as a friendly greeting. I want to respond warmly and possibly ask how I can help them. I might even mirror their greeting or provide a brief explanation about myself. Keeping it concise is key, and I should consider mentioning the programming context since that's often linked to \"Hello world!\" Let’s keep it light and open!",
+            "reasoning_details": [
+              {
+                "format": "openai-responses-v1",
+                "index": "0",
+                "summary": "**Responding to a greeting**\n\nThe user just said \"Hello world!\" which I take as a friendly greeting. I want to respond warmly and possibly ask how I can help them. I might even mirror their greeting or provide a brief explanation about myself. Keeping it concise is key, and I should consider mentioning the programming context since that's often linked to \"Hello world!\" Let’s keep it light and open!",
+                "type": "reasoning.summary"
+              },
+              {
+                "data": "gAAAAABqGiibDb-6Ptd4Re7511Ud4_qb3p-apvqLVmZEAhSUZSlkbw9QmBGhaEohwp8jpr4u99fVno7YoF6xiskZTLOyD1_CiDuNVBAqRucfaNLdEj-4auHBvM-ZXtk6xcRreBNknlRQyQ6bvtsUs18C7cYmGvnRpwH2v5TAbMt8ev5dnOmrmxoWcPwArvOygSXmF7zQ2M2cDYlRhgVwDidh8zrfud3BaqSN4ssvOeMwdPiHPOE_NrJ68lAsNL4PH63h5Ds1a8l5-lfJH0BzGvtKKMX1SyABFjlYXqnpZzBmbNaTb1KESbUk6INL6jg2Nu9lccMvCHGXkjfbjkTVWUGt1lCtoSoDVXjEtJ19n2A2asKWd1cD81NFPsFGOh8bfMZXfOVJ8M1xG1mSgmoKOhxJ-y57jtlOvLX8kR7Ql9WcFQbWdPst6XelDm2M-3jEb0Iv3-zr4jq3QX9MvPWM-jLruO4RHBMbopZxlu6_9dnt9R4dVEUtlj6tlbhHNQgHbntvmBOkZlOSqzo9ZAau8aINXHQg0B_ejpU8_6yh9Eei9G2nR1eysCYbw5Yz5EmKABKXMEop-Au5lV24A6ttyJcqVCHnFyidxkKF7YAGPiPLOK6mgJOxyxuTXZGkBaHmQnN_4UEwMsbGsJ1N0SckhYC04fJ32h7VTk3DgWpW0PO7Z0o5w6ikV4C-HMgBL1L2NsC3Hs6quR3tAxVzwmzjsx6BiUc1va6Xs-oeijHFhJI4DnPRwSJWxx7c1jRN6RZAuRiatVX5AWNDtpzgZcHRCKo7iZOT_7mmCJr09XJyjQVk3_UjEhAiimPBzFLsHaGEJRhAfItr4lZPQsGy0xltJNcBtUvHFFwG2yRI5nUu74gfCAPWAcTriB12Rwb673Bjj9-DAqoQ9feCSF-wDwf-bgC82pGTC-CSTFwQ3opaiKEAeBPwTtqVQ4BiKcDUiQ3ExJG-F0yMxVzGcezUi2_OgKY22w12p1pufMxFMTcL5mze0IRWpV1tREkO0Hvu8yphLNqoMVT17Xt2O7-Jzq6PK9UkxF6vWYWvn2OYNDbIcTGryrsJkIV10bHTCSw5yvMFR9b4LqgUleuTL5rj9tQ5tKWKwLgf_i1zenXf13BC8wykIZtxvG89anWom0vPymoU1M5FjDVf5scrR0YpJKwQEi_gVCU4Me_FS9uzvCtCvhbuEEtumi_xT1ZBgnxj4izLcAwtC8DFeXDCzcZnzfONcc8DzbLEgxDkEg==",
+                "format": "openai-responses-v1",
+                "id": "rs_06fc5c9b0256bdd7006a1a28997d788190a2f78159ff1a2058",
+                "index": "0",
+                "type": "reasoning.encrypted"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1780099224,
+      "id": "b101ac0b05824f5395da2ff699605b60",
+      "model": "openai/gpt-5-mini",
+      "object": "chat.completion",
+      "service_tier": "default",
+      "usage": {
+        "completion_tokens": 0,
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "prompt_tokens": 9,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "total_tokens": 9
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "X-ZenMux-RequestId"
+      ],
+      "cf-ray": [
+        "a03975553c7feafb-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Sat, 30 May 2026 00:00:27 GMT"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-zenmux-requestid": [
+        "b101ac0b05824f5395da2ff699605b60"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

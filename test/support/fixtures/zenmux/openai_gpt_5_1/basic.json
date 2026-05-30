@@ -1,0 +1,126 @@
+{
+  "model_spec": "zenmux:openai/gpt-5.1",
+  "provider": "zenmux",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjIwMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiSGVsbG8gd29ybGQhIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoib3BlbmFpL2dwdC01LjEiLCJyZWFzb25pbmdfZWZmb3J0IjoibG93Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+    },
+    "canonical_json": {
+      "max_completion_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "openai/gpt-5.1",
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://zenmux.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": {
+            "content": [],
+            "refusal": null
+          },
+          "message": {
+            "annotations": [],
+            "content": "Hello!  \n\nHow can I help you today?",
+            "reasoning": "**Creating a simple greeting**\n\nI want to come up with a simple greeting that's warm and welcoming. Something like \"Hello! How are you today?\" could work really well because it invites conversation and shows I care. I’m considering making it even more friendly or casual, maybe something like \"Hi there!\" or \"Hey! Glad to see you!” I think a positive tone is important, so I want to make sure it feels genuine and approachable!",
+            "reasoning_details": [
+              {
+                "format": "openai-responses-v1",
+                "index": "0",
+                "summary": "**Creating a simple greeting**\n\nI want to come up with a simple greeting that's warm and welcoming. Something like \"Hello! How are you today?\" could work really well because it invites conversation and shows I care. I’m considering making it even more friendly or casual, maybe something like \"Hi there!\" or \"Hey! Glad to see you!” I think a positive tone is important, so I want to make sure it feels genuine and approachable!",
+                "type": "reasoning.summary"
+              },
+              {
+                "data": "gAAAAABqGiipFDiml7jbBwoe2A3P-awCpKHfAWM5H5pyD0SHCuej_5KarwT72Oxnq6CVYF0t5BPY4JH9n27b-GEfakIui7QCOa6h-z7ZxMWrEVXuDfb1Asxn2C0ItJf5LAuev5dufRmWaygTL14CxrRdzzJ9m7N2UCEb54PFDPcY2SANAKEX77cmJ2wG0gBlP7t-32dUktTVMstvbMgu3hrcHkK4jBTtuCR2p5XYR58fusy0_vpbIi2RJLOWjC8tAyUgmQSwe_BC4PFnm5U4qdEMYvZWHq5pE69_0p-9vXPgbHO69rcUbZ6QkgsoIF8mPOPOaEpcTK60VheO2TOyQFA7rCaNFMg6-ch8WuVK0i5iK5EFNz2lHq2oaM2zPwN6CvPFcWJI7eZEGofzy8lysKAnCKIkS4TUG6ko1k39mj4Fr1frOVSMLe5ierPul4LpEvZgJwpX-5Scw3AyI2ZwKpo71ycnms-fKzAiFmINA4XS64rOkyr7z8mEBECgDvu2CR3KrZmWw7Rcx2xaCem1w5N0sd4Tm14zHRVFthfECSWZ_D6nh3qPawYPGGqQ2dTaWBgLKrTTf9ouT3LGrFqLU85siG1yBhPKBrrD_TekpTWfTdYsGSs5RkP2rinfjamkgjlro_vctLTewC4Q_NWhEj52Ov12LX4Pmb-e5ufzDjm9S0QJqzIr7Ejz-dFnLxFIqoWCM8TyE0lH-S6BIvU9N8iL7RxRLgO0mLWo4gpJjSVA1FpBH4LxBQDFacFrsGIAw1GbC4dujK3kyhimZMHOlN-vd_aHgB2-h_GgaILJGN8MiUbJ2mECa_xvZ3lI8ekI6R75rCyiEBRe2nUs-Cso2Gz6QLYUOZHSGPTKtG2Xi5AMvLHlfIZgqX2tqe8u8-wHJXzQlMpoSU40Wztf3JI5lflGAHKGTPuHCSrt6xQQef1wzCNP-WlTzzQ=",
+                "format": "openai-responses-v1",
+                "id": "rs_072ffc47ee0228ca006a1a28a8c4808194bf96538c44d571a4",
+                "index": "0",
+                "type": "reasoning.encrypted"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1780099240,
+      "id": "ff1d7f37472f458cb7bf2d8b496580a5",
+      "model": "openai/gpt-5.1",
+      "object": "chat.completion",
+      "service_tier": "default",
+      "usage": {
+        "completion_tokens": 24,
+        "completion_tokens_details": {
+          "reasoning_tokens": 8
+        },
+        "prompt_tokens": 9,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "total_tokens": 33
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "X-ZenMux-RequestId"
+      ],
+      "cf-ray": [
+        "a03975b6a9eae252-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Sat, 30 May 2026 00:00:41 GMT"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-zenmux-requestid": [
+        "ff1d7f37472f458cb7bf2d8b496580a5"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

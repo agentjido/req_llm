@@ -1,4 +1,6 @@
 {
+  "model_spec": "openrouter:google/gemini-2.5-flash-lite",
+  "provider": "openrouter",
   "request": {
     "body": {
       "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Imdvb2dsZS9nZW1pbmktMi41LWZsYXNoLWxpdGUiLCJuIjoxLCJyZWFzb25pbmdfZWZmb3J0IjoibG93Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
@@ -19,6 +21,9 @@
       "temperature": 0.0
     },
     "headers": {
+      "accept": [
+        "application/json"
+      ],
       "accept-encoding": [
         "gzip"
       ],
@@ -27,7 +32,7 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ]
     },
     "method": "post",
@@ -41,13 +46,13 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Hello there! How can I help you today?",
-            "reasoning": "**Greeting the user**\n\nI'm thinking about how best to respond to your \"Hello world!\" greeting. My aim is to be friendly and acknowledge your message directly, perhaps by returning the sentiment.\n\n**Greeting the User**\n\nI'm continuing to refine my approach to your initial greeting. My current thought is to offer a straightforward and welcoming \"Hello there!\" and immediately follow up by asking how I can be of assistance to you.\n\n",
+            "content": "Hello world! It's nice to hear from you.\n\nHow can I assist you today?",
+            "reasoning": "**Acknowledging Greetings**\n\nI'm currently processing the initial \"Hello world!\" input. My immediate focus is on formulating a friendly and relevant response to this common programmatic salutation. This involves confirming receipt and preparing a suitable reply.\n\n**Formulating Initial Response**\n\nI'm currently considering how best to greet you back. My aim is to offer a warm acknowledgment of your \"Hello world!\" while smoothly transitioning into an offer of assistance. I'm refining the phrasing to be both welcoming and immediately useful.\n\n",
             "reasoning_details": [
               {
-                "format": "unknown",
+                "format": "google-gemini-v1",
                 "index": 0,
-                "text": "**Greeting the user**\n\nI'm thinking about how best to respond to your \"Hello world!\" greeting. My aim is to be friendly and acknowledge your message directly, perhaps by returning the sentiment.\n\n**Greeting the User**\n\nI'm continuing to refine my approach to your initial greeting. My current thought is to offer a straightforward and welcoming \"Hello there!\" and immediately follow up by asking how I can be of assistance to you.\n\n",
+                "text": "**Acknowledging Greetings**\n\nI'm currently processing the initial \"Hello world!\" input. My immediate focus is on formulating a friendly and relevant response to this common programmatic salutation. This involves confirming receipt and preparing a suitable reply.\n\n**Formulating Initial Response**\n\nI'm currently considering how best to greet you back. My aim is to offer a warm acknowledgment of your \"Hello world!\" while smoothly transitioning into an offer of assistance. I'm refining the phrasing to be both welcoming and immediately useful.\n\n",
                 "type": "reasoning.text"
               }
             ],
@@ -57,30 +62,46 @@
           "native_finish_reason": "STOP"
         }
       ],
-      "created": 1762104932,
-      "id": "gen-1762104932-gDIwBhJ3nwQws01VSbbg",
+      "created": 1780100620,
+      "id": "gen-1780100620-ICL4FMVdbMDFbC6KeBpr",
       "model": "google/gemini-2.5-flash-lite",
       "object": "chat.completion",
       "provider": "Google",
+      "service_tier": "default",
+      "system_fingerprint": null,
       "usage": {
-        "completion_tokens": 301,
+        "completion_tokens": 319,
         "completion_tokens_details": {
+          "audio_tokens": 0,
           "image_tokens": 0,
-          "reasoning_tokens": 291
+          "reasoning_tokens": 299
         },
+        "cost": 1.279e-4,
+        "cost_details": {
+          "upstream_inference_completions_cost": 1.276e-4,
+          "upstream_inference_cost": 1.279e-4,
+          "upstream_inference_prompt_cost": 3.0e-7
+        },
+        "is_byok": false,
         "prompt_tokens": 3,
         "prompt_tokens_details": {
-          "cached_tokens": 0
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 0,
+          "video_tokens": 0
         },
-        "total_tokens": 304
+        "total_tokens": 322
       }
     },
     "headers": {
       "access-control-allow-origin": [
         "*"
       ],
+      "access-control-expose-headers": [
+        "X-Generation-Id,cf-ray"
+      ],
       "cf-ray": [
-        "998563940f5bc365-ORD"
+        "a039976d2ba08a1f-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -89,7 +110,7 @@
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:35:33 GMT"
+        "Sat, 30 May 2026 00:23:41 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
@@ -103,13 +124,14 @@
       "transfer-encoding": [
         "chunked"
       ],
-      "vary": [
-        "Accept-Encoding"
-      ],
       "x-content-type-options": [
         "nosniff"
+      ],
+      "x-generation-id": [
+        "gen-1780100620-ICL4FMVdbMDFbC6KeBpr"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

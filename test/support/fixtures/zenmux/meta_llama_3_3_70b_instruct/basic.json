@@ -1,0 +1,111 @@
+{
+  "model_spec": "zenmux:meta/llama-3.3-70b-instruct",
+  "provider": "zenmux",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjUwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Im1ldGEvbGxhbWEtMy4zLTcwYi1pbnN0cnVjdCIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+    },
+    "canonical_json": {
+      "max_completion_tokens": 50,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "meta/llama-3.3-70b-instruct",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://zenmux.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Hello! It's nice to meet you. Is there something I can help you with or would you like to chat?",
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1780099131,
+      "id": "019bd535b36e4b6aae1716df52481833",
+      "model": "meta/llama-3.3-70b-instruct",
+      "object": "chat.completion",
+      "system_fingerprint": "fastcoe",
+      "usage": {
+        "completion_tokens": 24,
+        "completion_tokens_after_first_per_sec": 416.45905517589716,
+        "completion_tokens_after_first_per_sec_first_ten": 423.3454248638496,
+        "completion_tokens_after_first_per_sec_graph": 423.3454248638496,
+        "completion_tokens_per_sec": 154.412636080692,
+        "end_time": 1780099131.0490232,
+        "is_last_response": true,
+        "prompt_tokens": 38,
+        "prompt_tokens_details": {},
+        "start_time": 1780099130.8935955,
+        "stop_reason": "stop",
+        "time_to_first_token": 0.10020017623901367,
+        "time_to_first_token_graph": 0.09698152542114258,
+        "total_latency": 0.1554276943206787,
+        "total_tokens": 62,
+        "total_tokens_per_sec": 398.899309875121
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "X-ZenMux-RequestId"
+      ],
+      "cf-ray": [
+        "a039730a8ce9f603-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 29 May 2026 23:58:51 GMT"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-zenmux-requestid": [
+        "019bd535b36e4b6aae1716df52481833"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

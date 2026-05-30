@@ -1,0 +1,104 @@
+{
+  "model_spec": "zai_coding_plan:glm-4.7",
+  "provider": "zai_coding_plan",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImdsbS00LjciLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+    },
+    "canonical_json": {
+      "max_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "glm-4.7",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.z.ai/api/coding/paas/v4/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "content": "Hello! It's great to meet you. How can I help you today?",
+            "reasoning_content": "\n1.  **Analyze the user's request:** The user simply said \"Hello world!\". This is a standard, universal greeting, often used as the first program someone learns to write. It's a polite way to initiate a conversation.\n\n2.  **Identify the core intent:** The user is greeting me. They are likely expecting a greeting back and an invitation to continue the conversation. There's no complex question or task here.\n\n3.  **Determine the appropriate persona and tone:**\n    *   **Persona:** I am a large language model, an AI assistant. My tone should be helpful, friendly, and professional. It should be neutral but welcoming.\n    *   **Tone:** Friendly, helpful, open, slightly more sophisticated than a simple \"Hello\" but not overly formal. A good balance is key.\n\n4.  **Brainstorm possible responses:**\n\n    *   *Option 1 (Simple & Direct):* \"Hello! How can I help you today?\"\n        *   **Pros:** Simple, clear, direct. Does the job.\n        *   **Cons:** A bit generic. Doesn't acknowledge the \"world\" part or play off it.\n\n    *   *Option 2 (Playful & Thematic):* \"Hello there, user! I'm ready to help you conquer the world... or just answer a few questions. What's on your mind?\"\n        *   **Pros:** Playful, acknowledges the \"world\" part, more engaging.\n        *   **Cons:** Might be a bit too informal or \"cheesy\" for some users.\n\n    *   *Option 3 (Professional & Helpful):* \"Hello! I am a large language model, and I am here to assist you. I can help with a wide range of tasks, from answering questions to generating text. How can I be of service?\"\n        *   **Pros:** Professional, informative, sets expectations.\n        *   **Cons:** A bit robotic, might feel too formal for a simple \"Hello world!\" greeting.\n\n    *   *Option 4 (Balanced - Friendly & Helpful):* \"Hello! It's great to meet you. How can I help you today?\"\n        *   **Pros:** Friendly, welcoming, open-ended, standard for a helpful assistant. This is a very strong contender.\n\n    *   *Option 5 (Combining elements for a good final response):* Start with a friendly greeting, acknowledge the \"world\" part subtly, and then offer assistance. This shows I'm listening and am ready to help.\n\n5.  **Drafting the final response (incorporating the best elements):**\n\n    *   *Start with a greeting:* \"Hello!\" is good. \"Hello there!\" is a bit more friendly. Let's go with \"Hello!\" as it's a direct match to the user's input.\n    *   *Acknowledge the input:* The user said \"Hello world!\". I can respond with a phrase that mirrors this. \"Hello to you, too!\" or \"Hello there!\" both work. Let's try to be a bit more conversational.\n    *   *Offer help:* This is the most important part. I need to show I'm useful. \"How can I help you today?\" is the standard, effective phrase.\n    *   *Refine:* Let's put it together. \"Hello! How can I help you today?\" - This is good, but let's try to add a little more warmth.\n    *   *New Draft:* \"Hello! It's great to hear from you. How can I help you today?\" - Better. \"It's great to hear from you\" is a nice personal touch.\n    *   *Adding a bit of personality (optional):* Since \"Hello world!\" is a programming inside joke, maybe I can nod to that? But I don't want to alienate non-programmers. Let's keep it general but friendly.\n\n    Let's go with a version that is friendly, welcoming, and immediately offers assistance. This is the most versatile and useful response.\n\n    *   **Final Polish:** \"Hello! How can I help you today?\"\n\n    This is simple, effective, and friendly. It's the best balance of all the options. It's direct, helpful, and professional. I can also add a little more warmth: \"Hello! It's great to meet you. How can I help you today?\" This is even better. It's a common, human-like greeting. Let's use that.\n\n6.  **Final Selection:** \"Hello! It's great to meet you. How can I help you today?\"\n\n    This response:\n    *   Directly greets the user.\n    *   Adds a friendly, personal touch (\"It's great to meet you\").\n    *   Immediately pivots to its core function (\"How can I help you today?\").\n    *   Is polite and professional.\n    *   Is simple enough to be universally understood.\n\n    This seems like the perfect response. It's a good balance of being helpful, friendly, and professional.",
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1780099874,
+      "id": "202605300810517320a42577e44dd6",
+      "model": "glm-4.7",
+      "object": "chat.completion",
+      "request_id": "202605300810517320a42577e44dd6",
+      "usage": {
+        "completion_tokens": 1059,
+        "completion_tokens_details": {
+          "reasoning_tokens": 1041
+        },
+        "prompt_tokens": 8,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "total_tokens": 1067
+      }
+    },
+    "headers": {
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json; charset=UTF-8"
+      ],
+      "date": [
+        "Sat, 30 May 2026 00:11:14 GMT"
+      ],
+      "keep-alive": [
+        "timeout=6"
+      ],
+      "server": [
+        "nginx"
+      ],
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding",
+        "Origin",
+        "Access-Control-Request-Method",
+        "Access-Control-Request-Headers",
+        "Origin",
+        "Access-Control-Request-Method",
+        "Access-Control-Request-Headers"
+      ],
+      "x-log-id": [
+        "202605300810517320a42577e44dd6"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

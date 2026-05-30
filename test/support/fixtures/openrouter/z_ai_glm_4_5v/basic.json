@@ -1,4 +1,6 @@
 {
+  "model_spec": "openrouter:z-ai/glm-4.5v",
+  "provider": "openrouter",
   "request": {
     "body": {
       "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6InotYWkvZ2xtLTQuNXYiLCJuIjoxLCJyZWFzb25pbmdfZWZmb3J0IjoibG93Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
@@ -19,6 +21,9 @@
       "temperature": 0.0
     },
     "headers": {
+      "accept": [
+        "application/json"
+      ],
       "accept-encoding": [
         "gzip"
       ],
@@ -27,7 +32,7 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ]
     },
     "method": "post",
@@ -41,13 +46,13 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "\nHello there! 😊 It's great to connect with you. How can I assist you today? Whether you have questions, need help, or just want to chat, I'm here for you!",
-            "reasoning": "I see the user just said \"Hello world!\". That's a classic first program greeting. I should respond in a friendly and welcoming way, maybe acknowledge it as a common programming tradition while keeping it natural.\n\nThe user might be testing if I'm working properly, or they could be new to programming. Either way, I'll keep my response warm and inviting without overcomplicating things. A simple hello back with a smile emoji would work well here - it's approachable but not too formal.\n\nI wonder if they're expecting something more technical? But since they didn't ask any specific questions, sticking with a basic greeting seems appropriate for now. If they follow up with coding questions, I can adjust my tone then.",
+            "content": "\nHello! 👋 It's nice to meet you. How can I assist you today? Whether you have questions, need help with something specific, or just want to chat, feel free to ask! 😊",
+            "reasoning": "I'm being asked to respond to \"Hello world!\" which is a classic greeting in programming contexts. This seems like a simple social interaction rather than a technical question.\n\nThe user might be:\n1. Testing if I'm working properly\n2. Starting a conversation casually\n3. Referencing the common \"hello world\" program example\n\nSince this is a friendly greeting, I should respond warmly and appropriately. A simple acknowledgment with a similar greeting would be suitable.",
             "reasoning_details": [
               {
                 "format": "unknown",
                 "index": 0,
-                "text": "I see the user just said \"Hello world!\". That's a classic first program greeting. I should respond in a friendly and welcoming way, maybe acknowledge it as a common programming tradition while keeping it natural.\n\nThe user might be testing if I'm working properly, or they could be new to programming. Either way, I'll keep my response warm and inviting without overcomplicating things. A simple hello back with a smile emoji would work well here - it's approachable but not too formal.\n\nI wonder if they're expecting something more technical? But since they didn't ask any specific questions, sticking with a basic greeting seems appropriate for now. If they follow up with coding questions, I can adjust my tone then.",
+                "text": "I'm being asked to respond to \"Hello world!\" which is a classic greeting in programming contexts. This seems like a simple social interaction rather than a technical question.\n\nThe user might be:\n1. Testing if I'm working properly\n2. Starting a conversation casually\n3. Referencing the common \"hello world\" program example\n\nSince this is a friendly greeting, I should respond warmly and appropriately. A simple acknowledgment with a similar greeting would be suitable.",
                 "type": "reasoning.text"
               }
             ],
@@ -57,29 +62,46 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1762105073,
-      "id": "gen-1762105073-XylhXuxc8PD42db88mw7",
+      "created": 1780098197,
+      "id": "gen-1780098197-gCLSOuMZfb9GbekFLNC9",
       "model": "z-ai/glm-4.5v",
       "object": "chat.completion",
-      "provider": "Novita",
-      "system_fingerprint": "",
+      "provider": "Z.AI",
+      "service_tier": null,
+      "system_fingerprint": null,
       "usage": {
-        "completion_tokens": 188,
-        "completion_tokens_details": null,
+        "completion_tokens": 137,
+        "completion_tokens_details": {
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "reasoning_tokens": 123
+        },
+        "cost": 2.5064e-4,
+        "cost_details": {
+          "upstream_inference_completions_cost": 2.466e-4,
+          "upstream_inference_cost": 2.5064e-4,
+          "upstream_inference_prompt_cost": 4.04e-6
+        },
+        "is_byok": false,
         "prompt_tokens": 10,
         "prompt_tokens_details": {
           "audio_tokens": 0,
-          "cached_tokens": 4
+          "cache_write_tokens": 0,
+          "cached_tokens": 4,
+          "video_tokens": 0
         },
-        "total_tokens": 198
+        "total_tokens": 147
       }
     },
     "headers": {
       "access-control-allow-origin": [
         "*"
       ],
+      "access-control-expose-headers": [
+        "X-Generation-Id,cf-ray"
+      ],
       "cf-ray": [
-        "99856705c9372240-ORD"
+        "a0395c465860ead0-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -88,7 +110,7 @@
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:37:54 GMT"
+        "Fri, 29 May 2026 23:43:21 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
@@ -102,13 +124,14 @@
       "transfer-encoding": [
         "chunked"
       ],
-      "vary": [
-        "Accept-Encoding"
-      ],
       "x-content-type-options": [
         "nosniff"
+      ],
+      "x-generation-id": [
+        "gen-1780098197-gCLSOuMZfb9GbekFLNC9"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

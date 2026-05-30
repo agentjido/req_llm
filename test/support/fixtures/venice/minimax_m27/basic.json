@@ -1,0 +1,191 @@
+{
+  "model_spec": "venice:minimax-m27",
+  "provider": "venice",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Im1pbmltYXgtbTI3Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjAsInZlbmljZV9wYXJhbWV0ZXJzIjp7ImRpc2FibGVfdGhpbmtpbmciOmZhbHNlLCJlbmFibGVfd2ViX2NpdGF0aW9ucyI6ZmFsc2UsImVuYWJsZV93ZWJfc2NyYXBpbmciOmZhbHNlLCJlbmFibGVfd2ViX3NlYXJjaCI6Im9mZiIsImluY2x1ZGVfc2VhcmNoX3Jlc3VsdHNfaW5fc3RyZWFtIjpmYWxzZSwiaW5jbHVkZV92ZW5pY2Vfc3lzdGVtX3Byb21wdCI6dHJ1ZSwic3RyaXBfdGhpbmtpbmdfcmVzcG9uc2UiOmZhbHNlfX0="
+    },
+    "canonical_json": {
+      "max_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "minimax-m27",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0,
+      "venice_parameters": {
+        "disable_thinking": false,
+        "enable_web_citations": false,
+        "enable_web_scraping": false,
+        "enable_web_search": "off",
+        "include_search_results_in_stream": false,
+        "include_venice_system_prompt": true,
+        "strip_thinking_response": false
+      }
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.venice.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Hello! 👋 Welcome! I'm MiniMax M2.7, ready to help you with whatever you need — coding, writing, analysis, creative projects, or just a chat. What can I do for you today?",
+            "reasoning_content": "The user said \"Hello world!\" which is a simple greeting. I should respond in a friendly, helpful manner as MiniMax M2.7. This is a straightforward greeting, so I'll keep the response warm and welcoming while offering to help.\n",
+            "reasoning_details": [
+              {
+                "format": "unknown",
+                "index": 0,
+                "text": "The user said \"Hello world!\" which is a simple greeting. I should respond in a friendly, helpful manner as MiniMax M2.7. This is a straightforward greeting, so I'll keep the response warm and welcoming while offering to help.\n",
+                "type": "reasoning.text"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "stop"
+        }
+      ],
+      "created": 1780098754,
+      "id": "gen-1780098754-RGKTbUNAlZG8MCZmMFwP",
+      "model": "minimax-m27",
+      "object": "chat.completion",
+      "service_tier": null,
+      "usage": {
+        "completion_tokens": 97,
+        "completion_tokens_details": {
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "reasoning_tokens": 58
+        },
+        "prompt_tokens": 1539,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "total_tokens": 1636
+      },
+      "venice_parameters": {
+        "disable_thinking": false,
+        "enable_e2ee": true,
+        "enable_web_citations": false,
+        "enable_web_scraping": false,
+        "enable_web_search": "off",
+        "enable_x_search": false,
+        "include_search_results_in_stream": false,
+        "include_venice_system_prompt": true,
+        "return_search_results_as_documents": false,
+        "strip_thinking_response": false,
+        "web_search_citations": []
+      }
+    },
+    "headers": {
+      "access-control-allow-credentials": [
+        "true"
+      ],
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "*"
+      ],
+      "cache-control": [
+        "no-store, no-cache, private, must-revalidate"
+      ],
+      "cdn-cache-control": [
+        "no-store"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a03969dbef2e22ff-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-security-policy": [
+        "default-src 'none'; frame-ancestors *; upgrade-insecure-requests"
+      ],
+      "content-type": [
+        "application/json; charset=utf-8"
+      ],
+      "date": [
+        "Fri, 29 May 2026 23:52:35 GMT"
+      ],
+      "etag": [
+        "W/\"62f-ZZbQbXxR5WOWlF/oI/TQw9PkEQg\""
+      ],
+      "permissions-policy": [
+        "geolocation=(), camera=()"
+      ],
+      "referrer-policy": [
+        "strict-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": "[REDACTED:set-cookie]",
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-frame-options": [
+        "SAMEORIGIN"
+      ],
+      "x-ratelimit-limit-requests": [
+        "1000"
+      ],
+      "x-ratelimit-remaining": [
+        "20"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "999"
+      ],
+      "x-ratelimit-reset-requests": [
+        "1780098813973"
+      ],
+      "x-ratelimit-resets": [
+        "1780098783941"
+      ],
+      "x-venice-balance-usd": [
+        "9.05842198"
+      ],
+      "x-venice-version": [
+        "outerface-api-server-us-east1-03948-9pd"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

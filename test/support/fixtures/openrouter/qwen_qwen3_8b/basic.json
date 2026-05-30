@@ -1,0 +1,137 @@
+{
+  "model_spec": "openrouter:qwen/qwen3-8b",
+  "provider": "openrouter",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6InF3ZW4vcXdlbjMtOGIiLCJuIjoxLCJyZWFzb25pbmdfZWZmb3J0IjoibG93Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+    },
+    "canonical_json": {
+      "max_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "qwen/qwen3-8b",
+      "n": 1,
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Hello! 😊 How can I assist you today? If you have any questions or need help with something, feel free to let me know!",
+            "reasoning": "Okay, the user said \"Hello world!\" and I need to respond appropriately. Let me think about how to handle this.\n\nFirst, \"Hello world!\" is a common greeting, so I should acknowledge it warmly. Maybe start with a friendly greeting back. Then, since it's a simple message, perhaps ask how I can assist them. That way, I invite them to share more details if they need help. I should keep the tone positive and open-ended. Let me check for any typos or errors. Yeah, that seems good. Alright, time to put it all together.",
+            "reasoning_details": [
+              {
+                "format": "unknown",
+                "index": 0,
+                "text": "Okay, the user said \"Hello world!\" and I need to respond appropriately. Let me think about how to handle this.\n\nFirst, \"Hello world!\" is a common greeting, so I should acknowledge it warmly. Maybe start with a friendly greeting back. Then, since it's a simple message, perhaps ask how I can assist them. That way, I invite them to share more details if they need help. I should keep the tone positive and open-ended. Let me check for any typos or errors. Yeah, that seems good. Alright, time to put it all together.",
+                "type": "reasoning.text"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "stop"
+        }
+      ],
+      "created": 1780097936,
+      "id": "gen-1780097936-W7A4ueLucCX9qJlTLFZ2",
+      "model": "qwen/qwen3-8b-04-28",
+      "object": "chat.completion",
+      "provider": "AtlasCloud",
+      "service_tier": null,
+      "system_fingerprint": null,
+      "usage": {
+        "completion_tokens": 151,
+        "completion_tokens_details": {
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "reasoning_tokens": 117
+        },
+        "cost": 6.095e-5,
+        "cost_details": {
+          "upstream_inference_completions_cost": 6.04e-5,
+          "upstream_inference_cost": 6.095e-5,
+          "upstream_inference_prompt_cost": 5.5e-7
+        },
+        "is_byok": false,
+        "prompt_tokens": 11,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 0,
+          "video_tokens": 0
+        },
+        "total_tokens": 162
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "X-Generation-Id,cf-ray"
+      ],
+      "cf-ray": [
+        "a03955e85a09928a-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 29 May 2026 23:38:57 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-generation-id": [
+        "gen-1780097936-W7A4ueLucCX9qJlTLFZ2"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

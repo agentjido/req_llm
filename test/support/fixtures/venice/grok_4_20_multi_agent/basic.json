@@ -1,0 +1,190 @@
+{
+  "model_spec": "venice:grok-4-20-multi-agent",
+  "provider": "venice",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Imdyb2stNC0yMC1tdWx0aS1hZ2VudCIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ2ZW5pY2VfcGFyYW1ldGVycyI6eyJkaXNhYmxlX3RoaW5raW5nIjpmYWxzZSwiZW5hYmxlX3dlYl9jaXRhdGlvbnMiOmZhbHNlLCJlbmFibGVfd2ViX3NjcmFwaW5nIjpmYWxzZSwiZW5hYmxlX3dlYl9zZWFyY2giOiJvZmYiLCJpbmNsdWRlX3NlYXJjaF9yZXN1bHRzX2luX3N0cmVhbSI6ZmFsc2UsImluY2x1ZGVfdmVuaWNlX3N5c3RlbV9wcm9tcHQiOnRydWUsInN0cmlwX3RoaW5raW5nX3Jlc3BvbnNlIjpmYWxzZX19"
+    },
+    "canonical_json": {
+      "max_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "grok-4-20-multi-agent",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0,
+      "venice_parameters": {
+        "disable_thinking": false,
+        "enable_web_citations": false,
+        "enable_web_scraping": false,
+        "enable_web_search": "off",
+        "include_search_results_in_stream": false,
+        "include_venice_system_prompt": true,
+        "strip_thinking_response": false
+      }
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.venice.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Hello, world! 🌍\n\nThe classic first words of a new program—I'm glad to receive them. What's on your mind today?",
+            "reasoning_content": "__ENCRYPTED_REASONING__mvNX9V0LLUZPB/ncoCqHl+QaoWO3V9xZkc9h+N+Y37FKSPXX+X0JcQG87BaC6EfWjxJrroI2dZAom8bp9TAYTEFR75sOwOWF4fxxGT2kTVWxm5R+uY5K81A8en5ZkHff066XEhgDjobu6yY1AROyYqrdqJ0jyK59nuy394bWi38WUekBwxv9MmGCX6wNojSrk5xfdm/HBsfwy/MOmA5Mbqyfsui1idlstlAZLe9MlhhNCqcyX37F/k2RmSnSn8qqaT9RH1ZhsTrkmD4oh3uFQ7+GKR6C6zOqRPholJI18tD4C19yTzQM0fmD88OeDpPro9+66Nnigbr+CTHry3VNLc9tNq99fVkKBLSA3lVuIfM8M8wbrYA7/JW49e/if9GMTufKsxkzrm8s7ee/0A2noa74YstPhKVLdLsfDtQdex61nMrZPYbgE5dSQfTSyQjoZUUVggT0Wf7vDstRojtcHx9EYSbQYZlueS5TG8bpwJLF7LkytbRoIpdxPX2zQXXDrbNheWtXTDvDltFJER00GCsSFfvh38OsJIa8vTqPabtGxZYr683ojkJQvYPyhz0D1EtOlTxsT6V7u+p7MlQJegU1x7JH7UqjxWaJUPVd6aK1BnhzoZMQKssdoKyOYgECpqF5pTMAbhsLBHr3xElk5x1iJiYOUpEyHgGOWy3IklTAVUEzWQuKvuOX9qtRpe7o+b9oU0Ftj0X+BYBzUBvIY3npdyrMvwkuzT8+VhVtYORgdx5C3GjDLWTxdE3wlECRthLHqr1SLBUfcXxEdetMmQYirKtOUFHFsyX77ANRYY29FB69pvbRcJYBBNmk1xNKAWx9IxK+C6clxFgT+SEc/dhM",
+            "reasoning_encrypted": true,
+            "refusal": null,
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1780098711,
+      "id": "425f1e50-a115-941d-97e2-46128b89a4e5",
+      "model": "grok-4-20-multi-agent",
+      "object": "chat.completion",
+      "usage": {
+        "cache_read_input_tokens": 10432,
+        "completion_tokens": 2167,
+        "completion_tokens_details": {
+          "reasoning_tokens": 2126
+        },
+        "prompt_tokens": 14191,
+        "prompt_tokens_details": {
+          "cached_tokens": 10432
+        },
+        "total_tokens": 16358
+      },
+      "venice_parameters": {
+        "disable_thinking": false,
+        "enable_e2ee": true,
+        "enable_web_citations": false,
+        "enable_web_scraping": false,
+        "enable_web_search": "off",
+        "enable_x_search": false,
+        "include_search_results_in_stream": false,
+        "include_venice_system_prompt": true,
+        "return_search_results_as_documents": false,
+        "strip_thinking_response": false,
+        "web_search_citations": []
+      }
+    },
+    "headers": {
+      "access-control-allow-credentials": [
+        "true"
+      ],
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "*"
+      ],
+      "cache-control": [
+        "no-store, no-cache, private, must-revalidate"
+      ],
+      "cdn-cache-control": [
+        "no-store"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a03968bb0822876c-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-security-policy": [
+        "default-src 'none'; frame-ancestors *; upgrade-insecure-requests"
+      ],
+      "content-type": [
+        "application/json; charset=utf-8"
+      ],
+      "date": [
+        "Fri, 29 May 2026 23:51:51 GMT"
+      ],
+      "etag": [
+        "W/\"740-ZWfuy8jFDYFZGHzNwwjfT2QdBxE\""
+      ],
+      "permissions-policy": [
+        "geolocation=(), camera=()"
+      ],
+      "referrer-policy": [
+        "strict-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": "[REDACTED:set-cookie]",
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-frame-options": [
+        "SAMEORIGIN"
+      ],
+      "x-ratelimit-limit-requests": [
+        "500"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "10000000"
+      ],
+      "x-ratelimit-remaining": [
+        "20"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "499"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "10000000"
+      ],
+      "x-ratelimit-reset-requests": [
+        "1780098767738"
+      ],
+      "x-ratelimit-reset-tokens": [
+        "1780098767739"
+      ],
+      "x-ratelimit-resets": [
+        "1780098737719"
+      ],
+      "x-venice-balance-usd": [
+        "9.08291994"
+      ],
+      "x-venice-version": [
+        "outerface-api-server-us-east1-03948-9pd"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

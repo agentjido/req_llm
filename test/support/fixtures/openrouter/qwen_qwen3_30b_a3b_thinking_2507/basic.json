@@ -1,4 +1,6 @@
 {
+  "model_spec": "openrouter:qwen/qwen3-30b-a3b-thinking-2507",
+  "provider": "openrouter",
   "request": {
     "body": {
       "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6InF3ZW4vcXdlbjMtMzBiLWEzYi10aGlua2luZy0yNTA3IiwibiI6MSwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
@@ -19,6 +21,9 @@
       "temperature": 0.0
     },
     "headers": {
+      "accept": [
+        "application/json"
+      ],
       "accept-encoding": [
         "gzip"
       ],
@@ -27,7 +32,7 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ]
     },
     "method": "post",
@@ -41,13 +46,13 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "\n\nHello! 😊 How can I assist you today?",
-            "reasoning": "Okay, the user said \"Hello world!\" which is a classic first program in programming. But since they're talking to me, maybe they're just greeting me. I should respond politely.\n\nFirst, I need to acknowledge their greeting. \"Hello world!\" is a common phrase, so I'll start with a friendly reply. Maybe say \"Hello! 😊\" to keep it warm.\n\nWait, they might be testing if I respond correctly. I should make sure my response is clear and helpful. Let me check if there's any hidden meaning, but it's probably just a greeting.\n\nI should also offer assistance. Maybe add something like \"How can I assist you today?\" to prompt them to ask for help. Keep it simple and open-ended.\n\nAvoid using any technical jargon since it's a greeting. Just be friendly and approachable. Let me put that together: \"Hello! 😊 How can I assist you today?\"\n\nWait, the user wrote \"Hello world!\" with an exclamation, so maybe they're referencing the programming term. But since they're talking to me, I'll treat it as a greeting. If they meant the programming thing, they'll clarify later.\n\nDouble-check for any errors. The response should be short, friendly, and inviting. Yeah, that's good. Let me go with that.\n",
+            "content": "Hello! 👋 That's the classic first program in programming! How can I assist you today? 😊",
+            "reasoning": "Okay, the user said \"Hello world!\" which is a classic programming greeting. Let me think about how to respond.\n\nFirst, I should acknowledge their message. \"Hello world!\" is often the first program people write in programming, so maybe they're testing if I'm a bot or just being playful.\n\nI need to keep it friendly and engaging. Maybe add a bit of humor or a programming reference. Let me check if there's a common response to \"Hello world!\" in tech communities.\n\nOh right, the classic \"Hello, World!\" program in many languages. I could mention that. But since they wrote it in lowercase, maybe they're not a programmer, so I shouldn't assume too much.\n\nWait, the user might be a beginner, so I should keep it simple. Just a friendly reply. Maybe add an emoji to keep it light.\n\nAlso, make sure to ask how I can help them. That way, it's not just a one-liner but opens the door for further conversation.\n\nLet me draft a response: \"Hello! 👋 That's the classic first program in programming! How can I assist you today? 😊\"\n\nWait, \"Hello world!\" is usually capitalized, but they wrote it lowercase. Maybe they're just typing casually. Doesn't matter, I'll respond to the message as is.\n\nCheck for any typos. \"Hello!\" with an exclamation, then the emoji. Yeah, that's good.\n\nMake sure it's not too long. Keep it concise. The user might just be testing, so a short, friendly reply is best.\n\nDouble-check the emoji usage. 👋 and 😊 are friendly and common. No issues there.\n\nOkay, that should work. Let me go with that.",
             "reasoning_details": [
               {
                 "format": "unknown",
                 "index": 0,
-                "text": "Okay, the user said \"Hello world!\" which is a classic first program in programming. But since they're talking to me, maybe they're just greeting me. I should respond politely.\n\nFirst, I need to acknowledge their greeting. \"Hello world!\" is a common phrase, so I'll start with a friendly reply. Maybe say \"Hello! 😊\" to keep it warm.\n\nWait, they might be testing if I respond correctly. I should make sure my response is clear and helpful. Let me check if there's any hidden meaning, but it's probably just a greeting.\n\nI should also offer assistance. Maybe add something like \"How can I assist you today?\" to prompt them to ask for help. Keep it simple and open-ended.\n\nAvoid using any technical jargon since it's a greeting. Just be friendly and approachable. Let me put that together: \"Hello! 😊 How can I assist you today?\"\n\nWait, the user wrote \"Hello world!\" with an exclamation, so maybe they're referencing the programming term. But since they're talking to me, I'll treat it as a greeting. If they meant the programming thing, they'll clarify later.\n\nDouble-check for any errors. The response should be short, friendly, and inviting. Yeah, that's good. Let me go with that.\n",
+                "text": "Okay, the user said \"Hello world!\" which is a classic programming greeting. Let me think about how to respond.\n\nFirst, I should acknowledge their message. \"Hello world!\" is often the first program people write in programming, so maybe they're testing if I'm a bot or just being playful.\n\nI need to keep it friendly and engaging. Maybe add a bit of humor or a programming reference. Let me check if there's a common response to \"Hello world!\" in tech communities.\n\nOh right, the classic \"Hello, World!\" program in many languages. I could mention that. But since they wrote it in lowercase, maybe they're not a programmer, so I shouldn't assume too much.\n\nWait, the user might be a beginner, so I should keep it simple. Just a friendly reply. Maybe add an emoji to keep it light.\n\nAlso, make sure to ask how I can help them. That way, it's not just a one-liner but opens the door for further conversation.\n\nLet me draft a response: \"Hello! 👋 That's the classic first program in programming! How can I assist you today? 😊\"\n\nWait, \"Hello world!\" is usually capitalized, but they wrote it lowercase. Maybe they're just typing casually. Doesn't matter, I'll respond to the message as is.\n\nCheck for any typos. \"Hello!\" with an exclamation, then the emoji. Yeah, that's good.\n\nMake sure it's not too long. Keep it concise. The user might just be testing, so a short, friendly reply is best.\n\nDouble-check the emoji usage. 👋 and 😊 are friendly and common. No issues there.\n\nOkay, that should work. Let me go with that.",
                 "type": "reasoning.text"
               }
             ],
@@ -57,23 +62,46 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1762105077,
-      "id": "gen-1762105077-q3CssMkJIGZurKynZhFS",
+      "created": 1780097926,
+      "id": "gen-1780097926-X9Hu3wXPdwVxTjWUWBZz",
       "model": "qwen/qwen3-30b-a3b-thinking-2507",
       "object": "chat.completion",
-      "provider": "Nebius",
+      "provider": "AtlasCloud",
+      "service_tier": null,
+      "system_fingerprint": null,
       "usage": {
-        "completion_tokens": 282,
-        "prompt_tokens": 13,
-        "total_tokens": 295
+        "completion_tokens": 379,
+        "completion_tokens_details": {
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "reasoning_tokens": 352
+        },
+        "cost": 1.5248e-4,
+        "cost_details": {
+          "upstream_inference_completions_cost": 1.516e-4,
+          "upstream_inference_cost": 1.5248e-4,
+          "upstream_inference_prompt_cost": 8.8e-7
+        },
+        "is_byok": false,
+        "prompt_tokens": 11,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 0,
+          "video_tokens": 0
+        },
+        "total_tokens": 390
       }
     },
     "headers": {
       "access-control-allow-origin": [
         "*"
       ],
+      "access-control-expose-headers": [
+        "X-Generation-Id,cf-ray"
+      ],
       "cf-ray": [
-        "9985671d9cea514c-ORD"
+        "a03955aab9ddeb60-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -82,7 +110,7 @@
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:37:57 GMT"
+        "Fri, 29 May 2026 23:38:48 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
@@ -96,13 +124,14 @@
       "transfer-encoding": [
         "chunked"
       ],
-      "vary": [
-        "Accept-Encoding"
-      ],
       "x-content-type-options": [
         "nosniff"
+      ],
+      "x-generation-id": [
+        "gen-1780097926-X9Hu3wXPdwVxTjWUWBZz"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

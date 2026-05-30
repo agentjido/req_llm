@@ -1,0 +1,104 @@
+{
+  "model_spec": "zai_coding_plan:glm-5.1",
+  "provider": "zai_coding_plan",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImdsbS01LjEiLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+    },
+    "canonical_json": {
+      "max_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "glm-5.1",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.z.ai/api/coding/paas/v4/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "content": "Hello! How can I help you today?",
+            "reasoning_content": "1.  **Analyze the Input:** The user said \"Hello world!\". This is a very standard, generic greeting, often used as a first test message.\n2.  **Determine the Intent:** The user is initiating a conversation or testing the system. They might want a greeting back, an introduction, or just confirmation that I'm active.\n3.  **Formulate a Response:**\n    *   Acknowledge the greeting (\"Hello!\", \"Hi there!\", \"Greetings!\").\n    *   Offer assistance (\"How can I help you today?\", \"What's on your mind?\").\n    *   Keep it friendly, concise, and open-ended.\n4.  **Draft Options:**\n    *   *Option 1:* Hello! How can I help you today?\n    *   *Option 2:* Hi there! Welcome. What can I do for you?\n    *   *Option 3:* Hello world to you too! How can I assist you today?\n5.  **Select the Best Option:** Option 1 or 2 is standard and polite. Option 3 is slightly playful. Let's go with a friendly, standard AI greeting.\n    \"Hello! How can I help you today?\" (Simple, effective). Let's add a bit of warmth. \"Hello! How can I help you today?\" is perfect.",
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1780099900,
+      "id": "20260530081133cc2e392e6a0d4a68",
+      "model": "glm-5.1",
+      "object": "chat.completion",
+      "request_id": "20260530081133cc2e392e6a0d4a68",
+      "usage": {
+        "completion_tokens": 285,
+        "completion_tokens_details": {
+          "reasoning_tokens": 274
+        },
+        "prompt_tokens": 8,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "total_tokens": 293
+      }
+    },
+    "headers": {
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json; charset=UTF-8"
+      ],
+      "date": [
+        "Sat, 30 May 2026 00:11:40 GMT"
+      ],
+      "keep-alive": [
+        "timeout=6"
+      ],
+      "server": [
+        "nginx"
+      ],
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding",
+        "Origin",
+        "Access-Control-Request-Method",
+        "Access-Control-Request-Headers",
+        "Origin",
+        "Access-Control-Request-Method",
+        "Access-Control-Request-Headers"
+      ],
+      "x-log-id": [
+        "20260530081133cc2e392e6a0d4a68"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

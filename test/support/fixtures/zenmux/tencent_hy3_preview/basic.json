@@ -1,0 +1,104 @@
+{
+  "model_spec": "zenmux:tencent/hy3-preview",
+  "provider": "zenmux",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjIwMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiSGVsbG8gd29ybGQhIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoidGVuY2VudC9oeTMtcHJldmlldyIsInJlYXNvbmluZ19lZmZvcnQiOiJsb3ciLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+    },
+    "canonical_json": {
+      "max_completion_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "tencent/hy3-preview",
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://zenmux.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "content": "世界你好呀～ 👋 这是要开启什么新项目，还是单纯来打个招呼呀？😄",
+            "reasoning": "嗯，用户发来“Hello world!”，这是编程中最经典的入门语句，通常用来测试环境或表达初学者的问候。可能用户只是想打个招呼，或者想看看我的反应。\n\n既然没有具体问题，我可以用轻松友好的方式回应，同时带点技术梗，比如提到编程传统。这样既符合语境，又能保持互动性。\n\n想到了用“世界你好呀～”来呼应原句，再加一句关于编程的调侃，最后留个开放结尾让用户决定下一步。这样既简洁又有温度。",
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1780099456,
+      "id": "f88378b491d44554874d49fb1231db90",
+      "model": "tencent/hy3-preview",
+      "object": "chat.completion",
+      "usage": {
+        "completion_tokens": 133,
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "prompt_tokens": 15,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "total_tokens": 148
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "X-ZenMux-RequestId"
+      ],
+      "cf-ray": [
+        "a0397ae53d2a89e9-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Sat, 30 May 2026 00:04:19 GMT"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-zenmux-requestid": [
+        "f88378b491d44554874d49fb1231db90"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

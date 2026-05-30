@@ -1,4 +1,6 @@
 {
+  "model_spec": "openrouter:qwen/qwen3-next-80b-a3b-thinking",
+  "provider": "openrouter",
   "request": {
     "body": {
       "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6InF3ZW4vcXdlbjMtbmV4dC04MGItYTNiLXRoaW5raW5nIiwibiI6MSwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
@@ -19,6 +21,9 @@
       "temperature": 0.0
     },
     "headers": {
+      "accept": [
+        "application/json"
+      ],
       "accept-encoding": [
         "gzip"
       ],
@@ -27,7 +32,7 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ]
     },
     "method": "post",
@@ -57,19 +62,34 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1762105044,
-      "id": "gen-1762105044-ZTEXHQvVBP1EV9BpYtUM",
-      "model": "qwen/qwen3-next-80b-a3b-thinking",
+      "created": 1780097982,
+      "id": "gen-1780097982-hQiFVsY7WzqoJeRKGVSN",
+      "model": "qwen/qwen3-next-80b-a3b-thinking-2509",
       "object": "chat.completion",
-      "provider": "Novita",
-      "system_fingerprint": "",
+      "provider": "Alibaba",
+      "service_tier": null,
+      "system_fingerprint": null,
       "usage": {
         "completion_tokens": 118,
         "completion_tokens_details": {
+          "audio_tokens": 0,
+          "image_tokens": 0,
           "reasoning_tokens": 102
         },
+        "cost": 9.31125e-5,
+        "cost_details": {
+          "upstream_inference_completions_cost": 9.204e-5,
+          "upstream_inference_cost": 9.31125e-5,
+          "upstream_inference_prompt_cost": 1.0725e-6
+        },
+        "is_byok": false,
         "prompt_tokens": 11,
-        "prompt_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 0,
+          "video_tokens": 0
+        },
         "total_tokens": 129
       }
     },
@@ -77,8 +97,11 @@
       "access-control-allow-origin": [
         "*"
       ],
+      "access-control-expose-headers": [
+        "X-Generation-Id,cf-ray"
+      ],
       "cf-ray": [
-        "9985664dae7bff5c-ORD"
+        "a0395704a8292234-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -87,7 +110,7 @@
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:37:24 GMT"
+        "Fri, 29 May 2026 23:39:42 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
@@ -101,13 +124,14 @@
       "transfer-encoding": [
         "chunked"
       ],
-      "vary": [
-        "Accept-Encoding"
-      ],
       "x-content-type-options": [
         "nosniff"
+      ],
+      "x-generation-id": [
+        "gen-1780097982-hQiFVsY7WzqoJeRKGVSN"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

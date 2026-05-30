@@ -1,0 +1,199 @@
+{
+  "model_spec": "venice:openai-gpt-54",
+  "provider": "venice",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Im9wZW5haS1ncHQtNTQiLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMCwidmVuaWNlX3BhcmFtZXRlcnMiOnsiZGlzYWJsZV90aGlua2luZyI6ZmFsc2UsImVuYWJsZV93ZWJfY2l0YXRpb25zIjpmYWxzZSwiZW5hYmxlX3dlYl9zY3JhcGluZyI6ZmFsc2UsImVuYWJsZV93ZWJfc2VhcmNoIjoib2ZmIiwiaW5jbHVkZV9zZWFyY2hfcmVzdWx0c19pbl9zdHJlYW0iOmZhbHNlLCJpbmNsdWRlX3ZlbmljZV9zeXN0ZW1fcHJvbXB0Ijp0cnVlLCJzdHJpcF90aGlua2luZ19yZXNwb25zZSI6ZmFsc2V9fQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "openai-gpt-54",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0,
+      "venice_parameters": {
+        "disable_thinking": false,
+        "enable_web_citations": false,
+        "enable_web_scraping": false,
+        "enable_web_search": "off",
+        "include_search_results_in_stream": false,
+        "include_venice_system_prompt": true,
+        "strip_thinking_response": false
+      }
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.venice.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Hello world! How can I help?",
+            "reasoning_content": "**Formulating a greeting**\n\nI need to craft a simple greeting, making sure to respond in the same language as the prompt, which is English. Although I could identify as GPT-5.4 if asked, it's not necessary for this response. I'm focusing on keeping my reply concise to ensure clarity. It's all about being friendly and straightforward!",
+            "reasoning_details": [
+              {
+                "format": "openai-responses-v1",
+                "index": 0,
+                "summary": "**Formulating a greeting**\n\nI need to craft a simple greeting, making sure to respond in the same language as the prompt, which is English. Although I could identify as GPT-5.4 if asked, it's not necessary for this response. I'm focusing on keeping my reply concise to ensure clarity. It's all about being friendly and straightforward!",
+                "type": "reasoning.summary"
+              },
+              {
+                "data": "gAAAAABqGibvgXkMTax-WtHlLlj-yYJfflOpvHHz6MlptPK-yuyAwJFvwoz3kCUuiTcMGA3TOdHJ0ju-wNe-Td8qqzTslEeLsAB_9JFMoKgy2-OA7zt04mRn1z5bY1ns2fKtP6PfVxKhoCmyE2BhAnP1W6ILqE0Dom-wY7ox-Ggg4dq5nMw2zcER8dvefW39CPuCH4dHmPsCFJSsEneEW7sb2XWpbbAKMJNUPQHMDx17pYCHe6rKgZDXuoOOWyHPvQhjBXvTdnQa2d00wKfQ-eceU3E7JjFkYmsRu_o2suKvcXGdRT1uEfh9ZbHgmCSUN6oJq5MzuVnoRPyUFe_C7s4DecBt301cLViXp14qx4Uh7BqG0iBiDDl3ppbpQ5IQ5RsZr7IW28XM-weJ2WeX9KnD4Zk89gJJxBngZ9AknWJ66uYx3QT5UO51565gk4_zdJQ2BAnYRTC7tdiegbHU7gS_GX7LWkGI6Q-GocaFqf91vCTp_0Sdyz3yRmt1_R80gZOjNvMpuPGPGS91laFoL1FwXRG6rJO2b3EolsjsTAfFFatsw9IffWzUXMng8AypdjpmNQN1D1BkHHhfc3vuQUCjWj6nhxfuokvSEd4H-VxL-LJ4ZcaLJDFdyBzGiIwNXc8K5SN_vuOZVCdJiu8y5eSwd6IUjCE9q7VxSZkahHocZIpmupElGhzc1-V1X_N2FWutjSpAxrY6XXgUh2StaoytyLBzWHl_xvd3Y1mBzS0YTiDDk2KYEI1gG8fEqLM84x1Ufa2dybGGxz8RLF4HWpNdnL35eP3CNe_mag8F6g4R5aexnp14Pb1PCXRJ8oa9ahywUJCUxSoQW9GgQ-mKDTOzO-ncyMCSRl5-frdh1RwCzc8g2Fq-DjaHVznDY2rywbtoPQzUAlieJUAmJee6hQrUV-ScJpAajcpK9hfyh9G1t0lHGkgEIeDvgV7ppF2a16292b1ofUVLeMOrLTBeYIo5iIMLBUYLvtnVZ-lpd4aZ35E0caFTmUJewLdpss3sykOWXKc5PSaBhDKFziAtfyGUpG7uDb6coTLIazMaVgyAlDPfHPlsQ_9f5qLJ6TgcmyxM5vkZN6OdcMeP68ONf2BkIRarHbJDCHdVed-cb8PhoVyYKPZ5No4=",
+                "format": "openai-responses-v1",
+                "id": "rs_0da6fd561ad211e3016a1a26edc4b08196a20e478291c9062b",
+                "index": 1,
+                "type": "reasoning.encrypted"
+              }
+            ],
+            "reasoning_encrypted": true,
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "completed"
+        }
+      ],
+      "created": 1780098797,
+      "id": "gen-1780098797-yF8o6cbRHY9rAqHQGqmK",
+      "model": "openai-gpt-54",
+      "object": "chat.completion",
+      "service_tier": "default",
+      "usage": {
+        "completion_tokens": 51,
+        "completion_tokens_details": {
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "reasoning_tokens": 37
+        },
+        "prompt_tokens": 1517,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "total_tokens": 1568
+      },
+      "venice_parameters": {
+        "disable_thinking": false,
+        "enable_e2ee": true,
+        "enable_web_citations": false,
+        "enable_web_scraping": false,
+        "enable_web_search": "off",
+        "enable_x_search": false,
+        "include_search_results_in_stream": false,
+        "include_venice_system_prompt": true,
+        "return_search_results_as_documents": false,
+        "strip_thinking_response": false,
+        "web_search_citations": []
+      }
+    },
+    "headers": {
+      "access-control-allow-credentials": [
+        "true"
+      ],
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "*"
+      ],
+      "cache-control": [
+        "no-store, no-cache, private, must-revalidate"
+      ],
+      "cdn-cache-control": [
+        "no-store"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a0396ae98aa5eade-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-security-policy": [
+        "default-src 'none'; frame-ancestors *; upgrade-insecure-requests"
+      ],
+      "content-type": [
+        "application/json; charset=utf-8"
+      ],
+      "date": [
+        "Fri, 29 May 2026 23:53:19 GMT"
+      ],
+      "etag": [
+        "W/\"bb5-aqDxismnBryukaWRo5TmOWiY7Cs\""
+      ],
+      "permissions-policy": [
+        "geolocation=(), camera=()"
+      ],
+      "referrer-policy": [
+        "strict-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": "[REDACTED:set-cookie]",
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-frame-options": [
+        "SAMEORIGIN"
+      ],
+      "x-ratelimit-limit-requests": [
+        "1000"
+      ],
+      "x-ratelimit-remaining": [
+        "20"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "999"
+      ],
+      "x-ratelimit-reset-requests": [
+        "1780098857121"
+      ],
+      "x-ratelimit-resets": [
+        "1780098827106"
+      ],
+      "x-venice-balance-usd": [
+        "9.04599524"
+      ],
+      "x-venice-version": [
+        "outerface-api-server-us-east1-03948-9pd"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

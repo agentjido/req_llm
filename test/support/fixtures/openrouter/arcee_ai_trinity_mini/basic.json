@@ -1,0 +1,137 @@
+{
+  "model_spec": "openrouter:arcee-ai/trinity-mini",
+  "provider": "openrouter",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImFyY2VlLWFpL3RyaW5pdHktbWluaSIsIm4iOjEsInJlYXNvbmluZ19lZmZvcnQiOiJsb3ciLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+    },
+    "canonical_json": {
+      "max_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "arcee-ai/trinity-mini",
+      "n": 1,
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "\n\nHello! How can Ihelp you today?",
+            "reasoning": "Okay, the user just said \"Hello world!\" That's a pretty standard greeting. Let me think about how to respond. \n\nHmm, the user might be testing if I can handle simple interactions. Or maybe they're just starting a conversation. Since it's a common phrase, they probably don't need a deep response. \n\nI should keep it friendly and open-ended. A simple \"Hello!\" would be polite. Then I can ask a question to encourage them to share more. That way, the conversation can flow naturally. \n\nWait, should I add an emoji? Maybe a smiley face to keep it light. Yeah, that would make the response more approachable. \n\nSo the plan is: reply with \"Hello!\" and then ask \"How can I help you today?\" That covers the basics and invites further interaction. \n\nI wonder if the user is expecting something else. But since they didn't specify, sticking to a standard response seems safe. If they need something else, they'll probably say so next.\n",
+            "reasoning_details": [
+              {
+                "format": "unknown",
+                "index": 0,
+                "text": "Okay, the user just said \"Hello world!\" That's a pretty standard greeting. Let me think about how to respond. \n\nHmm, the user might be testing if I can handle simple interactions. Or maybe they're just starting a conversation. Since it's a common phrase, they probably don't need a deep response. \n\nI should keep it friendly and open-ended. A simple \"Hello!\" would be polite. Then I can ask a question to encourage them to share more. That way, the conversation can flow naturally. \n\nWait, should I add an emoji? Maybe a smiley face to keep it light. Yeah, that would make the response more approachable. \n\nSo the plan is: reply with \"Hello!\" and then ask \"How can I help you today?\" That covers the basics and invites further interaction. \n\nI wonder if the user is expecting something else. But since they didn't specify, sticking to a standard response seems safe. If they need something else, they'll probably say so next.\n",
+                "type": "reasoning.text"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "stop"
+        }
+      ],
+      "created": 1780100031,
+      "id": "gen-1780100031-YGVn0wBqImEtD98DdHLm",
+      "model": "arcee-ai/trinity-mini-20251201",
+      "object": "chat.completion",
+      "provider": "Clarifai",
+      "service_tier": null,
+      "system_fingerprint": null,
+      "usage": {
+        "completion_tokens": 216,
+        "completion_tokens_details": {
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "reasoning_tokens": 240
+        },
+        "cost": 3.2985e-5,
+        "cost_details": {
+          "upstream_inference_completions_cost": 3.24e-5,
+          "upstream_inference_cost": 3.2985e-5,
+          "upstream_inference_prompt_cost": 5.85e-7
+        },
+        "is_byok": false,
+        "prompt_tokens": 13,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 0,
+          "video_tokens": 0
+        },
+        "total_tokens": 229
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "X-Generation-Id,cf-ray"
+      ],
+      "cf-ray": [
+        "a039890f5dbcf849-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Sat, 30 May 2026 00:13:52 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-generation-id": [
+        "gen-1780100031-YGVn0wBqImEtD98DdHLm"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

@@ -1,0 +1,116 @@
+{
+  "model_spec": "fireworks_ai:accounts/fireworks/models/glm-5p1",
+  "provider": "fireworks_ai",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImFjY291bnRzL2ZpcmV3b3Jrcy9tb2RlbHMvZ2xtLTVwMSIsInJlYXNvbmluZ19lZmZvcnQiOiJsb3ciLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+    },
+    "canonical_json": {
+      "max_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "accounts/fireworks/models/glm-5p1",
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.fireworks.ai/inference/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "content": "Hello there! How can I help you today?",
+            "reasoning_content": "1.  **Analyze the Input:** The user said \"Hello world!\". This is a classic, simple greeting, often used as the first program output in coding, but also just a standard friendly greeting.\n2.  **Determine the Intent:** The user is initiating a conversation, testing the system, or just being friendly.\n3.  **Formulate the Response:**\n    *   Acknowledge the greeting.\n    *   Match the friendly tone.\n    *   Offer assistance.\n    *   *Self-Correction/Refinement:* Keep it brief and welcoming. \"Hello! How can I help you today?\" or \"Hello world to you too! How can I assist you today?\" are good options. Adding a slight nod to the programming origin could be fun, but keeping it simple is usually best unless context demands otherwise. Let's go with a friendly, helpful, and slightly enthusiastic response.\n4.  **Draft the Response:** \"Hello! How can I help you today?\" (Simple, effective). Or \"Hello world! How can I assist you today?\" (Mirrors their greeting). Let's mirror it slightly.\n5.  **Final Polish:** \"Hello! How can I help you today?\" is the standard, universally acceptable response. Let's add a tiny bit of personality: \"Hello there! How can I help you today?\"",
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1780097376,
+      "id": "chatcmpl-805c4441556643559a56dc251ca902cd",
+      "model": "accounts/fireworks/models/glm-5p1",
+      "object": "chat.completion",
+      "usage": {
+        "completion_tokens": 288,
+        "prompt_tokens": 8,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "total_tokens": 296
+      }
+    },
+    "headers": {
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 29 May 2026 23:29:34 GMT"
+      ],
+      "fireworks-cached-prompt-tokens": [
+        "0"
+      ],
+      "fireworks-prompt-tokens": [
+        "8"
+      ],
+      "fireworks-sampling-options": [
+        "{\"max_tokens\": 2000, \"temperature\": 0.0, \"top_k\": 0, \"top_p\": 0.95, \"min_p\": 0.0, \"typical_p\": 1.0, \"frequency_penalty\": 0.0, \"presence_penalty\": 0.0, \"repetition_penalty\": 1.0, \"mirostat_target\": null, \"mirostat_lr\": 0.1, \"cycle_multiplier\": 0.0, \"cycle_base\": 0.0, \"cycle_allowed_length\": 0, \"cycle_sequence_breakers\": []}"
+      ],
+      "fireworks-server-processing-time": [
+        "10.762"
+      ],
+      "fireworks-server-time-to-first-token": [
+        "0.456"
+      ],
+      "fireworks-speculation-prompt-matched-tokens": [
+        "0"
+      ],
+      "server": [
+        "istio-envoy"
+      ],
+      "vary": [
+        "Origin"
+      ],
+      "via": [
+        "1.1 google"
+      ],
+      "x-ratelimit-limit-tokens-prompt": [
+        "3600000"
+      ],
+      "x-ratelimit-over-limit": [
+        "no"
+      ],
+      "x-ratelimit-remaining-tokens-prompt": [
+        "3599992"
+      ],
+      "x-request-id": [
+        "chatcmpl-805c4441556643559a56dc251ca902cd"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

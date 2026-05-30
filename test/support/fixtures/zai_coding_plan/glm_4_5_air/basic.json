@@ -1,0 +1,101 @@
+{
+  "model_spec": "zai_coding_plan:glm-4.5-air",
+  "provider": "zai_coding_plan",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImdsbS00LjUtYWlyIiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+    },
+    "canonical_json": {
+      "max_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "glm-4.5-air",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.z.ai/api/coding/paas/v4/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "content": "Hello! 😊 It's great to hear from you! How can I assist you today? Whether you need help with coding, ideas, creative writing, or just want to chat, I'm here to help. What's on your mind?",
+            "reasoning_content": "\nWe are going to output \"Hello world!\" as per the user's message.\n Since the user just said \"Hello world!\", we can respond by greeting them and perhaps extending the conversation.\n Let's respond with a friendly greeting and an open-ended question to encourage further interaction.",
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1780099843,
+      "id": "20260530081040a40ae97121d64a33",
+      "model": "glm-4.5-air",
+      "object": "chat.completion",
+      "request_id": "20260530081040a40ae97121d64a33",
+      "usage": {
+        "completion_tokens": 107,
+        "prompt_tokens": 8,
+        "prompt_tokens_details": {
+          "cached_tokens": 4
+        },
+        "total_tokens": 115
+      }
+    },
+    "headers": {
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json; charset=UTF-8"
+      ],
+      "date": [
+        "Sat, 30 May 2026 00:10:43 GMT"
+      ],
+      "keep-alive": [
+        "timeout=6"
+      ],
+      "server": [
+        "nginx"
+      ],
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding",
+        "Origin",
+        "Access-Control-Request-Method",
+        "Access-Control-Request-Headers",
+        "Origin",
+        "Access-Control-Request-Method",
+        "Access-Control-Request-Headers"
+      ],
+      "x-log-id": [
+        "20260530081040a40ae97121d64a33"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

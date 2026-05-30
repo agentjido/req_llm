@@ -1,0 +1,102 @@
+{
+  "model_spec": "zenmux:baidu/ernie-5.0-thinking-preview",
+  "provider": "zenmux",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjIwMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiSGVsbG8gd29ybGQhIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiYmFpZHUvZXJuaWUtNS4wLXRoaW5raW5nLXByZXZpZXciLCJyZWFzb25pbmdfZWZmb3J0IjoibG93Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+    },
+    "canonical_json": {
+      "max_completion_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "baidu/ernie-5.0-thinking-preview",
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://zenmux.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "flag": 0,
+          "index": 0,
+          "message": {
+            "content": "Hello world! 👋 \n\nThe classic greeting! How can I help you today?",
+            "reasoning": "The user has sent a simple greeting: \"Hello world!\"\n\nThis is a classic programming greeting, often the first program people write. I should respond in a friendly, welcoming way. I can acknowledge the programming reference if I want, or just respond warmly.\n\nI'll keep it simple and friendly.",
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1780098975,
+      "id": "67471cdaaeb24f26ae60187120a90e5d",
+      "model": "baidu/ernie-5.0-thinking-preview",
+      "object": "chat.completion",
+      "usage": {
+        "completion_tokens": 86,
+        "completion_tokens_details": {
+          "reasoning_tokens": 64
+        },
+        "prompt_tokens": 3,
+        "total_tokens": 89
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "X-ZenMux-RequestId"
+      ],
+      "cf-ray": [
+        "a0396f370dbaeae6-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 29 May 2026 23:56:20 GMT"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-zenmux-requestid": [
+        "67471cdaaeb24f26ae60187120a90e5d"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

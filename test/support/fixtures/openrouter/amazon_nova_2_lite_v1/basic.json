@@ -1,0 +1,129 @@
+{
+  "model_spec": "openrouter:amazon/nova-2-lite-v1",
+  "provider": "openrouter",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImFtYXpvbi9ub3ZhLTItbGl0ZS12MSIsIm4iOjEsInJlYXNvbmluZ19lZmZvcnQiOiJsb3ciLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+    },
+    "canonical_json": {
+      "max_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "amazon/nova-2-lite-v1",
+      "n": 1,
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "### Hello! 👋  \n\nHow can I help you today? Whether you have questions, need information, want to chat about a topic, or are just exploring—I'm here for you!  \n\n**Examples of what you can ask me:**  \n- Quick facts (\"How far is the Moon from Earth?\")  \n- Creative ideas (\"Give me a story starter about a lost treasure\")  \n- Problem-solving (\"How to organize digital photos efficiently?\")  \n- Learning (\"Explain photosynthesis in simple terms\")  \n\nJust let me know! 💬✨",
+            "reasoning": null,
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "end_turn"
+        }
+      ],
+      "created": 1780099992,
+      "id": "gen-1780099992-tHO3QkfBF07TC20YzXpc",
+      "model": "amazon/nova-2-lite-v1",
+      "object": "chat.completion",
+      "provider": "Amazon Bedrock",
+      "service_tier": null,
+      "system_fingerprint": null,
+      "usage": {
+        "completion_tokens": 244,
+        "completion_tokens_details": {
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "reasoning_tokens": 3
+        },
+        "cost": 6.397e-4,
+        "cost_details": {
+          "upstream_inference_completions_cost": 6.1e-4,
+          "upstream_inference_cost": 6.397e-4,
+          "upstream_inference_prompt_cost": 2.97e-5
+        },
+        "is_byok": false,
+        "prompt_tokens": 99,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 0,
+          "video_tokens": 0
+        },
+        "total_tokens": 343
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "X-Generation-Id,cf-ray"
+      ],
+      "cf-ray": [
+        "a03988198f51ead2-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Sat, 30 May 2026 00:13:13 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-generation-id": [
+        "gen-1780099992-tHO3QkfBF07TC20YzXpc"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

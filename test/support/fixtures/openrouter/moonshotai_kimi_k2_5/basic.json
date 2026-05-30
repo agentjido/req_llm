@@ -1,0 +1,137 @@
+{
+  "model_spec": "openrouter:moonshotai/kimi-k2.5",
+  "provider": "openrouter",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Im1vb25zaG90YWkva2ltaS1rMi41IiwibiI6MSwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "moonshotai/kimi-k2.5",
+      "n": 1,
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Hello! How can I help you today?",
+            "reasoning": "The user said \"Hello world!\". This is a simple greeting. I should respond in a friendly and helpful manner. Since there's no specific question or task, I can acknowledge the greeting and offer assistance.\n\nI should:\n1. Greet them back\n2. Ask how I can help them today\n3. Keep it concise and welcoming\n\nThis is a straightforward interaction, so I don't need to overthink it. Just a warm, helpful response.",
+            "reasoning_details": [
+              {
+                "format": "unknown",
+                "index": 0,
+                "text": "The user said \"Hello world!\". This is a simple greeting. I should respond in a friendly and helpful manner. Since there's no specific question or task, I can acknowledge the greeting and offer assistance.\n\nI should:\n1. Greet them back\n2. Ask how I can help them today\n3. Keep it concise and welcoming\n\nThis is a straightforward interaction, so I don't need to overthink it. Just a warm, helpful response.",
+                "type": "reasoning.text"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "stop"
+        }
+      ],
+      "created": 1780098304,
+      "id": "gen-1780098304-WZHz4odhPTG2sjCBHKmi",
+      "model": "moonshotai/kimi-k2.5-0127",
+      "object": "chat.completion",
+      "provider": "Moonshot AI",
+      "service_tier": null,
+      "system_fingerprint": "fpv0_692dab17",
+      "usage": {
+        "completion_tokens": 103,
+        "completion_tokens_details": {
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "reasoning_tokens": 107
+        },
+        "cost": 3.15e-4,
+        "cost_details": {
+          "upstream_inference_completions_cost": 3.09e-4,
+          "upstream_inference_cost": 3.15e-4,
+          "upstream_inference_prompt_cost": 6.0e-6
+        },
+        "is_byok": false,
+        "prompt_tokens": 10,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 0,
+          "video_tokens": 0
+        },
+        "total_tokens": 113
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "X-Generation-Id,cf-ray"
+      ],
+      "cf-ray": [
+        "a0395ee0dc3bd539-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 29 May 2026 23:45:04 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-generation-id": [
+        "gen-1780098304-WZHz4odhPTG2sjCBHKmi"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

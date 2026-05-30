@@ -1,0 +1,158 @@
+{
+  "model_spec": "cerebras:zai-glm-4.7",
+  "provider": "cerebras",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjo1MCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJIZWxsbyB3b3JsZCEiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJ6YWktZ2xtLTQuNyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 50,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "zai-glm-4.7",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.cerebras.ai/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "length",
+          "index": 0,
+          "message": {
+            "reasoning": "Let me consider how to respond to this classic programming greeting.\n\nThe user has started with \"Hello world!\" - the most traditional first program in coding. This calls for a warm and welcoming response that acknowledges this programming tradition.\n\nI should respond in a friendly",
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1780097224,
+      "id": "chatcmpl-58f4e7e4-b50f-4bc2-adda-5ce40058d05d",
+      "model": "zai-glm-4.7",
+      "object": "chat.completion",
+      "system_fingerprint": "fp_a33c042689e969567008",
+      "time_info": {
+        "completion_time": 0.095236305,
+        "created": 1780097224.3500733,
+        "prompt_time": 0.002641812,
+        "queue_time": 1.4287e-4,
+        "total_time": 0.09952449798583984
+      },
+      "usage": {
+        "completion_tokens": 50,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "reasoning_tokens": 50,
+          "rejected_prediction_tokens": 0
+        },
+        "prompt_tokens": 8,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "total_tokens": 58
+      }
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=86400"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a0394483ef57ddf4-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 29 May 2026 23:27:04 GMT"
+      ],
+      "inference-id": [
+        "chatcmpl-58f4e7e4-b50f-4bc2-adda-5ce40058d05d"
+      ],
+      "referrer-policy": [
+        "strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": "[REDACTED:set-cookie]",
+      "strict-transport-security": [
+        "max-age=15552000; includeSubDomains; preload"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-ratelimit-limit-requests-day": [
+        "720000"
+      ],
+      "x-ratelimit-limit-requests-hour": [
+        "30000"
+      ],
+      "x-ratelimit-limit-requests-minute": [
+        "500"
+      ],
+      "x-ratelimit-limit-tokens-day": [
+        "720000000"
+      ],
+      "x-ratelimit-limit-tokens-hour": [
+        "30000000"
+      ],
+      "x-ratelimit-limit-tokens-minute": [
+        "500000"
+      ],
+      "x-ratelimit-remaining-requests-day": [
+        "719999"
+      ],
+      "x-ratelimit-remaining-requests-hour": [
+        "29999"
+      ],
+      "x-ratelimit-remaining-requests-minute": [
+        "499"
+      ],
+      "x-ratelimit-remaining-tokens-day": [
+        "719999947"
+      ],
+      "x-ratelimit-remaining-tokens-hour": [
+        "29999947"
+      ],
+      "x-ratelimit-remaining-tokens-minute": [
+        "499947"
+      ],
+      "x-request-id": [
+        "a0394483ef57ddf4-ORD"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

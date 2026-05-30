@@ -1,0 +1,111 @@
+{
+  "model_spec": "zenmux:minimax/minimax-m2.5",
+  "provider": "zenmux",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjIwMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiSGVsbG8gd29ybGQhIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoibWluaW1heC9taW5pbWF4LW0yLjUiLCJyZWFzb25pbmdfZWZmb3J0IjoibG93Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+    },
+    "canonical_json": {
+      "max_completion_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "minimax/minimax-m2.5",
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://zenmux.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "base_resp": {
+        "status_code": 0,
+        "status_msg": "success"
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "content": "Hello world! 👋\n\nGreat to meet you! How can I help you today? Whether it's coding, writing, answering questions, or working through any problems – I'm here to assist.",
+            "reasoning": "The user has just said \"Hello world!\" which is a classic programming greeting and a simple, friendly greeting overall. This is not a complex question or request - it's just a casual greeting.\n\nI should respond in kind with a friendly greeting and perhaps offer to help them with whatever they might need. I'll keep it brief and warm.",
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1780099150,
+      "id": "051375691a384b0f9193c7ff0aa8d704",
+      "input_sensitive": false,
+      "input_sensitive_type": 0,
+      "model": "minimax/minimax-m2.5",
+      "object": "chat.completion",
+      "output_sensitive": false,
+      "output_sensitive_int": 0,
+      "output_sensitive_type": 0,
+      "usage": {
+        "completion_tokens": 107,
+        "prompt_tokens": 46,
+        "prompt_tokens_details": {
+          "cached_tokens": 32
+        },
+        "total_characters": 0,
+        "total_tokens": 153
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "X-ZenMux-RequestId"
+      ],
+      "cf-ray": [
+        "a039737bf9120009-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 29 May 2026 23:59:10 GMT"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-zenmux-requestid": [
+        "051375691a384b0f9193c7ff0aa8d704"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

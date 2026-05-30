@@ -1,0 +1,143 @@
+{
+  "model_spec": "openrouter:google/gemini-3.1-pro-preview-customtools",
+  "provider": "openrouter",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Imdvb2dsZS9nZW1pbmktMy4xLXByby1wcmV2aWV3LWN1c3RvbXRvb2xzIiwibiI6MSwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "google/gemini-3.1-pro-preview-customtools",
+      "n": 1,
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Hello! How can I help you today?",
+            "reasoning": "**Initiating next steps**\n\nI'm now determining the next step. I'm assessing the best way to move forward given the basic input received. My focus is on effectively progressing from the initial response towards a more complete answer. I'm evaluating what tasks must be done.\n\n\n",
+            "reasoning_details": [
+              {
+                "format": "google-gemini-v1",
+                "index": 0,
+                "text": "**Initiating next steps**\n\nI'm now determining the next step. I'm assessing the best way to move forward given the basic input received. My focus is on effectively progressing from the initial response towards a more complete answer. I'm evaluating what tasks must be done.\n\n\n",
+                "type": "reasoning.text"
+              },
+              {
+                "data": "Ev4ICvsIAQw51sdrybMQKE5bLTL1qFcGnT6fxR3X70KBlyITbXPIgYkhJqg+cAhFA4Sou5zFh2jBCW9U400/+F4Nu9DFpBkoRosNX8whJlVz8bhiLsQi4kcla4cEHTCRk8eD/j3UFTJ31An8orhtFQVlPRMdDrQD9otX6Djz0Ev50h9jO0F7A0NofwHk5qfJGkFVNiWyaWJBxcceMgscCQ+lyvM8+/n6BQAYix8tymTdR84yFfVsOz4QVCJ219+qKxE1oO7asxUfyNrgP//asQP2rU/qzw6M8PGrde9WGug9wFYz4q4IoB27bCT0apCyiI4XB19aPHTgeiBLOfT/37uSIyMF8NCZyP5vOs6YWjaFu85jErlvv5sxaJ0z18QdBNLNvz+I98Ck9gyBJ8Kc1XFmK0brZuyG9OWeG+L0ab7KviUSuM7l98dPeNvrQuwVU3z/Q9kInqscHg7mVKuhlzgubZZfoCU8BdChZoKJPVm91UlJsaNOghnHSWkCC5cZBFJ7eTxg6PrUonFAq7JKpbmIQietTnpHaVZrjK/IudVwp2Zya5ANAo8hYKRPL8LiDxgLQomR/XEkGWS1Uw+QTC9rJPeX6u/hetp8ZrJoAs2bANBBOTq3luenCCdGdUKk6pptLm7Ljgmtt/eKLpKhRQw6AKNz/Exjwcb9MZKlx+/V1kaOW2TqjI511SsXo1hl0DPzkocxVrg8TQ+54Yo+LSBY4oT4UPwn3WpRxKgdijxxjebLc6fEs5PXZ2bTBIoGET8cs3lFTmmYaNEJFr3G5e74hnzsBFHGcwvWEFzzA3UUNI8+FzjZ8b3wjUCDln9lx+8bQXGaswwsKUpIlh4RQSniKPMCFxgrKt4ZE0/fueh60pq4ZDROgt2Yh7NJtqbQEsWmgn4+qNReIQjiPZqFUMk3GNGLK4tkjHuQgcy42xbRmi0S3kt2u8j/nBXvZzQYA/+F6zrTHgNN7RXwQxZbO5Gl1PrflOQwmUaNJ134+cchv+nedoI8wq9WjlV4CwoyMJ2kSVDUum5SqN0LvfuLQCzAbXNn+oZlrwTwHtsxmOkKpbEp+z+l1yTPYFu9kW2zvSHpKKZabneF2KABX9WtRi+YjAc6YrbBmB1/4ndMDqoKFunW1HRWbNouV5tOhd3TWdOnSTvjzspRAwu6Ts7YZ7LkZ93ThP0zoP6zpGveenPEOMlQInYBEfHeCJUKwTULB+kYrM5x1x1E00g5N89ZfL7oIBAvZ8KgMFWstgcclHx4Gtd+wcKz04eEdUn+0MOZSlOrN5Yuah1dHikRvrDi2FnKDAGeioQEdz4ThCa/Ic9GFMS+ZxXVSmh1zdsODK5CCfT1lS/fF7Q+rYcy9wT6JqH3zA18pnW3LuxmzdFSrV0NpsWZ1eGi/BriGI4N6RrvxNoXdOT0y21Q3bna7dwKN8nrNqO06QqerfCK8UpnmIfBuYPH7AFhDIItkJdjplCbkPyLvaBl6102aB/NLcYUxnfYeTQXr9NbDdEaS/rm/V0EKvzj4k/RRZeMbn5doWCcrg==",
+                "format": "google-gemini-v1",
+                "index": 1,
+                "type": "reasoning.encrypted"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "STOP"
+        }
+      ],
+      "created": 1780100151,
+      "id": "gen-1780100151-XzAu3yJgY6vgpEE1CRva",
+      "model": "google/gemini-3.1-pro-preview-customtools-20260219",
+      "object": "chat.completion",
+      "provider": "Google AI Studio",
+      "service_tier": "default",
+      "system_fingerprint": null,
+      "usage": {
+        "completion_tokens": 250,
+        "completion_tokens_details": {
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "reasoning_tokens": 241
+        },
+        "cost": 0.003008,
+        "cost_details": {
+          "upstream_inference_completions_cost": 0.003,
+          "upstream_inference_cost": 0.003008,
+          "upstream_inference_prompt_cost": 8.0e-6
+        },
+        "is_byok": false,
+        "prompt_tokens": 4,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 0,
+          "video_tokens": 0
+        },
+        "total_tokens": 254
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "X-Generation-Id,cf-ray"
+      ],
+      "cf-ray": [
+        "a0398bf93cd47b1b-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Sat, 30 May 2026 00:15:53 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-generation-id": [
+        "gen-1780100151-XzAu3yJgY6vgpEE1CRva"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

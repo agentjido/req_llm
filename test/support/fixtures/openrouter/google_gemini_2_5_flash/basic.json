@@ -1,4 +1,6 @@
 {
+  "model_spec": "openrouter:google/gemini-2.5-flash",
+  "provider": "openrouter",
   "request": {
     "body": {
       "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Imdvb2dsZS9nZW1pbmktMi41LWZsYXNoIiwibiI6MSwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
@@ -19,6 +21,9 @@
       "temperature": 0.0
     },
     "headers": {
+      "accept": [
+        "application/json"
+      ],
       "accept-encoding": [
         "gzip"
       ],
@@ -27,7 +32,7 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ]
     },
     "method": "post",
@@ -41,13 +46,13 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Hello there! How can I help you today?",
-            "reasoning": "**Formulating A Response**\n\nI've considered the prompt: \"Hello world!\". My primary goal is to provide a fitting response. I aim for brevity and friendliness. My current inclination is toward a similar simple greeting.\n\n\n",
+            "content": "Hello there! It's great to hear from you. How can I help you today?",
+            "reasoning": "**Acknowledging User Greeting**\n\nI'm processing the user's \"Hello world!\" and formulating a friendly, welcoming response. My aim is to acknowledge their classic introductory phrase and establish a positive connection.\n\n",
             "reasoning_details": [
               {
-                "format": "unknown",
+                "format": "google-gemini-v1",
                 "index": 0,
-                "text": "**Formulating A Response**\n\nI've considered the prompt: \"Hello world!\". My primary goal is to provide a fitting response. I aim for brevity and friendliness. My current inclination is toward a similar simple greeting.\n\n\n",
+                "text": "**Acknowledging User Greeting**\n\nI'm processing the user's \"Hello world!\" and formulating a friendly, welcoming response. My aim is to acknowledge their classic introductory phrase and establish a positive connection.\n\n",
                 "type": "reasoning.text"
               }
             ],
@@ -57,30 +62,46 @@
           "native_finish_reason": "STOP"
         }
       ],
-      "created": 1762104929,
-      "id": "gen-1762104928-sAtDRpivtok07v83iD5I",
+      "created": 1780100620,
+      "id": "gen-1780100620-lviVw4sXGaCXJ7nQUkdK",
       "model": "google/gemini-2.5-flash",
       "object": "chat.completion",
       "provider": "Google",
+      "service_tier": "provisioned",
+      "system_fingerprint": null,
       "usage": {
-        "completion_tokens": 40,
+        "completion_tokens": 47,
         "completion_tokens_details": {
+          "audio_tokens": 0,
           "image_tokens": 0,
-          "reasoning_tokens": 30
+          "reasoning_tokens": 28
         },
+        "cost": 1.184e-4,
+        "cost_details": {
+          "upstream_inference_completions_cost": 1.175e-4,
+          "upstream_inference_cost": 1.184e-4,
+          "upstream_inference_prompt_cost": 9.0e-7
+        },
+        "is_byok": false,
         "prompt_tokens": 3,
         "prompt_tokens_details": {
-          "cached_tokens": 0
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 0,
+          "video_tokens": 0
         },
-        "total_tokens": 43
+        "total_tokens": 50
       }
     },
     "headers": {
       "access-control-allow-origin": [
         "*"
       ],
+      "access-control-expose-headers": [
+        "X-Generation-Id,cf-ray"
+      ],
       "cf-ray": [
-        "9985637d3d5a10df-ORD"
+        "a039976db8a326c8-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -89,7 +110,7 @@
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:35:30 GMT"
+        "Sat, 30 May 2026 00:23:41 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
@@ -103,13 +124,14 @@
       "transfer-encoding": [
         "chunked"
       ],
-      "vary": [
-        "Accept-Encoding"
-      ],
       "x-content-type-options": [
         "nosniff"
+      ],
+      "x-generation-id": [
+        "gen-1780100620-lviVw4sXGaCXJ7nQUkdK"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

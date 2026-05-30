@@ -1,0 +1,100 @@
+{
+  "model_spec": "fireworks_ai:accounts/fireworks/models/qwen3p6-plus",
+  "provider": "fireworks_ai",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImFjY291bnRzL2ZpcmV3b3Jrcy9tb2RlbHMvcXdlbjNwNi1wbHVzIiwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "accounts/fireworks/models/qwen3p6-plus",
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.fireworks.ai/inference/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "annotations": null,
+            "audio": null,
+            "content": "\n\nHello! 👋 How can I help you today? Whether you have a question, need help with a task, or just want to chat, I'm here for you!",
+            "function_call": null,
+            "reasoning_content": "Here's a thinking process:\n\n1.  **Analyze User Input:**\n   - User said: \"Hello world!\"\n   - This is a standard greeting, often used as a test message or a friendly opener.\n\n2.  **Identify Intent:**\n   - The user is greeting me.\n   - No specific question or task is provided.\n   - Expected response: A friendly, welcoming reply that acknowledges the greeting and offers assistance.\n\n3.  **Determine Response Strategy:**\n   - Acknowledge the greeting warmly.\n   - Keep it concise.\n   - Offer help or ask how I can assist.\n   - Match the tone (friendly, professional).\n\n4.  **Draft Response (Mental):**\n   Hello! 👋 How can I assist you today? Whether you have a question, need help with a project, or just want to chat, I'm here for you!\n\n5.  **Refine Response:**\n   - Check tone: Friendly and helpful.\n   - Check length: Concise.\n   - Check accuracy: No factual claims needed.\n   - Add openness: Invites further interaction.\n\n   Final version matches the draft closely.\n\n6.  **Output Generation:** (Proceeds to output)✅\n",
+            "refusal": null,
+            "role": "assistant",
+            "tool_calls": []
+          },
+          "stop_reason": null,
+          "token_ids": null
+        }
+      ],
+      "created": 1780097432,
+      "id": "chatcmpl-chatcmpl-ea31d262e9a84849b95e91eb8ff88e46",
+      "kv_transfer_params": null,
+      "model": "accounts/fireworks/deployments/qwen3p6-plus-llm-think",
+      "object": "chat.completion",
+      "prompt_logprobs": null,
+      "prompt_token_ids": null,
+      "service_tier": null,
+      "system_fingerprint": null,
+      "usage": {
+        "completion_tokens": 304,
+        "prompt_tokens": 13,
+        "prompt_tokens_details": null,
+        "total_tokens": 317
+      }
+    },
+    "headers": {
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 29 May 2026 23:30:32 GMT,Fri, 29 May 2026 23:30:32 GMT"
+      ],
+      "server": [
+        "istio-envoy"
+      ],
+      "vary": [
+        "Origin"
+      ],
+      "via": [
+        "1.1 google"
+      ],
+      "x-request-id": [
+        "chatcmpl-ea31d262e9a84849b95e91eb8ff88e46"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

@@ -1,0 +1,137 @@
+{
+  "model_spec": "openrouter:deepseek/deepseek-r1",
+  "provider": "openrouter",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImRlZXBzZWVrL2RlZXBzZWVrLXIxIiwibiI6MSwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "deepseek/deepseek-r1",
+      "n": 1,
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Hello world! 🌍✨ It's wonderful to connect with you today. As a classic greeting in programming, your message brings a smile! 😊  \nIf you have any questions, need help with code, or just want to explore ideas—I'm here for it. What can I do for you?",
+            "reasoning": "We are going to print \"Hello world!\" to the console.\n Since the user just said \"Hello world!\", we can assume they want to see the classic programming greeting.\n However, note that the user's message is exactly \"Hello world!\" so we might just be echoing that.\n But in the context of an assistant, we should respond appropriately.\n\n Let's break down:\n - The user said: \"Hello world!\"\n - This is often the first program people write when learning to code.\n\n We can respond in a friendly manner, perhaps by also saying \"Hello world!\" and then adding a little more to make it conversational.\n\n However, note that the instructions might be to just output \"Hello world!\" if we are simulating a simple program.\n\n But since this is an assistant, we are expected to be more engaging.\n\n Let me decide: \n Option 1: Just output \"Hello world!\" (if we are being minimal)\n Option 2: Respond with a greeting and then ask how the user is.\n\n Given the context, I think we should be friendly and engaging.\n\n Response idea:\n \"Hello world! It's great to connect with you. How are you doing today?\"\n\n But note: the user might be testing a classic \"Hello World\" scenario.\n\n Alternatively, we could do:\n\n \"Hello world! 🌎✨\"\n\n But let's keep it simple and classic.\n\n However, the problem is: the user said \"Hello world!\" and we are an AI assistant. We should respond appropriately.\n\n Since the user started with \"Hello world!\", we can interpret it as a greeting.\n\n Let's respond:\n\n \"Hello! How can I assist you today?\"\n\n But that ignores the \"world\" part.\n\n Alternatively, we could be playful:\n\n \"Hello world! Indeed, a classic. How can I help you on this fine day?\"\n\n But let's not overcomplicate.\n\n Actually, the classic response to \"Hello world!\" in programming is just to output the same. But as an assistant, we are more than a program.\n\n Considering the above, I will go with a friendly response that acknowledges the classic phrase and then transitions to offering help.\n\n Response:\n",
+            "reasoning_details": [
+              {
+                "format": "unknown",
+                "index": 0,
+                "text": "We are going to print \"Hello world!\" to the console.\n Since the user just said \"Hello world!\", we can assume they want to see the classic programming greeting.\n However, note that the user's message is exactly \"Hello world!\" so we might just be echoing that.\n But in the context of an assistant, we should respond appropriately.\n\n Let's break down:\n - The user said: \"Hello world!\"\n - This is often the first program people write when learning to code.\n\n We can respond in a friendly manner, perhaps by also saying \"Hello world!\" and then adding a little more to make it conversational.\n\n However, note that the instructions might be to just output \"Hello world!\" if we are simulating a simple program.\n\n But since this is an assistant, we are expected to be more engaging.\n\n Let me decide: \n Option 1: Just output \"Hello world!\" (if we are being minimal)\n Option 2: Respond with a greeting and then ask how the user is.\n\n Given the context, I think we should be friendly and engaging.\n\n Response idea:\n \"Hello world! It's great to connect with you. How are you doing today?\"\n\n But note: the user might be testing a classic \"Hello World\" scenario.\n\n Alternatively, we could do:\n\n \"Hello world! 🌎✨\"\n\n But let's keep it simple and classic.\n\n However, the problem is: the user said \"Hello world!\" and we are an AI assistant. We should respond appropriately.\n\n Since the user started with \"Hello world!\", we can interpret it as a greeting.\n\n Let's respond:\n\n \"Hello! How can I assist you today?\"\n\n But that ignores the \"world\" part.\n\n Alternatively, we could be playful:\n\n \"Hello world! Indeed, a classic. How can I help you on this fine day?\"\n\n But let's not overcomplicate.\n\n Actually, the classic response to \"Hello world!\" in programming is just to output the same. But as an assistant, we are more than a program.\n\n Considering the above, I will go with a friendly response that acknowledges the classic phrase and then transitions to offering help.\n\n Response:\n",
+                "type": "reasoning.text"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "stop"
+        }
+      ],
+      "created": 1780097674,
+      "id": "gen-1780097674-a9z4nNfzPWHvmEF5cbDe",
+      "model": "deepseek/deepseek-r1",
+      "object": "chat.completion",
+      "provider": "Novita",
+      "service_tier": null,
+      "system_fingerprint": null,
+      "usage": {
+        "completion_tokens": 492,
+        "completion_tokens_details": {
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "reasoning_tokens": 429
+        },
+        "cost": 0.0012356,
+        "cost_details": {
+          "upstream_inference_completions_cost": 0.00123,
+          "upstream_inference_cost": 0.0012356,
+          "upstream_inference_prompt_cost": 5.6e-6
+        },
+        "is_byok": false,
+        "prompt_tokens": 8,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 0,
+          "video_tokens": 0
+        },
+        "total_tokens": 500
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "X-Generation-Id,cf-ray"
+      ],
+      "cf-ray": [
+        "a0394f82bc8df7d2-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 29 May 2026 23:34:36 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-generation-id": [
+        "gen-1780097674-a9z4nNfzPWHvmEF5cbDe"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

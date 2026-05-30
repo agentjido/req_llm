@@ -1,0 +1,118 @@
+{
+  "model_spec": "groq:whisper-large-v3-turbo",
+  "provider": "groq",
+  "request": {
+    "body": {
+      "b64": "eyJfZml4dHVyZV9ib2R5Ijoibm9uX2pzb24iLCJieXRlX3NpemUiOjMxNzA5LCJjb250ZW50X3R5cGUiOiJtdWx0aXBhcnQvZm9ybS1kYXRhOyBib3VuZGFyeT05OTcxMjQ0MDJkNzA3YjE0ZTEyOGE1ZTc5NGJlYmU1ZiJ9"
+    },
+    "canonical_json": {
+      "_fixture_body": "non_json",
+      "byte_size": 31709,
+      "content_type": "multipart/form-data; boundary=997124402d707b14e128a5e794bebe5f"
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-length": [
+        "31709"
+      ],
+      "content-type": [
+        "multipart/form-data; boundary=997124402d707b14e128a5e794bebe5f"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.groq.com/openai/v1/audio/transcriptions"
+  },
+  "response": {
+    "body": {
+      "duration": 0.848,
+      "language": "English",
+      "segments": [
+        {
+          "avg_logprob": -0.34631371,
+          "compression_ratio": 0.61904764,
+          "end": 0.84,
+          "id": 0,
+          "no_speech_prob": 0,
+          "seek": 0,
+          "start": 0,
+          "temperature": 0,
+          "text": " Hello world.",
+          "tokens": [
+            50365,
+            2425,
+            1002,
+            13,
+            50407
+          ]
+        }
+      ],
+      "task": "transcribe",
+      "text": " Hello world.",
+      "x_groq": {
+        "id": "req_01ksv0z1fvf8ssqbrr2ekegk13"
+      }
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=86400"
+      ],
+      "cache-control": [
+        "private, max-age=0, no-store, no-cache, must-revalidate"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a03943a9394da434-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 29 May 2026 23:26:29 GMT"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": "[REDACTED:set-cookie]",
+      "strict-transport-security": [
+        "max-age=15552000"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Origin"
+      ],
+      "via": [
+        "1.1 google"
+      ],
+      "x-groq-region": [
+        "dls"
+      ],
+      "x-ratelimit-limit-requests": [
+        "2000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "1999"
+      ],
+      "x-ratelimit-reset-requests": [
+        "43.2s"
+      ],
+      "x-request-id": [
+        "req_01ksv0z1fvf8ssqbrr2ekegk13"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

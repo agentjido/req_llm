@@ -1,0 +1,137 @@
+{
+  "model_spec": "openrouter:qwen/qwen3.6-27b",
+  "provider": "openrouter",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6InF3ZW4vcXdlbjMuNi0yN2IiLCJuIjoxLCJyZWFzb25pbmdfZWZmb3J0IjoibG93Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+    },
+    "canonical_json": {
+      "max_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "qwen/qwen3.6-27b",
+      "n": 1,
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Hello! 👋 How can I help you today? Whether you have a question, need assistance with something, or just want to chat, I'm here for you!",
+            "reasoning": "Here's a thinking process:\n\n1.  **Analyze User Input:**\n   - User said: \"Hello world!\"\n   - This is a classic greeting/test phrase, often used in programming to verify that a system is working correctly.\n   - It's friendly, simple, and doesn't contain a specific question or request.\n\n2.  **Identify Intent:**\n   - The user is likely testing the system, saying hello, or just starting a conversation.\n   - No specific task or question is asked.\n\n3.  **Determine Response Strategy:**\n   - Acknowledge the greeting warmly.\n   - Match the tone (friendly, conversational).\n   - Offer assistance or invite them to ask a question.\n   - Keep it concise.\n\n4.  **Draft Response (Mental):**\n   Hello! 👋 How can I assist you today? Whether you have a question, need help with something, or just want to chat, I'm here for you!\n\n5.  **Refine Response:**\n   - Check tone: Friendly, professional, open-ended.\n   - Check length: Short and to the point.\n   - Check relevance: Directly responds to the greeting and invites next step.\n   - No overcomplication.\n\n   Final version matches the draft closely.\n\n6.  **Output Generation:** (Proceeds to output)✅\n",
+            "reasoning_details": [
+              {
+                "format": "unknown",
+                "index": 0,
+                "text": "Here's a thinking process:\n\n1.  **Analyze User Input:**\n   - User said: \"Hello world!\"\n   - This is a classic greeting/test phrase, often used in programming to verify that a system is working correctly.\n   - It's friendly, simple, and doesn't contain a specific question or request.\n\n2.  **Identify Intent:**\n   - The user is likely testing the system, saying hello, or just starting a conversation.\n   - No specific task or question is asked.\n\n3.  **Determine Response Strategy:**\n   - Acknowledge the greeting warmly.\n   - Match the tone (friendly, conversational).\n   - Offer assistance or invite them to ask a question.\n   - Keep it concise.\n\n4.  **Draft Response (Mental):**\n   Hello! 👋 How can I assist you today? Whether you have a question, need help with something, or just want to chat, I'm here for you!\n\n5.  **Refine Response:**\n   - Check tone: Friendly, professional, open-ended.\n   - Check length: Short and to the point.\n   - Check relevance: Directly responds to the greeting and invites next step.\n   - No overcomplication.\n\n   Final version matches the draft closely.\n\n6.  **Output Generation:** (Proceeds to output)✅\n",
+                "type": "reasoning.text"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "stop"
+        }
+      ],
+      "created": 1780098093,
+      "id": "gen-1780098093-Ld7BQWvaiNtyXVYXBQwu",
+      "model": "qwen/qwen3.6-27b-20260422",
+      "object": "chat.completion",
+      "provider": "DeepInfra",
+      "service_tier": null,
+      "system_fingerprint": null,
+      "usage": {
+        "completion_tokens": 328,
+        "completion_tokens_details": {
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "reasoning_tokens": 309
+        },
+        "cost": 0.00105376,
+        "cost_details": {
+          "upstream_inference_completions_cost": 0.0010496,
+          "upstream_inference_cost": 0.00105376,
+          "upstream_inference_prompt_cost": 4.16e-6
+        },
+        "is_byok": false,
+        "prompt_tokens": 13,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 0,
+          "video_tokens": 0
+        },
+        "total_tokens": 341
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "X-Generation-Id,cf-ray"
+      ],
+      "cf-ray": [
+        "a03959bcb8f683b9-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 29 May 2026 23:41:33 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-generation-id": [
+        "gen-1780098093-Ld7BQWvaiNtyXVYXBQwu"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

@@ -1,0 +1,144 @@
+{
+  "model_spec": "openrouter:x-ai/grok-4.20",
+  "provider": "openrouter",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6IngtYWkvZ3Jvay00LjIwIiwibiI6MSwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "x-ai/grok-4.20",
+      "n": 1,
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "**Hello, world!** 🌍\n\nNice to meet you. What's on your mind today?",
+            "reasoning": "First, the user's message is \"Hello world!\". This is a classic programming greeting, often the first output in a new language or system.\n",
+            "reasoning_details": [
+              {
+                "format": "xai-responses-v1",
+                "index": 0,
+                "summary": "First, the user's message is \"Hello world!\". This is a classic programming greeting, often the first output in a new language or system.\n",
+                "type": "reasoning.summary"
+              },
+              {
+                "data": "vd7esbV1w0Gpz8xQs7pTVRjxxDU0Y7RAeXq/IqYJ7vAR9Rv91KIRCtQf9d6ycIiYKt+4Q0p2wSl8gP54smBAGNPnV/PpK2cXXoLNNK2Cu6PwdcC7zMdYtr4nHMTdJP1yvTegbAlPF4zVoiBFeW/socIa4zaTbOUX1JfVnGAhN0egTWKjGg0jrglCH2cZsWGIE9+e8ac6bz1/9QybRqWDG5UTn2wUoP189q1Df+nJpW10eJbADBmAVsL4TtcCtrX2n7DygP5Vpo7CwncqfVWmqAlV/yQTL7G0J64TL8avH1c57mybtRkmBwXnJQj5bDrga2FNZzbzJ2v+mRLqiD1d2sbZJVd34lQsJ7dBm7Cru8Ux80FmhjEBhq21ETDeQ3p6EwwxNThfz2ga+/5ZY0XCt9iXhfra06eLMpP1I2aBW2ZeDk043U/SfikpHtNSuh7OXQfkQ8kz8wRawifHA7rsN/A4LVuhD9tGxvxBsRjqWFOaj+E6IKUHiUuk26Lvd0dwbv/hcmgJH3Pgmzo48jWlWefhTQjRXQyhDsYyuI6i5LTLl+EmNkbvHdKlCsvRuKnzEw8Tc39juCcUymb9p+CHv6C/CtKFvS29KzJRYwH+TKGLq7TxPZKEt5KN5dSXB08/peAvcibIKj0RWY154Bk4GKI2oLkKNejTqoi2mroOkJrTkvmr8E6VH777cbNhnkjQCyOIe+IP+N96utQd6lLdXtAoyLWtR6LB6gx61T9bzGbM1fBT+/t/Y2LnBKFs3CoKviVPlnx4YCXH1tdfGl6d8MqXgzS7eE1A/3zLICFFR8GkzFS/2sVU8fnvXmuJyz5Hs/o3H9hDnTjsamTiZBtHpI7th2rwoJy7Rqx4PVmaDFsk8fIGGN972fjOPVTPqeK3aMTby4o4i05Q2G2PflnhCnswgar8f5qkcRiScyoVWBLNJmsS80Xk6S9EKtwY11eqW/jVGL9W3VyINlR1GwkhWOmc1g1ySxmtHEXGXMCgglEDBh/Vxx3PHyGBXPuM/c7OxIkanUMmdw5nalBr8LaaRRG1/jL4WdgOzhYYMWqJILI8K368RKs6dw",
+                "format": "xai-responses-v1",
+                "id": "rs_7a423527-80d5-91c6-8290-b78b8d4501b6",
+                "index": 1,
+                "type": "reasoning.encrypted"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "completed"
+        }
+      ],
+      "created": 1780100337,
+      "id": "gen-1780100337-wBmqvY6SnQlweAvojB0f",
+      "model": "x-ai/grok-4.20-20260309",
+      "object": "chat.completion",
+      "provider": "xAI",
+      "service_tier": "default",
+      "system_fingerprint": null,
+      "usage": {
+        "completion_tokens": 197,
+        "completion_tokens_details": {
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "reasoning_tokens": 177
+        },
+        "cost": 5.8405e-4,
+        "cost_details": {
+          "upstream_inference_completions_cost": 4.925e-4,
+          "upstream_inference_cost": 5.8405e-4,
+          "upstream_inference_prompt_cost": 9.155e-5
+        },
+        "is_byok": false,
+        "prompt_tokens": 127,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 64,
+          "video_tokens": 0
+        },
+        "total_tokens": 324
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "X-Generation-Id,cf-ray"
+      ],
+      "cf-ray": [
+        "a03990831af7eac4-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Sat, 30 May 2026 00:18:57 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-generation-id": [
+        "gen-1780100337-wBmqvY6SnQlweAvojB0f"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

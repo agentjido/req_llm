@@ -1,0 +1,103 @@
+{
+  "model_spec": "zenmux:qwen/qwen3.7-max",
+  "provider": "zenmux",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjUwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6InF3ZW4vcXdlbjMuNy1tYXgiLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+    },
+    "canonical_json": {
+      "max_completion_tokens": 50,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "qwen/qwen3.7-max",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://zenmux.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "content": "Hello! How can I help you today?",
+            "reasoning": "Thinking Process:\n\n1.  **Analyze the input:** The user said \"Hello world!\". This is a standard, friendly greeting, often used as a test or introductory message in programming and general interactions.\n2.  **Determine the goal:** Respond politely, acknowledge the greeting, and offer assistance.\n3.  **Draft potential responses:**\n    *   \"Hello! How can I help you today?\"\n    *   \"Hello world to you too! What's on your mind?\"\n    *   \"Hi there! How can I assist you?\"\n4.  **Select the best response:** \"Hello! How can I help you today?\" is standard, polite, and opens the door for the user to state their needs. Adding a slight nod to the \"world\" part can be fun but keeping it simple is usually best. Let's go with a friendly, helpful greeting.\n5.  **Final Polish:** \"Hello! How can I help you today?\" or \"Hello world! How can I assist you today?\" Let's use the latter to mirror their greeting playfully. \"Hello! How can I help you today?\" is safer and universally good. Let's just say \"Hello! How can I help you today?\" or \"Hello world! How can I help you today?\"\n    *   *Draft:* \"Hello! How can I help you today?\" (Simple, effective). Let's go with \"Hello! How can I help you today?\" or \"Hello world! How can I assist you today?\"\n    *   Let's do: \"Hello! How can I help you today?\" It's standard and welcoming. Wait, \"Hello world!\" is iconic. \"Hello! How can I help you today?\" is perfect. Let's add a bit of warmth. \"Hello! How can I help you today?\" is fine. Let's just output that.\n\n*Self-Correction during thought process:* Keep it brief and helpful.\n\n*Final Output Generation:* \"Hello! How can I help you today?\" or \"Hello world! How can I help you today?\" Let's use \"Hello! How can I help you today?\" to be professional yet friendly. Actually, \"Hello world! How can I help you today?\" is a nice touch. I'll go with a friendly \"Hello! How can I help you today?\" to be safe. Let's just say \"Hello! How can I help you today?\"",
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1780099397,
+      "id": "c1da25f62c9b46b09f87ec74b4624d90",
+      "model": "qwen/qwen3.7-max",
+      "object": "chat.completion",
+      "usage": {
+        "completion_tokens": 519,
+        "completion_tokens_details": {
+          "reasoning_tokens": 505
+        },
+        "prompt_tokens": 13,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "total_tokens": 532
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "X-ZenMux-RequestId"
+      ],
+      "cf-ray": [
+        "a039798e2995d130-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Sat, 30 May 2026 00:03:26 GMT"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-zenmux-requestid": [
+        "c1da25f62c9b46b09f87ec74b4624d90"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

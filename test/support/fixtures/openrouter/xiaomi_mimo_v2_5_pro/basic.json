@@ -1,0 +1,137 @@
+{
+  "model_spec": "openrouter:xiaomi/mimo-v2.5-pro",
+  "provider": "openrouter",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6InhpYW9taS9taW1vLXYyLjUtcHJvIiwibiI6MSwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "xiaomi/mimo-v2.5-pro",
+      "n": 1,
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Hey there! 👋 Welcome to the world of conversation with MiMo! \n\nI'm MiMo, your friendly AI assistant created by the Xiaomi MiMo Team. Whether you want to chat about tech, ask questions, brainstorm ideas, or just have a fun conversation - I'm here for it all! \n\nWhat brings you my way today? Let's make this conversation awesome! 😊",
+            "reasoning": "The user said \"Hello world!\" - a classic programming greeting. Simple and friendly.\n\nI'll respond warmly, match their enthusiasm, and keep it open-ended. A little energy (\"!\", \"Hey there\") feels right. No need for overanalysis - just welcome them and invite conversation.",
+            "reasoning_details": [
+              {
+                "format": "unknown",
+                "index": 0,
+                "text": "The user said \"Hello world!\" - a classic programming greeting. Simple and friendly.\n\nI'll respond warmly, match their enthusiasm, and keep it open-ended. A little energy (\"!\", \"Hey there\") feels right. No need for overanalysis - just welcome them and invite conversation.",
+                "type": "reasoning.text"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "stop"
+        }
+      ],
+      "created": 1780100566,
+      "id": "gen-1780100566-qqs0aw3npcG0nDV8B16E",
+      "model": "xiaomi/mimo-v2.5-pro-20260422",
+      "object": "chat.completion",
+      "provider": "Xiaomi",
+      "service_tier": null,
+      "system_fingerprint": null,
+      "usage": {
+        "completion_tokens": 138,
+        "completion_tokens_details": {
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "reasoning_tokens": 57
+        },
+        "cost": 1.477212e-4,
+        "cost_details": {
+          "upstream_inference_completions_cost": 1.2006e-4,
+          "upstream_inference_cost": 1.477212e-4,
+          "upstream_inference_prompt_cost": 2.76612e-5
+        },
+        "is_byok": false,
+        "prompt_tokens": 254,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 192,
+          "video_tokens": 0
+        },
+        "total_tokens": 392
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "X-Generation-Id,cf-ray"
+      ],
+      "cf-ray": [
+        "a039961ebb3faf01-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Sat, 30 May 2026 00:22:47 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-generation-id": [
+        "gen-1780100566-qqs0aw3npcG0nDV8B16E"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

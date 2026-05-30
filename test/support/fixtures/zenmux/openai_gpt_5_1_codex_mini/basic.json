@@ -1,0 +1,126 @@
+{
+  "model_spec": "zenmux:openai/gpt-5.1-codex-mini",
+  "provider": "zenmux",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjIwMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiSGVsbG8gd29ybGQhIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoib3BlbmFpL2dwdC01LjEtY29kZXgtbWluaSIsInJlYXNvbmluZ19lZmZvcnQiOiJsb3ciLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+    },
+    "canonical_json": {
+      "max_completion_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "openai/gpt-5.1-codex-mini",
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://zenmux.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": {
+            "content": [],
+            "refusal": null
+          },
+          "message": {
+            "annotations": [],
+            "content": "Hello there! How can I help you today?",
+            "reasoning": "**Responding to a greeting**\n\nThe user greeted me with \"Hello world!\" which is friendly and doesn't ask anything explicit. I can respond with a greeting and also offer my assistance. It looks like there’s no conflict with policies here, so I can keep it simple. My best choice is to say something like, \"Hello! How can I assist you today?\" while adding a touch of friendliness. It's nice to connect!",
+            "reasoning_details": [
+              {
+                "format": "openai-responses-v1",
+                "index": "0",
+                "summary": "**Responding to a greeting**\n\nThe user greeted me with \"Hello world!\" which is friendly and doesn't ask anything explicit. I can respond with a greeting and also offer my assistance. It looks like there’s no conflict with policies here, so I can keep it simple. My best choice is to say something like, \"Hello! How can I assist you today?\" while adding a touch of friendliness. It's nice to connect!",
+                "type": "reasoning.summary"
+              },
+              {
+                "data": "gAAAAABqGii9uOZL90_XY3Omv9hIB0Szi_mamxkuYzIIcwt-Q9hQER-7-o_uiPN3fiPFJyeVq_cXLQRTc6QViydG0aWkOcUv2r1lkBapmRAU9b-WdCzBCYg-7htjOSnl_tE1V6ERz7t0uxXmW5N17rzGOs67bcHBLqYUlVhgp4ZPCdg204To_ifXmHzOCfQnzphC9O3Fzi4P1V2qDkJLUI8cPBcxNrAUyeVt279YY6cpzi1rQVWIu1_g4YARxBKYrAsTl3Jx0_qmzFk602rAcIxt_bHiPiVZUQKOUrvujPL040xcMvuJTrh86KFpkRumVNTD7FdNz1W1cFg5OEm9mjgCmZtDDHWZH-tXUas81bh30aOMH2XWDn5XLxOCoddDhkkOeQQeE9G7JP3xGNRm0zVIzl8Ft36eiyKyZNL0CoB_OXLF_zZrU0uMi7A-uGUViG8Dff1wgrFnITlqXtl4VJ9HElflg4LsG5WCRTW5W7nGJkVM74CCichYKRtjZYQfUsJDVJ34LsUBCJEdVtvtsqZEnFT7Dv27aeQbNE48-gEuCXm5taC3bwn6A8QynG1Wp_tBuTCLk6X06ch9SPOxMjYMh2hQ6hAwKqwjcfl_43tGXRQMZPOeeCOpu0BSYvaPgMDur8xPVy-U8gW4-fsBJAKGr8hAtg54IWZQ7Juvyx6PzhVe7U2nQCYFl2pbCkNLpMW0mfFXYB0i-mpS93NQwvwBDwCLF3X16ZWLmcPnJjPI8QE5hz-7V611ALdu31LPoUnQzdFDTvKvG1if0sV3OxyJW_xi1-B7WsIDIan0fvmHTSDVIwBvm8bkb5gggPskHOlCNfeARKqNCISBQ__ZXY5ZQIOH6WAxSzHkWr-KHGPXAP9KVAn_C1LtUfHBD1biOwrzXTmqFa-P8xkmFOk7VkuSgVS2jgQT1Bz3BEEkYOZrYtsk3dl8EVfC3bz8wvaAxfnJeCz89bfpxIOnSH31C3fAkORZnxwpFqO0NY2NpLLbIGtVWZFPFBm4CTHKeGrJQ1bNXrywOLi5KXuA84SnIc_q4T1URw_3YUprMU2DCXNuETbY7ip5A4IMHFOKM-jsqZrU6p79to0IDuQDRem-MnNG2nMu0wYJD7Wv-SM06QiEZAqlUGNeDc2IIdgTOOH8uC_QG4QoKNcKOdrBZ1LV-xDDekxZpSXHmHe8ROq4ICrs8r32dY2qIbiLxF_B1pxNkSgXvhRShann6OOIDTzYYhavT3neuZ-rDgAnf1q3od9omJSI-jFmqNApfXYe8j1ZMCarU0U0Frsd3yiZt_CcSaDmF3XxqXQS2wwEQ-G3ZfhNuoQdGQhOorAS3Ao20oL0RvfAnY6cWdDwsGuf99XFaOwN1JOnhmmLhDGFq7XDFjx7F6qIsc9IKJg=",
+                "format": "openai-responses-v1",
+                "id": "rs_0c026004d0e214ad006a1a28bb961c8196a15edf7109c07b1e",
+                "index": "0",
+                "type": "reasoning.encrypted"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1780099259,
+      "id": "cdd609f371134c76907e88da191dfd38",
+      "model": "openai/gpt-5.1-codex-mini",
+      "object": "chat.completion",
+      "service_tier": "default",
+      "usage": {
+        "completion_tokens": 93,
+        "completion_tokens_details": {
+          "reasoning_tokens": 64
+        },
+        "prompt_tokens": 9,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "total_tokens": 102
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "X-ZenMux-RequestId"
+      ],
+      "cf-ray": [
+        "a039762c5d9c73db-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Sat, 30 May 2026 00:01:01 GMT"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-zenmux-requestid": [
+        "cdd609f371134c76907e88da191dfd38"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

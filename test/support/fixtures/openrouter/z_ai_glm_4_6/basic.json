@@ -1,4 +1,6 @@
 {
+  "model_spec": "openrouter:z-ai/glm-4.6",
+  "provider": "openrouter",
   "request": {
     "body": {
       "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6InotYWkvZ2xtLTQuNiIsIm4iOjEsInJlYXNvbmluZ19lZmZvcnQiOiJsb3ciLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
@@ -19,6 +21,9 @@
       "temperature": 0.0
     },
     "headers": {
+      "accept": [
+        "application/json"
+      ],
       "accept-encoding": [
         "gzip"
       ],
@@ -27,7 +32,7 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ]
     },
     "method": "post",
@@ -41,13 +46,13 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "\nHello there! A classic greeting, and a great way to start.\n\nHow can I help you today?",
-            "reasoning": "\n1.  **Analyze the User's Input:**\n    *   The user typed: \"Hello world!\"\n    *   This is one of the most common, simple, and universally recognized phrases in programming and computer science.\n    *   It's often the first program someone writes when learning a new language.\n    *   It's a friendly, non-demanding greeting.\n\n2.  **Determine the User's Intent:**\n    *   **Is it a question?** No.\n    *   **Is it a command?** No.\n    *   **Is it a request for information?** No.\n    *   **Is it a test?** Very likely. Users often test a new AI or chatbot with a simple, low-stakes input to see how it responds. They're checking if I'm \"alive,\" if I understand basic language, and what my \"personality\" or tone is.\n    *   **Is it a genuine greeting?** Also possible. It's a friendly way to start a conversation.\n\n3.  **Brainstorm Potential Responses:**\n    *   **The Simple, Direct Response:** \"Hello!\" or \"Hello there!\" or \"Hi!\" This is safe, direct, and answers the greeting. It's the baseline.\n    *   **The \"In-Character\" AI Response:** Acknowledge the significance of \"Hello world!\" in programming. This shows I understand the context and the subtext of their message. It's a bit more clever and engaging.\n        *   \"Hello! That's a classic. Ready to start coding?\"\n        *   \"Hello to you, too! The first step in many a great program.\"\n        *   \"Hello world! It's great to be here. What can I help you with today?\"\n    *   **The Enthusiastic/Friendly Response:** Add a bit more personality.\n        *   \"Hello there! It's a pleasure to meet you. How can I make your day better?\"\n        *   \"Well, hello to you too! The world is certainly more interesting with you in it. What's on your mind?\"\n    *   **The Humorous/Playful Response:** A little bit of wit.\n        *   \"Hello world! Is this the part where I say `> printf(\"Hello, user!\");` ?\" (This is a bit niche, might not land with everyone).\n        *   \"Hello! The world and I are both listening.\"\n\n4.  **Select the Best Response Strategy:**\n    *   The user is likely testing me. A simple \"Hello\" is okay, but it's a bit boring. It doesn't showcase my capabilities.\n    *   The \"In-Character\" AI response is the strongest. It demonstrates understanding beyond the literal words. It acknowledges the cultural context of the phrase, which is a key part of being a helpful AI assistant. It's friendly, informative, and opens the door for further conversation.\n    *   Combining the \"In-Character\" and \"Friendly\" approaches is ideal. Start by acknowledging the phrase, then offer help.\n\n5.  **Draft the Final Response:**\n    *   Start with a direct, friendly greeting: \"Hello there!\" or \"Hello to you, too!\"\n    *   Acknowledge the \"Hello world!\" significance. Something like: \"That's a classic for a reason!\" or \"A great way to start any conversation, whether it's with a person or a computer.\"\n    *   Pivot to being helpful. This is my primary function. Ask an open-ended question to encourage interaction. \"How can I help you today?\" or \"What can I do for you?\"\n\n6.  **Refine the Draft:**\n    *   *Initial Draft:* \"Hello! That's a classic programming phrase. What can I help you with?\" - A bit dry.\n    *   *Second Draft:* \"Hello there! A classic greeting. It's often the first step in a new program. What's our first step today?\" - Better, more engaging.\n    *   *Third Draft (closer to final):* \"Hello to you, too! That's a classic. It's often the very first thing people learn to write when they start coding. It's a great way to start. What can I help you with today?\" - This is good. It's friendly, informative, and helpful.\n    *   *Final Polish:* Let's make it a little more concise and punchy.\n        *   \"Hello there!\" (Friendly opening)\n        *   \"A classic greeting, and a great way to start.\" (Acknowledges the phrase's importance in a general, friendly way)\n        *   \"How can I help you today?\" (Clear call to action)\n\n    This combination is perfect. It's:\n    *   **Friendly:** \"Hello there!\"\n    *   **Context-aware:** \"A classic greeting...\"\n    *   **Helpful:** \"How can I help you today?\"\n    *   **Concise:** Not too wordy.\n\n    This is the response I'll generate. It hits all the right notes for this specific, common input.",
+            "content": "Hello there! How can I help you today?",
+            "reasoning": "\n1.  **Analyze the user's input:** The user said \"Hello world!\".\n2.  **Identify the intent:** This is a standard greeting, often used as a first test message in programming or a simple \"hello\" to an AI.\n3.  **Determine the appropriate response:**\n    *   Acknowledge the greeting.\n    *   Be polite and helpful.\n    *   Offer assistance.\n    *   Keep it concise and friendly.\n4.  **Draft potential responses:**\n    *   *Option 1 (Simple):* Hello! How can I help you today?\n    *   *Option 2 (More enthusiastic):* Hello there! Welcome! What can I do for you?\n    *   *Option 3 (Programmer-centric):* Hello world! It's great to meet you. What's on your mind?\n    *   *Option 4 (Standard AI response):* Hello! I am an AI assistant. How can I help you?\n5.  **Select the best response:** Option 1 is a classic, safe, and effective response. It's friendly and open-ended. Option 3 is also good because it acknowledges the specific phrase \"Hello world!\" which is a nod to programming. Let's combine the best elements.\n6.  **Final Polish:** \"Hello! How can I help you today?\" is perfect. It's simple, direct, and helpful. I can add a little more warmth. \"Hello there! How can I help you today?\" is even better.",
             "reasoning_details": [
               {
                 "format": "unknown",
                 "index": 0,
-                "text": "\n1.  **Analyze the User's Input:**\n    *   The user typed: \"Hello world!\"\n    *   This is one of the most common, simple, and universally recognized phrases in programming and computer science.\n    *   It's often the first program someone writes when learning a new language.\n    *   It's a friendly, non-demanding greeting.\n\n2.  **Determine the User's Intent:**\n    *   **Is it a question?** No.\n    *   **Is it a command?** No.\n    *   **Is it a request for information?** No.\n    *   **Is it a test?** Very likely. Users often test a new AI or chatbot with a simple, low-stakes input to see how it responds. They're checking if I'm \"alive,\" if I understand basic language, and what my \"personality\" or tone is.\n    *   **Is it a genuine greeting?** Also possible. It's a friendly way to start a conversation.\n\n3.  **Brainstorm Potential Responses:**\n    *   **The Simple, Direct Response:** \"Hello!\" or \"Hello there!\" or \"Hi!\" This is safe, direct, and answers the greeting. It's the baseline.\n    *   **The \"In-Character\" AI Response:** Acknowledge the significance of \"Hello world!\" in programming. This shows I understand the context and the subtext of their message. It's a bit more clever and engaging.\n        *   \"Hello! That's a classic. Ready to start coding?\"\n        *   \"Hello to you, too! The first step in many a great program.\"\n        *   \"Hello world! It's great to be here. What can I help you with today?\"\n    *   **The Enthusiastic/Friendly Response:** Add a bit more personality.\n        *   \"Hello there! It's a pleasure to meet you. How can I make your day better?\"\n        *   \"Well, hello to you too! The world is certainly more interesting with you in it. What's on your mind?\"\n    *   **The Humorous/Playful Response:** A little bit of wit.\n        *   \"Hello world! Is this the part where I say `> printf(\"Hello, user!\");` ?\" (This is a bit niche, might not land with everyone).\n        *   \"Hello! The world and I are both listening.\"\n\n4.  **Select the Best Response Strategy:**\n    *   The user is likely testing me. A simple \"Hello\" is okay, but it's a bit boring. It doesn't showcase my capabilities.\n    *   The \"In-Character\" AI response is the strongest. It demonstrates understanding beyond the literal words. It acknowledges the cultural context of the phrase, which is a key part of being a helpful AI assistant. It's friendly, informative, and opens the door for further conversation.\n    *   Combining the \"In-Character\" and \"Friendly\" approaches is ideal. Start by acknowledging the phrase, then offer help.\n\n5.  **Draft the Final Response:**\n    *   Start with a direct, friendly greeting: \"Hello there!\" or \"Hello to you, too!\"\n    *   Acknowledge the \"Hello world!\" significance. Something like: \"That's a classic for a reason!\" or \"A great way to start any conversation, whether it's with a person or a computer.\"\n    *   Pivot to being helpful. This is my primary function. Ask an open-ended question to encourage interaction. \"How can I help you today?\" or \"What can I do for you?\"\n\n6.  **Refine the Draft:**\n    *   *Initial Draft:* \"Hello! That's a classic programming phrase. What can I help you with?\" - A bit dry.\n    *   *Second Draft:* \"Hello there! A classic greeting. It's often the first step in a new program. What's our first step today?\" - Better, more engaging.\n    *   *Third Draft (closer to final):* \"Hello to you, too! That's a classic. It's often the very first thing people learn to write when they start coding. It's a great way to start. What can I help you with today?\" - This is good. It's friendly, informative, and helpful.\n    *   *Final Polish:* Let's make it a little more concise and punchy.\n        *   \"Hello there!\" (Friendly opening)\n        *   \"A classic greeting, and a great way to start.\" (Acknowledges the phrase's importance in a general, friendly way)\n        *   \"How can I help you today?\" (Clear call to action)\n\n    This combination is perfect. It's:\n    *   **Friendly:** \"Hello there!\"\n    *   **Context-aware:** \"A classic greeting...\"\n    *   **Helpful:** \"How can I help you today?\"\n    *   **Concise:** Not too wordy.\n\n    This is the response I'll generate. It hits all the right notes for this specific, common input.",
+                "text": "\n1.  **Analyze the user's input:** The user said \"Hello world!\".\n2.  **Identify the intent:** This is a standard greeting, often used as a first test message in programming or a simple \"hello\" to an AI.\n3.  **Determine the appropriate response:**\n    *   Acknowledge the greeting.\n    *   Be polite and helpful.\n    *   Offer assistance.\n    *   Keep it concise and friendly.\n4.  **Draft potential responses:**\n    *   *Option 1 (Simple):* Hello! How can I help you today?\n    *   *Option 2 (More enthusiastic):* Hello there! Welcome! What can I do for you?\n    *   *Option 3 (Programmer-centric):* Hello world! It's great to meet you. What's on your mind?\n    *   *Option 4 (Standard AI response):* Hello! I am an AI assistant. How can I help you?\n5.  **Select the best response:** Option 1 is a classic, safe, and effective response. It's friendly and open-ended. Option 3 is also good because it acknowledges the specific phrase \"Hello world!\" which is a nod to programming. Let's combine the best elements.\n6.  **Final Polish:** \"Hello! How can I help you today?\" is perfect. It's simple, direct, and helpful. I can add a little more warmth. \"Hello there! How can I help you today?\" is even better.",
                 "type": "reasoning.text"
               }
             ],
@@ -57,26 +62,46 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1762105248,
-      "id": "gen-1762105248-kN03AmKyeZoI397sMggD",
+      "created": 1780098204,
+      "id": "gen-1780098204-IjLEfvpS3h0hlGrNF6eo",
       "model": "z-ai/glm-4.6",
       "object": "chat.completion",
-      "provider": "Z.AI",
+      "provider": "Novita",
+      "service_tier": null,
+      "system_fingerprint": null,
       "usage": {
-        "completion_tokens": 1084,
+        "completion_tokens": 328,
+        "completion_tokens_details": {
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "reasoning_tokens": 316
+        },
+        "cost": 7.26e-4,
+        "cost_details": {
+          "upstream_inference_completions_cost": 7.216e-4,
+          "upstream_inference_cost": 7.26e-4,
+          "upstream_inference_prompt_cost": 4.4e-6
+        },
+        "is_byok": false,
         "prompt_tokens": 8,
         "prompt_tokens_details": {
-          "cached_tokens": 4
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 0,
+          "video_tokens": 0
         },
-        "total_tokens": 1092
+        "total_tokens": 336
       }
     },
     "headers": {
       "access-control-allow-origin": [
         "*"
       ],
+      "access-control-expose-headers": [
+        "X-Generation-Id,cf-ray"
+      ],
       "cf-ray": [
-        "99856b494a5ff790-ORD"
+        "a0395c70cfb622cc-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -85,7 +110,7 @@
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:40:49 GMT"
+        "Fri, 29 May 2026 23:43:25 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
@@ -99,13 +124,14 @@
       "transfer-encoding": [
         "chunked"
       ],
-      "vary": [
-        "Accept-Encoding"
-      ],
       "x-content-type-options": [
         "nosniff"
+      ],
+      "x-generation-id": [
+        "gen-1780098204-IjLEfvpS3h0hlGrNF6eo"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

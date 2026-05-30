@@ -1,0 +1,107 @@
+{
+  "model_spec": "zenmux:kuaishou/kat-coder-pro-v2",
+  "provider": "zenmux",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjUwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Imt1YWlzaG91L2thdC1jb2Rlci1wcm8tdjIiLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+    },
+    "canonical_json": {
+      "max_completion_tokens": 50,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "kuaishou/kat-coder-pro-v2",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://zenmux.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "matched_stop": 248046,
+          "message": {
+            "content": "Hello! How can I assist you today?",
+            "reasoning": "",
+            "reasoning_details": null,
+            "role": "assistant",
+            "tool_calls": null
+          }
+        }
+      ],
+      "created": 1780099127,
+      "id": "623619e8e7124a2dac23eee30e6197c6",
+      "metadata": {
+        "weight_version": "default"
+      },
+      "model": "kuaishou/kat-coder-pro-v2",
+      "object": "chat.completion",
+      "usage": {
+        "completion_tokens": 10,
+        "completion_tokens_details": null,
+        "prompt_tokens": 11,
+        "prompt_tokens_details": null,
+        "reasoning_tokens": 0,
+        "total_tokens": 21
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "X-ZenMux-RequestId"
+      ],
+      "cf-ray": [
+        "a03972ebfd0eb48a-MEM"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 29 May 2026 23:58:47 GMT"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-zenmux-requestid": [
+        "623619e8e7124a2dac23eee30e6197c6"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

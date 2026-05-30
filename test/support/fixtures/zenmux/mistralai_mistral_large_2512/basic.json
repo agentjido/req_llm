@@ -1,0 +1,99 @@
+{
+  "model_spec": "zenmux:mistralai/mistral-large-2512",
+  "provider": "zenmux",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjUwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Im1pc3RyYWxhaS9taXN0cmFsLWxhcmdlLTI1MTIiLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+    },
+    "canonical_json": {
+      "max_completion_tokens": 50,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "mistralai/mistral-large-2512",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://zenmux.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "content_filter_results": {},
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "content": "Hello, World! 🌍✨\n\nIt looks like you're starting with a classic! How can I help you today? Whether you're diving into coding, exploring new ideas, or just saying hi—I'm here for it. 😊\n\nWhat’s next on your journey? 🚀",
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1780099164,
+      "id": "5cd100d802ef4b60b288ff01a302752e",
+      "model": "mistralai/mistral-large-2512",
+      "object": "chat.completion",
+      "prompt_filter_results": null,
+      "usage": {
+        "audio_prompt_tokens": 0,
+        "completion_tokens": 64,
+        "prompt_tokens": 6,
+        "total_tokens": 70
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "X-ZenMux-RequestId"
+      ],
+      "cf-ray": [
+        "a03973d98b02119b-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 29 May 2026 23:59:24 GMT"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-zenmux-requestid": [
+        "5cd100d802ef4b60b288ff01a302752e"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

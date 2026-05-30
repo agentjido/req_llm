@@ -1,0 +1,221 @@
+{
+  "model_spec": "openrouter:perplexity/sonar-reasoning-pro",
+  "provider": "openrouter",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6InBlcnBsZXhpdHkvc29uYXItcmVhc29uaW5nLXBybyIsIm4iOjEsInJlYXNvbmluZ19lZmZvcnQiOiJsb3ciLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+    },
+    "canonical_json": {
+      "max_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "perplexity/sonar-reasoning-pro",
+      "n": 1,
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "annotations": [
+              {
+                "type": "url_citation",
+                "url_citation": {
+                  "end_index": 0,
+                  "start_index": 0,
+                  "title": "Hello, world - Wikipedia",
+                  "url": "https://en.wikipedia.org/wiki/Hello,_world"
+                }
+              },
+              {
+                "type": "url_citation",
+                "url_citation": {
+                  "end_index": 0,
+                  "start_index": 0,
+                  "title": "Hello World – Programming Fundamentals - Rebus Press",
+                  "url": "https://press.rebus.community/programmingfundamentals/chapter/hello-world/"
+                }
+              },
+              {
+                "type": "url_citation",
+                "url_citation": {
+                  "end_index": 0,
+                  "start_index": 0,
+                  "title": "Hello World: Your First Step into Programming | Lenovo US",
+                  "url": "https://www.lenovo.com/us/en/glossary/hello-world/"
+                }
+              },
+              {
+                "type": "url_citation",
+                "url_citation": {
+                  "end_index": 0,
+                  "start_index": 0,
+                  "title": "Hello World - Code.org",
+                  "url": "https://code.org/en-US/hour-of-code/helloworld"
+                }
+              },
+              {
+                "type": "url_citation",
+                "url_citation": {
+                  "end_index": 0,
+                  "start_index": 0,
+                  "title": "Hello World CS",
+                  "url": "https://www.helloworldcs.org"
+                }
+              },
+              {
+                "type": "url_citation",
+                "url_citation": {
+                  "end_index": 0,
+                  "start_index": 0,
+                  "title": "Hello World - Simple source code examples",
+                  "url": "https://www.helloworld.org"
+                }
+              },
+              {
+                "type": "url_citation",
+                "url_citation": {
+                  "end_index": 0,
+                  "start_index": 0,
+                  "title": "The Origins of \"Hello, World\" - YouTube",
+                  "url": "https://www.youtube.com/watch?v=vLer3fRwwxE"
+                }
+              },
+              {
+                "type": "url_citation",
+                "url_citation": {
+                  "end_index": 0,
+                  "start_index": 0,
+                  "title": "Hello World - Raspberry Pi Foundation",
+                  "url": "https://www.raspberrypi.org/hello-world"
+                }
+              },
+              {
+                "type": "url_citation",
+                "url_citation": {
+                  "end_index": 0,
+                  "start_index": 0,
+                  "title": "What does a Hello World program actually do? - Reddit",
+                  "url": "https://www.reddit.com/r/AskProgramming/comments/lvoco1/what_does_a_hello_world_program_actually_do/"
+                }
+              },
+              {
+                "type": "url_citation",
+                "url_citation": {
+                  "end_index": 0,
+                  "start_index": 0,
+                  "title": "Total immersion, Serious fun! with Hello-World!",
+                  "url": "https://www.hello-world.com"
+                }
+              }
+            ],
+            "content": "Hello!  \n\nNice to meet you — how can I help you today?",
+            "reasoning": null,
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "stop"
+        }
+      ],
+      "created": 1780100390,
+      "id": "gen-1780100390-Rxqk7bA6yJL7NNAqLMYt",
+      "model": "perplexity/sonar-reasoning-pro",
+      "object": "chat.completion",
+      "provider": "Perplexity",
+      "service_tier": null,
+      "system_fingerprint": null,
+      "usage": {
+        "completion_tokens": 15,
+        "completion_tokens_details": {
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "reasoning_tokens": 0
+        },
+        "cost": 0.00613,
+        "cost_details": {
+          "upstream_inference_completions_cost": 0.006122,
+          "upstream_inference_cost": 0.00613,
+          "upstream_inference_prompt_cost": 8.0e-6
+        },
+        "is_byok": false,
+        "prompt_tokens": 4,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 0,
+          "video_tokens": 0
+        },
+        "total_tokens": 19
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "X-Generation-Id,cf-ray"
+      ],
+      "cf-ray": [
+        "a03991d08f5315b6-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Sat, 30 May 2026 00:19:52 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-generation-id": [
+        "gen-1780100390-Rxqk7bA6yJL7NNAqLMYt"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

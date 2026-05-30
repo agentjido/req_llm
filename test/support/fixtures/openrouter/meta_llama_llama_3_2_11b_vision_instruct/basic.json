@@ -1,4 +1,6 @@
 {
+  "model_spec": "openrouter:meta-llama/llama-3.2-11b-vision-instruct",
+  "provider": "openrouter",
   "request": {
     "body": {
       "b64": "eyJtYXhfdG9rZW5zIjo1MCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJIZWxsbyB3b3JsZCEiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJtZXRhLWxsYW1hL2xsYW1hLTMuMi0xMWItdmlzaW9uLWluc3RydWN0IiwibiI6MSwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
@@ -18,6 +20,9 @@
       "temperature": 0.0
     },
     "headers": {
+      "accept": [
+        "application/json"
+      ],
       "accept-encoding": [
         "gzip"
       ],
@@ -26,7 +31,7 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ]
     },
     "method": "post",
@@ -48,15 +53,34 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1762104948,
-      "id": "gen-1762104948-9w5ztAawyNRA5LCCStvG",
+      "created": 1780097741,
+      "id": "gen-1780097741-mVkaPoigEDa7bovBIVk5",
       "model": "meta-llama/llama-3.2-11b-vision-instruct",
       "object": "chat.completion",
       "provider": "DeepInfra",
+      "service_tier": null,
+      "system_fingerprint": null,
       "usage": {
         "completion_tokens": 26,
+        "completion_tokens_details": {
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "reasoning_tokens": 0
+        },
+        "cost": 9.555e-6,
+        "cost_details": {
+          "upstream_inference_completions_cost": 6.37e-6,
+          "upstream_inference_cost": 9.555e-6,
+          "upstream_inference_prompt_cost": 3.185e-6
+        },
+        "is_byok": false,
         "prompt_tokens": 13,
-        "prompt_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 0,
+          "video_tokens": 0
+        },
         "total_tokens": 39
       }
     },
@@ -64,8 +88,11 @@
       "access-control-allow-origin": [
         "*"
       ],
+      "access-control-expose-headers": [
+        "X-Generation-Id,cf-ray"
+      ],
       "cf-ray": [
-        "998563f96b62eb65-ORD"
+        "a03951269c74eb56-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -74,7 +101,7 @@
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:35:48 GMT"
+        "Fri, 29 May 2026 23:35:43 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
@@ -88,13 +115,14 @@
       "transfer-encoding": [
         "chunked"
       ],
-      "vary": [
-        "Accept-Encoding"
-      ],
       "x-content-type-options": [
         "nosniff"
+      ],
+      "x-generation-id": [
+        "gen-1780097741-mVkaPoigEDa7bovBIVk5"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

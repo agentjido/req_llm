@@ -1,4 +1,6 @@
 {
+  "model_spec": "openrouter:deepseek/deepseek-chat-v3-0324",
+  "provider": "openrouter",
   "request": {
     "body": {
       "b64": "eyJtYXhfdG9rZW5zIjo1MCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJIZWxsbyB3b3JsZCEiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJkZWVwc2Vlay9kZWVwc2Vlay1jaGF0LXYzLTAzMjQiLCJuIjoxLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
@@ -18,6 +20,9 @@
       "temperature": 0.0
     },
     "headers": {
+      "accept": [
+        "application/json"
+      ],
       "accept-encoding": [
         "gzip"
       ],
@@ -26,7 +31,7 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ]
     },
     "method": "post",
@@ -40,7 +45,7 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Hello there!  🌍✨ It looks like you're starting with the classic \"Hello, world!\"—a timeless tradition in programming. Whether you're coding in Python, Java, JavaScript, or any other language, this first step is always exciting!",
+            "content": "Hello there! If you're just starting out with programming, \"Hello, world!\" is often the first program you'll write. Here's how it looks in a few popular languages:\n\n**Python:**\n```python\nprint(\"Hello, world!\")\n",
             "reasoning": null,
             "refusal": null,
             "role": "assistant"
@@ -48,19 +53,33 @@
           "native_finish_reason": "length"
         }
       ],
-      "created": 1762104929,
-      "id": "gen-1762104929-8Av3EPfpAGxsZql8Jbg5",
+      "created": 1780097668,
+      "id": "gen-1780097668-qlgFTNIOV8NWG2vFB2YD",
       "model": "deepseek/deepseek-chat-v3-0324",
       "object": "chat.completion",
-      "provider": "Novita",
-      "system_fingerprint": "",
+      "provider": "AtlasCloud",
+      "service_tier": null,
+      "system_fingerprint": null,
       "usage": {
         "completion_tokens": 50,
-        "completion_tokens_details": null,
+        "completion_tokens_details": {
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "reasoning_tokens": 0
+        },
+        "cost": 4.5296e-5,
+        "cost_details": {
+          "upstream_inference_completions_cost": 4.4e-5,
+          "upstream_inference_cost": 4.5296e-5,
+          "upstream_inference_prompt_cost": 1.296e-6
+        },
+        "is_byok": false,
         "prompt_tokens": 6,
         "prompt_tokens_details": {
           "audio_tokens": 0,
-          "cached_tokens": 2
+          "cache_write_tokens": 0,
+          "cached_tokens": 0,
+          "video_tokens": 0
         },
         "total_tokens": 56
       }
@@ -69,8 +88,11 @@
       "access-control-allow-origin": [
         "*"
       ],
+      "access-control-expose-headers": [
+        "X-Generation-Id,cf-ray"
+      ],
       "cf-ray": [
-        "99856380efbd11fb-ORD"
+        "a0394f597e39bd1f-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -79,7 +101,7 @@
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:35:30 GMT"
+        "Fri, 29 May 2026 23:34:29 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
@@ -93,13 +115,14 @@
       "transfer-encoding": [
         "chunked"
       ],
-      "vary": [
-        "Accept-Encoding"
-      ],
       "x-content-type-options": [
         "nosniff"
+      ],
+      "x-generation-id": [
+        "gen-1780097668-qlgFTNIOV8NWG2vFB2YD"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

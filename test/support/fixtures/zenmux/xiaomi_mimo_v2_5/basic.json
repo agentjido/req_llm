@@ -1,0 +1,106 @@
+{
+  "model_spec": "zenmux:xiaomi/mimo-v2.5",
+  "provider": "zenmux",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjIwMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiSGVsbG8gd29ybGQhIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoieGlhb21pL21pbW8tdjIuNSIsInJlYXNvbmluZ19lZmZvcnQiOiJsb3ciLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+    },
+    "canonical_json": {
+      "max_completion_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "xiaomi/mimo-v2.5",
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://zenmux.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "content": "Hello there! 😊 I'm MiMo, a large language model developed by Xiaomi's LLM Core Team. Nice to meet you! How can I help you today?",
+            "reasoning": "Hmm, the user just said \"Hello world!\" - a classic programmer greeting. This seems like a simple, cheerful opening.  \n\nI should match their friendly tone while introducing myself properly. Since they might be testing basic functionality, I'll keep it warm but concise.  \n\nAdding an emoji feels appropriate here to maintain the lighthearted vibe. No need for complex explanations since this is clearly just an initial contact.",
+            "role": "assistant",
+            "tool_calls": null
+          }
+        }
+      ],
+      "created": 1780099589,
+      "id": "4df746f0ca194db0b92e05f9878452be",
+      "model": "xiaomi/mimo-v2.5",
+      "object": "chat.completion",
+      "usage": {
+        "completion_tokens": 122,
+        "completion_tokens_details": {
+          "reasoning_tokens": 84
+        },
+        "prompt_tokens": 250,
+        "prompt_tokens_details": {
+          "cached_tokens": 192
+        },
+        "total_tokens": 372,
+        "web_search_queries": 0
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "X-ZenMux-RequestId"
+      ],
+      "cf-ray": [
+        "a0397e2d3e0898c3-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Sat, 30 May 2026 00:06:30 GMT"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-zenmux-requestid": [
+        "4df746f0ca194db0b92e05f9878452be"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

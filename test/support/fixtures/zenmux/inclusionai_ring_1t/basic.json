@@ -1,0 +1,102 @@
+{
+  "model_spec": "zenmux:inclusionai/ring-1t",
+  "provider": "zenmux",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjIwMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiSGVsbG8gd29ybGQhIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiaW5jbHVzaW9uYWkvcmluZy0xdCIsInJlYXNvbmluZ19lZmZvcnQiOiJsb3ciLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+    },
+    "canonical_json": {
+      "max_completion_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "inclusionai/ring-1t",
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://zenmux.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "content": "Hello! 👋 It looks like you've greeted me with the classic **\"Hello, World!\"** — the traditional first program written by developers learning a new programming language. Fun fact: This simple phrase has been used since the 1970s (popularized by Brian Kernighan in the C language) to verify that a development environment is set up correctly!\n\nHere’s how it looks in a few languages:\n\n- **Python**:  \n  `print(\"Hello, World!\")`\n\n- **JavaScript** (in a browser):  \n  `console.log(\"Hello, World!\");`\n\n- **C**:  \n  ```c\n  #include <stdio.h>\n  int main() {\n      printf(\"Hello, World!\\n\");\n      return 0;\n  }\n  ```\n\nAre you learning to code, testing me, or just saying hello? 😊 Let me know how I can help!",
+            "reasoning": "Okay, the user said \"Hello world!\" which is a classic programming greeting. Let me think about how to respond.\n\nFirst, I should acknowledge their greeting in a friendly way. Since they used \"Hello world!\", they might be a programmer or someone learning to code. Maybe they're testing if I recognize the reference.\n\nI should explain that \"Hello, World!\" is a traditional first program in many languages. It's simple and shows basic syntax. Examples like Python, Java, C could be helpful.\n\nWait, the user might not know much about programming. I should keep it simple but informative. Offer to show examples if they're interested.\n\nAlso, check if they need help with something specific. Maybe they're starting to learn coding and want guidance. Or just saying hello casually.\n\nI should respond warmly, provide some context about the phrase, and invite them to ask more questions. Keep the tone approachable and encouraging.\n\nLet me structure the response: greet back, explain the phrase's origin, give a couple of code examples, and ask how I can assist them further.\n\nMake sure the examples are correct. Python uses print(\"Hello, World!\"), Java has a class and main method, C has printf. But don't overwhelm with too many examples.\n\nYes, that should cover it. Keep it concise but helpful.\n",
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1780099123,
+      "id": "44d000eb84f046dab463e2b4394b367e",
+      "metadata": {},
+      "model": "inclusionai/ring-1t",
+      "object": "chat.completion",
+      "usage": {
+        "completion_tokens": 491,
+        "prompt_tokens": 12,
+        "prompt_tokens_details": {
+          "cached_tokens": 4
+        },
+        "total_tokens": 503
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "X-ZenMux-RequestId"
+      ],
+      "cf-ray": [
+        "a039729fa8512b43-MEM"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 29 May 2026 23:58:44 GMT"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-zenmux-requestid": [
+        "44d000eb84f046dab463e2b4394b367e"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

@@ -1,0 +1,190 @@
+{
+  "model_spec": "venice:grok-build-0-1",
+  "provider": "venice",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Imdyb2stYnVpbGQtMC0xIiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjAsInZlbmljZV9wYXJhbWV0ZXJzIjp7ImRpc2FibGVfdGhpbmtpbmciOmZhbHNlLCJlbmFibGVfd2ViX2NpdGF0aW9ucyI6ZmFsc2UsImVuYWJsZV93ZWJfc2NyYXBpbmciOmZhbHNlLCJlbmFibGVfd2ViX3NlYXJjaCI6Im9mZiIsImluY2x1ZGVfc2VhcmNoX3Jlc3VsdHNfaW5fc3RyZWFtIjpmYWxzZSwiaW5jbHVkZV92ZW5pY2Vfc3lzdGVtX3Byb21wdCI6dHJ1ZSwic3RyaXBfdGhpbmtpbmdfcmVzcG9uc2UiOmZhbHNlfX0="
+    },
+    "canonical_json": {
+      "max_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "grok-build-0-1",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0,
+      "venice_parameters": {
+        "disable_thinking": false,
+        "enable_web_citations": false,
+        "enable_web_scraping": false,
+        "enable_web_search": "off",
+        "include_search_results_in_stream": false,
+        "include_venice_system_prompt": true,
+        "strip_thinking_response": false
+      }
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.venice.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Hello world! 👋\n\nNice to meet you. What can I help you with today?",
+            "reasoning_content": "Hello! How can I help you today? \n\n## Explanation\n\nThe response is constructed as a direct, context-aware acknowledgment of the greeting “Hello world!” to establish immediate conversational flow without introducing extraneous details or assumptions.\n\n__ENCRYPTED_REASONING__oX7u1haa1cADsobO4gzjpPp8laphGk0reGDtkMH7lvqHWh6eRwY9QlAXlAA9W+ahlkiht4fyY9J97W9DC3wcvVAmRBFZXqCq62rN0rsZZ/8btjC+nl3YBoMbqTQNDsAjiJoIevLD4gmJk8QJ4q3j9bzjk+NBch9DNJ8H+d7lSfLz3qZN/W3ebbjHPV2icHVa7t6GKQKHLmJQMgy3IxI0JYH4YC70atkx0pd1WBRl9scOvB5Ymz2/jfe+34ovWpq+or5GloUxb8L7F1zFitUBpcrxqVuseMC+96EX31n7XySkZmVgrbNYG2HpE2AWB4/VMCU6O6z/kuK7tvDog5qmdBZRmEwW+N9yZN/bPbALaRpoXIP7aEKw485JoKyFo5J7Jre6A9VhDUpkATW5u4IY1pMPNbgzDh+7LmKraNxZ7Sfz1G/Z86XQ2D37KQo9m9D8aPpZuhncAXN8f3YSSxldc7/eJZXhjVQC2AzGirSC41R7F4y2BfnpVxWx5UXOJa4oZ1TKMqNN/2ChRTajkAKTq+9YOee3nzqiIl1EROOOfnn0KopYRLRtc/2nVzJIqLp4MRS0AAo/XvUC6tbOSOQvF4sNNulc4wr48p76oxZbkWStWdMfby6UyVM7c1O1UPOBLfZ7kTkcqSPVtvVjoanMZXh3+9Q5iM7Mw1CNiD+NgyW9M1nbJabNKP5ao/M9SMTvnGNWpd6HkBqa0Fb9Q2eXXRJhaVYSgDbi1/QTM42pZX5e0jL/G3ZuRsPv/uHnGnCZDRn+AONIjVBWpvGaIPAVK+nLxG4Pspjev2Y2V7rGw/ctzPTaKDOy8dPFLbjpVJqOLCfF2ZjoyBAC4PbmbWC23Qz1NveseG5nNTAFcMw7paOxNZBkcQ64eV7mMM1DcSY0XfTZuHtcw/tCHlSG5NpTVa5rxncuTTNhWWIjVRsjxX2bRp2+xIL8/SIr/eo7FdqGSKO1QPtWwCQEF32206ilwMep7S+uW9maCyG3PvBl6m8qc67ndhPiEnowAl8D+72W0Sf2pJulmP0ZpP6YDVZvEzw/DLpu7cnXZnuK7YFTvm2zE6fWsMDDLw2z5tC/oSaJKEoZ0nUbIs/M3DZgBqCVz29P2yZNJCoQo61buInyL3SK7WkFWnTjmk0igGBbXi4SxbCpnttKrcSf1mM5oL+2wzWlNbHzfMahbmnf64upNj4LG1HgUXNcxzLXIV2H9+YaSM6djBEIJxxYMd8SIPkqtkDTMlwG/L+DiBXDFnNvp1rjhzP7JULjs7yOrYJWppqcQKnGiyDERIi8SSdHU1bcD3rQrnHiCJEjHN/tjh2RJJgNNmJOCJMqYaoq0kODdOETf3ukE3xIRkGfIkKVg7DQKSPyIhNdoKZlGQsU4TFqWpFs9Cf7delofxldZFewB+0y2aZrf5OK05E/hS6HgfqfbhPWdCgRY9iG6rYrrWxwns1uRbFqEmJR+oADJ4jPlGu5m398p0vOPk6AA88PxIuAKLUK6Jf7Ius3lx/misI/RvKPrb7ukUJjKCrvNTVpb4cMA7Vjgx2nEamnXpbVvtTVXH/R4UfC9s9d0f/ph3NTgPJ7ROu6QBIQjJa8Aw2/T1V687VdbnG3Zxv63lr/k5WOqtPOReEFYBF7N5hJSsw+ghT/EJh2R/WmT6Tie/nWzHiOJxcPKKLH5VCEN1Zj/eGWHt8mCbfrA6jBC4T2yAHS/dLGXCqNy7nVOwsHuv13wLEnNDGMeqLgwus38qgrL9P6nVTJDrUuUxyaOFsilqvQRmq+4ILM0eXo4wE0lKx/8OsUANSkg1HVdWMeWx8LrzcXlX5P5lRvrcpYRrfsKnXnBGzDdF6cccajMszDKTX9Z13uB62+m/SG0jdmbF3ftVisC/TYsRgzFq2MZ8hcxuGA3RWfhI2apYhXXbxeaUiYoOo8UkvH0VGXPWLP73g7x9Vwyb5gBxrs/Kuur/jq+qplcf+h5pJt1bWZSx6iofsQzIBPYYmw/tD6kTkNOGlNsY3urJb0hc6WxTsHwSzoykWJklCsRUAVKJdQFbK45j191eVziopPp8Q1Y+4+khgJegrH871VjzTYi2SNJUA7f+/eVkHfssgDH7WwciW2rHft7W2ZSrLtmHNDagNHe66WG7reI4PsTMCmD+VFjNehIISEEQ7U8a9Vr2yxJ211cRHEwBD/75HORsL8VhtLv+S5tB3T83y44SPMPu57iRA8h5w16JfebtU8SNgaqpEFR6L+jX7l/vc4jP3jPxI3zI3s5OYjsHfZToo1UZe3jlL9gvpgHzYTX45OFHEZ0+r28uZviyuA/FQt/HDOAh223NqDCt84Ozs4+xl+zMHl2Id/Es2nHFg2TnzlR2h4ZtxgrqWctQb3Br2CNAeW6I1qmVuEk1CkDSEhnKFz5/6NY2zBwuN77cANK86lKinc9THjn4zSwM9jKoJOGhiYOTCbjje6muRmzI+b3YVRUKQNvcq6tr0IkSM9BSzN5UxV1AHjIhIT6ig1Zj9gBl9QAAud0lsckjiDZOkinQYLTnXo41oe+BwS/upwpz2CrHdAcZ6kyGrzgKp0fLeciGUV9BJ2A2iFSEH6+0tpXlicV47od6cEmMrC6AttqKz8D1mlh+TSqI33i5NOyN5X7o6grV7ABwdRy9Ujk9Ckl2BuI0eqkC/WKldImg6I9ew6OzhDZGQDU/EMfI2jTVtpnCjcNb91d1/W2z1db1kCE/8ihb4AUGORqTOorraBmRczA+K2t/4pwArp6LS1qzBOD29iCiBqE64",
+            "reasoning_encrypted": true,
+            "refusal": null,
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1780098716,
+      "id": "77c2ce90-5e32-902a-b727-5b89cc209459",
+      "model": "grok-build-0-1",
+      "object": "chat.completion",
+      "usage": {
+        "cache_read_input_tokens": 64,
+        "completion_tokens": 493,
+        "completion_tokens_details": {
+          "reasoning_tokens": 474
+        },
+        "prompt_tokens": 1575,
+        "prompt_tokens_details": {
+          "cached_tokens": 64
+        },
+        "total_tokens": 2068
+      },
+      "venice_parameters": {
+        "disable_thinking": false,
+        "enable_e2ee": true,
+        "enable_web_citations": false,
+        "enable_web_scraping": false,
+        "enable_web_search": "off",
+        "enable_x_search": false,
+        "include_search_results_in_stream": false,
+        "include_venice_system_prompt": true,
+        "return_search_results_as_documents": false,
+        "strip_thinking_response": false,
+        "web_search_citations": []
+      }
+    },
+    "headers": {
+      "access-control-allow-credentials": [
+        "true"
+      ],
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "*"
+      ],
+      "cache-control": [
+        "no-store, no-cache, private, must-revalidate"
+      ],
+      "cdn-cache-control": [
+        "no-store"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a03968f21ca97dd6-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-security-policy": [
+        "default-src 'none'; frame-ancestors *; upgrade-insecure-requests"
+      ],
+      "content-type": [
+        "application/json; charset=utf-8"
+      ],
+      "date": [
+        "Fri, 29 May 2026 23:52:11 GMT"
+      ],
+      "etag": [
+        "W/\"f7c-GRCIBW84Xu1MW+JerhI/hDkVAOQ\""
+      ],
+      "permissions-policy": [
+        "geolocation=(), camera=()"
+      ],
+      "referrer-policy": [
+        "strict-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": "[REDACTED:set-cookie]",
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-frame-options": [
+        "SAMEORIGIN"
+      ],
+      "x-ratelimit-limit-requests": [
+        "500"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "10000000"
+      ],
+      "x-ratelimit-remaining": [
+        "20"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "499"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "10000000"
+      ],
+      "x-ratelimit-reset-requests": [
+        "1780098776540"
+      ],
+      "x-ratelimit-reset-tokens": [
+        "1780098776541"
+      ],
+      "x-ratelimit-resets": [
+        "1780098746519"
+      ],
+      "x-venice-balance-usd": [
+        "9.06644811"
+      ],
+      "x-venice-version": [
+        "outerface-api-server-us-east1-03948-9pd"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

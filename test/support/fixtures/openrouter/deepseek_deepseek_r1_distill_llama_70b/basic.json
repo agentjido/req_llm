@@ -1,4 +1,6 @@
 {
+  "model_spec": "openrouter:deepseek/deepseek-r1-distill-llama-70b",
+  "provider": "openrouter",
   "request": {
     "body": {
       "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImRlZXBzZWVrL2RlZXBzZWVrLXIxLWRpc3RpbGwtbGxhbWEtNzBiIiwibiI6MSwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
@@ -19,6 +21,9 @@
       "temperature": 0.0
     },
     "headers": {
+      "accept": [
+        "application/json"
+      ],
       "accept-encoding": [
         "gzip"
       ],
@@ -27,7 +32,7 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ]
     },
     "method": "post",
@@ -41,42 +46,54 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Hello! How can I assist you today?",
-            "reasoning": "Okay, so I just saw someone write \"Hello world!\" and the response was \"Hello! How can I assist you today?\" I'm trying to figure out what's going on here. It seems like they're using some kind of chatbot or AI assistant. Maybe they're testing it out or just starting to learn how to use it.\n\nI wonder why they chose \"Hello world!\" specifically. I remember that's a common first program people write when they're learning to code. It's simple and just outputs that phrase. So maybe they're drawing a parallel between that and starting a conversation with an AI. That's kind of clever.\n\nNow, if I were to respond, I should probably keep it friendly and open-ended to encourage further interaction. Maybe ask how I can help them today. That way, they feel comfortable to ask anything they need. I should make sure my response is clear and welcoming.\n\nI also need to consider the tone. It should be warm and approachable, not too formal. Using an exclamation mark adds a bit of enthusiasm, which is nice. I don't want to come off as robotic, so keeping it natural is key.\n\nWait, should I mention anything specific? Maybe not, since I don't know what they need yet. It's better to be general and let them guide the conversation. That way, I can provide more tailored assistance once they specify their needs.\n\nI also think about the structure. Starting with a greeting, then asking how I can help. It's a classic approach that's proven to be effective in initiating conversations. It shows that I'm ready and willing to assist with whatever they bring up.\n\nAnother thing to consider is the length of the response. It should be concise but complete. Not too short that it feels abrupt, but not too long that it's overwhelming. \"Hello! How can I assist you today?\" seems just right.\n\nI also wonder if there are any cultural or language nuances I should be aware of. Since the greeting is in English, I can assume the user is comfortable with that, but being sensitive to different communication styles is always a good idea.\n\nIn summary, my response should be friendly, open-ended, and inviting to encourage the user to specify how I can help them. Keeping it simple and natural is the way to go.\n",
-            "reasoning_details": [
-              {
-                "format": null,
-                "index": 0,
-                "text": "Okay, so I just saw someone write \"Hello world!\" and the response was \"Hello! How can I assist you today?\" I'm trying to figure out what's going on here. It seems like they're using some kind of chatbot or AI assistant. Maybe they're testing it out or just starting to learn how to use it.\n\nI wonder why they chose \"Hello world!\" specifically. I remember that's a common first program people write when they're learning to code. It's simple and just outputs that phrase. So maybe they're drawing a parallel between that and starting a conversation with an AI. That's kind of clever.\n\nNow, if I were to respond, I should probably keep it friendly and open-ended to encourage further interaction. Maybe ask how I can help them today. That way, they feel comfortable to ask anything they need. I should make sure my response is clear and welcoming.\n\nI also need to consider the tone. It should be warm and approachable, not too formal. Using an exclamation mark adds a bit of enthusiasm, which is nice. I don't want to come off as robotic, so keeping it natural is key.\n\nWait, should I mention anything specific? Maybe not, since I don't know what they need yet. It's better to be general and let them guide the conversation. That way, I can provide more tailored assistance once they specify their needs.\n\nI also think about the structure. Starting with a greeting, then asking how I can help. It's a classic approach that's proven to be effective in initiating conversations. It shows that I'm ready and willing to assist with whatever they bring up.\n\nAnother thing to consider is the length of the response. It should be concise but complete. Not too short that it feels abrupt, but not too long that it's overwhelming. \"Hello! How can I assist you today?\" seems just right.\n\nI also wonder if there are any cultural or language nuances I should be aware of. Since the greeting is in English, I can assume the user is comfortable with that, but being sensitive to different communication styles is always a good idea.\n\nIn summary, my response should be friendly, open-ended, and inviting to encourage the user to specify how I can help them. Keeping it simple and natural is the way to go.\n",
-                "type": "reasoning.text"
-              }
-            ],
+            "content": "Hello! How can I assist you today? 😊",
+            "reasoning": null,
             "refusal": null,
             "role": "assistant"
           },
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1762105054,
-      "id": "gen-1762105054-CDnSGjBeQ4A1FetIjYOW",
+      "created": 1780097683,
+      "id": "gen-1780097683-oGa6Hhe7tTjnNjaTRd4v",
       "model": "deepseek/deepseek-r1-distill-llama-70b",
       "object": "chat.completion",
-      "provider": "Chutes",
+      "provider": "Novita",
+      "service_tier": null,
+      "system_fingerprint": null,
       "usage": {
-        "completion_tokens": 479,
-        "prompt_tokens": 9,
-        "prompt_tokens_details": {
-          "cached_tokens": 3
+        "completion_tokens": 15,
+        "completion_tokens_details": {
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "reasoning_tokens": 0
         },
-        "total_tokens": 488
+        "cost": 1.68e-5,
+        "cost_details": {
+          "upstream_inference_completions_cost": 1.2e-5,
+          "upstream_inference_cost": 1.68e-5,
+          "upstream_inference_prompt_cost": 4.8e-6
+        },
+        "is_byok": false,
+        "prompt_tokens": 6,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 0,
+          "video_tokens": 0
+        },
+        "total_tokens": 21
       }
     },
     "headers": {
       "access-control-allow-origin": [
         "*"
       ],
+      "access-control-expose-headers": [
+        "X-Generation-Id,cf-ray"
+      ],
       "cf-ray": [
-        "9985668e9cbf13a0-ORD"
+        "a0394fbcaca3d95e-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -85,7 +102,7 @@
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:37:36 GMT"
+        "Fri, 29 May 2026 23:34:45 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
@@ -99,13 +116,14 @@
       "transfer-encoding": [
         "chunked"
       ],
-      "vary": [
-        "Accept-Encoding"
-      ],
       "x-content-type-options": [
         "nosniff"
+      ],
+      "x-generation-id": [
+        "gen-1780097683-oGa6Hhe7tTjnNjaTRd4v"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

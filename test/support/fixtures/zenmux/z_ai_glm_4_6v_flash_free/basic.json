@@ -1,0 +1,105 @@
+{
+  "model_spec": "zenmux:z-ai/glm-4.6v-flash-free",
+  "provider": "zenmux",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjIwMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiSGVsbG8gd29ybGQhIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiei1haS9nbG0tNC42di1mbGFzaC1mcmVlIiwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+    },
+    "canonical_json": {
+      "max_completion_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "z-ai/glm-4.6v-flash-free",
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://zenmux.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "content": "\nHello! It's great to see you. How can I assist you today? Whether you need help with coding, information, or just a chat, feel free to let me know what you're looking for.",
+            "reasoning": "用户输入了“Hello world!”。这是一个非常常见的问候语。用户可能是在测试AI的响应能力，或者只是想看看AI能做什么。首先，我应该确认用户输入的内容，然后给出一个合适的回应。用户可能希望得到一个友好的回应，或者可能是在编程上下文中，比如学习如何与AI交互。不过，用户只是输入了文本，没有具体问题。所以，可能需要回应用户的问候，并询问是否需要帮助。检查用户意图：用户可能是在测试，或者只是想开始对话。因此，回应应该友好，比如“Hello! How can I help you today?”或者直接回应用户的问候，比如“Hello! It's nice to meet you. What can I do for you?”。用户输入是“Hello world!”，可能是在模仿编程中的第一个程序，所以或许可以回应说“Hello world! Welcome to the world of AI. How can I assist you?”。这样既回应了用户的输入，也提供了帮助。确保回应自然且有帮助。最终决定，用友好的问候并询问需求。",
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1780099636,
+      "id": "765bdaf33d894556b50df29c16105f82",
+      "model": "z-ai/glm-4.6v-flash-free",
+      "object": "chat.completion",
+      "request_id": "20260530080711f33830f8ef2647df",
+      "usage": {
+        "completion_tokens": 268,
+        "completion_tokens_details": {
+          "reasoning_tokens": 222
+        },
+        "prompt_tokens": 9,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "total_tokens": 277
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "X-ZenMux-RequestId"
+      ],
+      "cf-ray": [
+        "a0397f3f4a1a116b-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Sat, 30 May 2026 00:07:17 GMT"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-zenmux-requestid": [
+        "765bdaf33d894556b50df29c16105f82"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

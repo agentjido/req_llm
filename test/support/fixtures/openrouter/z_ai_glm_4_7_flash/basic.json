@@ -1,0 +1,137 @@
+{
+  "model_spec": "openrouter:z-ai/glm-4.7-flash",
+  "provider": "openrouter",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6InotYWkvZ2xtLTQuNy1mbGFzaCIsIm4iOjEsInJlYXNvbmluZ19lZmZvcnQiOiJsb3ciLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+    },
+    "canonical_json": {
+      "max_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "z-ai/glm-4.7-flash",
+      "n": 1,
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Hello! How can I help you today?",
+            "reasoning": "1.  **Analyze the user's input:** The user said \"Hello world!\".\n2.  **Identify the intent:** This is a standard, friendly greeting. It's often used to test if an AI is working or just to start a conversation.\n3.  **Determine the appropriate response:**\n    *   Acknowledge the greeting.\n    *   Respond in a friendly and helpful manner.\n    *   Offer assistance.\n4.  **Drafting potential responses:**\n    *   *Option 1 (Simple):* Hello! How can I help you?\n    *   *Option 2 (Enthusiastic):* Hi there! Welcome. What's on your mind?\n    *   *Option 3 (Contextual):* Hello world! That's the classic first program. How can I assist you today?\n    *   *Option 4 (Standard AI persona):* Hello! I'm an AI assistant. How can I help you?\n5.  **Selecting the best response:** Option 1 is safe, polite, and direct. Option 3 is a nice nod to the phrase's origin but might be slightly too nerdy unless the user seems technical. Let's go with a friendly, standard greeting that invites further interaction.\n6.  **Final Polish:** \"Hello! How can I help you today?\" or \"Hi there! What can I do for you?\"",
+            "reasoning_details": [
+              {
+                "format": "unknown",
+                "index": 0,
+                "text": "1.  **Analyze the user's input:** The user said \"Hello world!\".\n2.  **Identify the intent:** This is a standard, friendly greeting. It's often used to test if an AI is working or just to start a conversation.\n3.  **Determine the appropriate response:**\n    *   Acknowledge the greeting.\n    *   Respond in a friendly and helpful manner.\n    *   Offer assistance.\n4.  **Drafting potential responses:**\n    *   *Option 1 (Simple):* Hello! How can I help you?\n    *   *Option 2 (Enthusiastic):* Hi there! Welcome. What's on your mind?\n    *   *Option 3 (Contextual):* Hello world! That's the classic first program. How can I assist you today?\n    *   *Option 4 (Standard AI persona):* Hello! I'm an AI assistant. How can I help you?\n5.  **Selecting the best response:** Option 1 is safe, polite, and direct. Option 3 is a nice nod to the phrase's origin but might be slightly too nerdy unless the user seems technical. Let's go with a friendly, standard greeting that invites further interaction.\n6.  **Final Polish:** \"Hello! How can I help you today?\" or \"Hi there! What can I do for you?\"",
+                "type": "reasoning.text"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "stop"
+        }
+      ],
+      "created": 1780098224,
+      "id": "gen-1780098224-5sp82Walpg0dYifBnYLw",
+      "model": "z-ai/glm-4.7-flash-20260119",
+      "object": "chat.completion",
+      "provider": "Z.AI",
+      "service_tier": null,
+      "system_fingerprint": null,
+      "usage": {
+        "completion_tokens": 300,
+        "completion_tokens_details": {
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "reasoning_tokens": 289
+        },
+        "cost": 1.2044e-4,
+        "cost_details": {
+          "upstream_inference_completions_cost": 1.2e-4,
+          "upstream_inference_cost": 1.2044e-4,
+          "upstream_inference_prompt_cost": 4.4e-7
+        },
+        "is_byok": false,
+        "prompt_tokens": 8,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 2,
+          "video_tokens": 0
+        },
+        "total_tokens": 308
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "X-Generation-Id,cf-ray"
+      ],
+      "cf-ray": [
+        "a0395ce69b55acae-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 29 May 2026 23:43:48 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-generation-id": [
+        "gen-1780098224-5sp82Walpg0dYifBnYLw"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

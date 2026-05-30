@@ -1,4 +1,6 @@
 {
+  "model_spec": "openrouter:z-ai/glm-4.5",
+  "provider": "openrouter",
   "request": {
     "body": {
       "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6InotYWkvZ2xtLTQuNSIsIm4iOjEsInJlYXNvbmluZ19lZmZvcnQiOiJsb3ciLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
@@ -19,6 +21,9 @@
       "temperature": 0.0
     },
     "headers": {
+      "accept": [
+        "application/json"
+      ],
       "accept-encoding": [
         "gzip"
       ],
@@ -27,7 +32,7 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ]
     },
     "method": "post",
@@ -41,13 +46,13 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Hello! It looks like you're starting with the classic \"Hello world!\" greeting. This is often the first program people write when learning a new programming language. Here's how you'd implement it in a few popular languages:\n\n### Python\n```python\nprint(\"Hello, World!\")\n```\n\n### JavaScript\n```javascript\nconsole.log(\"Hello, World!\");\n```\n\n### Java\n```java\npublic class HelloWorld {\n    public static void main(String[] args) {\n        System.out.println(\"Hello, World!\");\n    }\n}\n```\n\n### C\n```c\n#include <stdio.h>\n\nint main() {\n    printf(\"Hello, World!\\n\");\n    return 0;\n}\n```\n\n### C++\n```cpp\n#include <iostream>\n\nint main() {\n    std::cout << \"Hello, World!\" << std::endl;\n    return 0;\n}\n```\n\n### Ruby\n```ruby\nputs \"Hello, World!\"\n```\n\n### Go\n```go\npackage main\n\nimport \"fmt\"\n\nfunc main() {\n    fmt.Println(\"Hello, World!\")\n}\n```\n\n### Swift\n```swift\nprint(\"Hello, World!\")\n```\n\n### Key Notes:\n1. **Purpose**: This simple program tests that your environment is set up correctly and introduces basic syntax.\n2. **Variations**: Some languages use `print`, `console.log`, `printf`, etc., but the core idea is the same.\n3. **History**: The tradition started with Brian Kernighan's 1972 example in the C programming language tutorial.\n\nLet me know if you'd like explanations for any specific language or help with your next steps! 😊",
-            "reasoning": "\nWe are just starting, so a simple \"Hello, World!\" program is appropriate.\n Since the user said \"Hello world!\", we can respond with a classic greeting.\n However, note that the user's message is \"Hello world!\" (with an exclamation) and the classic is \"Hello, World!\" (with a comma and capital W).\n We can either match the user's input exactly or use the classic version. Let's go with the classic for a standard response.\n But note: the user might be expecting a response that mirrors their input. However, in programming, the classic is well-known.\n\n Let's output: \"Hello, World!\"",
+            "content": "Hello! It looks like you're greeting the world. Here's a classic response in Python:\n\n```python\nprint(\"Hello, World!\")\n```\n\nWhen you run this code, it will output:\n```\nHello, World!\n```\n\nThis is often the first program people write when learning a new programming language. It's a simple way to verify that your environment is set up correctly and that you can create and run a basic program. \n\nIf you're just starting out, welcome to the exciting world of programming! If you have any specific questions or need help with something else, feel free to ask. 😊",
+            "reasoning": "\nWe are going to create a simple \"Hello, World!\" program.\n Since the user said \"Hello world!\", we can respond with a greeting.\n However, note that the user's message is \"Hello world!\" (with an exclamation) and the classic is \"Hello, World!\" (with a comma and capital W).\n We can respond in a similar manner.\n\n Let's output: \"Hello, World!\"",
             "reasoning_details": [
               {
                 "format": "unknown",
                 "index": 0,
-                "text": "\nWe are just starting, so a simple \"Hello, World!\" program is appropriate.\n Since the user said \"Hello world!\", we can respond with a classic greeting.\n However, note that the user's message is \"Hello world!\" (with an exclamation) and the classic is \"Hello, World!\" (with a comma and capital W).\n We can either match the user's input exactly or use the classic version. Let's go with the classic for a standard response.\n But note: the user might be expecting a response that mirrors their input. However, in programming, the classic is well-known.\n\n Let's output: \"Hello, World!\"",
+                "text": "\nWe are going to create a simple \"Hello, World!\" program.\n Since the user said \"Hello world!\", we can respond with a greeting.\n However, note that the user's message is \"Hello world!\" (with an exclamation) and the classic is \"Hello, World!\" (with a comma and capital W).\n We can respond in a similar manner.\n\n Let's output: \"Hello, World!\"",
                 "type": "reasoning.text"
               }
             ],
@@ -57,26 +62,46 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1762105059,
-      "id": "gen-1762105059-i7D89Ex7XqEzS6LzX9q6",
+      "created": 1780098187,
+      "id": "gen-1780098187-UEczGJI9DptdZPveoHgh",
       "model": "z-ai/glm-4.5",
       "object": "chat.completion",
       "provider": "Z.AI",
+      "service_tier": null,
+      "system_fingerprint": null,
       "usage": {
-        "completion_tokens": 468,
+        "completion_tokens": 210,
+        "completion_tokens_details": {
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "reasoning_tokens": 83
+        },
+        "cost": 4.6484e-4,
+        "cost_details": {
+          "upstream_inference_completions_cost": 4.62e-4,
+          "upstream_inference_cost": 4.6484e-4,
+          "upstream_inference_prompt_cost": 2.84e-6
+        },
+        "is_byok": false,
         "prompt_tokens": 8,
         "prompt_tokens_details": {
-          "cached_tokens": 4
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 4,
+          "video_tokens": 0
         },
-        "total_tokens": 476
+        "total_tokens": 218
       }
     },
     "headers": {
       "access-control-allow-origin": [
         "*"
       ],
+      "access-control-expose-headers": [
+        "X-Generation-Id,cf-ray"
+      ],
       "cf-ray": [
-        "998566b00f3214ce-ORD"
+        "a0395c0838e3b474-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -85,7 +110,7 @@
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:37:40 GMT"
+        "Fri, 29 May 2026 23:43:09 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
@@ -99,13 +124,14 @@
       "transfer-encoding": [
         "chunked"
       ],
-      "vary": [
-        "Accept-Encoding"
-      ],
       "x-content-type-options": [
         "nosniff"
+      ],
+      "x-generation-id": [
+        "gen-1780098187-UEczGJI9DptdZPveoHgh"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

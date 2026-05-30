@@ -25,7 +25,7 @@ Historical warning: before the fixture-tooling slice, explicit `mix mc "provider
 
 Current branch: `fixture-refresh-2026-06`.
 
-Committed fixture-refresh slices:
+Previously committed fixture-refresh slices:
 
 | Commit | Scope |
 | --- | --- |
@@ -34,7 +34,11 @@ Committed fixture-refresh slices:
 | `84f38a47` | Hardened model operation selection so specialty models do not leak into text refreshes. |
 | `74c92f75` | Refreshed Anthropic coverage, removed deprecated Claude 3-family fixtures, and normalized Anthropic fixture cookies. |
 | `a4f7f64d` | Refreshed current OpenAI text coverage, removed deprecated OpenAI fixtures, and fixed OpenAI Responses/reasoning profile issues found during recording. |
+| `2825361a` | Updated the fixture refresh plan after the initial OpenAI pass. |
 | `27688e8c` | Refreshed base OpenAI non-text fixtures and hardened binary/multipart fixture replay. |
+| `6d63a57a` | Expanded OpenAI non-text fixture coverage. |
+| `aa22f7f5` | Refreshed OpenAI text fixtures after the expanded non-text pass. |
+| `82b9dd47` | Refreshed Google and xAI fixture coverage, added provider scenario routing, and hardened xAI streaming option handling. |
 
 Current completed provider status:
 
@@ -52,23 +56,47 @@ Current completed provider status:
 - xAI current normal text targets are replay-clean for `grok-4`, `grok-4-fast`, `grok-3-mini`, `grok-3-mini-fast`, `grok-3-mini-fast-latest`, `grok-3-mini-latest`, `grok-4.20-0309-non-reasoning`, `grok-4.20-non-reasoning`, `grok-4.20-0309-reasoning`, `grok-4.3`, and `grok-build-0.1`.
 - xAI current image generation is replay-clean for `grok-imagine-image` and `grok-imagine-image-quality`.
 - xAI provider-specific coverage is retargeted to current models and replay-clean for web search, X search, native streaming structured output, tool-strict streaming structured output, auto streaming structured output, and truncated-stream handling.
+- Groq now has basic-scenario fixture coverage for 9/14 text models and transcription fixture coverage for both Whisper models. The full comprehensive suite only passed for `allam-2-7b`; advanced Groq tools/object scenarios should be handled separately from broad model coverage.
+- Cerebras now has basic-scenario fixture coverage for `gpt-oss-120b` and `zai-glm-4.7`; `llama3.1-8b`, `qwen-3-235b-a22b-instruct-2507`, and `qwen-3-coder-480b` returned 404 on basic chat.
+- Cohere rerank is refreshed for all five rerank models. Cohere chat/text models are not currently implemented by `ReqLLM.Providers.Cohere`, so those catalog entries are not fixture targets yet.
+- ElevenLabs speech fixtures are refreshed for all four speech models.
+- Fireworks AI has basic-scenario fixture coverage for 11/12 text models; `accounts/fireworks/routers/glm-5p1-fast` returned 503 during the live run.
+- OpenRouter now has basic-scenario fixture coverage for 209 text models across OpenAI OSS, Gemini/Gemma, DeepSeek, Meta, Mistral, Qwen, Z.ai, NVIDIA, Moonshot, Amazon, ByteDance, Cohere, InclusionAI, Liquid, Microsoft, Nous, xAI, Perplexity, IBM Granite, Inception, Morph, Nex-AGI, Reka, Poolside, Xiaomi, Aion, Inflection, Mancer, Sao10k, and OpenRouter-native routes.
+- Venice now has basic-scenario fixture coverage for all 67 current Venice catalog text models. A missing coverage wrapper caused an initial false failure pass; `test/coverage/venice/comprehensive_test.exs` now exists.
+- Zenmux now has basic-scenario fixture coverage for 107/147 text models. Most misses were live 400/404 catalog availability mismatches, plus a few timeouts.
+- Z.ai coding-plan now has basic-scenario fixture coverage for 4/5 models; `glm-5v-turbo` returned 429.
+- Cached replay validation is clean for the expansion-provider batch: OpenRouter `basic` 209/209, Venice `basic` 67/67, Zenmux `basic` 107/107, Groq `basic` 9/9, Groq transcription 2/2, Cerebras `basic` 2/2, Fireworks AI `basic` 11/11, Cohere rerank 5/5, ElevenLabs speech 4/4, Z.ai `basic` 2/2, and Z.ai coding-plan `basic` 4/4.
 - Deprecated OpenAI, Anthropic, Google, and xAI fixture directories have been removed from package scope.
 - Minimax key and balance are no longer blocking key work. Keep Minimax as a later provider-specific fixture pass rather than retesting credentials now.
 
 ## Next Recommended Pass
 
-1. Move to `groq` next, then `cerebras`; both already have some passing fixture state and should be cheaper to normalize than the larger aggregator providers.
-2. After Groq/Cerebras, run focused passes for `zai`, `zai_coder`, and `minimax`; Minimax key/balance work is no longer blocking.
-3. Then handle expansion providers by endpoint family: `fireworks_ai`, `mistral`, `cohere` rerank, `elevenlabs` speech, `zenmux`, and `venice`.
+1. Add a "passing scenario set" replay selector or report mode so the large basic-scenario fixture set can be rerun without hand-built `REQ_LLM_MODELS` lists.
+2. Decide how deep to go on aggregator providers: OpenRouter, Venice, and Zenmux now have broad `basic` coverage, but advanced scenarios should be opt-in by provider family because tools, object streaming, and token-limit behavior varies heavily.
+3. Revisit Groq advanced scenarios separately. Basic/transcription coverage is useful now, but the full comprehensive suite exposed tool/object/limit differences that should not block model-level basic fixtures.
 4. Keep OpenAI deferred gaps separate: dated audio-chat aliases, Pro depth, realtime, Sora, moderation, search, and legacy completions.
 5. Keep Google deferred gaps separate: video/Veo, native audio/live, Lyria, robotics, deep research, `text-embedding-004` 404, and stale/unavailable `gemini-3-pro-preview`.
 6. Keep xAI deferred gaps separate: `grok-2`, `grok-2-1212`, and `grok-beta` currently return 400 on normal chat; `grok-4.20-multi-agent-0309` is not a normal chat target; `grok-imagine-video` needs explicit video support before fixture recording.
-7. Before broad recording, add or decide on a "currently fixture-backed passing models" selector so we can rerun the conservative set without hand-running individual specs or accidentally selecting every active LLMDB model.
-8. Keep Azure, Amazon Bedrock, Alibaba, and Google Vertex out of this pass until the user explicitly reopens those credential/provider tracks.
+7. Keep Azure, Amazon Bedrock, Alibaba, and Google Vertex out of this pass until the user explicitly reopens those credential/provider tracks. Alibaba is currently blocked on `DASHSCOPE_API_KEY`; Google Vertex is blocked on Google Cloud project/application credentials.
 
 ## Current Fixture State
 
-The fixture tree has 2309 JSON fixture files under `test/support/fixtures`.
+The fixture tree has 2697 JSON fixture files under `test/support/fixtures`.
+
+Scenario-backed fixture coverage is now the clearest metric for this branch because broad provider sweeps intentionally recorded `basic`, speech, transcription, and rerank scenarios without promoting every model to full comprehensive state:
+
+| Provider | Passing scenario-backed models | Scenario scope |
+| --- | ---: | --- |
+| openrouter | 209 | `basic` text |
+| zenmux | 107 | `basic` text |
+| venice | 67 | `basic` text |
+| groq | 11 | `basic` text plus transcription |
+| fireworks_ai | 11 | `basic` text |
+| cohere | 5 | rerank |
+| elevenlabs | 4 | speech |
+| zai_coding_plan | 4 | `basic` text |
+| cerebras | 2 | `basic` text |
+| zai | 2 | newly recorded `basic` text; earlier full fixtures still exist for the original Z.ai set |
 
 `MIX_ENV=test mix mc` reports:
 
@@ -85,7 +113,7 @@ The fixture tree has 2309 JSON fixture files under `test/support/fixtures`.
 | fireworks_ai | 0 | 0 | 0 | 12 |
 | google | 7 | 0 | 2 | 41 |
 | google_vertex | 0 | 0 | 0 | 40 |
-| groq | 7 | 0 | 0 | 11 |
+| groq | 1 | 10 | 0 | 7 |
 | minimax | 6 | 0 | 0 | 0 |
 | openai | 19 | 2 | 0 | 65 |
 | openrouter | 45 | 0 | 0 | 319 |
@@ -96,7 +124,7 @@ The fixture tree has 2309 JSON fixture files under `test/support/fixtures`.
 | zai_coding_plan | 0 | 0 | 0 | 5 |
 | zenmux | 0 | 0 | 0 | 149 |
 
-The provider sections currently sum to 165 passing, fixture-backed models after the Google and xAI pass. The task's model-level table still undercounts targeted non-text/provider-specific work because image, embedding, grounding, web-search, and streaming-structured scenarios are tracked by scenario fixtures rather than by full text-model state.
+The provider sections currently sum to 159 full-model passing entries. The task's model-level table now intentionally undercounts targeted non-text/provider-specific/basic-only work because image, embedding, grounding, web-search, streaming-structured, speech, transcription, rerank, and broad aggregator `basic` scenarios are tracked by scenario fixtures rather than by full comprehensive model state.
 
 OpenAI scenario/fixture-file verification is more current than the model-level `mix mc` table because this branch records targeted scenarios without promoting every scenario result to `priv/supported_models.json`. The current OpenAI fixture-file count is 64/86:
 
@@ -216,6 +244,7 @@ Important behavior:
 - `--record` and `--record-all` both make live API calls for selected specs in the current task implementation.
 - Replay checks are read-only by default.
 - Use `--scenario` for one or more comma-separated scenario tags.
+- For direct `mix test` replay of a scenario, use `mix test path/to/test.exs --only scenario:basic`. Do not combine `--include coverage` with `--only scenario:...`; `--only` already admits matching coverage tests and combining both broadens the run to all coverage tests in the file.
 - Use `--capability core|conversation|streaming|tools|objects|reasoning|embedding|image|speech|transcription|rerank|ocr` for scenario groups.
 - Use `--update-state` when a replay run should write scenario or model state.
 - Record mode defaults to `--max-concurrency 1`; replay mode uses higher concurrency unless overridden.
