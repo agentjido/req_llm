@@ -1098,13 +1098,13 @@ defmodule ReqLLM.StreamServer do
 
             iodata = Enum.reverse(state.raw_iodata)
 
-            apply(fixture_backend, :save_streaming_fixture, [
+            fixture_backend.save_streaming_fixture(
               state.http_context,
               state.fixture_path,
               state.canonical_json,
               state.model,
               iodata
-            ])
+            )
 
             Debug.dbug("save_streaming_fixture completed", component: :stream_server)
 
