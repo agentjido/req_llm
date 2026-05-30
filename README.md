@@ -25,9 +25,9 @@ LLM APIs are inconsistent. ReqLLM provides a unified, idiomatic Elixir interface
 
 ReqLLM currently exposes **1,205 models across 21 implemented provider integrations** from the [models.dev](https://models.dev) catalog via `llm_db`. Counting the cataloged-but-not-separate `google_vertex_anthropic` namespace, the registry contains **1,218 models across 22 provider namespaces**.
 
-That includes **92 non-text operation models**: 39 embedding, 23 image generation, 12 text-to-speech, 11 transcription, 5 rerank, and 2 OCR models. The fixture suite currently contains **619 unique recorded model specs** across text and non-text operations.
+That breadth extends well beyond chat: ReqLLM tracks **92 non-text operation models** across embedding, image generation, text-to-speech, transcription, rerank, and OCR APIs. The fixture suite currently contains **619 unique recorded model specs**, giving ReqLLM a compatibility ledger for text and multi-modal provider behavior.
 
-| Provider | ID | Catalog models | Operation surface | Fixture specs | Guide |
+| Provider | ID | Catalog models | Operation surface | Recorded specs | Guide |
 |---|---|---:|---|---:|---|
 | [Alibaba Cloud Bailian](https://www.alibabacloud.com/help/en/model-studio) | `alibaba` | 50 | text, OCR 1, transcription 1 | 0 | — |
 | [Alibaba Cloud Bailian (China)](https://www.alibabacloud.com/help/en/model-studio) | `alibaba_cn` | 82 | text, OCR 1, transcription 1 | 0 | — |
@@ -480,9 +480,9 @@ ReqLLM has now reached v1.0.0. The core API is stable and ready for production u
 
 ### Test Coverage & Quality Commitment
 
-**159 model-compat entries currently pass our fixture-backed test suite** across 12 providers, with **619 unique recorded fixture model specs** across text and non-text operations. The LLM API landscape is highly dynamic, so catalog support and fixture-verified coverage are tracked separately.
+ReqLLM uses fixture-backed compatibility tests as a practical map of provider behavior. The current suite includes **159 passing model-compat entries** across 12 providers and **619 unique recorded fixture model specs** across text, streaming, tool calling, structured output, embeddings, image generation, speech, transcription, rerank, and OCR.
 
-These fixture tests are regularly refreshed against live APIs to catch provider-side changes. While we can't guarantee every edge case or every catalog model in production, the fixture-based approach provides a reliable baseline that you can verify with `mix mc "*:*"` or narrow by provider and operation type.
+Catalog support and fixture-verified coverage are tracked separately on purpose: provider catalogs move quickly, account access varies, and some modalities need specialized tests. ReqLLM makes that state visible through `mix mc "*:*"` and lets you narrow checks by provider or operation type when you need to validate the exact models your application uses.
 
 **We welcome bug reports and feedback!** If you encounter issues with any supported model, please open a GitHub issue with details. The more feedback we receive, the stronger the code will be!
 
