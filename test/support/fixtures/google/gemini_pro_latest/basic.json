@@ -43,13 +43,21 @@
     "body": {
       "candidates": [
         {
-          "content": {},
+          "content": {
+            "parts": [
+              {
+                "text": "Hello",
+                "thoughtSignature": "EoUCCoICAQw51sd0A1tRWCgNShAdwPbQ5RJ/fqtS5c8JeGuV7f6x6Ts03ApY/146vPiwvEQTApjGw1EObA4K7K1dhJ/cm7hkvgzk0p12WcAYoPzmiPdZyckIbqXlDjyXvAEsFUmNFnFzQUux9OdBmXcf7ZTy+6LXsgQFUPpJUpkMzfNMdLKcmN9P+timECxr9k10WI9yDJ++Mx4xPu43Sbi7Vc9oi94E9jidD3k6BnTvrEnO6qGCvzVY/CHsIBbV8Efoipob5AkRxpvG+BANSxG2ZV3N/VoYH74VRmSjJGpIZ0Q6eeqH5BEmEeGmdiQ/WqSiaWxUGBLtMxFR/3Sob3KHbsUNMo+K"
+              }
+            ],
+            "role": "model"
+          },
           "finishReason": "MAX_TOKENS",
           "index": 0
         }
       ],
       "modelVersion": "gemini-3.1-pro-preview",
-      "responseId": "Xw8aapDEDuLFjMcPvfnt6Qs",
+      "responseId": "qTYaarmCMa6W-8YPxp-a8QM",
       "usageMetadata": {
         "promptTokenCount": 4,
         "promptTokensDetails": [
@@ -59,8 +67,8 @@
           }
         ],
         "serviceTier": "standard",
-        "thoughtsTokenCount": 47,
-        "totalTokenCount": 51
+        "thoughtsTokenCount": 45,
+        "totalTokenCount": 49
       }
     },
     "headers": {
@@ -71,13 +79,13 @@
         "application/json; charset=UTF-8"
       ],
       "date": [
-        "Fri, 29 May 2026 22:12:48 GMT"
+        "Sat, 30 May 2026 01:00:27 GMT"
       ],
       "server": [
         "scaffolding on HTTPServer2"
       ],
       "server-timing": [
-        "gfet4t7; dur=1692"
+        "gfet4t7; dur=1771"
       ],
       "transfer-encoding": [
         "chunked"

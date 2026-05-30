@@ -51,8 +51,8 @@
           }
         }
       ],
-      "created": 1780095516,
-      "id": "7b0f3a9e-21ec-9d92-ae6f-e300d3302582",
+      "created": 1780103100,
+      "id": "34a3fb56-71a5-914f-8b2c-304fb2bd20f3",
       "model": "grok-4.3",
       "object": "chat.completion",
       "system_fingerprint": "fp_eb3c003fc66c14ed",
@@ -61,10 +61,10 @@
         "completion_tokens_details": {
           "accepted_prediction_tokens": 0,
           "audio_tokens": 0,
-          "reasoning_tokens": 124,
+          "reasoning_tokens": 181,
           "rejected_prediction_tokens": 0
         },
-        "cost_in_usd_ticks": 3643500,
+        "cost_in_usd_ticks": 5068500,
         "num_sources_used": 0,
         "prompt_tokens": 133,
         "prompt_tokens_details": {
@@ -73,7 +73,7 @@
           "image_tokens": 0,
           "text_tokens": 133
         },
-        "total_tokens": 266
+        "total_tokens": 323
       }
     },
     "headers": {
@@ -87,7 +87,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "a0391ad22a5fe7f4-ORD"
+        "a039d3f6796b344d-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -96,7 +96,7 @@
         "application/json"
       ],
       "date": [
-        "Fri, 29 May 2026 22:58:37 GMT"
+        "Sat, 30 May 2026 01:05:02 GMT"
       ],
       "server": [
         "cloudflare"
@@ -106,7 +106,7 @@
         "max-age=31536000"
       ],
       "traceparent": [
-        "00-ac12820b253e789dcaefc1ba05ef22a8-4c446e4400039444-01"
+        "00-124fcd9dd6344579d3ae650b9d24aa9d-94ad52410002141f-01"
       ],
       "transfer-encoding": [
         "chunked"
@@ -115,13 +115,13 @@
         "origin, access-control-request-method, access-control-request-headers"
       ],
       "x-metrics-e2e-ms": [
-        "1133.9"
+        "2826.2"
       ],
       "x-metrics-mean-itl-ms": [
-        "6.1"
+        "13.1"
       ],
       "x-metrics-ttft-ms": [
-        "158.7"
+        "181.2"
       ],
       "x-ratelimit-limit-requests": [
         "1800"
@@ -130,13 +130,13 @@
         "10000000"
       ],
       "x-ratelimit-remaining-requests": [
-        "1799"
+        "1800"
       ],
       "x-ratelimit-remaining-tokens": [
-        "9999449"
+        "10000000"
       ],
       "x-request-id": [
-        "7b0f3a9e-21ec-9d92-ae6f-e300d3302582"
+        "34a3fb56-71a5-914f-8b2c-304fb2bd20f3"
       ],
       "x-zero-data-retention": [
         "false"

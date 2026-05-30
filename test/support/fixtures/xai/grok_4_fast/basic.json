@@ -43,27 +43,27 @@
           "finish_reason": "stop",
           "index": 0,
           "message": {
-            "content": "Hello, World! 👋 What's up?",
-            "reasoning_content": "The user said \"Hello world!\" This is a classic greeting, often the first program in programming tutorials. It's friendly and casual.\n",
+            "content": "Hello, World! 👋 How can I help you today?",
+            "reasoning_content": "The user said \"Hello world!\" This is a classic greeting, often the first program in programming tutorials. It's friendly and casual.",
             "refusal": null,
             "role": "assistant"
           }
         }
       ],
-      "created": 1780096048,
-      "id": "f6c3bab4-25ee-9947-88a3-00ada0edbba2",
+      "created": 1780103044,
+      "id": "7393fc5c-a13a-9509-bbab-1ced4e6b8df5",
       "model": "grok-4.3",
       "object": "chat.completion",
       "system_fingerprint": "fp_eb3c003fc66c14ed",
       "usage": {
-        "completion_tokens": 9,
+        "completion_tokens": 13,
         "completion_tokens_details": {
           "accepted_prediction_tokens": 0,
           "audio_tokens": 0,
-          "reasoning_tokens": 140,
+          "reasoning_tokens": 125,
           "rejected_prediction_tokens": 0
         },
-        "cost_in_usd_ticks": 4043500,
+        "cost_in_usd_ticks": 3768500,
         "num_sources_used": 0,
         "prompt_tokens": 133,
         "prompt_tokens_details": {
@@ -72,7 +72,7 @@
           "image_tokens": 0,
           "text_tokens": 133
         },
-        "total_tokens": 282
+        "total_tokens": 271
       }
     },
     "headers": {
@@ -86,22 +86,16 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "a03927cf6a991fa5-ORD"
+        "a039d29b4b8a9d52-ORD"
       ],
       "connection": [
         "keep-alive"
-      ],
-      "content-security-policy-report-only": [
-        "script-src 'unsafe-inline' 'unsafe-eval'; report-uri https://csp-reporting.cloudflare.com/cdn-cgi/script_monitor/report?m=3yUMF3tvdKQSkLoZW2CjZ48oc7_xsf308Dmg9_SXdfk-1780096048.5425882-1.0.1.1-YqHt7mVKxfimDGa0qTkEIqGgNLZeWTTGJlzRSKXsDZfdncOz9VfFuYUYvPhWMLLUk9KlHKwNKLX0tbkPNriCOgiJESXxRER8WB2llRC6joYF.Q.ySOQzsQw627lDhcH2Yy7Dmzc.zmAet0uS5ncr3A33lHKieJPg92dyVrCiweM; report-to cf-csp-endpoint"
       ],
       "content-type": [
         "application/json"
       ],
       "date": [
-        "Fri, 29 May 2026 23:07:30 GMT"
-      ],
-      "report-to": [
-        "{\"group\":\"cf-csp-endpoint\",\"max_age\":86400,\"endpoints\":[{\"url\":\"https://csp-reporting.cloudflare.com/cdn-cgi/script_monitor/report?m=3yUMF3tvdKQSkLoZW2CjZ48oc7_xsf308Dmg9_SXdfk-1780096048.5425882-1.0.1.1-YqHt7mVKxfimDGa0qTkEIqGgNLZeWTTGJlzRSKXsDZfdncOz9VfFuYUYvPhWMLLUk9KlHKwNKLX0tbkPNriCOgiJESXxRER8WB2llRC6joYF.Q.ySOQzsQw627lDhcH2Yy7Dmzc.zmAet0uS5ncr3A33lHKieJPg92dyVrCiweM\"}]}"
+        "Sat, 30 May 2026 01:04:06 GMT"
       ],
       "server": [
         "cloudflare"
@@ -111,7 +105,7 @@
         "max-age=31536000"
       ],
       "traceparent": [
-        "00-344b4754b45dfed5a1f3c41f64506cff-4c73f42300047c90-01"
+        "00-2549c1c865daa64398812eb083bd86c2-b4e9dace000238b7-01"
       ],
       "transfer-encoding": [
         "chunked"
@@ -120,13 +114,13 @@
         "origin, access-control-request-method, access-control-request-headers"
       ],
       "x-metrics-e2e-ms": [
-        "1434.7"
+        "2424.7"
       ],
       "x-metrics-mean-itl-ms": [
-        "7.6"
+        "14.4"
       ],
       "x-metrics-ttft-ms": [
-        "152.7"
+        "255.8"
       ],
       "x-ratelimit-limit-requests": [
         "1800"
@@ -135,13 +129,13 @@
         "10000000"
       ],
       "x-ratelimit-remaining-requests": [
-        "1798"
+        "1800"
       ],
       "x-ratelimit-remaining-tokens": [
-        "9998890"
+        "10000000"
       ],
       "x-request-id": [
-        "f6c3bab4-25ee-9947-88a3-00ada0edbba2"
+        "7393fc5c-a13a-9509-bbab-1ced4e6b8df5"
       ],
       "x-zero-data-retention": [
         "false"

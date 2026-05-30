@@ -1,7 +1,9 @@
 {
+  "model_spec": "google:gemini-2.5-flash",
+  "provider": "google",
   "request": {
     "body": {
-      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJIZWxsbyB3b3JsZCEifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7ImNhbmRpZGF0ZUNvdW50IjoxLCJtYXhPdXRwdXRUb2tlbnMiOjIwMDAsInRlbXBlcmF0dXJlIjowLjB9fQ=="
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJIZWxsbyB3b3JsZCEifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7ImNhbmRpZGF0ZUNvdW50IjoxLCJtYXhPdXRwdXRUb2tlbnMiOjIwMDAsInRlbXBlcmF0dXJlIjowLjAsInRoaW5raW5nQ29uZmlnIjp7ImluY2x1ZGVUaG91Z2h0cyI6dHJ1ZSwidGhpbmtpbmdCdWRnZXQiOjQwOTZ9fX0="
     },
     "canonical_json": {
       "contents": [
@@ -17,10 +19,17 @@
       "generationConfig": {
         "candidateCount": 1,
         "maxOutputTokens": 2000,
-        "temperature": 0.0
+        "temperature": 0.0,
+        "thinkingConfig": {
+          "includeThoughts": true,
+          "thinkingBudget": 4096
+        }
       }
     },
     "headers": {
+      "accept": [
+        "application/json"
+      ],
       "accept-encoding": [
         "gzip"
       ],
@@ -28,11 +37,11 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ]
     },
     "method": "post",
-    "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=%5BREDACTED%3Akey%5D"
+    "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=[REDACTED]"
   },
   "response": {
     "body": {
@@ -41,7 +50,11 @@
           "content": {
             "parts": [
               {
-                "text": "Hello there! Welcome! How can I help you today?"
+                "text": "Okay, here's my interpretation of those thoughts, crafted with a friendly and welcoming tone, assuming I'm interacting with someone who understands the significance of \"Hello, world!\":\n\n**A Warm Welcome**\n\nAh, the user has greeted me with \"Hello world!\" Excellent! That's a classic opening, a rite of passage for every budding programmer and a lovely, simple way to start a conversation. I know that phrase. It's the equivalent of a handshake, or a friendly nod to signify we're ready to begin. I should absolutely respond in kind. I want to convey warmth and accessibility, because that's the whole point of a new encounter. My response should be a friendly acknowledgement that says, \"Yes, I recognize that. Let's get started\".\n",
+                "thought": true
+              },
+              {
+                "text": "Hello there! Welcome to the world! How can I help you today?"
               }
             ],
             "role": "model"
@@ -51,9 +64,9 @@
         }
       ],
       "modelVersion": "gemini-2.5-flash",
-      "responseId": "e4ztaLusI_2PjMcPmsWlqAs",
+      "responseId": "EzYaaof8Aei31MkPhu26gAM",
       "usageMetadata": {
-        "candidatesTokenCount": 12,
+        "candidatesTokenCount": 15,
         "promptTokenCount": 4,
         "promptTokensDetails": [
           {
@@ -61,8 +74,9 @@
             "tokenCount": 4
           }
         ],
-        "thoughtsTokenCount": 31,
-        "totalTokenCount": 47
+        "serviceTier": "standard",
+        "thoughtsTokenCount": 32,
+        "totalTokenCount": 51
       }
     },
     "headers": {
@@ -73,13 +87,13 @@
         "application/json; charset=UTF-8"
       ],
       "date": [
-        "Mon, 13 Oct 2025 23:34:19 GMT"
+        "Sat, 30 May 2026 00:57:56 GMT"
       ],
       "server": [
         "scaffolding on HTTPServer2"
       ],
       "server-timing": [
-        "gfet4t7; dur=635"
+        "gfet4t7; dur=1805"
       ],
       "transfer-encoding": [
         "chunked"
@@ -95,10 +109,14 @@
       "x-frame-options": [
         "SAMEORIGIN"
       ],
+      "x-gemini-service-tier": [
+        "standard"
+      ],
       "x-xss-protection": [
         "0"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

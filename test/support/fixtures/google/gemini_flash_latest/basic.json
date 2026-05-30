@@ -1,7 +1,9 @@
 {
+  "model_spec": "google:gemini-flash-latest",
+  "provider": "google",
   "request": {
     "body": {
-      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJIZWxsbyB3b3JsZCEifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7ImNhbmRpZGF0ZUNvdW50IjoxLCJtYXhPdXRwdXRUb2tlbnMiOjIwMDAsInRlbXBlcmF0dXJlIjowLjB9fQ=="
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJIZWxsbyB3b3JsZCEifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7ImNhbmRpZGF0ZUNvdW50IjoxLCJtYXhPdXRwdXRUb2tlbnMiOjIwMDAsInRlbXBlcmF0dXJlIjowLjAsInRoaW5raW5nQ29uZmlnIjp7ImluY2x1ZGVUaG91Z2h0cyI6dHJ1ZSwidGhpbmtpbmdCdWRnZXQiOjQwOTZ9fX0="
     },
     "canonical_json": {
       "contents": [
@@ -17,10 +19,17 @@
       "generationConfig": {
         "candidateCount": 1,
         "maxOutputTokens": 2000,
-        "temperature": 0.0
+        "temperature": 0.0,
+        "thinkingConfig": {
+          "includeThoughts": true,
+          "thinkingBudget": 4096
+        }
       }
     },
     "headers": {
+      "accept": [
+        "application/json"
+      ],
       "accept-encoding": [
         "gzip"
       ],
@@ -28,11 +37,11 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ]
     },
     "method": "post",
-    "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=%5BREDACTED%3Akey%5D"
+    "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=[REDACTED]"
   },
   "response": {
     "body": {
@@ -41,7 +50,12 @@
           "content": {
             "parts": [
               {
-                "text": "Hello! How can I help you today?"
+                "text": "**My Response to \"Hello World!\"**\n\nOkay, so the user's input is \"Hello world!\". Classic, right? That's a textbook programmer's first step, the equivalent of a handshake in code. I need to figure out their intent – this is likely a friendly hello, a way of initiating interaction and maybe subtly hinting at a tech-related query.\n\nMy brain automatically jumps to formulating a good response. I need to be friendly, helpful, and maintain a tone that's somewhat fitting. Keeping it accessible is always key, especially with a simple greeting.\n\nI've got a few options buzzing around: a straightforward \"Hello! How can I help you today?\"; a slightly more playful \"Hello World! `print(\"Hello, User!\")` How can I help you today?\", or a warmer \"Hello! It's great to connect with you. How can I help you today?\".\n\nI could go full-on Python, but let's be honest, that might be overkill. I think I'll aim for a friendly and approachable tone, so I’m settling on a friendly, playful response. Hmm, maybe something like \"Hello, World! 🌍 How can I help you today?\" Perfect. It's simple, acknowledges the specific phrase, and invites them to explain what they need. Done.\n\n\n",
+                "thought": true
+              },
+              {
+                "text": "Hello, World! 🌍 \n\nHow can I help you today?",
+                "thoughtSignature": "Es4JCssJAQw51sd+AFhySivSxXjgJMLe5c19QdtA6jsaDCW7sdxRDmncCWmNdwpWjxH+Jzwj/5GkFUhgS/0QZGVRdK9R/nY9UymjIMnH4qBjz20oLpa04ZYmyL3HA89U6+TMnF0R59Z52K7J7KqqmzZ/Q1PdzdjnKpvdZMmMS0LsSkBHiFGjX0kjFRmPaTTEzQoL1fLAl592hprJAIylMGsMjg3OMTyQx+n2qi5vORPSJr5TiLV2QqepdsCzn3EhosKzsk0Sh1YrG7oVYa+ajbO5nRtIbRqtKVN+fmRVt23466qAsh1t6v1WvqNPAlgcsNpBsFEvoXBLFywq/a54ieumenCysqwrO+v3EJ078Bwl6TKS34c54GwnhQRnZ7YRdbIMhTViHanK9ha1nj2q9ZgdVxzoC+ViqZ3c0VAKeb57gC0kzgjI+x+uzvTHcqnR1KFrbnVwc6268QDwWLDNIW23VicIoe48gL3peJLowXByH/VozlLJCG3igu+vgwdtPrAaneyGAqw/A0PQO6NDiWdNbWiWgmf2tSRHkXb+KH3XMzidM223r3+lk2sg6U+i26jdE1YNtC+89vuN0QAW/dBlSs1xtjMTuIxqs+A+6pvlEbdtgOjf9L/DdXy6RA+xFABDmjfqXUUzFuuiXXoMC9qEymUQK0T715Wi+UHFGmAKLUZQv3u+C7ipCk2kxOjLJSZIaChky/wh9fpYYD6w1SuoGHfhdy9ymvWaS/+JttoLKnxgHEtbilch8/rwU2U8qm8nhyIUhI8JJwjOox2KFZEIiUaPXOuCKMrnN1IQfyvlStFQFBH463mOg80X/1e1p9whHAlCW2cOCjWtiajjvhCfxzm+Ro+s1G9jltBfZlSd0eXTpBJdLnB9n47q4W7NibMUey0vhwA8oT8IMl0TFdOLUSMdFNrGyUUg1d+Ob+NNo91BLoDhDZqHViQHj9mFYHfek2uwaNLwDN+RdFFnYwalTQMYj4WKELw0ACqDIoGIHGYl5B4yN3X/RO3DjVeHIwe8I9QnWkJaKxiCyWhnZ0MXQsKZNPnuoMXZ7Kmk+gLtOB9xZClJ2UFS5CoC4bk2FKvBNNKvcVm49TfmkHunH6bfx4WWX7mLn2zW8QpNfG+Rp2DkNRfL8T6ZdYLxsjhtlPafurMKGneI0PndlvlyFjfQVCpUtEWiDDH+AHhzMhSI8YdesRs/JRETpiFM0PGjYq9/GTnsNubha3Lm0IKWmU4WaQX83RqcGgusi7sjl2CZMmk8QTA3F/rzPOCKxyJA2BXxEk/T1Vst6WBE4fjCfiEJSz5diW4F+EO8gAKwDfYlwS2pMj0ilx1Ifp0bDPtEsSqEtHNYFhNLD4JqbdAUgYviIFxAhYIhquOow6PtVsl5mxvAVhXGIFULGMKzpxkIgwtu7XcyN0HOjfELwrLgcgWjej7XcCSBOoM2drJ3icSObsVNogvTRk9WulWnXyvkQOxbLycyr8AjI2Iro+uYSiDEC52l2PTp+V2os1RnBfqm7hj6BkH4dV2PW+X16hXaJv+JzSeT0qYvfrG1vRNBCPrTfCBxAolB6ng/3okT8f0WxJIIh6ZiqmxViWVL/FdwoR4g9R3xWHfkACZV9uMzEaUds3mNBveAsU86JL3vd7y8"
               }
             ],
             "role": "model"
@@ -50,10 +64,10 @@
           "index": 0
         }
       ],
-      "modelVersion": "gemini-2.5-flash-preview-09-2025",
-      "responseId": "joztaIqHK6uOjMcPjIuYwQY",
+      "modelVersion": "gemini-3.5-flash",
+      "responseId": "nzYaarK7MLPf_uMP89aM4AM",
       "usageMetadata": {
-        "candidatesTokenCount": 9,
+        "candidatesTokenCount": 15,
         "promptTokenCount": 4,
         "promptTokensDetails": [
           {
@@ -61,7 +75,9 @@
             "tokenCount": 4
           }
         ],
-        "totalTokenCount": 13
+        "serviceTier": "standard",
+        "thoughtsTokenCount": 326,
+        "totalTokenCount": 345
       }
     },
     "headers": {
@@ -72,13 +88,13 @@
         "application/json; charset=UTF-8"
       ],
       "date": [
-        "Mon, 13 Oct 2025 23:34:38 GMT"
+        "Sat, 30 May 2026 01:00:19 GMT"
       ],
       "server": [
         "scaffolding on HTTPServer2"
       ],
       "server-timing": [
-        "gfet4t7; dur=346"
+        "gfet4t7; dur=3650"
       ],
       "transfer-encoding": [
         "chunked"
@@ -94,10 +110,14 @@
       "x-frame-options": [
         "SAMEORIGIN"
       ],
+      "x-gemini-service-tier": [
+        "standard"
+      ],
       "x-xss-protection": [
         "0"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

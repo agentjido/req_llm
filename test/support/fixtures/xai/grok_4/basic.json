@@ -43,27 +43,27 @@
           "finish_reason": "stop",
           "index": 0,
           "message": {
-            "content": "Hello, World! 👋 How can I help you today?",
+            "content": "Hello, World! 👋 What's up?",
             "reasoning_content": "The user said \"Hello world!\" This is a classic greeting, often the first program in programming tutorials. It's friendly and casual.",
             "refusal": null,
             "role": "assistant"
           }
         }
       ],
-      "created": 1780095855,
-      "id": "9f5e45e1-f1de-9dd4-a397-b9bd3819853d",
+      "created": 1780103007,
+      "id": "c2e7c4fc-a99f-9ce5-847f-6f9f8bab811e",
       "model": "grok-4.3",
       "object": "chat.completion",
       "system_fingerprint": "fp_eb3c003fc66c14ed",
       "usage": {
-        "completion_tokens": 13,
+        "completion_tokens": 9,
         "completion_tokens_details": {
           "accepted_prediction_tokens": 0,
           "audio_tokens": 0,
-          "reasoning_tokens": 125,
+          "reasoning_tokens": 139,
           "rejected_prediction_tokens": 0
         },
-        "cost_in_usd_ticks": 3768500,
+        "cost_in_usd_ticks": 4018500,
         "num_sources_used": 0,
         "prompt_tokens": 133,
         "prompt_tokens_details": {
@@ -72,7 +72,7 @@
           "image_tokens": 0,
           "text_tokens": 133
         },
-        "total_tokens": 271
+        "total_tokens": 281
       }
     },
     "headers": {
@@ -86,7 +86,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "a0392317f85690c6-ORD"
+        "a039d1b3ea5aeaf3-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -95,7 +95,7 @@
         "application/json"
       ],
       "date": [
-        "Fri, 29 May 2026 23:04:16 GMT"
+        "Sat, 30 May 2026 01:03:29 GMT"
       ],
       "server": [
         "cloudflare"
@@ -105,7 +105,7 @@
         "max-age=31536000"
       ],
       "traceparent": [
-        "00-90ccf8a8d85078960655aef8813b5227-2ba60eef000084de-01"
+        "00-aab126fb2afa22fb1b3ecbb172f4ce3e-e3a3523d0000995d-01"
       ],
       "transfer-encoding": [
         "chunked"
@@ -114,13 +114,13 @@
         "origin, access-control-request-method, access-control-request-headers"
       ],
       "x-metrics-e2e-ms": [
-        "1612.1"
+        "1912.4"
       ],
       "x-metrics-mean-itl-ms": [
-        "8.6"
+        "10.6"
       ],
       "x-metrics-ttft-ms": [
-        "277.5"
+        "157.9"
       ],
       "x-ratelimit-limit-requests": [
         "1800"
@@ -129,13 +129,13 @@
         "10000000"
       ],
       "x-ratelimit-remaining-requests": [
-        "1791"
+        "1800"
       ],
       "x-ratelimit-remaining-tokens": [
-        "9996112"
+        "10000000"
       ],
       "x-request-id": [
-        "9f5e45e1-f1de-9dd4-a397-b9bd3819853d"
+        "c2e7c4fc-a99f-9ce5-847f-6f9f8bab811e"
       ],
       "x-zero-data-retention": [
         "false"

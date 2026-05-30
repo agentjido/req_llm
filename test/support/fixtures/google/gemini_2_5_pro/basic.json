@@ -1,7 +1,9 @@
 {
+  "model_spec": "google:gemini-2.5-pro",
+  "provider": "google",
   "request": {
     "body": {
-      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJIZWxsbyB3b3JsZCEifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7ImNhbmRpZGF0ZUNvdW50IjoxLCJtYXhPdXRwdXRUb2tlbnMiOjIwMDAsInRlbXBlcmF0dXJlIjowLjB9fQ=="
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJIZWxsbyB3b3JsZCEifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7ImNhbmRpZGF0ZUNvdW50IjoxLCJtYXhPdXRwdXRUb2tlbnMiOjIwMDAsInRlbXBlcmF0dXJlIjowLjAsInRoaW5raW5nQ29uZmlnIjp7ImluY2x1ZGVUaG91Z2h0cyI6dHJ1ZSwidGhpbmtpbmdCdWRnZXQiOjQwOTZ9fX0="
     },
     "canonical_json": {
       "contents": [
@@ -17,10 +19,17 @@
       "generationConfig": {
         "candidateCount": 1,
         "maxOutputTokens": 2000,
-        "temperature": 0.0
+        "temperature": 0.0,
+        "thinkingConfig": {
+          "includeThoughts": true,
+          "thinkingBudget": 4096
+        }
       }
     },
     "headers": {
+      "accept": [
+        "application/json"
+      ],
       "accept-encoding": [
         "gzip"
       ],
@@ -28,11 +37,11 @@
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.18"
       ]
     },
     "method": "post",
-    "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent?key=%5BREDACTED%3Akey%5D"
+    "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent?key=[REDACTED]"
   },
   "response": {
     "body": {
@@ -41,7 +50,11 @@
           "content": {
             "parts": [
               {
-                "text": "Hello there! The classic programmer's greeting.\n\nHow can I help you today?"
+                "text": "**My Thought Process: Responding to \"Hello world!\"**\n\nOkay, the user has given me \"Hello world!\". My first thought is that it's the iconic phrase, the cornerstone of almost every programming tutorial. It's a signal! I recognize it instantly; it's practically hardwired in. They're likely testing me, or at least setting a tone. I need to acknowledge that this is *not* just a simple greeting.\n\nI'm considering their intent. Are they just being friendly? Maybe. Testing my capabilities? Possibly. Are they a programmer? Almost certainly, given the phrase. This needs a response that's in on the joke, but not overly complex. I can't assume they are going to expect a super technical answer.\n\nSo, I'm thinking about responses. A generic \"Hello, how can I help?\" feels too basic. I could get overly nerdy and drop some code, but that might be lost on someone who isn't familiar. I want to convey knowledge, a playful understanding, *and* be helpful.\n\nI settled on the idea of incorporating a friendly greeting, the nod to the programming tradition, and then opening up the floor for the user to indicate the next step. I'm aiming for something that's positive, welcoming, and slightly \"in-the-know\".\n\nI'm running through variations. \"Hello back! That's the traditional first program for a reason...\" is a good starting point. But \"Hello there! The classic programmer's greeting. How can I help you today?\" feels smoother. I'm looking for the most natural flow.\n\nI think I've landed on a good combination of friendliness and reference to the classic. \"Hello back! The classic greeting for any new beginning in the world of code. How can I help you today?\" That acknowledges the \"Hello, world!\" significance without being overly elaborate. I think that's perfect. That's a solid, well-rounded, and hopefully, engaging response.\n",
+                "thought": true
+              },
+              {
+                "text": "Hello back! The classic first program.\n\nHow can I help you today?"
               }
             ],
             "role": "model"
@@ -51,9 +64,9 @@
         }
       ],
       "modelVersion": "gemini-2.5-pro",
-      "responseId": "NpHtaIzFOrWqjMcPkM2OgQw",
+      "responseId": "ODYaavfxOM-D-8YP8diQiQQ",
       "usageMetadata": {
-        "candidatesTokenCount": 18,
+        "candidatesTokenCount": 16,
         "promptTokenCount": 4,
         "promptTokensDetails": [
           {
@@ -61,8 +74,9 @@
             "tokenCount": 4
           }
         ],
-        "thoughtsTokenCount": 932,
-        "totalTokenCount": 954
+        "serviceTier": "standard",
+        "thoughtsTokenCount": 993,
+        "totalTokenCount": 1013
       }
     },
     "headers": {
@@ -73,13 +87,13 @@
         "application/json; charset=UTF-8"
       ],
       "date": [
-        "Mon, 13 Oct 2025 23:54:30 GMT"
+        "Sat, 30 May 2026 00:58:44 GMT"
       ],
       "server": [
         "scaffolding on HTTPServer2"
       ],
       "server-timing": [
-        "gfet4t7; dur=9117"
+        "gfet4t7; dur=11507"
       ],
       "transfer-encoding": [
         "chunked"
@@ -95,10 +109,14 @@
       "x-frame-options": [
         "SAMEORIGIN"
       ],
+      "x-gemini-service-tier": [
+        "standard"
+      ],
       "x-xss-protection": [
         "0"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

@@ -1,0 +1,123 @@
+{
+  "model_spec": "google:gemini-3.1-flash-lite-preview",
+  "provider": "google",
+  "request": {
+    "body": {
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJIZWxsbyB3b3JsZCEifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7ImNhbmRpZGF0ZUNvdW50IjoxLCJtYXhPdXRwdXRUb2tlbnMiOjIwMDAsInRlbXBlcmF0dXJlIjowLjAsInRoaW5raW5nQ29uZmlnIjp7ImluY2x1ZGVUaG91Z2h0cyI6dHJ1ZSwidGhpbmtpbmdMZXZlbCI6ImxvdyJ9fX0="
+    },
+    "canonical_json": {
+      "contents": [
+        {
+          "parts": [
+            {
+              "text": "Hello world!"
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "generationConfig": {
+        "candidateCount": 1,
+        "maxOutputTokens": 2000,
+        "temperature": 0.0,
+        "thinkingConfig": {
+          "includeThoughts": true,
+          "thinkingLevel": "low"
+        }
+      }
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite-preview:generateContent?key=[REDACTED]"
+  },
+  "response": {
+    "body": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "**My Response to \"Hello World!\"**\n\nOkay, so the user's input is a simple \"Hello world!\". Let's break this down. First, I recognize it as a standard greeting, a common starting point. I know it's often used as a test message or a friendly opening. My intent here is clear: acknowledge the greeting, be helpful, and keep things concise but open to further interaction. I don't want to overcomplicate things.\n\nNow, let's consider a few response options. I could go with the simple \"Hello! How can I help you today?\". That's straightforward and gets right to the point. Alternatively, there's a playful approach: \"Hello world! It's great to meet you. What's on your mind?\". It's a bit more engaging and a little more personable. Or, leaning into the programming aspect, I could try \"Hello! Ready to start coding or just saying hi?\". It acknowledges the programming context, if appropriate.\n\nUltimately, I lean toward the friendly and welcoming, but open-ended response. That approach invites further interaction and establishes a positive connection. It will suit any context, therefore, I shall proceed with the **'Hello! How can I help you today?'** response.\n\n\n",
+                "thought": true
+              },
+              {
+                "text": "Hello! It's great to meet you. How can I help you today?",
+                "thoughtSignature": "EvEFCu4FAQw51sePbC5tP5CN/5zr6VsbhpDI010hA1kAgH84a+iYE+Sze0t6I+iOhLY5r4IUBU4VGoPgEIsQpgGprxKJ0jXagjrcPhx+S9OVjvvQrZNsUH7Y1izOgcQu2rlCToBHuN87KzRMFXEylImpI50c51+lPTyvX7zeYneAqFWhCNUwIE+ewbte6gRvuXxYYT2F35pQu2BIFiBDjpjLMnbWyLbOPx933HMX7idVoipc+Lglw5pt2u8JK/kh7cTvH1cofRNn42P48VXpBxj9z5XKOgSgjiGSxbU0ycWeGAGPg6Sc8uVlOHV5Z4PTdSv/hNp5tWQOGsMphmtStwI4mfYoj5qize9IGpdfBXPpAeomW6IcUttnkvTTvPFuO+iheQ5oLM1Q97Xgd93FQOcHk2I0upCRg5KwNP2LVbEZl4jrh5mNVC/D/1WzLEOv2PsJUG/raHL2zzOPnP9c1pVAQNv+M+DT+xFf2SFFIcSqP4raeAfz96FTMWSXcbSt6+QGRQVRSLQQvxGRN0/OqqcWCBa3pyDZP13kXgWkBlNtEfTtTzxPATHT65p5J0Ncrt37oc3AOJBtuMk0DgbLJ/W2b9+miHEmns7Mj/DTUogt8pfIu58z2OlFKKlI5vDG4pmDtjp4mWKS6p3HFzmMU+vdeBWmDMOtajcGWqZBQuOoppeFMpIOxdZeZFOFFVKXSfgAejAsBg8JIsGjtVQUWBH50Qn/ll/7O9ynzLIz6r7itVG5OMQOiKNA44LOSdP7Aybu9zbbBX2olMOos53r2n7pm/a0tW98Irp4Nzp2IMZv8mrfCGmOa2wZRDweU5JerlxhbyLNGO5tScPXvkzErZfYQ5zQJOKGRWT5LkDjtPi8lMEr53qdHg3AnCug35FFRizv8aWet3vD7B7Ma1a6U4m8Q5uFYlSFAXNs0ND2WNl7cxdXV/XqLZaHQO5mQgLYYYf7UdWm0H0Ctn2qJojIEk8dIsaAcRVT7xMkMPLlb2zqEPxP"
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "modelVersion": "gemini-3.1-flash-lite",
+      "responseId": "YzYaapfQL7yR-8YPhaC3KA",
+      "usageMetadata": {
+        "candidatesTokenCount": 17,
+        "promptTokenCount": 4,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 4
+          }
+        ],
+        "serviceTier": "standard",
+        "thoughtsTokenCount": 194,
+        "totalTokenCount": 215
+      }
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "content-type": [
+        "application/json; charset=UTF-8"
+      ],
+      "date": [
+        "Sat, 30 May 2026 00:59:18 GMT"
+      ],
+      "server": [
+        "scaffolding on HTTPServer2"
+      ],
+      "server-timing": [
+        "gfet4t7; dur=2596"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-frame-options": [
+        "SAMEORIGIN"
+      ],
+      "x-gemini-service-tier": [
+        "standard"
+      ],
+      "x-xss-protection": [
+        "0"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

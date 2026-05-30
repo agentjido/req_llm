@@ -84,7 +84,7 @@
         "fixtures": [
           "basic"
         ],
-        "last_checked": "2026-05-29T22:30:50Z",
+        "last_checked": "2026-05-30T01:01:43Z",
         "mode": "record",
         "status": "fail"
       }
@@ -376,6 +376,19 @@
       }
     }
   },
+  "google:gemini-2.5-flash-native-audio-preview-12-2025": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (404): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T01:01:43Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
   "zenmux:bytedance/doubao-seed-1.8": {
     "scenarios": {
       "basic": {
@@ -435,7 +448,7 @@
         "fixtures": [
           "basic"
         ],
-        "last_checked": "2026-05-29T22:42:31Z",
+        "last_checked": "2026-05-30T01:06:18Z",
         "mode": "record",
         "status": "fail"
       }
@@ -654,6 +667,19 @@
       }
     }
   },
+  "openrouter:perplexity/pplx-embed-v1-4b": {
+    "scenarios": {
+      "embed_basic": {
+        "error": null,
+        "fixtures": [
+          "embed_basic"
+        ],
+        "last_checked": "2026-05-30T00:56:13Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
   "openrouter:meta-llama/llama-4-scout": {
     "scenarios": {
       "basic": {
@@ -758,6 +784,19 @@
       }
     }
   },
+  "openrouter:sentence-transformers/paraphrase-minilm-l6-v2": {
+    "scenarios": {
+      "embed_basic": {
+        "error": null,
+        "fixtures": [
+          "embed_basic"
+        ],
+        "last_checked": "2026-05-30T00:56:13Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
   "openai:gpt-5-nano": {
     "scenarios": {
       "object_streaming": {
@@ -777,6 +816,19 @@
           "basic"
         ],
         "last_checked": "2026-05-29T23:45:21Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "xai:grok-code-fast-1": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T01:06:18Z",
         "mode": "record",
         "status": "pass"
       }
@@ -847,6 +899,19 @@
       }
     }
   },
+  "google:gemini-2.5-flash-native-audio-preview-09-2025": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (404): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T01:01:43Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
   "openai:gpt-4-0125-preview": {
     "scenarios": {
       "basic": {
@@ -881,6 +946,32 @@
           "basic"
         ],
         "last_checked": "2026-05-29T23:37:04Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "xai:grok-3-mini-latest": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T01:06:18Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "google:gemini-2.0-flash-lite": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T01:01:43Z",
         "mode": "record",
         "status": "pass"
       }
@@ -950,7 +1041,7 @@
         "fixtures": [
           "basic"
         ],
-        "last_checked": "2026-05-29T22:42:39Z",
+        "last_checked": "2026-05-30T01:06:18Z",
         "mode": "record",
         "status": "fail"
       }
@@ -1340,7 +1431,7 @@
         "fixtures": [
           "basic"
         ],
-        "last_checked": "2026-05-29T22:45:04Z",
+        "last_checked": "2026-05-30T01:06:18Z",
         "mode": "record",
         "status": "pass"
       }
@@ -1393,6 +1484,19 @@
         "last_checked": "2026-05-29T23:45:45Z",
         "mode": "record",
         "status": "pass"
+      }
+    }
+  },
+  "google:gemini-2.5-flash-native-audio-latest": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (404): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T01:01:43Z",
+        "mode": "record",
+        "status": "fail"
       }
     }
   },
@@ -1459,6 +1563,19 @@
       }
     }
   },
+  "openrouter:google/gemini-embedding-001": {
+    "scenarios": {
+      "embed_basic": {
+        "error": null,
+        "fixtures": [
+          "embed_basic"
+        ],
+        "last_checked": "2026-05-30T00:56:13Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
   "openrouter:openrouter/bodybuilder": {
     "scenarios": {
       "basic": {
@@ -1492,7 +1609,7 @@
         "fixtures": [
           "basic"
         ],
-        "last_checked": "2026-05-29T22:09:19Z",
+        "last_checked": "2026-05-30T01:01:43Z",
         "mode": "record",
         "status": "pass"
       },
@@ -1634,6 +1751,19 @@
       }
     }
   },
+  "openrouter:baai/bge-base-en-v1.5": {
+    "scenarios": {
+      "embed_basic": {
+        "error": null,
+        "fixtures": [
+          "embed_basic"
+        ],
+        "last_checked": "2026-05-30T00:56:13Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
   "openrouter:mistralai/mistral-large": {
     "scenarios": {
       "basic": {
@@ -1751,6 +1881,19 @@
       }
     }
   },
+  "openrouter:perplexity/pplx-embed-v1-0.6b": {
+    "scenarios": {
+      "embed_basic": {
+        "error": null,
+        "fixtures": [
+          "embed_basic"
+        ],
+        "last_checked": "2026-05-30T00:56:13Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
   "openrouter:qwen/qwen3.6-35b-a3b": {
     "scenarios": {
       "basic": {
@@ -1798,6 +1941,19 @@
           "basic"
         ],
         "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "xai:grok-4-1-fast-reasoning": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T01:06:18Z",
         "mode": "record",
         "status": "pass"
       }
@@ -1868,6 +2024,19 @@
       }
     }
   },
+  "openrouter:nvidia/llama-nemotron-embed-vl-1b-v2:free": {
+    "scenarios": {
+      "embed_basic": {
+        "error": null,
+        "fixtures": [
+          "embed_basic"
+        ],
+        "last_checked": "2026-05-30T00:56:13Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
   "zenmux:moonshotai/kimi-k2-thinking-turbo": {
     "scenarios": {
       "basic": {
@@ -1891,6 +2060,19 @@
         "last_checked": "2026-05-30T00:19:11Z",
         "mode": "record",
         "status": "fail"
+      }
+    }
+  },
+  "openrouter:openai/text-embedding-3-small": {
+    "scenarios": {
+      "embed_basic": {
+        "error": null,
+        "fixtures": [
+          "embed_basic"
+        ],
+        "last_checked": "2026-05-30T00:56:13Z",
+        "mode": "record",
+        "status": "pass"
       }
     }
   },
@@ -1928,6 +2110,19 @@
           "basic"
         ],
         "last_checked": "2026-05-29T23:42:59Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:sentence-transformers/all-minilm-l12-v2": {
+    "scenarios": {
+      "embed_basic": {
+        "error": null,
+        "fixtures": [
+          "embed_basic"
+        ],
+        "last_checked": "2026-05-30T00:56:13Z",
         "mode": "record",
         "status": "pass"
       }
@@ -2084,6 +2279,19 @@
           "basic"
         ],
         "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "xai:grok-4-0709": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T01:06:18Z",
         "mode": "record",
         "status": "pass"
       }
@@ -2367,7 +2575,7 @@
         "fixtures": [
           "basic"
         ],
-        "last_checked": "2026-05-29T22:30:42Z",
+        "last_checked": "2026-05-30T01:01:43Z",
         "mode": "record",
         "status": "fail"
       }
@@ -2380,7 +2588,7 @@
         "fixtures": [
           "basic"
         ],
-        "last_checked": "2026-05-29T22:13:02Z",
+        "last_checked": "2026-05-30T01:01:43Z",
         "mode": "record",
         "status": "pass"
       },
@@ -2670,6 +2878,32 @@
       }
     }
   },
+  "openrouter:intfloat/e5-base-v2": {
+    "scenarios": {
+      "embed_basic": {
+        "error": null,
+        "fixtures": [
+          "embed_basic"
+        ],
+        "last_checked": "2026-05-30T00:56:13Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "google:lyria-3-pro-preview": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (500): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T01:01:43Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
   "openrouter:qwen/qwen3-vl-235b-a22b-instruct": {
     "scenarios": {
       "basic": {
@@ -2761,6 +2995,19 @@
       }
     }
   },
+  "xai:grok-4-fast-reasoning": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T01:06:18Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
   "openrouter:z-ai/glm-5-turbo": {
     "scenarios": {
       "basic": {
@@ -2771,6 +3018,19 @@
         "last_checked": "2026-05-29T23:44:10Z",
         "mode": "record",
         "status": "pass"
+      }
+    }
+  },
+  "xai:grok-imagine-video": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (400): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T01:06:18Z",
+        "mode": "record",
+        "status": "fail"
       }
     }
   },
@@ -2898,7 +3158,7 @@
         "fixtures": [
           "image_basic"
         ],
-        "last_checked": "2026-05-29T22:50:37Z",
+        "last_checked": "2026-05-30T01:06:56Z",
         "mode": "record",
         "status": "pass"
       }
@@ -2912,6 +3172,19 @@
           "basic"
         ],
         "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "google:gemini-embedding-2": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (404): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T01:01:43Z",
         "mode": "record",
         "status": "fail"
       }
@@ -2982,6 +3255,19 @@
       }
     }
   },
+  "openrouter:baai/bge-large-en-v1.5": {
+    "scenarios": {
+      "embed_basic": {
+        "error": null,
+        "fixtures": [
+          "embed_basic"
+        ],
+        "last_checked": "2026-05-30T00:56:13Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
   "openrouter:inflection/inflection-3-productivity": {
     "scenarios": {
       "basic": {
@@ -3047,6 +3333,19 @@
       }
     }
   },
+  "google:gemini-2.5-pro": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T01:01:43Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
   "zenmux:openai/text-embedding-3-large": {
     "scenarios": {
       "basic": {
@@ -3055,6 +3354,19 @@
           "basic"
         ],
         "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "google:gemini-3.1-flash-live-preview": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (404): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T01:01:43Z",
         "mode": "record",
         "status": "fail"
       }
@@ -3125,6 +3437,45 @@
       }
     }
   },
+  "openrouter:qwen/qwen3-embedding-8b": {
+    "scenarios": {
+      "embed_basic": {
+        "error": null,
+        "fixtures": [
+          "embed_basic"
+        ],
+        "last_checked": "2026-05-30T00:56:13Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "xai:grok-4-fast-non-reasoning": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T01:06:18Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:mistralai/mistral-embed-2312": {
+    "scenarios": {
+      "embed_basic": {
+        "error": null,
+        "fixtures": [
+          "embed_basic"
+        ],
+        "last_checked": "2026-05-30T00:56:13Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
   "openai:gpt-5-pro": {
     "scenarios": {
       "basic": {
@@ -3133,6 +3484,19 @@
           "basic"
         ],
         "last_checked": "2026-05-29T18:59:05Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:openai/text-embedding-3-large": {
+    "scenarios": {
+      "embed_basic": {
+        "error": null,
+        "fixtures": [
+          "embed_basic"
+        ],
+        "last_checked": "2026-05-30T00:56:13Z",
         "mode": "record",
         "status": "pass"
       }
@@ -3423,6 +3787,19 @@
       }
     }
   },
+  "google:lyria-3-clip-preview": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (500): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T01:01:43Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
   "zenmux:openai/text-embedding-3-small": {
     "scenarios": {
       "basic": {
@@ -3469,7 +3846,7 @@
         "fixtures": [
           "basic"
         ],
-        "last_checked": "2026-05-29T22:44:19Z",
+        "last_checked": "2026-05-30T01:06:18Z",
         "mode": "record",
         "status": "pass"
       }
@@ -3550,7 +3927,7 @@
         "fixtures": [
           "basic"
         ],
-        "last_checked": "2026-05-29T16:17:08Z",
+        "last_checked": "2026-05-30T01:01:43Z",
         "mode": "record",
         "status": "pass"
       }
@@ -3628,7 +4005,7 @@
         "fixtures": [
           "basic"
         ],
-        "last_checked": "2026-05-29T22:10:55Z",
+        "last_checked": "2026-05-30T01:01:43Z",
         "mode": "record",
         "status": "pass"
       },
@@ -3800,7 +4177,7 @@
         "fixtures": [
           "embed_basic"
         ],
-        "last_checked": "2026-05-29T22:26:56Z",
+        "last_checked": "2026-05-30T01:02:06Z",
         "mode": "record",
         "status": "pass"
       }
@@ -3840,6 +4217,19 @@
           "basic"
         ],
         "last_checked": "2026-05-29T23:42:04Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:baai/bge-m3": {
+    "scenarios": {
+      "embed_basic": {
+        "error": null,
+        "fixtures": [
+          "embed_basic"
+        ],
+        "last_checked": "2026-05-30T00:56:13Z",
         "mode": "record",
         "status": "pass"
       }
@@ -3910,6 +4300,19 @@
       }
     }
   },
+  "xai:grok-3-mini-fast-latest": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T01:06:18Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
   "openrouter:inclusionai/ring-2.6-1t": {
     "scenarios": {
       "basic": {
@@ -3931,6 +4334,19 @@
           "basic"
         ],
         "last_checked": "2026-05-30T00:13:28Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:qwen/qwen3-embedding-4b": {
+    "scenarios": {
+      "embed_basic": {
+        "error": null,
+        "fixtures": [
+          "embed_basic"
+        ],
+        "last_checked": "2026-05-30T00:56:13Z",
         "mode": "record",
         "status": "pass"
       }
@@ -3994,6 +4410,19 @@
           "basic"
         ],
         "last_checked": "2026-05-29T19:08:33Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:sentence-transformers/multi-qa-mpnet-base-dot-v1": {
+    "scenarios": {
+      "embed_basic": {
+        "error": null,
+        "fixtures": [
+          "embed_basic"
+        ],
+        "last_checked": "2026-05-30T00:56:13Z",
         "mode": "record",
         "status": "pass"
       }
@@ -4110,7 +4539,7 @@
         "fixtures": [
           "basic"
         ],
-        "last_checked": "2026-05-29T22:41:43Z",
+        "last_checked": "2026-05-30T01:06:18Z",
         "mode": "record",
         "status": "pass"
       },
@@ -4138,6 +4567,19 @@
       }
     }
   },
+  "google:gemini-robotics-er-1.5-preview": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (404): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T01:01:43Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
   "zenmux:tencent/hy3-preview": {
     "scenarios": {
       "basic": {
@@ -4159,6 +4601,19 @@
           "basic"
         ],
         "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:google/gemini-embedding-2-preview": {
+    "scenarios": {
+      "embed_basic": {
+        "error": null,
+        "fixtures": [
+          "embed_basic"
+        ],
+        "last_checked": "2026-05-30T00:56:13Z",
         "mode": "record",
         "status": "pass"
       }
@@ -4209,6 +4664,19 @@
           "basic"
         ],
         "last_checked": "2026-05-29T23:42:04Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "google:gemini-flash-latest": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T01:01:43Z",
         "mode": "record",
         "status": "pass"
       }
@@ -4286,7 +4754,7 @@
         "fixtures": [
           "basic"
         ],
-        "last_checked": "2026-05-29T22:42:23Z",
+        "last_checked": "2026-05-30T01:06:18Z",
         "mode": "record",
         "status": "fail"
       }
@@ -4299,7 +4767,7 @@
         "fixtures": [
           "basic"
         ],
-        "last_checked": "2026-05-29T22:31:12Z",
+        "last_checked": "2026-05-30T01:01:43Z",
         "mode": "record",
         "status": "fail"
       }
@@ -4415,6 +4883,19 @@
           "basic"
         ],
         "last_checked": "2026-05-29T23:42:04Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:sentence-transformers/all-minilm-l6-v2": {
+    "scenarios": {
+      "embed_basic": {
+        "error": null,
+        "fixtures": [
+          "embed_basic"
+        ],
+        "last_checked": "2026-05-30T00:56:13Z",
         "mode": "record",
         "status": "pass"
       }
@@ -4594,6 +5075,19 @@
       }
     }
   },
+  "google:gemini-embedding-2-preview": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (404): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T01:01:43Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
   "zenmux:stepfun/step-3": {
     "scenarios": {
       "basic": {
@@ -4708,6 +5202,19 @@
       }
     }
   },
+  "openrouter:mistralai/codestral-embed-2505": {
+    "scenarios": {
+      "embed_basic": {
+        "error": null,
+        "fixtures": [
+          "embed_basic"
+        ],
+        "last_checked": "2026-05-30T00:56:13Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
   "zenmux:anthropic/claude-sonnet-4.6": {
     "scenarios": {
       "basic": {
@@ -4728,7 +5235,7 @@
         "fixtures": [
           "basic"
         ],
-        "last_checked": "2026-05-29T22:09:53Z",
+        "last_checked": "2026-05-30T01:01:43Z",
         "mode": "record",
         "status": "pass"
       },
@@ -4935,6 +5442,19 @@
       }
     }
   },
+  "xai:grok-3-mini-fast": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T01:06:18Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
   "zai:glm-4.5-flash": {
     "scenarios": {
       "basic": {
@@ -5085,7 +5605,7 @@
         "fixtures": [
           "basic"
         ],
-        "last_checked": "2026-05-29T22:31:06Z",
+        "last_checked": "2026-05-30T01:01:43Z",
         "mode": "record",
         "status": "fail"
       }
@@ -5221,6 +5741,19 @@
       }
     }
   },
+  "google:gemini-3.1-flash-lite-preview": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T01:01:43Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
   "openrouter:google/gemma-2-27b-it": {
     "scenarios": {
       "basic": {
@@ -5229,6 +5762,32 @@
           "basic"
         ],
         "last_checked": "2026-05-29T23:42:35Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "google:deep-research-pro-preview-12-2025": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (400): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T01:01:43Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "xai:grok-3": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T01:06:18Z",
         "mode": "record",
         "status": "pass"
       }
@@ -5281,6 +5840,19 @@
           "basic"
         ],
         "last_checked": "2026-05-29T23:55:12Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:thenlper/gte-large": {
+    "scenarios": {
+      "embed_basic": {
+        "error": null,
+        "fixtures": [
+          "embed_basic"
+        ],
+        "last_checked": "2026-05-30T00:56:13Z",
         "mode": "record",
         "status": "pass"
       }
@@ -5416,6 +5988,19 @@
       }
     }
   },
+  "google:veo-3.1-fast-generate-preview": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (404): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T01:01:43Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
   "openrouter:google/gemma-4-31b-it:free": {
     "scenarios": {
       "basic": {
@@ -5426,6 +6011,19 @@
         "last_checked": "2026-05-29T23:42:35Z",
         "mode": "record",
         "status": "pass"
+      }
+    }
+  },
+  "google:veo-3.0-generate-001": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (404): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T01:01:43Z",
+        "mode": "record",
+        "status": "fail"
       }
     }
   },
@@ -5491,6 +6089,19 @@
         "last_checked": "2026-05-30T00:10:17Z",
         "mode": "record",
         "status": "fail"
+      }
+    }
+  },
+  "openrouter:sentence-transformers/all-mpnet-base-v2": {
+    "scenarios": {
+      "embed_basic": {
+        "error": null,
+        "fixtures": [
+          "embed_basic"
+        ],
+        "last_checked": "2026-05-30T00:56:13Z",
+        "mode": "record",
+        "status": "pass"
       }
     }
   },
@@ -5728,6 +6339,19 @@
       }
     }
   },
+  "google:deep-research-preview-04-2026": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (400): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T01:01:43Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
   "openrouter:qwen/qwen3-vl-32b-instruct": {
     "scenarios": {
       "basic": {
@@ -5764,6 +6388,19 @@
         "last_checked": "2026-05-29T23:55:12Z",
         "mode": "record",
         "status": "pass"
+      }
+    }
+  },
+  "google:nano-banana-pro-preview": {
+    "scenarios": {
+      "basic": {
+        "error": "",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T01:01:43Z",
+        "mode": "record",
+        "status": "fail"
       }
     }
   },
@@ -5813,7 +6450,7 @@
         "fixtures": [
           "embed_basic"
         ],
-        "last_checked": "2026-05-29T22:26:43Z",
+        "last_checked": "2026-05-30T01:02:06Z",
         "mode": "record",
         "status": "fail"
       }
@@ -5999,6 +6636,19 @@
       }
     }
   },
+  "google:veo-2.0-generate-001": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (404): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T01:01:43Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
   "zenmux:google/gemini-2.5-pro": {
     "scenarios": {
       "basic": {
@@ -6058,7 +6708,7 @@
         "fixtures": [
           "basic"
         ],
-        "last_checked": "2026-05-29T22:11:54Z",
+        "last_checked": "2026-05-30T01:01:43Z",
         "mode": "record",
         "status": "pass"
       },
@@ -6233,7 +6883,7 @@
         "fixtures": [
           "basic"
         ],
-        "last_checked": "2026-05-29T22:41:17Z",
+        "last_checked": "2026-05-30T01:06:18Z",
         "mode": "record",
         "status": "pass"
       },
@@ -6519,6 +7169,19 @@
       }
     }
   },
+  "google:veo-3.1-lite-generate-preview": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (404): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T01:01:43Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
   "openrouter:sao10k/l3.1-70b-hanami-x1": {
     "scenarios": {
       "basic": {
@@ -6551,6 +7214,19 @@
           "basic"
         ],
         "last_checked": "2026-05-29T19:00:43Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:openai/text-embedding-ada-002": {
+    "scenarios": {
+      "embed_basic": {
+        "error": null,
+        "fixtures": [
+          "embed_basic"
+        ],
+        "last_checked": "2026-05-30T00:56:13Z",
         "mode": "record",
         "status": "pass"
       }
@@ -6777,6 +7453,19 @@
       }
     }
   },
+  "google:deep-research-max-preview-04-2026": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (400): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T01:01:43Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
   "zenmux:deepseek/deepseek-v4-pro": {
     "scenarios": {
       "basic": {
@@ -6876,6 +7565,19 @@
           "basic"
         ],
         "last_checked": "2026-05-29T23:42:04Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "xai:grok-4-1-fast-non-reasoning": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T01:06:18Z",
         "mode": "record",
         "status": "pass"
       }
@@ -7087,6 +7789,19 @@
       }
     }
   },
+  "google:gemini-2.0-flash-exp": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (404): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T01:01:43Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
   "openrouter:qwen/qwen3.5-plus-20260420": {
     "scenarios": {
       "basic": {
@@ -7160,6 +7875,19 @@
           "basic"
         ],
         "last_checked": "2026-05-29T23:38:18Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "xai:grok-4-fast": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T01:06:18Z",
         "mode": "record",
         "status": "pass"
       }
@@ -7263,7 +7991,7 @@
         "fixtures": [
           "basic"
         ],
-        "last_checked": "2026-05-29T22:42:00Z",
+        "last_checked": "2026-05-30T01:06:18Z",
         "mode": "record",
         "status": "pass"
       }
@@ -7360,6 +8088,19 @@
       }
     }
   },
+  "xai:grok-imagine-image-pro": {
+    "scenarios": {
+      "image_basic": {
+        "error": null,
+        "fixtures": [
+          "image_basic"
+        ],
+        "last_checked": "2026-05-30T01:06:56Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
   "openrouter:bytedance-seed/seed-1.6": {
     "scenarios": {
       "basic": {
@@ -7368,6 +8109,19 @@
           "basic"
         ],
         "last_checked": "2026-05-30T00:15:07Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "xai:grok-4": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T01:06:18Z",
         "mode": "record",
         "status": "pass"
       }
@@ -7555,6 +8309,19 @@
       }
     }
   },
+  "openrouter:intfloat/multilingual-e5-large": {
+    "scenarios": {
+      "embed_basic": {
+        "error": null,
+        "fixtures": [
+          "embed_basic"
+        ],
+        "last_checked": "2026-05-30T00:56:13Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
   "fireworks_ai:accounts/fireworks/models/deepseek-v4-flash": {
     "scenarios": {
       "basic": {
@@ -7575,7 +8342,7 @@
         "fixtures": [
           "basic"
         ],
-        "last_checked": "2026-05-29T22:30:58Z",
+        "last_checked": "2026-05-30T01:01:43Z",
         "mode": "record",
         "status": "fail"
       }
@@ -7620,6 +8387,19 @@
       }
     }
   },
+  "google:gemini-robotics-er-1.6-preview": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T01:01:43Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
   "zenmux:sapiens-ai/agnes-1.5-flash": {
     "scenarios": {
       "basic": {
@@ -7640,7 +8420,7 @@
         "fixtures": [
           "basic"
         ],
-        "last_checked": "2026-05-29T22:08:36Z",
+        "last_checked": "2026-05-30T01:01:43Z",
         "mode": "record",
         "status": "pass"
       },
@@ -7740,7 +8520,7 @@
         "fixtures": [
           "image_basic"
         ],
-        "last_checked": "2026-05-29T22:51:39Z",
+        "last_checked": "2026-05-30T01:06:56Z",
         "mode": "record",
         "status": "pass"
       }
@@ -7837,6 +8617,19 @@
       }
     }
   },
+  "google:gemini-2.5-flash": {
+    "scenarios": {
+      "basic": {
+        "error": null,
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T01:01:43Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
   "google:gemini-3.5-flash": {
     "scenarios": {
       "basic": {
@@ -7844,7 +8637,7 @@
         "fixtures": [
           "basic"
         ],
-        "last_checked": "2026-05-29T22:12:39Z",
+        "last_checked": "2026-05-30T01:01:43Z",
         "mode": "record",
         "status": "pass"
       },
@@ -8051,6 +8844,32 @@
       }
     }
   },
+  "google:gemini-3-pro-preview": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (404): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T01:01:43Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
+  "google:veo-3.0-fast-generate-001": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (404): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T01:01:43Z",
+        "mode": "record",
+        "status": "fail"
+      }
+    }
+  },
   "openrouter:poolside/laguna-m.1:free": {
     "scenarios": {
       "basic": {
@@ -8116,6 +8935,19 @@
       }
     }
   },
+  "openrouter:thenlper/gte-base": {
+    "scenarios": {
+      "embed_basic": {
+        "error": null,
+        "fixtures": [
+          "embed_basic"
+        ],
+        "last_checked": "2026-05-30T00:56:13Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
   "zenmux:openai/gpt-4": {
     "scenarios": {
       "basic": {
@@ -8163,6 +8995,19 @@
           "basic"
         ],
         "last_checked": "2026-05-30T00:10:17Z",
+        "mode": "record",
+        "status": "pass"
+      }
+    }
+  },
+  "openrouter:intfloat/e5-large-v2": {
+    "scenarios": {
+      "embed_basic": {
+        "error": null,
+        "fixtures": [
+          "embed_basic"
+        ],
+        "last_checked": "2026-05-30T00:56:13Z",
         "mode": "record",
         "status": "pass"
       }
@@ -8305,7 +9150,7 @@
         "fixtures": [
           "basic"
         ],
-        "last_checked": "2026-05-29T22:44:27Z",
+        "last_checked": "2026-05-30T01:06:18Z",
         "mode": "record",
         "status": "fail"
       }
@@ -8487,7 +9332,7 @@
         "fixtures": [
           "basic"
         ],
-        "last_checked": "2026-05-29T16:17:48Z",
+        "last_checked": "2026-05-30T01:06:18Z",
         "mode": "record",
         "status": "pass"
       }
@@ -8722,6 +9567,19 @@
         "last_checked": "2026-05-30T00:18:40Z",
         "mode": "record",
         "status": "pass"
+      }
+    }
+  },
+  "google:veo-3.1-generate-preview": {
+    "scenarios": {
+      "basic": {
+        "error": "     Expected {:ok, %ReqLLM.Response{}}, got: {:error, %ReqLLM.Error.API.Request{reason: \"Provider response error (404): ",
+        "fixtures": [
+          "basic"
+        ],
+        "last_checked": "2026-05-30T01:01:43Z",
+        "mode": "record",
+        "status": "fail"
       }
     }
   },

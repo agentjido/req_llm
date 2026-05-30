@@ -1,0 +1,114 @@
+{
+  "model_spec": "google:gemini-robotics-er-1.6-preview",
+  "provider": "google",
+  "request": {
+    "body": {
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJIZWxsbyB3b3JsZCEifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7ImNhbmRpZGF0ZUNvdW50IjoxLCJtYXhPdXRwdXRUb2tlbnMiOjUwLCJ0ZW1wZXJhdHVyZSI6MC4wfX0="
+    },
+    "canonical_json": {
+      "contents": [
+        {
+          "parts": [
+            {
+              "text": "Hello world!"
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "generationConfig": {
+        "candidateCount": 1,
+        "maxOutputTokens": 50,
+        "temperature": 0.0
+      }
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.18"
+      ]
+    },
+    "method": "post",
+    "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-robotics-er-1.6-preview:generateContent?key=[REDACTED]"
+  },
+  "response": {
+    "body": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "Hello",
+                "thoughtSignature": "EqwCCqkCAQw51sfSaGcdeh32bOiJ6mtV2RoAHytlmg7FxFOv8Z2gGW45fO/tncIM1FBsLToJ5ysSD8q88sZpgVuZUiy2VsQsIg9JLKfLr7ZbKXIq7j3Jug9Pd+ajprtssOCmgC75Y7PtChu2BwODYGj+nzNNvB3+ntdmAqfXLkab+xrLZDTPhNGyky1OXliUSKppvagyrH5N+XSk36rj+eG16Qsirz84kX0ayVFNyIcKoS89Yk8tJu2CNN528Pj6SLHcx848C7U5lXOzx0B3ADwBvbfl/C9Vs8WGcv3PgIssF6GMCyNC2zSM55yspW8ppo6rIkQ3h+8mcAHZhMPDedogpNFw4BJmwu9wtYICIrqVAcZkFAnwZInOnp3WS8CoBnZNBjFbbM7S5KGhxbmP"
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "MAX_TOKENS",
+          "index": 0
+        }
+      ],
+      "modelVersion": "gemini-robotics-er-1.6-preview",
+      "responseId": "uDYaau6EI96BjrEP_Na70Qg",
+      "usageMetadata": {
+        "promptTokenCount": 4,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 4
+          }
+        ],
+        "serviceTier": "standard",
+        "thoughtsTokenCount": 45,
+        "totalTokenCount": 49
+      }
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "content-type": [
+        "application/json; charset=UTF-8"
+      ],
+      "date": [
+        "Sat, 30 May 2026 01:00:41 GMT"
+      ],
+      "server": [
+        "scaffolding on HTTPServer2"
+      ],
+      "server-timing": [
+        "gfet4t7; dur=898"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-frame-options": [
+        "SAMEORIGIN"
+      ],
+      "x-gemini-service-tier": [
+        "standard"
+      ],
+      "x-xss-protection": [
+        "0"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

@@ -51,10 +51,10 @@ Current completed provider status:
 - OpenAI speech is refreshed and replay-clean for `tts-1`, `tts-1-1106`, `tts-1-hd`, `tts-1-hd-1106`, `gpt-4o-mini-tts`, and `gpt-4o-mini-tts-2025-12-15`.
 - OpenAI transcription is refreshed and replay-clean for `whisper-1`, `gpt-4o-transcribe`, `gpt-4o-transcribe-diarize`, `gpt-4o-mini-transcribe`, `gpt-4o-mini-transcribe-2025-03-20`, and `gpt-4o-mini-transcribe-2025-12-15`.
 - OpenAI audio-chat basic fixtures are refreshed and replay-clean for `gpt-audio` and `gpt-audio-mini`. These require Chat Completions audio output defaults and transcript decoding; the dated audio-chat aliases remain a later expansion.
-- Google is refreshed for the current normal text/chat target set and non-text image/embedding targets we can exercise through ReqLLM: newly replay-clean text suites include `gemini-2.5-flash-lite`, `gemini-3-flash-preview`, `gemini-3.1-flash-lite`, `gemini-3.1-pro-preview`, `gemini-3.1-pro-preview-customtools`, `gemini-3.5-flash`, and `gemini-pro-latest`; Google image generation is replay-clean for all 8 catalog image models; `gemini-embedding-001` is replay-clean for embeddings.
+- Google is refreshed for the current normal text/chat target set and non-text image/embedding targets we can exercise through ReqLLM: replay-clean text suites now include 14 `basic` scenario fixtures across Gemini 2.0, Gemini 2.5, Gemini 3/3.1/3.5, `gemini-flash-latest`, `gemini-pro-latest`, and `gemini-robotics-er-1.6-preview`; Google image generation is replay-clean for all 8 catalog image models; `gemini-embedding-001` is replay-clean for embeddings.
 - Google provider-specific coverage now includes `grounding` on `gemini-3-flash-preview` and `multimodal_tool_result` retargeted from unavailable `gemini-3-pro-preview` to `gemini-3.1-pro-preview`.
-- xAI current normal text targets are replay-clean for `grok-4`, `grok-4-fast`, `grok-3-mini`, `grok-3-mini-fast`, `grok-3-mini-fast-latest`, `grok-3-mini-latest`, `grok-4.20-0309-non-reasoning`, `grok-4.20-non-reasoning`, `grok-4.20-0309-reasoning`, `grok-4.3`, and `grok-build-0.1`.
-- xAI current image generation is replay-clean for `grok-imagine-image` and `grok-imagine-image-quality`.
+- xAI current normal text targets are replay-clean for 18/23 catalog text models, including the Grok 3 mini family, Grok 4, Grok 4 fast/reasoning aliases, Grok 4.20 reasoning/non-reasoning aliases, Grok 4.3, `grok-build-0.1`, and `grok-code-fast-1`.
+- xAI current image generation is replay-clean for all 3 catalog image models: `grok-imagine-image`, `grok-imagine-image-quality`, and `grok-imagine-image-pro`.
 - xAI provider-specific coverage is retargeted to current models and replay-clean for web search, X search, native streaming structured output, tool-strict streaming structured output, auto streaming structured output, and truncated-stream handling.
 - Groq now has basic-scenario fixture coverage for 9/14 text models and transcription fixture coverage for both Whisper models. The full comprehensive suite only passed for `allam-2-7b`; advanced Groq tools/object scenarios should be handled separately from broad model coverage.
 - Cerebras now has basic-scenario fixture coverage for `gpt-oss-120b` and `zai-glm-4.7`; `llama3.1-8b`, `qwen-3-235b-a22b-instruct-2507`, and `qwen-3-coder-480b` returned 404 on basic chat.
@@ -62,10 +62,11 @@ Current completed provider status:
 - ElevenLabs speech fixtures are refreshed for all four speech models.
 - Fireworks AI has basic-scenario fixture coverage for 11/12 text models; `accounts/fireworks/routers/glm-5p1-fast` returned 503 during the live run.
 - OpenRouter now has basic-scenario fixture coverage for 209 text models across OpenAI OSS, Gemini/Gemma, DeepSeek, Meta, Mistral, Qwen, Z.ai, NVIDIA, Moonshot, Amazon, ByteDance, Cohere, InclusionAI, Liquid, Microsoft, Nous, xAI, Perplexity, IBM Granite, Inception, Morph, Nex-AGI, Reka, Poolside, Xiaomi, Aion, Inflection, Mancer, Sao10k, and OpenRouter-native routes.
+- OpenRouter embedding coverage is now replay-clean for all 25 catalog embedding models, covering BAAI, Google Gemini embeddings, Intfloat, Mistral, NVIDIA, OpenAI, Perplexity, Qwen, sentence-transformers, and Thenlper routes.
 - Venice now has basic-scenario fixture coverage for all 67 current Venice catalog text models. A missing coverage wrapper caused an initial false failure pass; `test/coverage/venice/comprehensive_test.exs` now exists.
 - Zenmux now has basic-scenario fixture coverage for 107/147 text models. Most misses were live 400/404 catalog availability mismatches, plus a few timeouts.
 - Z.ai coding-plan now has basic-scenario fixture coverage for 4/5 models; `glm-5v-turbo` returned 429.
-- Cached replay validation is clean for the expansion-provider batch: OpenRouter `basic` 209/209, Venice `basic` 67/67, Zenmux `basic` 107/107, Groq `basic` 9/9, Groq transcription 2/2, Cerebras `basic` 2/2, Fireworks AI `basic` 11/11, Cohere rerank 5/5, ElevenLabs speech 4/4, Z.ai `basic` 2/2, and Z.ai coding-plan `basic` 4/4.
+- Cached replay validation is clean for the expansion-provider batch: OpenRouter `basic` 209/209, OpenRouter embeddings 25/25, Google `basic` 14/14, Google embeddings 1/1, xAI `basic` 18/18, xAI images 3/3, Venice `basic` 67/67, Zenmux `basic` 107/107, Groq `basic` 9/9, Groq transcription 2/2, Cerebras `basic` 2/2, Fireworks AI `basic` 11/11, Cohere rerank 5/5, ElevenLabs speech 4/4, Z.ai `basic` 2/2, and Z.ai coding-plan `basic` 4/4.
 - Deprecated OpenAI, Anthropic, Google, and xAI fixture directories have been removed from package scope.
 - Minimax key and balance are no longer blocking key work. Keep Minimax as a later provider-specific fixture pass rather than retesting credentials now.
 
@@ -81,13 +82,15 @@ Current completed provider status:
 
 ## Current Fixture State
 
-The fixture tree has 2697 JSON fixture files under `test/support/fixtures`.
+The fixture tree has 2732 JSON fixture files under `test/support/fixtures`.
 
 Scenario-backed fixture coverage is now the clearest metric for this branch because broad provider sweeps intentionally recorded `basic`, speech, transcription, and rerank scenarios without promoting every model to full comprehensive state:
 
 | Provider | Passing scenario-backed models | Scenario scope |
 | --- | ---: | --- |
-| openrouter | 209 | `basic` text |
+| openrouter | 234 | `basic` text plus `embed_basic` embeddings |
+| google | 23 | `basic` text plus embedding/image/provider-specific scenarios |
+| xai | 21 | `basic` text plus image/provider-specific scenarios |
 | zenmux | 107 | `basic` text |
 | venice | 67 | `basic` text |
 | groq | 11 | `basic` text plus transcription |
@@ -138,9 +141,9 @@ OpenAI scenario/fixture-file verification is more current than the model-level `
 
 Remaining OpenAI catalog gaps are intentionally split by endpoint family: realtime (`gpt-realtime*`, `gpt-realtime-whisper`), Sora (`sora-2*`), moderation (`omni-moderation-*`), search (`gpt-5-search-api*`), legacy completions (`babbage-002`, `davinci-002`), older preview text (`gpt-4-0125-preview`, `o1-mini`), inaccessible current catalog (`gpt-5.3-codex-spark`), and deferred dated audio-chat aliases (`gpt-audio-1.5`, `gpt-audio-2025-08-28`, `gpt-audio-mini-2025-12-15`).
 
-Google scenario/fixture-file verification is more current than the model-level `mix mc` table. Current non-deprecated fixture-file coverage is 22/49 by catalog directory, with the normal chat targets and all current Google image models covered. Known Google gaps are endpoint-specific or unavailable through the current provider path: native audio/live, Veo/video, Lyria, robotics, deep research, `text-embedding-004` 404, legacy Gemini 1.5 404s, and `gemini-3-pro-preview` 404.
+Google scenario/fixture-file verification is more current than the model-level `mix mc` table. Current fixture-backed catalog coverage is 24/50: text 15/40, embedding 1/2, and image 8/8. Known Google gaps are endpoint-specific, retired, or unavailable through the current provider path: native audio/live, Veo/video, Lyria, deep research, `text-embedding-004` 404, legacy Gemini 1.5 404s, `gemini-3-pro-preview` 404, and special computer-use/Antigravity routes returning 400 through the normal text path.
 
-xAI scenario/fixture-file verification is also more current than the model-level `mix mc` table. Current non-deprecated fixture-file coverage is 13/18: text 11/16 and image 2/2. Known xAI gaps are `grok-2`, `grok-2-1212`, and `grok-beta` returning 400 on normal chat, `grok-4.20-multi-agent-0309` requiring separate multi-agent handling, and `grok-imagine-video` requiring video-operation support.
+xAI scenario/fixture-file verification is also more current than the model-level `mix mc` table. Current fixture-backed catalog coverage is 21/26: text 18/23 and image 3/3. Known xAI gaps are `grok-2`, `grok-2-1212`, and `grok-beta` returning 400 on normal chat, `grok-4.20-multi-agent-0309` requiring separate multi-agent handling, and `grok-imagine-video` requiring video-operation support.
 
 ## Date Findings
 

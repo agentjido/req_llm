@@ -43,14 +43,14 @@
           "finish_reason": "stop",
           "index": 0,
           "message": {
-            "content": "Hello, world! 👋 What's up?",
+            "content": "Hello, world! 🌍 What's up?",
             "refusal": null,
             "role": "assistant"
           }
         }
       ],
-      "created": 1780095597,
-      "id": "63df3f0b-aa5a-9a1f-85e7-8dd2b3840e77",
+      "created": 1780103093,
+      "id": "b2a379a5-ae8d-9622-96bc-1dad6738e467",
       "model": "grok-4.20-0309-non-reasoning",
       "object": "chat.completion",
       "system_fingerprint": "fp_8b3f31b605",
@@ -85,7 +85,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "a0391ccd6fae2911-ORD"
+        "a039d3c83f54986a-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -94,7 +94,7 @@
         "application/json"
       ],
       "date": [
-        "Fri, 29 May 2026 22:59:58 GMT"
+        "Sat, 30 May 2026 01:04:53 GMT"
       ],
       "server": [
         "cloudflare"
@@ -104,7 +104,7 @@
         "max-age=31536000"
       ],
       "traceparent": [
-        "00-59bf8998f28fd0373bbc625fa565f763-240415da000351f0-01"
+        "00-6d1b4a1bacd75a8db792122eff9bb44d-1405b3930001d7ad-01"
       ],
       "transfer-encoding": [
         "chunked"
@@ -113,13 +113,13 @@
         "origin, access-control-request-method, access-control-request-headers"
       ],
       "x-metrics-e2e-ms": [
-        "324.2"
+        "562.8"
       ],
       "x-metrics-mean-itl-ms": [
-        "7.7"
+        "7.6"
       ],
       "x-metrics-ttft-ms": [
-        "133.1"
+        "250.4"
       ],
       "x-ratelimit-limit-requests": [
         "1800"
@@ -128,13 +128,13 @@
         "10000000"
       ],
       "x-ratelimit-remaining-requests": [
-        "1794"
+        "1800"
       ],
       "x-ratelimit-remaining-tokens": [
-        "9998993"
+        "10000000"
       ],
       "x-request-id": [
-        "63df3f0b-aa5a-9a1f-85e7-8dd2b3840e77"
+        "b2a379a5-ae8d-9622-96bc-1dad6738e467"
       ],
       "x-zero-data-retention": [
         "false"
