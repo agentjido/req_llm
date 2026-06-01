@@ -1418,11 +1418,15 @@ defmodule ReqLLM.Providers.Anthropic do
           |> put_output_effort(effort_from_thinking(thinking, model))
           |> remove_adaptive_thinking_sampling_params()
 
-        %{type: "adaptive"} ->
-          remove_adaptive_thinking_sampling_params(opts)
+        %{type: "adaptive"} = thinking ->
+          opts
+          |> Keyword.put(:thinking, put_default_adaptive_thinking_display(thinking))
+          |> remove_adaptive_thinking_sampling_params()
 
-        %{"type" => "adaptive"} ->
-          remove_adaptive_thinking_sampling_params(opts)
+        %{"type" => "adaptive"} = thinking ->
+          opts
+          |> Keyword.put(:thinking, put_default_adaptive_thinking_display(thinking))
+          |> remove_adaptive_thinking_sampling_params()
 
         _ ->
           opts
@@ -1431,6 +1435,15 @@ defmodule ReqLLM.Providers.Anthropic do
       opts
     end
   end
+
+  defp put_default_adaptive_thinking_display(%{display: _} = thinking), do: thinking
+  defp put_default_adaptive_thinking_display(%{"display" => _} = thinking), do: thinking
+
+  defp put_default_adaptive_thinking_display(%{"type" => _} = thinking),
+    do: Map.put(thinking, "display", "summarized")
+
+  defp put_default_adaptive_thinking_display(thinking),
+    do: Map.put(thinking, :display, "summarized")
 
   defp put_output_effort(opts, effort) do
     Keyword.update(opts, :output_config, %{effort: effort}, fn

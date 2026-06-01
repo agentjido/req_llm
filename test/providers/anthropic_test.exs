@@ -1373,6 +1373,27 @@ defmodule ReqLLM.Providers.AnthropicTest do
       refute Keyword.has_key?(translated_opts, :temperature)
     end
 
+    test "translate_options defaults direct adaptive thinking display to summarized" do
+      {:ok, model} = ReqLLM.model("anthropic:claude-opus-4-8")
+
+      cases = [
+        {%{type: "adaptive"}, %{type: "adaptive", display: "summarized"}},
+        {%{"type" => "adaptive"}, %{"type" => "adaptive", "display" => "summarized"}}
+      ]
+
+      for {thinking, expected} <- cases do
+        {translated_opts, []} =
+          Anthropic.translate_options(:chat, model,
+            thinking: thinking,
+            temperature: 0.0,
+            max_tokens: 100
+          )
+
+        assert Keyword.get(translated_opts, :thinking) == expected
+        refute Keyword.has_key?(translated_opts, :temperature)
+      end
+    end
+
     test "translate_options removes Claude Opus 4.8 sampling params without reasoning" do
       {:ok, model} = ReqLLM.model("anthropic:claude-opus-4-8")
 
