@@ -251,13 +251,35 @@ defmodule ReqLLM.Providers.AnthropicPromptCacheTest do
           ReqLLM.Context.user("Hello!")
         ])
 
-      # No `anthropic_prompt_cache` option — the breakpoint is declared explicitly.
       {:ok, request} = Anthropic.prepare_request(:chat, model, context, [])
       decoded = request |> Anthropic.encode_body() |> ReqLLM.Test.Helpers.json_body()
 
       [system_block] = decoded["system"]
       assert system_block["text"] == "Style guide."
       assert system_block["cache_control"] == %{"type" => "ephemeral", "ttl" => "1h"}
+    end
+
+    test "preserves cache_control on a single message content block" do
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
+
+      context =
+        ReqLLM.Context.new([
+          %ReqLLM.Message{
+            role: :user,
+            content: [
+              ReqLLM.Message.ContentPart.text("Cached user context.", %{
+                "cache_control" => %{"type" => "ephemeral", "ttl" => "1h"}
+              })
+            ]
+          }
+        ])
+
+      {:ok, request} = Anthropic.prepare_request(:chat, model, context, [])
+      decoded = request |> Anthropic.encode_body() |> ReqLLM.Test.Helpers.json_body()
+
+      [%{"content" => [content_block]}] = decoded["messages"]
+      assert content_block["text"] == "Cached user context."
+      assert content_block["cache_control"] == %{"type" => "ephemeral", "ttl" => "1h"}
     end
 
     test "supports multiple breakpoints with distinct per-block TTLs" do
@@ -283,7 +305,6 @@ defmodule ReqLLM.Providers.AnthropicPromptCacheTest do
       decoded = request |> Anthropic.encode_body() |> ReqLLM.Test.Helpers.json_body()
 
       assert [first, second] = decoded["system"]
-      # Longer TTL (1h) must precede the shorter (5m default) per Anthropic's rule.
       assert first["cache_control"] == %{"type" => "ephemeral", "ttl" => "1h"}
       assert second["cache_control"] == %{"type" => "ephemeral"}
     end
@@ -303,8 +324,6 @@ defmodule ReqLLM.Providers.AnthropicPromptCacheTest do
       {:ok, request} = Anthropic.prepare_request(:chat, model, context, [])
       decoded = request |> Anthropic.encode_body() |> ReqLLM.Test.Helpers.json_body()
 
-      # No cache_control and nothing else on the block, so it collapses to a
-      # bare system string, exactly as before this change.
       assert decoded["system"] == "Plain."
     end
   end

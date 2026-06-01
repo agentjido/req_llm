@@ -217,8 +217,7 @@ defmodule ReqLLM.Providers.Anthropic.Context do
 
     case content_blocks do
       [] -> ""
-      # Simplify single text blocks
-      [%{type: "text", text: text}] -> text
+      [%{type: "text", text: text} = block] when map_size(block) == 2 -> text
       blocks -> blocks
     end
   end
