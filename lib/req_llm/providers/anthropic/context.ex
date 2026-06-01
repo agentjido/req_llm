@@ -196,7 +196,13 @@ defmodule ReqLLM.Providers.Anthropic.Context do
   defp blank_system_content_block?(_block), do: false
 
   defp normalize_system_content([]), do: nil
-  defp normalize_system_content([%{type: "text", text: text}]), do: text
+  # Collapse a lone plain text block to a bare string — but only when it carries
+  # nothing else (e.g. no explicit `cache_control`), so an explicit cache
+  # breakpoint on a single system block is preserved.
+  defp normalize_system_content([%{type: "text", text: text} = block])
+       when map_size(block) == 2,
+       do: text
+
   defp normalize_system_content(blocks), do: blocks
 
   # Simple text content
@@ -217,13 +223,29 @@ defmodule ReqLLM.Providers.Anthropic.Context do
     end
   end
 
-  defp encode_content_part(%ReqLLM.Message.ContentPart{type: :text, text: ""}), do: nil
+  # Encodes a content part, then applies any explicit Anthropic cache breakpoint
+  # declared via `ContentPart` metadata. This lets callers place multiple
+  # `cache_control` breakpoints with PER-BLOCK TTLs — e.g. a 1-hour system block
+  # followed by a 5-minute one — which the single `anthropic_prompt_cache_ttl`
+  # option cannot express. See the Anthropic prompt-caching "explicit cache
+  # breakpoints" docs. Declare it as
+  # `ContentPart.text(text, %{cache_control: %{type: "ephemeral", ttl: "1h"}})`.
+  defp encode_content_part(%ReqLLM.Message.ContentPart{metadata: metadata} = part) do
+    case do_encode_content_part(part) do
+      block when is_map(block) -> maybe_put_cache_control(block, metadata)
+      other -> other
+    end
+  end
 
-  defp encode_content_part(%ReqLLM.Message.ContentPart{type: :text, text: text}) do
+  defp encode_content_part(_), do: nil
+
+  defp do_encode_content_part(%ReqLLM.Message.ContentPart{type: :text, text: ""}), do: nil
+
+  defp do_encode_content_part(%ReqLLM.Message.ContentPart{type: :text, text: text}) do
     %{type: "text", text: text}
   end
 
-  defp encode_content_part(%ReqLLM.Message.ContentPart{
+  defp do_encode_content_part(%ReqLLM.Message.ContentPart{
          type: :image,
          data: data,
          media_type: media_type
@@ -240,7 +262,7 @@ defmodule ReqLLM.Providers.Anthropic.Context do
     }
   end
 
-  defp encode_content_part(%ReqLLM.Message.ContentPart{type: :image_url, url: url}) do
+  defp do_encode_content_part(%ReqLLM.Message.ContentPart{type: :image_url, url: url}) do
     %{
       type: "image",
       source: %{
@@ -250,7 +272,7 @@ defmodule ReqLLM.Providers.Anthropic.Context do
     }
   end
 
-  defp encode_content_part(%ReqLLM.Message.ContentPart{
+  defp do_encode_content_part(%ReqLLM.Message.ContentPart{
          type: :file,
          file_id: file_id,
          media_type: media_type,
@@ -267,7 +289,7 @@ defmodule ReqLLM.Providers.Anthropic.Context do
     |> maybe_add_document_file_metadata(metadata)
   end
 
-  defp encode_content_part(%ReqLLM.Message.ContentPart{
+  defp do_encode_content_part(%ReqLLM.Message.ContentPart{
          type: :file,
          data: data,
          media_type: media_type,
@@ -286,7 +308,20 @@ defmodule ReqLLM.Providers.Anthropic.Context do
     }
   end
 
-  defp encode_content_part(_), do: nil
+  defp do_encode_content_part(_), do: nil
+
+  # Honors an explicit cache breakpoint declared in ContentPart metadata as
+  # `%{cache_control: %{type: "ephemeral"}}` (or with `"ttl" => "1h"`). Accepts
+  # atom or string `cache_control` keys; leaves the block untouched when absent.
+  defp maybe_put_cache_control(block, %{cache_control: cache_control})
+       when is_map(cache_control),
+       do: Map.put(block, :cache_control, cache_control)
+
+  defp maybe_put_cache_control(block, %{"cache_control" => cache_control})
+       when is_map(cache_control),
+       do: Map.put(block, :cache_control, cache_control)
+
+  defp maybe_put_cache_control(block, _metadata), do: block
 
   defp file_block_type(media_type) when is_binary(media_type) do
     if String.starts_with?(media_type, "image/"), do: "image", else: "document"

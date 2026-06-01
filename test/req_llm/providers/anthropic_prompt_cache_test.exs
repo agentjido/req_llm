@@ -234,6 +234,81 @@ defmodule ReqLLM.Providers.AnthropicPromptCacheTest do
     end
   end
 
+  describe "explicit per-block cache_control via ContentPart metadata" do
+    test "preserves cache_control declared on a content block, with its TTL" do
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
+
+      context =
+        ReqLLM.Context.new([
+          %ReqLLM.Message{
+            role: :system,
+            content: [
+              ReqLLM.Message.ContentPart.text("Style guide.", %{
+                cache_control: %{type: "ephemeral", ttl: "1h"}
+              })
+            ]
+          },
+          ReqLLM.Context.user("Hello!")
+        ])
+
+      # No `anthropic_prompt_cache` option — the breakpoint is declared explicitly.
+      {:ok, request} = Anthropic.prepare_request(:chat, model, context, [])
+      decoded = request |> Anthropic.encode_body() |> ReqLLM.Test.Helpers.json_body()
+
+      [system_block] = decoded["system"]
+      assert system_block["text"] == "Style guide."
+      assert system_block["cache_control"] == %{"type" => "ephemeral", "ttl" => "1h"}
+    end
+
+    test "supports multiple breakpoints with distinct per-block TTLs" do
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
+
+      context =
+        ReqLLM.Context.new([
+          %ReqLLM.Message{
+            role: :system,
+            content: [
+              ReqLLM.Message.ContentPart.text("Stable style guide.", %{
+                cache_control: %{type: "ephemeral", ttl: "1h"}
+              }),
+              ReqLLM.Message.ContentPart.text("Per-run context.", %{
+                cache_control: %{type: "ephemeral"}
+              })
+            ]
+          },
+          ReqLLM.Context.user("Hello!")
+        ])
+
+      {:ok, request} = Anthropic.prepare_request(:chat, model, context, [])
+      decoded = request |> Anthropic.encode_body() |> ReqLLM.Test.Helpers.json_body()
+
+      assert [first, second] = decoded["system"]
+      # Longer TTL (1h) must precede the shorter (5m default) per Anthropic's rule.
+      assert first["cache_control"] == %{"type" => "ephemeral", "ttl" => "1h"}
+      assert second["cache_control"] == %{"type" => "ephemeral"}
+    end
+
+    test "leaves blocks untouched when metadata has no cache_control" do
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
+
+      context =
+        ReqLLM.Context.new([
+          %ReqLLM.Message{
+            role: :system,
+            content: [ReqLLM.Message.ContentPart.text("Plain.", %{source: "test"})]
+          },
+          ReqLLM.Context.user("Hello!")
+        ])
+
+      {:ok, request} = Anthropic.prepare_request(:chat, model, context, [])
+      decoded = request |> Anthropic.encode_body() |> ReqLLM.Test.Helpers.json_body()
+
+      # No cache_control and nothing else on the block, so it collapses to a
+      # bare system string, exactly as before this change.
+      assert decoded["system"] == "Plain."
+    end
+  end
+
   describe "combined prompt caching scenarios" do
     test "applies cache_control to both tools and system" do
       {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
