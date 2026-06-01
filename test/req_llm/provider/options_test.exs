@@ -365,7 +365,7 @@ defmodule ReqLLM.Provider.OptionsTest do
       refute Keyword.has_key?(processed, :retry)
     end
 
-    test "process_stream preserves map-shaped thinking options" do
+    test "process_stream defaults direct adaptive thinking display to summarized" do
       {:ok, model} = ReqLLM.model("anthropic:claude-opus-4-8")
       context = ReqLLM.Context.new([ReqLLM.Context.user("Hello")])
 
@@ -381,7 +381,7 @@ defmodule ReqLLM.Provider.OptionsTest do
           temperature: 0.0
         )
 
-      assert processed[:thinking] == %{type: "adaptive"}
+      assert processed[:thinking] == %{type: "adaptive", display: "summarized"}
       assert processed[:output_config] == %{effort: "low"}
       assert processed[:stream] == true
       refute Keyword.has_key?(processed, :top_p)
