@@ -1691,6 +1691,45 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
       assert payload["type"] == "response.create"
       assert payload["response"] == config.canonical_json
     end
+
+    test "keeps previous_response_id with store false over websocket transport" do
+      original_key = System.get_env("OPENAI_API_KEY")
+      System.put_env("OPENAI_API_KEY", "test-key-12345")
+
+      on_exit(fn ->
+        if original_key do
+          System.put_env("OPENAI_API_KEY", original_key)
+        else
+          System.delete_env("OPENAI_API_KEY")
+        end
+      end)
+
+      {:ok, model} = ReqLLM.model("openai:gpt-5")
+
+      assistant_msg = %ReqLLM.Message{
+        role: :assistant,
+        content: [%ReqLLM.Message.ContentPart{type: :text, text: "Previous answer"}],
+        metadata: %{response_id: "resp_ws_123"}
+      }
+
+      user_msg = %ReqLLM.Message{
+        role: :user,
+        content: [%ReqLLM.Message.ContentPart{type: :text, text: "Follow up"}]
+      }
+
+      context = %ReqLLM.Context{messages: [assistant_msg, user_msg]}
+
+      {:ok, config} =
+        ResponsesAPI.attach_websocket_stream(
+          model,
+          context,
+          base_url: "http://localhost:4010/v1",
+          provider_options: [store: false]
+        )
+
+      assert config.canonical_json["previous_response_id"] == "resp_ws_123"
+      assert config.canonical_json["store"] == false
+    end
   end
 
   describe "reasoning details - decode_response/1" do
@@ -1888,7 +1927,7 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
              end)
     end
 
-    test "store: false sends previous_response_id and keeps store false (no coercion)" do
+    test "store: false suppresses previous_response_id outside websocket transport" do
       assistant_msg = %ReqLLM.Message{
         role: :assistant,
         content: [%ReqLLM.Message.ContentPart{type: :text, text: "Previous answer"}],
@@ -1906,14 +1945,11 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
       encoded = ResponsesAPI.encode_body(request)
       body = ReqLLM.Test.Helpers.json_body(encoded)
 
-      # `store: false` + `previous_response_id` is valid over the Responses
-      # WebSocket transport (connection-local cache); `store` must NOT be
-      # coerced to true and `previous_response_id` must NOT be dropped.
-      assert body["previous_response_id"] == "resp_prev_123"
+      refute Map.has_key?(body, "previous_response_id")
       assert body["store"] == false
     end
 
-    test "explicit previous_response_id provider option is honored with store: false" do
+    test "explicit previous_response_id provider option is suppressed with store: false outside websocket transport" do
       user_msg = %ReqLLM.Message{
         role: :user,
         content: [%ReqLLM.Message.ContentPart{type: :text, text: "Follow up"}]
@@ -1930,7 +1966,7 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
       encoded = ResponsesAPI.encode_body(request)
       body = ReqLLM.Test.Helpers.json_body(encoded)
 
-      assert body["previous_response_id"] == "resp_x"
+      refute Map.has_key?(body, "previous_response_id")
       assert body["store"] == false
     end
 
@@ -1956,7 +1992,7 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
       assert body["store"] == true
     end
 
-    test "codex models default store to false but still chain via previous_response_id" do
+    test "websocket transport with codex models defaults store to false but still chains via previous_response_id" do
       assistant_msg = %ReqLLM.Message{
         role: :assistant,
         content: [%ReqLLM.Message.ContentPart{type: :text, text: "Previous answer"}],
@@ -1969,14 +2005,17 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
       }
 
       context = %ReqLLM.Context{messages: [assistant_msg, user_msg]}
-      request = build_request(id: "gpt-5.3-codex", context: context)
+
+      request =
+        build_request(
+          id: "gpt-5.3-codex",
+          context: context,
+          responses_transport: :websocket
+        )
 
       encoded = ResponsesAPI.encode_body(request)
       body = ReqLLM.Test.Helpers.json_body(encoded)
 
-      # Codex always forces `store: false`, but multi-turn chaining over the
-      # Responses WebSocket depends on `previous_response_id` resolving against
-      # the connection-local cache. The id must be sent, not suppressed.
       assert body["previous_response_id"] == "resp_prev_codex"
       assert body["store"] == false
     end
@@ -2228,19 +2267,21 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
     context = Keyword.get(opts, :context, %ReqLLM.Context{messages: []})
     provider_opts = Keyword.get(opts, :provider_options, [])
 
-    req_opts = %{
-      id: Keyword.get(opts, :id, "gpt-5"),
-      context: context,
-      stream: Keyword.get(opts, :stream),
-      max_output_tokens: Keyword.get(opts, :max_output_tokens),
-      max_completion_tokens: Keyword.get(opts, :max_completion_tokens),
-      max_tokens: Keyword.get(opts, :max_tokens),
-      tools: Keyword.get(opts, :tools),
-      tool_choice: Keyword.get(opts, :tool_choice),
-      parallel_tool_calls: Keyword.get(opts, :parallel_tool_calls),
-      reasoning_effort: Keyword.get(opts, :reasoning_effort),
-      provider_options: provider_opts
-    }
+    req_opts =
+      %{
+        id: Keyword.get(opts, :id, "gpt-5"),
+        context: context,
+        stream: Keyword.get(opts, :stream),
+        max_output_tokens: Keyword.get(opts, :max_output_tokens),
+        max_completion_tokens: Keyword.get(opts, :max_completion_tokens),
+        max_tokens: Keyword.get(opts, :max_tokens),
+        tools: Keyword.get(opts, :tools),
+        tool_choice: Keyword.get(opts, :tool_choice),
+        parallel_tool_calls: Keyword.get(opts, :parallel_tool_calls),
+        reasoning_effort: Keyword.get(opts, :reasoning_effort),
+        provider_options: provider_opts
+      }
+      |> maybe_put_responses_transport(Keyword.get(opts, :responses_transport))
 
     %Req.Request{
       method: :post,
@@ -2250,6 +2291,11 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
       options: req_opts
     }
   end
+
+  defp maybe_put_responses_transport(opts, nil), do: opts
+
+  defp maybe_put_responses_transport(opts, transport),
+    do: Map.put(opts, :responses_transport, transport)
 
   defp build_response(status, body, opts \\ []) do
     context = Keyword.get(opts, :context, %ReqLLM.Context{messages: []})

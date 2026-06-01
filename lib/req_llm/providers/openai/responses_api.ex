@@ -620,17 +620,11 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
 
     store = Keyword.get(provider_opts, :store, default_store(model_name))
 
-    # `previous_response_id` is resolved independently of `store`. The Responses
-    # WebSocket transport keeps the most recent response in a connection-local,
-    # in-memory cache even when `store: false` (ZDR-compatible), and
-    # `previous_response_id` resolves against that cache. The official Codex CLI
-    # (openai/codex, codex-rs) relies on exactly this: `store: false` +
-    # `previous_response_id` over a persistent WebSocket to chain turns without
-    # re-uploading history. Coupling the two would silently break multi-turn
-    # chaining for every Codex request (Codex always forces `store: false`).
     previous_response_id =
-      provider_opts[:previous_response_id] ||
-        extract_previous_response_id_from_context(context)
+      if include_previous_response_id?(store, opts_map) do
+        provider_opts[:previous_response_id] ||
+          extract_previous_response_id_from_context(context)
+      end
 
     {input, _tool_messages, reasoning_items} =
       Enum.reduce(context.messages, {[], [], []}, fn msg, {input_acc, tool_acc, reasoning_acc} ->
@@ -723,14 +717,6 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
       |> maybe_put_string("include", include)
       |> maybe_put_string("text", text_format)
 
-    # Attach `previous_response_id` without coercing `store`. The caller's
-    # `store` value is authoritative: `store: false` + `previous_response_id`
-    # is a valid combination over the Responses WebSocket transport (the prior
-    # response lives in a connection-local cache), so we must not force
-    # `store: true` here. The `store: true` path is unchanged: when a
-    # `previous_response_id` is present and `store` is not explicitly false we
-    # still stamp `store: true` (preserving the historical behavior), but for
-    # `store: false` we send `store: false` alongside `previous_response_id`.
     body =
       if previous_response_id do
         body
@@ -747,10 +733,10 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     end
   end
 
-  # Preserve the historical `store: true` stamp when chaining with a
-  # `previous_response_id` and `store` is not explicitly disabled. When
-  # `store == false` the trailing clause in `build_request_body/4` sets
-  # `store: false`, so we intentionally do nothing here.
+  defp include_previous_response_id?(false, %{responses_transport: :websocket}), do: true
+  defp include_previous_response_id?(false, _opts), do: false
+  defp include_previous_response_id?(_store, _opts), do: true
+
   defp maybe_put_store_true(body, false), do: body
   defp maybe_put_store_true(body, _store), do: Map.put(body, "store", true)
 
@@ -990,6 +976,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
       |> Keyword.delete(:compiled_schema)
       |> Keyword.put(:provider_options, Keyword.get(opts, :provider_options, []))
       |> Keyword.put(:stream, nil)
+      |> Keyword.put(:responses_transport, :websocket)
       |> Keyword.put(:model, model.id)
       |> Keyword.put(:context, context)
       |> Keyword.put(
