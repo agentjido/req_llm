@@ -214,7 +214,7 @@ defmodule ReqLLM.Providers.OpenAICodexTest do
              )
     end
 
-    test "omits previous_response_id from context metadata while keeping store=false" do
+    test "sends previous_response_id from context metadata while keeping store=false" do
       {:ok, model} = ReqLLM.model("openai_codex:gpt-5.3-codex-spark")
 
       context =
@@ -238,11 +238,18 @@ defmodule ReqLLM.Providers.OpenAICodexTest do
 
       body = ReqLLM.Test.Helpers.json_body(request)
 
-      refute Map.has_key?(body, "previous_response_id")
+      # Codex forces store=false, but multi-turn chaining over the Responses
+      # WebSocket depends on previous_response_id resolving against the
+      # connection-local cache. The id must be sent, not suppressed.
+      assert body["previous_response_id"] == "resp_prev_789"
       assert body["store"] == false
     end
 
     test "omits previous_response_id for explicit tool_outputs resume while keeping store=false" do
+      # Tool-resume turns (those carrying function_call_output items) follow a
+      # distinct backend contract that deliberately drops previous_response_id
+      # (see #613). That is independent of the store/previous_response_id
+      # coupling fixed in ResponsesAPI.build_request_body/4 and is preserved here.
       {:ok, model} = ReqLLM.model("openai_codex:gpt-5.3-codex-spark")
       context = ReqLLM.context([ReqLLM.Context.user("Use the provided tool output")])
 

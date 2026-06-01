@@ -1888,7 +1888,7 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
              end)
     end
 
-    test "store: false suppresses previous_response_id and sets store to false" do
+    test "store: false sends previous_response_id and keeps store false (no coercion)" do
       assistant_msg = %ReqLLM.Message{
         role: :assistant,
         content: [%ReqLLM.Message.ContentPart{type: :text, text: "Previous answer"}],
@@ -1906,7 +1906,31 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
       encoded = ResponsesAPI.encode_body(request)
       body = ReqLLM.Test.Helpers.json_body(encoded)
 
-      refute Map.has_key?(body, "previous_response_id")
+      # `store: false` + `previous_response_id` is valid over the Responses
+      # WebSocket transport (connection-local cache); `store` must NOT be
+      # coerced to true and `previous_response_id` must NOT be dropped.
+      assert body["previous_response_id"] == "resp_prev_123"
+      assert body["store"] == false
+    end
+
+    test "explicit previous_response_id provider option is honored with store: false" do
+      user_msg = %ReqLLM.Message{
+        role: :user,
+        content: [%ReqLLM.Message.ContentPart{type: :text, text: "Follow up"}]
+      }
+
+      context = %ReqLLM.Context{messages: [user_msg]}
+
+      request =
+        build_request(
+          context: context,
+          provider_options: [store: false, previous_response_id: "resp_x"]
+        )
+
+      encoded = ResponsesAPI.encode_body(request)
+      body = ReqLLM.Test.Helpers.json_body(encoded)
+
+      assert body["previous_response_id"] == "resp_x"
       assert body["store"] == false
     end
 
@@ -1932,7 +1956,7 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
       assert body["store"] == true
     end
 
-    test "codex models default store to false and suppress previous_response_id" do
+    test "codex models default store to false but still chain via previous_response_id" do
       assistant_msg = %ReqLLM.Message{
         role: :assistant,
         content: [%ReqLLM.Message.ContentPart{type: :text, text: "Previous answer"}],
@@ -1950,7 +1974,10 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
       encoded = ResponsesAPI.encode_body(request)
       body = ReqLLM.Test.Helpers.json_body(encoded)
 
-      refute Map.has_key?(body, "previous_response_id")
+      # Codex always forces `store: false`, but multi-turn chaining over the
+      # Responses WebSocket depends on `previous_response_id` resolving against
+      # the connection-local cache. The id must be sent, not suppressed.
+      assert body["previous_response_id"] == "resp_prev_codex"
       assert body["store"] == false
     end
 
