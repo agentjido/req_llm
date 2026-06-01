@@ -66,7 +66,7 @@ defmodule ReqLLM.Providers.AnthropicTest do
       decoded = request |> Anthropic.encode_body() |> ReqLLM.Test.Helpers.json_body()
 
       assert decoded["model"] == "claude-opus-4-8"
-      assert decoded["thinking"] == %{"type" => "adaptive"}
+      assert decoded["thinking"] == %{"type" => "adaptive", "display" => "summarized"}
       assert decoded["output_config"] == %{"effort" => "low"}
       refute Map.has_key?(decoded, "temperature")
       refute Map.has_key?(request.headers, "anthropic-beta")
@@ -1367,7 +1367,7 @@ defmodule ReqLLM.Providers.AnthropicTest do
           max_tokens: 100
         )
 
-      assert Keyword.get(translated_opts, :thinking) == %{type: "adaptive"}
+      assert Keyword.get(translated_opts, :thinking) == %{type: "adaptive", display: "summarized"}
       assert Keyword.get(translated_opts, :output_config) == %{effort: "max"}
       refute Keyword.has_key?(translated_opts, :top_p)
       refute Keyword.has_key?(translated_opts, :temperature)
