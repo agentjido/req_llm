@@ -516,6 +516,38 @@ defmodule ReqLLM.Provider.DefaultsTest do
       assert Jason.decode!(tool_call.function.arguments) == %{"city" => "Paris"}
       assert tool_call.id == "lVauww8VE"
     end
+
+    test "decodes nested thinking chunks from Mistral responses" do
+      model = %LLMDB.Model{provider: :mistral, id: "mistral-medium-2604"}
+
+      response_data = %{
+        "id" => "chatcmpl-mistral-reasoning",
+        "model" => "mistral-medium-2604",
+        "choices" => [
+          %{
+            "message" => %{
+              "role" => "assistant",
+              "content" => [
+                %{
+                  "type" => "thinking",
+                  "thinking" => [
+                    %{"type" => "text", "text" => "Okay"},
+                    %{"type" => "text", "text" => ", let me plan this."}
+                  ]
+                },
+                %{"type" => "text", "text" => "Build a broad foundation first."}
+              ]
+            },
+            "finish_reason" => "stop"
+          }
+        ]
+      }
+
+      {:ok, result} = Defaults.decode_response_body_openai_format(response_data, model)
+
+      assert ReqLLM.Response.thinking(result) == "Okay, let me plan this."
+      assert ReqLLM.Response.text(result) == "Build a broad foundation first."
+    end
   end
 
   describe "default_decode_stream_event/2" do
@@ -646,6 +678,39 @@ defmodule ReqLLM.Provider.DefaultsTest do
       assert chunk.name == "get_weather"
       assert chunk.arguments == %{"city" => "Paris"}
       assert chunk.metadata == %{id: "lVauww8VE", index: 0}
+    end
+
+    test "decodes nested thinking chunks from Mistral streaming deltas" do
+      model = %LLMDB.Model{provider: :mistral, id: "mistral-medium-2604"}
+
+      mistral_event = %{
+        data: %{
+          "choices" => [
+            %{
+              "index" => 0,
+              "delta" => %{
+                "content" => [
+                  %{
+                    "type" => "thinking",
+                    "thinking" => [
+                      %{"type" => "text", "text" => "Okay"},
+                      %{"type" => "text", "text" => ", streaming thoughts."}
+                    ]
+                  }
+                ]
+              },
+              "finish_reason" => nil
+            }
+          ]
+        }
+      }
+
+      chunks = Defaults.default_decode_stream_event(mistral_event, model)
+
+      assert [
+               %StreamChunk{type: :thinking, text: "Okay"},
+               %StreamChunk{type: :thinking, text: ", streaming thoughts."}
+             ] = chunks
     end
 
     test "handles nil tool names in streaming deltas", %{model: model} do

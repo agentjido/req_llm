@@ -1243,10 +1243,37 @@ defmodule ReqLLM.Provider.Defaults do
   end
 
   defp decode_openai_content_part(%{"type" => "thinking", "thinking" => thinking}) do
-    [ReqLLM.StreamChunk.thinking(thinking)]
+    decode_openai_thinking_content(thinking)
   end
 
   defp decode_openai_content_part(_), do: []
+
+  defp decode_openai_thinking_content(thinking) when is_binary(thinking) do
+    [ReqLLM.StreamChunk.thinking(thinking)]
+  end
+
+  defp decode_openai_thinking_content(thinking) when is_list(thinking) do
+    thinking
+    |> Enum.flat_map(&decode_openai_thinking_part/1)
+    |> Enum.reject(&is_nil/1)
+  end
+
+  defp decode_openai_thinking_content(_), do: []
+
+  defp decode_openai_thinking_part(%{"type" => "text", "text" => text})
+       when is_binary(text) and text != "" do
+    [ReqLLM.StreamChunk.thinking(text)]
+  end
+
+  defp decode_openai_thinking_part(%{"text" => text}) when is_binary(text) and text != "" do
+    [ReqLLM.StreamChunk.thinking(text)]
+  end
+
+  defp decode_openai_thinking_part(text) when is_binary(text) and text != "" do
+    [ReqLLM.StreamChunk.thinking(text)]
+  end
+
+  defp decode_openai_thinking_part(_), do: []
 
   defp decode_openai_tool_call(%{
          "id" => id,
