@@ -4,6 +4,11 @@ defmodule ReqLLM.Test.Scenario do
 
   Scenarios describe one fixture-backed behavior check and can be run by the
   comprehensive coverage macro, model compatibility tooling, or focused tests.
+
+  Scenario fixture names are part of the replay compatibility contract. Do not
+  change a scenario's prompt, request options, tool schema, object schema, or
+  fixture names unless the work also includes an explicit fixture-refresh task
+  and replay proof for the affected providers.
   """
 
   @type step :: %{
