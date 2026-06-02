@@ -1,0 +1,15 @@
+{
+  "assignee": "",
+  "blocked_by": [],
+  "blocks": [],
+  "created": "2026-06-02T13:02:13Z",
+  "description": "Create a ReqLLM scenario behavior/registry modeled on reqllm_next but adapted to req_llm. The contract should keep scenario id/name/description, applies?/1, run/3, deterministic fixture naming, structured result maps, and step metadata.\n\nConstraints:\n- Investigation/implementation belongs on v2/reqllm-next-architecture when started.\n- Do not change provider runtime behavior.\n- Preserve existing fixture names and tags.\n- Add focused unit tests for fixture naming, applicability, result shape, and registry filtering.\n\nProof target: mix test test/req_llm/scenarios or equivalent new scenario test path.",
+  "id": "req-qqb.1",
+  "labels": [],
+  "parent": "req-qqb",
+  "priority": 1,
+  "status": "open",
+  "title": "Define ReqLLM scenario contract and registry",
+  "type": "task",
+  "updated_at": "2026-06-02T13:02:13Z"
+}
