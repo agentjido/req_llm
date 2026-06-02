@@ -1,7 +1,9 @@
 {
   "assignee": "",
   "blocked_by": [],
-  "blocks": [],
+  "blocks": [
+    "req-aa2.2"
+  ],
   "created": "2026-06-02T14:05:35Z",
   "description": "Add a test-support taxonomy module that names scenario/modality groups, maps existing scenario ids to modalities, and lists focused non-text coverage areas without changing fixture behavior.",
   "id": "req-aa2.1",
@@ -11,5 +13,5 @@
   "status": "open",
   "title": "Define modality taxonomy contract",
   "type": "task",
-  "updated_at": "2026-06-02T14:05:35Z"
+  "updated_at": "2026-06-02T14:09:07Z"
 }
