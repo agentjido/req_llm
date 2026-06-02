@@ -1,0 +1,15 @@
+{
+  "assignee": "",
+  "blocked_by": [],
+  "blocks": [],
+  "created": "2026-06-02T13:02:39Z",
+  "description": "Update ReqLLM.ProviderTest.Comprehensive and Mix.Tasks.ReqLlm.ModelCompat to consume the scenario registry rather than encoding scenario behavior directly in the macro. The generated ExUnit tags and model selection behavior must remain compatible with current commands.\n\nRequirements:\n- Preserve --scenario and --capability behavior in mix req_llm.model_compat.\n- Preserve provider/model/scenario tags for existing filter commands.\n- Keep focused provider-specific test-file routing for special scenarios such as Google grounding and xAI web search.\n- Keep staged fixture promotion behavior unchanged.\n\nProof target: mix test test/mix/tasks/model_compat_test.exs and replay-only provider comprehensive slices.",
+  "id": "req-qqb.5",
+  "labels": [],
+  "parent": "req-qqb",
+  "priority": 1,
+  "status": "open",
+  "title": "Rewire comprehensive coverage and model_compat to scenarios",
+  "type": "task",
+  "updated_at": "2026-06-02T13:02:39Z"
+}
