@@ -11,7 +11,10 @@ defmodule ReqLLM.Test.Scenarios do
     ReqLLM.Test.Scenarios.ContextAppend,
     ReqLLM.Test.Scenarios.ToolMulti,
     ReqLLM.Test.Scenarios.ToolRoundTrip,
-    ReqLLM.Test.Scenarios.ToolNone
+    ReqLLM.Test.Scenarios.ToolNone,
+    ReqLLM.Test.Scenarios.ObjectBasic,
+    ReqLLM.Test.Scenarios.ObjectStreaming,
+    ReqLLM.Test.Scenarios.Reasoning
   ]
 
   @spec all() :: [module()]

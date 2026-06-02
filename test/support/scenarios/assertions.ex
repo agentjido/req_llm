@@ -35,4 +35,56 @@ defmodule ReqLLM.Test.Scenarios.Assertions do
   def assert_streaming_usage(usage) do
     flunk("Expected usage map or nil, got: #{inspect(usage)}")
   end
+
+  def assert_profile_object_or_reasoning(response) do
+    object = ReqLLM.Response.object(response)
+    rt = ReqLLM.Response.reasoning_tokens(response)
+
+    cond do
+      is_map(object) and map_size(object) > 0 ->
+        assert Map.has_key?(object, "name")
+        assert Map.has_key?(object, "age")
+        assert is_binary(object["name"])
+        assert object["name"] != ""
+        assert is_integer(object["age"])
+        assert object["age"] > 0
+
+      response.finish_reason == :length ->
+        assert is_number(rt) and rt >= 0
+
+      is_number(rt) and rt > 0 ->
+        :ok
+
+      is_map(object) ->
+        :ok
+
+      true ->
+        flunk("Expected object or reasoning tokens but got: #{inspect(object)}")
+    end
+  end
+
+  def assert_reasoning_details_if_present(%ReqLLM.Message{reasoning_details: nil}), do: :ok
+  def assert_reasoning_details_if_present(%ReqLLM.Message{reasoning_details: []}), do: :ok
+
+  def assert_reasoning_details_if_present(%ReqLLM.Message{reasoning_details: details})
+      when is_list(details) do
+    for {detail, idx} <- Enum.with_index(details) do
+      assert %ReqLLM.Message.ReasoningDetails{} = detail,
+             "reasoning_details[#{idx}] should be a ReasoningDetails struct, got: #{inspect(detail)}"
+
+      assert is_atom(detail.provider) and not is_nil(detail.provider),
+             "reasoning_details[#{idx}].provider should be a provider atom, got: #{inspect(detail.provider)}"
+
+      assert is_binary(detail.format) and detail.format != "",
+             "reasoning_details[#{idx}].format should be a non-empty string, got: #{inspect(detail.format)}"
+
+      assert is_integer(detail.index) and detail.index >= 0,
+             "reasoning_details[#{idx}].index should be a non-negative integer, got: #{inspect(detail.index)}"
+
+      assert is_boolean(detail.encrypted?),
+             "reasoning_details[#{idx}].encrypted? should be a boolean, got: #{inspect(detail.encrypted?)}"
+    end
+
+    :ok
+  end
 end

@@ -270,294 +270,39 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
           if ReqLLM.ProviderTest.Comprehensive.supports_object_generation?(model_spec) do
             @tag scenario: :object_basic
             test "object generation (non-streaming)" do
-              schema = [
-                name: [type: :string, required: true, doc: "Person's full name"],
-                age: [type: :pos_integer, required: true, doc: "Person's age in years"],
-                occupation: [type: :string, doc: "Person's job or profession"]
-              ]
-
-              opts =
-                param_bundles(@provider).deterministic
-                |> Keyword.put(:max_tokens, 500)
-                |> then(&reasoning_overlay(@model_spec, @provider, &1, 500))
-
-              {:ok, response} =
-                ReqLLM.generate_object(
-                  @model_spec,
-                  "Generate a software engineer profile",
-                  schema,
-                  fixture_opts(@provider, "object_basic", opts)
-                )
-
-              assert %ReqLLM.Response{} = response
-              object = ReqLLM.Response.object(response)
-              rt = ReqLLM.Response.reasoning_tokens(response)
-
-              cond do
-                is_map(object) and map_size(object) > 0 ->
-                  assert Map.has_key?(object, "name")
-                  assert Map.has_key?(object, "age")
-                  assert is_binary(object["name"])
-                  assert object["name"] != ""
-                  assert is_integer(object["age"])
-                  assert object["age"] > 0
-
-                truncated?(response) ->
-                  assert is_number(rt) and rt >= 0
-
-                is_number(rt) and rt > 0 ->
-                  :ok
-
-                is_map(object) ->
-                  :ok
-
-                true ->
-                  flunk("Expected object or reasoning tokens but got: #{inspect(object)}")
-              end
+              ReqLLM.Test.Scenario.execute(
+                ReqLLM.Test.Scenarios.ObjectBasic,
+                @model_spec,
+                provider: @provider
+              )
+              |> ReqLLM.Test.Scenario.assert_result!()
             end
           end
 
           if ReqLLM.ProviderTest.Comprehensive.supports_streaming_object_generation?(model_spec) do
             @tag scenario: :object_streaming
             test "object generation (streaming)" do
-              schema = [
-                name: [type: :string, required: true, doc: "Person's full name"],
-                age: [type: :pos_integer, required: true, doc: "Person's age in years"],
-                occupation: [type: :string, doc: "Person's job or profession"]
-              ]
-
-              opts =
-                param_bundles(@provider).deterministic
-                |> Keyword.put(:max_tokens, 500)
-                |> then(&reasoning_overlay(@model_spec, @provider, &1, 500))
-
-              {:ok, response} =
-                ReqLLM.stream_object(
-                  @model_spec,
-                  "Generate a software engineer profile",
-                  schema,
-                  fixture_opts(@provider, "object_streaming", opts)
-                )
-
-              response =
-                if match?(%ReqLLM.StreamResponse{}, response) do
-                  {:ok, resp} = ReqLLM.StreamResponse.to_response(response)
-                  resp
-                else
-                  response
-                end
-
-              object = ReqLLM.Response.object(response)
-              rt = ReqLLM.Response.reasoning_tokens(response)
-
-              cond do
-                is_map(object) and map_size(object) > 0 ->
-                  assert Map.has_key?(object, "name")
-                  assert Map.has_key?(object, "age")
-                  assert is_binary(object["name"])
-                  assert object["name"] != ""
-                  assert is_integer(object["age"])
-                  assert object["age"] > 0
-
-                truncated?(response) ->
-                  assert is_number(rt) and rt >= 0
-
-                is_number(rt) and rt > 0 ->
-                  :ok
-
-                is_map(object) ->
-                  :ok
-
-                true ->
-                  flunk("Expected object or reasoning tokens but got: #{inspect(object)}")
-              end
+              ReqLLM.Test.Scenario.execute(
+                ReqLLM.Test.Scenarios.ObjectStreaming,
+                @model_spec,
+                provider: @provider
+              )
+              |> ReqLLM.Test.Scenario.assert_result!()
             end
           end
 
           if ReqLLM.ProviderTest.Comprehensive.supports_reasoning?(model_spec) do
             @tag scenario: :reasoning
             test "reasoning/thinking tokens (non-streaming + streaming)" do
-              dbug(
-                fn -> "\n[Comprehensive] model_spec=#{@model_spec}, test=reasoning" end,
-                component: :test
+              ReqLLM.Test.Scenario.execute(
+                ReqLLM.Test.Scenarios.Reasoning,
+                @model_spec,
+                provider: @provider
               )
-
-              {:ok, model} = ReqLLM.model(@model_spec)
-
-              provider_config = param_bundles(@provider)
-
-              # Bedrock requires max_tokens > budget_tokens (4000 for :low)
-              # Use 5000 to be safe for all providers
-              base_opts =
-                provider_config.deterministic
-                |> Keyword.delete(:temperature)
-                |> Keyword.merge(
-                  max_tokens: 5000,
-                  temperature: 1.0,
-                  reasoning_effort: provider_config.reasoning[:reasoning_effort]
-                )
-
-              prompt = provider_config.reasoning_prompts.basic
-
-              {:ok, response} =
-                ReqLLM.generate_text(
-                  @model_spec,
-                  prompt,
-                  fixture_opts(@provider, "reasoning_basic", base_opts)
-                )
-
-              assert %ReqLLM.Response{} = response
-              assert response.message.role == :assistant
-
-              text = ReqLLM.Response.text(response) || ""
-              thinking = ReqLLM.Response.thinking(response) || ""
-              combined = text <> thinking
-              assert combined != ""
-
-              has_thinking_part? =
-                Enum.any?(
-                  response.message.content,
-                  &(&1.type == :thinking and is_binary(&1.text) and &1.text != "")
-                )
-
-              reasoning_tokens = ReqLLM.Response.reasoning_tokens(response)
-
-              # Some reasoning models (like gpt-5-codex) don't expose thinking content
-              # They reason internally but only output final text
-              # Accept responses with: thinking content, reasoning tokens, or just regular text
-              has_any_output = combined != ""
-
-              assert has_thinking_part? or (is_number(reasoning_tokens) and reasoning_tokens > 0) or
-                       has_any_output,
-                     "Expected thinking content, reasoning tokens, or text output; got thinking: #{inspect(thinking)} tokens: #{inspect(reasoning_tokens)} text: #{inspect(text)}"
-
-              last = List.last(response.context.messages)
-              assert last == response.message
-
-              assert_reasoning_details_if_present(response.message)
-
-              context =
-                ReqLLM.Context.new([
-                  system(provider_config.reasoning_prompts.streaming_system),
-                  user(provider_config.reasoning_prompts.streaming_user)
-                ])
-
-              stream_opts =
-                provider_config.creative
-                |> Keyword.delete(:temperature)
-                |> Keyword.merge(
-                  max_tokens: 5000,
-                  temperature: 1.0,
-                  reasoning_effort: provider_config.reasoning[:reasoning_effort]
-                )
-
-              {:ok, stream_response} =
-                ReqLLM.stream_text(
-                  @model_spec,
-                  context,
-                  fixture_opts(@provider, "reasoning_streaming", stream_opts)
-                )
-
-              assert %ReqLLM.StreamResponse{} = stream_response
-              assert stream_response.stream
-              assert stream_response.metadata_handle
-
-              # Collect stream chunks once (streams are single-use)
-              stream_chunks = Enum.to_list(stream_response.stream)
-
-              {thinking_count, reasoning_tokens_stream} =
-                stream_chunks
-                |> Enum.reduce({0, 0}, fn chunk, {tc, rt} ->
-                  case chunk.type do
-                    :thinking ->
-                      {tc + 1, rt}
-
-                    :meta ->
-                      usage = chunk.metadata[:usage] || %{}
-                      rt2 = Map.get(usage, :reasoning_tokens, 0)
-                      {tc, max(rt, (is_number(rt2) && rt2) || 0)}
-
-                    _ ->
-                      {tc, rt}
-                  end
-                end)
-
-              # Build response from collected chunks
-              stream_with_chunks = %{stream_response | stream: stream_chunks}
-              {:ok, response} = ReqLLM.StreamResponse.to_response(stream_with_chunks)
-              rt_final = ReqLLM.Response.reasoning_tokens(response)
-
-              # Adaptive reasoning models (like gpt-5-chat) may choose not to reason
-              # for simple prompts, so also accept text output like non-streaming does
-              streaming_text = ReqLLM.Response.text(response) || ""
-              has_streaming_output = streaming_text != ""
-
-              assert thinking_count > 0 or reasoning_tokens_stream > 0 or rt_final > 0 or
-                       has_streaming_output,
-                     "Expected at least one :thinking chunk, positive reasoning_tokens, or text output; got tc=#{thinking_count} rt_stream=#{reasoning_tokens_stream} rt_final=#{rt_final} text_len=#{String.length(streaming_text)}"
-
-              assert %ReqLLM.Response{} = response
-              assert response.message.role == :assistant
-
-              assert_reasoning_details_if_present(response.message)
+              |> ReqLLM.Test.Scenario.assert_result!()
             end
           end
         end
-      end
-
-      defp assert_usage_cost_fields(usage, required?) do
-        present? =
-          Enum.any?([:input_cost, :output_cost, :total_cost], &Map.has_key?(usage, &1))
-
-        if required? or present? do
-          assert is_number(usage.input_cost) and usage.input_cost >= 0
-
-          assert is_number(usage.output_cost) and
-                   usage.output_cost >= 0
-
-          assert is_number(usage.total_cost) and usage.total_cost >= 0
-
-          expected = usage.input_cost + usage.output_cost
-          assert abs(usage.total_cost - expected) < 0.00001
-        end
-      end
-
-      defp assert_streaming_usage(nil), do: :ok
-
-      defp assert_streaming_usage(usage) when is_map(usage) do
-        assert is_number(usage.input_tokens) and usage.input_tokens > 0
-        assert is_number(usage.output_tokens) and usage.output_tokens >= 0
-        assert is_number(usage.total_tokens) and usage.total_tokens > 0
-        assert is_number(usage.cached_input) and usage.cached_input >= 0
-        assert is_number(usage.reasoning) and usage.reasoning >= 0
-      end
-
-      defp assert_streaming_usage(usage),
-        do: flunk("Expected usage map or nil, got: #{inspect(usage)}")
-
-      defp assert_reasoning_details_if_present(%ReqLLM.Message{reasoning_details: nil}), do: :ok
-      defp assert_reasoning_details_if_present(%ReqLLM.Message{reasoning_details: []}), do: :ok
-
-      defp assert_reasoning_details_if_present(%ReqLLM.Message{reasoning_details: details})
-           when is_list(details) do
-        for {detail, idx} <- Enum.with_index(details) do
-          assert %ReqLLM.Message.ReasoningDetails{} = detail,
-                 "reasoning_details[#{idx}] should be a ReasoningDetails struct, got: #{inspect(detail)}"
-
-          assert is_atom(detail.provider) and not is_nil(detail.provider),
-                 "reasoning_details[#{idx}].provider should be a provider atom, got: #{inspect(detail.provider)}"
-
-          assert is_binary(detail.format) and detail.format != "",
-                 "reasoning_details[#{idx}].format should be a non-empty string, got: #{inspect(detail.format)}"
-
-          assert is_integer(detail.index) and detail.index >= 0,
-                 "reasoning_details[#{idx}].index should be a non-negative integer, got: #{inspect(detail.index)}"
-
-          assert is_boolean(detail.encrypted?),
-                 "reasoning_details[#{idx}].encrypted? should be a boolean, got: #{inspect(detail.encrypted?)}"
-        end
-
-        :ok
       end
     end
   end

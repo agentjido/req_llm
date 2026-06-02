@@ -10,8 +10,8 @@ defmodule ReqLLM.Test.Scenarios.ToolTest do
   ]
 
   test "registry includes extracted tool scenarios after core text scenarios" do
-    assert Enum.take(Scenarios.all(), -3) == @tool_scenarios
-    assert Enum.take(Scenarios.ids(), -3) == [:tool_multi, :tool_round_trip, :tool_none]
+    assert Enum.slice(Scenarios.all(), 5, 3) == @tool_scenarios
+    assert Enum.slice(Scenarios.ids(), 5, 3) == [:tool_multi, :tool_round_trip, :tool_none]
   end
 
   test "tool scenarios preserve fixture names" do
@@ -38,7 +38,6 @@ defmodule ReqLLM.Test.Scenarios.ToolTest do
       capabilities: %{tools: %{enabled: false}}
     }
 
-    assert Scenarios.for_model(tool_model) -- Scenarios.for_model(plain_model) == @tool_scenarios
     assert Enum.all?(@tool_scenarios, & &1.applies?(tool_model))
     refute Enum.any?(@tool_scenarios, & &1.applies?(plain_model))
   end
