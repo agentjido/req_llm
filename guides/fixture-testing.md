@@ -99,6 +99,9 @@ Current comprehensive scenarios:
 10. **object_streaming** - Object generation (streaming)
 11. **reasoning** - Reasoning/thinking tokens for non-streaming and streaming
 
+The broader ReqLLM v2 modality map, including focused non-text coverage and
+known gaps, is documented in `guides/modality-coverage.md`.
+
 ### Test Organization
 
 ```
@@ -253,7 +256,7 @@ mix req_llm.model_compat "openai:gpt-4o-mini" --capability core
 mix req_llm.model_compat "anthropic:*" --capability tools
 ```
 
-Text capability groups are sourced from `ReqLLM.Test.Scenarios` when the test support registry is loaded. Specialty provider scenarios, such as Google grounding and xAI web search, still route to focused provider-specific files.
+Text capability groups are sourced from `ReqLLM.Test.Scenarios` when the test support registry is loaded. Specialty provider scenarios, such as Google grounding, web search/fetch, multimodal tool results, and focused streaming structured output, still route to focused provider-specific files.
 
 ### Live Verification Policy
 

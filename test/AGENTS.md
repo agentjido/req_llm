@@ -155,6 +155,16 @@ Tests are organized by Provider → Model → Scenario hierarchy.
   - `:object_basic` - Object generation (non-streaming)
   - `:object_streaming` - Object generation (streaming)
   - `:reasoning` - Reasoning/thinking tokens
+  - `:embed_basic`, `:embed_usage`, `:embed_batch` - Embedding operation coverage
+  - `:image_basic` - Image generation coverage
+  - `:transcription_basic` - Audio transcription coverage
+  - `:speech_basic` - Speech generation coverage
+  - `:rerank_basic` - Rerank operation coverage
+  - `:ocr_basic` - OCR operation coverage
+  - `:grounding_basic`, `:grounding_with_context`, `:grounding_streaming`, `:grounding_legacy` - Google grounding coverage
+  - `:multimodal_tool_result` - Text plus file/PDF tool-result coverage
+  - `:web_search_basic`, `:web_search_streaming`, `:x_search_streaming`, `:web_fetch_basic` - Built-in web tool coverage
+  - `:object_streaming_json_schema`, `:object_streaming_tool_strict`, `:object_streaming_auto`, `:streaming_error_handling` - Focused streaming structured-output coverage
 - `coverage` - Mark coverage tests with `coverage: true`
 
 ## Live Verification Policy
