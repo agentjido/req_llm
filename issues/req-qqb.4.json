@@ -6,14 +6,15 @@
   "blocks": [
     "req-qqb.5"
   ],
+  "closed_at": "2026-06-02T13:19:48Z",
   "created": "2026-06-02T13:02:32Z",
   "description": "Move object_basic, object_streaming, reasoning_basic, and reasoning_streaming logic into standalone scenario modules. Keep provider-specific object support predicates, strict/tool fallback behavior, and reasoning budget overlays intact.\n\nPreserve exactly:\n- fixture names: object_basic, object_streaming, reasoning_basic, reasoning_streaming\n- schema shape and prompts\n- reasoning option defaults and provider overlays\n- acceptance rules for reasoning tokens, thinking parts, truncation, and text output\n\nExpected behavior: replay existing object/reasoning fixtures without live re-recording.\n\nProof target: representative replay slices for OpenAI Responses, Anthropic thinking, Google, xAI, and providers with object fixtures.",
   "id": "req-qqb.4",
   "labels": [],
   "parent": "req-qqb",
   "priority": 1,
-  "status": "in_progress",
+  "status": "closed",
   "title": "Extract object and reasoning scenarios",
   "type": "task",
-  "updated_at": "2026-06-02T13:15:36Z"
+  "updated_at": "2026-06-02T13:19:48Z"
 }
