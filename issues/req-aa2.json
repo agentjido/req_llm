@@ -2,13 +2,14 @@
   "assignee": "",
   "blocked_by": [],
   "blocks": [],
+  "closed_at": "2026-06-02T14:16:27Z",
   "created": "2026-06-02T14:05:26Z",
   "description": "Define the ReqLLM v2 scenario taxonomy across text and non-text modalities so future provider-wire refactors have a documented proof matrix. This epic should identify the current fixture-backed coverage surface, mark gaps that need later epics, and add guardrails so scenario groups, model_compat capability names, and modality documentation stay aligned. Non-text modalities include vision input, file/document input, image generation, embeddings, OCR, transcription, speech, rerank, web/search/fetch tools, and media URL content parts.",
   "id": "req-aa2",
   "labels": [],
   "priority": 1,
-  "status": "open",
+  "status": "closed",
   "title": "[EPIC] Map scenario taxonomy and modality coverage gaps",
   "type": "epic",
-  "updated_at": "2026-06-02T14:05:26Z"
+  "updated_at": "2026-06-02T14:16:27Z"
 }
