@@ -1,0 +1,15 @@
+{
+  "assignee": "",
+  "blocked_by": [],
+  "blocks": [],
+  "created": "2026-06-02T13:02:51Z",
+  "description": "Update developer-facing docs for the scenario-based coverage workflow after the refactor lands. Explain how scenarios are authored, how fixture names are preserved, how mix req_llm.model_compat maps --scenario and --capability to scenario modules, and when live recording is or is not required.\n\nInclude guidance that broad coverage remains replay-first and that sparse live provider drift checks should be added separately rather than expanding routine replay suites into live CI.\n\nCandidate docs:\n- AGENTS.md testing section\n- test/AGENTS.md\n- guides/fixture-testing.md\n- guides/mix-tasks.md, if command behavior changes\n\nProof target: docs-only review plus existing tests from earlier tasks.",
+  "id": "req-qqb.7",
+  "labels": [],
+  "parent": "req-qqb",
+  "priority": 2,
+  "status": "open",
+  "title": "Document scenario workflow and live verifier policy",
+  "type": "task",
+  "updated_at": "2026-06-02T13:02:51Z"
+}
