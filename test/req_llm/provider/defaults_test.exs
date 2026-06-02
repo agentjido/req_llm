@@ -696,7 +696,8 @@ defmodule ReqLLM.Provider.DefaultsTest do
                       %{"type" => "text", "text" => "Okay"},
                       %{"type" => "text", "text" => ", streaming thoughts."}
                     ]
-                  }
+                  },
+                  %{"type" => "text", "text" => "Then answer."}
                 ]
               },
               "finish_reason" => nil
@@ -709,7 +710,8 @@ defmodule ReqLLM.Provider.DefaultsTest do
 
       assert [
                %StreamChunk{type: :thinking, text: "Okay"},
-               %StreamChunk{type: :thinking, text: ", streaming thoughts."}
+               %StreamChunk{type: :thinking, text: ", streaming thoughts."},
+               %StreamChunk{type: :content, text: "Then answer."}
              ] = chunks
     end
 
