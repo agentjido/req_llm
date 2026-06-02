@@ -101,6 +101,7 @@ defmodule ReqLLM.Test.Scenarios.ObjectStreaming do
         response
       end
 
+    assert %ReqLLM.Response{} = response
     Assertions.assert_profile_object_or_reasoning(response)
 
     Scenario.ok(__MODULE__, [Scenario.step(:stream_object, "object_streaming")], %{
@@ -167,10 +168,9 @@ defmodule ReqLLM.Test.Scenarios.Reasoning do
     assert combined != ""
 
     has_thinking_part? =
-      Enum.any?(
-        response.message.content,
-        &(&1.type == :thinking and is_binary(&1.text) and &1.text != "")
-      )
+      response.message.content
+      |> List.wrap()
+      |> Enum.any?(&(&1.type == :thinking and is_binary(&1.text) and &1.text != ""))
 
     reasoning_tokens = ReqLLM.Response.reasoning_tokens(response)
     has_any_output = combined != ""

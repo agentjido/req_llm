@@ -49,8 +49,7 @@ defmodule ReqLLM.Test.Scenarios do
     available = modules |> ids() |> MapSet.new()
 
     group
-    |> normalize_id()
-    |> then(&Map.get(@groups, &1, []))
+    |> group_ids()
     |> Enum.filter(&MapSet.member?(available, &1))
   end
 
@@ -59,9 +58,7 @@ defmodule ReqLLM.Test.Scenarios do
 
   @spec get(atom() | binary(), [module()]) :: {:ok, module()} | :error
   def get(id, modules) when is_list(modules) do
-    target = normalize_id(id)
-
-    case Enum.find(modules, &(&1.id() == target)) do
+    case Enum.find(modules, &id_match?(&1.id(), id)) do
       nil -> :error
       module -> {:ok, module}
     end
@@ -85,6 +82,20 @@ defmodule ReqLLM.Test.Scenarios do
     |> Map.new(fn scenario -> {scenario.id(), scenario.fixtures(model)} end)
   end
 
-  defp normalize_id(id) when is_atom(id), do: id
-  defp normalize_id(id) when is_binary(id), do: String.to_atom(id)
+  defp group_ids(group) do
+    Enum.find_value(@groups, [], fn {group_id, ids} ->
+      if id_match?(group_id, group), do: ids
+    end)
+  end
+
+  defp id_match?(left, right) when is_atom(left) and is_atom(right), do: left == right
+
+  defp id_match?(left, right) when is_atom(left) and is_binary(right),
+    do: Atom.to_string(left) == right
+
+  defp id_match?(left, right) when is_binary(left) and is_atom(right),
+    do: left == Atom.to_string(right)
+
+  defp id_match?(left, right) when is_binary(left) and is_binary(right), do: left == right
+  defp id_match?(_left, _right), do: false
 end

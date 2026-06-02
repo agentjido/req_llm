@@ -80,19 +80,37 @@ defmodule ReqLLM.Test.Scenarios.Capabilities do
 
   defp cap(_value, _path), do: nil
 
-  defp fetch_cap(map, key) do
+  defp fetch_cap(map, key) when is_atom(key) do
     cond do
       Map.has_key?(map, key) ->
         Map.get(map, key)
 
-      is_atom(key) and Map.has_key?(map, Atom.to_string(key)) ->
+      Map.has_key?(map, Atom.to_string(key)) ->
         Map.get(map, Atom.to_string(key))
-
-      is_binary(key) and Map.has_key?(map, String.to_atom(key)) ->
-        Map.get(map, String.to_atom(key))
 
       true ->
         nil
     end
+  end
+
+  defp fetch_cap(map, key) when is_binary(key) do
+    atom_key = existing_atom(key)
+
+    cond do
+      Map.has_key?(map, key) ->
+        Map.get(map, key)
+
+      not is_nil(atom_key) and Map.has_key?(map, atom_key) ->
+        Map.get(map, atom_key)
+
+      true ->
+        nil
+    end
+  end
+
+  defp existing_atom(key) do
+    String.to_existing_atom(key)
+  rescue
+    ArgumentError -> nil
   end
 end

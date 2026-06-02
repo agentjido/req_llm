@@ -63,4 +63,13 @@ defmodule ReqLLM.Test.ScenarioTest do
     assert Scenarios.for_model(:model, modules) == [AlwaysScenario]
     assert Scenarios.fixture_manifest(:model, modules) == %{always: ["always"]}
   end
+
+  test "registry string lookups do not create atoms for unknown ids" do
+    missing = "missing_#{System.unique_integer([:positive])}"
+
+    assert_raise ArgumentError, fn -> String.to_existing_atom(missing) end
+    assert Scenarios.get(missing, [AlwaysScenario]) == :error
+    assert Scenarios.ids_for_group(missing, [AlwaysScenario]) == []
+    assert_raise ArgumentError, fn -> String.to_existing_atom(missing) end
+  end
 end
