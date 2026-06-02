@@ -12,8 +12,15 @@ defmodule ReqLLM.Test.Scenarios.CoreTextTest do
   ]
 
   test "registry includes extracted core text scenarios in stable order" do
-    assert Scenarios.all() == @core
-    assert Scenarios.ids() == [:basic, :streaming, :token_limit, :usage, :context_append]
+    assert Enum.take(Scenarios.all(), 5) == @core
+
+    assert Enum.take(Scenarios.ids(), 5) == [
+             :basic,
+             :streaming,
+             :token_limit,
+             :usage,
+             :context_append
+           ]
   end
 
   test "core text scenarios preserve fixture names" do

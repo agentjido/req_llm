@@ -238,156 +238,32 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
           if ReqLLM.ProviderTest.Comprehensive.supports_tool_calling?(model_spec) do
             @tag scenario: :tool_multi
             test "tool calling - multi-tool selection" do
-              tools = [
-                ReqLLM.tool(
-                  name: "get_weather",
-                  description: "Get current weather information for a location",
-                  parameter_schema: [
-                    location: [type: :string, required: true],
-                    unit: [type: {:in, ["celsius", "fahrenheit"]}]
-                  ],
-                  callback: fn _args -> {:ok, "Weather data"} end
-                ),
-                ReqLLM.tool(
-                  name: "tell_joke",
-                  description: "Tell a funny joke",
-                  parameter_schema: [
-                    topic: [type: :string, doc: "Topic for the joke"]
-                  ],
-                  callback: fn _args -> {:ok, "Why did the cat cross the road?"} end
-                ),
-                ReqLLM.tool(
-                  name: "get_time",
-                  description: "Get the current time",
-                  parameter_schema: [],
-                  callback: fn _args -> {:ok, "12:00 PM"} end
-                )
-              ]
-
-              base_opts =
-                param_bundles().deterministic
-                |> Keyword.put(:max_tokens, tool_budget_for(@model_spec))
-                |> then(
-                  &reasoning_overlay(
-                    @model_spec,
-                    &1,
-                    tool_budget_for(@model_spec) * 2
-                  )
-                )
-
-              result =
-                ReqLLM.generate_text(
-                  @model_spec,
-                  "What's the weather like in Paris, France?",
-                  fixture_opts("multi_tool", base_opts ++ [tools: tools])
-                )
-
-              case result do
-                {:ok, response} ->
-                  assert_basic_response(result)
-
-                  tool_calls = ReqLLM.Response.tool_calls(response) || []
-
-                  if Enum.empty?(tool_calls) and truncated?(response) do
-                    rt = ReqLLM.Response.reasoning_tokens(response)
-                    assert is_number(rt) and rt >= 0
-                  else
-                    assert_has_tool_call(response)
-                  end
-
-                {:error, _} ->
-                  flunk("Expected successful response with tool call")
-              end
+              ReqLLM.Test.Scenario.execute(
+                ReqLLM.Test.Scenarios.ToolMulti,
+                @model_spec,
+                provider: @provider
+              )
+              |> ReqLLM.Test.Scenario.assert_result!()
             end
 
             @tag scenario: :tool_round_trip
             test "tool calling - round trip execution" do
-              tools = [
-                ReqLLM.tool(
-                  name: "add",
-                  description: "Add two integers",
-                  parameter_schema: [
-                    a: [type: :integer, required: true],
-                    b: [type: :integer, required: true]
-                  ],
-                  callback: fn %{a: a, b: b} -> {:ok, a + b} end
-                )
-              ]
-
-              base_opts =
-                param_bundles().deterministic
-                |> Keyword.put(:max_tokens, tool_budget_for(@model_spec))
-
-              # Use forced tool choice if supported, otherwise fall back to "required"
-              tool_choice =
-                if ReqLLM.ProviderTest.Comprehensive.supports_forced_tool_choice?(@model_spec) do
-                  %{type: "tool", name: "add"}
-                else
-                  "required"
-                end
-
-              {:ok, resp1} =
-                ReqLLM.generate_text(
-                  @model_spec,
-                  "Use the add tool to compute 2 + 3. After the tool result arrives, respond with 'sum=<value>'.",
-                  fixture_opts(
-                    "tool_round_trip_1",
-                    base_opts ++
-                      [
-                        tools: tools,
-                        tool_choice: tool_choice
-                      ]
-                  )
-                )
-
-              tool_calls = ReqLLM.Response.tool_calls(resp1)
-              assert tool_calls != []
-
-              ctx2 = ReqLLM.Context.execute_and_append_tools(resp1.context, tool_calls, tools)
-
-              {:ok, resp2} =
-                ReqLLM.generate_text(
-                  @model_spec,
-                  ctx2,
-                  fixture_opts("tool_round_trip_2", base_opts)
-                )
-
-              text = ReqLLM.Response.text(resp2) || ""
-              assert text != ""
-              assert String.contains?(text, "5")
-              assert Enum.empty?(ReqLLM.Response.tool_calls(resp2))
+              ReqLLM.Test.Scenario.execute(
+                ReqLLM.Test.Scenarios.ToolRoundTrip,
+                @model_spec,
+                provider: @provider
+              )
+              |> ReqLLM.Test.Scenario.assert_result!()
             end
 
             @tag scenario: :tool_none
             test "tool calling - no tool when inappropriate" do
-              tools = [
-                ReqLLM.tool(
-                  name: "get_weather",
-                  description: "Get current weather information for a location",
-                  parameter_schema: [
-                    location: [type: :string, required: true]
-                  ],
-                  callback: fn _args -> {:ok, "Weather data"} end
-                )
-              ]
-
-              base_opts =
-                param_bundles().deterministic
-                |> Keyword.put(:max_tokens, tool_budget_for(@model_spec))
-                |> then(
-                  &reasoning_overlay(
-                    @model_spec,
-                    &1,
-                    tool_budget_for(@model_spec) * 2
-                  )
-                )
-
-              ReqLLM.generate_text(
+              ReqLLM.Test.Scenario.execute(
+                ReqLLM.Test.Scenarios.ToolNone,
                 @model_spec,
-                "Tell me a joke about cats",
-                fixture_opts("no_tool", base_opts ++ [tools: tools])
+                provider: @provider
               )
-              |> assert_basic_response()
+              |> ReqLLM.Test.Scenario.assert_result!()
             end
           end
 

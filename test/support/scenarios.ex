@@ -8,7 +8,10 @@ defmodule ReqLLM.Test.Scenarios do
     ReqLLM.Test.Scenarios.Streaming,
     ReqLLM.Test.Scenarios.TokenLimit,
     ReqLLM.Test.Scenarios.Usage,
-    ReqLLM.Test.Scenarios.ContextAppend
+    ReqLLM.Test.Scenarios.ContextAppend,
+    ReqLLM.Test.Scenarios.ToolMulti,
+    ReqLLM.Test.Scenarios.ToolRoundTrip,
+    ReqLLM.Test.Scenarios.ToolNone
   ]
 
   @spec all() :: [module()]
