@@ -3,7 +3,13 @@ defmodule ReqLLM.Test.Scenarios do
   Registry for provider coverage scenarios.
   """
 
-  @default_modules []
+  @default_modules [
+    ReqLLM.Test.Scenarios.Basic,
+    ReqLLM.Test.Scenarios.Streaming,
+    ReqLLM.Test.Scenarios.TokenLimit,
+    ReqLLM.Test.Scenarios.Usage,
+    ReqLLM.Test.Scenarios.ContextAppend
+  ]
 
   @spec all() :: [module()]
   def all, do: @default_modules
