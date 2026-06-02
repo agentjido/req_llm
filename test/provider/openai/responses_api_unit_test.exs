@@ -144,6 +144,37 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
       assert warning == ""
     end
 
+    test "encodes file_id content parts as input_file items" do
+      file_part = ReqLLM.Message.ContentPart.file_id("file-6F2ksmvXxt4VdoqmHRw6kL")
+
+      context = %ReqLLM.Context{
+        messages: [
+          %ReqLLM.Message{
+            role: :user,
+            content: [
+              ReqLLM.Message.ContentPart.text("Summarize this file"),
+              file_part
+            ]
+          }
+        ]
+      }
+
+      request = build_request(context: context)
+
+      encoded = ResponsesAPI.encode_body(request)
+      body = ReqLLM.Test.Helpers.json_body(encoded)
+
+      assert [
+               %{
+                 "role" => "user",
+                 "content" => [
+                   %{"type" => "input_text", "text" => "Summarize this file"},
+                   %{"type" => "input_file", "file_id" => "file-6F2ksmvXxt4VdoqmHRw6kL"}
+                 ]
+               }
+             ] = body["input"]
+    end
+
     test "omits tools when empty list" do
       request = build_request(tools: [])
 

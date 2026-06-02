@@ -867,6 +867,18 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   end
 
   defp encode_input_content_part(
+         %ReqLLM.Message.ContentPart{type: :file, file_id: file_id, filename: filename},
+         _type
+       )
+       when is_binary(file_id) and file_id != "" do
+    file =
+      %{"type" => "input_file", "file_id" => file_id}
+      |> maybe_put_string("filename", filename)
+
+    [file]
+  end
+
+  defp encode_input_content_part(
          %ReqLLM.Message.ContentPart{
            type: :file,
            data: data,
