@@ -1,0 +1,15 @@
+{
+  "assignee": "",
+  "blocked_by": [],
+  "blocks": [],
+  "created": "2026-06-02T13:02:19Z",
+  "description": "Move the basic, streaming, token_limit, usage, and context_append coverage logic out of test/support/provider_test/comprehensive.ex into standalone scenario modules.\n\nPreserve exactly:\n- fixture names: basic, streaming, token_limit, usage, context_append_1, context_append_2\n- prompts and contexts unless a separate fixture-refresh task is created later\n- option bundles, reasoning overlays, tags, and assertion semantics\n\nExpected behavior: replay existing fixtures without live re-recording.\n\nProof target: mix test test/coverage/openai/comprehensive_test.exs --only scenario:basic plus representative provider/scenario slices in replay mode.",
+  "id": "req-qqb.2",
+  "labels": [],
+  "parent": "req-qqb",
+  "priority": 1,
+  "status": "open",
+  "title": "Extract core text coverage scenarios",
+  "type": "task",
+  "updated_at": "2026-06-02T13:02:19Z"
+}
