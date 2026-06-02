@@ -1,6 +1,8 @@
 {
   "assignee": "",
-  "blocked_by": [],
+  "blocked_by": [
+    "req-qqb.5"
+  ],
   "blocks": [],
   "created": "2026-06-02T13:02:45Z",
   "description": "Add tests and checks that prove scenario extraction preserves existing fixture compatibility. This task should protect fixture names, fixture paths, replay behavior, and model_compat result parsing while avoiding live API calls.\n\nGuardrails to consider:\n- unit tests mapping each scenario id to the exact existing fixture names\n- replay tests against a small representative fixture set\n- assertions that missing fixtures still fail with actionable messages\n- documentation in test helpers that scenario extraction must not change prompts/options without an explicit fixture-refresh task\n\nOptional follow-up design note: plan a backward-compatible execution metadata block for future fixtures, but do not require re-recording existing fixtures in this task.\n\nProof target: replay-only tests; no REQ_LLM_FIXTURES_MODE=record needed.",
@@ -11,5 +13,5 @@
   "status": "open",
   "title": "Add replay fixture guardrails for scenario extraction",
   "type": "task",
-  "updated_at": "2026-06-02T13:02:45Z"
+  "updated_at": "2026-06-02T13:03:00Z"
 }
