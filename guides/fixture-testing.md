@@ -75,19 +75,29 @@ Each model entry includes:
 
 The `priv/supported_models.json` file tracks which models have passing fixtures. This file is auto-generated and should not be manually edited.
 
-### Comprehensive Test Macro
+### Scenario-Based Comprehensive Coverage
 
-Tests use the `ReqLLM.ProviderTest.Comprehensive` macro (in `test/support/provider_test/comprehensive.ex`), which generates up to 9 focused tests per model based on capabilities:
+Tests use the `ReqLLM.ProviderTest.Comprehensive` macro (in `test/support/provider_test/comprehensive.ex`), which generates tests from the scenario registry in `ReqLLM.Test.Scenarios`.
 
-1. **Basic generate_text** (non-streaming) - All models
-2. **Streaming** with system context + creative params - Models with streaming support
-3. **Token limit constraints** - All models
-4. **Usage metrics and cost calculations** - All models
-5. **Tool calling - multi-tool selection** - Models with `:tool_call` capability
-6. **Tool calling - no tool when inappropriate** - Models with `:tool_call` capability
-7. **Object generation (non-streaming)** - Models with object generation support
-8. **Object generation (streaming)** - Models with object generation support
-9. **Reasoning/thinking tokens** - Models with `:reasoning` capability
+Scenario modules live in `test/support/scenarios/` and own:
+- `id/0`, `name/0`, and `description/0`
+- fixture names via `fixtures/1`
+- model capability applicability via `applies?/1`
+- the replay/record request behavior in `run/3`
+
+Current comprehensive scenarios:
+
+1. **basic** - Basic `generate_text` (non-streaming)
+2. **streaming** - Streaming with system context
+3. **token_limit** - Token limit constraints
+4. **usage** - Usage metrics and cost calculations
+5. **context_append** - Multi-turn context advancement
+6. **tool_multi** - Tool calling with multiple tools
+7. **tool_round_trip** - Tool execution and follow-up response
+8. **tool_none** - Text response when tools are available but inappropriate
+9. **object_basic** - Object generation (non-streaming)
+10. **object_streaming** - Object generation (streaming)
+11. **reasoning** - Reasoning/thinking tokens for non-streaming and streaming
 
 ### Test Organization
 
@@ -112,9 +122,19 @@ end
 
 The macro automatically:
 - Selects models from `ModelMatrix` based on provider and operation type
-- Generates tests for each model based on capabilities
+- Filters scenario modules for each model based on capabilities
 - Handles fixture recording and replay
 - Tags tests with provider, model, and scenario
+
+### Authoring Scenarios
+
+Add or change scenarios in `test/support/scenarios/`, then register them in `ReqLLM.Test.Scenarios`.
+
+Rules:
+- Keep fixture names stable when refactoring test structure.
+- Do not change prompts, request options, tool schemas, object schemas, or fixture names unless the work includes an explicit fixture-refresh task.
+- Add guardrail coverage in `test/req_llm/scenarios/fixture_guardrail_test.exs` for new scenario fixture names.
+- Prefer replay proof first. Live recording is only needed when the wire request or provider behavior is intentionally changing.
 
 ## How "Supported Models" is Defined
 
@@ -150,6 +170,7 @@ mix test --only "provider:anthropic"
 mix test --only "scenario:basic"
 mix test --only "scenario:streaming"
 mix test --only "scenario:tool_multi"
+mix test --only "scenario:tool_round_trip"
 
 # Specific model
 mix test --only "model:claude-3-5-haiku-20241022"
@@ -202,20 +223,43 @@ REQ_LLM_DEBUG=1 mix mc
 
 ### Fixture Storage
 
-Fixtures are stored next to test files:
+Fixtures are stored under `test/support/fixtures/<provider>/<model_slug>/<fixture>.json`:
 
 ```
-test/coverage/<provider>/fixtures/
+test/support/fixtures/openai/gpt_4o_mini/
 ├── basic.json
 ├── streaming.json
 ├── token_limit.json
 ├── usage.json
-├── tool_multi.json
+├── context_append_1.json
+├── context_append_2.json
+├── multi_tool.json
+├── tool_round_trip_1.json
+├── tool_round_trip_2.json
 ├── no_tool.json
 ├── object_basic.json
-├── object_streaming.json
-└── reasoning_basic.json
+└── object_streaming.json
 ```
+
+Fixture paths are derived by `ReqLLM.Test.FixturePath`; scenario modules only pass the fixture basename through `fixture_opts/2` or `fixture_opts/3`.
+
+### `model_compat` Scenario Routing
+
+`mix req_llm.model_compat` preserves scenario and capability filters:
+
+```bash
+mix req_llm.model_compat "openai:gpt-4o-mini" --scenario basic,usage
+mix req_llm.model_compat "openai:gpt-4o-mini" --capability core
+mix req_llm.model_compat "anthropic:*" --capability tools
+```
+
+Text capability groups are sourced from `ReqLLM.Test.Scenarios` when the test support registry is loaded. Specialty provider scenarios, such as Google grounding and xAI web search, still route to focused provider-specific files.
+
+### Live Verification Policy
+
+Routine broad coverage is replay-first and should not make live API calls. Use `REQ_LLM_FIXTURES_MODE=record` or `mix req_llm.model_compat --record` only when intentionally creating or refreshing fixtures.
+
+Sparse live provider-drift checks should be added as separate focused work. Do not expand routine replay suites into live CI just to prove scenario refactors.
 
 ### Fixture Format
 

@@ -17,7 +17,7 @@ Three-tier testing architecture for reliability and comprehensive coverage.
 **FIXTURE-BASED API CALLS** - High-level integration testing
 - Only test high-level API (`ReqLLM.generate_text/3`, `ReqLLM.stream_text/3`, etc.)
 - Fixtures replayed by default, re-recorded with `REQ_LLM_FIXTURES_MODE=record`
-- Uses shared provider test macros (`ReqLLM.ProviderTest.Core`, `ReqLLM.ProviderTest.Streaming`)
+- Uses shared provider test macros and scenario modules (`ReqLLM.ProviderTest.Comprehensive`, `ReqLLM.Test.Scenarios`)
 
 ## Test Commands
 
@@ -78,36 +78,33 @@ REQ_LLM_FIXTURES_MODE=record mix test --only "model:claude-3-5-haiku-20241022" -
 
 ## Fixture System
 
+Comprehensive coverage tests are generated from scenario modules in `test/support/scenarios/`.
+Each scenario owns its fixture basenames, prompt/options, capability guard, and assertions.
+The provider macro only applies provider/model/scenario tags and executes applicable scenarios.
+
+Fixture names are a compatibility contract. Do not change a scenario prompt, request options, tool schema, object schema, or fixture basename without an explicit fixture-refresh task and replay proof.
+
 Coverage tests use shared provider test macros with automatic fixture handling:
 
 ```elixir
-defmodule ReqLLM.Coverage.Anthropic.CoreTest do
+defmodule ReqLLM.Coverage.Anthropic.ComprehensiveTest do
   @moduledoc """
-  Core Anthropic API feature coverage tests.
+  Comprehensive Anthropic API feature coverage tests.
   
   Run with REQ_LLM_FIXTURES_MODE=record to test against live API and record fixtures.
   Otherwise uses fixtures for fast, reliable testing.
   """
   
-  use ReqLLM.ProviderTest.Core, provider: :anthropic
-end
-
-defmodule ReqLLM.Coverage.Anthropic.StreamingTest do
-  @moduledoc """
-  Anthropic streaming API feature coverage tests.
-  
-  Run with REQ_LLM_FIXTURES_MODE=record to test against live API and capture fixtures.
-  Otherwise uses cached fixtures for fast, reliable testing.
-  """
-  
-  use ReqLLM.ProviderTest.Streaming, provider: :anthropic
+  use ReqLLM.ProviderTest.Comprehensive, provider: :anthropic
 end
 ```
 
 The macros automatically:
 - Generate tests for all models selected by `ModelMatrix` for the provider
 - Handle fixture creation and replay transparently
-- Support both streaming and non-streaming APIs
+- Support applicable text, streaming, tool, object, and reasoning scenarios
+
+`mix req_llm.model_compat --scenario ...` routes generic text scenarios to the comprehensive provider file. `--capability core|conversation|streaming|tools|objects|reasoning` expands from `ReqLLM.Test.Scenarios`; provider-specific scenarios still use focused files.
 
 ## Environment Variables
 
@@ -151,12 +148,18 @@ Tests are organized by Provider → Model → Scenario hierarchy.
   - `:streaming` - Streaming with system context
   - `:token_limit` - Token limit constraints
   - `:usage` - Usage metrics and costs
+  - `:context_append` - Context continuation
   - `:tool_multi` - Tool calling with multiple tools
+  - `:tool_round_trip` - Tool execution and follow-up response
   - `:tool_none` - Tool avoidance
   - `:object_basic` - Object generation (non-streaming)
   - `:object_streaming` - Object generation (streaming)
   - `:reasoning` - Reasoning/thinking tokens
 - `coverage` - Mark coverage tests with `coverage: true`
+
+## Live Verification Policy
+
+Broad coverage remains replay-first. Use live recording only for deliberate fixture creation or refresh work. Add sparse provider drift checks separately instead of turning routine replay suites into live CI.
 
 ## HTTP Mocking
 
