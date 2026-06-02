@@ -6,14 +6,15 @@
   "blocks": [
     "req-qqb.4"
   ],
+  "closed_at": "2026-06-02T13:15:23Z",
   "created": "2026-06-02T13:02:26Z",
   "description": "Move tool-capability scenarios from ProviderTest.Comprehensive into standalone scenario modules, including tool_multi, tool_none, and tool_round_trip. Keep context construction and tool execution semantics identical.\n\nPreserve exactly:\n- fixture names: multi_tool, no_tool, tool_round_trip_1, tool_round_trip_2\n- tool definitions and callbacks\n- forced-tool-choice fallback behavior\n- model capability guards for tools and forced choice\n\nExpected behavior: replay existing tool fixtures without live re-recording.\n\nProof target: replay representative OpenAI, Anthropic, Google, and OpenAI-compatible provider tool slices where fixtures already exist.",
   "id": "req-qqb.3",
   "labels": [],
   "parent": "req-qqb",
   "priority": 1,
-  "status": "in_progress",
+  "status": "closed",
   "title": "Extract tool and conversation scenarios",
   "type": "task",
-  "updated_at": "2026-06-02T13:12:21Z"
+  "updated_at": "2026-06-02T13:15:23Z"
 }
