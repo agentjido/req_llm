@@ -3,14 +3,14 @@
   "blocked_by": [],
   "blocks": [],
   "created": "2026-03-26T01:16:53Z",
-  "description": "bw 0.11.6 → 0.11.7 is available.\n\n## What's new\n\n## 0.11.7 — 2026-03-25\n\n- **Cyclic dependency rejection** — `bw dep add` now rejects edges that would create circular dependencies (e.g. A blocks B, B blocks C, then C blocks A). Previously only self-loops were caught; transitive cycles were silently accepted, creating logically incoherent state where blocked issues could never become unblocked. The check uses a DFS walk of the reachable subgraph, consistent with the existing parent-child cycle detection.\n\n## To upgrade\n\nRun `bw upgrade --yes` or `bw upgrade` for interactive mode.\n",
+  "description": "bw 0.13.0 → 0.13.1 is available.\n\n## What's new\n\n## 0.13.1 — 2026-05-30\n\n- **No more `ref moved` errors under concurrent use** — commands that change issue state (`start`, `create`, `update`, `delete`, `reopen`, `attach`, `label`, `comment`, `defer`, `undefer`, `dep add`/`remove`) used to die with an error like:\n\n  ```\n  error: commit failed: ref moved: ref refs/heads/beadwork (expected f2105ed3, got 3e642ee7)\n  ```\n\n  This happened whenever something else moved the beadwork branch mid-command — another `bw` in a second terminal, a background `bw sync`, or an agent working in a worktree. Only `bw close` knew how to recover; every other command lost its work and made you retry by hand. Now all mutating commands automatically refresh against the latest state and retry (up to 12 attempts, with exponential backoff and jitter so colliding writers spread out), so the command just succeeds instead of erroring. Also fixed a latent snapshot-tracking bug in the underlying store that could spuriously trigger the same error.\n\n## To upgrade\n\nRun `bw upgrade --yes` or `bw upgrade` for interactive mode.\n",
   "id": "req-f2v",
   "labels": [
     "beadwork-upgrade"
   ],
   "priority": 1,
   "status": "open",
-  "title": "Upgrade bw to 0.11.7",
+  "title": "Upgrade bw to 0.13.1",
   "type": "task",
-  "updated_at": "2026-03-26T01:16:53Z"
+  "updated_at": "2026-06-02T13:01:30Z"
 }
