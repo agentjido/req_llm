@@ -2,13 +2,14 @@
   "assignee": "",
   "blocked_by": [],
   "blocks": [],
+  "closed_at": "2026-06-02T13:28:31Z",
   "created": "2026-06-02T13:01:49Z",
   "description": "Refactor ReqLLM coverage tests from the monolithic ProviderTest.Comprehensive macro into standalone scenario modules while preserving public API behavior and the existing fixture corpus. Initial work must keep fixture names, prompts, request options, schemas, tool definitions, model selection, and tags stable so replay fixtures remain valid and no live re-recording is required. Later work can layer fixture execution metadata and planner proof once the scenario boundary is stable.\n\nBranch assumption: implement on v2/reqllm-next-architecture when explicitly started.\n\nSequencing:\n\n```mermaid\ngraph LR\n  A(\"Define scenario contract\") --\u003e B(\"Extract core text scenarios\")\n  B --\u003e C(\"Extract conversation and tool scenarios\")\n  C --\u003e D(\"Extract object and reasoning scenarios\")\n  D --\u003e E(\"Rewire comprehensive macro and model_compat\")\n  E --\u003e F(\"Add fixture-proof guardrails\")\n  F --\u003e G(\"Document workflow and live-verifier policy\")\n```",
   "id": "req-qqb",
   "labels": [],
   "priority": 1,
-  "status": "open",
+  "status": "closed",
   "title": "[EPIC] Transition coverage to scenario-based tests",
   "type": "epic",
-  "updated_at": "2026-06-02T13:02:06Z"
+  "updated_at": "2026-06-02T13:28:31Z"
 }
