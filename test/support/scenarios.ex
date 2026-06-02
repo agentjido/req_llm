@@ -17,6 +17,15 @@ defmodule ReqLLM.Test.Scenarios do
     ReqLLM.Test.Scenarios.Reasoning
   ]
 
+  @groups %{
+    core: [:basic, :usage, :token_limit],
+    conversation: [:context_append],
+    streaming: [:streaming],
+    tools: [:tool_none, :tool_multi, :tool_round_trip],
+    objects: [:object_basic, :object_streaming],
+    reasoning: [:reasoning]
+  }
+
   @spec all() :: [module()]
   def all, do: @default_modules
 
@@ -28,6 +37,22 @@ defmodule ReqLLM.Test.Scenarios do
 
   @spec ids([module()]) :: [atom()]
   def ids(modules) when is_list(modules), do: Enum.map(modules, & &1.id())
+
+  @spec groups() :: %{atom() => [atom()]}
+  def groups, do: @groups
+
+  @spec ids_for_group(atom() | binary()) :: [atom()]
+  def ids_for_group(group), do: ids_for_group(group, all())
+
+  @spec ids_for_group(atom() | binary(), [module()]) :: [atom()]
+  def ids_for_group(group, modules) when is_list(modules) do
+    available = modules |> ids() |> MapSet.new()
+
+    group
+    |> normalize_id()
+    |> then(&Map.get(@groups, &1, []))
+    |> Enum.filter(&MapSet.member?(available, &1))
+  end
 
   @spec get(atom() | binary()) :: {:ok, module()} | :error
   def get(id), do: get(id, all())

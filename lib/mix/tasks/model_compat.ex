@@ -169,8 +169,10 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
 
   @doc false
   def capability_scenarios!(capability) when is_binary(capability) do
-    case Map.fetch(@capability_scenarios, capability) do
+    case scenario_registry_capability_scenarios(capability) ||
+           Map.fetch(@capability_scenarios, capability) do
       {:ok, scenarios} -> scenarios
+      scenarios when is_list(scenarios) -> scenarios
       :error -> Mix.raise("Unknown capability group: #{capability}")
     end
   end
@@ -542,6 +544,31 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
 
   defp build_test_args(provider, _category, operation, scenario) do
     test_args_for(provider, operation, scenario)
+  end
+
+  defp scenario_registry_capability_scenarios(capability) do
+    registry = Module.concat([ReqLLM, Test, Scenarios])
+
+    with true <- Code.ensure_loaded?(registry),
+         true <- function_exported?(registry, :groups, 0),
+         true <- function_exported?(registry, :ids_for_group, 1),
+         group when not is_nil(group) <- scenario_registry_group(registry, capability) do
+      registry
+      |> apply(:ids_for_group, [group])
+      |> Enum.map(&Atom.to_string/1)
+    else
+      _ -> nil
+    end
+  end
+
+  defp scenario_registry_group(registry, capability) do
+    registry
+    |> apply(:groups, [])
+    |> Enum.find_value(fn {group, _ids} ->
+      if Atom.to_string(group) == capability do
+        group
+      end
+    end)
   end
 
   defp scenario_test_args(_provider, nil), do: nil

@@ -35,6 +35,15 @@ defmodule ReqLLM.Test.Scenarios.CoreTextTest do
            ]
   end
 
+  test "registry exposes capability groups for model compatibility" do
+    assert Scenarios.ids_for_group(:core) == [:basic, :usage, :token_limit]
+    assert Scenarios.ids_for_group("conversation") == [:context_append]
+    assert Scenarios.ids_for_group(:streaming) == [:streaming]
+    assert Scenarios.ids_for_group(:tools) == [:tool_none, :tool_multi, :tool_round_trip]
+    assert Scenarios.ids_for_group(:objects) == [:object_basic, :object_streaming]
+    assert Scenarios.ids_for_group(:reasoning) == [:reasoning]
+  end
+
   test "core text scenarios apply to every selected text model" do
     model = %LLMDB.Model{provider: :openai, id: "gpt-4o-mini"}
 
