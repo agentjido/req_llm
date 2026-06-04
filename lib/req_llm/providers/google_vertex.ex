@@ -147,6 +147,11 @@ defmodule ReqLLM.Providers.GoogleVertex do
       type: :non_neg_integer,
       doc: "Thinking token budget for Gemini 2.5 models (0 disables thinking, omit for dynamic)"
     ],
+    google_thinking_level: [
+      type: {:or, [:atom, :string]},
+      doc:
+        "Thinking level for Gemini 3+ models (e.g. :low, :medium, :high, or \"low\", \"medium\", \"high\"). Passed directly to the Gemini API. Cannot be combined with google_thinking_budget."
+    ],
     google_grounding: [
       type: :map,
       doc:

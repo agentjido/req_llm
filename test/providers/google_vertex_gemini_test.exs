@@ -588,7 +588,12 @@ defmodule ReqLLM.Providers.GoogleVertex.GeminiTest do
       assert :google_thinking_budget in schema_keys
     end
 
-    test "translate_options maps reasoning_token_budget to google_thinking_budget for Gemini" do
+    test "google_thinking_level is in the Vertex provider schema" do
+      schema_keys = GoogleVertex.provider_schema().schema |> Keyword.keys()
+      assert :google_thinking_level in schema_keys
+    end
+
+    test "translate_options maps reasoning_token_budget to google_thinking_budget for Gemini 2.5 models" do
       model = %LLMDB.Model{
         id: "gemini-2.5-pro",
         provider: :google_vertex,
@@ -601,7 +606,7 @@ defmodule ReqLLM.Providers.GoogleVertex.GeminiTest do
       assert Keyword.get(translated, :google_thinking_budget) == 16_384
     end
 
-    test "translate_options maps reasoning_effort levels to google_thinking_budget for Gemini" do
+    test "translate_options maps reasoning_effort levels to google_thinking_budget for Gemini 2.5 models" do
       model = %LLMDB.Model{
         id: "gemini-2.5-flash",
         provider: :google_vertex,
@@ -623,6 +628,31 @@ defmodule ReqLLM.Providers.GoogleVertex.GeminiTest do
 
         assert Keyword.get(translated, :google_thinking_budget) == expected_budget,
                "Expected reasoning_effort #{inspect(effort)} to map to budget #{expected_budget}"
+      end
+    end
+
+    test "translate_options maps reasoning_effort levels to google_thinking_level for Gemini 3 models" do
+      model = %LLMDB.Model{
+        id: "gemini-3.1-pro-preview",
+        provider: :google_vertex,
+        capabilities: %{chat: true}
+      }
+
+      test_cases = [
+        {:none, :minimal},
+        {:minimal, :minimal},
+        {:low, :low},
+        {:medium, :medium},
+        {:high, :high},
+        {:xhigh, :high}
+      ]
+
+      for {effort, expected_level} <- test_cases do
+        opts = [reasoning_effort: effort]
+        {translated, _warnings} = GoogleVertex.translate_options(:chat, model, opts)
+
+        assert Keyword.get(translated, :google_thinking_level) == expected_level,
+               "Expected reasoning_effort #{inspect(effort)} to map to level #{expected_level}"
       end
     end
 
