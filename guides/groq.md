@@ -28,7 +28,7 @@ Passed via `:provider_options` keyword:
 - **Type**: `"none"` | `"default"` | `"low"` | `"medium"` | `"high"`
 - **Purpose**: Control reasoning level for compatible models
 - **Compatible**: DeepSeek R1 distill models
-- **Example**: `provider_options: [reasoning_effort: "high"]`
+- **Example**: `reasoning_effort: "high"`
 
 ### `reasoning_format`
 - **Type**: String

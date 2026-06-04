@@ -129,7 +129,7 @@ Configure model selection within the same provider:
 #### `reasoning_effort`
 - **Type**: `:none` | `:minimal` | `:low` | `:medium` | `:high` | `:xhigh`
 - **Purpose**: Control reasoning model effort level
-- **Example**: `provider_options: [reasoning_effort: :high]`
+- **Example**: `reasoning_effort: :high`
 
 ## Dual Protocol Support
 

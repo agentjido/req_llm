@@ -156,6 +156,21 @@ defmodule ReqLLM.Providers.OpenAITest do
       assert body["audio"] == %{"format" => "mp3", "voice" => "alloy"}
     end
 
+    test "prepare_request passes through top-level reasoning_effort option to Chat Completions API request body" do
+      {:ok, model} = ReqLLM.model("openai:gpt-4o")
+
+      {:ok, request} =
+        OpenAI.prepare_request(:chat, model, "How are you?",
+          api_key: "test-key",
+          reasoning_effort: :high
+        )
+
+      encoded_request = ReqLLM.Providers.OpenAI.ChatAPI.encode_body(request)
+      body = ReqLLM.Test.Helpers.json_body(encoded_request)
+
+      assert body["reasoning_effort"] == "high"
+    end
+
     test "attach_stream defaults chat max_tokens from model output limit" do
       model = %LLMDB.Model{
         provider: :openai,

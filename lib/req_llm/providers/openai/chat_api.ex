@@ -197,8 +197,7 @@ defmodule ReqLLM.Providers.OpenAI.ChatAPI do
   end
 
   defp add_reasoning_effort(body, request_options) do
-    provider_opts = request_options[:provider_options] || []
-    maybe_put(body, :reasoning_effort, provider_opts[:reasoning_effort])
+    maybe_put(body, :reasoning_effort, request_options[:reasoning_effort])
   end
 
   defp add_service_tier(body, request_options) do

@@ -158,7 +158,7 @@ Passed via `:provider_options` keyword:
 ### `reasoning_effort`
 
 - **Type**: `:low` | `:medium` | `:high`
-- **Purpose**: Control reasoning effort (Responses API only)
+- **Purpose**: Control reasoning effort
 - **Example**: `reasoning_effort: :high`
 
 ### `service_tier`
