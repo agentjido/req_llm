@@ -1138,6 +1138,35 @@ defmodule ReqLLM.Providers.AnthropicTest do
       assert List.last(response.context.messages).role == :assistant
     end
 
+    test "decode_response normalizes the full set of Anthropic stop_reasons" do
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
+
+      decode = fn stop_reason ->
+        data = %{
+          "id" => "msg_01ABC123",
+          "type" => "message",
+          "role" => "assistant",
+          "content" => [%{"type" => "text", "text" => "ok"}],
+          "stop_reason" => stop_reason,
+          "usage" => %{"input_tokens" => 5, "output_tokens" => 2}
+        }
+
+        {:ok, response} = ReqLLM.Providers.Anthropic.Response.decode_response(data, model)
+        response.finish_reason
+      end
+
+      assert decode.("end_turn") == :stop
+      assert decode.("stop_sequence") == :stop
+      assert decode.("max_tokens") == :length
+      assert decode.("model_context_window_exceeded") == :length
+      assert decode.("tool_use") == :tool_calls
+      assert decode.("pause_turn") == :incomplete
+      # Safety decline: surfaced as :content_filter, not silently collapsed to :error.
+      assert decode.("refusal") == :content_filter
+      # A genuinely unknown reason is :unknown (reserve :error for real failures).
+      assert decode.("some_future_reason") == :unknown
+    end
+
     test "decode_response handles API errors with non-200 status" do
       # Create error response
       error_body = %{

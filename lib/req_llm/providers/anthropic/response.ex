@@ -100,14 +100,7 @@ defmodule ReqLLM.Providers.Anthropic.Response do
         [ReqLLM.StreamChunk.meta(%{terminal?: true})]
 
       %{"type" => "message_delta", "delta" => delta} ->
-        finish_reason =
-          case Map.get(delta, "stop_reason") do
-            "end_turn" -> :stop
-            "max_tokens" -> :length
-            "stop_sequence" -> :stop
-            "tool_use" -> :tool_calls
-            _ -> :unknown
-          end
+        finish_reason = parse_finish_reason(Map.get(delta, "stop_reason")) || :unknown
 
         raw_usage = Map.get(data, "usage", %{})
 
@@ -420,11 +413,19 @@ defmodule ReqLLM.Providers.Anthropic.Response do
   defp maybe_put_tool_usage(tool_usage, _tool, _count), do: tool_usage
 
   defp parse_finish_reason("stop"), do: :stop
-  defp parse_finish_reason("max_tokens"), do: :length
-  defp parse_finish_reason("tool_use"), do: :tool_calls
   defp parse_finish_reason("end_turn"), do: :stop
+  defp parse_finish_reason("stop_sequence"), do: :stop
+  defp parse_finish_reason("max_tokens"), do: :length
+  defp parse_finish_reason("model_context_window_exceeded"), do: :length
+  defp parse_finish_reason("tool_use"), do: :tool_calls
+  defp parse_finish_reason("pause_turn"), do: :incomplete
+  defp parse_finish_reason("refusal"), do: :content_filter
   defp parse_finish_reason("content_filter"), do: :content_filter
-  defp parse_finish_reason(reason) when is_binary(reason), do: :error
+  # An unrecognized but valid stop_reason is "unknown", not an error — reserve
+  # :error for genuine decode/transport failures. (Previously any unmapped
+  # reason — e.g. "refusal", "pause_turn" — collapsed to :error, losing the
+  # signal and surfacing a non-error turn as an error.)
+  defp parse_finish_reason(reason) when is_binary(reason), do: :unknown
   defp parse_finish_reason(_), do: nil
 
   defp ensure_stream_state(nil), do: init_stream_state()
@@ -442,14 +443,7 @@ defmodule ReqLLM.Providers.Anthropic.Response do
   end
 
   defp message_delta_chunks(data, delta) do
-    finish_reason =
-      case Map.get(delta, "stop_reason") do
-        "end_turn" -> :stop
-        "max_tokens" -> :length
-        "stop_sequence" -> :stop
-        "tool_use" -> :tool_calls
-        _ -> :unknown
-      end
+    finish_reason = parse_finish_reason(Map.get(delta, "stop_reason")) || :unknown
 
     raw_usage = Map.get(data, "usage", %{})
     chunks = [ReqLLM.StreamChunk.meta(%{finish_reason: finish_reason, terminal?: true})]
