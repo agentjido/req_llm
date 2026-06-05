@@ -724,19 +724,14 @@ defmodule ReqLLM.Providers.GoogleVertex do
     model = Req.Request.get_private(request, :model)
     formatter = get_formatter(model)
 
-    # Build opts with operation and context from request.options (which is a map)
     opts =
-      []
-      |> then(
-        &if request.options[:operation],
-          do: Keyword.put(&1, :operation, request.options[:operation]),
-          else: &1
-      )
-      |> then(
-        &if request.options[:context],
-          do: Keyword.put(&1, :context, request.options[:context]),
-          else: &1
-      )
+      [:operation, :context, :provider_options, :anthropic_structured_output_mode]
+      |> Enum.reduce([], fn key, acc ->
+        case request.options[key] do
+          nil -> acc
+          value -> Keyword.put(acc, key, value)
+        end
+      end)
 
     # Parse response using formatter
     result = formatter.parse_response(response.body, model, opts)

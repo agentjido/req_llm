@@ -54,4 +54,47 @@ defmodule ReqLLM.Providers.GoogleVertex.AnthropicObjectTest do
       assert "structured_output" in tool_names(body)
     end
   end
+
+  describe "decode_response/1 forwards the structured-output mode" do
+    @object %{"question" => "q", "options" => ["a", "b", "c", "d"]}
+
+    defp decode(extra_options) do
+      model = %LLMDB.Model{
+        id: "claude-opus-4-6",
+        provider: :google_vertex,
+        capabilities: %{chat: true}
+      }
+
+      body = %{
+        "id" => "msg_1",
+        "type" => "message",
+        "role" => "assistant",
+        "model" => "claude-opus-4-6",
+        "content" => [%{"type" => "text", "text" => JSON.encode!(@object)}],
+        "stop_reason" => "end_turn",
+        "usage" => %{"input_tokens" => 10, "output_tokens" => 5}
+      }
+
+      request =
+        Req.new()
+        |> Req.Request.put_private(:model, model)
+
+      request = %{request | options: Map.new([operation: :object] ++ extra_options)}
+
+      {_req, %Req.Response{body: decoded}} =
+        ReqLLM.Providers.GoogleVertex.decode_response(
+          {request, %Req.Response{status: 200, body: body}}
+        )
+
+      decoded
+    end
+
+    test "json_schema mode parses the object from response text" do
+      assert decode(anthropic_structured_output_mode: :json_schema).object == @object
+    end
+
+    test "without the mode forwarded the json_schema text is not parsed (tool path → nil)" do
+      assert decode([]).object == nil
+    end
+  end
 end
