@@ -1161,9 +1161,7 @@ defmodule ReqLLM.Providers.AnthropicTest do
       assert decode.("model_context_window_exceeded") == :length
       assert decode.("tool_use") == :tool_calls
       assert decode.("pause_turn") == :incomplete
-      # Safety decline: surfaced as :content_filter, not silently collapsed to :error.
       assert decode.("refusal") == :content_filter
-      # A genuinely unknown reason is :unknown (reserve :error for real failures).
       assert decode.("some_future_reason") == :unknown
     end
 

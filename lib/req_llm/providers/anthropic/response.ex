@@ -421,10 +421,6 @@ defmodule ReqLLM.Providers.Anthropic.Response do
   defp parse_finish_reason("pause_turn"), do: :incomplete
   defp parse_finish_reason("refusal"), do: :content_filter
   defp parse_finish_reason("content_filter"), do: :content_filter
-  # An unrecognized but valid stop_reason is "unknown", not an error — reserve
-  # :error for genuine decode/transport failures. (Previously any unmapped
-  # reason — e.g. "refusal", "pause_turn" — collapsed to :error, losing the
-  # signal and surfacing a non-error turn as an error.)
   defp parse_finish_reason(reason) when is_binary(reason), do: :unknown
   defp parse_finish_reason(_), do: nil
 
