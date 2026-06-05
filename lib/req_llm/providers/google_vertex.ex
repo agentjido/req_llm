@@ -143,6 +143,19 @@ defmodule ReqLLM.Providers.GoogleVertex do
       - `0` - first message, `1` - second, etc.
       """
     ],
+    anthropic_structured_output_mode: [
+      type: {:in, [:auto, :json_schema]},
+      default: :auto,
+      doc: """
+      Structured output strategy for Claude `:object` generation:
+      - `:auto` (default) - best-effort tool calling
+      - `:json_schema` - grammar-constrained decoding via `output_config.format`
+
+      `:json_schema` requires the `structured_outputs` partner-model feature to be
+      allow-listed by the GCP org policy (`constraints/vertexai.allowedPartnerModelFeatures`),
+      otherwise the request is rejected with HTTP 400 `FAILED_PRECONDITION`.
+      """
+    ],
     google_thinking_budget: [
       type: :non_neg_integer,
       doc: "Thinking token budget for Gemini 2.5 models (0 disables thinking, omit for dynamic)"

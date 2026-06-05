@@ -13,15 +13,18 @@ defmodule ReqLLM.Providers.Anthropic.AdapterHelpers do
   def maybe_add_param(body, key, value), do: Map.put(body, key, value)
 
   @doc """
-  Prepare context and options for :object operations using structured output.
+  Prepare context and options for `:object` operations using a synthetic
+  `structured_output` tool, forcing tool choice to use it.
 
-  Creates a synthetic "structured_output" tool and forces tool choice to use it.
-  This leverages Claude's tool-calling for structured JSON output.
+  This is the best-effort tool-calling path. For grammar-constrained output,
+  callers pass `anthropic_structured_output_mode: :json_schema`, which the
+  platform adapter (e.g. Google Vertex) handles via the response-level
+  `output_config.format` path instead of this tool — see
+  `structured_output_mode/1` and `strict_json_schema/1`.
   """
   def prepare_structured_output_context(context, opts) do
     compiled_schema = Keyword.fetch!(opts, :compiled_schema)
 
-    # Create the structured_output tool
     structured_output_tool =
       ReqLLM.Tool.new!(
         name: "structured_output",
@@ -30,11 +33,9 @@ defmodule ReqLLM.Providers.Anthropic.AdapterHelpers do
         callback: fn _args -> {:ok, "structured output generated"} end
       )
 
-    # Add tool to context
     existing_tools = Map.get(context, :tools, [])
     updated_context = Map.put(context, :tools, [structured_output_tool | existing_tools])
 
-    # Update opts to force tool choice
     updated_opts =
       opts
       |> Keyword.put(:tools, [structured_output_tool | Keyword.get(opts, :tools, [])])
@@ -42,6 +43,37 @@ defmodule ReqLLM.Providers.Anthropic.AdapterHelpers do
 
     {updated_context, updated_opts}
   end
+
+  @doc """
+  Resolve the `anthropic_structured_output_mode` from opts (top-level or nested
+  under `:provider_options`), defaulting to `:auto`.
+  """
+  def structured_output_mode(opts) do
+    provider_opts = get_opt(opts, :provider_options) || []
+
+    get_opt(opts, :anthropic_structured_output_mode) ||
+      get_opt(provider_opts, :anthropic_structured_output_mode) ||
+      :auto
+  end
+
+  @doc """
+  Reduce a compiled schema to the subset that grammar-constrained
+  (`output_config.format`) decoding supports: strip unsupported keywords and
+  force every property required with `additionalProperties: false`.
+
+  Array length (`minItems`/`maxItems`) cannot be expressed, so callers that need
+  an exact count must re-validate it on the response.
+  """
+  def strict_json_schema(compiled_schema) do
+    compiled_schema.schema
+    |> ReqLLM.Schema.to_json()
+    |> strip_constraints_recursive()
+    |> enforce_strict_schema_requirements()
+  end
+
+  defp get_opt(opts, key) when is_list(opts), do: Keyword.get(opts, key)
+  defp get_opt(opts, key) when is_map(opts), do: Map.get(opts, key)
+  defp get_opt(_opts, _key), do: nil
 
   @doc """
   Add extended thinking configuration to request body if enabled.
@@ -132,4 +164,55 @@ defmodule ReqLLM.Providers.Anthropic.AdapterHelpers do
       }
     end)
   end
+
+  @doc """
+  Recursively remove JSON Schema keywords that strict (grammar-constrained)
+  decoding does not support.
+
+  Strips numeric/length/array constraints (`minimum`, `maximum`, `minLength`,
+  `maxLength`, `minItems`, `maxItems`) and the Gemini-style `propertyOrdering`
+  annotation (which `ReqLLM.Schema.to_json/1` emits but Anthropic's strict tool
+  rejects) from the schema and every nested `properties`/`items` subschema.
+  """
+  def strip_constraints_recursive(schema) when is_map(schema) do
+    schema
+    |> Map.drop([
+      "minimum",
+      "maximum",
+      "minLength",
+      "maxLength",
+      "minItems",
+      "maxItems",
+      "propertyOrdering"
+    ])
+    |> Map.new(fn
+      {"properties", props} when is_map(props) ->
+        {"properties", Map.new(props, fn {k, v} -> {k, strip_constraints_recursive(v)} end)}
+
+      {"items", items} when is_map(items) ->
+        {"items", strip_constraints_recursive(items)}
+
+      {k, v} when is_map(v) ->
+        {k, strip_constraints_recursive(v)}
+
+      {k, v} ->
+        {k, v}
+    end)
+  end
+
+  def strip_constraints_recursive(value), do: value
+
+  @doc """
+  Apply the object-level requirements strict decoding mandates: every property
+  is marked required and `additionalProperties` is set to `false`.
+  """
+  def enforce_strict_schema_requirements(
+        %{"type" => "object", "properties" => properties} = schema
+      ) do
+    schema
+    |> Map.put("required", Map.keys(properties))
+    |> Map.put("additionalProperties", false)
+  end
+
+  def enforce_strict_schema_requirements(schema), do: schema
 end

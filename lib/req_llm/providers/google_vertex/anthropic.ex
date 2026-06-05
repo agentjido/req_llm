@@ -45,10 +45,12 @@ defmodule ReqLLM.Providers.GoogleVertex.Anthropic do
   """
   def format_request(_model_id, context, opts) do
     operation = opts[:operation]
+    mode = AdapterHelpers.structured_output_mode(opts)
 
-    # For :object operation, we need to inject the structured_output tool
+    # For :object operation, inject the structured_output tool unless the caller
+    # requested the response-level json_schema output_format path.
     {context, opts} =
-      if operation == :object do
+      if operation == :object and mode != :json_schema do
         AdapterHelpers.prepare_structured_output_context(context, opts)
       else
         {context, opts}
@@ -78,8 +80,22 @@ defmodule ReqLLM.Providers.GoogleVertex.Anthropic do
     |> AdapterHelpers.maybe_add_param(:stop_sequences, opts[:stop_sequences])
     |> AdapterHelpers.maybe_add_thinking(opts)
     |> maybe_add_tools(opts)
+    |> maybe_add_output_format(operation, mode, opts)
     |> Anthropic.maybe_apply_prompt_caching(opts)
   end
+
+  defp maybe_add_output_format(body, :object, :json_schema, opts) do
+    compiled_schema = Keyword.fetch!(opts, :compiled_schema)
+
+    Map.put(body, :output_config, %{
+      format: %{
+        type: "json_schema",
+        schema: AdapterHelpers.strict_json_schema(compiled_schema)
+      }
+    })
+  end
+
+  defp maybe_add_output_format(body, _operation, _mode, _opts), do: body
 
   # Add tools from opts to request body
   defp maybe_add_tools(body, opts) do
@@ -124,12 +140,19 @@ defmodule ReqLLM.Providers.GoogleVertex.Anthropic do
         input_context = opts[:context] || %ReqLLM.Context{messages: []}
         merged_response = ReqLLM.Context.merge_response(input_context, response)
 
-        # For :object operation, extract structured output from tool call
+        # For :object operation, extract structured output. The json_schema path
+        # returns the object as message text; the tool path returns it as a tool call.
         final_response =
-          if opts[:operation] == :object do
-            AdapterHelpers.extract_and_set_object(merged_response)
-          else
-            merged_response
+          cond do
+            opts[:operation] == :object and
+                AdapterHelpers.structured_output_mode(opts) == :json_schema ->
+              extract_object_from_text(merged_response, opts)
+
+            opts[:operation] == :object ->
+              AdapterHelpers.extract_and_set_object(merged_response)
+
+            true ->
+              merged_response
           end
 
         {:ok, final_response}
@@ -137,6 +160,16 @@ defmodule ReqLLM.Providers.GoogleVertex.Anthropic do
       error ->
         error
     end
+  end
+
+  defp extract_object_from_text(response, opts) do
+    object =
+      case ReqLLM.JSON.decode(ReqLLM.Response.text(response), opts) do
+        {:ok, decoded} -> decoded
+        _ -> nil
+      end
+
+    %{response | object: object}
   end
 
   @doc """
