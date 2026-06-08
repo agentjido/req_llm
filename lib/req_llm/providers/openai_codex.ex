@@ -357,6 +357,7 @@ defmodule ReqLLM.Providers.OpenAICodex do
       |> Keyword.delete(:compiled_schema)
       |> Keyword.put(:provider_options, Keyword.get(opts, :provider_options, []))
       |> Keyword.put(:stream, nil)
+      |> Keyword.put(:responses_transport, :websocket)
       |> Keyword.put(:model, model.id)
       |> Keyword.put(:context, context)
       |> Keyword.put(:base_url, base_url)
@@ -394,7 +395,7 @@ defmodule ReqLLM.Providers.OpenAICodex do
   end
 
   defp build_codex_body(context, model_name, opts, request) do
-    opts = opts |> ensure_provider_options() |> force_store_false() |> put_responses_transport()
+    opts = opts |> ensure_provider_options() |> force_store_false()
     body = ResponsesAPI.build_request_body(context, model_name, opts, request)
     provider_opts = provider_options(opts)
     instructions = extract_instructions(context) || ""
@@ -440,12 +441,6 @@ defmodule ReqLLM.Providers.OpenAICodex do
     do: provider_opts |> Map.to_list() |> Keyword.put(:store, false)
 
   defp provider_options_store_false(_provider_opts), do: [store: false]
-
-  defp put_responses_transport(opts) when is_list(opts),
-    do: Keyword.put(opts, :responses_transport, :websocket)
-
-  defp put_responses_transport(opts) when is_map(opts),
-    do: Map.put(opts, :responses_transport, :websocket)
 
   defp tool_resume_body?(%{"input" => input}) when is_list(input) do
     Enum.any?(input, fn
