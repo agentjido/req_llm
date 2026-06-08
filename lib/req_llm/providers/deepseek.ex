@@ -33,17 +33,15 @@ defmodule ReqLLM.Providers.Deepseek do
 
       # With thinking mode enabled (default for reasoning models)
       ReqLLM.generate_text("deepseek:deepseek-v4-pro", "Solve this complex problem",
+        reasoning_effort: :high,
         provider_options: [
-          thinking: %{type: "enabled"},
-          reasoning_effort: :high
+          thinking: %{type: "enabled"}
         ]
       )
 
       # With maximum reasoning effort for complex tasks
       ReqLLM.generate_text("deepseek:deepseek-v4-pro", "Complex reasoning task",
-        provider_options: [
-          reasoning_effort: :max
-        ]
+        reasoning_effort: :xhigh
       )
 
       # Disable thinking mode

@@ -259,9 +259,6 @@ defmodule ReqLLM.Providers.DeepseekTest do
       assert {opts, []} = Deepseek.translate_options(:chat, model, reasoning_effort: :high)
       assert opts[:reasoning_effort] == "high"
 
-      assert {opts, []} = Deepseek.translate_options(:chat, model, reasoning_effort: :max)
-      assert opts[:reasoning_effort] == "max"
-
       assert {opts, []} = Deepseek.translate_options(:chat, model, reasoning_effort: :xhigh)
       assert opts[:reasoning_effort] == "max"
     end
