@@ -769,7 +769,7 @@ defmodule ReqLLM.Providers.Azure do
     formatter = get_formatter(model_id, model)
 
     if function_exported?(formatter, :init_stream_state, 0) do
-      formatter.init_stream_state()
+      call_formatter(formatter, :init_stream_state, [])
     end
   end
 
@@ -784,11 +784,16 @@ defmodule ReqLLM.Providers.Azure do
     model_id = effective_model_id(model)
     formatter = get_formatter(model_id, model)
 
-    if function_exported?(formatter, :decode_stream_event, 3) do
-      formatter.decode_stream_event(event, model, state)
-    else
-      chunks = formatter.decode_stream_event(event, model)
-      {chunks, state}
+    cond do
+      function_exported?(formatter, :decode_stream_event, 3) ->
+        call_formatter(formatter, :decode_stream_event, [event, model, state])
+
+      function_exported?(formatter, :decode_stream_event, 2) ->
+        chunks = call_formatter(formatter, :decode_stream_event, [event, model])
+        {chunks, state}
+
+      true ->
+        {[], state}
     end
   end
 
@@ -798,7 +803,7 @@ defmodule ReqLLM.Providers.Azure do
     formatter = get_formatter(model_id, model)
 
     if function_exported?(formatter, :flush_stream_state, 1) do
-      formatter.flush_stream_state(state)
+      call_formatter(formatter, :flush_stream_state, [state])
     else
       {[], state}
     end
@@ -815,7 +820,7 @@ defmodule ReqLLM.Providers.Azure do
     formatter = get_formatter(model_id, model)
 
     if function_exported?(formatter, :extract_usage, 2) do
-      formatter.extract_usage(body, model)
+      call_formatter(formatter, :extract_usage, [body, model])
     else
       {:error, :no_usage_extractor}
     end
@@ -888,10 +893,14 @@ defmodule ReqLLM.Providers.Azure do
     formatter = get_formatter(model_id, model)
 
     if function_exported?(formatter, :pre_validate_options, 3) do
-      formatter.pre_validate_options(operation, model, opts)
+      call_formatter(formatter, :pre_validate_options, [operation, model, opts])
     else
       {opts, []}
     end
+  end
+
+  defp call_formatter(formatter, function, args) do
+    apply(formatter, function, args)
   end
 
   @doc """

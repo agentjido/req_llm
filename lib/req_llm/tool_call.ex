@@ -333,8 +333,6 @@ defmodule ReqLLM.ToolCall do
         map
       end
     end
-
-    defp maybe_put_builtin(map, _function), do: map
   end
 
   defimpl Inspect do

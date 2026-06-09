@@ -1295,8 +1295,6 @@ defmodule ReqLLM.Providers.XAI do
     end
   end
 
-  defp parse_json_defensively(_, _opts), do: nil
-
   defp merge_response_with_context(req, response) do
     context = req.options[:context] || %ReqLLM.Context{messages: []}
     ReqLLM.Context.merge_response(context, response)

@@ -103,8 +103,6 @@ defmodule ReqLLM.Providers.Anthropic.Context do
     end)
   end
 
-  defp all_tool_results?(_), do: false
-
   defp encode_message(%ReqLLM.Message{
          role: :assistant,
          tool_calls: tool_calls,

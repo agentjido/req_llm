@@ -255,6 +255,4 @@ defmodule ReqLLM.Providers.Mistral do
       true -> nil
     end
   end
-
-  defp option_value(_value, _key), do: nil
 end

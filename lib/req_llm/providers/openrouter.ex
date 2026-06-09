@@ -496,8 +496,6 @@ defmodule ReqLLM.Providers.OpenRouter do
     end
   end
 
-  defp openrouter_file_media_type(_part), do: "application/pdf"
-
   @passthrough_content_metadata_keys [:cache_control, "cache_control"]
 
   defp merge_content_metadata(base, metadata) when is_map(metadata) and map_size(metadata) > 0 do

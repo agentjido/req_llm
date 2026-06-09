@@ -633,7 +633,7 @@ defmodule ReqLLM.Providers.GoogleVertex do
     # Clean thinking after translation if incompatible
     other_opts =
       if function_exported?(formatter, :maybe_clean_thinking_after_translation, 2) do
-        formatter.maybe_clean_thinking_after_translation(other_opts, operation)
+        call_formatter(formatter, :maybe_clean_thinking_after_translation, [other_opts, operation])
       else
         other_opts
       end
@@ -766,7 +766,7 @@ defmodule ReqLLM.Providers.GoogleVertex do
         formatter = get_formatter(model)
 
         if function_exported?(formatter, :extract_usage, 2) do
-          formatter.extract_usage(body, model)
+          call_formatter(formatter, :extract_usage, [body, model])
         else
           {:error, :no_usage_extractor}
         end
@@ -816,7 +816,7 @@ defmodule ReqLLM.Providers.GoogleVertex do
         formatter = get_formatter(model)
 
         if function_exported?(formatter, :pre_validate_options, 3) do
-          formatter.pre_validate_options(operation, model, opts)
+          call_formatter(formatter, :pre_validate_options, [operation, model, opts])
         else
           {opts, []}
         end
@@ -949,7 +949,7 @@ defmodule ReqLLM.Providers.GoogleVertex do
     formatter = get_formatter(model)
 
     if function_exported?(formatter, :decode_stream_event, 2) do
-      formatter.decode_stream_event(event, model)
+      call_formatter(formatter, :decode_stream_event, [event, model])
     else
       ReqLLM.Providers.Anthropic.Response.decode_stream_event(event, model)
     end
@@ -960,7 +960,7 @@ defmodule ReqLLM.Providers.GoogleVertex do
     formatter = get_formatter(model)
 
     if function_exported?(formatter, :init_stream_state, 0) do
-      formatter.init_stream_state()
+      call_formatter(formatter, :init_stream_state, [])
     end
   end
 
@@ -970,10 +970,10 @@ defmodule ReqLLM.Providers.GoogleVertex do
 
     cond do
       function_exported?(formatter, :decode_stream_event, 3) ->
-        formatter.decode_stream_event(event, model, state)
+        call_formatter(formatter, :decode_stream_event, [event, model, state])
 
       function_exported?(formatter, :decode_stream_event, 2) ->
-        {formatter.decode_stream_event(event, model), state}
+        {call_formatter(formatter, :decode_stream_event, [event, model]), state}
 
       true ->
         ReqLLM.Providers.Anthropic.Response.decode_stream_event(event, model, state)
@@ -986,14 +986,18 @@ defmodule ReqLLM.Providers.GoogleVertex do
 
     cond do
       function_exported?(formatter, :flush_stream_state, 2) ->
-        formatter.flush_stream_state(model, state)
+        call_formatter(formatter, :flush_stream_state, [model, state])
 
       function_exported?(formatter, :flush_stream_state, 1) ->
-        formatter.flush_stream_state(state)
+        call_formatter(formatter, :flush_stream_state, [state])
 
       true ->
         {[], state}
     end
+  end
+
+  defp call_formatter(formatter, function, args) do
+    apply(formatter, function, args)
   end
 
   # Build streaming path for model

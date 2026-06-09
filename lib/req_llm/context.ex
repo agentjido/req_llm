@@ -1297,9 +1297,6 @@ defmodule ReqLLM.Context do
         not Message.valid?(msg) ->
           {:halt, {:error, "Context contains invalid messages"}}
 
-        not is_list(msg.content) ->
-          {:halt, {:error, "Message content must be a list of ContentParts"}}
-
         msg.role == :assistant and msg.tool_calls != nil and not is_list(msg.tool_calls) ->
           {:halt, {:error, "tool_calls must be a list or nil"}}
 

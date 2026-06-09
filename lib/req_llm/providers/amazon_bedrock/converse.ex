@@ -395,8 +395,6 @@ defmodule ReqLLM.Providers.AmazonBedrock.Converse do
     end)
   end
 
-  defp all_tool_results?(_), do: false
-
   defp add_tools(request, [], _formatter_module), do: request
 
   defp add_tools(request, tools, formatter_module) when is_list(tools) do

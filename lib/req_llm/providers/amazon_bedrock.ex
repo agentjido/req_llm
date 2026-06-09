@@ -380,7 +380,7 @@ defmodule ReqLLM.Providers.AmazonBedrock do
         # Otherwise use Converse formatter directly
         formatter =
           if function_exported?(family_formatter, :requires_converse_api?, 0) and
-               family_formatter.requires_converse_api?() do
+               call_formatter(family_formatter, :requires_converse_api?, []) do
             family_formatter
           else
             ReqLLM.Providers.AmazonBedrock.Converse
@@ -564,7 +564,7 @@ defmodule ReqLLM.Providers.AmazonBedrock do
         # Otherwise use Converse formatter directly
         formatter =
           if function_exported?(family_formatter, :requires_converse_api?, 0) and
-               family_formatter.requires_converse_api?() do
+               call_formatter(family_formatter, :requires_converse_api?, []) do
             family_formatter
           else
             ReqLLM.Providers.AmazonBedrock.Converse
@@ -775,7 +775,7 @@ defmodule ReqLLM.Providers.AmazonBedrock do
     formatter = get_formatter_module(model_family)
 
     if function_exported?(formatter, :extract_usage, 2) do
-      formatter.extract_usage(body, model)
+      call_formatter(formatter, :extract_usage, [body, model])
     else
       {:error, :no_usage_extractor}
     end
@@ -891,7 +891,6 @@ defmodule ReqLLM.Providers.AmazonBedrock do
   defp extract_region(aws_creds) do
     case aws_creds do
       %{region: r} when is_binary(r) -> r
-      %AWSAuth.Credentials{region: r} when is_binary(r) -> r
       _ -> "us-east-1"
     end
   end
@@ -1196,12 +1195,16 @@ defmodule ReqLLM.Providers.AmazonBedrock do
       model_family = req.options[:model_family]
       formatter = Map.get(@embedding_families, model_family)
 
-      case formatter.parse_embedding_response(parsed_body) do
-        {:ok, normalized_response} ->
-          {req, inject_usage_from_headers(%{resp | body: normalized_response})}
+      if function_exported?(formatter, :parse_embedding_response, 1) do
+        case call_formatter(formatter, :parse_embedding_response, [parsed_body]) do
+          {:ok, normalized_response} ->
+            {req, inject_usage_from_headers(%{resp | body: normalized_response})}
 
-        {:error, error} ->
-          {req, error}
+          {:error, error} ->
+            {req, error}
+        end
+      else
+        {req, ReqLLM.Error.API.Response.exception(reason: "Unsupported embedding model family")}
       end
     end
   end
@@ -1273,6 +1276,10 @@ defmodule ReqLLM.Providers.AmazonBedrock do
     end
   end
 
+  defp call_formatter(formatter, function, args) do
+    apply(formatter, function, args)
+  end
+
   # Private helper: Determine whether to use Converse API with caching optimization
   defp determine_use_converse(model_id, opts) do
     # Check if model's formatter requires Converse API
@@ -1281,7 +1288,7 @@ defmodule ReqLLM.Providers.AmazonBedrock do
 
     requires_converse =
       function_exported?(formatter, :requires_converse_api?, 0) &&
-        formatter.requires_converse_api?()
+        call_formatter(formatter, :requires_converse_api?, [])
 
     # Check if formatter is Converse (fallback for unsupported families)
     is_fallback_to_converse = formatter == ReqLLM.Providers.AmazonBedrock.Converse

@@ -238,8 +238,6 @@ defmodule ReqLLM.Schema do
     module_name == "Zoi"
   end
 
-  defp zoi_schema?(_), do: false
-
   @doc false
   @spec schema_kind(any()) :: :nimble | :json | :zoi | :unknown
   defp schema_kind(schema) when is_list(schema), do: :nimble
