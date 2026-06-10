@@ -172,7 +172,7 @@ usage = ReqLLM.StreamResponse.usage(response)
 
 - **Production-grade streaming**
   - `stream_text/3` returns a `StreamResponse` with both real-time tokens and async metadata
-  - Finch-based streaming with HTTP/2 multiplexing and automatic connection pooling
+  - Finch-based streaming with automatic connection pooling and configurable checkout timeouts
   - OpenAI Responses models can opt into WebSocket mode with `provider_options: [openai_stream_transport: :websocket]`
   - Concurrent metadata collection (usage, finish_reason) without blocking token flow
   - Works uniformly across providers with internal SSE / chunked-response adaptation
@@ -347,50 +347,63 @@ See `examples/scripts/usage_cost_search_image.exs` and run it from `examples/` w
 
 ## Streaming Configuration
 
-ReqLLM uses Finch for streaming connections with automatic connection pooling. By default, we use HTTP/1-only pools to work around a known Finch bug with large request bodies:
+ReqLLM uses Finch for streaming connections with automatic connection pooling. By default, we use HTTP/1-only pools to avoid a known Finch mixed-protocol ALPN bug with large request bodies:
 
 ```elixir
 # Default configuration (automatic)
 config :req_llm,
-  finch: [
-    name: ReqLLM.Finch,
-    pools: %{
-      :default => [protocols: [:http1], size: 1, count: 8]
-    }
-  ]
+  stream_pool_timeout: 120_000,
+  stream_pool_protocols: [:http1],
+  stream_pool_size: 1,
+  stream_pool_count: 8
 ```
 
 ### HTTP/2 Configuration (Advanced)
 
-**Important:** Due to [Finch issue #265](https://github.com/sneako/finch/issues/265), HTTP/2 pools may fail when sending request bodies larger than 64KB (large prompts, extensive context windows). This is a bug in Finch's HTTP/2 flow control implementation, not a limitation of HTTP/2 itself.
+**Important:** Due to [Finch issue #265](https://github.com/sneako/finch/issues/265), mixed HTTP/1+HTTP/2 ALPN pools may fail when sending request bodies larger than 64KB (large prompts, extensive context windows). This is a bug in Finch's mixed-protocol flow control path, not a limitation of HTTP/2 itself.
 
-If you want to use HTTP/2 pools (e.g., for performance testing or if you know your prompts are small), you can configure it:
+If you know all target providers support HTTP/2, you can configure HTTP/2-only pools:
 
 ```elixir
-# HTTP/2 configuration (use with caution)
+# HTTP/2-only configuration
 config :req_llm,
-  finch: [
-    name: ReqLLM.Finch,
-    pools: %{
-      :default => [protocols: [:http2, :http1], size: 1, count: 8]
-    }
-  ]
+  stream_pool_protocols: [:http2],
+  stream_pool_count: 8
 ```
 
-**ReqLLM will error with a helpful message if you try to send a large request body with HTTP/2 pools.** The error will reference this section for configuration guidance.
+**ReqLLM will error with a helpful message if you try to send a large request body with mixed HTTP/1+HTTP/2 pools.** The error will reference this section for configuration guidance.
 
-For high-scale deployments with small prompts, you can increase the connection count:
+Streaming responses hold a connection until completion. For high-scale deployments, tune both the Finch pool capacity and the stream checkout timeout:
 
 ```elixir
 # High-scale configuration
+# config/runtime.exs
+round_robin = Finch.Pool.Strategy.RoundRobin.new()
+
+config :req_llm,
+  stream_pool_timeout: 300_000,
+  stream_pool_protocols: [:http1],
+  stream_pool_size: 1,
+  stream_pool_count: 32,
+  stream_pool_strategy: {Finch.Pool.Strategy.RoundRobin, round_robin}
+```
+
+With the default HTTP/1 transport, concurrent streams per origin are roughly `stream_pool_size * stream_pool_count`. Prefer increasing `stream_pool_count` first when a single pool worker is under pressure; increase `stream_pool_size` when each worker should hold more concurrent HTTP/1 connections. For high worker counts, a round-robin `stream_pool_strategy` spreads stream starts more evenly than Finch's default random selection. These settings configure ReqLLM's default Finch pool; an explicit `finch: [pools: ...]` configuration takes precedence.
+
+If you need origin-specific pools, HTTP/2, connection options, or pool metrics, configure Finch directly:
+
+```elixir
+# Advanced Finch configuration
 config :req_llm,
   finch: [
     name: ReqLLM.Finch,
     pools: %{
-      :default => [protocols: [:http1], size: 1, count: 32]  # More connections
+      :default => [protocols: [:http1], size: 1, count: 32]
     }
   ]
 ```
+
+Use `pool_timeout: ...` on an individual `stream_text/3` or `stream_object/4` call when one workload needs a longer connection checkout window than the global `stream_pool_timeout` setting.
 
 Advanced users can specify custom Finch instances per request:
 

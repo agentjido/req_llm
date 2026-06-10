@@ -158,6 +158,11 @@ defmodule ReqLLM.Streaming.FinchClient do
          _fixture_path,
          opts
        ) do
+    stream_opts =
+      finch_request
+      |> Fixtures.canonical_json_from_finch_request()
+      |> stream_options(opts)
+
     task_pid =
       Task.Supervisor.async(ReqLLM.TaskSupervisor, fn ->
         finch_stream_callback = fn
@@ -178,29 +183,13 @@ defmodule ReqLLM.Streaming.FinchClient do
             acc
         end
 
-        canonical = Fixtures.canonical_json_from_finch_request(finch_request)
-
-        default_timeout =
-          if has_thinking_enabled?(canonical) do
-            Application.get_env(:req_llm, :thinking_timeout, 300_000)
-          else
-            Application.get_env(
-              :req_llm,
-              :stream_receive_timeout,
-              Application.get_env(:req_llm, :receive_timeout, 30_000)
-            )
-          end
-
-        receive_timeout = Keyword.get(opts, :receive_timeout, default_timeout)
-
         try do
           case Retry.stream(
                  finch_request,
                  finch_name,
                  :ok,
                  finch_stream_callback,
-                 receive_timeout: receive_timeout,
-                 max_retries: Keyword.get(opts, :max_retries, 3)
+                 stream_opts
                ) do
             {:ok, _} ->
               :ok
@@ -231,6 +220,21 @@ defmodule ReqLLM.Streaming.FinchClient do
     error ->
       Logger.error("Failed to start streaming task: #{inspect(error)}")
       {:error, {:task_start_failed, error}}
+  end
+
+  @doc false
+  @spec stream_options(map(), keyword()) :: keyword()
+  def stream_options(canonical, opts) do
+    receive_timeout = Keyword.get(opts, :receive_timeout, default_receive_timeout(canonical))
+    pool_timeout = Keyword.get(opts, :pool_timeout, default_pool_timeout(receive_timeout))
+
+    [
+      pool_timeout: validate_timeout!(pool_timeout, :pool_timeout),
+      receive_timeout: receive_timeout,
+      max_retries: Keyword.get(opts, :max_retries, 3)
+    ]
+    |> maybe_put_option(:request_timeout, Keyword.get(opts, :request_timeout))
+    |> maybe_put_option(:pool_strategy, pool_strategy(opts))
   end
 
   # Apply config-level adapter then per-request callback, in that order.
@@ -276,6 +280,39 @@ defmodule ReqLLM.Streaming.FinchClient do
     end
   end
 
+  defp default_receive_timeout(canonical) do
+    if has_thinking_enabled?(canonical) do
+      Application.get_env(:req_llm, :thinking_timeout, 300_000)
+    else
+      Application.get_env(
+        :req_llm,
+        :stream_receive_timeout,
+        Application.get_env(:req_llm, :receive_timeout, 30_000)
+      )
+    end
+  end
+
+  defp default_pool_timeout(receive_timeout) do
+    case Application.get_env(:req_llm, :stream_pool_timeout) do
+      nil -> receive_timeout
+      timeout -> timeout
+    end
+  end
+
+  defp validate_timeout!(:infinity, _key), do: :infinity
+
+  defp validate_timeout!(timeout, _key) when is_integer(timeout) and timeout >= 0, do: timeout
+
+  defp validate_timeout!(timeout, key) do
+    raise ReqLLM.Error.Invalid.Parameter.exception(
+            parameter:
+              "#{key} must be a non-negative integer or :infinity, got: #{inspect(timeout)}"
+          )
+  end
+
+  defp maybe_put_option(opts, _key, nil), do: opts
+  defp maybe_put_option(opts, key, value), do: Keyword.put(opts, key, value)
+
   defp safe_http_event(server, event) do
     StreamServer.http_event(server, event)
   catch
@@ -292,9 +329,9 @@ defmodule ReqLLM.Streaming.FinchClient do
 
     # Only check if body is potentially problematic (>64KB threshold from Finch #265)
     if body_size > 65_535 do
-      case get_pool_protocols(finch_name) do
+      case get_pool_protocols(finch_request, finch_name) do
         {:ok, protocols} ->
-          if :http2 in protocols do
+          if mixed_http2_protocols?(protocols) do
             {:error, {:http2_body_too_large, body_size, protocols}}
           else
             :ok
@@ -309,19 +346,80 @@ defmodule ReqLLM.Streaming.FinchClient do
     end
   end
 
-  # Get the protocols configured for the Finch pool
-  defp get_pool_protocols(_finch_name) do
-    # Get Finch configuration from application env
-    finch_config = Application.get_env(:req_llm, :finch, [])
+  defp mixed_http2_protocols?(protocols) do
+    :http1 in protocols and :http2 in protocols
+  end
+
+  defp get_pool_protocols(finch_request, finch_name) do
+    finch_config = ReqLLM.Application.get_finch_config()
+    configured_name = Keyword.get(finch_config, :name, ReqLLM.Finch)
     pools = Keyword.get(finch_config, :pools, %{})
 
-    # Get default pool config
-    case Map.get(pools, :default) do
-      nil -> {:error, :no_pool_config}
-      pool_config -> {:ok, Keyword.get(pool_config, :protocols, [:http1])}
+    cond do
+      configured_name != finch_name ->
+        {:error, :unknown_finch_config}
+
+      is_map(pools) ->
+        case matching_pool_config(pools, finch_request) do
+          nil -> {:error, :no_pool_config}
+          pool_config -> {:ok, pool_protocols(pool_config)}
+        end
+
+      true ->
+        {:error, :no_pool_config}
     end
   rescue
     _ -> {:error, :config_error}
+  end
+
+  defp matching_pool_config(pools, finch_request) do
+    request_pool = request_pool(finch_request)
+
+    Enum.find_value(pools, fn
+      {:default, _pool_config} ->
+        nil
+
+      {destination, pool_config} ->
+        if pool_matches?(destination, request_pool), do: pool_config
+    end) || Map.get(pools, :default)
+  end
+
+  defp request_pool(%Finch.Request{scheme: scheme, unix_socket: unix_socket, pool_tag: tag})
+       when is_binary(unix_socket) do
+    Finch.Pool.from_name({scheme, {:local, unix_socket}, 0, tag})
+  end
+
+  defp request_pool(%Finch.Request{scheme: scheme, host: host, port: port, pool_tag: tag}) do
+    Finch.Pool.from_name({scheme, host, port, tag})
+  end
+
+  defp pool_matches?(%Finch.Pool{} = destination, request_pool), do: destination == request_pool
+
+  defp pool_matches?(destination, request_pool) when is_binary(destination) do
+    Finch.Pool.new(destination) == request_pool
+  rescue
+    _ -> false
+  end
+
+  defp pool_matches?({scheme, {:local, path}}, request_pool)
+       when is_atom(scheme) and is_binary(path) do
+    Finch.Pool.new({scheme, {:local, path}}) == request_pool
+  end
+
+  defp pool_matches?(_destination, _request_pool), do: false
+
+  defp pool_protocols(pool_config) when is_list(pool_config) do
+    Keyword.get(pool_config, :protocols, [:http1])
+  end
+
+  defp pool_protocols(pool_config) when is_map(pool_config) do
+    Map.get(pool_config, :protocols, [:http1])
+  end
+
+  defp pool_protocols(_pool_config), do: [:http1]
+
+  defp pool_strategy(opts) do
+    Keyword.get(opts, :pool_strategy, Application.get_env(:req_llm, :stream_pool_strategy))
   end
 
   defp request_body_size(nil), do: 0

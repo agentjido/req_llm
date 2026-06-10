@@ -3,6 +3,38 @@ defmodule ReqLLM.Streaming.RetryTest do
 
   alias ReqLLM.Streaming.Retry
 
+  test "passes Finch checkout options through to the stream transport" do
+    parent = self()
+
+    stream_fun = fn _request, _finch_name, acc, callback, opts ->
+      send(parent, {:stream_opts, opts})
+      acc = callback.(:done, acc)
+      {:ok, acc}
+    end
+
+    assert {:ok, []} =
+             Retry.stream(
+               Finch.build(:post, "https://example.com/stream"),
+               ReqLLM.Finch,
+               [],
+               fn _event, acc -> acc end,
+               [
+                 max_retries: 0,
+                 pool_timeout: 30_000,
+                 pool_strategy: :random,
+                 receive_timeout: 1_000,
+                 request_timeout: 60_000
+               ],
+               stream_fun
+             )
+
+    assert_receive {:stream_opts, opts}
+    assert opts[:pool_timeout] == 30_000
+    assert opts[:pool_strategy] == :random
+    assert opts[:receive_timeout] == 1_000
+    assert opts[:request_timeout] == 60_000
+  end
+
   test "retries transient transport errors before any data is received" do
     {:ok, counter} = Agent.start_link(fn -> 0 end)
 
@@ -42,6 +74,39 @@ defmodule ReqLLM.Streaming.RetryTest do
              {:data, "hello"},
              :done
            ]
+  end
+
+  test "retries Finch pool readiness errors before any data is received" do
+    {:ok, counter} = Agent.start_link(fn -> 0 end)
+
+    stream_fun = fn _request, _finch_name, acc, callback, _opts ->
+      attempt = Agent.get_and_update(counter, fn current -> {current + 1, current + 1} end)
+
+      case attempt do
+        1 ->
+          {:error, %Finch.Error{reason: :pool_not_available}, acc}
+
+        2 ->
+          acc = callback.({:status, 200}, acc)
+          acc = callback.(:done, acc)
+          {:ok, acc}
+      end
+    end
+
+    callback = fn event, acc -> [event | acc] end
+
+    assert {:ok, events} =
+             Retry.stream(
+               Finch.build(:post, "https://example.com/stream"),
+               ReqLLM.Finch,
+               [],
+               callback,
+               [max_retries: 1, receive_timeout: 1_000],
+               stream_fun
+             )
+
+    assert Agent.get(counter, & &1) == 2
+    assert Enum.reverse(events) == [{:status, 200}, :done]
   end
 
   test "does not retry transient transport errors after data has been received" do

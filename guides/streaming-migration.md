@@ -4,9 +4,9 @@ This guide helps you migrate from the deprecated `stream_text!/3` pattern to the
 
 ## Overview
 
-ReqLLM's streaming implementation has been completely redesigned to use Finch directly instead of REQ, providing:
+ReqLLM's streaming implementation has been completely redesigned to use Finch directly instead of Req, providing:
 
-- **HTTP/2 multiplexing** for concurrent streams
+- **Configurable Finch transport** for concurrent streams
 - **Asynchronous metadata collection** (usage, finish_reason)
 - **Production-grade connection pooling**
 - **Better error handling and resource cleanup**
@@ -224,16 +224,17 @@ The new Finch-based system allows connection pool configuration:
 ```elixir
 # In config.exs
 config :req_llm,
-  finch: [
-    name: ReqLLM.Finch,
-    pools: %{
-      :default => [protocols: [:http2, :http1], size: 1, count: 16]
-    }
-  ]
+  stream_pool_timeout: 120_000,
+  stream_pool_protocols: [:http1],
+  stream_pool_size: 1,
+  stream_pool_count: 16,
+  stream_pool_strategy: nil
 
 # Use custom Finch instance per request
 {:ok, response} = ReqLLM.stream_text(model, messages, finch_name: MyApp.Finch)
 ```
+
+With the default HTTP/1 transport, concurrent streams per provider origin are roughly `stream_pool_size * stream_pool_count`. If every target provider supports HTTP/2, set `stream_pool_protocols: [:http2]`.
 
 ## Common Migration Issues
 
@@ -322,7 +323,7 @@ end
 
 The new streaming system provides significant performance improvements:
 
-1. **HTTP/2 Multiplexing**: Multiple concurrent streams over single connection
+1. **Connection Pooling**: Configurable Finch pools for concurrent streams
 2. **Reduced Memory Usage**: Lazy stream evaluation prevents buffering
 3. **Concurrent Processing**: Metadata collection doesn't block token streaming
 4. **Connection Reuse**: Finch pools reduce connection overhead
@@ -330,13 +331,15 @@ The new streaming system provides significant performance improvements:
 For high-throughput applications, consider tuning the connection pool:
 
 ```elixir
+# config/runtime.exs
+round_robin = Finch.Pool.Strategy.RoundRobin.new()
+
 config :req_llm,
-  finch: [
-    name: ReqLLM.Finch,
-    pools: %{
-      :default => [protocols: [:http2], size: 1, count: 32]
-    }
-  ]
+  stream_pool_timeout: 300_000,
+  stream_pool_protocols: [:http1],
+  stream_pool_size: 1,
+  stream_pool_count: 32,
+  stream_pool_strategy: {Finch.Pool.Strategy.RoundRobin, round_robin}
 ```
 
 ## Next Steps

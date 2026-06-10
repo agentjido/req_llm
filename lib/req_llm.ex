@@ -893,7 +893,7 @@ defmodule ReqLLM do
   zero-latency content delivery while collecting billing/usage data concurrently.
 
   The streaming implementation uses Finch directly for production-grade performance
-  with HTTP/2 multiplexing and automatic connection pooling.
+  with automatic connection pooling and configurable checkout timeouts.
 
   ## Parameters
 
@@ -901,41 +901,45 @@ defmodule ReqLLM do
 
   ## Returns
 
-    * `{:ok, stream_response}` - StreamResponse with stream and metadata task
-    * `{:error, reason}` - Request failed or invalid parameters
+   * `{:ok, stream_response}` - StreamResponse with stream and metadata task
+   * `{:error, reason}` - Request failed or invalid parameters
 
   ## Examples
 
-      # Real-time streaming
-      {:ok, response} = ReqLLM.stream_text("anthropic:claude-3-sonnet", "Tell me a story")
-      response
-      |> ReqLLM.StreamResponse.tokens()
-      |> Stream.each(&IO.write/1)
-      |> Stream.run()
+     # Real-time streaming
+     {:ok, response} = ReqLLM.stream_text("anthropic:claude-3-sonnet", "Tell me a story")
+     response
+     |> ReqLLM.StreamResponse.tokens()
+     |> Stream.each(&IO.write/1)
+     |> Stream.run()
 
-      # Concurrent metadata collection
-      usage = ReqLLM.StreamResponse.usage(response)
-      #=> %{input_tokens: 15, output_tokens: 42, total_cost: 0.087}
+     # Concurrent metadata collection
+     usage = ReqLLM.StreamResponse.usage(response)
+     #=> %{input_tokens: 15, output_tokens: 42, total_cost: 0.087}
 
-      # Simple text collection
-      text = ReqLLM.StreamResponse.text(response)
+     # Simple text collection
+     text = ReqLLM.StreamResponse.text(response)
 
-      # Backward compatibility
-      {:ok, legacy_response} = ReqLLM.StreamResponse.to_response(response)
+     # Backward compatibility
+     {:ok, legacy_response} = ReqLLM.StreamResponse.to_response(response)
 
   ## StreamResponse Fields
 
-    * `stream` - Lazy enumerable of `StreamChunk` structs for real-time consumption
-    * `metadata_handle` - Concurrent handle collecting usage and finish_reason
-    * `cancel` - Function to terminate streaming and cleanup resources
-    * `model` - Model specification that generated this response
-    * `context` - Updated conversation context including assistant's response
+   * `stream` - Lazy enumerable of `StreamChunk` structs for real-time consumption
+   * `metadata_handle` - Concurrent handle collecting usage and finish_reason
+   * `cancel` - Function to terminate streaming and cleanup resources
+   * `model` - Model specification that generated this response
+   * `context` - Updated conversation context including assistant's response
 
   ## Performance Notes
 
   The stream is lazy and supports backpressure. Metadata collection happens
   concurrently and won't block token delivery. Use cancellation for early
-  termination to free resources.
+  termination to free resources. High-concurrency streaming workloads can tune
+  Finch pool protocols with `:stream_pool_protocols`, capacity with
+  `:stream_pool_size` and `:stream_pool_count`, shard selection with
+  `:stream_pool_strategy`, and checkout behavior with `:stream_pool_timeout`
+  config or per-request `pool_timeout: ...`.
 
   """
   defdelegate stream_text(model_spec, messages, opts \\ []), to: Generation

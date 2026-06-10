@@ -270,22 +270,22 @@ defmodule ReqLLM.Streaming do
     size_kb = div(body_size, 1024)
 
     """
-    Request body (#{size_kb}KB) exceeds safe limit for HTTP/2 connections (64KB).
+    Request body (#{size_kb}KB) exceeds safe limit for mixed HTTP/1+HTTP/2 Finch pools (64KB).
 
-    This is due to a known issue in Finch's HTTP/2 implementation:
+    This is due to a known issue in Finch's mixed-protocol ALPN implementation:
     https://github.com/sneako/finch/issues/265
 
     Your current pool configuration uses: #{inspect(protocols)}
 
-    To fix this, configure ReqLLM to use HTTP/1-only pools (recommended):
+    To fix this, configure ReqLLM to use HTTP/1-only pools (recommended default):
 
         config :req_llm,
-          finch: [
-            name: ReqLLM.Finch,
-            pools: %{
-              :default => [protocols: [:http1], size: 1, count: 8]
-            }
-          ]
+          stream_pool_protocols: [:http1]
+
+    If you know all target providers support HTTP/2, HTTP/2-only pools are also supported:
+
+        config :req_llm,
+          stream_pool_protocols: [:http2]
 
     See the ReqLLM README section "HTTP/2 Configuration (Advanced)" for more details:
     https://github.com/agentjido/req_llm#http2-configuration-advanced

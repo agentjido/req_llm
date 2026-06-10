@@ -28,6 +28,8 @@ defmodule ReqLLM.Streaming.FinchClientTest do
   setup do
     adapter_config = Application.get_env(:req_llm, :finch_request_adapter)
     finch_config = Application.get_env(:req_llm, :finch)
+    stream_pool_timeout_config = Application.get_env(:req_llm, :stream_pool_timeout)
+    stream_pool_strategy_config = Application.get_env(:req_llm, :stream_pool_strategy)
     fixtures_mode = System.get_env("REQ_LLM_FIXTURES_MODE")
     openai_api_key = System.get_env("OPENAI_API_KEY")
 
@@ -37,11 +39,78 @@ defmodule ReqLLM.Streaming.FinchClientTest do
     on_exit(fn ->
       restore_app_env(:finch_request_adapter, adapter_config)
       restore_app_env(:finch, finch_config)
+      restore_app_env(:stream_pool_timeout, stream_pool_timeout_config)
+      restore_app_env(:stream_pool_strategy, stream_pool_strategy_config)
       restore_system_env("REQ_LLM_FIXTURES_MODE", fixtures_mode)
       restore_system_env("OPENAI_API_KEY", openai_api_key)
     end)
 
     :ok
+  end
+
+  describe "stream_options/2" do
+    test "defaults pool_timeout to receive_timeout when no global pool timeout is configured" do
+      Application.delete_env(:req_llm, :stream_pool_timeout)
+
+      opts = FinchClient.stream_options(%{}, receive_timeout: 42_000)
+
+      assert opts[:receive_timeout] == 42_000
+      assert opts[:pool_timeout] == 42_000
+    end
+
+    test "uses stream_pool_timeout config when request pool_timeout is not provided" do
+      Application.put_env(:req_llm, :stream_pool_timeout, 180_000)
+
+      opts = FinchClient.stream_options(%{}, receive_timeout: 42_000)
+
+      assert opts[:receive_timeout] == 42_000
+      assert opts[:pool_timeout] == 180_000
+    end
+
+    test "lets per-request pool_timeout override global stream_pool_timeout" do
+      Application.put_env(:req_llm, :stream_pool_timeout, 180_000)
+
+      opts = FinchClient.stream_options(%{}, receive_timeout: 42_000, pool_timeout: 5_000)
+
+      assert opts[:receive_timeout] == 42_000
+      assert opts[:pool_timeout] == 5_000
+    end
+
+    test "uses thinking timeout for streams that enable thinking" do
+      expected = Application.get_env(:req_llm, :thinking_timeout, 300_000)
+
+      opts = FinchClient.stream_options(%{"thinking" => %{"type" => "enabled"}}, [])
+
+      assert opts[:receive_timeout] == expected
+    end
+
+    test "uses stream_pool_strategy config when request pool_strategy is not provided" do
+      Application.put_env(:req_llm, :stream_pool_strategy, Finch.Pool.Strategy.Random)
+
+      opts = FinchClient.stream_options(%{}, receive_timeout: 42_000)
+
+      assert opts[:pool_strategy] == Finch.Pool.Strategy.Random
+    end
+
+    test "lets per-request pool_strategy override global stream_pool_strategy" do
+      Application.put_env(:req_llm, :stream_pool_strategy, Finch.Pool.Strategy.Random)
+
+      opts =
+        FinchClient.stream_options(%{},
+          receive_timeout: 42_000,
+          pool_strategy: Finch.Pool.Strategy.RoundRobin
+        )
+
+      assert opts[:pool_strategy] == Finch.Pool.Strategy.RoundRobin
+    end
+
+    test "rejects invalid configured pool_timeout values" do
+      Application.put_env(:req_llm, :stream_pool_timeout, "bad")
+
+      assert_raise ReqLLM.Error.Invalid.Parameter, fn ->
+        FinchClient.stream_options(%{}, receive_timeout: 42_000)
+      end
+    end
   end
 
   defp restore_app_env(key, nil), do: Application.delete_env(:req_llm, key)

@@ -52,14 +52,18 @@ defmodule ReqLLM.StreamingCase do
   end
 
   @doc """
-  Configure Finch pools with custom protocol list.
+  Configure Finch pools with a custom protocol list or pool map.
   """
   def configure_pools!(protocols) when is_list(protocols) do
+    configure_pools!(%{
+      default: [protocols: protocols, size: 1, count: 8]
+    })
+  end
+
+  def configure_pools!(pools) when is_map(pools) do
     Application.put_env(:req_llm, :finch,
       name: ReqLLM.Finch,
-      pools: %{
-        default: [protocols: protocols, size: 1, count: 8]
-      }
+      pools: pools
     )
   end
 
@@ -68,6 +72,13 @@ defmodule ReqLLM.StreamingCase do
   """
   def configure_http2_pools! do
     configure_pools!([:http2, :http1])
+  end
+
+  @doc """
+  Configure Finch pools to use HTTP/2 only.
+  """
+  def configure_http2_only_pools! do
+    configure_pools!([:http2])
   end
 
   @doc """

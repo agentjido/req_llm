@@ -1,6 +1,10 @@
 defmodule ReqLLM.Application do
   @moduledoc false
 
+  @default_stream_pool_protocols [:http1]
+  @default_stream_pool_size 1
+  @default_stream_pool_count 8
+
   # Application supervisor for ReqLLM.
 
   # Starts and supervises the Finch instance used for all HTTP operations,
@@ -54,10 +58,17 @@ defmodule ReqLLM.Application do
   Users can override pool configurations by setting:
 
       config :req_llm,
+        stream_pool_protocols: [:http1],
+        stream_pool_size: 1,
+        stream_pool_count: 16
+
+  Advanced users can replace the full Finch configuration by setting:
+
+      config :req_llm,
         finch: [
           name: ReqLLM.Finch,
           pools: %{
-            :default => [protocols: [:http2, :http1], size: 1, count: 16]
+            :default => [protocols: [:http2], size: 1, count: 16]
           }
         ]
   """
@@ -65,10 +76,12 @@ defmodule ReqLLM.Application do
   def get_finch_config do
     user_config = Application.get_env(:req_llm, :finch, [])
 
-    default_config = [
-      name: ReqLLM.Finch,
-      pools: get_default_pools()
-    ]
+    default_config =
+      if Keyword.has_key?(user_config, :pools) do
+        [name: ReqLLM.Finch]
+      else
+        [name: ReqLLM.Finch, pools: get_default_pools()]
+      end
 
     Keyword.merge(default_config, user_config)
   end
@@ -87,17 +100,56 @@ defmodule ReqLLM.Application do
   # switch providers by just changing the model spec
   defp get_default_pools do
     %{
-      # Single default pool that handles all providers efficiently
-      # HTTP/1 only to avoid Finch issue #265 (HTTP/2 flow control bug with large bodies)
-      # Once https://github.com/sneako/finch/issues/265 is fixed, we can use [:http2, :http1]
       :default => [
-        protocols: [:http1],
-        # Single persistent connection per pool
-        size: 1,
-        # 8 pools for good concurrency
-        count: 8
+        protocols: stream_pool_protocols(),
+        size: stream_pool_size(),
+        count: stream_pool_count()
       ]
     }
+  end
+
+  defp stream_pool_protocols do
+    :req_llm
+    |> Application.get_env(:stream_pool_protocols, @default_stream_pool_protocols)
+    |> validate_protocols!()
+  end
+
+  defp stream_pool_size do
+    :req_llm
+    |> Application.get_env(:stream_pool_size, @default_stream_pool_size)
+    |> validate_positive_integer!(:stream_pool_size)
+  end
+
+  defp stream_pool_count do
+    :req_llm
+    |> Application.get_env(:stream_pool_count, @default_stream_pool_count)
+    |> validate_positive_integer!(:stream_pool_count)
+  end
+
+  defp validate_positive_integer!(value, _key) when is_integer(value) and value > 0, do: value
+
+  defp validate_positive_integer!(value, key) do
+    raise ReqLLM.Error.Invalid.Parameter.exception(
+            parameter: "#{key} must be a positive integer, got: #{inspect(value)}"
+          )
+  end
+
+  defp validate_protocols!(protocols)
+       when is_list(protocols) and protocols != [] do
+    if Enum.all?(protocols, &(&1 in [:http1, :http2])) do
+      protocols
+    else
+      invalid_protocols!(protocols)
+    end
+  end
+
+  defp validate_protocols!(protocols), do: invalid_protocols!(protocols)
+
+  defp invalid_protocols!(protocols) do
+    raise ReqLLM.Error.Invalid.Parameter.exception(
+            parameter:
+              "stream_pool_protocols must be a non-empty list containing :http1 and/or :http2, got: #{inspect(protocols)}"
+          )
   end
 
   defp dev_children do

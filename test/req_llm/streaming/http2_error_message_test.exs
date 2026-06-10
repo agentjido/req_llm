@@ -19,10 +19,11 @@ defmodule ReqLLM.Streaming.HTTP2ErrorMessageTest do
 
           assert {:error, {:http2_body_too_large, message}} = result
           assert message =~ "Request body"
-          assert message =~ "exceeds safe limit for HTTP/2 connections (64KB)"
+          assert message =~ "exceeds safe limit for mixed HTTP/1+HTTP/2 Finch pools (64KB)"
           assert message =~ "https://github.com/sneako/finch/issues/265"
           assert message =~ "config :req_llm"
-          assert message =~ "protocols: [:http1]"
+          assert message =~ "stream_pool_protocols: [:http1]"
+          assert message =~ "stream_pool_protocols: [:http2]"
           assert message =~ "README"
         end)
 

@@ -6,12 +6,20 @@ defmodule ReqLLM.ApplicationTest do
   setup do
     original_req_llm_load_dotenv = Application.get_env(:req_llm, :load_dotenv)
     original_llm_db_load_dotenv = Application.get_env(:llm_db, :load_dotenv)
+    original_finch = Application.get_env(:req_llm, :finch)
+    original_stream_pool_protocols = Application.get_env(:req_llm, :stream_pool_protocols)
+    original_stream_pool_size = Application.get_env(:req_llm, :stream_pool_size)
+    original_stream_pool_count = Application.get_env(:req_llm, :stream_pool_count)
 
     on_exit(fn ->
       stop_app(:req_llm)
       stop_app(:llm_db)
       restore_app_env(:req_llm, :load_dotenv, original_req_llm_load_dotenv)
       restore_app_env(:llm_db, :load_dotenv, original_llm_db_load_dotenv)
+      restore_app_env(:req_llm, :finch, original_finch)
+      restore_app_env(:req_llm, :stream_pool_protocols, original_stream_pool_protocols)
+      restore_app_env(:req_llm, :stream_pool_size, original_stream_pool_size)
+      restore_app_env(:req_llm, :stream_pool_count, original_stream_pool_count)
       System.delete_env(@dotenv_key)
       Application.ensure_all_started(:llm_db)
       LLMDB.load(custom: Application.get_env(:llm_db, :custom, %{}))
@@ -27,6 +35,58 @@ defmodule ReqLLM.ApplicationTest do
 
       assert Keyword.get(config, :name) == ReqLLM.Finch
       assert is_map(Keyword.get(config, :pools))
+    end
+
+    test "get_finch_config/0 uses stream pool sizing configuration" do
+      Application.delete_env(:req_llm, :finch)
+      Application.put_env(:req_llm, :stream_pool_protocols, [:http2])
+      Application.put_env(:req_llm, :stream_pool_size, 2)
+      Application.put_env(:req_llm, :stream_pool_count, 16)
+
+      pool_config =
+        ReqLLM.Application.get_finch_config()
+        |> Keyword.fetch!(:pools)
+        |> Map.fetch!(:default)
+
+      assert pool_config[:protocols] == [:http2]
+      assert pool_config[:size] == 2
+      assert pool_config[:count] == 16
+    end
+
+    test "get_finch_config/0 lets explicit Finch pools override stream pool sizing" do
+      pools = %{:default => [protocols: [:http1], size: 4, count: 6]}
+
+      Application.put_env(:req_llm, :stream_pool_size, 0)
+      Application.put_env(:req_llm, :stream_pool_count, "many")
+      Application.put_env(:req_llm, :stream_pool_protocols, [:bad])
+      Application.put_env(:req_llm, :finch, name: ReqLLM.Finch, pools: pools)
+
+      config = ReqLLM.Application.get_finch_config()
+
+      assert Keyword.fetch!(config, :pools) == pools
+    end
+
+    test "get_finch_config/0 rejects invalid stream pool sizing" do
+      Application.delete_env(:req_llm, :finch)
+      Application.put_env(:req_llm, :stream_pool_size, 0)
+
+      assert_raise ReqLLM.Error.Invalid.Parameter, ~r/stream_pool_size/, fn ->
+        ReqLLM.Application.get_finch_config()
+      end
+
+      Application.put_env(:req_llm, :stream_pool_size, 1)
+      Application.put_env(:req_llm, :stream_pool_count, "many")
+
+      assert_raise ReqLLM.Error.Invalid.Parameter, ~r/stream_pool_count/, fn ->
+        ReqLLM.Application.get_finch_config()
+      end
+
+      Application.put_env(:req_llm, :stream_pool_count, 8)
+      Application.put_env(:req_llm, :stream_pool_protocols, [:http3])
+
+      assert_raise ReqLLM.Error.Invalid.Parameter, ~r/stream_pool_protocols/, fn ->
+        ReqLLM.Application.get_finch_config()
+      end
     end
 
     test "finch_name/0 returns default name" do

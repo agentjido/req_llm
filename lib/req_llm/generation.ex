@@ -461,7 +461,7 @@ defmodule ReqLLM.Generation do
 
   Returns a `ReqLLM.StreamResponse` that provides both real-time structured data streaming
   and concurrent metadata collection. Uses the same Finch-based streaming infrastructure
-  as `stream_text/3` with HTTP/2 multiplexing and connection pooling.
+  as `stream_text/3` with connection pooling and configurable checkout timeouts.
 
   ## Parameters
 

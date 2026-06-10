@@ -10,6 +10,11 @@ config :req_llm,
   # HTTP timeouts (all values in milliseconds)
   receive_timeout: 120_000,          # Default response timeout
   stream_receive_timeout: 120_000,   # Streaming chunk timeout
+  stream_pool_timeout: 120_000,      # Streaming connection checkout timeout
+  stream_pool_protocols: [:http1],   # Default stream pool protocols
+  stream_pool_size: 1,               # HTTP/1 connections per stream pool worker
+  stream_pool_count: 8,              # Stream pool workers per origin
+  stream_pool_strategy: nil,         # Finch shard selection strategy
   metadata_timeout: 120_000,         # Streaming metadata collection timeout
   thinking_timeout: 300_000,         # Extended timeout for reasoning models
   image_receive_timeout: 120_000,    # Image generation timeout
@@ -56,6 +61,66 @@ Timeout between streaming chunks. If no data arrives within this window, the str
 config :req_llm, stream_receive_timeout: 120_000
 ```
 
+### `stream_pool_timeout` (when unset: inherits from `stream_receive_timeout`)
+
+Timeout for checking out a Finch connection before a streaming request starts. Increase this when short bursts of concurrent streams can queue behind long-running responses.
+
+```elixir
+config :req_llm, stream_pool_timeout: 300_000
+```
+
+Per-request override:
+
+```elixir
+ReqLLM.stream_text(model, messages, pool_timeout: 300_000)
+```
+
+### `stream_pool_protocols` (default: `[:http1]`)
+
+Protocols for ReqLLM's default Finch stream pool. Use HTTP/1 for broad provider compatibility, or HTTP/2-only when all target providers support HTTP/2.
+
+```elixir
+config :req_llm, stream_pool_protocols: [:http2]
+```
+
+Avoid mixed HTTP/1+HTTP/2 ALPN pools for large prompts. Due to a Finch flow-control issue, `[:http2, :http1]` and `[:http1, :http2]` may fail when request bodies exceed 64KB.
+
+### `stream_pool_size` (default: 1)
+
+Maximum HTTP/1 connections per stream pool worker. With the default HTTP/1 transport, concurrent streams per origin are roughly `stream_pool_size * stream_pool_count`.
+
+```elixir
+config :req_llm, stream_pool_size: 2
+```
+
+### `stream_pool_count` (default: 8)
+
+Number of stream pool workers per origin. Increase this when high concurrent streaming load produces Finch checkout queue timeouts and the downstream provider can handle more simultaneous streams.
+
+```elixir
+config :req_llm, stream_pool_count: 32
+```
+
+### `stream_pool_strategy` (default: `nil`)
+
+Finch shard selection strategy used when `stream_pool_count` is greater than 1. Finch defaults to random shard selection. Large streaming deployments can use round-robin to spread stream starts evenly across pool workers:
+
+```elixir
+# config/runtime.exs
+round_robin = Finch.Pool.Strategy.RoundRobin.new()
+
+config :req_llm,
+  stream_pool_strategy: {Finch.Pool.Strategy.RoundRobin, round_robin}
+```
+
+Per-request override:
+
+```elixir
+ReqLLM.stream_text(model, messages, pool_strategy: Finch.Pool.Strategy.Random)
+```
+
+These settings configure ReqLLM's default Finch pool. If you set `config :req_llm, finch: [pools: ...]`, that explicit Finch pool configuration takes precedence.
+
 ### `thinking_timeout` (default: 300,000ms / 5 minutes)
 
 Extended timeout for reasoning models that "think" before responding (e.g., Claude with extended thinking, OpenAI o1/o3 models, Z.AI thinking mode). These models may take several minutes to produce the first token.
@@ -93,23 +158,36 @@ config :req_llm, image_receive_timeout: 180_000
 
 ## Connection Pool Configuration
 
-ReqLLM uses Finch for HTTP connections. By default, HTTP/1-only pools are used due to a [known Finch issue with HTTP/2 and large request bodies](https://github.com/sneako/finch/issues/265).
+ReqLLM uses Finch for HTTP connections. By default, HTTP/1-only pools are used because Finch's mixed HTTP/1+HTTP/2 ALPN pools have a [known large-body flow-control issue](https://github.com/sneako/finch/issues/265).
+
+Streaming responses hold a connection until the stream completes. With the default HTTP/1 configuration, each origin can run up to `size * count` concurrent checked-out connections before new streams wait in Finch's checkout queue.
 
 ### Default Configuration
 
 ```elixir
 config :req_llm,
-  finch: [
-    name: ReqLLM.Finch,
-    pools: %{
-      :default => [protocols: [:http1], size: 1, count: 8]
-    }
-  ]
+  stream_pool_protocols: [:http1],
+  stream_pool_size: 1,
+  stream_pool_count: 8
 ```
 
 ### High-Concurrency Configuration
 
 For applications making many concurrent requests:
+
+```elixir
+# config/runtime.exs
+round_robin = Finch.Pool.Strategy.RoundRobin.new()
+
+config :req_llm,
+  stream_pool_timeout: 300_000,
+  stream_pool_protocols: [:http1],
+  stream_pool_size: 1,
+  stream_pool_count: 32,
+  stream_pool_strategy: {Finch.Pool.Strategy.RoundRobin, round_robin}
+```
+
+When this is not enough or when you need origin-specific settings, replace the full Finch pool configuration:
 
 ```elixir
 config :req_llm,
@@ -121,9 +199,37 @@ config :req_llm,
   ]
 ```
 
+If you see `Finch was unable to provide a connection within the timeout due to excess queuing for connections`, tune both sides of the limit:
+
+- Raise `stream_pool_timeout` when bursty workloads can safely wait for an existing stream to finish.
+- Increase `stream_pool_count` or `stream_pool_size` when the downstream provider and your rate limits can handle more simultaneous streams.
+- Add application-level concurrency limits when provider rate limits, costs, or latency make unbounded queueing unsafe.
+
+For example, to allow roughly 32 concurrent HTTP/1 streams per provider origin:
+
+```elixir
+# config/runtime.exs
+round_robin = Finch.Pool.Strategy.RoundRobin.new()
+
+config :req_llm,
+  stream_pool_timeout: 300_000,
+  stream_pool_protocols: [:http1],
+  stream_pool_size: 1,
+  stream_pool_count: 32,
+  stream_pool_strategy: {Finch.Pool.Strategy.RoundRobin, round_robin}
+```
+
 ### HTTP/2 Configuration (Advanced)
 
-Use with caution—HTTP/2 pools may fail with request bodies larger than 64KB:
+Use HTTP/2-only when all target providers support HTTP/2:
+
+```elixir
+config :req_llm,
+  stream_pool_protocols: [:http2],
+  stream_pool_count: 8
+```
+
+Use mixed HTTP/1+HTTP/2 ALPN pools with caution. They may fail with request bodies larger than 64KB:
 
 ```elixir
 config :req_llm,
@@ -295,16 +401,15 @@ inspect(context)
 config :req_llm,
   receive_timeout: 120_000,
   stream_receive_timeout: 120_000,
+  stream_pool_timeout: 120_000,
+  stream_pool_protocols: [:http1],
+  stream_pool_size: 1,
+  stream_pool_count: 16,
+  stream_pool_strategy: nil,
   thinking_timeout: 300_000,
   metadata_timeout: 120_000,
   telemetry: [payloads: :none],
-  load_dotenv: false,  # Use proper secrets management in production
-  finch: [
-    name: ReqLLM.Finch,
-    pools: %{
-      :default => [protocols: [:http1], size: 1, count: 16]
-    }
-  ]
+  load_dotenv: false  # Use proper secrets management in production
 ```
 
 ## Example: Development Configuration
