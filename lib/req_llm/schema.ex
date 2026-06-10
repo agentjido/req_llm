@@ -396,55 +396,17 @@ defmodule ReqLLM.Schema do
         :boolean ->
           %{"type" => "boolean"}
 
-        {:list, :string} ->
-          %{"type" => "array", "items" => %{"type" => "string"}}
+        :map ->
+          %{"type" => "object"}
 
-        {:list, :integer} ->
-          %{"type" => "array", "items" => %{"type" => "integer"}}
+        :keyword_list ->
+          %{"type" => "object"}
 
-        {:list, :boolean} ->
-          %{"type" => "array", "items" => %{"type" => "boolean"}}
-
-        {:list, :float} ->
-          %{"type" => "array", "items" => %{"type" => "number"}}
-
-        {:list, :number} ->
-          %{"type" => "array", "items" => %{"type" => "number"}}
-
-        {:list, :pos_integer} ->
-          %{"type" => "array", "items" => %{"type" => "integer", "minimum" => 1}}
-
-        # Handle {:list, {:in, choices}} for arrays with enum constraints - must be before general {:list, item_type}
-        {:list, {:in, choices}} when is_list(choices) ->
-          %{"type" => "array", "items" => %{"type" => "string", "enum" => choices}}
-
-        {:list, {:in, first..last//_step}} ->
-          %{
-            "type" => "array",
-            "items" => %{"type" => "integer", "minimum" => first, "maximum" => last}
-          }
-
-        {:list, {:in, %MapSet{} = choices}} ->
-          %{
-            "type" => "array",
-            "items" => %{"type" => "string", "enum" => MapSet.to_list(choices)}
-          }
-
-        {:list, {:in, choices}} when is_struct(choices) ->
-          try do
-            %{
-              "type" => "array",
-              "items" => %{"type" => "string", "enum" => Enum.to_list(choices)}
-            }
-          rescue
-            _ -> %{"type" => "array", "items" => %{"type" => "string"}}
-          end
+        :atom ->
+          %{"type" => "string"}
 
         {:list, item_type} ->
           %{"type" => "array", "items" => nimble_type_to_json_schema(item_type, [])}
-
-        :map ->
-          %{"type" => "object"}
 
         {:map, opts} when is_list(opts) and opts != [] ->
           property_ordering = Enum.map(opts, fn {key, _prop_opts} -> to_string(key) end)
@@ -464,12 +426,6 @@ defmodule ReqLLM.Schema do
 
         {:map, _} ->
           %{"type" => "object"}
-
-        :keyword_list ->
-          %{"type" => "object"}
-
-        :atom ->
-          %{"type" => "string"}
 
         # Handle :in type for enums and ranges
         {:in, choices} when is_list(choices) ->
