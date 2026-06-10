@@ -387,6 +387,9 @@ defmodule ReqLLM.Schema do
         :pos_integer ->
           %{"type" => "integer", "minimum" => 1}
 
+        :non_neg_integer ->
+          %{"type" => "integer", "minimum" => 0}
+
         :float ->
           %{"type" => "number"}
 

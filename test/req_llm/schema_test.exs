@@ -176,6 +176,11 @@ defmodule ReqLLM.SchemaTest do
                "type" => "integer",
                "minimum" => 1
              }
+
+      assert Schema.nimble_type_to_json_schema(:non_neg_integer, []) == %{
+               "type" => "integer",
+               "minimum" => 0
+             }
     end
 
     test "converts list types" do
@@ -207,6 +212,11 @@ defmodule ReqLLM.SchemaTest do
       assert Schema.nimble_type_to_json_schema({:list, :pos_integer}, []) == %{
                "type" => "array",
                "items" => %{"type" => "integer", "minimum" => 1}
+             }
+
+      assert Schema.nimble_type_to_json_schema({:list, :non_neg_integer}, []) == %{
+               "type" => "array",
+               "items" => %{"type" => "integer", "minimum" => 0}
              }
     end
 
