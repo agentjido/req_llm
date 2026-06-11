@@ -852,7 +852,37 @@ defmodule ReqLLM.Provider.DefaultsTest do
 
       finish_chunk = Enum.find(chunks, &Map.has_key?(&1.metadata, :finish_reason))
       assert finish_chunk.metadata.finish_reason == :stop
-      assert finish_chunk.metadata.terminal? == true
+      refute Map.get(finish_chunk.metadata, :terminal?)
+    end
+
+    test "finish_reason chunk is not terminal - a usage chunk may still follow", %{model: model} do
+      # With stream_options.include_usage, the final usage chunk arrives in a
+      # separate SSE event *after* finish_reason. Marking finish_reason
+      # terminal finalized the stream early and dropped that usage whenever
+      # it landed in a later network chunk. Stream termination is signaled by
+      # the standalone usage chunk, [DONE], or HTTP stream end instead.
+      event = %{
+        data: %{
+          "choices" => [%{"delta" => %{}, "finish_reason" => "tool_calls"}]
+        }
+      }
+
+      chunks = Defaults.default_decode_stream_event(event, model)
+
+      finish_chunk = Enum.find(chunks, &Map.has_key?(&1.metadata, :finish_reason))
+      assert finish_chunk.metadata.finish_reason == :tool_calls
+      refute Map.get(finish_chunk.metadata, :terminal?)
+
+      # The standalone usage chunk (empty choices) remains the terminal signal
+      usage_event = %{
+        data: %{
+          "choices" => [],
+          "usage" => %{"prompt_tokens" => 10, "completion_tokens" => 5, "total_tokens" => 15}
+        }
+      }
+
+      assert [usage_chunk] = Defaults.default_decode_stream_event(usage_event, model)
+      assert usage_chunk.metadata.terminal? == true
     end
 
     test "emits terminal error chunk for SSE error event with nested message", %{model: model} do
