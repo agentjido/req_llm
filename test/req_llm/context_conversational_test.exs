@@ -365,5 +365,54 @@ defmodule ReqLLM.ContextConversationalTest do
       refute Map.has_key?(ok_msg.metadata, :is_error)
       assert fail_msg.metadata[:is_error] == true
     end
+
+    test "parameter validation error is handled", %{context: ctx, success_tool: success_tool} do
+      tool_calls = [
+        %ReqLLM.ToolCall{
+          id: "invalid_call",
+          type: "function",
+          function: %{name: "echo", arguments: ~s({"text":42})}
+        }
+      ]
+
+      result = Context.execute_and_append_tools(ctx, tool_calls, [success_tool])
+
+      [invalid_call_msg] = Enum.filter(result.messages, &(&1.role == :tool))
+
+      assert %{
+               is_error: true,
+               tool_output: %{
+                 error: "invalid value for :text option: expected string, got: 42"
+               }
+             } == invalid_call_msg.metadata
+    end
+
+    test "exceptions inside tool calls are handled", %{context: ctx} do
+      raising_tool =
+        ReqLLM.Tool.new!(
+          name: "raise",
+          description: "Always raises",
+          callback: fn _args -> raise "hell" end
+        )
+
+      tool_calls = [
+        %ReqLLM.ToolCall{
+          id: "raise_call",
+          type: "function",
+          function: %{name: "raise", arguments: ~s({})}
+        }
+      ]
+
+      result = Context.execute_and_append_tools(ctx, tool_calls, [raising_tool])
+
+      [invalid_call_msg] = Enum.filter(result.messages, &(&1.role == :tool))
+
+      assert %{
+               is_error: true,
+               tool_output: %{
+                 error: "Unknown error: \"Callback execution failed: hell\""
+               }
+             } == invalid_call_msg.metadata
+    end
   end
 end
