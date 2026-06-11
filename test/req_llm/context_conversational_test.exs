@@ -281,6 +281,53 @@ defmodule ReqLLM.ContextConversationalTest do
       assert tool_msg.metadata[:is_error] == true
     end
 
+    test "non-exception callback errors are handled", %{context: ctx} do
+      map_error_tool =
+        ReqLLM.Tool.new!(
+          name: "map_error",
+          description: "Returns a map error",
+          callback: fn _args -> {:error, %{reason: "nope"}} end
+        )
+
+      tuple_error_tool =
+        ReqLLM.Tool.new!(
+          name: "tuple_error",
+          description: "Returns a tuple error",
+          callback: fn _args -> {:error, {:bad, :thing}} end
+        )
+
+      tool_calls = [
+        %ReqLLM.ToolCall{
+          id: "map_error_call",
+          type: "function",
+          function: %{name: "map_error", arguments: ~s({})}
+        },
+        %ReqLLM.ToolCall{
+          id: "tuple_error_call",
+          type: "function",
+          function: %{name: "tuple_error", arguments: ~s({})}
+        }
+      ]
+
+      result =
+        Context.execute_and_append_tools(ctx, tool_calls, [map_error_tool, tuple_error_tool])
+
+      tool_messages = Enum.filter(result.messages, &(&1.role == :tool))
+
+      map_error_msg = Enum.find(tool_messages, &(&1.tool_call_id == "map_error_call"))
+      tuple_error_msg = Enum.find(tool_messages, &(&1.tool_call_id == "tuple_error_call"))
+
+      assert %{
+               is_error: true,
+               tool_output: %{error: "%{reason: \"nope\"}"}
+             } == map_error_msg.metadata
+
+      assert %{
+               is_error: true,
+               tool_output: %{error: "{:bad, :thing}"}
+             } == tuple_error_msg.metadata
+    end
+
     test "error path sets is_error for ToolResult errors", %{
       error_tool_result: tool,
       context: ctx
