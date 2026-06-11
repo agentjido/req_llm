@@ -1029,6 +1029,14 @@ defmodule ReqLLM.Provider.Options do
 
   defp base_url_from_application_config(provider_id) do
     config = Application.get_env(:req_llm, provider_id, [])
-    Keyword.get(config, :base_url)
+    config_value(config, :base_url)
   end
+
+  defp config_value(config, key) when is_list(config), do: Keyword.get(config, key)
+
+  defp config_value(config, key) when is_map(config) do
+    Map.get(config, key) || Map.get(config, Atom.to_string(key))
+  end
+
+  defp config_value(_config, _key), do: nil
 end

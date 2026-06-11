@@ -99,12 +99,19 @@ defmodule ReqLLM.Availability do
   end
 
   defp google_vertex_configured?(opts) do
+    config = Application.get_env(:req_llm, :google_vertex, [])
+
     service_account_json =
       option_value(opts, :service_account_json) ||
+        config_value(config, :service_account_json) ||
         System.get_env("GOOGLE_APPLICATION_CREDENTIALS")
 
-    access_token = option_value(opts, :access_token)
-    project_id = option_value(opts, :project_id) || System.get_env("GOOGLE_CLOUD_PROJECT")
+    access_token = option_value(opts, :access_token) || config_value(config, :access_token)
+
+    project_id =
+      option_value(opts, :project_id) ||
+        config_value(config, :project_id) ||
+        System.get_env("GOOGLE_CLOUD_PROJECT")
 
     present?(project_id) and (present?(service_account_json) or present?(access_token))
   end
@@ -123,6 +130,14 @@ defmodule ReqLLM.Availability do
   defp option_value(opts, key) do
     Keyword.get(opts, key) || provider_option_value(opts, key)
   end
+
+  defp config_value(config, key) when is_list(config), do: Keyword.get(config, key)
+
+  defp config_value(config, key) when is_map(config) do
+    Map.get(config, key) || Map.get(config, Atom.to_string(key))
+  end
+
+  defp config_value(_config, _key), do: nil
 
   defp provider_option_value(opts, key) do
     case Keyword.get(opts, :provider_options, []) do

@@ -33,6 +33,7 @@ defmodule ReqLLM.AvailabilityTest do
     :deepseek_api_key,
     :elevenlabs_api_key,
     :google_api_key,
+    :google_vertex,
     :groq_api_key,
     :openai_api_key,
     :openrouter_api_key,
@@ -105,6 +106,28 @@ defmodule ReqLLM.AvailabilityTest do
       assert ReqLLM.available_models(scope: :google_vertex) == []
 
       System.put_env("GOOGLE_CLOUD_PROJECT", "test-project")
+
+      models = ReqLLM.available_models(scope: :google_vertex)
+
+      assert Enum.any?(models, &String.starts_with?(&1, "google_vertex:"))
+    end
+
+    test "detects google vertex keyword application config" do
+      Application.put_env(:req_llm, :google_vertex,
+        service_account_json: "/tmp/service-account.json",
+        project_id: "test-project"
+      )
+
+      models = ReqLLM.available_models(scope: :google_vertex)
+
+      assert Enum.any?(models, &String.starts_with?(&1, "google_vertex:"))
+    end
+
+    test "detects google vertex map application config" do
+      Application.put_env(:req_llm, :google_vertex, %{
+        "access_token" => "test-token",
+        "project_id" => "test-project"
+      })
 
       models = ReqLLM.available_models(scope: :google_vertex)
 

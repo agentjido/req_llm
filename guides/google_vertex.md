@@ -16,6 +16,15 @@ GOOGLE_CLOUD_PROJECT="your-project-id"
 GOOGLE_CLOUD_REGION="global"
 ```
 
+**Application Config:**
+
+```elixir
+config :req_llm, :google_vertex,
+  service_account_json: "/path/to/service-account.json",
+  project_id: "your-project-id",
+  region: "global"
+```
+
 **Provider Options:**
 
 ```elixir
@@ -44,7 +53,7 @@ Passed via `:provider_options` keyword:
 
 - **Type**: String (file path)
 - **Purpose**: Path to Google Cloud service account JSON file
-- **Fallback**: `GOOGLE_APPLICATION_CREDENTIALS` env var
+- **Fallback**: `config :req_llm, :google_vertex`, then `GOOGLE_APPLICATION_CREDENTIALS` env var
 - **Example**: `provider_options: [service_account_json: "/path/to/credentials.json"]`
 
 ### `access_token`
@@ -52,13 +61,14 @@ Passed via `:provider_options` keyword:
 - **Type**: String
 - **Purpose**: Use an existing OAuth2 access token generated outside ReqLLM (e.g., via Goth or gcloud)
 - **Behavior**: Bypasses the service account JSON flow and internal token management
+- **Fallback**: `config :req_llm, :google_vertex`
 - **Example**: `provider_options: [access_token: "your-access-token"]`
 
 ### `project_id`
 
 - **Type**: String
 - **Purpose**: Google Cloud project ID
-- **Fallback**: `GOOGLE_CLOUD_PROJECT` env var
+- **Fallback**: `config :req_llm, :google_vertex`, then `GOOGLE_CLOUD_PROJECT` env var
 - **Example**: `provider_options: [project_id: "my-project-123"]`
 - **Required**: Yes
 
@@ -67,6 +77,7 @@ Passed via `:provider_options` keyword:
 - **Type**: String
 - **Default**: `"global"`
 - **Purpose**: GCP region for Vertex AI endpoint
+- **Fallback**: `config :req_llm, :google_vertex`, then `GOOGLE_CLOUD_REGION` env var
 - **Example**: `provider_options: [region: "us-central1"]`
 - **Note**: Use `"global"` for newest models, specific regions for regional deployment
 

@@ -53,6 +53,12 @@ defmodule ReqLLM.Providers.GoogleVertex do
         ]
       )
 
+      # Option 5: Application config
+      config :req_llm, :google_vertex,
+        service_account_json: "/path/to/service-account.json",
+        project_id: "your-project-id",
+        region: "us-central1"
+
   ### Access Token
 
       ReqLLM.generate_text(
@@ -492,7 +498,7 @@ defmodule ReqLLM.Providers.GoogleVertex do
   end
 
   defp fetch_access_token(%{service_account_json: service_account_json})
-       when is_binary(service_account_json) do
+       when is_binary(service_account_json) or is_map(service_account_json) do
     ReqLLM.Providers.GoogleVertex.TokenCache.get_or_refresh(service_account_json)
   end
 
@@ -669,8 +675,12 @@ defmodule ReqLLM.Providers.GoogleVertex do
         rest -> Keyword.put(other_opts, :provider_options, rest)
       end
 
-    # Merge: top-level takes precedence over provider_options
-    merged = Keyword.merge(provider_creds, top_creds)
+    config_creds = google_vertex_config()
+
+    merged =
+      config_creds
+      |> Keyword.merge(provider_creds)
+      |> Keyword.merge(top_creds)
 
     creds = %{
       service_account_json:
@@ -683,6 +693,25 @@ defmodule ReqLLM.Providers.GoogleVertex do
 
     {creds, other_opts}
   end
+
+  defp google_vertex_config do
+    config = Application.get_env(:req_llm, :google_vertex, [])
+
+    Enum.reduce([:service_account_json, :access_token, :project_id, :region], [], fn key, acc ->
+      case config_value(config, key) do
+        nil -> acc
+        value -> Keyword.put(acc, key, value)
+      end
+    end)
+  end
+
+  defp config_value(config, key) when is_list(config), do: Keyword.get(config, key)
+
+  defp config_value(config, key) when is_map(config) do
+    Map.get(config, key) || Map.get(config, Atom.to_string(key))
+  end
+
+  defp config_value(_config, _key), do: nil
 
   # Validate GCP credentials
   defp validate_gcp_credentials!(creds) do
@@ -705,13 +734,18 @@ defmodule ReqLLM.Providers.GoogleVertex do
            access_token: "ya29.ci...",
            project_id: "your-project-id"
          ]
+
+      4. Application config:
+         config :req_llm, :google_vertex,
+           service_account_json: "/path/to/service-account.json",
+           project_id: "your-project-id"
       """
     end
 
     if !creds[:project_id] do
       raise ArgumentError, """
       Google Cloud project ID required for Vertex AI.
-      Set GOOGLE_CLOUD_PROJECT environment variable or pass project_id in provider_options.
+      Set GOOGLE_CLOUD_PROJECT environment variable, configure :google_vertex, or pass project_id in provider_options.
       """
     end
 
