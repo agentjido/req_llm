@@ -196,7 +196,7 @@ defmodule ReqLLM.MixProject do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      extra_applications: [:logger, :xmerl],
+      extra_applications: [:logger, :crypto],
       included_applications: [:llm_db],
       mod: {ReqLLM.Application, []}
     ]
@@ -212,7 +212,6 @@ defmodule ReqLLM.MixProject do
       {:ex_aws_auth, "~> 1.3"},
       {:server_sent_events, "~> 1.1.0"},
       {:splode, "~> 0.3.0"},
-      {:uniq, "~> 0.6"},
       {:websockex, "~> 0.5.1"},
       {:zoi, "~> 0.14"},
       {:jsv, "~> 0.11"},

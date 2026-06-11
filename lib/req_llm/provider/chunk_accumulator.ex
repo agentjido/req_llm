@@ -437,5 +437,5 @@ defmodule ReqLLM.Provider.ChunkAccumulator do
 
   defp encode_tool_call_args(_args), do: "{}"
 
-  defp generate_tool_call_id, do: "call_#{Uniq.UUID.uuid7()}"
+  defp generate_tool_call_id, do: "call_#{ReqLLM.ID.uuid7()}"
 end

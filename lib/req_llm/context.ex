@@ -746,7 +746,7 @@ defmodule ReqLLM.Context do
   end
 
   defp generate_id do
-    Uniq.UUID.uuid7()
+    ReqLLM.ID.uuid7()
   end
 
   defp to_parts(s) when is_binary(s) do

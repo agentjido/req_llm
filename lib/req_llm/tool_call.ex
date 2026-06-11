@@ -180,7 +180,7 @@ defmodule ReqLLM.ToolCall do
   def put_metadata(%__MODULE__{} = call, _metadata), do: call
 
   defp generate_id do
-    "call_#{Uniq.UUID.uuid7()}"
+    "call_#{ReqLLM.ID.uuid7()}"
   end
 
   @doc """
