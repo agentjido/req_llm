@@ -1342,6 +1342,54 @@ defmodule ReqLLM.Providers.AnthropicTest do
       assert thinking_block[:signature] == "sig_test_123"
       assert text_block == %{type: "text", text: "Answer: 42"}
     end
+
+    test "empty streamed tool arguments do not report lost args" do
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
+      context = %ReqLLM.Context{messages: []}
+
+      events = [
+        %{
+          data: %{
+            "type" => "content_block_start",
+            "index" => 0,
+            "content_block" => %{
+              "type" => "tool_use",
+              "id" => "toolu_empty_args",
+              "name" => "test_tool",
+              "input" => %{}
+            }
+          }
+        },
+        %{
+          data: %{
+            "type" => "content_block_delta",
+            "index" => 0,
+            "delta" => %{"type" => "input_json_delta", "partial_json" => ""}
+          }
+        },
+        %{data: %{"type" => "content_block_stop", "index" => 0}}
+      ]
+
+      {chunks, _state} =
+        Enum.reduce(events, {[], Anthropic.init_stream_state(model)}, fn event, {acc, state} ->
+          {event_chunks, next_state} = Anthropic.decode_stream_event(event, model, state)
+          {acc ++ event_chunks, next_state}
+        end)
+
+      {:ok, response} =
+        ReqLLM.Providers.Anthropic.ResponseBuilder.build_response(
+          chunks,
+          %{finish_reason: :tool_calls},
+          context: context,
+          model: model
+        )
+
+      assert [tool_call] = response.message.tool_calls
+      assert tool_call.id == "toolu_empty_args"
+      assert tool_call.function.name == "test_tool"
+      assert tool_call.function.arguments == "{}"
+      refute get_in(tool_call.function, [:metadata, :error])
+    end
   end
 
   describe "option translation" do
