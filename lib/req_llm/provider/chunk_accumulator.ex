@@ -206,7 +206,7 @@ defmodule ReqLLM.Provider.ChunkAccumulator do
     args = Map.get(metadata, :tool_call_args) || Map.get(metadata, "tool_call_args")
 
     with args when is_map(args) <- args,
-         fragment when is_binary(fragment) and fragment != "" <-
+         fragment when is_binary(fragment) <-
            Map.get(args, :fragment) || Map.get(args, "fragment") do
       {Map.get(args, :index, Map.get(args, "index", 0)), fragment}
     else
@@ -306,16 +306,23 @@ defmodule ReqLLM.Provider.ChunkAccumulator do
 
       iodata ->
         json = IO.iodata_to_binary(iodata)
+        response_tool_call_from_json(tool_call, json)
+    end
+  end
 
-        case Jason.decode(json) do
-          {:ok, args} ->
-            tool_call
-            |> Map.put(:arguments, args)
-            |> drop_accumulator_fields()
+  defp response_tool_call_from_json(tool_call, "") do
+    drop_accumulator_fields(tool_call)
+  end
 
-          {:error, _} ->
-            args_lost(tool_call, :json_decode_error, json)
-        end
+  defp response_tool_call_from_json(tool_call, json) do
+    case Jason.decode(json) do
+      {:ok, args} ->
+        tool_call
+        |> Map.put(:arguments, args)
+        |> drop_accumulator_fields()
+
+      {:error, _} ->
+        args_lost(tool_call, :json_decode_error, json)
     end
   end
 

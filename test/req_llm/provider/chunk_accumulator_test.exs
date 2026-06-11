@@ -113,6 +113,20 @@ defmodule ReqLLM.Provider.ChunkAccumulatorTest do
       assert IO.iodata_to_binary(acc.arg_fragments[0]) == "{\"location\":\"SF\"}"
     end
 
+    test "tracks empty argument fragments by index" do
+      acc =
+        ChunkAccumulator.push(
+          ChunkAccumulator.new(),
+          %StreamChunk{
+            type: :meta,
+            metadata: %{tool_call_args: %{index: 0, fragment: ""}}
+          }
+        )
+
+      assert Map.has_key?(acc.arg_fragments, 0)
+      assert IO.iodata_to_binary(acc.arg_fragments[0]) == ""
+    end
+
     test "collects reasoning_details across meta chunks in arrival order" do
       details_a = %{provider: :openai, text: "first"}
       details_b = %{provider: :openai, text: "second"}
@@ -284,6 +298,29 @@ defmodule ReqLLM.Provider.ChunkAccumulatorTest do
 
       assert_receive {:args_lost, "call_missing_fragments", %{count: 1},
                       %{reason: :missing_fragments}}
+    end
+
+    test "does not mark empty expected argument fragments as missing" do
+      attach_args_lost_handler("call_empty_fragments")
+
+      acc =
+        ChunkAccumulator.new()
+        |> ChunkAccumulator.push(%StreamChunk{
+          type: :tool_call,
+          name: "test_tool",
+          arguments: %{},
+          metadata: %{id: "call_empty_fragments", index: 0, start: true}
+        })
+        |> ChunkAccumulator.push(%StreamChunk{
+          type: :meta,
+          metadata: %{tool_call_args: %{index: 0, fragment: ""}}
+        })
+
+      assert [%{arguments: %{}} = tool_call] =
+               ChunkAccumulator.finalize_tool_calls_for_response(acc)
+
+      refute Map.has_key?(tool_call, :metadata)
+      refute_receive {:args_lost, "call_empty_fragments", _, _}
     end
 
     test "returns [] for empty accumulator" do
