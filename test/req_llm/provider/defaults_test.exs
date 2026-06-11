@@ -856,11 +856,6 @@ defmodule ReqLLM.Provider.DefaultsTest do
     end
 
     test "finish_reason chunk is not terminal - a usage chunk may still follow", %{model: model} do
-      # With stream_options.include_usage, the final usage chunk arrives in a
-      # separate SSE event *after* finish_reason. Marking finish_reason
-      # terminal finalized the stream early and dropped that usage whenever
-      # it landed in a later network chunk. Stream termination is signaled by
-      # the standalone usage chunk, [DONE], or HTTP stream end instead.
       event = %{
         data: %{
           "choices" => [%{"delta" => %{}, "finish_reason" => "tool_calls"}]
@@ -873,7 +868,6 @@ defmodule ReqLLM.Provider.DefaultsTest do
       assert finish_chunk.metadata.finish_reason == :tool_calls
       refute Map.get(finish_chunk.metadata, :terminal?)
 
-      # The standalone usage chunk (empty choices) remains the terminal signal
       usage_event = %{
         data: %{
           "choices" => [],

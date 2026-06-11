@@ -1150,15 +1150,6 @@ defmodule ReqLLM.Provider.Defaults do
 
             if finish_reason do
               normalized_reason = parse_openai_finish_reason(finish_reason)
-
-              # The finish_reason chunk is deliberately NOT marked terminal:
-              # it is not the end of an OpenAI-compatible stream. With
-              # stream_options.include_usage (set automatically when
-              # streaming), a final usage chunk (choices: []) arrives *after*
-              # it, and marking finish_reason terminal finalized the stream
-              # early - dropping usage whenever it landed in a later network
-              # chunk. Termination is signaled by the standalone usage chunk
-              # below, the [DONE] event, or HTTP stream end.
               meta_chunk = ReqLLM.StreamChunk.meta(%{finish_reason: normalized_reason})
 
               content_chunks ++
