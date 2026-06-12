@@ -626,6 +626,14 @@ defmodule ReqLLM do
     end
   end
 
+  defp resolve_provider_model_fallback(:github_copilot, model_id, _original_error) do
+    model(%{
+      provider: :github_copilot,
+      id: model_id,
+      extra: %{wire: %{protocol: "openai_chat"}}
+    })
+  end
+
   defp resolve_provider_model_fallback(:mistral, model_id, _original_error) do
     model(mistral_inline_model_attrs(model_id))
   end
