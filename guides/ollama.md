@@ -12,7 +12,7 @@ Run local LLMs with [Ollama](https://ollama.ai) using the OpenAI-compatible API.
 
 For the full model-spec workflow, see [Model Specs](model-specs.md).
 
-Ollama is a good example of the full explicit model specification path: the model may not exist in LLMDB, but ReqLLM can still use it as long as the model spec includes `provider`, `id`, and `base_url`.
+Ollama is a good example of the full explicit model specification path: the model may not exist in LLMDB, but ReqLLM can still use it as long as the model spec includes `provider` and `id`. Use provider config for the base URL when you need a custom Ollama host.
 
 ## Native Provider (recommended)
 
@@ -35,19 +35,53 @@ ReqLLM.generate_object("ollama:llama3", "What is 2+2?", schema)
 For jido_ai users, set a model alias in config and it resolves automatically:
 
 ```elixir
-config :jido_ai, model_aliases: [default: "ollama:gemma4:27b"]
+config :jido_ai,
+  model_aliases: %{
+    fast: %{provider: :ollama, id: "gemma4:27b"}
+  }
 ```
 
 The existing model-struct approach (`provider: :openai, base_url: "..."`) continues to
 work unchanged.
 
-## Usage
+## Configuration Boundaries
 
-Ollama exposes an OpenAI-compatible API, so use the `:openai` provider with a custom `base_url`:
+ReqLLM owns provider connection settings. For Ollama, configure the host/base URL
+under `:req_llm`:
 
 ```elixir
-# Create a model struct for your Ollama model
-model = ReqLLM.model!(%{id: "llama3", provider: :openai, base_url: "http://localhost:11434/v1"})
+config :req_llm, :ollama,
+  base_url: System.get_env("OLLAMA_BASE_URL", "http://localhost:11434/v1")
+```
+
+Model selection should stay at the call site or in downstream package aliases. Do
+not put an Ollama model name in ReqLLM provider config; Ollama can serve many
+models from the same base URL, so model choice is workload policy rather than
+connection configuration.
+
+For downstream packages such as `jido_ai`, keep the model in that package's
+alias/default config and let ReqLLM supply the provider connection details:
+
+```elixir
+config :req_llm, :ollama,
+  base_url: "http://localhost:11434/v1"
+
+config :jido_ai,
+  model_aliases: %{
+    fast: %{provider: :ollama, id: "llama3.2"},
+    capable: %{provider: :ollama, id: "qwen2.5-coder:14b"}
+  }
+```
+
+The inline alias form avoids the "unverified model" warning that can appear with
+`"ollama:<model>"` when a local model is not present in the LLMDB catalog.
+
+## Usage
+
+Use the built-in `:ollama` provider with an inline model spec:
+
+```elixir
+model = ReqLLM.model!(%{id: "llama3.2", provider: :ollama})
 
 {:ok, response} = ReqLLM.generate_text(model, "Hello!")
 ```
@@ -55,13 +89,35 @@ model = ReqLLM.model!(%{id: "llama3", provider: :openai, base_url: "http://local
 ### Streaming
 
 ```elixir
-model = ReqLLM.model!(%{id: "gemma2", provider: :openai, base_url: "http://localhost:11434/v1"})
+model = ReqLLM.model!(%{id: "gemma2", provider: :ollama})
 
-{:ok, stream} = ReqLLM.stream_text(model, "Write a haiku")
+{:ok, stream_response} = ReqLLM.stream_text(model, "Write a haiku")
 
-for chunk <- stream do
-  IO.write(chunk.text || "")
-end
+stream_response
+|> ReqLLM.StreamResponse.tokens()
+|> Enum.each(&IO.write/1)
+```
+
+Using `"ollama:<model>"` also works, but local model names may not exist in the
+LLMDB catalog yet. In that case ReqLLM emits an "unverified model" warning; the
+inline model spec above avoids that warning for local smoke tests.
+
+## OpenAI-Compatible Fallback
+
+Ollama exposes an OpenAI-compatible API. If you need to bypass the native provider,
+use the `:openai` provider with a custom `base_url` and mark the backend as Ollama
+so no OpenAI API key is required:
+
+```elixir
+model =
+  ReqLLM.model!(%{
+    id: "llama3.2",
+    provider: :openai,
+    base_url: "http://localhost:11434/v1",
+    extra: %{openai_compatible_backend: :ollama}
+  })
+
+{:ok, response} = ReqLLM.generate_text(model, "Hello!")
 ```
 
 ## Helper Module
@@ -70,15 +126,13 @@ For convenience, create a wrapper module:
 
 ```elixir
 defmodule MyApp.Ollama do
-  @base_url "http://localhost:11434/v1"
-
   def generate_text(model_name, prompt, opts \\ []) do
-    model = ReqLLM.model!(%{id: model_name, provider: :openai, base_url: @base_url})
+    model = ReqLLM.model!(%{id: model_name, provider: :ollama})
     ReqLLM.generate_text(model, prompt, opts)
   end
 
   def stream_text(model_name, prompt, opts \\ []) do
-    model = ReqLLM.model!(%{id: model_name, provider: :openai, base_url: @base_url})
+    model = ReqLLM.model!(%{id: model_name, provider: :ollama})
     ReqLLM.stream_text(model, prompt, opts)
   end
 end
@@ -92,7 +146,7 @@ MyApp.Ollama.generate_text("gemma2", "Write a poem", temperature: 0.9)
 
 | Model | Command | Notes |
 |-------|---------|-------|
-| Llama 3 | `ollama pull llama3` | Meta's latest, good general purpose |
+| Llama 3 | `ollama pull llama3` | Meta general purpose model family |
 | Gemma 2 | `ollama pull gemma2` | Google's efficient model |
 | Mistral | `ollama pull mistral` | Fast, good for coding |
 | CodeLlama | `ollama pull codellama` | Specialized for code |
