@@ -118,6 +118,32 @@ defmodule ReqLLM.Providers.GitHubCopilotTest do
       assert body["max_tokens"] == 40
     end
 
+    test "build_body translates forced tool choice to OpenAI function shape" do
+      model = ReqLLM.model!(%{provider: :github_copilot, id: "gpt-4o-mini"})
+
+      tool =
+        ReqLLM.tool(
+          name: "add",
+          description: "Add two integers",
+          parameter_schema: [
+            a: [type: :integer, required: true],
+            b: [type: :integer, required: true]
+          ],
+          callback: fn _args -> {:ok, 5} end
+        )
+
+      {:ok, request} =
+        GitHubCopilot.prepare_request(:chat, model, "Use add for 2 + 3",
+          api_key: "test-token",
+          tools: [tool],
+          tool_choice: %{type: "tool", name: "add"}
+        )
+
+      body = GitHubCopilot.build_body(request)
+
+      assert body[:tool_choice] == %{type: "function", function: %{name: "add"}}
+    end
+
     test "custom base_url is preserved for Copilot-compatible deployments" do
       model =
         ReqLLM.model!(%{

@@ -51,6 +51,12 @@ defmodule ReqLLM.Providers.GitHubCopilot do
   def display_name, do: "GitHub Copilot"
 
   @impl ReqLLM.Provider
+  def build_body(request) do
+    ReqLLM.Provider.Defaults.default_build_body(request)
+    |> ReqLLM.Providers.OpenAI.AdapterHelpers.translate_tool_choice_format()
+  end
+
+  @impl ReqLLM.Provider
   def attach(request, model_input, user_opts) do
     {:ok, %LLMDB.Model{} = model} = ReqLLM.model(model_input)
 

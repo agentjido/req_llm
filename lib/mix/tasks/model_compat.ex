@@ -592,20 +592,7 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
   end
 
   defp parse_test_result(provider, model_id, output, exit_code, scenario) do
-    {passed, failed, total} =
-      cond do
-        match = Regex.run(~r/(\d+) tests?, 0 failures/, output) ->
-          count = String.to_integer(Enum.at(match, 1))
-          {count, 0, count}
-
-        match = Regex.run(~r/(\d+) tests?, (\d+) failures?/, output) ->
-          total = String.to_integer(Enum.at(match, 1))
-          failed = String.to_integer(Enum.at(match, 2))
-          {total - failed, failed, total}
-
-        true ->
-          {0, 1, 1}
-      end
+    {passed, failed, total} = parse_exunit_summary(output)
 
     status = if exit_code == 0 && failed == 0, do: :pass, else: :fail
     fixtures = extract_fixtures(output)
@@ -622,6 +609,32 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
       fixtures: fixtures,
       scenario: scenario
     }
+  end
+
+  @doc false
+  def parse_exunit_summary(output) do
+    cond do
+      match = Regex.run(~r/Result:\s+(\d+)\/(\d+)\s+passed/, output) ->
+        passed = String.to_integer(Enum.at(match, 1))
+        total = String.to_integer(Enum.at(match, 2))
+        {passed, total - passed, total}
+
+      match = Regex.run(~r/Result:\s+(\d+)\s+passed/, output) ->
+        passed = String.to_integer(Enum.at(match, 1))
+        {passed, 0, passed}
+
+      match = Regex.run(~r/(\d+) tests?, 0 failures/, output) ->
+        count = String.to_integer(Enum.at(match, 1))
+        {count, 0, count}
+
+      match = Regex.run(~r/(\d+) tests?, (\d+) failures?/, output) ->
+        total = String.to_integer(Enum.at(match, 1))
+        failed = String.to_integer(Enum.at(match, 2))
+        {total - failed, failed, total}
+
+      true ->
+        {0, 1, 1}
+    end
   end
 
   defp aggregate_scenario_results(results, provider, model_id) do

@@ -119,6 +119,18 @@ defmodule Mix.Tasks.ReqLlm.ModelCompatTest do
     end
   end
 
+  describe "parse_exunit_summary/1" do
+    test "parses default ExUnit summaries" do
+      assert ModelCompat.parse_exunit_summary("10 tests, 0 failures") == {10, 0, 10}
+      assert ModelCompat.parse_exunit_summary("10 tests, 2 failures") == {8, 2, 10}
+    end
+
+    test "parses result formatter summaries" do
+      assert ModelCompat.parse_exunit_summary("Result: 1 passed, 9 excluded") == {1, 0, 1}
+      assert ModelCompat.parse_exunit_summary("Result: 0/1 passed, 9 excluded") == {0, 1, 1}
+    end
+  end
+
   describe "run/1" do
     test "raises clearly for unknown operation types" do
       Mix.Task.reenable("req_llm.model_compat")
