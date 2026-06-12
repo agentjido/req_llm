@@ -32,6 +32,29 @@ defmodule ReqLLM.Test.Env do
   @default_timeout 30_000
 
   @doc """
+  Snapshots the given environment variables, deletes them for the duration of
+  the test, and restores them on exit.
+
+  Call from a `setup` block. Tests using this must be `async: false` since
+  environment variables are global.
+  """
+  @spec isolate!([String.t()]) :: :ok
+  def isolate!(vars) do
+    snapshot = Map.new(vars, &{&1, System.get_env(&1)})
+
+    Enum.each(vars, &System.delete_env/1)
+
+    ExUnit.Callbacks.on_exit(fn ->
+      Enum.each(snapshot, fn
+        {var, nil} -> System.delete_env(var)
+        {var, value} -> System.put_env(var, value)
+      end)
+    end)
+
+    :ok
+  end
+
+  @doc """
   Get fixture recording/replay mode.
 
   ## Valid Values

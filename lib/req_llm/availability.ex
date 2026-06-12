@@ -1,6 +1,8 @@
 defmodule ReqLLM.Availability do
   @moduledoc false
 
+  import ReqLLM.Provider.Utils, only: [present_env: 1]
+
   @query_opts [:scope, :prefer, :require, :forbid]
 
   @azure_api_key_env_vars [
@@ -103,8 +105,7 @@ defmodule ReqLLM.Availability do
 
     service_account_json =
       option_value(opts, :service_account_json) ||
-        config_value(config, :service_account_json) ||
-        System.get_env("GOOGLE_APPLICATION_CREDENTIALS")
+        config_value(config, :service_account_json)
 
     access_token = option_value(opts, :access_token) || config_value(config, :access_token)
 
@@ -113,18 +114,12 @@ defmodule ReqLLM.Availability do
         config_value(config, :project_id) ||
         System.get_env("GOOGLE_CLOUD_PROJECT")
 
-    present?(project_id) and (present?(service_account_json) or present?(access_token))
+    present?(project_id) and
+      (present?(service_account_json) or present?(access_token) or google_adc_available?())
   end
 
   defp first_present_env(vars) do
     Enum.find_value(vars, &present_env/1)
-  end
-
-  defp present_env(var) do
-    case System.get_env(var) do
-      value when is_binary(value) and value != "" -> value
-      _ -> nil
-    end
   end
 
   defp option_value(opts, key) do
@@ -178,4 +173,16 @@ defmodule ReqLLM.Availability do
 
   defp present?(value) when is_binary(value), do: value != ""
   defp present?(value), do: not is_nil(value)
+
+  defp google_adc_available? do
+    # Local ADC credentials, or env hints that a GCP metadata server is
+    # reachable. Plain GCE VMs and GKE pods set none of these env vars, so
+    # this under-reports availability there even though the metadata-server
+    # fallback in Auth would succeed at request time — we accept that rather
+    # than probing the metadata server over the network here.
+    ReqLLM.Providers.GoogleVertex.Auth.adc_credentials_present?() or
+      present_env("GCE_METADATA_HOST") != nil or
+      present_env("K_SERVICE") != nil or
+      present_env("GAE_ENV") != nil
+  end
 end

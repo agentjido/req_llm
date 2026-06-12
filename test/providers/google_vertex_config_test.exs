@@ -11,20 +11,12 @@ defmodule ReqLLM.Providers.GoogleVertex.ConfigTest do
   ]
 
   setup do
-    env_snapshot = Map.new(@env_vars, &{&1, System.get_env(&1)})
-    app_config = Application.get_env(:req_llm, :google_vertex)
+    ReqLLM.Test.Env.isolate!(@env_vars)
 
-    Enum.each(@env_vars, &System.delete_env/1)
+    app_config = Application.get_env(:req_llm, :google_vertex)
     Application.delete_env(:req_llm, :google_vertex)
 
-    on_exit(fn ->
-      Enum.each(env_snapshot, fn
-        {var, nil} -> System.delete_env(var)
-        {var, value} -> System.put_env(var, value)
-      end)
-
-      restore_application_env(app_config)
-    end)
+    on_exit(fn -> restore_application_env(app_config) end)
 
     :ok
   end
@@ -108,6 +100,79 @@ defmodule ReqLLM.Providers.GoogleVertex.ConfigTest do
       assert url =~ "us-central1-aiplatform.googleapis.com"
       assert url =~ "projects/config-project"
       assert creds[:service_account_json] == "/tmp/config-service-account.json"
+      assert match?({:service_account, "/tmp/config-service-account.json"}, creds[:auth_source])
+    end
+
+    test "uses ADC auth source when only project configuration is present" do
+      System.put_env("GOOGLE_CLOUD_PROJECT", "env-project")
+      System.put_env("GOOGLE_CLOUD_REGION", "europe-west4")
+
+      {:ok, model} = ReqLLM.model("google_vertex:gemini-2.5-pro")
+      {:ok, request} = GoogleVertex.prepare_request(:chat, model, context_fixture(), [])
+
+      url = URI.to_string(request.url)
+      creds = Req.Request.get_private(request, :gcp_credentials)
+
+      assert url =~ "europe-west4-aiplatform.googleapis.com"
+      assert url =~ "projects/env-project"
+      assert creds[:service_account_json] == nil
+      assert creds[:auth_source] == :adc
+    end
+
+    test "treats GOOGLE_APPLICATION_CREDENTIALS as ADC instead of service_account_json" do
+      System.put_env(
+        "GOOGLE_APPLICATION_CREDENTIALS",
+        "/tmp/application-default-credentials.json"
+      )
+
+      System.put_env("GOOGLE_CLOUD_PROJECT", "env-project")
+
+      {:ok, model} = ReqLLM.model("google_vertex:gemini-2.5-pro")
+      {:ok, request} = GoogleVertex.prepare_request(:chat, model, context_fixture(), [])
+
+      creds = Req.Request.get_private(request, :gcp_credentials)
+
+      assert creds[:service_account_json] == nil
+      assert creds[:auth_source] == :adc
+    end
+
+    test "treats empty GOOGLE_CLOUD_REGION as unset and falls back to global" do
+      System.put_env("GOOGLE_CLOUD_PROJECT", "env-project")
+      System.put_env("GOOGLE_CLOUD_REGION", "")
+
+      {:ok, model} = ReqLLM.model("google_vertex:gemini-2.5-pro")
+      {:ok, request} = GoogleVertex.prepare_request(:chat, model, context_fixture(), [])
+
+      creds = Req.Request.get_private(request, :gcp_credentials)
+
+      assert creds[:region] == "global"
+    end
+
+    test "treats empty GOOGLE_CLOUD_PROJECT as missing and raises" do
+      System.put_env("GOOGLE_CLOUD_PROJECT", "")
+
+      {:ok, model} = ReqLLM.model("google_vertex:gemini-2.5-pro")
+
+      assert_raise ArgumentError, ~r/project ID required/, fn ->
+        GoogleVertex.prepare_request(:chat, model, context_fixture(), [])
+      end
+    end
+
+    test "treats empty access_token and service_account_json as ADC" do
+      System.put_env("GOOGLE_CLOUD_PROJECT", "env-project")
+
+      {:ok, model} = ReqLLM.model("google_vertex:gemini-2.5-pro")
+
+      {:ok, request} =
+        GoogleVertex.prepare_request(:chat, model, context_fixture(),
+          provider_options: [access_token: "", service_account_json: ""]
+        )
+
+      creds = Req.Request.get_private(request, :gcp_credentials)
+
+      assert creds[:access_token] == nil
+      assert creds[:service_account_json] == nil
+      assert creds[:auth_source] == :adc
     end
   end
 

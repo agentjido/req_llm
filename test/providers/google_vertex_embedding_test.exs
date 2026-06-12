@@ -6,7 +6,7 @@ defmodule ReqLLM.Providers.GoogleVertex.EmbeddingTest do
   normalization for the :predict endpoint used by Vertex AI embeddings.
   """
 
-  use ExUnit.Case, async: true
+  use ExUnit.Case, async: false
 
   alias ReqLLM.Providers.GoogleVertex
 
@@ -17,6 +17,16 @@ defmodule ReqLLM.Providers.GoogleVertex.EmbeddingTest do
     project_id: "test-project",
     region: "us-central1"
   ]
+
+  @env_vars [
+    "GOOGLE_APPLICATION_CREDENTIALS",
+    "GOOGLE_CLOUD_PROJECT",
+    "GOOGLE_CLOUD_REGION"
+  ]
+
+  setup do
+    ReqLLM.Test.Env.isolate!(@env_vars)
+  end
 
   describe "prepare_request(:embedding, ...) single text" do
     test "builds correct predict endpoint URL" do

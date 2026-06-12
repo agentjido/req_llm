@@ -4,9 +4,32 @@ Access Claude, Gemini, and MaaS models through Google Cloud's Vertex AI platform
 
 ## Configuration
 
-Vertex AI uses Google Cloud OAuth2 authentication with service accounts.
+Vertex AI uses Google Cloud OAuth2 authentication. ReqLLM uses Application
+Default Credentials (ADC) by default.
 
-### Service Account (Recommended)
+### Application Default Credentials (Recommended)
+
+For local development:
+
+```bash
+gcloud auth application-default login
+export GOOGLE_CLOUD_PROJECT="your-project-id"
+export GOOGLE_CLOUD_REGION="global"
+```
+
+ReqLLM checks ADC sources in this order:
+
+1. `GOOGLE_APPLICATION_CREDENTIALS` pointing to an ADC credential file
+2. `GOOGLE_APPLICATION_CREDENTIALS_JSON` containing ADC credential JSON
+3. The well-known gcloud ADC file, such as `~/.config/gcloud/application_default_credentials.json` (honors `CLOUDSDK_CONFIG`)
+4. The Google Cloud metadata server
+
+Supported ADC credential types include user ADC credentials from `gcloud auth
+application-default login`, service account keys, workload identity credential
+configuration files, and metadata server credentials. Local ADC files of type
+`impersonated_service_account` are not supported yet.
+
+### Service Account
 
 **Environment Variables:**
 
@@ -51,10 +74,11 @@ Passed via `:provider_options` keyword:
 
 ### `service_account_json`
 
-- **Type**: String (file path)
-- **Purpose**: Path to Google Cloud service account JSON file
-- **Fallback**: `config :req_llm, :google_vertex`, then `GOOGLE_APPLICATION_CREDENTIALS` env var
+- **Type**: String (file path or JSON string) or map
+- **Purpose**: Explicit Google Cloud service account JSON credentials
+- **Fallback**: `config :req_llm, :google_vertex`
 - **Example**: `provider_options: [service_account_json: "/path/to/credentials.json"]`
+- **Note**: For normal ADC usage, prefer `GOOGLE_APPLICATION_CREDENTIALS` instead of this option.
 
 ### `access_token`
 

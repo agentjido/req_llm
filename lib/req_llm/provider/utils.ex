@@ -48,6 +48,32 @@ defmodule ReqLLM.Provider.Utils do
   def maybe_put(opts, key, value) when is_map(opts), do: Map.put(opts, key, value)
 
   @doc """
+  Returns the value if it is a non-empty binary, otherwise nil.
+
+  Useful for treating empty strings from options or env vars as unset.
+
+  ## Examples
+
+      iex> ReqLLM.Provider.Utils.presence("value")
+      "value"
+
+      iex> ReqLLM.Provider.Utils.presence("")
+      nil
+
+      iex> ReqLLM.Provider.Utils.presence(nil)
+      nil
+  """
+  @spec presence(term()) :: binary() | nil
+  def presence(value) when is_binary(value) and value != "", do: value
+  def presence(_value), do: nil
+
+  @doc """
+  Returns the value of an environment variable if it is set to a non-empty string.
+  """
+  @spec present_env(String.t()) :: String.t() | nil
+  def present_env(var), do: presence(System.get_env(var))
+
+  @doc """
   Conditionally adds a key-value pair to opts, skipping if value is nil or in skip_values list.
 
   This is useful for providers that need to omit certain default values from API requests.

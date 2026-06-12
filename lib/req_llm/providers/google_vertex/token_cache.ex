@@ -2,31 +2,36 @@ defmodule ReqLLM.Providers.GoogleVertex.TokenCache do
   @moduledoc """
   OAuth2 token cache for Google Vertex AI.
 
-  Caches access tokens per service account to avoid expensive token
+  Caches access tokens per Google auth source to avoid expensive token
   generation on every request.
 
   ## Lifecycle
 
   - Started by ReqLLM.Application supervision tree
   - One cache per node (not distributed)
-  - Tokens cached for 55 minutes (5 minute safety margin)
+  - Tokens cached until the auth source's reported expiry
 
   ## Usage
 
       # Provider calls this instead of Auth.get_access_token/1 directly
-      {:ok, token} = TokenCache.get_or_refresh(service_account_json_path)
+      {:ok, token} = TokenCache.get_or_refresh(:adc)
 
   ## Cache Key
 
-  For file paths: the path string is used as the cache key.
-  For JSON strings or maps: the `client_email` field is used as the cache key.
+  For ADC: `{:adc, scope}` is used as the cache key, where scope identifies
+  the credential location (env var path, inline JSON, well-known file, or
+  metadata server) so swapping credentials at runtime does not serve stale
+  tokens.
+  For service account file paths: the path string is used as the cache key.
+  For service account JSON strings or maps: the `client_email` field is used
+  as the cache key.
 
-  This allows multiple service accounts to be used simultaneously with
+  This allows ADC and multiple service accounts to be used simultaneously with
   independent token caches.
 
   ## Expiry & Refresh
 
-  Tokens are cached for 55 minutes (5 minute safety margin before 1 hour expiry).
+  Tokens are cached until the token expiry reported by the auth source.
   The GenServer serializes concurrent refresh requests to prevent duplicate token
   fetches when the cache is empty or expired.
   """
@@ -53,38 +58,46 @@ defmodule ReqLLM.Providers.GoogleVertex.TokenCache do
   - Expiry checking
   - Concurrent request deduplication
 
-  Accepts credentials in multiple formats:
-  - File path (string, if file exists) - uses path as cache key
-  - JSON string (string, if not a file) - uses client_email as cache key
-  - Map (already parsed) - uses client_email as cache key
+  Accepts auth sources in multiple formats:
+  - `:adc` - uses Application Default Credentials
+  - `{:service_account, credentials}` - uses explicit service account credentials
+  - Legacy service account credentials directly
 
   ## Examples
 
-      iex> TokenCache.get_or_refresh("/path/to/service-account.json")
+      iex> TokenCache.get_or_refresh(:adc)
       {:ok, "ya29.c.Kl6iB..."}
 
-      iex> TokenCache.get_or_refresh(~s({"client_email": "...", "private_key": "..."}))
+      iex> TokenCache.get_or_refresh({:service_account, "/path/to/service-account.json"})
       {:ok, "ya29.c.Kl6iB..."}
 
       iex> TokenCache.get_or_refresh("/invalid/path.json")
       {:error, :enoent}
   """
-  @spec get_or_refresh(service_account :: String.t() | map()) ::
+  @spec get_or_refresh(
+          source :: :adc | {:service_account, String.t() | map()} | String.t() | map()
+        ) ::
           {:ok, access_token :: String.t()} | {:error, term()}
-  def get_or_refresh(service_account) do
-    GenServer.call(__MODULE__, {:get_or_refresh, service_account})
+  def get_or_refresh(source, opts \\ []) do
+    # Resolve the cache key in the caller: it reads env vars and stats files,
+    # which must not run inside the GenServer that serializes all requests.
+    case resolve_cache_key(source, opts) do
+      {:error, reason} ->
+        {:error, reason}
+
+      {cache_key, auth_source} ->
+        GenServer.call(__MODULE__, {:get_or_refresh, cache_key, auth_source, opts})
+    end
   end
 
   @doc """
-  Invalidates cached token for a service account.
+  Invalidates cached token for an auth source.
 
   Useful for testing or when credentials are rotated.
 
-  The cache_key should match what was used for caching:
-  - File path if credentials were provided as a file path
-  - client_email if credentials were provided as JSON string or map
+  The cache key should match what was used for caching.
   """
-  @spec invalidate(cache_key :: String.t()) :: :ok
+  @spec invalidate(cache_key :: term()) :: :ok
   def invalidate(cache_key) do
     GenServer.call(__MODULE__, {:invalidate, cache_key})
   end
@@ -112,22 +125,13 @@ defmodule ReqLLM.Providers.GoogleVertex.TokenCache do
   end
 
   @impl true
-  def handle_call({:get_or_refresh, service_account}, _from, state) do
-    case resolve_cache_key(service_account) do
-      {:error, reason} ->
-        {:reply, {:error, reason}, state}
+  def handle_call({:get_or_refresh, cache_key, auth_source, opts}, _from, state) do
+    case lookup_token(state.table, cache_key) do
+      {:ok, token} ->
+        {:reply, {:ok, token}, state}
 
-      {cache_key, parsed_or_path} ->
-        case lookup_token(state.table, cache_key) do
-          {:ok, token} ->
-            {:reply, {:ok, token}, state}
-
-          :expired ->
-            refresh_and_cache(state, cache_key, parsed_or_path)
-
-          :not_found ->
-            refresh_and_cache(state, cache_key, parsed_or_path)
-        end
+      _miss ->
+        refresh_and_cache(state, cache_key, auth_source, opts)
     end
   end
 
@@ -159,13 +163,27 @@ defmodule ReqLLM.Providers.GoogleVertex.TokenCache do
     end
   end
 
-  defp refresh_and_cache(state, cache_key, service_account) do
-    case ReqLLM.Providers.GoogleVertex.Auth.get_access_token(service_account) do
-      {:ok, token} ->
+  defp refresh_and_cache(state, cache_key, auth_source, opts) do
+    token_fetcher =
+      Keyword.get(
+        opts,
+        :token_fetcher,
+        &ReqLLM.Providers.GoogleVertex.Auth.fetch_access_token/2
+      )
+
+    case token_fetcher.(auth_source, opts) do
+      {:ok, %{token: token, expires_at: expires_at}} ->
+        :ets.insert(state.table, {cache_key, token, expires_at})
+
+        Logger.debug("Cached OAuth2 token for #{inspect(cache_key)}")
+
+        {:reply, {:ok, token}, state}
+
+      {:ok, token} when is_binary(token) ->
         expires_at = System.system_time(:second) + @cache_ttl_seconds
         :ets.insert(state.table, {cache_key, token, expires_at})
 
-        Logger.debug("Cached OAuth2 token for #{cache_key}, expires in #{@cache_ttl_seconds}s")
+        Logger.debug("Cached OAuth2 token for #{inspect(cache_key)}")
 
         {:reply, {:ok, token}, state}
 
@@ -174,23 +192,40 @@ defmodule ReqLLM.Providers.GoogleVertex.TokenCache do
     end
   end
 
-  # Resolve cache key based on credential type
-  defp resolve_cache_key(service_account) when is_map(service_account) do
-    # Already parsed map - normalize to string keys and use client_email as cache key
-    normalized = Utils.stringify_keys(service_account)
-    {normalized["client_email"], normalized}
+  defp resolve_cache_key(:adc, opts) do
+    {{:adc, ReqLLM.Providers.GoogleVertex.Auth.adc_cache_scope(opts)}, :adc}
   end
 
-  defp resolve_cache_key(path_or_json) when is_binary(path_or_json) do
-    # Check if it's a file path first (more reliable than checking for "{")
+  defp resolve_cache_key({:service_account, service_account}, _opts) do
+    with {:ok, cache_key} <- service_account_cache_key(service_account) do
+      {{:service_account, cache_key}, {:service_account, service_account}}
+    end
+  end
+
+  defp resolve_cache_key(service_account, opts) when is_map(service_account) do
+    resolve_cache_key({:service_account, service_account}, opts)
+  end
+
+  defp resolve_cache_key(path_or_json, opts) when is_binary(path_or_json) do
+    resolve_cache_key({:service_account, path_or_json}, opts)
+  end
+
+  defp service_account_cache_key(service_account) when is_map(service_account) do
+    normalized = Utils.stringify_keys(service_account)
+
+    case normalized["client_email"] do
+      email when is_binary(email) and email != "" -> {:ok, email}
+      _ -> {:error, "Invalid service account credentials: missing client_email"}
+    end
+  end
+
+  defp service_account_cache_key(path_or_json) when is_binary(path_or_json) do
     if File.exists?(path_or_json) do
-      # File path - use path as cache key, let Auth read the file
-      {path_or_json, path_or_json}
+      {:ok, path_or_json}
     else
-      # Not a file - try parsing as JSON string
       case Jason.decode(path_or_json) do
         {:ok, parsed} ->
-          {parsed["client_email"], parsed}
+          service_account_cache_key(parsed)
 
         {:error, _reason} ->
           {:error,

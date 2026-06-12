@@ -14,9 +14,14 @@ defmodule ReqLLM.AvailabilityTest do
     "DEEPSEEK_API_KEY",
     "DASHSCOPE_API_KEY",
     "ELEVENLABS_API_KEY",
+    "CLOUDSDK_CONFIG",
+    "GAE_ENV",
+    "GCE_METADATA_HOST",
     "GOOGLE_API_KEY",
     "GOOGLE_APPLICATION_CREDENTIALS",
+    "GOOGLE_APPLICATION_CREDENTIALS_JSON",
     "GOOGLE_CLOUD_PROJECT",
+    "K_SERVICE",
     "GROQ_API_KEY",
     "OPENROUTER_API_KEY",
     "OPENAI_API_KEY",
@@ -44,20 +49,15 @@ defmodule ReqLLM.AvailabilityTest do
   ]
 
   setup do
-    env_snapshot = Map.new(@env_vars, &{&1, System.get_env(&1)})
+    ReqLLM.Test.Env.isolate!(@env_vars)
+
     app_snapshot = Map.new(@app_keys, &{&1, Application.get_env(:req_llm, &1)})
     azure_snapshot = Application.get_env(:req_llm, :azure)
 
-    Enum.each(@env_vars, &System.delete_env/1)
     Enum.each(@app_keys, &Application.delete_env(:req_llm, &1))
     Application.delete_env(:req_llm, :azure)
 
     on_exit(fn ->
-      Enum.each(env_snapshot, fn
-        {var, nil} -> System.delete_env(var)
-        {var, value} -> System.put_env(var, value)
-      end)
-
       Enum.each(app_snapshot, fn
         {key, nil} -> Application.delete_env(:req_llm, key)
         {key, value} -> Application.put_env(:req_llm, key, value)
@@ -105,6 +105,52 @@ defmodule ReqLLM.AvailabilityTest do
 
       assert ReqLLM.available_models(scope: :google_vertex) == []
 
+      System.put_env("GOOGLE_CLOUD_PROJECT", "test-project")
+
+      models = ReqLLM.available_models(scope: :google_vertex)
+
+      assert Enum.any?(models, &String.starts_with?(&1, "google_vertex:"))
+    end
+
+    test "requires some google credential source even when project is set" do
+      # Point the well-known ADC lookup at an empty directory so a real
+      # ~/.config/gcloud file on the host cannot leak into the test.
+      empty_config_dir =
+        Path.join(System.tmp_dir!(), "req_llm_no_adc_#{System.unique_integer([:positive])}")
+
+      File.mkdir_p!(empty_config_dir)
+      System.put_env("CLOUDSDK_CONFIG", empty_config_dir)
+      System.put_env("GOOGLE_CLOUD_PROJECT", "test-project")
+
+      assert ReqLLM.available_models(scope: :google_vertex) == []
+    end
+
+    test "detects google vertex via GOOGLE_APPLICATION_CREDENTIALS_JSON" do
+      empty_config_dir =
+        Path.join(System.tmp_dir!(), "req_llm_no_adc_#{System.unique_integer([:positive])}")
+
+      File.mkdir_p!(empty_config_dir)
+      System.put_env("CLOUDSDK_CONFIG", empty_config_dir)
+      System.put_env("GOOGLE_CLOUD_PROJECT", "test-project")
+      System.put_env("GOOGLE_APPLICATION_CREDENTIALS_JSON", ~s({"type":"authorized_user"}))
+
+      models = ReqLLM.available_models(scope: :google_vertex)
+
+      assert Enum.any?(models, &String.starts_with?(&1, "google_vertex:"))
+    end
+
+    test "detects google vertex via the well-known gcloud ADC file" do
+      config_dir =
+        Path.join(System.tmp_dir!(), "req_llm_adc_#{System.unique_integer([:positive])}")
+
+      File.mkdir_p!(config_dir)
+
+      File.write!(
+        Path.join(config_dir, "application_default_credentials.json"),
+        ~s({"type":"authorized_user"})
+      )
+
+      System.put_env("CLOUDSDK_CONFIG", config_dir)
       System.put_env("GOOGLE_CLOUD_PROJECT", "test-project")
 
       models = ReqLLM.available_models(scope: :google_vertex)

@@ -13,16 +13,21 @@ defmodule ReqLLM.Providers.GoogleVertex do
 
   ## Authentication
 
-  Vertex AI uses Google Cloud OAuth2 authentication with service accounts.
+  Vertex AI uses Google Cloud OAuth2 authentication. Application Default
+  Credentials (ADC) are used by default.
 
-  ### Service Account (Recommended)
+  ### Application Default Credentials (Recommended)
 
-      # Option 1: Environment variables
-      export GOOGLE_APPLICATION_CREDENTIALS="/path/to/service-account.json"
+      gcloud auth application-default login
       export GOOGLE_CLOUD_PROJECT="your-project-id"
       export GOOGLE_CLOUD_REGION="us-central1"
 
-      # Option 2: File path in options
+  `GOOGLE_APPLICATION_CREDENTIALS` can also point to any ADC credential file
+  supported by the Google auth library.
+
+  ### Service Account
+
+      # File path in options
       ReqLLM.generate_text(
         "google-vertex:claude-haiku-4-5@20251001",
         "Hello",
@@ -102,6 +107,8 @@ defmodule ReqLLM.Providers.GoogleVertex do
     default_base_url: "https://{region}-aiplatform.googleapis.com",
     default_env_key: "GOOGLE_APPLICATION_CREDENTIALS"
 
+  import ReqLLM.Provider.Utils, only: [presence: 1, present_env: 1]
+
   alias ReqLLM.ModelHelpers
 
   require Logger
@@ -109,9 +116,7 @@ defmodule ReqLLM.Providers.GoogleVertex do
   @provider_schema [
     service_account_json: [
       type: {:or, [:string, :map]},
-      doc:
-        "Service account credentials: file path, JSON string, or pre-parsed map " <>
-          "(can also use GOOGLE_APPLICATION_CREDENTIALS env var for file path)"
+      doc: "Explicit service account credentials: file path, JSON string, or pre-parsed map"
     ],
     access_token: [
       type: :string,
@@ -497,9 +502,8 @@ defmodule ReqLLM.Providers.GoogleVertex do
     {:ok, token}
   end
 
-  defp fetch_access_token(%{service_account_json: service_account_json})
-       when is_binary(service_account_json) or is_map(service_account_json) do
-    ReqLLM.Providers.GoogleVertex.TokenCache.get_or_refresh(service_account_json)
+  defp fetch_access_token(%{auth_source: auth_source}) when not is_nil(auth_source) do
+    ReqLLM.Providers.GoogleVertex.TokenCache.get_or_refresh(auth_source)
   end
 
   defp fetch_access_token(_), do: {:error, :missing_credentials}
@@ -682,13 +686,20 @@ defmodule ReqLLM.Providers.GoogleVertex do
       |> Keyword.merge(provider_creds)
       |> Keyword.merge(top_creds)
 
+    access_token = presence(merged[:access_token])
+
+    service_account_json =
+      case merged[:service_account_json] do
+        value when is_map(value) -> value
+        value -> presence(value)
+      end
+
     creds = %{
-      service_account_json:
-        merged[:service_account_json] ||
-          System.get_env("GOOGLE_APPLICATION_CREDENTIALS"),
-      project_id: merged[:project_id] || System.get_env("GOOGLE_CLOUD_PROJECT"),
-      region: merged[:region] || System.get_env("GOOGLE_CLOUD_REGION") || "global",
-      access_token: merged[:access_token]
+      service_account_json: service_account_json,
+      project_id: presence(merged[:project_id]) || present_env("GOOGLE_CLOUD_PROJECT"),
+      region: presence(merged[:region]) || present_env("GOOGLE_CLOUD_REGION") || "global",
+      access_token: access_token,
+      auth_source: auth_source(access_token, service_account_json)
     }
 
     {creds, other_opts}
@@ -713,44 +724,30 @@ defmodule ReqLLM.Providers.GoogleVertex do
 
   defp config_value(_config, _key), do: nil
 
-  # Validate GCP credentials
   defp validate_gcp_credentials!(creds) do
-    if !creds[:service_account_json] and !creds[:access_token] do
-      raise ArgumentError, """
-      Google Cloud credentials required for Vertex AI. Please provide either:
-
-      1. Environment variables:
-         GOOGLE_APPLICATION_CREDENTIALS=/path/to/service-account.json
-         GOOGLE_CLOUD_PROJECT=your-project-id
-
-      2. Service account:
-         provider_options: [
-           service_account_json: "/path/to/service-account.json",
-           project_id: "your-project-id"
-         ]
-
-      3. Access token:
-         provider_options: [
-           access_token: "ya29.ci...",
-           project_id: "your-project-id"
-         ]
-
-      4. Application config:
-         config :req_llm, :google_vertex,
-           service_account_json: "/path/to/service-account.json",
-           project_id: "your-project-id"
-      """
-    end
-
     if !creds[:project_id] do
       raise ArgumentError, """
       Google Cloud project ID required for Vertex AI.
       Set GOOGLE_CLOUD_PROJECT environment variable, configure :google_vertex, or pass project_id in provider_options.
+
+      Vertex AI authentication uses Application Default Credentials by default.
+      Run `gcloud auth application-default login`, set GOOGLE_APPLICATION_CREDENTIALS to an ADC credential file,
+      or pass access_token/service_account_json explicitly.
       """
     end
 
     creds
   end
+
+  defp auth_source(access_token, _service_account_json)
+       when is_binary(access_token) and byte_size(access_token) > 0,
+       do: nil
+
+  defp auth_source(_access_token, service_account_json)
+       when is_binary(service_account_json) or is_map(service_account_json),
+       do: {:service_account, service_account_json}
+
+  defp auth_source(_access_token, _service_account_json), do: :adc
 
   # Decode response
   def decode_response({request, response}) do

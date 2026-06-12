@@ -10,6 +10,74 @@ defmodule ReqLLM.Providers.GoogleVertex.TokenCacheTest do
   end
 
   describe "get_or_refresh/1" do
+    test "caches ADC tokens by default source" do
+      {:ok, counter} = Agent.start_link(fn -> 0 end)
+
+      token_fetcher = fn :adc, _opts ->
+        Agent.update(counter, &(&1 + 1))
+
+        {:ok,
+         %{
+           token: "adc-token",
+           expires_at: System.system_time(:second) + 3600
+         }}
+      end
+
+      assert {:ok, "adc-token"} = TokenCache.get_or_refresh(:adc, token_fetcher: token_fetcher)
+      assert {:ok, "adc-token"} = TokenCache.get_or_refresh(:adc, token_fetcher: token_fetcher)
+      assert Agent.get(counter, & &1) == 1
+    end
+
+    test "refreshes expired ADC tokens" do
+      {:ok, counter} = Agent.start_link(fn -> 0 end)
+
+      token_fetcher = fn :adc, _opts ->
+        count = Agent.get_and_update(counter, &{&1 + 1, &1 + 1})
+
+        {:ok,
+         %{
+           token: "adc-token-#{count}",
+           expires_at: System.system_time(:second) - 1
+         }}
+      end
+
+      assert {:ok, "adc-token-1"} = TokenCache.get_or_refresh(:adc, token_fetcher: token_fetcher)
+      assert {:ok, "adc-token-2"} = TokenCache.get_or_refresh(:adc, token_fetcher: token_fetcher)
+      assert Agent.get(counter, & &1) == 2
+    end
+
+    test "scopes ADC cache by GOOGLE_APPLICATION_CREDENTIALS so credential swaps refresh" do
+      env_snapshot = System.get_env("GOOGLE_APPLICATION_CREDENTIALS")
+
+      on_exit(fn ->
+        case env_snapshot do
+          nil -> System.delete_env("GOOGLE_APPLICATION_CREDENTIALS")
+          value -> System.put_env("GOOGLE_APPLICATION_CREDENTIALS", value)
+        end
+      end)
+
+      {:ok, counter} = Agent.start_link(fn -> 0 end)
+
+      token_fetcher = fn :adc, _opts ->
+        count = Agent.get_and_update(counter, &{&1 + 1, &1 + 1})
+
+        {:ok,
+         %{
+           token: "adc-token-#{count}",
+           expires_at: System.system_time(:second) + 3600
+         }}
+      end
+
+      System.put_env("GOOGLE_APPLICATION_CREDENTIALS", "/tmp/adc-credentials-a.json")
+      assert {:ok, "adc-token-1"} = TokenCache.get_or_refresh(:adc, token_fetcher: token_fetcher)
+      assert {:ok, "adc-token-1"} = TokenCache.get_or_refresh(:adc, token_fetcher: token_fetcher)
+
+      System.put_env("GOOGLE_APPLICATION_CREDENTIALS", "/tmp/adc-credentials-b.json")
+      assert {:ok, "adc-token-2"} = TokenCache.get_or_refresh(:adc, token_fetcher: token_fetcher)
+
+      assert Agent.get(counter, & &1) == 2
+    end
+
     @tag :skip
     test "fetches token on first call" do
       service_account_path = System.get_env("GOOGLE_SERVICE_ACCOUNT_JSON")
