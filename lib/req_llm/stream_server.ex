@@ -218,6 +218,15 @@ defmodule ReqLLM.StreamServer do
   @spec cancel(server()) :: :ok
   def cancel(server) do
     GenServer.call(server, :cancel)
+  catch
+    :exit, {:noproc, {GenServer, :call, [^server, :cancel, _timeout]}} -> :ok
+    :exit, {:normal, {GenServer, :call, [^server, :cancel, _timeout]}} -> :ok
+  end
+
+  @doc false
+  @spec monitor_consumer(server(), pid()) :: :ok
+  def monitor_consumer(server, consumer_pid) when is_pid(consumer_pid) do
+    GenServer.call(server, {:monitor_consumer, consumer_pid})
   end
 
   @doc """
@@ -386,6 +395,12 @@ defmodule ReqLLM.StreamServer do
       end
 
     {:ok, %{state | protocol_parser: protocol_parser}}
+  end
+
+  @impl GenServer
+  def handle_call({:monitor_consumer, consumer_pid}, _from, state) do
+    ref = Process.monitor(consumer_pid)
+    {:reply, :ok, %{state | consumer_refs: MapSet.put(state.consumer_refs, ref)}}
   end
 
   @impl GenServer
@@ -601,8 +616,20 @@ defmodule ReqLLM.StreamServer do
   end
 
   @impl GenServer
-  def handle_info({:DOWN, _ref, :process, _pid, _reason}, state) do
-    {:noreply, state}
+  def handle_info({:DOWN, ref, :process, _pid, _reason}, state) do
+    case MapSet.member?(state.consumer_refs, ref) do
+      true ->
+        new_state =
+          %{state | consumer_refs: MapSet.delete(state.consumer_refs, ref)}
+          |> maybe_emit_stream_stop(:cancelled)
+          |> cleanup_resources()
+          |> reply_to_waiting_callers()
+
+        {:stop, :normal, new_state}
+
+      false ->
+        {:noreply, state}
+    end
   end
 
   @impl GenServer

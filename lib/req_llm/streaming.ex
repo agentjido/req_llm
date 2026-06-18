@@ -317,7 +317,10 @@ defmodule ReqLLM.Streaming do
   # Create lazy stream using Stream.resource that calls StreamServer.next/2
   defp create_lazy_stream(server_pid, timeout) do
     Stream.resource(
-      fn -> %{server: server_pid, exhausted?: false} end,
+      fn ->
+        :ok = StreamServer.monitor_consumer(server_pid, self())
+        %{server: server_pid, exhausted?: false}
+      end,
       fn %{server: server} = state ->
         case StreamServer.next(server, timeout) do
           {:ok, chunk} ->
@@ -335,23 +338,10 @@ defmodule ReqLLM.Streaming do
       end,
       fn %{server: server, exhausted?: exhausted?} ->
         if not exhausted? do
-          safe_cancel_stream_server(server)
+          StreamServer.cancel(server)
         end
       end
     )
-  end
-
-  defp safe_cancel_stream_server(server) do
-    if Process.alive?(server) do
-      StreamServer.cancel(server)
-    else
-      :ok
-    end
-  catch
-    :exit, {:noproc, _} -> :ok
-    :exit, {:normal, _} -> :ok
-    :exit, {:shutdown, _} -> :ok
-    :exit, {{:shutdown, _}, _} -> :ok
   end
 
   defp start_metadata_handle(server_pid, opts) do

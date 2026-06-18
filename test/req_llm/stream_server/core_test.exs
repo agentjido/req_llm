@@ -43,6 +43,32 @@ defmodule ReqLLM.StreamServer.CoreTest do
       StreamServer.cancel(server)
       refute Process.alive?(server)
     end
+
+    test "cancels stream resources when monitored consumer exits" do
+      server = start_server()
+      task = mock_http_task(server)
+
+      consumer =
+        spawn(fn ->
+          receive do
+            :stop -> :ok
+          end
+        end)
+
+      assert :ok = StreamServer.monitor_consumer(server, consumer)
+      Process.exit(consumer, :cancelled)
+
+      assert wait_until(fn -> not Process.alive?(server) end)
+      assert wait_until(fn -> not Process.alive?(task.pid) end)
+    end
+
+    test "cancel is idempotent after StreamServer exits normally" do
+      server = start_server()
+
+      assert :ok = StreamServer.cancel(server)
+      assert wait_until(fn -> not Process.alive?(server) end)
+      assert :ok = StreamServer.cancel(server)
+    end
   end
 
   describe "HTTP event processing" do
@@ -212,6 +238,19 @@ defmodule ReqLLM.StreamServer.CoreTest do
              end)
 
       StreamServer.cancel(server)
+    end
+  end
+
+  defp wait_until(fun, attempts \\ 50)
+
+  defp wait_until(_fun, 0), do: false
+
+  defp wait_until(fun, attempts) do
+    if fun.() do
+      true
+    else
+      Process.sleep(20)
+      wait_until(fun, attempts - 1)
     end
   end
 end
