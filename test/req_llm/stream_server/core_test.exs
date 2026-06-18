@@ -56,17 +56,21 @@ defmodule ReqLLM.StreamServer.CoreTest do
         end)
 
       assert :ok = StreamServer.monitor_consumer(server, consumer)
+      server_ref = Process.monitor(server)
+      task_ref = Process.monitor(task.pid)
+
       Process.exit(consumer, :cancelled)
 
-      assert wait_until(fn -> not Process.alive?(server) end)
-      assert wait_until(fn -> not Process.alive?(task.pid) end)
+      assert_receive {:DOWN, ^server_ref, :process, ^server, :normal}
+      assert_receive {:DOWN, ^task_ref, :process, task_pid, :cancelled} when task_pid == task.pid
     end
 
     test "cancel is idempotent after StreamServer exits normally" do
       server = start_server()
+      ref = Process.monitor(server)
 
       assert :ok = StreamServer.cancel(server)
-      assert wait_until(fn -> not Process.alive?(server) end)
+      assert_receive {:DOWN, ^ref, :process, ^server, :normal}
       assert :ok = StreamServer.cancel(server)
     end
   end
@@ -238,19 +242,6 @@ defmodule ReqLLM.StreamServer.CoreTest do
              end)
 
       StreamServer.cancel(server)
-    end
-  end
-
-  defp wait_until(fun, attempts \\ 50)
-
-  defp wait_until(_fun, 0), do: false
-
-  defp wait_until(fun, attempts) do
-    if fun.() do
-      true
-    else
-      Process.sleep(20)
-      wait_until(fun, attempts - 1)
     end
   end
 end
