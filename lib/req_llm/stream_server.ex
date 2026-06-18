@@ -617,8 +617,11 @@ defmodule ReqLLM.StreamServer do
 
   @impl GenServer
   def handle_info({:DOWN, ref, :process, _pid, _reason}, state) do
-    case MapSet.member?(state.consumer_refs, ref) do
-      true ->
+    case {MapSet.member?(state.consumer_refs, ref), state.status} do
+      {true, :done} ->
+        {:noreply, %{state | consumer_refs: MapSet.delete(state.consumer_refs, ref)}}
+
+      {true, _status} ->
         new_state =
           %{state | consumer_refs: MapSet.delete(state.consumer_refs, ref)}
           |> maybe_emit_stream_stop(:cancelled)
@@ -627,7 +630,7 @@ defmodule ReqLLM.StreamServer do
 
         {:stop, :normal, new_state}
 
-      false ->
+      {false, _status} ->
         {:noreply, state}
     end
   end
