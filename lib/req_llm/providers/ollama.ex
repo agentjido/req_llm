@@ -113,7 +113,7 @@ defmodule ReqLLM.Providers.Ollama do
     )
     |> ReqLLM.Step.Retry.attach()
     |> ReqLLM.Step.Error.attach()
-    |> Req.Request.append_request_steps(llm_encode_body: &encode_body/1)
+    |> Req.Request.prepend_request_steps(llm_encode_body: &encode_body/1)
     |> Req.Request.append_response_steps(llm_decode_response: &decode_response/1)
     |> ReqLLM.Step.Usage.attach(model)
     |> ReqLLM.Step.Telemetry.attach(model, user_opts)
