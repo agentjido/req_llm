@@ -17,9 +17,7 @@ defmodule ReqLLM.Providers.OllamaTest do
     %Req.Request{options: Map.new(opts)}
   end
 
-  # Runs the request pipeline steps in order, skipping network-making steps,
-  # so the returned request.body reflects what would actually be sent.
-  defp run_request_steps(%Req.Request{} = request) do
+  defp materialize_body_through_request_steps(%Req.Request{} = request) do
     skip = [:run_finch, :put_plug, :cache, :llm_telemetry_start]
 
     Enum.reduce(request.request_steps, request, fn {name, step}, acc ->
@@ -111,15 +109,6 @@ defmodule ReqLLM.Providers.OllamaTest do
   end
 
   describe "request body materialization" do
-    # Regression guard for the empty-request-body bug: the provider's attach/3
-    # must run llm_encode_body BEFORE Req's built-in encode_body step, otherwise
-    # options[:json] is set too late and the outgoing request carries an empty
-    # body (Content-Length: 0), which Ollama rejects with `400 ... EOF`.
-    #
-    # Unlike tests that call encode_body/1 directly (which always populates
-    # options[:json] regardless of pipeline order), this drives the full Req
-    # request pipeline and asserts on the materialized request.body — the gap
-    # that let the bug ship.
     test "llm_encode_body runs before Req's encode_body so the body is materialized" do
       {:ok, request} = Ollama.prepare_request(:chat, ollama_model(), "ping", [])
 
@@ -133,10 +122,7 @@ defmodule ReqLLM.Providers.OllamaTest do
     test "outgoing request carries a non-empty JSON body with model + messages" do
       {:ok, request} = Ollama.prepare_request(:chat, ollama_model(), "ping", [])
 
-      # Run the request steps in the exact order Req would, stopping just before
-      # the network adapter. After the full pipeline, request.body is what would
-      # be sent on the wire — this is where the empty-body bug manifests.
-      materialized = run_request_steps(request)
+      materialized = materialize_body_through_request_steps(request)
 
       body = materialized.body
       assert is_binary(body) or is_list(body)
