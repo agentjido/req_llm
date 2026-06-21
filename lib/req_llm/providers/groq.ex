@@ -148,6 +148,7 @@ defmodule ReqLLM.Providers.Groq do
   @impl ReqLLM.Provider
   def build_body(request) do
     ReqLLM.Provider.Defaults.default_build_body(request)
+    |> strip_message_reasoning_fields()
     |> ReqLLM.Providers.OpenAI.AdapterHelpers.translate_tool_choice_format()
     |> maybe_put_skip(:service_tier, request.options[:service_tier], ["auto"])
     |> maybe_put_skip(:reasoning_effort, request.options[:reasoning_effort], ["default"])
@@ -177,8 +178,36 @@ defmodule ReqLLM.Providers.Groq do
 
     base_url = ReqLLM.Provider.Options.effective_base_url(__MODULE__, model, processed_opts)
     opts_with_base_url = Keyword.put(processed_opts, :base_url, base_url)
-    ReqLLM.Providers.OpenAI.ChatAPI.attach_stream(model, context, opts_with_base_url, finch_name)
+
+    ReqLLM.Provider.Defaults.default_attach_stream(
+      __MODULE__,
+      model,
+      context,
+      opts_with_base_url,
+      finch_name
+    )
   end
+
+  defp strip_message_reasoning_fields(%{messages: messages} = body) when is_list(messages) do
+    Map.put(body, :messages, Enum.map(messages, &strip_reasoning_fields/1))
+  end
+
+  defp strip_message_reasoning_fields(%{"messages" => messages} = body) when is_list(messages) do
+    Map.put(body, "messages", Enum.map(messages, &strip_reasoning_fields/1))
+  end
+
+  defp strip_message_reasoning_fields(body), do: body
+
+  defp strip_reasoning_fields(message) when is_map(message) do
+    Map.drop(message, [
+      :reasoning_content,
+      :reasoning_details,
+      "reasoning_content",
+      "reasoning_details"
+    ])
+  end
+
+  defp strip_reasoning_fields(message), do: message
 
   @doc """
   Initialize streaming state for <think> tag normalization.

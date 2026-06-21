@@ -9,7 +9,50 @@ defmodule ReqLLM.Providers.GroqTest do
   use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Groq
 
   alias ReqLLM.Context
+  alias ReqLLM.Message
+  alias ReqLLM.Message.ContentPart
+  alias ReqLLM.Message.ReasoningDetails
   alias ReqLLM.Providers.Groq
+
+  defp groq_gpt_oss_model do
+    %LLMDB.Model{
+      id: "openai/gpt-oss-120b",
+      model: "openai/gpt-oss-120b",
+      provider: :groq,
+      capabilities: %{chat: true, streaming: true},
+      limits: %{context: 131_072, output: 8192}
+    }
+  end
+
+  defp reasoning_context do
+    %Context{
+      messages: [
+        %Message{
+          role: :user,
+          content: [ContentPart.text("How would you build a pyramid?")]
+        },
+        %Message{
+          role: :assistant,
+          content: [
+            ContentPart.thinking("Plan the answer carefully."),
+            ContentPart.text("Use a stable foundation and stack stone courses.")
+          ],
+          reasoning_details: [
+            %ReasoningDetails{
+              text: "Plan the answer carefully.",
+              provider: :groq,
+              format: "groq-reasoning",
+              index: 0
+            }
+          ]
+        },
+        %Message{
+          role: :user,
+          content: [ContentPart.text("What is your favorite pyramid?")]
+        }
+      ]
+    }
+  end
 
   describe "provider contract" do
     test "provider identity and configuration" do
@@ -330,6 +373,50 @@ defmodule ReqLLM.Providers.GroqTest do
         decoded = ReqLLM.Test.Helpers.json_body(updated_request)
         assertion.(decoded)
       end
+    end
+
+    test "encode_body omits unsupported reasoning fields from assistant history" do
+      mock_request = %Req.Request{
+        options: [
+          context: reasoning_context(),
+          model: "openai/gpt-oss-120b",
+          stream: false,
+          reasoning_effort: "high"
+        ]
+      }
+
+      updated_request = Groq.encode_body(mock_request)
+      decoded = ReqLLM.Test.Helpers.json_body(updated_request)
+
+      assistant_message = Enum.find(decoded["messages"], &(&1["role"] == "assistant"))
+
+      assert decoded["reasoning_effort"] == "high"
+      assert assistant_message["content"] == "Use a stable foundation and stack stone courses."
+      refute Map.has_key?(assistant_message, "reasoning_content")
+      refute Map.has_key?(assistant_message, "reasoning_details")
+    end
+
+    test "attach_stream omits unsupported reasoning fields from assistant history" do
+      {:ok, request} =
+        Groq.attach_stream(
+          groq_gpt_oss_model(),
+          reasoning_context(),
+          [reasoning_effort: :high],
+          ReqLLM.Finch
+        )
+
+      decoded =
+        request.body
+        |> IO.iodata_to_binary()
+        |> Jason.decode!()
+
+      assistant_message = Enum.find(decoded["messages"], &(&1["role"] == "assistant"))
+
+      assert decoded["stream"] == true
+      assert decoded["reasoning_effort"] == "high"
+      assert assistant_message["content"] == "Use a stable foundation and stack stone courses."
+      refute Map.has_key?(assistant_message, "reasoning_content")
+      refute Map.has_key?(assistant_message, "reasoning_details")
     end
   end
 
