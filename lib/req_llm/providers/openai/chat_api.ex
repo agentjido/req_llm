@@ -70,33 +70,7 @@ defmodule ReqLLM.Providers.OpenAI.ChatAPI do
 
   @impl true
   def decode_stream_event(event, model) do
-    event
-    |> ReqLLM.Provider.Defaults.default_decode_stream_event(model)
-    |> drop_finish_reason_terminal()
-  end
-
-  # Azure and OpenAI-compatible gateways (e.g. LiteLLM) send the usage chunk
-  # after the finish_reason chunk, just before [DONE]. The default decoder marks
-  # finish_reason terminal, so the stream ends before that usage chunk lands and
-  # Response.usage comes back zero. Drop terminal? on normal finish_reason chunks
-  # so the stream finalizes on [DONE] (or connection close) once usage is in.
-  # Error chunks (finish_reason: :error, or an :error key) stay terminal so
-  # failures still fail fast; [DONE] and empty-choices usage chunks have no
-  # finish_reason and are left untouched.
-  defp drop_finish_reason_terminal(chunks) do
-    Enum.map(chunks, fn
-      %ReqLLM.StreamChunk{
-        type: :meta,
-        metadata: %{terminal?: true, finish_reason: reason} = meta
-      } = chunk
-      when reason != :error ->
-        if Map.has_key?(meta, :error),
-          do: chunk,
-          else: %{chunk | metadata: Map.delete(meta, :terminal?)}
-
-      chunk ->
-        chunk
-    end)
+    ReqLLM.Provider.Defaults.default_decode_stream_event(event, model)
   end
 
   # ========================================================================

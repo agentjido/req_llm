@@ -13,17 +13,19 @@ defmodule ReqLLM.Providers.OpenAI.ChatStreamingUsageTest do
   If the finish_reason chunk is flagged `terminal?`, the stream halts there and
   the consumer reads `Response.usage` before the trailing usage chunk has been
   merged — so token counts (and the cost derived from them) come back as zero.
-  `ChatAPI.decode_stream_event/2` strips the terminal flag off finish_reason
-  chunks so the stream finalizes on `[DONE]` instead.
+  Chat-completion finish_reason chunks must remain non-terminal so the stream
+  finalizes on `[DONE]` after the trailing usage chunk is accumulated.
   """
   use ExUnit.Case, async: true
 
+  alias ReqLLM.{Context, Response, StreamResponse, StreamServer}
   alias ReqLLM.Providers.OpenAI.ChatAPI
   alias ReqLLM.StreamChunk
+  alias ReqLLM.StreamResponse.MetadataHandle
 
   @model %LLMDB.Model{provider: :openai, id: "gpt-4o"}
 
-  test "finish_reason chunk is not terminal (so the trailing usage chunk is not raced)" do
+  test "finish_reason chunk is not terminal" do
     finish_event = %{
       data: %{
         "choices" => [%{"finish_reason" => "stop", "index" => 0, "delta" => %{}}]
@@ -61,10 +63,7 @@ defmodule ReqLLM.Providers.OpenAI.ChatStreamingUsageTest do
     assert meta.metadata[:terminal?] == true
   end
 
-  test "an inline error chunk STAYS terminal (must fail fast, not wait for [DONE])" do
-    # OpenAI-compatible gateways (incl. LiteLLM/Azure) report mid-stream
-    # failures as `data: {"error": {...}}` with an HTTP 200. These must remain
-    # terminal so the stream errors immediately instead of hanging.
+  test "an inline error chunk stays terminal" do
     error_event = %{data: %{"error" => %{"message" => "boom"}}}
 
     [meta] = ChatAPI.decode_stream_event(error_event, @model)
@@ -73,9 +72,6 @@ defmodule ReqLLM.Providers.OpenAI.ChatStreamingUsageTest do
   end
 
   test "an empty-choices usage chunk keeps its own terminal flag" do
-    # Some servers send the final usage with `choices: []`; the default decoder
-    # marks that terminal. It has no :finish_reason key, so it must pass through
-    # untouched.
     usage_event = %{
       data: %{
         "choices" => [],
@@ -89,9 +85,6 @@ defmodule ReqLLM.Providers.OpenAI.ChatStreamingUsageTest do
   end
 
   test "finish_reason + usage in a single event still yields usage" do
-    # If a gateway combines both into one chunk (non-empty choices), usage is
-    # captured and the finish_reason chunk is no longer terminal (stream
-    # finalizes on [DONE] / close).
     combined = %{
       data: %{
         "choices" => [%{"finish_reason" => "stop", "index" => 0, "delta" => %{}}],
@@ -104,4 +97,97 @@ defmodule ReqLLM.Providers.OpenAI.ChatStreamingUsageTest do
     assert usage_meta.metadata[:usage][:input_tokens] == 11
     refute Enum.any?(chunks, &(&1.metadata[:finish_reason] == :stop and &1.metadata[:terminal?]))
   end
+
+  test "to_response keeps usage that arrives after finish_reason" do
+    {:ok, server} = StreamServer.start_link(provider_mod: ChatAPI, model: @model)
+    stream_response = stream_response_for(server)
+
+    await_metadata_waiter(server)
+
+    send_sse(server, %{"choices" => [%{"delta" => %{"content" => "Done"}}]})
+
+    send_sse(server, %{
+      "choices" => [%{"finish_reason" => "stop", "index" => 0, "delta" => %{}}]
+    })
+
+    send_sse(server, %{
+      "choices" => [%{"index" => 0, "delta" => %{}}],
+      "usage" => %{"prompt_tokens" => 12, "completion_tokens" => 8, "total_tokens" => 20}
+    })
+
+    send_done(server)
+    StreamServer.http_event(server, :done)
+
+    assert {:ok, response} = StreamResponse.to_response(stream_response)
+    assert Response.text(response) == "Done"
+    assert Response.finish_reason(response) == :stop
+
+    usage = Response.usage(response)
+    assert usage.input_tokens == 12
+    assert usage.output_tokens == 8
+    assert usage.total_tokens == 20
+  end
+
+  defp stream_response_for(server) do
+    {:ok, metadata_handle} =
+      MetadataHandle.start_link(fn ->
+        case StreamServer.await_metadata(server, 500) do
+          {:ok, metadata} -> metadata
+          {:error, reason} -> %{error: reason}
+        end
+      end)
+
+    %StreamResponse{
+      stream: stream_from(server),
+      metadata_handle: metadata_handle,
+      cancel: fn -> StreamServer.cancel(server) end,
+      model: @model,
+      context: Context.normalize!("Say done")
+    }
+  end
+
+  defp stream_from(server) do
+    Stream.resource(
+      fn -> false end,
+      fn
+        true ->
+          {:halt, true}
+
+        false ->
+          case StreamServer.next(server, 500) do
+            {:ok, chunk} -> {[chunk], false}
+            :halt -> {:halt, true}
+            {:error, reason} -> raise "stream failed: #{inspect(reason)}"
+          end
+      end,
+      fn exhausted? ->
+        if not exhausted? do
+          StreamServer.cancel(server)
+        end
+      end
+    )
+  end
+
+  defp send_sse(server, data) do
+    StreamServer.http_event(server, {:data, "data: #{Jason.encode!(data)}\n\n"})
+  end
+
+  defp send_done(server) do
+    StreamServer.http_event(server, {:data, "data: [DONE]\n\n"})
+  end
+
+  defp await_metadata_waiter(server, attempts \\ 50)
+
+  defp await_metadata_waiter(server, attempts) when attempts > 0 do
+    state = :sys.get_state(server)
+
+    if Enum.any?(state.waiting_callers, &(&1.type == :metadata)) do
+      :ok
+    else
+      Process.sleep(10)
+      await_metadata_waiter(server, attempts - 1)
+    end
+  end
+
+  defp await_metadata_waiter(_server, 0), do: flunk("metadata waiter was not registered")
 end
