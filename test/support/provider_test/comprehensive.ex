@@ -32,18 +32,7 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
   def supports_object_generation?(model_spec) do
     case ReqLLM.model(model_spec) do
       {:ok, model} ->
-        caps = model.capabilities || %{}
-
-        # Object generation is supported if:
-        # 1. Model has native JSON mode (json.native)
-        # 2. Model supports JSON schemas (json.schema)
-        # 3. Model has strict tool calling (tools.strict = true)
-        # 4. Model has regular tool calling (tools.enabled = true) - req_llm has workaround
-        structured_outputs_supported?(model) and
-          (get_in(caps, [:json, :native]) ||
-             get_in(caps, [:json, :schema]) ||
-             get_in(caps, [:tools, :strict]) == true ||
-             get_in(caps, [:tools, :enabled]) == true)
+        object_generation_supported?(model)
 
       {:error, _} ->
         false
@@ -87,6 +76,37 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
     end
   end
 
+  defp object_generation_supported?(%LLMDB.Model{} = model) do
+    structured_outputs_supported?(model) and
+      (execution_object_supported?(model) or
+         json_output_supported?(model) or
+         strict_tool_output_supported?(model) or
+         tool_workaround_supported?(model))
+  end
+
+  defp execution_object_supported?(%LLMDB.Model{execution: execution}) when is_map(execution) do
+    execution
+    |> map_value(:object)
+    |> supported_entry?()
+  end
+
+  defp execution_object_supported?(_model), do: false
+
+  defp json_output_supported?(%LLMDB.Model{capabilities: capabilities}) do
+    capability_enabled?(capabilities, [:json, :native]) or
+      capability_enabled?(capabilities, [:json, :schema])
+  end
+
+  defp strict_tool_output_supported?(%LLMDB.Model{capabilities: capabilities}) do
+    capability_enabled?(capabilities, [:tools, :strict])
+  end
+
+  defp tool_workaround_supported?(%LLMDB.Model{provider: :anthropic}), do: false
+
+  defp tool_workaround_supported?(%LLMDB.Model{capabilities: capabilities}) do
+    capability_enabled?(capabilities, [:tools, :enabled])
+  end
+
   defp structured_outputs_supported?(%LLMDB.Model{provider: :anthropic, extra: extra}) do
     cond do
       get_in(extra || %{}, [:provider_capabilities, :structured_outputs, :supported]) == false ->
@@ -101,6 +121,32 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
   end
 
   defp structured_outputs_supported?(_model), do: true
+
+  defp capability_enabled?(capabilities, path) do
+    capabilities
+    |> path_value(path)
+    |> enabled_value?()
+  end
+
+  defp supported_entry?(entry) when is_map(entry),
+    do: enabled_value?(map_value(entry, :supported))
+
+  defp supported_entry?(_entry), do: false
+
+  defp enabled_value?(true), do: true
+  defp enabled_value?(_value), do: false
+
+  defp path_value(value, []), do: value
+
+  defp path_value(value, [key | rest]) when is_map(value) do
+    value
+    |> map_value(key)
+    |> path_value(rest)
+  end
+
+  defp path_value(_value, _path), do: nil
+
+  defp map_value(map, key) when is_map(map), do: Map.get(map, key) || Map.get(map, to_string(key))
 
   defmacro __using__(opts) do
     provider = Keyword.fetch!(opts, :provider)
