@@ -146,7 +146,12 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
 
   defp path_value(_value, _path), do: nil
 
-  defp map_value(map, key) when is_map(map), do: Map.get(map, key) || Map.get(map, to_string(key))
+  defp map_value(map, key) when is_map(map) do
+    case Map.fetch(map, key) do
+      {:ok, value} -> value
+      :error -> Map.get(map, to_string(key))
+    end
+  end
 
   defmacro __using__(opts) do
     provider = Keyword.fetch!(opts, :provider)
