@@ -40,10 +40,15 @@ defmodule ReqLLM.Test.Scenarios.ObjectReasoningTest do
       provider: :anthropic,
       id: "claude-haiku-4-5-20251001",
       capabilities: %{
-        json: %{schema: false},
+        json: %{schema: true},
         tools: %{enabled: true},
         streaming: %{tool_calls: true},
         reasoning: %{enabled: true}
+      },
+      extra: %{
+        provider_capabilities: %{
+          structured_outputs: %{supported: true}
+        }
       }
     }
 

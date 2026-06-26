@@ -21,4 +21,30 @@ defmodule ReqLLM.Test.Scenarios.CapabilitiesTest do
     assert Capabilities.supports_reasoning?(model)
     refute Capabilities.supports_forced_tool_choice?(model)
   end
+
+  test "object generation can be supported through execution metadata" do
+    model = %LLMDB.Model{
+      provider: :openai,
+      id: "execution-object",
+      execution: %{"object" => %{"supported" => true}},
+      capabilities: %{}
+    }
+
+    assert Capabilities.supports_object_generation?(model)
+  end
+
+  test "anthropic structured output metadata can disable tool fallback object generation" do
+    model = %LLMDB.Model{
+      provider: :anthropic,
+      id: "anthropic-without-structured-output",
+      capabilities: %{"tools" => %{"enabled" => true}},
+      extra: %{
+        "provider_capabilities" => %{
+          "structured_outputs" => %{"supported" => false}
+        }
+      }
+    }
+
+    refute Capabilities.supports_object_generation?(model)
+  end
 end

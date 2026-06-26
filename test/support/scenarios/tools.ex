@@ -64,7 +64,7 @@ defmodule ReqLLM.Test.Scenarios.ToolMulti do
       {:ok, response} ->
         assert_basic_response(result)
 
-        tool_calls = ReqLLM.Response.tool_calls(response) || []
+        tool_calls = ReqLLM.Response.tool_calls(response)
 
         if Enum.empty?(tool_calls) and truncated?(response) do
           rt = ReqLLM.Response.reasoning_tokens(response)

@@ -7,13 +7,7 @@ defmodule ReqLLM.Test.Scenarios.Capabilities do
   def supports_object_generation?(model_or_spec) do
     case model_for(model_or_spec) do
       {:ok, model} ->
-        caps = model.capabilities || %{}
-
-        structured_outputs_supported?(model) and
-          (cap(caps, [:json, :native]) ||
-             cap(caps, [:json, :schema]) ||
-             cap(caps, [:tools, :strict]) == true ||
-             cap(caps, [:tools, :enabled]) == true)
+        object_generation_supported?(model)
 
       {:error, _} ->
         false
@@ -61,14 +55,65 @@ defmodule ReqLLM.Test.Scenarios.Capabilities do
   defp model_for(model_spec) when is_binary(model_spec), do: ReqLLM.model(model_spec)
   defp model_for(_), do: {:error, :invalid_model}
 
+  defp object_generation_supported?(%LLMDB.Model{} = model) do
+    structured_outputs_supported?(model) and
+      (execution_object_supported?(model) or
+         json_output_supported?(model) or
+         strict_tool_output_supported?(model) or
+         tool_workaround_supported?(model))
+  end
+
+  defp execution_object_supported?(%LLMDB.Model{execution: execution}) when is_map(execution) do
+    execution
+    |> cap([:object])
+    |> supported_entry?()
+  end
+
+  defp execution_object_supported?(_model), do: false
+
+  defp json_output_supported?(%LLMDB.Model{capabilities: capabilities}) do
+    capability_enabled?(capabilities, [:json, :native]) or
+      capability_enabled?(capabilities, [:json, :schema])
+  end
+
+  defp strict_tool_output_supported?(%LLMDB.Model{capabilities: capabilities}) do
+    capability_enabled?(capabilities, [:tools, :strict])
+  end
+
+  defp tool_workaround_supported?(%LLMDB.Model{provider: :anthropic}), do: false
+
+  defp tool_workaround_supported?(%LLMDB.Model{capabilities: capabilities}) do
+    capability_enabled?(capabilities, [:tools, :enabled])
+  end
+
   defp structured_outputs_supported?(%LLMDB.Model{provider: :anthropic, extra: extra}) do
-    case cap(extra || %{}, [:capabilities, :structured_outputs, :supported]) do
-      false -> false
-      _ -> true
+    cond do
+      cap(extra || %{}, [:provider_capabilities, :structured_outputs, :supported]) == false ->
+        false
+
+      cap(extra || %{}, [:capabilities, :structured_outputs, :supported]) == false ->
+        false
+
+      true ->
+        true
     end
   end
 
   defp structured_outputs_supported?(_model), do: true
+
+  defp capability_enabled?(capabilities, path) do
+    capabilities
+    |> cap(path)
+    |> enabled_value?()
+  end
+
+  defp supported_entry?(entry) when is_map(entry),
+    do: entry |> cap([:supported]) |> enabled_value?()
+
+  defp supported_entry?(_entry), do: false
+
+  defp enabled_value?(true), do: true
+  defp enabled_value?(_value), do: false
 
   defp cap(value, []), do: value
 
