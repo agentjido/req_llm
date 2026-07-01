@@ -14,16 +14,16 @@ defmodule ReqLLM.Keys do
       # From .env file (recommended)
       # ANTHROPIC_API_KEY=sk-ant-...
       ReqLLM.Keys.get(:anthropic, [])
-      
+
       # From application config
       Application.put_env(:req_llm, :anthropic_api_key, "sk-ant-...")
       ReqLLM.Keys.get(:anthropic, [])
-      
+
       # Per-request override
       ReqLLM.Keys.get(:anthropic, api_key: "sk-ant-...")
 
       # Works with models (extracts provider automatically)
-      model = ReqLLM.model("anthropic:claude-3-sonnet")
+      {:ok, model} = ReqLLM.model("anthropic:claude-3-sonnet")
       key = ReqLLM.Keys.get!(model)
 
       # Debug key source
