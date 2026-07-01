@@ -50,6 +50,7 @@ defmodule ReqLLM.Keys do
   """
   @spec get(LLMDB.Model.t() | atom, keyword) ::
           {:ok, String.t(), key_source} | {:error, String.t()}
+  def get(provider_or_model, opts)
   def get(%LLMDB.Model{provider: provider}, opts), do: get(provider, opts)
 
   def get(provider, opts) when is_atom(provider) do
