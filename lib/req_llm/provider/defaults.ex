@@ -1658,8 +1658,11 @@ defmodule ReqLLM.Provider.Defaults do
     response_format = request.options[:response_format] || provider_opts[:response_format]
 
     case response_format do
-      format when is_map(format) -> Map.put(body, :response_format, format)
-      _ -> body
+      format when is_map(format) ->
+        ReqLLM.Providers.OpenAI.AdapterHelpers.add_response_format(body, response_format: format)
+
+      _other ->
+        body
     end
   end
 
