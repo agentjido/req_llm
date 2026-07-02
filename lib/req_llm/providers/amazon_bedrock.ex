@@ -818,6 +818,7 @@ defmodule ReqLLM.Providers.AmazonBedrock do
 
         # 2. Passed IAM credentials
         passed_creds[:access_key_id] && passed_creds[:secret_access_key] ->
+          ensure_ex_aws_auth!()
           AWSAuth.Credentials.from_map(passed_creds)
 
         # 3. Env var API key
@@ -829,10 +830,26 @@ defmodule ReqLLM.Providers.AmazonBedrock do
 
         # 4. Env var IAM credentials
         true ->
+          ensure_ex_aws_auth!()
           AWSAuth.Credentials.from_env()
       end
 
     {creds, other_opts}
+  end
+
+  # Raise an informative error when IAM authentication is requested but the
+  # optional ex_aws_auth dependency is not available.
+  defp ensure_ex_aws_auth! do
+    case Code.ensure_loaded(AWSAuth.Credentials) do
+      {:module, _} ->
+        :ok
+
+      {:error, _} ->
+        raise """
+        AWS Bedrock IAM authentication requires the ex_aws_auth dependency.
+        Please add {:ex_aws_auth, "~> 1.4"} to your mix.exs dependencies.
+        """
+    end
   end
 
   defp validate_aws_credentials!(nil) do
@@ -856,7 +873,7 @@ defmodule ReqLLM.Providers.AmazonBedrock do
     raise ArgumentError, "API key must be a non-empty string"
   end
 
-  defp validate_aws_credentials!(%AWSAuth.Credentials{access_key_id: nil}) do
+  defp validate_aws_credentials!(%{__struct__: AWSAuth.Credentials, access_key_id: nil}) do
     raise ArgumentError, """
     AWS credentials required for Bedrock. Please provide either:
 
@@ -871,7 +888,7 @@ defmodule ReqLLM.Providers.AmazonBedrock do
     """
   end
 
-  defp validate_aws_credentials!(%AWSAuth.Credentials{secret_access_key: nil}) do
+  defp validate_aws_credentials!(%{__struct__: AWSAuth.Credentials, secret_access_key: nil}) do
     raise ArgumentError, """
     AWS credentials required for Bedrock. Please provide either:
 
@@ -886,7 +903,7 @@ defmodule ReqLLM.Providers.AmazonBedrock do
     """
   end
 
-  defp validate_aws_credentials!(%AWSAuth.Credentials{}), do: :ok
+  defp validate_aws_credentials!(%{__struct__: AWSAuth.Credentials}), do: :ok
 
   defp extract_region(aws_creds) do
     case aws_creds do
@@ -912,7 +929,7 @@ defmodule ReqLLM.Providers.AmazonBedrock do
   end
 
   # IAM authentication - use AWS Signature V4
-  defp put_aws_sigv4(request, %AWSAuth.Credentials{} = aws_creds) do
+  defp put_aws_sigv4(request, %{__struct__: AWSAuth.Credentials} = aws_creds) do
     case Code.ensure_loaded(AWSAuth.Req) do
       {:module, _} ->
         :ok
@@ -920,7 +937,7 @@ defmodule ReqLLM.Providers.AmazonBedrock do
       {:error, _} ->
         raise """
         AWS Bedrock support requires the ex_aws_auth dependency.
-        Please add {:ex_aws_auth, "~> 1.3", optional: true} to your mix.exs dependencies.
+        Please add {:ex_aws_auth, "~> 1.4"} to your mix.exs dependencies.
         """
     end
 
@@ -941,7 +958,12 @@ defmodule ReqLLM.Providers.AmazonBedrock do
   end
 
   # IAM authentication - use AWS Signature V4
-  defp sign_aws_request(finch_request, %AWSAuth.Credentials{} = aws_creds, _region, service) do
+  defp sign_aws_request(
+         finch_request,
+         %{__struct__: AWSAuth.Credentials} = aws_creds,
+         _region,
+         service
+       ) do
     case Code.ensure_loaded(AWSAuth) do
       {:module, _} ->
         :ok
@@ -949,7 +971,7 @@ defmodule ReqLLM.Providers.AmazonBedrock do
       {:error, _} ->
         raise """
         AWS Bedrock streaming requires the ex_aws_auth dependency.
-        Please add {:ex_aws_auth, "~> 1.3", optional: true} to your mix.exs dependencies.
+        Please add {:ex_aws_auth, "~> 1.4"} to your mix.exs dependencies.
         """
     end
 

@@ -81,6 +81,22 @@ Then run:
 mix deps.get
 ```
 
+### Optional Provider Dependencies
+
+Two providers rely on external authentication libraries that are **optional** —
+they are not pulled in unless you add them yourself, so most users incur no extra
+dependencies:
+
+| Provider | Add to `deps` | Used for |
+| --- | --- | --- |
+| `amazon_bedrock` | `{:ex_aws_auth, "~> 1.4"}` | AWS Signature V4 request signing (IAM credentials, STS, bidirectional streaming) |
+| `google_vertex` | `{:goth, "~> 1.4"}` | Google Cloud OAuth via Application Default Credentials, refresh tokens, workload identity, and the metadata server |
+
+If you use one of these providers without the corresponding dependency, ReqLLM
+raises a clear error telling you which package to add. (Amazon Bedrock's API-key
+auth and Google Vertex's service-account JWT signing do not require these
+libraries.)
+
 ## Quick Start
 
 ```elixir

@@ -356,8 +356,21 @@ defmodule ReqLLM.Providers.GoogleVertex.Auth do
   defp normalize_goth_http_client(other), do: other
 
   defp fetch_goth_token(config) do
+    case Code.ensure_loaded(Goth.Token) do
+      {:module, _} ->
+        :ok
+
+      {:error, _} ->
+        raise """
+        Google Vertex AI authentication via Application Default Credentials
+        (ADC, refresh tokens, workload identity, or the GCP metadata server)
+        requires the goth dependency.
+        Please add {:goth, "~> 1.4"} to your mix.exs dependencies.
+        """
+    end
+
     case Goth.Token.fetch(config) do
-      {:ok, %Goth.Token{token: token, expires: expires_at}} ->
+      {:ok, %{__struct__: Goth.Token, token: token, expires: expires_at}} ->
         # Goth reports the raw expiry; apply the same safety margin as the
         # service-account path so cached tokens are never served moments
         # before they die.

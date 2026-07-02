@@ -184,7 +184,8 @@ defmodule ReqLLM.Bedrock.BidiStream do
   # wrapped in an outer signed message (:date + :chunk-signature), chained from
   # the prior signature. Returns {outer_frame, hex_signature}.
   defp build_signed_frame(state, event) do
-    creds = %AWSAuth.Credentials{secret_access_key: state.secret_key, region: state.region}
+    creds =
+      struct(AWSAuth.Credentials, secret_access_key: state.secret_key, region: state.region)
 
     AWSAuth.EventStream.sign_message(
       creds,
