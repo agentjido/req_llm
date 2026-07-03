@@ -143,9 +143,26 @@ defmodule ReqLLM.Provider.ChunkAccumulator do
         |> ToolCall.put_builtin_flag(ToolCall.flagged_builtin?(metadata))
 
       # Prepend (O(1)); finalizers reverse to restore arrival order.
-      %{acc | tool_calls: [tool_call | acc.tool_calls]}
+      acc = %{acc | tool_calls: [tool_call | acc.tool_calls]}
+      seed_arg_fragment(acc, index, metadata)
     else
       acc
+    end
+  end
+
+  # Some servers (e.g. llama.cpp, vLLM) begin streaming `arguments` in the same
+  # chunk as the tool name — valid per the OpenAI streaming spec. That leading
+  # fragment (often just `"{"`) doesn't parse as complete JSON, so the decoder
+  # keeps it as `:raw_arguments`. Seed it as the first argument fragment for this
+  # index so the continuation fragments append to it and the joined JSON parses;
+  # otherwise the opening brace is lost and the tool receives empty arguments.
+  defp seed_arg_fragment(acc, index, metadata) do
+    case Map.get(metadata, :raw_arguments) || Map.get(metadata, "raw_arguments") do
+      raw when is_binary(raw) and raw != "" ->
+        %{acc | arg_fragments: Map.update(acc.arg_fragments, index, [raw], &[&1, raw])}
+
+      _ ->
+        acc
     end
   end
 

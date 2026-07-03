@@ -158,6 +158,33 @@ defmodule ReqLLM.Provider.ChunkAccumulatorTest do
   end
 
   describe "finalize_tool_calls_for_response/1" do
+    test "reconstructs args when the first chunk carries the opening brace (llama.cpp/vLLM)" do
+      # Some OpenAI-compatible servers begin streaming `arguments` in the same chunk
+      # as the tool name (valid per the spec). That leading `"{"` fails to parse and
+      # is kept as :raw_arguments; without seeding it as the first fragment the
+      # opening brace is lost and the tool would receive `%{}`.
+      acc =
+        ChunkAccumulator.new()
+        |> ChunkAccumulator.push(%StreamChunk{
+          type: :tool_call,
+          name: "get_weather",
+          arguments: %{},
+          metadata: %{id: "call_1", index: 0, raw_arguments: "{", invalid_arguments: true}
+        })
+        |> ChunkAccumulator.push(%StreamChunk{
+          type: :meta,
+          metadata: %{tool_call_args: %{index: 0, fragment: "\"city\":\"NYC\""}}
+        })
+        |> ChunkAccumulator.push(%StreamChunk{
+          type: :meta,
+          metadata: %{tool_call_args: %{index: 0, fragment: "}"}}
+        })
+
+      assert [
+               %{id: "call_1", name: "get_weather", arguments: %{"city" => "NYC"}}
+             ] = ChunkAccumulator.finalize_tool_calls_for_response(acc)
+    end
+
     test "decodes argument fragments and drops :index" do
       acc =
         ChunkAccumulator.new()
