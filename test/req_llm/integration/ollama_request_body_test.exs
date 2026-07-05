@@ -47,4 +47,19 @@ defmodule ReqLLM.Integration.OllamaRequestBodyTest do
         """)
     end
   end
+
+  test "stream_text round-trips against live Ollama with a non-empty body" do
+    case ReqLLM.stream_text(@model, "Reply with the single word: pong") do
+      {:ok, stream_response} ->
+        text = stream_response |> ReqLLM.StreamResponse.tokens() |> Enum.to_list() |> Enum.join()
+        assert String.trim(text) != ""
+
+      {:error, error} ->
+        flunk("""
+        Ollama rejected the streaming request — likely an empty request body regression
+        in encode_stream_body/3 (missing Req.Steps.encode_body/1 materialization step):
+        #{inspect(error, pretty: true)}
+        """)
+    end
+  end
 end

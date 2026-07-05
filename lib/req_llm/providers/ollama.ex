@@ -181,6 +181,7 @@ defmodule ReqLLM.Providers.Ollama do
 
     request
     |> encode_body()
+    |> Req.Steps.encode_body()
     |> Map.fetch!(:body)
   end
 
