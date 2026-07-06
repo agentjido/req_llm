@@ -724,8 +724,6 @@ defmodule ReqLLM.Providers.OpenRouter do
     |> Enum.find_value(:ok, &unsupported_openrouter_audio_error/1)
   end
 
-  defp validate_openrouter_stream_content(_context), do: :ok
-
   defp openrouter_message_content(%ReqLLM.Message{content: content}) when is_list(content),
     do: content
 
