@@ -379,11 +379,15 @@ defmodule ReqLLM.Providers.OpenRouter do
 
   @impl ReqLLM.Provider
   def build_body(request) do
-    ReqLLM.Provider.Defaults.default_build_body(request)
+    original_context = request.options[:context]
+
+    request
+    |> strip_reasoning_details_from_context()
+    |> ReqLLM.Provider.Defaults.default_build_body()
     |> encode_openrouter_content_parts(request.options)
     |> add_embedding_options(request.options)
     |> translate_tool_choice_format()
-    |> encode_reasoning_details_in_messages()
+    |> encode_reasoning_details_in_messages(original_context)
     |> maybe_put(:models, request.options[:openrouter_models])
     |> maybe_put(:route, request.options[:openrouter_route])
     |> maybe_put(:provider, request.options[:openrouter_provider])
@@ -954,72 +958,93 @@ defmodule ReqLLM.Providers.OpenRouter do
   defp extract_reasoning_details(_), do: nil
 
   defp normalize_reasoning_detail({raw, fallback_index}) do
-    %ReqLLM.Message.ReasoningDetails{
-      text: raw["text"],
-      signature: raw["signature"],
-      encrypted?: raw["signature_encrypted"] || false,
-      provider: :openrouter,
-      format: raw["format"] || "openrouter-v1",
-      index: raw["index"] || fallback_index,
-      provider_data: %{"type" => raw["type"]}
-    }
+    ReqLLM.Message.ReasoningDetails.from_openai_compatible(
+      raw,
+      :openrouter,
+      fallback_index,
+      "openrouter-v1"
+    )
   end
 
-  defp encode_reasoning_details_in_messages(%{messages: messages} = body)
-       when is_list(messages) do
-    updated_messages = Enum.map(messages, &encode_message_reasoning_details/1)
-    Map.put(body, :messages, updated_messages)
+  defp strip_reasoning_details_from_context(%Req.Request{options: options} = request) do
+    case options[:context] do
+      %ReqLLM.Context{messages: messages} = context ->
+        stripped_messages =
+          Enum.map(messages, fn
+            %ReqLLM.Message{} = message -> %{message | reasoning_details: nil}
+            message -> message
+          end)
+
+        put_in(request.options[:context], %{context | messages: stripped_messages})
+
+      _ ->
+        request
+    end
   end
 
-  defp encode_reasoning_details_in_messages(%{"messages" => messages} = body)
-       when is_list(messages) do
-    updated_messages = Enum.map(messages, &encode_message_reasoning_details/1)
-    Map.put(body, "messages", updated_messages)
+  defp encode_reasoning_details_in_messages(body, %ReqLLM.Context{messages: context_messages}) do
+    cond do
+      is_list(Map.get(body, :messages)) ->
+        updated_messages = encode_messages_reasoning_details(body.messages, context_messages)
+        Map.put(body, :messages, updated_messages)
+
+      is_list(Map.get(body, "messages")) ->
+        updated_messages = encode_messages_reasoning_details(body["messages"], context_messages)
+        Map.put(body, "messages", updated_messages)
+
+      true ->
+        body
+    end
   end
 
-  defp encode_reasoning_details_in_messages(body), do: body
+  defp encode_reasoning_details_in_messages(body, _context), do: body
 
-  defp encode_message_reasoning_details(%{reasoning_details: details} = message)
+  defp encode_messages_reasoning_details(encoded_messages, context_messages)
+       when length(encoded_messages) == length(context_messages) do
+    encoded_messages
+    |> Enum.zip(context_messages)
+    |> Enum.map(fn {encoded_message, context_message} ->
+      encode_message_reasoning_details(encoded_message, context_message)
+    end)
+  end
+
+  defp encode_messages_reasoning_details(encoded_messages, _context_messages),
+    do: encoded_messages
+
+  defp encode_message_reasoning_details(encoded_message, %ReqLLM.Message{
+         reasoning_details: details
+       })
        when is_list(details) and details != [] do
     encoded_details =
       details
       |> Enum.map(&encode_single_reasoning_detail/1)
       |> Enum.reject(&is_nil/1)
 
-    if encoded_details == [] do
-      Map.delete(message, :reasoning_details)
-    else
-      Map.put(message, :reasoning_details, encoded_details)
-    end
+    put_encoded_reasoning_details(encoded_message, encoded_details)
   end
 
-  defp encode_message_reasoning_details(%{"reasoning_details" => details} = message)
-       when is_list(details) and details != [] do
-    encoded_details =
-      details
-      |> Enum.map(&encode_single_reasoning_detail/1)
-      |> Enum.reject(&is_nil/1)
+  defp encode_message_reasoning_details(encoded_message, _context_message), do: encoded_message
 
-    if encoded_details == [] do
-      Map.delete(message, "reasoning_details")
-    else
-      Map.put(message, "reasoning_details", encoded_details)
-    end
+  defp put_encoded_reasoning_details(message, []) when is_map(message) do
+    message
+    |> Map.delete(:reasoning_details)
+    |> Map.delete("reasoning_details")
   end
 
-  defp encode_message_reasoning_details(message), do: message
+  defp put_encoded_reasoning_details(%{} = message, details) do
+    cond do
+      Map.has_key?(message, :role) -> Map.put(message, :reasoning_details, details)
+      Map.has_key?(message, "role") -> Map.put(message, "reasoning_details", details)
+      true -> Map.put(message, :reasoning_details, details)
+    end
+  end
 
   defp encode_single_reasoning_detail(
          %ReqLLM.Message.ReasoningDetails{provider: :openrouter} = detail
        ) do
-    base = %{
-      "type" => detail.provider_data["type"] || "reasoning.text",
-      "format" => detail.format,
-      "index" => detail.index,
-      "text" => detail.text
-    }
-
-    if detail.signature, do: Map.put(base, "signature", detail.signature), else: base
+    detail
+    |> ReqLLM.Message.ReasoningDetails.to_openai_compatible()
+    |> Map.put_new("type", "reasoning.text")
   end
 
   defp encode_single_reasoning_detail(%ReqLLM.Message.ReasoningDetails{provider: provider}) do
@@ -1028,16 +1053,9 @@ defmodule ReqLLM.Providers.OpenRouter do
   end
 
   defp encode_single_reasoning_detail(%{"provider" => "openrouter"} = decoded_struct) do
-    base = %{
-      "type" => get_in(decoded_struct, ["provider_data", "type"]) || "reasoning.text",
-      "format" => decoded_struct["format"],
-      "index" => decoded_struct["index"],
-      "text" => decoded_struct["text"]
-    }
-
-    if decoded_struct["signature"],
-      do: Map.put(base, "signature", decoded_struct["signature"]),
-      else: base
+    decoded_struct
+    |> openrouter_reasoning_detail_to_wire()
+    |> Map.put_new("type", "reasoning.text")
   end
 
   defp encode_single_reasoning_detail(%{"provider" => provider}) when is_binary(provider) do
@@ -1050,6 +1068,28 @@ defmodule ReqLLM.Providers.OpenRouter do
   end
 
   defp encode_single_reasoning_detail(_), do: nil
+
+  defp openrouter_reasoning_detail_to_wire(detail) do
+    detail
+    |> Map.get("provider_data", %{})
+    |> ensure_map()
+    |> put_wire_field("text", detail["text"])
+    |> put_wire_field("signature", detail["signature"])
+    |> put_wire_field("signature_encrypted", encrypted_signature?(detail))
+    |> put_wire_field("format", detail["format"])
+    |> put_wire_field("index", detail["index"])
+  end
+
+  defp encrypted_signature?(%{"encrypted?" => true}), do: true
+  defp encrypted_signature?(%{"encrypted" => true}), do: true
+  defp encrypted_signature?(_detail), do: nil
+
+  defp put_wire_field(map, _key, nil), do: map
+  defp put_wire_field(map, _key, ""), do: map
+  defp put_wire_field(map, key, value), do: Map.put(map, key, value)
+
+  defp ensure_map(map) when is_map(map), do: map
+  defp ensure_map(_), do: %{}
 
   defp attach_reasoning_details_to_response(resp, nil), do: resp
 

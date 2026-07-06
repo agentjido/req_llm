@@ -4,6 +4,7 @@ defmodule ReqLLM.Provider.DefaultsTest do
   alias ReqLLM.Context
   alias ReqLLM.Message
   alias ReqLLM.Message.ContentPart
+  alias ReqLLM.Message.ReasoningDetails
   alias ReqLLM.Provider.Defaults
   alias ReqLLM.Provider.Defaults.ResponseBuilder
   alias ReqLLM.StreamChunk
@@ -303,9 +304,17 @@ defmodule ReqLLM.Provider.DefaultsTest do
              ) == expected_message_result
     end
 
-    test "encodes reasoning_details for round-trip preservation" do
+    test "encodes normalized reasoning_details for round-trip preservation" do
       reasoning_details = [
-        %{"type" => "encrypted_thought", "data" => "abc123", "format" => "google-gemini-v1"}
+        %ReasoningDetails{
+          text: "hidden thought",
+          signature: "sig-123",
+          encrypted?: true,
+          provider: :openrouter,
+          format: "google-gemini-v1",
+          index: 0,
+          provider_data: %{"type" => "encrypted_thought", "data" => "abc123"}
+        }
       ]
 
       message = %Message{
@@ -315,11 +324,26 @@ defmodule ReqLLM.Provider.DefaultsTest do
       }
 
       context = %Context{messages: [message]}
-      result = Defaults.encode_context_to_openai_format(context, "gemini-2.5-flash")
+
+      result =
+        Defaults.encode_context_to_openai_format(context, "gemini-2.5-flash",
+          encode_reasoning_details?: true
+        )
 
       [encoded_message] = result.messages
 
-      assert encoded_message.reasoning_details == reasoning_details
+      assert encoded_message.reasoning_details == [
+               %{
+                 "type" => "encrypted_thought",
+                 "data" => "abc123",
+                 "text" => "hidden thought",
+                 "signature" => "sig-123",
+                 "signature_encrypted" => true,
+                 "format" => "google-gemini-v1",
+                 "index" => 0
+               }
+             ]
+
       assert encoded_message.role == "assistant"
       assert encoded_message.content == "I'll help with that."
     end
@@ -527,6 +551,50 @@ defmodule ReqLLM.Provider.DefaultsTest do
         {:ok, result} = Defaults.decode_response_body_openai_format(response_data, model)
         assertion_fn.(result)
       end
+    end
+
+    test "decodes reasoning_details to normalized structs", %{model: model} do
+      response_data = %{
+        "id" => "chatcmpl-reasoning",
+        "model" => "openai/gpt-5-mini-2025-08-07",
+        "choices" => [
+          %{
+            "message" => %{
+              "role" => "assistant",
+              "content" => nil,
+              "reasoning" => "I should answer briefly.",
+              "reasoning_details" => [
+                %{
+                  "type" => "reasoning.text",
+                  "format" => "openrouter-v1",
+                  "index" => 0,
+                  "text" => "I should answer briefly.",
+                  "signature" => "sig-abc",
+                  "signature_encrypted" => true,
+                  "provider_extra" => %{"kept" => true}
+                }
+              ]
+            },
+            "finish_reason" => "length"
+          }
+        ]
+      }
+
+      {:ok, result} = Defaults.decode_response_body_openai_format(response_data, model)
+
+      assert ReqLLM.Response.thinking(result) == "I should answer briefly."
+      assert [%ReasoningDetails{} = detail] = result.message.reasoning_details
+      assert detail.text == "I should answer briefly."
+      assert detail.signature == "sig-abc"
+      assert detail.encrypted? == true
+      assert detail.provider == :openai
+      assert detail.format == "openrouter-v1"
+      assert detail.index == 0
+
+      assert detail.provider_data == %{
+               "type" => "reasoning.text",
+               "provider_extra" => %{"kept" => true}
+             }
     end
 
     test "decodes tool calls without type field (Mistral format)", %{model: model} do
@@ -804,7 +872,9 @@ defmodule ReqLLM.Provider.DefaultsTest do
       chunks = Defaults.default_decode_stream_event(event, model)
 
       assert [%StreamChunk{type: :meta, metadata: meta}] = chunks
-      assert meta.reasoning_details == reasoning_details
+      assert [%ReasoningDetails{}, %ReasoningDetails{}] = meta.reasoning_details
+      assert Enum.map(meta.reasoning_details, & &1.provider_data) == reasoning_details
+      assert Enum.map(meta.reasoning_details, & &1.provider) == [:openai, :openai]
     end
 
     test "emits reasoning_details alongside content chunks", %{model: model} do
@@ -831,7 +901,10 @@ defmodule ReqLLM.Provider.DefaultsTest do
       assert content_chunk.text == "Hello world"
 
       meta_chunk = Enum.find(chunks, &(&1.type == :meta))
-      assert meta_chunk.metadata.reasoning_details == reasoning_details
+      assert [%ReasoningDetails{} = detail] = meta_chunk.metadata.reasoning_details
+      assert detail.provider_data == %{"type" => "thought"}
+      assert detail.signature == "xyz789"
+      assert detail.provider == :openai
     end
 
     test "does not emit reasoning_details meta when list is empty", %{model: model} do
@@ -892,7 +965,9 @@ defmodule ReqLLM.Provider.DefaultsTest do
       assert length(chunks) == 2
 
       reasoning_chunk = Enum.find(chunks, &Map.has_key?(&1.metadata, :reasoning_details))
-      assert reasoning_chunk.metadata.reasoning_details == reasoning_details
+      assert [%ReasoningDetails{} = detail] = reasoning_chunk.metadata.reasoning_details
+      assert detail.provider_data == %{"type" => "thought", "data" => "final"}
+      assert detail.provider == :openai
 
       finish_chunk = Enum.find(chunks, &Map.has_key?(&1.metadata, :finish_reason))
       assert finish_chunk.metadata.finish_reason == :stop
@@ -994,8 +1069,14 @@ defmodule ReqLLM.Provider.DefaultsTest do
 
     test "accumulates reasoning_details from meta chunks", %{model: model, context: context} do
       reasoning_details = [
-        %{"type" => "encrypted_thought", "data" => "abc123"},
-        %{"type" => "encrypted_thought", "data" => "def456"}
+        %ReasoningDetails{
+          provider: :openai,
+          provider_data: %{"type" => "encrypted_thought", "data" => "abc123"}
+        },
+        %ReasoningDetails{
+          provider: :openai,
+          provider_data: %{"type" => "encrypted_thought", "data" => "def456"}
+        }
       ]
 
       chunks = [
@@ -1013,8 +1094,19 @@ defmodule ReqLLM.Provider.DefaultsTest do
       model: model,
       context: context
     } do
-      details1 = [%{"type" => "thought", "data" => "first"}]
-      details2 = [%{"type" => "thought", "data" => "second"}]
+      details1 = [
+        %ReasoningDetails{
+          provider: :openai,
+          provider_data: %{"type" => "thought", "data" => "first"}
+        }
+      ]
+
+      details2 = [
+        %ReasoningDetails{
+          provider: :openai,
+          provider_data: %{"type" => "thought", "data" => "second"}
+        }
+      ]
 
       chunks = [
         StreamChunk.text("Hello"),
@@ -1056,7 +1148,13 @@ defmodule ReqLLM.Provider.DefaultsTest do
     end
 
     test "preserves reasoning_details alongside tool calls", %{model: model, context: context} do
-      reasoning_details = [%{"type" => "thought", "signature" => "xyz"}]
+      reasoning_details = [
+        %ReasoningDetails{
+          provider: :openai,
+          signature: "xyz",
+          provider_data: %{"type" => "thought"}
+        }
+      ]
 
       chunks = [
         StreamChunk.tool_call("get_weather", %{"city" => "NYC"}, %{id: "call_123"}),

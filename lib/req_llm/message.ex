@@ -43,10 +43,64 @@ defmodule ReqLLM.Message do
 
     @type t :: unquote(Zoi.type_spec(@schema))
 
+    @openai_compatible_keys ["text", "signature", "signature_encrypted", "format", "index"]
+
     @enforce_keys Zoi.Struct.enforce_keys(@schema)
     defstruct Zoi.Struct.struct_fields(@schema)
 
     def schema, do: @schema
+
+    @doc """
+    Builds normalized reasoning details from an OpenAI-compatible wire map.
+
+    OpenAI-compatible providers such as OpenRouter attach provider-specific
+    fields to `reasoning_details` entries. ReqLLM keeps common fields on the
+    struct and stores unknown provider fields in `provider_data` so the entry
+    can be encoded back to the provider without losing wire metadata.
+    """
+    @spec from_openai_compatible(map(), atom() | nil, non_neg_integer()) :: t()
+    @spec from_openai_compatible(map(), atom() | nil, non_neg_integer(), String.t()) :: t()
+    def from_openai_compatible(
+          raw,
+          provider,
+          fallback_index,
+          default_format \\ "openai-compatible-v1"
+        )
+        when is_map(raw) and is_binary(default_format) do
+      %__MODULE__{
+        text: raw["text"],
+        signature: raw["signature"],
+        encrypted?: raw["signature_encrypted"] == true,
+        provider: provider,
+        format: raw["format"] || default_format,
+        index: raw["index"] || fallback_index,
+        provider_data: Map.drop(raw, @openai_compatible_keys)
+      }
+    end
+
+    @doc """
+    Encodes normalized reasoning details to an OpenAI-compatible wire map.
+    """
+    @spec to_openai_compatible(t()) :: map()
+    def to_openai_compatible(%__MODULE__{} = detail) do
+      detail.provider_data
+      |> ensure_map()
+      |> put_wire_field("text", detail.text)
+      |> put_wire_field("signature", detail.signature)
+      |> put_wire_field("signature_encrypted", encrypted_signature(detail))
+      |> put_wire_field("format", detail.format)
+      |> put_wire_field("index", detail.index)
+    end
+
+    defp encrypted_signature(%__MODULE__{encrypted?: true}), do: true
+    defp encrypted_signature(_detail), do: nil
+
+    defp put_wire_field(map, _key, nil), do: map
+    defp put_wire_field(map, _key, ""), do: map
+    defp put_wire_field(map, key, value), do: Map.put(map, key, value)
+
+    defp ensure_map(map) when is_map(map), do: map
+    defp ensure_map(_), do: %{}
   end
 
   @derive Jason.Encoder

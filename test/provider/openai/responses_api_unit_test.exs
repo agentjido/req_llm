@@ -130,6 +130,68 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
       assert Enum.sort(encoded_tool["parameters"]["required"]) == ["location", "units"]
     end
 
+    test "strictifies raw function tools with JSON schema placeholder parameters" do
+      tool = %{
+        "type" => "function",
+        "function" => %{
+          "name" => "websearch",
+          "description" => "Search the web",
+          "parameters" => %{
+            "type" => "object",
+            "required" => ["query"],
+            "properties" => %{
+              "query" => %{"type" => "string"},
+              "outputSchema" => %{
+                "description" => "JSON schema for synthesized output.content"
+              },
+              "summary" => %{
+                "anyOf" => [
+                  %{"type" => "boolean"},
+                  %{
+                    "type" => "object",
+                    "properties" => %{
+                      "schema" => %{
+                        "description" => "JSON schema for structured summary output"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+
+      request = build_request(tools: [tool])
+
+      encoded = ResponsesAPI.encode_body(request)
+      body = ReqLLM.Test.Helpers.json_body(encoded)
+
+      assert [encoded_tool] = body["tools"]
+      assert encoded_tool["type"] == "function"
+      assert encoded_tool["name"] == "websearch"
+      assert encoded_tool["strict"] == true
+
+      params = encoded_tool["parameters"]
+      assert Enum.sort(params["required"]) == ["outputSchema", "query", "summary"]
+      assert params["additionalProperties"] == false
+
+      output_schema = params["properties"]["outputSchema"]
+      assert output_schema["description"] == "JSON schema for synthesized output.content"
+      assert output_schema["type"] == "object"
+      assert output_schema["properties"] == %{}
+      assert output_schema["required"] == []
+      assert output_schema["additionalProperties"] == false
+
+      [_, summary_object] = params["properties"]["summary"]["anyOf"]
+      nested_schema = summary_object["properties"]["schema"]
+      assert nested_schema["description"] == "JSON schema for structured summary output"
+      assert nested_schema["type"] == "object"
+      assert nested_schema["properties"] == %{}
+      assert nested_schema["required"] == []
+      assert nested_schema["additionalProperties"] == false
+    end
+
     test "passes through code_interpreter tool maps unchanged" do
       tool = %{
         "type" => "code_interpreter",

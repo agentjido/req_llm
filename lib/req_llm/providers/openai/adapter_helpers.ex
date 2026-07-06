@@ -128,6 +128,19 @@ defmodule ReqLLM.Providers.OpenAI.AdapterHelpers do
     |> maybe_recurse_defs()
   end
 
+  def enforce_strict_recursive(%{"type" => "object", "patternProperties" => patterns} = schema)
+      when is_map(patterns) do
+    updated_patterns =
+      Map.new(patterns, fn {k, v} -> {k, enforce_strict_recursive(v)} end)
+
+    schema
+    |> Map.put("patternProperties", updated_patterns)
+    |> Map.put_new("properties", %{})
+    |> Map.put("required", [])
+    |> Map.put("additionalProperties", false)
+    |> maybe_recurse_defs()
+  end
+
   def enforce_strict_recursive(%{"type" => "array", "items" => items} = schema)
       when is_map(items) do
     Map.put(schema, "items", enforce_strict_recursive(items))
@@ -141,7 +154,32 @@ defmodule ReqLLM.Providers.OpenAI.AdapterHelpers do
     Map.put(schema, "oneOf", Enum.map(variants, &enforce_strict_recursive/1))
   end
 
+  def enforce_strict_recursive(%{} = schema) do
+    if annotation_only_schema?(schema) do
+      schema
+      |> Map.put("type", "object")
+      |> Map.put("properties", %{})
+      |> Map.put("required", [])
+      |> Map.put("additionalProperties", false)
+      |> maybe_recurse_defs()
+    else
+      schema
+    end
+  end
+
   def enforce_strict_recursive(schema), do: schema
+
+  # Annotation-only schemas such as %{"description" => "..."} are valid JSON Schema
+  # unrestricted subschemas, but OpenAI strict tool schemas reject subschemas without an
+  # assertion/applicator keyword. In strict OpenAI mode, represent them as empty strict objects.
+  @schema_shape_keys ["type", "anyOf", "oneOf", "allOf", "$ref", "const", "enum"]
+  @annotation_keys ["description", "title", "default", "examples"]
+
+  defp annotation_only_schema?(schema) do
+    map_size(schema) > 0 and
+      not Enum.any?(@schema_shape_keys, &Map.has_key?(schema, &1)) and
+      Enum.all?(Map.keys(schema), &(&1 in @annotation_keys))
+  end
 
   defp maybe_recurse_defs(%{"$defs" => defs} = schema) when is_map(defs) do
     updated_defs = Map.new(defs, fn {k, v} -> {k, enforce_strict_recursive(v)} end)

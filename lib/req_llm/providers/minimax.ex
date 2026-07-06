@@ -98,10 +98,12 @@ defmodule ReqLLM.Providers.Minimax do
   @impl ReqLLM.Provider
   def build_body(request) do
     reasoning_split = option_value(request.options, :reasoning_split, true)
+    original_context = request.options[:context]
 
     request
+    |> strip_reasoning_details_from_context()
     |> ReqLLM.Provider.Defaults.default_build_body()
-    |> encode_minimax_reasoning_history()
+    |> encode_minimax_reasoning_history(original_context)
     |> Map.delete(:max_tokens)
     |> Map.delete("max_tokens")
     |> maybe_put(:max_completion_tokens, request.options[:max_completion_tokens])
@@ -223,28 +225,74 @@ defmodule ReqLLM.Providers.Minimax do
 
   defp normalize_stream_chunk(chunk), do: chunk
 
-  defp encode_minimax_reasoning_history(%{messages: messages} = body) when is_list(messages) do
-    %{body | messages: Enum.map(messages, &encode_minimax_message_reasoning/1)}
+  defp strip_reasoning_details_from_context(%Req.Request{options: options} = request) do
+    case options[:context] do
+      %ReqLLM.Context{messages: messages} = context ->
+        stripped_messages =
+          Enum.map(messages, fn
+            %ReqLLM.Message{} = message -> %{message | reasoning_details: nil}
+            message -> message
+          end)
+
+        put_in(request.options[:context], %{context | messages: stripped_messages})
+
+      _ ->
+        request
+    end
   end
 
-  defp encode_minimax_reasoning_history(%{"messages" => messages} = body)
-       when is_list(messages) do
-    %{body | "messages" => Enum.map(messages, &encode_minimax_message_reasoning/1)}
+  defp encode_minimax_reasoning_history(body, %ReqLLM.Context{messages: context_messages}) do
+    cond do
+      is_list(Map.get(body, :messages)) ->
+        %{body | messages: encode_minimax_messages_reasoning(body.messages, context_messages)}
+
+      is_list(Map.get(body, "messages")) ->
+        %{
+          body
+          | "messages" => encode_minimax_messages_reasoning(body["messages"], context_messages)
+        }
+
+      true ->
+        body
+    end
   end
 
-  defp encode_minimax_reasoning_history(body), do: body
+  defp encode_minimax_reasoning_history(body, _context), do: body
 
-  defp encode_minimax_message_reasoning(%{reasoning_details: details} = message)
+  defp encode_minimax_messages_reasoning(encoded_messages, context_messages)
+       when length(encoded_messages) == length(context_messages) do
+    encoded_messages
+    |> Enum.zip(context_messages)
+    |> Enum.map(fn {encoded_message, context_message} ->
+      encode_minimax_message_reasoning(encoded_message, context_message)
+    end)
+  end
+
+  defp encode_minimax_messages_reasoning(encoded_messages, _context_messages),
+    do: encoded_messages
+
+  defp encode_minimax_message_reasoning(encoded_message, %ReqLLM.Message{
+         reasoning_details: details
+       })
        when is_list(details) do
-    %{message | reasoning_details: encode_minimax_reasoning_details(details)}
+    put_minimax_reasoning_details(encoded_message, encode_minimax_reasoning_details(details))
   end
 
-  defp encode_minimax_message_reasoning(%{"reasoning_details" => details} = message)
-       when is_list(details) do
-    %{message | "reasoning_details" => encode_minimax_reasoning_details(details)}
+  defp encode_minimax_message_reasoning(encoded_message, _context_message), do: encoded_message
+
+  defp put_minimax_reasoning_details(message, []) when is_map(message) do
+    message
+    |> Map.delete(:reasoning_details)
+    |> Map.delete("reasoning_details")
   end
 
-  defp encode_minimax_message_reasoning(message), do: message
+  defp put_minimax_reasoning_details(%{} = message, details) do
+    cond do
+      Map.has_key?(message, :role) -> Map.put(message, :reasoning_details, details)
+      Map.has_key?(message, "role") -> Map.put(message, "reasoning_details", details)
+      true -> Map.put(message, :reasoning_details, details)
+    end
+  end
 
   defp encode_minimax_reasoning_details(details) do
     Enum.map(details, &encode_minimax_reasoning_detail/1)

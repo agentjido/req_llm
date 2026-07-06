@@ -627,6 +627,26 @@ defmodule ReqLLM.Providers.OpenAI.StructuredOutputTest do
       assert Enum.sort(item_schema["required"]) == ["name", "qty"]
     end
 
+    test "enforce_strict_recursive handles patternProperties objects" do
+      schema = %{
+        "type" => "object",
+        "properties" => %{
+          "headers" => %{
+            "type" => "object",
+            "patternProperties" => %{"^.*$" => %{"type" => "string"}}
+          }
+        }
+      }
+
+      result = ReqLLM.Providers.OpenAI.AdapterHelpers.enforce_strict_recursive(schema)
+
+      headers = result["properties"]["headers"]
+      assert headers["additionalProperties"] == false
+      assert headers["properties"] == %{}
+      assert headers["required"] == []
+      assert headers["patternProperties"] == %{"^.*$" => %{"type" => "string"}}
+    end
+
     test "enforce_strict_recursive handles anyOf branches" do
       schema = %{
         "type" => "object",

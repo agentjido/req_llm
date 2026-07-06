@@ -1585,7 +1585,7 @@ defmodule ReqLLM.Providers.OpenRouterTest do
       assert log =~ "anthropic"
     end
 
-    test "encodes ReasoningDetails with signature field" do
+    test "encodes ReasoningDetails with signature and provider data fields" do
       message_with_signature = %ReqLLM.Message{
         role: :assistant,
         content: [ReqLLM.Message.ContentPart.text("The answer")],
@@ -1597,7 +1597,7 @@ defmodule ReqLLM.Providers.OpenRouterTest do
             provider: :openrouter,
             format: "google-gemini-v1",
             index: 0,
-            provider_data: %{"type" => "reasoning.text"}
+            provider_data: %{"type" => "reasoning.text", "id" => "rs_123"}
           }
         ]
       }
@@ -1623,7 +1623,9 @@ defmodule ReqLLM.Providers.OpenRouterTest do
         Enum.find(decoded_body["messages"], fn msg -> msg["role"] == "assistant" end)
 
       [detail] = assistant_message["reasoning_details"]
+      assert detail["id"] == "rs_123"
       assert detail["signature"] == "encrypted-sig-token"
+      assert detail["signature_encrypted"] == true
       assert detail["text"] == "Reasoning text"
     end
   end
