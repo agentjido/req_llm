@@ -444,6 +444,8 @@ defmodule ReqLLM.Providers.OpenAI do
             :stream,
             :model,
             :provider_options,
+            :stream_transport,
+            :defer_http_events_until_telemetry?,
             :api_mod,
             :max_completion_tokens,
             :reasoning_effort,

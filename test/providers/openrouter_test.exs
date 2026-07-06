@@ -489,6 +489,67 @@ defmodule ReqLLM.Providers.OpenRouterTest do
       assert decoded["response_format"] == %{"type" => "json_object"}
     end
 
+    test "encode_body enforces strict requirements for raw JSON schema response_format" do
+      {:ok, model} = ReqLLM.model("openrouter:openai/gpt-4")
+      context = context_fixture()
+
+      response_format = %{
+        "type" => "json_schema",
+        "json_schema" => %{
+          "name" => "response",
+          "strict" => true,
+          "schema" => %{
+            "type" => "object",
+            "properties" => %{
+              "receipt" => %{
+                "anyOf" => [
+                  %{
+                    "type" => "object",
+                    "properties" => %{
+                      "items" => %{
+                        "type" => "array",
+                        "items" => %{
+                          "type" => "object",
+                          "properties" => %{"item_name" => %{"type" => "string"}}
+                        }
+                      }
+                    }
+                  },
+                  %{"type" => "null"}
+                ]
+              },
+              "error" => %{"anyOf" => [%{"type" => "string"}, %{"type" => "null"}]}
+            }
+          }
+        }
+      }
+
+      mock_request = %Req.Request{
+        options: [
+          context: context,
+          model: model.model,
+          stream: false,
+          response_format: response_format
+        ]
+      }
+
+      updated_request = OpenRouter.encode_body(mock_request)
+
+      schema =
+        ReqLLM.Test.Helpers.json_body(updated_request)["response_format"]["json_schema"]["schema"]
+
+      assert Enum.sort(schema["required"]) == ["error", "receipt"]
+      assert schema["additionalProperties"] == false
+
+      [receipt_object, %{"type" => "null"}] = schema["properties"]["receipt"]["anyOf"]
+      assert receipt_object["required"] == ["items"]
+      assert receipt_object["additionalProperties"] == false
+
+      item_schema = receipt_object["properties"]["items"]["items"]
+      assert item_schema["required"] == ["item_name"]
+      assert item_schema["additionalProperties"] == false
+    end
+
     test "encode_body OpenRouter-specific options" do
       {:ok, model} = ReqLLM.model("openrouter:anthropic/claude-3-haiku")
       context = context_fixture()

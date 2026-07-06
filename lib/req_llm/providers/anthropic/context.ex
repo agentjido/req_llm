@@ -127,11 +127,11 @@ defmodule ReqLLM.Providers.Anthropic.Context do
        })
        when is_list(reasoning_details) and reasoning_details != [] do
     thinking_blocks = encode_reasoning_details(reasoning_details)
-    text_blocks = encode_content(content)
+    content_blocks = encode_non_thinking_content(content)
 
     %{
       role: "assistant",
-      content: combine_all_content_blocks(thinking_blocks, text_blocks, [])
+      content: combine_all_content_blocks(thinking_blocks, content_blocks, [])
     }
   end
 
@@ -236,10 +236,46 @@ defmodule ReqLLM.Providers.Anthropic.Context do
 
   defp encode_content_part(_), do: nil
 
+  defp encode_non_thinking_content(content) when is_list(content) do
+    content
+    |> Enum.reject(&thinking_content_part?/1)
+    |> encode_content()
+  end
+
+  defp encode_non_thinking_content(content), do: encode_content(content)
+
+  defp thinking_content_part?(%ReqLLM.Message.ContentPart{type: :thinking}), do: true
+  defp thinking_content_part?(_part), do: false
+
   defp do_encode_content_part(%ReqLLM.Message.ContentPart{type: :text, text: ""}), do: nil
 
   defp do_encode_content_part(%ReqLLM.Message.ContentPart{type: :text, text: text}) do
     %{type: "text", text: text}
+  end
+
+  defp do_encode_content_part(%ReqLLM.Message.ContentPart{
+         type: :thinking,
+         metadata: %{"redacted" => true, "data" => data}
+       })
+       when is_binary(data) do
+    %{type: "redacted_thinking", data: data}
+  end
+
+  defp do_encode_content_part(%ReqLLM.Message.ContentPart{
+         type: :thinking,
+         metadata: %{redacted: true, data: data}
+       })
+       when is_binary(data) do
+    %{type: "redacted_thinking", data: data}
+  end
+
+  defp do_encode_content_part(%ReqLLM.Message.ContentPart{
+         type: :thinking,
+         text: text,
+         metadata: metadata
+       }) do
+    %{type: "thinking", thinking: text || ""}
+    |> maybe_put_signature(metadata)
   end
 
   defp do_encode_content_part(%ReqLLM.Message.ContentPart{
@@ -320,6 +356,14 @@ defmodule ReqLLM.Providers.Anthropic.Context do
 
   defp maybe_put_cache_control(block, _metadata), do: block
 
+  defp maybe_put_signature(block, %{signature: signature}) when is_binary(signature),
+    do: Map.put(block, :signature, signature)
+
+  defp maybe_put_signature(block, %{"signature" => signature}) when is_binary(signature),
+    do: Map.put(block, :signature, signature)
+
+  defp maybe_put_signature(block, _metadata), do: block
+
   defp file_block_type(media_type) when is_binary(media_type) do
     if String.starts_with?(media_type, "image/"), do: "image", else: "document"
   end
@@ -387,11 +431,18 @@ defmodule ReqLLM.Providers.Anthropic.Context do
   end
 
   defp encode_single_reasoning_detail(
+         %ReqLLM.Message.ReasoningDetails{provider: :anthropic, encrypted?: true} = detail
+       ) do
+    case redacted_reasoning_data(detail) do
+      nil -> encode_anthropic_thinking_detail(detail)
+      data -> [%{type: "redacted_thinking", data: data}]
+    end
+  end
+
+  defp encode_single_reasoning_detail(
          %ReqLLM.Message.ReasoningDetails{provider: :anthropic} = detail
        ) do
-    block = %{type: "thinking", thinking: detail.text || ""}
-    block = if detail.signature, do: Map.put(block, :signature, detail.signature), else: block
-    [block]
+    encode_anthropic_thinking_detail(detail)
   end
 
   defp encode_single_reasoning_detail(%ReqLLM.Message.ReasoningDetails{provider: provider}) do
@@ -400,6 +451,19 @@ defmodule ReqLLM.Providers.Anthropic.Context do
   end
 
   defp encode_single_reasoning_detail(_), do: []
+
+  defp encode_anthropic_thinking_detail(detail) do
+    block = %{type: "thinking", thinking: detail.text || ""}
+    block = if detail.signature, do: Map.put(block, :signature, detail.signature), else: block
+    [block]
+  end
+
+  defp redacted_reasoning_data(%ReqLLM.Message.ReasoningDetails{provider_data: provider_data})
+       when is_map(provider_data) do
+    Map.get(provider_data, :data) || Map.get(provider_data, "data")
+  end
+
+  defp redacted_reasoning_data(_detail), do: nil
 
   defp encode_tool_result_content(%ReqLLM.Message{content: content} = msg) do
     output = ReqLLM.ToolResult.output_from_message(msg)

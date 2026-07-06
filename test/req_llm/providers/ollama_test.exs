@@ -157,5 +157,20 @@ defmodule ReqLLM.Providers.OllamaTest do
         if original_key, do: System.put_env("OLLAMA_API_KEY", original_key)
       end
     end
+
+    test "carries a non-empty JSON body with model + messages (regression: empty-body bug)" do
+      assert {:ok, request} =
+               Ollama.attach_stream(ollama_model(), simple_context(), [], ReqLLM.Finch)
+
+      assert is_binary(request.body) or is_list(request.body)
+      body_string = IO.iodata_to_binary(request.body)
+      refute body_string == "", "streaming request body must not be empty"
+
+      decoded = Jason.decode!(body_string)
+      assert decoded["model"] == "qwen2.5-coder:14b"
+      assert decoded["stream"] == true
+      assert is_list(decoded["messages"])
+      assert decoded["messages"] != []
+    end
   end
 end
