@@ -25,6 +25,8 @@ defmodule ReqLLM.Providers.AmazonBedrock.STS do
       )
   """
 
+  alias ReqLLM.Providers.AmazonBedrock.AWSAuthAdapter
+
   @doc """
   Assume an AWS IAM role and get temporary credentials.
 
@@ -141,33 +143,17 @@ defmodule ReqLLM.Providers.AmazonBedrock.STS do
   defp maybe_add_param(params, _key, nil), do: params
   defp maybe_add_param(params, key, value), do: params ++ [{key, to_string(value)}]
 
-  # Sign STS request using ex_aws_auth
   defp sign_sts_request(access_key_id, secret_access_key, region, url, headers, body) do
-    case Code.ensure_loaded(AWSAuth) do
-      {:module, _} ->
-        :ok
-
-      {:error, _} ->
-        raise """
-        AWS STS AssumeRole requires the ex_aws_auth dependency.
-        Please add {:ex_aws_auth, "~> 1.4"} to your mix.exs dependencies.
-        """
-    end
-
-    # Create credentials struct (built via struct/2 so the compile-time
-    # reference to AWSAuth.Credentials stays optional)
     creds =
-      struct(AWSAuth.Credentials,
+      AWSAuthAdapter.credentials_struct(
         access_key_id: access_key_id,
         secret_access_key: secret_access_key,
         region: region
       )
 
-    # Convert headers to map
     headers_map = Map.new(headers, fn {k, v} -> {String.downcase(k), v} end)
 
-    # Sign using new credential-based API
-    AWSAuth.sign_authorization_header(
+    AWSAuthAdapter.sign_authorization_header(
       creds,
       "POST",
       url,

@@ -118,6 +118,7 @@ defmodule ReqLLM.Providers.AmazonBedrock do
   alias ReqLLM.Error
   alias ReqLLM.Error.Invalid.Parameter, as: InvalidParameter
   alias ReqLLM.ModelHelpers
+  alias ReqLLM.Providers.AmazonBedrock.AWSAuthAdapter
   alias ReqLLM.Providers.AmazonBedrock.AWSEventStream
   alias ReqLLM.Providers.Anthropic
   alias ReqLLM.Providers.Anthropic.PlatformReasoning
@@ -794,62 +795,33 @@ defmodule ReqLLM.Providers.AmazonBedrock do
 
   def wrap_response(data), do: data
 
-  # AWS Authentication
   defp extract_aws_credentials(opts) do
     aws_keys = [:api_key, :access_key_id, :secret_access_key, :session_token, :region]
 
-    # Split AWS credentials from other options
     {passed_creds, other_opts} = Keyword.split(opts, aws_keys)
-
-    # Credential precedence:
-    # 1. Passed API key
-    # 2. Passed IAM credentials
-    # 3. Env var API key
-    # 4. Env var IAM credentials
 
     creds =
       cond do
-        # 1. Passed API key takes highest priority
         passed_creds[:api_key] ->
           %{
             api_key: passed_creds[:api_key],
             region: passed_creds[:region] || System.get_env("AWS_REGION") || "us-east-1"
           }
 
-        # 2. Passed IAM credentials
         passed_creds[:access_key_id] && passed_creds[:secret_access_key] ->
-          ensure_ex_aws_auth!()
-          AWSAuth.Credentials.from_map(passed_creds)
+          AWSAuthAdapter.from_map(passed_creds)
 
-        # 3. Env var API key
         env_api_key = System.get_env("AWS_BEARER_TOKEN_BEDROCK") ->
           %{
             api_key: env_api_key,
             region: passed_creds[:region] || System.get_env("AWS_REGION") || "us-east-1"
           }
 
-        # 4. Env var IAM credentials
         true ->
-          ensure_ex_aws_auth!()
-          AWSAuth.Credentials.from_env()
+          AWSAuthAdapter.from_env()
       end
 
     {creds, other_opts}
-  end
-
-  # Raise an informative error when IAM authentication is requested but the
-  # optional ex_aws_auth dependency is not available.
-  defp ensure_ex_aws_auth! do
-    case Code.ensure_loaded(AWSAuth.Credentials) do
-      {:module, _} ->
-        :ok
-
-      {:error, _} ->
-        raise """
-        AWS Bedrock IAM authentication requires the ex_aws_auth dependency.
-        Please add {:ex_aws_auth, "~> 1.4"} to your mix.exs dependencies.
-        """
-    end
   end
 
   defp validate_aws_credentials!(nil) do
@@ -873,7 +845,20 @@ defmodule ReqLLM.Providers.AmazonBedrock do
     raise ArgumentError, "API key must be a non-empty string"
   end
 
-  defp validate_aws_credentials!(%{__struct__: AWSAuth.Credentials, access_key_id: nil}) do
+  defp validate_aws_credentials!(aws_creds) do
+    cond do
+      AWSAuthAdapter.credentials?(aws_creds) and is_nil(Map.get(aws_creds, :access_key_id)) ->
+        raise_missing_aws_credentials!()
+
+      AWSAuthAdapter.credentials?(aws_creds) and is_nil(Map.get(aws_creds, :secret_access_key)) ->
+        raise_missing_aws_credentials!()
+
+      true ->
+        :ok
+    end
+  end
+
+  defp raise_missing_aws_credentials! do
     raise ArgumentError, """
     AWS credentials required for Bedrock. Please provide either:
 
@@ -887,23 +872,6 @@ defmodule ReqLLM.Providers.AmazonBedrock do
        or access_key_id: "...", secret_access_key: "..."
     """
   end
-
-  defp validate_aws_credentials!(%{__struct__: AWSAuth.Credentials, secret_access_key: nil}) do
-    raise ArgumentError, """
-    AWS credentials required for Bedrock. Please provide either:
-
-    1. API Key (simplest):
-       AWS_BEARER_TOKEN_BEDROCK=... (environment variable)
-       or api_key: "..." (option)
-
-    2. IAM Credentials:
-       AWS_ACCESS_KEY_ID=...
-       AWS_SECRET_ACCESS_KEY=...
-       or access_key_id: "...", secret_access_key: "..."
-    """
-  end
-
-  defp validate_aws_credentials!(%{__struct__: AWSAuth.Credentials}), do: :ok
 
   defp extract_region(aws_creds) do
     case aws_creds do
@@ -923,33 +891,20 @@ defmodule ReqLLM.Providers.AmazonBedrock do
     end
   end
 
-  # API Key authentication - use Bearer token
   defp put_aws_sigv4(request, %{api_key: api_key}) when is_binary(api_key) do
     Req.Request.put_header(request, "authorization", "Bearer #{api_key}")
   end
 
-  # IAM authentication - use AWS Signature V4
-  defp put_aws_sigv4(request, %{__struct__: AWSAuth.Credentials} = aws_creds) do
-    case Code.ensure_loaded(AWSAuth.Req) do
-      {:module, _} ->
-        :ok
-
-      {:error, _} ->
-        raise """
-        AWS Bedrock support requires the ex_aws_auth dependency.
-        Please add {:ex_aws_auth, "~> 1.4"} to your mix.exs dependencies.
-        """
+  defp put_aws_sigv4(request, aws_creds) do
+    if AWSAuthAdapter.credentials?(aws_creds) do
+      AWSAuthAdapter.attach_request(request, credentials: aws_creds, service: "bedrock")
+    else
+      request
     end
-
-    # Use the AWSAuth.Req plugin for automatic signing
-    AWSAuth.Req.attach(request, credentials: aws_creds, service: "bedrock")
   end
 
-  # Sign a Finch request with AWS Signature V4 using ex_aws_auth library
-  # API Key authentication - just add Bearer token header
   defp sign_aws_request(finch_request, %{api_key: api_key}, _region, _service)
        when is_binary(api_key) do
-    # Normalize headers to lowercase (matching IAM path behavior)
     normalized_headers =
       Enum.map(finch_request.headers, fn {k, v} -> {String.downcase(k), v} end)
 
@@ -957,61 +912,41 @@ defmodule ReqLLM.Providers.AmazonBedrock do
     %{finch_request | headers: headers}
   end
 
-  # IAM authentication - use AWS Signature V4
-  defp sign_aws_request(
-         finch_request,
-         %{__struct__: AWSAuth.Credentials} = aws_creds,
-         _region,
-         service
-       ) do
-    case Code.ensure_loaded(AWSAuth) do
-      {:module, _} ->
-        :ok
+  defp sign_aws_request(finch_request, aws_creds, _region, service) do
+    if AWSAuthAdapter.credentials?(aws_creds) do
+      %Finch.Request{
+        method: method,
+        path: path,
+        headers: headers,
+        body: body,
+        query: query
+      } = finch_request
 
-      {:error, _} ->
-        raise """
-        AWS Bedrock streaming requires the ex_aws_auth dependency.
-        Please add {:ex_aws_auth, "~> 1.4"} to your mix.exs dependencies.
-        """
+      body_binary =
+        case body do
+          nil -> ""
+          binary when is_binary(binary) -> binary
+        end
+
+      region = Map.get(aws_creds, :region) || "us-east-1"
+      url = "https://bedrock-runtime.#{region}.amazonaws.com#{path}"
+      url = if query && query != "", do: "#{url}?#{query}", else: url
+      headers_map = Map.new(headers, fn {k, v} -> {String.downcase(k), v} end)
+
+      signed_headers =
+        AWSAuthAdapter.sign_authorization_header(
+          aws_creds,
+          String.upcase(to_string(method)),
+          url,
+          service,
+          headers: headers_map,
+          payload: body_binary
+        )
+
+      %{finch_request | headers: signed_headers, body: body_binary}
+    else
+      finch_request
     end
-
-    # Extract request details
-    %Finch.Request{
-      method: method,
-      path: path,
-      headers: headers,
-      body: body,
-      query: query
-    } = finch_request
-
-    # Ensure body is binary (Finch always provides binary or nil)
-    body_binary =
-      case body do
-        nil -> ""
-        binary when is_binary(binary) -> binary
-      end
-
-    # Build URL
-    region = aws_creds.region || "us-east-1"
-    url = "https://bedrock-runtime.#{region}.amazonaws.com#{path}"
-    url = if query && query != "", do: "#{url}?#{query}", else: url
-
-    # Convert headers to map for signing
-    headers_map = Map.new(headers, fn {k, v} -> {String.downcase(k), v} end)
-
-    # Sign using credential-based API - returns list of header tuples
-    signed_headers =
-      AWSAuth.sign_authorization_header(
-        aws_creds,
-        String.upcase(to_string(method)),
-        url,
-        service,
-        headers: headers_map,
-        payload: body_binary
-      )
-
-    # Return signed request
-    %{finch_request | headers: signed_headers, body: body_binary}
   end
 
   defp get_model_family(model_id) do

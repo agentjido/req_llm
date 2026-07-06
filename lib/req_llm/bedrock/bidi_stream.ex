@@ -24,6 +24,7 @@ defmodule ReqLLM.Bedrock.BidiStream do
 
   use GenServer
 
+  alias ReqLLM.Providers.AmazonBedrock.AWSAuthAdapter
   alias ReqLLM.Providers.AmazonBedrock.AWSEventStream
   alias ReqLLM.Streaming.HTTP2DuplexSession, as: Session
 
@@ -56,6 +57,8 @@ defmodule ReqLLM.Bedrock.BidiStream do
   """
   @spec connect(String.t(), keyword()) :: {:ok, Conn.t()} | {:error, term()}
   def connect(model_id, opts \\ []) when is_binary(model_id) do
+    AWSAuthAdapter.ensure_available!()
+
     with {:ok, pid} <- GenServer.start_link(__MODULE__, {model_id, opts}),
          :ok <- GenServer.call(pid, :await_connected, Keyword.get(opts, :connect_timeout, 15_000)) do
       {:ok, %Conn{pid: pid, model_id: model_id}}
@@ -87,8 +90,8 @@ defmodule ReqLLM.Bedrock.BidiStream do
 
   @impl GenServer
   def init({model_id, opts}) do
-    creds = Keyword.get(opts, :credentials) || AWSAuth.Credentials.from_env()
-    region = (opts[:region] || creds.region || "us-east-1") |> String.downcase()
+    creds = Keyword.get(opts, :credentials) || AWSAuthAdapter.from_env()
+    region = (opts[:region] || Map.get(creds, :region) || "us-east-1") |> String.downcase()
     service = "bedrock"
     host = "bedrock-runtime.#{region}.amazonaws.com"
     path = "/model/#{model_id}/invoke-with-bidirectional-stream"
@@ -101,7 +104,7 @@ defmodule ReqLLM.Bedrock.BidiStream do
         {:ok,
          %__MODULE__{
            session: session,
-           secret_key: creds.secret_access_key,
+           secret_key: Map.get(creds, :secret_access_key),
            region: region,
            service: service,
            prior_signature: seed_sig
@@ -185,9 +188,9 @@ defmodule ReqLLM.Bedrock.BidiStream do
   # the prior signature. Returns {outer_frame, hex_signature}.
   defp build_signed_frame(state, event) do
     creds =
-      struct(AWSAuth.Credentials, secret_access_key: state.secret_key, region: state.region)
+      AWSAuthAdapter.credentials_struct(secret_access_key: state.secret_key, region: state.region)
 
-    AWSAuth.EventStream.sign_message(
+    AWSAuthAdapter.event_stream_sign_message(
       creds,
       state.service,
       state.prior_signature,
@@ -214,12 +217,12 @@ defmodule ReqLLM.Bedrock.BidiStream do
   # Exposed for testing.
   def build_inner(event) do
     headers =
-      AWSAuth.EventStream.encode_string_header(":content-type", "application/json") <>
-        AWSAuth.EventStream.encode_string_header(":event-type", "chunk") <>
-        AWSAuth.EventStream.encode_string_header(":message-type", "event")
+      AWSAuthAdapter.event_stream_encode_string_header(":content-type", "application/json") <>
+        AWSAuthAdapter.event_stream_encode_string_header(":event-type", "chunk") <>
+        AWSAuthAdapter.event_stream_encode_string_header(":message-type", "event")
 
     payload = Jason.encode!(%{"bytes" => Base.encode64(Jason.encode!(event))})
-    AWSAuth.EventStream.encode_message(headers, payload)
+    AWSAuthAdapter.event_stream_encode_message(headers, payload)
   end
 
   @doc false
@@ -230,7 +233,7 @@ defmodule ReqLLM.Bedrock.BidiStream do
   # Returns {request_headers, seed_signature_hex}. Exposed for testing.
   def sign_seed(creds, region, service, host, url) do
     signed =
-      AWSAuth.sign_authorization_header(
+      AWSAuthAdapter.sign_authorization_header(
         creds,
         "POST",
         url,

@@ -7,20 +7,14 @@ defmodule ReqLLM.Bedrock.BidiStreamTest do
   use ExUnit.Case, async: true
 
   alias ReqLLM.Bedrock.BidiStream
-
-  @creds %AWSAuth.Credentials{
-    access_key_id: "AKIDEXAMPLE",
-    secret_access_key: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
-    region: "us-west-2"
-  }
+  alias ReqLLM.Providers.AmazonBedrock.AWSAuthAdapter
 
   describe "sign_seed/5 region handling" do
     test "scopes the seed signature to the explicit region, not the credential region" do
       host = "bedrock-runtime.us-east-1.amazonaws.com"
       url = "https://#{host}/model/amazon.nova-sonic-v1:0/invoke-with-bidirectional-stream"
 
-      # credential region is us-west-2, but the call overrides to us-east-1
-      {headers, sig} = BidiStream.sign_seed(@creds, "us-east-1", "bedrock", host, url)
+      {headers, sig} = BidiStream.sign_seed(creds(), "us-east-1", "bedrock", host, url)
       hmap = Map.new(headers)
 
       assert hmap["x-amz-content-sha256"] == "STREAMING-AWS4-HMAC-SHA256-EVENTS"
@@ -64,11 +58,11 @@ defmodule ReqLLM.Bedrock.BidiStreamTest do
       payload = Jason.encode!(%{"bytes" => Base.encode64(Jason.encode!(event))})
 
       headers =
-        AWSAuth.EventStream.encode_string_header(":content-type", "application/json") <>
-          AWSAuth.EventStream.encode_string_header(":event-type", "chunk") <>
-          AWSAuth.EventStream.encode_string_header(":message-type", "event")
+        AWSAuthAdapter.event_stream_encode_string_header(":content-type", "application/json") <>
+          AWSAuthAdapter.event_stream_encode_string_header(":event-type", "chunk") <>
+          AWSAuthAdapter.event_stream_encode_string_header(":message-type", "event")
 
-      AWSAuth.EventStream.encode_message(headers, payload)
+      AWSAuthAdapter.event_stream_encode_message(headers, payload)
     end
 
     test "decodes a complete inbound message (unwrapping the bytes blob)" do
@@ -87,5 +81,13 @@ defmodule ReqLLM.Bedrock.BidiStreamTest do
       b = %{"event" => %{"b" => 2}}
       assert {[^a, ^b], ""} = BidiStream.decode_inbound(output_message(a) <> output_message(b))
     end
+  end
+
+  defp creds do
+    AWSAuthAdapter.credentials_struct(
+      access_key_id: "AKIDEXAMPLE",
+      secret_access_key: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+      region: "us-west-2"
+    )
   end
 end
