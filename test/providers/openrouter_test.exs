@@ -433,6 +433,70 @@ defmodule ReqLLM.Providers.OpenRouterTest do
              }
     end
 
+    test "encode_body encodes mp3 file parts as OpenRouter input_audio" do
+      {:ok, model} = ReqLLM.model("openrouter:openai/gpt-4")
+      audio_data = "audio bytes"
+
+      context =
+        Context.new([
+          Context.user([
+            ContentPart.text("Transcribe this audio"),
+            ContentPart.file(audio_data, "speech.mp3", "audio/mpeg")
+          ])
+        ])
+
+      mock_request = %Req.Request{
+        options: [
+          context: context,
+          model: model.model,
+          stream: false
+        ]
+      }
+
+      updated_request = OpenRouter.encode_body(mock_request)
+      decoded = ReqLLM.Test.Helpers.json_body(updated_request)
+
+      [message] = decoded["messages"]
+      [text_part, audio_part] = message["content"]
+
+      assert text_part == %{"type" => "text", "text" => "Transcribe this audio"}
+
+      assert audio_part == %{
+               "type" => "input_audio",
+               "input_audio" => %{
+                 "data" => Base.encode64(audio_data),
+                 "format" => "mp3"
+               }
+             }
+
+      refute Map.has_key?(audio_part, "image_url")
+    end
+
+    test "encode_body rejects unsupported audio file formats" do
+      {:ok, model} = ReqLLM.model("openrouter:openai/gpt-4")
+
+      context =
+        Context.new([
+          Context.user([
+            ContentPart.file("audio bytes", "speech.ogg", "audio/ogg")
+          ])
+        ])
+
+      mock_request = %Req.Request{
+        options: [
+          context: context,
+          model: model.model,
+          stream: false
+        ]
+      }
+
+      assert_raise ReqLLM.Error.Invalid.Message,
+                   ~r/OpenRouter chat audio input supports only mp3 and wav/,
+                   fn ->
+                     OpenRouter.encode_body(mock_request)
+                   end
+    end
+
     test "attach_stream with file-parser plugin encodes PDF files in OpenRouter format" do
       model = ReqLLM.model!("openrouter:openai/gpt-4")
       pdf_data = "%PDF stream"
@@ -464,6 +528,35 @@ defmodule ReqLLM.Providers.OpenRouterTest do
                "file" => %{
                  "filename" => "stream.pdf",
                  "file_data" => "data:application/pdf;base64,#{Base.encode64(pdf_data)}"
+               }
+             }
+    end
+
+    test "attach_stream encodes wav file parts as OpenRouter input_audio" do
+      model = ReqLLM.model!("openrouter:openai/gpt-4")
+      audio_data = "wav bytes"
+
+      context =
+        Context.new([
+          Context.user([
+            ContentPart.text("Describe the audio"),
+            ContentPart.file(audio_data, "clip.wav", "audio/wav")
+          ])
+        ])
+
+      {:ok, finch_request} = OpenRouter.attach_stream(model, context, [], MyApp.Finch)
+
+      decoded = Jason.decode!(finch_request.body)
+      [message] = decoded["messages"]
+      [_, audio_part] = message["content"]
+
+      assert decoded["stream"] == true
+
+      assert audio_part == %{
+               "type" => "input_audio",
+               "input_audio" => %{
+                 "data" => Base.encode64(audio_data),
+                 "format" => "wav"
                }
              }
     end
