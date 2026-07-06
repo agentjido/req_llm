@@ -266,6 +266,32 @@ defmodule ReqLLM.Providers.OpenRouter do
   end
 
   @impl ReqLLM.Provider
+  def attach_stream(model, context, opts, finch_name) do
+    processed_opts =
+      ReqLLM.Provider.Options.process_stream!(
+        __MODULE__,
+        opts[:operation] || :chat,
+        model,
+        context,
+        opts
+      )
+
+    case validate_openrouter_stream_content(context) do
+      :ok ->
+        ReqLLM.Provider.Defaults.default_attach_stream(
+          __MODULE__,
+          model,
+          context,
+          processed_opts,
+          finch_name
+        )
+
+      {:error, error} ->
+        {:error, error}
+    end
+  end
+
+  @impl ReqLLM.Provider
   def translate_options(_operation, model, opts) do
     warnings = []
 
@@ -691,6 +717,29 @@ defmodule ReqLLM.Providers.OpenRouter do
   end
 
   defp merge_content_metadata(base, _metadata), do: base
+
+  defp validate_openrouter_stream_content(%ReqLLM.Context{messages: messages}) do
+    messages
+    |> Stream.flat_map(&openrouter_message_content/1)
+    |> Enum.find_value(:ok, &unsupported_openrouter_audio_error/1)
+  end
+
+  defp validate_openrouter_stream_content(_context), do: :ok
+
+  defp openrouter_message_content(%ReqLLM.Message{content: content}) when is_list(content),
+    do: content
+
+  defp openrouter_message_content(_message), do: []
+
+  defp unsupported_openrouter_audio_error(part) do
+    if openrouter_audio_file_part?(part) and not openrouter_input_audio_part?(part) do
+      {:error,
+       ReqLLM.Error.Invalid.Message.exception(
+         reason:
+           "OpenRouter chat audio input supports only mp3 and wav file parts; got #{inspect(part.media_type)}."
+       )}
+    end
+  end
 
   defp add_embedding_options(body, request_options) do
     if request_options[:operation] == :embedding do

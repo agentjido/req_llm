@@ -561,6 +561,22 @@ defmodule ReqLLM.Providers.OpenRouterTest do
              }
     end
 
+    test "attach_stream rejects unsupported audio file formats" do
+      model = ReqLLM.model!("openrouter:openai/gpt-4")
+
+      context =
+        Context.new([
+          Context.user([
+            ContentPart.file("audio bytes", "speech.ogg", "audio/ogg")
+          ])
+        ])
+
+      assert {:error, %ReqLLM.Error.Invalid.Message{} = error} =
+               OpenRouter.attach_stream(model, context, [], MyApp.Finch)
+
+      assert Exception.message(error) =~ "OpenRouter chat audio input supports only mp3 and wav"
+    end
+
     test "encode_body with response_format" do
       {:ok, model} = ReqLLM.model("openrouter:openai/gpt-4")
       context = context_fixture()
