@@ -19,6 +19,10 @@ defmodule ReqLLM.ToolCall do
   - `type` - Always "function" (reserved for future extensibility)
   - `function` - Map with `name` (string) and `arguments` (JSON string)
 
+  `ToolCall` is a struct, not an `Access`-compatible map. Read fields with
+  `call.id`, `call.function.name`, and `call.function.arguments`, or use
+  `to_map/1` when a plain map with decoded arguments is more convenient.
+
   ## Examples
 
       iex> ToolCall.new("call_abc", "get_weather", ~s({"location":"Paris"}))

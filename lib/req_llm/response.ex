@@ -150,15 +150,19 @@ defmodule ReqLLM.Response do
   Extract tool calls from the response message.
 
   Returns a list of tool calls if the message contains them, empty list otherwise.
-  Always returns normalized maps with `.name` and `.arguments` fields.
+  Provider responses expose tool calls as `ReqLLM.ToolCall` structs. Use struct
+  field access such as `call.id` and `call.function.name`, or call
+  `ReqLLM.ToolCall.to_map/1` when you need decoded arguments in a plain map.
+  Use `classify/1` when you want response text, finish reason, and normalized
+  tool call maps in one value.
 
   ## Examples
 
       iex> ReqLLM.Response.tool_calls(response)
-      [%{name: "get_weather", arguments: %{location: "San Francisco"}}]
+      [%ReqLLM.ToolCall{id: "call_123", type: "function", function: %{name: "get_weather", arguments: ~s({"location":"San Francisco"})}}]
 
   """
-  @spec tool_calls(t()) :: [term()]
+  @spec tool_calls(t()) :: [ToolCall.t()]
   def tool_calls(%__MODULE__{message: nil}), do: []
 
   def tool_calls(%__MODULE__{message: %Message{tool_calls: tool_calls}})
