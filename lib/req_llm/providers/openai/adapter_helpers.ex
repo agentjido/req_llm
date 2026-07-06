@@ -268,7 +268,8 @@ defmodule ReqLLM.Providers.OpenAI.AdapterHelpers do
   Adds response_format to the request body with schema normalization.
 
   Handles json_schema response formats by converting ReqLLM schema DSL
-  to JSON Schema format. Supports both atom and string key maps.
+  to JSON Schema format and enforcing strict OpenAI JSON Schema requirements
+  when `strict: true` is set. Supports both atom and string key maps.
   """
   @spec add_response_format(map(), keyword()) :: map()
   def add_response_format(body, provider_opts) do
@@ -276,8 +277,31 @@ defmodule ReqLLM.Providers.OpenAI.AdapterHelpers do
 
     normalized =
       case response_format do
+        %{type: "json_schema", json_schema: %{schema: schema, strict: true}} = m
+        when is_list(schema) ->
+          put_in(
+            m,
+            [:json_schema, :schema],
+            schema |> ReqLLM.Schema.to_json() |> enforce_strict_recursive()
+          )
+
         %{type: "json_schema", json_schema: %{schema: schema}} = m when is_list(schema) ->
           put_in(m, [:json_schema, :schema], ReqLLM.Schema.to_json(schema))
+
+        %{
+          "type" => "json_schema",
+          "json_schema" => %{"strict" => true, "schema" => schema} = json_schema
+        } = m
+        when is_list(schema) ->
+          schema = schema |> ReqLLM.Schema.to_json() |> enforce_strict_recursive()
+          %{m | "json_schema" => Map.put(json_schema, "schema", schema)}
+
+        %{
+          "type" => "json_schema",
+          "json_schema" => %{"strict" => true, "schema" => schema} = json_schema
+        } = m
+        when is_map(schema) ->
+          %{m | "json_schema" => Map.put(json_schema, "schema", enforce_strict_recursive(schema))}
 
         %{"type" => "json_schema", "json_schema" => %{"schema" => schema}} = m
         when is_list(schema) ->

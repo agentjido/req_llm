@@ -189,6 +189,50 @@ defmodule ReqLLM.Provider.DefaultsTest do
              }
     end
 
+    test "encodes assistant tool call structs to OpenAI wire maps" do
+      tool_call = ReqLLM.ToolCall.new("call_weather", "weather", ~s({"city":"Paris"}))
+      message = %Message{role: :assistant, content: [], tool_calls: [tool_call]}
+      context = %Context{messages: [message]}
+
+      result = Defaults.encode_context_to_openai_format(context, "gpt-4")
+      [encoded_message] = result.messages
+
+      assert encoded_message.tool_calls == [
+               %{
+                 id: "call_weather",
+                 type: "function",
+                 function: %{name: "weather", arguments: ~s({"city":"Paris"})}
+               }
+             ]
+    end
+
+    test "preserves OpenAI image detail inside image_url payload" do
+      image = ContentPart.image_url("https://example.com/image.png", %{"detail" => "high"})
+      message = %Message{role: :user, content: [image]}
+      context = %Context{messages: [message]}
+
+      result = Defaults.encode_context_to_openai_format(context, "gpt-4")
+      [encoded_message] = result.messages
+      [image_block] = encoded_message.content
+
+      assert image_block == %{
+               type: "image_url",
+               image_url: %{url: "https://example.com/image.png", detail: "high"}
+             }
+    end
+
+    test "encodes file id content parts to OpenAI file blocks" do
+      file = ContentPart.file_id("file_123")
+      message = %Message{role: :user, content: [file]}
+      context = %Context{messages: [message]}
+
+      result = Defaults.encode_context_to_openai_format(context, "gpt-4")
+      [encoded_message] = result.messages
+      [file_block] = encoded_message.content
+
+      assert file_block == %{type: "file", file: %{file_id: "file_123"}}
+    end
+
     test "raises for unsupported video_url content parts" do
       video_url_part = ContentPart.video_url("https://example.com/clip.mp4")
 

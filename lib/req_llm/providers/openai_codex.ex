@@ -142,6 +142,8 @@ defmodule ReqLLM.Providers.OpenAICodex do
             :stream,
             :model,
             :provider_options,
+            :stream_transport,
+            :defer_http_events_until_telemetry?,
             :service_tier,
             :max_completion_tokens,
             :reasoning_effort

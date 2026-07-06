@@ -849,7 +849,7 @@ defmodule ReqLLM.Provider.Defaults do
     }
 
     base_message
-    |> maybe_add_field(:tool_calls, tc)
+    |> maybe_add_field(:tool_calls, encode_openai_tool_calls(tc))
     |> maybe_add_field(:tool_call_id, tcid)
     |> maybe_add_field(:name, name)
     |> maybe_add_assistant_reasoning(r, reasoning_content)
@@ -889,6 +889,25 @@ defmodule ReqLLM.Provider.Defaults do
   end
 
   defp maybe_add_assistant_reasoning(message, _, _), do: message
+
+  defp encode_openai_tool_calls(nil), do: nil
+  defp encode_openai_tool_calls([]), do: []
+
+  defp encode_openai_tool_calls(tool_calls) when is_list(tool_calls),
+    do: Enum.map(tool_calls, &encode_openai_tool_call/1)
+
+  defp encode_openai_tool_call(%ReqLLM.ToolCall{id: id, type: type, function: function}) do
+    %{
+      id: id,
+      type: type,
+      function: %{
+        name: function.name,
+        arguments: function.arguments
+      }
+    }
+  end
+
+  defp encode_openai_tool_call(tool_call), do: tool_call
 
   defp encode_openai_content(content) when is_binary(content), do: content
 
@@ -956,6 +975,8 @@ defmodule ReqLLM.Provider.Defaults do
         image_url_map
       end
 
+    image_url_map = maybe_put_image_detail(image_url_map, metadata)
+
     %{
       type: "image_url",
       image_url: image_url_map
@@ -967,6 +988,17 @@ defmodule ReqLLM.Provider.Defaults do
     raise ReqLLM.Error.Invalid.Message.exception(
             reason: "Video URLs are not supported for this provider."
           )
+  end
+
+  defp encode_openai_content_part(%ReqLLM.Message.ContentPart{
+         type: :file,
+         file_id: file_id
+       })
+       when is_binary(file_id) and file_id != "" do
+    %{
+      type: "file",
+      file: %{file_id: file_id}
+    }
   end
 
   defp encode_openai_content_part(%ReqLLM.Message.ContentPart{
@@ -991,6 +1023,14 @@ defmodule ReqLLM.Provider.Defaults do
   defp encode_openai_content_part(%ReqLLM.Message.ContentPart{type: :thinking}), do: nil
 
   defp encode_openai_content_part(_), do: nil
+
+  defp maybe_put_image_detail(image_url, %{detail: detail}) when not is_nil(detail),
+    do: Map.put(image_url, :detail, detail)
+
+  defp maybe_put_image_detail(image_url, %{"detail" => detail}) when not is_nil(detail),
+    do: Map.put(image_url, :detail, detail)
+
+  defp maybe_put_image_detail(image_url, _metadata), do: image_url
 
   @passthrough_metadata_keys [:cache_control, "cache_control"]
 
@@ -1618,8 +1658,11 @@ defmodule ReqLLM.Provider.Defaults do
     response_format = request.options[:response_format] || provider_opts[:response_format]
 
     case response_format do
-      format when is_map(format) -> Map.put(body, :response_format, format)
-      _ -> body
+      format when is_map(format) ->
+        ReqLLM.Providers.OpenAI.AdapterHelpers.add_response_format(body, response_format: format)
+
+      _other ->
+        body
     end
   end
 

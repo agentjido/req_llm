@@ -175,6 +175,17 @@ defmodule ReqLLM.Provider.Options do
                                  doc: "Provider-specific options (nested under this key)"
                                ],
 
+                               # Internal streaming orchestration options
+                               stream_transport: [
+                                 type: {:in, [:http, :websocket]},
+                                 doc: "Internal streaming transport selected by ReqLLM.Streaming"
+                               ],
+                               defer_http_events_until_telemetry?: [
+                                 type: :boolean,
+                                 doc:
+                                   "Internal streaming flag used by ReqLLM.Streaming telemetry coordination"
+                               ],
+
                                # Streaming request hook
                                on_finch_request: [
                                  type: {:fun, 1},
