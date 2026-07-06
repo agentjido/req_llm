@@ -19,7 +19,7 @@ defmodule ReqLLM.KeysTest do
     end
   end
 
-  describe "get/2" do
+  describe "get/1 and get/2" do
     test "returns {:ok, key, source} with source information" do
       on_exit(fn -> System.delete_env("ANTHROPIC_API_KEY") end)
       System.put_env("ANTHROPIC_API_KEY", "test-key")
@@ -46,6 +46,14 @@ defmodule ReqLLM.KeysTest do
       System.put_env("ANTHROPIC_API_KEY", "test-key")
 
       assert {:ok, "test-key", :system} = Keys.get(model, [])
+    end
+
+    test "uses default options with ReqLLM.Model structs" do
+      on_exit(fn -> System.delete_env("ANTHROPIC_API_KEY") end)
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
+      System.put_env("ANTHROPIC_API_KEY", "test-key")
+
+      assert {:ok, "test-key", :system} = Keys.get(model)
     end
   end
 
