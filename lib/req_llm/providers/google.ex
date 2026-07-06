@@ -943,12 +943,7 @@ defmodule ReqLLM.Providers.Google do
     {system_instruction, contents} =
       case request.options[:context] do
         %ReqLLM.Context{} = ctx ->
-          encoded =
-            ctx
-            |> normalize_context_video_urls()
-            |> ReqLLM.Provider.Defaults.encode_context_to_openai_format(model_name)
-
-          messages = encoded[:messages] || []
+          messages = encode_context_messages_for_gemini(ctx, model_name)
           split_messages_for_gemini(messages, model_name)
 
         _ ->
@@ -1125,12 +1120,7 @@ defmodule ReqLLM.Providers.Google do
       case request.options[:context] do
         %ReqLLM.Context{} = ctx ->
           # Convert OpenAI-style context to Gemini format
-          encoded =
-            ctx
-            |> normalize_context_video_urls()
-            |> ReqLLM.Provider.Defaults.encode_context_to_openai_format(model_name)
-
-          messages = encoded[:messages] || []
+          messages = encode_context_messages_for_gemini(ctx, model_name)
           split_messages_for_gemini(messages, model_name)
 
         _ ->
@@ -1218,12 +1208,7 @@ defmodule ReqLLM.Providers.Google do
     {system_instruction, contents} =
       case request.options[:context] do
         %ReqLLM.Context{} = ctx ->
-          encoded =
-            ctx
-            |> normalize_context_video_urls()
-            |> ReqLLM.Provider.Defaults.encode_context_to_openai_format(model_name)
-
-          messages = encoded[:messages] || []
+          messages = encode_context_messages_for_gemini(ctx, model_name)
           split_messages_for_gemini(messages, model_name)
 
         _ ->
@@ -2116,6 +2101,93 @@ defmodule ReqLLM.Providers.Google do
       _ -> []
     end
   end
+
+  defp encode_context_messages_for_gemini(%ReqLLM.Context{} = ctx, model_name) do
+    normalized_context = normalize_context_video_urls(ctx)
+
+    encoded =
+      ReqLLM.Provider.Defaults.encode_context_to_openai_format(normalized_context, model_name)
+
+    encoded
+    |> Map.get(:messages, [])
+    |> preserve_tool_call_metadata_in_messages(normalized_context)
+  end
+
+  defp preserve_tool_call_metadata_in_messages(messages, %ReqLLM.Context{
+         messages: context_messages
+       }) do
+    metadata_by_id =
+      context_messages
+      |> Enum.flat_map(fn
+        %ReqLLM.Message{tool_calls: tool_calls} when is_list(tool_calls) -> tool_calls
+        _ -> []
+      end)
+      |> Enum.reduce(%{}, fn tool_call, acc ->
+        metadata = ReqLLM.ToolCall.metadata(tool_call)
+
+        case {tool_call_id(tool_call), metadata} do
+          {id, metadata} when is_binary(id) and id != "" and map_size(metadata) > 0 ->
+            Map.put(acc, id, metadata)
+
+          _ ->
+            acc
+        end
+      end)
+
+    Enum.map(messages, &preserve_message_tool_call_metadata(&1, metadata_by_id))
+  end
+
+  defp preserve_message_tool_call_metadata(message, metadata_by_id)
+       when map_size(metadata_by_id) == 0,
+       do: message
+
+  defp preserve_message_tool_call_metadata(%{tool_calls: tool_calls} = message, metadata_by_id)
+       when is_list(tool_calls) do
+    %{
+      message
+      | tool_calls: Enum.map(tool_calls, &preserve_tool_call_metadata(&1, metadata_by_id))
+    }
+  end
+
+  defp preserve_message_tool_call_metadata(
+         %{"tool_calls" => tool_calls} = message,
+         metadata_by_id
+       )
+       when is_list(tool_calls) do
+    %{
+      message
+      | "tool_calls" => Enum.map(tool_calls, &preserve_tool_call_metadata(&1, metadata_by_id))
+    }
+  end
+
+  defp preserve_message_tool_call_metadata(message, _metadata_by_id), do: message
+
+  defp preserve_tool_call_metadata(tool_call, metadata_by_id) do
+    case Map.get(metadata_by_id, tool_call_id(tool_call)) do
+      metadata when is_map(metadata) and map_size(metadata) > 0 ->
+        put_tool_call_metadata(tool_call, metadata)
+
+      _ ->
+        tool_call
+    end
+  end
+
+  defp put_tool_call_metadata(%{"function" => function} = tool_call, metadata)
+       when is_map(function) do
+    %{tool_call | "function" => Map.put(function, "metadata", metadata)}
+  end
+
+  defp put_tool_call_metadata(%{function: function} = tool_call, metadata)
+       when is_map(function) do
+    %{tool_call | function: Map.put(function, :metadata, metadata)}
+  end
+
+  defp put_tool_call_metadata(tool_call, _metadata), do: tool_call
+
+  defp tool_call_id(%ReqLLM.ToolCall{id: id}), do: id
+  defp tool_call_id(%{"id" => id}), do: id
+  defp tool_call_id(%{id: id}), do: id
+  defp tool_call_id(_), do: nil
 
   # Split messages into system instruction and contents for Google Gemini
   defp split_messages_for_gemini(messages, model) do
