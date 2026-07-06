@@ -150,6 +150,18 @@ defmodule ReqLLM.Provider.ChunkAccumulator do
     end
   end
 
+  def push(%__MODULE__{} = acc, %StreamChunk{type: :meta, metadata: metadata})
+      when is_map(metadata) do
+    acc
+    |> push_arg_fragment(metadata)
+    |> push_reasoning_details(metadata)
+    |> push_logprobs(metadata)
+    |> push_finish_reason(metadata)
+    |> push_usage(metadata)
+  end
+
+  def push(%__MODULE__{} = acc, _chunk), do: acc
+
   # Some servers (e.g. llama.cpp, vLLM) begin streaming `arguments` in the same
   # chunk as the tool name — valid per the OpenAI streaming spec. That leading
   # fragment (often just `"{"`) doesn't parse as complete JSON, so the decoder
@@ -165,18 +177,6 @@ defmodule ReqLLM.Provider.ChunkAccumulator do
         acc
     end
   end
-
-  def push(%__MODULE__{} = acc, %StreamChunk{type: :meta, metadata: metadata})
-      when is_map(metadata) do
-    acc
-    |> push_arg_fragment(metadata)
-    |> push_reasoning_details(metadata)
-    |> push_logprobs(metadata)
-    |> push_finish_reason(metadata)
-    |> push_usage(metadata)
-  end
-
-  def push(%__MODULE__{} = acc, _chunk), do: acc
 
   defp push_arg_fragment(acc, metadata) do
     case tool_call_args_fragment(metadata) do
