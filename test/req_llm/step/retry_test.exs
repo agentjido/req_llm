@@ -46,6 +46,22 @@ defmodule ReqLLM.Step.RetryTest do
       assert Retry.should_retry?(request, error) == false
     end
 
+    test "returns {:delay, 0} for a transient transport error wrapped in ReqLLM.Error.API.Request" do
+      request = Req.new()
+
+      for reason <- [:closed, :timeout, :econnrefused] do
+        wrapped = %ReqLLM.Error.API.Request{cause: %Finch.TransportError{reason: reason}}
+        assert Retry.should_retry?(request, wrapped) == {:delay, 0}
+      end
+    end
+
+    test "returns false for a non-transient transport error wrapped in ReqLLM.Error.API.Request" do
+      request = Req.new()
+      wrapped = %ReqLLM.Error.API.Request{cause: %Finch.TransportError{reason: :nxdomain}}
+
+      assert Retry.should_retry?(request, wrapped) == false
+    end
+
     test "returns false for non-transport errors" do
       request = Req.new()
       error = %RuntimeError{message: "Some application error"}

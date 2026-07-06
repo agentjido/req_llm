@@ -935,6 +935,49 @@ defmodule ReqLLM.Providers.AnthropicTest do
              end)
     end
 
+    test "encode_request preserves assistant thinking content parts" do
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
+
+      context =
+        ReqLLM.Context.new([
+          %ReqLLM.Message{
+            role: :assistant,
+            content: [
+              ReqLLM.Message.ContentPart.thinking("private", %{"signature" => "sig_123"}),
+              ReqLLM.Message.ContentPart.thinking("", %{"redacted" => true, "data" => "opaque"})
+            ]
+          }
+        ])
+
+      request = ReqLLM.Providers.Anthropic.Context.encode_request(context, model)
+      [message] = request[:messages]
+
+      assert message[:content] == [
+               %{type: "thinking", thinking: "private", signature: "sig_123"},
+               %{type: "redacted_thinking", data: "opaque"}
+             ]
+    end
+
+    test "encode_request encodes encrypted Anthropic reasoning details as redacted thinking" do
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
+
+      detail = %ReqLLM.Message.ReasoningDetails{
+        provider: :anthropic,
+        encrypted?: true,
+        provider_data: %{"data" => "opaque"}
+      }
+
+      context =
+        ReqLLM.Context.new([
+          %ReqLLM.Message{role: :assistant, content: [], reasoning_details: [detail]}
+        ])
+
+      request = ReqLLM.Providers.Anthropic.Context.encode_request(context, model)
+      [message] = request[:messages]
+
+      assert message[:content] == [%{type: "redacted_thinking", data: "opaque"}]
+    end
+
     test "encode_request encodes multiple system messages as non-empty blocks" do
       {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
 

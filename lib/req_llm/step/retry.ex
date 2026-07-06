@@ -22,7 +22,8 @@ defmodule ReqLLM.Step.Retry do
 
   - **Max retries**: 3 attempts (4 total requests including initial)
   - **Retry delay**: 0ms (instant retry)
-  - **Retryable errors**: Only transient `Req.TransportError` types
+  - **Retryable errors**: Transient transport errors, whether they arrive as a bare
+    `Req.TransportError` or wrapped in a `ReqLLM.Error.API.Request`
   - **Non-retryable errors**: Application errors, HTTP errors, etc. are not retried
 
   ## Examples
@@ -36,6 +37,10 @@ defmodule ReqLLM.Step.Retry do
       # If a request fails with {:error, %Req.TransportError{reason: :closed}},
       # it will be retried up to 3 times before giving up.
   """
+
+  # Transient transport reasons retried instantly (`{:delay, 0}`), whether the error
+  # arrives as a bare `Req.TransportError` or wrapped in a `ReqLLM.Error.API.Request`.
+  @transient_reasons [:closed, :timeout, :econnrefused]
 
   @doc """
   Attaches the Retry configuration to a Req request struct.
@@ -89,13 +94,16 @@ defmodule ReqLLM.Step.Retry do
       iex> ReqLLM.Step.Retry.should_retry?(%Req.Request{}, %Req.TransportError{reason: :timeout})
       {:delay, 0}
 
+      iex> ReqLLM.Step.Retry.should_retry?(%Req.Request{}, %ReqLLM.Error.API.Request{cause: %Req.TransportError{reason: :closed}})
+      {:delay, 0}
+
       iex> ReqLLM.Step.Retry.should_retry?(%Req.Request{}, %RuntimeError{})
       false
   """
   @spec should_retry?(Req.Request.t(), Req.Response.t() | Exception.t()) ::
           boolean() | {:delay, non_neg_integer()}
   def should_retry?(_request, %Req.TransportError{reason: reason})
-      when reason in [:closed, :timeout, :econnrefused] do
+      when reason in @transient_reasons do
     {:delay, 0}
   end
 
@@ -107,6 +115,19 @@ defmodule ReqLLM.Step.Retry do
   def should_retry?(_request, %ReqLLM.Error.API.Request{status: 429, headers: headers}) do
     retry_after = extract_retry_after_delay(headers)
     {:delay, retry_after}
+  end
+
+  # Transport failures often surface wrapped in a ReqLLM.Error.API.Request rather than
+  # as a bare Req.TransportError — e.g. a stale pooled connection closed on reuse
+  # arrives as %ReqLLM.Error.API.Request{cause: %Finch.TransportError{reason: :closed}}.
+  # Retry the same transient reasons so these aren't silently dropped by the clause
+  # below despite matching the retry intent.
+  def should_retry?(_request, %ReqLLM.Error.API.Request{
+        cause: %{__struct__: mod, reason: reason}
+      })
+      when mod in [Finch.TransportError, Mint.TransportError, Req.TransportError] and
+             reason in @transient_reasons do
+    {:delay, 0}
   end
 
   def should_retry?(_request, _response_or_exception), do: false
