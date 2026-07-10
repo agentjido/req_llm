@@ -101,6 +101,62 @@ defmodule ReqLLM.AuthTest do
       assert is_integer(refreshed["openai-codex"]["expires"])
       assert refreshed["openai-codex"]["expires"] > System.system_time(:millisecond)
     end
+
+    test "refreshes expired anthropic oauth credentials and persists them", %{tmp_dir: tmp_dir} do
+      {:ok, model} = ReqLLM.model("anthropic:claude-opus-4-8")
+      path = Path.join(tmp_dir, "oauth.json")
+
+      write_oauth_file(path, %{
+        "anthropic" => %{
+          "type" => "oauth",
+          "access" => "expired-access",
+          "refresh" => "refresh-token-123",
+          "expires" => past_expiry()
+        }
+      })
+
+      Req.Test.stub(ReqLLM.AuthAnthropicRefreshTest, fn conn ->
+        assert conn.method == "POST"
+        assert conn.request_path == "/v1/oauth/token"
+
+        {:ok, body, conn} = Plug.Conn.read_body(conn)
+        params = Jason.decode!(body)
+
+        assert params["grant_type"] == "refresh_token"
+        assert params["refresh_token"] == "refresh-token-123"
+        assert params["client_id"] == "9d1c250a-e61b-44d9-88ed-5944d1962f5e"
+
+        Req.Test.json(conn, %{
+          "access_token" => "fresh-access-token",
+          "refresh_token" => "fresh-refresh-token",
+          "expires_in" => 3600
+        })
+      end)
+
+      assert {:ok,
+              %{
+                kind: :oauth_access_token,
+                token: "fresh-access-token",
+                source: :oauth_refresh
+              }} =
+               Auth.resolve(model,
+                 provider_options: [
+                   auth_mode: :oauth,
+                   oauth_file: path,
+                   oauth_http_options: [plug: {Req.Test, ReqLLM.AuthAnthropicRefreshTest}]
+                 ]
+               )
+
+      refreshed =
+        path
+        |> File.read!()
+        |> Jason.decode!()
+
+      assert refreshed["anthropic"]["access"] == "fresh-access-token"
+      assert refreshed["anthropic"]["refresh"] == "fresh-refresh-token"
+      assert is_integer(refreshed["anthropic"]["expires"])
+      assert refreshed["anthropic"]["expires"] > System.system_time(:millisecond)
+    end
   end
 
   describe "OAuth.resolve/2 account id handling" do

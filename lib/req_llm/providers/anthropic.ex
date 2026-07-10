@@ -181,6 +181,11 @@ defmodule ReqLLM.Providers.Anthropic do
   @reasoning_budget_xhigh 8_192
 
   @impl ReqLLM.Provider
+  def refresh_oauth_credentials(credentials, opts) do
+    ReqLLM.Providers.Anthropic.OAuth.refresh(credentials, opts)
+  end
+
+  @impl ReqLLM.Provider
   def prepare_request(:chat, model_spec, prompt, opts) do
     with {:ok, model} <- ReqLLM.model(model_spec),
          {:ok, context} <- ReqLLM.Context.normalize(prompt, opts),
