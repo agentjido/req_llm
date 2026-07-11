@@ -29,6 +29,33 @@ ReqLLM.generate_text(
 
 You can also pass these under `provider_options`.
 
+For file-backed OAuth credentials, provide a req_llm-compatible `oauth.json`
+or `auth.json` entry under the `"anthropic"` key:
+
+```json
+{
+  "anthropic": {
+    "type": "oauth",
+    "access": "...",
+    "refresh": "...",
+    "expires": 1735689600000
+  }
+}
+```
+
+```elixir
+ReqLLM.generate_text(
+  "anthropic:claude-opus-4-8",
+  "Summarize this",
+  provider_options: [auth_mode: :oauth, oauth_file: "/path/to/oauth.json"]
+)
+```
+
+Expired credentials refresh automatically through Anthropic's OAuth token
+endpoint, and the rotated access and refresh tokens are persisted to the same
+file. Use `:auth_file` as an alias for `:oauth_file`; `:oauth_http_options`
+forwards Req options to the refresh request.
+
 ## Provider Options
 
 Passed via `:provider_options` keyword:
