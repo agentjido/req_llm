@@ -111,7 +111,12 @@ defmodule ReqLLM.Providers.Anthropic.Context do
        })
        when is_list(tool_calls) and tool_calls != [] do
     thinking_blocks = encode_reasoning_details(reasoning_details)
-    text_blocks = encode_content(content)
+
+    text_blocks =
+      if thinking_blocks == [],
+        do: encode_content(content),
+        else: encode_non_thinking_content(content)
+
     tool_blocks = Enum.map(tool_calls, &encode_tool_call_to_tool_use/1)
 
     %{
