@@ -65,6 +65,10 @@ Passed via `:provider_options` keyword:
 - **Example**: `provider_options: [thinking: %{type: "enabled", budget_tokens: 4096}]`
 - **Access**: `ReqLLM.Response.thinking(response)`
 
+Streaming responses preserve Anthropic's signed thinking blocks when the
+response context is continued after tool calls. Pass the returned context to
+the follow-up request rather than reconstructing thinking content manually.
+
 ### `anthropic_prompt_cache`
 
 - **Type**: Boolean
