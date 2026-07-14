@@ -54,9 +54,13 @@ defmodule ReqLLM.StreamServer do
 
   ## Backpressure
 
-  When the internal queue exceeds `high_watermark`, the server delays replying to
-  `{:http_event, {:data, _}}` messages until consumers drain the queue via `next/2`.
-  This provides natural backpressure without dropping events.
+  When the number of decoded public chunks in the internal queue reaches
+  `high_watermark`, the server delays replying to the producing
+  `{:http_event, {:data, _}}` call until consumers drain the queue below the
+  watermark via `next/2`. Each transport data event is processed atomically, so
+  one event that decodes to multiple chunks can exceed the watermark by the
+  chunks from that event. No later transport event is acknowledged or processed
+  while the producer is suspended.
   """
 
   use GenServer
@@ -99,6 +103,8 @@ defmodule ReqLLM.StreamServer do
     high_watermark: 500,
     headers: [],
     http_status: nil,
+    blocked_http_event: nil,
+    pending_http_calls: :queue.new(),
     waiting_callers: [],
     object_json_mode?: false,
     object_acc: [],
@@ -125,7 +131,8 @@ defmodule ReqLLM.StreamServer do
     * `:provider_mod` - Provider module implementing ReqLLM.Provider behavior (required)
     * `:model` - ReqLLM.Model struct (required)
     * `:fixture_path` - Optional path for fixture capture
-    * `:high_watermark` - Queue size limit for backpressure (default: 500)
+    * `:high_watermark` - Positive decoded public-chunk queue bound for backpressure
+      (default: 500)
 
   ## Examples
 
@@ -139,6 +146,7 @@ defmodule ReqLLM.StreamServer do
   def start_link(opts) do
     provider_mod = Keyword.fetch!(opts, :provider_mod)
     model = Keyword.fetch!(opts, :model)
+    high_watermark = validate_high_watermark!(Keyword.get(opts, :high_watermark, 500))
 
     provider_state =
       if function_exported?(provider_mod, :init_stream_state, 1) do
@@ -158,7 +166,7 @@ defmodule ReqLLM.StreamServer do
           :completion_cleanup_after,
           Application.get_env(:req_llm, :stream_completion_cleanup_after, 30_000)
         ),
-      high_watermark: Keyword.get(opts, :high_watermark, 500)
+      high_watermark: high_watermark
     }
 
     GenServer.start_link(__MODULE__, state, opts)
@@ -315,7 +323,7 @@ defmodule ReqLLM.StreamServer do
   """
   @spec http_event(server(), term()) :: :ok
   def http_event(server, event) do
-    GenServer.call(server, {:http_event, event})
+    GenServer.call(server, {:http_event, event}, :infinity)
   end
 
   @doc """
@@ -405,18 +413,15 @@ defmodule ReqLLM.StreamServer do
   end
 
   @impl GenServer
-  def handle_call({:http_event, event}, _from, %{telemetry_pending?: true} = state) do
-    {:reply, :ok, %{state | pending_http_events: state.pending_http_events ++ [event]}}
+  def handle_call({:http_event, event}, from, %{blocked_http_event: nil} = state) do
+    {reply, new_state} = apply_http_event(event, state)
+    finish_http_event_call(event, from, reply, new_state)
   end
 
   @impl GenServer
-  def handle_call({:http_event, event}, _from, state) do
-    {:reply, reply, new_state} = process_http_event(event, state)
-
-    case finalize_lifecycle(new_state) do
-      {:stop, final_state} -> {:stop, :normal, reply, final_state}
-      {:continue, final_state} -> {:reply, reply, final_state}
-    end
+  def handle_call({:http_event, event}, from, state) do
+    pending_http_calls = :queue.in({from, event}, state.pending_http_calls)
+    {:noreply, %{state | pending_http_calls: pending_http_calls}}
   end
 
   @impl GenServer
@@ -425,7 +430,7 @@ defmodule ReqLLM.StreamServer do
 
     case dequeue_chunk(state) do
       {:ok, chunk, new_state} ->
-        {:reply, {:ok, chunk}, new_state}
+        reply_with_lifecycle({:ok, chunk}, resume_http_event_callers(new_state))
 
       {:empty, new_state} ->
         case state.status do
@@ -537,6 +542,7 @@ defmodule ReqLLM.StreamServer do
       state
       |> Map.put(:telemetry, telemetry_context)
       |> drain_pending_http_events()
+      |> resume_http_event_callers()
 
     case finalize_lifecycle(new_state) do
       {:stop, final_state} -> {:stop, :normal, :ok, final_state}
@@ -586,7 +592,11 @@ defmodule ReqLLM.StreamServer do
 
   @impl GenServer
   def handle_info({:EXIT, pid, reason}, %{http_task: pid} = state) do
-    new_state = state |> process_http_task_exit(reason) |> reply_to_waiting_callers()
+    new_state =
+      state
+      |> process_http_task_exit(reason)
+      |> release_http_event_callers()
+      |> reply_to_waiting_callers()
 
     case finalize_lifecycle(new_state) do
       {:stop, final_state} -> {:stop, :normal, final_state}
@@ -609,7 +619,11 @@ defmodule ReqLLM.StreamServer do
 
   @impl GenServer
   def handle_info({:DOWN, _ref, :process, pid, reason}, %{http_task: pid} = state) do
-    new_state = state |> process_http_task_exit(reason) |> reply_to_waiting_callers()
+    new_state =
+      state
+      |> process_http_task_exit(reason)
+      |> release_http_event_callers()
+      |> reply_to_waiting_callers()
 
     case finalize_lifecycle(new_state) do
       {:stop, final_state} -> {:stop, :normal, final_state}
@@ -662,6 +676,115 @@ defmodule ReqLLM.StreamServer do
   end
 
   ## Private Functions
+
+  defp validate_high_watermark!(high_watermark)
+       when is_integer(high_watermark) and high_watermark > 0,
+       do: high_watermark
+
+  defp validate_high_watermark!(high_watermark) do
+    raise ArgumentError,
+          ":high_watermark must be a positive integer, got: #{inspect(high_watermark)}"
+  end
+
+  defp apply_http_event(event, %{telemetry_pending?: true} = state) do
+    {:ok, %{state | pending_http_events: state.pending_http_events ++ [event]}}
+  end
+
+  defp apply_http_event(event, state) do
+    {:reply, reply, new_state} = process_http_event(event, state)
+    {reply, new_state}
+  end
+
+  defp finish_http_event_call(event, from, reply, state) do
+    if backpressure_required?(event, state) do
+      {:noreply, %{state | blocked_http_event: {from, reply}}}
+    else
+      reply_with_lifecycle(reply, state)
+    end
+  end
+
+  defp reply_with_lifecycle(reply, state) do
+    case finalize_lifecycle(state) do
+      {:stop, final_state} -> {:stop, :normal, reply, final_state}
+      {:continue, final_state} -> {:reply, reply, final_state}
+    end
+  end
+
+  defp backpressure_required?({:data, _chunk}, state) do
+    active_stream?(state) and buffered_chunk_count(state) >= state.high_watermark
+  end
+
+  defp backpressure_required?(_event, _state), do: false
+
+  defp active_stream?(%{status: :done}), do: false
+  defp active_stream?(%{status: {:error, _reason}}), do: false
+  defp active_stream?(_state), do: true
+
+  defp buffered_chunk_count(state) do
+    :queue.len(state.queue) + pending_telemetry_data_count(state)
+  end
+
+  defp pending_telemetry_data_count(%{telemetry_pending?: true} = state) do
+    Enum.count(state.pending_http_events, &match?({:data, _chunk}, &1))
+  end
+
+  defp pending_telemetry_data_count(_state), do: 0
+
+  defp resume_http_event_callers(%{blocked_http_event: nil} = state) do
+    drain_pending_http_calls(state)
+  end
+
+  defp resume_http_event_callers(state) do
+    if active_stream?(state) and buffered_chunk_count(state) >= state.high_watermark do
+      state
+    else
+      {from, reply} = state.blocked_http_event
+      GenServer.reply(from, reply)
+
+      state
+      |> Map.put(:blocked_http_event, nil)
+      |> drain_pending_http_calls()
+    end
+  end
+
+  defp drain_pending_http_calls(%{blocked_http_event: nil} = state) do
+    case :queue.out(state.pending_http_calls) do
+      {{:value, {from, event}}, pending_http_calls} ->
+        {reply, new_state} =
+          apply_http_event(event, %{state | pending_http_calls: pending_http_calls})
+
+        cond do
+          not active_stream?(new_state) ->
+            GenServer.reply(from, reply)
+            release_http_event_callers(new_state)
+
+          backpressure_required?(event, new_state) ->
+            %{new_state | blocked_http_event: {from, reply}}
+
+          true ->
+            GenServer.reply(from, reply)
+            drain_pending_http_calls(new_state)
+        end
+
+      {:empty, _pending_http_calls} ->
+        state
+    end
+  end
+
+  defp drain_pending_http_calls(state), do: state
+
+  defp release_http_event_callers(state) do
+    case state.blocked_http_event do
+      nil -> :ok
+      {from, reply} -> GenServer.reply(from, reply)
+    end
+
+    state.pending_http_calls
+    |> :queue.to_list()
+    |> Enum.each(fn {from, _event} -> GenServer.reply(from, :ok) end)
+
+    %{state | blocked_http_event: nil, pending_http_calls: :queue.new()}
+  end
 
   defp process_http_event({:status, status}, state) do
     new_state = %{state | http_status: status}
@@ -1338,6 +1461,8 @@ defmodule ReqLLM.StreamServer do
   end
 
   defp cleanup_resources(state) do
+    state = release_http_event_callers(state)
+
     # Kill HTTP task if running
     if state.http_task && Process.alive?(state.http_task) do
       Process.exit(state.http_task, :cancelled)

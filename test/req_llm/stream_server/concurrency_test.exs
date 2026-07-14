@@ -80,42 +80,40 @@ defmodule ReqLLM.StreamServer.ConcurrencyTest do
       StreamServer.cancel(server)
     end
 
-    test "concurrent consumers with backpressure" do
+    test "consumer demand releases a backpressured producer one chunk at a time" do
       server = start_server(high_watermark: 1)
-      _task = mock_http_task(server)
 
       sse_data1 = ~s(data: {"choices": [{"delta": {"content": "one"}}]}\n\n)
       sse_data2 = ~s(data: {"choices": [{"delta": {"content": "two"}}]}\n\n)
       sse_data3 = ~s(data: {"choices": [{"delta": {"content": "three"}}]}\n\n)
 
-      assert :ok = GenServer.call(server, {:http_event, {:data, sse_data1}})
+      producer =
+        Task.async(fn ->
+          Enum.each([sse_data1, sse_data2, sse_data3], fn event ->
+            :ok = StreamServer.http_event(server, {:data, event})
+          end)
 
-      consumer1 = Task.async(fn -> StreamServer.next(server, 1000) end)
+          StreamServer.http_event(server, :done)
+        end)
 
-      :timer.sleep(10)
+      assert :ok = wait_for_backpressure(server)
 
-      assert :ok = GenServer.call(server, {:http_event, {:data, sse_data2}})
+      chunks =
+        for expected <- ["one", "two", "three"] do
+          consumer = Task.async(fn -> StreamServer.next(server, 1000) end)
+          assert {:ok, chunk} = Task.await(consumer)
+          assert chunk.text == expected
 
-      consumer2 = Task.async(fn -> StreamServer.next(server, 1000) end)
+          if expected != "three" do
+            assert :ok = wait_for_backpressure(server)
+          end
 
-      :timer.sleep(10)
+          chunk.text
+        end
 
-      assert :ok = GenServer.call(server, {:http_event, {:data, sse_data3}})
-
-      consumer3 = Task.async(fn -> StreamServer.next(server, 1000) end)
-
-      :timer.sleep(10)
-
-      assert :ok = GenServer.call(server, {:http_event, :done})
-
-      assert {:ok, chunk1} = Task.await(consumer1)
-      assert chunk1.text == "one"
-
-      assert {:ok, chunk2} = Task.await(consumer2)
-      assert chunk2.text == "two"
-
-      assert {:ok, chunk3} = Task.await(consumer3)
-      assert chunk3.text == "three"
+      assert chunks == ["one", "two", "three"]
+      assert :ok = Task.await(producer)
+      assert :halt = StreamServer.next(server, 100)
 
       StreamServer.cancel(server)
     end
@@ -136,6 +134,23 @@ defmodule ReqLLM.StreamServer.ConcurrencyTest do
       assert Process.alive?(server)
 
       StreamServer.cancel(server)
+    end
+  end
+
+  defp wait_for_backpressure(server, attempts \\ 100)
+
+  defp wait_for_backpressure(_server, 0) do
+    flunk("StreamServer did not apply backpressure")
+  end
+
+  defp wait_for_backpressure(server, attempts) do
+    state = :sys.get_state(server)
+
+    if state.blocked_http_event && :queue.len(state.queue) == 1 do
+      :ok
+    else
+      Process.sleep(10)
+      wait_for_backpressure(server, attempts - 1)
     end
   end
 end
