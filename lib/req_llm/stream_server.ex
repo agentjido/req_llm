@@ -1038,14 +1038,7 @@ defmodule ReqLLM.StreamServer do
   end
 
   defp finalize_stream(state) do
-    state = flush_protocol_state(state)
-
-    {flush_chunks, new_provider_state} =
-      if function_exported?(state.provider_mod, :flush_stream_state, 2) do
-        state.provider_mod.flush_stream_state(state.model, state.provider_state)
-      else
-        {[], state.provider_state}
-      end
+    state = state |> flush_protocol_state() |> flush_provider_state()
 
     extra_flush_chunks =
       if state.object_json_mode? do
@@ -1074,8 +1067,7 @@ defmodule ReqLLM.StreamServer do
 
     state =
       state
-      |> Map.put(:provider_state, new_provider_state)
-      |> then(&enqueue_chunks(flush_chunks ++ extra_flush_chunks, &1))
+      |> then(&enqueue_chunks(extra_flush_chunks, &1))
 
     metadata = extract_final_metadata(state)
 
@@ -1089,7 +1081,7 @@ defmodule ReqLLM.StreamServer do
   defp finalize_cancelled_stream(%{status: {:error, _reason}} = state), do: state
 
   defp finalize_cancelled_stream(state) do
-    state = flush_protocol_state(state)
+    state = state |> flush_protocol_state() |> flush_provider_state()
 
     metadata =
       state
@@ -1101,6 +1093,19 @@ defmodule ReqLLM.StreamServer do
     |> Map.put(:queue, :queue.new())
     |> Map.put(:metadata, metadata)
     |> maybe_emit_stream_stop(:cancelled)
+  end
+
+  defp flush_provider_state(state) do
+    {flush_chunks, new_provider_state} =
+      if function_exported?(state.provider_mod, :flush_stream_state, 2) do
+        state.provider_mod.flush_stream_state(state.model, state.provider_state)
+      else
+        {[], state.provider_state}
+      end
+
+    state
+    |> Map.put(:provider_state, new_provider_state)
+    |> then(&enqueue_chunks(flush_chunks, &1))
   end
 
   defp flush_protocol_state(state) do

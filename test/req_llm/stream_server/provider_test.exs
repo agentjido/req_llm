@@ -69,8 +69,18 @@ defmodule ReqLLM.StreamServer.ProviderTest.ProviderWithState do
 
   def decode_stream_event(_, _model, provider_state), do: {[], provider_state}
 
-  def flush_stream_state(_model, %{count: count} = provider_state) do
-    {[StreamChunk.text("FLUSH:#{count}")], provider_state}
+  def flush_stream_state(model, %{count: count} = provider_state) do
+    flush_chunks =
+      case model.extra do
+        %{test_pid: test_pid} ->
+          send(test_pid, {:provider_flushed, count})
+          [StreamChunk.text("FLUSH:#{count}"), StreamChunk.meta(%{provider_flush_count: count})]
+
+        _other ->
+          [StreamChunk.text("FLUSH:#{count}")]
+      end
+
+    {flush_chunks, provider_state}
   end
 
   def prepare_request(_op, _model, _data, _opts), do: {:error, :not_implemented}
@@ -229,6 +239,28 @@ defmodule ReqLLM.StreamServer.ProviderTest do
       assert flush_chunk == StreamChunk.text("FLUSH:2")
     end
 
+    test "flushes provider state before cancellation metadata" do
+      model = %LLMDB.Model{
+        provider: ProviderWithState,
+        id: "test",
+        extra: %{test_pid: self()}
+      }
+
+      server = start_server(provider_mod: ProviderWithState, model: model)
+      _task = mock_http_task(server)
+
+      StreamServer.http_event(server, {:data, "data: content\n\n"})
+
+      metadata_task = Task.async(fn -> StreamServer.await_metadata(server, :infinity) end)
+      await_metadata_waiter(server)
+
+      assert :ok = StreamServer.cancel(server)
+      assert {:ok, metadata} = Task.await(metadata_task)
+      assert_receive {:provider_flushed, 1}
+      assert metadata.finish_reason == :cancelled
+      assert metadata.provider_flush_count == 1
+    end
+
     test "handles provider without init_stream_state" do
       server = start_server()
       _task = mock_http_task(server)
@@ -368,5 +400,20 @@ defmodule ReqLLM.StreamServer.ProviderTest do
 
       StreamServer.cancel(server)
     end
+  end
+
+  defp await_metadata_waiter(server, attempts \\ 50)
+
+  defp await_metadata_waiter(server, attempts) when attempts > 0 do
+    if Enum.any?(:sys.get_state(server).waiting_callers, &(&1.type == :metadata)) do
+      :ok
+    else
+      Process.sleep(5)
+      await_metadata_waiter(server, attempts - 1)
+    end
+  end
+
+  defp await_metadata_waiter(_server, 0) do
+    flunk("metadata waiter was not registered")
   end
 end
