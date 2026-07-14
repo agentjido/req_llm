@@ -68,7 +68,7 @@ defmodule ReqLLM.Streaming do
   ## Options
 
     * `:timeout` - HTTP request timeout in milliseconds (default: 30_000)
-    * `:metadata_timeout` - Metadata collection timeout in milliseconds (default: 300_000)
+    * `:metadata_timeout` - Maximum metadata inactivity in milliseconds, or `:infinity`
     * `:fixture_path` - Path for test fixture capture (testing only)
     * `:finch_name` - Finch pool name (default: ReqLLM.Finch)
 

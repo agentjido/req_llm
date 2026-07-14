@@ -251,6 +251,35 @@ defmodule ReqLLM.StreamServer.StreamingTest do
       StreamServer.cancel(server)
     end
 
+    test "await_metadata/2 resets a finite timeout on semantic progress" do
+      server = start_server()
+      _task = mock_http_task(server)
+
+      metadata_task = Task.async(fn -> StreamServer.await_metadata(server, 250) end)
+
+      Process.sleep(150)
+
+      StreamServer.http_event(
+        server,
+        {:data, ~s(data: {"choices": [{"delta": {"content": "one"}}]}\n\n)}
+      )
+
+      Process.sleep(150)
+
+      StreamServer.http_event(
+        server,
+        {:data, ~s(data: {"choices": [{"delta": {"content": "two"}}]}\n\n)}
+      )
+
+      Process.sleep(150)
+      StreamServer.http_event(server, :done)
+
+      assert {:ok, metadata} = Task.await(metadata_task, 500)
+      assert metadata.finish_reason == :incomplete
+
+      StreamServer.cancel(server)
+    end
+
     test "next/2 returns structured timeout when transport error arrives late" do
       server = start_server()
       _task = mock_http_task(server)

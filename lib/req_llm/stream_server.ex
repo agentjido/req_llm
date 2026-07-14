@@ -173,7 +173,7 @@ defmodule ReqLLM.StreamServer do
   ## Parameters
 
     * `server` - StreamServer process
-    * `timeout` - Maximum time to wait in milliseconds (default: 30_000)
+    * `timeout` - Maximum time without semantic stream progress, or `:infinity`
 
   ## Returns
 
@@ -371,8 +371,9 @@ defmodule ReqLLM.StreamServer do
       end
 
   """
-  @spec await_metadata(server(), non_neg_integer()) :: {:ok, map()} | {:error, any()}
-  def await_metadata(server, timeout \\ 30_000) do
+  @spec await_metadata(server(), timeout()) :: {:ok, map()} | {:error, any()}
+  def await_metadata(server, timeout \\ 30_000)
+      when timeout == :infinity or (is_integer(timeout) and timeout >= 0) do
     GenServer.call(server, {:await_metadata, timeout}, :infinity)
   end
 
@@ -449,7 +450,8 @@ defmodule ReqLLM.StreamServer do
   def handle_call(:cancel, _from, state) do
     new_state =
       state
-      |> maybe_emit_stream_stop(:cancelled)
+      |> finalize_cancelled_stream()
+      |> reply_to_waiting_callers()
       |> cleanup_resources()
 
     {:stop, :normal, :ok, new_state}
@@ -624,7 +626,7 @@ defmodule ReqLLM.StreamServer do
       {true, _status} ->
         new_state =
           %{state | consumer_refs: MapSet.delete(state.consumer_refs, ref)}
-          |> maybe_emit_stream_stop(:cancelled)
+          |> finalize_cancelled_stream()
           |> cleanup_resources()
           |> reply_to_waiting_callers()
 
@@ -800,6 +802,7 @@ defmodule ReqLLM.StreamServer do
         | protocol_state: new_protocol_state,
           provider_state: new_provider_state
       })
+      |> reset_metadata_waiter_timeouts(stream_chunks)
 
     terminated? =
       Enum.any?(events, &termination_event?/1) or
@@ -1082,6 +1085,24 @@ defmodule ReqLLM.StreamServer do
     |> maybe_emit_stream_stop(metadata[:finish_reason] || :unknown)
   end
 
+  defp finalize_cancelled_stream(%{status: :done} = state), do: state
+  defp finalize_cancelled_stream(%{status: {:error, _reason}} = state), do: state
+
+  defp finalize_cancelled_stream(state) do
+    state = flush_protocol_state(state)
+
+    metadata =
+      state
+      |> extract_final_metadata()
+      |> Map.put(:finish_reason, :cancelled)
+
+    state
+    |> Map.put(:status, :done)
+    |> Map.put(:queue, :queue.new())
+    |> Map.put(:metadata, metadata)
+    |> maybe_emit_stream_stop(:cancelled)
+  end
+
   defp flush_protocol_state(state) do
     {events, new_protocol_state} = SSE.flush(state.protocol_state)
     terminated? = Enum.any?(events, &termination_event?/1)
@@ -1256,10 +1277,46 @@ defmodule ReqLLM.StreamServer do
 
   defp register_waiting_caller(state, from, type, timeout) do
     token = make_ref()
-    timer = Process.send_after(self(), {:caller_timeout, token}, timeout)
+    timer = start_waiting_caller_timer(token, timeout)
 
-    caller = %{from: from, type: type, token: token, timer: timer}
+    caller = %{from: from, type: type, token: token, timer: timer, timeout: timeout}
     %{state | waiting_callers: state.waiting_callers ++ [caller]}
+  end
+
+  defp reset_metadata_waiter_timeouts(state, chunks) do
+    if Enum.any?(chunks, &semantic_progress_chunk?/1) do
+      waiting_callers = Enum.map(state.waiting_callers, &reset_metadata_waiter_timeout/1)
+      %{state | waiting_callers: waiting_callers}
+    else
+      state
+    end
+  end
+
+  defp semantic_progress_chunk?(%StreamChunk{type: type})
+       when type in [:content, :thinking, :tool_call],
+       do: true
+
+  defp semantic_progress_chunk?(%StreamChunk{type: :meta, metadata: metadata})
+       when is_map(metadata) do
+    map_size(metadata) > 0 and
+      Map.get(metadata, :keepalive?) != true and Map.get(metadata, "keepalive?") != true
+  end
+
+  defp semantic_progress_chunk?(_chunk), do: false
+
+  defp reset_metadata_waiter_timeout(%{type: :metadata, timeout: timeout} = caller)
+       when is_integer(timeout) do
+    cancel_waiting_caller_timer(caller)
+    token = make_ref()
+    %{caller | token: token, timer: start_waiting_caller_timer(token, timeout)}
+  end
+
+  defp reset_metadata_waiter_timeout(caller), do: caller
+
+  defp start_waiting_caller_timer(_token, :infinity), do: nil
+
+  defp start_waiting_caller_timer(token, timeout) do
+    Process.send_after(self(), {:caller_timeout, token}, timeout)
   end
 
   defp pop_waiting_caller(state, token) do
@@ -1268,6 +1325,8 @@ defmodule ReqLLM.StreamServer do
 
     {List.first(matched), %{state | waiting_callers: remaining}}
   end
+
+  defp cancel_waiting_caller_timer(%{timer: nil}), do: :ok
 
   defp cancel_waiting_caller_timer(%{timer: timer}) do
     Process.cancel_timer(timer, async: true, info: false)
