@@ -106,10 +106,18 @@ defmodule ReqLLM.StreamServer.StreamingTest do
     end
 
     test "telemetry deferral cannot bypass the watermark" do
-      server = start_server(high_watermark: 1)
+      server = start_server(high_watermark: 2)
       :sys.replace_state(server, &%{&1 | telemetry_pending?: true})
 
-      event = ~s(data: {"choices": [{"delta": {"content": "deferred"}}]}\n\n)
+      event = """
+      data: {"choices": [{"delta": {"content": "one"}}]}
+
+      data: {"choices": [{"delta": {"content": "two"}}]}
+
+      data: {"choices": [{"delta": {"content": "three"}}]}
+
+      """
+
       producer = Task.async(fn -> StreamServer.http_event(server, {:data, event}) end)
 
       assert :ok = wait_for_telemetry_backpressure(server)
@@ -119,8 +127,15 @@ defmodule ReqLLM.StreamServer.StreamingTest do
       assert nil == Task.yield(producer, 25)
 
       assert {:ok, chunk} = StreamServer.next(server, 100)
-      assert chunk.text == "deferred"
+      assert chunk.text == "one"
+      assert nil == Task.yield(producer, 25)
+
+      assert {:ok, chunk} = StreamServer.next(server, 100)
+      assert chunk.text == "two"
       assert :ok = Task.await(producer)
+
+      assert {:ok, chunk} = StreamServer.next(server, 100)
+      assert chunk.text == "three"
 
       StreamServer.cancel(server)
     end

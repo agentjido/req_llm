@@ -60,7 +60,9 @@ defmodule ReqLLM.StreamServer do
   watermark via `next/2`. Each transport data event is processed atomically, so
   one event that decodes to multiple chunks can exceed the watermark by the
   chunks from that event. No later transport event is acknowledged or processed
-  while the producer is suspended.
+  while the producer is suspended. Before telemetry setup completes, the first
+  data event is held so its decoded chunk count can be evaluated against the
+  watermark instead of estimating capacity from raw transport reads.
   """
 
   use GenServer
@@ -711,7 +713,7 @@ defmodule ReqLLM.StreamServer do
   end
 
   defp backpressure_required?({:data, _chunk}, state) do
-    active_stream?(state) and buffered_chunk_count(state) >= state.high_watermark
+    active_stream?(state) and backpressure_saturated?(state)
   end
 
   defp backpressure_required?(_event, _state), do: false
@@ -720,22 +722,18 @@ defmodule ReqLLM.StreamServer do
   defp active_stream?(%{status: {:error, _reason}}), do: false
   defp active_stream?(_state), do: true
 
-  defp buffered_chunk_count(state) do
-    :queue.len(state.queue) + pending_telemetry_data_count(state)
-  end
+  defp backpressure_saturated?(%{telemetry_pending?: true}), do: true
 
-  defp pending_telemetry_data_count(%{telemetry_pending?: true} = state) do
-    Enum.count(state.pending_http_events, &match?({:data, _chunk}, &1))
+  defp backpressure_saturated?(state) do
+    :queue.len(state.queue) >= state.high_watermark
   end
-
-  defp pending_telemetry_data_count(_state), do: 0
 
   defp resume_http_event_callers(%{blocked_http_event: nil} = state) do
     drain_pending_http_calls(state)
   end
 
   defp resume_http_event_callers(state) do
-    if active_stream?(state) and buffered_chunk_count(state) >= state.high_watermark do
+    if active_stream?(state) and backpressure_saturated?(state) do
       state
     else
       {from, reply} = state.blocked_http_event
