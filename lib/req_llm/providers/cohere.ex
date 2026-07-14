@@ -85,7 +85,7 @@ defmodule ReqLLM.Providers.Cohere do
           auth: {:bearer, api_key}
         ] ++ user_opts
     )
-    |> ReqLLM.Step.Retry.attach()
+    |> ReqLLM.Step.Retry.attach(user_opts)
     |> ReqLLM.Step.Error.attach()
     |> Req.Request.prepend_request_steps(llm_encode_body: &encode_body/1)
     |> Req.Request.append_response_steps(llm_decode_response: &decode_response/1)

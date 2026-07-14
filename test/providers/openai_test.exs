@@ -85,6 +85,27 @@ defmodule ReqLLM.Providers.OpenAITest do
       assert request.options[:finch] == :custom_finch
     end
 
+    test "prepare_request honors caller retry limits for chat and object requests" do
+      {:ok, chat_model} = ReqLLM.model("openai:gpt-4-turbo")
+      {:ok, object_model} = ReqLLM.model("openai:gpt-4o-mini")
+      {:ok, schema} = ReqLLM.Schema.compile(name: [type: :string, required: true])
+
+      {:ok, chat_request} =
+        OpenAI.prepare_request(:chat, chat_model, "Hello", max_retries: 0)
+
+      {:ok, object_request} =
+        OpenAI.prepare_request(:object, object_model, "Hello",
+          compiled_schema: schema,
+          max_retries: 1
+        )
+
+      {:ok, default_request} = OpenAI.prepare_request(:chat, chat_model, "Hello", [])
+
+      assert chat_request.options[:max_retries] == 0
+      assert object_request.options[:max_retries] == 1
+      assert default_request.options[:max_retries] == 3
+    end
+
     test "prepare_request routes gpt-4o models to Responses API" do
       {:ok, model} = ReqLLM.model("openai:gpt-4o")
       context = context_fixture()

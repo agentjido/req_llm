@@ -413,7 +413,7 @@ defmodule ReqLLM.Provider.Defaults do
           ] ++ http_opts
         )
         |> Req.Request.put_header("authorization", "Bearer #{api_key}")
-        |> ReqLLM.Step.Retry.attach()
+        |> ReqLLM.Step.Retry.attach(opts)
         |> ReqLLM.Step.Error.attach()
         |> ReqLLM.Step.Telemetry.attach(
           model,
@@ -504,7 +504,7 @@ defmodule ReqLLM.Provider.Defaults do
         )
         |> Req.Request.put_header("content-type", "application/json")
         |> Req.Request.put_header("authorization", "Bearer #{api_key}")
-        |> ReqLLM.Step.Retry.attach()
+        |> ReqLLM.Step.Retry.attach(opts)
         |> ReqLLM.Step.Error.attach()
         |> ReqLLM.Step.Telemetry.attach(
           model,
@@ -582,7 +582,7 @@ defmodule ReqLLM.Provider.Defaults do
           auth: {:bearer, api_key}
         ] ++ user_opts
     )
-    |> ReqLLM.Step.Retry.attach()
+    |> ReqLLM.Step.Retry.attach(user_opts)
     |> ReqLLM.Step.Error.attach()
     |> Req.Request.prepend_request_steps(llm_encode_body: &provider_mod.encode_body/1)
     |> Req.Request.append_response_steps(llm_decode_response: &provider_mod.decode_response/1)

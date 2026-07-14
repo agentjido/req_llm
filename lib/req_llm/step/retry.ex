@@ -55,7 +55,7 @@ defmodule ReqLLM.Step.Retry do
   """
   @spec attach(Req.Request.t(), keyword()) :: Req.Request.t()
   def attach(%Req.Request{} = req, opts \\ []) do
-    max_retries = Keyword.get(opts, :max_retries, 3)
+    max_retries = Keyword.get(opts, :max_retries, Map.get(req.options, :max_retries, 3))
 
     req
     |> Req.Request.merge_options(
