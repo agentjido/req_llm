@@ -262,8 +262,9 @@ defmodule ReqLLM.OAuth do
 
     result =
       with {:ok, stat} <- File.stat(path),
-           :ok <- File.write(temporary_path, contents, [:exclusive]),
-           :ok <- File.chmod(temporary_path, Bitwise.band(stat.mode, 0o777)) do
+           :ok <- File.write(temporary_path, <<>>, [:exclusive]),
+           :ok <- File.chmod(temporary_path, Bitwise.band(stat.mode, 0o777)),
+           :ok <- File.write(temporary_path, contents) do
         File.rename(temporary_path, path)
       end
 
