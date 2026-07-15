@@ -4,7 +4,7 @@ defmodule ReqLLM.StreamResponse.MetadataHandle do
 
   The handle starts a background process that runs the supplied fetch fun exactly once.
   Callers can await the metadata multiple times without causing repeated fetches or
-  task mailbox exhaustion.
+  task mailbox exhaustion. Call `stop/1` when the cached metadata is no longer needed.
   """
 
   use GenServer
@@ -26,32 +26,37 @@ defmodule ReqLLM.StreamResponse.MetadataHandle do
     end
   end
 
+  @doc """
+  Stops a metadata handle and any in-progress metadata collection.
+
+  This operation is idempotent and returns `:ok` when the handle has already stopped.
+  """
+  @spec stop(t()) :: :ok
+  def stop(handle) when is_pid(handle) do
+    GenServer.stop(handle)
+  catch
+    :exit, {:noproc, {GenServer, :stop, [^handle, :normal, :infinity]}} -> :ok
+  end
+
   @impl true
   def init(fetch_fun) do
-    state = %{fetch_fun: fetch_fun, metadata: :pending, waiters: []}
+    state = %{fetch_fun: fetch_fun, metadata: :pending, waiters: [], worker: nil}
     {:ok, state, {:continue, :collect_metadata}}
   end
 
   @impl true
   def handle_continue(:collect_metadata, %{fetch_fun: fetch_fun} = state) do
-    metadata =
-      try do
-        fetch_fun.()
-      rescue
-        error ->
-          Logger.warning(
-            "Metadata collection failed: #{Exception.format(:error, error, __STACKTRACE__)}"
-          )
+    parent = self()
 
-          %{}
-      catch
-        :exit, reason ->
-          Logger.warning("Metadata collection exited: #{inspect(reason)}")
-          %{}
-      end
+    worker =
+      :erlang.spawn_opt(
+        fn ->
+          send(parent, {:metadata_collected, self(), collect_metadata(fetch_fun)})
+        end,
+        [:link, :monitor]
+      )
 
-    Enum.each(state.waiters, &GenServer.reply(&1, {:ok, metadata}))
-    {:noreply, %{state | metadata: {:ready, metadata}, waiters: [], fetch_fun: nil}}
+    {:noreply, %{state | fetch_fun: nil, worker: worker}}
   end
 
   @impl true
@@ -61,5 +66,52 @@ defmodule ReqLLM.StreamResponse.MetadataHandle do
 
   def handle_call(:await, from, state) do
     {:noreply, %{state | waiters: [from | state.waiters]}}
+  end
+
+  @impl true
+  def handle_info(
+        {:metadata_collected, worker_pid, metadata},
+        %{worker: {worker_pid, monitor_ref}} = state
+      ) do
+    Process.demonitor(monitor_ref, [:flush])
+    {:noreply, metadata_ready(state, metadata)}
+  end
+
+  def handle_info(
+        {:DOWN, monitor_ref, :process, worker_pid, reason},
+        %{worker: {worker_pid, monitor_ref}} = state
+      ) do
+    Logger.warning("Metadata collection exited: #{inspect(reason)}")
+    {:noreply, metadata_ready(state, %{})}
+  end
+
+  @impl true
+  def terminate(_reason, %{worker: {worker_pid, monitor_ref}}) do
+    Process.unlink(worker_pid)
+    Process.demonitor(monitor_ref, [:flush])
+    Process.exit(worker_pid, :kill)
+    :ok
+  end
+
+  def terminate(_reason, _state), do: :ok
+
+  defp collect_metadata(fetch_fun) do
+    fetch_fun.()
+  rescue
+    error ->
+      Logger.warning(
+        "Metadata collection failed: #{Exception.format(:error, error, __STACKTRACE__)}"
+      )
+
+      %{}
+  catch
+    :exit, reason ->
+      Logger.warning("Metadata collection exited: #{inspect(reason)}")
+      %{}
+  end
+
+  defp metadata_ready(state, metadata) do
+    Enum.each(state.waiters, &GenServer.reply(&1, {:ok, metadata}))
+    %{state | metadata: {:ready, metadata}, waiters: [], worker: nil}
   end
 end

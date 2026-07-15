@@ -68,7 +68,14 @@ defmodule ReqLLM.StreamResponseTest do
 
   import ReqLLM.StreamResponseTest.Helpers
 
-  alias ReqLLM.{Context, Response, StreamChunk, StreamResponse, ToolCall}
+  alias ReqLLM.{
+    Context,
+    Response,
+    StreamChunk,
+    StreamResponse,
+    StreamResponse.MetadataHandle,
+    ToolCall
+  }
 
   describe "struct validation and defaults" do
     test "exposes schema metadata" do
@@ -376,6 +383,8 @@ defmodule ReqLLM.StreamResponseTest do
 
       {:ok, response} = StreamResponse.to_response(stream_response)
 
+      refute Process.alive?(metadata_handle)
+
       # Verify Response struct structure
       assert %Response{} = response
       assert response.stream? == false
@@ -491,10 +500,13 @@ defmodule ReqLLM.StreamResponseTest do
           metadata_handle: create_metadata_handle(%{finish_reason: :stop})
         )
 
+      metadata_handle = stream_response.metadata_handle
+
       # Enum.to_list will raise, which to_response should catch
       result = StreamResponse.to_response(stream_response)
 
       assert {:error, %RuntimeError{message: "Stream processing failed"}} = result
+      refute Process.alive?(metadata_handle)
     end
 
     test "generates unique response IDs" do
@@ -507,6 +519,50 @@ defmodule ReqLLM.StreamResponseTest do
       assert response1.id != response2.id
       assert String.starts_with?(response1.id, "resp_")
       assert String.starts_with?(response2.id, "resp_")
+    end
+  end
+
+  describe "close/1 lifecycle" do
+    test "stops pending metadata collection and is idempotent" do
+      metadata_handle =
+        create_metadata_handle(fn ->
+          receive do
+            :finish -> %{finish_reason: :stop}
+          end
+        end)
+
+      stream_response = create_stream_response(metadata_handle: metadata_handle)
+
+      assert :ok = StreamResponse.close(stream_response)
+      refute Process.alive?(metadata_handle)
+      assert :ok = StreamResponse.close(stream_response)
+    end
+
+    test "preserves reusable metadata until explicitly closed" do
+      usage = %{input_tokens: 5, output_tokens: 10}
+      metadata_handle = create_metadata_handle(%{usage: usage, finish_reason: :stop})
+      stream_response = create_stream_response(metadata_handle: metadata_handle)
+
+      assert StreamResponse.usage(stream_response) == usage
+      assert StreamResponse.finish_reason(stream_response) == :stop
+      assert Process.alive?(metadata_handle)
+      assert :ok = StreamResponse.close(stream_response)
+      refute Process.alive?(metadata_handle)
+    end
+  end
+
+  describe "MetadataHandle lifecycle" do
+    test "stop/1 terminates an in-progress collector" do
+      metadata_handle =
+        create_metadata_handle(fn ->
+          receive do
+            :finish -> %{}
+          end
+        end)
+
+      assert :ok = MetadataHandle.stop(metadata_handle)
+      refute Process.alive?(metadata_handle)
+      assert :ok = MetadataHandle.stop(metadata_handle)
     end
   end
 
@@ -1043,6 +1099,7 @@ defmodule ReqLLM.StreamResponseTest do
       result = StreamResponse.process_stream(stream_response)
 
       assert {:error, ^error} = result
+      refute Process.alive?(metadata_handle)
     end
 
     test "returns {:error, reason} when stream encounters a transport error" do
@@ -1071,6 +1128,20 @@ defmodule ReqLLM.StreamResponseTest do
 
       assert {:error, %ReqLLM.Error.API.Stream{cause: %Mint.TransportError{reason: :closed}}} =
                result
+
+      refute Process.alive?(stream_response.metadata_handle)
+    end
+
+    test "releases metadata handles after repeated materialization" do
+      handles =
+        for _ <- 1..100 do
+          stream_response = create_stream_response(stream: [StreamChunk.text("complete")])
+
+          assert {:ok, %Response{}} = StreamResponse.process_stream(stream_response)
+          stream_response.metadata_handle
+        end
+
+      assert Enum.all?(handles, &(not Process.alive?(&1)))
     end
   end
 

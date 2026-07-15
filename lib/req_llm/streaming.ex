@@ -139,13 +139,9 @@ defmodule ReqLLM.Streaming do
         )
 
       receive_timeout = Keyword.get(opts, :receive_timeout, default_timeout)
-      stream = create_lazy_stream(server_pid, receive_timeout)
-
-      # Start metadata collection handle
       metadata_handle = start_metadata_handle(server_pid, opts)
-
-      # Create cancel function
-      cancel_fn = fn -> StreamServer.cancel(server_pid) end
+      cancel_fn = fn -> cancel_stream(server_pid, metadata_handle) end
+      stream = create_lazy_stream(server_pid, receive_timeout, cancel_fn)
 
       # Build StreamResponse
       stream_response = %StreamResponse{
@@ -315,7 +311,7 @@ defmodule ReqLLM.Streaming do
   end
 
   # Create lazy stream using Stream.resource that calls StreamServer.next/2
-  defp create_lazy_stream(server_pid, timeout) do
+  defp create_lazy_stream(server_pid, timeout, cancel) do
     Stream.resource(
       fn ->
         :ok = StreamServer.monitor_consumer(server_pid, self())
@@ -336,12 +332,18 @@ defmodule ReqLLM.Streaming do
             }
         end
       end,
-      fn %{server: server, exhausted?: exhausted?} ->
+      fn %{exhausted?: exhausted?} ->
         if not exhausted? do
-          StreamServer.cancel(server)
+          cancel.()
         end
       end
     )
+  end
+
+  defp cancel_stream(server_pid, metadata_handle) do
+    StreamServer.cancel(server_pid)
+  after
+    MetadataHandle.stop(metadata_handle)
   end
 
   defp start_metadata_handle(server_pid, opts) do

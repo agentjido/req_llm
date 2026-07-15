@@ -90,6 +90,7 @@ defmodule ReqLLM.Integration.StreamingOrchestrationTest do
       assert function_exported?(ReqLLM.StreamResponse, :text, 1)
       assert function_exported?(ReqLLM.StreamResponse, :usage, 1)
       assert function_exported?(ReqLLM.StreamResponse, :finish_reason, 1)
+      assert function_exported?(ReqLLM.StreamResponse, :close, 1)
     end
   end
 
@@ -139,7 +140,7 @@ defmodule ReqLLM.Integration.StreamingOrchestrationTest do
         Streaming.start_stream(
           ReqLLM.Providers.OpenRouter,
           model,
-          Context.new("Hello"),
+          Context.new([Context.user("Hello")]),
           fixture: "streaming"
         )
 
@@ -163,7 +164,7 @@ defmodule ReqLLM.Integration.StreamingOrchestrationTest do
         Streaming.start_stream(
           ReqLLM.Providers.OpenRouter,
           model,
-          Context.new("Hello"),
+          Context.new([Context.user("Hello")]),
           fixture: "streaming",
           completion_cleanup_after: 20
         )
@@ -183,7 +184,7 @@ defmodule ReqLLM.Integration.StreamingOrchestrationTest do
         Streaming.start_stream(
           ReqLLM.Providers.OpenRouter,
           model,
-          Context.new("Hello"),
+          Context.new([Context.user("Hello")]),
           fixture: "streaming",
           completion_cleanup_after: 1_000
         )
@@ -208,7 +209,7 @@ defmodule ReqLLM.Integration.StreamingOrchestrationTest do
         Streaming.start_stream(
           ReqLLM.Providers.OpenRouter,
           model,
-          Context.new("Hello"),
+          Context.new([Context.user("Hello")]),
           fixture: "streaming"
         )
 
@@ -217,6 +218,22 @@ defmodule ReqLLM.Integration.StreamingOrchestrationTest do
       assert is_pid(stream_server_pid)
       assert [_chunk | _] = stream_response.stream |> Stream.take(1) |> Enum.to_list()
       assert wait_until(fn -> not Process.alive?(stream_server_pid) end)
+      refute Process.alive?(stream_response.metadata_handle)
+    end
+
+    test "explicit cancellation terminates the metadata handle" do
+      {:ok, model} = ReqLLM.model("openrouter:google/gemini-3-flash-preview")
+
+      {:ok, stream_response} =
+        Streaming.start_stream(
+          ReqLLM.Providers.OpenRouter,
+          model,
+          Context.new([Context.user("Hello")]),
+          fixture: "streaming"
+        )
+
+      assert :ok = stream_response.cancel.()
+      refute Process.alive?(stream_response.metadata_handle)
     end
   end
 

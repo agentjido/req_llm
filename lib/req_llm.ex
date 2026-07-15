@@ -942,8 +942,9 @@ defmodule ReqLLM do
   ## Performance Notes
 
   The stream is lazy and supports backpressure. Metadata collection happens
-  concurrently and won't block token delivery. Use cancellation for early
-  termination to free resources. High-concurrency streaming workloads can tune
+  concurrently and won't block token delivery. Use `ReqLLM.StreamResponse.close/1`
+  for early termination or after direct metadata access to free resources.
+  High-concurrency streaming workloads can tune
   Finch pool protocols with `:stream_pool_protocols`, capacity with
   `:stream_pool_size` and `:stream_pool_count`, shard selection with
   `:stream_pool_strategy`, and checkout behavior with `:stream_pool_timeout`

@@ -32,6 +32,7 @@ defmodule ReqLLM.StreamResponse do
 
   text = ReqLLM.StreamResponse.text(stream_response)
   usage = ReqLLM.StreamResponse.usage(stream_response)
+  :ok = ReqLLM.StreamResponse.close(stream_response)
   ```
 
   ### Backward compatibility
@@ -52,8 +53,8 @@ defmodule ReqLLM.StreamResponse do
   |> Stream.each(&IO.write/1)
   |> Stream.run()
 
-  # Cancel remaining work
-  stream_response.cancel.()
+  # Cancel remaining work and close the metadata handle
+  ReqLLM.StreamResponse.close(stream_response)
   ```
 
   ## Design Philosophy
@@ -385,6 +386,7 @@ defmodule ReqLLM.StreamResponse do
   - The stream is consumed exactly once (no double-consumption bugs)
   - All callbacks are optional - omitted callbacks are simply not invoked
   - The returned Response struct contains all accumulated data plus metadata
+  - The metadata handle is closed before this function returns
   """
   @spec process_stream(t(), keyword()) :: {:ok, Response.t()} | {:error, term()}
   def process_stream(%__MODULE__{} = stream_response, opts \\ []) do
@@ -411,6 +413,8 @@ defmodule ReqLLM.StreamResponse do
     error -> {:error, error}
   catch
     :exit, reason -> {:error, reason}
+  after
+    MetadataHandle.stop(stream_response.metadata_handle)
   end
 
   # Process stream chunks, invoking callbacks and collecting chunks
@@ -534,6 +538,20 @@ defmodule ReqLLM.StreamResponse do
     end
   end
 
+  @doc """
+  Closes a streaming response and releases its resources.
+
+  This operation cancels any remaining stream work and terminates the metadata
+  handle. It is safe to call more than once. After closing, metadata accessors
+  such as `usage/1` and `finish_reason/1` are no longer available.
+  """
+  @spec close(t()) :: :ok
+  def close(%__MODULE__{cancel: cancel, metadata_handle: handle}) do
+    cancel.()
+  after
+    MetadataHandle.stop(handle)
+  end
+
   defp normalize_finish_reason(reason) when is_atom(reason) do
     case reason do
       :tool_use -> :tool_calls
@@ -601,7 +619,7 @@ defmodule ReqLLM.StreamResponse do
 
   This function materializes the entire stream and awaits metadata collection,
   so it negates the streaming benefits. Use this only when backward compatibility
-  is required.
+  is required. The metadata handle is closed before this function returns.
   """
   @spec to_response(t()) :: {:ok, Response.t()} | {:error, term()}
   def to_response(%__MODULE__{} = stream_response) do
@@ -622,5 +640,7 @@ defmodule ReqLLM.StreamResponse do
     error -> {:error, error}
   catch
     :exit, reason -> {:error, reason}
+  after
+    MetadataHandle.stop(stream_response.metadata_handle)
   end
 end
