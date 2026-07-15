@@ -230,7 +230,41 @@ defmodule ReqLLM.Streaming.RetryTest do
     assert error.status == 429
     assert error.reason == "Too many requests"
     assert error.headers == [{"retry-after", "0"}]
+    assert error.retryable == true
     assert Enum.reverse(events) == [{:status, 429}, {:headers, [{"retry-after", "0"}]}]
+  end
+
+  test "buffers a 503 response and returns one structured API failure" do
+    stream_fun = fn _request, _finch_name, acc, callback, _opts ->
+      acc = callback.({:status, 503}, acc)
+      acc = callback.({:headers, [{"content-type", "application/json"}]}, acc)
+      acc = callback.({:data, ~s({"error":{"code":"over)}, acc)
+      acc = callback.({:data, ~s(loaded","message":"try later"}})}, acc)
+      acc = callback.(:done, acc)
+      {:ok, acc}
+    end
+
+    callback = fn event, acc -> [event | acc] end
+
+    assert {:error, %ReqLLM.Error.API.Request{} = error, events} =
+             Retry.stream(
+               Finch.build(:post, "https://example.com/stream"),
+               ReqLLM.Finch,
+               [],
+               callback,
+               [max_retries: 0, receive_timeout: 1_000],
+               stream_fun
+             )
+
+    assert error.status == 503
+    assert error.reason == "try later"
+    assert error.provider_code == "overloaded"
+    assert error.retryable == true
+
+    assert Enum.reverse(events) == [
+             {:status, 503},
+             {:headers, [{"content-type", "application/json"}]}
+           ]
   end
 
   test "retries 429 errors returned from the streaming transport" do

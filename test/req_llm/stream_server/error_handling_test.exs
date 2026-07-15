@@ -103,6 +103,7 @@ defmodule ReqLLM.StreamServer.ErrorHandlingTest do
       assert {:error, %ReqLLM.Error.API.Request{} = error} = StreamServer.next(server, 100)
       assert error.status == 500
       assert error.reason == "Internal server error"
+      assert error.retryable == true
 
       StreamServer.cancel(server)
     end
@@ -118,6 +119,7 @@ defmodule ReqLLM.StreamServer.ErrorHandlingTest do
       assert error.status == 404
       assert error.reason == "HTTP 404"
       assert error.response_body == "Not Found"
+      assert error.retryable == false
 
       StreamServer.cancel(server)
     end

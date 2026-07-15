@@ -57,7 +57,16 @@ defmodule ReqLLM.Error do
   defmodule API.Request do
     @moduledoc "Error for API request failures, HTTP errors, and network issues."
     use Splode.Error,
-      fields: [:reason, :status, :response_body, :request_body, :cause, :headers],
+      fields: [
+        :reason,
+        :status,
+        :response_body,
+        :request_body,
+        :cause,
+        :headers,
+        :provider_code,
+        :retryable
+      ],
       class: :api
 
     @spec message(map()) :: String.t()

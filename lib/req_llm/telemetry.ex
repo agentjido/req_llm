@@ -386,24 +386,41 @@ defmodule ReqLLM.Telemetry do
 
   def exception_request(%{request_stopped?: true} = context, _error, _opts), do: context
 
-  def exception_request(context, error, _opts) do
+  def exception_request(context, error, opts) do
     context = ensure_started(context, context.original_opts)
-    context = observe_error_reasoning(context, error)
+    usage = Keyword.get(opts, :usage)
+
+    context =
+      context
+      |> observe_error_reasoning(error)
+      |> observe_reasoning_usage(usage)
 
     :telemetry.execute(
       @request_exception_event,
       stop_measurements(context),
       request_metadata(context, %{
-        http_status: http_status_from_error(error),
+        http_status: Keyword.get(opts, :http_status) || http_status_from_error(error),
         finish_reason: :error,
-        usage: nil,
+        usage: usage,
         response_summary: response_summary(context.response_summary_state, context.operation),
         response_payload: nil,
+        builtin_tool_timing: Keyword.get(opts, :builtin_tool_timing),
         error: error
       })
     )
 
     maybe_emit_reasoning_stop(context, :error)
+
+    if Keyword.get(opts, :emit_token_usage?, false) do
+      emit_token_usage(context.model, usage,
+        request_id: context.request_id,
+        operation: context.operation,
+        mode: context.mode,
+        provider: context.model.provider,
+        transport: context.transport
+      )
+    end
+
     %{context | request_stopped?: true}
   end
 

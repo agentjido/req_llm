@@ -514,15 +514,32 @@ defmodule ReqLLM.StreamServer.TelemetryTest do
 
     assert :ok = StreamServer.set_telemetry_context(server, telemetry_context)
 
+    usage = %{"prompt_tokens" => 7, "completion_tokens" => 3, "total_tokens" => 10}
+
+    StreamServer.http_event(
+      server,
+      {:data,
+       "data: #{Jason.encode!(%{"type" => "meta", "usage" => usage, "reasoning_details" => []})}\n\n"}
+    )
+
     StreamServer.http_event(server, {:error, :boom})
 
-    assert {:error, :boom} = StreamServer.await_metadata(server, 200)
+    assert {:ok, metadata} = StreamServer.await_metadata(server, 200)
+    assert metadata.error == :boom
+    assert metadata.usage.input_tokens == 7
+    assert metadata.usage.output_tokens == 3
+
     assert_receive {:telemetry_event, [:req_llm, :request, :start], _, _}
     assert_receive {:telemetry_event, [:req_llm, :reasoning, :start], _, _}
     assert_receive {:telemetry_event, [:req_llm, :request, :exception], _, exception_meta}
     assert_receive {:telemetry_event, [:req_llm, :reasoning, :stop], _, reasoning_stop_meta}
+    assert_receive {:telemetry_event, [:req_llm, :token_usage], token_measurements, _}
     refute_receive {:telemetry_event, [:req_llm, :request, :stop], _, _}
     assert exception_meta.finish_reason == :error
+    assert exception_meta.usage.input_tokens == 7
+    assert exception_meta.usage.output_tokens == 3
+    assert token_measurements.tokens.input_tokens == 7
+    assert token_measurements.tokens.output_tokens == 3
     assert reasoning_stop_meta.milestone == :error
 
     StreamServer.cancel(server)

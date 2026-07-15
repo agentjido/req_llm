@@ -69,6 +69,7 @@ defmodule ReqLLM.StreamServer do
 
   alias ReqLLM.MapAccess
   alias ReqLLM.StreamChunk
+  alias ReqLLM.Streaming.Failure
   alias ReqLLM.Streaming.SSE
 
   require Logger
@@ -99,6 +100,7 @@ defmodule ReqLLM.StreamServer do
     stream_requested?: false,
     metadata_delivered?: false,
     halt_delivered?: false,
+    error_delivered?: false,
     completion_cleanup_after: 30_000,
     completion_cleanup_timer: nil,
     completion_cleanup_token: nil,
@@ -445,7 +447,12 @@ defmodule ReqLLM.StreamServer do
             end
 
           {:error, reason} ->
-            {:reply, {:error, reason}, new_state}
+            error_state = %{new_state | error_delivered?: true}
+
+            case finalize_lifecycle(error_state) do
+              {:stop, final_state} -> {:stop, :normal, {:error, reason}, final_state}
+              {:continue, final_state} -> {:reply, {:error, reason}, final_state}
+            end
 
           _ ->
             {:noreply, register_waiting_caller(new_state, from, :next, timeout)}
@@ -563,7 +570,13 @@ defmodule ReqLLM.StreamServer do
   end
 
   def handle_call({:await_metadata, _timeout}, _from, %{status: {:error, reason}} = state) do
-    {:reply, {:error, reason}, state}
+    metadata = error_metadata(state, reason)
+    new_state = %{state | metadata: metadata, metadata_delivered?: true}
+
+    case finalize_lifecycle(new_state) do
+      {:stop, final_state} -> {:stop, :normal, {:ok, metadata}, final_state}
+      {:continue, final_state} -> {:reply, {:ok, metadata}, final_state}
+    end
   end
 
   def handle_call({:await_metadata, timeout}, from, state) do
@@ -804,6 +817,10 @@ defmodule ReqLLM.StreamServer do
     {:reply, :ok, new_state}
   end
 
+  defp process_http_event({:data, _chunk}, %{status: {:error, _reason}} = state) do
+    {:reply, :ok, state}
+  end
+
   defp process_http_event({:data, chunk}, state) do
     if state.http_status && state.http_status >= 400 do
       error = build_http_error(state.http_status, chunk, state.headers)
@@ -820,9 +837,17 @@ defmodule ReqLLM.StreamServer do
     end
   end
 
+  defp process_http_event(:done, %{status: {:error, _reason}} = state) do
+    {:reply, :ok, state}
+  end
+
   defp process_http_event(:done, state) do
     new_state = finalize_stream_with_fixture(state) |> reply_to_waiting_callers()
     {:reply, :ok, new_state}
+  end
+
+  defp process_http_event({:error, _reason}, %{status: {:error, _existing}} = state) do
+    {:reply, :ok, state}
   end
 
   defp process_http_event({:error, reason}, state) do
@@ -832,6 +857,11 @@ defmodule ReqLLM.StreamServer do
       |> maybe_emit_stream_exception(reason)
       |> reply_to_waiting_callers()
 
+    {:reply, :ok, new_state}
+  end
+
+  defp process_http_event({:cancelled, _reason}, state) do
+    new_state = state |> finalize_cancelled_stream() |> reply_to_waiting_callers()
     {:reply, :ok, new_state}
   end
 
@@ -868,6 +898,7 @@ defmodule ReqLLM.StreamServer do
   defp store_pending_http_exit(state, _reason), do: state
 
   defp process_http_task_exit(%{status: :done} = state, _reason), do: state
+  defp process_http_task_exit(%{status: {:error, _reason}} = state, _exit_reason), do: state
 
   defp process_http_task_exit(state, reason) when reason in [:normal, :shutdown] do
     finalize_stream_with_fixture(state)
@@ -1335,6 +1366,13 @@ defmodule ReqLLM.StreamServer do
     Map.delete(meta, :terminal?)
   end
 
+  defp error_metadata(state, reason) do
+    state
+    |> extract_final_metadata()
+    |> Map.put(:finish_reason, :error)
+    |> Map.put(:error, reason)
+  end
+
   defp reply_to_waiting_callers(state) do
     {replied_callers, remaining_callers} =
       Enum.split_with(state.waiting_callers, fn caller ->
@@ -1372,7 +1410,7 @@ defmodule ReqLLM.StreamServer do
 
       {{:empty, _}, {:error, reason}} ->
         GenServer.reply(from, {:error, reason})
-        state
+        %{state | error_delivered?: true}
 
       {{:empty, _}, _} ->
         GenServer.reply(from, {:error, :unexpected_empty_queue})
@@ -1391,8 +1429,9 @@ defmodule ReqLLM.StreamServer do
          %{status: {:error, reason}} = state
        ) do
     cancel_waiting_caller_timer(caller)
-    GenServer.reply(from, {:error, reason})
-    state
+    metadata = error_metadata(state, reason)
+    GenServer.reply(from, {:ok, metadata})
+    %{state | metadata: metadata, metadata_delivered?: true}
   end
 
   defp reply_to_caller(%{from: from, type: :metadata} = caller, state) do
@@ -1469,10 +1508,15 @@ defmodule ReqLLM.StreamServer do
     cancel_completion_cleanup(state)
   end
 
-  defp ready_to_stop?(state) do
-    state.status == :done and state.metadata_delivered? and state.halt_delivered? and
-      :queue.is_empty(state.queue)
+  defp ready_to_stop?(%{status: :done} = state) do
+    state.metadata_delivered? and state.halt_delivered? and :queue.is_empty(state.queue)
   end
+
+  defp ready_to_stop?(%{status: {:error, _reason}} = state) do
+    state.metadata_delivered? and state.error_delivered? and :queue.is_empty(state.queue)
+  end
+
+  defp ready_to_stop?(_state), do: false
 
   defp finalize_lifecycle(state) do
     cond do
@@ -1488,10 +1532,14 @@ defmodule ReqLLM.StreamServer do
   end
 
   defp should_schedule_completion_cleanup?(state) do
-    state.status == :done and state.metadata_delivered? and not state.stream_requested? and
+    terminal_status?(state.status) and state.metadata_delivered? and not state.stream_requested? and
       not state.halt_delivered? and is_integer(state.completion_cleanup_after) and
       state.completion_cleanup_after >= 0
   end
+
+  defp terminal_status?(:done), do: true
+  defp terminal_status?({:error, _reason}), do: true
+  defp terminal_status?(_status), do: false
 
   defp ensure_completion_cleanup_timer(%{completion_cleanup_timer: nil} = state) do
     token = make_ref()
@@ -1512,33 +1560,7 @@ defmodule ReqLLM.StreamServer do
   end
 
   defp build_http_error(status, chunk, headers) do
-    case Jason.decode(chunk) do
-      {:ok, %{"error" => error_data}} when is_map(error_data) ->
-        message = Map.get(error_data, "message", "HTTP #{status}")
-
-        ReqLLM.Error.API.Request.exception(
-          reason: message,
-          status: status,
-          response_body: error_data,
-          headers: headers
-        )
-
-      {:ok, decoded} ->
-        ReqLLM.Error.API.Request.exception(
-          reason: "HTTP #{status}",
-          status: status,
-          response_body: decoded,
-          headers: headers
-        )
-
-      {:error, _} ->
-        ReqLLM.Error.API.Request.exception(
-          reason: "HTTP #{status}",
-          status: status,
-          response_body: chunk,
-          headers: headers
-        )
-    end
+    Failure.api_error(status, chunk, headers)
   end
 
   # Normalize streaming usage data from provider format to ReqLLM format
@@ -1577,7 +1599,17 @@ defmodule ReqLLM.StreamServer do
   defp maybe_emit_stream_exception(%{telemetry: nil} = state, _reason), do: state
 
   defp maybe_emit_stream_exception(%{telemetry: telemetry} = state, reason) do
-    %{state | telemetry: ReqLLM.Telemetry.exception_request(telemetry, reason)}
+    usage = state.metadata[:usage]
+
+    telemetry =
+      ReqLLM.Telemetry.exception_request(telemetry, reason,
+        http_status: state.http_status,
+        usage: usage,
+        builtin_tool_timing: state.builtin_tool_timing,
+        emit_token_usage?: is_map(usage)
+      )
+
+    %{state | telemetry: telemetry}
   end
 
   defp maybe_put_request_id(meta, nil), do: meta

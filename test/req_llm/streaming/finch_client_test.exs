@@ -1,6 +1,8 @@
 defmodule ReqLLM.Streaming.FinchClientTest do
   use ExUnit.Case, async: false
 
+  import ExUnit.CaptureLog
+
   alias ReqLLM.Context
   alias ReqLLM.Streaming.FinchClient
   alias ReqLLM.Streaming.Fixtures.HTTPContext
@@ -22,6 +24,24 @@ defmodule ReqLLM.Streaming.FinchClientTest do
 
       {:ok, conn} = Plug.Conn.chunk(conn, "data: [DONE]\n\n")
       conn
+    end
+
+    post "/rate_limit" do
+      conn
+      |> Plug.Conn.put_resp_content_type("application/json")
+      |> Plug.Conn.send_resp(
+        429,
+        ~s({"error":{"code":"traffic_queue_timeout","message":"traffic queue wait expired"}})
+      )
+    end
+
+    post "/unavailable" do
+      conn
+      |> Plug.Conn.put_resp_content_type("application/json")
+      |> Plug.Conn.send_resp(
+        503,
+        ~s({"error":{"code":"overloaded","message":"service unavailable"}})
+      )
     end
   end
 
@@ -536,20 +556,116 @@ defmodule ReqLLM.Streaming.FinchClientTest do
       {:ok, context} = Context.normalize("Test")
       model = %LLMDB.Model{provider: :test, id: "test"}
 
-      assert {:ok, task_pid, _http_context, _canonical_json} =
-               FinchClient.start_stream(
-                 LiveStreamProvider,
-                 model,
-                 context,
-                 [stream_url: "http://127.0.0.1:1/stream", max_retries: 0, receive_timeout: 10],
-                 stream_server
-               )
+      log =
+        capture_log(fn ->
+          assert {:ok, task_pid, _http_context, _canonical_json} =
+                   FinchClient.start_stream(
+                     LiveStreamProvider,
+                     model,
+                     context,
+                     [
+                       stream_url: "http://127.0.0.1:1/stream",
+                       max_retries: 0,
+                       receive_timeout: 10
+                     ],
+                     stream_server
+                   )
 
-      assert is_pid(task_pid)
+          assert is_pid(task_pid)
 
-      assert wait_until(fn ->
-               Enum.any?(EventStreamServer.events(stream_server), &match?({:error, _}, &1))
-             end)
+          assert wait_until(fn ->
+                   Enum.any?(EventStreamServer.events(stream_server), &match?({:error, _}, &1))
+                 end)
+        end)
+
+      assert log =~ "Finch streaming transport failed"
+      refute log =~ "Metadata collection failed"
+    end
+
+    test "classifies streamed 429 and 503 responses without false Finch errors" do
+      port = reserve_port()
+      start_supervised!({Bandit, plug: StreamingRouter, port: port})
+
+      {:ok, context} = Context.normalize("Test")
+      model = %LLMDB.Model{provider: :test, id: "test"}
+
+      for {path, status, provider_code} <- [
+            {"rate_limit", 429, "traffic_queue_timeout"},
+            {"unavailable", 503, "overloaded"}
+          ] do
+        {:ok, stream_server} = EventStreamServer.start_link()
+
+        log =
+          capture_log(fn ->
+            assert {:ok, task_pid, _http_context, _canonical_json} =
+                     FinchClient.start_stream(
+                       LiveStreamProvider,
+                       model,
+                       context,
+                       [
+                         stream_url: "http://127.0.0.1:#{port}/#{path}",
+                         max_retries: 0
+                       ],
+                       stream_server
+                     )
+
+            monitor_ref = Process.monitor(task_pid)
+            assert_receive {:DOWN, ^monitor_ref, :process, ^task_pid, :normal}, 1_000
+          end)
+
+        assert log =~ "Streaming provider/API request failed"
+        assert log =~ "status=#{status}"
+        assert log =~ "provider_code=\"#{provider_code}\""
+        refute log =~ "Finch streaming failed"
+        refute log =~ "Finch streaming transport failed"
+
+        assert Enum.any?(EventStreamServer.events(stream_server), fn
+                 {:error, %ReqLLM.Error.API.Request{} = error} ->
+                   error.status == status and error.provider_code == provider_code and
+                     error.retryable == true
+
+                 _event ->
+                   false
+               end)
+
+        GenServer.stop(stream_server)
+      end
+    end
+
+    test "keeps terminal metadata accessible after a streamed API failure" do
+      port = reserve_port()
+      start_supervised!({Bandit, plug: StreamingRouter, port: port})
+
+      {:ok, context} = Context.normalize("Test")
+      model = %LLMDB.Model{provider: :test, id: "test"}
+
+      log =
+        capture_log(fn ->
+          assert {:ok, stream_response} =
+                   ReqLLM.Streaming.start_stream(
+                     LiveStreamProvider,
+                     model,
+                     context,
+                     stream_url: "http://127.0.0.1:#{port}/unavailable",
+                     max_retries: 0
+                   )
+
+          assert_raise ReqLLM.Error.API.Stream, fn -> Enum.to_list(stream_response.stream) end
+          assert Process.alive?(stream_response.metadata_handle)
+
+          metadata =
+            ReqLLM.StreamResponse.MetadataHandle.await(stream_response.metadata_handle)
+
+          assert metadata.finish_reason == :error
+          assert metadata.error.status == 503
+          assert metadata.error.provider_code == "overloaded"
+
+          ReqLLM.StreamResponse.MetadataHandle.stop(stream_response.metadata_handle)
+        end)
+
+      assert length(Regex.scan(~r/Streaming provider\/API request failed/, log)) == 1
+      refute log =~ "Finch streaming failed"
+      refute log =~ "Metadata collection failed"
     end
 
     test "captures finch process exits as stream server errors" do

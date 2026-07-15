@@ -315,7 +315,8 @@ defmodule ReqLLM.Streaming do
     Stream.resource(
       fn ->
         :ok = StreamServer.monitor_consumer(server_pid, self())
-        %{server: server_pid, exhausted?: false}
+        failure_ref = make_ref()
+        %{server: server_pid, exhausted?: false, failure_ref: failure_ref}
       end,
       fn %{server: server} = state ->
         case StreamServer.next(server, timeout) do
@@ -326,14 +327,18 @@ defmodule ReqLLM.Streaming do
             {:halt, %{state | exhausted?: true}}
 
           {:error, reason} ->
+            Process.put(state.failure_ref, true)
+
             raise %ReqLLM.Error.API.Stream{
               reason: "Stream failed: #{inspect(reason)}",
               cause: reason
             }
         end
       end,
-      fn %{exhausted?: exhausted?} ->
-        if not exhausted? do
+      fn state ->
+        failed? = Process.delete(state.failure_ref) == true
+
+        if not state.exhausted? and not failed? do
           cancel.()
         end
       end

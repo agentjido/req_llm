@@ -26,7 +26,7 @@ defmodule ReqLLM.Streaming.FinchClient do
   requests with proper authentication, headers, and request body formatting.
   """
 
-  alias ReqLLM.Streaming.{Fixtures, Retry}
+  alias ReqLLM.Streaming.{Failure, Fixtures, Retry}
   alias ReqLLM.Streaming.Fixtures.HTTPContext
   alias ReqLLM.StreamServer
 
@@ -195,23 +195,14 @@ defmodule ReqLLM.Streaming.FinchClient do
               :ok
 
             {:error, reason, _callback_acc} ->
-              Logger.error("Finch streaming failed: #{inspect(reason)}")
-              safe_http_event(stream_server_pid, {:error, reason})
-              {:error, reason}
+              forward_stream_failure(stream_server_pid, reason)
           end
         catch
           :exit, reason ->
-            Logger.error("Finch streaming task exited: #{inspect(reason)}")
-            safe_http_event(stream_server_pid, {:error, {:exit, reason}})
-            {:error, {:exit, reason}}
+            forward_stream_failure(stream_server_pid, {:exit, reason})
 
           kind, reason ->
-            Logger.error(
-              "Finch streaming task crashed (kind=#{inspect(kind)}): #{inspect(reason)}"
-            )
-
-            safe_http_event(stream_server_pid, {:error, {kind, reason}})
-            {:error, {kind, reason}}
+            forward_stream_failure(stream_server_pid, {kind, reason})
         end
       end)
 
@@ -220,6 +211,18 @@ defmodule ReqLLM.Streaming.FinchClient do
     error ->
       Logger.error("Failed to start streaming task: #{inspect(error)}")
       {:error, {:task_start_failed, error}}
+  end
+
+  defp forward_stream_failure(stream_server_pid, reason) do
+    case Failure.log(reason) do
+      %{category: :cancelled} ->
+        safe_http_event(stream_server_pid, {:cancelled, reason})
+
+      _classification ->
+        safe_http_event(stream_server_pid, {:error, reason})
+    end
+
+    {:error, reason}
   end
 
   @doc false

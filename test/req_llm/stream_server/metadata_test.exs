@@ -70,16 +70,46 @@ defmodule ReqLLM.StreamServer.MetadataTest do
       StreamServer.cancel(server)
     end
 
-    test "await_metadata returns error on stream failure" do
+    test "await_metadata returns terminal error metadata on stream failure" do
       server = start_server()
       _task = mock_http_task(server)
 
       error_reason = {:request_failed, "Network error"}
       assert :ok = GenServer.call(server, {:http_event, {:error, error_reason}})
 
-      assert {:error, ^error_reason} = StreamServer.await_metadata(server, 100)
+      assert {:ok, metadata} = StreamServer.await_metadata(server, 100)
+      assert metadata.error == error_reason
+      assert metadata.finish_reason == :error
 
       StreamServer.cancel(server)
+    end
+
+    test "stream failure metadata preserves partial content and observed usage" do
+      server = start_server()
+      _task = mock_http_task(server)
+
+      content = Jason.encode!(%{"choices" => [%{"delta" => %{"content" => "partial"}}]})
+      usage = Jason.encode!(%{"usage" => %{"prompt_tokens" => 4, "completion_tokens" => 2}})
+
+      StreamServer.http_event(server, {:data, "data: #{content}\n\n"})
+      StreamServer.http_event(server, {:data, "data: #{usage}\n\n"})
+
+      error = %Finch.TransportError{source: %Mint.TransportError{reason: :closed}}
+      StreamServer.http_event(server, {:error, error})
+
+      assert {:ok, content_chunk} = StreamServer.next(server, 100)
+      assert content_chunk.text == "partial"
+
+      assert {:ok, usage_chunk} = StreamServer.next(server, 100)
+      assert usage_chunk.metadata.usage["prompt_tokens"] == 4
+
+      assert {:ok, metadata} = StreamServer.await_metadata(server, 100)
+      assert metadata.error == error
+      assert metadata.finish_reason == :error
+      assert metadata.usage.input_tokens == 4
+      assert metadata.usage.output_tokens == 2
+
+      assert {:error, ^error} = StreamServer.next(server, 100)
     end
 
     test "cancellation replies to all metadata waiters with partial usage" do
