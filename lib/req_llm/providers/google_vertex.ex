@@ -380,7 +380,7 @@ defmodule ReqLLM.Providers.GoogleVertex do
     request
     |> Req.Request.merge_options(ReqLLM.Provider.Defaults.finch_option(request))
     |> ReqLLM.Step.Error.attach()
-    |> ReqLLM.Step.Retry.attach()
+    |> ReqLLM.Step.Retry.attach(opts)
     |> Req.Request.append_response_steps(llm_decode_response: &decode_response/1)
     |> ReqLLM.Step.Usage.attach(model)
     |> ReqLLM.Step.Telemetry.attach(model, opts)
@@ -412,7 +412,7 @@ defmodule ReqLLM.Providers.GoogleVertex do
     request
     |> Req.Request.merge_options(ReqLLM.Provider.Defaults.finch_option(request))
     |> ReqLLM.Step.Error.attach()
-    |> ReqLLM.Step.Retry.attach()
+    |> ReqLLM.Step.Retry.attach(opts)
     |> ReqLLM.Step.Fixture.maybe_attach(model, opts)
     |> put_gcp_auth(gcp_creds)
   end
@@ -421,7 +421,7 @@ defmodule ReqLLM.Providers.GoogleVertex do
     request
     |> Req.Request.merge_options(ReqLLM.Provider.Defaults.finch_option(request))
     |> ReqLLM.Step.Error.attach()
-    |> ReqLLM.Step.Retry.attach()
+    |> ReqLLM.Step.Retry.attach(opts)
     |> ReqLLM.Step.Usage.attach(model)
     |> Req.Request.append_response_steps(llm_decode_response: &decode_embedding_response/1)
     |> ReqLLM.Step.Telemetry.attach(model, opts)

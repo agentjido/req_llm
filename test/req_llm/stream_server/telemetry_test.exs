@@ -161,18 +161,22 @@ defmodule ReqLLM.StreamServer.TelemetryTest do
 
     StreamServer.http_event(server, {:status, 200})
 
-    StreamServer.http_event(
-      server,
-      {:data, "data: #{Jason.encode!(%{"type" => "content", "text" => "answer"})}\n\n"}
-    )
+    producer =
+      Task.async(fn ->
+        StreamServer.http_event(
+          server,
+          {:data, "data: #{Jason.encode!(%{"type" => "content", "text" => "answer"})}\n\n"}
+        )
 
-    StreamServer.http_event(
-      server,
-      {:data, "data: #{Jason.encode!(%{"type" => "finish", "finish_reason" => "stop"})}\n\n"}
-    )
+        StreamServer.http_event(
+          server,
+          {:data, "data: #{Jason.encode!(%{"type" => "finish", "finish_reason" => "stop"})}\n\n"}
+        )
 
-    StreamServer.http_event(server, :done)
-    send(server, {:EXIT, task.pid, :normal})
+        StreamServer.http_event(server, :done)
+      end)
+
+    assert nil == Task.yield(producer, 25)
 
     refute_receive {:telemetry_event, [:req_llm, :request, :start], _, _}, 50
     refute_receive {:telemetry_event, [:req_llm, :request, :stop], _, _}, 50
@@ -188,6 +192,8 @@ defmodule ReqLLM.StreamServer.TelemetryTest do
       |> ReqLLM.Telemetry.start_request(%{})
 
     assert :ok = StreamServer.set_telemetry_context(server, telemetry_context)
+    assert :ok = Task.await(producer)
+    send(server, {:EXIT, task.pid, :normal})
     assert {:ok, metadata} = StreamServer.await_metadata(server, 500)
     assert metadata.finish_reason == :stop
 

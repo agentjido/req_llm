@@ -2338,7 +2338,6 @@ defmodule ReqLLM.Providers.AnthropicTest do
         metadata: %{}
       }
 
-      # Preserve the exact streaming message shape without Context.new/1 normalization.
       context = %ReqLLM.Context{
         messages: [
           ReqLLM.Context.user("What's the weather in NYC?"),

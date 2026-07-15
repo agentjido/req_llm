@@ -82,6 +82,36 @@ defmodule ReqLLM.StreamServer.MetadataTest do
       StreamServer.cancel(server)
     end
 
+    test "cancellation replies to all metadata waiters with partial usage" do
+      server = start_server()
+      _task = mock_http_task(server)
+
+      usage = %{"prompt_tokens" => 10, "completion_tokens" => 5, "total_tokens" => 15}
+      payload = Jason.encode!(%{"usage" => usage})
+
+      StreamServer.http_event(server, {:data, "data: #{payload}\n\n"})
+
+      metadata_tasks =
+        for _index <- 1..2 do
+          Task.async(fn -> StreamServer.await_metadata(server, :infinity) end)
+        end
+
+      await_metadata_waiters(server, 2)
+
+      assert :ok = StreamServer.cancel(server)
+
+      results = Task.await_many(metadata_tasks)
+      assert length(results) == 2
+
+      Enum.each(results, fn result ->
+        assert {:ok, metadata} = result
+        assert metadata.finish_reason == :cancelled
+        assert metadata.usage.input_tokens == 10
+        assert metadata.usage.output_tokens == 5
+        assert metadata.usage.total_tokens == 15
+      end)
+    end
+
     test "stops after normal HTTP task completion once halt and metadata are delivered" do
       server = start_server()
       task = Task.async(fn -> Process.sleep(20) end)
@@ -183,5 +213,20 @@ defmodule ReqLLM.StreamServer.MetadataTest do
 
       StreamServer.cancel(server)
     end
+  end
+
+  defp await_metadata_waiters(server, expected_count, attempts \\ 50)
+
+  defp await_metadata_waiters(server, expected_count, attempts) when attempts > 0 do
+    if length(:sys.get_state(server).waiting_callers) >= expected_count do
+      :ok
+    else
+      Process.sleep(5)
+      await_metadata_waiters(server, expected_count, attempts - 1)
+    end
+  end
+
+  defp await_metadata_waiters(_server, _expected_count, 0) do
+    flunk("metadata waiters were not registered")
   end
 end

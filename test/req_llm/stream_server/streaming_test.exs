@@ -24,45 +24,118 @@ defmodule ReqLLM.StreamServer.StreamingTest do
   end
 
   describe "backpressure handling" do
-    test "applies backpressure when queue exceeds high_watermark" do
-      server = start_server(high_watermark: 2)
-      _task = mock_http_task(server)
+    test "bounds queued chunks and fixture data until consumer demand resumes" do
+      server = start_server(high_watermark: 1, fixture_path: "unused-stream-fixture.json")
+      parent = self()
 
-      for i <- 1..5 do
-        sse_data = ~s(data: {"choices": [{"delta": {"content": "#{i}"}}]}\n\n)
-        GenServer.call(server, {:http_event, {:data, sse_data}})
-      end
+      events =
+        for text <- ["one", "two", "three"] do
+          {text, ~s(data: {"choices": [{"delta": {"content": "#{text}"}}]}\n\n)}
+        end
 
-      assert {:ok, chunk1} = StreamServer.next(server, 100)
-      assert chunk1.text == "1"
+      producer =
+        Task.async(fn ->
+          Enum.each(events, fn {text, event} ->
+            send(parent, {:producer_sending, text})
+            :ok = StreamServer.http_event(server, {:data, event})
+            send(parent, {:producer_acknowledged, text})
+          end)
+        end)
 
-      assert {:ok, chunk2} = StreamServer.next(server, 100)
-      assert chunk2.text == "2"
+      expected_raw_bytes =
+        Enum.reduce(events, 0, fn {text, event}, raw_bytes ->
+          assert_receive {:producer_sending, ^text}
+          expected_raw_bytes = raw_bytes + byte_size(event)
+          assert :ok = wait_for_backpressure(server, expected_raw_bytes)
+          refute_receive {:producer_acknowledged, ^text}, 25
+
+          assert {:ok, chunk} = StreamServer.next(server, 100)
+          assert chunk.text == text
+          assert_receive {:producer_acknowledged, ^text}
+
+          expected_raw_bytes
+        end)
+
+      assert expected_raw_bytes ==
+               Enum.sum(Enum.map(events, fn {_text, event} -> byte_size(event) end))
+
+      assert :ok = Task.await(producer)
+      assert :ok = StreamServer.http_event(server, :done)
+      assert :halt = StreamServer.next(server, 100)
 
       StreamServer.cancel(server)
     end
 
-    test "resumes processing after queue drains below watermark" do
+    test "cancellation releases a suspended producer" do
       server = start_server(high_watermark: 1)
-      _task = mock_http_task(server)
+      first = ~s(data: {"choices": [{"delta": {"content": "first"}}]}\n\n)
+      second = ~s(data: {"choices": [{"delta": {"content": "second"}}]}\n\n)
+      first_producer = Task.async(fn -> StreamServer.http_event(server, {:data, first}) end)
 
-      sse_data1 = ~s(data: {"choices": [{"delta": {"content": "First"}}]}\n\n)
-      sse_data2 = ~s(data: {"choices": [{"delta": {"content": "Second"}}]}\n\n)
+      assert :ok = wait_for_backpressure(server)
 
-      assert :ok = GenServer.call(server, {:http_event, {:data, sse_data1}})
+      second_producer = Task.async(fn -> StreamServer.http_event(server, {:data, second}) end)
+      assert :ok = wait_for_pending_http_call(server)
 
-      data_task =
-        Task.async(fn ->
-          GenServer.call(server, {:http_event, {:data, sse_data2}})
+      assert :ok = StreamServer.cancel(server)
+      assert :ok = Task.await(first_producer)
+      assert :ok = Task.await(second_producer)
+    end
+
+    test "consumer termination releases a suspended producer" do
+      server = start_server(high_watermark: 1)
+
+      consumer =
+        spawn(fn ->
+          receive do
+            :stop -> :ok
+          end
         end)
 
-      assert {:ok, chunk} = StreamServer.next(server, 100)
-      assert chunk.text == "First"
+      assert :ok = StreamServer.monitor_consumer(server, consumer)
 
-      assert :ok = Task.await(data_task)
+      event = ~s(data: {"choices": [{"delta": {"content": "blocked"}}]}\n\n)
+      producer = Task.async(fn -> StreamServer.http_event(server, {:data, event}) end)
+      server_ref = Process.monitor(server)
+
+      assert :ok = wait_for_backpressure(server)
+      Process.exit(consumer, :cancelled)
+
+      assert :ok = Task.await(producer)
+      assert_receive {:DOWN, ^server_ref, :process, ^server, :normal}
+    end
+
+    test "telemetry deferral cannot bypass the watermark" do
+      server = start_server(high_watermark: 2)
+      :sys.replace_state(server, &%{&1 | telemetry_pending?: true})
+
+      event = """
+      data: {"choices": [{"delta": {"content": "one"}}]}
+
+      data: {"choices": [{"delta": {"content": "two"}}]}
+
+      data: {"choices": [{"delta": {"content": "three"}}]}
+
+      """
+
+      producer = Task.async(fn -> StreamServer.http_event(server, {:data, event}) end)
+
+      assert :ok = wait_for_telemetry_backpressure(server)
+      assert nil == Task.yield(producer, 25)
+
+      assert :ok = StreamServer.set_telemetry_context(server, nil)
+      assert nil == Task.yield(producer, 25)
 
       assert {:ok, chunk} = StreamServer.next(server, 100)
-      assert chunk.text == "Second"
+      assert chunk.text == "one"
+      assert nil == Task.yield(producer, 25)
+
+      assert {:ok, chunk} = StreamServer.next(server, 100)
+      assert chunk.text == "two"
+      assert :ok = Task.await(producer)
+
+      assert {:ok, chunk} = StreamServer.next(server, 100)
+      assert chunk.text == "three"
 
       StreamServer.cancel(server)
     end
@@ -251,6 +324,35 @@ defmodule ReqLLM.StreamServer.StreamingTest do
       StreamServer.cancel(server)
     end
 
+    test "await_metadata/2 resets a finite timeout on semantic progress" do
+      server = start_server()
+      _task = mock_http_task(server)
+
+      metadata_task = Task.async(fn -> StreamServer.await_metadata(server, 250) end)
+
+      Process.sleep(150)
+
+      StreamServer.http_event(
+        server,
+        {:data, ~s(data: {"choices": [{"delta": {"content": "one"}}]}\n\n)}
+      )
+
+      Process.sleep(150)
+
+      StreamServer.http_event(
+        server,
+        {:data, ~s(data: {"choices": [{"delta": {"content": "two"}}]}\n\n)}
+      )
+
+      Process.sleep(150)
+      StreamServer.http_event(server, :done)
+
+      assert {:ok, metadata} = Task.await(metadata_task, 500)
+      assert metadata.finish_reason == :incomplete
+
+      StreamServer.cancel(server)
+    end
+
     test "next/2 returns structured timeout when transport error arrives late" do
       server = start_server()
       _task = mock_http_task(server)
@@ -272,6 +374,59 @@ defmodule ReqLLM.StreamServer.StreamingTest do
       assert {:error, :transport_timeout} = StreamServer.next(server, 100)
 
       StreamServer.cancel(server)
+    end
+  end
+
+  defp wait_for_backpressure(server, expected_raw_bytes \\ nil, attempts \\ 100)
+
+  defp wait_for_backpressure(_server, _expected_raw_bytes, 0) do
+    flunk("StreamServer did not apply backpressure")
+  end
+
+  defp wait_for_backpressure(server, expected_raw_bytes, attempts) do
+    state = :sys.get_state(server)
+
+    raw_bytes_match? = is_nil(expected_raw_bytes) or state.raw_bytes == expected_raw_bytes
+
+    if state.blocked_http_event && :queue.len(state.queue) == 1 && raw_bytes_match? do
+      :ok
+    else
+      Process.sleep(10)
+      wait_for_backpressure(server, expected_raw_bytes, attempts - 1)
+    end
+  end
+
+  defp wait_for_pending_http_call(server, attempts \\ 100)
+
+  defp wait_for_pending_http_call(_server, 0) do
+    flunk("StreamServer did not retain the pending HTTP call")
+  end
+
+  defp wait_for_pending_http_call(server, attempts) do
+    state = :sys.get_state(server)
+
+    if :queue.len(state.pending_http_calls) == 1 do
+      :ok
+    else
+      Process.sleep(10)
+      wait_for_pending_http_call(server, attempts - 1)
+    end
+  end
+
+  defp wait_for_telemetry_backpressure(server, attempts \\ 100)
+
+  defp wait_for_telemetry_backpressure(_server, 0) do
+    flunk("StreamServer did not backpressure deferred telemetry events")
+  end
+
+  defp wait_for_telemetry_backpressure(server, attempts) do
+    state = :sys.get_state(server)
+
+    if state.blocked_http_event && length(state.pending_http_events) == 1 do
+      :ok
+    else
+      Process.sleep(10)
+      wait_for_telemetry_backpressure(server, attempts - 1)
     end
   end
 end

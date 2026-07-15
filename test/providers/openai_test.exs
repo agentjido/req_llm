@@ -85,6 +85,53 @@ defmodule ReqLLM.Providers.OpenAITest do
       assert request.options[:finch] == :custom_finch
     end
 
+    test "prepare_request honors caller retry limits in chat and object pipelines" do
+      {:ok, chat_model} = ReqLLM.model("openai:gpt-4-turbo")
+      {:ok, object_model} = ReqLLM.model("openai:gpt-4o-mini")
+      {:ok, schema} = ReqLLM.Schema.compile(name: [type: :string, required: true])
+
+      {:ok, chat_request} =
+        OpenAI.prepare_request(:chat, chat_model, "Hello", max_retries: 0)
+
+      {:ok, object_request} =
+        OpenAI.prepare_request(:object, object_model, "Hello",
+          compiled_schema: schema,
+          max_retries: 1
+        )
+
+      {:ok, default_request} = OpenAI.prepare_request(:chat, chat_model, "Hello", [])
+
+      assert chat_request.options[:max_retries] == 0
+      assert object_request.options[:max_retries] == 1
+      assert default_request.options[:max_retries] == 3
+
+      cases = [
+        {:chat, chat_model, [], 0, 1},
+        {:object, object_model, [compiled_schema: schema], 1, 2}
+      ]
+
+      Enum.each(cases, fn {operation, model, extra_opts, max_retries, expected_attempts} ->
+        parent = self()
+
+        adapter = fn request ->
+          send(parent, {:attempt, operation})
+          {request, %Req.TransportError{reason: :closed}}
+        end
+
+        opts =
+          [max_retries: max_retries, req_http_options: [adapter: adapter]] ++ extra_opts
+
+        {:ok, request} = OpenAI.prepare_request(operation, model, "Hello", opts)
+        assert {:error, _reason} = Req.request(request)
+
+        Enum.each(1..expected_attempts, fn _attempt ->
+          assert_receive {:attempt, ^operation}
+        end)
+
+        refute_receive {:attempt, ^operation}, 20
+      end)
+    end
+
     test "prepare_request routes gpt-4o models to Responses API" do
       {:ok, model} = ReqLLM.model("openai:gpt-4o")
       context = context_fixture()

@@ -246,7 +246,7 @@ defmodule ReqLLM.Providers.OpenRouter do
         |> Req.Request.put_header("content-type", "application/json")
         |> Req.Request.put_header("authorization", "Bearer #{api_key}")
         |> maybe_add_attribution_headers(opts)
-        |> ReqLLM.Step.Retry.attach()
+        |> ReqLLM.Step.Retry.attach(opts)
         |> ReqLLM.Step.Error.attach()
         |> ReqLLM.Step.Telemetry.attach(
           model,
