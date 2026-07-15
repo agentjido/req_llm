@@ -564,6 +564,35 @@ defmodule ReqLLM.StreamResponseTest do
       refute Process.alive?(metadata_handle)
       assert :ok = MetadataHandle.stop(metadata_handle)
     end
+
+    test "stop/1 is safe for concurrent callers" do
+      metadata_handle =
+        create_metadata_handle(fn ->
+          receive do
+            :finish -> %{}
+          end
+        end)
+
+      parent = self()
+
+      callers =
+        for _ <- 1..100 do
+          Task.async(fn ->
+            send(parent, {:ready, self()})
+
+            receive do
+              :stop -> MetadataHandle.stop(metadata_handle)
+            end
+          end)
+        end
+
+      caller_pids = Enum.map(callers, & &1.pid)
+      Enum.each(caller_pids, fn caller_pid -> assert_receive {:ready, ^caller_pid} end)
+      Enum.each(caller_pids, &send(&1, :stop))
+
+      assert Enum.map(callers, &Task.await(&1)) == List.duplicate(:ok, 100)
+      refute Process.alive?(metadata_handle)
+    end
   end
 
   describe "cancel function handling" do

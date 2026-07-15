@@ -33,9 +33,12 @@ defmodule ReqLLM.StreamResponse.MetadataHandle do
   """
   @spec stop(t()) :: :ok
   def stop(handle) when is_pid(handle) do
-    GenServer.stop(handle)
-  catch
-    :exit, {:noproc, {GenServer, :stop, [^handle, :normal, :infinity]}} -> :ok
+    monitor_ref = Process.monitor(handle)
+    GenServer.cast(handle, :stop)
+
+    receive do
+      {:DOWN, ^monitor_ref, :process, ^handle, _reason} -> :ok
+    end
   end
 
   @impl true
@@ -66,6 +69,11 @@ defmodule ReqLLM.StreamResponse.MetadataHandle do
 
   def handle_call(:await, from, state) do
     {:noreply, %{state | waiters: [from | state.waiters]}}
+  end
+
+  @impl true
+  def handle_cast(:stop, state) do
+    {:stop, :normal, state}
   end
 
   @impl true
