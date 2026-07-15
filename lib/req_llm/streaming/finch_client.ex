@@ -215,7 +215,7 @@ defmodule ReqLLM.Streaming.FinchClient do
 
   defp forward_stream_failure(stream_server_pid, reason) do
     case Failure.log(reason) do
-      %{category: :cancelled} ->
+      :cancelled ->
         safe_http_event(stream_server_pid, {:cancelled, reason})
 
       _classification ->

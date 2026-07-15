@@ -18,16 +18,11 @@ defmodule ReqLLM.Streaming.FailureTest do
     assert error.retryable == true
     assert error.reason == "traffic queue wait expired"
 
-    assert %{
-             category: :api,
-             severity: :warning,
-             status: 429,
-             provider_code: "traffic_queue_timeout",
-             retryable: true
-           } = Failure.classify(error)
+    assert {:api, 429, "traffic_queue_timeout", true} = Failure.classify(error)
 
     log = capture_log(fn -> Failure.log(error) end)
 
+    assert log =~ "[warning]"
     assert log =~ "Streaming provider/API request failed"
     assert log =~ "status=429"
     assert log =~ "provider_code=\"traffic_queue_timeout\""
@@ -37,29 +32,31 @@ defmodule ReqLLM.Streaming.FailureTest do
   test "marks streamed 503 responses as retryable API failures" do
     error = Failure.api_error(503, ~s({"error":{"code":"overloaded"}}), [])
 
-    assert %{category: :api, status: 503, provider_code: "overloaded", retryable: true} =
-             Failure.classify(error)
+    assert {:api, 503, "overloaded", true} = Failure.classify(error)
+  end
+
+  test "preserves a plain-text provider response as the failure reason" do
+    error = Failure.api_error(429, "rate limit exceeded", [], use_body_as_reason?: true)
+
+    assert error.reason == "rate limit exceeded"
+    assert error.response_body == "rate limit exceeded"
   end
 
   test "classifies Finch errors backed by Mint as transport failures" do
     error = %Finch.TransportError{source: %Mint.TransportError{reason: :closed}}
 
-    assert %{
-             category: :transport,
-             severity: :error,
-             transport_reason: :closed,
-             retryable: true
-           } = Failure.classify(error)
+    assert {:transport, :closed, true} = Failure.classify(error)
+    assert {:transport, :closed, true} = Failure.classify({:error, error})
 
     log = capture_log(fn -> Failure.log(error) end)
 
+    assert log =~ "[error]"
     assert log =~ "Finch streaming transport failed"
     assert log =~ "reason=:closed"
   end
 
   test "treats expected cancellation as a non-logged terminal outcome" do
-    assert %{category: :cancelled, severity: nil, retryable: false} =
-             Failure.classify({:exit, :cancelled})
+    assert :cancelled = Failure.classify({:exit, :cancelled})
 
     assert capture_log(fn -> Failure.log({:exit, :cancelled}) end) == ""
   end

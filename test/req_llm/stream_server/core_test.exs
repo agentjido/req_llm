@@ -100,6 +100,34 @@ defmodule ReqLLM.StreamServer.CoreTest do
       StreamServer.cancel(server)
     end
 
+    test "keeps failed streams alive for metadata when consumer exits" do
+      server = start_server()
+      _task = mock_http_task(server)
+
+      consumer =
+        spawn(fn ->
+          receive do
+            :stop -> :ok
+          end
+        end)
+
+      assert :ok = StreamServer.monitor_consumer(server, consumer)
+      assert :ok = StreamServer.http_event(server, {:error, :connection_lost})
+
+      consumer_ref = Process.monitor(consumer)
+      send(consumer, :stop)
+      assert_receive {:DOWN, ^consumer_ref, :process, ^consumer, :normal}
+
+      Process.sleep(20)
+      assert Process.alive?(server)
+
+      assert {:ok, metadata} = StreamServer.await_metadata(server, 100)
+      assert metadata.finish_reason == :error
+      assert metadata.error == :connection_lost
+
+      StreamServer.cancel(server)
+    end
+
     test "cancel is idempotent after StreamServer exits normally" do
       server = start_server()
       ref = Process.monitor(server)

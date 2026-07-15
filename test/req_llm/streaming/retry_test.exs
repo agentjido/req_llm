@@ -209,7 +209,7 @@ defmodule ReqLLM.Streaming.RetryTest do
       Agent.update(counter, &(&1 + 1))
       acc = callback.({:status, 429}, acc)
       acc = callback.({:headers, [{"retry-after", "0"}]}, acc)
-      acc = callback.({:data, ~s({"error":{"message":"Too many requests"}})}, acc)
+      acc = callback.({:data, "Too many requests"}, acc)
       acc = callback.(:done, acc)
       {:ok, acc}
     end
@@ -229,6 +229,7 @@ defmodule ReqLLM.Streaming.RetryTest do
     assert Agent.get(counter, & &1) == 2
     assert error.status == 429
     assert error.reason == "Too many requests"
+    assert error.response_body == "Too many requests"
     assert error.headers == [{"retry-after", "0"}]
     assert error.retryable == true
     assert Enum.reverse(events) == [{:status, 429}, {:headers, [{"retry-after", "0"}]}]

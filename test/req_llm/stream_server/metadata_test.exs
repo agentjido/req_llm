@@ -87,6 +87,7 @@ defmodule ReqLLM.StreamServer.MetadataTest do
     test "stream failure metadata preserves partial content and observed usage" do
       server = start_server()
       _task = mock_http_task(server)
+      server_ref = Process.monitor(server)
 
       content = Jason.encode!(%{"choices" => [%{"delta" => %{"content" => "partial"}}]})
       usage = Jason.encode!(%{"usage" => %{"prompt_tokens" => 4, "completion_tokens" => 2}})
@@ -110,6 +111,7 @@ defmodule ReqLLM.StreamServer.MetadataTest do
       assert metadata.usage.output_tokens == 2
 
       assert {:error, ^error} = StreamServer.next(server, 100)
+      assert_receive {:DOWN, ^server_ref, :process, ^server, :normal}, 100
     end
 
     test "cancellation replies to all metadata waiters with partial usage" do
