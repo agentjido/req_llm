@@ -15,6 +15,38 @@ defmodule ReqLLM.Step.RetryTest do
       refute updated_request.options[:retry_delay]
       assert updated_request.options[:retry_log_level] == false
     end
+
+    test "preserves max_retries already configured on the request" do
+      request = Req.new(max_retries: 0)
+
+      assert Retry.attach(request).options[:max_retries] == 0
+    end
+  end
+
+  describe "attach/2" do
+    test "honors max_retries in the real Req pipeline" do
+      for {max_retries, expected_attempts} <- [{0, 1}, {1, 2}] do
+        parent = self()
+
+        request =
+          Req.new(
+            url: "https://example.invalid",
+            adapter: fn request ->
+              send(parent, :attempt)
+              {request, %Req.TransportError{reason: :closed}}
+            end
+          )
+          |> Retry.attach(max_retries: max_retries)
+
+        assert {:error, %Req.TransportError{reason: :closed}} = Req.request(request)
+
+        Enum.each(1..expected_attempts, fn _attempt ->
+          assert_receive :attempt
+        end)
+
+        refute_receive :attempt, 20
+      end
+    end
   end
 
   describe "should_retry?/2" do
@@ -131,6 +163,21 @@ defmodule ReqLLM.Step.RetryTest do
         )
 
       assert request.options[:finch] == :custom_finch
+    end
+
+    test "default_attach preserves caller max_retries" do
+      {:ok, model} = ReqLLM.model("openai:gpt-4")
+
+      request =
+        ReqLLM.Provider.Defaults.default_attach(
+          ReqLLM.Providers.OpenAI,
+          Req.new(),
+          model,
+          api_key: "test-key",
+          max_retries: 0
+        )
+
+      assert request.options[:max_retries] == 0
     end
 
     test "retry function correctly identifies retryable errors" do

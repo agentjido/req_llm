@@ -30,6 +30,12 @@ defmodule ReqLLM.StreamServer.CoreTest do
       assert :ok = StreamServer.cancel(server)
     end
 
+    test "requires a positive high watermark" do
+      assert_raise ArgumentError, ":high_watermark must be a positive integer, got: 0", fn ->
+        start_server(high_watermark: 0)
+      end
+    end
+
     test "handles HTTP task attachment and monitoring" do
       server = start_server()
       task = mock_http_task(server)

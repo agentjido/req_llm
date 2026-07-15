@@ -17,8 +17,24 @@ defmodule ReqLLM.OAuth do
     provider_opts = get_option(opts, :provider_options) || []
 
     with {:ok, provider, provider_mod} <- fetch_provider(provider_or_model),
-         {:ok, oauth_file} <- oauth_file_path(opts, provider_opts),
-         {:ok, payload} <- read_oauth_file(oauth_file),
+         {:ok, oauth_file} <- oauth_file_path(opts, provider_opts) do
+      resolve_serialized(provider, provider_mod, oauth_file, opts, provider_opts)
+    end
+  end
+
+  defp resolve_serialized(provider, provider_mod, oauth_file, opts, provider_opts) do
+    lock_id = {{__MODULE__, oauth_file}, self()}
+
+    case :global.trans(lock_id, fn ->
+           resolve_from_file(provider, provider_mod, oauth_file, opts, provider_opts)
+         end) do
+      :aborted -> {:error, "Unable to lock OAuth file #{oauth_file} for credential refresh"}
+      result -> result
+    end
+  end
+
+  defp resolve_from_file(provider, provider_mod, oauth_file, opts, provider_opts) do
+    with {:ok, payload} <- read_oauth_file(oauth_file),
          {:ok, provider_key, credentials} <- fetch_credentials(payload, provider, provider_mod),
          {:ok, normalized} <- normalize_credentials(credentials, provider_key, oauth_file),
          {:ok, refreshed, source} <-
@@ -235,10 +251,33 @@ defmodule ReqLLM.OAuth do
       |> drop_nil_values()
       |> Jason.encode_to_iodata!(pretty: true)
 
-    case File.write(oauth_file, serialized) do
+    case atomic_replace(oauth_file, serialized) do
       :ok -> :ok
       {:error, reason} -> {:error, "Unable to write OAuth file #{oauth_file}: #{inspect(reason)}"}
     end
+  end
+
+  defp atomic_replace(path, contents) do
+    temporary_path = temporary_path(path)
+
+    result =
+      with {:ok, stat} <- File.stat(path),
+           :ok <- File.write(temporary_path, <<>>, [:exclusive]),
+           :ok <- File.chmod(temporary_path, Bitwise.band(stat.mode, 0o777)),
+           :ok <- File.write(temporary_path, contents) do
+        File.rename(temporary_path, path)
+      end
+
+    File.rm(temporary_path)
+    result
+  end
+
+  defp temporary_path(path) do
+    suffix =
+      [System.system_time(:nanosecond), System.unique_integer([:positive, :monotonic])]
+      |> Enum.join("-")
+
+    Path.join(Path.dirname(path), ".#{Path.basename(path)}.#{suffix}.tmp")
   end
 
   defp oauth_refresh_opts(opts, provider_opts) do

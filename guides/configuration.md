@@ -136,7 +136,7 @@ config :req_llm, thinking_timeout: 600_000  # 10 minutes
 
 ### `metadata_timeout` (default: 300,000ms)
 
-Timeout for collecting streaming metadata (usage, finish_reason) after the stream completes. Long-running streams or slow providers may need more time.
+Maximum time without semantic stream progress while collecting metadata. Content, reasoning, tool, and usage events restart a finite timeout, so active long-running streams are not failed based on total elapsed time. Set it to `:infinity` to disable the inactivity timeout.
 
 ```elixir
 config :req_llm, metadata_timeout: 120_000
@@ -146,6 +146,8 @@ Per-request override:
 
 ```elixir
 ReqLLM.stream_text("anthropic:claude-haiku-4-5", "Hello", metadata_timeout: 60_000)
+
+ReqLLM.stream_text("anthropic:claude-haiku-4-5", "Hello", metadata_timeout: :infinity)
 ```
 
 ### `image_receive_timeout` (default: 120,000ms)

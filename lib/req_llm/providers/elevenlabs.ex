@@ -117,7 +117,7 @@ defmodule ReqLLM.Providers.ElevenLabs do
         )
         |> Req.Request.put_header("content-type", "application/json")
         |> Req.Request.put_header("xi-api-key", api_key)
-        |> ReqLLM.Step.Retry.attach()
+        |> ReqLLM.Step.Retry.attach(opts)
         |> ReqLLM.Step.Error.attach()
         |> ReqLLM.Step.Telemetry.attach(
           model,
@@ -167,7 +167,7 @@ defmodule ReqLLM.Providers.ElevenLabs do
           ] ++ http_opts
         )
         |> Req.Request.put_header("xi-api-key", api_key)
-        |> ReqLLM.Step.Retry.attach()
+        |> ReqLLM.Step.Retry.attach(opts)
         |> ReqLLM.Step.Error.attach()
         |> ReqLLM.Step.Telemetry.attach(
           model,
