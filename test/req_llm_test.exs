@@ -1,5 +1,5 @@
 defmodule ReqLLMTest do
-  use ExUnit.Case, async: true
+  use ExUnit.Case, async: false
 
   @moduletag contract: :public_api
 
