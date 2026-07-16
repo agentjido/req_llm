@@ -32,6 +32,49 @@ defmodule ReqLLM.OCR do
 
   @type ocr_result :: %{markdown: String.t(), pages: [map()]}
 
+  @base_schema NimbleOptions.new!(
+                 include_images: [
+                   type: :boolean,
+                   default: true,
+                   doc: "Extract images as base64 data in the returned markdown"
+                 ],
+                 document_type: [
+                   type: :string,
+                   default: "application/pdf",
+                   doc: "MIME type for the document binary"
+                 ],
+                 pages: [
+                   type: {:list, :non_neg_integer},
+                   doc: "Zero-based page indexes to process"
+                 ],
+                 provider_options: [
+                   type: {:or, [:map, {:list, :any}]},
+                   doc: "Provider-specific options (keyword list or map)",
+                   default: []
+                 ],
+                 req_http_options: [
+                   type: {:or, [:map, {:list, :any}]},
+                   doc: "Req-specific options (keyword list or map)",
+                   default: []
+                 ],
+                 max_retries: [
+                   type: :non_neg_integer,
+                   default: 3,
+                   doc:
+                     "Maximum number of retry attempts for transient network errors. Set to 0 to disable retries."
+                 ],
+                 fixture: [
+                   type: {:or, [:string, {:tuple, [:atom, :string]}]},
+                   doc: "HTTP fixture for testing (provider inferred from model if string)"
+                 ]
+               )
+
+  @doc """
+  Returns the base OCR options schema.
+  """
+  @spec schema :: NimbleOptions.t()
+  def schema, do: @base_schema
+
   @doc """
   Validates that a model supports OCR operations.
   """
@@ -63,6 +106,7 @@ defmodule ReqLLM.OCR do
     * `opts` — Options:
       - `:include_images` — extract images as base64 in markdown (default `true`)
       - `:document_type` — MIME type hint (default `"application/pdf"`)
+      - `:pages` — zero-based page indexes to process
       - `:provider_options` — provider-specific options (e.g., `region`, `access_token`)
 
   ## Examples
@@ -75,6 +119,8 @@ defmodule ReqLLM.OCR do
   @spec ocr(String.t() | struct(), binary(), keyword()) ::
           {:ok, ocr_result()} | {:error, term()}
   def ocr(model_spec, document_binary, opts \\ []) do
+    opts = ReqLLM.ModelInput.merge_tuple_defaults(model_spec, :ocr, opts)
+
     with {:ok, model} <- validate_model(model_spec),
          {:ok, provider_module} <- ReqLLM.provider(model.provider),
          {:ok, request} <-

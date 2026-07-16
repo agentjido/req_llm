@@ -125,6 +125,8 @@ defmodule ReqLLM.Rerank do
 
   @spec rerank(ReqLLM.model_input(), keyword()) :: {:ok, RerankResponse.t()} | {:error, term()}
   def rerank(model_spec, opts) when is_list(opts) do
+    opts = ReqLLM.ModelInput.merge_tuple_defaults(model_spec, :rerank, opts)
+
     with :ok <- validate_query(Keyword.get(opts, :query)),
          :ok <- validate_documents(Keyword.get(opts, :documents)),
          :ok <- validate_batch_size(Keyword.get(opts, :batch_size)),

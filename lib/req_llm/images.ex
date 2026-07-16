@@ -138,6 +138,8 @@ defmodule ReqLLM.Images do
           keyword()
         ) :: {:ok, Response.t()} | {:error, term()}
   def generate_image(model_spec, prompt_or_messages, opts \\ []) do
+    opts = ReqLLM.ModelInput.merge_tuple_defaults(model_spec, :image, opts)
+
     with {:ok, model} <- ReqLLM.model(model_spec),
          {:ok, provider_module} <- ReqLLM.provider(model.provider),
          {:ok, request} <-

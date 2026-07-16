@@ -71,6 +71,8 @@ defmodule ReqLLM.Generation do
           keyword()
         ) :: {:ok, Response.t()} | {:error, term()}
   def generate_text(model_spec, messages, opts \\ []) do
+    opts = ReqLLM.ModelInput.merge_tuple_defaults(model_spec, :chat, opts)
+
     with {:ok, model} <- ReqLLM.model(model_spec),
          {:ok, provider_module} <- ReqLLM.provider(model.provider),
          {:ok, context} <- ReqLLM.Context.normalize(messages, opts) do
@@ -146,6 +148,8 @@ defmodule ReqLLM.Generation do
           keyword()
         ) :: {:ok, ReqLLM.StreamResponse.t()} | {:error, term()}
   def stream_text(model_spec, messages, opts \\ []) do
+    opts = ReqLLM.ModelInput.merge_tuple_defaults(model_spec, :chat, opts)
+
     with {:ok, model} <- ReqLLM.model(model_spec),
          {:ok, provider_module} <- ReqLLM.provider(model.provider),
          {:ok, context} <- ReqLLM.Context.normalize(messages, opts) do
@@ -244,6 +248,8 @@ defmodule ReqLLM.Generation do
           keyword()
         ) :: {:ok, Response.t()} | {:error, term()}
   def generate_object(model_spec, messages, object_schema, opts \\ []) do
+    opts = ReqLLM.ModelInput.merge_tuple_defaults(model_spec, :object, opts)
+
     opts_with_schema = fn compiled_schema ->
       Keyword.put(opts, :compiled_schema, compiled_schema)
     end

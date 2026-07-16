@@ -136,6 +136,8 @@ defmodule ReqLLM.Speech do
           keyword()
         ) :: {:ok, Result.t()} | {:error, term()}
   def speak(model_spec, text, opts \\ []) do
+    opts = ReqLLM.ModelInput.merge_tuple_defaults(model_spec, :speech, opts)
+
     with {:ok, model} <- ReqLLM.model(model_spec),
          {:ok, provider_module} <- ReqLLM.provider(model.provider),
          {:ok, request} <-

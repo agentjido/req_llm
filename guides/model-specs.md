@@ -56,6 +56,25 @@ Tuples also resolve through LLMDB, but let you keep the provider and model ID sp
 {:openai, id: "gpt-4o"}
 ```
 
+When a three-element tuple is passed directly to an operation, its keyword list supplies
+low-precedence defaults for options documented by that operation:
+
+```elixir
+model = {:anthropic, "claude-haiku-4-5", max_tokens: 512, temperature: 0.3}
+
+ReqLLM.generate_text(model, "Hello", temperature: 0.7)
+```
+
+Here `max_tokens: 512` is used and the explicit `temperature: 0.7` wins. An explicit
+`provider_options` value replaces a tuple's provider-options default as one option. Options
+that do not belong to the selected operation, invalid values, duplicate defaults, and
+operation-control or request-input keys are ignored with a warning rather than applied to
+the wrong request. Pass `on_unsupported: :ignore` on the call to suppress that warning.
+
+`ReqLLM.model/1` resolves only model identity. It returns the same `%LLMDB.Model{}` for
+equivalent two- and three-element tuples. The two-element keyword tuple remains an identity
+form; only the documented three-element tuple supplies operation defaults.
+
 ### 3. `%LLMDB.Model{}`
 
 This is the canonical explicit model contract in ReqLLM.

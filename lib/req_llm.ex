@@ -259,6 +259,10 @@ defmodule ReqLLM do
 
   ## Inline Models
 
+  Three-element tuple options are applied as low-precedence defaults when the tuple is
+  passed directly to an operation. Explicit operation options win. `model/1` resolves
+  only model identity, so equivalent two- and three-element tuples return the same model.
+
   For models not in the LLMDB catalog yet, use an inline model spec:
 
       model =

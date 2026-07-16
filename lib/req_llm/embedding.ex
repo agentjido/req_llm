@@ -204,6 +204,7 @@ defmodule ReqLLM.Embedding do
   def embed(model_spec, input, opts \\ [])
 
   def embed(model_spec, text, opts) when is_binary(text) do
+    opts = ReqLLM.ModelInput.merge_tuple_defaults(model_spec, :embedding, opts)
     {return_usage, provider_opts} = Keyword.pop(opts, :return_usage, false)
 
     with {:ok, model} <- validate_model(model_spec),
@@ -234,6 +235,7 @@ defmodule ReqLLM.Embedding do
   end
 
   def embed(model_spec, texts, opts) when is_list(texts) do
+    opts = ReqLLM.ModelInput.merge_tuple_defaults(model_spec, :embedding, opts)
     {return_usage, provider_opts} = Keyword.pop(opts, :return_usage, false)
 
     with {:ok, model} <- validate_model(model_spec),

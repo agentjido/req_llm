@@ -132,6 +132,8 @@ defmodule ReqLLM.Transcription do
           keyword()
         ) :: {:ok, Result.t()} | {:error, term()}
   def transcribe(model_spec, audio, opts \\ []) do
+    opts = ReqLLM.ModelInput.merge_tuple_defaults(model_spec, :transcription, opts)
+
     with {:ok, audio_data, media_type} <- resolve_audio(audio),
          {:ok, model} <- ReqLLM.model(model_spec),
          {:ok, provider_module} <- ReqLLM.provider(model.provider),
