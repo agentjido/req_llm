@@ -1165,7 +1165,7 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
   defp evidence_support_text(nil, _provider, _model, _selected_operation), do: ""
 
   defp evidence_support_text(evidence, provider, model, selected_operation) do
-    operation = if selected_operation == :all, do: model["type"], else: selected_operation
+    operation = support_operation(model, selected_operation)
     model_spec = "#{provider}:#{model["id"]}"
 
     declared? =
@@ -1182,6 +1182,13 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
 
     IO.ANSI.faint() <> " [support: #{support.tier}]" <> IO.ANSI.reset()
   end
+
+  @doc false
+  def support_operation(model, :all) do
+    ReqLLM.ModelOperation.normalize(model["type"])
+  end
+
+  def support_operation(_model, selected_operation), do: selected_operation
 
   defp print_model_status(model, _spec, status) do
     tier_color =

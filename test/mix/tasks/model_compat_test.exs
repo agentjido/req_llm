@@ -255,6 +255,18 @@ defmodule Mix.Tasks.ReqLlm.ModelCompatTest do
     end
   end
 
+  describe "support_operation/2" do
+    test "normalizes inferred model types for all-operation discovery" do
+      assert ModelCompat.support_operation(%{"type" => "text"}, :all) == :text
+      assert ModelCompat.support_operation(%{"type" => "embedding"}, :all) == :embedding
+      assert ModelCompat.support_operation(%{"type" => "unknown"}, :all) == :unknown
+    end
+
+    test "preserves an explicitly selected operation" do
+      assert ModelCompat.support_operation(%{"type" => "embedding"}, :text) == :text
+    end
+  end
+
   describe "run/1" do
     test "raises clearly for unknown operation types" do
       Mix.Task.reenable("req_llm.model_compat")

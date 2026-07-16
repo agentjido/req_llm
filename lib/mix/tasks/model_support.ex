@@ -43,10 +43,7 @@ defmodule Mix.Tasks.ReqLlm.ModelSupport do
   end
 
   defp generate(evidence) do
-    evidence =
-      evidence
-      |> Evidence.resolve_surfaces(surface_resolver())
-      |> Evidence.annotate_declarations()
+    evidence = refresh_evidence(evidence)
 
     Evidence.write!(evidence_path(), evidence)
     File.write!(reference_path(), SupportReference.render(evidence))
@@ -54,6 +51,7 @@ defmodule Mix.Tasks.ReqLlm.ModelSupport do
   end
 
   defp check(evidence) do
+    evidence = refresh_evidence(evidence)
     expected_evidence = Evidence.canonical_json(evidence)
     expected_reference = SupportReference.render(evidence)
 
@@ -63,6 +61,13 @@ defmodule Mix.Tasks.ReqLlm.ModelSupport do
     else
       _mismatch -> Mix.raise("Compatibility evidence or support reference is not generated")
     end
+  end
+
+  @doc false
+  def refresh_evidence(evidence) do
+    evidence
+    |> Evidence.resolve_surfaces(surface_resolver())
+    |> Evidence.annotate_declarations(packaged_catalog_resolver())
   end
 
   defp print_summary(evidence) do
@@ -97,6 +102,33 @@ defmodule Mix.Tasks.ReqLlm.ModelSupport do
 
     fn model_spec, operation, fixtures ->
       Evidence.fixture_surface(fixture_root, model_spec, operation, fixtures)
+    end
+  end
+
+  defp packaged_catalog_resolver do
+    case LLMDB.Loader.load(custom: %{}) do
+      {:ok, snapshot} ->
+        direct_models =
+          Map.new(snapshot.models_by_key, fn {{provider, model_id}, model} ->
+            {"#{provider}:#{model_id}", model}
+          end)
+
+        alias_models =
+          Map.new(snapshot.aliases_by_key, fn {{provider, alias_id}, model_id} ->
+            {"#{provider}:#{alias_id}", Map.fetch!(snapshot.models_by_key, {provider, model_id})}
+          end)
+
+        models_by_spec = Map.merge(direct_models, alias_models)
+
+        fn model_spec ->
+          case Map.fetch(models_by_spec, model_spec) do
+            {:ok, model} -> {:ok, model}
+            :error -> {:error, :unknown_model}
+          end
+        end
+
+      {:error, reason} ->
+        raise ArgumentError, "cannot load packaged LLMDB catalog: #{inspect(reason)}"
     end
   end
 end
