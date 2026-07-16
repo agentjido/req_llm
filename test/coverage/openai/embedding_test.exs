@@ -9,14 +9,17 @@ defmodule ReqLLM.Coverage.OpenAI.EmbeddingTest do
   use ReqLLM.ProviderTest.Embedding, provider: :openai
 
   @tag category: :embedding
-  @tag scenario: :embed_basic
+  @tag ReqLLM.Test.CompatibilityScenario.tag!(:embed_basic)
   @tag model: "text-embedding-3-small"
   test "return_usage includes cost fields" do
     {:ok, %{usage: usage}} =
       ReqLLM.embed(
         "openai:text-embedding-3-small",
         "Hello world",
-        fixture_opts("embed_basic", return_usage: true)
+        fixture_opts(
+          ReqLLM.Test.CompatibilityScenario.fixture!(:embed_basic),
+          return_usage: true
+        )
       )
 
     assert usage.input_tokens > 0

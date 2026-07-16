@@ -14,11 +14,11 @@ defmodule ReqLLM.Coverage.Anthropic.WebSearchTest do
     :ok
   end
 
-  @tag scenario: :web_search_basic
+  @tag ReqLLM.Test.CompatibilityScenario.tag!(:web_search_basic)
   @tag model: "claude-sonnet-4-5"
   test "web search reports tool usage and cost" do
     opts =
-      fixture_opts("web_search_basic",
+      fixture_opts(ReqLLM.Test.CompatibilityScenario.fixture!(:web_search_basic),
         provider_options: [
           web_search: %{max_uses: 2}
         ]

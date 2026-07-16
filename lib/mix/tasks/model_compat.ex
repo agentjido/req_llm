@@ -123,8 +123,32 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
   end
 
   @doc false
+  def scenarios_for_opts(opts, operation, provider) when is_atom(provider) do
+    scenarios = csv_values(opts[:scenario])
+
+    capability_scenarios =
+      opts[:capability]
+      |> csv_values()
+      |> Enum.flat_map(&capability_scenarios!(&1, provider))
+
+    operation_defaults = ScenarioCatalog.operation_defaults(operation, opts[:capability])
+
+    (scenarios ++ capability_scenarios ++ operation_defaults)
+    |> Enum.uniq()
+  end
+
+  @doc false
   def capability_scenarios!(capability) when is_binary(capability) do
     case ScenarioCatalog.scenarios_for_capability(capability) do
+      {:ok, scenarios} -> scenarios
+      :error -> Mix.raise("Unknown capability group: #{capability}")
+    end
+  end
+
+  @doc false
+  def capability_scenarios!(capability, provider)
+      when is_binary(capability) and is_atom(provider) do
+    case ScenarioCatalog.model_compat_scenarios_for_capability(capability, provider) do
       {:ok, scenarios} -> scenarios
       :error -> Mix.raise("Unknown capability group: #{capability}")
     end
@@ -316,10 +340,12 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
     Mix.shell().info("----------------------------------------------------\n")
 
     models = load_registry()
-    specs = select_models(models, model_spec, opts)
+
+    selected_specs = select_models(models, model_spec, opts)
+    specs = filter_capability_specs(selected_specs, opts)
 
     if Enum.empty?(specs) do
-      Mix.raise("No models match spec: #{inspect(model_spec)}")
+      raise_for_empty_specs(selected_specs, model_spec, opts)
     end
 
     total_specs = length(specs)
@@ -360,10 +386,12 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
     Mix.shell().info("----------------------------------------------------\n")
 
     models = load_registry()
-    specs = select_models(models, nil, opts)
+
+    selected_specs = select_models(models, nil, opts)
+    specs = filter_capability_specs(selected_specs, opts)
 
     if Enum.empty?(specs) do
-      Mix.raise("No models match spec")
+      raise_for_empty_specs(selected_specs, nil, opts)
     end
 
     total_specs = length(specs)
@@ -399,7 +427,7 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
   end
 
   defp test_model(provider, model_id, opts) do
-    scenarios = scenarios_for_opts(opts, parse_operation_type(opts[:type]))
+    scenarios = scenarios_for_opts(opts, parse_operation_type(opts[:type]), provider)
 
     if Enum.empty?(scenarios) do
       run_test_invocation(provider, model_id, opts, nil)
@@ -500,11 +528,19 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
   defp normalize_provider(provider) when is_atom(provider), do: provider
   defp normalize_provider(provider) when is_binary(provider), do: String.to_atom(provider)
 
-  defp parse_test_result(provider, model_id, output, exit_code, scenario) do
+  @doc false
+  def parse_test_result(provider, model_id, output, exit_code, scenario) do
     {passed, failed, total} = parse_exunit_summary(output)
 
-    status = if exit_code == 0 && failed == 0, do: :pass, else: :fail
+    status = if exit_code == 0 && failed == 0 && passed > 0, do: :pass, else: :fail
     fixtures = extract_fixtures(output)
+
+    error =
+      cond do
+        total == 0 -> "No matching compatibility tests executed"
+        failed > 0 or exit_code != 0 -> extract_error(output)
+        true -> nil
+      end
 
     %{
       provider: provider,
@@ -514,7 +550,7 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
       passed: passed,
       failed: failed,
       total: total,
-      error: if(failed > 0, do: extract_error(output)),
+      error: error,
       fixtures: fixtures,
       scenario: scenario
     }
@@ -594,6 +630,35 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
     |> Enum.map(&String.trim/1)
     |> Enum.reject(&(&1 == ""))
   end
+
+  defp filter_capability_specs(specs, opts) do
+    if csv_values(opts[:capability]) == [] do
+      specs
+    else
+      operation = parse_operation_type(opts[:type])
+
+      Enum.filter(specs, fn {provider, _model_id} ->
+        scenarios_for_opts(opts, operation, provider) != []
+      end)
+    end
+  end
+
+  @spec raise_for_empty_specs(list(), binary() | nil, keyword()) :: no_return()
+  defp raise_for_empty_specs(selected_specs, model_spec, opts) do
+    capabilities = csv_values(opts[:capability])
+
+    if selected_specs != [] and capabilities != [] do
+      Mix.raise(
+        "No replayable per-model scenarios apply to capability #{Enum.join(capabilities, ",")}" <>
+          model_spec_suffix(model_spec)
+      )
+    else
+      Mix.raise("No models match spec#{model_spec_suffix(model_spec)}")
+    end
+  end
+
+  defp model_spec_suffix(nil), do: ""
+  defp model_spec_suffix(model_spec), do: ": #{inspect(model_spec)}"
 
   defp max_concurrency(opts) do
     cond do

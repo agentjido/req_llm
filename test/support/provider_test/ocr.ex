@@ -37,13 +37,17 @@ defmodule ReqLLM.ProviderTest.OCR do
 
         describe "#{inspect(model_spec)}" do
           @tag category: :ocr
-          @tag scenario: :ocr_basic
+          @tag ReqLLM.Test.CompatibilityScenario.tag!(:ocr_basic)
           test "basic OCR extraction" do
             {:ok, result} =
               ReqLLM.ocr(
                 @model_spec,
                 ReqLLM.ProviderTest.OCR.tiny_pdf(),
-                fixture_opts(@provider, "ocr_basic", [])
+                fixture_opts(
+                  @provider,
+                  ReqLLM.Test.CompatibilityScenario.fixture!(:ocr_basic),
+                  []
+                )
               )
 
             assert is_binary(result.markdown)

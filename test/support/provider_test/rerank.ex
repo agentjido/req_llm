@@ -35,13 +35,13 @@ defmodule ReqLLM.ProviderTest.Rerank do
 
         describe "#{model_spec}" do
           @tag category: :rerank
-          @tag scenario: :rerank_basic
+          @tag ReqLLM.Test.CompatibilityScenario.tag!(:rerank_basic)
           @tag model: model_spec |> String.split(":", parts: 2) |> List.last()
           test "basic rerank" do
             {:ok, response} =
               ReqLLM.rerank(
                 @model_spec,
-                fixture_opts(@provider, "rerank_basic",
+                fixture_opts(@provider, ReqLLM.Test.CompatibilityScenario.fixture!(:rerank_basic),
                   query: "capital of the United States",
                   documents: ["Carson City", "Washington, D.C.", "Saipan"],
                   top_n: 2

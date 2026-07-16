@@ -35,12 +35,12 @@ defmodule ReqLLM.Coverage.Anthropic.StreamingStructuredOutputTest do
   end
 
   describe "streaming with json_schema mode" do
-    @tag scenario: :object_streaming_json_schema
+    @tag ReqLLM.Test.CompatibilityScenario.tag!(:object_streaming_json_schema)
 
     test "streams object with native output_format json_schema" do
       opts =
         fixture_opts(
-          "object_streaming_json_schema",
+          ReqLLM.Test.CompatibilityScenario.fixture!(:object_streaming_json_schema),
           param_bundles().deterministic
           |> Keyword.put(:max_tokens, 1000)
           |> Keyword.put(:provider_options, anthropic_structured_output_mode: :json_schema)
@@ -72,12 +72,12 @@ defmodule ReqLLM.Coverage.Anthropic.StreamingStructuredOutputTest do
   end
 
   describe "streaming with tool_strict mode" do
-    @tag scenario: :object_streaming_tool_strict
+    @tag ReqLLM.Test.CompatibilityScenario.tag!(:object_streaming_tool_strict)
 
     test "streams object with strict tool calling" do
       opts =
         fixture_opts(
-          "object_streaming_tool_strict",
+          ReqLLM.Test.CompatibilityScenario.fixture!(:object_streaming_tool_strict),
           param_bundles().deterministic
           |> Keyword.put(:max_tokens, 1000)
           |> Keyword.put(:provider_options, anthropic_structured_output_mode: :tool_strict)
@@ -105,12 +105,12 @@ defmodule ReqLLM.Coverage.Anthropic.StreamingStructuredOutputTest do
   end
 
   describe "streaming with auto mode" do
-    @tag scenario: :object_streaming_auto
+    @tag ReqLLM.Test.CompatibilityScenario.tag!(:object_streaming_auto)
 
     test "auto-selects json_schema when no other tools present" do
       opts =
         fixture_opts(
-          "object_streaming_auto",
+          ReqLLM.Test.CompatibilityScenario.fixture!(:object_streaming_auto),
           param_bundles().deterministic
           |> Keyword.put(:max_tokens, 1000)
           # Default mode is auto
@@ -142,7 +142,7 @@ defmodule ReqLLM.Coverage.Anthropic.StreamingStructuredOutputTest do
 
       opts =
         fixture_opts(
-          "object_streaming_auto_with_tools",
+          ReqLLM.Test.CompatibilityScenario.fixture!(:object_streaming_auto, 1),
           param_bundles().deterministic
           |> Keyword.put(:max_tokens, 1000)
           |> Keyword.put(:tools, [other_tool])

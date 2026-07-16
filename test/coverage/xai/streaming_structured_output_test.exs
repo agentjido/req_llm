@@ -31,12 +31,12 @@ defmodule ReqLLM.Coverage.XAI.StreamingStructuredOutputTest do
   end
 
   describe "streaming with json_schema mode (grok-4.3)" do
-    @tag scenario: :object_streaming_json_schema
+    @tag ReqLLM.Test.CompatibilityScenario.tag!(:object_streaming_json_schema)
 
     test "streams object with native response_format json_schema" do
       opts =
         fixture_opts(
-          "object_streaming_json_schema",
+          ReqLLM.Test.CompatibilityScenario.fixture!(:object_streaming_json_schema),
           param_bundles().deterministic
           |> Keyword.put(:max_tokens, 500)
         )
@@ -69,12 +69,12 @@ defmodule ReqLLM.Coverage.XAI.StreamingStructuredOutputTest do
   end
 
   describe "streaming with tool_strict mode" do
-    @tag scenario: :object_streaming_tool_strict
+    @tag ReqLLM.Test.CompatibilityScenario.tag!(:object_streaming_tool_strict)
 
     test "streams object with strict tool calling fallback" do
       opts =
         fixture_opts(
-          "object_streaming_tool_strict",
+          ReqLLM.Test.CompatibilityScenario.fixture!(:object_streaming_tool_strict),
           param_bundles().deterministic
           |> Keyword.put(:max_tokens, 500)
           |> Keyword.put(:provider_options, xai_structured_output_mode: :tool_strict)
@@ -112,12 +112,12 @@ defmodule ReqLLM.Coverage.XAI.StreamingStructuredOutputTest do
   end
 
   describe "streaming with auto mode selection" do
-    @tag scenario: :object_streaming_auto
+    @tag ReqLLM.Test.CompatibilityScenario.tag!(:object_streaming_auto)
 
     test "auto-selects json_schema for current Grok models" do
       opts =
         fixture_opts(
-          "object_streaming_auto",
+          ReqLLM.Test.CompatibilityScenario.fixture!(:object_streaming_auto),
           param_bundles().deterministic
           |> Keyword.put(:max_tokens, 500)
         )
@@ -140,12 +140,12 @@ defmodule ReqLLM.Coverage.XAI.StreamingStructuredOutputTest do
   end
 
   describe "error handling in streaming" do
-    @tag scenario: :streaming_error_handling
+    @tag ReqLLM.Test.CompatibilityScenario.tag!(:streaming_error_handling)
 
     test "handles interrupted stream gracefully" do
       opts =
         fixture_opts(
-          "streaming_truncated",
+          ReqLLM.Test.CompatibilityScenario.fixture!(:streaming_error_handling),
           param_bundles().deterministic
           |> Keyword.put(:max_tokens, 10)
         )

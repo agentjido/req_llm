@@ -23,9 +23,10 @@ defmodule ReqLLM.Coverage.CrossProvider.ToolCallIdCompatIntegrationTest do
   end
 
   @tag provider: "openai"
-  @tag scenario: :tool_id_compat_openai_passthrough
+  @tag ReqLLM.Test.CompatibilityScenario.tag!(:tool_id_compat_openai_passthrough)
   test "OpenAI request preserves OpenAI-style tool call IDs" do
-    fixture_name = "tool_call_id_compat_openai_passthrough"
+    fixture_name =
+      ReqLLM.Test.CompatibilityScenario.fixture!(:tool_id_compat_openai_passthrough)
 
     {:ok, response} =
       ReqLLM.generate_text(
@@ -44,9 +45,10 @@ defmodule ReqLLM.Coverage.CrossProvider.ToolCallIdCompatIntegrationTest do
   end
 
   @tag provider: "anthropic"
-  @tag scenario: :tool_id_compat_openai_to_anthropic
+  @tag ReqLLM.Test.CompatibilityScenario.tag!(:tool_id_compat_openai_to_anthropic)
   test "Anthropic request sanitizes IDs from OpenAI-shaped context" do
-    fixture_name = "tool_call_id_compat_openai_to_anthropic"
+    fixture_name =
+      ReqLLM.Test.CompatibilityScenario.fixture!(:tool_id_compat_openai_to_anthropic)
 
     {:ok, response} =
       ReqLLM.generate_text(
@@ -67,7 +69,7 @@ defmodule ReqLLM.Coverage.CrossProvider.ToolCallIdCompatIntegrationTest do
   end
 
   @tag provider: "anthropic"
-  @tag scenario: :tool_id_compat_turn_boundary
+  @tag ReqLLM.Test.CompatibilityScenario.tag!(:tool_id_compat_turn_boundary)
   test "Anthropic rejects unresolved tool turns" do
     assert_raise ReqLLM.Error.Invalid.Parameter,
                  ~r/Switch providers only after appending tool results/,

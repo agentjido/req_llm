@@ -14,11 +14,11 @@ defmodule ReqLLM.Coverage.Anthropic.WebFetchTest do
     :ok
   end
 
-  @tag scenario: :web_fetch_basic
+  @tag ReqLLM.Test.CompatibilityScenario.tag!(:web_fetch_basic)
   @tag model: "claude-sonnet-4-5"
   test "web fetch retrieves and analyzes URL content" do
     opts =
-      fixture_opts("web_fetch_basic",
+      fixture_opts(ReqLLM.Test.CompatibilityScenario.fixture!(:web_fetch_basic),
         provider_options: [
           web_fetch: %{max_uses: 2}
         ]

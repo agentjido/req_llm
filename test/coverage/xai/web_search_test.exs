@@ -14,11 +14,11 @@ defmodule ReqLLM.Coverage.XAI.WebSearchTest do
     :ok
   end
 
-  @tag scenario: :web_search_basic
+  @tag ReqLLM.Test.CompatibilityScenario.tag!(:web_search_basic)
   @tag model: "grok-4.3"
   test "web search reports tool usage and cost" do
     opts =
-      fixture_opts("web_search_basic",
+      fixture_opts(ReqLLM.Test.CompatibilityScenario.fixture!(:web_search_basic),
         xai_tools: [%{type: "web_search"}]
       )
 
@@ -33,11 +33,11 @@ defmodule ReqLLM.Coverage.XAI.WebSearchTest do
     assert response.usage.cost.tools > 0
   end
 
-  @tag scenario: :web_search_streaming
+  @tag ReqLLM.Test.CompatibilityScenario.tag!(:web_search_streaming)
   @tag model: "grok-4.3"
   test "web search reports tool usage and cost with streaming" do
     opts =
-      fixture_opts("web_search_streaming",
+      fixture_opts(ReqLLM.Test.CompatibilityScenario.fixture!(:web_search_streaming),
         stream: true,
         xai_tools: [%{type: "web_search"}]
       )
@@ -57,11 +57,11 @@ defmodule ReqLLM.Coverage.XAI.WebSearchTest do
     assert response.usage.cost.tools > 0
   end
 
-  @tag scenario: :x_search_streaming
+  @tag ReqLLM.Test.CompatibilityScenario.tag!(:x_search_streaming)
   @tag model: "grok-4.3"
   test "x search reports tool usage and cost with streaming" do
     opts =
-      fixture_opts("x_search_streaming",
+      fixture_opts(ReqLLM.Test.CompatibilityScenario.fixture!(:x_search_streaming),
         stream: true,
         xai_tools: [%{type: "x_search"}]
       )

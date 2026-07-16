@@ -24,11 +24,11 @@ defmodule ReqLLM.Coverage.OpenAI.LogprobsTest do
     :ok
   end
 
-  @tag scenario: :logprobs_non_streaming
+  @tag ReqLLM.Test.CompatibilityScenario.tag!(:logprobs_non_streaming)
   @tag model: "gpt-3.5-turbo"
   test "logprobs are returned in provider_meta when requested" do
     opts =
-      fixture_opts("logprobs_non_streaming",
+      fixture_opts(ReqLLM.Test.CompatibilityScenario.fixture!(:logprobs_non_streaming),
         provider_options: [openai_logprobs: true]
       )
 
@@ -47,10 +47,10 @@ defmodule ReqLLM.Coverage.OpenAI.LogprobsTest do
     end)
   end
 
-  @tag scenario: :basic
+  @tag ReqLLM.Test.CompatibilityScenario.tag!(:basic)
   @tag model: "gpt-3.5-turbo"
   test "logprobs are absent from provider_meta when not requested" do
-    opts = fixture_opts("basic")
+    opts = fixture_opts(ReqLLM.Test.CompatibilityScenario.fixture!(:basic))
 
     {:ok, response} = ReqLLM.generate_text(@model_spec, "Hello world!", opts)
 

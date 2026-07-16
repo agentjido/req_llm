@@ -35,7 +35,7 @@ defmodule ReqLLM.ProviderTest.Speech do
 
         describe "#{model_spec}" do
           @tag category: :speech
-          @tag scenario: :speech_basic
+          @tag ReqLLM.Test.CompatibilityScenario.tag!(:speech_basic)
           @tag model: model_spec |> String.split(":", parts: 2) |> List.last()
           test "basic speech generation" do
             {:ok, result} =
@@ -44,7 +44,7 @@ defmodule ReqLLM.ProviderTest.Speech do
                 "Hello, this is a short fixture test.",
                 fixture_opts(
                   @provider,
-                  "speech_basic",
+                  ReqLLM.Test.CompatibilityScenario.fixture!(:speech_basic),
                   ReqLLM.ProviderTest.Speech.options(@provider)
                 )
               )

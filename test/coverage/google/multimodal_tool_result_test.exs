@@ -26,7 +26,7 @@ defmodule ReqLLM.Coverage.Google.MultimodalToolResultTest do
     :ok
   end
 
-  @tag scenario: :multimodal_tool_result
+  @tag ReqLLM.Test.CompatibilityScenario.tag!(:multimodal_tool_result)
   @tag model: "gemini-3.1-pro-preview"
   test "tool result with PDF and accompanying text reaches the model" do
     pdf_bytes = File.read!(Path.join(File.cwd!(), "priv/examples/test.pdf"))
@@ -57,7 +57,7 @@ defmodule ReqLLM.Coverage.Google.MultimodalToolResultTest do
         @model_spec,
         "Call get_document with name=\"test.pdf\" to fetch the file, then quote the text it contains in full.",
         fixture_opts(
-          "multimodal_tool_result_1",
+          ReqLLM.Test.CompatibilityScenario.fixture!(:multimodal_tool_result, 0),
           base_opts ++
             [
               tools: tools,
@@ -75,7 +75,10 @@ defmodule ReqLLM.Coverage.Google.MultimodalToolResultTest do
       ReqLLM.generate_text(
         @model_spec,
         ctx2,
-        fixture_opts("multimodal_tool_result_2", base_opts ++ [tools: tools])
+        fixture_opts(
+          ReqLLM.Test.CompatibilityScenario.fixture!(:multimodal_tool_result, 1),
+          base_opts ++ [tools: tools]
+        )
       )
 
     text = ReqLLM.Response.text(resp2) || ""

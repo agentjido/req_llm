@@ -14,11 +14,11 @@ defmodule ReqLLM.Coverage.OpenAI.WebSearchTest do
     :ok
   end
 
-  @tag scenario: :web_search_basic
+  @tag ReqLLM.Test.CompatibilityScenario.tag!(:web_search_basic)
   @tag model: "gpt-5-mini"
   test "web search reports tool usage and cost" do
     opts =
-      fixture_opts("web_search_basic",
+      fixture_opts(ReqLLM.Test.CompatibilityScenario.fixture!(:web_search_basic),
         tools: [%{"type" => "web_search"}]
       )
 
@@ -33,11 +33,11 @@ defmodule ReqLLM.Coverage.OpenAI.WebSearchTest do
     assert response.usage.cost.tools > 0
   end
 
-  @tag scenario: :web_search_streaming
+  @tag ReqLLM.Test.CompatibilityScenario.tag!(:web_search_streaming)
   @tag model: "gpt-5-mini"
   test "web search reports tool usage and cost with streaming" do
     opts =
-      fixture_opts("web_search_streaming",
+      fixture_opts(ReqLLM.Test.CompatibilityScenario.fixture!(:web_search_streaming),
         stream: true,
         tools: [%{"type" => "web_search"}]
       )

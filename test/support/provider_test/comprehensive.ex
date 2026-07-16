@@ -184,7 +184,7 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
         describe "#{model_spec}" do
           @describetag model: model_spec |> String.split(":", parts: 2) |> List.last()
 
-          @tag scenario: :basic
+          @tag ReqLLM.Test.CompatibilityScenario.tag!(:basic)
           test "basic generate_text (non-streaming)" do
             require Logger
 
@@ -203,12 +203,12 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
             ReqLLM.generate_text(
               @model_spec,
               "Hello world!",
-              fixture_opts("basic", opts)
+              fixture_opts(ReqLLM.Test.CompatibilityScenario.fixture!(:basic), opts)
             )
             |> assert_basic_response()
           end
 
-          @tag scenario: :streaming
+          @tag ReqLLM.Test.CompatibilityScenario.tag!(:streaming)
           test "stream_text with system context and creative params" do
             require Logger
 
@@ -230,7 +230,11 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
               ReqLLM.stream_text(
                 @model_spec,
                 context,
-                fixture_opts(@provider, "streaming", opts)
+                fixture_opts(
+                  @provider,
+                  ReqLLM.Test.CompatibilityScenario.fixture!(:streaming),
+                  opts
+                )
               )
 
             assert %ReqLLM.StreamResponse{} = stream_response
@@ -259,7 +263,7 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
             assert_streaming_usage(response.usage)
           end
 
-          @tag scenario: :token_limit
+          @tag ReqLLM.Test.CompatibilityScenario.tag!(:token_limit)
           @tag timeout: 600_000
           test "token limit constraints" do
             opts =
@@ -270,7 +274,11 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
             case ReqLLM.generate_text(
                    @model_spec,
                    "Write a very long story about dragons and adventures",
-                   fixture_opts(@provider, "token_limit", opts)
+                   fixture_opts(
+                     @provider,
+                     ReqLLM.Test.CompatibilityScenario.fixture!(:token_limit),
+                     opts
+                   )
                  ) do
               {:ok, response} ->
                 assert_basic_response({:ok, response})
@@ -294,7 +302,7 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
             end
           end
 
-          @tag scenario: :usage
+          @tag ReqLLM.Test.CompatibilityScenario.tag!(:usage)
           test "usage metrics and cost calculations" do
             require Logger
 
@@ -316,7 +324,7 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
                 @model_spec,
                 "Hi there!",
                 fixture_opts(
-                  "usage",
+                  ReqLLM.Test.CompatibilityScenario.fixture!(:usage),
                   Keyword.put(param_bundles().deterministic, :max_tokens, max_tokens)
                 )
               )
@@ -349,7 +357,7 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
             end
           end
 
-          @tag scenario: :context_append
+          @tag ReqLLM.Test.CompatibilityScenario.tag!(:context_append)
           test "context append continues conversation" do
             ctx = ReqLLM.Context.new([user("Respond with a single word 'Hi'.")])
 
@@ -362,7 +370,11 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
               ReqLLM.generate_text(
                 @model_spec,
                 ctx,
-                fixture_opts(@provider, "context_append_1", opts)
+                fixture_opts(
+                  @provider,
+                  ReqLLM.Test.CompatibilityScenario.fixture!(:context_append, 0),
+                  opts
+                )
               )
 
             ctx2 = ReqLLM.Context.append(resp1.context, user("Hi again"))
@@ -371,7 +383,11 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
               ReqLLM.generate_text(
                 @model_spec,
                 ctx2,
-                fixture_opts(@provider, "context_append_2", opts)
+                fixture_opts(
+                  @provider,
+                  ReqLLM.Test.CompatibilityScenario.fixture!(:context_append, 1),
+                  opts
+                )
               )
 
             text = ReqLLM.Response.text(resp2) || ""
@@ -383,8 +399,8 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
             assert resp2.message.role == :assistant
           end
 
-          if ReqLLM.ProviderTest.Comprehensive.supports_tool_calling?(model_spec) do
-            @tag scenario: :tool_multi
+          if ReqLLM.Test.CompatibilityScenario.applicable?(:tool_multi, model_spec) do
+            @tag ReqLLM.Test.CompatibilityScenario.tag!(:tool_multi)
             test "tool calling - multi-tool selection" do
               tools = [
                 ReqLLM.tool(
@@ -427,7 +443,10 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
                 ReqLLM.generate_text(
                   @model_spec,
                   "What's the weather like in Paris, France?",
-                  fixture_opts("multi_tool", base_opts ++ [tools: tools])
+                  fixture_opts(
+                    ReqLLM.Test.CompatibilityScenario.fixture!(:tool_multi),
+                    base_opts ++ [tools: tools]
+                  )
                 )
 
               case result do
@@ -448,7 +467,7 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
               end
             end
 
-            @tag scenario: :tool_round_trip
+            @tag ReqLLM.Test.CompatibilityScenario.tag!(:tool_round_trip)
             test "tool calling - round trip execution" do
               tools = [
                 ReqLLM.tool(
@@ -479,7 +498,7 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
                   @model_spec,
                   "Use the add tool to compute 2 + 3. After the tool result arrives, respond with 'sum=<value>'.",
                   fixture_opts(
-                    "tool_round_trip_1",
+                    ReqLLM.Test.CompatibilityScenario.fixture!(:tool_round_trip, 0),
                     base_opts ++
                       [
                         tools: tools,
@@ -497,7 +516,10 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
                 ReqLLM.generate_text(
                   @model_spec,
                   ctx2,
-                  fixture_opts("tool_round_trip_2", base_opts)
+                  fixture_opts(
+                    ReqLLM.Test.CompatibilityScenario.fixture!(:tool_round_trip, 1),
+                    base_opts
+                  )
                 )
 
               text = ReqLLM.Response.text(resp2) || ""
@@ -506,7 +528,7 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
               assert Enum.empty?(ReqLLM.Response.tool_calls(resp2))
             end
 
-            @tag scenario: :tool_none
+            @tag ReqLLM.Test.CompatibilityScenario.tag!(:tool_none)
             test "tool calling - no tool when inappropriate" do
               tools = [
                 ReqLLM.tool(
@@ -533,14 +555,17 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
               ReqLLM.generate_text(
                 @model_spec,
                 "Tell me a joke about cats",
-                fixture_opts("no_tool", base_opts ++ [tools: tools])
+                fixture_opts(
+                  ReqLLM.Test.CompatibilityScenario.fixture!(:tool_none),
+                  base_opts ++ [tools: tools]
+                )
               )
               |> assert_basic_response()
             end
           end
 
-          if ReqLLM.ProviderTest.Comprehensive.supports_object_generation?(model_spec) do
-            @tag scenario: :object_basic
+          if ReqLLM.Test.CompatibilityScenario.applicable?(:object_basic, model_spec) do
+            @tag ReqLLM.Test.CompatibilityScenario.tag!(:object_basic)
             test "object generation (non-streaming)" do
               schema = [
                 name: [type: :string, required: true, doc: "Person's full name"],
@@ -558,7 +583,11 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
                   @model_spec,
                   "Generate a software engineer profile",
                   schema,
-                  fixture_opts(@provider, "object_basic", opts)
+                  fixture_opts(
+                    @provider,
+                    ReqLLM.Test.CompatibilityScenario.fixture!(:object_basic),
+                    opts
+                  )
                 )
 
               assert %ReqLLM.Response{} = response
@@ -589,8 +618,8 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
             end
           end
 
-          if ReqLLM.ProviderTest.Comprehensive.supports_streaming_object_generation?(model_spec) do
-            @tag scenario: :object_streaming
+          if ReqLLM.Test.CompatibilityScenario.applicable?(:object_streaming, model_spec) do
+            @tag ReqLLM.Test.CompatibilityScenario.tag!(:object_streaming)
             test "object generation (streaming)" do
               schema = [
                 name: [type: :string, required: true, doc: "Person's full name"],
@@ -608,7 +637,11 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
                   @model_spec,
                   "Generate a software engineer profile",
                   schema,
-                  fixture_opts(@provider, "object_streaming", opts)
+                  fixture_opts(
+                    @provider,
+                    ReqLLM.Test.CompatibilityScenario.fixture!(:object_streaming),
+                    opts
+                  )
                 )
 
               response =
@@ -646,8 +679,8 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
             end
           end
 
-          if ReqLLM.ProviderTest.Comprehensive.supports_reasoning?(model_spec) do
-            @tag scenario: :reasoning
+          if ReqLLM.Test.CompatibilityScenario.applicable?(:reasoning, model_spec) do
+            @tag ReqLLM.Test.CompatibilityScenario.tag!(:reasoning)
             test "reasoning/thinking tokens (non-streaming + streaming)" do
               dbug(
                 fn -> "\n[Comprehensive] model_spec=#{@model_spec}, test=reasoning" end,
@@ -675,7 +708,11 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
                 ReqLLM.generate_text(
                   @model_spec,
                   prompt,
-                  fixture_opts(@provider, "reasoning_basic", base_opts)
+                  fixture_opts(
+                    @provider,
+                    ReqLLM.Test.CompatibilityScenario.fixture!(:reasoning, 0),
+                    base_opts
+                  )
                 )
 
               assert %ReqLLM.Response{} = response
@@ -727,7 +764,11 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
                 ReqLLM.stream_text(
                   @model_spec,
                   context,
-                  fixture_opts(@provider, "reasoning_streaming", stream_opts)
+                  fixture_opts(
+                    @provider,
+                    ReqLLM.Test.CompatibilityScenario.fixture!(:reasoning, 1),
+                    stream_opts
+                  )
                 )
 
               assert %ReqLLM.StreamResponse{} = stream_response

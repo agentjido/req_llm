@@ -35,14 +35,18 @@ defmodule ReqLLM.ProviderTest.ImageGeneration do
 
         describe "#{model_spec}" do
           @tag category: :image
-          @tag scenario: :image_basic
+          @tag ReqLLM.Test.CompatibilityScenario.tag!(:image_basic)
           @tag model: model_spec |> String.split(":", parts: 2) |> List.last()
           test "basic image generation" do
             {:ok, response} =
               ReqLLM.generate_image(
                 @model_spec,
                 ReqLLM.ProviderTest.ImageGeneration.prompt(@provider),
-                fixture_opts(@provider, "image_basic", [])
+                fixture_opts(
+                  @provider,
+                  ReqLLM.Test.CompatibilityScenario.fixture!(:image_basic),
+                  []
+                )
               )
 
             images = ReqLLM.Response.images(response)

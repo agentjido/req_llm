@@ -48,7 +48,7 @@ defmodule ReqLLM.ProviderTest.Embedding do
 
         describe "#{model_spec}" do
           @tag category: :embedding
-          @tag scenario: :embed_basic
+          @tag ReqLLM.Test.CompatibilityScenario.tag!(:embed_basic)
           test "basic embedding generation" do
             dbug(
               fn -> "\n[Embedding] model_spec=#{@model_spec}, test=basic_embed" end,
@@ -59,7 +59,11 @@ defmodule ReqLLM.ProviderTest.Embedding do
               ReqLLM.embed(
                 @model_spec,
                 "Hello world",
-                fixture_opts(@provider, "embed_basic", [])
+                fixture_opts(
+                  @provider,
+                  ReqLLM.Test.CompatibilityScenario.fixture!(:embed_basic),
+                  []
+                )
               )
 
             case result do
@@ -74,7 +78,7 @@ defmodule ReqLLM.ProviderTest.Embedding do
           end
 
           @tag category: :embedding
-          @tag scenario: :embed_usage
+          @tag ReqLLM.Test.CompatibilityScenario.tag!(:embed_usage)
           test "return_usage includes token counts" do
             dbug(
               fn -> "\n[Embedding] model_spec=#{@model_spec}, test=embed_basic_usage" end,
@@ -85,7 +89,11 @@ defmodule ReqLLM.ProviderTest.Embedding do
               ReqLLM.embed(
                 @model_spec,
                 "Hello world",
-                fixture_opts(@provider, "embed_basic", return_usage: true)
+                fixture_opts(
+                  @provider,
+                  ReqLLM.Test.CompatibilityScenario.fixture!(:embed_usage),
+                  return_usage: true
+                )
               )
 
             case result do
@@ -106,7 +114,7 @@ defmodule ReqLLM.ProviderTest.Embedding do
           end
 
           @tag category: :embedding
-          @tag scenario: :embed_batch
+          @tag ReqLLM.Test.CompatibilityScenario.tag!(:embed_batch)
           test "batch embedding generation" do
             dbug(
               fn -> "\n[Embedding] model_spec=#{@model_spec}, test=batch_embed" end,
@@ -119,7 +127,11 @@ defmodule ReqLLM.ProviderTest.Embedding do
               ReqLLM.embed(
                 @model_spec,
                 texts,
-                fixture_opts(@provider, "embed_batch", [])
+                fixture_opts(
+                  @provider,
+                  ReqLLM.Test.CompatibilityScenario.fixture!(:embed_batch),
+                  []
+                )
               )
 
             case result do

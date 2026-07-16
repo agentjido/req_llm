@@ -41,7 +41,7 @@ defmodule ReqLLM.Coverage.GoogleVertexGemini.LabelsTest do
     describe "#{model_spec}" do
       @describetag model: model_spec |> String.split(":", parts: 2) |> List.last()
 
-      @tag scenario: :labels_basic
+      @tag ReqLLM.Test.CompatibilityScenario.tag!(:labels_basic)
       test "sends labels at the top level of the generateContent body" do
         labels = %{
           "team" => "engineering",
@@ -50,7 +50,8 @@ defmodule ReqLLM.Coverage.GoogleVertexGemini.LabelsTest do
         }
 
         opts =
-          ReqLLM.Test.Helpers.fixture_opts("labels_basic",
+          ReqLLM.Test.Helpers.fixture_opts(
+            ReqLLM.Test.CompatibilityScenario.fixture!(:labels_basic),
             provider_options: [labels: labels]
           )
 

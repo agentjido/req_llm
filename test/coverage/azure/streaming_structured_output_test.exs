@@ -43,12 +43,12 @@ defmodule ReqLLM.Coverage.Azure.StreamingStructuredOutputTest do
   end
 
   describe "streaming with auto mode selection" do
-    @tag scenario: :object_streaming_auto
+    @tag ReqLLM.Test.CompatibilityScenario.tag!(:object_streaming_auto)
 
     test "auto-selects appropriate mode for OpenAI models (defaults to json_schema)" do
       opts =
         fixture_opts(
-          "object_streaming_auto",
+          ReqLLM.Test.CompatibilityScenario.fixture!(:object_streaming_auto),
           param_bundles().deterministic
           |> Keyword.put(:max_tokens, 500)
         )
@@ -73,12 +73,12 @@ defmodule ReqLLM.Coverage.Azure.StreamingStructuredOutputTest do
   end
 
   describe "streaming with OpenAI models (json_schema mode)" do
-    @tag scenario: :object_streaming_json_schema
+    @tag ReqLLM.Test.CompatibilityScenario.tag!(:object_streaming_json_schema)
 
     test "streams object with native response_format json_schema" do
       opts =
         fixture_opts(
-          "object_streaming_json_schema",
+          ReqLLM.Test.CompatibilityScenario.fixture!(:object_streaming_json_schema),
           param_bundles().deterministic
           |> Keyword.put(:max_tokens, 500)
         )
@@ -111,12 +111,12 @@ defmodule ReqLLM.Coverage.Azure.StreamingStructuredOutputTest do
   end
 
   describe "streaming with tool_strict mode" do
-    @tag scenario: :object_streaming_tool_strict
+    @tag ReqLLM.Test.CompatibilityScenario.tag!(:object_streaming_tool_strict)
 
     test "streams object with strict tool calling" do
       opts =
         fixture_opts(
-          "object_streaming_tool_strict",
+          ReqLLM.Test.CompatibilityScenario.fixture!(:object_streaming_tool_strict),
           param_bundles().deterministic
           |> Keyword.put(:max_tokens, 500)
           |> Keyword.put(:provider_options, openai_structured_output_mode: :tool_strict)
@@ -154,13 +154,13 @@ defmodule ReqLLM.Coverage.Azure.StreamingStructuredOutputTest do
   end
 
   describe "streaming with Claude models (tool-based structured output)" do
-    @tag scenario: :object_streaming_claude_tool
+    @tag ReqLLM.Test.CompatibilityScenario.tag!(:object_streaming_claude_tool)
     @tag model_family: "anthropic"
 
     test "streams object using tool calling for Claude (json_schema not supported)" do
       opts =
         fixture_opts(
-          "object_streaming_claude_tool",
+          ReqLLM.Test.CompatibilityScenario.fixture!(:object_streaming_claude_tool),
           param_bundles().deterministic
           |> Keyword.put(:max_tokens, 500)
         )
@@ -197,13 +197,13 @@ defmodule ReqLLM.Coverage.Azure.StreamingStructuredOutputTest do
   end
 
   describe "Claude auto mode selection" do
-    @tag scenario: :object_streaming_claude_auto
+    @tag ReqLLM.Test.CompatibilityScenario.tag!(:object_streaming_claude_auto)
     @tag model_family: "anthropic"
 
     test "auto-selects tool mode for Claude models (json_schema unavailable on Azure)" do
       opts =
         fixture_opts(
-          "object_streaming_claude_auto",
+          ReqLLM.Test.CompatibilityScenario.fixture!(:object_streaming_claude_auto),
           param_bundles().deterministic
           |> Keyword.put(:max_tokens, 500)
         )
@@ -228,12 +228,12 @@ defmodule ReqLLM.Coverage.Azure.StreamingStructuredOutputTest do
   end
 
   describe "error handling in streaming" do
-    @tag scenario: :streaming_error_handling
+    @tag ReqLLM.Test.CompatibilityScenario.tag!(:streaming_error_handling)
 
     test "handles truncated stream gracefully" do
       opts =
         fixture_opts(
-          "streaming_truncated",
+          ReqLLM.Test.CompatibilityScenario.fixture!(:streaming_error_handling),
           param_bundles().deterministic
           |> Keyword.put(:max_tokens, 10)
         )

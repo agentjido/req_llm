@@ -34,10 +34,10 @@ defmodule ReqLLM.Coverage.Google.GroundingTest do
     describe "#{model_spec}" do
       @describetag model: model_spec |> String.split(":", parts: 2) |> List.last()
 
-      @tag scenario: :grounding_basic
+      @tag ReqLLM.Test.CompatibilityScenario.tag!(:grounding_basic)
       test "grounding with enable: true" do
         opts =
-          fixture_opts("grounding_basic",
+          fixture_opts(ReqLLM.Test.CompatibilityScenario.fixture!(:grounding_basic),
             provider_options: [
               google_api_version: "v1beta",
               google_grounding: %{enable: true}
@@ -71,10 +71,10 @@ defmodule ReqLLM.Coverage.Google.GroundingTest do
         assert response.usage.cost.tools > 0
       end
 
-      @tag scenario: :grounding_with_context
+      @tag ReqLLM.Test.CompatibilityScenario.tag!(:grounding_with_context)
       test "grounding with conversation context" do
         opts =
-          fixture_opts("grounding_context",
+          fixture_opts(ReqLLM.Test.CompatibilityScenario.fixture!(:grounding_with_context),
             provider_options: [
               google_api_version: "v1beta",
               google_grounding: %{enable: true}
@@ -103,10 +103,10 @@ defmodule ReqLLM.Coverage.Google.GroundingTest do
         assert response.usage.cost.tools > 0
       end
 
-      @tag scenario: :grounding_streaming
+      @tag ReqLLM.Test.CompatibilityScenario.tag!(:grounding_streaming)
       test "grounding with streaming" do
         opts =
-          fixture_opts("grounding_streaming",
+          fixture_opts(ReqLLM.Test.CompatibilityScenario.fixture!(:grounding_streaming),
             stream: true,
             provider_options: [
               google_api_version: "v1beta",
@@ -136,10 +136,10 @@ defmodule ReqLLM.Coverage.Google.GroundingTest do
       end
 
       if String.contains?(@model_spec, "gemini-1.5") do
-        @tag scenario: :grounding_legacy
+        @tag ReqLLM.Test.CompatibilityScenario.tag!(:grounding_legacy)
         test "grounding with legacy dynamic_retrieval (Gemini 1.5)" do
           opts =
-            fixture_opts("grounding_legacy",
+            fixture_opts(ReqLLM.Test.CompatibilityScenario.fixture!(:grounding_legacy),
               provider_options: [
                 google_api_version: "v1beta",
                 google_grounding: %{
