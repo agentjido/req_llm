@@ -1,6 +1,8 @@
 defmodule ReqLLM.Response.StreamTest do
   use ExUnit.Case, async: true
 
+  @moduletag contract: :public_api
+
   alias ReqLLM.Response.Stream, as: ResponseStream
   alias ReqLLM.StreamChunk
 

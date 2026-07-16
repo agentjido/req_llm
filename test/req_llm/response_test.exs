@@ -50,6 +50,8 @@ end
 defmodule ReqLLM.ResponseTest do
   use ExUnit.Case, async: true
 
+  @moduletag contract: :public_api
+
   import ReqLLM.ResponseTest.Helpers
 
   alias ReqLLM.{Context, Error, Message, Message.ContentPart, Response, StreamChunk, ToolCall}

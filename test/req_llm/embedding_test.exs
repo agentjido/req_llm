@@ -12,6 +12,8 @@ defmodule ReqLLM.EmbeddingTest do
 
   use ExUnit.Case, async: true
 
+  @moduletag contract: :public_api
+
   alias ReqLLM.Embedding
 
   defp setup_telemetry do

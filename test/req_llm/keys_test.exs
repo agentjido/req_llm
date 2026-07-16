@@ -1,6 +1,8 @@
 defmodule ReqLLM.KeysTest do
   use ExUnit.Case, async: false
 
+  @moduletag contract: :public_api
+
   alias ReqLLM.Keys
 
   describe "config_key/1" do

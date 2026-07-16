@@ -1,6 +1,8 @@
 defmodule ReqLLM.AuthTest do
   use ExUnit.Case, async: true
 
+  @moduletag contract: :public_api
+
   alias ReqLLM.Auth
   alias ReqLLM.OAuth
 

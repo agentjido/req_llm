@@ -66,6 +66,8 @@ end
 defmodule ReqLLM.StreamResponseTest do
   use ExUnit.Case, async: true
 
+  @moduletag contract: :public_api
+
   import ReqLLM.StreamResponseTest.Helpers
 
   alias ReqLLM.{

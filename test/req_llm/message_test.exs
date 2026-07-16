@@ -1,6 +1,8 @@
 defmodule ReqLLM.MessageTest do
   use ExUnit.Case, async: true
 
+  @moduletag contract: :public_api
+
   alias ReqLLM.Message
   alias ReqLLM.Message.ContentPart
   alias ReqLLM.Message.ReasoningDetails

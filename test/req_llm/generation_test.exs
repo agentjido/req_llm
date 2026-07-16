@@ -1,6 +1,8 @@
 defmodule ReqLLM.GenerationTest do
   use ExUnit.Case, async: true
 
+  @moduletag contract: :public_api
+
   alias ReqLLM.{Context, Generation, Response, StreamResponse}
 
   @chat_model "openai:gpt-4-turbo"

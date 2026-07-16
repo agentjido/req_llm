@@ -1,6 +1,8 @@
 defmodule ReqLLMTest do
   use ExUnit.Case, async: true
 
+  @moduletag contract: :public_api
+
   import ExUnit.CaptureIO
 
   describe "model/1 top-level API" do
@@ -315,6 +317,7 @@ defmodule ReqLLMTest do
   describe "top-level delegated APIs" do
     test "delegate wrappers return provider errors without additional setup" do
       assert {:error, :unknown_provider} = ReqLLM.generate_text("invalid:model", "Hello")
+      assert {:error, :unknown_provider} = ReqLLM.stream_text("invalid:model", "Hello")
       assert {:error, :unknown_provider} = ReqLLM.generate_object("invalid:model", "Hello", [])
       assert {:error, :unknown_provider} = ReqLLM.stream_object("invalid:model", "Hello", [])
       assert {:error, :unknown_provider} = ReqLLM.embed("invalid:model", "Hello")
@@ -327,6 +330,7 @@ defmodule ReqLLMTest do
 
       assert {:error, :unknown_provider} = ReqLLM.speak("invalid:model", "Hello")
       assert {:error, :unknown_provider} = ReqLLM.generate_image("invalid:model", "Hello")
+      assert {:error, :unknown_provider} = ReqLLM.ocr("invalid:model", <<0, 1, 2>>)
     end
   end
 

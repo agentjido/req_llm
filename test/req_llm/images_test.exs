@@ -1,7 +1,20 @@
 defmodule ReqLLM.ImagesTest do
   use ExUnit.Case, async: true
 
-  alias ReqLLM.{Context, Images}
+  @moduletag contract: :public_api
+
+  alias ReqLLM.{Context, Images, Response}
+
+  setup do
+    Req.Test.stub(__MODULE__, fn conn ->
+      Req.Test.json(conn, %{
+        "created" => 1_234,
+        "data" => [%{"b64_json" => Base.encode64("image-bytes")}]
+      })
+    end)
+
+    :ok
+  end
 
   test "supported_models/0 includes known image models by heuristic" do
     models = Images.supported_models()
@@ -22,6 +35,32 @@ defmodule ReqLLM.ImagesTest do
   test "generate_image/3 errors when context has no user text" do
     context = Context.new([Context.system("You are helpful.")])
     assert {:error, _} = Images.generate_image("openai:gpt-image-1.5", context, fixture: "noop")
+  end
+
+  test "ReqLLM image facade preserves response and bang contracts" do
+    model = %{provider: :openai, id: "gpt-image-1.5"}
+
+    opts = [
+      api_key: "test-key",
+      req_http_options: [plug: {Req.Test, __MODULE__}]
+    ]
+
+    assert {:ok, %Response{} = response} =
+             ReqLLM.generate_image(model, "A blue square", opts)
+
+    assert Response.image_data(response) == "image-bytes"
+
+    assert %Response{} =
+             ReqLLM.generate_image!(model, "A blue square", opts)
+  end
+
+  test "ReqLLM image bang facade raises the current public error" do
+    model = %{provider: :openai, id: "gpt-image-1.5"}
+    context = Context.new([Context.system("You are helpful.")])
+
+    assert_raise ReqLLM.Error.Invalid.Parameter, ~r/non-empty user text prompt/, fn ->
+      ReqLLM.generate_image!(model, context)
+    end
   end
 
   test "process/4 accepts image options like aspect_ratio" do

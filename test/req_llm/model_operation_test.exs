@@ -1,6 +1,8 @@
 defmodule ReqLLM.ModelOperationTest do
   use ExUnit.Case, async: true
 
+  @moduletag contract: :public_api
+
   alias ReqLLM.ModelOperation
 
   describe "normalize/1" do

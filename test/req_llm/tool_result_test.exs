@@ -1,6 +1,8 @@
 defmodule ReqLLM.ToolResultTest do
   use ExUnit.Case, async: true
 
+  @moduletag contract: :public_api
+
   alias ReqLLM.{Message, ToolResult}
 
   describe "schema helpers" do

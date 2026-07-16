@@ -1,6 +1,8 @@
 defmodule ReqLLM.ToolCallTest do
   use ExUnit.Case, async: true
 
+  @moduletag contract: :public_api
+
   alias ReqLLM.ToolCall
 
   describe "new/3" do

@@ -13,6 +13,8 @@ defmodule ReqLLM.TranscriptionTest do
 
   use ExUnit.Case, async: true
 
+  @moduletag contract: :public_api
+
   alias ReqLLM.Transcription
   alias ReqLLM.Transcription.Result
 

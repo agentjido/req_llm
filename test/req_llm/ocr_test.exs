@@ -12,6 +12,8 @@ defmodule ReqLLM.OCRTest do
 
   use ExUnit.Case, async: true
 
+  @moduletag contract: :public_api
+
   alias ReqLLM.OCR
 
   @tiny_pdf <<"%PDF-1.0\n1 0 obj\n<< /Type /Catalog >>\nendobj\n">>

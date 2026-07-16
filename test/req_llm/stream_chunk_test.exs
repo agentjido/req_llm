@@ -1,6 +1,8 @@
 defmodule ReqLLM.StreamChunkTest do
   use ExUnit.Case, async: true
 
+  @moduletag contract: :public_api
+
   alias ReqLLM.StreamChunk
 
   # Shared test helpers

@@ -11,6 +11,8 @@ defmodule ReqLLM.SpeechTest do
 
   use ExUnit.Case, async: true
 
+  @moduletag contract: :public_api
+
   alias ReqLLM.Speech
   alias ReqLLM.Speech.Result
 

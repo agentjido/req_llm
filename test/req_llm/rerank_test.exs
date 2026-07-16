@@ -1,6 +1,8 @@
 defmodule ReqLLM.RerankTest do
   use ExUnit.Case, async: false
 
+  @moduletag contract: :public_api
+
   import ReqLLM.Test.Helpers, only: [pricing_from_cost: 1]
 
   alias ReqLLM.Rerank

@@ -1,6 +1,8 @@
 defmodule ReqLLM.ContextTest do
   use ExUnit.Case, async: true
 
+  @moduletag contract: :public_api
+
   alias ReqLLM.Context
   alias ReqLLM.Message
   alias ReqLLM.Message.ContentPart

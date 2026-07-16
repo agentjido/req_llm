@@ -1,6 +1,8 @@
 defmodule ReqLLM.Message.ContentPartTest do
   use ExUnit.Case, async: true
 
+  @moduletag contract: :public_api
+
   alias ReqLLM.Message.ContentPart
 
   describe "text/1 and text/2" do
