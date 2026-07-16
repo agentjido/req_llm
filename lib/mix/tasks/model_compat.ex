@@ -74,46 +74,9 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
 
   use Mix.Task
 
-  @preferred_cli_env :test
-  @capability_scenarios %{
-    "core" => ~w(basic usage token_limit),
-    "conversation" => ~w(context_append),
-    "streaming" => ~w(streaming),
-    "tools" => ~w(tool_none tool_multi tool_round_trip),
-    "objects" => ~w(object_basic object_streaming),
-    "reasoning" => ~w(reasoning),
-    "embedding" => ~w(embed_basic embed_usage embed_batch),
-    "image" => ~w(image_basic),
-    "speech" => ~w(speech_basic),
-    "transcription" => ~w(transcription_basic),
-    "rerank" => ~w(rerank_basic),
-    "ocr" => ~w(ocr_basic),
-    "grounding" => ~w(grounding_basic grounding_with_context grounding_streaming),
-    "grounding_legacy" => ~w(grounding_legacy),
-    "multimodal_tool_result" => ~w(multimodal_tool_result),
-    "web_search" => ~w(web_search_basic web_search_streaming x_search_streaming),
-    "streaming_structured_output" =>
-      ~w(object_streaming_json_schema object_streaming_tool_strict object_streaming_auto streaming_error_handling)
-  }
+  alias ReqLLM.Compatibility.ScenarioCatalog
 
-  @scenario_test_files %{
-    google: %{
-      "grounding_basic" => "test/coverage/google/grounding_test.exs",
-      "grounding_with_context" => "test/coverage/google/grounding_test.exs",
-      "grounding_streaming" => "test/coverage/google/grounding_test.exs",
-      "grounding_legacy" => "test/coverage/google/grounding_test.exs",
-      "multimodal_tool_result" => "test/coverage/google/multimodal_tool_result_test.exs"
-    },
-    xai: %{
-      "web_search_basic" => "test/coverage/xai/web_search_test.exs",
-      "web_search_streaming" => "test/coverage/xai/web_search_test.exs",
-      "x_search_streaming" => "test/coverage/xai/web_search_test.exs",
-      "object_streaming_json_schema" => "test/coverage/xai/streaming_structured_output_test.exs",
-      "object_streaming_tool_strict" => "test/coverage/xai/streaming_structured_output_test.exs",
-      "object_streaming_auto" => "test/coverage/xai/streaming_structured_output_test.exs",
-      "streaming_error_handling" => "test/coverage/xai/streaming_structured_output_test.exs"
-    }
-  }
+  @preferred_cli_env :test
 
   @impl Mix.Task
   def run(args) do
@@ -153,15 +116,7 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
       |> csv_values()
       |> Enum.flat_map(&capability_scenarios!/1)
 
-    operation_capability = Atom.to_string(operation)
-
-    operation_defaults =
-      if opts[:capability] == operation_capability and
-           Map.has_key?(@capability_scenarios, operation_capability) do
-        Map.fetch!(@capability_scenarios, operation_capability)
-      else
-        []
-      end
+    operation_defaults = ScenarioCatalog.operation_defaults(operation, opts[:capability])
 
     (scenarios ++ capability_scenarios ++ operation_defaults)
     |> Enum.uniq()
@@ -169,7 +124,7 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
 
   @doc false
   def capability_scenarios!(capability) when is_binary(capability) do
-    case Map.fetch(@capability_scenarios, capability) do
+    case ScenarioCatalog.scenarios_for_capability(capability) do
       {:ok, scenarios} -> scenarios
       :error -> Mix.raise("Unknown capability group: #{capability}")
     end
@@ -529,9 +484,7 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
   @doc false
   def test_args_for(provider, operation, scenario \\ nil) do
     provider = normalize_provider(provider)
-
-    args =
-      scenario_test_args(provider, scenario) || base_test_args(provider, operation)
+    args = ["test", ScenarioCatalog.test_file(provider, operation, scenario)]
 
     if scenario do
       args ++ ["--only", "scenario:#{scenario}"]
@@ -544,52 +497,8 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
     test_args_for(provider, operation, scenario)
   end
 
-  defp scenario_test_args(_provider, nil), do: nil
-
-  defp scenario_test_args(provider, scenario) do
-    provider
-    |> then(&Map.get(@scenario_test_files, &1, %{}))
-    |> Map.get(to_string(scenario))
-    |> case do
-      nil -> nil
-      path -> ["test", path]
-    end
-  end
-
   defp normalize_provider(provider) when is_atom(provider), do: provider
   defp normalize_provider(provider) when is_binary(provider), do: String.to_atom(provider)
-
-  defp base_test_args(provider, :all) do
-    ["test", "test/coverage/#{provider}"]
-  end
-
-  defp base_test_args(provider, :embedding) do
-    ["test", "test/coverage/#{provider}/embedding_test.exs"]
-  end
-
-  defp base_test_args(provider, :image) do
-    ["test", "test/coverage/#{provider}/image_generation_test.exs"]
-  end
-
-  defp base_test_args(provider, :speech) do
-    ["test", "test/coverage/#{provider}/speech_test.exs"]
-  end
-
-  defp base_test_args(provider, :transcription) do
-    ["test", "test/coverage/#{provider}/transcription_test.exs"]
-  end
-
-  defp base_test_args(provider, :rerank) do
-    ["test", "test/coverage/#{provider}/rerank_test.exs"]
-  end
-
-  defp base_test_args(provider, :ocr) do
-    ["test", "test/coverage/#{provider}/ocr_test.exs"]
-  end
-
-  defp base_test_args(provider, :text) do
-    ["test", "test/coverage/#{provider}/comprehensive_test.exs"]
-  end
 
   defp parse_test_result(provider, model_id, output, exit_code, scenario) do
     {passed, failed, total} = parse_exunit_summary(output)

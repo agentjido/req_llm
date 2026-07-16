@@ -57,6 +57,20 @@ defmodule Mix.Tasks.ReqLlm.ModelCompatTest do
              ]
     end
 
+    test "preserves ordered operation-specific defaults" do
+      assert ModelCompat.scenarios_for_opts([capability: "embedding"], :embedding) == [
+               "embed_basic",
+               "embed_usage",
+               "embed_batch"
+             ]
+
+      assert ModelCompat.scenarios_for_opts([capability: "core"], :text) == [
+               "basic",
+               "usage",
+               "token_limit"
+             ]
+    end
+
     test "raises for unknown capabilities" do
       assert_raise Mix.Error, ~r/Unknown capability group/, fn ->
         ModelCompat.scenarios_for_opts([capability: "unknown"], :text)
@@ -115,6 +129,22 @@ defmodule Mix.Tasks.ReqLlm.ModelCompatTest do
                "test/coverage/xai/streaming_structured_output_test.exs",
                "--only",
                "scenario:object_streaming_json_schema"
+             ]
+    end
+
+    test "preserves operation-specific and unknown explicit scenario fallback routes" do
+      assert ModelCompat.test_args_for(:openai, :embedding) == [
+               "test",
+               "test/coverage/openai/embedding_test.exs",
+               "--only",
+               "provider:openai"
+             ]
+
+      assert ModelCompat.test_args_for(:anthropic, :text, "custom_scenario") == [
+               "test",
+               "test/coverage/anthropic/comprehensive_test.exs",
+               "--only",
+               "scenario:custom_scenario"
              ]
     end
   end
