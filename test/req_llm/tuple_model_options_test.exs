@@ -1,5 +1,5 @@
 defmodule ReqLLM.TupleModelOptionsTest do
-  use ExUnit.Case, async: true
+  use ExUnit.Case, async: false
 
   @moduletag contract: :public_api
 
@@ -27,6 +27,18 @@ defmodule ReqLLM.TupleModelOptionsTest do
   end
 
   defmodule OCRHTTP do
+  end
+
+  defmodule CaptureStreamRequest do
+    @behaviour ReqLLM.FinchRequestAdapter
+
+    @impl true
+    def call(request) do
+      test_pid = Application.fetch_env!(:req_llm, :tuple_model_stream_test_pid)
+      body = request.body |> IO.iodata_to_binary() |> Jason.decode!()
+      send(test_pid, {:stream_request_body, body})
+      request
+    end
   end
 
   test "model/1 returns the same model for equivalent tuple identities" do
@@ -179,6 +191,50 @@ defmodule ReqLLM.TupleModelOptionsTest do
              )
 
     assert_body_delta(baseline, receive_body(ObjectHTTP), "temperature", 0.2)
+  end
+
+  test "streaming object tuple defaults change only the corresponding request key" do
+    previous_adapter = Application.get_env(:req_llm, :finch_request_adapter)
+    previous_test_pid = Application.get_env(:req_llm, :tuple_model_stream_test_pid)
+
+    on_exit(fn ->
+      Application.put_env(:req_llm, :finch_request_adapter, previous_adapter)
+      Application.put_env(:req_llm, :tuple_model_stream_test_pid, previous_test_pid)
+    end)
+
+    Application.put_env(:req_llm, :finch_request_adapter, CaptureStreamRequest)
+    Application.put_env(:req_llm, :tuple_model_stream_test_pid, self())
+
+    opts = [
+      api_key: "test-key",
+      base_url: "http://127.0.0.1:1/v1",
+      max_retries: 0
+    ]
+
+    schema = [name: [type: :string, required: true]]
+
+    assert {:ok, baseline_response} =
+             ReqLLM.stream_object(
+               {:openai, id: "gpt-4-0125-preview"},
+               "Return a person",
+               schema,
+               opts
+             )
+
+    assert_receive {:stream_request_body, baseline}
+    baseline_response.cancel.()
+
+    assert {:ok, tuple_response} =
+             ReqLLM.stream_object(
+               {:openai, "gpt-4-0125-preview", temperature: 0.2},
+               "Return a person",
+               schema,
+               opts
+             )
+
+    assert_receive {:stream_request_body, with_default}
+    assert_body_delta(baseline, with_default, "temperature", 0.2)
+    tuple_response.cancel.()
   end
 
   test "embedding tuple defaults change only the corresponding request key" do

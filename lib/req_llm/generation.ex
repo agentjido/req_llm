@@ -514,6 +514,8 @@ defmodule ReqLLM.Generation do
           keyword()
         ) :: {:ok, ReqLLM.StreamResponse.t()} | {:error, term()}
   def stream_object(model_spec, messages, object_schema, opts \\ []) do
+    opts = ReqLLM.ModelInput.merge_tuple_defaults(model_spec, :object, opts)
+
     with {:ok, model} <- ReqLLM.model(model_spec),
          {:ok, provider_module} <- ReqLLM.provider(model.provider),
          {:ok, compiled_schema} <- ReqLLM.Schema.compile(object_schema),
