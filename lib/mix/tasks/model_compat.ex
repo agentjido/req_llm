@@ -55,6 +55,7 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
   ## Flags
 
       --available        List all models from models.dev API registry (no implementation filter)
+      --support-tiers    Annotate --available output with evidence-derived support tiers
       --sample           Further reduce to sample subset (see :sample_* config or fallback)
       --type TYPE        Operation type: text, embedding, image, speech, transcription, rerank, ocr, or all
       --record           Re-record fixtures (live API calls)
@@ -74,7 +75,7 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
 
   use Mix.Task
 
-  alias ReqLLM.Compatibility.ScenarioCatalog
+  alias ReqLLM.Compatibility.{Evidence, ScenarioCatalog}
 
   @preferred_cli_env :test
 
@@ -88,6 +89,7 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
         switches: [
           sample: :boolean,
           available: :boolean,
+          support_tiers: :boolean,
           type: :string,
           record: :boolean,
           record_all: :boolean,
@@ -163,6 +165,7 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
     operation = parse_operation_type(opts[:type])
     sample_specs = if opts[:sample], do: default_specs_for_operation(operation)
     implemented_providers = get_implemented_providers()
+    evidence = if opts[:support_tiers], do: Evidence.load!()
 
     Mix.shell().info("\n#{header(opts[:sample])}\n")
 
@@ -200,7 +203,7 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
         )
 
         Enum.each(filtered, fn model ->
-          print_model_with_status(model, provider, state)
+          print_model_with_status(model, provider, state, evidence, operation)
         end)
 
         Mix.shell().info("")
@@ -542,6 +545,8 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
         true -> nil
       end
 
+    failure_layer = if status == :pass, do: nil, else: Evidence.classify_failure(error || output)
+
     %{
       provider: provider,
       model_id: model_id,
@@ -551,6 +556,7 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
       failed: failed,
       total: total,
       error: error,
+      failure_layer: failure_layer,
       fixtures: fixtures,
       scenario: scenario
     }
@@ -596,6 +602,7 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
           "scenario" => result.scenario,
           "status" => Atom.to_string(result.status),
           "fixtures" => result.fixtures,
+          "failure_layer" => result.failure_layer,
           "error" => result.error
         }
       end)
@@ -614,6 +621,7 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
       failed: Enum.reduce(results, 0, &(&1.failed + &2)),
       total: Enum.reduce(results, 0, &(&1.total + &2)),
       error: if(errors == [], do: nil, else: Enum.join(errors, "\n")),
+      failure_layer: nil,
       fixtures:
         results
         |> Enum.flat_map(& &1.fixtures)
@@ -1119,7 +1127,7 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
     end
   end
 
-  defp print_model_with_status(model, provider, state) do
+  defp print_model_with_status(model, provider, state, evidence, selected_operation) do
     model_spec = "#{provider}:#{model["id"]}"
     model_id = model["id"]
     has_fixtures = has_fixtures?(provider, model_id)
@@ -1149,7 +1157,30 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
     tier_text =
       if model["tier"], do: " #{tier_color}(#{model["tier"]})#{IO.ANSI.reset()}", else: ""
 
-    Mix.shell().info("  #{status_icon} #{model["id"]}#{tier_text}")
+    support_text = evidence_support_text(evidence, provider, model, selected_operation)
+
+    Mix.shell().info("  #{status_icon} #{model["id"]}#{tier_text}#{support_text}")
+  end
+
+  defp evidence_support_text(nil, _provider, _model, _selected_operation), do: ""
+
+  defp evidence_support_text(evidence, provider, model, selected_operation) do
+    operation = if selected_operation == :all, do: model["type"], else: selected_operation
+    model_spec = "#{provider}:#{model["id"]}"
+
+    declared? =
+      case LLMDB.model(model_spec) do
+        {:ok, resolved} -> ReqLLM.ModelOperation.supported?(resolved, operation)
+        _error -> false
+      end
+
+    support =
+      Evidence.support_status(evidence, model_spec, operation,
+        declared?: declared?,
+        as_of: DateTime.utc_now()
+      )
+
+    IO.ANSI.faint() <> " [support: #{support.tier}]" <> IO.ANSI.reset()
   end
 
   defp print_model_status(model, _spec, status) do
@@ -1499,66 +1530,33 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
   defp save_scenario_state(results, run_ts, opts) do
     priv_dir = :code.priv_dir(:req_llm)
     path = Path.join(priv_dir, "model_compat_scenarios.json")
-
-    existing =
-      case File.read(path) do
-        {:ok, content} -> Jason.decode!(content)
-        _ -> %{}
-      end
-
-    ts = DateTime.to_iso8601(run_ts)
     mode = if opts[:record_all] || opts[:record], do: "record", else: "replay"
 
+    surface_resolver = fn model_spec, operation, fixtures ->
+      Evidence.fixture_surface(fixture_path_root(), model_spec, operation, fixtures)
+    end
+
+    existing =
+      case Evidence.load(path, surface_resolver: surface_resolver) do
+        {:ok, evidence} ->
+          evidence
+
+        {:error, :enoent} ->
+          Evidence.migrate(%{})
+
+        {:error, reason} ->
+          raise ArgumentError, "cannot load compatibility evidence: #{inspect(reason)}"
+      end
+
     new_state =
-      Enum.reduce(results, existing, fn result, acc ->
-        scenarios = Map.get(result, :scenarios) || scenario_entries_for_result(result)
+      Evidence.record(existing, results, run_ts, mode, surface_resolver: surface_resolver)
 
-        Enum.reduce(scenarios, acc, fn scenario, scenario_acc ->
-          put_scenario_state(scenario_acc, result.model_spec, scenario, ts, mode)
-        end)
-      end)
-
-    json = Jason.encode!(new_state, pretty: true)
+    json = Evidence.canonical_json(new_state)
 
     case File.read(path) do
       {:ok, prev} when prev == json -> :ok
       _ -> File.write!(path, json)
     end
-  end
-
-  defp scenario_entries_for_result(%{scenario: nil}), do: []
-
-  defp scenario_entries_for_result(result) do
-    [
-      %{
-        "scenario" => result.scenario,
-        "status" => Atom.to_string(result.status),
-        "fixtures" => result.fixtures,
-        "error" => result.error
-      }
-    ]
-  end
-
-  defp put_scenario_state(state, model_spec, scenario, ts, mode) do
-    scenario_name = scenario["scenario"]
-
-    model_state =
-      state
-      |> Map.get(model_spec, %{})
-      |> Map.put_new("scenarios", %{})
-
-    scenario_state = %{
-      "status" => scenario["status"],
-      "last_checked" => ts,
-      "mode" => mode,
-      "fixtures" => scenario["fixtures"] || [],
-      "error" => scenario["error"]
-    }
-
-    updated_model_state =
-      put_in(model_state, ["scenarios", scenario_name], scenario_state)
-
-    Map.put(state, model_spec, updated_model_state)
   end
 
   defp build_sorted_json(state) do

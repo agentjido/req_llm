@@ -235,6 +235,7 @@ defmodule Mix.Tasks.ReqLlm.ModelCompatTest do
       assert result.status == :fail
       assert result.total == 0
       assert result.error == "No matching compatibility tests executed"
+      assert result.failure_layer == "planning"
     end
 
     test "accepts successful invocations that execute a matching test" do
@@ -250,6 +251,7 @@ defmodule Mix.Tasks.ReqLlm.ModelCompatTest do
       assert result.status == :pass
       assert result.total == 1
       assert result.error == nil
+      assert result.failure_layer == nil
     end
   end
 

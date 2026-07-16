@@ -52,6 +52,7 @@ defmodule ReqLLM.MixProject do
           "guides/usage-and-billing.md",
           "guides/image-generation.md",
           "guides/model-metadata.md",
+          "guides/model-support.md",
           "guides/getting-started.livemd",
           "guides/image-generation.livemd",
           "guides/mix-tasks.md",
@@ -98,7 +99,8 @@ defmodule ReqLLM.MixProject do
             "guides/model-specs.md",
             "guides/usage-and-billing.md",
             "guides/image-generation.md",
-            "guides/model-metadata.md"
+            "guides/model-metadata.md",
+            "guides/model-support.md"
           ],
           Livebooks: [
             "guides/getting-started.livemd",

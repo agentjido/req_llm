@@ -353,6 +353,42 @@ The `priv/supported_models.json` file tracks validation status:
 }
 ```
 
+Scenario-level evidence is stored separately in
+`priv/model_compat_scenarios.json`. That versioned artifact records the model,
+exact execution surface inferred from the fixture request URL, scenario,
+proof level, observations, fixture names, and classified failure layer. It is
+used only by compatibility tooling and generated documentation; it never
+changes model resolution or request routing.
+
+## `mix req_llm.model_support`
+
+Inspect the conservative support tiers derived from current scenario evidence:
+
+```bash
+mix req_llm.model_support
+mix req_llm.model_support --model openai:gpt-4o-mini
+mix req_llm.model_compat --available --sample --support-tiers
+```
+
+Maintainers generate and verify the checked-in evidence reference with:
+
+```bash
+mix req_llm.model_support --generate
+mix req_llm.model_support --check
+```
+
+The generated [`model-support.md`](model-support.md) reference is deterministic
+for a given catalog and evidence snapshot. Tiers are surface-specific:
+
+- `first_class` requires current passing evidence for the entire operation baseline;
+- `best_effort` requires at least one current baseline pass but is incomplete;
+- `experimental` means evidence or current catalog declaration is missing or stale; and
+- `unsupported` includes an explicit reason such as a baseline failure layer or
+  an operation absent from current model metadata.
+
+Catalog presence alone is never evidence. These tiers do not act as a runtime
+allowlist.
+
 ### Example Output
 
 ```

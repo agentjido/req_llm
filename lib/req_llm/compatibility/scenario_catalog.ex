@@ -505,6 +505,17 @@ defmodule ReqLLM.Compatibility.ScenarioCatalog do
     end
   end
 
+  @doc "Returns fixture-replay baseline scenarios required for an operation support tier."
+  @spec baseline_scenarios(atom()) :: [binary()]
+  def baseline_scenarios(operation) when is_atom(operation) do
+    @scenarios
+    |> Enum.filter(fn scenario ->
+      scenario.operation == operation and scenario.applicability == :operation and
+        scenario.proof == :fixture_replay and scenario.providers == :all
+    end)
+    |> Enum.map(& &1.id)
+  end
+
   @doc "Returns the selected test file for a provider, operation, and optional scenario."
   @spec test_file(atom(), atom(), atom() | binary() | nil) :: binary()
   def test_file(provider, operation, scenario \\ nil) when is_atom(provider) do

@@ -492,6 +492,7 @@ This approach gives you full control over the Req pipeline, allowing you to add 
 ## Documentation
 
 - [Compatibility Policy](COMPATIBILITY.md) – stable, experimental, deprecated, platform, and ReqLLM/Jido contracts
+- [Model Support Evidence](guides/model-support.md) – generated, surface-specific compatibility tiers
 - [Getting Started](guides/getting-started.md) – first call and basic concepts
 - [Configuration](guides/configuration.md) – timeouts, connection pools, and global settings
 - [Telemetry](guides/telemetry.md) – request lifecycle, reasoning lifecycle, payload capture

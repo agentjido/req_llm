@@ -75,6 +75,19 @@ Each model entry includes:
 
 The `priv/supported_models.json` file tracks which models have passing fixtures. This file is auto-generated and should not be manually edited.
 
+The versioned `priv/model_compat_scenarios.json` artifact preserves finer-grained
+evidence keyed by model, execution surface, and scenario. Each scenario keeps
+its proof level and observation history, including timestamps, fixture names,
+mode, status, errors, and the classified failure layer. The exact surface comes
+from the recorded fixture request URL, so a replay cannot silently move to a
+different provider API surface.
+
+Run `mix req_llm.model_support --generate` to regenerate the deterministic
+[`model support evidence reference`](model-support.md), and run
+`mix req_llm.model_support --check` to verify both generated files. Support tiers
+are descriptive compatibility-tool output only; ReqLLM continues to resolve
+models independently of this evidence.
+
 ### Comprehensive Test Macro
 
 Tests use the `ReqLLM.ProviderTest.Comprehensive` macro (in `test/support/provider_test/comprehensive.ex`), which generates up to 9 focused tests per model based on capabilities:
