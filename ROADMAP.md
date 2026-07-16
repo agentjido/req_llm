@@ -21,6 +21,10 @@ The [V1 execution goal](V1_EXECUTION_GOAL.md) defines the one-issue delivery
 loop, backward-compatibility merge gate, review and hardening standard, and
 completion criteria for the V1 backlog.
 
+The [ReqLLM 1.x compatibility policy](COMPATIBILITY.md) is the normative public
+contract for stable, experimental, deprecated, platform, and ReqLLM/Jido
+boundaries.
+
 The V1 roadmap records the review of 42 proposed issues covering Milestones 0–8.
 After auditing them against current `main`, 36 remain active one-pull-request
 tickets, three are already satisfied by current code, two were consolidated into

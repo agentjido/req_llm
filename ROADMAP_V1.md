@@ -3,6 +3,7 @@
 > Backward-compatible evolution — discussion draft, July 16, 2026
 
 [Back to the roadmap index](ROADMAP.md) ·
+[Compatibility policy](COMPATIBILITY.md) ·
 [V1 execution goal](V1_EXECUTION_GOAL.md) ·
 [V2 roadmap](ROADMAP_V2.md) ·
 [Master tracking issue #829](https://github.com/agentjido/req_llm/issues/829)

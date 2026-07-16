@@ -491,6 +491,7 @@ This approach gives you full control over the Req pipeline, allowing you to add 
 
 ## Documentation
 
+- [Compatibility Policy](COMPATIBILITY.md) – stable, experimental, deprecated, platform, and ReqLLM/Jido contracts
 - [Getting Started](guides/getting-started.md) – first call and basic concepts
 - [Configuration](guides/configuration.md) – timeouts, connection pools, and global settings
 - [Telemetry](guides/telemetry.md) – request lifecycle, reasoning lifecycle, payload capture
@@ -506,7 +507,10 @@ This approach gives you full control over the Req pipeline, allowing you to add 
 
 ## Roadmap & Status
 
-ReqLLM has now reached v1.0.0. The core API is stable and ready for production use. We're continuing to refine the library and would love community feedback as we plan the next set of improvements. If you run into anything or have suggestions, please open an issue or PR.
+ReqLLM has reached v1.0.0. Its [compatibility policy](COMPATIBILITY.md)
+protects the stable core API while the [roadmap](ROADMAP.md) evolves the library
+through conservative V1 improvements and separately justified V2 candidates.
+If you run into anything or have suggestions, please open an issue or PR.
 
 ### Test Coverage & Quality Commitment
 

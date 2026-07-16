@@ -4,6 +4,7 @@
 
 [Roadmap index](ROADMAP.md) ·
 [V1 roadmap](ROADMAP_V1.md) ·
+[Compatibility policy](COMPATIBILITY.md) ·
 [V1 master tracker #829](https://github.com/agentjido/req_llm/issues/829)
 
 ## Goal

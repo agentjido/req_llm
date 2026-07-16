@@ -35,6 +35,11 @@ defmodule ReqLLM.MixProject do
         main: "overview",
         extras: [
           {"README.md", title: "Overview", filename: "overview"},
+          "COMPATIBILITY.md",
+          "ROADMAP.md",
+          "ROADMAP_V1.md",
+          "ROADMAP_V2.md",
+          "V1_EXECUTION_GOAL.md",
           "CHANGELOG.md",
           "CONTRIBUTING.md",
           "guides/getting-started.md",
@@ -74,7 +79,14 @@ defmodule ReqLLM.MixProject do
         ],
         groups_for_extras: [
           Overview: [
-            "README.md"
+            "README.md",
+            "COMPATIBILITY.md"
+          ],
+          Roadmaps: [
+            "ROADMAP.md",
+            "ROADMAP_V1.md",
+            "ROADMAP_V2.md",
+            "V1_EXECUTION_GOAL.md"
           ],
           Guides: [
             "guides/getting-started.md",
@@ -250,7 +262,7 @@ defmodule ReqLLM.MixProject do
         "Website" => "https://agentjido.xyz"
       },
       files:
-        ~w(lib priv mix.exs LICENSE README.md CHANGELOG.md CONTRIBUTING.md AGENTS.md usage-rules.md guides .formatter.exs)
+        ~w(lib priv mix.exs LICENSE README.md COMPATIBILITY.md ROADMAP.md ROADMAP_V1.md ROADMAP_V2.md V1_EXECUTION_GOAL.md CHANGELOG.md CONTRIBUTING.md AGENTS.md usage-rules.md guides .formatter.exs)
     ]
   end
 
