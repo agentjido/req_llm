@@ -32,6 +32,21 @@ defmodule ReqLLM.Providers.OpenAICodexTest do
       assert request.headers["authorization"] == ["Bearer #{jwt_with_account_id("acct_123")}"]
       assert request.headers["chatgpt-account-id"] == ["acct_123"]
       assert request.headers["originator"] == ["pi"]
+      refute Map.has_key?(request.headers, "x-openai-internal-codex-responses-lite")
+    end
+
+    test "prepare_request automatically enables Responses Lite from model metadata" do
+      {:ok, model} = ReqLLM.model("openai_codex:gpt-5.6-sol")
+
+      {:ok, request} =
+        OpenAICodex.prepare_request(:chat, model, "Summarize BHP",
+          provider_options: [
+            auth_mode: :oauth,
+            access_token: jwt_with_account_id("acct_lite")
+          ]
+        )
+
+      assert request.headers["x-openai-internal-codex-responses-lite"] == ["true"]
     end
 
     test "prepare_request loads oauth_file without explicit auth_mode" do
@@ -102,6 +117,7 @@ defmodule ReqLLM.Providers.OpenAICodexTest do
       assert request.path == "/backend-api/codex/responses"
       assert {"accept", "text/event-stream"} in request.headers
       assert {"openai-beta", "responses=experimental"} in request.headers
+      refute {"x-openai-internal-codex-responses-lite", "true"} in request.headers
 
       body = ReqLLM.Test.Helpers.json_body(request)
 
@@ -113,6 +129,34 @@ defmodule ReqLLM.Providers.OpenAICodexTest do
       refute Map.has_key?(body, "max_output_tokens")
       refute Map.has_key?(body, "max_completion_tokens")
       assert Enum.all?(body["input"], &(&1["role"] != "system"))
+    end
+
+    test "adds Responses Lite to SSE requests for matching models" do
+      {:ok, model} = ReqLLM.model("openai_codex:gpt-5.6-sol")
+      context = ReqLLM.context([ReqLLM.Context.user("Say hi")])
+
+      {:ok, request} =
+        OpenAICodex.attach_stream(
+          model,
+          context,
+          [
+            provider_options: [
+              auth_mode: :oauth,
+              access_token: jwt_with_account_id("acct_lite_stream")
+            ]
+          ],
+          nil
+        )
+
+      assert {"x-openai-internal-codex-responses-lite", "true"} in request.headers
+
+      body = ReqLLM.Test.Helpers.json_body(request)
+
+      refute Map.has_key?(body, "instructions")
+      refute Map.has_key?(body, "tools")
+      assert body["parallel_tool_calls"] == false
+      assert body["reasoning"]["context"] == "all_turns"
+      assert [%{"type" => "additional_tools", "role" => "developer"} | _input] = body["input"]
     end
 
     test "builds websocket request with codex websocket beta" do
@@ -136,6 +180,7 @@ defmodule ReqLLM.Providers.OpenAICodexTest do
       assert {"openai-beta", "responses_websockets=2026-02-06"} in config.headers
       assert {"session_id", "req_ws"} in config.headers
       assert {"x-client-request-id", "req_ws"} in config.headers
+      refute {"x-openai-internal-codex-responses-lite", "true"} in config.headers
       refute Enum.any?(config.headers, &(elem(&1, 0) == "content-type"))
 
       payload = config.initial_messages |> hd() |> Jason.decode!()
@@ -147,6 +192,31 @@ defmodule ReqLLM.Providers.OpenAICodexTest do
       assert payload["previous_response_id"] == "resp_ws_789"
       refute Map.has_key?(payload, "max_completion_tokens")
       refute Map.has_key?(payload, "response")
+    end
+
+    test "adds Responses Lite to websocket requests for matching models" do
+      {:ok, model} = ReqLLM.model("openai_codex:gpt-5.6-sol")
+
+      {:ok, config} =
+        OpenAICodex.attach_websocket_stream(
+          model,
+          ReqLLM.context([ReqLLM.Context.user("Say hi")]),
+          provider_options: [
+            auth_mode: :oauth,
+            access_token: jwt_with_account_id("acct_lite_ws")
+          ]
+        )
+
+      assert {"x-openai-internal-codex-responses-lite", "true"} in config.headers
+
+      payload = config.initial_messages |> hd() |> Jason.decode!()
+
+      refute Map.has_key?(payload, "previous_response_id")
+      refute Map.has_key?(payload, "instructions")
+      refute Map.has_key?(payload, "tools")
+      assert payload["parallel_tool_calls"] == false
+      assert payload["reasoning"]["context"] == "all_turns"
+      assert [%{"type" => "additional_tools", "role" => "developer"} | _input] = payload["input"]
     end
 
     test "loads oauth_file without explicit auth_mode for streaming" do

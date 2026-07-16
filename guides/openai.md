@@ -93,10 +93,14 @@ ReqLLM.generate_text(
 
 If you need to customize the refresh HTTP client, pass `oauth_http_options` under `provider_options`.
 
-For `openai_codex`, you can also override the backend headers with:
+For `openai_codex`, you can also override backend request headers with:
 
 - `provider_options: [chatgpt_account_id: "..."]`
 - `provider_options: [codex_originator: "pi"]`
+
+ReqLLM applies the complete Responses Lite wire profile when the Codex model catalog marks a model with `use_responses_lite: true`. The bundled catalog currently enables that profile for GPT-5.6 Sol, Terra, and Luna. Explicit model specs can provide updated provider metadata under `extra.openai_codex.use_responses_lite`.
+
+Responses Lite is an internal Codex backend contract, not a mode of the public OpenAI Responses API. It sends instructions and client-executed tools as input items, uses persistent reasoning context, disables parallel tool calls, and marks the request with the Codex Responses Lite header. The canonical behavior is defined by the [Codex model metadata](https://github.com/openai/codex/blob/main/codex-rs/protocol/src/openai_models.rs) and [Responses Lite contract tests](https://github.com/openai/codex/blob/main/codex-rs/core/tests/suite/responses_lite.rs).
 
 ## Attachments
 
