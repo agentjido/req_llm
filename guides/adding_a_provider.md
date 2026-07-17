@@ -2,10 +2,14 @@
 
 ## TL;DR
 
-- Implement a provider module under `lib/req_llm/providers/`, use `ReqLLM.Provider.DSL` + `Defaults`, and only override what the API actually deviates on.
+- Implement a provider module under `lib/req_llm/providers/`, use `ReqLLM.Provider` + `Defaults`, and only override what the API actually deviates on.
 - The `Default` provider implementation is OpenAI Compatible.
 - Non-streaming requests run through Req with `attach/3` + `encode_body/1` + `decode_response/1`; streaming runs through Finch with `attach_stream/4` + `decode_stream_event/2` or `/3`.
 - Add models via `priv/models_local/` when you want shared registry coverage, then add tests using the three-tier strategy and record fixtures with `LIVE=true`. For one-off invocation or early development, ReqLLM can also use explicit model specs; see [Model Specs](model-specs.md).
+
+ReqLLM 1.x intentionally keeps provider extensions as plain modules and data.
+See the [provider extension manifest decision](provider-extension-decision.md)
+for the evidence and V2 reconsideration criteria.
 
 ## Overview and Prerequisites
 
@@ -37,15 +41,17 @@ You should know:
 
 Create `lib/req_llm/providers/<provider>.ex`
 
-### Using the DSL
+### Declaring a provider
 
-Use the DSL to register:
+Use `ReqLLM.Provider` to declare:
 
 - `id` (atom) - Provider identifier
-- `base_url` - Default API endpoint
-- `metadata` - Path to metadata file (`priv/models_dev/<provider>.json`)
+- `default_base_url` - Default API endpoint
 - `default_env_key` - Fallback environment variable for API key
-- `provider_schema` - Provider-only options
+
+Declare provider-only options with the `@provider_schema` module attribute.
+Model metadata belongs in LLMDB or `priv/models_local/`, not in the provider
+macro.
 
 ### Implementing the behavior
 
@@ -133,23 +139,22 @@ This example shows a provider that reuses defaults and only adds custom headers:
 defmodule ReqLLM.Providers.Acme do
   @moduledoc "Acme – OpenAI-compatible chat API."
 
-  @behaviour ReqLLM.Provider
-
-  use ReqLLM.Provider.DSL,
+  use ReqLLM.Provider,
     id: :acme,
-    base_url: "https://api.acme.ai/v1",
-    metadata: "priv/models_dev/acme.json",
-    default_env_key: "ACME_API_KEY",
-    provider_schema: [
-      organization: [type: :string, doc: "Tenant/Org header"]
-    ]
+    default_base_url: "https://api.acme.ai/v1",
+    default_env_key: "ACME_API_KEY"
 
   use ReqLLM.Provider.Defaults
+
+  @provider_schema [
+    organization: [type: :string, doc: "Tenant/Org header"]
+  ]
 
   @impl ReqLLM.Provider
   def attach(request, model_input, user_opts) do
     request = super(request, model_input, user_opts)
-    org = user_opts[:organization]
+    provider_opts = user_opts[:provider_options] || []
+    org = provider_opts[:organization]
     
     case org do
       nil -> request
@@ -173,28 +178,27 @@ This example shows custom encoding/decoding for a provider with different JSON s
 defmodule ReqLLM.Providers.Zephyr do
   @moduledoc "Zephyr – custom JSON schema, SSE streaming."
 
-  @behaviour ReqLLM.Provider
-
-  use ReqLLM.Provider.DSL,
+  use ReqLLM.Provider,
     id: :zephyr,
-    base_url: "https://api.zephyr.ai",
-    metadata: "priv/models_dev/zephyr.json",
-    default_env_key: "ZEPHYR_API_KEY",
-    provider_schema: [
-      version: [type: :string, default: "2024-10-01"],
-      tenant: [type: :string]
-    ]
+    default_base_url: "https://api.zephyr.ai",
+    default_env_key: "ZEPHYR_API_KEY"
 
   use ReqLLM.Provider.Defaults
+
+  @provider_schema [
+    version: [type: :string, default: "2024-10-01"],
+    tenant: [type: :string]
+  ]
 
   @impl ReqLLM.Provider
   def attach(request, model_input, user_opts) do
     request = ReqLLM.Provider.Defaults.default_attach(__MODULE__, request, model_input, user_opts)
+    provider_opts = user_opts[:provider_options] || []
     
     request
-    |> Req.Request.put_header("x-zephyr-version", user_opts[:version] || "2024-10-01")
+    |> Req.Request.put_header("x-zephyr-version", provider_opts[:version] || "2024-10-01")
     |> then(fn req ->
-      case user_opts[:tenant] do
+      case provider_opts[:tenant] do
         nil -> req
         t -> Req.Request.put_header(req, "x-zephyr-tenant", t)
       end
@@ -749,23 +753,22 @@ File: `lib/req_llm/providers/acme.ex`
 defmodule ReqLLM.Providers.Acme do
   @moduledoc "Acme – OpenAI-compatible chat API."
 
-  @behaviour ReqLLM.Provider
-
-  use ReqLLM.Provider.DSL,
+  use ReqLLM.Provider,
     id: :acme,
-    base_url: "https://api.acme.ai/v1",
-    metadata: "priv/models_dev/acme.json",
-    default_env_key: "ACME_API_KEY",
-    provider_schema: [
-      organization: [type: :string, doc: "Tenant/Org header"]
-    ]
+    default_base_url: "https://api.acme.ai/v1",
+    default_env_key: "ACME_API_KEY"
 
   use ReqLLM.Provider.Defaults
+
+  @provider_schema [
+    organization: [type: :string, doc: "Tenant/Org header"]
+  ]
 
   @impl ReqLLM.Provider
   def attach(request, model_input, user_opts) do
     request = super(request, model_input, user_opts)
-    org = user_opts[:organization]
+    provider_opts = user_opts[:provider_options] || []
+    org = provider_opts[:organization]
     
     case org do
       nil -> request

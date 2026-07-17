@@ -59,6 +59,7 @@ defmodule ReqLLM.MixProject do
           "guides/mix-tasks.md",
           "guides/fixture-testing.md",
           "guides/adding_a_provider.md",
+          "guides/provider-extension-decision.md",
           "guides/anthropic.md",
           "guides/openai.md",
           "guides/google.md",
@@ -111,7 +112,8 @@ defmodule ReqLLM.MixProject do
           "Development & Testing": [
             "guides/mix-tasks.md",
             "guides/fixture-testing.md",
-            "guides/adding_a_provider.md"
+            "guides/adding_a_provider.md",
+            "guides/provider-extension-decision.md"
           ],
           Providers: [
             "guides/anthropic.md",
@@ -181,7 +183,6 @@ defmodule ReqLLM.MixProject do
           Speech: ~r/ReqLLM\.Speech.*/,
           "Provider Extension API": [
             ReqLLM.Provider,
-            ReqLLM.Provider.DSL,
             ReqLLM.Provider.Registry,
             ReqLLM.Provider.Options,
             ReqLLM.Provider.Utils,
