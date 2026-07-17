@@ -2,7 +2,9 @@ defmodule ReqLLM.Doctor do
   @moduledoc """
   Read-only installation and runtime diagnostics for ReqLLM.
 
-  `run/1` never performs provider requests or changes application configuration. Its
+  `run/1` never performs provider requests. By default it also never starts applications
+  or changes runtime configuration. Callers may explicitly opt into normal ReqLLM startup
+  with `start_application?: true`, which is useful for short-lived command processes. Its
   result is JSON-serializable and contains no credential values, request payloads, or
   provider response data.
 
@@ -52,6 +54,10 @@ defmodule ReqLLM.Doctor do
     * `:model` - optional model input to resolve and inspect
     * `:provider` - optional provider atom or provider-name string to require
     * `:operation` - `:chat` or `:object`; defaults to `:chat` when a model is supplied
+    * `:start_application?` - explicitly allow ReqLLM startup; defaults to `false`
+
+  When ReqLLM is not already running, the default returns warnings for runtime-only
+  checks instead of starting applications or changing runtime configuration.
   """
   @spec run(keyword()) :: result()
   def run(opts \\ [])
@@ -108,23 +114,23 @@ defmodule ReqLLM.Doctor do
   end
 
   defp run_checks(opts) do
-    {application_check, application_ready?} = application_check()
-    {model_check, model} = model_check(opts)
-    {provider_check, provider} = provider_check(opts, model, application_ready?)
+    {application_check, application_state} = application_check(opts)
+    {model_check, model} = model_check(opts, application_state)
+    {provider_check, provider} = provider_check(opts, model, application_state)
 
     checks =
       [versions_check(), application_check] ++
         optional_check(model_check) ++
         [provider_check] ++
-        credential_checks(provider, application_ready?) ++
-        surface_checks(model, opts, application_ready?) ++
-        [finch_configuration_check(), finch_runtime_check(application_ready?)]
+        credential_checks(provider, application_state) ++
+        surface_checks(model, opts, application_state) ++
+        [finch_configuration_check(), finch_runtime_check(application_state)]
 
     result(checks)
   end
 
   defp validate_options(opts) do
-    allowed = [:model, :provider, :operation]
+    allowed = [:model, :provider, :operation, :start_application?]
 
     if Keyword.keyword?(opts) do
       unknown = Keyword.keys(opts) -- allowed
@@ -136,6 +142,9 @@ defmodule ReqLLM.Doctor do
 
         operation not in @operations ->
           {:error, "Operation must be :chat or :object."}
+
+        not is_boolean(Keyword.get(opts, :start_application?, false)) ->
+          {:error, ":start_application? must be a boolean."}
 
         Keyword.has_key?(opts, :operation) and not Keyword.has_key?(opts, :model) ->
           {:error, "Operation inspection requires a model."}
@@ -168,15 +177,29 @@ defmodule ReqLLM.Doctor do
     )
   end
 
-  defp application_check do
-    case safe_start_application() do
-      {:ok, _applications} ->
+  defp application_check(opts) do
+    cond do
+      application_running?() ->
+        {application_running_check(), :running}
+
+      Keyword.get(opts, :start_application?, false) ->
+        start_application_check()
+
+      true ->
         {check(
            "runtime.application",
            "runtime",
-           "ok",
-           "ReqLLM and its supervision tree are running."
-         ), true}
+           "warning",
+           "ReqLLM is not running; runtime-only checks were not performed.",
+           "Start :req_llm or pass start_application?: true to explicitly allow startup."
+         ), :not_running}
+    end
+  end
+
+  defp start_application_check do
+    case safe_start_application() do
+      {:ok, _applications} ->
+        {application_running_check(), :running}
 
       {:error, _reason} ->
         {check(
@@ -185,8 +208,23 @@ defmodule ReqLLM.Doctor do
            "error",
            "ReqLLM could not start.",
            "Review application configuration and startup logs, then rerun mix req_llm.doctor."
-         ), false}
+         ), :startup_error}
     end
+  end
+
+  defp application_running_check do
+    check(
+      "runtime.application",
+      "runtime",
+      "ok",
+      "ReqLLM and its supervision tree are running."
+    )
+  end
+
+  defp application_running? do
+    Enum.any?(Application.started_applications(), fn {app, _description, _version} ->
+      app == :req_llm
+    end)
   end
 
   defp safe_start_application do
@@ -197,7 +235,7 @@ defmodule ReqLLM.Doctor do
     _kind, _reason -> {:error, :startup_failure}
   end
 
-  defp model_check(opts) do
+  defp model_check(opts, :running) do
     case Keyword.fetch(opts, :model) do
       :error ->
         {nil, nil}
@@ -226,20 +264,45 @@ defmodule ReqLLM.Doctor do
     end
   end
 
-  defp provider_check(opts, model, application_ready?) do
-    providers = if application_ready?, do: ReqLLM.Providers.list(), else: []
+  defp model_check(opts, _application_state) do
+    if Keyword.has_key?(opts, :model) do
+      {check(
+         "model.resolution",
+         "model",
+         "warning",
+         "Model resolution was not inspected because ReqLLM is not running.",
+         "Start :req_llm or explicitly allow diagnostic startup."
+       ), nil}
+    else
+      {nil, nil}
+    end
+  end
+
+  defp provider_check(_opts, _model, :not_running) do
+    {check(
+       "providers.registry",
+       "provider",
+       "warning",
+       "Provider registration was not inspected because ReqLLM is not running.",
+       "Start :req_llm or explicitly allow diagnostic startup."
+     ), nil}
+  end
+
+  defp provider_check(_opts, _model, :startup_error) do
+    {check(
+       "providers.registry",
+       "provider",
+       "error",
+       "Provider registration could not be inspected because ReqLLM failed to start.",
+       "Resolve the application startup error first."
+     ), nil}
+  end
+
+  defp provider_check(opts, model, :running) do
+    providers = ReqLLM.Providers.list()
     requested = requested_provider(opts, model, providers)
 
     cond do
-      not application_ready? ->
-        {check(
-           "providers.registry",
-           "provider",
-           "error",
-           "Provider registration could not be inspected because ReqLLM is not running.",
-           "Resolve the application startup error first."
-         ), nil}
-
       match?({:error, _name}, requested) ->
         {check(
            "providers.registry",
@@ -322,9 +385,9 @@ defmodule ReqLLM.Doctor do
   defp requested_provider_value({:ok, provider}), do: provider
   defp requested_provider_value(_requested), do: nil
 
-  defp credential_checks(_provider, false), do: []
+  defp credential_checks(_provider, application_state) when application_state != :running, do: []
 
-  defp credential_checks(nil, true) do
+  defp credential_checks(nil, :running) do
     configured = configured_credential_providers()
 
     if configured == [] do
@@ -352,7 +415,7 @@ defmodule ReqLLM.Doctor do
     end
   end
 
-  defp credential_checks(provider, true) do
+  defp credential_checks(provider, :running) do
     case credential_requirement(provider) do
       :none ->
         [
@@ -460,7 +523,8 @@ defmodule ReqLLM.Doctor do
   defp configured_provider?(:openai_codex), do: oauth_credential_present?(:openai_codex)
 
   defp configured_provider?(provider) do
-    api_key_present?(provider) or oauth_credential_present?(provider)
+    api_key_present?(provider) or
+      (default_oauth_mode?(provider) and oauth_credential_present?(provider))
   rescue
     _error -> false
   end
@@ -500,6 +564,19 @@ defmodule ReqLLM.Doctor do
   defp auth_mode_declared?(module) do
     function_exported?(module, :provider_schema, 0) and
       Keyword.has_key?(module.provider_schema().schema, :auth_mode)
+  rescue
+    _error -> false
+  end
+
+  defp default_oauth_mode?(provider) do
+    with {:ok, module} <- ReqLLM.provider(provider),
+         true <- function_exported?(module, :provider_schema, 0),
+         schema when is_list(schema) <- module.provider_schema().schema,
+         auth_mode when is_list(auth_mode) <- Keyword.get(schema, :auth_mode) do
+      Keyword.get(auth_mode, :default) == :oauth
+    else
+      _not_default_oauth -> false
+    end
   rescue
     _error -> false
   end
@@ -582,10 +659,10 @@ defmodule ReqLLM.Doctor do
   defp present?(value) when is_map(value), do: map_size(value) > 0
   defp present?(_value), do: false
 
-  defp surface_checks(nil, _opts, _application_ready?), do: []
-  defp surface_checks(_model, _opts, false), do: []
+  defp surface_checks(nil, _opts, _application_state), do: []
+  defp surface_checks(_model, _opts, application_state) when application_state != :running, do: []
 
-  defp surface_checks(%LLMDB.Model{provider: provider} = model, opts, true)
+  defp surface_checks(%LLMDB.Model{provider: provider} = model, opts, :running)
        when provider in [:openai, :anthropic] do
     operation = Keyword.get(opts, :operation, :chat)
 
@@ -619,7 +696,7 @@ defmodule ReqLLM.Doctor do
     end
   end
 
-  defp surface_checks(%LLMDB.Model{provider: provider}, opts, true) do
+  defp surface_checks(%LLMDB.Model{provider: provider}, opts, :running) do
     operation = Keyword.get(opts, :operation, :chat)
 
     case ReqLLM.provider(provider) do
@@ -736,17 +813,27 @@ defmodule ReqLLM.Doctor do
   defp safe_pool_name(name) when is_atom(name), do: Atom.to_string(name)
   defp safe_pool_name(_name), do: "configured_origin"
 
-  defp finch_runtime_check(false) do
+  defp finch_runtime_check(:not_running) do
+    check(
+      "finch.runtime",
+      "finch",
+      "warning",
+      "Finch runtime availability was not inspected because ReqLLM is not running.",
+      "Start :req_llm or explicitly allow diagnostic startup."
+    )
+  end
+
+  defp finch_runtime_check(:startup_error) do
     check(
       "finch.runtime",
       "finch",
       "error",
-      "Finch runtime availability could not be inspected because ReqLLM is not running.",
+      "Finch runtime availability could not be inspected because ReqLLM failed to start.",
       "Resolve the application startup error first."
     )
   end
 
-  defp finch_runtime_check(true) do
+  defp finch_runtime_check(:running) do
     name = ReqLLM.Application.finch_name()
 
     case GenServer.whereis(name) do
@@ -822,6 +909,6 @@ defmodule ReqLLM.Doctor do
   defp status_icon("error"), do: "ERROR"
 
   defp input_remediation do
-    "Use :model, :provider, and :operation options supported by ReqLLM.Doctor.run/1."
+    "Use :model, :provider, :operation, and :start_application? options supported by ReqLLM.Doctor.run/1."
   end
 end

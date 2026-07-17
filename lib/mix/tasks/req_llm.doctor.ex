@@ -62,6 +62,7 @@ defmodule Mix.Tasks.ReqLlm.Doctor do
     |> put_if_present(:model, opts[:model])
     |> put_if_present(:provider, opts[:provider])
     |> put_if_present(:operation, operation)
+    |> Keyword.put(:start_application?, true)
   end
 
   defp operation!(nil), do: nil

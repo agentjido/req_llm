@@ -5,19 +5,24 @@ defmodule ReqLLM.DoctorTest do
 
   setup do
     original_finch = Application.get_env(:req_llm, :finch)
+    original_llm_db_load_dotenv = Application.get_env(:llm_db, :load_dotenv)
     original_oauth_file = Application.get_env(:req_llm, :oauth_file)
     original_auth_file = Application.get_env(:req_llm, :auth_file)
     original_openai_key = Application.get_env(:req_llm, :openai_api_key)
+    original_openai_env = System.get_env("OPENAI_API_KEY")
     original_xai_key = Application.get_env(:req_llm, :xai_api_key)
     original_xai_env = System.get_env("XAI_API_KEY")
 
     on_exit(fn ->
       restore_app_env(:req_llm, :finch, original_finch)
+      restore_app_env(:llm_db, :load_dotenv, original_llm_db_load_dotenv)
       restore_app_env(:req_llm, :oauth_file, original_oauth_file)
       restore_app_env(:req_llm, :auth_file, original_auth_file)
       restore_app_env(:req_llm, :openai_api_key, original_openai_key)
       restore_app_env(:req_llm, :xai_api_key, original_xai_key)
+      restore_system_env("OPENAI_API_KEY", original_openai_env)
       restore_system_env("XAI_API_KEY", original_xai_env)
+      Application.ensure_all_started(:req_llm)
       ReqLLM.Providers.initialize()
     end)
 
@@ -42,6 +47,23 @@ defmodule ReqLLM.DoctorTest do
     assert versions["details"]["elixir"] == System.version()
     assert versions["details"]["otp"] == System.otp_release()
     assert Jason.encode!(result)
+  end
+
+  test "does not start ReqLLM or mutate runtime configuration by default" do
+    Application.delete_env(:llm_db, :load_dotenv)
+    assert :ok = Application.stop(:req_llm)
+
+    result = Doctor.run()
+
+    refute Enum.any?(Application.started_applications(), fn {app, _description, _version} ->
+             app == :req_llm
+           end)
+
+    assert Application.get_env(:llm_db, :load_dotenv) == nil
+    assert find_check(result, "runtime.application")["status"] == "warning"
+    assert find_check(result, "providers.registry")["status"] == "warning"
+    assert find_check(result, "finch.runtime")["status"] == "warning"
+    assert Doctor.exit_status(result) == 0
   end
 
   test "treats absent optional credentials as a warning with a successful exit" do
@@ -116,7 +138,12 @@ defmodule ReqLLM.DoctorTest do
 
     result = Doctor.run(provider: :openai_codex)
 
+    Application.delete_env(:req_llm, :openai_api_key)
+    System.delete_env("OPENAI_API_KEY")
+    default_openai_result = Doctor.run(provider: :openai)
+
     assert find_check(result, "credentials.selected_provider")["status"] == "ok"
+    assert find_check(default_openai_result, "credentials.selected_provider")["status"] == "error"
     assert File.read!(path) == body
     refute Jason.encode!(result) =~ "doctor-refresh-secret"
     refute Jason.encode!(result) =~ path
