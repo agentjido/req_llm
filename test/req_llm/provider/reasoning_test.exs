@@ -183,6 +183,7 @@ defmodule ReqLLM.Provider.ReasoningTest do
 
       assert [
                %{kind: :clamped, option: :reasoning_effort},
+               %{kind: :clamped, option: :reasoning_effort},
                %{kind: :lossy, option: :reasoning_effort}
              ] =
                Reasoning.advisories(
@@ -191,6 +192,12 @@ defmodule ReqLLM.Provider.ReasoningTest do
                  [reasoning_effort: :xhigh],
                  google_thinking_level: :high
                ) ++
+                 Reasoning.advisories(
+                   Google,
+                   model,
+                   [reasoning_effort: :max],
+                   google_thinking_level: :high
+                 ) ++
                  Reasoning.advisories(
                    Google,
                    model,

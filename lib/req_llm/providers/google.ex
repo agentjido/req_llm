@@ -819,6 +819,7 @@ defmodule ReqLLM.Providers.Google do
       :medium -> 8_192
       :high -> 16_384
       :xhigh -> 32_768
+      :max -> 32_768
       budget when is_integer(budget) -> budget
       _ -> 8_192
     end
@@ -832,6 +833,7 @@ defmodule ReqLLM.Providers.Google do
       :medium -> :medium
       :high -> :high
       :xhigh -> :high
+      :max -> :high
       _ -> :medium
     end
   end

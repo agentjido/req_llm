@@ -120,6 +120,14 @@ defmodule ReqLLM.Providers.MetaTest do
       assert warning =~ "do not accept reasoning_effort :none"
     end
 
+    test "translate_options preserves max reasoning effort" do
+      {translated, warnings} =
+        Meta.translate_options(:chat, meta_model(), reasoning_effort: :max)
+
+      assert translated[:reasoning_effort] == "max"
+      assert warnings == []
+    end
+
     test "translate_options enforces Meta's minimum output token limit" do
       {translated, warnings} =
         Meta.translate_options(:chat, meta_model(), max_tokens: 10)

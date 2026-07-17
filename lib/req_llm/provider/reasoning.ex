@@ -146,11 +146,12 @@ defmodule ReqLLM.Provider.Reasoning do
     level = Keyword.get(translated_opts, :google_thinking_level)
 
     case {effort, level} do
-      {:xhigh, level} when level in [:high, "high"] ->
+      {effort, level} when effort in [:xhigh, :max] and level in [:high, "high"] ->
         %{
           kind: :clamped,
           option: :reasoning_effort,
-          message: ":reasoning_effort :xhigh was clamped to Gemini thinking level :high"
+          message:
+            ":reasoning_effort #{inspect(effort)} was clamped to Gemini thinking level :high"
         }
 
       {:none, level} when level in [:minimal, "minimal"] ->

@@ -393,7 +393,7 @@ defmodule ReqLLM.Providers.Meta do
            | warnings
          ]}
 
-      {effort, opts} when effort in [:minimal, :low, :medium, :high, :xhigh] ->
+      {effort, opts} when effort in [:minimal, :low, :medium, :high, :xhigh, :max] ->
         {Keyword.put(opts, :reasoning_effort, Atom.to_string(effort)), warnings}
 
       {effort, opts} when is_binary(effort) ->

@@ -1591,7 +1591,8 @@ defmodule ReqLLM.Providers.GoogleTest do
         {:low, 4_096},
         {:medium, 8_192},
         {:high, 16_384},
-        {:xhigh, 32_768}
+        {:xhigh, 32_768},
+        {:max, 32_768}
       ]
 
       for {effort, expected_budget} <- test_cases do
@@ -1612,7 +1613,8 @@ defmodule ReqLLM.Providers.GoogleTest do
         {:low, :low},
         {:medium, :medium},
         {:high, :high},
-        {:xhigh, :high}
+        {:xhigh, :high},
+        {:max, :high}
       ]
 
       for {effort, expected_level} <- test_cases do
