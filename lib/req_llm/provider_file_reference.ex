@@ -125,6 +125,19 @@ defmodule ReqLLM.ProviderFileReference do
   end
 
   @doc false
+  @spec validate(ContentPart.t() | map(), atom() | String.t(), keyword()) ::
+          :ok | {:error, ReqLLM.Error.Invalid.ProviderFileReference.t()}
+  def validate(part, provider, opts \\ []) do
+    now = Keyword.get_lazy(opts, :now, &DateTime.utc_now/0)
+    validate_expiry? = Keyword.get(opts, :validate_expiry?, true)
+
+    case fetch(part) do
+      {:ok, reference} -> validate_reference(reference, provider, now, validate_expiry?)
+      :error -> :ok
+    end
+  end
+
+  @doc false
   @spec validate_context(ReqLLM.Context.t(), atom() | String.t(), keyword()) ::
           :ok | {:error, ReqLLM.Error.Invalid.ProviderFileReference.t()}
   def validate_context(context, provider, opts \\ [])
@@ -135,7 +148,7 @@ defmodule ReqLLM.ProviderFileReference do
     messages
     |> Enum.flat_map(fn message -> List.wrap(Map.get(message, :content, [])) end)
     |> Enum.reduce_while(:ok, fn part, :ok ->
-      case validate_part(part, provider, now) do
+      case validate(part, provider, now: now) do
         :ok -> {:cont, :ok}
         {:error, error} -> {:halt, {:error, error}}
       end
@@ -199,14 +212,7 @@ defmodule ReqLLM.ProviderFileReference do
     end)
   end
 
-  defp validate_part(part, provider, now) do
-    case fetch(part) do
-      {:ok, reference} -> validate_reference(reference, provider, now)
-      :error -> :ok
-    end
-  end
-
-  defp validate_reference(reference, provider, now) do
+  defp validate_reference(reference, provider, now, validate_expiry?) do
     owner = get_value(reference, "provider")
     expected_provider = normalize_provider!(provider)
 
@@ -221,7 +227,7 @@ defmodule ReqLLM.ProviderFileReference do
            status: get_value(reference, "status")
          )}
 
-      expired?(get_value(reference, "expires_at"), now) ->
+      validate_expiry? and expired?(get_value(reference, "expires_at"), now) ->
         {:error,
          ReqLLM.Error.Invalid.ProviderFileReference.exception(
            reason: :expired,

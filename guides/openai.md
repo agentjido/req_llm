@@ -105,7 +105,69 @@ Responses Lite is an internal Codex backend contract, not a mode of the public O
 ## Attachments
 
 OpenAI Chat Completions API only supports image attachments (JPEG, PNG, GIF, WebP).
-For document support (PDFs, etc.), use Anthropic or Google providers.
+OpenAI Responses models also support image and PDF file inputs. Inline and URL
+attachments continue to work as before.
+
+### Reusable OpenAI files
+
+`ReqLLM.Providers.OpenAI.Files` exposes the OpenAI Files lifecycle without
+adding uploads to the common provider behaviour. Uploading once can avoid
+repeating a large inline payload across Responses calls:
+
+```elixir
+alias ReqLLM.Message.ContentPart
+alias ReqLLM.Providers.OpenAI.Files
+
+{:ok, file} =
+  Files.upload(
+    ContentPart.file(pdf_bytes, "report.pdf", "application/pdf"),
+    purpose: :user_data,
+    expires_after: 86_400
+  )
+
+context =
+  ReqLLM.Context.new([
+    ReqLLM.Context.user([
+      ContentPart.text("Summarize this report."),
+      file
+    ])
+  ])
+
+{:ok, response} = ReqLLM.generate_text("openai:gpt-5", context)
+```
+
+`Files.upload/2` accepts an inline file `ContentPart`, a local path, or an
+explicit `{:binary, data, filename, media_type}` tuple. It returns the same
+owned `ContentPart` shape documented in [Data Structures](data-structures.md),
+including OpenAI ownership, purpose, filename, media type, size, status, and
+expiry when available. Inline inputs also include a locally calculated SHA-256.
+Local paths are streamed into the multipart request instead of being loaded
+into one large binary.
+
+Lifecycle operations remain provider-scoped:
+
+```elixir
+{:ok, current} = Files.retrieve(file)
+{:ok, %Files.Page{files: files, has_more: has_more}} =
+  Files.list(purpose: :user_data, limit: 100)
+
+{:ok, true} = Files.delete(current)
+```
+
+OpenAI retains most uploaded files until they are deleted. Use
+`:expires_after` when supported by the selected purpose, or delete references
+when they are no longer needed. Deletion accepts a known-expired reference so
+cleanup remains possible. The caller remains responsible for retention,
+pagination, and cleanup; ReqLLM does not run background workers or upload
+inputs automatically.
+
+Treat returned references as sensitive. Regular inspection and ReqLLM
+telemetry redact provider IDs, URLs, credentials, and file contents. Use
+`ContentPart.provider_file_reference/1` only when the complete provider record
+is required.
+
+See the [OpenAI Files API reference](https://platform.openai.com/docs/api-reference/files)
+for current purposes, retention rules, and service limits.
 
 ## Dual API Architecture
 

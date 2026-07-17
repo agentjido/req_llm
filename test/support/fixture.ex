@@ -250,6 +250,16 @@ defmodule ReqLLM.Step.Fixture.Backend do
           }
         }
 
+      {key, {%File.Stream{} = stream, opts}} when is_list(opts) ->
+        %{
+          name: to_string(key),
+          file: %{
+            filename: Keyword.get(opts, :filename, Path.basename(stream.path)),
+            content_type: Keyword.get(opts, :content_type),
+            bytes: Keyword.get(opts, :size, File.stat!(stream.path).size)
+          }
+        }
+
       {key, value} ->
         %{name: to_string(key), value: to_string(value)}
     end)

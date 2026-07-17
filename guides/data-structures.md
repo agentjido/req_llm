@@ -191,7 +191,9 @@ encoding, errors, struct value, JSON, and inspection behavior.
 OpenAI and Anthropic encode a matching owned reference through their existing
 file-ID wire format. Google encodes the reference ID as a Gemini `fileData`
 URI. The constructor does not upload data, read local paths, or infer ownership
-from an ID prefix.
+from an ID prefix. OpenAI callers that need an upload lifecycle can use the
+provider-scoped `ReqLLM.Providers.OpenAI.Files` module; upload support is not
+part of the common provider behaviour.
 
 `ContentPart.provider_file_reference/1` returns the complete persisted record.
 Treat it as sensitive because it contains the provider reference ID. Use

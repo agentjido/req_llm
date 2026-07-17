@@ -1,0 +1,48 @@
+{
+  "model_spec": "openai:files",
+  "provider": "openai",
+  "request": {
+    "body": {
+      "canonical_json": [
+        {
+          "file": {
+            "bytes": 13,
+            "content_type": "application/pdf",
+            "filename": "fixture.pdf"
+          },
+          "name": "file"
+        },
+        {
+          "name": "purpose",
+          "value": "user_data"
+        }
+      ]
+    },
+    "headers": {
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "multipart/form-data"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.openai.com/v1/files"
+  },
+  "response": {
+    "body": {
+      "id": "file-fixture-upload",
+      "object": "file",
+      "bytes": 13,
+      "created_at": 1783000000,
+      "filename": "fixture.pdf",
+      "purpose": "user_data",
+      "status": "processed"
+    },
+    "headers": {
+      "content-type": [
+        "application/json"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}
