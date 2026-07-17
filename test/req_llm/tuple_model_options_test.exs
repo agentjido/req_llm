@@ -135,6 +135,24 @@ defmodule ReqLLM.TupleModelOptionsTest do
     assert warning =~ ":stream is controlled by the operation boundary"
   end
 
+  test "total timeout is a valid default for every model operation" do
+    cases = [
+      {:chat, {:openai, "gpt-4-0125-preview", total_timeout: 1_000}},
+      {:object, {:openai, "gpt-4-0125-preview", total_timeout: 1_000}},
+      {:embedding, {:openai, "text-embedding-3-small", total_timeout: 1_000}},
+      {:image, {:openai, "gpt-image-1.5", total_timeout: 1_000}},
+      {:transcription, {:openai, "whisper-1", total_timeout: 1_000}},
+      {:speech, {:openai, "tts-1", total_timeout: 1_000}},
+      {:rerank, {:cohere, "rerank-v3.5", total_timeout: 1_000}},
+      {:ocr, {:google_vertex, "mistral-ocr-2505", total_timeout: 1_000}}
+    ]
+
+    for {operation, model} <- cases do
+      assert ReqLLM.ModelInput.merge_tuple_defaults(model, operation, []) ==
+               [total_timeout: 1_000]
+    end
+  end
+
   test "on_unsupported ignore suppresses tuple-default warnings" do
     assert capture_io(:stderr, fn ->
              assert ReqLLM.ModelInput.merge_tuple_defaults(

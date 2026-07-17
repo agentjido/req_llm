@@ -41,7 +41,8 @@ defmodule ReqLLM.Streaming.Retry do
         callback: callback,
         stream_opts: stream_opts,
         stream_fun: stream_fun,
-        max_retries: max_retries
+        max_retries: max_retries,
+        on_retry: Keyword.get(opts, :on_retry)
       },
       0
     )
@@ -69,20 +70,22 @@ defmodule ReqLLM.Streaming.Retry do
 
     wrapped_callback = fn event, wrapped_acc -> apply_callback(event, wrapped_acc, callback) end
 
+    started_at = System.monotonic_time()
+
     case stream_fun.(request, finch_name, initial_acc, wrapped_callback, stream_opts) do
       {:ok, %{status: status} = state} when is_integer(status) and status >= 400 ->
-        handle_http_failure(params, attempt, :rate_limited, state)
+        handle_http_failure(params, attempt, :rate_limited, state, started_at)
 
       {:ok, %{callback_acc: callback_acc}} ->
         {:ok, callback_acc}
 
       {:error, reason, %{status: status} = state}
       when is_integer(status) and status >= 400 ->
-        handle_http_failure(params, attempt, reason, state)
+        handle_http_failure(params, attempt, reason, state, started_at)
 
       {:error, reason, %{data_received?: false, callback_acc: callback_acc} = state}
       when attempt < max_retries ->
-        maybe_retry(params, attempt, callback_acc, reason, state)
+        maybe_retry(params, attempt, callback_acc, reason, state, started_at)
 
       {:error, reason, %{callback_acc: callback_acc}} ->
         {:error, reason, callback_acc}
@@ -93,20 +96,29 @@ defmodule ReqLLM.Streaming.Retry do
          %{max_retries: max_retries} = params,
          attempt,
          reason,
-         %{status: 429} = state
+         %{status: 429} = state,
+         started_at
        )
        when attempt < max_retries do
-    maybe_retry(params, attempt, state.callback_acc, reason, state)
+    maybe_retry(params, attempt, state.callback_acc, reason, state, started_at)
   end
 
-  defp handle_http_failure(%{callback: callback}, _attempt, _reason, state) do
+  defp handle_http_failure(%{callback: callback}, _attempt, _reason, state, _started_at) do
     deliver_http_failure(state, callback)
   end
 
-  defp maybe_retry(%{max_retries: max_retries} = params, attempt, callback_acc, reason, state) do
+  defp maybe_retry(
+         %{max_retries: max_retries} = params,
+         attempt,
+         callback_acc,
+         reason,
+         state,
+         started_at
+       ) do
     case classify_error(reason, state) do
       {:retry, delay_ms} ->
         log_retry(reason, attempt + 1, max_retries, delay_ms, state.status)
+        emit_retry(params, attempt, max_retries, delay_ms, state.status, started_at)
 
         if delay_ms > 0 do
           Process.sleep(delay_ms)
@@ -117,6 +129,20 @@ defmodule ReqLLM.Streaming.Retry do
       :no_retry ->
         {:error, reason, callback_acc}
     end
+  end
+
+  defp emit_retry(%{on_retry: nil}, _attempt, _max_retries, _delay, _status, _started_at),
+    do: :ok
+
+  defp emit_retry(%{on_retry: on_retry}, attempt, max_retries, delay, status, started_at) do
+    on_retry.(%{
+      attempt: attempt + 1,
+      next_attempt: attempt + 2,
+      max_retries: max_retries,
+      delay: delay,
+      duration: System.monotonic_time() - started_at,
+      http_status: status
+    })
   end
 
   defp apply_callback({:status, status}, wrapped_acc, _callback)

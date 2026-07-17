@@ -162,6 +162,7 @@ defmodule ReqLLM.Streaming.FinchClient do
       finch_request
       |> Fixtures.canonical_json_from_finch_request()
       |> stream_options(opts)
+      |> Keyword.put(:on_retry, fn retry -> StreamServer.retry_event(stream_server_pid, retry) end)
 
     task_pid =
       Task.Supervisor.async(ReqLLM.TaskSupervisor, fn ->

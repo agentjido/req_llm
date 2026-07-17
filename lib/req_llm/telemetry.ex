@@ -14,6 +14,7 @@ defmodule ReqLLM.Telemetry do
   | Event                                | Measurements                   |
   |--------------------------------------|--------------------------------|
   | `[:req_llm, :request, :start]`       | `system_time`                  |
+  | `[:req_llm, :request, :retry]`       | `duration`, `system_time`      |
   | `[:req_llm, :request, :stop]`        | `duration`, `system_time`      |
   | `[:req_llm, :request, :exception]`   | `duration`, `system_time`      |
   | `[:req_llm, :reasoning, :start]`     | `system_time`                  |
@@ -73,6 +74,7 @@ defmodule ReqLLM.Telemetry do
   @request_context_key :req_llm_telemetry
   @token_usage_event [:req_llm, :token_usage]
   @request_start_event [:req_llm, :request, :start]
+  @request_retry_event [:req_llm, :request, :retry]
   @request_stop_event [:req_llm, :request, :stop]
   @request_exception_event [:req_llm, :request, :exception]
   @reasoning_start_event [:req_llm, :reasoning, :start]
@@ -249,6 +251,33 @@ defmodule ReqLLM.Telemetry do
     else
       context
     end
+  end
+
+  @doc false
+  @spec retry_request(context() | nil, map()) :: :ok
+  def retry_request(nil, _retry), do: :ok
+
+  def retry_request(context, retry) do
+    duration = Map.get(retry, :duration, 0)
+
+    metadata =
+      context
+      |> request_metadata(%{
+        http_status: Map.get(retry, :http_status),
+        finish_reason: nil,
+        usage: nil,
+        response_summary: response_summary(context.response_summary_state, context.operation),
+        response_payload: nil
+      })
+      |> Map.put(:retry, Map.delete(retry, :duration))
+
+    :telemetry.execute(
+      @request_retry_event,
+      %{duration: duration, system_time: System.system_time()},
+      metadata
+    )
+
+    :ok
   end
 
   @doc """

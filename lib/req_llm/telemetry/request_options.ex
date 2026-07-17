@@ -36,7 +36,11 @@ defmodule ReqLLM.Telemetry.RequestOptions do
       stream?: mode == :stream,
       encoding_formats: normalize_string_list(opts[:encoding_format]),
       conversation_id: telemetry_conversation_id(opts),
-      service_tier: opts[:service_tier] || provider_opts[:service_tier]
+      service_tier: opts[:service_tier] || provider_opts[:service_tier],
+      receive_timeout: opts[:receive_timeout],
+      total_timeout: opts[:total_timeout],
+      stream_idle_timeout: opts[:stream_idle_timeout],
+      max_retries: opts[:max_retries]
     }
     |> Enum.reject(fn {_key, value} -> is_nil(value) end)
     |> Map.new()

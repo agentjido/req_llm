@@ -63,6 +63,10 @@ defmodule ReqLLM.Embedding do
                    doc: "ReqLLM telemetry options (for example, [payloads: :raw])",
                    default: []
                  ],
+                 total_timeout: [
+                   type: {:or, [:pos_integer, {:in, [:infinity]}]},
+                   doc: "Optional total model-call timeout in milliseconds, including retries"
+                 ],
                  fixture: [
                    type: {:or, [:string, {:tuple, [:atom, :string]}]},
                    doc: "HTTP fixture for testing (provider inferred from model if string)"
@@ -172,6 +176,7 @@ defmodule ReqLLM.Embedding do
     * `:user` - User identifier for tracking
     * `:provider_options` - Provider-specific options
     * `:return_usage` - When `true`, returns `%{embedding: vectors, usage: map}` (default: `false`)
+    * `:total_timeout` - Optional whole-call deadline in milliseconds, including retries
 
   ## Examples
 
@@ -206,6 +211,7 @@ defmodule ReqLLM.Embedding do
   def embed(model_spec, text, opts) when is_binary(text) do
     opts = ReqLLM.ModelInput.merge_tuple_defaults(model_spec, :embedding, opts)
     {return_usage, request_opts} = Keyword.pop(opts, :return_usage, false)
+    deadline = ReqLLM.TimeoutBudget.deadline(request_opts)
 
     with {:ok, model} <- validate_model(model_spec),
          :ok <- validate_input(text),
@@ -220,7 +226,7 @@ defmodule ReqLLM.Embedding do
          {:ok, request} <-
            provider_module.prepare_request(:embedding, model, text, provider_opts),
          {:ok, %Req.Response{status: status} = response} when status in 200..299 <-
-           Req.request(request),
+           ReqLLM.TimeoutBudget.request(request, deadline),
          {:ok, embedding} <- extract_single_embedding(response.body) do
       if return_usage do
         {:ok, %{embedding: embedding, usage: extract_usage(response)}}
@@ -244,6 +250,7 @@ defmodule ReqLLM.Embedding do
   def embed(model_spec, texts, opts) when is_list(texts) do
     opts = ReqLLM.ModelInput.merge_tuple_defaults(model_spec, :embedding, opts)
     {return_usage, request_opts} = Keyword.pop(opts, :return_usage, false)
+    deadline = ReqLLM.TimeoutBudget.deadline(request_opts)
 
     with {:ok, model} <- validate_model(model_spec),
          :ok <- validate_input(texts),
@@ -258,7 +265,7 @@ defmodule ReqLLM.Embedding do
          {:ok, request} <-
            provider_module.prepare_request(:embedding, model, texts, provider_opts),
          {:ok, %Req.Response{status: status} = response} when status in 200..299 <-
-           Req.request(request),
+           ReqLLM.TimeoutBudget.request(request, deadline),
          {:ok, embeddings} <- extract_multiple_embeddings(response.body) do
       if return_usage do
         {:ok, %{embedding: embeddings, usage: extract_usage(response)}}

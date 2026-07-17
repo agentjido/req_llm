@@ -57,6 +57,10 @@ defmodule ReqLLM.OCR do
                    doc: "Req-specific options (keyword list or map)",
                    default: []
                  ],
+                 total_timeout: [
+                   type: {:or, [:pos_integer, {:in, [:infinity]}]},
+                   doc: "Optional total model-call timeout in milliseconds, including retries"
+                 ],
                  max_retries: [
                    type: :non_neg_integer,
                    default: 3,
@@ -108,6 +112,7 @@ defmodule ReqLLM.OCR do
       - `:document_type` — MIME type hint (default `"application/pdf"`)
       - `:pages` — zero-based page indexes to process
       - `:provider_options` — provider-specific options (e.g., `region`, `access_token`)
+      - `:total_timeout` — optional whole-call deadline in milliseconds, including retries
 
   ## Examples
 
@@ -120,6 +125,7 @@ defmodule ReqLLM.OCR do
           {:ok, ocr_result()} | {:error, term()}
   def ocr(model_spec, document_binary, opts \\ []) do
     opts = ReqLLM.ModelInput.merge_tuple_defaults(model_spec, :ocr, opts)
+    deadline = ReqLLM.TimeoutBudget.deadline(opts)
 
     with {:ok, model} <- validate_model(model_spec),
          {:ok, provider_module} <- ReqLLM.provider(model.provider),
@@ -133,7 +139,7 @@ defmodule ReqLLM.OCR do
          {:ok, request} <-
            provider_module.prepare_request(:ocr, model, document_binary, opts),
          {:ok, %Req.Response{status: status, body: response}} when status in 200..299 <-
-           Req.request(request) do
+           ReqLLM.TimeoutBudget.request(request, deadline) do
       {:ok, normalize_response(response)}
     else
       {:ok, %Req.Response{status: status, body: body}} ->

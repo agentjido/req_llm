@@ -97,6 +97,45 @@ defmodule ReqLLM.Provider.OptionsTest do
       assert processed[:max_tokens] == 1000
     end
 
+    test "accepts additive model-call timeout controls" do
+      model = %LLMDB.Model{provider: :mock, id: "test-model"}
+
+      assert {:ok, processed} =
+               Options.process(MockProvider, :chat, model,
+                 receive_timeout: 5_000,
+                 total_timeout: 60_000,
+                 stream_idle_timeout: 10_000
+               )
+
+      assert processed[:receive_timeout] == 5_000
+      assert processed[:total_timeout] == 60_000
+      assert processed[:stream_idle_timeout] == 10_000
+
+      assert {:ok, unlimited} =
+               Options.process(MockProvider, :chat, model,
+                 total_timeout: :infinity,
+                 stream_idle_timeout: :infinity
+               )
+
+      assert unlimited[:total_timeout] == :infinity
+      assert unlimited[:stream_idle_timeout] == :infinity
+    end
+
+    test "rejects invalid model-call timeout controls" do
+      model = %LLMDB.Model{provider: :mock, id: "test-model"}
+
+      for {key, value} <- [
+            {:receive_timeout, 0},
+            {:total_timeout, 0},
+            {:total_timeout, -1},
+            {:stream_idle_timeout, 0},
+            {:stream_idle_timeout, "slow"}
+          ] do
+        assert {:error, %ReqLLM.Error.Unknown.Unknown{}} =
+                 Options.process(MockProvider, :chat, model, [{key, value}])
+      end
+    end
+
     test "returns error for invalid generation options" do
       model = %LLMDB.Model{provider: :mock, id: "test-model"}
       opts = [temperature: "invalid"]

@@ -68,6 +68,10 @@ defmodule ReqLLM.Transcription do
                    doc: "Timeout for receiving HTTP responses in milliseconds",
                    default: 120_000
                  ],
+                 total_timeout: [
+                   type: {:or, [:pos_integer, {:in, [:infinity]}]},
+                   doc: "Optional total model-call timeout in milliseconds, including retries"
+                 ],
                  max_retries: [
                    type: :non_neg_integer,
                    default: 3,
@@ -111,6 +115,7 @@ defmodule ReqLLM.Transcription do
     * `:language` - Language hint in ISO-639-1 format (e.g., "en")
     * `:provider_options` - Provider-specific options
     * `:receive_timeout` - HTTP timeout in milliseconds (default: 120_000)
+    * `:total_timeout` - Optional whole-call deadline in milliseconds, including retries
 
   ## Examples
 
@@ -133,6 +138,7 @@ defmodule ReqLLM.Transcription do
         ) :: {:ok, Result.t()} | {:error, term()}
   def transcribe(model_spec, audio, opts \\ []) do
     opts = ReqLLM.ModelInput.merge_tuple_defaults(model_spec, :transcription, opts)
+    deadline = ReqLLM.TimeoutBudget.deadline(opts)
 
     with {:ok, audio_data, media_type} <- resolve_audio(audio),
          {:ok, model} <- ReqLLM.model(model_spec),
@@ -149,7 +155,7 @@ defmodule ReqLLM.Transcription do
              {:media_type, media_type} | opts
            ]),
          {:ok, %Req.Response{status: status, body: body}} when status in 200..299 <-
-           Req.request(request) do
+           ReqLLM.TimeoutBudget.request(request, deadline) do
       parse_transcription_response(body)
     else
       {:ok, %Req.Response{status: status, body: body}} ->

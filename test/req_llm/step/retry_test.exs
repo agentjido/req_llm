@@ -47,6 +47,92 @@ defmodule ReqLLM.Step.RetryTest do
         refute_receive :attempt, 20
       end
     end
+
+    test "emits completed attempt timing before a retry" do
+      test_pid = self()
+      handler_id = {__MODULE__, self(), make_ref()}
+      conversation_id = "retry-timing-#{System.unique_integer([:positive])}"
+      {:ok, counter} = Agent.start_link(fn -> 0 end)
+
+      :ok =
+        :telemetry.attach(
+          handler_id,
+          [:req_llm, :request, :retry],
+          fn event, measurements, metadata, pid ->
+            if get_in(metadata, [:request_options, :conversation_id]) == conversation_id do
+              send(pid, {:retry_telemetry, event, measurements, metadata})
+            end
+          end,
+          test_pid
+        )
+
+      on_exit(fn -> :telemetry.detach(handler_id) end)
+
+      request =
+        Req.new(
+          url: "https://example.invalid",
+          adapter: fn request ->
+            attempt = Agent.get_and_update(counter, fn value -> {value, value + 1} end)
+
+            if attempt == 0 do
+              {request, %Req.TransportError{reason: :closed}}
+            else
+              {request, %Req.Response{status: 200, body: "ok"}}
+            end
+          end
+        )
+        |> Retry.attach(max_retries: 1)
+        |> ReqLLM.Step.Telemetry.attach(
+          %LLMDB.Model{provider: :test, id: "retry-model"},
+          max_retries: 1,
+          telemetry: [conversation_id: conversation_id]
+        )
+
+      assert {:ok, %Req.Response{status: 200}} = Req.request(request)
+
+      assert_receive {:retry_telemetry, [:req_llm, :request, :retry], measurements, metadata}
+      assert measurements.duration >= 0
+      assert metadata.retry.attempt == 1
+      assert metadata.retry.next_attempt == 2
+      assert metadata.retry.max_retries == 1
+      assert metadata.retry.delay == 0
+      assert metadata.retry.http_status == nil
+    end
+
+    test "does not emit retry timing after the retry budget is exhausted" do
+      test_pid = self()
+      handler_id = {__MODULE__, self(), make_ref()}
+      conversation_id = "retry-exhausted-#{System.unique_integer([:positive])}"
+
+      :ok =
+        :telemetry.attach(
+          handler_id,
+          [:req_llm, :request, :retry],
+          fn event, measurements, metadata, pid ->
+            if get_in(metadata, [:request_options, :conversation_id]) == conversation_id do
+              send(pid, {:retry_telemetry, event, measurements, metadata})
+            end
+          end,
+          test_pid
+        )
+
+      on_exit(fn -> :telemetry.detach(handler_id) end)
+
+      request =
+        Req.new(
+          url: "https://example.invalid",
+          adapter: fn request -> {request, %Req.TransportError{reason: :closed}} end
+        )
+        |> Retry.attach(max_retries: 0)
+        |> ReqLLM.Step.Telemetry.attach(
+          %LLMDB.Model{provider: :test, id: "retry-model"},
+          max_retries: 0,
+          telemetry: [conversation_id: conversation_id]
+        )
+
+      assert {:error, %Req.TransportError{reason: :closed}} = Req.request(request)
+      refute_receive {:retry_telemetry, [:req_llm, :request, :retry], _, _}
+    end
   end
 
   describe "should_retry?/2" do

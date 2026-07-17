@@ -919,6 +919,9 @@ defmodule ReqLLM do
     * `:tools` - List of tool definitions
     * `:tool_choice` - Tool choice strategy
     * `:system_prompt` - System prompt to prepend
+    * `:receive_timeout` - Provider-transport inactivity timeout in milliseconds
+    * `:total_timeout` - Optional whole-call deadline in milliseconds, including retries
+    * `:stream_idle_timeout` - Optional semantic-progress timeout for streaming calls
     * `:provider_options` - Provider-specific options
 
   ## Examples
@@ -1010,6 +1013,12 @@ defmodule ReqLLM do
   `:stream_pool_strategy`, and checkout behavior with `:stream_pool_timeout`
   config or per-request `pool_timeout: ...`.
 
+  Use `total_timeout: ...` for a whole-call deadline that includes retries and
+  `stream_idle_timeout: ...` to fail a stream that stops making semantic
+  progress. Existing `receive_timeout` behavior remains the provider-transport
+  inactivity control. See the configuration guide for precedence and terminal
+  error semantics.
+
   """
   defdelegate stream_text(model_spec, messages, opts \\ []), to: Generation
 
@@ -1070,6 +1079,9 @@ defmodule ReqLLM do
 
     * `:temperature` - Control randomness in responses (0.0 to 2.0)
     * `:max_tokens` - Limit the length of the response
+    * `:receive_timeout` - Provider-transport inactivity timeout in milliseconds
+    * `:total_timeout` - Optional whole-call deadline in milliseconds, including retries
+    * `:stream_idle_timeout` - Optional semantic-progress timeout for streaming calls
     * `:provider_options` - Provider-specific options
 
   ## Examples

@@ -75,6 +75,10 @@ defmodule ReqLLM.Speech do
                    doc: "Timeout for receiving HTTP responses in milliseconds",
                    default: 120_000
                  ],
+                 total_timeout: [
+                   type: {:or, [:pos_integer, {:in, [:infinity]}]},
+                   doc: "Optional total model-call timeout in milliseconds, including retries"
+                 ],
                  max_retries: [
                    type: :non_neg_integer,
                    default: 3,
@@ -118,6 +122,7 @@ defmodule ReqLLM.Speech do
     * `:language` - ISO-639-1 language code
     * `:provider_options` - Provider-specific options (e.g., `[instructions: "Speak calmly"]`)
     * `:receive_timeout` - HTTP timeout in milliseconds (default: 120_000)
+    * `:total_timeout` - Optional whole-call deadline in milliseconds, including retries
 
   ## Examples
 
@@ -137,6 +142,7 @@ defmodule ReqLLM.Speech do
         ) :: {:ok, Result.t()} | {:error, term()}
   def speak(model_spec, text, opts \\ []) do
     opts = ReqLLM.ModelInput.merge_tuple_defaults(model_spec, :speech, opts)
+    deadline = ReqLLM.TimeoutBudget.deadline(opts)
 
     with {:ok, model} <- ReqLLM.model(model_spec),
          {:ok, provider_module} <- ReqLLM.provider(model.provider),
@@ -150,7 +156,7 @@ defmodule ReqLLM.Speech do
          {:ok, request} <-
            provider_module.prepare_request(:speech, model, text, opts),
          {:ok, %Req.Response{status: status, body: body}} when status in 200..299 <-
-           Req.request(request) do
+           ReqLLM.TimeoutBudget.request(request, deadline) do
       output_format = Keyword.get(opts, :output_format, :mp3)
       format_string = to_string(output_format)
 

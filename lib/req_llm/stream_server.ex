@@ -92,6 +92,7 @@ defmodule ReqLLM.StreamServer do
     :telemetry,
     :pending_http_exit,
     pending_http_events: [],
+    pending_retry_events: [],
     telemetry_pending?: false,
     queue: :queue.new(),
     status: :init,
@@ -103,6 +104,13 @@ defmodule ReqLLM.StreamServer do
     completion_cleanup_after: 30_000,
     completion_cleanup_timer: nil,
     completion_cleanup_token: nil,
+    total_timeout: :infinity,
+    total_timeout_deadline: :infinity,
+    total_timeout_timer: nil,
+    total_timeout_token: nil,
+    stream_idle_timeout: nil,
+    stream_idle_timeout_timer: nil,
+    stream_idle_timeout_token: nil,
     high_watermark: 500,
     headers: [],
     http_status: nil,
@@ -169,6 +177,10 @@ defmodule ReqLLM.StreamServer do
           :completion_cleanup_after,
           Application.get_env(:req_llm, :stream_completion_cleanup_after, 30_000)
         ),
+      total_timeout: Keyword.get(opts, :total_timeout, :infinity),
+      total_timeout_deadline:
+        Keyword.get(opts, :total_timeout_deadline, Keyword.get(opts, :total_timeout, :infinity)),
+      stream_idle_timeout: Keyword.get(opts, :stream_idle_timeout),
       high_watermark: high_watermark
     }
 
@@ -357,6 +369,12 @@ defmodule ReqLLM.StreamServer do
   @spec set_telemetry_context(server(), map()) :: :ok
   def set_telemetry_context(server, telemetry_context) do
     GenServer.call(server, {:set_telemetry_context, telemetry_context})
+  end
+
+  @doc false
+  @spec retry_event(server(), map()) :: :ok
+  def retry_event(server, retry) do
+    GenServer.cast(server, {:retry_event, retry})
   end
 
   @doc """
@@ -552,6 +570,8 @@ defmodule ReqLLM.StreamServer do
     new_state =
       state
       |> Map.put(:telemetry, telemetry_context)
+      |> start_timeout_budgets()
+      |> drain_pending_retry_events()
       |> drain_pending_http_events()
       |> resume_http_event_callers()
 
@@ -575,6 +595,16 @@ defmodule ReqLLM.StreamServer do
   end
 
   @impl GenServer
+  def handle_cast({:retry_event, retry}, %{telemetry: nil} = state) do
+    {:noreply, %{state | pending_retry_events: [retry | state.pending_retry_events]}}
+  end
+
+  def handle_cast({:retry_event, retry}, state) do
+    ReqLLM.Telemetry.retry_request(state.telemetry, retry)
+    {:noreply, state}
+  end
+
+  @impl GenServer
   def handle_info({ref, _result}, state) when is_reference(ref) do
     {:noreply, state}
   end
@@ -589,6 +619,22 @@ defmodule ReqLLM.StreamServer do
         GenServer.reply(from, {:error, :timeout})
         {:noreply, new_state}
     end
+  end
+
+  @impl GenServer
+  def handle_info({:timeout_budget, :total, token}, %{total_timeout_token: token} = state) do
+    handle_timeout_budget(state, :total, state.total_timeout)
+  end
+
+  def handle_info(
+        {:timeout_budget, :stream_idle, token},
+        %{stream_idle_timeout_token: token} = state
+      ) do
+    handle_timeout_budget(state, :stream_idle, state.stream_idle_timeout)
+  end
+
+  def handle_info({:timeout_budget, _kind, _token}, state) do
+    {:noreply, state}
   end
 
   @impl GenServer
@@ -934,6 +980,7 @@ defmodule ReqLLM.StreamServer do
           provider_state: new_provider_state
       })
       |> reset_metadata_waiter_timeouts(stream_chunks)
+      |> reset_stream_idle_timeout(stream_chunks)
 
     terminated? =
       Enum.any?(events, &termination_event?/1) or
@@ -1206,6 +1253,7 @@ defmodule ReqLLM.StreamServer do
     |> Map.put(:status, :done)
     |> Map.put(:metadata, metadata)
     |> maybe_emit_stream_stop(metadata[:finish_reason] || :unknown)
+    |> cancel_timeout_budgets()
   end
 
   defp finalize_cancelled_stream(%{status: :done} = state), do: state
@@ -1224,6 +1272,7 @@ defmodule ReqLLM.StreamServer do
     |> Map.put(:queue, :queue.new())
     |> Map.put(:metadata, metadata)
     |> maybe_emit_stream_stop(:cancelled)
+    |> cancel_timeout_budgets()
   end
 
   defp flush_provider_state(state) do
@@ -1359,6 +1408,7 @@ defmodule ReqLLM.StreamServer do
     |> Map.put(:status, {:error, reason})
     |> Map.put(:metadata, metadata)
     |> maybe_emit_stream_exception(reason)
+    |> cancel_timeout_budgets()
   end
 
   defp reply_with_metadata(state) do
@@ -1494,7 +1544,7 @@ defmodule ReqLLM.StreamServer do
   end
 
   defp cleanup_resources(state) do
-    state = release_http_event_callers(state)
+    state = state |> release_http_event_callers() |> cancel_timeout_budgets()
 
     # Kill HTTP task if running
     if state.http_task && Process.alive?(state.http_task) do
@@ -1502,6 +1552,90 @@ defmodule ReqLLM.StreamServer do
     end
 
     cancel_completion_cleanup(state)
+  end
+
+  defp handle_timeout_budget(state, kind, timeout) do
+    error = ReqLLM.TimeoutBudget.error(kind, timeout)
+
+    new_state =
+      state
+      |> finalize_failed_stream(error)
+      |> reply_to_waiting_callers()
+      |> cleanup_resources()
+
+    case finalize_lifecycle(new_state) do
+      {:stop, final_state} -> {:stop, :normal, final_state}
+      {:continue, final_state} -> {:noreply, final_state}
+    end
+  end
+
+  defp drain_pending_retry_events(state) do
+    state.pending_retry_events
+    |> Enum.reverse()
+    |> Enum.each(&ReqLLM.Telemetry.retry_request(state.telemetry, &1))
+
+    %{state | pending_retry_events: []}
+  end
+
+  defp start_timeout_budgets(state) do
+    state
+    |> cancel_timeout_budgets()
+    |> start_total_timeout()
+    |> start_stream_idle_timeout()
+  end
+
+  defp start_total_timeout(%{total_timeout: timeout} = state) when is_integer(timeout) do
+    token = make_ref()
+    remaining = total_timeout_remaining(state.total_timeout_deadline, timeout)
+    timer = Process.send_after(self(), {:timeout_budget, :total, token}, remaining)
+    %{state | total_timeout_timer: timer, total_timeout_token: token}
+  end
+
+  defp start_total_timeout(state), do: state
+
+  defp total_timeout_remaining(%{expires_at: _expires_at} = deadline, _timeout) do
+    ReqLLM.TimeoutBudget.remaining(deadline)
+  end
+
+  defp total_timeout_remaining(_deadline, timeout), do: timeout
+
+  defp start_stream_idle_timeout(%{stream_idle_timeout: timeout} = state)
+       when is_integer(timeout) do
+    token = make_ref()
+    timer = Process.send_after(self(), {:timeout_budget, :stream_idle, token}, timeout)
+    %{state | stream_idle_timeout_timer: timer, stream_idle_timeout_token: token}
+  end
+
+  defp start_stream_idle_timeout(state), do: state
+
+  defp reset_stream_idle_timeout(state, chunks) do
+    if Enum.any?(chunks, &semantic_progress_chunk?/1) do
+      state
+      |> cancel_stream_idle_timeout()
+      |> start_stream_idle_timeout()
+    else
+      state
+    end
+  end
+
+  defp cancel_timeout_budgets(state) do
+    state
+    |> cancel_total_timeout()
+    |> cancel_stream_idle_timeout()
+  end
+
+  defp cancel_total_timeout(%{total_timeout_timer: nil} = state), do: state
+
+  defp cancel_total_timeout(%{total_timeout_timer: timer} = state) do
+    Process.cancel_timer(timer, async: true, info: false)
+    %{state | total_timeout_timer: nil, total_timeout_token: nil}
+  end
+
+  defp cancel_stream_idle_timeout(%{stream_idle_timeout_timer: nil} = state), do: state
+
+  defp cancel_stream_idle_timeout(%{stream_idle_timeout_timer: timer} = state) do
+    Process.cancel_timer(timer, async: true, info: false)
+    %{state | stream_idle_timeout_timer: nil, stream_idle_timeout_token: nil}
   end
 
   defp ready_to_stop?(state) do

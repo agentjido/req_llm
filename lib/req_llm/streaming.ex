@@ -67,7 +67,9 @@ defmodule ReqLLM.Streaming do
 
   ## Options
 
-    * `:timeout` - HTTP request timeout in milliseconds (default: 30_000)
+    * `:receive_timeout` - Provider transport inactivity timeout in milliseconds
+    * `:total_timeout` - Optional total model-call timeout, including retries
+    * `:stream_idle_timeout` - Optional timeout between semantic stream updates
     * `:metadata_timeout` - Maximum metadata inactivity in milliseconds, or `:infinity`
     * `:fixture_path` - Path for test fixture capture (testing only)
     * `:finch_name` - Finch pool name (default: ReqLLM.Finch)
@@ -87,7 +89,7 @@ defmodule ReqLLM.Streaming do
         provider_mod,
         model,
         context,
-        timeout: 60_000,
+        total_timeout: 60_000,
         fixture_path: "/tmp/test_fixture.json"
       )
 
@@ -106,8 +108,20 @@ defmodule ReqLLM.Streaming do
           {:ok, StreamResponse.t()} | {:error, term()}
   def start_stream(provider_mod, model, context, opts \\ []) do
     transport = stream_transport(provider_mod, model, opts)
+    total_timeout = ReqLLM.TimeoutBudget.total_timeout(opts)
+    total_timeout_deadline = ReqLLM.TimeoutBudget.deadline(opts)
+    stream_idle_timeout = ReqLLM.TimeoutBudget.stream_idle_timeout(opts)
 
-    with {:ok, server_pid} <- start_stream_server(provider_mod, model, transport, opts),
+    with {:ok, server_pid} <-
+           start_stream_server(
+             provider_mod,
+             model,
+             transport,
+             opts,
+             total_timeout,
+             total_timeout_deadline,
+             stream_idle_timeout
+           ),
          {:ok, _http_task_pid, http_context, canonical_json} <-
            start_transport_streaming(transport, provider_mod, model, context, opts, server_pid),
          :ok <- set_fixture_context_if_needed(server_pid, http_context, canonical_json) do
@@ -139,9 +153,10 @@ defmodule ReqLLM.Streaming do
         )
 
       receive_timeout = Keyword.get(opts, :receive_timeout, default_timeout)
+      next_timeout = stream_next_timeout(stream_idle_timeout, receive_timeout)
       metadata_handle = start_metadata_handle(server_pid, opts)
       cancel_fn = fn -> cancel_stream(server_pid, metadata_handle) end
-      stream = create_lazy_stream(server_pid, receive_timeout, cancel_fn)
+      stream = create_lazy_stream(server_pid, next_timeout, cancel_fn)
 
       # Build StreamResponse
       stream_response = %StreamResponse{
@@ -161,12 +176,23 @@ defmodule ReqLLM.Streaming do
   end
 
   # Start StreamServer with provider configuration
-  defp start_stream_server(provider_mod, model, transport, opts) do
+  defp start_stream_server(
+         provider_mod,
+         model,
+         transport,
+         opts,
+         total_timeout,
+         total_timeout_deadline,
+         stream_idle_timeout
+       ) do
     server_opts = [
       provider_mod: provider_mod,
       model: model,
       protocol_parser: protocol_parser_for_transport(transport),
       fixture_path: maybe_capture_fixture(model, opts),
+      total_timeout: total_timeout,
+      total_timeout_deadline: total_timeout_deadline,
+      stream_idle_timeout: configured_stream_idle_timeout(stream_idle_timeout),
       completion_cleanup_after:
         Keyword.get(
           opts,
@@ -253,6 +279,12 @@ defmodule ReqLLM.Streaming do
       :http
     end
   end
+
+  defp configured_stream_idle_timeout({:configured, timeout}), do: timeout
+  defp configured_stream_idle_timeout(:legacy), do: nil
+
+  defp stream_next_timeout({:configured, _timeout}, _receive_timeout), do: :infinity
+  defp stream_next_timeout(:legacy, receive_timeout), do: receive_timeout
 
   defp telemetry_transport(:websocket), do: :websocket
   defp telemetry_transport(_transport), do: :finch

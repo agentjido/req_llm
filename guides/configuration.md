@@ -11,6 +11,8 @@ config :req_llm,
   receive_timeout: 120_000,          # Default response timeout
   stream_receive_timeout: 120_000,   # Streaming chunk timeout
   stream_pool_timeout: 120_000,      # Streaming connection checkout timeout
+  # total_timeout: 180_000,          # Optional whole-call deadline
+  # stream_idle_timeout: 60_000,     # Optional semantic-progress deadline
   stream_pool_protocols: [:http1],   # Default stream pool protocols
   stream_pool_size: 1,               # HTTP/1 connections per stream pool worker
   stream_pool_count: 8,              # Stream pool workers per origin
@@ -121,11 +123,32 @@ uses the legacy flat shape.
 
 ## Timeout Configuration
 
-ReqLLM uses multiple timeout settings to handle different scenarios:
+ReqLLM separates whole-call, transport, semantic-progress, pool-checkout, and
+metadata-wait budgets. The earliest applicable timeout wins.
+
+### `total_timeout` (default: `:infinity`)
+
+An opt-in deadline for one ReqLLM model call. It includes provider requests,
+retry attempts and retry delays, sequential rerank batches, and streamed
+responses. A finite total timeout prevents internal work from extending a call
+past the caller's budget.
+
+```elixir
+config :req_llm, total_timeout: 180_000
+
+ReqLLM.generate_text(model, messages, total_timeout: 60_000)
+ReqLLM.stream_text(model, messages, total_timeout: 120_000)
+```
+
+Set `total_timeout: :infinity` to disable the total deadline. Omitting the
+option preserves ReqLLM 1.x's unlimited total-call behavior.
 
 ### `receive_timeout` (default: 30,000ms)
 
-The standard HTTP response timeout for non-streaming requests. Increase this for slow models or large responses.
+The existing provider-transport inactivity timeout. For buffered requests it
+limits how long the HTTP client waits to receive the response. For Finch
+streaming it applies between raw transport chunks. Transport keepalive traffic
+therefore counts as activity for this timeout.
 
 ```elixir
 config :req_llm, receive_timeout: 60_000
@@ -137,13 +160,36 @@ Per-request override:
 ReqLLM.generate_text("openai:gpt-4o", "Hello", receive_timeout: 60_000)
 ```
 
+`receive_timeout` is not a total-call deadline and is unchanged by the additive
+timeout options.
+
 ### `stream_receive_timeout` (default: inherits from `receive_timeout`)
 
-Timeout between streaming chunks. If no data arrives within this window, the stream fails.
+The global default for streaming `receive_timeout`. If no raw transport chunk
+arrives within this window, the transport fails.
 
 ```elixir
 config :req_llm, stream_receive_timeout: 120_000
 ```
+
+### `stream_idle_timeout` (default: not configured)
+
+An opt-in timeout between semantic stream updates. Text, reasoning, tool calls,
+usage, and meaningful provider metadata reset it; transport keepalives do not.
+Expiry terminates the transport, wakes waiting consumers, emits request
+exception telemetry, and materializes final metadata with
+`finish_reason: :error` and a `%ReqLLM.Error.API.Timeout{kind: :stream_idle}`.
+
+```elixir
+config :req_llm, stream_idle_timeout: 60_000
+
+ReqLLM.stream_text(model, messages, stream_idle_timeout: 30_000)
+```
+
+Omitting this option retains the existing ReqLLM 1.x stream-consumer timeout
+behavior based on `receive_timeout`. Explicit `stream_idle_timeout: :infinity`
+disables the semantic-progress timer while leaving the transport timeout in
+place.
 
 ### `stream_pool_timeout` (when unset: inherits from `stream_receive_timeout`)
 
@@ -220,7 +266,12 @@ config :req_llm, thinking_timeout: 600_000  # 10 minutes
 
 ### `metadata_timeout` (default: 300,000ms)
 
-Maximum time without semantic stream progress while collecting metadata. Content, reasoning, tool, and usage events restart a finite timeout, so active long-running streams are not failed based on total elapsed time. Set it to `:infinity` to disable the inactivity timeout.
+Maximum time the concurrent metadata collector waits without semantic stream
+progress. Content, reasoning, tool, and usage events restart a finite wait, so
+active long-running streams are not abandoned based on total elapsed time. This
+controls the metadata accessor; it does not terminate the provider stream. Use
+`stream_idle_timeout` when inactivity should fail and clean up the model call.
+Set it to `:infinity` to disable the metadata wait timeout.
 
 ```elixir
 config :req_llm, metadata_timeout: 120_000
@@ -233,6 +284,21 @@ ReqLLM.stream_text("anthropic:claude-haiku-4-5", "Hello", metadata_timeout: 60_0
 
 ReqLLM.stream_text("anthropic:claude-haiku-4-5", "Hello", metadata_timeout: :infinity)
 ```
+
+### Timeout, cancellation, and retry results
+
+Finite `total_timeout` and `stream_idle_timeout` values produce a structured
+`ReqLLM.Error.API.Timeout` whose `kind` identifies the expired budget. Buffered
+calls return it in `{:error, error}`. Direct stream enumeration preserves the
+existing `ReqLLM.Error.API.Stream` wrapper and places the timeout in `cause`;
+`ReqLLM.StreamResponse.events/1` emits a terminal error event, and materialized
+metadata retains the timeout under `:error` with `finish_reason: :error`.
+
+Caller cancellation remains distinct: it ends successfully with
+`finish_reason: :cancelled`, not a timeout exception. Completed retry attempt
+durations and scheduled delays are available through
+`[:req_llm, :request, :retry]` telemetry. Pool checkout is still governed by
+`pool_timeout`; the total budget can end the call sooner when both are finite.
 
 ### `image_receive_timeout` (default: 120,000ms)
 

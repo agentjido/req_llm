@@ -37,6 +37,7 @@ defmodule ReqLLM.Streaming.RetryTest do
 
   test "retries transient transport errors before any data is received" do
     {:ok, counter} = Agent.start_link(fn -> 0 end)
+    test_pid = self()
 
     stream_fun = fn _request, _finch_name, acc, callback, _opts ->
       attempt = Agent.get_and_update(counter, fn current -> {current + 1, current + 1} end)
@@ -62,7 +63,11 @@ defmodule ReqLLM.Streaming.RetryTest do
                ReqLLM.Finch,
                [],
                callback,
-               [max_retries: 1, receive_timeout: 1_000],
+               [
+                 max_retries: 1,
+                 receive_timeout: 1_000,
+                 on_retry: fn retry -> send(test_pid, {:retry_timing, retry}) end
+               ],
                stream_fun
              )
 
@@ -74,6 +79,14 @@ defmodule ReqLLM.Streaming.RetryTest do
              {:data, "hello"},
              :done
            ]
+
+    assert_receive {:retry_timing, retry}
+    assert retry.attempt == 1
+    assert retry.next_attempt == 2
+    assert retry.max_retries == 1
+    assert retry.delay == 0
+    assert retry.duration >= 0
+    assert retry.http_status == 200
   end
 
   test "retries Finch pool readiness errors before any data is received" do

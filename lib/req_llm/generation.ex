@@ -51,6 +51,9 @@ defmodule ReqLLM.Generation do
     * `:tools` - List of tool definitions
     * `:tool_choice` - Tool choice strategy
     * `:system_prompt` - System prompt to prepend
+    * `:receive_timeout` - Provider-transport inactivity timeout in milliseconds
+    * `:total_timeout` - Optional whole-call deadline in milliseconds, including retries
+    * `:stream_idle_timeout` - Optional semantic-progress timeout for streaming calls
     * `:provider_options` - Provider-specific options
 
   ## Examples
@@ -242,6 +245,9 @@ defmodule ReqLLM.Generation do
     * `:presence_penalty` - Penalize new tokens based on presence
     * `:frequency_penalty` - Penalize new tokens based on frequency
     * `:system_prompt` - System prompt to prepend
+    * `:receive_timeout` - Provider-transport inactivity timeout in milliseconds
+    * `:total_timeout` - Optional whole-call deadline in milliseconds, including retries
+    * `:stream_idle_timeout` - Optional semantic-progress timeout for streaming calls
     * `:provider_options` - Provider-specific options
 
   ## Examples
@@ -339,9 +345,11 @@ defmodule ReqLLM.Generation do
   defp coerce_object_types(response, _schema), do: response
 
   defp execute_generate_text(provider_module, model, context, request_opts, cache_opts, cache_ref) do
+    deadline = ReqLLM.TimeoutBudget.deadline(request_opts)
+
     with {:ok, request} <- provider_module.prepare_request(:chat, model, context, request_opts),
          {:ok, %Req.Response{status: status, body: decoded_response}} when status in 200..299 <-
-           Req.request(request) do
+           ReqLLM.TimeoutBudget.request(request, deadline) do
       {:ok, ReqLLM.Cache.store(cache_ref, decoded_response, cache_opts)}
     else
       {:ok, %Req.Response{status: status, body: body}} ->
@@ -366,10 +374,12 @@ defmodule ReqLLM.Generation do
          cache_opts,
          cache_ref
        ) do
+    deadline = ReqLLM.TimeoutBudget.deadline(request_opts)
+
     with {:ok, request} <-
            provider_module.prepare_request(:object, model, context, request_opts),
          {:ok, %Req.Response{status: status, body: decoded_response}} when status in 200..299 <-
-           Req.request(request) do
+           ReqLLM.TimeoutBudget.request(request, deadline) do
       response =
         if ReqLLM.ModelHelpers.json_strict?(model) do
           decoded_response

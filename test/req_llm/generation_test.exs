@@ -96,6 +96,9 @@ defmodule ReqLLM.GenerationTest do
   defmodule ObjectStreamHTTP do
   end
 
+  defmodule SlowHTTP do
+  end
+
   setup do
     # Stub HTTP responses for testing
     Req.Test.stub(ReqLLM.GenerationTest, fn conn ->
@@ -215,6 +218,57 @@ defmodule ReqLLM.GenerationTest do
   end
 
   describe "generate_text/3 error cases" do
+    test "enforces a total timeout across the Req lifecycle" do
+      conversation_id = "total-timeout-#{System.unique_integer([:positive])}"
+      handler_id = {__MODULE__, self(), make_ref()}
+
+      :ok =
+        :telemetry.attach_many(
+          handler_id,
+          [
+            [:req_llm, :request, :start],
+            [:req_llm, :request, :stop],
+            [:req_llm, :request, :exception]
+          ],
+          fn event, measurements, metadata, test_pid ->
+            if get_in(metadata, [:request_options, :conversation_id]) == conversation_id do
+              send(test_pid, {:timeout_telemetry, event, measurements, metadata})
+            end
+          end,
+          self()
+        )
+
+      on_exit(fn -> :telemetry.detach(handler_id) end)
+
+      Req.Test.stub(SlowHTTP, fn conn ->
+        Process.sleep(250)
+
+        Req.Test.json(conn, %{
+          "id" => "cmpl_too_late",
+          "model" => "gpt-4-turbo",
+          "choices" => [%{"message" => %{"role" => "assistant", "content" => "late"}}]
+        })
+      end)
+
+      assert {:error, %ReqLLM.Error.API.Timeout{kind: :total, timeout: 60}} =
+               Generation.generate_text(
+                 @chat_model,
+                 "Hello",
+                 total_timeout: 60,
+                 telemetry: [conversation_id: conversation_id],
+                 req_http_options: [plug: {Req.Test, SlowHTTP}]
+               )
+
+      assert_receive {:timeout_telemetry, [:req_llm, :request, :start], _, start_metadata}
+
+      assert_receive {:timeout_telemetry, [:req_llm, :request, :exception], _, exception_metadata}
+
+      assert start_metadata.request_id == exception_metadata.request_id
+      assert exception_metadata.finish_reason == :error
+      assert %ReqLLM.Error.API.Timeout{kind: :total} = exception_metadata.error
+      refute_receive {:timeout_telemetry, [:req_llm, :request, :stop], _, _}, 100
+    end
+
     test "returns error for invalid model spec" do
       assert {:error, :unknown_provider} = Generation.generate_text("invalid:model", "Hello")
     end

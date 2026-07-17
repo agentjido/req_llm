@@ -53,6 +53,10 @@ defmodule ReqLLM.Test.StreamServerHelpers do
       [StreamChunk.meta(%{terminal?: true})]
     end
 
+    def decode_stream_event(%{data: %{"event" => "keepalive"}}, _model) do
+      [StreamChunk.meta(%{keepalive?: true})]
+    end
+
     def decode_stream_event(_event, _model), do: []
 
     def prepare_request(_op, _model, _data, _opts), do: {:error, :not_implemented}

@@ -117,6 +117,7 @@ defmodule ReqLLM.StreamServer.TelemetryTest do
 
   @events [
     [:req_llm, :request, :start],
+    [:req_llm, :request, :retry],
     [:req_llm, :request, :stop],
     [:req_llm, :request, :exception],
     [:req_llm, :reasoning, :start],
@@ -148,6 +149,77 @@ defmodule ReqLLM.StreamServer.TelemetryTest do
     end)
 
     :ok
+  end
+
+  test "buffers retry timing until telemetry context is installed" do
+    model = reasoning_model()
+    server = start_server(provider_mod: ReqLLM.StreamServer.TelemetryProvider, model: model)
+
+    StreamServer.retry_event(server, %{
+      attempt: 1,
+      next_attempt: 2,
+      max_retries: 3,
+      delay: 25,
+      duration: 100,
+      http_status: 429
+    })
+
+    refute_receive {:telemetry_event, [:req_llm, :request, :retry], _, _}, 25
+
+    telemetry_context =
+      model
+      |> ReqLLM.Telemetry.new_context(
+        [context: ReqLLM.Context.new([user("hello")])],
+        mode: :stream,
+        transport: :finch,
+        operation: :chat
+      )
+      |> ReqLLM.Telemetry.start_request(%{})
+
+    assert :ok = StreamServer.set_telemetry_context(server, telemetry_context)
+
+    assert_receive {:telemetry_event, [:req_llm, :request, :retry], measurements, metadata}
+    assert measurements.duration == 100
+    assert metadata.request_id == telemetry_context.request_id
+    assert metadata.retry.attempt == 1
+    assert metadata.retry.next_attempt == 2
+    assert metadata.retry.delay == 25
+    assert metadata.retry.http_status == 429
+
+    StreamServer.cancel(server)
+  end
+
+  test "emits a structured streaming timeout exception" do
+    model = reasoning_model()
+
+    server =
+      start_server(
+        provider_mod: ReqLLM.StreamServer.TelemetryProvider,
+        model: model,
+        total_timeout: 50
+      )
+
+    _task = mock_http_task(server)
+
+    telemetry_context =
+      model
+      |> ReqLLM.Telemetry.new_context(
+        [context: ReqLLM.Context.new([user("hello")]), total_timeout: 50],
+        mode: :stream,
+        transport: :finch,
+        operation: :chat
+      )
+      |> ReqLLM.Telemetry.start_request(%{})
+
+    assert :ok = StreamServer.set_telemetry_context(server, telemetry_context)
+    assert {:ok, metadata} = StreamServer.await_metadata(server, 500)
+    assert %ReqLLM.Error.API.Timeout{kind: :total, timeout: 50} = metadata.error
+
+    assert_receive {:telemetry_event, [:req_llm, :request, :exception], _, exception_metadata}
+    assert exception_metadata.request_id == telemetry_context.request_id
+    assert exception_metadata.finish_reason == :error
+    assert exception_metadata.error == metadata.error
+    refute_receive {:telemetry_event, [:req_llm, :request, :stop], _, _}
   end
 
   test "buffers fast HTTP events until streaming telemetry context is installed" do

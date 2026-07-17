@@ -16,6 +16,9 @@ defmodule ReqLLM.EmbeddingTest do
 
   alias ReqLLM.Embedding
 
+  defmodule SlowHTTP do
+  end
+
   defp setup_telemetry do
     test_pid = self()
     ref = System.unique_integer([:positive])
@@ -144,6 +147,26 @@ defmodule ReqLLM.EmbeddingTest do
 
     test "rejects unsupported providers" do
       assert {:error, :unknown_provider} = Embedding.embed("unsupported:model", "Hello")
+    end
+
+    test "enforces the total timeout for non-generation model calls" do
+      Req.Test.stub(SlowHTTP, fn conn ->
+        Process.sleep(200)
+
+        Req.Test.json(conn, %{
+          "data" => [%{"embedding" => [0.1, 0.2], "index" => 0}],
+          "usage" => %{"prompt_tokens" => 1, "total_tokens" => 1}
+        })
+      end)
+
+      assert {:error, %ReqLLM.Error.API.Timeout{kind: :total, timeout: 50}} =
+               Embedding.embed(
+                 "openai:text-embedding-3-small",
+                 "Hello",
+                 api_key: "test-key",
+                 total_timeout: 50,
+                 req_http_options: [plug: {Req.Test, SlowHTTP}]
+               )
     end
   end
 

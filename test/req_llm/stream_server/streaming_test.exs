@@ -292,6 +292,105 @@ defmodule ReqLLM.StreamServer.StreamingTest do
   end
 
   describe "timeout handling" do
+    test "total timeout finalizes the stream and stops its transport" do
+      server = start_server(total_timeout: 60)
+      task = mock_http_task(server)
+      :ok = StreamServer.set_telemetry_context(server, nil)
+
+      assert {:ok, metadata} = StreamServer.await_metadata(server, 500)
+      assert metadata.finish_reason == :error
+
+      assert %ReqLLM.Error.API.Timeout{kind: :total, timeout: 60} = metadata.error
+
+      assert {:error, %ReqLLM.Error.API.Timeout{kind: :total, timeout: 60}} =
+               StreamServer.next(server, 100)
+
+      refute Process.alive?(task.pid)
+    end
+
+    test "total timeout stops streaming retries" do
+      test_pid = self()
+      server = start_server(total_timeout: 250)
+
+      task =
+        Task.async(fn ->
+          stream_fun = fn _request, _finch_name, acc, _callback, _opts ->
+            send(test_pid, :stream_budget_attempt)
+            Process.sleep(150)
+            {:error, %Mint.TransportError{reason: :closed}, acc}
+          end
+
+          ReqLLM.Streaming.Retry.stream(
+            Finch.build(:post, "https://example.com/stream"),
+            ReqLLM.Finch,
+            :ok,
+            fn _event, acc -> acc end,
+            [max_retries: 3, receive_timeout: 1_000],
+            stream_fun
+          )
+        end)
+
+      StreamServer.attach_http_task(server, task.pid)
+
+      assert_receive :stream_budget_attempt, 1_000
+      :ok = StreamServer.set_telemetry_context(server, nil)
+      assert_receive :stream_budget_attempt, 300
+      assert {:ok, metadata} = StreamServer.await_metadata(server, 500)
+      assert %ReqLLM.Error.API.Timeout{kind: :total, timeout: 250} = metadata.error
+      refute_receive :stream_budget_attempt, 100
+      refute Process.alive?(task.pid)
+    end
+
+    test "stream idle timeout finalizes after semantic inactivity" do
+      server = start_server(stream_idle_timeout: 60)
+      task = mock_http_task(server)
+      :ok = StreamServer.set_telemetry_context(server, nil)
+
+      assert {:ok, metadata} = StreamServer.await_metadata(server, 500)
+      assert metadata.finish_reason == :error
+
+      assert %ReqLLM.Error.API.Timeout{kind: :stream_idle, timeout: 60} = metadata.error
+
+      assert {:error, %ReqLLM.Error.API.Timeout{kind: :stream_idle, timeout: 60}} =
+               StreamServer.next(server, 100)
+
+      refute Process.alive?(task.pid)
+    end
+
+    test "semantic progress resets the stream idle budget" do
+      server = start_server(stream_idle_timeout: 120)
+      _task = mock_http_task(server)
+      :ok = StreamServer.set_telemetry_context(server, nil)
+
+      Process.sleep(80)
+
+      StreamServer.http_event(
+        server,
+        {:data, ~s(data: {"choices": [{"delta": {"content": "progress"}}]}\n\n)}
+      )
+
+      assert {:error, :timeout} = StreamServer.await_metadata(server, 60)
+      assert {:ok, chunk} = StreamServer.next(server, 100)
+      assert chunk.text == "progress"
+
+      assert {:ok, metadata} = StreamServer.await_metadata(server, 200)
+      assert %ReqLLM.Error.API.Timeout{kind: :stream_idle} = metadata.error
+    end
+
+    test "keepalive metadata does not reset the stream idle budget" do
+      server = start_server(stream_idle_timeout: 200)
+      _task = mock_http_task(server)
+      :ok = StreamServer.set_telemetry_context(server, nil)
+
+      for _iteration <- 1..3 do
+        Process.sleep(50)
+        StreamServer.http_event(server, {:data, ~s(data: {"event": "keepalive"}\n\n)})
+      end
+
+      assert {:ok, metadata} = StreamServer.await_metadata(server, 120)
+      assert %ReqLLM.Error.API.Timeout{kind: :stream_idle, timeout: 200} = metadata.error
+    end
+
     test "next/2 respects timeout parameter" do
       server = start_server()
       _task = mock_http_task(server)

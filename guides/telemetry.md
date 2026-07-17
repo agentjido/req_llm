@@ -78,6 +78,7 @@ See [Langfuse](#langfuse) for the OTLP endpoint and auth setup.
 | Event | When it fires |
 |---|---|
 | `[:req_llm, :request, :start]` | Request begins. |
+| `[:req_llm, :request, :retry]` | A retryable provider attempt completes before its scheduled retry. |
 | `[:req_llm, :request, :stop]` | Request completes (including streaming completion or cancellation). |
 | `[:req_llm, :request, :exception]` | Request fails. |
 | `[:req_llm, :reasoning, :start]` | Effective request enables provider reasoning. |
@@ -90,9 +91,13 @@ Request lifecycle events always include a `reasoning` map, even when the operati
 ### Measurements
 
 - `request.start`, `reasoning.start`, `reasoning.update` emit `%{system_time: integer}`.
-- `request.stop`, `request.exception`, `reasoning.stop` emit `%{duration: integer, system_time: integer}`.
+- `request.retry`, `request.stop`, `request.exception`, `reasoning.stop` emit `%{duration: integer, system_time: integer}`.
 
 `duration` is in native monotonic time units — convert with `System.convert_time_unit/3` if you want milliseconds.
+For `request.retry`, it is the completed provider attempt duration. Its `retry`
+metadata contains `attempt`, `next_attempt`, `max_retries`, `delay` in
+milliseconds, and `http_status` when present. No request or response body is
+included.
 
 ### Request metadata
 
@@ -105,7 +110,7 @@ Every request lifecycle event includes:
 
 When payload capture is enabled, `request_payload` and `response_payload` are also included.
 
-`request_options` is a compact map of normalized inference parameters extracted from the original call: `temperature`, `top_p`, `top_k`, `max_tokens`, `frequency_penalty`, `presence_penalty`, `stop_sequences`, `seed`, `n` (choice count), `stream?`, `encoding_formats`, `conversation_id`, `service_tier`. Nil values are dropped.
+`request_options` is a compact map of normalized inference parameters extracted from the original call: `temperature`, `top_p`, `top_k`, `max_tokens`, `frequency_penalty`, `presence_penalty`, `stop_sequences`, `seed`, `n` (choice count), `stream?`, `encoding_formats`, `conversation_id`, `service_tier`, `receive_timeout`, `total_timeout`, `stream_idle_timeout`, and `max_retries`. Nil values are dropped.
 
 `server` is the resolved upstream endpoint (`address`, `port`, `path`). It is populated as soon as ReqLLM has a request URL and may be empty when the URL is unavailable.
 

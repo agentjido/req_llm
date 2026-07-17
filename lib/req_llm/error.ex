@@ -297,6 +297,28 @@ defmodule ReqLLM.Error do
     end
   end
 
+  defmodule API.Timeout do
+    @moduledoc "Error for an explicit ReqLLM model-call timeout budget."
+    use Splode.Error,
+      fields: [:kind, :timeout],
+      class: :api
+
+    @typedoc "Structured timeout raised by an opt-in ReqLLM timeout budget."
+    @type t() :: %__MODULE__{
+            kind: :total | :stream_idle,
+            timeout: pos_integer()
+          }
+
+    @spec message(t()) :: String.t()
+    def message(%{kind: :total, timeout: timeout}) do
+      "Model call exceeded the total timeout of #{timeout}ms"
+    end
+
+    def message(%{kind: :stream_idle, timeout: timeout}) do
+      "Model stream made no semantic progress for #{timeout}ms"
+    end
+  end
+
   @doc """
   Creates a validation error with the given tag, reason, and context.
 

@@ -71,6 +71,10 @@ defmodule ReqLLM.Rerank do
                    type: :pos_integer,
                    doc: "Timeout for receiving HTTP responses in milliseconds"
                  ],
+                 total_timeout: [
+                   type: {:or, [:pos_integer, {:in, [:infinity]}]},
+                   doc: "Optional total model-call timeout in milliseconds, including retries"
+                 ],
                  max_retries: [
                    type: :non_neg_integer,
                    default: 3,
@@ -126,6 +130,7 @@ defmodule ReqLLM.Rerank do
   @spec rerank(ReqLLM.model_input(), keyword()) :: {:ok, RerankResponse.t()} | {:error, term()}
   def rerank(model_spec, opts) when is_list(opts) do
     opts = ReqLLM.ModelInput.merge_tuple_defaults(model_spec, :rerank, opts)
+    deadline = ReqLLM.TimeoutBudget.deadline(opts)
 
     with :ok <- validate_query(Keyword.get(opts, :query)),
          :ok <- validate_documents(Keyword.get(opts, :documents)),
@@ -145,7 +150,8 @@ defmodule ReqLLM.Rerank do
              model,
              Keyword.fetch!(opts, :query),
              Keyword.fetch!(opts, :documents),
-             opts
+             opts,
+             deadline
            ) do
       build_response(model, Keyword.fetch!(opts, :query), opts, batch_responses)
     end
@@ -222,7 +228,7 @@ defmodule ReqLLM.Rerank do
      )}
   end
 
-  defp rerank_batches(provider_module, model, query, documents, opts) do
+  defp rerank_batches(provider_module, model, query, documents, opts, deadline) do
     batch_size = effective_batch_size(documents, Keyword.get(opts, :batch_size))
     batched_documents = batch_documents(documents, batch_size)
     single_batch? = length(batched_documents) == 1
@@ -230,7 +236,7 @@ defmodule ReqLLM.Rerank do
     request_opts = maybe_delete_top_n(request_opts, single_batch?)
 
     Enum.reduce_while(batched_documents, {:ok, []}, fn {batch_docs, offset}, {:ok, acc} ->
-      case rerank_batch(provider_module, model, query, batch_docs, request_opts) do
+      case rerank_batch(provider_module, model, query, batch_docs, request_opts, deadline) do
         {:ok, response_body} -> {:cont, {:ok, [{response_body, offset} | acc]}}
         {:error, error} -> {:halt, {:error, error}}
       end
@@ -260,7 +266,7 @@ defmodule ReqLLM.Rerank do
   defp maybe_delete_top_n(opts, true), do: opts
   defp maybe_delete_top_n(opts, false), do: Keyword.delete(opts, :top_n)
 
-  defp rerank_batch(provider_module, model, query, documents, opts) do
+  defp rerank_batch(provider_module, model, query, documents, opts, deadline) do
     with {:ok, request} <-
            provider_module.prepare_request(
              :rerank,
@@ -269,7 +275,7 @@ defmodule ReqLLM.Rerank do
              opts
            ),
          {:ok, %Req.Response{status: status} = response} when status in 200..299 <-
-           Req.request(request) do
+           ReqLLM.TimeoutBudget.request(request, deadline) do
       {:ok, response}
     else
       {:ok, %Req.Response{status: status, body: body}} ->
