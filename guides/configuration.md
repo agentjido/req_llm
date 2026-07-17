@@ -65,6 +65,60 @@ without making a request. These reasoning advisories do not introduce new
 failures for `on_unsupported: :error`; existing enforceable provider warnings
 retain their current behavior.
 
+## Provider Option Namespaces
+
+ReqLLM 1.x accepts both the existing flat `provider_options` shape and an
+additive provider-keyed shape. Existing calls remain valid and do not warn when
+their flat options are unambiguous:
+
+```elixir
+ReqLLM.generate_text(
+  "openai:gpt-5",
+  "Solve this carefully",
+  provider_options: [reasoning_summary: "auto"]
+)
+```
+
+New code can scope the same options to the selected provider:
+
+```elixir
+ReqLLM.generate_text(
+  "openai:gpt-5",
+  "Solve this carefully",
+  provider_options: [
+    openai: [reasoning_summary: "auto"]
+  ]
+)
+```
+
+Keyword lists and atom-keyed maps are supported:
+
+```elixir
+provider_options: %{
+  openai: %{reasoning_summary: "auto"}
+}
+```
+
+The namespace is always the actual ReqLLM provider identity. Use `azure:` for
+Azure-hosted models, `google_vertex:` for Vertex-hosted models, and
+`openrouter:` for OpenRouter models. Do not use `openai:` or `google:` merely
+because the hosted service uses an OpenAI- or Gemini-compatible wire format.
+Foreign namespaces fail before network I/O.
+
+When forms are combined, precedence is deterministic:
+
+1. Explicit top-level canonical options win over the same namespaced option.
+2. Options under the selected provider namespace win over colliding legacy flat
+   provider options.
+3. Non-colliding flat and namespaced provider options are merged.
+
+Mixed forms emit an actionable warning by default. Set `on_unsupported: :error`
+to reject an ambiguous mix, or `on_unsupported: :ignore` to apply the same
+precedence without logging. Invalid namespace containers, unknown namespaced
+options, duplicate namespaced keys, and foreign provider namespaces are rejected
+before I/O. ReqLLM 1.x does not reject an otherwise valid call merely because it
+uses the legacy flat shape.
+
 ## Timeout Configuration
 
 ReqLLM uses multiple timeout settings to handle different scenarios:

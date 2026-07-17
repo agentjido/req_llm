@@ -140,6 +140,13 @@ defmodule ReqLLM.Speech do
 
     with {:ok, model} <- ReqLLM.model(model_spec),
          {:ok, provider_module} <- ReqLLM.provider(model.provider),
+         {:ok, opts} <-
+           ReqLLM.Provider.Options.normalize_namespaced_provider_options(
+             provider_module,
+             :speech,
+             model,
+             opts
+           ),
          {:ok, request} <-
            provider_module.prepare_request(:speech, model, text, opts),
          {:ok, %Req.Response{status: status, body: body}} when status in 200..299 <-

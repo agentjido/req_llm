@@ -806,6 +806,18 @@ defmodule ReqLLM.GenerationTest do
 
       assert %Response{} = response
     end
+
+    test "handles provider-keyed options through the public API" do
+      {:ok, response} =
+        Generation.generate_text(
+          @chat_model,
+          "Hello",
+          provider_options: [openai: [openai_logprobs: true]],
+          req_http_options: [plug: {Req.Test, ReqLLM.GenerationTest}]
+        )
+
+      assert %Response{} = response
+    end
   end
 
   describe "generate_text/3 with req_http_options" do

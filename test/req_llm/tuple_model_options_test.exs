@@ -78,6 +78,14 @@ defmodule ReqLLM.TupleModelOptionsTest do
              [temperature: 0.2, max_tokens: 64, provider_options: []]
   end
 
+  test "provider-keyed maps remain valid tuple defaults" do
+    tuple =
+      {:openai, "gpt-4-0125-preview", provider_options: %{openai: %{reasoning_summary: "auto"}}}
+
+    assert ReqLLM.ModelInput.merge_tuple_defaults(tuple, :chat, []) ==
+             [provider_options: %{openai: %{reasoning_summary: "auto"}}]
+  end
+
   test "wrong-operation, invalid, duplicate, and ambiguous tuple defaults stay non-fatal" do
     tuple =
       {:cohere, "rerank-v3.5",

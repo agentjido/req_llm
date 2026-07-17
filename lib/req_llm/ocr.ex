@@ -123,6 +123,13 @@ defmodule ReqLLM.OCR do
 
     with {:ok, model} <- validate_model(model_spec),
          {:ok, provider_module} <- ReqLLM.provider(model.provider),
+         {:ok, opts} <-
+           ReqLLM.Provider.Options.normalize_namespaced_provider_options(
+             provider_module,
+             :ocr,
+             model,
+             opts
+           ),
          {:ok, request} <-
            provider_module.prepare_request(:ocr, model, document_binary, opts),
          {:ok, %Req.Response{status: status, body: response}} when status in 200..299 <-

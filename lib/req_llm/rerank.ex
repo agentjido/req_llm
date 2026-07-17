@@ -132,6 +132,13 @@ defmodule ReqLLM.Rerank do
          :ok <- validate_batch_size(Keyword.get(opts, :batch_size)),
          {:ok, model} <- validate_model(model_spec),
          {:ok, provider_module} <- ReqLLM.provider(model.provider),
+         {:ok, opts} <-
+           ReqLLM.Provider.Options.normalize_namespaced_provider_options(
+             provider_module,
+             :rerank,
+             model,
+             opts
+           ),
          {:ok, batch_responses} <-
            rerank_batches(
              provider_module,

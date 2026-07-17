@@ -42,9 +42,21 @@ defmodule ReqLLM.RequestPlan do
          :ok <- validate_operation(operation),
          {merged_opts, input_warnings} <-
            ReqLLM.ModelInput.merge_tuple_defaults_with_warnings(model_input, operation, opts),
-         normalized_opts <- normalize_options(merged_opts),
          {:ok, model} <- resolve_model(model_input),
          {:ok, provider_module} <- ReqLLM.provider(model.provider),
+         {:ok, namespaced_opts, namespace_warnings} <-
+           ReqLLM.Provider.Options.Namespace.normalize(
+             provider_module,
+             operation,
+             model,
+             merged_opts
+           ),
+         {:ok, flat_opts} <-
+           ReqLLM.Provider.Options.normalize_flat_provider_options(
+             provider_module,
+             namespaced_opts
+           ),
+         normalized_opts <- normalize_options(flat_opts),
          {:ok, surface, api_module, surface_warnings} <-
            resolve_surface(model, provider_module),
          {:ok, transport, transport_warnings} <-
@@ -59,7 +71,7 @@ defmodule ReqLLM.RequestPlan do
          options: canonicalize(normalized_opts),
          provider_module: provider_module,
          api_module: api_module,
-         warnings: input_warnings ++ surface_warnings ++ transport_warnings
+         warnings: input_warnings ++ namespace_warnings ++ surface_warnings ++ transport_warnings
        }}
     end
   end

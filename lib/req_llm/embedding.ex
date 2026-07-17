@@ -205,11 +205,18 @@ defmodule ReqLLM.Embedding do
 
   def embed(model_spec, text, opts) when is_binary(text) do
     opts = ReqLLM.ModelInput.merge_tuple_defaults(model_spec, :embedding, opts)
-    {return_usage, provider_opts} = Keyword.pop(opts, :return_usage, false)
+    {return_usage, request_opts} = Keyword.pop(opts, :return_usage, false)
 
     with {:ok, model} <- validate_model(model_spec),
          :ok <- validate_input(text),
          {:ok, provider_module} <- ReqLLM.provider(model.provider),
+         {:ok, provider_opts} <-
+           ReqLLM.Provider.Options.normalize_namespaced_provider_options(
+             provider_module,
+             :embedding,
+             model,
+             request_opts
+           ),
          {:ok, request} <-
            provider_module.prepare_request(:embedding, model, text, provider_opts),
          {:ok, %Req.Response{status: status} = response} when status in 200..299 <-
@@ -236,11 +243,18 @@ defmodule ReqLLM.Embedding do
 
   def embed(model_spec, texts, opts) when is_list(texts) do
     opts = ReqLLM.ModelInput.merge_tuple_defaults(model_spec, :embedding, opts)
-    {return_usage, provider_opts} = Keyword.pop(opts, :return_usage, false)
+    {return_usage, request_opts} = Keyword.pop(opts, :return_usage, false)
 
     with {:ok, model} <- validate_model(model_spec),
          :ok <- validate_input(texts),
          {:ok, provider_module} <- ReqLLM.provider(model.provider),
+         {:ok, provider_opts} <-
+           ReqLLM.Provider.Options.normalize_namespaced_provider_options(
+             provider_module,
+             :embedding,
+             model,
+             request_opts
+           ),
          {:ok, request} <-
            provider_module.prepare_request(:embedding, model, texts, provider_opts),
          {:ok, %Req.Response{status: status} = response} when status in 200..299 <-

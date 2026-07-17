@@ -142,6 +142,13 @@ defmodule ReqLLM.Images do
 
     with {:ok, model} <- ReqLLM.model(model_spec),
          {:ok, provider_module} <- ReqLLM.provider(model.provider),
+         {:ok, opts} <-
+           ReqLLM.Provider.Options.normalize_namespaced_provider_options(
+             provider_module,
+             :image,
+             model,
+             opts
+           ),
          {:ok, request} <-
            provider_module.prepare_request(:image, model, prompt_or_messages, opts),
          {:ok, %Req.Response{status: status, body: response}} when status in 200..299 <-

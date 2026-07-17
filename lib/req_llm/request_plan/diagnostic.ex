@@ -233,6 +233,12 @@ defmodule ReqLLM.RequestPlan.Diagnostic do
         String.contains?(parameter, "WebSocket transport is not supported") ->
           parameter
 
+        String.contains?(parameter, "provider_options namespace") ->
+          parameter
+
+        String.contains?(parameter, "provider option") ->
+          parameter
+
         true ->
           "request plan is invalid; verify provider, operation, and transport metadata"
       end

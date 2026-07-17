@@ -137,6 +137,13 @@ defmodule ReqLLM.Transcription do
     with {:ok, audio_data, media_type} <- resolve_audio(audio),
          {:ok, model} <- ReqLLM.model(model_spec),
          {:ok, provider_module} <- ReqLLM.provider(model.provider),
+         {:ok, opts} <-
+           ReqLLM.Provider.Options.normalize_namespaced_provider_options(
+             provider_module,
+             :transcription,
+             model,
+             opts
+           ),
          {:ok, request} <-
            provider_module.prepare_request(:transcription, model, audio_data, [
              {:media_type, media_type} | opts

@@ -75,6 +75,13 @@ defmodule ReqLLM.Generation do
 
     with {:ok, model} <- ReqLLM.model(model_spec),
          {:ok, provider_module} <- ReqLLM.provider(model.provider),
+         {:ok, opts} <-
+           ReqLLM.Provider.Options.normalize_namespaced_provider_options(
+             provider_module,
+             :chat,
+             model,
+             opts
+           ),
          {:ok, context} <- ReqLLM.Context.normalize(messages, opts) do
       case ReqLLM.Cache.fetch(model, :chat, context, opts) do
         {:hit, response, _cache_ref} ->
@@ -152,6 +159,13 @@ defmodule ReqLLM.Generation do
 
     with {:ok, model} <- ReqLLM.model(model_spec),
          {:ok, provider_module} <- ReqLLM.provider(model.provider),
+         {:ok, opts} <-
+           ReqLLM.Provider.Options.normalize_namespaced_provider_options(
+             provider_module,
+             :chat,
+             model,
+             opts
+           ),
          {:ok, context} <- ReqLLM.Context.normalize(messages, opts) do
       case ReqLLM.Cache.fetch(model, :chat, context, opts) do
         {:hit, response, _cache_ref} ->
@@ -250,15 +264,18 @@ defmodule ReqLLM.Generation do
   def generate_object(model_spec, messages, object_schema, opts \\ []) do
     opts = ReqLLM.ModelInput.merge_tuple_defaults(model_spec, :object, opts)
 
-    opts_with_schema = fn compiled_schema ->
-      Keyword.put(opts, :compiled_schema, compiled_schema)
-    end
-
     with {:ok, model} <- ReqLLM.model(model_spec),
          {:ok, provider_module} <- ReqLLM.provider(model.provider),
+         {:ok, opts} <-
+           ReqLLM.Provider.Options.normalize_namespaced_provider_options(
+             provider_module,
+             :object,
+             model,
+             opts
+           ),
          {:ok, context} <- ReqLLM.Context.normalize(messages, opts),
          {:ok, compiled_schema} <- ReqLLM.Schema.compile(object_schema) do
-      compiled_opts = opts_with_schema.(compiled_schema)
+      compiled_opts = Keyword.put(opts, :compiled_schema, compiled_schema)
 
       case ReqLLM.Cache.fetch(model, :object, context, opts, compiled_schema.schema) do
         {:hit, response, _cache_ref} ->
@@ -518,6 +535,13 @@ defmodule ReqLLM.Generation do
 
     with {:ok, model} <- ReqLLM.model(model_spec),
          {:ok, provider_module} <- ReqLLM.provider(model.provider),
+         {:ok, opts} <-
+           ReqLLM.Provider.Options.normalize_namespaced_provider_options(
+             provider_module,
+             :object,
+             model,
+             opts
+           ),
          {:ok, compiled_schema} <- ReqLLM.Schema.compile(object_schema),
          {:ok, prepared_req} <-
            provider_module.prepare_request(
