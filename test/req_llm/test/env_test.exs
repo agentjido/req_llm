@@ -126,7 +126,7 @@ defmodule ReqLLM.Test.EnvTest do
     end
   end
 
-  defp set_or_delete(_var, nil), do: :ok
+  defp set_or_delete(var, nil), do: System.delete_env(var)
 
   defp set_or_delete(var, value) do
     System.put_env(var, value)
