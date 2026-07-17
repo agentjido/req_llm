@@ -518,6 +518,7 @@ This approach gives you full control over the Req pipeline, allowing you to add 
 - [Core Concepts](guides/core-concepts.md) – architecture & data model
 - [Data Structures](guides/data-structures.md) – detailed type information
 - [Host Integration](guides/host-integration.md) – stable one-call boundary for Jido and other hosts
+- [Provider-native Integrations](guides/provider-native-integrations.md) – MCP, native tool, resource, and future operation boundaries
 - [Pricing Policy](guides/pricing-policy.md) – cost-calculation scope, guarantees, and known gaps
 - [Usage & Billing](guides/usage-and-billing.md) – token costs, tool usage, image costs
 - [Image Generation](guides/image-generation.md) – generating images with OpenAI and Google
