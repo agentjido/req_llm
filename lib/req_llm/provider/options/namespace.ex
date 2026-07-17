@@ -181,6 +181,9 @@ defmodule ReqLLM.Provider.Options.Namespace do
       is_atom(key) and key in schema_keys ->
         {:ok, key}
 
+      is_atom(key) and schema_keys == [] ->
+        {:ok, key}
+
       is_binary(key) and Map.has_key?(schema_names, key) ->
         {:ok, Map.fetch!(schema_names, key)}
 

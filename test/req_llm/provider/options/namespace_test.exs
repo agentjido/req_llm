@@ -98,6 +98,22 @@ defmodule ReqLLM.Provider.Options.NamespaceTest do
                Namespace.normalize(ProviderNameOptionProvider, :chat, model, opts)
     end
 
+    test "preserves atom-keyed options for schema-less providers" do
+      elevenlabs_model = model(:elevenlabs, "eleven_multilingual_v2")
+
+      assert {:ok, normalized, []} =
+               Namespace.normalize(
+                 ReqLLM.Providers.ElevenLabs,
+                 :speech,
+                 elevenlabs_model,
+                 provider_options: [
+                   elevenlabs: [stability: 0.5, future_voice_setting: true]
+                 ]
+               )
+
+      assert normalized[:provider_options] == [stability: 0.5, future_voice_setting: true]
+    end
+
     test "rejects foreign provider namespaces before translation" do
       assert {:error, %ReqLLM.Error.Invalid.Parameter{} = error} =
                Namespace.normalize(MockProvider, :chat, model(:mock_namespace),
