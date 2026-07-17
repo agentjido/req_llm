@@ -68,6 +68,18 @@ defmodule ReqLLM.RequestPlan do
     invalid_parameter("options must be a keyword list, got: #{inspect(opts)}")
   end
 
+  @doc false
+  @spec openai_surface(LLMDB.Model.t()) ::
+          {:ok, :openai_responses | :openai_chat_completions, module(), [binary()]}
+          | {:error, term()}
+  def openai_surface(%LLMDB.Model{provider: :openai} = model) do
+    resolve_openai_surface(model)
+  end
+
+  def openai_surface(%LLMDB.Model{provider: provider}) do
+    invalid_parameter("OpenAI surface resolution does not support provider #{inspect(provider)}")
+  end
+
   defp validate_options(opts) do
     if Keyword.keyword?(opts) do
       :ok
@@ -92,7 +104,7 @@ defmodule ReqLLM.RequestPlan do
 
   defp resolve_surface(%LLMDB.Model{provider: :openai} = model, provider_module) do
     if provider_module == ReqLLM.Providers.OpenAI do
-      resolve_openai_surface(model)
+      openai_surface(model)
     else
       invalid_parameter(
         "provider :openai resolves to unsupported request-plan module #{inspect(provider_module)}"
