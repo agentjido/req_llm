@@ -15,6 +15,7 @@ defmodule Provider.OpenAI.ParamProfilesTest do
       assert translate_reasoning_effort.(:medium) == "medium"
       assert translate_reasoning_effort.(:high) == "high"
       assert translate_reasoning_effort.(:xhigh) == "xhigh"
+      assert translate_reasoning_effort.(:max) == "max"
       assert translate_reasoning_effort.(:default) == nil
       assert translate_reasoning_effort.("custom") == "custom"
     end

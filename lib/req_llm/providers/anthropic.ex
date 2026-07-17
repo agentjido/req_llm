@@ -1362,9 +1362,11 @@ defmodule ReqLLM.Providers.Anthropic do
   This is the canonical source of truth for Anthropic reasoning effort mappings,
   used by all providers hosting Anthropic models.
 
+  - `:minimal` → 512 tokens
   - `:low` → 1,024 tokens
   - `:medium` → 2,048 tokens
   - `:high` → 4,096 tokens
+  - `:xhigh` and `:max` → 8,192 tokens for legacy fixed-budget models
 
   ## Examples
 
@@ -1381,7 +1383,7 @@ defmodule ReqLLM.Providers.Anthropic do
       :low -> @reasoning_budget_low
       :medium -> @reasoning_budget_medium
       :high -> @reasoning_budget_high
-      :xhigh -> @reasoning_budget_xhigh
+      effort when effort in [:xhigh, :max] -> @reasoning_budget_xhigh
       _ -> @reasoning_budget_medium
     end
   end
@@ -1408,6 +1410,9 @@ defmodule ReqLLM.Providers.Anthropic do
 
       :xhigh ->
         put_reasoning_effort(opts, model, :xhigh, reasoning_budget)
+
+      :max ->
+        put_reasoning_effort(opts, model, :max, reasoning_budget)
 
       :default ->
         put_default_reasoning_effort(opts, model)
@@ -1512,26 +1517,34 @@ defmodule ReqLLM.Providers.Anthropic do
   defp adaptive_effort(:low, _model), do: "low"
   defp adaptive_effort(:medium, _model), do: "medium"
   defp adaptive_effort(:high, _model), do: "high"
-  defp adaptive_effort(:xhigh, model), do: max_effort(model)
-  defp adaptive_effort(:default, _model), do: "medium"
 
-  defp max_effort(model) do
-    if max_effort_supported?(model) do
-      "max"
-    else
-      "high"
+  defp adaptive_effort(:xhigh, model) do
+    cond do
+      effort_supported?(model, :xhigh) -> "xhigh"
+      effort_supported?(model, :max) -> "max"
+      true -> "high"
     end
   end
 
-  defp max_effort_supported?(%LLMDB.Model{} = model) do
-    model_capability(model, [:reasoning, :effort, :values])
-    |> normalized_effort_values()
-    |> Enum.member?("max") or
-      model_extra(model, [:provider_capabilities, :effort, :max, :supported]) == true or
-      model_extra(model, [:capabilities, :effort, :max, :supported]) == true
+  defp adaptive_effort(:max, model) do
+    cond do
+      effort_supported?(model, :max) -> "max"
+      effort_supported?(model, :xhigh) -> "xhigh"
+      true -> "high"
+    end
   end
 
-  defp max_effort_supported?(_model), do: false
+  defp adaptive_effort(:default, _model), do: "medium"
+
+  defp effort_supported?(%LLMDB.Model{} = model, effort) do
+    model_capability(model, [:reasoning, :effort, :values])
+    |> normalized_effort_values()
+    |> Enum.member?(Atom.to_string(effort)) or
+      model_extra(model, [:provider_capabilities, :effort, effort, :supported]) == true or
+      model_extra(model, [:capabilities, :effort, effort, :supported]) == true
+  end
+
+  defp effort_supported?(_model, _effort), do: false
 
   defp normalized_effort_values(values) when is_list(values) do
     Enum.map(values, fn

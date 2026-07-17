@@ -14,6 +14,7 @@ defmodule ReqLLM.Provider.Reasoning do
     "medium" => :medium,
     "high" => :high,
     "xhigh" => :xhigh,
+    "max" => :max,
     "default" => :default
   }
 

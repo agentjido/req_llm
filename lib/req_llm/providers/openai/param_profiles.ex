@@ -70,6 +70,7 @@ defmodule ReqLLM.Providers.OpenAI.ParamProfiles do
   defp translate_reasoning_effort(:medium), do: "medium"
   defp translate_reasoning_effort(:high), do: "high"
   defp translate_reasoning_effort(:xhigh), do: "xhigh"
+  defp translate_reasoning_effort(:max), do: "max"
   defp translate_reasoning_effort(:default), do: nil
   defp translate_reasoning_effort(other), do: other
 

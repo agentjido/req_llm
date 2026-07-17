@@ -1537,21 +1537,27 @@ defmodule ReqLLM.Providers.AnthropicTest do
       assert Keyword.get(translated_opts, :response_format) == nil
     end
 
-    test "translate_options adapts Claude Opus 4.8 metadata constraints" do
+    test "translate_options preserves supported Claude Opus 4.8 effort levels" do
       {:ok, model} = ReqLLM.model("anthropic:claude-opus-4-8")
 
-      {translated_opts, []} =
-        Anthropic.translate_options(:chat, model,
-          reasoning_effort: :xhigh,
-          temperature: 0.0,
-          top_p: 0.5,
-          max_tokens: 100
-        )
+      for effort <- [:xhigh, :max] do
+        {translated_opts, []} =
+          Anthropic.translate_options(:chat, model,
+            reasoning_effort: effort,
+            temperature: 0.0,
+            top_p: 0.5,
+            max_tokens: 100
+          )
 
-      assert Keyword.get(translated_opts, :thinking) == %{type: "adaptive", display: "summarized"}
-      assert Keyword.get(translated_opts, :output_config) == %{effort: "max"}
-      refute Keyword.has_key?(translated_opts, :top_p)
-      refute Keyword.has_key?(translated_opts, :temperature)
+        assert Keyword.get(translated_opts, :thinking) == %{
+                 type: "adaptive",
+                 display: "summarized"
+               }
+
+        assert Keyword.get(translated_opts, :output_config) == %{effort: Atom.to_string(effort)}
+        refute Keyword.has_key?(translated_opts, :top_p)
+        refute Keyword.has_key?(translated_opts, :temperature)
+      end
     end
 
     test "translate_options defaults direct adaptive thinking display to summarized" do
@@ -2137,7 +2143,8 @@ defmodule ReqLLM.Providers.AnthropicTest do
         {:low, 1_024},
         {:medium, 2_048},
         {:high, 4_096},
-        {:xhigh, 8_192}
+        {:xhigh, 8_192},
+        {:max, 8_192}
       ]
 
       for {effort, expected_budget} <- test_cases do

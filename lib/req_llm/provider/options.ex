@@ -143,7 +143,16 @@ defmodule ReqLLM.Provider.Options do
                                reasoning_effort: [
                                  type:
                                    {:in,
-                                    [:none, :minimal, :low, :medium, :high, :xhigh, :default]},
+                                    [
+                                      :none,
+                                      :minimal,
+                                      :low,
+                                      :medium,
+                                      :high,
+                                      :xhigh,
+                                      :max,
+                                      :default
+                                    ]},
                                  doc:
                                    "Computational effort for reasoning models (higher = more thinking)"
                                ],

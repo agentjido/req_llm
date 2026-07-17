@@ -118,7 +118,7 @@ defmodule ReqLLM.Telemetry do
           | :unsupported
 
   @reasoning_operations [:chat, :object]
-  @canonical_reasoning_efforts [:minimal, :low, :medium, :high, :xhigh, :default]
+  @canonical_reasoning_efforts [:minimal, :low, :medium, :high, :xhigh, :max, :default]
   @openai_reasoning_providers [:openai, :groq, :openrouter, :xai]
   @thinking_toggle_providers [:zai, :zai_coder]
   @alibaba_providers [:alibaba, :alibaba_cn]

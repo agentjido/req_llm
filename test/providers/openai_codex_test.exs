@@ -49,6 +49,24 @@ defmodule ReqLLM.Providers.OpenAICodexTest do
       assert request.headers["x-openai-internal-codex-responses-lite"] == ["true"]
     end
 
+    test "prepare_request preserves max reasoning effort for GPT-5.6" do
+      {:ok, model} = ReqLLM.model("openai_codex:gpt-5.6-sol")
+
+      {:ok, request} =
+        OpenAICodex.prepare_request(:chat, model, "Solve carefully",
+          reasoning_effort: :max,
+          provider_options: [
+            auth_mode: :oauth,
+            access_token: jwt_with_account_id("acct_max")
+          ]
+        )
+
+      encoded_request = OpenAICodex.encode_body(request)
+      body = Jason.decode!(encoded_request.body)
+
+      assert body["reasoning"]["effort"] == "max"
+    end
+
     test "prepare_request loads oauth_file without explicit auth_mode" do
       {:ok, model} = ReqLLM.model("openai_codex:gpt-5.3-codex-spark")
       path = oauth_file_path("prepare")
