@@ -497,6 +497,41 @@ defmodule ReqLLM.Providers.AnthropicTest do
       assert result2["tool_use_id"] == "tool_2"
     end
 
+    test "encode_body round trips matched tool exchanges in assistant call order" do
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
+      base_context = ReqLLM.Context.new([ReqLLM.Context.user("Get weather and time")])
+
+      assistant =
+        ReqLLM.Context.assistant("",
+          tool_calls: [
+            {"get_weather", %{city: "Paris"}, id: "tool_1"},
+            {"get_time", %{timezone: "Europe/Paris"}, id: "tool_2"}
+          ],
+          metadata: %{provider_native: %{request_id: "req_123"}}
+        )
+
+      results = [
+        ReqLLM.Context.tool_result("tool_2", "get_time", "10:00 CEST"),
+        ReqLLM.Context.tool_result("tool_1", "72°F and sunny")
+      ]
+
+      assert {:ok, context} =
+               ReqLLM.Context.append_tool_exchange(base_context, assistant, results)
+
+      mock_request = %Req.Request{
+        options: [context: context, model: model.model, stream: false]
+      }
+
+      decoded = mock_request |> Anthropic.encode_body() |> ReqLLM.Test.Helpers.json_body()
+
+      tool_result_blocks =
+        decoded["messages"]
+        |> List.last()
+        |> Map.fetch!("content")
+
+      assert Enum.map(tool_result_blocks, & &1["tool_use_id"]) == ["tool_1", "tool_2"]
+    end
+
     test "encode_body preserves multimodal tool_result content blocks" do
       {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
 

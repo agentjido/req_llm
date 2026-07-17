@@ -682,6 +682,38 @@ defmodule ReqLLM.Providers.OpenAITest do
       assert tool_message["tool_call_id"] == "functions.add:0"
     end
 
+    test "encode_body round trips matched tool exchanges in assistant call order" do
+      {:ok, model} = ReqLLM.model("openai:gpt-4o")
+      base_context = Context.new([Context.user("Get weather and time")])
+
+      assistant =
+        Context.assistant("",
+          tool_calls: [
+            {"get_weather", %{city: "Paris"}, id: "call_1"},
+            {"get_time", %{timezone: "Europe/Paris"}, id: "call_2"}
+          ],
+          metadata: %{provider_native: %{response_id: "resp_123"}}
+        )
+
+      results = [
+        Context.tool_result("call_2", "get_time", "10:00 CEST"),
+        Context.tool_result("call_1", "72°F and sunny")
+      ]
+
+      assert {:ok, context} = Context.append_tool_exchange(base_context, assistant, results)
+
+      mock_request = %Req.Request{
+        options: [context: context, model: model.model, stream: false]
+      }
+
+      decoded = mock_request |> OpenAI.encode_body() |> ReqLLM.Test.Helpers.json_body()
+      assistant_message = Enum.find(decoded["messages"], &(&1["role"] == "assistant"))
+      tool_messages = Enum.filter(decoded["messages"], &(&1["role"] == "tool"))
+
+      assert Enum.map(assistant_message["tool_calls"], & &1["id"]) == ["call_1", "call_2"]
+      assert Enum.map(tool_messages, & &1["tool_call_id"]) == ["call_1", "call_2"]
+    end
+
     test "encode_body for o1 models uses max_completion_tokens" do
       {:ok, model} = ReqLLM.model("openai:o1-mini")
       context = context_fixture()

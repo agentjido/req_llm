@@ -201,6 +201,30 @@ Defines callable functions (aka "tools" or "function calling") with validation.
 
 `ReqLLM.ToolCall` represents assistant tool-call requests. Most tool calls are local work your app should execute, but some providers also return server-side builtin calls (for example OpenAI Responses API `web_search_call`). ReqLLM preserves those with `ReqLLM.ToolCall.new_builtin/3`; detect them with `ReqLLM.ToolCall.builtin?/1` and do not replay them as local tools.
 
+### Continuing with matched tool results
+
+`ReqLLM.Context.append_tool_exchange/3` appends a canonical assistant message
+and its tool-result messages without executing tools or making another model
+call. It validates IDs and names atomically, ignores provider-executed calls,
+and orders results to match the assistant calls:
+
+```elixir
+results = [
+  ReqLLM.Context.tool_result("call_2", "get_time", "10:00 CEST"),
+  ReqLLM.Context.tool_result("call_1", "get_weather", "72°F and sunny")
+]
+
+{:ok, continued_context} =
+  ReqLLM.Context.append_tool_exchange(input_context, response, results)
+
+{:ok, next_response} =
+  ReqLLM.generate_text(model, continued_context, tools: tools)
+```
+
+The second model call remains explicit and application-owned. The helper also
+accepts `response.message`; when passed `response.context`, it recognizes the
+assistant message already present and appends only the matched results.
+
 ## 6) ReqLLM.StreamChunk
 
 Unified streaming event payloads emitted during `stream_text`.
