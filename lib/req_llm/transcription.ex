@@ -248,7 +248,7 @@ defmodule ReqLLM.Transcription do
     if Keyword.has_key?(request.response_steps, :llm_usage) do
       request
     else
-      ReqLLM.Step.Usage.attach(request, model)
+      ReqLLM.Step.Usage.attach(request, model, before: :llm_telemetry_stop)
     end
   end
 

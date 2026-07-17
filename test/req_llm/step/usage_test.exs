@@ -74,6 +74,17 @@ defmodule ReqLLM.Step.UsageTest do
       assert Keyword.has_key?(updated_request.response_steps, :llm_usage)
       assert updated_request.private[:req_llm_model] == nil
     end
+
+    test "can insert usage before an existing response step" do
+      request = %Req.Request{
+        response_steps: [decode: &Function.identity/1, telemetry: &Function.identity/1]
+      }
+
+      updated_request = Usage.attach(request, nil, before: :telemetry)
+
+      assert Keyword.keys(updated_request.response_steps) == [:decode, :llm_usage, :telemetry]
+      assert updated_request.response_steps[:llm_usage] == (&Usage.handle/1)
+    end
   end
 
   describe "handle/1 - usage extraction and processing" do

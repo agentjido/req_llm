@@ -31,20 +31,36 @@ defmodule ReqLLM.Step.Usage do
 
   - `req` - The Req.Request struct
   - `model` - Optional ReqLLM.Model struct for cost calculation
+  - `opts` - Optional placement settings. `:before` inserts the step before a
+    named response step and appends it when that name is absent.
 
   ## Examples
 
       request
       |> ReqLLM.Step.Usage.attach(model)
 
+      request
+      |> ReqLLM.Step.Usage.attach(model, before: :llm_telemetry_stop)
+
   """
-  @spec attach(Req.Request.t(), LLMDB.Model.t() | nil) :: Req.Request.t()
-  def attach(%Req.Request{} = req, model \\ nil) do
+  @spec attach(Req.Request.t(), LLMDB.Model.t() | nil, keyword()) :: Req.Request.t()
+  def attach(%Req.Request{} = req, model \\ nil, opts \\ []) do
     req
-    |> Req.Request.append_response_steps(llm_usage: &__MODULE__.handle/1)
+    |> attach_response_step(Keyword.get(opts, :before))
     |> then(fn r ->
       if model, do: Req.Request.put_private(r, :req_llm_model, model), else: r
     end)
+  end
+
+  defp attach_response_step(req, nil) do
+    Req.Request.append_response_steps(req, llm_usage: &__MODULE__.handle/1)
+  end
+
+  defp attach_response_step(req, before) when is_atom(before) do
+    {leading, trailing} =
+      Enum.split_while(req.response_steps, fn {name, _step} -> name != before end)
+
+    %{req | response_steps: leading ++ [llm_usage: &__MODULE__.handle/1] ++ trailing}
   end
 
   @doc false

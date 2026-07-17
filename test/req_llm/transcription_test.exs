@@ -177,12 +177,12 @@ defmodule ReqLLM.TranscriptionTest do
       test_pid = self()
       handler_id = "transcription-detailed-#{System.unique_integer([:positive])}"
 
-      :telemetry.attach(
+      :telemetry.attach_many(
         handler_id,
-        [:req_llm, :token_usage],
-        fn _event, _measurements, metadata, _config ->
+        [[:req_llm, :token_usage], [:req_llm, :request, :stop]],
+        fn event, _measurements, metadata, _config ->
           if metadata.model.id == "transcription-metadata-test" do
-            send(test_pid, {:usage_telemetry, metadata})
+            send(test_pid, {event, metadata})
           end
         end,
         nil
@@ -227,7 +227,12 @@ defmodule ReqLLM.TranscriptionTest do
 
       assert_receive :detailed_request
       refute_receive :detailed_request, 20
-      assert_receive {:usage_telemetry, %{operation: :transcription}}
+
+      assert_receive {[:req_llm, :request, :stop], request_stop}
+      assert request_stop.operation == :transcription
+      assert request_stop.usage.tokens.input_tokens == 10
+
+      assert_receive {[:req_llm, :token_usage], %{operation: :transcription}}
 
       assert detailed.result == %Result{
                text: "Hello world",
