@@ -181,6 +181,7 @@ defmodule ReqLLM.ResponseProjectionTest do
             "files" => [%{"file_id" => "file_secret"}],
             "reasoningDetails" => %{"signature" => "opaque"},
             "request" => %{"id" => "provider_req", "body" => "private"},
+            "warnings" => ["temperature was ignored for sk-secret"],
             "url" => "https://example.com/result?token=secret&format=json"
           }
         )
@@ -205,6 +206,7 @@ defmodule ReqLLM.ResponseProjectionTest do
                "files" => "[REDACTED]",
                "reasoningDetails" => "[REDACTED]",
                "request" => "[REDACTED]",
+               "warnings" => "[REDACTED]",
                "url" => "https://example.com/result?format=json&token=[REDACTED]"
              }
 

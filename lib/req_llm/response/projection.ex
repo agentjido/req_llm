@@ -271,7 +271,7 @@ defmodule ReqLLM.Response.Projection do
 
   defp safe_metadata(value) when is_map(value) do
     Map.new(value, fn {key, item} ->
-      if sensitive_metadata_key?(key) do
+      if redacted_metadata_key?(key) do
         {key, @redacted}
       else
         {key, safe_metadata(item)}
@@ -307,6 +307,13 @@ defmodule ReqLLM.Response.Projection do
   end
 
   defp sensitive_metadata_key?(_key), do: false
+
+  defp redacted_metadata_key?(key) when is_atom(key) or is_binary(key) do
+    sensitive_metadata_key?(key) or
+      (key |> to_string() |> Macro.underscore() |> String.downcase()) in ["warning", "warnings"]
+  end
+
+  defp redacted_metadata_key?(_key), do: false
 
   defp numeric_metadata(map) do
     map
