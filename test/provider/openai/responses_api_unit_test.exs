@@ -2577,7 +2577,34 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
                  end)
         end)
 
-      assert log =~ "Skipping non-OpenAI reasoning detail from provider: :anthropic"
+      assert log =~ "Skipping reasoning detail from provider :anthropic for :openai request"
+    end
+
+    test "does not replay Meta reasoning details into OpenAI requests" do
+      meta_detail = %ReqLLM.Message.ReasoningDetails{
+        text: "Meta reasoning",
+        signature: "meta_encrypted_reasoning",
+        encrypted?: true,
+        provider: :meta,
+        format: "openai-responses-v1",
+        index: 0,
+        provider_data: %{"id" => "rs_meta_1", "type" => "reasoning"}
+      }
+
+      assistant_msg = %ReqLLM.Message{
+        role: :assistant,
+        content: [%ReqLLM.Message.ContentPart{type: :text, text: "Response"}],
+        reasoning_details: [meta_detail]
+      }
+
+      context = %ReqLLM.Context{messages: [assistant_msg]}
+
+      body =
+        build_request(context: context)
+        |> ResponsesAPI.encode_body()
+        |> ReqLLM.Test.Helpers.json_body()
+
+      refute Enum.any?(body["input"], &(&1["type"] == "reasoning"))
     end
 
     test "encodes summary from reasoning detail text" do
