@@ -139,6 +139,39 @@ This path is best when:
 
 This is the key point: you do not need the model to exist in LLMDB before ReqLLM can use it, as long as you provide a complete enough model spec.
 
+## Inspect Request Routing Without Executing
+
+`ReqLLM.plan/3` provides an experimental, redacted view of text-request routing before
+ReqLLM encodes a request or resolves credentials:
+
+```elixir
+{:ok, diagnostic} =
+  ReqLLM.plan("openai:gpt-4o-mini", :chat,
+    max_tokens: 256,
+    stream: true
+  )
+
+diagnostic.surface
+#=> :openai_responses
+
+diagnostic.transport
+#=> :finch
+
+diagnostic.route
+#=> %{method: :post, path: "/responses"}
+```
+
+The result contains the resolved provider/model ID, operation, named surface, transport,
+relative route template, canonical and provider-translated option names, fallbacks, and
+warnings. It does not contain model metadata, internal modules, option values, hosts,
+credentials, prompt/message/tool/file values, or encoded request bodies. ReqLLM 1.x does
+not silently retry another provider surface, so `fallbacks` is currently empty.
+
+Planning currently covers the production surfaces migrated to the shared planner: OpenAI
+Chat Completions, OpenAI Responses, and Anthropic Messages. Unsupported providers and
+surface/transport combinations return normal ReqLLM structured errors without sending a
+request.
+
 ## Recommended Workflow
 
 ### Use a string when the model is in LLMDB

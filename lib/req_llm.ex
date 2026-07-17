@@ -108,6 +108,23 @@ defmodule ReqLLM do
           | {atom(), keyword()}
           | LLMDB.Model.t()
 
+  @typedoc """
+  Redacted, JSON-serializable diagnostic returned by `plan/3`.
+
+  The diagnostic contains route and option names only. It never contains provider modules,
+  model metadata, option values, credentials, prompt/message/tool/file values, or encoded bodies.
+  """
+  @type plan_diagnostic :: %{
+          model: %{provider: atom(), id: String.t()},
+          operation: :chat | :object,
+          surface: atom(),
+          transport: :req | :finch | :websocket,
+          route: %{method: :post | :websocket, path: String.t()},
+          options: %{canonical: [atom()], translated: [atom()]},
+          fallbacks: [],
+          warnings: [String.t()]
+        }
+
   @inline_model_example "%{provider: :openai, id: \"gpt-4o\"}"
   @inline_model_fields LLMDB.Model.__struct__(provider: :openai, id: "__inline__")
                        |> Map.from_struct()
@@ -363,6 +380,45 @@ defmodule ReqLLM do
       {:ok, model} -> model
       {:error, error} -> raise error
     end
+  end
+
+  @doc """
+  Returns an experimental redacted diagnostic for a text request before execution.
+
+  `plan/3` uses the same internal planner as OpenAI Chat Completions, OpenAI Responses,
+  and Anthropic Messages execution. It resolves the selected surface and transport, but
+  does not encode a request, resolve credentials, access fixtures, or perform network I/O.
+
+  The returned map includes only the resolved provider/model ID, operation, named surface,
+  transport, relative route template, sorted option names, fallbacks, and warnings. Credential
+  and request-payload control options are omitted even from the option-name lists. ReqLLM 1.x
+  does not silently fall back to another surface, so `:fallbacks` is currently always empty.
+
+  This API is additive and experimental. Its diagnostic fields are not a stable compatibility
+  contract during ReqLLM 1.x, but existing generation and provider behavior are unaffected.
+
+  ## Examples
+
+      {:ok, diagnostic} =
+        ReqLLM.plan("openai:gpt-4o-mini", :chat,
+          max_tokens: 256,
+          stream: true
+        )
+
+      diagnostic.surface
+      #=> :openai_responses
+
+      diagnostic.transport
+      #=> :finch
+
+      diagnostic.route
+      #=> %{method: :post, path: "/responses"}
+
+  """
+  @spec plan(model_input(), :chat | :object, keyword()) ::
+          {:ok, plan_diagnostic()} | {:error, term()}
+  def plan(model_spec, operation, opts \\ []) do
+    ReqLLM.RequestPlan.Diagnostic.build(model_spec, operation, opts)
   end
 
   @doc """
