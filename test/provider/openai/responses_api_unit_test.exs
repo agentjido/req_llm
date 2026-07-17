@@ -419,6 +419,46 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
       end
     end
 
+    test "requires and encodes explicit results for provider-native calls" do
+      base_context = ReqLLM.Context.new([ReqLLM.Context.user("Search provider data")])
+
+      provider_native_call =
+        "native_1"
+        |> ReqLLM.ToolCall.new("provider_search", ~s({"query":"elixir"}))
+        |> ReqLLM.ToolCall.put_metadata(%{provider_native: :openai})
+
+      assistant =
+        ReqLLM.Context.assistant("", tool_calls: [provider_native_call])
+
+      assert {:error, %ReqLLM.Error.Validation.Error{context: error_context}} =
+               ReqLLM.Context.append_tool_exchange(base_context, assistant, [])
+
+      assert error_context[:kind] == :missing_tool_results
+
+      result =
+        ReqLLM.Context.tool_result(
+          "native_1",
+          "provider_search",
+          "provider search complete"
+        )
+
+      assert {:ok, context} =
+               ReqLLM.Context.append_tool_exchange(base_context, assistant, [result])
+
+      request = build_request(context: context)
+      body = request |> ResponsesAPI.encode_body() |> ReqLLM.Test.Helpers.json_body()
+
+      function_items =
+        Enum.filter(body["input"], &(&1["type"] in ["function_call", "function_call_output"]))
+
+      assert Enum.map(function_items, & &1["type"]) == [
+               "function_call",
+               "function_call_output"
+             ]
+
+      assert Enum.map(function_items, & &1["call_id"]) == ["native_1", "native_1"]
+    end
+
     test "encodes multimodal tool results as array function_call_output" do
       tool_call = %ReqLLM.ToolCall{
         id: "call_1",

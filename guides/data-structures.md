@@ -205,8 +205,9 @@ Defines callable functions (aka "tools" or "function calling") with validation.
 
 `ReqLLM.Context.append_tool_exchange/3` appends a canonical assistant message
 and its tool-result messages without executing tools or making another model
-call. It validates IDs and names atomically, ignores provider-executed calls,
-and orders results to match the assistant calls:
+call. It validates IDs and names atomically, ignores provider-executed
+builtins, and orders results to match the assistant calls. Provider-native
+calls remain explicit and require matching results:
 
 ```elixir
 results = [

@@ -122,9 +122,7 @@ defmodule ReqLLM.Context.ToolExchange do
     end
   end
 
-  defp non_application_call?(call) do
-    ToolCall.builtin?(call) or ToolCall.provider_native?(call)
-  end
+  defp provider_executed_call?(call), do: ToolCall.builtin?(call)
 
   defp valid_call?(%ToolCall{
          type: "function",
@@ -147,7 +145,7 @@ defmodule ReqLLM.Context.ToolExchange do
     if duplicate_ids == [] do
       application_calls =
         calls
-        |> Enum.reject(&non_application_call?/1)
+        |> Enum.reject(&provider_executed_call?/1)
         |> Enum.map(&call_identity/1)
 
       {:ok, application_calls}
@@ -230,7 +228,7 @@ defmodule ReqLLM.Context.ToolExchange do
 
   defp pending_calls?(%Message{role: :assistant, tool_calls: tool_calls})
        when is_list(tool_calls) do
-    Enum.any?(tool_calls, &(not non_application_call?(&1)))
+    Enum.any?(tool_calls, &(not provider_executed_call?(&1)))
   end
 
   defp pending_calls?(_message), do: false

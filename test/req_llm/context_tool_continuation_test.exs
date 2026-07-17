@@ -48,6 +48,14 @@ defmodule ReqLLM.ContextToolContinuationTest do
         }
       )
 
+    native_result =
+      Context.tool_result_message(
+        "provider_search",
+        "native_1",
+        "provider search complete",
+        %{provider_native: %{request_id: "req_native_result"}}
+      )
+
     second_result = Context.tool_result("call_2", "get_time", "10:00 CEST")
     base_context = Context.new([Context.user("Weather and time in Paris?")])
 
@@ -55,25 +63,34 @@ defmodule ReqLLM.ContextToolContinuationTest do
       assistant: assistant,
       base_context: base_context,
       first_result: first_result,
+      native_result: native_result,
       second_result: second_result
     }
   end
 
   describe "append_tool_exchange/3" do
     test "appends canonical messages in assistant call order", setup do
-      results = [setup.second_result, setup.first_result]
+      results = [setup.second_result, setup.native_result, setup.first_result]
 
       assert {:ok, context} =
                Context.append_tool_exchange(setup.base_context, setup.assistant, results)
 
-      assert [user, assistant, first_result, second_result] = context.messages
+      assert [user, assistant, first_result, native_result, second_result] = context.messages
       assert user == hd(setup.base_context.messages)
       assert assistant == setup.assistant
-      assert Enum.map([first_result, second_result], & &1.tool_call_id) == ["call_1", "call_2"]
+
+      assert Enum.map([first_result, native_result, second_result], & &1.tool_call_id) == [
+               "call_1",
+               "native_1",
+               "call_2"
+             ]
+
       assert first_result.name == "get_weather"
+      assert native_result.name == "provider_search"
       assert second_result.name == "get_time"
       assert first_result.content == setup.first_result.content
       assert first_result.metadata == setup.first_result.metadata
+      assert native_result.metadata == setup.native_result.metadata
       assert assistant.metadata == setup.assistant.metadata
       assert assistant.reasoning_details == setup.assistant.reasoning_details
       assert length(assistant.tool_calls) == 4
@@ -87,7 +104,7 @@ defmodule ReqLLM.ContextToolContinuationTest do
         message: setup.assistant
       }
 
-      results = [setup.second_result, setup.first_result]
+      results = [setup.second_result, setup.native_result, setup.first_result]
       merged_context = Context.merge_response(setup.base_context, response).context
 
       assert {:ok, from_message} =
@@ -109,7 +126,7 @@ defmodule ReqLLM.ContextToolContinuationTest do
                Context.append_tool_exchange(
                  setup.base_context,
                  setup.assistant,
-                 [setup.first_result, setup.second_result]
+                 [setup.first_result, setup.native_result, setup.second_result]
                )
 
       assert is_binary(Jason.encode!(context))
@@ -122,7 +139,12 @@ defmodule ReqLLM.ContextToolContinuationTest do
         Context.append_tool_exchange(
           setup.base_context,
           setup.assistant,
-          [setup.first_result, setup.first_result, setup.second_result]
+          [
+            setup.first_result,
+            setup.first_result,
+            setup.native_result,
+            setup.second_result
+          ]
         )
       )
     end
@@ -175,7 +197,7 @@ defmodule ReqLLM.ContextToolContinuationTest do
         Context.append_tool_exchange(
           setup.base_context,
           setup.assistant,
-          [mismatched, setup.second_result]
+          [mismatched, setup.native_result, setup.second_result]
         )
       )
     end
@@ -263,9 +285,29 @@ defmodule ReqLLM.ContextToolContinuationTest do
         Context.append_tool_exchange(
           pending,
           setup.assistant,
-          [setup.first_result, setup.second_result]
+          [setup.first_result, setup.native_result, setup.second_result]
         )
       )
+    end
+
+    test "requires explicit results for provider-native calls", setup do
+      provider_native_call = Enum.at(setup.assistant.tool_calls, 2)
+      provider_native_assistant = %{setup.assistant | tool_calls: [provider_native_call]}
+
+      assert_exchange_error(
+        :missing_tool_results,
+        Context.append_tool_exchange(setup.base_context, provider_native_assistant, [])
+      )
+
+      assert {:ok, context} =
+               Context.append_tool_exchange(
+                 setup.base_context,
+                 provider_native_assistant,
+                 [setup.native_result]
+               )
+
+      assert [_, ^provider_native_assistant, native_result] = context.messages
+      assert native_result == setup.native_result
     end
 
     test "allows completed provider-executed calls without local results", setup do

@@ -218,10 +218,11 @@ defmodule ReqLLM.Context do
   order. A result without a name inherits the matched call name. Explicit
   result names must match.
 
-  Provider-executed builtins and provider-native calls do not require local
-  results. The assistant and result messages otherwise retain their content,
-  reasoning details, and metadata unchanged. This function never executes a
-  tool or starts another model call.
+  Provider-executed builtins do not require local results. Provider-native
+  calls remain explicit and require a matching result before continuation.
+  The assistant and result messages otherwise retain their content, reasoning
+  details, and metadata unchanged. This function never executes a tool or
+  starts another model call.
 
   If the context already ends with the exact assistant message, only the
   results are appended. This supports both the original input context and the
