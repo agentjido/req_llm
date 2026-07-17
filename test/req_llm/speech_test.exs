@@ -143,6 +143,7 @@ defmodule ReqLLM.SpeechTest do
     test "passes text through to provider" do
       assert {:error, error} =
                Speech.speak("openai:tts-1", "Hello world",
+                 api_key: "test-key",
                  req_http_options: [plug: {Req.Test, __MODULE__}]
                )
 
