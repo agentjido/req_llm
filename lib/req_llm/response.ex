@@ -103,6 +103,23 @@ defmodule ReqLLM.Response do
   end
 
   @doc """
+  Projects the value described by a `ReqLLM.Output` descriptor.
+
+  This is a computed view over the unchanged response. Plain text delegates to
+  `text/1`; object output uses the existing `object` value; array, choice, and
+  JSON outputs unwrap the private compatibility envelope used by providers that
+  require a top-level object schema.
+
+  Raw text, structured tool-call arguments, usage, and provider metadata remain
+  available through their existing accessors. This projection follows the
+  current V1 structured-output validation and repair behavior.
+  """
+  @spec output(t(), ReqLLM.Output.t()) :: term()
+  def output(%__MODULE__{} = response, %ReqLLM.Output{} = descriptor) do
+    ReqLLM.Output.value(descriptor, response)
+  end
+
+  @doc """
   Extract image content parts from the response message.
 
   Returns a list of `ReqLLM.Message.ContentPart` where `type` is `:image` or `:image_url`.

@@ -110,6 +110,11 @@ schema = [name: [type: :string, required: true], age: [type: :pos_integer]]
 person = ReqLLM.generate_object!(model, "Generate a person", schema)
 #=> %{name: "John Doe", age: 30}
 
+output = ReqLLM.Output.array([name: [type: :string, required: true]])
+{:ok, response} = ReqLLM.generate_text(model, "Generate three people", output: output)
+ReqLLM.Response.output(response, output)
+#=> [%{"name" => "Ada"}, %{"name" => "Grace"}, %{"name" => "Linus"}]
+
 {:ok, image_response} = ReqLLM.generate_image("openai:gpt-image-1.5", "A simple red square")
 image_bytes = ReqLLM.Response.image_data(image_response)
 File.write!("red_square.png", image_bytes)
@@ -171,8 +176,9 @@ usage = ReqLLM.StreamResponse.usage(response)
   - Req-backed request/response calls and Finch-backed streaming behind the same provider abstraction
   - Advanced Req request customization available for non-streaming use cases
 
-- **Structured object generation**
-  - `generate_object/4` renders JSON-compatible Elixir maps validated by a NimbleOptions-compiled schema
+- **Structured output generation**
+  - `ReqLLM.Output` descriptors add text, object, array, choice, and arbitrary JSON contracts to `generate_text/3` and `stream_text/3`
+  - `generate_object/4` and `stream_object/4` remain compatible object-generation conveniences
   - Zero-copy mapping to provider JSON-schema / function-calling endpoints
   - OpenAI native structured outputs with three modes (`:auto` (default), `:json_schema`, `:tool_strict`)
 

@@ -918,6 +918,8 @@ defmodule ReqLLM do
     * `:frequency_penalty` - Penalize new tokens based on frequency
     * `:tools` - List of tool definitions
     * `:tool_choice` - Tool choice strategy
+    * `:output` - A `ReqLLM.Output` descriptor for text, object, array, choice,
+      or arbitrary JSON output
     * `:system_prompt` - System prompt to prepend
     * `:receive_timeout` - Provider-transport inactivity timeout in milliseconds
     * `:total_timeout` - Optional whole-call deadline in milliseconds, including retries
@@ -934,6 +936,11 @@ defmodule ReqLLM do
       ReqLLM.Response.usage(response)
       #=> %{input_tokens: 10, output_tokens: 8}
 
+      output = ReqLLM.Output.array([name: [type: :string, required: true]])
+      {:ok, response} = ReqLLM.generate_text(model, "Generate people", output: output)
+      ReqLLM.Response.output(response, output)
+      #=> [%{"name" => "Ada"}]
+
   """
   defdelegate generate_text(model_spec, messages, opts \\ []), to: Generation
 
@@ -942,7 +949,8 @@ defmodule ReqLLM do
 
   This is a convenience function that extracts just the text from the response.
   For access to usage metadata and other response data, use `generate_text/3`.
-  Raises on error.
+  Raises on error. This function remains a text-only convenience; use
+  `generate_text/3` and `ReqLLM.Response.output/2` for structured descriptors.
 
   ## Parameters
 
@@ -962,6 +970,11 @@ defmodule ReqLLM do
   Returns a `ReqLLM.StreamResponse` that provides both real-time token streaming
   and asynchronous metadata collection (usage, finish_reason). This enables
   zero-latency content delivery while collecting billing/usage data concurrently.
+
+  Structured `:output` descriptors reuse the existing object-stream path.
+  Partial chunks are not final-schema validation results. Convert the response
+  once with `ReqLLM.StreamResponse.to_response/1`, then project the complete
+  value with `ReqLLM.Response.output/2`.
 
   The streaming implementation uses Finch directly for production-grade performance
   with automatic connection pooling and configurable checkout timeouts.

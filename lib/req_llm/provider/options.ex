@@ -165,6 +165,11 @@ defmodule ReqLLM.Provider.Options do
                                ],
 
                                # Output control
+                               output: [
+                                 type: :any,
+                                 doc:
+                                   "ReqLLM.Output descriptor for text, object, array, choice, or JSON generation"
+                               ],
                                n: [
                                  type: :pos_integer,
                                  default: 1,
@@ -1028,7 +1033,7 @@ defmodule ReqLLM.Provider.Options do
     unknown_keys = extract_unknown_keys_from_opts(opts)
     provider_suggestions = get_provider_option_suggestions(provider_mod, unknown_keys)
 
-    output_related_keys = [:output, :mode, :schema_name, :schema_description, :enum]
+    output_related_keys = [:mode, :schema_name, :schema_description, :enum]
     has_output_options = Enum.any?(unknown_keys, &(&1 in output_related_keys))
 
     base_message = message
@@ -1036,10 +1041,9 @@ defmodule ReqLLM.Provider.Options do
     base_message =
       if has_output_options do
         output_tip =
-          "Tip: The :output option and related options (:mode, :schema_name, :schema_description, :enum) are not yet supported. " <>
-            "For array/enum outputs, use Zoi to define your schema and convert it with ReqLLM.Schema.to_json/1, then pass it to generate_object/4. " <>
-            "This requires a provider that supports JSON Schema (e.g., OpenAI). " <>
-            "Example: array_schema = Zoi.array(Zoi.object(%{name: Zoi.string()})) |> ReqLLM.Schema.to_json()"
+          "Tip: Use the :output option with a ReqLLM.Output descriptor. " <>
+            "The legacy :mode, :schema_name, :schema_description, and :enum options are not supported. " <>
+            "Example: output: ReqLLM.Output.array(Zoi.object(%{name: Zoi.string()}), name: \"people\")"
 
         base_message <> "\n\n" <> output_tip
       else

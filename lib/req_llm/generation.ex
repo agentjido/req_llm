@@ -50,6 +50,9 @@ defmodule ReqLLM.Generation do
     * `:frequency_penalty` - Penalize new tokens based on frequency
     * `:tools` - List of tool definitions
     * `:tool_choice` - Tool choice strategy
+    * `:output` - A `ReqLLM.Output` descriptor; omitted and `ReqLLM.Output.text/0`
+      preserve plain-text behavior, while structured descriptors reuse the existing
+      provider-native or tool-fallback object path
     * `:system_prompt` - System prompt to prepend
     * `:receive_timeout` - Provider-transport inactivity timeout in milliseconds
     * `:total_timeout` - Optional whole-call deadline in milliseconds, including retries
@@ -66,6 +69,11 @@ defmodule ReqLLM.Generation do
       ReqLLM.Response.usage(response)
       #=> %{input_tokens: 10, output_tokens: 8}
 
+      output = ReqLLM.Output.object([name: [type: :string, required: true]])
+      {:ok, response} = ReqLLM.Generation.generate_text(model, "Generate a person", output: output)
+      ReqLLM.Response.output(response, output)
+      #=> %{"name" => "Ada"}
+
   """
 
   @spec generate_text(
@@ -75,7 +83,18 @@ defmodule ReqLLM.Generation do
         ) :: {:ok, Response.t()} | {:error, term()}
   def generate_text(model_spec, messages, opts \\ []) do
     opts = ReqLLM.ModelInput.merge_tuple_defaults(model_spec, :chat, opts)
+    {output, opts} = Keyword.pop(opts, :output)
 
+    with {:ok, descriptor} <- ReqLLM.Output.normalize(output),
+         {:ok, contract} <- ReqLLM.Output.compile(descriptor) do
+      case contract.operation do
+        :chat -> generate_text_response(model_spec, messages, opts)
+        :object -> generate_output_response(model_spec, messages, contract, opts)
+      end
+    end
+  end
+
+  defp generate_text_response(model_spec, messages, opts) do
     with {:ok, model} <- ReqLLM.model(model_spec),
          {:ok, provider_module} <- ReqLLM.provider(model.provider),
          {:ok, opts} <-
@@ -103,12 +122,22 @@ defmodule ReqLLM.Generation do
     end
   end
 
+  defp generate_output_response(model_spec, messages, contract, opts) do
+    generate_object_response(
+      model_spec,
+      messages,
+      {:compiled, contract.compiled_schema},
+      opts
+    )
+  end
+
   @doc """
   Generates text using an AI model, returning only the text content.
 
   This is a convenience function that extracts just the text from the response.
   For access to usage metadata and other response data, use `generate_text/3`.
-  Raises on error.
+  Raises on error. This function remains a text-only convenience; use
+  `generate_text/3` and `ReqLLM.Response.output/2` for structured descriptors.
 
   ## Parameters
 
@@ -138,6 +167,12 @@ defmodule ReqLLM.Generation do
   Returns a canonical ReqLLM.Response containing usage data and stream.
   For simple streaming without metadata, use `stream_text!/3`.
 
+  When `:output` is structured, the stream retains the existing object-stream
+  representation. Partial content and tool-call argument chunks are transport
+  fragments, not final-schema validation results. Materialize the stream once
+  with `ReqLLM.StreamResponse.to_response/1`, then call
+  `ReqLLM.Response.output/2` with the same descriptor.
+
   ## Parameters
 
   Same as `generate_text/3`.
@@ -159,7 +194,18 @@ defmodule ReqLLM.Generation do
         ) :: {:ok, ReqLLM.StreamResponse.t()} | {:error, term()}
   def stream_text(model_spec, messages, opts \\ []) do
     opts = ReqLLM.ModelInput.merge_tuple_defaults(model_spec, :chat, opts)
+    {output, opts} = Keyword.pop(opts, :output)
 
+    with {:ok, descriptor} <- ReqLLM.Output.normalize(output),
+         {:ok, contract} <- ReqLLM.Output.compile(descriptor) do
+      case contract.operation do
+        :chat -> stream_text_response(model_spec, messages, opts)
+        :object -> stream_output_response(model_spec, messages, contract, opts)
+      end
+    end
+  end
+
+  defp stream_text_response(model_spec, messages, opts) do
     with {:ok, model} <- ReqLLM.model(model_spec),
          {:ok, provider_module} <- ReqLLM.provider(model.provider),
          {:ok, opts} <-
@@ -183,6 +229,15 @@ defmodule ReqLLM.Generation do
           )
       end
     end
+  end
+
+  defp stream_output_response(model_spec, messages, contract, opts) do
+    stream_object_response(
+      model_spec,
+      messages,
+      {:compiled, contract.compiled_schema},
+      opts
+    )
   end
 
   @doc """
@@ -268,8 +323,15 @@ defmodule ReqLLM.Generation do
           keyword()
         ) :: {:ok, Response.t()} | {:error, term()}
   def generate_object(model_spec, messages, object_schema, opts \\ []) do
-    opts = ReqLLM.ModelInput.merge_tuple_defaults(model_spec, :object, opts)
+    opts =
+      model_spec
+      |> ReqLLM.ModelInput.merge_tuple_defaults(:object, opts)
+      |> Keyword.delete(:output)
 
+    generate_object_response(model_spec, messages, {:schema, object_schema}, opts)
+  end
+
+  defp generate_object_response(model_spec, messages, schema_source, opts) do
     with {:ok, model} <- ReqLLM.model(model_spec),
          {:ok, provider_module} <- ReqLLM.provider(model.provider),
          {:ok, opts} <-
@@ -280,7 +342,7 @@ defmodule ReqLLM.Generation do
              opts
            ),
          {:ok, context} <- ReqLLM.Context.normalize(messages, opts),
-         {:ok, compiled_schema} <- ReqLLM.Schema.compile(object_schema) do
+         {:ok, compiled_schema} <- compile_schema_source(schema_source) do
       compiled_opts = Keyword.put(opts, :compiled_schema, compiled_schema)
 
       case ReqLLM.Cache.fetch(model, :object, context, opts, compiled_schema.schema) do
@@ -300,6 +362,9 @@ defmodule ReqLLM.Generation do
       end
     end
   end
+
+  defp compile_schema_source({:schema, schema}), do: ReqLLM.Schema.compile(schema)
+  defp compile_schema_source({:compiled, compiled_schema}), do: {:ok, compiled_schema}
 
   @doc """
   Generates structured data using an AI model, returning only the object content.
@@ -541,8 +606,15 @@ defmodule ReqLLM.Generation do
           keyword()
         ) :: {:ok, ReqLLM.StreamResponse.t()} | {:error, term()}
   def stream_object(model_spec, messages, object_schema, opts \\ []) do
-    opts = ReqLLM.ModelInput.merge_tuple_defaults(model_spec, :object, opts)
+    opts =
+      model_spec
+      |> ReqLLM.ModelInput.merge_tuple_defaults(:object, opts)
+      |> Keyword.delete(:output)
 
+    stream_object_response(model_spec, messages, {:schema, object_schema}, opts)
+  end
+
+  defp stream_object_response(model_spec, messages, schema_source, opts) do
     with {:ok, model} <- ReqLLM.model(model_spec),
          {:ok, provider_module} <- ReqLLM.provider(model.provider),
          {:ok, opts} <-
@@ -552,7 +624,7 @@ defmodule ReqLLM.Generation do
              model,
              opts
            ),
-         {:ok, compiled_schema} <- ReqLLM.Schema.compile(object_schema),
+         {:ok, compiled_schema} <- compile_schema_source(schema_source),
          {:ok, prepared_req} <-
            provider_module.prepare_request(
              :object,
