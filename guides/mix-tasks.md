@@ -9,6 +9,7 @@ ReqLLM includes these main Mix tasks:
 | Task | Alias | Purpose |
 |------|-------|---------|
 | `mix req_llm.doctor` | — | Diagnose installation and runtime configuration without provider calls |
+| `mix req_llm.migration_audit` | — | Find precise, mechanical V2 migration work without rewriting source |
 | `mix req_llm.gen` | `mix llm` | Generate text/objects from the command line |
 | `mix req_llm.model_compat` | `mix mc` | Validate model coverage with fixtures |
 | `mix req_llm.model_support` | — | Inspect and verify evidence-derived support tiers |
@@ -58,6 +59,24 @@ Top-level status is `ok`, `warning`, or `error`. Each check always includes
 `id`, `layer`, `status`, `message`, `remediation`, and `details`. New check IDs or
 detail fields may be added without changing schema version; existing common fields
 retain their meaning for schema version 1.
+
+## mix req_llm.migration_audit
+
+Scan Elixir source for active ReqLLM deprecations and precise V2-readiness
+patterns. The task parses source without evaluating or rewriting it and makes no
+provider requests.
+
+```bash
+mix req_llm.migration_audit
+mix req_llm.migration_audit lib test
+mix req_llm.migration_audit --exclude test/fixtures
+mix req_llm.migration_audit --format json
+```
+
+Actionable findings exit with status `1`; unreadable or invalid source exits
+with status `2`. Clean and provider-extension-advisory-only reports exit with
+status `0`. See the [V2 migration audit guide](v2-migration-audit.md) for the
+ledger schema, before/after examples, and static-analysis limitations.
 
 ## mix req_llm.gen
 

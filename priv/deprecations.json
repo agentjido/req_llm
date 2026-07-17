@@ -1,0 +1,231 @@
+{
+  "schema_version": 1,
+  "deprecations": [
+    {
+      "id": "req_llm.stream_text_bang",
+      "owner": "ReqLLM core maintainers",
+      "contract": "ReqLLM.stream_text!/3",
+      "replacement": "ReqLLM.stream_text/3 and a ReqLLM.StreamResponse projection",
+      "introduced_version": "0.2.10",
+      "target_major": 2,
+      "v2_scope": "approved",
+      "minimum_window": {"minor_releases": 2},
+      "guide": "https://hexdocs.pm/req_llm/v2-migration-audit.html#bang-streaming-apis",
+      "detector": {"type": "remote_call", "module": "ReqLLM", "function": "stream_text!"}
+    },
+    {
+      "id": "req_llm.generation.stream_text_bang",
+      "owner": "ReqLLM core maintainers",
+      "contract": "ReqLLM.Generation.stream_text!/3",
+      "replacement": "ReqLLM.Generation.stream_text/3 and a ReqLLM.StreamResponse projection",
+      "introduced_version": "0.2.10",
+      "target_major": 2,
+      "v2_scope": "approved",
+      "minimum_window": {"minor_releases": 2},
+      "guide": "https://hexdocs.pm/req_llm/v2-migration-audit.html#bang-streaming-apis",
+      "detector": {"type": "remote_call", "module": "ReqLLM.Generation", "function": "stream_text!"}
+    },
+    {
+      "id": "req_llm.stream_object_bang",
+      "owner": "ReqLLM core maintainers",
+      "contract": "ReqLLM.stream_object!/4",
+      "replacement": "ReqLLM.stream_object/4 and a ReqLLM.StreamResponse projection",
+      "introduced_version": "0.2.10",
+      "target_major": 2,
+      "v2_scope": "approved",
+      "minimum_window": {"minor_releases": 2},
+      "guide": "https://hexdocs.pm/req_llm/v2-migration-audit.html#bang-streaming-apis",
+      "detector": {"type": "remote_call", "module": "ReqLLM", "function": "stream_object!"}
+    },
+    {
+      "id": "req_llm.generation.stream_object_bang",
+      "owner": "ReqLLM core maintainers",
+      "contract": "ReqLLM.Generation.stream_object!/4",
+      "replacement": "ReqLLM.Generation.stream_object/4 and a ReqLLM.StreamResponse projection",
+      "introduced_version": "0.2.10",
+      "target_major": 2,
+      "v2_scope": "approved",
+      "minimum_window": {"minor_releases": 2},
+      "guide": "https://hexdocs.pm/req_llm/v2-migration-audit.html#bang-streaming-apis",
+      "detector": {"type": "remote_call", "module": "ReqLLM.Generation", "function": "stream_object!"}
+    },
+    {
+      "id": "req_llm.context.assistant_with_tools",
+      "owner": "ReqLLM core maintainers",
+      "contract": "ReqLLM.Context.assistant_with_tools/2",
+      "replacement": "ReqLLM.Context.assistant/2 with the :tool_calls option",
+      "introduced_version": "0.2.10",
+      "target_major": 2,
+      "v2_scope": "unapproved",
+      "minimum_window": {"minor_releases": 2},
+      "guide": "https://hexdocs.pm/req_llm/v2-migration-audit.html#context-tool-call-helpers",
+      "detector": {"type": "remote_call", "module": "ReqLLM.Context", "function": "assistant_with_tools"}
+    },
+    {
+      "id": "req_llm.context.assistant_tool_call",
+      "owner": "ReqLLM core maintainers",
+      "contract": "ReqLLM.Context.assistant_tool_call/3",
+      "replacement": "ReqLLM.Context.assistant/2 with one :tool_calls entry",
+      "introduced_version": "0.2.10",
+      "target_major": 2,
+      "v2_scope": "unapproved",
+      "minimum_window": {"minor_releases": 2},
+      "guide": "https://hexdocs.pm/req_llm/v2-migration-audit.html#context-tool-call-helpers",
+      "detector": {"type": "remote_call", "module": "ReqLLM.Context", "function": "assistant_tool_call"}
+    },
+    {
+      "id": "req_llm.context.assistant_tool_calls",
+      "owner": "ReqLLM core maintainers",
+      "contract": "ReqLLM.Context.assistant_tool_calls/2",
+      "replacement": "ReqLLM.Context.assistant/2 with the :tool_calls option",
+      "introduced_version": "0.2.10",
+      "target_major": 2,
+      "v2_scope": "unapproved",
+      "minimum_window": {"minor_releases": 2},
+      "guide": "https://hexdocs.pm/req_llm/v2-migration-audit.html#context-tool-call-helpers",
+      "detector": {"type": "remote_call", "module": "ReqLLM.Context", "function": "assistant_tool_calls"}
+    },
+    {
+      "id": "req_llm.keys.fetch_bang",
+      "owner": "ReqLLM core maintainers",
+      "contract": "ReqLLM.Keys.fetch!/2",
+      "replacement": "ReqLLM.Keys.get!/2",
+      "introduced_version": "0.2.10",
+      "target_major": 2,
+      "v2_scope": "unapproved",
+      "minimum_window": {"minor_releases": 2},
+      "guide": "https://hexdocs.pm/req_llm/v2-migration-audit.html#key-lookup-aliases",
+      "detector": {"type": "remote_call", "module": "ReqLLM.Keys", "function": "fetch!"}
+    },
+    {
+      "id": "req_llm.keys.fetch",
+      "owner": "ReqLLM core maintainers",
+      "contract": "ReqLLM.Keys.fetch/2",
+      "replacement": "ReqLLM.Keys.get/2",
+      "introduced_version": "0.2.10",
+      "target_major": 2,
+      "v2_scope": "unapproved",
+      "minimum_window": {"minor_releases": 2},
+      "guide": "https://hexdocs.pm/req_llm/v2-migration-audit.html#key-lookup-aliases",
+      "detector": {"type": "remote_call", "module": "ReqLLM.Keys", "function": "fetch"}
+    },
+    {
+      "id": "req_llm.tool_call.builtin_flag",
+      "owner": "ReqLLM core maintainers",
+      "contract": "ReqLLM.ToolCall.builtin_flag?/1",
+      "replacement": "ReqLLM.ToolCall.flagged_builtin?/1",
+      "introduced_version": "1.12.0",
+      "target_major": 2,
+      "v2_scope": "unapproved",
+      "minimum_window": {"minor_releases": 2},
+      "guide": "https://hexdocs.pm/req_llm/v2-migration-audit.html#tool-call-flag-helper",
+      "detector": {"type": "remote_call", "module": "ReqLLM.ToolCall", "function": "builtin_flag?"}
+    },
+    {
+      "id": "req_llm.providers.meta.format_request",
+      "owner": "ReqLLM provider maintainers",
+      "contract": "ReqLLM.Providers.Meta.format_request/2",
+      "replacement": "ReqLLM.Providers.Meta.Llama.format_request/2",
+      "introduced_version": "unreleased",
+      "target_major": 2,
+      "v2_scope": "unapproved",
+      "minimum_window": {"minor_releases": 2},
+      "guide": "https://hexdocs.pm/req_llm/v2-migration-audit.html#meta-llama-delegates",
+      "detector": {"type": "remote_call", "module": "ReqLLM.Providers.Meta", "function": "format_request"}
+    },
+    {
+      "id": "req_llm.providers.meta.format_llama_prompt",
+      "owner": "ReqLLM provider maintainers",
+      "contract": "ReqLLM.Providers.Meta.format_llama_prompt/1",
+      "replacement": "ReqLLM.Providers.Meta.Llama.format_llama_prompt/1",
+      "introduced_version": "unreleased",
+      "target_major": 2,
+      "v2_scope": "unapproved",
+      "minimum_window": {"minor_releases": 2},
+      "guide": "https://hexdocs.pm/req_llm/v2-migration-audit.html#meta-llama-delegates",
+      "detector": {"type": "remote_call", "module": "ReqLLM.Providers.Meta", "function": "format_llama_prompt"}
+    },
+    {
+      "id": "req_llm.providers.meta.parse_response",
+      "owner": "ReqLLM provider maintainers",
+      "contract": "ReqLLM.Providers.Meta.parse_response/2",
+      "replacement": "ReqLLM.Providers.Meta.Llama.parse_response/2",
+      "introduced_version": "unreleased",
+      "target_major": 2,
+      "v2_scope": "unapproved",
+      "minimum_window": {"minor_releases": 2},
+      "guide": "https://hexdocs.pm/req_llm/v2-migration-audit.html#meta-llama-delegates",
+      "detector": {"type": "remote_call", "module": "ReqLLM.Providers.Meta", "function": "parse_response"}
+    },
+    {
+      "id": "req_llm.providers.meta.extract_usage",
+      "owner": "ReqLLM provider maintainers",
+      "contract": "ReqLLM.Providers.Meta.extract_usage/1",
+      "replacement": "ReqLLM.Providers.Meta.Llama.extract_usage/1",
+      "introduced_version": "unreleased",
+      "target_major": 2,
+      "v2_scope": "unapproved",
+      "minimum_window": {"minor_releases": 2},
+      "guide": "https://hexdocs.pm/req_llm/v2-migration-audit.html#meta-llama-delegates",
+      "detector": {"type": "remote_call", "module": "ReqLLM.Providers.Meta", "function": "extract_usage"}
+    },
+    {
+      "id": "req_llm.providers.meta.parse_stop_reason",
+      "owner": "ReqLLM provider maintainers",
+      "contract": "ReqLLM.Providers.Meta.parse_stop_reason/1",
+      "replacement": "ReqLLM.Providers.Meta.Llama.parse_stop_reason/1",
+      "introduced_version": "unreleased",
+      "target_major": 2,
+      "v2_scope": "unapproved",
+      "minimum_window": {"minor_releases": 2},
+      "guide": "https://hexdocs.pm/req_llm/v2-migration-audit.html#meta-llama-delegates",
+      "detector": {"type": "remote_call", "module": "ReqLLM.Providers.Meta", "function": "parse_stop_reason"}
+    }
+  ],
+  "migration_checks": [
+    {
+      "id": "v2.legacy_provider_options",
+      "owner": "ReqLLM provider maintainers",
+      "contract": "Literal flat provider_options paired with a literal provider model",
+      "replacement": "Wrap provider-specific options in the selected provider namespace",
+      "target_major": 2,
+      "v2_scope": "approved",
+      "actionable": true,
+      "guide": "https://hexdocs.pm/req_llm/v2-migration-audit.html#provider-option-namespaces",
+      "detector": {"type": "legacy_provider_options"}
+    },
+    {
+      "id": "v2.raw_stream_field",
+      "owner": "ReqLLM streaming maintainers",
+      "contract": "Explicit matching on the ReqLLM.StreamResponse.stream field",
+      "replacement": "Select ReqLLM.StreamResponse.events/1, tokens/1, or another named projection",
+      "target_major": 2,
+      "v2_scope": "approved",
+      "actionable": true,
+      "guide": "https://hexdocs.pm/req_llm/v2-migration-audit.html#raw-stream-assumptions",
+      "detector": {"type": "stream_response_field"}
+    },
+    {
+      "id": "v2.provider_behaviour",
+      "owner": "ReqLLM provider maintainers",
+      "contract": "A module that directly uses or declares the ReqLLM.Provider behavior",
+      "replacement": "No V2 replacement is frozen; inventory the extension and keep the V1 conformance suite green",
+      "target_major": 2,
+      "v2_scope": "approved",
+      "actionable": false,
+      "guide": "https://hexdocs.pm/req_llm/v2-migration-audit.html#provider-extension-inventory",
+      "detector": {"type": "provider_behavior"}
+    },
+    {
+      "id": "v2.implicit_output_validation",
+      "owner": "ReqLLM structured-output maintainers",
+      "contract": "A statically structured output call without an explicit output_validation policy",
+      "replacement": "Set output_validation to :compatible, :warn, or :strict explicitly",
+      "target_major": 2,
+      "v2_scope": "approved",
+      "actionable": true,
+      "guide": "https://hexdocs.pm/req_llm/v2-migration-audit.html#structured-output-validation-default",
+      "detector": {"type": "implicit_output_validation"}
+    }
+  ]
+}

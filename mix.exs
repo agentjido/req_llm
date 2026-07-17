@@ -55,6 +55,7 @@ defmodule ReqLLM.MixProject do
           "guides/image-generation.md",
           "guides/model-metadata.md",
           "guides/model-support.md",
+          "guides/v2-migration-audit.md",
           "guides/getting-started.livemd",
           "guides/image-generation.livemd",
           "guides/mix-tasks.md",
@@ -105,7 +106,8 @@ defmodule ReqLLM.MixProject do
             "guides/usage-and-billing.md",
             "guides/image-generation.md",
             "guides/model-metadata.md",
-            "guides/model-support.md"
+            "guides/model-support.md",
+            "guides/v2-migration-audit.md"
           ],
           Livebooks: [
             "guides/getting-started.livemd",
@@ -162,7 +164,8 @@ defmodule ReqLLM.MixProject do
             ReqLLM.Usage,
             ReqLLM.Error,
             ReqLLM.Debug,
-            ReqLLM.ParamTransform
+            ReqLLM.ParamTransform,
+            ReqLLM.Migration
           ],
           "Data Structures": [
             ReqLLM.Message,

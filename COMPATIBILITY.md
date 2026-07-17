@@ -52,6 +52,14 @@ Stable runtime APIs are not removed during V1 merely because the overlap window
 has elapsed. Their removal belongs to a major release. The window creates a
 usable V1 bridge before that release.
 
+The versioned
+[`priv/deprecations.json`](https://github.com/agentjido/req_llm/blob/main/priv/deprecations.json)
+ledger records
+every active deprecation and its owner, replacement, window, target, approved or
+unapproved V2 scope status, guide, and precise detector. Run
+`mix req_llm.migration_audit` to inventory mechanical V2 work without evaluating
+or rewriting application source.
+
 ### Internal
 
 A surface is internal only when it is hidden from public documentation or
