@@ -23,6 +23,10 @@ defmodule ReqLLM.ToolCall do
   `call.id`, `call.function.name`, and `call.function.arguments`, or use
   `to_map/1` when a plain map with decoded arguments is more convenient.
 
+  Use `resolve/3` to inspect a call against application tools without invoking
+  a callback. `execute/3` is the explicit single-call execution boundary and
+  only runs calls whose resolution state is `:valid`.
+
   ## Examples
 
       iex> ToolCall.new("call_abc", "get_weather", ~s({"location":"Paris"}))
@@ -47,6 +51,24 @@ defmodule ReqLLM.ToolCall do
           })
 
   @type t :: unquote(Zoi.type_spec(@schema))
+
+  @typedoc "Resolution state for a tool call"
+  @type resolution_state ::
+          :valid | :invalid | :unknown | :provider_executed | :provider_native
+
+  @typedoc "Provider-independent inspection of a tool call"
+  @type resolution :: %{
+          state: resolution_state(),
+          call: t(),
+          id: String.t(),
+          name: String.t(),
+          tool: ReqLLM.Tool.t() | nil,
+          raw_arguments: String.t(),
+          arguments: map() | nil,
+          validated_arguments: map() | nil,
+          metadata: map(),
+          error: term() | nil
+        }
 
   @enforce_keys Zoi.Struct.enforce_keys(@schema)
   defstruct Zoi.Struct.struct_fields(@schema)
@@ -128,6 +150,22 @@ defmodule ReqLLM.ToolCall do
   def builtin?(_), do: false
 
   @doc """
+  Returns true when local tool-call metadata marks a call as provider-native.
+
+  Provider adapters can attach the non-wire marker with
+  `put_metadata(call, %{provider_native: provider})`, where `provider` may be
+  an atom, string, map, or `true`. A false or nil marker is ignored.
+
+  Provider-executed builtins use the separate `builtin?/1` marker.
+  """
+  @spec provider_native?(t() | map()) :: boolean()
+  def provider_native?(tool_call) do
+    tool_call
+    |> metadata()
+    |> provider_native_metadata?()
+  end
+
+  @doc """
   Returns true when the given map carries a truthy `:builtin?` (or
   `"builtin?"`) flag **directly on it**. Does not unwrap a nested
   `:function` map — use it for chunk metadata or raw tool-call shapes
@@ -183,8 +221,167 @@ defmodule ReqLLM.ToolCall do
 
   def put_metadata(%__MODULE__{} = call, _metadata), do: call
 
+  @doc """
+  Resolves a tool call against application tools without invoking a callback.
+
+  The returned map always preserves the original call, raw JSON arguments, and
+  metadata. Application calls are `:valid`, `:invalid`, or `:unknown`.
+  Provider-executed builtins and calls carrying provider-native metadata are
+  returned as `:provider_executed` or `:provider_native` and are never treated
+  as application callbacks.
+
+  JSON repair follows `args_map/2` and can be disabled with
+  `json_repair: false`.
+  """
+  @spec resolve(t(), [ReqLLM.Tool.t()], keyword()) :: resolution()
+  def resolve(%__MODULE__{} = call, available_tools, opts \\ [])
+      when is_list(available_tools) and is_list(opts) do
+    resolution = base_resolution(call)
+
+    cond do
+      builtin?(call) ->
+        resolve_non_application_call(resolution, :provider_executed, opts)
+
+      provider_native?(call) ->
+        resolve_non_application_call(resolution, :provider_native, opts)
+
+      true ->
+        resolve_application_call(resolution, available_tools, opts)
+    end
+  end
+
+  @doc """
+  Executes one resolved application tool call.
+
+  The callback is invoked only when `resolve/3` returns `:valid`. Invalid,
+  unknown, provider-executed, and provider-native calls return
+  `{:error, resolution}` without invoking any callback. Successful and failed
+  callback values retain the existing `ReqLLM.Tool.execute/2` contract.
+  """
+  @spec execute(t(), [ReqLLM.Tool.t()], keyword()) ::
+          {:ok, term()} | {:error, term() | resolution()}
+  def execute(%__MODULE__{} = call, available_tools, opts \\ []) do
+    case resolve(call, available_tools, opts) do
+      %{state: :valid, tool: tool, arguments: arguments} ->
+        ReqLLM.Tool.execute(tool, arguments)
+
+      resolution ->
+        {:error, resolution}
+    end
+  end
+
   defp generate_id do
     "call_#{ReqLLM.ID.uuid7()}"
+  end
+
+  defp base_resolution(%__MODULE__{} = call) do
+    %{
+      state: :unknown,
+      call: call,
+      id: call.id,
+      name: name(call),
+      tool: nil,
+      raw_arguments: args_json(call),
+      arguments: nil,
+      validated_arguments: nil,
+      metadata: metadata(call),
+      error: nil
+    }
+  end
+
+  defp resolve_application_call(resolution, available_tools, opts) do
+    case find_tool(available_tools, resolution.name) do
+      nil -> resolve_unknown_call(resolution, opts)
+      tool -> resolve_known_call(resolution, tool, opts)
+    end
+  end
+
+  defp resolve_non_application_call(resolution, state, opts) do
+    arguments = decode_arguments_or_nil(resolution.raw_arguments, opts)
+    %{resolution | state: state, arguments: arguments}
+  end
+
+  defp resolve_unknown_call(resolution, opts) do
+    arguments = decode_arguments_or_nil(resolution.raw_arguments, opts)
+    error = unknown_tool_error(resolution.name)
+    %{resolution | state: :unknown, arguments: arguments, error: error}
+  end
+
+  defp resolve_known_call(resolution, tool, opts) do
+    case ReqLLM.JSON.decode(resolution.raw_arguments, opts) do
+      {:ok, arguments} when is_map(arguments) ->
+        resolve_validated_call(resolution, tool, arguments)
+
+      {:ok, arguments} ->
+        error = invalid_arguments_error(arguments)
+
+        %{
+          resolution
+          | state: :invalid,
+            tool: tool,
+            arguments: nil,
+            error: error
+        }
+
+      {:error, error} ->
+        %{resolution | state: :invalid, tool: tool, error: error}
+    end
+  end
+
+  defp resolve_validated_call(resolution, tool, arguments) do
+    case ReqLLM.Tool.validate_input(tool, arguments) do
+      {:ok, validated_arguments} ->
+        %{
+          resolution
+          | state: :valid,
+            tool: tool,
+            arguments: arguments,
+            validated_arguments: validated_arguments
+        }
+
+      {:error, error} ->
+        %{
+          resolution
+          | state: :invalid,
+            tool: tool,
+            arguments: arguments,
+            error: error
+        }
+    end
+  end
+
+  defp find_tool(available_tools, name) do
+    Enum.find(available_tools, fn
+      %ReqLLM.Tool{name: ^name} -> true
+      _tool -> false
+    end)
+  end
+
+  defp decode_arguments_or_nil(raw_arguments, opts) do
+    case ReqLLM.JSON.decode(raw_arguments, opts) do
+      {:ok, arguments} when is_map(arguments) -> arguments
+      _other -> nil
+    end
+  end
+
+  defp invalid_arguments_error(arguments) do
+    ReqLLM.Error.Invalid.Parameter.exception(
+      parameter: "Tool call arguments must decode to a map, got: #{inspect(arguments)}"
+    )
+  end
+
+  defp unknown_tool_error(name) do
+    ReqLLM.Error.Invalid.Parameter.exception(parameter: "Tool #{inspect(name)} not found")
+  end
+
+  defp provider_native_metadata?(metadata) do
+    marker =
+      Map.get(metadata, :provider_native) ||
+        Map.get(metadata, "provider_native") ||
+        Map.get(metadata, :provider_native?) ||
+        Map.get(metadata, "provider_native?")
+
+    marker not in [nil, false]
   end
 
   @doc """

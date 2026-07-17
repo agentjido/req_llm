@@ -1,9 +1,32 @@
 defmodule ReqLLM.ToolResult do
   @moduledoc """
-  ToolResult represents structured and multi-part tool outputs.
+  ToolResult represents structured and multi-part tool outputs while keeping
+  application-visible data separate from model-facing content.
 
-  Tool outputs can include structured data via `output` and/or multimodal
-  content parts via `content`.
+  * `output` is the original application value. Maps and lists remain available
+    to local code and provider adapters without a text round trip.
+  * `content` is the content sent back to the model. It may contain text or
+    `ReqLLM.Message.ContentPart` values for images and files. When omitted,
+    `ReqLLM.Context` derives model-facing text from `output`.
+  * `metadata` carries supplementary application or provider-native data. It is
+    not a substitute for model-facing error or result content.
+
+  These fields may intentionally differ. For example, an application can keep a
+  rich JSON result in `output` while returning a concise explanation, an error,
+  or a multimodal file/image payload in `content`:
+
+      %ReqLLM.ToolResult{
+        output: %{document_id: "doc_123", page_count: 4},
+        content: [
+          ReqLLM.Message.ContentPart.text("The requested document is attached."),
+          ReqLLM.Message.ContentPart.file_id("file_123")
+        ],
+        metadata: %{provider_native: %{request_id: "req_123"}}
+      }
+
+  Tool callbacks retain their existing contract: return `{:ok, result}` for a
+  successful result or `{:error, result}` for an error. Either result may be a
+  plain text/JSON value or a `ToolResult`.
   """
 
   @metadata_key :tool_output

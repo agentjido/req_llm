@@ -3,7 +3,7 @@ defmodule ReqLLM.ToolCallTest do
 
   @moduletag contract: :public_api
 
-  alias ReqLLM.ToolCall
+  alias ReqLLM.{Tool, ToolCall}
 
   describe "new/3" do
     test "creates a ToolCall with provided id" do
@@ -141,6 +141,215 @@ defmodule ReqLLM.ToolCallTest do
                thought_signature: "sig_123",
                raw_arguments: "{}"
              }
+    end
+  end
+
+  describe "provider_native?/1" do
+    test "recognizes provider-native metadata without changing wire encoding" do
+      tool_call =
+        "call_123"
+        |> ToolCall.new("web_search", ~s({"query":"docs"}))
+        |> ToolCall.put_metadata(%{provider_native: :example, request_id: "req_123"})
+
+      assert ToolCall.provider_native?(tool_call)
+      assert ToolCall.metadata(tool_call).request_id == "req_123"
+
+      decoded = tool_call |> Jason.encode!() |> Jason.decode!()
+      refute Map.has_key?(decoded["function"], "metadata")
+      refute Map.has_key?(decoded["function"], "provider_native")
+    end
+
+    test "does not confuse provider-executed builtins with provider-native metadata" do
+      builtin = ToolCall.new_builtin("call_123", "web_search", "{}")
+
+      assert ToolCall.builtin?(builtin)
+      refute ToolCall.provider_native?(builtin)
+    end
+  end
+
+  describe "resolve/3 and execute/3" do
+    setup do
+      parent = self()
+
+      tool =
+        Tool.new!(
+          name: "search",
+          description: "Search documents",
+          parameter_schema: [
+            query: [type: :string, required: true],
+            limit: [type: :integer, default: 5]
+          ],
+          callback: fn args ->
+            send(parent, {:tool_executed, args})
+            {:ok, %{matches: args.limit}}
+          end
+        )
+
+      %{tool: tool}
+    end
+
+    test "resolves raw, decoded, and validated arguments without executing", %{tool: tool} do
+      raw_arguments = ~s({"query":"elixir"})
+
+      call =
+        "call_valid"
+        |> ToolCall.new("search", raw_arguments)
+        |> ToolCall.put_metadata(%{provider_request_id: "req_123"})
+
+      assert %{
+               state: :valid,
+               call: ^call,
+               id: "call_valid",
+               name: "search",
+               tool: ^tool,
+               raw_arguments: ^raw_arguments,
+               arguments: %{"query" => "elixir"},
+               validated_arguments: %{query: "elixir", limit: 5},
+               metadata: %{provider_request_id: "req_123"},
+               error: nil
+             } = ToolCall.resolve(call, [tool])
+
+      refute_received {:tool_executed, _args}
+    end
+
+    test "executes one valid call with the existing callback contract", %{tool: tool} do
+      call = ToolCall.new("call_valid", "search", ~s({"query":"elixir"}))
+
+      assert {:ok, %{matches: 5}} = ToolCall.execute(call, [tool])
+      assert_received {:tool_executed, %{query: "elixir", limit: 5}}
+      refute_received {:tool_executed, _args}
+    end
+
+    test "keeps invalid schema input inspectable and does not execute", %{tool: tool} do
+      call = ToolCall.new("call_invalid", "search", ~s({"limit":"many"}))
+
+      assert %{
+               state: :invalid,
+               call: ^call,
+               raw_arguments: ~s({"limit":"many"}),
+               arguments: %{"limit" => "many"},
+               validated_arguments: nil,
+               error: %ReqLLM.Error.Validation.Error{}
+             } = resolution = ToolCall.resolve(call, [tool])
+
+      assert {:error,
+              %{
+                state: :invalid,
+                call: ^call,
+                arguments: %{"limit" => "many"},
+                error: %ReqLLM.Error.Validation.Error{}
+              }} = ToolCall.execute(call, [tool])
+
+      assert resolution.state == :invalid
+      refute_received {:tool_executed, _args}
+    end
+
+    test "keeps malformed arguments inspectable and honors JSON repair options", %{tool: tool} do
+      call = ToolCall.new("call_invalid_json", "search", ~s({"query":"elixir",}))
+
+      assert %{state: :valid, arguments: %{"query" => "elixir"}} =
+               ToolCall.resolve(call, [tool])
+
+      assert %{
+               state: :invalid,
+               call: ^call,
+               raw_arguments: ~s({"query":"elixir",}),
+               arguments: nil,
+               validated_arguments: nil,
+               error: %Jason.DecodeError{}
+             } = ToolCall.resolve(call, [tool], json_repair: false)
+
+      assert {:error, %{state: :invalid}} =
+               ToolCall.execute(call, [tool], json_repair: false)
+
+      refute_received {:tool_executed, _args}
+    end
+
+    test "keeps unknown calls inspectable and does not execute another tool", %{tool: tool} do
+      call = ToolCall.new("call_unknown", "missing", ~s({"query":"elixir"}))
+
+      assert %{
+               state: :unknown,
+               call: ^call,
+               name: "missing",
+               tool: nil,
+               raw_arguments: ~s({"query":"elixir"}),
+               arguments: %{"query" => "elixir"},
+               validated_arguments: nil,
+               error: %ReqLLM.Error.Invalid.Parameter{}
+             } = resolution = ToolCall.resolve(call, [tool])
+
+      assert Exception.message(resolution.error) =~ ~s(Tool "missing" not found)
+
+      assert {:error,
+              %{
+                state: :unknown,
+                call: ^call,
+                arguments: %{"query" => "elixir"},
+                error: %ReqLLM.Error.Invalid.Parameter{}
+              }} = ToolCall.execute(call, [tool])
+
+      refute_received {:tool_executed, _args}
+    end
+
+    test "classifies provider-executed builtins before application tools", %{tool: tool} do
+      call = ToolCall.new_builtin("call_builtin", "search", ~s({"query":"elixir"}))
+
+      assert %{
+               state: :provider_executed,
+               call: ^call,
+               tool: nil,
+               raw_arguments: ~s({"query":"elixir"}),
+               arguments: %{"query" => "elixir"},
+               validated_arguments: nil,
+               metadata: %{},
+               error: nil
+             } = resolution = ToolCall.resolve(call, [tool])
+
+      assert {:error, ^resolution} = ToolCall.execute(call, [tool])
+      refute_received {:tool_executed, _args}
+    end
+
+    test "classifies provider-native calls and preserves provider metadata", %{tool: tool} do
+      call =
+        "call_native"
+        |> ToolCall.new("search", ~s({"query":"elixir"}))
+        |> ToolCall.put_metadata(%{
+          provider_native: :example,
+          provider_payload: %{request_id: "req_native"}
+        })
+
+      assert %{
+               state: :provider_native,
+               call: ^call,
+               tool: nil,
+               arguments: %{"query" => "elixir"},
+               validated_arguments: nil,
+               metadata: %{
+                 provider_native: :example,
+                 provider_payload: %{request_id: "req_native"}
+               },
+               error: nil
+             } = resolution = ToolCall.resolve(call, [tool])
+
+      assert {:error, ^resolution} = ToolCall.execute(call, [tool])
+      refute_received {:tool_executed, _args}
+    end
+
+    test "keeps multiple calls independent and executes each callback once", %{tool: tool} do
+      calls = [
+        ToolCall.new("call_1", "search", ~s({"query":"one"})),
+        ToolCall.new("call_2", "search", ~s({"query":"two","limit":2}))
+      ]
+
+      assert Enum.map(calls, &ToolCall.execute(&1, [tool])) == [
+               {:ok, %{matches: 5}},
+               {:ok, %{matches: 2}}
+             ]
+
+      assert_received {:tool_executed, %{query: "one", limit: 5}}
+      assert_received {:tool_executed, %{query: "two", limit: 2}}
+      refute_received {:tool_executed, _args}
     end
   end
 

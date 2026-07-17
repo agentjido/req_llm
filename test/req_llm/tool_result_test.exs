@@ -12,6 +12,22 @@ defmodule ReqLLM.ToolResultTest do
     end
   end
 
+  describe "application output and model-facing content" do
+    test "remain independently inspectable" do
+      content = [ReqLLM.Message.ContentPart.text("A concise model-facing result")]
+
+      result = %ToolResult{
+        output: %{records: [%{id: 1}], internal_cursor: "cursor_123"},
+        content: content,
+        metadata: %{provider_native: %{request_id: "req_123"}}
+      }
+
+      assert result.output == %{records: [%{id: 1}], internal_cursor: "cursor_123"}
+      assert result.content == content
+      assert result.metadata.provider_native.request_id == "req_123"
+    end
+  end
+
   describe "output_from_message/1" do
     test "reads atom-key metadata from message structs" do
       message = %Message{role: :tool, metadata: %{tool_output: %{ok: true}}}
