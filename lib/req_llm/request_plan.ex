@@ -84,8 +84,11 @@ defmodule ReqLLM.RequestPlan do
     )
   end
 
-  defp resolve_model(%LLMDB.Model{} = model), do: {:ok, model}
-  defp resolve_model(model_input), do: ReqLLM.model(model_input)
+  defp resolve_model(model_input) do
+    with {:ok, %LLMDB.Model{} = model} <- ReqLLM.model(model_input) do
+      ReqLLM.model(model)
+    end
+  end
 
   defp resolve_surface(%LLMDB.Model{provider: :openai} = model, provider_module) do
     if provider_module == ReqLLM.Providers.OpenAI do
@@ -174,18 +177,26 @@ defmodule ReqLLM.RequestPlan do
   end
 
   defp requested_stream_transport(opts) do
-    case explicit_transport(opts) do
-      :none -> {:ok, :http, false}
-      value when value in [:http, :sse, "http", "sse"] -> {:ok, :http, true}
-      value when value in [:websocket, "websocket"] -> {:ok, :websocket, true}
-      value -> invalid_parameter("unsupported stream transport: #{inspect(value)}")
+    with :ok <- validate_internal_stream_transport(opts) do
+      case provider_option(opts, :openai_stream_transport, :none) do
+        :none -> {:ok, :http, false}
+        value when value in [:sse, "sse"] -> {:ok, :http, true}
+        value when value in [:websocket, "websocket"] -> {:ok, :websocket, true}
+        value -> invalid_parameter("unsupported OpenAI stream transport: #{inspect(value)}")
+      end
     end
   end
 
-  defp explicit_transport(opts) do
+  defp validate_internal_stream_transport(opts) do
     case Keyword.fetch(opts, :stream_transport) do
-      {:ok, value} -> value
-      :error -> provider_option(opts, :openai_stream_transport, :none)
+      :error ->
+        :ok
+
+      {:ok, value} when value in [:http, :websocket] ->
+        :ok
+
+      {:ok, value} ->
+        invalid_parameter("unsupported internal stream transport: #{inspect(value)}")
     end
   end
 

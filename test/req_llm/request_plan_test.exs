@@ -89,6 +89,18 @@ defmodule ReqLLM.RequestPlanTest do
                RequestPlan.build(model, :chat, temperature: 0.4)
     end
 
+    test "normalizes raw model structs like current execution" do
+      raw_model = %LLMDB.Model{provider: :openai, id: "gpt-4o-mini"}
+
+      assert {:ok, plan} = RequestPlan.build(raw_model, :chat)
+
+      assert plan.model.id == "gpt-4o-mini"
+      assert plan.model.model == "gpt-4o-mini"
+      assert plan.model.family == "gpt-4o"
+      assert plan.model.extra.wire.protocol == "openai_responses"
+      assert plan.surface == :openai_responses
+    end
+
     test "keeps planning warnings in deterministic source order" do
       model_input =
         {:openai, "chat-latest", [stream_transport: :http, unsupported_default: true]}
@@ -120,6 +132,16 @@ defmodule ReqLLM.RequestPlanTest do
 
       assert plan.surface == :openai_responses
       assert plan.transport == :websocket
+    end
+
+    test "does not treat the internal transport flag as the provider selector" do
+      assert {:ok, plan} =
+               RequestPlan.build("openai:gpt-4o-mini", :chat,
+                 stream: true,
+                 stream_transport: :websocket
+               )
+
+      assert plan.transport == :finch
     end
 
     test "rejects an unsupported operation before execution" do
@@ -165,7 +187,7 @@ defmodule ReqLLM.RequestPlanTest do
                  stream_transport: :udp
                )
 
-      assert Exception.message(transport_error) =~ "unsupported stream transport"
+      assert Exception.message(transport_error) =~ "unsupported internal stream transport"
     end
   end
 end
