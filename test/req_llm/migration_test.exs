@@ -155,6 +155,27 @@ defmodule ReqLLM.MigrationTest do
     assert Migration.exit_status(report) == 0
   end
 
+  test "reports unapproved deprecations without blocking V2 readiness", %{directory: directory} do
+    path = Path.join(directory, "unapproved.ex")
+
+    File.write!(path, """
+    defmodule UnapprovedDeprecation do
+      def run, do: ReqLLM.Keys.fetch(:openai)
+    end
+    """)
+
+    report = Migration.audit(path)
+    finding = hd(report["findings"])
+
+    assert report["status"] == "advisory"
+    assert report["summary"]["actionable"] == 0
+    assert report["summary"]["advisory"] == 1
+    assert finding["id"] == "req_llm.keys.fetch"
+    assert finding["actionable"] == false
+    assert finding["message"] =~ "not approved for removal in V2"
+    assert Migration.exit_status(report) == 0
+  end
+
   test "detects every ledger-backed deprecated remote call", %{directory: directory} do
     path = Path.join(directory, "deprecated.ex")
 
@@ -177,6 +198,9 @@ defmodule ReqLLM.MigrationTest do
     ledger_ids = Migration.deprecations() |> Enum.map(& &1["id"]) |> Enum.sort()
 
     assert detected_ids == ledger_ids
+
+    assert report["summary"]["actionable"] == 4
+    assert report["summary"]["advisory"] == 11
   end
 
   test "ignores dynamic migration shapes it cannot prove", %{directory: directory} do

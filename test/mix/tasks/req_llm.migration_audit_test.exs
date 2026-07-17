@@ -31,7 +31,7 @@ defmodule Mix.Tasks.ReqLlm.MigrationAuditTest do
   test "prints stable JSON before failing for actionable findings", %{directory: directory} do
     File.write!(
       Path.join(directory, "deprecated.ex"),
-      "defmodule DeprecatedTaskFixture do\n  def run, do: ReqLLM.Keys.fetch(:openai)\nend\n"
+      "defmodule DeprecatedTaskFixture do\n  def run, do: ReqLLM.stream_text!(\"openai:gpt-4o\", \"hello\")\nend\n"
     )
 
     output =
@@ -43,7 +43,21 @@ defmodule Mix.Tasks.ReqLlm.MigrationAuditTest do
 
     assert report["schema_version"] == 1
     assert report["status"] == "findings"
-    assert hd(report["findings"])["id"] == "req_llm.keys.fetch"
+    assert hd(report["findings"])["id"] == "req_llm.stream_text_bang"
+  end
+
+  test "exits successfully for unapproved deprecation advisories", %{directory: directory} do
+    File.write!(
+      Path.join(directory, "advisory.ex"),
+      "defmodule AdvisoryTaskFixture do\n  def run, do: ReqLLM.Keys.fetch(:openai)\nend\n"
+    )
+
+    output = capture_io(fn -> MigrationAuditTask.run([directory, "--json"]) end)
+    report = Jason.decode!(output)
+
+    assert report["status"] == "advisory"
+    assert report["summary"]["actionable"] == 0
+    assert report["summary"]["advisory"] == 1
   end
 
   test "uses exit status 2 for audit errors", %{directory: directory} do

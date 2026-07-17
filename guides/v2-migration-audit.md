@@ -18,8 +18,8 @@ dependency, build, VCS, coverage, generated documentation, and Node dependency
 directories. It parses source but never evaluates or rewrites it, starts ReqLLM,
 loads credentials, or makes a provider request.
 
-Exit status `0` means the report is clean or contains provider-extension
-advisories only. Status `1` means actionable migration findings are present.
+Exit status `0` means the report is clean or contains advisories only. Status
+`1` means actionable migration findings are present.
 Status `2` means a requested path could not be read, source could not be parsed,
 or the bundled ledger was invalid.
 
@@ -36,7 +36,9 @@ latest tagged release.
 compatible; it is not approval by itself. Only records with
 `v2_scope: "approved"` belong to the breaking scope accepted by the V2
 roadmap. An `unapproved` record remains an active deprecation and must not be
-removed in V2 without a separate scope decision.
+removed in V2 without a separate scope decision. The audit reports those
+records as non-blocking advisories so they remain visible without expanding the
+approved V2 migration plan.
 
 Applications and tooling can inspect the exact shipped data:
 

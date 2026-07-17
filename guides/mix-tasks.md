@@ -74,7 +74,7 @@ mix req_llm.migration_audit --format json
 ```
 
 Actionable findings exit with status `1`; unreadable or invalid source exits
-with status `2`. Clean and provider-extension-advisory-only reports exit with
+with status `2`. Clean and advisory-only reports exit with
 status `0`. See the [V2 migration audit guide](v2-migration-audit.md) for the
 ledger schema, before/after examples, and static-analysis limitations.
 

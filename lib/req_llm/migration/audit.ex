@@ -453,13 +453,20 @@ defmodule ReqLLM.Migration.Audit do
   end
 
   defp deprecated_finding(entry, module, function, arity, file, metadata) do
+    actionable = entry["v2_scope"] == "approved"
+
     finding(entry, file, metadata, %{
-      "actionable" => true,
+      "actionable" => actionable,
       "category" => "deprecated_api",
       "contract" => "#{module}.#{function}/#{arity}",
-      "message" => "#{entry["contract"]} is deprecated."
+      "message" => deprecated_message(entry, actionable)
     })
   end
+
+  defp deprecated_message(entry, true), do: "#{entry["contract"]} is deprecated."
+
+  defp deprecated_message(entry, false),
+    do: "#{entry["contract"]} is deprecated but is not approved for removal in V2."
 
   defp check_finding(entry, file, metadata) do
     category = if entry["actionable"], do: "migration", else: "advisory"
