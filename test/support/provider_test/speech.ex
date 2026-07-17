@@ -56,6 +56,28 @@ defmodule ReqLLM.ProviderTest.Speech do
             assert is_binary(result.media_type) and
                      String.starts_with?(result.media_type, "audio/")
           end
+
+          @tag category: :speech
+          @tag ReqLLM.Test.CompatibilityScenario.tag!(:speech_basic)
+          @tag model: model_spec |> String.split(":", parts: 2) |> List.last()
+          test "detailed speech generation reuses the provider fixture" do
+            {:ok, detailed} =
+              ReqLLM.speak_detailed(
+                @model_spec,
+                "Hello, this is a short fixture test.",
+                fixture_opts(
+                  @provider,
+                  ReqLLM.Test.CompatibilityScenario.fixture!(:speech_basic),
+                  ReqLLM.ProviderTest.Speech.options(@provider)
+                )
+              )
+
+            assert %ReqLLM.Speech.DetailedResult{} = detailed
+            assert is_binary(detailed.result.audio)
+            assert byte_size(detailed.result.audio) > 100
+            assert detailed.call_metadata.provider == @provider
+            assert detailed.call_metadata.status in 200..299
+          end
         end
       end
     end

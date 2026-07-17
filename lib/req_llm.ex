@@ -1494,11 +1494,26 @@ defmodule ReqLLM do
   defdelegate speak(model_spec, text, opts \\ []), to: Speech
 
   @doc """
+  Generates speech and returns the unchanged speech result with sparse metadata
+  for the same provider call.
+
+  See `ReqLLM.Speech.speak_detailed/3` for details.
+  """
+  defdelegate speak_detailed(model_spec, text, opts \\ []), to: Speech
+
+  @doc """
   Generates speech audio from text, raising on error.
 
   Same as `speak/3` but raises on error.
   """
   defdelegate speak!(model_spec, text, opts \\ []), to: Speech
+
+  @doc """
+  Generates speech with call metadata, raising on error.
+
+  Same as `speak_detailed/3` but raises on error.
+  """
+  defdelegate speak_detailed!(model_spec, text, opts \\ []), to: Speech
 
   # ===========================================================================
   # Vercel AI SDK Utility API - Delegated to ReqLLM.Utils
