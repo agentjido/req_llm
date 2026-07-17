@@ -120,6 +120,21 @@ defmodule ReqLLM.Response do
   end
 
   @doc """
+  Returns a visible final-value report for an output descriptor.
+
+  The report separates retained raw output, the projected value, final validity,
+  validation errors, warnings, extraction source, repair attempts, and provider
+  metadata. It is computed locally and never triggers another model call.
+
+  `:policy` defaults to the policy recorded by generation, or `:compatible` when
+  no policy was explicitly selected.
+  """
+  @spec output_result(t(), ReqLLM.Output.t(), keyword()) :: ReqLLM.Output.Result.t()
+  def output_result(%__MODULE__{} = response, %ReqLLM.Output{} = descriptor, opts \\ []) do
+    ReqLLM.Output.result(response, descriptor, opts)
+  end
+
+  @doc """
   Extract image content parts from the response message.
 
   Returns a list of `ReqLLM.Message.ContentPart` where `type` is `:image` or `:image_url`.

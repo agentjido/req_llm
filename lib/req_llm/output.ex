@@ -38,8 +38,11 @@ defmodule ReqLLM.Output do
       output = ReqLLM.Output.choice(["sunny", "rainy", "snowy"])
       output = ReqLLM.Output.json(description: "Any valid JSON value")
 
-  Complete structured values retain the current V1 validation and repair
-  behavior. Partial stream values are never final-schema validation evidence.
+  Omitting `:output_validation` retains the current V1 validation and repair
+  behavior. `:compatible`, `:warn`, and `:strict` make local final validation
+  explicit without changing provider requests. Partial stream values are never
+  final-schema validation evidence; streaming policies apply when the stream is
+  materialized.
 
   ## Result and error semantics
 
@@ -48,14 +51,34 @@ defmodule ReqLLM.Output do
   `json/1`. It returns `nil` when the existing provider path did not materialize
   a structured value.
 
+  `ReqLLM.Response.output_result/3` exposes the retained raw output, projected
+  value, final validity, validation errors, warnings, extraction source, repair
+  attempts, and provider metadata separately. It is local and never triggers a
+  follow-up model call.
+
   Constructors raise `ArgumentError` for invalid descriptor metadata options.
   Schema and choice contracts are checked before an HTTP request; generation
   returns `{:error, %ReqLLM.Error.Invalid.Parameter{}}` when a contract cannot be
-  compiled. Descriptors do not introduce a new final-value validation policy:
-  current V1 provider validation, coercion, and JSON-repair behavior is retained.
+  compiled. `output_validation: :strict` turns an invalid complete value into a
+  validation error. `:warn` returns the response with structured warnings, and
+  `:compatible` reports validity while retaining V1 success behavior.
+
+  `:output_repair` accepts a callback returning `{:ok, candidate}` or
+  `{:error, reason}`. It runs locally at most once after invalid final output,
+  and a candidate replaces the value only after it passes the same final
+  validation. Existing light `json_repair` remains enabled by default and is
+  reported when detected.
   """
 
   @type output_type :: :text | :object | :array | :choice | :json
+  @type validation_policy :: :compatible | :warn | :strict
+  @type repair_callback :: (ReqLLM.Output.Result.t() -> {:ok, term()} | {:error, term()})
+
+  @type runtime_config :: %{
+          enabled?: boolean(),
+          policy: validation_policy(),
+          repair: repair_callback() | nil
+        }
 
   @type t :: %__MODULE__{
           type: output_type(),
@@ -203,6 +226,19 @@ defmodule ReqLLM.Output do
     response
     |> Map.get(:object)
     |> unwrap_value()
+  end
+
+  @doc """
+  Computes a complete structured-output result without changing the response.
+
+  The default `:compatible` policy reports final validity without converting an
+  invalid V1 response into an error. Pass `policy: :warn` or `policy: :strict`
+  to describe the policy used for the projection. Runtime enforcement is
+  configured on generation calls with `:output_validation`.
+  """
+  @spec result(ReqLLM.Response.t(), t(), keyword()) :: ReqLLM.Output.Result.t()
+  def result(response, descriptor, opts \\ []) do
+    ReqLLM.Output.Validation.result(response, descriptor, opts)
   end
 
   defp build(type, fields, opts) do

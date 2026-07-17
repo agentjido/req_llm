@@ -53,6 +53,10 @@ defmodule ReqLLM.Generation do
     * `:output` - A `ReqLLM.Output` descriptor; omitted and `ReqLLM.Output.text/0`
       preserve plain-text behavior, while structured descriptors reuse the existing
       provider-native or tool-fallback object path
+    * `:output_validation` - Final validation policy: `:compatible`, `:warn`, or
+      `:strict`; omitted calls preserve current V1 behavior
+    * `:output_repair` - Optional one-argument local repair callback invoked at
+      most once after an invalid complete structured output
     * `:system_prompt` - System prompt to prepend
     * `:receive_timeout` - Provider-transport inactivity timeout in milliseconds
     * `:total_timeout` - Optional whole-call deadline in milliseconds, including retries
@@ -85,11 +89,18 @@ defmodule ReqLLM.Generation do
     opts = ReqLLM.ModelInput.merge_tuple_defaults(model_spec, :chat, opts)
     {output, opts} = Keyword.pop(opts, :output)
 
-    with {:ok, descriptor} <- ReqLLM.Output.normalize(output),
-         {:ok, contract} <- ReqLLM.Output.compile(descriptor) do
+    with {:ok, runtime_config, opts} <- ReqLLM.Output.Validation.take_runtime_options(opts),
+         {:ok, descriptor} <- ReqLLM.Output.normalize(output),
+         {:ok, contract} <- ReqLLM.Output.compile(descriptor),
+         :ok <- ReqLLM.Output.Validation.validate_runtime_config(contract, runtime_config) do
       case contract.operation do
-        :chat -> generate_text_response(model_spec, messages, opts)
-        :object -> generate_output_response(model_spec, messages, contract, opts)
+        :chat ->
+          model_spec
+          |> generate_text_response(messages, opts)
+          |> ReqLLM.Output.Validation.finalize_result(contract, runtime_config)
+
+        :object ->
+          generate_output_response(model_spec, messages, contract, opts, runtime_config)
       end
     end
   end
@@ -122,12 +133,14 @@ defmodule ReqLLM.Generation do
     end
   end
 
-  defp generate_output_response(model_spec, messages, contract, opts) do
+  defp generate_output_response(model_spec, messages, contract, opts, runtime_config) do
     generate_object_response(
       model_spec,
       messages,
       {:compiled, contract.compiled_schema},
-      opts
+      opts,
+      contract.descriptor,
+      runtime_config
     )
   end
 
@@ -171,7 +184,9 @@ defmodule ReqLLM.Generation do
   representation. Partial content and tool-call argument chunks are transport
   fragments, not final-schema validation results. Materialize the stream once
   with `ReqLLM.StreamResponse.to_response/1`, then call
-  `ReqLLM.Response.output/2` with the same descriptor.
+  `ReqLLM.Response.output/2` with the same descriptor. An explicit
+  `:output_validation` policy is enforced by `to_response/1` or
+  `ReqLLM.StreamResponse.process_stream/2` after the complete value exists.
 
   ## Parameters
 
@@ -196,11 +211,18 @@ defmodule ReqLLM.Generation do
     opts = ReqLLM.ModelInput.merge_tuple_defaults(model_spec, :chat, opts)
     {output, opts} = Keyword.pop(opts, :output)
 
-    with {:ok, descriptor} <- ReqLLM.Output.normalize(output),
-         {:ok, contract} <- ReqLLM.Output.compile(descriptor) do
+    with {:ok, runtime_config, opts} <- ReqLLM.Output.Validation.take_runtime_options(opts),
+         {:ok, descriptor} <- ReqLLM.Output.normalize(output),
+         {:ok, contract} <- ReqLLM.Output.compile(descriptor),
+         :ok <- ReqLLM.Output.Validation.validate_runtime_config(contract, runtime_config) do
       case contract.operation do
-        :chat -> stream_text_response(model_spec, messages, opts)
-        :object -> stream_output_response(model_spec, messages, contract, opts)
+        :chat ->
+          model_spec
+          |> stream_text_response(messages, opts)
+          |> ReqLLM.Output.Validation.attach_stream_result(contract, runtime_config)
+
+        :object ->
+          stream_output_response(model_spec, messages, contract, opts, runtime_config)
       end
     end
   end
@@ -231,12 +253,14 @@ defmodule ReqLLM.Generation do
     end
   end
 
-  defp stream_output_response(model_spec, messages, contract, opts) do
+  defp stream_output_response(model_spec, messages, contract, opts, runtime_config) do
     stream_object_response(
       model_spec,
       messages,
       {:compiled, contract.compiled_schema},
-      opts
+      opts,
+      contract.descriptor,
+      runtime_config
     )
   end
 
@@ -304,6 +328,10 @@ defmodule ReqLLM.Generation do
     * `:total_timeout` - Optional whole-call deadline in milliseconds, including retries
     * `:stream_idle_timeout` - Optional semantic-progress timeout for streaming calls
     * `:provider_options` - Provider-specific options
+    * `:output_validation` - Final validation policy: `:compatible`, `:warn`, or
+      `:strict`; omitted calls preserve current V1 behavior
+    * `:output_repair` - Optional one-argument local repair callback invoked at
+      most once after an invalid complete object
 
   ## Examples
 
@@ -328,10 +356,27 @@ defmodule ReqLLM.Generation do
       |> ReqLLM.ModelInput.merge_tuple_defaults(:object, opts)
       |> Keyword.delete(:output)
 
-    generate_object_response(model_spec, messages, {:schema, object_schema}, opts)
+    with {:ok, runtime_config, opts} <-
+           ReqLLM.Output.Validation.take_runtime_options(opts) do
+      generate_object_response(
+        model_spec,
+        messages,
+        {:schema, object_schema},
+        opts,
+        ReqLLM.Output.object(object_schema),
+        runtime_config
+      )
+    end
   end
 
-  defp generate_object_response(model_spec, messages, schema_source, opts) do
+  defp generate_object_response(
+         model_spec,
+         messages,
+         schema_source,
+         opts,
+         descriptor,
+         runtime_config
+       ) do
     with {:ok, model} <- ReqLLM.model(model_spec),
          {:ok, provider_module} <- ReqLLM.provider(model.provider),
          {:ok, opts} <-
@@ -344,22 +389,26 @@ defmodule ReqLLM.Generation do
          {:ok, context} <- ReqLLM.Context.normalize(messages, opts),
          {:ok, compiled_schema} <- compile_schema_source(schema_source) do
       compiled_opts = Keyword.put(opts, :compiled_schema, compiled_schema)
+      contract = ReqLLM.Output.Validation.validation_contract(descriptor, compiled_schema)
 
-      case ReqLLM.Cache.fetch(model, :object, context, opts, compiled_schema.schema) do
-        {:hit, response, _cache_ref} ->
-          {:ok, response}
+      result =
+        case ReqLLM.Cache.fetch(model, :object, context, opts, compiled_schema.schema) do
+          {:hit, response, _cache_ref} ->
+            {:ok, response}
 
-        {:miss, cache_ref} ->
-          execute_generate_object(
-            provider_module,
-            model,
-            context,
-            compiled_schema,
-            ReqLLM.Cache.request_opts(compiled_opts),
-            compiled_opts,
-            cache_ref
-          )
-      end
+          {:miss, cache_ref} ->
+            execute_generate_object(
+              provider_module,
+              model,
+              context,
+              compiled_schema,
+              ReqLLM.Cache.request_opts(compiled_opts),
+              compiled_opts,
+              cache_ref
+            )
+        end
+
+      ReqLLM.Output.Validation.finalize_result(result, contract, runtime_config)
     end
   end
 
@@ -611,10 +660,27 @@ defmodule ReqLLM.Generation do
       |> ReqLLM.ModelInput.merge_tuple_defaults(:object, opts)
       |> Keyword.delete(:output)
 
-    stream_object_response(model_spec, messages, {:schema, object_schema}, opts)
+    with {:ok, runtime_config, opts} <-
+           ReqLLM.Output.Validation.take_runtime_options(opts) do
+      stream_object_response(
+        model_spec,
+        messages,
+        {:schema, object_schema},
+        opts,
+        ReqLLM.Output.object(object_schema),
+        runtime_config
+      )
+    end
   end
 
-  defp stream_object_response(model_spec, messages, schema_source, opts) do
+  defp stream_object_response(
+         model_spec,
+         messages,
+         schema_source,
+         opts,
+         descriptor,
+         runtime_config
+       ) do
     with {:ok, model} <- ReqLLM.model(model_spec),
          {:ok, provider_module} <- ReqLLM.provider(model.provider),
          {:ok, opts} <-
@@ -641,7 +707,11 @@ defmodule ReqLLM.Generation do
         |> Keyword.put_new(:operation, :object)
         |> Keyword.put(:compiled_schema, compiled_schema)
 
-      ReqLLM.Streaming.start_stream(provider_module, model, prepared_context, stream_opts)
+      contract = ReqLLM.Output.Validation.validation_contract(descriptor, compiled_schema)
+
+      provider_module
+      |> ReqLLM.Streaming.start_stream(model, prepared_context, stream_opts)
+      |> ReqLLM.Output.Validation.attach_stream_result(contract, runtime_config)
     end
   end
 

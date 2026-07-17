@@ -920,6 +920,10 @@ defmodule ReqLLM do
     * `:tool_choice` - Tool choice strategy
     * `:output` - A `ReqLLM.Output` descriptor for text, object, array, choice,
       or arbitrary JSON output
+    * `:output_validation` - Final validation policy: `:compatible`, `:warn`,
+      or `:strict`; omission preserves current V1 behavior
+    * `:output_repair` - Optional one-shot local repair callback for an invalid
+      complete structured output
     * `:system_prompt` - System prompt to prepend
     * `:receive_timeout` - Provider-transport inactivity timeout in milliseconds
     * `:total_timeout` - Optional whole-call deadline in milliseconds, including retries

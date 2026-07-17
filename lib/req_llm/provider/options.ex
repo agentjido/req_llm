@@ -170,6 +170,16 @@ defmodule ReqLLM.Provider.Options do
                                  doc:
                                    "ReqLLM.Output descriptor for text, object, array, choice, or JSON generation"
                                ],
+                               output_validation: [
+                                 type: {:in, [:compatible, :warn, :strict]},
+                                 doc:
+                                   "Final output validation policy; omission preserves compatible V1 behavior"
+                               ],
+                               output_repair: [
+                                 type: {:fun, 1},
+                                 doc:
+                                   "One-shot local callback for repairing an invalid complete structured output"
+                               ],
                                n: [
                                  type: :pos_integer,
                                  default: 1,

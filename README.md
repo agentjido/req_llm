@@ -115,6 +115,18 @@ output = ReqLLM.Output.array([name: [type: :string, required: true]])
 ReqLLM.Response.output(response, output)
 #=> [%{"name" => "Ada"}, %{"name" => "Grace"}, %{"name" => "Linus"}]
 
+result = ReqLLM.Response.output_result(response, output)
+result.valid?       #=> true
+result.raw          # retained text or tool-call arguments
+result.repairs      # visible legacy or callback repair attempts
+
+{:ok, strict_response} = ReqLLM.generate_text(
+  model,
+  "Generate three people",
+  output: output,
+  output_validation: :strict
+)
+
 {:ok, image_response} = ReqLLM.generate_image("openai:gpt-image-1.5", "A simple red square")
 image_bytes = ReqLLM.Response.image_data(image_response)
 File.write!("red_square.png", image_bytes)

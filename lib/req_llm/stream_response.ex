@@ -661,6 +661,7 @@ defmodule ReqLLM.StreamResponse do
 
   defp materialize_chunks(stream_response, chunks) do
     metadata = MetadataHandle.await(stream_response.metadata_handle)
+    {output_config, metadata} = ReqLLM.Output.Validation.pop_stream_config(metadata)
 
     case metadata do
       %{error: reason} ->
@@ -669,12 +670,15 @@ defmodule ReqLLM.StreamResponse do
       _metadata ->
         builder = ResponseBuilder.for_model(stream_response.model)
 
-        builder.build_response(
-          chunks,
-          metadata,
-          context: stream_response.context,
-          model: stream_response.model
-        )
+        result =
+          builder.build_response(
+            chunks,
+            metadata,
+            context: stream_response.context,
+            model: stream_response.model
+          )
+
+        ReqLLM.Output.Validation.finalize_stream_response(result, output_config)
     end
   end
 end
