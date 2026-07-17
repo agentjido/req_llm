@@ -1,0 +1,144 @@
+[
+  {
+    "type": "session.created",
+    "event_id": "evt_session",
+    "session": {
+      "id": "sess_1",
+      "instructions": "private session instructions",
+      "api_key": "sk-session-secret"
+    }
+  },
+  {
+    "type": "response.created",
+    "event_id": "evt_start",
+    "response": {
+      "id": "resp_1",
+      "status": "in_progress",
+      "conversation_id": "conv_1"
+    }
+  },
+  {
+    "type": "response.output_text.delta",
+    "event_id": "evt_text",
+    "response_id": "resp_1",
+    "item_id": "msg_1",
+    "output_index": 0,
+    "content_index": 0,
+    "delta": "private text output"
+  },
+  {
+    "type": "response.output_audio_transcript.delta",
+    "event_id": "evt_transcript",
+    "response_id": "resp_1",
+    "item_id": "msg_2",
+    "output_index": 1,
+    "content_index": 0,
+    "delta": "private audio transcript"
+  },
+  {
+    "type": "response.output_audio.delta",
+    "event_id": "evt_audio",
+    "response_id": "resp_1",
+    "item_id": "msg_2",
+    "output_index": 1,
+    "content_index": 0,
+    "delta": "cHJpdmF0ZSBhdWRpbw=="
+  },
+  {
+    "type": "response.output_item.added",
+    "event_id": "evt_tool_start",
+    "response_id": "resp_1",
+    "output_index": 2,
+    "item": {
+      "id": "fc_1",
+      "call_id": "call_1",
+      "type": "function_call",
+      "name": "lookup",
+      "arguments": ""
+    }
+  },
+  {
+    "type": "response.function_call_arguments.delta",
+    "event_id": "evt_tool_delta",
+    "response_id": "resp_1",
+    "item_id": "fc_1",
+    "call_id": "call_1",
+    "output_index": 2,
+    "delta": "{\"query\":\"private query\"}"
+  },
+  {
+    "type": "response.function_call_arguments.done",
+    "event_id": "evt_tool_done",
+    "response_id": "resp_1",
+    "item_id": "fc_1",
+    "call_id": "call_1",
+    "output_index": 2,
+    "name": "lookup",
+    "arguments": "{\"query\":\"private query\"}"
+  },
+  {
+    "type": "conversation.item.done",
+    "event_id": "evt_tool_result",
+    "previous_item_id": "fc_1",
+    "item": {
+      "id": "fco_1",
+      "call_id": "call_1",
+      "type": "function_call_output",
+      "output": "private tool result"
+    }
+  },
+  {
+    "type": "error",
+    "event_id": "evt_recoverable_error",
+    "error": {
+      "type": "invalid_request_error",
+      "code": "response_cancel_not_active",
+      "message": "private recoverable error"
+    }
+  },
+  {
+    "type": "rate_limits.updated",
+    "event_id": "evt_limits",
+    "rate_limits": [
+      {
+        "name": "tokens",
+        "limit": 50000,
+        "remaining": 49950,
+        "reset_seconds": 60
+      }
+    ]
+  },
+  {
+    "type": "response.done",
+    "event_id": "evt_done",
+    "response": {
+      "id": "resp_1",
+      "status": "completed",
+      "status_details": null,
+      "conversation_id": "conv_1",
+      "output": [
+        {
+          "id": "fc_1",
+          "call_id": "call_1",
+          "type": "function_call",
+          "name": "lookup",
+          "arguments": "{\"query\":\"private query\"}"
+        }
+      ],
+      "usage": {
+        "input_tokens": 12,
+        "output_tokens": 5,
+        "total_tokens": 17,
+        "input_token_details": {
+          "text_tokens": 9,
+          "audio_tokens": 3,
+          "cached_tokens": 4
+        },
+        "output_token_details": {
+          "text_tokens": 5,
+          "audio_tokens": 0
+        }
+      }
+    }
+  }
+]

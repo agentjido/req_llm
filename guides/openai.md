@@ -357,7 +357,40 @@ ReqLLM also exposes an experimental low-level Realtime WebSocket client for sess
 :ok = ReqLLM.OpenAI.Realtime.close(session)
 ```
 
-This API is intentionally low-level. You send JSON events, receive JSON events, and manage the session lifecycle explicitly.
+This API is intentionally low-level. You send JSON events, receive JSON events, and manage the session lifecycle explicitly. Existing `next_event/2` calls continue to return the decoded OpenAI event unchanged.
+
+For consumers that already understand `ReqLLM.StreamEvent`, use the additive projected view:
+
+```elixir
+{:ok, projected} = ReqLLM.OpenAI.Realtime.next_projected_event(session)
+
+projected.type
+#=> "response.output_text.delta"
+
+projected.native
+#=> the native event with sensitive payloads redacted
+
+projected.stream_events
+#=> [%ReqLLM.StreamEvent{type: :text_delta, data: "[REDACTED]", ...}]
+```
+
+Pass `payloads: :raw` only when that consumer is authorized to retain text, audio transcripts, tool arguments/results, and provider error messages. Raw audio deltas, input transcription, session/control events, rate limits, MCP and other provider-native tools, and recoverable session errors remain native-only because ReqLLM has no exact portable event for them.
+
+The experimental projection is intentionally narrow:
+
+| OpenAI Realtime event | Portable projection |
+| --- | --- |
+| `response.created` | `:start` when the resolved session model is available |
+| `response.output_text.delta` | `:text_delta` |
+| `response.output_audio_transcript.delta` | `:text_delta` with `modality: :audio_transcript` |
+| application `response.output_item.added` | `:tool_call_start` |
+| `response.function_call_arguments.delta` / `.done` | `:tool_call_delta` / `:tool_call` |
+| application `conversation.item.done` function output | `:tool_result` |
+| `response.done` | optional `:usage`, then one `:finish`, `:cancelled`, or terminal `:error` |
+
+All other events have an empty `stream_events` list and remain available through `native`. This includes top-level `error` events because OpenAI defines many of them as recoverable session errors, while canonical `StreamEvent` errors are terminal. See the [OpenAI Realtime server-event reference](https://platform.openai.com/docs/api-reference/realtime-server-events) for the provider event catalog.
+
+`response.created` starts a canonical response lifecycle, and `response.done` contributes usage followed by exactly one completion, cancellation, or terminal error event. OpenAI event, response, item, call, conversation, session, index, and sequence identifiers are retained for correlation. Reconnecting creates a new provider session; ReqLLM does not hide reconnection or replay events. Applications or Jido continue to own session hosting, reconnection, tool execution, and follow-up calls.
 
 ## Usage Metrics
 
