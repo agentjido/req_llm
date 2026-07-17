@@ -22,6 +22,15 @@ defmodule ReqLLM.Providers.Anthropic.ResponseBuilder do
     end
   end
 
+  @doc false
+  @spec build_buffered_response([ReqLLM.StreamChunk.t()], map(), keyword()) ::
+          {:ok, ReqLLM.Response.t()} | {:error, term()}
+  def build_buffered_response(chunks, metadata, opts) do
+    with {:ok, response} <- DefaultBuilder.build_buffered_response(chunks, metadata, opts) do
+      {:ok, preserve_empty_message(response, chunks, opts)}
+    end
+  end
+
   defp ensure_non_empty_content(%{message: %{tool_calls: tc, content: []}} = response)
        when is_list(tc) and tc != [] do
     content = [ContentPart.text("")]
@@ -29,4 +38,18 @@ defmodule ReqLLM.Providers.Anthropic.ResponseBuilder do
   end
 
   defp ensure_non_empty_content(response), do: response
+
+  defp preserve_empty_message(response, chunks, opts) do
+    if Enum.any?(chunks, &message_chunk?/1) do
+      response
+    else
+      %{response | message: nil, context: Keyword.fetch!(opts, :context)}
+    end
+  end
+
+  defp message_chunk?(%ReqLLM.StreamChunk{type: type})
+       when type in [:content, :thinking, :tool_call],
+       do: true
+
+  defp message_chunk?(_chunk), do: false
 end

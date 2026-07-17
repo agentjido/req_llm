@@ -99,7 +99,7 @@ defmodule ReqLLM.Provider.Defaults.ResponseBuilder do
       end
 
     base_response = %Response{
-      id: metadata[:response_id] || generate_response_id(),
+      id: materialize_response_id(profile, metadata),
       model: materialize_model(profile, metadata, model),
       context: context,
       message: message,
@@ -352,6 +352,17 @@ defmodule ReqLLM.Provider.Defaults.ResponseBuilder do
   end
 
   defp materialize_model(_profile, _metadata, model), do: model.id
+
+  defp materialize_response_id(:buffered, metadata) do
+    case Map.fetch(metadata, :response_id) do
+      {:ok, response_id} -> response_id
+      :error -> generate_response_id()
+    end
+  end
+
+  defp materialize_response_id(_profile, metadata) do
+    metadata[:response_id] || generate_response_id()
+  end
 
   # ============================================================================
   # Metadata Helpers
