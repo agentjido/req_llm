@@ -1140,14 +1140,7 @@ defmodule ReqLLM.Provider.Defaults do
         _ -> {[], %{}}
       end
 
-    message =
-      content_chunks
-      |> build_openai_message_from_chunks()
-      |> put_openai_reasoning_details(raw_message, model.provider)
-
-    context = %ReqLLM.Context{
-      messages: [message]
-    }
+    chunks = content_chunks ++ openai_reasoning_details_chunks(raw_message, model.provider)
 
     logprobs = get_in(first_choice, ["logprobs", "content"])
 
@@ -1155,22 +1148,23 @@ defmodule ReqLLM.Provider.Defaults do
       data
       |> Map.drop(["id", "model", "choices", "usage"])
       |> then(fn meta ->
-        if logprobs, do: Map.put(meta, :logprobs, logprobs), else: meta
+        if is_nil(logprobs), do: meta, else: Map.put(meta, :logprobs, logprobs)
       end)
 
-    response = %ReqLLM.Response{
-      id: id,
-      model: model_name,
-      context: context,
-      message: message,
-      stream?: false,
-      stream: nil,
+    metadata = %{
+      response_id: id,
+      response_model: model_name,
       usage: usage,
       finish_reason: finish_reason,
       provider_meta: provider_meta
     }
 
-    {:ok, response}
+    ReqLLM.Provider.Defaults.ResponseBuilder.build_buffered_response(
+      chunks,
+      metadata,
+      context: %ReqLLM.Context{messages: []},
+      model: model
+    )
   end
 
   @doc """
@@ -1312,18 +1306,15 @@ defmodule ReqLLM.Provider.Defaults do
 
   defp decode_openai_tool_calls(_), do: []
 
-  defp put_openai_reasoning_details(message, %{"reasoning_details" => details}, provider)
+  defp openai_reasoning_details_chunks(%{"reasoning_details" => details}, provider)
        when is_list(details) and details != [] do
-    normalized_details = decode_openai_reasoning_details(details, provider)
-
-    if normalized_details == [] do
-      message
-    else
-      %{message | reasoning_details: normalized_details}
+    case decode_openai_reasoning_details(details, provider) do
+      [] -> []
+      normalized_details -> [ReqLLM.StreamChunk.meta(%{reasoning_details: normalized_details})]
     end
   end
 
-  defp put_openai_reasoning_details(message, _raw_message, _provider), do: message
+  defp openai_reasoning_details_chunks(_raw_message, _provider), do: []
 
   defp decode_openai_reasoning_details(details, provider) when is_list(details) do
     details
@@ -1527,67 +1518,6 @@ defmodule ReqLLM.Provider.Defaults do
        decoded_arguments: arguments
      }}
   end
-
-  defp build_openai_message_from_chunks(chunks) when is_list(chunks) do
-    content_parts =
-      chunks
-      |> Enum.filter(&(&1.type in [:content, :thinking]))
-      |> Enum.map(&openai_chunk_to_content_part/1)
-      |> Enum.reject(&is_nil/1)
-
-    tool_calls =
-      chunks
-      |> Enum.filter(&(&1.type == :tool_call))
-      |> Enum.map(&openai_chunk_to_tool_call/1)
-      |> Enum.reject(&is_nil/1)
-
-    %ReqLLM.Message{
-      role: :assistant,
-      content: content_parts,
-      tool_calls: if(tool_calls != [], do: tool_calls),
-      metadata: %{}
-    }
-  end
-
-  defp openai_chunk_to_content_part(%ReqLLM.StreamChunk{type: :content, text: text}) do
-    %ReqLLM.Message.ContentPart{type: :text, text: text}
-  end
-
-  defp openai_chunk_to_content_part(%ReqLLM.StreamChunk{type: :thinking, text: text}) do
-    %ReqLLM.Message.ContentPart{type: :thinking, text: text}
-  end
-
-  defp openai_chunk_to_content_part(_), do: nil
-
-  defp openai_chunk_to_tool_call(%ReqLLM.StreamChunk{
-         type: :tool_call,
-         name: name,
-         arguments: args,
-         metadata: meta
-       }) do
-    args_json =
-      cond do
-        Map.get(meta, :unparseable_arguments) && is_binary(Map.get(meta, :raw_arguments)) ->
-          Map.get(meta, :raw_arguments)
-
-        Map.get(meta, :invalid_arguments) ->
-          Jason.encode!(args)
-
-        is_binary(Map.get(meta, :raw_arguments)) ->
-          Map.get(meta, :raw_arguments)
-
-        is_binary(args) ->
-          args
-
-        true ->
-          Jason.encode!(args)
-      end
-
-    id = Map.get(meta, :id)
-    ReqLLM.ToolCall.new(id, name, args_json)
-  end
-
-  defp openai_chunk_to_tool_call(_), do: nil
 
   defp parse_openai_usage(usage, choices \\ [])
 

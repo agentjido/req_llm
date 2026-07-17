@@ -434,22 +434,7 @@ defmodule ReqLLM.StreamResponse do
     callbacks = extract_callbacks(opts)
 
     chunks = process_stream_with_callbacks(stream_response.stream, callbacks)
-    metadata = MetadataHandle.await(stream_response.metadata_handle)
-
-    case metadata do
-      %{error: reason} ->
-        {:error, reason}
-
-      _ ->
-        builder = ResponseBuilder.for_model(stream_response.model)
-
-        builder.build_response(
-          chunks,
-          metadata,
-          context: stream_response.context,
-          model: stream_response.model
-        )
-    end
+    materialize_chunks(stream_response, chunks)
   rescue
     error -> {:error, error}
   catch
@@ -664,24 +649,32 @@ defmodule ReqLLM.StreamResponse do
   """
   @spec to_response(t()) :: {:ok, Response.t()} | {:error, term()}
   def to_response(%__MODULE__{} = stream_response) do
-    # Consume stream and collect metadata
     chunks = Enum.to_list(stream_response.stream)
-    metadata = MetadataHandle.await(stream_response.metadata_handle)
-
-    # Use the appropriate ResponseBuilder for this model
-    builder = ResponseBuilder.for_model(stream_response.model)
-
-    builder.build_response(
-      chunks,
-      metadata,
-      context: stream_response.context,
-      model: stream_response.model
-    )
+    materialize_chunks(stream_response, chunks)
   rescue
     error -> {:error, error}
   catch
     :exit, reason -> {:error, reason}
   after
     MetadataHandle.stop(stream_response.metadata_handle)
+  end
+
+  defp materialize_chunks(stream_response, chunks) do
+    metadata = MetadataHandle.await(stream_response.metadata_handle)
+
+    case metadata do
+      %{error: reason} ->
+        {:error, reason}
+
+      _metadata ->
+        builder = ResponseBuilder.for_model(stream_response.model)
+
+        builder.build_response(
+          chunks,
+          metadata,
+          context: stream_response.context,
+          model: stream_response.model
+        )
+    end
   end
 end

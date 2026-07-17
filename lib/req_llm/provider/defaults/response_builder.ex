@@ -43,32 +43,51 @@ defmodule ReqLLM.Provider.Defaults.ResponseBuilder do
   @spec build_response([StreamChunk.t()], map(), keyword()) ::
           {:ok, Response.t()} | {:error, term()}
   def build_response(chunks, metadata, opts) do
+    do_build_response(chunks, metadata, opts, :stream)
+  end
+
+  @doc false
+  @spec build_buffered_response([StreamChunk.t()], map(), keyword()) ::
+          {:ok, Response.t()} | {:error, term()}
+  def build_buffered_response(chunks, metadata, opts) do
+    do_build_response(chunks, metadata, opts, :buffered)
+  end
+
+  defp do_build_response(chunks, metadata, opts, profile) do
     context = Keyword.fetch!(opts, :context)
     model = Keyword.fetch!(opts, :model)
 
-    acc = ChunkAccumulator.reduce(ChunkAccumulator.new(), chunks)
+    acc =
+      chunks
+      |> accumulator_chunks(profile)
+      |> then(&ChunkAccumulator.reduce(ChunkAccumulator.new(), &1))
+
     reconstructed_tool_calls = ChunkAccumulator.finalize_tool_calls_for_response(acc)
-    normalized_tool_calls = normalize_tool_calls(reconstructed_tool_calls)
+    normalized_tool_calls = normalize_tool_calls(reconstructed_tool_calls, profile)
 
     text_content = ChunkAccumulator.finalize_text(acc)
     thinking_content = ChunkAccumulator.finalize_thinking(acc)
-    content_parts = build_content_parts(text_content, thinking_content, normalized_tool_calls)
 
-    reasoning_details =
-      case ChunkAccumulator.finalize_reasoning_details(acc) do
-        [] -> extract_reasoning_from_thinking_chunks(chunks, model.provider)
-        details -> details
-      end
+    content_parts =
+      materialize_content_parts(
+        profile,
+        chunks,
+        text_content,
+        thinking_content,
+        normalized_tool_calls
+      )
+
+    reasoning_details = materialize_reasoning_details(profile, chunks, acc, model.provider)
 
     message = %Message{
       role: :assistant,
       content: content_parts,
       tool_calls: if(normalized_tool_calls != [], do: normalized_tool_calls),
-      metadata: build_message_metadata(metadata),
+      metadata: materialize_message_metadata(profile, metadata),
       reasoning_details: reasoning_details
     }
 
-    object = extract_object_from_message(message)
+    object = materialize_object(profile, message)
     usage = normalize_usage_fields(metadata[:usage])
     finish_reason = normalize_finish_reason(metadata[:finish_reason])
     base_provider_meta = metadata[:provider_meta] || %{}
@@ -81,7 +100,7 @@ defmodule ReqLLM.Provider.Defaults.ResponseBuilder do
 
     base_response = %Response{
       id: metadata[:response_id] || generate_response_id(),
-      model: model.id,
+      model: materialize_model(profile, metadata, model),
       context: context,
       message: message,
       object: object,
@@ -116,38 +135,46 @@ defmodule ReqLLM.Provider.Defaults.ResponseBuilder do
   """
   @spec normalize_tool_calls([map() | ToolCall.t()]) :: [ToolCall.t()]
   def normalize_tool_calls(tool_calls) when is_list(tool_calls) do
-    Enum.map(tool_calls, &normalize_tool_call/1)
+    normalize_tool_calls(tool_calls, :stream)
   end
 
   def normalize_tool_calls(_), do: []
 
-  defp normalize_tool_call(%ToolCall{} = call), do: call
+  defp normalize_tool_calls(tool_calls, profile) when is_list(tool_calls) do
+    Enum.map(tool_calls, &normalize_tool_call(&1, profile))
+  end
 
-  defp normalize_tool_call(%{id: id, name: name, arguments: args} = m) do
+  defp normalize_tool_calls(_tool_calls, _profile), do: []
+
+  defp normalize_tool_call(%ToolCall{} = call, _profile), do: call
+
+  defp normalize_tool_call(%{id: id, name: name, arguments: args} = m, profile) do
     constructor =
       if ToolCall.flagged_builtin?(m), do: &ToolCall.new_builtin/3, else: &ToolCall.new/3
 
     constructor.(id, name, encode_tool_args(args))
-    |> put_tool_call_metadata(m)
+    |> put_tool_call_metadata(m, profile)
   end
 
-  defp normalize_tool_call(%{"id" => id, "name" => name, "arguments" => args} = m) do
+  defp normalize_tool_call(%{"id" => id, "name" => name, "arguments" => args} = m, profile) do
     constructor =
       if ToolCall.flagged_builtin?(m), do: &ToolCall.new_builtin/3, else: &ToolCall.new/3
 
     constructor.(id, name, encode_tool_args(args))
-    |> put_tool_call_metadata(m)
+    |> put_tool_call_metadata(m, profile)
   end
 
-  defp normalize_tool_call(other) when is_map(other) do
+  defp normalize_tool_call(other, profile) when is_map(other) do
     constructor =
       if ToolCall.flagged_builtin?(other), do: &ToolCall.new_builtin/3, else: &ToolCall.new/3
 
     constructor.(other[:id], other[:name], encode_tool_args(other[:arguments]))
-    |> put_tool_call_metadata(other)
+    |> put_tool_call_metadata(other, profile)
   end
 
-  defp put_tool_call_metadata(%ToolCall{} = call, source) do
+  defp put_tool_call_metadata(%ToolCall{} = call, _source, :buffered), do: call
+
+  defp put_tool_call_metadata(%ToolCall{} = call, source, _profile) do
     ToolCall.put_metadata(call, ToolCall.metadata(source))
   end
 
@@ -238,6 +265,74 @@ defmodule ReqLLM.Provider.Defaults.ResponseBuilder do
       _ -> nil
     end)
   end
+
+  defp accumulator_chunks(chunks, :buffered) do
+    Enum.map(chunks, &restore_buffered_tool_arguments/1)
+  end
+
+  defp accumulator_chunks(chunks, _profile), do: chunks
+
+  defp restore_buffered_tool_arguments(
+         %StreamChunk{
+           type: :tool_call,
+           metadata: %{unparseable_arguments: true, raw_arguments: raw_arguments} = metadata
+         } = chunk
+       )
+       when is_binary(raw_arguments) do
+    %{chunk | arguments: raw_arguments, metadata: drop_buffered_argument_metadata(metadata)}
+  end
+
+  defp restore_buffered_tool_arguments(
+         %StreamChunk{type: :tool_call, metadata: %{invalid_arguments: true} = metadata} = chunk
+       ) do
+    %{chunk | metadata: drop_buffered_argument_metadata(metadata)}
+  end
+
+  defp restore_buffered_tool_arguments(chunk), do: chunk
+
+  defp drop_buffered_argument_metadata(metadata) do
+    Map.drop(metadata, [
+      :decoded_arguments,
+      :invalid_arguments,
+      :raw_arguments,
+      :unparseable_arguments
+    ])
+  end
+
+  defp materialize_content_parts(:buffered, chunks, _text, _thinking, _tool_calls) do
+    Enum.flat_map(chunks, fn
+      %StreamChunk{type: :content, text: text} -> [%ContentPart{type: :text, text: text}]
+      %StreamChunk{type: :thinking, text: text} -> [%ContentPart{type: :thinking, text: text}]
+      _chunk -> []
+    end)
+  end
+
+  defp materialize_content_parts(_profile, _chunks, text, thinking, tool_calls) do
+    build_content_parts(text, thinking, tool_calls)
+  end
+
+  defp materialize_reasoning_details(:buffered, _chunks, acc, _provider) do
+    case ChunkAccumulator.finalize_reasoning_details(acc) do
+      [] -> nil
+      details -> details
+    end
+  end
+
+  defp materialize_reasoning_details(_profile, chunks, acc, provider) do
+    case ChunkAccumulator.finalize_reasoning_details(acc) do
+      [] -> extract_reasoning_from_thinking_chunks(chunks, provider)
+      details -> details
+    end
+  end
+
+  defp materialize_message_metadata(:buffered, _metadata), do: %{}
+  defp materialize_message_metadata(_profile, metadata), do: build_message_metadata(metadata)
+
+  defp materialize_object(:buffered, _message), do: nil
+  defp materialize_object(_profile, message), do: extract_object_from_message(message)
+
+  defp materialize_model(:buffered, metadata, model), do: metadata[:response_model] || model.id
+  defp materialize_model(_profile, _metadata, model), do: model.id
 
   # ============================================================================
   # Metadata Helpers
