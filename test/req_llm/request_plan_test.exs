@@ -175,6 +175,17 @@ defmodule ReqLLM.RequestPlanTest do
                "WebSocket transport is not supported by OpenAI Chat Completions"
     end
 
+    test "rejects WebSocket for Anthropic Messages" do
+      assert {:error, %ReqLLM.Error.Invalid.Parameter{} = error} =
+               RequestPlan.build("anthropic:claude-sonnet-4-5-20250929", :chat,
+                 stream: true,
+                 provider_options: [openai_stream_transport: :websocket]
+               )
+
+      assert Exception.message(error) =~
+               "WebSocket transport is not supported by Anthropic Messages"
+    end
+
     test "rejects invalid stream settings with typed errors" do
       assert {:error, %ReqLLM.Error.Invalid.Parameter{} = stream_error} =
                RequestPlan.build("openai:gpt-4o-mini", :chat, stream: :yes)

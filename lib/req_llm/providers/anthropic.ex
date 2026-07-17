@@ -189,6 +189,8 @@ defmodule ReqLLM.Providers.Anthropic do
   def prepare_request(:chat, model_spec, prompt, opts) do
     with {:ok, model} <- ReqLLM.model(model_spec),
          {:ok, context} <- ReqLLM.Context.normalize(prompt, opts),
+         operation = Keyword.get(opts, :operation, :chat),
+         {:ok, plan} <- ReqLLM.RequestPlan.build(model, operation, opts),
          opts_with_context = Keyword.put(opts, :context, context),
          {:ok, processed_opts} <-
            ReqLLM.Provider.Options.process(__MODULE__, :chat, model, opts_with_context) do
@@ -211,7 +213,7 @@ defmodule ReqLLM.Providers.Anthropic do
         Req.new(
           [
             base_url: base_url,
-            url: "/v1/messages",
+            url: request_path(plan),
             method: :post,
             receive_timeout: timeout,
             pool_timeout: timeout
@@ -222,6 +224,7 @@ defmodule ReqLLM.Providers.Anthropic do
           Keyword.take(processed_opts, req_keys) ++ [model: get_api_model_id(model)]
         )
         |> attach(model, processed_opts)
+        |> Req.Request.put_private(:req_llm_request_plan, request_plan_metadata(plan))
 
       {:ok, request}
     end
@@ -677,9 +680,9 @@ defmodule ReqLLM.Providers.Anthropic do
     |> binary_part(0, length)
   end
 
-  defp build_request_url(opts, credential) do
+  defp build_request_url(opts, credential, path) do
     base_url = get_option(opts, :base_url, base_url())
-    add_subscription_beta_query("#{base_url}/v1/messages", credential)
+    add_subscription_beta_query("#{base_url}#{path}", credential)
   end
 
   defp add_subscription_beta_query(url, {credential, opts}) do
@@ -722,56 +725,71 @@ defmodule ReqLLM.Providers.Anthropic do
   def attach_stream(model, context, opts, _finch_name) do
     operation = opts[:operation] || :chat
 
-    translated_opts =
-      ReqLLM.Provider.Options.process_stream!(
-        __MODULE__,
-        operation,
-        model,
-        context,
-        opts
-      )
+    with {:ok, plan} <-
+           ReqLLM.RequestPlan.build(model, operation, Keyword.put(opts, :stream, true)) do
+      translated_opts =
+        ReqLLM.Provider.Options.process_stream!(
+          __MODULE__,
+          operation,
+          model,
+          context,
+          opts
+        )
 
-    default_timeout =
-      if Keyword.has_key?(translated_opts, :thinking) do
-        Application.get_env(:req_llm, :thinking_timeout, 300_000)
-      else
-        Application.get_env(:req_llm, :receive_timeout, 120_000)
-      end
+      default_timeout =
+        if Keyword.has_key?(translated_opts, :thinking) do
+          Application.get_env(:req_llm, :thinking_timeout, 300_000)
+        else
+          Application.get_env(:req_llm, :receive_timeout, 120_000)
+        end
 
-    translated_opts = Keyword.put_new(translated_opts, :receive_timeout, default_timeout)
+      translated_opts = Keyword.put_new(translated_opts, :receive_timeout, default_timeout)
 
-    base_url = ReqLLM.Provider.Options.effective_base_url(__MODULE__, model, translated_opts)
-    translated_opts = Keyword.put(translated_opts, :base_url, base_url)
+      base_url = ReqLLM.Provider.Options.effective_base_url(__MODULE__, model, translated_opts)
+      translated_opts = Keyword.put(translated_opts, :base_url, base_url)
 
-    credential = ReqLLM.Auth.resolve!(model, translated_opts)
-    headers = build_request_headers(translated_opts, credential)
-    streaming_headers = [{"Accept", "text/event-stream"} | headers]
-    beta_headers = build_beta_headers(Keyword.put(translated_opts, :context, context), credential)
+      credential = ReqLLM.Auth.resolve!(model, translated_opts)
+      headers = build_request_headers(translated_opts, credential)
+      streaming_headers = [{"Accept", "text/event-stream"} | headers]
 
-    custom_headers =
-      ReqLLM.Provider.Utils.extract_custom_headers(translated_opts[:req_http_options])
+      beta_headers =
+        build_beta_headers(Keyword.put(translated_opts, :context, context), credential)
 
-    all_headers = streaming_headers ++ beta_headers ++ custom_headers
+      custom_headers =
+        ReqLLM.Provider.Utils.extract_custom_headers(translated_opts[:req_http_options])
 
-    context =
-      ReqLLM.ToolCallIdCompat.apply_context(
-        __MODULE__,
-        operation,
-        model,
-        context,
-        translated_opts
-      )
+      all_headers = streaming_headers ++ beta_headers ++ custom_headers
 
-    body =
-      context
-      |> build_request_body(get_api_model_id(model), translated_opts ++ [stream: true])
-      |> shape_subscription_body({credential, translated_opts})
+      context =
+        ReqLLM.ToolCallIdCompat.apply_context(
+          __MODULE__,
+          operation,
+          model,
+          context,
+          translated_opts
+        )
 
-    url = build_request_url(translated_opts, {credential, translated_opts})
+      body =
+        context
+        |> build_request_body(get_api_model_id(model), translated_opts ++ [stream: true])
+        |> shape_subscription_body({credential, translated_opts})
 
-    encoded = body |> ReqLLM.Schema.apply_property_ordering() |> Jason.encode!()
-    finch_request = Finch.build(:post, url, all_headers, encoded)
-    {:ok, finch_request}
+      url =
+        build_request_url(
+          translated_opts,
+          {credential, translated_opts},
+          request_path(plan)
+        )
+
+      encoded = body |> ReqLLM.Schema.apply_property_ordering() |> Jason.encode!()
+
+      finch_request =
+        :post
+        |> Finch.build(url, all_headers, encoded)
+        |> Finch.Request.put_private(:req_llm_request_plan, request_plan_metadata(plan))
+
+      {:ok, finch_request}
+    end
   rescue
     error ->
       {:error,
@@ -798,6 +816,28 @@ defmodule ReqLLM.Providers.Anthropic do
   @impl ReqLLM.Provider
   def flush_stream_state(model, state) do
     ReqLLM.Providers.Anthropic.Response.flush_stream_state(model, state)
+  end
+
+  defp request_plan_metadata(plan) do
+    Map.take(plan, [
+      :operation,
+      :provider,
+      :surface,
+      :transport,
+      :provider_module,
+      :api_module,
+      :warnings
+    ])
+  end
+
+  defp request_path(%ReqLLM.RequestPlan{
+         surface: :anthropic_messages,
+         api_module: __MODULE__
+       }),
+       do: "/v1/messages"
+
+  defp request_path(%ReqLLM.RequestPlan{model: model}) do
+    raise ReqLLM.Error.Invalid.Provider.exception(provider: model.provider)
   end
 
   @impl ReqLLM.Provider
