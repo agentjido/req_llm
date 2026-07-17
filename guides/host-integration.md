@@ -159,10 +159,11 @@ end
 A fully consumed event stream begins with `:start`, preserves output delta
 order, emits assembled tool calls, usage, and warnings when available, and ends
 with one `:finish`, `:cancelled`, or `:error` event. Always call
-`ReqLLM.StreamResponse.close/1` after direct chunk, token, or event consumption;
-an `after` block also guarantees cancellation and cleanup when enumeration stops
-early or raises. `process_stream/2` and `to_response/1` close their metadata
-handles before returning.
+`ReqLLM.StreamResponse.close/1` after consuming the raw stream or using
+`tokens/1`, `events/1`, `text/1`, `tool_calls/1`, `extract_tool_calls/1`, or
+`classify/1`. An `after` block also guarantees cancellation and cleanup when
+enumeration stops early or raises. Only `process_stream/2` and `to_response/1`
+close their metadata handles before returning.
 
 Buffered responses and fully materialized streams expose the same canonical
 information for capabilities supported by both paths. Streaming deltas retain
