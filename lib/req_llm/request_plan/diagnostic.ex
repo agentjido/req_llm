@@ -86,7 +86,7 @@ defmodule ReqLLM.RequestPlan.Diagnostic do
   defp apply_option_callback(provider_module, callback, plan, opts) do
     if function_exported?(provider_module, callback, 3) do
       provider_module
-      |> apply(callback, [plan.operation, plan.model, opts])
+      |> apply(callback, [option_operation(plan), plan.model, opts])
       |> normalize_option_callback_result()
     else
       {:ok, opts, []}
@@ -94,6 +94,9 @@ defmodule ReqLLM.RequestPlan.Diagnostic do
   rescue
     _error -> translation_error()
   end
+
+  defp option_operation(%RequestPlan{operation: :object}), do: :chat
+  defp option_operation(%RequestPlan{operation: operation}), do: operation
 
   defp normalize_option_callback_result({opts, warnings})
        when is_list(opts) and is_list(warnings) do

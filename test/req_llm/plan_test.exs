@@ -111,6 +111,22 @@ defmodule ReqLLM.PlanTest do
       refute inspect(diagnostic) =~ "END"
     end
 
+    test "translates object options through the underlying chat request operation" do
+      model = chat_model()
+
+      assert {:ok, diagnostic} =
+               ReqLLM.plan(model, :object,
+                 max_tokens: 128,
+                 temperature: 0.2
+               )
+
+      assert diagnostic.operation == :object
+      assert diagnostic.options.canonical == [:max_tokens, :temperature]
+      assert diagnostic.options.translated == [:max_completion_tokens]
+      assert Enum.any?(diagnostic.warnings, &String.contains?(&1, ":max_tokens"))
+      assert Enum.any?(diagnostic.warnings, &String.contains?(&1, "temperature"))
+    end
+
     test "uses an explicit WebSocket method for the Responses WebSocket route" do
       assert {:ok, diagnostic} =
                ReqLLM.plan("openai:gpt-4o-mini", :chat,
@@ -173,6 +189,27 @@ defmodule ReqLLM.PlanTest do
       assert diagnostic.surface == execution_plan.surface
       assert diagnostic.transport == execution_plan.transport
       assert diagnostic.route.path == request.path
+    end
+
+    test "reports the option translation used by object request execution" do
+      model = chat_model()
+      {:ok, schema} = ReqLLM.Schema.compile(name: [type: :string, required: true])
+      opts = [api_key: @api_key, max_tokens: 128, temperature: 0.2]
+
+      assert {:ok, diagnostic} = ReqLLM.plan(model, :object, opts)
+
+      assert {:ok, request} =
+               OpenAI.prepare_request(
+                 :object,
+                 model,
+                 "Return a name",
+                 Keyword.put(opts, :compiled_schema, schema)
+               )
+
+      assert diagnostic.options.translated == [:max_completion_tokens]
+      assert request.options[:max_completion_tokens] == 128
+      refute Map.has_key?(request.options, :max_tokens)
+      refute Map.has_key?(request.options, :temperature)
     end
   end
 
