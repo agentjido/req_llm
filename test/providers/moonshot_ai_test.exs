@@ -99,6 +99,32 @@ defmodule ReqLLM.Providers.MoonshotAITest do
       assert Enum.any?(warnings, &String.contains?(&1, "K2.x thinking"))
     end
 
+    test "removes K2.x thinking through the public option pipeline" do
+      processed =
+        ReqLLM.Provider.Options.process!(
+          MoonshotAI,
+          :chat,
+          kimi_k3_model(),
+          provider_options: [thinking: %{type: "enabled"}],
+          on_unsupported: :ignore
+        )
+
+      refute Keyword.has_key?(processed, :thinking)
+      refute Keyword.has_key?(processed, :provider_options)
+    end
+
+    test "rejects K2.x thinking when unsupported options are errors" do
+      assert_raise ReqLLM.Error.Validation.Error, ~r/K2\.x thinking/, fn ->
+        ReqLLM.Provider.Options.process!(
+          MoonshotAI,
+          :chat,
+          kimi_k3_model(),
+          provider_options: [thinking: %{type: "enabled"}],
+          on_unsupported: :error
+        )
+      end
+    end
+
     test "retains an explicit max completion token limit" do
       {translated, warnings} =
         MoonshotAI.translate_options(

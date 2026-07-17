@@ -123,9 +123,11 @@ defmodule ReqLLM.Providers.MoonshotAI do
   end
 
   defp strip_thinking_option({opts, warnings}) do
+    {thinking, opts} = Keyword.pop(opts, :thinking)
     {provider_options, opts} = Keyword.pop(opts, :provider_options, [])
-    {thinking, provider_options} = pop_option(provider_options, :thinking)
+    {nested_thinking, provider_options} = pop_option(provider_options, :thinking)
     opts = put_provider_options(opts, provider_options)
+    thinking = thinking || nested_thinking
 
     if is_nil(thinking) do
       {opts, warnings}
