@@ -135,6 +135,14 @@ defmodule ReqLLM.Provider.Options.NamespaceTest do
     end
 
     test "rejects duplicate selected namespaces and duplicate nested keys" do
+      assert {:error, %ReqLLM.Error.Invalid.Parameter{} = container_error} =
+               Namespace.normalize(MockProvider, :chat, model(:mock_namespace),
+                 provider_options: [mock_namespace: [custom_option: "one"]],
+                 provider_options: [mock_namespace: [custom_option: "two"]]
+               )
+
+      assert Exception.message(container_error) =~ "provider_options more than once"
+
       assert {:error, %ReqLLM.Error.Invalid.Parameter{} = namespace_error} =
                Namespace.normalize(MockProvider, :chat, model(:mock_namespace),
                  provider_options: [

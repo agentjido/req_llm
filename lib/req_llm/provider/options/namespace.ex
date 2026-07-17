@@ -30,12 +30,15 @@ defmodule ReqLLM.Provider.Options.Namespace do
   end
 
   defp normalize_container(provider_mod, operation, provider, opts) do
-    case Keyword.fetch(opts, :provider_options) do
-      :error ->
+    case Keyword.get_values(opts, :provider_options) do
+      [] ->
         {:ok, opts, []}
 
-      {:ok, provider_options} ->
+      [provider_options] ->
         normalize_provider_options(provider_mod, operation, provider, opts, provider_options)
+
+      _provider_options ->
+        invalid_parameter("request options contain provider_options more than once")
     end
   end
 
