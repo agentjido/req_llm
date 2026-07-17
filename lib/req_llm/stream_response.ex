@@ -72,6 +72,7 @@ defmodule ReqLLM.StreamResponse do
   alias ReqLLM.Provider.ResponseBuilder
   alias ReqLLM.Response
   alias ReqLLM.Response.Stream, as: ResponseStream
+  alias ReqLLM.StreamResponse.EventProjector
   alias ReqLLM.StreamResponse.MetadataHandle
   alias ReqLLM.ToolCall
 
@@ -137,6 +138,46 @@ defmodule ReqLLM.StreamResponse do
     stream
     |> Stream.filter(&(&1.type == :content))
     |> Stream.map(& &1.text)
+  end
+
+  @doc """
+  Project the one consumable chunk stream into canonical tagged events.
+
+  This is a lazy view over `stream_response.stream`; it does not create or
+  buffer a second stream. Choose either the legacy chunk stream, `tokens/1`,
+  or `events/1` for a response because consuming one consumes the underlying
+  stream.
+
+  A fully consumed event stream starts with `:start` and ends with exactly one
+  `:finish`, `:cancelled`, or `:error` event. Output deltas and provider
+  extensions retain their arrival order. Final assembled tool calls, usage,
+  and warnings are emitted immediately before the terminal event. Early
+  enumeration halts the underlying stream and therefore cannot deliver a
+  terminal event to a consumer that has already stopped requesting values.
+
+  Provider and transport failures encountered by this projection are yielded
+  as terminal `:error` events. Consuming `stream_response.stream` directly or
+  through `tokens/1` retains the existing exception behavior.
+
+  `StreamResponse.stream` and every `StreamChunk` value remain unchanged in
+  ReqLLM 1.x.
+
+  ## Examples
+
+      {:ok, response} = ReqLLM.stream_text("openai:gpt-4o-mini", "Hello")
+
+      response
+      |> ReqLLM.StreamResponse.events()
+      |> Enum.each(fn
+        %ReqLLM.StreamEvent{type: :text_delta, data: text} -> IO.write(text)
+        %ReqLLM.StreamEvent{type: :error, data: error} -> IO.inspect(error)
+        _event -> :ok
+      end)
+
+  """
+  @spec events(t()) :: Enumerable.t()
+  def events(%__MODULE__{} = stream_response) do
+    EventProjector.events(stream_response)
   end
 
   @doc """

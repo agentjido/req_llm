@@ -121,7 +121,9 @@ defmodule ReqLLM.Response.Projection do
 
   defp reasoning_detail_value(_detail), do: nil
 
-  defp metadata_output_items(metadata) when is_map(metadata) do
+  @doc false
+  @spec metadata_output_items(map()) :: [OutputItem.t()]
+  def metadata_output_items(metadata) when is_map(metadata) do
     values_for_keys(metadata, @source_keys)
     |> output_items_for(:source)
     |> Kernel.++(values_for_keys(metadata, @annotation_keys) |> output_items_for(:annotation))
@@ -132,9 +134,11 @@ defmodule ReqLLM.Response.Projection do
     )
   end
 
-  defp metadata_output_items(_metadata), do: []
+  def metadata_output_items(_metadata), do: []
 
-  defp provider_output_items(provider_meta) when is_map(provider_meta) do
+  @doc false
+  @spec provider_output_items(map()) :: [OutputItem.t()]
+  def provider_output_items(provider_meta) when is_map(provider_meta) do
     source_items =
       values_for_keys(provider_meta, @source_keys) ++
         (provider_meta
@@ -156,7 +160,7 @@ defmodule ReqLLM.Response.Projection do
       output_items_for(provider_items, :provider_item)
   end
 
-  defp provider_output_items(_provider_meta), do: []
+  def provider_output_items(_provider_meta), do: []
 
   defp output_items_for(values, type) do
     Enum.map(values, &output_item(type, sanitize_urls(&1)))
@@ -207,7 +211,9 @@ defmodule ReqLLM.Response.Projection do
     end
   end
 
-  defp warnings(sources) do
+  @doc false
+  @spec warnings([term()]) :: [String.t()] | nil
+  def warnings(sources) do
     case first_available(sources, [:warnings, "warnings"]) do
       warning when is_binary(warning) and warning != "" ->
         redact_warnings([warning], sources)
@@ -269,7 +275,15 @@ defmodule ReqLLM.Response.Projection do
 
   defp safe_provider_metadata(_provider_meta), do: nil
 
-  defp safe_metadata(value) when is_map(value) do
+  @doc false
+  @spec safe_metadata(term()) :: term()
+  def safe_metadata(%_{} = value) do
+    value
+    |> Map.from_struct()
+    |> safe_metadata()
+  end
+
+  def safe_metadata(value) when is_map(value) do
     Map.new(value, fn {key, item} ->
       if redacted_metadata_key?(key) do
         {key, @redacted}
@@ -279,13 +293,13 @@ defmodule ReqLLM.Response.Projection do
     end)
   end
 
-  defp safe_metadata(value) when is_list(value), do: Enum.map(value, &safe_metadata/1)
+  def safe_metadata(value) when is_list(value), do: Enum.map(value, &safe_metadata/1)
 
-  defp safe_metadata(value) when is_tuple(value),
+  def safe_metadata(value) when is_tuple(value),
     do: value |> Tuple.to_list() |> Enum.map(&safe_metadata/1) |> List.to_tuple()
 
-  defp safe_metadata(value) when is_binary(value), do: sanitize_url(value)
-  defp safe_metadata(value), do: value
+  def safe_metadata(value) when is_binary(value), do: sanitize_url(value)
+  def safe_metadata(value), do: value
 
   defp sanitize_urls(value) when is_map(value) do
     Map.new(value, fn {key, item} -> {key, sanitize_urls(item)} end)
@@ -346,7 +360,11 @@ defmodule ReqLLM.Response.Projection do
     _error -> value
   end
 
-  defp redact_warnings(warnings, sources) do
+  @doc false
+  @spec redact_warnings([String.t()], [term()]) :: [String.t()]
+  def redact_warnings([], _sources), do: []
+
+  def redact_warnings(warnings, sources) do
     values = Enum.flat_map(sources, &sensitive_values/1)
 
     Enum.map(warnings, fn warning ->
@@ -357,7 +375,9 @@ defmodule ReqLLM.Response.Projection do
   end
 
   defp sensitive_values(value) when is_map(value) do
-    Enum.flat_map(value, fn {key, item} ->
+    value
+    |> Map.to_list()
+    |> Enum.flat_map(fn {key, item} ->
       if sensitive_metadata_key?(key) do
         binary_values(item)
       else
@@ -371,8 +391,11 @@ defmodule ReqLLM.Response.Projection do
 
   defp binary_values(value) when is_binary(value), do: if(value == "", do: [], else: [value])
 
-  defp binary_values(value) when is_map(value),
-    do: Enum.flat_map(value, fn {_key, item} -> binary_values(item) end)
+  defp binary_values(value) when is_map(value) do
+    value
+    |> Map.to_list()
+    |> Enum.flat_map(fn {_key, item} -> binary_values(item) end)
+  end
 
   defp binary_values(value) when is_list(value), do: Enum.flat_map(value, &binary_values/1)
   defp binary_values(_value), do: []
