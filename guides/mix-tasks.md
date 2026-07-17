@@ -8,10 +8,56 @@ ReqLLM includes these main Mix tasks:
 
 | Task | Alias | Purpose |
 |------|-------|---------|
+| `mix req_llm.doctor` | — | Diagnose installation and runtime configuration without provider calls |
 | `mix req_llm.gen` | `mix llm` | Generate text/objects from the command line |
 | `mix req_llm.model_compat` | `mix mc` | Validate model coverage with fixtures |
 | `mix req_llm.model_support` | — | Inspect and verify evidence-derived support tiers |
 | `mix req_llm.provider_drift` | — | Run bounded, read-only live anchor verification |
+
+## mix req_llm.doctor
+
+Inspect the local ReqLLM runtime, provider registration, credential presence,
+model resolution, selected request surface, and Finch configuration. The default
+command performs no network probe or paid provider request and never prints
+credential values.
+
+```bash
+mix req_llm.doctor
+mix req_llm.doctor --provider anthropic
+mix req_llm.doctor --model openai:gpt-4o-mini --operation chat
+mix req_llm.doctor --format json
+```
+
+Warnings such as missing optional credentials exit successfully. Invalid required
+configuration, an unknown requested provider or model, an unavailable selected
+surface, or an unhealthy Finch runtime produces a non-zero exit status.
+
+### Machine-readable output
+
+Use `--format json` or `--json` for the stable schema-versioned result. Schema
+version 1 contains only redacted, JSON-safe data:
+
+```json
+{
+  "schema_version": 1,
+  "status": "ok",
+  "checks": [
+    {
+      "id": "runtime.application",
+      "layer": "runtime",
+      "status": "ok",
+      "message": "ReqLLM and its supervision tree are running.",
+      "remediation": null,
+      "details": {}
+    }
+  ]
+}
+```
+
+Top-level status is `ok`, `warning`, or `error`. Each check always includes
+`id`, `layer`, `status`, `message`, `remediation`, and `details`. New check IDs or
+detail fields may be added without changing schema version; existing common fields
+retain their meaning for schema version 1.
 
 ## mix req_llm.gen
 
