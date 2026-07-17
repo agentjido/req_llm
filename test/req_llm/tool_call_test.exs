@@ -220,6 +220,19 @@ defmodule ReqLLM.ToolCallTest do
       refute_received {:tool_executed, _args}
     end
 
+    test "preserves callback error values" do
+      tool =
+        Tool.new!(
+          name: "restricted",
+          description: "Restricted tool",
+          callback: fn _args -> {:error, :permission_denied} end
+        )
+
+      call = ToolCall.new("call_error", "restricted", "{}")
+
+      assert {:error, :permission_denied} = ToolCall.execute(call, [tool])
+    end
+
     test "keeps invalid schema input inspectable and does not execute", %{tool: tool} do
       call = ToolCall.new("call_invalid", "search", ~s({"limit":"many"}))
 
@@ -262,6 +275,23 @@ defmodule ReqLLM.ToolCallTest do
       assert {:error, %{state: :invalid}} =
                ToolCall.execute(call, [tool], json_repair: false)
 
+      refute_received {:tool_executed, _args}
+    end
+
+    test "rejects arguments that decode to a non-map", %{tool: tool} do
+      call = ToolCall.new("call_array", "search", ~s(["elixir"]))
+
+      assert %{
+               state: :invalid,
+               call: ^call,
+               raw_arguments: ~s(["elixir"]),
+               arguments: nil,
+               validated_arguments: nil,
+               error: %ReqLLM.Error.Invalid.Parameter{}
+             } = resolution = ToolCall.resolve(call, [tool])
+
+      assert Exception.message(resolution.error) =~ "must decode to a map"
+      assert {:error, %{state: :invalid}} = ToolCall.execute(call, [tool])
       refute_received {:tool_executed, _args}
     end
 
