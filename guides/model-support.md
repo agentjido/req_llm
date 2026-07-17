@@ -5,7 +5,7 @@ compatibility scenario catalog. It is a tooling snapshot, not a runtime model
 allowlist, and it does not change whether ReqLLM can resolve or call a model.
 
 - Evidence schema: `1`
-- Snapshot evaluated at: `2026-06-12T21:58:25Z`
+- Snapshot evaluated at: `2026-07-17T14:17:49Z`
 - Freshness window: `90 days`
 
 ## Conservative tier rules
@@ -30,11 +30,11 @@ provider-native feature and are not consulted by request routing.
 
 | Tier | Surfaces |
 | --- | ---: |
-| First-class | 46 |
+| First-class | 47 |
 | Best-effort | 475 |
 | Experimental | 66 |
 | Unsupported | 103 |
-| **Total recorded surfaces** | **690** |
+| **Total recorded surfaces** | **691** |
 
 ## anthropic
 
@@ -187,6 +187,12 @@ provider-native feature and are not consulted by request routing.
 | `qwen/qwen3-32b` | `text` | `groq.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-29T23:26:10Z | missing current evidence: usage, token_limit, context_append, streaming |
 | `whisper-large-v3` | `transcription` | `groq.transcription` | audio → text | First-class | 1/1 | 2026-05-29T23:26:29Z | complete current baseline |
 | `whisper-large-v3-turbo` | `transcription` | `groq.transcription` | audio → text | First-class | 1/1 | 2026-05-29T23:26:29Z | complete current baseline |
+
+## meta
+
+| Model | Operation | Execution surface | Input → output | Tier | Baseline | Checked | Reason |
+| --- | --- | --- | --- | --- | ---: | --- | --- |
+| `muse-spark-1.1` | `text` | `meta.responses` | text, tool_result → reasoning, structured_object, text, tool_call | First-class | 5/5 | 2026-07-17T14:17:49Z | complete current baseline |
 
 ## minimax
 

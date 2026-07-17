@@ -87,13 +87,13 @@ defmodule ReqLLM.Compatibility.EvidenceTest do
         end
 
       assert evidence["schema_version"] == 1
-      assert map_size(evidence["models"]) == 688
-      assert length(observations) == 769
-      assert Enum.frequencies_by(observations, & &1["status"]) == %{"fail" => 132, "pass" => 637}
-      assert Enum.frequencies_by(observations, & &1["mode"]) == %{"record" => 766, "replay" => 3}
-      assert Enum.sum(Enum.map(observations, &length(&1["fixtures"]))) == 773
+      assert map_size(evidence["models"]) == 689
+      assert length(observations) == 780
+      assert Enum.frequencies_by(observations, & &1["status"]) == %{"fail" => 132, "pass" => 648}
+      assert Enum.frequencies_by(observations, & &1["mode"]) == %{"record" => 766, "replay" => 14}
+      assert Enum.sum(Enum.map(observations, &length(&1["fixtures"]))) == 787
       assert Enum.count(observations, & &1["error"]) == 132
-      assert observations |> Enum.map(& &1["checked_at"]) |> Enum.uniq() |> length() == 173
+      assert observations |> Enum.map(& &1["checked_at"]) |> Enum.uniq() |> length() == 174
       assert Evidence.canonical_json(evidence) == content
     end
   end

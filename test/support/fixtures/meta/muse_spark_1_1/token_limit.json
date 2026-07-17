@@ -1,0 +1,147 @@
+{
+  "model_spec": "meta:muse-spark-1.1",
+  "provider": "meta",
+  "request": {
+    "body": {
+      "b64": "eyJpbmNsdWRlIjpbInJlYXNvbmluZy5lbmNyeXB0ZWRfY29udGVudCJdLCJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IldyaXRlIGEgdmVyeSBsb25nIHN0b3J5IGFib3V0IGRyYWdvbnMgYW5kIGFkdmVudHVyZXMiLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjozMDAwLCJtb2RlbCI6Im11c2Utc3BhcmstMS4xIiwicmVhc29uaW5nIjp7ImVmZm9ydCI6ImxvdyJ9LCJzdG9yZSI6ZmFsc2UsInN0cmVhbSI6ZmFsc2V9"
+    },
+    "canonical_json": {
+      "include": [
+        "reasoning.encrypted_content"
+      ],
+      "input": [
+        {
+          "content": [
+            {
+              "text": "Write a very long story about dragons and adventures",
+              "type": "input_text"
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "max_output_tokens": 3000,
+      "model": "muse-spark-1.1",
+      "reasoning": {
+        "effort": "low"
+      },
+      "store": false,
+      "stream": false
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.6.3"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.meta.ai/v1/responses"
+  },
+  "response": {
+    "body": {
+      "background": false,
+      "created_at": 1784297261.0,
+      "error": null,
+      "id": "resp_6a5a374695a4c1b19d6d4382",
+      "incomplete_details": {
+        "reason": "max_output_tokens"
+      },
+      "instructions": null,
+      "max_output_tokens": 3000,
+      "model": "muse-spark-1.1",
+      "object": "response",
+      "output": [
+        {
+          "encrypted_content": "Q-PaDgGMDWJpvM_Ey2B2aKc7FKYx95DK_GuS6X9tgDXEs1f9RpKj8lkIStZtetzvxayXxtGhFvQzSpn5uzls-Tu-VGnUcaDVfYjSw_6aQGSoXDooNNa2n5YtU-K1hSQbV3BlTcVLycEPvyYkG0qFAGIbjaDifsxKNppyLLeZzy_XnOud-Arc6-kDyeygZzfML7xjds-9QedQ5xawzzTkeZhrMAaldlyk8WTvyAAKA8G3rV4Wch5k4cwS3mibWPuskeRzxlB8I2mCCnFYLgtKWQvVn1hl_zKV3fSLsn9nt9CXye_iM2AX7tDK9xWQTL1qne-CjJ1MjkAtEiEQinzDhupO_Iky7eM75Rn-3d_7FPS_uR3reb_G5XUFbp0ASHDLNcd7ItQygOlnGc91ppRW5gy8-G_b9p-W4CnFARuoNdhm07qlUmLok6ekAEEId9Pr6-1pxa7KtE3J3RnmY2zKGlWe_RghzfxaU9gdtPUABudjUMtO8UMkWp3Xi8__n8AGxQjyLumsFt-M-FFV7zp4xcLSex-89wmWI1ducSDPSxvtSho4tXyGtT1gV8i-Pkbhh9INZNR5Ep4m8tcAB9MOE8ZyqQkhFdNkP0Seif7SrQfevcUxWZdB6k7l9sRkTFMvCoMfAaBR44H1jhIwu2So8hRyEtu2y7WFlUpckAf_o1YsuwX-Ch3dGfMQRY39pOF2Nv_FUfB7ZMOJA_wsEn6mb_xhePQzv1dN0ICsU-DA6qq_pm_OOdL-wMjqgbzaUqqFGSvkMosFlNkIMQFC5uG7IdyhgDczgSjIsuVzmuiR_CD0ZIv3uuBeWd9uJ1mos7MxIu9jG03qjBPl9SJ2fnQ8r9gwRiNn-M36IrY_hFg4lwlMgLLXAIOdEogcD01W9PmxIkz94cSP1H1PcfnD9tFZkH8N1RMlIqMbO1Bxnee7OYCNQzRtxBkfmBjaOSOTMm7iXetHuCyGccW4F1GFxcblkFHkvJpgNOSgIFLlyuOvcmAyBDYPvV46ss_t08zoOieiTChLZITTBDbJHu9I5Atwsu80RLyqt2e_ZWMiJggUupYEYgCZHanrZDTMUkl0VLyRaEhbDXaF4XqM27PtRlxjP30B9jKMzDTI5_4VV6xUswkaWeQ6xSy8zAvJrGDSvL8er17mb-YJaoS8OyuTCk6wzBRHuS2zHqrAJ7VGckAmKmYogL_WggCKXxfsjf_BC3T0HZ-oVnAYnHOkVCGomhY1UjfkDDdO0C69ySHf6c6cGXvXogdIm07qdqtP6yYIHeUzLg6PVjGcWRwIQfoz6wkeit_3HH-cZbiyNcICC5R9jSERUqa7q6bhe0IuWV65Vuy02PvOx5p6ZCSUhoiFeBynK-DHEMFWqM8oN2j4yTg88yD0ZMre9ZcqbunUvZmkLXmUfHWcLoywIwulqps2qdTTZ75tb5Ajb2TyxfFxHLdf2NRk0G3Mofj1alTkeY7JhjR6d5rUN-IHHjVtwH-b5Iw4_R-bH7Jo_msuKObp3Bcffh4A1UkM63BLvHc8DgD0a6N1oiU_Td1u1nLMeiDFXbMoZuJIyinj7ekYDCFI21srHmrhdnJO7nqPQxc7eZMwMPVBolYjedPBLwt7YM4Pyx5fCbfzAETAxAUQF9BK1NQG1lJBWDQVH3yUtkFqOZoo_okZDCDLuFd2FAn8G9kwdaX3uNSBRZ_HdSZFnJicGOfrFZlADRXg-RkMmD4wnEnmT8HpG_v67yIqmZLHS3WOBf_xEtmvHXdiXq7OUGsEsr7_0rAyhsMVtTyJ2kBZl6SzC8nW20SonRxh7Iu5uenCv8nu30JjjLyxGoCB71li0VhpphkgL0TgkgBMLfz0MEmyYBIU_Jix6ac9mnTYll0-6J719H0WJ_aMub6BIXGLuKCpVnL7a9OhnQ2GqXwIuN3vE5IdZezkG8id35TFqrm__L9tue_dRclVkA-9REaAFzgy6KuLajEe-44O-KNHpNB9IEDl1sGiXv0XzUsfqUxBKX-P6sejMkevM3rFtNTvHzT8p5BtdJLwP7nbdErIG7JxlbkXzBwuJr7yeESDrs4Tdx0GwPqjMF3WGhgdrf4-3J5pHr3HrHte6Q8yqXbTnhN9vQNt4qg_-R2JdKuuH-bV2p1HzZsYcbepQdrXhr0ekRD_7v_8gfzkMz-KYqPwx_FubRIondYAVP6XCCfwNBJOp2QOxH8-H6GZABt0LKmO96s-_fcn20UBtstK5TbBpagCTn24Ox659eiUzJ0IjNHnLMXy27nfS18SGbfZQ7fDk5lzXGiLw49AeVBC6DKm_0q6UJ0Xi427IEBm2JGYg2qmqoxL0cwrGxoFMxPOhFC7Ix_2UmzbY9omlElXa1uc4qUOxCTKA6Xho6klpJ0vRWNHsUQYZT4xMnijjzMRKeuLAkD1CpfanB49_K9oPDYg-6JCOvqc9XefgtxFowYSv8V1dm-AosQqdfSfG7GlawsiZMnbYMW7lZsWsscWyDCkA7uilPwUG-FWLY74ow47f8t_q1k36IUWDKNMjCGgtChsIkyDmaH8F_e8-0-4h0a4idOoVO9RtC3UKdCBILtbpP0oJVAozG_HBRbQv99uRlWyI5lA75bu3Vg00VuXR-RqHH6Qx56KzE_WwapnFNSF0ceKBTFzGlpipT4PHZIWmScBnBx-j6uh0CG5GSYb-Ang3ozUREZlLFv_BHTrvP-AiEP4kBaMt3rWOs59W-rb6j8XMPy_yOa2aPh4odqKOL_s6ORGfqYwOZn7N6JwJKz0JfYHUej-t5Loqc9Ku4L-6iG701s",
+          "id": "rs_6a5a374695a4c1b19d6d4382:rs_8274ab61df366d1b",
+          "summary": [],
+          "type": "reasoning"
+        },
+        {
+          "content": [
+            {
+              "annotations": [],
+              "logprobs": [],
+              "text": "The Mountain That Breathed\n\nIn the country of Skarn, every child grew up knowing three things.\n\nOne: Never go into the Wyrwood after dark.\n\nTwo: The wind that came down off the Grey Spine in winter was the breath of sleeping dragons.\n\nThree: Dragons were gone.\n\nMara Tideswell had believed all three until the year she turned seventeen, when she discovered that all three were lies.\n\n---\n\n### I. The Egg\n\nMara wasn't supposed to be in the Wyrwood at all, let alone after dark. She was supposed to be mending nets with her auntie Jen down by Salt Harbor, listening to the old women complain about the price of lamp oil and the way the King's taxmen had taken too much of the autumn catch again.\n\nInstead she was running.\n\nShe had stolen a loaf of rye from the baker's stall — not because she was hungry, though she was — but because Joren Hal's son had called her auntie a crippled sea-witch and she had wanted to throw something at his stupid head. She'd missed. The loaf had sailed clean over him and landed in the mud, and he'd laughed and called her useless besides. So she ran, not from him, but from that hot, shamed feeling in her chest, straight up the goat path and into the trees where the Kingdom's roads ended and the old world began.\n\nThe Wyrwood was not like other woods. The oaks there grew too tall, their roots tangled like sleeping giants' fingers. Moss covered everything in a thick green pelt that swallowed sound. Light, even at midday, came down in spears, but after dark —\n\nAfter dark it should have been blind black. It wasn't.\n\nAhead, between two fallen trunks, something was glowing.\n\nMara crept closer, her breath small white puffs. In a hollow where no plant grew, nestled in ash-black earth, was a stone. No. Not a stone. It was as big as a beer barrel, ovoid, and its shell was the color of storm clouds before lightning, dark grey shot through with veins of molten amber that pulsed, slow as a heartbeat.\n\nHeat came off it.\n\nShe had found a dragon egg.\n\nShe knew it the way you know your own hands. Every tapestry in the old ruined chapel above Salt Harbor showed them. The children of Skarn drew them in chalk on walls. Dragons were gone, the priests said. Hunted to extinction by the Dragon Knights of old, Saint Brenn's order, their bones ground up for splendor.\n\nThis one was alive. And it was dying.\n\nCracks spiderwebbed across one side where something had tried to dig it out — claw marks too big for a bear, too sharp for a wolf. The amber light was flickering, stuttering. As Mara watched, a thin whine escaped it, not heard with ears but felt behind her teeth.\n\nWithout thinking, she shed her threadbare shawl and wrapped it around the egg, and lifted.\n\nIt burned her hands — not hot enough to blister, but like holding a fresh loaf — and it was impossibly heavy, heavier than stone should be. She staggered, knees buckling, but the whining quieted a little.\n\n\"Okay,\" she whispered to it. \"Okay, you big, stupid rock. I've got you.\"\n\nShe didn't know where she was carrying it. Home was out of the question. Back into the deep woods seemed like giving it to whatever had tried to claw it open. So she took it up. Up the goat path, up where the trees thinned and the air turned thin and cold, up to the cave she and her cousins had played in as kids, the Shepherd's Hollow, high on the Grey Spine's first shoulder where the wind lived.\n\nShe laid the egg in the back of the cave, on a bed of dry lichen, and stayed the night watching its light pulse against the stone walls. The wind outside, for the first time in her life, didn't sound like weather.\n\nIt sounded like breathing.\n\nThe egg hatched three nights later, under the full Hunter's Moon.\n\nIt didn't crack so much as sigh open. The shell split along those amber veins and light poured out, and then —\n\nSomething the size of a gangly dog flopped into Mara's lap, all wet wings and too-big head and indignant chirps. Its scales were not the red or green of the storybooks, but a deep, pearlescent slate-blue, like the sea under storm. Its eyes, when they opened, were molten gold, slit-pupiled, and they fixed on hers with an ancient, cranky intelligence.\n\n\"Oh,\" Mara breathed. \"Oh, you're ugly.\"\n\nThe dragon sneezed, and a puff of harmless, glittering smoke hit her in the face, smelling of cinnamon and sulfur.\n\n\"I'll call you Ash,\" she decided.\n\nAsh had other ideas about who owned whom.\n\n### II. The Learning\n\nYou cannot hide a dragon.\n\nYou can, however, be very, very clever about it for about six months, which was how long Mara managed.\n\nDuring the day she mended nets and hauled water and pretended to be the dull, dutiful orphan girl Auntie Jen had raised. At night she climbed to Shepherd's Hollow with offerings — fish, half a rabbit she'd snared, once an entire sheep's leg stolen from the butcher's offal pile.\n\nAsh grew at an alarming rate. By first snow, he was as big as a horse. By the dead of winter, he no longer fit in the cave. He had to wedge his head in to sleep, his long serpentine neck curled around Mara like a cat the size of a house.\n\nAnd he talked.\n\nNot in words, at first. In pictures pushed into her mind, in feelings. Hunger. Amusement. Affection, fierce as fire. He showed her memories that were not his — a sky full of wings, hundreds of dragons wheeling over a mountain that wasn't the Grey Spine, but taller, crowned with a city of white stone and wind-towers. He showed her humans, small figures on the backs of dragons, wearing armor that shone like his scales.\n\n*Vyr.*\n\nThat was the first word he gave her. His word for them in the old tongue.\n\n*Rider. Heart-bound.*\n\n\"You think I'm your rider?\" Mara whispered one night, snow falling on his massive, steaming back.\n\nHe nudged her so hard she fell over, and then licked her face with a tongue like hot sandpaper.\n\n*Not think. Know. You pulled me from cold. You are clutch-mother. Sky-sister.*\n\n\"Well, sky-sister needs you to not eat Auntie Jen's goats anymore,\" Mara said, wiping dragon drool off her cheek.\n\nAsh sent her a distinct picture of a goat with very judgmental eyes and the feeling: *Delicious.*\n\nThe second lie — that the wind was dragons breathing — was not a lie. It was dragons sleeping. Ash told her that underneath the Grey Spine, in caverns that went down to the world's root, the Old Sleep was happening. The great dragons of Skarn, hunted by Brenn's zealots three hundred years ago, had not died. They had hidden. They had cast the Deep Slumber, a spell of collective hibernation, waiting for the world to be safe enough for eggs again. Ash's egg had been one of the last laid before the Sleep, hidden in the Wyrwood by his mother, and his mother —\n\nAsh couldn't remember his mother. Only a vast blue shape, and warmth, and a song that was a name: *Saphryne-Of-The-Tempest.*\n\n\"I'll find her for you,\" Mara promised.\n\nThat's when the King's men came to Salt Harbor looking for a dragon.\n\n### III. The Burned Man\n\nThey didn't ride with banners. Five men in grey cloaks, with the white dragon skull of the Order of Saint Brenn on their shoulders. Their leader had a face that had been burned long ago, so his smile never reached his eyes.\n\n\"We had reports,\" the burned man told the assembled villagers in the square, his voice pleasant. \"Strange lights on the mountain. Sheep gone missing, taken in a way no wolf can manage. A roar on a still night.\"\n\nNo one looked at Mara. Auntie Jen's hand found hers and squeezed so tight it hurt.\n\nThe burned man — Commander Cade, he called himself — held up a blackened scale the size of a dinner plate. \"This was found in the high pass. A dragon lives. You have been harboring an enemy of the faith and the King. Give it to us, and we will purify it, and you will be spared. Hide it, and we burn the Wyrwood. And then we burn Salt Harbor for giving it shelter.\"\n\nThat night, Mara ran to the cave. Ash was too big now; his chest brushed the tops of the trees when he tried to walk.\n\n\"Cade knows,\" she said. \"He's going to kill you. He's going to kill everyone.\"\n\nAsh lowered his immense head, his golden eyes sad. He pushed a picture into her mind: the deep caverns, countless enormous shapes coiled in darkness, breathing together. Dragons beyond counting. And above them, thin points of light — humans with swords, fire, a ritual circle.\n\n*Cade's people know Sleeping Place. They will wake them to kill them while they dream. If Old Ones die sleeping, Skarn dies. No rain. No wind.*\n\n\"Then we have to wake them first,\" Mara said.\n\n*We cannot. Only Queen can wake them. My mother. She is in Stone Bind above human King's city. The Order chained her as warning.*\n\nMara stared. The King's city was a month's travel on foot, through enemy land.\n\n\"Then we go there,\" she said. \"Right now.\"\n\nLearning to fly was the shortest, most terrifying part of the whole adventure. Ash had been doing little hops, but he'd never truly flown — his wings still learning their strength. Mara clung to his neck with rope she'd braided from fishing line and old harness leather, shoved her feet into the hollow in front of his wings where her legs locked, and screamed as the world fell away beneath her.\n\nThen she laughed, because the wind was a living thing and Ash was cutting through it like a knife through silk, and below them Salt Harbor became a toy, and the Grey Spine became a ripple, and the whole country of Skarn spread out like a map.\n\nThey flew east, toward the capital, toward the white city of Caelum Spire where dragons went to die.\n\n### IV. Caelum Spire\n\nCaelum Spire was built on and into the highest mountain in the land, a needle of white granite. At its peak, chained with spell-forged orichalcum as thick as tree trunks, was a dragon.\n\nMara had thought Ash was big. This was a continent with wings.\n\nShe was slate-blue like Ash but faded at the edges to silver, her scales each as large as shields. Her head alone was bigger than a house. Her eyes were closed. Her breathing shook snow off the mountain. The chains didn't just bind her; they pierced her wings, her legs, her tail, and they pulsed with dull red anti-magic.\n\nSaphryne-Of-The-Tempest. The Storm Queen. The Last Mother.\n\nAround her base, the Order of Saint Brenn had built a fortress-monastery, and Cade was already there — Mara saw his banner arriving at the foot of the mountain as she and Ash hid in the clouds.\n\n\"He's come to kill her in front of his men,\" Mara realized, horror cold in her gut. \"So he can say he ended the dragons.\"\n\nAsh was trembling rage, his own blue scales rattling. *Mother hurts. Can not wake.*\n\nMara looked at the chains. Looked at the fortress. Looked at her knife, her fishing rope, her seventeen years of being told she was nothing.\n\n\"Well,\" she said, her voice shaking. \"We've come too far to be clever now. We're going to have to be stupid and brave.\"\n\nTheir plan was, objectively, insane.\n\nAsh dove from the sun itself, the way hawks do, becoming a meteor of blue and fury. The alarms of the fortress screamed. Brenn's knights poured out with ballistae that shot spears of black iron. Ash roared — his first true roar — and it cracked the sky, and adolescent flame, white-blue and star-hot, incinerated a whole battery.\n\nMara slid from his back onto Saphryne's vast head. The Queen's eye was bigger than Mara was tall, closed, crusted with ice.\n\n\"Wake up!\" Mara shouted, pounding on a scale. \"Wake up! Your baby is here! Your son is fighting for",
+              "type": "output_text"
+            }
+          ],
+          "id": "msg_9555557a39dd2fd3",
+          "role": "assistant",
+          "status": "incomplete",
+          "type": "message"
+        }
+      ],
+      "parallel_tool_calls": true,
+      "reasoning": {
+        "effort": "low"
+      },
+      "service_tier": "auto",
+      "status": "incomplete",
+      "store": false,
+      "temperature": 1.0,
+      "tool_choice": "auto",
+      "tools": [],
+      "top_logprobs": 0,
+      "top_p": 1.0,
+      "truncation": "disabled",
+      "usage": {
+        "input_tokens": 16,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens": 3000,
+        "output_tokens_details": {
+          "reasoning_tokens": 310
+        },
+        "total_tokens": 3016
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-length": [
+        "15322"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 17 Jul 2026 14:08:06 GMT"
+      ],
+      "vary": [
+        "origin, access-control-request-method, access-control-request-headers"
+      ],
+      "x-ratelimit-limit-requests": [
+        "60"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "2100000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "51"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "2096041"
+      ],
+      "x-request-id": [
+        "7773a153-008e-4c22-9a03-45f523aee832"
+      ],
+      "x-route": [
+        "model-api-rust"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

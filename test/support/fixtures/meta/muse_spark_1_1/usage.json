@@ -1,0 +1,127 @@
+{
+  "model_spec": "meta:muse-spark-1.1",
+  "provider": "meta",
+  "request": {
+    "body": {
+      "b64": "eyJpbmNsdWRlIjpbInJlYXNvbmluZy5lbmNyeXB0ZWRfY29udGVudCJdLCJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IkhpIHRoZXJlISIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9XSwibWF4X291dHB1dF90b2tlbnMiOjE2LCJtb2RlbCI6Im11c2Utc3BhcmstMS4xIiwic3RvcmUiOmZhbHNlLCJzdHJlYW0iOmZhbHNlfQ=="
+    },
+    "canonical_json": {
+      "include": [
+        "reasoning.encrypted_content"
+      ],
+      "input": [
+        {
+          "content": [
+            {
+              "text": "Hi there!",
+              "type": "input_text"
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "max_output_tokens": 16,
+      "model": "muse-spark-1.1",
+      "store": false,
+      "stream": false
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.6.3"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.meta.ai/v1/responses"
+  },
+  "response": {
+    "body": {
+      "background": false,
+      "created_at": 1784297297.0,
+      "error": null,
+      "id": "resp_6a5a3751c170ab8b9e8940e4",
+      "incomplete_details": {
+        "reason": "max_output_tokens"
+      },
+      "instructions": null,
+      "max_output_tokens": 16,
+      "model": "muse-spark-1.1",
+      "object": "response",
+      "output": [
+        {
+          "encrypted_content": "Q-PaDgE91hPtrym14f9LCxUHP-nixTdp7ay0gPM0JxdRFIFPPHvRKUtSW2w3kf7e6quzaPSzKyf6PR1oZ-1YjkZAF66-MdShmg_LiMn2K7NCLazGSxAvEsAACbymbCy6ze51aL54L0j5EBOO8OH6sWwznAA-Iy7j2Rj-fRKFCa_5h9kfE8r7YXkfavBeCgDMHDpYj0y2c8Tir_nEmM17XOXYthwPDknk8pTsMaRJgr2v8dNYegqPXeJ-GOA9g27yasyI_t9uhgY470628kHdGGs-_uj2KTJdqIUVhx3IbZ3Bo0-2dkNa1ZGp0xIyxzuIY1CyXzWyHRDHzqvUoEfe5-rklDkLrzisldfBfUjLe1SNykrnIuygtsD-whGO_J5jwTbinLnErsbVM_FRyk5lCKXGjaG-YfWLQwUImsAlimfkMhtTzz0SKpOemKro3rlqKI7vzZpyFrYt7jsGJYq4QP3Ym2-1vNVgUAK_6D-9XNtHR4HU0uP66QO0ktKGduIr9pQDoVDvq-3dQ-k5PF4E63_BT3fZcEJWNMozcQnAsaGuWMmJwergkig9X4uy8KQuvxZ2BzSG84KosocEMpASz8Bopl9RZ9i4pQb9uKkCDn-2Stepg5ZKosXdjZMz0LivlSo5rYkz69IDEJqQHTk2VlX3o7ute4TbtBE-gjB_UkECqWJEyowVHAbu3PQR54o2F0vXxDiBHi_CXCD80ZRQqrzWRKtZpRcxO9Hu4zFFDBuXoKDtX9jxdDG9NXPb6ems75N7H7JPIhdS2WPpvgOTo7zdsckYDeLYh6fnzQZdUq_1bu1HNQ5Cc6gT2HYsYRRXUtMlXjSGSCLiMSSw3hlZeh6rozWr1vMrobeYh9JoWhYAmtFRoub9-Jx3nLxH6ZBfvRbkOx4IcUuzYhuO-IEruCk84S9iyLA6HnafFnVQ-LgrY-mDLoen6MXX-W-S5usdDqo_65PE_p9mrZ3UzACs2c6Z9yUB0Mr85609-v5G0RV5T9pdPM_uQlaEqNqkb-yQhUbhQiLOf7Mi_GfkKezSjAyOjWVPRXRf8ALDRtudOKt6Zt5qzoEHElT8q46Tot40bi_PoGBIiUR4bG29UbFkhxQcLGM641B0Z3e3fwUJV6s8rSGhpnupTLiOPoIqSbwZBRfto70arosqMFnZpSpPt_td59vPZH2a7W4juOt6_SciybA-SKAZlGKw3DETiqXjTFsbcu9bpTrtzDH4KnQVOtwHXCSScFC259oL9W3VwjEjK0JCfwbYpF2oxGcIUDb3zvh9oMEUnJCTmm7_Eruxflb7HGO0pto8U74N_JavEoV8bLx1QpoLwBLQjz2D4cUm0UnDk4KA8GxdIj4ueUtJf5tq2TGKJjmxEMI1-aOPpvW6MzElUMYQ9qkRBl_u-Eei8SR53PDtT9bC2eib3g",
+          "id": "rs_6a5a3751c170ab8b9e8940e4:rs_96a56c2af75bbe17",
+          "summary": [],
+          "type": "reasoning"
+        }
+      ],
+      "parallel_tool_calls": true,
+      "service_tier": "auto",
+      "status": "incomplete",
+      "store": false,
+      "temperature": 1.0,
+      "tool_choice": "auto",
+      "tools": [],
+      "top_logprobs": 0,
+      "top_p": 1.0,
+      "truncation": "disabled",
+      "usage": {
+        "input_tokens": 10,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens": 16,
+        "output_tokens_details": {
+          "reasoning_tokens": 13
+        },
+        "total_tokens": 26
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-length": [
+        "2129"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 17 Jul 2026 14:08:17 GMT"
+      ],
+      "vary": [
+        "origin, access-control-request-method, access-control-request-headers"
+      ],
+      "x-ratelimit-limit-requests": [
+        "60"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "2100000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "49"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "2092634"
+      ],
+      "x-request-id": [
+        "6a9b1814-5cc6-44bd-bae7-4a060bedf2b1"
+      ],
+      "x-route": [
+        "model-api-rust"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

@@ -1,0 +1,209 @@
+{
+  "model_spec": "meta:muse-spark-1.1",
+  "provider": "meta",
+  "request": {
+    "body": {
+      "b64": "eyJpbmNsdWRlIjpbInJlYXNvbmluZy5lbmNyeXB0ZWRfY29udGVudCJdLCJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IkdlbmVyYXRlIGEgc29mdHdhcmUgZW5naW5lZXIgcHJvZmlsZSIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9XSwibWF4X291dHB1dF90b2tlbnMiOjUwMCwibW9kZWwiOiJtdXNlLXNwYXJrLTEuMSIsInBhcmFsbGVsX3Rvb2xfY2FsbHMiOmZhbHNlLCJyZWFzb25pbmciOnsiZWZmb3J0IjoibG93In0sInN0b3JlIjpmYWxzZSwic3RyZWFtIjpmYWxzZSwidGV4dCI6eyJmb3JtYXQiOnsibmFtZSI6Im91dHB1dF9zY2hlbWEiLCJzY2hlbWEiOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7ImFnZSI6eyJkZXNjcmlwdGlvbiI6IlBlcnNvbidzIGFnZSBpbiB5ZWFycyIsIm1pbmltdW0iOjEsInR5cGUiOiJpbnRlZ2VyIn0sIm5hbWUiOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBmdWxsIG5hbWUiLCJ0eXBlIjoic3RyaW5nIn0sIm9jY3VwYXRpb24iOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBqb2Igb3IgcHJvZmVzc2lvbiIsInR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImFnZSIsIm5hbWUiLCJvY2N1cGF0aW9uIl0sInR5cGUiOiJvYmplY3QifSwic3RyaWN0Ijp0cnVlLCJ0eXBlIjoianNvbl9zY2hlbWEifX19"
+    },
+    "canonical_json": {
+      "include": [
+        "reasoning.encrypted_content"
+      ],
+      "input": [
+        {
+          "content": [
+            {
+              "text": "Generate a software engineer profile",
+              "type": "input_text"
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "max_output_tokens": 500,
+      "model": "muse-spark-1.1",
+      "parallel_tool_calls": false,
+      "reasoning": {
+        "effort": "low"
+      },
+      "store": false,
+      "stream": false,
+      "text": {
+        "format": {
+          "name": "output_schema",
+          "schema": {
+            "additionalProperties": false,
+            "properties": {
+              "age": {
+                "description": "Person's age in years",
+                "minimum": 1,
+                "type": "integer"
+              },
+              "name": {
+                "description": "Person's full name",
+                "type": "string"
+              },
+              "occupation": {
+                "description": "Person's job or profession",
+                "type": "string"
+              }
+            },
+            "required": [
+              "age",
+              "name",
+              "occupation"
+            ],
+            "type": "object"
+          },
+          "strict": true,
+          "type": "json_schema"
+        }
+      }
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.6.3"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.meta.ai/v1/responses"
+  },
+  "response": {
+    "body": {
+      "background": false,
+      "completed_at": 1784297296.0,
+      "created_at": 1784297292.0,
+      "error": null,
+      "id": "resp_6a5a3750fcbb5bd38b0d46bb",
+      "incomplete_details": null,
+      "instructions": null,
+      "max_output_tokens": 500,
+      "model": "muse-spark-1.1",
+      "object": "response",
+      "output": [
+        {
+          "encrypted_content": "Q-PaDgFaAX9_V57Y10ZZlNwVDzg3sE2NqdsT8l7U2Q6N1pTVYCu-SkwHhegXzqB3-SJ2P-or5HIpHMJ9npaVTr_Ky7Wk1aXk_6Cz7CVW0TBgw5mDe9d4EnFwIUGGXMg0_Z9_itT_LWyGduyUNv_rdV1glKx53BD33RcR2Lu7rNu1MLwfokDbHTF_O-ErpdmIfsTMVlcy8HahY4pyXi97fbIGkol3T7gjlcQZIRmiXG_uYtKN4XcnmYnrTpcN4FnaM1BaB1RF_1kR258DqaFa_edDRORwTTwTed6giVgVh3HhHUsE6aP6Id3U5xModCQfTZd8VsNBD_cC3tB2YJQAaOlgCResrma9KwjqLg3J4viItCef5A72riKfmmjXcrPdPpwwjTorz8pnXZwyyAtOeI4uyxjsleOILwAPYV-6D5y9CSiHZftJxxx8H1oAL94IVqaU3tVlvC7FgWh_LUXMjLqaYBCQwjLEyAnIU0w3PnAz_ikQAhwwNmV_UN7AIRSaDsBXJUSnLkWUcAxew9dpO-8lokr3nCu1KSoiKRnTXcfES5UmtH2V0KhMaEah1jz7H1nvELCL4UcLuLytZ8nyEbTvvfiWfX9cCNKrdwXOlSX2avkolYkn-OVIYi0N5WqRSEn4u83Ke8cTi_Lr2uZRmBIdRzquDAPDBahyrF57B5qtzXyGNsPMNcD4xl2hWjGaVayDxLffuydd8bNlgn8hBBvCqznPDwaopFS9os2m9YmRh5iznEmih6X7v7sKPJuEPUEn333aTXQWnMkwFuqgMMYsXzG5vZYnFHH1hsEVX7AfVfIfiGXCLflOFqrwpVhxHWKIGvsv44RZcaBHmQvFjoYaC90jfSvr19Kfe72orahXyplLdAJ3LubRd_U5y2k85EM_fSPhzfV4RFVcSLNy_H-MGgXE103NEONTg4RkINKlEL9IVGKtqiRhfzAphOOpWpAjAhlt3KfCsLowxBBg_RRrOOSmWhRMLn0hiOrCYWpNYBUwxxsmhUJHm0mVeHdqIFfr4XFdNrhRCLRkhEVRtdXhM5jJqlBSo0AavSSYLwNX8INpXtVN_QLr4VQnYWwOrO_qR0OJhOLf5axoEewWZhavdxkcCQzvgM7TakUpsxbS3ChNXbHUlc8TAdW3WpB9F0GaqyQh1Z3xRVWv7T7Jfc27G2gWdOBVxdRu0UblMMru6cJUOX0hr9OzTWmKmFcXciaVVghnk00Npfi0XGX9GSFldX_75tyYqRTcXyUmrzgd7z5rmpA50k3rCicqqO9gnSNlHscxsQjMrMGQm_ttJRFAV7bFxZspL444_RFbDQ021WijVHwCCIOt0sWoCfAOk-ZWxrbWv0sU9LoEP6__TLZkMQFn7R5LFHjp6MJ5shfLWgsydhTv_B8C_MsZc1yya-rqshX54Stt3MkZZZmFJLWVvc-UcGqvXUTiXPDRjcOLDTslsvUw6Ug1MHNholEn2dtQXsTItXU9ORbIgZruDRhUtWEoweUIkY3wBd55EANd_vmnw6NdP91bTy38IJaDpZcRIbF2gErddu-7TU-zOJOtkE1M8IcbdryAYBVmkm3PG_kU2V7Ku0fZvjojL5dz9VMnxZCfs4pnJXTmYPbE4Zl_CFzB5N1WcyM-a9uPNtipWJs4EKqg5KS0Z_ratFs2DRwchmA9-g6GsQE502Zra8RRnpaGzo5ELVjxFQNtqmYT-fHtfSI8GhwQvWj0_efnnleMTT3RISakO-5bP8xRey-LRyOj8LJqCRmUE-26kNTDzfVzR1ob99z5XMzfBOl6jx1WKUbKPD9_dFAJxN1C6F1Nb4iYEys7F9PrsfuNBCnOIScIoLP7lY7b-uuHnGpBoc0mGBDdLXcc7k-E5BKFuxZ9HCunmTQjLG9t-rSP7JK671vuNJIwCciBEGUl6YLJ7Ynvadko2Wj7csBQ82KCdiPIFlF1Xv8UZ2pVFmVk-3rdFHuPnPqZhSK-sEGWQbY_xgSEQTt8xSLS5Q--hbvpV5D9CgVN_4ihky284asTcFj5cRGlD7a46Jbnyxe1s3MYmwO6WKSpc0kKkBfQ82_VALsQnE11sNYzmakPFHApoDIoxQT1fjbeY_PoaeUcJPgAxjFPeDz_zgT5GLalWAEEm3hPPKzSftog2Owk_gmaqMMdC9T8jL9bqBfATFtjCbcrgy8fYqXssKezBDF6wrOVVXeHEYsCl6JoJygghqL5BuoMXe9-pUlLO7gJloT2nbb2YH6SYBDDD-xJ__Ry7C9lEyqI5HRAqTPfxmWdIVYGiXVJZtkSctK3x_IbDYqjATmYe2_r_dAWkvQ0DOMURf9CFTqkdEpmbvt7qFyAcLhiNhBw0vfRYYjatMkVzTw24A8LiObLqZzT-SV94Wg-yqJt73e9dPFkf3P8pW7ZlnzO1tk8gZ-df_0t1GkB6MDSn9W91pdghoAXJSxFusKuutqtmbTAhCNTrRHXqExxJgs2zf2bqPASaMnZFbo6F8upD3dGve2LRlJG9lq44y7CuG-2aLZ8FD4G6ou_2JezYZ7yywiG0lAhuij4CRE1dmPBjFKQDQ8xSvdtSFCHQAZtPbBaiFexxKju8ISmztZ59HOjJ4Xd7pcq_ektRSLKc_02DZTn9FhVFcQ-1QPBO1jGN6i8-BZMvus-iNFTw5gwt36wMz7-WrTRsdUq4gbJwfn41cB6UkMhHh0vV_PKN1O1V9o4l-48YvtDEq7phmOB6Uwf1PNStSdI5kqOsAnl3bEoPspTTUu_pDzlzwrNEaMOv8fgGSqUFrPlFtYCcsapppMzeRDSoxLc5z0kYHYO7ybqx1lminWiBwpa8RjiiPB-rChD1VEAiIF3zxYPNgzCPBhOqO7wltV7BKsj37PIOG-9w5yP2-Fh9rKh5eTczZc67UKHzkN3BEix2xe1aJfqmGv4WWL1MwrvtOW9yxEmcCqKFw5RbxPXg7E0xfG_QduXHSmh2VshPwoatbgm5OHgFRf6BJmYaUO1GHnS7fCT6D2lO9dCwXQAKYu6gWN7iKWkKVvEAqfyln4rbdBpph1h2SQo4OjZv0-lO-1Bpsl_arZHV3MJKoP-3EFpOCFItasC4jygbA1mcoeQ0stwFcz3HErClNEkZUQOSaJRSg6npVdeKgbSV-M6kIG_JJwKr5vFmxpzW70s_TpAWXZbO1l6J9kncEnFKjPbt3FljHR-fuGxs9uS0csGZz1fcSJiEw62uITuMTr7r63NHcxSibEtsZ1uEq6sJ96NMQesypCt5Co5MhU4w7Vghuv2TKCVVriqNy_XvFsmyEPFOnYsIJFi5U__O5xB6yoLVtDLFgLow86JtgZ_JKEB9oS6JVq0Yxvr7cJYJ_UgEPaDXBMFYhzXcuwN5qux-RL3kIMb27Tsv5q-d3f4ub1lNSXOy99CpHGZ2qEbBxzi5BvosFlAiy6_ngzMdlRKLfS2uQ9RRMyHO5hLHIpXzbq_SCy-VU-1fqYBodLBpAmqDijJu9hK1q3SmeUAsXdl-AhWrnlz7FS3O8WnF93ZNkWQDnWkDtEPAO3-Q02p3zgIZ0u_XWYKdKuW8iO0JL0XaNSesoTExWu2-DCBKYGcs-YsmWPIwTcoVo_wqcmIWAo09N1ywwtDeIUKo9ZuZDn8fD_NqUTwX6-YwsFXv-t1GiROeYrwNBlA8YrxhgRVrg02x4NMxsUVzsaTE6YXdsLQaOIanidN2DNCJGEketx0_iMpIfiaEVywy6z0BVSNeLyFpSaDFuqczsdtFTmmx6x92oJGodl0ktwbM7uidA8DOJb-RIUYpGYdxeIuLnHii20hQmptXP3b8L0SrjXTJSg8a75lGWLKH-gQIYhrAVQrVFx_SAmfSvndgtbKP-QgQmFm963gvkvJ7WbFwVBai2DDuCTOHMzslddo4t5HutE5l2YAnsqCyNoQGpPJC93C5Ot0sEND5CXMFl3CpIFVAE4uAJc6bMlEq1mFDI4NVaHRkMVMgHYCANaHN1WEk8mfPToFvPYHYdHlduhiFaCc5bn6lbyp-YAcFuEzxYIK3xrqmWn3zVOT99_hb2UEz5HGlwWv9u2by6PzprOvuJgYQBfgKb0ysGP1wE7FrEtfxFggLZWAUGVKch_HB1MNtPhYQclWhGDdMFxifXkDGlveQc57kF12Uzl9V-IMzPRlGNScJbix4Xorg29AMxQboEJN0QfcF5Ap9QT9jmMrH4qpgTEEP_cslMov_dZd2T4kM3UYqAPNrtDxO6DJFChjK4ZEHf59xg64XtG4cp6vci76I1RlP5PJdB43zMMHJ4rgE0_EzEqO9_PnFNLmcYsP3R8t19iIorLj8a1y_Ys-j6vQOnURkJ4GiIH4oGux5Q1elgHGNiw_S7dohCB6f6QxYYdeddIFGTC7RfQt82qeBvHpBOQNLKl0lMSu8xxmjK3FrcLV8MZ9OIEeCLsklCZKLPzpo-LB1HnM5iJ16o2M6VHwUO9AWTU-nRjHXIjFI-t6qnB8bTdPiBtfgRszM_GEzpXHWDLC4ijihSMaFUGYsFr_qICv3Ku5NqZ7W_IOuzDPhG4KPZw4HRB0sApSc3n6KJgPOMxM4l0aNsnItNTZKjhzuS6WX3mKdvbNM69lPd6pxBbr0dYXLvJlrsTvPC8SCyQKiJy4QeWTDNkDR9DByBWM3xXb9hkDB_jZ7ZK8zwYzX7693sYM0X9V409agbDfp6qZ03uo8-PClXnwxd0ULWK4oyi07I2kVO2KzmcczFl0HeB5B9b7y_CrOJd0crjsJpjxuVXYiQJ_IsOIOGHw9Ldxee5kwdqGUB6elU6uVtvZwWH1ssyUed18zIc7pDQBVDxpVPDp4m6BDwv7zFVS-__7lFv6rpoKbeHvuJAtZjYz_FSwZjCORsPBqDBvWnPQ-oKYZHKIpf4SA6Wg3D8e94-69Ocywsmxgt01SyFOzk4amqvSVkxpeYj5Dz8H1rZKfKbnAzP8Z83YwZm7VayvMHRavXsIrPV3P1o9yHcrMeGUWKQkN7DwHcmdHQPLOYwSJgnjSjB39bKdrTW24NunVHXB-Fzp_vvh5K9S-vkn-WoxYUGtHxUnPT3IhhxVxuj7x9qnWefgv8g1M6SCQq8ahWKiiw5-d0zhDekpMGHjZbg9NVC7MRC7LyMOI_6hSrgSHxXWFCdL6aKAiFKPGi5i5grzBVBlYnuxJWm8RIQuzeli-QiZ27LooGGtXhjv5IAvfKqUHjj1PXjYzfOC6mCRXr-8ZdQsBpW0mGOOarPCDIeTU6f332dfqE4HwH1UGISu1Z2xDmLzAlsYzn8TU0C5AbTLvenIxOI5c0H2VPSh90pXkrdjjOosYGtLy2ThGG521UjXINjaiM1_BEdaGRobztLXtSqnAf9yk0KVhqGt4yuOoNFfHq400ZSotXFV2Ty2EYljwdfl2lR71rqpFYZCG62UDL8agbdNVxxie8L2ib08g3tfcxB-mIAjhzvVY3d5EzKojvvqj29nMFDi9nK_2G4Ea_IjI-aoJmQTjvjSfFsWLZdkK6azRmQAJhs65RqEqw",
+          "id": "rs_6a5a3750fcbb5bd38b0d46bb:rs_b347b59944412c00",
+          "summary": [],
+          "type": "reasoning"
+        },
+        {
+          "content": [
+            {
+              "annotations": [],
+              "logprobs": [],
+              "text": "{\r\n  \"age\": 26,\r\n  \"name\": \"Creek gw\",\r\n  \"occupation\": \"NULYHS Student Council, CKC member, Science fair active member, sometimes pretend to be a coder\"\r\n}",
+              "type": "output_text"
+            }
+          ],
+          "id": "msg_8b3f3312d8533eba",
+          "role": "assistant",
+          "status": "completed",
+          "type": "message"
+        }
+      ],
+      "parallel_tool_calls": false,
+      "reasoning": {
+        "effort": "low"
+      },
+      "service_tier": "auto",
+      "status": "completed",
+      "store": false,
+      "temperature": 1.0,
+      "text": {
+        "format": {
+          "name": "output_schema",
+          "schema": {
+            "additionalProperties": false,
+            "properties": {
+              "age": {
+                "description": "Person's age in years",
+                "minimum": 1,
+                "type": "integer"
+              },
+              "name": {
+                "description": "Person's full name",
+                "type": "string"
+              },
+              "occupation": {
+                "description": "Person's job or profession",
+                "type": "string"
+              }
+            },
+            "required": [
+              "age",
+              "name",
+              "occupation"
+            ],
+            "type": "object"
+          },
+          "strict": true,
+          "type": "json_schema"
+        }
+      },
+      "tool_choice": "auto",
+      "tools": [],
+      "top_logprobs": 0,
+      "top_p": 1.0,
+      "truncation": "disabled",
+      "usage": {
+        "input_tokens": 12,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens": 373,
+        "output_tokens_details": {
+          "reasoning_tokens": 313
+        },
+        "total_tokens": 385
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-length": [
+        "6994"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 17 Jul 2026 14:08:16 GMT"
+      ],
+      "vary": [
+        "origin, access-control-request-method, access-control-request-headers"
+      ],
+      "x-ratelimit-limit-requests": [
+        "60"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "2100000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "49"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "2092634"
+      ],
+      "x-request-id": [
+        "a6c692c4-e51e-44c8-9615-b1727a6585f7"
+      ],
+      "x-route": [
+        "model-api-rust"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

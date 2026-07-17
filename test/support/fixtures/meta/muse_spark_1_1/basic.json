@@ -1,0 +1,146 @@
+{
+  "model_spec": "meta:muse-spark-1.1",
+  "provider": "meta",
+  "request": {
+    "body": {
+      "b64": "eyJpbmNsdWRlIjpbInJlYXNvbmluZy5lbmNyeXB0ZWRfY29udGVudCJdLCJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IkhlbGxvIHdvcmxkISIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9XSwibWF4X291dHB1dF90b2tlbnMiOjIwMDAsIm1vZGVsIjoibXVzZS1zcGFyay0xLjEiLCJyZWFzb25pbmciOnsiZWZmb3J0IjoibG93In0sInN0b3JlIjpmYWxzZSwic3RyZWFtIjpmYWxzZX0="
+    },
+    "canonical_json": {
+      "include": [
+        "reasoning.encrypted_content"
+      ],
+      "input": [
+        {
+          "content": [
+            {
+              "text": "Hello world!",
+              "type": "input_text"
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "max_output_tokens": 2000,
+      "model": "muse-spark-1.1",
+      "reasoning": {
+        "effort": "low"
+      },
+      "store": false,
+      "stream": false
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.6.3"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.meta.ai/v1/responses"
+  },
+  "response": {
+    "body": {
+      "background": false,
+      "completed_at": 1784297246.0,
+      "created_at": 1784297244.0,
+      "error": null,
+      "id": "resp_6a5a371eedc756362e02468b",
+      "incomplete_details": null,
+      "instructions": null,
+      "max_output_tokens": 2000,
+      "model": "muse-spark-1.1",
+      "object": "response",
+      "output": [
+        {
+          "encrypted_content": "Q-PaDgGgzkkZtuIFV8x528uDsA36PCEcBbRzS0X2AjORIXxsbW1vcSFbZmmmSspCZRMSTpj3Q613Qt7cQ1qRcw1FRTyPYr4zEHklW4pp25LePfPCeS8B_9P9Ir9jgj-bLPoqiDx79TUx4EYEiR0TKph69Q3bqBRTlLKgfkGF2MzDlkFpUmFI68aJREwx-1-Vrj5bngNOng3LrbQSYV-dHtFeOG6_SgYswixXGRcsG5JSArnJSb4rc0d3aBz39svL2cY3bamjOOKZ1QYmSE8L2knHM0iUdevACAiiik6lKCcIumT0PuZhGWn25bY-wXLYD_BXrcrgX7BQ71sva_Sqb-WlWaJGb0nm80H3m4G-IE1BSV9lcC6f6RT2rOj_73YtLDu2gQUq2ZWAjECh3l151KooJy0Md7SgiOglfGCeeBQo__Ch747YBjcfjJ2LThngR6rbioGeOXydXYyvmrvrOuw6P34vfAdKeg-rg-jU_xGE2Denf5EcGns0yVIsdB1UoKOGAzs_wRnlt997UKjN4dNBTFeLOIaUsPBAaD0k-tBEp0ogGBLVJ-2izJW5mnFOr9vmBbRsHHCwlXTaV9m5DMw1HgGnyYBjmz6y4Gotoz5d0a5-qfT0eI43Dq_tmRDVs6pO1Sn7X7UbtGlkXP0AFrz1ZZyGmrJpDWetVHZ9yLK5vV_kmttcMEtubuEULBuVgP9TGgCNpnBcb0oEI3Qt_1YKc9vqd9d3K8WoCloKkeMizgcnxc5MI6CPH0Yz_hV7JiAy8YqyDAraGdZG7u7rqA5pMcM1ANreMWJ_eDnfnYNwpGuFSe8OJXIMixVxH0JZ-cEhdJ6Y42xBKGbjAAMhj6AkIIQetCds98NbfkufYckm1PlOVNYZ9W2yWqSa0ArtV906PIe930zvfMKPHGtAg3x8KLK00kBVCcvgQLlIIC3UpzjW-6R1I785THGLEY-snvPyRMQzkwnQxdHo61PfJ1yTTjnAR_Ep4LawMEa4FM5r6x8lUCKzSM9649cvO9qcKhZt7jwYcQNTuDsEoQBj4x5PZYxzKWAFc4fhcYbhlyXbobcL7OMT94Z0oy0cd_pZ_1Q60hEvsm1izua6SNtfxSw6NsTWMqDf5swP6Jd68UnHrA52Lku-yL0C6ZuHSnYcdqZjt32MHZYXbcZdpYf2z6AwO_5zU6NSq2vqyFRcofzCP52P-RkZICjn11ZqmRUURT27jfklp_FyWZ_LPGDH4FVKXihJ9iTzaph57ECVQOnbNIRvNULe0pciNKcwKBKddoIoEVs-wSZHf_GEP7FntbFc5l3YmQjOT74VWFsh6CSj7wVYFf4c6d-XHqqhBdNW6sAgPLTWGjvsF_u_gQ7UYqaksnD6sQ8piorH2BsprXIRm2dBwln02TXw7rSLUXs8AA_GDijuuWr4Yr3HQqN7etYVAVxSZaKAchja4baFQv9jHt_xYmhlBKCQDFFlq0_N_ogmvnpsvAGlajTT9t6Z9GzWxTEq12veyp6yj7OlAWRB96USAUUa1RG_dqlkCxaXYpDqdwTgPlRCnw4WWC5hE42jf-0vXAUE1fZUrJRErvRo8-SmX9jlAlaDvOQ84BCifsVMqx32S5-N1nOodgzp2ytjUkAAQu0IoYmcrkRfotL5QaiqPt4vLvy9FIAsNaAQbh4rM8-yWBShXwFLuVLFuMb9nmGNe6b1KHbJCw9NHVro9DpVk2cSRBEUxmOHDvffNah7WetwWlKDQ6NyBxI_GtdG6VY6qbSq_cTHPXPv8wGApcX6O0SBVlFZoqZi9sguoO8VZinq-Coh6Y0iZDoKnCuDHMgkXF1pBJmwSfALm4QZkUlvrW5rPjGoZH_q4lniPAc8C4WSi2HFBNCG7oLdxQ0eG3KZsmcDyhus3DH3RwBSzDuzz0HbEZixDo7Fg5GK14Bu_4O3D0zRNEaQL55rFySoRHcrYL-9PvgEvWXgTDRCsQwt8UDlcyVotZ0ma53lxyPp2m1nUqhfY8DwhIwaXXkgo_V8TIW3UpcZT8vugszSuemp1iymTVfZ5E_r2VFH-wwDpBOOm_FzAsJV3a3N-d4NcZrXg7CV9zBCcLImvjrC0Gv1aA7cVeJzzLT6uj84xG7jtutaTLqFMYVRwIpMwZ0GLPNniAchoLN5skfGLn_ezUH1HjS0FBpdFaJYvcNCpcVehogKfyMLw0WgqqyDcpsUNZOnYW4w6kVa0tZ3ccap3XmrdyAZrAVNuJQ7cKkqqN8Jf0pjAPZq9bvVaXDJhyw4wg8-kNLeA71L3OfGJiKwbBthONBwb7rzQ4vdboKLyA3Umt6lqey0RKZ15RRy7fudhRQIMhmTDBAF2I_mtAj4n5Ese9uJBYrCTv24Sxif1zK84f2UC2-rMRfWGFDzm8jrNDXPQfropzee7RxWplP_vn4OvQ7Gyz0ITuEtLCTkSc4jUgBJ2ZZ79Z1Yy6_Pi5YeF6rVuTZtrSPoxv3AtuYLyB1lCL0NCt4CU8lKQCdWTlBfP892Z7Ka7-3YNsbbSXQ2qVZCEyIvKjD8v8s-4d6wYhPv4fCBEF2EKoOTHSFOrv1LKoE-InBNv_iFIiTlV1LcyvbnJ2tIfObTExbibZZijfXafgwKoSYYeTF-uTSj6ureQ_J42ytYvkJzQjMijApfU77WQ96XeA5uM8E0jMluQtMuV4lWVHxm90DZln2w4g7vJBgTDINqSSzwZIhkJnsWTY_sjD7tp90uV7X7ljFbjRn3VDwpskVmyyGTaphOn_09cnu815b3jNcuCUHxWBbogTTEXIUuVMqOl-s",
+          "id": "rs_6a5a371eedc756362e02468b:rs_8048c2932fddf9d3",
+          "summary": [],
+          "type": "reasoning"
+        },
+        {
+          "content": [
+            {
+              "annotations": [],
+              "logprobs": [],
+              "text": "Hello! 👋 World says hi back!\n\nHow can I help you today?",
+              "type": "output_text"
+            }
+          ],
+          "id": "msg_9c354c9e21627995",
+          "role": "assistant",
+          "status": "completed",
+          "type": "message"
+        }
+      ],
+      "parallel_tool_calls": true,
+      "reasoning": {
+        "effort": "low"
+      },
+      "service_tier": "auto",
+      "status": "completed",
+      "store": false,
+      "temperature": 1.0,
+      "tool_choice": "auto",
+      "tools": [],
+      "top_logprobs": 0,
+      "top_p": 1.0,
+      "truncation": "disabled",
+      "usage": {
+        "input_tokens": 10,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens": 198,
+        "output_tokens_details": {
+          "reasoning_tokens": 173
+        },
+        "total_tokens": 208
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-length": [
+        "3752"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 17 Jul 2026 14:07:26 GMT"
+      ],
+      "vary": [
+        "origin, access-control-request-method, access-control-request-headers"
+      ],
+      "x-ratelimit-limit-requests": [
+        "60"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "2100000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "59"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "2100000"
+      ],
+      "x-request-id": [
+        "c5fd42c3-e234-453a-ba16-edcae6d1a754"
+      ],
+      "x-route": [
+        "model-api-rust"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

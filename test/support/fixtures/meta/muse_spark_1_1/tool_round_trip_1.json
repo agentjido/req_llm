@@ -1,0 +1,188 @@
+{
+  "model_spec": "meta:muse-spark-1.1",
+  "provider": "meta",
+  "request": {
+    "body": {
+      "b64": "eyJpbmNsdWRlIjpbInJlYXNvbmluZy5lbmNyeXB0ZWRfY29udGVudCJdLCJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9XSwibWF4X291dHB1dF90b2tlbnMiOjMyMDAsIm1vZGVsIjoibXVzZS1zcGFyay0xLjEiLCJzdG9yZSI6ZmFsc2UsInN0cmVhbSI6ZmFsc2UsInRvb2xzIjpbeyJkZXNjcmlwdGlvbiI6IkFkZCB0d28gaW50ZWdlcnMiLCJuYW1lIjoiYWRkIiwicGFyYW1ldGVycyI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnsiYSI6eyJ0eXBlIjoiaW50ZWdlciJ9LCJiIjp7InR5cGUiOiJpbnRlZ2VyIn19LCJ0eXBlIjoib2JqZWN0In0sInN0cmljdCI6ZmFsc2UsInR5cGUiOiJmdW5jdGlvbiJ9XX0="
+    },
+    "canonical_json": {
+      "include": [
+        "reasoning.encrypted_content"
+      ],
+      "input": [
+        {
+          "content": [
+            {
+              "text": "Use the add tool to compute 2 + 3. After the tool result arrives, respond with 'sum=<value>'.",
+              "type": "input_text"
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "max_output_tokens": 3200,
+      "model": "muse-spark-1.1",
+      "store": false,
+      "stream": false,
+      "tools": [
+        {
+          "description": "Add two integers",
+          "name": "add",
+          "parameters": {
+            "additionalProperties": false,
+            "properties": {
+              "a": {
+                "type": "integer"
+              },
+              "b": {
+                "type": "integer"
+              }
+            },
+            "type": "object"
+          },
+          "strict": false,
+          "type": "function"
+        }
+      ]
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.6.3"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.meta.ai/v1/responses"
+  },
+  "response": {
+    "body": {
+      "background": false,
+      "completed_at": 1784297258.0,
+      "created_at": 1784297257.0,
+      "error": null,
+      "id": "resp_6a5a372a79b1e67a877e4c07",
+      "incomplete_details": null,
+      "instructions": null,
+      "max_output_tokens": 3200,
+      "model": "muse-spark-1.1",
+      "object": "response",
+      "output": [
+        {
+          "encrypted_content": "Q-PaDgHdSLuZgVZc36ogM3L3ljTrYwtcLBKWCJ-P7gKwm5XVMhEkkGx-dpxzZu5Hk1zNCV8nuiBB4HmZZwNpv_PnRYP_GMnHOb1DdRjAVyuagIm2fHmCO7o1yvabE-LGkYh-Z_pFO1F0vcRRYUloflANuWi6Iiu9tPNJ4jFqUQOHu8ikRA0M4sqnLtbIPSWNKgysVKkTxsKvz96eagsyu_RkV1szUg9zmjUc2ERSY4S-CKyrht64mApAdJc0XB7FUJ-3IugOTr3DY0gKqh5CQ28JjC11cHY_DlBSGWJ6NmwQWA_kZHauO4bIKRizQfbsfQqYduLCObxA0tBZFllndRiKerqAq0zMJFi921W852zNz8O9LoTQj7m3_RT4YRnaoPP716tUNAlCWpQ99KQFwOv4s28mtdzdy6TrANeeHVGBnbC67XWapC6LUBwKOSoAnit0vf4GHa6NO5j_K4V3gdsCkBkEjOOlmymFHcMXKi6qEc8s5kqzyalz4O-NIGSOwXB3sGBA-2Ijj-JNys9ZbVZidDG2HhqkLczj3VNu1Wnl9kbU818RXbeDtSwVutTAMmeUgHDKsF0Hb3QVrGvAY5h-GxoL8Eyrm0Lltt55cUUo6eAYugb-hAhWVYNkT7Ln8H2W85ZTpZbtVoB6mfjcTXnLqviy44oo8dPE8I0wJHVz59iUnjnbWyUrHoXXP3nyU1xVl9j0SYFQS6tWxwP1V7Jxmr6gBiEmaNnmb093bdkdS8TgbjLSz7oNEV6ontIlRKPp3A_d_g7hh3CMziEqwgZmtr4YXqYX6M3zsoVg9MK4EO9YZX01kaoyd0gFkashgwkEpEROddBh0LJfv4WRVf9LDfjygt1SNUeqinlAStSHmn-BWlesVt_fbaqrG5_E9lXuK5kFP2US8A0A4RCIdgp3nKwruYeu7ocDq4YFeYTjJM9ipKb-HfYC9F5OmSKFI8PFivlJogs_m4edmD4tGN15DsmbwFTL3m63RAu3EUv2wJHPwjI2B3Rl67lk0KfJd4Tq_655aq2kc1H3uvw_me19aXnswbFKMeaLV1u1BnmJA5eP_I6wzTUoj42m8WjnIB6hh6QzX7CGrpgxif5vqkLm3IyJmXnK5pAfgM0FhnjBOq0exzVWDquCrsYd8smSUnU5JbwyeiFPbyqF35ZjLSEbyMvD7gB7FQ-dDLOu-n94Na3fwqknQ2NMk0wBCgb3OFjHKoGHu4eZnpQvj76IVT0qNnZCnX9uHaeu9JmMf3V0OI7Sg9cBZ54KRFAY40SiSDy5qx0OwLbOGcM-WM6vp-Hy9soj9702q3rogfjBuyS5qtqiixEQkHTl0bm6OSxIr8ZlAnk03O9cJI6CL1zTTuLHn1J-cXdM7GfFP1B1zsFxYmyy0mqVV7dLQ4t4o2-vXE6uLkpORf5NoqF5TA",
+          "id": "rs_6a5a372a79b1e67a877e4c07:rs_b6ae1ea523c26199",
+          "summary": [],
+          "type": "reasoning"
+        },
+        {
+          "content": [
+            {
+              "annotations": [],
+              "logprobs": [],
+              "text": "I'll calculate 2+3 using the add tool.",
+              "type": "output_text"
+            }
+          ],
+          "id": "rs_b8db837dde06ba19",
+          "phase": "commentary",
+          "role": "assistant",
+          "status": "completed",
+          "type": "message"
+        },
+        {
+          "arguments": "{\"a\": 2, \"b\": 3}",
+          "call_id": "call_a434c2e910ffc999",
+          "id": "fc_a434c2e910ffc999",
+          "name": "add",
+          "status": "completed",
+          "type": "function_call"
+        }
+      ],
+      "parallel_tool_calls": true,
+      "service_tier": "auto",
+      "status": "completed",
+      "store": false,
+      "temperature": 1.0,
+      "tool_choice": "auto",
+      "tools": [
+        {
+          "description": "Add two integers",
+          "name": "add",
+          "parameters": {
+            "additionalProperties": false,
+            "properties": {
+              "a": {
+                "type": "integer"
+              },
+              "b": {
+                "type": "integer"
+              }
+            },
+            "type": "object"
+          },
+          "strict": false,
+          "type": "function"
+        }
+      ],
+      "top_logprobs": 0,
+      "top_p": 1.0,
+      "truncation": "disabled",
+      "usage": {
+        "input_tokens": 559,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens": 163,
+        "output_tokens_details": {
+          "reasoning_tokens": 81
+        },
+        "total_tokens": 722
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-length": [
+        "2712"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 17 Jul 2026 14:07:38 GMT"
+      ],
+      "vary": [
+        "origin, access-control-request-method, access-control-request-headers"
+      ],
+      "x-ratelimit-limit-requests": [
+        "60"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "2100000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "55"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "2097958"
+      ],
+      "x-request-id": [
+        "8b63b81b-574b-4e95-8cc4-84d29efb0745"
+      ],
+      "x-route": [
+        "model-api-rust"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

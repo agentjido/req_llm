@@ -1,0 +1,146 @@
+{
+  "model_spec": "meta:muse-spark-1.1",
+  "provider": "meta",
+  "request": {
+    "body": {
+      "b64": "eyJpbmNsdWRlIjpbInJlYXNvbmluZy5lbmNyeXB0ZWRfY29udGVudCJdLCJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IlNvbHZlIDEyKjcgYW5kIHNob3cgeW91ciBpbnRlcm5hbCB0aGlua2luZyAoYnJpZWYpLiIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9XSwibWF4X291dHB1dF90b2tlbnMiOjUwMDAsIm1vZGVsIjoibXVzZS1zcGFyay0xLjEiLCJyZWFzb25pbmciOnsiZWZmb3J0IjoibG93In0sInN0b3JlIjpmYWxzZSwic3RyZWFtIjpmYWxzZX0="
+    },
+    "canonical_json": {
+      "include": [
+        "reasoning.encrypted_content"
+      ],
+      "input": [
+        {
+          "content": [
+            {
+              "text": "Solve 12*7 and show your internal thinking (brief).",
+              "type": "input_text"
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "max_output_tokens": 5000,
+      "model": "muse-spark-1.1",
+      "reasoning": {
+        "effort": "low"
+      },
+      "store": false,
+      "stream": false
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.6.3"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.meta.ai/v1/responses"
+  },
+  "response": {
+    "body": {
+      "background": false,
+      "completed_at": 1784297251.0,
+      "created_at": 1784297249.0,
+      "error": null,
+      "id": "resp_6a5a3723dabdb98735544820",
+      "incomplete_details": null,
+      "instructions": null,
+      "max_output_tokens": 5000,
+      "model": "muse-spark-1.1",
+      "object": "response",
+      "output": [
+        {
+          "encrypted_content": "Q-PaDgE85uLuhURzh8z6roK4MGmVB_fl9YL8YydwvEic23MVAXni-vN-ROxjlIa-FFCEF575uxGZlQ7orkqI-mW4zRv03jb-w-v6QyTsDy7zSmgI7G_4H6JQpMWtxiDuIh72jHr6EUQEgBr2x9KfrdFCRbdxNG4Vsr2UXEd3RqALgDaFjkA-xLddgnZkuesJ0oIWDIDl_BYO1liR9_472va2haUw_d4W9iiOF4yLc-u1J1sOSzccEELqEonK4u9xSvoJ-bfTcZGQ4_VECLDMTBbfCCyQDSMD6rGB1kUvoejlAsHfVozDuvaXhZdWOnd4uFrWfp0Wk0mreUcyuU0y5gWtXrfq_sr4tMw5BdabBChY2G9wmnU2djghckHEQi7aSEKb3nkxjsAwoOPCrYNIBrAiS1wlxtidH4rMDVdHrDs2LOUZlWkxGMNQ4qp-F2m767iQ_t9VLc_n7nj40KnIdZ1KG8YbXEbNeM-SxOX5dXtYaDwd2xou0-mlxMGQP2N8-XMqwYvFc0WLpwDdkknl9ITvS7Uelt9F6aAiaXK2yIht5QTv0aGlUodXdLFM1ZkE-Xf2tCtgg19-g0-95hj973Cv9Sb0SK_BXgkC7v-h9iv34D5NzW7p9FCQAB4vHGFSHeuOG6SP9IBLOmDKDhOPgZ6B5KK0DOxUCKBUy-7CXQjDAa0RBVgwSf-t0wA7SMVHRdTyucoQD2jHbBg43Gbt-TpZz5zh7gN18nipTNBgFmaKxykPGXR2det7LLaEd7P-hOkPoRtB7cJ3mISbOR4qQzh65jTm40QtHILDjocK24wgRYyCinvn7KRW6tC_dxw9hBYAwa9Ju5pLEYTkLuX7KhprRrjdLCzTXuyQNRIg9cFFJ4sfB-EifxZpoI3hz1JJ-YMc0LJ7G4IGRDsNK-kSIQT-BVdyKuuOE830LNsLouVacKka0cC_5zG3MUYTYtt-yOvzIzGCXDne2m5cnfEgWA8Nm5WZaUF5T3hK6MZiWfjeFGNvDalnclJ01nh3sQrvgexqntNL5F7Rfq5Zu90FIEOU2idOkKaSLVEbUXyszDEV-Ga8CSCgIsdNFTp9UxUywbm0dYSzXJ43u9Z1JHRYxY5lSGAiQ4C0xl5uzLvP73C-A7i5JZOQR6yKhkkVw25UmipWjx13zfBShB2jsNxdKrDc0LCfVFRG_0grgAjrrbmHeAJyz-so4-l95tYKHZDgGRxN9WA-1TVV5Lk4RppjHG2cn9viy8jC987S3cyUshOHNxoZbzT0B-agYV491sGI7tM_KQhrt8vb2RJbEiqhOQQjZw1cX6oNYpp78SwPzngFtzKX4-do7DeqSgSwFVQ2WWcq_TK5YzD-UrydaKi88GrkeRAhrpa29pXVyMth72fk88jxjanyu7R93BmrhciqjONgVM-_oMSshLfi1ELqIt7V0JgKVJ3t_UTWp4VwKcftC42ShNiPGLwSKZ_WfCcADsHP3y-bTypFEukOMFk7Flo3r6ykZRjWlg9XhnBSstajfy9ycQEMd821qFD9y56MIeA4YyOGS2fn5GxAbqMhaY5jaCKSUvIuXTL0NFWAFEofCbcBgYsEg_hsz-Ak69o-HDzbDZP4vvalZsJUB0H3QAY1kSQqGUtv9L-otkNe8rojZjZ6-1Vb2oKOdouLY9ut5jYyx4KIDcfLqx8mtMaGA7bKLJu62veN2zGwJrvDQgHMAfxhZaWAWxhKeEoj0cxb4gCAFpsISl-2Q9c7oWhW9oLRL4XpflvRgWaOBICCtZmxvBNhC_YZIJNFeukYCAZQIgGlfwiY1Bs9GXKSFqBtVLQXTpA_zh_-C5enTXQpwYEC2EAH2z_AcB2LXUjbQ-Azpcfnr0DZ0dM2s7fVBV9M7m7L39Bkwazk9xoO4WKoyuFj9WeR1oOTE_Lj0TDHwNOrJ26U8qW7hmaXXAVkybqZiKGtwJ6iHXM6p2xML2qSlcanjamT6iyDkn0VYGCTgPmiO2eVsEXUBLGLYFZm3CgIZqUc5-KdGo_uQdWSqL31VVg5fuCvt16lICLB4jyo73rb9tEt6O0A8mzGlaPH355euvZLRaoDnV0egf6JwtcC_9bBIaV0F6_F5IB1a5QBuaPjQtMpLnqNWv2Yay8NLw-Dl2qfP6KirhxYYPCIXZC5NbgPOQInqxwgE24s9zVo6SHZvB_u2UkuZp7difmR9QmjUmIH5DJWThyBUrrdFoTl_-ew21z0DdT7M4R6zaRrQawZS-iFtKbmNmnNxSq-bUikH7iPkQoqEcqT07j0JMAq9P-UWMWvEN50RZnNy1znF4UpNksWniX_7nMyq9Okl8t1fBcKvR41TRhtLPdfN_dtx09_yHv22c5nE3hcTRmx1yf1lBm-BxbXwwFDbsnU9gUKyF0cq_Cek0zf0yYJ55GMk1TPyKwOLzdlTYxs0uDUMNQ9A9h9_kVCgCGrpGkhAjLJekPBs_EXDJ1iDPJB4Axu-JcXDAPMbB82Womo6Y52YT3hZoDM0w0cWd2ADOJA3okVuACcJ2TZCyNYmFhf1Q9BP07rwjgYQUxgIDHcGzV_GHAkQLE4cT7I4iS944LWcLF9E-vhnjtC8ItoOSar61dHilMH6v50Etmq5V3ZSFKtwVosU2MQFRgRNf1by4Q-3wP50eqXsvAsi-ynIlG4IJyI21y5n-2uRftoEItEfCg95zJ5GehGXPYmu4CS7Z_dNtZo9OB1lnyn7opUQKx-HyL8bO1Bdl_nIBL--3q4wVNBknSLilvDPFhkWgwOeZIwIP6HpmoXzENV7zaIccurecE",
+          "id": "rs_6a5a3723dabdb98735544820:rs_96415978b36f3782",
+          "summary": [],
+          "type": "reasoning"
+        },
+        {
+          "content": [
+            {
+              "annotations": [],
+              "logprobs": [],
+              "text": "12 * 7 = **84**\n\nInternal thinking (brief): \n10*7 = 70, 2*7 = 14, 70+14 = 84.",
+              "type": "output_text"
+            }
+          ],
+          "id": "msg_b6e30059b40a069c",
+          "role": "assistant",
+          "status": "completed",
+          "type": "message"
+        }
+      ],
+      "parallel_tool_calls": true,
+      "reasoning": {
+        "effort": "low"
+      },
+      "service_tier": "auto",
+      "status": "completed",
+      "store": false,
+      "temperature": 1.0,
+      "tool_choice": "auto",
+      "tools": [],
+      "top_logprobs": 0,
+      "top_p": 1.0,
+      "truncation": "disabled",
+      "usage": {
+        "input_tokens": 20,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens": 274,
+        "output_tokens_details": {
+          "reasoning_tokens": 227
+        },
+        "total_tokens": 294
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-length": [
+        "3772"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 17 Jul 2026 14:07:31 GMT"
+      ],
+      "vary": [
+        "origin, access-control-request-method, access-control-request-headers"
+      ],
+      "x-ratelimit-limit-requests": [
+        "60"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "2100000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "57"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "2099407"
+      ],
+      "x-request-id": [
+        "406c3a84-7345-4a53-a57a-c5dd357eff59"
+      ],
+      "x-route": [
+        "model-api-rust"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

@@ -25,7 +25,7 @@ LLM APIs are inconsistent. ReqLLM provides a unified, idiomatic Elixir interface
 
 ReqLLM currently exposes **1,205 models across 21 implemented provider integrations** from [LLMDB](https://llmdb.xyz), the model catalog maintained through `llm_db`. Counting the cataloged-but-not-separate `google_vertex_anthropic` namespace, the registry contains **1,218 models across 22 provider namespaces**.
 
-That breadth extends well beyond chat: ReqLLM tracks **92 non-text operation models** across embedding, image generation, text-to-speech, transcription, rerank, and OCR APIs. The fixture suite currently contains **619 unique recorded model specs**, giving ReqLLM a compatibility ledger for text and multi-modal provider behavior.
+That breadth extends well beyond chat: ReqLLM tracks **92 non-text operation models** across embedding, image generation, text-to-speech, transcription, rerank, and OCR APIs. The fixture suite currently contains **622 unique recorded model specs**, giving ReqLLM a compatibility ledger for text and multi-modal provider behavior.
 
 | Provider | ID | Catalog models | Operation surface | Recorded specs | Guide |
 |---|---|---:|---|---:|---|
@@ -41,7 +41,7 @@ That breadth extends well beyond chat: ReqLLM tracks **92 non-text operation mod
 | [Google Gemini](https://llmdb.xyz/?providers=google) | `google` | 50 | text, embedding 2, image 8 | 24 | [Guide](guides/google.md) |
 | [Google Vertex AI](https://llmdb.xyz/?providers=google_vertex) | `google_vertex` | 40 | text | 11 | [Guide](guides/google_vertex.md) |
 | [Groq](https://llmdb.xyz/?providers=groq) | `groq` | 18 | text, speech 2, transcription 2 | 11 | [Guide](guides/groq.md) |
-| [Meta Model API](https://llmdb.xyz/?providers=meta) | `meta` | 1 | text | 0 | [Guide](guides/meta.md) |
+| [Meta Model API](https://llmdb.xyz/?providers=meta) | `meta` | 1 | text | 1 | [Guide](guides/meta.md) |
 | [MiniMax](https://llmdb.xyz/?providers=minimax) | `minimax` | 6 | text | 6 | — |
 | [OpenAI](https://llmdb.xyz/?providers=openai) | `openai` | 86 | text, embedding 3, image 5, speech 6, transcription 7 | 64 | [Guide](guides/openai.md) |
 | [OpenRouter](https://llmdb.xyz/?providers=openrouter) | `openrouter` | 364 | text, embedding 25, image 5 | 234 | [Guide](guides/openrouter.md) |
@@ -535,7 +535,7 @@ If you run into anything or have suggestions, please open an issue or PR.
 
 ### Test Coverage & Quality Commitment
 
-ReqLLM uses fixture-backed compatibility tests as a practical map of provider behavior. The current suite includes **159 passing model-compat entries** across 12 providers and **619 unique recorded fixture model specs** across text, streaming, tool calling, structured output, embeddings, image generation, speech, transcription, rerank, and OCR.
+ReqLLM uses fixture-backed compatibility tests as a practical map of provider behavior. The current suite includes **160 passing model-compat entries** across 13 providers and **622 unique recorded fixture model specs** across text, streaming, tool calling, structured output, embeddings, image generation, speech, transcription, rerank, and OCR.
 
 Catalog support and fixture-verified coverage are tracked separately on purpose: provider catalogs move quickly, account access varies, and some modalities need specialized tests. ReqLLM makes that state visible through `mix mc "*:*"` and lets you narrow checks by provider or operation type when you need to validate the exact models your application uses.
 

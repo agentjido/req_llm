@@ -1,0 +1,140 @@
+{
+  "model_spec": "meta:muse-spark-1.1",
+  "provider": "meta",
+  "request": {
+    "body": {
+      "b64": "eyJpbmNsdWRlIjpbInJlYXNvbmluZy5lbmNyeXB0ZWRfY29udGVudCJdLCJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IlJlc3BvbmQgd2l0aCBhIHNpbmdsZSB3b3JkICdIaScuIiwidHlwZSI6ImlucHV0X3RleHQifV0sInJvbGUiOiJ1c2VyIn1dLCJtYXhfb3V0cHV0X3Rva2VucyI6MTAyNCwibW9kZWwiOiJtdXNlLXNwYXJrLTEuMSIsInN0b3JlIjpmYWxzZSwic3RyZWFtIjpmYWxzZX0="
+    },
+    "canonical_json": {
+      "include": [
+        "reasoning.encrypted_content"
+      ],
+      "input": [
+        {
+          "content": [
+            {
+              "text": "Respond with a single word 'Hi'.",
+              "type": "input_text"
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "max_output_tokens": 1024,
+      "model": "muse-spark-1.1",
+      "store": false,
+      "stream": false
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.6.3"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.meta.ai/v1/responses"
+  },
+  "response": {
+    "body": {
+      "background": false,
+      "completed_at": 1784297299.0,
+      "created_at": 1784297297.0,
+      "error": null,
+      "id": "resp_6a5a37535ab09c0b6f7f4749",
+      "incomplete_details": null,
+      "instructions": null,
+      "max_output_tokens": 1024,
+      "model": "muse-spark-1.1",
+      "object": "response",
+      "output": [
+        {
+          "encrypted_content": "Q-PaDgGezppIZ2Ocqw4FJhfKdegs2UZM7ZzBkKlOjqTBcLvpj27SNGOcNR92BkX_5Yi5I7R5vTc9G__BybA6I_3jSeU8RtFyqkSEwfN1pTr1g4Su8PLCctHB5xxlT1lrF0StXAQOia86GVnazq4Eub0D2I7VpAR9zUGEumCTVDbygLJQ4hRxOOFnVd1bX5FpSXPKfv7JqQHhJdS8bo2ycuXlaMvF_AnDTYsCsdxfeEEBTuxXLpNoh23gcsdEkqkNU_LCCfutnL-rYueb1FZ6LRzC-hk8LQWEh56oJmKw287WCVQSjhdA16FeG9q--iQ-67w1ZtyiJIDGiQJwGp_yGSN-NP_v9LHYHYuOglM6GTVKwhOJ1hecJ77zgpQm__WqQqqyQwbCSiewr16I-F5DTPed1AvRWjzzY0ehoHQenRQezV7TYjJAHAJsfnCyjQqzVXGN8bNrABM10kik3nfPCfRS1v8DgmA_FRxPlKltB3jCPE4PoKOeMdTPmdC3HNzZrMbs9yisVR2Zrnorsk23ChjSnJEHpSff1j73R1M55WAfjBML7NrMeI8mxbaCU7rXCVl8catV6y8mddq-uk-ii00sy0aL7eUvT_2ybIChnot9PieWk4r3uCv1p9elxZfj7O-55OcsUtN6faBqv34SdBNeArSP9Gx9tDNI7LmKWIcY6soyhGg3FJfdp0Ih47n4ov5JQqX-eiotgOVbOFqofsrCFWNRdzQA_VjygfOSxetIeQc5ImIX0jhlP7eeIBD_X3l9QVJU_oSynu4tbfGA9iXLdm0MD7e6IPITic5AMtjW7spq9-5breoaX9E8MD_mxs4nWGqtAFnOLPf-R3XHawzXtPgUQr90MJpGsNOOx1CwTczyoBKkkeab_Sro7u7kuQfqkXdlbPkYrGERpwBvnfxslrpC-lBYHvD3XpgB8Y2bW0xq3MNDYhxFlxRNaqOroGf_Udlv624LwC01RqjaHof3bTJg0fLF8eyhQGbWPbR4B_pu-ZVXbsM11Vb4h37-2no-Yw4tSd3l1u6OEutf7hCof2TP4E4kod3cY89okcPr21MfzFQ92qiwrnm85N5ddro-4mjdZvxwAlb9Jpilhg985eeMwZ9JF-ZVIStvbW9nOk5ZqccsgBFf9Q5d9ogTbQ3jORnRWXVHGlcUNmCx7-rvU6qIYiaBbAcjjsWl9B_Eb_biOypLKjMSEMl9qEwPNLYvks9qzEp4-Z5T-wNLbvJgh0L2ys3Qni0CCcBoBkbN8osJSKVierI3exP4Zur3RLDHzh3j0aIK8JpJcg3BZc7bPYPpt9lL0OsFIs_zZsd6ACZW2CibBl0s8bz_gvj24AKiJQcKE3qQpegohLQ7A6D0-Tkb7reK5wSBoGLw1qEzRkCLmk_6NtytBtjrkcVvmMX0T2krceX7Ea11movu56KpLzra2AwrkhBjYBGwnSdcOE0SOeLLNtJ1tQiJ2G4qV9cBQS322IiJJ4piqPLiJVjGXi5MCkDo9ffn2_3rgoDRDLfiIXgO4HeJ91lqJNnGzknWK9ykf04qB38jfe8rTXd5pojdmrHpIeuXn0-F5-TnrDcBp99inxEcYaorBWkHWL6oT7W_4HEjOtlQeGkDCtW5qSgWBVGCN0GoxjxXsSR-IWxhT_UfrWuNo-fig5zGo0KgfdNqzBkUvonn-GfORKXP7KtGkxWA0bI1tgqfgixknUtSo3aXOVWS4I9mgHqgsCxDiNLSl86JYB2T_qFiDVAzk4loeQpT7zIifeVZHCoPMd5mtJzr9dqKbOYPWzU9TkwG_pJbPJpko3L1pC8PrwN11ASk7icHqspdLCBpjTFtCByqAj6YdzCr5jPUDRYgQg-2U1FmCnYqERGL-0NJmTtIvEczzWE71d7IoG-5CW74x5lKD5GkX0fZrqacGfPaBi8aFKBJuNBjwcysn01f1iti-Vyu2yK6Y3nTFxkvIh2cfhhlN5iEIiwlUsaynYE6kb8LxnCejcjUFOin3r9mrn_fRWjGKOD45GaZdQQzcaCtXjbSmITnhZYsHlr7ar_bi6hm50FhoTj4toxTJGUD9X3uGAeknH39X_PeKtdNMFznbbAYYN1n31y08YBqLymPK81uy6oc4-mGYBXemIRliS4qzKK48h2cTs4AGnOaUeX7pUhLbGfp7FR8nkDItvgxN738snAAvQ7eFGmU1SKGLkzlicy1dDgUj5g1gomRmN495z0rzxPgq_IuKHyu8rketFzGzGEHxRmBdy1jbhkiPPJCXwcMnJCR4ksaaLMBK9aTBlltoJ6oauMJxWCi6Q2MzwySwR0LEZCEjM6VXau9mFpVrl3t989W7sKDgUo3w2Vpt-RY8P9Pm7htWOE8pHY1QYPVGs4jwK-ZV_5CyyutI-1jT6ukv98ba4Iu0kUX_iBRJuwtfo9YC1TpxXIvi8X0CwIIoFL8NiXqBC5VXmHQReBiu8vxfgfD9h92JdqTLNhgThUH9tX-tCAP4k7N5v87BQ-rtxPMAzEQ6AdzdAuGlQ9q-Ws5WO8wemh6KR89A98q4KdS2NPPMLy1GBO58Tf0CBZJa3yj9sVwRkJ8f2kFLMdwlEj1Xyd-NukT02yT9sM3oesa1WvwTw_-KkxWqMKffucXd960Kj6L0-djv9jD2hSNKetd1RZ2y18aU-CNzN58JXO3P9woW_7ZRqQzJ6MxfDFUXhVFdpdu7K-Heomsjy4Fru_0mSOK-YFLzFLUbu4DOOURGZBCc2oNL78isE_4Y210xBnBXLnIxW4nDdcMQSWc1Pomo72QzqMMVBQ",
+          "id": "rs_6a5a37535ab09c0b6f7f4749:rs_9161456162c5bbb9",
+          "summary": [],
+          "type": "reasoning"
+        },
+        {
+          "content": [
+            {
+              "annotations": [],
+              "logprobs": [],
+              "text": "Hi",
+              "type": "output_text"
+            }
+          ],
+          "id": "msg_8f388a605cb01d8e",
+          "role": "assistant",
+          "status": "completed",
+          "type": "message"
+        }
+      ],
+      "parallel_tool_calls": true,
+      "service_tier": "auto",
+      "status": "completed",
+      "store": false,
+      "temperature": 1.0,
+      "tool_choice": "auto",
+      "tools": [],
+      "top_logprobs": 0,
+      "top_p": 1.0,
+      "truncation": "disabled",
+      "usage": {
+        "input_tokens": 15,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens": 226,
+        "output_tokens_details": {
+          "reasoning_tokens": 215
+        },
+        "total_tokens": 241
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-length": [
+        "3665"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 17 Jul 2026 14:08:19 GMT"
+      ],
+      "vary": [
+        "origin, access-control-request-method, access-control-request-headers"
+      ],
+      "x-ratelimit-limit-requests": [
+        "60"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "2100000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "47"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "2092223"
+      ],
+      "x-request-id": [
+        "a7d78a1f-6731-4a31-a7f1-0be3d0fa68f6"
+      ],
+      "x-route": [
+        "model-api-rust"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

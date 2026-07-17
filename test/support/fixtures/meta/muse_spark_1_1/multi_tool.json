@@ -1,0 +1,256 @@
+{
+  "model_spec": "meta:muse-spark-1.1",
+  "provider": "meta",
+  "request": {
+    "body": {
+      "b64": "eyJpbmNsdWRlIjpbInJlYXNvbmluZy5lbmNyeXB0ZWRfY29udGVudCJdLCJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IldoYXQncyB0aGUgd2VhdGhlciBsaWtlIGluIFBhcmlzLCBGcmFuY2U/IiwidHlwZSI6ImlucHV0X3RleHQifV0sInJvbGUiOiJ1c2VyIn1dLCJtYXhfb3V0cHV0X3Rva2VucyI6NjQwMCwibW9kZWwiOiJtdXNlLXNwYXJrLTEuMSIsInJlYXNvbmluZyI6eyJlZmZvcnQiOiJsb3cifSwic3RvcmUiOmZhbHNlLCJzdHJlYW0iOmZhbHNlLCJ0b29scyI6W3siZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9LCJ1bml0Ijp7ImVudW0iOlsiY2Vsc2l1cyIsImZhaHJlbmhlaXQiXSwidHlwZSI6InN0cmluZyJ9fSwidHlwZSI6Im9iamVjdCJ9LCJzdHJpY3QiOmZhbHNlLCJ0eXBlIjoiZnVuY3Rpb24ifSx7ImRlc2NyaXB0aW9uIjoiVGVsbCBhIGZ1bm55IGpva2UiLCJuYW1lIjoidGVsbF9qb2tlIiwicGFyYW1ldGVycyI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnsidG9waWMiOnsiZGVzY3JpcHRpb24iOiJUb3BpYyBmb3IgdGhlIGpva2UiLCJ0eXBlIjoic3RyaW5nIn19LCJ0eXBlIjoib2JqZWN0In0sInN0cmljdCI6ZmFsc2UsInR5cGUiOiJmdW5jdGlvbiJ9LHsiZGVzY3JpcHRpb24iOiJHZXQgdGhlIGN1cnJlbnQgdGltZSIsIm5hbWUiOiJnZXRfdGltZSIsInBhcmFtZXRlcnMiOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7fSwidHlwZSI6Im9iamVjdCJ9LCJzdHJpY3QiOmZhbHNlLCJ0eXBlIjoiZnVuY3Rpb24ifV19"
+    },
+    "canonical_json": {
+      "include": [
+        "reasoning.encrypted_content"
+      ],
+      "input": [
+        {
+          "content": [
+            {
+              "text": "What's the weather like in Paris, France?",
+              "type": "input_text"
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "max_output_tokens": 6400,
+      "model": "muse-spark-1.1",
+      "reasoning": {
+        "effort": "low"
+      },
+      "store": false,
+      "stream": false,
+      "tools": [
+        {
+          "description": "Get current weather information for a location",
+          "name": "get_weather",
+          "parameters": {
+            "additionalProperties": false,
+            "properties": {
+              "location": {
+                "type": "string"
+              },
+              "unit": {
+                "enum": [
+                  "celsius",
+                  "fahrenheit"
+                ],
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "strict": false,
+          "type": "function"
+        },
+        {
+          "description": "Tell a funny joke",
+          "name": "tell_joke",
+          "parameters": {
+            "additionalProperties": false,
+            "properties": {
+              "topic": {
+                "description": "Topic for the joke",
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "strict": false,
+          "type": "function"
+        },
+        {
+          "description": "Get the current time",
+          "name": "get_time",
+          "parameters": {
+            "additionalProperties": false,
+            "properties": {},
+            "type": "object"
+          },
+          "strict": false,
+          "type": "function"
+        }
+      ]
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.6.3"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.meta.ai/v1/responses"
+  },
+  "response": {
+    "body": {
+      "background": false,
+      "completed_at": 1784297261.0,
+      "created_at": 1784297260.0,
+      "error": null,
+      "id": "resp_6a5a372d1b177e91142c4cd0",
+      "incomplete_details": null,
+      "instructions": null,
+      "max_output_tokens": 6400,
+      "model": "muse-spark-1.1",
+      "object": "response",
+      "output": [
+        {
+          "encrypted_content": "Q-PaDgGU7sucoCyfe1E1lUnPG8Xxs0xZusoAGQmCNuMZ6FRgSda9nnF-v-kUU_cW2rtdTNf4txmzIAhcTVZu_MKzZzuSHtan0lQzVUQ2S3fRjvONxST9fCrGVCGy_H3xd_wPe6RzTXBbsF7Q4bIsFl5HhHahMh7207pHVedWp6l20_xLcH8Bnbpjzf6jIE0FbNorwH87uRO9brMaq5ZIkzikmUfijWhclN3rtmyrdWfxpxr2z4TIp-NtdhBQJt47IQk3zmj6UHnFl9JK_cBgUY7TDbmEGs6p_C6_WTnezxG9vRY5cFVF9mm_EIWz3cGL88YUO6hpPfVoIc_I4iHxnyhzV3KKDqYOggcIpEvG1sPvrvUXr2WNrGTr4o0R5ayIpl-QfARDh8nd-Rjumr7WBs1Oxas9kaBI9IC-iN6t-lhV3lRON0CrD8W1UbOGf9ggwaeAKgVnL9fe1Y67Oc90Kfs00d3mdFRQ_bUgUtnqEtibwPRj3Jk6jn-B7fIdfoITnFTa2Rk2ZDp2yjJPSqDuf3iM4uiha6KOh2AeWN9294z0mjnhEldBiKQYKfsE5NbqbIS4yhwdCyqutYclXUjfp0CobIphJjBqKSEuLv0B4WiybZsMmIir9TsQYWNuJ_e80tf7c2VmC3NjYZEoWLvi893OdZnAx1lMI1Z7xJebB-jl8iDv3cTKD5_HziYgYO6m9h0r6WHCCtj9Xw5vKhlk7JHkyioBlxZ4ZjgoFdzA6FitqcoVpFfBBJTGpfFITEbMc5xPSnPaJNdq1A0Uc4YqqvJHNA-iLnAS_oLVYv26Qg1MPs5Z8SNWx_vzQj-_cMnrZhXFdOyN_VOyX3fWxMsnhdPVX0tNfXmZo2BrzFyIJQoRGyBC1LQoAjubxijt4cMeFP5uCVNIzdN_5RJyCImW0sSFJxCkZFrzMRGG9bmSgQ7Yqldc4ms3MMRAqbCEO54mKYBDVtLLBX8jd8H387E2kcuQ60HbQfPbVi3jpDp4lxwHqbo-NOC1iiqDevq6DupcgRYjHVOtD-DJK3UQReAfSXrOkm-YrARsq-lVDfawiOpQcaWgImGnO5Aesk2mPBHRAWpG5foTOlptK0imEQ5Lf3PLex1hYmm8bhI06VoVDneMallmayXF92LZZiuX46z1r_xWdgBkgA8-oOsZ8uL1VVr4slylFSm_R92UehLCQpNdN1l1C-IKMmY3UNQH2aVXBt_KlSbxhwDgqouhRpjasiFsQd_Nlb2PzdvU2H6lj6vdtz6DUxb27lxGhhgnyNSYKUk46Zyfa6WM0c_2rHiah9kLU85LJ8mj88kgUbL40zUDgzPVRYr8HX9YJWN9ocVCHsQTbWKlB7hmoGDlZvyNEO78iISqevu_oSL609YDn9uhKH9rjcd5rRyIcGJk216HCH1lqWwefM5PWq0h5A",
+          "id": "rs_6a5a372d1b177e91142c4cd0:rs_bd6d87abc2a32d22",
+          "summary": [],
+          "type": "reasoning"
+        },
+        {
+          "content": [
+            {
+              "annotations": [],
+              "logprobs": [],
+              "text": "I'll check the current weather in Paris for you.",
+              "type": "output_text"
+            }
+          ],
+          "id": "rs_bd5de70ff1f150d1",
+          "phase": "commentary",
+          "role": "assistant",
+          "status": "completed",
+          "type": "message"
+        },
+        {
+          "arguments": "{\"location\": \"Paris, France\", \"unit\": \"celsius\"}",
+          "call_id": "call_b48c10da13e1b9f3",
+          "id": "fc_b48c10da13e1b9f3",
+          "name": "get_weather",
+          "status": "completed",
+          "type": "function_call"
+        }
+      ],
+      "parallel_tool_calls": true,
+      "reasoning": {
+        "effort": "low"
+      },
+      "service_tier": "auto",
+      "status": "completed",
+      "store": false,
+      "temperature": 1.0,
+      "tool_choice": "auto",
+      "tools": [
+        {
+          "description": "Get current weather information for a location",
+          "name": "get_weather",
+          "parameters": {
+            "additionalProperties": false,
+            "properties": {
+              "location": {
+                "type": "string"
+              },
+              "unit": {
+                "enum": [
+                  "celsius",
+                  "fahrenheit"
+                ],
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "strict": false,
+          "type": "function"
+        },
+        {
+          "description": "Tell a funny joke",
+          "name": "tell_joke",
+          "parameters": {
+            "additionalProperties": false,
+            "properties": {
+              "topic": {
+                "description": "Topic for the joke",
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "strict": false,
+          "type": "function"
+        },
+        {
+          "description": "Get the current time",
+          "name": "get_time",
+          "parameters": {
+            "additionalProperties": false,
+            "properties": {},
+            "type": "object"
+          },
+          "strict": false,
+          "type": "function"
+        }
+      ],
+      "top_logprobs": 0,
+      "top_p": 1.0,
+      "truncation": "disabled",
+      "usage": {
+        "input_tokens": 653,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens": 135,
+        "output_tokens_details": {
+          "reasoning_tokens": 49
+        },
+        "total_tokens": 788
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-length": [
+        "3263"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 17 Jul 2026 14:07:41 GMT"
+      ],
+      "vary": [
+        "origin, access-control-request-method, access-control-request-headers"
+      ],
+      "x-ratelimit-limit-requests": [
+        "60"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "2100000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "53"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "2097236"
+      ],
+      "x-request-id": [
+        "4dc8750d-57a8-444e-9346-2239a6cbeda2"
+      ],
+      "x-route": [
+        "model-api-rust"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

@@ -1,0 +1,179 @@
+{
+  "model_spec": "meta:muse-spark-1.1",
+  "provider": "meta",
+  "request": {
+    "body": {
+      "b64": "eyJpbmNsdWRlIjpbInJlYXNvbmluZy5lbmNyeXB0ZWRfY29udGVudCJdLCJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IlRlbGwgbWUgYSBqb2tlIGFib3V0IGNhdHMiLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjo2NDAwLCJtb2RlbCI6Im11c2Utc3BhcmstMS4xIiwicmVhc29uaW5nIjp7ImVmZm9ydCI6ImxvdyJ9LCJzdG9yZSI6ZmFsc2UsInN0cmVhbSI6ZmFsc2UsInRvb2xzIjpbeyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJwYXJhbWV0ZXJzIjp7ImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjpmYWxzZSwicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJ0eXBlIjoic3RyaW5nIn19LCJ0eXBlIjoib2JqZWN0In0sInN0cmljdCI6ZmFsc2UsInR5cGUiOiJmdW5jdGlvbiJ9XX0="
+    },
+    "canonical_json": {
+      "include": [
+        "reasoning.encrypted_content"
+      ],
+      "input": [
+        {
+          "content": [
+            {
+              "text": "Tell me a joke about cats",
+              "type": "input_text"
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "max_output_tokens": 6400,
+      "model": "muse-spark-1.1",
+      "reasoning": {
+        "effort": "low"
+      },
+      "store": false,
+      "stream": false,
+      "tools": [
+        {
+          "description": "Get current weather information for a location",
+          "name": "get_weather",
+          "parameters": {
+            "additionalProperties": false,
+            "properties": {
+              "location": {
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "strict": false,
+          "type": "function"
+        }
+      ]
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.6.3"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.meta.ai/v1/responses"
+  },
+  "response": {
+    "body": {
+      "background": false,
+      "completed_at": 1784297256.0,
+      "created_at": 1784297254.0,
+      "error": null,
+      "id": "resp_6a5a37280f8680ae5bed4355",
+      "incomplete_details": null,
+      "instructions": null,
+      "max_output_tokens": 6400,
+      "model": "muse-spark-1.1",
+      "object": "response",
+      "output": [
+        {
+          "encrypted_content": "Q-PaDgFNWyWVlq-6jzdDVQEVAK4btyvkkin1HGfzczBGUQ24taSbD7T9MMHO7gkagCjzjaY7amwJ1ArHZYLDLH47GcglKoRwmSXu4_ShRO-GJ9fZKvqE7M1wTbrRA2Q2Q0wVd_OAbL3PAos4pPRy5Tqp0ewsRT7yNm0lH8k49xB03-MIToe2mdwWHVOYUeFr3xrbq4rl_ULUGoxePfuhsBIYwcgMFIAxwXjLzL-U-Jg4lcLquYMlpKRUQCllkUuYXjqGuzqNXCA-yNuwO3VWvIxQSEok0M4SfMeYbZWpBtqlpMes1aUiSpNRCmJtsYt428ZLHU6t5kc6QZIdFfo__sAhyfcrSwiBms-3Yd14Qcc7gDC6heRZ-ng8WztVMwiel0nMeMSHfnExubC5M0tztUEmUEBxYxdtpWJotq9UPA2NlI-7oNLjkWwGjA_tsOl54rqyqA9YGfmAPOpJ4LZUjBrnAb6cLlu4NIZZCv-rPpCvVI9-5fRvLj0MM-yD981cUz403WSO1TPoVzETG7f-uK4aYREfVlMxOdq0_-eFkEG_da-pjMXVWGndu6VdAgQ85SGQ0pSNszWMcBXq9FaxM4Xawh9lghXC01nXS3vB6_ajuqWltZ9LBRJOohVuMhaXeXaCMMCVXPdnreHT7adK593nya6zKI3aI_7IYSZC1ibiPp-jYHZNz4Em42axh1nO0eX03TdtPTzcJ_pkRGlk30anBhmXvMANG6f9ChcAIAUaI5m8DyZti1ctfab7-gWLAij3CscW2RhuEVNAAU9UxpIWGyQE4Wao0sIxc1x-LeMeaDnyipjMMDFtAsVUvQpZlvRP-vxGMUJsnccnyzk_Le1rsUY3EbxInT98b5Pi7jk9VWWWkT4khbqq6dsgmi3jP-EjxmbQRHb6Bt9uq6c7_vSxVAAMwXqan7fIAw-4gltPsBnxV5xsy8yMAOKZtwvuu-EMT1Dn4dDq-krGUjdPqZkHccpI94XT6EkYIVrYnsdM7RZpvAgcdvxL-vyC4lz_TVivoY2t7IvPHaGyCBUDzDwymSzvckXeEldnmRbvuHHgGI0R0mfNx99ZfFR7ZY8BAjjhINBhNkOdhtEE9Ey1gk45UtPANgvGMsU6SL-MifDrlbmBzXFnnIFSOm0suaFIcjfGFs8IuTpByQzKYYl21vOKoSNLIFQp2EtBuEzAdgNm4-rZP5J69YihMUvqYYoq4_qSfvcKY1J0f-gbcCC78-z6GBJ2YDjPKuOj9-o5U5hhlCqJnkDQf4tXsMpf-6RwjU7Mzm72tZKR7byodZXZeT_Zs8C8IDF5p6_k40EqMTZztDkVXqvJ35hCW_MDpqd58EcCoEru4XVdWbIvofAN-kDW8jJlifWztwUoSp22ONqUNhpNMPwuWW8eFUgQfALAhgNwDjWfiTuSuIBrDpxxwRjWAxzhvB5y2WyI0cCGSYPuObKStjUjdZdaBDinEy6S1_nVSdbRJvSo9Vde53HAQOQhtJQCfjxesO4na_SbZQVbBIgH9P5i4WOJgCjTJPzMZpLQ7fXDTrLuloQcL37wQBl-X1ZJk946RWNEAoYTneP5UCJ62uaYepUX6BTohDdPDbSmq_tEujcQqWJHP4NUUdaXVVEVkRsnj9Zxv_sZhQ0k23XoYW5UkXL9S6Rv2iOR6ecNcSq29sucVCaEiWD2Cd1zyak6C_dZfdeYkuY9KTcfm4igRLvWCGHgqrJlVvlQlbP_1f96VNcFkYjFcX3QpWiLTYiFN-9VA2sGUAQh5XQ5Vn_0RhvoGCH-uGf3DszIEZFzjqUVLZcHHWkDKMcnEPfeEJIwoGkAINfsnz3DTQndlpIw_rJc8Mjh2V-DT0MRTq0Iyg00qbjwxSj0u_qmz73TcPnaRX2iFQRg2EzTuFuySJlYbTnlTkpLVGOFffVZOLcF-Zsvs5cbsevQ0qu5QQCr5vR503Pq_m-QEME-s7Va_mzWgUaOWS7Gcf7GIq8dN7aXpvt41Di2jDd0VBhUJSviHpo8tprUn992ZpdAV0BIF0XzIEjBfULSzzNQBpTiiRR91fNpG9FpEGp_spZu2Z9a-hf59QRYaDOU_bZrMLWBgb8nhMyfJPmI88At1qEMS7pb7ahGXD9FyQnXNVzrgr108sDkAhJ4eQL0OKzYzxh1sKfpg9Q8J-DCnVoMatGtaH-HpfRUZwxleVbD6mNrPVabztcH4KGC00OOg5tkw9XKRTtTRRJjXIj0PzKI7MlDl8yguOR2eYWn_MqrkgGmZfl0CRHnXasz3nQR7fFXkU9-BTXkErN207uctJ8_kNQpJ3p-hrFM87K39J6ybJtpxO1SoOzHEa6Svfkw_oHtn99PDqSPPIDC4gPIBz0eR8DyrPSfkjh93wUs33X6uxSVcmZLM7qCCB_hW8BP9gyrsNwrVKQhRgHJy43juXyq7zSVL6Kc7msLKNJiqeTwmHfPDjnMWR9-GzD8TaD7rUkz-ccgEIKQBQT0wKlWQkMeXB2UCS81EYdd8kQtv5ZyXPw9AV3drCKHPfGWd0keyn6ryippf4tZLvvKHDlJTJNhDxvzT5fR6iljD3WdYGNPcRik8L-EsTnl1bkEMbkK2QEITLwsHvNqpRkTEUDXZtbBImu4D0K5XchpN9qVdZWEu3cyJGIl2GP3ibtC2tEMJnDpk0LsHfjHw2J1cy4Z53lh46JujK1RuRt2j4Ys1qs3Vq2dTUy3ItZ16EyvFm-jAtNCJS7BPNckUQYTDTWnEdugPuFqsIgx4e_-Hv1NuUAIWS1v6e84oJc7JvCK995hLTE",
+          "id": "rs_6a5a37280f8680ae5bed4355:rs_a9c96ca0c8804eb6",
+          "summary": [],
+          "type": "reasoning"
+        },
+        {
+          "content": [
+            {
+              "annotations": [],
+              "logprobs": [],
+              "text": "Why did the cat sit on the computer?\n\nTo keep an eye on the mouse.",
+              "type": "output_text"
+            }
+          ],
+          "id": "msg_a28768f32dc05d09",
+          "role": "assistant",
+          "status": "completed",
+          "type": "message"
+        }
+      ],
+      "parallel_tool_calls": true,
+      "reasoning": {
+        "effort": "low"
+      },
+      "service_tier": "auto",
+      "status": "completed",
+      "store": false,
+      "temperature": 1.0,
+      "tool_choice": "auto",
+      "tools": [
+        {
+          "description": "Get current weather information for a location",
+          "name": "get_weather",
+          "parameters": {
+            "additionalProperties": false,
+            "properties": {
+              "location": {
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "strict": false,
+          "type": "function"
+        }
+      ],
+      "top_logprobs": 0,
+      "top_p": 1.0,
+      "truncation": "disabled",
+      "usage": {
+        "input_tokens": 536,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens": 299,
+        "output_tokens_details": {
+          "reasoning_tokens": 272
+        },
+        "total_tokens": 835
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-length": [
+        "3983"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 17 Jul 2026 14:07:36 GMT"
+      ],
+      "vary": [
+        "origin, access-control-request-method, access-control-request-headers"
+      ],
+      "x-ratelimit-limit-requests": [
+        "60"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "2100000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "55"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "2098793"
+      ],
+      "x-request-id": [
+        "a74ab1d0-0dec-483c-8208-76263b8cae45"
+      ],
+      "x-route": [
+        "model-api-rust"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}
