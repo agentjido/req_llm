@@ -30,6 +30,7 @@ defmodule ReqLLM.ToolResult do
   """
 
   @metadata_key :tool_output
+  @content_source_key :req_llm_tool_result_content_source
 
   @schema Zoi.struct(__MODULE__, %{
             content: Zoi.list(Zoi.any()) |> Zoi.optional(),
@@ -63,5 +64,39 @@ defmodule ReqLLM.ToolResult do
 
   def put_output_metadata(metadata, output) when is_map(metadata) do
     Map.put(metadata, @metadata_key, output)
+  end
+
+  @doc "Preserves a tool result's output and explicit-content provenance in message metadata."
+  @spec put_message_metadata(map(), t()) :: map()
+  def put_message_metadata(metadata, %__MODULE__{} = result) when is_map(metadata) do
+    metadata
+    |> Map.delete(@content_source_key)
+    |> Map.delete(to_string(@content_source_key))
+    |> put_output_metadata(result.output)
+    |> maybe_mark_explicit_content(result.content)
+  end
+
+  @doc "Returns whether a normalized tool message contains explicitly supplied result content."
+  @spec explicit_content?(ReqLLM.Message.t() | map()) :: boolean()
+  def explicit_content?(%ReqLLM.Message{metadata: metadata}) when is_map(metadata) do
+    explicit_content_metadata?(metadata)
+  end
+
+  def explicit_content?(%{metadata: metadata}) when is_map(metadata) do
+    explicit_content_metadata?(metadata)
+  end
+
+  def explicit_content?(_), do: false
+
+  defp maybe_mark_explicit_content(metadata, nil), do: metadata
+  defp maybe_mark_explicit_content(metadata, []), do: metadata
+
+  defp maybe_mark_explicit_content(metadata, _content) do
+    Map.put(metadata, @content_source_key, :explicit)
+  end
+
+  defp explicit_content_metadata?(metadata) do
+    Map.get(metadata, @content_source_key) in [:explicit, "explicit"] or
+      Map.get(metadata, to_string(@content_source_key)) in [:explicit, "explicit"]
   end
 end

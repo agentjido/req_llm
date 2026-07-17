@@ -1344,7 +1344,7 @@ defmodule ReqLLM.Context do
 
   defp normalize_tool_result_struct(%ToolResult{} = result) do
     content = normalize_tool_result_content(result.content, result.output)
-    metadata = ToolResult.put_output_metadata(result.metadata, result.output)
+    metadata = ToolResult.put_message_metadata(result.metadata, result)
     {content, metadata}
   end
 

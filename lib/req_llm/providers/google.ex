@@ -2462,6 +2462,9 @@ defmodule ReqLLM.Providers.Google do
     output = ReqLLM.ToolResult.output_from_message(message)
 
     cond do
+      ReqLLM.ToolResult.explicit_content?(message) ->
+        %{content: extract_content_text(raw_content)}
+
       is_map(output) or is_list(output) ->
         output
 

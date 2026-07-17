@@ -61,4 +61,30 @@ defmodule ReqLLM.ToolResultTest do
              }
     end
   end
+
+  describe "message metadata" do
+    test "marks non-empty explicit content without changing the output value" do
+      result = %ToolResult{
+        output: %{internal_cursor: "cursor_123"},
+        content: [ReqLLM.Message.ContentPart.text("A concise result")]
+      }
+
+      metadata = ToolResult.put_message_metadata(result.metadata, result)
+      message = %Message{role: :tool, metadata: metadata}
+
+      assert ToolResult.output_from_message(message) == %{internal_cursor: "cursor_123"}
+      assert ToolResult.explicit_content?(message)
+    end
+
+    test "does not mark content derived from output" do
+      result = %ToolResult{
+        output: %{ok: true},
+        metadata: %{req_llm_tool_result_content_source: :explicit}
+      }
+
+      metadata = ToolResult.put_message_metadata(result.metadata, result)
+
+      refute ToolResult.explicit_content?(%Message{role: :tool, metadata: metadata})
+    end
+  end
 end

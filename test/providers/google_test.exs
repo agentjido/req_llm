@@ -430,6 +430,43 @@ defmodule ReqLLM.Providers.GoogleTest do
       assert function_response["response"]["temperature"] == 72
     end
 
+    test "encode_body prefers explicit model-facing content over application output" do
+      {:ok, model} = ReqLLM.model("google:gemini-1.5-flash")
+
+      tool_result =
+        Context.tool_result(
+          "call_1",
+          "search_documents",
+          %ReqLLM.ToolResult{
+            output: %{records: [%{id: 1}], internal_cursor: "cursor_123"},
+            content: [ReqLLM.Message.ContentPart.text("One matching document was found.")]
+          }
+        )
+
+      context = Context.new([tool_result])
+
+      mock_request = %Req.Request{
+        options: [
+          context: context,
+          model: model.model,
+          stream: false,
+          operation: :chat
+        ]
+      }
+
+      updated_request = Google.encode_body(mock_request)
+      decoded = ReqLLM.Test.Helpers.json_body(updated_request)
+
+      [tool_part] =
+        decoded["contents"]
+        |> Enum.flat_map(& &1["parts"])
+        |> Enum.filter(&Map.has_key?(&1, "functionResponse"))
+
+      assert tool_part["functionResponse"]["response"] == %{
+               "content" => "One matching document was found."
+             }
+    end
+
     test "encode_body nests file content in functionResponse.parts for Gemini 3+" do
       {:ok, model} = ReqLLM.model("google:gemini-3-pro-preview")
 

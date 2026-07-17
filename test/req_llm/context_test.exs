@@ -1099,6 +1099,7 @@ defmodule ReqLLM.ContextTest do
 
       assert msg.metadata[:request_id] == "req_explicit"
       assert msg.metadata[:tool_output] == %{ok: true, result: %{sum: 3}}
+      assert ReqLLM.ToolResult.explicit_content?(msg)
     end
 
     test "normalizes full tool conversation flow" do

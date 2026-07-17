@@ -809,9 +809,13 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
       }
     else
       output =
-        case ReqLLM.ToolResult.output_from_message(msg) do
-          nil -> extract_tool_output_text(msg.content)
-          value -> value
+        if ReqLLM.ToolResult.explicit_content?(msg) do
+          extract_tool_output_text(msg.content)
+        else
+          case ReqLLM.ToolResult.output_from_message(msg) do
+            nil -> extract_tool_output_text(msg.content)
+            value -> value
+          end
         end
 
       output_string =

@@ -352,6 +352,31 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
       assert Jason.decode!(tool_output["output"]) == %{"temp" => 72}
     end
 
+    test "prefers explicit model-facing content over application output" do
+      tool_result =
+        ReqLLM.Context.tool_result(
+          "call_1",
+          "search_documents",
+          %ReqLLM.ToolResult{
+            output: %{records: [%{id: 1}], internal_cursor: "cursor_123"},
+            content: [ReqLLM.Message.ContentPart.text("One matching document was found.")]
+          }
+        )
+
+      context = %ReqLLM.Context{messages: [tool_result]}
+      request = build_request(context: context)
+
+      encoded = ResponsesAPI.encode_body(request)
+      body = ReqLLM.Test.Helpers.json_body(encoded)
+
+      tool_output =
+        Enum.find(body["input"], fn item ->
+          item["type"] == "function_call_output"
+        end)
+
+      assert tool_output["output"] == "One matching document was found."
+    end
+
     test "skips builtin tool calls when replaying assistant context" do
       contexts = [
         %ReqLLM.Context{
