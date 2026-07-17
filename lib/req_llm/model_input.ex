@@ -8,19 +8,32 @@ defmodule ReqLLM.ModelInput do
   }
 
   @spec merge_tuple_defaults(ReqLLM.model_input(), atom(), keyword()) :: keyword()
-  def merge_tuple_defaults({provider, model_id, tuple_opts}, operation, call_opts)
+  def merge_tuple_defaults(model_input, operation, call_opts) do
+    {merged, warnings} = merge_tuple_defaults_with_warnings(model_input, operation, call_opts)
+    Enum.each(warnings, &IO.warn/1)
+    merged
+  end
+
+  @doc false
+  @spec merge_tuple_defaults_with_warnings(ReqLLM.model_input(), atom(), keyword()) ::
+          {keyword(), [binary()]}
+  def merge_tuple_defaults_with_warnings(
+        {provider, model_id, tuple_opts},
+        operation,
+        call_opts
+      )
       when is_atom(provider) and is_binary(model_id) and is_list(call_opts) do
     if Keyword.keyword?(tuple_opts) do
       {defaults, ignored} = select_defaults(tuple_opts, operation)
-      warn_ignored(operation, ignored, tuple_opts, call_opts)
-      merge_defaults(defaults, call_opts)
+      warnings = ignored_defaults_warnings(operation, ignored, tuple_opts, call_opts)
+      {merge_defaults(defaults, call_opts), warnings}
     else
-      warn_invalid_container(operation, call_opts)
-      call_opts
+      {call_opts, invalid_container_warnings(operation, call_opts)}
     end
   end
 
-  def merge_tuple_defaults(_model_input, _operation, call_opts), do: call_opts
+  def merge_tuple_defaults_with_warnings(_model_input, _operation, call_opts),
+    do: {call_opts, []}
 
   defp select_defaults(tuple_opts, operation) do
     schema = option_schema(operation).schema
@@ -68,24 +81,28 @@ defmodule ReqLLM.ModelInput do
     Keyword.merge(defaults, call_opts)
   end
 
-  defp warn_ignored(_operation, [], _tuple_opts, _call_opts), do: :ok
+  defp ignored_defaults_warnings(_operation, [], _tuple_opts, _call_opts), do: []
 
-  defp warn_ignored(operation, ignored, tuple_opts, call_opts) do
+  defp ignored_defaults_warnings(operation, ignored, tuple_opts, call_opts) do
     if warning_enabled?(tuple_opts, call_opts) do
       details = Enum.map_join(ignored, ", ", &format_ignored/1)
 
-      IO.warn(
+      [
         "Ignoring tuple model defaults for #{operation}: #{details}. " <>
           "Pass only documented #{operation} options; explicit call options take precedence."
-      )
+      ]
+    else
+      []
     end
   end
 
-  defp warn_invalid_container(operation, call_opts) do
+  defp invalid_container_warnings(operation, call_opts) do
     if warning_enabled?([], call_opts) do
-      IO.warn(
+      [
         "Ignoring tuple model defaults for #{operation}: the third tuple element must be a keyword list."
-      )
+      ]
+    else
+      []
     end
   end
 
