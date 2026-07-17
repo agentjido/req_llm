@@ -22,6 +22,7 @@ defmodule ReqLLM.HostIntegrationContractTest do
         event_response = stream_response(fixture)
         events = event_response |> StreamResponse.events() |> Enum.to_list()
         :ok = StreamResponse.close(event_response)
+        refute Process.alive?(event_response.metadata_handle)
 
         materialized_response = stream_response(fixture)
         assert {:ok, materialized} = StreamResponse.to_response(materialized_response)
