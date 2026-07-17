@@ -159,6 +159,56 @@ defmodule ReqLLM.Providers.OpenAICodexTest do
       assert [%{"type" => "additional_tools", "role" => "developer"} | _input] = body["input"]
     end
 
+    test "normalizes Responses Lite tools and images after shared Responses encoding" do
+      {:ok, model} = ReqLLM.model("openai_codex:gpt-5.6-sol")
+
+      local_tool =
+        ReqLLM.Tool.new!(
+          name: "lookup",
+          description: "Look up a value",
+          parameter_schema: [value: [type: :string, required: true]],
+          callback: fn args -> {:ok, args} end
+        )
+
+      context =
+        ReqLLM.context([
+          ReqLLM.Context.user([
+            ReqLLM.Message.ContentPart.image_url("https://example.com/image.png"),
+            ReqLLM.Message.ContentPart.image("png", "image/png")
+          ])
+        ])
+
+      {:ok, request} =
+        OpenAICodex.attach_stream(
+          model,
+          context,
+          [
+            tools: [%{"type" => "web_search"}, local_tool],
+            provider_options: [
+              auth_mode: :oauth,
+              access_token: jwt_with_account_id("acct_lite_contract")
+            ]
+          ],
+          nil
+        )
+
+      body = ReqLLM.Test.Helpers.json_body(request)
+      [additional_tools, user_message] = body["input"]
+
+      assert [%{"type" => "function", "name" => "lookup"}] = additional_tools["tools"]
+
+      assert [omission, data_image] = user_message["content"]
+
+      assert omission == %{
+               "type" => "input_text",
+               "text" => "image content omitted because remote image URLs are not supported"
+             }
+
+      assert data_image["type"] == "input_image"
+      assert String.starts_with?(data_image["image_url"], "data:image/png;base64,")
+      refute Map.has_key?(data_image, "detail")
+    end
+
     test "builds websocket request with codex websocket beta" do
       {:ok, model} = ReqLLM.model("openai_codex:gpt-5.3-codex-spark")
 

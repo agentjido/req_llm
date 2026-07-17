@@ -2,6 +2,8 @@ defmodule ReqLLM.Providers.OpenAICodex.ResponsesLite do
   @moduledoc false
 
   @header "x-openai-internal-codex-responses-lite"
+  @hosted_tool_types ~w(web_search web_search_preview file_search mcp x_search code_interpreter)
+  @remote_image_omission "image content omitted because remote image URLs are not supported"
 
   @bundled_model_metadata %{
     "gpt-5.6-sol" => %{use_responses_lite: true},
@@ -38,13 +40,13 @@ defmodule ReqLLM.Providers.OpenAICodex.ResponsesLite do
   end
 
   defp apply_lite_contract(body) do
-    tools = body |> Map.get("tools") |> List.wrap()
+    tools = body |> Map.get("tools") |> List.wrap() |> client_executed_tools()
     instructions = Map.get(body, "instructions", "")
 
     input =
       [%{"type" => "additional_tools", "role" => "developer", "tools" => tools}]
       |> maybe_add_instructions(instructions)
-      |> Kernel.++(body |> Map.get("input") |> List.wrap() |> strip_image_details())
+      |> Kernel.++(body |> Map.get("input") |> List.wrap() |> prepare_images())
 
     body
     |> Map.put("input", input)
@@ -74,19 +76,38 @@ defmodule ReqLLM.Providers.OpenAICodex.ResponsesLite do
 
   defp put_reasoning_context(_reasoning), do: %{"context" => "all_turns"}
 
-  defp strip_image_details(items) when is_list(items), do: Enum.map(items, &strip_image_details/1)
+  defp client_executed_tools(tools) do
+    Enum.reject(tools, fn tool -> tool_type(tool) in @hosted_tool_types end)
+  end
 
-  defp strip_image_details(%{"type" => "input_image"} = item) do
+  defp tool_type(%{"type" => type}) when is_atom(type), do: Atom.to_string(type)
+  defp tool_type(%{"type" => type}), do: type
+  defp tool_type(%{type: type}) when is_atom(type), do: Atom.to_string(type)
+  defp tool_type(%{type: type}), do: type
+  defp tool_type(_tool), do: nil
+
+  defp prepare_images(items) when is_list(items), do: Enum.map(items, &prepare_images/1)
+
+  defp prepare_images(%{"type" => "input_image", "image_url" => "data:" <> _rest} = item) do
     item
     |> Map.delete("detail")
-    |> Map.new(fn {key, value} -> {key, strip_image_details(value)} end)
+    |> Map.new(fn {key, value} -> {key, prepare_images(value)} end)
   end
 
-  defp strip_image_details(%{} = item) do
-    Map.new(item, fn {key, value} -> {key, strip_image_details(value)} end)
+  defp prepare_images(%{"type" => "input_image", "image_url" => image_url})
+       when is_binary(image_url) do
+    %{"type" => "input_text", "text" => @remote_image_omission}
   end
 
-  defp strip_image_details(value), do: value
+  defp prepare_images(%{"type" => "input_image"} = item) do
+    Map.delete(item, "detail")
+  end
+
+  defp prepare_images(%{} = item) do
+    Map.new(item, fn {key, value} -> {key, prepare_images(value)} end)
+  end
+
+  defp prepare_images(value), do: value
 
   defp model_metadata_value(%LLMDB.Model{extra: extra}, key) when is_map(extra) do
     metadata = Map.get(extra, :openai_codex) || Map.get(extra, "openai_codex") || %{}

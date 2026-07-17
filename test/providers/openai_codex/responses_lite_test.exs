@@ -88,6 +88,60 @@ defmodule ReqLLM.Providers.OpenAICodex.ResponsesLiteTest do
 
       assert ResponsesLite.apply_body(body, model("gpt-5.5")) == body
     end
+
+    test "keeps client-executed tools and omits provider-hosted tools" do
+      body = %{
+        "tools" => [
+          %{"type" => "web_search"},
+          %{"type" => :file_search},
+          %{type: :code_interpreter},
+          %{"type" => "function", "name" => "lookup"}
+        ]
+      }
+
+      transformed = ResponsesLite.apply_body(body, model("gpt-5.6-sol"))
+
+      assert [%{"type" => "additional_tools", "tools" => tools}] = transformed["input"]
+      assert tools == [%{"type" => "function", "name" => "lookup"}]
+    end
+
+    test "replaces remote images and preserves data images without detail" do
+      body = %{
+        "input" => [
+          %{
+            "type" => "message",
+            "role" => "user",
+            "content" => [
+              %{
+                "type" => "input_image",
+                "image_url" => "https://example.com/image.png",
+                "detail" => "high"
+              },
+              %{
+                "type" => "input_image",
+                "image_url" => "data:image/png;base64,abc",
+                "detail" => "original"
+              }
+            ]
+          }
+        ]
+      }
+
+      transformed = ResponsesLite.apply_body(body, model("gpt-5.6-sol"))
+      [_additional_tools, user_message] = transformed["input"]
+
+      assert [omission, data_image] = user_message["content"]
+
+      assert omission == %{
+               "type" => "input_text",
+               "text" => "image content omitted because remote image URLs are not supported"
+             }
+
+      assert data_image == %{
+               "type" => "input_image",
+               "image_url" => "data:image/png;base64,abc"
+             }
+    end
   end
 
   defp model(id, extra \\ %{}) do
