@@ -21,17 +21,19 @@ defmodule ReqLLM.Telemetry do
   | `[:req_llm, :reasoning, :update]`    | `system_time`                  |
   | `[:req_llm, :reasoning, :stop]`      | `duration`, `system_time`      |
   | `[:req_llm, :token_usage]`           | token + cost counters          |
+  | `[:req_llm, :tool_call_args_lost]`   | `count`                        |
 
   `duration` is in native monotonic time units — convert with
   `System.convert_time_unit/3` if you want milliseconds.
 
   ## Request metadata
 
-  All request lifecycle events carry the same metadata map: `request_id`,
+  All request lifecycle events carry the same base metadata map: `request_id`,
   `operation`, `mode`, `provider`, `model`, `transport`, `reasoning`,
   `request_summary`, `response_summary`, `http_status`, `finish_reason`,
-  `usage`, `request_options`, `server`, `streaming`. The full shape and a
-  worked example live in the [Telemetry guide](https://hexdocs.pm/req_llm/telemetry.html).
+  `usage`, `request_options`, `server`, `request_started_system_time`.
+  Streaming requests additionally carry `streaming`. The full shape and a worked
+  example live in the [Telemetry guide](https://hexdocs.pm/req_llm/telemetry.html).
 
   Reasoning events never include raw thinking text — they are metadata-only
   even with payload capture enabled.
@@ -59,6 +61,8 @@ defmodule ReqLLM.Telemetry do
 
   - [Telemetry guide](https://hexdocs.pm/req_llm/telemetry.html) — full event
     shapes, reasoning normalization, payload capture, attach examples
+  - [V1 telemetry contract](https://hexdocs.pm/req_llm/telemetry-contract.html) —
+    stability, units, redaction, and complete event inventory
   - `ReqLLM.OpenTelemetry` — the auto-attached GenAI client span bridge
   - `ReqLLM.Telemetry.OpenTelemetry` — dependency-free OTel mapper
   """
@@ -80,6 +84,24 @@ defmodule ReqLLM.Telemetry do
   @reasoning_start_event [:req_llm, :reasoning, :start]
   @reasoning_update_event [:req_llm, :reasoning, :update]
   @reasoning_stop_event [:req_llm, :reasoning, :stop]
+  @tool_call_args_lost_event [:req_llm, :tool_call_args_lost]
+
+  @stable_events [
+    @request_start_event,
+    @request_stop_event,
+    @request_exception_event,
+    @token_usage_event
+  ]
+
+  @experimental_events [
+    @request_retry_event,
+    @reasoning_start_event,
+    @reasoning_update_event,
+    @reasoning_stop_event,
+    @tool_call_args_lost_event
+  ]
+
+  @events @stable_events ++ @experimental_events
 
   @type payload_mode :: :none | :raw
   @type lifecycle_mode :: :sync | :stream
@@ -126,6 +148,33 @@ defmodule ReqLLM.Telemetry do
           reasoning_observation: map(),
           response_summary_state: map()
         }
+
+  @doc """
+  Returns every native telemetry event emitted by ReqLLM V1.
+
+  Use `stable_events/0` when attaching a long-lived integration. The remaining
+  events are included here so diagnostic tooling can attach without maintaining
+  a duplicate inventory.
+  """
+  @spec events() :: [[atom()]]
+  def events, do: @events
+
+  @doc """
+  Returns the V1 stable telemetry core.
+
+  This includes request lifecycle events and the backwards-compatible token
+  usage event. Stream first-output timing is carried by request lifecycle
+  metadata rather than a separate event.
+  """
+  @spec stable_events() :: [[atom()]]
+  def stable_events, do: @stable_events
+
+  @doc """
+  Returns events that remain available in V1 but whose detailed shape is
+  experimental.
+  """
+  @spec experimental_events() :: [[atom()]]
+  def experimental_events, do: @experimental_events
 
   @doc """
   Returns the private key used to store telemetry context on Req requests.

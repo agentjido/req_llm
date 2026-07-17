@@ -8,6 +8,7 @@ Every event for a logical request shares the same `request_id`, so request lifec
 
 - [Quickstart](#quickstart)
 - [Native telemetry events](#native-telemetry-events)
+  - [V1 stability contract](#v1-stability-contract)
   - [Event families](#event-families)
   - [Measurements](#measurements)
   - [Request metadata](#request-metadata)
@@ -73,6 +74,18 @@ See [Langfuse](#langfuse) for the OTLP endpoint and auth setup.
 
 ## Native telemetry events
 
+### V1 stability contract
+
+For long-lived integrations, attach to `ReqLLM.Telemetry.stable_events/0`. It
+contains request start, stop, and exception plus the backwards-compatible token
+usage event. Streaming first-output timing is part of request lifecycle metadata,
+so streaming does not require a separate event subscription.
+
+`ReqLLM.Telemetry.events/0` returns the complete V1 inventory, including
+diagnostic events whose detailed metadata remains experimental. See the
+[V1 telemetry contract](telemetry-contract.md) for the exhaustive event, field,
+unit, stability, redaction, and OpenTelemetry mapping inventory.
+
 ### Event families
 
 | Event | When it fires |
@@ -85,6 +98,7 @@ See [Langfuse](#langfuse) for the OTLP endpoint and auth setup.
 | `[:req_llm, :reasoning, :update]` | Reasoning milestone (not every chunk). |
 | `[:req_llm, :reasoning, :stop]` | Reasoning request finishes, is cancelled, or errors. |
 | `[:req_llm, :token_usage]` | Compatibility event for token and cost tracking. |
+| `[:req_llm, :tool_call_args_lost]` | Diagnostic emitted when streamed tool arguments cannot be recovered. |
 
 Request lifecycle events always include a `reasoning` map, even when the operation does not support reasoning — the snapshot is explicit about that case.
 
@@ -92,6 +106,7 @@ Request lifecycle events always include a `reasoning` map, even when the operati
 
 - `request.start`, `reasoning.start`, `reasoning.update` emit `%{system_time: integer}`.
 - `request.retry`, `request.stop`, `request.exception`, `reasoning.stop` emit `%{duration: integer, system_time: integer}`.
+- `tool_call_args_lost` emits `%{count: 1}`.
 
 `duration` is in native monotonic time units — convert with `System.convert_time_unit/3` if you want milliseconds.
 For `request.retry`, it is the completed provider attempt duration. Its `retry`
@@ -101,14 +116,17 @@ included.
 
 ### Request metadata
 
-Every request lifecycle event includes:
+Every request lifecycle event includes these base keys:
 
 - `request_id`, `operation`, `mode`, `provider`, `model`, `transport`
 - `reasoning`, `request_summary`, `response_summary`
 - `http_status`, `finish_reason`, `usage`
-- `request_options`, `server`, `streaming`
+- `request_options`, `server`, `request_started_system_time`
 
-When payload capture is enabled, `request_payload` and `response_payload` are also included.
+Streaming requests additionally include `streaming`. When payload capture is
+enabled, `request_payload` and `response_payload` are also included. Retry events
+add `retry`, exception events add `error`, and terminal streaming events may add
+`builtin_tool_timing` when server-side builtin tool timings are available.
 
 `request_options` is a compact map of normalized inference parameters extracted from the original call: `temperature`, `top_p`, `top_k`, `max_tokens`, `frequency_penalty`, `presence_penalty`, `stop_sequences`, `seed`, `n` (choice count), `stream?`, `encoding_formats`, `conversation_id`, `service_tier`, `receive_timeout`, `total_timeout`, `stream_idle_timeout`, and `max_retries`. Nil values are dropped.
 
@@ -235,7 +253,13 @@ Reasoning events never include raw thinking text. They are metadata-only, even w
 
 `[:req_llm, :token_usage]` remains available for existing consumers and fires for both streaming and non-streaming requests.
 
-Measurements: `input_tokens`, `output_tokens`, `total_tokens`, `input_cost`, `output_cost`, `total_cost`, `reasoning_tokens`.
+Measurements preserve the V1 nested shape:
+
+- `tokens` — normalized token counters such as `input`, `output`, `total_tokens`,
+  `reasoning`, `cached_input`, and `cache_creation` when available.
+- `cost` — total USD cost or `nil`.
+- `input_cost`, `output_cost`, `reasoning_cost`, `total_cost` — optional USD
+  breakdown keys when model pricing is available.
 
 Metadata: `model`, `request_id`, `operation`, `mode`, `provider`, `transport`.
 

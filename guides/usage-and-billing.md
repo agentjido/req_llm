@@ -298,9 +298,12 @@ When you audit reasoning-heavy workloads, prefer the normalized `reasoning` snap
 ```
 
 Event measurements include:
-- `input_tokens`, `output_tokens`, `total_tokens`
-- `input_cost`, `output_cost`, `total_cost`
-- `reasoning_tokens` (when applicable)
+
+- `tokens` — the normalized token map, including `input`, `output`,
+  `total_tokens`, and `reasoning` when available
+- `cost` — total USD cost or `nil`
+- `input_cost`, `output_cost`, `reasoning_cost`, and `total_cost` when model
+  pricing is available
 
 See the [Telemetry Guide](telemetry.md) for the full event contract, reasoning lifecycle, milestone semantics, and payload capture options.
 

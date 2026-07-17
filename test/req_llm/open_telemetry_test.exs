@@ -90,6 +90,29 @@ defmodule ReqLLM.OpenTelemetryTest do
     end
   end
 
+  test "publishes the stable lifecycle subset and rejects duplicate handler ids safely" do
+    handler_id = "req-llm-otel-#{System.unique_integer([:positive])}"
+
+    assert OpenTelemetry.events() == [
+             [:req_llm, :request, :start],
+             [:req_llm, :request, :stop],
+             [:req_llm, :request, :exception]
+           ]
+
+    assert :ok = OpenTelemetry.attach(handler_id, adapter: FakeAdapter, test_pid: self())
+
+    on_exit(fn ->
+      OpenTelemetry.detach(handler_id)
+    end)
+
+    assert {:error, :already_exists} =
+             OpenTelemetry.attach(handler_id, adapter: FakeAdapter, test_pid: self())
+
+    Enum.each(OpenTelemetry.events(), fn event ->
+      assert Enum.count(:telemetry.list_handlers(event), &(&1.id == handler_id)) == 1
+    end)
+  end
+
   test "attaches a GenAI client span for request lifecycle events" do
     handler_id = "req-llm-otel-#{System.unique_integer([:positive])}"
     request_id = "req-#{System.unique_integer([:positive])}"
