@@ -100,6 +100,48 @@ defmodule ReqLLM.OutputGenerationTest do
       refute Map.has_key?(body, "tools")
     end
 
+    test "preserves existing native response validation for compiled schemas" do
+      output =
+        Output.object(
+          [
+            name: [type: :string, required: true],
+            age: [type: :pos_integer, required: true]
+          ],
+          name: "person"
+        )
+
+      stub = stub_native_object_response(%{"name" => "Ada"}, self())
+
+      assert {:ok, response} =
+               ReqLLM.generate_text(
+                 "openai:gpt-4o-2024-08-06",
+                 "Generate a person",
+                 output: output,
+                 req_http_options: [plug: {Req.Test, stub}]
+               )
+
+      assert Response.output(response, output) == nil
+      assert response.provider_meta[:object_parse_error] == :validation_failed
+      assert_receive {:request_body, _body}
+    end
+
+    test "validates compiled array wrappers before projection" do
+      output = Output.array([name: [type: :string, required: true]], name: "people")
+      stub = stub_native_object_response(%{"value" => [%{"name" => 123}]}, self())
+
+      assert {:ok, response} =
+               ReqLLM.generate_text(
+                 "openai:gpt-4o-2024-08-06",
+                 "Generate people",
+                 output: output,
+                 req_http_options: [plug: {Req.Test, stub}]
+               )
+
+      assert Response.output(response, output) == nil
+      assert response.provider_meta[:object_parse_error] == :validation_failed
+      assert_receive {:request_body, _body}
+    end
+
     test "array output projects the wrapped array while retaining raw arguments" do
       output = Output.array([name: [type: :string, required: true]], name: "people")
       value = [%{"name" => "Ada"}, %{"name" => "Grace"}]

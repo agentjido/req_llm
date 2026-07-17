@@ -65,6 +65,7 @@ defmodule ReqLLM.OutputTest do
       refute contract.wrapped?
       assert contract.compiled_schema.name == "person"
       assert contract.compiled_schema.description == "A generated person"
+      refute is_nil(contract.compiled_schema.compiled)
 
       assert contract.compiled_schema.schema == %{
                "type" => "object",
@@ -106,6 +107,7 @@ defmodule ReqLLM.OutputTest do
       assert {:ok, contract} = Output.compile(output)
       assert contract.wrapped?
       assert contract.compiled_schema.name == "people"
+      refute is_nil(contract.compiled_schema.compiled)
 
       assert get_in(contract.compiled_schema.schema, ["properties", "value", "type"]) ==
                "array"
@@ -144,6 +146,7 @@ defmodule ReqLLM.OutputTest do
 
     test "wraps choice and arbitrary JSON values" do
       assert {:ok, choice_contract} = Output.compile(Output.choice(["sunny", "rainy"]))
+      refute is_nil(choice_contract.compiled_schema.compiled)
 
       assert get_in(choice_contract.compiled_schema.schema, [
                "properties",

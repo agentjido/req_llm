@@ -137,30 +137,52 @@ defmodule ReqLLM.Output do
   end
 
   def compile(%__MODULE__{type: :object, schema: schema} = descriptor) do
-    with :ok <- validate_schema(schema),
+    with {:ok, compiled_schema} <- compile_schema(schema),
          {:ok, json_schema} <- schema_to_json(schema),
          :ok <- ensure_object_schema(json_schema) do
-      {:ok, structured_contract(descriptor, decorate_schema(json_schema, descriptor), false)}
+      {:ok,
+       structured_contract(
+         descriptor,
+         decorate_schema(json_schema, descriptor),
+         compiled_schema.compiled,
+         false
+       )}
     end
   end
 
   def compile(%__MODULE__{type: :array, element: element} = descriptor) do
-    with :ok <- validate_schema(element),
-         {:ok, element_schema} <- schema_to_json(element) do
+    with {:ok, _compiled_element} <- compile_schema(element),
+         {:ok, element_schema} <- schema_to_json(element),
+         {:ok, compiled_wrapper} <- compile_array_wrapper(element) do
       value_schema = %{"type" => "array", "items" => element_schema}
-      {:ok, structured_contract(descriptor, wrap_value_schema(value_schema, descriptor), true)}
+
+      {:ok,
+       structured_contract(
+         descriptor,
+         wrap_value_schema(value_schema, descriptor),
+         compiled_wrapper.compiled,
+         true
+       )}
     end
   end
 
   def compile(%__MODULE__{type: :choice, choices: choices} = descriptor) do
-    with :ok <- validate_choices(choices) do
+    with :ok <- validate_choices(choices),
+         {:ok, compiled_wrapper} <- compile_choice_wrapper(choices) do
       value_schema = %{"type" => "string", "enum" => choices}
-      {:ok, structured_contract(descriptor, wrap_value_schema(value_schema, descriptor), true)}
+
+      {:ok,
+       structured_contract(
+         descriptor,
+         wrap_value_schema(value_schema, descriptor),
+         compiled_wrapper.compiled,
+         true
+       )}
     end
   end
 
   def compile(%__MODULE__{type: :json} = descriptor) do
-    {:ok, structured_contract(descriptor, wrap_value_schema(%{}, descriptor), true)}
+    {:ok, structured_contract(descriptor, wrap_value_schema(%{}, descriptor), nil, true)}
   end
 
   def compile(%__MODULE__{type: type}) do
@@ -236,9 +258,9 @@ defmodule ReqLLM.Output do
     invalid_output("output descriptor #{inspect(key)} must be a string, got: #{inspect(value)}")
   end
 
-  defp structured_contract(descriptor, schema, wrapped?) do
+  defp structured_contract(descriptor, schema, compiled, wrapped?) do
     compiled_schema =
-      %{schema: schema, compiled: nil}
+      %{schema: schema, compiled: compiled}
       |> maybe_put(:name, descriptor.name)
       |> maybe_put(:description, descriptor.description)
 
@@ -257,11 +279,21 @@ defmodule ReqLLM.Output do
       invalid_output("invalid output schema: #{Exception.message(error)}")
   end
 
-  defp validate_schema(schema) do
+  defp compile_schema(schema) do
     case ReqLLM.Schema.compile(schema) do
-      {:ok, _compiled} -> :ok
+      {:ok, compiled_schema} -> {:ok, compiled_schema}
       {:error, error} -> invalid_output("invalid output schema: #{Exception.message(error)}")
     end
+  end
+
+  defp compile_array_wrapper(element) when is_list(element) do
+    compile_schema(value: [type: {:list, {:map, element}}, required: true])
+  end
+
+  defp compile_array_wrapper(_element), do: {:ok, %{compiled: nil}}
+
+  defp compile_choice_wrapper(choices) do
+    compile_schema(value: [type: {:in, choices}, required: true])
   end
 
   defp ensure_object_schema(%{"type" => type}) when type not in ["object", nil] do
