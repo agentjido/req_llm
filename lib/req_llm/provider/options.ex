@@ -324,6 +324,8 @@ defmodule ReqLLM.Provider.Options do
     # Auto-hoist provider-specific top-level options into :provider_options
     user_opts = auto_hoist_provider_options(provider_mod, user_opts)
 
+    reasoning_advisory_options = flatten_options_for_advisories(user_opts)
+
     telemetry_original_opts =
       user_opts
       |> Keyword.merge(Keyword.take(internal_opts, [:telemetry, :context, :text, :operation]))
@@ -345,7 +347,7 @@ defmodule ReqLLM.Provider.Options do
       ReqLLM.Provider.Reasoning.advisories(
         provider_mod,
         model,
-        flattened_for_translation,
+        reasoning_advisory_options,
         translated_opts
       )
 
@@ -774,6 +776,18 @@ defmodule ReqLLM.Provider.Options do
       NimbleOptions.new!(updated_keys)
     else
       base_schema
+    end
+  end
+
+  defp flatten_options_for_advisories(opts) do
+    case Keyword.pop(opts, :provider_options, []) do
+      {provider_options, standard_options} when is_list(provider_options) ->
+        if Keyword.keyword?(provider_options),
+          do: Keyword.merge(standard_options, provider_options),
+          else: standard_options
+
+      {_provider_options, standard_options} ->
+        standard_options
     end
   end
 

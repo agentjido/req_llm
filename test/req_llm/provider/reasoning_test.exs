@@ -198,6 +198,39 @@ defmodule ReqLLM.Provider.ReasoningTest do
                  )
     end
 
+    test "does not mistake an unrelated native budget for the canonical budget" do
+      model = ReqLLM.model!("anthropic:claude-sonnet-4-5")
+
+      assert [
+               %{
+                 kind: :ignored,
+                 option: :reasoning_token_budget
+               }
+             ] =
+               Reasoning.advisories(
+                 Anthropic,
+                 model,
+                 [reasoning_token_budget: 4_096, thinking: %{budget_tokens: 7_777}],
+                 thinking: %{budget_tokens: 7_777}
+               )
+    end
+
+    test "reports lossy nested legacy effort translations before pre-validation removes them" do
+      model = ReqLLM.model!("google:gemini-3-flash-preview")
+
+      log =
+        capture_log(fn ->
+          assert {:ok, processed} =
+                   Options.process(Google, :chat, model,
+                     provider_options: [reasoning_effort: "xhigh"]
+                   )
+
+          assert processed[:google_thinking_level] == :high
+        end)
+
+      assert log =~ ":reasoning_effort :xhigh was clamped"
+    end
+
     test "exposes advisories through sanitized request planning" do
       assert {:ok, openai_plan} =
                ReqLLM.plan("openai:gpt-5", :chat, reasoning_token_budget: 4_096)

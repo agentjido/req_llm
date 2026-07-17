@@ -94,9 +94,12 @@ defmodule ReqLLM.Provider.Reasoning do
   end
 
   defp ignored_budget_advisory(provider, canonical_opts, translated_opts) do
-    if Keyword.has_key?(canonical_opts, :reasoning_token_budget) and
-         !budget_consumed?(provider, translated_opts) do
-      ignored_budget(provider)
+    case Keyword.fetch(canonical_opts, :reasoning_token_budget) do
+      {:ok, budget} ->
+        if !budget_consumed?(provider, budget, translated_opts), do: ignored_budget(provider)
+
+      :error ->
+        nil
     end
   end
 
@@ -122,19 +125,19 @@ defmodule ReqLLM.Provider.Reasoning do
 
   defp ignored_budget(_provider), do: nil
 
-  defp budget_consumed?(provider, _translated_opts)
+  defp budget_consumed?(provider, _budget, _translated_opts)
        when provider in [:openai, :openrouter, :groq, :xai],
        do: false
 
-  defp budget_consumed?(:anthropic, translated_opts) do
+  defp budget_consumed?(:anthropic, budget, translated_opts) do
     case Keyword.get(translated_opts, :thinking) do
-      %{budget_tokens: budget} when is_integer(budget) -> true
-      %{"budget_tokens" => budget} when is_integer(budget) -> true
+      %{budget_tokens: ^budget} -> true
+      %{"budget_tokens" => ^budget} -> true
       _ -> false
     end
   end
 
-  defp budget_consumed?(_provider, _translated_opts), do: true
+  defp budget_consumed?(_provider, _budget, _translated_opts), do: true
 
   defp google_effort_advisory(provider, canonical_opts, translated_opts)
        when provider in [:google, :google_vertex] do
