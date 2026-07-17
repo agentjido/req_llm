@@ -66,6 +66,27 @@ defmodule ReqLLM.Provider.OptionsTest do
       default_base_url: "https://example.com"
   end
 
+  defmodule WarningPipelineProvider do
+    @behaviour ReqLLM.Provider
+
+    def provider_id, do: :warning_pipeline
+    def default_base_url, do: "https://api.warning-pipeline.test"
+    def supported_provider_options, do: []
+
+    def pre_validate_options(_operation, _model, opts) do
+      {opts, ["pre-validation warning"]}
+    end
+
+    def translate_options(_operation, _model, opts) do
+      {opts, ["translation warning"]}
+    end
+
+    def attach(_request, _model, _opts), do: nil
+    def prepare_request(_operation, _model, _input, _opts), do: {:error, :not_implemented}
+    def encode_body(_request), do: nil
+    def decode_response(_response), do: nil
+  end
+
   describe "Options.process/4 - core functionality" do
     test "validates and passes through standard generation options" do
       model = %LLMDB.Model{provider: :mock, id: "test-model"}
@@ -619,6 +640,46 @@ defmodule ReqLLM.Provider.OptionsTest do
       refute Keyword.has_key?(processed, :max_tokens)
       assert %ReqLLM.Context{} = processed[:context]
     end
+
+    test "keeps warning stages ordered and local to one call" do
+      model = %LLMDB.Model{provider: :warning_pipeline, id: "test-model"}
+
+      log =
+        capture_log(fn ->
+          assert {:ok, _processed} =
+                   Options.process(WarningPipelineProvider, :chat, model, [])
+        end)
+
+      assert warning_lines(log) == ["pre-validation warning", "translation warning"]
+      refute Process.get(:req_llm_warnings)
+    end
+
+    test "does not retain pre-validation warnings after validation fails" do
+      model = %LLMDB.Model{provider: :warning_pipeline, id: "test-model"}
+
+      assert {:error, %ReqLLM.Error.Unknown.Unknown{}} =
+               Options.process(WarningPipelineProvider, :chat, model, temperature: "invalid")
+
+      refute Process.get(:req_llm_warnings)
+
+      log =
+        capture_log(fn ->
+          assert {:ok, _processed} =
+                   Options.process(WarningPipelineProvider, :chat, model, [])
+        end)
+
+      assert warning_lines(log) == ["pre-validation warning", "translation warning"]
+    end
+
+    test "does not make newly visible pre-validation warnings strict" do
+      model = %LLMDB.Model{provider: :warning_pipeline, id: "test-model"}
+
+      assert {:error, %ReqLLM.Error.Validation.Error{} = error} =
+               Options.process(WarningPipelineProvider, :chat, model, on_unsupported: :error)
+
+      assert Exception.message(error) =~ "translation warning"
+      refute Exception.message(error) =~ "pre-validation warning"
+    end
   end
 
   describe "Options.process/4 - internal keys handling" do
@@ -870,5 +931,12 @@ defmodule ReqLLM.Provider.OptionsTest do
       assert processed[:temperature] == 0.7
       assert processed[:max_tokens] == 1000
     end
+  end
+
+  defp warning_lines(log) do
+    log
+    |> String.split("\n", trim: true)
+    |> Enum.filter(&String.ends_with?(&1, "warning"))
+    |> Enum.map(&String.replace(&1, ~r/^.*\[warning\] /, ""))
   end
 end

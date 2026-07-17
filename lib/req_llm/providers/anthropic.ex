@@ -1374,19 +1374,17 @@ defmodule ReqLLM.Providers.Anthropic do
       iex> ReqLLM.Providers.Anthropic.map_reasoning_effort_to_budget("medium")
       2048
   """
-  def map_reasoning_effort_to_budget(:none), do: nil
-  def map_reasoning_effort_to_budget(:minimal), do: @reasoning_budget_minimal
-  def map_reasoning_effort_to_budget(:low), do: @reasoning_budget_low
-  def map_reasoning_effort_to_budget(:medium), do: @reasoning_budget_medium
-  def map_reasoning_effort_to_budget(:high), do: @reasoning_budget_high
-  def map_reasoning_effort_to_budget(:xhigh), do: @reasoning_budget_xhigh
-  def map_reasoning_effort_to_budget("none"), do: map_reasoning_effort_to_budget(:none)
-  def map_reasoning_effort_to_budget("minimal"), do: map_reasoning_effort_to_budget(:minimal)
-  def map_reasoning_effort_to_budget("low"), do: map_reasoning_effort_to_budget(:low)
-  def map_reasoning_effort_to_budget("medium"), do: map_reasoning_effort_to_budget(:medium)
-  def map_reasoning_effort_to_budget("high"), do: map_reasoning_effort_to_budget(:high)
-  def map_reasoning_effort_to_budget("xhigh"), do: map_reasoning_effort_to_budget(:xhigh)
-  def map_reasoning_effort_to_budget(_), do: @reasoning_budget_medium
+  def map_reasoning_effort_to_budget(effort) do
+    case ReqLLM.Provider.Reasoning.normalize_effort(effort) do
+      :none -> nil
+      :minimal -> @reasoning_budget_minimal
+      :low -> @reasoning_budget_low
+      :medium -> @reasoning_budget_medium
+      :high -> @reasoning_budget_high
+      :xhigh -> @reasoning_budget_xhigh
+      _ -> @reasoning_budget_medium
+    end
+  end
 
   defp translate_reasoning_effort(opts, model) do
     {reasoning_effort, opts} = Keyword.pop(opts, :reasoning_effort)

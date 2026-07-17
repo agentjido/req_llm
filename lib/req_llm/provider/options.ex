@@ -329,14 +329,25 @@ defmodule ReqLLM.Provider.Options do
       |> Keyword.merge(Keyword.take(internal_opts, [:telemetry, :context, :text, :operation]))
 
     # Apply pre-validation normalization (allows providers to filter/map unsupported options)
-    user_opts = apply_pre_validation(provider_mod, operation, model, user_opts)
+    {user_opts, prevalidation_warnings} =
+      apply_pre_validation(provider_mod, operation, model, user_opts)
 
     schema = compose_schema_internal(base_schema_for_operation(operation), provider_mod)
     validated_opts = NimbleOptions.validate!(user_opts, schema)
 
     {provider_options, standard_opts} = Keyword.pop(validated_opts, :provider_options, [])
     flattened_for_translation = Keyword.merge(standard_opts, provider_options)
-    translated_opts = apply_translation(provider_mod, operation, model, flattened_for_translation)
+
+    {translated_opts, translation_warnings, translation_replaced_warnings?} =
+      apply_translation(provider_mod, operation, model, flattened_for_translation)
+
+    reasoning_advisories =
+      ReqLLM.Provider.Reasoning.advisories(
+        provider_mod,
+        model,
+        flattened_for_translation,
+        translated_opts
+      )
 
     final_opts =
       if provider_options == [] do
@@ -352,7 +363,21 @@ defmodule ReqLLM.Provider.Options do
         end
       end
 
-    final_opts = handle_warnings(final_opts, opts)
+    callback_warnings = prevalidation_warnings ++ translation_warnings
+
+    enforceable_warnings =
+      if translation_replaced_warnings?,
+        do: translation_warnings,
+        else: callback_warnings
+
+    final_opts =
+      handle_warnings(
+        final_opts,
+        opts,
+        callback_warnings,
+        enforceable_warnings,
+        reasoning_advisories
+      )
 
     final_opts =
       final_opts
@@ -615,7 +640,7 @@ defmodule ReqLLM.Provider.Options do
   defp normalize_legacy_options(opts) do
     opts
     |> normalize_stop_sequences()
-    |> normalize_legacy_reasoning()
+    |> ReqLLM.Provider.Reasoning.normalize_options()
     |> normalize_req_http_options()
     |> normalize_tools()
   end
@@ -684,69 +709,6 @@ defmodule ReqLLM.Provider.Options do
     case Keyword.pop(opts, :stop_sequences) do
       {nil, rest} -> rest
       {sequences, rest} -> Keyword.put(rest, :stop, sequences)
-    end
-  end
-
-  defp normalize_legacy_reasoning(opts) do
-    opts
-    |> normalize_thinking_flag()
-    |> normalize_reasoning_flag()
-  end
-
-  defp normalize_thinking_flag(opts) do
-    case Keyword.pop(opts, :thinking) do
-      {nil, rest} ->
-        rest
-
-      {false, rest} ->
-        rest
-
-      {true, rest} ->
-        rest
-
-      {thinking, rest} when is_map(thinking) ->
-        Keyword.put(rest, :thinking, thinking)
-    end
-  end
-
-  defp normalize_reasoning_flag(opts) do
-    case Keyword.pop(opts, :reasoning) do
-      {nil, rest} ->
-        rest
-
-      {false, rest} ->
-        rest
-
-      {true, rest} ->
-        rest
-        |> Keyword.put_new(:reasoning_effort, :medium)
-
-      {"auto", rest} ->
-        rest
-
-      {"none", rest} ->
-        rest
-        |> Keyword.put_new(:reasoning_effort, :none)
-
-      {"minimal", rest} ->
-        rest
-        |> Keyword.put_new(:reasoning_effort, :minimal)
-
-      {"low", rest} ->
-        rest
-        |> Keyword.put_new(:reasoning_effort, :low)
-
-      {"medium", rest} ->
-        rest
-        |> Keyword.put_new(:reasoning_effort, :medium)
-
-      {"high", rest} ->
-        rest
-        |> Keyword.put_new(:reasoning_effort, :high)
-
-      {"xhigh", rest} ->
-        rest
-        |> Keyword.put_new(:reasoning_effort, :xhigh)
     end
   end
 
@@ -819,15 +781,13 @@ defmodule ReqLLM.Provider.Options do
     if function_exported?(provider_mod, :pre_validate_options, 3) do
       case provider_mod.pre_validate_options(operation, model, opts) do
         {normalized_opts, warnings} when is_list(warnings) ->
-          existing_warnings = Process.get(:req_llm_warnings, [])
-          Process.put(:req_llm_warnings, existing_warnings ++ warnings)
-          normalized_opts
+          {normalized_opts, warnings}
 
         normalized_opts ->
-          normalized_opts
+          {normalized_opts, []}
       end
     else
-      opts
+      {opts, []}
     end
   end
 
@@ -835,42 +795,56 @@ defmodule ReqLLM.Provider.Options do
     if function_exported?(provider_mod, :translate_options, 3) do
       case provider_mod.translate_options(operation, model, opts) do
         {translated_opts, warnings} when is_list(warnings) ->
-          Process.put(:req_llm_warnings, warnings)
-          translated_opts
+          {translated_opts, warnings, true}
 
         translated_opts ->
-          translated_opts
+          {translated_opts, [], false}
       end
     else
-      opts
+      {opts, [], false}
     end
   end
 
-  defp handle_warnings(opts, original_opts) do
-    warnings = Process.get(:req_llm_warnings, [])
-    Process.delete(:req_llm_warnings)
+  defp handle_warnings(
+         opts,
+         original_opts,
+         callback_warnings,
+         enforceable_warnings,
+         reasoning_advisories
+       ) do
+    advisory_messages = ReqLLM.Provider.Reasoning.messages(reasoning_advisories)
+    all_warnings = callback_warnings ++ advisory_messages
 
-    if warnings == [] do
+    if all_warnings == [] do
       opts
     else
       case Keyword.get(original_opts, :on_unsupported, :warn) do
         :warn ->
-          Enum.each(warnings, fn warning ->
-            require Logger
-
-            Logger.warning(warning)
-          end)
+          log_warnings(all_warnings)
 
           opts
 
         :error ->
-          reason = Enum.join(warnings, "; ")
-          raise ReqLLM.Error.Validation.Error.exception(reason: reason)
+          if enforceable_warnings == [] do
+            log_warnings(all_warnings)
+            opts
+          else
+            reason = Enum.join(enforceable_warnings, "; ")
+            raise ReqLLM.Error.Validation.Error.exception(reason: reason)
+          end
 
         :ignore ->
           opts
       end
     end
+  end
+
+  defp log_warnings(warnings) do
+    Enum.each(warnings, fn warning ->
+      require Logger
+
+      Logger.warning(warning)
+    end)
   end
 
   defp validate_context(opts, original_opts) do

@@ -29,12 +29,13 @@ defmodule ReqLLM.RequestPlan.Diagnostic do
   def build(model_input, operation, opts) when is_list(opts) do
     with :ok <- validate_options(opts),
          {:ok, plan} <- RequestPlan.build(model_input, operation, opts),
-         {:ok, canonical_options} <- flatten_provider_options(plan.options),
-         {:ok, translated_options, translation_warnings} <-
+         {:ok, normalized_options} <- normalize_options(plan.options),
+         {:ok, canonical_options} <- flatten_provider_options(normalized_options),
+         {:ok, translated_options, enforceable_warnings, diagnostic_warnings} <-
            translate_options(plan, canonical_options),
          redacted_warnings <-
-           redact_warning_values(plan.warnings ++ translation_warnings, canonical_options),
-         :ok <- enforce_warning_policy(plan.options, translation_warnings, canonical_options) do
+           redact_warning_values(plan.warnings ++ diagnostic_warnings, canonical_options),
+         :ok <- enforce_warning_policy(plan.options, enforceable_warnings, canonical_options) do
       {:ok, diagnostic(plan, canonical_options, translated_options, redacted_warnings)}
     else
       {:error, error} -> {:error, sanitize_error(error)}
@@ -74,12 +75,31 @@ defmodule ReqLLM.RequestPlan.Diagnostic do
     end
   end
 
+  defp normalize_options(opts) do
+    {:ok, ReqLLM.Provider.Reasoning.normalize_options(opts)}
+  rescue
+    _error -> translation_error()
+  end
+
   defp translate_options(plan, opts) do
-    with {:ok, prevalidated, prevalidation_warnings} <-
+    with {:ok, prevalidated, prevalidation_warnings, _prevalidation_replaced_warnings?} <-
            apply_option_callback(plan.provider_module, :pre_validate_options, plan, opts),
-         {:ok, translated, translation_warnings} <-
+         {:ok, translated, translation_warnings, translation_replaced_warnings?} <-
            apply_option_callback(plan.provider_module, :translate_options, plan, prevalidated) do
-      {:ok, translated, prevalidation_warnings ++ translation_warnings}
+      callback_warnings = prevalidation_warnings ++ translation_warnings
+
+      enforceable_warnings =
+        if translation_replaced_warnings?,
+          do: translation_warnings,
+          else: callback_warnings
+
+      diagnostic_warnings =
+        callback_warnings ++
+          (plan.provider_module
+           |> ReqLLM.Provider.Reasoning.advisories(plan.model, opts, translated)
+           |> ReqLLM.Provider.Reasoning.messages())
+
+      {:ok, translated, enforceable_warnings, diagnostic_warnings}
     end
   end
 
@@ -89,7 +109,7 @@ defmodule ReqLLM.RequestPlan.Diagnostic do
       |> apply(callback, [option_operation(plan), plan.model, opts])
       |> normalize_option_callback_result()
     else
-      {:ok, opts, []}
+      {:ok, opts, [], false}
     end
   rescue
     _error -> translation_error()
@@ -101,14 +121,14 @@ defmodule ReqLLM.RequestPlan.Diagnostic do
   defp normalize_option_callback_result({opts, warnings})
        when is_list(opts) and is_list(warnings) do
     if Keyword.keyword?(opts) and Enum.all?(warnings, &is_binary/1) do
-      {:ok, opts, warnings}
+      {:ok, opts, warnings, true}
     else
       translation_error()
     end
   end
 
   defp normalize_option_callback_result(opts) when is_list(opts) do
-    if Keyword.keyword?(opts), do: {:ok, opts, []}, else: translation_error()
+    if Keyword.keyword?(opts), do: {:ok, opts, [], false}, else: translation_error()
   end
 
   defp normalize_option_callback_result(_result), do: translation_error()

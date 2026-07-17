@@ -35,6 +35,36 @@ config :req_llm,
   debug: false                       # Enable verbose logging
 ```
 
+## Canonical Reasoning Options
+
+ReqLLM accepts provider-neutral reasoning controls on text requests:
+
+```elixir
+ReqLLM.generate_text(
+  "anthropic:claude-sonnet-4-5",
+  "Solve this carefully",
+  reasoning_effort: :high,
+  reasoning_token_budget: 8_192
+)
+```
+
+`reasoning_effort` accepts `:none`, `:minimal`, `:low`, `:medium`, `:high`,
+`:xhigh`, and `:default`. `reasoning_token_budget` refines the request on
+provider surfaces with an explicit thinking budget. Older `reasoning: true` and
+string-valued `reasoning` aliases remain supported, but new code should use the
+canonical options.
+
+Provider-native controls such as Anthropic `thinking` and Google
+`google_thinking_budget` remain available under `provider_options`. Avoid mixing
+canonical and provider-native controls unless you rely on the provider's
+existing precedence rules.
+
+Lossy or ignored reasoning translations are non-fatal by default and emit a
+deterministic warning. `ReqLLM.plan/3` reports the same sanitized warnings
+without making a request. These reasoning advisories do not introduce new
+failures for `on_unsupported: :error`; existing enforceable provider warnings
+retain their current behavior.
+
 ## Timeout Configuration
 
 ReqLLM uses multiple timeout settings to handle different scenarios:

@@ -311,20 +311,8 @@ defmodule ReqLLM.Providers.OpenAI do
 
   @doc false
   def pre_validate_options(_operation, _model, opts) do
-    case Keyword.fetch(opts, :reasoning_effort) do
-      {:ok, value} -> Keyword.put(opts, :reasoning_effort, normalize_reasoning_effort(value))
-      :error -> opts
-    end
+    ReqLLM.Provider.Reasoning.normalize_effort_option(opts)
   end
-
-  defp normalize_reasoning_effort("none"), do: :none
-  defp normalize_reasoning_effort("minimal"), do: :minimal
-  defp normalize_reasoning_effort("low"), do: :low
-  defp normalize_reasoning_effort("medium"), do: :medium
-  defp normalize_reasoning_effort("high"), do: :high
-  defp normalize_reasoning_effort("xhigh"), do: :xhigh
-  defp normalize_reasoning_effort("default"), do: :default
-  defp normalize_reasoning_effort(value), do: value
 
   @impl ReqLLM.Provider
   @doc """

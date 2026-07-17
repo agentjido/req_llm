@@ -811,48 +811,30 @@ defmodule ReqLLM.Providers.Google do
 
   defp normalize_response_modality(modality), do: modality
 
-  defp translate_reasoning_effort_to_budget(:none, _model), do: 0
-  defp translate_reasoning_effort_to_budget(:minimal, _model), do: 2_048
-  defp translate_reasoning_effort_to_budget(:low, _model), do: 4_096
-  defp translate_reasoning_effort_to_budget(:medium, _model), do: 8_192
-  defp translate_reasoning_effort_to_budget(:high, _model), do: 16_384
-  defp translate_reasoning_effort_to_budget(:xhigh, _model), do: 32_768
+  defp translate_reasoning_effort_to_budget(effort, _model) do
+    case ReqLLM.Provider.Reasoning.normalize_effort(effort) do
+      :none -> 0
+      :minimal -> 2_048
+      :low -> 4_096
+      :medium -> 8_192
+      :high -> 16_384
+      :xhigh -> 32_768
+      budget when is_integer(budget) -> budget
+      _ -> 8_192
+    end
+  end
 
-  defp translate_reasoning_effort_to_budget("none", model),
-    do: translate_reasoning_effort_to_budget(:none, model)
-
-  defp translate_reasoning_effort_to_budget("minimal", model),
-    do: translate_reasoning_effort_to_budget(:minimal, model)
-
-  defp translate_reasoning_effort_to_budget("low", model),
-    do: translate_reasoning_effort_to_budget(:low, model)
-
-  defp translate_reasoning_effort_to_budget("medium", model),
-    do: translate_reasoning_effort_to_budget(:medium, model)
-
-  defp translate_reasoning_effort_to_budget("high", model),
-    do: translate_reasoning_effort_to_budget(:high, model)
-
-  defp translate_reasoning_effort_to_budget("xhigh", model),
-    do: translate_reasoning_effort_to_budget(:xhigh, model)
-
-  defp translate_reasoning_effort_to_budget(budget, _model) when is_integer(budget), do: budget
-  defp translate_reasoning_effort_to_budget(_unknown, _model), do: 8_192
-
-  defp translate_reasoning_effort_to_level(:none), do: :minimal
-  defp translate_reasoning_effort_to_level(:minimal), do: :minimal
-  defp translate_reasoning_effort_to_level(:low), do: :low
-  defp translate_reasoning_effort_to_level(:medium), do: :medium
-  defp translate_reasoning_effort_to_level(:high), do: :high
-  defp translate_reasoning_effort_to_level(:xhigh), do: :high
-
-  defp translate_reasoning_effort_to_level("none"), do: :minimal
-  defp translate_reasoning_effort_to_level("minimal"), do: :minimal
-  defp translate_reasoning_effort_to_level("low"), do: :low
-  defp translate_reasoning_effort_to_level("medium"), do: :medium
-  defp translate_reasoning_effort_to_level("high"), do: :high
-  defp translate_reasoning_effort_to_level("xhigh"), do: :high
-  defp translate_reasoning_effort_to_level(_unknown), do: :medium
+  defp translate_reasoning_effort_to_level(effort) do
+    case ReqLLM.Provider.Reasoning.normalize_effort(effort) do
+      :none -> :minimal
+      :minimal -> :minimal
+      :low -> :low
+      :medium -> :medium
+      :high -> :high
+      :xhigh -> :high
+      _ -> :medium
+    end
+  end
 
   @impl ReqLLM.Provider
   def translate_options(:image, _model, opts) do
