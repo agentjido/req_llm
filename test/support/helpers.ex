@@ -359,11 +359,26 @@ defmodule ReqLLM.Test.Helpers do
       [temperature: 0.0, fixture: "basic"]
   """
   def fixture_opts(name, extra_opts \\ []) do
-    Keyword.put(extra_opts, :fixture, name)
+    extra_opts
+    |> cap_provider_drift_tokens()
+    |> Keyword.put(:fixture, name)
   end
 
   def fixture_opts(_provider, name, extra_opts) do
     fixture_opts(name, extra_opts)
+  end
+
+  defp cap_provider_drift_tokens(opts) do
+    case Integer.parse(System.get_env("REQ_LLM_DRIFT_MAX_TOKENS") || "") do
+      {limit, ""} when limit > 0 ->
+        Keyword.update(opts, :max_tokens, limit, fn
+          current when is_integer(current) and current > 0 -> min(current, limit)
+          _current -> limit
+        end)
+
+      _value ->
+        opts
+    end
   end
 
   @doc """

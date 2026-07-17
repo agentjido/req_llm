@@ -88,6 +88,50 @@ Run `mix req_llm.model_support --generate` to regenerate the deterministic
 are descriptive compatibility-tool output only; ReqLLM continues to resolve
 models independently of this evidence.
 
+### Sparse Live Provider Drift Verification
+
+Normal pull-request CI remains fixture replay only and requires no provider
+credentials. The `Provider Drift` workflow adds a separate live lane that runs
+manually or every Tuesday at 09:17 UTC. Its checked-in matrix lives in
+`priv/provider_drift_anchors.json`:
+
+| Provider | Model | Expected surface | Scenario |
+| --- | --- | --- | --- |
+| Anthropic | `claude-sonnet-4-5-20250929` | `anthropic.messages` | `basic` |
+| Google | `gemini-2.0-flash` | `google.generate_content` | `basic` |
+| OpenAI | `gpt-4o-mini` | `openai.responses` | `basic` |
+| OpenAI | `chat-latest` | `openai.chat_completions` | `basic` |
+
+The lane is bounded to four anchors, one concurrent request, 180 seconds and 64
+output tokens per anchor, and an estimated maximum provider cost of $0.03 per
+complete run. Missing credentials skip only their anchors. Failures report the
+provider, model, expected or observed surface, scenario, classified failure
+layer, remediation, and GitHub run correlation. Prompt and response bodies,
+credential values, and staged fixtures are never included in its artifacts.
+
+Validate the matrix without making provider requests:
+
+```bash
+mix req_llm.provider_drift --dry-run
+```
+
+Run the available anchors, or select one provider:
+
+```bash
+mix req_llm.provider_drift
+mix req_llm.provider_drift --provider openai
+```
+
+Live probes capture fixtures only in a temporary directory long enough to
+derive the actual execution surface, then delete them. They do not update
+`priv/model_compat_scenarios.json`, support tiers, or checked-in fixtures. A
+maintainer who deliberately wants new fixtures uses the separate existing
+recording command:
+
+```bash
+mix req_llm.model_compat openai:gpt-4o-mini --scenario basic --record
+```
+
 ### Comprehensive Test Macro
 
 Tests use the `ReqLLM.ProviderTest.Comprehensive` macro (in `test/support/provider_test/comprehensive.ex`), which generates up to 9 focused tests per model based on capabilities:

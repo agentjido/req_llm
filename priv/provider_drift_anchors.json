@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "limits": {
+    "max_anchors": 4,
+    "max_concurrency": 1,
+    "timeout_seconds": 180,
+    "max_output_tokens_per_anchor": 64,
+    "estimated_max_cost_usd": 0.03
+  },
+  "anchors": [
+    {
+      "id": "anthropic-messages-basic",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5-20250929",
+      "operation": "text",
+      "surface": "anthropic.messages",
+      "scenario": "basic",
+      "credential_env": ["ANTHROPIC_API_KEY"],
+      "max_output_tokens": 64,
+      "estimated_max_cost_usd": 0.01
+    },
+    {
+      "id": "google-generate-content-basic",
+      "provider": "google",
+      "model": "gemini-2.0-flash",
+      "operation": "text",
+      "surface": "google.generate_content",
+      "scenario": "basic",
+      "credential_env": ["GOOGLE_API_KEY"],
+      "max_output_tokens": 64,
+      "estimated_max_cost_usd": 0.005
+    },
+    {
+      "id": "openai-responses-basic",
+      "provider": "openai",
+      "model": "gpt-4o-mini",
+      "operation": "text",
+      "surface": "openai.responses",
+      "scenario": "basic",
+      "credential_env": ["OPENAI_API_KEY"],
+      "max_output_tokens": 64,
+      "estimated_max_cost_usd": 0.005
+    },
+    {
+      "id": "openai-chat-completions-basic",
+      "provider": "openai",
+      "model": "chat-latest",
+      "operation": "text",
+      "surface": "openai.chat_completions",
+      "scenario": "basic",
+      "credential_env": ["OPENAI_API_KEY"],
+      "max_output_tokens": 64,
+      "estimated_max_cost_usd": 0.005
+    }
+  ]
+}

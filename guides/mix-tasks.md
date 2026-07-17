@@ -4,12 +4,14 @@ ReqLLM provides powerful Mix tasks for text generation and model coverage valida
 
 ## Overview
 
-ReqLLM includes two main Mix tasks:
+ReqLLM includes these main Mix tasks:
 
 | Task | Alias | Purpose |
 |------|-------|---------|
 | `mix req_llm.gen` | `mix llm` | Generate text/objects from the command line |
 | `mix req_llm.model_compat` | `mix mc` | Validate model coverage with fixtures |
+| `mix req_llm.model_support` | — | Inspect and verify evidence-derived support tiers |
+| `mix req_llm.provider_drift` | — | Run bounded, read-only live anchor verification |
 
 ## mix req_llm.gen
 
@@ -388,6 +390,50 @@ for a given catalog and evidence snapshot. Tiers are surface-specific:
 
 Catalog presence alone is never evidence. These tiers do not act as a runtime
 allowlist.
+
+## `mix req_llm.provider_drift`
+
+Validate the sparse live anchor configuration without making provider calls:
+
+```bash
+mix req_llm.provider_drift --dry-run
+```
+
+Run every anchor whose credential is available, or select a provider:
+
+```bash
+mix req_llm.provider_drift
+mix req_llm.provider_drift --provider openai
+mix req_llm.provider_drift --provider anthropic,google
+```
+
+Write the sanitized JSON and Markdown reports to a chosen directory:
+
+```bash
+mix req_llm.provider_drift --output-dir .artifacts/provider-drift
+```
+
+| Option | Purpose |
+| --- | --- |
+| `--dry-run` | Validate anchors, evidence references, and guardrails without provider requests |
+| `--provider NAME[,NAME]` | Limit the run to selected configured providers |
+| `--config PATH` | Validate and run a different anchor configuration |
+| `--output-dir PATH` | Choose the report directory; defaults to `_build/provider_drift` |
+
+The default matrix is `priv/provider_drift_anchors.json`. It explicitly caps
+anchor count, concurrency, per-anchor timeout, output tokens, and estimated
+cost. Missing credentials produce skipped results rather than failures. An
+executed failure uses the same resolution, planning, encoding, transport,
+decoding, materialization, assertion, and provider-drift layers as compatibility
+evidence.
+
+The task records provider responses only into a temporary directory, derives
+the actual execution surface, and deletes the temporary files. Reports contain
+no prompts, response bodies, or credential values. They embed completed results
+in the versioned compatibility evidence schema with mode `live_probe`, but do
+not modify the checked-in evidence or influence runtime support. Use the
+separate `mix req_llm.model_compat MODEL --scenario SCENARIO --record` action
+when fixture recording is intentional.
 
 ### Example Output
 
