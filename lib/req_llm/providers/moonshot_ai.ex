@@ -29,6 +29,7 @@ defmodule ReqLLM.Providers.MoonshotAI do
 
   import ReqLLM.Provider.Utils, only: [maybe_put: 3]
 
+  @default_receive_timeout 300_000
   @fixed_sampling_options [:temperature, :top_p, :n, :presence_penalty, :frequency_penalty]
   @fixed_sampling_values %{
     temperature: 1.0,
@@ -61,6 +62,8 @@ defmodule ReqLLM.Providers.MoonshotAI do
       |> strip_fixed_sampling_options()
       |> strip_thinking_option()
       |> normalize_reasoning_effort()
+      |> normalize_tool_choice()
+      |> put_default_receive_timeout()
       |> then(fn {translated, warnings} -> {translated, Enum.reverse(warnings)} end)
     else
       {opts, []}
@@ -137,31 +140,49 @@ defmodule ReqLLM.Providers.MoonshotAI do
 
     case effort do
       nil ->
-        {Keyword.put(opts, :reasoning_effort, "max"), warnings}
+        {Keyword.put(opts, :reasoning_effort, :max), warnings}
 
       :default ->
-        {Keyword.put(opts, :reasoning_effort, "max"), warnings}
+        {Keyword.put(opts, :reasoning_effort, :max), warnings}
 
       "max" ->
-        {Keyword.put(opts, :reasoning_effort, "max"), warnings}
+        {Keyword.put(opts, :reasoning_effort, :max), warnings}
 
       :max ->
-        {Keyword.put(opts, :reasoning_effort, "max"), warnings}
+        {Keyword.put(opts, :reasoning_effort, :max), warnings}
 
       effort when effort in @canonical_reasoning_efforts ->
-        {Keyword.put(opts, :reasoning_effort, "max"),
+        {Keyword.put(opts, :reasoning_effort, :max),
          [
            "Kimi K3 only supports reasoning_effort :max; translated #{inspect(effort)} to :max."
            | warnings
          ]}
 
       effort ->
-        {Keyword.put(opts, :reasoning_effort, "max"),
+        {Keyword.put(opts, :reasoning_effort, :max),
          [
            "Kimi K3 only supports reasoning_effort :max; replaced #{inspect(effort)} with :max."
            | warnings
          ]}
     end
+  end
+
+  defp normalize_tool_choice({opts, warnings}) do
+    case Keyword.get(opts, :tool_choice) do
+      choice when is_map(choice) ->
+        {Keyword.put(opts, :tool_choice, "required"),
+         [
+           "Kimi K3 does not support named tool choice with reasoning; translated it to required."
+           | warnings
+         ]}
+
+      _choice ->
+        {opts, warnings}
+    end
+  end
+
+  defp put_default_receive_timeout({opts, warnings}) do
+    {Keyword.put_new(opts, :receive_timeout, @default_receive_timeout), warnings}
   end
 
   defp token_limit(options) do

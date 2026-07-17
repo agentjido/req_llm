@@ -28,7 +28,7 @@ defmodule ReqLLM.Application do
 
     sync_llm_db_dotenv_config(req_llm_load_dotenv)
 
-    if req_llm_load_dotenv do
+    if req_llm_load_dotenv or Application.get_env(:llm_db, :load_dotenv, false) do
       load_dotenv()
     end
 

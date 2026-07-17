@@ -1,0 +1,116 @@
+{
+  "model_spec": "moonshotai:kimi-k3",
+  "provider": "moonshotai",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjEwMjQsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiUmVzcG9uZCB3aXRoIGEgc2luZ2xlIHdvcmQgJ0hpJy4iLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJraW1pLWszIiwicmVhc29uaW5nX2VmZm9ydCI6Im1heCIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlfQ=="
+    },
+    "canonical_json": {
+      "max_completion_tokens": 1024,
+      "messages": [
+        {
+          "content": "Respond with a single word 'Hi'.",
+          "role": "user"
+        }
+      ],
+      "model": "kimi-k3",
+      "reasoning_effort": "max",
+      "seed": 42,
+      "stream": false
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.6.3"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.moonshot.ai/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "content": "Hi",
+            "reasoning_content": "The user wants me to respond with a single word 'Hi'. This is a simple request. I should just say \"Hi\" and nothing else.",
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1784321143,
+      "id": "chatcmpl-6a5a94767a49e333e5e7a81f",
+      "model": "kimi-k3",
+      "object": "chat.completion",
+      "usage": {
+        "completion_tokens": 47,
+        "completion_tokens_details": {
+          "reasoning_tokens": 31
+        },
+        "prompt_tokens": 93,
+        "total_tokens": 140
+      }
+    },
+    "headers": {
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a1cc178148c190bd-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-length": [
+        "469"
+      ],
+      "content-type": [
+        "application/json; charset=utf-8"
+      ],
+      "date": [
+        "Fri, 17 Jul 2026 20:45:45 GMT"
+      ],
+      "msh-gid": [
+        "enterprise-tier-1"
+      ],
+      "msh-org-id": [
+        "org-2e00d57aaa814aab964027d4e1725ad1"
+      ],
+      "msh-project-id": [
+        "proj-cc2527f3424443819941eccf7d433f28"
+      ],
+      "msh-request-id": [
+        "7a081c02-8220-11f1-9783-26f8917389f9"
+      ],
+      "msh-trace-mode": [
+        "on"
+      ],
+      "msh-uid": [
+        "d9d42j522qd4i53o58vg"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": "[REDACTED:set-cookie]",
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains"
+      ],
+      "vary": [
+        "Origin"
+      ],
+      "x-msh-trace-id": [
+        "c255da5c5d1d123fb8e136613cc02c17"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

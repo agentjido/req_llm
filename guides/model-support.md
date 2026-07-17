@@ -31,9 +31,9 @@ provider-native feature and are not consulted by request routing.
 | Tier | Surfaces |
 | --- | ---: |
 | First-class | 47 |
-| Best-effort | 475 |
-| Experimental | 66 |
-| Unsupported | 103 |
+| Best-effort | 470 |
+| Experimental | 72 |
+| Unsupported | 102 |
 | **Total recorded surfaces** | **691** |
 
 ## anthropic
@@ -281,7 +281,7 @@ provider-native feature and are not consulted by request routing.
 | `amazon/nova-micro-v1` | `text` | `openrouter.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-30T00:13:28Z | missing current evidence: usage, token_limit, context_append, streaming |
 | `amazon/nova-premier-v1` | `text` | `openrouter.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-30T00:13:28Z | missing current evidence: usage, token_limit, context_append, streaming |
 | `amazon/nova-pro-v1` | `text` | `openrouter.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-30T00:13:28Z | missing current evidence: usage, token_limit, context_append, streaming |
-| `arcee-ai/coder-large` | `text` | `openrouter.unrecorded_text` | text → text | Unsupported | 0/5 | 2026-05-30T00:13:54Z | basic failed at provider_drift |
+| `arcee-ai/coder-large` | `text` | `openrouter.unrecorded_text` | text → text | Experimental | 0/5 | 2026-05-30T00:13:54Z | surface declaration unknown |
 | `arcee-ai/maestro-reasoning` | `text` | `openrouter.unrecorded_text` | text → text | Experimental | 0/5 | 2026-05-30T00:13:54Z | surface declaration unknown |
 | `arcee-ai/spotlight` | `text` | `openrouter.unrecorded_text` | text → text | Experimental | 0/5 | 2026-05-30T00:13:54Z | surface declaration unknown |
 | `arcee-ai/trinity-large-thinking` | `text` | `openrouter.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-30T00:13:54Z | missing current evidence: usage, token_limit, context_append, streaming |
@@ -350,8 +350,8 @@ provider-native feature and are not consulted by request routing.
 | `intfloat/e5-large-v2` | `embedding` | `openrouter.embedding` | text → embedding | Best-effort | 1/3 | 2026-05-30T00:56:13Z | missing current evidence: embed_usage, embed_batch |
 | `intfloat/multilingual-e5-large` | `embedding` | `openrouter.embedding` | text → embedding | Best-effort | 1/3 | 2026-05-30T00:56:13Z | missing current evidence: embed_usage, embed_batch |
 | `liquid/lfm-2-24b-a2b` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:16:50Z | surface declaration unknown |
-| `liquid/lfm-2.5-1.2b-instruct:free` | `text` | `openrouter.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-30T00:16:50Z | missing current evidence: usage, token_limit, context_append, streaming |
-| `liquid/lfm-2.5-1.2b-thinking:free` | `text` | `openrouter.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-30T00:16:50Z | missing current evidence: usage, token_limit, context_append, streaming |
+| `liquid/lfm-2.5-1.2b-instruct:free` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:16:50Z | surface declaration unknown |
+| `liquid/lfm-2.5-1.2b-thinking:free` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:16:50Z | surface declaration unknown |
 | `mancer/weaver` | `text` | `openrouter.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-30T00:25:07Z | missing current evidence: usage, token_limit, context_append, streaming |
 | `meta-llama/llama-3-70b-instruct` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:37:04Z | surface declaration unknown |
 | `meta-llama/llama-3-8b-instruct` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:37:04Z | surface declaration unknown |
@@ -423,7 +423,7 @@ provider-native feature and are not consulted by request routing.
 | `nvidia/nemotron-nano-9b-v2:free` | `text` | `openrouter.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-29T23:44:50Z | missing current evidence: usage, token_limit, context_append, streaming |
 | `openai/gpt-4o-mini` | `text` | `openrouter.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-29T16:17:31Z | missing current evidence: usage, token_limit, context_append, streaming |
 | `openai/gpt-oss-120b` | `text` | `openrouter.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-29T23:45:45Z | missing current evidence: usage, token_limit, context_append, streaming |
-| `openai/gpt-oss-120b:free` | `text` | `openrouter.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-29T23:45:45Z | missing current evidence: usage, token_limit, context_append, streaming |
+| `openai/gpt-oss-120b:free` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:45:45Z | surface declaration unknown |
 | `openai/gpt-oss-20b` | `text` | `openrouter.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-29T23:45:45Z | missing current evidence: usage, token_limit, context_append, streaming |
 | `openai/gpt-oss-20b:free` | `text` | `openrouter.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-29T23:45:45Z | missing current evidence: usage, token_limit, context_append, streaming |
 | `openai/gpt-oss-safeguard-20b` | `text` | `openrouter.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-29T23:45:45Z | missing current evidence: usage, token_limit, context_append, streaming |
@@ -492,7 +492,7 @@ provider-native feature and are not consulted by request routing.
 | `rekaai/reka-edge` | `text` | `openrouter.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-30T00:21:19Z | missing current evidence: usage, token_limit, context_append, streaming |
 | `sao10k/l3-euryale-70b` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:25:35Z | surface declaration unknown |
 | `sao10k/l3-lunaris-8b` | `text` | `openrouter.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-30T00:25:35Z | missing current evidence: usage, token_limit, context_append, streaming |
-| `sao10k/l3.1-70b-hanami-x1` | `text` | `openrouter.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-30T00:25:35Z | missing current evidence: usage, token_limit, context_append, streaming |
+| `sao10k/l3.1-70b-hanami-x1` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:25:35Z | surface declaration unknown |
 | `sao10k/l3.1-euryale-70b` | `text` | `openrouter.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-30T00:25:35Z | missing current evidence: usage, token_limit, context_append, streaming |
 | `sao10k/l3.3-euryale-70b` | `text` | `openrouter.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-30T00:25:35Z | missing current evidence: usage, token_limit, context_append, streaming |
 | `sentence-transformers/all-minilm-l12-v2` | `embedding` | `openrouter.embedding` | text → embedding | Best-effort | 1/3 | 2026-05-30T00:56:13Z | missing current evidence: embed_usage, embed_batch |
@@ -530,7 +530,7 @@ provider-native feature and are not consulted by request routing.
 
 | Model | Operation | Execution surface | Input → output | Tier | Baseline | Checked | Reason |
 | --- | --- | --- | --- | --- | ---: | --- | --- |
-| `aion-labs-aion-2-0` | `text` | `venice.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-29T23:55:12Z | missing current evidence: usage, token_limit, context_append, streaming |
+| `aion-labs-aion-2-0` | `text` | `venice.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:55:12Z | surface declaration unknown |
 | `arcee-trinity-large-thinking` | `text` | `venice.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:55:12Z | surface declaration unknown |
 | `claude-opus-4-5` | `text` | `venice.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-29T23:55:12Z | missing current evidence: usage, token_limit, context_append, streaming |
 | `claude-opus-4-6` | `text` | `venice.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-29T23:55:12Z | missing current evidence: usage, token_limit, context_append, streaming |

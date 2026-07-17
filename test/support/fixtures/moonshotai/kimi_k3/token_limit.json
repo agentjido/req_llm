@@ -1,0 +1,123 @@
+{
+  "model_spec": "moonshotai:kimi-k3",
+  "provider": "moonshotai",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjMwMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiV3JpdGUgYSB2ZXJ5IGxvbmcgc3RvcnkgYWJvdXQgZHJhZ29ucyBhbmQgYWR2ZW50dXJlcyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImtpbWktazMiLCJyZWFzb25pbmdfZWZmb3J0IjoibWF4Iiwic3RyZWFtIjpmYWxzZX0="
+    },
+    "canonical_json": {
+      "max_completion_tokens": 3000,
+      "messages": [
+        {
+          "content": "Write a very long story about dragons and adventures",
+          "role": "user"
+        }
+      ],
+      "model": "kimi-k3",
+      "reasoning_effort": "max",
+      "stream": false
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.6.3"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.moonshot.ai/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "length",
+          "index": 0,
+          "message": {
+            "content": "# The Ember Road\n\n## Chapter One: The Mapmaker's Daughter\n\nIn the village of Thornhollow, where the Ashenspine Mountains leaned down to watch the world below, there lived a girl who heard songs that no one else could hear.\n\nHer name was Wren Calloway, and she was sixteen years old, and she was supposed to be a cartographer.\n\nHer father, Master Aldous Calloway, was the finest mapmaker in the valley — possibly in the whole of the lowlands, though he would never say so himself. His maps hung in the halls of merchants and the studies of lords, each one drawn in iron-gall ink on calfskin vellum, with coastlines like lace and mountains rendered as tiny, careful triangles. He had taught Wren everything: how to measure distance by the turn of a wheel, how to hold a quill so it would not blot, how to tell true north from the lie a compass tells near iron-rich stone.\n\nBut there was one thing he had not taught her, because he could not.\n\nHe had not taught her to hear the songs.\n\nThey came to her on high winds, usually at dawn or in the blue hour after sunset. They were not songs made of words. They were made of something older — long, slow threads of feeling that unspooled across the sky, vast and mournful and bright. When Wren was small, she had thought everyone heard them. When she was seven, she had asked her mother what the songs were singing about, and her mother had gone very still, and taken Wren's face in her hands, and said: *You must never tell anyone but me.*\n\nHer mother had been dead for six years now. Wren still kept the secret.\n\nShe knew what made the songs, of course. Everyone knew, in the way that everyone knows about thunder and tides. The songs came from dragons.\n\nDragons were rare in those days — rarer than anyone alive could remember. Once, the old people said, they had crossed the sky in migrations like flocks of geese, and their shadows had cooled the harvest fields, and no one had been afraid. But that was long ago. Now a dragon sighting came perhaps once in a year, and it was spoken of the way people speak of comets: with awe, and unease, and a quiet hope that it would pass by without meaning anything.\n\nThe maps in Aldous Calloway's workshop still carried the old warnings in their margins, copied from older maps, which had been copied from older ones still. *Here be drakes.* *The high passes are theirs.* *Do not light fires on the ridge after dark.*\n\nWren had copied those warnings a hundred times. And all the while, the songs had gone on threading through her dreams.\n\nUntil the autumn of her sixteenth year, when they began to go out.\n\nIt happened one by one. A song she had known all her life — a deep amber one, like the sound of a banked fire — faltered in the middle of an October night, wavered, and fell silent. A week later, another: a high, quick, silvery song that always reminded her of swallows. It simply stopped, halfway through a phrase, the way a candle stops when it's pinched.\n\nWren stood at her window in the dark, gripping the sill, and felt the silence where the songs had been like missing teeth in a familiar smile.\n\nSomething, she knew with a certainty that had no evidence at all, was terribly wrong.\n\n## Chapter Two: The Fallen One\n\nThree days later, the dragon came down in Tannerson's high meadow.\n\nWren saw it fall. She was on the ridge above the village with her father's survey chain, taking sightings for the winter map, when the sky tore.\n\nThat was the only way she could describe it afterward. The dragon came out of the clouds trailing smoke that wasn't smoke — a gray, ashy haze, like the ghost of a fire — and it was not flying so much as *failing* to fall, over and over, each wingbeat a desperate argument with the earth. It crossed the valley low enough that she could see its scales, which should have shone like new-minted copper and instead were the color of an old, cold penny. It passed over Thornhollow, and every person in the village came out of every door, and then it folded its wings wrong and dropped into the high meadow in a plume of heather and torn earth.\n\nThe sound it made, Wren felt in her bones.\n\nThe sound it made *in her mind* was worse — a ragged, fading thread of song, the amber one, the one she had thought lost. It was still alive. Barely.\n\nBy nightfall, the village council had gathered in the longhouse, and Wren had listened at the shutter gap with her heart hammering.\n\n\"Bounty,\" said Tannerson, who owned the meadow and had always wanted to be more important than he was. \"The crown pays a bounty for a dragon. Dead or alive, but dead's easier to haul.\"\n\n\"It killed six of my sheep in the fall,\" said someone else, which wasn't true — the sheep had scattered, not died — but fear has always been a sloppy accountant.\n\n\"It hasn't moved in three hours,\" said the village warden. \"Could be dying on its own. Could be a sickness on it. I say we send for the soldiers at Kettleford and let them deal with it.\"\n\n\"And let the soldiers take the bounty?\"\n\nWren stopped listening. She was already running home, already pulling her mother's old leather pack down from the high shelf in her room, already stuffing it with bread and bandages and her father's best field lantern.\n\nHer father caught her at the door.\n\nHe didn't ask where she was going. He looked at her face — at whatever he saw burning there — and he went to his own desk, unlocked the drawer he never unlocked, and took out a small, cloth-wrapped book.\n\n\"Your mother's journal,\" he said. His voice was rough. \"I have waited six years to know whether to give it to you or burn it. I suppose the world has decided for me.\" He pressed it into her hands. \"She heard them too, Wren. She heard the songs. And the night she—\" He stopped. Started again. \"Be more careful than she was.\"\n\nWren kissed his stubbled cheek, and went out into the dark, toward",
+            "reasoning_content": "The user wants a very long story about dragons and adventures. This is a creative writing request with no constraints or concerns. I should write an engaging, lengthy story with dragons, adventure, interesting characters, and a compelling plot. Let me craft something rich and immersive.\n\nLet me plan the story structure:\n- A protagonist with an interesting background\n- A world with dragons - I'll make dragons complex, not just monsters\n- An adventure with stakes, twists, and growth\n- Multiple acts/chapters to make it feel substantial\n\nLet me create:\n- Setting: A fantasy world, maybe the Emberreach or similar\n- Protagonist: A young person - perhaps a mapmaker's apprentice, or a dragon keeper's daughter\n- Twist ideas: Dragons aren't evil, there's a deeper threat, bonds between humans and dragons\n- Plot: A journey, discovery, trials, climax, resolution\n\nLet me write something with chapters to give it structure and length. I'll aim for a genuinely long, well-crafted story with:\n1. Character introduction and world setup\n2. Inciting incident\n3. Journey begins\n4. Trials and discoveries\n5. Revelations and twists\n6. Climax\n7. Resolution\n\nCharacters:\n- Wren - a young cartographer's apprentice in a mountain village\n- Pyrax/Ignivar - an old dragon\n- Maybe a younger dragon companion\n- A villain or antagonistic force - perhaps something threatening both humans and dragons\n\nLet me make the story unique: Instead of \"slay the dragon,\" make it about a forgotten pact, a blight affecting dragons, and a journey to the Dragonspine mountains. Maybe dragons are disappearing, their fires going cold.\n\nConcept: \"The Coldfire Blight\" - dragons' inner fire is dying, and without dragons, the world's balance collapses (volcanoes, seasons, magic). Wren, who can hear the \"song\" of dragons (a rare gift), must journey to find the source.\n\nLet me write this out in chapters, with rich description, dialogue, and emotional beats. I should make it genuinely long as requested - several thousand words at minimum. Let me structure it:\n\nChapter 1: The Mapmaker's Daughter - introduce Wren, village of Thornhollow, her gift of hearing dragon-song\nChapter 2: The Fallen Star / The Wounded Dragon - a dragon crashes near the village\nChapter 3: The Choice - she decides to help, learns of the blight\nChapter 4: The Journey North - companions join, travel\nChapter 5: Trials - mountain passes, sky pirates or hostile forces, the Archive\nChapter 6: The Truth - the blight's origin (maybe an ancient betrayal, a wound in the world)\nChapter 7: The Deepfire / Heart of the Mountain - climax\nChapter 8: Resolution - the world healed, new balance\n\nLet me write with care - good prose, varied pacing, dialogue, sensory detail. I'll use headers for chapters since it's a long story - that helps organization. Markdown is appropriate here since this will be rendered in a chat interface.\n\nLet me draft this properly. I'll aim for a substantial story - maybe 4000-6000 words. Let me write flowing, engaging prose.\n\nStory title: \"The Last Ember\" or \"Where Dragons Dream\" or \"The Cartographer and the Coldfire\"\n\nLet me go with \"The Coldfire\" or \"When the Fire Went Cold\" — I like \"The Song of Embers\" too. Let me pick \"The Coldfire Blight\" as the phenomenon and title the story something evocative like \"Emberfall\" or \"The Dragon's Last Song.\" \n\nI'll title it: \"The Ashen Road\" or \"Wren and the Dying Fire\" — Let me go with \"The Ember Road.\"\n\nNow writing the story. I'll be thorough and craft each chapter well.\n\nChapter 1: Setup\n- Thornhollow, a village in the shadow of the Ashenspine mountains\n- Wren Calloway, 16, apprentice to her father the cartographer\n- She has a secret: she hears songs on the wind - dragon songs\n- Dragons are rare now, seen as omens; the old pacts are forgotten\n- Inciting: the songs are changing - going silent, one by one\n\nChapter 2: The Fallen Dragon\n- A dragon crashes in the high meadow - coppery scales, dull\n- Villagers afraid; some want to kill it for glory/bounty\n- Wren sneaks out, approaches; the dragon, Kessa (female dragon), speaks to her mind\n- Kessa's fire is dying - the Coldfire blight\n- She was flying to the Emberhold, the ancestral home, seeking the First Fire\n- Wren decides to help\n\nChapter 3: Departure\n- Wren's father reveals he knew about her gift; her mother had it too (died years ago - maybe died on a journey related to dragons?)\n- Gives Wren her mother's journal - a \"flamekeeper\" lineage\n- They set off: Wren, Kessa (who can't fly far), maybe a friend - Tam, a blacksmith's son who wants adventure, or a disgraced dragon-hunter turned protector, Baltus/Corin\n- Let me include Corin, an old dragon hunter who laid down his spear, as a gruff mentor figure\n\nChapter 4: The Road\n- Travel through the Whisperwood\n- Encounter: other dragons affected, or people reacting to a dragon\n- The Weeping Pass, trolls or bandits - action scene\n- Learning about the world's lore: the First Fire, the Pact of Embers, dragons keep the deep fires of the world alive; without them, the world cools - winters longer, mountains sleeping wrong, magic fading\n\nChapter 5: The Archive / The City\n- Reach the city of Lanternfall or the Archive of the Flamekeepers\n- Learn the truth: the First Fire was stolen or wounded long ago; a splinter of it (the Heartspark) was taken by a king who feared dragons, locked away - its absence is the blight; or the blight is a \"hollowing\" - an ancient enemy, the Pale Wyrm / the Hollow, a dragon who lost its fire and became something else, now draining others\n- I like the Hollow King idea: a dragon who, betrayed and dying, swallowed a piece of the First Fire to survive but it consumed him from inside, making him a void that drinks fire from other dragons\n- Wren's mother's death connected: she died trying to reach the Emberhold years ago with the same mission\n\nChapter 6: The Emberhold\n- Journey to the Emberhold - the volcanic dragon sanctuary\n- Trials: the Ash Storms, the bridge of glass, the sleeping guardians\n- Confront the Hollow King - climax: Kessa nearly dies; Wren uses her song - the flamekeeper gift - to rekindle; the song isn't magic of command but of giving - she gives her own inner fire/memory/warmth\n- The Hollow King redeemed or destroyed: perhaps Wren sings to the ember of who he was, and he chooses to release the stolen fire - sacrifice\n- The First Fire rekindled; dragons' fires restored across the world - felt everywhere\n\nChapter 7: Homecoming\n- Return; the world changing - springs return, dragon sightings become common and welcomed\n- Wren becomes a flamekeeper, rebuilding the pact; Kessa stays as her bonded dragon\n- Ends with a new map - the first map to include dragon territories as allies, not warnings\n\nThat's a solid structure. Now let me write it with rich prose. I'll aim for length and quality. Given \"very long,\" I'll write generously - maybe 5000+ words. Format with chapter headings.\n\nLet me write it now, being careful with pacing, dialogue, and description.",
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1784321530,
+      "id": "chatcmpl-6a5a95fa5c44548bdd66a361",
+      "model": "kimi-k3",
+      "object": "chat.completion",
+      "usage": {
+        "cached_tokens": 94,
+        "completion_tokens": 3000,
+        "completion_tokens_details": {
+          "reasoning_tokens": 1646
+        },
+        "prompt_tokens": 94,
+        "prompt_tokens_details": {
+          "cached_tokens": 94
+        },
+        "total_tokens": 3094
+      }
+    },
+    "headers": {
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a1cc20fa2c620b74-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json; charset=utf-8"
+      ],
+      "date": [
+        "Fri, 17 Jul 2026 20:53:55 GMT"
+      ],
+      "msh-context-cache-token-saved": [
+        "94"
+      ],
+      "msh-gid": [
+        "enterprise-tier-1"
+      ],
+      "msh-org-id": [
+        "org-2e00d57aaa814aab964027d4e1725ad1"
+      ],
+      "msh-project-id": [
+        "proj-cc2527f3424443819941eccf7d433f28"
+      ],
+      "msh-request-id": [
+        "6140e0f3-8221-11f1-9783-26f8917389f9"
+      ],
+      "msh-trace-mode": [
+        "on"
+      ],
+      "msh-uid": [
+        "d9d42j522qd4i53o58vg"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": "[REDACTED:set-cookie]",
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding",
+        "Origin"
+      ],
+      "x-msh-trace-id": [
+        "88b8115ba818a4b4dedb2b5b7b206e2a"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

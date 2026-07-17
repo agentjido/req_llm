@@ -1,0 +1,124 @@
+{
+  "model_spec": "moonshotai:kimi-k3",
+  "provider": "moonshotai",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjUwMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiU29sdmUgMTIqNyBhbmQgc2hvdyB5b3VyIGludGVybmFsIHRoaW5raW5nIChicmllZikuIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoia2ltaS1rMyIsInJlYXNvbmluZ19lZmZvcnQiOiJtYXgiLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZX0="
+    },
+    "canonical_json": {
+      "max_completion_tokens": 5000,
+      "messages": [
+        {
+          "content": "Solve 12*7 and show your internal thinking (brief).",
+          "role": "user"
+        }
+      ],
+      "model": "kimi-k3",
+      "reasoning_effort": "max",
+      "seed": 42,
+      "stream": false
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.6.3"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.moonshot.ai/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "content": "**Thinking:** 12 × 7 — I'll break it down: (10 × 7) + (2 × 7) = 70 + 14 = 84.\n\n**Answer: 84**",
+            "reasoning_content": "The user is asking me to solve 12*7 and show my internal thinking briefly.\n\n12*7 = 84\n\nLet me think about how to show brief internal thinking:\n- 12 × 7\n- Can break it down: (10 × 7) + (2 × 7) = 70 + 14 = 84\n- Or: 12 × 7 = 84 directly\n\nI should be transparent here. The user is asking me to \"show internal thinking.\" I can show my reasoning process - how I actually compute this. That's a reasonable request and I can describe my problem-solving approach. I shouldn't pretend there's some hidden mystical process, but I can show the mathematical reasoning steps.\n\nLet me give a brief answer with the reasoning shown.",
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1784321353,
+      "id": "chatcmpl-6a5a954794aa054be2161c51",
+      "model": "kimi-k3",
+      "object": "chat.completion",
+      "usage": {
+        "cached_tokens": 98,
+        "completion_tokens": 216,
+        "completion_tokens_details": {
+          "reasoning_tokens": 158
+        },
+        "prompt_tokens": 98,
+        "prompt_tokens_details": {
+          "cached_tokens": 98
+        },
+        "total_tokens": 314
+      }
+    },
+    "headers": {
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a1cc1ce108aeeae7-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json; charset=utf-8"
+      ],
+      "date": [
+        "Fri, 17 Jul 2026 20:49:29 GMT"
+      ],
+      "msh-context-cache-token-saved": [
+        "98"
+      ],
+      "msh-gid": [
+        "enterprise-tier-1"
+      ],
+      "msh-org-id": [
+        "org-2e00d57aaa814aab964027d4e1725ad1"
+      ],
+      "msh-project-id": [
+        "proj-cc2527f3424443819941eccf7d433f28"
+      ],
+      "msh-request-id": [
+        "fd38c1c3-8220-11f1-b423-0add88ed98f6"
+      ],
+      "msh-trace-mode": [
+        "on"
+      ],
+      "msh-uid": [
+        "d9d42j522qd4i53o58vg"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": "[REDACTED:set-cookie]",
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding",
+        "Origin"
+      ],
+      "x-msh-trace-id": [
+        "87bcc42b3e2351b83c4e557e57625d92"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

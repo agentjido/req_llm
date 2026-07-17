@@ -43,7 +43,7 @@ That breadth extends well beyond chat: ReqLLM tracks **92 non-text operation mod
 | [Groq](https://llmdb.xyz/?providers=groq) | `groq` | 18 | text, speech 2, transcription 2 | 11 | [Guide](guides/groq.md) |
 | [Meta Model API](https://llmdb.xyz/?providers=meta) | `meta` | 1 | text | 1 | [Guide](guides/meta.md) |
 | [MiniMax](https://llmdb.xyz/?providers=minimax) | `minimax` | 6 | text | 6 | — |
-| [Moonshot AI](https://llmdb.xyz/?providers=moonshotai) | `moonshotai` | 1 | text | 0 | [Guide](guides/moonshot_ai.md) |
+| [Moonshot AI](https://llmdb.xyz/?providers=moonshotai) | `moonshotai` | 1 | text | 1 | [Guide](guides/moonshot_ai.md) |
 | [OpenAI](https://llmdb.xyz/?providers=openai) | `openai` | 86 | text, embedding 3, image 5, speech 6, transcription 7 | 64 | [Guide](guides/openai.md) |
 | [OpenRouter](https://llmdb.xyz/?providers=openrouter) | `openrouter` | 364 | text, embedding 25, image 5 | 234 | [Guide](guides/openrouter.md) |
 | [Venice](https://llmdb.xyz/?providers=venice) | `venice` | 67 | text | 67 | — |

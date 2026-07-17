@@ -1,0 +1,160 @@
+{
+  "model_spec": "moonshotai:kimi-k3",
+  "provider": "moonshotai",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjUwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJHZW5lcmF0ZSBhIHNvZnR3YXJlIGVuZ2luZWVyIHByb2ZpbGUiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJraW1pLWszIiwicmVhc29uaW5nX2VmZm9ydCI6Im1heCIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0b29sX2Nob2ljZSI6InJlcXVpcmVkIiwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2VuZXJhdGUgc3RydWN0dXJlZCBvdXRwdXQgbWF0Y2hpbmcgdGhlIHByb3ZpZGVkIHNjaGVtYSIsIm5hbWUiOiJzdHJ1Y3R1cmVkX291dHB1dCIsInBhcmFtZXRlcnMiOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7ImFnZSI6eyJkZXNjcmlwdGlvbiI6IlBlcnNvbidzIGFnZSBpbiB5ZWFycyIsIm1pbmltdW0iOjEsInR5cGUiOiJpbnRlZ2VyIn0sIm5hbWUiOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBmdWxsIG5hbWUiLCJ0eXBlIjoic3RyaW5nIn0sIm9jY3VwYXRpb24iOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBqb2Igb3IgcHJvZmVzc2lvbiIsInR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbIm5hbWUiLCJhZ2UiXSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
+    },
+    "canonical_json": {
+      "max_completion_tokens": 500,
+      "messages": [
+        {
+          "content": "Generate a software engineer profile",
+          "role": "user"
+        }
+      ],
+      "model": "kimi-k3",
+      "reasoning_effort": "max",
+      "seed": 42,
+      "stream": false,
+      "tool_choice": "required",
+      "tools": [
+        {
+          "function": {
+            "description": "Generate structured output matching the provided schema",
+            "name": "structured_output",
+            "parameters": {
+              "additionalProperties": false,
+              "properties": {
+                "age": {
+                  "description": "Person's age in years",
+                  "minimum": 1,
+                  "type": "integer"
+                },
+                "name": {
+                  "description": "Person's full name",
+                  "type": "string"
+                },
+                "occupation": {
+                  "description": "Person's job or profession",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "name",
+                "age"
+              ],
+              "type": "object"
+            }
+          },
+          "type": "function"
+        }
+      ]
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.6.3"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.moonshot.ai/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "tool_calls",
+          "index": 0,
+          "message": {
+            "content": "",
+            "reasoning_content": "The user wants me to generate a software engineer profile. I have access to a structured_output tool that takes name, age, and occupation. The tool_choice is required, so I must call the tool. Let me generate a realistic software engineer profile with a name, age, and occupation.",
+            "role": "assistant",
+            "tool_calls": [
+              {
+                "function": {
+                  "arguments": "{\"name\":\"Alexandra Chen\",\"age\":29,\"occupation\":\"Senior Software Engineer specializing in backend systems and cloud infrastructure\"}",
+                  "name": "structured_output"
+                },
+                "id": "structured_output_0",
+                "index": 0,
+                "type": "function"
+              }
+            ]
+          }
+        }
+      ],
+      "created": 1784321505,
+      "id": "chatcmpl-6a5a95e1c79d9d013a8bdfc0",
+      "model": "kimi-k3",
+      "object": "chat.completion",
+      "usage": {
+        "completion_tokens": 152,
+        "completion_tokens_details": {
+          "reasoning_tokens": 59
+        },
+        "prompt_tokens": 251,
+        "total_tokens": 403
+      }
+    },
+    "headers": {
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a1cc205f3fd6e7f5-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-length": [
+        "901"
+      ],
+      "content-type": [
+        "application/json; charset=utf-8"
+      ],
+      "date": [
+        "Fri, 17 Jul 2026 20:51:49 GMT"
+      ],
+      "msh-gid": [
+        "enterprise-tier-1"
+      ],
+      "msh-org-id": [
+        "org-2e00d57aaa814aab964027d4e1725ad1"
+      ],
+      "msh-project-id": [
+        "proj-cc2527f3424443819941eccf7d433f28"
+      ],
+      "msh-request-id": [
+        "52820bef-8221-11f1-ac30-ea0f982c325f"
+      ],
+      "msh-trace-mode": [
+        "on"
+      ],
+      "msh-uid": [
+        "d9d42j522qd4i53o58vg"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": "[REDACTED:set-cookie]",
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains"
+      ],
+      "vary": [
+        "Origin"
+      ],
+      "x-msh-trace-id": [
+        "1a0672f9660ce668fbe70277d9cf6766"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

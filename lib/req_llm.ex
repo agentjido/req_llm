@@ -509,8 +509,34 @@ defmodule ReqLLM do
   defp normalize_model_metadata(%LLMDB.Model{} = model) do
     model
     |> sync_legacy_model_field()
+    |> normalize_catalog_extra()
     |> do_normalize_model_metadata()
   end
+
+  defp normalize_catalog_extra(%LLMDB.Model{extra: extra} = model) when is_map(extra) do
+    normalized_extra =
+      extra
+      |> copy_catalog_extra_key("family", :family)
+      |> copy_catalog_extra_key("wire", :wire)
+      |> normalize_catalog_wire()
+
+    %{model | extra: normalized_extra}
+  end
+
+  defp normalize_catalog_extra(%LLMDB.Model{} = model), do: model
+
+  defp copy_catalog_extra_key(extra, string_key, atom_key) do
+    case {Map.has_key?(extra, atom_key), Map.fetch(extra, string_key)} do
+      {false, {:ok, value}} -> Map.put(extra, atom_key, value)
+      _ -> extra
+    end
+  end
+
+  defp normalize_catalog_wire(%{wire: wire} = extra) when is_map(wire) do
+    Map.put(extra, :wire, copy_catalog_extra_key(wire, "protocol", :protocol))
+  end
+
+  defp normalize_catalog_wire(extra), do: extra
 
   defp do_normalize_model_metadata(%LLMDB.Model{provider: :openai} = model) do
     protocol =

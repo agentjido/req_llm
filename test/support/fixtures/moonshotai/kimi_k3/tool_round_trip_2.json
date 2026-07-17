@@ -1,0 +1,140 @@
+{
+  "model_spec": "moonshotai:kimi-k3",
+  "provider": "moonshotai",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjEwNDg1NywibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJVc2UgdGhlIGFkZCB0b29sIHRvIGNvbXB1dGUgMiArIDMuIEFmdGVyIHRoZSB0b29sIHJlc3VsdCBhcnJpdmVzLCByZXNwb25kIHdpdGggJ3N1bT08dmFsdWU+Jy4iLCJyb2xlIjoidXNlciJ9LHsiY29udGVudCI6IkknbGwgY29tcHV0ZSAyICsgMyB1c2luZyB0aGUgYWRkIHRvb2wuIiwicmVhc29uaW5nX2NvbnRlbnQiOiJUaGUgdXNlciB3YW50cyBtZSB0byB1c2UgdGhlIGFkZCB0b29sIHRvIGNvbXB1dGUgMiArIDMsIHRoZW4gcmVzcG9uZCB3aXRoICdzdW09PHZhbHVlPicuIiwicm9sZSI6ImFzc2lzdGFudCIsInRvb2xfY2FsbHMiOlt7ImZ1bmN0aW9uIjp7ImFyZ3VtZW50cyI6IntcImFcIjoyLFwiYlwiOjN9IiwibmFtZSI6ImFkZCJ9LCJpZCI6ImFkZF8wIiwidHlwZSI6ImZ1bmN0aW9uIn1dfSx7ImNvbnRlbnQiOiI1IiwibWV0YWRhdGEiOnsidG9vbF9vdXRwdXQiOjV9LCJuYW1lIjoiYWRkIiwicm9sZSI6InRvb2wiLCJ0b29sX2NhbGxfaWQiOiJhZGRfMCJ9XSwibW9kZWwiOiJraW1pLWszIiwicmVhc29uaW5nX2VmZm9ydCI6Im1heCIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlfQ=="
+    },
+    "canonical_json": {
+      "max_completion_tokens": 104857,
+      "messages": [
+        {
+          "content": "Use the add tool to compute 2 + 3. After the tool result arrives, respond with 'sum=<value>'.",
+          "role": "user"
+        },
+        {
+          "content": "I'll compute 2 + 3 using the add tool.",
+          "reasoning_content": "The user wants me to use the add tool to compute 2 + 3, then respond with 'sum=<value>'.",
+          "role": "assistant",
+          "tool_calls": [
+            {
+              "function": {
+                "arguments": "{\"a\":2,\"b\":3}",
+                "name": "add"
+              },
+              "id": "add_0",
+              "type": "function"
+            }
+          ]
+        },
+        {
+          "content": "5",
+          "metadata": {
+            "tool_output": 5
+          },
+          "name": "add",
+          "role": "tool",
+          "tool_call_id": "add_0"
+        }
+      ],
+      "model": "kimi-k3",
+      "reasoning_effort": "max",
+      "seed": 42,
+      "stream": false
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.6.3"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.moonshot.ai/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "content": "sum=5",
+            "reasoning_content": "The tool returned 5. Now I respond with 'sum=5'.",
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1784321391,
+      "id": "chatcmpl-6a5a956eb063312cf8058e31",
+      "model": "kimi-k3",
+      "object": "chat.completion",
+      "usage": {
+        "completion_tokens": 34,
+        "completion_tokens_details": {
+          "reasoning_tokens": 16
+        },
+        "prompt_tokens": 242,
+        "total_tokens": 276
+      }
+    },
+    "headers": {
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a1cc1d8f2bf91060-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-length": [
+        "399"
+      ],
+      "content-type": [
+        "application/json; charset=utf-8"
+      ],
+      "date": [
+        "Fri, 17 Jul 2026 20:49:52 GMT"
+      ],
+      "msh-gid": [
+        "enterprise-tier-1"
+      ],
+      "msh-org-id": [
+        "org-2e00d57aaa814aab964027d4e1725ad1"
+      ],
+      "msh-project-id": [
+        "proj-cc2527f3424443819941eccf7d433f28"
+      ],
+      "msh-request-id": [
+        "0dd5440c-8221-11f1-bcf1-3af8c7c83b3c"
+      ],
+      "msh-trace-mode": [
+        "on"
+      ],
+      "msh-uid": [
+        "d9d42j522qd4i53o58vg"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": "[REDACTED:set-cookie]",
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains"
+      ],
+      "vary": [
+        "Origin"
+      ],
+      "x-msh-trace-id": [
+        "3cfc0035d302e73b7fbe0f3d7991ed1a"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

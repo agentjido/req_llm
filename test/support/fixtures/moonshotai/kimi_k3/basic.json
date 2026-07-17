@@ -1,0 +1,124 @@
+{
+  "model_spec": "moonshotai:kimi-k3",
+  "provider": "moonshotai",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjIwMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiSGVsbG8gd29ybGQhIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoia2ltaS1rMyIsInJlYXNvbmluZ19lZmZvcnQiOiJtYXgiLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZX0="
+    },
+    "canonical_json": {
+      "max_completion_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "kimi-k3",
+      "reasoning_effort": "max",
+      "seed": 42,
+      "stream": false
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.6.3"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.moonshot.ai/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "content": "Hello! 👋 Nice classic greeting — the first program many of us ever write.\n\nWhat can I help you with today?",
+            "reasoning_content": "The user has sent a very simple greeting: \"Hello world!\" This is a common programming reference (the classic first program everyone writes), and also just a friendly greeting.\n\nThere's nothing complex here. No deep thinking needed, no ethical considerations, no ambiguity that matters. The appropriate response is a friendly greeting back. Since \"Hello world!\" is famously the first program developers write, I could acknowledge that playfully, but I shouldn't overdo it or make assumptions about who they are.\n\nThe format should be short and conversational — matching the energy of their message. No headers, no bullet points, no lengthy explanation. Just a warm, natural greeting, maybe with a light nod to the programming reference, and an invitation to help with something.\n\nLet me keep it brief and friendly.",
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1784321378,
+      "id": "chatcmpl-6a5a9561c95b1c06317b3389",
+      "model": "kimi-k3",
+      "object": "chat.completion",
+      "usage": {
+        "cached_tokens": 88,
+        "completion_tokens": 196,
+        "completion_tokens_details": {
+          "reasoning_tokens": 156
+        },
+        "prompt_tokens": 88,
+        "prompt_tokens_details": {
+          "cached_tokens": 88
+        },
+        "total_tokens": 284
+      }
+    },
+    "headers": {
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a1cc1d3e4e0e9d03-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json; charset=utf-8"
+      ],
+      "date": [
+        "Fri, 17 Jul 2026 20:49:44 GMT"
+      ],
+      "msh-context-cache-token-saved": [
+        "88"
+      ],
+      "msh-gid": [
+        "enterprise-tier-1"
+      ],
+      "msh-org-id": [
+        "org-2e00d57aaa814aab964027d4e1725ad1"
+      ],
+      "msh-project-id": [
+        "proj-cc2527f3424443819941eccf7d433f28"
+      ],
+      "msh-request-id": [
+        "06224679-8221-11f1-8de6-eef1954a427f"
+      ],
+      "msh-trace-mode": [
+        "on"
+      ],
+      "msh-uid": [
+        "d9d42j522qd4i53o58vg"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": "[REDACTED:set-cookie]",
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding",
+        "Origin"
+      ],
+      "x-msh-trace-id": [
+        "7b5357802530ffb8df121226703eddad"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

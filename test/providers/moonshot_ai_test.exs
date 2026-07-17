@@ -1,6 +1,8 @@
 defmodule ReqLLM.Providers.MoonshotAITest do
   use ReqLLM.ProviderCase, provider: ReqLLM.Providers.MoonshotAI
 
+  import ExUnit.CaptureIO
+
   alias ReqLLM.Message
   alias ReqLLM.Message.ContentPart
   alias ReqLLM.Providers.MoonshotAI
@@ -35,6 +37,16 @@ defmodule ReqLLM.Providers.MoonshotAITest do
       assert {:ok, MoonshotAI} = ReqLLM.provider(:moonshotai)
     end
 
+    test "resolves Kimi K3 from LLMDB without an unverified warning" do
+      warning =
+        capture_io(:stderr, fn ->
+          assert %LLMDB.Model{provider: :moonshotai, id: "kimi-k3"} =
+                   ReqLLM.model!("moonshotai:kimi-k3")
+        end)
+
+      refute warning =~ "Using unverified model"
+    end
+
     test "prepares the Chat Completions endpoint with bearer authentication" do
       assert {:ok, request} =
                MoonshotAI.prepare_request(:chat, kimi_k3_model(), "Hello", api_key: "test-key")
@@ -65,7 +77,8 @@ defmodule ReqLLM.Providers.MoonshotAITest do
         refute Keyword.has_key?(translated, option)
       end
 
-      assert translated[:reasoning_effort] == "max"
+      assert translated[:reasoning_effort] == :max
+      assert translated[:receive_timeout] == 300_000
       assert length(warnings) == 6
     end
 
@@ -81,7 +94,7 @@ defmodule ReqLLM.Providers.MoonshotAITest do
       assert translated[:max_completion_tokens] == 2048
       refute Keyword.has_key?(translated, :max_tokens)
       refute Keyword.has_key?(translated, :provider_options)
-      assert translated[:reasoning_effort] == "max"
+      assert translated[:reasoning_effort] == :max
       assert Enum.any?(warnings, &String.contains?(&1, "translated max_tokens"))
       assert Enum.any?(warnings, &String.contains?(&1, "K2.x thinking"))
     end
@@ -97,9 +110,21 @@ defmodule ReqLLM.Providers.MoonshotAITest do
         )
 
       assert translated[:max_completion_tokens] == 4096
-      assert translated[:reasoning_effort] == "max"
+      assert translated[:reasoning_effort] == :max
       refute Keyword.has_key?(translated, :max_tokens)
       assert Enum.any?(warnings, &String.contains?(&1, "ignored max_tokens"))
+    end
+
+    test "translates named tool choice to required for always-on reasoning" do
+      {translated, warnings} =
+        MoonshotAI.translate_options(
+          :object,
+          kimi_k3_model(),
+          tool_choice: %{type: "function", function: %{name: "structured_output"}}
+        )
+
+      assert translated[:tool_choice] == "required"
+      assert Enum.any?(warnings, &String.contains?(&1, "named tool choice"))
     end
   end
 

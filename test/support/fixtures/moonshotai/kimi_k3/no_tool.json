@@ -1,0 +1,138 @@
+{
+  "model_spec": "moonshotai:kimi-k3",
+  "provider": "moonshotai",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjIwOTcxNCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJUZWxsIG1lIGEgam9rZSBhYm91dCBjYXRzIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoia2ltaS1rMyIsInJlYXNvbmluZ19lZmZvcnQiOiJtYXgiLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsIm5hbWUiOiJnZXRfd2VhdGhlciIsInBhcmFtZXRlcnMiOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9XX0="
+    },
+    "canonical_json": {
+      "max_completion_tokens": 209714,
+      "messages": [
+        {
+          "content": "Tell me a joke about cats",
+          "role": "user"
+        }
+      ],
+      "model": "kimi-k3",
+      "reasoning_effort": "max",
+      "seed": 42,
+      "stream": false,
+      "tools": [
+        {
+          "function": {
+            "description": "Get current weather information for a location",
+            "name": "get_weather",
+            "parameters": {
+              "additionalProperties": false,
+              "properties": {
+                "location": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "location"
+              ],
+              "type": "object"
+            }
+          },
+          "type": "function"
+        }
+      ]
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.6.3"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.moonshot.ai/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "content": "Why don't cats play poker in the jungle?\n\nToo many cheetahs! 🐱\n\nWant another one? I've got a whole litter of them.",
+            "reasoning_content": "The user is asking for a joke about cats. This is a simple, benign request. I should just tell a joke about cats. No tools are needed here — the only available tool is weather, which is irrelevant.\n\nLet me think of some good cat jokes:\n\n1. Why don't cats play poker in the jungle? Too many cheetahs!\n2. What do you call a pile of cats? A meow-ntain!\n3. Why was the cat sitting on the computer? To keep an eye on the mouse!\n4. What's a cat's favorite color? Purr-ple!\n5. Why did the cat get kicked out of the library? Because it refused to be quiet... it kept purring too loud. (not great)\n6. What do cats eat for breakfast? Mice Krispies!\n7. Why are cats good at video games? Because they have nine lives!\n8. What's a cat's favorite movie? The Sound of Mew-sic!\n\nI'll pick one good one, maybe with a light format. Keep it short and fun. Maybe offer one joke and keep it snappy. Format: just plain text, brief, no need for headers or lists. Could add a little flair but keep it conversational.",
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1784321291,
+      "id": "chatcmpl-6a5a950a62fb16e98bbd4016",
+      "model": "kimi-k3",
+      "object": "chat.completion",
+      "usage": {
+        "completion_tokens": 300,
+        "completion_tokens_details": {
+          "reasoning_tokens": 254
+        },
+        "prompt_tokens": 175,
+        "total_tokens": 475
+      }
+    },
+    "headers": {
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a1cc1b1bdc18ead8-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json; charset=utf-8"
+      ],
+      "date": [
+        "Fri, 17 Jul 2026 20:48:20 GMT"
+      ],
+      "msh-gid": [
+        "enterprise-tier-1"
+      ],
+      "msh-org-id": [
+        "org-2e00d57aaa814aab964027d4e1725ad1"
+      ],
+      "msh-project-id": [
+        "proj-cc2527f3424443819941eccf7d433f28"
+      ],
+      "msh-request-id": [
+        "d203bfd7-8220-11f1-8de6-eef1954a427f"
+      ],
+      "msh-trace-mode": [
+        "on"
+      ],
+      "msh-uid": [
+        "d9d42j522qd4i53o58vg"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": "[REDACTED:set-cookie]",
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding",
+        "Origin"
+      ],
+      "x-msh-trace-id": [
+        "561074c79bb0ea27cff3afc8108eee2f"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}
