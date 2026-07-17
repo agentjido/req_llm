@@ -281,6 +281,31 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
              ] = body["input"]
     end
 
+    test "encodes explicitly owned OpenAI file references without ownership metadata" do
+      file_part =
+        ReqLLM.Message.ContentPart.owned_file_id("file-owned", :openai,
+          purpose: :assistants,
+          status: :processed
+        )
+
+      context = %ReqLLM.Context{
+        messages: [
+          %ReqLLM.Message{
+            role: :user,
+            content: [file_part]
+          }
+        ]
+      }
+
+      body = context |> then(&build_request(context: &1)) |> ResponsesAPI.encode_body()
+      decoded = ReqLLM.Test.Helpers.json_body(body)
+
+      assert [%{"content" => [%{"type" => "input_file", "file_id" => "file-owned"}]}] =
+               decoded["input"]
+
+      refute Jason.encode!(decoded) =~ "req_llm"
+    end
+
     test "omits tools when empty list" do
       request = build_request(tools: [])
 

@@ -631,6 +631,35 @@ defmodule ReqLLM.Providers.AnthropicTest do
              }
     end
 
+    test "encode_body consumes explicitly owned Anthropic file references" do
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
+
+      file_part =
+        ContentPart.owned_file_id("file_owned", :anthropic,
+          metadata: %{title: "Quarterly report"},
+          purpose: :analysis,
+          status: :active
+        )
+
+      context = ReqLLM.Context.new([ReqLLM.Context.user([file_part])])
+
+      request = %Req.Request{
+        options: [context: context, model: model.model, stream: false]
+      }
+
+      decoded = request |> Anthropic.encode_body() |> ReqLLM.Test.Helpers.json_body()
+
+      assert [%{"content" => [block]}] = decoded["messages"]
+
+      assert block == %{
+               "type" => "document",
+               "source" => %{"type" => "file", "file_id" => "file_owned"},
+               "title" => "Quarterly report"
+             }
+
+      refute Jason.encode!(decoded) =~ "req_llm"
+    end
+
     test "encode_body without tools" do
       {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
       context = context_fixture()

@@ -157,6 +157,31 @@ defmodule ReqLLM.Error do
     end
   end
 
+  defmodule Invalid.ProviderFileReference do
+    @moduledoc "Error for an explicitly owned provider file used outside its lifecycle."
+    use Splode.Error,
+      fields: [:reason, :owner, :provider, :expires_at, :status],
+      class: :invalid
+
+    @typedoc "Validation error for an explicitly provider-owned file reference."
+    @type t() :: %__MODULE__{
+            reason: :provider_mismatch | :expired,
+            owner: String.t(),
+            provider: String.t(),
+            expires_at: String.t() | nil,
+            status: String.t() | nil
+          }
+
+    @spec message(t()) :: String.t()
+    def message(%{reason: :provider_mismatch, owner: owner, provider: provider}) do
+      "Owned provider file belongs to #{owner} and cannot be used with #{provider}"
+    end
+
+    def message(%{reason: :expired, owner: owner, expires_at: expires_at}) do
+      "Owned #{owner} provider file expired at #{expires_at}"
+    end
+  end
+
   defmodule Invalid.NotImplemented do
     @moduledoc "Error for unimplemented functionality."
     use Splode.Error, fields: [:feature], class: :invalid

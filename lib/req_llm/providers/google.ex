@@ -2093,7 +2093,46 @@ defmodule ReqLLM.Providers.Google do
     encoded
     |> Map.get(:messages, [])
     |> preserve_tool_call_metadata_in_messages(normalized_context)
+    |> preserve_provider_file_metadata_in_messages(normalized_context)
   end
+
+  defp preserve_provider_file_metadata_in_messages(messages, %ReqLLM.Context{
+         messages: context_messages
+       }) do
+    owned_files =
+      context_messages
+      |> Enum.flat_map(fn message -> List.wrap(message.content) end)
+      |> Enum.reduce(%{}, fn part, acc ->
+        case ReqLLM.ProviderFileReference.reference_id(part, :google) do
+          {:ok, reference_id} ->
+            Map.put(acc, reference_id, %{media_type: part.media_type})
+
+          :error ->
+            acc
+        end
+      end)
+
+    Enum.map(messages, &preserve_message_provider_files(&1, owned_files))
+  end
+
+  defp preserve_message_provider_files(message, owned_files) when map_size(owned_files) == 0,
+    do: message
+
+  defp preserve_message_provider_files(%{content: content} = message, owned_files)
+       when is_list(content) do
+    %{message | content: Enum.map(content, &preserve_provider_file(&1, owned_files))}
+  end
+
+  defp preserve_message_provider_files(message, _owned_files), do: message
+
+  defp preserve_provider_file(%{type: "file", file: %{file_id: file_id}} = part, owned_files) do
+    case Map.get(owned_files, file_id) do
+      nil -> part
+      metadata -> Map.put(part, :req_llm_provider_file, metadata)
+    end
+  end
+
+  defp preserve_provider_file(part, _owned_files), do: part
 
   defp preserve_tool_call_metadata_in_messages(messages, %ReqLLM.Context{
          messages: context_messages
@@ -2562,17 +2601,20 @@ defmodule ReqLLM.Providers.Google do
     end
   end
 
-  # Most specific patterns first (file, image, etc.) - for ContentPart structs
-  defp convert_content_part(%{type: :file, data: data, media_type: media_type})
-       when is_binary(data) do
-    encoded_data = Base.encode64(data)
+  defp convert_content_part(%{
+         type: "file",
+         file: %{file_id: reference_id},
+         req_llm_provider_file: metadata
+       }) do
+    build_file_data(metadata, reference_id)
+  end
 
-    %{
-      inline_data: %{
-        mime_type: media_type,
-        data: encoded_data
-      }
-    }
+  # Most specific patterns first (file, image, etc.) - for ContentPart structs
+  defp convert_content_part(%{type: :file} = part) do
+    case ReqLLM.ProviderFileReference.reference_id(part, :google) do
+      {:ok, reference_id} -> build_file_data(part, reference_id)
+      :error -> convert_legacy_file_content_part(part)
+    end
   end
 
   # Specific text patterns
@@ -2585,6 +2627,20 @@ defmodule ReqLLM.Providers.Google do
   defp convert_content_part(text) when is_binary(text), do: %{text: text}
 
   defp convert_content_part(part), do: %{text: to_string(part)}
+
+  defp convert_legacy_file_content_part(%{data: data, media_type: media_type})
+       when is_binary(data) do
+    encoded_data = Base.encode64(data)
+
+    %{
+      inline_data: %{
+        mime_type: media_type,
+        data: encoded_data
+      }
+    }
+  end
+
+  defp convert_legacy_file_content_part(part), do: %{text: to_string(part)}
 
   defp convert_url_content_part(part, url) do
     cond do

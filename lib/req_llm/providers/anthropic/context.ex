@@ -310,13 +310,17 @@ defmodule ReqLLM.Providers.Anthropic.Context do
     }
   end
 
-  defp do_encode_content_part(%ReqLLM.Message.ContentPart{
-         type: :file,
-         file_id: file_id,
-         media_type: media_type,
-         metadata: metadata
-       })
-       when is_binary(file_id) and file_id != "" do
+  defp do_encode_content_part(
+         %ReqLLM.Message.ContentPart{
+           type: :file,
+           file_id: legacy_file_id,
+           media_type: media_type,
+           metadata: metadata
+         } = part
+       )
+       when is_binary(legacy_file_id) and legacy_file_id != "" do
+    file_id = provider_file_id(part, :anthropic, legacy_file_id)
+
     %{
       type: file_block_type(media_type),
       source: %{
@@ -347,6 +351,13 @@ defmodule ReqLLM.Providers.Anthropic.Context do
   end
 
   defp do_encode_content_part(_), do: nil
+
+  defp provider_file_id(part, provider, legacy_file_id) do
+    case ReqLLM.ProviderFileReference.reference_id(part, provider) do
+      {:ok, reference_id} -> reference_id
+      :error -> legacy_file_id
+    end
+  end
 
   # Honors an explicit cache breakpoint declared in ContentPart metadata as
   # `%{cache_control: %{type: "ephemeral"}}` (or with `"ttl" => "1h"`). Accepts

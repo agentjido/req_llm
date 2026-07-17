@@ -1029,14 +1029,7 @@ defmodule ReqLLM.Telemetry do
   end
 
   defp sanitize_content_part(%ContentPart{type: :file} = part) do
-    %{
-      type: :file,
-      file_id: part.file_id,
-      filename: part.filename,
-      media_type: part.media_type,
-      bytes: binary_size_or_nil(part.data),
-      metadata: part.metadata
-    }
+    ReqLLM.ProviderFileReference.sanitize_content_part(part)
   end
 
   defp sanitize_content_part(%{type: :image} = part) when is_map(part) do

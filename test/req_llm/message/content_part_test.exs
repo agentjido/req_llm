@@ -176,6 +176,150 @@ defmodule ReqLLM.Message.ContentPartTest do
     end
   end
 
+  describe "owned_file_id/3" do
+    test "adds versioned provider ownership without changing the ContentPart struct" do
+      expires_at = ~U[2030-01-01 00:00:00Z]
+
+      part =
+        ContentPart.owned_file_id("file-secret", :openai,
+          media_type: "text/plain",
+          metadata: %{title: "Notes"},
+          purpose: :assistants,
+          status: :processed,
+          expires_at: expires_at,
+          size: 12,
+          sha256: "abc123",
+          provider_metadata: %{tenant: "docs"}
+        )
+
+      assert %ContentPart{
+               type: :file,
+               file_id: "file-secret",
+               media_type: "text/plain",
+               metadata: %{
+                 "req_llm" => %{
+                   "provider_file" => %{
+                     "schema_version" => 1,
+                     "provider" => "openai",
+                     "reference_id" => "file-secret",
+                     "purpose" => "assistants",
+                     "status" => "processed",
+                     "expires_at" => "2030-01-01T00:00:00Z",
+                     "size" => 12,
+                     "sha256" => "abc123",
+                     "metadata" => %{"tenant" => "docs"}
+                   }
+                 },
+                 title: "Notes"
+               }
+             } = part
+
+      assert Map.keys(Map.from_struct(part)) |> Enum.sort() ==
+               Map.keys(Map.from_struct(ContentPart.file_id("legacy"))) |> Enum.sort()
+
+      assert ContentPart.owned_file?(part)
+      refute ContentPart.owned_file?(ContentPart.file_id("legacy"))
+    end
+
+    test "provides full and redacted ownership inspection" do
+      part =
+        ContentPart.owned_file_id("file-secret", :openai,
+          provider_metadata: %{
+            url: "https://example.com/private",
+            api_token: "token-secret",
+            tenant: "docs"
+          }
+        )
+
+      assert {:ok, %{"reference_id" => "file-secret"}} =
+               ContentPart.provider_file_reference(part)
+
+      assert {:ok, redacted} = ContentPart.inspect_provider_file(part)
+      assert redacted["reference_id"] == "[REDACTED]"
+      assert redacted["metadata"]["url"] == "[REDACTED]"
+      assert redacted["metadata"]["api_token"] == "[REDACTED]"
+      assert redacted["metadata"]["tenant"] == "docs"
+
+      inspected = inspect(part)
+      assert inspected =~ "owned file provider: openai"
+      assert inspected =~ "file_id: [REDACTED]"
+      refute inspected =~ "file-secret"
+      refute inspected =~ "token-secret"
+    end
+
+    test "round-trips deterministically through JSON and context normalization" do
+      part =
+        ContentPart.owned_file_id("files/report", :google,
+          purpose: "analysis",
+          status: "active",
+          provider_metadata: %{tenant: "docs"}
+        )
+
+      decoded_part = Jason.decode!(Jason.encode!(part))
+
+      assert {:ok, context} =
+               ReqLLM.Context.normalize(
+                 [%{"role" => "user", "content" => [decoded_part]}],
+                 validate: false
+               )
+
+      assert [%ReqLLM.Message{content: [normalized]}] = context.messages
+      assert normalized.file_id == "files/report"
+      assert {:ok, reference} = ContentPart.provider_file_reference(normalized)
+      assert reference["provider"] == "google"
+      assert reference["reference_id"] == "files/report"
+      assert reference["metadata"] == %{"tenant" => "docs"}
+    end
+
+    test "rejects invalid lifecycle metadata" do
+      assert_raise ArgumentError, ~r/expires_at/, fn ->
+        ContentPart.owned_file_id("file-1", :openai, expires_at: "tomorrow")
+      end
+
+      assert_raise ArgumentError, ~r/size/, fn ->
+        ContentPart.owned_file_id("file-1", :openai, size: -1)
+      end
+
+      assert_raise ArgumentError, ~r/unknown provider-owned file options/, fn ->
+        ContentPart.owned_file_id("file-1", :openai, unknown: true)
+      end
+
+      assert_raise ArgumentError, ~r/JSON-safe/, fn ->
+        ContentPart.owned_file_id("file-1", :openai,
+          provider_metadata: %{callback: fn -> :ok end}
+        )
+      end
+    end
+
+    test "preserves exact legacy file reference values and serialization" do
+      legacy = ContentPart.file_id("file-legacy", "application/pdf", %{title: "Report"})
+
+      assert Map.from_struct(legacy) == %{
+               type: :file,
+               text: nil,
+               url: nil,
+               data: nil,
+               file_id: "file-legacy",
+               media_type: "application/pdf",
+               filename: nil,
+               metadata: %{title: "Report"}
+             }
+
+      assert Jason.decode!(Jason.encode!(legacy)) == %{
+               "type" => "file",
+               "text" => nil,
+               "url" => nil,
+               "data" => nil,
+               "file_id" => "file-legacy",
+               "media_type" => "application/pdf",
+               "filename" => nil,
+               "metadata" => %{"title" => "Report"}
+             }
+
+      assert inspect(legacy) == "#ContentPart<:file file_id: file-legacy>"
+    end
+  end
+
   describe "struct validation and edge cases" do
     test "requires type field" do
       assert_raise ArgumentError, fn ->

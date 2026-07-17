@@ -2159,6 +2159,38 @@ defmodule ReqLLM.Providers.GoogleTest do
       assert Base.decode64!(part["inline_data"]["data"]) == file_content
     end
 
+    test "encode_body consumes explicitly owned Google file references" do
+      file_part =
+        ReqLLM.Message.ContentPart.owned_file_id(
+          "https://generativelanguage.googleapis.com/v1beta/files/report",
+          :google,
+          media_type: "application/pdf",
+          purpose: :analysis,
+          status: :active
+        )
+
+      context = %ReqLLM.Context{
+        messages: [%ReqLLM.Message{role: :user, content: [file_part]}]
+      }
+
+      request = %Req.Request{
+        options: [context: context, id: "gemini-1.5-flash", stream: false]
+      }
+
+      decoded = request |> Google.encode_body() |> ReqLLM.Test.Helpers.json_body()
+
+      assert [%{"parts" => [part]}] = decoded["contents"]
+
+      assert part == %{
+               "fileData" => %{
+                 "fileUri" => "https://generativelanguage.googleapis.com/v1beta/files/report",
+                 "mimeType" => "application/pdf"
+               }
+             }
+
+      refute Jason.encode!(decoded) =~ "req_llm"
+    end
+
     test "encode_body handles video ContentPart with inline_data format" do
       video_content = "fake video bytes"
 

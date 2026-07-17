@@ -170,6 +170,28 @@ defmodule ReqLLM.OpenTelemetry.ContentTest do
       refute part |> Map.values() |> Enum.any?(&(&1 == "RAW_FILE_BYTES_NEVER_TO_BE_EMITTED"))
     end
 
+    test "redacts explicitly owned file IDs in content telemetry" do
+      owned_part =
+        ContentPart.owned_file_id("file-secret", :openai,
+          provider_metadata: %{url: "https://example.com/private", api_token: "token-secret"}
+        )
+
+      messages = [%Message{role: :user, content: [owned_part]}]
+
+      assert [%{"parts" => [part]}] =
+               %{request_payload: %{messages: messages}}
+               |> Content.input_messages()
+               |> decode_all()
+
+      assert part["type"] == "file"
+      assert part["file_id"] == "[REDACTED]"
+
+      encoded = Jason.encode!(part)
+      refute encoded =~ "file-secret"
+      refute encoded =~ "token-secret"
+      refute encoded =~ "example.com"
+    end
+
     test "drops :thinking parts even if text is present" do
       messages = [
         %Message{

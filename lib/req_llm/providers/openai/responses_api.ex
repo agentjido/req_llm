@@ -927,10 +927,13 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   end
 
   defp encode_input_content_part(
-         %ReqLLM.Message.ContentPart{type: :file, file_id: file_id, filename: filename},
+         %ReqLLM.Message.ContentPart{type: :file, file_id: legacy_file_id, filename: filename} =
+           part,
          _type
        )
-       when is_binary(file_id) and file_id != "" do
+       when is_binary(legacy_file_id) and legacy_file_id != "" do
+    file_id = provider_file_id(part, :openai, legacy_file_id)
+
     file =
       %{"type" => "input_file", "file_id" => file_id}
       |> maybe_put_string("filename", filename)
@@ -958,6 +961,13 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   end
 
   defp encode_input_content_part(_, _type), do: []
+
+  defp provider_file_id(part, provider, legacy_file_id) do
+    case ReqLLM.ProviderFileReference.reference_id(part, provider) do
+      {:ok, reference_id} -> reference_id
+      :error -> legacy_file_id
+    end
+  end
 
   defp encode_reasoning_details_from_message(
          %ReqLLM.Message{reasoning_details: nil},

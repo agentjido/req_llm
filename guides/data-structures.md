@@ -121,6 +121,9 @@ Typed content elements that compose a `Message`. Common variants:
 - `image/2`: `ContentPart.image(binary, "image/png")`
 - `image/3`: `ContentPart.image(binary, "image/png", metadata)` with metadata
 - `file/3`: `ContentPart.file(binary, "name.ext", "mime/type")`
+- `file_id/1`: `ContentPart.file_id("file_123")` for a legacy unowned provider reference
+- `owned_file_id/3`: `ContentPart.owned_file_id("file_123", :openai, purpose: :assistants)`
+  for an explicitly provider-owned reference
 - `thinking/1`: `ContentPart.thinking("...")` for models that expose reasoning tokens
 - `tool_call/2`: `ContentPart.tool_call("name", %{arg: "value"})` for assistant-issued calls
 - `tool_result/2`: `ContentPart.tool_result("tool_call_id", %{...})` for tool outputs
@@ -159,6 +162,42 @@ cached_binary_image = ContentPart.image(
   %{cache_control: %{type: "ephemeral"}}
 )
 ```
+
+### Provider-owned file references
+
+`owned_file_id/3` adds lifecycle information without adding fields to
+`ContentPart` or changing `file_id/1`. Ownership lives under the reserved
+`"req_llm" -> "provider_file"` metadata namespace:
+
+```elixir
+owned_file =
+  ContentPart.owned_file_id("file_123", :openai,
+    media_type: "application/pdf",
+    purpose: :assistants,
+    status: :processed,
+    expires_at: ~U[2030-01-01 00:00:00Z],
+    size: 12_345,
+    sha256: "...",
+    provider_metadata: %{tenant: "documentation"}
+  )
+```
+
+ReqLLM validates only explicitly owned references. Using an owned file with a
+different provider, or using it after a known `expires_at`, returns
+`ReqLLM.Error.Invalid.ProviderFileReference` before a model request starts.
+Plain `file_id/1` references remain unowned and retain their existing routing,
+encoding, errors, struct value, JSON, and inspection behavior.
+
+OpenAI and Anthropic encode a matching owned reference through their existing
+file-ID wire format. Google encodes the reference ID as a Gemini `fileData`
+URI. The constructor does not upload data, read local paths, or infer ownership
+from an ID prefix.
+
+`ContentPart.provider_file_reference/1` returns the complete persisted record.
+Treat it as sensitive because it contains the provider reference ID. Use
+`ContentPart.inspect_provider_file/1` for a redacted diagnostic value; regular
+`Inspect` and telemetry also redact IDs, URLs, and credential-like metadata for
+owned references.
 
 **How this supports normalization**:
 - Discriminated union eliminates polymorphism across providers.

@@ -10,6 +10,9 @@ defmodule ReqLLM.Message.ContentPart do
   - `:file` - File attachment or uploaded file reference
   - `:thinking` - Chain-of-thought thinking content
 
+  Provider-owned file references are opt-in through `owned_file_id/3`. Legacy
+  `file_id/1` values remain unowned and preserve their existing behavior.
+
   ## See also
 
   - `ReqLLM.Message` - Multi-modal message composition using ContentPart collections
@@ -91,6 +94,58 @@ defmodule ReqLLM.Message.ContentPart do
   def file_id(file_id, media_type, metadata),
     do: %__MODULE__{type: :file, file_id: file_id, media_type: media_type, metadata: metadata}
 
+  @doc """
+  Creates an explicitly provider-owned file reference.
+
+  Ownership is stored in the reserved `"req_llm" -> "provider_file"` metadata
+  namespace. Legacy `file_id/1` references remain unowned and keep their existing
+  behavior.
+
+  Supported options are `:media_type`, `:metadata`, `:purpose`, `:status`,
+  `:expires_at`, `:size`, `:sha256`, and `:provider_metadata`.
+  """
+  @spec owned_file_id(String.t(), atom() | String.t(), keyword()) :: t()
+  def owned_file_id(file_id, provider, opts \\ []) when is_list(opts) do
+    unless Keyword.keyword?(opts) do
+      raise ArgumentError, "provider-owned file options must be a keyword list"
+    end
+
+    media_type = Keyword.get(opts, :media_type, "application/pdf")
+    metadata = Keyword.get(opts, :metadata, %{})
+
+    unless is_binary(media_type) and media_type != "" do
+      raise ArgumentError, "media_type must be a non-empty string"
+    end
+
+    unless is_map(metadata) do
+      raise ArgumentError, "metadata must be a map"
+    end
+
+    reference_opts = Keyword.drop(opts, [:media_type, :metadata])
+    reference = ReqLLM.ProviderFileReference.new!(provider, file_id, reference_opts)
+
+    %__MODULE__{
+      type: :file,
+      file_id: file_id,
+      media_type: media_type,
+      metadata: ReqLLM.ProviderFileReference.put(metadata, reference)
+    }
+  end
+
+  @doc "Returns whether a file reference has explicit provider ownership metadata."
+  @spec owned_file?(t() | map()) :: boolean()
+  def owned_file?(part), do: ReqLLM.ProviderFileReference.owned?(part)
+
+  @doc "Returns the full metadata record for an explicitly owned provider file."
+  @spec provider_file_reference(t() | map()) ::
+          {:ok, ReqLLM.ProviderFileReference.t()} | :error
+  def provider_file_reference(part), do: ReqLLM.ProviderFileReference.fetch(part)
+
+  @doc "Returns redacted provider file metadata suitable for logs and diagnostics."
+  @spec inspect_provider_file(t() | map()) ::
+          {:ok, ReqLLM.ProviderFileReference.t()} | :error
+  def inspect_provider_file(part), do: ReqLLM.ProviderFileReference.redacted(part)
+
   defimpl Inspect do
     def inspect(%{type: type} = part, opts) do
       content_desc =
@@ -119,8 +174,14 @@ defmodule ReqLLM.Message.ContentPart do
       if String.length(text) > 30, do: "\"#{truncated}...\"", else: "\"#{truncated}\""
     end
 
-    defp inspect_file(%{file_id: file_id}) when is_binary(file_id) and file_id != "" do
-      "file_id: #{file_id}"
+    defp inspect_file(%{file_id: file_id} = part) when is_binary(file_id) and file_id != "" do
+      case ReqLLM.ProviderFileReference.redacted(part) do
+        {:ok, reference} ->
+          "owned file provider: #{reference["provider"]}, file_id: #{reference["reference_id"]}"
+
+        :error ->
+          "file_id: #{file_id}"
+      end
     end
 
     defp inspect_file(part), do: "#{part.media_type} (#{byte_size(part.data || <<>>)} bytes)"

@@ -115,7 +115,8 @@ defmodule ReqLLM.Generation do
              model,
              opts
            ),
-         {:ok, context} <- ReqLLM.Context.normalize(messages, opts) do
+         {:ok, context} <- ReqLLM.Context.normalize(messages, opts),
+         :ok <- ReqLLM.ProviderFileReference.validate_context(context, model.provider) do
       case ReqLLM.Cache.fetch(model, :chat, context, opts) do
         {:hit, response, _cache_ref} ->
           {:ok, response}
@@ -237,7 +238,8 @@ defmodule ReqLLM.Generation do
              model,
              opts
            ),
-         {:ok, context} <- ReqLLM.Context.normalize(messages, opts) do
+         {:ok, context} <- ReqLLM.Context.normalize(messages, opts),
+         :ok <- ReqLLM.ProviderFileReference.validate_context(context, model.provider) do
       case ReqLLM.Cache.fetch(model, :chat, context, opts) do
         {:hit, response, _cache_ref} ->
           {:ok, ReqLLM.Cache.stream_response(response, model, context)}
@@ -387,6 +389,7 @@ defmodule ReqLLM.Generation do
              opts
            ),
          {:ok, context} <- ReqLLM.Context.normalize(messages, opts),
+         :ok <- ReqLLM.ProviderFileReference.validate_context(context, model.provider),
          {:ok, compiled_schema} <- compile_schema_source(schema_source) do
       compiled_opts = Keyword.put(opts, :compiled_schema, compiled_schema)
       contract = ReqLLM.Output.Validation.validation_contract(descriptor, compiled_schema)
@@ -690,6 +693,8 @@ defmodule ReqLLM.Generation do
              model,
              opts
            ),
+         {:ok, context} <- ReqLLM.Context.normalize(messages, opts),
+         :ok <- ReqLLM.ProviderFileReference.validate_context(context, model.provider),
          {:ok, compiled_schema} <- compile_schema_source(schema_source),
          {:ok, prepared_req} <-
            provider_module.prepare_request(

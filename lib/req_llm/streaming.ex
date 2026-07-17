@@ -112,7 +112,8 @@ defmodule ReqLLM.Streaming do
     total_timeout_deadline = ReqLLM.TimeoutBudget.deadline(opts)
     stream_idle_timeout = ReqLLM.TimeoutBudget.stream_idle_timeout(opts)
 
-    with {:ok, server_pid} <-
+    with :ok <- ReqLLM.ProviderFileReference.validate_context(context, model.provider),
+         {:ok, server_pid} <-
            start_stream_server(
              provider_mod,
              model,

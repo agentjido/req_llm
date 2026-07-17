@@ -360,9 +360,16 @@ defmodule ReqLLM.OpenTelemetry.Content do
   end
 
   defp file_descriptor_part(part) do
+    file_id =
+      if ReqLLM.ProviderFileReference.owned?(part) do
+        "[REDACTED]"
+      else
+        MapAccess.get(part, :file_id)
+      end
+
     [
       %{"type" => "file"}
-      |> maybe_put("file_id", MapAccess.get(part, :file_id))
+      |> maybe_put("file_id", file_id)
       |> maybe_put("filename", MapAccess.get(part, :filename))
       |> maybe_put("media_type", MapAccess.get(part, :media_type))
       |> maybe_put("bytes", MapAccess.get(part, :bytes))
