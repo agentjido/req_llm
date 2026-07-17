@@ -71,6 +71,25 @@ available when exception-based control flow is intentional.
 The call performs no follow-up work. If `outcome.type` is `:tool_calls`, the
 host decides whether each call is allowed, rejected, deferred, or executed.
 
+Transcription keeps its established compact result by default. A host that
+needs call-level observability can opt into the detailed facade without making
+a second provider request or changing the nested result:
+
+```elixir
+{:ok, detailed} =
+  ReqLLM.transcribe_detailed(model, audio,
+    telemetry: [conversation_id: conversation_id]
+  )
+
+transcript = detailed.result
+call = detailed.call_metadata
+```
+
+`call` always identifies the resolved model and provider. Usage and cost,
+request or response identifiers, warnings, timings, and provider metadata are
+present only when observed. The top-level `request_id` is ReqLLM's telemetry
+correlation ID; a provider request ID remains under `provider_metadata`.
+
 ## Inspect, execute, and continue explicitly
 
 The host can inspect calls before any callback runs:

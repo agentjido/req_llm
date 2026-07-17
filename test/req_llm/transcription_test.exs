@@ -15,8 +15,17 @@ defmodule ReqLLM.TranscriptionTest do
 
   @moduletag contract: :public_api
 
+  import ReqLLM.Test.Helpers, only: [pricing_from_cost: 1]
+
   alias ReqLLM.Transcription
+  alias ReqLLM.Transcription.DetailedResult
   alias ReqLLM.Transcription.Result
+
+  defmodule DetailedHTTP do
+  end
+
+  defmodule SparseDetailedHTTP do
+  end
 
   describe "Result struct" do
     test "creates result with defaults" do
@@ -25,6 +34,13 @@ defmodule ReqLLM.TranscriptionTest do
       assert result.segments == []
       assert result.language == nil
       assert result.duration_in_seconds == nil
+
+      assert Map.from_struct(result) == %{
+               text: "",
+               segments: [],
+               language: nil,
+               duration_in_seconds: nil
+             }
     end
 
     test "creates result with all fields" do
@@ -156,6 +172,137 @@ defmodule ReqLLM.TranscriptionTest do
     end
   end
 
+  describe "transcribe_detailed/3" do
+    test "wraps the unchanged result with redacted metadata from one request" do
+      test_pid = self()
+      handler_id = "transcription-detailed-#{System.unique_integer([:positive])}"
+
+      :telemetry.attach(
+        handler_id,
+        [:req_llm, :token_usage],
+        fn _event, _measurements, metadata, _config ->
+          if metadata.model.id == "transcription-metadata-test" do
+            send(test_pid, {:usage_telemetry, metadata})
+          end
+        end,
+        nil
+      )
+
+      on_exit(fn -> :telemetry.detach(handler_id) end)
+
+      Req.Test.stub(DetailedHTTP, fn conn ->
+        send(test_pid, :detailed_request)
+
+        conn
+        |> Plug.Conn.put_resp_header("x-request-id", "provider_req_123")
+        |> Plug.Conn.put_resp_header("openai-processing-ms", "8")
+        |> Req.Test.json(%{
+          "id" => "transcription_123",
+          "text" => "Hello world",
+          "segments" => [%{"text" => "Hello world", "start" => 0.0, "end" => 1.0}],
+          "language" => "english",
+          "duration" => 1.0,
+          "usage" => %{"input_tokens" => 10, "output_tokens" => 4, "total_tokens" => 14},
+          "warnings" => ["credential sk-secret was ignored"],
+          "provider_metadata" => %{
+            "api_key" => "sk-secret",
+            "url" => "https://example.com/transcription?token=sk-secret"
+          }
+        })
+      end)
+
+      model = %LLMDB.Model{
+        id: "transcription-metadata-test",
+        provider: :openai,
+        pricing: pricing_from_cost(%{input: 1.0, output: 2.0})
+      }
+
+      assert {:ok, %DetailedResult{} = detailed} =
+               ReqLLM.transcribe_detailed(
+                 model,
+                 {:binary, "audio", "audio/mpeg"},
+                 api_key: "sk-secret",
+                 req_http_options: [plug: {Req.Test, DetailedHTTP}]
+               )
+
+      assert_receive :detailed_request
+      refute_receive :detailed_request, 20
+      assert_receive {:usage_telemetry, %{operation: :transcription}}
+
+      assert detailed.result == %Result{
+               text: "Hello world",
+               segments: [%{text: "Hello world", start_second: 0.0, end_second: 1.0}],
+               language: "en",
+               duration_in_seconds: 1.0
+             }
+
+      assert Map.from_struct(detailed.result) == %{
+               text: "Hello world",
+               segments: [%{text: "Hello world", start_second: 0.0, end_second: 1.0}],
+               language: "en",
+               duration_in_seconds: 1.0
+             }
+
+      metadata = detailed.call_metadata
+      assert metadata.model == "transcription-metadata-test"
+      assert metadata.provider == :openai
+      assert is_binary(metadata.request_id)
+      assert metadata.request_id != "provider_req_123"
+      assert metadata.response_id == "transcription_123"
+      assert metadata.usage.input_tokens == 10
+      assert metadata.usage.output_tokens == 4
+      assert metadata.usage.total_tokens == 14
+      assert metadata.usage.total_cost > 0
+      assert metadata.warnings == ["credential [REDACTED] was ignored"]
+      assert metadata.timings.request_ms > 0
+      assert metadata.timings.provider_ms == 8.0
+      assert metadata.provider_metadata.request_id == "provider_req_123"
+      assert metadata.provider_metadata["api_key"] == "[REDACTED]"
+
+      assert metadata.provider_metadata["url"] ==
+               "https://example.com/transcription?token=[REDACTED]"
+
+      refute inspect(detailed) =~ "sk-secret"
+    end
+
+    test "omits metadata that the provider and request pipeline do not supply" do
+      Req.Test.stub(SparseDetailedHTTP, fn conn ->
+        Req.Test.json(conn, %{"text" => "Hello"})
+      end)
+
+      assert {:ok, %DetailedResult{result: %Result{text: "Hello"}} = detailed} =
+               ReqLLM.transcribe_detailed(
+                 %LLMDB.Model{id: "whisper-1", provider: :openai},
+                 {:binary, "audio", "audio/mpeg"},
+                 api_key: "test-key",
+                 req_http_options: [plug: {Req.Test, SparseDetailedHTTP}]
+               )
+
+      assert detailed.call_metadata.model == "whisper-1"
+      assert detailed.call_metadata.provider == :openai
+      assert is_binary(detailed.call_metadata.request_id)
+      assert detailed.call_metadata.timings.request_ms > 0
+      refute Map.has_key?(detailed.call_metadata, :response_id)
+      refute Map.has_key?(detailed.call_metadata, :usage)
+      refute Map.has_key?(detailed.call_metadata, :warnings)
+      refute Map.has_key?(detailed.call_metadata, :provider_metadata)
+    end
+
+    test "bang variant raises the same error as the legacy facade" do
+      legacy_error =
+        assert_raise ReqLLM.Error.Invalid.Parameter, fn ->
+          Transcription.transcribe!("openai:whisper-1", "/nonexistent/audio.mp3")
+        end
+
+      detailed_error =
+        assert_raise ReqLLM.Error.Invalid.Parameter, fn ->
+          Transcription.transcribe_detailed!("openai:whisper-1", "/nonexistent/audio.mp3")
+        end
+
+      assert Exception.message(detailed_error) == Exception.message(legacy_error)
+    end
+  end
+
   describe "ReqLLM facade delegation" do
     test "transcribe/3 is delegated" do
       assert function_exported?(ReqLLM, :transcribe, 3)
@@ -165,6 +312,13 @@ defmodule ReqLLM.TranscriptionTest do
     test "transcribe!/3 is delegated" do
       assert function_exported?(ReqLLM, :transcribe!, 3)
       assert function_exported?(ReqLLM, :transcribe!, 2)
+    end
+
+    test "detailed transcription functions are delegated" do
+      assert function_exported?(ReqLLM, :transcribe_detailed, 3)
+      assert function_exported?(ReqLLM, :transcribe_detailed, 2)
+      assert function_exported?(ReqLLM, :transcribe_detailed!, 3)
+      assert function_exported?(ReqLLM, :transcribe_detailed!, 2)
     end
   end
 end

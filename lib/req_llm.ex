@@ -1431,6 +1431,21 @@ defmodule ReqLLM do
   """
   defdelegate transcribe!(model_spec, audio, opts \\ []), to: Transcription
 
+  @doc """
+  Transcribes audio with sparse metadata for the same provider call.
+
+  The returned `ReqLLM.Transcription.DetailedResult` wraps the unchanged
+  `ReqLLM.Transcription.Result`. Unavailable metadata is omitted.
+  """
+  defdelegate transcribe_detailed(model_spec, audio, opts \\ []), to: Transcription
+
+  @doc """
+  Transcribes audio with call metadata, raising on error.
+
+  Same as `transcribe_detailed/3` but raises on error.
+  """
+  defdelegate transcribe_detailed!(model_spec, audio, opts \\ []), to: Transcription
+
   # ===========================================================================
   # Speech API - Delegated to ReqLLM.Speech
   # ===========================================================================

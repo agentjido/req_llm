@@ -40,6 +40,7 @@ defmodule ReqLLM.Transcription do
 
   """
 
+  alias ReqLLM.Transcription.DetailedResult
   alias ReqLLM.Transcription.Result
 
   @base_schema NimbleOptions.new!(
@@ -137,6 +138,31 @@ defmodule ReqLLM.Transcription do
           keyword()
         ) :: {:ok, Result.t()} | {:error, term()}
   def transcribe(model_spec, audio, opts \\ []) do
+    perform_transcription(model_spec, audio, opts, :result)
+  end
+
+  @doc """
+  Transcribes audio and returns the unchanged transcription result with sparse
+  metadata for the same provider call.
+
+  The returned `ReqLLM.Transcription.DetailedResult` keeps the legacy result at
+  `detailed.result`. Its `call_metadata` includes model and provider identity,
+  then adds usage and cost, correlation and provider request IDs, warnings, and
+  timings only when the request pipeline supplied them.
+
+  This function performs one provider request. Use `transcribe/3` when call
+  metadata is not needed.
+  """
+  @spec transcribe_detailed(
+          ReqLLM.model_input(),
+          String.t() | {:binary, binary(), String.t()} | {:base64, String.t(), String.t()},
+          keyword()
+        ) :: {:ok, DetailedResult.t()} | {:error, term()}
+  def transcribe_detailed(model_spec, audio, opts \\ []) do
+    perform_transcription(model_spec, audio, opts, :detailed)
+  end
+
+  defp perform_transcription(model_spec, audio, opts, return_mode) do
     opts = ReqLLM.ModelInput.merge_tuple_defaults(model_spec, :transcription, opts)
     deadline = ReqLLM.TimeoutBudget.deadline(opts)
 
@@ -153,21 +179,29 @@ defmodule ReqLLM.Transcription do
          {:ok, request} <-
            provider_module.prepare_request(:transcription, model, audio_data, [
              {:media_type, media_type} | opts
-           ]),
-         {:ok, %Req.Response{status: status, body: body}} when status in 200..299 <-
-           ReqLLM.TimeoutBudget.request(request, deadline) do
-      parse_transcription_response(body)
-    else
-      {:ok, %Req.Response{status: status, body: body}} ->
-        {:error,
-         ReqLLM.Error.API.Request.exception(
-           reason: "HTTP #{status}: Transcription request failed",
-           status: status,
-           response_body: body
-         )}
+           ]) do
+      request = maybe_attach_usage(request, model, return_mode)
+      started_at = request_started_at(return_mode)
 
-      {:error, error} ->
-        {:error, error}
+      case ReqLLM.TimeoutBudget.request(request, deadline) do
+        {:ok, %Req.Response{status: status, body: body} = response} when status in 200..299 ->
+          timings = request_timings(started_at)
+
+          with {:ok, result} <- parse_transcription_response(body) do
+            build_return(result, response, model, timings, return_mode)
+          end
+
+        {:ok, %Req.Response{status: status, body: body}} ->
+          {:error,
+           ReqLLM.Error.API.Request.exception(
+             reason: "HTTP #{status}: Transcription request failed",
+             status: status,
+             response_body: body
+           )}
+
+        {:error, error} ->
+          {:error, error}
+      end
     end
   end
 
@@ -187,6 +221,62 @@ defmodule ReqLLM.Transcription do
       {:error, error} -> raise error
     end
   end
+
+  @doc """
+  Transcribes audio with call metadata, raising on error.
+
+  Same as `transcribe_detailed/3` but raises on error.
+  """
+  @spec transcribe_detailed!(
+          ReqLLM.model_input(),
+          String.t() | {:binary, binary(), String.t()} | {:base64, String.t(), String.t()},
+          keyword()
+        ) :: DetailedResult.t() | no_return()
+  def transcribe_detailed!(model_spec, audio, opts \\ []) do
+    case transcribe_detailed(model_spec, audio, opts) do
+      {:ok, result} -> result
+      {:error, error} -> raise error
+    end
+  end
+
+  defp maybe_attach_usage(request, model, :detailed) do
+    request =
+      request
+      |> Req.Request.register_options([:operation])
+      |> Req.Request.merge_options(operation: :transcription)
+
+    if Keyword.has_key?(request.response_steps, :llm_usage) do
+      request
+    else
+      ReqLLM.Step.Usage.attach(request, model)
+    end
+  end
+
+  defp maybe_attach_usage(request, _model, :result), do: request
+
+  defp request_started_at(:detailed), do: System.monotonic_time()
+  defp request_started_at(:result), do: nil
+
+  defp build_return(result, _response, _model, _timings, :result), do: {:ok, result}
+
+  defp build_return(result, response, model, timings, :detailed) do
+    call_metadata =
+      ReqLLM.CallMetadata.from_req_response(response, model,
+        timings: timings,
+        sensitive_sources: [%{content: result.text}]
+      )
+
+    {:ok, %DetailedResult{result: result, call_metadata: call_metadata}}
+  end
+
+  defp request_timings(started_at) when is_integer(started_at) do
+    duration = System.monotonic_time() - started_at
+    microseconds = System.convert_time_unit(duration, :native, :microsecond)
+
+    if microseconds > 0, do: %{request_ms: microseconds / 1_000}
+  end
+
+  defp request_timings(nil), do: nil
 
   defp resolve_audio(path) when is_binary(path) do
     case File.read(path) do
