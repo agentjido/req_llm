@@ -46,6 +46,7 @@ defmodule ReqLLM.Providers.GoogleVertex.OCRTest do
 
     test "attaches correlated OCR telemetry and usage steps without retaining document content" do
       document = "private-document-content"
+      transport_secret = "private-transport-secret"
 
       {:ok, request} =
         GoogleVertex.prepare_request(
@@ -53,9 +54,15 @@ defmodule ReqLLM.Providers.GoogleVertex.OCRTest do
           @model_spec,
           document,
           @base_opts ++
-            [pages: [2, 4], document_type: "image/png", telemetry: [payloads: :raw]]
+            [
+              pages: [2, 4],
+              document_type: "image/png",
+              telemetry: [payloads: :raw],
+              req_http_options: [headers: [{"x-api-key", transport_secret}]]
+            ]
         )
 
+      assert Req.Request.get_header(request, "x-api-key") == [transport_secret]
       assert :llm_telemetry_start in Keyword.keys(request.request_steps)
       assert :ocr_classify_failure in Keyword.keys(request.response_steps)
       assert :llm_usage in Keyword.keys(request.response_steps)
@@ -74,8 +81,10 @@ defmodule ReqLLM.Providers.GoogleVertex.OCRTest do
              }
 
       assert context.request_payload == context.request_summary
+      refute Keyword.has_key?(context.original_opts, :req_http_options)
 
       refute inspect(context) =~ document
+      refute inspect(context) =~ transport_secret
       refute inspect(context) =~ "test-token"
       refute inspect(context) =~ "test-project"
     end

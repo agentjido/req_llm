@@ -241,7 +241,13 @@ defmodule ReqLLM.Providers.GoogleVertex do
 
       telemetry_opts =
         other_opts
-        |> Keyword.drop([:pages])
+        |> Keyword.take([
+          :document_type,
+          :include_images,
+          :max_retries,
+          :telemetry,
+          :total_timeout
+        ])
         |> Keyword.put(:ocr_document_bytes, byte_size(document_binary))
         |> Keyword.put(
           :ocr_document_type,
