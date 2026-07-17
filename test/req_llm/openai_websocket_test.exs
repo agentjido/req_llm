@@ -220,6 +220,30 @@ defmodule ReqLLM.OpenAIWebSocketTest do
     assert :ok = Realtime.close(session)
   end
 
+  test "Realtime session can receive the additive projected event view", %{base_url: base_url} do
+    {:ok, session} =
+      Realtime.connect("gpt-realtime",
+        base_url: base_url,
+        receive_timeout: 5_000
+      )
+
+    assert :ok = Realtime.response_create(session, %{"instructions" => "Say hi"})
+
+    assert {:ok, projected} = Realtime.next_projected_event(session, payloads: :raw)
+
+    assert projected.type == "response.created"
+
+    assert projected.native == %{
+             "type" => "response.created",
+             "response" => %{"id" => "resp_rt_123"}
+           }
+
+    assert [%ReqLLM.StreamEvent{type: :start, metadata: %{response_id: "resp_rt_123"}}] =
+             projected.stream_events
+
+    assert :ok = Realtime.close(session)
+  end
+
   defp reserve_port do
     {:ok, socket} = :gen_tcp.listen(0, [:binary, active: false, reuseaddr: true])
     {:ok, port} = :inet.port(socket)

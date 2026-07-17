@@ -211,4 +211,7 @@ package and should depend on the public values in this guide rather than
 provider modules or wire payloads.
 
 See the [compatibility policy](../COMPATIBILITY.md) for the complete ReqLLM/Jido
-ownership boundary and the [telemetry guide](telemetry.md) for event details.
+ownership boundary, the
+[provider-native integration guide](provider-native-integrations.md) for MCP and
+provider-owned capability placement, and the [telemetry guide](telemetry.md) for
+event details.

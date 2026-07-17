@@ -707,6 +707,15 @@ defmodule ReqLLM.Telemetry do
     }
   end
 
+  defp request_input(:ocr, opts) do
+    %{
+      document_bytes: opts[:ocr_document_bytes],
+      document_type: opts[:ocr_document_type],
+      include_images: opts[:ocr_include_images],
+      page_count: opts[:ocr_page_count]
+    }
+  end
+
   defp request_input(_operation, opts) do
     opts[:context] || opts[:messages] || opts[:text]
   end
@@ -775,6 +784,8 @@ defmodule ReqLLM.Telemetry do
       language: Map.get(input, :language)
     }
   end
+
+  defp summarize_request(:ocr, input) when is_map(input), do: input
 
   defp summarize_request(_operation, input) when is_binary(input) do
     %{text_bytes: byte_size(input)}
@@ -845,6 +856,8 @@ defmodule ReqLLM.Telemetry do
     input
     |> Map.take([:audio_bytes, :media_type, :language])
   end
+
+  defp request_payload(:ocr, input, :raw) when is_map(input), do: input
 
   defp request_payload(_operation, input, :raw), do: sanitize_generic_payload(input)
 
@@ -1134,6 +1147,22 @@ defmodule ReqLLM.Telemetry do
 
   defp summarize_response(:speech, audio) when is_binary(audio) do
     %{audio_bytes: byte_size(audio)}
+  end
+
+  defp summarize_response(:ocr, body) when is_map(body) do
+    pages = List.wrap(fetch_value(body, :pages))
+
+    %{
+      page_count: length(pages),
+      text_bytes:
+        Enum.reduce(pages, 0, fn page, total ->
+          total + byte_size(to_string(fetch_value(page, :markdown) || ""))
+        end),
+      image_count:
+        Enum.reduce(pages, 0, fn page, total ->
+          total + length(List.wrap(fetch_value(page, :images)))
+        end)
+    }
   end
 
   defp summarize_response(_operation, _response), do: %{}
@@ -2199,8 +2228,13 @@ defmodule ReqLLM.Telemetry do
     summary_state[:finish_reason]
   end
 
-  defp finish_reason_from_response(%Req.Response{body: body}),
-    do: finish_reason_from_response(body)
+  defp finish_reason_from_response(%Req.Response{body: body, private: private}) do
+    if get_in(private, [:req_llm, :failure_classification]) do
+      :error
+    else
+      finish_reason_from_response(body)
+    end
+  end
 
   defp finish_reason_from_response(%Response{} = response),
     do: normalize_finish_reason(response.finish_reason)

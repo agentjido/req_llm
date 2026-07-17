@@ -6,9 +6,29 @@ defmodule ReqLLM.OpenAI.Realtime do
   do not map cleanly onto `ReqLLM.stream_text/3`. It is intentionally low-level:
   you connect a session, send JSON events, receive JSON events, and close the
   socket when you are done.
+
+  `next_event/2` remains the raw provider-event API. Use
+  `next_projected_event/3` or `project_event/2` for an additive view that keeps
+  the sanitized native event alongside any exact `ReqLLM.StreamEvent` overlap.
+  Session, transport, audio, MCP, rate-limit, and other provider-native events
+  are not forced into portable event types.
   """
 
+  alias ReqLLM.OpenAI.Realtime.Event
+  alias ReqLLM.OpenAI.Realtime.EventProjector
   alias ReqLLM.Streaming.WebSocketSession
+
+  @projection_schema NimbleOptions.new!(
+                       payloads: [
+                         type: {:in, [:none, :raw]},
+                         default: :none,
+                         doc: "Include raw text, audio transcript, tool, and error payloads"
+                       ],
+                       model: [
+                         type: {:struct, LLMDB.Model},
+                         doc: "Resolved model used to project response.created as :start"
+                       ]
+                     )
 
   defmodule Session do
     @moduledoc """
@@ -52,6 +72,49 @@ defmodule ReqLLM.OpenAI.Realtime do
     with {:ok, message} <- WebSocketSession.next_message(pid, timeout) do
       Jason.decode(message)
     end
+  end
+
+  @doc """
+  Receives one raw event and returns its provider-native and exact portable views.
+
+  Sensitive text, audio transcript, tool, and error payloads are redacted by
+  default. Pass `payloads: :raw` only when the consumer is authorized to retain
+  model and tool content. This function does not loop, reconnect, execute tools,
+  or continue a response.
+  """
+  @spec next_projected_event(Session.t()) :: {:ok, Event.t()} | :halt | {:error, term()}
+  def next_projected_event(%Session{} = session), do: next_projected_event(session, 30_000, [])
+
+  @spec next_projected_event(Session.t(), non_neg_integer() | keyword()) ::
+          {:ok, Event.t()} | :halt | {:error, term()}
+  def next_projected_event(%Session{} = session, opts) when is_list(opts),
+    do: next_projected_event(session, 30_000, opts)
+
+  def next_projected_event(%Session{} = session, timeout)
+      when is_integer(timeout) and timeout >= 0,
+      do: next_projected_event(session, timeout, [])
+
+  @spec next_projected_event(Session.t(), non_neg_integer(), keyword()) ::
+          {:ok, Event.t()} | :halt | {:error, term()}
+  def next_projected_event(%Session{} = session, timeout, opts)
+      when is_integer(timeout) and timeout >= 0 and is_list(opts) do
+    with {:ok, event} <- next_event(session, timeout) do
+      {:ok, project_event(event, Keyword.put(opts, :model, session.model))}
+    end
+  end
+
+  @doc """
+  Projects one already-decoded OpenAI Realtime server event.
+
+  The returned `ReqLLM.OpenAI.Realtime.Event` always retains a native view.
+  `stream_events` is empty when no exact provider-neutral meaning exists.
+  Supplying the resolved `:model` allows `response.created` to project to the
+  canonical `:start` event.
+  """
+  @spec project_event(map(), keyword()) :: Event.t()
+  def project_event(event, opts \\ []) when is_map(event) and is_list(opts) do
+    opts = NimbleOptions.validate!(opts, @projection_schema)
+    EventProjector.project(event, opts)
   end
 
   @spec session_update(Session.t(), map()) :: :ok | {:error, term()}

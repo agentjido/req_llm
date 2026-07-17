@@ -239,6 +239,25 @@ defmodule ReqLLM.Providers.GoogleVertex do
 
       body = ReqLLM.OCR.build_ocr_body(model_id, document_binary, other_opts)
 
+      telemetry_opts =
+        other_opts
+        |> Keyword.take([
+          :document_type,
+          :include_images,
+          :max_retries,
+          :telemetry,
+          :total_timeout
+        ])
+        |> Keyword.put(:ocr_document_bytes, byte_size(document_binary))
+        |> Keyword.put(
+          :ocr_document_type,
+          Keyword.get(other_opts, :document_type, "application/pdf")
+        )
+        |> Keyword.put(:ocr_include_images, Keyword.get(other_opts, :include_images, true))
+        |> Keyword.put(:ocr_page_count, ocr_page_count(other_opts))
+
+      request_opts = Keyword.put(other_opts, :telemetry_original_opts, telemetry_opts)
+
       base_url = build_base_url(region)
       path = build_model_path(model_family, model_id, project_id, region)
       url = "#{base_url}#{path}"
@@ -259,7 +278,7 @@ defmodule ReqLLM.Providers.GoogleVertex do
         |> Req.Request.merge_options(operation: :ocr)
         |> Req.Request.put_private(:gcp_credentials, gcp_creds)
         |> Req.Request.put_private(:model, model)
-        |> attach_ocr(model, gcp_creds, other_opts)
+        |> attach_ocr(model, gcp_creds, request_opts)
 
       {:ok, request}
     end
@@ -413,9 +432,35 @@ defmodule ReqLLM.Providers.GoogleVertex do
     |> Req.Request.merge_options(ReqLLM.Provider.Defaults.finch_option(request))
     |> ReqLLM.Step.Error.attach()
     |> ReqLLM.Step.Retry.attach(opts)
+    |> Req.Request.append_response_steps(ocr_classify_failure: &classify_ocr_failure/1)
+    |> ReqLLM.Step.Usage.attach(model)
+    |> ReqLLM.Step.Telemetry.attach(model, opts)
     |> ReqLLM.Step.Fixture.maybe_attach(model, opts)
     |> put_gcp_auth(gcp_creds)
   end
+
+  defp ocr_page_count(opts) do
+    case Keyword.get(opts, :pages) do
+      pages when is_list(pages) -> length(pages)
+      _ -> nil
+    end
+  end
+
+  defp classify_ocr_failure({request, %Req.Response{status: status} = response})
+       when status not in 200..299 do
+    req_llm =
+      response.private
+      |> Map.get(:req_llm, %{})
+      |> Map.put(:failure_classification, %{
+        operation: :ocr,
+        kind: :provider_http,
+        status: status
+      })
+
+    {request, %{response | private: Map.put(response.private, :req_llm, req_llm)}}
+  end
+
+  defp classify_ocr_failure(request_response), do: request_response
 
   defp attach_embedding(request, model, gcp_creds, opts) do
     request

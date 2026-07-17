@@ -48,8 +48,10 @@ this contract suite.
 
 ## Intentionally not frozen by this suite
 
-- `ReqLLM.OpenAI.Realtime` is explicitly experimental. Its current session and
-  event shapes are not promoted to stable V1 contracts here.
+- `ReqLLM.OpenAI.Realtime` is explicitly experimental. Its raw session and
+  event shapes are not promoted to stable V1 contracts here. Its additive
+  projected view reuses stable `ReqLLM.StreamEvent` values only for exact
+  overlap while preserving provider-native events separately.
 - Venice search-result stream chunks enabled by its explicitly experimental
   provider option are not promoted to stable V1 stream semantics here.
 - Private modules, intermediate request maps, and first-party module layout are
