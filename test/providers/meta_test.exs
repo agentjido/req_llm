@@ -120,6 +120,14 @@ defmodule ReqLLM.Providers.MetaTest do
       assert warning =~ "do not accept reasoning_effort :none"
     end
 
+    test "translate_options enforces Meta's minimum output token limit" do
+      {translated, warnings} =
+        Meta.translate_options(:chat, meta_model(), max_tokens: 10)
+
+      assert translated[:max_output_tokens] == 16
+      assert Enum.any?(warnings, &(&1 =~ "Meta API minimum (16)"))
+    end
+
     test "encode_body emits Meta-compatible Responses fields" do
       request = %Req.Request{
         options: [

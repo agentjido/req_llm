@@ -104,9 +104,7 @@ providers.
 The comprehensive provider suite can be recorded after `MODEL_API_KEY` is set:
 
 ```bash
-REQ_LLM_FIXTURES_MODE=record \
-REQ_LLM_MODELS=meta:muse-spark-1.1 \
-mix test test/coverage/meta/comprehensive_test.exs
+mix mc "meta:muse-spark-1.1" --record
 ```
 
 ## Llama Models Hosted Elsewhere

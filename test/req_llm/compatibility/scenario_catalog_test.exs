@@ -43,6 +43,10 @@ defmodule ReqLLM.Compatibility.ScenarioCatalogTest do
   }
 
   describe "catalog" do
+    test "test tags use CLI-filterable scenario IDs" do
+      assert ReqLLM.Test.CompatibilityScenario.tag!(:basic) == [scenario: "basic"]
+    end
+
     test "represents every scenario once" do
       scenario_ids = Enum.map(ScenarioCatalog.scenarios(), & &1.id)
 

@@ -243,7 +243,7 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
 
             {:ok, response} = ReqLLM.StreamResponse.to_response(stream_response)
 
-            finish_reason = ReqLLM.StreamResponse.finish_reason(stream_response)
+            finish_reason = response.finish_reason
 
             # Assert response structure without context advancement check
             # (streaming doesn't auto-append to context)
@@ -453,7 +453,7 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
                 {:ok, response} ->
                   assert_basic_response(result)
 
-                  tool_calls = ReqLLM.Response.tool_calls(response) || []
+                  tool_calls = ReqLLM.Response.tool_calls(response)
 
                   if Enum.empty?(tool_calls) and truncated?(response) do
                     rt = ReqLLM.Response.reasoning_tokens(response)

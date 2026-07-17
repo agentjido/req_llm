@@ -15,4 +15,11 @@ ReqLLM.TestSupport.FakeKeys.install!()
 
 # Exclude :coverage and :integration by default
 # Run integration tests with: mix test --include integration
-ExUnit.start(capture_log: true, exclude: [:coverage, :integration])
+excluded_tags =
+  if System.get_env("REQ_LLM_INCLUDE_COVERAGE") in ~w(1 true yes on) do
+    [:integration]
+  else
+    [:coverage, :integration]
+  end
+
+ExUnit.start(capture_log: true, exclude: excluded_tags)

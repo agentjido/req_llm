@@ -9,10 +9,10 @@ defmodule ReqLLM.Test.CompatibilityScenario do
   alias ReqLLM.Compatibility.ScenarioCatalog
   alias ReqLLM.ProviderTest.Comprehensive
 
-  @spec tag!(atom()) :: [{:scenario, atom()}]
+  @spec tag!(atom()) :: [{:scenario, binary()}]
   def tag!(id) when is_atom(id) do
-    ScenarioCatalog.fetch_scenario!(id)
-    [scenario: id]
+    scenario = ScenarioCatalog.fetch_scenario!(id)
+    [scenario: scenario.id]
   end
 
   @spec fixture!(atom() | binary(), non_neg_integer()) :: binary()

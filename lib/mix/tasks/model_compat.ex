@@ -475,6 +475,7 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
          {"REQ_LLM_FIXTURES_MODE", mode},
          {"REQ_LLM_DEBUG", "1"},
          {"REQ_LLM_INCLUDE_RESPONSES", "1"},
+         {"REQ_LLM_INCLUDE_COVERAGE", "1"},
          {"REQ_LLM_FIXTURE_ALLOW_CREDENTIAL_FALLBACK", "0"}
        ] ++ cloud_env_vars)
       |> maybe_put_record_root(stage_dir)
@@ -536,7 +537,7 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
     {passed, failed, total} = parse_exunit_summary(output)
 
     status = if exit_code == 0 && failed == 0 && passed > 0, do: :pass, else: :fail
-    fixtures = extract_fixtures(output)
+    fixtures = output |> extract_fixtures() |> fallback_scenario_fixtures(scenario)
 
     error =
       cond do
@@ -777,6 +778,15 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
     |> Enum.reject(&is_nil/1)
     |> Enum.uniq()
   end
+
+  defp fallback_scenario_fixtures([], scenario) when is_binary(scenario) do
+    case ScenarioCatalog.fetch_scenario(scenario) do
+      {:ok, metadata} -> metadata.fixtures
+      :error -> []
+    end
+  end
+
+  defp fallback_scenario_fixtures(fixtures, _scenario), do: fixtures
 
   defp print_enhanced_summary(model_spec, results, registry, elapsed_ms, opts) do
     Mix.shell().info("\n" <> String.duplicate("━", 60))

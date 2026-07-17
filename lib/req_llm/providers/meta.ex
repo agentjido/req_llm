@@ -101,6 +101,7 @@ defmodule ReqLLM.Providers.Meta do
 
     {max_tokens, opts} = Keyword.pop(opts, :max_tokens)
     {opts, warnings} = translate_max_tokens(max_tokens, opts, warnings)
+    {opts, warnings} = enforce_minimum_output_tokens(opts, warnings)
     {opts, warnings} = translate_reasoning_effort(opts, warnings)
     {opts, warnings} = drop_reasoning_token_budget(opts, warnings)
 
@@ -363,6 +364,17 @@ defmodule ReqLLM.Providers.Meta do
     else
       {Keyword.put(opts, :max_output_tokens, max_tokens),
        ["Meta uses max_output_tokens; translated max_tokens." | warnings]}
+    end
+  end
+
+  defp enforce_minimum_output_tokens(opts, warnings) do
+    case Keyword.get(opts, :max_output_tokens) do
+      tokens when is_integer(tokens) and tokens < 16 ->
+        {Keyword.put(opts, :max_output_tokens, 16),
+         ["Raised :max_output_tokens to Meta API minimum (16)." | warnings]}
+
+      _tokens ->
+        {opts, warnings}
     end
   end
 

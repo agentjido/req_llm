@@ -252,6 +252,20 @@ defmodule Mix.Tasks.ReqLlm.ModelCompatTest do
       assert result.total == 1
       assert result.error == nil
       assert result.failure_layer == nil
+      assert result.fixtures == ["basic"]
+    end
+
+    test "preserves fixture names emitted by the test run" do
+      result =
+        ModelCompat.parse_test_result(
+          :openai,
+          "gpt-4o-mini",
+          "[Fixture] promoted: name=custom\n1 test, 0 failures",
+          0,
+          "basic"
+        )
+
+      assert result.fixtures == ["custom"]
     end
   end
 
