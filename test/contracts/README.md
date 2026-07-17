@@ -10,6 +10,7 @@ Run the focused suites with:
 ```sh
 mix test --only "contract:public_api"
 mix test --only "contract:provider_extension"
+mix test --only "host_contract:true"
 ```
 
 ## Stable public contracts
@@ -23,6 +24,12 @@ mix test --only "contract:provider_extension"
 | Context, message, content part, tool, tool call, tool result, response, stream response, and stream chunk values | Corresponding value tests under `test/req_llm/` |
 | Stream enumeration, metadata, materialization, cancellation, and cleanup | `test/req_llm/stream_response_test.exs` and `test/req_llm/response/stream_test.exs` |
 | Deprecated streaming bang helpers and their warnings | `test/req_llm_test.exs`, `test/req_llm/generation_test.exs` |
+| One-call host integration across buffered, materialized stream, event, tool-inspection, and continuation paths | `test/contracts/host_integration_contract_test.exs` |
+
+The host integration contract uses representative OpenAI and Anthropic data to
+verify that host control flow can remain on canonical public values. Provider
+modules only construct the representative responses and stream chunks; the
+host-facing projections do not depend on provider modules or wire keys.
 
 ## Stable provider extension contracts
 
