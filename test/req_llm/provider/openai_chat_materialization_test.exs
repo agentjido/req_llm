@@ -152,6 +152,12 @@ defmodule ReqLLM.Provider.OpenAIChatMaterializationTest do
 
     {:ok, scalar_response} = Defaults.decode_response_body_openai_format(scalar, model)
 
+    {:ok, unknown_finish_response} =
+      Defaults.decode_response_body_openai_format(
+        buffered_tool_response("{}", "tool_call"),
+        model
+      )
+
     [malformed_call] = malformed_response.message.tool_calls
     [scalar_call] = scalar_response.message.tool_calls
 
@@ -159,6 +165,7 @@ defmodule ReqLLM.Provider.OpenAIChatMaterializationTest do
     assert ToolCall.args_json(scalar_call) == "{}"
     assert ToolCall.metadata(malformed_call) == %{}
     assert ToolCall.metadata(scalar_call) == %{}
+    assert unknown_finish_response.finish_reason == :error
   end
 
   test "StreamResponse helpers share terminal error materialization", %{model: model} do
@@ -234,7 +241,7 @@ defmodule ReqLLM.Provider.OpenAIChatMaterializationTest do
     }
   end
 
-  defp buffered_tool_response(arguments) do
+  defp buffered_tool_response(arguments, finish_reason \\ "tool_calls") do
     %{
       "id" => "chatcmpl-tool",
       "choices" => [
@@ -248,7 +255,7 @@ defmodule ReqLLM.Provider.OpenAIChatMaterializationTest do
               }
             ]
           },
-          "finish_reason" => "tool_calls"
+          "finish_reason" => finish_reason
         }
       ]
     }
