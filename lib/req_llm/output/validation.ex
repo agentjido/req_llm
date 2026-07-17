@@ -303,13 +303,19 @@ defmodule ReqLLM.Output.Validation do
   end
 
   defp validation_errors(response, %{compiled_schema: %{schema: schema}}, _value) do
-    case ReqLLM.Schema.validate(response.object, schema) do
-      {:ok, _validated} -> []
-      {:error, error} -> [%{type: :schema_validation, message: Exception.message(error)}]
-    end
+    validate_schema(response.object, schema)
   end
 
   defp validation_errors(_response, _contract, _value), do: []
+
+  defp validate_schema(value, schema) do
+    case ReqLLM.Schema.validate(value, schema) do
+      {:ok, _validated} -> []
+      {:error, error} -> [%{type: :schema_validation, message: Exception.message(error)}]
+    end
+  rescue
+    error -> [%{type: :schema_validation, message: Exception.message(error)}]
+  end
 
   defp evaluation_warnings(descriptor, source, repairs, errors, policy) do
     extraction_warnings(descriptor, source) ++

@@ -150,6 +150,27 @@ defmodule ReqLLM.OutputValidationTest do
                Response.output_result(response, output)
     end
 
+    test "turns unknown output keys into diagnostics instead of raising" do
+      output = person_output()
+      unknown_key = "unexpected_#{System.unique_integer([:positive])}"
+      value = %{"name" => "Ada", "age" => 37, unknown_key => true}
+
+      assert {:ok, warned_response} =
+               generate(output, stub_tool_response(value), output_validation: :warn)
+
+      assert %Result{valid?: false, errors: [%{type: :schema_validation}]} =
+               Response.output_result(warned_response, output)
+
+      assert {:error,
+              %ReqLLM.Error.Validation.Error{
+                tag: :structured_output_validation_failed,
+                context: context
+              }} = generate(output, stub_tool_response(value), output_validation: :strict)
+
+      assert %Result{valid?: false, errors: [%{type: :schema_validation}]} =
+               context[:output_result]
+    end
+
     test "compatible can record diagnostics without changing success semantics" do
       output = person_output()
       stub = stub_tool_response(%{"name" => "Ada"}, self())
