@@ -5,7 +5,7 @@ defmodule ReqLLM.Providers.AmazonBedrock.Meta do
   Handles Meta's Llama models (Llama 3, 3.1, 3.2, 3.3, 4) on AWS Bedrock.
 
   This module acts as a thin adapter between Bedrock's AWS-specific wrapping
-  and Meta's native Llama format. It delegates to `ReqLLM.Providers.Meta` for
+  and Meta's native Llama format. It delegates to `ReqLLM.Providers.Meta.Llama` for
   all format conversion and response parsing.
 
   ## Native Format vs OpenAI-Compatible
@@ -15,12 +15,12 @@ defmodule ReqLLM.Providers.AmazonBedrock.Meta do
   **AWS Bedrock uses Meta's native format** with `prompt`, `max_gen_len`,
   and `generation` fields.
 
-  This is why this module delegates to the generic `ReqLLM.Providers.Meta`
-  rather than `ReqLLM.Providers.OpenAI`.
+  This is why this module delegates to `ReqLLM.Providers.Meta.Llama` rather
+  than the direct Meta Model API provider.
   """
 
   alias ReqLLM.Providers.AmazonBedrock
-  alias ReqLLM.Providers.Meta
+  alias ReqLLM.Providers.Meta.Llama
 
   @doc """
   Returns whether this model family supports toolChoice in Bedrock Converse API.
@@ -60,7 +60,7 @@ defmodule ReqLLM.Providers.AmazonBedrock.Meta do
   Delegates to the generic Meta provider and returns the formatted request.
   """
   def format_request(_model_id, context, opts) do
-    Meta.format_request(context, opts)
+    Llama.format_request(context, opts)
   end
 
   @doc """
@@ -69,7 +69,7 @@ defmodule ReqLLM.Providers.AmazonBedrock.Meta do
   Delegates to the generic Meta provider. Exposed for testing.
   """
   def format_llama_prompt(messages) do
-    Meta.format_llama_prompt(messages)
+    Llama.format_llama_prompt(messages)
   end
 
   @doc """
@@ -78,7 +78,7 @@ defmodule ReqLLM.Providers.AmazonBedrock.Meta do
   Delegates to the generic Meta provider for parsing.
   """
   def parse_response(body, opts) when is_map(body) do
-    Meta.parse_response(body, opts)
+    Llama.parse_response(body, opts)
   end
 
   @doc """
@@ -95,7 +95,7 @@ defmodule ReqLLM.Providers.AmazonBedrock.Meta do
           {:ok, ReqLLM.StreamChunk.text(text)}
 
         %{"stop_reason" => reason} ->
-          normalized_reason = Meta.parse_stop_reason(reason)
+          normalized_reason = Llama.parse_stop_reason(reason)
           {:ok, ReqLLM.StreamChunk.meta(%{finish_reason: normalized_reason, terminal?: true})}
 
         %{"amazon-bedrock-invocationMetrics" => metrics} ->
@@ -126,7 +126,7 @@ defmodule ReqLLM.Providers.AmazonBedrock.Meta do
   Delegates to the generic Meta provider for usage extraction.
   """
   def extract_usage(body, _model) when is_map(body) do
-    Meta.extract_usage(body)
+    Llama.extract_usage(body)
   end
 
   def extract_usage(_, _), do: {:error, :no_usage}

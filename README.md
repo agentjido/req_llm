@@ -41,6 +41,7 @@ That breadth extends well beyond chat: ReqLLM tracks **92 non-text operation mod
 | [Google Gemini](https://llmdb.xyz/?providers=google) | `google` | 50 | text, embedding 2, image 8 | 24 | [Guide](guides/google.md) |
 | [Google Vertex AI](https://llmdb.xyz/?providers=google_vertex) | `google_vertex` | 40 | text | 11 | [Guide](guides/google_vertex.md) |
 | [Groq](https://llmdb.xyz/?providers=groq) | `groq` | 18 | text, speech 2, transcription 2 | 11 | [Guide](guides/groq.md) |
+| [Meta Model API](https://llmdb.xyz/?providers=meta) | `meta` | 1 | text | 0 | [Guide](guides/meta.md) |
 | [MiniMax](https://llmdb.xyz/?providers=minimax) | `minimax` | 6 | text | 6 | — |
 | [OpenAI](https://llmdb.xyz/?providers=openai) | `openai` | 86 | text, embedding 3, image 5, speech 6, transcription 7 | 64 | [Guide](guides/openai.md) |
 | [OpenRouter](https://llmdb.xyz/?providers=openrouter) | `openrouter` | 364 | text, embedding 25, image 5 | 234 | [Guide](guides/openrouter.md) |
@@ -523,7 +524,7 @@ This approach gives you full control over the Req pipeline, allowing you to add 
 - [Mix Tasks](guides/mix-tasks.md) – model sync, compatibility testing, code generation
 - [Fixture Testing](guides/fixture-testing.md) – model validation and supported models
 - [Adding a Provider](guides/adding_a_provider.md) – extend with new providers
-- Provider Guides: [Anthropic](guides/anthropic.md), [OpenAI](guides/openai.md), [Google](guides/google.md), [Google Vertex](guides/google_vertex.md), [xAI](guides/xai.md), [Groq](guides/groq.md), [OpenRouter](guides/openrouter.md), [Amazon Bedrock](guides/amazon_bedrock.md), [Azure](guides/azure.md), [Cerebras](guides/cerebras.md), [Fireworks AI](guides/fireworks_ai.md), [Z.AI](guides/zai.md), [Z.AI Coder](guides/zai_coder.md), [Zenmux](guides/zenmux.md)
+- Provider Guides: [Anthropic](guides/anthropic.md), [OpenAI](guides/openai.md), [Google](guides/google.md), [Google Vertex](guides/google_vertex.md), [xAI](guides/xai.md), [Groq](guides/groq.md), [OpenRouter](guides/openrouter.md), [Amazon Bedrock](guides/amazon_bedrock.md), [Azure](guides/azure.md), [Cerebras](guides/cerebras.md), [Fireworks AI](guides/fireworks_ai.md), [Meta](guides/meta.md), [Z.AI](guides/zai.md), [Z.AI Coder](guides/zai_coder.md), [Zenmux](guides/zenmux.md)
 
 ## Roadmap & Status
 

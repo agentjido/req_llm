@@ -110,6 +110,9 @@ defmodule ReqLLM.Provider.ResponseBuilder do
 
   def for_model(%LLMDB.Model{provider: :minimax}), do: ReqLLM.Providers.Minimax.ResponseBuilder
 
+  def for_model(%LLMDB.Model{provider: :meta}),
+    do: ReqLLM.Providers.OpenAI.ResponsesAPI.ResponseBuilder
+
   def for_model(%LLMDB.Model{provider: :google_vertex} = model) do
     if vertex_claude_model?(model) do
       ReqLLM.Providers.Anthropic.ResponseBuilder
