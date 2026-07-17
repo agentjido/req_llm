@@ -153,47 +153,49 @@ defmodule ReqLLM.OutputGenerationTest do
 
   describe "stream_text/3 output contracts" do
     test "exposes unvalidated partial chunks and materializes the final projected value" do
-      output = Output.array(name: [type: :string, required: true])
-      stub = stub_tool_stream(%{"value" => [%{"name" => "Ada"}]})
+      output =
+        Output.object(
+          [
+            name: [type: :string, required: true],
+            age: [type: :pos_integer, required: true],
+            occupation: [type: :string, required: true]
+          ],
+          name: "person"
+        )
+
+      opts = [output: output, max_tokens: 500, fixture: "object_streaming"]
 
       assert {:ok, partial_response} =
                ReqLLM.stream_text(
-                 @model,
-                 "Generate people",
-                 output: output,
-                 openai_structured_output_mode: :tool_strict,
-                 req_http_options: [plug: {Req.Test, stub}]
+                 "openai:gpt-4o-mini",
+                 "Generate a software engineer profile",
+                 opts
                )
 
       chunks = Enum.to_list(partial_response.stream)
 
-      assert %ReqLLM.StreamChunk{type: :tool_call, name: "structured_output"} =
-               chunk = Enum.find(chunks, &(&1.type == :tool_call))
+      content_chunks = Enum.filter(chunks, &(&1.type == :content and is_binary(&1.text)))
 
-      assert chunk.arguments == %{}
-      assert chunk.metadata.invalid_arguments == true
-
-      assert Enum.any?(chunks, fn chunk ->
-               chunk.type == :meta and
-                 is_binary(get_in(chunk.metadata, [:tool_call_args, :fragment]))
-             end)
+      assert length(content_chunks) > 1
+      assert Enum.any?(content_chunks, &match?({:error, _reason}, Jason.decode(&1.text)))
+      streamed_json = content_chunks |> Enum.map_join(& &1.text) |> Jason.decode!()
 
       assert {:ok, final_stream} =
                ReqLLM.stream_text(
-                 @model,
-                 "Generate people",
-                 output: output,
-                 openai_structured_output_mode: :tool_strict,
-                 req_http_options: [plug: {Req.Test, stub}]
+                 "openai:gpt-4o-mini",
+                 "Generate a software engineer profile",
+                 opts
                )
 
       assert {:ok, response} = StreamResponse.to_response(final_stream)
       value = Response.output(response, output)
-      assert is_list(value)
-      assert value != []
-      assert Enum.all?(value, &is_binary(&1["name"]))
-      assert response.object == %{"value" => value}
-      assert [%ToolCall{}] = Response.tool_calls(response)
+      assert is_binary(value["name"])
+      assert is_integer(value["age"])
+      assert is_binary(value["occupation"])
+      assert response.object == value
+      assert streamed_json == value
+      assert response.provider_meta["status"] == "completed"
+      assert Response.tool_calls(response) == []
     end
   end
 
@@ -254,52 +256,6 @@ defmodule ReqLLM.OutputGenerationTest do
         "output_text" => Jason.encode!(object),
         "usage" => %{"input_tokens" => 10, "output_tokens" => 4}
       })
-    end)
-
-    stub
-  end
-
-  defp stub_tool_stream(arguments) do
-    stub = {__MODULE__, make_ref()}
-    argument_json = Jason.encode!(arguments)
-
-    delta = %{
-      "id" => "chatcmpl-stream-123",
-      "choices" => [
-        %{
-          "delta" => %{
-            "role" => "assistant",
-            "tool_calls" => [
-              %{
-                "index" => 0,
-                "id" => "call_123",
-                "type" => "function",
-                "function" => %{
-                  "name" => "structured_output",
-                  "arguments" => argument_json
-                }
-              }
-            ]
-          },
-          "finish_reason" => nil
-        }
-      ]
-    }
-
-    finish = %{
-      "id" => "chatcmpl-stream-123",
-      "choices" => [%{"delta" => %{}, "finish_reason" => "tool_calls"}]
-    }
-
-    Req.Test.stub(stub, fn conn ->
-      body =
-        "data: #{Jason.encode!(delta)}\n\n" <>
-          "data: #{Jason.encode!(finish)}\n\n" <>
-          "data: [DONE]\n\n"
-
-      conn
-      |> Plug.Conn.put_resp_header("content-type", "text/event-stream")
-      |> Plug.Conn.send_resp(200, body)
     end)
 
     stub
