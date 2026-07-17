@@ -232,6 +232,21 @@ defmodule ReqLLM.Providers.MetaTest do
       assert decoded["include"] == ["reasoning.encrypted_content"]
       refute Map.has_key?(decoded, "max_tokens")
     end
+
+    test "attach_stream uses the wire model ID from explicit model specs" do
+      model = %{meta_model() | id: "friendly-name", provider_model_id: "muse-spark-wire-id"}
+
+      {:ok, request} =
+        Meta.attach_stream(
+          model,
+          context_fixture(),
+          [base_url: "https://proxy.example/v1/"],
+          ReqLLM.Finch
+        )
+
+      assert request.path == "/v1/responses"
+      assert Jason.decode!(request.body)["model"] == "muse-spark-wire-id"
+    end
   end
 
   describe "response decoding" do

@@ -159,7 +159,7 @@ defmodule ReqLLM.Providers.Meta do
       processed_opts
       |> put_meta_defaults()
       |> Keyword.put(:context, context)
-      |> Keyword.put(:model, model.id)
+      |> Keyword.put(:model, model.provider_model_id || model.id)
       |> Keyword.put(:req_llm_model, model)
       |> Keyword.put(:stream, true)
 
@@ -179,7 +179,9 @@ defmodule ReqLLM.Providers.Meta do
       |> ReqLLM.Schema.apply_property_ordering()
       |> Jason.encode!()
 
-    {:ok, Finch.build(:post, base_url <> ResponsesAPI.path(), headers, body)}
+    url = String.trim_trailing(base_url, "/") <> ResponsesAPI.path()
+
+    {:ok, Finch.build(:post, url, headers, body)}
   rescue
     error ->
       {:error,
