@@ -44,6 +44,42 @@ defmodule ReqLLM.Providers.GoogleVertex.OCRTest do
       assert :llm_fixture in Keyword.keys(request.request_steps)
     end
 
+    test "attaches correlated OCR telemetry and usage steps without retaining document content" do
+      document = "private-document-content"
+
+      {:ok, request} =
+        GoogleVertex.prepare_request(
+          :ocr,
+          @model_spec,
+          document,
+          @base_opts ++
+            [pages: [2, 4], document_type: "image/png", telemetry: [payloads: :raw]]
+        )
+
+      assert :llm_telemetry_start in Keyword.keys(request.request_steps)
+      assert :ocr_classify_failure in Keyword.keys(request.response_steps)
+      assert :llm_usage in Keyword.keys(request.response_steps)
+      assert :llm_telemetry_stop in Keyword.keys(request.response_steps)
+      assert :llm_telemetry_exception in Keyword.keys(request.error_steps)
+
+      context = ReqLLM.Telemetry.request_context(request)
+
+      assert context.operation == :ocr
+
+      assert context.request_summary == %{
+               document_bytes: byte_size(document),
+               document_type: "image/png",
+               include_images: true,
+               page_count: 2
+             }
+
+      assert context.request_payload == context.request_summary
+
+      refute inspect(context) =~ document
+      refute inspect(context) =~ "test-token"
+      refute inspect(context) =~ "test-project"
+    end
+
     test "rejects non-OCR models" do
       assert {:error, error} =
                GoogleVertex.prepare_request(

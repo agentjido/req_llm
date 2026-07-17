@@ -27,7 +27,7 @@ defimpl ReqLLM.Telemetry.RequestSource, for: Req.Request do
     %{}
     |> put_present(:address, uri.host)
     |> put_present(:port, uri.port)
-    |> put_present(:path, uri.path)
+    |> put_present(:path, sanitize_path(uri.path))
   end
 
   def server(%{url: url}) when is_binary(url) do
@@ -35,6 +35,12 @@ defimpl ReqLLM.Telemetry.RequestSource, for: Req.Request do
   end
 
   def server(_source), do: %{}
+
+  defp sanitize_path(path) when is_binary(path) do
+    Regex.replace(~r{(/projects/)[^/]+}, path, "\\1{project_id}")
+  end
+
+  defp sanitize_path(path), do: path
 
   defp put_present(map, _key, nil), do: map
   defp put_present(map, _key, ""), do: map

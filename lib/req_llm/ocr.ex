@@ -57,6 +57,11 @@ defmodule ReqLLM.OCR do
                    doc: "Req-specific options (keyword list or map)",
                    default: []
                  ],
+                 telemetry: [
+                   type: {:or, [:map, {:list, :any}]},
+                   doc: "ReqLLM telemetry options (for example, [payloads: :raw])",
+                   default: []
+                 ],
                  total_timeout: [
                    type: {:or, [:pos_integer, {:in, [:infinity]}]},
                    doc: "Optional total model-call timeout in milliseconds, including retries"
@@ -112,6 +117,7 @@ defmodule ReqLLM.OCR do
       - `:document_type` — MIME type hint (default `"application/pdf"`)
       - `:pages` — zero-based page indexes to process
       - `:provider_options` — provider-specific options (e.g., `region`, `access_token`)
+      - `:telemetry` — ReqLLM telemetry options (for example, `[payloads: :raw]`)
       - `:total_timeout` — optional whole-call deadline in milliseconds, including retries
 
   ## Examples

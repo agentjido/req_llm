@@ -10,13 +10,31 @@ defmodule ReqLLM.OCRTest do
   - ReqLLM facade delegation
   """
 
-  use ExUnit.Case, async: true
+  use ExUnit.Case, async: false
 
   @moduletag contract: :public_api
 
   alias ReqLLM.OCR
 
   @tiny_pdf <<"%PDF-1.0\n1 0 obj\n<< /Type /Catalog >>\nendobj\n">>
+
+  defmodule SuccessHTTP do
+  end
+
+  defmodule ErrorHTTP do
+  end
+
+  describe "schema/0" do
+    test "accepts the shared telemetry options without changing defaults" do
+      schema = OCR.schema()
+
+      assert :telemetry in Keyword.keys(schema.schema)
+      assert {:ok, opts} = NimbleOptions.validate([], schema)
+      assert opts[:telemetry] == []
+      assert opts[:include_images] == true
+      assert opts[:document_type] == "application/pdf"
+    end
+  end
 
   describe "validate_model/1" do
     test "rejects non-OCR models" do
@@ -173,12 +191,23 @@ defmodule ReqLLM.OCRTest do
   end
 
   describe "ocr_file/3" do
-    test "returns error for missing file" do
-      result =
-        OCR.ocr_file(%{provider: :google_vertex, id: "mistral-ocr-2505"}, "/nonexistent/file.pdf")
+    test "preserves exact missing-file errors and validation order" do
+      path =
+        Path.join(
+          System.tmp_dir!(),
+          "req_llm_missing_ocr_#{System.unique_integer([:positive])}.pdf"
+        )
 
-      assert {:error, message} = result
-      assert message =~ "Cannot read"
+      expected = "Cannot read #{path}: enoent"
+
+      assert {:error, ^expected} = OCR.ocr_file("invalid:model", path)
+
+      error =
+        assert_raise RuntimeError, fn ->
+          OCR.ocr_file!("invalid:model", path)
+        end
+
+      assert Exception.message(error) == "OCR failed: #{inspect(expected)}"
     end
 
     test "detects document type from extension" do
@@ -205,6 +234,166 @@ defmodule ReqLLM.OCRTest do
   end
 
   describe "ocr/3" do
+    @tag category: :ocr
+    @tag provider: :google_vertex
+    @tag ReqLLM.Test.CompatibilityScenario.tag!(:ocr_basic)
+    test "preserves the exact result while emitting redacted correlated telemetry and usage" do
+      test_pid = self()
+      document = "private-document-content"
+      recognized = "# Private recognized output"
+      access_token = "private-access-token"
+      project_id = "private-project-id"
+      handler_id = attach_ocr_telemetry(test_pid)
+
+      on_exit(fn -> :telemetry.detach(handler_id) end)
+
+      Req.Test.stub(SuccessHTTP, fn conn ->
+        send(test_pid, :ocr_provider_request)
+
+        body = %{
+          "pages" => [
+            %{
+              "index" => 0,
+              "markdown" => recognized,
+              "images" => [%{"id" => "image-1", "image_base64" => "encoded-image"}]
+            }
+          ],
+          "usage" => %{
+            "prompt_tokens" => 7,
+            "completion_tokens" => 3,
+            "total_tokens" => 10
+          }
+        }
+
+        conn
+        |> Plug.Conn.put_resp_content_type("application/json")
+        |> Plug.Conn.send_resp(200, Jason.encode!(body))
+      end)
+
+      model = %{provider: :google_vertex, id: "mistral-ocr-2505"}
+
+      opts = [
+        provider_options: [
+          access_token: access_token,
+          project_id: project_id,
+          region: "us-central1"
+        ],
+        req_http_options: [plug: {Req.Test, SuccessHTTP}],
+        max_retries: 0
+      ]
+
+      assert {:ok, result} = ReqLLM.ocr(model, document, opts)
+
+      assert result == %{
+               markdown: recognized,
+               pages: [
+                 %{
+                   index: 0,
+                   markdown: recognized,
+                   images: [%{"id" => "image-1", "image_base64" => "encoded-image"}]
+                 }
+               ]
+             }
+
+      assert Enum.sort(Map.keys(result)) == [:markdown, :pages]
+      assert_receive :ocr_provider_request
+      refute_receive :ocr_provider_request, 20
+
+      assert_receive {:ocr_telemetry, [:req_llm, :request, :start], start_meta}
+      assert_receive {:ocr_telemetry, [:req_llm, :token_usage], usage_meta}
+      assert_receive {:ocr_telemetry, [:req_llm, :request, :stop], stop_meta}
+
+      assert start_meta.operation == :ocr
+      assert start_meta.provider == :google_vertex
+      assert start_meta.transport == :req
+
+      assert start_meta.server.path ==
+               "/v1/projects/{project_id}/locations/us-central1/publishers/mistralai/models/mistral-ocr-2505:rawPredict"
+
+      assert start_meta.request_summary == %{
+               document_bytes: byte_size(document),
+               document_type: "application/pdf",
+               include_images: true,
+               page_count: nil
+             }
+
+      refute Map.has_key?(start_meta, :request_payload)
+      assert usage_meta.request_id == start_meta.request_id
+      assert usage_meta.operation == :ocr
+      assert stop_meta.request_id == start_meta.request_id
+      assert stop_meta.http_status == 200
+      assert stop_meta.usage.tokens.input_tokens == 7
+      assert stop_meta.usage.tokens.output_tokens == 3
+      assert stop_meta.usage.tokens.total_tokens == 10
+
+      assert stop_meta.response_summary == %{
+               image_count: 1,
+               page_count: 1,
+               text_bytes: byte_size(recognized)
+             }
+
+      refute Map.has_key?(stop_meta, :response_payload)
+
+      telemetry = inspect({start_meta, usage_meta, stop_meta})
+      refute telemetry =~ document
+      refute telemetry =~ recognized
+      refute telemetry =~ access_token
+      refute telemetry =~ project_id
+      refute telemetry =~ "encoded-image"
+    end
+
+    test "preserves provider failures and classifies them only in telemetry" do
+      test_pid = self()
+      response_body = %{"error" => %{"message" => "invalid document"}}
+      handler_id = attach_ocr_telemetry(test_pid)
+
+      on_exit(fn -> :telemetry.detach(handler_id) end)
+
+      Req.Test.stub(ErrorHTTP, fn conn ->
+        conn
+        |> Plug.Conn.put_resp_content_type("application/json")
+        |> Plug.Conn.send_resp(422, Jason.encode!(response_body))
+      end)
+
+      model = %{provider: :google_vertex, id: "mistral-ocr-2505"}
+
+      opts = [
+        provider_options: [
+          access_token: "test-token",
+          project_id: "test-project",
+          region: "us-central1"
+        ],
+        req_http_options: [plug: {Req.Test, ErrorHTTP}],
+        max_retries: 0
+      ]
+
+      assert {:error, %ReqLLM.Error.API.Request{} = error} =
+               ReqLLM.ocr(model, @tiny_pdf, opts)
+
+      assert error.reason == "HTTP 422: OCR request failed"
+      assert error.status == 422
+      assert error.response_body == response_body
+      assert error.request_body == nil
+      assert Exception.message(error) == "API request failed (422): HTTP 422: OCR request failed"
+
+      assert_receive {:ocr_telemetry, [:req_llm, :request, :start], start_meta}
+      assert_receive {:ocr_telemetry, [:req_llm, :request, :stop], stop_meta}
+      assert stop_meta.request_id == start_meta.request_id
+      assert stop_meta.http_status == 422
+      assert stop_meta.finish_reason == :error
+      refute_receive {:ocr_telemetry, [:req_llm, :request, :exception], _}
+
+      raised =
+        assert_raise ReqLLM.Error.API.Request, fn ->
+          ReqLLM.ocr!(model, @tiny_pdf, opts)
+        end
+
+      assert raised.reason == error.reason
+      assert raised.status == error.status
+      assert raised.response_body == error.response_body
+      assert Exception.message(raised) == Exception.message(error)
+    end
+
     test "rejects non-OCR models before preparing a request" do
       assert {:error, error} = OCR.ocr("google_vertex:gemini-2.5-flash", "binary")
       assert Exception.message(error) =~ "does not support OCR operations"
@@ -239,5 +428,28 @@ defmodule ReqLLM.OCRTest do
       assert function_exported?(ReqLLM, :ocr_file!, 3)
       assert function_exported?(ReqLLM, :ocr_file!, 2)
     end
+  end
+
+  defp attach_ocr_telemetry(test_pid) do
+    handler_id = "ocr-telemetry-#{System.unique_integer([:positive])}"
+
+    :ok =
+      :telemetry.attach_many(
+        handler_id,
+        [
+          [:req_llm, :request, :start],
+          [:req_llm, :request, :stop],
+          [:req_llm, :request, :exception],
+          [:req_llm, :token_usage]
+        ],
+        fn event, _measurements, metadata, _config ->
+          if metadata.operation == :ocr do
+            send(test_pid, {:ocr_telemetry, event, metadata})
+          end
+        end,
+        nil
+      )
+
+    handler_id
   end
 end
