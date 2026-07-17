@@ -86,6 +86,7 @@ defmodule ReqLLM.Providers.Azure.ResponsesAPI do
     fake_request = %{
       options: %{
         model: model.id,
+        req_llm_model: model,
         operation: opts[:operation],
         context: opts[:context],
         compiled_schema: opts[:compiled_schema]

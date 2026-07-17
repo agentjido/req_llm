@@ -20,17 +20,23 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI.ResponseBuilder do
 
   @impl true
   def build_response(chunks, metadata, opts) do
+    DefaultBuilder.build_response(chunks, normalize_metadata(chunks, metadata), opts)
+  end
+
+  @doc false
+  @spec build_buffered_response([StreamChunk.t()], map(), keyword()) ::
+          {:ok, ReqLLM.Response.t()} | {:error, term()}
+  def build_buffered_response(chunks, metadata, opts) do
+    DefaultBuilder.build_buffered_response(chunks, metadata, opts)
+  end
+
+  defp normalize_metadata(chunks, metadata) do
     has_actionable_tool_calls? = Enum.any?(chunks, &actionable_tool_call_chunk?/1)
 
-    metadata =
-      if has_actionable_tool_calls? and finish_reason_is_stop?(metadata[:finish_reason]) do
-        Map.put(metadata, :finish_reason, :tool_calls)
-      else
-        metadata
-      end
-
-    with {:ok, response} <- DefaultBuilder.build_response(chunks, metadata, opts) do
-      {:ok, propagate_response_id(response, metadata)}
+    if has_actionable_tool_calls? and finish_reason_is_stop?(metadata[:finish_reason]) do
+      Map.put(metadata, :finish_reason, :tool_calls)
+    else
+      metadata
     end
   end
 
@@ -43,12 +49,4 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI.ResponseBuilder do
   end
 
   defp actionable_tool_call_chunk?(_), do: false
-
-  defp propagate_response_id(response, %{response_id: id}) when is_binary(id) do
-    update_in(response.message.metadata, fn meta ->
-      Map.put(meta || %{}, :response_id, id)
-    end)
-  end
-
-  defp propagate_response_id(response, _metadata), do: response
 end

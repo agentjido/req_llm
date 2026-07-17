@@ -1732,16 +1732,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     finish_reason =
       determine_finish_reason(body, Enum.reject(tool_calls, &ReqLLM.ToolCall.builtin?/1))
 
-    content_parts = build_content_parts(text, thinking)
     message_metadata = build_message_metadata(body["id"], output_segments)
-
-    msg = %ReqLLM.Message{
-      role: :assistant,
-      content: content_parts,
-      tool_calls: if(tool_calls != [], do: tool_calls),
-      reasoning_details: if(reasoning_details != [], do: reasoning_details),
-      metadata: message_metadata
-    }
 
     {object, object_meta} = maybe_extract_object(req, text, tool_calls) || {nil, %{}}
 
@@ -1760,25 +1751,65 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
       |> Map.merge(object_meta)
       |> put_code_interpreter_meta(code_interpreter_items)
 
-    response = %ReqLLM.Response{
-      id: body["id"] || "unknown",
-      model: body["model"] || req.options[:model],
-      context: %ReqLLM.Context{
-        messages: if(content_parts == [] and is_nil(msg.tool_calls), do: [], else: [msg])
-      },
-      message: msg,
+    ctx = req.options[:context] || %ReqLLM.Context{messages: []}
+    model = response_materialization_model(req, body)
+
+    chunks = buffered_response_chunks(text, thinking, tool_calls, reasoning_details)
+
+    metadata = %{
+      response_id: body["id"] || "unknown",
+      response_model: body["model"] || req.options[:model],
+      message_metadata: message_metadata,
       object: object,
-      stream?: false,
-      stream: nil,
       usage: usage,
       finish_reason: finish_reason,
       provider_meta: provider_meta
     }
 
-    ctx = req.options[:context] || %ReqLLM.Context{messages: []}
-    merged_response = %{response | context: ReqLLM.Context.append(ctx, msg)}
+    case ReqLLM.Providers.OpenAI.ResponsesAPI.ResponseBuilder.build_buffered_response(
+           chunks,
+           metadata,
+           context: ctx,
+           model: model
+         ) do
+      {:ok, response} -> {req, %{resp | body: response}}
+      {:error, error} -> {req, error}
+    end
+  end
 
-    {req, %{resp | body: merged_response}}
+  defp buffered_response_chunks(text, thinking, tool_calls, reasoning_details) do
+    thinking_chunks = if thinking == "", do: [], else: [ReqLLM.StreamChunk.thinking(thinking)]
+    text_chunks = if text == "", do: [], else: [ReqLLM.StreamChunk.text(text)]
+
+    tool_chunks =
+      tool_calls
+      |> Enum.with_index()
+      |> Enum.map(&buffered_tool_call_chunk/1)
+
+    reasoning_chunks =
+      if reasoning_details == [] do
+        []
+      else
+        [ReqLLM.StreamChunk.meta(%{reasoning_details: reasoning_details})]
+      end
+
+    thinking_chunks ++ text_chunks ++ tool_chunks ++ reasoning_chunks
+  end
+
+  defp buffered_tool_call_chunk({%ReqLLM.ToolCall{} = tool_call, index}) do
+    metadata =
+      %{id: tool_call.id, index: index, buffered_arguments: ReqLLM.ToolCall.args_json(tool_call)}
+      |> ReqLLM.ToolCall.put_builtin_flag(ReqLLM.ToolCall.builtin?(tool_call))
+
+    ReqLLM.StreamChunk.tool_call(ReqLLM.ToolCall.name(tool_call), %{}, metadata)
+  end
+
+  defp response_materialization_model(req, body) do
+    request_model(req) ||
+      %LLMDB.Model{
+        provider: :openai,
+        id: body["model"] || req.options[:model] || req.options[:id] || "unknown"
+      }
   end
 
   defp build_message_metadata(response_id, output_segments) do
@@ -2131,26 +2162,6 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   end
 
   defp normalize_arguments_json(_), do: "{}"
-
-  defp build_content_parts(text, thinking) do
-    parts = []
-
-    parts =
-      if thinking == "" do
-        parts
-      else
-        [%ReqLLM.Message.ContentPart{type: :thinking, text: thinking} | parts]
-      end
-
-    parts =
-      if text == "" do
-        parts
-      else
-        [%ReqLLM.Message.ContentPart{type: :text, text: text} | parts]
-      end
-
-    Enum.reverse(parts)
-  end
 
   defp normalize_responses_usage(usage, response_data) do
     reasoning_tokens =

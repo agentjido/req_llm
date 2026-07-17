@@ -87,7 +87,7 @@ defmodule ReqLLM.Provider.Defaults.ResponseBuilder do
       reasoning_details: reasoning_details
     }
 
-    object = materialize_object(profile, message)
+    object = materialize_object(profile, message, metadata)
     usage = normalize_usage_fields(metadata[:usage])
     finish_reason = normalize_finish_reason(metadata[:finish_reason])
     base_provider_meta = metadata[:provider_meta] || %{}
@@ -275,6 +275,16 @@ defmodule ReqLLM.Provider.Defaults.ResponseBuilder do
   defp restore_buffered_tool_arguments(
          %StreamChunk{
            type: :tool_call,
+           metadata: %{buffered_arguments: arguments} = metadata
+         } = chunk
+       )
+       when is_binary(arguments) do
+    %{chunk | arguments: arguments, metadata: Map.delete(metadata, :buffered_arguments)}
+  end
+
+  defp restore_buffered_tool_arguments(
+         %StreamChunk{
+           type: :tool_call,
            metadata: %{unparseable_arguments: true, raw_arguments: raw_arguments} = metadata
          } = chunk
        )
@@ -325,13 +335,22 @@ defmodule ReqLLM.Provider.Defaults.ResponseBuilder do
     end
   end
 
-  defp materialize_message_metadata(:buffered, _metadata), do: %{}
+  defp materialize_message_metadata(:buffered, metadata) do
+    Map.get(metadata, :message_metadata, %{})
+  end
+
   defp materialize_message_metadata(_profile, metadata), do: build_message_metadata(metadata)
 
-  defp materialize_object(:buffered, _message), do: nil
-  defp materialize_object(_profile, message), do: extract_object_from_message(message)
+  defp materialize_object(:buffered, _message, metadata), do: Map.get(metadata, :object)
+  defp materialize_object(_profile, message, _metadata), do: extract_object_from_message(message)
 
-  defp materialize_model(:buffered, metadata, model), do: metadata[:response_model] || model.id
+  defp materialize_model(:buffered, metadata, model) do
+    case Map.fetch(metadata, :response_model) do
+      {:ok, response_model} -> response_model
+      :error -> model.id
+    end
+  end
+
   defp materialize_model(_profile, _metadata, model), do: model.id
 
   # ============================================================================
