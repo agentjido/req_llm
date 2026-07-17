@@ -39,9 +39,9 @@ defmodule ReqLLM.Providers.OpenAI.ChatAPI do
   """
   @behaviour ReqLLM.Providers.OpenAI.API
 
-  import ReqLLM.Provider.Utils, only: [maybe_put: 3]
-
   require ReqLLM.Debug, as: Debug
+
+  alias ReqLLM.Providers.OpenAI.ChatAPI.Request
 
   @impl true
   def path, do: "/chat/completions"
@@ -53,7 +53,7 @@ defmodule ReqLLM.Providers.OpenAI.ChatAPI do
     operation = request.options[:operation] || :chat
     opts = if is_map(request.options), do: Map.to_list(request.options), else: request.options
 
-    enhanced_body = build_request_body(context, model_name, opts, operation)
+    enhanced_body = Request.build_body(context, model_name, opts, operation)
 
     Debug.dbug(
       fn -> "OpenAI ChatAPI request body: #{Jason.encode!(enhanced_body, pretty: true)}" end,
@@ -73,50 +73,11 @@ defmodule ReqLLM.Providers.OpenAI.ChatAPI do
     ReqLLM.Provider.Defaults.default_decode_stream_event(event, model)
   end
 
-  # ========================================================================
-  # Shared Request Building Helpers (used by both Req and Finch paths)
-  # ========================================================================
-
   defp build_request_headers(model, opts) do
     ReqLLM.Providers.OpenAI.auth_header_list(
       ReqLLM.Providers.OpenAI.resolve_request_credential!(model, opts)
     ) ++
       [{"Content-Type", "application/json"}]
-  end
-
-  defp build_request_body(context, model_name, opts, operation \\ :chat) do
-    temp_request =
-      Req.new(method: :post, url: URI.parse("https://example.com/temp"))
-      |> Map.put(:body, {:json, %{}})
-      |> Map.put(
-        :options,
-        Map.new([model: model_name, context: context, operation: operation] ++ opts)
-      )
-
-    body = ReqLLM.Provider.Defaults.default_build_body(temp_request)
-
-    # Convert opts to map for helper functions that expect request.options
-    opts_map = if is_list(opts), do: Map.new(opts), else: opts
-
-    # Apply ChatAPI-specific enhancements
-    case operation do
-      :embedding ->
-        add_embedding_options(body, opts_map)
-
-      _ ->
-        body
-        |> add_token_limits(model_name, opts_map)
-        |> add_stream_options(opts_map)
-        |> add_reasoning_effort(opts_map)
-        |> add_service_tier(opts_map)
-        |> add_verbosity(opts_map)
-        |> add_response_format(opts_map)
-        |> add_parallel_tool_calls(opts_map)
-        |> add_logprobs(opts_map)
-        |> add_audio_output(opts_map)
-        |> ReqLLM.Providers.OpenAI.AdapterHelpers.translate_tool_choice_format()
-        |> add_strict_to_tools()
-    end
   end
 
   defp build_request_url(opts) do
@@ -125,8 +86,6 @@ defmodule ReqLLM.Providers.OpenAI.ChatAPI do
       base_url -> "#{base_url}#{path()}"
     end
   end
-
-  # ========================================================================
 
   @impl true
   def attach_stream(model, context, opts, _finch_name) do
@@ -143,7 +102,7 @@ defmodule ReqLLM.Providers.OpenAI.ChatAPI do
       |> Keyword.put(:stream, true)
       |> Keyword.put(:base_url, base_url)
 
-    body = build_request_body(context, model.id, cleaned_opts)
+    body = Request.build_body(context, model.id, cleaned_opts, :chat)
     url = build_request_url(cleaned_opts)
 
     encoded = body |> ReqLLM.Schema.apply_property_ordering() |> Jason.encode!()
@@ -154,171 +113,5 @@ defmodule ReqLLM.Providers.OpenAI.ChatAPI do
        ReqLLM.Error.API.Request.exception(
          reason: "Failed to build streaming request: #{Exception.message(error)}"
        )}
-  end
-
-  defp add_embedding_options(body, request_options) do
-    body
-    |> maybe_put(:dimensions, request_options[:dimensions])
-    |> maybe_put(:encoding_format, request_options[:encoding_format])
-  end
-
-  defp add_token_limits(body, model_name, request_options) do
-    body =
-      body
-      |> Map.drop([:max_tokens, :max_completion_tokens, "max_tokens", "max_completion_tokens"])
-
-    if reasoning_model_name?(model_name) do
-      maybe_put(
-        body,
-        :max_completion_tokens,
-        request_options[:max_completion_tokens] || request_options[:max_tokens]
-      )
-    else
-      body
-      |> maybe_put(:max_tokens, request_options[:max_tokens])
-      |> maybe_put(:max_completion_tokens, request_options[:max_completion_tokens])
-    end
-  end
-
-  defp reasoning_model_name?("gpt-5-chat-latest"), do: false
-  defp reasoning_model_name?(<<"gpt-5", _::binary>>), do: true
-  defp reasoning_model_name?(<<"gpt-4.1", _::binary>>), do: true
-  defp reasoning_model_name?(<<"o1", _::binary>>), do: true
-  defp reasoning_model_name?(<<"o3", _::binary>>), do: true
-  defp reasoning_model_name?(<<"o4", _::binary>>), do: true
-  defp reasoning_model_name?(_), do: false
-
-  defp add_stream_options(body, request_options) do
-    if request_options[:stream] do
-      maybe_put(body, :stream_options, %{include_usage: true})
-    else
-      body
-    end
-  end
-
-  defp add_reasoning_effort(body, request_options) do
-    maybe_put(body, :reasoning_effort, request_options[:reasoning_effort])
-  end
-
-  defp add_service_tier(body, request_options) do
-    provider_opts = request_options[:provider_options] || []
-    service_tier = request_options[:service_tier] || provider_opts[:service_tier]
-    maybe_put(body, :service_tier, service_tier)
-  end
-
-  defp add_verbosity(body, request_options) do
-    provider_opts = request_options[:provider_options] || []
-    verbosity = provider_opts[:verbosity]
-    maybe_put(body, :verbosity, normalize_verbosity(verbosity))
-  end
-
-  defp normalize_verbosity(nil), do: nil
-  defp normalize_verbosity(v) when is_atom(v), do: Atom.to_string(v)
-  defp normalize_verbosity(v) when is_binary(v), do: v
-
-  defp add_response_format(body, request_options) do
-    provider_opts = request_options[:provider_options] || []
-    rf = provider_opts[:response_format]
-
-    normalized =
-      case rf do
-        %{type: "json_schema", json_schema: %{schema: schema}} = m when is_list(schema) ->
-          put_in(m, [:json_schema, :schema], ReqLLM.Schema.to_json(schema))
-
-        %{"type" => "json_schema", "json_schema" => %{"schema" => schema}} = m
-        when is_list(schema) ->
-          js = ReqLLM.Schema.to_json(schema)
-          %{m | "json_schema" => Map.put(m["json_schema"], "schema", js)}
-
-        _ ->
-          rf
-      end
-
-    body
-    |> Map.drop(["response_format", :response_format])
-    |> maybe_put(:response_format, normalized)
-  end
-
-  defp add_logprobs(body, request_options) do
-    provider_opts = request_options[:provider_options] || []
-
-    body
-    |> maybe_put(:logprobs, provider_opts[:openai_logprobs])
-    |> maybe_put(:top_logprobs, provider_opts[:openai_top_logprobs])
-  end
-
-  defp add_parallel_tool_calls(body, request_options) do
-    provider_opts = request_options[:provider_options] || []
-
-    ptc =
-      request_options[:parallel_tool_calls] ||
-        provider_opts[:openai_parallel_tool_calls] ||
-        provider_opts[:parallel_tool_calls]
-
-    maybe_put(body, :parallel_tool_calls, ptc)
-  end
-
-  defp add_audio_output(body, request_options) do
-    provider_opts = request_options[:provider_options] || []
-
-    body
-    |> maybe_put(:modalities, request_options[:modalities] || provider_opts[:modalities])
-    |> maybe_put(:audio, request_options[:audio] || provider_opts[:audio])
-  end
-
-  defp add_strict_to_tools(body) do
-    tools = body[:tools]
-
-    if tools && is_list(tools) do
-      updated_tools =
-        Enum.map(tools, fn tool ->
-          function = tool["function"]
-
-          if function && function["strict"] do
-            function_with_strict =
-              if is_map_key(tool, :function) do
-                function
-                |> Map.put(:strict, true)
-                |> ensure_all_properties_required()
-              else
-                function
-                |> Map.put("strict", true)
-                |> ensure_all_properties_required()
-              end
-
-            if is_map_key(tool, :function) do
-              Map.put(tool, :function, function_with_strict)
-            else
-              Map.put(tool, "function", function_with_strict)
-            end
-          else
-            tool
-          end
-        end)
-
-      if is_map_key(body, :tools) do
-        Map.put(body, :tools, updated_tools)
-      else
-        Map.put(body, "tools", updated_tools)
-      end
-    else
-      body
-    end
-  end
-
-  defp ensure_all_properties_required(function) do
-    params = function["parameters"]
-
-    if params do
-      updated_params = ReqLLM.Providers.OpenAI.AdapterHelpers.enforce_strict_recursive(params)
-
-      if is_map_key(function, :parameters) do
-        Map.put(function, :parameters, updated_params)
-      else
-        Map.put(function, "parameters", updated_params)
-      end
-    else
-      function
-    end
   end
 end

@@ -110,6 +110,26 @@ OpenAI provider automatically routes between two APIs based on model metadata:
 - **Chat Completions API**: Standard GPT models (gpt-4o, gpt-4-turbo, gpt-3.5-turbo)
 - **Responses API**: Reasoning models (o1, o3, o4-mini, gpt-5) with extended thinking
 
+### Chat Completions responsibilities
+
+The V1 provider callbacks and transports remain unchanged. Internally, Chat
+Completions responsibilities are intentionally narrow:
+
+| Responsibility | Before | Current owner |
+| --- | --- | --- |
+| Select Chat Completions or Responses and attach the Req pipeline | `ReqLLM.Providers.OpenAI` | `ReqLLM.Providers.OpenAI` |
+| Implement the Chat Completions driver callbacks and assemble its Finch request | `ReqLLM.Providers.OpenAI.ChatAPI` | `ReqLLM.Providers.OpenAI.ChatAPI` |
+| Build the exact request envelope used by both Req and Finch | private functions mixed into `ChatAPI` | <code>ReqLLM.Providers.OpenAI.ChatAPI.Request</code> |
+| Encode OpenAI-compatible messages and decode buffered/SSE wire data | `ReqLLM.Provider.Defaults` | `ReqLLM.Provider.Defaults` |
+| Accumulate chunks and materialize canonical responses | `ReqLLM.Provider.ChunkAccumulator` and response builders | unchanged shared modules |
+
+The request-envelope seam removes duplicate strict-tool and parallel-tool
+normalization by reusing `ReqLLM.Providers.OpenAI.AdapterHelpers`. SSE decoding,
+transport construction, and response handoff already have single owners, so they
+remain in place. This is an internal refactor: Req remains the buffered
+transport, Finch remains the streaming transport, and the existing
+`ReqLLM.Provider` callbacks and request/response shapes are preserved.
+
 ## Provider Options
 
 Passed via `:provider_options` keyword:
