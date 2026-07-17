@@ -2,7 +2,7 @@ defmodule ReqLLM.Providers.OpenAICodex.ResponsesLite do
   @moduledoc false
 
   @header "x-openai-internal-codex-responses-lite"
-  @hosted_tool_types ~w(web_search web_search_preview file_search mcp x_search code_interpreter)
+  @hosted_tool_types ~w(web_search web_search_preview file_search mcp x_search code_interpreter image_generation)
   @remote_image_omission "image content omitted because remote image URLs are not supported"
 
   @bundled_model_metadata %{

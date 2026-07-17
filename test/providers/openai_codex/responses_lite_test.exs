@@ -93,6 +93,7 @@ defmodule ReqLLM.Providers.OpenAICodex.ResponsesLiteTest do
       body = %{
         "tools" => [
           %{"type" => "web_search"},
+          %{"type" => "image_generation"},
           %{"type" => :file_search},
           %{type: :code_interpreter},
           %{"type" => "function", "name" => "lookup"}

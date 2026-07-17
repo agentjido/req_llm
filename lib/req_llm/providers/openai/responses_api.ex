@@ -70,7 +70,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   require Logger
   require ReqLLM.Debug, as: Debug
 
-  @builtin_tool_types ~w(web_search web_search_preview file_search mcp x_search code_interpreter)
+  @builtin_tool_types ~w(web_search web_search_preview file_search mcp x_search code_interpreter image_generation)
   @tool_usage_type_atoms %{
     "web_search" => :web_search,
     "web_search_preview" => :web_search_preview,

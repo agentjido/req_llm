@@ -1818,7 +1818,7 @@ defmodule ReqLLM.Providers.OpenAITest do
   end
 
   describe "ResponsesAPI tool encoding" do
-    test "passes through built-in web_search tool definitions" do
+    test "passes through built-in hosted tool definitions" do
       {:ok, model} = ReqLLM.model("openai:gpt-5-nano")
 
       context = %ReqLLM.Context{
@@ -1833,7 +1833,7 @@ defmodule ReqLLM.Providers.OpenAITest do
       opts = [
         context: context,
         model: model.model,
-        tools: [%{"type" => "web_search"}]
+        tools: [%{"type" => "web_search"}, %{"type" => "image_generation"}]
       ]
 
       request = %Req.Request{
@@ -1845,7 +1845,7 @@ defmodule ReqLLM.Providers.OpenAITest do
       encoded_request = ReqLLM.Providers.OpenAI.ResponsesAPI.encode_body(request)
       body = ReqLLM.Test.Helpers.json_body(encoded_request)
 
-      assert Enum.any?(body["tools"], fn tool -> tool["type"] == "web_search" end)
+      assert Enum.map(body["tools"], & &1["type"]) == ["web_search", "image_generation"]
     end
   end
 end

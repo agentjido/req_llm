@@ -183,7 +183,11 @@ defmodule ReqLLM.Providers.OpenAICodexTest do
           model,
           context,
           [
-            tools: [%{"type" => "web_search"}, local_tool],
+            tools: [
+              %{"type" => "web_search"},
+              %{"type" => "image_generation"},
+              local_tool
+            ],
             provider_options: [
               auth_mode: :oauth,
               access_token: jwt_with_account_id("acct_lite_contract")
