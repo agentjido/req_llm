@@ -37,9 +37,7 @@ defmodule ReqLLM.OutputGenerationTest do
       assert Response.text(legacy_response) == "Hello"
       assert Response.text(explicit_response) == "Hello"
       assert Response.output(explicit_response, Output.text()) == "Hello"
-
-      assert Map.from_struct(legacy_response) |> Map.keys() |> Enum.sort() ==
-               Map.from_struct(explicit_response) |> Map.keys() |> Enum.sort()
+      assert legacy_response == explicit_response
     end
 
     test "object output reuses the existing object operation and response shape" do
