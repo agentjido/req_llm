@@ -2,7 +2,7 @@ defmodule ReqLLM.ModelOperation do
   @moduledoc false
 
   @operations ~w(text embedding image speech transcription rerank ocr all)a
-  @image_providers ~w(openai google xai)a
+  @image_providers ~w(openai google xai minimax)a
   @speech_providers ~w(openai elevenlabs)a
   @transcription_providers ~w(openai groq elevenlabs openrouter)a
   @rerank_providers ~w(cohere)a
