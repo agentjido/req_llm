@@ -49,6 +49,8 @@ defmodule ReqLLM.Providers.MinimaxTest do
 
       assert :max_completion_tokens in schema_keys
       assert :reasoning_split in schema_keys
+      assert :prompt_optimizer in schema_keys
+      assert :subject_reference in schema_keys
     end
 
     test "provider_extended_generation_schema includes all core keys" do
@@ -439,6 +441,30 @@ defmodule ReqLLM.Providers.MinimaxTest do
 
       assert body["aspect_ratio"] == "1:1"
       assert body["response_format"] == "url"
+      refute Map.has_key?(body, "width")
+      refute Map.has_key?(body, "height")
+    end
+
+    test "encode_body preserves string and tuple non-canonical sizes" do
+      for size <- ["1792x1024", {1792, 1024}] do
+        request =
+          Req.new(url: ImagesAPI.path())
+          |> Req.Request.register_options([:model, :prompt, :size, :response_format, :context])
+          |> Req.Request.merge_options(
+            model: "image-01",
+            prompt: "A lighthouse",
+            size: size,
+            response_format: :url,
+            context: %Context{messages: []}
+          )
+
+        encoded = ImagesAPI.encode_body(request)
+        body = ReqLLM.Test.Helpers.json_body(encoded)
+
+        assert body["width"] == 1792
+        assert body["height"] == 1024
+        refute Map.has_key?(body, "aspect_ratio")
+      end
     end
 
     test "encode_body forwards subject_reference for image-to-image" do
@@ -491,6 +517,54 @@ defmodule ReqLLM.Providers.MinimaxTest do
              ]
     end
 
+    test "generate_image completes a MiniMax public API round trip" do
+      image_data = <<0xFF, 0xD8, 0xFF, 0xE0, "generated-image">>
+
+      Req.Test.stub(__MODULE__, fn conn ->
+        assert conn.method == "POST"
+        assert conn.request_path == "/v1/image_generation"
+        assert Plug.Conn.get_req_header(conn, "authorization") == ["Bearer test-key"]
+
+        {:ok, request_body, conn} = Plug.Conn.read_body(conn)
+        request_json = Jason.decode!(request_body)
+
+        assert request_json["model"] == "image-01"
+        assert request_json["prompt"] == "A girl by a window"
+        assert request_json["width"] == 1792
+        assert request_json["height"] == 1024
+
+        assert request_json["subject_reference"] == [
+                 %{
+                   "type" => "character",
+                   "image_file" => "https://example.com/face.jpg"
+                 }
+               ]
+
+        Req.Test.json(conn, %{
+          "id" => "trace-public-api",
+          "data" => %{"image_base64" => [Base.encode64(image_data)]},
+          "base_resp" => %{"status_code" => 0, "status_msg" => "success"}
+        })
+      end)
+
+      assert {:ok, response} =
+               ReqLLM.generate_image(minimax_image_model(), "A girl by a window",
+                 api_key: "test-key",
+                 size: "1792x1024",
+                 provider_options: [
+                   subject_reference: %{
+                     "type" => "character",
+                     "image_file" => "https://example.com/face.jpg"
+                   }
+                 ],
+                 req_http_options: [plug: {Req.Test, __MODULE__}]
+               )
+
+      assert response.id == "trace-public-api"
+      assert ReqLLM.Response.image_data(response) == image_data
+      assert [%{type: :image, media_type: "image/jpeg"}] = ReqLLM.Response.images(response)
+    end
+
     test "decode_response detects image media type from decoded bytes" do
       req =
         Req.new(url: ImagesAPI.path())
@@ -520,6 +594,7 @@ defmodule ReqLLM.Providers.MinimaxTest do
         {_req, updated} = ImagesAPI.decode_response({req, resp})
 
         assert %ReqLLM.Response{} = updated.body
+        assert updated.body.id == "trace-123"
         assert ReqLLM.Response.image_data(updated.body) == image_data
 
         [part] = ReqLLM.Response.images(updated.body)
@@ -553,7 +628,7 @@ defmodule ReqLLM.Providers.MinimaxTest do
       assert part.type == :image_url
     end
 
-    test "decode_response raises on base_resp status_code != 0 even with HTTP 200" do
+    test "decode_response returns an error on base_resp status_code != 0 even with HTTP 200" do
       req =
         Req.new(url: ImagesAPI.path())
         |> Req.Request.register_options([:model, :context])

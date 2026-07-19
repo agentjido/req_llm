@@ -19,11 +19,9 @@ defmodule ReqLLM.Providers.Minimax.ImagesAPI do
 
   @known_size_to_aspect_ratio %{
     "1024x1024" => "1:1",
-    "1792x1024" => "16:9",
-    "1024x1792" => "9:16",
-    "1536x1024" => "3:2",
+    "1280x720" => "16:9",
+    "720x1280" => "9:16",
     "1248x832" => "3:2",
-    "1024x1536" => "2:3",
     "832x1248" => "2:3",
     "1152x864" => "4:3",
     "864x1152" => "3:4",
@@ -44,7 +42,7 @@ defmodule ReqLLM.Providers.Minimax.ImagesAPI do
         _ -> []
       end
 
-    aspect_ratio = resolve_aspect_ratio(opts[:aspect_ratio], opts[:size])
+    {aspect_ratio, width, height} = resolve_dimensions(opts[:aspect_ratio], opts[:size])
 
     body =
       %{
@@ -53,6 +51,8 @@ defmodule ReqLLM.Providers.Minimax.ImagesAPI do
       }
       |> maybe_put_integer("n", opts[:n])
       |> maybe_put_string("aspect_ratio", aspect_ratio)
+      |> maybe_put_integer("width", width)
+      |> maybe_put_integer("height", height)
       |> maybe_put_integer("seed", opts[:seed])
       |> maybe_put_string("response_format", minimax_response_format(opts[:response_format]))
       |> maybe_put_boolean("prompt_optimizer", provider_opts[:prompt_optimizer])
@@ -99,16 +99,18 @@ defmodule ReqLLM.Providers.Minimax.ImagesAPI do
   end
 
   defp decode_images_response(req, %{} = body) do
-    data = Map.get(body, "data", %{})
+    data = Map.get(body, "data") || %{}
 
     url_parts =
       data
-      |> Map.get("image_urls", [])
+      |> Map.get("image_urls")
+      |> Kernel.||([])
       |> Enum.map(&decode_url_item/1)
 
     b64_parts =
       data
-      |> Map.get("image_base64", [])
+      |> Map.get("image_base64")
+      |> Kernel.||([])
       |> Enum.map(&decode_b64_item/1)
 
     parts = Enum.reject(url_parts ++ b64_parts, &is_nil/1)
@@ -122,7 +124,7 @@ defmodule ReqLLM.Providers.Minimax.ImagesAPI do
       end
 
     base_response = %Response{
-      id: image_response_id(),
+      id: Map.get(body, "id") || image_response_id(),
       model: req.options[:model] || "unknown",
       context: req.options[:context] || %Context{messages: []},
       message: message,
@@ -176,15 +178,29 @@ defmodule ReqLLM.Providers.Minimax.ImagesAPI do
 
   defp minimax_error?(_body), do: :ok
 
-  defp resolve_aspect_ratio(nil, size) when is_binary(size) do
-    Map.get(@known_size_to_aspect_ratio, size)
+  defp resolve_dimensions(nil, size) when is_binary(size) do
+    case Map.fetch(@known_size_to_aspect_ratio, size) do
+      {:ok, aspect_ratio} -> {aspect_ratio, nil, nil}
+      :error -> parse_dimensions(size)
+    end
   end
 
-  defp resolve_aspect_ratio(nil, {w, h}) when is_integer(w) and is_integer(h) do
-    Map.get(@known_size_to_aspect_ratio, "#{w}x#{h}")
+  defp resolve_dimensions(nil, {width, height})
+       when is_integer(width) and is_integer(height) do
+    resolve_dimensions(nil, "#{width}x#{height}")
   end
 
-  defp resolve_aspect_ratio(aspect_ratio, _size), do: aspect_ratio
+  defp resolve_dimensions(aspect_ratio, _size), do: {aspect_ratio, nil, nil}
+
+  defp parse_dimensions(size) do
+    with [width, height] <- String.split(size, "x", parts: 2),
+         {width, ""} <- Integer.parse(width),
+         {height, ""} <- Integer.parse(height) do
+      {nil, width, height}
+    else
+      _ -> {nil, nil, nil}
+    end
+  end
 
   defp minimax_response_format(:url), do: "url"
   defp minimax_response_format(:binary), do: "base64"
