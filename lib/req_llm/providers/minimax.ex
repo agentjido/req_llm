@@ -52,9 +52,7 @@ defmodule ReqLLM.Providers.Minimax do
     subject_reference: [
       type: :any,
       doc:
-        "Image-to-image character reference for MiniMax image generation. " <>
-          "A keyword list or map (or list thereof) with :type/\"type\" (\"character\") " <>
-          "and :image_file/\"image_file\" (public URL or base64 data URL)."
+        ~s|Image-to-image character reference for MiniMax image generation. A keyword list or map (or list thereof) with :type/"type" ("character") and :image_file/"image_file" (public URL or base64 data URL).|
     ]
   ]
 

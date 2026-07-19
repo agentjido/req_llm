@@ -100,7 +100,6 @@ defmodule ReqLLM.Providers.Minimax.ImagesAPI do
 
   defp decode_images_response(req, %{} = body) do
     data = Map.get(body, "data", %{})
-    media_type = output_media_type(req.options[:output_format])
 
     url_parts =
       data
@@ -110,7 +109,7 @@ defmodule ReqLLM.Providers.Minimax.ImagesAPI do
     b64_parts =
       data
       |> Map.get("image_base64", [])
-      |> Enum.map(&decode_b64_item(&1, media_type))
+      |> Enum.map(&decode_b64_item/1)
 
     parts = Enum.reject(url_parts ++ b64_parts, &is_nil/1)
 
@@ -139,15 +138,17 @@ defmodule ReqLLM.Providers.Minimax.ImagesAPI do
     Context.merge_response(base_response.context, base_response)
   end
 
-  defp decode_b64_item(b64, media_type) when is_binary(b64) do
+  defp decode_b64_item(b64) when is_binary(b64) do
+    data = Base.decode64!(b64)
+
     %ContentPart{
       type: :image,
-      data: Base.decode64!(b64),
-      media_type: media_type
+      data: data,
+      media_type: image_media_type(data)
     }
   end
 
-  defp decode_b64_item(_b64, _media_type), do: nil
+  defp decode_b64_item(_b64), do: nil
 
   defp decode_url_item(url) when is_binary(url) do
     %ContentPart{type: :image_url, url: url}
@@ -190,9 +191,15 @@ defmodule ReqLLM.Providers.Minimax.ImagesAPI do
   defp minimax_response_format(other) when is_binary(other), do: other
   defp minimax_response_format(_), do: "base64"
 
-  defp output_media_type(:jpeg), do: "image/jpeg"
-  defp output_media_type(:webp), do: "image/webp"
-  defp output_media_type(_), do: "image/png"
+  defp image_media_type(<<0xFF, 0xD8, 0xFF, _::binary>>), do: "image/jpeg"
+
+  defp image_media_type(<<0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A, _::binary>>),
+    do: "image/png"
+
+  defp image_media_type(<<"RIFF", _size::binary-size(4), "WEBP", _::binary>>), do: "image/webp"
+  defp image_media_type(<<"GIF87a", _::binary>>), do: "image/gif"
+  defp image_media_type(<<"GIF89a", _::binary>>), do: "image/gif"
+  defp image_media_type(_data), do: "application/octet-stream"
 
   defp maybe_put_string(body, _key, nil), do: body
 
@@ -215,6 +222,10 @@ defmodule ReqLLM.Providers.Minimax.ImagesAPI do
   defp maybe_put_boolean(body, _key, _), do: body
 
   defp maybe_put_subject_reference(body, nil), do: body
+
+  defp maybe_put_subject_reference(body, reference) when is_map(reference) do
+    Map.put(body, "subject_reference", [reference_to_wire(reference)])
+  end
 
   defp maybe_put_subject_reference(body, references) when is_list(references) do
     wire_refs =

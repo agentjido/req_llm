@@ -469,7 +469,29 @@ defmodule ReqLLM.Providers.MinimaxTest do
              ]
     end
 
-    test "decode_response decodes image_base64 array into image content parts" do
+    test "prepare_request and encode_body accept a string-keyed subject_reference map" do
+      model = minimax_image_model()
+
+      {:ok, request} =
+        Minimax.prepare_request(:image, model, "A girl by a window",
+          api_key: "test-key",
+          provider_options: [
+            subject_reference: %{
+              "type" => "character",
+              "image_file" => "https://example.com/face.jpg"
+            }
+          ]
+        )
+
+      encoded = Minimax.encode_body(request)
+      body = ReqLLM.Test.Helpers.json_body(encoded)
+
+      assert body["subject_reference"] == [
+               %{"type" => "character", "image_file" => "https://example.com/face.jpg"}
+             ]
+    end
+
+    test "decode_response detects image media type from decoded bytes" do
       req =
         Req.new(url: ImagesAPI.path())
         |> Req.Request.register_options([:model, :output_format, :context])
@@ -479,23 +501,31 @@ defmodule ReqLLM.Providers.MinimaxTest do
           context: %Context{messages: []}
         )
 
-      resp = %Req.Response{
-        status: 200,
-        body: %{
-          "id" => "trace-123",
-          "data" => %{"image_base64" => [Base.encode64("abc")]},
-          "base_resp" => %{"status_code" => 0, "status_msg" => "success"}
+      images = [
+        {<<0xFF, 0xD8, 0xFF, 0xE0, "jpeg">>, "image/jpeg"},
+        {<<0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A, "png">>, "image/png"},
+        {<<"RIFF", 4::little-32, "WEBP", "webp">>, "image/webp"}
+      ]
+
+      for {image_data, expected_media_type} <- images do
+        resp = %Req.Response{
+          status: 200,
+          body: %{
+            "id" => "trace-123",
+            "data" => %{"image_base64" => [Base.encode64(image_data)]},
+            "base_resp" => %{"status_code" => 0, "status_msg" => "success"}
+          }
         }
-      }
 
-      {_req, updated} = ImagesAPI.decode_response({req, resp})
+        {_req, updated} = ImagesAPI.decode_response({req, resp})
 
-      assert %ReqLLM.Response{} = updated.body
-      assert ReqLLM.Response.image_data(updated.body) == "abc"
+        assert %ReqLLM.Response{} = updated.body
+        assert ReqLLM.Response.image_data(updated.body) == image_data
 
-      [part] = ReqLLM.Response.images(updated.body)
-      assert part.type == :image
-      assert part.media_type == "image/png"
+        [part] = ReqLLM.Response.images(updated.body)
+        assert part.type == :image
+        assert part.media_type == expected_media_type
+      end
     end
 
     test "decode_response decodes image_urls array into image_url content parts" do
