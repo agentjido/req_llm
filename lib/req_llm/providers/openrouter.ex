@@ -407,79 +407,65 @@ defmodule ReqLLM.Providers.OpenRouter do
 
   defp encode_openrouter_content_parts(body, request_options) do
     context = request_options[:context]
-    plugins = request_options[:openrouter_plugins]
 
     if match?(%ReqLLM.Context{}, context) do
-      replace_openrouter_content_messages(body, context, file_parser_plugin?(plugins))
+      replace_openrouter_content_messages(body, context)
     else
       body
     end
   end
 
-  defp file_parser_plugin?(plugins) when is_list(plugins) do
-    Enum.any?(plugins, fn
-      %{id: "file-parser"} -> true
-      %{"id" => "file-parser"} -> true
-      _ -> false
-    end)
-  end
-
-  defp file_parser_plugin?(_plugins), do: false
-
   defp replace_openrouter_content_messages(
          %{messages: encoded_messages} = body,
-         context,
-         pdf_files?
+         context
        )
        when is_list(encoded_messages) do
     Map.put(
       body,
       :messages,
-      encode_openrouter_content_messages(encoded_messages, context.messages, pdf_files?)
+      encode_openrouter_content_messages(encoded_messages, context.messages)
     )
   end
 
   defp replace_openrouter_content_messages(
          %{"messages" => encoded_messages} = body,
-         context,
-         pdf_files?
+         context
        )
        when is_list(encoded_messages) do
     Map.put(
       body,
       "messages",
-      encode_openrouter_content_messages(encoded_messages, context.messages, pdf_files?)
+      encode_openrouter_content_messages(encoded_messages, context.messages)
     )
   end
 
-  defp replace_openrouter_content_messages(body, _context, _pdf_files?), do: body
+  defp replace_openrouter_content_messages(body, _context), do: body
 
-  defp encode_openrouter_content_messages(encoded_messages, context_messages, pdf_files?)
+  defp encode_openrouter_content_messages(encoded_messages, context_messages)
        when length(encoded_messages) == length(context_messages) do
     encoded_messages
     |> Enum.zip(context_messages)
     |> Enum.map(fn {encoded_message, context_message} ->
-      encode_openrouter_content_message(encoded_message, context_message, pdf_files?)
+      encode_openrouter_content_message(encoded_message, context_message)
     end)
   end
 
-  defp encode_openrouter_content_messages(encoded_messages, _context_messages, _pdf_files?),
+  defp encode_openrouter_content_messages(encoded_messages, _context_messages),
     do: encoded_messages
 
   defp encode_openrouter_content_message(
          encoded_message,
-         %ReqLLM.Message{content: content},
-         pdf_files?
+         %ReqLLM.Message{content: content}
        )
        when is_list(content) do
-    if Enum.any?(content, &openrouter_reencoded_content_part?(&1, pdf_files?)) do
-      put_message_content(encoded_message, encode_openrouter_content(content, pdf_files?))
+    if Enum.any?(content, &openrouter_reencoded_content_part?/1) do
+      put_message_content(encoded_message, encode_openrouter_content(content))
     else
       encoded_message
     end
   end
 
-  defp encode_openrouter_content_message(encoded_message, _message, _pdf_files?),
+  defp encode_openrouter_content_message(encoded_message, _message),
     do: encoded_message
 
   defp put_message_content(%{content: _} = message, content),
@@ -490,9 +476,9 @@ defmodule ReqLLM.Providers.OpenRouter do
 
   defp put_message_content(message, content), do: Map.put(message, :content, content)
 
-  defp encode_openrouter_content(content, pdf_files?) do
+  defp encode_openrouter_content(content) do
     content
-    |> Enum.map(&encode_openrouter_content_part(&1, pdf_files?))
+    |> Enum.map(&encode_openrouter_content_part/1)
     |> Enum.reject(&is_nil/1)
     |> normalize_openrouter_content()
   end
@@ -505,38 +491,29 @@ defmodule ReqLLM.Providers.OpenRouter do
 
   defp normalize_openrouter_content(content), do: content
 
-  defp encode_openrouter_content_part(
-         %ContentPart{type: :text, text: text, metadata: metadata},
-         _pdf_files?
-       ) do
+  defp encode_openrouter_content_part(%ContentPart{type: :text, text: text, metadata: metadata}) do
     %{type: "text", text: text}
     |> merge_content_metadata(metadata)
   end
 
-  defp encode_openrouter_content_part(
-         %ContentPart{
-           type: :image,
-           data: data,
-           media_type: media_type,
-           metadata: metadata
-         },
-         _pdf_files?
-       )
+  defp encode_openrouter_content_part(%ContentPart{
+         type: :image,
+         data: data,
+         media_type: media_type,
+         metadata: metadata
+       })
        when is_binary(data) do
     data
     |> image_url_content_part(media_type)
     |> merge_content_metadata(metadata)
   end
 
-  defp encode_openrouter_content_part(
-         %ContentPart{
-           type: :image_url,
-           url: url,
-           media_type: media_type,
-           metadata: metadata
-         },
-         _pdf_files?
-       ) do
+  defp encode_openrouter_content_part(%ContentPart{
+         type: :image_url,
+         url: url,
+         media_type: media_type,
+         metadata: metadata
+       }) do
     image_url_map = %{url: url}
 
     image_url_map =
@@ -550,7 +527,7 @@ defmodule ReqLLM.Providers.OpenRouter do
     |> merge_content_metadata(metadata)
   end
 
-  defp encode_openrouter_content_part(%ContentPart{type: :file, data: data} = part, pdf_files?)
+  defp encode_openrouter_content_part(%ContentPart{type: :file, data: data} = part)
        when is_binary(data) do
     cond do
       openrouter_input_audio_part?(part) ->
@@ -564,7 +541,7 @@ defmodule ReqLLM.Providers.OpenRouter do
                   "OpenRouter chat audio input supports only mp3 and wav file parts; got #{inspect(part.media_type)}."
               )
 
-      pdf_files? and openrouter_pdf_file_part?(part) ->
+      openrouter_pdf_file_part?(part) ->
         %{
           type: "file",
           file: %{
@@ -578,16 +555,12 @@ defmodule ReqLLM.Providers.OpenRouter do
     end
   end
 
-  defp encode_openrouter_content_part(%ContentPart{type: :thinking}, _pdf_files?), do: nil
-  defp encode_openrouter_content_part(_part, _pdf_files?), do: nil
+  defp encode_openrouter_content_part(%ContentPart{type: :thinking}), do: nil
+  defp encode_openrouter_content_part(_part), do: nil
 
-  defp openrouter_reencoded_content_part?(part, true) do
+  defp openrouter_reencoded_content_part?(part) do
     openrouter_input_audio_part?(part) or openrouter_audio_file_part?(part) or
       openrouter_pdf_file_part?(part)
-  end
-
-  defp openrouter_reencoded_content_part?(part, _pdf_files?) do
-    openrouter_input_audio_part?(part) or openrouter_audio_file_part?(part)
   end
 
   defp input_audio_content_part(data, format) do

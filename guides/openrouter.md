@@ -104,7 +104,7 @@ Passed via `:provider_options` keyword:
 
 #### File parser PDFs
 
-When the `file-parser` plugin is enabled, ReqLLM encodes PDF `ContentPart.file/3` inputs in OpenRouter's expected file format:
+ReqLLM encodes PDF `ContentPart.file/3` inputs in OpenRouter's file format. The `file-parser` plugin is optional. Use it to select a PDF processing engine:
 
 ```elixir
 alias ReqLLM.Context
@@ -122,7 +122,7 @@ ReqLLM.generate_text("openrouter:anthropic/claude-sonnet-4-20250514", context,
 )
 ```
 
-Without `file-parser`, PDF parts use the normal OpenAI-compatible file encoding.
+Without `file-parser`, ReqLLM uses the same file encoding and lets OpenRouter select the PDF processing engine.
 
 ### App Attribution
 

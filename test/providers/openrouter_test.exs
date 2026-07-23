@@ -399,7 +399,7 @@ defmodule ReqLLM.Providers.OpenRouterTest do
              }
     end
 
-    test "encode_body without file-parser keeps OpenAI-compatible file encoding" do
+    test "encode_body without file-parser encodes PDF files in OpenRouter format" do
       {:ok, model} = ReqLLM.model("openrouter:openai/gpt-4")
       pdf_data = "%PDF test"
 
@@ -426,9 +426,10 @@ defmodule ReqLLM.Providers.OpenRouterTest do
       [_, file_part] = message["content"]
 
       assert file_part == %{
-               "type" => "image_url",
-               "image_url" => %{
-                 "url" => "data:application/pdf;base64,#{Base.encode64(pdf_data)}"
+               "type" => "file",
+               "file" => %{
+                 "filename" => "document.pdf",
+                 "file_data" => "data:application/pdf;base64,#{Base.encode64(pdf_data)}"
                }
              }
     end
@@ -522,6 +523,36 @@ defmodule ReqLLM.Providers.OpenRouterTest do
       assert decoded["plugins"] == [
                %{"id" => "file-parser", "pdf" => %{"engine" => "mistral-ocr"}}
              ]
+
+      assert file_part == %{
+               "type" => "file",
+               "file" => %{
+                 "filename" => "stream.pdf",
+                 "file_data" => "data:application/pdf;base64,#{Base.encode64(pdf_data)}"
+               }
+             }
+    end
+
+    test "attach_stream without file-parser encodes PDF files in OpenRouter format" do
+      model = ReqLLM.model!("openrouter:openai/gpt-4")
+      pdf_data = "%PDF stream"
+
+      context =
+        Context.new([
+          Context.user([
+            ContentPart.text("Summarize this PDF"),
+            ContentPart.file(pdf_data, "stream.pdf", "application/pdf")
+          ])
+        ])
+
+      {:ok, finch_request} = OpenRouter.attach_stream(model, context, [], MyApp.Finch)
+
+      decoded = Jason.decode!(finch_request.body)
+      [message] = decoded["messages"]
+      [_, file_part] = message["content"]
+
+      assert decoded["stream"] == true
+      refute Map.has_key?(decoded, "plugins")
 
       assert file_part == %{
                "type" => "file",
