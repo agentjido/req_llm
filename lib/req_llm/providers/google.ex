@@ -2344,12 +2344,21 @@ defmodule ReqLLM.Providers.Google do
   defp multimodal_tool_result?(_), do: false
 
   defp multimodal_part?(%ReqLLM.Message.ContentPart{type: type})
-       when type in [:file, :image, :image_url],
+       when type in [:file, :image, :image_url, :video_url],
        do: true
 
-  defp multimodal_part?(%{type: type}) when type in [:file, :image, :image_url], do: true
-  defp multimodal_part?(%{type: type}) when type in ["file", "image", "image_url"], do: true
-  defp multimodal_part?(%{"type" => type}) when type in ["file", "image", "image_url"], do: true
+  defp multimodal_part?(%{type: type})
+       when type in [:file, :image, :image_url, :video_url],
+       do: true
+
+  defp multimodal_part?(%{type: type})
+       when type in ["file", "image", "image_url", "video_url"],
+       do: true
+
+  defp multimodal_part?(%{"type" => type})
+       when type in ["file", "image", "image_url", "video_url"],
+       do: true
+
   defp multimodal_part?(_), do: false
 
   # Gemini requires that consecutive messages with the same role are merged

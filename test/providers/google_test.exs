@@ -478,6 +478,74 @@ defmodule ReqLLM.Providers.GoogleTest do
              ]
     end
 
+    test "encode_body preserves video_url media in raw tool result messages" do
+      video_url = "https://example.com/tool-result.mp4"
+
+      messages = [
+        %{
+          "role" => "tool",
+          "name" => "inspect_video",
+          "tool_call_id" => "call_1",
+          "content" => [
+            %{"type" => "text", "text" => "The video shows a blue car."},
+            %{"type" => "video_url", "video_url" => %{"url" => video_url}}
+          ]
+        }
+      ]
+
+      encode_for_model = fn model_id ->
+        {:ok, model} = ReqLLM.model("google:#{model_id}")
+
+        %Req.Request{
+          options: [
+            messages: messages,
+            model: model.model,
+            stream: false,
+            operation: :chat
+          ]
+        }
+        |> Google.encode_body()
+        |> ReqLLM.Test.Helpers.json_body()
+      end
+
+      gemini_2_5_body = encode_for_model.("gemini-2.5-flash-lite")
+
+      assert [%{"parts" => parts}] = gemini_2_5_body["contents"]
+
+      assert parts == [
+               %{
+                 "fileData" => %{
+                   "fileUri" => video_url,
+                   "mimeType" => "video/mp4"
+                 }
+               },
+               %{
+                 "functionResponse" => %{
+                   "name" => "inspect_video",
+                   "response" => %{"content" => "The video shows a blue car."}
+                 }
+               }
+             ]
+
+      gemini_3_body = encode_for_model.("gemini-3-pro-preview")
+
+      assert [%{"parts" => [%{"functionResponse" => function_response}]}] =
+               gemini_3_body["contents"]
+
+      assert function_response["response"] == %{
+               "content" => "The video shows a blue car."
+             }
+
+      assert function_response["parts"] == [
+               %{
+                 "fileData" => %{
+                   "fileUri" => video_url,
+                   "mimeType" => "video/mp4"
+                 }
+               }
+             ]
+    end
+
     test "encode_body prefers explicit model-facing content over application output" do
       {:ok, model} = ReqLLM.model("google:gemini-1.5-flash")
 
