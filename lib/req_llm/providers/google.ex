@@ -2290,6 +2290,14 @@ defmodule ReqLLM.Providers.Google do
         nest_multimodal? ->
           []
 
+        tool_result? and is_list(raw_content) ->
+          raw_content
+          |> Enum.filter(&multimodal_part?/1)
+          |> Enum.map(&convert_content_part/1)
+
+        tool_result? ->
+          []
+
         is_binary(raw_content) ->
           [%{text: raw_content}]
 

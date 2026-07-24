@@ -186,6 +186,30 @@ defmodule ReqLLM.Providers.GoogleVertex.GeminiTest do
       assert function_call["name"] == "add"
       refute Map.has_key?(function_call, "id")
     end
+
+    test "does not duplicate text tool results as sibling parts" do
+      context =
+        Context.new([
+          Context.tool_result(
+            "call_1",
+            "lookup_npi",
+            "NPI 1234567890 is valid and active"
+          )
+        ])
+
+      body = Gemini.format_request("gemini-2.5-flash-lite", context, max_tokens: 1000)
+
+      [tool_result_entry] = body["contents"]
+
+      assert tool_result_entry["parts"] == [
+               %{
+                 "functionResponse" => %{
+                   "name" => "lookup_npi",
+                   "response" => %{"content" => "NPI 1234567890 is valid and active"}
+                 }
+               }
+             ]
+    end
   end
 
   describe "ResponseBuilder - streaming reasoning_details extraction" do

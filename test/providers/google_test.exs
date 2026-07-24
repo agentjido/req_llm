@@ -430,6 +430,54 @@ defmodule ReqLLM.Providers.GoogleTest do
       assert function_response["response"]["temperature"] == 72
     end
 
+    test "encode_body emits text tool results only inside functionResponse" do
+      {:ok, model} = ReqLLM.model("google:gemini-2.5-flash-lite")
+
+      context =
+        Context.new([
+          Context.user("Check NPI 1234567890."),
+          Context.assistant("",
+            tool_calls: [
+              %ReqLLM.ToolCall{
+                id: "call_1",
+                type: "function",
+                function: %{name: "lookup_npi", arguments: ~s({"npi":"1234567890"})}
+              }
+            ]
+          ),
+          Context.tool_result(
+            "call_1",
+            "lookup_npi",
+            "NPI 1234567890 is valid and active"
+          )
+        ])
+
+      request = %Req.Request{
+        options: [
+          context: context,
+          model: model.model,
+          stream: false,
+          operation: :chat
+        ]
+      }
+
+      decoded = request |> Google.encode_body() |> ReqLLM.Test.Helpers.json_body()
+
+      tool_result_entry =
+        Enum.find(decoded["contents"], fn entry ->
+          Enum.any?(entry["parts"], &Map.has_key?(&1, "functionResponse"))
+        end)
+
+      assert tool_result_entry["parts"] == [
+               %{
+                 "functionResponse" => %{
+                   "name" => "lookup_npi",
+                   "response" => %{"content" => "NPI 1234567890 is valid and active"}
+                 }
+               }
+             ]
+    end
+
     test "encode_body prefers explicit model-facing content over application output" do
       {:ok, model} = ReqLLM.model("google:gemini-1.5-flash")
 
@@ -611,9 +659,12 @@ defmodule ReqLLM.Providers.GoogleTest do
                _ -> false
              end),
              "Gemini 2.5 must keep the file as a sibling inline_data part (legacy behavior)"
+
+      refute Enum.any?(tool_user_msg["parts"], &Map.has_key?(&1, "text")),
+             "tool result text must only appear in functionResponse.response"
     end
 
-    test "encode_body keeps text-only tool results unchanged on Gemini 3+" do
+    test "encode_body keeps text-only tool results inside functionResponse on Gemini 3+" do
       {:ok, model} = ReqLLM.model("google:gemini-3-pro-preview")
 
       tool_result = %ReqLLM.Message{
@@ -665,6 +716,13 @@ defmodule ReqLLM.Providers.GoogleTest do
 
       refute Map.has_key?(function_response_part["functionResponse"], "parts"),
              "text-only tool results must not gain a functionResponse.parts field"
+
+      assert function_response_part["functionResponse"]["response"] == %{
+               "content" => "just text"
+             }
+
+      refute Enum.any?(tool_user_msg["parts"], &Map.has_key?(&1, "text")),
+             "tool result text must only appear in functionResponse.response"
     end
 
     test "encode_body excludes id from functionCall parts" do
