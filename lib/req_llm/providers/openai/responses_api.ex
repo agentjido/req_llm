@@ -1678,6 +1678,10 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
 
   defp encode_tool_choice(nil), do: nil
 
+  defp encode_tool_choice(%{type: "tool", name: name}) do
+    %{"type" => "function", "name" => name}
+  end
+
   defp encode_tool_choice(%{type: "function", function: %{name: name}}) do
     %{"type" => "function", "name" => name}
   end

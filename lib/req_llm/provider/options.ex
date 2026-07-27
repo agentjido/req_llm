@@ -170,7 +170,7 @@ defmodule ReqLLM.Provider.Options do
                                tool_choice: [
                                  type: {:or, [:string, :atom, :map]},
                                  doc:
-                                   "Tool selection strategy (auto, none, required, or specific)"
+                                   "Tool selection strategy (auto, none, required, or %{type: \"tool\", name: name})"
                                ],
 
                                # Output control

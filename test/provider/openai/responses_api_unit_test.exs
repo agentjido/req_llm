@@ -571,7 +571,16 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
              end)
     end
 
-    test "encodes specific tool choice with atom keys" do
+    test "encodes canonical specific tool choice with atom keys" do
+      request = build_request(tool_choice: %{type: "tool", name: "get_weather"})
+
+      encoded = ResponsesAPI.encode_body(request)
+      body = ReqLLM.Test.Helpers.json_body(encoded)
+
+      assert body["tool_choice"] == %{"type" => "function", "name" => "get_weather"}
+    end
+
+    test "encodes OpenAI Chat-style specific tool choice with atom keys" do
       request =
         build_request(tool_choice: %{type: "function", function: %{name: "get_weather"}})
 
@@ -581,7 +590,7 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
       assert body["tool_choice"] == %{"type" => "function", "name" => "get_weather"}
     end
 
-    test "encodes specific tool choice with string keys" do
+    test "encodes OpenAI Chat-style specific tool choice with string keys" do
       request =
         build_request(tool_choice: %{"type" => "function", "function" => %{"name" => "search"}})
 
