@@ -146,45 +146,30 @@ option preserves ReqLLM 1.x's unlimited total-call behavior.
 
 ### `connect_timeout` (WebSocket default: 10,000ms)
 
-The maximum time allowed to establish a WebSocket connection, including the TCP/TLS
-connection and HTTP upgrade. This remains separate from model generation and stream
-inactivity. A finite connection timeout prevents unreachable infrastructure from
-blocking a call indefinitely.
-
-```elixir
-ReqLLM.stream_text(model, messages,
-  connect_timeout: 15_000,
-  provider_options: [openai_stream_transport: :websocket]
-)
-```
+The maximum time allowed for the TCP/TLS connection and HTTP upgrade. It does
+not limit model generation or stream inactivity.
 
 ### `receive_timeout` (default: 30,000ms)
 
-The provider-transport inactivity timeout. For buffered requests it limits how
-long the HTTP client waits to receive the response. For streaming it applies
-between raw transport messages. Transport keepalive traffic therefore counts as
-activity for this timeout.
+The provider-transport inactivity timeout. For streaming it applies between raw
+transport messages. Transport keepalive traffic counts as activity.
 
 ```elixir
 config :req_llm, receive_timeout: 60_000
 ```
 
-Per-request overrides:
+Per-request override:
 
 ```elixir
-ReqLLM.generate_text("openai:gpt-4o", "Hello", receive_timeout: 60_000)
 ReqLLM.stream_text(model, messages, receive_timeout: :infinity)
 ```
 
-Use `:infinity` when stream lifetime is governed by caller cancellation, a
-separate `total_timeout`, or transport liveness rather than model-output
-inactivity. `receive_timeout` is not a total-call deadline.
+Use `:infinity` to disable this inactivity timeout. `receive_timeout` is not a
+total-call deadline.
 
 ### `stream_receive_timeout` (default: inherits from `receive_timeout`)
 
-The global default for streaming `receive_timeout`. If no raw transport message
-arrives within a finite window, the transport fails. Set it to `:infinity` when
-transport inactivity should not be treated as model failure.
+The global default for streaming `receive_timeout`.
 
 ```elixir
 config :req_llm, stream_receive_timeout: :infinity
@@ -211,10 +196,9 @@ place.
 
 ### `stream_pool_timeout` (when unset: inherits from finite `stream_receive_timeout`)
 
-Timeout for checking out a Finch connection before a streaming request starts. When
-`stream_receive_timeout` is `:infinity`, pool checkout remains bounded at 30 seconds
-unless configured separately. Increase it when short bursts of concurrent streams can
-queue behind long-running responses.
+Timeout for checking out a Finch connection before a streaming request starts.
+When the receive timeout is `:infinity`, pool checkout remains bounded at 30
+seconds unless configured separately.
 
 ```elixir
 config :req_llm, stream_pool_timeout: 300_000
@@ -316,11 +300,8 @@ existing `ReqLLM.Error.API.Stream` wrapper and places the timeout in `cause`;
 metadata retains the timeout under `:error` with `finish_reason: :error`.
 
 Caller cancellation remains distinct: it ends successfully with
-`finish_reason: :cancelled`, not a timeout exception. Owned WebSocket streams retry
-transient connection failures only before the first provider data event, up to
-`max_retries`; once provider data starts, a disconnect is surfaced rather than
-risking duplicate output. Caller-owned reusable sessions are never recreated.
-Completed retry attempt durations and scheduled delays are available through
+`finish_reason: :cancelled`, not a timeout exception. Completed retry attempt
+durations and scheduled delays are available through
 `[:req_llm, :request, :retry]` telemetry. Pool checkout is still governed by
 `pool_timeout`; the total budget can end the call sooner when both are finite.
 

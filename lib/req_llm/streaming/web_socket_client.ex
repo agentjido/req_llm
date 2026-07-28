@@ -1,7 +1,6 @@
 defmodule ReqLLM.Streaming.WebSocketClient do
   @moduledoc false
 
-  alias ReqLLM.Streaming.Failure
   alias ReqLLM.Streaming.Fixtures.HTTPContext
   alias ReqLLM.Streaming.WebSocketProtocol
   alias ReqLLM.Streaming.WebSocketSession
@@ -104,11 +103,6 @@ defmodule ReqLLM.Streaming.WebSocketClient do
   end
 
   defp start_streaming_task(config, stream_server_pid, opts) do
-    opts =
-      Keyword.put(opts, :on_retry, fn retry ->
-        StreamServer.retry_event(stream_server_pid, retry)
-      end)
-
     task_pid =
       Task.Supervisor.async(ReqLLM.TaskSupervisor, fn ->
         case reusable_session(opts) do
@@ -131,69 +125,22 @@ defmodule ReqLLM.Streaming.WebSocketClient do
   end
 
   defp start_owned_session(config, stream_server_pid, opts) do
-    run_owned_session(config, stream_server_pid, opts, 0)
-  end
-
-  defp run_owned_session(config, stream_server_pid, opts, attempt) do
     connect_timeout = connect_timeout(opts)
-    started_at = System.monotonic_time()
 
-    result =
-      case WebSocketSession.start_link(
-             config.url,
-             headers: config.headers,
-             initial_messages: config.initial_messages,
-             connect_timeout: connect_timeout
-           ) do
-        {:ok, session_pid} ->
-          try do
-            await_connect_and_stream(session_pid, stream_server_pid, opts,
-              close_on_terminal?: true
-            )
-          after
-            close_session(session_pid)
-          end
+    case WebSocketSession.start_link(
+           config.url,
+           headers: config.headers,
+           initial_messages: config.initial_messages,
+           connect_timeout: connect_timeout
+         ) do
+      {:ok, session_pid} ->
+        await_connect_and_stream(session_pid, stream_server_pid, opts, close_on_terminal?: true)
 
-        {:error, reason} ->
-          {:error, reason, false}
-      end
-
-    handle_owned_session_result(result, config, stream_server_pid, opts, attempt, started_at)
-  end
-
-  defp handle_owned_session_result(
-         {:error, reason, false},
-         config,
-         stream_server_pid,
-         opts,
-         attempt,
-         started_at
-       ) do
-    max_retries = Keyword.get(opts, :max_retries, 3)
-
-    if attempt < max_retries and retryable_transport_error?(reason) do
-      emit_retry(opts, attempt, max_retries, started_at)
-      run_owned_session(config, stream_server_pid, opts, attempt + 1)
-    else
-      safe_http_event(stream_server_pid, {:error, reason})
-      {:error, reason}
+      {:error, reason} ->
+        safe_http_event(stream_server_pid, {:error, reason})
+        {:error, reason}
     end
   end
-
-  defp handle_owned_session_result(
-         {:error, reason, _data_received?},
-         _config,
-         server,
-         _opts,
-         _attempt,
-         _started_at
-       ) do
-    safe_http_event(server, {:error, reason})
-    {:error, reason}
-  end
-
-  defp handle_owned_session_result(result, _config, _server, _opts, _attempt, _started_at),
-    do: result
 
   defp await_connect_and_stream(session_pid, stream_server_pid, opts, session_opts) do
     case WebSocketSession.await_connected(session_pid, connect_timeout(opts)) do
@@ -208,21 +155,24 @@ defmodule ReqLLM.Streaming.WebSocketClient do
             )
 
           {:error, reason} ->
-            {:error, reason, false}
+            safe_http_event(stream_server_pid, {:error, reason})
+            {:error, reason}
         end
 
       {:error, reason} ->
-        {:error, reason, false}
+        safe_http_event(stream_server_pid, {:error, reason})
+        {:error, reason}
     end
   end
 
-  defp relay_messages(session_pid, stream_server_pid, opts, relay_opts, data_received? \\ false) do
+  defp relay_messages(session_pid, stream_server_pid, opts, relay_opts) do
     case WebSocketSession.next_message(session_pid, receive_timeout(opts)) do
       {:ok, message} ->
         case WebSocketProtocol.decode_message(message) do
           {:ok, decoded} ->
             if WebSocketProtocol.error_event?(%{data: decoded}) do
-              {:error, {:websocket_error_event, decoded}, true}
+              safe_http_event(stream_server_pid, {:error, {:websocket_error_event, decoded}})
+              {:error, decoded}
             else
               safe_http_event(stream_server_pid, {:data, message})
 
@@ -232,22 +182,24 @@ defmodule ReqLLM.Streaming.WebSocketClient do
                   Keyword.get(relay_opts, :close_on_terminal?, true)
                 )
               else
-                relay_messages(session_pid, stream_server_pid, opts, relay_opts, true)
+                relay_messages(session_pid, stream_server_pid, opts, relay_opts)
               end
             end
 
           {:error, reason} ->
-            {:error, {:invalid_websocket_message, reason}, true}
+            safe_http_event(stream_server_pid, {:error, {:invalid_websocket_message, reason}})
+            {:error, reason}
         end
 
       :halt ->
-        {:error, :closed, data_received?}
+        :ok
 
       {:error, :closed} ->
-        {:error, :closed, data_received?}
+        :ok
 
       {:error, reason} ->
-        {:error, reason, data_received?}
+        safe_http_event(stream_server_pid, {:error, reason})
+        {:error, reason}
     end
   end
 
@@ -266,38 +218,8 @@ defmodule ReqLLM.Streaming.WebSocketClient do
     end)
   end
 
-  defp maybe_close_session(session_pid, true), do: close_session(session_pid)
+  defp maybe_close_session(session_pid, true), do: WebSocketSession.close(session_pid)
   defp maybe_close_session(_session_pid, false), do: :ok
-
-  defp close_session(session_pid) do
-    if Process.alive?(session_pid), do: WebSocketSession.close(session_pid), else: :ok
-  catch
-    :exit, _reason -> :ok
-  end
-
-  defp retryable_transport_error?(reason) do
-    match?({:transport, _reason, true}, Failure.classify(reason))
-  end
-
-  defp emit_retry(opts, attempt, max_retries, started_at) do
-    Logger.warning(
-      "Retrying WebSocket stream before provider data " <>
-        "(attempt=#{attempt + 1}, max_retries=#{max_retries})"
-    )
-
-    if on_retry = Keyword.get(opts, :on_retry) do
-      on_retry.(%{
-        attempt: attempt + 1,
-        next_attempt: attempt + 2,
-        max_retries: max_retries,
-        delay: 0,
-        duration: System.monotonic_time() - started_at,
-        http_status: nil
-      })
-    end
-
-    :ok
-  end
 
   defp connect_timeout(opts) do
     Keyword.get(opts, :connect_timeout, Application.get_env(:req_llm, :connect_timeout, 10_000))

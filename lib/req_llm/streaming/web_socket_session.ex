@@ -189,20 +189,15 @@ defmodule ReqLLM.Streaming.WebSocketSession do
   end
 
   def handle_info({:DOWN, ref, :process, _pid, _reason}, state) do
-    state =
-      state
-      |> remove_waiter(:waiting_connect_callers, ref)
-      |> remove_waiter(:waiting_callers, ref)
-
-    {:noreply, state}
+    {:noreply, remove_waiter(state, ref)}
   end
 
-  def handle_info({:waiter_timeout, :connect, token}, state) do
-    {:noreply, expire_waiter(state, :waiting_connect_callers, token, :connect)}
+  def handle_info({:waiter_timeout, :connect, monitor}, state) do
+    {:noreply, expire_waiter(state, :waiting_connect_callers, monitor, :connect)}
   end
 
-  def handle_info({:waiter_timeout, :receive, token}, state) do
-    {:noreply, expire_waiter(state, :waiting_callers, token, :receive)}
+  def handle_info({:waiter_timeout, :receive, monitor}, state) do
+    {:noreply, expire_waiter(state, :waiting_callers, monitor, :receive)}
   end
 
   def handle_info(_message, state) do
@@ -222,7 +217,7 @@ defmodule ReqLLM.Streaming.WebSocketSession do
     cancel_waiter(waiter)
     state = %{state | waiting_callers: rest}
 
-    if Process.alive?(waiter.pid) do
+    if Process.alive?(elem(waiter.from, 0)) do
       GenServer.reply(waiter.from, {:ok, message})
       state
     else
@@ -242,11 +237,7 @@ defmodule ReqLLM.Streaming.WebSocketSession do
   end
 
   defp reply_to_connect_callers(state, reply) do
-    Enum.each(state.waiting_connect_callers, fn waiter ->
-      cancel_waiter(waiter)
-      GenServer.reply(waiter.from, reply)
-    end)
-
+    Enum.each(state.waiting_connect_callers, &reply_waiter(&1, reply))
     %{state | waiting_connect_callers: []}
   end
 
@@ -259,68 +250,58 @@ defmodule ReqLLM.Streaming.WebSocketSession do
         {:error, reason} -> {:error, reason}
       end
 
-    Enum.each(state.waiting_callers, fn waiter ->
-      cancel_waiter(waiter)
-      GenServer.reply(waiter.from, reply)
-    end)
-
+    Enum.each(state.waiting_callers, &reply_waiter(&1, reply))
     %{state | waiting_callers: []}
   end
 
   defp connection_reply(:closed), do: {:error, :closed}
   defp connection_reply({:error, reason}), do: {:error, reason}
 
-  defp new_waiter({pid, _tag} = from, kind, :infinity) do
-    %{
-      from: from,
-      pid: pid,
-      kind: kind,
-      timeout: :infinity,
-      token: nil,
-      timer: nil,
-      monitor: Process.monitor(pid)
-    }
-  end
-
-  defp new_waiter({pid, _tag} = from, kind, timeout) do
-    token = make_ref()
-    timer = Process.send_after(self(), {:waiter_timeout, kind, token}, timeout)
+  defp new_waiter(from, kind, timeout) do
+    monitor = Process.monitor(elem(from, 0))
 
     %{
       from: from,
-      pid: pid,
-      kind: kind,
       timeout: timeout,
-      token: token,
-      timer: timer,
-      monitor: Process.monitor(pid)
+      timer: waiter_timer(kind, timeout, monitor),
+      monitor: monitor
     }
   end
+
+  defp waiter_timer(_kind, :infinity, _monitor), do: nil
+
+  defp waiter_timer(kind, timeout, monitor),
+    do: Process.send_after(self(), {:waiter_timeout, kind, monitor}, timeout)
 
   defp cancel_waiter(waiter) do
     if waiter.timer, do: Process.cancel_timer(waiter.timer, async: true, info: false)
     Process.demonitor(waiter.monitor, [:flush])
-    :ok
   end
 
-  defp expire_waiter(state, field, token, kind) do
-    {expired, remaining} = Enum.split_with(Map.fetch!(state, field), &(&1.token == token))
+  defp reply_waiter(waiter, reply) do
+    cancel_waiter(waiter)
+    GenServer.reply(waiter.from, reply)
+  end
+
+  defp expire_waiter(state, field, monitor, kind) do
+    {expired, remaining} = Enum.split_with(Map.fetch!(state, field), &(&1.monitor == monitor))
 
     Enum.each(expired, fn waiter ->
-      cancel_waiter(waiter)
       error = ReqLLM.Error.API.Timeout.exception(kind: kind, timeout: waiter.timeout)
-      GenServer.reply(waiter.from, {:error, error})
+      reply_waiter(waiter, {:error, error})
     end)
 
     Map.put(state, field, remaining)
   end
 
-  defp remove_waiter(state, field, monitor) do
-    {removed, remaining} =
-      Enum.split_with(Map.fetch!(state, field), &(&1.monitor == monitor))
+  defp remove_waiter(state, monitor) do
+    Enum.reduce([:waiting_connect_callers, :waiting_callers], state, fn field, state ->
+      {removed, remaining} =
+        Enum.split_with(Map.fetch!(state, field), &(&1.monitor == monitor))
 
-    Enum.each(removed, &cancel_waiter/1)
-    Map.put(state, field, remaining)
+      Enum.each(removed, &cancel_waiter/1)
+      Map.put(state, field, remaining)
+    end)
   end
 
   defp call_timeout(:infinity), do: :infinity

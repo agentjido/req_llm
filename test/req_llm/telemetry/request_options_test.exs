@@ -73,14 +73,12 @@ defmodule ReqLLM.Telemetry.RequestOptionsTest do
 
     test "includes model-call timeout and retry controls" do
       assert %{
-               connect_timeout: 3_000,
                receive_timeout: 5_000,
                total_timeout: 60_000,
                stream_idle_timeout: 10_000,
                max_retries: 2
              } =
                RequestOptions.extract(:stream,
-                 connect_timeout: 3_000,
                  receive_timeout: 5_000,
                  total_timeout: 60_000,
                  stream_idle_timeout: 10_000,

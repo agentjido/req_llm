@@ -39,10 +39,6 @@ defmodule ReqLLM.Streaming.WebSocketClientTest do
     def handle_call({:http_event, event}, _from, state) do
       {:reply, :ok, [event | state]}
     end
-
-    def handle_cast({:retry_event, retry}, state) do
-      {:noreply, [{:retry, retry} | state]}
-    end
   end
 
   defmodule ErrorProvider do

@@ -25,20 +25,8 @@ defmodule ReqLLM.Streaming.Failure do
     classify(cause)
   end
 
-  def classify(reason) when reason in @retryable_transport_reasons do
-    transport_classification(reason)
-  end
-
-  def classify(%ReqLLM.Error.API.Timeout{kind: kind}) when kind in [:connect, :receive] do
-    transport_classification(:timeout)
-  end
-
   def classify(%Finch.TransportError{} = error) do
     transport_classification(transport_reason(error))
-  end
-
-  def classify(%WebSockex.ConnError{original: reason}) do
-    transport_classification(reason)
   end
 
   def classify(%{__struct__: module, reason: reason})
