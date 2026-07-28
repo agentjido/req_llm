@@ -31,9 +31,9 @@ provider-native feature and are not consulted by request routing.
 | Tier | Surfaces |
 | --- | ---: |
 | First-class | 47 |
-| Best-effort | 470 |
-| Experimental | 72 |
-| Unsupported | 102 |
+| Best-effort | 466 |
+| Experimental | 79 |
+| Unsupported | 99 |
 | **Total recorded surfaces** | **691** |
 
 ## anthropic
@@ -357,10 +357,10 @@ provider-native feature and are not consulted by request routing.
 | `meta-llama/llama-3-8b-instruct` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:37:04Z | surface declaration unknown |
 | `meta-llama/llama-3.1-70b-instruct` | `text` | `openrouter.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-29T23:37:04Z | missing current evidence: usage, token_limit, context_append, streaming |
 | `meta-llama/llama-3.1-8b-instruct` | `text` | `openrouter.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-29T23:37:04Z | missing current evidence: usage, token_limit, context_append, streaming |
-| `meta-llama/llama-3.2-11b-vision-instruct` | `text` | `openrouter.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-29T23:37:04Z | missing current evidence: usage, token_limit, context_append, streaming |
+| `meta-llama/llama-3.2-11b-vision-instruct` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:37:04Z | surface declaration unknown |
 | `meta-llama/llama-3.2-1b-instruct` | `text` | `openrouter.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-29T23:37:04Z | missing current evidence: usage, token_limit, context_append, streaming |
 | `meta-llama/llama-3.2-3b-instruct` | `text` | `openrouter.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-29T23:37:04Z | missing current evidence: usage, token_limit, context_append, streaming |
-| `meta-llama/llama-3.2-3b-instruct:free` | `text` | `openrouter.unrecorded_text` | text → text | Unsupported | 0/5 | 2026-05-29T23:37:04Z | basic failed at provider_drift |
+| `meta-llama/llama-3.2-3b-instruct:free` | `text` | `openrouter.unrecorded_text` | text → text | Experimental | 0/5 | 2026-05-29T23:37:04Z | surface declaration unknown |
 | `meta-llama/llama-3.3-70b-instruct` | `text` | `openrouter.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-29T23:37:04Z | missing current evidence: usage, token_limit, context_append, streaming |
 | `meta-llama/llama-4-maverick` | `text` | `openrouter.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-29T23:37:04Z | missing current evidence: usage, token_limit, context_append, streaming |
 | `meta-llama/llama-4-scout` | `text` | `openrouter.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-29T23:37:04Z | missing current evidence: usage, token_limit, context_append, streaming |
@@ -409,10 +409,10 @@ provider-native feature and are not consulted by request routing.
 | `nex-agi/deepseek-v3.1-nex-n1` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:21:08Z | surface declaration unknown |
 | `nousresearch/hermes-2-pro-llama-3-8b` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:18:40Z | surface declaration unknown |
 | `nousresearch/hermes-3-llama-3.1-405b` | `text` | `openrouter.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-30T00:18:40Z | missing current evidence: usage, token_limit, context_append, streaming |
-| `nousresearch/hermes-3-llama-3.1-405b:free` | `text` | `openrouter.unrecorded_text` | text → text | Unsupported | 0/5 | 2026-05-30T00:18:40Z | basic failed at provider_drift |
+| `nousresearch/hermes-3-llama-3.1-405b:free` | `text` | `openrouter.unrecorded_text` | text → text | Experimental | 0/5 | 2026-05-30T00:18:40Z | surface declaration unknown |
 | `nousresearch/hermes-3-llama-3.1-70b` | `text` | `openrouter.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-30T00:18:40Z | missing current evidence: usage, token_limit, context_append, streaming |
 | `nousresearch/hermes-4-70b` | `text` | `openrouter.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-30T00:18:40Z | missing current evidence: usage, token_limit, context_append, streaming |
-| `nvidia/llama-3.3-nemotron-super-49b-v1.5` | `text` | `openrouter.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-29T23:44:50Z | missing current evidence: usage, token_limit, context_append, streaming |
+| `nvidia/llama-3.3-nemotron-super-49b-v1.5` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:44:50Z | surface declaration unknown |
 | `nvidia/llama-nemotron-embed-vl-1b-v2:free` | `embedding` | `openrouter.embedding` | text → embedding | Best-effort | 1/3 | 2026-05-30T00:56:13Z | missing current evidence: embed_usage, embed_batch |
 | `nvidia/nemotron-3-nano-30b-a3b` | `text` | `openrouter.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-29T23:44:50Z | missing current evidence: usage, token_limit, context_append, streaming |
 | `nvidia/nemotron-3-nano-30b-a3b:free` | `text` | `openrouter.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-29T23:44:50Z | missing current evidence: usage, token_limit, context_append, streaming |
@@ -466,7 +466,7 @@ provider-native feature and are not consulted by request routing.
 | `qwen/qwen3-embedding-4b` | `embedding` | `openrouter.embedding` | text → embedding | Best-effort | 1/3 | 2026-05-30T00:56:13Z | missing current evidence: embed_usage, embed_batch |
 | `qwen/qwen3-embedding-8b` | `embedding` | `openrouter.embedding` | text → embedding | Best-effort | 1/3 | 2026-05-30T00:56:13Z | missing current evidence: embed_usage, embed_batch |
 | `qwen/qwen3-max-thinking` | `text` | `openrouter.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-29T23:42:04Z | missing current evidence: usage, token_limit, context_append, streaming |
-| `qwen/qwen3-next-80b-a3b-instruct:free` | `text` | `openrouter.unrecorded_text` | text → text | Unsupported | 0/5 | 2026-05-29T23:42:04Z | basic failed at provider_drift |
+| `qwen/qwen3-next-80b-a3b-instruct:free` | `text` | `openrouter.unrecorded_text` | text → text | Experimental | 0/5 | 2026-05-29T23:42:04Z | surface declaration unknown |
 | `qwen/qwen3-next-80b-a3b-thinking` | `text` | `openrouter.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-29T23:42:04Z | missing current evidence: usage, token_limit, context_append, streaming |
 | `qwen/qwen3-vl-235b-a22b-instruct` | `text` | `openrouter.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-29T23:42:04Z | missing current evidence: usage, token_limit, context_append, streaming |
 | `qwen/qwen3-vl-235b-a22b-thinking` | `text` | `openrouter.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-29T23:42:04Z | missing current evidence: usage, token_limit, context_append, streaming |
@@ -536,7 +536,7 @@ provider-native feature and are not consulted by request routing.
 | `claude-opus-4-6` | `text` | `venice.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-29T23:55:12Z | missing current evidence: usage, token_limit, context_append, streaming |
 | `claude-opus-4-6-fast` | `text` | `venice.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:55:12Z | surface declaration unknown |
 | `claude-opus-4-7` | `text` | `venice.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-29T23:55:12Z | missing current evidence: usage, token_limit, context_append, streaming |
-| `claude-opus-4-7-fast` | `text` | `venice.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-29T23:55:12Z | missing current evidence: usage, token_limit, context_append, streaming |
+| `claude-opus-4-7-fast` | `text` | `venice.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:55:12Z | surface declaration unknown |
 | `claude-sonnet-4-5` | `text` | `venice.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-29T23:55:12Z | missing current evidence: usage, token_limit, context_append, streaming |
 | `claude-sonnet-4-6` | `text` | `venice.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-29T23:55:12Z | missing current evidence: usage, token_limit, context_append, streaming |
 | `deepseek-v3.2` | `text` | `venice.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-29T23:55:12Z | missing current evidence: usage, token_limit, context_append, streaming |
@@ -693,7 +693,7 @@ provider-native feature and are not consulted by request routing.
 | `deepseek/deepseek-chat` | `text` | `zenmux.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-30T00:10:17Z | missing current evidence: usage, token_limit, context_append, streaming |
 | `deepseek/deepseek-chat-v3.1` | `text` | `zenmux.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-30T00:10:17Z | missing current evidence: usage, token_limit, context_append, streaming |
 | `deepseek/deepseek-r1-0528` | `text` | `zenmux.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-30T00:10:17Z | missing current evidence: usage, token_limit, context_append, streaming |
-| `deepseek/deepseek-reasoner` | `text` | `zenmux.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-30T00:10:17Z | missing current evidence: usage, token_limit, context_append, streaming |
+| `deepseek/deepseek-reasoner` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | surface declaration unknown |
 | `deepseek/deepseek-v3.2` | `text` | `zenmux.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-30T00:10:17Z | missing current evidence: usage, token_limit, context_append, streaming |
 | `deepseek/deepseek-v3.2-exp` | `text` | `zenmux.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-30T00:10:17Z | missing current evidence: usage, token_limit, context_append, streaming |
 | `deepseek/deepseek-v4-flash` | `text` | `zenmux.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-30T00:10:17Z | missing current evidence: usage, token_limit, context_append, streaming |
