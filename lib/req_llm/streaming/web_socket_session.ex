@@ -28,13 +28,13 @@ defmodule ReqLLM.Streaming.WebSocketSession do
   @spec await_connected(t(), timeout()) :: :ok | {:error, term()}
   def await_connected(server, timeout \\ 10_000)
       when timeout == :infinity or (is_integer(timeout) and timeout >= 0) do
-    GenServer.call(server, {:await_connected, timeout}, call_timeout(timeout))
+    GenServer.call(server, {:await_connected, timeout}, :infinity)
   end
 
   @spec next_message(t(), timeout()) :: {:ok, binary()} | :halt | {:error, term()}
   def next_message(server, timeout \\ 30_000)
       when timeout == :infinity or (is_integer(timeout) and timeout >= 0) do
-    GenServer.call(server, {:next_message, timeout}, call_timeout(timeout))
+    GenServer.call(server, {:next_message, timeout}, :infinity)
   end
 
   @spec send_json(t(), map()) :: :ok | {:error, term()}
@@ -192,12 +192,12 @@ defmodule ReqLLM.Streaming.WebSocketSession do
     {:noreply, remove_waiter(state, ref)}
   end
 
-  def handle_info({:waiter_timeout, :connect, monitor}, state) do
-    {:noreply, expire_waiter(state, :waiting_connect_callers, monitor, :connect)}
+  def handle_info({:waiter_timeout, :connect, monitor, timeout}, state) do
+    {:noreply, expire_waiter(state, :waiting_connect_callers, monitor, :connect, timeout)}
   end
 
-  def handle_info({:waiter_timeout, :receive, monitor}, state) do
-    {:noreply, expire_waiter(state, :waiting_callers, monitor, :receive)}
+  def handle_info({:waiter_timeout, :receive, monitor, timeout}, state) do
+    {:noreply, expire_waiter(state, :waiting_callers, monitor, :receive, timeout)}
   end
 
   def handle_info(_message, state) do
@@ -262,7 +262,6 @@ defmodule ReqLLM.Streaming.WebSocketSession do
 
     %{
       from: from,
-      timeout: timeout,
       timer: waiter_timer(kind, timeout, monitor),
       monitor: monitor
     }
@@ -271,7 +270,7 @@ defmodule ReqLLM.Streaming.WebSocketSession do
   defp waiter_timer(_kind, :infinity, _monitor), do: nil
 
   defp waiter_timer(kind, timeout, monitor),
-    do: Process.send_after(self(), {:waiter_timeout, kind, monitor}, timeout)
+    do: Process.send_after(self(), {:waiter_timeout, kind, monitor, timeout}, timeout)
 
   defp cancel_waiter(waiter) do
     if waiter.timer, do: Process.cancel_timer(waiter.timer, async: true, info: false)
@@ -283,11 +282,11 @@ defmodule ReqLLM.Streaming.WebSocketSession do
     GenServer.reply(waiter.from, reply)
   end
 
-  defp expire_waiter(state, field, monitor, kind) do
+  defp expire_waiter(state, field, monitor, kind, timeout) do
     {expired, remaining} = Enum.split_with(Map.fetch!(state, field), &(&1.monitor == monitor))
 
     Enum.each(expired, fn waiter ->
-      error = ReqLLM.Error.API.Timeout.exception(kind: kind, timeout: waiter.timeout)
+      error = ReqLLM.Error.API.Timeout.exception(kind: kind, timeout: timeout)
       reply_waiter(waiter, {:error, error})
     end)
 
@@ -304,15 +303,11 @@ defmodule ReqLLM.Streaming.WebSocketSession do
     end)
   end
 
-  defp call_timeout(:infinity), do: :infinity
-  defp call_timeout(timeout), do: timeout + 1_000
-
-  defp normalize_disconnect_reason(reason, %{status: :connecting, connect_timeout: timeout}) do
-    if timeout_reason?(reason) do
-      {:error, ReqLLM.Error.API.Timeout.exception(kind: :connect, timeout: timeout)}
-    else
-      normalize_disconnect_reason(reason)
-    end
+  defp normalize_disconnect_reason(
+         %{original: :timeout},
+         %{status: :connecting, connect_timeout: timeout}
+       ) do
+    {:error, ReqLLM.Error.API.Timeout.exception(kind: :connect, timeout: timeout)}
   end
 
   defp normalize_disconnect_reason(reason, _state), do: normalize_disconnect_reason(reason)
@@ -328,9 +323,4 @@ defmodule ReqLLM.Streaming.WebSocketSession do
   defp normalize_disconnect_reason(:shutdown), do: :closed
   defp normalize_disconnect_reason({:shutdown, _reason}), do: :closed
   defp normalize_disconnect_reason(reason), do: {:error, reason}
-
-  defp timeout_reason?(:timeout), do: true
-  defp timeout_reason?(%{original: reason}), do: timeout_reason?(reason)
-  defp timeout_reason?({_, reason}), do: timeout_reason?(reason)
-  defp timeout_reason?(_reason), do: false
 end

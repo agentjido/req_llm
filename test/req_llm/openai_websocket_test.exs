@@ -1,7 +1,9 @@
 defmodule ReqLLM.OpenAIWebSocketTest do
   use ExUnit.Case, async: false
 
+  alias ReqLLM.Error.API.Timeout
   alias ReqLLM.OpenAI.Realtime
+  alias ReqLLM.Streaming.WebSocketSession
 
   defmodule Router do
     use Plug.Router
@@ -41,24 +43,6 @@ defmodule ReqLLM.OpenAIWebSocketTest do
       payload = Jason.decode!(message)
       send(test_pid, {:responses_socket_message, payload})
 
-      case Application.get_env(:req_llm, :openai_websocket_test_mode, :immediate) do
-        :delayed ->
-          send(test_pid, {:responses_socket_waiting, self()})
-          {:ok, test_pid}
-
-        :immediate ->
-          {:push, response_messages(), test_pid}
-      end
-    end
-
-    @impl true
-    def handle_info(:complete_response, test_pid) do
-      {:push, response_messages(), test_pid}
-    end
-
-    def handle_info(_message, test_pid), do: {:ok, test_pid}
-
-    defp response_messages do
       response = %{
         "type" => "response.completed",
         "response" => %{
@@ -70,10 +54,17 @@ defmodule ReqLLM.OpenAIWebSocketTest do
         }
       }
 
-      [
+      messages = [
         {:text, Jason.encode!(%{"type" => "response.output_text.delta", "delta" => "Hello"})},
         {:text, Jason.encode!(response)}
       ]
+
+      {:push, messages, test_pid}
+    end
+
+    @impl true
+    def handle_info(_message, test_pid) do
+      {:ok, test_pid}
     end
   end
 
@@ -82,6 +73,7 @@ defmodule ReqLLM.OpenAIWebSocketTest do
 
     @impl true
     def init(test_pid) do
+      send(test_pid, {:realtime_socket_connected, self()})
       {:ok, test_pid}
     end
 
@@ -106,6 +98,10 @@ defmodule ReqLLM.OpenAIWebSocketTest do
     end
 
     @impl true
+    def handle_info({:emit, payload}, test_pid) do
+      {:push, {:text, payload}, test_pid}
+    end
+
     def handle_info(_message, test_pid) do
       {:ok, test_pid}
     end
@@ -128,10 +124,10 @@ defmodule ReqLLM.OpenAIWebSocketTest do
       end
 
       Application.delete_env(:req_llm, :openai_websocket_test_pid)
-      Application.delete_env(:req_llm, :openai_websocket_test_mode)
     end)
 
-    {:ok, base_url: base_url}
+    websocket_url = String.replace_prefix(base_url, "http://", "ws://") <> "/realtime"
+    {:ok, base_url: base_url, websocket_url: websocket_url}
   end
 
   test "stream_text uses OpenAI responses websocket mode when requested", %{base_url: base_url} do
@@ -140,7 +136,7 @@ defmodule ReqLLM.OpenAIWebSocketTest do
         "openai:gpt-5",
         "Say hello",
         base_url: base_url,
-        receive_timeout: 5_000,
+        receive_timeout: :infinity,
         provider_options: [openai_stream_transport: :websocket]
       )
 
@@ -157,30 +153,6 @@ defmodule ReqLLM.OpenAIWebSocketTest do
 
     assert request["model"] == "gpt-5"
     assert Enum.any?(request["input"], fn item -> item["role"] == "user" end)
-  end
-
-  test "stream_text allows WebSocket model silence when receive_timeout is infinity", %{
-    base_url: base_url
-  } do
-    Application.put_env(:req_llm, :openai_websocket_test_mode, :delayed)
-
-    {:ok, stream_response} =
-      ReqLLM.stream_text(
-        "openai:gpt-5",
-        "Wait for release",
-        base_url: base_url,
-        connect_timeout: 1_000,
-        receive_timeout: :infinity,
-        provider_options: [openai_stream_transport: :websocket]
-      )
-
-    materializer = Task.async(fn -> ReqLLM.StreamResponse.text(stream_response) end)
-
-    assert_receive {:responses_socket_waiting, socket}
-    assert Task.yield(materializer, 50) == nil
-
-    send(socket, :complete_response)
-    assert Task.await(materializer) == "Hello"
   end
 
   test "stream_text can reuse caller-owned OpenAI responses websocket sessions", %{
@@ -256,6 +228,57 @@ defmodule ReqLLM.OpenAIWebSocketTest do
     assert :ok = Realtime.close(session)
   end
 
+  test "a receive timeout does not consume a later WebSocket message", %{
+    websocket_url: websocket_url
+  } do
+    {session, socket} = start_session(websocket_url)
+
+    assert {:error, %Timeout{kind: :receive, timeout: 20}} =
+             WebSocketSession.next_message(session, 20)
+
+    receiver = Task.async(fn -> WebSocketSession.next_message(session, :infinity) end)
+    send(socket, {:emit, "later-event"})
+
+    assert Task.await(receiver) == {:ok, "later-event"}
+  end
+
+  test "a cancelled WebSocket waiter does not consume a later message", %{
+    websocket_url: websocket_url
+  } do
+    {session, socket} = start_session(websocket_url)
+
+    receiver = Task.async(fn -> WebSocketSession.next_message(session, :infinity) end)
+    assert Task.yield(receiver, 50) == nil
+    assert Task.shutdown(receiver, :brutal_kill) == nil
+
+    send(socket, {:emit, "later-event"})
+
+    assert WebSocketSession.next_message(session, 1_000) == {:ok, "later-event"}
+  end
+
+  test "connection timeout is distinct from receive inactivity" do
+    {:ok, listener} = :gen_tcp.listen(0, [:binary, active: false, reuseaddr: true])
+    {:ok, port} = :inet.port(listener)
+
+    accepter =
+      spawn(fn ->
+        {:ok, socket} = :gen_tcp.accept(listener)
+        Process.sleep(:infinity)
+        :gen_tcp.close(socket)
+      end)
+
+    on_exit(fn ->
+      Process.exit(accepter, :kill)
+      :gen_tcp.close(listener)
+    end)
+
+    {:ok, session} =
+      WebSocketSession.start_link("ws://127.0.0.1:#{port}/socket", connect_timeout: 30)
+
+    assert {:error, %Timeout{kind: :connect, timeout: 30}} =
+             WebSocketSession.await_connected(session, 30)
+  end
+
   test "Realtime session can receive the additive projected event view", %{base_url: base_url} do
     {:ok, session} =
       Realtime.connect("gpt-realtime",
@@ -278,6 +301,13 @@ defmodule ReqLLM.OpenAIWebSocketTest do
              projected.stream_events
 
     assert :ok = Realtime.close(session)
+  end
+
+  defp start_session(url) do
+    {:ok, session} = WebSocketSession.start_link(url, connect_timeout: 1_000)
+    assert :ok = WebSocketSession.await_connected(session, 1_000)
+    assert_receive {:realtime_socket_connected, socket}
+    {session, socket}
   end
 
   defp reserve_port do

@@ -7,10 +7,10 @@ This guide covers all global configuration options for ReqLLM, including timeout
 ```elixir
 # config/config.exs
 config :req_llm,
-  # Transport timeouts (finite values are milliseconds)
+  # Timeouts (finite values are milliseconds)
   connect_timeout: 10_000,           # WebSocket TCP/TLS/upgrade timeout
-  receive_timeout: 120_000,          # Default response timeout; :infinity allowed
-  stream_receive_timeout: 120_000,   # Streaming message timeout; :infinity allowed
+  receive_timeout: 120_000,          # Default response timeout
+  stream_receive_timeout: 120_000,   # Streaming chunk timeout
   stream_pool_timeout: 120_000,      # Streaming connection checkout timeout
   # total_timeout: 180_000,          # Optional whole-call deadline
   # stream_idle_timeout: 60_000,     # Optional semantic-progress deadline
@@ -151,8 +151,10 @@ not limit model generation or stream inactivity.
 
 ### `receive_timeout` (default: 30,000ms)
 
-The provider-transport inactivity timeout. For streaming it applies between raw
-transport messages. Transport keepalive traffic counts as activity.
+The existing provider-transport inactivity timeout. For buffered requests it
+limits how long the HTTP client waits to receive the response. For Finch
+streaming it applies between raw transport chunks. Transport keepalive traffic
+therefore counts as activity for this timeout.
 
 ```elixir
 config :req_llm, receive_timeout: 60_000
@@ -161,15 +163,16 @@ config :req_llm, receive_timeout: 60_000
 Per-request override:
 
 ```elixir
-ReqLLM.stream_text(model, messages, receive_timeout: :infinity)
+ReqLLM.generate_text("openai:gpt-4o", "Hello", receive_timeout: 60_000)
 ```
 
-Use `:infinity` to disable this inactivity timeout. `receive_timeout` is not a
-total-call deadline.
+For streams, use `receive_timeout: :infinity` to disable this inactivity
+timeout. `receive_timeout` is not a total-call deadline.
 
 ### `stream_receive_timeout` (default: inherits from `receive_timeout`)
 
-The global default for streaming `receive_timeout`.
+The global default for streaming `receive_timeout`. If no raw transport chunk
+arrives within this window, the transport fails.
 
 ```elixir
 config :req_llm, stream_receive_timeout: :infinity
@@ -194,11 +197,10 @@ behavior based on `receive_timeout`. Explicit `stream_idle_timeout: :infinity`
 disables the semantic-progress timer while leaving the transport timeout in
 place.
 
-### `stream_pool_timeout` (when unset: inherits from finite `stream_receive_timeout`)
+### `stream_pool_timeout` (when unset: inherits from `stream_receive_timeout`)
 
 Timeout for checking out a Finch connection before a streaming request starts.
-When the receive timeout is `:infinity`, pool checkout remains bounded at 30
-seconds unless configured separately.
+When the receive timeout is `:infinity`, the default is 30 seconds.
 
 ```elixir
 config :req_llm, stream_pool_timeout: 300_000
