@@ -188,6 +188,15 @@ defmodule ReqLLM.Streaming.WebSocketSession do
     {:noreply, state}
   end
 
+  def handle_info({:DOWN, ref, :process, _pid, _reason}, state) do
+    state =
+      state
+      |> remove_waiter(:waiting_connect_callers, ref)
+      |> remove_waiter(:waiting_callers, ref)
+
+    {:noreply, state}
+  end
+
   def handle_info({:waiter_timeout, :connect, token}, state) do
     {:noreply, expire_waiter(state, :waiting_connect_callers, token, :connect)}
   end
@@ -211,8 +220,14 @@ defmodule ReqLLM.Streaming.WebSocketSession do
 
   defp enqueue_or_reply(message, %{waiting_callers: [waiter | rest]} = state) do
     cancel_waiter(waiter)
-    GenServer.reply(waiter.from, {:ok, message})
-    %{state | waiting_callers: rest}
+    state = %{state | waiting_callers: rest}
+
+    if Process.alive?(waiter.pid) do
+      GenServer.reply(waiter.from, {:ok, message})
+      state
+    else
+      enqueue_or_reply(message, state)
+    end
   end
 
   defp enqueue_or_reply(message, state) do
@@ -255,27 +270,56 @@ defmodule ReqLLM.Streaming.WebSocketSession do
   defp connection_reply(:closed), do: {:error, :closed}
   defp connection_reply({:error, reason}), do: {:error, reason}
 
-  defp new_waiter(from, kind, :infinity) do
-    %{from: from, kind: kind, timeout: :infinity, token: nil, timer: nil}
+  defp new_waiter({pid, _tag} = from, kind, :infinity) do
+    %{
+      from: from,
+      pid: pid,
+      kind: kind,
+      timeout: :infinity,
+      token: nil,
+      timer: nil,
+      monitor: Process.monitor(pid)
+    }
   end
 
-  defp new_waiter(from, kind, timeout) do
+  defp new_waiter({pid, _tag} = from, kind, timeout) do
     token = make_ref()
     timer = Process.send_after(self(), {:waiter_timeout, kind, token}, timeout)
-    %{from: from, kind: kind, timeout: timeout, token: token, timer: timer}
+
+    %{
+      from: from,
+      pid: pid,
+      kind: kind,
+      timeout: timeout,
+      token: token,
+      timer: timer,
+      monitor: Process.monitor(pid)
+    }
   end
 
-  defp cancel_waiter(%{timer: nil}), do: :ok
-  defp cancel_waiter(%{timer: timer}), do: Process.cancel_timer(timer, async: true, info: false)
+  defp cancel_waiter(waiter) do
+    if waiter.timer, do: Process.cancel_timer(waiter.timer, async: true, info: false)
+    Process.demonitor(waiter.monitor, [:flush])
+    :ok
+  end
 
   defp expire_waiter(state, field, token, kind) do
     {expired, remaining} = Enum.split_with(Map.fetch!(state, field), &(&1.token == token))
 
     Enum.each(expired, fn waiter ->
+      cancel_waiter(waiter)
       error = ReqLLM.Error.API.Timeout.exception(kind: kind, timeout: waiter.timeout)
       GenServer.reply(waiter.from, {:error, error})
     end)
 
+    Map.put(state, field, remaining)
+  end
+
+  defp remove_waiter(state, field, monitor) do
+    {removed, remaining} =
+      Enum.split_with(Map.fetch!(state, field), &(&1.monitor == monitor))
+
+    Enum.each(removed, &cancel_waiter/1)
     Map.put(state, field, remaining)
   end
 

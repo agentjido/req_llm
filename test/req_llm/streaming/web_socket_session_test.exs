@@ -78,6 +78,24 @@ defmodule ReqLLM.Streaming.WebSocketSessionTest do
     assert Task.await(receiver) == {:ok, "later-event"}
   end
 
+  test "a cancelled infinite waiter does not consume a later message", %{url: url} do
+    {:ok, session} = WebSocketSession.start_link(url, connect_timeout: 1_000)
+    assert :ok = WebSocketSession.await_connected(session, 1_000)
+    assert_receive {:websocket_connected, socket}
+
+    receiver = spawn(fn -> WebSocketSession.next_message(session, :infinity) end)
+    assert wait_until(fn -> :sys.get_state(session).waiting_callers != [] end)
+
+    monitor = Process.monitor(receiver)
+    Process.exit(receiver, :kill)
+    assert_receive {:DOWN, ^monitor, :process, ^receiver, :killed}
+    assert wait_until(fn -> :sys.get_state(session).waiting_callers == [] end)
+
+    send(socket, {:emit, "later-event"})
+
+    assert WebSocketSession.next_message(session, 1_000) == {:ok, "later-event"}
+  end
+
   test "connection establishment timeout is distinct from receive inactivity" do
     {:ok, listener} = :gen_tcp.listen(0, [:binary, active: false, reuseaddr: true])
     {:ok, port} = :inet.port(listener)
@@ -100,6 +118,19 @@ defmodule ReqLLM.Streaming.WebSocketSessionTest do
     assert {:error, %Timeout{kind: :connect, timeout: 30}} =
              WebSocketSession.await_connected(session, 30)
   end
+
+  defp wait_until(fun, attempts \\ 100)
+
+  defp wait_until(fun, attempts) when attempts > 0 do
+    if fun.() do
+      true
+    else
+      Process.sleep(5)
+      wait_until(fun, attempts - 1)
+    end
+  end
+
+  defp wait_until(_fun, 0), do: false
 
   defp reserve_port do
     {:ok, socket} = :gen_tcp.listen(0, [:binary, active: false, reuseaddr: true])
