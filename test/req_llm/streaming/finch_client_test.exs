@@ -78,6 +78,15 @@ defmodule ReqLLM.Streaming.FinchClientTest do
       assert opts[:pool_timeout] == 42_000
     end
 
+    test "keeps pool checkout finite when receive timeout is infinite" do
+      Application.delete_env(:req_llm, :stream_pool_timeout)
+
+      opts = FinchClient.stream_options(%{}, receive_timeout: :infinity)
+
+      assert opts[:receive_timeout] == :infinity
+      assert opts[:pool_timeout] == 30_000
+    end
+
     test "uses stream_pool_timeout config when request pool_timeout is not provided" do
       Application.put_env(:req_llm, :stream_pool_timeout, 180_000)
 

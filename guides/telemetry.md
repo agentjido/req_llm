@@ -128,7 +128,7 @@ enabled, `request_payload` and `response_payload` are also included. Retry event
 add `retry`, exception events add `error`, and terminal streaming events may add
 `builtin_tool_timing` when server-side builtin tool timings are available.
 
-`request_options` is a compact map of normalized inference parameters extracted from the original call: `temperature`, `top_p`, `top_k`, `max_tokens`, `frequency_penalty`, `presence_penalty`, `stop_sequences`, `seed`, `n` (choice count), `stream?`, `encoding_formats`, `conversation_id`, `service_tier`, `receive_timeout`, `total_timeout`, `stream_idle_timeout`, and `max_retries`. Nil values are dropped.
+`request_options` is a compact map of normalized inference parameters extracted from the original call: `temperature`, `top_p`, `top_k`, `max_tokens`, `frequency_penalty`, `presence_penalty`, `stop_sequences`, `seed`, `n` (choice count), `stream?`, `encoding_formats`, `conversation_id`, `service_tier`, `connect_timeout`, `receive_timeout`, `total_timeout`, `stream_idle_timeout`, and `max_retries`. Nil values are dropped.
 
 `server` is the resolved upstream endpoint (`address`, `port`, `path`). It is populated as soon as ReqLLM has a request URL and may be empty when the URL is unavailable.
 

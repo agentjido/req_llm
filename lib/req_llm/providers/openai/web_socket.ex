@@ -16,7 +16,10 @@ defmodule ReqLLM.Providers.OpenAI.WebSocket do
 
   @spec start_responses_session(LLMDB.Model.t(), keyword()) :: GenServer.on_start()
   def start_responses_session(%LLMDB.Model{} = model, opts \\ []) do
-    WebSocketSession.start_link(responses_url(model, opts), headers: headers(model, opts))
+    WebSocketSession.start_link(responses_url(model, opts),
+      headers: headers(model, opts),
+      connect_timeout: Keyword.get(opts, :connect_timeout, 10_000)
+    )
   end
 
   @spec responses_url(LLMDB.Model.t(), keyword()) :: String.t()

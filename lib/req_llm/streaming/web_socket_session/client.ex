@@ -13,7 +13,16 @@ defmodule ReqLLM.Streaming.WebSocketSession.Client do
         handle_initial_conn_failure: true,
         extra_headers: Keyword.get(opts, :headers, [])
       ]
-      |> Keyword.merge(Keyword.take(opts, [:name, :debug, :async, :handle_initial_conn_failure]))
+      |> Keyword.merge(
+        Keyword.take(opts, [
+          :name,
+          :debug,
+          :async,
+          :handle_initial_conn_failure,
+          :socket_connect_timeout,
+          :socket_recv_timeout
+        ])
+      )
 
     WebSockex.start(url, __MODULE__, state, ws_opts)
   end

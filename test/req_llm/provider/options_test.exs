@@ -102,21 +102,25 @@ defmodule ReqLLM.Provider.OptionsTest do
 
       assert {:ok, processed} =
                Options.process(MockProvider, :chat, model,
+                 connect_timeout: 3_000,
                  receive_timeout: 5_000,
                  total_timeout: 60_000,
                  stream_idle_timeout: 10_000
                )
 
+      assert processed[:connect_timeout] == 3_000
       assert processed[:receive_timeout] == 5_000
       assert processed[:total_timeout] == 60_000
       assert processed[:stream_idle_timeout] == 10_000
 
       assert {:ok, unlimited} =
                Options.process(MockProvider, :chat, model,
+                 receive_timeout: :infinity,
                  total_timeout: :infinity,
                  stream_idle_timeout: :infinity
                )
 
+      assert unlimited[:receive_timeout] == :infinity
       assert unlimited[:total_timeout] == :infinity
       assert unlimited[:stream_idle_timeout] == :infinity
     end
@@ -125,6 +129,7 @@ defmodule ReqLLM.Provider.OptionsTest do
       model = %LLMDB.Model{provider: :mock, id: "test-model"}
 
       for {key, value} <- [
+            {:connect_timeout, 0},
             {:receive_timeout, 0},
             {:total_timeout, 0},
             {:total_timeout, -1},

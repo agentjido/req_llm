@@ -297,9 +297,10 @@ defmodule ReqLLM.Streaming.FinchClient do
   end
 
   defp default_pool_timeout(receive_timeout) do
-    case Application.get_env(:req_llm, :stream_pool_timeout) do
-      nil -> receive_timeout
-      timeout -> timeout
+    case Application.fetch_env(:req_llm, :stream_pool_timeout) do
+      {:ok, timeout} -> timeout
+      :error when receive_timeout == :infinity -> 30_000
+      :error -> receive_timeout
     end
   end
 

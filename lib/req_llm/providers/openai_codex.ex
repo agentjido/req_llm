@@ -398,7 +398,8 @@ defmodule ReqLLM.Providers.OpenAICodex do
     base_url = ReqLLM.Provider.Options.effective_base_url(__MODULE__, model, opts)
 
     ReqLLM.Streaming.WebSocketSession.start_link(codex_websocket_url(base_url),
-      headers: websocket_headers(model, credential.token, account_id, opts)
+      headers: websocket_headers(model, credential.token, account_id, opts),
+      connect_timeout: Keyword.get(opts, :connect_timeout, 10_000)
     )
   end
 

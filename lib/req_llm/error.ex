@@ -323,18 +323,29 @@ defmodule ReqLLM.Error do
   end
 
   defmodule API.Timeout do
-    @moduledoc "Error for an explicit ReqLLM model-call timeout budget."
+    @moduledoc "Structured timeout for ReqLLM model calls and provider transports."
     use Splode.Error,
       fields: [:kind, :timeout],
       class: :api
 
-    @typedoc "Structured timeout raised by an opt-in ReqLLM timeout budget."
+    @typedoc "The phase whose configured timeout expired."
+    @type kind() :: :connect | :receive | :total | :stream_idle
+
+    @typedoc "Structured timeout with its phase and configured duration."
     @type t() :: %__MODULE__{
-            kind: :total | :stream_idle,
+            kind: kind(),
             timeout: pos_integer()
           }
 
     @spec message(t()) :: String.t()
+    def message(%{kind: :connect, timeout: timeout}) do
+      "Provider connection exceeded the timeout of #{timeout}ms"
+    end
+
+    def message(%{kind: :receive, timeout: timeout}) do
+      "Provider transport received no data for #{timeout}ms"
+    end
+
     def message(%{kind: :total, timeout: timeout}) do
       "Model call exceeded the total timeout of #{timeout}ms"
     end

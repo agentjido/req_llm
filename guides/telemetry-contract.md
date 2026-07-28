@@ -89,7 +89,7 @@ are booleans, atoms, non-negative integers, or `nil`; `channel` is `:none`,
 `request_options` may contain `temperature`, `top_p`, `top_k`, `max_tokens`,
 `frequency_penalty`, `presence_penalty`, `stop_sequences`, `seed`, `n`,
 `stream?`, `encoding_formats`, `conversation_id`, `service_tier`,
-`receive_timeout`, `total_timeout`, `stream_idle_timeout`, and `max_retries`.
+`connect_timeout`, `receive_timeout`, `total_timeout`, `stream_idle_timeout`, and `max_retries`.
 Inference values retain their normalized scalar/list shape; timeout and retry
 values are milliseconds/counts or `:infinity` where supported.
 

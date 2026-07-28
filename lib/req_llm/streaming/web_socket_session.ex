@@ -10,6 +10,7 @@ defmodule ReqLLM.Streaming.WebSocketSession do
   defstruct [
     :client_pid,
     :client_ref,
+    connect_timeout: 10_000,
     status: :connecting,
     queue: :queue.new(),
     initial_messages: [],
@@ -24,14 +25,16 @@ defmodule ReqLLM.Streaming.WebSocketSession do
     GenServer.start_link(__MODULE__, {url, opts})
   end
 
-  @spec await_connected(t(), non_neg_integer()) :: :ok | {:error, term()}
-  def await_connected(server, timeout \\ 10_000) do
-    GenServer.call(server, :await_connected, timeout + 1000)
+  @spec await_connected(t(), timeout()) :: :ok | {:error, term()}
+  def await_connected(server, timeout \\ 10_000)
+      when timeout == :infinity or (is_integer(timeout) and timeout >= 0) do
+    GenServer.call(server, {:await_connected, timeout}, call_timeout(timeout))
   end
 
-  @spec next_message(t(), non_neg_integer()) :: {:ok, binary()} | :halt | {:error, term()}
-  def next_message(server, timeout \\ 30_000) do
-    GenServer.call(server, {:next_message, timeout}, timeout + 1000)
+  @spec next_message(t(), timeout()) :: {:ok, binary()} | :halt | {:error, term()}
+  def next_message(server, timeout \\ 30_000)
+      when timeout == :infinity or (is_integer(timeout) and timeout >= 0) do
+    GenServer.call(server, {:next_message, timeout}, call_timeout(timeout))
   end
 
   @spec send_json(t(), map()) :: :ok | {:error, term()}
@@ -52,14 +55,20 @@ defmodule ReqLLM.Streaming.WebSocketSession do
   @impl GenServer
   def init({url, opts}) do
     initial_messages = Keyword.get(opts, :initial_messages, [])
+    connect_timeout = Keyword.get(opts, :connect_timeout, 10_000)
 
-    case Client.start(url, self(), headers: Keyword.get(opts, :headers, [])) do
+    case Client.start(url, self(),
+           headers: Keyword.get(opts, :headers, []),
+           socket_connect_timeout: connect_timeout,
+           socket_recv_timeout: connect_timeout
+         ) do
       {:ok, client_pid} ->
         client_ref = Process.monitor(client_pid)
 
         state = %__MODULE__{
           client_pid: client_pid,
           client_ref: client_ref,
+          connect_timeout: connect_timeout,
           initial_messages: initial_messages
         }
 
@@ -71,23 +80,24 @@ defmodule ReqLLM.Streaming.WebSocketSession do
   end
 
   @impl GenServer
-  def handle_call(:await_connected, _from, %{status: :open} = state) do
+  def handle_call({:await_connected, _timeout}, _from, %{status: :open} = state) do
     {:reply, :ok, state}
   end
 
-  def handle_call(:await_connected, _from, %{status: :closed} = state) do
+  def handle_call({:await_connected, _timeout}, _from, %{status: :closed} = state) do
     {:reply, {:error, :closed}, state}
   end
 
-  def handle_call(:await_connected, _from, %{status: {:error, reason}} = state) do
+  def handle_call({:await_connected, _timeout}, _from, %{status: {:error, reason}} = state) do
     {:reply, {:error, reason}, state}
   end
 
-  def handle_call(:await_connected, from, state) do
-    {:noreply, %{state | waiting_connect_callers: state.waiting_connect_callers ++ [from]}}
+  def handle_call({:await_connected, timeout}, from, state) do
+    waiter = new_waiter(from, :connect, timeout)
+    {:noreply, %{state | waiting_connect_callers: state.waiting_connect_callers ++ [waiter]}}
   end
 
-  def handle_call({:next_message, _timeout}, from, state) do
+  def handle_call({:next_message, timeout}, from, state) do
     case dequeue_message(state) do
       {:ok, message, new_state} ->
         {:reply, {:ok, message}, new_state}
@@ -99,7 +109,8 @@ defmodule ReqLLM.Streaming.WebSocketSession do
         {:reply, {:error, reason}, new_state}
 
       {:empty, new_state} ->
-        {:noreply, %{new_state | waiting_callers: new_state.waiting_callers ++ [from]}}
+        waiter = new_waiter(from, :receive, timeout)
+        {:noreply, %{new_state | waiting_callers: new_state.waiting_callers ++ [waiter]}}
     end
   end
 
@@ -152,7 +163,7 @@ defmodule ReqLLM.Streaming.WebSocketSession do
   end
 
   def handle_info({:web_socket_session, _pid, {:disconnected, reason}}, state) do
-    status = normalize_disconnect_reason(reason)
+    status = normalize_disconnect_reason(reason, state)
 
     state =
       state
@@ -164,7 +175,7 @@ defmodule ReqLLM.Streaming.WebSocketSession do
   end
 
   def handle_info({:DOWN, ref, :process, _pid, reason}, %{client_ref: ref} = state) do
-    status = normalize_disconnect_reason(reason)
+    status = normalize_disconnect_reason(reason, state)
 
     state =
       state
@@ -175,6 +186,14 @@ defmodule ReqLLM.Streaming.WebSocketSession do
       |> reply_to_waiting_callers()
 
     {:noreply, state}
+  end
+
+  def handle_info({:waiter_timeout, :connect, token}, state) do
+    {:noreply, expire_waiter(state, :waiting_connect_callers, token, :connect)}
+  end
+
+  def handle_info({:waiter_timeout, :receive, token}, state) do
+    {:noreply, expire_waiter(state, :waiting_callers, token, :receive)}
   end
 
   def handle_info(_message, state) do
@@ -190,8 +209,9 @@ defmodule ReqLLM.Streaming.WebSocketSession do
     :ok
   end
 
-  defp enqueue_or_reply(message, %{waiting_callers: [from | rest]} = state) do
-    GenServer.reply(from, {:ok, message})
+  defp enqueue_or_reply(message, %{waiting_callers: [waiter | rest]} = state) do
+    cancel_waiter(waiter)
+    GenServer.reply(waiter.from, {:ok, message})
     %{state | waiting_callers: rest}
   end
 
@@ -207,7 +227,11 @@ defmodule ReqLLM.Streaming.WebSocketSession do
   end
 
   defp reply_to_connect_callers(state, reply) do
-    Enum.each(state.waiting_connect_callers, &GenServer.reply(&1, reply))
+    Enum.each(state.waiting_connect_callers, fn waiter ->
+      cancel_waiter(waiter)
+      GenServer.reply(waiter.from, reply)
+    end)
+
     %{state | waiting_connect_callers: []}
   end
 
@@ -220,18 +244,68 @@ defmodule ReqLLM.Streaming.WebSocketSession do
         {:error, reason} -> {:error, reason}
       end
 
-    Enum.each(state.waiting_callers, &GenServer.reply(&1, reply))
+    Enum.each(state.waiting_callers, fn waiter ->
+      cancel_waiter(waiter)
+      GenServer.reply(waiter.from, reply)
+    end)
+
     %{state | waiting_callers: []}
   end
 
   defp connection_reply(:closed), do: {:error, :closed}
   defp connection_reply({:error, reason}), do: {:error, reason}
 
+  defp new_waiter(from, kind, :infinity) do
+    %{from: from, kind: kind, timeout: :infinity, token: nil, timer: nil}
+  end
+
+  defp new_waiter(from, kind, timeout) do
+    token = make_ref()
+    timer = Process.send_after(self(), {:waiter_timeout, kind, token}, timeout)
+    %{from: from, kind: kind, timeout: timeout, token: token, timer: timer}
+  end
+
+  defp cancel_waiter(%{timer: nil}), do: :ok
+  defp cancel_waiter(%{timer: timer}), do: Process.cancel_timer(timer, async: true, info: false)
+
+  defp expire_waiter(state, field, token, kind) do
+    {expired, remaining} = Enum.split_with(Map.fetch!(state, field), &(&1.token == token))
+
+    Enum.each(expired, fn waiter ->
+      error = ReqLLM.Error.API.Timeout.exception(kind: kind, timeout: waiter.timeout)
+      GenServer.reply(waiter.from, {:error, error})
+    end)
+
+    Map.put(state, field, remaining)
+  end
+
+  defp call_timeout(:infinity), do: :infinity
+  defp call_timeout(timeout), do: timeout + 1_000
+
+  defp normalize_disconnect_reason(reason, %{status: :connecting, connect_timeout: timeout}) do
+    if timeout_reason?(reason) do
+      {:error, ReqLLM.Error.API.Timeout.exception(kind: :connect, timeout: timeout)}
+    else
+      normalize_disconnect_reason(reason)
+    end
+  end
+
+  defp normalize_disconnect_reason(reason, _state), do: normalize_disconnect_reason(reason)
+
   defp normalize_disconnect_reason(:normal), do: :closed
   defp normalize_disconnect_reason({:local, :normal}), do: :closed
   defp normalize_disconnect_reason({:remote, :normal}), do: :closed
   defp normalize_disconnect_reason({:remote, :closed}), do: :closed
+
+  defp normalize_disconnect_reason({side, 1000, _detail}) when side in [:local, :remote],
+    do: :closed
+
   defp normalize_disconnect_reason(:shutdown), do: :closed
   defp normalize_disconnect_reason({:shutdown, _reason}), do: :closed
   defp normalize_disconnect_reason(reason), do: {:error, reason}
+
+  defp timeout_reason?(:timeout), do: true
+  defp timeout_reason?(%{original: reason}), do: timeout_reason?(reason)
+  defp timeout_reason?({_, reason}), do: timeout_reason?(reason)
+  defp timeout_reason?(_reason), do: false
 end

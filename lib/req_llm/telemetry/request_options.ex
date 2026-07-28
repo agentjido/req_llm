@@ -37,6 +37,7 @@ defmodule ReqLLM.Telemetry.RequestOptions do
       encoding_formats: normalize_string_list(opts[:encoding_format]),
       conversation_id: telemetry_conversation_id(opts),
       service_tier: opts[:service_tier] || provider_opts[:service_tier],
+      connect_timeout: opts[:connect_timeout],
       receive_timeout: opts[:receive_timeout],
       total_timeout: opts[:total_timeout],
       stream_idle_timeout: opts[:stream_idle_timeout],
