@@ -425,13 +425,16 @@ defmodule ReqLLM.Providers.AmazonBedrock do
         :tools
       ])
       |> Req.Request.merge_options(
-        base_url: base_url,
-        model: model_id,
-        model_family: model_family,
-        context: opts[:context],
-        use_converse: use_converse,
-        operation: opts[:operation],
-        tools: opts[:tools]
+        ReqLLM.Provider.Defaults.finch_option(request) ++
+          [
+            base_url: base_url,
+            model: model_id,
+            model_family: model_family,
+            context: opts[:context],
+            use_converse: use_converse,
+            operation: opts[:operation],
+            tools: opts[:tools]
+          ]
       )
 
     model_body =
@@ -501,10 +504,13 @@ defmodule ReqLLM.Providers.AmazonBedrock do
           |> Map.put(:url, URI.parse(base_url <> "/model/#{model_id}/invoke"))
           |> Req.Request.register_options([:model, :text, :operation, :model_family])
           |> Req.Request.merge_options(
-            base_url: base_url,
-            model: model_id,
-            operation: :embedding,
-            model_family: model_family
+            ReqLLM.Provider.Defaults.finch_option(request) ++
+              [
+                base_url: base_url,
+                model: model_id,
+                operation: :embedding,
+                model_family: model_family
+              ]
           )
           |> Req.Request.put_header("content-type", "application/json")
           |> Req.Request.put_private(:req_llm_model, model)

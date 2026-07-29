@@ -466,6 +466,23 @@ defmodule ReqLLM.Providers.AmazonBedrockTest do
     end
   end
 
+  describe "attach/3 Finch pool routing" do
+    test "routes chat requests to the configured Finch pool" do
+      {:ok, model} = ReqLLM.model("amazon-bedrock:anthropic.claude-3-haiku-20240307-v1:0")
+      context = Context.new([Context.user("Hello")])
+
+      opts = [
+        access_key_id: "AKIATEST",
+        secret_access_key: "secretTEST",
+        region: "us-east-1"
+      ]
+
+      {:ok, request} = AmazonBedrock.prepare_request(:chat, model, context, opts)
+
+      assert request.options[:finch] == ReqLLM.Application.finch_name()
+    end
+  end
+
   describe "attach_stream/4" do
     setup do
       {:ok, model} = ReqLLM.model("amazon-bedrock:anthropic.claude-3-haiku-20240307-v1:0")
@@ -688,6 +705,14 @@ defmodule ReqLLM.Providers.AmazonBedrockTest do
       attached = AmazonBedrock.attach_embedding(request, model, opts)
 
       assert attached.request_steps[:aws_sigv4] != nil
+    end
+
+    test "routes the request to the configured Finch pool", %{model: model, opts: opts} do
+      request = Req.new(url: "/model/cohere.embed-english-v3/invoke", method: :post)
+
+      attached = AmazonBedrock.attach_embedding(request, model, opts)
+
+      assert attached.options[:finch] == ReqLLM.Application.finch_name()
     end
 
     test "sets content-type header", %{model: model, opts: opts} do
