@@ -5,9 +5,10 @@ defmodule ReqLLM.Provider.ChunkAccumulator do
   `ReqLLM.Provider.Defaults.ResponseBuilder` (batch, full chunk list at
   end-of-stream).
 
-  Maintains running iodata buffers for text/thinking, complete content parts,
-  a running tool-call list, and per-index argument-fragment buffers. Reasoning
-  details and logprobs are also collected from `:meta` chunks.
+  Maintains running iodata buffers for text/thinking, ordered content events,
+  complete content parts, a running tool-call list, and per-index
+  argument-fragment buffers. Reasoning details and logprobs are also collected
+  from `:meta` chunks.
 
   ## Finalizers
 
@@ -77,9 +78,13 @@ defmodule ReqLLM.Provider.ChunkAccumulator do
           optional(:metadata) => map()
         }
 
+  @type content_event ::
+          {:text, String.t()} | {:thinking, String.t()} | {:content_part, ContentPart.t()}
+
   @type t :: %__MODULE__{
           text_content: iodata(),
           thinking_content: iodata(),
+          content_events: [content_event()],
           content_parts: [ContentPart.t()],
           tool_calls: [tool_call_record()],
           arg_fragments: %{optional(non_neg_integer()) => iodata()},
@@ -91,6 +96,7 @@ defmodule ReqLLM.Provider.ChunkAccumulator do
 
   defstruct text_content: [],
             thinking_content: [],
+            content_events: [],
             content_parts: [],
             tool_calls: [],
             arg_fragments: %{},
@@ -118,19 +124,31 @@ defmodule ReqLLM.Provider.ChunkAccumulator do
   @spec push(t(), StreamChunk.t()) :: t()
   def push(%__MODULE__{} = acc, %StreamChunk{type: :content, text: text})
       when is_binary(text) and text != "" do
-    %{acc | text_content: [acc.text_content, text]}
+    %{
+      acc
+      | text_content: [acc.text_content, text],
+        content_events: [{:text, text} | acc.content_events]
+    }
   end
 
   def push(%__MODULE__{} = acc, %StreamChunk{type: :thinking, text: text})
       when is_binary(text) and text != "" do
-    %{acc | thinking_content: [acc.thinking_content, text]}
+    %{
+      acc
+      | thinking_content: [acc.thinking_content, text],
+        content_events: [{:thinking, text} | acc.content_events]
+    }
   end
 
   def push(
         %__MODULE__{} = acc,
         %StreamChunk{type: :content_part, content_part: %ContentPart{} = content_part}
       ) do
-    %{acc | content_parts: [content_part | acc.content_parts]}
+    %{
+      acc
+      | content_events: [{:content_part, content_part} | acc.content_events],
+        content_parts: [content_part | acc.content_parts]
+    }
   end
 
   def push(%__MODULE__{} = acc, %StreamChunk{type: :tool_call} = chunk) do
@@ -287,6 +305,50 @@ defmodule ReqLLM.Provider.ChunkAccumulator do
   def finalize_content_parts(%__MODULE__{content_parts: content_parts}),
     do: Enum.reverse(content_parts)
 
+  @doc """
+  Returns text, thinking, and complete content parts in arrival order.
+
+  Adjacent text or thinking chunks become one content part. Set
+  `:include_thinking?` to `false` to omit thinking content.
+  """
+  @spec finalize_ordered_content(t(), keyword()) :: [ContentPart.t()]
+  def finalize_ordered_content(%__MODULE__{content_events: content_events}, opts \\ []) do
+    include_thinking? = Keyword.get(opts, :include_thinking?, true)
+
+    content_events
+    |> Enum.reduce([], &prepend_content_event(&1, &2, include_thinking?))
+    |> Enum.map(&materialize_content_event/1)
+  end
+
+  defp prepend_content_event({:text, text}, [{:text, content} | rest], _include_thinking?),
+    do: [{:text, [text, content]} | rest]
+
+  defp prepend_content_event({:text, text}, content, _include_thinking?),
+    do: [{:text, text} | content]
+
+  defp prepend_content_event(
+         {:thinking, thinking},
+         [{:thinking, content} | rest],
+         true
+       ),
+       do: [{:thinking, [thinking, content]} | rest]
+
+  defp prepend_content_event({:thinking, thinking}, content, true),
+    do: [{:thinking, thinking} | content]
+
+  defp prepend_content_event({:thinking, _thinking}, content, false), do: content
+
+  defp prepend_content_event({:content_part, content_part}, content, _include_thinking?),
+    do: [{:content_part, content_part} | content]
+
+  defp materialize_content_event({:text, content}),
+    do: ContentPart.text(IO.iodata_to_binary(content))
+
+  defp materialize_content_event({:thinking, content}),
+    do: ContentPart.thinking(IO.iodata_to_binary(content))
+
+  defp materialize_content_event({:content_part, content_part}), do: content_part
+
   @doc "Returns reasoning details in arrival order."
   @spec finalize_reasoning_details(t()) :: [term()]
   def finalize_reasoning_details(%__MODULE__{reasoning_details: details}),
@@ -400,13 +462,8 @@ defmodule ReqLLM.Provider.ChunkAccumulator do
   """
   @spec finalize_message(t()) :: Message.t() | nil
   def finalize_message(%__MODULE__{} = acc) do
-    text = finalize_text(acc)
     tool_calls = finalize_message_tool_calls(acc)
-
-    content_parts =
-      if text == "", do: [], else: [%ContentPart{type: :text, text: text, metadata: %{}}]
-
-    content_parts = content_parts ++ finalize_content_parts(acc)
+    content_parts = finalize_ordered_content(acc, include_thinking?: false)
 
     if content_parts == [] and tool_calls == [] do
       nil

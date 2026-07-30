@@ -38,6 +38,28 @@ defmodule ReqLLM.Provider.ChunkAccumulatorTest do
     end
   end
 
+  describe "finalize_ordered_content/2" do
+    test "keeps images before and between merged text parts" do
+      first_image = ContentPart.image(<<1>>, "image/png")
+      second_image = ContentPart.image(<<2>>, "image/png")
+
+      acc =
+        ChunkAccumulator.new()
+        |> ChunkAccumulator.push(StreamChunk.content_part(first_image))
+        |> ChunkAccumulator.push(StreamChunk.text("First "))
+        |> ChunkAccumulator.push(StreamChunk.text("caption"))
+        |> ChunkAccumulator.push(StreamChunk.content_part(second_image))
+        |> ChunkAccumulator.push(StreamChunk.text("Second caption"))
+
+      assert ChunkAccumulator.finalize_ordered_content(acc) == [
+               first_image,
+               ContentPart.text("First caption"),
+               second_image,
+               ContentPart.text("Second caption")
+             ]
+    end
+  end
+
   describe "push/2 - tool calls" do
     test "captures tool call with provider-supplied id" do
       acc =

@@ -320,8 +320,10 @@ defmodule ReqLLM.Provider.Defaults.ResponseBuilder do
   end
 
   defp materialize_content_parts(_profile, _chunks, acc, text, thinking, tool_calls) do
-    build_content_parts(text, thinking, tool_calls) ++
-      ChunkAccumulator.finalize_content_parts(acc)
+    case ChunkAccumulator.finalize_content_parts(acc) do
+      [] -> build_content_parts(text, thinking, tool_calls)
+      _content_parts -> ChunkAccumulator.finalize_ordered_content(acc)
+    end
   end
 
   defp materialize_reasoning_details(:buffered, _chunks, acc, _provider) do

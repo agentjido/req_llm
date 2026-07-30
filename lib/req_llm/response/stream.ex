@@ -50,10 +50,15 @@ defmodule ReqLLM.Response.Stream do
   """
   @spec summarize(Enumerable.t()) :: summary()
   def summarize(chunks) do
+    {summary, _acc} = summarize_with_acc(chunks)
+    summary
+  end
+
+  defp summarize_with_acc(chunks) do
     chunks_list = if is_list(chunks), do: chunks, else: Enum.to_list(chunks)
     acc = ChunkAccumulator.reduce(ChunkAccumulator.new(), chunks_list)
 
-    %{
+    summary = %{
       text: ChunkAccumulator.finalize_text(acc),
       thinking: ChunkAccumulator.finalize_thinking(acc),
       content_parts: ChunkAccumulator.finalize_content_parts(acc),
@@ -61,6 +66,8 @@ defmodule ReqLLM.Response.Stream do
       finish_reason: normalize_finish_reason(ChunkAccumulator.finalize_finish_reason(acc)),
       usage: ChunkAccumulator.finalize_usage(acc)
     }
+
+    {summary, acc}
   end
 
   defp normalize_finish_reason(nil), do: nil
@@ -106,8 +113,8 @@ defmodule ReqLLM.Response.Stream do
   """
   @spec join(Enumerable.t(), Response.t()) :: {:ok, Response.t()} | {:error, term()}
   def join(stream, %Response{} = response) do
-    summary = summarize(stream)
-    content_parts = [%{type: :text, text: summary.text}] ++ summary.content_parts
+    {summary, acc} = summarize_with_acc(stream)
+    content_parts = joined_content_parts(summary, acc)
     final_usage = merge_usage(response.usage, summary.usage)
 
     message = %Message{
@@ -133,6 +140,12 @@ defmodule ReqLLM.Response.Stream do
          cause: error
        }}
   end
+
+  defp joined_content_parts(%{content_parts: []} = summary, _acc),
+    do: [%{type: :text, text: summary.text}]
+
+  defp joined_content_parts(_summary, acc),
+    do: ChunkAccumulator.finalize_ordered_content(acc, include_thinking?: false)
 
   defp merge_usage(existing_usage, nil), do: existing_usage
 

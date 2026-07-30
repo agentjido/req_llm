@@ -369,6 +369,33 @@ defmodule ReqLLM.ResponseTest do
       assert Response.images(materialized) == [image]
     end
 
+    test "preserves image and text order in joined streaming responses" do
+      first_image = ContentPart.image(<<1>>, "image/png")
+      second_image = ContentPart.image(<<2>>, "image/png")
+
+      response =
+        create_response(
+          message: nil,
+          stream?: true,
+          stream: [
+            StreamChunk.content_part(first_image),
+            StreamChunk.text("First caption"),
+            StreamChunk.content_part(second_image),
+            StreamChunk.text("Second "),
+            StreamChunk.text("caption")
+          ]
+        )
+
+      assert {:ok, materialized} = Response.join_stream(response)
+
+      assert materialized.message.content == [
+               first_image,
+               ContentPart.text("First caption"),
+               second_image,
+               ContentPart.text("Second caption")
+             ]
+    end
+
     test "returns error when stream consumption fails" do
       error_stream = Stream.repeatedly(fn -> raise "Stream error" end)
       response = create_response(message: nil, stream?: true, stream: error_stream)
