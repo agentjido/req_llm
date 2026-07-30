@@ -1504,7 +1504,7 @@ defmodule ReqLLM.StreamServer do
   end
 
   defp semantic_progress_chunk?(%StreamChunk{type: type})
-       when type in [:content, :thinking, :tool_call],
+       when type in [:content, :content_part, :thinking, :tool_call],
        do: true
 
   defp semantic_progress_chunk?(%StreamChunk{type: :meta, metadata: metadata})

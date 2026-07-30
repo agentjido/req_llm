@@ -369,6 +369,22 @@ defmodule ReqLLM.Provider.ChunkAccumulatorTest do
              } = ChunkAccumulator.finalize_message(acc)
     end
 
+    test "builds an assistant message with generated image content" do
+      image = ContentPart.image(<<1, 2, 3>>, "image/png")
+
+      acc =
+        ChunkAccumulator.new()
+        |> ChunkAccumulator.push(StreamChunk.content_part(image))
+
+      assert ChunkAccumulator.finalize_content_parts(acc) == [image]
+
+      assert %Message{
+               role: :assistant,
+               content: [^image],
+               tool_calls: nil
+             } = ChunkAccumulator.finalize_message(acc)
+    end
+
     test "builds assistant message with tool calls as ToolCall structs" do
       acc =
         ChunkAccumulator.new()

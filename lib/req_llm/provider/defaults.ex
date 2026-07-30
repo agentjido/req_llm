@@ -1266,8 +1266,9 @@ defmodule ReqLLM.Provider.Defaults do
   defp decode_openai_message(message) when is_map(message) do
     content_chunks = decode_openai_content(message)
     reasoning_chunks = decode_openai_reasoning(message)
+    image_chunks = decode_openai_images(message)
     tool_call_chunks = decode_openai_tool_calls(message)
-    content_chunks ++ reasoning_chunks ++ tool_call_chunks
+    content_chunks ++ reasoning_chunks ++ image_chunks ++ tool_call_chunks
   end
 
   defp decode_openai_message(_), do: []
@@ -1310,6 +1311,12 @@ defmodule ReqLLM.Provider.Defaults do
 
   defp decode_openai_tool_calls(_), do: []
 
+  defp decode_openai_images(%{"images" => images}) when is_list(images) do
+    Enum.flat_map(images, &decode_openai_content_part/1)
+  end
+
+  defp decode_openai_images(_), do: []
+
   defp openai_reasoning_details_chunks(%{"reasoning_details" => details}, provider)
        when is_list(details) and details != [] do
     case decode_openai_reasoning_details(details, provider) do
@@ -1348,7 +1355,58 @@ defmodule ReqLLM.Provider.Defaults do
     decode_openai_thinking_content(thinking)
   end
 
+  defp decode_openai_content_part(%{
+         "type" => "image_url",
+         "image_url" => %{"url" => url} = image_url
+       })
+       when is_binary(url) do
+    metadata = Map.delete(image_url, "url")
+    decode_openai_image_url(url, metadata)
+  end
+
+  defp decode_openai_content_part(%{"type" => "image_url", "image_url" => url})
+       when is_binary(url) do
+    decode_openai_image_url(url, %{})
+  end
+
   defp decode_openai_content_part(_), do: []
+
+  defp decode_openai_image_url("data:" <> data_uri = url, metadata) do
+    case String.split(data_uri, ";base64,", parts: 2) do
+      [media_type, encoded] when media_type != "" ->
+        case decode_base64_image(encoded) do
+          {:ok, data} ->
+            [
+              ReqLLM.StreamChunk.content_part(
+                ReqLLM.Message.ContentPart.image(data, media_type, metadata)
+              )
+            ]
+
+          :error ->
+            decode_openai_remote_image_url(url, metadata)
+        end
+
+      _ ->
+        decode_openai_remote_image_url(url, metadata)
+    end
+  end
+
+  defp decode_openai_image_url(url, metadata) do
+    decode_openai_remote_image_url(url, metadata)
+  end
+
+  defp decode_openai_remote_image_url(url, metadata) do
+    [
+      ReqLLM.StreamChunk.content_part(ReqLLM.Message.ContentPart.image_url(url, metadata))
+    ]
+  end
+
+  defp decode_base64_image(encoded) do
+    case Base.decode64(encoded, ignore: :whitespace) do
+      :error -> Base.decode64(encoded, padding: false, ignore: :whitespace)
+      decoded -> decoded
+    end
+  end
 
   defp decode_openai_thinking_content(thinking) when is_binary(thinking) do
     [ReqLLM.StreamChunk.thinking(thinking)]
@@ -1394,33 +1452,24 @@ defmodule ReqLLM.Provider.Defaults do
 
   defp decode_openai_tool_call(_), do: nil
 
-  defp decode_openai_delta(%{"content" => content}) when is_binary(content) and content != "" do
-    [ReqLLM.StreamChunk.text(content)]
+  defp decode_openai_delta(delta) when is_map(delta) do
+    content_chunks = decode_openai_content(delta)
+    reasoning_chunks = decode_openai_reasoning(delta)
+    image_chunks = decode_openai_images(delta)
+    tool_call_chunks = decode_openai_tool_call_deltas(delta)
+
+    content_chunks ++ reasoning_chunks ++ image_chunks ++ tool_call_chunks
   end
 
-  defp decode_openai_delta(%{"content" => parts}) when is_list(parts) do
-    parts
-    |> Enum.flat_map(&decode_openai_content_part/1)
-    |> Enum.reject(&is_nil/1)
-  end
+  defp decode_openai_delta(_), do: []
 
-  defp decode_openai_delta(%{"reasoning_content" => reasoning})
-       when is_binary(reasoning) and reasoning != "" do
-    [ReqLLM.StreamChunk.thinking(reasoning)]
-  end
-
-  defp decode_openai_delta(%{"reasoning" => reasoning})
-       when is_binary(reasoning) and reasoning != "" do
-    [ReqLLM.StreamChunk.thinking(reasoning)]
-  end
-
-  defp decode_openai_delta(%{"tool_calls" => tool_calls}) when is_list(tool_calls) do
+  defp decode_openai_tool_call_deltas(%{"tool_calls" => tool_calls}) when is_list(tool_calls) do
     tool_calls
     |> Enum.map(&decode_openai_tool_call_delta/1)
     |> Enum.reject(&is_nil/1)
   end
 
-  defp decode_openai_delta(_), do: []
+  defp decode_openai_tool_call_deltas(_), do: []
 
   # Handle complete tool call delta with all fields
   defp decode_openai_tool_call_delta(%{

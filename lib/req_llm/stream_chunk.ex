@@ -3,12 +3,13 @@ defmodule ReqLLM.StreamChunk do
   Represents a single chunk in a streaming response.
 
   StreamChunk provides a unified format for streaming responses across different providers,
-  supporting text content, tool calls, thinking tokens, and metadata. This structure enables
+  supporting text content, content parts, tool calls, thinking tokens, and metadata. This structure enables
   consistent handling of streaming data regardless of the underlying provider's format.
 
   ## Chunk Types
 
   - `:content` - Text content chunks (the main response text)
+  - `:content_part` - Complete multimodal content parts, such as generated images
   - `:thinking` - Reasoning/thinking tokens (e.g., Claude's `<thinking>` tags)
   - `:tool_call` - Function/tool call chunks with name and arguments
   - `:meta` - Metadata chunks (usage, finish reasons, etc.)
@@ -72,13 +73,14 @@ defmodule ReqLLM.StreamChunk do
   @typedoc """
   Chunk type indicating the kind of content in this chunk.
   """
-  @type chunk_type :: :content | :thinking | :tool_call | :meta
+  @type chunk_type :: :content | :content_part | :thinking | :tool_call | :meta
 
   @typedoc "A single chunk of streaming response data"
 
   @schema Zoi.struct(__MODULE__, %{
             type: Zoi.any(),
             text: Zoi.string() |> Zoi.nullable() |> Zoi.default(nil),
+            content_part: Zoi.any() |> Zoi.nullable() |> Zoi.default(nil),
             name: Zoi.string() |> Zoi.nullable() |> Zoi.default(nil),
             arguments: Zoi.map() |> Zoi.nullable() |> Zoi.default(nil),
             metadata: Zoi.map() |> Zoi.default(%{})
@@ -116,6 +118,22 @@ defmodule ReqLLM.StreamChunk do
     %__MODULE__{
       type: :content,
       text: content,
+      metadata: metadata
+    }
+  end
+
+  @doc """
+  Creates a chunk containing a complete multimodal content part.
+
+  This constructor carries non-text output, such as generated images, through
+  streaming response assembly without converting it to provider metadata.
+  """
+  @spec content_part(ReqLLM.Message.ContentPart.t(), map()) :: t()
+  def content_part(%ReqLLM.Message.ContentPart{} = content_part, metadata \\ %{})
+      when is_map(metadata) do
+    %__MODULE__{
+      type: :content_part,
+      content_part: content_part,
       metadata: metadata
     }
   end
@@ -292,6 +310,15 @@ defmodule ReqLLM.StreamChunk do
   defp validate_by_type(%{type: :content, text: text}) when is_binary(text), do: :ok
   defp validate_by_type(%{type: :content}), do: {:error, "Content chunks must have non-nil text"}
 
+  defp validate_by_type(%{
+         type: :content_part,
+         content_part: %ReqLLM.Message.ContentPart{}
+       }),
+       do: :ok
+
+  defp validate_by_type(%{type: :content_part}),
+    do: {:error, "Content part chunks must contain a ContentPart"}
+
   defp validate_by_type(%{type: :thinking, text: text}) when is_binary(text), do: :ok
 
   defp validate_by_type(%{type: :thinking}),
@@ -317,6 +344,9 @@ defmodule ReqLLM.StreamChunk do
         case type do
           :content ->
             inspect_text(chunk.text, 20)
+
+          :content_part ->
+            Inspect.Algebra.to_doc(chunk.content_part, opts)
 
           :thinking ->
             text_preview = inspect_text(chunk.text, 20)

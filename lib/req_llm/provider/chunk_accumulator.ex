@@ -79,6 +79,7 @@ defmodule ReqLLM.Provider.ChunkAccumulator do
   @type t :: %__MODULE__{
           text_content: iodata(),
           thinking_content: iodata(),
+          content_parts: [ContentPart.t()],
           tool_calls: [tool_call_record()],
           arg_fragments: %{optional(non_neg_integer()) => iodata()},
           reasoning_details: [term()],
@@ -89,6 +90,7 @@ defmodule ReqLLM.Provider.ChunkAccumulator do
 
   defstruct text_content: [],
             thinking_content: [],
+            content_parts: [],
             tool_calls: [],
             arg_fragments: %{},
             reasoning_details: [],
@@ -121,6 +123,13 @@ defmodule ReqLLM.Provider.ChunkAccumulator do
   def push(%__MODULE__{} = acc, %StreamChunk{type: :thinking, text: text})
       when is_binary(text) and text != "" do
     %{acc | thinking_content: [acc.thinking_content, text]}
+  end
+
+  def push(
+        %__MODULE__{} = acc,
+        %StreamChunk{type: :content_part, content_part: %ContentPart{} = content_part}
+      ) do
+    %{acc | content_parts: [content_part | acc.content_parts]}
   end
 
   def push(%__MODULE__{} = acc, %StreamChunk{type: :tool_call} = chunk) do
@@ -272,6 +281,11 @@ defmodule ReqLLM.Provider.ChunkAccumulator do
   @spec finalize_thinking(t()) :: String.t()
   def finalize_thinking(%__MODULE__{thinking_content: iodata}), do: IO.iodata_to_binary(iodata)
 
+  @doc "Returns complete content parts in arrival order."
+  @spec finalize_content_parts(t()) :: [ContentPart.t()]
+  def finalize_content_parts(%__MODULE__{content_parts: content_parts}),
+    do: Enum.reverse(content_parts)
+
   @doc "Returns reasoning details in arrival order."
   @spec finalize_reasoning_details(t()) :: [term()]
   def finalize_reasoning_details(%__MODULE__{reasoning_details: details}),
@@ -389,11 +403,9 @@ defmodule ReqLLM.Provider.ChunkAccumulator do
     tool_calls = finalize_message_tool_calls(acc)
 
     content_parts =
-      if text == "" do
-        []
-      else
-        [%ContentPart{type: :text, text: text, metadata: %{}}]
-      end
+      if text == "", do: [], else: [%ContentPart{type: :text, text: text, metadata: %{}}]
+
+    content_parts = content_parts ++ finalize_content_parts(acc)
 
     if content_parts == [] and tool_calls == [] do
       nil

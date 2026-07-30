@@ -7,6 +7,7 @@ defmodule ReqLLM.Response.Stream do
   """
 
   alias ReqLLM.{Message, Response}
+  alias ReqLLM.Message.ContentPart
   alias ReqLLM.Provider.ChunkAccumulator
 
   @typedoc """
@@ -18,6 +19,7 @@ defmodule ReqLLM.Response.Stream do
   @type summary :: %{
           text: String.t(),
           thinking: String.t(),
+          content_parts: [ContentPart.t()],
           tool_calls: [map()],
           finish_reason: atom() | nil,
           usage: map() | nil
@@ -29,6 +31,7 @@ defmodule ReqLLM.Response.Stream do
   Processes all chunks and returns a map with:
   - `text` - Accumulated text content
   - `thinking` - Accumulated thinking/reasoning content
+  - `content_parts` - Complete multimodal content parts
   - `tool_calls` - List of reconstructed tool calls with merged argument fragments
   - `finish_reason` - The finish reason from metadata chunks (normalized to atom)
   - `usage` - Token usage statistics from metadata chunks
@@ -53,6 +56,7 @@ defmodule ReqLLM.Response.Stream do
     %{
       text: ChunkAccumulator.finalize_text(acc),
       thinking: ChunkAccumulator.finalize_thinking(acc),
+      content_parts: ChunkAccumulator.finalize_content_parts(acc),
       tool_calls: ChunkAccumulator.finalize_tool_calls_for_response(acc),
       finish_reason: normalize_finish_reason(ChunkAccumulator.finalize_finish_reason(acc)),
       usage: ChunkAccumulator.finalize_usage(acc)
@@ -105,11 +109,12 @@ defmodule ReqLLM.Response.Stream do
     chunks = Enum.to_list(stream)
 
     content_text = build_content_text(chunks)
+    content_parts = [%{type: :text, text: content_text}] ++ build_content_parts(chunks)
     final_usage = merge_usage_from_chunks(chunks, response.usage)
 
     message = %Message{
       role: :assistant,
-      content: [%{type: :text, text: content_text}],
+      content: content_parts,
       metadata: %{}
     }
 
@@ -135,6 +140,12 @@ defmodule ReqLLM.Response.Stream do
     chunks
     |> Enum.filter(&(&1.type == :content))
     |> Enum.map_join("", & &1.text)
+  end
+
+  defp build_content_parts(chunks) do
+    chunks
+    |> Enum.filter(&(&1.type == :content_part))
+    |> Enum.map(& &1.content_part)
   end
 
   defp merge_usage_from_chunks(chunks, existing_usage) do

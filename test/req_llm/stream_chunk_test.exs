@@ -3,6 +3,7 @@ defmodule ReqLLM.StreamChunkTest do
 
   @moduletag contract: :public_api
 
+  alias ReqLLM.Message.ContentPart
   alias ReqLLM.StreamChunk
 
   # Shared test helpers
@@ -37,6 +38,19 @@ defmodule ReqLLM.StreamChunkTest do
       assert_nil_fields(basic_chunk, [:name, :arguments])
 
       assert_chunk_fields(with_meta, type: :thinking, text: "Step 1...", metadata: %{step: 1})
+    end
+
+    test "content_part/2 creates multimodal content chunks" do
+      part = ContentPart.image(<<1, 2, 3>>, "image/png")
+      chunk = StreamChunk.content_part(part, %{index: 0})
+
+      assert_chunk_fields(chunk,
+        type: :content_part,
+        content_part: part,
+        metadata: %{index: 0}
+      )
+
+      assert_nil_fields(chunk, [:text, :name, :arguments])
     end
 
     test "tool_call/3 creates tool call chunks" do
@@ -76,6 +90,8 @@ defmodule ReqLLM.StreamChunkTest do
   describe "validation" do
     @valid_cases [
       {:content, StreamChunk.text("valid")},
+      {:content_part,
+       StreamChunk.content_part(ContentPart.image_url("https://example.com/a.png"))},
       {:thinking, StreamChunk.thinking("valid reasoning")},
       {:tool_call, StreamChunk.tool_call("func", %{arg: "value"})},
       {:meta, StreamChunk.meta(%{key: "value"})},
@@ -88,6 +104,8 @@ defmodule ReqLLM.StreamChunkTest do
     @invalid_cases [
       {:content_nil_text, %StreamChunk{type: :content, text: nil},
        "Content chunks must have non-nil text"},
+      {:content_part_nil, %StreamChunk{type: :content_part, content_part: nil},
+       "Content part chunks must contain a ContentPart"},
       {:thinking_nil_text, %StreamChunk{type: :thinking, text: nil},
        "Thinking chunks must have non-nil text"},
       {:tool_call_nil_name, %StreamChunk{type: :tool_call, name: nil, arguments: %{}},

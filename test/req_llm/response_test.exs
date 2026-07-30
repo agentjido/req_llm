@@ -355,6 +355,20 @@ defmodule ReqLLM.ResponseTest do
       assert materialized.message.content == [%{type: :text, text: ""}]
     end
 
+    test "materializes generated images from streaming responses" do
+      image = ContentPart.image(<<1, 2, 3>>, "image/png")
+
+      response =
+        create_response(
+          message: nil,
+          stream?: true,
+          stream: [StreamChunk.content_part(image)]
+        )
+
+      assert {:ok, materialized} = Response.join_stream(response)
+      assert Response.images(materialized) == [image]
+    end
+
     test "returns error when stream consumption fails" do
       error_stream = Stream.repeatedly(fn -> raise "Stream error" end)
       response = create_response(message: nil, stream?: true, stream: error_stream)

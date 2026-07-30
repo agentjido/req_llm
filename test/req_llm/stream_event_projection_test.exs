@@ -4,6 +4,7 @@ defmodule ReqLLM.StreamEventProjectionTest do
   @moduletag contract: :public_api
 
   alias ReqLLM.Context
+  alias ReqLLM.Message.ContentPart
   alias ReqLLM.Provider.Defaults
   alias ReqLLM.Providers.Anthropic
   alias ReqLLM.Response.OutputItem
@@ -402,6 +403,23 @@ defmodule ReqLLM.StreamEventProjectionTest do
 
       legacy_response = stream_response(chunks, %{finish_reason: :stop})
       assert Enum.to_list(legacy_response.stream) == chunks
+    end
+
+    test "projects generated image chunks as output items" do
+      image = ContentPart.image(<<1, 2, 3>>, "image/png")
+      chunks = [StreamChunk.content_part(image, %{sequence: 2})]
+      response = stream_response(chunks, %{finish_reason: :stop})
+
+      events = Enum.to_list(StreamResponse.events(response))
+
+      assert %StreamEvent{
+               type: :output_item,
+               data: %OutputItem{
+                 type: :image,
+                 data: ^image,
+                 metadata: %{sequence: 2}
+               }
+             } = Enum.find(events, &(&1.type == :output_item))
     end
 
     test "keeps the StreamResponse struct and legacy projections unchanged" do

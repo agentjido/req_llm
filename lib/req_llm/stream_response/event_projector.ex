@@ -1,6 +1,7 @@
 defmodule ReqLLM.StreamResponse.EventProjector do
   @moduledoc false
 
+  alias ReqLLM.Message.ContentPart
   alias ReqLLM.Provider.ChunkAccumulator
   alias ReqLLM.Response.OutputItem
   alias ReqLLM.Response.Projection
@@ -161,6 +162,20 @@ defmodule ReqLLM.StreamResponse.EventProjector do
        when is_binary(text) do
     event = StreamEvent.new(:reasoning_delta, text, safe_map(metadata))
     output_item_events([event], metadata, state)
+  end
+
+  defp chunk_events(
+         %StreamChunk{
+           type: :content_part,
+           content_part: %ContentPart{type: type} = part,
+           metadata: metadata
+         },
+         state
+       )
+       when type in [:image, :image_url, :video_url, :file] do
+    item_metadata = Map.merge(safe_map(part.metadata), safe_map(metadata))
+    item = %OutputItem{type: type, data: part, metadata: item_metadata}
+    unique_output_item_events([item], state)
   end
 
   defp chunk_events(%StreamChunk{type: :tool_call, name: name} = chunk, state)

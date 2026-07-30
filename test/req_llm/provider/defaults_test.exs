@@ -660,6 +660,38 @@ defmodule ReqLLM.Provider.DefaultsTest do
       assert ReqLLM.Response.thinking(result) == "Okay, let me plan this."
       assert ReqLLM.Response.text(result) == "Build a broad foundation first."
     end
+
+    test "decodes generated images from OpenRouter responses" do
+      model = %LLMDB.Model{provider: :openrouter, id: "google/gemini-3-pro-image"}
+      image_data = <<255, 216, 255, 224>>
+      data_uri = "data:image/jpeg;base64,#{Base.encode64(image_data)}"
+
+      response_data = %{
+        "choices" => [
+          %{
+            "message" => %{
+              "role" => "assistant",
+              "content" => "",
+              "images" => [
+                %{"type" => "image_url", "image_url" => %{"url" => data_uri}},
+                %{
+                  "type" => "image_url",
+                  "image_url" => %{"url" => "https://example.com/generated.png"}
+                }
+              ]
+            },
+            "finish_reason" => "stop"
+          }
+        ]
+      }
+
+      {:ok, result} = Defaults.decode_response_body_openai_format(response_data, model)
+
+      assert ReqLLM.Response.images(result) == [
+               ContentPart.image(image_data, "image/jpeg"),
+               ContentPart.image_url("https://example.com/generated.png")
+             ]
+    end
   end
 
   describe "default_decode_stream_event/2" do
@@ -825,6 +857,53 @@ defmodule ReqLLM.Provider.DefaultsTest do
                %StreamChunk{type: :thinking, text: ", streaming thoughts."},
                %StreamChunk{type: :content, text: "Then answer."}
              ] = chunks
+    end
+
+    test "retains generated images from OpenRouter streaming deltas" do
+      model = %LLMDB.Model{provider: :openrouter, id: "google/gemini-3-pro-image"}
+      image_data = <<255, 216, 255, 224>>
+      data_uri = "data:image/jpeg;base64,#{Base.encode64(image_data)}"
+
+      event = %{
+        data: %{
+          "choices" => [
+            %{
+              "index" => 0,
+              "finish_reason" => nil,
+              "delta" => %{
+                "role" => "assistant",
+                "content" => "",
+                "images" => [
+                  %{"type" => "image_url", "image_url" => %{"url" => data_uri}}
+                ]
+              }
+            }
+          ]
+        }
+      }
+
+      chunks = Defaults.default_decode_stream_event(event, model)
+
+      assert [
+               %{
+                 type: :content_part,
+                 content_part: %ContentPart{
+                   type: :image,
+                   data: ^image_data,
+                   media_type: "image/jpeg"
+                 }
+               }
+             ] = chunks
+
+      {:ok, response} =
+        ResponseBuilder.build_response(chunks, %{},
+          context: Context.new([]),
+          model: model
+        )
+
+      assert ReqLLM.Response.images(response) == [
+               ContentPart.image(image_data, "image/jpeg")
+             ]
     end
 
     test "handles nil tool names in streaming deltas", %{model: model} do
