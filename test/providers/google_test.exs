@@ -1644,6 +1644,56 @@ defmodule ReqLLM.Providers.GoogleTest do
       assert meta_chunk.metadata[:terminal?] == true
     end
 
+    test "preserves raw finishReason and finishMessage on abnormal finishes", %{model: model} do
+      event = %{
+        data: %{
+          "candidates" => [
+            %{
+              "content" => %{
+                "parts" => [%{"text" => "", "thoughtSignature" => "sig"}],
+                "role" => "model"
+              },
+              "finishReason" => "MALFORMED_FUNCTION_CALL",
+              "finishMessage" =>
+                "Malformed function call: Failed to parse function call: Function call is empty - no input to parse.",
+              "index" => 0
+            }
+          ],
+          "usageMetadata" => %{
+            "promptTokenCount" => 10,
+            "candidatesTokenCount" => 5,
+            "totalTokenCount" => 15
+          }
+        }
+      }
+
+      chunks = Google.decode_stream_event(event, model)
+      meta_chunk = Enum.find(chunks, &(&1.type == :meta))
+      assert meta_chunk.metadata[:finish_reason] == "error"
+      assert meta_chunk.metadata[:finish_reason_raw] == "MALFORMED_FUNCTION_CALL"
+      assert meta_chunk.metadata[:finish_message] =~ "Function call is empty"
+      assert meta_chunk.metadata[:terminal?] == true
+    end
+
+    test "preserves raw finishReason without finishMessage", %{model: model} do
+      event = %{
+        data: %{"candidates" => [%{"finishReason" => "UNEXPECTED_TOOL_CALL", "index" => 0}]}
+      }
+
+      [meta_chunk] = Google.decode_stream_event(event, model)
+      assert meta_chunk.metadata[:finish_reason] == "error"
+      assert meta_chunk.metadata[:finish_reason_raw] == "UNEXPECTED_TOOL_CALL"
+      refute Map.has_key?(meta_chunk.metadata, :finish_message)
+    end
+
+    test "normal STOP finishes carry the raw reason too", %{model: model} do
+      event = %{data: %{"candidates" => [%{"finishReason" => "STOP", "index" => 0}]}}
+
+      [meta_chunk] = Google.decode_stream_event(event, model)
+      assert meta_chunk.metadata[:finish_reason] == "stop"
+      assert meta_chunk.metadata[:finish_reason_raw] == "STOP"
+    end
+
     test "usageMetadata alone still has no finish_reason (unchanged)", %{model: model} do
       event = %{
         data: %{
