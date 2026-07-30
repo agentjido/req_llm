@@ -106,11 +106,9 @@ defmodule ReqLLM.Response.Stream do
   """
   @spec join(Enumerable.t(), Response.t()) :: {:ok, Response.t()} | {:error, term()}
   def join(stream, %Response{} = response) do
-    chunks = Enum.to_list(stream)
-
-    content_text = build_content_text(chunks)
-    content_parts = [%{type: :text, text: content_text}] ++ build_content_parts(chunks)
-    final_usage = merge_usage_from_chunks(chunks, response.usage)
+    summary = summarize(stream)
+    content_parts = [%{type: :text, text: summary.text}] ++ summary.content_parts
+    final_usage = merge_usage(response.usage, summary.usage)
 
     message = %Message{
       role: :assistant,
@@ -136,26 +134,8 @@ defmodule ReqLLM.Response.Stream do
        }}
   end
 
-  defp build_content_text(chunks) do
-    chunks
-    |> Enum.filter(&(&1.type == :content))
-    |> Enum.map_join("", & &1.text)
-  end
+  defp merge_usage(existing_usage, nil), do: existing_usage
 
-  defp build_content_parts(chunks) do
-    chunks
-    |> Enum.filter(&(&1.type == :content_part))
-    |> Enum.map(& &1.content_part)
-  end
-
-  defp merge_usage_from_chunks(chunks, existing_usage) do
-    chunks
-    |> Enum.filter(&(&1.type == :meta))
-    |> Enum.reduce(existing_usage, fn chunk, acc ->
-      usage =
-        Map.get(chunk.metadata || %{}, :usage, %{})
-
-      ReqLLM.Usage.merge(acc || %{}, usage)
-    end)
-  end
+  defp merge_usage(existing_usage, streamed_usage),
+    do: ReqLLM.Usage.merge(existing_usage || %{}, streamed_usage)
 end

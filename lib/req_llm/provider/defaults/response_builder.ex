@@ -72,6 +72,7 @@ defmodule ReqLLM.Provider.Defaults.ResponseBuilder do
       materialize_content_parts(
         profile,
         chunks,
+        acc,
         text_content,
         thinking_content,
         normalized_tool_calls
@@ -309,7 +310,7 @@ defmodule ReqLLM.Provider.Defaults.ResponseBuilder do
     ])
   end
 
-  defp materialize_content_parts(:buffered, chunks, _text, _thinking, _tool_calls) do
+  defp materialize_content_parts(:buffered, chunks, _acc, _text, _thinking, _tool_calls) do
     Enum.flat_map(chunks, fn
       %StreamChunk{type: :content, text: text} -> [%ContentPart{type: :text, text: text}]
       %StreamChunk{type: :thinking, text: text} -> [%ContentPart{type: :thinking, text: text}]
@@ -318,15 +319,9 @@ defmodule ReqLLM.Provider.Defaults.ResponseBuilder do
     end)
   end
 
-  defp materialize_content_parts(_profile, chunks, text, thinking, tool_calls) do
-    build_content_parts(text, thinking, tool_calls) ++ streamed_content_parts(chunks)
-  end
-
-  defp streamed_content_parts(chunks) do
-    Enum.flat_map(chunks, fn
-      %StreamChunk{type: :content_part, content_part: %ContentPart{} = part} -> [part]
-      _chunk -> []
-    end)
+  defp materialize_content_parts(_profile, _chunks, acc, text, thinking, tool_calls) do
+    build_content_parts(text, thinking, tool_calls) ++
+      ChunkAccumulator.finalize_content_parts(acc)
   end
 
   defp materialize_reasoning_details(:buffered, _chunks, acc, _provider) do

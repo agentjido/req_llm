@@ -1371,35 +1371,30 @@ defmodule ReqLLM.Provider.Defaults do
 
   defp decode_openai_content_part(_), do: []
 
-  defp decode_openai_image_url("data:" <> data_uri = url, metadata) do
-    case String.split(data_uri, ";base64,", parts: 2) do
-      [media_type, encoded] when media_type != "" ->
-        case decode_base64_image(encoded) do
-          {:ok, data} ->
-            [
-              ReqLLM.StreamChunk.content_part(
-                ReqLLM.Message.ContentPart.image(data, media_type, metadata)
-              )
-            ]
+  defp decode_openai_image_url(url, metadata) do
+    content_part =
+      case decode_image_data_uri(url) do
+        {:ok, data, media_type} ->
+          ReqLLM.Message.ContentPart.image(data, media_type, metadata)
 
-          :error ->
-            decode_openai_remote_image_url(url, metadata)
-        end
+        :error ->
+          ReqLLM.Message.ContentPart.image_url(url, metadata)
+      end
 
-      _ ->
-        decode_openai_remote_image_url(url, metadata)
+    [ReqLLM.StreamChunk.content_part(content_part)]
+  end
+
+  defp decode_image_data_uri("data:" <> data_uri) do
+    with [media_type, encoded] when media_type != "" <-
+           String.split(data_uri, ";base64,", parts: 2),
+         {:ok, data} <- decode_base64_image(encoded) do
+      {:ok, data, media_type}
+    else
+      _ -> :error
     end
   end
 
-  defp decode_openai_image_url(url, metadata) do
-    decode_openai_remote_image_url(url, metadata)
-  end
-
-  defp decode_openai_remote_image_url(url, metadata) do
-    [
-      ReqLLM.StreamChunk.content_part(ReqLLM.Message.ContentPart.image_url(url, metadata))
-    ]
-  end
+  defp decode_image_data_uri(_url), do: :error
 
   defp decode_base64_image(encoded) do
     case Base.decode64(encoded, ignore: :whitespace) do

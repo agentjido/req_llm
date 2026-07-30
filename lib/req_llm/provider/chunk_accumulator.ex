@@ -5,9 +5,9 @@ defmodule ReqLLM.Provider.ChunkAccumulator do
   `ReqLLM.Provider.Defaults.ResponseBuilder` (batch, full chunk list at
   end-of-stream).
 
-  Maintains running iodata buffers for text/thinking, a running tool-call
-  list, and per-index argument-fragment buffers. Reasoning details and
-  logprobs are also collected from `:meta` chunks.
+  Maintains running iodata buffers for text/thinking, complete content parts,
+  a running tool-call list, and per-index argument-fragment buffers. Reasoning
+  details and logprobs are also collected from `:meta` chunks.
 
   ## Finalizers
 
@@ -23,8 +23,9 @@ defmodule ReqLLM.Provider.ChunkAccumulator do
     * `finalize_message/1` — preserves the historical `StreamServer`
       contract: returns either `nil` (empty acc) or an assistant
       `%ReqLLM.Message{}` ready to attach to OTel content-capture metadata.
-      Text content becomes a single `:text` `ContentPart`; tool calls
-      become `%ReqLLM.ToolCall{}` structs (with builtin flag preserved).
+      Text content becomes a single `:text` `ContentPart`; complete content
+      parts are retained; tool calls become `%ReqLLM.ToolCall{}` structs
+      (with builtin flag preserved).
 
   Reasoning text is intentionally not surfaced through `finalize_message/1`
   — OTel content capture redacts it anyway and the canonical response

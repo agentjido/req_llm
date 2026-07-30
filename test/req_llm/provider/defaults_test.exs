@@ -665,6 +665,7 @@ defmodule ReqLLM.Provider.DefaultsTest do
       model = %LLMDB.Model{provider: :openrouter, id: "google/gemini-3-pro-image"}
       image_data = <<255, 216, 255, 224>>
       data_uri = "data:image/jpeg;base64,#{Base.encode64(image_data)}"
+      invalid_data_uri = "data:image/png;base64,not-valid-base64!"
 
       response_data = %{
         "choices" => [
@@ -676,8 +677,12 @@ defmodule ReqLLM.Provider.DefaultsTest do
                 %{"type" => "image_url", "image_url" => %{"url" => data_uri}},
                 %{
                   "type" => "image_url",
-                  "image_url" => %{"url" => "https://example.com/generated.png"}
-                }
+                  "image_url" => %{
+                    "url" => "https://example.com/generated.png",
+                    "detail" => "high"
+                  }
+                },
+                %{"type" => "image_url", "image_url" => %{"url" => invalid_data_uri}}
               ]
             },
             "finish_reason" => "stop"
@@ -689,7 +694,8 @@ defmodule ReqLLM.Provider.DefaultsTest do
 
       assert ReqLLM.Response.images(result) == [
                ContentPart.image(image_data, "image/jpeg"),
-               ContentPart.image_url("https://example.com/generated.png")
+               ContentPart.image_url("https://example.com/generated.png", %{"detail" => "high"}),
+               ContentPart.image_url(invalid_data_uri)
              ]
     end
   end
@@ -904,6 +910,34 @@ defmodule ReqLLM.Provider.DefaultsTest do
       assert ReqLLM.Response.images(response) == [
                ContentPart.image(image_data, "image/jpeg")
              ]
+    end
+
+    test "emits text and images from the same streaming delta" do
+      model = %LLMDB.Model{provider: :openrouter, id: "google/gemini-3-pro-image"}
+      image_url = "https://example.com/generated.png"
+
+      event = %{
+        data: %{
+          "choices" => [
+            %{
+              "delta" => %{
+                "content" => "Generated image:",
+                "images" => [
+                  %{"type" => "image_url", "image_url" => %{"url" => image_url}}
+                ]
+              }
+            }
+          ]
+        }
+      }
+
+      assert [
+               %StreamChunk{type: :content, text: "Generated image:"},
+               %StreamChunk{
+                 type: :content_part,
+                 content_part: %ContentPart{type: :image_url, url: ^image_url}
+               }
+             ] = Defaults.default_decode_stream_event(event, model)
     end
 
     test "handles nil tool names in streaming deltas", %{model: model} do

@@ -21,6 +21,12 @@ defmodule ReqLLM.StreamChunk do
       chunk.type   #=> :content
       chunk.text   #=> "Hello world"
 
+      # Complete multimodal content
+      part = ReqLLM.Message.ContentPart.image_url("https://example.com/image.png")
+      chunk = ReqLLM.StreamChunk.content_part(part)
+      chunk.type         #=> :content_part
+      chunk.content_part #=> #ContentPart<:image_url ...>
+
       # Thinking/reasoning content
       chunk = ReqLLM.StreamChunk.thinking("Let me think about this...")
       chunk.type   #=> :thinking
