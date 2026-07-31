@@ -1902,6 +1902,25 @@ defmodule ReqLLM.Providers.Google do
 
   defp attach_reasoning_details(response, _details), do: response
 
+  # Preserve the provider's original finishReason (and finishMessage, when
+  # present) alongside the normalized value. Normalization collapses every
+  # unrecognized reason (MALFORMED_FUNCTION_CALL, UNEXPECTED_TOOL_CALL,
+  # OTHER, ...) into "error", which makes provider failures undiagnosable
+  # downstream.
+  defp put_raw_finish_meta(meta, finish_reason, data) do
+    finish_message =
+      case data do
+        %{"candidates" => [%{"finishMessage" => message} | _]} when is_binary(message) -> message
+        _ -> nil
+      end
+
+    meta
+    |> Map.put(:finish_reason_raw, finish_reason)
+    |> then(fn m ->
+      if finish_message, do: Map.put(m, :finish_message, finish_message), else: m
+    end)
+  end
+
   defp normalize_google_finish_reason("STOP"), do: "stop"
   defp normalize_google_finish_reason("MAX_TOKENS"), do: "length"
   defp normalize_google_finish_reason("SAFETY"), do: "content_filter"
@@ -2808,12 +2827,14 @@ defmodule ReqLLM.Providers.Google do
       when finish_reason != nil ->
         chunks = extract_chunks_from_parts(parts)
 
-        meta = %{
-          usage: convert_google_usage_for_streaming(usage),
-          finish_reason: normalize_google_finish_reason(finish_reason),
-          model: model.id,
-          terminal?: true
-        }
+        meta =
+          %{
+            usage: convert_google_usage_for_streaming(usage),
+            finish_reason: normalize_google_finish_reason(finish_reason),
+            model: model.id,
+            terminal?: true
+          }
+          |> put_raw_finish_meta(finish_reason, data)
 
         meta = if provider_meta, do: Map.put(meta, :provider_meta, provider_meta), else: meta
         chunks ++ [ReqLLM.StreamChunk.meta(meta)]
@@ -2824,10 +2845,12 @@ defmodule ReqLLM.Providers.Google do
       when finish_reason != nil ->
         chunks = extract_chunks_from_parts(parts)
 
-        meta = %{
-          finish_reason: normalize_google_finish_reason(finish_reason),
-          terminal?: true
-        }
+        meta =
+          %{
+            finish_reason: normalize_google_finish_reason(finish_reason),
+            terminal?: true
+          }
+          |> put_raw_finish_meta(finish_reason, data)
 
         meta = if provider_meta, do: Map.put(meta, :provider_meta, provider_meta), else: meta
         chunks ++ [ReqLLM.StreamChunk.meta(meta)]
@@ -2857,22 +2880,26 @@ defmodule ReqLLM.Providers.Google do
         "usageMetadata" => usage
       }
       when finish_reason != nil ->
-        meta = %{
-          usage: convert_google_usage_for_streaming(usage),
-          finish_reason: normalize_google_finish_reason(finish_reason),
-          model: model.id,
-          terminal?: true
-        }
+        meta =
+          %{
+            usage: convert_google_usage_for_streaming(usage),
+            finish_reason: normalize_google_finish_reason(finish_reason),
+            model: model.id,
+            terminal?: true
+          }
+          |> put_raw_finish_meta(finish_reason, data)
 
         meta = if provider_meta, do: Map.put(meta, :provider_meta, provider_meta), else: meta
         [ReqLLM.StreamChunk.meta(meta)]
 
       %{"candidates" => [%{"finishReason" => finish_reason} | _]}
       when finish_reason != nil ->
-        meta = %{
-          finish_reason: normalize_google_finish_reason(finish_reason),
-          terminal?: true
-        }
+        meta =
+          %{
+            finish_reason: normalize_google_finish_reason(finish_reason),
+            terminal?: true
+          }
+          |> put_raw_finish_meta(finish_reason, data)
 
         meta = if provider_meta, do: Map.put(meta, :provider_meta, provider_meta), else: meta
         [ReqLLM.StreamChunk.meta(meta)]
