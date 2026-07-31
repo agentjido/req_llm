@@ -29,6 +29,7 @@ defmodule ReqLLM.Providers.OpenAI.ChatAPI.Request do
         |> add_stream_options(request_options)
         |> add_reasoning_effort(request_options)
         |> add_service_tier(request_options)
+        |> add_prompt_cache_options(request_options)
         |> add_verbosity(request_options)
         |> add_response_format(request_options)
         |> add_parallel_tool_calls(request_options)
@@ -91,6 +92,14 @@ defmodule ReqLLM.Providers.OpenAI.ChatAPI.Request do
     provider_options = provider_options(request_options)
     service_tier = request_options[:service_tier] || provider_options[:service_tier]
     maybe_put(body, :service_tier, service_tier)
+  end
+
+  defp add_prompt_cache_options(body, request_options) do
+    provider_options = provider_options(request_options)
+
+    body
+    |> maybe_put(:prompt_cache_key, provider_options[:prompt_cache_key])
+    |> maybe_put(:prompt_cache_options, provider_options[:prompt_cache_options])
   end
 
   defp add_verbosity(body, request_options) do

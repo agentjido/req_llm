@@ -47,6 +47,26 @@ defmodule ReqLLM.Providers.OpenAI do
   - Returns images as `ReqLLM.Message.ContentPart` with `:image` or `:image_url` type
   - Streaming not supported
 
+  ## Explicit Prompt Caching
+
+  GPT-5.6 and later models support explicit cache breakpoints. Add
+  `prompt_cache_breakpoint` to content-part metadata and configure the request-wide
+  policy through provider options:
+
+      cached_part =
+        ReqLLM.Message.ContentPart.text("Stable instructions", %{
+          prompt_cache_breakpoint: %{mode: "explicit"}
+        })
+
+      ReqLLM.generate_text(model, ReqLLM.Context.user([cached_part]),
+        provider_options: [
+          prompt_cache_key: "tenant:acme:instructions-v1",
+          prompt_cache_options: %{mode: "explicit", ttl: "30m"}
+        ]
+      )
+
+  Both the Chat Completions API and Responses API support these options.
+
   ## Usage Normalization
 
   Chat and Responses drivers normalize usage metrics to provide consistent field names:
@@ -200,6 +220,15 @@ defmodule ReqLLM.Providers.OpenAI do
       doc:
         "Whether to store responses for multi-turn chaining via previous_response_id. " <>
           "Set to false for Zero Data Retention (ZDR) organizations."
+    ],
+    prompt_cache_key: [
+      type: :string,
+      doc: "Stable key for OpenAI prompt-cache matching"
+    ],
+    prompt_cache_options: [
+      type: {:or, [:map, :keyword_list]},
+      doc:
+        "OpenAI prompt-cache policy for GPT-5.6 and later models, such as %{mode: \"explicit\", ttl: \"30m\"}"
     ],
     openai_stream_transport: [
       type: {:in, [:sse, :websocket]},

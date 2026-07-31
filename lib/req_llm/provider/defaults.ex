@@ -1028,19 +1028,22 @@ defmodule ReqLLM.Provider.Defaults do
 
   defp encode_openai_content_part(%ReqLLM.Message.ContentPart{
          type: :file,
-         file_id: file_id
+         file_id: file_id,
+         metadata: metadata
        })
        when is_binary(file_id) and file_id != "" do
     %{
       type: "file",
       file: %{file_id: file_id}
     }
+    |> merge_content_metadata(metadata)
   end
 
   defp encode_openai_content_part(%ReqLLM.Message.ContentPart{
          type: :file,
          data: data,
-         media_type: media_type
+         media_type: media_type,
+         metadata: metadata
        })
        when is_binary(data) do
     # Encode file as image_url data URI (OpenAI format supports various media types this way)
@@ -1052,6 +1055,7 @@ defmodule ReqLLM.Provider.Defaults do
         url: "data:#{media_type};base64,#{base64}"
       }
     }
+    |> merge_content_metadata(metadata)
   end
 
   # Thinking content is extracted to the top-level reasoning_content field
@@ -1068,7 +1072,12 @@ defmodule ReqLLM.Provider.Defaults do
 
   defp maybe_put_image_detail(image_url, _metadata), do: image_url
 
-  @passthrough_metadata_keys [:cache_control, "cache_control"]
+  @passthrough_metadata_keys [
+    :cache_control,
+    "cache_control",
+    :prompt_cache_breakpoint,
+    "prompt_cache_breakpoint"
+  ]
 
   defp merge_content_metadata(base, metadata) when is_map(metadata) and map_size(metadata) > 0 do
     passthrough =
@@ -1076,6 +1085,7 @@ defmodule ReqLLM.Provider.Defaults do
       |> Map.take(@passthrough_metadata_keys)
       |> Map.new(fn
         {"cache_control", v} -> {:cache_control, v}
+        {"prompt_cache_breakpoint", v} -> {:prompt_cache_breakpoint, v}
         {k, v} -> {k, v}
       end)
 
@@ -1587,6 +1597,7 @@ defmodule ReqLLM.Provider.Defaults do
       end
 
     cached_tokens = get_in(usage, ["prompt_tokens_details", "cached_tokens"]) || 0
+    cache_creation_tokens = get_in(usage, ["prompt_tokens_details", "cache_write_tokens"])
 
     base = %{
       input_tokens: input,
@@ -1595,6 +1606,8 @@ defmodule ReqLLM.Provider.Defaults do
       cached_tokens: cached_tokens,
       reasoning_tokens: reasoning_tokens
     }
+
+    base = maybe_put_cache_creation_tokens(base, cache_creation_tokens)
 
     extra =
       Map.drop(usage, [
@@ -1616,6 +1629,11 @@ defmodule ReqLLM.Provider.Defaults do
       cached_tokens: 0,
       reasoning_tokens: 0
     }
+
+  defp maybe_put_cache_creation_tokens(usage, nil), do: usage
+
+  defp maybe_put_cache_creation_tokens(usage, tokens),
+    do: Map.put(usage, :cache_creation_tokens, tokens)
 
   # DeepSeek R1 models return reasoning in "reasoning_content" field
   # When present, we use completion_tokens as reasoning_tokens

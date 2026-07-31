@@ -2,6 +2,7 @@ defmodule ReqLLM.Providers.OpenAI.ChatRequestTest do
   use ExUnit.Case, async: true
 
   alias ReqLLM.Context
+  alias ReqLLM.Message.ContentPart
   alias ReqLLM.Providers.OpenAI.ChatAPI
   alias ReqLLM.Providers.OpenAI.ChatAPI.Request
   alias ReqLLM.Tool
@@ -88,5 +89,37 @@ defmodule ReqLLM.Providers.OpenAI.ChatRequestTest do
     finch_body = ReqLLM.Test.Helpers.json_body(finch_request)
 
     assert req_body == finch_body
+  end
+
+  test "encodes explicit prompt cache controls" do
+    breakpoint = %{mode: "explicit"}
+
+    context =
+      Context.new([
+        Context.system([
+          ContentPart.text("Stable instructions", %{prompt_cache_breakpoint: breakpoint})
+        ]),
+        Context.user("Dynamic request")
+      ])
+
+    body =
+      Request.build_body(
+        context,
+        "gpt-5.6",
+        [
+          provider_options: [
+            prompt_cache_key: "tenant:acme:instructions-v1",
+            prompt_cache_options: %{mode: "explicit", ttl: "30m"}
+          ]
+        ],
+        :chat
+      )
+
+    assert body.prompt_cache_key == "tenant:acme:instructions-v1"
+    assert body.prompt_cache_options == %{mode: "explicit", ttl: "30m"}
+
+    [system_message, _user_message] = body.messages
+    assert [system_block] = system_message.content
+    assert system_block.prompt_cache_breakpoint == breakpoint
   end
 end

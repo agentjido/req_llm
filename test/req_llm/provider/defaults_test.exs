@@ -108,6 +108,31 @@ defmodule ReqLLM.Provider.DefaultsTest do
              ]
     end
 
+    test "preserves explicit prompt cache breakpoints on supported content blocks" do
+      breakpoint = %{mode: "explicit"}
+
+      message = %Message{
+        role: :user,
+        content: [
+          ContentPart.text("Stable text", %{prompt_cache_breakpoint: breakpoint}),
+          ContentPart.image_url("https://example.com/image.png", %{
+            "prompt_cache_breakpoint" => breakpoint
+          }),
+          ContentPart.file_id("file_123", %{prompt_cache_breakpoint: breakpoint})
+        ]
+      }
+
+      context = %Context{messages: [message]}
+      result = Defaults.encode_context_to_openai_format(context, "gpt-5.6")
+
+      [encoded_message] = result.messages
+
+      assert [text_block, image_block, file_block] = encoded_message.content
+      assert text_block.prompt_cache_breakpoint == breakpoint
+      assert image_block.prompt_cache_breakpoint == breakpoint
+      assert file_block.prompt_cache_breakpoint == breakpoint
+    end
+
     test "ignores non-passthrough metadata keys" do
       content_with_extra_meta = %ContentPart{
         type: :text,
@@ -551,6 +576,25 @@ defmodule ReqLLM.Provider.DefaultsTest do
         {:ok, result} = Defaults.decode_response_body_openai_format(response_data, model)
         assertion_fn.(result)
       end
+    end
+
+    test "decodes prompt cache write usage", %{model: model} do
+      response_data = %{
+        "choices" => [%{"message" => %{"content" => "Cached"}, "finish_reason" => "stop"}],
+        "usage" => %{
+          "prompt_tokens" => 2_000,
+          "completion_tokens" => 10,
+          "total_tokens" => 2_010,
+          "prompt_tokens_details" => %{
+            "cached_tokens" => 1_200,
+            "cache_write_tokens" => 800
+          }
+        }
+      }
+
+      assert {:ok, response} = Defaults.decode_response_body_openai_format(response_data, model)
+      assert response.usage.cached_tokens == 1_200
+      assert response.usage.cache_creation_tokens == 800
     end
 
     test "decodes reasoning_details to normalized structs", %{model: model} do
