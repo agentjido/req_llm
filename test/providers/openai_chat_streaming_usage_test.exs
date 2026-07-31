@@ -112,7 +112,12 @@ defmodule ReqLLM.Providers.OpenAI.ChatStreamingUsageTest do
 
     send_sse(server, %{
       "choices" => [%{"index" => 0, "delta" => %{}}],
-      "usage" => %{"prompt_tokens" => 12, "completion_tokens" => 8, "total_tokens" => 20}
+      "usage" => %{
+        "prompt_tokens" => 12,
+        "completion_tokens" => 8,
+        "total_tokens" => 20,
+        "prompt_tokens_details" => %{"cached_tokens" => 5, "cache_write_tokens" => 7}
+      }
     })
 
     send_done(server)
@@ -126,6 +131,8 @@ defmodule ReqLLM.Providers.OpenAI.ChatStreamingUsageTest do
     assert usage.input_tokens == 12
     assert usage.output_tokens == 8
     assert usage.total_tokens == 20
+    assert usage.cached_tokens == 5
+    assert usage.cache_creation_tokens == 7
   end
 
   defp stream_response_for(server) do

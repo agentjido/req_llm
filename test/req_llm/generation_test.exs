@@ -99,6 +99,9 @@ defmodule ReqLLM.GenerationTest do
   defmodule SlowHTTP do
   end
 
+  defmodule CacheWriteHTTP do
+  end
+
   setup do
     # Stub HTTP responses for testing
     Req.Test.stub(ReqLLM.GenerationTest, fn conn ->
@@ -131,6 +134,54 @@ defmodule ReqLLM.GenerationTest do
       assert response.model =~ "gpt-4-turbo"
       assert is_binary(Response.text(response))
       assert String.length(Response.text(response)) > 0
+    end
+
+    test "preserves OpenAI cache writes in response usage and billing" do
+      model = %LLMDB.Model{
+        provider: :openai,
+        id: "gpt-cache-write-test",
+        pricing:
+          ReqLLM.Test.Helpers.pricing_from_cost(%{
+            input: 1.0,
+            output: 2.0,
+            cache_read: 0.1,
+            cache_write: 0.2
+          })
+      }
+
+      Req.Test.stub(CacheWriteHTTP, fn conn ->
+        Req.Test.json(conn, %{
+          "id" => "chatcmpl-cache-write",
+          "model" => model.id,
+          "choices" => [
+            %{
+              "message" => %{"role" => "assistant", "content" => "Cached"},
+              "finish_reason" => "stop"
+            }
+          ],
+          "usage" => %{
+            "prompt_tokens" => 2_000,
+            "completion_tokens" => 10,
+            "total_tokens" => 2_010,
+            "prompt_tokens_details" => %{
+              "cached_tokens" => 1_200,
+              "cache_write_tokens" => 800
+            }
+          }
+        })
+      end)
+
+      assert {:ok, response} =
+               Generation.generate_text(model, "Hello",
+                 api_key: "test-key",
+                 req_http_options: [plug: {Req.Test, CacheWriteHTTP}]
+               )
+
+      assert response.usage.cached_tokens == 1_200
+      assert response.usage.cache_creation_tokens == 800
+      assert response.usage.input_cost == 0.00028
+      assert response.usage.output_cost == 0.00002
+      assert response.usage.total_cost == 0.0003
     end
 
     test "accepts Context input format" do

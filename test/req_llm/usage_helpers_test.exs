@@ -56,6 +56,36 @@ defmodule ReqLLM.UsageHelpersTest do
       assert usage.output == 6
     end
 
+    test "preserves OpenAI cache writes across normalization" do
+      usage_maps = [
+        %{
+          input_tokens: 2_000,
+          output_tokens: 10,
+          cache_creation_tokens: 800
+        },
+        %{
+          "prompt_tokens" => 2_000,
+          "completion_tokens" => 10,
+          "prompt_tokens_details" => %{"cache_write_tokens" => 800}
+        },
+        %{
+          "input_tokens" => 2_000,
+          "output_tokens" => 10,
+          "input_tokens_details" => %{"cache_write_tokens" => 800}
+        }
+      ]
+
+      for usage_map <- usage_maps do
+        normalized = ReqLLM.Usage.normalize(usage_map)
+        renormalized = ReqLLM.Usage.normalize(normalized)
+
+        assert normalized.cache_creation == 800
+        assert normalized.cache_creation_tokens == 800
+        assert renormalized.cache_creation == 800
+        assert renormalized.cache_creation_tokens == 800
+      end
+    end
+
     test "returns zeroed canonical and alias keys for non-map values" do
       usage = ReqLLM.Usage.normalize(nil)
 
