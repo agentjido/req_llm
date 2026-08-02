@@ -1444,10 +1444,13 @@ defmodule ReqLLM.Providers.Google do
                   }
               end
 
+            response_with_raw_finish =
+              put_raw_finish_provider_meta(response_with_grounding, body)
+
             merged_response =
               ReqLLM.Context.merge_response(
                 req.options[:context] || %ReqLLM.Context{messages: []},
-                response_with_grounding
+                response_with_raw_finish
               )
 
             {req, %{resp | body: merged_response}}
@@ -1758,6 +1761,18 @@ defmodule ReqLLM.Providers.Google do
             "finish_reason" => normalize_google_finish_reason(finish_reason)
           }
 
+        # A candidate can carry a finishReason and no "content" key at all:
+        # Gemini does this when it aborts before producing anything, e.g.
+        # UNEXPECTED_TOOL_CALL or MALFORMED_FUNCTION_CALL on the non-streaming
+        # endpoint. Without this clause it fell through to the catch-all below
+        # and was reported as a clean "stop", so a provider abort was
+        # indistinguishable from an empty but successful answer.
+        %{"finishReason" => finish_reason} when is_binary(finish_reason) ->
+          %{
+            "message" => %{"role" => "assistant", "content" => ""},
+            "finish_reason" => normalize_google_finish_reason(finish_reason)
+          }
+
         _ ->
           %{
             "message" => %{"role" => "assistant", "content" => ""},
@@ -1774,6 +1789,32 @@ defmodule ReqLLM.Providers.Google do
 
   defp convert_google_to_openai_format(body) when is_map(body), do: body
   defp convert_google_to_openai_format(_body), do: %{}
+
+  # Non-streaming counterpart of put_raw_finish_meta/3. Normalization collapses
+  # the abort reasons into "error" (or, before the clause above, into "stop"),
+  # so without this the caller cannot tell UNEXPECTED_TOOL_CALL from any other
+  # failure on this path — the streaming path has carried the raw value since
+  # the finish-reason-preservation commit.
+  defp put_raw_finish_provider_meta(%ReqLLM.Response{} = response, body) when is_map(body) do
+    case body do
+      %{"candidates" => [%{"finishReason" => raw} | _]} when is_binary(raw) ->
+        meta = Map.put(response.provider_meta, "finish_reason_raw", raw)
+
+        meta =
+          case body do
+            %{"candidates" => [%{"finishMessage" => message} | _]} when is_binary(message) ->
+              Map.put(meta, "finish_message", message)
+
+            _ ->
+              meta
+          end
+
+        %{response | provider_meta: meta}
+
+      _ ->
+        response
+    end
+  end
 
   defp convert_google_json_mode_to_openai_format(%{"candidates" => candidates} = body) do
     choice =

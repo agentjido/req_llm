@@ -1734,6 +1734,33 @@ defmodule ReqLLM.Providers.GoogleTest do
       end
     end
 
+    # Body captured verbatim from gemini-2.5-pro on the non-streaming endpoint
+    # with no tools declared: the candidate carries only a finishReason and no
+    # "content" key. This used to fall through to the catch-all and report
+    # "stop", making a provider abort look like a successful empty answer.
+    test "non-streaming abort with no content keeps its reason and raw name" do
+      google_response = %{
+        "candidates" => [%{"finishReason" => "UNEXPECTED_TOOL_CALL", "index" => 0}],
+        "usageMetadata" => %{"promptTokenCount" => 22, "totalTokenCount" => 22},
+        "modelVersion" => "gemini-2.5-pro"
+      }
+
+      mock_resp = %Req.Response{status: 200, body: google_response}
+      {:ok, model} = ReqLLM.model("google:gemini-2.5-pro")
+
+      mock_req = %Req.Request{
+        options: [context: context_fixture(), stream: false, model: model.model]
+      }
+
+      {_req, resp} = Google.decode_response({mock_req, mock_resp})
+
+      refute ReqLLM.Response.finish_reason(resp.body) == :stop,
+             "an abort must not be reported as a clean stop"
+
+      assert ReqLLM.Response.finish_reason(resp.body) == :error
+      assert resp.body.provider_meta["finish_reason_raw"] == "UNEXPECTED_TOOL_CALL"
+    end
+
     test "usageMetadata alone still has no finish_reason (unchanged)", %{model: model} do
       event = %{
         data: %{
