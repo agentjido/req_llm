@@ -124,6 +124,32 @@ ReqLLM.generate_text("openrouter:anthropic/claude-sonnet-4-20250514", context,
 
 Without `file-parser`, ReqLLM uses the same file encoding and lets OpenRouter select the PDF processing engine.
 
+### Safety Settings (Google Models)
+
+#### `openrouter_safety_settings`
+- **Type**: List of maps
+- **Purpose**: Set Google's per-category content filters on Gemini models routed through OpenRouter
+- **Example**: `provider_options: [openrouter_safety_settings: [%{category: "HARM_CATEGORY_HARASSMENT", threshold: "OFF"}]]`
+
+OpenRouter forwards the top-level `safety_settings` body field to Google, so the
+same categories and thresholds accepted by the Gemini API apply here. This works
+on both of OpenRouter's Google upstreams (`google-ai-studio` and `google-vertex`).
+
+```elixir
+safety_settings =
+  Enum.map(
+    ~w(HARM_CATEGORY_HARASSMENT HARM_CATEGORY_HATE_SPEECH
+       HARM_CATEGORY_SEXUALLY_EXPLICIT HARM_CATEGORY_DANGEROUS_CONTENT),
+    &%{category: &1, threshold: "BLOCK_ONLY_HIGH"}
+  )
+
+ReqLLM.generate_text("openrouter:google/gemini-2.5-flash", "Write a battle scene.",
+  provider_options: [openrouter_safety_settings: safety_settings]
+)
+```
+
+The option is ignored by non-Google models.
+
 ### App Attribution
 
 #### `app_referer`
