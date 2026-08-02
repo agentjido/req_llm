@@ -1740,7 +1740,13 @@ defmodule ReqLLM.Providers.GoogleTest do
     # "stop", making a provider abort look like a successful empty answer.
     test "non-streaming abort with no content keeps its reason and raw name" do
       google_response = %{
-        "candidates" => [%{"finishReason" => "UNEXPECTED_TOOL_CALL", "index" => 0}],
+        "candidates" => [
+          %{
+            "finishReason" => "UNEXPECTED_TOOL_CALL",
+            "finishMessage" => "Unexpected tool call",
+            "index" => 0
+          }
+        ],
         "usageMetadata" => %{"promptTokenCount" => 22, "totalTokenCount" => 22},
         "modelVersion" => "gemini-2.5-pro"
       }
@@ -1759,6 +1765,7 @@ defmodule ReqLLM.Providers.GoogleTest do
 
       assert ReqLLM.Response.finish_reason(resp.body) == :error
       assert resp.body.provider_meta["finish_reason_raw"] == "UNEXPECTED_TOOL_CALL"
+      assert resp.body.provider_meta["finish_message"] == "Unexpected tool call"
     end
 
     test "usageMetadata alone still has no finish_reason (unchanged)", %{model: model} do

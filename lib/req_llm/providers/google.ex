@@ -1761,12 +1761,6 @@ defmodule ReqLLM.Providers.Google do
             "finish_reason" => normalize_google_finish_reason(finish_reason)
           }
 
-        # A candidate can carry a finishReason and no "content" key at all:
-        # Gemini does this when it aborts before producing anything, e.g.
-        # UNEXPECTED_TOOL_CALL or MALFORMED_FUNCTION_CALL on the non-streaming
-        # endpoint. Without this clause it fell through to the catch-all below
-        # and was reported as a clean "stop", so a provider abort was
-        # indistinguishable from an empty but successful answer.
         %{"finishReason" => finish_reason} when is_binary(finish_reason) ->
           %{
             "message" => %{"role" => "assistant", "content" => ""},
