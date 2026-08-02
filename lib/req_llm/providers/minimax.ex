@@ -514,6 +514,9 @@ defmodule ReqLLM.Providers.Minimax do
     |> Enum.map(&normalize_reasoning_detail/1)
   end
 
+  defp normalize_reasoning_detail({%ReqLLM.Message.ReasoningDetails{} = detail, _fallback_index}),
+    do: detail
+
   defp normalize_reasoning_detail({raw, fallback_index}) when is_map(raw) do
     %ReqLLM.Message.ReasoningDetails{
       text: raw["text"],

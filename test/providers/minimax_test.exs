@@ -362,6 +362,47 @@ defmodule ReqLLM.Providers.MinimaxTest do
       assert List.last(response.context.messages).reasoning_details ==
                response.message.reasoning_details
     end
+
+    test "stream decoding preserves reasoning details already normalized by the default decoder" do
+      event = %{
+        data: %{
+          "choices" => [
+            %{
+              "index" => 0,
+              "delta" => %{
+                "reasoning_content" => "Think",
+                "reasoning_details" => [
+                  %{
+                    "type" => "reasoning.text",
+                    "id" => "reasoning-text-1",
+                    "format" => "MiniMax-response-v1",
+                    "index" => 0,
+                    "text" => "Think"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+
+      assert [%StreamChunk{type: :thinking}, %StreamChunk{type: :meta} = metadata_chunk] =
+               Minimax.decode_stream_event(event, minimax_model())
+
+      assert [
+               %ReasoningDetails{
+                 text: "Think",
+                 signature: nil,
+                 provider: :minimax,
+                 format: "MiniMax-response-v1",
+                 index: 0,
+                 provider_data: %{
+                   "id" => "reasoning-text-1",
+                   "type" => "reasoning.text"
+                 }
+               }
+             ] = metadata_chunk.metadata.reasoning_details
+    end
   end
 
   describe "image generation" do
