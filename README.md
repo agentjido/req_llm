@@ -531,8 +531,7 @@ This approach gives you full control over the Req pipeline, allowing you to add 
 ## Roadmap & Status
 
 ReqLLM has reached v1.0.0. Its [compatibility policy](COMPATIBILITY.md)
-protects the stable core API while the [roadmap](ROADMAP.md) evolves the library
-through conservative V1 improvements and separately justified V2 candidates.
+protects the stable core API while the library continues to improve.
 If you run into anything or have suggestions, please open an issue or PR.
 
 ### Test Coverage & Quality Commitment

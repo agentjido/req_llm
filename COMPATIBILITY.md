@@ -4,10 +4,7 @@ ReqLLM 1.x evolves without requiring applications or third-party providers to
 rewrite working integrations. Internal architecture may change substantially,
 but stable observable behavior follows semantic versioning.
 
-This policy applies to the 1.x release line. The
-[V1 roadmap](ROADMAP_V1.md) describes planned compatible improvements, and the
-[V1 execution goal](V1_EXECUTION_GOAL.md) defines the evidence required before
-each roadmap pull request can merge.
+This policy applies to the 1.x release line.
 
 ## Contract classifications
 
