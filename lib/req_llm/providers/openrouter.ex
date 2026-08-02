@@ -22,6 +22,7 @@ defmodule ReqLLM.Providers.OpenRouter do
   - `openrouter_usage` - Usage options (e.g., `%{include: true}`)
   - `openrouter_plugins` - Array of plugins (e.g., `[%{id: "web"}]`)
   - `openrouter_session_id` - Session ID for grouping related requests in OpenRouter
+  - `openrouter_safety_settings` - Google safety filter settings, forwarded to Gemini models
   - `app_referer` - HTTP-Referer header for app identification
   - `app_title` - X-Title header for app title in rankings
 
@@ -116,6 +117,11 @@ defmodule ReqLLM.Providers.OpenRouter do
     openrouter_session_id: [
       type: :string,
       doc: "OpenRouter session ID for grouping related LLM calls"
+    ],
+    openrouter_safety_settings: [
+      type: {:list, :map},
+      doc:
+        "Google safety filter settings, forwarded to Gemini models as the top-level `safety_settings` body field"
     ],
     dimensions: [
       type: :pos_integer,
@@ -401,6 +407,7 @@ defmodule ReqLLM.Providers.OpenRouter do
     |> maybe_put(:usage, request.options[:openrouter_usage])
     |> maybe_put(:plugins, request.options[:openrouter_plugins])
     |> maybe_put(:session_id, request.options[:openrouter_session_id])
+    |> maybe_put(:safety_settings, request.options[:openrouter_safety_settings])
     |> add_openrouter_specific_options(request.options)
     |> add_stream_options(request.options)
   end

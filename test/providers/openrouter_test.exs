@@ -361,6 +361,45 @@ defmodule ReqLLM.Providers.OpenRouterTest do
       assert decoded["plugins"] == [%{"id" => "web"}, %{"id" => "code"}]
     end
 
+    test "encode_body with openrouter_safety_settings option" do
+      {:ok, model} = ReqLLM.model("openrouter:google/gemini-2.5-flash")
+      context = context_fixture()
+
+      mock_request = %Req.Request{
+        options: [
+          context: context,
+          model: model.model,
+          stream: false,
+          openrouter_safety_settings: [
+            %{category: "HARM_CATEGORY_HARASSMENT", threshold: "OFF"},
+            %{category: "HARM_CATEGORY_HATE_SPEECH", threshold: "BLOCK_ONLY_HIGH"}
+          ]
+        ]
+      }
+
+      updated_request = OpenRouter.encode_body(mock_request)
+      decoded = ReqLLM.Test.Helpers.json_body(updated_request)
+
+      assert decoded["safety_settings"] == [
+               %{"category" => "HARM_CATEGORY_HARASSMENT", "threshold" => "OFF"},
+               %{"category" => "HARM_CATEGORY_HATE_SPEECH", "threshold" => "BLOCK_ONLY_HIGH"}
+             ]
+    end
+
+    test "encode_body omits safety_settings when openrouter_safety_settings is absent" do
+      {:ok, model} = ReqLLM.model("openrouter:google/gemini-2.5-flash")
+      context = context_fixture()
+
+      mock_request = %Req.Request{
+        options: [context: context, model: model.model, stream: false]
+      }
+
+      updated_request = OpenRouter.encode_body(mock_request)
+      decoded = ReqLLM.Test.Helpers.json_body(updated_request)
+
+      refute Map.has_key?(decoded, "safety_settings")
+    end
+
     test "encode_body with file-parser plugin encodes PDF files in OpenRouter format" do
       {:ok, model} = ReqLLM.model("openrouter:openai/gpt-4")
       pdf_data = "%PDF test"
