@@ -104,6 +104,7 @@ Passed via `:provider_options` keyword:
 - **Fallback**: `config :req_llm, :google_vertex`, then `GOOGLE_CLOUD_REGION` env var
 - **Example**: `provider_options: [region: "us-central1"]`
 - **Note**: Use `"global"` for newest models, specific regions for regional deployment
+- **Multi-region**: `"us"` or `"eu"` select Agent Platform (fka Vertex AI) multi-region endpoints, served from the `aiplatform.{us,eu}.rep.googleapis.com` (see [AI Platform - locations](https://docs.cloud.google.com/vertex-ai/generative-ai/docs/learn/locations))
 
 ### `additional_model_request_fields`
 

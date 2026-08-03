@@ -206,6 +206,11 @@ defmodule ReqLLM.Providers.GoogleVertex do
   @vertex_base_url_global "https://aiplatform.googleapis.com"
   @vertex_base_url_regional "https://{region}-aiplatform.googleapis.com"
 
+  # Vertex AI multi-region endpoints use host to match jurisdictional boundaries
+  # https://docs.cloud.google.com/vertex-ai/generative-ai/docs/learn/locations
+  @vertex_base_url_multi_region "https://aiplatform.{region}.rep.googleapis.com"
+  @multi_region_locations ~w(us eu)
+
   # Model family to formatter module mapping
   @model_families %{
     "claude" => ReqLLM.Providers.GoogleVertex.Anthropic,
@@ -652,13 +657,19 @@ defmodule ReqLLM.Providers.GoogleVertex do
     raise ArgumentError, "No model path builder for Vertex AI model family: #{family}"
   end
 
-  # Build base URL based on region
+  # Build base URL based on region/location.
+  #
+  #   * "global"        -> the global endpoint
+  #   * "us" / "eu"     -> the multi-region endpoints
+  #   * any other value -> a specific regional endpoint (e.g. "us-east5")
+  defp build_base_url("global"), do: @vertex_base_url_global
+
+  defp build_base_url(region) when region in @multi_region_locations do
+    String.replace(@vertex_base_url_multi_region, "{region}", region)
+  end
+
   defp build_base_url(region) do
-    if region == "global" do
-      @vertex_base_url_global
-    else
-      String.replace(@vertex_base_url_regional, "{region}", region)
-    end
+    String.replace(@vertex_base_url_regional, "{region}", region)
   end
 
   # Process and validate options (shared between do_prepare_request and attach_stream)

@@ -176,6 +176,68 @@ defmodule ReqLLM.Providers.GoogleVertex.ConfigTest do
     end
   end
 
+  describe "endpoint host selection by region" do
+    test "global region uses the global endpoint host" do
+      {:ok, model} = ReqLLM.model("google_vertex:gemini-2.5-pro")
+
+      {:ok, request} =
+        GoogleVertex.prepare_request(:chat, model, context_fixture(),
+          project_id: "config-project",
+          region: "global"
+        )
+
+      url = URI.to_string(request.url)
+
+      assert url =~ "https://aiplatform.googleapis.com"
+      assert url =~ "locations/global"
+    end
+
+    test "us multi-region uses the REP host" do
+      {:ok, model} = ReqLLM.model("google_vertex:gemini-2.5-pro")
+
+      {:ok, request} =
+        GoogleVertex.prepare_request(:chat, model, context_fixture(),
+          project_id: "config-project",
+          region: "us"
+        )
+
+      url = URI.to_string(request.url)
+
+      assert url =~ "https://aiplatform.us.rep.googleapis.com"
+      assert url =~ "locations/us/"
+    end
+
+    test "eu multi-region uses the REP host" do
+      {:ok, model} = ReqLLM.model("google_vertex:gemini-2.5-pro")
+
+      {:ok, request} =
+        GoogleVertex.prepare_request(:chat, model, context_fixture(),
+          project_id: "config-project",
+          region: "eu"
+        )
+
+      url = URI.to_string(request.url)
+
+      assert url =~ "https://aiplatform.eu.rep.googleapis.com"
+      assert url =~ "locations/eu/"
+    end
+
+    test "a specific region still uses the regional host" do
+      {:ok, model} = ReqLLM.model("google_vertex:gemini-2.5-pro")
+
+      {:ok, request} =
+        GoogleVertex.prepare_request(:chat, model, context_fixture(),
+          project_id: "config-project",
+          region: "us-east5"
+        )
+
+      url = URI.to_string(request.url)
+
+      assert url =~ "https://us-east5-aiplatform.googleapis.com"
+      assert url =~ "locations/us-east5/"
+    end
+  end
+
   defp context_fixture do
     Context.new([Context.user("Hello")])
   end
