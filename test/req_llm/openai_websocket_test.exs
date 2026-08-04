@@ -248,7 +248,7 @@ defmodule ReqLLM.OpenAIWebSocketTest do
     {session, socket} = start_session(websocket_url)
 
     receiver = Task.async(fn -> WebSocketSession.next_message(session, :infinity) end)
-    assert Task.yield(receiver, 50) == nil
+    assert :ok = await_websocket_waiter(session, receiver.pid)
     assert Task.shutdown(receiver, :brutal_kill) == nil
 
     send(socket, {:emit, "later-event"})
@@ -308,6 +308,30 @@ defmodule ReqLLM.OpenAIWebSocketTest do
     assert :ok = WebSocketSession.await_connected(session, 1_000)
     assert_receive {:realtime_socket_connected, socket}
     {session, socket}
+  end
+
+  defp await_websocket_waiter(session, receiver_pid, timeout \\ 5_000) do
+    deadline = System.monotonic_time(:millisecond) + timeout
+    do_await_websocket_waiter(session, receiver_pid, deadline)
+  end
+
+  defp do_await_websocket_waiter(session, receiver_pid, deadline) do
+    waiter_registered? =
+      session
+      |> :sys.get_state()
+      |> Map.fetch!(:waiting_callers)
+      |> Enum.any?(fn waiter -> elem(waiter.from, 0) == receiver_pid end)
+
+    if waiter_registered? do
+      :ok
+    else
+      if System.monotonic_time(:millisecond) >= deadline do
+        flunk("WebSocket session did not register the waiting caller")
+      end
+
+      Process.sleep(5)
+      do_await_websocket_waiter(session, receiver_pid, deadline)
+    end
   end
 
   defp reserve_port do

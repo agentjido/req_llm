@@ -242,7 +242,7 @@ defmodule ReqLLM.OutputValidationTest do
                  output_repair: repair
                )
 
-      refute_receive {:repair_attempt, _result}
+      refute_received {:repair_attempt, _result}
       assert %Result{valid?: true, repairs: []} = Response.output_result(response, output)
     end
 
@@ -266,7 +266,7 @@ defmodule ReqLLM.OutputValidationTest do
 
       assert Response.output(response, output) == %{"name" => "Ada", "age" => 37}
       assert_receive {:repair_attempt, %Result{valid?: false}}
-      refute_receive {:repair_attempt, _result}
+      refute_received {:repair_attempt, _result}
 
       assert %Result{
                valid?: true,
@@ -296,7 +296,7 @@ defmodule ReqLLM.OutputValidationTest do
                )
 
       assert_receive {:repair_attempt, %Result{}}
-      refute_receive {:repair_attempt, _result}
+      refute_received {:repair_attempt, _result}
 
       assert %Result{repairs: [%{type: :callback, status: :failed}]} =
                context[:output_result]

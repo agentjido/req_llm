@@ -23,9 +23,10 @@ defmodule ReqLLM.StreamServer.ErrorHandlingTest do
     test "handles HTTP task crash gracefully" do
       server = start_server()
       task = mock_http_task(server)
+      task_ref = Process.monitor(task.pid)
 
       Process.exit(task.pid, :kill)
-      :timer.sleep(20)
+      assert_receive {:DOWN, ^task_ref, :process, task_pid, :killed} when task_pid == task.pid
 
       assert Process.alive?(server)
 
@@ -37,13 +38,13 @@ defmodule ReqLLM.StreamServer.ErrorHandlingTest do
     test "cancellation kills HTTP task and cleans up" do
       server = start_server()
       task = mock_http_task(server)
+      task_ref = Process.monitor(task.pid)
 
       assert Process.alive?(task.pid)
 
       assert :ok = StreamServer.cancel(server)
 
-      :timer.sleep(20)
-
+      assert_receive {:DOWN, ^task_ref, :process, task_pid, _reason} when task_pid == task.pid
       refute Process.alive?(task.pid)
     end
 
@@ -54,12 +55,11 @@ defmodule ReqLLM.StreamServer.ErrorHandlingTest do
       malformed_data = "invalid sse data without proper format\n\n"
       assert :ok = GenServer.call(server, {:http_event, {:data, malformed_data}})
 
-      Task.start(fn ->
-        :timer.sleep(100)
-        GenServer.call(server, {:http_event, :done})
-      end)
+      next_task = Task.async(fn -> StreamServer.next(server, 200) end)
+      assert :ok = await_waiting_callers(server, [:next])
+      assert :ok = GenServer.call(server, {:http_event, :done})
 
-      assert :halt = StreamServer.next(server, 200)
+      assert :halt = Task.await(next_task)
 
       StreamServer.cancel(server)
     end

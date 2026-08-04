@@ -155,16 +155,19 @@ defmodule ReqLLM.StreamServer.TelemetryTest do
     model = reasoning_model()
     server = start_server(provider_mod: ReqLLM.StreamServer.TelemetryProvider, model: model)
 
-    StreamServer.retry_event(server, %{
+    retry = %{
       attempt: 1,
       next_attempt: 2,
       max_retries: 3,
       delay: 25,
       duration: 100,
       http_status: 429
-    })
+    }
 
-    refute_receive {:telemetry_event, [:req_llm, :request, :retry], _, _}, 25
+    StreamServer.retry_event(server, retry)
+
+    assert :sys.get_state(server).pending_retry_events == [retry]
+    refute_received {:telemetry_event, [:req_llm, :request, :retry], _, _}
 
     telemetry_context =
       model
@@ -219,7 +222,7 @@ defmodule ReqLLM.StreamServer.TelemetryTest do
     assert exception_metadata.request_id == telemetry_context.request_id
     assert exception_metadata.finish_reason == :error
     assert exception_metadata.error == metadata.error
-    refute_receive {:telemetry_event, [:req_llm, :request, :stop], _, _}
+    refute_received {:telemetry_event, [:req_llm, :request, :stop], _, _}
   end
 
   test "buffers fast HTTP events until streaming telemetry context is installed" do
@@ -248,10 +251,11 @@ defmodule ReqLLM.StreamServer.TelemetryTest do
         StreamServer.http_event(server, :done)
       end)
 
-    assert nil == Task.yield(producer, 25)
+    assert %{pending_http_events: [_, _]} = await_pending_http_events(server, 2)
+    assert Process.alive?(producer.pid)
 
-    refute_receive {:telemetry_event, [:req_llm, :request, :start], _, _}, 50
-    refute_receive {:telemetry_event, [:req_llm, :request, :stop], _, _}, 50
+    refute_received {:telemetry_event, [:req_llm, :request, :start], _, _}
+    refute_received {:telemetry_event, [:req_llm, :request, :stop], _, _}
 
     telemetry_context =
       model
@@ -564,7 +568,7 @@ defmodule ReqLLM.StreamServer.TelemetryTest do
     assert update_meta.milestone == :content_started
     assert_receive {:telemetry_event, [:req_llm, :request, :stop], _, stop_meta}
     assert_receive {:telemetry_event, [:req_llm, :reasoning, :stop], _, reasoning_stop_meta}
-    refute_receive {:telemetry_event, [:req_llm, :request, :exception], _, _}
+    refute_received {:telemetry_event, [:req_llm, :request, :exception], _, _}
     assert stop_meta.finish_reason == :cancelled
     assert reasoning_stop_meta.milestone == :cancelled
   end
@@ -606,7 +610,7 @@ defmodule ReqLLM.StreamServer.TelemetryTest do
     assert_receive {:telemetry_event, [:req_llm, :request, :exception], _, exception_meta}
     assert_receive {:telemetry_event, [:req_llm, :reasoning, :stop], _, reasoning_stop_meta}
     assert_receive {:telemetry_event, [:req_llm, :token_usage], token_measurements, _}
-    refute_receive {:telemetry_event, [:req_llm, :request, :stop], _, _}
+    refute_received {:telemetry_event, [:req_llm, :request, :stop], _, _}
     assert exception_meta.finish_reason == :error
     assert exception_meta.usage.input_tokens == 7
     assert exception_meta.usage.output_tokens == 3
@@ -661,5 +665,22 @@ defmodule ReqLLM.StreamServer.TelemetryTest do
       id: "test-reasoning-model",
       capabilities: %{reasoning: %{enabled: true}}
     }
+  end
+
+  defp await_pending_http_events(server, count, attempts \\ 100)
+
+  defp await_pending_http_events(_server, _count, 0) do
+    flunk("pending HTTP events were not buffered")
+  end
+
+  defp await_pending_http_events(server, count, attempts) do
+    state = :sys.get_state(server)
+
+    if length(state.pending_http_events) >= count do
+      state
+    else
+      Process.sleep(5)
+      await_pending_http_events(server, count, attempts - 1)
+    end
   end
 end

@@ -103,8 +103,32 @@ defmodule ReqLLM.Test.StreamServerHelpers do
       Process.exit(task.pid, :kill)  # Simulate HTTP failure
   """
   def mock_http_task(server) do
-    task = Task.async(fn -> :timer.sleep(50_000) end)
+    task = Task.async(fn -> Process.sleep(:infinity) end)
     StreamServer.attach_http_task(server, task.pid)
     task
+  end
+
+  @doc false
+  def await_waiting_callers(server, expected_types, timeout \\ 5_000) do
+    deadline = System.monotonic_time(:millisecond) + timeout
+    do_await_waiting_callers(server, expected_types, deadline)
+  end
+
+  defp do_await_waiting_callers(server, expected_types, deadline) do
+    waiting_types =
+      server |> :sys.get_state() |> Map.fetch!(:waiting_callers) |> Enum.map(& &1.type)
+
+    if Enum.all?(expected_types, &(&1 in waiting_types)) do
+      :ok
+    else
+      if System.monotonic_time(:millisecond) >= deadline do
+        ExUnit.Assertions.flunk(
+          "StreamServer did not register waiting callers: #{inspect(expected_types)}"
+        )
+      end
+
+      Process.sleep(5)
+      do_await_waiting_callers(server, expected_types, deadline)
+    end
   end
 end

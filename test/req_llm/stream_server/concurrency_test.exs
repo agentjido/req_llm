@@ -60,7 +60,7 @@ defmodule ReqLLM.StreamServer.ConcurrencyTest do
       next_task = Task.async(fn -> StreamServer.next(server, 1000) end)
       metadata_task = Task.async(fn -> StreamServer.await_metadata(server, 1000) end)
 
-      :timer.sleep(50)
+      assert :ok = await_waiting_callers(server, [:next, :metadata])
 
       content_data = ~s(data: {"choices": [{"delta": {"content": "text"}}]}\n\n)
       usage_data = ~s(data: {"usage": {"prompt_tokens": 10, "completion_tokens": 32}}\n\n)

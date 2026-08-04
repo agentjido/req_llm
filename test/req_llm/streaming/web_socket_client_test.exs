@@ -126,7 +126,8 @@ defmodule ReqLLM.Streaming.WebSocketClientTest do
     assert http_context.status == 200
     assert canonical_json["model"] == "google/gemini-3-flash-preview"
 
-    Process.sleep(50)
+    assert_receive {task_ref, :ok}, 5_000
+    assert_receive {:DOWN, ^task_ref, :process, ^task_pid, :normal}, 5_000
 
     assert Enum.any?(EventStreamServer.events(stream_server), &match?({:status, 200}, &1))
   end

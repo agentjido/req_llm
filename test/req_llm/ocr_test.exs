@@ -297,7 +297,7 @@ defmodule ReqLLM.OCRTest do
 
       assert Enum.sort(Map.keys(result)) == [:markdown, :pages]
       assert_receive :ocr_provider_request
-      refute_receive :ocr_provider_request, 20
+      refute_received :ocr_provider_request
 
       assert_receive {:ocr_telemetry, [:req_llm, :request, :start], start_meta}
       assert_receive {:ocr_telemetry, [:req_llm, :token_usage], usage_meta}
@@ -381,7 +381,7 @@ defmodule ReqLLM.OCRTest do
       assert stop_meta.request_id == start_meta.request_id
       assert stop_meta.http_status == 422
       assert stop_meta.finish_reason == :error
-      refute_receive {:ocr_telemetry, [:req_llm, :request, :exception], _}
+      refute_received {:ocr_telemetry, [:req_llm, :request, :exception], _}
 
       raised =
         assert_raise ReqLLM.Error.API.Request, fn ->

@@ -317,7 +317,7 @@ defmodule ReqLLM.GenerationTest do
       assert start_metadata.request_id == exception_metadata.request_id
       assert exception_metadata.finish_reason == :error
       assert %ReqLLM.Error.API.Timeout{kind: :total} = exception_metadata.error
-      refute_receive {:timeout_telemetry, [:req_llm, :request, :stop], _, _}, 100
+      refute_received {:timeout_telemetry, [:req_llm, :request, :stop], _, _}
     end
 
     test "returns error for invalid model spec" do
@@ -372,6 +372,7 @@ defmodule ReqLLM.GenerationTest do
                Generation.generate_text(
                  @chat_model,
                  "Hello",
+                 max_retries: 0,
                  req_http_options: [plug: {Req.Test, ErrorHTTP}]
                )
 

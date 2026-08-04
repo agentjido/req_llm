@@ -409,11 +409,11 @@ defmodule ReqLLM.EmbeddingTest do
     test "returns api request errors for non-success responses" do
       Req.Test.stub(__MODULE__.EmbeddingHTTPError, fn conn ->
         conn
-        |> Plug.Conn.put_status(429)
-        |> Req.Test.json(%{"error" => %{"message" => "rate limited"}})
+        |> Plug.Conn.put_status(422)
+        |> Req.Test.json(%{"error" => %{"message" => "invalid request"}})
       end)
 
-      assert {:error, %ReqLLM.Error.API.Request{status: 429, response_body: body}} =
+      assert {:error, %ReqLLM.Error.API.Request{status: 422, response_body: body}} =
                Embedding.embed(
                  "openai:text-embedding-3-small",
                  "Hello",
@@ -421,7 +421,7 @@ defmodule ReqLLM.EmbeddingTest do
                  req_http_options: [plug: {Req.Test, __MODULE__.EmbeddingHTTPError}]
                )
 
-      assert body == %{"error" => %{"message" => "rate limited"}}
+      assert body == %{"error" => %{"message" => "invalid request"}}
     end
 
     test "returns parse errors for malformed single embedding responses" do

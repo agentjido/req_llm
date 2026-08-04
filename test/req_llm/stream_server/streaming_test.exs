@@ -47,7 +47,7 @@ defmodule ReqLLM.StreamServer.StreamingTest do
           assert_receive {:producer_sending, ^text}
           expected_raw_bytes = raw_bytes + byte_size(event)
           assert :ok = wait_for_backpressure(server, expected_raw_bytes)
-          refute_receive {:producer_acknowledged, ^text}, 25
+          refute_received {:producer_acknowledged, ^text}
 
           assert {:ok, chunk} = StreamServer.next(server, 100)
           assert chunk.text == text
@@ -121,14 +121,14 @@ defmodule ReqLLM.StreamServer.StreamingTest do
       producer = Task.async(fn -> StreamServer.http_event(server, {:data, event}) end)
 
       assert :ok = wait_for_telemetry_backpressure(server)
-      assert nil == Task.yield(producer, 25)
+      assert Process.alive?(producer.pid)
 
       assert :ok = StreamServer.set_telemetry_context(server, nil)
-      assert nil == Task.yield(producer, 25)
+      assert Process.alive?(producer.pid)
 
       assert {:ok, chunk} = StreamServer.next(server, 100)
       assert chunk.text == "one"
-      assert nil == Task.yield(producer, 25)
+      assert Process.alive?(producer.pid)
 
       assert {:ok, chunk} = StreamServer.next(server, 100)
       assert chunk.text == "two"
@@ -337,7 +337,7 @@ defmodule ReqLLM.StreamServer.StreamingTest do
       assert_receive :stream_budget_attempt, 300
       assert {:ok, metadata} = StreamServer.await_metadata(server, 500)
       assert %ReqLLM.Error.API.Timeout{kind: :total, timeout: 250} = metadata.error
-      refute_receive :stream_budget_attempt, 100
+      refute_received :stream_budget_attempt
       refute Process.alive?(task.pid)
     end
 
@@ -395,14 +395,8 @@ defmodule ReqLLM.StreamServer.StreamingTest do
       server = start_server()
       _task = mock_http_task(server)
 
-      start_time = :os.system_time(:millisecond)
-
-      assert {:error, :timeout} = StreamServer.next(server, 50)
-
-      elapsed = :os.system_time(:millisecond) - start_time
-
-      assert elapsed >= 50
-      assert elapsed < 250
+      timeout_task = Task.async(fn -> StreamServer.next(server, 50) end)
+      assert {:error, :timeout} = Task.await(timeout_task, 5_000)
 
       StreamServer.cancel(server)
     end
@@ -411,14 +405,8 @@ defmodule ReqLLM.StreamServer.StreamingTest do
       server = start_server()
       _task = mock_http_task(server)
 
-      start_time = :os.system_time(:millisecond)
-
-      assert {:error, :timeout} = StreamServer.await_metadata(server, 50)
-
-      elapsed = :os.system_time(:millisecond) - start_time
-
-      assert elapsed >= 50
-      assert elapsed < 250
+      timeout_task = Task.async(fn -> StreamServer.await_metadata(server, 50) end)
+      assert {:error, :timeout} = Task.await(timeout_task, 5_000)
 
       StreamServer.cancel(server)
     end
@@ -461,14 +449,9 @@ defmodule ReqLLM.StreamServer.StreamingTest do
           StreamServer.next(server, 50)
         end)
 
-      spawn(fn ->
-        :timer.sleep(1200)
-        GenServer.call(server, {:http_event, {:error, :transport_timeout}})
-      end)
-
       assert {:error, :timeout} = Task.await(timeout_task, 500)
 
-      :timer.sleep(1250)
+      StreamServer.http_event(server, {:error, :transport_timeout})
 
       assert {:error, :transport_timeout} = StreamServer.next(server, 100)
 

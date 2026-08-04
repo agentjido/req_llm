@@ -234,7 +234,6 @@ defmodule ReqLLM.Test.VCR do
 
     task =
       Task.async(fn ->
-        Process.sleep(10)
         feed_transcript_to_server(stream_server_pid, transcript)
       end)
 
@@ -365,9 +364,7 @@ defmodule ReqLLM.Test.VCR do
         model: model
       )
 
-    # Feed transcript events to server
     Task.async(fn ->
-      Process.sleep(10)
       feed_transcript_to_server(server, transcript)
     end)
 

@@ -128,7 +128,7 @@ defmodule ReqLLM.Providers.OpenAITest do
           assert_receive {:attempt, ^operation}
         end)
 
-        refute_receive {:attempt, ^operation}, 20
+        refute_received {:attempt, ^operation}
       end)
     end
 

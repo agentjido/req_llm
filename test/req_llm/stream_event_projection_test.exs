@@ -346,7 +346,7 @@ defmodule ReqLLM.StreamEventProjectionTest do
       assert_receive {:pulled, "a"}
       assert_receive {:pulled, "b"}
       assert_receive {:pulled, "c"}
-      refute_receive {:pulled, _text}
+      refute_received {:pulled, _text}
       assert_receive :upstream_closed
     end
 

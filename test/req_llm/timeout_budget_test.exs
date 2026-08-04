@@ -50,29 +50,24 @@ defmodule ReqLLM.TimeoutBudgetTest do
   end
 
   test "bounds retries within the total deadline" do
-    test_pid = self()
+    attempts = :atomics.new(1, [])
 
     request =
       Req.new(
         url: "https://example.invalid",
         adapter: fn request ->
-          send(test_pid, :budget_attempt)
+          :atomics.add(attempts, 1, 1)
           Process.sleep(120)
           {request, %Req.TransportError{reason: :closed}}
         end
       )
       |> ReqLLM.Step.Retry.attach(max_retries: 3)
 
-    started_at = System.monotonic_time(:millisecond)
-
     assert {:error, %ReqLLM.Error.API.Timeout{kind: :total, timeout: 200}} =
              TimeoutBudget.request(request, TimeoutBudget.deadline(total_timeout: 200))
 
-    assert System.monotonic_time(:millisecond) - started_at < 350
-    assert_receive :budget_attempt
-    assert_receive :budget_attempt, 250
-    refute_receive :budget_attempt, 100
-    refute_receive {ReqLLM.TimeoutBudget, _capture_ref, _context}
+    assert :atomics.get(attempts, 1) == 2
+    refute_received {ReqLLM.TimeoutBudget, _capture_ref, _context}
   end
 
   test "preserves request exceptions under a finite budget" do

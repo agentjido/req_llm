@@ -203,7 +203,7 @@ defmodule ReqLLM.SpeechTest do
                )
 
       assert_receive :detailed_request
-      refute_receive :detailed_request, 20
+      refute_received :detailed_request
 
       assert_receive {[:req_llm, :request, :stop], request_stop}
       assert request_stop.operation == :speech

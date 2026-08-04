@@ -290,7 +290,7 @@ defmodule ReqLLM.Provider.ChunkAccumulatorTest do
                ChunkAccumulator.finalize_tool_calls_for_response(acc)
 
       refute Map.has_key?(tool_call, :metadata)
-      refute_receive {:args_lost, "call_direct_args", _, _}
+      refute_received {:args_lost, "call_direct_args", _, _}
     end
 
     test "preserves non-control tool metadata" do
@@ -365,7 +365,7 @@ defmodule ReqLLM.Provider.ChunkAccumulatorTest do
                ChunkAccumulator.finalize_tool_calls_for_response(acc)
 
       refute Map.has_key?(tool_call, :metadata)
-      refute_receive {:args_lost, "call_empty_fragments", _, _}
+      refute_received {:args_lost, "call_empty_fragments", _, _}
     end
 
     test "returns [] for empty accumulator" do

@@ -27,6 +27,9 @@ defmodule ReqLLM.TranscriptionTest do
   defmodule SparseDetailedHTTP do
   end
 
+  defmodule AudioResolutionHTTP do
+  end
+
   describe "Result struct" do
     test "creates result with defaults" do
       result = %Result{}
@@ -74,6 +77,14 @@ defmodule ReqLLM.TranscriptionTest do
   end
 
   describe "transcribe/3 - audio resolution" do
+    setup do
+      Req.Test.stub(AudioResolutionHTTP, fn conn ->
+        Req.Test.json(conn, %{"text" => "resolved"})
+      end)
+
+      :ok
+    end
+
     test "rejects non-existent file path" do
       assert {:error, error} =
                Transcription.transcribe("openai:whisper-1", "/nonexistent/audio.mp3")
@@ -97,21 +108,25 @@ defmodule ReqLLM.TranscriptionTest do
     end
 
     test "accepts binary audio data" do
-      # This will fail at the provider level (no API key), but should pass audio resolution
-      result = Transcription.transcribe("openai:whisper-1", {:binary, "fake audio", "audio/mpeg"})
-
-      # Should get past audio resolution and fail at provider/API key level
-      assert {:error, _} = result
+      assert {:ok, %Result{text: "resolved"}} =
+               Transcription.transcribe(
+                 "openai:whisper-1",
+                 {:binary, "fake audio", "audio/mpeg"},
+                 api_key: "test-key",
+                 req_http_options: [plug: {Req.Test, AudioResolutionHTTP}]
+               )
     end
 
     test "accepts base64 audio data" do
       encoded = Base.encode64("fake audio data")
 
-      result =
-        Transcription.transcribe("openai:whisper-1", {:base64, encoded, "audio/mpeg"})
-
-      # Should get past audio resolution and fail at provider/API key level
-      assert {:error, _} = result
+      assert {:ok, %Result{text: "resolved"}} =
+               Transcription.transcribe(
+                 "openai:whisper-1",
+                 {:base64, encoded, "audio/mpeg"},
+                 api_key: "test-key",
+                 req_http_options: [plug: {Req.Test, AudioResolutionHTTP}]
+               )
     end
   end
 
@@ -226,7 +241,7 @@ defmodule ReqLLM.TranscriptionTest do
                )
 
       assert_receive :detailed_request
-      refute_receive :detailed_request, 20
+      refute_received :detailed_request
 
       assert_receive {[:req_llm, :request, :stop], request_stop}
       assert request_stop.operation == :transcription

@@ -61,7 +61,7 @@ defmodule ReqLLM.StreamServer.MetadataTest do
           StreamServer.await_metadata(server, 200)
         end)
 
-      :timer.sleep(50)
+      assert :ok = await_waiting_callers(server, [:metadata])
       assert :ok = GenServer.call(server, {:http_event, :done})
 
       assert {:ok, metadata} = Task.await(metadata_task)
@@ -146,12 +146,27 @@ defmodule ReqLLM.StreamServer.MetadataTest do
 
     test "stops after normal HTTP task completion once halt and metadata are delivered" do
       server = start_server()
-      task = Task.async(fn -> Process.sleep(20) end)
+      parent = self()
+
+      task =
+        Task.async(fn ->
+          send(parent, {:http_task_ready, self()})
+
+          receive do
+            :complete -> :ok
+          end
+        end)
+
+      assert_receive {:http_task_ready, task_pid}
+      assert task_pid == task.pid
 
       StreamServer.attach_http_task(server, task.pid)
 
       next_task = Task.async(fn -> StreamServer.next(server, 200) end)
       metadata_task = Task.async(fn -> StreamServer.await_metadata(server, 200) end)
+
+      assert :ok = await_waiting_callers(server, [:next, :metadata])
+      send(task.pid, :complete)
 
       assert :halt = Task.await(next_task)
       assert {:ok, metadata} = Task.await(metadata_task)
@@ -218,7 +233,7 @@ defmodule ReqLLM.StreamServer.MetadataTest do
       _task = mock_http_task(server)
 
       metadata_task = Task.async(fn -> StreamServer.await_metadata(server, 500) end)
-      :timer.sleep(20)
+      assert :ok = await_waiting_callers(server, [:metadata])
 
       finish_payload =
         Jason.encode!(%{

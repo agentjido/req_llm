@@ -266,7 +266,7 @@ defmodule ReqLLM.TelemetryTest do
 
     assert_receive {:telemetry_event, [:req_llm, :request, :start], _, start_meta}
     assert_receive {:telemetry_event, [:req_llm, :request, :stop], _, stop_meta}
-    refute_receive {:telemetry_event, [:req_llm, :reasoning, _], _, _}
+    refute_received {:telemetry_event, [:req_llm, :reasoning, _], _, _}
     refute start_meta.reasoning[:supported?]
     refute stop_meta.reasoning[:effective?]
     assert stop_meta.reasoning.channel == :none

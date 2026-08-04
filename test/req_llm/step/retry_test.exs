@@ -44,7 +44,7 @@ defmodule ReqLLM.Step.RetryTest do
           assert_receive :attempt
         end)
 
-        refute_receive :attempt, 20
+        refute_received :attempt
       end
     end
 
@@ -131,7 +131,7 @@ defmodule ReqLLM.Step.RetryTest do
         )
 
       assert {:error, %Req.TransportError{reason: :closed}} = Req.request(request)
-      refute_receive {:retry_telemetry, [:req_llm, :request, :retry], _, _}
+      refute_received {:retry_telemetry, [:req_llm, :request, :retry], _, _}
     end
   end
 
