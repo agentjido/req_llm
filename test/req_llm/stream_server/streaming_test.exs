@@ -394,8 +394,18 @@ defmodule ReqLLM.StreamServer.StreamingTest do
     test "next/2 respects timeout parameter" do
       server = start_server()
       _task = mock_http_task(server)
+      timeout = 5_000
 
-      timeout_task = Task.async(fn -> StreamServer.next(server, 50) end)
+      timeout_task = Task.async(fn -> StreamServer.next(server, timeout) end)
+      assert :ok = await_waiting_callers(server, [:next])
+
+      assert %{waiting_callers: [waiting_caller]} = :sys.get_state(server)
+
+      assert %{timer: timer, timeout: ^timeout, token: token, type: :next} = waiting_caller
+      assert Process.read_timer(timer) in 1..timeout
+      assert nil == Task.yield(timeout_task, 0)
+
+      send(server, {:caller_timeout, token})
       assert {:error, :timeout} = Task.await(timeout_task, 5_000)
 
       StreamServer.cancel(server)
@@ -404,8 +414,18 @@ defmodule ReqLLM.StreamServer.StreamingTest do
     test "await_metadata/2 respects timeout parameter" do
       server = start_server()
       _task = mock_http_task(server)
+      timeout = 5_000
 
-      timeout_task = Task.async(fn -> StreamServer.await_metadata(server, 50) end)
+      timeout_task = Task.async(fn -> StreamServer.await_metadata(server, timeout) end)
+      assert :ok = await_waiting_callers(server, [:metadata])
+
+      assert %{waiting_callers: [waiting_caller]} = :sys.get_state(server)
+
+      assert %{timer: timer, timeout: ^timeout, token: token, type: :metadata} = waiting_caller
+      assert Process.read_timer(timer) in 1..timeout
+      assert nil == Task.yield(timeout_task, 0)
+
+      send(server, {:caller_timeout, token})
       assert {:error, :timeout} = Task.await(timeout_task, 5_000)
 
       StreamServer.cancel(server)
