@@ -166,6 +166,8 @@ defmodule ReqLLM.AuthTest do
       {:ok, model} = ReqLLM.model("openai:gpt-4o")
       path = Path.join(tmp_dir, "oauth.json")
       parent = self()
+      refresh_requests = :atomics.new(1, [])
+      start_ref = make_ref()
 
       write_oauth_file(path, %{
         "openai-codex" => %{
@@ -180,8 +182,17 @@ defmodule ReqLLM.AuthTest do
       File.chmod!(path, 0o600)
 
       Req.Test.stub(ReqLLM.AuthConcurrentOpenAIRefreshTest, fn conn ->
-        send(parent, :refresh_request)
-        Process.sleep(100)
+        request_number = :atomics.add_get(refresh_requests, 1, 1)
+
+        if request_number == 1 do
+          send(parent, {:refresh_request, self()})
+
+          receive do
+            :complete_refresh -> :ok
+          after
+            5_000 -> raise "Timed out while waiting to complete the OAuth refresh"
+          end
+        end
 
         Req.Test.json(conn, %{
           "access_token" => "serialized-access-token",
@@ -198,18 +209,37 @@ defmodule ReqLLM.AuthTest do
         ]
       ]
 
-      results =
+      tasks =
         1..2
-        |> Enum.map(fn _ -> Task.async(fn -> OAuth.resolve(model, opts) end) end)
-        |> Task.await_many(1_000)
+        |> Enum.map(fn _ ->
+          Task.async(fn ->
+            send(parent, {:resolver_ready, self()})
+
+            receive do
+              ^start_ref -> OAuth.resolve(model, opts)
+            after
+              5_000 -> raise "Timed out while waiting to start OAuth resolution"
+            end
+          end)
+        end)
+
+      Enum.each(tasks, fn %{pid: task_pid} ->
+        assert_receive {:resolver_ready, ^task_pid}, 5_000
+      end)
+
+      Enum.each(tasks, &send(&1.pid, start_ref))
+
+      assert_receive {:refresh_request, refresh_pid}, 5_000
+      send(refresh_pid, :complete_refresh)
+
+      results = Task.await_many(tasks, 5_000)
 
       assert [
                {:ok, %{token: "serialized-access-token"}},
                {:ok, %{token: "serialized-access-token"}}
              ] = results
 
-      assert_receive :refresh_request
-      refute_receive :refresh_request, 100
+      assert :atomics.get(refresh_requests, 1) == 1
 
       persisted = path |> File.read!() |> Jason.decode!()
       {:ok, stat} = File.stat(path)
