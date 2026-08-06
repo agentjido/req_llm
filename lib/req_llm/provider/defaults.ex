@@ -409,7 +409,7 @@ defmodule ReqLLM.Provider.Defaults do
             receive_timeout: timeout,
             form_multipart: form_parts,
             auth: {:bearer, api_key}
-          ] ++ default_finch_option(pool_timeout: timeout) ++ http_opts
+          ] ++ merge_finch_options(http_opts, pool_timeout: timeout)
         )
         |> Req.Request.put_header("authorization", "Bearer #{api_key}")
         |> ReqLLM.Step.Retry.attach(opts)
@@ -498,7 +498,7 @@ defmodule ReqLLM.Provider.Defaults do
             auth: {:bearer, api_key},
             # Disable Req's automatic JSON decoding — response is raw audio binary
             decode_body: false
-          ] ++ default_finch_option(pool_timeout: timeout) ++ http_opts
+          ] ++ merge_finch_options(http_opts, pool_timeout: timeout)
         )
         |> Req.Request.put_header("content-type", "application/json")
         |> Req.Request.put_header("authorization", "Bearer #{api_key}")
@@ -591,22 +591,25 @@ defmodule ReqLLM.Provider.Defaults do
     |> ReqLLM.Step.Fixture.maybe_attach(model, user_opts)
   end
 
-  @spec default_finch_option(keyword()) :: keyword()
-  def default_finch_option(options \\ []) do
-    [finch: Keyword.put_new(options, :name, ReqLLM.Application.finch_name())]
+  @spec merge_finch_options(keyword(), keyword()) :: keyword()
+  def merge_finch_options(request_options, defaults \\ []) do
+    {finch, request_options} = Keyword.pop(request_options, :finch)
+    finch_options = Keyword.merge(defaults, normalize_finch_options(finch))
+
+    Keyword.put(request_options, :finch, finch_options)
   end
 
   @spec finch_option(Req.Request.t(), keyword()) :: keyword()
   def finch_option(%Req.Request{} = request, options \\ []) do
     current_options =
-      case request.options[:finch] do
-        nil -> [name: ReqLLM.Application.finch_name()]
-        name when is_atom(name) -> [name: name]
-        options when is_list(options) -> options
-      end
+      normalize_finch_options(request.options[:finch])
 
     [finch: Keyword.merge(current_options, options)]
   end
+
+  defp normalize_finch_options(nil), do: [name: ReqLLM.Application.finch_name()]
+  defp normalize_finch_options(name) when is_atom(name), do: [name: name]
+  defp normalize_finch_options(options) when is_list(options), do: options
 
   @doc """
   Fetches API key and extra common option keys.

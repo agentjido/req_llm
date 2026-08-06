@@ -159,7 +159,7 @@ defmodule ReqLLM.Providers.OpenAICodex do
             url: codex_path(),
             method: :post,
             receive_timeout: timeout
-          ] ++ ReqLLM.Provider.Defaults.default_finch_option(pool_timeout: timeout) ++ http_opts
+          ] ++ ReqLLM.Provider.Defaults.merge_finch_options(http_opts, pool_timeout: timeout)
         )
         |> Req.Request.register_options(req_keys)
         |> Req.Request.merge_options(

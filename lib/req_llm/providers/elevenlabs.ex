@@ -112,7 +112,7 @@ defmodule ReqLLM.Providers.ElevenLabs do
             receive_timeout: timeout,
             body: Jason.encode!(body),
             decode_body: false
-          ] ++ ReqLLM.Provider.Defaults.default_finch_option(pool_timeout: timeout) ++ http_opts
+          ] ++ ReqLLM.Provider.Defaults.merge_finch_options(http_opts, pool_timeout: timeout)
         )
         |> Req.Request.put_header("content-type", "application/json")
         |> Req.Request.put_header("xi-api-key", api_key)
@@ -162,7 +162,7 @@ defmodule ReqLLM.Providers.ElevenLabs do
             params: transcription_query_params(provider_options),
             receive_timeout: timeout,
             form_multipart: form_parts
-          ] ++ ReqLLM.Provider.Defaults.default_finch_option(pool_timeout: timeout) ++ http_opts
+          ] ++ ReqLLM.Provider.Defaults.merge_finch_options(http_opts, pool_timeout: timeout)
         )
         |> Req.Request.put_header("xi-api-key", api_key)
         |> ReqLLM.Step.Retry.attach(opts)

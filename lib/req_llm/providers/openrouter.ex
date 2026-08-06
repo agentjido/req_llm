@@ -246,7 +246,7 @@ defmodule ReqLLM.Providers.OpenRouter do
             receive_timeout: timeout,
             json: body,
             auth: {:bearer, api_key}
-          ] ++ ReqLLM.Provider.Defaults.default_finch_option(pool_timeout: timeout) ++ http_opts
+          ] ++ ReqLLM.Provider.Defaults.merge_finch_options(http_opts, pool_timeout: timeout)
         )
         |> Req.Request.put_header("content-type", "application/json")
         |> Req.Request.put_header("authorization", "Bearer #{api_key}")

@@ -417,8 +417,8 @@ defmodule ReqLLM.Providers.OpenAI do
             method: :post,
             receive_timeout: timeout
           ] ++
-            ReqLLM.Provider.Defaults.default_finch_option(pool_timeout: timeout) ++
-            form_multipart_options ++ http_opts
+            form_multipart_options ++
+            ReqLLM.Provider.Defaults.merge_finch_options(http_opts, pool_timeout: timeout)
         )
         |> Req.Request.register_options(req_keys)
         |> Req.Request.merge_options(image_options)
@@ -466,7 +466,7 @@ defmodule ReqLLM.Providers.OpenAI do
             url: path,
             method: :post,
             receive_timeout: timeout
-          ] ++ ReqLLM.Provider.Defaults.default_finch_option(pool_timeout: timeout) ++ http_opts
+          ] ++ ReqLLM.Provider.Defaults.merge_finch_options(http_opts, pool_timeout: timeout)
         )
         |> Req.Request.register_options(req_keys)
         |> Req.Request.merge_options(
@@ -532,8 +532,8 @@ defmodule ReqLLM.Providers.OpenAI do
             receive_timeout: timeout,
             form_multipart: form_parts
           ] ++
-            ReqLLM.Provider.Defaults.default_finch_option(pool_timeout: timeout) ++
-            auth_req_options(credential) ++ http_opts
+            auth_req_options(credential) ++
+            ReqLLM.Provider.Defaults.merge_finch_options(http_opts, pool_timeout: timeout)
         )
         |> maybe_put_authorization_header(credential)
         |> ReqLLM.Step.Retry.attach(opts)
