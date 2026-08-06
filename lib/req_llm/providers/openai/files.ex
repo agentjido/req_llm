@@ -342,9 +342,9 @@ defmodule ReqLLM.Providers.OpenAI.Files do
           method: method,
           url: path,
           base_url: Keyword.get(opts, :base_url, OpenAI.base_url()),
-          receive_timeout: receive_timeout,
-          pool_timeout: receive_timeout
+          receive_timeout: receive_timeout
         ] ++
+          ReqLLM.Provider.Defaults.default_finch_option(pool_timeout: receive_timeout) ++
           Keyword.take(request_opts, [:form_multipart, :params]) ++
           OpenAI.auth_req_options(credential) ++ http_opts
 

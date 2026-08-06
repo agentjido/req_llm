@@ -407,10 +407,9 @@ defmodule ReqLLM.Provider.Defaults do
             method: :post,
             base_url: Keyword.get(opts, :base_url, provider_mod.default_base_url()),
             receive_timeout: timeout,
-            pool_timeout: timeout,
             form_multipart: form_parts,
             auth: {:bearer, api_key}
-          ] ++ http_opts
+          ] ++ default_finch_option(pool_timeout: timeout) ++ http_opts
         )
         |> Req.Request.put_header("authorization", "Bearer #{api_key}")
         |> ReqLLM.Step.Retry.attach(opts)
@@ -495,12 +494,11 @@ defmodule ReqLLM.Provider.Defaults do
             method: :post,
             base_url: Keyword.get(opts, :base_url, provider_mod.default_base_url()),
             receive_timeout: timeout,
-            pool_timeout: timeout,
             body: Jason.encode!(body),
             auth: {:bearer, api_key},
             # Disable Req's automatic JSON decoding — response is raw audio binary
             decode_body: false
-          ] ++ http_opts
+          ] ++ default_finch_option(pool_timeout: timeout) ++ http_opts
         )
         |> Req.Request.put_header("content-type", "application/json")
         |> Req.Request.put_header("authorization", "Bearer #{api_key}")
@@ -593,9 +591,21 @@ defmodule ReqLLM.Provider.Defaults do
     |> ReqLLM.Step.Fixture.maybe_attach(model, user_opts)
   end
 
-  @spec finch_option(Req.Request.t()) :: keyword()
-  def finch_option(%Req.Request{} = request) do
-    [finch: request.options[:finch] || ReqLLM.Application.finch_name()]
+  @spec default_finch_option(keyword()) :: keyword()
+  def default_finch_option(options \\ []) do
+    [finch: Keyword.put_new(options, :name, ReqLLM.Application.finch_name())]
+  end
+
+  @spec finch_option(Req.Request.t(), keyword()) :: keyword()
+  def finch_option(%Req.Request{} = request, options \\ []) do
+    current_options =
+      case request.options[:finch] do
+        nil -> [name: ReqLLM.Application.finch_name()]
+        name when is_atom(name) -> [name: name]
+        options when is_list(options) -> options
+      end
+
+    [finch: Keyword.merge(current_options, options)]
   end
 
   @doc """

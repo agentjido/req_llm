@@ -248,7 +248,7 @@ defmodule ReqLLM.Step.RetryTest do
           api_key: "test-key"
         )
 
-      assert request.options[:finch] == :custom_finch
+      assert request.options[:finch] == [name: :custom_finch]
     end
 
     test "default_attach preserves caller max_retries" do

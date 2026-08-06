@@ -82,7 +82,7 @@ defmodule ReqLLM.Providers.OpenAITest do
       {:ok, request} =
         OpenAI.prepare_request(:chat, model, context, req_http_options: [finch: :custom_finch])
 
-      assert request.options[:finch] == :custom_finch
+      assert request.options[:finch] == [name: :custom_finch]
     end
 
     test "prepare_request honors caller retry limits in chat and object pipelines" do

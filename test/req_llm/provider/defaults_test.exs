@@ -9,6 +9,34 @@ defmodule ReqLLM.Provider.DefaultsTest do
   alias ReqLLM.Provider.Defaults.ResponseBuilder
   alias ReqLLM.StreamChunk
 
+  describe "Finch options" do
+    test "builds current Req options for the application pool and timeout" do
+      assert Defaults.default_finch_option(pool_timeout: 30_000) ==
+               [finch: [name: ReqLLM.Application.finch_name(), pool_timeout: 30_000]]
+    end
+
+    test "normalizes a legacy pool name" do
+      request = Req.new() |> Req.Request.merge_options(finch: MyApp.CustomFinch)
+
+      assert Defaults.finch_option(request) == [finch: [name: MyApp.CustomFinch]]
+    end
+
+    test "preserves current Finch options and merges overrides" do
+      request =
+        Req.new()
+        |> Req.Request.merge_options(finch: [name: MyApp.CustomFinch, pool_tag: :bulk])
+
+      assert Defaults.finch_option(request, pool_timeout: 30_000) ==
+               [
+                 finch: [
+                   name: MyApp.CustomFinch,
+                   pool_tag: :bulk,
+                   pool_timeout: 30_000
+                 ]
+               ]
+    end
+  end
+
   describe "encode_context_to_openai_format/2" do
     test "encodes text content correctly" do
       test_cases = [

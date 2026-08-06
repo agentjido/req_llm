@@ -41,7 +41,9 @@ defmodule ReqLLM.Providers.Zai.Shared do
       |> Map.update!(:options, fn opts ->
         opts
         |> Map.put(:receive_timeout, timeout)
-        |> Map.put(:pool_timeout, timeout)
+        |> Map.merge(
+          Map.new(ReqLLM.Provider.Defaults.finch_option(request, pool_timeout: timeout))
+        )
       end)
 
     ReqLLM.Provider.Defaults.default_attach(

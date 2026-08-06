@@ -243,9 +243,8 @@ defmodule ReqLLM.Providers.XAI do
           [
             url: path,
             method: :post,
-            receive_timeout: timeout,
-            pool_timeout: timeout
-          ] ++ http_opts
+            receive_timeout: timeout
+          ] ++ ReqLLM.Provider.Defaults.default_finch_option(pool_timeout: timeout) ++ http_opts
         )
         |> Req.Request.register_options(req_keys)
         |> Req.Request.merge_options(

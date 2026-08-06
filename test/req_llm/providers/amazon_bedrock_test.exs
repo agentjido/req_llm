@@ -479,7 +479,7 @@ defmodule ReqLLM.Providers.AmazonBedrockTest do
 
       {:ok, request} = AmazonBedrock.prepare_request(:chat, model, context, opts)
 
-      assert request.options[:finch] == ReqLLM.Application.finch_name()
+      assert request.options[:finch] == [name: ReqLLM.Application.finch_name()]
     end
   end
 
@@ -712,7 +712,7 @@ defmodule ReqLLM.Providers.AmazonBedrockTest do
 
       attached = AmazonBedrock.attach_embedding(request, model, opts)
 
-      assert attached.options[:finch] == ReqLLM.Application.finch_name()
+      assert attached.options[:finch] == [name: ReqLLM.Application.finch_name()]
     end
 
     test "sets content-type header", %{model: model, opts: opts} do

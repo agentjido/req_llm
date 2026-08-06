@@ -224,9 +224,10 @@ defmodule ReqLLM.Providers.Meta do
           [
             url: ResponsesAPI.path(),
             method: :post,
-            receive_timeout: timeout,
-            pool_timeout: timeout
-          ] ++ Keyword.get(opts, :req_http_options, [])
+            receive_timeout: timeout
+          ] ++
+            ReqLLM.Provider.Defaults.default_finch_option(pool_timeout: timeout) ++
+            Keyword.get(opts, :req_http_options, [])
         )
         |> Req.Request.register_options(request_option_keys())
         |> Req.Request.merge_options(

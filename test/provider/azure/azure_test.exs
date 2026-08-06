@@ -91,7 +91,7 @@ defmodule ReqLLM.Providers.AzureTest do
           req_http_options: [finch: :custom_finch]
         )
 
-      assert request.options[:finch] == :custom_finch
+      assert request.options[:finch] == [name: :custom_finch]
     end
 
     test "embedding operation uses correct endpoint" do

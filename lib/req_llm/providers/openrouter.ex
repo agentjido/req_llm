@@ -244,10 +244,9 @@ defmodule ReqLLM.Providers.OpenRouter do
             method: :post,
             base_url: Keyword.get(opts, :base_url, base_url()),
             receive_timeout: timeout,
-            pool_timeout: timeout,
             json: body,
             auth: {:bearer, api_key}
-          ] ++ http_opts
+          ] ++ ReqLLM.Provider.Defaults.default_finch_option(pool_timeout: timeout) ++ http_opts
         )
         |> Req.Request.put_header("content-type", "application/json")
         |> Req.Request.put_header("authorization", "Bearer #{api_key}")
