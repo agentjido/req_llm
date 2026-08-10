@@ -387,6 +387,64 @@ defmodule ReqLLM.Providers.OpenAIImagesTest do
     assert %{generated: %{count: 1, size_class: "1024x1024:low"}} = usage.image_usage
   end
 
+  test "decode_response/1 bills the size class the response reports, not the one requested" do
+    req =
+      Req.new(url: ImagesAPI.path())
+      |> Req.Request.register_options([:model, :output_format, :size, :quality, :context])
+      |> Req.Request.merge_options(
+        model: "gpt-image-1.5",
+        output_format: :png,
+        size: "auto",
+        quality: "auto",
+        context: %Context{messages: []}
+      )
+
+    resp = %Req.Response{
+      status: 200,
+      headers: [],
+      body: %{
+        "created" => 1_234,
+        "data" => [%{"b64_json" => Base.encode64("abc")}],
+        "size" => "1536x1024",
+        "quality" => "high",
+        "usage" => %{"input_tokens" => 14, "output_tokens" => 229, "total_tokens" => 243}
+      }
+    }
+
+    {_req, updated} = ImagesAPI.decode_response({req, resp})
+
+    assert %{generated: %{count: 1, size_class: "1536x1024:high"}} =
+             updated.body.usage.image_usage
+  end
+
+  test "decode_response/1 falls back to requested size class when the body omits it" do
+    req =
+      Req.new(url: ImagesAPI.path())
+      |> Req.Request.register_options([:model, :output_format, :size, :quality, :context])
+      |> Req.Request.merge_options(
+        model: "gpt-image-1.5",
+        output_format: :png,
+        size: "1024x1536",
+        quality: "high",
+        context: %Context{messages: []}
+      )
+
+    resp = %Req.Response{
+      status: 200,
+      headers: [],
+      body: %{
+        "created" => 1_234,
+        "data" => [%{"b64_json" => Base.encode64("abc")}],
+        "size" => "auto"
+      }
+    }
+
+    {_req, updated} = ImagesAPI.decode_response({req, resp})
+
+    assert %{generated: %{count: 1, size_class: "1024x1536:high"}} =
+             updated.body.usage.image_usage
+  end
+
   test "prepare_request/4 keeps prompt-only image generation on generations JSON endpoint" do
     model = %LLMDB.Model{id: "gpt-image-1.5", provider: :openai}
 
