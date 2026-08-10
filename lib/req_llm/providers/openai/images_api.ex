@@ -28,6 +28,14 @@ defmodule ReqLLM.Providers.OpenAI.ImagesAPI do
     put_in(request, [Access.key!(:options), :json], OpenAICompatible.build_generation_body(opts))
   end
 
+  @doc """
+  Builds the Req `:form_multipart` keyword list for the `/images/edits` endpoint.
+
+  This function keeps the existing OpenAI adapter API while the shared codec
+  owns the implementation.
+  """
+  defdelegate edit_image_form_multipart(opts), to: OpenAICompatible
+
   @impl true
   defdelegate decode_response(request_response), to: OpenAICompatible
 

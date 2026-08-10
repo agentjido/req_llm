@@ -73,18 +73,30 @@ defmodule ReqLLM.Images.OpenAICompatible do
     :user
   ]
 
-  # Fails the build if one of the keys above is renamed or dropped from
-  # ReqLLM.Images, rather than silently registering an option that no longer
-  # exists.
-  case @wire_option_keys -- Keyword.keys(ReqLLM.Images.schema().schema) do
-    [] ->
+  @plumbing_option_keys [
+    :provider_options,
+    :req_http_options,
+    :telemetry,
+    :receive_timeout,
+    :total_timeout,
+    :max_retries,
+    :on_unsupported,
+    :fixture
+  ]
+
+  @image_schema_keys ReqLLM.Images.schema().schema |> Keyword.keys()
+  @unknown_option_keys (@wire_option_keys ++ @plumbing_option_keys) -- @image_schema_keys
+  @unclassified_option_keys @image_schema_keys -- (@wire_option_keys ++ @plumbing_option_keys)
+
+  case {@unknown_option_keys, @unclassified_option_keys} do
+    {[], []} ->
       :ok
 
-    unknown ->
+    {unknown, unclassified} ->
       raise CompileError,
         description:
-          "#{inspect(__MODULE__)} @wire_option_keys not present in ReqLLM.Images.schema/0: " <>
-            "#{inspect(unknown)}"
+          "#{inspect(__MODULE__)} image option classification is out of date; " <>
+            "unknown: #{inspect(unknown)}, unclassified: #{inspect(unclassified)}"
   end
 
   # :prompt is derived from the context rather than passed as an option, so it
@@ -240,7 +252,6 @@ defmodule ReqLLM.Images.OpenAICompatible do
         end
 
       {_ratio, _size} ->
-        # An explicit :size wins; the ratio is dropped rather than fought over.
         {Keyword.delete(opts, :aspect_ratio), warnings}
     end
   end
@@ -266,8 +277,6 @@ defmodule ReqLLM.Images.OpenAICompatible do
           orientation(w, h) == wanted ->
             []
 
-          # The family has the orientation, but a nearer size sits across the
-          # boundary (5:4 is closer to square than to DALL-E 3's 1792x1024).
           Enum.any?(offered, fn {_size, {w, h}} -> orientation(w, h) == wanted end) ->
             [
               "aspect_ratio #{inspect(ratio)} resolved to #{size}, the nearest size " <>

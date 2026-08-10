@@ -354,9 +354,6 @@ defmodule ReqLLM.Providers.OpenAI do
   - :object operations maintain OpenAI-specific token handling
   """
   def prepare_request(:image, model_spec, prompt_or_messages, opts) do
-    # Validation runs before Options.process/4 so that translate_options/3 -
-    # which process/4 invokes - only ever sees options the Images API can
-    # express. See ReqLLM.Images.OpenAICompatible for the pipeline contract.
     with {:ok, model} <- ReqLLM.model(model_spec),
          {:ok, context, prompt} <-
            ReqLLM.Images.OpenAICompatible.image_context(prompt_or_messages, opts),

@@ -556,9 +556,6 @@ defmodule ReqLLM.Providers.Azure do
   end
 
   defp do_prepare_image_request(model_spec, prompt_or_messages, opts) do
-    # Validation runs before Options.process/4 so that translate_options/3 -
-    # which process/4 invokes - only ever sees options the Images API can
-    # express. See ReqLLM.Images.OpenAICompatible for the pipeline contract.
     with {:ok, model} <- ReqLLM.model(model_spec),
          model_id = effective_model_id(model),
          :ok <- validate_image_model(model_id),

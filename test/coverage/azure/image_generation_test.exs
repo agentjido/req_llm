@@ -6,10 +6,10 @@ defmodule ReqLLM.Coverage.Azure.ImageGenerationTest do
 
   ## Azure-Specific Requirements
 
-  Set AZURE_OPENAI_API_KEY and AZURE_OPENAI_BASE_URL when recording (and for
-  replay, since request preparation still resolves and validates the base URL).
-  The Azure resource must have a deployment named exactly like the model id
-  (e.g. "gpt-image-2"), or set AZURE_IMAGE_DEPLOYMENT to override.
+  Set AZURE_OPENAI_API_KEY and AZURE_OPENAI_BASE_URL when recording. Replay uses
+  non-network fixture credentials supplied by the shared coverage helper. The
+  Azure resource must have a deployment named exactly like the model id (e.g.
+  "gpt-image-2"), or set AZURE_IMAGE_DEPLOYMENT to override.
 
   Either endpoint format works for every gpt-image model; the committed fixture
   was recorded against the v1 GA base URL:

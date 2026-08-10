@@ -66,22 +66,22 @@ defmodule ReqLLM.Images do
                  source_image: [
                    type: {:custom, __MODULE__, :validate_binary, []},
                    doc:
-                     "Source image bytes for image editing or reference generation (OpenAI image models only)"
+                     "Source image bytes for image editing or reference generation (OpenAI and Azure image models only)"
                  ],
                  source_image_media_type: [
                    type: :string,
                    doc:
-                     "MIME type for source_image, defaults to image/png when source_image is set (OpenAI image models only)"
+                     "MIME type for source_image, defaults to image/png when source_image is set (OpenAI and Azure image models only)"
                  ],
                  mask: [
                    type: {:custom, __MODULE__, :validate_binary, []},
                    doc:
-                     "Optional mask image bytes for inpainting/editing (OpenAI image models only)"
+                     "Optional mask image bytes for inpainting/editing (OpenAI and Azure image models only)"
                  ],
                  mask_media_type: [
                    type: :string,
                    doc:
-                     "MIME type for mask, defaults to image/png when mask is set (OpenAI image models only)"
+                     "MIME type for mask, defaults to image/png when mask is set (OpenAI and Azure image models only)"
                  ],
                  user: [
                    type: :string,

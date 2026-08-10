@@ -60,6 +60,13 @@ defmodule ReqLLM.Providers.OpenAIImagesTest do
     assert body["response_format"] == "b64_json"
   end
 
+  test "OpenAI adapter keeps the multipart edit helper" do
+    opts = [model: "gpt-image-1", prompt: "Edit this", source_image: "image-bytes"]
+
+    assert ImagesAPI.edit_image_form_multipart(opts) ==
+             OpenAICompatible.edit_image_form_multipart(opts)
+  end
+
   test "decode_response/1 converts b64_json to ContentPart.image with revised_prompt metadata" do
     req =
       Req.new(url: ImagesAPI.path())
@@ -210,8 +217,6 @@ defmodule ReqLLM.Providers.OpenAIImagesTest do
       {opts, [warning]} = OpenAICompatible.translate_options([aspect_ratio: "5:4"], "dall-e-3")
 
       assert Keyword.get(opts, :size) == "1024x1024"
-
-      # DALL-E 3 does offer a landscape size; 5:4 is simply nearer to square.
       assert warning =~ "nearest size"
       refute warning =~ "offer no landscape"
     end
@@ -257,11 +262,24 @@ defmodule ReqLLM.Providers.OpenAIImagesTest do
     test "covers every wire option plus the derived prompt" do
       keys = OpenAICompatible.request_option_keys()
 
-      assert :prompt in keys
-
-      for key <- [:n, :size, :aspect_ratio, :quality, :style, :source_image, :mask, :user] do
-        assert key in keys, "expected #{inspect(key)} to be a registered request option"
-      end
+      assert MapSet.new(keys) ==
+               MapSet.new([
+                 :prompt,
+                 :n,
+                 :size,
+                 :aspect_ratio,
+                 :output_format,
+                 :response_format,
+                 :quality,
+                 :style,
+                 :seed,
+                 :negative_prompt,
+                 :source_image,
+                 :source_image_media_type,
+                 :mask,
+                 :mask_media_type,
+                 :user
+               ])
     end
 
     test "excludes plumbing options that request builders register themselves" do

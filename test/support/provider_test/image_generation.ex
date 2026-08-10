@@ -76,14 +76,19 @@ defmodule ReqLLM.ProviderTest.ImageGeneration do
   def prompt(:xai), do: "A simple green square on a white background"
   def prompt(_provider), do: "A simple red square on a white background"
 
+  @azure_fixture_base_url "https://fixture.openai.azure.com/openai/v1"
+
   @doc false
-  # Azure routes requests via deployment names that may differ from model ids.
-  # Only needed when recording; replay never hits the network, so the fallback
-  # (deployment defaults to the model id) is fine without the env var.
   def provider_opts(:azure) do
+    opts =
+      case ReqLLM.Test.Env.fixtures_mode() do
+        :record -> []
+        :replay -> [api_key: "fixture-api-key", base_url: @azure_fixture_base_url]
+      end
+
     case System.get_env("AZURE_IMAGE_DEPLOYMENT") do
-      nil -> []
-      deployment -> [deployment: deployment]
+      nil -> opts
+      deployment -> Keyword.put(opts, :deployment, deployment)
     end
   end
 
