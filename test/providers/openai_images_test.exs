@@ -4,6 +4,7 @@ defmodule ReqLLM.Providers.OpenAIImagesTest do
   @moduletag :capture_log
 
   alias ReqLLM.Context
+  alias ReqLLM.Images.OpenAICompatible
   alias ReqLLM.Providers.OpenAI
   alias ReqLLM.Providers.OpenAI.ImagesAPI
   alias ReqLLM.Response
@@ -91,94 +92,50 @@ defmodule ReqLLM.Providers.OpenAIImagesTest do
     assert part.metadata[:revised_prompt] == "revised"
   end
 
-  describe "normalize_options/2" do
-    test "resolves aspect_ratio to the gpt-image sizes" do
-      for {ratio, expected} <- [
-            {"1:1", "1024x1024"},
-            {"4:3", "1536x1024"},
-            {"16:9", "1536x1024"},
-            {"3:4", "1024x1536"},
-            {"9:16", "1024x1536"}
-          ] do
-        assert {:ok, opts} = ImagesAPI.normalize_options([aspect_ratio: ratio], "gpt-image-1")
-        assert Keyword.get(opts, :size) == expected
-        refute Keyword.has_key?(opts, :aspect_ratio)
-      end
-    end
-
-    test "resolves aspect_ratio to the wider DALL-E 3 sizes" do
-      assert {:ok, opts} = ImagesAPI.normalize_options([aspect_ratio: "16:9"], "dall-e-3")
-      assert Keyword.get(opts, :size) == "1792x1024"
-
-      assert {:ok, opts} = ImagesAPI.normalize_options([aspect_ratio: "9:16"], "dall-e-3")
-      assert Keyword.get(opts, :size) == "1024x1792"
-    end
-
-    test "resolves to the nearest offered ratio, not just the orientation" do
-      assert {:ok, opts} = ImagesAPI.normalize_options([aspect_ratio: "5:4"], "dall-e-3")
-      assert Keyword.get(opts, :size) == "1024x1024"
-    end
-
-    test "DALL-E 2 only offers squares" do
-      assert {:ok, opts} = ImagesAPI.normalize_options([aspect_ratio: "16:9"], "dall-e-2")
-      assert Keyword.get(opts, :size) == "1024x1024"
-    end
-
-    test "unknown model ids fall back to the gpt-image sizes" do
-      assert {:ok, opts} =
-               ImagesAPI.normalize_options([aspect_ratio: "16:9"], "gpt-image-9-ultra")
-
-      assert Keyword.get(opts, :size) == "1536x1024"
-
-      assert {:ok, opts} = ImagesAPI.normalize_options([aspect_ratio: "16:9"], "something-new")
-      assert Keyword.get(opts, :size) == "1536x1024"
-    end
-
-    test "an explicit size wins and aspect_ratio is still stripped" do
-      assert {:ok, opts} =
-               ImagesAPI.normalize_options(
-                 [size: {1024, 1536}, aspect_ratio: "16:9"],
-                 "gpt-image-1"
-               )
-
-      assert Keyword.get(opts, :size) == {1024, 1536}
-      refute Keyword.has_key?(opts, :aspect_ratio)
-    end
-
-    test "leaves options without an aspect_ratio untouched" do
-      assert {:ok, opts} = ImagesAPI.normalize_options([size: "1024x1024"], "gpt-image-1")
-      assert opts == [size: "1024x1024"]
-    end
-
+  describe "validate_options/1" do
     test "rejects malformed aspect ratios" do
       for ratio <- ["16-9", "16:", "0:1", "-1:2", "", "sixteen:nine", 169] do
         assert {:error, %ReqLLM.Error.Invalid.Parameter{}} =
-                 ImagesAPI.normalize_options([aspect_ratio: ratio], "gpt-image-1")
+                 OpenAICompatible.validate_options(aspect_ratio: ratio)
       end
     end
 
     test "rejects a malformed aspect_ratio even when an explicit size is present" do
       assert {:error, %ReqLLM.Error.Invalid.Parameter{parameter: message}} =
-               ImagesAPI.normalize_options(
-                 [aspect_ratio: "sixteen by nine", size: "1024x1024"],
-                 "gpt-image-1"
+               OpenAICompatible.validate_options(
+                 aspect_ratio: "sixteen by nine",
+                 size: "1024x1024"
                )
 
       assert message =~ "aspect_ratio"
     end
 
+    test "accepts a well-formed aspect_ratio, leaving resolution to translate_options/2" do
+      assert :ok = OpenAICompatible.validate_options(aspect_ratio: "16:9")
+      assert :ok = OpenAICompatible.validate_options(aspect_ratio: "16:9", size: "1024x1024")
+    end
+
     test "rejects a mask without a source_image" do
       assert {:error, %ReqLLM.Error.Invalid.Parameter{parameter: message}} =
-               ImagesAPI.normalize_options([mask: <<1, 2, 3>>], "gpt-image-1")
+               OpenAICompatible.validate_options(mask: <<1, 2, 3>>)
 
       assert message =~ "source_image"
+    end
+
+    test "accepts a mask alongside a source_image" do
+      assert :ok = OpenAICompatible.validate_options(mask: <<1, 2, 3>>, source_image: <<4, 5, 6>>)
+    end
+
+    test "accepts options with nothing to reject" do
+      assert :ok = OpenAICompatible.validate_options([])
+      assert :ok = OpenAICompatible.validate_options(size: "1024x1024", quality: :hd)
     end
   end
 
   describe "translate_options/2" do
     test "drops seed and negative_prompt with a warning" do
       {opts, warnings} =
-        ImagesAPI.translate_options([seed: 42, negative_prompt: "blurry"], "gpt-image-1")
+        OpenAICompatible.translate_options([seed: 42, negative_prompt: "blurry"], "gpt-image-1")
 
       refute Keyword.has_key?(opts, :seed)
       refute Keyword.has_key?(opts, :negative_prompt)
@@ -188,7 +145,10 @@ defmodule ReqLLM.Providers.OpenAIImagesTest do
 
     test "leaves explicitly nil unsupported options alone" do
       assert {[seed: nil, negative_prompt: nil], []} =
-               ImagesAPI.translate_options([seed: nil, negative_prompt: nil], "gpt-image-1")
+               OpenAICompatible.translate_options(
+                 [seed: nil, negative_prompt: nil],
+                 "gpt-image-1"
+               )
     end
 
     test "translates the DALL-E quality names for gpt-image models" do
@@ -198,7 +158,7 @@ defmodule ReqLLM.Providers.OpenAIImagesTest do
             {:hd, "high"},
             {"hd", "high"}
           ] do
-        {opts, warnings} = ImagesAPI.translate_options([quality: input], "gpt-image-1")
+        {opts, warnings} = OpenAICompatible.translate_options([quality: input], "gpt-image-1")
 
         assert Keyword.get(opts, :quality) == expected
         assert [warning] = warnings
@@ -208,37 +168,117 @@ defmodule ReqLLM.Providers.OpenAIImagesTest do
 
     test "leaves native gpt-image and DALL-E quality names untouched" do
       assert {[quality: "high"], []} =
-               ImagesAPI.translate_options([quality: "high"], "gpt-image-1")
+               OpenAICompatible.translate_options([quality: "high"], "gpt-image-1")
 
-      assert {[quality: :hd], []} = ImagesAPI.translate_options([quality: :hd], "dall-e-3")
+      assert {[quality: :hd], []} = OpenAICompatible.translate_options([quality: :hd], "dall-e-3")
     end
 
     test "drops :style outside DALL-E 3" do
-      {opts, [warning]} = ImagesAPI.translate_options([style: "vivid"], "gpt-image-1")
+      {opts, [warning]} = OpenAICompatible.translate_options([style: "vivid"], "gpt-image-1")
 
       refute Keyword.has_key?(opts, :style)
       assert warning =~ ":style"
 
-      assert {[style: :vivid], []} = ImagesAPI.translate_options([style: :vivid], "dall-e-3")
+      assert {[style: :vivid], []} =
+               OpenAICompatible.translate_options([style: :vivid], "dall-e-3")
     end
 
-    test "resolves aspect_ratio into a size without warning when the orientation is offered" do
-      {opts, []} = ImagesAPI.translate_options([aspect_ratio: "16:9"], "gpt-image-1")
+    test "resolves aspect_ratio to the gpt-image sizes" do
+      for {ratio, expected} <- [
+            {"1:1", "1024x1024"},
+            {"4:3", "1536x1024"},
+            {"16:9", "1536x1024"},
+            {"3:4", "1024x1536"},
+            {"9:16", "1024x1536"}
+          ] do
+        {opts, []} = OpenAICompatible.translate_options([aspect_ratio: ratio], "gpt-image-1")
 
+        assert Keyword.get(opts, :size) == expected
+        refute Keyword.has_key?(opts, :aspect_ratio)
+      end
+    end
+
+    test "resolves aspect_ratio to the wider DALL-E 3 sizes" do
+      {opts, []} = OpenAICompatible.translate_options([aspect_ratio: "16:9"], "dall-e-3")
+      assert Keyword.get(opts, :size) == "1792x1024"
+
+      {opts, []} = OpenAICompatible.translate_options([aspect_ratio: "9:16"], "dall-e-3")
+      assert Keyword.get(opts, :size) == "1024x1792"
+    end
+
+    test "resolves to the nearest offered ratio, not just the orientation" do
+      {opts, [warning]} = OpenAICompatible.translate_options([aspect_ratio: "5:4"], "dall-e-3")
+
+      assert Keyword.get(opts, :size) == "1024x1024"
+
+      # DALL-E 3 does offer a landscape size; 5:4 is simply nearer to square.
+      assert warning =~ "nearest size"
+      refute warning =~ "offer no landscape"
+    end
+
+    test "unknown model ids fall back to the gpt-image sizes" do
+      {opts, []} = OpenAICompatible.translate_options([aspect_ratio: "16:9"], "gpt-image-9-ultra")
       assert Keyword.get(opts, :size) == "1536x1024"
+
+      {opts, []} = OpenAICompatible.translate_options([aspect_ratio: "16:9"], "something-new")
+      assert Keyword.get(opts, :size) == "1536x1024"
+    end
+
+    test "an explicit size wins and aspect_ratio is still stripped" do
+      {opts, []} =
+        OpenAICompatible.translate_options(
+          [size: {1024, 1536}, aspect_ratio: "16:9"],
+          "gpt-image-1"
+        )
+
+      assert Keyword.get(opts, :size) == {1024, 1536}
       refute Keyword.has_key?(opts, :aspect_ratio)
     end
 
+    test "leaves options without an aspect_ratio untouched" do
+      assert {[size: "1024x1024"], []} =
+               OpenAICompatible.translate_options([size: "1024x1024"], "gpt-image-1")
+    end
+
     test "warns when the model family cannot match the requested orientation" do
-      {opts, [warning]} = ImagesAPI.translate_options([aspect_ratio: "16:9"], "dall-e-2")
+      {opts, [warning]} = OpenAICompatible.translate_options([aspect_ratio: "16:9"], "dall-e-2")
 
       assert Keyword.get(opts, :size) == "1024x1024"
       assert warning =~ "no landscape size"
     end
 
-    test "leaves a malformed aspect_ratio for normalize_options/2 to reject" do
+    test "leaves a malformed aspect_ratio alone, since validate_options/1 rejects it first" do
       assert {[aspect_ratio: "wide"], []} =
-               ImagesAPI.translate_options([aspect_ratio: "wide"], "gpt-image-1")
+               OpenAICompatible.translate_options([aspect_ratio: "wide"], "gpt-image-1")
+    end
+  end
+
+  describe "request_option_keys/0" do
+    test "covers every wire option plus the derived prompt" do
+      keys = OpenAICompatible.request_option_keys()
+
+      assert :prompt in keys
+
+      for key <- [:n, :size, :aspect_ratio, :quality, :style, :source_image, :mask, :user] do
+        assert key in keys, "expected #{inspect(key)} to be a registered request option"
+      end
+    end
+
+    test "excludes plumbing options that request builders register themselves" do
+      keys = OpenAICompatible.request_option_keys()
+
+      for key <- [
+            :provider_options,
+            :req_http_options,
+            :telemetry,
+            :receive_timeout,
+            :total_timeout,
+            :max_retries,
+            :on_unsupported,
+            :fixture
+          ] do
+        refute key in keys, "#{inspect(key)} is plumbing and must not be a request option"
+      end
     end
   end
 

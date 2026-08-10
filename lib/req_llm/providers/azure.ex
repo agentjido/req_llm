@@ -556,11 +556,15 @@ defmodule ReqLLM.Providers.Azure do
   end
 
   defp do_prepare_image_request(model_spec, prompt_or_messages, opts) do
+    # Validation runs before Options.process/4 so that translate_options/3 -
+    # which process/4 invokes - only ever sees options the Images API can
+    # express. See ReqLLM.Images.OpenAICompatible for the pipeline contract.
     with {:ok, model} <- ReqLLM.model(model_spec),
          model_id = effective_model_id(model),
          :ok <- validate_image_model(model_id),
          {:ok, context, prompt} <-
-           ReqLLM.Providers.OpenAI.ImagesAPI.image_context(prompt_or_messages, opts) do
+           ReqLLM.Images.OpenAICompatible.image_context(prompt_or_messages, opts),
+         :ok <- ReqLLM.Images.OpenAICompatible.validate_options(opts) do
       model_family = get_model_family(model_id)
 
       resolved_base_url = resolve_base_url(model_family, opts)
@@ -576,10 +580,8 @@ defmodule ReqLLM.Providers.Azure do
       with {:ok, processed_opts} <-
              ReqLLM.Provider.Options.process(__MODULE__, :image, model, opts_with_context),
            :ok <- validate_image_output_format(processed_opts),
-           {:ok, processed_opts} <-
-             ReqLLM.Providers.OpenAI.ImagesAPI.normalize_options(processed_opts, model_id),
            {api_version, deployment, base_url} = extract_azure_credentials(model, processed_opts),
-           image_edit? = ReqLLM.Providers.OpenAI.ImagesAPI.image_edit?(processed_opts),
+           image_edit? = ReqLLM.Images.OpenAICompatible.image_edit?(processed_opts),
            kind = if(image_edit?, do: :edit, else: :generation),
            {:ok, path} <- get_image_endpoint_path(kind, deployment, api_version, base_url) do
         timeout =
@@ -594,7 +596,7 @@ defmodule ReqLLM.Providers.Azure do
             parts =
               processed_opts
               |> Keyword.merge(prompt: prompt, model: deployment)
-              |> ReqLLM.Providers.OpenAI.ImagesAPI.edit_image_form_multipart()
+              |> ReqLLM.Images.OpenAICompatible.edit_image_form_multipart()
 
             parts =
               if uses_v1_ga_format?(base_url), do: parts, else: Keyword.delete(parts, :model)
@@ -604,7 +606,7 @@ defmodule ReqLLM.Providers.Azure do
             body =
               processed_opts
               |> Keyword.merge(prompt: prompt, model: model_id)
-              |> ReqLLM.Providers.OpenAI.ImagesAPI.build_generation_body()
+              |> ReqLLM.Images.OpenAICompatible.build_generation_body()
               |> Map.delete("model")
               |> maybe_add_model_for_foundry(deployment, base_url)
 
@@ -613,7 +615,7 @@ defmodule ReqLLM.Providers.Azure do
 
         req_keys =
           (supported_provider_options() ++
-             @common_req_keys ++ ReqLLM.Providers.OpenAI.ImagesAPI.request_option_keys())
+             @common_req_keys ++ ReqLLM.Images.OpenAICompatible.request_option_keys())
           |> Enum.uniq()
 
         request =
@@ -711,7 +713,7 @@ defmodule ReqLLM.Providers.Azure do
         {%Req.Request{options: %{operation: :image}} = request, %{status: status} = response}
       )
       when status in 200..299 do
-    ReqLLM.Providers.OpenAI.ImagesAPI.decode_response({request, response})
+    ReqLLM.Images.OpenAICompatible.decode_response({request, response})
   end
 
   def decode_response({request, %{status: status} = response}) when status in 200..299 do
@@ -1409,11 +1411,11 @@ defmodule ReqLLM.Providers.Azure do
   # Foundry endpoints have no documented image generation path, so they are
   # rejected with a clear error instead of guessing a URL.
   defp get_image_endpoint_path(kind, deployment, api_version, base_url) do
-    suffix = if kind == :edit, do: "edits", else: "generations"
+    path = ReqLLM.Images.OpenAICompatible.path(kind)
 
     cond do
       uses_v1_ga_format?(base_url) ->
-        {:ok, "/images/#{suffix}"}
+        {:ok, path}
 
       uses_foundry_format?(base_url) ->
         {:error,
@@ -1425,7 +1427,7 @@ defmodule ReqLLM.Providers.Azure do
          )}
 
       true ->
-        {:ok, "/deployments/#{deployment}/images/#{suffix}?api-version=#{api_version}"}
+        {:ok, "/deployments/#{deployment}#{path}?api-version=#{api_version}"}
     end
   end
 

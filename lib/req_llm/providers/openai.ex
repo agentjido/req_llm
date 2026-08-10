@@ -14,7 +14,9 @@ defmodule ReqLLM.Providers.OpenAI do
     for models such as GPT-4.1, GPT-4o, o-series, and GPT-5.
 
   - **ImagesAPI** (`ReqLLM.Providers.OpenAI.ImagesAPI`) - Handles `/v1/images/generations` endpoint
-    for image generation models (DALL-E 2, DALL-E 3, gpt-image-*).
+    for image generation models (DALL-E 2, DALL-E 3, gpt-image-*). A thin adapter over
+    `ReqLLM.Images.OpenAICompatible`, the codec shared with every provider that speaks the
+    same wire format.
 
   The provider automatically routes requests based on the operation type and model metadata:
   - `:image` operations → uses ImagesAPI driver
@@ -352,20 +354,19 @@ defmodule ReqLLM.Providers.OpenAI do
   - :object operations maintain OpenAI-specific token handling
   """
   def prepare_request(:image, model_spec, prompt_or_messages, opts) do
+    # Validation runs before Options.process/4 so that translate_options/3 -
+    # which process/4 invokes - only ever sees options the Images API can
+    # express. See ReqLLM.Images.OpenAICompatible for the pipeline contract.
     with {:ok, model} <- ReqLLM.model(model_spec),
          {:ok, context, prompt} <-
-           ReqLLM.Providers.OpenAI.ImagesAPI.image_context(prompt_or_messages, opts),
+           ReqLLM.Images.OpenAICompatible.image_context(prompt_or_messages, opts),
+         :ok <- ReqLLM.Images.OpenAICompatible.validate_options(opts),
          opts_with_context = Keyword.put(opts, :context, context),
          http_opts = Keyword.get(opts, :req_http_options, []),
          {:ok, processed_opts} <-
-           ReqLLM.Provider.Options.process(__MODULE__, :image, model, opts_with_context),
-         {:ok, processed_opts} <-
-           ReqLLM.Providers.OpenAI.ImagesAPI.normalize_options(
-             processed_opts,
-             model.provider_model_id || model.id
-           ) do
+           ReqLLM.Provider.Options.process(__MODULE__, :image, model, opts_with_context) do
       api_mod = ReqLLM.Providers.OpenAI.ImagesAPI
-      image_edit? = api_mod.image_edit?(processed_opts)
+      image_edit? = ReqLLM.Images.OpenAICompatible.image_edit?(processed_opts)
       path = if image_edit?, do: api_mod.path(:edit), else: api_mod.path()
 
       req_keys =
@@ -379,7 +380,7 @@ defmodule ReqLLM.Providers.OpenAI do
              :api_mod,
              :base_url
            ] ++
-           api_mod.request_option_keys())
+           ReqLLM.Images.OpenAICompatible.request_option_keys())
         |> Enum.uniq()
 
       timeout = get_timeout_for_operation(:image, processed_opts)
@@ -398,7 +399,10 @@ defmodule ReqLLM.Providers.OpenAI do
 
       form_multipart_options =
         if image_edit? do
-          [form_multipart: api_mod.edit_image_form_multipart(image_options)]
+          [
+            form_multipart:
+              ReqLLM.Images.OpenAICompatible.edit_image_form_multipart(image_options)
+          ]
         else
           []
         end
@@ -643,7 +647,7 @@ defmodule ReqLLM.Providers.OpenAI do
   """
   @impl ReqLLM.Provider
   def translate_options(:image, %LLMDB.Model{} = model, opts) do
-    ReqLLM.Providers.OpenAI.ImagesAPI.translate_options(opts, model.provider_model_id || model.id)
+    ReqLLM.Images.OpenAICompatible.translate_options(opts, model.provider_model_id || model.id)
   end
 
   def translate_options(op, %LLMDB.Model{} = model, opts) do

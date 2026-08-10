@@ -6,7 +6,7 @@ defmodule ReqLLM.Providers.Azure.ImageTest do
   - Endpoint path construction across traditional / v1 GA / Foundry formats
   - Generation body encoding (no model/response_format leakage)
   - Multipart edit requests (no JSON content-type, model part handling)
-  - Response decoding via the OpenAI ImagesAPI codec
+  - Response decoding via the shared `ReqLLM.Images.OpenAICompatible` codec
 
   Does NOT test live API calls - see test/coverage/azure/ for integration tests.
   """
