@@ -46,12 +46,12 @@ These options are supported across providers (where the model allows):
 |--------|------|-------------|
 | `n` | integer | Number of images to generate (provider-dependent; gemini-2.5-flash-image and gemini-3-pro-image-preview reject `n`) |
 | `size` | string or tuple | Image dimensions, e.g., `"1024x1024"` or `{1024, 1024}` |
-| `aspect_ratio` | string | Aspect ratio, e.g., `"16:9"` or `"1:1"` |
+| `aspect_ratio` | string | Aspect ratio, e.g., `"16:9"` or `"1:1"` (on OpenAI and Azure this resolves to the nearest supported `size` — see below) |
 | `output_format` | atom | Image format: `:png`, `:jpeg`, or `:webp` |
 | `response_format` | atom | Return type: `:binary` (default) or `:url` |
 | `quality` | atom/string | Image quality (provider-dependent) |
-| `seed` | integer | Random seed for reproducibility (provider-dependent) |
-| `negative_prompt` | string | What to avoid in the image (provider-dependent) |
+| `seed` | integer | Random seed for reproducibility (provider-dependent; **not supported by OpenAI or Azure**) |
+| `negative_prompt` | string | What to avoid in the image (provider-dependent; **not supported by OpenAI or Azure**) |
 | `source_image` | binary | Source image bytes for editing or reference generation (OpenAI and Azure image models only) |
 | `source_image_media_type` | string | MIME type for `source_image` (default: `"image/png"`; OpenAI and Azure image models only) |
 | `mask` | binary | Optional mask image bytes for inpainting/editing (OpenAI and Azure image models only) |
@@ -86,6 +86,20 @@ The GPT Image family provides superior instruction following, text rendering, de
 | `gpt-image-1-mini` | Cost-effective option for simpler use cases |
 | `dall-e-3` | Removed from the OpenAI API on May 12, 2026; use GPT Image models instead |
 | `dall-e-2` | Removed from the OpenAI API on May 12, 2026; use GPT Image models instead |
+
+### Sizes and Aspect Ratios
+
+The Images API accepts a fixed set of sizes rather than a free-form aspect ratio, so `aspect_ratio` is resolved to the closest size the model offers. An explicit `size` always wins.
+
+| Requested ratio | GPT Image | DALL-E 3 | DALL-E 2 |
+|---|---|---|---|
+| square (`"1:1"`) | `1024x1024` | `1024x1024` | `1024x1024` |
+| landscape (`"16:9"`, `"3:2"`, …) | `1536x1024` | `1792x1024` | `1024x1024` |
+| portrait (`"9:16"`, `"2:3"`, …) | `1024x1536` | `1024x1792` | `1024x1024` |
+
+Because only three shapes exist, the result is an approximation: `"16:9"` yields a 3:2 image on GPT Image. Pass `size` directly when you need exact dimensions.
+
+`seed` and `negative_prompt` have no equivalent in the Images API and are rejected with `ReqLLM.Error.Invalid.Parameter` before the request is sent, rather than being forwarded and returning an `unknown_parameter` error from the provider. To steer away from unwanted content, describe the exclusion in the prompt itself.
 
 ### Image Editing
 
@@ -247,6 +261,7 @@ Notes:
 - All three gpt-image models work on either endpoint format. A `DeploymentNotFound` (HTTP 404) means the `deployment` you passed does not exist on the resource — deployment names are chosen when the deployment is created and often differ from the model id, so pass `deployment:` explicitly rather than relying on the model-id default.
 - The default `api_version` (`2025-04-01-preview`) satisfies gpt-image models; override via `provider_options: [api_version: ...]` if needed.
 - GPT Image models always return base64 image data (`:binary`); URL responses are not available.
+- Option handling matches OpenAI's exactly, including `aspect_ratio` resolving to the nearest supported size and `seed`/`negative_prompt` being rejected — see [Sizes and Aspect Ratios](#sizes-and-aspect-ratios).
 - DALL-E models are retired on Azure — use gpt-image models.
 - Only `gpt-image-*` model ids are accepted. Chat models (e.g. `azure:gpt-4o`) are rejected locally with a `ReqLLM.Error.Invalid.Parameter` before any HTTP call, rather than failing at the API.
 - The `deployment` name is free-form and affects only the URL/body identifier. Option handling is keyed off the catalog model id, so a deployment named after a different model does not change which options are sent.

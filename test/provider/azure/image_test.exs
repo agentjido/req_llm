@@ -90,21 +90,74 @@ defmodule ReqLLM.Providers.Azure.ImageTest do
       assert URI.to_string(request.url) =~ "api-version=2026-01-01-preview"
     end
 
-    test "passes n, output_format, seed, and negative_prompt into the body" do
-      request =
-        prepare!(
-          base_url: @traditional_base_url,
-          n: 3,
-          output_format: :webp,
-          seed: 42,
-          negative_prompt: "blurry"
-        )
+    test "passes n and output_format into the body" do
+      request = prepare!(base_url: @traditional_base_url, n: 3, output_format: :webp)
 
       body = request.options[:json]
       assert body["n"] == 3
       assert body["output_format"] == "webp"
-      assert body["seed"] == 42
-      assert body["negative_prompt"] == "blurry"
+    end
+
+    # The Images API rejects these with `unknown_parameter`, so they are refused
+    # before the request goes out rather than surfacing as a provider 400.
+    for {option, value} <- [seed: 42, negative_prompt: "blurry"] do
+      test "rejects :#{option}, which the Images API does not accept" do
+        assert {:error, %ReqLLM.Error.Invalid.Parameter{parameter: message}} =
+                 Azure.prepare_request(
+                   :image,
+                   "azure:gpt-image-1",
+                   "A simple red square",
+                   [
+                     api_key: "test-api-key",
+                     deployment: "my-image-deploy",
+                     base_url: @traditional_base_url
+                   ] ++ [{unquote(option), unquote(value)}]
+                 )
+
+        assert message =~ to_string(unquote(option))
+      end
+    end
+
+    test "resolves aspect_ratio to the nearest size the model offers" do
+      for {ratio, expected} <- [
+            {"1:1", "1024x1024"},
+            {"16:9", "1536x1024"},
+            {"3:2", "1536x1024"},
+            {"9:16", "1024x1536"},
+            {"2:3", "1024x1536"}
+          ] do
+        request = prepare!(base_url: @traditional_base_url, aspect_ratio: ratio)
+
+        assert request.options[:json]["size"] == expected
+      end
+    end
+
+    test "an explicit size wins over aspect_ratio" do
+      request =
+        prepare!(base_url: @traditional_base_url, size: "1024x1024", aspect_ratio: "16:9")
+
+      assert request.options[:json]["size"] == "1024x1024"
+    end
+
+    test "never sends aspect_ratio on the wire" do
+      request = prepare!(base_url: @traditional_base_url, aspect_ratio: "16:9")
+
+      refute Map.has_key?(request.options[:json], "aspect_ratio")
+    end
+
+    test "rejects a malformed aspect_ratio" do
+      assert {:error, %ReqLLM.Error.Invalid.Parameter{parameter: message}} =
+               Azure.prepare_request(
+                 :image,
+                 "azure:gpt-image-1",
+                 "A simple red square",
+                 api_key: "test-api-key",
+                 deployment: "my-image-deploy",
+                 base_url: @traditional_base_url,
+                 aspect_ratio: "sixteen by nine"
+               )
+
+      assert message =~ "aspect_ratio"
     end
 
     test "returns an error tuple for invalid options instead of raising" do

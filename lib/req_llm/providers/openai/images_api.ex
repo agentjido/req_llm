@@ -6,8 +6,9 @@ defmodule ReqLLM.Providers.OpenAI.ImagesAPI do
 
   Also serves as the shared image codec for providers that expose the same wire
   format (currently Azure OpenAI). Those providers reuse `image_context/2`,
-  `build_generation_body/1`, `edit_image_form_multipart/1`, `image_edit?/1` and
-  `decode_response/1` rather than duplicating the encoding rules.
+  `normalize_options/2`, `build_generation_body/1`, `edit_image_form_multipart/1`,
+  `image_edit?/1` and `decode_response/1` rather than duplicating the encoding
+  rules.
   """
 
   @behaviour ReqLLM.Providers.OpenAI.API
@@ -40,7 +41,11 @@ defmodule ReqLLM.Providers.OpenAI.ImagesAPI do
 
   Accepts a map or keyword list with `:model`, `:prompt`, and the optional
   image generation options (`:n`, `:size`, `:quality`, `:style`, `:user`,
-  `:output_format`, `:response_format`, `:seed`, `:negative_prompt`).
+  `:output_format`, `:response_format`).
+
+  Expects options that have already been through `normalize_options/2`, which
+  resolves `:aspect_ratio` into `:size` and rejects options the Images API has
+  no field for.
 
   `:model` must be the catalog model id rather than a provider-side alias: it
   decides whether `response_format` is a legal field for the target model.
@@ -61,9 +66,113 @@ defmodule ReqLLM.Providers.OpenAI.ImagesAPI do
     |> maybe_put_string("style", opts[:style])
     |> maybe_put_string("user", opts[:user])
     |> maybe_put_output_format(opts[:output_format])
-    |> maybe_put_integer("seed", opts[:seed])
-    |> maybe_put_string("negative_prompt", opts[:negative_prompt])
   end
+
+  # The Images API exposes orientation through a fixed set of sizes rather than a
+  # free-form aspect ratio, so a requested ratio is resolved to the square,
+  # landscape or portrait size the model actually offers.
+  @sizes_by_family %{
+    "gpt-image" => %{square: "1024x1024", landscape: "1536x1024", portrait: "1024x1536"},
+    "dall-e-3" => %{square: "1024x1024", landscape: "1792x1024", portrait: "1024x1792"},
+    "dall-e-2" => %{square: "1024x1024", landscape: "1024x1024", portrait: "1024x1024"}
+  }
+
+  # Generic image options with no Images API equivalent. Sending them anyway
+  # makes the API reject the whole request with `unknown_parameter`, so they are
+  # refused up front where the message can say what to do instead.
+  @unsupported_options [
+    seed: "OpenAI image models do not accept a random seed",
+    negative_prompt:
+      "OpenAI image models have no negative prompt - describe what to avoid in the prompt itself"
+  ]
+
+  @doc """
+  Normalizes generic image options into what the OpenAI Images API accepts.
+
+  Resolves `:aspect_ratio` into the closest `:size` the model offers, and
+  rejects options the API has no field for. An explicit `:size` always wins over
+  `:aspect_ratio`.
+
+  `model_id` must be the catalog model id, since the available sizes differ
+  between the gpt-image and DALL-E families.
+  """
+  @spec normalize_options(keyword(), String.t() | nil) ::
+          {:ok, keyword()} | {:error, Exception.t()}
+  def normalize_options(opts, model_id) when is_list(opts) do
+    with :ok <- reject_unsupported_options(opts) do
+      resolve_aspect_ratio(opts, model_id)
+    end
+  end
+
+  defp reject_unsupported_options(opts) do
+    Enum.reduce_while(@unsupported_options, :ok, fn {key, reason}, :ok ->
+      if is_nil(Keyword.get(opts, key)) do
+        {:cont, :ok}
+      else
+        {:halt,
+         {:error, ReqLLM.Error.Invalid.Parameter.exception(parameter: "#{key}: #{reason}")}}
+      end
+    end)
+  end
+
+  defp resolve_aspect_ratio(opts, model_id) do
+    case {Keyword.get(opts, :aspect_ratio), Keyword.get(opts, :size)} do
+      {nil, _size} ->
+        {:ok, Keyword.delete(opts, :aspect_ratio)}
+
+      {_ratio, size} when not is_nil(size) ->
+        {:ok, Keyword.delete(opts, :aspect_ratio)}
+
+      {ratio, nil} ->
+        case aspect_ratio_size(ratio, model_id) do
+          {:ok, size} ->
+            {:ok, opts |> Keyword.delete(:aspect_ratio) |> Keyword.put(:size, size)}
+
+          :error ->
+            {:error,
+             ReqLLM.Error.Invalid.Parameter.exception(
+               parameter:
+                 "aspect_ratio: expected a ratio like \"16:9\" or \"1:1\", got #{inspect(ratio)}"
+             )}
+        end
+    end
+  end
+
+  defp aspect_ratio_size(ratio, model_id) do
+    with {:ok, {width, height}} <- parse_aspect_ratio(ratio) do
+      orientation =
+        cond do
+          width == height -> :square
+          width > height -> :landscape
+          true -> :portrait
+        end
+
+      {:ok, sizes_for_model(model_id)[orientation]}
+    end
+  end
+
+  defp parse_aspect_ratio(ratio) when is_binary(ratio) do
+    with [width, height] <- String.split(ratio, ":", parts: 2),
+         {width, ""} <- Integer.parse(String.trim(width)),
+         {height, ""} <- Integer.parse(String.trim(height)),
+         true <- width > 0 and height > 0 do
+      {:ok, {width, height}}
+    else
+      _ -> :error
+    end
+  end
+
+  defp parse_aspect_ratio(_ratio), do: :error
+
+  # Unknown ids fall back to the gpt-image sizes: new image models join that
+  # family, and the DALL-E ones are frozen.
+  defp sizes_for_model(model_id) when is_binary(model_id) do
+    Enum.find_value(@sizes_by_family, @sizes_by_family["gpt-image"], fn {prefix, sizes} ->
+      if String.starts_with?(model_id, prefix), do: sizes
+    end)
+  end
+
+  defp sizes_for_model(_model_id), do: @sizes_by_family["gpt-image"]
 
   @doc """
   Returns true when the options describe an image *edit* rather than a generation.
@@ -332,10 +441,6 @@ defmodule ReqLLM.Providers.OpenAI.ImagesAPI do
   end
 
   defp maybe_put_string(body, _key, _), do: body
-
-  defp maybe_put_integer(body, _key, nil), do: body
-  defp maybe_put_integer(body, key, value) when is_integer(value), do: Map.put(body, key, value)
-  defp maybe_put_integer(body, _key, _), do: body
 
   defp maybe_put_output_format(body, nil), do: body
   defp maybe_put_output_format(body, :png), do: Map.put(body, "output_format", "png")

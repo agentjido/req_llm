@@ -89,6 +89,111 @@ defmodule ReqLLM.Providers.OpenAIImagesTest do
     assert part.metadata[:revised_prompt] == "revised"
   end
 
+  describe "normalize_options/2" do
+    test "resolves aspect_ratio to the gpt-image sizes" do
+      for {ratio, expected} <- [
+            {"1:1", "1024x1024"},
+            {"4:3", "1536x1024"},
+            {"16:9", "1536x1024"},
+            {"3:4", "1024x1536"},
+            {"9:16", "1024x1536"}
+          ] do
+        assert {:ok, opts} = ImagesAPI.normalize_options([aspect_ratio: ratio], "gpt-image-1")
+        assert Keyword.get(opts, :size) == expected
+        refute Keyword.has_key?(opts, :aspect_ratio)
+      end
+    end
+
+    test "resolves aspect_ratio to the wider DALL-E 3 sizes" do
+      assert {:ok, opts} = ImagesAPI.normalize_options([aspect_ratio: "16:9"], "dall-e-3")
+      assert Keyword.get(opts, :size) == "1792x1024"
+
+      assert {:ok, opts} = ImagesAPI.normalize_options([aspect_ratio: "9:16"], "dall-e-3")
+      assert Keyword.get(opts, :size) == "1024x1792"
+    end
+
+    test "DALL-E 2 only offers squares" do
+      assert {:ok, opts} = ImagesAPI.normalize_options([aspect_ratio: "16:9"], "dall-e-2")
+      assert Keyword.get(opts, :size) == "1024x1024"
+    end
+
+    test "unknown model ids fall back to the gpt-image sizes" do
+      assert {:ok, opts} =
+               ImagesAPI.normalize_options([aspect_ratio: "16:9"], "gpt-image-9-ultra")
+
+      assert Keyword.get(opts, :size) == "1536x1024"
+
+      assert {:ok, opts} = ImagesAPI.normalize_options([aspect_ratio: "16:9"], "something-new")
+      assert Keyword.get(opts, :size) == "1536x1024"
+    end
+
+    test "an explicit size wins and aspect_ratio is still stripped" do
+      assert {:ok, opts} =
+               ImagesAPI.normalize_options(
+                 [size: {1024, 1536}, aspect_ratio: "16:9"],
+                 "gpt-image-1"
+               )
+
+      assert Keyword.get(opts, :size) == {1024, 1536}
+      refute Keyword.has_key?(opts, :aspect_ratio)
+    end
+
+    test "leaves options without an aspect_ratio untouched" do
+      assert {:ok, opts} = ImagesAPI.normalize_options([size: "1024x1024"], "gpt-image-1")
+      assert opts == [size: "1024x1024"]
+    end
+
+    test "rejects malformed aspect ratios" do
+      for ratio <- ["16-9", "16:", "0:1", "-1:2", "", "sixteen:nine", 169] do
+        assert {:error, %ReqLLM.Error.Invalid.Parameter{}} =
+                 ImagesAPI.normalize_options([aspect_ratio: ratio], "gpt-image-1")
+      end
+    end
+
+    test "rejects options the Images API has no field for" do
+      assert {:error, %ReqLLM.Error.Invalid.Parameter{parameter: message}} =
+               ImagesAPI.normalize_options([seed: 42], "gpt-image-1")
+
+      assert message =~ "seed"
+
+      assert {:error, %ReqLLM.Error.Invalid.Parameter{parameter: message}} =
+               ImagesAPI.normalize_options([negative_prompt: "blurry"], "gpt-image-1")
+
+      assert message =~ "negative_prompt"
+    end
+
+    test "an explicitly nil unsupported option is not a rejection" do
+      assert {:ok, _opts} =
+               ImagesAPI.normalize_options([seed: nil, negative_prompt: nil], "gpt-image-1")
+    end
+  end
+
+  test "prepare_request/4 resolves aspect_ratio into size for image edits too" do
+    model = %LLMDB.Model{id: "gpt-image-1.5", provider: :openai}
+
+    assert {:ok, request} =
+             OpenAI.prepare_request(:image, model, "Make the sky stormy",
+               api_key: "test-key",
+               source_image: <<1, 2, 3>>,
+               aspect_ratio: "9:16"
+             )
+
+    assert request.options[:form_multipart][:size] == "1024x1536"
+    refute Keyword.has_key?(request.options[:form_multipart], :aspect_ratio)
+  end
+
+  test "prepare_request/4 rejects seed before the request is built" do
+    model = %LLMDB.Model{id: "gpt-image-1.5", provider: :openai}
+
+    assert {:error, %ReqLLM.Error.Invalid.Parameter{parameter: message}} =
+             OpenAI.prepare_request(:image, model, "A lighthouse",
+               api_key: "test-key",
+               seed: 7
+             )
+
+    assert message =~ "seed"
+  end
+
   test "decode_response/1 carries the body's token usage alongside image usage" do
     req =
       Req.new(url: ImagesAPI.path())

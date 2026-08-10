@@ -598,6 +598,8 @@ defmodule ReqLLM.Providers.Azure do
       # ReqLLM error instead of a MatchError.
       with {:ok, processed_opts} <-
              ReqLLM.Provider.Options.process(__MODULE__, :image, model, opts_with_context),
+           {:ok, processed_opts} <-
+             ReqLLM.Providers.OpenAI.ImagesAPI.normalize_options(processed_opts, model_id),
            {api_version, deployment, base_url} = extract_azure_credentials(model, processed_opts),
            image_edit? = ReqLLM.Providers.OpenAI.ImagesAPI.image_edit?(processed_opts),
            kind = if(image_edit?, do: :edit, else: :generation),

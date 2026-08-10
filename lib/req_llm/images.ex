@@ -29,7 +29,8 @@ defmodule ReqLLM.Images do
                  ],
                  aspect_ratio: [
                    type: :string,
-                   doc: ~s(Requested aspect ratio, e.g. "1:1" or "16:9")
+                   doc:
+                     ~s(Requested aspect ratio, e.g. "1:1" or "16:9"; OpenAI and Azure resolve it to the nearest size they offer, and an explicit :size wins)
                  ],
                  output_format: [
                    type: {:in, @output_formats},
@@ -43,7 +44,8 @@ defmodule ReqLLM.Images do
                  ],
                  seed: [
                    type: :integer,
-                   doc: "Random seed for deterministic image generation (provider dependent)"
+                   doc:
+                     "Random seed for deterministic image generation (provider dependent; rejected by OpenAI and Azure image models)"
                  ],
                  quality: [
                    type: {:or, [{:in, [:standard, :hd]}, :string]},
@@ -55,7 +57,8 @@ defmodule ReqLLM.Images do
                  ],
                  negative_prompt: [
                    type: :string,
-                   doc: "Negative prompt text (provider dependent)"
+                   doc:
+                     "Negative prompt text (provider dependent; rejected by OpenAI and Azure image models, which have no such field)"
                  ],
                  source_image: [
                    type: {:custom, __MODULE__, :validate_binary, []},

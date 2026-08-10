@@ -358,7 +358,12 @@ defmodule ReqLLM.Providers.OpenAI do
          opts_with_context = Keyword.put(opts, :context, context),
          http_opts = Keyword.get(opts, :req_http_options, []),
          {:ok, processed_opts} <-
-           ReqLLM.Provider.Options.process(__MODULE__, :image, model, opts_with_context) do
+           ReqLLM.Provider.Options.process(__MODULE__, :image, model, opts_with_context),
+         {:ok, processed_opts} <-
+           ReqLLM.Providers.OpenAI.ImagesAPI.normalize_options(
+             processed_opts,
+             model.provider_model_id || model.id
+           ) do
       api_mod = ReqLLM.Providers.OpenAI.ImagesAPI
       image_edit? = api_mod.image_edit?(processed_opts)
       path = if image_edit?, do: api_mod.path(:edit), else: api_mod.path()
