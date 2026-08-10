@@ -532,44 +532,46 @@ defmodule ReqLLM.Providers.Azure do
 
       http_opts = Keyword.get(opts, :req_http_options, [])
 
-      {:ok, processed_opts} =
-        ReqLLM.Provider.Options.process(__MODULE__, :embedding, model, opts_with_text)
+      # Option validation failures are returned, not matched, so callers get a
+      # ReqLLM error instead of a MatchError.
+      with {:ok, processed_opts} <-
+             ReqLLM.Provider.Options.process(__MODULE__, :embedding, model, opts_with_text) do
+        {api_version, deployment, base_url} =
+          extract_azure_credentials(model, processed_opts)
 
-      {api_version, deployment, base_url} =
-        extract_azure_credentials(model, processed_opts)
+        formatter = get_formatter(model_id, model)
 
-      formatter = get_formatter(model_id, model)
+        path = get_embedding_endpoint_path(deployment, api_version, base_url)
 
-      path = get_embedding_endpoint_path(deployment, api_version, base_url)
+        body =
+          formatter.format_embedding_request(model_id, text, processed_opts)
+          |> maybe_add_model_for_foundry(deployment, base_url)
 
-      body =
-        formatter.format_embedding_request(model_id, text, processed_opts)
-        |> maybe_add_model_for_foundry(deployment, base_url)
+        req_keys = supported_provider_options() ++ @common_req_keys
 
-      req_keys = supported_provider_options() ++ @common_req_keys
-
-      request =
-        Req.new(
-          [
-            url: path,
-            method: :post,
-            json: body,
-            receive_timeout: Keyword.get(processed_opts, :receive_timeout, 30_000)
-          ] ++ http_opts
-        )
-        |> Req.Request.register_options(req_keys)
-        |> Req.Request.merge_options(
-          Keyword.take(processed_opts, req_keys) ++
+        request =
+          Req.new(
             [
-              model: model.id,
-              base_url: base_url
-            ]
-        )
-        |> Req.Request.put_private(:model, model)
-        |> Req.Request.put_private(:formatter, formatter)
-        |> attach(model, processed_opts)
+              url: path,
+              method: :post,
+              json: body,
+              receive_timeout: Keyword.get(processed_opts, :receive_timeout, 30_000)
+            ] ++ http_opts
+          )
+          |> Req.Request.register_options(req_keys)
+          |> Req.Request.merge_options(
+            Keyword.take(processed_opts, req_keys) ++
+              [
+                model: model.id,
+                base_url: base_url
+              ]
+          )
+          |> Req.Request.put_private(:model, model)
+          |> Req.Request.put_private(:formatter, formatter)
+          |> attach(model, processed_opts)
 
-      {:ok, request}
+        {:ok, request}
+      end
     end
   end
 
@@ -592,16 +594,14 @@ defmodule ReqLLM.Providers.Azure do
 
       http_opts = Keyword.get(opts, :req_http_options, [])
 
-      {:ok, processed_opts} =
-        ReqLLM.Provider.Options.process(__MODULE__, :image, model, opts_with_context)
-
-      {api_version, deployment, base_url} =
-        extract_azure_credentials(model, processed_opts)
-
-      image_edit? = Keyword.has_key?(processed_opts, :source_image)
-      kind = if image_edit?, do: :edit, else: :generation
-
-      with {:ok, path} <- get_image_endpoint_path(kind, deployment, api_version, base_url) do
+      # Option validation failures are returned, not matched, so callers get a
+      # ReqLLM error instead of a MatchError.
+      with {:ok, processed_opts} <-
+             ReqLLM.Provider.Options.process(__MODULE__, :image, model, opts_with_context),
+           {api_version, deployment, base_url} = extract_azure_credentials(model, processed_opts),
+           image_edit? = ReqLLM.Providers.OpenAI.ImagesAPI.image_edit?(processed_opts),
+           kind = if(image_edit?, do: :edit, else: :generation),
+           {:ok, path} <- get_image_endpoint_path(kind, deployment, api_version, base_url) do
         timeout =
           Keyword.get(
             processed_opts,
@@ -609,11 +609,12 @@ defmodule ReqLLM.Providers.Azure do
             Application.get_env(:req_llm, :image_receive_timeout, 120_000)
           )
 
-        body_opts = Keyword.merge(processed_opts, prompt: prompt, model: deployment)
-
         body_options =
           if image_edit? do
-            parts = ReqLLM.Providers.OpenAI.ImagesAPI.edit_image_form_multipart(body_opts)
+            parts =
+              processed_opts
+              |> Keyword.merge(prompt: prompt, model: deployment)
+              |> ReqLLM.Providers.OpenAI.ImagesAPI.edit_image_form_multipart()
 
             # Traditional format carries the deployment in the URL; drop the model part.
             parts =
@@ -621,8 +622,14 @@ defmodule ReqLLM.Providers.Azure do
 
             [form_multipart: parts]
           else
+            # Body is built against the catalog model id so option gating (e.g.
+            # response_format) keys off the real model rather than the
+            # arbitrarily-named deployment; the wire "model" is then replaced
+            # with the deployment for the formats that expect it in the body.
             body =
-              ReqLLM.Providers.OpenAI.ImagesAPI.build_generation_body(body_opts)
+              processed_opts
+              |> Keyword.merge(prompt: prompt, model: model_id)
+              |> ReqLLM.Providers.OpenAI.ImagesAPI.build_generation_body()
               |> Map.delete("model")
               |> maybe_add_model_for_foundry(deployment, base_url)
 
@@ -1319,8 +1326,10 @@ defmodule ReqLLM.Providers.Azure do
   end
 
   # Validates that a model supports image generation (gpt-image-* models only).
+  # Checked against the model id prefix rather than the coarse "gpt" family, so
+  # chat models like gpt-4o are rejected here instead of failing server-side.
   defp validate_image_model(model_id) do
-    if get_model_family(model_id) == "gpt" do
+    if is_binary(model_id) and String.starts_with?(model_id, "gpt-image") do
       :ok
     else
       {:error,

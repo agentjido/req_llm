@@ -45,7 +45,7 @@ defmodule ReqLLM.ProviderTest.ImageGeneration do
                 fixture_opts(
                   @provider,
                   ReqLLM.Test.CompatibilityScenario.fixture!(:image_basic),
-                  []
+                  ReqLLM.ProviderTest.ImageGeneration.provider_opts(@provider)
                 )
               )
 
@@ -75,4 +75,17 @@ defmodule ReqLLM.ProviderTest.ImageGeneration do
   def prompt(:google), do: "A simple blue square on a white background"
   def prompt(:xai), do: "A simple green square on a white background"
   def prompt(_provider), do: "A simple red square on a white background"
+
+  @doc false
+  # Azure routes requests via deployment names that may differ from model ids.
+  # Only needed when recording; replay never hits the network, so the fallback
+  # (deployment defaults to the model id) is fine without the env var.
+  def provider_opts(:azure) do
+    case System.get_env("AZURE_IMAGE_DEPLOYMENT") do
+      nil -> []
+      deployment -> [deployment: deployment]
+    end
+  end
+
+  def provider_opts(_provider), do: []
 end

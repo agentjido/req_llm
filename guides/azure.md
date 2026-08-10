@@ -177,6 +177,23 @@ Image editing (multipart) with a source image and optional mask:
 )
 ```
 
+Endpoint routing follows the `base_url` you supply:
+
+| `base_url` shape | Request path | Deployment sent as |
+|---|---|---|
+| `https://<resource>.openai.azure.com/openai` | `/deployments/<deployment>/images/{generations,edits}?api-version=…` | URL path segment |
+| `https://<resource>.openai.azure.com/openai/v1` | `/images/{generations,edits}` | `model` field in the body/form |
+| `https://<resource>.services.ai.azure.com` | — | not supported (returns an error) |
+
+Notes:
+
+- All three gpt-image models work on either endpoint format. A `DeploymentNotFound` (HTTP 404) means the `deployment` name does not exist on the resource, not that the model is unavailable — deployment names are set at deployment-creation time and frequently differ from the model id, so pass `deployment:` explicitly.
+- Cost is billed per token for these models. `response.usage` carries the `input_tokens`/`output_tokens` reported by the Images API alongside `image_usage`.
+- Non-image models are rejected before the request is sent — `azure:gpt-4o` and `azure:claude-*` both return `ReqLLM.Error.Invalid.Parameter` rather than failing at the API.
+- Image responses expose provider metadata under `response.provider_meta["azure"]`.
+
+See the [Image Generation guide](image-generation.md) for the full option list.
+
 ### Structured Output
 
 ```elixir

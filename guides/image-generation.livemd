@@ -162,3 +162,67 @@ end)
 
 Kino.Layout.grid(result_widgets, columns: 3)
 ```
+
+## Azure OpenAI (optional)
+
+Azure serves the same GPT Image family, but addresses it through a resource `base_url` and a
+`deployment` name rather than a bare model id. This section is skipped unless both
+`AZURE_OPENAI_API_KEY` and `AZURE_OPENAI_BASE_URL` are configured as Livebook secrets.
+
+Set `AZURE_OPENAI_BASE_URL` to `https://<your-resource>.openai.azure.com/openai`, or to
+`.../openai/v1` to use the v1 GA API. Either works for every gpt-image model.
+
+```elixir
+azure_key = System.get_env("LB_AZURE_OPENAI_API_KEY") || System.get_env("AZURE_OPENAI_API_KEY")
+azure_base_url = System.get_env("LB_AZURE_OPENAI_BASE_URL") || System.get_env("AZURE_OPENAI_BASE_URL")
+
+# Change this to match the deployment name in your Azure resource.
+azure_deployment = "gpt-image-1"
+
+cond do
+  is_nil(azure_key) or azure_key == "" or is_nil(azure_base_url) or azure_base_url == "" ->
+    Kino.Markdown.new("""
+    ⏭️ **Azure section skipped** — set the `AZURE_OPENAI_API_KEY` and `AZURE_OPENAI_BASE_URL`
+    secrets to run it.
+    """)
+
+  true ->
+    prompt = Kino.Input.read(prompt_input)
+
+    result =
+      ImageGenerator.generate("azure:gpt-image-1", prompt,
+        api_key: azure_key,
+        base_url: azure_base_url,
+        deployment: azure_deployment,
+        size: "1024x1024"
+      )
+
+    case result do
+      {:ok, data} ->
+        Kino.Layout.grid(
+          [
+            Kino.Markdown.new("""
+            **azure:gpt-image-1** (deployment: `#{azure_deployment}`)
+
+            Time: #{ImageGenerator.format_duration(data.duration_ms)} | Cost: #{ImageGenerator.format_cost(data.cost)}
+            """),
+            Kino.Image.new(data.image_data, :png)
+          ],
+          columns: 1
+        )
+
+      {:error, data} ->
+        Kino.Markdown.new("""
+        **azure:gpt-image-1** failed after #{ImageGenerator.format_duration(data.duration_ms)}
+
+        ```
+        #{inspect(data.error)}
+        ```
+
+        Most common cause: `azure_deployment` above does not match a deployment on the resource
+        (`DeploymentNotFound`). Deployment names are chosen at creation time and need not match
+        the model id.
+        """)
+    end
+end
+```

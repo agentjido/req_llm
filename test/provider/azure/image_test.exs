@@ -89,6 +89,52 @@ defmodule ReqLLM.Providers.Azure.ImageTest do
 
       assert URI.to_string(request.url) =~ "api-version=2026-01-01-preview"
     end
+
+    test "passes n, output_format, seed, and negative_prompt into the body" do
+      request =
+        prepare!(
+          base_url: @traditional_base_url,
+          n: 3,
+          output_format: :webp,
+          seed: 42,
+          negative_prompt: "blurry"
+        )
+
+      body = request.options[:json]
+      assert body["n"] == 3
+      assert body["output_format"] == "webp"
+      assert body["seed"] == 42
+      assert body["negative_prompt"] == "blurry"
+    end
+
+    test "returns an error tuple for invalid options instead of raising" do
+      assert {:error, error} =
+               Azure.prepare_request(
+                 :image,
+                 "azure:gpt-image-1",
+                 "A simple red square",
+                 api_key: "test-api-key",
+                 deployment: "my-image-deploy",
+                 base_url: @traditional_base_url,
+                 source_image: nil
+               )
+
+      assert Exception.message(error) =~ "source_image"
+    end
+
+    test "rejects an empty prompt" do
+      assert {:error, %ReqLLM.Error.Invalid.Parameter{parameter: message}} =
+               Azure.prepare_request(
+                 :image,
+                 "azure:gpt-image-1",
+                 "   ",
+                 api_key: "test-api-key",
+                 deployment: "my-image-deploy",
+                 base_url: @traditional_base_url
+               )
+
+      assert message =~ "non-empty user text prompt"
+    end
   end
 
   describe "image generation (v1 GA format)" do
@@ -110,6 +156,21 @@ defmodule ReqLLM.Providers.Azure.ImageTest do
                  api_key: "test-api-key",
                  deployment: "my-image-deploy",
                  base_url: @foundry_base_url
+               )
+
+      assert message =~ "not supported on Azure AI Foundry"
+    end
+
+    test "returns the same error for edit requests" do
+      assert {:error, %ReqLLM.Error.Invalid.Parameter{parameter: message}} =
+               Azure.prepare_request(
+                 :image,
+                 "azure:gpt-image-1",
+                 "Make the square blue",
+                 api_key: "test-api-key",
+                 deployment: "my-image-deploy",
+                 base_url: @foundry_base_url,
+                 source_image: @png_bytes
                )
 
       assert message =~ "not supported on Azure AI Foundry"
@@ -172,6 +233,36 @@ defmodule ReqLLM.Providers.Azure.ImageTest do
       assert message =~ "does not support image generation"
       assert message =~ "gpt-image-1"
     end
+
+    test "rejects gpt chat models that are not image models" do
+      for model_spec <- ["azure:gpt-4o", "azure:gpt-5.1"] do
+        assert {:error, %ReqLLM.Error.Invalid.Parameter{parameter: message}} =
+                 Azure.prepare_request(
+                   :image,
+                   model_spec,
+                   "A simple red square",
+                   api_key: "test-api-key",
+                   deployment: "my-image-deploy",
+                   base_url: @traditional_base_url
+                 )
+
+        assert message =~ "does not support image generation"
+      end
+    end
+
+    test "accepts every documented gpt-image model" do
+      for model_spec <- ["azure:gpt-image-1", "azure:gpt-image-1.5", "azure:gpt-image-2"] do
+        assert {:ok, _request} =
+                 Azure.prepare_request(
+                   :image,
+                   model_spec,
+                   "A simple red square",
+                   api_key: "test-api-key",
+                   deployment: "my-image-deploy",
+                   base_url: @traditional_base_url
+                 )
+      end
+    end
   end
 
   describe "decode_response/1" do
@@ -187,6 +278,78 @@ defmodule ReqLLM.Providers.Azure.ImageTest do
       assert %ReqLLM.Response{} = decoded.body
       images = ReqLLM.Response.images(decoded.body)
       assert [%ReqLLM.Message.ContentPart{type: :image, data: ^image_data}] = images
+    end
+
+    test "reports the model id and image usage metadata" do
+      request = prepare!(base_url: @traditional_base_url, size: "1024x1024", quality: "high")
+
+      body = %{"created" => 1_700_000_000, "data" => [%{"b64_json" => Base.encode64(@png_bytes)}]}
+
+      {_req, decoded} = Azure.decode_response({request, %Req.Response{status: 200, body: body}})
+
+      # The catalog model id, not the deployment name, so cost lookups resolve.
+      assert decoded.body.model == "gpt-image-1"
+      assert %{image_usage: image_usage} = decoded.body.usage
+      assert map_size(image_usage) > 0
+    end
+
+    test "lifts the Images API token usage into response usage" do
+      request = prepare!(base_url: @traditional_base_url, size: "1024x1024", quality: "low")
+
+      body = %{
+        "created" => 1_700_000_000,
+        "data" => [%{"b64_json" => Base.encode64(@png_bytes)}],
+        "usage" => %{"input_tokens" => 14, "output_tokens" => 229, "total_tokens" => 243}
+      }
+
+      {_req, decoded} = Azure.decode_response({request, %Req.Response{status: 200, body: body}})
+
+      usage = decoded.body.usage
+      assert usage.input_tokens == 14
+      assert usage.output_tokens == 229
+      assert usage.total_tokens == 243
+      assert %{generated: %{count: 1}} = usage.image_usage
+    end
+
+    test "token usage yields a non-zero cost, since Azure prices images per token" do
+      request = prepare!(base_url: @traditional_base_url, size: "1024x1024", quality: "low")
+
+      body = %{
+        "created" => 1_700_000_000,
+        "data" => [%{"b64_json" => Base.encode64(@png_bytes)}],
+        "usage" => %{"input_tokens" => 14, "output_tokens" => 229, "total_tokens" => 243}
+      }
+
+      {_req, decoded} = Azure.decode_response({request, %Req.Response{status: 200, body: body}})
+      {:ok, model} = ReqLLM.model("azure:gpt-image-1")
+
+      assert {:ok, breakdown} = ReqLLM.Billing.calculate(decoded.body.usage, model)
+      assert breakdown.total > 0
+      assert breakdown.tokens > 0
+    end
+
+    test "a response without a usage object still reports image usage" do
+      request = prepare!(base_url: @traditional_base_url, size: "1024x1024", quality: "low")
+
+      body = %{"created" => 1_700_000_000, "data" => [%{"b64_json" => Base.encode64(@png_bytes)}]}
+
+      {_req, decoded} = Azure.decode_response({request, %Req.Response{status: 200, body: body}})
+
+      usage = decoded.body.usage
+      assert %{generated: %{count: 1}} = usage.image_usage
+      refute Map.has_key?(usage, :input_tokens)
+    end
+
+    test "keys provider_meta under azure rather than openai" do
+      request = prepare!(base_url: @traditional_base_url)
+
+      body = %{"created" => 1_700_000_000, "data" => [%{"b64_json" => Base.encode64(@png_bytes)}]}
+
+      {_req, decoded} = Azure.decode_response({request, %Req.Response{status: 200, body: body}})
+
+      assert %{"azure" => meta} = decoded.body.provider_meta
+      assert meta["created"] == 1_700_000_000
+      refute Map.has_key?(decoded.body.provider_meta, "openai")
     end
 
     test "non-200 image responses fall through to Azure error handling" do

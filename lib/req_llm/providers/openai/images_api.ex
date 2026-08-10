@@ -3,6 +3,11 @@ defmodule ReqLLM.Providers.OpenAI.ImagesAPI do
   OpenAI Images API driver.
 
   Implements request/response handling for OpenAI image generation.
+
+  Also serves as the shared image codec for providers that expose the same wire
+  format (currently Azure OpenAI). Those providers reuse `image_context/2`,
+  `build_generation_body/1`, `edit_image_form_multipart/1`, `image_edit?/1` and
+  `decode_response/1` rather than duplicating the encoding rules.
   """
 
   @behaviour ReqLLM.Providers.OpenAI.API
@@ -36,6 +41,11 @@ defmodule ReqLLM.Providers.OpenAI.ImagesAPI do
   Accepts a map or keyword list with `:model`, `:prompt`, and the optional
   image generation options (`:n`, `:size`, `:quality`, `:style`, `:user`,
   `:output_format`, `:response_format`, `:seed`, `:negative_prompt`).
+
+  `:model` must be the catalog model id rather than a provider-side alias: it
+  decides whether `response_format` is a legal field for the target model.
+  Callers that send a different identifier on the wire (e.g. an Azure
+  deployment name) should replace `"model"` in the returned map afterwards.
   """
   def build_generation_body(opts) when is_list(opts), do: build_generation_body(Map.new(opts))
 
@@ -54,6 +64,17 @@ defmodule ReqLLM.Providers.OpenAI.ImagesAPI do
     |> maybe_put_integer("seed", opts[:seed])
     |> maybe_put_string("negative_prompt", opts[:negative_prompt])
   end
+
+  @doc """
+  Returns true when the options describe an image *edit* rather than a generation.
+
+  An edit is signalled by a non-nil `:source_image`. An explicitly nil
+  `:source_image` is treated as a generation, since a multipart edit request
+  cannot be built without image bytes.
+  """
+  @spec image_edit?(keyword() | map()) :: boolean()
+  def image_edit?(opts) when is_list(opts), do: Keyword.get(opts, :source_image) != nil
+  def image_edit?(opts) when is_map(opts), do: Map.get(opts, :source_image) != nil
 
   @doc """
   Normalizes image generation input into a `{:ok, context, prompt}` tuple.
@@ -170,6 +191,19 @@ defmodule ReqLLM.Providers.OpenAI.ImagesAPI do
      ReqLLM.Error.Invalid.Parameter.exception(parameter: "streaming not supported for :image")}
   end
 
+  # This codec is shared with providers that reuse the OpenAI Images wire
+  # format, so provider_meta is keyed by whichever provider actually served the
+  # request (e.g. "azure") instead of always "openai".
+  defp provider_meta_key(req) do
+    case req.private[:model] do
+      %LLMDB.Model{provider: provider} when is_atom(provider) and not is_nil(provider) ->
+        Atom.to_string(provider)
+
+      _ ->
+        "openai"
+    end
+  end
+
   defp decode_images_response(req, %{} = body) do
     data = Map.get(body, "data", [])
 
@@ -188,11 +222,7 @@ defmodule ReqLLM.Providers.OpenAI.ImagesAPI do
     message = %Message{role: :assistant, content: parts}
     size_class = openai_image_size_class(req.options[:size], req.options[:quality])
     image_usage = ReqLLM.Usage.Image.build_generated(length(parts), size_class)
-
-    usage =
-      if map_size(image_usage) > 0 do
-        %{image_usage: image_usage}
-      end
+    usage = image_response_usage(body, image_usage)
 
     base_response = %Response{
       id: image_response_id(),
@@ -204,12 +234,41 @@ defmodule ReqLLM.Providers.OpenAI.ImagesAPI do
       stream: nil,
       usage: usage,
       finish_reason: :stop,
-      provider_meta: %{"openai" => Map.delete(body, "data")},
+      provider_meta: %{provider_meta_key(req) => Map.delete(body, "data")},
       error: nil
     }
 
     Context.merge_response(base_response.context, base_response)
   end
+
+  # gpt-image models report token usage in the response body, and providers do
+  # not agree on how images are priced: some bill per generated image (keyed by
+  # size class), others - Azure among them - bill the underlying tokens. Report
+  # both so cost calculation can use whichever the model's pricing defines.
+  defp image_response_usage(body, image_usage) do
+    usage = body |> Map.get("usage") |> image_token_usage()
+
+    usage =
+      if map_size(image_usage) > 0 do
+        Map.put(usage, :image_usage, image_usage)
+      else
+        usage
+      end
+
+    if map_size(usage) > 0, do: usage
+  end
+
+  defp image_token_usage(%{} = usage) do
+    %{input_tokens: "input_tokens", output_tokens: "output_tokens", total_tokens: "total_tokens"}
+    |> Enum.reduce(%{}, fn {key, wire_key}, acc ->
+      case Map.get(usage, wire_key) do
+        count when is_integer(count) -> Map.put(acc, key, count)
+        _ -> acc
+      end
+    end)
+  end
+
+  defp image_token_usage(_), do: %{}
 
   defp decode_image_item(%{"b64_json" => b64} = item, media_type) when is_binary(b64) do
     revised_prompt = Map.get(item, "revised_prompt")

@@ -328,7 +328,7 @@ config :req_llm, :sample_embedding_models, ~w(
 config :req_llm, :sample_image_models, ~w(
     openai:gpt-image-1.5
     google:gemini-2.5-flash-image
-    azure:gpt-image-1
+    azure:gpt-image-2
   )
 config :req_llm, :sample_speech_models, ~w(
     openai:tts-1

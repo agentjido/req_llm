@@ -33,7 +33,7 @@ That breadth extends well beyond chat: ReqLLM tracks **92 non-text operation mod
 | [Alibaba Cloud Bailian (China)](https://llmdb.xyz/?providers=alibaba_cn) | `alibaba_cn` | 82 | text, OCR 1, transcription 1 | 0 | — |
 | [Amazon Bedrock](https://llmdb.xyz/?providers=amazon_bedrock) | `amazon_bedrock` | 92 | text, embedding 3 | 7 | [Guide](guides/amazon_bedrock.md) |
 | [Anthropic](https://llmdb.xyz/?providers=anthropic) | `anthropic` | 11 | text | 11 | [Guide](guides/anthropic.md) |
-| [Azure OpenAI](https://llmdb.xyz/?providers=azure) | `azure` | 103 | text, embedding 6 | 26 | [Guide](guides/azure.md) |
+| [Azure OpenAI](https://llmdb.xyz/?providers=azure) | `azure` | 103 | text, embedding 6, image 3 | 26 | [Guide](guides/azure.md) |
 | [Cerebras](https://llmdb.xyz/?providers=cerebras) | `cerebras` | 5 | text | 2 | [Guide](guides/cerebras.md) |
 | [Cohere](https://llmdb.xyz/?providers=cohere) | `cohere` | 17 | text, rerank 5 | 5 | — |
 | [ElevenLabs](https://llmdb.xyz/?providers=elevenlabs) | `elevenlabs` | 4 | speech 4 | 4 | — |
@@ -522,7 +522,7 @@ This approach gives you full control over the Req pipeline, allowing you to add 
 - [Provider-native Integrations](guides/provider-native-integrations.md) – MCP, native tool, resource, and future operation boundaries
 - [Pricing Policy](guides/pricing-policy.md) – cost-calculation scope, guarantees, and known gaps
 - [Usage & Billing](guides/usage-and-billing.md) – token costs, tool usage, image costs
-- [Image Generation](guides/image-generation.md) – generating images with OpenAI and Google
+- [Image Generation](guides/image-generation.md) – generating images with OpenAI, Azure, Google, and xAI
 - [Mix Tasks](guides/mix-tasks.md) – model sync, compatibility testing, code generation
 - [Fixture Testing](guides/fixture-testing.md) – model validation and supported models
 - [Adding a Provider](guides/adding_a_provider.md) – extend with new providers

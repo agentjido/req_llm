@@ -89,6 +89,42 @@ defmodule ReqLLM.Providers.OpenAIImagesTest do
     assert part.metadata[:revised_prompt] == "revised"
   end
 
+  test "decode_response/1 carries the body's token usage alongside image usage" do
+    req =
+      Req.new(url: ImagesAPI.path())
+      |> Req.Request.register_options([:model, :output_format, :size, :quality, :context])
+      |> Req.Request.merge_options(
+        model: "gpt-image-1",
+        output_format: :png,
+        size: "1024x1024",
+        quality: "low",
+        context: %Context{messages: []}
+      )
+
+    resp = %Req.Response{
+      status: 200,
+      headers: [],
+      body: %{
+        "created" => 1_234,
+        "data" => [%{"b64_json" => Base.encode64("abc")}],
+        "usage" => %{
+          "input_tokens" => 14,
+          "output_tokens" => 229,
+          "total_tokens" => 243,
+          "input_tokens_details" => %{"image_tokens" => 0, "text_tokens" => 14}
+        }
+      }
+    }
+
+    {_req, updated} = ImagesAPI.decode_response({req, resp})
+
+    usage = updated.body.usage
+    assert usage.input_tokens == 14
+    assert usage.output_tokens == 229
+    assert usage.total_tokens == 243
+    assert %{generated: %{count: 1, size_class: "1024x1024:low"}} = usage.image_usage
+  end
+
   test "prepare_request/4 keeps prompt-only image generation on generations JSON endpoint" do
     model = %LLMDB.Model{id: "gpt-image-1.5", provider: :openai}
 
@@ -129,6 +165,18 @@ defmodule ReqLLM.Providers.OpenAIImagesTest do
     assert {^source_image, image_opts} = form_parts[:image]
     assert image_opts[:filename] == "source_image.jpg"
     assert image_opts[:content_type] == "image/jpeg"
+  end
+
+  test "prepare_request/4 rejects a nil source_image instead of building an edit request" do
+    model = %LLMDB.Model{id: "gpt-image-1.5", provider: :openai}
+
+    assert {:error, error} =
+             OpenAI.prepare_request(:image, model, "A lighthouse in a storm",
+               api_key: "test-key",
+               source_image: nil
+             )
+
+    assert Exception.message(error) =~ "source_image"
   end
 
   test "prepare_request/4 includes mask multipart part when provided" do

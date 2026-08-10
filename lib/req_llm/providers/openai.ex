@@ -360,7 +360,7 @@ defmodule ReqLLM.Providers.OpenAI do
          {:ok, processed_opts} <-
            ReqLLM.Provider.Options.process(__MODULE__, :image, model, opts_with_context) do
       api_mod = ReqLLM.Providers.OpenAI.ImagesAPI
-      image_edit? = Keyword.has_key?(processed_opts, :source_image)
+      image_edit? = api_mod.image_edit?(processed_opts)
       path = if image_edit?, do: api_mod.path(:edit), else: api_mod.path()
 
       req_keys =

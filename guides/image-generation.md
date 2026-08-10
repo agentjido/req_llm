@@ -52,10 +52,10 @@ These options are supported across providers (where the model allows):
 | `quality` | atom/string | Image quality (provider-dependent) |
 | `seed` | integer | Random seed for reproducibility (provider-dependent) |
 | `negative_prompt` | string | What to avoid in the image (provider-dependent) |
-| `source_image` | binary | Source image bytes for editing or reference generation (OpenAI image models only) |
-| `source_image_media_type` | string | MIME type for `source_image` (default: `"image/png"`; OpenAI image models only) |
-| `mask` | binary | Optional mask image bytes for inpainting/editing (OpenAI image models only) |
-| `mask_media_type` | string | MIME type for `mask` (default: `"image/png"`; OpenAI image models only) |
+| `source_image` | binary | Source image bytes for editing or reference generation (OpenAI and Azure image models only) |
+| `source_image_media_type` | string | MIME type for `source_image` (default: `"image/png"`; OpenAI and Azure image models only) |
+| `mask` | binary | Optional mask image bytes for inpainting/editing (OpenAI and Azure image models only) |
+| `mask_media_type` | string | MIME type for `mask` (default: `"image/png"`; OpenAI and Azure image models only) |
 
 ## Discovering Available Models
 
@@ -244,9 +244,13 @@ Image editing works the same way as OpenAI's (multipart upload with `source_imag
 Notes:
 
 - Supported endpoint formats: traditional Azure OpenAI (`https://<resource>.openai.azure.com/openai`, deployment in the URL path) and the v1 GA API (`.../openai/v1`, deployment sent as `model` in the body). Azure AI Foundry endpoints (`.services.ai.azure.com`) are not supported for image generation.
+- All three gpt-image models work on either endpoint format. A `DeploymentNotFound` (HTTP 404) means the `deployment` you passed does not exist on the resource — deployment names are chosen when the deployment is created and often differ from the model id, so pass `deployment:` explicitly rather than relying on the model-id default.
 - The default `api_version` (`2025-04-01-preview`) satisfies gpt-image models; override via `provider_options: [api_version: ...]` if needed.
 - GPT Image models always return base64 image data (`:binary`); URL responses are not available.
 - DALL-E models are retired on Azure — use gpt-image models.
+- Only `gpt-image-*` model ids are accepted. Chat models (e.g. `azure:gpt-4o`) are rejected locally with a `ReqLLM.Error.Invalid.Parameter` before any HTTP call, rather than failing at the API.
+- The `deployment` name is free-form and affects only the URL/body identifier. Option handling is keyed off the catalog model id, so a deployment named after a different model does not change which options are sent.
+- Responses carry provider metadata under `response.provider_meta["azure"]`, and `response.usage.image_usage` is populated the same way as for OpenAI.
 
 See the [Azure guide](azure.md) for authentication and deployment configuration.
 
