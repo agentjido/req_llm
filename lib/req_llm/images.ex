@@ -30,7 +30,7 @@ defmodule ReqLLM.Images do
                  aspect_ratio: [
                    type: :string,
                    doc:
-                     ~s(Requested aspect ratio, e.g. "1:1" or "16:9"; OpenAI and Azure resolve it to the nearest size they offer, and an explicit :size wins)
+                     ~s(Requested aspect ratio, e.g. "1:1" or "16:9"; OpenAI and Azure resolve it to the nearest size they offer - warning when the model family cannot match the orientation - and an explicit :size wins)
                  ],
                  output_format: [
                    type: {:in, @output_formats},
@@ -45,20 +45,22 @@ defmodule ReqLLM.Images do
                  seed: [
                    type: :integer,
                    doc:
-                     "Random seed for deterministic image generation (provider dependent; rejected by OpenAI and Azure image models)"
+                     "Random seed for deterministic image generation (provider dependent; dropped with a warning by OpenAI and Azure image models, subject to :on_unsupported)"
                  ],
                  quality: [
                    type: {:or, [{:in, [:standard, :hd]}, :string]},
-                   doc: "Requested quality (provider dependent)"
+                   doc:
+                     "Requested quality (provider dependent; gpt-image models take low/medium/high, so :standard/:hd are translated with a warning)"
                  ],
                  style: [
                    type: {:or, [{:in, [:vivid, :natural]}, :string]},
-                   doc: "Requested style (provider dependent)"
+                   doc:
+                     "Requested style (provider dependent; only DALL-E 3 accepts it, other OpenAI/Azure image models drop it with a warning)"
                  ],
                  negative_prompt: [
                    type: :string,
                    doc:
-                     "Negative prompt text (provider dependent; rejected by OpenAI and Azure image models, which have no such field)"
+                     "Negative prompt text (provider dependent; dropped with a warning by OpenAI and Azure image models, which have no such field, subject to :on_unsupported)"
                  ],
                  source_image: [
                    type: {:custom, __MODULE__, :validate_binary, []},

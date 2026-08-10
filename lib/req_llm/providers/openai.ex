@@ -369,31 +369,18 @@ defmodule ReqLLM.Providers.OpenAI do
       path = if image_edit?, do: api_mod.path(:edit), else: api_mod.path()
 
       req_keys =
-        supported_provider_options() ++
-          [
-            :context,
-            :operation,
-            :model,
-            :prompt,
-            :n,
-            :size,
-            :aspect_ratio,
-            :output_format,
-            :response_format,
-            :quality,
-            :style,
-            :seed,
-            :negative_prompt,
-            :user,
-            :provider_options,
-            :req_http_options,
-            :api_mod,
-            :source_image,
-            :source_image_media_type,
-            :mask,
-            :mask_media_type,
-            :base_url
-          ]
+        (supported_provider_options() ++
+           [
+             :context,
+             :operation,
+             :model,
+             :provider_options,
+             :req_http_options,
+             :api_mod,
+             :base_url
+           ] ++
+           api_mod.request_option_keys())
+        |> Enum.uniq()
 
       timeout = get_timeout_for_operation(:image, processed_opts)
       model_id = model.provider_model_id || model.id
@@ -655,9 +642,8 @@ defmodule ReqLLM.Providers.OpenAI do
   `{translated_opts, warnings}` where warnings is a list of transformation messages.
   """
   @impl ReqLLM.Provider
-  def translate_options(:image, %LLMDB.Model{}, opts) do
-    # Image generation has no special parameter translations
-    {opts, []}
+  def translate_options(:image, %LLMDB.Model{} = model, opts) do
+    ReqLLM.Providers.OpenAI.ImagesAPI.translate_options(opts, model.provider_model_id || model.id)
   end
 
   def translate_options(op, %LLMDB.Model{} = model, opts) do
@@ -694,7 +680,7 @@ defmodule ReqLLM.Providers.OpenAI do
     extra_option_keys = ReqLLM.Provider.Defaults.extra_option_keys(__MODULE__)
 
     request
-    |> maybe_put_json_content_type()
+    |> ReqLLM.Provider.Utils.maybe_put_json_content_type()
     |> maybe_put_authorization_header(credential)
     |> Req.Request.register_options(extra_option_keys)
     |> Req.Request.merge_options(
@@ -1013,14 +999,6 @@ defmodule ReqLLM.Providers.OpenAI do
 
   defp maybe_put_authorization_header(request, credential) do
     Req.Request.put_header(request, "authorization", "Bearer #{credential.token}")
-  end
-
-  defp maybe_put_json_content_type(request) do
-    if request.options[:form_multipart] do
-      request
-    else
-      Req.Request.put_header(request, "content-type", "application/json")
-    end
   end
 
   defp allow_missing_api_key?(%LLMDB.Model{} = model, opts) do

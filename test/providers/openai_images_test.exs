@@ -1,6 +1,8 @@
 defmodule ReqLLM.Providers.OpenAIImagesTest do
   use ExUnit.Case, async: true
 
+  @moduletag :capture_log
+
   alias ReqLLM.Context
   alias ReqLLM.Providers.OpenAI
   alias ReqLLM.Providers.OpenAI.ImagesAPI
@@ -112,6 +114,12 @@ defmodule ReqLLM.Providers.OpenAIImagesTest do
       assert Keyword.get(opts, :size) == "1024x1792"
     end
 
+    test "resolves to the nearest offered ratio, not just the orientation" do
+      # 5:4 is nearer to square than to DALL-E 3's wide 1792x1024
+      assert {:ok, opts} = ImagesAPI.normalize_options([aspect_ratio: "5:4"], "dall-e-3")
+      assert Keyword.get(opts, :size) == "1024x1024"
+    end
+
     test "DALL-E 2 only offers squares" do
       assert {:ok, opts} = ImagesAPI.normalize_options([aspect_ratio: "16:9"], "dall-e-2")
       assert Keyword.get(opts, :size) == "1024x1024"
@@ -150,21 +158,88 @@ defmodule ReqLLM.Providers.OpenAIImagesTest do
       end
     end
 
-    test "rejects options the Images API has no field for" do
+    test "rejects a malformed aspect_ratio even when an explicit size is present" do
       assert {:error, %ReqLLM.Error.Invalid.Parameter{parameter: message}} =
-               ImagesAPI.normalize_options([seed: 42], "gpt-image-1")
+               ImagesAPI.normalize_options(
+                 [aspect_ratio: "sixteen by nine", size: "1024x1024"],
+                 "gpt-image-1"
+               )
 
-      assert message =~ "seed"
-
-      assert {:error, %ReqLLM.Error.Invalid.Parameter{parameter: message}} =
-               ImagesAPI.normalize_options([negative_prompt: "blurry"], "gpt-image-1")
-
-      assert message =~ "negative_prompt"
+      assert message =~ "aspect_ratio"
     end
 
-    test "an explicitly nil unsupported option is not a rejection" do
-      assert {:ok, _opts} =
-               ImagesAPI.normalize_options([seed: nil, negative_prompt: nil], "gpt-image-1")
+    test "rejects a mask without a source_image" do
+      assert {:error, %ReqLLM.Error.Invalid.Parameter{parameter: message}} =
+               ImagesAPI.normalize_options([mask: <<1, 2, 3>>], "gpt-image-1")
+
+      assert message =~ "source_image"
+    end
+  end
+
+  describe "translate_options/2" do
+    test "drops seed and negative_prompt with a warning" do
+      {opts, warnings} =
+        ImagesAPI.translate_options([seed: 42, negative_prompt: "blurry"], "gpt-image-1")
+
+      refute Keyword.has_key?(opts, :seed)
+      refute Keyword.has_key?(opts, :negative_prompt)
+      assert Enum.any?(warnings, &(&1 =~ ":seed"))
+      assert Enum.any?(warnings, &(&1 =~ ":negative_prompt"))
+    end
+
+    test "leaves explicitly nil unsupported options alone" do
+      assert {[seed: nil, negative_prompt: nil], []} =
+               ImagesAPI.translate_options([seed: nil, negative_prompt: nil], "gpt-image-1")
+    end
+
+    test "translates the DALL-E quality names for gpt-image models" do
+      for {input, expected} <- [
+            {:standard, "medium"},
+            {"standard", "medium"},
+            {:hd, "high"},
+            {"hd", "high"}
+          ] do
+        {opts, warnings} = ImagesAPI.translate_options([quality: input], "gpt-image-1")
+
+        assert Keyword.get(opts, :quality) == expected
+        assert [warning] = warnings
+        assert warning =~ ":quality"
+      end
+    end
+
+    test "leaves native gpt-image and DALL-E quality names untouched" do
+      assert {[quality: "high"], []} =
+               ImagesAPI.translate_options([quality: "high"], "gpt-image-1")
+
+      assert {[quality: :hd], []} = ImagesAPI.translate_options([quality: :hd], "dall-e-3")
+    end
+
+    test "drops :style outside DALL-E 3" do
+      {opts, [warning]} = ImagesAPI.translate_options([style: "vivid"], "gpt-image-1")
+
+      refute Keyword.has_key?(opts, :style)
+      assert warning =~ ":style"
+
+      assert {[style: :vivid], []} = ImagesAPI.translate_options([style: :vivid], "dall-e-3")
+    end
+
+    test "resolves aspect_ratio into a size without warning when the orientation is offered" do
+      {opts, []} = ImagesAPI.translate_options([aspect_ratio: "16:9"], "gpt-image-1")
+
+      assert Keyword.get(opts, :size) == "1536x1024"
+      refute Keyword.has_key?(opts, :aspect_ratio)
+    end
+
+    test "warns when the model family cannot match the requested orientation" do
+      {opts, [warning]} = ImagesAPI.translate_options([aspect_ratio: "16:9"], "dall-e-2")
+
+      assert Keyword.get(opts, :size) == "1024x1024"
+      assert warning =~ "no landscape size"
+    end
+
+    test "leaves a malformed aspect_ratio for normalize_options/2 to reject" do
+      assert {[aspect_ratio: "wide"], []} =
+               ImagesAPI.translate_options([aspect_ratio: "wide"], "gpt-image-1")
     end
   end
 
@@ -182,16 +257,41 @@ defmodule ReqLLM.Providers.OpenAIImagesTest do
     refute Keyword.has_key?(request.options[:form_multipart], :aspect_ratio)
   end
 
-  test "prepare_request/4 rejects seed before the request is built" do
+  test "prepare_request/4 drops seed with a warning instead of sending it" do
     model = %LLMDB.Model{id: "gpt-image-1.5", provider: :openai}
 
-    assert {:error, %ReqLLM.Error.Invalid.Parameter{parameter: message}} =
+    assert {:ok, request} =
              OpenAI.prepare_request(:image, model, "A lighthouse",
                api_key: "test-key",
                seed: 7
              )
 
-    assert message =~ "seed"
+    assert request.options[:seed] == nil
+  end
+
+  test "prepare_request/4 with on_unsupported: :error makes dropped options a hard error" do
+    model = %LLMDB.Model{id: "gpt-image-1.5", provider: :openai}
+
+    assert {:error, %ReqLLM.Error.Validation.Error{reason: reason}} =
+             OpenAI.prepare_request(:image, model, "A lighthouse",
+               api_key: "test-key",
+               seed: 7,
+               on_unsupported: :error
+             )
+
+    assert reason =~ ":seed"
+  end
+
+  test "prepare_request/4 rejects a mask without a source_image" do
+    model = %LLMDB.Model{id: "gpt-image-1.5", provider: :openai}
+
+    assert {:error, %ReqLLM.Error.Invalid.Parameter{parameter: message}} =
+             OpenAI.prepare_request(:image, model, "Remove the sky",
+               api_key: "test-key",
+               mask: <<1, 2, 3>>
+             )
+
+    assert message =~ "source_image"
   end
 
   test "decode_response/1 carries the body's token usage alongside image usage" do
@@ -315,6 +415,28 @@ defmodule ReqLLM.Providers.OpenAIImagesTest do
     form_parts = request.options.form_multipart
     assert form_parts[:output_format] == "png"
     refute Keyword.has_key?(form_parts, :response_format)
+  end
+
+  test "decode_response/1 treats any 2xx status as success" do
+    req =
+      Req.new(url: ImagesAPI.path())
+      |> Req.Request.register_options([:model, :output_format, :context])
+      |> Req.Request.merge_options(
+        model: "gpt-image-1",
+        output_format: :png,
+        context: %Context{messages: []}
+      )
+
+    resp = %Req.Response{
+      status: 202,
+      headers: [],
+      body: %{"data" => [%{"b64_json" => Base.encode64("abc")}]}
+    }
+
+    {_req, updated} = ImagesAPI.decode_response({req, resp})
+
+    assert %Response{} = updated.body
+    assert Response.image_data(updated.body) == "abc"
   end
 
   test "decode_response/1 decodes edit b64_json responses" do

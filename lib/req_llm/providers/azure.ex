@@ -316,24 +316,6 @@ defmodule ReqLLM.Providers.Azure do
 
   @common_req_keys [:context, :operation, :text, :stream, :model, :provider_options, :deployment]
 
-  @image_req_keys [
-    :prompt,
-    :n,
-    :size,
-    :aspect_ratio,
-    :output_format,
-    :response_format,
-    :quality,
-    :style,
-    :seed,
-    :negative_prompt,
-    :user,
-    :source_image,
-    :source_image_media_type,
-    :mask,
-    :mask_media_type
-  ]
-
   @family_env_vars %{
     "claude" => "AZURE_ANTHROPIC_BASE_URL",
     "gpt" => "AZURE_OPENAI_BASE_URL",
@@ -638,11 +620,16 @@ defmodule ReqLLM.Providers.Azure do
             [json: body]
           end
 
-        req_keys = supported_provider_options() ++ @common_req_keys ++ @image_req_keys
+        req_keys =
+          (supported_provider_options() ++
+             @common_req_keys ++ ReqLLM.Providers.OpenAI.ImagesAPI.request_option_keys())
+          |> Enum.uniq()
 
         request =
           Req.new(
-            [url: path, method: :post, receive_timeout: timeout] ++ body_options ++ http_opts
+            [url: path, method: :post, receive_timeout: timeout] ++
+              body_options ++
+              ReqLLM.Provider.Defaults.merge_finch_options(http_opts, pool_timeout: timeout)
           )
           |> Req.Request.register_options(req_keys)
           |> Req.Request.merge_options(
@@ -694,7 +681,7 @@ defmodule ReqLLM.Providers.Azure do
       |> Enum.uniq()
 
     request
-    |> maybe_put_json_content_type()
+    |> ReqLLM.Provider.Utils.maybe_put_json_content_type()
     |> Req.Request.put_header(auth_header_name, auth_header_value)
     |> then(fn req ->
       Enum.reduce(extra_headers, req, fn {key, value}, acc ->
@@ -709,16 +696,6 @@ defmodule ReqLLM.Providers.Azure do
     |> ReqLLM.Step.Usage.attach(model)
     |> ReqLLM.Step.Telemetry.attach(model, user_opts)
     |> ReqLLM.Step.Fixture.maybe_attach(model, user_opts)
-  end
-
-  # Multipart requests (image edits) must let Req set the multipart boundary
-  # content type; a pre-set application/json header would suppress it.
-  defp maybe_put_json_content_type(request) do
-    if request.options[:form_multipart] do
-      request
-    else
-      Req.Request.put_header(request, "content-type", "application/json")
-    end
   end
 
   @doc """

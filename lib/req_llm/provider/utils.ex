@@ -106,6 +106,21 @@ defmodule ReqLLM.Provider.Utils do
   end
 
   @doc """
+  Sets a JSON content-type header unless the request carries a multipart form.
+
+  Multipart requests must let Req compute the multipart boundary content type;
+  a pre-set application/json header would suppress it.
+  """
+  @spec maybe_put_json_content_type(Req.Request.t()) :: Req.Request.t()
+  def maybe_put_json_content_type(request) do
+    if request.options[:form_multipart] do
+      request
+    else
+      Req.Request.put_header(request, "content-type", "application/json")
+    end
+  end
+
+  @doc """
   Ensures the response body is parsed from JSON if it's binary.
 
   Common utility for providers to ensure they have parsed JSON data

@@ -98,11 +98,20 @@ defmodule ReqLLM.Providers.Azure.ImageTest do
       assert body["output_format"] == "webp"
     end
 
-    # The Images API rejects these with `unknown_parameter`, so they are refused
-    # before the request goes out rather than surfacing as a provider 400.
+    # The Images API rejects these with `unknown_parameter`, so they are dropped
+    # with a warning before the request goes out rather than surfacing as a
+    # provider 400; `on_unsupported: :error` upgrades the drop to a hard error.
     for {option, value} <- [seed: 42, negative_prompt: "blurry"] do
-      test "rejects :#{option}, which the Images API does not accept" do
-        assert {:error, %ReqLLM.Error.Invalid.Parameter{parameter: message}} =
+      test "drops :#{option}, which the Images API does not accept" do
+        request =
+          prepare!([base_url: @traditional_base_url] ++ [{unquote(option), unquote(value)}])
+
+        assert request.options[unquote(option)] == nil
+        refute Map.has_key?(request.options[:json], to_string(unquote(option)))
+      end
+
+      test ":#{option} with on_unsupported: :error is a hard error" do
+        assert {:error, %ReqLLM.Error.Validation.Error{reason: reason}} =
                  Azure.prepare_request(
                    :image,
                    "azure:gpt-image-1",
@@ -110,12 +119,31 @@ defmodule ReqLLM.Providers.Azure.ImageTest do
                    [
                      api_key: "test-api-key",
                      deployment: "my-image-deploy",
-                     base_url: @traditional_base_url
+                     base_url: @traditional_base_url,
+                     on_unsupported: :error
                    ] ++ [{unquote(option), unquote(value)}]
                  )
 
-        assert message =~ to_string(unquote(option))
+        assert reason =~ to_string(unquote(option))
       end
+    end
+
+    test "translates the DALL-E :hd quality name for gpt-image deployments" do
+      request = prepare!(base_url: @traditional_base_url, quality: :hd)
+
+      assert request.options[:json]["quality"] == "high"
+    end
+
+    test "drops :style, which gpt-image models do not accept" do
+      request = prepare!(base_url: @traditional_base_url, style: "vivid")
+
+      refute Map.has_key?(request.options[:json], "style")
+    end
+
+    test "sets a Finch pool_timeout matching the long image receive_timeout" do
+      request = prepare!(base_url: @traditional_base_url)
+
+      assert request.options[:finch][:pool_timeout] == 120_000
     end
 
     test "resolves aspect_ratio to the nearest size the model offers" do
@@ -173,6 +201,21 @@ defmodule ReqLLM.Providers.Azure.ImageTest do
                )
 
       assert Exception.message(error) =~ "source_image"
+    end
+
+    test "rejects a mask without a source_image" do
+      assert {:error, %ReqLLM.Error.Invalid.Parameter{parameter: message}} =
+               Azure.prepare_request(
+                 :image,
+                 "azure:gpt-image-1",
+                 "Remove the sky",
+                 api_key: "test-api-key",
+                 deployment: "my-image-deploy",
+                 base_url: @traditional_base_url,
+                 mask: @png_bytes
+               )
+
+      assert message =~ "source_image"
     end
 
     test "rejects an empty prompt" do
@@ -403,6 +446,17 @@ defmodule ReqLLM.Providers.Azure.ImageTest do
       assert %{"azure" => meta} = decoded.body.provider_meta
       assert meta["created"] == 1_700_000_000
       refute Map.has_key?(decoded.body.provider_meta, "openai")
+    end
+
+    test "a non-200 2xx response still decodes as success" do
+      request = prepare!(base_url: @traditional_base_url)
+
+      body = %{"created" => 1_700_000_000, "data" => [%{"b64_json" => Base.encode64(@png_bytes)}]}
+
+      {_req, decoded} = Azure.decode_response({request, %Req.Response{status: 202, body: body}})
+
+      assert %ReqLLM.Response{} = decoded.body
+      assert [_image] = ReqLLM.Response.images(decoded.body)
     end
 
     test "non-200 image responses fall through to Azure error handling" do
