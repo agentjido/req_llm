@@ -514,8 +514,6 @@ defmodule ReqLLM.Providers.Azure do
 
       http_opts = Keyword.get(opts, :req_http_options, [])
 
-      # Option validation failures are returned, not matched, so callers get a
-      # ReqLLM error instead of a MatchError.
       with {:ok, processed_opts} <-
              ReqLLM.Provider.Options.process(__MODULE__, :embedding, model, opts_with_text) do
         {api_version, deployment, base_url} =
@@ -565,7 +563,6 @@ defmodule ReqLLM.Providers.Azure do
            ReqLLM.Providers.OpenAI.ImagesAPI.image_context(prompt_or_messages, opts) do
       model_family = get_model_family(model_id)
 
-      # Resolve base_url BEFORE Options.process
       resolved_base_url = resolve_base_url(model_family, opts)
 
       opts_with_context =
@@ -576,10 +573,9 @@ defmodule ReqLLM.Providers.Azure do
 
       http_opts = Keyword.get(opts, :req_http_options, [])
 
-      # Option validation failures are returned, not matched, so callers get a
-      # ReqLLM error instead of a MatchError.
       with {:ok, processed_opts} <-
              ReqLLM.Provider.Options.process(__MODULE__, :image, model, opts_with_context),
+           :ok <- validate_image_output_format(processed_opts),
            {:ok, processed_opts} <-
              ReqLLM.Providers.OpenAI.ImagesAPI.normalize_options(processed_opts, model_id),
            {api_version, deployment, base_url} = extract_azure_credentials(model, processed_opts),
@@ -600,16 +596,11 @@ defmodule ReqLLM.Providers.Azure do
               |> Keyword.merge(prompt: prompt, model: deployment)
               |> ReqLLM.Providers.OpenAI.ImagesAPI.edit_image_form_multipart()
 
-            # Traditional format carries the deployment in the URL; drop the model part.
             parts =
               if uses_v1_ga_format?(base_url), do: parts, else: Keyword.delete(parts, :model)
 
             [form_multipart: parts]
           else
-            # Body is built against the catalog model id so option gating (e.g.
-            # response_format) keys off the real model rather than the
-            # arbitrarily-named deployment; the wire "model" is then replaced
-            # with the deployment for the formats that expect it in the body.
             body =
               processed_opts
               |> Keyword.merge(prompt: prompt, model: model_id)
@@ -1322,6 +1313,20 @@ defmodule ReqLLM.Providers.Azure do
            azure:gpt-image-2
          """
        )}
+    end
+  end
+
+  defp validate_image_output_format(opts) do
+    case Keyword.get(opts, :output_format) do
+      format when format in [:png, :jpeg] ->
+        :ok
+
+      format ->
+        {:error,
+         ReqLLM.Error.Invalid.Parameter.exception(
+           parameter:
+             "output_format: #{inspect(format)} is not supported for Azure image models; use :png or :jpeg"
+         )}
     end
   end
 

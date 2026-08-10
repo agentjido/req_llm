@@ -194,8 +194,6 @@ defmodule ReqLLM.Providers.OpenAI.ImagesAPI do
         end
 
       {ratio, _size} ->
-        # An explicit :size wins, but only a well-formed ratio is silently
-        # dropped - a malformed one still has to fail validation.
         case parse_aspect_ratio(ratio) do
           {:ok, _dimensions} -> {Keyword.delete(opts, :aspect_ratio), warnings}
           :error -> {opts, warnings}

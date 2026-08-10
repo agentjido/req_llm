@@ -90,12 +90,27 @@ defmodule ReqLLM.Providers.Azure.ImageTest do
       assert URI.to_string(request.url) =~ "api-version=2026-01-01-preview"
     end
 
-    test "passes n and output_format into the body" do
-      request = prepare!(base_url: @traditional_base_url, n: 3, output_format: :webp)
+    test "passes n and a supported output_format into the body" do
+      request = prepare!(base_url: @traditional_base_url, n: 3, output_format: :jpeg)
 
       body = request.options[:json]
       assert body["n"] == 3
-      assert body["output_format"] == "webp"
+      assert body["output_format"] == "jpeg"
+    end
+
+    test "rejects WebP before building an Azure request" do
+      assert {:error, %ReqLLM.Error.Invalid.Parameter{} = error} =
+               Azure.prepare_request(
+                 :image,
+                 "azure:gpt-image-1",
+                 "A simple red square",
+                 api_key: "test-api-key",
+                 deployment: "my-image-deploy",
+                 base_url: @traditional_base_url,
+                 output_format: :webp
+               )
+
+      assert Exception.message(error) =~ ":png or :jpeg"
     end
 
     # The Images API rejects these with `unknown_parameter`, so they are dropped
@@ -383,7 +398,6 @@ defmodule ReqLLM.Providers.Azure.ImageTest do
 
       {_req, decoded} = Azure.decode_response({request, %Req.Response{status: 200, body: body}})
 
-      # The catalog model id, not the deployment name, so cost lookups resolve.
       assert decoded.body.model == "gpt-image-1"
       assert %{image_usage: image_usage} = decoded.body.usage
       assert map_size(image_usage) > 0

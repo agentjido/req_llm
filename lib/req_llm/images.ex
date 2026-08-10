@@ -35,7 +35,8 @@ defmodule ReqLLM.Images do
                  output_format: [
                    type: {:in, @output_formats},
                    default: :png,
-                   doc: "Requested output image encoding"
+                   doc:
+                     "Requested output image encoding (provider dependent; Azure supports :png and :jpeg)"
                  ],
                  response_format: [
                    type: {:in, @response_formats},

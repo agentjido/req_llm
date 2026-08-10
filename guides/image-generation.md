@@ -262,6 +262,7 @@ Notes:
 - The default `api_version` (`2025-04-01-preview`) satisfies gpt-image models; override via `provider_options: [api_version: ...]` if needed.
 - GPT Image models always return base64 image data (`:binary`); URL responses are not available.
 - Option handling matches OpenAI's exactly, including `aspect_ratio` resolving to the nearest supported size and `seed`/`negative_prompt` being rejected — see [Sizes and Aspect Ratios](#sizes-and-aspect-ratios).
+- Azure supports `output_format: :png` and `output_format: :jpeg`. It does not support `:webp`, and ReqLLM rejects that value before it sends the request.
 - DALL-E models are retired on Azure — use gpt-image models.
 - Only `gpt-image-*` model ids are accepted. Chat models (e.g. `azure:gpt-4o`) are rejected locally with a `ReqLLM.Error.Invalid.Parameter` before any HTTP call, rather than failing at the API.
 - The `deployment` name is free-form and affects only the URL/body identifier. Option handling is keyed off the catalog model id, so a deployment named after a different model does not change which options are sent.

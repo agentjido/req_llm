@@ -190,6 +190,7 @@ Notes:
 - All three gpt-image models work on either endpoint format. A `DeploymentNotFound` (HTTP 404) means the `deployment` name does not exist on the resource, not that the model is unavailable — deployment names are set at deployment-creation time and frequently differ from the model id, so pass `deployment:` explicitly.
 - Cost is billed per token for these models. `response.usage` carries the `input_tokens`/`output_tokens` reported by the Images API alongside `image_usage`.
 - `aspect_ratio` resolves to the nearest size the model offers (`"16:9"` → `1536x1024`); an explicit `size` wins. `seed` and `negative_prompt` are rejected up front, since the Images API has no such fields.
+- Azure supports `:png` and `:jpeg` output. ReqLLM rejects `output_format: :webp` before it sends the request.
 - Non-image models are rejected before the request is sent — `azure:gpt-4o` and `azure:claude-*` both return `ReqLLM.Error.Invalid.Parameter` rather than failing at the API.
 - Image responses expose provider metadata under `response.provider_meta["azure"]`.
 

@@ -115,7 +115,6 @@ defmodule ReqLLM.Providers.OpenAIImagesTest do
     end
 
     test "resolves to the nearest offered ratio, not just the orientation" do
-      # 5:4 is nearer to square than to DALL-E 3's wide 1792x1024
       assert {:ok, opts} = ImagesAPI.normalize_options([aspect_ratio: "5:4"], "dall-e-3")
       assert Keyword.get(opts, :size) == "1024x1024"
     end

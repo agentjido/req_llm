@@ -171,6 +171,7 @@ Azure serves the same GPT Image family, but addresses it through a resource `bas
 
 Set `AZURE_OPENAI_BASE_URL` to `https://<your-resource>.openai.azure.com/openai`, or to
 `.../openai/v1` to use the v1 GA API. Either works for every gpt-image model.
+Azure supports PNG and JPEG output. ReqLLM rejects WebP before it sends the request.
 
 ```elixir
 azure_key = System.get_env("LB_AZURE_OPENAI_API_KEY") || System.get_env("AZURE_OPENAI_API_KEY")
