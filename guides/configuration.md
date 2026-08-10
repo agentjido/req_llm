@@ -559,7 +559,7 @@ inspect(context)
 
 ## Unverified Model Warnings
 
-When a `"provider:model"` spec resolves to a model that is not in the LLMDB catalog, ReqLLM emits a one-off warning (pricing, token counting, and capability detection may be unavailable for such models). For a fixed set of models, the preferred fix is an inline model spec:
+When a `"provider:model"` spec resolves to a model that is not in the LLMDB catalog, ReqLLM emits a warning (pricing, token counting, and capability detection may be unavailable for such models). For a fixed set of models, the preferred fix is an inline model spec:
 
 ```elixir
 ReqLLM.model(%{provider: :openai, id: "my-custom-model"})
