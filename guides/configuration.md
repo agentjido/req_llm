@@ -34,6 +34,9 @@ config :req_llm,
   # Privacy
   redact_context: false,             # Hide message contents in inspect output
 
+  # Warnings
+  warn_unverified_models: true,      # Warn when a model spec is not in the LLMDB catalog
+
   # Debugging
   debug: false                       # Enable verbose logging
 ```
@@ -267,6 +270,7 @@ config :req_llm, thinking_timeout: 600_000  # 10 minutes
 ```
 
 **Automatic detection:** ReqLLM automatically applies `thinking_timeout` when:
+
 - Extended thinking is enabled on Anthropic models
 - Using OpenAI o1/o3 reasoning models
 - Z.AI or Z.AI Coder thinking mode is enabled
@@ -552,6 +556,22 @@ When disabled (the default), the full message preview is shown as normal:
 inspect(context)
 #=> "#Context<2 msgs: system:\"You are a helpful assistant\", user:\"Hello\">"
 ```
+
+## Unverified Model Warnings
+
+When a `"provider:model"` spec resolves to a model that is not in the LLMDB catalog, ReqLLM emits a one-off warning (pricing, token counting, and capability detection may be unavailable for such models). For a fixed set of models, the preferred fix is an inline model spec:
+
+```elixir
+ReqLLM.model(%{provider: :openai, id: "my-custom-model"})
+```
+
+When model ids are dynamic — user-configured, stored in a database, or pointing at self-hosted OpenAI-compatible servers — uncataloged ids are expected, and the warning can be disabled globally:
+
+```elixir
+config :req_llm, warn_unverified_models: false
+```
+
+The default is `true`.
 
 ## Example: Production Configuration
 

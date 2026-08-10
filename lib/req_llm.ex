@@ -745,17 +745,26 @@ defmodule ReqLLM do
   end
 
   defp warn_unverified_model(provider, model_id) do
-    IO.warn("""
-    Using unverified model: #{provider}:#{model_id}
+    if Application.get_env(:req_llm, :warn_unverified_models, true) do
+      IO.warn("""
+      Using unverified model: #{provider}:#{model_id}
 
-    This model is not in the LLMDB catalog. While it will work if the provider \
-    supports this model ID, some features like pricing, token counting, and \
-    capability detection may be unavailable.
+      This model is not in the LLMDB catalog. While it will work if the provider \
+      supports this model ID, some features like pricing, token counting, and \
+      capability detection may be unavailable.
 
-    To suppress this warning, use an inline model spec:
+      To suppress this warning, use an inline model spec:
 
-        ReqLLM.model(%{provider: :#{provider}, id: "#{model_id}"})
-    """)
+          ReqLLM.model(%{provider: :#{provider}, id: "#{model_id}"})
+
+      or, when model ids are dynamic (user- or database-configured), disable it \
+      globally:
+
+          config :req_llm, warn_unverified_models: false
+      """)
+    end
+
+    :ok
   end
 
   defp provider_atom_from_string(provider_name) when is_binary(provider_name) do

@@ -85,6 +85,23 @@ defmodule ReqLLMTest do
       assert output =~ "To suppress this warning, use an inline model spec"
     end
 
+    test "warn_unverified_models: false suppresses the unverified-model warning" do
+      Application.put_env(:req_llm, :warn_unverified_models, false)
+      on_exit(fn -> Application.delete_env(:req_llm, :warn_unverified_models) end)
+
+      output =
+        capture_io(:stderr, fn ->
+          assert {:ok,
+                  %LLMDB.Model{
+                    provider: :openai,
+                    id: "quiet-unverified-model",
+                    provider_model_id: "quiet-unverified-model"
+                  }} = ReqLLM.model("openai:quiet-unverified-model")
+        end)
+
+      assert output == ""
+    end
+
     test "resolves unknown registered provider tuple specs with a warning" do
       output =
         capture_io(:stderr, fn ->
