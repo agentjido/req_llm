@@ -215,6 +215,43 @@ revised = image_part.metadata[:revised_prompt]
 
 ---
 
+## Azure
+
+Azure hosts the OpenAI GPT Image family (`gpt-image-1`, `gpt-image-1.5`, `gpt-image-2`) behind Azure OpenAI resources. The wire format matches OpenAI's Images API, so the same options apply, but Azure requires a `base_url` and a `deployment`:
+
+```elixir
+{:ok, response} = ReqLLM.generate_image(
+  "azure:gpt-image-1",
+  "A watercolor painting of a lighthouse",
+  base_url: "https://my-resource.openai.azure.com/openai",
+  deployment: "my-image-deployment",
+  size: "1024x1024"
+)
+```
+
+Image editing works the same way as OpenAI's (multipart upload with `source_image` and optional `mask`):
+
+```elixir
+{:ok, response} = ReqLLM.generate_image(
+  "azure:gpt-image-1",
+  "Make the sky stormy",
+  base_url: "https://my-resource.openai.azure.com/openai",
+  deployment: "my-image-deployment",
+  source_image: File.read!("lighthouse.png")
+)
+```
+
+Notes:
+
+- Supported endpoint formats: traditional Azure OpenAI (`https://<resource>.openai.azure.com/openai`, deployment in the URL path) and the v1 GA API (`.../openai/v1`, deployment sent as `model` in the body). Azure AI Foundry endpoints (`.services.ai.azure.com`) are not supported for image generation.
+- The default `api_version` (`2025-04-01-preview`) satisfies gpt-image models; override via `provider_options: [api_version: ...]` if needed.
+- GPT Image models always return base64 image data (`:binary`); URL responses are not available.
+- DALL-E models are retired on Azure — use gpt-image models.
+
+See the [Azure guide](azure.md) for authentication and deployment configuration.
+
+---
+
 ## Google (Gemini)
 
 Google's Gemini models support both text-to-image generation and image editing through multi-turn conversations.

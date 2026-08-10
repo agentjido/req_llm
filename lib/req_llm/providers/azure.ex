@@ -20,6 +20,7 @@ defmodule ReqLLM.Providers.Azure do
   - Streaming responses with usage tracking
   - Tool calling (function calling)
   - Embeddings generation (OpenAI models only)
+  - Image generation and editing (gpt-image models only)
   - Multi-modal inputs (text and images)
   - Structured output generation
   - Extended thinking (Claude models)
@@ -137,6 +138,24 @@ defmodule ReqLLM.Providers.Azure do
         "Hello world",
         base_url: "https://my-resource.openai.azure.com/openai",
         deployment: "my-embedding-deployment"
+      )
+
+      # Image generation (gpt-image models)
+      {:ok, response} = ReqLLM.generate_image(
+        "azure:gpt-image-1",
+        "A watercolor painting of a lighthouse",
+        base_url: "https://my-resource.openai.azure.com/openai",
+        deployment: "my-image-deployment",
+        size: "1024x1024"
+      )
+
+      # Image editing (multipart, gpt-image models)
+      {:ok, response} = ReqLLM.generate_image(
+        "azure:gpt-image-1",
+        "Make the sky stormy",
+        base_url: "https://my-resource.openai.azure.com/openai",
+        deployment: "my-image-deployment",
+        source_image: File.read!("lighthouse.png")
       )
 
       # OpenAI reasoning models (o1, o3, o4-mini)
@@ -297,6 +316,24 @@ defmodule ReqLLM.Providers.Azure do
 
   @common_req_keys [:context, :operation, :text, :stream, :model, :provider_options, :deployment]
 
+  @image_req_keys [
+    :prompt,
+    :n,
+    :size,
+    :aspect_ratio,
+    :output_format,
+    :response_format,
+    :quality,
+    :style,
+    :seed,
+    :negative_prompt,
+    :user,
+    :source_image,
+    :source_image_media_type,
+    :mask,
+    :mask_media_type
+  ]
+
   @family_env_vars %{
     "claude" => "AZURE_ANTHROPIC_BASE_URL",
     "gpt" => "AZURE_OPENAI_BASE_URL",
@@ -337,6 +374,7 @@ defmodule ReqLLM.Providers.Azure do
   - `:chat` - Text generation via chat completions or messages endpoint
   - `:object` - Structured output generation (uses tools for OpenAI, native for Claude)
   - `:embedding` - Vector embeddings (OpenAI embedding models only)
+  - `:image` - Image generation and editing (gpt-image models only)
   """
   @impl ReqLLM.Provider
   def prepare_request(:chat, model_spec, prompt, opts) do
@@ -388,6 +426,10 @@ defmodule ReqLLM.Providers.Azure do
 
   def prepare_request(:embedding, model_spec, text, opts) do
     do_prepare_embedding_request(model_spec, text, opts)
+  end
+
+  def prepare_request(:image, model_spec, prompt, opts) do
+    do_prepare_image_request(model_spec, prompt, opts)
   end
 
   def prepare_request(operation, model_spec, input, opts) do
@@ -531,6 +573,87 @@ defmodule ReqLLM.Providers.Azure do
     end
   end
 
+  defp do_prepare_image_request(model_spec, prompt_or_messages, opts) do
+    with {:ok, model} <- ReqLLM.model(model_spec),
+         model_id = effective_model_id(model),
+         :ok <- validate_image_model(model_id),
+         {:ok, context, prompt} <-
+           ReqLLM.Providers.OpenAI.ImagesAPI.image_context(prompt_or_messages, opts) do
+      model_family = get_model_family(model_id)
+
+      # Resolve base_url BEFORE Options.process
+      resolved_base_url = resolve_base_url(model_family, opts)
+
+      opts_with_context =
+        opts
+        |> Keyword.put(:context, context)
+        |> Keyword.put(:base_url, resolved_base_url)
+        |> Keyword.put(:operation, :image)
+
+      http_opts = Keyword.get(opts, :req_http_options, [])
+
+      {:ok, processed_opts} =
+        ReqLLM.Provider.Options.process(__MODULE__, :image, model, opts_with_context)
+
+      {api_version, deployment, base_url} =
+        extract_azure_credentials(model, processed_opts)
+
+      image_edit? = Keyword.has_key?(processed_opts, :source_image)
+      kind = if image_edit?, do: :edit, else: :generation
+
+      with {:ok, path} <- get_image_endpoint_path(kind, deployment, api_version, base_url) do
+        timeout =
+          Keyword.get(
+            processed_opts,
+            :receive_timeout,
+            Application.get_env(:req_llm, :image_receive_timeout, 120_000)
+          )
+
+        body_opts = Keyword.merge(processed_opts, prompt: prompt, model: deployment)
+
+        body_options =
+          if image_edit? do
+            parts = ReqLLM.Providers.OpenAI.ImagesAPI.edit_image_form_multipart(body_opts)
+
+            # Traditional format carries the deployment in the URL; drop the model part.
+            parts =
+              if uses_v1_ga_format?(base_url), do: parts, else: Keyword.delete(parts, :model)
+
+            [form_multipart: parts]
+          else
+            body =
+              ReqLLM.Providers.OpenAI.ImagesAPI.build_generation_body(body_opts)
+              |> Map.delete("model")
+              |> maybe_add_model_for_foundry(deployment, base_url)
+
+            [json: body]
+          end
+
+        req_keys = supported_provider_options() ++ @common_req_keys ++ @image_req_keys
+
+        request =
+          Req.new(
+            [url: path, method: :post, receive_timeout: timeout] ++ body_options ++ http_opts
+          )
+          |> Req.Request.register_options(req_keys)
+          |> Req.Request.merge_options(
+            Keyword.take(processed_opts, req_keys) ++
+              [
+                model: model.id,
+                base_url: base_url,
+                operation: :image,
+                prompt: prompt,
+                context: context
+              ]
+          )
+          |> Req.Request.put_private(:model, model)
+          |> attach(model, processed_opts)
+
+        {:ok, request}
+      end
+    end
+  end
+
   @doc """
   Attaches Azure-specific authentication and pipeline steps to a request.
 
@@ -562,7 +685,7 @@ defmodule ReqLLM.Providers.Azure do
       |> Enum.uniq()
 
     request
-    |> Req.Request.put_header("content-type", "application/json")
+    |> maybe_put_json_content_type()
     |> Req.Request.put_header(auth_header_name, auth_header_value)
     |> then(fn req ->
       Enum.reduce(extra_headers, req, fn {key, value}, acc ->
@@ -577,6 +700,16 @@ defmodule ReqLLM.Providers.Azure do
     |> ReqLLM.Step.Usage.attach(model)
     |> ReqLLM.Step.Telemetry.attach(model, user_opts)
     |> ReqLLM.Step.Fixture.maybe_attach(model, user_opts)
+  end
+
+  # Multipart requests (image edits) must let Req set the multipart boundary
+  # content type; a pre-set application/json header would suppress it.
+  defp maybe_put_json_content_type(request) do
+    if request.options[:form_multipart] do
+      request
+    else
+      Req.Request.put_header(request, "content-type", "application/json")
+    end
   end
 
   @doc """
@@ -597,6 +730,13 @@ defmodule ReqLLM.Providers.Azure do
   based on the model. Handles both successful responses and error extraction.
   """
   @impl ReqLLM.Provider
+  def decode_response(
+        {%Req.Request{options: %{operation: :image}} = request, %{status: status} = response}
+      )
+      when status in 200..299 do
+    ReqLLM.Providers.OpenAI.ImagesAPI.decode_response({request, response})
+  end
+
   def decode_response({request, %{status: status} = response}) when status in 200..299 do
     # Embedding responses should return raw body, not parsed ReqLLM.Response
     if request.options[:operation] == :embedding do
@@ -1178,6 +1318,25 @@ defmodule ReqLLM.Providers.Azure do
     end
   end
 
+  # Validates that a model supports image generation (gpt-image-* models only).
+  defp validate_image_model(model_id) do
+    if get_model_family(model_id) == "gpt" do
+      :ok
+    else
+      {:error,
+       ReqLLM.Error.Invalid.Parameter.exception(
+         parameter: """
+         Model '#{model_id}' does not support image generation on Azure.
+
+         Use a gpt-image model, e.g.:
+           azure:gpt-image-1
+           azure:gpt-image-1.5
+           azure:gpt-image-2
+         """
+       )}
+    end
+  end
+
   # Returns the formatter module for a model.
   # Responses API models use Azure.ResponsesAPI adapter, others use family-specific formatters.
   defp get_formatter(model_id, model) do
@@ -1250,6 +1409,30 @@ defmodule ReqLLM.Providers.Azure do
       true ->
         # Azure OpenAI (traditional): deployment in URL determines model
         "/deployments/#{deployment}/embeddings?api-version=#{api_version}"
+    end
+  end
+
+  # Builds the image endpoint path (kind is :generation | :edit).
+  # Foundry endpoints have no documented image generation path, so they are
+  # rejected with a clear error instead of guessing a URL.
+  defp get_image_endpoint_path(kind, deployment, api_version, base_url) do
+    suffix = if kind == :edit, do: "edits", else: "generations"
+
+    cond do
+      uses_v1_ga_format?(base_url) ->
+        {:ok, "/images/#{suffix}"}
+
+      uses_foundry_format?(base_url) ->
+        {:error,
+         ReqLLM.Error.Invalid.Parameter.exception(
+           parameter:
+             "base_url: image generation is not supported on Azure AI Foundry " <>
+               "(.services.ai.azure.com) endpoints. Use an Azure OpenAI resource " <>
+               "(https://YOUR-RESOURCE.openai.azure.com/openai or .../openai/v1)."
+         )}
+
+      true ->
+        {:ok, "/deployments/#{deployment}/images/#{suffix}?api-version=#{api_version}"}
     end
   end
 

@@ -148,6 +148,35 @@ tools = [
 )
 ```
 
+### Image Generation
+
+Available for gpt-image models (`gpt-image-1`, `gpt-image-1.5`, `gpt-image-2`) on Azure OpenAI resources. Foundry endpoints (`.services.ai.azure.com`) are not supported for images.
+
+```elixir
+{:ok, response} = ReqLLM.generate_image(
+  "azure:gpt-image-1",
+  "A watercolor painting of a lighthouse",
+  base_url: "https://my-resource.openai.azure.com/openai",
+  deployment: "my-image-deployment",
+  size: "1024x1024"
+)
+
+[image] = ReqLLM.Response.images(response)
+File.write!("lighthouse.png", image.data)
+```
+
+Image editing (multipart) with a source image and optional mask:
+
+```elixir
+{:ok, response} = ReqLLM.generate_image(
+  "azure:gpt-image-1",
+  "Make the sky stormy",
+  base_url: "https://my-resource.openai.azure.com/openai",
+  deployment: "my-image-deployment",
+  source_image: File.read!("lighthouse.png")
+)
+```
+
 ### Structured Output
 
 ```elixir
@@ -200,6 +229,12 @@ schema = [
 - `azure:text-embedding-3-small` - Small, efficient embeddings
 - `azure:text-embedding-3-large` - Higher quality embeddings
 - `azure:text-embedding-ada-002` - Legacy embedding model
+
+### OpenAI Image Models
+
+- `azure:gpt-image-1` - GPT Image generation and editing
+- `azure:gpt-image-1.5` - Improved GPT Image model
+- `azure:gpt-image-2` - Latest GPT Image model
 
 ### Anthropic Claude Models
 

@@ -26,23 +26,89 @@ defmodule ReqLLM.Providers.OpenAI.ImagesAPI do
   def encode_body(request) do
     opts = if is_map(request.options), do: request.options, else: Map.new(request.options)
 
-    body =
-      %{
-        "model" => opts[:model],
-        "prompt" => opts[:prompt],
-        "n" => opts[:n] || 1
-      }
-      |> maybe_put_response_format(opts[:model], opts[:response_format])
-      |> maybe_put_size(opts[:size])
-      |> maybe_put_string("quality", opts[:quality])
-      |> maybe_put_string("style", opts[:style])
-      |> maybe_put_string("user", opts[:user])
-      |> maybe_put_output_format(opts[:output_format])
-      |> maybe_put_integer("seed", opts[:seed])
-      |> maybe_put_string("negative_prompt", opts[:negative_prompt])
-
     request
-    |> put_in([Access.key!(:options), :json], body)
+    |> put_in([Access.key!(:options), :json], build_generation_body(opts))
+  end
+
+  @doc """
+  Builds the JSON body map for the `/images/generations` endpoint.
+
+  Accepts a map or keyword list with `:model`, `:prompt`, and the optional
+  image generation options (`:n`, `:size`, `:quality`, `:style`, `:user`,
+  `:output_format`, `:response_format`, `:seed`, `:negative_prompt`).
+  """
+  def build_generation_body(opts) when is_list(opts), do: build_generation_body(Map.new(opts))
+
+  def build_generation_body(opts) when is_map(opts) do
+    %{
+      "model" => opts[:model],
+      "prompt" => opts[:prompt],
+      "n" => opts[:n] || 1
+    }
+    |> maybe_put_response_format(opts[:model], opts[:response_format])
+    |> maybe_put_size(opts[:size])
+    |> maybe_put_string("quality", opts[:quality])
+    |> maybe_put_string("style", opts[:style])
+    |> maybe_put_string("user", opts[:user])
+    |> maybe_put_output_format(opts[:output_format])
+    |> maybe_put_integer("seed", opts[:seed])
+    |> maybe_put_string("negative_prompt", opts[:negative_prompt])
+  end
+
+  @doc """
+  Normalizes image generation input into a `{:ok, context, prompt}` tuple.
+
+  Uses an existing `:context` option when present, otherwise normalizes the
+  prompt/messages input. The prompt is the text content of the last user
+  message; an empty prompt is an error.
+  """
+  @spec image_context(term(), keyword()) ::
+          {:ok, Context.t(), String.t()} | {:error, term()}
+  def image_context(prompt_or_messages, opts) do
+    context_result =
+      case Keyword.get(opts, :context) do
+        %Context{} = context -> {:ok, context}
+        _ -> Context.normalize(prompt_or_messages, opts)
+      end
+
+    with {:ok, context} <- context_result,
+         {:ok, prompt} <- extract_image_prompt(context) do
+      {:ok, context, prompt}
+    end
+  end
+
+  defp extract_image_prompt(%Context{messages: messages}) do
+    last_user =
+      messages
+      |> Enum.reverse()
+      |> Enum.find(&(&1.role == :user))
+
+    prompt =
+      case last_user do
+        nil ->
+          ""
+
+        %Message{content: content} when is_list(content) ->
+          content
+          |> Enum.filter(&(&1.type == :text))
+          |> Enum.map_join("", & &1.text)
+
+        %Message{content: content} when is_binary(content) ->
+          content
+
+        _ ->
+          ""
+      end
+      |> String.trim()
+
+    if prompt == "" do
+      {:error,
+       ReqLLM.Error.Invalid.Parameter.exception(
+         parameter: "image generation requires a non-empty user text prompt"
+       )}
+    else
+      {:ok, prompt}
+    end
   end
 
   @doc """

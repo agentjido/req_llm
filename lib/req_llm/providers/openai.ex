@@ -353,7 +353,8 @@ defmodule ReqLLM.Providers.OpenAI do
   """
   def prepare_request(:image, model_spec, prompt_or_messages, opts) do
     with {:ok, model} <- ReqLLM.model(model_spec),
-         {:ok, context, prompt} <- image_context(prompt_or_messages, opts),
+         {:ok, context, prompt} <-
+           ReqLLM.Providers.OpenAI.ImagesAPI.image_context(prompt_or_messages, opts),
          opts_with_context = Keyword.put(opts, :context, context),
          http_opts = Keyword.get(opts, :req_http_options, []),
          {:ok, processed_opts} <-
@@ -559,53 +560,6 @@ defmodule ReqLLM.Providers.OpenAI do
 
       result ->
         result
-    end
-  end
-
-  defp image_context(prompt_or_messages, opts) do
-    context_result =
-      case Keyword.get(opts, :context) do
-        %ReqLLM.Context{} = context -> {:ok, context}
-        _ -> ReqLLM.Context.normalize(prompt_or_messages, opts)
-      end
-
-    with {:ok, context} <- context_result,
-         {:ok, prompt} <- extract_image_prompt(context) do
-      {:ok, context, prompt}
-    end
-  end
-
-  defp extract_image_prompt(%ReqLLM.Context{messages: messages}) do
-    last_user =
-      messages
-      |> Enum.reverse()
-      |> Enum.find(&(&1.role == :user))
-
-    prompt =
-      case last_user do
-        nil ->
-          ""
-
-        %ReqLLM.Message{content: content} when is_list(content) ->
-          content
-          |> Enum.filter(&(&1.type == :text))
-          |> Enum.map_join("", & &1.text)
-
-        %ReqLLM.Message{content: content} when is_binary(content) ->
-          content
-
-        _ ->
-          ""
-      end
-      |> String.trim()
-
-    if prompt == "" do
-      {:error,
-       ReqLLM.Error.Invalid.Parameter.exception(
-         parameter: "image generation requires a non-empty user text prompt"
-       )}
-    else
-      {:ok, prompt}
     end
   end
 
