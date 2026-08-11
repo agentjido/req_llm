@@ -94,10 +94,9 @@ defmodule ReqLLM.Provider.Defaults.ResponseBuilder do
     base_provider_meta = metadata[:provider_meta] || %{}
 
     provider_meta =
-      case ChunkAccumulator.finalize_logprobs(acc) do
-        [] -> base_provider_meta
-        tokens -> Map.put(base_provider_meta, :logprobs, tokens)
-      end
+      base_provider_meta
+      |> put_streamed_logprobs(ChunkAccumulator.finalize_logprobs(acc))
+      |> put_streamed_annotations(ChunkAccumulator.finalize_annotations(acc))
 
     base_response = %Response{
       id: materialize_response_id(profile, metadata),
@@ -118,6 +117,24 @@ defmodule ReqLLM.Provider.Defaults.ResponseBuilder do
     {:ok, merged_response}
   rescue
     error -> {:error, error}
+  end
+
+  defp put_streamed_logprobs(provider_meta, []), do: provider_meta
+
+  defp put_streamed_logprobs(provider_meta, tokens),
+    do: Map.put(provider_meta, :logprobs, tokens)
+
+  defp put_streamed_annotations(provider_meta, []), do: provider_meta
+
+  defp put_streamed_annotations(provider_meta, annotations) do
+    # A provider that already resolved the authoritative list into
+    # `provider_meta` (the OpenAI Responses API re-derives it from the full
+    # output on `response.completed`) wins over the streamed fragments.
+    if Map.has_key?(provider_meta, "annotations") or Map.has_key?(provider_meta, :annotations) do
+      provider_meta
+    else
+      Map.put(provider_meta, "annotations", annotations)
+    end
   end
 
   # ============================================================================

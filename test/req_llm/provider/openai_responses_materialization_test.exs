@@ -119,6 +119,96 @@ defmodule ReqLLM.Provider.OpenAIResponsesMaterializationTest do
     assert streamed.model == "gpt-responses-local"
   end
 
+  test "buffered Responses output surfaces annotations from output_text parts", %{model: model} do
+    annotation = %{
+      "type" => "url_citation",
+      "url" => "https://example.com/article",
+      "title" => "Example Article",
+      "start_index" => 10,
+      "end_index" => 20
+    }
+
+    body = %{
+      "id" => "resp_ann",
+      "status" => "completed",
+      "output" => [
+        %{
+          "type" => "message",
+          "content" => [
+            %{"type" => "output_text", "text" => "Cited answer", "annotations" => [annotation]}
+          ]
+        }
+      ]
+    }
+
+    response = decode(body, model)
+
+    assert response.provider_meta["annotations"] == [annotation]
+    assert ReqLLM.Response.annotations(response) == [annotation]
+  end
+
+  test "annotation.added stream events emit annotation meta chunks", %{model: model} do
+    annotation = %{
+      "type" => "url_citation",
+      "url" => "https://example.com/article",
+      "title" => "Example Article",
+      "start_index" => 10,
+      "end_index" => 20
+    }
+
+    event = %{
+      data: %{
+        "type" => "response.output_text.annotation.added",
+        "annotation" => annotation,
+        "annotation_index" => 0,
+        "content_index" => 0,
+        "output_index" => 0
+      }
+    }
+
+    assert [%StreamChunk{type: :meta, metadata: %{annotations: [^annotation]}}] =
+             ResponsesAPI.decode_stream_event(event, model)
+  end
+
+  test "response.completed captures annotations into provider_meta", %{model: model} do
+    annotation = %{
+      "type" => "url_citation",
+      "url" => "https://example.com/article",
+      "title" => "Example Article",
+      "start_index" => 10,
+      "end_index" => 20
+    }
+
+    event = %{
+      data: %{
+        "type" => "response.completed",
+        "response" => %{
+          "id" => "resp_ann",
+          "status" => "completed",
+          "output" => [
+            %{
+              "type" => "message",
+              "content" => [
+                %{
+                  "type" => "output_text",
+                  "text" => "Cited answer",
+                  "annotations" => [annotation]
+                }
+              ]
+            }
+          ],
+          "usage" => %{"input_tokens" => 1, "output_tokens" => 2}
+        }
+      }
+    }
+
+    assert [%StreamChunk{type: :meta, metadata: metadata}] =
+             ResponsesAPI.decode_stream_event(event, model)
+
+    assert metadata.terminal? == true
+    assert metadata.provider_meta["annotations"] == [annotation]
+  end
+
   test "buffered compatibility retains legacy ordering and raw tool arguments", %{model: model} do
     context = Context.new([Context.user("Keep this")])
 

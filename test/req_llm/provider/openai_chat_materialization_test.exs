@@ -168,6 +168,200 @@ defmodule ReqLLM.Provider.OpenAIChatMaterializationTest do
     assert unknown_finish_response.finish_reason == :error
   end
 
+  test "buffered chat responses surface normalized annotations", %{model: model} do
+    data = %{
+      "id" => "chatcmpl-ann",
+      "choices" => [
+        %{
+          "message" => %{
+            "content" => "Cited answer",
+            "annotations" => [
+              %{
+                "type" => "url_citation",
+                "url_citation" => %{
+                  "url" => "https://example.com/article",
+                  "title" => "Example Article",
+                  "start_index" => 0,
+                  "end_index" => 5
+                }
+              }
+            ]
+          },
+          "finish_reason" => "stop"
+        }
+      ]
+    }
+
+    {:ok, response} = Defaults.decode_response_body_openai_format(data, model)
+
+    expected = [
+      %{
+        "type" => "url_citation",
+        "url" => "https://example.com/article",
+        "title" => "Example Article",
+        "start_index" => 0,
+        "end_index" => 5
+      }
+    ]
+
+    assert response.provider_meta["annotations"] == expected
+    assert Response.annotations(response) == expected
+  end
+
+  test "streamed chat deltas emit normalized annotation meta chunks", %{model: model} do
+    event = %{
+      data: %{
+        "choices" => [
+          %{
+            "delta" => %{
+              "annotations" => [
+                %{
+                  "type" => "url_citation",
+                  "url_citation" => %{
+                    "url" => "https://example.com/article",
+                    "title" => "Example Article",
+                    "start_index" => 0,
+                    "end_index" => 5
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+
+    expected = [
+      %{
+        "type" => "url_citation",
+        "url" => "https://example.com/article",
+        "title" => "Example Article",
+        "start_index" => 0,
+        "end_index" => 5
+      }
+    ]
+
+    assert [%StreamChunk{type: :meta, metadata: metadata}] =
+             Defaults.default_decode_stream_event(event, model)
+
+    assert metadata.annotations == expected
+
+    # Deliberately no per-chunk :provider_meta — StreamServer shallow-merges
+    # meta chunks, so one there would drop every citation but the last.
+    refute Map.has_key?(metadata, :provider_meta)
+  end
+
+  test "streamed chat annotations accumulate across deltas", %{model: model} do
+    annotation = fn i ->
+      %{
+        "type" => "url_citation",
+        "url_citation" => %{
+          "url" => "https://example.com/#{i}",
+          "title" => "Article #{i}",
+          "start_index" => i,
+          "end_index" => i + 1
+        }
+      }
+    end
+
+    normalized = fn i ->
+      %{
+        "type" => "url_citation",
+        "url" => "https://example.com/#{i}",
+        "title" => "Article #{i}",
+        "start_index" => i,
+        "end_index" => i + 1
+      }
+    end
+
+    delta_event = fn i ->
+      %{data: %{"choices" => [%{"delta" => %{"annotations" => [annotation.(i)]}}]}}
+    end
+
+    chunks =
+      Defaults.default_decode_stream_event(
+        %{data: %{"choices" => [%{"delta" => %{"content" => "cited"}}]}},
+        model
+      ) ++
+        Defaults.default_decode_stream_event(delta_event.(1), model) ++
+        Defaults.default_decode_stream_event(delta_event.(2), model) ++
+        Defaults.default_decode_stream_event(delta_event.(3), model)
+
+    {:ok, response} =
+      Defaults.ResponseBuilder.build_response(chunks, %{finish_reason: :stop},
+        context: %ReqLLM.Context{messages: []},
+        model: model
+      )
+
+    expected = [normalized.(1), normalized.(2), normalized.(3)]
+
+    assert response.provider_meta["annotations"] == expected
+    assert Response.annotations(response) == expected
+    assert Response.text(response) == "cited"
+  end
+
+  test "streamed chat annotations drop exact duplicates", %{model: model} do
+    annotation = %{
+      "type" => "url_citation",
+      "url_citation" => %{
+        "url" => "https://example.com/article",
+        "title" => "Example Article",
+        "start_index" => 0,
+        "end_index" => 5
+      }
+    }
+
+    event = %{data: %{"choices" => [%{"delta" => %{"annotations" => [annotation]}}]}}
+
+    chunks =
+      Defaults.default_decode_stream_event(event, model) ++
+        Defaults.default_decode_stream_event(event, model)
+
+    {:ok, response} =
+      Defaults.ResponseBuilder.build_response(chunks, %{finish_reason: :stop},
+        context: %ReqLLM.Context{messages: []},
+        model: model
+      )
+
+    assert [
+             %{
+               "type" => "url_citation",
+               "url" => "https://example.com/article",
+               "title" => "Example Article",
+               "start_index" => 0,
+               "end_index" => 5
+             }
+           ] = Response.annotations(response)
+  end
+
+  test "provider-resolved annotations win over streamed fragments", %{model: model} do
+    streamed = %{
+      data: %{
+        "choices" => [
+          %{
+            "delta" => %{
+              "annotations" => [
+                %{"type" => "url_citation", "url_citation" => %{"url" => "https://partial"}}
+              ]
+            }
+          }
+        ]
+      }
+    }
+
+    authoritative = [%{"type" => "url_citation", "url" => "https://authoritative"}]
+
+    {:ok, response} =
+      Defaults.ResponseBuilder.build_response(
+        Defaults.default_decode_stream_event(streamed, model),
+        %{finish_reason: :stop, provider_meta: %{"annotations" => authoritative}},
+        context: %ReqLLM.Context{messages: []},
+        model: model
+      )
+
+    assert Response.annotations(response) == authoritative
+  end
+
   test "StreamResponse helpers share terminal error materialization", %{model: model} do
     error = ReqLLM.Error.API.Stream.exception(reason: "provider failed", cause: :closed)
 

@@ -183,6 +183,14 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
       "response.output_text.done" ->
         []
 
+      "response.output_text.annotation.added" ->
+        # Live event only; the durable full list is captured from the final
+        # output in `capture_completion_metadata/3`.
+        case ReqLLM.Provider.Defaults.normalize_openai_annotations([data["annotation"]]) do
+          [] -> []
+          annotations -> [ReqLLM.StreamChunk.meta(%{annotations: annotations})]
+        end
+
       "response.function_call.delta" ->
         handle_function_call_delta(data)
 
@@ -309,8 +317,26 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
 
     meta = merge_response_provider_meta(meta, data["response"] || %{})
 
+    meta = merge_annotations_meta(meta, response_output)
+
     [ReqLLM.StreamChunk.meta(meta)]
   end
+
+  # The incremental `response.output_text.annotation.added` chunks are
+  # event-only; the completed/incomplete response's full output is the
+  # authoritative annotations list that lands in `provider_meta`.
+  defp merge_annotations_meta(meta, response_output) when is_list(response_output) do
+    case extract_annotations_from_segments(response_output) do
+      [] ->
+        meta
+
+      annotations ->
+        provider_meta = Map.get(meta, :provider_meta, %{})
+        Map.put(meta, :provider_meta, put_annotations_meta(provider_meta, annotations))
+    end
+  end
+
+  defp merge_annotations_meta(meta, _), do: meta
 
   defp maybe_put_reasoning_details(meta, []), do: meta
 
@@ -1864,6 +1890,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
       base_provider_meta
       |> Map.merge(object_meta)
       |> put_code_interpreter_meta(code_interpreter_items)
+      |> put_annotations_meta(extract_annotations_from_segments(output_segments))
 
     ctx = req.options[:context] || %ReqLLM.Context{messages: []}
     chunks = buffered_response_chunks(text, thinking, tool_calls, reasoning_details)
@@ -2259,6 +2286,24 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
 
   defp put_code_interpreter_meta(provider_meta, items) when is_list(items) do
     Map.put(provider_meta, "code_interpreter", %{"items" => items})
+  end
+
+  defp extract_annotations_from_segments(segments) when is_list(segments) do
+    segments
+    |> Enum.filter(&(&1["type"] == "message"))
+    |> Enum.flat_map(fn seg ->
+      (seg["content"] || [])
+      |> Enum.filter(&(is_map(&1) and &1["type"] in ["output_text", "text"]))
+      |> Enum.flat_map(&ReqLLM.Provider.Defaults.normalize_openai_annotations(&1["annotations"]))
+    end)
+  end
+
+  defp extract_annotations_from_segments(_), do: []
+
+  defp put_annotations_meta(provider_meta, []), do: provider_meta
+
+  defp put_annotations_meta(provider_meta, annotations) when is_list(annotations) do
+    Map.put(provider_meta, "annotations", annotations)
   end
 
   defp normalize_arguments_json(nil), do: "{}"

@@ -7,8 +7,8 @@ defmodule ReqLLM.Provider.ChunkAccumulator do
 
   Maintains running iodata buffers for text/thinking, ordered content events,
   complete content parts, a running tool-call list, and per-index
-  argument-fragment buffers. Reasoning details and logprobs are also collected
-  from `:meta` chunks.
+  argument-fragment buffers. Reasoning details, logprobs, and annotations are
+  also collected from `:meta` chunks.
 
   ## Finalizers
 
@@ -36,8 +36,8 @@ defmodule ReqLLM.Provider.ChunkAccumulator do
   ## Performance notes
 
   The accumulator is on the streaming hot path. To keep `push/2` O(1) per
-  chunk we prepend list entries (tool calls, reasoning details, logprobs)
-  and reverse them at finalize time. Text and thinking buffers are iodata
+  chunk we prepend list entries (tool calls, reasoning details, logprobs,
+  annotations) and reverse them at finalize time. Text and thinking buffers are iodata
   — also O(1) per chunk. Argument fragments are iodata buffers keyed by
   tool-call index, joined only at finalize time. A stream with N chunks
   costs O(N) total work, not O(N²).
@@ -90,6 +90,7 @@ defmodule ReqLLM.Provider.ChunkAccumulator do
           arg_fragments: %{optional(non_neg_integer()) => iodata()},
           reasoning_details: [term()],
           logprobs: [term()],
+          annotations: [term()],
           finish_reason: atom() | String.t() | nil,
           usage: map() | nil
         }
@@ -102,6 +103,7 @@ defmodule ReqLLM.Provider.ChunkAccumulator do
             arg_fragments: %{},
             reasoning_details: [],
             logprobs: [],
+            annotations: [],
             finish_reason: nil,
             usage: nil
 
@@ -184,6 +186,7 @@ defmodule ReqLLM.Provider.ChunkAccumulator do
     |> push_arg_fragment(metadata)
     |> push_reasoning_details(metadata)
     |> push_logprobs(metadata)
+    |> push_annotations(metadata)
     |> push_finish_reason(metadata)
     |> push_usage(metadata)
   end
@@ -228,6 +231,16 @@ defmodule ReqLLM.Provider.ChunkAccumulator do
   end
 
   defp push_logprobs(acc, _metadata), do: acc
+
+  # Providers that stream citations one-per-delta (OpenAI Chat Completions
+  # web search) surface a fresh `:annotations` list on each meta chunk. They
+  # accumulate rather than replace so the materialized response carries every
+  # citation, not just the last one.
+  defp push_annotations(acc, %{annotations: annotations}) when is_list(annotations) do
+    %{acc | annotations: Enum.reverse(annotations, acc.annotations)}
+  end
+
+  defp push_annotations(acc, _metadata), do: acc
 
   # Latest finish_reason wins — streaming providers may emit interim values
   # and a final terminal value. The raw (string or atom) form is stored;
@@ -357,6 +370,16 @@ defmodule ReqLLM.Provider.ChunkAccumulator do
   @doc "Returns logprob tokens in arrival order."
   @spec finalize_logprobs(t()) :: [term()]
   def finalize_logprobs(%__MODULE__{logprobs: tokens}), do: Enum.reverse(tokens)
+
+  @doc """
+  Returns annotations in arrival order, with exact duplicates dropped.
+
+  Deduplication matters because a provider may re-send an annotation it
+  already streamed (or emit both an incremental event and a final list).
+  """
+  @spec finalize_annotations(t()) :: [term()]
+  def finalize_annotations(%__MODULE__{annotations: annotations}),
+    do: annotations |> Enum.reverse() |> Enum.uniq()
 
   @doc """
   Returns the most recently observed `finish_reason` from meta chunks, or

@@ -31,6 +31,11 @@ defmodule ReqLLM.Coverage.OpenAI.WebSearchTest do
 
     assert response.usage.tool_usage.web_search.count > 0
     assert response.usage.cost.tools > 0
+
+    assert [%{"type" => "url_citation", "url" => url} | _] =
+             ReqLLM.Response.annotations(response)
+
+    assert is_binary(url)
   end
 
   @tag ReqLLM.Test.CompatibilityScenario.tag!(:web_search_streaming)
@@ -55,5 +60,10 @@ defmodule ReqLLM.Coverage.OpenAI.WebSearchTest do
 
     assert response.usage.tool_usage.web_search.count > 0
     assert response.usage.cost.tools > 0
+
+    assert [%{"type" => "url_citation", "url" => url} | _] =
+             ReqLLM.Response.annotations(response)
+
+    assert is_binary(url)
   end
 end

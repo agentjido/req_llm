@@ -177,6 +177,36 @@ defmodule ReqLLM.Provider.ChunkAccumulatorTest do
 
       assert ChunkAccumulator.finalize_logprobs(acc) == [%{token: "a"}, %{token: "b"}]
     end
+
+    test "collects annotations across meta chunks in arrival order" do
+      acc =
+        ChunkAccumulator.new()
+        |> ChunkAccumulator.push(%StreamChunk{type: :meta, metadata: %{annotations: [%{n: 1}]}})
+        |> ChunkAccumulator.push(%StreamChunk{type: :meta, metadata: %{annotations: [%{n: 2}]}})
+        |> ChunkAccumulator.push(%StreamChunk{type: :meta, metadata: %{finish_reason: "stop"}})
+
+      assert ChunkAccumulator.finalize_annotations(acc) == [%{n: 1}, %{n: 2}]
+    end
+
+    test "drops exact duplicate annotations while preserving order" do
+      acc =
+        ChunkAccumulator.new()
+        |> ChunkAccumulator.push(%StreamChunk{type: :meta, metadata: %{annotations: [%{n: 1}]}})
+        |> ChunkAccumulator.push(%StreamChunk{
+          type: :meta,
+          metadata: %{annotations: [%{n: 2}, %{n: 1}]}
+        })
+
+      assert ChunkAccumulator.finalize_annotations(acc) == [%{n: 1}, %{n: 2}]
+    end
+
+    test "ignores meta chunks without annotations" do
+      acc =
+        ChunkAccumulator.new()
+        |> ChunkAccumulator.push(%StreamChunk{type: :meta, metadata: %{finish_reason: "stop"}})
+
+      assert ChunkAccumulator.finalize_annotations(acc) == []
+    end
   end
 
   describe "finalize_tool_calls_for_response/1" do
