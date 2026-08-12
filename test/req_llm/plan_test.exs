@@ -1,7 +1,10 @@
 defmodule ReqLLM.PlanTest do
-  use ExUnit.Case, async: true
+  use ExUnit.Case, async: false
 
   @moduletag contract: :public_api
+
+  import ExUnit.CaptureIO
+  import ExUnit.CaptureLog
 
   alias ReqLLM.Providers.{Anthropic, OpenAI}
 
@@ -211,6 +214,34 @@ defmodule ReqLLM.PlanTest do
   end
 
   describe "redaction and no-I/O guarantees" do
+    test "does not resolve credentials, access fixtures, or log translation warnings" do
+      model = %{
+        provider: :openai,
+        id: "chat-latest",
+        extra: %{wire: %{protocol: "openai_chat"}}
+      }
+
+      output =
+        capture_io(:stderr, fn ->
+          log =
+            capture_log(fn ->
+              send(
+                self(),
+                ReqLLM.plan(model, :chat,
+                  max_tokens: 64,
+                  temperature: 0.2
+                )
+              )
+            end)
+
+          send(self(), {:captured_log, log})
+        end)
+
+      assert output == ""
+      assert_received {:captured_log, ""}
+      assert_received {:ok, %{surface: :openai_chat_completions}}
+    end
+
     test "omits credential, payload, header, callback, and option values" do
       callback = fn request -> request end
 
@@ -304,44 +335,5 @@ defmodule ReqLLM.PlanTest do
       id: "chat-latest",
       extra: %{wire: %{protocol: "openai_chat"}}
     })
-  end
-end
-
-defmodule ReqLLM.PlanSilenceTest do
-  use ExUnit.Case, async: false
-
-  @moduletag contract: :public_api
-
-  import ExUnit.CaptureIO
-  import ExUnit.CaptureLog
-
-  describe "redaction and no-I/O guarantees" do
-    test "does not resolve credentials, access fixtures, or log translation warnings" do
-      model = %{
-        provider: :openai,
-        id: "chat-latest",
-        extra: %{wire: %{protocol: "openai_chat"}}
-      }
-
-      output =
-        capture_io(:stderr, fn ->
-          log =
-            capture_log(fn ->
-              send(
-                self(),
-                ReqLLM.plan(model, :chat,
-                  max_tokens: 64,
-                  temperature: 0.2
-                )
-              )
-            end)
-
-          send(self(), {:captured_log, log})
-        end)
-
-      assert output == ""
-      assert_received {:captured_log, ""}
-      assert_received {:ok, %{surface: :openai_chat_completions}}
-    end
   end
 end
