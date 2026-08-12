@@ -410,7 +410,7 @@ defmodule ReqLLM.Providers.OpenAICodex do
   defp websocket_session_fell_back?(session) when is_pid(session) do
     ReqLLM.Streaming.WebSocketSession.http_fallback?(session)
   catch
-    :exit, _reason -> true
+    :exit, _reason -> false
   end
 
   defp websocket_session_fell_back?(_session), do: false

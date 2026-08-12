@@ -150,7 +150,11 @@ defmodule ReqLLM.Streaming.WebSocketClient do
            connect_timeout: connect_timeout
          ) do
       {:ok, session_pid} ->
-        await_connect_and_stream(session_pid, stream_server_pid, opts, close_on_terminal?: true)
+        result =
+          await_connect_and_stream(session_pid, stream_server_pid, opts, close_on_terminal?: true)
+
+        close_owned_session(session_pid)
+        result
 
       {:error, reason} ->
         safe_http_event(stream_server_pid, {:error, reason})
@@ -277,7 +281,7 @@ defmodule ReqLLM.Streaming.WebSocketClient do
   end
 
   defp maybe_fallback_to_http(
-         {:websocket_error, reason, true},
+         {:websocket_error, reason, _output_observed?},
          _config,
          stream_server_pid,
          _provider_mod,
@@ -312,6 +316,12 @@ defmodule ReqLLM.Streaming.WebSocketClient do
   end
 
   defp mark_session_http_fallback(_session), do: :ok
+
+  defp close_owned_session(session) do
+    WebSocketSession.close(session)
+  catch
+    :exit, _reason -> :ok
+  end
 
   defp reusable_session(opts) do
     opts

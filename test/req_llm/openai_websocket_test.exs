@@ -117,6 +117,24 @@ defmodule ReqLLM.OpenAIWebSocketTest do
     def handle_info(_message, test_pid), do: {:ok, test_pid}
   end
 
+  defmodule MessageTooBigWithoutFallbackProvider do
+    def stream_transport(_model, _opts), do: :websocket
+
+    def attach_websocket_stream(model, _context, opts) do
+      base_url = Keyword.fetch!(opts, :base_url)
+      headers = [{"Authorization", "Bearer test-key-12345"}]
+      url = ReqLLM.Providers.OpenAI.WebSocket.responses_url(model, base_url: base_url)
+
+      {:ok,
+       %{
+         url: url,
+         headers: headers,
+         initial_messages: [Jason.encode!(%{"type" => "response.create"})],
+         canonical_json: %{"type" => "response.create"}
+       }}
+    end
+  end
+
   defmodule PartialThenMessageTooBigSocket do
     @behaviour WebSock
 
@@ -243,6 +261,55 @@ defmodule ReqLLM.OpenAIWebSocketTest do
     assert_received {:responses_http_request, %{"model" => "gpt-5"}}
   end
 
+  test "owned websocket sessions stop after HTTP fallback", %{base_url: base_url} do
+    Application.put_env(
+      :req_llm,
+      :openai_websocket_responses_socket,
+      MessageTooBigSocket
+    )
+
+    before_pids = websocket_session_pids()
+
+    {:ok, stream_response} =
+      ReqLLM.stream_text(
+        "openai:gpt-5",
+        "Say hello",
+        base_url: base_url,
+        receive_timeout: 5_000,
+        provider_options: [openai_stream_transport: :websocket]
+      )
+
+    assert ReqLLM.StreamResponse.text(stream_response) == "HTTP fallback"
+    assert wait_until(fn -> websocket_session_pids() == before_pids end)
+  end
+
+  test "preserves close 1009 when HTTP fallback is not enabled", %{base_url: base_url} do
+    Application.put_env(
+      :req_llm,
+      :openai_websocket_responses_socket,
+      MessageTooBigSocket
+    )
+
+    {:ok, context} = ReqLLM.Context.normalize("Say hello")
+    model = %LLMDB.Model{provider: :test, id: "test", base_url: base_url}
+
+    assert {:ok, stream_response} =
+             ReqLLM.Streaming.start_stream(
+               MessageTooBigWithoutFallbackProvider,
+               model,
+               context,
+               base_url: base_url,
+               connect_timeout: 5_000,
+               receive_timeout: 5_000
+             )
+
+    assert_raise ReqLLM.Error.API.Stream, ~r/1009/, fn ->
+      Enum.to_list(stream_response.stream)
+    end
+
+    refute_received {:responses_http_request, _request}
+  end
+
   test "does not replay over HTTP after websocket output", %{base_url: base_url} do
     Application.put_env(
       :req_llm,
@@ -301,6 +368,23 @@ defmodule ReqLLM.OpenAIWebSocketTest do
     refute_received {:responses_oversized_socket_message, %{"type" => "response.create"}}
     assert_received {:responses_http_request, _request}
     assert_received {:responses_http_request, _request}
+  end
+
+  test "a dead reusable session does not silently select HTTP" do
+    session = spawn(fn -> :ok end)
+    monitor = Process.monitor(session)
+    assert_receive {:DOWN, ^monitor, :process, ^session, reason}
+    assert reason in [:normal, :noproc]
+
+    opts = [
+      provider_options: [
+        openai_stream_transport: :websocket,
+        openai_websocket_session: session
+      ]
+    ]
+
+    assert ReqLLM.Providers.OpenAI.stream_transport(nil, opts) == :websocket
+    assert ReqLLM.Providers.OpenAICodex.stream_transport(nil, opts) == :websocket
   end
 
   test "stream_text can reuse caller-owned OpenAI responses websocket sessions", %{
@@ -479,6 +563,33 @@ defmodule ReqLLM.OpenAIWebSocketTest do
 
       Process.sleep(5)
       do_await_websocket_waiter(session, receiver_pid, deadline)
+    end
+  end
+
+  defp websocket_session_pids do
+    Process.list()
+    |> Enum.filter(fn pid ->
+      case Process.info(pid, :dictionary) do
+        {:dictionary, dictionary} ->
+          Keyword.get(dictionary, :"$initial_call") ==
+            {ReqLLM.Streaming.WebSocketSession, :init, 1}
+
+        nil ->
+          false
+      end
+    end)
+    |> MapSet.new()
+  end
+
+  defp wait_until(fun, attempts \\ 100)
+  defp wait_until(_fun, 0), do: false
+
+  defp wait_until(fun, attempts) do
+    if fun.() do
+      true
+    else
+      Process.sleep(5)
+      wait_until(fun, attempts - 1)
     end
   end
 
