@@ -1,8 +1,6 @@
 defmodule ReqLLM.RequestPlanTest do
   use ExUnit.Case, async: true
 
-  import ExUnit.CaptureIO
-
   alias ReqLLM.RequestPlan
 
   describe "build/3" do
@@ -101,28 +99,6 @@ defmodule ReqLLM.RequestPlanTest do
       assert plan.surface == :openai_responses
     end
 
-    test "keeps planning warnings in deterministic source order" do
-      model_input =
-        {:openai, "chat-latest", [stream_transport: :http, unsupported_default: true]}
-
-      assert capture_io(:stderr, fn ->
-               send(
-                 self(),
-                 RequestPlan.build(model_input, :chat,
-                   provider_options: [openai_stream_transport: :websocket]
-                 )
-               )
-             end) == ""
-
-      assert_received {:ok, plan}
-
-      assert plan.warnings == [
-               "Ignoring tuple model defaults for chat: :stream_transport is controlled by the operation boundary, not the model, :unsupported_default is not accepted by this operation. Pass only documented chat options; explicit call options take precedence.",
-               "Defaulted to OpenAI Chat Completions because model wire metadata is absent",
-               "Ignored streaming transport selection for a non-streaming request plan"
-             ]
-    end
-
     test "selects WebSocket only for streaming OpenAI Responses" do
       assert {:ok, plan} =
                RequestPlan.build("openai:gpt-4o-mini", :chat,
@@ -199,6 +175,38 @@ defmodule ReqLLM.RequestPlanTest do
                )
 
       assert Exception.message(transport_error) =~ "unsupported internal stream transport"
+    end
+  end
+end
+
+defmodule ReqLLM.RequestPlanSilenceTest do
+  use ExUnit.Case, async: false
+
+  import ExUnit.CaptureIO
+
+  alias ReqLLM.RequestPlan
+
+  describe "build/3" do
+    test "keeps planning warnings in deterministic source order" do
+      model_input =
+        {:openai, "chat-latest", [stream_transport: :http, unsupported_default: true]}
+
+      assert capture_io(:stderr, fn ->
+               send(
+                 self(),
+                 RequestPlan.build(model_input, :chat,
+                   provider_options: [openai_stream_transport: :websocket]
+                 )
+               )
+             end) == ""
+
+      assert_received {:ok, plan}
+
+      assert plan.warnings == [
+               "Ignoring tuple model defaults for chat: :stream_transport is controlled by the operation boundary, not the model, :unsupported_default is not accepted by this operation. Pass only documented chat options; explicit call options take precedence.",
+               "Defaulted to OpenAI Chat Completions because model wire metadata is absent",
+               "Ignored streaming transport selection for a non-streaming request plan"
+             ]
     end
   end
 end
