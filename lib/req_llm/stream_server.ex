@@ -838,6 +838,27 @@ defmodule ReqLLM.StreamServer do
     {:reply, :ok, state}
   end
 
+  defp process_http_event(
+         {:transport_fallback, :http, _reason, http_context, canonical_json},
+         state
+       ) do
+    protocol_parser = http_protocol_parser(state.provider_mod)
+    provider_state = reset_provider_state(state.provider_mod, state.model)
+
+    new_state = %{
+      state
+      | protocol_parser: protocol_parser,
+        protocol_state: nil,
+        provider_state: provider_state,
+        http_context: http_context,
+        canonical_json: canonical_json,
+        http_status: nil,
+        headers: []
+    }
+
+    {:reply, :ok, new_state}
+  end
+
   defp process_http_event({:status, status}, state) do
     new_state = %{state | http_status: status}
     {:reply, :ok, new_state}
@@ -949,6 +970,20 @@ defmodule ReqLLM.StreamServer do
 
   defp process_http_task_exit(state, reason) do
     finalize_failed_stream(state, {:http_task_failed, reason})
+  end
+
+  defp http_protocol_parser(provider_mod) do
+    if function_exported?(provider_mod, :parse_stream_protocol, 2) do
+      fn chunk, buffer -> provider_mod.parse_stream_protocol(chunk, buffer) end
+    else
+      &ReqLLM.Provider.parse_stream_protocol/2
+    end
+  end
+
+  defp reset_provider_state(provider_mod, model) do
+    if function_exported?(provider_mod, :init_stream_state, 1) do
+      provider_mod.init_stream_state(model)
+    end
   end
 
   defp parse_protocol_events(chunk, state) do

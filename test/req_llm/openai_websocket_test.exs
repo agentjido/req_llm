@@ -12,12 +12,45 @@ defmodule ReqLLM.OpenAIWebSocketTest do
     plug(:dispatch)
 
     get "/v1/responses" do
+      socket =
+        Application.get_env(
+          :req_llm,
+          :openai_websocket_responses_socket,
+          ReqLLM.OpenAIWebSocketTest.ResponsesSocket
+        )
+
       WebSockAdapter.upgrade(
         conn,
-        ReqLLM.OpenAIWebSocketTest.ResponsesSocket,
+        socket,
         Application.fetch_env!(:req_llm, :openai_websocket_test_pid),
         []
       )
+    end
+
+    post "/v1/responses" do
+      {:ok, body, conn} = Plug.Conn.read_body(conn)
+
+      send(
+        Application.fetch_env!(:req_llm, :openai_websocket_test_pid),
+        {:responses_http_request, Jason.decode!(body)}
+      )
+
+      events = [
+        %{"type" => "response.output_text.delta", "delta" => "HTTP fallback"},
+        %{
+          "type" => "response.completed",
+          "response" => %{
+            "id" => "resp_http_123",
+            "usage" => %{"input_tokens" => 12, "output_tokens" => 3}
+          }
+        }
+      ]
+
+      payload = Enum.map_join(events, "", &("data: " <> Jason.encode!(&1) <> "\n\n"))
+
+      conn
+      |> Plug.Conn.put_resp_content_type("text/event-stream")
+      |> Plug.Conn.send_resp(200, payload)
     end
 
     get "/v1/realtime" do
@@ -66,6 +99,38 @@ defmodule ReqLLM.OpenAIWebSocketTest do
     def handle_info(_message, test_pid) do
       {:ok, test_pid}
     end
+  end
+
+  defmodule MessageTooBigSocket do
+    @behaviour WebSock
+
+    @impl true
+    def init(test_pid), do: {:ok, test_pid}
+
+    @impl true
+    def handle_in({message, opts}, test_pid) when is_binary(message) and is_list(opts) do
+      send(test_pid, {:responses_oversized_socket_message, Jason.decode!(message)})
+      {:stop, :normal, {1009, "message too big"}, test_pid}
+    end
+
+    @impl true
+    def handle_info(_message, test_pid), do: {:ok, test_pid}
+  end
+
+  defmodule PartialThenMessageTooBigSocket do
+    @behaviour WebSock
+
+    @impl true
+    def init(test_pid), do: {:ok, test_pid}
+
+    @impl true
+    def handle_in({_message, opts}, test_pid) when is_list(opts) do
+      message = Jason.encode!(%{"type" => "response.output_text.delta", "delta" => "partial"})
+      {:stop, :normal, {1009, "message too big"}, [{:text, message}], test_pid}
+    end
+
+    @impl true
+    def handle_info(_message, test_pid), do: {:ok, test_pid}
   end
 
   defmodule RealtimeSocket do
@@ -124,6 +189,7 @@ defmodule ReqLLM.OpenAIWebSocketTest do
       end
 
       Application.delete_env(:req_llm, :openai_websocket_test_pid)
+      Application.delete_env(:req_llm, :openai_websocket_responses_socket)
     end)
 
     websocket_url = String.replace_prefix(base_url, "http://", "ws://") <> "/realtime"
@@ -153,6 +219,88 @@ defmodule ReqLLM.OpenAIWebSocketTest do
 
     assert request["model"] == "gpt-5"
     assert Enum.any?(request["input"], fn item -> item["role"] == "user" end)
+  end
+
+  test "falls back from pre-output websocket close 1009 to HTTP/SSE", %{base_url: base_url} do
+    Application.put_env(
+      :req_llm,
+      :openai_websocket_responses_socket,
+      MessageTooBigSocket
+    )
+
+    {:ok, stream_response} =
+      ReqLLM.stream_text(
+        "openai:gpt-5",
+        "Say hello",
+        base_url: base_url,
+        receive_timeout: 5_000,
+        provider_options: [openai_stream_transport: :websocket]
+      )
+
+    assert ReqLLM.StreamResponse.text(stream_response) == "HTTP fallback"
+    assert ReqLLM.StreamResponse.finish_reason(stream_response) == :stop
+    assert_received {:responses_oversized_socket_message, %{"type" => "response.create"}}
+    assert_received {:responses_http_request, %{"model" => "gpt-5"}}
+  end
+
+  test "does not replay over HTTP after websocket output", %{base_url: base_url} do
+    Application.put_env(
+      :req_llm,
+      :openai_websocket_responses_socket,
+      PartialThenMessageTooBigSocket
+    )
+
+    {:ok, stream_response} =
+      ReqLLM.stream_text(
+        "openai:gpt-5",
+        "Say hello",
+        base_url: base_url,
+        receive_timeout: 5_000,
+        provider_options: [openai_stream_transport: :websocket]
+      )
+
+    assert_raise ReqLLM.Error.API.Stream, ~r/1009/, fn ->
+      Enum.to_list(stream_response.stream)
+    end
+
+    refute_received {:responses_http_request, _request}
+  end
+
+  test "a reusable session keeps HTTP fallback sticky across turns", %{base_url: base_url} do
+    Application.put_env(
+      :req_llm,
+      :openai_websocket_responses_socket,
+      MessageTooBigSocket
+    )
+
+    {:ok, model} = ReqLLM.model("openai:gpt-5")
+
+    {:ok, session} =
+      ReqLLM.Providers.OpenAI.WebSocket.start_responses_session(model,
+        base_url: base_url,
+        api_key: "test-key-12345"
+      )
+
+    for prompt <- ["first", "second"] do
+      {:ok, stream_response} =
+        ReqLLM.stream_text(
+          model,
+          prompt,
+          base_url: base_url,
+          receive_timeout: 5_000,
+          provider_options: [
+            openai_stream_transport: :websocket,
+            openai_websocket_session: session
+          ]
+        )
+
+      assert ReqLLM.StreamResponse.text(stream_response) == "HTTP fallback"
+    end
+
+    assert_received {:responses_oversized_socket_message, %{"type" => "response.create"}}
+    refute_received {:responses_oversized_socket_message, %{"type" => "response.create"}}
+    assert_received {:responses_http_request, _request}
+    assert_received {:responses_http_request, _request}
   end
 
   test "stream_text can reuse caller-owned OpenAI responses websocket sessions", %{

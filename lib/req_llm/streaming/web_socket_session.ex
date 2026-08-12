@@ -15,7 +15,8 @@ defmodule ReqLLM.Streaming.WebSocketSession do
     queue: :queue.new(),
     initial_messages: [],
     waiting_callers: [],
-    waiting_connect_callers: []
+    waiting_connect_callers: [],
+    http_fallback?: false
   ]
 
   @type t :: pid()
@@ -50,6 +51,16 @@ defmodule ReqLLM.Streaming.WebSocketSession do
   @spec close(t()) :: :ok
   def close(server) do
     GenServer.call(server, :close)
+  end
+
+  @spec mark_http_fallback(t()) :: :ok
+  def mark_http_fallback(server) do
+    GenServer.call(server, :mark_http_fallback)
+  end
+
+  @spec http_fallback?(t()) :: boolean()
+  def http_fallback?(server) do
+    GenServer.call(server, :http_fallback?)
   end
 
   @impl GenServer
@@ -131,6 +142,14 @@ defmodule ReqLLM.Streaming.WebSocketSession do
     {:reply, :ok, state}
   end
 
+  def handle_call(:mark_http_fallback, _from, state) do
+    {:reply, :ok, %{state | http_fallback?: true}}
+  end
+
+  def handle_call(:http_fallback?, _from, state) do
+    {:reply, state.http_fallback?, state}
+  end
+
   def handle_call(:close, _from, state) do
     if is_pid(state.client_pid) and Process.alive?(state.client_pid) do
       :ok = Client.close(state.client_pid)
@@ -172,6 +191,13 @@ defmodule ReqLLM.Streaming.WebSocketSession do
       |> reply_to_waiting_callers()
 
     {:noreply, state}
+  end
+
+  def handle_info(
+        {:DOWN, ref, :process, _pid, _down_reason},
+        %{client_ref: ref, status: {:error, _status_reason}} = state
+      ) do
+    {:noreply, %{state | client_pid: nil, client_ref: nil}}
   end
 
   def handle_info({:DOWN, ref, :process, _pid, reason}, %{client_ref: ref} = state) do
