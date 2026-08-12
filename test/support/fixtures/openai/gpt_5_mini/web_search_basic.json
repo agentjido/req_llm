@@ -3,9 +3,12 @@
   "provider": "openai",
   "request": {
     "body": {
-      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IlVzZSB3ZWIgc2VhcmNoIHRvIGZpbmQgb25lIHJlY2VudCBBSSBtb2RlbCBhbm5vdW5jZW1lbnQgYW5kIGNpdGUgdGhlIHNvdXJjZS4iLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjoxMjgwMDAsIm1vZGVsIjoiZ3B0LTUtbWluaSIsInN0cmVhbSI6ZmFsc2UsInRvb2xzIjpbeyJ0eXBlIjoid2ViX3NlYXJjaCJ9XX0="
+      "b64": "eyJpbmNsdWRlIjpbInJlYXNvbmluZy5lbmNyeXB0ZWRfY29udGVudCJdLCJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IlVzZSB3ZWIgc2VhcmNoIHRvIGZpbmQgb25lIHJlY2VudCBBSSBtb2RlbCBhbm5vdW5jZW1lbnQgYW5kIGNpdGUgdGhlIHNvdXJjZS4iLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjoxMjgwMDAsIm1vZGVsIjoiZ3B0LTUtbWluaSIsInN0cmVhbSI6ZmFsc2UsInRvb2xzIjpbeyJ0eXBlIjoid2ViX3NlYXJjaCJ9XX0="
     },
     "canonical_json": {
+      "include": [
+        "reasoning.encrypted_content"
+      ],
       "input": [
         {
           "content": [
@@ -27,15 +30,12 @@
       ]
     },
     "headers": {
-      "accept-encoding": [
-        "gzip"
-      ],
       "authorization": "[REDACTED:authorization]",
       "content-type": [
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.17"
+        "req/0.7.2"
       ]
     },
     "method": "post",
@@ -43,141 +43,19 @@
   },
   "response": {
     "body": {
-      "background": false,
-      "text": {
-        "format": {
-          "type": "text"
-        },
-        "verbosity": "medium"
-      },
-      "top_logprobs": 0,
-      "previous_response_id": null,
-      "tool_choice": "auto",
-      "service_tier": "default",
-      "status": "completed",
-      "tools": [
-        {
-          "filters": null,
-          "search_context_size": "medium",
-          "type": "web_search",
-          "user_location": {
-            "city": null,
-            "country": "US",
-            "region": null,
-            "timezone": null,
-            "type": "approximate"
-          }
-        }
-      ],
-      "id": "resp_02bc33d57992389c00697c0d202c308197957605c7d13eb73b",
-      "temperature": 1.0,
-      "max_output_tokens": 128000,
-      "user": null,
-      "frequency_penalty": 0.0,
-      "error": null,
-      "model": "gpt-5-mini-2025-08-07",
-      "usage": {
-        "input_tokens": 12661,
-        "input_tokens_details": {
-          "cached_tokens": 0
-        },
-        "output_tokens": 1034,
-        "output_tokens_details": {
-          "reasoning_tokens": 896
-        },
-        "total_tokens": 13695
-      },
-      "safety_identifier": null,
-      "object": "response",
-      "parallel_tool_calls": true,
-      "output": [
-        {
-          "id": "rs_02bc33d57992389c00697c0d21102081979d98f732ae5f60c4",
-          "summary": [],
-          "type": "reasoning"
-        },
-        {
-          "action": {
-            "queries": [
-              "AI model announced January 2026",
-              "recent AI model announcement January 2026 'announced' 'model' '2026' 'AI'",
-              "Anthropic Claude announcement 2026",
-              "OpenAI new model announced 2026 GPT-4o 2026 announcement"
-            ],
-            "query": "AI model announced January 2026",
-            "type": "search"
-          },
-          "id": "ws_02bc33d57992389c00697c0d24f2048197b4105742b3d0410f",
-          "status": "completed",
-          "type": "web_search_call"
-        },
-        {
-          "id": "rs_02bc33d57992389c00697c0d26b5d081979280342584c0cfcb",
-          "summary": [],
-          "type": "reasoning"
-        },
-        {
-          "action": {
-            "queries": [
-              "Google announces Gemini 1.5 Pro 2026 announcement 'Gemini 1.5' '2026'",
-              "Google Gemini new model announced 2026 'Gemini 1.5 Pro' 'announced'"
-            ],
-            "query": "Google announces Gemini 1.5 Pro 2026 announcement 'Gemini 1.5' '2026'",
-            "type": "search"
-          },
-          "id": "ws_02bc33d57992389c00697c0d2878748197a2d973b2345ab102",
-          "status": "completed",
-          "type": "web_search_call"
-        },
-        {
-          "id": "rs_02bc33d57992389c00697c0d2ac2fc8197bb6efed4e1fc4ea2",
-          "summary": [],
-          "type": "reasoning"
-        },
-        {
-          "content": [
-            {
-              "annotations": [
-                {
-                  "end_index": 241,
-                  "start_index": 149,
-                  "title": "Retiring GPT-4o, GPT-4.1, GPT-4.1 mini, and OpenAI o4-mini in ChatGPT | OpenAI",
-                  "type": "url_citation",
-                  "url": "https://openai.com/index/retiring-gpt-4o-and-older-models/?utm_source=openai"
-                }
-              ],
-              "logprobs": [],
-              "text": "OpenAI announced on January 29, 2026 that it will retire GPT‑4o, GPT‑4.1, GPT‑4.1 mini, and OpenAI o4‑mini from ChatGPT effective February 13, 2026. ([openai.com](https://openai.com/index/retiring-gpt-4o-and-older-models/?utm_source=openai))",
-              "type": "output_text"
-            }
-          ],
-          "id": "msg_02bc33d57992389c00697c0d30d3a88197bcc0e1a11e0b2d6c",
-          "role": "assistant",
-          "status": "completed",
-          "type": "message"
-        }
-      ],
-      "instructions": null,
-      "store": true,
-      "presence_penalty": 0.0,
-      "incomplete_details": null,
-      "reasoning": {
-        "effort": "medium",
-        "summary": null
-      },
-      "completed_at": 1769737521,
-      "truncation": "disabled",
-      "top_p": 1.0,
-      "billing": {
-        "payer": "developer"
-      },
-      "prompt_cache_retention": null,
-      "metadata": {},
-      "prompt_cache_key": null,
-      "created_at": 1769737504,
-      "max_tool_calls": null
+      "error": {
+        "code": "credit_balance_exhausted",
+        "message": "You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
+        "param": null,
+        "type": "insufficient_quota"
+      }
     },
     "headers": {
+      "access-control-expose-headers": [
+        "X-Request-ID",
+        "CF-Ray",
+        "CF-Ray"
+      ],
       "alt-svc": [
         "h3=\":443\"; ma=86400"
       ],
@@ -185,25 +63,26 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "9c5d49a408ab2b10-SJC"
+        "a29e2795bd232c45-PRG"
       ],
       "connection": [
         "keep-alive"
+      ],
+      "content-length": [
+        "262"
       ],
       "content-type": [
         "application/json"
       ],
       "date": [
-        "Fri, 30 Jan 2026 01:45:21 GMT"
+        "Wed, 12 Aug 2026 08:36:50 GMT"
       ],
-      "openai-organization": [
-        "elani-dev"
-      ],
+      "openai-organization": "[REDACTED:openai-organization]",
       "openai-processing-ms": [
-        "17836"
+        "551"
       ],
       "openai-project": [
-        "proj_7xm0tTbe0BtZ6VvGnyNl81DN"
+        "proj_wdn4twhCQ0QUWShj3orQlBgk"
       ],
       "openai-version": [
         "2020-10-01"
@@ -211,41 +90,18 @@
       "server": [
         "cloudflare"
       ],
-      "set-cookie": [
-        "__cf_bm=i9HlsIpNJscacEaN0EVE.Tu9wKzVDQlwR.8QC4zmSDc-1769737521-1.0.1.1-p8EzX3SRx86rkAO.Y_VynptMjw6wuATEUg0Ierub3CoaCW1Vp7cnhRbSK.yL59._Ypf_uhL6yCCYF0BcWr.HF2Rim0rhoinQ92o10Sj3OrA; path=/; expires=Fri, 30-Jan-26 02:15:21 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=s34uvPAfmj1nNcTKUO50ZTU3Auu_gYP_czBTc7KVhjA-1769737521987-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
-      ],
+      "set-cookie": "[REDACTED:set-cookie]",
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
-      ],
-      "transfer-encoding": [
-        "chunked"
       ],
       "x-content-type-options": [
         "nosniff"
       ],
-      "x-ratelimit-limit-requests": [
-        "500"
-      ],
-      "x-ratelimit-limit-tokens": [
-        "500000"
-      ],
-      "x-ratelimit-remaining-requests": [
-        "499"
-      ],
-      "x-ratelimit-remaining-tokens": [
-        "491156"
-      ],
-      "x-ratelimit-reset-requests": [
-        "120ms"
-      ],
-      "x-ratelimit-reset-tokens": [
-        "1.061s"
-      ],
       "x-request-id": [
-        "req_bc87cca1b7b14bb49ef2f824b935c52e"
+        "req_91165ab172834195aec3d5ebe75ac458"
       ]
     },
-    "status": 200
-  }
+    "status": 429
+  },
+  "streaming": false
 }

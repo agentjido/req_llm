@@ -231,6 +231,72 @@ defmodule ReqLLM.StreamEventProjectionTest do
              }
     end
 
+    test "surfaces streamed citations live as deduplicated annotation output items" do
+      model = %LLMDB.Model{provider: :openai, id: "gpt-test"}
+
+      citation = fn i ->
+        %{
+          "type" => "url_citation",
+          "url_citation" => %{
+            "url" => "https://example.com/#{i}?api_key=secret-value",
+            "title" => "Article #{i}"
+          }
+        }
+      end
+
+      delta = fn i ->
+        %{data: %{"choices" => [%{"delta" => %{"annotations" => [citation.(i)]}}]}}
+      end
+
+      chunks =
+        [
+          %{data: %{"choices" => [%{"delta" => %{"content" => "Cited"}}]}},
+          delta.(1),
+          delta.(2),
+          # A re-sent citation must not reach the consumer twice.
+          delta.(1),
+          %{data: %{"choices" => [%{"delta" => %{}, "finish_reason" => "stop"}]}}
+        ]
+        |> Enum.flat_map(&Defaults.default_decode_stream_event(&1, model))
+
+      events =
+        chunks
+        |> stream_response(%{finish_reason: :stop})
+        |> StreamResponse.events()
+        |> Enum.to_list()
+
+      assert Enum.map(events, & &1.type) == [
+               :start,
+               :text_delta,
+               :output_item,
+               :output_item,
+               :finish
+             ]
+
+      annotations =
+        events
+        |> Enum.filter(&(&1.type == :output_item))
+        |> Enum.map(& &1.data)
+
+      # Citations arrive flattened to the canonical shape, in stream order, with
+      # credentials scrubbed from the URL.
+      assert [
+               %OutputItem{
+                 type: :annotation,
+                 data: %{
+                   "type" => "url_citation",
+                   "title" => "Article 1",
+                   "url" => "https://example.com/1?api_key=[REDACTED]"
+                 }
+               },
+               %OutputItem{type: :annotation, data: %{"title" => "Article 2"}}
+             ] = annotations
+
+      # `:annotations` is a canonical meta key, so it must not also leak through
+      # the provider passthrough channel.
+      refute Enum.any?(events, &(&1.type == :provider_event))
+    end
+
     test "emits one terminal cancellation event" do
       response = stream_response([], %{finish_reason: :cancelled})
 

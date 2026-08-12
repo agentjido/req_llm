@@ -79,7 +79,8 @@ Exact common information uses existing projections:
 
 - `ReqLLM.Response.tool_calls/1` retains observed calls;
 - `ReqLLM.Response.sources/1` and `annotations/1` expose retained supporting
-  material;
+  material — for example web-search citations, which OpenAI-format providers
+  normalize to a single shape (see [Citations](openai.md#citations));
 - `ReqLLM.Response.usage/1` exposes normalized usage when reported; and
 - `ReqLLM.Response.provider_items/1` exposes native output that has no more
   precise canonical type.

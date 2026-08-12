@@ -422,6 +422,117 @@ response.usage.cost
 
 Responses API server-side tools may also appear in `response.message.tool_calls` as builtin records (for example `web_search_call` or `file_search_call`). They are preserved for observability, but the provider already executed them: do not replay them as local tool calls. `ReqLLM.Response.classify/1` and `ReqLLM.StreamResponse.classify/1` treat builtin-only responses as final answers.
 
+### Citations
+
+When a model cites its sources — web search being the common case — the citations
+are retained as annotations and read back with `ReqLLM.Response.annotations/1`:
+
+```elixir
+{:ok, response} = ReqLLM.generate_text(
+  "openai:gpt-5-mini",
+  "Find one recent AI model announcement and cite the source.",
+  tools: [%{"type" => "web_search"}]
+)
+
+ReqLLM.Response.annotations(response)
+#=> [
+#=>   %{
+#=>     "type" => "url_citation",
+#=>     "url" => "https://example.com/announcement",
+#=>     "title" => "Example Announcement",
+#=>     "start_index" => 120,
+#=>     "end_index" => 168
+#=>   }
+#=> ]
+```
+
+`start_index` and `end_index` mark the span of `ReqLLM.Response.text/1` the citation
+supports, so a host can render that span as a link. The same list is available
+unprojected at `response.provider_meta["annotations"]`.
+
+#### One shape across both API surfaces
+
+OpenAI's two API surfaces disagree on the wire format: Chat Completions nests the
+citation fields under a `"url_citation"` key, while the Responses API returns them
+flat. ReqLLM normalizes Chat Completions to the flat form, so consumers match one
+shape regardless of which surface a model uses:
+
+```
+Chat Completions, on the wire        What annotations/1 returns
+─────────────────────────────        ──────────────────────────
+%{"type" => "url_citation",          %{"type" => "url_citation",
+  "url_citation" => %{                 "url" => "https://…",
+    "url" => "https://…",       ──►    "title" => "…",
+    "title" => "…",                    "start_index" => 120,
+    "start_index" => 120,              "end_index" => 168}
+    "end_index" => 168}}
+```
+
+Annotation types that OpenAI already returns flat (`file_citation`, `file_path`,
+and others) pass through unchanged.
+
+#### Streaming
+
+Streaming needs no special handling — citations arrive incrementally and are
+accumulated for you, so the materialized response carries the full list:
+
+```elixir
+{:ok, stream_response} = ReqLLM.stream_text(
+  "openai:gpt-5-mini",
+  "Find one recent AI model announcement and cite the source.",
+  stream: true,
+  tools: [%{"type" => "web_search"}]
+)
+
+{:ok, response} = ReqLLM.StreamResponse.to_response(stream_response)
+ReqLLM.Response.annotations(response)
+#=> same list as the buffered call
+```
+
+To surface citations *during* the stream — to render footnotes as text arrives —
+consume `ReqLLM.StreamResponse.events/1` and watch for annotation output items:
+
+```elixir
+stream_response
+|> ReqLLM.StreamResponse.events()
+|> Stream.filter(&match?(%ReqLLM.StreamEvent{type: :output_item, data: %{type: :annotation}}, &1))
+|> Enum.each(fn event -> IO.inspect(event.data.data) end)
+```
+
+Each citation is emitted once. Providers that re-send a citation they already
+streamed, or that emit both incremental events and a final list, do not produce
+duplicates.
+
+#### Other OpenAI-format providers
+
+Citation normalization lives in the shared OpenAI-format decoders rather than in the
+OpenAI provider, so a provider inherits it by decoding through them — no
+per-provider work required. Providers that route both their buffered and streaming
+decode through the shared path get citations on both: Azure OpenAI, OpenRouter,
+Groq, MiniMax, ZenMux, Z.AI, Google Vertex (OpenAI-compatible endpoint), and xAI.
+
+Perplexity Sonar models routed through OpenRouter, for example, return nested
+`url_citation` annotations and read back through `ReqLLM.Response.annotations/1`
+in the same flat shape.
+
+The Responses API decoder is shared the same way, so Azure (Responses), OpenAI
+Codex, and Meta pick up annotations there. xAI is covered on both surfaces — it
+routes through the Responses API whenever built-in tools such as `web_search` or
+`x_search` are in play, and through Chat Completions otherwise.
+
+Some providers are covered only partially, because they hand-roll one half of their
+decoding:
+
+| Provider | Buffered | Streaming |
+| --- | --- | --- |
+| Amazon Bedrock (OpenAI models) | no — custom response parser | yes |
+| Google (OpenAI-compatible endpoint) | yes | no — native event decoder |
+
+Anthropic is not covered at all: it returns citations attached to its own content
+blocks rather than as OpenAI-style annotations. Google's native Gemini endpoints
+report grounding metadata through `ReqLLM.Response.sources/1`, a related but
+distinct channel.
+
 ### Code Interpreter (Responses API)
 
 Models using the Responses API support the Code Interpreter tool, which runs Python code in a sandboxed container. Pass the tool as a map and ReqLLM will forward it unchanged to OpenAI:

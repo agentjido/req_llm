@@ -194,6 +194,37 @@ The `cache_control` metadata is passed directly to the underlying Anthropic API,
 
 > **Note**: This differs from the direct Anthropic provider which uses `anthropic_prompt_cache: true` option. Through OpenRouter, you have fine-grained control over exactly which content blocks get cached.
 
+## Citations (Search Models)
+
+Models that cite their sources — Perplexity Sonar in particular — return
+`url_citation` annotations. OpenRouter speaks the OpenAI Chat Completions wire
+format, so ReqLLM normalizes those citations the same way it does for OpenAI and
+exposes them through `ReqLLM.Response.annotations/1`:
+
+```elixir
+{:ok, response} = ReqLLM.generate_text(
+  "openrouter:perplexity/sonar",
+  "What is a hello world program?"
+)
+
+ReqLLM.Response.annotations(response)
+#=> [
+#=>   %{
+#=>     "type" => "url_citation",
+#=>     "url" => "https://en.wikipedia.org/wiki/Hello,_world",
+#=>     "title" => "Hello, world - Wikipedia",
+#=>     "start_index" => 0,
+#=>     "end_index" => 0
+#=>   }
+#=> ]
+```
+
+The nested `"url_citation"` wrapper OpenRouter sends on the wire is flattened, so
+the shape matches what the direct OpenAI provider returns. Streaming works the
+same way — citations accumulate across deltas and the materialized response carries
+the full list. See [Citations](openai.md#citations) in the OpenAI guide for the
+full contract, including how to consume citations live during a stream.
+
 ## Model Discovery
 
 Browse available models:

@@ -952,6 +952,76 @@ defmodule ReqLLM.Providers.OpenRouterTest do
       assert List.last(response.context.messages).role == :assistant
     end
 
+    test "decode_response normalizes nested url_citation annotations" do
+      # Perplexity Sonar models routed through OpenRouter return citations in the
+      # Chat Completions nested shape. They normalize through the shared
+      # OpenAI-format decoder to the same flat shape OpenAI's Responses API uses.
+      response_body = %{
+        "id" => "gen-citations",
+        "model" => "perplexity/sonar",
+        "choices" => [
+          %{
+            "index" => 0,
+            "message" => %{
+              "role" => "assistant",
+              "content" => "Hello world is a traditional first program.",
+              "annotations" => [
+                %{
+                  "type" => "url_citation",
+                  "url_citation" => %{
+                    "url" => "https://en.wikipedia.org/wiki/Hello,_world",
+                    "title" => "Hello, world - Wikipedia",
+                    "start_index" => 0,
+                    "end_index" => 0
+                  }
+                },
+                %{
+                  "type" => "url_citation",
+                  "url_citation" => %{
+                    "url" => "https://press.rebus.community/programmingfundamentals/",
+                    "title" => "Programming Fundamentals",
+                    "start_index" => 0,
+                    "end_index" => 0
+                  }
+                }
+              ]
+            },
+            "finish_reason" => "stop"
+          }
+        ]
+      }
+
+      {:ok, model} = ReqLLM.model("openrouter:perplexity/sonar")
+
+      mock_req = %Req.Request{
+        options: [context: context_fixture(), stream: false],
+        private: %{req_llm_model: model}
+      }
+
+      {_req, resp} =
+        OpenRouter.decode_response({mock_req, %Req.Response{status: 200, body: response_body}})
+
+      expected = [
+        %{
+          "type" => "url_citation",
+          "url" => "https://en.wikipedia.org/wiki/Hello,_world",
+          "title" => "Hello, world - Wikipedia",
+          "start_index" => 0,
+          "end_index" => 0
+        },
+        %{
+          "type" => "url_citation",
+          "url" => "https://press.rebus.community/programmingfundamentals/",
+          "title" => "Programming Fundamentals",
+          "start_index" => 0,
+          "end_index" => 0
+        }
+      ]
+
+      assert resp.body.provider_meta["annotations"] == expected
+      assert ReqLLM.Response.annotations(resp.body) == expected
+    end
+
     test "prepare_request for :object with openrouter_structured_output_mode: :json_schema uses native schema" do
       {:ok, model} = ReqLLM.model("openrouter:openai/gpt-4")
       context = context_fixture()
