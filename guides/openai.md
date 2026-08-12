@@ -14,7 +14,7 @@ OPENAI_API_KEY=sk-...
 
 For the full model-spec workflow, see [Model Specs](model-specs.md).
 
-Use exact OpenAI IDs from [LLMDB.xyz](https://llmdb.xyz) when possible. For brand-new model IDs, local OpenAI-compatible servers, or proxies, use `ReqLLM.model!/1` with `provider: :openai`, an explicit `id`, and `base_url` when needed.
+Use exact OpenAI IDs from [LLM Catalog](https://llmcatalog.dev) when possible. For brand-new model IDs, local OpenAI-compatible servers, or proxies, use `ReqLLM.model!/1` with `provider: :openai`, an explicit `id`, and `base_url` when needed.
 
 ### OAuth Access Token (optional)
 

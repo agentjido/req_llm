@@ -12,7 +12,7 @@ GOOGLE_API_KEY=AIza...
 
 For the full model-spec workflow, see [Model Specs](model-specs.md).
 
-Use exact Gemini IDs from [LLMDB.xyz](https://llmdb.xyz) when possible. If you need to work ahead of the registry, use `ReqLLM.model!/1` to build a full explicit model spec.
+Use exact Gemini IDs from [LLM Catalog](https://llmcatalog.dev) when possible. If you need to work ahead of the registry, use `ReqLLM.model!/1` to build a full explicit model spec.
 
 ## Provider Options
 

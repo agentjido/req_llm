@@ -33,7 +33,8 @@ defmodule ReqLLM.Streaming.WebSocketClient do
 
       :no_fixture ->
         with {:ok, config} <- build_stream_request(provider_mod, model, context, opts),
-             {:ok, task_pid} <- start_streaming_task(config, stream_server_pid, opts) do
+             {:ok, task_pid} <-
+               start_streaming_task(config, stream_server_pid, provider_mod, model, context, opts) do
           {:ok, task_pid, config.http_context, config.canonical_json}
         end
     end
@@ -53,7 +54,8 @@ defmodule ReqLLM.Streaming.WebSocketClient do
          headers: config.headers || [],
          initial_messages: config.initial_messages || [],
          http_context: http_context,
-         canonical_json: config.canonical_json || %{}
+         canonical_json: config.canonical_json || %{},
+         fallback_transport: Map.get(config, :fallback_transport)
        }}
     else
       false ->
@@ -102,19 +104,33 @@ defmodule ReqLLM.Streaming.WebSocketClient do
     end
   end
 
-  defp start_streaming_task(config, stream_server_pid, opts) do
+  defp start_streaming_task(config, stream_server_pid, provider_mod, model, context, opts) do
     task_pid =
       Task.Supervisor.async(ReqLLM.TaskSupervisor, fn ->
-        case reusable_session(opts) do
-          nil ->
-            start_owned_session(config, stream_server_pid, opts)
+        session = reusable_session(opts)
 
-          session_pid when is_pid(session_pid) ->
-            await_connect_and_stream(session_pid, stream_server_pid, opts,
-              initial_messages: config.initial_messages,
-              close_on_terminal?: false
-            )
-        end
+        result =
+          case session do
+            nil ->
+              start_owned_session(config, stream_server_pid, opts)
+
+            session_pid when is_pid(session_pid) ->
+              await_connect_and_stream(session_pid, stream_server_pid, opts,
+                initial_messages: config.initial_messages,
+                close_on_terminal?: false
+              )
+          end
+
+        maybe_fallback_to_http(
+          result,
+          config,
+          stream_server_pid,
+          provider_mod,
+          model,
+          context,
+          opts,
+          session
+        )
       end)
 
     {:ok, task_pid.pid}
@@ -134,7 +150,11 @@ defmodule ReqLLM.Streaming.WebSocketClient do
            connect_timeout: connect_timeout
          ) do
       {:ok, session_pid} ->
-        await_connect_and_stream(session_pid, stream_server_pid, opts, close_on_terminal?: true)
+        result =
+          await_connect_and_stream(session_pid, stream_server_pid, opts, close_on_terminal?: true)
+
+        close_owned_session(session_pid)
+        result
 
       {:error, reason} ->
         safe_http_event(stream_server_pid, {:error, reason})
@@ -150,8 +170,12 @@ defmodule ReqLLM.Streaming.WebSocketClient do
 
         case send_initial_messages(session_pid, Keyword.get(session_opts, :initial_messages, [])) do
           :ok ->
-            relay_messages(session_pid, stream_server_pid, opts,
-              close_on_terminal?: Keyword.get(session_opts, :close_on_terminal?, true)
+            relay_messages(
+              session_pid,
+              stream_server_pid,
+              opts,
+              [close_on_terminal?: Keyword.get(session_opts, :close_on_terminal?, true)],
+              false
             )
 
           {:error, reason} ->
@@ -165,7 +189,7 @@ defmodule ReqLLM.Streaming.WebSocketClient do
     end
   end
 
-  defp relay_messages(session_pid, stream_server_pid, opts, relay_opts) do
+  defp relay_messages(session_pid, stream_server_pid, opts, relay_opts, output_observed?) do
     case WebSocketSession.next_message(session_pid, receive_timeout(opts)) do
       {:ok, message} ->
         case WebSocketProtocol.decode_message(message) do
@@ -182,7 +206,7 @@ defmodule ReqLLM.Streaming.WebSocketClient do
                   Keyword.get(relay_opts, :close_on_terminal?, true)
                 )
               else
-                relay_messages(session_pid, stream_server_pid, opts, relay_opts)
+                relay_messages(session_pid, stream_server_pid, opts, relay_opts, true)
               end
             end
 
@@ -198,9 +222,105 @@ defmodule ReqLLM.Streaming.WebSocketClient do
         :ok
 
       {:error, reason} ->
-        safe_http_event(stream_server_pid, {:error, reason})
-        {:error, reason}
+        if message_too_big?(reason) do
+          {:websocket_error, reason, output_observed?}
+        else
+          safe_http_event(stream_server_pid, {:error, reason})
+          {:error, reason}
+        end
     end
+  end
+
+  defp maybe_fallback_to_http(
+         {:websocket_error, reason, false},
+         %{fallback_transport: :http},
+         stream_server_pid,
+         provider_mod,
+         model,
+         context,
+         opts,
+         session
+       ) do
+    mark_session_http_fallback(session)
+
+    http_opts =
+      opts
+      |> Keyword.delete(:stream_transport)
+      |> Keyword.update(:provider_options, [], fn provider_opts ->
+        provider_opts
+        |> Keyword.put(:openai_stream_transport, :sse)
+        |> Keyword.delete(:openai_websocket_session)
+      end)
+
+    finch_name = Keyword.get(opts, :finch_name, ReqLLM.Finch)
+
+    case ReqLLM.Streaming.FinchClient.build_stream_request(
+           provider_mod,
+           model,
+           context,
+           http_opts,
+           finch_name
+         ) do
+      {:ok, finch_request, http_context, canonical_json} ->
+        safe_http_event(
+          stream_server_pid,
+          {:transport_fallback, :http, reason, http_context, canonical_json}
+        )
+
+        ReqLLM.Streaming.FinchClient.run_stream(
+          finch_request,
+          stream_server_pid,
+          finch_name,
+          http_opts
+        )
+
+      {:error, fallback_reason} ->
+        safe_http_event(stream_server_pid, {:error, fallback_reason})
+        {:error, fallback_reason}
+    end
+  end
+
+  defp maybe_fallback_to_http(
+         {:websocket_error, reason, _output_observed?},
+         _config,
+         stream_server_pid,
+         _provider_mod,
+         _model,
+         _context,
+         _opts,
+         _session
+       ) do
+    safe_http_event(stream_server_pid, {:error, reason})
+    {:error, reason}
+  end
+
+  defp maybe_fallback_to_http(
+         result,
+         _config,
+         _stream_server_pid,
+         _provider_mod,
+         _model,
+         _context,
+         _opts,
+         _session
+       ),
+       do: result
+
+  defp message_too_big?({side, 1009, _detail}) when side in [:local, :remote], do: true
+  defp message_too_big?(_reason), do: false
+
+  defp mark_session_http_fallback(session) when is_pid(session) do
+    WebSocketSession.mark_http_fallback(session)
+  catch
+    :exit, _reason -> :ok
+  end
+
+  defp mark_session_http_fallback(_session), do: :ok
+
+  defp close_owned_session(session) do
+    WebSocketSession.close(session)
+  catch
+    :exit, _reason -> :ok
   end
 
   defp reusable_session(opts) do

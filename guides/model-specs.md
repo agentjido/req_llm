@@ -8,9 +8,9 @@ This guide covers both paths.
 
 ## Start with LLMDB
 
-ReqLLM uses [`llm_db`](https://hex.pm/packages/llm_db) as its model registry. The easiest human-readable reference for that registry is [LLMDB.xyz](https://llmdb.xyz).
+ReqLLM uses [`llm_db`](https://hex.pm/packages/llm_db) as its model registry. The easiest human-readable reference for that registry is [LLM Catalog](https://llmcatalog.dev).
 
-Use [LLMDB.xyz](https://llmdb.xyz) when you want to:
+Use [LLM Catalog](https://llmcatalog.dev) when you want to:
 
 - look up the exact provider and model ID to pass to ReqLLM
 - inspect current model variants and versioned releases
@@ -29,7 +29,7 @@ That strategy matters for developer experience:
 - aliases can still resolve to a current canonical model through LLMDB
 - moving from one dated release to another is an explicit choice instead of an accidental drift
 
-If the model is already on [LLMDB.xyz](https://llmdb.xyz), prefer using that exact spec first.
+If the model is already on [LLM Catalog](https://llmcatalog.dev), prefer using that exact spec first.
 
 ## What A Model Spec Is
 
@@ -417,7 +417,7 @@ The full model specification path is the fastest way to use a model that is miss
 
 You should still update LLMDB or add registry metadata when you want:
 
-- the model to be discoverable on [LLMDB.xyz](https://llmdb.xyz)
+- the model to be discoverable on [LLM Catalog](https://llmcatalog.dev)
 - shared, reusable metadata for the team
 - compatibility tooling such as `mix mc`
 - richer cost, capability, and limit metadata everywhere

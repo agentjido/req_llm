@@ -249,6 +249,7 @@ defmodule ReqLLM.Providers.OpenAICodexTest do
         )
 
       assert config.url == "wss://chatgpt.com/backend-api/codex/responses"
+      assert config.fallback_transport == :http
       assert {"openai-beta", "responses_websockets=2026-02-06"} in config.headers
       assert {"session_id", "req_ws"} in config.headers
       assert {"x-client-request-id", "req_ws"} in config.headers

@@ -12,7 +12,7 @@ OPENROUTER_API_KEY=sk-or-...
 
 For the full model-spec workflow, see [Model Specs](model-specs.md).
 
-Use exact OpenRouter model IDs from [LLMDB.xyz](https://llmdb.xyz) when possible. If you need to route to a model that is not in the registry yet, use `ReqLLM.model!/1` and provide the full explicit model spec.
+Use exact OpenRouter model IDs from [LLM Catalog](https://llmcatalog.dev) when possible. If you need to route to a model that is not in the registry yet, use `ReqLLM.model!/1` and provide the full explicit model spec.
 
 ## Provider Options
 

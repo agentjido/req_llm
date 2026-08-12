@@ -12,7 +12,7 @@ XAI_API_KEY=xai-...
 
 For the full model-spec workflow, see [Model Specs](model-specs.md).
 
-Use exact Grok IDs from [LLMDB.xyz](https://llmdb.xyz) when possible. If you need a new or proxied xAI-compatible model ID before it lands in LLMDB, use `ReqLLM.model!/1`.
+Use exact Grok IDs from [LLM Catalog](https://llmcatalog.dev) when possible. If you need a new or proxied xAI-compatible model ID before it lands in LLMDB, use `ReqLLM.model!/1`.
 
 ## Attachments
 

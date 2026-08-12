@@ -66,7 +66,7 @@ ReqLLM.generate_text(
 
 For the full model-spec workflow, see [Model Specs](model-specs.md).
 
-Use exact Vertex model IDs from [LLMDB.xyz](https://llmdb.xyz) when possible. For MaaS and other OpenAI-compatible Vertex models that are not in the registry yet, build a full explicit model spec with `ReqLLM.model!/1`. Some MaaS model IDs also need `extra.family` when the family cannot be inferred from the ID alone.
+Use exact Vertex model IDs from [LLM Catalog](https://llmcatalog.dev) when possible. For MaaS and other OpenAI-compatible Vertex models that are not in the registry yet, build a full explicit model spec with `ReqLLM.model!/1`. Some MaaS model IDs also need `extra.family` when the family cannot be inferred from the ID alone.
 
 ## Provider Options
 
