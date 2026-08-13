@@ -26,13 +26,10 @@ defmodule ReqLLM.Application do
   def start(_type, _args) do
     req_llm_load_dotenv = Application.get_env(:req_llm, :load_dotenv, true)
 
-    sync_llm_db_dotenv_config(req_llm_load_dotenv)
-
-    if req_llm_load_dotenv or Application.get_env(:llm_db, :load_dotenv, false) do
+    if req_llm_load_dotenv do
       load_dotenv()
     end
 
-    ensure_llm_db_started()
     initialize_registry()
     initialize_schema_cache()
 
@@ -182,23 +179,6 @@ defmodule ReqLLM.Application do
       :named_table,
       read_concurrency: true
     ])
-  end
-
-  defp sync_llm_db_dotenv_config(req_llm_load_dotenv) do
-    case Application.fetch_env(:llm_db, :load_dotenv) do
-      :error ->
-        Application.put_env(:llm_db, :load_dotenv, req_llm_load_dotenv)
-
-      {:ok, _value} ->
-        :ok
-    end
-  end
-
-  defp ensure_llm_db_started do
-    case Application.ensure_all_started(:llm_db) do
-      {:ok, _} -> :ok
-      {:error, reason} -> raise "failed to start :llm_db: #{inspect(reason)}"
-    end
   end
 
   defp load_dotenv do

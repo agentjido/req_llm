@@ -577,6 +577,8 @@ The default is `true`.
 
 ```elixir
 # config/prod.exs
+config :llm_db, compile_embed: true
+
 config :req_llm,
   receive_timeout: 120_000,
   stream_receive_timeout: 120_000,
@@ -590,6 +592,11 @@ config :req_llm,
   telemetry: [payloads: :none],
   load_dotenv: false  # Use proper secrets management in production
 ```
+
+Set `compile_embed` in the root application before dependencies compile. This
+embeds the LLMDB catalog in BEAM bytecode and removes catalog file access at
+runtime. Recompile the dependency after each `llm_db` update. ReqLLM cannot set
+this compile-time option for applications that install ReqLLM from Hex.
 
 ## Example: Development Configuration
 
