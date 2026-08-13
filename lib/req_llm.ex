@@ -1263,7 +1263,7 @@ defmodule ReqLLM do
   @doc """
   Resolves a video `file_id` to a time-limited download URL (V1 providers).
   """
-  @spec retrieve_video_file(ReqLLM.model_input(), String.t(), keyword()) ::
+  @spec retrieve_video_file(ReqLLM.model_input(), String.t() | integer(), keyword()) ::
           {:ok, ReqLLM.Video.File.t()} | {:error, term()}
   defdelegate retrieve_video_file(model_spec, file_id, opts \\ []), to: Video, as: :retrieve_file
 

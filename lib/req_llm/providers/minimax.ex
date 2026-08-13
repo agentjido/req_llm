@@ -49,6 +49,10 @@ defmodule ReqLLM.Providers.Minimax do
       default: false,
       doc: "Enable automatic prompt optimization for MiniMax image generation."
     ],
+    fast_pretreatment: [
+      type: :boolean,
+      doc: "Reduce MiniMax video prompt optimization time when prompt optimization is enabled."
+    ],
     subject_reference: [
       type: :any,
       doc:
@@ -353,6 +357,17 @@ defmodule ReqLLM.Providers.Minimax do
     {opts, Enum.reverse(warnings)}
   end
 
+  def pre_validate_options(:video, _model, opts) do
+    provider_options =
+      opts
+      |> Keyword.get(:provider_options, [])
+      |> Keyword.put_new(:prompt_optimizer, true)
+
+    Keyword.put(opts, :provider_options, provider_options)
+  end
+
+  def pre_validate_options(_operation, _model, opts), do: opts
+
   @impl ReqLLM.Provider
   def encode_body(%{options: %{api_mod: api_mod}} = request) when is_atom(api_mod) do
     api_mod.encode_body(request)
@@ -471,6 +486,16 @@ defmodule ReqLLM.Providers.Minimax do
   end
 
   defp video_content(content) when is_list(content) do
+    if Keyword.keyword?(content) do
+      validate_video_prompt(content)
+    else
+      invalid_video_content()
+    end
+  end
+
+  defp video_content(_content), do: invalid_video_content()
+
+  defp validate_video_prompt(content) do
     prompt = Keyword.get(content, :prompt)
 
     if is_binary(prompt) and String.trim(prompt) != "" do
@@ -483,7 +508,7 @@ defmodule ReqLLM.Providers.Minimax do
     end
   end
 
-  defp video_content(_content) do
+  defp invalid_video_content do
     {:error,
      ReqLLM.Error.Invalid.Parameter.exception(
        parameter: "video content must be a keyword list with a :prompt"

@@ -17,6 +17,9 @@ defmodule ReqLLM.TupleModelOptionsTest do
   defmodule ImageHTTP do
   end
 
+  defmodule VideoHTTP do
+  end
+
   defmodule TranscriptionHTTP do
   end
 
@@ -144,7 +147,8 @@ defmodule ReqLLM.TupleModelOptionsTest do
       {:transcription, {:openai, "whisper-1", total_timeout: 1_000}},
       {:speech, {:openai, "tts-1", total_timeout: 1_000}},
       {:rerank, {:cohere, "rerank-v3.5", total_timeout: 1_000}},
-      {:ocr, {:google_vertex, "mistral-ocr-2505", total_timeout: 1_000}}
+      {:ocr, {:google_vertex, "mistral-ocr-2505", total_timeout: 1_000}},
+      {:video, {:minimax, "MiniMax-H3", total_timeout: 1_000}}
     ]
 
     for {operation, model} <- cases do
@@ -299,6 +303,26 @@ defmodule ReqLLM.TupleModelOptionsTest do
              )
 
     assert_body_delta(baseline, receive_body(ImageHTTP), "size", "512x512")
+  end
+
+  test "video tuple defaults change only the corresponding request key" do
+    stub_json(VideoHTTP, %{"task_id" => "task-1"})
+    opts = [api_key: "test-key", req_http_options: [plug: {Req.Test, VideoHTTP}]]
+    content = [prompt: "A square moves across the frame"]
+
+    assert {:ok, _task} =
+             ReqLLM.generate_video({:minimax, id: "MiniMax-H3"}, content, opts)
+
+    baseline = receive_body(VideoHTTP)
+
+    assert {:ok, _task} =
+             ReqLLM.generate_video(
+               {:minimax, "MiniMax-H3", duration: 5},
+               content,
+               opts
+             )
+
+    assert_body_delta(baseline, receive_body(VideoHTTP), "duration", 5)
   end
 
   test "transcription tuple defaults change only the corresponding multipart field" do

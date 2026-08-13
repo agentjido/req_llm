@@ -34,6 +34,13 @@ defmodule ReqLLM.Video do
   alias LLMDB.Model
 
   @terminal_statuses [:succeeded, :failed, :cancelled]
+  @type file_id :: String.t() | integer()
+
+  @wait_schema NimbleOptions.new!(
+                 poll_interval: [type: :non_neg_integer, default: 10_000],
+                 timeout: [type: :pos_integer, default: 600_000],
+                 max_transient_retries: [type: :non_neg_integer, default: 3]
+               )
 
   @base_schema NimbleOptions.new!(
                  duration: [
@@ -124,7 +131,7 @@ defmodule ReqLLM.Video do
             task_id: String.t(),
             status: :queued | :running | :succeeded | :failed | :cancelled,
             url: String.t() | nil,
-            file_id: String.t() | nil,
+            file_id: ReqLLM.Video.file_id() | nil,
             error: String.t() | nil,
             model: String.t() | nil,
             provider: atom() | nil,
@@ -171,7 +178,7 @@ defmodule ReqLLM.Video do
     opts = ReqLLM.ModelInput.merge_tuple_defaults(model_spec, :video, opts)
     deadline = ReqLLM.TimeoutBudget.deadline(opts)
 
-    with {:ok, model} <- ReqLLM.model(model_spec),
+    with {:ok, model} <- validate_model(model_spec),
          {:ok, provider_module} <- ReqLLM.provider(model.provider),
          {:ok, opts} <-
            ReqLLM.Provider.Options.normalize_namespaced_provider_options(
@@ -180,7 +187,8 @@ defmodule ReqLLM.Video do
              model,
              opts
            ),
-         {:ok, content} <- maybe_upload_content(model, content, opts),
+         {:ok, content} <- validate_content(content),
+         {:ok, content} <- maybe_upload_content(model, content, opts, deadline),
          {:ok, request} <- provider_module.prepare_request(:video, model, content, opts),
          {:ok, %Req.Response{status: status, body: %Task{} = task}} when status in 200..299 <-
            ReqLLM.TimeoutBudget.request(request, deadline) do
@@ -211,7 +219,7 @@ defmodule ReqLLM.Video do
     opts = ReqLLM.ModelInput.merge_tuple_defaults(model_spec, :video, opts)
     deadline = ReqLLM.TimeoutBudget.deadline(opts)
 
-    with {:ok, model} <- ReqLLM.model(model_spec),
+    with {:ok, model} <- validate_model(model_spec),
          {:ok, provider_module} <- ReqLLM.provider(model.provider),
          {:ok, request} <- provider_module.prepare_request(:video_query, model, task_id, opts),
          {:ok, %Req.Response{status: status, body: %Task{} = task}} when status in 200..299 <-
@@ -252,44 +260,49 @@ defmodule ReqLLM.Video do
   @spec wait_video(ReqLLM.model_input(), String.t(), keyword()) ::
           {:ok, Task.t()} | {:error, term()}
   def wait_video(model_spec, task_id, opts \\ []) do
-    {poll_interval, opts} = Keyword.pop(opts, :poll_interval, 10_000)
-    {timeout, opts} = Keyword.pop(opts, :timeout, 600_000)
-    {max_transient_retries, opts} = Keyword.pop(opts, :max_transient_retries, 3)
-    deadline = System.monotonic_time(:millisecond) + timeout
+    opts = ReqLLM.ModelInput.merge_tuple_defaults(model_spec, :video, opts)
 
-    with {:ok, model} <- ReqLLM.model(model_spec),
+    with {:ok, wait_opts, request_opts} <- validate_wait_options(opts),
+         {:ok, model} <- validate_model(model_spec),
          {:ok, provider_module} <- ReqLLM.provider(model.provider),
-         {:ok, request} <- provider_module.prepare_request(:video_query, model, task_id, opts) do
-      do_wait(request, poll_interval, deadline, max_transient_retries, timeout, opts)
+         {:ok, request} <-
+           provider_module.prepare_request(:video_query, model, task_id, request_opts) do
+      wait_deadline = ReqLLM.TimeoutBudget.deadline(total_timeout: wait_opts[:timeout])
+
+      do_wait(
+        request,
+        wait_opts[:poll_interval],
+        wait_deadline,
+        wait_opts[:max_transient_retries],
+        request_opts
+      )
     end
   end
 
-  defp do_wait(request, poll_interval, deadline, retries_left, timeout, opts) do
-    case query_request(request, opts) do
-      {:ok, %Task{status: status} = task} when status in @terminal_statuses ->
-        {:ok, task}
+  defp do_wait(request, poll_interval, wait_deadline, retries_left, opts) do
+    if ReqLLM.TimeoutBudget.remaining(wait_deadline) == 0 do
+      wait_timeout(wait_deadline)
+    else
+      request_deadline = earliest_deadline(wait_deadline, ReqLLM.TimeoutBudget.deadline(opts))
 
-      {:ok, %Task{}} ->
-        if System.monotonic_time(:millisecond) >= deadline do
-          {:error, ReqLLM.Error.API.Timeout.exception(kind: :total, timeout: timeout)}
-        else
-          Process.sleep(poll_interval)
-          do_wait(request, poll_interval, deadline, retries_left, timeout, opts)
-        end
+      case query_request(request, request_deadline) do
+        {:ok, %Task{status: status} = task} when status in @terminal_statuses ->
+          {:ok, task}
 
-      {:error, error} ->
-        if retries_left > 0 and transient_error?(error) do
-          Process.sleep(poll_interval)
-          do_wait(request, poll_interval, deadline, retries_left - 1, timeout, opts)
-        else
-          {:error, error}
-        end
+        {:ok, %Task{}} ->
+          continue_wait(request, poll_interval, wait_deadline, retries_left, opts)
+
+        {:error, error} ->
+          if retries_left > 0 and transient_error?(error) do
+            continue_wait(request, poll_interval, wait_deadline, retries_left - 1, opts)
+          else
+            {:error, error}
+          end
+      end
     end
   end
 
-  defp query_request(request, opts) do
-    deadline = ReqLLM.TimeoutBudget.deadline(opts)
-
+  defp query_request(request, deadline) do
     case ReqLLM.TimeoutBudget.request(request, deadline) do
       {:ok, %Req.Response{status: status, body: %Task{} = task}} when status in 200..299 ->
         {:ok, task}
@@ -304,6 +317,40 @@ defmodule ReqLLM.Video do
 
       {:error, error} ->
         {:error, error}
+    end
+  end
+
+  defp continue_wait(request, poll_interval, wait_deadline, retries_left, opts) do
+    remaining = ReqLLM.TimeoutBudget.remaining(wait_deadline)
+
+    if remaining == 0 do
+      wait_timeout(wait_deadline)
+    else
+      Process.sleep(min(poll_interval, remaining))
+      do_wait(request, poll_interval, wait_deadline, retries_left, opts)
+    end
+  end
+
+  defp earliest_deadline(:infinity, deadline), do: deadline
+  defp earliest_deadline(deadline, :infinity), do: deadline
+
+  defp earliest_deadline(%{expires_at: left} = first, %{expires_at: right})
+       when left <= right,
+       do: first
+
+  defp earliest_deadline(_first, second), do: second
+
+  defp wait_timeout(%{timeout: timeout}) do
+    {:error, ReqLLM.Error.API.Timeout.exception(kind: :total, timeout: timeout)}
+  end
+
+  defp validate_wait_options(opts) do
+    {wait_opts, request_opts} =
+      Keyword.split(opts, [:poll_interval, :timeout, :max_transient_retries])
+
+    case NimbleOptions.validate(wait_opts, @wait_schema) do
+      {:ok, validated} -> {:ok, validated, request_opts}
+      {:error, error} -> {:error, error}
     end
   end
 
@@ -326,13 +373,13 @@ defmodule ReqLLM.Video do
 
   Returns `{:ok, %ReqLLM.Video.File{}}` with the `url` populated.
   """
-  @spec retrieve_file(ReqLLM.model_input(), String.t(), keyword()) ::
+  @spec retrieve_file(ReqLLM.model_input(), file_id(), keyword()) ::
           {:ok, File.t()} | {:error, term()}
   def retrieve_file(model_spec, file_id, opts \\ []) do
     opts = ReqLLM.ModelInput.merge_tuple_defaults(model_spec, :video, opts)
     deadline = ReqLLM.TimeoutBudget.deadline(opts)
 
-    with {:ok, model} <- ReqLLM.model(model_spec),
+    with {:ok, model} <- validate_model(model_spec),
          {:ok, provider_module} <- ReqLLM.provider(model.provider),
          {:ok, request} <- provider_module.prepare_request(:video_retrieve, model, file_id, opts),
          {:ok, %Req.Response{status: status, body: body}} when status in 200..299 <-
@@ -375,24 +422,9 @@ defmodule ReqLLM.Video do
     opts = ReqLLM.ModelInput.merge_tuple_defaults(model_spec, :video, opts)
     deadline = ReqLLM.TimeoutBudget.deadline(opts)
 
-    with {:ok, model} <- ReqLLM.model(model_spec),
-         {:ok, provider_module} <- ReqLLM.provider(model.provider),
-         {:ok, request} <-
-           provider_module.prepare_request(:video_upload, model, file_binary, opts),
-         {:ok, %Req.Response{status: status, body: %File{} = file}} when status in 200..299 <-
-           ReqLLM.TimeoutBudget.request(request, deadline) do
-      {:ok, file}
-    else
-      {:ok, %Req.Response{status: status, body: body}} ->
-        {:error,
-         ReqLLM.Error.API.Request.exception(
-           reason: "HTTP #{status}: Request failed",
-           status: status,
-           response_body: body
-         )}
-
-      {:error, error} ->
-        {:error, error}
+    with {:ok, model} <- validate_model(model_spec),
+         :ok <- validate_file_binary(file_binary) do
+      upload_file_with_deadline(model, file_binary, opts, deadline)
     end
   end
 
@@ -418,55 +450,135 @@ defmodule ReqLLM.Video do
     :req_http_options
   ]
 
-  defp maybe_upload_content(model, content, opts) when is_list(content) do
+  defp maybe_upload_content(model, content, opts, deadline) do
     upload_opts = Keyword.take(opts, @upload_opts)
     v2? = ReqLLM.Providers.Minimax.video_api_mod(model) == ReqLLM.Providers.Minimax.VideoAPI
 
     Enum.reduce_while(@media_keys, {:ok, content}, fn key, {:ok, acc} ->
-      case Keyword.get(acc, key) do
-        {:upload, binary, media_type} when is_binary(media_type) ->
-          case upload_reference(model, v2?, binary, media_type, upload_opts) do
-            {:ok, ref} -> {:cont, {:ok, Keyword.put(acc, key, ref)}}
+      case Keyword.fetch(acc, key) do
+        {:ok, input} ->
+          case resolve_media_value(model, v2?, input, upload_opts, deadline) do
+            {:ok, value} -> {:cont, {:ok, Keyword.put(acc, key, value)}}
             {:error, error} -> {:halt, {:error, error}}
           end
 
-        {:upload, _binary, _media_type} ->
-          {:halt,
-           {:error,
-            ReqLLM.Error.Invalid.Parameter.exception(
-              parameter:
-                "media_type must be a binary, e.g. {:upload, image_bytes, \"image/jpeg\"}"
-            )}}
-
-        {:file, path} ->
-          case :file.read_file(path) do
-            {:ok, binary} ->
-              case upload_reference(model, v2?, binary, media_type_from_path(path), upload_opts) do
-                {:ok, ref} -> {:cont, {:ok, Keyword.put(acc, key, ref)}}
-                {:error, error} -> {:halt, {:error, error}}
-              end
-
-            {:error, error} ->
-              {:halt, {:error, error}}
-          end
-
-        _ ->
+        :error ->
           {:cont, {:ok, acc}}
       end
     end)
   end
 
-  defp maybe_upload_content(_model, content, _opts), do: {:ok, content}
+  defp resolve_media_value(model, v2?, values, upload_opts, deadline) when is_list(values) do
+    Enum.reduce_while(values, {:ok, []}, fn value, {:ok, resolved} ->
+      case resolve_media_value(model, v2?, value, upload_opts, deadline) do
+        {:ok, result} -> {:cont, {:ok, [result | resolved]}}
+        {:error, error} -> {:halt, {:error, error}}
+      end
+    end)
+    |> case do
+      {:ok, resolved} -> {:ok, Enum.reverse(resolved)}
+      {:error, error} -> {:error, error}
+    end
+  end
 
-  defp upload_reference(model, true, binary, media_type, upload_opts) do
+  defp resolve_media_value(model, v2?, {:upload, binary, media_type}, upload_opts, deadline)
+       when is_binary(binary) and is_binary(media_type) do
+    upload_reference(model, v2?, binary, media_type, upload_opts, deadline)
+  end
+
+  defp resolve_media_value(_model, _v2?, {:upload, _binary, _media_type}, _opts, _deadline) do
+    {:error,
+     ReqLLM.Error.Invalid.Parameter.exception(
+       parameter:
+         "upload media and media_type must be binaries, e.g. {:upload, image_bytes, \"image/jpeg\"}"
+     )}
+  end
+
+  defp resolve_media_value(model, v2?, {:file, path}, upload_opts, deadline)
+       when is_binary(path) do
+    case Elixir.File.read(path) do
+      {:ok, binary} ->
+        upload_reference(
+          model,
+          v2?,
+          binary,
+          media_type_from_path(path),
+          upload_opts,
+          deadline
+        )
+
+      {:error, error} ->
+        {:error, error}
+    end
+  end
+
+  defp resolve_media_value(_model, _v2?, {:file, _path}, _opts, _deadline) do
+    {:error,
+     ReqLLM.Error.Invalid.Parameter.exception(parameter: "media file path must be a binary")}
+  end
+
+  defp resolve_media_value(_model, _v2?, value, _upload_opts, _deadline), do: {:ok, value}
+
+  defp upload_reference(model, true, binary, media_type, upload_opts, deadline) do
     with {:ok, file} <-
-           upload_file(model, binary, Keyword.put(upload_opts, :media_type, media_type)) do
+           upload_file_with_deadline(
+             model,
+             binary,
+             Keyword.put(upload_opts, :media_type, media_type),
+             deadline
+           ) do
       {:ok, "mm_file://#{file.file_id}"}
     end
   end
 
-  defp upload_reference(_model, false, binary, media_type, _upload_opts) do
+  defp upload_reference(_model, false, binary, media_type, _upload_opts, _deadline) do
     {:ok, "data:#{media_type};base64,#{Base.encode64(binary)}"}
+  end
+
+  defp upload_file_with_deadline(model, file_binary, opts, deadline) do
+    with {:ok, provider_module} <- ReqLLM.provider(model.provider),
+         {:ok, request} <-
+           provider_module.prepare_request(:video_upload, model, file_binary, opts),
+         {:ok, %Req.Response{status: status, body: %File{} = file}} when status in 200..299 <-
+           ReqLLM.TimeoutBudget.request(request, deadline) do
+      {:ok, file}
+    else
+      {:ok, %Req.Response{status: status, body: body}} ->
+        {:error,
+         ReqLLM.Error.API.Request.exception(
+           reason: "HTTP #{status}: Request failed",
+           status: status,
+           response_body: body
+         )}
+
+      {:error, error} ->
+        {:error, error}
+    end
+  end
+
+  defp validate_content(content) when is_list(content) do
+    if Keyword.keyword?(content) do
+      {:ok, content}
+    else
+      {:error,
+       ReqLLM.Error.Invalid.Parameter.exception(
+         parameter: "video content must be a keyword list with a :prompt"
+       )}
+    end
+  end
+
+  defp validate_content(_content) do
+    {:error,
+     ReqLLM.Error.Invalid.Parameter.exception(
+       parameter: "video content must be a keyword list with a :prompt"
+     )}
+  end
+
+  defp validate_file_binary(file_binary) when is_binary(file_binary), do: :ok
+
+  defp validate_file_binary(_file_binary) do
+    {:error,
+     ReqLLM.Error.Invalid.Parameter.exception(parameter: "uploaded file must be a binary")}
   end
 
   defp media_type_from_path(path) do

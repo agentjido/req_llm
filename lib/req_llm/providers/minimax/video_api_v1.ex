@@ -80,6 +80,7 @@ defmodule ReqLLM.Providers.Minimax.VideoAPIV1 do
       %{"model" => opts[:model]}
       |> maybe_put_string("prompt", Keyword.get(content, :prompt))
       |> maybe_put_string("first_frame_image", Keyword.get(content, :first_frame_image))
+      |> maybe_put_string("last_frame_image", Keyword.get(content, :last_frame_image))
       |> maybe_put_boolean("prompt_optimizer", opts[:prompt_optimizer])
       |> maybe_put_boolean("fast_pretreatment", opts[:fast_pretreatment])
       |> maybe_put_integer("duration", opts[:duration])

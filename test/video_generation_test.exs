@@ -383,6 +383,44 @@ defmodule ReqLLM.VideoGenerationTest do
                  req_http_options: [plug: {Req.Test, __MODULE__}]
                )
     end
+
+    test "rejects a model that does not support video generation" do
+      model = %LLMDB.Model{
+        id: "MiniMax-M2.7",
+        model: "MiniMax-M2.7",
+        provider_model_id: "MiniMax-M2.7",
+        provider: :minimax,
+        name: "MiniMax-M2.7",
+        family: "minimax-m2",
+        capabilities: %{chat: true},
+        limits: %{},
+        extra: %{}
+      }
+
+      assert {:error, %ReqLLM.Error.Invalid.Parameter{}} =
+               ReqLLM.Video.generate_video(model, prompt: "A cat")
+    end
+
+    test "returns validation errors for malformed content and upload tuples" do
+      model = minimax_video_model()
+
+      assert {:error, %ReqLLM.Error.Invalid.Parameter{}} =
+               ReqLLM.Video.generate_video(model, ["not", "a", "keyword", "list"])
+
+      assert {:error, %ReqLLM.Error.Invalid.Parameter{}} =
+               ReqLLM.Video.generate_video(
+                 model,
+                 prompt: "A cat",
+                 first_frame_image: {:upload, :not_binary, "image/png"}
+               )
+
+      assert {:error, %ReqLLM.Error.Invalid.Parameter{}} =
+               ReqLLM.Video.generate_video(
+                 model,
+                 prompt: "A cat",
+                 first_frame_image: {:file, :not_a_path}
+               )
+    end
   end
 
   describe "query_video" do
@@ -507,6 +545,24 @@ defmodule ReqLLM.VideoGenerationTest do
                  req_http_options: [plug: {Req.Test, __MODULE__}]
                )
     end
+
+    test "enforces the wait timeout while a query request is running" do
+      Req.Test.stub(__MODULE__, fn conn ->
+        Process.sleep(50)
+
+        Req.Test.json(conn, %{
+          "task" => %{"id" => "task-4", "status" => "succeeded"}
+        })
+      end)
+
+      assert {:error, %ReqLLM.Error.API.Timeout{timeout: 10}} =
+               ReqLLM.Video.wait_video(minimax_video_model(), "task-4",
+                 api_key: "test-key",
+                 poll_interval: 1,
+                 timeout: 10,
+                 req_http_options: [plug: {Req.Test, __MODULE__}]
+               )
+    end
   end
 end
 
@@ -585,6 +641,27 @@ defmodule ReqLLM.VideoGenerationV1Test do
       assert request.options[:operation] == :video
     end
 
+    test "accepts fast pretreatment and preserves the video prompt optimizer default" do
+      model = minimax_hailuo_model()
+
+      assert {:ok, request} =
+               Minimax.prepare_request(:video, model, [prompt: "A cat"],
+                 fast_pretreatment: true,
+                 api_key: "test-key"
+               )
+
+      assert request.options[:fast_pretreatment] == true
+      assert request.options[:prompt_optimizer] == true
+
+      assert {:ok, request} =
+               Minimax.prepare_request(:video, model, [prompt: "A cat"],
+                 prompt_optimizer: false,
+                 api_key: "test-key"
+               )
+
+      assert request.options[:prompt_optimizer] == false
+    end
+
     test "creates query request with task_id as query param" do
       model = minimax_hailuo_model()
 
@@ -628,7 +705,8 @@ defmodule ReqLLM.VideoGenerationV1Test do
           model: "MiniMax-Hailuo-2.3",
           content: [
             prompt: "A cat",
-            first_frame_image: "https://example.com/cat.png"
+            first_frame_image: "https://example.com/cat.png",
+            last_frame_image: "https://example.com/adult-cat.png"
           ],
           duration: 6,
           resolution: "768P",
@@ -643,6 +721,7 @@ defmodule ReqLLM.VideoGenerationV1Test do
       assert body["model"] == "MiniMax-Hailuo-2.3"
       assert body["prompt"] == "A cat"
       assert body["first_frame_image"] == "https://example.com/cat.png"
+      assert body["last_frame_image"] == "https://example.com/adult-cat.png"
       assert body["duration"] == 6
       assert body["resolution"] == "768P"
       assert body["prompt_optimizer"] == true
@@ -1018,6 +1097,66 @@ defmodule ReqLLM.VideoGenerationV1Test do
                  ],
                  duration: 5,
                  resolution: "2K",
+                 api_key: "test-key",
+                 req_http_options: [plug: {Req.Test, __MODULE__}]
+               )
+    end
+
+    test "uploads private media inside reference lists" do
+      upload_counter = :counters.new(1, [])
+
+      Req.Test.stub(__MODULE__, fn conn ->
+        case {conn.method, conn.request_path} do
+          {"POST", "/v1/files/upload"} ->
+            :counters.add(upload_counter, 1, 1)
+            file_id = :counters.get(upload_counter, 1)
+
+            Req.Test.json(conn, %{
+              "file" => %{
+                "file_id" => file_id,
+                "bytes" => 17,
+                "filename" => "input.jpg",
+                "purpose" => "video_generation_input"
+              },
+              "base_resp" => %{"status_code" => 0, "status_msg" => "success"}
+            })
+
+          {"POST", "/v2/video_generation"} ->
+            {:ok, request_body, conn} = Plug.Conn.read_body(conn)
+            request_json = Jason.decode!(request_body)
+
+            assert [
+                     %{"type" => "text"},
+                     %{"image_url" => %{"url" => "mm_file://1"}},
+                     %{"image_url" => %{"url" => "mm_file://2"}}
+                   ] = request_json["content"]
+
+            Req.Test.json(conn, %{"task_id" => "task-list"})
+        end
+      end)
+
+      model = %LLMDB.Model{
+        id: "MiniMax-H3",
+        model: "MiniMax-H3",
+        provider_model_id: "MiniMax-H3",
+        provider: :minimax,
+        name: "MiniMax-H3",
+        family: "minimax-h3",
+        capabilities: %{video: true},
+        limits: %{},
+        extra: %{}
+      }
+
+      assert {:ok, %Task{task_id: "task-list"}} =
+               ReqLLM.Video.generate_video(
+                 model,
+                 [
+                   prompt: "A cat",
+                   reference_images: [
+                     {:upload, "first-image", "image/jpeg"},
+                     {:upload, "second-image", "image/jpeg"}
+                   ]
+                 ],
                  api_key: "test-key",
                  req_http_options: [plug: {Req.Test, __MODULE__}]
                )
