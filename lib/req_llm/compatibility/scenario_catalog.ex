@@ -41,6 +41,7 @@ defmodule ReqLLM.Compatibility.ScenarioCatalog do
     %{id: :transcription, test_file: "transcription_test.exs"},
     %{id: :rerank, test_file: "rerank_test.exs"},
     %{id: :ocr, test_file: "ocr_test.exs"},
+    %{id: :video, test_file: "video_generation_test.exs"},
     %{id: :all, test_file: :provider_directory}
   ]
 
@@ -57,6 +58,7 @@ defmodule ReqLLM.Compatibility.ScenarioCatalog do
     %{id: "transcription", operation: :transcription},
     %{id: "rerank", operation: :rerank},
     %{id: "ocr", operation: :ocr},
+    %{id: "video", operation: :video},
     %{id: "grounding", operation: :text},
     %{id: "grounding_legacy", operation: :text},
     %{id: "multimodal_tool_result", operation: :text},
@@ -135,6 +137,10 @@ defmodule ReqLLM.Compatibility.ScenarioCatalog do
                        output_modalities: [:ranked_documents], requirements: [:reranking]},
                       {"ocr_basic", "ocr",
                        input_modalities: [:document], requirements: [:ocr], proof: :declared},
+                      {"video_basic", "video",
+                       output_modalities: [:video],
+                       requirements: [:video_generation],
+                       proof: :declared},
                       {"grounding_basic", "grounding",
                        requirements: [:grounding], applicability: :focused, providers: [:google]},
                       {"grounding_with_context", "grounding",

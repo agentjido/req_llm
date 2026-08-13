@@ -42,7 +42,7 @@ That breadth extends well beyond chat: ReqLLM tracks **92 non-text operation mod
 | [Google Vertex AI](https://llmcatalog.dev/?providers=google_vertex) | `google_vertex` | 40 | text | 11 | [Guide](guides/google_vertex.md) |
 | [Groq](https://llmcatalog.dev/?providers=groq) | `groq` | 18 | text, speech 2, transcription 2 | 11 | [Guide](guides/groq.md) |
 | [Meta Model API](https://llmcatalog.dev/?providers=meta) | `meta` | 1 | text | 1 | [Guide](guides/meta.md) |
-| [MiniMax](https://llmcatalog.dev/?providers=minimax) | `minimax` | 6 | text | 6 | — |
+| [MiniMax](https://llmcatalog.dev/?providers=minimax) | `minimax` | 6 | text, video 2 | 6 | — |
 | [Moonshot AI](https://llmcatalog.dev/?providers=moonshotai) | `moonshotai` | 1 | text | 1 | [Guide](guides/moonshot_ai.md) |
 | [OpenAI](https://llmcatalog.dev/?providers=openai) | `openai` | 86 | text, embedding 3, image 5, speech 6, transcription 7 | 64 | [Guide](guides/openai.md) |
 | [OpenRouter](https://llmcatalog.dev/?providers=openrouter) | `openrouter` | 364 | text, embedding 25, image 5 | 234 | [Guide](guides/openrouter.md) |
@@ -135,6 +135,41 @@ File.write!("red_square.png", image_bytes)
 ```
 
 Note: Google image models gemini-2.5-flash-image and gemini-3-pro-image-preview reject :n; specify the image count in the prompt.
+
+```elixir
+{:ok, task} =
+  ReqLLM.generate_video("minimax:MiniMax-H3",
+    [prompt: "A boy playing basketball by the sea", first_frame_image: "https://example.com/frame.png"],
+    duration: 5,
+    resolution: "2K"
+  )
+
+{:ok, completed} = ReqLLM.wait_video("minimax:MiniMax-H3", task.task_id)
+# completed.url is the video download URL
+
+# Hailuo series (V1 API) returns a file_id instead of a url:
+{:ok, task} =
+  ReqLLM.generate_video("minimax:MiniMax-Hailuo-2.3",
+    [prompt: "A cat", first_frame_image: "https://example.com/cat.png"],
+    duration: 6,
+    resolution: "768P"
+  )
+
+{:ok, completed} = ReqLLM.wait_video("minimax:MiniMax-Hailuo-2.3", task.task_id)
+{:ok, file} = ReqLLM.retrieve_video_file("minimax:MiniMax-Hailuo-2.3", completed.file_id)
+# file.url is the time-limited download URL
+
+# Sensitive images: no public URL exposure. Auto-upload with {:upload, binary, media_type}:
+# - H3 (V2 API): uploads to the platform and references mm_file://{file_id}
+# - Hailuo (V1 API): inlines the image as a base64 data URL
+{:ok, task} =
+  ReqLLM.generate_video("minimax:MiniMax-Hailuo-2.3",
+    [prompt: "The cat turns its head",
+     first_frame_image: {:upload, image_bytes, "image/jpeg"}],
+    duration: 6,
+    resolution: "768P"
+  )
+```
 
 ```elixir
 {:ok, response} = ReqLLM.generate_text(

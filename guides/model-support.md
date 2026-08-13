@@ -163,9 +163,9 @@ provider-native feature and are not consulted by request routing.
 | `veo-2.0-generate-001` | `text` | `google.unrecorded_text` | text → text | Experimental | 0/5 | 2026-05-30T01:01:43Z | surface declaration unknown |
 | `veo-3.0-fast-generate-001` | `text` | `google.unrecorded_text` | text → text | Experimental | 0/5 | 2026-05-30T01:01:43Z | surface declaration unknown |
 | `veo-3.0-generate-001` | `text` | `google.unrecorded_text` | text → text | Experimental | 0/5 | 2026-05-30T01:01:43Z | surface declaration unknown |
-| `veo-3.1-fast-generate-preview` | `text` | `google.unrecorded_text` | text → text | Unsupported | 0/5 | 2026-05-30T01:01:43Z | basic failed at provider_drift |
-| `veo-3.1-generate-preview` | `text` | `google.unrecorded_text` | text → text | Unsupported | 0/5 | 2026-05-30T01:01:43Z | basic failed at provider_drift |
-| `veo-3.1-lite-generate-preview` | `text` | `google.unrecorded_text` | text → text | Unsupported | 0/5 | 2026-05-30T01:01:43Z | basic failed at provider_drift |
+| `veo-3.1-fast-generate-preview` | `text` | `google.unrecorded_text` | text → text | Unsupported | 0/5 | 2026-05-30T01:01:43Z | operation not declared |
+| `veo-3.1-generate-preview` | `text` | `google.unrecorded_text` | text → text | Unsupported | 0/5 | 2026-05-30T01:01:43Z | operation not declared |
+| `veo-3.1-lite-generate-preview` | `text` | `google.unrecorded_text` | text → text | Unsupported | 0/5 | 2026-05-30T01:01:43Z | operation not declared |
 
 ## groq
 
@@ -629,7 +629,7 @@ provider-native feature and are not consulted by request routing.
 | `grok-imagine-image` | `image` | `xai.image` | text → image | First-class | 1/1 | 2026-05-30T01:06:56Z | complete current baseline |
 | `grok-imagine-image-pro` | `image` | `xai.image` | text → image | First-class | 1/1 | 2026-05-30T01:06:56Z | complete current baseline |
 | `grok-imagine-image-quality` | `image` | `xai.image` | text → image | First-class | 1/1 | 2026-05-30T01:06:56Z | complete current baseline |
-| `grok-imagine-video` | `text` | `xai.unrecorded_text` | text → text | Unsupported | 0/5 | 2026-05-30T01:06:18Z | basic failed at provider_drift |
+| `grok-imagine-video` | `text` | `xai.unrecorded_text` | text → text | Unsupported | 0/5 | 2026-05-30T01:06:18Z | operation not declared |
 
 ## zai
 

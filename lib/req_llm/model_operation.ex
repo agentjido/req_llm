@@ -1,11 +1,12 @@
 defmodule ReqLLM.ModelOperation do
   @moduledoc false
 
-  @operations ~w(text embedding image speech transcription rerank ocr all)a
+  @operations ~w(text embedding image speech transcription rerank ocr video all)a
   @image_providers ~w(openai google xai minimax azure)a
   @speech_providers ~w(openai elevenlabs)a
   @transcription_providers ~w(openai groq elevenlabs openrouter)a
   @rerank_providers ~w(cohere)a
+  @video_providers ~w(minimax)a
   @operation_map for operation <- @operations,
                      into: %{},
                      do: {Atom.to_string(operation), operation}
@@ -36,6 +37,7 @@ defmodule ReqLLM.ModelOperation do
   def supported?(model, :transcription), do: transcription?(model)
   def supported?(model, :rerank), do: rerank?(model)
   def supported?(model, :ocr), do: ocr?(model)
+  def supported?(model, :video), do: video?(model)
   def supported?(model, :text), do: text?(model)
   def supported?(_model, _operation), do: false
 
@@ -46,6 +48,7 @@ defmodule ReqLLM.ModelOperation do
   def category(:transcription), do: "transcription"
   def category(:rerank), do: "rerank"
   def category(:ocr), do: "ocr"
+  def category(:video), do: "video"
   def category(_operation), do: "core"
 
   @spec config_key(atom()) :: atom()
@@ -61,6 +64,7 @@ defmodule ReqLLM.ModelOperation do
       transcription_model?(model) -> "transcription"
       rerank_model?(model) -> "rerank"
       ocr_model?(model) -> "ocr"
+      video_model?(model) -> "video"
       true -> "text"
     end
   end
@@ -72,7 +76,8 @@ defmodule ReqLLM.ModelOperation do
       not speech_model?(model) and
       not transcription_model?(model) and
       not rerank_model?(model) and
-      not ocr_model?(model)
+      not ocr_model?(model) and
+      not video_model?(model)
   end
 
   defp chat_enabled?(model) do
@@ -108,6 +113,10 @@ defmodule ReqLLM.ModelOperation do
     field(model, :provider) == :google_vertex and ocr_model?(model)
   end
 
+  defp video?(model) do
+    provider?(model, @video_providers) and video_model?(model)
+  end
+
   defp image_model?(model) do
     capability_truthy?(model, [:images]) or
       id_contains?(model, ["image", "imagen", "dall-e"]) or
@@ -134,6 +143,12 @@ defmodule ReqLLM.ModelOperation do
     capability_truthy?(model, [:ocr]) or
       field(model, :family) == "mistral-ocr" or
       id_contains?(model, ["ocr"])
+  end
+
+  defp video_model?(model) do
+    capability_truthy?(model, [:video]) or
+      id_contains?(model, ["hailuo", "h3", "video"]) or
+      (modality?(model, :output, :video) and not modality?(model, :output, :text))
   end
 
   defp capability_present?(model, path) do

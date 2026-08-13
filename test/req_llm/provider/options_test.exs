@@ -301,6 +301,15 @@ defmodule ReqLLM.Provider.OptionsTest do
       refute Keyword.has_key?(processed, :max_tokens)
     end
 
+    test "does not extract max_tokens for :video operation" do
+      model = %LLMDB.Model{provider: :mock, id: "test-model", limits: %{output: 4}}
+      opts = [duration: 5, resolution: "2K"]
+
+      assert {:ok, processed} = Options.process(MockProvider, :video, model, opts)
+      refute Keyword.has_key?(processed, :max_tokens)
+      assert processed[:duration] == 5
+    end
+
     test "uses provider base_url when model has no base_url" do
       model = %LLMDB.Model{provider: :mock, id: "test-model"}
       opts = []

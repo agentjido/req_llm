@@ -11,6 +11,7 @@ defmodule ReqLLM.Compatibility.ScenarioCatalogTest do
     %{id: :transcription, test_file: "transcription_test.exs"},
     %{id: :rerank, test_file: "rerank_test.exs"},
     %{id: :ocr, test_file: "ocr_test.exs"},
+    %{id: :video, test_file: "video_generation_test.exs"},
     %{id: :all, test_file: :provider_directory}
   ]
 
@@ -27,6 +28,7 @@ defmodule ReqLLM.Compatibility.ScenarioCatalogTest do
     "transcription" => ~w(transcription_basic),
     "rerank" => ~w(rerank_basic),
     "ocr" => ~w(ocr_basic),
+    "video" => ~w(video_basic),
     "grounding" => ~w(grounding_basic grounding_with_context grounding_streaming),
     "grounding_legacy" => ~w(grounding_legacy),
     "multimodal_tool_result" => ~w(multimodal_tool_result),
@@ -50,7 +52,7 @@ defmodule ReqLLM.Compatibility.ScenarioCatalogTest do
     test "represents every scenario once" do
       scenario_ids = Enum.map(ScenarioCatalog.scenarios(), & &1.id)
 
-      assert length(scenario_ids) == 39
+      assert length(scenario_ids) == 40
       assert length(scenario_ids) == MapSet.size(MapSet.new(scenario_ids))
     end
 
