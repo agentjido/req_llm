@@ -886,6 +886,56 @@ defmodule ReqLLM.VideoGenerationV1Test do
 
       assert %ReqLLM.Error.API.Response{} = updated
     end
+
+    test "non-success HTTP responses are surfaced before operation decoding" do
+      req =
+        Req.new(url: VideoAPIV1.query_path("task-1"))
+        |> Req.Request.register_options([:model, :operation, :task_id])
+        |> Req.Request.merge_options(
+          model: "MiniMax-Hailuo-2.3",
+          operation: :video_query,
+          task_id: "task-1"
+        )
+
+      resp = %Req.Response{
+        status: 503,
+        body: %{
+          "base_resp" => %{"status_code" => 1001, "status_msg" => "service unavailable"}
+        }
+      }
+
+      {_req, updated} = VideoAPIV1.decode_response({req, resp})
+
+      assert %ReqLLM.Error.API.Response{status: 503} = updated
+      assert updated.reason =~ "1001"
+      assert updated.reason =~ "service unavailable"
+    end
+
+    test "malformed successful responses are surfaced" do
+      for {operation, path, body, detail} <- [
+            {:video_query, VideoAPIV1.query_path("task-1"), %{"task_id" => "task-1"},
+             "missing status"},
+            {:video_upload, VideoAPIV1.upload_path(), %{"file" => %{}}, "missing file_id"},
+            {:video_retrieve, VideoAPIV1.retrieve_path("file-1"),
+             %{"file" => %{"file_id" => "file-1"}}, "missing file_id or download_url"}
+          ] do
+        req =
+          Req.new(url: path)
+          |> Req.Request.register_options([:model, :operation, :task_id, :file_id])
+          |> Req.Request.merge_options(
+            model: "MiniMax-Hailuo-2.3",
+            operation: operation,
+            task_id: "task-1",
+            file_id: "file-1"
+          )
+
+        resp = %Req.Response{status: 200, body: body}
+        {_req, updated} = VideoAPIV1.decode_response({req, resp})
+
+        assert %ReqLLM.Error.API.Response{status: 200} = updated
+        assert updated.reason =~ detail
+      end
+    end
   end
 
   describe "V1 upload" do

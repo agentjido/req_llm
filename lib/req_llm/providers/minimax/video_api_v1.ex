@@ -91,6 +91,19 @@ defmodule ReqLLM.Providers.Minimax.VideoAPIV1 do
   end
 
   @impl true
+  def decode_response({req, %Req.Response{status: status} = resp}) when status not in 200..299 do
+    body = ensure_parsed_body(resp.body)
+
+    error =
+      ReqLLM.Error.API.Response.exception(
+        reason: http_error_reason(body),
+        status: status,
+        response_body: body
+      )
+
+    {req, error}
+  end
+
   def decode_response({req, resp}) do
     body = ensure_parsed_body(resp.body)
 
@@ -153,9 +166,8 @@ defmodule ReqLLM.Providers.Minimax.VideoAPIV1 do
     {req, err}
   end
 
-  defp decode_query_response(req, resp, body) do
-    status = Map.get(body, "status")
-
+  defp decode_query_response(req, resp, %{"status" => status} = body)
+       when is_binary(status) do
     case get_in(body, ["base_resp", "status_code"]) do
       code when is_integer(code) and code != 0 and status != "Fail" ->
         status_msg =
@@ -187,12 +199,46 @@ defmodule ReqLLM.Providers.Minimax.VideoAPIV1 do
     end
   end
 
-  defp decode_upload_response(req, resp, body) do
+  defp decode_query_response(req, resp, body) do
+    malformed_response(req, resp, body, "missing status in query response")
+  end
+
+  defp decode_upload_response(
+         req,
+         resp,
+         %{"file" => %{"file_id" => file_id} = file_body} = body
+       )
+       when is_binary(file_id) or is_integer(file_id) do
     file = %ReqLLM.Video.File{
-      file_id: get_in(body, ["file", "file_id"]),
-      filename: get_in(body, ["file", "filename"]),
-      bytes: get_in(body, ["file", "bytes"]),
-      purpose: get_in(body, ["file", "purpose"]),
+      file_id: file_id,
+      filename: Map.get(file_body, "filename"),
+      bytes: Map.get(file_body, "bytes"),
+      purpose: Map.get(file_body, "purpose"),
+      provider_meta: %{"minimax" => Map.take(body, ["base_resp"])}
+    }
+
+    {req, %{resp | body: file}}
+  end
+
+  defp decode_upload_response(req, resp, body) do
+    malformed_response(req, resp, body, "missing file_id in upload response")
+  end
+
+  defp decode_retrieve_response(
+         req,
+         resp,
+         %{
+           "file" => %{"file_id" => file_id, "download_url" => download_url} = file_body
+         } = body
+       )
+       when (is_binary(file_id) or is_integer(file_id)) and is_binary(download_url) and
+              download_url != "" do
+    file = %ReqLLM.Video.File{
+      file_id: file_id,
+      url: download_url,
+      filename: Map.get(file_body, "filename"),
+      bytes: Map.get(file_body, "bytes"),
+      purpose: Map.get(file_body, "purpose"),
       provider_meta: %{"minimax" => Map.take(body, ["base_resp"])}
     }
 
@@ -200,16 +246,7 @@ defmodule ReqLLM.Providers.Minimax.VideoAPIV1 do
   end
 
   defp decode_retrieve_response(req, resp, body) do
-    file = %ReqLLM.Video.File{
-      file_id: get_in(body, ["file", "file_id"]),
-      url: get_in(body, ["file", "download_url"]),
-      filename: get_in(body, ["file", "filename"]),
-      bytes: get_in(body, ["file", "bytes"]),
-      purpose: get_in(body, ["file", "purpose"]),
-      provider_meta: %{"minimax" => Map.take(body, ["base_resp"])}
-    }
-
-    {req, %{resp | body: file}}
+    malformed_response(req, resp, body, "missing file_id or download_url in retrieve response")
   end
 
   defp decode_status(status) when is_binary(status), do: Map.get(@status_map, status, :queued)
@@ -240,6 +277,28 @@ defmodule ReqLLM.Providers.Minimax.VideoAPIV1 do
   end
 
   defp minimax_error?(_body), do: :ok
+
+  defp http_error_reason(body) do
+    case get_in(body, ["base_resp", "status_code"]) do
+      code when is_integer(code) and code != 0 ->
+        status_msg = get_in(body, ["base_resp", "status_msg"]) || "request failed"
+        "MiniMax error #{code}: #{status_msg}"
+
+      _ ->
+        "MiniMax Video API error"
+    end
+  end
+
+  defp malformed_response(req, resp, body, detail) do
+    error =
+      ReqLLM.Error.API.Response.exception(
+        reason: "MiniMax Video API error: #{detail}",
+        status: resp.status,
+        response_body: body
+      )
+
+    {req, error}
+  end
 
   defp maybe_put_string(body, _key, nil), do: body
 
