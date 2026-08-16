@@ -488,13 +488,13 @@ defmodule ReqLLM.Compatibility.ProviderDrift do
 
   defp checked_at_from_results(_results), do: DateTime.utc_now() |> DateTime.truncate(:second)
 
-  defp provider_filter([]), do: MapSet.new()
-  defp provider_filter(["all"]), do: MapSet.new()
-  defp provider_filter(providers), do: MapSet.new(providers)
+  @spec provider_filter([binary()]) :: [binary()]
+  defp provider_filter([]), do: []
+  defp provider_filter(["all"]), do: []
+  defp provider_filter(providers), do: Enum.uniq(providers)
 
-  defp selected_provider?(anchor, providers) do
-    MapSet.size(providers) == 0 or MapSet.member?(providers, anchor["provider"])
-  end
+  defp selected_provider?(_anchor, []), do: true
+  defp selected_provider?(anchor, providers), do: anchor["provider"] in providers
 
   defp credential_present?(value) when is_binary(value), do: String.trim(value) != ""
   defp credential_present?(_value), do: false
