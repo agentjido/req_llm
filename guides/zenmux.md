@@ -12,7 +12,7 @@ ZENMUX_API_KEY=sk-ai-v1-...
 
 For the full model-spec workflow, see [Model Specs](model-specs.md).
 
-Zenmux is another good fit for the full explicit model specification path because protocol and `base_url` can vary by deployment. Use exact IDs from [LLMDB.xyz](https://llmdb.xyz) when possible, and use `ReqLLM.model!/1` when you need to pin custom routing metadata.
+Zenmux is another good fit for the full explicit model specification path because protocol and `base_url` can vary by deployment. Use exact IDs from [LLM Catalog](https://llmcatalog.dev) when possible, and use `ReqLLM.model!/1` when you need to pin custom routing metadata.
 
 ## Provider Options
 

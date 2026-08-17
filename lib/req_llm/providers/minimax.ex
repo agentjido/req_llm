@@ -49,6 +49,10 @@ defmodule ReqLLM.Providers.Minimax do
       default: false,
       doc: "Enable automatic prompt optimization for MiniMax image generation."
     ],
+    fast_pretreatment: [
+      type: :boolean,
+      doc: "Reduce MiniMax video prompt optimization time when prompt optimization is enabled."
+    ],
     subject_reference: [
       type: :any,
       doc:
@@ -131,12 +135,196 @@ defmodule ReqLLM.Providers.Minimax do
     end
   end
 
+  def prepare_request(:video, model_spec, content, opts) do
+    with {:ok, model} <- ReqLLM.model(model_spec),
+         {:ok, content} <- video_content(content),
+         http_opts = Keyword.get(opts, :req_http_options, []),
+         api_mod = video_api_mod(model),
+         opts = Keyword.put_new(opts, :base_url, api_mod.base_url()),
+         {:ok, processed_opts} <-
+           ReqLLM.Provider.Options.process(__MODULE__, :video, model, opts) do
+      path = api_mod.path()
+
+      req_keys =
+        supported_provider_options() ++
+          [
+            :operation,
+            :model,
+            :content,
+            :duration,
+            :resolution,
+            :ratio,
+            :callback_url,
+            :prompt_optimizer,
+            :fast_pretreatment,
+            :provider_options,
+            :req_http_options,
+            :api_mod,
+            :base_url
+          ]
+
+      timeout =
+        Keyword.get(
+          processed_opts,
+          :receive_timeout,
+          Application.get_env(:req_llm, :video_receive_timeout, 60_000)
+        )
+
+      request =
+        Req.new(
+          [
+            url: path,
+            method: :post,
+            receive_timeout: timeout
+          ] ++ ReqLLM.Provider.Defaults.merge_finch_options(http_opts, pool_timeout: timeout)
+        )
+        |> Req.Request.register_options(req_keys)
+        |> Req.Request.merge_options(
+          Keyword.take(processed_opts, req_keys) ++
+            [
+              operation: :video,
+              model: model.provider_model_id || model.id,
+              content: content,
+              base_url: Keyword.get(opts, :base_url, api_mod.base_url()),
+              api_mod: api_mod
+            ]
+        )
+        |> attach(model, processed_opts)
+
+      {:ok, request}
+    end
+  end
+
+  def prepare_request(:video_query, model_spec, task_id, opts) do
+    with {:ok, model} <- ReqLLM.model(model_spec) do
+      api_mod = video_api_mod(model)
+      path = api_mod.query_path(task_id)
+      http_opts = Keyword.get(opts, :req_http_options, [])
+      timeout = Keyword.get(opts, :receive_timeout, 30_000)
+
+      request =
+        Req.new(
+          [
+            url: path,
+            method: :get,
+            receive_timeout: timeout
+          ] ++ ReqLLM.Provider.Defaults.merge_finch_options(http_opts, pool_timeout: timeout)
+        )
+        |> Req.Request.register_options([
+          :operation,
+          :model,
+          :task_id,
+          :api_mod,
+          :base_url,
+          :req_http_options
+        ])
+        |> Req.Request.merge_options(
+          operation: :video_query,
+          model: model.provider_model_id || model.id,
+          task_id: task_id,
+          base_url: Keyword.get(opts, :base_url, api_mod.base_url()),
+          api_mod: api_mod
+        )
+        |> attach(model, opts)
+
+      {:ok, request}
+    end
+  end
+
+  def prepare_request(:video_retrieve, model_spec, file_id, opts) do
+    with {:ok, model} <- ReqLLM.model(model_spec) do
+      api_mod = ReqLLM.Providers.Minimax.VideoAPIV1
+      path = api_mod.retrieve_path(file_id)
+      http_opts = Keyword.get(opts, :req_http_options, [])
+      timeout = Keyword.get(opts, :receive_timeout, 30_000)
+
+      request =
+        Req.new(
+          [
+            url: path,
+            method: :get,
+            receive_timeout: timeout
+          ] ++ ReqLLM.Provider.Defaults.merge_finch_options(http_opts, pool_timeout: timeout)
+        )
+        |> Req.Request.register_options([
+          :operation,
+          :model,
+          :file_id,
+          :api_mod,
+          :base_url,
+          :req_http_options
+        ])
+        |> Req.Request.merge_options(
+          operation: :video_retrieve,
+          model: model.provider_model_id || model.id,
+          file_id: file_id,
+          base_url: Keyword.get(opts, :base_url, api_mod.base_url()),
+          api_mod: api_mod
+        )
+        |> attach(model, opts)
+
+      {:ok, request}
+    end
+  end
+
+  def prepare_request(:video_upload, model_spec, file_binary, opts) do
+    with {:ok, model} <- ReqLLM.model(model_spec) do
+      api_mod = ReqLLM.Providers.Minimax.VideoAPIV1
+      path = api_mod.upload_path()
+      http_opts = Keyword.get(opts, :req_http_options, [])
+      timeout = Keyword.get(opts, :receive_timeout, 60_000)
+      purpose = Keyword.get(opts, :purpose, "video_generation_input")
+      media_type = Keyword.get(opts, :media_type, "application/octet-stream")
+      filename = Keyword.get(opts, :filename) || upload_filename(media_type)
+
+      request =
+        Req.new(
+          [
+            url: path,
+            method: :post,
+            receive_timeout: timeout,
+            form_multipart: [
+              {"purpose", purpose},
+              {"file", {file_binary, [filename: filename, content_type: media_type]}}
+            ]
+          ] ++ ReqLLM.Provider.Defaults.merge_finch_options(http_opts, pool_timeout: timeout)
+        )
+        |> Req.Request.register_options([
+          :operation,
+          :model,
+          :api_mod,
+          :base_url,
+          :req_http_options,
+          :purpose,
+          :filename,
+          :media_type
+        ])
+        |> Req.Request.merge_options(
+          operation: :video_upload,
+          model: model.provider_model_id || model.id,
+          base_url: Keyword.get(opts, :base_url, api_mod.base_url()),
+          api_mod: api_mod
+        )
+        |> attach(model, opts)
+
+      {:ok, request}
+    end
+  end
+
   def prepare_request(operation, model_spec, input, opts) do
     ReqLLM.Provider.Defaults.prepare_request(__MODULE__, operation, model_spec, input, opts)
   end
 
   @impl ReqLLM.Provider
   def translate_options(:image, _model, opts), do: {opts, []}
+
+  def translate_options(:video, _model, opts), do: {opts, []}
+
+  def translate_options(:video_query, _model, opts), do: {opts, []}
+
+  def translate_options(:video_retrieve, _model, opts), do: {opts, []}
+
+  def translate_options(:video_upload, _model, opts), do: {opts, []}
 
   def translate_options(_operation, _model, opts) do
     warnings = []
@@ -168,6 +356,17 @@ defmodule ReqLLM.Providers.Minimax do
 
     {opts, Enum.reverse(warnings)}
   end
+
+  def pre_validate_options(:video, _model, opts) do
+    provider_options =
+      opts
+      |> Keyword.get(:provider_options, [])
+      |> Keyword.put_new(:prompt_optimizer, true)
+
+    Keyword.put(opts, :provider_options, provider_options)
+  end
+
+  def pre_validate_options(_operation, _model, opts), do: opts
 
   @impl ReqLLM.Provider
   def encode_body(%{options: %{api_mod: api_mod}} = request) when is_atom(api_mod) do
@@ -249,6 +448,71 @@ defmodule ReqLLM.Providers.Minimax do
     event
     |> ReqLLM.Provider.Defaults.default_decode_stream_event(model)
     |> Enum.map(&normalize_stream_chunk/1)
+  end
+
+  @media_type_extensions %{
+    "image/jpeg" => "jpg",
+    "image/png" => "png",
+    "image/webp" => "webp",
+    "image/heic" => "heic",
+    "image/heif" => "heif",
+    "video/mp4" => "mp4",
+    "video/quicktime" => "mov",
+    "audio/wav" => "wav",
+    "audio/mpeg" => "mp3"
+  }
+
+  defp upload_filename(media_type) do
+    ext = Map.get(@media_type_extensions, media_type, "bin")
+    "input.#{ext}"
+  end
+
+  @doc """
+  Returns the API driver module for the given model's video operations.
+
+  `MiniMax-H3*` models use the V2 API (`ReqLLM.Providers.Minimax.VideoAPI`);
+  all other video models (Hailuo series, I2V-01*, T2V-01*) use the V1 API
+  (`ReqLLM.Providers.Minimax.VideoAPIV1`).
+  """
+  @spec video_api_mod(LLMDB.Model.t()) :: module()
+  def video_api_mod(model) do
+    model_id = model.provider_model_id || model.id || ""
+
+    if String.starts_with?(model_id, "MiniMax-H3") do
+      ReqLLM.Providers.Minimax.VideoAPI
+    else
+      ReqLLM.Providers.Minimax.VideoAPIV1
+    end
+  end
+
+  defp video_content(content) when is_list(content) do
+    if Keyword.keyword?(content) do
+      validate_video_prompt(content)
+    else
+      invalid_video_content()
+    end
+  end
+
+  defp video_content(_content), do: invalid_video_content()
+
+  defp validate_video_prompt(content) do
+    prompt = Keyword.get(content, :prompt)
+
+    if is_binary(prompt) and String.trim(prompt) != "" do
+      {:ok, content}
+    else
+      {:error,
+       ReqLLM.Error.Invalid.Parameter.exception(
+         parameter: "video generation requires a non-empty :prompt in content"
+       )}
+    end
+  end
+
+  defp invalid_video_content do
+    {:error,
+     ReqLLM.Error.Invalid.Parameter.exception(
+       parameter: "video content must be a keyword list with a :prompt"
+     )}
   end
 
   defp image_context(prompt_or_messages, opts) do

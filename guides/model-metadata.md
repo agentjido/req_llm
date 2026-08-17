@@ -1,6 +1,6 @@
 # Model Metadata
 
-LLMDB is the model registry behind ReqLLM. Browse the current catalog on [LLMDB.xyz](https://llmdb.xyz).
+LLMDB is the model registry behind ReqLLM. Browse the current catalog on [LLM Catalog](https://llmcatalog.dev).
 
 This guide is about shared registry metadata. If you only need to call a model that is not in the registry yet, start with the [Model Specs](model-specs.md) guide. You do not need a local patch just to make a request.
 
@@ -8,7 +8,7 @@ This guide is about shared registry metadata. If you only need to call a model t
 
 The model metadata system provides:
 - **Automatic metadata** via the `llm_db` dependency, sourced from models.dev
-- **Browsable catalog** via [LLMDB.xyz](https://llmdb.xyz)
+- **Browsable catalog** via [LLM Catalog](https://llmcatalog.dev)
 - **Local patch system** for adding missing models or overriding metadata
 - **Explicit model-spec path** for using models before they land in the registry
 - **Seamless integration** with no provider configuration changes needed

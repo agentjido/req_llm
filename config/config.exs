@@ -1,6 +1,7 @@
 import Config
 
 config :llm_db,
+  compile_embed: true,
   filter: %{
     allow: %{
       alibaba: ["*"],

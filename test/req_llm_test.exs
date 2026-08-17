@@ -348,6 +348,9 @@ defmodule ReqLLMTest do
       assert {:error, :unknown_provider} = ReqLLM.speak("invalid:model", "Hello")
       assert {:error, :unknown_provider} = ReqLLM.generate_image("invalid:model", "Hello")
       assert {:error, :unknown_provider} = ReqLLM.ocr("invalid:model", <<0, 1, 2>>)
+      assert {:error, :unknown_provider} = ReqLLM.generate_video("invalid:model", prompt: "x")
+      assert {:error, :unknown_provider} = ReqLLM.query_video("invalid:model", "task-1")
+      assert {:error, :unknown_provider} = ReqLLM.wait_video("invalid:model", "task-1")
     end
   end
 

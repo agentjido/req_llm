@@ -29,7 +29,8 @@ defmodule ReqLLM.Compatibility.ScenarioCatalog.Validator do
     :token_logprobs,
     :tool_call,
     :tool_result,
-    :usage
+    :usage,
+    :video
   ]
   @requirements [
     :cross_provider_tool_ids,
@@ -47,6 +48,7 @@ defmodule ReqLLM.Compatibility.ScenarioCatalog.Validator do
     :reasoning,
     :tool_calling,
     :transcription,
+    :video_generation,
     :web_fetch,
     :web_search
   ]

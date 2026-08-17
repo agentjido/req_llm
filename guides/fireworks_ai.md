@@ -18,7 +18,7 @@ ReqLLM.put_key(:fireworks_ai_api_key, "fw_...")
 
 For the full model-spec workflow, see [Model Specs](model-specs.md).
 
-Fireworks model IDs are path-like — `accounts/fireworks/models/<slug>`. Use exact Fireworks IDs from [LLMDB.xyz](https://llmdb.xyz) when possible. If you need to use a model ID before it lands in the registry, use `ReqLLM.model!/1`:
+Fireworks model IDs are path-like — `accounts/fireworks/models/<slug>`. Use exact Fireworks IDs from [LLM Catalog](https://llmcatalog.dev) when possible. If you need to use a model ID before it lands in the registry, use `ReqLLM.model!/1`:
 
 ```elixir
 ReqLLM.generate_text(
@@ -197,5 +197,5 @@ ReqLLM targets Fireworks's `/inference/v1/chat/completions` endpoint. Out of sco
 
 - [Fireworks Documentation](https://docs.fireworks.ai/)
 - [Fireworks Models](https://fireworks.ai/models)
-- [LLMDB.xyz](https://llmdb.xyz)
+- [LLM Catalog](https://llmcatalog.dev)
 - [Model Specs Guide](model-specs.md)

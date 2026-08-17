@@ -12,7 +12,7 @@ GROQ_API_KEY=gsk_...
 
 For the full model-spec workflow, see [Model Specs](model-specs.md).
 
-Use exact Groq model IDs from [LLMDB.xyz](https://llmdb.xyz) when possible. If you need to use a model ID before it lands in the registry, use `ReqLLM.model!/1`.
+Use exact Groq model IDs from [LLM Catalog](https://llmcatalog.dev) when possible. If you need to use a model ID before it lands in the registry, use `ReqLLM.model!/1`.
 
 ## Provider Options
 

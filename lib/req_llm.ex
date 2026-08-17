@@ -92,7 +92,8 @@ defmodule ReqLLM do
     Schema,
     Speech,
     Tool,
-    Transcription
+    Transcription,
+    Video
   }
 
   @typedoc """
@@ -1231,6 +1232,47 @@ defmodule ReqLLM do
       {:error, error} -> raise error
     end
   end
+
+  # ===========================================================================
+  # Video Generation API - Delegated to ReqLLM.Video
+  # ===========================================================================
+
+  @doc """
+  Submits a video generation task and returns a `ReqLLM.Video.Task` with the
+  provider `task_id`. The task runs asynchronously; poll with `query_video/3`
+  or block until completion with `wait_video/3`.
+  """
+  @spec generate_video(ReqLLM.model_input(), keyword(), keyword()) ::
+          {:ok, ReqLLM.Video.Task.t()} | {:error, term()}
+  defdelegate generate_video(model_spec, content, opts \\ []), to: Video
+
+  @doc """
+  Queries the status of a video generation task by `task_id`.
+  """
+  @spec query_video(ReqLLM.model_input(), String.t(), keyword()) ::
+          {:ok, ReqLLM.Video.Task.t()} | {:error, term()}
+  defdelegate query_video(model_spec, task_id, opts \\ []), to: Video
+
+  @doc """
+  Polls a video generation task until it reaches a terminal state.
+  """
+  @spec wait_video(ReqLLM.model_input(), String.t(), keyword()) ::
+          {:ok, ReqLLM.Video.Task.t()} | {:error, term()}
+  defdelegate wait_video(model_spec, task_id, opts \\ []), to: Video
+
+  @doc """
+  Resolves a video `file_id` to a time-limited download URL (V1 providers).
+  """
+  @spec retrieve_video_file(ReqLLM.model_input(), String.t() | integer(), keyword()) ::
+          {:ok, ReqLLM.Video.File.t()} | {:error, term()}
+  defdelegate retrieve_video_file(model_spec, file_id, opts \\ []), to: Video, as: :retrieve_file
+
+  @doc """
+  Uploads a file to the provider platform for use as video generation input.
+  """
+  @spec upload_video_file(ReqLLM.model_input(), binary(), keyword()) ::
+          {:ok, ReqLLM.Video.File.t()} | {:error, term()}
+  defdelegate upload_video_file(model_spec, file_binary, opts \\ []), to: Video, as: :upload_file
 
   @doc """
   Streams structured data generation using an AI model with schema validation.

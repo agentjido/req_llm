@@ -800,13 +800,24 @@ defmodule ReqLLM.Providers.OpenAI do
 
   def stream_transport(_model, opts) do
     provider_opts = Keyword.get(opts, :provider_options, [])
+    session = Keyword.get(provider_opts, :openai_websocket_session)
 
     case Keyword.get(provider_opts, :openai_stream_transport, :sse) do
-      :websocket -> :websocket
-      "websocket" -> :websocket
-      _ -> :http
+      transport when transport in [:websocket, "websocket"] ->
+        if websocket_session_fell_back?(session), do: :http, else: :websocket
+
+      _ ->
+        :http
     end
   end
+
+  defp websocket_session_fell_back?(session) when is_pid(session) do
+    ReqLLM.Streaming.WebSocketSession.http_fallback?(session)
+  catch
+    :exit, _reason -> false
+  end
+
+  defp websocket_session_fell_back?(_session), do: false
 
   @doc false
   def resolve_request_credential!(%LLMDB.Model{} = model, opts) do

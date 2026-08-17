@@ -501,6 +501,7 @@ defmodule ReqLLM.Provider.Options do
   end
 
   defp base_schema_for_operation(:image), do: ReqLLM.Images.schema()
+  defp base_schema_for_operation(:video), do: ReqLLM.Video.schema()
 
   defp base_schema_for_operation(:embedding) do
     embedding_schema = ReqLLM.Embedding.schema()
@@ -793,6 +794,7 @@ defmodule ReqLLM.Provider.Options do
   defp maybe_extract_model_options(:image, _model, opts), do: opts
   defp maybe_extract_model_options(:embedding, _model, opts), do: opts
   defp maybe_extract_model_options(:rerank, _model, opts), do: opts
+  defp maybe_extract_model_options(:video, _model, opts), do: opts
 
   defp maybe_extract_model_options(_operation, model, opts),
     do: extract_model_options(model, opts)

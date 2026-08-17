@@ -1,12 +1,9 @@
-# Ensure LLMDB is started first (loads model catalog from snapshot)
-Application.ensure_all_started(:llm_db)
+# Ensure ReqLLM and its regular OTP dependencies are started
+Application.ensure_all_started(:req_llm)
 
 # Reload LLMDB with custom test models merged with snapshot
 custom_providers = Application.get_env(:llm_db, :custom, %{})
 LLMDB.load(custom: custom_providers)
-
-# Ensure providers are loaded for testing
-Application.ensure_all_started(:req_llm)
 
 # Install fake API keys for tests when not in LIVE mode
 ReqLLM.TestSupport.FakeKeys.install!()

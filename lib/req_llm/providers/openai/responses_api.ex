@@ -1171,7 +1171,8 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
        headers: headers,
        initial_messages: [Jason.encode!(create_event)],
        http_context: ReqLLM.Providers.OpenAI.WebSocket.http_context(url, headers),
-       canonical_json: body
+       canonical_json: body,
+       fallback_transport: :http
      }}
   rescue
     error ->

@@ -76,6 +76,7 @@ defmodule ReqLLM.ModelInput do
   defp option_schema(:speech), do: ReqLLM.Speech.schema()
   defp option_schema(:rerank), do: ReqLLM.Rerank.schema()
   defp option_schema(:ocr), do: ReqLLM.OCR.schema()
+  defp option_schema(:video), do: ReqLLM.Video.schema()
 
   defp merge_defaults(defaults, call_opts) do
     Keyword.merge(defaults, call_opts)

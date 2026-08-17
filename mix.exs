@@ -13,6 +13,7 @@ defmodule ReqLLM.MixProject do
       deps: deps(),
       aliases: aliases(),
       elixirc_paths: elixirc_paths(Mix.env()),
+      test_ignore_filters: [&String.starts_with?(&1, "test/fixtures/")],
 
       # Test coverage
       test_coverage: [tool: ExCoveralls, export: "cov", exclude: [:coverage]],
@@ -215,7 +216,6 @@ defmodule ReqLLM.MixProject do
   def application do
     [
       extra_applications: [:logger, :crypto],
-      included_applications: [:llm_db],
       mod: {ReqLLM.Application, []}
     ]
   end

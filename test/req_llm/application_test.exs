@@ -21,9 +21,8 @@ defmodule ReqLLM.ApplicationTest do
       restore_app_env(:req_llm, :stream_pool_size, original_stream_pool_size)
       restore_app_env(:req_llm, :stream_pool_count, original_stream_pool_count)
       System.delete_env(@dotenv_key)
-      Application.ensure_all_started(:llm_db)
-      LLMDB.load(custom: Application.get_env(:llm_db, :custom, %{}))
       Application.ensure_all_started(:req_llm)
+      LLMDB.load(custom: Application.get_env(:llm_db, :custom, %{}))
     end)
 
     :ok
@@ -121,7 +120,7 @@ defmodule ReqLLM.ApplicationTest do
       end
     end
 
-    test "load_dotenv false prevents llm_db from loading .env during req_llm startup" do
+    test "load_dotenv false prevents ReqLLM from loading .env during startup" do
       with_apps_stopped(fn ->
         with_temp_dir(fn ->
           File.write!(".env", "#{@dotenv_key}=from_file\n")
@@ -149,7 +148,7 @@ defmodule ReqLLM.ApplicationTest do
       end)
     end
 
-    test "explicit llm_db load_dotenv config overrides req_llm default" do
+    test "llm_db load_dotenv configuration does not control ReqLLM startup" do
       with_apps_stopped(fn ->
         with_temp_dir(fn ->
           File.write!(".env", "#{@dotenv_key}=from_file\n")
@@ -158,8 +157,26 @@ defmodule ReqLLM.ApplicationTest do
           Application.put_env(:llm_db, :load_dotenv, true)
 
           assert {:ok, _} = Application.ensure_all_started(:req_llm)
-          assert System.get_env(@dotenv_key) == "from_file"
+          assert System.get_env(@dotenv_key) == nil
         end)
+      end)
+    end
+  end
+
+  describe "OTP dependencies" do
+    test "declares llm_db as a regular application dependency" do
+      applications = Application.spec(:req_llm, :applications)
+      included_applications = Application.spec(:req_llm, :included_applications) || []
+
+      assert :llm_db in applications
+      refute :llm_db in included_applications
+    end
+
+    test "starts llm_db before req_llm" do
+      with_apps_stopped(fn ->
+        assert {:ok, started_applications} = Application.ensure_all_started(:req_llm)
+        assert :llm_db in started_applications
+        assert started?(:llm_db)
       end)
     end
   end
@@ -182,9 +199,13 @@ defmodule ReqLLM.ApplicationTest do
   end
 
   defp stop_app(app) do
-    if Keyword.has_key?(Application.started_applications(), app) do
+    if started?(app) do
       Application.stop(app)
     end
+  end
+
+  defp started?(app) do
+    Keyword.has_key?(Application.started_applications(), app)
   end
 
   defp restore_app_env(app, key, nil), do: Application.delete_env(app, key)

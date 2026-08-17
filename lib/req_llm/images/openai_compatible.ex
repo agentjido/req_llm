@@ -516,7 +516,13 @@ defmodule ReqLLM.Images.OpenAICompatible do
       |> Enum.reject(&is_nil/1)
 
     message = %Message{role: :assistant, content: parts}
-    size_class = image_size_class(req.options[:size], req.options[:quality])
+
+    size_class =
+      image_size_class(
+        echoed_option(body, "size") || req.options[:size],
+        echoed_option(body, "quality") || req.options[:quality]
+      )
+
     image_usage = ReqLLM.Usage.Image.build_generated(length(parts), size_class)
     usage = image_response_usage(body, image_usage)
 
@@ -675,6 +681,26 @@ defmodule ReqLLM.Images.OpenAICompatible do
 
   defp image_size_class(size, quality) do
     "#{normalize_image_size(size)}:#{normalize_image_quality(quality)}"
+  end
+
+  # Image-priced models bill per `image.<size>.<quality>` component, and the
+  # rendered dimensions need not match what was asked for: `size: "auto"` (or no
+  # size at all) resolves server-side. The response echoes what was actually
+  # produced, so bill from that and fall back to the request only when the body
+  # is silent or still says "auto".
+  defp echoed_option(body, key) do
+    case Map.get(body, key) do
+      value when is_binary(value) -> reject_auto(value)
+      _ -> nil
+    end
+  end
+
+  defp reject_auto(value) do
+    case value |> String.trim() |> String.downcase() do
+      "auto" -> nil
+      "" -> nil
+      resolved -> resolved
+    end
   end
 
   defp normalize_image_size(nil), do: "1024x1024"

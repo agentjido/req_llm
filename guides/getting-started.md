@@ -130,4 +130,4 @@ ReqLLM.generate_text!(
 
 ## Available Providers
 
-Model metadata is provided by the `llm_db` dependency and browsable on [LLMDB.xyz](https://llmdb.xyz).
+Model metadata is provided by the `llm_db` dependency and browsable on [LLM Catalog](https://llmcatalog.dev).
