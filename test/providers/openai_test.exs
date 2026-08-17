@@ -1399,7 +1399,6 @@ defmodule ReqLLM.Providers.OpenAITest do
         refute AdapterHelpers.responses_model?(id)
       end
 
-      # The plain gpt-4o family still routes to Responses.
       refute AdapterHelpers.search_preview_model?("gpt-4o-mini")
       assert AdapterHelpers.responses_model?("gpt-4o-mini")
     end

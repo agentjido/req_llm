@@ -1248,7 +1248,6 @@ defmodule ReqLLM.Provider.Defaults do
                   []
               end
 
-            # Annotations (e.g. web-search url_citation) arrive on the delta
             annotation_chunks = decode_openai_annotations(delta)
 
             # Extract finish_reason
@@ -1328,13 +1327,6 @@ defmodule ReqLLM.Provider.Defaults do
         []
 
       annotations ->
-        # Only `:annotations` — deliberately not `:provider_meta`. Chat
-        # Completions streams citations one per delta, and `StreamServer`
-        # shallow-merges each meta chunk's metadata, so a per-chunk
-        # `provider_meta` would leave the response holding just the last
-        # citation (and clobber provider_meta set by earlier chunks).
-        # `ChunkAccumulator` accumulates `:annotations` across the stream and
-        # `ResponseBuilder` folds the full list into `provider_meta` at the end.
         [ReqLLM.StreamChunk.meta(%{annotations: annotations})]
     end
   end

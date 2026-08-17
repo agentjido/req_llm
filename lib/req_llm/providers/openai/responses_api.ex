@@ -184,8 +184,6 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
         []
 
       "response.output_text.annotation.added" ->
-        # Live event only; the durable full list is captured from the final
-        # output in `capture_completion_metadata/3`.
         case ReqLLM.Provider.Defaults.normalize_openai_annotations([data["annotation"]]) do
           [] -> []
           annotations -> [ReqLLM.StreamChunk.meta(%{annotations: annotations})]

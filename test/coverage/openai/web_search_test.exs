@@ -89,8 +89,6 @@ defmodule ReqLLM.Coverage.OpenAI.WebSearchTest do
     assert annotations != []
 
     for annotation <- annotations do
-      # The wire shape here nests these fields under "url_citation"; reaching
-      # them flat is the normalization contract.
       assert %{"type" => "url_citation", "url" => url, "title" => title} = annotation
       refute Map.has_key?(annotation, "url_citation")
       assert is_binary(url)

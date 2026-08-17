@@ -161,8 +161,6 @@ defmodule ReqLLM.Providers.OpenAI.ChatRequestTest do
     test "is accepted by the provider option schema" do
       assert :web_search_options in ReqLLM.Providers.OpenAI.supported_provider_options()
 
-      # OpenAI's search config is a JSON object, so string keys must validate —
-      # a plain `:map` NimbleOptions type would reject them.
       for value <- [
             %{},
             %{"search_context_size" => "medium"},

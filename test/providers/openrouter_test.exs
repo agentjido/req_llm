@@ -953,9 +953,6 @@ defmodule ReqLLM.Providers.OpenRouterTest do
     end
 
     test "decode_response normalizes nested url_citation annotations" do
-      # Perplexity Sonar models routed through OpenRouter return citations in the
-      # Chat Completions nested shape. They normalize through the shared
-      # OpenAI-format decoder to the same flat shape OpenAI's Responses API uses.
       response_body = %{
         "id" => "gen-citations",
         "model" => "perplexity/sonar",

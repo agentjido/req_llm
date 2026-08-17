@@ -246,8 +246,6 @@ defmodule ReqLLM.Provider.OpenAIChatMaterializationTest do
 
     assert metadata.annotations == expected
 
-    # Deliberately no per-chunk :provider_meta — StreamServer shallow-merges
-    # meta chunks, so one there would drop every citation but the last.
     refute Map.has_key?(metadata, :provider_meta)
   end
 

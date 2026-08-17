@@ -253,7 +253,6 @@ defmodule ReqLLM.StreamEventProjectionTest do
           %{data: %{"choices" => [%{"delta" => %{"content" => "Cited"}}]}},
           delta.(1),
           delta.(2),
-          # A re-sent citation must not reach the consumer twice.
           delta.(1),
           %{data: %{"choices" => [%{"delta" => %{}, "finish_reason" => "stop"}]}}
         ]
@@ -278,8 +277,6 @@ defmodule ReqLLM.StreamEventProjectionTest do
         |> Enum.filter(&(&1.type == :output_item))
         |> Enum.map(& &1.data)
 
-      # Citations arrive flattened to the canonical shape, in stream order, with
-      # credentials scrubbed from the URL.
       assert [
                %OutputItem{
                  type: :annotation,
@@ -292,8 +289,6 @@ defmodule ReqLLM.StreamEventProjectionTest do
                %OutputItem{type: :annotation, data: %{"title" => "Article 2"}}
              ] = annotations
 
-      # `:annotations` is a canonical meta key, so it must not also leak through
-      # the provider passthrough channel.
       refute Enum.any?(events, &(&1.type == :provider_event))
     end
 

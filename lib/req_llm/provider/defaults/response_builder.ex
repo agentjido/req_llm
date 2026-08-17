@@ -127,9 +127,6 @@ defmodule ReqLLM.Provider.Defaults.ResponseBuilder do
   defp put_streamed_annotations(provider_meta, []), do: provider_meta
 
   defp put_streamed_annotations(provider_meta, annotations) do
-    # A provider that already resolved the authoritative list into
-    # `provider_meta` (the OpenAI Responses API re-derives it from the full
-    # output on `response.completed`) wins over the streamed fragments.
     if Map.has_key?(provider_meta, "annotations") or Map.has_key?(provider_meta, :annotations) do
       provider_meta
     else
