@@ -43,12 +43,170 @@
   },
   "response": {
     "body": {
-      "error": {
-        "code": "credit_balance_exhausted",
-        "message": "You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
-        "param": null,
-        "type": "insufficient_quota"
-      }
+      "tool_usage": {
+        "image_gen": {
+          "input_tokens": 0,
+          "input_tokens_details": {
+            "image_tokens": 0,
+            "text_tokens": 0
+          },
+          "output_tokens": 0,
+          "output_tokens_details": {
+            "image_tokens": 0,
+            "text_tokens": 0
+          },
+          "total_tokens": 0
+        },
+        "web_search": {
+          "num_requests": 2
+        }
+      },
+      "background": false,
+      "text": {
+        "format": {
+          "type": "text"
+        },
+        "verbosity": "medium"
+      },
+      "moderation": null,
+      "top_logprobs": 0,
+      "previous_response_id": null,
+      "tool_choice": "auto",
+      "service_tier": "default",
+      "status": "completed",
+      "tools": [
+        {
+          "return_token_budget": "default",
+          "search_content_types": [
+            "text"
+          ],
+          "search_context_size": "medium",
+          "type": "web_search",
+          "user_location": {
+            "city": null,
+            "country": "US",
+            "region": null,
+            "timezone": null,
+            "type": "approximate"
+          }
+        }
+      ],
+      "id": "resp_0c1dd4d1f332ab3a006a824bee330081a1b4ece81e50d06118",
+      "temperature": 1.0,
+      "max_output_tokens": 128000,
+      "user": null,
+      "frequency_penalty": 0.0,
+      "error": null,
+      "model": "gpt-5-mini-2025-08-07",
+      "usage": {
+        "input_tokens": 13503,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 1330,
+        "output_tokens_details": {
+          "reasoning_tokens": 1152
+        },
+        "total_tokens": 14833
+      },
+      "safety_identifier": null,
+      "object": "response",
+      "parallel_tool_calls": true,
+      "output": [
+        {
+          "content": [],
+          "encrypted_content": "gAAAAABqgkwAGIOe5yLyBHaeMHcIZhe4rbTAs0CVtHfBV8_ydel11N5A_iI3fhiSIza61YfMGR4yAgKh1qICTJONOl8IzMMboqJaJRma19QZHa7_Ugv9Y5aYiS5tb0CECoJedgMU-qmXBUdSQ-Bj2H2aRh5bn5XUNPw53ey5iRIRzC2U4JC5k2dIK_eu9ndBzzvM4hAj9LJvzKB9VF1CLTPWdhLhYipCEFUU1FI-YAz0OvIPoS01Z5gFoK26Mhbd8NN7CgMTRLsDd8kVnGrW9w2a83iewiBevuUpVSSM10x0asMDUZw6BxQKHZpNTLwq-3gPjk_ZgKZTL8wRKmZjrkc1euR_n9wWjwHBMt0LMRpSuIVNw-FMsu7nN0pojNNsKfUr-tza0bvOLSkhj_SRsG_xxN4bGhKWW3r--yC81HC4CSyud_Di7yE_HMaZvelyHQXlYhGYsmaTcC6AZtYZGNRgobIY8Fw8j9cm-ErdjCgTftWbDGCQ4qX64aIjf_lgE9MUpBATn2qnJT0qcGoob9x93mcLb6aGO6Qp2kFY-jwgPFYRVGIUG8rDIdZFj9cbOTYKY5O9S_PG4i5rZTTZP2nnO0gmrY9muMGGh-vVWYL0fqQXAi8XYhgDuk0rNcV23b6nG9sOeoOeiRt-tXdmoUcUtH_p1qosCIDYO5fWeWFIM_bUwhpeAk2GzI3C55WThtntfiGEKe2H47r3kkbTIGCiOlRYvZECa3f_3JcGjh1Bmsc9hs1A2a1GqEi4sk8ptPAJF5ujACdh0UbSdmygw5ojnwsUIIR1ewiuC70jxw_-VvLQFXKLYn3ERx1WshGkRwDU3gRxWV15TGTbk1movI3f5z49OtUsHgkVaMMaqZ6timWK-pnMG3t7MdzmUYL8DLNNuHEv72OWAtvEAp7MS-NQX_kFpK3VTNx9Io0ggvCG0WOwK1NbucCnlZXPHe4ROAmA9Mn5_ySX_wAlTzwnhy0ZuhMQ6p_6W1e6fd2xB1XRmBefSDbf-lgZ6Qml0kedQ5DmWvCK-7H9UTi9IYYvkWRxjOB8gWKN7_pEp8D6qLT6VQmj-meIxAGvJmn2pC7mNP3Gc0uiHMkOluNBBF1SoALb5y5Og5jOz4B2eQGiZagjFhvdldHf7ukFRyaoNUgEFmNbBWqgTKV1KwWmQfEH5VFryxo3PbqDThkQdJzopYupfIH8T1nlKDQ4OTVqH4v_VroiVi3hFv5iHbvyi8LQPbKdUWsh3QFMrzeUN0RoOkKDYZWkhfZUjxITt-TVliGTGlKoljMm0pIHu_jPIv5qnqUWSujYigNsMo5KZutLmsTZeNn8R26ESHjJDxWCpGfOqNnYgkREHdbTq9hVxqAKB1VJlkk3nz6krfeMwDpumeyLTC_u1PdpZ6nEZqTu_25jPzo1Pi74MEynLzd55Bc2BOZzNkDhXH_jTGRCWe5zkTp0I6x5x_ifs1TZLpCnCqph8yfwykfkadw1YsaeBS8x-0l5DhI0r9uYheL9O8PrTDMm6wVkaFOt6FTr9LglZ_DMoqEq_7ZFdO6DEPIOHtjDKPqrHNRn4p0KyF1FhXfHGDnNw8MqvWRaze3tbXUo24qKu1E1HfJrMZ0zrKmOySeoA_qpaH6PGkcqDc6XH-NQGUYcjUL3nguVWGWx98aGHIujHxKTG8ouMFgtlwCMGvehd0rpYYhmJWymJK5T4qKVidXutCYnXKdjJsT0Snn5XYAdFhZQnCQhKLUcfaKg-wEDJ6qXfaeRRNsB_ELjemvJNUDMNbtWxNQAPgRX6L-smpTc9Vjjwp3AO3b-R_-iOFOhIGf-QeTY_NZbyvkF5C_t1lJJupWvtSWIMdAQ3TkkSiX3gqSAWjTdBF2HFHrCRC9sCfEcNFwsg0XMpYmP251iutKFytzJAcvsCSjj1rgF1YoOvnFg2dHlyoNxY9tm3dWt5CMB0zaJzfsfelSXW8pE11TYY7N5I_d8di-wHT9ZqGk1CmsoAu7dgwJ-OPIJ75bGa0UtGmHiGFKNVTOp-LxNX0CxgCQIEEgm1VECWS7pDQBPbtz81jBlUlXq7elz_qUtRulTEjCexnQABn3WUFOj5WEr1jyWHOZtceUfYmhO0ddfUnlApLVOJO9uL_zNvYQ3Lbj-39sG13O8I1cjQqrYzQIYTBpCBhe8Da4UtCWuCeufEwb5Ejg6GIQQnFKibwQKGQJw5ZelPVcBrTSgQSRtRio9QKrNzeggDnlncVK6CL_M4I2MLF8bydno",
+          "id": "rs_0c1dd4d1f332ab3a006a824bef2df481a1a5ad7842bd0668b8",
+          "summary": [],
+          "type": "reasoning"
+        },
+        {
+          "action": {
+            "queries": [
+              "AI model announced 2026 August announcement",
+              "Anthropic new model 2026 announcement",
+              "OpenAI new model 2026 announcement",
+              "Google DeepMind new model 2026 announcement"
+            ],
+            "query": "AI model announced 2026 August announcement",
+            "type": "search"
+          },
+          "id": "ws_0c1dd4d1f332ab3a006a824bf15b7081a18b183050449e7d6e",
+          "status": "completed",
+          "type": "web_search_call"
+        },
+        {
+          "content": [],
+          "encrypted_content": "gAAAAABqgkwAkUfF9EYmnTsa3SdubHS1Mo5ptXOhQEWCYrsDSErMJmtCI0Jyj23qLPFCjlZKr0KroZBf-DYA_ZZdncbXGWXoFBC20y7CrYerIHxeecekvp_iHwmvF26TDie9yC2EN9f-wwhrvKCCGUNGtRUX-GFmJoRPpLvukYjmOA37OCMl6gU2nhQpJN1dmo-ZyDbURVifcjNjpYwS70BXgYUw-ArVRr0fFsQuIafuiphu9Ifuewfb6-QuOd9DJME6In4pQ4w_o0HAr2g0LRE2uugBq6N66RGWgZ64nO_ffelMWGydcNeayxXVrpIRvjLHUGUcojBuVRMtbm53dPcClKiRWV6xlwwlqw2W063IPLl1rHnqBYhJez27Vdv_Od0S6FydbHvjLvMdm9fC6x6mwBmrL67KMshxvxURMaRtRHBEpMl2cNa7-jkMw_pBxLBP1L6jK2E0x6VQtktEIhlBWt7B-AEupcRFOoV-3z0BCv2LY3PqpaJET7Oco4F64oN2GLj4cNKBCjxAVtZxvitJ1HSHfbgqPAxj7XmkocZbam_EQpPMC1XKMsoU_JYdDxR9htXQoDKgvU6PK9KtlY2lwTch8i_NgBLLuzRsKQCBVJq_LrB15RJjJcwdIZF-VYlkMJGff26vXEp2PP_0wVt__cqZRb0AeUW4PtV_vAZ2K90AUv-_ZZYwPLSexvRBUIop4cl6Cv3ow0Vk1uNsAFh2lZ2HkFlTi6VhCVJN2aVCrkDaWBxx19TiZ4qlyMGf6a4UpYH4APlmkwU591jWWjnik4vgQkaIC8gwN3JMSqbx5zZuzrXIRzsjfA_jryW55uMWGH65cQeqoBuFlT1f-scob3PNb1ibE7tTgmKP1qb7TOVJEVCG8AROcW76AalF8nVrI2fZxCTJtfdOCNS3Yt3zf5Sg3FyxZv0JIBztlqiIpjg-hNZeQn6ifFWzsNA2KlLPgXQ-0Fk_vwctZb7W_9wdX3EpHz1T3TNN1QMs4T6hA6jxfkPUHnBlI2BlbMFMhqa40G7ql1nWMzz2W4aesrMsgrBF0-zhFVmdYeDkoBDpf-4pFc_ZCTqJWCZyphM1ZG3PQT_5sK7Dlhhyz-79yGPtJkzL4IgCbaMGGMlSOnchLKn9a7v6Bw1JID0pKij_WOymAz4dQfV7u32e2QP8mWOtZcIKhuOXHj2-N3tRhtzjoTksjbQhoeiJAfmxitJPUXS_ayJ6OPcnVvZ4xs7jXO4poZQlBOgnfOfgplvDfLUmjpIfI91vlx9mK3rn4SGE1pPbzPb7L_bOBl9oOFXoBOwVrnAooiDcQioHxdDvLnISnmGJ-L3PSfk4TqCaqRsNyt8Ri6m7H0JHFsmmu1EBsOjs9E6J9QALzRLgJMA1Pgbkqegz92FQioaGHPEHgVXpNdXhSlUNuKzDmJ6bO2H4s4evVzCchJ6vW_r_fVQP3PhJMWVW3GNe63bucXXMgMvduzLMB4oBoLvhUak4ux0JfVNWBhFGpbRy2a2CvxI2VO2mA8XSPk0KBWVvH4wHabmnF7R9IckODtMwVgp6LTA6Nskuf092a8C-LVeX_eRjXbzRmB_bfDCzow1NszZN0yTY3gybZd0dwQcJC4mkmQo5beuvSzIZSvph_jV8pBf0pamyamnwCFqjYCPvEmmIuXBc859-0l4VCrx7pWeFGAFFhobQzVLRkdat7UNAAlZov9TO1y8LkCtiv7fQ27oBb2b9zoc_5q07f6N71dt2oa8azZ9CLkjzptgcxmu1vsNVbATknBeUHkGkQPCXmGU2Bo7aa4IchS4gR9xVOYG4jX1jSyU7loq2p7c7tlPBOSSCXAHe3ipU81liSJNCEoq6vh8FxLCGgGvRFQdaThZhi3ynRZgDXHNTV9wceqHpEiexBFbv5SfXlD8BPPj-uFW8k--tLWmuqa8CLQc1eiYL3wTBQ7BxtXUnnEWrkMZqhZGfDdmreIgbPL6hLV4lTawEjQY5rt0pI4VAOUIouwYV-quqPpzQFW5juwBnzqWdupa-IbpqldtRk-pQHxNnVYJB0NxORNBq5tkTm02sDLIgg7T-ZhjGiHsy3aoqjA-YaXBbyUWhhYoMtup4GH7yMeD3G5uME70fiJ9RsArzxugK28Na6qcrEkd8cSBmJl41W2Q79tX0mQP_87aXB8n-0nUpoN7K_qMqUXr9vekI1s-JwYSOKG0F4M8bAH7zIOcQ5WPr-BfW86wBZYmVYWgpjiwmNB4LLw7O4liQph1knHXub86gyWPbIT8_9w5mJOKqGL7uE5SNRR_0GWx79xtOXis1-gsNgrKcAA2LGcl97N70tUKSfxSKV6ixlcR4-ZwJvhwBdYVeqdVkcg2gnoWlyp3iqDI91D3f-Z6EU2QPU0GXVXF6E7x8ElF2KdxTAQGiyvrkWXcR_NYCJp_kLd19pwW6xYEMv99Qc75SnSK0",
+          "id": "rs_0c1dd4d1f332ab3a006a824bf4009081a19881c8f41be533b2",
+          "summary": [],
+          "type": "reasoning"
+        },
+        {
+          "action": {
+            "queries": [
+              "OpenAI GPT-5.6 release July 2026 OpenAI announcement GPT-5.6 site:openai.com",
+              "OpenAI GPT-5.6 announcement July 9 2026 'GPT-5.6'"
+            ],
+            "query": "OpenAI GPT-5.6 release July 2026 OpenAI announcement GPT-5.6 site:openai.com",
+            "type": "search"
+          },
+          "id": "ws_0c1dd4d1f332ab3a006a824bf626d081a1ad01ba91cff52c4a",
+          "status": "completed",
+          "type": "web_search_call"
+        },
+        {
+          "content": [],
+          "encrypted_content": "gAAAAABqgkwA0pCn54vXt5GJ_alY3begCq6fLT5dPne7H4n1w6vkXhrycW1cxe90AZA4lkkR6GO2LyIO7zp658x34wgR-KabHRLJd6cOyv0a92n12FZoSJjYhuxEpSfbu_fDW5WSLVm_DtkONfQvov7Aow_guk_Hk3OSDYRChtxv4mi4GP12gU2lVOiDtO0ZwbZlaVHtbQ-XKRH-vgwYRsIDaLiGdoTZLUihxNTlOHsSg518qtJfDkuqWcHVuuk0b1TYuAfkHjFRkw-eE6hfdLz44LYzQ4XjK7KCvAhPT6Iex-O2I25zhlZTsw0-qINXqth7jrEyGH2jrHgpr_oEF0jFH7sFHHL5E0sF5oXe0QeZYpJoGwO3f27l3SeG6KngSUi0MwZHWNOS_0qyaBHgncQ25RFHBUqLS9r6D7mR7bkjBL_kOtWcqWCXEatiYfUy9ge_bcmL8SqhVthF62-nOWp_sXpCDAefzPgt7XYev-HUJI3L9GmIOxp9FuDNVSBOtrCEk9lO-clmKP0uGwBHWjUCb_5aUnF-HnzP2V6qFCOwXQnxkE-HK75kPrb4tCD5LpyHMglJAiGYrQmzIRa7wwlFKr-St-ClWKBEIKt7Ue4w0IT6O2l6NgQHDyjbrPpXnw7iRwiBuNU7W5Sgm_2CodqLh4XvnyyiBvyCTpIWfBTGodNqbDQR-mQGJKgS_w-XeelTy4LQAHv4IzZsNka7wUfMGOpOKGETzLCXQuFJaq8r7mtE1LF8gWgrEco_HYhk4K3S59h9s7vn1oTc21jjPyfse7vlT06cgPaDjshWN4RSIOYbUh343gvUWutAfkajtqvLdBjhf2u5HRFWevDY_uWVAWu0knbOAy_P_cMwJpVAs_h4m9vhaIXj-uv0YmTOeHWUsclwFoKHDGAnOiegOn1ZersFFWLfIgrjlU-rrv2jHX4-OXqaCLGytgNVqbcx3J2wLszTIwqcftCxULMwrPMe4MzScOpa3Yqh_RjeDLTsTQo4xZ0YVxWccd9YqCh0x36lK88D2y39-0d3xV1nhEYqyXcTBFggu0OuKH2zzix1KHFWnPGAGzZWCpCqlwoDEeCZKeGdgg21iWAH9mm63rbSgrKeiYv8Wvhn7cSLy-UGbtRrThDMtUWtnp0iMhJDHx1Byrz_HxU88IwZ4zj9pS-GU2QZmCQIiOeuIDxDImIp_Bos91dSb9CQAuuIAsGIohcWsoRkKJnvlYf1SU3cAsXeI33H8-ttik1hUjWpSXDoJ129L8o4kXo04L_WSSowxnR-7CtEMweaVM1dnLQojBS_sbZLkm9CU2eHKOeb7dekuomSopK61dBHH5a0ilgoMNeCBXbBbbzkx4P129dJeJnXEqmF-XnLwxioFRMZweXUeAzxKWBm2goUYkI6uzUl9J4JUPBvNIX9vB4KI7jQZj4fSF5085YTtepMb5zkf819196yM4uxP7rs3gRDeg_C369krBNa3asMuMP_rAJM7xg0ExdU1xO7IxRyT2D7QqgJSzCum6RGt8A240vWIuqQ-L8AZAxabcxnEQdD4HFhCFY1XPuSQH0hfZz449FMI_7fciT1IkZmDo5ulAZYE2C53G01YllVuHGadAlXljJeEAaN0TSWeZH3QicnuHCVwzOsAo7IalV4AdykAs2Gd0kvDmgs9QxiCZVcWp909pB0nm-VQLf2O-49PK6cXzS6d-qqjeOP0dkPYKe1Hq7zLjgV7WUliBciQKFTnK4bu0O1dVcY0eptafuwsklUOB_4LMMoDdh02R83cklcQtUbj2mtAI1ak6NJNs9WB-ZaZBUJOX5gxXIyI9GRvh_qsM25xMWOTziueM-QhUlVMCEihiDnBN5xGIV2PuEHHBKpnXYDsaa52ZdfHoBdf6RDyYJA9eEeDc9lFN4eOsjkvKohbwJbgWP6D6O2A3gsVh-_rLxOWoyn9GmZEHIFY1ToBqDO3MByxGLcahAt6yBVvFyrT-WZgtHTZkffMSEt90eEh3OgGbu49GeY_pks0y8reAKipJpwRwy6DbXfAZKriyF8csWnqpxClnF8vsMkkSzy90-EGlNzzxoDJiJ0ESKBxRLvU8WMS1cUYd_RQjKAjHURAM4i-ZasP6AY8eVIvpMqLXopuyw2f9m7FWP5PzXTK7ReW4tHXw6ai88OPZJIY7JddZffojcm-MAME6vEAUkW_Tj2x_ancxq5LlgFCZLKV_lYRpvWi0Brxdq_yX4FVzSUCtXHONEem6sJcsFEIPel-vxIugzOzYNGTHc5bwxF0G_72CO8dakttcDmGds-hZRkMaQy2OswR_ksF6agp7Teqh_HMYA4r24zIeyHUFHbhJWJuTGwHOHXJ7z8C_I-SFgaZ5hAY6aEnTo9CsN0U3q_lns5x984ebw-u8n-0uIB1vrMJXv-IK09pSLW5l-GcZHDvxkhXW0ASABrWwhh_XNQKreSWbfsPrww75EXmAcQJSPAa3IRfcP4jlpS-ivdN9iZa2mzLXenyNILTon2dHE6PvZ6k3-OatCnXbCNTqa61gqiVDCPZenptRVfZahaHQmyCJX0kAIauh_Wi15aJXpNc32LnMxSR7j3XTErf_WOvmTZjwzXzRedsVtPpdzOHENLIyhr2w37tngNsbWgUH4CKP4zKlJUwUzlS-qHbM2Jfm_Q3pgJZwr_xHoEGPOBFBL0QPOfbqva09JRFMoeLCzT7AlxDeWZrL8q_pvhYjfjZ1W-_F1utGxgcydbZpJzgTUbcKdQRn15AOfFOfpfmlr32KOaPuxC7RQ3hRYmkn1C3rxJ7U0_ctFxPadUphPcYwvmCzE6s3z3LS4h1nr3UreVNkgaS8sU9-nLkih_s3v9aBMrLzRPXepbOLYLMjQtj5l61wEjioaN2-HFEoy9-OAZEbJw46E1zZrkyRX6n95jJ6mXXR1Lt6ILTpxTQE1kigTX2x5D91jstb-CU9YAYc2Ex-99YXvg6tEz_VscU_QFIP0pTUzrr9XM9huMPp4d7iyhMOG56quYbkODkjkeXcfqQLQj4bmH_3Rev-gTW_FiuR6Mum8azJ32pWrRtZsXjU6Mxo2ey8J-6rtu0YOm0C8gwP1SMr_PR020MuhKDjV224QMzxcB8z3Ik6cMCsoaxkcoJ_Qw-F1Lct5Br0MRTLIsYoYgsJeEZpoq2LkwX9FOuYZeRrGH6JCwZZf0QA4KHs3vfIh6sqU7DewfzmIbB8UOQZllaAEsDG-EIlD1YyeoQ2HsV-l-pIyq8EgmK9UJahV925MhY7DYpAo6uOhMwfF0BgAaZQzeBd9pKj0z5PD1t-L0ld5tm4pXJQKwkgyMzUMyYiqBc0dtnYEhY0ZbCvYq2JlDuIhJq4UMt2TbU8fckLpXuKbAclHorBUmcklMnA-jyBc4yrMKh5nczClyYZ6Yrtw5iOv9t76pn33L_k8JiNPlNww8BKf2wRmiYN710ocIOBz_fqlLNF55fbGWYNxetNU_QXEdMPvtlktpjA3x4eHLsup1GfkjQDfobsh5pbHa5miPa3_eS06cc7gRTGaZGTv4RImv6orY2x1F8sXdpPFKMtE32wFJ5jSM7__izbLfcOSkI1R9TPW-nCOTwA3ek265lBpu-YyQkPyF2Z6FkHJa3e_zXSWrZV9UQHoT-lyYbSmOn9kuccc5tgP_w_mjQEI3vzGYiFo8TVheIOmyFMkHg302mZvXjoSqSJKF95tUgBls8wK12MRBi0q9A2OAS8jeRvG8xhnq4obOpWZByLyD4jOI68aqaVwv1KqZuE3ucWbaNUZfpPeBQzynjGKozEUQjpvsov_pJOB5JIize2kNjN0fIXQYy9j2q3-g0KxYcq6L7udl8ldgIPee0DSBPTHYaNGtLHxMkGLXevs40AkhsQ3YI7v2S2Qy72YmcaPzMaBxMNhtGqgsAEHm06yQQOFX9iNqwQHiAf89uSAFkYc6oBEpBm1c4SP92NaeIeozLdll80aVXilk4UFXGjNhfXNqAq5GgFFc_I-BaMHBESiyTPZBDQ7-j5iX7x5m32jJvSkQgzGPWKMwI-3IUg3uXgavliVMCZ1WTqZ9NjYRyCQvbzqghD6fqnWoJ4PQW9xOIjsxbZ6PcKdClsA1terzwIWKlqLtimZ_xHDIqitulcGig7LWqP4dLA9WuAN8e_NY1RQhJtmkFECXh7drdkoSaafPfZFpslZXq3uFK2zxPKDw4HUD5wr6Q7dL4vPizzJQ79FScjsGLYzcoh7MZFu46BTDMJZktgzaC6GgbLzMRmC7S3SjBvBNSGHiwZnSm-3JfcDlBADPNAPfc6nnjHCTwH6MTeuK3auMsJyrk7rAmEqbt_GCp56LUP0_Dxsbg6hBr686wMjy_wsGlpNBYRkYL4nRutkkhgyhc2GcdxCj1BLYJlzQ7GKFdtk1p021XJb278o_vQMOOKNKfzx2NzZb62XPYQ1HhUajjt5jFw3tYtsUUcCjEQEsySVtKnuEoPkupjjGF1S56wtj0mx-nwWVYzHEL_QVrT1sPoI083324z0JwKjQBz0NdS7O15xQiR0jRx1uUVm6HqCBs6-Oql190nyaMC95MjC6vO5ZWLhBZy0pflMMTmv2GtDF4EzmPZ9VanHhw5JWlO5IjgYldP_BHGwSYRCcED4Eh3xUkAqZt1bQhLsB15CLzDSf4I4cKLDlGacrJD6DE2hJ-QZDe9PkJTZ3Xg-DK9QFXwau4OxcufBI84ENgYC2Tt_otS5LIgFA5Aujvm0aifE3YdkqOxaUvW_A8VTutk1nFkrVUplH71OuxZ15C16hPqv_ICX0jAvadJzWOm9iz2rtNj3yLF1gwvTbAb5xTzcPh8bvtQjuyhwt4rKpbrw1LtLa9ZiyLqjLKirrCodeu4jziwFBjLsCFIflngm-MMcj8nn98AE0iWBzdMjp8b_qbsJxlRp34y3UX6q0OqqCqv10pMtf_5WxISRDVFgKmX1yiSqla7Ml9KUQ7fr6ifWozzGGNgNz5P3ZqI0_oW7nu1rnODNamHvvMtl9RSizpe2KiIXXIkHLD2OEKbPtj42uHmzoPczF1Ruml5qTLtdOvJlTUsx1qdgCUw22BC-kcW9m57Q6OM4ImftX4-0vMbEmyt8z0Cs1lMDxP3Og2B34o-iODtni02Z_cjW0O2y9UP86fNz-m9mzKqY818leJZvCGAE5SZYQKuIdVrjHMoP29uFT62YWSbjrdj5dn32Gj7ABjL-uW6qCweZq-Cdl6YnfvLpDz0JPznd5jZ55iUQ3AgY56YegBxnE5Pl26z2JuVS8BqCaxcuy59P2ompEGqAXT3OAEkwZO8pPBiyftViU4OutFjDHO8Qs_JPdiNsElX8aa9hq8hBNMNVwzGTFOnceTGqsuoA=",
+          "id": "rs_0c1dd4d1f332ab3a006a824bfa197881a1b83c4b2c37ff8607",
+          "summary": [],
+          "type": "reasoning"
+        },
+        {
+          "content": [
+            {
+              "annotations": [
+                {
+                  "end_index": 213,
+                  "start_index": 131,
+                  "title": "Previewing GPT-5.6 Sol: a next-generation model | OpenAI",
+                  "type": "url_citation",
+                  "url": "https://openai.com/index/previewing-gpt-5-6-sol/?utm_source=openai"
+                }
+              ],
+              "logprobs": [],
+              "text": "One recent announcement: OpenAI introduced the GPT‑5.6 family (Sol, Terra, and Luna), publicly previewed/launched on July 9, 2026. ([openai.com](https://openai.com/index/previewing-gpt-5-6-sol/?utm_source=openai))",
+              "type": "output_text"
+            }
+          ],
+          "id": "msg_0c1dd4d1f332ab3a006a824bff835481a1957e9e707fbd0dd0",
+          "role": "assistant",
+          "status": "completed",
+          "type": "message"
+        }
+      ],
+      "instructions": null,
+      "store": true,
+      "presence_penalty": 0.0,
+      "incomplete_details": null,
+      "reasoning": {
+        "context": "current_turn",
+        "effort": "medium",
+        "mode": "standard",
+        "summary": null
+      },
+      "completed_at": 1786924032,
+      "truncation": "disabled",
+      "top_p": 1.0,
+      "billing": {
+        "payer": "openai"
+      },
+      "prompt_cache_retention": "in_memory",
+      "metadata": {},
+      "prompt_cache_key": null,
+      "created_at": 1786924014,
+      "max_tool_calls": null
     },
     "headers": {
       "access-control-expose-headers": [
@@ -63,26 +221,26 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "a29e2795bd232c45-PRG"
+        "a2c4522bccd8d1c5-PRG"
       ],
       "connection": [
         "keep-alive"
       ],
       "content-length": [
-        "262"
+        "14475"
       ],
       "content-type": [
         "application/json"
       ],
       "date": [
-        "Wed, 12 Aug 2026 08:36:50 GMT"
+        "Sun, 16 Aug 2026 23:47:12 GMT"
       ],
       "openai-organization": "[REDACTED:openai-organization]",
       "openai-processing-ms": [
-        "551"
+        "18178"
       ],
       "openai-project": [
-        "proj_wdn4twhCQ0QUWShj3orQlBgk"
+        "proj_3dY1iXJUREcWndbVOEU89tfL"
       ],
       "openai-version": [
         "2020-10-01"
@@ -97,11 +255,29 @@
       "x-content-type-options": [
         "nosniff"
       ],
+      "x-ratelimit-limit-requests": [
+        "500"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "500000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "499"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "494524"
+      ],
+      "x-ratelimit-reset-requests": [
+        "120ms"
+      ],
+      "x-ratelimit-reset-tokens": [
+        "657ms"
+      ],
       "x-request-id": [
-        "req_91165ab172834195aec3d5ebe75ac458"
+        "req_c5d1b9be876c4f898fbf4a716f1b2ec3"
       ]
     },
-    "status": 429
+    "status": 200
   },
   "streaming": false
 }
