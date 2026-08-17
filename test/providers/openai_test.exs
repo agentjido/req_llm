@@ -1390,6 +1390,19 @@ defmodule ReqLLM.Providers.OpenAITest do
       refute ReqLLM.Providers.OpenAI.AdapterHelpers.reasoning_model?("gpt-4.1-mini")
       assert ReqLLM.Providers.OpenAI.AdapterHelpers.responses_model?("gpt-4.1-mini")
     end
+
+    test "classifies search-preview models as Chat Completions only" do
+      alias ReqLLM.Providers.OpenAI.AdapterHelpers
+
+      for id <- ["gpt-4o-search-preview", "gpt-4o-mini-search-preview"] do
+        assert AdapterHelpers.search_preview_model?(id)
+        refute AdapterHelpers.responses_model?(id)
+      end
+
+      # The plain gpt-4o family still routes to Responses.
+      refute AdapterHelpers.search_preview_model?("gpt-4o-mini")
+      assert AdapterHelpers.responses_model?("gpt-4o-mini")
+    end
   end
 
   describe "ResponsesAPI json_schema support" do

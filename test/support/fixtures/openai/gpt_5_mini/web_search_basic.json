@@ -58,7 +58,7 @@
           "total_tokens": 0
         },
         "web_search": {
-          "num_requests": 2
+          "num_requests": 3
         }
       },
       "background": false,
@@ -91,7 +91,7 @@
           }
         }
       ],
-      "id": "resp_0c1dd4d1f332ab3a006a824bee330081a1b4ece81e50d06118",
+      "id": "resp_02f63ba0fe9cee07006a82637d792c819ca2737937be272b14",
       "temperature": 1.0,
       "max_output_tokens": 128000,
       "user": null,
@@ -99,16 +99,16 @@
       "error": null,
       "model": "gpt-5-mini-2025-08-07",
       "usage": {
-        "input_tokens": 13503,
+        "input_tokens": 17444,
         "input_tokens_details": {
           "cache_write_tokens": 0,
-          "cached_tokens": 0
+          "cached_tokens": 4352
         },
-        "output_tokens": 1330,
+        "output_tokens": 1702,
         "output_tokens_details": {
-          "reasoning_tokens": 1152
+          "reasoning_tokens": 1472
         },
-        "total_tokens": 14833
+        "total_tokens": 19146
       },
       "safety_identifier": null,
       "object": "response",
@@ -116,50 +116,70 @@
       "output": [
         {
           "content": [],
-          "encrypted_content": "gAAAAABqgkwAGIOe5yLyBHaeMHcIZhe4rbTAs0CVtHfBV8_ydel11N5A_iI3fhiSIza61YfMGR4yAgKh1qICTJONOl8IzMMboqJaJRma19QZHa7_Ugv9Y5aYiS5tb0CECoJedgMU-qmXBUdSQ-Bj2H2aRh5bn5XUNPw53ey5iRIRzC2U4JC5k2dIK_eu9ndBzzvM4hAj9LJvzKB9VF1CLTPWdhLhYipCEFUU1FI-YAz0OvIPoS01Z5gFoK26Mhbd8NN7CgMTRLsDd8kVnGrW9w2a83iewiBevuUpVSSM10x0asMDUZw6BxQKHZpNTLwq-3gPjk_ZgKZTL8wRKmZjrkc1euR_n9wWjwHBMt0LMRpSuIVNw-FMsu7nN0pojNNsKfUr-tza0bvOLSkhj_SRsG_xxN4bGhKWW3r--yC81HC4CSyud_Di7yE_HMaZvelyHQXlYhGYsmaTcC6AZtYZGNRgobIY8Fw8j9cm-ErdjCgTftWbDGCQ4qX64aIjf_lgE9MUpBATn2qnJT0qcGoob9x93mcLb6aGO6Qp2kFY-jwgPFYRVGIUG8rDIdZFj9cbOTYKY5O9S_PG4i5rZTTZP2nnO0gmrY9muMGGh-vVWYL0fqQXAi8XYhgDuk0rNcV23b6nG9sOeoOeiRt-tXdmoUcUtH_p1qosCIDYO5fWeWFIM_bUwhpeAk2GzI3C55WThtntfiGEKe2H47r3kkbTIGCiOlRYvZECa3f_3JcGjh1Bmsc9hs1A2a1GqEi4sk8ptPAJF5ujACdh0UbSdmygw5ojnwsUIIR1ewiuC70jxw_-VvLQFXKLYn3ERx1WshGkRwDU3gRxWV15TGTbk1movI3f5z49OtUsHgkVaMMaqZ6timWK-pnMG3t7MdzmUYL8DLNNuHEv72OWAtvEAp7MS-NQX_kFpK3VTNx9Io0ggvCG0WOwK1NbucCnlZXPHe4ROAmA9Mn5_ySX_wAlTzwnhy0ZuhMQ6p_6W1e6fd2xB1XRmBefSDbf-lgZ6Qml0kedQ5DmWvCK-7H9UTi9IYYvkWRxjOB8gWKN7_pEp8D6qLT6VQmj-meIxAGvJmn2pC7mNP3Gc0uiHMkOluNBBF1SoALb5y5Og5jOz4B2eQGiZagjFhvdldHf7ukFRyaoNUgEFmNbBWqgTKV1KwWmQfEH5VFryxo3PbqDThkQdJzopYupfIH8T1nlKDQ4OTVqH4v_VroiVi3hFv5iHbvyi8LQPbKdUWsh3QFMrzeUN0RoOkKDYZWkhfZUjxITt-TVliGTGlKoljMm0pIHu_jPIv5qnqUWSujYigNsMo5KZutLmsTZeNn8R26ESHjJDxWCpGfOqNnYgkREHdbTq9hVxqAKB1VJlkk3nz6krfeMwDpumeyLTC_u1PdpZ6nEZqTu_25jPzo1Pi74MEynLzd55Bc2BOZzNkDhXH_jTGRCWe5zkTp0I6x5x_ifs1TZLpCnCqph8yfwykfkadw1YsaeBS8x-0l5DhI0r9uYheL9O8PrTDMm6wVkaFOt6FTr9LglZ_DMoqEq_7ZFdO6DEPIOHtjDKPqrHNRn4p0KyF1FhXfHGDnNw8MqvWRaze3tbXUo24qKu1E1HfJrMZ0zrKmOySeoA_qpaH6PGkcqDc6XH-NQGUYcjUL3nguVWGWx98aGHIujHxKTG8ouMFgtlwCMGvehd0rpYYhmJWymJK5T4qKVidXutCYnXKdjJsT0Snn5XYAdFhZQnCQhKLUcfaKg-wEDJ6qXfaeRRNsB_ELjemvJNUDMNbtWxNQAPgRX6L-smpTc9Vjjwp3AO3b-R_-iOFOhIGf-QeTY_NZbyvkF5C_t1lJJupWvtSWIMdAQ3TkkSiX3gqSAWjTdBF2HFHrCRC9sCfEcNFwsg0XMpYmP251iutKFytzJAcvsCSjj1rgF1YoOvnFg2dHlyoNxY9tm3dWt5CMB0zaJzfsfelSXW8pE11TYY7N5I_d8di-wHT9ZqGk1CmsoAu7dgwJ-OPIJ75bGa0UtGmHiGFKNVTOp-LxNX0CxgCQIEEgm1VECWS7pDQBPbtz81jBlUlXq7elz_qUtRulTEjCexnQABn3WUFOj5WEr1jyWHOZtceUfYmhO0ddfUnlApLVOJO9uL_zNvYQ3Lbj-39sG13O8I1cjQqrYzQIYTBpCBhe8Da4UtCWuCeufEwb5Ejg6GIQQnFKibwQKGQJw5ZelPVcBrTSgQSRtRio9QKrNzeggDnlncVK6CL_M4I2MLF8bydno",
-          "id": "rs_0c1dd4d1f332ab3a006a824bef2df481a1a5ad7842bd0668b8",
+          "encrypted_content": "gAAAAABqgmOP0CH29RkXdnH8qsH0kDPO8_0udQ3r1LJ8joDOfF1s47eIiKqh2HGy2hd6HWKf3C0Y7ucLWhBVvYcT2PJLuOJk-ePj6g2VdUGlTeMSNeeoe2_ES91UKWFJ_dP-Qi5-HPs40GGK8zD2djWVglnWwmMnUPr6r0fPKi_U9ywiyibtkO3F2ly4EKpg50tggPAHt6oGl7iRGbV8Rw5R5qcVxp5iL5eFzT565nsD3XjqxQd-lobgW6SdOqXfMUPHUX1a6cnXv-YZPHiwE19nbqoY_uC0FhStZh4NCBlr-6hyVKiVo2YhDJBUkAMVmSrNVaSvcTcwoHgnMAvl-u8J9UATycOdo0Grp5FYjsORtMkv26I-hhbOJBtqwu1EZHobIQHX4R5yUs_WxI7MBOHM5Sbpnh3umkL1wCqk0R1bByiwsxCXPqWJI8_cYwEovKQh8gh5-6qPGhda1HsEop3whBDZhJf4T2rKQFtxMn5I9fbkKtFZ1nCaL1VixXJandfv6C33QefWhgoQUPoEPKB9wMRPk3xQJUvG7u05R5vHfcpfifKp3hFCt7RZVo3GDicjYo1DG5P-nH4BW1cASl5U4e2fNZpeB351L5-9Tm8Cag4Xe5Ac_WKpmmASen4E2-w7nA_cxvaP3cPtqy1N4LtAnDQ8dgtYH1zdR2jRs0r7QwPuQ32P7VhU6iOjFzTa-yv3Fm9iE3h0Bk8UVeBhyiaTzNkLs1QQDfVYuhtA20LrQfEx-oa_-vzEVyePSMkIZ_z_KhciQtlaCXBURbVa9Cua0yAJgdDNsqJGtkGMVK4ysG2DQB9kt-wiDL5UJdMbm4uHfvTj_7k8XqYC6H7I2v5MwZIWfunXNsxK17m3EFY4Hudu154ChgIfm8JihqYRh8bD56EOCVSXe0dqqkB00HqpGvHMCRqYwRiUsJRH9YuefUfbZ8AEoJX1T3NoBZRq5R4RU4aJTX4hvUVFaB0PIJDv1_sQOB8U3ayDDPes8-8em7EwoZzVdnzLFS5gZ1WnozY5vmldVQvbNQDvB7Bcrd-W9ZBgcrwiH2UfN-49UqR8sJr0-HqrmWEItWMZjuV-2yuvDc5Um7ulZ2r2NHAMD7pBqc9AeaNq3nw9BFqtfVRV9Nb_6L2kdQe6tysEVvjTCC1Bdz1MqCS5-eGji0m8M30Z5rATkSBaRiUgiGWCbocvn46xwbnvYptjQXGZMbBd3DBg6aGqkpC-_k5ApkWvj2WMJ4ntJai_O_dNHygOmyUZHtchgEEXNNYwQIK3xab4mo49v45siNHVUERCTPk79jre2kLWINfhbWAkHh0DyNB2phAdjXy95L5B5IKuk9IEwb6VcbHFRxBX-DGkpJp6BEShxfPRWJ95ZtIQR_BZTwhwnWCmWlws6U5n8idq2O8LP4J345-dbCZsnenokLyKEfRK2St7V3tx1ao8eL69IXnqBuNi_i6HW19d7wPCFMYD_9KYve93qWch_K3RK0wKU2T3XUDQPgMxxUECXr4-Qp8So0-eEtEES3KnNgfeUKx7x7eUI9ERZaL5k1eAzTqcWAOsk_E1zJOJDaW6VGNP-dBkqL_zThVCkpqEXUKJF6ChzgxLWyJPmVPbNPX0rGwQrTDpiyvj1QU06ipV0cvKmLGsZ-A6bSwIHLwTopXXSgrEUAT8AkEdpuVSwRd3YKzS8u-cw_s6DZ1KTrZzLjvIG15p2Dq6eos95u6BUkCNbfU5cYO5prFFDFOU8yHO2tXq0K5VwSqrGbkuuPBavaBQ_K_pmYfCnZUCrGAW0RHQGSgdO5_ZcYTAb1iswOrcFvtruJ0Z6e1h4ItN02JRuRe8rxoRuLbluwWlroaIdAGBYwHG1FM00j1NoFfgz3_xEDIguQv5FuO35ZupZWBdFmA1b03Zt4pO0ZkLVU_pU4gRS1B8IEDMvqd1vYYkSZqk7CBZLhXwLdeYEKjWykZ_rumEBI7gClPN72tIzZ1fFfNwjFDxPTMveHl1Srl0-8ndQVRm3Gf0NvD_fNtrEOfl6HAjEti88fkSveDwgPc=",
+          "id": "rs_02f63ba0fe9cee07006a82637e053c819c85c44678b38d413b",
           "summary": [],
           "type": "reasoning"
         },
         {
           "action": {
             "queries": [
-              "AI model announced 2026 August announcement",
-              "Anthropic new model 2026 announcement",
-              "OpenAI new model 2026 announcement",
-              "Google DeepMind new model 2026 announcement"
+              "AI model announced August 2026 'announced' 'model' 'AI' '2026'",
+              "recent AI model announcement August 2026 'announced model' 'AI' 'news'",
+              "OpenAI announcement August 2026 new model",
+              "Google announced new AI model 2026 'announcement' 'model' '2026'"
             ],
-            "query": "AI model announced 2026 August announcement",
+            "query": "AI model announced August 2026 'announced' 'model' 'AI' '2026'",
             "type": "search"
           },
-          "id": "ws_0c1dd4d1f332ab3a006a824bf15b7081a18b183050449e7d6e",
+          "id": "ws_02f63ba0fe9cee07006a82637f1768819c8c44a2be3dc0794d",
           "status": "completed",
           "type": "web_search_call"
         },
         {
           "content": [],
-          "encrypted_content": "gAAAAABqgkwAkUfF9EYmnTsa3SdubHS1Mo5ptXOhQEWCYrsDSErMJmtCI0Jyj23qLPFCjlZKr0KroZBf-DYA_ZZdncbXGWXoFBC20y7CrYerIHxeecekvp_iHwmvF26TDie9yC2EN9f-wwhrvKCCGUNGtRUX-GFmJoRPpLvukYjmOA37OCMl6gU2nhQpJN1dmo-ZyDbURVifcjNjpYwS70BXgYUw-ArVRr0fFsQuIafuiphu9Ifuewfb6-QuOd9DJME6In4pQ4w_o0HAr2g0LRE2uugBq6N66RGWgZ64nO_ffelMWGydcNeayxXVrpIRvjLHUGUcojBuVRMtbm53dPcClKiRWV6xlwwlqw2W063IPLl1rHnqBYhJez27Vdv_Od0S6FydbHvjLvMdm9fC6x6mwBmrL67KMshxvxURMaRtRHBEpMl2cNa7-jkMw_pBxLBP1L6jK2E0x6VQtktEIhlBWt7B-AEupcRFOoV-3z0BCv2LY3PqpaJET7Oco4F64oN2GLj4cNKBCjxAVtZxvitJ1HSHfbgqPAxj7XmkocZbam_EQpPMC1XKMsoU_JYdDxR9htXQoDKgvU6PK9KtlY2lwTch8i_NgBLLuzRsKQCBVJq_LrB15RJjJcwdIZF-VYlkMJGff26vXEp2PP_0wVt__cqZRb0AeUW4PtV_vAZ2K90AUv-_ZZYwPLSexvRBUIop4cl6Cv3ow0Vk1uNsAFh2lZ2HkFlTi6VhCVJN2aVCrkDaWBxx19TiZ4qlyMGf6a4UpYH4APlmkwU591jWWjnik4vgQkaIC8gwN3JMSqbx5zZuzrXIRzsjfA_jryW55uMWGH65cQeqoBuFlT1f-scob3PNb1ibE7tTgmKP1qb7TOVJEVCG8AROcW76AalF8nVrI2fZxCTJtfdOCNS3Yt3zf5Sg3FyxZv0JIBztlqiIpjg-hNZeQn6ifFWzsNA2KlLPgXQ-0Fk_vwctZb7W_9wdX3EpHz1T3TNN1QMs4T6hA6jxfkPUHnBlI2BlbMFMhqa40G7ql1nWMzz2W4aesrMsgrBF0-zhFVmdYeDkoBDpf-4pFc_ZCTqJWCZyphM1ZG3PQT_5sK7Dlhhyz-79yGPtJkzL4IgCbaMGGMlSOnchLKn9a7v6Bw1JID0pKij_WOymAz4dQfV7u32e2QP8mWOtZcIKhuOXHj2-N3tRhtzjoTksjbQhoeiJAfmxitJPUXS_ayJ6OPcnVvZ4xs7jXO4poZQlBOgnfOfgplvDfLUmjpIfI91vlx9mK3rn4SGE1pPbzPb7L_bOBl9oOFXoBOwVrnAooiDcQioHxdDvLnISnmGJ-L3PSfk4TqCaqRsNyt8Ri6m7H0JHFsmmu1EBsOjs9E6J9QALzRLgJMA1Pgbkqegz92FQioaGHPEHgVXpNdXhSlUNuKzDmJ6bO2H4s4evVzCchJ6vW_r_fVQP3PhJMWVW3GNe63bucXXMgMvduzLMB4oBoLvhUak4ux0JfVNWBhFGpbRy2a2CvxI2VO2mA8XSPk0KBWVvH4wHabmnF7R9IckODtMwVgp6LTA6Nskuf092a8C-LVeX_eRjXbzRmB_bfDCzow1NszZN0yTY3gybZd0dwQcJC4mkmQo5beuvSzIZSvph_jV8pBf0pamyamnwCFqjYCPvEmmIuXBc859-0l4VCrx7pWeFGAFFhobQzVLRkdat7UNAAlZov9TO1y8LkCtiv7fQ27oBb2b9zoc_5q07f6N71dt2oa8azZ9CLkjzptgcxmu1vsNVbATknBeUHkGkQPCXmGU2Bo7aa4IchS4gR9xVOYG4jX1jSyU7loq2p7c7tlPBOSSCXAHe3ipU81liSJNCEoq6vh8FxLCGgGvRFQdaThZhi3ynRZgDXHNTV9wceqHpEiexBFbv5SfXlD8BPPj-uFW8k--tLWmuqa8CLQc1eiYL3wTBQ7BxtXUnnEWrkMZqhZGfDdmreIgbPL6hLV4lTawEjQY5rt0pI4VAOUIouwYV-quqPpzQFW5juwBnzqWdupa-IbpqldtRk-pQHxNnVYJB0NxORNBq5tkTm02sDLIgg7T-ZhjGiHsy3aoqjA-YaXBbyUWhhYoMtup4GH7yMeD3G5uME70fiJ9RsArzxugK28Na6qcrEkd8cSBmJl41W2Q79tX0mQP_87aXB8n-0nUpoN7K_qMqUXr9vekI1s-JwYSOKG0F4M8bAH7zIOcQ5WPr-BfW86wBZYmVYWgpjiwmNB4LLw7O4liQph1knHXub86gyWPbIT8_9w5mJOKqGL7uE5SNRR_0GWx79xtOXis1-gsNgrKcAA2LGcl97N70tUKSfxSKV6ixlcR4-ZwJvhwBdYVeqdVkcg2gnoWlyp3iqDI91D3f-Z6EU2QPU0GXVXF6E7x8ElF2KdxTAQGiyvrkWXcR_NYCJp_kLd19pwW6xYEMv99Qc75SnSK0",
-          "id": "rs_0c1dd4d1f332ab3a006a824bf4009081a19881c8f41be533b2",
+          "encrypted_content": "gAAAAABqgmOPHa3nZVhLFOqWusW7wGv7BWwuQoFzf8T5S1PrLNbT7M5W-6VUsTxxbOy6ngoh_oEsS6Pjv2DY_z94uQnsRAynYWxxGpfbwE_3dY-9LE9sbZ9g7y2iNwyNBFthTWEVFyLgby9PPRC4vH8F9KurcJkD5cF1clbI4h5Fk_j08Ga6ktFf8eV9hYW8W2ZBBXorWrGljUtpYQk-ZsMZyHZFAq26USJr_L-PnyCqC3uEk3QcSnPAh_lC6-9BbYWZplJWa0_2vgMPofcS2o31wnnN8LR0alX879KmumbSkoVPA2-t8Flwx-VMR4bf3klkos5ce-g2bpjyEmOZR4qJws9NNSoBDuyToAT5dUzkVih7AEbcgOzyMoiqhUTQPv-JGg5DJ1xPcBhPxo9T7EyUVbLyLwXxFctoG3ZcXzSpr_NYFjblFp4YfyZJzo-QKwH7pTWen0I_WWGOkWKVeBAy-5KCDBgkKRAF8SKfAgZOWeBtv9E3A4fqdBFuIKiCaun-czQ2p-u_CsL48JWijx5JeZCBuy_jKcaIWZbSu1iEozwcz_qMBbyojFjxjc3kt8q7tXhgWy4Al_1wkNb-Fkf3tqXaFuEC4faZZ2rdbBrpNPSPuv0eo5mSPFyHNbNYnr6HpczXv-ScCsS8mRHphsRdqpVS9uOJidnqaBiXHNLSxh2W5e6PDMrI3yfgt_Syk4hQ9siuY7exk0HxbYhM-piO63x6YxECAzeEgyrhzPGXUHHXHZLWPP7N5jOyZlUclk4zMOwE6yiVWmiY8fCGx4WPT_aALBAMPRF4pkkbaaphXypLxpVFHdLtq_X9lTDj-lojeahHJ6rZdZhGEj3utNNVZt1udXNIZJ1ZlIgWE2Y3r9c9VVei9Kd09p1NO26_BReqHR4dsoBcu4wY4cjcmqYeaWbqimD7vF3JqaCOpfub-RlAx64oMQ84szHq2YvoYNAQ3YLsSBilhvAKokSivRl7dtxtKp_22p9uaOdXHtaFUNBm7Hg_Odox2gCmJNYWYQnalTmYlVRZJkDffSw2ncGMcOi5ZEZekmHbwzVXud6f6jX7ouqWSlM95C3Y97u9vHrvBM69CsWX7FwxatUpJscw-Be0EejZmCQMaVKzEpjizp6KcRLGidSooBeAWZ91yXUw_ElIkTqY-dWjSa2IurNxkGpQ2sdkXSz9PzrUi_UEysL3nkORJpIFFmO7tf-MJasUr-T4wC1DubKY_p-tjqk2gM8M9KPrgHPoRdgtZBpJNyzuU-IrTh7PX2XR-VNO-i1-0Qc98zlUHcJv_A0zrd8NEibtFJxbEt8eBm1Zgg5pry26DpIzJpr_i8DMYvy-YBhk5jp90ZLD8Kqs6hzCxzu2A_N51LucnZ1BUoyBRzq3VuP1436eQIeaG9BRAASCOCU6HaPc4-eRNncs6gWq1Eo61wD691vwHBUh6RcBIVJScZO2a4ENuEi-ZpAKZEtdOMTD1AWqm3FY_BlMXYTkION_HTb1C2tYtqAx5DQpmy1LAeYN8hOMRo471Jtd3zdhEQQkpKNEOKFb5V583b9_R5Yz3PIkKqWr5yIrDY58HVgZ7y8kl9A_T143bb4qN8sOvnU3sHFkaaV87_ieJtm28FDXE0iy0G-WZ8ZDz_l0OurmWlUIaYszbkSjVI2FnWCpRUL87B5xZESt6uXFnNG_cRPItsOHo16QL08KWIVzcEFycTrj9HdXI0Rqz1mJ2q_Xr79mLWdtz0m7e7bu--tp7_8BXVCtGOuUc2T9Hth9DYjBqYkCmSVaxc-jHk1xQx_rBkyeo9m-R8jy00DwVYE5b7xfPFD_dnlEPU8_6W2dd2t4jClpNAAzH4uEfYpIZt025Lhm5PKAIgI4Z7lcBDg3wXxE8j7MnWg5ncpxXzSdnnBusGlHgWbYXuPfkbcCKgCdLxuQ3_t_m545-0EFvHQIC6wKu9jxZpdb7wwPQHYv0QUSvmY2MEuUlAHxxoiAc0nPLtcXL45rVNUMS9dNZV2WKpqkJJ0_30yS5TuWg2wYzch1GGRqxyQmR3FlMxHLtwS7y0E2MbHkAWBrnqI1xwn0J2KSU1wYSPblMnYr_DWI1lqjeicSFY5_CFItmUhnE9m80zXsRDcR-4i4zG_Ous6j66E7nMz8bthRLxBhSWz2WXcxbxVy8eaXVJ51iJpoIHYTjfRxCl5XugYlJMrmms4fHAJiwgMD7F39uk4zZRRalvj45ZG_E1ofeE_qNWlRw1ivSXRQcEq42lrrCtJoHgQAOW1BOL4_nqn5VTYozmkkvfS8tgaTTGmsElrs5YYjcRPzFGJjMlolqS98tvO-B6sKh0T4gtEDKCaombeEtZAmMYPDxciqBo9q5ktmeQ79OkPi25dMZ8uMo2FjGcFqfUmERQuY0oEE8gtYblq2hkQkRdyg17lQNr6dB5WBtuNKz87pYXUHcTiLElGwAqGTS_bWAmk-RkYWMTo1RYGjLejFO0SkyWLGsveVeMdrqklKGMAn1ZWV3nx0mPnofHLnxVxDK3VJC6PUTLKpp57yr25BjxgJNY5IRhJm4_G-Mg0SKhk0UQMJxUFzLp_fuLaS_OBRlAFvuNNc7Is_ewxXP0_-euVyg8DjaInj6oAjwrgk9-jVhUL-weRiPdGNVtIEyX7oL_voXoTMFD3gVg==",
+          "id": "rs_02f63ba0fe9cee07006a826381bff4819c9e79599f80291aa1",
           "summary": [],
           "type": "reasoning"
         },
         {
           "action": {
             "queries": [
-              "OpenAI GPT-5.6 release July 2026 OpenAI announcement GPT-5.6 site:openai.com",
-              "OpenAI GPT-5.6 announcement July 9 2026 'GPT-5.6'"
+              "Qwen3.8-Max announcement Aug 2026 Alibaba Qwen3.8-Max press release",
+              "Alibaba Qwen3.8-Max official announcement 'Qwen 3.8 Max' Aug 2026 'press release' 'Qwen'"
             ],
-            "query": "OpenAI GPT-5.6 release July 2026 OpenAI announcement GPT-5.6 site:openai.com",
+            "query": "Qwen3.8-Max announcement Aug 2026 Alibaba Qwen3.8-Max press release",
             "type": "search"
           },
-          "id": "ws_0c1dd4d1f332ab3a006a824bf626d081a1ad01ba91cff52c4a",
+          "id": "ws_02f63ba0fe9cee07006a8263834bb8819cb1c66e94df05b89b",
           "status": "completed",
           "type": "web_search_call"
         },
         {
           "content": [],
-          "encrypted_content": "gAAAAABqgkwA0pCn54vXt5GJ_alY3begCq6fLT5dPne7H4n1w6vkXhrycW1cxe90AZA4lkkR6GO2LyIO7zp658x34wgR-KabHRLJd6cOyv0a92n12FZoSJjYhuxEpSfbu_fDW5WSLVm_DtkONfQvov7Aow_guk_Hk3OSDYRChtxv4mi4GP12gU2lVOiDtO0ZwbZlaVHtbQ-XKRH-vgwYRsIDaLiGdoTZLUihxNTlOHsSg518qtJfDkuqWcHVuuk0b1TYuAfkHjFRkw-eE6hfdLz44LYzQ4XjK7KCvAhPT6Iex-O2I25zhlZTsw0-qINXqth7jrEyGH2jrHgpr_oEF0jFH7sFHHL5E0sF5oXe0QeZYpJoGwO3f27l3SeG6KngSUi0MwZHWNOS_0qyaBHgncQ25RFHBUqLS9r6D7mR7bkjBL_kOtWcqWCXEatiYfUy9ge_bcmL8SqhVthF62-nOWp_sXpCDAefzPgt7XYev-HUJI3L9GmIOxp9FuDNVSBOtrCEk9lO-clmKP0uGwBHWjUCb_5aUnF-HnzP2V6qFCOwXQnxkE-HK75kPrb4tCD5LpyHMglJAiGYrQmzIRa7wwlFKr-St-ClWKBEIKt7Ue4w0IT6O2l6NgQHDyjbrPpXnw7iRwiBuNU7W5Sgm_2CodqLh4XvnyyiBvyCTpIWfBTGodNqbDQR-mQGJKgS_w-XeelTy4LQAHv4IzZsNka7wUfMGOpOKGETzLCXQuFJaq8r7mtE1LF8gWgrEco_HYhk4K3S59h9s7vn1oTc21jjPyfse7vlT06cgPaDjshWN4RSIOYbUh343gvUWutAfkajtqvLdBjhf2u5HRFWevDY_uWVAWu0knbOAy_P_cMwJpVAs_h4m9vhaIXj-uv0YmTOeHWUsclwFoKHDGAnOiegOn1ZersFFWLfIgrjlU-rrv2jHX4-OXqaCLGytgNVqbcx3J2wLszTIwqcftCxULMwrPMe4MzScOpa3Yqh_RjeDLTsTQo4xZ0YVxWccd9YqCh0x36lK88D2y39-0d3xV1nhEYqyXcTBFggu0OuKH2zzix1KHFWnPGAGzZWCpCqlwoDEeCZKeGdgg21iWAH9mm63rbSgrKeiYv8Wvhn7cSLy-UGbtRrThDMtUWtnp0iMhJDHx1Byrz_HxU88IwZ4zj9pS-GU2QZmCQIiOeuIDxDImIp_Bos91dSb9CQAuuIAsGIohcWsoRkKJnvlYf1SU3cAsXeI33H8-ttik1hUjWpSXDoJ129L8o4kXo04L_WSSowxnR-7CtEMweaVM1dnLQojBS_sbZLkm9CU2eHKOeb7dekuomSopK61dBHH5a0ilgoMNeCBXbBbbzkx4P129dJeJnXEqmF-XnLwxioFRMZweXUeAzxKWBm2goUYkI6uzUl9J4JUPBvNIX9vB4KI7jQZj4fSF5085YTtepMb5zkf819196yM4uxP7rs3gRDeg_C369krBNa3asMuMP_rAJM7xg0ExdU1xO7IxRyT2D7QqgJSzCum6RGt8A240vWIuqQ-L8AZAxabcxnEQdD4HFhCFY1XPuSQH0hfZz449FMI_7fciT1IkZmDo5ulAZYE2C53G01YllVuHGadAlXljJeEAaN0TSWeZH3QicnuHCVwzOsAo7IalV4AdykAs2Gd0kvDmgs9QxiCZVcWp909pB0nm-VQLf2O-49PK6cXzS6d-qqjeOP0dkPYKe1Hq7zLjgV7WUliBciQKFTnK4bu0O1dVcY0eptafuwsklUOB_4LMMoDdh02R83cklcQtUbj2mtAI1ak6NJNs9WB-ZaZBUJOX5gxXIyI9GRvh_qsM25xMWOTziueM-QhUlVMCEihiDnBN5xGIV2PuEHHBKpnXYDsaa52ZdfHoBdf6RDyYJA9eEeDc9lFN4eOsjkvKohbwJbgWP6D6O2A3gsVh-_rLxOWoyn9GmZEHIFY1ToBqDO3MByxGLcahAt6yBVvFyrT-WZgtHTZkffMSEt90eEh3OgGbu49GeY_pks0y8reAKipJpwRwy6DbXfAZKriyF8csWnqpxClnF8vsMkkSzy90-EGlNzzxoDJiJ0ESKBxRLvU8WMS1cUYd_RQjKAjHURAM4i-ZasP6AY8eVIvpMqLXopuyw2f9m7FWP5PzXTK7ReW4tHXw6ai88OPZJIY7JddZffojcm-MAME6vEAUkW_Tj2x_ancxq5LlgFCZLKV_lYRpvWi0Brxdq_yX4FVzSUCtXHONEem6sJcsFEIPel-vxIugzOzYNGTHc5bwxF0G_72CO8dakttcDmGds-hZRkMaQy2OswR_ksF6agp7Teqh_HMYA4r24zIeyHUFHbhJWJuTGwHOHXJ7z8C_I-SFgaZ5hAY6aEnTo9CsN0U3q_lns5x984ebw-u8n-0uIB1vrMJXv-IK09pSLW5l-GcZHDvxkhXW0ASABrWwhh_XNQKreSWbfsPrww75EXmAcQJSPAa3IRfcP4jlpS-ivdN9iZa2mzLXenyNILTon2dHE6PvZ6k3-OatCnXbCNTqa61gqiVDCPZenptRVfZahaHQmyCJX0kAIauh_Wi15aJXpNc32LnMxSR7j3XTErf_WOvmTZjwzXzRedsVtPpdzOHENLIyhr2w37tngNsbWgUH4CKP4zKlJUwUzlS-qHbM2Jfm_Q3pgJZwr_xHoEGPOBFBL0QPOfbqva09JRFMoeLCzT7AlxDeWZrL8q_pvhYjfjZ1W-_F1utGxgcydbZpJzgTUbcKdQRn15AOfFOfpfmlr32KOaPuxC7RQ3hRYmkn1C3rxJ7U0_ctFxPadUphPcYwvmCzE6s3z3LS4h1nr3UreVNkgaS8sU9-nLkih_s3v9aBMrLzRPXepbOLYLMjQtj5l61wEjioaN2-HFEoy9-OAZEbJw46E1zZrkyRX6n95jJ6mXXR1Lt6ILTpxTQE1kigTX2x5D91jstb-CU9YAYc2Ex-99YXvg6tEz_VscU_QFIP0pTUzrr9XM9huMPp4d7iyhMOG56quYbkODkjkeXcfqQLQj4bmH_3Rev-gTW_FiuR6Mum8azJ32pWrRtZsXjU6Mxo2ey8J-6rtu0YOm0C8gwP1SMr_PR020MuhKDjV224QMzxcB8z3Ik6cMCsoaxkcoJ_Qw-F1Lct5Br0MRTLIsYoYgsJeEZpoq2LkwX9FOuYZeRrGH6JCwZZf0QA4KHs3vfIh6sqU7DewfzmIbB8UOQZllaAEsDG-EIlD1YyeoQ2HsV-l-pIyq8EgmK9UJahV925MhY7DYpAo6uOhMwfF0BgAaZQzeBd9pKj0z5PD1t-L0ld5tm4pXJQKwkgyMzUMyYiqBc0dtnYEhY0ZbCvYq2JlDuIhJq4UMt2TbU8fckLpXuKbAclHorBUmcklMnA-jyBc4yrMKh5nczClyYZ6Yrtw5iOv9t76pn33L_k8JiNPlNww8BKf2wRmiYN710ocIOBz_fqlLNF55fbGWYNxetNU_QXEdMPvtlktpjA3x4eHLsup1GfkjQDfobsh5pbHa5miPa3_eS06cc7gRTGaZGTv4RImv6orY2x1F8sXdpPFKMtE32wFJ5jSM7__izbLfcOSkI1R9TPW-nCOTwA3ek265lBpu-YyQkPyF2Z6FkHJa3e_zXSWrZV9UQHoT-lyYbSmOn9kuccc5tgP_w_mjQEI3vzGYiFo8TVheIOmyFMkHg302mZvXjoSqSJKF95tUgBls8wK12MRBi0q9A2OAS8jeRvG8xhnq4obOpWZByLyD4jOI68aqaVwv1KqZuE3ucWbaNUZfpPeBQzynjGKozEUQjpvsov_pJOB5JIize2kNjN0fIXQYy9j2q3-g0KxYcq6L7udl8ldgIPee0DSBPTHYaNGtLHxMkGLXevs40AkhsQ3YI7v2S2Qy72YmcaPzMaBxMNhtGqgsAEHm06yQQOFX9iNqwQHiAf89uSAFkYc6oBEpBm1c4SP92NaeIeozLdll80aVXilk4UFXGjNhfXNqAq5GgFFc_I-BaMHBESiyTPZBDQ7-j5iX7x5m32jJvSkQgzGPWKMwI-3IUg3uXgavliVMCZ1WTqZ9NjYRyCQvbzqghD6fqnWoJ4PQW9xOIjsxbZ6PcKdClsA1terzwIWKlqLtimZ_xHDIqitulcGig7LWqP4dLA9WuAN8e_NY1RQhJtmkFECXh7drdkoSaafPfZFpslZXq3uFK2zxPKDw4HUD5wr6Q7dL4vPizzJQ79FScjsGLYzcoh7MZFu46BTDMJZktgzaC6GgbLzMRmC7S3SjBvBNSGHiwZnSm-3JfcDlBADPNAPfc6nnjHCTwH6MTeuK3auMsJyrk7rAmEqbt_GCp56LUP0_Dxsbg6hBr686wMjy_wsGlpNBYRkYL4nRutkkhgyhc2GcdxCj1BLYJlzQ7GKFdtk1p021XJb278o_vQMOOKNKfzx2NzZb62XPYQ1HhUajjt5jFw3tYtsUUcCjEQEsySVtKnuEoPkupjjGF1S56wtj0mx-nwWVYzHEL_QVrT1sPoI083324z0JwKjQBz0NdS7O15xQiR0jRx1uUVm6HqCBs6-Oql190nyaMC95MjC6vO5ZWLhBZy0pflMMTmv2GtDF4EzmPZ9VanHhw5JWlO5IjgYldP_BHGwSYRCcED4Eh3xUkAqZt1bQhLsB15CLzDSf4I4cKLDlGacrJD6DE2hJ-QZDe9PkJTZ3Xg-DK9QFXwau4OxcufBI84ENgYC2Tt_otS5LIgFA5Aujvm0aifE3YdkqOxaUvW_A8VTutk1nFkrVUplH71OuxZ15C16hPqv_ICX0jAvadJzWOm9iz2rtNj3yLF1gwvTbAb5xTzcPh8bvtQjuyhwt4rKpbrw1LtLa9ZiyLqjLKirrCodeu4jziwFBjLsCFIflngm-MMcj8nn98AE0iWBzdMjp8b_qbsJxlRp34y3UX6q0OqqCqv10pMtf_5WxISRDVFgKmX1yiSqla7Ml9KUQ7fr6ifWozzGGNgNz5P3ZqI0_oW7nu1rnODNamHvvMtl9RSizpe2KiIXXIkHLD2OEKbPtj42uHmzoPczF1Ruml5qTLtdOvJlTUsx1qdgCUw22BC-kcW9m57Q6OM4ImftX4-0vMbEmyt8z0Cs1lMDxP3Og2B34o-iODtni02Z_cjW0O2y9UP86fNz-m9mzKqY818leJZvCGAE5SZYQKuIdVrjHMoP29uFT62YWSbjrdj5dn32Gj7ABjL-uW6qCweZq-Cdl6YnfvLpDz0JPznd5jZ55iUQ3AgY56YegBxnE5Pl26z2JuVS8BqCaxcuy59P2ompEGqAXT3OAEkwZO8pPBiyftViU4OutFjDHO8Qs_JPdiNsElX8aa9hq8hBNMNVwzGTFOnceTGqsuoA=",
-          "id": "rs_0c1dd4d1f332ab3a006a824bfa197881a1b83c4b2c37ff8607",
+          "encrypted_content": "gAAAAABqgmOPzPOAViQwBnzOaDBbAYnF9m6YIEB502eKJ_cnT8n0E2RgnqgTmDJABRH6FvElFHFJWAxx-soqX-gHYxoeZhIEBCHmDTFDvl5P3LNhOMb1x0Odjm3-M4B_UoBuUbPKh8PODMITgavSIh1GEoC004xfwlqPCweDHCbhKiy30KvuWa_CN7cZhnk9NZiC_D_gDLJxcVZuLVBsd444Sq-xc1p_ggoXSEtaDpaRBPZFaV2TGKKKxmPMQRHNRQiPoPEFC5zg0C5ff1lO_9mzFU00lUXcV-jOwet6qaF3Av1JrffjR_9oa-xdiPRnw5tStaS558r6nUVQ_7JIbmbUDZwkoglbH5bQpAF93MqAirveH7EmP1lbGANFawWJ0yBYugVsfAbvSGyOpeyEpoJK5rqFHU5LML7UTYaXEvecw_FPMTk0cuSU0VJKtEwhA7mrG9hWM4fIJR7FJCebXIX92CnXttQD4RHhRwP6No51wILLxLB1Z0_IDrIdgW4UCc3SaAxBx0JarU5XxYJGfPE1K99rkROLOF-GUrp5o20YYlKOElxkQVe_wlNLqYt13m_kZBaxtp_ax8fE92FVlzZHFDMhXqjQU4Q7if2DkEdLWskCvSPuCwH0hI_c2KiRZUgI6kFNy3vOOkoDghcAioicF0lnbswsVjDDb4bVsUgSFtEw8-cuC8PlMle9uvTAZRSxqnvJLV7Q_unJVy87vhhvHCZXg8GyfFfhU0QUmh5-MxHZtqAgA4o7nwvhie-Tx3X1HOqX3ex0PTKEXLA_aMaLhEp-Bc8y-d-XWiFKURHpD2ml5PVvYmG7ssDqwYgISfCwWaC4Fn_JDuH3spjLA-UaNaC2aSRw2Dl_iTyxPDsBwSi6jr8gvJe3VlgwZn5lWF8vvIHVMjGW-bC7ZekAiGKjtHW1kKJrfw_yE_VbBBj2jAOmUsAzMgoDvzQ7T5BQA1f9ifL_Vqx5msYAX_YFA24gKkRVR2dZWJ-jxTVZ-L-0jaZ-KpUKhfa8adpK5sv1jAzqyx736HMDjoSrNrTgekpDQRnmHxTjLRuaeNCP-wd2BtRVdnUtJCM9NE0iHaozA7s-4ks8y_VympBVPvhyM3ReilW79dh8eAuKSlbJK0slWC8g6NkWVBCimVVzf0vfawP4Zf5glhikn0Fsvyi_O4xg77ga1zgPdTq0S-rr0R75Cn6zq3CWNZ7NamSJAP2Igc2Jsd6846CcN8LcF4vE0o3wzxgYk1nwLhP2j2a_LPoe_UpLIuy4p9DOuHS7--OLDC2cztF0pUJqpC9IaLCmlDwhGbCPtxR_X2jA81mVqOaljccqNfSNcDph7-Ul3m-Zvs5_YILg-z0RV_vUnoe7K-0tCs_UYpn1wBNaq1rt5s8x2tRwucp-hmHRcmno3PcD0ciO7EHQ-2DfujhDmvNqzqWR9pV508GRXvjWjmeDl6gENhX4706EWiBM-Z4KgWfasKuy5Hioq2ZYD5JYvkc_Tul2x097XJR6G-IVC0BQCWn5uTdQZJ_tTXlm7QBqW5uJsfmiU1Uy3xT0KJ7p5NgomDK4CqKr-HkFAIHUmfv3nj2kezEkVJSema574I41BShesfnWiuq-Y9YyB0Qvz396eH_DwKEhUqNKC_dLsWLy2yxCVdJMwhHYC5d4SFHdnl-KzWj51Ys2IrkuiXc0v2a0yK7LqHgSl52madqWKWz1LSsFtqFOVeR8cHrItF-w-0L5ZC9p8F4PGG7bGRj864ZcVrkpV3kj3oJdd079jcotMiJ8xTm2mTmSC-QGEYuRr0hiO5zZgUygIKufrS5tYFP7rJbFzQhmH1gnmsFCZBsDLAbrx4TP5gm0XRRVs7ogA_SIgUDBm_RJykG5Jqcld7ioIE_8zNeOV2j_Rt8l852g5aXTpfJ2ZI0jv7zGKI_5BDnJ3T-wvpcSSfiA4BSyrElu7NPGlmCHcvsd6Itczqv354VvUb41onJNpuShf6br-vd4ZutEV97497Hx6tjljKQt1S_arp_bJKG622i_UcEsJ104wE26mDwtncsgMnyQ5rIAo2jNnPFZSXaxbcN7fZp3cLOd8t5mrgGP0-_j7Y71b8wIbT6nXqrT1E4Nzx_gWS2ve2TreDSCaECjyfMdn4L5DfvWPKOHNrs3zP5mn40Aysw39VMfpTwWS1I=",
+          "id": "rs_02f63ba0fe9cee07006a8263868a0c819c8820dd81277203a9",
+          "summary": [],
+          "type": "reasoning"
+        },
+        {
+          "action": {
+            "queries": [
+              "Reuters 'Qwen3.8-Max' Aug 3 2026 Alibaba Reuters Qwen3.8-Max",
+              "Reuters Alibaba Qwen3.8 Max Aug 2026 'Qwen 3.8' Reuters"
+            ],
+            "query": "Reuters 'Qwen3.8-Max' Aug 3 2026 Alibaba Reuters Qwen3.8-Max",
+            "type": "search"
+          },
+          "id": "ws_02f63ba0fe9cee07006a82638725cc819cb06d1448f7a2145f",
+          "status": "completed",
+          "type": "web_search_call"
+        },
+        {
+          "content": [],
+          "encrypted_content": "gAAAAABqgmOPNmhz6C7axRcqwTHv-bFGiAGNeZp78RgIOw4xEbrRoGkN8kG6BWpZ4MRKLxLsncwhWyyNgaV_Wnz8kiz23BO3MfD1QHKCdnEXaTFxN7WxtKvsVwH4YXEwC4WjqexPqb4w8tniYCYGU_2SRie4JBhlv30LyPLa4FvYACHCcEHmihZ9mE-PAVdjJueaA6Y_obsUOiXWnHpBwOFRiGl9xS12g-vSUeFyemh-Cbsxh2eXUn7RSTqha-9UuuAHsNpK79k7P0xWPkm46bYgaeWRIVxxvuEb9ArNpflhD0kh9PlKFp-umJpUISv_kjZ4K9HQAyyGOd36aFBs92VotDVWqvccUaFcIUs41BrFXsCYqdRCB6DusTloU8ylOLQP1pkzsK4K7unowQYc-IczOs2M2cgtHrZvxPiBA8ZK4TJ_1vutGxU4EAqN8ertX8g8PgiO2F_1kaaObMM4KATOMg82vYj7UDC-BCRsUrAM6Jakh13aDlNUTDVKejcGuUUt5sW9KGfFqQ49gH-y9EYDyGa7IRk8MUNtjSUqGsS8B9SmigVvlCnnWIX_RJYmmRgOU9s0jCZaqg1v6q2H20XzW0d5KV8i3TOaBxIFBUDZkvaRVpw3Gff86od-q1eGIPM1i2iKsEf8ROtdp1jfF1I7Jp3oLvv2xP2AZ9VgQ4F520n65PPbA3I7_Cbaqn7rTT-l3TeDKfKDBxnNy9dJoGOIZTi6xDPTLJVU3jW3_CSm2NTFoEsGib_hClL7Dl0e_cVm0yn6VOa_wr0PVUy7b1mOikloCDI42Iu2V9tRf5Yp808DfTDlDazJ0hXL591V1ZazYz7Rr8r5Se4n9og-gOIliVFpbOn47bPxazUZgBxLnEpJ0Rp04HYsSal6iqyAPvH3sXnoMg4j3edU11MceNX0ETgXwBWxDWAWRFxQBG1iVjwqE24soKjd6kt0_sqQ9cmNhfttV_UhY0ebEaFvE7BGtrlCFvztjrlF6DyoomX2i7ZHlO6USIS5-q8eeK_wRiXBL5D87ADGMVm-M2MApa53Zc0kk3Refas0d6kha99HXpDvrpb-PWc2NjbCCOvT-375_qxLkI2IhG48cwfVVzs8jbePzN--2sM1zv_ym3L0BZ3RILyVqvCKHDSX7TToJ-6m-QyqfB-Zp26dy44QZphzQ5pXJ3yhDtq70_HJRM0faPY2KXB7ayzJB3sQRI1UGMZ8T4wdM63Qm3JiYhr_1nbwhuIWiyhayJOa2WLfsJizWQiGRccC1tnc19SPebRGwk9qxqPMoNT9n73so06RKk4FcuqI9DS9zVTjhBb0SGC73dKwmZ_SvNDzLa0OXa0PhC2HcNMUqckOsAD3VIVlInked_k0ekE0zY3hRSzBUtPHfs6fFGi52hoMod0ATK7ceWNHaeFiR2iTpYfBDwM3qUiDs6dPede7MxsmzP-UQXJG0He3jvWK0NBR_7PK57Xbxd41jJFGNr2VdhSP8AneVhF0WLfbd6ZyqeEHQhOv11XxPFywaG63lOtxVbLyF0G6piuHkXb8-9x3z3pNB-C_se2gV1gfbC0ZFsm-kRRzXmU-Ri9r-LQhetYn6D2OpR4Zja6kIPdepSW7ANzaBJWcAuICJ74CNPH7UkcIS8oxef-qWsr26wlY8-Zfpe8pJqdsqwb5nSUClCTYeAyy-I3XbXKWxZQffkFDU34FR7_7buVIYBqLuFDG5PWRDWajjYlheDp79cEnc4AR1qt0lFj0TiL6dkuwsvaxlIoUyt71fuJCyoi6hvzuRKeqRj_Geb-EOLn_JRHm8Q9V06jpmRPGUWijU4fA2VzHTwtCLe9utYxAXsUriCCxoR_NjjIG2JR_iO6-1KYPCZIG1shr-MxjFA8VUWwmme_BLeSNu-eyp-d6b1Erho_y7SZXDUwJEC_fz3HB0gnoaKIcPk_hgFs1MDurLPSwp_FFLiPihkyoLYua1tcoxmmxuzbcoZi-cPOo2P4sZTR7Ri-1aX6kWAIDFT5dwzEBDXXUfsnQR1RI4i-crlevJRpGpfrz4esgY8qOIQ2n0Xe5BzYOkznIXRwHojoOqOgZp0RgIRknLIkLsAOqUS_7BZ5_m-rrGuReNIr_wCjCPbvHMbCjkfs4m9PtM1rqN67A7mLzkZwnkQT-W2NMPm0LnZW6rMFSPEUuR-zQLmtotAqxNNvGOv5dt8VgGG2O_Dgc9FBAhlTYcAsXMdPeiVUaQeGyH7oeJquFL6i9C-5MwSN2hg86wzw9aDD3RHt6NVuUcISWY7kqA8lv4hcncuMFYfBriZIim9l-O6dwCaum70fg8lXS7fuf6Aphv_SACH5ztHOoxsuDO3luawoajfHxe8qHIP-YYhKhMIGjKOivThnvFaY_yc38qWGzBpD_lrijQCInrQbSxtqzUK4ABTQB36c16KTehlxSOBOaiGdt3GLBbKSsEGOwuNwzmNwz_SeHDHTyP8YwZweLZhj1tBp4rLCZomuQXlHw23HT32FeAH_GyDO0l7LsK4mq9ox_83hdm-ZhQ8sIOOsNuBQpaaj6H3oILVUwShkGaKihtr6TAb_25ElK2yHNdzt5meR3qHKFmlgocKyGl2-Dl9LMsgKp1PW6j3jMpMfjQGXgEEx7F2cUpLAw--KrV27pC5OQFD5VXigL9__ODr5VMtnbPqEI2Z0HOXjTOTT88qRXZoUaTu_3zAZZxhi2cE99HjWwdWkQnRB38cGEwAErsKUeOjE-5VPXSrGCrV5islOEGmVcsGRFXhAuNx4ds7M_jU9VatZvFnM-NCqc_WplDLNtv9gha_7ZThAsGZECm_MxbEF_GiWtKaCTcnStHaMATOtAfgPZv7skJD5EUQIIvoKIu3oYyzbYRuw-99_ouUBus1oGMHhEN0jOaJQ2bQLJBMRR2xjS3GzWnkVywLuFElQtJ_g3TcAr7qAo-FlAoJO9KFjA7A2jIRwtX_fA_HuxVuZ7oyGbuQCHq-okkeapYon5YS8sX1Fqb_WT_qOY2eI9udMtRITtqnhvZtJJAiEK_6PjyGt40J6aflK4rVadfsJeVsEnmNtO5Ztntsqs8rp3S2P4UISj4douSz-SBUq4MnhT4TYe1Ebu3yToUk0YFoEKl91MmbQgG3Ok5HTgmKiVUX3ver02ps8dDo3qcxB3Zf0tvJ42xx9FbOamgdmgPyJbcylzMxnbmRqlCNVfvrhwqTO3hEivzk1m-VNBA_mTCCJautFkzYJlwRQLm94SosHDC7koVArTYQpRo9i5QxBEFStO6LtWgf77MsiFDdekNL4McVZABSWOdFcj9N6zEzZB2BsjxWIccKIV4sAsyFYx9GwxHTV_9nrinSuSiYt1Vx5TYcpMGnR8gOVu8jvEcErxn_DAix_SUeItanPFWr6h-Eur227M8iQ4sVK4yktiOErBm9IQqCLsZhVV_HUXSaVGFIcDScNgOUKKBeJY2uhiiDRcCJEkNEh6mPppE47lRscWHLCY5uyioNRcItvC8CF0ygNHugo3sQgnD-Gtacbun8jExR8SfdaWZwA_ktkTWsJmz96u9_j0R_EUN3UnN02bFWiMqR8mA_6EHUvm84dMNRYbln5RnnyRemzynTNZPqbj41E4iCZxkFt3fwcjFpjzGb6ZoMkfjnDis_H54CUhyS0v60OOOgRFs5_Ohd9qAdax7osVe7d9vZy-G-VC6PZIKXXRv_IsxLM014LY-GiZt4jVZZLVaUsB3wXPlk-52Ap-DoezGRFaRfg23JlLM7_fpgsZbJxVnvZ06mnYftqoQusFPohAuFaKAU5fEC2_NCcv-74md4giwvm_N8dpouWzfSpEngI2j0s4o16q7393ClVeycxar5DMn-l3P64oLET_jXzB0vJHnl6t_XoVa8ZNFkAUlk-sW5TDsMgR9bdfmKnKjcFzenG0Rq_RKinCQ1M3RLWG-oowo173GTqhMvX2PdBlreUZ7ElT9DGzCVW8vFzSurY5_uSsf-h5ne74rtZVqZwbx_fdVQESoZCcGoPQKYoqE1bY-GVqUMF308XaDHVE0mcNrXUGukKSt4mrv7Xqch0wRIR0mDPFxCaZ0rapugCGz5tvvdYNc5luIe_6GN9Q9W5M5Ls8VG-JZHeGP9zEOps7yUDJnY2zXW0b2x_1ONxcqG5W-xQpW9HGtq7rdijH4ckqiCYlrV3PS32xnAfLAQJCGeG5Cz90NxFsSyr1jePrzyca0aLahNwATS19g38kRI4KX7i0rGz-EYPTjbCG890tVuYUSbftInanzQjjXXIlQPlSLiT0K3OCjD8O44YPgS24ZYU31IaHaK0ocCZHeBr4K_SLf5HJaFgpev_Vjt-n0tYFjKOO1mjzp-D_2Wx5ECMEMIxFUWJj69G3mD3ZDv6w_qvfb6nhjAY3Gn8N4jKUJ7FP3ArRMqzgHcWfc4LTa0gKGp7m9AYmafN9nqh2RX3Ls034Aq288Z5_woCriq_VysvUOya5XXNQsU3r1b9XpLjRg-O_qlFffV1l_b2Mc-CNoEwL3FALGjsJwDoamIgP_XFzd8MiWXPoadn8x0ypNtaSX8f4NJryoWQxw47QrekozhCzVdd_uwxtC8IvtwgCKtQ5e2rtMoZHH1acbp0WngGp-1SL8-2tqk19pbWrIY-r25A67pMwXy5joS3E-VyLKWmjzd-Ki9Wkz53XL-SL-WIGG96iPIkqtQwpiDLgjLmrB8qCsbZSEDYi6YMXi0_NQrZVi7dtXxFWOYzlA3MTs2mzPIrlimG2NV5I1zmgmKkPV31NhnZtYI5dZjMqsU_XehpYtD00hT_u1VWP30P3WJkU5GbAVEhpaI1gg5ASobePoK4qmnXA0xNd-pVCt55dlO6Osp88Enp-3V_iz4ZoCCkdUTF6MuU4f1WkQ7eUjUDClimULOH2mLV-eolVW8guUD2yf2KmGm6Pbw3RVkE60B00KswveVvlYyScscbY6nfYq41qxdr919RRfakm_PdP4yQ123PM9VILxsVSf5vg1LzxMC2Ay8y15WN4cFdyzgNjhRWYbGAgJ1aqzLpgAk2W5Vv4Wv9JHHWbOlSwrnODe0oup5Cax7XsqrCZHOe460riFjEkwdArK1DX3VVwSQ-jwY3akBzCzfIb7vDorPh5ACQdspFCedYG771_UfoJyqPWJ0Lo9FQIZmUeStBsxAOOHLfGZvbX0PZX7YlLAMIFDD2C64OISLaIv2JCj6J5OQkr-4UUxCHRTUF_V6IFbrSO6J_y8idcYX0GfSyI2vAUEaoXHJyca3eUP79KrPuzAufcELaYzT08c4UA-lM7I61GOKy-tc0s6_QHz_YkDffPLEDIma6xBQDngiEsmFmO_Tp-gKMJXFXyuRd5-BzvIgA-nJKCBUnqoi5wFFr5BmDCcIWCXkCbSeau8YyZQeG1YPCcoplfu-crua08dY8w64ZplmWEEEjXYGYqYyC1XPihVgOrnDrgbcCCgWKVvNFGC_6t_VCIpC_lmtu6KtgWvL-cFyj67UZfp2N6EanG2hB0uJoLjn9cZBm0RK3U5YsQrXx7y4zRc2q6Tq8kvGBH09jr-3Q9Gx5XFZttLw8_-uksTKd1e76hbKZyCQEdqihfnM-KV6T-ZYlfbSOBTSbz6TF7KlU_rKDrYk3nSUTcH4hTMFKhYZiNUMcDWRKDvUWAyq7wJHu5QtERTei6AeAmCDniWD3WzmKFGJY3fH5kCraLZYjZSTK3cbZ4Q9cd0rDhzavU4jSfJ2z-FoFjB9_TUfVJGY1iQy7GiQK1lFKZVDqIvM5RyrYPbNRT_HOku3rdcvEyu2pzGH8arCRgM8NI-YZGOx1W-Nsb920bAWaWL07nPOROGYnkI1lK2KcC6QO6sIMemkuLy_GGOpmMRkb2hZF8F_CatsWebCn84Eux6Zm60r8HeNqhUa8hw-g9xQxQYZrFXzq0D64KNknMvtqYwGfZD0iOTtk_jsZ0JymhtMIZAKnVsPj1xL1bBRErBIJOG0IXvAXBcsLYKkhKDINkM2nYIzBHhLIabWLaTmOoNs-bk-t8oTS1",
+          "id": "rs_02f63ba0fe9cee07006a82638a04ac819caae08f9f440cabaf",
           "summary": [],
           "type": "reasoning"
         },
@@ -168,19 +188,19 @@
             {
               "annotations": [
                 {
-                  "end_index": 213,
-                  "start_index": 131,
-                  "title": "Previewing GPT-5.6 Sol: a next-generation model | OpenAI",
+                  "end_index": 373,
+                  "start_index": 270,
+                  "title": "Alibaba Cloud Unveils Agent-Native Innovations at WAIC 2026-Alibaba Group",
                   "type": "url_citation",
-                  "url": "https://openai.com/index/previewing-gpt-5-6-sol/?utm_source=openai"
+                  "url": "https://www.alibabagroup.com/en-US/document-2016703577908576256?utm_source=openai"
                 }
               ],
               "logprobs": [],
-              "text": "One recent announcement: OpenAI introduced the GPT‑5.6 family (Sol, Terra, and Luna), publicly previewed/launched on July 9, 2026. ([openai.com](https://openai.com/index/previewing-gpt-5-6-sol/?utm_source=openai))",
+              "text": "One recent announcement: Alibaba unveiled Qwen3.8‑Max — a 2.4‑trillion‑parameter mixture‑of‑experts (MoE) multimodal model (about 95 billion active parameters) — previewed at the World AI Conference and made available via Alibaba Cloud in late July / early August 2026. ([alibabagroup.com](https://www.alibabagroup.com/en-US/document-2016703577908576256?utm_source=openai))",
               "type": "output_text"
             }
           ],
-          "id": "msg_0c1dd4d1f332ab3a006a824bff835481a1957e9e707fbd0dd0",
+          "id": "msg_02f63ba0fe9cee07006a82638f3d68819ca3b89c54988604be",
           "role": "assistant",
           "status": "completed",
           "type": "message"
@@ -196,7 +216,7 @@
         "mode": "standard",
         "summary": null
       },
-      "completed_at": 1786924032,
+      "completed_at": 1786930063,
       "truncation": "disabled",
       "top_p": 1.0,
       "billing": {
@@ -205,7 +225,7 @@
       "prompt_cache_retention": "in_memory",
       "metadata": {},
       "prompt_cache_key": null,
-      "created_at": 1786924014,
+      "created_at": 1786930045,
       "max_tool_calls": null
     },
     "headers": {
@@ -221,23 +241,23 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "a2c4522bccd8d1c5-PRG"
+        "a2c4e56f4c2ab9e4-PRG"
       ],
       "connection": [
         "keep-alive"
       ],
       "content-length": [
-        "14475"
+        "18283"
       ],
       "content-type": [
         "application/json"
       ],
       "date": [
-        "Sun, 16 Aug 2026 23:47:12 GMT"
+        "Mon, 17 Aug 2026 01:27:43 GMT"
       ],
       "openai-organization": "[REDACTED:openai-organization]",
       "openai-processing-ms": [
-        "18178"
+        "18145"
       ],
       "openai-project": [
         "proj_3dY1iXJUREcWndbVOEU89tfL"
@@ -265,16 +285,16 @@
         "499"
       ],
       "x-ratelimit-remaining-tokens": [
-        "494524"
+        "494447"
       ],
       "x-ratelimit-reset-requests": [
         "120ms"
       ],
       "x-ratelimit-reset-tokens": [
-        "657ms"
+        "666ms"
       ],
       "x-request-id": [
-        "req_c5d1b9be876c4f898fbf4a716f1b2ec3"
+        "req_2834167a8a8144f384e35bc04be904aa"
       ]
     },
     "status": 200

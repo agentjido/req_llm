@@ -123,6 +123,25 @@ defmodule ReqLLM.Providers.OpenAIRequestPlanTest do
                "Defaulted to OpenAI Chat Completions because model wire metadata is absent"
              ]
     end
+
+    # `*-search-preview` models share the gpt-4o prefix but exist only on Chat
+    # Completions; inferring Responses for them returns a 404 from OpenAI.
+    test "infers Chat Completions for search-preview models despite the gpt-4o prefix" do
+      for id <- ["gpt-4o-search-preview", "gpt-4o-mini-search-preview"] do
+        assert {:ok, request} =
+                 OpenAI.prepare_request(
+                   :chat,
+                   ReqLLM.model!(%{provider: :openai, id: id}),
+                   "Hello",
+                   api_key: @api_key
+                 )
+
+        assert request.url.path == "/chat/completions"
+
+        assert %{surface: :openai_chat_completions, api_module: ReqLLM.Providers.OpenAI.ChatAPI} =
+                 request.private[:req_llm_request_plan]
+      end
+    end
   end
 
   describe "planning failures" do

@@ -35,6 +35,7 @@ defmodule ReqLLM.Providers.OpenAI.ChatAPI.Request do
         |> add_parallel_tool_calls(request_options)
         |> add_logprobs(request_options)
         |> add_audio_output(request_options)
+        |> add_web_search_options(request_options)
         |> AdapterHelpers.translate_tool_choice_format()
         |> AdapterHelpers.add_strict_to_tools()
     end
@@ -153,6 +154,20 @@ defmodule ReqLLM.Providers.OpenAI.ChatAPI.Request do
     body
     |> maybe_put(:modalities, request_options[:modalities] || provider_options[:modalities])
     |> maybe_put(:audio, request_options[:audio] || provider_options[:audio])
+  end
+
+  # `web_search_options` is how Chat Completions enables web search (the Responses
+  # API takes a tool instead). An empty map is meaningful — it selects OpenAI's
+  # defaults — so normalize to a map rather than relying on `maybe_put/3`, which
+  # would keep `%{}` but drop a `[]` keyword list.
+  defp add_web_search_options(body, request_options) do
+    provider_options = provider_options(request_options)
+
+    case request_options[:web_search_options] || provider_options[:web_search_options] do
+      nil -> body
+      options when is_map(options) -> Map.put(body, :web_search_options, options)
+      options when is_list(options) -> Map.put(body, :web_search_options, Map.new(options))
+    end
   end
 
   defp provider_options(request_options) do

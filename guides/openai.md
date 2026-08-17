@@ -446,9 +446,22 @@ ReqLLM.Response.annotations(response)
 #=> ]
 ```
 
-`start_index` and `end_index` mark the span of `ReqLLM.Response.text/1` the citation
-supports, so a host can render that span as a link. The same list is available
-unprojected at `response.provider_meta["annotations"]`.
+`start_index` and `end_index` locate the citation inside `ReqLLM.Response.text/1`.
+The same list is available unprojected at `response.provider_meta["annotations"]`.
+
+Note that OpenAI usually points the span at an inline Markdown link it already wrote
+into the text, not at the prose the citation supports:
+
+```elixir
+text = ReqLLM.Response.text(response)
+String.slice(text, annotation["start_index"], annotation["end_index"] - annotation["start_index"])
+#=> "([example.com](https://example.com/announcement))"
+```
+
+So treat the span as "where this citation is already rendered" rather than "the
+claim to hyperlink" — wrapping it in another link would nest one link inside another.
+If you want your own citation markers, strip those Markdown links from the text and
+render footnotes from the annotation list instead.
 
 #### One shape across both API surfaces
 
@@ -470,6 +483,32 @@ Chat Completions, on the wire        What annotations/1 returns
 
 Annotation types that OpenAI already returns flat (`file_citation`, `file_path`,
 and others) pass through unchanged.
+
+The two surfaces also differ in how you *ask* for web search. The Responses API takes
+it as a tool; Chat Completions takes a `web_search_options` body field and serves it
+only on `*-search-preview` models:
+
+| | Responses API | Chat Completions |
+| --- | --- | --- |
+| Models | `gpt-5-mini`, `gpt-4o`, … | `gpt-4o-search-preview`, `gpt-4o-mini-search-preview` |
+| Enable with | `tools: [%{"type" => "web_search"}]` | `web_search_options: %{}` |
+| Citations on the wire | flat | nested under `"url_citation"` |
+
+```elixir
+{:ok, response} = ReqLLM.generate_text(
+  "openai:gpt-4o-mini-search-preview",
+  "Find one recent AI model announcement and cite the source.",
+  web_search_options: %{}
+)
+
+ReqLLM.Response.annotations(response)
+#=> flat url_citation maps, same as the Responses API
+```
+
+Pass `%{}` for OpenAI's defaults, or a configuration map such as
+`%{"search_context_size" => "high"}`. ReqLLM routes `*-search-preview` models to Chat
+Completions automatically, even though they share the `gpt-4o` prefix that otherwise
+selects the Responses API.
 
 #### Streaming
 
@@ -493,11 +532,41 @@ To surface citations *during* the stream — to render footnotes as text arrives
 consume `ReqLLM.StreamResponse.events/1` and watch for annotation output items:
 
 ```elixir
+{:ok, stream_response} = ReqLLM.stream_text(
+  "openai:gpt-5-mini",
+  "Find one recent AI model announcement and cite the source.",
+  stream: true,
+  tools: [%{"type" => "web_search"}]
+)
+
 stream_response
 |> ReqLLM.StreamResponse.events()
 |> Stream.filter(&match?(%ReqLLM.StreamEvent{type: :output_item, data: %{type: :annotation}}, &1))
 |> Enum.each(fn event -> IO.inspect(event.data.data) end)
 ```
+
+> #### Pick one consumer per stream {: .warning}
+>
+> A `StreamResponse` carries a single consumable stream, so `events/1`, `tokens/1`,
+> `to_response/1`, and the raw chunk stream are alternatives, not steps. Calling
+> `to_response/1` after draining `events/1` exits with `{:noproc, ...}` because the
+> stream is already spent. Each example above starts its own `stream_text/3` call
+> for that reason.
+>
+> To watch citations live *and* get the materialized response from one request, use
+> `ReqLLM.StreamResponse.process_stream/2`, which streams through your callbacks and
+> returns the final `Response`:
+>
+> ```elixir
+> {:ok, response} =
+>   ReqLLM.StreamResponse.process_stream(stream_response,
+>     on_meta: fn %ReqLLM.StreamChunk{metadata: meta} ->
+>       Enum.each(meta[:annotations] || [], &IO.inspect/1)
+>     end
+>   )
+>
+> ReqLLM.Response.annotations(response)
+> ```
 
 Each citation is emitted once. Providers that re-send a citation they already
 streamed, or that emit both incremental events and a final list, do not produce

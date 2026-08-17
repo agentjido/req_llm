@@ -767,9 +767,12 @@ defmodule ReqLLM.Providers.AmazonBedrock do
     Enum.any?(@converse_event_keys, &Map.has_key?(event, &1))
   end
 
+  # Formatters may return a single chunk or a list — one wire event can decode
+  # to content plus trailing metadata (annotations, reasoning details, logprobs).
   defp decode_formatter_stream_event(formatter, event) do
     case formatter.parse_stream_chunk(event, %{}) do
       {:ok, nil} -> []
+      {:ok, chunks} when is_list(chunks) -> chunks
       {:ok, chunk} -> [chunk]
       {:error, _} -> []
     end

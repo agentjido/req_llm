@@ -1,0 +1,154 @@
+{
+  "model_spec": "openai:gpt-4o-mini-search-preview",
+  "provider": "openai",
+  "request": {
+    "body": {
+      "b64": "eyJtZXNzYWdlcyI6W3siY29udGVudCI6IlVzZSB3ZWIgc2VhcmNoIHRvIGZpbmQgb25lIHJlY2VudCBBSSBtb2RlbCBhbm5vdW5jZW1lbnQgYW5kIGNpdGUgdGhlIHNvdXJjZS4iLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJncHQtNG8tbWluaS1zZWFyY2gtcHJldmlldyIsInN0cmVhbSI6ZmFsc2UsIndlYl9zZWFyY2hfb3B0aW9ucyI6e319"
+    },
+    "canonical_json": {
+      "messages": [
+        {
+          "content": "Use web search to find one recent AI model announcement and cite the source.",
+          "role": "user"
+        }
+      ],
+      "model": "gpt-4o-mini-search-preview",
+      "stream": false,
+      "web_search_options": {}
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.7.2"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.openai.com/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "annotations": [
+              {
+                "type": "url_citation",
+                "url_citation": {
+                  "end_index": 629,
+                  "start_index": 528,
+                  "title": "Anthropic releases new model, Opus 5",
+                  "url": "https://www.axios.com/2026/07/24/anthropic-releases-new-model-opus-5?utm_source=openai"
+                }
+              }
+            ],
+            "content": "Anthropic has recently released Claude Opus 5, a new AI model that delivers performance close to its top-tier model, Claude Fable 5, but at half the cost. Priced at $5 per million input tokens and $25 per million output tokens—the same as its predecessor, Opus 4.8—Opus 5 balances high capability with affordability. This marks Anthropic’s fourth release in the Claude 5 series within less than two months, highlighting the shift in AI development from occasional groundbreaking launches to rapid, iterative model improvements. ([axios.com](https://www.axios.com/2026/07/24/anthropic-releases-new-model-opus-5?utm_source=openai)) ",
+            "refusal": null,
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1786930043,
+      "id": "chatcmpl-d0e39ae4-10e7-4d9a-9de8-8b013547526d",
+      "model": "gpt-4o-mini-search-preview-2025-03-11",
+      "object": "chat.completion",
+      "system_fingerprint": "",
+      "usage": {
+        "completion_tokens": 147,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "prompt_tokens": 15,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 0
+        },
+        "total_tokens": 162
+      }
+    },
+    "headers": {
+      "access-control-expose-headers": [
+        "X-Request-ID",
+        "CF-Ray",
+        "CF-Ray"
+      ],
+      "alt-svc": [
+        "h3=\":443\"; ma=86400"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a2c4e5621dbe2ec8-PRG"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Mon, 17 Aug 2026 01:27:25 GMT"
+      ],
+      "openai-organization": "[REDACTED:openai-organization]",
+      "openai-processing-ms": [
+        "1832"
+      ],
+      "openai-project": [
+        "proj_3dY1iXJUREcWndbVOEU89tfL"
+      ],
+      "openai-version": [
+        "2020-10-01"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": "[REDACTED:set-cookie]",
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-openai-proxy-wasm": [
+        "v0.1"
+      ],
+      "x-ratelimit-limit-requests": [
+        "100"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "6000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "99"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "5979"
+      ],
+      "x-ratelimit-reset-requests": [
+        "600ms"
+      ],
+      "x-ratelimit-reset-tokens": [
+        "210ms"
+      ],
+      "x-request-id": [
+        "req_179d930f9a1c49079b2f00c8972d62ba"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

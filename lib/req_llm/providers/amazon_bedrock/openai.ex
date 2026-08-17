@@ -263,12 +263,12 @@ defmodule ReqLLM.Providers.AmazonBedrock.OpenAI do
           # Event is already parsed JSON, wrap in SSE format expected by decoder
           sse_event = %{data: event}
 
-          chunks = Defaults.default_decode_stream_event(sse_event, model)
-
-          # Return first chunk if any, or nil
-          case chunks do
-            [chunk | _] -> {:ok, chunk}
+          # Return every chunk. A single delta can decode to more than one —
+          # content plus annotations, reasoning details, or logprobs — and
+          # keeping only the first silently drops the trailing metadata.
+          case Defaults.default_decode_stream_event(sse_event, model) do
             [] -> {:ok, nil}
+            chunks -> {:ok, chunks}
           end
       end
     end

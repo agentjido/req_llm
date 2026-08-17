@@ -193,13 +193,29 @@ defmodule ReqLLM.Providers.OpenAI.AdapterHelpers do
 
   This includes reasoning/codex families plus GPT-4.1 and GPT-4o models, which
   support Responses even when older metadata has not been updated yet.
+
+  Search-preview models are excluded: OpenAI serves them only on Chat
+  Completions, so inferring Responses for them yields a 404.
   """
   @spec responses_model?(term()) :: boolean()
   def responses_model?(model_id) when is_binary(model_id) do
-    reasoning_model?(model_id) || gpt41_model?(model_id) || gpt4o_model?(model_id)
+    not search_preview_model?(model_id) and
+      (reasoning_model?(model_id) || gpt41_model?(model_id) || gpt4o_model?(model_id))
   end
 
   def responses_model?(_), do: false
+
+  @doc """
+  Checks if a model ID is an OpenAI `*-search-preview` model.
+
+  These models are Chat Completions only, and enable web search through the
+  `web_search_options` body field rather than a tool entry.
+  """
+  @spec search_preview_model?(term()) :: boolean()
+  def search_preview_model?(model_id) when is_binary(model_id),
+    do: String.contains?(model_id, "search-preview")
+
+  def search_preview_model?(_), do: false
 
   @doc """
   Checks if a model ID corresponds to an OpenAI reasoning model.

@@ -285,6 +285,15 @@ defmodule ReqLLM.Providers.OpenAI do
     audio: [
       type: {:or, [:map, :keyword_list]},
       doc: "Chat Completions audio output options, such as voice and format"
+    ],
+    web_search_options: [
+      # Not plain `:map` — that rejects string keys, and OpenAI's search config
+      # is a JSON object (`"search_context_size"`, `"user_location"`).
+      type: {:or, [{:map, {:or, [:atom, :string]}, :any}, :keyword_list]},
+      doc:
+        "Chat Completions web search configuration, forwarded as the `web_search_options` body field. " <>
+          "Required to enable web search on `*-search-preview` models; pass `%{}` for defaults. " <>
+          "The Responses API takes web search as a tool instead (`tools: [%{\"type\" => \"web_search\"}]`)."
     ]
   ]
 

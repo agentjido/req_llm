@@ -216,7 +216,7 @@ defmodule ReqLLM.Providers.AmazonBedrock.OpenAITest do
         }
       }
 
-      assert {:ok, stream_chunk} =
+      assert {:ok, [stream_chunk]} =
                OpenAI.parse_stream_chunk(chunk, id: "openai.gpt-oss-20b-1:0")
 
       assert stream_chunk.type == :content
@@ -244,11 +244,89 @@ defmodule ReqLLM.Providers.AmazonBedrock.OpenAITest do
         }
       }
 
-      assert {:ok, stream_chunk} =
+      assert {:ok, [stream_chunk]} =
                OpenAI.parse_stream_chunk(chunk, id: "openai.gpt-oss-20b-1:0")
 
       assert stream_chunk.type == :meta
       assert stream_chunk.metadata[:finish_reason] == :stop
+    end
+
+    # A single delta decodes to content plus trailing metadata; returning only
+    # the first chunk silently dropped the citations.
+    test "returns every chunk a delta decodes to, not just the first" do
+      inner_event = %{
+        "id" => "chatcmpl-123",
+        "object" => "chat.completion.chunk",
+        "model" => "openai.gpt-oss-20b-1:0",
+        "choices" => [
+          %{
+            "index" => 0,
+            "delta" => %{
+              "content" => "Hello",
+              "annotations" => [
+                %{
+                  "type" => "url_citation",
+                  "url_citation" => %{
+                    "url" => "https://example.com/a",
+                    "title" => "A",
+                    "start_index" => 0,
+                    "end_index" => 5
+                  }
+                }
+              ]
+            },
+            "finish_reason" => nil
+          }
+        ]
+      }
+
+      chunk = %{"chunk" => %{"bytes" => Base.encode64(Jason.encode!(inner_event))}}
+
+      assert {:ok, [content_chunk, meta_chunk]} =
+               OpenAI.parse_stream_chunk(chunk, id: "openai.gpt-oss-20b-1:0")
+
+      assert content_chunk.type == :content
+      assert content_chunk.text == "Hello"
+
+      assert meta_chunk.type == :meta
+
+      assert meta_chunk.metadata[:annotations] == [
+               %{
+                 "type" => "url_citation",
+                 "url" => "https://example.com/a",
+                 "title" => "A",
+                 "start_index" => 0,
+                 "end_index" => 5
+               }
+             ]
+    end
+
+    test "surfaces annotations through the provider stream decoder" do
+      model = LLMDB.Model.new!(%{id: "openai.gpt-oss-20b-1:0", provider: :amazon_bedrock})
+
+      event = %{
+        "object" => "chat.completion.chunk",
+        "choices" => [
+          %{
+            "delta" => %{
+              "content" => "Hello",
+              "annotations" => [
+                %{
+                  "type" => "url_citation",
+                  "url_citation" => %{"url" => "https://example.com/a", "title" => "A"}
+                }
+              ]
+            }
+          }
+        ]
+      }
+
+      chunks = ReqLLM.Providers.AmazonBedrock.decode_stream_event(event, model)
+
+      assert [%{type: :content}, %{type: :meta}] = chunks
+
+      assert [%{"type" => "url_citation", "url" => "https://example.com/a"}] =
+               chunks |> Enum.flat_map(&(&1.metadata[:annotations] || []))
     end
 
     test "handles malformed chunk" do

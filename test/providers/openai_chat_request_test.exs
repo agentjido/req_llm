@@ -122,4 +122,64 @@ defmodule ReqLLM.Providers.OpenAI.ChatRequestTest do
     assert [system_block] = system_message.content
     assert system_block.prompt_cache_breakpoint == breakpoint
   end
+
+  describe "web_search_options" do
+    setup do
+      %{context: Context.new([Context.user("Find one recent announcement")])}
+    end
+
+    # `%{}` is the documented way to request OpenAI's web-search defaults, so it
+    # must survive into the body rather than being treated as "unset".
+    test "forwards an empty map to enable web search with provider defaults", %{context: context} do
+      assert %{web_search_options: %{}} = search_body(context, web_search_options: %{})
+    end
+
+    test "forwards search configuration verbatim", %{context: context} do
+      body = search_body(context, web_search_options: %{"search_context_size" => "high"})
+      assert body.web_search_options == %{"search_context_size" => "high"}
+    end
+
+    test "accepts the option nested under provider_options", %{context: context} do
+      body =
+        search_body(context, provider_options: [web_search_options: %{"user_location" => nil}])
+
+      assert body.web_search_options == %{"user_location" => nil}
+    end
+
+    test "normalizes a keyword list into a map so it encodes as a JSON object", %{
+      context: context
+    } do
+      body = search_body(context, web_search_options: [search_context_size: "low"])
+      assert body.web_search_options == %{search_context_size: "low"}
+      assert Jason.encode!(body.web_search_options) == ~s({"search_context_size":"low"})
+    end
+
+    test "is omitted entirely when not requested", %{context: context} do
+      refute Map.has_key?(search_body(context, []), :web_search_options)
+    end
+
+    test "is accepted by the provider option schema" do
+      assert :web_search_options in ReqLLM.Providers.OpenAI.supported_provider_options()
+
+      # OpenAI's search config is a JSON object, so string keys must validate —
+      # a plain `:map` NimbleOptions type would reject them.
+      for value <- [
+            %{},
+            %{"search_context_size" => "medium"},
+            %{"user_location" => %{"type" => "approximate", "country" => "US"}},
+            %{search_context_size: "low"},
+            [search_context_size: "low"]
+          ] do
+        assert {:ok, _opts} =
+                 NimbleOptions.validate(
+                   [web_search_options: value],
+                   ReqLLM.Providers.OpenAI.provider_schema()
+                 )
+      end
+    end
+
+    defp search_body(context, opts) do
+      Request.build_body(context, "gpt-4o-mini-search-preview", opts, :chat)
+    end
+  end
 end
