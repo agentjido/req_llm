@@ -61,6 +61,56 @@ defmodule ReqLLM.Providers.OllamaTest do
       body = Ollama.build_body(request)
       assert body.keep_alive == "30m"
     end
+
+    test "omits :reasoning_effort key when not given" do
+      request = req_with_opts(model: "llama3", context: simple_context())
+      body = Ollama.build_body(request)
+      refute Map.has_key?(body, :reasoning_effort)
+    end
+
+    test "injects reasoning_effort at body top-level, atom coerced to string (:none disables thinking)" do
+      request =
+        req_with_opts(model: "qwen3:14b", context: simple_context(), reasoning_effort: :none)
+
+      body = Ollama.build_body(request)
+      assert body.reasoning_effort == "none"
+    end
+  end
+
+  describe "translate_options/3" do
+    test "normalizes every Ollama-supported reasoning effort" do
+      for effort <- [:none, :low, :medium, :high, :max] do
+        assert {translated, []} =
+                 Ollama.translate_options(:chat, ollama_model(), reasoning_effort: effort)
+
+        assert translated[:reasoning_effort] == Atom.to_string(effort)
+      end
+    end
+
+    test "omits the provider default reasoning effort" do
+      assert {translated, []} =
+               Ollama.translate_options(:chat, ollama_model(), reasoning_effort: :default)
+
+      refute Keyword.has_key?(translated, :reasoning_effort)
+    end
+
+    test "clamps unsupported canonical levels to Ollama equivalents" do
+      for {effort, expected} <- [minimal: "low", xhigh: "max"] do
+        assert {translated, [warning]} =
+                 Ollama.translate_options(:chat, ollama_model(), reasoning_effort: effort)
+
+        assert translated[:reasoning_effort] == expected
+        assert warning =~ "was clamped"
+      end
+    end
+
+    test "drops unknown direct-callback values with a warning" do
+      assert {translated, [warning]} =
+               Ollama.translate_options(:chat, ollama_model(), reasoning_effort: :extreme)
+
+      refute Keyword.has_key?(translated, :reasoning_effort)
+      assert warning =~ "will be ignored"
+    end
   end
 
   describe "attach/3" do
@@ -105,6 +155,16 @@ defmodule ReqLLM.Providers.OllamaTest do
 
       refute Map.has_key?(body, "tools")
       refute Map.has_key?(body, "tool_choice")
+    end
+
+    test "request processing translates reasoning effort before encoding" do
+      {:ok, request} =
+        Ollama.prepare_request(:chat, ollama_model(), "ping", reasoning_effort: :minimal)
+
+      encoded = Ollama.encode_body(request)
+      body = ReqLLM.Test.Helpers.json_body(encoded)
+
+      assert body["reasoning_effort"] == "low"
     end
   end
 
@@ -171,6 +231,20 @@ defmodule ReqLLM.Providers.OllamaTest do
       assert decoded["stream"] == true
       assert is_list(decoded["messages"])
       assert decoded["messages"] != []
+    end
+
+    test "translates reasoning effort in streaming request bodies" do
+      assert {:ok, request} =
+               Ollama.attach_stream(
+                 ollama_model(),
+                 simple_context(),
+                 [reasoning_effort: :xhigh],
+                 ReqLLM.Finch
+               )
+
+      decoded = request.body |> IO.iodata_to_binary() |> Jason.decode!()
+
+      assert decoded["reasoning_effort"] == "max"
     end
   end
 end

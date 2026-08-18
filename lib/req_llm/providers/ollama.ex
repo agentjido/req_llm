@@ -25,10 +25,22 @@ defmodule ReqLLM.Providers.Ollama do
   - `num_ctx` — context window size in tokens (Ollama `options.num_ctx`)
   - `keep_alive` — how long to keep model loaded, e.g. `"30m"` or `0` to unload immediately
 
+  ## Reasoning models
+
+  `reasoning_effort` is a **core** ReqLLM option. ReqLLM's default body
+  builder accepts it but does not emit it, so this provider forwards it
+  `"none"` disables thinking entirely for reasoning models. Ollama honors
+  this on the `/v1` endpoint; the native `think` flag does not apply there.
+
   ## Examples
 
       ReqLLM.generate_text("ollama:gemma4:27b", "Hello",
         provider_options: [num_ctx: 16_384, keep_alive: "30m"]
+      )
+
+      # Disable thinking on a reasoning model:
+      ReqLLM.generate_object("ollama:qwen3:14b", "Extract entities…", schema,
+        reasoning_effort: :none
       )
   """
 
@@ -37,6 +49,9 @@ defmodule ReqLLM.Providers.Ollama do
     default_base_url: "http://localhost:11434/v1"
 
   use ReqLLM.Provider.Defaults
+
+  @reasoning_efforts [:none, :low, :medium, :high, :max]
+  @reasoning_effort_strings Enum.map(@reasoning_efforts, &Atom.to_string/1)
 
   @provider_schema [
     num_ctx: [
@@ -52,6 +67,31 @@ defmodule ReqLLM.Providers.Ollama do
       doc: "Response format configuration for Ollama's OpenAI-compatible API"
     ]
   ]
+
+  @impl ReqLLM.Provider
+  def translate_options(_operation, _model, opts) do
+    {reasoning_effort, opts} = Keyword.pop(opts, :reasoning_effort)
+
+    case normalize_reasoning_effort(reasoning_effort) do
+      {:ok, nil} ->
+        {opts, []}
+
+      {:ok, normalized} ->
+        {Keyword.put(opts, :reasoning_effort, normalized), []}
+
+      {:clamped, normalized} ->
+        warning =
+          "Ollama reasoning_effort #{inspect(reasoning_effort)} was clamped to #{inspect(normalized)}"
+
+        {Keyword.put(opts, :reasoning_effort, normalized), [warning]}
+
+      :unsupported ->
+        warning =
+          "Ollama supports reasoning_effort values :none, :low, :medium, :high, and :max; #{inspect(reasoning_effort)} will be ignored"
+
+        {opts, [warning]}
+    end
+  end
 
   @impl ReqLLM.Provider
   def prepare_request(:object, model_spec, prompt, opts) do
@@ -147,15 +187,19 @@ defmodule ReqLLM.Providers.Ollama do
   @doc """
   Builds the Ollama request body.
 
-  Extends the standard OpenAI-compat body with two Ollama-specific fields:
+  Extends the standard OpenAI-compat body with Ollama-specific fields:
   - `options.num_ctx` — nested under the `options` map (Ollama model parameter)
   - `keep_alive` — top-level field controlling how long the model stays loaded
+  - `reasoning_effort` — top-level field controlling thinking (`"none"` disables it).
+    `default_build_body/1` recognizes `reasoning_effort` as an option but does not
+    emit it, so the Ollama provider forwards it here.
   """
   @impl ReqLLM.Provider
   def build_body(request) do
     ReqLLM.Provider.Defaults.default_build_body(request)
     |> maybe_add_num_ctx(request.options[:num_ctx])
     |> maybe_add_keep_alive(request.options[:keep_alive])
+    |> maybe_add_reasoning_effort(request.options[:reasoning_effort])
   end
 
   defp maybe_add_num_ctx(body, nil), do: body
@@ -163,6 +207,30 @@ defmodule ReqLLM.Providers.Ollama do
 
   defp maybe_add_keep_alive(body, nil), do: body
   defp maybe_add_keep_alive(body, keep_alive), do: Map.put(body, :keep_alive, keep_alive)
+
+  defp maybe_add_reasoning_effort(body, nil), do: body
+
+  defp maybe_add_reasoning_effort(body, effort),
+    do: Map.put(body, :reasoning_effort, to_string(effort))
+
+  defp normalize_reasoning_effort(nil), do: {:ok, nil}
+  defp normalize_reasoning_effort(:default), do: {:ok, nil}
+  defp normalize_reasoning_effort("default"), do: {:ok, nil}
+  defp normalize_reasoning_effort(:minimal), do: {:clamped, "low"}
+  defp normalize_reasoning_effort("minimal"), do: {:clamped, "low"}
+  defp normalize_reasoning_effort(:xhigh), do: {:clamped, "max"}
+  defp normalize_reasoning_effort("xhigh"), do: {:clamped, "max"}
+
+  defp normalize_reasoning_effort(effort) when effort in @reasoning_efforts,
+    do: {:ok, Atom.to_string(effort)}
+
+  defp normalize_reasoning_effort(effort) when is_binary(effort) do
+    if effort in @reasoning_effort_strings,
+      do: {:ok, effort},
+      else: :unsupported
+  end
+
+  defp normalize_reasoning_effort(_effort), do: :unsupported
 
   defp encode_stream_body(model, context, opts) do
     req_opts =
