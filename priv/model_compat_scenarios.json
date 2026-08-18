@@ -4117,13 +4117,15 @@
       }
     },
     "groq:allam-2-7b": {
-      "catalog_status": "missing",
-      "declared_operations": [],
+      "catalog_status": "present",
+      "declared_operations": [
+        "text"
+      ],
       "model": "allam-2-7b",
       "provider": "groq",
       "surfaces": {
         "groq.chat_completions": {
-          "declaration": "unknown",
+          "declaration": "declared",
           "operation": "text",
           "provider": "groq",
           "scenarios": {
@@ -4525,15 +4527,13 @@
       }
     },
     "groq:qwen/qwen3-32b": {
-      "catalog_status": "present",
-      "declared_operations": [
-        "text"
-      ],
+      "catalog_status": "missing",
+      "declared_operations": [],
       "model": "qwen/qwen3-32b",
       "provider": "groq",
       "surfaces": {
         "groq.chat_completions": {
-          "declaration": "declared",
+          "declaration": "unknown",
           "operation": "text",
           "provider": "groq",
           "scenarios": {
@@ -10169,15 +10169,13 @@
       }
     },
     "openrouter:mistralai/devstral-2512": {
-      "catalog_status": "present",
-      "declared_operations": [
-        "text"
-      ],
+      "catalog_status": "missing",
+      "declared_operations": [],
       "model": "mistralai/devstral-2512",
       "provider": "openrouter",
       "surfaces": {
         "openrouter.chat_completions": {
-          "declaration": "declared",
+          "declaration": "unknown",
           "operation": "text",
           "provider": "openrouter",
           "scenarios": {
@@ -18397,15 +18395,13 @@
       }
     },
     "zai_coding_plan:glm-4.5-air": {
-      "catalog_status": "present",
-      "declared_operations": [
-        "text"
-      ],
+      "catalog_status": "missing",
+      "declared_operations": [],
       "model": "glm-4.5-air",
       "provider": "zai_coding_plan",
       "surfaces": {
         "zai_coding_plan.chat_completions": {
-          "declaration": "declared",
+          "declaration": "unknown",
           "operation": "text",
           "provider": "zai_coding_plan",
           "scenarios": {
@@ -18493,15 +18489,13 @@
       }
     },
     "zai_coding_plan:glm-5.1": {
-      "catalog_status": "present",
-      "declared_operations": [
-        "text"
-      ],
+      "catalog_status": "missing",
+      "declared_operations": [],
       "model": "glm-5.1",
       "provider": "zai_coding_plan",
       "surfaces": {
         "zai_coding_plan.chat_completions": {
-          "declaration": "declared",
+          "declaration": "unknown",
           "operation": "text",
           "provider": "zai_coding_plan",
           "scenarios": {
@@ -18525,15 +18519,13 @@
       }
     },
     "zai_coding_plan:glm-5v-turbo": {
-      "catalog_status": "present",
-      "declared_operations": [
-        "text"
-      ],
+      "catalog_status": "missing",
+      "declared_operations": [],
       "model": "glm-5v-turbo",
       "provider": "zai_coding_plan",
       "surfaces": {
         "zai_coding_plan.unrecorded_text": {
-          "declaration": "declared",
+          "declaration": "unknown",
           "operation": "text",
           "provider": "zai_coding_plan",
           "scenarios": {

@@ -31,9 +31,9 @@ provider-native feature and are not consulted by request routing.
 | Tier | Surfaces |
 | --- | ---: |
 | First-class | 47 |
-| Best-effort | 461 |
-| Experimental | 85 |
-| Unsupported | 98 |
+| Best-effort | 458 |
+| Experimental | 89 |
+| Unsupported | 97 |
 | **Total recorded surfaces** | **691** |
 
 ## anthropic
@@ -171,7 +171,7 @@ provider-native feature and are not consulted by request routing.
 
 | Model | Operation | Execution surface | Input → output | Tier | Baseline | Checked | Reason |
 | --- | --- | --- | --- | --- | ---: | --- | --- |
-| `allam-2-7b` | `text` | `groq.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:26:10Z | surface declaration unknown |
+| `allam-2-7b` | `text` | `groq.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-29T23:26:10Z | missing current evidence: usage, token_limit, context_append, streaming |
 | `groq/compound` | `text` | `groq.unrecorded_text` | text → text | Unsupported | 0/5 | 2026-05-29T23:26:10Z | basic failed at provider_drift |
 | `groq/compound-mini` | `text` | `groq.unrecorded_text` | text → text | Unsupported | 0/5 | 2026-05-29T23:26:10Z | basic failed at provider_drift |
 | `llama-3.1-8b-instant` | `text` | `groq.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-29T23:26:10Z | missing current evidence: usage, token_limit, context_append, streaming |
@@ -184,7 +184,7 @@ provider-native feature and are not consulted by request routing.
 | `openai/gpt-oss-120b` | `text` | `groq.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-29T23:26:10Z | missing current evidence: usage, token_limit, context_append, streaming |
 | `openai/gpt-oss-20b` | `text` | `groq.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-29T23:26:10Z | missing current evidence: usage, token_limit, context_append, streaming |
 | `openai/gpt-oss-safeguard-20b` | `text` | `groq.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-29T23:26:10Z | missing current evidence: usage, token_limit, context_append, streaming |
-| `qwen/qwen3-32b` | `text` | `groq.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-29T23:26:10Z | missing current evidence: usage, token_limit, context_append, streaming |
+| `qwen/qwen3-32b` | `text` | `groq.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:26:10Z | surface declaration unknown |
 | `whisper-large-v3` | `transcription` | `groq.transcription` | audio → text | First-class | 1/1 | 2026-05-29T23:26:29Z | complete current baseline |
 | `whisper-large-v3-turbo` | `transcription` | `groq.transcription` | audio → text | First-class | 1/1 | 2026-05-29T23:26:29Z | complete current baseline |
 
@@ -377,7 +377,7 @@ provider-native feature and are not consulted by request routing.
 | `minimax/minimax-m2.7` | `text` | `openrouter.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-29T23:42:59Z | missing current evidence: usage, token_limit, context_append, streaming |
 | `mistralai/codestral-2508` | `text` | `openrouter.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-29T23:38:18Z | missing current evidence: usage, token_limit, context_append, streaming |
 | `mistralai/codestral-embed-2505` | `embedding` | `openrouter.embedding` | text → embedding | Best-effort | 1/3 | 2026-05-30T00:56:13Z | missing current evidence: embed_usage, embed_batch |
-| `mistralai/devstral-2512` | `text` | `openrouter.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-29T23:38:18Z | missing current evidence: usage, token_limit, context_append, streaming |
+| `mistralai/devstral-2512` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:38:18Z | surface declaration unknown |
 | `mistralai/devstral-medium` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:38:18Z | surface declaration unknown |
 | `mistralai/devstral-small` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:38:18Z | surface declaration unknown |
 | `mistralai/ministral-14b-2512` | `text` | `openrouter.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-29T23:38:18Z | missing current evidence: usage, token_limit, context_append, streaming |
@@ -659,11 +659,11 @@ provider-native feature and are not consulted by request routing.
 
 | Model | Operation | Execution surface | Input → output | Tier | Baseline | Checked | Reason |
 | --- | --- | --- | --- | --- | ---: | --- | --- |
-| `glm-4.5-air` | `text` | `zai_coding_plan.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-30T00:11:52Z | missing current evidence: usage, token_limit, context_append, streaming |
+| `glm-4.5-air` | `text` | `zai_coding_plan.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:11:52Z | surface declaration unknown |
 | `glm-4.7` | `text` | `zai_coding_plan.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-30T00:11:52Z | missing current evidence: usage, token_limit, context_append, streaming |
 | `glm-5-turbo` | `text` | `zai_coding_plan.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-30T00:11:52Z | missing current evidence: usage, token_limit, context_append, streaming |
-| `glm-5.1` | `text` | `zai_coding_plan.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-30T00:11:52Z | missing current evidence: usage, token_limit, context_append, streaming |
-| `glm-5v-turbo` | `text` | `zai_coding_plan.unrecorded_text` | text → text | Unsupported | 0/5 | 2026-05-30T00:11:52Z | basic failed at provider_drift |
+| `glm-5.1` | `text` | `zai_coding_plan.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:11:52Z | surface declaration unknown |
+| `glm-5v-turbo` | `text` | `zai_coding_plan.unrecorded_text` | text → text | Experimental | 0/5 | 2026-05-30T00:11:52Z | surface declaration unknown |
 
 ## zenmux
 
