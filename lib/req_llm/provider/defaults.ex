@@ -868,9 +868,19 @@ defmodule ReqLLM.Provider.Defaults do
        ) do
     {reasoning_content, content_without_thinking} = extract_reasoning_content(c)
 
+    # DeepSeek / xAI / Groq / Mistral reject tool-only assistant messages
+    # whose content is an empty string: the OpenAI spec says content is
+    # nullable when tool_calls is present, so send null instead of "".
+    content =
+      if tc not in [nil, []] and empty_content?(content_without_thinking) do
+        nil
+      else
+        encode_openai_content(content_without_thinking)
+      end
+
     base_message = %{
       role: to_string(r),
-      content: encode_openai_content(content_without_thinking)
+      content: content
     }
 
     base_message
@@ -965,6 +975,25 @@ defmodule ReqLLM.Provider.Defaults do
     |> Enum.map(&encode_openai_content_part/1)
     |> normalize_encoded_content()
   end
+
+  # True when a message has no visible text (only empty text parts or
+  # thinking), so a tool-call-only assistant message can send content: null.
+  defp empty_content?(nil), do: true
+  defp empty_content?(""), do: true
+
+  defp empty_content?(content) when is_list(content) do
+    content
+    |> Enum.reject(fn
+      %ReqLLM.Message.ContentPart{type: :thinking} -> true
+      _ -> false
+    end)
+    |> Enum.all?(fn
+      %ReqLLM.Message.ContentPart{type: :text, text: text} -> text in [nil, ""]
+      _ -> false
+    end)
+  end
+
+  defp empty_content?(_), do: false
 
   # Normalize encoded content parts: reject nils, flatten single text blocks,
   # and collapse empty arrays to "" (vLLM/strict OpenAI rejects "content": []).

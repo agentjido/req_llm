@@ -180,4 +180,52 @@ defmodule ReqLLM.Providers.OpenAI.ChatRequestTest do
       Request.build_body(context, "gpt-4o-mini-search-preview", opts, :chat)
     end
   end
+
+  describe "tool-only assistant messages" do
+    test "send content: null when tool_calls are present and there is no text" do
+      tool_call = ReqLLM.ToolCall.new("call_1", "get_weather", ~s({"location":"SF"}))
+
+      context =
+        Context.new([
+          Context.user("What's the weather?"),
+          Context.assistant("", tool_calls: [tool_call]),
+          Context.tool_result("call_1", "24°C")
+        ])
+
+      body = Request.build_body(context, "gpt-4o-mini", [], :chat)
+
+      [user_msg, assistant_msg, tool_msg] = body.messages
+      assert user_msg[:role] == "user"
+      # DeepSeek / xAI / Groq / Mistral reject "" here; must be null
+      assert assistant_msg[:content] == nil
+      assert [%{id: "call_1", type: "function"}] = assistant_msg[:tool_calls]
+      assert tool_msg[:role] == "tool"
+      assert tool_msg[:tool_call_id] == "call_1"
+    end
+
+    test "keep text content when the assistant message has both text and tool_calls" do
+      tool_call = ReqLLM.ToolCall.new("call_1", "get_weather", ~s({"location":"SF"}))
+
+      context =
+        Context.new([
+          Context.user("What's the weather?"),
+          Context.assistant("Let me check", tool_calls: [tool_call]),
+          Context.tool_result("call_1", "24°C")
+        ])
+
+      body = Request.build_body(context, "gpt-4o-mini", [], :chat)
+
+      [_user_msg, assistant_msg, _tool_msg] = body.messages
+      assert assistant_msg[:content] == "Let me check"
+      assert [%{id: "call_1"}] = assistant_msg[:tool_calls]
+    end
+
+    test "plain assistant messages keep their content" do
+      context = Context.new([Context.user("hi"), Context.assistant("hello")])
+      body = Request.build_body(context, "gpt-4o-mini", [], :chat)
+
+      [_user_msg, assistant_msg] = body.messages
+      assert assistant_msg[:content] == "hello"
+    end
+  end
 end

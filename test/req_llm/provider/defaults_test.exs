@@ -370,7 +370,8 @@ defmodule ReqLLM.Provider.DefaultsTest do
         messages: [
           %{
             role: "assistant",
-            content: "",
+            # tool-only assistant messages send null content (OpenAI spec)
+            content: nil,
             tool_calls: [
               %{
                 id: "call_123",
@@ -534,8 +535,8 @@ defmodule ReqLLM.Provider.DefaultsTest do
       result = Defaults.encode_context_to_openai_format(context, "gpt-4")
 
       [encoded_message] = result.messages
-      # All parts filtered → empty array collapsed to ""
-      assert encoded_message.content == ""
+      # Thinking-only content with tool_calls → null content (OpenAI spec)
+      assert encoded_message.content == nil
       # Tool calls still present
       assert length(encoded_message.tool_calls) == 1
       # reasoning_content emitted for assistant
