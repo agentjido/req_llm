@@ -23,8 +23,7 @@ defmodule ReqLLM.LLMDBReleaseFixture.MixProject do
 
   defp deps do
     [
-      {:req_llm, path: @req_llm_path},
-      {:llm_db, path: Path.join(@req_llm_path, "deps/llm_db"), override: true}
+      {:req_llm, path: @req_llm_path}
     ]
   end
 end
