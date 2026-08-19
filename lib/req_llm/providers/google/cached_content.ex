@@ -18,6 +18,24 @@ defmodule ReqLLM.Providers.Google.CachedContent do
   - Gemini 2.5 Flash: 1,024 tokens minimum
   - Gemini 2.5 Pro: 4,096 tokens minimum
 
+  ## HTTP Options
+
+  Every function in this module accepts the following options in addition to
+  the ones listed in its documentation:
+
+  - `:base_url` - Override the API base URL (e.g. for proxies or test servers).
+    For Google AI Studio the default is `"https://generativelanguage.googleapis.com/v1beta"`.
+    For Vertex AI the default is `"https://{region}-aiplatform.googleapis.com/v1"` for
+    `create/1` and `list/1`, and `"https://aiplatform.googleapis.com/v1"` for the
+    name-based operations (`get/1`, `update/1`, `delete/1`), whose `:name` is a full
+    resource path.
+  - `:receive_timeout` - Timeout for receiving the response in milliseconds
+    (defaults to `120_000`).
+  - `:req_http_options` - Keyword list of `Req` options merged into the underlying
+    request (e.g. `finch: [name: MyFinch]`, `retry: false`, or
+    `plug: {Req.Test, MyStub}` for testing). Requests run through ReqLLM's Finch
+    pool (`ReqLLM.Finch`) unless a `:finch` option is given.
+
   ## Cost Savings
 
   - Gemini 2.5: 90% discount on cached tokens
@@ -100,6 +118,10 @@ defmodule ReqLLM.Providers.Google.CachedContent do
 
   """
 
+  @google_ai_studio_base_url "https://generativelanguage.googleapis.com/v1beta"
+  @vertex_global_base_url "https://aiplatform.googleapis.com/v1"
+  @default_receive_timeout 120_000
+
   @doc """
   Creates a new cached content resource.
 
@@ -117,6 +139,9 @@ defmodule ReqLLM.Providers.Google.CachedContent do
   - `:tool_config` - Optional tool configuration
   - `:ttl` - Time-to-live duration (e.g., "3600s", defaults to "3600s")
   - `:display_name` - Optional display name for the cache
+  - `:base_url` - Optional API base URL override (see "HTTP Options" in the moduledoc)
+  - `:receive_timeout` - Optional response timeout in milliseconds (defaults to 120000)
+  - `:req_http_options` - Optional `Req` options for the underlying request
 
   ## Returns
 
@@ -179,6 +204,9 @@ defmodule ReqLLM.Providers.Google.CachedContent do
   - `:region` - GCP region (for Vertex AI)
   - `:page_size` - Number of results per page (optional)
   - `:page_token` - Token for pagination (optional)
+  - `:base_url` - Optional API base URL override (see "HTTP Options" in the moduledoc)
+  - `:receive_timeout` - Optional response timeout in milliseconds (defaults to 120000)
+  - `:req_http_options` - Optional `Req` options for the underlying request
   """
   def list(opts) do
     provider = Keyword.fetch!(opts, :provider)
@@ -201,6 +229,9 @@ defmodule ReqLLM.Providers.Google.CachedContent do
   - `:service_account_json` - Service account JSON path (for Vertex AI)
   - `:project_id` - GCP project ID (for Vertex AI)
   - `:region` - GCP region (for Vertex AI)
+  - `:base_url` - Optional API base URL override (see "HTTP Options" in the moduledoc)
+  - `:receive_timeout` - Optional response timeout in milliseconds (defaults to 120000)
+  - `:req_http_options` - Optional `Req` options for the underlying request
   """
   def get(opts) do
     provider = Keyword.fetch!(opts, :provider)
@@ -224,6 +255,9 @@ defmodule ReqLLM.Providers.Google.CachedContent do
   - `:service_account_json` - Service account JSON path (for Vertex AI)
   - `:project_id` - GCP project ID (for Vertex AI)
   - `:region` - GCP region (for Vertex AI)
+  - `:base_url` - Optional API base URL override (see "HTTP Options" in the moduledoc)
+  - `:receive_timeout` - Optional response timeout in milliseconds (defaults to 120000)
+  - `:req_http_options` - Optional `Req` options for the underlying request
   """
   def update(opts) do
     provider = Keyword.fetch!(opts, :provider)
@@ -246,6 +280,9 @@ defmodule ReqLLM.Providers.Google.CachedContent do
   - `:service_account_json` - Service account JSON path (for Vertex AI)
   - `:project_id` - GCP project ID (for Vertex AI)
   - `:region` - GCP region (for Vertex AI)
+  - `:base_url` - Optional API base URL override (see "HTTP Options" in the moduledoc)
+  - `:receive_timeout` - Optional response timeout in milliseconds (defaults to 120000)
+  - `:req_http_options` - Optional `Req` options for the underlying request
   """
   def delete(opts) do
     provider = Keyword.fetch!(opts, :provider)
@@ -281,9 +318,10 @@ defmodule ReqLLM.Providers.Google.CachedContent do
       |> maybe_put(:toolConfig, tool_config)
       |> maybe_put(:displayName, display_name)
 
-    url = "https://generativelanguage.googleapis.com/v1beta/cachedContents"
+    request_options =
+      http_options(@google_ai_studio_base_url, [json: body, params: [key: api_key]], opts)
 
-    case Req.post(url, json: body, params: [key: api_key]) do
+    case Req.post("/cachedContents", request_options) do
       {:ok, %{status: 200, body: response}} ->
         {:ok, parse_cache_response(response)}
 
@@ -300,14 +338,14 @@ defmodule ReqLLM.Providers.Google.CachedContent do
     page_size = Keyword.get(opts, :page_size)
     page_token = Keyword.get(opts, :page_token)
 
-    url = "https://generativelanguage.googleapis.com/v1beta/cachedContents"
-
     params =
       [key: api_key]
       |> maybe_put_param(:pageSize, page_size)
       |> maybe_put_param(:pageToken, page_token)
 
-    case Req.get(url, params: params) do
+    request_options = http_options(@google_ai_studio_base_url, [params: params], opts)
+
+    case Req.get("/cachedContents", request_options) do
       {:ok, %{status: 200, body: response}} ->
         {:ok, response}
 
@@ -323,9 +361,9 @@ defmodule ReqLLM.Providers.Google.CachedContent do
     api_key = Keyword.fetch!(opts, :api_key)
     name = Keyword.fetch!(opts, :name)
 
-    url = "https://generativelanguage.googleapis.com/v1beta/#{name}"
+    request_options = http_options(@google_ai_studio_base_url, [params: [key: api_key]], opts)
 
-    case Req.get(url, params: [key: api_key]) do
+    case Req.get("/#{name}", request_options) do
       {:ok, %{status: 200, body: response}} ->
         {:ok, parse_cache_response(response)}
 
@@ -342,10 +380,16 @@ defmodule ReqLLM.Providers.Google.CachedContent do
     name = Keyword.fetch!(opts, :name)
     ttl = Keyword.fetch!(opts, :ttl)
 
-    url = "https://generativelanguage.googleapis.com/v1beta/#{name}"
     body = %{ttl: ttl}
 
-    case Req.patch(url, json: body, params: [key: api_key, updateMask: "ttl"]) do
+    request_options =
+      http_options(
+        @google_ai_studio_base_url,
+        [json: body, params: [key: api_key, updateMask: "ttl"]],
+        opts
+      )
+
+    case Req.patch("/#{name}", request_options) do
       {:ok, %{status: 200, body: response}} ->
         {:ok, parse_cache_response(response)}
 
@@ -361,9 +405,9 @@ defmodule ReqLLM.Providers.Google.CachedContent do
     api_key = Keyword.fetch!(opts, :api_key)
     name = Keyword.fetch!(opts, :name)
 
-    url = "https://generativelanguage.googleapis.com/v1beta/#{name}"
+    request_options = http_options(@google_ai_studio_base_url, [params: [key: api_key]], opts)
 
-    case Req.delete(url, params: [key: api_key]) do
+    case Req.delete("/#{name}", request_options) do
       {:ok, %{status: 200}} ->
         :ok
 
@@ -419,14 +463,16 @@ defmodule ReqLLM.Providers.Google.CachedContent do
       |> maybe_put(:toolConfig, tool_config)
       |> maybe_put(:displayName, display_name)
 
-    url =
-      "https://#{region}-aiplatform.googleapis.com/v1/projects/#{project_id}/locations/#{region}/cachedContents"
+    url = "/projects/#{project_id}/locations/#{region}/cachedContents"
 
     with {:ok, access_token} <-
            ReqLLM.Providers.GoogleVertex.Auth.get_access_token(service_account_json) do
       headers = [{"authorization", "Bearer #{access_token}"}]
 
-      case Req.post(url, json: body, headers: headers) do
+      request_options =
+        http_options(vertex_regional_base_url(region), [json: body, headers: headers], opts)
+
+      case Req.post(url, request_options) do
         {:ok, %{status: 200, body: response}} ->
           {:ok, parse_cache_response(response)}
 
@@ -452,8 +498,7 @@ defmodule ReqLLM.Providers.Google.CachedContent do
       page_size = Keyword.get(opts, :page_size)
       page_token = Keyword.get(opts, :page_token)
 
-      url =
-        "https://#{region}-aiplatform.googleapis.com/v1/projects/#{project_id}/locations/#{region}/cachedContents"
+      url = "/projects/#{project_id}/locations/#{region}/cachedContents"
 
       params =
         []
@@ -464,7 +509,10 @@ defmodule ReqLLM.Providers.Google.CachedContent do
              ReqLLM.Providers.GoogleVertex.Auth.get_access_token(service_account_json) do
         headers = [{"authorization", "Bearer #{access_token}"}]
 
-        case Req.get(url, params: params, headers: headers) do
+        request_options =
+          http_options(vertex_regional_base_url(region), [params: params, headers: headers], opts)
+
+        case Req.get(url, request_options) do
           {:ok, %{status: 200, body: response}} ->
             {:ok, response}
 
@@ -483,13 +531,12 @@ defmodule ReqLLM.Providers.Google.CachedContent do
     name = Keyword.fetch!(opts, :name)
 
     # Name should be full resource path: projects/{project}/locations/{region}/cachedContents/{id}
-    url = "https://aiplatform.googleapis.com/v1/#{name}"
-
     with {:ok, access_token} <-
            ReqLLM.Providers.GoogleVertex.Auth.get_access_token(service_account_json) do
       headers = [{"authorization", "Bearer #{access_token}"}]
+      request_options = http_options(@vertex_global_base_url, [headers: headers], opts)
 
-      case Req.get(url, headers: headers) do
+      case Req.get("/#{name}", request_options) do
         {:ok, %{status: 200, body: response}} ->
           {:ok, parse_cache_response(response)}
 
@@ -507,14 +554,20 @@ defmodule ReqLLM.Providers.Google.CachedContent do
     name = Keyword.fetch!(opts, :name)
     ttl = Keyword.fetch!(opts, :ttl)
 
-    url = "https://aiplatform.googleapis.com/v1/#{name}"
     body = %{ttl: ttl}
 
     with {:ok, access_token} <-
            ReqLLM.Providers.GoogleVertex.Auth.get_access_token(service_account_json) do
       headers = [{"authorization", "Bearer #{access_token}"}]
 
-      case Req.patch(url, json: body, params: [updateMask: "ttl"], headers: headers) do
+      request_options =
+        http_options(
+          @vertex_global_base_url,
+          [json: body, params: [updateMask: "ttl"], headers: headers],
+          opts
+        )
+
+      case Req.patch("/#{name}", request_options) do
         {:ok, %{status: 200, body: response}} ->
           {:ok, parse_cache_response(response)}
 
@@ -531,13 +584,12 @@ defmodule ReqLLM.Providers.Google.CachedContent do
     service_account_json = Keyword.fetch!(opts, :service_account_json)
     name = Keyword.fetch!(opts, :name)
 
-    url = "https://aiplatform.googleapis.com/v1/#{name}"
-
     with {:ok, access_token} <-
            ReqLLM.Providers.GoogleVertex.Auth.get_access_token(service_account_json) do
       headers = [{"authorization", "Bearer #{access_token}"}]
+      request_options = http_options(@vertex_global_base_url, [headers: headers], opts)
 
-      case Req.delete(url, headers: headers) do
+      case Req.delete("/#{name}", request_options) do
         {:ok, %{status: 200}} ->
           :ok
 
@@ -551,6 +603,20 @@ defmodule ReqLLM.Providers.Google.CachedContent do
   end
 
   # Shared helper functions
+
+  defp vertex_regional_base_url(region), do: "https://#{region}-aiplatform.googleapis.com/v1"
+
+  defp http_options(default_base_url, request_options, opts) do
+    http_opts = Keyword.get(opts, :req_http_options, [])
+    receive_timeout = Keyword.get(opts, :receive_timeout, @default_receive_timeout)
+
+    [
+      base_url: Keyword.get(opts, :base_url, default_base_url),
+      receive_timeout: receive_timeout
+    ] ++
+      request_options ++
+      ReqLLM.Provider.Defaults.merge_finch_options(http_opts, pool_timeout: receive_timeout)
+  end
 
   defp format_system_instruction(nil), do: nil
   defp format_system_instruction(text) when is_binary(text), do: %{parts: [%{text: text}]}
