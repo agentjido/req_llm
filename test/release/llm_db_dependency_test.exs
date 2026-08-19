@@ -24,17 +24,9 @@ defmodule ReqLLM.Release.LLMDBDependencyTest do
     environment = [
       {"HEX_OFFLINE", "1"},
       {"MIX_ENV", "prod"},
+      {"MIX_DEPS_PATH", Path.join(@project_root, "deps")},
       {"REQ_LLM_PATH", @project_root}
     ]
-
-    {deps_output, deps_status} =
-      System.cmd(mix_executable(), ["deps.get", "--only", "prod"],
-        cd: fixture_path,
-        env: environment,
-        stderr_to_stdout: true
-      )
-
-    assert deps_status == 0, deps_output
 
     {build_output, build_status} =
       System.cmd(mix_executable(), ["release", "--path", release_path],
