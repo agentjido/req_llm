@@ -861,22 +861,84 @@ defmodule ReqLLM.Providers.Google do
     end
   end
 
-  defp supported_thinking_levels(%LLMDB.Model{extra: extra}) when is_map(extra) do
-    reasoning_options = extra["reasoning_options"] || extra[:reasoning_options] || []
-
-    reasoning_options
-    |> List.wrap()
-    |> Enum.find_value([], fn
-      %{"type" => "effort", "values" => values} when is_list(values) -> values
-      %{type: type, values: values} when type in ["effort", :effort] and is_list(values) -> values
-      _ -> nil
+  defp supported_thinking_levels(%LLMDB.Model{} = model) do
+    [
+      get_nested(model.capabilities, [:reasoning, :effort, :values]),
+      extra_thinking_levels(model.extra),
+      known_thinking_levels(model)
+    ]
+    |> Enum.find_value([], fn levels ->
+      case normalize_thinking_levels(levels) do
+        [] -> nil
+        normalized -> normalized
+      end
     end)
+  end
+
+  defp supported_thinking_levels(_model), do: []
+
+  defp extra_thinking_levels(extra) do
+    extra
+    |> get_nested([:reasoning_options])
+    |> List.wrap()
+    |> Enum.find_value([], fn option ->
+      case {get_nested(option, [:type]), get_nested(option, [:values])} do
+        {type, values} when type in ["effort", :effort] and is_list(values) and values != [] ->
+          values
+
+        _ ->
+          nil
+      end
+    end)
+  end
+
+  defp normalize_thinking_levels(levels) do
+    levels
+    |> List.wrap()
     |> Enum.map(&ReqLLM.Provider.Reasoning.normalize_effort/1)
     |> Enum.filter(&Map.has_key?(@thinking_level_ranks, &1))
     |> Enum.uniq()
   end
 
-  defp supported_thinking_levels(_model), do: []
+  defp known_thinking_levels(%LLMDB.Model{} = model) do
+    [model.provider_model_id, model.model, model.id]
+    |> Enum.find_value([], &known_thinking_levels/1)
+  end
+
+  defp known_thinking_levels(model_id) when is_binary(model_id) do
+    model_name = google_model_name(model_id)
+
+    cond do
+      model_name_matches?(model_name, "gemini-3.7-flash") -> [:low, :medium, :high]
+      model_name_matches?(model_name, "gemini-3.1-pro") -> [:low, :medium, :high]
+      true -> nil
+    end
+  end
+
+  defp known_thinking_levels(_model_id), do: nil
+
+  defp model_name_matches?(model_name, base_name),
+    do: model_name == base_name or String.starts_with?(model_name, base_name <> "-")
+
+  defp google_model_name(model_id) do
+    model_id
+    |> String.split("/")
+    |> List.last()
+    |> String.split(":", parts: 2)
+    |> List.last()
+  end
+
+  defp get_nested(value, []), do: value
+
+  defp get_nested(value, [key | rest]) when is_map(value) do
+    cond do
+      Map.has_key?(value, key) -> get_nested(Map.get(value, key), rest)
+      Map.has_key?(value, to_string(key)) -> get_nested(Map.get(value, to_string(key)), rest)
+      true -> nil
+    end
+  end
+
+  defp get_nested(_value, _path), do: nil
 
   @impl ReqLLM.Provider
   def translate_options(:image, _model, opts) do
@@ -1274,14 +1336,13 @@ defmodule ReqLLM.Providers.Google do
     |> maybe_put(:labels, request.options[:labels])
   end
 
-  defp gemini_3_or_later?(%LLMDB.Model{family: family}) when is_binary(family),
-    do: String.starts_with?(family, "gemini-3")
-
-  defp gemini_3_or_later?(%LLMDB.Model{id: id}) when is_binary(id),
-    do: String.starts_with?(id, "gemini-3")
+  defp gemini_3_or_later?(%LLMDB.Model{} = model) do
+    [model.provider_model_id, model.model, model.id, model.family]
+    |> Enum.any?(&gemini_3_or_later?/1)
+  end
 
   defp gemini_3_or_later?(id) when is_binary(id),
-    do: String.starts_with?(id, "gemini-3")
+    do: id |> google_model_name() |> String.starts_with?("gemini-3")
 
   defp gemini_3_or_later?(_), do: false
 

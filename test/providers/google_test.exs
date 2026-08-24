@@ -1893,6 +1893,66 @@ defmodule ReqLLM.Providers.GoogleTest do
       end
     end
 
+    test "uses known thinking constraints when explicit model specs omit metadata" do
+      models = [
+        LLMDB.Model.new!(%{provider: :google, id: "gemini-3.7-flash"}),
+        LLMDB.Model.new!(%{
+          provider: :google,
+          id: "custom-gemini-pro",
+          provider_model_id: "publishers/google/models/gemini-3.1-pro-preview"
+        })
+      ]
+
+      for model <- models do
+        assert {translated_opts, []} =
+                 Google.translate_options(:chat, model, reasoning_effort: :minimal)
+
+        assert translated_opts[:google_thinking_level] == :low
+
+        assert {validated_opts, []} =
+                 Google.pre_validate_options(:chat, model,
+                   provider_options: [reasoning_effort: :minimal]
+                 )
+
+        assert validated_opts[:provider_options][:google_thinking_level] == :low
+      end
+    end
+
+    test "uses structured capability metadata for supported thinking levels" do
+      model =
+        LLMDB.Model.new!(%{
+          provider: :google,
+          id: "gemini-3-custom",
+          capabilities: %{
+            reasoning: %{
+              enabled: true,
+              effort: %{supported: true, values: ["minimal", "high"]}
+            }
+          }
+        })
+
+      for {effort, expected_level} <- [low: :minimal, medium: :high] do
+        assert {translated_opts, []} =
+                 Google.translate_options(:chat, model, reasoning_effort: effort)
+
+        assert translated_opts[:google_thinking_level] == expected_level
+      end
+    end
+
+    test "ignores malformed supported thinking metadata" do
+      model =
+        LLMDB.Model.new!(%{
+          provider: :google,
+          id: "gemini-3-custom",
+          extra: %{"reasoning_options" => "invalid"}
+        })
+
+      assert {translated_opts, []} =
+               Google.translate_options(:chat, model, reasoning_effort: :minimal)
+
+      assert translated_opts[:google_thinking_level] == :minimal
+    end
+
     test "translate_options uses google_thinking_budget for reasoning_token_budget even on Gemini 3" do
       {:ok, model} = ReqLLM.model(%{provider: :google, id: "gemini-3-flash"})
 
