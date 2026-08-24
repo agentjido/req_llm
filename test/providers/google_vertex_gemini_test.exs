@@ -708,15 +708,11 @@ defmodule ReqLLM.Providers.GoogleVertex.GeminiTest do
     end
 
     test "translate_options maps reasoning_effort levels to google_thinking_level for Gemini 3 models" do
-      model = %LLMDB.Model{
-        id: "gemini-3.1-pro-preview",
-        provider: :google_vertex,
-        capabilities: %{chat: true}
-      }
+      model = ReqLLM.model!("google_vertex:gemini-3.1-pro-preview")
 
       test_cases = [
-        {:none, :minimal},
-        {:minimal, :minimal},
+        {:none, :low},
+        {:minimal, :low},
         {:low, :low},
         {:medium, :medium},
         {:high, :high},

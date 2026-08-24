@@ -25,6 +25,8 @@ defmodule ReqLLM.Provider.Reasoning do
     xai: "xAI"
   }
 
+  @google_thinking_levels [:minimal, :low, :medium, :high]
+
   @spec normalize_options(keyword()) :: keyword()
   def normalize_options(opts) do
     opts
@@ -143,23 +145,25 @@ defmodule ReqLLM.Provider.Reasoning do
   defp google_effort_advisory(provider, canonical_opts, translated_opts)
        when provider in [:google, :google_vertex] do
     effort = canonical_opts |> Keyword.get(:reasoning_effort) |> normalize_effort()
-    level = Keyword.get(translated_opts, :google_thinking_level)
+    level = translated_opts |> Keyword.get(:google_thinking_level) |> normalize_effort()
 
     case {effort, level} do
-      {effort, level} when effort in [:xhigh, :max] and level in [:high, "high"] ->
-        %{
-          kind: :clamped,
-          option: :reasoning_effort,
-          message:
-            ":reasoning_effort #{inspect(effort)} was clamped to Gemini thinking level :high"
-        }
-
-      {:none, level} when level in [:minimal, "minimal"] ->
+      {:none, level} when level in @google_thinking_levels ->
         %{
           kind: :lossy,
           option: :reasoning_effort,
           message:
-            ":reasoning_effort :none has no exact Gemini thinking-level mapping and was translated to :minimal"
+            ":reasoning_effort :none has no exact Gemini thinking-level mapping and was translated to #{inspect(level)}"
+        }
+
+      {effort, level}
+      when effort in [:minimal, :low, :medium, :high, :xhigh, :max] and
+             level in @google_thinking_levels and effort != level ->
+        %{
+          kind: :clamped,
+          option: :reasoning_effort,
+          message:
+            ":reasoning_effort #{inspect(effort)} was clamped to Gemini thinking level #{inspect(level)}"
         }
 
       _ ->

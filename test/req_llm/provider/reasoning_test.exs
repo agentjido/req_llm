@@ -239,6 +239,21 @@ defmodule ReqLLM.Provider.ReasoningTest do
       assert log =~ ":reasoning_effort :xhigh was clamped"
     end
 
+    test "reports model-specific Gemini effort clamping" do
+      model = ReqLLM.model!("google:gemini-3.7-flash")
+
+      log =
+        capture_log(fn ->
+          assert {:ok, processed} =
+                   Options.process(Google, :chat, model, reasoning_effort: :minimal)
+
+          assert processed[:google_thinking_level] == :low
+        end)
+
+      assert log =~ ":reasoning_effort :minimal was clamped"
+      assert log =~ "thinking level :low"
+    end
+
     test "exposes advisories through sanitized request planning" do
       assert {:ok, openai_plan} =
                ReqLLM.plan("openai:gpt-5", :chat, reasoning_token_budget: 4_096)

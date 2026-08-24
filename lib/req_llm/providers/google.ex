@@ -83,6 +83,8 @@ defmodule ReqLLM.Providers.Google do
 
   require Logger
 
+  @thinking_level_ranks %{minimal: 0, low: 1, medium: 2, high: 3}
+
   @provider_schema [
     google_api_version: [
       type: {:in, ["v1", "v1beta"]},
@@ -767,7 +769,7 @@ defmodule ReqLLM.Providers.Google do
               provider_opts
 
             :error ->
-              level = translate_reasoning_effort_to_level(effort_value)
+              level = translate_reasoning_effort_to_level(effort_value, model)
               Keyword.put(provider_opts, :google_thinking_level, level)
           end
 
@@ -828,8 +830,10 @@ defmodule ReqLLM.Providers.Google do
     end
   end
 
-  defp translate_reasoning_effort_to_level(effort) do
-    case ReqLLM.Provider.Reasoning.normalize_effort(effort) do
+  defp translate_reasoning_effort_to_level(effort, model) do
+    effort
+    |> ReqLLM.Provider.Reasoning.normalize_effort()
+    |> case do
       :none -> :minimal
       :minimal -> :minimal
       :low -> :low
@@ -839,7 +843,40 @@ defmodule ReqLLM.Providers.Google do
       :max -> :high
       _ -> :medium
     end
+    |> closest_supported_thinking_level(model)
   end
+
+  defp closest_supported_thinking_level(level, model) do
+    case supported_thinking_levels(model) do
+      [] ->
+        level
+
+      supported_levels ->
+        requested_rank = Map.fetch!(@thinking_level_ranks, level)
+
+        Enum.min_by(supported_levels, fn supported_level ->
+          supported_rank = Map.fetch!(@thinking_level_ranks, supported_level)
+          {abs(supported_rank - requested_rank), supported_rank}
+        end)
+    end
+  end
+
+  defp supported_thinking_levels(%LLMDB.Model{extra: extra}) when is_map(extra) do
+    reasoning_options = extra["reasoning_options"] || extra[:reasoning_options] || []
+
+    reasoning_options
+    |> List.wrap()
+    |> Enum.find_value([], fn
+      %{"type" => "effort", "values" => values} when is_list(values) -> values
+      %{type: type, values: values} when type in ["effort", :effort] and is_list(values) -> values
+      _ -> nil
+    end)
+    |> Enum.map(&ReqLLM.Provider.Reasoning.normalize_effort/1)
+    |> Enum.filter(&Map.has_key?(@thinking_level_ranks, &1))
+    |> Enum.uniq()
+  end
+
+  defp supported_thinking_levels(_model), do: []
 
   @impl ReqLLM.Provider
   def translate_options(:image, _model, opts) do
@@ -874,7 +911,7 @@ defmodule ReqLLM.Providers.Google do
           Keyword.put(opts, :google_thinking_budget, reasoning_budget)
 
         reasoning_effort && gemini_3_or_later?(model) ->
-          level = translate_reasoning_effort_to_level(reasoning_effort)
+          level = translate_reasoning_effort_to_level(reasoning_effort, model)
           Keyword.put(opts, :google_thinking_level, level)
 
         reasoning_effort ->

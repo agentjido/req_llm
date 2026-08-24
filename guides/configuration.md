@@ -65,6 +65,9 @@ Provider-native controls such as Anthropic `thinking` and Google
 canonical and provider-native controls unless you rely on the provider's
 existing precedence rules.
 
+For Gemini 3 models, ReqLLM maps canonical effort to the nearest thinking level
+that the selected model supports.
+
 Lossy or ignored reasoning translations are non-fatal by default and emit a
 deterministic warning. `ReqLLM.plan/3` reports the same sanitized warnings
 without making a request. These reasoning advisories do not introduce new

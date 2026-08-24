@@ -1879,6 +1879,20 @@ defmodule ReqLLM.Providers.GoogleTest do
       end
     end
 
+    test "translate_options uses supported thinking levels from Gemini model metadata" do
+      for model_spec <- ["google:gemini-3.7-flash", "google:gemini-3.1-pro-preview"] do
+        model = ReqLLM.model!(model_spec)
+
+        for effort <- [:none, :minimal] do
+          {translated_opts, _warnings} =
+            Google.translate_options(:chat, model, reasoning_effort: effort)
+
+          assert Keyword.get(translated_opts, :google_thinking_level) == :low
+          refute Keyword.has_key?(translated_opts, :google_thinking_budget)
+        end
+      end
+    end
+
     test "translate_options uses google_thinking_budget for reasoning_token_budget even on Gemini 3" do
       {:ok, model} = ReqLLM.model(%{provider: :google, id: "gemini-3-flash"})
 
