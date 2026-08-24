@@ -121,6 +121,34 @@ xAI's native structured outputs have limitations (auto-sanitized by ReqLLM):
 - `anyOf`
 - `additionalProperties: false` (enforced on root)
 
+## Structured Outputs with Agent Tools
+
+Grok-4 family models can return a json_schema object and run server-side tools
+in the same request. Pass `xai_tools` into `generate_object/4`; ReqLLM keeps
+native structured output (`response_format` / Responses `text.format`) and does
+not force `parallel_tool_calls: false`.
+
+```elixir
+schema = [
+  headline: [type: :string, required: true],
+  sources: [type: {:list, :string}, required: true]
+]
+
+{:ok, response} =
+  ReqLLM.generate_object(
+    "xai:grok-4",
+    "What is the latest news about AI?",
+    schema,
+    xai_tools: [%{type: "web_search"}]
+  )
+
+response.object
+response.usage.tool_usage.web_search
+```
+
+Client-side function tools still select `:tool_strict` and force a
+`structured_output` tool call.
+
 ## Web Search Cost Tracking
 
 Web search usage and costs are tracked in `response.usage`:

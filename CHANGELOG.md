@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Bug Fixes:
+
+* xai: keep web_search enabled for generate_object on Grok-4 family models
+
 <!-- changelog -->
 
 ## [v1.21.0](https://github.com/agentjido/req_llm/compare/v1.20.0...v1.21.0) (2026-08-23)

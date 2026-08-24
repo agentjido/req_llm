@@ -25,10 +25,15 @@ defmodule ReqLLM.Providers.XAI do
 
   ### Tool Calling Fallback
 
-  For legacy models or when other tools are present:
+  For legacy models or when client-side function tools are present:
   - Uses a synthetic `structured_output` tool with forced `tool_choice`
   - Works on all models as fallback
   - Automatically used for `grok-2` and `grok-2-vision` (pre-1212 versions)
+
+  Built-in agent tools (`xai_tools`, e.g. `web_search` / `x_search`) stay on the
+  native json_schema path. xAI supports structured outputs together with those
+  server-side tools on Grok-4 family models; forcing `tool_strict` would pin
+  `tool_choice` to `structured_output` and prevent search from running.
 
   The mode is automatically selected based on model capabilities, or can be explicitly
   controlled via `:xai_structured_output_mode` option.
@@ -94,6 +99,15 @@ defmodule ReqLLM.Providers.XAI do
           "Generate a person profile",
           schema,
           provider_options: [xai_structured_output_mode: :json_schema]
+        )
+
+      # Structured output grounded in live web search
+      {:ok, response} =
+        ReqLLM.generate_object(
+          "xai:grok-4",
+          "What is the latest news about AI?",
+          schema,
+          xai_tools: [%{type: "web_search"}]
         )
   """
 
@@ -421,6 +435,8 @@ defmodule ReqLLM.Providers.XAI do
 
     case sanitize_schema_for_xai(json_schema) do
       {:ok, sanitized_schema} ->
+        opts = preserve_builtin_tools(opts)
+
         opts_with_format =
           opts
           |> Keyword.update(
@@ -433,9 +449,8 @@ defmodule ReqLLM.Providers.XAI do
                   strict: true,
                   schema: sanitized_schema
                 }
-              },
-              parallel_tool_calls: false
-            ],
+              }
+            ] ++ maybe_parallel_tool_calls_opt(opts),
             fn provider_opts ->
               provider_opts
               |> Keyword.put(:response_format, %{
@@ -446,7 +461,7 @@ defmodule ReqLLM.Providers.XAI do
                   schema: sanitized_schema
                 }
               })
-              |> Keyword.put(:parallel_tool_calls, false)
+              |> maybe_disable_parallel_tool_calls(opts)
             end
           )
           |> Keyword.delete(:tools)
@@ -616,7 +631,8 @@ defmodule ReqLLM.Providers.XAI do
   1. If explicit `xai_structured_output_mode` is set, validate and use it
   2. If `response_format` with `json_schema` is present in options, force `:json_schema`
   3. If `:auto`:
-     - Use `:json_schema` when model supports it AND no other tools present
+     - Use `:json_schema` when model supports it AND no client-side function tools present
+     - Built-in agent tools (`xai_tools`) do not force `:tool_strict`
      - Otherwise use `:tool_strict`
 
   ## Examples
@@ -629,6 +645,9 @@ defmodule ReqLLM.Providers.XAI do
 
       iex> determine_output_mode(%LLMDB.Model{model: "grok-3"}, tools: [%{name: "other"}])
       :tool_strict
+
+      iex> determine_output_mode(%LLMDB.Model{model: "grok-3"}, xai_tools: [%{type: "web_search"}])
+      :json_schema
   """
   @spec determine_output_mode(LLMDB.Model.t(), keyword()) :: :json_schema | :tool_strict
   def determine_output_mode(model, opts) do
@@ -669,6 +688,55 @@ defmodule ReqLLM.Providers.XAI do
     end
   end
 
+  defp preserve_builtin_tools(opts) do
+    tools = List.wrap(Keyword.get(opts, :tools, []))
+    {builtin, rest} = Enum.split_with(tools, &xai_tool_entry?/1)
+
+    opts =
+      if rest == [] do
+        Keyword.delete(opts, :tools)
+      else
+        Keyword.put(opts, :tools, rest)
+      end
+
+    case builtin do
+      [] ->
+        opts
+
+      _ ->
+        existing = resolve_xai_tools(opts)
+        Keyword.put(opts, :xai_tools, existing ++ builtin)
+    end
+  end
+
+  defp maybe_disable_parallel_tool_calls(provider_opts, opts) do
+    if built_in_agent_tools?(opts) do
+      provider_opts
+    else
+      Keyword.put(provider_opts, :parallel_tool_calls, false)
+    end
+  end
+
+  defp maybe_parallel_tool_calls_opt(opts) do
+    if built_in_agent_tools?(opts) do
+      []
+    else
+      [parallel_tool_calls: false]
+    end
+  end
+
+  defp built_in_agent_tools?(opts) do
+    from_xai = opts |> resolve_xai_tools() |> Enum.any?(&built_in_tool?/1)
+
+    from_tools =
+      opts
+      |> Keyword.get(:tools, [])
+      |> List.wrap()
+      |> Enum.any?(&xai_tool_entry?/1)
+
+    from_xai or from_tools
+  end
+
   defp has_other_tools?(opts) do
     tools = Keyword.get(opts, :tools, [])
 
@@ -679,7 +747,7 @@ defmodule ReqLLM.Providers.XAI do
           _ -> nil
         end
 
-      name != "structured_output"
+      name != "structured_output" and name != nil
     end)
   end
 

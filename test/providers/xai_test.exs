@@ -165,6 +165,18 @@ defmodule ReqLLM.Providers.XAITest do
 
       assert XAI.determine_output_mode(model, tools: [tool_struct]) == :tool_strict
     end
+
+    test "keeps :json_schema when only built-in xAI agent tools are present" do
+      {:ok, model} = ReqLLM.model("xai:grok-3")
+
+      assert XAI.determine_output_mode(model, xai_tools: [%{type: "web_search"}]) == :json_schema
+
+      assert XAI.determine_output_mode(model,
+               provider_options: [xai_tools: [%{type: "x_search"}]]
+             ) == :json_schema
+
+      assert XAI.determine_output_mode(model, tools: [%{type: "web_search"}]) == :json_schema
+    end
   end
 
   describe "mode selection - explicit mode override" do
@@ -372,6 +384,35 @@ defmodule ReqLLM.Providers.XAITest do
       assert length(tools) == 2
       assert Enum.any?(tools, &(&1.name == "structured_output"))
       assert Enum.any?(tools, &(&1.name == "other_tool"))
+    end
+
+    test "keeps json_schema and built-in agent tools together", %{compiled_schema: schema} do
+      {:ok, request} =
+        XAI.prepare_request(:object, "xai:grok-4.3", "Generate data",
+          compiled_schema: schema,
+          xai_tools: [%{type: "web_search"}]
+        )
+
+      provider_options = request.options[:provider_options] || []
+      assert provider_options[:response_format][:type] == "json_schema"
+      refute Keyword.get(provider_options, :parallel_tool_calls) == false
+      assert request.options[:xai_api_type] == :responses
+      assert request.url.path == "/responses"
+    end
+
+    test "moves web_search from :tools onto xai_tools for object requests", %{
+      compiled_schema: schema
+    } do
+      {:ok, request} =
+        XAI.prepare_request(:object, "xai:grok-4.3", "Generate data",
+          compiled_schema: schema,
+          tools: [%{type: "web_search"}]
+        )
+
+      provider_options = request.options[:provider_options] || []
+      assert provider_options[:response_format][:type] == "json_schema"
+      assert request.options[:xai_tools] == [%{type: "web_search"}]
+      refute Map.has_key?(request.options, :tools)
     end
 
     test "honors explicit mode overrides", %{compiled_schema: schema} do
@@ -680,6 +721,24 @@ defmodule ReqLLM.Providers.XAITest do
       decoded = ReqLLM.Test.Helpers.json_body(updated_request)
 
       assert decoded["response_format"] == %{"type" => "json_object"}
+    end
+
+    test "encode_body for object + web_search uses Responses text format and keeps search" do
+      compiled_schema = %{schema: @test_schema, name: "test_output"}
+
+      {:ok, request} =
+        XAI.prepare_request(:object, "xai:grok-4.3", "What is the latest news?",
+          compiled_schema: compiled_schema,
+          xai_tools: [%{type: "web_search"}]
+        )
+
+      encoded = XAI.encode_body(request)
+      decoded = ReqLLM.Test.Helpers.json_body(encoded)
+
+      assert decoded["tools"] == [%{"type" => "web_search"}]
+      assert decoded["text"]["format"]["type"] == "json_schema"
+      refute decoded["parallel_tool_calls"] == false
+      refute Map.has_key?(decoded, "tool_choice")
     end
 
     test "encode_body with xAI-specific options" do
