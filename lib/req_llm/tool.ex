@@ -529,7 +529,11 @@ defmodule ReqLLM.Tool do
     |> Enum.flat_map(fn {key, value} ->
       case normalize_key_and_field_opts(key, schema_key_map, schema_entries) do
         {normalized_key, field_opts} when is_atom(normalized_key) ->
-          [{normalized_key, normalize_typed_value(value, field_opts)}]
+          if Map.has_key?(schema_entries, normalized_key) do
+            [{normalized_key, normalize_typed_value(value, field_opts)}]
+          else
+            []
+          end
 
         _ ->
           []
