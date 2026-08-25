@@ -525,12 +525,17 @@ defmodule ReqLLM.Tool do
       |> Map.keys()
       |> Map.new(fn key -> {Atom.to_string(key), key} end)
 
-    Map.new(input, fn {key, value} ->
-      {normalized_key, field_opts} =
-        normalize_key_and_field_opts(key, schema_key_map, schema_entries)
+    input
+    |> Enum.flat_map(fn {key, value} ->
+      case normalize_key_and_field_opts(key, schema_key_map, schema_entries) do
+        {normalized_key, field_opts} when is_atom(normalized_key) ->
+          [{normalized_key, normalize_typed_value(value, field_opts)}]
 
-      {normalized_key, normalize_typed_value(value, field_opts)}
+        _ ->
+          []
+      end
     end)
+    |> Map.new()
   end
 
   defp normalize_input_keys(input, _parameter_schema), do: input
