@@ -1271,6 +1271,41 @@ defmodule ReqLLM.Providers.AnthropicTest do
       assert decode.("some_future_reason") == :unknown
     end
 
+    test "decode_response reads thinking tokens from output_tokens_details" do
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
+
+      decode = fn usage ->
+        data = %{
+          "id" => "msg_01ABC123",
+          "type" => "message",
+          "role" => "assistant",
+          "content" => [%{"type" => "text", "text" => "ok"}],
+          "stop_reason" => "end_turn",
+          "usage" => usage
+        }
+
+        {:ok, response} = ReqLLM.Providers.Anthropic.Response.decode_response(data, model)
+        response.usage.reasoning_tokens
+      end
+
+      # The shape the Messages API actually returns for adaptive thinking.
+      assert decode.(%{
+               "input_tokens" => 5,
+               "output_tokens" => 210,
+               "output_tokens_details" => %{"thinking_tokens" => 192}
+             }) == 192
+
+      # The pre-existing top-level field keeps working.
+      assert decode.(%{
+               "input_tokens" => 5,
+               "output_tokens" => 210,
+               "reasoning_output_tokens" => 192
+             }) == 192
+
+      # Absent from both places: zero rather than nil.
+      assert decode.(%{"input_tokens" => 5, "output_tokens" => 2}) == 0
+    end
+
     test "decode_response handles API errors with non-200 status" do
       # Create error response
       error_body = %{

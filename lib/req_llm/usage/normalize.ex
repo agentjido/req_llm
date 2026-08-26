@@ -159,6 +159,8 @@ defmodule ReqLLM.Usage.Normalize do
         get_in(usage, [:completion_tokens_details, :reasoning_tokens]) ||
         get_in(usage, ["output_tokens_details", "reasoning_tokens"]) ||
         get_in(usage, [:output_tokens_details, :reasoning_tokens]) ||
+        get_in(usage, ["output_tokens_details", "thinking_tokens"]) ||
+        get_in(usage, [:output_tokens_details, :thinking_tokens]) ||
         MapAccess.get(usage, "reasoning_tokens") ||
         MapAccess.get(usage, :reasoning_tokens) ||
         MapAccess.get(usage, "reasoning_output_tokens") ||

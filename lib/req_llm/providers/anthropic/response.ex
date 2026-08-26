@@ -309,7 +309,11 @@ defmodule ReqLLM.Providers.Anthropic.Response do
     output = Map.get(usage, "output_tokens", 0)
     cache_read = Map.get(usage, "cache_read_input_tokens", 0)
     cache_creation = Map.get(usage, "cache_creation_input_tokens", 0)
-    reasoning_tokens = Map.get(usage, "reasoning_output_tokens", 0)
+
+    reasoning_tokens =
+      get_in(usage, ["output_tokens_details", "thinking_tokens"]) ||
+        Map.get(usage, "reasoning_output_tokens", 0)
+
     tool_usage = anthropic_tool_usage(usage)
 
     base = %{
