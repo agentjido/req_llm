@@ -2207,6 +2207,103 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
       assert %{input_tokens: 8, output_tokens: 12, total_tokens: 20} = chunk.metadata.usage
     end
 
+    test "decodes failed event", %{model: model} do
+      event = %{
+        data: %{
+          "event" => "response.failed",
+          "response" => %{
+            "id" => "resp_123",
+            "status" => "failed",
+            "error" => %{"code" => "server_error", "message" => "The model run failed"}
+          }
+        }
+      }
+
+      assert [chunk] = ResponsesAPI.decode_stream_event(event, model)
+      assert chunk.type == :meta
+      assert chunk.metadata.terminal? == true
+      assert chunk.metadata.finish_reason == :error
+      assert chunk.metadata.error == "The model run failed"
+      assert chunk.metadata.response_id == "resp_123"
+    end
+
+    test "decodes failed event with usage so token spend is captured", %{model: model} do
+      event = %{
+        data: %{
+          "event" => "response.failed",
+          "response" => %{
+            "error" => %{"message" => "The model run failed"},
+            "usage" => %{"input_tokens" => 8, "output_tokens" => 12}
+          }
+        }
+      }
+
+      assert [chunk] = ResponsesAPI.decode_stream_event(event, model)
+      assert chunk.type == :meta
+      assert chunk.metadata.terminal? == true
+      assert chunk.metadata.finish_reason == :error
+      assert %{input_tokens: 8, output_tokens: 12, total_tokens: 20} = chunk.metadata.usage
+    end
+
+    test "decodes failed event falling back to error code", %{model: model} do
+      event = %{
+        data: %{
+          "event" => "response.failed",
+          "response" => %{"error" => %{"code" => "server_error"}}
+        }
+      }
+
+      assert [chunk] = ResponsesAPI.decode_stream_event(event, model)
+      assert chunk.metadata.terminal? == true
+      assert chunk.metadata.finish_reason == :error
+      assert chunk.metadata.error == "server_error"
+    end
+
+    test "decodes failed event without error details", %{model: model} do
+      event = %{data: %{"event" => "response.failed"}}
+
+      assert [chunk] = ResponsesAPI.decode_stream_event(event, model)
+      assert chunk.type == :meta
+      assert chunk.metadata.terminal? == true
+      assert chunk.metadata.finish_reason == :error
+      assert chunk.metadata.error == "response failed"
+    end
+
+    test "decodes error event", %{model: model} do
+      event = %{
+        data: %{
+          "event" => "error",
+          "code" => "rate_limit_exceeded",
+          "message" => "Rate limit exceeded",
+          "param" => nil
+        }
+      }
+
+      assert [chunk] = ResponsesAPI.decode_stream_event(event, model)
+      assert chunk.type == :meta
+      assert chunk.metadata.terminal? == true
+      assert chunk.metadata.finish_reason == :error
+      assert chunk.metadata.error == "Rate limit exceeded"
+    end
+
+    test "decodes error event falling back to code", %{model: model} do
+      event = %{data: %{"event" => "error", "code" => "server_error"}}
+
+      assert [chunk] = ResponsesAPI.decode_stream_event(event, model)
+      assert chunk.metadata.terminal? == true
+      assert chunk.metadata.finish_reason == :error
+      assert chunk.metadata.error == "server_error"
+    end
+
+    test "decodes error event without details", %{model: model} do
+      event = %{data: %{"event" => "error"}}
+
+      assert [chunk] = ResponsesAPI.decode_stream_event(event, model)
+      assert chunk.metadata.terminal? == true
+      assert chunk.metadata.finish_reason == :error
+      assert chunk.metadata.error == "stream error"
+    end
+
     test "handles [DONE] event", %{model: model} do
       event = %{data: "[DONE]"}
 

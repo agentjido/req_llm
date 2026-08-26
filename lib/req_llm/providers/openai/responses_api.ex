@@ -58,6 +58,8 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   - `response.usage` → usage metrics with reasoning_tokens
   - `response.completed` → terminal event with finish_reason
   - `response.incomplete` → terminal event for truncated responses
+  - `response.failed` → terminal event with `finish_reason: :error` and the failure message
+  - `error` → terminal event with `finish_reason: :error` and the error message
 
   ## Usage Normalization
 
@@ -228,6 +230,23 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
           },
           model.provider
         )
+
+      "response.failed" ->
+        message =
+          get_in(data, ["response", "error", "message"]) ||
+            get_in(data, ["response", "error", "code"]) ||
+            "response failed"
+
+        capture_completion_metadata(
+          data,
+          %{terminal?: true, finish_reason: :error, error: message},
+          model.provider
+        )
+
+      "error" ->
+        message = data["message"] || data["code"] || "stream error"
+
+        [ReqLLM.StreamChunk.meta(%{terminal?: true, finish_reason: :error, error: message})]
 
       _ ->
         []
