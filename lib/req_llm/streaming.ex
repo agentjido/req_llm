@@ -189,7 +189,9 @@ defmodule ReqLLM.Streaming do
     server_opts = [
       provider_mod: provider_mod,
       model: model,
-      protocol_parser: protocol_parser_for_transport(transport),
+      protocol_parser:
+        protocol_parser_for_transport(transport) ||
+          provider_protocol_parser(provider_mod, model, opts),
       fixture_path: maybe_capture_fixture(model, opts),
       total_timeout: total_timeout,
       total_timeout_deadline: total_timeout_deadline,
@@ -278,6 +280,12 @@ defmodule ReqLLM.Streaming do
       provider_mod.stream_transport(model, opts)
     else
       :http
+    end
+  end
+
+  defp provider_protocol_parser(provider_mod, model, opts) do
+    if function_exported?(provider_mod, :stream_protocol_parser, 2) do
+      provider_mod.stream_protocol_parser(model, opts)
     end
   end
 

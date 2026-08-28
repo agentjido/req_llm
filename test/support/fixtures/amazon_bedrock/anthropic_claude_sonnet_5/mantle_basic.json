@@ -1,0 +1,108 @@
+{
+  "model_spec": "amazon_bedrock:anthropic.claude-sonnet-5",
+  "provider": "amazon_bedrock",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjo0MDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiU2F5IGhpIGluIHR3byB3b3Jkcy4iLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJhbnRocm9waWMuY2xhdWRlLXNvbm5ldC01Iiwic3RyZWFtIjpmYWxzZX0="
+    },
+    "canonical_json": {
+      "max_tokens": 400,
+      "messages": [
+        {
+          "content": "Say hi in two words.",
+          "role": "user"
+        }
+      ],
+      "model": "anthropic.claude-sonnet-5",
+      "stream": false
+    },
+    "headers": {
+      "anthropic-version": [
+        "2023-06-01"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "host": [
+        "bedrock-mantle.eu-west-1.api.aws"
+      ],
+      "user-agent": [
+        "req/0.7.3"
+      ],
+      "x-amz-content-sha256": [
+        "a6c781af2da7d2f1eb7b212f589c1ed076526269a190532b2bfb5786730a46af"
+      ],
+      "x-amz-date": [
+        "20260828T123655Z"
+      ],
+      "x-amz-security-token": [
+        "[REDACTED:x-amz-security-token]"
+      ]
+    },
+    "method": "post",
+    "url": "https://bedrock-mantle.eu-west-1.api.aws/anthropic/v1/messages"
+  },
+  "response": {
+    "body": {
+      "content": [
+        {
+          "text": "Hi there!",
+          "type": "text"
+        }
+      ],
+      "id": "msg_bdrk_xfhtdp7oe43anx3ihfjuguusbe7ulxar67byydp6lnr5wyldzcgq",
+      "model": "claude-sonnet-5",
+      "role": "assistant",
+      "stop_details": null,
+      "stop_reason": "end_turn",
+      "stop_sequence": null,
+      "type": "message",
+      "usage": {
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 0,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "input_tokens": 14,
+        "output_tokens": 7,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard"
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "x-amzn-requestid,x-request-id,date,x-amzn-usage-reservation-quota,x-amzn-usage-reservation-remaining-quota,x-amzn-usage-reservation-spillover"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-length": [
+        "502"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 28 Aug 2026 12:38:20 GMT"
+      ],
+      "vary": [
+        "origin, access-control-request-method, access-control-request-headers"
+      ],
+      "x-amzn-requestid": [
+        "req_mr2vat7xjikzf26mltxs3edb4j44neeogehjrjdgsx2jv4ccbdfa"
+      ],
+      "x-request-id": [
+        "req_mr2vat7xjikzf26mltxs3edb4j44neeogehjrjdgsx2jv4ccbdfa"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

@@ -500,6 +500,15 @@ defmodule ReqLLM.Provider do
               {:ok, [map()], term()} | {:incomplete, term()} | {:error, term()}
 
   @doc """
+  Picks the stream protocol parser for a request, in the shape of
+  `parse_stream_protocol/2`. `nil` falls back to `parse_stream_protocol/2`.
+  """
+  @callback stream_protocol_parser(LLMDB.Model.t(), keyword()) ::
+              (binary(), term() ->
+                 {:ok, [map()], term()} | {:incomplete, term()} | {:error, term()})
+              | nil
+
+  @doc """
   Build complete Finch request for streaming operations.
 
   This callback creates a complete Finch.Request struct for streaming operations,
@@ -633,6 +642,7 @@ defmodule ReqLLM.Provider do
     init_stream_state: 1,
     flush_stream_state: 2,
     parse_stream_protocol: 2,
+    stream_protocol_parser: 2,
     attach_stream: 4,
     thinking_constraints: 0,
     credential_missing?: 1,

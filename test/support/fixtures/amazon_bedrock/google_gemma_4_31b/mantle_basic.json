@@ -1,0 +1,112 @@
+{
+  "model_spec": "amazon_bedrock:google.gemma-4-31b",
+  "provider": "amazon_bedrock",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjo0MDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiU2F5IGhpIGluIHR3byB3b3Jkcy4iLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJnb29nbGUuZ2VtbWEtNC0zMWIiLCJzdHJlYW0iOmZhbHNlfQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 400,
+      "messages": [
+        {
+          "content": "Say hi in two words.",
+          "role": "user"
+        }
+      ],
+      "model": "google.gemma-4-31b",
+      "stream": false
+    },
+    "headers": {
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "host": [
+        "bedrock-mantle.us-east-1.api.aws"
+      ],
+      "user-agent": [
+        "req/0.7.3"
+      ],
+      "x-amz-content-sha256": [
+        "1a58a0d709cd8fb7b0b037819b54d1e1278cf2d0b0ec4dae3dff83d490903708"
+      ],
+      "x-amz-date": [
+        "20260828T184413Z"
+      ],
+      "x-amz-security-token": [
+        "[REDACTED:x-amz-security-token]"
+      ]
+    },
+    "method": "post",
+    "url": "https://bedrock-mantle.us-east-1.api.aws/openai/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "annotations": [],
+            "content": "Hi there!",
+            "refusal": null,
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1787942653,
+      "id": "chatcmpl-eydth6wxlfizliggnoplvcbrpthvxrwlnjout3vhp2ictjccf2fq",
+      "model": "google.gemma-4-31b",
+      "object": "chat.completion",
+      "service_tier": "default",
+      "system_fingerprint": null,
+      "usage": {
+        "completion_tokens": 4,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "prompt_tokens": 39,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "total_tokens": 43
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "x-amzn-requestid,x-request-id,date,x-amzn-usage-reservation-quota,x-amzn-usage-reservation-remaining-quota,x-amzn-usage-reservation-spillover"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-length": [
+        "613"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 28 Aug 2026 18:44:14 GMT"
+      ],
+      "vary": [
+        "origin, access-control-request-method, access-control-request-headers"
+      ],
+      "x-amzn-requestid": [
+        "req_crfczcyiywnneje4auds525o2xf2p4vg3vvuaikmw6mrdfwger2q"
+      ],
+      "x-request-id": [
+        "req_crfczcyiywnneje4auds525o2xf2p4vg3vvuaikmw6mrdfwger2q"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

@@ -45,7 +45,35 @@ defmodule ReqLLM.Providers.AmazonBedrock.Anthropic do
   For :object operations, creates a synthetic "structured_output" tool to
   leverage Claude's tool-calling for structured JSON output.
   """
-  def format_request(_model_id, context, opts) do
+  def format_request(model_id, context, opts) do
+    body = messages_body(context, opts)
+
+    case get_in(opts, [:provider_options, :endpoint]) do
+      :mantle ->
+        body
+        |> Map.put(:model, model_id)
+        |> AdapterHelpers.maybe_add_param(:stream, opts[:stream])
+
+      _runtime ->
+        body
+        |> Map.put(:anthropic_version, "bedrock-2023-05-31")
+        |> maybe_add_anthropic_beta(opts)
+    end
+  end
+
+  @doc """
+  Anthropic headers for the bedrock-mantle Messages API.
+  """
+  def mantle_headers(opts) do
+    version = {"anthropic-version", "2023-06-01"}
+
+    case anthropic_betas(opts) do
+      [] -> [version]
+      betas -> [version, {"anthropic-beta", Enum.join(betas, ",")}]
+    end
+  end
+
+  defp messages_body(context, opts) do
     operation = opts[:operation]
 
     # For :object operation, we need to inject the structured_output tool
@@ -59,19 +87,12 @@ defmodule ReqLLM.Providers.AmazonBedrock.Anthropic do
     # Create a fake model struct for Anthropic.Context.encode_request
     model = %{model: opts[:model] || "claude-3-sonnet"}
 
-    # Delegate to native Anthropic context encoding
-    body = Anthropic.Context.encode_request(context, model)
-
-    # Remove model field - Bedrock specifies model in URL, not body
-    body = Map.delete(body, :model)
-
-    # Add Bedrock-specific parameters
     # Use 4096 for :object operations (need more tokens for structured output), 1024 otherwise
     default_max_tokens = if operation == :object, do: 4096, else: 1024
 
-    body
-    |> Map.put(:anthropic_version, "bedrock-2023-05-31")
-    |> maybe_add_anthropic_beta(opts)
+    context
+    |> Anthropic.Context.encode_request(model)
+    |> Map.delete(:model)
     |> AdapterHelpers.maybe_add_param(:max_tokens, opts[:max_tokens] || default_max_tokens)
     |> AdapterHelpers.maybe_add_param(:temperature, opts[:temperature])
     |> AdapterHelpers.maybe_add_param(:top_p, opts[:top_p])
@@ -83,12 +104,16 @@ defmodule ReqLLM.Providers.AmazonBedrock.Anthropic do
   end
 
   defp maybe_add_anthropic_beta(body, opts) do
-    case get_in(opts, [:provider_options, :anthropic_beta]) do
-      betas when is_list(betas) and betas != [] ->
-        Map.put(body, :anthropic_beta, betas)
+    case anthropic_betas(opts) do
+      [] -> body
+      betas -> Map.put(body, :anthropic_beta, betas)
+    end
+  end
 
-      _ ->
-        body
+  defp anthropic_betas(opts) do
+    case get_in(opts, [:provider_options, :anthropic_beta]) do
+      betas when is_list(betas) -> betas
+      _none -> []
     end
   end
 

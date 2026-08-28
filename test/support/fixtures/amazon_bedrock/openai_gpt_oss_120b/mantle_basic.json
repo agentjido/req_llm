@@ -1,0 +1,101 @@
+{
+  "model_spec": "amazon_bedrock:openai.gpt-oss-120b",
+  "provider": "amazon_bedrock",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjo0MDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiU2F5IGhpIGluIHR3byB3b3Jkcy4iLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJvcGVuYWkuZ3B0LW9zcy0xMjBiIiwic3RyZWFtIjpmYWxzZX0="
+    },
+    "canonical_json": {
+      "max_tokens": 400,
+      "messages": [
+        {
+          "content": "Say hi in two words.",
+          "role": "user"
+        }
+      ],
+      "model": "openai.gpt-oss-120b",
+      "stream": false
+    },
+    "headers": {
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "host": [
+        "bedrock-mantle.eu-west-1.api.aws"
+      ],
+      "user-agent": [
+        "req/0.7.3"
+      ],
+      "x-amz-content-sha256": [
+        "0f49aac91adbdcd5af147dc601d057414444c6428cd329c9423bbc1db5841526"
+      ],
+      "x-amz-date": [
+        "20260828T123822Z"
+      ],
+      "x-amz-security-token": [
+        "[REDACTED:x-amz-security-token]"
+      ]
+    },
+    "method": "post",
+    "url": "https://bedrock-mantle.eu-west-1.api.aws/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Hello there!",
+            "reasoning": "User asks: \"Say hi in two words.\" So respond with a two-word greeting, such as \"Hello there\". That's two words. Should be succinct.",
+            "refusal": null,
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1787920703,
+      "id": "chatcmpl-0ab5e713-7b64-44dc-84bd-82b912f1044b",
+      "model": "openai.gpt-oss-120b",
+      "object": "chat.completion",
+      "service_tier": "default",
+      "usage": {
+        "completion_tokens": 45,
+        "prompt_tokens": 73,
+        "total_tokens": 118
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "x-amzn-requestid,x-request-id,date,x-amzn-usage-reservation-quota,x-amzn-usage-reservation-remaining-quota,x-amzn-usage-reservation-spillover"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-length": [
+        "512"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 28 Aug 2026 12:38:23 GMT"
+      ],
+      "vary": [
+        "origin, access-control-request-method, access-control-request-headers"
+      ],
+      "x-amzn-requestid": [
+        "req_ecwwvya26w5q54nrb3jczka4b5z7ao35audmpsvwqdf26jzzv5wa"
+      ],
+      "x-request-id": [
+        "req_ecwwvya26w5q54nrb3jczka4b5z7ao35audmpsvwqdf26jzzv5wa"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

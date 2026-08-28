@@ -146,6 +146,26 @@ Passed via `:provider_options` keyword:
 - **Default**: Auto-detect based on tools presence
 - **Example**: `provider_options: [use_converse: true]`
 
+### `endpoint`
+
+- **Type**: `:runtime` | `:mantle`
+- **Purpose**: Bedrock endpoint the request goes to
+- **Default**: `:runtime`
+- **Example**: `provider_options: [endpoint: :mantle]`
+
+### `project`
+
+- **Type**: String
+- **Purpose**: bedrock-mantle project the request is attributed to
+- **Example**: `provider_options: [endpoint: :mantle, project: "proj_5d5ykleja6cwpirysbb7"]`
+
+### `mantle_base_path`
+
+- **Type**: `"/v1"` | `"/openai/v1"`
+- **Purpose**: Base path of the Chat Completions route on bedrock-mantle; each [model card](https://docs.aws.amazon.com/bedrock/latest/userguide/model-cards.html) states it
+- **Default**: `/openai/v1` for `openai.gpt-5*`, `google.gemma-4*` and `xai.*` models, `/v1` for every other family
+- **Example**: `provider_options: [endpoint: :mantle, mantle_base_path: "/openai/v1"]` for a model not covered by the default
+
 ### `additional_model_request_fields`
 
 - **Type**: Map

@@ -95,6 +95,7 @@ defmodule ReqLLM.Streaming.Fixtures do
       sensitive_keys = [
         "authorization",
         "x-api-key",
+        "x-amz-security-token",
         "anthropic-api-key",
         "openai-api-key",
         "x-auth-token",
