@@ -271,6 +271,47 @@ Optional metadata that can improve validation, usage reporting, and capability c
 
 You do not need to provide all of these just to make a request.
 
+### `capabilities`
+
+Use this map to state the features that the model supports. This metadata is important
+for operations such as embeddings because ReqLLM checks the capability before it sends
+the request. For example, a local Ollama embedding model whose ID does not contain
+`"embedding"` needs an explicit capability:
+
+```elixir
+model =
+  ReqLLM.model!(%{
+    provider: :ollama,
+    id: "nomic-embed-text",
+    capabilities: %{embeddings: true}
+  })
+
+ReqLLM.embed(model, "Hello")
+```
+
+The complete capabilities map supports these fields:
+
+- `chat` - A boolean that states if the model supports chat.
+- `embeddings` - A boolean, or a map with `min_dimensions`, `max_dimensions`, and
+  `default_dimensions`.
+- `rerank` - A boolean that states if the model supports reranking.
+- `reasoning` - A map with `enabled`, `effort`, `thinking`, and `token_budget`.
+  - `effort` supports `supported`, `values`, and `default`.
+  - `thinking` supports `supported`, `types`, `default_type`, `disable_supported`,
+    `raw_output_supported`, `summary_supported`, and `encrypted_supported`.
+  - `token_budget` can be a non-negative integer or a map with `min`, `max`, and
+    `default`.
+- `tools` - A map with `enabled`, `streaming`, `strict`, `parallel`, and
+  `forced_choice`.
+- `json` - A map with `native`, `schema`, and `strict`.
+- `caching` - A map with `type` set to `"implicit"` or `"explicit"`.
+- `streaming` - A map with `text` and `tool_calls`.
+- `batch`, `citations`, `code_execution`, and `context_management` - Maps with
+  `supported` and an optional list of `features`.
+
+The nested support fields are booleans unless the list above gives another type. Only
+set fields that you know. LLMDB adds defaults when it normalizes the model spec.
+
 ### `extra`
 
 Provider-specific metadata that does not belong in the common top-level fields.
