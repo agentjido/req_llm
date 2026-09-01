@@ -227,7 +227,8 @@ defmodule ReqLLM.Embedding do
            provider_module.prepare_request(:embedding, model, text, provider_opts),
          {:ok, %Req.Response{status: status} = response} when status in 200..299 <-
            ReqLLM.TimeoutBudget.request(request, deadline),
-         {:ok, embedding} <- extract_single_embedding(response.body) do
+         {:ok, embedding} <- extract_single_embedding(response.body),
+         :ok <- validate_single_embedding_dimensions(embedding, requested_dimensions(request)) do
       if return_usage do
         {:ok, %{embedding: embedding, usage: extract_usage(response)}}
       else
@@ -266,7 +267,9 @@ defmodule ReqLLM.Embedding do
            provider_module.prepare_request(:embedding, model, texts, provider_opts),
          {:ok, %Req.Response{status: status} = response} when status in 200..299 <-
            ReqLLM.TimeoutBudget.request(request, deadline),
-         {:ok, embeddings} <- extract_multiple_embeddings(response.body) do
+         {:ok, embeddings} <- extract_multiple_embeddings(response.body),
+         :ok <-
+           validate_multiple_embedding_dimensions(embeddings, requested_dimensions(request)) do
       if return_usage do
         {:ok, %{embedding: embeddings, usage: extract_usage(response)}}
       else
@@ -328,6 +331,42 @@ defmodule ReqLLM.Embedding do
      ReqLLM.Error.API.Response.exception(
        reason: "Invalid embedding response format",
        response_body: response
+     )}
+  end
+
+  defp requested_dimensions(%Req.Request{} = request) do
+    provider_opts = request.options[:provider_options] || []
+    provider_opts[:dimensions] || request.options[:dimensions]
+  end
+
+  defp validate_single_embedding_dimensions(_embedding, nil), do: :ok
+
+  defp validate_single_embedding_dimensions(embedding, expected) when is_list(embedding) do
+    validate_embedding_dimensions(length(embedding), expected)
+  end
+
+  defp validate_single_embedding_dimensions(_embedding, _expected), do: :ok
+
+  defp validate_multiple_embedding_dimensions(_embeddings, nil), do: :ok
+
+  defp validate_multiple_embedding_dimensions(embeddings, expected) do
+    embeddings
+    |> Enum.find_value(fn embedding ->
+      if is_list(embedding) and length(embedding) != expected, do: length(embedding)
+    end)
+    |> case do
+      nil -> :ok
+      actual -> validate_embedding_dimensions(actual, expected)
+    end
+  end
+
+  defp validate_embedding_dimensions(expected, expected), do: :ok
+
+  defp validate_embedding_dimensions(actual, expected) do
+    {:error,
+     ReqLLM.Error.API.Response.exception(
+       reason: "Embedding dimension mismatch: expected #{expected}, got #{actual}",
+       response_body: %{actual_dimensions: actual, expected_dimensions: expected}
      )}
   end
 

@@ -268,7 +268,7 @@ defmodule ReqLLM.TupleModelOptionsTest do
   end
 
   test "embedding tuple defaults change only the corresponding request key" do
-    stub_json(EmbeddingHTTP, embedding_response())
+    stub_embedding_json(EmbeddingHTTP)
     opts = openai_opts(EmbeddingHTTP)
 
     assert {:ok, _embedding} =
@@ -421,7 +421,7 @@ defmodule ReqLLM.TupleModelOptionsTest do
   end
 
   test "unsupported tuple defaults do not alter an applicable operation request" do
-    stub_json(EmbeddingHTTP, embedding_response())
+    stub_embedding_json(EmbeddingHTTP)
     opts = openai_opts(EmbeddingHTTP)
 
     assert {:ok, _embedding} =
@@ -453,6 +453,16 @@ defmodule ReqLLM.TupleModelOptionsTest do
     Req.Test.stub(owner, fn conn ->
       send(test_pid, {:request_body, owner, conn.body_params})
       Req.Test.json(conn, response)
+    end)
+  end
+
+  defp stub_embedding_json(owner) do
+    test_pid = self()
+
+    Req.Test.stub(owner, fn conn ->
+      dimensions = conn.body_params["dimensions"] || 2
+      send(test_pid, {:request_body, owner, conn.body_params})
+      Req.Test.json(conn, embedding_response(dimensions))
     end)
   end
 
@@ -520,9 +530,15 @@ defmodule ReqLLM.TupleModelOptionsTest do
     }
   end
 
-  defp embedding_response do
+  defp embedding_response(dimensions) do
     %{
-      "data" => [%{"embedding" => [0.1, 0.2], "index" => 0, "object" => "embedding"}],
+      "data" => [
+        %{
+          "embedding" => List.duplicate(0.1, dimensions),
+          "index" => 0,
+          "object" => "embedding"
+        }
+      ],
       "model" => "text-embedding-3-small",
       "object" => "list",
       "usage" => %{"prompt_tokens" => 1, "total_tokens" => 1}

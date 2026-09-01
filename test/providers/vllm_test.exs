@@ -77,6 +77,15 @@ defmodule ReqLLM.Providers.VLLMTest do
       assert request.method == :post
     end
 
+    test "prepare_request includes embedding dimensions in the body" do
+      model = vllm_model("embedding-model", capabilities: %{embeddings: true})
+
+      {:ok, request} =
+        VLLM.prepare_request(:embedding, model, "Follow the white rabbit.", dimensions: 32)
+
+      assert VLLM.build_body(request).dimensions == 32
+    end
+
     test "prepare_request rejects unsupported operations" do
       model = vllm_model()
       context = context_fixture()

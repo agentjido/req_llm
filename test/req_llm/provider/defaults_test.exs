@@ -68,6 +68,39 @@ defmodule ReqLLM.Provider.DefaultsTest do
     end
   end
 
+  describe "default_build_body/1 embeddings" do
+    test "includes dimensions from canonical embedding options" do
+      request = %Req.Request{
+        options: %{
+          operation: :embedding,
+          model: "embedding-model",
+          text: "Follow the white rabbit.",
+          dimensions: 32
+        }
+      }
+
+      assert Defaults.default_build_body(request) == %{
+               model: "embedding-model",
+               input: "Follow the white rabbit.",
+               dimensions: 32
+             }
+    end
+
+    test "keeps provider-specific dimensions precedence" do
+      request = %Req.Request{
+        options: %{
+          operation: :embedding,
+          model: "embedding-model",
+          text: "Follow the white rabbit.",
+          dimensions: 32,
+          provider_options: [dimensions: 64]
+        }
+      }
+
+      assert Defaults.default_build_body(request).dimensions == 64
+    end
+  end
+
   describe "encode_context_to_openai_format/2" do
     test "encodes text content correctly" do
       test_cases = [

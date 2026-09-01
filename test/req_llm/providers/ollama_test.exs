@@ -135,6 +135,20 @@ defmodule ReqLLM.Providers.OllamaTest do
   end
 
   describe "prepare_request/4" do
+    test "embedding requests include dimensions in the body" do
+      model = %{
+        ollama_model()
+        | id: "qwen3-embedding:0.6b",
+          model: "qwen3-embedding:0.6b",
+          capabilities: %{embeddings: true}
+      }
+
+      {:ok, request} =
+        Ollama.prepare_request(:embedding, model, "Follow the white rabbit.", dimensions: 32)
+
+      assert Ollama.build_body(request).dimensions == 32
+    end
+
     test "object requests use Ollama json_schema response format" do
       {:ok, compiled_schema} =
         ReqLLM.Schema.compile(answer: [type: :string, required: true])

@@ -1798,7 +1798,7 @@ defmodule ReqLLM.Provider.Defaults do
       input: input
     }
     |> maybe_put(:user, request.options[:user])
-    |> maybe_put(:dimensions, provider_opts[:dimensions])
+    |> maybe_put(:dimensions, provider_opts[:dimensions] || request.options[:dimensions])
     |> maybe_put(:encoding_format, provider_opts[:encoding_format])
   end
 
