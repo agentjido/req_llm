@@ -19,6 +19,20 @@ defmodule ReqLLM.EmbeddingTest do
   defmodule SlowHTTP do
   end
 
+  defmodule SingleDimensionMismatchHTTP do
+  end
+
+  defmodule BatchDimensionMismatchHTTP do
+  end
+
+  defp vllm_embedding_model do
+    LLMDB.Model.new!(%{
+      provider: :vllm,
+      id: "embedding-model",
+      capabilities: %{embeddings: true}
+    })
+  end
+
   defp setup_telemetry do
     test_pid = self()
     ref = System.unique_integer([:positive])
@@ -166,6 +180,51 @@ defmodule ReqLLM.EmbeddingTest do
                  api_key: "test-key",
                  total_timeout: 50,
                  req_http_options: [plug: {Req.Test, SlowHTTP}]
+               )
+    end
+
+    test "rejects a single embedding with unexpected dimensions" do
+      Req.Test.stub(SingleDimensionMismatchHTTP, fn conn ->
+        assert conn.body_params["dimensions"] == 2
+
+        Req.Test.json(conn, %{
+          "data" => [%{"embedding" => [0.1, 0.2, 0.3], "index" => 0}]
+        })
+      end)
+
+      assert {:error,
+              %ReqLLM.Error.API.Response{
+                reason: "Embedding dimension mismatch: expected 2, got 3",
+                response_body: %{actual_dimensions: 3, expected_dimensions: 2}
+              }} =
+               Embedding.embed(vllm_embedding_model(), "Hello",
+                 dimensions: 2,
+                 api_key: "test-key",
+                 req_http_options: [plug: {Req.Test, SingleDimensionMismatchHTTP}]
+               )
+    end
+
+    test "rejects a batch embedding with inconsistent dimensions" do
+      Req.Test.stub(BatchDimensionMismatchHTTP, fn conn ->
+        assert conn.body_params["dimensions"] == 2
+
+        Req.Test.json(conn, %{
+          "data" => [
+            %{"embedding" => [0.1, 0.2], "index" => 0},
+            %{"embedding" => [0.3, 0.4, 0.5], "index" => 1}
+          ]
+        })
+      end)
+
+      assert {:error,
+              %ReqLLM.Error.API.Response{
+                reason: "Embedding dimension mismatch: expected 2, got 3",
+                response_body: %{actual_dimensions: 3, expected_dimensions: 2}
+              }} =
+               Embedding.embed(vllm_embedding_model(), ["Hello", "World"],
+                 dimensions: 2,
+                 api_key: "test-key",
+                 req_http_options: [plug: {Req.Test, BatchDimensionMismatchHTTP}]
                )
     end
   end
@@ -321,7 +380,7 @@ defmodule ReqLLM.EmbeddingTest do
         Req.Test.json(conn, %{
           "data" => [
             %{
-              "embedding" => [0.1, -0.2, 0.3],
+              "embedding" => List.duplicate(0.1, 16),
               "index" => 0,
               "object" => "embedding"
             }
@@ -360,7 +419,7 @@ defmodule ReqLLM.EmbeddingTest do
           req_http_options: [plug: {Req.Test, __MODULE__.OpenRouterEmbedUsage}]
         )
 
-      assert embedding == [0.1, -0.2, 0.3]
+      assert length(embedding) == 16
       assert usage.input == 1
       assert usage.total_tokens == 1
     end
