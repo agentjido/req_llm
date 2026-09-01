@@ -73,5 +73,31 @@ defmodule ReqLLM.Providers.ZaiTest do
       assert assistant_msg["content"] == "hello"
       assert user_msg["content"] == "repeat"
     end
+
+    test "includes tool_call_id and name on tool result messages" do
+      {:ok, model} = ReqLLM.model("zai:glm-4.5")
+
+      context =
+        Context.new([
+          Context.user("What's the weather?"),
+          Context.assistant("",
+            tool_calls: [{"get_weather", %{"city" => "Shanghai"}, id: "call_123"}]
+          ),
+          Context.tool_result("call_123", "get_weather", "{\"temp\": 20}")
+        ])
+
+      request = %Req.Request{options: [context: context, model: model.model, stream: false]}
+
+      encoded_request = Zai.encode_body(request)
+      decoded = ReqLLM.Test.Helpers.json_body(encoded_request)
+
+      [_user_msg, assistant_msg, tool_result_msg] = decoded["messages"]
+
+      assert assistant_msg["role"] == "assistant"
+      assert tool_result_msg["role"] == "tool"
+      assert tool_result_msg["tool_call_id"] == "call_123"
+      assert tool_result_msg["name"] == "get_weather"
+      assert tool_result_msg["content"] == "{\"temp\": 20}"
+    end
   end
 end
