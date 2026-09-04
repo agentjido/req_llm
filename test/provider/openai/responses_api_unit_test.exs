@@ -2367,7 +2367,8 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
       payload = Jason.decode!(message)
 
       assert payload["type"] == "response.create"
-      assert payload["response"] == config.canonical_json
+      assert Map.delete(payload, "type") == config.canonical_json
+      refute Map.has_key?(payload, "response")
     end
 
     test "keeps previous_response_id with store false over websocket transport" do

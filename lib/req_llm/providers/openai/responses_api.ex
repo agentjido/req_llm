@@ -1200,7 +1200,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
       )
 
     body = build_request_body(context, model.id, cleaned_opts, nil)
-    create_event = %{"type" => "response.create", "response" => body}
+    create_event = Map.put(body, "type", "response.create")
 
     {:ok,
      %{

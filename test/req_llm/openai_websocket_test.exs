@@ -233,8 +233,10 @@ defmodule ReqLLM.OpenAIWebSocketTest do
     assert usage.total_tokens == 14
 
     assert_received {:responses_socket_message,
-                     %{"type" => "response.create", "response" => request}}
+                     %{"type" => "response.create", "model" => "gpt-5"} = request}
 
+    refute Map.has_key?(request, "response")
+    refute Map.has_key?(request, "stream")
     assert request["model"] == "gpt-5"
     assert Enum.any?(request["input"], fn item -> item["role"] == "user" end)
   end

@@ -78,6 +78,10 @@ lists these requirements as of 2026-09-03:
   `include: ["message.output_text.logprobs"]`.
 - Use `prompt_cache_options: %{ttl: "30m"}` instead of `prompt_cache_retention`.
 
+For WebSocket requests, `response.create` carries the request fields at the
+top level. It does not wrap them in `response`. Omit `stream` and `background`.
+See the [WebSocket event reference](https://developers.openai.com/api/reference/resources/responses/websocket-events).
+
 After API access is available, configure `OPENAI_API_KEY` in the environment or
 the local `.env` file. Start with one recorded request:
 

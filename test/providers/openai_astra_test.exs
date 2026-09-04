@@ -86,8 +86,12 @@ defmodule ReqLLM.Providers.OpenAIAstraTest do
     assert {:ok, websocket} = OpenAI.attach_websocket_stream(model, context, websocket_opts)
     assert [initial_message] = websocket.initial_messages
 
-    assert %{"type" => "response.create", "response" => websocket_body} =
-             Jason.decode!(initial_message)
+    assert %{"type" => "response.create", "model" => "gpt-6-astra"} =
+             websocket_event = Jason.decode!(initial_message)
+
+    refute Map.has_key?(websocket_event, "response")
+    refute Map.has_key?(websocket_event, "stream")
+    refute Map.has_key?(websocket_event, "background")
 
     assert stream_request.path == "/v1/responses"
     assert websocket.url == "wss://api.openai.com/v1/responses"
@@ -95,7 +99,7 @@ defmodule ReqLLM.Providers.OpenAIAstraTest do
     assert body["stream"] == false
     assert Map.delete(stream_body, "stream") == Map.delete(body, "stream")
     assert websocket.request_plan.transport == :websocket
-    assert websocket_body == Map.delete(body, "stream")
+    assert Map.delete(websocket_event, "type") == Map.delete(body, "stream")
     assert body["store"] == false
     assert body["prompt_cache_options"] == %{"ttl" => "30m"}
     assert body["include"] == ["reasoning.encrypted_content"]
