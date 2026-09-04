@@ -220,7 +220,7 @@ defmodule ReqLLM.Providers.OpenAI.AdapterHelpers do
   @doc """
   Checks if a model ID corresponds to an OpenAI reasoning model.
 
-  Reasoning models (o-series, gpt-5, codex) require special handling:
+  Reasoning models (o-series, gpt-5, gpt-6-astra, codex) require special handling:
   - Use `max_completion_tokens` instead of `max_tokens`
   - Support `reasoning_effort` parameter
 
@@ -228,7 +228,8 @@ defmodule ReqLLM.Providers.OpenAI.AdapterHelpers do
   """
   @spec reasoning_model?(term()) :: boolean()
   def reasoning_model?(model_id) when is_binary(model_id) do
-    o_series_model?(model_id) || gpt5_model?(model_id) || codex_model?(model_id)
+    o_series_model?(model_id) || gpt5_model?(model_id) || gpt6_astra_model?(model_id) ||
+      codex_model?(model_id)
   end
 
   def reasoning_model?(_), do: false
@@ -256,6 +257,12 @@ defmodule ReqLLM.Providers.OpenAI.AdapterHelpers do
   def gpt5_model?("gpt-5-chat-latest"), do: false
   def gpt5_model?(<<"gpt-5", _::binary>>), do: true
   def gpt5_model?(_), do: false
+
+  @doc "Checks if model is a GPT-6 Astra reasoning model."
+  @spec gpt6_astra_model?(term()) :: boolean()
+  def gpt6_astra_model?("gpt-6-astra"), do: true
+  def gpt6_astra_model?(<<"gpt-6-astra-", _::binary>>), do: true
+  def gpt6_astra_model?(_), do: false
 
   @doc "Checks if model is a GPT-5 Pro model."
   @spec gpt5_pro_model?(term()) :: boolean()

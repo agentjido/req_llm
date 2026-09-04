@@ -58,6 +58,63 @@ mix mc --sample
 mix mc --sample anthropic
 ```
 
+### GPT-6 Astra Launch Fixtures
+
+Use `llm_db` 2026.9.1 or later to resolve `openai:gpt-6-astra`. Keep Astra out
+of the default test models until live fixtures pass. The request tests in
+`test/providers/openai_astra_test.exs` run without API calls:
+
+```bash
+mix test test/providers/openai_astra_test.exs
+```
+
+The [OpenAI Astra guide](https://developers.openai.com/api/docs/guides/latest-model?model=gpt-6-astra)
+lists these requirements as of 2026-09-03:
+
+- Use Responses for tool calls.
+- Use `low`, `medium`, `high`, `xhigh`, or `max` reasoning effort. `none` and
+  `minimal` are not supported. The shared coverage tests use `low`.
+- Omit `temperature`, `top_p`, `top_logprobs`, and
+  `include: ["message.output_text.logprobs"]`.
+- Use `prompt_cache_options: %{ttl: "30m"}` instead of `prompt_cache_retention`.
+
+After API access is available, configure `OPENAI_API_KEY` in the environment or
+the local `.env` file. Start with one recorded request:
+
+```bash
+mix mc "openai:gpt-6-astra" --scenario basic --record --max-concurrency 1
+```
+
+Check the result before recording more scenarios. A model access error does
+not prove an API format change. After the basic request passes, record the
+remaining standard scenarios:
+
+```bash
+mix mc "openai:gpt-6-astra" \
+  --scenario streaming,usage,token_limit,context_append,tool_multi,tool_none,tool_round_trip,object_basic,object_streaming,reasoning \
+  --record --max-concurrency 1
+```
+
+Each scenario uses the existing output limits and test timeouts. The `reasoning`
+scenario records both HTTP and SSE responses. Review the captured request URLs,
+response items, tool call IDs, reasoning data, and usage fields in
+`test/support/fixtures/openai/gpt_6_astra/`. The expected URL ends in
+`/v1/responses`. The recorder updates compatibility evidence from the results.
+
+Replay the full set, then update and check the generated support reference:
+
+```bash
+mix mc "openai:gpt-6-astra" \
+  --scenario basic,streaming,usage,token_limit,context_append,tool_multi,tool_none,tool_round_trip,object_basic,object_streaming,reasoning
+mix req_llm.model_support --generate
+mix req_llm.model_support --check
+```
+
+The Astra guide also adds async tools, WebSocket mid-turn steering, and
+`configuration_update` input items. These features need separate implementation
+and live tests. The standard scenarios above do not verify them. The local
+WebSocket request test checks the request body only.
+
 ## Architecture
 
 ### Model Registry
