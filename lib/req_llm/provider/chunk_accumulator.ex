@@ -88,6 +88,7 @@ defmodule ReqLLM.Provider.ChunkAccumulator do
           content_parts: [ContentPart.t()],
           tool_calls: [tool_call_record()],
           arg_fragments: %{optional(non_neg_integer()) => iodata()},
+          tool_call_metadata: %{optional(non_neg_integer()) => map()},
           reasoning_details: [term()],
           logprobs: [term()],
           annotations: [term()],
@@ -101,6 +102,7 @@ defmodule ReqLLM.Provider.ChunkAccumulator do
             content_parts: [],
             tool_calls: [],
             arg_fragments: %{},
+            tool_call_metadata: %{},
             reasoning_details: [],
             logprobs: [],
             annotations: [],
@@ -184,6 +186,7 @@ defmodule ReqLLM.Provider.ChunkAccumulator do
       when is_map(metadata) do
     acc
     |> push_arg_fragment(metadata)
+    |> push_tool_call_metadata(metadata)
     |> push_reasoning_details(metadata)
     |> push_logprobs(metadata)
     |> push_annotations(metadata)
@@ -192,6 +195,22 @@ defmodule ReqLLM.Provider.ChunkAccumulator do
   end
 
   def push(%__MODULE__{} = acc, _chunk), do: acc
+
+  defp push_tool_call_metadata(acc, %{tool_call_metadata: %{index: index, metadata: metadata}})
+       when is_map(metadata) do
+    updates = Map.drop(metadata, @tool_call_control_metadata_keys)
+    by_index = Map.update(acc.tool_call_metadata, index, updates, &Map.merge(&1, updates))
+    %{acc | tool_call_metadata: by_index}
+  end
+
+  defp push_tool_call_metadata(acc, _metadata), do: acc
+
+  defp merge_tool_call_metadata(tool_call, by_index) do
+    case Map.get(by_index, tool_call.index) do
+      nil -> tool_call
+      updates -> Map.update(tool_call, :metadata, updates, &Map.merge(&1, updates))
+    end
+  end
 
   # Some servers (e.g. llama.cpp, vLLM) begin streaming `arguments` in the same
   # chunk as the tool name — valid per the OpenAI streaming spec. That leading
@@ -405,11 +424,12 @@ defmodule ReqLLM.Provider.ChunkAccumulator do
   @spec finalize_tool_calls_for_response(t()) :: [map()]
   def finalize_tool_calls_for_response(%__MODULE__{
         tool_calls: tool_calls,
-        arg_fragments: fragments
+        arg_fragments: fragments,
+        tool_call_metadata: metadata
       }) do
     tool_calls
     |> Enum.reverse()
-    |> Enum.map(&response_tool_call(&1, fragments))
+    |> Enum.map(&(merge_tool_call_metadata(&1, metadata) |> response_tool_call(fragments)))
   end
 
   defp response_tool_call(tool_call, fragments) do
@@ -503,10 +523,14 @@ defmodule ReqLLM.Provider.ChunkAccumulator do
     end
   end
 
-  defp finalize_message_tool_calls(%__MODULE__{tool_calls: tool_calls, arg_fragments: fragments}) do
+  defp finalize_message_tool_calls(%__MODULE__{
+         tool_calls: tool_calls,
+         arg_fragments: fragments,
+         tool_call_metadata: metadata
+       }) do
     tool_calls
     |> Enum.reverse()
-    |> Enum.map(&message_tool_call_struct(&1, fragments))
+    |> Enum.map(&(merge_tool_call_metadata(&1, metadata) |> message_tool_call_struct(fragments)))
   end
 
   defp message_tool_call_struct(tool_call, fragments) do

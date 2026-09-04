@@ -220,6 +220,8 @@ defmodule ReqLLM.Context do
 
   Provider-executed builtins do not require local results. Provider-native
   calls remain explicit and require a matching result before continuation.
+  Calls marked async may omit their results until a later turn. Append a delayed
+  result to the latest context with `append/2`, using the original call ID.
   The assistant and result messages otherwise retain their content, reasoning
   details, and metadata unchanged. This function never executes a tool or
   starts another model call.

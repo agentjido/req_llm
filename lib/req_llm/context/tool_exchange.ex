@@ -90,7 +90,8 @@ defmodule ReqLLM.Context.ToolExchange do
     result_ids = Enum.map(results, & &1.tool_call_id)
     duplicates = duplicates(result_ids)
     unknown = result_ids -- call_ids
-    missing = call_ids -- result_ids
+    required_ids = calls |> Enum.reject(& &1.async?) |> Enum.map(& &1.id)
+    missing = required_ids -- result_ids
     results_by_id = Map.new(results, &{&1.tool_call_id, &1})
     mismatches = mismatches(calls, results_by_id)
 
@@ -134,8 +135,8 @@ defmodule ReqLLM.Context.ToolExchange do
 
   defp valid_call?(_call), do: false
 
-  defp call_identity(%ToolCall{id: id, function: %{name: name}}) do
-    %{id: id, name: name}
+  defp call_identity(%ToolCall{id: id, function: %{name: name}} = call) do
+    %{id: id, name: name, async?: ToolCall.async?(call)}
   end
 
   defp normalize_calls(calls) do
@@ -193,7 +194,9 @@ defmodule ReqLLM.Context.ToolExchange do
   end
 
   defp ordered_results(calls, results_by_id) do
-    Enum.map(calls, fn call ->
+    calls
+    |> Enum.filter(&Map.has_key?(results_by_id, &1.id))
+    |> Enum.map(fn call ->
       case Map.fetch!(results_by_id, call.id) do
         %Message{name: nil} = message -> %{message | name: call.name}
         %Message{} = message -> message
@@ -228,7 +231,7 @@ defmodule ReqLLM.Context.ToolExchange do
 
   defp pending_calls?(%Message{role: :assistant, tool_calls: tool_calls})
        when is_list(tool_calls) do
-    Enum.any?(tool_calls, &(not provider_executed_call?(&1)))
+    Enum.any?(tool_calls, &(not provider_executed_call?(&1) and not ToolCall.async?(&1)))
   end
 
   defp pending_calls?(_message), do: false

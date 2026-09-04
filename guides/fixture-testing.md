@@ -114,10 +114,25 @@ mix req_llm.model_support --generate
 mix req_llm.model_support --check
 ```
 
-The Astra guide also adds async tools, WebSocket mid-turn steering, and
-`configuration_update` input items. These features need separate implementation
-and live tests. The standard scenarios above do not verify them. The local
-WebSocket request test checks the request body only.
+The branch also implements async function tools, ordered reasoning updates, and
+a persistent WebSocket session API for steering. See the
+[Astra usage guide](openai.md#gpt-6-astra-experimental). Local tests cover request
+validation, async metadata, delayed results, and steering events. The standard
+scenarios above do not verify these features against the service.
+
+After the standard live scenarios pass, verify these feature cases separately:
+
+- An async function call and text in one response, for both HTTP and SSE.
+- A result returned on a later turn with its original `call_id`, while another
+  async job remains pending.
+- A reasoning update before a user message, followed by another turn with the
+  same request-level effort. Check manual replay and `previous_response_id`.
+- Steering after `response.created`, including acceptance, interruption or
+  normal completion, and the automatic successor response.
+- Steering that requires a tool result, and a failed steer or disconnect.
+
+Capture the request and event sequence for each case. Keep Astra out of the
+default fixture matrix until the live results and replay pass.
 
 ## Architecture
 

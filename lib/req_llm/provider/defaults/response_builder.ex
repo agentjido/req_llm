@@ -187,7 +187,9 @@ defmodule ReqLLM.Provider.Defaults.ResponseBuilder do
     |> put_tool_call_metadata(other, profile)
   end
 
-  defp put_tool_call_metadata(%ToolCall{} = call, _source, :buffered), do: call
+  defp put_tool_call_metadata(%ToolCall{} = call, source, :buffered) do
+    ToolCall.put_metadata(call, Map.take(ToolCall.metadata(source), [:async, "async"]))
+  end
 
   defp put_tool_call_metadata(%ToolCall{} = call, source, _profile) do
     ToolCall.put_metadata(call, ToolCall.metadata(source))
