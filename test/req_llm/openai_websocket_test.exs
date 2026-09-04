@@ -3,6 +3,7 @@ defmodule ReqLLM.OpenAIWebSocketTest do
 
   alias ReqLLM.Error.API.Timeout
   alias ReqLLM.OpenAI.Realtime
+  alias ReqLLM.OpenAI.Responses
   alias ReqLLM.Streaming.WebSocketSession
 
   defmodule Router do
@@ -99,6 +100,29 @@ defmodule ReqLLM.OpenAIWebSocketTest do
     def handle_info(_message, test_pid) do
       {:ok, test_pid}
     end
+  end
+
+  defmodule ControlledResponsesSocket do
+    @behaviour WebSock
+
+    @impl true
+    def init(test_pid) do
+      send(test_pid, {:responses_connected, self()})
+      {:ok, test_pid}
+    end
+
+    @impl true
+    def handle_in({message, _opts}, test_pid) do
+      send(test_pid, {:responses_frame, Jason.decode!(message)})
+      {:ok, test_pid}
+    end
+
+    @impl true
+    def handle_info({:emit, event}, test_pid) do
+      {:push, {:text, Jason.encode!(event)}, test_pid}
+    end
+
+    def handle_info(:disconnect, test_pid), do: {:stop, :normal, {1000, "closed"}, test_pid}
   end
 
   defmodule MessageTooBigSocket do
@@ -214,6 +238,202 @@ defmodule ReqLLM.OpenAIWebSocketTest do
     {:ok, base_url: base_url, websocket_url: websocket_url}
   end
 
+  test "Responses session reads automatic steering continuations after either terminal event", %{
+    base_url: base_url
+  } do
+    Application.put_env(:req_llm, :openai_websocket_responses_socket, ControlledResponsesSocket)
+
+    for terminal <- ["response.incomplete", "response.completed"] do
+      {:ok, session} = Responses.connect("openai:gpt-6-astra", base_url: base_url)
+      assert_receive {:responses_connected, socket}
+
+      assert :ok =
+               Responses.response_create(session, %{
+                 "input" => "Draft a plan",
+                 "reasoning" => %{"effort" => "low"}
+               })
+
+      assert_receive {:responses_frame,
+                      %{
+                        "type" => "response.create",
+                        "model" => "gpt-6-astra",
+                        "input" => "Draft a plan"
+                      } = create}
+
+      refute Map.has_key?(create, "response")
+      emit_response(socket, "response.created", "resp_1")
+      assert {:ok, %{"response" => %{"id" => "resp_1"}}} = Responses.next_event(session)
+      assert :ok = Responses.steer(session, "resp_1", "Keep it small")
+      assert_receive {:responses_frame, frame}
+
+      assert frame == %{
+               "type" => "response.steer",
+               "previous_response_id" => "resp_1",
+               "input" => "Keep it small"
+             }
+
+      accepted = %{
+        "type" => "response.steer.accepted",
+        "steer" => %{"id" => "steer_1", "previous_response_id" => "resp_1"}
+      }
+
+      send(socket, {:emit, accepted})
+
+      emit_response(socket, terminal, "resp_1", %{
+        "incomplete_details" => %{"reason" => "steered"}
+      })
+
+      emit_response(socket, "response.created", "resp_2")
+      emit_response(socket, "response.completed", "resp_2")
+
+      assert {:ok, ^accepted} = Responses.next_event(session)
+
+      assert {:ok, %{"type" => ^terminal, "response" => %{"id" => "resp_1"}}} =
+               Responses.next_event(session)
+
+      assert {:ok, %{"type" => "response.created", "response" => %{"id" => "resp_2"}}} =
+               Responses.next_event(session)
+
+      assert {:ok, %{"type" => "response.completed", "response" => %{"id" => "resp_2"}}} =
+               Responses.next_event(session)
+
+      refute_received {:responses_frame, _}
+      assert :ok = Responses.close(session)
+    end
+  end
+
+  test "Responses session returns pending tool results on the same connection", %{
+    base_url: base_url
+  } do
+    Application.put_env(:req_llm, :openai_websocket_responses_socket, ControlledResponsesSocket)
+
+    {:ok, session} =
+      Responses.connect(%{provider: :openai, id: "gpt-6-astra"}, base_url: base_url)
+
+    assert_receive {:responses_connected, socket}
+    emit_response(socket, "response.created", "resp_tools")
+    assert {:ok, _} = Responses.next_event(session)
+
+    assert :ok =
+             Responses.steer(session, "resp_tools", [
+               %{"role" => "user", "content" => "Use the result"}
+             ])
+
+    assert_receive {:responses_frame, %{"type" => "response.steer"}}
+
+    pending = %{
+      "type" => "response.steer.pending",
+      "steer" => %{"id" => "steer_pending", "previous_response_id" => "resp_tools"},
+      "required_input" => [
+        %{"type" => "function_call_output", "call_id" => "call_1", "name" => "lookup"}
+      ]
+    }
+
+    emit_response(socket, "response.completed", "resp_tools")
+    send(socket, {:emit, pending})
+    assert {:ok, %{"type" => "response.completed"}} = Responses.next_event(session)
+    assert {:ok, ^pending} = Responses.next_event(session)
+
+    continuation = %{
+      "previous_response_id" => pending["steer"]["previous_response_id"],
+      "input" => [%{"type" => "function_call_output", "call_id" => "call_1", "output" => "Done"}],
+      "instructions" => "Use the report",
+      "tools" => [
+        %{
+          "type" => "function",
+          "name" => "lookup",
+          "parameters" => %{"type" => "object"},
+          "async" => true
+        }
+      ]
+    }
+
+    assert :ok = Responses.response_create(session, continuation)
+    assert_receive {:responses_frame, frame}
+    assert Map.drop(frame, ["model", "type"]) == continuation
+    emit_response(socket, "response.created", "resp_after_tools")
+    assert {:ok, %{"response" => %{"id" => "resp_after_tools"}}} = Responses.next_event(session)
+    Responses.close(session)
+  end
+
+  test "Responses session retains steering failures and does not retry after disconnect", %{
+    base_url: base_url
+  } do
+    Application.put_env(:req_llm, :openai_websocket_responses_socket, ControlledResponsesSocket)
+    {:ok, session} = Responses.connect("openai:gpt-6-astra", base_url: base_url)
+    assert_receive {:responses_connected, socket}
+
+    failed = %{
+      "type" => "response.steer.failed",
+      "steer" => %{"id" => "steer_1", "previous_response_id" => "resp_1", "input" => "Update"},
+      "error" => %{"code" => "response_not_found"}
+    }
+
+    send(socket, {:emit, failed})
+    assert {:ok, ^failed} = Responses.next_event(session)
+    send(socket, :disconnect)
+    assert :halt = Responses.next_event(session)
+    assert {:error, _} = Responses.steer(session, "resp_1", "Update")
+    refute_received {:responses_connected, _}
+    Responses.close(session)
+  end
+
+  test "Responses session validates Astra requests and steering before sending", %{
+    base_url: base_url
+  } do
+    Application.put_env(:req_llm, :openai_websocket_responses_socket, ControlledResponsesSocket)
+    {:ok, session} = Responses.connect("openai:gpt-6-astra", base_url: base_url)
+    assert_receive {:responses_connected, _socket}
+    update = %{"type" => "configuration_update", "reasoning" => %{"effort" => "high"}}
+
+    for payload <- [
+          %{input: "Hello"},
+          %{"stream" => false},
+          %{"background" => false},
+          %{"response" => %{}},
+          %{"model" => "gpt-5"},
+          %{"reasoning" => %{"effort" => "none"}},
+          %{"top_p" => 0.9},
+          %{"input" => [update, update]},
+          %{"input" => [update], "truncation" => "auto"},
+          %{"input" => [update], "context_management" => [%{"type" => "compaction"}]},
+          %{"input" => [update], "multi_agent" => %{"enabled" => true}}
+        ] do
+      assert {:error, %ReqLLM.Error.Invalid.Parameter{}} =
+               Responses.response_create(session, payload)
+    end
+
+    for input <- [
+          "",
+          [],
+          [%{"role" => "system", "content" => "No"}],
+          [%{"type" => "function_call_output", "call_id" => "call_1", "output" => "No"}]
+        ] do
+      assert {:error, _} = Responses.steer(session, "resp_1", input)
+    end
+
+    assert {:error, _} = Responses.steer(session, nil, "Hello")
+    other = %{session | model: ReqLLM.model!("openai:gpt-5")}
+    assert {:error, _} = Responses.steer(other, "resp_1", "Hello")
+    assert {:error, _} = Responses.response_create(other, %{"input" => [update]})
+    refute_received {:responses_frame, _}
+
+    assert :ok =
+             Responses.response_create(session, %{
+               "reasoning" => %{"effort" => "low"},
+               "input" => [update, %{"role" => "user", "content" => "Hello"}]
+             })
+
+    assert_receive {:responses_frame,
+                    %{"reasoning" => %{"effort" => "low"}, "input" => [^update, _]}}
+
+    Responses.close(session)
+  end
+
+  defp emit_response(socket, type, id, fields \\ %{}) do
+    send(socket, {:emit, %{"type" => type, "response" => Map.put(fields, "id", id)}})
+  end
+
   test "stream_text uses OpenAI responses websocket mode when requested", %{base_url: base_url} do
     {:ok, stream_response} =
       ReqLLM.stream_text(
@@ -233,8 +453,10 @@ defmodule ReqLLM.OpenAIWebSocketTest do
     assert usage.total_tokens == 14
 
     assert_received {:responses_socket_message,
-                     %{"type" => "response.create", "response" => request}}
+                     %{"type" => "response.create", "model" => "gpt-5"} = request}
 
+    refute Map.has_key?(request, "response")
+    refute Map.has_key?(request, "stream")
     assert request["model"] == "gpt-5"
     assert Enum.any?(request["input"], fn item -> item["role"] == "user" end)
   end

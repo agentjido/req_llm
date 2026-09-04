@@ -350,8 +350,9 @@ defmodule ReqLLM.Providers.OpenAI do
   end
 
   @doc false
-  def pre_validate_options(_operation, _model, opts) do
-    ReqLLM.Provider.Reasoning.normalize_effort_option(opts)
+  def pre_validate_options(_operation, model, opts) do
+    opts = ReqLLM.Provider.Reasoning.normalize_effort_option(opts)
+    ReqLLM.Providers.OpenAI.Astra.validate_options!(model, opts)
   end
 
   @impl ReqLLM.Provider

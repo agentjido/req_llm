@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-17T14:17:49Z",
+  "generated_at": "2026-09-04T19:26:34Z",
   "models": {
     "anthropic:claude-haiku-4-5-20251001": {
       "catalog_status": "present",
@@ -6359,6 +6359,304 @@
                   "failure_layer": null,
                   "fixtures": [
                     "basic"
+                  ],
+                  "mode": "record",
+                  "status": "pass"
+                }
+              ],
+              "proof": "fixture_replay"
+            }
+          }
+        }
+      }
+    },
+    "openai:gpt-6-astra": {
+      "catalog_status": "present",
+      "declared_operations": [
+        "text"
+      ],
+      "model": "gpt-6-astra",
+      "provider": "openai",
+      "surfaces": {
+        "openai.responses": {
+          "declaration": "declared",
+          "operation": "text",
+          "provider": "openai",
+          "scenarios": {
+            "astra_async_streaming": {
+              "observations": [
+                {
+                  "checked_at": "2026-09-04T19:22:44Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "astra_async_streaming"
+                  ],
+                  "mode": "record",
+                  "status": "pass"
+                },
+                {
+                  "checked_at": "2026-09-04T19:26:34Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "astra_async_streaming"
+                  ],
+                  "mode": "record",
+                  "status": "pass"
+                }
+              ],
+              "proof": "fixture_replay"
+            },
+            "astra_async_tools": {
+              "observations": [
+                {
+                  "checked_at": "2026-09-04T19:22:44Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "astra_async_tools_1",
+                    "astra_async_tools_2",
+                    "astra_async_tools_3"
+                  ],
+                  "mode": "record",
+                  "status": "pass"
+                },
+                {
+                  "checked_at": "2026-09-04T19:26:34Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "astra_async_tools_1",
+                    "astra_async_tools_2",
+                    "astra_async_tools_3"
+                  ],
+                  "mode": "record",
+                  "status": "pass"
+                }
+              ],
+              "proof": "fixture_replay"
+            },
+            "astra_reasoning_update": {
+              "observations": [
+                {
+                  "checked_at": "2026-09-04T19:22:44Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "astra_reasoning_update_1",
+                    "astra_reasoning_update_2",
+                    "astra_reasoning_update_3"
+                  ],
+                  "mode": "record",
+                  "status": "pass"
+                },
+                {
+                  "checked_at": "2026-09-04T19:26:34Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "astra_reasoning_update_1",
+                    "astra_reasoning_update_2",
+                    "astra_reasoning_update_3"
+                  ],
+                  "mode": "record",
+                  "status": "pass"
+                }
+              ],
+              "proof": "fixture_replay"
+            },
+            "astra_steering": {
+              "observations": [
+                {
+                  "checked_at": "2026-09-04T19:22:44Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "astra_steering"
+                  ],
+                  "mode": "record",
+                  "status": "pass"
+                }
+              ],
+              "proof": "fixture_replay"
+            },
+            "astra_steering_pending": {
+              "observations": [
+                {
+                  "checked_at": "2026-09-04T19:22:44Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "astra_steering_pending"
+                  ],
+                  "mode": "record",
+                  "status": "pass"
+                }
+              ],
+              "proof": "fixture_replay"
+            },
+            "basic": {
+              "observations": [
+                {
+                  "checked_at": "2026-09-04T19:08:12Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "basic"
+                  ],
+                  "mode": "record",
+                  "status": "pass"
+                }
+              ],
+              "proof": "fixture_replay"
+            },
+            "context_append": {
+              "observations": [
+                {
+                  "checked_at": "2026-09-04T19:10:46Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "context_append_1",
+                    "context_append_2"
+                  ],
+                  "mode": "record",
+                  "status": "pass"
+                }
+              ],
+              "proof": "fixture_replay"
+            },
+            "object_basic": {
+              "observations": [
+                {
+                  "checked_at": "2026-09-04T19:10:46Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "object_basic"
+                  ],
+                  "mode": "record",
+                  "status": "pass"
+                }
+              ],
+              "proof": "fixture_replay"
+            },
+            "object_streaming": {
+              "observations": [
+                {
+                  "checked_at": "2026-09-04T19:10:46Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "object_streaming"
+                  ],
+                  "mode": "record",
+                  "status": "pass"
+                }
+              ],
+              "proof": "fixture_replay"
+            },
+            "reasoning": {
+              "observations": [
+                {
+                  "checked_at": "2026-09-04T19:10:46Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "reasoning_basic",
+                    "reasoning_streaming"
+                  ],
+                  "mode": "record",
+                  "status": "pass"
+                }
+              ],
+              "proof": "fixture_replay"
+            },
+            "streaming": {
+              "observations": [
+                {
+                  "checked_at": "2026-09-04T19:10:46Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "streaming"
+                  ],
+                  "mode": "record",
+                  "status": "pass"
+                }
+              ],
+              "proof": "fixture_replay"
+            },
+            "token_limit": {
+              "observations": [
+                {
+                  "checked_at": "2026-09-04T19:10:46Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "token_limit"
+                  ],
+                  "mode": "record",
+                  "status": "pass"
+                }
+              ],
+              "proof": "fixture_replay"
+            },
+            "tool_multi": {
+              "observations": [
+                {
+                  "checked_at": "2026-09-04T19:10:46Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "multi_tool"
+                  ],
+                  "mode": "record",
+                  "status": "pass"
+                }
+              ],
+              "proof": "fixture_replay"
+            },
+            "tool_none": {
+              "observations": [
+                {
+                  "checked_at": "2026-09-04T19:10:46Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "no_tool"
+                  ],
+                  "mode": "record",
+                  "status": "pass"
+                }
+              ],
+              "proof": "fixture_replay"
+            },
+            "tool_round_trip": {
+              "observations": [
+                {
+                  "checked_at": "2026-09-04T19:10:46Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "tool_round_trip_1",
+                    "tool_round_trip_2"
+                  ],
+                  "mode": "record",
+                  "status": "pass"
+                }
+              ],
+              "proof": "fixture_replay"
+            },
+            "usage": {
+              "observations": [
+                {
+                  "checked_at": "2026-09-04T19:10:46Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "usage"
                   ],
                   "mode": "record",
                   "status": "pass"

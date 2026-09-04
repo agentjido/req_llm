@@ -150,6 +150,18 @@ defmodule ReqLLM.ToolCall do
   def builtin?(_), do: false
 
   @doc """
+  Returns whether the application can return this tool result in a later turn.
+
+  Async calls still require application execution. Preserve their original call
+  IDs and use `to_map/1` to retain metadata when storing conversation history.
+  """
+  @spec async?(t() | map()) :: boolean()
+  def async?(call) do
+    metadata = metadata(call)
+    metadata[:async] == true or metadata["async"] == true
+  end
+
+  @doc """
   Returns true when local tool-call metadata marks a call as provider-native.
 
   Provider adapters can attach the non-wire marker with

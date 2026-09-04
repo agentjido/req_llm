@@ -73,21 +73,24 @@ defmodule ReqLLM.Compatibility.EvidenceTest do
       end
     end
 
-    test "checked-in migration preserves every legacy scenario observation" do
+    test "checked-in migration preserves legacy observations as new evidence is added" do
       path = Path.expand("../../../priv/model_compat_scenarios.json", __DIR__)
       content = File.read!(path)
       evidence = Jason.decode!(content)
 
-      observations =
-        for {_model_spec, model} <- evidence["models"],
+      legacy_entries =
+        for {model_spec, model} <- evidence["models"],
             {_surface_id, surface} <- model["surfaces"],
             {_scenario_id, scenario} <- surface["scenarios"],
-            observation <- scenario["observations"] do
-          observation
+            observation <- scenario["observations"],
+            observation["checked_at"] <= "2026-07-17T14:17:49Z" do
+          {model_spec, observation}
         end
 
+      observations = Enum.map(legacy_entries, &elem(&1, 1))
+
       assert evidence["schema_version"] == 1
-      assert map_size(evidence["models"]) == 689
+      assert legacy_entries |> Enum.map(&elem(&1, 0)) |> Enum.uniq() |> length() == 689
       assert length(observations) == 780
       assert Enum.frequencies_by(observations, & &1["status"]) == %{"fail" => 132, "pass" => 648}
       assert Enum.frequencies_by(observations, & &1["mode"]) == %{"record" => 766, "replay" => 14}

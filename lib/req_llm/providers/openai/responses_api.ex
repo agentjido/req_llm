@@ -734,6 +734,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   @doc false
   def build_request_body(context, model_name, opts, request) do
     opts_map = if is_map(opts), do: opts, else: Map.new(opts)
+    ReqLLM.Providers.OpenAI.Astra.validate_options!(%{id: model_name}, Map.to_list(opts_map))
     provider_opts = opts_map[:provider_options] || []
     target_provider = request_provider(request)
 
@@ -744,6 +745,10 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
         provider_opts[:previous_response_id] ||
           extract_previous_response_id_from_context(context)
       end
+
+    inline_reasoning? =
+      previous_response_id == nil and
+        ReqLLM.Providers.OpenAI.AdapterHelpers.gpt6_astra_model?(model_name)
 
     {input, _tool_messages, reasoning_items} =
       Enum.reduce(context.messages, {[], [], []}, fn msg, {input_acc, tool_acc, reasoning_acc} ->
@@ -767,8 +772,9 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
             assistant_items = encode_assistant_message_items(msg)
             function_calls = encode_tool_calls_as_function_calls(msg.tool_calls || [])
 
-            if assistant_items == [] and function_calls == [] do
-              {input_acc, tool_acc, reasoning_acc ++ new_reasoning}
+            if inline_reasoning? do
+              {input_acc ++ new_reasoning ++ assistant_items ++ function_calls, tool_acc,
+               reasoning_acc}
             else
               {input_acc ++ assistant_items ++ function_calls, tool_acc,
                reasoning_acc ++ new_reasoning}
@@ -783,7 +789,10 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
             if content == [] do
               {input_acc, tool_acc, reasoning_acc}
             else
-              {input_acc ++ [%{"role" => Atom.to_string(msg.role), "content" => content}],
+              updates = ReqLLM.Providers.OpenAI.Astra.configuration_items(msg, model_name)
+
+              {input_acc ++
+                 updates ++ [%{"role" => Atom.to_string(msg.role), "content" => content}],
                tool_acc, reasoning_acc}
             end
         end
@@ -806,6 +815,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
         opts_map[:max_tokens]
 
     temp_request = request || %{options: opts_map}
+
     tools = encode_tools_if_any(temp_request) |> ensure_deep_research_tools(temp_request)
 
     tool_choice = encode_tool_choice(opts_map[:tool_choice])
@@ -1200,7 +1210,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
       )
 
     body = build_request_body(context, model.id, cleaned_opts, nil)
-    create_event = %{"type" => "response.create", "response" => body}
+    create_event = Map.put(body, "type", "response.create")
 
     {:ok,
      %{
@@ -1230,11 +1240,18 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
       case delta["name"] do
         name when is_binary(name) and name != "" ->
           [
-            ReqLLM.StreamChunk.tool_call(name, %{}, %{
-              id: call_id,
-              index: index,
-              expects_arg_fragments: true
-            })
+            ReqLLM.StreamChunk.tool_call(
+              name,
+              %{},
+              Map.merge(
+                %{
+                  id: call_id,
+                  index: index,
+                  expects_arg_fragments: true
+                },
+                ReqLLM.Providers.OpenAI.Astra.async_metadata(delta)
+              )
+            )
           ]
 
         _ ->
@@ -1335,11 +1352,18 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
 
         if name && name != "" do
           [
-            ReqLLM.StreamChunk.tool_call(name, %{}, %{
-              id: call_id,
-              index: index,
-              expects_arg_fragments: true
-            })
+            ReqLLM.StreamChunk.tool_call(
+              name,
+              %{},
+              Map.merge(
+                %{
+                  id: call_id,
+                  index: index,
+                  expects_arg_fragments: true
+                },
+                ReqLLM.Providers.OpenAI.Astra.async_metadata(item)
+              )
+            )
           ]
         else
           []
@@ -1449,14 +1473,31 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     chunks =
       if is_binary(name) and name != "" and not tool_call_emitted?(state, index) do
         [
-          ReqLLM.StreamChunk.tool_call(name, %{}, %{
-            id: call_id,
-            index: index,
-            expects_arg_fragments: true
-          })
+          ReqLLM.StreamChunk.tool_call(
+            name,
+            %{},
+            Map.merge(
+              %{
+                id: call_id,
+                index: index,
+                expects_arg_fragments: true
+              },
+              ReqLLM.Providers.OpenAI.Astra.async_metadata(item)
+            )
+          )
         ]
       else
         []
+      end
+
+    metadata = ReqLLM.Providers.OpenAI.Astra.async_metadata(item)
+
+    chunks =
+      if map_size(metadata) > 0 do
+        chunks ++
+          [ReqLLM.StreamChunk.meta(%{tool_call_metadata: %{index: index, metadata: metadata}})]
+      else
+        chunks
       end
 
     if is_binary(arguments) and arguments != "" and not argument_fragment_emitted?(state, index) do
@@ -1593,6 +1634,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
         "name" => ReqLLM.ToolCall.name(tc),
         "arguments" => ReqLLM.ToolCall.args_json(tc)
       }
+      |> ReqLLM.Providers.OpenAI.Astra.put_async(ReqLLM.ToolCall.metadata(tc))
     end)
   end
 
@@ -1699,6 +1741,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
       "parameters" => params,
       "strict" => strict
     }
+    |> ReqLLM.Providers.OpenAI.Astra.put_async(ReqLLM.Tool.provider_options(tool, :openai))
   end
 
   defp encode_tool_for_responses_api(tool_schema) when is_map(tool_schema) do
@@ -1725,6 +1768,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
           "parameters" => params,
           "strict" => true
         }
+        |> ReqLLM.Providers.OpenAI.Astra.put_async(Map.merge(tool_schema, function_def))
       else
         name = tool_schema["name"]
         description = tool_schema["description"]
@@ -1738,6 +1782,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
           "parameters" => params,
           "strict" => true
         }
+        |> ReqLLM.Providers.OpenAI.Astra.put_async(tool_schema)
       end
     end
   end
@@ -1976,6 +2021,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   defp buffered_tool_call_chunk({%ReqLLM.ToolCall{} = tool_call, index}) do
     metadata =
       %{id: tool_call.id, index: index, buffered_arguments: ReqLLM.ToolCall.args_json(tool_call)}
+      |> Map.merge(ReqLLM.ToolCall.metadata(tool_call))
       |> ReqLLM.ToolCall.put_builtin_flag(ReqLLM.ToolCall.builtin?(tool_call))
 
     ReqLLM.StreamChunk.tool_call(ReqLLM.ToolCall.name(tool_call), %{}, metadata)
@@ -2260,7 +2306,9 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     args_json = normalize_arguments_json(seg["arguments"])
     id = seg["call_id"] || seg["id"]
     name = seg["name"] || "unknown"
+
     ReqLLM.ToolCall.new(id, name, args_json)
+    |> ReqLLM.ToolCall.put_metadata(ReqLLM.Providers.OpenAI.Astra.async_metadata(seg))
   end
 
   defp builtin_call_segment_to_tool_call(seg, type) do
@@ -2546,6 +2594,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
           "name" => tc.name || "unknown",
           "arguments" => tc.arguments || "{}"
         }
+        |> ReqLLM.Providers.OpenAI.Astra.put_async(tc)
       end)
 
     output_segments = output_segments ++ tool_segments
@@ -2591,11 +2640,13 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
 
     existing = Map.get(state.tool_calls, key, %{})
 
-    updated = %{
-      id: tool_id || existing[:id],
-      name: chunk.name || existing[:name],
-      arguments: merge_tool_arguments(existing[:arguments], chunk.arguments)
-    }
+    updated =
+      %{
+        id: tool_id || existing[:id],
+        name: chunk.name || existing[:name],
+        arguments: merge_tool_arguments(existing[:arguments], chunk.arguments)
+      }
+      |> Map.merge(ReqLLM.Providers.OpenAI.Astra.async_metadata(chunk.metadata))
 
     order =
       if key in state.tool_call_order,
@@ -2610,9 +2661,22 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     |> maybe_put_usage(meta[:usage])
     |> maybe_put_finish(meta[:finish_reason])
     |> maybe_put_response_id(meta[:response_id])
+    |> maybe_put_tool_metadata(meta[:tool_call_metadata])
   end
 
   defp accumulate_chunk_to_state(_chunk, state), do: state
+
+  defp maybe_put_tool_metadata(state, %{index: index, metadata: metadata}) do
+    case Map.fetch(state.tool_calls, index) do
+      {:ok, call} ->
+        %{state | tool_calls: Map.put(state.tool_calls, index, Map.merge(call, metadata))}
+
+      :error ->
+        state
+    end
+  end
+
+  defp maybe_put_tool_metadata(state, _metadata), do: state
 
   defp merge_tool_arguments(nil, new), do: new
   defp merge_tool_arguments(existing, nil), do: existing

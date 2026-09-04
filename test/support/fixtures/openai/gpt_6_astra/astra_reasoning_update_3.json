@@ -1,0 +1,277 @@
+{
+  "model_spec": "openai:gpt-6-astra",
+  "provider": "openai",
+  "request": {
+    "body": {
+      "b64": "eyJpbmNsdWRlIjpbInJlYXNvbmluZy5lbmNyeXB0ZWRfY29udGVudCJdLCJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IlN1Z2dlc3Qgb25lIHNob3J0IGRhdGFiYXNlIG1pZ3JhdGlvbiBzdGVwLiIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9LHsiY29udGVudCI6W3sidGV4dCI6IkFkZCBhbiBpbmRleCB0byBhIGZyZXF1ZW50bHkgcXVlcmllZCBjb2x1bW4gdG8gaW1wcm92ZSBsb29rdXAgcGVyZm9ybWFuY2UuIiwidHlwZSI6Im91dHB1dF90ZXh0In1dLCJwaGFzZSI6ImZpbmFsX2Fuc3dlciIsInJvbGUiOiJhc3Npc3RhbnQifSx7InJlYXNvbmluZyI6eyJlZmZvcnQiOiJoaWdoIn0sInR5cGUiOiJjb25maWd1cmF0aW9uX3VwZGF0ZSJ9LHsiY29udGVudCI6W3sidGV4dCI6IkdpdmUgdHdvIGZhaWx1cmUgcmlza3MgYW5kIG9uZSByb2xsYmFjayBzdGVwLiBLZWVwIHRoZSBhbnN3ZXIgYnJpZWYuIiwidHlwZSI6ImlucHV0X3RleHQifV0sInJvbGUiOiJ1c2VyIn0seyJlbmNyeXB0ZWRfY29udGVudCI6ImdBQUFBQUJxbXh0bElGenlWY2xvM0VacmVhMGwydUhNMXZUSTF0c2V6OWMtR0lYa1pXM01QUDNyQVpqRkZvUVBaVkhHdU9MekxGdWFsb1lCYnJ3OWo5Nm1HNC0za004QVZkb1dRamNlZ3N2cXoweUw4MHJONl8xaFYwN05QdFNHcHBraFktc3FOdG5ZTmo4cHBOMDBNYWE4Vm45bjZKWHNlS1FhY0ZveTdQTmdGUzBBTE5nODB3NlowenUwVVBnbndweEFpa2hUektrSl9paU9Fd1k4WDU2NDFpbDFMQ3V3dnc2LTE0dDFGcnhkRjdEUk1mYjB3dURlRXNnbGxXQU14c2NoSFVGN0tpb2ZnTzRpTHN0Q1V2VElLV0tpU2gwZGlybHJJMTQ1VW1DTDBKakI4REhXVnpOWnlGZWxRYm8yc2hkWEk4YVJqMm9YeEswcjlMNjZBU0gwT2Y5QjN4SE1ac053RERSR0FPeHpUME5LdGQzcUtHNDdNZi16Tk5CZC1xSEhBWmE0MjJqZmY0SXFfeExBMTFvZ25ackNEZ0ZqWjJEakgzN1VUMFhRR1g2MVJIVlk0TWgwTHBibGdVNF9tREhPYWd6MHQ3Zkc4TEhVOHFPVW5vTlNnd29rdVhvbDRHOVlDaVl3WllaY21rOEI1c2FDWVhtbHBVX2N2VGZBSkphZmNmTkd3X05Rd2NyREhZLW8yX2RmcGdKc3NFTzlRS2h1ektYTGNFbU14M2hIMWRlaXI5TGhMby1oR2s1UXNLeDZZUnotMXJjTF9fMlY2ZnpGUTVNdzdwYnBSQ1RpaUQzdHdHTnVMZTlVWC1LckhINjl3UHp0ZUQ1MW1fdUVObDB5OW5TazdYS1lTX2R4bnVad1ZOb2VZWnlqc1NnVk5DVG5hLUJRUHpzRC1FbU50REtDbzNJOWRsVV9pUUNRWkZ3c1NRbUxZRWIxNWtfUndTRnhqQkk0UXk4cUFPcHZQM2FUQzd1a09aNnJzSU8yZkNiOXpENW9oWGlVMlltMnpIN3FRUjdCaHJIUEJ0dUVIaUdkTTg2SlctZ1o3clJUd3h6N2l2M3dYdmwzcXMyR0xSc3pESVplSFdEU3FvMGFoRlAwMGtZeW9zQl9ndl9yMTgzaXBMbldPcFNfWVg5TkZUb195bEZFeFp2ODJrdzhLbGhiQkw2dGd1dmVzREgzWk9uNFlOc2RQOFpMY3REc2dwUlZraXlMaWV0UmxWWmhrTzRNelloTXlwUDN5VnBmNGlfR0twbktNMENwbjRYaXotUURqMDZFS1F3eXdMUHN1TlY3UVNFUldBT3JRZ0tlM1VRYVkyQ2w2dTBFTmt5MHhCWWh2QWdSZ0hVbmNZX2RHeGJOVDZpOXhadXVoWHp0czFueVFBVGpPNm1XVWpzZFBydl9BLXBsYUx3eTFrdTJTbG5DaXhJS0hjSkZsbVBNU0xCME9HeWoyTVJkT2Y4MmVETEFDeEpEZTVGa252d3FzbmNVT1BfZHc1V1Q5OG1NNXNfaGJaTUdoNXlYZ01hQkl6SkhtaXRQaUdqbS1HNkF3R3JTWkRLaldUVnN3bV9xWXJBS1IyRk9iSUVleWYzN2o4LUdrbW1CREdhd1NoTzd3R1llS1pmaGpFYXliRUdqZzFtSnNvb2gxOWVIdlpTQVBlODNUd0gxSVl1MDVhVzlIYWpxTzUtTnptRmhyTzhCX0JJS2F6N0dHQm01bnVSV3hLZndvUFZwOExEMDZiZHUzdHJLcDZQejNpSWJGMTN0aWp0a1pOMFJyRlRPSGR5eWFEMEZES2w3aUFoVFdObExsdC1Ca3JCcmVkSUNwTGpNQTVtc0VJQ2JqU0wzM093bW40TVBjOXcxQXJzYmg4ZjFRRUx6QnU4dmw5bmtMbHJ0Y1NBUWRINVhxR3VXUXFzVDJta0RzOGJIOEN4VU0tTXJsM1lIMlBtTG9IUzBQSVg4ZV9iQ1hZd2xkay05Wl9GN1Y4b21KeDk3ak5TM3dWWkZFWWx2WGhJV29DZ2t3VHNnd01JeDVEaTZ4NU1pd1pMMUt3WVQzSEVvZ2lJTl9WN3dtcnM2a2tLRkN2ek5oaFdHMjJmNHltYVA2MDdHc1VYM1ZXcHBDRWJUeTVYZzFBbE9mMzFjTE1IOU9UQUNZX0EtaGFtNFNycmtUT1oyTndnZDdtdG5MaHdNeXJWYVRGWVR3MDVjdVAwQnVERG5sb3dwOTE1WFo4WHBybXV2UzZKN091QVpFNVBuQXhzRVFfTWE4SVNlZlRwa0taYk9WbGxuRTZvT0xmV2k2N1VLbjNweHJXUTQ5QWtqaC1RRW15S3REWmpxbWY2ZDhqaGgtcEF1Qy13b3MycTVvbTF1NzItdU42VkVobEx1bGl4aGR1TkFIaWRHb1B3cXhlakIiLCJpZCI6InJzXzA1ZDgyZDkzYmQzYjFkZGIwMTZhOWIxYjYyZTc2Yzg3ZDFiNWUyMTI2ZWE5N2Q3ZTVjIiwic3VtbWFyeSI6W10sInR5cGUiOiJyZWFzb25pbmcifSx7ImNvbnRlbnQiOlt7InRleHQiOiItICoqUmlzayAxOioqIEluZGV4IGNyZWF0aW9uIG1heSBsb2NrIHRoZSB0YWJsZSBhbmQgZGlzcnVwdCBxdWVyaWVzLlxuLSAqKlJpc2sgMjoqKiBUaGUgaW5kZXggY29uc3VtZXMgZGlzayBzcGFjZSBhbmQgYWRkcyB3cml0ZSBvdmVyaGVhZC5cbi0gKipSb2xsYmFjazoqKiBEcm9wIHRoZSBuZXdseSBjcmVhdGVkIGluZGV4LiIsInR5cGUiOiJvdXRwdXRfdGV4dCJ9XSwicGhhc2UiOiJmaW5hbF9hbnN3ZXIiLCJyb2xlIjoiYXNzaXN0YW50In0seyJjb250ZW50IjpbeyJ0ZXh0IjoiTmFtZSB0aGUgbW9zdCBpbXBvcnRhbnQgY2hlY2sgaW4gb25lIHNlbnRlbmNlLiIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9XSwibWF4X291dHB1dF90b2tlbnMiOjEwMjQsIm1vZGVsIjoiZ3B0LTYtYXN0cmEiLCJwcm9tcHRfY2FjaGVfb3B0aW9ucyI6eyJ0dGwiOiIzMG0ifSwicmVhc29uaW5nIjp7ImVmZm9ydCI6ImxvdyJ9LCJzdG9yZSI6ZmFsc2UsInN0cmVhbSI6ZmFsc2V9"
+    },
+    "canonical_json": {
+      "include": [
+        "reasoning.encrypted_content"
+      ],
+      "input": [
+        {
+          "content": [
+            {
+              "text": "Suggest one short database migration step.",
+              "type": "input_text"
+            }
+          ],
+          "role": "user"
+        },
+        {
+          "content": [
+            {
+              "text": "Add an index to a frequently queried column to improve lookup performance.",
+              "type": "output_text"
+            }
+          ],
+          "phase": "final_answer",
+          "role": "assistant"
+        },
+        {
+          "reasoning": {
+            "effort": "high"
+          },
+          "type": "configuration_update"
+        },
+        {
+          "content": [
+            {
+              "text": "Give two failure risks and one rollback step. Keep the answer brief.",
+              "type": "input_text"
+            }
+          ],
+          "role": "user"
+        },
+        {
+          "encrypted_content": "gAAAAABqmxtlIFzyVclo3EZrea0l2uHM1vTI1tsez9c-GIXkZW3MPP3rAZjFFoQPZVHGuOLzLFualoYBbrw9j96mG4-3kM8AVdoWQjcegsvqz0yL80rN6_1hV07NPtSGppkhY-sqNtnYNj8ppN00Maa8Vn9n6JXseKQacFoy7PNgFS0ALNg80w6Z0zu0UPgnwpxAikhTzKkJ_iiOEwY8X5641il1LCuwvw6-14t1FrxdF7DRMfb0wuDeEsgllWAMxschHUF7KiofgO4iLstCUvTIKWKiSh0dirlrI145UmCL0JjB8DHWVzNZyFelQbo2shdXI8aRj2oXxK0r9L66ASH0Of9B3xHMZsNwDDRGAOxzT0NKtd3qKG47Mf-zNNBd-qHHAZa422jff4Iq_xLA11ognZrCDgFjZ2DjH37UT0XQGX61RHVY4Mh0LpblgU4_mDHOagz0t7fG8LHU8qOUnoNSgwokuXol4G9YCiYwZYZcmk8B5saCYXmlpU_cvTfAJJafcfNGw_NQwcrDHY-o2_dfpgJssEO9QKhuzKXLcEmMx3hH1deir9LhLo-hGk5QsKx6YRz-1rcL__2V6fzFQ5Mw7pbpRCTiiD3twGNuLe9UX-KrHH69wPzteD51m_uENl0y9nSk7XKYS_dxnuZwVNoeYZyjsSgVNCTna-BQPzsD-EmNtDKCo3I9dlU_iQCQZFwsSQmLYEb15k_RwSFxjBI4Qy8qAOpvP3aTC7ukOZ6rsIO2fCb9zD5ohXiU2Ym2zH7qQR7BhrHPBtuEHiGdM86JW-gZ7rRTwxz7iv3wXvl3qs2GLRszDIZeHWDSqo0ahFP00kYyosB_gv_r183ipLnWOpS_YX9NFTo_ylFExZv82kw8KlhbBL6tguvesDH3ZOn4YNsdP8ZLctDsgpRVkiyLietRlVZhkO4MzYhMypP3yVpf4i_GKpnKM0Cpn4Xiz-QDj06EKQwywLPsuNV7QSERWAOrQgKe3UQaY2Cl6u0ENky0xBYhvAgRgHUncY_dGxbNT6i9xZuuhXzts1nyQATjO6mWUjsdPrv_A-plaLwy1ku2SlnCixIKHcJFlmPMSLB0OGyj2MRdOf82eDLACxJDe5FknvwqsncUOP_dw5WT98mM5s_hbZMGh5yXgMaBIzJHmitPiGjm-G6AwGrSZDKjWTVswm_qYrAKR2FObIEeyf37j8-GkmmBDGawShO7wGYeKZfhjEaybEGjg1mJsooh19eHvZSAPe83TwH1IYu05aW9HajqO5-NzmFhrO8B_BIKaz7GGBm5nuRWxKfwoPVp8LD06bdu3trKp6Pz3iIbF13tijtkZN0RrFTOHdyyaD0FDKl7iAhTWNlLlt-BkrBredICpLjMA5msEICbjSL33Owmn4MPc9w1Arsbh8f1QELzBu8vl9nkLlrtcSAQdH5XqGuWQqsT2mkDs8bH8CxUM-Mrl3YH2PmLoHS0PIX8e_bCXYwldk-9Z_F7V8omJx97jNS3wVZFEYlvXhIWoCgkwTsgwMIx5Di6x5MiwZL1KwYT3HEogiIN_V7wmrs6kkKFCvzNhhWG22f4ymaP607GsUX3VWppCEbTy5Xg1AlOf31cLMH9OTACY_A-ham4SrrkTOZ2Nwgd7mtnLhwMyrVaTFYTw05cuP0BuDDnlowp915XZ8XprmuvS6J7OuAZE5PnAxsEQ_Ma8ISefTpkKZbOVllnE6oOLfWi67UKn3pxrWQ49Akjh-QEmyKtDZjqmf6d8jhh-pAuC-wos2q5om1u72-uN6VEhlLulixhduNAHidGoPwqxejB",
+          "id": "rs_05d82d93bd3b1ddb016a9b1b62e76c87d1b5e2126ea97d7e5c",
+          "summary": [],
+          "type": "reasoning"
+        },
+        {
+          "content": [
+            {
+              "text": "- **Risk 1:** Index creation may lock the table and disrupt queries.\n- **Risk 2:** The index consumes disk space and adds write overhead.\n- **Rollback:** Drop the newly created index.",
+              "type": "output_text"
+            }
+          ],
+          "phase": "final_answer",
+          "role": "assistant"
+        },
+        {
+          "content": [
+            {
+              "text": "Name the most important check in one sentence.",
+              "type": "input_text"
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "max_output_tokens": 1024,
+      "model": "gpt-6-astra",
+      "prompt_cache_options": {
+        "ttl": "30m"
+      },
+      "reasoning": {
+        "effort": "low"
+      },
+      "store": false,
+      "stream": false
+    },
+    "headers": {
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.7.4"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.openai.com/v1/responses"
+  },
+  "response": {
+    "body": {
+      "safety_identifier": null,
+      "store": false,
+      "prompt_cache_options": {
+        "mode": "implicit",
+        "ttl": "30m"
+      },
+      "error": null,
+      "created_at": 1788549989,
+      "presence_penalty": 0.0,
+      "status": "completed",
+      "tool_usage": {
+        "image_gen": {
+          "input_tokens": 0,
+          "input_tokens_details": {
+            "image_tokens": 0,
+            "text_tokens": 0
+          },
+          "output_tokens": 0,
+          "output_tokens_details": {
+            "image_tokens": 0,
+            "text_tokens": 0
+          },
+          "total_tokens": 0
+        },
+        "web_search": {
+          "num_requests": 0
+        }
+      },
+      "max_tool_calls": null,
+      "instructions": null,
+      "billing": {
+        "payer": "developer"
+      },
+      "prompt_cache_retention": "24h",
+      "completed_at": 1788549993,
+      "temperature": 1.0,
+      "text": {
+        "format": {
+          "type": "text"
+        },
+        "verbosity": "medium"
+      },
+      "parallel_tool_calls": true,
+      "tool_choice": "auto",
+      "frequency_penalty": 0.0,
+      "top_logprobs": 0,
+      "reasoning": {
+        "context": "all_turns",
+        "effort": "low",
+        "mode": "standard",
+        "summary": null
+      },
+      "usage": {
+        "input_tokens": 207,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 153,
+        "output_tokens_details": {
+          "reasoning_tokens": 130
+        },
+        "total_tokens": 360
+      },
+      "access_programs": {
+        "cyber": "standard"
+      },
+      "incomplete_details": null,
+      "model": "gpt-6-astra",
+      "truncation": "disabled",
+      "metadata": {},
+      "service_tier": "default",
+      "id": "resp_05d82d93bd3b1ddb016a9b1b65b60087d18ba9edb6f2516be0",
+      "top_p": 0.98,
+      "user": null,
+      "prompt_cache_key": null,
+      "moderation": null,
+      "object": "response",
+      "background": false,
+      "previous_response_id": null,
+      "max_output_tokens": 1024,
+      "output": [
+        {
+          "content": [],
+          "encrypted_content": "gAAAAABqmxtpEp3qUCraw9RZrLgyV_94gBQ3SfMQMpIXHwkdoG6hiSlbvLmmhEOfATCOzGAtKfqsMgnRH6UQ4TFor_tGfoG0VXPkSAkueiyGq9QxNrQfnoKkXkBubT_BUoEjIxC-XKOlX5PqH6pe1XWXmwPifY-QT1qnU6hL0MWiL-NrKtVCMucmwZmCATOJgSvIqlw-7chRlrsiR5Bzyy2dPzmOScUagoe3G6-sFwpBsLnE_gteCDtMgyl0yMZ3jsyKoo2mxb5EMn11MNSwTu7iZs3zzPPUWbhZhDMUYwNkyjnwv8lTSxVAP6Rgu4eAZ3wFm66AJf09UHjhbc7t2fxcsWBX5Nge95Hn9dfE205kRXURqK-saaxKZto16FXidKgtR9YV2JUw1fXIvhF4_pGekfNsVjvzTj-cixexg7W3PuKJ69ZoOfTrj37QhzJyxMJTssZKs_5z_BCjJ2uwY_RM39bv1czwFyEDnBcDAZNSe49OMETGCMa5zBMGpvSilsTsbsCx6jxXjbutpIrZCSjbPwvJo9vwFLLjLPHtKJbptiCkSLCXKlQfSgd2e5uNNObvO6kENNrMggtYb4ZrEwOMU8M4GoWtWW1pSuAl5Wui-FVA3qMEyEu911vCr9Fy8DTsy3lD53SV-sjQfISmH_xP0C7a-ux4vr2Lac0yT27EvmMis47bchKKXyl9m-ynCR6XNiTJ57VOXU8yf18uA3PqKOV7v7jLOGC_nmh2kYD21n1RVOH9zeJfXdajhwU5x37RADJU0UtZ7MwANKcttnhgX2900WyrQiWcEq55rfLkO9MNNCKOi2lYMkgrneaoepFFMiyElzefE_rFCUEevi90rP9SOmnZjt1rr7NL6WtntcWf0CcCTw5DPx3rF7_IcTtEpWGLx3UJK14dkg0axQSUe81w_EdhA7CUtTg2OMgo6Q9_85W0-PH-FnE20wKxyMEyKTg6VwH6sZO-5Dl8NwsjBpxcoDEuY8NTFvp7lC6jnCvstHptO8FDWRYsZlgynqqCBqCSex3SlnBbKiC1VhXnjTYuC9fRTGc3-Getj6PS1BskZy_wSYBsLBGizKYsY0tnQYwtktULtXD8KIJWCgtv1hoZ7Xr7XelBkokhiSdxtt9YjMDBSk7tLydcPLJM9mLRgLyqySF8iSpSaFvkeVO7HZdArkh6RraHRTa0LzDkf_Jf9TQYPxA5SC6RwMOJtiZ3UBpegiurE1QfjMkb2qDq91HxWZIRPVu57GXov-pp03OlThKlihumIQr4mCeH6wKeCPt48be_QB3Uc_oMyK9O-WsZunb6q746egQ_AKQ-EKA6mfhRsou_juHPj616HfKuMFm2OzwxFCKEcNa2NIVvQMre8nfLpeZxpN5mtkHij1aVHqxqTm-CRbzVCND6kMCDq81fJbTSLSNExssZelEFAKK9NlTNtV026cvqHIfwmClSyH6vLDx4UmSAOrP2FoCLy2BShzujATudDiwYDljiq3GuUTjZbetSUfdWA6vl896J1tWSZgBVH7wMEyM7MOIMQjxYQwCxwCqcXzSf5mt-LXrshGM1mqQUS3PPA16oNnn7bC5OoZtImmOmhN9SytDqNdIlfRx7WXmtXEle8LTX1JvLP2uLIlKWVBWxbUIQF8PjO7b_8R0zxhzaiw7cAv-uEEmwk4iCVyXWrQzqiRF_xdrBgpBbIzodwkf4NnB_2y0pPuHOZObLEBJ2dVaPB6hyVywcm3nK5J-lwsg5nHZWjKiK4Atpu-UZSXKFt3wOgWq77vUi5IEsuS6vhyJBex5nbDhWiTeNHO4h72RjJlM04If4hFbM1P-TStYBXXQkAsbjp-nB39udhMsJPzPqHwOcR5BkPTwV791nGMfiTvMkOMSPmbrSElGStALsJmix4C8EM7lcJHu0l89K7Gp6hPR5nJdB1pX91GF9xwzgC5d3pFHErgz5fTDspkBb8DuyiQRqevBJlbUfHl5qpZc2UpqxCjWukMCuQtmwko8nTgdStrQmxfWYiB8Fbn-D2oK_iN2nao2-77CY7R59Xongf-BiCBpu4P22aZ2sCl8ej__dvDajNfz2bGBx2af38oeQzs6Kxn8fJrtzAsbHr4wPXgqtgc5WFLckdTRWmXuuXkiGrCdMji45p87KBOBQdvA6rVPQ8QJ-MPrUQMwR0zfua_vqt58JrojQP2mKFnO44Beyd0VBD5EVEjwq9aU3p-wkH0cOAGxky5WeiIllIV6G42KDAYToXhPk",
+          "id": "rs_05d82d93bd3b1ddb016a9b1b66d0e087d18ea94e264239ad9b",
+          "summary": [],
+          "type": "reasoning"
+        },
+        {
+          "content": [
+            {
+              "annotations": [],
+              "logprobs": [],
+              "text": "Verify under production-like load that creating the index won’t cause unacceptable locking or downtime.",
+              "type": "output_text"
+            }
+          ],
+          "id": "msg_05d82d93bd3b1ddb016a9b1b69628487d1a88e1a0b6f7b804a",
+          "phase": "final_answer",
+          "role": "assistant",
+          "status": "completed",
+          "type": "message"
+        }
+      ],
+      "tools": []
+    },
+    "headers": {
+      "access-control-expose-headers": [
+        "X-Request-ID",
+        "CF-Ray",
+        "CF-Ray"
+      ],
+      "alt-svc": [
+        "h3=\":443\"; ma=86400"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a35f62db2e4ce7fd-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-length": [
+        "4690"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 04 Sep 2026 19:26:34 GMT"
+      ],
+      "openai-organization": "[REDACTED:openai-organization]",
+      "openai-processing-ms": [
+        "4299"
+      ],
+      "openai-project": [
+        "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
+      ],
+      "openai-version": [
+        "2020-10-01"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": "[REDACTED:set-cookie]",
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-ratelimit-limit-requests": [
+        "10000"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "4000000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "9999"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "4000000"
+      ],
+      "x-ratelimit-reset-requests": [
+        "6ms"
+      ],
+      "x-ratelimit-reset-tokens": [
+        "0s"
+      ],
+      "x-request-id": [
+        "req_f477670bfac1441db02dc656409792d2"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

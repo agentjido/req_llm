@@ -58,6 +58,126 @@ mix mc --sample
 mix mc --sample anthropic
 ```
 
+### GPT-6 Astra Launch Fixtures
+
+Use `llm_db` 2026.9.1 or later to resolve `openai:gpt-6-astra`. Run the standard
+Astra fixtures and focused feature fixtures locally. The request tests in
+`test/providers/openai_astra_test.exs` run without API calls:
+
+```bash
+mix test test/providers/openai_astra_test.exs
+```
+
+The [OpenAI Astra guide](https://developers.openai.com/api/docs/guides/latest-model?model=gpt-6-astra)
+lists these requirements as of 2026-09-03:
+
+- Use Responses for tool calls.
+- Use `low`, `medium`, `high`, `xhigh`, or `max` reasoning effort. `none` and
+  `minimal` are not supported. The shared coverage tests use `low`.
+- Omit `temperature`, `top_p`, `top_logprobs`, and
+  `include: ["message.output_text.logprobs"]`.
+- Use `prompt_cache_options: %{ttl: "30m"}` instead of `prompt_cache_retention`.
+
+For WebSocket requests, `response.create` carries the request fields at the
+top level. It does not wrap them in `response`. Omit `stream` and `background`.
+See the [WebSocket event reference](https://developers.openai.com/api/reference/resources/responses/websocket-events).
+
+Configure `OPENAI_API_KEY` in the environment or the local `.env` file. Start
+with one recorded request:
+
+```bash
+mix mc "openai:gpt-6-astra" --scenario basic --record --max-concurrency 1
+```
+
+Check the result before recording more scenarios. A model access error does
+not prove an API format change. After the basic request passes, record the
+remaining standard scenarios:
+
+```bash
+mix mc "openai:gpt-6-astra" \
+  --scenario streaming,usage,token_limit,context_append,tool_multi,tool_none,tool_round_trip,object_basic,object_streaming,reasoning \
+  --record --max-concurrency 1
+```
+
+Each scenario uses the existing output limits and test timeouts. The `reasoning`
+scenario records both HTTP and SSE responses. Review the captured request URLs,
+response items, tool call IDs, reasoning data, and usage fields in
+`test/support/fixtures/openai/gpt_6_astra/`. The expected URL ends in
+`/v1/responses`. The recorder updates compatibility evidence from the results.
+
+Replay the full set, then update and check the generated support reference:
+
+```bash
+mix mc "openai:gpt-6-astra" \
+  --scenario basic,streaming,usage,token_limit,context_append,tool_multi,tool_none,tool_round_trip,object_basic,object_streaming,reasoning
+mix req_llm.model_support --generate
+mix req_llm.model_support --check
+```
+
+The focused `astra` capability routes to `test/coverage/openai/astra_test.exs`.
+It checks async HTTP and SSE calls, delayed results across an intervening turn,
+reasoning updates across three turns, automatic steering continuation, and
+steering that requires a tool result on the same connection. See the
+[Astra usage guide](openai.md#gpt-6-astra-experimental).
+
+Record and replay these scenarios with the normal compatibility task:
+
+```bash
+mix mc "openai:gpt-6-astra" --capability astra --record --max-concurrency 1
+mix mc "openai:gpt-6-astra" --capability astra --max-concurrency 1
+```
+
+HTTP and SSE use the standard fixture recorder. Persistent WebSocket sessions
+use `ReqLLM.Test.WebSocketFixture`: a JSON transcript stores client calls and
+raw server events in order. Replay uses a local WebSocket server and checks
+every client frame against the saved transcript. It exercises the public
+Responses session API across response boundaries. No connection headers or
+credentials enter these transcripts. Recording uses the compatibility task's
+staging directory; only passing scenarios replace fixtures.
+
+Replay both suites locally without API credentials:
+
+```bash
+REQ_LLM_FIXTURES_MODE=replay REQ_LLM_MODELS=openai:gpt-6-astra REQ_LLM_INCLUDE_RESPONSES=1 \
+mix test test/coverage/openai/comprehensive_test.exs test/coverage/openai/astra_test.exs --include coverage
+```
+
+### Live results from 2026-09-04
+
+The initial Astra fixture run recorded and replayed all 14 files for the 11
+standard scenarios. HTTP, SSE, two-turn context, function tools, structured
+objects, reasoning, usage, and the output limit all passed. The support evidence
+classifies `openai:gpt-6-astra` on `openai.responses` as first-class for the
+standard text baseline.
+
+Five focused scenarios add nine live JSON files, for 23 files and 16 scenarios
+in total. The focused checks cover:
+
+- HTTP async calls with text, an intervening turn while the result is pending,
+  and a delayed result with the original call ID.
+- SSE async calls with text and retained async metadata.
+- A reasoning update requesting `high`, with the request effort fixed at `low`
+  across three turns. Manual history retains the earlier input prefix. The API
+  accepts `prompt_cache_options.ttl` set to `30m`. These checks do not measure
+  effective reasoning effort, cache hits, or cache cost savings.
+- An accepted WebSocket steer, normal completion of the original response, and
+  an automatic successor on the same connection.
+- A pending steer that identifies a required tool result, then accepts that
+  result with the original call ID on the same connection and completes.
+
+The focused JSON files use the `astra_` prefix. They are part of the scenario
+catalog, compatibility evidence, and local replay. Failure events, disconnects,
+interrupted responses, and validation of incompatible settings have local mock
+tests. Live fixtures do not yet cover multiple simultaneous async jobs, stored
+HTTP continuation with `previous_response_id`, async custom tools, or
+multi-agent orchestration. The first-class classification applies to the
+standard text baseline, not every optional Astra API feature.
+
+One steering edge case was also observed. A steer can be accepted and later
+fail with `response_not_active` if the original response reaches
+`max_output_tokens` before the update is applied. Consumers must keep the steer
+ID and process later failure events instead of treating acceptance as success.
+
 ## Architecture
 
 ### Model Registry
@@ -90,8 +210,9 @@ models independently of this evidence.
 
 ### Sparse Live Provider Drift Verification
 
-Normal pull-request CI remains fixture replay only and requires no provider
-credentials. The `Provider Drift` workflow adds a separate live lane that runs
+Normal pull-request CI runs `mix test`, which excludes the provider coverage
+suites, and requires no provider credentials. The `Provider Drift` workflow
+adds a separate live lane that runs
 manually or every Tuesday at 09:17 UTC. Its checked-in matrix lives in
 `priv/provider_drift_anchors.json`:
 

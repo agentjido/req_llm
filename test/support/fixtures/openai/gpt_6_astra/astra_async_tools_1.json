@@ -1,0 +1,287 @@
+{
+  "model_spec": "openai:gpt-6-astra",
+  "provider": "openai",
+  "request": {
+    "body": {
+      "b64": "eyJpbmNsdWRlIjpbInJlYXNvbmluZy5lbmNyeXB0ZWRfY29udGVudCJdLCJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IkNhbGwgbG9va3VwX3JlcG9ydCBmb3IgcmVwb3J0IDEyMy4gQWxzbyB0ZWxsIG1lIHRoYXQgdGhlIGxvb2t1cCBzdGFydGVkLiBXaGVuIGl0cyByZXN1bHQgYXJyaXZlcywgaW5jbHVkZSB0aGUgcmVzdWx0IGNvZGUuIiwidHlwZSI6ImlucHV0X3RleHQifV0sInJvbGUiOiJ1c2VyIn1dLCJtYXhfb3V0cHV0X3Rva2VucyI6MTAyNCwibW9kZWwiOiJncHQtNi1hc3RyYSIsInJlYXNvbmluZyI6eyJlZmZvcnQiOiJsb3cifSwic3RvcmUiOmZhbHNlLCJzdHJlYW0iOmZhbHNlLCJ0b29sX2Nob2ljZSI6eyJuYW1lIjoibG9va3VwX3JlcG9ydCIsInR5cGUiOiJmdW5jdGlvbiJ9LCJ0b29scyI6W3siYXN5bmMiOnRydWUsImRlc2NyaXB0aW9uIjoiR2V0IGEgc2hvcnQgcHJvamVjdCByZXBvcnQgYnkgaXRzIElEIiwibmFtZSI6Imxvb2t1cF9yZXBvcnQiLCJwYXJhbWV0ZXJzIjp7ImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjpmYWxzZSwicHJvcGVydGllcyI6eyJyZXBvcnRfaWQiOnsidHlwZSI6InN0cmluZyJ9fSwidHlwZSI6Im9iamVjdCJ9LCJzdHJpY3QiOmZhbHNlLCJ0eXBlIjoiZnVuY3Rpb24ifV19"
+    },
+    "canonical_json": {
+      "include": [
+        "reasoning.encrypted_content"
+      ],
+      "input": [
+        {
+          "content": [
+            {
+              "text": "Call lookup_report for report 123. Also tell me that the lookup started. When its result arrives, include the result code.",
+              "type": "input_text"
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "max_output_tokens": 1024,
+      "model": "gpt-6-astra",
+      "reasoning": {
+        "effort": "low"
+      },
+      "store": false,
+      "stream": false,
+      "tool_choice": {
+        "name": "lookup_report",
+        "type": "function"
+      },
+      "tools": [
+        {
+          "async": true,
+          "description": "Get a short project report by its ID",
+          "name": "lookup_report",
+          "parameters": {
+            "additionalProperties": false,
+            "properties": {
+              "report_id": {
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "strict": false,
+          "type": "function"
+        }
+      ]
+    },
+    "headers": {
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.7.4"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.openai.com/v1/responses"
+  },
+  "response": {
+    "body": {
+      "safety_identifier": null,
+      "store": false,
+      "error": null,
+      "created_at": 1788549960,
+      "presence_penalty": 0.0,
+      "status": "completed",
+      "tool_usage": {
+        "image_gen": {
+          "input_tokens": 0,
+          "input_tokens_details": {
+            "image_tokens": 0,
+            "text_tokens": 0
+          },
+          "output_tokens": 0,
+          "output_tokens_details": {
+            "image_tokens": 0,
+            "text_tokens": 0
+          },
+          "total_tokens": 0
+        },
+        "web_search": {
+          "num_requests": 0
+        }
+      },
+      "max_tool_calls": null,
+      "instructions": null,
+      "billing": {
+        "payer": "developer"
+      },
+      "prompt_cache_retention": "24h",
+      "completed_at": 1788549962,
+      "temperature": 1.0,
+      "text": {
+        "format": {
+          "type": "text"
+        },
+        "verbosity": "medium"
+      },
+      "parallel_tool_calls": true,
+      "tool_choice": {
+        "name": "lookup_report",
+        "type": "function"
+      },
+      "frequency_penalty": 0.0,
+      "top_logprobs": 0,
+      "reasoning": {
+        "context": "all_turns",
+        "effort": "low",
+        "mode": "standard",
+        "summary": null
+      },
+      "usage": {
+        "input_tokens": 111,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 83,
+        "output_tokens_details": {
+          "reasoning_tokens": 21
+        },
+        "total_tokens": 194
+      },
+      "access_programs": {
+        "cyber": "standard"
+      },
+      "incomplete_details": null,
+      "model": "gpt-6-astra",
+      "truncation": "disabled",
+      "metadata": {},
+      "service_tier": "default",
+      "id": "resp_01088993bc7a9221016a9b1b48158487d1916d02ab8aa00de1",
+      "top_p": 0.98,
+      "user": null,
+      "prompt_cache_key": null,
+      "moderation": null,
+      "object": "response",
+      "background": false,
+      "previous_response_id": null,
+      "max_output_tokens": 1024,
+      "output": [
+        {
+          "arguments": "{\"report_id\":\"123\"}",
+          "async": true,
+          "call_id": "call_LcADDRUjtQaBhb9TCdOCX15z",
+          "id": "fc_01088993bc7a9221016a9b1b48e50487d1a32e6ba49bdc68df",
+          "name": "lookup_report",
+          "status": "completed",
+          "type": "function_call"
+        },
+        {
+          "content": [
+            {
+              "annotations": [],
+              "logprobs": [],
+              "text": "The lookup has started. I’ll include the result code when the result arrives.",
+              "type": "output_text"
+            }
+          ],
+          "id": "msg_01088993bc7a9221016a9b1b498fc487d1936dbb33b96fe581",
+          "phase": "commentary",
+          "role": "assistant",
+          "status": "completed",
+          "type": "message"
+        },
+        {
+          "content": [],
+          "encrypted_content": "gAAAAABqmxtK9RUDbRcvmHAOtbyetZzdrvBidQWdA0HqSCMkK7ATcFF-uOBbIxzgpylr04liu_Z0bnTuVWhQ4dEUy41w0wa5USQdUaZAPv3KF3h0D_uLM5GEfiL4HYHWr58JDCYXECYdp41qXT2MCanxilMMjQIK9auhyPpMd2GI8Iuquw0DbdGB3Kn3PTVX1KmjtvZIi1jaXLhHGBB8QRZTvZ6qdudtLn4Gj0TxjR0zO6i0T_TYD0Lrp4hreud1ZHqKnNbhPOEouYo5RzO0DuJp6-T-yzsyGP3mqu0JuLgUCO7SZqJqzEUP246JKwpbFsiwWDRp-v4wvN9Oo089xVGYb4kNJbRkUsRbJ0RyuF_k7hhcIx4FYNE4I8rkcuFXAiaqexUSkWeONtom-qmRsbCgUDpAZHluBhPRiA8S_X4JtIrkkVL9MlxEtAxB4cwz81k1ZPkaTUKDqdeCoWCRX0gS5wp3hiVtvz66weI36yw0erykr7SY9EyUGK8QFP6ZG6ESVm5XTk6fI3vR5OBrhBNKPCpgm1sU1JVWAWGQSu1CYsJMEK-B--LIbcNqFFclPpMoD1IY1Fh9WQD-f7Z3RaTTIZhJrD0LJwWKXDGuyUj1rhY3sFvmFzbYVFAO2ueQe2iZezQBaIREdHqmWO6e1jT-2jKh4qz1OR-SoTmEVqJAKd415wVHjFljHWXkb7VQnUIvREvuHZkBt0oeMT78h_Qv5Vy8oA5F3oGnh_ibtjuxJ1HmZvc3Pz6zWxueH66M43V78A_YxHHyBmBpI_QheQWiys39qoO8l-DPAlbMF8vGRkzZqD5qdNVB_LI-NcSMbJAi0lCHJS_HJp23cTSDS86q9fSXv3bLY7_KZfsd7zRbvYPn95WTjco6ag8hwDIkSPRxF-R3xYGJZv6KChOnk8xmVwoSzksxNF-fPj4OlJ-E6qb2fKpgfXKg48hL6GjNF2wQkHRmvJ_n_nhky2n8xQdvn0mzGxzFN11kCTHnyOV7nDEU70ZfwPbPRgvge-UsqPlVMd0QV8K0I3aBEfOhtX0CGL2a5HSna6EE7LVYM7TFEDEdd7GHTq2NzH7dI2Anax1jktvr_zBkfhB9TXE0hMvLV7CFoUVqTZSnFMBj8EONNMqoabiB4Dd_Fy9U5h8hVXCAmfZp2j6wqioZBM8d7PjWq4GZBJ_WsYqbQVEtIqpEVfPrUuzNI31KgsrLq2YmlJbKqy4RQA7tOKPRyj4WJPthjxno_3aUmHx4xH0hQ8brTF6z2-RiHzrHsamQ09wxTu-tFn20k_SK",
+          "id": "rs_01088993bc7a9221016a9b1b49d7ac87d1a9ddfa97295f4a49",
+          "summary": [],
+          "type": "reasoning"
+        },
+        {
+          "content": [
+            {
+              "annotations": [],
+              "logprobs": [],
+              "text": "The lookup is underway for report 123. No result code has arrived yet.",
+              "type": "output_text"
+            }
+          ],
+          "id": "msg_01088993bc7a9221016a9b1b4a1fd087d1885ad3424b555b88",
+          "phase": "final_answer",
+          "role": "assistant",
+          "status": "completed",
+          "type": "message"
+        }
+      ],
+      "tools": [
+        {
+          "async": true,
+          "description": "Get a short project report by its ID",
+          "name": "lookup_report",
+          "output_schema": null,
+          "parameters": {
+            "additionalProperties": false,
+            "properties": {
+              "report_id": {
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "strict": false,
+          "type": "function"
+        }
+      ]
+    },
+    "headers": {
+      "access-control-expose-headers": [
+        "X-Request-ID",
+        "CF-Ray",
+        "CF-Ray"
+      ],
+      "alt-svc": [
+        "h3=\":443\"; ma=86400"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a35f62215df410c7-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-length": [
+        "4788"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 04 Sep 2026 19:26:02 GMT"
+      ],
+      "openai-organization": "[REDACTED:openai-organization]",
+      "openai-processing-ms": [
+        "2640"
+      ],
+      "openai-project": [
+        "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
+      ],
+      "openai-version": [
+        "2020-10-01"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": "[REDACTED:set-cookie]",
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-ratelimit-limit-requests": [
+        "10000"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "4000000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "9999"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "4000000"
+      ],
+      "x-ratelimit-reset-requests": [
+        "6ms"
+      ],
+      "x-ratelimit-reset-tokens": [
+        "0s"
+      ],
+      "x-request-id": [
+        "req_f285eafa566540db80255308db86c664"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

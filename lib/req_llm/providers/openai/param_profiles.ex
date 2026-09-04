@@ -113,7 +113,8 @@ defmodule ReqLLM.Providers.OpenAI.ParamProfiles do
   end
 
   defp no_sampling_params?(%LLMDB.Model{id: model_name}) do
-    AdapterHelpers.gpt5_model?(model_name) || AdapterHelpers.o_series_model?(model_name)
+    AdapterHelpers.gpt5_model?(model_name) || AdapterHelpers.gpt6_astra_model?(model_name) ||
+      AdapterHelpers.o_series_model?(model_name)
   end
 
   defp gpt5_pro_model?(%LLMDB.Model{id: model_name}) do

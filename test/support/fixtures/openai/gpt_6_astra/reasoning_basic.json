@@ -1,0 +1,219 @@
+{
+  "model_spec": "openai:gpt-6-astra",
+  "provider": "openai",
+  "request": {
+    "body": {
+      "b64": "eyJpbmNsdWRlIjpbInJlYXNvbmluZy5lbmNyeXB0ZWRfY29udGVudCJdLCJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IlNvbHZlIDEyKjcgYW5kIHNob3cgeW91ciBpbnRlcm5hbCB0aGlua2luZyAoYnJpZWYpLiIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9XSwibWF4X291dHB1dF90b2tlbnMiOjUwMDAsIm1vZGVsIjoiZ3B0LTYtYXN0cmEiLCJyZWFzb25pbmciOnsiZWZmb3J0IjoibG93In0sInN0cmVhbSI6ZmFsc2V9"
+    },
+    "canonical_json": {
+      "include": [
+        "reasoning.encrypted_content"
+      ],
+      "input": [
+        {
+          "content": [
+            {
+              "text": "Solve 12*7 and show your internal thinking (brief).",
+              "type": "input_text"
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "max_output_tokens": 5000,
+      "model": "gpt-6-astra",
+      "reasoning": {
+        "effort": "low"
+      },
+      "stream": false
+    },
+    "headers": {
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.7.4"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.openai.com/v1/responses"
+  },
+  "response": {
+    "body": {
+      "safety_identifier": null,
+      "store": true,
+      "error": null,
+      "created_at": 1788549042,
+      "presence_penalty": 0.0,
+      "status": "completed",
+      "tool_usage": {
+        "image_gen": {
+          "input_tokens": 0,
+          "input_tokens_details": {
+            "image_tokens": 0,
+            "text_tokens": 0
+          },
+          "output_tokens": 0,
+          "output_tokens_details": {
+            "image_tokens": 0,
+            "text_tokens": 0
+          },
+          "total_tokens": 0
+        },
+        "web_search": {
+          "num_requests": 0
+        }
+      },
+      "max_tool_calls": null,
+      "instructions": null,
+      "billing": {
+        "payer": "developer"
+      },
+      "prompt_cache_retention": "24h",
+      "completed_at": 1788549045,
+      "temperature": 1.0,
+      "text": {
+        "format": {
+          "type": "text"
+        },
+        "verbosity": "medium"
+      },
+      "parallel_tool_calls": true,
+      "tool_choice": "auto",
+      "frequency_penalty": 0.0,
+      "top_logprobs": 0,
+      "reasoning": {
+        "context": "all_turns",
+        "effort": "low",
+        "mode": "standard",
+        "summary": null
+      },
+      "usage": {
+        "input_tokens": 19,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 75,
+        "output_tokens_details": {
+          "reasoning_tokens": 40
+        },
+        "total_tokens": 94
+      },
+      "access_programs": {
+        "cyber": "standard"
+      },
+      "incomplete_details": null,
+      "model": "gpt-6-astra",
+      "truncation": "disabled",
+      "metadata": {},
+      "service_tier": "default",
+      "id": "resp_077e487a18f0a012006a9b17b2936087d19ce143885299ca8d",
+      "top_p": 0.98,
+      "user": null,
+      "prompt_cache_key": null,
+      "moderation": null,
+      "object": "response",
+      "background": false,
+      "previous_response_id": null,
+      "max_output_tokens": 5000,
+      "output": [
+        {
+          "content": [],
+          "encrypted_content": "gAAAAABqmxe1KMMfwAeHOyA3GrUT-sqxrAiRxlk2wjpzps2H47rQZoH6oI5SMcG8q447vUvBTIUexuqCG6ZF_5P1SoDQ7_iDLoh3nkRHDsCbP-h_4jrK41JkanWAgkYovMD5P-oZt_NEse7tMXwA-4eTUjK2LsQuMToTAa9_lyrRDhuoFfnsSlLVUXtBIBGuFXm1Tb4EfXNOHRSay40LCWvGGcQt-dfJsaOqGQ66anJImxLUwVJXOJruuSi6sQK9JYH1UMvfpQifLmMCY_VOzQl9CN5vjME--7J1ylq8XhHCWIMP1tORsBqdlAZPCrDgIc48nh99abdIKRIyVToGyye02IwAp8iSKeMDKzVTkt471GyCLRgRI8nzCpnXLE3xlncsr1xAw3jRsf7pNv7QpB9TaySJ_1SKau9LK6b35J5zHEViEnFJH8P_P1zioR6suom8AMnEpF_IREUiSMjUz_Pdknc4D8l4QaF5eI4kj3-fPkyglwCAUjykNMhSpSscmgZg7OBNympruHtul5X6BwSGagh_pQFMvs4k9bwFkdDUIHFfVRi6b_EtE3bgzZaRO9xljTo9KQUYj-JIuX6No4QwR-GO4mT1yH08WshqV-uUcu-kcq1Kl-cGsqCyHQxxnPZkqEq9DEaJs3IFsul4zxjWJwfYZYdE597IJ-dhfbFsxmhJ7Gf6T29CKwoDg4NgHVhl0lks_MdFTKr_bBVB_UV-uI-J30eEtTqSEbbIN2dj50xeTNx_PM5GgFVSIGG6U1fFL1fukWRQMS9QvviLa9XE0dRVqJSi4wwvnO5LNvKpMrwDRkD4tcw1HAKAcnMrF_J-EcFRkhnFpB9fYjnb9yObK1Z3M0y2SsdflWJ4P3pmt2h_XjXOz3yjCtvfAqLActCwaaFbbjyhS5jLLjpqV8NunrLQBWuMftYXU5ITCHUkmWis_u3c4ySmT8QodeXtnDd1zh-Ordo2JrcB5Khsuhrib6jpExFkDIwPpEeI_bTrQNyg0RdK8CF18EQitpBsOSf6imYt1W43L2trVAfQChN24f5X3vW3iDIUhmwEM5kGzkrUmd6emnJZwUGdv8nM_Ok-zWJ3OsotnAu4UbRYv9haj5FDlVC1WIklAvfVN2MXfYv2d6BHktHUVT5um8FYOodsIrT3SJRjqa_nrckZUxlE-poeESFHYrljJX0tBPouthFRJ1IZo8ogcqf1ZgoDf0LscMgb2YXEyAJpL8cUhk-S4ffZsxkI-TD16AAcDINpxvZrmqRQL9Aba-MEk7PU_i4g61hb11q5Y4sHtJbKzV36gvCIHWZ6zXXzVTllIOaIt8VLcin1OnWqo-QzZsvi8Q1pTFFSUoxziw0h2PwnDkdZ6CqTxNDardQ96xdsaj2_nZJEMeC9IIo=",
+          "id": "rs_077e487a18f0a012006a9b17b3da5487d194244cdf2b2e1cbb",
+          "summary": [],
+          "type": "reasoning"
+        },
+        {
+          "content": [
+            {
+              "annotations": [],
+              "logprobs": [],
+              "text": "12 × 7 = (10 × 7) + (2 × 7) = 70 + 14 = **84**.",
+              "type": "output_text"
+            }
+          ],
+          "id": "msg_077e487a18f0a012006a9b17b4b25487d198850c6caa6433a0",
+          "phase": "final_answer",
+          "role": "assistant",
+          "status": "completed",
+          "type": "message"
+        }
+      ],
+      "tools": []
+    },
+    "headers": {
+      "access-control-expose-headers": [
+        "X-Request-ID",
+        "CF-Ray",
+        "CF-Ray"
+      ],
+      "alt-svc": [
+        "h3=\":443\"; ma=86400"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a35f4bbb2bd5e287-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-length": [
+        "3713"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 04 Sep 2026 19:10:45 GMT"
+      ],
+      "openai-organization": "[REDACTED:openai-organization]",
+      "openai-processing-ms": [
+        "2770"
+      ],
+      "openai-project": [
+        "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
+      ],
+      "openai-version": [
+        "2020-10-01"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": "[REDACTED:set-cookie]",
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-ratelimit-limit-requests": [
+        "10000"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "4000000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "9999"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "4000000"
+      ],
+      "x-ratelimit-reset-requests": [
+        "6ms"
+      ],
+      "x-ratelimit-reset-tokens": [
+        "0s"
+      ],
+      "x-request-id": [
+        "req_16fcfd4d1118487f9ed729c9682dea3a"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

@@ -1,0 +1,252 @@
+{
+  "model_spec": "openai:gpt-6-astra",
+  "provider": "openai",
+  "request": {
+    "body": {
+      "b64": "eyJpbmNsdWRlIjpbInJlYXNvbmluZy5lbmNyeXB0ZWRfY29udGVudCJdLCJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IlN1Z2dlc3Qgb25lIHNob3J0IGRhdGFiYXNlIG1pZ3JhdGlvbiBzdGVwLiIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9LHsiY29udGVudCI6W3sidGV4dCI6IkFkZCBhbiBpbmRleCB0byBhIGZyZXF1ZW50bHkgcXVlcmllZCBjb2x1bW4gdG8gaW1wcm92ZSBsb29rdXAgcGVyZm9ybWFuY2UuIiwidHlwZSI6Im91dHB1dF90ZXh0In1dLCJwaGFzZSI6ImZpbmFsX2Fuc3dlciIsInJvbGUiOiJhc3Npc3RhbnQifSx7InJlYXNvbmluZyI6eyJlZmZvcnQiOiJoaWdoIn0sInR5cGUiOiJjb25maWd1cmF0aW9uX3VwZGF0ZSJ9LHsiY29udGVudCI6W3sidGV4dCI6IkdpdmUgdHdvIGZhaWx1cmUgcmlza3MgYW5kIG9uZSByb2xsYmFjayBzdGVwLiBLZWVwIHRoZSBhbnN3ZXIgYnJpZWYuIiwidHlwZSI6ImlucHV0X3RleHQifV0sInJvbGUiOiJ1c2VyIn1dLCJtYXhfb3V0cHV0X3Rva2VucyI6MTAyNCwibW9kZWwiOiJncHQtNi1hc3RyYSIsInByb21wdF9jYWNoZV9vcHRpb25zIjp7InR0bCI6IjMwbSJ9LCJyZWFzb25pbmciOnsiZWZmb3J0IjoibG93In0sInN0b3JlIjpmYWxzZSwic3RyZWFtIjpmYWxzZX0="
+    },
+    "canonical_json": {
+      "include": [
+        "reasoning.encrypted_content"
+      ],
+      "input": [
+        {
+          "content": [
+            {
+              "text": "Suggest one short database migration step.",
+              "type": "input_text"
+            }
+          ],
+          "role": "user"
+        },
+        {
+          "content": [
+            {
+              "text": "Add an index to a frequently queried column to improve lookup performance.",
+              "type": "output_text"
+            }
+          ],
+          "phase": "final_answer",
+          "role": "assistant"
+        },
+        {
+          "reasoning": {
+            "effort": "high"
+          },
+          "type": "configuration_update"
+        },
+        {
+          "content": [
+            {
+              "text": "Give two failure risks and one rollback step. Keep the answer brief.",
+              "type": "input_text"
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "max_output_tokens": 1024,
+      "model": "gpt-6-astra",
+      "prompt_cache_options": {
+        "ttl": "30m"
+      },
+      "reasoning": {
+        "effort": "low"
+      },
+      "store": false,
+      "stream": false
+    },
+    "headers": {
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.7.4"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.openai.com/v1/responses"
+  },
+  "response": {
+    "body": {
+      "safety_identifier": null,
+      "store": false,
+      "prompt_cache_options": {
+        "mode": "implicit",
+        "ttl": "30m"
+      },
+      "error": null,
+      "created_at": 1788549985,
+      "presence_penalty": 0.0,
+      "status": "completed",
+      "tool_usage": {
+        "image_gen": {
+          "input_tokens": 0,
+          "input_tokens_details": {
+            "image_tokens": 0,
+            "text_tokens": 0
+          },
+          "output_tokens": 0,
+          "output_tokens_details": {
+            "image_tokens": 0,
+            "text_tokens": 0
+          },
+          "total_tokens": 0
+        },
+        "web_search": {
+          "num_requests": 0
+        }
+      },
+      "max_tool_calls": null,
+      "instructions": null,
+      "billing": {
+        "payer": "developer"
+      },
+      "prompt_cache_retention": "24h",
+      "completed_at": 1788549989,
+      "temperature": 1.0,
+      "text": {
+        "format": {
+          "type": "text"
+        },
+        "verbosity": "medium"
+      },
+      "parallel_tool_calls": true,
+      "tool_choice": "auto",
+      "frequency_penalty": 0.0,
+      "top_logprobs": 0,
+      "reasoning": {
+        "context": "all_turns",
+        "effort": "low",
+        "mode": "standard",
+        "summary": null
+      },
+      "usage": {
+        "input_tokens": 50,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 142,
+        "output_tokens_details": {
+          "reasoning_tokens": 94
+        },
+        "total_tokens": 192
+      },
+      "access_programs": {
+        "cyber": "standard"
+      },
+      "incomplete_details": null,
+      "model": "gpt-6-astra",
+      "truncation": "disabled",
+      "metadata": {},
+      "service_tier": "default",
+      "id": "resp_05d82d93bd3b1ddb016a9b1b61bdcc87d192006316d56c4bec",
+      "top_p": 0.98,
+      "user": null,
+      "prompt_cache_key": null,
+      "moderation": null,
+      "object": "response",
+      "background": false,
+      "previous_response_id": null,
+      "max_output_tokens": 1024,
+      "output": [
+        {
+          "content": [],
+          "encrypted_content": "gAAAAABqmxtlIFzyVclo3EZrea0l2uHM1vTI1tsez9c-GIXkZW3MPP3rAZjFFoQPZVHGuOLzLFualoYBbrw9j96mG4-3kM8AVdoWQjcegsvqz0yL80rN6_1hV07NPtSGppkhY-sqNtnYNj8ppN00Maa8Vn9n6JXseKQacFoy7PNgFS0ALNg80w6Z0zu0UPgnwpxAikhTzKkJ_iiOEwY8X5641il1LCuwvw6-14t1FrxdF7DRMfb0wuDeEsgllWAMxschHUF7KiofgO4iLstCUvTIKWKiSh0dirlrI145UmCL0JjB8DHWVzNZyFelQbo2shdXI8aRj2oXxK0r9L66ASH0Of9B3xHMZsNwDDRGAOxzT0NKtd3qKG47Mf-zNNBd-qHHAZa422jff4Iq_xLA11ognZrCDgFjZ2DjH37UT0XQGX61RHVY4Mh0LpblgU4_mDHOagz0t7fG8LHU8qOUnoNSgwokuXol4G9YCiYwZYZcmk8B5saCYXmlpU_cvTfAJJafcfNGw_NQwcrDHY-o2_dfpgJssEO9QKhuzKXLcEmMx3hH1deir9LhLo-hGk5QsKx6YRz-1rcL__2V6fzFQ5Mw7pbpRCTiiD3twGNuLe9UX-KrHH69wPzteD51m_uENl0y9nSk7XKYS_dxnuZwVNoeYZyjsSgVNCTna-BQPzsD-EmNtDKCo3I9dlU_iQCQZFwsSQmLYEb15k_RwSFxjBI4Qy8qAOpvP3aTC7ukOZ6rsIO2fCb9zD5ohXiU2Ym2zH7qQR7BhrHPBtuEHiGdM86JW-gZ7rRTwxz7iv3wXvl3qs2GLRszDIZeHWDSqo0ahFP00kYyosB_gv_r183ipLnWOpS_YX9NFTo_ylFExZv82kw8KlhbBL6tguvesDH3ZOn4YNsdP8ZLctDsgpRVkiyLietRlVZhkO4MzYhMypP3yVpf4i_GKpnKM0Cpn4Xiz-QDj06EKQwywLPsuNV7QSERWAOrQgKe3UQaY2Cl6u0ENky0xBYhvAgRgHUncY_dGxbNT6i9xZuuhXzts1nyQATjO6mWUjsdPrv_A-plaLwy1ku2SlnCixIKHcJFlmPMSLB0OGyj2MRdOf82eDLACxJDe5FknvwqsncUOP_dw5WT98mM5s_hbZMGh5yXgMaBIzJHmitPiGjm-G6AwGrSZDKjWTVswm_qYrAKR2FObIEeyf37j8-GkmmBDGawShO7wGYeKZfhjEaybEGjg1mJsooh19eHvZSAPe83TwH1IYu05aW9HajqO5-NzmFhrO8B_BIKaz7GGBm5nuRWxKfwoPVp8LD06bdu3trKp6Pz3iIbF13tijtkZN0RrFTOHdyyaD0FDKl7iAhTWNlLlt-BkrBredICpLjMA5msEICbjSL33Owmn4MPc9w1Arsbh8f1QELzBu8vl9nkLlrtcSAQdH5XqGuWQqsT2mkDs8bH8CxUM-Mrl3YH2PmLoHS0PIX8e_bCXYwldk-9Z_F7V8omJx97jNS3wVZFEYlvXhIWoCgkwTsgwMIx5Di6x5MiwZL1KwYT3HEogiIN_V7wmrs6kkKFCvzNhhWG22f4ymaP607GsUX3VWppCEbTy5Xg1AlOf31cLMH9OTACY_A-ham4SrrkTOZ2Nwgd7mtnLhwMyrVaTFYTw05cuP0BuDDnlowp915XZ8XprmuvS6J7OuAZE5PnAxsEQ_Ma8ISefTpkKZbOVllnE6oOLfWi67UKn3pxrWQ49Akjh-QEmyKtDZjqmf6d8jhh-pAuC-wos2q5om1u72-uN6VEhlLulixhduNAHidGoPwqxejB",
+          "id": "rs_05d82d93bd3b1ddb016a9b1b62e76c87d1b5e2126ea97d7e5c",
+          "summary": [],
+          "type": "reasoning"
+        },
+        {
+          "content": [
+            {
+              "annotations": [],
+              "logprobs": [],
+              "text": "- **Risk 1:** Index creation may lock the table and disrupt queries.\n- **Risk 2:** The index consumes disk space and adds write overhead.\n- **Rollback:** Drop the newly created index.",
+              "type": "output_text"
+            }
+          ],
+          "id": "msg_05d82d93bd3b1ddb016a9b1b64cb7c87d1b65f99d257de7ff4",
+          "phase": "final_answer",
+          "role": "assistant",
+          "status": "completed",
+          "type": "message"
+        }
+      ],
+      "tools": []
+    },
+    "headers": {
+      "access-control-expose-headers": [
+        "X-Request-ID",
+        "CF-Ray",
+        "CF-Ray"
+      ],
+      "alt-svc": [
+        "h3=\":443\"; ma=86400"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a35f62c23cb1e7fd-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-length": [
+        "4317"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 04 Sep 2026 19:26:29 GMT"
+      ],
+      "openai-organization": "[REDACTED:openai-organization]",
+      "openai-processing-ms": [
+        "3746"
+      ],
+      "openai-project": [
+        "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
+      ],
+      "openai-version": [
+        "2020-10-01"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": "[REDACTED:set-cookie]",
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-ratelimit-limit-requests": [
+        "10000"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "4000000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "9999"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "4000000"
+      ],
+      "x-ratelimit-reset-requests": [
+        "6ms"
+      ],
+      "x-ratelimit-reset-tokens": [
+        "0s"
+      ],
+      "x-request-id": [
+        "req_96b2569c2d8e44a2a1f923579732a0af"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

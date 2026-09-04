@@ -339,6 +339,134 @@ usage = ReqLLM.StreamResponse.usage(stream_response)
 
 Use this when you want a call-scoped WebSocket transport while keeping the existing `StreamResponse` API. SSE remains the safer default for broad provider parity and existing fixture coverage.
 
+## GPT-6 Astra (experimental)
+
+The standard text scenarios and focused Astra features have live JSON fixtures
+and offline replay tests that run locally. See
+[Astra fixture testing](fixture-testing.md#gpt-6-astra-launch-fixtures) for the
+commands and the exact coverage limits.
+
+Use `openai:gpt-6-astra` with `llm_db` 2026.9.1 or later. ReqLLM selects Responses
+and accepts `low`, `medium`, `high`, `xhigh`, or `max` reasoning effort. It rejects
+`none`, `minimal`, and log-probability options before dispatch. Sampling options
+are removed with a translation warning. The raw session API rejects them.
+See the [Astra migration guide](https://developers.openai.com/api/docs/guides/latest-model?model=gpt-6-astra).
+
+### Async function tools
+
+Set the OpenAI tool option when the application can run a job while the model
+continues:
+
+```elixir
+tool = ReqLLM.Tool.new!(
+  name: "read_report",
+  description: "Read a report",
+  parameter_schema: [report_id: [type: :string, required: true]],
+  callback: &MyReports.read/1,
+  provider_options: [openai: [async: true]]
+)
+
+{:ok, response} = ReqLLM.generate_text(
+  "openai:gpt-6-astra",
+  "Read report 123 and start an outline while it loads",
+  tools: [tool],
+  reasoning_effort: :low
+)
+
+async_calls = Enum.filter(response.message.tool_calls || [], &ReqLLM.ToolCall.async?/1)
+```
+
+Raw function maps can also include `"async" => true`. Responses may contain both
+text and async calls. The application must start and track each job. A call with
+`ReqLLM.ToolCall.async?(call)` can return its result in a later turn. Complete
+synchronous calls before continuation; `Context.append_tool_exchange/3` checks
+that their results are present and permits pending async calls.
+
+Append delayed results to the **latest** context with the original call ID:
+
+```elixir
+result = ReqLLM.Context.tool_result(call.id, "Report contents")
+context = ReqLLM.Context.append(latest_context, result)
+```
+
+For server-side continuation, use the latest `previous_response_id` while jobs
+remain pending. For manual replay, retain the assistant call and its async
+metadata. The generic ToolCall JSON encoder uses Chat Completions format and
+omits metadata; persist calls with `ToolCall.to_map/1` and restore their metadata
+with `ToolCall.put_metadata/2`. No automatic tool scheduler is included. Async
+custom tools and hosted tools are outside this implementation.
+See [async tool calling](https://developers.openai.com/api/docs/guides/async-tool-calling).
+
+### Change reasoning effort within a conversation
+
+Attach an update to the next user message:
+
+```elixir
+message =
+  ReqLLM.Context.user("Check the edge cases in detail")
+  |> ReqLLM.OpenAI.Responses.with_reasoning_effort(:high)
+
+context = ReqLLM.Context.append(context, message)
+ReqLLM.generate_text("openai:gpt-6-astra", context, reasoning_effort: :low)
+```
+
+The encoder places a `configuration_update` input item immediately before this
+user message. Keep the request effort at its original value (`low` in this
+example). The update stays in the same place when later messages are appended.
+Manual Astra history also retains each encrypted reasoning item at its original
+assistant turn, so later turns preserve the earlier input prefix. The response's
+request-level effort does not report the effective update.
+
+Use the current cache option when needed:
+
+```elixir
+provider_options: [prompt_cache_options: %{ttl: "30m"}]
+```
+
+The fixtures verify that the API accepts this option. They do not measure cache
+hits or cache cost savings.
+
+This feature requires Astra in standard single-agent mode. It cannot use
+automatic compaction or truncation. After explicit compaction, add a fresh
+update. Raw session requests reject adjacent updates and incompatible context
+settings. See [reasoning updates](https://developers.openai.com/api/docs/guides/reasoning#change-reasoning-mid-conversation).
+
+### Steering over a persistent WebSocket
+
+`ReqLLM.OpenAI.Responses` keeps one connection open across responses and returns
+raw provider events. `stream_text/3` continues to represent one response.
+
+```elixir
+alias ReqLLM.OpenAI.Responses
+
+{:ok, session} = Responses.connect("openai:gpt-6-astra")
+:ok = Responses.response_create(session, %{
+  "input" => "Draft a project plan",
+  "reasoning" => %{"effort" => "low"}
+})
+
+{:ok, %{"type" => "response.created", "response" => %{"id" => id}}} =
+  Responses.next_event(session)
+
+:ok = Responses.steer(session, id, "Keep the plan small enough for one developer")
+```
+
+Continue reading with `Responses.next_event/2`. Track accepted submissions by
+`steer.id`. Acceptance means queued input. Later events show whether it was applied. Read
+past the original `response.completed` or `response.incomplete` event to receive
+the automatic successor. Use the successor's ID for later steering.
+
+If `response.steer.pending` requests tool results, send them through
+`Responses.response_create/2` on the same session, with the pending event's
+`previous_response_id`. Include the tools and instructions again. Do not repeat
+the steering input. Already started application tools still need results.
+
+Handle `response.steer.failed`, response failures, and connection errors in the
+application. The client does not retry or reconnect. Pending steering belongs
+to the current connection; check recorded events before sending it again after
+a disconnect. Close the session with `Responses.close/1` when finished.
+See the [steering guide](https://developers.openai.com/api/docs/guides/steering).
+
 ## Realtime API
 
 ReqLLM also exposes an experimental low-level Realtime WebSocket client for session-oriented workflows that do not fit `stream_text/3`:
