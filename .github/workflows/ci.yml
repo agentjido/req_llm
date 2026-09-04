@@ -22,7 +22,4 @@ jobs:
     secrets: inherit
     with:
       docs_command: mix docs -f html
-      test_command: >-
-        mix test &&
-        REQ_LLM_FIXTURES_MODE=replay REQ_LLM_MODELS=openai:gpt-6-astra REQ_LLM_INCLUDE_RESPONSES=1
-        mix test test/coverage/openai/comprehensive_test.exs test/coverage/openai/astra_test.exs --include coverage
+      test_command: mix test

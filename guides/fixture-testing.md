@@ -60,8 +60,8 @@ mix mc --sample anthropic
 
 ### GPT-6 Astra Launch Fixtures
 
-Use `llm_db` 2026.9.1 or later to resolve `openai:gpt-6-astra`. CI runs the
-standard Astra fixtures and focused feature fixtures in replay mode. The request tests in
+Use `llm_db` 2026.9.1 or later to resolve `openai:gpt-6-astra`. Run the standard
+Astra fixtures and focused feature fixtures locally. The request tests in
 `test/providers/openai_astra_test.exs` run without API calls:
 
 ```bash
@@ -135,7 +135,7 @@ Responses session API across response boundaries. No connection headers or
 credentials enter these transcripts. Recording uses the compatibility task's
 staging directory; only passing scenarios replace fixtures.
 
-CI replays both suites without API credentials:
+Replay both suites locally without API credentials:
 
 ```bash
 REQ_LLM_FIXTURES_MODE=replay REQ_LLM_MODELS=openai:gpt-6-astra REQ_LLM_INCLUDE_RESPONSES=1 \
@@ -166,7 +166,7 @@ in total. The focused checks cover:
   result with the original call ID on the same connection and completes.
 
 The focused JSON files use the `astra_` prefix. They are part of the scenario
-catalog, compatibility evidence, and CI replay. Failure events, disconnects,
+catalog, compatibility evidence, and local replay. Failure events, disconnects,
 interrupted responses, and validation of incompatible settings have local mock
 tests. Live fixtures do not yet cover multiple simultaneous async jobs, stored
 HTTP continuation with `previous_response_id`, async custom tools, or
@@ -210,8 +210,9 @@ models independently of this evidence.
 
 ### Sparse Live Provider Drift Verification
 
-Normal pull-request CI remains fixture replay only and requires no provider
-credentials. The `Provider Drift` workflow adds a separate live lane that runs
+Normal pull-request CI runs `mix test`, which excludes the provider coverage
+suites, and requires no provider credentials. The `Provider Drift` workflow
+adds a separate live lane that runs
 manually or every Tuesday at 09:17 UTC. Its checked-in matrix lives in
 `priv/provider_drift_anchors.json`:
 

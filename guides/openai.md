@@ -342,7 +342,7 @@ Use this when you want a call-scoped WebSocket transport while keeping the exist
 ## GPT-6 Astra (experimental)
 
 The standard text scenarios and focused Astra features have live JSON fixtures
-and offline replay tests. CI runs both suites. See
+and offline replay tests that run locally. See
 [Astra fixture testing](fixture-testing.md#gpt-6-astra-launch-fixtures) for the
 commands and the exact coverage limits.
 
