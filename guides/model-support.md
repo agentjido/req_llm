@@ -5,7 +5,7 @@ compatibility scenario catalog. It is a tooling snapshot, not a runtime model
 allowlist, and it does not change whether ReqLLM can resolve or call a model.
 
 - Evidence schema: `1`
-- Snapshot evaluated at: `2026-09-04T19:10:46Z`
+- Snapshot evaluated at: `2026-09-04T19:26:34Z`
 - Freshness window: `90 days`
 
 ## Conservative tier rules
@@ -252,7 +252,7 @@ provider-native feature and are not consulted by request routing.
 | `gpt-5.5-2026-04-23` | `text` | `openai.responses` | text → text | Experimental | 0/5 | 2026-05-29T19:08:42Z | missing or stale evidence |
 | `gpt-5.5-pro` | `text` | `openai.responses` | text → text | Experimental | 0/5 | 2026-05-29T19:08:53Z | missing or stale evidence |
 | `gpt-5.5-pro-2026-04-23` | `text` | `openai.responses` | text → text | Experimental | 0/5 | 2026-05-29T19:09:14Z | missing or stale evidence |
-| `gpt-6-astra` | `text` | `openai.responses` | text, tool_result → reasoning, structured_object, text, tool_call | First-class | 5/5 | 2026-09-04T19:10:46Z | complete current baseline |
+| `gpt-6-astra` | `text` | `openai.responses` | text, tool_result → reasoning, structured_object, text, tool_call | First-class | 5/5 | 2026-09-04T19:26:34Z | complete current baseline |
 | `gpt-audio` | `text` | `openai.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T21:37:41Z | missing or stale evidence |
 | `gpt-audio-mini` | `text` | `openai.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T21:37:57Z | missing or stale evidence |
 | `gpt-image-1-mini` | `image` | `openai.image` | text → image | Experimental | 0/1 | 2026-05-29T21:25:04Z | missing or stale evidence |
