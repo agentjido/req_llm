@@ -31,9 +31,9 @@ provider-native feature and are not consulted by request routing.
 | Tier | Surfaces |
 | --- | ---: |
 | First-class | 47 |
-| Best-effort | 456 |
-| Experimental | 91 |
-| Unsupported | 97 |
+| Best-effort | 442 |
+| Experimental | 106 |
+| Unsupported | 96 |
 | **Total recorded surfaces** | **691** |
 
 ## anthropic
@@ -93,18 +93,18 @@ provider-native feature and are not consulted by request routing.
 
 | Model | Operation | Execution surface | Input → output | Tier | Baseline | Checked | Reason |
 | --- | --- | --- | --- | --- | ---: | --- | --- |
-| `accounts/fireworks/models/deepseek-v4-flash` | `text` | `fireworks_ai.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-29T23:30:47Z | missing current evidence: usage, token_limit, context_append, streaming |
-| `accounts/fireworks/models/deepseek-v4-pro` | `text` | `fireworks_ai.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-29T23:30:47Z | missing current evidence: usage, token_limit, context_append, streaming |
+| `accounts/fireworks/models/deepseek-v4-flash` | `text` | `fireworks_ai.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:30:47Z | surface declaration unknown |
+| `accounts/fireworks/models/deepseek-v4-pro` | `text` | `fireworks_ai.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:30:47Z | surface declaration unknown |
 | `accounts/fireworks/models/glm-5p1` | `text` | `fireworks_ai.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:30:47Z | surface declaration unknown |
 | `accounts/fireworks/models/gpt-oss-120b` | `text` | `fireworks_ai.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-29T23:30:47Z | missing current evidence: usage, token_limit, context_append, streaming |
-| `accounts/fireworks/models/gpt-oss-20b` | `text` | `fireworks_ai.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-29T23:30:47Z | missing current evidence: usage, token_limit, context_append, streaming |
+| `accounts/fireworks/models/gpt-oss-20b` | `text` | `fireworks_ai.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:30:47Z | surface declaration unknown |
 | `accounts/fireworks/models/kimi-k2p5` | `text` | `fireworks_ai.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:30:47Z | surface declaration unknown |
 | `accounts/fireworks/models/kimi-k2p6` | `text` | `fireworks_ai.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-29T23:30:47Z | missing current evidence: usage, token_limit, context_append, streaming |
 | `accounts/fireworks/models/minimax-m2p5` | `text` | `fireworks_ai.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:30:47Z | surface declaration unknown |
-| `accounts/fireworks/models/minimax-m2p7` | `text` | `fireworks_ai.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-29T23:30:47Z | missing current evidence: usage, token_limit, context_append, streaming |
+| `accounts/fireworks/models/minimax-m2p7` | `text` | `fireworks_ai.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:30:47Z | surface declaration unknown |
 | `accounts/fireworks/models/qwen3p6-plus` | `text` | `fireworks_ai.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:30:47Z | surface declaration unknown |
 | `accounts/fireworks/routers/glm-5p1-fast` | `text` | `fireworks_ai.unrecorded_text` | text → text | Experimental | 0/5 | 2026-05-29T23:30:47Z | surface declaration unknown |
-| `accounts/fireworks/routers/kimi-k2p6-turbo` | `text` | `fireworks_ai.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-29T23:30:47Z | missing current evidence: usage, token_limit, context_append, streaming |
+| `accounts/fireworks/routers/kimi-k2p6-turbo` | `text` | `fireworks_ai.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:30:47Z | surface declaration unknown |
 
 ## github_copilot
 
@@ -152,7 +152,7 @@ provider-native feature and are not consulted by request routing.
 | `gemini-flash-latest` | `text` | `google.generate_content` | text → text | Best-effort | 1/5 | 2026-05-30T01:01:43Z | missing current evidence: usage, token_limit, context_append, streaming |
 | `gemini-pro-latest` | `text` | `google.generate_content` | text → text | First-class | 5/5 | 2026-05-30T01:01:43Z | complete current baseline |
 | `gemini-robotics-er-1.5-preview` | `text` | `google.unrecorded_text` | text → text | Unsupported | 0/5 | 2026-05-30T01:01:43Z | basic failed at provider_drift |
-| `gemini-robotics-er-1.6-preview` | `text` | `google.generate_content` | text → text | Best-effort | 1/5 | 2026-05-30T01:01:43Z | missing current evidence: usage, token_limit, context_append, streaming |
+| `gemini-robotics-er-1.6-preview` | `text` | `google.generate_content` | text → text | Experimental | 0/5 | 2026-05-30T01:01:43Z | surface declaration unknown |
 | `imagen-4.0-fast-generate-001` | `image` | `google.image` | text → image | First-class | 1/1 | 2026-05-29T22:29:31Z | complete current baseline |
 | `imagen-4.0-generate-001` | `image` | `google.image` | text → image | First-class | 1/1 | 2026-05-29T22:29:18Z | complete current baseline |
 | `imagen-4.0-ultra-generate-001` | `image` | `google.image` | text → image | First-class | 1/1 | 2026-05-29T22:29:47Z | complete current baseline |
@@ -286,7 +286,7 @@ provider-native feature and are not consulted by request routing.
 | `arcee-ai/spotlight` | `text` | `openrouter.unrecorded_text` | text → text | Experimental | 0/5 | 2026-05-30T00:13:54Z | surface declaration unknown |
 | `arcee-ai/trinity-large-thinking` | `text` | `openrouter.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-30T00:13:54Z | missing current evidence: usage, token_limit, context_append, streaming |
 | `arcee-ai/trinity-mini` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:13:54Z | surface declaration unknown |
-| `arcee-ai/virtuoso-large` | `text` | `openrouter.unrecorded_text` | text → text | Unsupported | 0/5 | 2026-05-30T00:13:54Z | basic failed at provider_drift |
+| `arcee-ai/virtuoso-large` | `text` | `openrouter.unrecorded_text` | text → text | Experimental | 0/5 | 2026-05-30T00:13:54Z | surface declaration unknown |
 | `baai/bge-base-en-v1.5` | `embedding` | `openrouter.embedding` | text → embedding | Best-effort | 1/3 | 2026-05-30T00:56:13Z | missing current evidence: embed_usage, embed_batch |
 | `baai/bge-large-en-v1.5` | `embedding` | `openrouter.embedding` | text → embedding | Best-effort | 1/3 | 2026-05-30T00:56:13Z | missing current evidence: embed_usage, embed_batch |
 | `baai/bge-m3` | `embedding` | `openrouter.embedding` | text → embedding | Best-effort | 1/3 | 2026-05-30T00:56:13Z | missing current evidence: embed_usage, embed_batch |
@@ -333,7 +333,7 @@ provider-native feature and are not consulted by request routing.
 | `google/gemini-embedding-2-preview` | `embedding` | `openrouter.embedding` | text → embedding | Best-effort | 1/3 | 2026-05-30T00:56:13Z | missing current evidence: embed_usage, embed_batch |
 | `google/gemma-2-27b-it` | `text` | `openrouter.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-29T23:42:35Z | missing current evidence: usage, token_limit, context_append, streaming |
 | `google/gemma-3-4b-it` | `text` | `openrouter.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-29T23:42:35Z | missing current evidence: usage, token_limit, context_append, streaming |
-| `google/gemma-3n-e4b-it` | `text` | `openrouter.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-29T23:42:35Z | missing current evidence: usage, token_limit, context_append, streaming |
+| `google/gemma-3n-e4b-it` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:42:35Z | surface declaration unknown |
 | `google/gemma-4-26b-a4b-it` | `text` | `openrouter.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-29T23:42:35Z | missing current evidence: usage, token_limit, context_append, streaming |
 | `google/gemma-4-26b-a4b-it:free` | `text` | `openrouter.unrecorded_text` | text → text | Unsupported | 0/5 | 2026-05-29T23:42:35Z | basic failed at provider_drift |
 | `google/gemma-4-31b-it` | `text` | `openrouter.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-29T23:42:35Z | missing current evidence: usage, token_limit, context_append, streaming |
@@ -341,9 +341,9 @@ provider-native feature and are not consulted by request routing.
 | `ibm-granite/granite-4.0-h-micro` | `text` | `openrouter.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-30T00:20:36Z | missing current evidence: usage, token_limit, context_append, streaming |
 | `ibm-granite/granite-4.1-8b` | `text` | `openrouter.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-30T00:20:36Z | missing current evidence: usage, token_limit, context_append, streaming |
 | `inception/mercury-2` | `text` | `openrouter.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-30T00:20:46Z | missing current evidence: usage, token_limit, context_append, streaming |
-| `inclusionai/ling-2.6-1t` | `text` | `openrouter.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-30T00:16:15Z | missing current evidence: usage, token_limit, context_append, streaming |
-| `inclusionai/ling-2.6-flash` | `text` | `openrouter.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-30T00:16:15Z | missing current evidence: usage, token_limit, context_append, streaming |
-| `inclusionai/ring-2.6-1t` | `text` | `openrouter.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-30T00:16:15Z | missing current evidence: usage, token_limit, context_append, streaming |
+| `inclusionai/ling-2.6-1t` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:16:15Z | surface declaration unknown |
+| `inclusionai/ling-2.6-flash` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:16:15Z | surface declaration unknown |
+| `inclusionai/ring-2.6-1t` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:16:15Z | surface declaration unknown |
 | `inflection/inflection-3-pi` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:24:54Z | surface declaration unknown |
 | `inflection/inflection-3-productivity` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:24:54Z | surface declaration unknown |
 | `intfloat/e5-base-v2` | `embedding` | `openrouter.embedding` | text → embedding | Best-effort | 1/3 | 2026-05-30T00:56:13Z | missing current evidence: embed_usage, embed_batch |
@@ -377,7 +377,7 @@ provider-native feature and are not consulted by request routing.
 | `minimax/minimax-m2.7` | `text` | `openrouter.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-29T23:42:59Z | missing current evidence: usage, token_limit, context_append, streaming |
 | `mistralai/codestral-2508` | `text` | `openrouter.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-29T23:38:18Z | missing current evidence: usage, token_limit, context_append, streaming |
 | `mistralai/codestral-embed-2505` | `embedding` | `openrouter.embedding` | text → embedding | Best-effort | 1/3 | 2026-05-30T00:56:13Z | missing current evidence: embed_usage, embed_batch |
-| `mistralai/devstral-2512` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:38:18Z | surface declaration unknown |
+| `mistralai/devstral-2512` | `text` | `openrouter.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-29T23:38:18Z | missing current evidence: usage, token_limit, context_append, streaming |
 | `mistralai/devstral-medium` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:38:18Z | surface declaration unknown |
 | `mistralai/devstral-small` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:38:18Z | surface declaration unknown |
 | `mistralai/ministral-14b-2512` | `text` | `openrouter.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-29T23:38:18Z | missing current evidence: usage, token_limit, context_append, streaming |
@@ -415,12 +415,12 @@ provider-native feature and are not consulted by request routing.
 | `nvidia/llama-3.3-nemotron-super-49b-v1.5` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:44:50Z | surface declaration unknown |
 | `nvidia/llama-nemotron-embed-vl-1b-v2:free` | `embedding` | `openrouter.embedding` | text → embedding | Best-effort | 1/3 | 2026-05-30T00:56:13Z | missing current evidence: embed_usage, embed_batch |
 | `nvidia/nemotron-3-nano-30b-a3b` | `text` | `openrouter.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-29T23:44:50Z | missing current evidence: usage, token_limit, context_append, streaming |
-| `nvidia/nemotron-3-nano-30b-a3b:free` | `text` | `openrouter.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-29T23:44:50Z | missing current evidence: usage, token_limit, context_append, streaming |
+| `nvidia/nemotron-3-nano-30b-a3b:free` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:44:50Z | surface declaration unknown |
 | `nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free` | `text` | `openrouter.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-29T23:44:50Z | missing current evidence: usage, token_limit, context_append, streaming |
 | `nvidia/nemotron-3-super-120b-a12b` | `text` | `openrouter.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-29T23:44:50Z | missing current evidence: usage, token_limit, context_append, streaming |
 | `nvidia/nemotron-3-super-120b-a12b:free` | `text` | `openrouter.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-29T23:44:50Z | missing current evidence: usage, token_limit, context_append, streaming |
-| `nvidia/nemotron-nano-12b-v2-vl:free` | `text` | `openrouter.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-29T23:44:50Z | missing current evidence: usage, token_limit, context_append, streaming |
-| `nvidia/nemotron-nano-9b-v2:free` | `text` | `openrouter.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-29T23:44:50Z | missing current evidence: usage, token_limit, context_append, streaming |
+| `nvidia/nemotron-nano-12b-v2-vl:free` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:44:50Z | surface declaration unknown |
+| `nvidia/nemotron-nano-9b-v2:free` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:44:50Z | surface declaration unknown |
 | `openai/gpt-4o-mini` | `text` | `openrouter.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-29T16:17:31Z | missing current evidence: usage, token_limit, context_append, streaming |
 | `openai/gpt-oss-120b` | `text` | `openrouter.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-29T23:45:45Z | missing current evidence: usage, token_limit, context_append, streaming |
 | `openai/gpt-oss-120b:free` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:45:45Z | surface declaration unknown |
@@ -449,7 +449,7 @@ provider-native feature and are not consulted by request routing.
 | `qwen/qwen-2.5-coder-32b-instruct` | `text` | `openrouter.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-30T00:21:54Z | missing current evidence: usage, token_limit, context_append, streaming |
 | `qwen/qwen-plus` | `text` | `openrouter.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-30T00:22:16Z | missing current evidence: usage, token_limit, context_append, streaming |
 | `qwen/qwen-plus-2025-07-28` | `text` | `openrouter.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-30T00:22:16Z | missing current evidence: usage, token_limit, context_append, streaming |
-| `qwen/qwen-plus-2025-07-28:thinking` | `text` | `openrouter.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-30T00:22:16Z | missing current evidence: usage, token_limit, context_append, streaming |
+| `qwen/qwen-plus-2025-07-28:thinking` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:22:16Z | surface declaration unknown |
 | `qwen/qwen3-14b` | `text` | `openrouter.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-29T23:42:04Z | missing current evidence: usage, token_limit, context_append, streaming |
 | `qwen/qwen3-235b-a22b` | `text` | `openrouter.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-29T23:42:04Z | missing current evidence: usage, token_limit, context_append, streaming |
 | `qwen/qwen3-235b-a22b-2507` | `text` | `openrouter.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-29T23:42:04Z | missing current evidence: usage, token_limit, context_append, streaming |
@@ -778,7 +778,7 @@ provider-native feature and are not consulted by request routing.
 | `sapiens-ai/agnes-1.5-flash` | `text` | `zenmux.unrecorded_text` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | surface declaration unknown |
 | `sapiens-ai/agnes-1.5-lite` | `text` | `zenmux.unrecorded_text` | text → text | Unsupported | 0/5 | 2026-05-30T00:10:17Z | basic failed at provider_drift |
 | `sapiens-ai/agnes-1.5-pro` | `text` | `zenmux.unrecorded_text` | text → text | Unsupported | 0/5 | 2026-05-30T00:10:17Z | basic failed at provider_drift |
-| `sapiens-ai/agnes-2.0-flash` | `text` | `zenmux.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-30T00:10:17Z | missing current evidence: usage, token_limit, context_append, streaming |
+| `sapiens-ai/agnes-2.0-flash` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | surface declaration unknown |
 | `stepfun/step-3` | `text` | `zenmux.unrecorded_text` | text → text | Unsupported | 0/5 | 2026-05-30T00:10:17Z | basic failed at transport |
 | `stepfun/step-3.5-flash` | `text` | `zenmux.chat_completions` | text → text | Best-effort | 1/5 | 2026-05-30T00:10:17Z | missing current evidence: usage, token_limit, context_append, streaming |
 | `stepfun/step-3.5-flash-free` | `text` | `zenmux.unrecorded_text` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | surface declaration unknown |
