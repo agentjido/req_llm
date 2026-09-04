@@ -9,6 +9,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- changelog -->
 
+## [v1.22.0](https://github.com/agentjido/req_llm/compare/v1.21.1...v1.22.0) (2026-09-04)
+
+
+
+
+### Features:
+
+* openai: add experimental GPT-6 Astra Responses support (#987) by mikehostetler
+
+* bedrock: serve requests through the bedrock-mantle endpoint (#979) by adriencohen
+
+* bedrock: support application inference profiles (#978) by adriencohen
+
+### Bug Fixes:
+
+* deps: update vulnerable example dependencies by mikehostetler
+
+* deps: allow monthly llm_db catalog updates (#988) by BlueHotDog
+
+* embedding: forward dimensions to compatible providers (#986) by mikehostetler
+
+* zai: include tool_call_id and name in tool result messages (#985) by Bill Huang
+
 ## [v1.21.1](https://github.com/agentjido/req_llm/compare/v1.21.0...v1.21.1) (2026-08-26)
 
 
