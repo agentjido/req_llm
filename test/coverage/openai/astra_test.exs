@@ -222,7 +222,7 @@ defmodule ReqLLM.Coverage.OpenAI.AstraTest do
     )
   end
 
-  defp opts(scenario, index, extra \\ []) do
+  defp opts(scenario, index, extra) do
     common = [
       reasoning_effort: :low,
       max_tokens: 1_024,
