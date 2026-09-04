@@ -60,8 +60,8 @@ mix mc --sample anthropic
 
 ### GPT-6 Astra Launch Fixtures
 
-Use `llm_db` 2026.9.1 or later to resolve `openai:gpt-6-astra`. Keep Astra out
-of the default test models until live fixtures pass. The request tests in
+Use `llm_db` 2026.9.1 or later to resolve `openai:gpt-6-astra`. CI runs the
+standard Astra fixtures and focused feature fixtures in replay mode. The request tests in
 `test/providers/openai_astra_test.exs` run without API calls:
 
 ```bash
@@ -114,25 +114,33 @@ mix req_llm.model_support --generate
 mix req_llm.model_support --check
 ```
 
-The branch also implements async function tools, ordered reasoning updates, and
-a persistent WebSocket session API for steering. See the
-[Astra usage guide](openai.md#gpt-6-astra-experimental). Local tests cover request
-validation, async metadata, delayed results, and steering events. The standard
-scenarios above do not verify these features against the service.
+The focused `astra` capability routes to `test/coverage/openai/astra_test.exs`.
+It checks async HTTP and SSE calls, delayed results across an intervening turn,
+reasoning updates across three turns, automatic steering continuation, and
+steering that requires a tool result on the same connection. See the
+[Astra usage guide](openai.md#gpt-6-astra-experimental).
 
-After the standard live scenarios pass, verify these feature cases separately:
+Record and replay these scenarios with the normal compatibility task:
 
-- An async function call and text in one response, for both HTTP and SSE.
-- A result returned on a later turn with its original `call_id`, while another
-  async job remains pending.
-- A reasoning update before a user message, followed by another turn with the
-  same request-level effort. Check manual replay and `previous_response_id`.
-- Steering after `response.created`, including acceptance, interruption or
-  normal completion, and the automatic successor response.
-- Steering that requires a tool result, and a failed steer or disconnect.
+```bash
+mix mc "openai:gpt-6-astra" --capability astra --record --max-concurrency 1
+mix mc "openai:gpt-6-astra" --capability astra --max-concurrency 1
+```
 
-Capture the request and event sequence for each case. Keep Astra out of the
-default fixture matrix until the live results and replay pass.
+HTTP and SSE use the standard fixture recorder. Persistent WebSocket sessions
+use `ReqLLM.Test.WebSocketFixture`: a JSON transcript stores client calls and
+raw server events in order. Replay uses a local WebSocket server and checks
+every client frame against the saved transcript. It exercises the public
+Responses session API across response boundaries. No connection headers or
+credentials enter these transcripts. Recording uses the compatibility task's
+staging directory; only passing scenarios replace fixtures.
+
+CI replays both suites without API credentials:
+
+```bash
+REQ_LLM_FIXTURES_MODE=replay REQ_LLM_MODELS=openai:gpt-6-astra REQ_LLM_INCLUDE_RESPONSES=1 \
+mix test test/coverage/openai/comprehensive_test.exs test/coverage/openai/astra_test.exs --include coverage
+```
 
 ### Live results from 2026-09-04
 
@@ -142,15 +150,28 @@ objects, reasoning, usage, and the output limit all passed. The support evidence
 classifies `openai:gpt-6-astra` on `openai.responses` as first-class for the
 standard text baseline.
 
-Focused live calls also confirmed the new feature paths:
+Five focused scenarios add nine live JSON files, for 23 files and 16 scenarios
+in total. The focused checks cover:
 
-- A function tool returned `async: true` together with assistant text. A later
-  response accepted its result with the original call ID.
-- A `configuration_update` changed the effective effort to `high` while the
-  response still reported the request-level effort as `low`.
-- A WebSocket steer was accepted. The original response completed normally,
-  and the service created and completed an automatic successor on the same
-  connection.
+- HTTP async calls with text, an intervening turn while the result is pending,
+  and a delayed result with the original call ID.
+- SSE async calls with text and retained async metadata.
+- A reasoning update requesting `high`, with the request effort fixed at `low`
+  across three turns. Manual history retains the earlier input prefix. The API
+  accepts `prompt_cache_options.ttl` set to `30m`. These checks do not measure
+  effective reasoning effort, cache hits, or cache cost savings.
+- An accepted WebSocket steer, normal completion of the original response, and
+  an automatic successor on the same connection.
+- A pending steer that identifies a required tool result, then accepts that
+  result with the original call ID on the same connection and completes.
+
+The focused JSON files use the `astra_` prefix. They are part of the scenario
+catalog, compatibility evidence, and CI replay. Failure events, disconnects,
+interrupted responses, and validation of incompatible settings have local mock
+tests. Live fixtures do not yet cover multiple simultaneous async jobs, stored
+HTTP continuation with `previous_response_id`, async custom tools, or
+multi-agent orchestration. The first-class classification applies to the
+standard text baseline, not every optional Astra API feature.
 
 One steering edge case was also observed. A steer can be accepted and later
 fail with `response_not_active` if the original response reaches

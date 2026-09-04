@@ -1,0 +1,292 @@
+{
+  "model_spec": "openai:gpt-6-astra",
+  "provider": "openai",
+  "request": {
+    "body": {
+      "b64": "eyJpbmNsdWRlIjpbInJlYXNvbmluZy5lbmNyeXB0ZWRfY29udGVudCJdLCJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IkNhbGwgbG9va3VwX3JlcG9ydCBmb3IgcmVwb3J0IDEyMy4gQWxzbyB0ZWxsIG1lIHRoYXQgdGhlIGxvb2t1cCBzdGFydGVkLiBXaGVuIGl0cyByZXN1bHQgYXJyaXZlcywgaW5jbHVkZSB0aGUgcmVzdWx0IGNvZGUuIiwidHlwZSI6ImlucHV0X3RleHQifV0sInJvbGUiOiJ1c2VyIn0seyJlbmNyeXB0ZWRfY29udGVudCI6ImdBQUFBQUJxbXh0SzlSVURiUmN2bUhBT3RieWV0WnpkcnZCaWRRV2RBMEhxU0NNa0s3QVRjRkYtdU9CYkl4emdweWxyMDRsaXVfWjBiblR1VldoUTRkRVV5NDF3MHdhNVVTUWRVYVpBUHYzS0YzaDBEX3VMTTVHRWZpTDRIWUhXcjU4SkRDWVhFQ1lkcDQxcVhUMk1DYW54aWxNTWpRSUs5YXVoeVBwTWQyR0k4SXVxdXcwRGJkR0IzS24zUFRWWDFLbWp0dlpJaTFqYVhMaEhHQkI4UVJaVHZaNnFkdWR0TG40R2owVHhqUjB6TzZpMFRfVFlEMExycDRocmV1ZDFaSHFLbk5iaFBPRW91WW81UnpPMER1SnA2LVQteXpzeUdQM21xdTBKdUxnVUNPN1NacUpxekVVUDI0NkpLd3BiRnNpd1dEUnAtdjR3dk45T28wODl4VkdZYjRrTkpiUmtVc1JiSjBSeXVGX2s3aGhjSXg0RllORTRJOHJrY3VGWEFpYXFleFVTa1dlT050b20tcW1Sc2JDZ1VEcEFaSGx1QmhQUmlBOFNfWDRKdElya2tWTDlNbHhFdEF4QjRjd3o4MWsxWlBrYVRVS0RxZGVDb1dDUlgwZ1M1d3AzaGlWdHZ6NjZ3ZUkzNnl3MGVyeWtyN1NZOUV5VUdLOFFGUDZaRzZFU1ZtNVhUazZmSTN2UjVPQnJoQk5LUENwZ20xc1UxSlZXQVdHUVN1MUNZc0pNRUstQi0tTEliY05xRkZjbFBwTW9EMUlZMUZoOVdRRC1mN1ozUmFUVElaaEpyRDBMSndXS1hER3V5VWoxcmhZM3NGdm1GemJZVkZBTzJ1ZVFlMmlaZXpRQmFJUkVkSHFtV082ZTFqVC0yaktoNHF6MU9SLVNvVG1FVnFKQUtkNDE1d1ZIakZsakhXWGtiN1ZRblVJdlJFdnVIWmtCdDBvZU1UNzhoX1F2NVZ5OG9BNUYzb0duaF9pYnRqdXhKMUhtWnZjM1B6NnpXeHVlSDY2TTQzVjc4QV9ZeEhIeUJtQnBJX1FoZVFXaXlzMzlxb084bC1EUEFsYk1GOHZHUmt6WnFENXFkTlZCX0xJLU5jU01iSkFpMGxDSEpTX0hKcDIzY1RTRFM4NnE5ZlNYdjNiTFk3X0taZnNkN3pSYnZZUG45NVdUamNvNmFnOGh3RElrU1BSeEYtUjN4WUdKWnY2S0NoT25rOHhtVndvU3prc3hORi1mUGo0T2xKLUU2cWIyZktwZ2ZYS2c0OGhMNkdqTkYyd1FrSFJtdkpfbl9uaGt5Mm44eFFkdm4wbXpHeHpGTjExa0NUSG55T1Y3bkRFVTcwWmZ3UGJQUmd2Z2UtVXNxUGxWTWQwUVY4SzBJM2FCRWZPaHRYMENHTDJhNUhTbmE2RUU3TFZZTTdURkVERWRkN0dIVHEyTnpIN2RJMkFuYXgxamt0dnJfekJrZmhCOVRYRTBoTXZMVjdDRm9VVnFUWlNuRk1CajhFT05OTXFvYWJpQjREZF9GeTlVNWg4aFZYQ0FtZlpwMmo2d3Fpb1pCTThkN1BqV3E0R1pCSl9Xc1lxYlFWRXRJcXBFVmZQclV1ek5JMzFLZ3NyTHEyWW1sSmJLcXk0UlFBN3RPS1BSeWo0V0pQdGhqeG5vXzNhVW1IeDR4SDBoUThiclRGNnoyLVJpSHpySHNhbVEwOXd4VHUtdEZuMjBrX1NLIiwiaWQiOiJyc18wMTA4ODk5M2JjN2E5MjIxMDE2YTliMWI0OWQ3YWM4N2QxYTlkZGZhOTcyOTVmNGE0OSIsInN1bW1hcnkiOltdLCJ0eXBlIjoicmVhc29uaW5nIn0seyJjb250ZW50IjpbeyJ0ZXh0IjoiVGhlIGxvb2t1cCBoYXMgc3RhcnRlZC4gSeKAmWxsIGluY2x1ZGUgdGhlIHJlc3VsdCBjb2RlIHdoZW4gdGhlIHJlc3VsdCBhcnJpdmVzLiIsInR5cGUiOiJvdXRwdXRfdGV4dCJ9XSwicGhhc2UiOiJjb21tZW50YXJ5Iiwicm9sZSI6ImFzc2lzdGFudCJ9LHsiY29udGVudCI6W3sidGV4dCI6IlRoZSBsb29rdXAgaXMgdW5kZXJ3YXkgZm9yIHJlcG9ydCAxMjMuIE5vIHJlc3VsdCBjb2RlIGhhcyBhcnJpdmVkIHlldC4iLCJ0eXBlIjoib3V0cHV0X3RleHQifV0sInBoYXNlIjoiZmluYWxfYW5zd2VyIiwicm9sZSI6ImFzc2lzdGFudCJ9LHsiYXJndW1lbnRzIjoie1wicmVwb3J0X2lkXCI6XCIxMjNcIn0iLCJhc3luYyI6dHJ1ZSwiY2FsbF9pZCI6ImNhbGxfTGNBRERSVWp0UWFCaGI5VENkT0NYMTV6IiwibmFtZSI6Imxvb2t1cF9yZXBvcnQiLCJ0eXBlIjoiZnVuY3Rpb25fY2FsbCJ9LHsiY29udGVudCI6W3sidGV4dCI6IlRoZSByZXBvcnQgaXMgc3RpbGwgcnVubmluZy4gUmVwbHkgYnJpZWZseSB3aXRoIHdoYXQgd2UgY2FuIGRvIHdoaWxlIHdlIHdhaXQuIERvIG5vdCBjYWxsIGFueSB0b29scy4iLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjoxMDI0LCJtb2RlbCI6ImdwdC02LWFzdHJhIiwicmVhc29uaW5nIjp7ImVmZm9ydCI6ImxvdyJ9LCJzdG9yZSI6ZmFsc2UsInN0cmVhbSI6ZmFsc2UsInRvb2xfY2hvaWNlIjoibm9uZSIsInRvb2xzIjpbeyJhc3luYyI6dHJ1ZSwiZGVzY3JpcHRpb24iOiJHZXQgYSBzaG9ydCBwcm9qZWN0IHJlcG9ydCBieSBpdHMgSUQiLCJuYW1lIjoibG9va3VwX3JlcG9ydCIsInBhcmFtZXRlcnMiOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7InJlcG9ydF9pZCI6eyJ0eXBlIjoic3RyaW5nIn19LCJ0eXBlIjoib2JqZWN0In0sInN0cmljdCI6ZmFsc2UsInR5cGUiOiJmdW5jdGlvbiJ9XX0="
+    },
+    "canonical_json": {
+      "include": [
+        "reasoning.encrypted_content"
+      ],
+      "input": [
+        {
+          "content": [
+            {
+              "text": "Call lookup_report for report 123. Also tell me that the lookup started. When its result arrives, include the result code.",
+              "type": "input_text"
+            }
+          ],
+          "role": "user"
+        },
+        {
+          "encrypted_content": "gAAAAABqmxtK9RUDbRcvmHAOtbyetZzdrvBidQWdA0HqSCMkK7ATcFF-uOBbIxzgpylr04liu_Z0bnTuVWhQ4dEUy41w0wa5USQdUaZAPv3KF3h0D_uLM5GEfiL4HYHWr58JDCYXECYdp41qXT2MCanxilMMjQIK9auhyPpMd2GI8Iuquw0DbdGB3Kn3PTVX1KmjtvZIi1jaXLhHGBB8QRZTvZ6qdudtLn4Gj0TxjR0zO6i0T_TYD0Lrp4hreud1ZHqKnNbhPOEouYo5RzO0DuJp6-T-yzsyGP3mqu0JuLgUCO7SZqJqzEUP246JKwpbFsiwWDRp-v4wvN9Oo089xVGYb4kNJbRkUsRbJ0RyuF_k7hhcIx4FYNE4I8rkcuFXAiaqexUSkWeONtom-qmRsbCgUDpAZHluBhPRiA8S_X4JtIrkkVL9MlxEtAxB4cwz81k1ZPkaTUKDqdeCoWCRX0gS5wp3hiVtvz66weI36yw0erykr7SY9EyUGK8QFP6ZG6ESVm5XTk6fI3vR5OBrhBNKPCpgm1sU1JVWAWGQSu1CYsJMEK-B--LIbcNqFFclPpMoD1IY1Fh9WQD-f7Z3RaTTIZhJrD0LJwWKXDGuyUj1rhY3sFvmFzbYVFAO2ueQe2iZezQBaIREdHqmWO6e1jT-2jKh4qz1OR-SoTmEVqJAKd415wVHjFljHWXkb7VQnUIvREvuHZkBt0oeMT78h_Qv5Vy8oA5F3oGnh_ibtjuxJ1HmZvc3Pz6zWxueH66M43V78A_YxHHyBmBpI_QheQWiys39qoO8l-DPAlbMF8vGRkzZqD5qdNVB_LI-NcSMbJAi0lCHJS_HJp23cTSDS86q9fSXv3bLY7_KZfsd7zRbvYPn95WTjco6ag8hwDIkSPRxF-R3xYGJZv6KChOnk8xmVwoSzksxNF-fPj4OlJ-E6qb2fKpgfXKg48hL6GjNF2wQkHRmvJ_n_nhky2n8xQdvn0mzGxzFN11kCTHnyOV7nDEU70ZfwPbPRgvge-UsqPlVMd0QV8K0I3aBEfOhtX0CGL2a5HSna6EE7LVYM7TFEDEdd7GHTq2NzH7dI2Anax1jktvr_zBkfhB9TXE0hMvLV7CFoUVqTZSnFMBj8EONNMqoabiB4Dd_Fy9U5h8hVXCAmfZp2j6wqioZBM8d7PjWq4GZBJ_WsYqbQVEtIqpEVfPrUuzNI31KgsrLq2YmlJbKqy4RQA7tOKPRyj4WJPthjxno_3aUmHx4xH0hQ8brTF6z2-RiHzrHsamQ09wxTu-tFn20k_SK",
+          "id": "rs_01088993bc7a9221016a9b1b49d7ac87d1a9ddfa97295f4a49",
+          "summary": [],
+          "type": "reasoning"
+        },
+        {
+          "content": [
+            {
+              "text": "The lookup has started. I’ll include the result code when the result arrives.",
+              "type": "output_text"
+            }
+          ],
+          "phase": "commentary",
+          "role": "assistant"
+        },
+        {
+          "content": [
+            {
+              "text": "The lookup is underway for report 123. No result code has arrived yet.",
+              "type": "output_text"
+            }
+          ],
+          "phase": "final_answer",
+          "role": "assistant"
+        },
+        {
+          "arguments": "{\"report_id\":\"123\"}",
+          "async": true,
+          "call_id": "call_LcADDRUjtQaBhb9TCdOCX15z",
+          "name": "lookup_report",
+          "type": "function_call"
+        },
+        {
+          "content": [
+            {
+              "text": "The report is still running. Reply briefly with what we can do while we wait. Do not call any tools.",
+              "type": "input_text"
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "max_output_tokens": 1024,
+      "model": "gpt-6-astra",
+      "reasoning": {
+        "effort": "low"
+      },
+      "store": false,
+      "stream": false,
+      "tool_choice": "none",
+      "tools": [
+        {
+          "async": true,
+          "description": "Get a short project report by its ID",
+          "name": "lookup_report",
+          "parameters": {
+            "additionalProperties": false,
+            "properties": {
+              "report_id": {
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "strict": false,
+          "type": "function"
+        }
+      ]
+    },
+    "headers": {
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.7.4"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.openai.com/v1/responses"
+  },
+  "response": {
+    "body": {
+      "safety_identifier": null,
+      "store": false,
+      "error": null,
+      "created_at": 1788549962,
+      "presence_penalty": 0.0,
+      "status": "completed",
+      "tool_usage": {
+        "image_gen": {
+          "input_tokens": 0,
+          "input_tokens_details": {
+            "image_tokens": 0,
+            "text_tokens": 0
+          },
+          "output_tokens": 0,
+          "output_tokens_details": {
+            "image_tokens": 0,
+            "text_tokens": 0
+          },
+          "total_tokens": 0
+        },
+        "web_search": {
+          "num_requests": 0
+        }
+      },
+      "max_tool_calls": null,
+      "instructions": null,
+      "billing": {
+        "payer": "developer"
+      },
+      "prompt_cache_retention": "24h",
+      "completed_at": 1788549965,
+      "temperature": 1.0,
+      "text": {
+        "format": {
+          "type": "text"
+        },
+        "verbosity": "medium"
+      },
+      "parallel_tool_calls": true,
+      "tool_choice": "none",
+      "frequency_penalty": 0.0,
+      "top_logprobs": 0,
+      "reasoning": {
+        "context": "all_turns",
+        "effort": "low",
+        "mode": "standard",
+        "summary": null
+      },
+      "usage": {
+        "input_tokens": 204,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 35,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 239
+      },
+      "access_programs": {
+        "cyber": "standard"
+      },
+      "incomplete_details": null,
+      "model": "gpt-6-astra",
+      "truncation": "disabled",
+      "metadata": {},
+      "service_tier": "default",
+      "id": "resp_01088993bc7a9221016a9b1b4aeb1887d1adad16743062a70b",
+      "top_p": 0.98,
+      "user": null,
+      "prompt_cache_key": null,
+      "moderation": null,
+      "object": "response",
+      "background": false,
+      "previous_response_id": null,
+      "max_output_tokens": 1024,
+      "output": [
+        {
+          "content": [
+            {
+              "annotations": [],
+              "logprobs": [],
+              "text": "While we wait, we can outline what to check in the report or prepare follow-up questions. Once the result arrives, I’ll include its result code.",
+              "type": "output_text"
+            }
+          ],
+          "id": "msg_01088993bc7a9221016a9b1b4ce71c87d1b0cb2e4ab81f2014",
+          "phase": "final_answer",
+          "role": "assistant",
+          "status": "completed",
+          "type": "message"
+        }
+      ],
+      "tools": [
+        {
+          "async": true,
+          "description": "Get a short project report by its ID",
+          "name": "lookup_report",
+          "output_schema": null,
+          "parameters": {
+            "additionalProperties": false,
+            "properties": {
+              "report_id": {
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "strict": false,
+          "type": "function"
+        }
+      ]
+    },
+    "headers": {
+      "access-control-expose-headers": [
+        "X-Request-ID",
+        "CF-Ray",
+        "CF-Ray"
+      ],
+      "alt-svc": [
+        "h3=\":443\"; ma=86400"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a35f6233ddf3344d-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-length": [
+        "2622"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 04 Sep 2026 19:26:05 GMT"
+      ],
+      "openai-organization": "[REDACTED:openai-organization]",
+      "openai-processing-ms": [
+        "2756"
+      ],
+      "openai-project": [
+        "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
+      ],
+      "openai-version": [
+        "2020-10-01"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": "[REDACTED:set-cookie]",
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-ratelimit-limit-requests": [
+        "10000"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "4000000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "9999"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "4000000"
+      ],
+      "x-ratelimit-reset-requests": [
+        "6ms"
+      ],
+      "x-ratelimit-reset-tokens": [
+        "0s"
+      ],
+      "x-request-id": [
+        "req_c60603253246452ea7522b52c79bb5b9"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

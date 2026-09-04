@@ -46,6 +46,7 @@ defmodule ReqLLM.Compatibility.ScenarioCatalog do
   ]
 
   @capabilities [
+    %{id: "astra", operation: :text},
     %{id: "core", operation: :text},
     %{id: "conversation", operation: :text},
     %{id: "streaming", operation: :text},
@@ -83,6 +84,41 @@ defmodule ReqLLM.Compatibility.ScenarioCatalog do
 
   @scenario_specs Enum.map(
                     [
+                      {"astra_async_tools", "astra",
+                       applicability: :focused,
+                       providers: [:openai],
+                       input_modalities: [:text, :tool_result],
+                       output_modalities: [:text, :tool_call],
+                       requirements: [:tool_calling],
+                       fixtures: [
+                         "astra_async_tools_1",
+                         "astra_async_tools_2",
+                         "astra_async_tools_3"
+                       ]},
+                      {"astra_async_streaming", "astra",
+                       applicability: :focused,
+                       providers: [:openai],
+                       output_modalities: [:text, :tool_call],
+                       requirements: [:tool_calling],
+                       transports: [:server_sent_events]},
+                      {"astra_reasoning_update", "astra",
+                       applicability: :focused,
+                       providers: [:openai],
+                       requirements: [:reasoning],
+                       fixtures: [
+                         "astra_reasoning_update_1",
+                         "astra_reasoning_update_2",
+                         "astra_reasoning_update_3"
+                       ]},
+                      {"astra_steering", "astra",
+                       applicability: :focused, providers: [:openai], transports: [:websocket]},
+                      {"astra_steering_pending", "astra",
+                       applicability: :focused,
+                       providers: [:openai],
+                       input_modalities: [:text, :tool_result],
+                       output_modalities: [:text, :tool_call],
+                       requirements: [:tool_calling],
+                       transports: [:websocket]},
                       {"basic", "core", []},
                       {"usage", "core", []},
                       {"token_limit", "core", []},
@@ -273,6 +309,31 @@ defmodule ReqLLM.Compatibility.ScenarioCatalog do
              end)
 
   @routes [
+    %{
+      provider: :openai,
+      scenario: "astra_async_tools",
+      test_file: "test/coverage/openai/astra_test.exs"
+    },
+    %{
+      provider: :openai,
+      scenario: "astra_async_streaming",
+      test_file: "test/coverage/openai/astra_test.exs"
+    },
+    %{
+      provider: :openai,
+      scenario: "astra_reasoning_update",
+      test_file: "test/coverage/openai/astra_test.exs"
+    },
+    %{
+      provider: :openai,
+      scenario: "astra_steering",
+      test_file: "test/coverage/openai/astra_test.exs"
+    },
+    %{
+      provider: :openai,
+      scenario: "astra_steering_pending",
+      test_file: "test/coverage/openai/astra_test.exs"
+    },
     %{
       provider: :openai,
       scenario: "logprobs_non_streaming",

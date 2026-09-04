@@ -16,6 +16,8 @@ defmodule ReqLLM.Compatibility.ScenarioCatalogTest do
   ]
 
   @capability_scenarios %{
+    "astra" =>
+      ~w(astra_async_tools astra_async_streaming astra_reasoning_update astra_steering astra_steering_pending),
     "core" => ~w(basic usage token_limit),
     "conversation" => ~w(context_append),
     "streaming" => ~w(streaming),
@@ -52,7 +54,7 @@ defmodule ReqLLM.Compatibility.ScenarioCatalogTest do
     test "represents every scenario once" do
       scenario_ids = Enum.map(ScenarioCatalog.scenarios(), & &1.id)
 
-      assert length(scenario_ids) == 40
+      assert length(scenario_ids) == 45
       assert length(scenario_ids) == MapSet.size(MapSet.new(scenario_ids))
     end
 

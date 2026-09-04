@@ -206,6 +206,65 @@ defmodule ReqLLM.Providers.OpenAIAstraFeaturesTest do
     end
   end
 
+  test "manual Astra history keeps reasoning at its turn and preserves the input prefix" do
+    model = ReqLLM.model!(@model)
+    initial = Context.new([Context.user("Start a migration plan")])
+
+    first =
+      decode(
+        %{
+          "id" => "resp_1",
+          "model" => model.id,
+          "status" => "completed",
+          "output" => [
+            %{"type" => "reasoning", "id" => "rs_1", "encrypted_content" => "encrypted_1"}
+          ],
+          "output_text" => "Back up the database."
+        },
+        model,
+        initial
+      )
+
+    updated =
+      Context.append(
+        first.context,
+        Responses.with_reasoning_effort(Context.user("Check risks"), :high)
+      )
+
+    before = body(updated, reasoning_effort: :low, provider_options: [store: false])
+
+    assert Enum.map(before["input"], &(&1["type"] || &1["role"])) == [
+             "user",
+             "reasoning",
+             "assistant",
+             "configuration_update",
+             "user"
+           ]
+
+    second =
+      decode(
+        %{
+          "id" => "resp_2",
+          "model" => model.id,
+          "status" => "completed",
+          "output" => [
+            %{"type" => "reasoning", "id" => "rs_2", "encrypted_content" => "encrypted_2"}
+          ],
+          "output_text" => "Test rollback."
+        },
+        model,
+        updated
+      )
+
+    later = Context.append(second.context, Context.user("Continue"))
+    after_update = body(later, reasoning_effort: :low, provider_options: [store: false])
+    assert Enum.take(after_update["input"], length(before["input"])) == before["input"]
+    assert after_update["reasoning"] == before["reasoning"]
+
+    assert Enum.filter(after_update["input"], &(&1["type"] == "reasoning"))
+           |> Enum.map(& &1["id"]) == ["rs_1", "rs_2"]
+  end
+
   defp body(context, opts) do
     {:ok, request} =
       OpenAI.prepare_request(

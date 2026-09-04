@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-04T19:10:46Z",
+  "generated_at": "2026-09-04T19:26:34Z",
   "models": {
     "anthropic:claude-haiku-4-5-20251001": {
       "catalog_status": "present",
@@ -6383,6 +6383,119 @@
           "operation": "text",
           "provider": "openai",
           "scenarios": {
+            "astra_async_streaming": {
+              "observations": [
+                {
+                  "checked_at": "2026-09-04T19:22:44Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "astra_async_streaming"
+                  ],
+                  "mode": "record",
+                  "status": "pass"
+                },
+                {
+                  "checked_at": "2026-09-04T19:26:34Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "astra_async_streaming"
+                  ],
+                  "mode": "record",
+                  "status": "pass"
+                }
+              ],
+              "proof": "fixture_replay"
+            },
+            "astra_async_tools": {
+              "observations": [
+                {
+                  "checked_at": "2026-09-04T19:22:44Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "astra_async_tools_1",
+                    "astra_async_tools_2",
+                    "astra_async_tools_3"
+                  ],
+                  "mode": "record",
+                  "status": "pass"
+                },
+                {
+                  "checked_at": "2026-09-04T19:26:34Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "astra_async_tools_1",
+                    "astra_async_tools_2",
+                    "astra_async_tools_3"
+                  ],
+                  "mode": "record",
+                  "status": "pass"
+                }
+              ],
+              "proof": "fixture_replay"
+            },
+            "astra_reasoning_update": {
+              "observations": [
+                {
+                  "checked_at": "2026-09-04T19:22:44Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "astra_reasoning_update_1",
+                    "astra_reasoning_update_2",
+                    "astra_reasoning_update_3"
+                  ],
+                  "mode": "record",
+                  "status": "pass"
+                },
+                {
+                  "checked_at": "2026-09-04T19:26:34Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "astra_reasoning_update_1",
+                    "astra_reasoning_update_2",
+                    "astra_reasoning_update_3"
+                  ],
+                  "mode": "record",
+                  "status": "pass"
+                }
+              ],
+              "proof": "fixture_replay"
+            },
+            "astra_steering": {
+              "observations": [
+                {
+                  "checked_at": "2026-09-04T19:22:44Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "astra_steering"
+                  ],
+                  "mode": "record",
+                  "status": "pass"
+                }
+              ],
+              "proof": "fixture_replay"
+            },
+            "astra_steering_pending": {
+              "observations": [
+                {
+                  "checked_at": "2026-09-04T19:22:44Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "astra_steering_pending"
+                  ],
+                  "mode": "record",
+                  "status": "pass"
+                }
+              ],
+              "proof": "fixture_replay"
+            },
             "basic": {
               "observations": [
                 {

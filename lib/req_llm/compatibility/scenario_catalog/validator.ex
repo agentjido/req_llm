@@ -52,7 +52,7 @@ defmodule ReqLLM.Compatibility.ScenarioCatalog.Validator do
     :web_fetch,
     :web_search
   ]
-  @transports [:request_response, :server_sent_events]
+  @transports [:request_response, :server_sent_events, :websocket]
   @proofs [:declared, :fixture_replay, :live_only]
   @applicabilities [:focused, :integration, :model_features, :operation]
 

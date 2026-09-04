@@ -746,6 +746,10 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
           extract_previous_response_id_from_context(context)
       end
 
+    inline_reasoning? =
+      previous_response_id == nil and
+        ReqLLM.Providers.OpenAI.AdapterHelpers.gpt6_astra_model?(model_name)
+
     {input, _tool_messages, reasoning_items} =
       Enum.reduce(context.messages, {[], [], []}, fn msg, {input_acc, tool_acc, reasoning_acc} ->
         case msg.role do
@@ -768,8 +772,9 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
             assistant_items = encode_assistant_message_items(msg)
             function_calls = encode_tool_calls_as_function_calls(msg.tool_calls || [])
 
-            if assistant_items == [] and function_calls == [] do
-              {input_acc, tool_acc, reasoning_acc ++ new_reasoning}
+            if inline_reasoning? do
+              {input_acc ++ new_reasoning ++ assistant_items ++ function_calls, tool_acc,
+               reasoning_acc}
             else
               {input_acc ++ assistant_items ++ function_calls, tool_acc,
                reasoning_acc ++ new_reasoning}

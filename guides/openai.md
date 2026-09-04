@@ -341,9 +341,10 @@ Use this when you want a call-scoped WebSocket transport while keeping the exist
 
 ## GPT-6 Astra (experimental)
 
-These features follow the published API docs and have local mock tests. Live
-Astra validation is pending. See [Astra fixture testing](fixture-testing.md#gpt-6-astra-launch-fixtures)
-for the recording steps.
+The standard text scenarios and focused Astra features have live JSON fixtures
+and offline replay tests. CI runs both suites. See
+[Astra fixture testing](fixture-testing.md#gpt-6-astra-launch-fixtures) for the
+commands and the exact coverage limits.
 
 Use `openai:gpt-6-astra` with `llm_db` 2026.9.1 or later. ReqLLM selects Responses
 and accepts `low`, `medium`, `high`, `xhigh`, or `max` reasoning effort. It rejects
@@ -412,7 +413,18 @@ ReqLLM.generate_text("openai:gpt-6-astra", context, reasoning_effort: :low)
 The encoder places a `configuration_update` input item immediately before this
 user message. Keep the request effort at its original value (`low` in this
 example). The update stays in the same place when later messages are appended.
-The response's request-level effort does not report the effective update.
+Manual Astra history also retains each encrypted reasoning item at its original
+assistant turn, so later turns preserve the earlier input prefix. The response's
+request-level effort does not report the effective update.
+
+Use the current cache option when needed:
+
+```elixir
+provider_options: [prompt_cache_options: %{ttl: "30m"}]
+```
+
+The fixtures verify that the API accepts this option. They do not measure cache
+hits or cache cost savings.
 
 This feature requires Astra in standard single-agent mode. It cannot use
 automatic compaction or truncation. After explicit compaction, add a fresh
