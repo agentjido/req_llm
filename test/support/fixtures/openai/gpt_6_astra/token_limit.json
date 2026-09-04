@@ -1,0 +1,203 @@
+{
+  "model_spec": "openai:gpt-6-astra",
+  "provider": "openai",
+  "request": {
+    "body": {
+      "b64": "eyJpbmNsdWRlIjpbInJlYXNvbmluZy5lbmNyeXB0ZWRfY29udGVudCJdLCJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IldyaXRlIGEgdmVyeSBsb25nIHN0b3J5IGFib3V0IGRyYWdvbnMgYW5kIGFkdmVudHVyZXMiLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjozMDAwLCJtb2RlbCI6ImdwdC02LWFzdHJhIiwicmVhc29uaW5nIjp7ImVmZm9ydCI6ImxvdyJ9LCJzdHJlYW0iOmZhbHNlfQ=="
+    },
+    "canonical_json": {
+      "include": [
+        "reasoning.encrypted_content"
+      ],
+      "input": [
+        {
+          "content": [
+            {
+              "text": "Write a very long story about dragons and adventures",
+              "type": "input_text"
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "max_output_tokens": 3000,
+      "model": "gpt-6-astra",
+      "reasoning": {
+        "effort": "low"
+      },
+      "stream": false
+    },
+    "headers": {
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.7.4"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.openai.com/v1/responses"
+  },
+  "response": {
+    "body": {
+      "safety_identifier": null,
+      "store": true,
+      "error": null,
+      "created_at": 1788548929,
+      "presence_penalty": 0.0,
+      "status": "incomplete",
+      "tool_usage": {
+        "image_gen": {
+          "input_tokens": 0,
+          "input_tokens_details": {
+            "image_tokens": 0,
+            "text_tokens": 0
+          },
+          "output_tokens": 0,
+          "output_tokens_details": {
+            "image_tokens": 0,
+            "text_tokens": 0
+          },
+          "total_tokens": 0
+        },
+        "web_search": {
+          "num_requests": 0
+        }
+      },
+      "max_tool_calls": null,
+      "instructions": null,
+      "billing": {
+        "payer": "developer"
+      },
+      "prompt_cache_retention": "24h",
+      "completed_at": null,
+      "temperature": 1.0,
+      "text": {
+        "format": {
+          "type": "text"
+        },
+        "verbosity": "medium"
+      },
+      "parallel_tool_calls": true,
+      "tool_choice": "auto",
+      "frequency_penalty": 0.0,
+      "top_logprobs": 0,
+      "reasoning": {
+        "context": "all_turns",
+        "effort": "low",
+        "mode": "standard",
+        "summary": null
+      },
+      "usage": {
+        "input_tokens": 15,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 3000,
+        "output_tokens_details": {
+          "reasoning_tokens": 40
+        },
+        "total_tokens": 3015
+      },
+      "access_programs": {
+        "cyber": "standard"
+      },
+      "incomplete_details": {
+        "reason": "max_output_tokens"
+      },
+      "model": "gpt-6-astra",
+      "truncation": "disabled",
+      "metadata": {},
+      "service_tier": "default",
+      "id": "resp_07942242068cd66d006a9b1741de3087d19fa3c88f47068c80",
+      "top_p": 0.98,
+      "user": null,
+      "prompt_cache_key": null,
+      "moderation": null,
+      "object": "response",
+      "background": false,
+      "previous_response_id": null,
+      "max_output_tokens": 3000,
+      "output": [
+        {
+          "content": [],
+          "encrypted_content": "gAAAAABqmxeBR2tJHALoeSqiGLHT5OV3QrJBQhnzxJP-w1ixXr9G_m2Zo0P_8piMFX6_E8YynSwEEgK1jhasslDIa1Y-X8Go_QaHllh05_8amzAQQ5yORutFkPEsdVeoi2mjjK2PgW0Vby_Ht7gxyWQzm5XrDEExW3iX2gOAgzV4hjdUkR6mtYhy7NIdZi4OsZbwF0vfbIFi195XQCxX3wG82sN-1DtPVDzc3j0weazjvovr2AvAuwHXDs43iN2AhZhvvmxuMu2NDWW-HGn2QmUOyT4EanV2_bRgRDpcIRINAUGdPDBiMlHWrV7rw0zpmPiugE7n3LacxPw-t6bv3RRxQNgm-s3bhgSA7PFh6LSjVbvZIcWUAlL7314Q5kp-q7kRMf7WcmCW2aVNfQnN4Cup1HQ0epfeJZuIIFGf8zeraA-f7cqXrPNY_HwyaojISN8O1yyTfpCH-qxNylAMaaNRZBXaWSJwJPafA3wJ2Y3UgB4dAZdTMDpfGL66kbH5oMRx8oEs8CjZt5B7UnloVbbhhoxMS9n2qnklh4Tw-QMk4-oxMtalOM-gSGUIrUKXzB4aoYRgZhBCmMXaIIxrBRfy_uTsWvvdVOxmznd5p0Jk_mZkROuzyHsggBLMvyw9N9pdPY1tjb_pMUCTL4Ga6fItzyj-UyId8qHxSesveoYpZAXEero7GxfTpOXcn2m7EZItSxgdLkvFt3PhkAjuVHX6nwUNmFu1oH1xaFfz9HTnGTV10cUGTzUXsxm3UonvqDSzbGkd6Ziy8Z8PXQN1N5y634_y5-OlM38H0rZ20ZkAdCzfPVVj_uR970p08CRLTiIsIQWydeECZhLWQJrw9N2XlQsKwKep-zW7PCqfNMyaJekKrx1IflK3N4Wo8DWABRlGdHZ9ncOaz3BVGMtZ5SykZPDrsrbe-aQsf3e9rPqZBn_jYfkdF_EWt5cOr_WF1J-H4U_eT9yuOxycNngoiAmSLTnced9tBvkiaZNMLIG3L7c2C58BxhbppdapI9ORWc2tDInmwSGUvApCeiIC9fgmgsP0bunLZkQRWjpOQooyJLa_LXT898RGK0GELu0RBbn4w28gwCXq-NxjRpuFvm1tp6YVJnYmkzzIrPsv0OzwDhxJmXfCB6XOIMcXVN2C5t9EC2KCuiXXw3pXiWVdB2UNuL3HVMds6pqLQG60KjYNSraZu1Cip88zppf4-JLOQ7kqN00FAnkX9N5GIzO6siaOiqK0MythSNk3N2iABB3H2lKAfdCyr3eFQneFnKbEqBUkRmPjAfNnesit-x1BLIwdb05yp7RPkc5ctd-q3kG3n27XJVDu29_timpARy4S9rBE4tt8vCs-",
+          "id": "rs_07942242068cd66d006a9b1743350087d1a13c6958889d80eb",
+          "summary": [],
+          "type": "reasoning"
+        },
+        {
+          "content": [
+            {
+              "annotations": [],
+              "logprobs": [],
+              "text": "# The Dragon Who Stole the Horizon\n\n## 1. The Morning the World Ended Early\n\nOn the morning the horizon disappeared, Mara was arguing with a fish.\n\n“You cannot possibly be worth six copper,” she told it.\n\nThe fish lay on the counter with its mouth open, which Mara considered a weak defense.\n\n“Eight copper,” said the fishmonger.\n\n“You said six.”\n\n“That was before you insulted him.”\n\nMara had just decided that breakfast was a luxury for the morally weak when every bell in the harbor began to ring.\n\nNot one bell after another, as they did for fires or funerals. All at once.\n\nThe bell above the lighthouse. The cracked bell at the customs house. The twelve little bells sewn into Old Renn’s coat. Even the bell at the bottom of the harbor, which had gone down with the *Saint Oriole* sixty-three years earlier.\n\nPeople stopped.\n\nThen they turned toward the sea.\n\nBeyond the fishing boats, beyond the white-backed waves and the line of gulls following the morning trawlers, the world ended.\n\nThere was no horizon.\n\nSea and sky did not meet. They stopped at the edge of a vast gray emptiness, as if someone had taken a knife to a painting and cut away everything beyond the bay.\n\nA fishing boat reached that emptiness.\n\nFor one dreadful moment it balanced there, its bow extending into nothing.\n\nThen it vanished.\n\nNo splash. No scream.\n\nJust gone.\n\nThe fishmonger crossed himself in three different religious traditions.\n\nMara dropped her last two copper coins.\n\nHigh overhead, something enormous passed across the sun.\n\nShe saw wings first: dark blue, wide enough to cover the harbor. Then a body like a mountain seen underwater, a long tail, and seven horns sweeping backward from a narrow skull.\n\nA dragon.\n\nIt flew inland carrying a bright golden line between its teeth.\n\nThe line bent and trembled.\n\nIt stretched from one end of the sky to the other.\n\nMara knew, with the strange certainty that comes before panic, that the dragon was carrying the horizon.\n\nThen the creature disappeared behind the northern hills.\n\nFor three heartbeats, nobody spoke.\n\nAfter that, everyone spoke at once.\n\nMara ran.\n\nNot away from the sea. Not toward the town hall, where people would gather to shout questions at men who had never answered one honestly in their lives.\n\nShe ran toward the crooked tower at the end of Lantern Street.\n\nToward her grandfather.\n\nAnd toward the map that had begun whispering her name the night before.\n\n---\n\nGrandfather Iven was standing on a chair when she burst into his workshop.\n\nThis was never a good sign.\n\nAt seventy-three, he considered ladders an admission of defeat. He had one boot on the seat, another on the backrest, and a broom in his hand. Above him, something moved inside the chimney.\n\n“Close the door,” he said.\n\n“The horizon’s gone.”\n\n“Yes. Close the door.”\n\n“A dragon took it.”\n\n“Very inconsiderate. Door, Mara.”\n\nShe slammed it.\n\nSomething black shot from the chimney.\n\nIt struck the ceiling, knocked down three star charts, and landed in a bowl of ink.\n\nFor a moment Mara thought it was a crow.\n\nThen it lifted its head.\n\nIt had copper-colored eyes, two crooked horns, and a face that looked deeply offended by the world.\n\nIt was a dragon.\n\nA very small dragon.\n\nBlack ink ran from its wings.\n\n“Oh,” it said. “Excellent. Witnesses.”\n\nMara stared.\n\nHer grandfather climbed carefully down from the chair.\n\n“Take the map,” he told her.\n\n“Why is there a dragon in the ink?”\n\n“Because your grandfather attempted murder with a broom,” said the dragon.\n\n“It was a gentle discouragement.”\n\n“You shouted, ‘I’ll stuff you and use you as a doorstop.’”\n\n“I was improvising.”\n\nMara looked from one to the other.\n\nOutside, the bells kept ringing.\n\n“Grandfather.”\n\nHe stopped smiling.\n\nThat frightened her more than the missing horizon.\n\nIven crossed the workshop and lifted a cloth from the long table beneath the window.\n\nThe map underneath was older than the town, perhaps older than the kingdom. Its edges were dark with age. Rivers wandered across its surface when nobody was watching. Mountains rose and settled like sleeping animals.\n\nIn its center stood a city drawn in silver ink.\n\nMara had never seen it before.\n\nLast night the map had shown only forests.\n\nNow, beneath the city, letters formed.\n\n**THE NINTH HOUR APPROACHES.**\n\nThe little dragon climbed from the ink bowl.\n\n“Oh,” he said quietly.\n\n“You know what that means?” Mara asked.\n\n“Yes.”\n\n“What?”\n\n“It means I should have stayed in the chimney.”\n\nGrandfather placed both hands on Mara’s shoulders.\n\n“Listen carefully. The dragon you saw is called Orun. He is the Keeper of Distances.”\n\n“He stole the horizon.”\n\n“He moved it. There’s a difference.”\n\n“A fishing boat disappeared.”\n\nIven’s jaw tightened.\n\n“Then we have less time than I hoped.”\n\nHe took a brass compass from his pocket. Its needle spun once, twice, and pointed directly at Mara.\n\n“This belonged to your mother.”\n\nMara went still.\n\nHer mother had vanished eleven years earlier while charting the mountains beyond the northern kingdoms. Iven rarely spoke of her. When he did, it was as if he were walking across thin ice.\n\n“What does she have to do with this?”\n\n“Everything.”\n\nFrom outside came a heavy crash.\n\nThe workshop windows rattled.\n\nIn the street, a horse screamed.\n\nThe little dragon scrambled under the table.\n\n“Armored men,” he said. “I dislike armored men. They’re so often full of knives.”\n\nIven thrust the compass into Mara’s hand.\n\n“Take the map. Go through the cellar. Find the city of Aster. Find your mother.”\n\nMara could not move.\n\n“My mother is alive?”\n\nThe front door shook beneath a fist.\n\n“IVEN VALE!” shouted someone outside. “BY ORDER OF THE CROWN!”\n\nHer grandfather rolled up the map.\n\n“I believe she is.”\n\n“Then you should have told me.”\n\n“Yes,” he said.\n\nThere was no excuse in his voice. Somehow that made it worse.\n\nThe door shook again.\n\nIven put the map in her arms.\n\n“You can be angry with me when you return.”\n\n“You’re coming.”\n\n“I’ll delay them.”\n\n“You can’t—”\n\n“Mara.” He squeezed her hand. “Your mother always said a map was not a picture of the world. It was a promise that somewhere could be reached.”\n\nThe lock splintered.\n\nIven looked under the table.\n\n“You too, sootling.”\n\nThe small dragon poked out his head.\n\n“I have a name.”\n\n“Then tell her on the way.”\n\nMara grabbed the dragon around the middle and ran for the cellar.\n\nBehind her, she heard her grandfather greet the men at the door.\n\n“Good morning, gentlemen. If this is about the taxes, I can explain almost everything.”\n\nThen the cellar door slammed shut.\n\n## 2. A Dragon of Modest Inconvenience\n\nThe tunnel beneath the workshop smelled of salt, mold, and old secrets.\n\nMara knew the first twenty steps. Her grandfather kept jars of pears there, along with two broken clocks and a sword he claimed was a curtain rod.\n\nShe had not known about the twenty-first step.\n\nOr the hundred after it.\n\nOr the underground river.\n\n“This family,” she muttered.\n\nThe dragon wriggled out of her arms and landed on a damp stone.\n\n“For the record, I object to being carried like laundry.”\n\n“What’s your name?”\n\n“Peregrine Ash-of-the-Last-Ember, Descendant of the Furnace Kings, Eater of—”\n\n“Pip.”\n\n“No.”\n\n“Fine. Walk faster, Peregrine Ash-of-the-Last-Ember, Descendant of the Furnace Kings.”\n\n“Pip will do in emergencies.”\n\nThe tunnel opened onto a narrow landing. A boat waited in the dark water, tied to an iron ring.\n\nInside lay a lantern, two blankets, a sack of food, and a note.\n\nMara recognized her grandfather’s handwriting.\n\n*If you are reading this, something has gone terribly wrong.*\n\nBelow that:\n\n*Or you have found the pears again. If so, leave some for winter.*\n\nHer throat tightened.\n\nShe pushed the boat into the current.\n\nPip perched at the bow while Mara lit the lantern.\n\nThe river carried them beneath the town. Above, faint through earth and stone, came the rumble of carts and shouting.\n\nFor a while neither spoke.\n\nThen Mara said, “Why were you in our chimney?”\n\n“Hiding.”\n\n“From the armored men?”\n\n“Among other things.”\n\n“Why?”\n\nPip examined one ink-stained claw.\n\n“I may have escaped from a royal collection.”\n\n“A zoo?”\n\n“A prison with descriptive plaques.”\n\nMara looked at him more carefully. Beneath the ink, his scales were dark red rather than black. A pale band circled his neck where a collar had rubbed them away.\n\n“What were they keeping you for?”\n\n“Experiments. Displays. Questions about where larger dragons sleep.”\n\n“Did you tell them?”\n\n“No.”\n\n“Good.”\n\nHe looked back at her.\n\n“You say that very easily.”\n\n“My grandfather taught me not to give bullies directions.”\n\nThe river curved. Ahead, a pale oval of daylight appeared.\n\nMara unrolled the map.\n\nIts silver city glimmered.\n\nA red line ran north through a forest, across a blank stretch labeled **THE UNREMEMBERED ROAD**, and into a mountain range.\n\nOn the bottom edge, words appeared.\n\n**NINE DAYS UNTIL THE LAST DISTANCE CLOSES.**\n\n“Nine days,” she whispered.\n\nPip leaned over the map.\n\n“Oh, that’s not good.”\n\n“Stop saying things are not good and tell me what’s happening.”\n\nHe folded his wings.\n\n“There are old places in the world where everything is fastened together. Sea to shore. Morning to evening. Here to there. Aster is one of them.”\n\n“A knot.”\n\n“A very complicated knot. Dragons tend it.”\n\n“And something’s wrong with it?”\n\n“Something is cutting it.”\n\nThe boat slid into daylight.\n\nThey emerged beneath a curtain of willow branches. Behind them lay Bellweather, its harbor bells still ringing. Ahead stretched the low green country of the north.\n\nAbove the distant hills, Mara saw a thin golden thread.\n\nThe stolen horizon.\n\nShe took up the oars.\n\n“Then we go to Aster.”\n\nPip settled on the sack of food.\n\n“Yes. An excellent plan. Cross half a kingdom, find a city missing for a thousand years, and persuade creatures the size of fortresses not to eat us.”\n\nMara began to row.\n\n“Can you breathe fire?”\n\n“Certainly.”\n\n“That might help.”\n\nPip inhaled.\n\nHis chest swelled.\n\nHe opened his jaws.\n\nA small puff of warm smoke drifted out.\n\nAfter a moment, he added, “It’s more impressive in cold weather.”\n\n## 3. The Forest That Collected Names\n\nBy sunset, the river had narrowed into a stream.\n\nBy moonrise, the stream had become a series of muddy disagreements.\n\nMara dragged the boat ashore beneath a stone bridge and made camp.\n\nShe was seventeen years old. Until that morning, her greatest adventure had been climbing the lighthouse during a thunderstorm to prove that the keeper’s ghost was actually a goat.\n\nNow the world was falling apart, her grandfather was under arrest, and her mother might be alive in a city that did not exist.\n\nPip ate three strips of dried meat and most of a pear.\n\n“Do dragons usually eat fruit?” Mara asked.\n\n“Do humans usually ask personal questions at dinner?”\n\nShe wrapped herself in a blanket.\n\nWhen she finally slept, she dreamed of her mother.\n\nNot as she remembered her: a woman with wind-tangled hair and ink on her thumbs, lifting Mara onto a windowsill to watch a storm.\n\nIn the dream, her mother stood behind a silver door.\n\nShe was holding it shut.\n\nSomething on the other side was knocking.\n\n---\n\nThe forest began at noon the next day.\n\nThere was no gradual thickening of trees. One side of the road lay in warm sunlight, bordered by fields. On the other stood enormous white trunks beneath a roof of black leaves.\n\nA wooden sign leaned beside the path.\n\n**WELCOME TO THE KING’S WOOD.**\n\nSomeone had scratched out *KING’S*.\n\nBeneath it, in smaller letters, was written:\n\n**DO NOT ANSWER WHEN CALLED.**\n\nPip stopped.\n\n“Ah.”\n\nMara looked at him.\n\n“You know this place?”\n\n“By reputation.”\n\n“What does it do?”\n\n“Collects names.”\n\n“What does that mean?”\n\n“If something calls your name and you answer, it takes it.”\n\n“And then?”\n\n“Then you don’t have one.”\n\nMara waited.\n\nPip sighed.\n\n“Names attach us to ourselves. Lose yours, and other things begin to slip. Memories. Promises. Eventually your face.”\n\nShe pulled her scarf higher.\n\n“Then we don’t answer.”\n\nThey entered the wood.\n\nAt first, it was almost beautiful.\n\nBlue mushrooms glowed at the roots of the trees. Thin streams ran uphill through the moss. Birds with glassy wings moved soundlessly between branches.\n\nThen Mara heard her grandfather.\n\n“Mara?”\n\nThe voice came from just beyond a fallen trunk.\n\nShe stopped so abruptly Pip struck her heel.\n\n“Mara, help me.”\n\nShe took one step.\n\nPip bit her ankle.\n\nPain flashed up her leg.\n\nShe gasped and clapped a hand over her mouth.\n\nBetween the trees stood a shape wearing her grandfather’s coat.\n\nIts head was turned away.\n\nToo far away.\n\nAlmost backward.\n\nMara walked on.\n\nThe voice followed.\n\nFirst her grandfather.\n\nThen the fishmonger.\n\nThen her mother.\n\nThat was worst.\n\n“Little star?”\n\nMara had not heard those words for eleven years.\n\nTears blurred the trees.\n\nPip pressed against her boot.\n\nShe kept walking.\n\nThey found the knight near the center of the forest.\n\nHe hung upside down from a branch, wrapped from ankles to chest in living roots. His armor was rusted. A yellow flower grew from the slit in his helmet.\n\nWhen Mara approached, he lifted one gauntleted hand.\n\n“Don’t suppose,” he said, “you have a knife?”\n\n“Do you have a name?”\n\n“Probably.”\n\n“Probably?”\n\n“Mislaid it.”\n\nPip fluttered onto a",
+              "type": "output_text"
+            }
+          ],
+          "id": "msg_07942242068cd66d006a9b1743cab487d18ee6ea2db7bb4e48",
+          "phase": "final_answer",
+          "role": "assistant",
+          "status": "incomplete",
+          "type": "message"
+        }
+      ],
+      "tools": []
+    },
+    "headers": {
+      "access-control-expose-headers": [
+        "X-Request-ID",
+        "CF-Ray",
+        "CF-Ray"
+      ],
+      "alt-svc": [
+        "h3=\":443\"; ma=86400"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a35f48f94feb88cd-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-length": [
+        "18636"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 04 Sep 2026 19:09:53 GMT"
+      ],
+      "openai-organization": "[REDACTED:openai-organization]",
+      "openai-processing-ms": [
+        "63710"
+      ],
+      "openai-project": [
+        "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
+      ],
+      "openai-version": [
+        "2020-10-01"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": "[REDACTED:set-cookie]",
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-request-id": [
+        "req_197ebbc7ad85493bb6ab99a633fa94dd"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

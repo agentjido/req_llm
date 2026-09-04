@@ -82,8 +82,8 @@ For WebSocket requests, `response.create` carries the request fields at the
 top level. It does not wrap them in `response`. Omit `stream` and `background`.
 See the [WebSocket event reference](https://developers.openai.com/api/reference/resources/responses/websocket-events).
 
-After API access is available, configure `OPENAI_API_KEY` in the environment or
-the local `.env` file. Start with one recorded request:
+Configure `OPENAI_API_KEY` in the environment or the local `.env` file. Start
+with one recorded request:
 
 ```bash
 mix mc "openai:gpt-6-astra" --scenario basic --record --max-concurrency 1
@@ -133,6 +133,29 @@ After the standard live scenarios pass, verify these feature cases separately:
 
 Capture the request and event sequence for each case. Keep Astra out of the
 default fixture matrix until the live results and replay pass.
+
+### Live results from 2026-09-04
+
+The initial Astra fixture run recorded and replayed all 14 files for the 11
+standard scenarios. HTTP, SSE, two-turn context, function tools, structured
+objects, reasoning, usage, and the output limit all passed. The support evidence
+classifies `openai:gpt-6-astra` on `openai.responses` as first-class for the
+standard text baseline.
+
+Focused live calls also confirmed the new feature paths:
+
+- A function tool returned `async: true` together with assistant text. A later
+  response accepted its result with the original call ID.
+- A `configuration_update` changed the effective effort to `high` while the
+  response still reported the request-level effort as `low`.
+- A WebSocket steer was accepted. The original response completed normally,
+  and the service created and completed an automatic successor on the same
+  connection.
+
+One steering edge case was also observed. A steer can be accepted and later
+fail with `response_not_active` if the original response reaches
+`max_output_tokens` before the update is applied. Consumers must keep the steer
+ID and process later failure events instead of treating acceptance as success.
 
 ## Architecture
 
