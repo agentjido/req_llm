@@ -1240,13 +1240,15 @@
       }
     },
     "fireworks_ai:accounts/fireworks/models/deepseek-v4-flash": {
-      "catalog_status": "missing",
-      "declared_operations": [],
+      "catalog_status": "present",
+      "declared_operations": [
+        "text"
+      ],
       "model": "accounts/fireworks/models/deepseek-v4-flash",
       "provider": "fireworks_ai",
       "surfaces": {
         "fireworks_ai.chat_completions": {
-          "declaration": "unknown",
+          "declaration": "declared",
           "operation": "text",
           "provider": "fireworks_ai",
           "scenarios": {
@@ -1270,13 +1272,15 @@
       }
     },
     "fireworks_ai:accounts/fireworks/models/deepseek-v4-pro": {
-      "catalog_status": "missing",
-      "declared_operations": [],
+      "catalog_status": "present",
+      "declared_operations": [
+        "text"
+      ],
       "model": "accounts/fireworks/models/deepseek-v4-pro",
       "provider": "fireworks_ai",
       "surfaces": {
         "fireworks_ai.chat_completions": {
-          "declaration": "unknown",
+          "declaration": "declared",
           "operation": "text",
           "provider": "fireworks_ai",
           "scenarios": {
@@ -1362,13 +1366,15 @@
       }
     },
     "fireworks_ai:accounts/fireworks/models/gpt-oss-20b": {
-      "catalog_status": "missing",
-      "declared_operations": [],
+      "catalog_status": "present",
+      "declared_operations": [
+        "text"
+      ],
       "model": "accounts/fireworks/models/gpt-oss-20b",
       "provider": "fireworks_ai",
       "surfaces": {
         "fireworks_ai.chat_completions": {
-          "declaration": "unknown",
+          "declaration": "declared",
           "operation": "text",
           "provider": "fireworks_ai",
           "scenarios": {
@@ -1484,13 +1490,15 @@
       }
     },
     "fireworks_ai:accounts/fireworks/models/minimax-m2p7": {
-      "catalog_status": "missing",
-      "declared_operations": [],
+      "catalog_status": "present",
+      "declared_operations": [
+        "text"
+      ],
       "model": "accounts/fireworks/models/minimax-m2p7",
       "provider": "fireworks_ai",
       "surfaces": {
         "fireworks_ai.chat_completions": {
-          "declaration": "unknown",
+          "declaration": "declared",
           "operation": "text",
           "provider": "fireworks_ai",
           "scenarios": {
@@ -1574,13 +1582,15 @@
       }
     },
     "fireworks_ai:accounts/fireworks/routers/kimi-k2p6-turbo": {
-      "catalog_status": "missing",
-      "declared_operations": [],
+      "catalog_status": "present",
+      "declared_operations": [
+        "text"
+      ],
       "model": "accounts/fireworks/routers/kimi-k2p6-turbo",
       "provider": "fireworks_ai",
       "surfaces": {
         "fireworks_ai.chat_completions": {
-          "declaration": "unknown",
+          "declaration": "declared",
           "operation": "text",
           "provider": "fireworks_ai",
           "scenarios": {
@@ -3671,13 +3681,15 @@
       }
     },
     "google:gemini-robotics-er-1.6-preview": {
-      "catalog_status": "missing",
-      "declared_operations": [],
+      "catalog_status": "present",
+      "declared_operations": [
+        "text"
+      ],
       "model": "gemini-robotics-er-1.6-preview",
       "provider": "google",
       "surfaces": {
         "google.generate_content": {
-          "declaration": "unknown",
+          "declaration": "declared",
           "operation": "text",
           "provider": "google",
           "scenarios": {
@@ -7287,13 +7299,15 @@
       }
     },
     "openrouter:arcee-ai/virtuoso-large": {
-      "catalog_status": "missing",
-      "declared_operations": [],
+      "catalog_status": "present",
+      "declared_operations": [
+        "text"
+      ],
       "model": "arcee-ai/virtuoso-large",
       "provider": "openrouter",
       "surfaces": {
         "openrouter.unrecorded_text": {
-          "declaration": "unknown",
+          "declaration": "declared",
           "operation": "text",
           "provider": "openrouter",
           "scenarios": {
@@ -8769,13 +8783,15 @@
       }
     },
     "openrouter:google/gemma-3n-e4b-it": {
-      "catalog_status": "missing",
-      "declared_operations": [],
+      "catalog_status": "present",
+      "declared_operations": [
+        "text"
+      ],
       "model": "google/gemma-3n-e4b-it",
       "provider": "openrouter",
       "surfaces": {
         "openrouter.chat_completions": {
-          "declaration": "unknown",
+          "declaration": "declared",
           "operation": "text",
           "provider": "openrouter",
           "scenarios": {
@@ -9023,13 +9039,15 @@
       }
     },
     "openrouter:inclusionai/ling-2.6-1t": {
-      "catalog_status": "missing",
-      "declared_operations": [],
+      "catalog_status": "present",
+      "declared_operations": [
+        "text"
+      ],
       "model": "inclusionai/ling-2.6-1t",
       "provider": "openrouter",
       "surfaces": {
         "openrouter.chat_completions": {
-          "declaration": "unknown",
+          "declaration": "declared",
           "operation": "text",
           "provider": "openrouter",
           "scenarios": {
@@ -9053,13 +9071,15 @@
       }
     },
     "openrouter:inclusionai/ling-2.6-flash": {
-      "catalog_status": "missing",
-      "declared_operations": [],
+      "catalog_status": "present",
+      "declared_operations": [
+        "text"
+      ],
       "model": "inclusionai/ling-2.6-flash",
       "provider": "openrouter",
       "surfaces": {
         "openrouter.chat_completions": {
-          "declaration": "unknown",
+          "declaration": "declared",
           "operation": "text",
           "provider": "openrouter",
           "scenarios": {
@@ -9083,13 +9103,15 @@
       }
     },
     "openrouter:inclusionai/ring-2.6-1t": {
-      "catalog_status": "missing",
-      "declared_operations": [],
+      "catalog_status": "present",
+      "declared_operations": [
+        "text"
+      ],
       "model": "inclusionai/ring-2.6-1t",
       "provider": "openrouter",
       "surfaces": {
         "openrouter.chat_completions": {
-          "declaration": "unknown",
+          "declaration": "declared",
           "operation": "text",
           "provider": "openrouter",
           "scenarios": {
@@ -10145,15 +10167,13 @@
       }
     },
     "openrouter:mistralai/devstral-2512": {
-      "catalog_status": "present",
-      "declared_operations": [
-        "text"
-      ],
+      "catalog_status": "missing",
+      "declared_operations": [],
       "model": "mistralai/devstral-2512",
       "provider": "openrouter",
       "surfaces": {
         "openrouter.chat_completions": {
-          "declaration": "declared",
+          "declaration": "unknown",
           "operation": "text",
           "provider": "openrouter",
           "scenarios": {
@@ -11341,13 +11361,15 @@
       }
     },
     "openrouter:nvidia/nemotron-3-nano-30b-a3b:free": {
-      "catalog_status": "missing",
-      "declared_operations": [],
+      "catalog_status": "present",
+      "declared_operations": [
+        "text"
+      ],
       "model": "nvidia/nemotron-3-nano-30b-a3b:free",
       "provider": "openrouter",
       "surfaces": {
         "openrouter.chat_completions": {
-          "declaration": "unknown",
+          "declaration": "declared",
           "operation": "text",
           "provider": "openrouter",
           "scenarios": {
@@ -11467,13 +11489,15 @@
       }
     },
     "openrouter:nvidia/nemotron-nano-12b-v2-vl:free": {
-      "catalog_status": "missing",
-      "declared_operations": [],
+      "catalog_status": "present",
+      "declared_operations": [
+        "text"
+      ],
       "model": "nvidia/nemotron-nano-12b-v2-vl:free",
       "provider": "openrouter",
       "surfaces": {
         "openrouter.chat_completions": {
-          "declaration": "unknown",
+          "declaration": "declared",
           "operation": "text",
           "provider": "openrouter",
           "scenarios": {
@@ -11497,13 +11521,15 @@
       }
     },
     "openrouter:nvidia/nemotron-nano-9b-v2:free": {
-      "catalog_status": "missing",
-      "declared_operations": [],
+      "catalog_status": "present",
+      "declared_operations": [
+        "text"
+      ],
       "model": "nvidia/nemotron-nano-9b-v2:free",
       "provider": "openrouter",
       "surfaces": {
         "openrouter.chat_completions": {
-          "declaration": "unknown",
+          "declaration": "declared",
           "operation": "text",
           "provider": "openrouter",
           "scenarios": {
@@ -12413,13 +12439,15 @@
       }
     },
     "openrouter:qwen/qwen-plus-2025-07-28:thinking": {
-      "catalog_status": "missing",
-      "declared_operations": [],
+      "catalog_status": "present",
+      "declared_operations": [
+        "text"
+      ],
       "model": "qwen/qwen-plus-2025-07-28:thinking",
       "provider": "openrouter",
       "surfaces": {
         "openrouter.chat_completions": {
-          "declaration": "unknown",
+          "declaration": "declared",
           "operation": "text",
           "provider": "openrouter",
           "scenarios": {
@@ -21995,13 +22023,15 @@
       }
     },
     "zenmux:sapiens-ai/agnes-2.0-flash": {
-      "catalog_status": "missing",
-      "declared_operations": [],
+      "catalog_status": "present",
+      "declared_operations": [
+        "text"
+      ],
       "model": "sapiens-ai/agnes-2.0-flash",
       "provider": "zenmux",
       "surfaces": {
         "zenmux.chat_completions": {
-          "declaration": "unknown",
+          "declaration": "declared",
           "operation": "text",
           "provider": "zenmux",
           "scenarios": {
