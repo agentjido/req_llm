@@ -912,9 +912,6 @@ defmodule ReqLLM.Providers.AzureTest do
              ]
     end
 
-    # The streaming path validates provider_options strictly against the
-    # provider schema before the body is built, so an include the encoder
-    # honours but the schema does not list fails the whole request.
     test "attach_stream accepts include for Responses API models" do
       model = %LLMDB.Model{
         id: "gpt-5",
