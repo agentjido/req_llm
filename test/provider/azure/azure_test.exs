@@ -531,6 +531,12 @@ defmodule ReqLLM.Providers.AzureTest do
 
       assert deployment_spec[:type] == :string
     end
+
+    test "include option accepts a list of Responses API include values" do
+      schema = Azure.provider_schema()
+
+      assert schema.schema[:include][:type] == {:list, :string}
+    end
   end
 
   describe "translate_options/3" do
@@ -886,6 +892,51 @@ defmodule ReqLLM.Providers.AzureTest do
       body = Azure.ResponsesAPI.format_request("gpt-5-codex", context, opts)
 
       refute Map.has_key?(body, "parallel_tool_calls")
+    end
+
+    test "Responses API models forward include from provider_options" do
+      context = ReqLLM.Context.new([ReqLLM.Context.user("Hello")])
+
+      opts = [
+        stream: false,
+        provider_options: [
+          include: ["reasoning.encrypted_content", "web_search_call.action.sources"]
+        ]
+      ]
+
+      body = Azure.ResponsesAPI.format_request("gpt-5-codex", context, opts)
+
+      assert body["include"] == [
+               "reasoning.encrypted_content",
+               "web_search_call.action.sources"
+             ]
+    end
+
+    test "attach_stream accepts include for Responses API models" do
+      model = %LLMDB.Model{
+        id: "gpt-5",
+        provider: :azure,
+        capabilities: %{chat: true},
+        extra: %{wire: %{protocol: "openai_responses"}}
+      }
+
+      context = ReqLLM.Context.new([ReqLLM.Context.user("Hello")])
+
+      {:ok, finch_request} =
+        Azure.attach_stream(
+          model,
+          context,
+          [
+            api_key: "test-api-key",
+            deployment: "gpt-5",
+            base_url: "https://my-resource.openai.azure.com/openai/v1",
+            provider_options: [include: ["web_search_call.action.sources"]]
+          ],
+          :req_llm_finch
+        )
+
+      assert %Finch.Request{} = finch_request
+      assert Jason.decode!(finch_request.body)["include"] == ["web_search_call.action.sources"]
     end
 
     test "Claude reasoning models override temperature to 1.0" do
