@@ -1430,6 +1430,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
 
   defp handle_builtin_call_item_done(item, data, state, type) do
     index = stream_output_index(data)
+    status = builtin_status_metadata(item)
 
     if tool_call_emitted?(state, index) do
       args =
@@ -1441,7 +1442,12 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
         ReqLLM.StreamChunk.meta(%{
           tool_call_args: %{index: index, fragment: args, builtin?: true}
         })
-      ]
+      ] ++
+        if map_size(status) > 0 do
+          [ReqLLM.StreamChunk.meta(%{tool_call_metadata: %{index: index, metadata: status}})]
+        else
+          []
+        end
     else
       id = item["id"] || item[:id] || item["call_id"] || item[:call_id]
 
@@ -1453,12 +1459,12 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
         ReqLLM.StreamChunk.tool_call(
           type,
           args_map,
-          %{
+          Map.merge(status, %{
             id: id,
             index: index,
             builtin?: true,
             done_at_unix_nano: System.system_time(:nanosecond)
-          }
+          })
         )
       ]
     end
@@ -2320,6 +2326,18 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
       |> Jason.encode!()
 
     ReqLLM.ToolCall.new_builtin(id, type, args_json)
+    |> ReqLLM.ToolCall.put_metadata(builtin_status_metadata(seg))
+  end
+
+  # The provider's terminal status for a builtin call (`completed`,
+  # `failed`, `incomplete`). It stays off the wire arguments — the item is
+  # not replayable anyway — and rides on the tool call's metadata so the
+  # OTel bridge can tell a failed web search from one that found nothing.
+  defp builtin_status_metadata(item) do
+    case item["status"] || item[:status] do
+      status when is_binary(status) -> %{status: status}
+      _ -> %{}
+    end
   end
 
   defp extract_reasoning_details_from_segments(segments, provider) do

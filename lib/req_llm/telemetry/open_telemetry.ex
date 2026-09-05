@@ -181,7 +181,13 @@ defmodule ReqLLM.Telemetry.OpenTelemetry do
   end
 
   defp build_tool_span_stub(%ToolCall{} = tc, metadata) do
-    build_tool_span_stub(ToolCall.name(tc), ToolCall.args_map(tc), tc.id, metadata)
+    build_tool_span_stub(
+      ToolCall.name(tc),
+      ToolCall.args_map(tc),
+      tc.id,
+      ToolCall.metadata(tc),
+      metadata
+    )
   end
 
   defp build_tool_span_stub(tool_call, metadata) when is_map(tool_call) do
@@ -189,19 +195,21 @@ defmodule ReqLLM.Telemetry.OpenTelemetry do
     name = MapAccess.get(function, :name) || MapAccess.get(tool_call, :name)
     args = args_from_map_tool_call(tool_call, function)
     id = MapAccess.get(tool_call, :id)
+    call_metadata = ToolCall.metadata(tool_call)
 
-    build_tool_span_stub(name, args, id, metadata)
+    build_tool_span_stub(name, args, id, call_metadata, metadata)
   end
 
-  defp build_tool_span_stub(name, args, id, metadata) when is_binary(name) do
+  defp build_tool_span_stub(name, args, id, call_metadata, metadata) when is_binary(name) do
     timing = MapAccess.get(metadata, :builtin_tool_timing) || %{}
     entry = timing_entry(timing, id)
     {start_time, end_time} = span_timing(entry)
+    {status, status_attrs} = tool_call_status(MapAccess.get(call_metadata, :status))
 
     %{
       name: "execute_tool " <> name,
       kind: :internal,
-      status: :ok,
+      status: status,
       start_time: start_time,
       end_time: end_time,
       attributes:
@@ -212,10 +220,23 @@ defmodule ReqLLM.Telemetry.OpenTelemetry do
           "gen_ai.tool.call.id" => id
         }
         |> maybe_put_arguments(args)
+        |> Map.merge(status_attrs)
     }
   end
 
-  defp build_tool_span_stub(_name, _args, _id, _metadata), do: nil
+  defp build_tool_span_stub(_name, _args, _id, _call_metadata, _metadata), do: nil
+
+  # A builtin call the provider reports as `failed` or `incomplete` (the
+  # status providers attach to the output item, kept in the tool call's
+  # metadata) becomes an error span carrying `error.type`, so a failed
+  # search is told apart from one that found nothing. Any other status —
+  # `completed`, or none — leaves the span `:ok`.
+  @failed_tool_call_statuses ["failed", "incomplete"]
+
+  defp tool_call_status(status) when status in @failed_tool_call_statuses,
+    do: {{:error, "builtin tool call " <> status}, %{"error.type" => status}}
+
+  defp tool_call_status(_status), do: {:ok, %{}}
 
   defp timing_entry(timing, nil), do: timing_entry(timing, "")
   defp timing_entry(timing, id), do: Map.get(timing, id) || Map.get(timing, to_string(id)) || %{}

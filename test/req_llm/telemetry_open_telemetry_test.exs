@@ -162,6 +162,64 @@ defmodule ReqLLM.TelemetryOpenTelemetryTest do
     assert Jason.decode!(attrs["gen_ai.tool.call.arguments"]) == %{"query" => "elixir telemetry"}
   end
 
+  test "marks a builtin tool call the provider reports as failed as an error span" do
+    failed =
+      ToolCall.new_builtin("ws_failed", "web_search_call", ~s({"action":{"query":"x"}}))
+      |> ToolCall.put_metadata(%{status: "failed"})
+
+    completed =
+      ToolCall.new_builtin("ws_ok", "web_search_call", ~s({"action":{"query":"y"}}))
+      |> ToolCall.put_metadata(%{status: "completed"})
+
+    stop_stub =
+      OpenTelemetry.request_stop(%{
+        operation: :chat,
+        provider: :openai,
+        model: %LLMDB.Model{provider: :openai, id: "gpt-5"},
+        finish_reason: :stop,
+        response_payload: %{message: %{tool_calls: [failed, completed]}}
+      })
+
+    assert [
+             %{status: {:error, "builtin tool call failed"}, attributes: failed_attrs},
+             %{status: :ok, attributes: ok_attrs}
+           ] = stop_stub.tool_spans
+
+    assert failed_attrs["gen_ai.tool.call.id"] == "ws_failed"
+    assert failed_attrs["error.type"] == "failed"
+    refute Map.has_key?(ok_attrs, "error.type")
+  end
+
+  test "reads the builtin status off map-shaped tool call metadata" do
+    stop_stub =
+      OpenTelemetry.request_stop(%{
+        operation: :chat,
+        provider: :openai,
+        model: %LLMDB.Model{provider: :openai, id: "gpt-5"},
+        finish_reason: :stop,
+        response_payload: %{
+          "message" => %{
+            "tool_calls" => [
+              %{
+                "id" => "ci_1",
+                "function" => %{
+                  "name" => "code_interpreter_call",
+                  "arguments" => ~s({"code":"1/0"}),
+                  "builtin?" => true,
+                  "metadata" => %{"status" => "incomplete"}
+                }
+              }
+            ]
+          }
+        }
+      })
+
+    assert [%{status: {:error, "builtin tool call incomplete"}, attributes: attrs}] =
+             stop_stub.tool_spans
+
+    assert attrs["error.type"] == "incomplete"
+  end
+
   test "builds child span stubs from map-shaped builtin tool calls" do
     metadata = %{
       operation: :chat,
