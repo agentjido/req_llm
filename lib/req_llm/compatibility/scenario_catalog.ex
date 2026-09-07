@@ -51,6 +51,7 @@ defmodule ReqLLM.Compatibility.ScenarioCatalog do
     %{id: "conversation", operation: :text},
     %{id: "streaming", operation: :text},
     %{id: "tools", operation: :text},
+    %{id: "prompt_cache", operation: :text},
     %{id: "objects", operation: :text},
     %{id: "reasoning", operation: :text},
     %{id: "embedding", operation: :embedding},
@@ -140,6 +141,18 @@ defmodule ReqLLM.Compatibility.ScenarioCatalog do
                        requirements: [:tool_calling],
                        applicability: :model_features,
                        fixtures: ["tool_round_trip_1", "tool_round_trip_2"]},
+                      {"sequential_tool_cache", "prompt_cache",
+                       input_modalities: [:text, :tool_result],
+                       output_modalities: [:text, :tool_call],
+                       requirements: [:tool_calling],
+                       applicability: :focused,
+                       providers: [:anthropic, :openai, :zai_coding_plan],
+                       fixtures: [
+                         "sequential_tool_cache_1",
+                         "sequential_tool_cache_2",
+                         "sequential_tool_cache_3",
+                         "sequential_tool_cache_4"
+                       ]},
                       {"object_basic", "objects",
                        output_modalities: [:structured_object],
                        requirements: [:object_generation],
@@ -341,6 +354,11 @@ defmodule ReqLLM.Compatibility.ScenarioCatalog do
     },
     %{
       provider: :openai,
+      scenario: "sequential_tool_cache",
+      test_file: "test/coverage/openai/sequential_tool_cache_test.exs"
+    },
+    %{
+      provider: :openai,
       scenario: "web_search_basic",
       test_file: "test/coverage/openai/web_search_test.exs"
     },
@@ -353,6 +371,11 @@ defmodule ReqLLM.Compatibility.ScenarioCatalog do
       provider: :anthropic,
       scenario: "web_fetch_basic",
       test_file: "test/coverage/anthropic/web_fetch_test.exs"
+    },
+    %{
+      provider: :anthropic,
+      scenario: "sequential_tool_cache",
+      test_file: "test/coverage/anthropic/sequential_tool_cache_test.exs"
     },
     %{
       provider: :anthropic,
@@ -448,6 +471,11 @@ defmodule ReqLLM.Compatibility.ScenarioCatalog do
       provider: :xai,
       scenario: "x_search_streaming",
       test_file: "test/coverage/xai/web_search_test.exs"
+    },
+    %{
+      provider: :zai_coding_plan,
+      scenario: "sequential_tool_cache",
+      test_file: "test/coverage/zai_coding_plan/sequential_tool_cache_test.exs"
     },
     %{
       provider: :xai,
