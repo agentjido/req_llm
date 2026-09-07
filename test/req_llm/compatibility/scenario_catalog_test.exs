@@ -22,6 +22,7 @@ defmodule ReqLLM.Compatibility.ScenarioCatalogTest do
     "conversation" => ~w(context_append),
     "streaming" => ~w(streaming),
     "tools" => ~w(tool_none tool_multi tool_round_trip),
+    "prompt_cache" => ~w(sequential_tool_cache),
     "objects" => ~w(object_basic object_streaming),
     "reasoning" => ~w(reasoning),
     "embedding" => ~w(embed_basic embed_usage embed_batch),
@@ -54,7 +55,7 @@ defmodule ReqLLM.Compatibility.ScenarioCatalogTest do
     test "represents every scenario once" do
       scenario_ids = Enum.map(ScenarioCatalog.scenarios(), & &1.id)
 
-      assert length(scenario_ids) == 45
+      assert length(scenario_ids) == 46
       assert length(scenario_ids) == MapSet.size(MapSet.new(scenario_ids))
     end
 
@@ -66,6 +67,13 @@ defmodule ReqLLM.Compatibility.ScenarioCatalogTest do
 
       assert ScenarioCatalog.fixture!(:embed_usage) == "embed_basic"
       assert ScenarioCatalog.fixture!(:multimodal_tool_result, 1) == "multimodal_tool_result_2"
+
+      assert ScenarioCatalog.fixtures(:sequential_tool_cache) == [
+               "sequential_tool_cache_1",
+               "sequential_tool_cache_2",
+               "sequential_tool_cache_3",
+               "sequential_tool_cache_4"
+             ]
 
       assert %{
                operation: :text,
@@ -133,6 +141,15 @@ defmodule ReqLLM.Compatibility.ScenarioCatalogTest do
 
       assert ScenarioCatalog.scenario_test_file(:azure, :object_streaming_claude_auto) ==
                "test/coverage/azure/streaming_structured_output_test.exs"
+
+      assert ScenarioCatalog.scenario_test_file(:anthropic, :sequential_tool_cache) ==
+               "test/coverage/anthropic/sequential_tool_cache_test.exs"
+
+      assert ScenarioCatalog.scenario_test_file(:openai, :sequential_tool_cache) ==
+               "test/coverage/openai/sequential_tool_cache_test.exs"
+
+      assert ScenarioCatalog.scenario_test_file(:zai_coding_plan, :sequential_tool_cache) ==
+               "test/coverage/zai_coding_plan/sequential_tool_cache_test.exs"
     end
 
     test "fixture-backed contracts have evidence and focused routes exist" do
