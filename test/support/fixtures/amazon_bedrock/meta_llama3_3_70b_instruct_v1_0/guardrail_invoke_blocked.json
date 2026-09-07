@@ -1,0 +1,121 @@
+{
+  "model_spec": "amazon_bedrock:us.meta.llama3-3-70b-instruct-v1:0",
+  "provider": "amazon_bedrock",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfZ2VuX2xlbiI6MTAwLCJwcm9tcHQiOiI8fGJlZ2luX29mX3RleHR8Pjx8c3RhcnRfaGVhZGVyX2lkfD51c2VyPHxlbmRfaGVhZGVyX2lkfD5cblxuV2hhdCBpcyB0aGUgd2VhdGhlciBsaWtlIGluIFBhcmlzIHRvZGF5Pzx8ZW90X2lkfD48fHN0YXJ0X2hlYWRlcl9pZHw+YXNzaXN0YW50PHxlbmRfaGVhZGVyX2lkfD5cblxuIn0="
+    },
+    "canonical_json": {
+      "max_gen_len": 100,
+      "prompt": "<|begin_of_text|><|start_header_id|>user<|end_header_id|>\n\nWhat is the weather like in Paris today?<|eot_id|><|start_header_id|>assistant<|end_header_id|>\n\n"
+    },
+    "headers": {
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "host": [
+        "bedrock-runtime.us-east-1.amazonaws.com"
+      ],
+      "user-agent": [
+        "req/0.7.4"
+      ],
+      "x-amz-content-sha256": [
+        "dab25e4be29abba7f6e62e4c5f16d227a9d674f90f457adac8f917c077c02161"
+      ],
+      "x-amz-date": [
+        "20260907T205832Z"
+      ],
+      "x-amz-security-token": [
+        "[REDACTED:x-amz-security-token]"
+      ],
+      "x-amzn-bedrock-guardrailidentifier": [
+        "guardrail1234"
+      ],
+      "x-amzn-bedrock-guardrailversion": [
+        "DRAFT"
+      ],
+      "x-amzn-bedrock-trace": [
+        "ENABLED"
+      ]
+    },
+    "method": "post",
+    "url": "https://bedrock-runtime.us-east-1.amazonaws.com/model/us.meta.llama3-3-70b-instruct-v1:0/invoke"
+  },
+  "response": {
+    "body": {
+      "amazon-bedrock-guardrailAction": "INTERVENED",
+      "amazon-bedrock-trace": {
+        "guardrail": {
+          "actionReason": "Guardrail blocked.",
+          "input": {
+            "guardrail1234": {
+              "appliedGuardrailDetails": {
+                "guardrailArn": "arn:aws:bedrock:us-east-1:123456789012:guardrail/guardrail1234",
+                "guardrailId": "guardrail1234",
+                "guardrailOrigin": [
+                  "REQUEST"
+                ],
+                "guardrailOwnership": "SELF",
+                "guardrailVersion": "DRAFT"
+              },
+              "invocationMetrics": {
+                "guardrailCoverage": {
+                  "textCharacters": {
+                    "guarded": 156,
+                    "total": 156
+                  }
+                },
+                "guardrailProcessingLatency": 199,
+                "usage": {
+                  "automatedReasoningPolicies": 0,
+                  "automatedReasoningPolicyUnits": 0,
+                  "contentPolicyImageUnits": 0,
+                  "contentPolicyUnits": 0,
+                  "contextualGroundingPolicyUnits": 0,
+                  "sensitiveInformationPolicyFreeUnits": 0,
+                  "sensitiveInformationPolicyUnits": 0,
+                  "topicPolicyUnits": 1,
+                  "wordPolicyUnits": 0
+                }
+              },
+              "topicPolicy": {
+                "topics": [
+                  {
+                    "action": "BLOCKED",
+                    "detected": true,
+                    "name": "Weather",
+                    "type": "DENY"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "generation": "Guardrail blocked the input."
+    },
+    "headers": {
+      "connection": [
+        "keep-alive"
+      ],
+      "content-length": [
+        "909"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Mon, 07 Sep 2026 20:58:33 GMT"
+      ],
+      "x-amzn-bedrock-invocation-latency": [
+        "300"
+      ],
+      "x-amzn-requestid": [
+        "b0c362ee-7b01-4f15-8d8e-32e873dcb967"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

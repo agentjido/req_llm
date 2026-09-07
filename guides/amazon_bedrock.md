@@ -173,6 +173,24 @@ Passed via `:provider_options` keyword:
 - **Example**: `provider_options: [additional_model_request_fields: %{thinking: %{type: "enabled", budget_tokens: 4096}}]`
 - **Use Case**: Claude extended thinking configuration
 
+### `guardrail_identifier`
+
+- **Type**: String
+- **Purpose**: [Amazon Bedrock Guardrail](https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails.html) ID or ARN applied to the request (bedrock-runtime only)
+- **Example**: `provider_options: [guardrail_identifier: "abc123def456", guardrail_version: "1"]`
+
+### `guardrail_version`
+
+- **Type**: String
+- **Purpose**: Guardrail version, `"DRAFT"` or a published number. Required with `guardrail_identifier`
+- **Example**: `provider_options: [guardrail_identifier: "abc123def456", guardrail_version: "DRAFT"]`
+
+### `guardrail_trace`
+
+- **Type**: `"enabled"` | `"disabled"` | `"enabled_full"`
+- **Purpose**: How much guardrail assessment detail Bedrock returns
+- **Example**: `provider_options: [guardrail_identifier: "abc123def456", guardrail_version: "1", guardrail_trace: "enabled"]`
+
 ### Claude-Specific Options
 
 #### `anthropic_prompt_cache`

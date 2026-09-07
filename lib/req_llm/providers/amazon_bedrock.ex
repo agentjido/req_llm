@@ -176,6 +176,19 @@ defmodule ReqLLM.Providers.AmazonBedrock do
       doc:
         "Additional model-specific request fields (e.g., thinking config for Claude extended thinking)"
     ],
+    guardrail_identifier: [
+      type: :string,
+      doc: "Bedrock Guardrail id or ARN applied to the request (bedrock-runtime only)"
+    ],
+    guardrail_version: [
+      type: :string,
+      doc:
+        "Guardrail version (\"DRAFT\" or a published number). Required with guardrail_identifier"
+    ],
+    guardrail_trace: [
+      type: {:in, ["enabled", "disabled", "enabled_full"]},
+      doc: "Guardrail trace detail returned in the response"
+    ],
     anthropic_prompt_cache: [
       type: :boolean,
       doc: "Enable Anthropic prompt caching for Claude models on Bedrock"
@@ -656,7 +669,7 @@ defmodule ReqLLM.Providers.AmazonBedrock do
         get_formatter_module(model_family)
       end
 
-    decode_formatter_stream_event(formatter, event)
+    decode_formatter_stream_event(formatter, event) ++ guardrail_stream_chunks(event)
   end
 
   def decode_stream_event(_data, _model) do
@@ -690,22 +703,38 @@ defmodule ReqLLM.Providers.AmazonBedrock do
   def decode_stream_event(event, model, state) when is_map(event) do
     model_id = model.provider_model_id || model.id
 
-    cond do
-      converse_event?(event) ->
-        {decode_formatter_stream_event(ReqLLM.Providers.AmazonBedrock.Converse, event), state}
+    {chunks, state} =
+      cond do
+        converse_event?(event) ->
+          {decode_formatter_stream_event(ReqLLM.Providers.AmazonBedrock.Converse, event), state}
 
-      get_model_family(model_id) == "anthropic" ->
-        ReqLLM.Providers.Anthropic.Response.decode_stream_event(%{data: event}, model, state)
+        get_model_family(model_id) == "anthropic" ->
+          ReqLLM.Providers.Anthropic.Response.decode_stream_event(%{data: event}, model, state)
 
-      true ->
-        formatter = get_formatter_module(get_model_family(model_id))
-        {decode_formatter_stream_event(formatter, event), state}
-    end
+        true ->
+          formatter = get_formatter_module(get_model_family(model_id))
+          {decode_formatter_stream_event(formatter, event), state}
+      end
+
+    {chunks ++ guardrail_stream_chunks(event), state}
   end
 
   def decode_stream_event(_event, _model, state) do
     {[], state}
   end
+
+  defp guardrail_stream_chunks(%{"amazon-bedrock-guardrailAction" => action} = event) do
+    meta = %{
+      provider_meta: Map.take(event, ["amazon-bedrock-guardrailAction", "amazon-bedrock-trace"])
+    }
+
+    meta =
+      if action == "INTERVENED", do: Map.put(meta, :finish_reason, :content_filter), else: meta
+
+    [ReqLLM.StreamChunk.meta(meta)]
+  end
+
+  defp guardrail_stream_chunks(_event), do: []
 
   @impl ReqLLM.Provider
   def flush_stream_state(model, state) do
@@ -1049,7 +1078,28 @@ defmodule ReqLLM.Providers.AmazonBedrock do
   defp route_headers(:mantle, _chat_completions, opts),
     do: project_header("openai-project", opts)
 
-  defp route_headers(:runtime, _model_family, _opts), do: []
+  defp route_headers(:runtime, :converse, _opts), do: []
+  defp route_headers(:runtime, _model_family, opts), do: guardrail_headers(opts)
+
+  defp guardrail_headers(opts) do
+    case provider_option(opts, :guardrail_identifier) do
+      nil ->
+        []
+
+      identifier ->
+        version =
+          provider_option(opts, :guardrail_version) ||
+            raise ArgumentError, "guardrail_version is required when guardrail_identifier is set"
+
+        [
+          {"x-amzn-bedrock-guardrailidentifier", identifier},
+          {"x-amzn-bedrock-guardrailversion", version}
+        ] ++ trace_header(provider_option(opts, :guardrail_trace))
+    end
+  end
+
+  defp trace_header(nil), do: []
+  defp trace_header(trace), do: [{"x-amzn-bedrock-trace", String.upcase(trace)}]
 
   defp project_header(name, opts) do
     case provider_option(opts, :project) do
@@ -1236,6 +1286,7 @@ defmodule ReqLLM.Providers.AmazonBedrock do
     # Let the formatter handle model-specific parsing
     case formatter.parse_response(parsed_body, req.options) do
       {:ok, formatted_response} ->
+        formatted_response = apply_guardrail_action(formatted_response, parsed_body)
         {req, %{resp | body: formatted_response}}
 
       {:error, reason} ->
@@ -1258,6 +1309,11 @@ defmodule ReqLLM.Providers.AmazonBedrock do
 
     {req, err}
   end
+
+  defp apply_guardrail_action(response, %{"amazon-bedrock-guardrailAction" => "INTERVENED"}),
+    do: %{response | finish_reason: :content_filter}
+
+  defp apply_guardrail_action(response, _body), do: response
 
   # A native request body is the declared model's; Bedrock validates it against
   # the model the profile serves and says only "schema violations" when they

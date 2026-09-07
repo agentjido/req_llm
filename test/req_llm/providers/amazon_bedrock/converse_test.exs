@@ -18,6 +18,8 @@ defmodule ReqLLM.Providers.AmazonBedrock.ConverseTest do
       assert result["messages"] == [
                %{"role" => "user", "content" => [%{"text" => "Hello"}]}
              ]
+
+      refute Map.has_key?(result, "guardrailConfig")
     end
 
     test "formats request with system message" do
@@ -390,6 +392,29 @@ defmodule ReqLLM.Providers.AmazonBedrock.ConverseTest do
       assert result1["toolResult"]["toolUseId"] == "call_1"
       assert result2["toolResult"]["toolUseId"] == "call_2"
     end
+
+    test "omits trace from guardrail config when not set" do
+      context = %ReqLLM.Context{messages: [%Message{role: :user, content: "Hello"}]}
+
+      result =
+        Converse.format_request("test-model", context,
+          guardrail_identifier: "abc123",
+          guardrail_version: "DRAFT"
+        )
+
+      assert result["guardrailConfig"] == %{
+               "guardrailIdentifier" => "abc123",
+               "guardrailVersion" => "DRAFT"
+             }
+    end
+
+    test "raises when guardrail identifier is set without a version" do
+      context = %ReqLLM.Context{messages: [%Message{role: :user, content: "Hello"}]}
+
+      assert_raise ArgumentError, ~r/guardrail_version/, fn ->
+        Converse.format_request("test-model", context, guardrail_identifier: "abc123")
+      end
+    end
   end
 
   describe "parse_response/2" do
@@ -412,6 +437,7 @@ defmodule ReqLLM.Providers.AmazonBedrock.ConverseTest do
 
       assert result.model == "test-model"
       assert result.finish_reason == :stop
+      assert result.provider_meta == %{}
 
       assert result.usage == %{
                input_tokens: 10,
@@ -495,7 +521,8 @@ defmodule ReqLLM.Providers.AmazonBedrock.ConverseTest do
         {"tool_use", :tool_calls},
         {"max_tokens", :length},
         {"stop_sequence", :stop},
-        {"content_filtered", :content_filter}
+        {"content_filtered", :content_filter},
+        {"guardrail_intervened", :content_filter}
       ]
 
       for {bedrock_reason, expected_reason} <- test_cases do
@@ -507,6 +534,23 @@ defmodule ReqLLM.Providers.AmazonBedrock.ConverseTest do
         {:ok, result} = Converse.parse_response(response_body, model: "test")
         assert result.finish_reason == expected_reason
       end
+    end
+
+    test "exposes guardrail trace in provider_meta" do
+      trace = %{"guardrail" => %{"inputAssessment" => %{"g1" => %{"topicPolicy" => %{}}}}}
+
+      response_body = %{
+        "output" => %{
+          "message" => %{"role" => "assistant", "content" => [%{"text" => "Blocked"}]}
+        },
+        "stopReason" => "guardrail_intervened",
+        "trace" => trace
+      }
+
+      {:ok, result} = Converse.parse_response(response_body, model: "test")
+
+      assert result.finish_reason == :content_filter
+      assert result.provider_meta.trace == trace
     end
   end
 
@@ -549,6 +593,41 @@ defmodule ReqLLM.Providers.AmazonBedrock.ConverseTest do
                type: :meta,
                metadata: %{usage: %{input_tokens: 100, output_tokens: 50}}
              } = result
+    end
+
+    test "parses metadata with guardrail trace" do
+      trace = %{"guardrail" => %{"outputAssessments" => %{}}}
+
+      chunk = %{
+        "metadata" => %{
+          "usage" => %{"inputTokens" => 1, "outputTokens" => 2},
+          "trace" => trace
+        }
+      }
+
+      {:ok, result} = Converse.parse_stream_chunk(chunk, "test-model")
+
+      assert %ReqLLM.StreamChunk{type: :meta, metadata: metadata} = result
+      assert metadata.usage.input_tokens == 1
+      assert metadata.provider_meta == %{trace: trace}
+    end
+
+    test "parses metadata with only a trace" do
+      chunk = %{"metadata" => %{"trace" => %{"guardrail" => %{}}}}
+
+      {:ok, result} = Converse.parse_stream_chunk(chunk, "test-model")
+
+      assert %ReqLLM.StreamChunk{type: :meta, metadata: %{provider_meta: %{trace: _}}} = result
+      refute Map.has_key?(result.metadata, :usage)
+    end
+
+    test "parses messageStop with guardrail_intervened stop reason" do
+      chunk = %{"messageStop" => %{"stopReason" => "guardrail_intervened"}}
+
+      {:ok, result} = Converse.parse_stream_chunk(chunk, "test-model")
+
+      assert %ReqLLM.StreamChunk{type: :meta, metadata: %{finish_reason: :content_filter}} =
+               result
     end
 
     test "returns nil for messageStart" do
