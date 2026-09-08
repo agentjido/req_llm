@@ -78,8 +78,19 @@ defmodule ReqLLM.Providers.AmazonBedrock.Meta do
   Delegates to the generic Meta provider for parsing.
   """
   def parse_response(body, opts) when is_map(body) do
-    Llama.parse_response(body, opts)
+    body
+    |> with_guardrail_defaults()
+    |> Llama.parse_response(opts)
   end
+
+  # A blocked request never reaches the model, so Bedrock omits the token counts
+  defp with_guardrail_defaults(%{"amazon-bedrock-guardrailAction" => "INTERVENED"} = body) do
+    body
+    |> Map.put_new("prompt_token_count", 0)
+    |> Map.put_new("generation_token_count", 0)
+  end
+
+  defp with_guardrail_defaults(body), do: body
 
   @doc """
   Parses a streaming chunk for Meta Llama models.

@@ -152,7 +152,7 @@ defmodule ReqLLM.Providers.AmazonBedrock.Converse do
     # Add additionalModelRequestFields for model-specific features (e.g., Claude extended thinking)
     request = add_additional_fields(request, opts)
 
-    request
+    add_guardrail_config(request, opts)
   end
 
   # Create the synthetic structured_output tool for :object operations
@@ -208,6 +208,7 @@ defmodule ReqLLM.Providers.AmazonBedrock.Converse do
       message: message,
       finish_reason: map_stop_reason(stop_reason),
       usage: parse_usage(usage),
+      provider_meta: response_provider_meta(response_body),
       stream?: false
     }
 
@@ -314,12 +315,12 @@ defmodule ReqLLM.Providers.AmazonBedrock.Converse do
         {:ok, ReqLLM.StreamChunk.meta(%{finish_reason: map_stop_reason(stop_reason)})}
 
       %{"metadata" => metadata} ->
-        # Usage metadata
-        if usage = metadata["usage"] do
-          {:ok, ReqLLM.StreamChunk.meta(%{usage: parse_usage(usage)})}
-        else
-          {:ok, nil}
-        end
+        meta =
+          %{}
+          |> maybe_put_usage(metadata["usage"])
+          |> maybe_put_trace(metadata["trace"])
+
+        if meta == %{}, do: {:ok, nil}, else: {:ok, ReqLLM.StreamChunk.meta(meta)}
 
       _ ->
         {:error, :unknown_chunk_type}
@@ -327,6 +328,17 @@ defmodule ReqLLM.Providers.AmazonBedrock.Converse do
   end
 
   # Private functions
+
+  defp response_provider_meta(%{"trace" => trace}) when is_map(trace), do: %{trace: trace}
+  defp response_provider_meta(_response_body), do: %{}
+
+  defp maybe_put_usage(meta, nil), do: meta
+  defp maybe_put_usage(meta, usage), do: Map.put(meta, :usage, parse_usage(usage))
+
+  defp maybe_put_trace(meta, trace) when is_map(trace),
+    do: Map.put(meta, :provider_meta, %{trace: trace})
+
+  defp maybe_put_trace(meta, _trace), do: meta
 
   defp add_messages(request, messages) do
     {system_messages, non_system_messages} =
@@ -514,6 +526,30 @@ defmodule ReqLLM.Providers.AmazonBedrock.Converse do
       nil -> request
       fields when is_map(fields) -> Map.put(request, "additionalModelRequestFields", fields)
       _ -> request
+    end
+  end
+
+  defp add_guardrail_config(request, opts) do
+    opts = Keyword.merge(opts, opts[:provider_options] || [])
+
+    case opts[:guardrail_identifier] do
+      nil ->
+        request
+
+      identifier ->
+        version =
+          opts[:guardrail_version] ||
+            raise ArgumentError, "guardrail_version is required when guardrail_identifier is set"
+
+        config = %{"guardrailIdentifier" => identifier, "guardrailVersion" => version}
+
+        config =
+          case opts[:guardrail_trace] do
+            nil -> config
+            trace -> Map.put(config, "trace", trace)
+          end
+
+        Map.put(request, "guardrailConfig", config)
     end
   end
 
@@ -855,5 +891,6 @@ defmodule ReqLLM.Providers.AmazonBedrock.Converse do
   defp map_stop_reason("max_tokens"), do: :length
   defp map_stop_reason("stop_sequence"), do: :stop
   defp map_stop_reason("content_filtered"), do: :content_filter
+  defp map_stop_reason("guardrail_intervened"), do: :content_filter
   defp map_stop_reason(_), do: :stop
 end

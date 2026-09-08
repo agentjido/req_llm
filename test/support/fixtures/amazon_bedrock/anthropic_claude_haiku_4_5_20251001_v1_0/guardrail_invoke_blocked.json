@@ -1,0 +1,139 @@
+{
+  "model_spec": "amazon_bedrock:global.anthropic.claude-haiku-4-5-20251001-v1:0",
+  "provider": "amazon_bedrock",
+  "request": {
+    "body": {
+      "b64": "eyJhbnRocm9waWNfdmVyc2lvbiI6ImJlZHJvY2stMjAyMy0wNS0zMSIsIm1heF90b2tlbnMiOjEwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJXaGF0IGlzIHRoZSB3ZWF0aGVyIGxpa2UgaW4gUGFyaXMgdG9kYXk/Iiwicm9sZSI6InVzZXIifV19"
+    },
+    "canonical_json": {
+      "anthropic_version": "bedrock-2023-05-31",
+      "max_tokens": 100,
+      "messages": [
+        {
+          "content": "What is the weather like in Paris today?",
+          "role": "user"
+        }
+      ]
+    },
+    "headers": {
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "host": [
+        "bedrock-runtime.us-east-1.amazonaws.com"
+      ],
+      "user-agent": [
+        "req/0.7.4"
+      ],
+      "x-amz-content-sha256": [
+        "bc68ec28acbe057f6c22608adcad78b5e7a4ee25850c7faf65c554c4fb0eeded"
+      ],
+      "x-amz-date": [
+        "20260907T205831Z"
+      ],
+      "x-amz-security-token": [
+        "[REDACTED:x-amz-security-token]"
+      ],
+      "x-amzn-bedrock-guardrailidentifier": [
+        "guardrail1234"
+      ],
+      "x-amzn-bedrock-guardrailversion": [
+        "DRAFT"
+      ],
+      "x-amzn-bedrock-trace": [
+        "ENABLED"
+      ]
+    },
+    "method": "post",
+    "url": "https://bedrock-runtime.us-east-1.amazonaws.com/model/global.anthropic.claude-haiku-4-5-20251001-v1:0/invoke"
+  },
+  "response": {
+    "body": {
+      "amazon-bedrock-guardrailAction": "INTERVENED",
+      "amazon-bedrock-trace": {
+        "guardrail": {
+          "actionReason": "Guardrail blocked.",
+          "input": {
+            "guardrail1234": {
+              "appliedGuardrailDetails": {
+                "guardrailArn": "arn:aws:bedrock:us-east-1:123456789012:guardrail/guardrail1234",
+                "guardrailId": "guardrail1234",
+                "guardrailOrigin": [
+                  "REQUEST"
+                ],
+                "guardrailOwnership": "SELF",
+                "guardrailVersion": "DRAFT"
+              },
+              "invocationMetrics": {
+                "guardrailCoverage": {
+                  "textCharacters": {
+                    "guarded": 40,
+                    "total": 40
+                  }
+                },
+                "guardrailProcessingLatency": 194,
+                "usage": {
+                  "automatedReasoningPolicies": 0,
+                  "automatedReasoningPolicyUnits": 0,
+                  "contentPolicyImageUnits": 0,
+                  "contentPolicyUnits": 0,
+                  "contextualGroundingPolicyUnits": 0,
+                  "sensitiveInformationPolicyFreeUnits": 0,
+                  "sensitiveInformationPolicyUnits": 0,
+                  "topicPolicyUnits": 1,
+                  "wordPolicyUnits": 0
+                }
+              },
+              "topicPolicy": {
+                "topics": [
+                  {
+                    "action": "BLOCKED",
+                    "detected": true,
+                    "name": "Weather",
+                    "type": "DENY"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "content": [
+        {
+          "text": "Guardrail blocked the input.",
+          "type": "text"
+        }
+      ],
+      "id": "bedrock-guardrails-07f4e15f",
+      "model": "claude-haiku-4-5-20251001",
+      "role": "assistant",
+      "stop_reason": "end_turn",
+      "stop_sequence": null,
+      "type": "message",
+      "usage": {
+        "input_tokens": 0,
+        "output_tokens": 0
+      }
+    },
+    "headers": {
+      "connection": [
+        "keep-alive"
+      ],
+      "content-length": [
+        "1127"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Mon, 07 Sep 2026 20:58:31 GMT"
+      ],
+      "x-amzn-requestid": [
+        "a40aab7e-3599-41a2-bd78-419f9edfe2e8"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

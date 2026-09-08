@@ -1,0 +1,142 @@
+{
+  "model_spec": "amazon_bedrock:global.anthropic.claude-haiku-4-5-20251001-v1:0",
+  "provider": "amazon_bedrock",
+  "request": {
+    "body": {
+      "b64": "eyJndWFyZHJhaWxDb25maWciOnsiZ3VhcmRyYWlsSWRlbnRpZmllciI6Imd1YXJkcmFpbDEyMzQiLCJndWFyZHJhaWxWZXJzaW9uIjoiRFJBRlQiLCJ0cmFjZSI6ImVuYWJsZWQifSwiaW5mZXJlbmNlQ29uZmlnIjp7Im1heFRva2VucyI6MTAwfSwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOlt7InRleHQiOiJXaGF0IGlzIHRoZSB3ZWF0aGVyIGxpa2UgaW4gUGFyaXMgdG9kYXk/In1dLCJyb2xlIjoidXNlciJ9XX0="
+    },
+    "canonical_json": {
+      "guardrailConfig": {
+        "guardrailIdentifier": "guardrail1234",
+        "guardrailVersion": "DRAFT",
+        "trace": "enabled"
+      },
+      "inferenceConfig": {
+        "maxTokens": 100
+      },
+      "messages": [
+        {
+          "content": [
+            {
+              "text": "What is the weather like in Paris today?"
+            }
+          ],
+          "role": "user"
+        }
+      ]
+    },
+    "headers": {
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "host": [
+        "bedrock-runtime.us-east-1.amazonaws.com"
+      ],
+      "user-agent": [
+        "req/0.7.4"
+      ],
+      "x-amz-content-sha256": [
+        "2e20d0a1f679d3685b35115b0fab5b5a203469aeb95771f8b7ef669236a6e8bc"
+      ],
+      "x-amz-date": [
+        "20260907T205827Z"
+      ],
+      "x-amz-security-token": [
+        "[REDACTED:x-amz-security-token]"
+      ]
+    },
+    "method": "post",
+    "url": "https://bedrock-runtime.us-east-1.amazonaws.com/model/global.anthropic.claude-haiku-4-5-20251001-v1:0/converse"
+  },
+  "response": {
+    "body": {
+      "metrics": {
+        "latencyMs": 368
+      },
+      "output": {
+        "message": {
+          "content": [
+            {
+              "text": "Guardrail blocked the input."
+            }
+          ],
+          "role": "assistant"
+        }
+      },
+      "stopReason": "guardrail_intervened",
+      "trace": {
+        "guardrail": {
+          "actionReason": "Guardrail blocked.",
+          "inputAssessment": {
+            "guardrail1234": {
+              "appliedGuardrailDetails": {
+                "guardrailArn": "arn:aws:bedrock:us-east-1:123456789012:guardrail/guardrail1234",
+                "guardrailId": "guardrail1234",
+                "guardrailOrigin": [
+                  "REQUEST"
+                ],
+                "guardrailOwnership": "SELF",
+                "guardrailVersion": "DRAFT"
+              },
+              "invocationMetrics": {
+                "guardrailCoverage": {
+                  "textCharacters": {
+                    "guarded": 40,
+                    "total": 40
+                  }
+                },
+                "guardrailProcessingLatency": 203,
+                "usage": {
+                  "contentPolicyImageUnits": 0,
+                  "contentPolicyUnits": 0,
+                  "contextualGroundingPolicyUnits": 0,
+                  "sensitiveInformationPolicyFreeUnits": 0,
+                  "sensitiveInformationPolicyUnits": 0,
+                  "topicPolicyUnits": 1,
+                  "wordPolicyUnits": 0
+                }
+              },
+              "topicPolicy": {
+                "topics": [
+                  {
+                    "action": "BLOCKED",
+                    "detected": true,
+                    "name": "Weather",
+                    "type": "DENY"
+                  }
+                ]
+              }
+            }
+          },
+          "modelOutput": []
+        }
+      },
+      "usage": {
+        "inputTokens": 0,
+        "outputTokens": 0,
+        "serverToolUsage": {},
+        "totalTokens": 0
+      }
+    },
+    "headers": {
+      "connection": [
+        "keep-alive"
+      ],
+      "content-length": [
+        "1002"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Mon, 07 Sep 2026 20:58:28 GMT"
+      ],
+      "x-amzn-requestid": [
+        "f2077e67-590f-45d4-9ee5-80ecc52988fe"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}
