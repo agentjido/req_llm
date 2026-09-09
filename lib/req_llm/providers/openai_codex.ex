@@ -222,7 +222,7 @@ defmodule ReqLLM.Providers.OpenAICodex do
     |> Req.Request.put_header("authorization", "Bearer #{credential.token}")
     |> Req.Request.put_header("chatgpt-account-id", account_id)
     |> Req.Request.put_header("originator", originator)
-    |> put_session_headers(user_opts)
+    |> Req.Request.put_headers(session_headers(user_opts))
     |> ResponsesLite.put_req_header(model)
     |> Req.Request.register_options([@codex_model_option | extra_option_keys])
     |> Req.Request.merge_options(
@@ -666,12 +666,6 @@ defmodule ReqLLM.Providers.OpenAICodex do
 
     [{"session-id", options[:session_id]}, {"thread-id", options[:thread_id]}]
     |> Enum.reject(fn {_name, value} -> is_nil(value) end)
-  end
-
-  defp put_session_headers(request, opts) do
-    Enum.reduce(session_headers(opts), request, fn {name, value}, req ->
-      Req.Request.put_header(req, name, value)
-    end)
   end
 
   defp maybe_put_prompt_cache_key(body, nil), do: body
