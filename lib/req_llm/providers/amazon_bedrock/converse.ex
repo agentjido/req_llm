@@ -311,11 +311,26 @@ defmodule ReqLLM.Providers.AmazonBedrock.Converse do
     block =
       case key do
         :text -> %{block | text: block.text <> value}
-        :signature -> %{block | signature: value}
-        :redacted -> %{block | redacted: value}
+        :signature -> %{block | signature: append_fragment(block.signature, value)}
+        :redacted -> %{block | redacted: append_redacted_fragment(block.redacted, value)}
       end
 
     %{state | reasoning_blocks: Map.put(state.reasoning_blocks, index, block)}
+  end
+
+  defp append_fragment(nil, value), do: value
+  defp append_fragment(existing, value), do: existing <> value
+
+  defp append_redacted_fragment(nil, value), do: value
+
+  defp append_redacted_fragment(existing, value) do
+    case {Base.decode64(existing), Base.decode64(value)} do
+      {{:ok, existing_bytes}, {:ok, value_bytes}} ->
+        Base.encode64(existing_bytes <> value_bytes)
+
+      _ ->
+        existing <> value
+    end
   end
 
   defp reasoning_detail(%{redacted: data}, index) when is_binary(data) do

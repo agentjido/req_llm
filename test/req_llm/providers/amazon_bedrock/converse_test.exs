@@ -689,11 +689,23 @@ defmodule ReqLLM.Providers.AmazonBedrock.ConverseTest do
             "delta" => %{"reasoningContent" => %{"signature" => "sig"}}
           }
         },
+        %{
+          "contentBlockDelta" => %{
+            "contentBlockIndex" => 0,
+            "delta" => %{"reasoningContent" => %{"signature" => "_test"}}
+          }
+        },
         %{"contentBlockStop" => %{"contentBlockIndex" => 0}},
         %{
           "contentBlockDelta" => %{
             "contentBlockIndex" => 1,
-            "delta" => %{"reasoningContent" => %{"redactedContent" => "abc="}}
+            "delta" => %{"reasoningContent" => %{"redactedContent" => Base.encode64("a")}}
+          }
+        },
+        %{
+          "contentBlockDelta" => %{
+            "contentBlockIndex" => 1,
+            "delta" => %{"reasoningContent" => %{"redactedContent" => Base.encode64("b")}}
           }
         },
         %{"contentBlockStop" => %{"contentBlockIndex" => 1}},
@@ -714,10 +726,16 @@ defmodule ReqLLM.Providers.AmazonBedrock.ConverseTest do
                %ReqLLM.StreamChunk{type: :content, text: "Answer"}
              ] = chunks
 
-      assert %ReasoningDetails{text: "thought", signature: "sig", encrypted?: true, index: 0} =
+      assert %ReasoningDetails{text: "thought", signature: "sig_test", encrypted?: true, index: 0} =
                signed
 
-      assert %ReasoningDetails{text: nil, index: 1, provider_data: %{"redactedContent" => "abc="}} =
+      expected_redacted = Base.encode64("ab")
+
+      assert %ReasoningDetails{
+               text: nil,
+               index: 1,
+               provider_data: %{"redactedContent" => ^expected_redacted}
+             } =
                redacted
     end
   end
