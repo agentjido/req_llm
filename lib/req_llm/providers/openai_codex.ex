@@ -222,7 +222,7 @@ defmodule ReqLLM.Providers.OpenAICodex do
     |> Req.Request.put_header("authorization", "Bearer #{credential.token}")
     |> Req.Request.put_header("chatgpt-account-id", account_id)
     |> Req.Request.put_header("originator", originator)
-    |> Req.Request.put_headers(session_headers(user_opts))
+    |> Req.Request.put_headers(identity_headers(user_opts))
     |> ResponsesLite.put_req_header(model)
     |> Req.Request.register_options([@codex_model_option | extra_option_keys])
     |> Req.Request.merge_options(
@@ -335,7 +335,7 @@ defmodule ReqLLM.Providers.OpenAICodex do
         {"accept", "text/event-stream"},
         {"openai-beta", "responses=experimental"}
       ]
-      |> Kernel.++(session_headers(opts))
+      |> Kernel.++(identity_headers(opts))
       |> ResponsesLite.put_header(model)
 
     encoded = body |> ReqLLM.Schema.apply_property_ordering() |> Jason.encode!()
@@ -644,10 +644,9 @@ defmodule ReqLLM.Providers.OpenAICodex do
       {"authorization", "Bearer " <> token},
       {"chatgpt-account-id", account_id},
       {"originator", codex_originator(opts)},
-      {"openai-beta", "responses_websockets=2026-02-06"},
-      {"x-client-request-id", codex_request_id(opts)}
+      {"openai-beta", "responses_websockets=2026-02-06"}
     ]
-    |> Kernel.++(session_headers(opts))
+    |> Kernel.++(identity_headers(opts, codex_request_id(opts)))
     |> ResponsesLite.put_header(model)
     |> Kernel.++(ReqLLM.Provider.Utils.extract_custom_headers(opts[:req_http_options]))
   end
@@ -661,10 +660,14 @@ defmodule ReqLLM.Providers.OpenAICodex do
     |> Keyword.get_lazy(:thread_id, fn -> "req_#{System.unique_integer([:positive])}" end)
   end
 
-  defp session_headers(opts) do
+  defp identity_headers(opts, fallback_request_id \\ nil) do
     options = provider_options(opts)
 
-    [{"session-id", options[:session_id]}, {"thread-id", options[:thread_id]}]
+    [
+      {"x-client-request-id", options[:thread_id] || fallback_request_id},
+      {"session-id", options[:session_id]},
+      {"thread-id", options[:thread_id]}
+    ]
     |> Enum.reject(fn {_name, value} -> is_nil(value) end)
   end
 

@@ -103,10 +103,11 @@ Reuse the same `session_id` across related requests. Codex sends it as the
 hyphenated `session-id` header on buffered HTTP, SSE, and WebSocket requests,
 and defaults `prompt_cache_key` to that identity. An explicit
 `provider_options: [prompt_cache_key: "cache-key"]` overrides the cache key.
-`thread_id` is a separate, optional identity sent as `thread-id` (and used for
-WebSocket `x-client-request-id`). No session or cache identity is invented when
-none is supplied. Applications serving multiple users should scope these
-identities to the authenticated user/session; never use one global cache key.
+`thread_id` is a separate, optional identity sent as `thread-id` and
+`x-client-request-id` on all three transports. No session or cache identity is
+invented when none is supplied. Applications serving multiple users should
+scope these identities to the authenticated user/session; never use one global
+cache key.
 
 These fields improve compatibility with the official Codex client but do not
 guarantee a cache hit or change the provider's subscription quota policy.

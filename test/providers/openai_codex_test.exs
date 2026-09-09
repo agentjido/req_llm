@@ -122,6 +122,7 @@ defmodule ReqLLM.Providers.OpenAICodexTest do
         ]
 
         {:ok, buffered} = OpenAICodex.prepare_request(:chat, model, context, opts)
+        assert buffered.headers["x-client-request-id"] == ["thread-456"]
         assert buffered.headers["session-id"] == ["session-123"]
         assert buffered.headers["thread-id"] == ["thread-456"]
         refute Map.has_key?(buffered.headers, "session_id")
@@ -130,11 +131,13 @@ defmodule ReqLLM.Providers.OpenAICodexTest do
                  "cache-override"
 
         {:ok, sse} = OpenAICodex.attach_stream(model, context, opts, nil)
+        assert {"x-client-request-id", "thread-456"} in sse.headers
         assert {"session-id", "session-123"} in sse.headers
         assert {"thread-id", "thread-456"} in sse.headers
         assert Jason.decode!(sse.body)["prompt_cache_key"] == "cache-override"
 
         {:ok, websocket} = OpenAICodex.attach_websocket_stream(model, context, opts)
+        assert {"x-client-request-id", "thread-456"} in websocket.headers
         assert {"session-id", "session-123"} in websocket.headers
         assert {"thread-id", "thread-456"} in websocket.headers
         refute List.keymember?(websocket.headers, "session_id", 0)
@@ -161,17 +164,24 @@ defmodule ReqLLM.Providers.OpenAICodexTest do
           assert Jason.decode!(OpenAICodex.encode_body(buffered).body)["prompt_cache_key"] ==
                    "session-123"
 
+          refute Map.has_key?(buffered.headers, "x-client-request-id")
           refute Map.has_key?(buffered.headers, "thread-id")
 
           {:ok, sse} = OpenAICodex.attach_stream(model, context, opts, nil)
           assert {"session-id", "session-123"} in sse.headers
           assert Jason.decode!(sse.body)["prompt_cache_key"] == "session-123"
+          refute List.keymember?(sse.headers, "x-client-request-id", 0)
           refute List.keymember?(sse.headers, "thread-id", 0)
 
           {:ok, websocket} = OpenAICodex.attach_websocket_stream(model, context, opts)
           assert {"session-id", "session-123"} in websocket.headers
           assert websocket.canonical_json["prompt_cache_key"] == "session-123"
           refute List.keymember?(websocket.headers, "thread-id", 0)
+
+          assert {"x-client-request-id", request_id} =
+                   List.keyfind(websocket.headers, "x-client-request-id", 0)
+
+          refute request_id == "session-123"
         end
       end
     end
