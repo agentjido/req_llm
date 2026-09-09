@@ -42,7 +42,16 @@ defmodule ReqLLM.Providers.OpenAICodex do
     ],
     session_id: [
       type: :string,
-      doc: "Stable request/session id used for Codex websocket headers"
+      doc: "Stable session identity sent as session-id and used as the default prompt cache key"
+    ],
+    thread_id: [
+      type: :string,
+      doc:
+        "Thread identity sent as thread-id, separate from the session shared by related threads"
+    ],
+    prompt_cache_key: [
+      type: :string,
+      doc: "Explicit prompt cache key override; defaults to session_id when supplied"
     ],
     codex_originator: [
       type: :string,
@@ -213,6 +222,7 @@ defmodule ReqLLM.Providers.OpenAICodex do
     |> Req.Request.put_header("authorization", "Bearer #{credential.token}")
     |> Req.Request.put_header("chatgpt-account-id", account_id)
     |> Req.Request.put_header("originator", originator)
+    |> put_session_headers(user_opts)
     |> ResponsesLite.put_req_header(model)
     |> Req.Request.register_options([@codex_model_option | extra_option_keys])
     |> Req.Request.merge_options(
@@ -325,6 +335,7 @@ defmodule ReqLLM.Providers.OpenAICodex do
         {"accept", "text/event-stream"},
         {"openai-beta", "responses=experimental"}
       ]
+      |> Kernel.++(session_headers(opts))
       |> ResponsesLite.put_header(model)
 
     encoded = body |> ReqLLM.Schema.apply_property_ordering() |> Jason.encode!()
@@ -437,6 +448,7 @@ defmodule ReqLLM.Providers.OpenAICodex do
     |> Map.put("include", ["reasoning.encrypted_content"])
     |> Map.put_new("text", %{"verbosity" => normalize_codex_verbosity(provider_opts[:verbosity])})
     |> Map.put("instructions", instructions)
+    |> maybe_put_prompt_cache_key(provider_opts[:prompt_cache_key] || provider_opts[:session_id])
     |> maybe_put_parallel_tool_calls(provider_opts[:openai_parallel_tool_calls])
     |> ResponsesLite.apply_body(model)
   end
@@ -628,16 +640,14 @@ defmodule ReqLLM.Providers.OpenAICodex do
   end
 
   defp websocket_headers(model, token, account_id, opts) do
-    request_id = codex_request_id(opts)
-
     [
       {"authorization", "Bearer " <> token},
       {"chatgpt-account-id", account_id},
       {"originator", codex_originator(opts)},
       {"openai-beta", "responses_websockets=2026-02-06"},
-      {"x-client-request-id", request_id},
-      {"session_id", request_id}
+      {"x-client-request-id", codex_request_id(opts)}
     ]
+    |> Kernel.++(session_headers(opts))
     |> ResponsesLite.put_header(model)
     |> Kernel.++(ReqLLM.Provider.Utils.extract_custom_headers(opts[:req_http_options]))
   end
@@ -648,8 +658,24 @@ defmodule ReqLLM.Providers.OpenAICodex do
   defp codex_request_id(opts) do
     opts
     |> provider_options()
-    |> Keyword.get_lazy(:session_id, fn -> "req_#{System.unique_integer([:positive])}" end)
+    |> Keyword.get_lazy(:thread_id, fn -> "req_#{System.unique_integer([:positive])}" end)
   end
+
+  defp session_headers(opts) do
+    options = provider_options(opts)
+
+    [{"session-id", options[:session_id]}, {"thread-id", options[:thread_id]}]
+    |> Enum.reject(fn {_name, value} -> is_nil(value) end)
+  end
+
+  defp put_session_headers(request, opts) do
+    Enum.reduce(session_headers(opts), request, fn {name, value}, req ->
+      Req.Request.put_header(req, name, value)
+    end)
+  end
+
+  defp maybe_put_prompt_cache_key(body, nil), do: body
+  defp maybe_put_prompt_cache_key(body, key), do: Map.put(body, "prompt_cache_key", key)
 
   defp normalize_stream_opts(opts) when is_list(opts) do
     provider_opts =
