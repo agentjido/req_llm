@@ -472,6 +472,52 @@ defmodule ReqLLM.Providers.AmazonBedrockTest do
     end
   end
 
+  describe "Converse reasoning stream state" do
+    setup do
+      {:ok, model} =
+        ReqLLM.model(%{
+          provider: :amazon_bedrock,
+          id: "anthropic.claude-haiku-4-5-20251001-v1:0",
+          capabilities: %{chat: true, reasoning: %{enabled: true}}
+        })
+
+      {:ok, model: model}
+    end
+
+    test "starts from nil state and flushes pending reasoning for Claude", %{model: model} do
+      delta = %{
+        "contentBlockDelta" => %{
+          "contentBlockIndex" => 0,
+          "delta" => %{"reasoningContent" => %{"text" => "thought"}}
+        }
+      }
+
+      signature = %{
+        "contentBlockDelta" => %{
+          "contentBlockIndex" => 0,
+          "delta" => %{"reasoningContent" => %{"signature" => "sig"}}
+        }
+      }
+
+      {[%ReqLLM.StreamChunk{type: :thinking}], state} =
+        AmazonBedrock.decode_stream_event(delta, model, nil)
+
+      {[], state} = AmazonBedrock.decode_stream_event(signature, model, state)
+      {chunks, _state} = AmazonBedrock.flush_stream_state(model, state)
+
+      assert [
+               %ReqLLM.StreamChunk{
+                 type: :meta,
+                 metadata: %{
+                   reasoning_details: [
+                     %ReqLLM.Message.ReasoningDetails{text: "thought", signature: "sig"}
+                   ]
+                 }
+               }
+             ] = chunks
+    end
+  end
+
   describe "AWS session token support" do
     test "includes session token in signed Req request headers" do
       # Test non-streaming path (Req pipeline via put_aws_sigv4)
