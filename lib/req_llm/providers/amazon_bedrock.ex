@@ -706,7 +706,12 @@ defmodule ReqLLM.Providers.AmazonBedrock do
     {chunks, state} =
       cond do
         converse_event?(event) ->
-          {decode_formatter_stream_event(ReqLLM.Providers.AmazonBedrock.Converse, event), state}
+          state = state || init_stream_state(model) || %{}
+
+          {chunks, converse_state} =
+            ReqLLM.Providers.AmazonBedrock.Converse.decode_stream_event(event, state[:converse])
+
+          {chunks, Map.put(state, :converse, converse_state)}
 
         get_model_family(model_id) == "anthropic" ->
           ReqLLM.Providers.Anthropic.Response.decode_stream_event(%{data: event}, model, state)
@@ -740,9 +745,21 @@ defmodule ReqLLM.Providers.AmazonBedrock do
   def flush_stream_state(model, state) do
     model_id = model.provider_model_id || model.id
 
-    case get_model_family(model_id) do
-      "anthropic" -> ReqLLM.Providers.Anthropic.Response.flush_stream_state(model, state)
-      _ -> {[], state}
+    {chunks, state} =
+      case get_model_family(model_id) do
+        "anthropic" -> ReqLLM.Providers.Anthropic.Response.flush_stream_state(model, state)
+        _ -> {[], state}
+      end
+
+    case state do
+      %{converse: converse_state} ->
+        {converse_chunks, converse_state} =
+          ReqLLM.Providers.AmazonBedrock.Converse.flush_stream_state(converse_state)
+
+        {chunks ++ converse_chunks, Map.put(state, :converse, converse_state)}
+
+      _ ->
+        {chunks, state}
     end
   end
 

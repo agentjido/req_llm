@@ -80,7 +80,11 @@ defmodule ReqLLM.Providers.AmazonBedrock.Converse do
 
   alias ReqLLM.Message
   alias ReqLLM.Message.ContentPart
+  alias ReqLLM.Message.ReasoningDetails
   alias ReqLLM.ToolCall
+
+  @reasoning_format "bedrock-converse-v1"
+  @replayable_reasoning_providers [:amazon_bedrock, :anthropic]
 
   @doc """
   Format a ReqLLM context into Bedrock Converse API format.
@@ -236,6 +240,118 @@ defmodule ReqLLM.Providers.AmazonBedrock.Converse do
       |> ReqLLM.ToolCall.find_args("structured_output", opts)
 
     %{response | object: extracted_object}
+  end
+
+  def init_stream_state, do: %{reasoning_blocks: %{}, next_reasoning_index: 0}
+
+  @doc "Emits `reasoning_details` when a reasoning block receives `contentBlockStop`."
+  def decode_stream_event(event, nil), do: decode_stream_event(event, init_stream_state())
+
+  def decode_stream_event(%{"contentBlockDelta" => delta_data} = event, state) do
+    index = delta_data["contentBlockIndex"]
+
+    case get_in(delta_data, ["delta", "reasoningContent"]) do
+      %{"text" => text} when is_binary(text) ->
+        chunks = if text == "", do: [], else: [ReqLLM.StreamChunk.thinking(text)]
+        {chunks, append_reasoning(state, index, :text, text)}
+
+      %{"signature" => signature} when is_binary(signature) ->
+        {[], append_reasoning(state, index, :signature, signature)}
+
+      %{"redactedContent" => data} when is_binary(data) ->
+        {[], append_reasoning(state, index, :redacted, data)}
+
+      _ ->
+        {stateless_chunks(event), state}
+    end
+  end
+
+  def decode_stream_event(%{"contentBlockStop" => %{"contentBlockIndex" => index}}, state) do
+    case Map.pop(state.reasoning_blocks, index) do
+      {nil, _blocks} ->
+        {[], state}
+
+      {block, blocks} ->
+        detail = reasoning_detail(block, state.next_reasoning_index)
+
+        {[ReqLLM.StreamChunk.meta(%{reasoning_details: [detail]})],
+         %{state | reasoning_blocks: blocks, next_reasoning_index: state.next_reasoning_index + 1}}
+    end
+  end
+
+  def decode_stream_event(event, state), do: {stateless_chunks(event), state}
+
+  @doc "Emit reasoning details for blocks that never received a `contentBlockStop`."
+  def flush_stream_state(nil), do: {[], init_stream_state()}
+
+  def flush_stream_state(state) do
+    state.reasoning_blocks
+    |> Enum.sort_by(fn {index, _block} -> index end)
+    |> Enum.map_reduce(%{state | reasoning_blocks: %{}}, fn {_index, block}, acc ->
+      {reasoning_detail(block, acc.next_reasoning_index),
+       %{acc | next_reasoning_index: acc.next_reasoning_index + 1}}
+    end)
+    |> case do
+      {[], state} -> {[], state}
+      {details, state} -> {[ReqLLM.StreamChunk.meta(%{reasoning_details: details})], state}
+    end
+  end
+
+  defp stateless_chunks(event) do
+    case parse_stream_chunk(event, %{}) do
+      {:ok, nil} -> []
+      {:ok, chunk} -> [chunk]
+      {:error, _} -> []
+    end
+  end
+
+  defp append_reasoning(state, index, key, value) do
+    block = Map.get(state.reasoning_blocks, index, %{text: "", signature: nil, redacted: nil})
+
+    block =
+      case key do
+        :text -> %{block | text: block.text <> value}
+        :signature -> %{block | signature: append_fragment(block.signature, value)}
+        :redacted -> %{block | redacted: append_redacted_fragment(block.redacted, value)}
+      end
+
+    %{state | reasoning_blocks: Map.put(state.reasoning_blocks, index, block)}
+  end
+
+  defp append_fragment(nil, value), do: value
+  defp append_fragment(existing, value), do: existing <> value
+
+  defp append_redacted_fragment(nil, value), do: value
+
+  defp append_redacted_fragment(existing, value) do
+    case {Base.decode64(existing), Base.decode64(value)} do
+      {{:ok, existing_bytes}, {:ok, value_bytes}} ->
+        Base.encode64(existing_bytes <> value_bytes)
+
+      _ ->
+        existing <> value
+    end
+  end
+
+  defp reasoning_detail(%{redacted: data}, index) when is_binary(data) do
+    %ReasoningDetails{
+      encrypted?: true,
+      provider: :amazon_bedrock,
+      format: @reasoning_format,
+      index: index,
+      provider_data: %{"redactedContent" => data}
+    }
+  end
+
+  defp reasoning_detail(%{text: text, signature: signature}, index) do
+    %ReasoningDetails{
+      text: text,
+      signature: signature,
+      encrypted?: signature != nil,
+      provider: :amazon_bedrock,
+      format: @reasoning_format,
+      index: index
+    }
   end
 
   @doc """
@@ -554,20 +670,13 @@ defmodule ReqLLM.Providers.AmazonBedrock.Converse do
   end
 
   # Assistant message with tool calls (new ToolCall pattern)
-  defp encode_message(%Message{role: :assistant, tool_calls: tool_calls, content: content})
+  defp encode_message(%Message{role: :assistant, tool_calls: tool_calls, content: content} = msg)
        when is_list(tool_calls) and tool_calls != [] do
-    text_content = encode_content(content)
     tool_blocks = Enum.map(tool_calls, &encode_tool_call_to_tool_use/1)
-
-    content_blocks =
-      case text_content do
-        [] -> tool_blocks
-        blocks when is_list(blocks) -> blocks ++ tool_blocks
-      end
 
     %{
       "role" => "assistant",
-      "content" => content_blocks
+      "content" => encode_reasoning_details(msg) ++ encode_content(content) ++ tool_blocks
     }
   end
 
@@ -588,12 +697,36 @@ defmodule ReqLLM.Providers.AmazonBedrock.Converse do
 
   # Regular message (user, assistant, system) — returns nil if content is
   # empty after filtering, so the caller can reject it like empty ContentParts.
-  defp encode_message(%Message{role: role, content: content}) do
-    case encode_content(content) do
+  defp encode_message(%Message{role: role, content: content} = msg) do
+    case encode_reasoning_details(msg) ++ encode_content(content) do
       [] -> nil
       encoded -> %{"role" => Atom.to_string(role), "content" => encoded}
     end
   end
+
+  defp encode_reasoning_details(%Message{role: :assistant, reasoning_details: details})
+       when is_list(details) do
+    details
+    |> Enum.filter(&(&1.provider in @replayable_reasoning_providers))
+    |> Enum.sort_by(& &1.index)
+    |> Enum.flat_map(&encode_reasoning_detail/1)
+  end
+
+  defp encode_reasoning_details(_msg), do: []
+
+  defp encode_reasoning_detail(%{provider_data: %{"redactedContent" => data}})
+       when is_binary(data),
+       do: [%{"reasoningContent" => %{"redactedContent" => data}}]
+
+  defp encode_reasoning_detail(%{text: text, signature: signature})
+       when is_binary(text) and is_binary(signature),
+       do: [
+         %{
+           "reasoningContent" => %{"reasoningText" => %{"text" => text, "signature" => signature}}
+         }
+       ]
+
+  defp encode_reasoning_detail(_detail), do: []
 
   defp encode_content_for_system(content) when is_binary(content) do
     [%{"text" => content}]
@@ -728,13 +861,35 @@ defmodule ReqLLM.Providers.AmazonBedrock.Converse do
     # Separate tool calls from regular content
     {tool_calls, content_parts} = parse_content_with_tool_calls(content_blocks)
 
-    # Build message with tool_calls field if present
-    message = %Message{role: role, content: content_parts}
+    message = %Message{
+      role: role,
+      content: content_parts,
+      reasoning_details: parse_reasoning_details(content_blocks)
+    }
 
     if tool_calls == [] do
       message
     else
       %{message | tool_calls: tool_calls}
+    end
+  end
+
+  defp parse_reasoning_details(content_blocks) do
+    content_blocks
+    |> Enum.flat_map(fn
+      %{"reasoningContent" => %{"reasoningText" => %{"text" => text} = reasoning}} ->
+        [%{text: text, signature: reasoning["signature"], redacted: nil}]
+
+      %{"reasoningContent" => %{"redactedContent" => data}} ->
+        [%{text: nil, signature: nil, redacted: data}]
+
+      _ ->
+        []
+    end)
+    |> Enum.with_index(&reasoning_detail/2)
+    |> case do
+      [] -> nil
+      details -> details
     end
   end
 
@@ -830,10 +985,11 @@ defmodule ReqLLM.Providers.AmazonBedrock.Converse do
     end
   end
 
-  defp parse_content_block(%{"reasoningText" => reasoning_text}) do
-    # Claude extended thinking reasoning content
-    %ContentPart{type: :thinking, text: reasoning_text}
+  defp parse_content_block(%{"reasoningContent" => %{"reasoningText" => %{"text" => text}}}) do
+    ContentPart.thinking(text)
   end
+
+  defp parse_content_block(%{"reasoningContent" => _redacted}), do: nil
 
   defp parse_content_block(%{"image" => _image}) do
     # Image in response - for now skip

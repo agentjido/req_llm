@@ -417,6 +417,329 @@ defmodule ReqLLM.Providers.AmazonBedrock.ConverseTest do
     end
   end
 
+  describe "reasoning round-trip" do
+    alias ReqLLM.Message.ReasoningDetails
+
+    defp tool_call, do: ReqLLM.ToolCall.new("call_1", "get_weather", "{}")
+
+    test "replays signed reasoning before assistant content" do
+      details = [
+        %ReasoningDetails{
+          text: "thought",
+          signature: "sig",
+          encrypted?: true,
+          provider: :amazon_bedrock,
+          index: 0
+        },
+        %ReasoningDetails{text: "unsigned", signature: nil, provider: :amazon_bedrock, index: 1}
+      ]
+
+      context = %ReqLLM.Context{
+        messages: [
+          %Message{role: :user, content: "Hi"},
+          %Message{
+            role: :assistant,
+            content: "Calling",
+            tool_calls: [tool_call()],
+            reasoning_details: details
+          },
+          %Message{role: :tool, tool_call_id: "call_1", content: "sunny"}
+        ]
+      }
+
+      result = Converse.format_request("test-model", context, [])
+      [_, assistant, _] = result["messages"]
+
+      assert [
+               %{
+                 "reasoningContent" => %{
+                   "reasoningText" => %{"text" => "thought", "signature" => "sig"}
+                 }
+               },
+               %{"text" => "Calling"},
+               %{"toolUse" => _}
+             ] = assistant["content"]
+    end
+
+    test "replays redacted reasoning" do
+      details = [
+        %ReasoningDetails{
+          encrypted?: true,
+          provider: :amazon_bedrock,
+          index: 0,
+          provider_data: %{"redactedContent" => "abc="}
+        }
+      ]
+
+      context = %ReqLLM.Context{
+        messages: [
+          %Message{role: :user, content: "Hi"},
+          %Message{role: :assistant, content: "Done", reasoning_details: details}
+        ]
+      }
+
+      result = Converse.format_request("test-model", context, [])
+      [_, assistant] = result["messages"]
+
+      assert assistant["content"] == [
+               %{"reasoningContent" => %{"redactedContent" => "abc="}},
+               %{"text" => "Done"}
+             ]
+    end
+
+    test "does not replay thinking parts without reasoning details" do
+      context = %ReqLLM.Context{
+        messages: [
+          %Message{role: :user, content: "Hi"},
+          %Message{
+            role: :assistant,
+            content: [ContentPart.thinking("x"), ContentPart.text("Done")]
+          }
+        ]
+      }
+
+      result = Converse.format_request("test-model", context, [])
+      [_, assistant] = result["messages"]
+
+      assert assistant["content"] == [%{"text" => "Done"}]
+    end
+
+    test "parses reasoningContent into thinking content and reasoning details" do
+      response_body = %{
+        "output" => %{
+          "message" => %{
+            "role" => "assistant",
+            "content" => [
+              %{
+                "reasoningContent" => %{
+                  "reasoningText" => %{"text" => "thought", "signature" => "sig"}
+                }
+              },
+              %{"reasoningContent" => %{"redactedContent" => "abc="}},
+              %{"text" => "Answer"}
+            ]
+          }
+        },
+        "stopReason" => "end_turn"
+      }
+
+      {:ok, result} = Converse.parse_response(response_body, model: "test-model")
+
+      assert [
+               %ContentPart{type: :thinking, text: "thought"},
+               %ContentPart{type: :text, text: "Answer"}
+             ] =
+               result.message.content
+
+      assert [
+               %ReasoningDetails{
+                 text: "thought",
+                 signature: "sig",
+                 encrypted?: true,
+                 provider: :amazon_bedrock,
+                 format: "bedrock-converse-v1",
+                 index: 0
+               },
+               %ReasoningDetails{
+                 text: nil,
+                 signature: nil,
+                 encrypted?: true,
+                 index: 1,
+                 provider_data: %{"redactedContent" => "abc="}
+               }
+             ] = result.message.reasoning_details
+    end
+
+    test "does not replay reasoning from other providers" do
+      details = [
+        %ReasoningDetails{
+          text: "thought",
+          signature: "sig",
+          encrypted?: true,
+          provider: :google,
+          index: 0
+        },
+        %ReasoningDetails{
+          text: "kept",
+          signature: "sig2",
+          encrypted?: true,
+          provider: :anthropic,
+          index: 1
+        }
+      ]
+
+      context = %ReqLLM.Context{
+        messages: [
+          %Message{role: :user, content: "Hi"},
+          %Message{role: :assistant, content: "Done", reasoning_details: details}
+        ]
+      }
+
+      result = Converse.format_request("test-model", context, [])
+      [_, assistant] = result["messages"]
+
+      assert [
+               %{
+                 "reasoningContent" => %{
+                   "reasoningText" => %{"text" => "kept", "signature" => "sig2"}
+                 }
+               },
+               %{"text" => "Done"}
+             ] = assistant["content"]
+    end
+
+    test "flushes reasoning blocks that never stopped" do
+      events = [
+        %{
+          "contentBlockDelta" => %{
+            "contentBlockIndex" => 0,
+            "delta" => %{"reasoningContent" => %{"text" => "thought"}}
+          }
+        },
+        %{
+          "contentBlockDelta" => %{
+            "contentBlockIndex" => 0,
+            "delta" => %{"reasoningContent" => %{"signature" => "sig"}}
+          }
+        }
+      ]
+
+      {_chunks, state} =
+        Enum.flat_map_reduce(
+          events,
+          Converse.init_stream_state(),
+          &Converse.decode_stream_event/2
+        )
+
+      {[chunk], state} = Converse.flush_stream_state(state)
+
+      assert %ReqLLM.StreamChunk{
+               metadata: %{
+                 reasoning_details: [%ReasoningDetails{text: "thought", signature: "sig"}]
+               }
+             } =
+               chunk
+
+      assert Converse.flush_stream_state(state) == {[], state}
+    end
+
+    test "numbers reasoning details independently of text block indices" do
+      events = [
+        %{"contentBlockDelta" => %{"contentBlockIndex" => 0, "delta" => %{"text" => "Hi"}}},
+        %{"contentBlockStop" => %{"contentBlockIndex" => 0}},
+        %{
+          "contentBlockDelta" => %{
+            "contentBlockIndex" => 3,
+            "delta" => %{"reasoningContent" => %{"text" => "a"}}
+          }
+        },
+        %{
+          "contentBlockDelta" => %{
+            "contentBlockIndex" => 3,
+            "delta" => %{"reasoningContent" => %{"signature" => "s1"}}
+          }
+        },
+        %{"contentBlockStop" => %{"contentBlockIndex" => 3}},
+        %{
+          "contentBlockDelta" => %{
+            "contentBlockIndex" => 5,
+            "delta" => %{"reasoningContent" => %{"text" => "b"}}
+          }
+        },
+        %{
+          "contentBlockDelta" => %{
+            "contentBlockIndex" => 5,
+            "delta" => %{"reasoningContent" => %{"signature" => "s2"}}
+          }
+        },
+        %{"contentBlockStop" => %{"contentBlockIndex" => 5}}
+      ]
+
+      {chunks, _state} =
+        Enum.flat_map_reduce(
+          events,
+          Converse.init_stream_state(),
+          &Converse.decode_stream_event/2
+        )
+
+      indices =
+        for %ReqLLM.StreamChunk{type: :meta, metadata: %{reasoning_details: [detail]}} <- chunks,
+            do: detail.index
+
+      assert indices == [0, 1]
+    end
+
+    test "streams reasoning deltas and emits details on contentBlockStop" do
+      events = [
+        %{
+          "contentBlockDelta" => %{
+            "contentBlockIndex" => 0,
+            "delta" => %{"reasoningContent" => %{"text" => "tho"}}
+          }
+        },
+        %{
+          "contentBlockDelta" => %{
+            "contentBlockIndex" => 0,
+            "delta" => %{"reasoningContent" => %{"text" => "ught"}}
+          }
+        },
+        %{
+          "contentBlockDelta" => %{
+            "contentBlockIndex" => 0,
+            "delta" => %{"reasoningContent" => %{"signature" => "sig"}}
+          }
+        },
+        %{
+          "contentBlockDelta" => %{
+            "contentBlockIndex" => 0,
+            "delta" => %{"reasoningContent" => %{"signature" => "_test"}}
+          }
+        },
+        %{"contentBlockStop" => %{"contentBlockIndex" => 0}},
+        %{
+          "contentBlockDelta" => %{
+            "contentBlockIndex" => 1,
+            "delta" => %{"reasoningContent" => %{"redactedContent" => Base.encode64("a")}}
+          }
+        },
+        %{
+          "contentBlockDelta" => %{
+            "contentBlockIndex" => 1,
+            "delta" => %{"reasoningContent" => %{"redactedContent" => Base.encode64("b")}}
+          }
+        },
+        %{"contentBlockStop" => %{"contentBlockIndex" => 1}},
+        %{"contentBlockDelta" => %{"contentBlockIndex" => 2, "delta" => %{"text" => "Answer"}}},
+        %{"contentBlockStop" => %{"contentBlockIndex" => 2}}
+      ]
+
+      {chunks, _state} =
+        Enum.flat_map_reduce(events, Converse.init_stream_state(), fn event, state ->
+          Converse.decode_stream_event(event, state)
+        end)
+
+      assert [
+               %ReqLLM.StreamChunk{type: :thinking, text: "tho"},
+               %ReqLLM.StreamChunk{type: :thinking, text: "ught"},
+               %ReqLLM.StreamChunk{type: :meta, metadata: %{reasoning_details: [signed]}},
+               %ReqLLM.StreamChunk{type: :meta, metadata: %{reasoning_details: [redacted]}},
+               %ReqLLM.StreamChunk{type: :content, text: "Answer"}
+             ] = chunks
+
+      assert %ReasoningDetails{text: "thought", signature: "sig_test", encrypted?: true, index: 0} =
+               signed
+
+      expected_redacted = Base.encode64("ab")
+
+      assert %ReasoningDetails{
+               text: nil,
+               index: 1,
+               provider_data: %{"redactedContent" => ^expected_redacted}
+             } =
+               redacted
+    end
+  end
+
   describe "parse_response/2" do
     test "parses basic text response" do
       response_body = %{
