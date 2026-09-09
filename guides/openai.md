@@ -97,6 +97,20 @@ For `openai_codex`, you can also override backend request headers with:
 
 - `provider_options: [chatgpt_account_id: "..."]`
 - `provider_options: [codex_originator: "pi"]`
+- `provider_options: [session_id: "stable-session-id", thread_id: "thread-id"]`
+
+Reuse the same `session_id` across related requests. Codex sends it as the
+hyphenated `session-id` header on buffered HTTP, SSE, and WebSocket requests,
+and defaults `prompt_cache_key` to that identity. An explicit
+`provider_options: [prompt_cache_key: "cache-key"]` overrides the cache key.
+`thread_id` is a separate, optional identity sent as `thread-id` and
+`x-client-request-id` on all three transports. No session or cache identity is
+invented when none is supplied. Applications serving multiple users should
+scope these identities to the authenticated user/session; never use one global
+cache key.
+
+These fields improve compatibility with the official Codex client but do not
+guarantee a cache hit or change the provider's subscription quota policy.
 
 ReqLLM applies the complete Responses Lite wire profile when the Codex model catalog marks a model with `use_responses_lite: true`. The bundled catalog currently enables that profile for GPT-5.6 Sol, Terra, and Luna. Explicit model specs can provide updated provider metadata under `extra.openai_codex.use_responses_lite`.
 
