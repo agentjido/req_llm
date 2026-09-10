@@ -1720,6 +1720,7 @@ defmodule ReqLLM.Providers.Google do
   defp build_google_tool_config(:required), do: build_google_tool_config("required")
   defp build_google_tool_config(:auto), do: build_google_tool_config("auto")
   defp build_google_tool_config(:none), do: build_google_tool_config("none")
+  defp build_google_tool_config(:validated), do: build_google_tool_config("validated")
 
   defp build_google_tool_config("required") do
     %{functionCallingConfig: %{mode: "ANY"}}
@@ -1727,6 +1728,7 @@ defmodule ReqLLM.Providers.Google do
 
   defp build_google_tool_config("auto"), do: %{functionCallingConfig: %{mode: "AUTO"}}
   defp build_google_tool_config("none"), do: %{functionCallingConfig: %{mode: "NONE"}}
+  defp build_google_tool_config("validated"), do: %{functionCallingConfig: %{mode: "VALIDATED"}}
   defp build_google_tool_config(_), do: nil
 
   defp build_grounding_tools(nil), do: []
