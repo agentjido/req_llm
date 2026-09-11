@@ -511,7 +511,7 @@ defmodule ReqLLM.Providers.AmazonBedrock.Converse do
   end
 
   defp encode_system_message(%Message{content: content}) when is_list(content) do
-    encode_content(content)
+    encode_system_content(content)
   end
 
   defp encode_system_message(_message), do: []
@@ -754,9 +754,47 @@ defmodule ReqLLM.Providers.AmazonBedrock.Converse do
 
   defp encode_content(content) when is_list(content) do
     content
+    |> encode_content_parts()
+    |> validate_document_prompt()
+  end
+
+  defp encode_system_content(content) do
+    content
+    |> encode_content_parts()
+    |> validate_system_content()
+  end
+
+  defp encode_content_parts(content) do
+    content
     |> Enum.map(&encode_guardable_content_part/1)
     |> Enum.reject(&is_nil/1)
   end
+
+  defp validate_document_prompt(content) do
+    if Enum.any?(content, &document_block?/1) and not Enum.any?(content, &text_block?/1) do
+      invalid_part("Converse document blocks need a related text prompt in the same message")
+    else
+      content
+    end
+  end
+
+  defp validate_system_content(content) do
+    if Enum.all?(content, &system_content_block?/1) do
+      content
+    else
+      invalid_part("Converse system prompts support text and guarded content only")
+    end
+  end
+
+  defp document_block?(%{"document" => _document}), do: true
+  defp document_block?(_block), do: false
+
+  defp text_block?(%{"text" => text}) when is_binary(text) and text != "", do: true
+  defp text_block?(_block), do: false
+
+  defp system_content_block?(%{"text" => _text}), do: true
+  defp system_content_block?(%{"guardContent" => _guard_content}), do: true
+  defp system_content_block?(_block), do: false
 
   defp encode_guardable_content_part(%ContentPart{type: type, metadata: metadata} = part)
        when type not in [:text, :image] do
@@ -891,6 +929,10 @@ defmodule ReqLLM.Providers.AmazonBedrock.Converse do
     |> String.replace(~r/ +/, " ")
     |> String.slice(0, 200)
     |> String.trim()
+    |> case do
+      "" -> "Document"
+      name -> name
+    end
   end
 
   defp filename_stem(nil), do: ""

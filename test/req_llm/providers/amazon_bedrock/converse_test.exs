@@ -1304,6 +1304,54 @@ defmodule ReqLLM.Providers.AmazonBedrock.ConverseTest do
                encode_part(ContentPart.file(@pdf, "Q3_report.v2.pdf"))
     end
 
+    test "uses a neutral name when the sanitized document name is empty" do
+      assert %{"document" => %{"name" => "Document"}} =
+               encode_part(ContentPart.file(@pdf, "!!!.pdf", "application/pdf"))
+
+      part = %{
+        ContentPart.file(@pdf, "report.pdf", "application/pdf")
+        | metadata: %{title: "!!!"}
+      }
+
+      assert %{"document" => %{"name" => "Document"}} = encode_part(part)
+    end
+
+    test "rejects a document without a related text prompt" do
+      context = %ReqLLM.Context{
+        messages: [
+          %Message{
+            role: :user,
+            content: [ContentPart.file(@pdf, "report.pdf", "application/pdf")]
+          }
+        ]
+      }
+
+      assert_raise ReqLLM.Error.Invalid.Parameter, ~r/related text prompt/, fn ->
+        Converse.format_request("test-model", context, [])
+      end
+    end
+
+    test "rejects attachments in system prompts" do
+      video = %{ContentPart.video_url("s3://bucket/video.mp4") | media_type: "video/mp4"}
+
+      for part <- [
+            ContentPart.file(@pdf, "report.pdf", "application/pdf"),
+            ContentPart.image(<<1>>, "image/png"),
+            video
+          ] do
+        context = %ReqLLM.Context{
+          messages: [
+            %Message{role: :system, content: [part]},
+            %Message{role: :user, content: "Hello"}
+          ]
+        }
+
+        assert_raise ReqLLM.Error.Invalid.Parameter, ~r/system prompts/, fn ->
+          Converse.format_request("test-model", context, [])
+        end
+      end
+    end
+
     test "reads sources from S3" do
       video = %{
         ContentPart.video_url("s3://amzn-s3-demo-bucket/myVideo", %{bucket_owner: "111122223333"})
@@ -1373,9 +1421,18 @@ defmodule ReqLLM.Providers.AmazonBedrock.ConverseTest do
     end
 
     defp encode_part(part) do
-      context = %ReqLLM.Context{messages: [%Message{role: :user, content: [part]}]}
+      context = %ReqLLM.Context{
+        messages: [
+          %Message{
+            role: :user,
+            content: [ContentPart.text("Describe the attachment."), part]
+          }
+        ]
+      }
 
-      [%{"content" => [block]}] = Converse.format_request("test-model", context, [])["messages"]
+      [%{"content" => [%{"text" => "Describe the attachment."}, block]}] =
+        Converse.format_request("test-model", context, [])["messages"]
+
       block
     end
   end

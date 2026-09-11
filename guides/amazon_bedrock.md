@@ -207,7 +207,7 @@ Passed via `:provider_options` keyword:
 
 ## Attachments
 
-On the Converse API, `file`, `image`, `image_url` and `video_url` parts are sent as [document, image and video blocks](https://docs.aws.amazon.com/bedrock/latest/userguide/conversation-inference.html#converse-messages) according to their media type. A document is named after its `title` metadata or its filename. Sources are inline bytes or an `s3://` URL, with `bucket_owner` metadata when another account owns the bucket.
+On the Converse API, `file`, `image`, `image_url` and `video_url` parts are sent as [document, image and video blocks](https://docs.aws.amazon.com/bedrock/latest/userguide/conversation-inference.html#converse-messages) according to their media type. A message with a document must also have a related text prompt. Attachments are not supported in system prompts. A document is named after its `title` metadata or its filename. If that name is empty after cleanup, ReqLLM uses `Document`. Sources are inline bytes or an `s3://` URL, with `bucket_owner` metadata when another account owns the bucket.
 
 ## Guarding content parts
 
