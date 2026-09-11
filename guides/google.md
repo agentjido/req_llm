@@ -14,6 +14,22 @@ For the full model-spec workflow, see [Model Specs](model-specs.md).
 
 Use exact Gemini IDs from [LLM Catalog](https://llmcatalog.dev) when possible. If you need to work ahead of the registry, use `ReqLLM.model!/1` to build a full explicit model spec.
 
+## Function Calling
+
+Use `tool_choice: :validated` (or `"validated"`) with `tools` to enable Gemini's
+`VALIDATED` function-calling mode. It enforces function-schema adherence while
+allowing the model to respond with either natural language or a function call.
+
+```elixir
+ReqLLM.generate_text("google:gemini-2.5-flash", "What is the weather in Madrid?",
+  tools: tools,
+  tool_choice: :validated
+)
+```
+
+The same option works with `ReqLLM.stream_text/3`. See Google's
+[function-calling modes reference](https://ai.google.dev/gemini-api/docs/generate-content/function-calling#function-calling-modes).
+
 ## Provider Options
 
 Passed via `:provider_options` keyword:

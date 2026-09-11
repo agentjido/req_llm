@@ -11,6 +11,59 @@ defmodule ReqLLM.Providers.GoogleTest do
   alias ReqLLM.Context
   alias ReqLLM.Providers.Google
 
+  describe "validated function calling" do
+    setup do
+      tool =
+        ReqLLM.Tool.new!(
+          name: "get_weather",
+          description: "Get the weather in a city",
+          parameter_schema: [city: [type: :string, required: true]],
+          callback: fn _ -> {:ok, "sunny"} end
+        )
+
+      {:ok, model: ReqLLM.model!("google:gemini-2.5-flash"), tools: [tool]}
+    end
+
+    for tool_choice <- [:validated, "validated"] do
+      test "serializes #{inspect(tool_choice)} for non-streaming requests", %{
+        model: model,
+        tools: tools
+      } do
+        assert {:ok, request} =
+                 Google.prepare_request(:chat, model, "Weather in Madrid?",
+                   tools: tools,
+                   tool_choice: unquote(tool_choice),
+                   api_key: "test"
+                 )
+
+        body = request |> Google.encode_body() |> ReqLLM.Test.Helpers.json_body()
+
+        assert body["toolConfig"] == %{"functionCallingConfig" => %{"mode" => "VALIDATED"}}
+        assert [%{"functionDeclarations" => [%{"name" => "get_weather"}]}] = body["tools"]
+      end
+
+      test "serializes #{inspect(tool_choice)} for streaming requests", %{
+        model: model,
+        tools: tools
+      } do
+        context = Context.new([Context.user("Weather in Madrid?")])
+
+        assert {:ok, request} =
+                 Google.attach_stream(
+                   model,
+                   context,
+                   [tools: tools, tool_choice: unquote(tool_choice), api_key: "test"],
+                   nil
+                 )
+
+        body = Jason.decode!(request.body)
+
+        assert body["toolConfig"] == %{"functionCallingConfig" => %{"mode" => "VALIDATED"}}
+        assert [%{"functionDeclarations" => [%{"name" => "get_weather"}]}] = body["tools"]
+      end
+    end
+  end
+
   describe "provider contract" do
     test "provider identity and configuration" do
       assert is_atom(Google.provider_id())
