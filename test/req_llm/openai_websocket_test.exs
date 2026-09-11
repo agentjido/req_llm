@@ -54,6 +54,19 @@ defmodule ReqLLM.OpenAIWebSocketTest do
       |> Plug.Conn.send_resp(200, payload)
     end
 
+    get "/v1/codex/responses" do
+      parent = Application.fetch_env!(:req_llm, :openai_websocket_test_pid)
+
+      send(
+        parent,
+        {:codex_handshake,
+         Map.new(conn.req_headers)
+         |> Map.take(["session-id", "thread-id", "x-codex-turn-metadata"])}
+      )
+
+      WebSockAdapter.upgrade(conn, ReqLLM.OpenAIWebSocketTest.ResponsesSocket, parent, [])
+    end
+
     get "/v1/realtime" do
       WebSockAdapter.upgrade(
         conn,
@@ -643,6 +656,65 @@ defmodule ReqLLM.OpenAIWebSocketTest do
 
     assert_received {:responses_socket_message, %{"type" => "response.create"}}
     assert_received {:responses_socket_message, %{"type" => "response.create"}}
+  end
+
+  test "Codex attribution changes per create frame without reopening a caller-owned session", %{
+    base_url: base_url
+  } do
+    model = ReqLLM.model!("openai_codex:gpt-6-astra")
+
+    turn = %{
+      turn_id: "turn-1",
+      window_id: "window",
+      request_kind: "turn",
+      turn_started_at_unix_ms: 123
+    }
+
+    provider_opts = [
+      access_token: "synthetic-token",
+      chatgpt_account_id: "synthetic-account",
+      session_id: "session",
+      thread_id: "thread",
+      codex_turn_metadata: turn
+    ]
+
+    {:ok, session} =
+      ReqLLM.Providers.OpenAICodex.start_responses_session(model,
+        base_url: base_url,
+        provider_options: [openai_codex: provider_opts]
+      )
+
+    try do
+      for turn_id <- ["turn-1", "turn-1", "turn-2"] do
+        options =
+          provider_opts
+          |> Keyword.put(:codex_turn_metadata, %{turn | turn_id: turn_id})
+          |> Keyword.put(:openai_stream_transport, :websocket)
+          |> Keyword.put(:openai_websocket_session, session)
+
+        {:ok, response} =
+          ReqLLM.stream_text(model, "Hello",
+            base_url: base_url,
+            receive_timeout: 5_000,
+            provider_options: [openai_codex: options]
+          )
+
+        assert ReqLLM.StreamResponse.text(response) == "Hello"
+        assert_receive {:responses_socket_message, frame}
+        assert frame["client_metadata"]["turn_id"] == turn_id
+
+        assert Jason.decode!(frame["client_metadata"]["x-codex-turn-metadata"])["turn_id"] ==
+                 turn_id
+      end
+    after
+      WebSocketSession.close(session)
+    end
+
+    assert_receive {:codex_handshake, headers}
+    assert headers["session-id"] == "session"
+    assert headers["thread-id"] == "thread"
+    assert Jason.decode!(headers["x-codex-turn-metadata"])["turn_id"] == "turn-1"
+    refute_receive {:codex_handshake, _}
   end
 
   test "Realtime session can connect, send events, and receive events", %{base_url: base_url} do

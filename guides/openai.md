@@ -109,6 +109,40 @@ invented when none is supplied. Applications serving multiple users should
 scope these identities to the authenticated user/session; never use one global
 cache key.
 
+For canonical turn attribution, supply caller-owned metadata alongside both
+session and thread identity:
+
+```elixir
+provider_options: [
+  openai_codex: [
+    session_id: "session-1",
+    thread_id: "thread-1",
+    codex_turn_metadata: %{
+      turn_id: "turn-1",
+      window_id: "window-1",
+      request_kind: "turn",
+      turn_started_at_unix_ms: 1_800_000_000_000
+    }
+  ]
+]
+```
+
+The metadata map accepts atom or string keys and an optional `installation_id`.
+IDs and request kind must be nonempty printable ASCII strings of at most 256
+bytes; the timestamp must be a nonnegative integer in Unix milliseconds.
+Unknown fields and incomplete attribution are rejected. ReqLLM projects the
+same identity into canonical `client_metadata`, `x-codex-turn-metadata`, window,
+and optional installation headers on buffered HTTP, SSE, and every WebSocket
+`response.create` frame, including requests sent on a reused connection.
+
+The application or agent runtime owns this lifecycle. Keep one turn ID and start
+time through tool continuations and retries; rotate for independent user work,
+and distinguish internal requests such as compaction with `request_kind`. A
+ReqLLM telemetry request ID identifies one model call, not a whole agent turn.
+ReqLLM never creates attribution implicitly. Valid attribution is also exposed
+as `codex_*` fields in telemetry `request_options`, independently of the per-call
+request ID. Cache-key overrides remain independent of turn attribution.
+
 These fields improve compatibility with the official Codex client but do not
 guarantee a cache hit or change the provider's subscription quota policy.
 
