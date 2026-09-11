@@ -141,6 +141,7 @@ parts = [
 The `metadata` field allows passing provider-specific attributes through to the wire format. Currently supported metadata keys:
 
 - `cache_control`: Anthropic prompt caching control (e.g., `%{type: "ephemeral"}`)
+- `guard_content`: Amazon Bedrock guardrail selection on the Converse API (`true` or `%{qualifiers: [...]}`)
 
 ```elixir
 # Enable prompt caching for text content

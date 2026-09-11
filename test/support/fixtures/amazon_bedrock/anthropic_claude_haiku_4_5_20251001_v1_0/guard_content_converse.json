@@ -1,0 +1,205 @@
+{
+  "model_spec": "amazon_bedrock:global.anthropic.claude-haiku-4-5-20251001-v1:0",
+  "provider": "amazon_bedrock",
+  "request": {
+    "body": {
+      "b64": "eyJndWFyZHJhaWxDb25maWciOnsiZ3VhcmRyYWlsSWRlbnRpZmllciI6Imd1YXJkcmFpbDEyMzQiLCJndWFyZHJhaWxWZXJzaW9uIjoiRFJBRlQiLCJ0cmFjZSI6ImVuYWJsZWQifSwiaW5mZXJlbmNlQ29uZmlnIjp7Im1heFRva2VucyI6MzJ9LCJtZXNzYWdlcyI6W3siY29udGVudCI6W3sidGV4dCI6IlRoZSB3ZWF0aGVyIGluIFBhcmlzIGlzIHN1bm55IHRvZGF5LiJ9LHsiZ3VhcmRDb250ZW50Ijp7InRleHQiOnsicXVhbGlmaWVycyI6WyJncm91bmRpbmdfc291cmNlIl0sInRleHQiOiJMb25kb24gaXMgdGhlIGNhcGl0YWwgb2YgVUsuIFRva3lvIGlzIHRoZSBjYXBpdGFsIG9mIEphcGFuLiJ9fX0seyJndWFyZENvbnRlbnQiOnsidGV4dCI6eyJxdWFsaWZpZXJzIjpbInF1ZXJ5Il0sInRleHQiOiJXaGF0IGlzIHRoZSBjYXBpdGFsIG9mIEphcGFuPyBBbnN3ZXIgd2l0aCB0aGUgY2l0eSBvbmx5LiJ9fX1dLCJyb2xlIjoidXNlciJ9XX0="
+    },
+    "canonical_json": {
+      "guardrailConfig": {
+        "guardrailIdentifier": "guardrail1234",
+        "guardrailVersion": "DRAFT",
+        "trace": "enabled"
+      },
+      "inferenceConfig": {
+        "maxTokens": 32
+      },
+      "messages": [
+        {
+          "content": [
+            {
+              "text": "The weather in Paris is sunny today."
+            },
+            {
+              "guardContent": {
+                "text": {
+                  "qualifiers": [
+                    "grounding_source"
+                  ],
+                  "text": "London is the capital of UK. Tokyo is the capital of Japan."
+                }
+              }
+            },
+            {
+              "guardContent": {
+                "text": {
+                  "qualifiers": [
+                    "query"
+                  ],
+                  "text": "What is the capital of Japan? Answer with the city only."
+                }
+              }
+            }
+          ],
+          "role": "user"
+        }
+      ]
+    },
+    "headers": {
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "host": [
+        "bedrock-runtime.us-east-1.amazonaws.com"
+      ],
+      "user-agent": [
+        "req/0.7.4"
+      ],
+      "x-amz-content-sha256": [
+        "d3feea70ad8cb570b6313f2a0617a6ef2a0cb8d27f6ffa58407b64b7adc0d674"
+      ],
+      "x-amz-date": [
+        "20260911T125046Z"
+      ],
+      "x-amz-security-token": [
+        "[REDACTED:x-amz-security-token]"
+      ]
+    },
+    "method": "post",
+    "url": "https://bedrock-runtime.us-east-1.amazonaws.com/model/global.anthropic.claude-haiku-4-5-20251001-v1:0/converse"
+  },
+  "response": {
+    "body": {
+      "metrics": {
+        "latencyMs": 1303
+      },
+      "output": {
+        "message": {
+          "content": [
+            {
+              "text": "Tokyo"
+            }
+          ],
+          "role": "assistant"
+        }
+      },
+      "stopReason": "end_turn",
+      "trace": {
+        "guardrail": {
+          "actionReason": "No action.",
+          "inputAssessment": {
+            "guardrail1234": {
+              "appliedGuardrailDetails": {
+                "guardrailArn": "arn:aws:bedrock:us-east-1:123456789012:guardrail/guardrail1234",
+                "guardrailId": "guardrail1234",
+                "guardrailOrigin": [
+                  "REQUEST"
+                ],
+                "guardrailOwnership": "SELF",
+                "guardrailVersion": "DRAFT"
+              },
+              "invocationMetrics": {
+                "guardrailCoverage": {
+                  "textCharacters": {
+                    "guarded": 0,
+                    "total": 151
+                  }
+                },
+                "guardrailProcessingLatency": 142,
+                "usage": {
+                  "contentPolicyImageUnits": 0,
+                  "contentPolicyUnits": 0,
+                  "contextualGroundingPolicyUnits": 0,
+                  "sensitiveInformationPolicyFreeUnits": 0,
+                  "sensitiveInformationPolicyUnits": 0,
+                  "topicPolicyUnits": 0,
+                  "wordPolicyUnits": 0
+                }
+              }
+            }
+          },
+          "modelOutput": [],
+          "outputAssessments": {
+            "guardrail1234": [
+              {
+                "appliedGuardrailDetails": {
+                  "guardrailArn": "arn:aws:bedrock:us-east-1:123456789012:guardrail/guardrail1234",
+                  "guardrailId": "guardrail1234",
+                  "guardrailOrigin": [
+                    "REQUEST"
+                  ],
+                  "guardrailOwnership": "SELF",
+                  "guardrailVersion": "DRAFT"
+                },
+                "contextualGroundingPolicy": {
+                  "filters": [
+                    {
+                      "action": "NONE",
+                      "detected": false,
+                      "score": 0.99,
+                      "threshold": 0.5,
+                      "type": "GROUNDING"
+                    },
+                    {
+                      "action": "NONE",
+                      "detected": false,
+                      "score": 1.0,
+                      "threshold": 0.5,
+                      "type": "RELEVANCE"
+                    }
+                  ]
+                },
+                "invocationMetrics": {
+                  "guardrailCoverage": {
+                    "textCharacters": {
+                      "guarded": 5,
+                      "total": 5
+                    }
+                  },
+                  "guardrailProcessingLatency": 247,
+                  "usage": {
+                    "contentPolicyImageUnits": 0,
+                    "contentPolicyUnits": 0,
+                    "contextualGroundingPolicyUnits": 1,
+                    "sensitiveInformationPolicyFreeUnits": 0,
+                    "sensitiveInformationPolicyUnits": 0,
+                    "topicPolicyUnits": 1,
+                    "wordPolicyUnits": 0
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
+      "usage": {
+        "cacheReadInputTokenCount": 0,
+        "cacheReadInputTokens": 0,
+        "inputTokens": 42,
+        "outputTokens": 4,
+        "serverToolUsage": {},
+        "totalTokens": 46
+      }
+    },
+    "headers": {
+      "connection": [
+        "keep-alive"
+      ],
+      "content-length": [
+        "1721"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 11 Sep 2026 12:50:51 GMT"
+      ],
+      "x-amzn-requestid": [
+        "48cc7d48-a74f-4979-b477-a99e284c139c"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}
