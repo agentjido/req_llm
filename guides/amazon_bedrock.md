@@ -205,6 +205,25 @@ Passed via `:provider_options` keyword:
 - **Purpose**: Cache TTL (default ~5min if omitted)
 - **Example**: `provider_options: [anthropic_prompt_cache_ttl: "1h"]`
 
+## Guarding content parts
+
+On the Converse API, `guard_content` metadata on a content part wraps it in a `guardContent` block. Which policies then skip the unmarked parts is up to the guardrail, see [selective guarding](https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-use-converse-api.html#guardrails-use-converse-api-call-message).
+
+```elixir
+ReqLLM.generate_text(
+  model,
+  ReqLLM.Context.user([
+    ReqLLM.Message.ContentPart.text("London is the capital of UK. Tokyo is the capital of Japan.",
+      %{guard_content: %{qualifiers: [:grounding_source]}}
+    ),
+    ReqLLM.Message.ContentPart.text("What is the capital of Japan?", %{guard_content: %{qualifiers: [:query]}})
+  ]),
+  provider_options: [use_converse: true, guardrail_identifier: "abc123def456", guardrail_version: "1"]
+)
+```
+
+Text and PNG or JPEG image parts, in messages and system prompts. InvokeModel has no equivalent, so the hint is ignored there.
+
 ## Supported Model Families
 
 ### Anthropic Claude

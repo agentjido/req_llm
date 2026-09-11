@@ -740,6 +740,155 @@ defmodule ReqLLM.Providers.AmazonBedrock.ConverseTest do
     end
   end
 
+  describe "guard content" do
+    defp guarded_request(parts) do
+      context = %ReqLLM.Context{messages: [%Message{role: :user, content: parts}]}
+      Converse.format_request("test-model", context, [])
+    end
+
+    test "wraps a guarded text part" do
+      result = guarded_request([ContentPart.text("Hi", %{guard_content: true})])
+
+      assert hd(result["messages"])["content"] == [
+               %{"guardContent" => %{"text" => %{"text" => "Hi"}}}
+             ]
+    end
+
+    test "carries qualifiers as strings" do
+      result =
+        guarded_request([
+          ContentPart.text("Paris is in France.", %{
+            guard_content: %{qualifiers: [:grounding_source, "query"]}
+          })
+        ])
+
+      assert hd(result["messages"])["content"] == [
+               %{
+                 "guardContent" => %{
+                   "text" => %{
+                     "text" => "Paris is in France.",
+                     "qualifiers" => ["grounding_source", "query"]
+                   }
+                 }
+               }
+             ]
+    end
+
+    test "accepts string keys" do
+      result =
+        guarded_request([
+          ContentPart.text("Hi", %{"guard_content" => %{"qualifiers" => ["query"]}})
+        ])
+
+      assert [%{"guardContent" => %{"text" => %{"qualifiers" => ["query"]}}}] =
+               hd(result["messages"])["content"]
+    end
+
+    test "wraps guarded png and jpeg images" do
+      for {media_type, format} <- [{"image/png", "png"}, {"image/jpeg", "jpeg"}] do
+        result =
+          guarded_request([ContentPart.image(<<1, 2>>, media_type, %{guard_content: true})])
+
+        assert hd(result["messages"])["content"] == [
+                 %{
+                   "guardContent" => %{
+                     "image" => %{"format" => format, "source" => %{"bytes" => "AQI="}}
+                   }
+                 }
+               ]
+      end
+    end
+
+    test "guards system message parts" do
+      context = %ReqLLM.Context{
+        messages: [
+          %Message{
+            role: :system,
+            content: [
+              ContentPart.text("Only list songs.", %{guard_content: true}),
+              ContentPart.text("Be brief.")
+            ]
+          },
+          %Message{role: :user, content: "Hi"}
+        ]
+      }
+
+      result = Converse.format_request("test-model", context, [])
+
+      assert result["system"] == [
+               %{"guardContent" => %{"text" => %{"text" => "Only list songs."}}},
+               %{"text" => "Be brief."}
+             ]
+    end
+
+    test "leaves unguarded parts alone" do
+      result =
+        guarded_request([
+          ContentPart.text("plain"),
+          ContentPart.text("off", %{guard_content: false})
+        ])
+
+      assert hd(result["messages"])["content"] == [%{"text" => "plain"}, %{"text" => "off"}]
+    end
+
+    test "raises on guarded tool result parts" do
+      context = %ReqLLM.Context{
+        messages: [
+          %Message{role: :user, content: "Hi"},
+          %Message{
+            role: :assistant,
+            content: [],
+            tool_calls: [ReqLLM.ToolCall.new("call_1", "get_weather", "{}")]
+          },
+          %Message{
+            role: :tool,
+            tool_call_id: "call_1",
+            content: [ContentPart.text("sunny", %{guard_content: true})]
+          }
+        ]
+      }
+
+      assert_raise ReqLLM.Error.Invalid.Parameter, ~r/tool results/, fn ->
+        Converse.format_request("test-model", context, [])
+      end
+    end
+
+    test "raises on malformed hints" do
+      for metadata <- [
+            %{guard_content: "yes"},
+            %{guard_content: %{qualifiers: "query"}},
+            %{guard_content: %{qualifiers: [1]}}
+          ] do
+        assert_raise ReqLLM.Error.Invalid.Parameter, fn ->
+          guarded_request([ContentPart.text("Hi", metadata)])
+        end
+      end
+    end
+
+    test "raises on guarded parts that cannot be encoded" do
+      for part <- [
+            ContentPart.text("", %{guard_content: true}),
+            ContentPart.image_url("https://example.com/a.png", %{guard_content: true})
+          ] do
+        assert_raise ReqLLM.Error.Invalid.Parameter, ~r/non-empty text or image/, fn ->
+          guarded_request([part])
+        end
+      end
+    end
+
+    test "raises on guarded images that AWS does not accept" do
+      assert_raise ReqLLM.Error.Invalid.Parameter, fn ->
+        guarded_request([ContentPart.image(<<1>>, "image/gif", %{guard_content: true})])
+      end
+
+      assert_raise ReqLLM.Error.Invalid.Parameter, fn ->
+        guarded_request([
+          ContentPart.image(<<1>>, "image/png", %{guard_content: %{qualifiers: [:query]}})
+        ])
+      end
+    end
+  end
+
   describe "parse_response/2" do
     test "parses basic text response" do
       response_body = %{
