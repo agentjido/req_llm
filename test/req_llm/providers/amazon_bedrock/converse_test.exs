@@ -1101,4 +1101,133 @@ defmodule ReqLLM.Providers.AmazonBedrock.ConverseTest do
       assert result["toolConfig"]["toolChoice"]["tool"]["name"] == "test_tool"
     end
   end
+
+  describe "documents and video" do
+    @pdf "%PDF-1.4 test"
+
+    test "sends a file part as a document block" do
+      part = ContentPart.file(@pdf, "MyDocument.pdf", "application/pdf")
+
+      assert encode_part(part) == %{
+               "document" => %{
+                 "format" => "pdf",
+                 "name" => "MyDocument",
+                 "source" => %{"bytes" => Base.encode64(@pdf)}
+               }
+             }
+    end
+
+    test "infers the format from the filename when the media type is the default" do
+      assert %{"video" => %{"format" => "mp4"}} =
+               encode_part(ContentPart.file("AQI=", "clip.mp4"))
+
+      assert %{"document" => %{"format" => "pdf"}} =
+               encode_part(ContentPart.file(@pdf, "report.pdf"))
+    end
+
+    test "prefers the media type over the filename extension" do
+      part = ContentPart.file("a,b", "export.bin", "text/csv")
+
+      assert %{"document" => %{"format" => "csv"}} = encode_part(part)
+    end
+
+    test "ignores media type parameters" do
+      part = ContentPart.file("notes", "notes.txt", "text/plain; charset=utf-8")
+
+      assert %{"document" => %{"format" => "txt"}} = encode_part(part)
+    end
+
+    test "passes unknown formats through for Amazon to refuse" do
+      assert %{"document" => %{"format" => "rtf"}} =
+               encode_part(ContentPart.file("x", "notes.rtf"))
+    end
+
+    test "names a document from its title metadata or its filename and passes context" do
+      part = %{
+        ContentPart.file(@pdf, "Q3_report.v2.pdf")
+        | metadata: %{title: "Quarterly report (Q3)", context: "Sales figures"}
+      }
+
+      assert %{"document" => %{"name" => "Quarterly report (Q3)", "context" => "Sales figures"}} =
+               encode_part(part)
+
+      assert %{"document" => %{"name" => "Q3 report v2"}} =
+               encode_part(ContentPart.file(@pdf, "Q3_report.v2.pdf"))
+    end
+
+    test "reads sources from S3" do
+      video = %{
+        ContentPart.video_url("s3://amzn-s3-demo-bucket/myVideo", %{bucket_owner: "111122223333"})
+        | media_type: "video/mp4"
+      }
+
+      assert encode_part(video) == %{
+               "video" => %{
+                 "format" => "mp4",
+                 "source" => %{
+                   "s3Location" => %{
+                     "uri" => "s3://amzn-s3-demo-bucket/myVideo",
+                     "bucketOwner" => "111122223333"
+                   }
+                 }
+               }
+             }
+
+      document = %ContentPart{
+        type: :file,
+        url: "s3://amzn-s3-demo-bucket/myDocument",
+        media_type: "application/pdf",
+        metadata: %{title: "MyDocument"}
+      }
+
+      assert encode_part(document) == %{
+               "document" => %{
+                 "format" => "pdf",
+                 "name" => "MyDocument",
+                 "source" => %{"s3Location" => %{"uri" => "s3://amzn-s3-demo-bucket/myDocument"}}
+               }
+             }
+
+      assert %{"image" => %{"format" => "png", "source" => %{"s3Location" => _}}} =
+               encode_part(ContentPart.image_url("s3://amzn-s3-demo-bucket/photo.png"))
+    end
+
+    test "raises on sources Converse cannot fetch" do
+      assert_raise ReqLLM.Error.Invalid.Parameter, fn ->
+        encode_part(ContentPart.image_url("https://example.com/photo.png"))
+      end
+
+      assert_raise ReqLLM.Error.Invalid.Parameter, fn ->
+        encode_part(ContentPart.file_id("file_123"))
+      end
+    end
+
+    test "sends documents inside tool results" do
+      context = %ReqLLM.Context{
+        messages: [
+          %Message{
+            role: :tool,
+            tool_call_id: "call_doc",
+            content: [
+              ContentPart.text("Here is the file:"),
+              ContentPart.file(@pdf, "MyDocument.pdf", "application/pdf")
+            ]
+          }
+        ]
+      }
+
+      [%{"content" => [%{"toolResult" => %{"content" => content}}]}] =
+        Converse.format_request("test-model", context, [])["messages"]
+
+      assert [%{"text" => "Here is the file:"}, %{"document" => %{"name" => "MyDocument"}}] =
+               content
+    end
+
+    defp encode_part(part) do
+      context = %ReqLLM.Context{messages: [%Message{role: :user, content: [part]}]}
+
+      [%{"content" => [block]}] = Converse.format_request("test-model", context, [])["messages"]
+      block
+    end
+  end
 end

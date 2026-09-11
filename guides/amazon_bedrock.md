@@ -205,6 +205,10 @@ Passed via `:provider_options` keyword:
 - **Purpose**: Cache TTL (default ~5min if omitted)
 - **Example**: `provider_options: [anthropic_prompt_cache_ttl: "1h"]`
 
+## Attachments
+
+On the Converse API, `file`, `image`, `image_url` and `video_url` parts are sent as [document, image and video blocks](https://docs.aws.amazon.com/bedrock/latest/userguide/conversation-inference.html#converse-messages) according to their media type. A document is named after its `title` metadata or its filename. Sources are inline bytes or an `s3://` URL, with `bucket_owner` metadata when another account owns the bucket.
+
 ## Supported Model Families
 
 ### Anthropic Claude

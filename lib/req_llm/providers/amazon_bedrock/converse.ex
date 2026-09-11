@@ -86,6 +86,26 @@ defmodule ReqLLM.Providers.AmazonBedrock.Converse do
   @reasoning_format "bedrock-converse-v1"
   @replayable_reasoning_providers [:amazon_bedrock, :anthropic]
 
+  @image_formats ~w(png jpeg gif webp)
+  @video_formats ~w(mkv mov mp4 webm flv mpeg mpg wmv three_gp)
+  @format_aliases %{
+    "jpg" => "jpeg",
+    "quicktime" => "mov",
+    "x-matroska" => "mkv",
+    "matroska" => "mkv",
+    "x-flv" => "flv",
+    "x-ms-wmv" => "wmv",
+    "3gpp" => "three_gp",
+    "3gp" => "three_gp",
+    "plain" => "txt",
+    "markdown" => "md",
+    "htm" => "html",
+    "msword" => "doc",
+    "vnd.openxmlformats-officedocument.wordprocessingml.document" => "docx",
+    "vnd.ms-excel" => "xls",
+    "vnd.openxmlformats-officedocument.spreadsheetml.sheet" => "xlsx"
+  }
+
   @doc """
   Format a ReqLLM context into Bedrock Converse API format.
 
@@ -487,11 +507,11 @@ defmodule ReqLLM.Providers.AmazonBedrock.Converse do
   end
 
   defp encode_system_message(%Message{content: content}) when is_binary(content) do
-    encode_content_for_system(content)
+    encode_content(content)
   end
 
   defp encode_system_message(%Message{content: content}) when is_list(content) do
-    encode_content_for_system(content)
+    encode_content(content)
   end
 
   defp encode_system_message(_message), do: []
@@ -728,14 +748,6 @@ defmodule ReqLLM.Providers.AmazonBedrock.Converse do
 
   defp encode_reasoning_detail(_detail), do: []
 
-  defp encode_content_for_system(content) when is_binary(content) do
-    [%{"text" => content}]
-  end
-
-  defp encode_content_for_system(content) when is_list(content) do
-    Enum.map(content, &encode_content_part/1)
-  end
-
   defp encode_content(content) when is_binary(content) do
     [%{"text" => content}]
   end
@@ -752,18 +764,83 @@ defmodule ReqLLM.Providers.AmazonBedrock.Converse do
     %{"text" => text}
   end
 
-  defp encode_content_part(%ContentPart{type: :image, data: data, media_type: media_type}) do
-    %{
-      "image" => %{
-        "format" => image_format_from_media_type(media_type),
-        "source" => %{
-          "bytes" => Base.encode64(data)
-        }
-      }
-    }
+  defp encode_content_part(%ContentPart{type: :thinking}), do: nil
+
+  defp encode_content_part(%ContentPart{} = part) do
+    format = media_format(part)
+    block = block_type(format)
+    %{block => media_block(block, part, format)}
   end
 
-  defp encode_content_part(_), do: nil
+  defp block_type(format) when format in @image_formats, do: "image"
+  defp block_type(format) when format in @video_formats, do: "video"
+  defp block_type(_format), do: "document"
+
+  defp media_block("document", part, format) do
+    source = encode_source(part)
+
+    %{"name" => document_name(part), "format" => format, "source" => source}
+    |> put_document_context(part)
+  end
+
+  defp media_block(_block, part, format),
+    do: %{"format" => format, "source" => encode_source(part)}
+
+  defp media_format(%ContentPart{media_type: media_type, filename: filename, url: url})
+       when media_type in [nil, "application/octet-stream"] do
+    (filename || url || "")
+    |> Path.extname()
+    |> String.trim_leading(".")
+    |> String.downcase()
+    |> canonical_format()
+  end
+
+  defp media_format(%ContentPart{media_type: media_type}) do
+    [mime | _params] = String.split(media_type, ";")
+    [_type, subtype] = mime |> String.trim() |> String.split("/", parts: 2)
+    canonical_format(subtype)
+  end
+
+  defp canonical_format(format), do: Map.get(@format_aliases, format, format)
+
+  defp encode_source(%ContentPart{data: data}) when is_binary(data),
+    do: %{"bytes" => Base.encode64(data)}
+
+  defp encode_source(%ContentPart{url: "s3://" <> _ = uri, metadata: metadata}) do
+    case metadata_value(metadata, :bucket_owner) do
+      nil -> %{"s3Location" => %{"uri" => uri}}
+      owner -> %{"s3Location" => %{"uri" => uri, "bucketOwner" => owner}}
+    end
+  end
+
+  defp encode_source(%ContentPart{url: url}) when is_binary(url),
+    do: invalid_part("Converse reads s3:// URLs only, got #{url}")
+
+  defp encode_source(%ContentPart{file_id: file_id}) when is_binary(file_id),
+    do: invalid_part("Converse cannot read provider file ids")
+
+  defp document_name(%ContentPart{filename: filename, metadata: metadata}) do
+    (metadata_value(metadata, :title) || filename_stem(filename))
+    |> String.replace(~r/[^A-Za-z0-9 \-()\[\]]+/, " ")
+    |> String.replace(~r/ +/, " ")
+    |> String.slice(0, 200)
+    |> String.trim()
+  end
+
+  defp filename_stem(nil), do: ""
+  defp filename_stem(filename), do: filename |> Path.basename() |> Path.rootname()
+
+  defp put_document_context(block, %ContentPart{metadata: metadata}) do
+    case metadata_value(metadata, :context) do
+      nil -> block
+      context -> Map.put(block, "context", context)
+    end
+  end
+
+  defp metadata_value(metadata, key) when is_map(metadata),
+    do: Map.get(metadata, key, Map.get(metadata, Atom.to_string(key)))
+
+  defp invalid_part(parameter), do: raise(ReqLLM.Error.Invalid.Parameter, parameter: parameter)
 
   # Helper to encode ToolCall struct to Converse API toolUse format
   defp encode_tool_call_to_tool_use(%ToolCall{id: id, function: %{name: name, arguments: args}}) do
@@ -819,7 +896,7 @@ defmodule ReqLLM.Providers.AmazonBedrock.Converse do
 
   defp encode_tool_result_content(%Message{content: content})
        when is_list(content) and content != [] do
-    Enum.map(content, &encode_content_part/1)
+    encode_content(content)
   end
 
   defp encode_tool_result_content(%Message{} = msg) do
@@ -844,13 +921,6 @@ defmodule ReqLLM.Providers.AmazonBedrock.Converse do
     do: Jason.encode!(output)
 
   defp encode_tool_output(output), do: to_string(output)
-
-  defp image_format_from_media_type("image/png"), do: "png"
-  defp image_format_from_media_type("image/jpeg"), do: "jpeg"
-  defp image_format_from_media_type("image/jpg"), do: "jpeg"
-  defp image_format_from_media_type("image/gif"), do: "gif"
-  defp image_format_from_media_type("image/webp"), do: "webp"
-  defp image_format_from_media_type(_), do: "png"
 
   defp parse_message(nil), do: nil
 
