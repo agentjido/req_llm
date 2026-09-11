@@ -12,7 +12,7 @@ defmodule ReqLLM.Providers.OpenAICodex do
 
   alias ReqLLM.Providers.OpenAI
   alias ReqLLM.Providers.OpenAI.ResponsesAPI
-  alias ReqLLM.Providers.OpenAICodex.ResponsesLite
+  alias ReqLLM.Providers.OpenAICodex.{ResponsesLite, TurnMetadata}
 
   @provider_schema [
     access_token: [
@@ -52,6 +52,12 @@ defmodule ReqLLM.Providers.OpenAICodex do
     prompt_cache_key: [
       type: :string,
       doc: "Explicit prompt cache key override; defaults to session_id when supplied"
+    ],
+    codex_turn_metadata: [
+      type: {:custom, TurnMetadata, :validate, []},
+      doc:
+        "Caller-owned turn_id, window_id, request_kind and turn_started_at_unix_ms, " <>
+          "with optional installation_id. Requires session_id and thread_id; no IDs are generated."
     ],
     codex_originator: [
       type: :string,
@@ -405,7 +411,11 @@ defmodule ReqLLM.Providers.OpenAICodex do
   end
 
   def start_responses_session(%LLMDB.Model{} = model, opts \\ []) do
-    opts = normalize_stream_opts(opts)
+    opts =
+      __MODULE__
+      |> ReqLLM.Provider.Options.process!(:chat, model, opts)
+      |> normalize_stream_opts()
+
     ensure_oauth_mode!(opts)
 
     credential = ReqLLM.Auth.resolve!(model, opts)
@@ -450,6 +460,7 @@ defmodule ReqLLM.Providers.OpenAICodex do
     |> Map.put("instructions", instructions)
     |> maybe_put_prompt_cache_key(provider_opts[:prompt_cache_key] || provider_opts[:session_id])
     |> maybe_put_parallel_tool_calls(provider_opts[:openai_parallel_tool_calls])
+    |> TurnMetadata.put_body(provider_opts)
     |> ResponsesLite.apply_body(model)
   end
 
@@ -669,6 +680,7 @@ defmodule ReqLLM.Providers.OpenAICodex do
       {"thread-id", options[:thread_id]}
     ]
     |> Enum.reject(fn {_name, value} -> is_nil(value) end)
+    |> Kernel.++(TurnMetadata.headers(options))
   end
 
   defp maybe_put_prompt_cache_key(body, nil), do: body
