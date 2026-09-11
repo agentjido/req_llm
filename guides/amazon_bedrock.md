@@ -209,6 +209,25 @@ Passed via `:provider_options` keyword:
 
 On the Converse API, `file`, `image`, `image_url` and `video_url` parts are sent as [document, image and video blocks](https://docs.aws.amazon.com/bedrock/latest/userguide/conversation-inference.html#converse-messages) according to their media type. A document is named after its `title` metadata or its filename. Sources are inline bytes or an `s3://` URL, with `bucket_owner` metadata when another account owns the bucket.
 
+## Guarding content parts
+
+On the Converse API, `guard_content` metadata on a content part wraps it in a `guardContent` block. Which policies then skip the unmarked parts is up to the guardrail, see [selective guarding](https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-use-converse-api.html#guardrails-use-converse-api-call-message).
+
+```elixir
+ReqLLM.generate_text(
+  model,
+  ReqLLM.Context.user([
+    ReqLLM.Message.ContentPart.text("London is the capital of UK. Tokyo is the capital of Japan.",
+      %{guard_content: %{qualifiers: [:grounding_source]}}
+    ),
+    ReqLLM.Message.ContentPart.text("What is the capital of Japan?", %{guard_content: %{qualifiers: [:query]}})
+  ]),
+  provider_options: [use_converse: true, guardrail_identifier: "abc123def456", guardrail_version: "1"]
+)
+```
+
+Text and PNG or JPEG image parts, in messages and system prompts. InvokeModel has no equivalent, so the hint is ignored there.
+
 ## Supported Model Families
 
 ### Anthropic Claude

@@ -143,6 +143,7 @@ The `metadata` field allows passing provider-specific attributes through to the 
 - `cache_control`: Anthropic prompt caching control (e.g., `%{type: "ephemeral"}`)
 - `title`, `context`: document name and context for `file` parts (Amazon Bedrock Converse; Anthropic file references)
 - `bucket_owner`: account that owns the bucket of an `s3://` source (Amazon Bedrock Converse)
+- `guard_content`: Amazon Bedrock guardrail selection on the Converse API (`true` or `%{qualifiers: [...]}`)
 
 ```elixir
 # Enable prompt caching for text content

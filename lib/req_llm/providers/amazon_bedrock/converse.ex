@@ -754,9 +754,75 @@ defmodule ReqLLM.Providers.AmazonBedrock.Converse do
 
   defp encode_content(content) when is_list(content) do
     content
-    |> Enum.map(&encode_content_part/1)
+    |> Enum.map(&encode_guardable_content_part/1)
     |> Enum.reject(&is_nil/1)
   end
+
+  defp encode_guardable_content_part(%ContentPart{type: type, metadata: metadata} = part)
+       when type not in [:text, :image] do
+    case metadata_value(metadata, :guard_content) do
+      hint when hint in [nil, false] -> encode_content_part(part)
+      _hint -> invalid_guard_content("guard_content needs a non-empty text or image part")
+    end
+  end
+
+  defp encode_guardable_content_part(%ContentPart{metadata: metadata} = part) do
+    case {metadata_value(metadata, :guard_content), encode_content_part(part)} do
+      {hint, block} when hint in [nil, false] ->
+        block
+
+      {_hint, nil} ->
+        invalid_guard_content("guard_content needs a non-empty text or image part")
+
+      {true, block} ->
+        guard_content(part, block, [])
+
+      {%{} = opts, block} ->
+        guard_content(part, block, qualifiers(metadata_value(opts, :qualifiers)))
+
+      {_hint, _block} ->
+        invalid_guard_content("guard_content must be a boolean or an options map")
+    end
+  end
+
+  defp encode_unguarded_content_part(%ContentPart{metadata: metadata} = part) do
+    case metadata_value(metadata, :guard_content) do
+      hint when hint in [nil, false] -> encode_content_part(part)
+      _hint -> invalid_guard_content("guard_content is not supported inside tool results")
+    end
+  end
+
+  defp guard_content(%ContentPart{type: :text}, %{"text" => text}, []),
+    do: %{"guardContent" => %{"text" => %{"text" => text}}}
+
+  defp guard_content(%ContentPart{type: :text}, %{"text" => text}, qualifiers),
+    do: %{"guardContent" => %{"text" => %{"text" => text, "qualifiers" => qualifiers}}}
+
+  defp guard_content(%ContentPart{type: :image, media_type: media_type}, block, [])
+       when media_type in ["image/png", "image/jpeg", "image/jpg"],
+       do: %{"guardContent" => block}
+
+  defp guard_content(%ContentPart{type: :image}, _block, _qualifiers),
+    do: invalid_guard_content("guard_content images must be png or jpeg and take no qualifiers")
+
+  defp guard_content(%ContentPart{}, _block, _qualifiers),
+    do: invalid_guard_content("guard_content needs a non-empty text or image part")
+
+  defp qualifiers(nil), do: []
+  defp qualifiers(values) when is_list(values), do: Enum.map(values, &qualifier/1)
+  defp qualifiers(_values), do: invalid_guard_content("guard_content qualifiers must be a list")
+
+  defp qualifier(value) when is_atom(value), do: Atom.to_string(value)
+  defp qualifier(value) when is_binary(value), do: value
+
+  defp qualifier(_value),
+    do: invalid_guard_content("guard_content qualifiers must be atoms or strings")
+
+  defp metadata_value(metadata, key) when is_map(metadata),
+    do: Map.get(metadata, key, Map.get(metadata, Atom.to_string(key)))
+
+  defp invalid_guard_content(parameter),
+    do: raise(ReqLLM.Error.Invalid.Parameter.exception(parameter: parameter))
 
   defp encode_content_part(%ContentPart{type: :text, text: ""}), do: nil
 
@@ -837,9 +903,6 @@ defmodule ReqLLM.Providers.AmazonBedrock.Converse do
     end
   end
 
-  defp metadata_value(metadata, key) when is_map(metadata),
-    do: Map.get(metadata, key, Map.get(metadata, Atom.to_string(key)))
-
   defp invalid_part(parameter), do: raise(ReqLLM.Error.Invalid.Parameter, parameter: parameter)
 
   # Helper to encode ToolCall struct to Converse API toolUse format
@@ -896,7 +959,7 @@ defmodule ReqLLM.Providers.AmazonBedrock.Converse do
 
   defp encode_tool_result_content(%Message{content: content})
        when is_list(content) and content != [] do
-    encode_content(content)
+    Enum.map(content, &encode_unguarded_content_part/1)
   end
 
   defp encode_tool_result_content(%Message{} = msg) do
