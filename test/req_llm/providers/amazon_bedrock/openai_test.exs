@@ -59,6 +59,20 @@ defmodule ReqLLM.Providers.AmazonBedrock.OpenAITest do
       assert formatted[:top_p] == 0.9
     end
 
+    test "preserves max_tokens for GPT-5 models outside Mantle" do
+      context = Context.new([Context.user("Hello")])
+
+      formatted =
+        OpenAI.format_request(
+          "openai.gpt-5.4",
+          context,
+          max_tokens: 2048
+        )
+
+      assert formatted[:max_tokens] == 2048
+      refute Map.has_key?(formatted, :max_completion_tokens)
+    end
+
     test "includes tools when provided" do
       get_weather =
         ReqLLM.Tool.new!(

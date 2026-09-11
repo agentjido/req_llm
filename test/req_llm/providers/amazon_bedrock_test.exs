@@ -1404,9 +1404,10 @@ defmodule ReqLLM.Providers.AmazonBedrockTest do
       ]
 
       {:ok, gpt_oss} = ReqLLM.model("amazon-bedrock:openai.gpt-oss-120b")
+      {:ok, gpt_5} = ReqLLM.model(%{provider: :amazon_bedrock, id: "openai.gpt-5.6-terra"})
       {:ok, claude} = ReqLLM.model("amazon-bedrock:anthropic.claude-3-haiku-20240307-v1:0")
 
-      {:ok, context: context, opts: opts, gpt_oss: gpt_oss, claude: claude}
+      {:ok, context: context, opts: opts, gpt_oss: gpt_oss, gpt_5: gpt_5, claude: claude}
     end
 
     test "stays on bedrock-runtime unless asked", %{context: context, opts: opts, gpt_oss: model} do
@@ -1421,6 +1422,21 @@ defmodule ReqLLM.Providers.AmazonBedrockTest do
       assert request.url.host == "bedrock-runtime.eu-west-1.amazonaws.com"
       assert request.url.path == "/model/openai.gpt-oss-120b/invoke"
       assert request.options[:endpoint] == :runtime
+    end
+
+    test "preserves runtime token parameters", %{context: context, opts: opts} do
+      {:ok, model} = ReqLLM.model(%{provider: :amazon_bedrock, id: "openai.gpt-5.4"})
+
+      opts =
+        opts
+        |> Keyword.delete(:provider_options)
+        |> Keyword.put(:max_tokens, 400)
+
+      {:ok, request} = AmazonBedrock.prepare_request(:chat, model, context, opts)
+      body = Jason.decode!(request.body)
+
+      assert body["max_tokens"] == 400
+      refute Map.has_key?(body, "max_completion_tokens")
     end
 
     test "sends chat completions to bedrock-mantle", %{
@@ -1451,8 +1467,11 @@ defmodule ReqLLM.Providers.AmazonBedrockTest do
       assert %{"model" => "mistral.voxtral-mini-3b-2507"} = Jason.decode!(request.body)
     end
 
-    test "serves OpenAI-hosted models under /openai/v1", %{context: context, opts: opts} do
-      for id <- ["openai.gpt-5.4", "google.gemma-4-31b", "xai.grok-4.3"] do
+    test "keeps non-Responses OpenAI-compatible models on chat completions", %{
+      context: context,
+      opts: opts
+    } do
+      for id <- ["google.gemma-4-31b", "xai.grok-4.3"] do
         {:ok, model} = ReqLLM.model(%{provider: :amazon_bedrock, id: id})
         {:ok, request} = AmazonBedrock.prepare_request(:chat, model, context, opts)
 
@@ -1463,6 +1482,98 @@ defmodule ReqLLM.Providers.AmazonBedrockTest do
         {:ok, finch_request} = AmazonBedrock.attach_stream(model, context, opts, ReqLLM.Finch)
         assert finch_request.path == "/openai/v1/chat/completions"
       end
+    end
+
+    test "routes GPT-5 Responses bodies on both Mantle transports", %{
+      context: context,
+      opts: opts,
+      gpt_5: model
+    } do
+      tool =
+        ReqLLM.Tool.new!(
+          name: "get_weather",
+          description: "Get the weather",
+          parameter_schema: [location: [type: :string, required: true]],
+          callback: fn _args -> {:ok, "sunny"} end
+        )
+
+      opts =
+        Keyword.merge(opts,
+          max_tokens: 400,
+          reasoning_effort: :high,
+          tools: [tool]
+        )
+
+      {:ok, request} = AmazonBedrock.prepare_request(:chat, model, context, opts)
+      assert Regex.scan(~r/"model":/, request.body) == [["\"model\":"]]
+      assert request.body =~ ~s("model":"openai.gpt-5.6-terra")
+      body = Jason.decode!(request.body)
+
+      assert request.url.path == "/openai/v1/responses"
+      assert [%{"role" => "user"}] = body["input"]
+      refute Map.has_key?(body, "messages")
+      assert [%{"type" => "function", "name" => "get_weather"}] = body["tools"]
+      assert body["reasoning"] == %{"effort" => "high"}
+      assert body["max_output_tokens"] == 400
+      refute Map.has_key?(body, "max_tokens")
+
+      {:ok, stream} = AmazonBedrock.attach_stream(model, context, opts, ReqLLM.Finch)
+      assert Regex.scan(~r/"model":/, stream.body) == [["\"model\":"]]
+      assert stream.body =~ ~s("model":"openai.gpt-5.6-terra")
+      body = Jason.decode!(stream.body)
+
+      assert stream.path == "/openai/v1/responses"
+      assert [%{"role" => "user"}] = body["input"]
+      assert [%{"type" => "function", "name" => "get_weather"}] = body["tools"]
+      assert body["max_output_tokens"] == 400
+      refute Map.has_key?(body, "max_tokens")
+    end
+
+    test "uses model shape metadata and excludes GPT OSS", %{context: context, opts: opts} do
+      for extra <- [
+            %{"provider" => %{"shape" => "responses"}},
+            %{provider: %{shape: "responses"}}
+          ] do
+        {:ok, model} =
+          ReqLLM.model(%{
+            provider: :amazon_bedrock,
+            id: "xai.grok-4.3",
+            extra: extra
+          })
+
+        {:ok, request} = AmazonBedrock.prepare_request(:chat, model, context, opts)
+        assert request.url.path == "/openai/v1/responses"
+      end
+
+      {:ok, model} =
+        ReqLLM.model(%{
+          provider: :amazon_bedrock,
+          id: "openai.gpt-oss-120b",
+          extra: %{"provider" => %{"shape" => "responses"}}
+        })
+
+      {:ok, request} = AmazonBedrock.prepare_request(:chat, model, context, opts)
+      assert request.url.path == "/v1/chat/completions"
+    end
+
+    test "preserves Anthropic token parameters on both Mantle transports", %{
+      context: context,
+      opts: opts,
+      claude: model
+    } do
+      opts = Keyword.put(opts, :max_tokens, 400)
+
+      {:ok, request} = AmazonBedrock.prepare_request(:chat, model, context, opts)
+      body = Jason.decode!(request.body)
+
+      assert body["max_tokens"] == 400
+      refute Map.has_key?(body, "max_completion_tokens")
+
+      {:ok, stream} = AmazonBedrock.attach_stream(model, context, opts, ReqLLM.Finch)
+      body = Jason.decode!(stream.body)
+
+      assert body["max_tokens"] == 400
+      refute Map.has_key?(body, "max_completion_tokens")
     end
 
     test "mantle_base_path overrides the base picked from the model id", %{
@@ -1481,7 +1592,7 @@ defmodule ReqLLM.Providers.AmazonBedrockTest do
       assert request.url.path == "/openai/v1/chat/completions"
 
       {:ok, request} = AmazonBedrock.prepare_request(:chat, gpt_5, context, to_v1)
-      assert request.url.path == "/v1/chat/completions"
+      assert request.url.path == "/v1/responses"
 
       {:ok, finch_request} =
         AmazonBedrock.attach_stream(gpt_oss, context, to_openai, ReqLLM.Finch)
@@ -1560,11 +1671,20 @@ defmodule ReqLLM.Providers.AmazonBedrockTest do
       assert {:incomplete, <<0, 0>>} = event_stream.(<<0, 0>>, nil)
     end
 
-    test "decodes chat completion and messages events", %{gpt_oss: gpt_oss, claude: claude} do
+    test "decodes each Mantle stream wire format", %{
+      gpt_oss: gpt_oss,
+      gpt_5: gpt_5,
+      claude: claude
+    } do
       delta = %{data: %{"choices" => [%{"index" => 0, "delta" => %{"content" => "Hi"}}]}}
 
       assert {[%ReqLLM.StreamChunk{type: :content, text: "Hi"}], nil} =
                AmazonBedrock.decode_stream_event(delta, gpt_oss, nil)
+
+      delta = %{data: %{"event" => "response.output_text.delta", "delta" => "Hi"}}
+
+      assert {[%ReqLLM.StreamChunk{type: :content, text: "Hi"}], _state} =
+               AmazonBedrock.decode_stream_event(delta, gpt_5, nil)
 
       delta = %{
         event: "content_block_delta",
@@ -1581,6 +1701,36 @@ defmodule ReqLLM.Providers.AmazonBedrockTest do
                  claude,
                  AmazonBedrock.init_stream_state(claude)
                )
+    end
+
+    test "decodes buffered Responses payloads with the routed formatter", %{
+      context: context,
+      opts: opts,
+      gpt_5: model
+    } do
+      {:ok, request} = AmazonBedrock.prepare_request(:chat, model, context, opts)
+
+      payload = %{
+        "id" => "resp_123",
+        "model" => "openai.gpt-5.6-terra",
+        "status" => "completed",
+        "output" => [
+          %{
+            "type" => "function_call",
+            "call_id" => "call_123",
+            "name" => "get_weather",
+            "arguments" => ~s({"location":"Boston"})
+          }
+        ],
+        "usage" => %{"input_tokens" => 8, "output_tokens" => 12}
+      }
+
+      {_request, response} =
+        AmazonBedrock.decode_response({request, %Req.Response{status: 200, body: payload}})
+
+      assert [tool_call] = response.body.message.tool_calls
+      assert tool_call.id == "call_123"
+      assert tool_call.function.name == "get_weather"
     end
 
     test "sends the project header each bedrock-mantle route takes", %{
