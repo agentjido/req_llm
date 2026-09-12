@@ -74,9 +74,15 @@ defmodule ReqLLM.Message.ContentPart do
   def image(data, media_type, metadata),
     do: %__MODULE__{type: :image, data: data, media_type: media_type, metadata: metadata}
 
-  @spec file(binary(), String.t(), String.t()) :: t()
-  def file(data, filename, media_type \\ "application/octet-stream"),
-    do: %__MODULE__{type: :file, data: data, filename: filename, media_type: media_type}
+  @spec file(binary(), String.t(), String.t(), map()) :: t()
+  def file(data, filename, media_type \\ "application/octet-stream", metadata \\ %{}),
+    do: %__MODULE__{
+      type: :file,
+      data: data,
+      filename: filename,
+      media_type: media_type,
+      metadata: metadata
+    }
 
   @spec file_id(String.t()) :: t()
   @spec file_id(String.t(), String.t() | map()) :: t()

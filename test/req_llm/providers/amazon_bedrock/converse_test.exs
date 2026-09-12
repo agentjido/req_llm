@@ -890,6 +890,50 @@ defmodule ReqLLM.Providers.AmazonBedrock.ConverseTest do
   end
 
   describe "parse_response/2" do
+    test "parses citationsContent into text and annotations" do
+      title = %{
+        "title" => "MyDocument",
+        "sourceContent" => [%{"text" => "Test PDF Document"}],
+        "location" => %{"documentPage" => %{"documentIndex" => 0, "start" => 1, "end" => 2}}
+      }
+
+      page = %{
+        "title" => "MyDocument",
+        "sourceContent" => [%{"text" => "one page"}],
+        "location" => %{"documentChar" => %{"documentIndex" => 0, "start" => 18, "end" => 26}}
+      }
+
+      response_body = %{
+        "output" => %{
+          "message" => %{
+            "role" => "assistant",
+            "content" => [
+              %{
+                "citationsContent" => %{
+                  "content" => [
+                    %{"text" => "This document contains "},
+                    %{"text" => "\"Test PDF Document\""}
+                  ],
+                  "citations" => [title]
+                }
+              },
+              %{"text" => " as its text, on "},
+              %{"citationsContent" => %{"citations" => [page, title]}}
+            ]
+          }
+        },
+        "stopReason" => "end_turn",
+        "usage" => %{"inputTokens" => 10, "outputTokens" => 5}
+      }
+
+      {:ok, result} = Converse.parse_response(response_body, model: "test-model")
+
+      assert ReqLLM.Response.text(result) ==
+               "This document contains \"Test PDF Document\" as its text, on "
+
+      assert ReqLLM.Response.annotations(result) == [title, page]
+    end
+
     test "parses basic text response" do
       response_body = %{
         "output" => %{
@@ -1027,6 +1071,21 @@ defmodule ReqLLM.Providers.AmazonBedrock.ConverseTest do
   end
 
   describe "parse_stream_chunk/2" do
+    test "parses citation deltas as annotations" do
+      citation = %{
+        "title" => "MyDocument",
+        "sourceContent" => [%{"text" => "Test PDF Document"}],
+        "location" => %{"documentPage" => %{"documentIndex" => 0, "start" => 1, "end" => 2}}
+      }
+
+      chunk = %{
+        "contentBlockDelta" => %{"contentBlockIndex" => 0, "delta" => %{"citation" => citation}}
+      }
+
+      {:ok, result} = Converse.parse_stream_chunk(chunk, "test-model")
+      assert %ReqLLM.StreamChunk{type: :meta, metadata: %{annotations: [^citation]}} = result
+    end
+
     test "parses contentBlockDelta with text" do
       chunk = %{
         "contentBlockDelta" => %{
@@ -1350,6 +1409,17 @@ defmodule ReqLLM.Providers.AmazonBedrock.ConverseTest do
           Converse.format_request("test-model", context, [])
         end
       end
+    end
+
+    test "enables citations on a document" do
+      document = fn citations ->
+        ContentPart.file(@pdf, "MyDocument.pdf", "application/pdf", %{citations: citations})
+      end
+
+      assert %{"document" => %{"citations" => %{"enabled" => true}}} =
+               encode_part(document.(true))
+
+      assert_raise ReqLLM.Error.Invalid.Parameter, fn -> encode_part(document.("yes")) end
     end
 
     test "reads sources from S3" do

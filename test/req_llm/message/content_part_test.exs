@@ -140,6 +140,13 @@ defmodule ReqLLM.Message.ContentPartTest do
              } = part
     end
 
+    test "creates file with metadata", %{file_data: data, filename: name} do
+      part = ContentPart.file(data, name, "text/plain", %{title: "Notes"})
+
+      assert %ContentPart{type: :file, media_type: "text/plain", metadata: %{title: "Notes"}} =
+               part
+    end
+
     test "creates file reference content part with default media type" do
       part = ContentPart.file_id("file_011CNha8iCJcU1wXNR6q4V8w")
 
