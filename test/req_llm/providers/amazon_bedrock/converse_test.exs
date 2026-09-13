@@ -931,7 +931,14 @@ defmodule ReqLLM.Providers.AmazonBedrock.ConverseTest do
       assert ReqLLM.Response.text(result) ==
                "This document contains \"Test PDF Document\" as its text, on "
 
-      assert ReqLLM.Response.annotations(result) == [title, page]
+      cited_length = String.length("This document contains \"Test PDF Document\"")
+      total_length = String.length(ReqLLM.Response.text(result))
+
+      assert ReqLLM.Response.annotations(result) == [
+               Map.merge(title, %{"start_index" => 0, "end_index" => cited_length}),
+               Map.merge(page, %{"start_index" => total_length, "end_index" => total_length}),
+               Map.merge(title, %{"start_index" => total_length, "end_index" => total_length})
+             ]
     end
 
     test "parses basic text response" do
@@ -1083,7 +1090,8 @@ defmodule ReqLLM.Providers.AmazonBedrock.ConverseTest do
       }
 
       {:ok, result} = Converse.parse_stream_chunk(chunk, "test-model")
-      assert %ReqLLM.StreamChunk{type: :meta, metadata: %{annotations: [^citation]}} = result
+      expected = Map.put(citation, "content_block_index", 0)
+      assert %ReqLLM.StreamChunk{type: :meta, metadata: %{annotations: [^expected]}} = result
     end
 
     test "parses contentBlockDelta with text" do

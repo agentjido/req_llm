@@ -39,12 +39,22 @@ defmodule ReqLLM.Coverage.AmazonBedrock.ConverseCitationsTest do
              %{
                "title" => "MyDocument",
                "sourceContent" => [%{"text" => source}],
-               "location" => location
+               "location" => location,
+               "start_index" => start_index,
+               "end_index" => end_index
              }
              | _
            ] =
              ReqLLM.Response.annotations(response)
 
+    cited_text =
+      response
+      |> ReqLLM.Response.text()
+      |> String.codepoints()
+      |> Enum.slice(start_index, end_index - start_index)
+      |> Enum.join()
+
+    assert cited_text =~ "Test PDF Document"
     assert source =~ "Test PDF Document"
     assert %{"documentPage" => %{"documentIndex" => 0}} = location
   end
