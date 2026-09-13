@@ -6,9 +6,8 @@ defmodule ReqLLM.Bedrock.BidiStream do
   Bidirectional streaming is HTTP/2 full-duplex: the client opens one request,
   streams SigV4 event-signed messages over time, and concurrently reads response
   event-stream messages back. This mirrors the shape of `ReqLLM.OpenAI.Realtime`
-  (`connect`, `send_event`, `next_event`, `close`) but the transport is
-  `ReqLLM.Streaming.HTTP2DuplexSession` (Mint HTTP/2), since the WebSockex-based
-  `WebSocketSession` cannot do HTTP/2.
+  (`connect`, `send_event`, `next_event`, `close`) but uses an internal Mint HTTP/2
+  transport, since the WebSockex-based `WebSocketSession` cannot do HTTP/2.
 
   Each outbound event is framed as an AWS event-stream message whose payload is
   `{"bytes": "<base64 of the event JSON>"}` (the `BidirectionalInputPayloadPart`
