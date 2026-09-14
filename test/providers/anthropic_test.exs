@@ -1790,6 +1790,91 @@ defmodule ReqLLM.Providers.AnthropicTest do
     end
   end
 
+  describe "tool search tool" do
+    defp deferred_tool(name) do
+      ReqLLM.Tool.new!(
+        name: name,
+        description: "A deferred tool",
+        parameter_schema: [name: [type: :string, required: true]],
+        callback: fn _ -> {:ok, "result"} end,
+        provider_options: [anthropic: [defer_loading: true]]
+      )
+    end
+
+    defp direct_tool(name) do
+      ReqLLM.Tool.new!(
+        name: name,
+        description: "An always-loaded tool",
+        parameter_schema: [name: [type: :string, required: true]],
+        callback: fn _ -> {:ok, "result"} end
+      )
+    end
+
+    # `anthropic_prompt_cache` is read from the request options, where the
+    # option pipeline flattens it; the search config is a provider option.
+    defp encode_tools(tools, provider_options, request_options \\ []) do
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-6")
+
+      %Req.Request{
+        options:
+          [
+            context: context_fixture(),
+            model: model.model,
+            stream: false,
+            tools: tools,
+            provider_options: provider_options
+          ] ++ request_options
+      }
+      |> Anthropic.encode_body()
+      |> ReqLLM.Test.Helpers.json_body()
+      |> Map.fetch!("tools")
+    end
+
+    test "tool_search leads the tools list, BM25 by default" do
+      [search, direct, deferred] =
+        encode_tools([direct_tool("direct"), deferred_tool("deferred")], tool_search: %{})
+
+      assert search == %{
+               "type" => "tool_search_tool_bm25_20251119",
+               "name" => "tool_search_tool_bm25"
+             }
+
+      assert direct["name"] == "direct"
+      refute Map.has_key?(direct, "defer_loading")
+      assert deferred["defer_loading"] == true
+    end
+
+    test "the regex variant is selectable" do
+      [search | _] = encode_tools([direct_tool("direct")], tool_search: %{variant: :regex})
+
+      assert search["type"] == "tool_search_tool_regex_20251119"
+      assert search["name"] == "tool_search_tool_regex"
+    end
+
+    test "the prompt-cache breakpoint lands on the last non-deferred tool" do
+      [search, direct, deferred_a, deferred_b] =
+        encode_tools(
+          [direct_tool("direct"), deferred_tool("deferred_a"), deferred_tool("deferred_b")],
+          [tool_search: %{}],
+          anthropic_prompt_cache: true
+        )
+
+      assert direct["cache_control"] == %{"type" => "ephemeral"}
+      refute Map.has_key?(search, "cache_control")
+      refute Map.has_key?(deferred_a, "cache_control")
+      refute Map.has_key?(deferred_b, "cache_control")
+    end
+
+    test "without deferred tools the breakpoint stays on the last tool" do
+      [_search, _first, last] =
+        encode_tools([direct_tool("first"), direct_tool("last")], [tool_search: %{}],
+          anthropic_prompt_cache: true
+        )
+
+      assert last["cache_control"] == %{"type" => "ephemeral"}
+    end
+  end
+
   describe "web fetch tool" do
     test "encode_body with web_fetch configuration" do
       {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-6")

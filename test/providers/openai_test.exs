@@ -1896,5 +1896,57 @@ defmodule ReqLLM.Providers.OpenAITest do
 
       assert Enum.map(body["tools"], & &1["type"]) == ["web_search", "image_generation"]
     end
+
+    test "passes through the tool_search built-in and marks deferred functions" do
+      {:ok, model} = ReqLLM.model("openai:gpt-5.4")
+
+      deferred =
+        ReqLLM.Tool.new!(
+          name: "deferred_tool",
+          description: "Loads on demand",
+          parameter_schema: [name: [type: :string, required: true]],
+          callback: fn _ -> {:ok, "result"} end,
+          provider_options: [openai: [defer_loading: true]]
+        )
+
+      direct =
+        ReqLLM.Tool.new!(
+          name: "direct_tool",
+          description: "Always loaded",
+          parameter_schema: [name: [type: :string, required: true]],
+          callback: fn _ -> {:ok, "result"} end
+        )
+
+      context = %ReqLLM.Context{
+        messages: [
+          %ReqLLM.Message{
+            role: :user,
+            content: [%ReqLLM.Message.ContentPart{type: :text, text: "Find a tool"}]
+          }
+        ]
+      }
+
+      request = %Req.Request{
+        url: URI.parse("https://api.openai.com/v1/responses"),
+        method: :post,
+        options: [
+          context: context,
+          model: model.model,
+          tools: [%{type: "tool_search"}, direct, deferred]
+        ]
+      }
+
+      body =
+        request
+        |> ReqLLM.Providers.OpenAI.ResponsesAPI.encode_body()
+        |> ReqLLM.Test.Helpers.json_body()
+
+      [search, direct_encoded, deferred_encoded] = body["tools"]
+      assert search == %{"type" => "tool_search"}
+      assert direct_encoded["name"] == "direct_tool"
+      refute Map.has_key?(direct_encoded, "defer_loading")
+      assert deferred_encoded["name"] == "deferred_tool"
+      assert deferred_encoded["defer_loading"] == true
+    end
   end
 end

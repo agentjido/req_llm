@@ -144,6 +144,16 @@ defmodule ReqLLM.Providers.Anthropic do
 
       Example: %{max_uses: 3, allowed_domains: ["example.com"]}
       """
+    ],
+    tool_search: [
+      type: :map,
+      doc: """
+      Enable the server-side tool search tool so tools marked
+      `provider_options: [anthropic: [defer_loading: true]]` load on demand:
+      - `variant` - `:bm25` (natural-language queries, default) or `:regex`
+
+      Example: %{variant: :bm25}
+      """
     ]
   ]
 
@@ -1032,23 +1042,38 @@ defmodule ReqLLM.Providers.Anthropic do
     end
   end
 
+  # The breakpoint goes on the last tool that loads into context. Deferred
+  # tools (`defer_loading: true`) never enter the cached prefix, and the API
+  # rejects a deferred tool that carries `cache_control`.
   defp maybe_cache_tools(body, cache_meta) do
     case Map.get(body, :tools) do
       tools when is_list(tools) and tools != [] ->
-        {init, [last]} = Enum.split(tools, -1)
+        case Enum.find_index(Enum.reverse(tools), &(not deferred_tool?(&1))) do
+          nil ->
+            body
 
-        updated_last =
-          if Map.has_key?(last, :cache_control) or Map.has_key?(last, "cache_control") do
-            last
-          else
-            Map.put(last, :cache_control, cache_meta)
-          end
+          from_end ->
+            index = length(tools) - 1 - from_end
 
-        Map.put(body, :tools, init ++ [updated_last])
+            Map.put(
+              body,
+              :tools,
+              List.update_at(tools, index, &put_cache_control(&1, cache_meta))
+            )
+        end
 
       _ ->
         body
     end
+  end
+
+  defp deferred_tool?(tool),
+    do: Map.get(tool, :defer_loading) == true or Map.get(tool, "defer_loading") == true
+
+  defp put_cache_control(tool, cache_meta) do
+    if Map.has_key?(tool, :cache_control) or Map.has_key?(tool, "cache_control"),
+      do: tool,
+      else: Map.put(tool, :cache_control, cache_meta)
   end
 
   defp maybe_cache_system(body, cache_meta) do
@@ -1199,6 +1224,9 @@ defmodule ReqLLM.Providers.Anthropic do
     web_fetch_config =
       get_option(options, :web_fetch) || get_option(provider_opts, :web_fetch)
 
+    tool_search_config =
+      get_option(options, :tool_search) || get_option(provider_opts, :tool_search)
+
     # Build the tools list
     formatted_tools =
       if is_list(tools) and tools != [],
@@ -1212,7 +1240,12 @@ defmodule ReqLLM.Providers.Anthropic do
       ]
       |> Enum.reject(&is_nil/1)
 
-    all_tools = formatted_tools ++ server_tools
+    # The search tool leads the list, as in Anthropic's reference requests;
+    # deferred function tools follow and are expanded by the API on demand.
+    search_tools =
+      if is_map(tool_search_config), do: [build_tool_search_tool(tool_search_config)], else: []
+
+    all_tools = search_tools ++ formatted_tools ++ server_tools
 
     case all_tools do
       [] ->
@@ -1317,6 +1350,13 @@ defmodule ReqLLM.Providers.Anthropic do
   #     * `:blocked_domains` - List of domains to exclude
   #     * `:max_content_tokens` - Maximum content length in tokens
   #     * `:citations` - Map with `:enabled` boolean
+  defp build_tool_search_tool(config) when is_map(config) do
+    case Map.get(config, :variant, :bm25) do
+      :bm25 -> %{type: "tool_search_tool_bm25_20251119", name: "tool_search_tool_bm25"}
+      :regex -> %{type: "tool_search_tool_regex_20251119", name: "tool_search_tool_regex"}
+    end
+  end
+
   defp build_web_fetch_tool(config) when is_map(config) do
     base_tool = %{
       type: "web_fetch_20260209",

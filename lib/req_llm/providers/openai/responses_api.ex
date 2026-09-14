@@ -72,7 +72,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   require Logger
   require ReqLLM.Debug, as: Debug
 
-  @builtin_tool_types ~w(web_search web_search_preview file_search mcp x_search code_interpreter image_generation)
+  @builtin_tool_types ~w(web_search web_search_preview file_search mcp x_search code_interpreter image_generation tool_search)
   @tool_usage_type_atoms %{
     "web_search" => :web_search,
     "web_search_preview" => :web_search_preview,
@@ -1734,6 +1734,8 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
         normalize_parameters(function_def["parameters"])
       end
 
+    openai_options = ReqLLM.Tool.provider_options(tool, :openai)
+
     %{
       "type" => "function",
       "name" => function_def["name"],
@@ -1741,8 +1743,19 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
       "parameters" => params,
       "strict" => strict
     }
-    |> ReqLLM.Providers.OpenAI.Astra.put_async(ReqLLM.Tool.provider_options(tool, :openai))
+    |> ReqLLM.Providers.OpenAI.Astra.put_async(openai_options)
+    |> put_defer_loading(openai_options)
   end
+
+  # `defer_loading: true` keeps a function out of context until the model
+  # finds it through the `tool_search` built-in tool.
+  defp put_defer_loading(function, %{defer_loading: true}),
+    do: Map.put(function, "defer_loading", true)
+
+  defp put_defer_loading(function, %{"defer_loading" => true}),
+    do: Map.put(function, "defer_loading", true)
+
+  defp put_defer_loading(function, _options), do: function
 
   defp encode_tool_for_responses_api(tool_schema) when is_map(tool_schema) do
     tool_schema = stringify_keys(tool_schema)
