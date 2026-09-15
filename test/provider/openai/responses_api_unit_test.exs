@@ -1299,7 +1299,31 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
                "action" => %{"type" => "search", "query" => "elixir"}
              }
 
+      assert ReqLLM.ToolCall.metadata(tool_call) == %{status: "completed"}
       assert ReqLLM.Response.classify(resp.body).type == :final_answer
+    end
+
+    test "keeps a failed builtin call's status in its metadata, off the arguments" do
+      response_body = %{
+        "id" => "resp_123",
+        "model" => "gpt-5",
+        "status" => "completed",
+        "output" => [
+          %{
+            "type" => "web_search_call",
+            "id" => "ws_1",
+            "status" => "failed",
+            "action" => %{"type" => "search", "query" => "elixir"}
+          }
+        ],
+        "usage" => %{"input_tokens" => 5, "output_tokens" => 10}
+      }
+
+      {_req, resp} = ResponsesAPI.decode_response(build_response(200, response_body))
+
+      assert [tool_call] = resp.body.message.tool_calls
+      assert ReqLLM.ToolCall.metadata(tool_call) == %{status: "failed"}
+      refute Map.has_key?(Jason.decode!(tool_call.function.arguments), "status")
     end
 
     test "handles malformed tool call arguments" do
@@ -1909,7 +1933,29 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
       assert chunk.arguments == %{"action" => %{"query" => "elixir telemetry"}}
       assert chunk.metadata.id == "ws_1"
       assert chunk.metadata.builtin? == true
+      assert chunk.metadata.status == "completed"
       assert is_integer(chunk.metadata.done_at_unix_nano)
+    end
+
+    test "carries a failed builtin item's status on the tool call chunk", %{model: model} do
+      event = %{
+        data: %{
+          "event" => "response.output_item.done",
+          "output_index" => 0,
+          "item" => %{
+            "id" => "ws_1",
+            "type" => "web_search_call",
+            "action" => %{"query" => "elixir telemetry"},
+            "status" => "failed"
+          }
+        }
+      }
+
+      assert [%ReqLLM.StreamChunk{type: :tool_call} = chunk] =
+               ResponsesAPI.decode_stream_event(event, model)
+
+      assert chunk.metadata.status == "failed"
+      refute Map.has_key?(chunk.arguments, "status")
     end
 
     test "decodes atom-keyed builtin output item events", %{model: model} do

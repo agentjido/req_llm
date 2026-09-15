@@ -44,6 +44,17 @@ defmodule ReqLLM.Telemetry.RequestOptions do
     }
     |> Enum.reject(fn {_key, value} -> is_nil(value) end)
     |> Map.new()
+    |> Map.merge(codex_attribution(provider_opts))
+  end
+
+  defp codex_attribution(provider_opts) do
+    case Keyword.get(provider_opts, :openai_codex, provider_opts) do
+      options when is_list(options) ->
+        ReqLLM.Providers.OpenAICodex.TurnMetadata.telemetry(options)
+
+      _ ->
+        %{}
+    end
   end
 
   defp normalize_string_list(nil), do: nil

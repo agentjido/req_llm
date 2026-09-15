@@ -1,0 +1,167 @@
+{
+  "model_spec": "amazon_bedrock:global.anthropic.claude-haiku-4-5-20251001-v1:0",
+  "provider": "amazon_bedrock",
+  "request": {
+    "body": {
+      "b64": "eyJndWFyZHJhaWxDb25maWciOnsiZ3VhcmRyYWlsSWRlbnRpZmllciI6Imd1YXJkcmFpbDEyMzQiLCJndWFyZHJhaWxWZXJzaW9uIjoiRFJBRlQiLCJ0cmFjZSI6ImVuYWJsZWQifSwiaW5mZXJlbmNlQ29uZmlnIjp7Im1heFRva2VucyI6MTAwfSwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOlt7InRleHQiOiJTYXkgaGkgaW4gdHdvIHdvcmRzLiJ9XSwicm9sZSI6InVzZXIifV19"
+    },
+    "canonical_json": {
+      "guardrailConfig": {
+        "guardrailIdentifier": "guardrail1234",
+        "guardrailVersion": "DRAFT",
+        "trace": "enabled"
+      },
+      "inferenceConfig": {
+        "maxTokens": 100
+      },
+      "messages": [
+        {
+          "content": [
+            {
+              "text": "Say hi in two words."
+            }
+          ],
+          "role": "user"
+        }
+      ]
+    },
+    "headers": {
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "host": [
+        "bedrock-runtime.us-east-1.amazonaws.com"
+      ],
+      "user-agent": [
+        "req/0.7.4"
+      ],
+      "x-amz-content-sha256": [
+        "e12908c8e8b61122bf33634ac9814a4ec83ad5ddff00342796f4971d924ef140"
+      ],
+      "x-amz-date": [
+        "20260907T205828Z"
+      ],
+      "x-amz-security-token": [
+        "[REDACTED:x-amz-security-token]"
+      ]
+    },
+    "method": "post",
+    "url": "https://bedrock-runtime.us-east-1.amazonaws.com/model/global.anthropic.claude-haiku-4-5-20251001-v1:0/converse"
+  },
+  "response": {
+    "body": {
+      "metrics": {
+        "latencyMs": 1312
+      },
+      "output": {
+        "message": {
+          "content": [
+            {
+              "text": "Hey there."
+            }
+          ],
+          "role": "assistant"
+        }
+      },
+      "stopReason": "end_turn",
+      "trace": {
+        "guardrail": {
+          "actionReason": "No action.",
+          "inputAssessment": {
+            "guardrail1234": {
+              "appliedGuardrailDetails": {
+                "guardrailArn": "arn:aws:bedrock:us-east-1:123456789012:guardrail/guardrail1234",
+                "guardrailId": "guardrail1234",
+                "guardrailOrigin": [
+                  "REQUEST"
+                ],
+                "guardrailOwnership": "SELF",
+                "guardrailVersion": "DRAFT"
+              },
+              "invocationMetrics": {
+                "guardrailCoverage": {
+                  "textCharacters": {
+                    "guarded": 20,
+                    "total": 20
+                  }
+                },
+                "guardrailProcessingLatency": 198,
+                "usage": {
+                  "contentPolicyImageUnits": 0,
+                  "contentPolicyUnits": 0,
+                  "contextualGroundingPolicyUnits": 0,
+                  "sensitiveInformationPolicyFreeUnits": 0,
+                  "sensitiveInformationPolicyUnits": 0,
+                  "topicPolicyUnits": 1,
+                  "wordPolicyUnits": 0
+                }
+              }
+            }
+          },
+          "modelOutput": [],
+          "outputAssessments": {
+            "guardrail1234": [
+              {
+                "appliedGuardrailDetails": {
+                  "guardrailArn": "arn:aws:bedrock:us-east-1:123456789012:guardrail/guardrail1234",
+                  "guardrailId": "guardrail1234",
+                  "guardrailOrigin": [
+                    "REQUEST"
+                  ],
+                  "guardrailOwnership": "SELF",
+                  "guardrailVersion": "DRAFT"
+                },
+                "invocationMetrics": {
+                  "guardrailCoverage": {
+                    "textCharacters": {
+                      "guarded": 10,
+                      "total": 10
+                    }
+                  },
+                  "guardrailProcessingLatency": 208,
+                  "usage": {
+                    "contentPolicyImageUnits": 0,
+                    "contentPolicyUnits": 0,
+                    "contextualGroundingPolicyUnits": 0,
+                    "sensitiveInformationPolicyFreeUnits": 0,
+                    "sensitiveInformationPolicyUnits": 0,
+                    "topicPolicyUnits": 1,
+                    "wordPolicyUnits": 0
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
+      "usage": {
+        "cacheReadInputTokenCount": 0,
+        "cacheReadInputTokens": 0,
+        "inputTokens": 13,
+        "outputTokens": 6,
+        "serverToolUsage": {},
+        "totalTokens": 19
+      }
+    },
+    "headers": {
+      "connection": [
+        "keep-alive"
+      ],
+      "content-length": [
+        "1521"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Mon, 07 Sep 2026 20:58:30 GMT"
+      ],
+      "x-amzn-requestid": [
+        "8336ad25-0b59-4f70-bf26-d3a72046fea5"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

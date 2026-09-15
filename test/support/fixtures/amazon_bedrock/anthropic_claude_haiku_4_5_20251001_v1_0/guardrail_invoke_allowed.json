@@ -1,0 +1,184 @@
+{
+  "model_spec": "amazon_bedrock:global.anthropic.claude-haiku-4-5-20251001-v1:0",
+  "provider": "amazon_bedrock",
+  "request": {
+    "body": {
+      "b64": "eyJhbnRocm9waWNfdmVyc2lvbiI6ImJlZHJvY2stMjAyMy0wNS0zMSIsIm1heF90b2tlbnMiOjEwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJTYXkgaGkgaW4gdHdvIHdvcmRzLiIsInJvbGUiOiJ1c2VyIn1dfQ=="
+    },
+    "canonical_json": {
+      "anthropic_version": "bedrock-2023-05-31",
+      "max_tokens": 100,
+      "messages": [
+        {
+          "content": "Say hi in two words.",
+          "role": "user"
+        }
+      ]
+    },
+    "headers": {
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "host": [
+        "bedrock-runtime.us-east-1.amazonaws.com"
+      ],
+      "user-agent": [
+        "req/0.7.4"
+      ],
+      "x-amz-content-sha256": [
+        "d54deddf2a1449f24ccc055fdd541c5c34895d0cbda81710b4614c0b883b6f5b"
+      ],
+      "x-amz-date": [
+        "20260907T205823Z"
+      ],
+      "x-amz-security-token": [
+        "[REDACTED:x-amz-security-token]"
+      ],
+      "x-amzn-bedrock-guardrailidentifier": [
+        "guardrail1234"
+      ],
+      "x-amzn-bedrock-guardrailversion": [
+        "DRAFT"
+      ],
+      "x-amzn-bedrock-trace": [
+        "ENABLED"
+      ]
+    },
+    "method": "post",
+    "url": "https://bedrock-runtime.us-east-1.amazonaws.com/model/global.anthropic.claude-haiku-4-5-20251001-v1:0/invoke"
+  },
+  "response": {
+    "body": {
+      "amazon-bedrock-guardrailAction": "NONE",
+      "amazon-bedrock-trace": {
+        "guardrail": {
+          "actionReason": "No action.",
+          "input": {
+            "guardrail1234": {
+              "appliedGuardrailDetails": {
+                "guardrailArn": "arn:aws:bedrock:us-east-1:123456789012:guardrail/guardrail1234",
+                "guardrailId": "guardrail1234",
+                "guardrailOrigin": [
+                  "REQUEST"
+                ],
+                "guardrailOwnership": "SELF",
+                "guardrailVersion": "DRAFT"
+              },
+              "invocationMetrics": {
+                "guardrailCoverage": {
+                  "textCharacters": {
+                    "guarded": 20,
+                    "total": 20
+                  }
+                },
+                "guardrailProcessingLatency": 206,
+                "usage": {
+                  "automatedReasoningPolicies": 0,
+                  "automatedReasoningPolicyUnits": 0,
+                  "contentPolicyImageUnits": 0,
+                  "contentPolicyUnits": 0,
+                  "contextualGroundingPolicyUnits": 0,
+                  "sensitiveInformationPolicyFreeUnits": 0,
+                  "sensitiveInformationPolicyUnits": 0,
+                  "topicPolicyUnits": 1,
+                  "wordPolicyUnits": 0
+                }
+              }
+            }
+          },
+          "outputs": [
+            {
+              "guardrail1234": {
+                "appliedGuardrailDetails": {
+                  "guardrailArn": "arn:aws:bedrock:us-east-1:123456789012:guardrail/guardrail1234",
+                  "guardrailId": "guardrail1234",
+                  "guardrailOrigin": [
+                    "REQUEST"
+                  ],
+                  "guardrailOwnership": "SELF",
+                  "guardrailVersion": "DRAFT"
+                },
+                "invocationMetrics": {
+                  "guardrailCoverage": {
+                    "textCharacters": {
+                      "guarded": 10,
+                      "total": 10
+                    }
+                  },
+                  "guardrailProcessingLatency": 192,
+                  "usage": {
+                    "automatedReasoningPolicies": 0,
+                    "automatedReasoningPolicyUnits": 0,
+                    "contentPolicyImageUnits": 0,
+                    "contentPolicyUnits": 0,
+                    "contextualGroundingPolicyUnits": 0,
+                    "sensitiveInformationPolicyFreeUnits": 0,
+                    "sensitiveInformationPolicyUnits": 0,
+                    "topicPolicyUnits": 1,
+                    "wordPolicyUnits": 0
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      "content": [
+        {
+          "text": "Hey there.",
+          "type": "text"
+        }
+      ],
+      "id": "msg_bdrk_m3eh3kscbgb4ltxg55a54rgg3gzm2qv6mp7wgdty2emwahfzzpzq",
+      "model": "anthropic.claude-haiku-4-5-20251001-v1:0",
+      "role": "assistant",
+      "stop_details": null,
+      "stop_reason": "end_turn",
+      "stop_sequence": null,
+      "type": "message",
+      "usage": {
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 0,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "input_tokens": 13,
+        "output_tokens": 6,
+        "service_tier": "standard"
+      }
+    },
+    "headers": {
+      "connection": [
+        "keep-alive"
+      ],
+      "content-length": [
+        "1885"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Mon, 07 Sep 2026 20:58:24 GMT"
+      ],
+      "x-amzn-bedrock-cache-read-input-token-count": [
+        "0"
+      ],
+      "x-amzn-bedrock-input-token-count": [
+        "13"
+      ],
+      "x-amzn-bedrock-invocation-latency": [
+        "1286"
+      ],
+      "x-amzn-bedrock-output-token-count": [
+        "6"
+      ],
+      "x-amzn-requestid": [
+        "7a17af76-6f25-4db6-80f3-7a06e29bab37"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

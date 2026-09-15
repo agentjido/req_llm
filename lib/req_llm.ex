@@ -351,10 +351,10 @@ defmodule ReqLLM do
   end
 
   def model(spec) when is_binary(spec) do
-    case LLMDB.model(spec) do
-      {:ok, %LLMDB.Model{} = model} ->
-        {:ok, model}
-        |> maybe_restore_inference_prefix(spec)
+    case parse_string_model_spec(spec) do
+      {:ok, {provider, model_id}} ->
+        provider
+        |> resolve_catalog_model(model_id)
         |> normalize_model_result()
 
       {:error, _reason} = error ->
@@ -456,46 +456,15 @@ defmodule ReqLLM do
 
   defp normalize_model_result(other), do: other
 
-  # Bedrock cross-region inference profile prefixes.
-  # These are stripped by LLMDB during catalog lookup but must be preserved
-  # in API URLs for models that only support inference profiles (not on-demand).
-  @bedrock_inference_prefixes ~w(us eu ap apac ca au jp us-gov global)
+  defp apply_resolved_route(provider, resolved_id, model) do
+    case LLMDB.Spec.strip_prefix(provider, resolved_id) do
+      {_base_id, nil} ->
+        {:ok, model}
 
-  # When a Bedrock model is resolved from a spec like "amazon_bedrock:global.anthropic.claude-opus-4-6-v1",
-  # the LLMDB catalog lookup strips the inference profile prefix for matching.
-  # This function detects that specific case and restores the original prefixed
-  # model ID as provider_model_id so it's used in API URL construction.
-  #
-  # Scoped to Bedrock inference profile prefixes only — does NOT affect alias
-  # resolution for other providers (e.g., anthropic:claude-3-haiku resolving
-  # to claude-3-haiku-20240307 should NOT set provider_model_id).
-  defp maybe_restore_inference_prefix(
-         {:ok, %LLMDB.Model{provider: :amazon_bedrock} = model},
-         spec
-       )
-       when is_binary(spec) do
-    original_model_id = extract_model_id_from_spec(spec)
-
-    if original_model_id && has_inference_prefix?(original_model_id) do
-      {:ok, %{model | provider_model_id: original_model_id}}
-    else
-      {:ok, model}
-    end
-  end
-
-  defp maybe_restore_inference_prefix({:ok, %LLMDB.Model{}} = result, _spec), do: result
-
-  defp has_inference_prefix?(model_id) do
-    case String.split(model_id, ".", parts: 2) do
-      [prefix, _rest] -> prefix in @bedrock_inference_prefixes
-      _ -> false
-    end
-  end
-
-  defp extract_model_id_from_spec(spec) do
-    case String.split(spec, ":", parts: 2) do
-      [_provider, model_id] -> model_id
-      _ -> nil
+      {_base_id, prefix} ->
+        api_id = model.provider_model_id || resolved_id
+        {base_api_id, _api_prefix} = LLMDB.Spec.strip_prefix(provider, api_id)
+        {:ok, %{model | provider_model_id: prefix <> base_api_id}}
     end
   end
 
@@ -680,27 +649,50 @@ defmodule ReqLLM do
   defp maybe_put_map_value(map, key, value), do: Map.put(map, key, value)
 
   defp resolve_catalog_model(provider, model_id) do
-    case LLMDB.model(provider, model_id) do
-      {:ok, %LLMDB.Model{} = model} ->
-        {:ok, model}
+    case LLMDB.Spec.resolve({provider, model_id}) do
+      {:ok, {resolved_provider, resolved_id, %LLMDB.Model{} = model}} ->
+        apply_resolved_route(resolved_provider, resolved_id, model)
 
       {:error, _reason} = error ->
         resolve_provider_model_fallback(provider, model_id, error)
     end
   end
 
-  defp resolve_string_model_fallback(spec, original_error) do
-    case String.split(spec, ":", parts: 2) do
-      [provider_name, model_id] ->
-        case provider_atom_from_string(provider_name) do
-          {:ok, provider} -> resolve_provider_model_fallback(provider, model_id, original_error)
-          _ -> original_error
+  defp parse_string_model_spec(spec) do
+    format =
+      case String.split(spec, "@", parts: 2) do
+        [_model_id, provider_name] ->
+          case provider_atom_from_string(String.trim(provider_name)) do
+            {:ok, _provider} -> [format: :at]
+            _ -> []
+          end
+
+        _ ->
+          []
+      end
+
+    LLMDB.Spec.parse_spec(spec, format)
+  end
+
+  defp resolve_string_model_fallback(spec, {:error, :unknown_provider} = original_error) do
+    candidates = [
+      String.split(spec, "@", parts: 2),
+      Enum.reverse(String.split(spec, ":", parts: 2))
+    ]
+
+    Enum.find_value(candidates, original_error, fn
+      [model_id, provider_name] ->
+        case provider_atom_from_string(String.trim(provider_name)) do
+          {:ok, provider} -> resolve_catalog_model(provider, String.trim(model_id))
+          _ -> nil
         end
 
       _ ->
-        original_error
-    end
+        nil
+    end)
   end
+
+  defp resolve_string_model_fallback(_spec, original_error), do: original_error
 
   defp resolve_provider_model_fallback(:openai_codex, model_id, _original_error) do
     case LLMDB.model(:openai, model_id) do

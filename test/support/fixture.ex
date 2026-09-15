@@ -109,7 +109,7 @@ defmodule ReqLLM.Step.Fixture.Backend do
         end
       else
         Logger.debug("Fixture REPLAY mode - loading from #{Path.relative_to_cwd(path)}")
-        {:ok, response} = handle_replay(path, model)
+        {:ok, response} = handle_replay(path, model, request)
         Logger.debug("Fixture loaded successfully, status=#{response.status}")
 
         request = Req.Request.put_private(request, :llm_fixture_replay, true)
@@ -159,11 +159,13 @@ defmodule ReqLLM.Step.Fixture.Backend do
   # Replay branch
   # ---------------------------------------------------------------------------
   @doc """
-  Load a fixture file and return it as a Req.Response.
-
-  This function is public to support credential fallback in generation.ex.
+  Load a fixture file after the recorded request matches the current request.
   """
-  def handle_replay(path, model) do
+  def handle_replay(path, model, %Req.Request{} = request) do
+    load_replay(path, model, request)
+  end
+
+  defp load_replay(path, model, request) do
     if !File.exists?(path) do
       raise """
       Fixture not found: #{path}
@@ -173,6 +175,8 @@ defmodule ReqLLM.Step.Fixture.Backend do
 
     case ReqLLM.Test.VCR.load(path) do
       {:ok, transcript} ->
+        verify_replay_request!(transcript, request, path)
+
         body =
           if ReqLLM.Test.VCR.streaming?(transcript) do
             provider_mod = provider_module(model.provider)
@@ -194,6 +198,120 @@ defmodule ReqLLM.Step.Fixture.Backend do
         Delete and regenerate with REQ_LLM_FIXTURES_MODE=record.
         """
     end
+  end
+
+  defp verify_replay_request!(transcript, request, path) do
+    recorded = comparable_recorded_request(transcript.request)
+    current = comparable_current_request(request)
+
+    case first_difference(recorded, current, "$") do
+      nil ->
+        :ok
+
+      {field, recorded_value, current_value} ->
+        raise """
+        Fixture request mismatch: #{Path.relative_to_cwd(path)}
+        Field: #{field}
+        Recorded: #{format_difference_value(recorded_value)}
+        Current: #{format_difference_value(current_value)}
+        Record the fixture again only when this request change is expected.
+        """
+    end
+  end
+
+  defp comparable_recorded_request(request) do
+    %{
+      "method" => normalize_method(request_value(request, :method)),
+      "url" => normalize_url(request_value(request, :url)),
+      "canonical_json" =>
+        request
+        |> request_value(:canonical_json)
+        |> unwrap_legacy_canonical_json()
+        |> normalize_json()
+    }
+  end
+
+  defp comparable_current_request(request) do
+    %{
+      "method" => normalize_method(request.method),
+      "url" => normalize_url(request.url),
+      "canonical_json" => normalize_json(request.private[:llm_canonical_json])
+    }
+  end
+
+  defp normalize_method(method), do: method |> to_string() |> String.downcase()
+
+  defp request_value(request, key), do: Map.get(request, key) || Map.get(request, to_string(key))
+
+  defp unwrap_legacy_canonical_json(%{"canonical_json" => value} = json)
+       when map_size(json) == 1,
+       do: value
+
+  defp unwrap_legacy_canonical_json(%{canonical_json: value} = json) when map_size(json) == 1,
+    do: value
+
+  defp unwrap_legacy_canonical_json(json), do: json
+
+  defp normalize_url(url) do
+    url
+    |> to_string()
+    |> ReqLLM.Provider.Utils.sanitize_url()
+  end
+
+  defp normalize_json(json) when is_binary(json) do
+    case Jason.decode(json) do
+      {:ok, decoded} -> decoded
+      {:error, _error} -> json
+    end
+  end
+
+  defp normalize_json(json) do
+    with {:ok, encoded} <- Jason.encode(json),
+         {:ok, decoded} <- Jason.decode(encoded) do
+      decoded
+    else
+      _error -> json
+    end
+  end
+
+  defp first_difference(left, right, _path) when left == right, do: nil
+
+  defp first_difference(left, right, path) when is_map(left) and is_map(right) do
+    left
+    |> Map.keys()
+    |> Kernel.++(Map.keys(right))
+    |> Enum.uniq()
+    |> Enum.sort_by(&to_string/1)
+    |> Enum.find_value(fn key ->
+      cond do
+        not Map.has_key?(left, key) -> {append_path(path, key), :missing, right[key]}
+        not Map.has_key?(right, key) -> {append_path(path, key), left[key], :missing}
+        true -> first_difference(left[key], right[key], append_path(path, key))
+      end
+    end)
+  end
+
+  defp first_difference(left, right, path) when is_list(left) and is_list(right) do
+    if length(left) == length(right) do
+      left
+      |> Enum.zip(right)
+      |> Enum.with_index()
+      |> Enum.find_value(fn {{left_item, right_item}, index} ->
+        first_difference(left_item, right_item, "#{path}[#{index}]")
+      end)
+    else
+      {"#{path}.length", length(left), length(right)}
+    end
+  end
+
+  defp first_difference(left, right, path), do: {path, left, right}
+
+  defp append_path(path, key), do: "#{path}.#{key}"
+
+  defp format_difference_value(value) do
+    value
+    |> inspect(limit: 10, printable_limit: 240)
+    |> String.slice(0, 300)
   end
 
   defp provider_module(provider), do: ReqLLM.Providers.get!(provider)
@@ -558,7 +676,7 @@ defmodule ReqLLM.Step.Fixture.Backend do
       """)
 
       # Load fixture and return as if we succeeded
-      {:ok, response} = handle_replay(fixture_path, model)
+      {:ok, response} = handle_replay(fixture_path, model, request)
       # Return success - this stops error propagation
       {request, response}
     else

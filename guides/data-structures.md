@@ -121,6 +121,7 @@ Typed content elements that compose a `Message`. Common variants:
 - `image/2`: `ContentPart.image(binary, "image/png")`
 - `image/3`: `ContentPart.image(binary, "image/png", metadata)` with metadata
 - `file/3`: `ContentPart.file(binary, "name.ext", "mime/type")`
+- `file/4`: `ContentPart.file(binary, "name.ext", "mime/type", metadata)` with metadata
 - `file_id/1`: `ContentPart.file_id("file_123")` for a legacy unowned provider reference
 - `owned_file_id/3`: `ContentPart.owned_file_id("file_123", :openai, purpose: :assistants)`
   for an explicitly provider-owned reference
@@ -141,6 +142,10 @@ parts = [
 The `metadata` field allows passing provider-specific attributes through to the wire format. Currently supported metadata keys:
 
 - `cache_control`: Anthropic prompt caching control (e.g., `%{type: "ephemeral"}`)
+- `title`, `context`: document name and context for `file` parts (Amazon Bedrock Converse; Anthropic file references)
+- `citations`: `true` asks for document citations (Amazon Bedrock Converse)
+- `bucket_owner`: account that owns the bucket of an `s3://` source (Amazon Bedrock Converse)
+- `guard_content`: Amazon Bedrock guardrail selection on the Converse API (`true` or `%{qualifiers: [...]}`)
 
 ```elixir
 # Enable prompt caching for text content

@@ -1,0 +1,142 @@
+{
+  "model_spec": "amazon_bedrock:global.anthropic.claude-haiku-4-5-20251001-v1:0",
+  "provider": "amazon_bedrock",
+  "request": {
+    "body": {
+      "b64": "eyJhZGRpdGlvbmFsTW9kZWxSZXF1ZXN0RmllbGRzIjp7InRoaW5raW5nIjp7ImJ1ZGdldF90b2tlbnMiOjEwMjQsInR5cGUiOiJlbmFibGVkIn19LCJpbmZlcmVuY2VDb25maWciOnsibWF4VG9rZW5zIjoyMDQ4fSwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOlt7InRleHQiOiJXaGF0IGlzIHRoZSBiYWxhbmNlIG9mIGFjY291bnQgYWNjXzE/In1dLCJyb2xlIjoidXNlciJ9XSwic3lzdGVtIjpbeyJ0ZXh0IjoiVXNlIHRoZSB0b29sLCB0aGVuIGFuc3dlciB3aXRoIHRoZSBudW1iZXIgb25seS4ifV0sInRvb2xDb25maWciOnsidG9vbHMiOlt7InRvb2xTcGVjIjp7ImRlc2NyaXB0aW9uIjoiQ3VycmVudCBiYWxhbmNlIGZvciBhbiBhY2NvdW50IGlkIiwiaW5wdXRTY2hlbWEiOnsianNvbiI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnsiYWNjb3VudF9pZCI6eyJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJhY2NvdW50X2lkIl0sInR5cGUiOiJvYmplY3QifX0sIm5hbWUiOiJnZXRfYmFsYW5jZSJ9fV19fQ=="
+    },
+    "canonical_json": {
+      "additionalModelRequestFields": {
+        "thinking": {
+          "budget_tokens": 1024,
+          "type": "enabled"
+        }
+      },
+      "inferenceConfig": {
+        "maxTokens": 2048
+      },
+      "messages": [
+        {
+          "content": [
+            {
+              "text": "What is the balance of account acc_1?"
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "system": [
+        {
+          "text": "Use the tool, then answer with the number only."
+        }
+      ],
+      "toolConfig": {
+        "tools": [
+          {
+            "toolSpec": {
+              "description": "Current balance for an account id",
+              "inputSchema": {
+                "json": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "account_id": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "account_id"
+                  ],
+                  "type": "object"
+                }
+              },
+              "name": "get_balance"
+            }
+          }
+        ]
+      }
+    },
+    "headers": {
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "host": [
+        "bedrock-runtime.us-east-1.amazonaws.com"
+      ],
+      "user-agent": [
+        "req/0.7.4"
+      ],
+      "x-amz-content-sha256": [
+        "029ecb0d436246637da907858733dca339db155697794c54375cde2cf1882275"
+      ],
+      "x-amz-date": [
+        "20260909T062351Z"
+      ],
+      "x-amz-security-token": [
+        "[REDACTED:x-amz-security-token]"
+      ]
+    },
+    "method": "post",
+    "url": "https://bedrock-runtime.us-east-1.amazonaws.com/model/global.anthropic.claude-haiku-4-5-20251001-v1:0/converse"
+  },
+  "response": {
+    "body": {
+      "metrics": {
+        "latencyMs": 1185
+      },
+      "output": {
+        "message": {
+          "content": [
+            {
+              "reasoningContent": {
+                "reasoningText": {
+                  "signature": "EuoDCoQBCBEQARgCKkCgz3Z9Cj2HXWouKIYnHTPGs8DgJGxuL67rxKGTGyFY0cSFyun2dalPmowatttcc3uZzdXinrw3DHng3Ux+q0xpMhljbGF1ZGUtaGFpa3UtNC01LTIwMjUxMDAxOABCCHRoaW5raW5nWgwxMjM0NTY3ODkwMTKoAfn2g9UGEgza9M7OfojnvVCB+qkaDAhrMfZc6WeZROb2RCIwRmnaUFc0RHkCl2b6kZt0w9ciZWzG0W3LcoRV09aTGJ1XrR8nDDTLNQ897Cp/liKYKpICPK0KAlxkNNTve3ykLRImm4p0IEuXrDwhMnRYOjGKr1d1TUL/lt8C0pvH4eXNkq8htkdx8CXAjJCYPh0WwjUCroj4qrqqlRRtFjBTY2qEwf5ZAXUJZy4R7Y1W5leMbwnrymb4b4UNog+mJGWz5zFyKCrvdUyYaQEghiuy0Gat7ajdiVmJZhepiLChwIFmIssLMFUc5adM3xPKDzzSzQ6Bq/3vzxItWHOWDWK/HcGCUkZO03L81zJXUHEgtxBMgFjtmeZj3RwpSmQR7qbBSa9DoG+86WXmcTCJ1tIm1dYE+hN4EIhubXgYOMV3KZLOvcZvt3zerZumDtx2Y0UwBYAALFjyhI8NzFHCq3N8kcQ2+3ZUMBgB",
+                  "text": "The user is asking for the balance of account \"acc_1\". I have a function available called \"get_balance\" that takes an account_id as a parameter. The user has provided the account_id as \"acc_1\", so I have all the information I need to make this function call."
+                }
+              }
+            },
+            {
+              "toolUse": {
+                "input": {
+                  "account_id": "acc_1"
+                },
+                "name": "get_balance",
+                "toolUseId": "tooluse_dESTIFFidU5NcgXThviwQf",
+                "type": "tool_use"
+              }
+            }
+          ],
+          "role": "assistant"
+        }
+      },
+      "stopReason": "tool_use",
+      "usage": {
+        "cacheReadInputTokenCount": 0,
+        "cacheReadInputTokens": 0,
+        "inputTokens": 620,
+        "outputTokens": 128,
+        "serverToolUsage": {},
+        "totalTokens": 748
+      }
+    },
+    "headers": {
+      "connection": [
+        "keep-alive"
+      ],
+      "content-length": [
+        "1367"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Wed, 09 Sep 2026 06:23:53 GMT"
+      ],
+      "x-amzn-requestid": [
+        "7403539b-08d8-44fd-ab8f-b40724b5a139"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

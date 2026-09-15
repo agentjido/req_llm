@@ -1,0 +1,101 @@
+{
+  "model_spec": "amazon_bedrock:global.anthropic.claude-haiku-4-5-20251001-v1:0",
+  "provider": "amazon_bedrock",
+  "request": {
+    "body": {
+      "b64": "eyJpbmZlcmVuY2VDb25maWciOnsibWF4VG9rZW5zIjoyNTZ9LCJtZXNzYWdlcyI6W3siY29udGVudCI6W3sidGV4dCI6IldoYXQncyBpbiB0aGlzIGRvY3VtZW50PyBRdW90ZSBpdHMgdGV4dC4ifSx7ImRvY3VtZW50Ijp7ImZvcm1hdCI6InBkZiIsIm5hbWUiOiJNeURvY3VtZW50Iiwic291cmNlIjp7ImJ5dGVzIjoiSlZCRVJpMHhMalFLTVNBd0lHOWlhZ284UEFvdlZIbHdaU0F2UTJGMFlXeHZad292VUdGblpYTWdNaUF3SUZJS1BqNEtaVzVrYjJKcUNqSWdNQ0J2WW1vS1BEd0tMMVI1Y0dVZ0wxQmhaMlZ6Q2k5TGFXUnpJRnN6SURBZ1VsMEtMME52ZFc1MElERUtQajRLWlc1a2IySnFDak1nTUNCdlltb0tQRHdLTDFSNWNHVWdMMUJoWjJVS0wxQmhjbVZ1ZENBeUlEQWdVZ292VW1WemIzVnlZMlZ6SUR3OENpOUdiMjUwSUR3OENpOUdNU0E4UEFvdlZIbHdaU0F2Um05dWRBb3ZVM1ZpZEhsd1pTQXZWSGx3WlRFS0wwSmhjMlZHYjI1MElDOUlaV3gyWlhScFkyRUtQajRLUGo0S1BqNEtMMDFsWkdsaFFtOTRJRnN3SURBZ05qRXlJRGM1TWwwS0wwTnZiblJsYm5SeklEUWdNQ0JTQ2o0K0NtVnVaRzlpYWdvMElEQWdiMkpxQ2p3OENpOU1aVzVuZEdnZ05EUUtQajRLYzNSeVpXRnRDa0pVQ2k5R01TQXhNaUJVWmdveE1EQWdOekF3SUZSa0NpaFVaWE4wSUZCRVJpQkViMk4xYldWdWRDa2dWR29LUlZRS1pXNWtjM1J5WldGdENtVnVaRzlpYWdwNGNtVm1DakFnTlFvd01EQXdNREF3TURBd0lEWTFOVE0xSUdZS01EQXdNREF3TURBd09TQXdNREF3TUNCdUNqQXdNREF3TURBd05UZ2dNREF3TURBZ2Jnb3dNREF3TURBd01URTFJREF3TURBd0lHNEtNREF3TURBd01ETXhOQ0F3TURBd01DQnVDblJ5WVdsc1pYSUtQRHdLTDFOcGVtVWdOUW92VW05dmRDQXhJREFnVWdvK1BncHpkR0Z5ZEhoeVpXWUtOREEzQ2lVbFJVOUdDZz09In19fV0sInJvbGUiOiJ1c2VyIn1dfQ=="
+    },
+    "canonical_json": {
+      "inferenceConfig": {
+        "maxTokens": 256
+      },
+      "messages": [
+        {
+          "content": [
+            {
+              "text": "What's in this document? Quote its text."
+            },
+            {
+              "document": {
+                "format": "pdf",
+                "name": "MyDocument",
+                "source": {
+                  "bytes": "JVBERi0xLjQKMSAwIG9iago8PAovVHlwZSAvQ2F0YWxvZwovUGFnZXMgMiAwIFIKPj4KZW5kb2JqCjIgMCBvYmoKPDwKL1R5cGUgL1BhZ2VzCi9LaWRzIFszIDAgUl0KL0NvdW50IDEKPj4KZW5kb2JqCjMgMCBvYmoKPDwKL1R5cGUgL1BhZ2UKL1BhcmVudCAyIDAgUgovUmVzb3VyY2VzIDw8Ci9Gb250IDw8Ci9GMSA8PAovVHlwZSAvRm9udAovU3VidHlwZSAvVHlwZTEKL0Jhc2VGb250IC9IZWx2ZXRpY2EKPj4KPj4KPj4KL01lZGlhQm94IFswIDAgNjEyIDc5Ml0KL0NvbnRlbnRzIDQgMCBSCj4+CmVuZG9iago0IDAgb2JqCjw8Ci9MZW5ndGggNDQKPj4Kc3RyZWFtCkJUCi9GMSAxMiBUZgoxMDAgNzAwIFRkCihUZXN0IFBERiBEb2N1bWVudCkgVGoKRVQKZW5kc3RyZWFtCmVuZG9iagp4cmVmCjAgNQowMDAwMDAwMDAwIDY1NTM1IGYKMDAwMDAwMDAwOSAwMDAwMCBuCjAwMDAwMDAwNTggMDAwMDAgbgowMDAwMDAwMTE1IDAwMDAwIG4KMDAwMDAwMDMxNCAwMDAwMCBuCnRyYWlsZXIKPDwKL1NpemUgNQovUm9vdCAxIDAgUgo+PgpzdGFydHhyZWYKNDA3CiUlRU9GCg=="
+                }
+              }
+            }
+          ],
+          "role": "user"
+        }
+      ]
+    },
+    "headers": {
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "host": [
+        "bedrock-runtime.us-east-1.amazonaws.com"
+      ],
+      "user-agent": [
+        "req/0.7.4"
+      ],
+      "x-amz-content-sha256": [
+        "39fbe91e763b6b468cffeb0a5bcc9c8032adb41c0891217a52c53f4d8d334dc4"
+      ],
+      "x-amz-date": [
+        "20260911T142515Z"
+      ],
+      "x-amz-security-token": [
+        "[REDACTED:x-amz-security-token]"
+      ]
+    },
+    "method": "post",
+    "url": "https://bedrock-runtime.us-east-1.amazonaws.com/model/global.anthropic.claude-haiku-4-5-20251001-v1:0/converse"
+  },
+  "response": {
+    "body": {
+      "metrics": {
+        "latencyMs": 1594
+      },
+      "output": {
+        "message": {
+          "content": [
+            {
+              "text": "# Document Contents\n\nThis is a simple PDF document titled \"Test PDF Document\". \n\n**Text quote from the document:**\n\n> \"Test PDF Document\"\n\nThe document appears to be a basic test file with minimal content—just the title text on page 1 with mostly blank space below it."
+            }
+          ],
+          "role": "assistant"
+        }
+      },
+      "stopReason": "end_turn",
+      "usage": {
+        "cacheReadInputTokenCount": 0,
+        "cacheReadInputTokens": 0,
+        "inputTokens": 1606,
+        "outputTokens": 65,
+        "serverToolUsage": {},
+        "totalTokens": 1671
+      }
+    },
+    "headers": {
+      "connection": [
+        "keep-alive"
+      ],
+      "content-length": [
+        "543"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 11 Sep 2026 14:25:18 GMT"
+      ],
+      "x-amzn-requestid": [
+        "71586593-effd-4e02-ab8c-86419cb539d0"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

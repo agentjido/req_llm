@@ -272,6 +272,33 @@ defmodule ReqLLM.OpenTelemetry.TranslatorTest do
       assert_receive {:end_span, :parent_span}
     end
 
+    test "sets the error status on a failed child span" do
+      stub = %{
+        attributes: %{},
+        status: :ok,
+        events: [],
+        metrics: [],
+        tool_spans: [
+          %{
+            name: "execute_tool web_search_call",
+            kind: :internal,
+            status: {:error, "builtin tool call failed"},
+            start_time: nil,
+            end_time: nil,
+            attributes: %{"error.type" => "failed"}
+          }
+        ]
+      }
+
+      Translator.apply_terminal(:parent_span, stub, ChildSpanAdapter, test_pid: self())
+
+      assert_receive {:start_child_span, :parent_span, "execute_tool web_search_call", attrs, _}
+      assert attrs[:"error.type"] == "failed"
+      assert_receive {:set_status, :child_span_handle, :error, "builtin tool call failed"}
+      assert_receive {:end_span, :child_span_handle}
+      assert_receive {:end_span, :parent_span}
+    end
+
     test "skips metric recording when metrics_enabled? is false" do
       stub = %{
         attributes: %{},

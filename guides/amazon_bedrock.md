@@ -173,19 +173,60 @@ Passed via `:provider_options` keyword:
 - **Example**: `provider_options: [additional_model_request_fields: %{thinking: %{type: "enabled", budget_tokens: 4096}}]`
 - **Use Case**: Claude extended thinking configuration
 
-### Claude-Specific Options
+### `guardrail_identifier`
 
-#### `anthropic_prompt_cache`
+- **Type**: String
+- **Purpose**: [Amazon Bedrock Guardrail](https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails.html) ID or ARN applied to the request (bedrock-runtime only)
+- **Example**: `provider_options: [guardrail_identifier: "abc123def456", guardrail_version: "1"]`
 
-- **Type**: Boolean
-- **Purpose**: Enable Anthropic prompt caching for Claude models
-- **Example**: `provider_options: [anthropic_prompt_cache: true]`
+### `guardrail_version`
 
-#### `anthropic_prompt_cache_ttl`
+- **Type**: String
+- **Purpose**: Guardrail version, `"DRAFT"` or a published number. Required with `guardrail_identifier`
+- **Example**: `provider_options: [guardrail_identifier: "abc123def456", guardrail_version: "DRAFT"]`
 
-- **Type**: String (e.g., `"1h"`)
-- **Purpose**: Cache TTL (default ~5min if omitted)
-- **Example**: `provider_options: [anthropic_prompt_cache_ttl: "1h"]`
+### `guardrail_trace`
+
+- **Type**: `"enabled"` | `"disabled"` | `"enabled_full"`
+- **Purpose**: How much guardrail assessment detail Bedrock returns
+- **Example**: `provider_options: [guardrail_identifier: "abc123def456", guardrail_version: "1", guardrail_trace: "enabled"]`
+
+### Prompt Caching
+
+ReqLLM emits `cachePoint` blocks on Converse and `cache_control` on InvokeModel and the Mantle Messages API. On Converse, `cache_control` metadata on a content part or a message adds an explicit checkpoint without enabling automatic caching, and a hint on a tool result lands after the enclosing result. Automatic tools checkpoints are skipped for `amazon.*` model ids. Caching does not change routing. Cache reads appear in `usage.cached_tokens`, writes in `usage.cache_creation_tokens`, and AWS's `cacheDetails` under `provider_meta.cache_details`. The `anthropic_*` names remain aliases. Model support, limits and TTLs are in [AWS prompt caching](https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-caching.html).
+
+- `prompt_cache`: enable automatic checkpoints after the tools and the system prompt.
+- `prompt_cache_ttl`: `"5m"` or `"1h"` for automatic checkpoints; omitted when unset.
+- `cache_messages`: also mark a message; `true` or `-1` the last, `0` the first.
+
+```elixir
+ReqLLM.generate_text(model, context,
+  provider_options: [use_converse: true, prompt_cache: true, prompt_cache_ttl: "1h", cache_messages: true]
+)
+```
+
+## Attachments
+
+On the Converse API, `file`, `image`, `image_url` and `video_url` parts are sent as [document, image and video blocks](https://docs.aws.amazon.com/bedrock/latest/userguide/conversation-inference.html#converse-messages) according to their media type. A message with a document must also have a related text prompt. Attachments are not supported in system prompts. A document is named after its `title` metadata or its filename. If that name is empty after cleanup, ReqLLM uses `Document`. Sources are inline bytes or an `s3://` URL, with `bucket_owner` metadata when another account owns the bucket. `citations: true` metadata enables document citations, returned through `ReqLLM.Response.annotations/1`. Each citation includes `"start_index"` (inclusive) and `"end_index"` (exclusive) in the generated text returned by `ReqLLM.Response.text/1`. These zero-based offsets count Unicode code points. The original `"location"` still refers to the source document. Streamed citations are emitted when the cited text block ends, so their ranges are complete.
+
+## Guarding content parts
+
+On the Converse API, `guard_content` metadata on a content part wraps it in a `guardContent` block. Which policies then skip the unmarked parts is up to the guardrail, see [selective guarding](https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-use-converse-api.html#guardrails-use-converse-api-call-message).
+
+```elixir
+ReqLLM.generate_text(
+  model,
+  ReqLLM.Context.user([
+    ReqLLM.Message.ContentPart.text("London is the capital of UK. Tokyo is the capital of Japan.",
+      %{guard_content: %{qualifiers: [:grounding_source]}}
+    ),
+    ReqLLM.Message.ContentPart.text("What is the capital of Japan?", %{guard_content: %{qualifiers: [:query]}})
+  ]),
+  provider_options: [use_converse: true, guardrail_identifier: "abc123def456", guardrail_version: "1"]
+)
+```
+
+Text and PNG or JPEG image parts, in messages and system prompts. InvokeModel has no equivalent, so the hint is ignored there.
 
 ## Supported Model Families
 

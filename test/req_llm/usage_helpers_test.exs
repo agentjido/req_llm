@@ -98,6 +98,33 @@ defmodule ReqLLM.UsageHelpersTest do
              }
     end
 
+    test "normalize handles mixed, missing, and malformed counters safely" do
+      usage =
+        ReqLLM.Usage.normalize(%{
+          "prompt_tokens" => "bad",
+          "total_tokens" => "unknown",
+          "prompt_tokens_details" => %{"cached_tokens" => "2"}
+        })
+
+      assert usage.input_tokens == "bad"
+      assert usage.output_tokens == 0
+      assert usage.total_tokens == "unknown"
+      assert usage.cached_tokens == 0
+    end
+
+    test "normalize derives a total when only the explicit total is malformed" do
+      usage =
+        ReqLLM.Usage.normalize(%{
+          "prompt_tokens" => "3",
+          "completion_tokens" => 1,
+          "total_tokens" => "unknown"
+        })
+
+      assert usage.input_tokens == 3
+      assert usage.output_tokens == 1
+      assert usage.total_tokens == 4
+    end
+
     test "merge takes max of numeric fields" do
       message_start = %{input_tokens: 1500, output_tokens: 1, total_tokens: 1501}
       message_delta = %{input_tokens: 0, output_tokens: 393, total_tokens: 393}
@@ -153,6 +180,88 @@ defmodule ReqLLM.UsageHelpersTest do
 
       assert merged.input_tokens == 10
       assert merged.output_tokens == 5
+    end
+
+    test "merge normalizes numeric-string counters" do
+      merged =
+        ReqLLM.Usage.merge(%{}, %{
+          input_tokens: "3",
+          output_tokens: "1",
+          total_tokens: "4"
+        })
+
+      assert merged.input_tokens == 3
+      assert merged.output_tokens == 1
+      assert merged.total_tokens == 4
+      assert merged.input == 3
+      assert merged.output == 1
+    end
+
+    test "merge normalizes mixed numeric and string counters" do
+      merged =
+        ReqLLM.Usage.merge(
+          %{input_tokens: 2, output_tokens: "1"},
+          %{input_tokens: "3", output_tokens: 2, total_tokens: "5"}
+        )
+
+      assert merged.input_tokens == 3
+      assert merged.output_tokens == 2
+      assert merged.total_tokens == 5
+    end
+
+    test "merge preserves explicit zeros and cumulative maxima from one model call" do
+      merged =
+        Enum.reduce(
+          [
+            %{input_tokens: "0", output_tokens: "0", total_tokens: "0"},
+            %{input_tokens: "8", output_tokens: "4", total_tokens: "12"},
+            %{input_tokens: "3", output_tokens: "1", total_tokens: "4"}
+          ],
+          %{},
+          &ReqLLM.Usage.merge(&2, &1)
+        )
+
+      assert merged.input_tokens == 8
+      assert merged.output_tokens == 4
+      assert merged.total_tokens == 12
+    end
+
+    test "callers can add usage from separate model calls" do
+      calls = [
+        ReqLLM.Usage.merge(%{}, %{input_tokens: "3", output_tokens: "1"}),
+        ReqLLM.Usage.merge(%{}, %{input_tokens: "2", output_tokens: "4"})
+      ]
+
+      total = Enum.sum(Enum.map(calls, & &1.total_tokens))
+
+      assert total == 10
+    end
+
+    test "merge keeps malformed counters visible and out of arithmetic" do
+      merged =
+        ReqLLM.Usage.merge(%{}, %{
+          input_tokens: "not-a-number",
+          output_tokens: 1,
+          total_tokens: "unknown"
+        })
+
+      assert merged.input_tokens == "not-a-number"
+      assert merged.output_tokens == 1
+      assert merged.total_tokens == "unknown"
+      assert merged.input == "not-a-number"
+      assert merged.output == 1
+    end
+
+    test "malformed or missing counters do not replace valid cumulative values" do
+      merged =
+        ReqLLM.Usage.merge(
+          %{input_tokens: 8, output_tokens: 4, total_tokens: 12},
+          %{input_tokens: "bad", output_tokens: nil}
+        )
+
+      assert merged.input_tokens == 8
+      assert merged.output_tokens == 4
+      assert merged.total_tokens == 12
     end
   end
 

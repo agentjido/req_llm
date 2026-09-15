@@ -286,6 +286,11 @@ defmodule ReqLLM.Providers.Azure do
       type: :any,
       doc: "Maximum output tokens (OpenAI Responses API models)"
     ],
+    include: [
+      type: {:list, :string},
+      doc:
+        "Responses API include values, such as reasoning.encrypted_content for reasoning signatures or web_search_call.action.sources for the sources a web search consulted (OpenAI Responses API models only)"
+    ],
     verbosity: [
       type: {:or, [:atom, :string]},
       doc:

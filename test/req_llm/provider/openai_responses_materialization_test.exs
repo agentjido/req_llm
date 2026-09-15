@@ -266,7 +266,11 @@ defmodule ReqLLM.Provider.OpenAIResponsesMaterializationTest do
     assert ToolCall.args_json(scalar) == ~s("draft")
     assert ToolCall.args_json(empty) == "{}"
     assert ToolCall.args_map(builtin) == %{"action" => %{"query" => "docs", "type" => "search"}}
-    assert Enum.all?(response.message.tool_calls, &(ToolCall.metadata(&1) == %{}))
+    # Function calls carry no metadata; the builtin call keeps only the
+    # provider status the OTel tool span reads.
+    assert Enum.map(response.message.tool_calls, &ToolCall.metadata/1) ==
+             [%{}, %{}, %{}, %{status: "completed"}]
+
     assert ToolCall.builtin?(builtin)
     assert response.context == Context.new(context.messages ++ [response.message])
 

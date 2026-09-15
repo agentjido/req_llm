@@ -656,4 +656,54 @@ defmodule ReqLLM.Providers.AmazonBedrock.AnthropicTest do
       assert is_nil(parsed.object)
     end
   end
+
+  describe "prompt caching bridge" do
+    @model "anthropic.claude-3-5-sonnet-20241022-v2:0"
+
+    test "generic options produce cache_control on system, tools, and message" do
+      context = Context.new([Context.system("Stable system"), Context.user("Hello")])
+
+      tool =
+        ReqLLM.Tool.new!(
+          name: "lookup",
+          description: "Lookup",
+          parameter_schema: [],
+          callback: fn _ -> {:ok, "x"} end
+        )
+
+      body =
+        Anthropic.format_request(@model, context,
+          tools: [tool],
+          prompt_cache: true,
+          prompt_cache_ttl: "1h",
+          cache_messages: true
+        )
+
+      assert [%{cache_control: %{type: "ephemeral", ttl: "1h"}}] = body[:system]
+      assert %{cache_control: %{type: "ephemeral", ttl: "1h"}} = List.last(body[:tools])
+
+      assert %{content: [%{cache_control: %{type: "ephemeral", ttl: "1h"}} | _]} =
+               List.last(body[:messages])
+    end
+
+    test "legacy anthropic_* options still work" do
+      context = Context.new([Context.system("Stable system"), Context.user("Hello")])
+      body = Anthropic.format_request(@model, context, anthropic_prompt_cache: true)
+
+      assert [%{cache_control: %{type: "ephemeral"}}] = body[:system]
+    end
+
+    test "applies on the mantle endpoint too" do
+      context = Context.new([Context.system("Stable system"), Context.user("Hello")])
+
+      body =
+        Anthropic.format_request(@model, context,
+          prompt_cache: true,
+          provider_options: [endpoint: :mantle]
+        )
+
+      assert body[:model] == @model
+      assert [%{cache_control: %{type: "ephemeral"}}] = body[:system]
+    end
+  end
 end

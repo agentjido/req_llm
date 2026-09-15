@@ -106,6 +106,188 @@ defmodule ReqLLM.Providers.OpenAICodexTest do
     end
   end
 
+  describe "session and prompt cache identity" do
+    test "preserves explicit cache and hyphenated session headers across transports" do
+      for model_id <- ["gpt-5.3-codex-spark", "gpt-5.6-sol", "gpt-6-astra"] do
+        {:ok, model} = ReqLLM.model("openai_codex:#{model_id}")
+        context = ReqLLM.context([ReqLLM.Context.user("Hello")])
+
+        opts = [
+          provider_options: [
+            access_token: jwt_with_account_id("acct_cache"),
+            session_id: "session-123",
+            thread_id: "thread-456",
+            prompt_cache_key: "cache-override"
+          ]
+        ]
+
+        {:ok, buffered} = OpenAICodex.prepare_request(:chat, model, context, opts)
+        assert buffered.headers["x-client-request-id"] == ["thread-456"]
+        assert buffered.headers["session-id"] == ["session-123"]
+        assert buffered.headers["thread-id"] == ["thread-456"]
+        refute Map.has_key?(buffered.headers, "session_id")
+
+        assert Jason.decode!(OpenAICodex.encode_body(buffered).body)["prompt_cache_key"] ==
+                 "cache-override"
+
+        {:ok, sse} = OpenAICodex.attach_stream(model, context, opts, nil)
+        assert {"x-client-request-id", "thread-456"} in sse.headers
+        assert {"session-id", "session-123"} in sse.headers
+        assert {"thread-id", "thread-456"} in sse.headers
+        assert Jason.decode!(sse.body)["prompt_cache_key"] == "cache-override"
+
+        {:ok, websocket} = OpenAICodex.attach_websocket_stream(model, context, opts)
+        assert {"x-client-request-id", "thread-456"} in websocket.headers
+        assert {"session-id", "session-123"} in websocket.headers
+        assert {"thread-id", "thread-456"} in websocket.headers
+        refute List.keymember?(websocket.headers, "session_id", 0)
+        assert websocket.canonical_json["prompt_cache_key"] == "cache-override"
+      end
+    end
+
+    test "defaults the cache key to the caller's session across repeated requests and transports" do
+      for model_id <- ["gpt-5.3-codex-spark", "gpt-5.6-sol", "gpt-6-astra"] do
+        {:ok, model} = ReqLLM.model("openai_codex:#{model_id}")
+        context = ReqLLM.context([ReqLLM.Context.user("Hello")])
+
+        opts = [
+          provider_options: [
+            access_token: jwt_with_account_id("acct_cache"),
+            session_id: "session-123"
+          ]
+        ]
+
+        for _ <- 1..2 do
+          {:ok, buffered} = OpenAICodex.prepare_request(:chat, model, context, opts)
+          assert buffered.headers["session-id"] == ["session-123"]
+
+          assert Jason.decode!(OpenAICodex.encode_body(buffered).body)["prompt_cache_key"] ==
+                   "session-123"
+
+          refute Map.has_key?(buffered.headers, "x-client-request-id")
+          refute Map.has_key?(buffered.headers, "thread-id")
+
+          {:ok, sse} = OpenAICodex.attach_stream(model, context, opts, nil)
+          assert {"session-id", "session-123"} in sse.headers
+          assert Jason.decode!(sse.body)["prompt_cache_key"] == "session-123"
+          refute List.keymember?(sse.headers, "x-client-request-id", 0)
+          refute List.keymember?(sse.headers, "thread-id", 0)
+
+          {:ok, websocket} = OpenAICodex.attach_websocket_stream(model, context, opts)
+          assert {"session-id", "session-123"} in websocket.headers
+          assert websocket.canonical_json["prompt_cache_key"] == "session-123"
+          refute List.keymember?(websocket.headers, "thread-id", 0)
+
+          assert {"x-client-request-id", request_id} =
+                   List.keyfind(websocket.headers, "x-client-request-id", 0)
+
+          refute request_id == "session-123"
+        end
+      end
+    end
+
+    test "does not invent a session or cache identity on any transport when none is supplied" do
+      for model_id <- ["gpt-5.3-codex-spark", "gpt-5.6-sol", "gpt-6-astra"] do
+        {:ok, model} = ReqLLM.model("openai_codex:#{model_id}")
+        context = ReqLLM.context([ReqLLM.Context.user("Hello")])
+        opts = [provider_options: [access_token: jwt_with_account_id("acct_cache")]]
+
+        {:ok, buffered} = OpenAICodex.prepare_request(:chat, model, context, opts)
+
+        refute Map.has_key?(
+                 Jason.decode!(OpenAICodex.encode_body(buffered).body),
+                 "prompt_cache_key"
+               )
+
+        {:ok, sse} = OpenAICodex.attach_stream(model, context, opts, nil)
+        refute Map.has_key?(Jason.decode!(sse.body), "prompt_cache_key")
+
+        {:ok, websocket} = OpenAICodex.attach_websocket_stream(model, context, opts)
+        refute Map.has_key?(websocket.canonical_json, "prompt_cache_key")
+
+        for header <- ["session-id", "thread-id", "session_id", "thread_id"] do
+          refute Map.has_key?(buffered.headers, header)
+          refute List.keymember?(sse.headers, header, 0)
+          refute List.keymember?(websocket.headers, header, 0)
+        end
+      end
+    end
+  end
+
+  describe "canonical turn attribution" do
+    test "projects caller-owned turn metadata on all transports and every create frame" do
+      for model_id <- ["gpt-5.3-codex-spark", "gpt-5.6-sol", "gpt-6-astra"] do
+        model = ReqLLM.model!("openai_codex:#{model_id}")
+        context = ReqLLM.context([ReqLLM.Context.user("Hello")])
+
+        for turn_id <- ["turn-1", "turn-1", "turn-2"] do
+          metadata = %{
+            turn_id: turn_id,
+            window_id: "window-1",
+            request_kind: "turn",
+            turn_started_at_unix_ms: 1_800_000_000_000,
+            installation_id: "installation-1"
+          }
+
+          opts = [
+            provider_options: [
+              openai_codex: [
+                access_token: jwt_with_account_id("acct_turn"),
+                session_id: "session-1",
+                thread_id: "thread-1",
+                prompt_cache_key: "independent-cache",
+                codex_turn_metadata: metadata
+              ]
+            ]
+          ]
+
+          {:ok, buffered} = OpenAICodex.prepare_request(:chat, model, context, opts)
+          {:ok, sse} = OpenAICodex.attach_stream(model, context, opts, nil)
+          {:ok, websocket} = OpenAICodex.attach_websocket_stream(model, context, opts)
+          [frame] = websocket.initial_messages
+
+          for {headers, body} <- [
+                {buffered.headers, Jason.decode!(OpenAICodex.encode_body(buffered).body)},
+                {Map.new(sse.headers), Jason.decode!(sse.body)},
+                {Map.new(websocket.headers), Jason.decode!(frame)}
+              ] do
+            client = body["client_metadata"]
+            assert client["session_id"] == "session-1"
+            assert client["thread_id"] == "thread-1"
+            assert client["turn_id"] == turn_id
+            assert client["x-codex-window-id"] == "window-1"
+            assert client["x-codex-installation-id"] == "installation-1"
+
+            assert List.wrap(headers["x-codex-turn-metadata"]) == [
+                     client["x-codex-turn-metadata"]
+                   ]
+
+            assert Jason.decode!(client["x-codex-turn-metadata"]) ==
+                     Map.merge(
+                       Map.new(metadata, fn {k, v} -> {Atom.to_string(k), v} end),
+                       %{"session_id" => "session-1", "thread_id" => "thread-1"}
+                     )
+
+            assert body["prompt_cache_key"] == "independent-cache"
+          end
+        end
+      end
+    end
+
+    test "does not invent attribution when the caller supplies only a session" do
+      model = ReqLLM.model!("openai_codex:gpt-6-astra")
+      context = ReqLLM.context([ReqLLM.Context.user("Hello")])
+
+      opts = [
+        provider_options: [access_token: jwt_with_account_id("acct_turn"), session_id: "session"]
+      ]
+
+      {:ok, websocket} = OpenAICodex.attach_websocket_stream(model, context, opts)
+      refute Map.has_key?(websocket.canonical_json, "client_metadata")
+      refute List.keymember?(websocket.headers, "x-codex-turn-metadata", 0)
+    end
+  end
+
   describe "attach_stream/4" do
     test "builds SSE request against codex backend with combined instructions" do
       {:ok, model} = ReqLLM.model("openai_codex:gpt-5.3-codex-spark")
@@ -244,15 +426,17 @@ defmodule ReqLLM.Providers.OpenAICodexTest do
           provider_options: [
             auth_mode: :oauth,
             access_token: jwt_with_account_id("acct_ws"),
-            session_id: "req_ws"
+            session_id: "req_ws",
+            thread_id: "thread_ws"
           ]
         )
 
       assert config.url == "wss://chatgpt.com/backend-api/codex/responses"
       assert config.fallback_transport == :http
       assert {"openai-beta", "responses_websockets=2026-02-06"} in config.headers
-      assert {"session_id", "req_ws"} in config.headers
-      assert {"x-client-request-id", "req_ws"} in config.headers
+      assert {"session-id", "req_ws"} in config.headers
+      assert {"thread-id", "thread_ws"} in config.headers
+      assert {"x-client-request-id", "thread_ws"} in config.headers
       refute {"x-openai-internal-codex-responses-lite", "true"} in config.headers
       refute Enum.any?(config.headers, &(elem(&1, 0) == "content-type"))
 

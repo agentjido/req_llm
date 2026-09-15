@@ -16,7 +16,7 @@ defmodule ReqLLM.Providers.OpenAI.ChatStreamingUsageTest do
   Chat-completion finish_reason chunks must remain non-terminal so the stream
   finalizes on `[DONE]` after the trailing usage chunk is accumulated.
   """
-  use ExUnit.Case, async: true
+  use ExUnit.Case, async: false
 
   alias ReqLLM.{Context, Response, StreamResponse, StreamServer}
   alias ReqLLM.Providers.OpenAI.ChatAPI
@@ -24,6 +24,35 @@ defmodule ReqLLM.Providers.OpenAI.ChatStreamingUsageTest do
   alias ReqLLM.StreamResponse.MetadataHandle
 
   @model %LLMDB.Model{provider: :openai, id: "gpt-4o"}
+
+  defmodule NumericStringUsageRouter do
+    use Plug.Router
+
+    plug(:match)
+    plug(:dispatch)
+
+    post "/v1/chat/completions" do
+      conn =
+        conn
+        |> Plug.Conn.put_resp_content_type("text/event-stream")
+        |> Plug.Conn.send_chunked(200)
+
+      {:ok, conn} =
+        Plug.Conn.chunk(
+          conn,
+          "data: {\"id\":\"mock-response\",\"object\":\"chat.completion.chunk\",\"created\":1,\"model\":\"local-chat\",\"choices\":[{\"index\":0,\"delta\":{\"content\":\"Done\"},\"finish_reason\":null}]}\n\n"
+        )
+
+      {:ok, conn} =
+        Plug.Conn.chunk(
+          conn,
+          "data: {\"id\":\"mock-response\",\"object\":\"chat.completion.chunk\",\"created\":1,\"model\":\"local-chat\",\"choices\":[{\"index\":0,\"delta\":{},\"finish_reason\":\"stop\"}],\"usage\":{\"prompt_tokens\":\"3\",\"completion_tokens\":\"1\",\"total_tokens\":\"4\"}}\n\n"
+        )
+
+      {:ok, conn} = Plug.Conn.chunk(conn, "data: [DONE]\n\n")
+      conn
+    end
+  end
 
   test "finish_reason chunk is not terminal" do
     finish_event = %{
@@ -133,6 +162,33 @@ defmodule ReqLLM.Providers.OpenAI.ChatStreamingUsageTest do
     assert usage.total_tokens == 20
     assert usage.cached_tokens == 5
     assert usage.cache_creation_tokens == 7
+  end
+
+  test "a real HTTP stream normalizes numeric-string usage" do
+    server =
+      start_supervised!({Bandit, plug: NumericStringUsageRouter, port: 0, ip: {127, 0, 0, 1}})
+
+    {:ok, {_address, port}} = ThousandIsland.listener_info(server)
+
+    model =
+      ReqLLM.model!(%{
+        id: "local-chat",
+        provider: :openai,
+        base_url: "http://127.0.0.1:#{port}/v1",
+        extra: %{wire: %{protocol: "openai_chat"}}
+      })
+
+    assert {:ok, stream_response} =
+             ReqLLM.stream_text(model, "Say done", api_key: "test-key", max_retries: 0)
+
+    assert {:ok, response} = StreamResponse.to_response(stream_response)
+    assert Response.text(response) == "Done"
+    assert Response.finish_reason(response) == :stop
+
+    usage = Response.usage(response)
+    assert usage.input_tokens == 3
+    assert usage.output_tokens == 1
+    assert usage.total_tokens == 4
   end
 
   defp stream_response_for(server) do
