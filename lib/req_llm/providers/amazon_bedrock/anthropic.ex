@@ -138,12 +138,21 @@ defmodule ReqLLM.Providers.AmazonBedrock.Anthropic do
 
       tools when is_list(tools) ->
         anthropic_tools = Enum.map(tools, &tool_to_anthropic_format/1)
-        body = Map.put(body, :tools, anthropic_tools)
+        body = Map.put(body, :tools, search_tools(opts) ++ anthropic_tools)
 
         case Keyword.get(opts, :tool_choice) do
           nil -> body
           choice -> Map.put(body, :tool_choice, Anthropic.normalize_tool_choice(choice))
         end
+    end
+  end
+
+  # The server-side tool search tool leads the list, as on the native provider,
+  # when `provider_options: [tool_search: %{}]` is set.
+  defp search_tools(opts) do
+    case get_in(opts, [:provider_options, :tool_search]) do
+      config when is_map(config) -> [Anthropic.build_tool_search_tool(config)]
+      _none -> []
     end
   end
 

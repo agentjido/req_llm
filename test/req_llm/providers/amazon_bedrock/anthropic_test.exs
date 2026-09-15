@@ -173,6 +173,47 @@ defmodule ReqLLM.Providers.AmazonBedrock.AnthropicTest do
     end
   end
 
+  describe "format_request/3 tool search" do
+    test "leads the tools list with the search tool and keeps defer_loading" do
+      context = Context.new([Context.user("Weather?")])
+
+      deferred =
+        ReqLLM.Tool.new!(
+          name: "get_weather",
+          description: "Weather for a city",
+          parameter_schema: [city: [type: :string, required: true]],
+          callback: fn _ -> {:ok, "sunny"} end,
+          provider_options: [anthropic: [defer_loading: true]]
+        )
+
+      body =
+        Anthropic.format_request("us.anthropic.claude-sonnet-4-6", context,
+          tools: [deferred],
+          provider_options: [tool_search: %{}]
+        )
+
+      assert [search, weather] = body[:tools]
+      assert search == %{type: "tool_search_tool_bm25_20251119", name: "tool_search_tool_bm25"}
+      assert weather[:name] == "get_weather"
+      assert weather[:defer_loading] == true
+    end
+
+    test "without the option the tools list is unchanged" do
+      context = Context.new([Context.user("Weather?")])
+
+      tool =
+        ReqLLM.Tool.new!(
+          name: "get_weather",
+          description: "Weather for a city",
+          parameter_schema: [city: [type: :string, required: true]],
+          callback: fn _ -> {:ok, "sunny"} end
+        )
+
+      body = Anthropic.format_request("us.anthropic.claude-sonnet-4-6", context, tools: [tool])
+      assert [%{name: "get_weather"}] = body[:tools]
+    end
+  end
+
   describe "format_request/3 tool_choice normalization" do
     test "normalizes atom :auto to Anthropic map format" do
       tool =

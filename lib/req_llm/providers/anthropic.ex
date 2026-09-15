@@ -1350,7 +1350,8 @@ defmodule ReqLLM.Providers.Anthropic do
   #     * `:blocked_domains` - List of domains to exclude
   #     * `:max_content_tokens` - Maximum content length in tokens
   #     * `:citations` - Map with `:enabled` boolean
-  defp build_tool_search_tool(config) when is_map(config) do
+  @doc false
+  def build_tool_search_tool(config) when is_map(config) do
     case Map.get(config, :variant, :bm25) do
       :bm25 -> %{type: "tool_search_tool_bm25_20251119", name: "tool_search_tool_bm25"}
       :regex -> %{type: "tool_search_tool_regex_20251119", name: "tool_search_tool_regex"}

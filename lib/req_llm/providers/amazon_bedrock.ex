@@ -171,6 +171,17 @@ defmodule ReqLLM.Providers.AmazonBedrock do
       type: :boolean,
       doc: "Force use of Bedrock Converse API (default: auto-detect based on tools presence)"
     ],
+    tool_search: [
+      type: :map,
+      doc: """
+      Claude only. Enable Anthropic's server-side tool search so tools marked
+      `provider_options: [anthropic: [defer_loading: true]]` load on demand:
+      - `variant` - `:bm25` (natural-language queries, default) or `:regex`
+
+      Tool search is served by InvokeModel only, so the request stays on the
+      native API (Converse is not auto-selected).
+      """
+    ],
     additional_model_request_fields: [
       type: :map,
       doc:
@@ -1393,6 +1404,7 @@ defmodule ReqLLM.Providers.AmazonBedrock do
         has_tools = opts[:tools] != nil and opts[:tools] != []
         # After Options.process, anthropic_prompt_cache is in :provider_options
         has_caching = get_in(opts, [:provider_options, :anthropic_prompt_cache]) == true
+        has_tool_search = is_map(get_in(opts, [:provider_options, :tool_search]))
 
         cond do
           # Formatters that require Converse API (like Mistral wrapper)
@@ -1402,6 +1414,10 @@ defmodule ReqLLM.Providers.AmazonBedrock do
           # Models without dedicated formatters fall back to Converse API
           is_fallback_to_converse ->
             true
+
+          # Anthropic's tool search is served by InvokeModel only
+          has_tool_search ->
+            false
 
           # If caching is enabled with tools, force native API for full caching support
           has_caching and has_tools ->
