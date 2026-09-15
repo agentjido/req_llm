@@ -45,7 +45,11 @@ The most common path. Strings resolve through LLMDB.
 "anthropic:claude-haiku-4-5"
 "openai:gpt-4o-mini-2024-07-18"
 "google_vertex:claude-sonnet-4-5@20250929"
+"gpt-4o@openai"
 ```
+
+Strings accept both `provider:model` and `model@provider`. Model IDs can contain
+colons, such as `eu.anthropic.claude-sonnet-4-5-20250929-v1:0@amazon_bedrock`.
 
 ### 2. Tuple Specs
 
@@ -125,6 +129,31 @@ This path is best when:
 - the model already exists in LLMDB
 - you want aliases and canonical version resolution
 - you want shared metadata like pricing, capabilities, and limits
+
+### Prefixed Model IDs
+
+Strings and tuples use the same LLMDB resolver. ReqLLM uses the resolved prefix
+with the model's API ID (`provider_model_id`). It keeps API suffixes such as `:0`
+and the prices and capabilities that LLMDB selects.
+
+For example, these specs select the same route:
+
+```elixir
+"amazon_bedrock:eu.anthropic.claude-sonnet-4-5-20250929-v1:0"
+"eu.anthropic.claude-sonnet-4-5-20250929-v1:0@amazon_bedrock"
+{:amazon_bedrock, "eu.anthropic.claude-sonnet-4-5-20250929-v1:0", []}
+{:amazon_bedrock, id: "eu.anthropic.claude-sonnet-4-5-20250929-v1:0"}
+```
+
+LLMDB defines which prefixes each provider supports. ReqLLM does not keep a
+separate prefix list. Regional model selection and provider-defined prefix rules
+require an LLMDB release that includes [LLMDB PR #326](https://github.com/agentjido/llmdb/pull/326).
+ReqLLM also works with older LLMDB releases and retains the metadata they select.
+
+For models outside the catalog, ReqLLM applies the provider's existing fallback.
+The generic fallback keeps the supplied model ID and warns that it is unverified.
+This also applies to `model@provider` specs. Inline maps and structs keep their
+explicit API IDs.
 
 ### Full Model Specification Path
 
