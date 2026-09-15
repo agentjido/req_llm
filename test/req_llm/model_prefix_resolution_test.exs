@@ -3,7 +3,7 @@ defmodule ReqLLM.ModelPrefixResolutionTest do
 
   import ExUnit.CaptureIO
 
-  alias LLMDB.{Catalog, Model, Provider, Spec, Store}
+  alias LLMDB.{Catalog, Model, Provider, Store}
   alias ReqLLM.Providers.AmazonBedrock
 
   @moduletag contract: :public_api
@@ -28,7 +28,7 @@ defmodule ReqLLM.ModelPrefixResolutionTest do
 
     providers = [
       Provider.new!(%{id: :amazon_bedrock}),
-      Provider.new!(%{id: :anthropic, extra: %{model_id_prefixes: ["zone."]}}),
+      Provider.new!(%{id: :anthropic, extra: %{model_id_prefixes: ["zone.", "zone.long."]}}),
       Provider.new!(%{id: :openai})
     ]
 
@@ -93,23 +93,20 @@ defmodule ReqLLM.ModelPrefixResolutionTest do
     end
   end
 
-  test "all spec forms retain the prices selected by LLMDB" do
+  test "all spec forms use the regional model and its prices" do
     model_id = "eu." <> @opus
-
-    assert {:ok, {:amazon_bedrock, ^model_id, selected}} =
-             Spec.resolve({:amazon_bedrock, model_id})
-
     usage = %{input_tokens: 1_000_000, output_tokens: 1_000_000}
-    assert {:ok, selected_cost} = ReqLLM.Billing.calculate(usage, selected)
-    assert selected_cost != nil
 
     for spec <- specs(:amazon_bedrock, model_id) do
       assert {:ok, model} = ReqLLM.model(spec)
-      assert model.id == selected.id
-      assert model.cost == selected.cost
-      assert model.pricing == selected.pricing
+      assert model.id == model_id
+      assert model.cost.input == 5.5
+      assert model.cost.output == 27.5
       assert model.provider_model_id == model_id
-      assert {:ok, ^selected_cost} = ReqLLM.Billing.calculate(usage, model)
+      assert {:ok, cost} = ReqLLM.Billing.calculate(usage, model)
+      assert cost.input_cost == 5.5
+      assert cost.output_cost == 27.5
+      assert cost.total == 33.0
     end
   end
 
@@ -154,6 +151,14 @@ defmodule ReqLLM.ModelPrefixResolutionTest do
       assert {:ok, model} = ReqLLM.model(spec)
       assert model.id == "zone.claude-versioned"
       assert model.provider_model_id == "zone.claude-api-version"
+    end
+  end
+
+  test "a base alias uses the provider's longest declared prefix" do
+    for spec <- specs(:anthropic, "zone.long.claude-short") do
+      assert {:ok, model} = ReqLLM.model(spec)
+      assert model.id == "claude-versioned"
+      assert model.provider_model_id == "zone.long.claude-api-version"
     end
   end
 

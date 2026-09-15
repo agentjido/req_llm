@@ -1604,15 +1604,13 @@
       }
     },
     "github_copilot:gpt-4.1": {
-      "catalog_status": "present",
-      "declared_operations": [
-        "text"
-      ],
+      "catalog_status": "missing",
+      "declared_operations": [],
       "model": "gpt-4.1",
       "provider": "github_copilot",
       "surfaces": {
         "github_copilot.chat_completions": {
-          "declaration": "declared",
+          "declaration": "unknown",
           "operation": "text",
           "provider": "github_copilot",
           "scenarios": {
@@ -8715,15 +8713,13 @@
       }
     },
     "openrouter:google/gemini-2.5-pro-preview-05-06": {
-      "catalog_status": "present",
-      "declared_operations": [
-        "text"
-      ],
+      "catalog_status": "missing",
+      "declared_operations": [],
       "model": "google/gemini-2.5-pro-preview-05-06",
       "provider": "openrouter",
       "surfaces": {
         "openrouter.chat_completions": {
-          "declaration": "declared",
+          "declaration": "unknown",
           "operation": "text",
           "provider": "openrouter",
           "scenarios": {
@@ -9257,15 +9253,13 @@
       }
     },
     "openrouter:ibm-granite/granite-4.1-8b": {
-      "catalog_status": "present",
-      "declared_operations": [
-        "text"
-      ],
+      "catalog_status": "missing",
+      "declared_operations": [],
       "model": "ibm-granite/granite-4.1-8b",
       "provider": "openrouter",
       "surfaces": {
         "openrouter.chat_completions": {
-          "declaration": "declared",
+          "declaration": "unknown",
           "operation": "text",
           "provider": "openrouter",
           "scenarios": {
@@ -11513,15 +11507,13 @@
       }
     },
     "openrouter:nousresearch/hermes-4-70b": {
-      "catalog_status": "present",
-      "declared_operations": [
-        "text"
-      ],
+      "catalog_status": "missing",
+      "declared_operations": [],
       "model": "nousresearch/hermes-4-70b",
       "provider": "openrouter",
       "surfaces": {
         "openrouter.chat_completions": {
-          "declaration": "declared",
+          "declaration": "unknown",
           "operation": "text",
           "provider": "openrouter",
           "scenarios": {
@@ -20985,15 +20977,13 @@
       }
     },
     "zenmux:openai/gpt-5-chat": {
-      "catalog_status": "present",
-      "declared_operations": [
-        "text"
-      ],
+      "catalog_status": "missing",
+      "declared_operations": [],
       "model": "openai/gpt-5-chat",
       "provider": "zenmux",
       "surfaces": {
         "zenmux.chat_completions": {
-          "declaration": "declared",
+          "declaration": "unknown",
           "operation": "text",
           "provider": "zenmux",
           "scenarios": {
@@ -21305,15 +21295,13 @@
       }
     },
     "zenmux:openai/gpt-5.2-chat": {
-      "catalog_status": "present",
-      "declared_operations": [
-        "text"
-      ],
+      "catalog_status": "missing",
+      "declared_operations": [],
       "model": "openai/gpt-5.2-chat",
       "provider": "zenmux",
       "surfaces": {
         "zenmux.chat_completions": {
-          "declaration": "declared",
+          "declaration": "unknown",
           "operation": "text",
           "provider": "zenmux",
           "scenarios": {

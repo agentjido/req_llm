@@ -31,8 +31,8 @@ provider-native feature and are not consulted by request routing.
 | Tier | Surfaces |
 | --- | ---: |
 | First-class | 2 |
-| Best-effort | 1 |
-| Experimental | 593 |
+| Best-effort | 0 |
+| Experimental | 594 |
 | Unsupported | 96 |
 | **Total recorded surfaces** | **692** |
 
@@ -110,7 +110,7 @@ provider-native feature and are not consulted by request routing.
 
 | Model | Operation | Execution surface | Input → output | Tier | Baseline | Checked | Reason |
 | --- | --- | --- | --- | --- | ---: | --- | --- |
-| `gpt-4.1` | `text` | `github_copilot.chat_completions` | text → text | Best-effort | 1/5 | 2026-06-12T21:58:25Z | missing current evidence: usage, token_limit, context_append, streaming |
+| `gpt-4.1` | `text` | `github_copilot.chat_completions` | text → text | Experimental | 0/5 | 2026-06-12T21:58:25Z | surface declaration unknown |
 
 ## google
 
@@ -323,7 +323,7 @@ provider-native feature and are not consulted by request routing.
 | `google/gemini-2.5-flash-lite-preview-09-2025` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:24:06Z | surface declaration unknown |
 | `google/gemini-2.5-pro` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:24:06Z | missing or stale evidence |
 | `google/gemini-2.5-pro-preview` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:24:06Z | missing or stale evidence |
-| `google/gemini-2.5-pro-preview-05-06` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:24:06Z | missing or stale evidence |
+| `google/gemini-2.5-pro-preview-05-06` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:24:06Z | surface declaration unknown |
 | `google/gemini-3-flash-preview` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:15:55Z | missing or stale evidence |
 | `google/gemini-3.1-flash-lite` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:15:55Z | missing or stale evidence |
 | `google/gemini-3.1-flash-lite-preview` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:15:55Z | missing or stale evidence |
@@ -340,7 +340,7 @@ provider-native feature and are not consulted by request routing.
 | `google/gemma-4-31b-it` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:42:35Z | missing or stale evidence |
 | `google/gemma-4-31b-it:free` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:42:35Z | missing or stale evidence |
 | `ibm-granite/granite-4.0-h-micro` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:20:36Z | missing or stale evidence |
-| `ibm-granite/granite-4.1-8b` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:20:36Z | missing or stale evidence |
+| `ibm-granite/granite-4.1-8b` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:20:36Z | surface declaration unknown |
 | `inception/mercury-2` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:20:46Z | missing or stale evidence |
 | `inclusionai/ling-2.6-1t` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:16:15Z | surface declaration unknown |
 | `inclusionai/ling-2.6-flash` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:16:15Z | surface declaration unknown |
@@ -412,7 +412,7 @@ provider-native feature and are not consulted by request routing.
 | `nousresearch/hermes-3-llama-3.1-405b` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:18:40Z | missing or stale evidence |
 | `nousresearch/hermes-3-llama-3.1-405b:free` | `text` | `openrouter.unrecorded_text` | text → text | Experimental | 0/5 | 2026-05-30T00:18:40Z | surface declaration unknown |
 | `nousresearch/hermes-3-llama-3.1-70b` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:18:40Z | missing or stale evidence |
-| `nousresearch/hermes-4-70b` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:18:40Z | missing or stale evidence |
+| `nousresearch/hermes-4-70b` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:18:40Z | surface declaration unknown |
 | `nvidia/llama-3.3-nemotron-super-49b-v1.5` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:44:50Z | surface declaration unknown |
 | `nvidia/llama-nemotron-embed-vl-1b-v2:free` | `embedding` | `openrouter.embedding` | text → embedding | Experimental | 0/3 | 2026-05-30T00:56:13Z | missing or stale evidence |
 | `nvidia/nemotron-3-nano-30b-a3b` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:44:50Z | missing or stale evidence |
@@ -738,7 +738,7 @@ provider-native feature and are not consulted by request routing.
 | `openai/gpt-4o` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
 | `openai/gpt-4o-mini` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
 | `openai/gpt-5` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
-| `openai/gpt-5-chat` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
+| `openai/gpt-5-chat` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | surface declaration unknown |
 | `openai/gpt-5-codex` | `text` | `zenmux.unrecorded_text` | text → text | Unsupported | 0/5 | 2026-05-30T00:10:17Z | basic failed at provider_drift |
 | `openai/gpt-5-mini` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
 | `openai/gpt-5-nano` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
@@ -748,7 +748,7 @@ provider-native feature and are not consulted by request routing.
 | `openai/gpt-5.1-codex` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
 | `openai/gpt-5.1-codex-mini` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
 | `openai/gpt-5.2` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
-| `openai/gpt-5.2-chat` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
+| `openai/gpt-5.2-chat` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | surface declaration unknown |
 | `openai/gpt-5.2-codex` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
 | `openai/gpt-5.2-pro` | `text` | `zenmux.unrecorded_text` | text → text | Unsupported | 0/5 | 2026-05-30T00:10:17Z | basic failed at provider_drift |
 | `openai/gpt-5.3-chat` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |

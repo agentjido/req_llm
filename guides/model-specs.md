@@ -147,8 +147,8 @@ For example, these specs select the same route:
 
 LLMDB defines which prefixes each provider supports. ReqLLM does not keep a
 separate prefix list. Regional model selection and provider-defined prefix rules
-require an LLMDB release that includes [LLMDB PR #326](https://github.com/agentjido/llmdb/pull/326).
-ReqLLM also works with older LLMDB releases and retains the metadata they select.
+are supported by [LLMDB 2026.9.2](https://hex.pm/packages/llm_db/2026.9.2),
+which is the minimum version required by ReqLLM.
 
 For models outside the catalog, ReqLLM applies the provider's existing fallback.
 The generic fallback keeps the supplied model ID and warns that it is unverified.

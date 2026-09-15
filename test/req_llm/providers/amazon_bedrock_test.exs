@@ -758,13 +758,15 @@ defmodule ReqLLM.Providers.AmazonBedrockTest do
     end
 
     test "preserves inference profile prefix for Cohere embedding model" do
-      warning =
+      output =
         ExUnit.CaptureIO.capture_io(:stderr, fn ->
           send(self(), {:model_result, ReqLLM.model("amazon-bedrock:global.cohere.embed-v4:0")})
         end)
 
-      assert warning =~ "Using unverified model: amazon_bedrock:global.cohere.embed-v4:0"
+      assert output == ""
       assert_received {:model_result, {:ok, model}}
+      assert model.id == "cohere.embed-v4"
+      assert is_number(model.cost.input)
 
       text = "Hello, world!"
 
