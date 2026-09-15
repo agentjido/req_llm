@@ -121,7 +121,7 @@ Strings and tuples resolve through LLMDB.
 
 ```elixir
 {:ok, model} = ReqLLM.model("openai:gpt-4o")
-{:ok, model} = ReqLLM.model({:anthropic, "claude-haiku-4-5"})
+{:ok, model} = ReqLLM.model({:anthropic, id: "claude-haiku-4-5"})
 ```
 
 This path is best when:
