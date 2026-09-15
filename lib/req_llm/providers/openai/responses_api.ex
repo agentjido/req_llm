@@ -1747,16 +1747,6 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     |> put_defer_loading(openai_options)
   end
 
-  # `defer_loading: true` keeps a function out of context until the model
-  # finds it through the `tool_search` built-in tool.
-  defp put_defer_loading(function, %{defer_loading: true}),
-    do: Map.put(function, "defer_loading", true)
-
-  defp put_defer_loading(function, %{"defer_loading" => true}),
-    do: Map.put(function, "defer_loading", true)
-
-  defp put_defer_loading(function, _options), do: function
-
   defp encode_tool_for_responses_api(tool_schema) when is_map(tool_schema) do
     tool_schema = stringify_keys(tool_schema)
     tool_type = tool_schema["type"]
@@ -1799,6 +1789,16 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
       end
     end
   end
+
+  # `defer_loading: true` keeps a function out of context until the model
+  # finds it through the `tool_search` built-in tool.
+  defp put_defer_loading(function, %{defer_loading: true}),
+    do: Map.put(function, "defer_loading", true)
+
+  defp put_defer_loading(function, %{"defer_loading" => true}),
+    do: Map.put(function, "defer_loading", true)
+
+  defp put_defer_loading(function, _options), do: function
 
   defp normalize_parameters_for_strict(nil) do
     %{
