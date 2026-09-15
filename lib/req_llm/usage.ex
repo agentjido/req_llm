@@ -9,6 +9,20 @@ defmodule ReqLLM.Usage do
   alias ReqLLM.MapAccess
   alias ReqLLM.Usage.Normalize
 
+  @counter_keys [
+    :input_tokens,
+    :output_tokens,
+    :total_tokens,
+    :input,
+    :output,
+    :cached_tokens,
+    :reasoning_tokens,
+    :cache_creation_tokens,
+    :reasoning,
+    :cached_input,
+    :cache_creation
+  ]
+
   @zero_usage %{
     input_tokens: 0,
     output_tokens: 0,
@@ -31,6 +45,11 @@ defmodule ReqLLM.Usage do
   Also guarantees compatibility aliases:
   - `:input`
   - `:output`
+
+  Canonical counters accept numbers and base-10 integer strings. Malformed
+  component counters remain visible instead of becoming zero. A malformed
+  explicit total is replaced only when valid input and output counters can
+  produce a derived total.
   """
   @spec normalize(map() | any()) :: map()
   def normalize(usage) when is_map(usage) do
@@ -74,15 +93,19 @@ defmodule ReqLLM.Usage do
   def zero(_), do: @zero_usage
 
   @doc """
-  Merge two usage maps, taking the max of numeric fields (to handle
-  cumulative streaming usage) and recomputing derived totals.
+  Merge two usage maps and take the maximum numeric value for each field.
+
+  Canonical token counters can be numbers or base-10 integer strings. Valid
+  integer strings are normalized before cumulative values are compared.
+  Malformed counters remain visible when no valid value exists, but they do
+  not replace an earlier valid counter and are not used to recompute totals.
+  Missing input or output counters keep the existing zero default.
   """
   @spec merge(map(), map()) :: map()
   def merge(existing, incoming) when is_map(existing) and is_map(incoming) do
     existing
-    |> Map.merge(incoming, fn _key, v1, v2 ->
-      if is_number(v1) and is_number(v2), do: max(v1, v2), else: v2
-    end)
+    |> normalize_counter_values()
+    |> Map.merge(normalize_counter_values(incoming), &merge_value/3)
     |> recompute_totals()
   end
 
@@ -90,10 +113,37 @@ defmodule ReqLLM.Usage do
     input = Map.get(usage, :input_tokens, 0)
     output = Map.get(usage, :output_tokens, 0)
 
+    usage =
+      if is_number(input) and is_number(output) do
+        Map.put(usage, :total_tokens, input + output)
+      else
+        usage
+      end
+
     usage
-    |> Map.put(:total_tokens, input + output)
     |> Map.put(:input, input)
     |> Map.put(:output, output)
+  end
+
+  defp normalize_counter_values(usage) do
+    Map.new(usage, fn
+      {key, value} when key in @counter_keys -> {key, Normalize.normalize_counter(value)}
+      entry -> entry
+    end)
+  end
+
+  defp merge_value(key, existing, incoming) when key in @counter_keys do
+    cond do
+      is_number(existing) and is_number(incoming) -> max(existing, incoming)
+      is_number(existing) -> existing
+      is_number(incoming) -> incoming
+      is_nil(incoming) -> existing
+      true -> incoming
+    end
+  end
+
+  defp merge_value(_key, existing, incoming) do
+    if is_number(existing) and is_number(incoming), do: max(existing, incoming), else: incoming
   end
 
   defp derive_total_tokens(input_tokens, output_tokens)

@@ -16,28 +16,31 @@ defmodule ReqLLM.Usage.Normalize do
     input_includes_cached = detect_input_includes_cached(usage)
 
     input =
-      first_present(usage, [
-        :input,
-        "input",
-        :prompt_tokens,
-        "prompt_tokens",
-        :input_tokens,
-        "input_tokens"
-      ]) || 0
+      (first_present(usage, [
+         :input,
+         "input",
+         :prompt_tokens,
+         "prompt_tokens",
+         :input_tokens,
+         "input_tokens"
+       ]) || 0)
+      |> normalize_counter()
 
     output =
-      first_present(usage, [
-        :output,
-        "output",
-        :completion_tokens,
-        "completion_tokens",
-        :output_tokens,
-        "output_tokens"
-      ]) || 0
+      (first_present(usage, [
+         :output,
+         "output",
+         :completion_tokens,
+         "completion_tokens",
+         :output_tokens,
+         "output_tokens"
+       ]) || 0)
+      |> normalize_counter()
 
     reasoning =
-      first_present(usage, [:reasoning, "reasoning", :reasoning_tokens, "reasoning_tokens"]) ||
-        get_reasoning_tokens(usage)
+      (first_present(usage, [:reasoning, "reasoning", :reasoning_tokens, "reasoning_tokens"]) ||
+         get_reasoning_tokens(usage))
+      |> normalize_counter()
 
     cached_input = get_cached_input_tokens(usage, input, input_includes_cached)
     cache_creation = get_cache_creation_tokens(usage, input, input_includes_cached)
@@ -66,13 +69,25 @@ defmodule ReqLLM.Usage.Normalize do
     Enum.find_value(keys, fn key -> MapAccess.get(usage, key) end)
   end
 
+  @doc false
+  @spec normalize_counter(any()) :: any()
+  def normalize_counter(value) when is_binary(value) do
+    case Integer.parse(String.trim(value)) do
+      {number, ""} -> number
+      _ -> value
+    end
+  end
+
+  def normalize_counter(value), do: value
+
   defp total_tokens_from_usage(usage, input, output) do
     total =
       first_present(usage, [:total_tokens, "total_tokens", :totalTokenCount, "totalTokenCount"])
 
-    case total do
+    case normalize_counter(total) do
       value when is_number(value) -> value
-      _ -> safe_total_tokens(input, output)
+      nil -> safe_total_tokens(input, output)
+      _invalid -> safe_total_tokens(input, output) || total
     end
   end
 
@@ -224,9 +239,17 @@ defmodule ReqLLM.Usage.Normalize do
   defp safe_to_int(nil), do: 0
   defp safe_to_int(n) when is_integer(n), do: max(n, 0)
   defp safe_to_int(n) when is_float(n), do: max(trunc(n), 0)
+
+  defp safe_to_int(n) when is_binary(n) do
+    case normalize_counter(n) do
+      value when is_integer(value) -> max(value, 0)
+      _ -> 0
+    end
+  end
+
   defp safe_to_int(_), do: 0
 
-  defp clamp_tokens(value, max_allowed) do
+  defp clamp_tokens(value, max_allowed) when is_number(max_allowed) do
     case safe_to_number(value) do
       {:ok, int} ->
         int
@@ -238,7 +261,17 @@ defmodule ReqLLM.Usage.Normalize do
     end
   end
 
+  defp clamp_tokens(_value, _max_allowed), do: 0
+
   defp safe_to_number(value) when is_integer(value), do: {:ok, value}
   defp safe_to_number(value) when is_float(value), do: {:ok, trunc(value)}
+
+  defp safe_to_number(value) when is_binary(value) do
+    case normalize_counter(value) do
+      number when is_integer(number) -> {:ok, number}
+      _ -> :error
+    end
+  end
+
   defp safe_to_number(_), do: :error
 end
