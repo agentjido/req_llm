@@ -113,6 +113,14 @@ defmodule ReqLLM.Provider.ResponseBuilder do
   def for_model(%LLMDB.Model{provider: :meta}),
     do: ReqLLM.Providers.OpenAI.ResponsesAPI.ResponseBuilder
 
+  def for_model(%LLMDB.Model{provider: :amazon_bedrock} = model) do
+    if ReqLLM.Providers.AmazonBedrock.mantle_wire(model) == :responses do
+      ReqLLM.Providers.OpenAI.ResponsesAPI.ResponseBuilder
+    else
+      ReqLLM.Provider.Defaults.ResponseBuilder
+    end
+  end
+
   def for_model(%LLMDB.Model{provider: :google_vertex} = model) do
     if vertex_claude_model?(model) do
       ReqLLM.Providers.Anthropic.ResponseBuilder

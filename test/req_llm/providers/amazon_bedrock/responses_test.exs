@@ -1,7 +1,10 @@
 defmodule ReqLLM.Providers.AmazonBedrock.ResponsesTest do
   use ExUnit.Case, async: true
 
+  alias ReqLLM.Providers.AmazonBedrock
   alias ReqLLM.Providers.AmazonBedrock.Responses
+  alias ReqLLM.StreamResponse
+  alias ReqLLM.StreamResponse.MetadataHandle
 
   setup do
     {:ok, model} =
@@ -135,5 +138,68 @@ defmodule ReqLLM.Providers.AmazonBedrock.ResponsesTest do
              Responses.decode_stream_event(arguments, model, state)
 
     assert {[], _state} = Responses.decode_stream_event(done, model, state)
+  end
+
+  test "materializes completed Mantle streams with actionable tool calls", %{
+    model: model,
+    context: context
+  } do
+    events = [
+      %{
+        "type" => "response.output_item.added",
+        "output_index" => 0,
+        "item" => %{"type" => "function_call", "call_id" => "call_123", "name" => "get_weather"}
+      },
+      %{
+        "type" => "response.function_call_arguments.delta",
+        "output_index" => 0,
+        "delta" => ~s({"location":"Boston"})
+      },
+      %{
+        "type" => "response.completed",
+        "response" => %{
+          "id" => "resp_123",
+          "status" => "completed",
+          "usage" => %{"input_tokens" => 8, "output_tokens" => 12}
+        }
+      }
+    ]
+
+    sse = Enum.map_join(events, &"event: #{&1["type"]}\ndata: #{Jason.encode!(&1)}\n\n")
+    parser = AmazonBedrock.stream_protocol_parser(model, provider_options: [endpoint: :mantle])
+    assert {:ok, events, _parser_state} = parser.(sse, nil)
+
+    {chunks, _state} =
+      Enum.reduce(events, {[], nil}, fn event, {chunks, state} ->
+        event = ReqLLM.Streaming.SSE.process_sse_event(event)
+        {new_chunks, state} = AmazonBedrock.decode_stream_event(event, model, state)
+        {chunks ++ new_chunks, state}
+      end)
+
+    metadata =
+      Enum.reduce(chunks, %{}, fn
+        %ReqLLM.StreamChunk{type: :meta, metadata: metadata}, acc -> Map.merge(acc, metadata)
+        _, acc -> acc
+      end)
+
+    {:ok, handle} = MetadataHandle.start_link(fn -> metadata end)
+
+    stream = %StreamResponse{
+      stream: chunks,
+      metadata_handle: handle,
+      cancel: fn -> :ok end,
+      model: model,
+      context: context
+    }
+
+    assert {:ok, response} = StreamResponse.to_response(stream)
+    assert response.finish_reason == :tool_calls
+    assert [tool_call] = response.message.tool_calls
+    assert tool_call.id == "call_123"
+    assert tool_call.function.name == "get_weather"
+    assert Jason.decode!(tool_call.function.arguments) == %{"location" => "Boston"}
+    assert response.message.metadata[:response_id] == "resp_123"
+    assert response.usage.input_tokens == 8
+    assert response.usage.output_tokens == 12
   end
 end

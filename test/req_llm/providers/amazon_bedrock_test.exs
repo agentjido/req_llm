@@ -1558,6 +1558,98 @@ defmodule ReqLLM.Providers.AmazonBedrockTest do
       assert request.url.path == "/v1/chat/completions"
     end
 
+    test "constrains object requests with a strict schema on both Mantle transports", %{
+      context: context,
+      opts: opts,
+      gpt_5: model
+    } do
+      {:ok, compiled_schema} =
+        ReqLLM.Schema.compile(location: [type: :string, required: true])
+
+      opts = Keyword.merge(opts, operation: :object, compiled_schema: compiled_schema)
+      {:ok, request} = AmazonBedrock.prepare_request(:object, model, context, opts)
+      {:ok, stream} = AmazonBedrock.attach_stream(model, context, opts, ReqLLM.Finch)
+
+      for body <- [request.body, stream.body] do
+        body = Jason.decode!(body)
+        assert [tool] = body["tools"]
+        assert tool["name"] == "structured_output"
+        assert tool["strict"] == true
+        assert tool["parameters"]["properties"]["location"]["type"] == "string"
+        assert tool["parameters"]["required"] == ["location"]
+        assert tool["parameters"]["additionalProperties"] == false
+        assert body["tool_choice"] == %{"type" => "function", "name" => "structured_output"}
+        assert body["parallel_tool_calls"] == false
+      end
+
+      payload = %{
+        "id" => "resp_object",
+        "status" => "completed",
+        "output" => [
+          %{
+            "type" => "function_call",
+            "call_id" => "call_object",
+            "name" => "structured_output",
+            "arguments" => ~s({"location":"Boston"})
+          }
+        ]
+      }
+
+      {_request, response} =
+        AmazonBedrock.decode_response({request, %Req.Response{status: 200, body: payload}})
+
+      assert response.body.object == %{"location" => "Boston"}
+      assert response.body.model == "openai.gpt-5.6-terra"
+      assert request.options[:compiled_schema] == compiled_schema
+    end
+
+    test "disables Responses storage by default and accepts explicit storage options", %{
+      context: context,
+      opts: opts,
+      gpt_5: model
+    } do
+      for store <- [:default, false, true] do
+        provider_opts = opts[:provider_options]
+
+        provider_opts =
+          if store == :default, do: provider_opts, else: Keyword.put(provider_opts, :store, store)
+
+        opts = Keyword.put(opts, :provider_options, provider_opts)
+        expected_store = store == true
+
+        {:ok, request} = AmazonBedrock.prepare_request(:chat, model, context, opts)
+        {:ok, stream} = AmazonBedrock.attach_stream(model, context, opts, ReqLLM.Finch)
+
+        assert Jason.decode!(request.body)["store"] == expected_store
+        assert Jason.decode!(stream.body)["store"] == expected_store
+      end
+    end
+
+    test "decodes runtime GPT-5 chat deltas through the runtime parser", %{
+      context: context,
+      opts: opts,
+      gpt_5: model
+    } do
+      opts = Keyword.delete(opts, :provider_options)
+      {:ok, request} = AmazonBedrock.attach_stream(model, context, opts, ReqLLM.Finch)
+      assert request.path == "/model/openai.gpt-5.6-terra/invoke-with-response-stream"
+      assert Map.has_key?(Jason.decode!(request.body), "messages")
+
+      delta = %{
+        "object" => "chat.completion.chunk",
+        "choices" => [%{"index" => 0, "delta" => %{"content" => "Hello"}}]
+      }
+
+      payload = Jason.encode!(%{"bytes" => Base.encode64(Jason.encode!(delta))})
+      parser = AmazonBedrock.stream_protocol_parser(model, opts)
+      assert {:ok, [event], <<>>} = parser.(build_aws_event_stream_message(payload), nil)
+
+      for event <- [event, %{data: event}] do
+        assert {[%ReqLLM.StreamChunk{type: :content, text: "Hello"}], nil} =
+                 AmazonBedrock.decode_stream_event(event, model, nil)
+      end
+    end
+
     test "preserves Anthropic token parameters on both Mantle transports", %{
       context: context,
       opts: opts,

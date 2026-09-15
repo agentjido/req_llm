@@ -155,7 +155,7 @@ defmodule ReqLLM.Providers.AmazonBedrock do
       type: {:in, [:runtime, :mantle]},
       default: :runtime,
       doc:
-        "Bedrock endpoint the request goes to: bedrock-runtime (InvokeModel/Converse), or bedrock-mantle — the OpenAI Chat Completions API for most model families, the Anthropic Messages API for Claude"
+        "Bedrock endpoint the request goes to: bedrock-runtime (InvokeModel/Converse), or bedrock-mantle (Responses for response-shaped models, Chat Completions for other compatible models, Messages for Claude)"
     ],
     project: [
       type: :string,
@@ -165,7 +165,13 @@ defmodule ReqLLM.Providers.AmazonBedrock do
     mantle_base_path: [
       type: {:in, ["/v1", "/openai/v1"]},
       doc:
-        "Base path of the Chat Completions route on bedrock-mantle. Default: `/openai/v1` for GPT-5, Gemma 4 and Grok models, `/v1` for every other family. Ignored for Claude and on bedrock-runtime"
+        "Base path of the OpenAI-compatible routes on bedrock-mantle. Default: `/openai/v1` for GPT-5, Gemma 4 and Grok models, `/v1` for every other family. Ignored for Claude and on bedrock-runtime"
+    ],
+    store: [
+      type: :boolean,
+      default: false,
+      doc:
+        "Store Mantle Responses input and output for later use. Defaults to false. Ignored on other routes"
     ],
     use_converse: [
       type: :boolean,
@@ -445,6 +451,7 @@ defmodule ReqLLM.Providers.AmazonBedrock do
         :model_family,
         :use_converse,
         :operation,
+        :compiled_schema,
         :tools,
         :inference_profile_arn,
         :endpoint,
@@ -461,6 +468,7 @@ defmodule ReqLLM.Providers.AmazonBedrock do
             context: opts[:context],
             use_converse: use_converse,
             operation: opts[:operation],
+            compiled_schema: opts[:compiled_schema],
             tools: opts[:tools],
             response_formatter: formatter
           ]
@@ -718,6 +726,12 @@ defmodule ReqLLM.Providers.AmazonBedrock do
   end
 
   @impl ReqLLM.Provider
+  def decode_stream_event(%{data: %{"choices" => _}} = event, model, state) do
+    model_id = model.provider_model_id || model.id
+    openai = %{model | id: model_id, provider: :openai}
+    {ReqLLM.Provider.Defaults.default_decode_stream_event(event, openai), state}
+  end
+
   def decode_stream_event(%{data: _} = event, model, state) do
     model_id = model.provider_model_id || model.id
 
@@ -1114,7 +1128,8 @@ defmodule ReqLLM.Providers.AmazonBedrock do
     {path, get_formatter_module(family), family}
   end
 
-  defp mantle_wire(model) do
+  @doc false
+  def mantle_wire(model) do
     model_id = request_model_id(model)
 
     cond do

@@ -11,8 +11,11 @@ defmodule ReqLLM.Providers.AmazonBedrock.Responses do
 
   def format_request(model_id, context, opts) when is_list(opts) do
     openai_model = openai_model(model_id)
+    opts = prepare_object_options(opts)
+    provider_opts = Keyword.put_new(opts[:provider_options] || [], :store, false)
 
     opts
+    |> Keyword.put(:provider_options, provider_opts)
     |> Map.new()
     |> Map.merge(%{
       model: openai_model.id,
@@ -24,6 +27,29 @@ defmodule ReqLLM.Providers.AmazonBedrock.Responses do
     |> ResponsesAPI.build_body()
     |> Map.drop([:model, "model"])
     |> Map.put(:model, model_id)
+    |> Map.put("store", provider_opts[:store])
+  end
+
+  defp prepare_object_options(opts) do
+    if opts[:operation] == :object do
+      compiled_schema = Keyword.fetch!(opts, :compiled_schema)
+
+      tool =
+        ReqLLM.Tool.new!(
+          name: "structured_output",
+          description: "Generate structured output matching the provided schema",
+          parameter_schema: compiled_schema.schema,
+          strict: true,
+          callback: fn _args -> {:ok, "structured output generated"} end
+        )
+
+      opts
+      |> Keyword.update(:tools, [tool], &[tool | &1])
+      |> Keyword.put(:tool_choice, %{type: "function", function: %{name: "structured_output"}})
+      |> Keyword.put(:parallel_tool_calls, false)
+    else
+      opts
+    end
   end
 
   def parse_response(body, opts) do
@@ -31,7 +57,7 @@ defmodule ReqLLM.Providers.AmazonBedrock.Responses do
 
     fake_request = %{
       options: %{
-        model: model.id,
+        model: opts[:model],
         req_llm_model: model,
         operation: opts[:operation],
         context: opts[:context],
@@ -64,8 +90,7 @@ defmodule ReqLLM.Providers.AmazonBedrock.Responses do
            output_tokens: output_tokens,
            total_tokens: usage["total_tokens"] || input_tokens + output_tokens,
            cached_tokens: get_in(usage, ["input_tokens_details", "cached_tokens"]) || 0,
-           reasoning_tokens:
-             get_in(usage, ["output_tokens_details", "reasoning_tokens"]) || 0
+           reasoning_tokens: get_in(usage, ["output_tokens_details", "reasoning_tokens"]) || 0
          }}
 
       _ ->
