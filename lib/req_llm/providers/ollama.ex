@@ -95,31 +95,11 @@ defmodule ReqLLM.Providers.Ollama do
 
   @impl ReqLLM.Provider
   def prepare_request(:object, model_spec, prompt, opts) do
-    compiled_schema = Keyword.fetch!(opts, :compiled_schema)
-    schema_name = Map.get(compiled_schema, :name, "structured_output")
-
-    response_format = %{
-      type: "json_schema",
-      json_schema: %{
-        name: schema_name,
-        schema: ReqLLM.Schema.to_json(compiled_schema.schema)
-      }
-    }
-
-    opts_with_format =
-      opts
-      |> Keyword.update(:provider_options, [response_format: response_format], fn provider_opts ->
-        Keyword.put(provider_opts, :response_format, response_format)
-      end)
-      |> ReqLLM.Provider.Options.put_model_max_tokens_default(model_spec, fallback: 4096)
-      |> Keyword.put(:operation, :object)
-
-    ReqLLM.Provider.Defaults.prepare_request(
+    ReqLLM.Provider.Defaults.prepare_json_schema_object_request(
       __MODULE__,
-      :chat,
       model_spec,
       prompt,
-      opts_with_format
+      opts
     )
   end
 

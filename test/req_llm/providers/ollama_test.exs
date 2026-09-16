@@ -171,6 +171,28 @@ defmodule ReqLLM.Providers.OllamaTest do
       refute Map.has_key?(body, "tool_choice")
     end
 
+    test "object requests accept flat map and namespaced provider options" do
+      {:ok, compiled_schema} = ReqLLM.Schema.compile(answer: [type: :string, required: true])
+
+      for provider_options <- [
+            %{num_ctx: 2048},
+            [ollama: [num_ctx: 2048]],
+            %{ollama: %{num_ctx: 2048}}
+          ] do
+        {:ok, request} =
+          Ollama.prepare_request(:object, ollama_model(), "Return ok",
+            compiled_schema: compiled_schema,
+            provider_options: provider_options
+          )
+
+        body = ReqLLM.Test.Helpers.json_body(Ollama.encode_body(request))
+
+        assert body["options"] == %{"num_ctx" => 2048}
+        assert body["response_format"]["type"] == "json_schema"
+        refute Map.has_key?(body["response_format"]["json_schema"], "strict")
+      end
+    end
+
     test "request processing translates reasoning effort before encoding" do
       {:ok, request} =
         Ollama.prepare_request(:chat, ollama_model(), "ping", reasoning_effort: :minimal)

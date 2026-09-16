@@ -46,6 +46,7 @@ defmodule ReqLLM.Provider.Defaults do
 
   - `prepare_chat_request/4`
   - `prepare_object_request/4`
+  - `prepare_json_schema_object_request/5`
   - `prepare_embedding_request/4`
   - `default_attach/3`
   - `default_build_body/1`
@@ -312,6 +313,60 @@ defmodule ReqLLM.Provider.Defaults do
       |> Keyword.put(:operation, :object)
 
     prepare_chat_request(provider_mod, model_spec, prompt, opts_with_tool)
+  end
+
+  @doc """
+  Prepares an object generation request using a native `json_schema` response format.
+
+  OpenAI-compatible local servers such as Ollama and LM Studio constrain output through
+  `response_format` instead of a synthetic tool. The compiled schema is placed in
+  `provider_options[:response_format]` regardless of the container shape the caller
+  used, a token limit default is applied, and the request is prepared as a chat request
+  with `operation: :object`. Pass `strict: true` to request strict schema adherence.
+  """
+  @spec prepare_json_schema_object_request(module(), term(), term(), keyword(), keyword()) ::
+          {:ok, Req.Request.t()} | {:error, Exception.t()}
+  def prepare_json_schema_object_request(provider_mod, model_spec, prompt, opts, options \\ []) do
+    with {:ok, model} <- ReqLLM.model(model_spec),
+         {:ok, opts} <-
+           ReqLLM.Provider.Options.normalize_namespaced_provider_options(
+             provider_mod,
+             :object,
+             model,
+             opts
+           ) do
+      compiled_schema = Keyword.fetch!(opts, :compiled_schema)
+      response_format = json_schema_response_format(compiled_schema, options)
+
+      object_opts =
+        opts
+        |> put_provider_option(:response_format, response_format)
+        |> ReqLLM.Provider.Options.put_model_max_tokens_default(model, fallback: 4096)
+        |> Keyword.put(:operation, :object)
+
+      prepare_chat_request(provider_mod, model, prompt, object_opts)
+    end
+  end
+
+  defp json_schema_response_format(compiled_schema, options) do
+    json_schema = %{
+      name: Map.get(compiled_schema, :name, "structured_output"),
+      schema: ReqLLM.Schema.to_json(compiled_schema.schema)
+    }
+
+    %{
+      type: "json_schema",
+      json_schema: maybe_put_strict(json_schema, Keyword.get(options, :strict))
+    }
+  end
+
+  defp maybe_put_strict(json_schema, nil), do: json_schema
+  defp maybe_put_strict(json_schema, strict), do: Map.put(json_schema, :strict, strict)
+
+  defp put_provider_option(opts, key, value) do
+    Keyword.update(opts, :provider_options, [{key, value}], fn provider_options ->
+      provider_options |> Enum.to_list() |> Keyword.put(key, value)
+    end)
   end
 
   defp get_tool_choice_for_model(model_spec) do
