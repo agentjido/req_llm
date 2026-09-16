@@ -565,7 +565,7 @@ defmodule ReqLLM.Response do
   @dialyzer {:nowarn_function, decode_response: 2}
   def decode_response(raw_data, model_spec) do
     with {:ok, model} <- ReqLLM.model(model_spec),
-         {:ok, provider_mod} <- ReqLLM.provider(model.provider) do
+         {:ok, provider_mod} <- ReqLLM.provider_for(model, :chat) do
       wrapped_data =
         if function_exported?(provider_mod, :wrap_response, 1) do
           provider_mod.wrap_response(raw_data)

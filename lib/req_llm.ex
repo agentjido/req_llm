@@ -264,6 +264,27 @@ defmodule ReqLLM do
     ReqLLM.Providers.get(provider)
   end
 
+  @doc false
+  @spec provider_for(LLMDB.Model.t(), atom()) :: {:ok, module()} | {:error, term()}
+  def provider_for(%LLMDB.Model{} = model, operation) do
+    case ReqLLM.Providers.get(model.provider) do
+      {:ok, module} ->
+        {:ok, module}
+
+      {:error, provider_error} ->
+        case LLMDB.provider(model.provider) do
+          {:ok, provider_data} ->
+            with :ok <-
+                   ReqLLM.Providers.OpenAICompatible.validate(model, provider_data, operation) do
+              {:ok, ReqLLM.Providers.OpenAICompatible}
+            end
+
+          {:error, _} ->
+            {:error, provider_error}
+        end
+    end
+  end
+
   @doc """
   Creates a model struct from various specifications.
 

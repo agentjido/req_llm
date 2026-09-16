@@ -564,7 +564,9 @@ defmodule ReqLLM.Provider.Defaults do
   def default_attach(provider_mod, %Req.Request{} = request, model_input, user_opts) do
     {:ok, %LLMDB.Model{} = model} = ReqLLM.model(model_input)
 
-    if model.provider != provider_mod.provider_id() do
+    if model.provider != provider_mod.provider_id() and
+         not (function_exported?(provider_mod, :accepts_provider?, 1) and
+                provider_mod.accepts_provider?(model.provider)) do
       raise ReqLLM.Error.Invalid.Provider.exception(provider: model.provider)
     end
 

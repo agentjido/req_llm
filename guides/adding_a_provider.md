@@ -2,10 +2,14 @@
 
 ## TL;DR
 
+- For an API that uses OpenAI Chat Completions without changes, add correct
+  provider and model execution metadata to LLMDB. ReqLLM can use the shared
+  adapter for text generation, structured output, and streaming. These entries
+  have the Community supported label and do not require live ReqLLM fixtures.
 - Implement a provider module under `lib/req_llm/providers/`, use `ReqLLM.Provider` + `Defaults`, and only override what the API actually deviates on.
 - The `Default` provider implementation is OpenAI Compatible.
 - Non-streaming requests run through Req with `attach/3` + `encode_body/1` + `decode_response/1`; streaming runs through Finch with `attach_stream/4` + `decode_stream_event/2` or `/3`.
-- Add models via `priv/models_local/` when you want shared registry coverage, then add tests using the three-tier strategy and record fixtures with `LIVE=true`. For one-off invocation or early development, ReqLLM can also use explicit model specs; see [Model Specs](model-specs.md).
+- Add provider and model metadata through LLMDB when you want shared catalog coverage. Dedicated ReqLLM providers should add focused tests and fixtures. For one-off invocation or early development, ReqLLM can also use explicit model specs; see [Model Specs](model-specs.md).
 
 ReqLLM 1.x intentionally keeps provider extensions as plain modules and data.
 See the [provider extension manifest decision](provider-extension-decision.md)

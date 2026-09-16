@@ -43,7 +43,7 @@ defmodule ReqLLM.RequestPlan do
          {merged_opts, input_warnings} <-
            ReqLLM.ModelInput.merge_tuple_defaults_with_warnings(model_input, operation, opts),
          {:ok, model} <- resolve_model(model_input),
-         {:ok, provider_module} <- ReqLLM.provider(model.provider),
+         {:ok, provider_module} <- ReqLLM.provider_for(model, operation),
          {:ok, namespaced_opts, namespace_warnings} <-
            ReqLLM.Provider.Options.Namespace.normalize(
              provider_module,
@@ -141,6 +141,10 @@ defmodule ReqLLM.RequestPlan do
         "provider :anthropic resolves to unsupported request-plan module #{inspect(provider_module)}"
       )
     end
+  end
+
+  defp resolve_surface(_model, ReqLLM.Providers.OpenAICompatible) do
+    {:ok, :openai_chat_completions, ReqLLM.Providers.OpenAICompatible, []}
   end
 
   defp resolve_surface(%LLMDB.Model{provider: provider}, _provider_module) do

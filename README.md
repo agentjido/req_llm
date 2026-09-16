@@ -55,6 +55,32 @@ That breadth extends well beyond chat: ReqLLM tracks **92 non-text operation mod
 
 \* _Streaming uses Finch directly due to known Req limitations with SSE responses._
 
+### Community supported OpenAI-compatible providers
+
+ReqLLM can use the shared Chat Completions adapter for a provider that has no
+dedicated ReqLLM module. Its LLMDB provider entry must declare a base URL and
+bearer API key environment variable. Each model operation must declare an
+executable `openai_chat_compatible` contract with the `openai_chat` wire format.
+The shared adapter covers text generation, structured output, and streaming.
+Existing provider modules take precedence.
+
+These providers have the **Community supported** label. ReqLLM does not record
+live fixtures for them. The community maintains the LLMDB model IDs, API
+metadata, and compatibility reports. A catalog entry or a successful call does
+not imply that every model feature works through the shared adapter. APIs that
+need different authentication, paths, or request and response handling need a
+dedicated provider module.
+
+After a provider and its models are added to LLMDB, use its catalog model ID and
+the API key environment variable declared in its LLMDB provider entry:
+
+```elixir
+ReqLLM.generate_text("provider:model-id", "Hello")
+```
+
+See the [LLMDB contribution guide](https://github.com/agentjido/llmdb/blob/main/CONTRIBUTING.md#provider-data-contributions)
+to add or correct provider and model metadata.
+
 ## Installation
 
 ### Igniter Installation (Recommended)

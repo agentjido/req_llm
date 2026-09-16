@@ -110,8 +110,13 @@ defmodule ReqLLM.Keys do
         end
 
       {:error, _} ->
-        # Provider not found, use conventional name
-        "#{provider |> Atom.to_string() |> String.upcase()}_API_KEY"
+        case LLMDB.provider(provider) do
+          {:ok, %{runtime: %{auth: %{env: [env | _]}}}} when is_binary(env) ->
+            env
+
+          _ ->
+            "#{provider |> Atom.to_string() |> String.upcase()}_API_KEY"
+        end
     end
   end
 

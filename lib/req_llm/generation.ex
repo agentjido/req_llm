@@ -107,7 +107,7 @@ defmodule ReqLLM.Generation do
 
   defp generate_text_response(model_spec, messages, opts) do
     with {:ok, model} <- ReqLLM.model(model_spec),
-         {:ok, provider_module} <- ReqLLM.provider(model.provider),
+         {:ok, provider_module} <- ReqLLM.provider_for(model, :chat),
          {:ok, opts} <-
            ReqLLM.Provider.Options.normalize_namespaced_provider_options(
              provider_module,
@@ -230,7 +230,7 @@ defmodule ReqLLM.Generation do
 
   defp stream_text_response(model_spec, messages, opts) do
     with {:ok, model} <- ReqLLM.model(model_spec),
-         {:ok, provider_module} <- ReqLLM.provider(model.provider),
+         {:ok, provider_module} <- ReqLLM.provider_for(model, :chat),
          {:ok, opts} <-
            ReqLLM.Provider.Options.normalize_namespaced_provider_options(
              provider_module,
@@ -380,7 +380,7 @@ defmodule ReqLLM.Generation do
          runtime_config
        ) do
     with {:ok, model} <- ReqLLM.model(model_spec),
-         {:ok, provider_module} <- ReqLLM.provider(model.provider),
+         {:ok, provider_module} <- ReqLLM.provider_for(model, :object),
          {:ok, opts} <-
            ReqLLM.Provider.Options.normalize_namespaced_provider_options(
              provider_module,
@@ -685,7 +685,7 @@ defmodule ReqLLM.Generation do
          runtime_config
        ) do
     with {:ok, model} <- ReqLLM.model(model_spec),
-         {:ok, provider_module} <- ReqLLM.provider(model.provider),
+         {:ok, provider_module} <- ReqLLM.provider_for(model, :object),
          {:ok, opts} <-
            ReqLLM.Provider.Options.normalize_namespaced_provider_options(
              provider_module,
