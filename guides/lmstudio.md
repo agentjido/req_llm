@@ -105,12 +105,15 @@ tool = ReqLLM.tool(
 
 {:ok, response} = ReqLLM.generate_text(model, "Weather in Paris?", tools: [tool])
 
-for call <- ReqLLM.Response.tool_calls(response) do
-  ReqLLM.Context.append(
-    response.context,
-    ReqLLM.Context.tool_result(call.id, "weather", "Sunny, 22 Celsius")
-  )
-end
+context =
+  Enum.reduce(ReqLLM.Response.tool_calls(response), response.context, fn call, context ->
+    ReqLLM.Context.append(
+      context,
+      ReqLLM.Context.tool_result(call.id, "weather", "Sunny, 22 Celsius")
+    )
+  end)
+
+{:ok, answer} = ReqLLM.generate_text(model, context, tools: [tool])
 ```
 
 Tool reliability depends on the model's training and chat template. See
