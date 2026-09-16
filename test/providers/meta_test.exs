@@ -206,7 +206,7 @@ defmodule ReqLLM.Providers.MetaTest do
 
       body = request |> Meta.encode_body() |> ReqLLM.Test.Helpers.json_body()
 
-      assert [reasoning | _input] = body["input"]
+      assert [%{"role" => "user"}, reasoning, %{"role" => "assistant"}] = body["input"]
       assert reasoning["type"] == "reasoning"
       assert reasoning["id"] == "rs_meta_1"
       assert reasoning["encrypted_content"] == "encrypted-meta-reasoning"

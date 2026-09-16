@@ -2616,6 +2616,70 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
       assert reasoning_input["encrypted_content"] == "encrypted_sig_abc"
     end
 
+    test "keeps each reasoning item at its own turn, so a later turn extends the input prefix" do
+      reasoning = fn id ->
+        %ReqLLM.Message.ReasoningDetails{
+          signature: "encrypted_#{id}",
+          encrypted?: true,
+          provider: :openai,
+          format: "openai-responses-v1",
+          index: 0,
+          provider_data: %{"id" => id, "type" => "reasoning"}
+        }
+      end
+
+      tool_turn =
+        ReqLLM.Context.assistant("",
+          tool_calls: [{"read", %{"path" => "a.ex"}, [id: "call_1"]}]
+        )
+
+      first_turn = [
+        ReqLLM.Context.user("Read the file"),
+        %{tool_turn | reasoning_details: [reasoning.("rs_1")]},
+        ReqLLM.Context.tool_result_message("read", "call_1", "file bytes", %{is_error: false}),
+        %{ReqLLM.Context.assistant("Done.") | reasoning_details: [reasoning.("rs_2")]}
+      ]
+
+      shape = fn body -> Enum.map(body["input"], &(&1["type"] || &1["role"])) end
+
+      encode = fn messages ->
+        %ReqLLM.Context{messages: messages}
+        |> then(&build_request(context: &1))
+        |> ResponsesAPI.encode_body()
+        |> ReqLLM.Test.Helpers.json_body()
+      end
+
+      before = encode.(first_turn ++ [ReqLLM.Context.user("Now edit it")])
+
+      assert shape.(before) == [
+               "user",
+               "reasoning",
+               "function_call",
+               "function_call_output",
+               "reasoning",
+               "assistant",
+               "user"
+             ]
+
+      assert Enum.map(before["input"], & &1["id"]) |> Enum.reject(&is_nil/1) == [
+               "rs_1",
+               "rs_2"
+             ]
+
+      later =
+        encode.(
+          first_turn ++
+            [
+              ReqLLM.Context.user("Now edit it"),
+              %{ReqLLM.Context.assistant("Edited.") | reasoning_details: [reasoning.("rs_3")]},
+              ReqLLM.Context.user("Continue")
+            ]
+        )
+
+      assert Enum.take(later["input"], length(before["input"])) == before["input"]
+      assert shape.(later) == shape.(before) ++ ["reasoning", "assistant", "user"]
+    end
+
     test "does not include reasoning items when previous_response_id is present" do
       reasoning_detail = %ReqLLM.Message.ReasoningDetails{
         text: "Previous reasoning",

@@ -746,12 +746,10 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
           extract_previous_response_id_from_context(context)
       end
 
-    inline_reasoning? =
-      previous_response_id == nil and
-        ReqLLM.Providers.OpenAI.AdapterHelpers.gpt6_astra_model?(model_name)
+    include_reasoning? = previous_response_id == nil
 
-    {input, _tool_messages, reasoning_items} =
-      Enum.reduce(context.messages, {[], [], []}, fn msg, {input_acc, tool_acc, reasoning_acc} ->
+    {input, _tool_messages} =
+      Enum.reduce(context.messages, {[], []}, fn msg, {input_acc, tool_acc} ->
         case msg.role do
           :tool when is_binary(msg.tool_call_id) ->
             # Encode tool results inline as function_call_output items so that
@@ -762,23 +760,21 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
             # tool calling with the Responses API.
             encoded = encode_tool_message_inline(msg)
 
-            {input_acc ++ [encoded], tool_acc, reasoning_acc}
+            {input_acc ++ [encoded], tool_acc}
 
           :tool ->
-            {input_acc, [msg | tool_acc], reasoning_acc}
+            {input_acc, [msg | tool_acc]}
 
           :assistant ->
-            new_reasoning = encode_reasoning_details_from_message(msg, target_provider)
+            reasoning =
+              if include_reasoning?,
+                do: encode_reasoning_details_from_message(msg, target_provider),
+                else: []
+
             assistant_items = encode_assistant_message_items(msg)
             function_calls = encode_tool_calls_as_function_calls(msg.tool_calls || [])
 
-            if inline_reasoning? do
-              {input_acc ++ new_reasoning ++ assistant_items ++ function_calls, tool_acc,
-               reasoning_acc}
-            else
-              {input_acc ++ assistant_items ++ function_calls, tool_acc,
-               reasoning_acc ++ new_reasoning}
-            end
+            {input_acc ++ reasoning ++ assistant_items ++ function_calls, tool_acc}
 
           _ ->
             content =
@@ -787,13 +783,13 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
               end)
 
             if content == [] do
-              {input_acc, tool_acc, reasoning_acc}
+              {input_acc, tool_acc}
             else
               updates = ReqLLM.Providers.OpenAI.Astra.configuration_items(msg, model_name)
 
               {input_acc ++
                  updates ++ [%{"role" => Atom.to_string(msg.role), "content" => content}],
-               tool_acc, reasoning_acc}
+               tool_acc}
             end
         end
       end)
@@ -825,17 +821,10 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
 
     text_format = encode_text_format(provider_opts[:response_format], provider_opts[:verbosity])
 
-    final_input =
-      if previous_response_id == nil and reasoning_items != [] do
-        reasoning_items ++ input
-      else
-        input
-      end
-
     body =
       Map.new()
       |> Map.put("model", model_name)
-      |> Map.put("input", final_input)
+      |> Map.put("input", input)
       |> maybe_put_string("stream", opts_map[:stream])
       |> maybe_put_string("max_output_tokens", max_output_tokens)
       |> maybe_put_string("reasoning", reasoning)
