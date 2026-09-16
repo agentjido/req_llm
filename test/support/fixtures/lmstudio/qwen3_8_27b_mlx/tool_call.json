@@ -1,0 +1,122 @@
+{
+  "model_spec": "lmstudio:qwen3.8-27b-mlx",
+  "provider": "lmstudio",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjo1MTIsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiQ2FsbCB0aGUgd2VhdGhlciB0b29sIGZvciBQYXJpcy4iLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJxd2VuMy44LTI3Yi1tbHgiLCJyZWFzb25pbmdfZWZmb3J0Ijoibm9uZSIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjAsInRvb2xfY2hvaWNlIjoiYXV0byIsInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCB0aGUgY3VycmVudCB3ZWF0aGVyIGluIGEgY2l0eSIsIm5hbWUiOiJ3ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnsiY2l0eSI6eyJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJjaXR5Il0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9XX0="
+    },
+    "canonical_json": {
+      "max_tokens": 512,
+      "messages": [
+        {
+          "content": "Call the weather tool for Paris.",
+          "role": "user"
+        }
+      ],
+      "model": "qwen3.8-27b-mlx",
+      "reasoning_effort": "none",
+      "stream": false,
+      "temperature": 0.0,
+      "tool_choice": "auto",
+      "tools": [
+        {
+          "function": {
+            "description": "Get the current weather in a city",
+            "name": "weather",
+            "parameters": {
+              "additionalProperties": false,
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ],
+              "type": "object"
+            }
+          },
+          "type": "function"
+        }
+      ]
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.7.4"
+      ]
+    },
+    "method": "post",
+    "url": "http://127.0.0.1:1234/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "tool_calls",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "\n\n",
+            "reasoning_content": "The user is asking to call a weather tool for Paris. This is simple and straightforward.\n",
+            "role": "assistant",
+            "tool_calls": [
+              {
+                "function": {
+                  "arguments": "{\"city\":\"Paris\"}",
+                  "name": "weather"
+                },
+                "id": "163453437",
+                "type": "function"
+              }
+            ]
+          }
+        }
+      ],
+      "created": 1789584260,
+      "id": "chatcmpl-7jy8i8vjaj8r7cvlnmrqdt",
+      "model": "qwen3.8-27b-mlx",
+      "object": "chat.completion",
+      "stats": {},
+      "system_fingerprint": "qwen3.8-27b-mlx",
+      "usage": {
+        "completion_tokens": 47,
+        "completion_tokens_details": {
+          "reasoning_tokens": 19
+        },
+        "prompt_tokens": 318,
+        "total_tokens": 365
+      }
+    },
+    "headers": {
+      "connection": [
+        "keep-alive"
+      ],
+      "content-length": [
+        "918"
+      ],
+      "content-type": [
+        "application/json; charset=utf-8"
+      ],
+      "date": [
+        "Wed, 16 Sep 2026 18:44:25 GMT"
+      ],
+      "etag": [
+        "W/\"396-Q6n70WKfNjAeUSqlJFisGfXRB7U\""
+      ],
+      "keep-alive": [
+        "timeout=5"
+      ],
+      "x-powered-by": [
+        "Express"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

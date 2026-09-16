@@ -1,0 +1,91 @@
+{
+  "model_spec": "lmstudio:qwen3.8-27b-mlx",
+  "provider": "lmstudio",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjo1MTIsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiU2F5IGhlbGxvLiIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6InF3ZW4zLjgtMjdiLW1seCIsInJlYXNvbmluZ19lZmZvcnQiOiJub25lIiwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+    },
+    "canonical_json": {
+      "max_tokens": 512,
+      "messages": [
+        {
+          "content": "Say hello.",
+          "role": "user"
+        }
+      ],
+      "model": "qwen3.8-27b-mlx",
+      "reasoning_effort": "none",
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.7.4"
+      ]
+    },
+    "method": "post",
+    "url": "http://127.0.0.1:1234/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "\n\nHello!",
+            "reasoning_content": "We need to respond to user: \"Say hello.\" Simple. Just say Hello. Final only.\n",
+            "role": "assistant",
+            "tool_calls": []
+          }
+        }
+      ],
+      "created": 1789584250,
+      "id": "chatcmpl-8tz3kpt4sn5zftkv0snj4b",
+      "model": "qwen3.8-27b-mlx",
+      "object": "chat.completion",
+      "stats": {},
+      "system_fingerprint": "qwen3.8-27b-mlx",
+      "usage": {
+        "completion_tokens": 26,
+        "completion_tokens_details": {
+          "reasoning_tokens": 21
+        },
+        "prompt_tokens": 55,
+        "total_tokens": 81
+      }
+    },
+    "headers": {
+      "connection": [
+        "keep-alive"
+      ],
+      "content-length": [
+        "687"
+      ],
+      "content-type": [
+        "application/json; charset=utf-8"
+      ],
+      "date": [
+        "Wed, 16 Sep 2026 18:44:14 GMT"
+      ],
+      "etag": [
+        "W/\"2af-93OpVKPW8xfjpEFOzGP5/Iawh+o\""
+      ],
+      "keep-alive": [
+        "timeout=5"
+      ],
+      "x-powered-by": [
+        "Express"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

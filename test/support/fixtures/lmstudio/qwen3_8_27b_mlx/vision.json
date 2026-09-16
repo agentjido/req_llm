@@ -1,0 +1,102 @@
+{
+  "model_spec": "lmstudio:qwen3.8-27b-mlx",
+  "provider": "lmstudio",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjo1MTIsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjpbeyJ0ZXh0IjoiV2hhdCBpcyB0aGUgZG9taW5hbnQgY29sb3IgaW4gdGhpcyBpbWFnZT8gQW5zd2VyIHdpdGggb25lIHdvcmQuIiwidHlwZSI6InRleHQifSx7ImltYWdlX3VybCI6eyJ1cmwiOiJkYXRhOmltYWdlL3BuZztiYXNlNjQsaVZCT1J3MEtHZ29BQUFBTlNVaEVVZ0FBQUVBQUFBQkFDQUlBQUFBbEMrYUpBQUFBYjBsRVFWUjRuTzNQQVFrQUFBeUV3TzlmZW9zaGduQUJkTGVwOFFVTnlQRUZEY2p4QlEzSThRVU55UEVGRGNqeEJRM0k4UVVOeVBFRkRjanhCUTNJOFFVTnlQRUZEY2p4QlEzSThRVU55UEVGRGNqeEJRM0k4UVVOeVBFRkRjanhCUTNJOFFVTnlQRUZEY2p4QlEzSThRVU55UEVGRGNqeEJRM0lQYW5jOE9MRFFpdHhBQUFBQUVsRlRrU3VRbUNDIn0sInR5cGUiOiJpbWFnZV91cmwifV0sInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6InF3ZW4zLjgtMjdiLW1seCIsInJlYXNvbmluZ19lZmZvcnQiOiJub25lIiwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+    },
+    "canonical_json": {
+      "max_tokens": 512,
+      "messages": [
+        {
+          "content": [
+            {
+              "text": "What is the dominant color in this image? Answer with one word.",
+              "type": "text"
+            },
+            {
+              "image_url": {
+                "url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAAb0lEQVR4nO3PAQkAAAyEwO9feoshgnABdLep8QUNyPEFDcjxBQ3I8QUNyPEFDcjxBQ3I8QUNyPEFDcjxBQ3I8QUNyPEFDcjxBQ3I8QUNyPEFDcjxBQ3I8QUNyPEFDcjxBQ3I8QUNyPEFDcjxBQ3I8QUNyPEFDcjxBQ3IPanc8OLDQitxAAAAAElFTkSuQmCC"
+              },
+              "type": "image_url"
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "model": "qwen3.8-27b-mlx",
+      "reasoning_effort": "none",
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.7.4"
+      ]
+    },
+    "method": "post",
+    "url": "http://127.0.0.1:1234/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "\n\nRed",
+            "reasoning_content": "The user wants the dominant color of the image, answered in a single word. The image is a uniform field of red with no other elements present. I need to consider possible one-word answers: \"red\" is the most direct and accurate descriptor. Other options like \"crimson\" or \"scarlet\" would be more specific than necessary and risk inaccuracy. The simplest, most correct response is \"Red\". I'll provide just that word to satisfy the constraint.\n",
+            "role": "assistant",
+            "tool_calls": []
+          }
+        }
+      ],
+      "created": 1789584320,
+      "id": "chatcmpl-xpaq0fcg3xyxw2o9xx4",
+      "model": "qwen3.8-27b-mlx",
+      "object": "chat.completion",
+      "stats": {},
+      "system_fingerprint": "qwen3.8-27b-mlx",
+      "usage": {
+        "completion_tokens": 99,
+        "completion_tokens_details": {
+          "reasoning_tokens": 95
+        },
+        "prompt_tokens": 69,
+        "total_tokens": 168
+      }
+    },
+    "headers": {
+      "connection": [
+        "keep-alive"
+      ],
+      "content-length": [
+        "1052"
+      ],
+      "content-type": [
+        "application/json; charset=utf-8"
+      ],
+      "date": [
+        "Wed, 16 Sep 2026 18:45:41 GMT"
+      ],
+      "etag": [
+        "W/\"41c-l5WnjSsMCvMxuOjt1J3Xu1f76y8\""
+      ],
+      "keep-alive": [
+        "timeout=5"
+      ],
+      "x-powered-by": [
+        "Express"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

@@ -37,6 +37,8 @@ defmodule ReqLLM.Doctor do
     "AZURE_MAI_BASE_URL"
   ]
   @oauth_default_files ["oauth.json", "auth.json"]
+  @credential_free_providers [:lmstudio, :ollama]
+  @credential_free_provider_names Enum.map(@credential_free_providers, &Atom.to_string/1)
 
   @type status :: String.t()
   @type check :: %{
@@ -398,7 +400,10 @@ defmodule ReqLLM.Doctor do
           "warning",
           "No optional provider credentials were detected; credential-free providers may still be usable.",
           "Configure a provider credential when you are ready to make provider requests.",
-          %{"configured_providers" => [], "credential_free_providers" => ["ollama"]}
+          %{
+            "configured_providers" => [],
+            "credential_free_providers" => @credential_free_provider_names
+          }
         )
       ]
     else
@@ -474,7 +479,7 @@ defmodule ReqLLM.Doctor do
 
   defp configured_credential_providers do
     ReqLLM.Providers.list()
-    |> Enum.reject(&(&1 == :ollama))
+    |> Enum.reject(&(&1 in @credential_free_providers))
     |> Enum.filter(&configured_provider?/1)
   end
 
@@ -619,7 +624,7 @@ defmodule ReqLLM.Doctor do
     end
   end
 
-  defp credential_requirement(:ollama), do: :none
+  defp credential_requirement(provider) when provider in @credential_free_providers, do: :none
   defp credential_requirement(:openai_codex), do: :required
 
   defp credential_requirement(provider) do

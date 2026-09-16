@@ -1,0 +1,110 @@
+{
+  "model_spec": "lmstudio:qwen2.5-0.5b-instruct",
+  "provider": "lmstudio",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjo1MTIsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiUmV0dXJuIGFuIG9iamVjdCB3aXRoIGFuc3dlciBzZXQgdG8gb2suIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoicXdlbjIuNS0wLjViLWluc3RydWN0IiwicmVhc29uaW5nX2VmZm9ydCI6Im5vbmUiLCJyZXNwb25zZV9mb3JtYXQiOnsianNvbl9zY2hlbWEiOnsibmFtZSI6InN0cnVjdHVyZWRfb3V0cHV0Iiwic2NoZW1hIjp7ImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjpmYWxzZSwicHJvcGVydGllcyI6eyJhbnN3ZXIiOnsidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsiYW5zd2VyIl0sInR5cGUiOiJvYmplY3QifSwic3RyaWN0Ijp0cnVlfSwidHlwZSI6Impzb25fc2NoZW1hIn0sInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+    },
+    "canonical_json": {
+      "max_tokens": 512,
+      "messages": [
+        {
+          "content": "Return an object with answer set to ok.",
+          "role": "user"
+        }
+      ],
+      "model": "qwen2.5-0.5b-instruct",
+      "reasoning_effort": "none",
+      "response_format": {
+        "json_schema": {
+          "name": "structured_output",
+          "schema": {
+            "additionalProperties": false,
+            "properties": {
+              "answer": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "answer"
+            ],
+            "type": "object"
+          },
+          "strict": true
+        },
+        "type": "json_schema"
+      },
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.7.4"
+      ]
+    },
+    "method": "post",
+    "url": "http://127.0.0.1:1234/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "{\n  \"answer\": \"ok\"\n}",
+            "reasoning_content": "",
+            "role": "assistant",
+            "tool_calls": []
+          }
+        }
+      ],
+      "created": 1789584525,
+      "id": "chatcmpl-hms05o4rjp6smwm21xx6o",
+      "model": "qwen2.5-0.5b-instruct",
+      "object": "chat.completion",
+      "stats": {},
+      "system_fingerprint": "qwen2.5-0.5b-instruct",
+      "usage": {
+        "completion_tokens": 14,
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "prompt_tokens": 38,
+        "total_tokens": 52
+      }
+    },
+    "headers": {
+      "connection": [
+        "keep-alive"
+      ],
+      "content-length": [
+        "633"
+      ],
+      "content-type": [
+        "application/json; charset=utf-8"
+      ],
+      "date": [
+        "Wed, 16 Sep 2026 18:48:45 GMT"
+      ],
+      "etag": [
+        "W/\"279-uAaTUkKOVq5SiukY1QxrZsrZA2A\""
+      ],
+      "keep-alive": [
+        "timeout=5"
+      ],
+      "x-powered-by": [
+        "Express"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

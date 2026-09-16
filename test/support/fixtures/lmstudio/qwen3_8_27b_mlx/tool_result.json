@@ -1,0 +1,133 @@
+{
+  "model_spec": "lmstudio:qwen3.8-27b-mlx",
+  "provider": "lmstudio",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjo1MTIsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiQ2FsbCB0aGUgd2VhdGhlciB0b29sIGZvciBQYXJpcy4iLCJyb2xlIjoidXNlciJ9LHsiY29udGVudCI6IlxuXG4iLCJyZWFzb25pbmdfY29udGVudCI6IlRoZSB1c2VyIGlzIGFza2luZyB0byBjYWxsIGEgd2VhdGhlciB0b29sIGZvciBQYXJpcy4gVGhpcyBpcyBzaW1wbGUgYW5kIHN0cmFpZ2h0Zm9yd2FyZC5cbiIsInJvbGUiOiJhc3Npc3RhbnQiLCJ0b29sX2NhbGxzIjpbeyJmdW5jdGlvbiI6eyJhcmd1bWVudHMiOiJ7XCJjaXR5XCI6XCJQYXJpc1wifSIsIm5hbWUiOiJ3ZWF0aGVyIn0sImlkIjoiMTYzNDUzNDM3IiwidHlwZSI6ImZ1bmN0aW9uIn1dfSx7ImNvbnRlbnQiOiJTdW5ueSwgMjIgQ2Vsc2l1cyIsIm5hbWUiOiJ3ZWF0aGVyIiwicm9sZSI6InRvb2wiLCJ0b29sX2NhbGxfaWQiOiIxNjM0NTM0MzcifV0sIm1vZGVsIjoicXdlbjMuOC0yN2ItbWx4IiwicmVhc29uaW5nX2VmZm9ydCI6Im5vbmUiLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgdGhlIGN1cnJlbnQgd2VhdGhlciBpbiBhIGNpdHkiLCJuYW1lIjoid2VhdGhlciIsInBhcmFtZXRlcnMiOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7ImNpdHkiOnsidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsiY2l0eSJdLCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifV19"
+    },
+    "canonical_json": {
+      "max_tokens": 512,
+      "messages": [
+        {
+          "content": "Call the weather tool for Paris.",
+          "role": "user"
+        },
+        {
+          "content": "\n\n",
+          "reasoning_content": "The user is asking to call a weather tool for Paris. This is simple and straightforward.\n",
+          "role": "assistant",
+          "tool_calls": [
+            {
+              "function": {
+                "arguments": "{\"city\":\"Paris\"}",
+                "name": "weather"
+              },
+              "id": "163453437",
+              "type": "function"
+            }
+          ]
+        },
+        {
+          "content": "Sunny, 22 Celsius",
+          "name": "weather",
+          "role": "tool",
+          "tool_call_id": "163453437"
+        }
+      ],
+      "model": "qwen3.8-27b-mlx",
+      "reasoning_effort": "none",
+      "stream": false,
+      "temperature": 0.0,
+      "tools": [
+        {
+          "function": {
+            "description": "Get the current weather in a city",
+            "name": "weather",
+            "parameters": {
+              "additionalProperties": false,
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ],
+              "type": "object"
+            }
+          },
+          "type": "function"
+        }
+      ]
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.7.4"
+      ]
+    },
+    "method": "post",
+    "url": "http://127.0.0.1:1234/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "\n\nThe current weather in Paris is **sunny, 22°C**.",
+            "reasoning_content": "The tool returned the weather for Paris: sunny, 22 degrees Celsius. I should report this to the user.\n",
+            "role": "assistant",
+            "tool_calls": []
+          }
+        }
+      ],
+      "created": 1789584265,
+      "id": "chatcmpl-utmg6aku2bicyl1xpzx9yj",
+      "model": "qwen3.8-27b-mlx",
+      "object": "chat.completion",
+      "stats": {},
+      "system_fingerprint": "qwen3.8-27b-mlx",
+      "usage": {
+        "completion_tokens": 43,
+        "completion_tokens_details": {
+          "reasoning_tokens": 25
+        },
+        "prompt_tokens": 390,
+        "total_tokens": 433
+      }
+    },
+    "headers": {
+      "connection": [
+        "keep-alive"
+      ],
+      "content-length": [
+        "755"
+      ],
+      "content-type": [
+        "application/json; charset=utf-8"
+      ],
+      "date": [
+        "Wed, 16 Sep 2026 18:44:35 GMT"
+      ],
+      "etag": [
+        "W/\"2f3-N17A9Re2RAOhAXqcG5/Os70GnVE\""
+      ],
+      "keep-alive": [
+        "timeout=5"
+      ],
+      "x-powered-by": [
+        "Express"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

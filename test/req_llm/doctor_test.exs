@@ -76,7 +76,24 @@ defmodule ReqLLM.DoctorTest do
     assert result["status"] == "warning"
     assert check["status"] == "warning"
     assert check["details"]["configured_providers"] == []
+    assert check["details"]["credential_free_providers"] == ["lmstudio", "ollama"]
     assert Doctor.exit_status(result) == 0
+  end
+
+  test "treats credential-free local providers as configured without a key" do
+    ReqLLM.Test.Env.isolate!(["LMSTUDIO_API_KEY"])
+    original_lmstudio_key = Application.get_env(:req_llm, :lmstudio_api_key)
+    Application.delete_env(:req_llm, :lmstudio_api_key)
+    on_exit(fn -> restore_app_env(:req_llm, :lmstudio_api_key, original_lmstudio_key) end)
+
+    for provider <- [:lmstudio, :ollama] do
+      result = Doctor.run(provider: provider)
+      check = find_check(result, "credentials.selected_provider")
+
+      assert check["status"] == "ok"
+      assert check["details"] == %{"provider" => Atom.to_string(provider), "required" => false}
+      assert Doctor.exit_status(result) == 0
+    end
   end
 
   test "reports missing selected-provider credentials as a required error" do
