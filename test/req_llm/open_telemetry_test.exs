@@ -408,7 +408,7 @@ defmodule ReqLLM.OpenTelemetryTest do
       %{request_id: request_id, operation: :chat, provider: :openai, model: model}
     )
 
-    assert_receive {:start_span, span, _name, _attrs}
+    assert_receive {:start_span, span, _name, %{:"req_llm.request_id" => ^request_id}}
 
     :telemetry.execute(
       [:req_llm, :request, :stop],
