@@ -208,6 +208,13 @@ defmodule ReqLLM.Step.RetryTest do
       assert Retry.should_retry?(request, response) == {:delay, 3_000}
     end
 
+    test "returns retry-after delay for 529 overload responses" do
+      request = Req.new()
+      response = %Req.Response{status: 529, headers: [{"retry-after", "2"}]}
+
+      assert Retry.should_retry?(request, response) == {:delay, 2_000}
+    end
+
     test "returns false for successful responses" do
       request = Req.new()
       response = %Req.Response{status: 200, body: "OK"}

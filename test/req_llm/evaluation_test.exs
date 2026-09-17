@@ -1,0 +1,158 @@
+defmodule ReqLLM.EvaluationTest do
+  use ExUnit.Case, async: true
+
+  alias ReqLLM.EvaluationResponse
+  alias ReqLLM.Providers.TypeSafe
+
+  @questions %{
+    department: %{
+      type: :choice,
+      instructions: "Which team should handle this?",
+      criteria: %{billing: "Billing and refunds", support: "Other requests"}
+    },
+    severity: %{
+      type: :score,
+      instructions: "How severe is this?",
+      criteria: ["low", "medium", "high"]
+    },
+    urgent: %{type: :boolean, instructions: "Is this urgent?"}
+  }
+
+  test "evaluates one structured state and keeps all TypeSafe answer data" do
+    Req.Test.stub(__MODULE__.Success, fn conn ->
+      assert conn.method == "POST"
+      assert conn.request_path == "/v1/systemone"
+      assert Plug.Conn.get_req_header(conn, "authorization") == ["Bearer test-key"]
+
+      assert conn.body_params == %{
+               "model" => "jev-latest",
+               "state" => %{"ticket" => "Please refund me today"},
+               "questions" => %{
+                 "department" => %{
+                   "type" => "choice",
+                   "instructions" => "Which team should handle this?",
+                   "criteria" => %{
+                     "billing" => "Billing and refunds",
+                     "support" => "Other requests"
+                   }
+                 },
+                 "severity" => %{
+                   "type" => "score",
+                   "instructions" => "How severe is this?",
+                   "criteria" => ["low", "medium", "high"]
+                 },
+                 "urgent" => %{"type" => "noul", "instructions" => "Is this urgent?"}
+               }
+             }
+
+      Req.Test.json(conn, %{
+        "model" => "jev-1.13.0",
+        "answers" => %{
+          "department" => %{
+            "type" => "choice",
+            "choice" => "billing",
+            "probabilities" => %{"billing" => 0.9, "support" => 0.1},
+            "confidence" => 0.8
+          },
+          "severity" => %{
+            "type" => "score",
+            "score" => 1.2,
+            "legend" => %{"0" => "low", "1" => "medium", "2" => "high"},
+            "probabilities" => %{"0" => 0.1, "1" => 0.6, "2" => 0.3},
+            "confidence" => 0.6
+          },
+          "urgent" => %{"type" => "noul", "noul" => 0.93}
+        },
+        "usage" => %{"input_tokens" => 100, "output_tokens" => 20}
+      })
+    end)
+
+    assert {:ok, %EvaluationResponse{} = result} =
+             ReqLLM.evaluate(
+               "typesafe:jev-latest",
+               %{ticket: "Please refund me today"},
+               @questions,
+               api_key: "test-key",
+               req_http_options: [plug: {Req.Test, __MODULE__.Success}]
+             )
+
+    assert result.model == "jev-1.13.0"
+    assert result.answers["department"]["choice"] == "billing"
+    assert result.answers["department"]["probabilities"]["billing"] == 0.9
+    assert result.answers["department"]["confidence"] == 0.8
+    assert result.answers["severity"]["score"] == 1.2
+    assert result.answers["severity"]["legend"]["2"] == "high"
+    assert result.answers["urgent"] == %{"type" => "boolean", "probability" => 0.93}
+    assert result.raw["answers"]["urgent"] == %{"type" => "noul", "noul" => 0.93}
+    assert result.usage.input_tokens == 100
+    assert result.usage.output_tokens == 20
+  end
+
+  test "resolves Jev as a non-chat model" do
+    assert {:ok, model} = ReqLLM.model("typesafe:jev-latest")
+    assert model.capabilities.chat == false
+    assert model.capabilities.streaming.text == false
+    assert {:ok, TypeSafe} = ReqLLM.provider(:typesafe)
+
+    assert {:ok, inline_model} = ReqLLM.model(%{provider: :typesafe, id: "jev-preview"})
+    assert inline_model.capabilities.chat == false
+    assert inline_model.capabilities.streaming.text == false
+  end
+
+  test "rejects invalid state and questions before a request" do
+    assert {:error, %ReqLLM.Error.Invalid.Parameter{}} =
+             ReqLLM.evaluate("typesafe:jev-latest", 123, @questions, api_key: "test-key")
+
+    assert {:error, %ReqLLM.Error.Invalid.Parameter{}} =
+             ReqLLM.evaluate("typesafe:jev-latest", "text", %{}, api_key: "test-key")
+  end
+
+  test "reports unsupported operations without a chat request" do
+    assert {:error, %ReqLLM.Error.Invalid.Parameter{}} =
+             TypeSafe.prepare_request(
+               :chat,
+               %{provider: :typesafe, id: "jev-latest"},
+               "hello",
+               api_key: "test-key"
+             )
+
+    assert {:error, %ReqLLM.Error.Invalid.Parameter{}} =
+             ReqLLM.evaluate("cohere:rerank-v3.5", "text", @questions, api_key: "test-key")
+
+    no_http = [plug: fn _conn -> flunk("unexpected HTTP request") end]
+
+    assert {:error, %ReqLLM.Error.Invalid.Parameter{}} =
+             ReqLLM.generate_text("typesafe:jev-latest", "hello",
+               api_key: "test-key",
+               req_http_options: no_http
+             )
+
+    assert {:error, %ReqLLM.Error.Invalid.Parameter{}} =
+             ReqLLM.generate_object(
+               "typesafe:jev-latest",
+               "hello",
+               [answer: [type: :string, required: true]],
+               api_key: "test-key",
+               req_http_options: no_http
+             )
+
+    ExUnit.CaptureLog.capture_log(fn ->
+      assert {:error, {:http_streaming_failed, {:provider_build_failed, error}}} =
+               ReqLLM.stream_text("typesafe:jev-latest", "hello", api_key: "test-key")
+
+      assert %ReqLLM.Error.Invalid.Parameter{} = error
+    end)
+  end
+
+  test "returns a response error for malformed provider data" do
+    Req.Test.stub(__MODULE__.Malformed, fn conn ->
+      Req.Test.json(conn, %{"answers" => %{}})
+    end)
+
+    assert {:error, %ReqLLM.Error.API.Request{status: 200}} =
+             ReqLLM.evaluate("typesafe:jev-latest", "text", @questions,
+               api_key: "test-key",
+               req_http_options: [plug: {Req.Test, __MODULE__.Malformed}]
+             )
+  end
+end

@@ -114,14 +114,16 @@ defmodule ReqLLM.Step.Retry do
     retry(request, 0, nil)
   end
 
-  def should_retry?(request, %Req.Response{status: 429} = response) do
+  def should_retry?(request, %Req.Response{status: status} = response)
+      when status in [429, 529] do
     retry_after = extract_retry_after_delay(response.headers)
-    retry(request, retry_after, 429)
+    retry(request, retry_after, status)
   end
 
-  def should_retry?(request, %ReqLLM.Error.API.Request{status: 429, headers: headers}) do
+  def should_retry?(request, %ReqLLM.Error.API.Request{status: status, headers: headers})
+      when status in [429, 529] do
     retry_after = extract_retry_after_delay(headers)
-    retry(request, retry_after, 429)
+    retry(request, retry_after, status)
   end
 
   # Transport failures often surface wrapped in a ReqLLM.Error.API.Request rather than

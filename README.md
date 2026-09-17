@@ -212,6 +212,34 @@ ReqLLM.StreamResponse.tokens(response)
 usage = ReqLLM.StreamResponse.usage(response)
 ```
 
+## Evaluation models
+
+Evaluation models answer named questions about one text or JSON state. They do
+not need to support chat. Set `TYPESAFE_API_KEY` in `.env` to use TypeSafe Jev:
+
+```elixir
+questions = %{
+  department: %{
+    type: :choice,
+    instructions: "Which team should handle this?",
+    criteria: %{billing: "Billing and refunds", support: "Other requests"}
+  },
+  urgent: %{type: :boolean, instructions: "Is this urgent?"}
+}
+
+{:ok, result} = ReqLLM.evaluate("typesafe:jev-latest", %{message: "Refund me today"}, questions)
+result.answers["department"]["choice"]
+result.answers["department"]["probabilities"]
+result.answers["urgent"]["probability"]
+result.usage.input_tokens
+```
+
+Jev also supports `:score` questions with an ordered `criteria` list. Answers
+use string keys. The result keeps the full provider response in `raw`, including
+TypeSafe's `noul` value. `:boolean` is the common ReqLLM name for that question.
+Use `generate_object/4` for text models that generate JSON objects; it is not a
+Jev endpoint. Jev does not support text generation or streaming.
+
 ## Features
 
 - **Provider-agnostic model registry**

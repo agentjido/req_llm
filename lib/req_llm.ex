@@ -84,6 +84,7 @@ defmodule ReqLLM do
   alias ReqLLM.{
     Availability,
     Embedding,
+    Evaluation,
     Generation,
     Images,
     MapAccess,
@@ -721,6 +722,14 @@ defmodule ReqLLM do
     model(minimax_inline_model_attrs(model_id))
   end
 
+  defp resolve_provider_model_fallback(:typesafe, model_id, _original_error) do
+    model(%{
+      provider: :typesafe,
+      id: model_id,
+      capabilities: %{chat: false, streaming: %{text: false, tool_calls: false}}
+    })
+  end
+
   defp resolve_provider_model_fallback(provider, model_id, _original_error) do
     case ReqLLM.provider(provider) do
       {:ok, _provider_module} ->
@@ -827,6 +836,7 @@ defmodule ReqLLM do
   defp normalize_inline_model_attrs(attrs) do
     attrs = atomize_inline_model_keys(attrs)
     attrs = sync_inline_model_id_and_model(attrs)
+    attrs = disable_typesafe_generation(attrs)
 
     cond do
       not valid_inline_model_provider?(attrs[:provider]) ->
@@ -847,6 +857,21 @@ defmodule ReqLLM do
         coerce_inline_model_provider(attrs)
     end
   end
+
+  defp disable_typesafe_generation(%{provider: provider} = attrs)
+       when provider in [:typesafe, "typesafe"] do
+    capabilities = Map.get(attrs, :capabilities) || %{}
+    streaming = Map.get(capabilities, :streaming) || %{}
+
+    capabilities =
+      capabilities
+      |> Map.put(:chat, false)
+      |> Map.put(:streaming, Map.merge(streaming, %{text: false, tool_calls: false}))
+
+    Map.put(attrs, :capabilities, capabilities)
+  end
+
+  defp disable_typesafe_generation(attrs), do: attrs
 
   defp atomize_inline_model_keys(attrs) do
     Enum.reduce(attrs, attrs, fn
@@ -1402,6 +1427,26 @@ defmodule ReqLLM do
   """
   @spec rerank!(model_input(), keyword()) :: ReqLLM.RerankResponse.t() | no_return()
   defdelegate rerank!(model_spec, opts \\ []), to: Rerank
+
+  # ==========================================================================
+  # Evaluation API - Delegated to ReqLLM.Evaluation
+  # ==========================================================================
+
+  @doc """
+  Evaluates one state against named questions with an evaluation model.
+
+  This call does not use chat or `generate_object/4`.
+  """
+  @spec evaluate(model_input(), String.t() | map() | list(), map(), keyword()) ::
+          {:ok, ReqLLM.EvaluationResponse.t()} | {:error, term()}
+  defdelegate evaluate(model_spec, state, questions, opts \\ []), to: Evaluation
+
+  @doc """
+  Same as `evaluate/4`, but raises on error.
+  """
+  @spec evaluate!(model_input(), String.t() | map() | list(), map(), keyword()) ::
+          ReqLLM.EvaluationResponse.t() | no_return()
+  defdelegate evaluate!(model_spec, state, questions, opts \\ []), to: Evaluation
 
   # ===========================================================================
   # OCR API - Delegated to ReqLLM.OCR

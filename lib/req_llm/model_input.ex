@@ -75,6 +75,7 @@ defmodule ReqLLM.ModelInput do
   defp option_schema(:transcription), do: ReqLLM.Transcription.schema()
   defp option_schema(:speech), do: ReqLLM.Speech.schema()
   defp option_schema(:rerank), do: ReqLLM.Rerank.schema()
+  defp option_schema(:evaluate), do: ReqLLM.Evaluation.schema()
   defp option_schema(:ocr), do: ReqLLM.OCR.schema()
   defp option_schema(:video), do: ReqLLM.Video.schema()
 
