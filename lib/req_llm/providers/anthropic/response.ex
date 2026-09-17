@@ -34,7 +34,26 @@ defmodule ReqLLM.Providers.Anthropic.Response do
 
   """
 
+  alias ReqLLM.Message.ContentPart
   alias ReqLLM.Message.ReasoningDetails
+
+  # Server-side tool blocks the API executes on the model's behalf and expects
+  # back VERBATIM, IN PLACE, in the next assistant turn. Tool search
+  # (`server_tool_use` + `tool_search_tool_result`) is the case that bites:
+  # they arrive mid-turn, so a thinking block can follow them, and the encoder
+  # hoists thinking blocks to the front. Measured against the live API on a
+  # turn shaped `thinking · text · server_tool_use · … · thinking · tool_use`:
+  # replaying it unchanged is accepted; hoisting the second thinking block is
+  # rejected with "`thinking` … blocks in the latest assistant message cannot
+  # be modified".
+  #
+  # So the blocks are decoded as `ContentPart.provider_block/3`, which
+  # `Anthropic.Context` replays unchanged at its position — and a thinking
+  # block that FOLLOWS one is decoded the same way instead of as a reasoning
+  # detail, because only the ordered content keeps its place. Thinking before
+  # the first server block keeps the reasoning-detail path, so a turn without
+  # server tools decodes and encodes exactly as it did before.
+  @server_tool_block_types ~w(server_tool_use tool_search_tool_result)
 
   @doc """
   Decode Anthropic response data to ReqLLM.Response.
@@ -121,7 +140,13 @@ defmodule ReqLLM.Providers.Anthropic.Response do
 
   @doc false
   def init_stream_state do
-    %{thinking_blocks: %{}, next_reasoning_index: 0}
+    %{
+      thinking_blocks: %{},
+      next_reasoning_index: 0,
+      server_tool_blocks: %{},
+      raw_thinking_blocks: %{},
+      after_server_tool?: false
+    }
   end
 
   @doc false
@@ -141,7 +166,16 @@ defmodule ReqLLM.Providers.Anthropic.Response do
         decode_content_block_start(block, index, state)
 
       %{"type" => "content_block_stop", "index" => index} ->
-        finalize_thinking_block(index, state)
+        cond do
+          Map.has_key?(state.server_tool_blocks, index) ->
+            finalize_server_tool_block(index, state)
+
+          Map.has_key?(state.raw_thinking_blocks, index) ->
+            finalize_raw_thinking_block(index, state)
+
+          true ->
+            finalize_thinking_block(index, state)
+        end
 
       %{"type" => "message_stop"} ->
         {[ReqLLM.StreamChunk.meta(%{terminal?: true})], state}
@@ -166,7 +200,8 @@ defmodule ReqLLM.Providers.Anthropic.Response do
   def flush_stream_state(_model, state) do
     state = ensure_stream_state(state)
     {details, state} = drain_thinking_blocks(state)
-    {reasoning_detail_chunks(details), state}
+    {server_tool_chunks, state} = drain_server_tool_blocks(state)
+    {reasoning_detail_chunks(details) ++ server_tool_chunks, state}
   end
 
   # Private helper functions
@@ -175,7 +210,11 @@ defmodule ReqLLM.Providers.Anthropic.Response do
 
   defp decode_content(content) when is_list(content) do
     content
-    |> Enum.map(&decode_content_block/1)
+    |> Enum.map_reduce(false, fn block, after_server_tool? ->
+      {decode_content_block(block, after_server_tool?),
+       after_server_tool? or server_tool_block?(block)}
+    end)
+    |> elem(0)
     |> List.flatten()
     |> Enum.reject(&is_nil/1)
   end
@@ -183,6 +222,16 @@ defmodule ReqLLM.Providers.Anthropic.Response do
   defp decode_content(content) when is_binary(content) do
     [ReqLLM.StreamChunk.text(content)]
   end
+
+  defp server_tool_block?(%{"type" => type}), do: type in @server_tool_block_types
+  defp server_tool_block?(_block), do: false
+
+  # A thinking block after a server tool block must keep its position, so it is
+  # carried as a provider block rather than a reasoning detail.
+  defp decode_content_block(%{"type" => "thinking"} = block, true),
+    do: server_tool_block_chunk(block)
+
+  defp decode_content_block(block, _after_server_tool?), do: decode_content_block(block)
 
   defp decode_content_block(%{"type" => "text", "text" => text}) do
     ReqLLM.StreamChunk.text(text)
@@ -200,7 +249,15 @@ defmodule ReqLLM.Providers.Anthropic.Response do
     ReqLLM.StreamChunk.tool_call(name, input, %{id: id})
   end
 
+  defp decode_content_block(%{"type" => type} = block) when type in @server_tool_block_types do
+    server_tool_block_chunk(block)
+  end
+
   defp decode_content_block(_), do: nil
+
+  defp server_tool_block_chunk(block) do
+    ReqLLM.StreamChunk.content_part(ContentPart.provider_block(:anthropic, block))
+  end
 
   defp decode_content_block_delta(%{"type" => "text_delta", "text" => text}, _index)
        when is_binary(text) do
@@ -228,6 +285,11 @@ defmodule ReqLLM.Providers.Anthropic.Response do
 
   defp decode_content_block_delta(_, _index), do: []
 
+  defp decode_content_block_delta(delta, index, %{raw_thinking_blocks: raw} = state)
+       when is_map_key(raw, index) do
+    {[], update_in(state, [:raw_thinking_blocks, index], &merge_thinking_delta(&1, delta))}
+  end
+
   defp decode_content_block_delta(%{"type" => "thinking_delta", "thinking" => text}, index, state)
        when is_binary(text) do
     chunks = if text == "", do: [], else: [ReqLLM.StreamChunk.thinking(text, thinking_metadata())]
@@ -247,6 +309,18 @@ defmodule ReqLLM.Providers.Anthropic.Response do
        )
        when is_binary(signature) do
     {[], update_thinking_signature(state, index, signature)}
+  end
+
+  defp decode_content_block_delta(
+         %{"type" => "input_json_delta", "partial_json" => fragment},
+         index,
+         %{server_tool_blocks: blocks} = state
+       )
+       when is_binary(fragment) and is_map_key(blocks, index) do
+    state =
+      update_in(state, [:server_tool_blocks, index, :fragments], &[fragment | &1])
+
+    {[], state}
   end
 
   defp decode_content_block_delta(delta, index, state) do
@@ -270,7 +344,31 @@ defmodule ReqLLM.Providers.Anthropic.Response do
     [ReqLLM.StreamChunk.tool_call(name, %{}, %{id: id, index: index, start: true})]
   end
 
+  defp decode_content_block_start(%{"type" => type} = block, _index)
+       when type in @server_tool_block_types do
+    [server_tool_block_chunk(block)]
+  end
+
   defp decode_content_block_start(_, _index), do: []
+
+  # `server_tool_use` streams its `input` as `input_json_delta` fragments, so the
+  # block is held in state and emitted whole at `content_block_stop`. The result
+  # block arrives complete in `content_block_start`.
+  defp decode_content_block_start(%{"type" => "server_tool_use"} = block, index, state) do
+    {[], put_in(state, [:server_tool_blocks, index], %{block: block, fragments: []})}
+  end
+
+  defp decode_content_block_start(%{"type" => "tool_search_tool_result"} = block, _index, state) do
+    {[server_tool_block_chunk(block)], %{state | after_server_tool?: true}}
+  end
+
+  defp decode_content_block_start(
+         %{"type" => "thinking"} = block,
+         index,
+         %{after_server_tool?: true} = state
+       ) do
+    {[], put_in(state, [:raw_thinking_blocks, index], block)}
+  end
 
   defp decode_content_block_start(%{"type" => "thinking"} = block, index, state) do
     text = extract_thinking_text(block)
@@ -349,9 +447,12 @@ defmodule ReqLLM.Providers.Anthropic.Response do
 
     web_fetch = Map.get(server_tool_use, "web_fetch_requests")
 
+    tool_search = Map.get(server_tool_use, "tool_search_requests")
+
     %{}
     |> maybe_put_tool_usage(:web_search, web_search)
     |> maybe_put_tool_usage(:web_fetch, web_fetch)
+    |> maybe_put_tool_usage(:tool_search, tool_search)
   end
 
   defp maybe_put_tool_usage(tool_usage, tool, count) when is_number(count) and count > 0 do
@@ -373,7 +474,13 @@ defmodule ReqLLM.Providers.Anthropic.Response do
   defp parse_finish_reason(_), do: nil
 
   defp ensure_stream_state(nil), do: init_stream_state()
-  defp ensure_stream_state(state), do: state
+
+  defp ensure_stream_state(state) do
+    state
+    |> Map.put_new(:server_tool_blocks, %{})
+    |> Map.put_new(:raw_thinking_blocks, %{})
+    |> Map.put_new(:after_server_tool?, false)
+  end
 
   defp message_start_chunks(message) do
     usage_data = Map.get(message, "usage", %{})
@@ -453,6 +560,53 @@ defmodule ReqLLM.Providers.Anthropic.Response do
         detail = build_reasoning_detail(thinking_block)
         chunk = ReqLLM.StreamChunk.meta(%{reasoning_details: [detail]})
         {[chunk], %{state | thinking_blocks: remaining_blocks}}
+    end
+  end
+
+  defp finalize_server_tool_block(index, %{server_tool_blocks: blocks} = state) do
+    {entry, remaining} = Map.pop(blocks, index)
+
+    {[server_tool_block_chunk(complete_server_tool_block(entry))],
+     %{state | server_tool_blocks: remaining, after_server_tool?: true}}
+  end
+
+  defp finalize_raw_thinking_block(index, %{raw_thinking_blocks: blocks} = state) do
+    {block, remaining} = Map.pop(blocks, index)
+    {[server_tool_block_chunk(block)], %{state | raw_thinking_blocks: remaining}}
+  end
+
+  defp merge_thinking_delta(block, %{"type" => "thinking_delta"} = delta) do
+    text = delta["thinking"] || delta["text"] || ""
+    Map.update(block, "thinking", text, &((&1 || "") <> text))
+  end
+
+  defp merge_thinking_delta(block, %{"type" => "signature_delta", "signature" => signature}),
+    do: Map.put(block, "signature", signature)
+
+  defp merge_thinking_delta(block, _delta), do: block
+
+  defp drain_server_tool_blocks(%{server_tool_blocks: blocks, raw_thinking_blocks: raw} = state) do
+    chunks =
+      Enum.map(blocks, fn {index, entry} -> {index, complete_server_tool_block(entry)} end)
+      |> Enum.concat(Map.to_list(raw))
+      |> Enum.sort_by(fn {index, _} -> index end)
+      |> Enum.map(fn {_, block} -> server_tool_block_chunk(block) end)
+
+    {chunks, %{state | server_tool_blocks: %{}, raw_thinking_blocks: %{}}}
+  end
+
+  # The streamed `input` (`{}` at start) is replaced by the decoded fragments;
+  # an undecodable or empty fragment stream keeps whatever the start block had.
+  defp complete_server_tool_block(%{block: block, fragments: fragments}) do
+    case fragments |> Enum.reverse() |> IO.iodata_to_binary() do
+      "" ->
+        block
+
+      json ->
+        case Jason.decode(json) do
+          {:ok, input} when is_map(input) -> Map.put(block, "input", input)
+          _ -> block
+        end
     end
   end
 

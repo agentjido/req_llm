@@ -453,9 +453,12 @@ defmodule ReqLLM.Providers.Anthropic do
 
     web_fetch = Map.get(server_tool_use, "web_fetch_requests")
 
+    tool_search = Map.get(server_tool_use, "tool_search_requests")
+
     usage
     |> maybe_put_tool_usage(:web_search, web_search)
     |> maybe_put_tool_usage(:web_fetch, web_fetch)
+    |> maybe_put_tool_usage(:tool_search, tool_search)
   end
 
   defp maybe_add_anthropic_tool_usage(usage), do: usage
