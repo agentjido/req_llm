@@ -147,6 +147,7 @@ defmodule ReqLLM.TupleModelOptionsTest do
       {:transcription, {:openai, "whisper-1", total_timeout: 1_000}},
       {:speech, {:openai, "tts-1", total_timeout: 1_000}},
       {:rerank, {:cohere, "rerank-v3.5", total_timeout: 1_000}},
+      {:evaluate, {:typesafe, "jev-latest", total_timeout: 1_000}},
       {:ocr, {:google_vertex, "mistral-ocr-2505", total_timeout: 1_000}},
       {:video, {:minimax, "MiniMax-H3", total_timeout: 1_000}}
     ]
@@ -155,6 +156,22 @@ defmodule ReqLLM.TupleModelOptionsTest do
       assert ReqLLM.ModelInput.merge_tuple_defaults(model, operation, []) ==
                [total_timeout: 1_000]
     end
+  end
+
+  test "evaluation tuple defaults use the Zoi option schema" do
+    tuple =
+      {:typesafe, "jev-latest",
+       api_key: "tuple-key", max_retries: 2, receive_timeout: 0, temperature: 0.5}
+
+    warning =
+      capture_io(:stderr, fn ->
+        merged = ReqLLM.ModelInput.merge_tuple_defaults(tuple, :evaluate, max_retries: 1)
+        send(self(), {:evaluation_options, merged})
+      end)
+
+    assert_receive {:evaluation_options, [api_key: "tuple-key", max_retries: 1]}
+    assert warning =~ ":receive_timeout has an invalid value"
+    assert warning =~ ":temperature is not accepted"
   end
 
   test "on_unsupported ignore suppresses tuple-default warnings" do

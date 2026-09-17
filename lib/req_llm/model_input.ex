@@ -36,7 +36,8 @@ defmodule ReqLLM.ModelInput do
     do: {call_opts, []}
 
   defp select_defaults(tuple_opts, operation) do
-    schema = option_schema(operation).schema
+    schema = option_schema(operation)
+    fields = option_fields(schema)
     ambiguous_keys = Map.get(@ambiguous_keys, operation, [])
 
     tuple_opts
@@ -48,7 +49,7 @@ defmodule ReqLLM.ModelInput do
         key in ambiguous_keys ->
           {defaults, [{key, :ambiguous} | ignored], MapSet.put(seen, key)}
 
-        not Keyword.has_key?(schema, key) ->
+        not Keyword.has_key?(fields, key) ->
           {defaults, [{key, :unsupported} | ignored], MapSet.put(seen, key)}
 
         valid_option?(key, value, schema) ->
@@ -63,9 +64,16 @@ defmodule ReqLLM.ModelInput do
     end)
   end
 
-  defp valid_option?(key, value, schema) do
-    option_schema = NimbleOptions.new!([{key, Keyword.fetch!(schema, key)}])
+  defp option_fields(%NimbleOptions{schema: fields}), do: fields
+  defp option_fields(%Zoi.Types.Keyword{fields: fields}), do: fields
+
+  defp valid_option?(key, value, %NimbleOptions{schema: fields}) do
+    option_schema = NimbleOptions.new!([{key, Keyword.fetch!(fields, key)}])
     match?({:ok, _validated}, NimbleOptions.validate([{key, value}], option_schema))
+  end
+
+  defp valid_option?(key, value, %Zoi.Types.Keyword{fields: fields}) do
+    match?({:ok, _validated}, Zoi.parse(Keyword.fetch!(fields, key), value))
   end
 
   defp option_schema(:chat), do: ReqLLM.Generation.schema()

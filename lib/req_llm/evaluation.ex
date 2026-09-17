@@ -8,15 +8,21 @@ defmodule ReqLLM.Evaluation do
 
   alias ReqLLM.EvaluationResponse
 
-  @options_schema NimbleOptions.new!(
-                    api_key: [type: :string],
-                    base_url: [type: :string],
-                    receive_timeout: [type: :pos_integer],
-                    total_timeout: [type: {:or, [:pos_integer, {:in, [:infinity]}]}],
-                    max_retries: [type: :non_neg_integer],
-                    req_http_options: [type: :keyword_list],
-                    fixture: [type: {:or, [:string, {:tuple, [:atom, :string]}]}],
-                    telemetry: [type: {:or, [:map, :keyword_list]}]
+  @keyword_options Zoi.array(Zoi.tuple({Zoi.atom(), Zoi.any()}))
+
+  @options_schema Zoi.keyword(
+                    [
+                      api_key: Zoi.string(),
+                      base_url: Zoi.string(),
+                      receive_timeout: Zoi.integer() |> Zoi.positive(),
+                      total_timeout:
+                        Zoi.union([Zoi.integer() |> Zoi.positive(), Zoi.literal(:infinity)]),
+                      max_retries: Zoi.integer() |> Zoi.min(0),
+                      req_http_options: @keyword_options,
+                      fixture: Zoi.union([Zoi.string(), Zoi.tuple({Zoi.atom(), Zoi.string()})]),
+                      telemetry: Zoi.union([Zoi.map(Zoi.any(), Zoi.any()), @keyword_options])
+                    ],
+                    unrecognized_keys: :error
                   )
 
   @doc """
@@ -103,10 +109,28 @@ defmodule ReqLLM.Evaluation do
   end
 
   defp validate_options(opts) do
-    case NimbleOptions.validate(opts, @options_schema) do
-      {:ok, valid_opts} -> {:ok, valid_opts}
-      {:error, error} -> {:error, invalid_parameter(Exception.message(error))}
+    cond do
+      not Keyword.keyword?(opts) ->
+        {:error, invalid_parameter("opts must be a keyword list")}
+
+      length(opts) != length(Enum.uniq_by(opts, &elem(&1, 0))) ->
+        {:error, invalid_parameter("opts must not contain duplicate keys")}
+
+      true ->
+        case Zoi.parse(@options_schema, opts) do
+          {:ok, valid_opts} -> {:ok, valid_opts}
+          {:error, errors} -> {:error, invalid_parameter(format_zoi_errors(errors))}
+        end
     end
+  end
+
+  defp format_zoi_errors(errors) do
+    Enum.map_join(errors, ", ", fn %Zoi.Error{path: path, message: message} ->
+      case path do
+        [] -> message
+        _ -> "#{Enum.map_join(path, ".", &to_string/1)}: #{message}"
+      end
+    end)
   end
 
   defp result(%Req.Response{status: status, body: %EvaluationResponse{} = body})

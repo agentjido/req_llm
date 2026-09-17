@@ -107,6 +107,50 @@ defmodule ReqLLM.EvaluationTest do
              ReqLLM.evaluate("typesafe:jev-latest", "text", %{}, api_key: "test-key")
   end
 
+  test "uses a Zoi schema for evaluation options" do
+    schema = ReqLLM.Evaluation.schema()
+    assert %Zoi.Types.Keyword{} = schema
+
+    assert {:ok, opts} =
+             Zoi.parse(schema,
+               api_key: "test-key",
+               base_url: "https://api.typesafe.ai",
+               receive_timeout: 1_000,
+               total_timeout: :infinity,
+               max_retries: 0,
+               req_http_options: [plug: {Req.Test, __MODULE__.Success}],
+               fixture: {:typesafe, "basic"},
+               telemetry: %{test: true}
+             )
+
+    assert opts[:total_timeout] == :infinity
+    assert opts[:req_http_options] == [plug: {Req.Test, __MODULE__.Success}]
+    assert opts[:telemetry] == %{test: true}
+    assert {:ok, [telemetry: [test: true]]} = Zoi.parse(schema, telemetry: [test: true])
+  end
+
+  test "rejects invalid evaluation options before a request" do
+    invalid_options = [
+      [receive_timeout: 0],
+      [total_timeout: 0],
+      [max_retries: -1],
+      [req_http_options: [1]],
+      [req_http_options: [{"plug", :invalid}]],
+      [fixture: {:typesafe, 123}],
+      [telemetry: 123],
+      [unexpected_option: true],
+      [api_key: "first", api_key: "second"]
+    ]
+
+    for opts <- invalid_options do
+      assert {:error, %ReqLLM.Error.Invalid.Parameter{}} =
+               ReqLLM.evaluate("typesafe:jev-latest", "text", @questions, opts)
+    end
+
+    assert {:error, %ReqLLM.Error.Invalid.Parameter{}} =
+             ReqLLM.evaluate("typesafe:jev-latest", "text", @questions, [1])
+  end
+
   test "reports unsupported operations without a chat request" do
     assert {:error, %ReqLLM.Error.Invalid.Parameter{}} =
              TypeSafe.prepare_request(
