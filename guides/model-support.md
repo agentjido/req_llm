@@ -94,14 +94,14 @@ provider-native feature and are not consulted by request routing.
 | Model | Operation | Execution surface | Input → output | Tier | Baseline | Checked | Reason |
 | --- | --- | --- | --- | --- | ---: | --- | --- |
 | `accounts/fireworks/models/deepseek-v4-flash` | `text` | `fireworks_ai.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:30:47Z | surface declaration unknown |
-| `accounts/fireworks/models/deepseek-v4-pro` | `text` | `fireworks_ai.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:30:47Z | surface declaration unknown |
+| `accounts/fireworks/models/deepseek-v4-pro` | `text` | `fireworks_ai.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:30:47Z | missing or stale evidence |
 | `accounts/fireworks/models/glm-5p1` | `text` | `fireworks_ai.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:30:47Z | surface declaration unknown |
 | `accounts/fireworks/models/gpt-oss-120b` | `text` | `fireworks_ai.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:30:47Z | missing or stale evidence |
 | `accounts/fireworks/models/gpt-oss-20b` | `text` | `fireworks_ai.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:30:47Z | surface declaration unknown |
 | `accounts/fireworks/models/kimi-k2p5` | `text` | `fireworks_ai.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:30:47Z | surface declaration unknown |
 | `accounts/fireworks/models/kimi-k2p6` | `text` | `fireworks_ai.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:30:47Z | missing or stale evidence |
 | `accounts/fireworks/models/minimax-m2p5` | `text` | `fireworks_ai.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:30:47Z | surface declaration unknown |
-| `accounts/fireworks/models/minimax-m2p7` | `text` | `fireworks_ai.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:30:47Z | surface declaration unknown |
+| `accounts/fireworks/models/minimax-m2p7` | `text` | `fireworks_ai.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:30:47Z | missing or stale evidence |
 | `accounts/fireworks/models/qwen3p6-plus` | `text` | `fireworks_ai.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:30:47Z | surface declaration unknown |
 | `accounts/fireworks/routers/glm-5p1-fast` | `text` | `fireworks_ai.unrecorded_text` | text → text | Experimental | 0/5 | 2026-05-29T23:30:47Z | surface declaration unknown |
 | `accounts/fireworks/routers/kimi-k2p6-turbo` | `text` | `fireworks_ai.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:30:47Z | surface declaration unknown |
@@ -570,7 +570,7 @@ provider-native feature and are not consulted by request routing.
 | `openai-gpt-4o-2024-11-20` | `text` | `venice.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:55:12Z | missing or stale evidence |
 | `openai-gpt-4o-mini-2024-07-18` | `text` | `venice.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:55:12Z | missing or stale evidence |
 | `openai-gpt-52` | `text` | `venice.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:55:12Z | missing or stale evidence |
-| `openai-gpt-52-codex` | `text` | `venice.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:55:12Z | missing or stale evidence |
+| `openai-gpt-52-codex` | `text` | `venice.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:55:12Z | surface declaration unknown |
 | `openai-gpt-53-codex` | `text` | `venice.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:55:12Z | missing or stale evidence |
 | `openai-gpt-54` | `text` | `venice.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:55:12Z | missing or stale evidence |
 | `openai-gpt-54-mini` | `text` | `venice.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:55:12Z | missing or stale evidence |

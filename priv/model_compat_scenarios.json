@@ -1270,13 +1270,15 @@
       }
     },
     "fireworks_ai:accounts/fireworks/models/deepseek-v4-pro": {
-      "catalog_status": "missing",
-      "declared_operations": [],
+      "catalog_status": "present",
+      "declared_operations": [
+        "text"
+      ],
       "model": "accounts/fireworks/models/deepseek-v4-pro",
       "provider": "fireworks_ai",
       "surfaces": {
         "fireworks_ai.chat_completions": {
-          "declaration": "unknown",
+          "declaration": "declared",
           "operation": "text",
           "provider": "fireworks_ai",
           "scenarios": {
@@ -1484,13 +1486,15 @@
       }
     },
     "fireworks_ai:accounts/fireworks/models/minimax-m2p7": {
-      "catalog_status": "missing",
-      "declared_operations": [],
+      "catalog_status": "present",
+      "declared_operations": [
+        "text"
+      ],
       "model": "accounts/fireworks/models/minimax-m2p7",
       "provider": "fireworks_ai",
       "surfaces": {
         "fireworks_ai.chat_completions": {
-          "declaration": "unknown",
+          "declaration": "declared",
           "operation": "text",
           "provider": "fireworks_ai",
           "scenarios": {
@@ -16353,15 +16357,13 @@
       }
     },
     "venice:openai-gpt-52-codex": {
-      "catalog_status": "present",
-      "declared_operations": [
-        "text"
-      ],
+      "catalog_status": "missing",
+      "declared_operations": [],
       "model": "openai-gpt-52-codex",
       "provider": "venice",
       "surfaces": {
         "venice.chat_completions": {
-          "declaration": "declared",
+          "declaration": "unknown",
           "operation": "text",
           "provider": "venice",
           "scenarios": {

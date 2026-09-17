@@ -105,10 +105,18 @@ defmodule ReqLLM.EvaluationTest do
     assert decoded.object == result.object
   end
 
-  test "resolves Jev as a non-chat model" do
-    assert {:ok, model} = ReqLLM.model("typesafe:jev-latest")
-    assert model.capabilities.chat == false
-    assert model.capabilities.streaming.text == false
+  test "resolves each Jev spec from LLMDB as an evaluation-only model" do
+    for id <- ["jev-latest", "jev-preview", "jev-1.13.0"] do
+      assert {:ok, model} = ReqLLM.model("typesafe:" <> id)
+      assert model.provider == :typesafe
+      assert model.id == id
+      assert LLMDB.Model.spec(model) == "typesafe:" <> id
+      assert model.capabilities.evaluate == true
+      assert model.capabilities.chat == false
+      assert model.capabilities.streaming.text == false
+      assert model.execution.evaluate.path == "/v1/systemone"
+    end
+
     assert {:ok, TypeSafe} = ReqLLM.provider(:typesafe)
 
     assert {:ok, inline_model} = ReqLLM.model(%{provider: :typesafe, id: "jev-preview"})
