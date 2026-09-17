@@ -135,6 +135,9 @@ defmodule ReqLLM.Provider.ChunkAccumulator do
     }
   end
 
+  def push(%__MODULE__{} = acc, %StreamChunk{type: :thinking, metadata: %{stream_only?: true}}),
+    do: acc
+
   def push(%__MODULE__{} = acc, %StreamChunk{type: :thinking, text: text})
       when is_binary(text) and text != "" do
     %{

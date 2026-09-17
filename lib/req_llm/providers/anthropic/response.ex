@@ -53,8 +53,6 @@ defmodule ReqLLM.Providers.Anthropic.Response do
   # detail, because only the ordered content keeps its place. Thinking before
   # the first server block keeps the reasoning-detail path, so a turn without
   # server tools decodes and encodes exactly as it did before.
-  @server_tool_block_types ~w(server_tool_use tool_search_tool_result)
-
   @doc """
   Decode Anthropic response data to ReqLLM.Response.
   """
@@ -223,8 +221,13 @@ defmodule ReqLLM.Providers.Anthropic.Response do
     [ReqLLM.StreamChunk.text(content)]
   end
 
-  defp server_tool_block?(%{"type" => type}), do: type in @server_tool_block_types
-  defp server_tool_block?(_block), do: false
+  defp server_tool_block?(%{"type" => "server_tool_use"}), do: true
+  defp server_tool_block?(block), do: server_tool_result?(block)
+
+  defp server_tool_result?(%{"type" => type}) when is_binary(type),
+    do: String.ends_with?(type, "_tool_result")
+
+  defp server_tool_result?(_block), do: false
 
   # A thinking block after a server tool block must keep its position, so it is
   # carried as a provider block rather than a reasoning detail.
@@ -249,8 +252,8 @@ defmodule ReqLLM.Providers.Anthropic.Response do
     ReqLLM.StreamChunk.tool_call(name, input, %{id: id})
   end
 
-  defp decode_content_block(%{"type" => type} = block) when type in @server_tool_block_types do
-    server_tool_block_chunk(block)
+  defp decode_content_block(%{"type" => _type} = block) do
+    if server_tool_block?(block), do: server_tool_block_chunk(block)
   end
 
   defp decode_content_block(_), do: nil
@@ -287,7 +290,16 @@ defmodule ReqLLM.Providers.Anthropic.Response do
 
   defp decode_content_block_delta(delta, index, %{raw_thinking_blocks: raw} = state)
        when is_map_key(raw, index) do
-    {[], update_in(state, [:raw_thinking_blocks, index], &merge_thinking_delta(&1, delta))}
+    chunks =
+      case delta do
+        %{"type" => "thinking_delta"} ->
+          raw_thinking_stream_chunks(delta["thinking"] || delta["text"])
+
+        _ ->
+          []
+      end
+
+    {chunks, update_in(state, [:raw_thinking_blocks, index], &merge_thinking_delta(&1, delta))}
   end
 
   defp decode_content_block_delta(%{"type" => "thinking_delta", "thinking" => text}, index, state)
@@ -344,9 +356,8 @@ defmodule ReqLLM.Providers.Anthropic.Response do
     [ReqLLM.StreamChunk.tool_call(name, %{}, %{id: id, index: index, start: true})]
   end
 
-  defp decode_content_block_start(%{"type" => type} = block, _index)
-       when type in @server_tool_block_types do
-    [server_tool_block_chunk(block)]
+  defp decode_content_block_start(%{"type" => _type} = block, _index) do
+    if server_tool_block?(block), do: [server_tool_block_chunk(block)], else: []
   end
 
   defp decode_content_block_start(_, _index), do: []
@@ -358,16 +369,13 @@ defmodule ReqLLM.Providers.Anthropic.Response do
     {[], put_in(state, [:server_tool_blocks, index], %{block: block, fragments: []})}
   end
 
-  defp decode_content_block_start(%{"type" => "tool_search_tool_result"} = block, _index, state) do
-    {[server_tool_block_chunk(block)], %{state | after_server_tool?: true}}
-  end
-
   defp decode_content_block_start(
          %{"type" => "thinking"} = block,
          index,
          %{after_server_tool?: true} = state
        ) do
-    {[], put_in(state, [:raw_thinking_blocks, index], block)}
+    {raw_thinking_stream_chunks(extract_thinking_text(block), block),
+     put_in(state, [:raw_thinking_blocks, index], block)}
   end
 
   defp decode_content_block_start(%{"type" => "thinking"} = block, index, state) do
@@ -380,7 +388,11 @@ defmodule ReqLLM.Providers.Anthropic.Response do
   end
 
   defp decode_content_block_start(block, index, state) do
-    {decode_content_block_start(block, index), state}
+    if server_tool_result?(block) do
+      {[server_tool_block_chunk(block)], %{state | after_server_tool?: true}}
+    else
+      {decode_content_block_start(block, index), state}
+    end
   end
 
   defp extract_reasoning_details(chunks) do
@@ -584,6 +596,14 @@ defmodule ReqLLM.Providers.Anthropic.Response do
     do: Map.put(block, "signature", signature)
 
   defp merge_thinking_delta(block, _delta), do: block
+
+  defp raw_thinking_stream_chunks(text, block \\ %{})
+
+  defp raw_thinking_stream_chunks(text, block) when is_binary(text) and text != "" do
+    [ReqLLM.StreamChunk.thinking(text, Map.put(thinking_metadata(block), :stream_only?, true))]
+  end
+
+  defp raw_thinking_stream_chunks(_text, _block), do: []
 
   defp drain_server_tool_blocks(%{server_tool_blocks: blocks, raw_thinking_blocks: raw} = state) do
     chunks =

@@ -453,6 +453,7 @@ defmodule ReqLLM.Provider.Defaults.ResponseBuilder do
   defp extract_reasoning_from_thinking_chunks(chunks, provider) do
     thinking_chunks =
       Enum.filter(chunks, fn
+        %StreamChunk{type: :thinking, metadata: %{stream_only?: true}} -> false
         %StreamChunk{type: :thinking} -> true
         _ -> false
       end)

@@ -1970,6 +1970,86 @@ defmodule ReqLLM.Providers.AnthropicTest do
       assert Enum.map(response.message.reasoning_details, & &1.text) == ["First.", "Second."]
     end
 
+    test "completed server tool results stay with their calls in the next request" do
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
+
+      for {tool_name, result_type} <- [
+            {"web_search", "web_search_tool_result"},
+            {"web_fetch", "web_fetch_tool_result"}
+          ] do
+        use_block = %{
+          "type" => "server_tool_use",
+          "id" => "srvtoolu_02",
+          "name" => tool_name,
+          "input" => %{"query" => "example"}
+        }
+
+        result_block = %{
+          "type" => result_type,
+          "tool_use_id" => "srvtoolu_02",
+          "content" => %{"type" => "result", "data" => "opaque"}
+        }
+
+        {:ok, response} =
+          ReqLLM.Providers.Anthropic.Response.decode_response(
+            %{
+              "id" => "msg_03",
+              "role" => "assistant",
+              "model" => model.id,
+              "content" => [use_block, result_block, %{"type" => "text", "text" => "Done."}],
+              "stop_reason" => "end_turn"
+            },
+            model
+          )
+
+        encoded = ReqLLM.Providers.Anthropic.Context.encode_request(response.context, model)
+        [assistant] = encoded[:messages]
+
+        assert [^use_block, ^result_block, %{type: "text", text: "Done."}] =
+                 assistant[:content]
+
+        events = [
+          %{"type" => "content_block_start", "index" => 0, "content_block" => use_block},
+          %{"type" => "content_block_stop", "index" => 0},
+          %{"type" => "content_block_start", "index" => 1, "content_block" => result_block}
+        ]
+
+        {chunks, _state} =
+          Enum.reduce(events, {[], Anthropic.init_stream_state(model)}, fn data, {acc, state} ->
+            {next, state} = Anthropic.decode_stream_event(%{data: data}, model, state)
+            {acc ++ next, state}
+          end)
+
+        assert Enum.map(chunks, & &1.content_part.data) == [use_block, result_block]
+      end
+    end
+
+    test "a paused response with only a server tool block remains in the context" do
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
+
+      {:ok, response} =
+        ReqLLM.Providers.Anthropic.Response.decode_response(
+          %{
+            "id" => "msg_04",
+            "role" => "assistant",
+            "model" => model.id,
+            "content" => [@search_use],
+            "stop_reason" => "pause_turn"
+          },
+          model
+        )
+
+      assert response.message != nil
+      assert response.finish_reason == :incomplete
+
+      assert [assistant] =
+               ReqLLM.Providers.Anthropic.Context.encode_request(response.context, model)[
+                 :messages
+               ]
+
+      assert assistant[:content] == [@search_use]
+    end
+
     test "streamed search blocks arrive whole, with the input assembled from deltas" do
       {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
 
@@ -2039,6 +2119,60 @@ defmodule ReqLLM.Providers.AnthropicTest do
       {[chunk], _state} = ReqLLM.Providers.Anthropic.Response.flush_stream_state(model, state)
 
       assert chunk.content_part.data == @search_use
+    end
+
+    test "later thinking streams to callers and replays once without earlier thinking" do
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
+
+      events = [
+        %{"type" => "content_block_start", "index" => 0, "content_block" => @search_use},
+        %{"type" => "content_block_stop", "index" => 0},
+        %{"type" => "content_block_start", "index" => 1, "content_block" => @search_result},
+        %{"type" => "content_block_stop", "index" => 1},
+        %{
+          "type" => "content_block_start",
+          "index" => 2,
+          "content_block" => %{"type" => "thinking", "thinking" => "", "signature" => ""}
+        },
+        %{
+          "type" => "content_block_delta",
+          "index" => 2,
+          "delta" => %{"type" => "thinking_delta", "thinking" => "Found it."}
+        },
+        %{
+          "type" => "content_block_delta",
+          "index" => 2,
+          "delta" => %{"type" => "signature_delta", "signature" => "sig_2"}
+        },
+        %{"type" => "content_block_stop", "index" => 2}
+      ]
+
+      {chunks, _state} =
+        Enum.reduce(events, {[], Anthropic.init_stream_state(model)}, fn data, {acc, state} ->
+          {next, state} = Anthropic.decode_stream_event(%{data: data}, model, state)
+          {acc ++ next, state}
+        end)
+
+      assert Enum.filter(chunks, &(&1.type == :thinking)) |> Enum.map(& &1.text) ==
+               ["Found it."]
+
+      {:ok, response} =
+        ReqLLM.Providers.Anthropic.ResponseBuilder.build_response(
+          chunks,
+          %{finish_reason: :stop},
+          context: %ReqLLM.Context{messages: [ReqLLM.Context.user("search")]},
+          model: model
+        )
+
+      assert response.message.reasoning_details == nil
+      encoded = ReqLLM.Providers.Anthropic.Context.encode_request(response.context, model)
+      [_user, assistant] = encoded[:messages]
+
+      assert assistant[:content] == [
+               @search_use,
+               @search_result,
+               %{"type" => "thinking", "thinking" => "Found it.", "signature" => "sig_2"}
+             ]
     end
 
     test "the replayed assistant turn carries the search blocks verbatim, in place" do
@@ -2130,6 +2264,11 @@ defmodule ReqLLM.Providers.AnthropicTest do
           {event_chunks, next_state} = Anthropic.decode_stream_event(event, model, state)
           {acc ++ event_chunks, next_state}
         end)
+
+      assert Enum.filter(chunks, &(&1.type == :thinking)) |> Enum.map(& &1.text) == [
+               "Need the catalog.",
+               "Found it."
+             ]
 
       {:ok, response} =
         ReqLLM.Providers.Anthropic.ResponseBuilder.build_response(
