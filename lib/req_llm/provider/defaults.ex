@@ -1217,6 +1217,15 @@ defmodule ReqLLM.Provider.Defaults do
   end
 
   def default_decode_stream_event(%{data: data}, model) when is_map(data) do
+    # 0. Carry the provider response id on the finish and usage metadata so the
+    #    streamed response keeps it instead of a generated one. Content deltas
+    #    stay unchanged; the stream server merges metadata across chunks.
+    response_id_meta =
+      case Map.get(data, "id") do
+        id when is_binary(id) and id != "" -> %{response_id: id}
+        _ -> %{}
+      end
+
     # 1. Handle choices (content + finish_reason + reasoning_details)
     choices_chunks =
       case Map.get(data, "choices") do
@@ -1255,7 +1264,11 @@ defmodule ReqLLM.Provider.Defaults do
 
             if finish_reason do
               normalized_reason = parse_openai_finish_reason(finish_reason)
-              meta_chunk = ReqLLM.StreamChunk.meta(%{finish_reason: normalized_reason})
+
+              meta_chunk =
+                ReqLLM.StreamChunk.meta(
+                  Map.put(response_id_meta, :finish_reason, normalized_reason)
+                )
 
               content_chunks ++
                 reasoning_details_chunks ++ logprobs_chunks ++ annotation_chunks ++ [meta_chunk]
@@ -1275,7 +1288,7 @@ defmodule ReqLLM.Provider.Defaults do
           # Check if this is a final usage chunk (empty choices) to mark terminal
           is_final = match?(%{"choices" => []}, data)
           normalized_usage = parse_openai_usage(usage)
-          meta = %{usage: normalized_usage, model: model.id}
+          meta = Map.merge(response_id_meta, %{usage: normalized_usage, model: model.id})
           meta = if is_final, do: Map.put(meta, :terminal?, true), else: meta
 
           [ReqLLM.StreamChunk.meta(meta)]

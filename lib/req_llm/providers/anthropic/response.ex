@@ -375,16 +375,29 @@ defmodule ReqLLM.Providers.Anthropic.Response do
   defp ensure_stream_state(nil), do: init_stream_state()
   defp ensure_stream_state(state), do: state
 
+  # `message_start` carries the message id and the served model. Surfacing them
+  # as metadata lets the response builder keep the provider id on streamed
+  # responses instead of generating a local one.
   defp message_start_chunks(message) do
-    usage_data = Map.get(message, "usage", %{})
+    meta =
+      %{}
+      |> maybe_put_meta(:response_id, Map.get(message, "id"))
+      |> maybe_put_meta(:response_model, Map.get(message, "model"))
 
-    if usage_data == %{} do
-      []
-    else
-      usage = parse_usage(usage_data)
-      [ReqLLM.StreamChunk.meta(%{usage: usage})]
+    case Map.get(message, "usage", %{}) do
+      usage_data when usage_data == %{} -> []
+      usage_data -> [ReqLLM.StreamChunk.meta(Map.put(meta, :usage, parse_usage(usage_data)))]
+    end
+    |> case do
+      [] when meta == %{} -> []
+      [] -> [ReqLLM.StreamChunk.meta(meta)]
+      chunks -> chunks
     end
   end
+
+  defp maybe_put_meta(meta, _key, nil), do: meta
+  defp maybe_put_meta(meta, key, value) when is_binary(value), do: Map.put(meta, key, value)
+  defp maybe_put_meta(meta, _key, _value), do: meta
 
   defp message_delta_chunks(data, delta) do
     finish_reason = parse_finish_reason(Map.get(delta, "stop_reason")) || :unknown
