@@ -1,10 +1,11 @@
 defmodule ReqLLM.Response do
   @moduledoc """
-  High-level representation of an LLM turn.
+  High-level representation of an LLM response.
 
-  Always contains a Context (full conversation history **including**
-  the newly-generated assistant/tool messages) plus rich metadata and, when
-  streaming, a lazy `Stream` of `ReqLLM.StreamChunk`s.
+  Always contains a Context. For chat generation, the context contains the full
+  conversation history, including new assistant and tool messages. For evaluation,
+  the context is empty and `object` contains the named answers. The response also
+  contains metadata and, when streaming, a lazy `Stream` of `ReqLLM.StreamChunk`s.
 
   This struct eliminates the need for manual message extraction and context building
   in multi-turn conversations and tool calling workflows.
@@ -683,7 +684,8 @@ defmodule ReqLLM.Response do
   end
 
   @doc """
-  Extracts the generated object from a Response.
+  Extracts the structured object from a Response. Evaluation responses contain
+  named answers in this field.
   """
   @spec object(t()) :: map() | nil
   def object(%__MODULE__{object: object}) do

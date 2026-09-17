@@ -1438,14 +1438,14 @@ defmodule ReqLLM do
   This call does not use chat or `generate_object/4`.
   """
   @spec evaluate(model_input(), String.t() | map() | list(), map(), keyword()) ::
-          {:ok, ReqLLM.EvaluationResponse.t()} | {:error, term()}
+          {:ok, ReqLLM.Response.t()} | {:error, term()}
   defdelegate evaluate(model_spec, state, questions, opts \\ []), to: Evaluation
 
   @doc """
   Same as `evaluate/4`, but raises on error.
   """
   @spec evaluate!(model_input(), String.t() | map() | list(), map(), keyword()) ::
-          ReqLLM.EvaluationResponse.t() | no_return()
+          ReqLLM.Response.t() | no_return()
   defdelegate evaluate!(model_spec, state, questions, opts \\ []), to: Evaluation
 
   # ===========================================================================

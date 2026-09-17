@@ -1,8 +1,8 @@
 defmodule ReqLLM.EvaluationTest do
   use ExUnit.Case, async: true
 
-  alias ReqLLM.EvaluationResponse
   alias ReqLLM.Providers.TypeSafe
+  alias ReqLLM.Response
 
   @questions %{
     department: %{
@@ -67,7 +67,7 @@ defmodule ReqLLM.EvaluationTest do
       })
     end)
 
-    assert {:ok, %EvaluationResponse{} = result} =
+    assert {:ok, %Response{} = result} =
              ReqLLM.evaluate(
                "typesafe:jev-latest",
                %{ticket: "Please refund me today"},
@@ -77,15 +77,32 @@ defmodule ReqLLM.EvaluationTest do
              )
 
     assert result.model == "jev-1.13.0"
-    assert result.answers["department"]["choice"] == "billing"
-    assert result.answers["department"]["probabilities"]["billing"] == 0.9
-    assert result.answers["department"]["confidence"] == 0.8
-    assert result.answers["severity"]["score"] == 1.2
-    assert result.answers["severity"]["legend"]["2"] == "high"
-    assert result.answers["urgent"] == %{"type" => "boolean", "probability" => 0.93}
-    assert result.raw["answers"]["urgent"] == %{"type" => "noul", "noul" => 0.93}
+    assert String.starts_with?(result.id, "eval-")
+    assert result.context.messages == []
+    assert result.message == nil
+    assert Response.text(result) == nil
+    assert Response.object(result) == result.object
+    assert result.object["department"]["choice"] == "billing"
+    assert result.object["department"]["probabilities"]["billing"] == 0.9
+    assert result.object["department"]["confidence"] == 0.8
+    assert result.object["severity"]["score"] == 1.2
+    assert result.object["severity"]["legend"]["2"] == "high"
+    assert result.object["urgent"] == %{"type" => "boolean", "probability" => 0.93}
+    assert result.provider_meta.operation == :evaluate
+
+    assert result.provider_meta.raw_response["answers"]["urgent"] == %{
+             "type" => "noul",
+             "noul" => 0.93
+           }
+
+    assert Response.usage(result) == result.usage
     assert result.usage.input_tokens == 100
     assert result.usage.output_tokens == 20
+
+    assert {:ok, %Response{} = decoded} =
+             Response.decode_response(result.provider_meta.raw_response, "typesafe:jev-latest")
+
+    assert decoded.object == result.object
   end
 
   test "resolves Jev as a non-chat model" do

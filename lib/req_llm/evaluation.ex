@@ -6,7 +6,7 @@ defmodule ReqLLM.Evaluation do
   answer formats. An evaluation model does not need to support chat generation.
   """
 
-  alias ReqLLM.EvaluationResponse
+  alias ReqLLM.Response
 
   @keyword_options Zoi.array(Zoi.tuple({Zoi.atom(), Zoi.any()}))
 
@@ -38,15 +38,15 @@ defmodule ReqLLM.Evaluation do
       }
 
       {:ok, result} = ReqLLM.evaluate("typesafe:jev-latest", "Please refund me", questions)
-      result.answers["department"]["choice"]
-      result.answers["urgent"]["probability"]
+      result.object["department"]["choice"]
+      result.object["urgent"]["probability"]
 
   Choice and score answers may include probabilities and confidence. Providers
-  may support more question types. Answers use string keys, and `raw` keeps the
-  original provider data.
+  may support more question types. The response stores named answers in `object`
+  with string keys. `provider_meta.raw_response` keeps the original provider data.
   """
   @spec evaluate(ReqLLM.model_input(), String.t() | map() | list(), map(), keyword()) ::
-          {:ok, EvaluationResponse.t()} | {:error, term()}
+          {:ok, Response.t()} | {:error, term()}
   def evaluate(model_spec, state, questions, opts \\ [])
 
   def evaluate(model_spec, state, questions, opts) when is_list(opts) do
@@ -74,7 +74,7 @@ defmodule ReqLLM.Evaluation do
   Same as `evaluate/4`, but raises on error.
   """
   @spec evaluate!(ReqLLM.model_input(), String.t() | map() | list(), map(), keyword()) ::
-          EvaluationResponse.t() | no_return()
+          Response.t() | no_return()
   def evaluate!(model_spec, state, questions, opts \\ []) do
     case evaluate(model_spec, state, questions, opts) do
       {:ok, response} -> response
@@ -133,7 +133,7 @@ defmodule ReqLLM.Evaluation do
     end)
   end
 
-  defp result(%Req.Response{status: status, body: %EvaluationResponse{} = body})
+  defp result(%Req.Response{status: status, body: %Response{} = body})
        when status in 200..299,
        do: {:ok, body}
 

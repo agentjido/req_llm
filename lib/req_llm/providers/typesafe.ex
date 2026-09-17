@@ -7,7 +7,7 @@ defmodule ReqLLM.Providers.TypeSafe do
 
   import ReqLLM.Provider.Utils, only: [ensure_parsed_body: 1]
 
-  alias ReqLLM.EvaluationResponse
+  alias ReqLLM.Response
 
   use ReqLLM.Provider,
     id: :typesafe,
@@ -101,11 +101,13 @@ defmodule ReqLLM.Providers.TypeSafe do
     case body do
       %{"model" => model, "answers" => answers, "usage" => usage}
       when is_binary(model) and is_map(answers) and is_map(usage) ->
-        result = %EvaluationResponse{
+        result = %Response{
+          id: "eval-#{System.unique_integer([:positive])}",
           model: model,
-          answers: normalize_answers(answers, request.options[:questions]),
+          context: ReqLLM.Context.new(),
+          object: normalize_answers(answers),
           usage: ReqLLM.Usage.normalize(usage),
-          raw: body
+          provider_meta: %{operation: :evaluate, raw_response: body}
         }
 
         {request, %{response | body: result}}
@@ -151,24 +153,18 @@ defmodule ReqLLM.Providers.TypeSafe do
     end
   end
 
-  defp normalize_answers(answers, questions) do
-    boolean_ids =
-      questions
-      |> Enum.filter(fn {_id, question} ->
-        (question[:type] || question["type"]) in [:boolean, "boolean"]
-      end)
-      |> Map.new(fn {id, _question} -> {to_string(id), true} end)
-
+  defp normalize_answers(answers) do
     Map.new(answers, fn {id, answer} ->
-      if Map.has_key?(boolean_ids, id) and is_map(answer) and
-           Map.has_key?(answer, "noul") do
-        {id,
-         answer
-         |> Map.drop(["noul"])
-         |> Map.put("type", "boolean")
-         |> Map.put("probability", answer["noul"])}
-      else
-        {id, answer}
+      case answer do
+        %{"type" => "noul", "noul" => probability} ->
+          {id,
+           answer
+           |> Map.drop(["noul"])
+           |> Map.put("type", "boolean")
+           |> Map.put("probability", probability)}
+
+        _ ->
+          {id, answer}
       end
     end)
   end

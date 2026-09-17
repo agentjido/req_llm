@@ -228,15 +228,16 @@ questions = %{
 }
 
 {:ok, result} = ReqLLM.evaluate("typesafe:jev-latest", %{message: "Refund me today"}, questions)
-result.answers["department"]["choice"]
-result.answers["department"]["probabilities"]
-result.answers["urgent"]["probability"]
+result.object["department"]["choice"]
+result.object["department"]["probabilities"]
+result.object["urgent"]["probability"]
 result.usage.input_tokens
 ```
 
 Jev also supports `:score` questions with an ordered `criteria` list. Answers
-use string keys. The result keeps the full provider response in `raw`, including
-TypeSafe's `noul` value. `:boolean` is the common ReqLLM name for that question.
+use string keys. The `ReqLLM.Response` keeps the full provider response in
+`provider_meta.raw_response`, including TypeSafe's `noul` value. `:boolean` is
+the common ReqLLM name for that question.
 Use `generate_object/4` for text models that generate JSON objects; it is not a
 Jev endpoint. Jev does not support text generation or streaming.
 
