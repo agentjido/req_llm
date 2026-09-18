@@ -55,9 +55,9 @@ with string keys. A `:boolean` question uses the provider's `noul` wire type;
 the answer becomes `%{"type" => "boolean", "probability" => value}`.
 `provider_meta.raw_response` keeps the original response.
 
-`ReqLLM.evaluation_models/0` includes only models with a ReqLLM evaluation
-adapter. It includes the two confirmed OpenRouter Jev IDs even when an older
-LLMDB release does not list them. LLMDB can also list evaluation models on other gateways.
+`ReqLLM.evaluation_models/0` includes only catalog models with a ReqLLM
+evaluation adapter. The `llm_db` 2026.9.4 release lists the two OpenRouter Jev
+IDs. LLMDB can also list evaluation models on other gateways.
 For example, Cloudflare has an executable `cloudflare_ai_run` contract in the
 catalog, but ReqLLM has no Cloudflare evaluation adapter. Vercel's Jev entry
 is catalog only. These specs cannot use the OpenRouter adapter. Netlify's

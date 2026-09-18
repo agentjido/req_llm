@@ -8,8 +8,6 @@ defmodule ReqLLM.Evaluation do
 
   alias ReqLLM.Response
 
-  @openrouter_jev_ids ["typesafe/jev-1.13", "~typesafe/jev-latest"]
-
   @keyword_options Zoi.array(Zoi.tuple({Zoi.atom(), Zoi.any()}))
 
   @options_schema Zoi.keyword(
@@ -76,9 +74,8 @@ defmodule ReqLLM.Evaluation do
   @doc """
   Lists model specs that `evaluate/4` can call with an installed adapter.
 
-  This includes the confirmed OpenRouter Jev IDs when an older LLMDB release
-  does not list them. Catalog evaluation metadata can also describe models for
-  providers that ReqLLM does not yet support. Those models are excluded.
+  Catalog evaluation metadata can also describe models for providers that
+  ReqLLM does not yet support. Those models are excluded.
   """
   @spec models() :: [String.t()]
   def models do
@@ -92,15 +89,7 @@ defmodule ReqLLM.Evaluation do
       end)
       |> Enum.map(fn {provider, id} -> "#{provider}:#{id}" end)
 
-    fallback_specs =
-      Enum.flat_map(@openrouter_jev_ids, fn id ->
-        case confirmed_openrouter_jev(id) do
-          {:ok, _model} -> ["openrouter:#{id}"]
-          _ -> []
-        end
-      end)
-
-    (catalog_specs ++ fallback_specs)
+    catalog_specs
     |> Enum.uniq()
     |> Enum.sort()
   end
@@ -172,58 +161,7 @@ defmodule ReqLLM.Evaluation do
         {:error, unavailable_catalog_error(model)}
 
       :error ->
-        case confirmed_openrouter_jev(provider, id) do
-          {:ok, model} -> {:ok, model}
-          :error -> {:error, unknown_model("#{provider}:#{id}")}
-        end
-    end
-  end
-
-  defp confirmed_openrouter_jev(id), do: confirmed_openrouter_jev(:openrouter, id)
-
-  defp confirmed_openrouter_jev(:openrouter, id) when id in @openrouter_jev_ids do
-    case LLMDB.Spec.resolve({:openrouter, id}) do
-      {:ok, _resolved} ->
-        :error
-
-      _ ->
-        case base_catalog_model(:openrouter, id) do
-          {:ok, _model} ->
-            :error
-
-          :error ->
-            if fallback_visible?(id) do
-              ReqLLM.model(%{
-                provider: :openrouter,
-                id: id,
-                capabilities: %{chat: false, evaluate: true, streaming: %{text: false}},
-                execution: %{
-                  evaluate: %{
-                    supported: true,
-                    family: "openrouter_decisions",
-                    wire_protocol: "openrouter_decisions",
-                    base_url: "https://openrouter.ai",
-                    path: "/api/alpha/decisions",
-                    provider_model_id: id
-                  }
-                }
-              })
-            else
-              :error
-            end
-        end
-    end
-  end
-
-  defp confirmed_openrouter_jev(_, _), do: :error
-
-  defp fallback_visible?(id) do
-    case LLMDB.Catalog.snapshot() do
-      %{filters: filters} when is_map(filters) ->
-        LLMDB.Engine.apply_filters([%{provider: :openrouter, id: id}], filters) != []
-
-      _ ->
-        false
+        {:error, unknown_model("#{provider}:#{id}")}
     end
   end
 

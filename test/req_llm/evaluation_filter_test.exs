@@ -1,7 +1,7 @@
 defmodule ReqLLM.EvaluationFilterTest do
   use ExUnit.Case, async: false
 
-  test "OpenRouter fallback respects the LLMDB model filter" do
+  test "OpenRouter evaluation models respect the LLMDB model filter" do
     on_exit(fn -> LLMDB.load() end)
 
     assert {:ok, _snapshot} = LLMDB.load(allow: [:typesafe])
@@ -20,6 +20,6 @@ defmodule ReqLLM.EvaluationFilterTest do
                req_http_options: [plug: fn _conn -> flunk("unexpected HTTP request") end]
              )
 
-    assert message =~ "Unknown evaluation model spec"
+    assert message =~ "unavailable under the current catalog filter"
   end
 end

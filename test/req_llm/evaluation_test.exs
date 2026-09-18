@@ -235,17 +235,9 @@ defmodule ReqLLM.EvaluationTest do
            ]
 
     for spec <- ReqLLM.evaluation_models() do
-      case LLMDB.model(spec) do
-        {:ok, model} ->
-          assert model.capabilities.evaluate == true
-          assert model.execution.evaluate.supported == true
-
-        {:error, :not_found} ->
-          assert spec in [
-                   "openrouter:typesafe/jev-1.13",
-                   "openrouter:~typesafe/jev-latest"
-                 ]
-      end
+      assert {:ok, model} = LLMDB.model(spec)
+      assert model.capabilities.evaluate == true
+      assert model.execution.evaluate.supported == true
     end
   end
 
