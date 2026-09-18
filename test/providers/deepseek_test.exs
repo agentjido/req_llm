@@ -96,6 +96,19 @@ defmodule ReqLLM.Providers.DeepseekTest do
       assert body["reasoning_effort"] == "low"
     end
 
+    test "prepare_request accepts :ultra and encodes max effort" do
+      model = deepseek_model("deepseek-flash")
+
+      {:ok, request} =
+        Deepseek.prepare_request(:chat, model, "Hello world", reasoning_effort: :ultra)
+
+      assert request.options[:reasoning_effort] == "max"
+
+      encoded = Deepseek.encode_body(request)
+      body = ReqLLM.Test.Helpers.json_body(encoded)
+      assert body["reasoning_effort"] == "max"
+    end
+
     test "prepare_request rejects unsupported operations" do
       model = deepseek_model()
       context = context_fixture()

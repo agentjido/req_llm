@@ -74,8 +74,8 @@ defmodule ReqLLM.Providers.Deepseek do
   ### Reasoning Effort
 
   The `reasoning_effort` option controls the depth of reasoning. DeepSeek supports
-  `"none"`, `"low"`, `"high"`, and `"max"` effort levels. ReqLLM's broader
-  canonical levels are mapped to the nearest DeepSeek value:
+  `"none"`, `"low"`, `"high"`, and `"max"` effort levels. ReqLLM effort levels
+  and DeepSeek's `:ultra` alias are mapped to the nearest DeepSeek value:
 
   - `:none` → `"none"`
   - `:minimal` and `:low` → `"low"`
@@ -104,6 +104,14 @@ defmodule ReqLLM.Providers.Deepseek do
       """
     ]
   ]
+
+  @doc false
+  def pre_validate_options(_operation, _model, opts) do
+    case Keyword.get(opts, :reasoning_effort) do
+      :ultra -> Keyword.put(opts, :reasoning_effort, :max)
+      _ -> opts
+    end
+  end
 
   @impl ReqLLM.Provider
   def translate_options(_operation, _model, opts) do
