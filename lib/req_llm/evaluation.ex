@@ -192,26 +192,40 @@ defmodule ReqLLM.Evaluation do
             :error
 
           :error ->
-            ReqLLM.model(%{
-              provider: :openrouter,
-              id: id,
-              capabilities: %{chat: false, evaluate: true, streaming: %{text: false}},
-              execution: %{
-                evaluate: %{
-                  supported: true,
-                  family: "openrouter_decisions",
-                  wire_protocol: "openrouter_decisions",
-                  base_url: "https://openrouter.ai",
-                  path: "/api/alpha/decisions",
-                  provider_model_id: id
+            if fallback_visible?(id) do
+              ReqLLM.model(%{
+                provider: :openrouter,
+                id: id,
+                capabilities: %{chat: false, evaluate: true, streaming: %{text: false}},
+                execution: %{
+                  evaluate: %{
+                    supported: true,
+                    family: "openrouter_decisions",
+                    wire_protocol: "openrouter_decisions",
+                    base_url: "https://openrouter.ai",
+                    path: "/api/alpha/decisions",
+                    provider_model_id: id
+                  }
                 }
-              }
-            })
+              })
+            else
+              :error
+            end
         end
     end
   end
 
   defp confirmed_openrouter_jev(_, _), do: :error
+
+  defp fallback_visible?(id) do
+    case LLMDB.Catalog.snapshot() do
+      %{filters: filters} when is_map(filters) ->
+        LLMDB.Engine.apply_filters([%{provider: :openrouter, id: id}], filters) != []
+
+      _ ->
+        false
+    end
+  end
 
   defp base_catalog_model(provider, id) do
     LLMDB.Catalog.ensure_loaded!()
