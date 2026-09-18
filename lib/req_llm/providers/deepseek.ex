@@ -41,7 +41,7 @@ defmodule ReqLLM.Providers.Deepseek do
 
       # With maximum reasoning effort for complex tasks
       ReqLLM.generate_text("deepseek:deepseek-v4-pro", "Complex reasoning task",
-        reasoning_effort: :xhigh
+        reasoning_effort: :max
       )
 
       # Disable thinking mode
@@ -74,12 +74,14 @@ defmodule ReqLLM.Providers.Deepseek do
   ### Reasoning Effort
 
   The `reasoning_effort` option controls the depth of reasoning. DeepSeek supports
-  `"low"`, `"high"`, and `"max"` effort levels:
+  `"none"`, `"low"`, `"high"`, and `"max"` effort levels. ReqLLM's broader
+  canonical levels are mapped to the nearest DeepSeek value:
 
-  - `:low` → `"low"`
-  - `:medium` → `"high"` (compatibility mapping)
-  - `:high` → `"high"` (default for thinking mode)
-  - `:xhigh` → `"max"` (maximum effort for complex tasks)
+  - `:none` → `"none"`
+  - `:minimal` and `:low` → `"low"`
+  - `:medium`, `:high`, and `:xhigh` → `"high"` (default for thinking mode)
+  - `:max` and `:ultra` → `"max"`
+  - `:default` → omitted, allowing the API default
 
   See https://platform.deepseek.com/docs for full model documentation.
   """
@@ -109,10 +111,15 @@ defmodule ReqLLM.Providers.Deepseek do
 
     opts =
       case reasoning_effort do
+        :none -> Keyword.put(opts, :reasoning_effort, "none")
+        :minimal -> Keyword.put(opts, :reasoning_effort, "low")
         :low -> Keyword.put(opts, :reasoning_effort, "low")
         :medium -> Keyword.put(opts, :reasoning_effort, "high")
         :high -> Keyword.put(opts, :reasoning_effort, "high")
-        :xhigh -> Keyword.put(opts, :reasoning_effort, "max")
+        :xhigh -> Keyword.put(opts, :reasoning_effort, "high")
+        :max -> Keyword.put(opts, :reasoning_effort, "max")
+        :ultra -> Keyword.put(opts, :reasoning_effort, "max")
+        :default -> Keyword.delete(opts, :reasoning_effort)
         nil -> opts
         other when is_binary(other) -> Keyword.put(opts, :reasoning_effort, other)
         other -> Keyword.put(opts, :reasoning_effort, to_string(other))
