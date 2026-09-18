@@ -215,7 +215,7 @@ usage = ReqLLM.StreamResponse.usage(response)
 ## Evaluation models
 
 Evaluation models answer named questions about one text or JSON state. They do
-not need to support chat. `ReqLLM.evaluation_models/0` lists catalog specs that
+not need to support chat. `ReqLLM.evaluation_models/0` lists specs that
 ReqLLM can call. Set `TYPESAFE_API_KEY` or `OPENROUTER_API_KEY` in `.env`:
 
 ```elixir

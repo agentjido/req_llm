@@ -225,7 +225,7 @@ defmodule ReqLLM.EvaluationTest do
     assert result.object["urgent"]["probability"] == 0.75
   end
 
-  test "lists only catalog evaluation specs with a callable adapter" do
+  test "lists only evaluation specs with a callable adapter" do
     assert ReqLLM.evaluation_models() == [
              "openrouter:typesafe/jev-1.13",
              "openrouter:~typesafe/jev-latest",
@@ -235,9 +235,17 @@ defmodule ReqLLM.EvaluationTest do
            ]
 
     for spec <- ReqLLM.evaluation_models() do
-      assert {:ok, model} = ReqLLM.model(spec)
-      assert model.capabilities.evaluate == true
-      assert model.execution.evaluate.supported == true
+      case LLMDB.model(spec) do
+        {:ok, model} ->
+          assert model.capabilities.evaluate == true
+          assert model.execution.evaluate.supported == true
+
+        {:error, :not_found} ->
+          assert spec in [
+                   "openrouter:typesafe/jev-1.13",
+                   "openrouter:~typesafe/jev-latest"
+                 ]
+      end
     end
   end
 
@@ -304,13 +312,21 @@ defmodule ReqLLM.EvaluationTest do
     assert {:error, %ReqLLM.Error.Invalid.Parameter{parameter: cloudflare_error}} =
              ReqLLM.evaluate("cloudflare_workers_ai:typesafe/jev", "text", @questions, opts)
 
-    assert cloudflare_error =~ "No evaluation adapter"
-    assert cloudflare_error =~ "cloudflare_ai_run"
+    if base_catalog_model?(:cloudflare_workers_ai, "typesafe/jev") do
+      assert cloudflare_error =~ "No evaluation adapter"
+      assert cloudflare_error =~ "cloudflare_ai_run"
+    else
+      assert cloudflare_error =~ "Unknown evaluation model spec"
+    end
 
     assert {:error, %ReqLLM.Error.Invalid.Parameter{parameter: vercel_error}} =
              ReqLLM.evaluate("vercel:typesafe-ai/jev", "text", @questions, opts)
 
-    assert vercel_error =~ "Catalog-only evaluation model"
+    if base_catalog_model?(:vercel, "typesafe-ai/jev") do
+      assert vercel_error =~ "Catalog-only evaluation model"
+    else
+      assert vercel_error =~ "Unknown evaluation model spec"
+    end
   end
 
   test "accepts a full inline spec for an unlisted OpenRouter evaluation model" do
@@ -472,5 +488,11 @@ defmodule ReqLLM.EvaluationTest do
                api_key: "test-key",
                req_http_options: [plug: {Req.Test, __MODULE__.Malformed}]
              )
+  end
+
+  defp base_catalog_model?(provider, id) do
+    Enum.any?(LLMDB.Catalog.snapshot().base_models, fn model ->
+      model.provider == provider and model.id == id
+    end)
   end
 end
