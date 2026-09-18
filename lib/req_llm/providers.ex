@@ -104,7 +104,7 @@ defmodule ReqLLM.Providers do
     Enum.filter(modules, fn module ->
       try do
         behaviours = module.__info__(:attributes)[:behaviour] || []
-        ReqLLM.Provider in behaviours
+        ReqLLM.Provider in behaviours and module != ReqLLM.Providers.CatalogGateway
       rescue
         _ -> false
       end

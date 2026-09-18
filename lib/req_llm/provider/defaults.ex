@@ -626,6 +626,15 @@ defmodule ReqLLM.Provider.Defaults do
     {api_key, extra_option_keys} =
       fetch_api_key_and_extra_options(provider_mod, model_input, user_opts)
 
+    attach_with_api_key(provider_mod, request, model, user_opts, api_key, extra_option_keys)
+  end
+
+  @doc false
+  @spec attach_with_api_key(module(), Req.Request.t(), LLMDB.Model.t(), keyword(), binary(), [
+          atom()
+        ]) ::
+          Req.Request.t()
+  def attach_with_api_key(provider_mod, request, model, user_opts, api_key, extra_option_keys) do
     request
     |> Req.Request.put_header("content-type", "application/json")
     |> Req.Request.put_header("authorization", "Bearer #{api_key}")
@@ -1933,9 +1942,15 @@ defmodule ReqLLM.Provider.Defaults do
           {model_struct.provider, model_struct, model_struct.model}
 
         model_name when is_binary(model_name) ->
-          provider_id = provider_id_from_model_name(model_name)
-          model = %LLMDB.Model{id: model_name, provider: provider_id}
-          {provider_id, model, model_name}
+          case req.private[:req_llm_model] do
+            %LLMDB.Model{} = stored_model ->
+              {stored_model.provider, stored_model, model_name}
+
+            _ ->
+              provider_id = provider_id_from_model_name(model_name)
+              model = %LLMDB.Model{id: model_name, provider: provider_id}
+              {provider_id, model, model_name}
+          end
       end
 
     is_streaming = req.options[:stream] == true
@@ -2069,7 +2084,7 @@ defmodule ReqLLM.Provider.Defaults do
     # Create a temporary Req request to use existing encode_body logic
     req_opts =
       [
-        model: model.id,
+        model: model.provider_model_id || model.id,
         context: context,
         stream: true
       ] ++ Keyword.delete(opts, :finch_name)
@@ -2115,7 +2130,7 @@ defmodule ReqLLM.Provider.Defaults do
       end)
 
     body = %{
-      model: model.id,
+      model: model.provider_model_id || model.id,
       messages: messages,
       stream: true
     }
