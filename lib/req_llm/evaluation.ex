@@ -56,7 +56,8 @@ defmodule ReqLLM.Evaluation do
          :ok <- validate_questions(questions),
          :ok <- validate_json(%{state: state, questions: questions}),
          {:ok, opts} <- validate_options(opts),
-         {:ok, model} <- ReqLLM.model(model_spec),
+         {:ok, model} <- resolve_model(model_spec),
+         :ok <- validate_support(model),
          {:ok, provider} <- ReqLLM.provider(model.provider),
          {:ok, request} <-
            provider.prepare_request(:evaluate, model, %{state: state, questions: questions}, opts),
@@ -68,6 +69,25 @@ defmodule ReqLLM.Evaluation do
 
   def evaluate(_model_spec, _state, _questions, opts) do
     {:error, invalid_parameter("opts must be a keyword list, got: #{inspect(opts)}")}
+  end
+
+  @doc """
+  Lists catalog model specs that `evaluate/4` can call with an installed adapter.
+
+  Catalog evaluation metadata can also describe models for providers that ReqLLM
+  does not yet support. Those models are excluded from this list.
+  """
+  @spec models() :: [String.t()]
+  def models do
+    LLMDB.candidates(require: [evaluate: true])
+    |> Enum.filter(fn spec ->
+      case LLMDB.Spec.resolve(spec) do
+        {:ok, {_provider, _id, model}} -> callable?(model)
+        _ -> false
+      end
+    end)
+    |> Enum.map(fn {provider, id} -> "#{provider}:#{id}" end)
+    |> Enum.sort()
   end
 
   @doc """
@@ -84,6 +104,154 @@ defmodule ReqLLM.Evaluation do
 
   @doc false
   def schema, do: @options_schema
+
+  defp resolve_model(model_spec) when is_binary(model_spec) do
+    case LLMDB.Spec.resolve(model_spec) do
+      {:ok, {_provider, _id, model}} ->
+        ReqLLM.model(model)
+
+      _ ->
+        case LLMDB.Spec.parse_spec(model_spec) do
+          {:ok, {provider, id}} -> unavailable_model(provider, id)
+          _ -> {:error, unknown_model(model_spec)}
+        end
+    end
+  end
+
+  defp resolve_model({provider, id, _opts}) when is_atom(provider) and is_binary(id) do
+    resolve_model({provider, id})
+  end
+
+  defp resolve_model({provider, id} = spec) when is_atom(provider) and is_binary(id) do
+    case LLMDB.Spec.resolve(spec) do
+      {:ok, {_provider, _id, model}} -> ReqLLM.model(model)
+      _ -> unavailable_model(provider, id)
+    end
+  end
+
+  defp resolve_model(model_spec) do
+    with {:ok, model} <- ReqLLM.model(model_spec) do
+      case LLMDB.Spec.resolve({model.provider, model.id}) do
+        {:ok, {_provider, _id, catalog_model}} ->
+          ReqLLM.model(catalog_model)
+
+        _ ->
+          case base_catalog_model(model.provider, model.id) do
+            {:ok, catalog_model} ->
+              {:error, unavailable_catalog_error(catalog_model)}
+
+            :error ->
+              if explicit_inline_evaluation?(model_spec) do
+                {:ok, model}
+              else
+                {:error, unknown_model("#{model.provider}:#{model.id}")}
+              end
+          end
+      end
+    end
+  end
+
+  defp unavailable_model(provider, id) do
+    case base_catalog_model(provider, id) do
+      {:ok, model} -> {:error, unavailable_catalog_error(model)}
+      :error -> {:error, unknown_model("#{provider}:#{id}")}
+    end
+  end
+
+  defp base_catalog_model(provider, id) do
+    LLMDB.Catalog.ensure_loaded!()
+
+    case LLMDB.Catalog.snapshot() do
+      %{base_models: models} when is_list(models) ->
+        case Enum.find(models, &(&1.provider == provider and &1.id == id)) do
+          nil -> :error
+          model -> {:ok, model}
+        end
+
+      _ ->
+        :error
+    end
+  end
+
+  defp unavailable_catalog_error(model) do
+    if model.catalog_only == true do
+      invalid_parameter(
+        "Catalog-only evaluation model #{LLMDB.Model.spec(model)} has no ReqLLM evaluation adapter"
+      )
+    else
+      case validate_support(model) do
+        :ok ->
+          invalid_parameter(
+            "Evaluation model #{LLMDB.Model.spec(model)} is unavailable under the current catalog filter"
+          )
+
+        {:error, error} ->
+          error
+      end
+    end
+  end
+
+  defp explicit_inline_evaluation?(spec) when is_map(spec) do
+    capabilities = field(spec, :capabilities)
+    execution = field(field(spec, :execution), :evaluate)
+
+    field(capabilities, :evaluate) == true and
+      field(execution, :supported) == true and
+      is_binary(field(execution, :family)) and
+      is_binary(field(execution, :wire_protocol)) and
+      is_binary(field(execution, :path)) and
+      is_binary(field(execution, :provider_model_id))
+  end
+
+  defp explicit_inline_evaluation?(_), do: false
+
+  defp field(map, key) when is_map(map), do: Map.get(map, key) || Map.get(map, to_string(key))
+  defp field(_, _), do: nil
+
+  defp validate_support(model) do
+    cond do
+      field(model.capabilities, :evaluate) != true ->
+        {:error, invalid_parameter("#{LLMDB.Model.spec(model)} does not support evaluation")}
+
+      callable?(model) ->
+        :ok
+
+      true ->
+        {:error,
+         invalid_parameter(
+           "No evaluation adapter for #{LLMDB.Model.spec(model)} (provider #{inspect(model.provider)}, execution family #{inspect(field(field(model.execution, :evaluate), :family))})"
+         )}
+    end
+  end
+
+  defp callable?(model) do
+    execution = field(model.execution, :evaluate)
+
+    case model.provider do
+      :typesafe ->
+        contract?(execution, "typesafe_systemone", "/v1/systemone")
+
+      :openrouter ->
+        contract?(execution, "openrouter_decisions", "/api/alpha/decisions")
+
+      _ ->
+        false
+    end
+  end
+
+  defp contract?(execution, family, path) do
+    field(execution, :supported) == true and
+      field(execution, :family) == family and
+      field(execution, :wire_protocol) == family and
+      field(execution, :path) == path and
+      is_binary(field(execution, :provider_model_id))
+  end
+
+  defp unknown_model(spec) do
+    invalid_parameter(
+      "Unknown evaluation model spec #{inspect(spec)}. Use a catalog spec from ReqLLM.evaluation_models/0 or a full inline model spec with evaluation capability and execution metadata"
+    )
+  end
 
   defp validate_state(state) when is_binary(state) or is_map(state) or is_list(state), do: :ok
   defp validate_state(_), do: {:error, invalid_parameter("state must be text or JSON data")}

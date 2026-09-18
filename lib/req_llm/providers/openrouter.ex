@@ -48,6 +48,7 @@ defmodule ReqLLM.Providers.OpenRouter do
 
   import ReqLLM.Provider.Utils, only: [maybe_put: 3]
 
+  alias ReqLLM.Evaluation.Codec, as: EvaluationCodec
   alias ReqLLM.Message.ContentPart
 
   require Logger
@@ -214,6 +215,49 @@ defmodule ReqLLM.Providers.OpenRouter do
       prompt,
       opts
     )
+  end
+
+  def prepare_request(:evaluate, model_spec, %{state: state, questions: questions}, opts) do
+    with {:ok, model} <- ReqLLM.model(model_spec),
+         {:ok, api_key, _source} <- ReqLLM.Keys.get(model, opts) do
+      timeout = Keyword.get(opts, :receive_timeout, 30_000)
+      http_opts = Keyword.get(opts, :req_http_options, [])
+      execution = model.execution.evaluate
+
+      request =
+        Req.new(
+          [
+            url: execution.path,
+            method: :post,
+            base_url:
+              Keyword.get(opts, :base_url, execution[:base_url] || "https://openrouter.ai"),
+            receive_timeout: timeout,
+            json: %{
+              model: execution.provider_model_id,
+              state: state,
+              questions: EvaluationCodec.normalize_questions(questions)
+            }
+          ] ++ ReqLLM.Provider.Defaults.merge_finch_options(http_opts, pool_timeout: timeout)
+        )
+        |> Req.Request.register_options([:operation])
+        |> Req.Request.merge_options(operation: :evaluate)
+        |> Req.Request.put_header("authorization", "Bearer #{api_key}")
+        |> maybe_add_attribution_headers(opts)
+        |> ReqLLM.Step.Retry.attach(opts)
+        |> ReqLLM.Step.Error.attach()
+        |> ReqLLM.Step.Usage.attach(model)
+        |> Req.Request.append_response_steps(llm_decode_response: &decode_response/1)
+        |> ReqLLM.Step.Telemetry.attach(model, opts)
+        |> ReqLLM.Step.Fixture.maybe_attach(model, opts)
+
+      {:ok, request}
+    else
+      {:error, message} when is_binary(message) ->
+        {:error, ReqLLM.Error.Invalid.Parameter.exception(parameter: message)}
+
+      {:error, _} = error ->
+        error
+    end
   end
 
   def prepare_request(:transcription, model_spec, audio_data, opts) do
@@ -856,27 +900,57 @@ defmodule ReqLLM.Providers.OpenRouter do
 
   @impl ReqLLM.Provider
   def decode_response({req, resp} = args) do
+    case req.options[:operation] do
+      :evaluate -> decode_evaluation_response(req, resp)
+      _ -> decode_chat_response(args)
+    end
+  end
+
+  defp decode_evaluation_response(req, %Req.Response{status: status} = resp)
+       when status in 200..299 do
+    body = ensure_parsed_body(resp.body)
+
+    case EvaluationCodec.decode_response(body, :openrouter) do
+      {:ok, result} ->
+        {req, %{resp | body: result}}
+
+      :error ->
+        {req,
+         ReqLLM.Error.API.Response.exception(
+           reason: "Invalid OpenRouter evaluation response",
+           status: status,
+           response_body: body
+         )}
+    end
+  end
+
+  defp decode_evaluation_response(req, %Req.Response{status: status} = resp) do
+    {req,
+     ReqLLM.Error.API.Response.exception(
+       reason: "OpenRouter evaluation failed",
+       status: status,
+       response_body: ensure_parsed_body(resp.body)
+     )}
+  end
+
+  defp decode_chat_response({req, resp} = args) do
     case resp.status do
       200 ->
         body = ensure_parsed_body(resp.body)
 
-        # Extract reasoning_details BEFORE any transformations
         reasoning_details = extract_reasoning_details(body)
 
-        # Handle Deepseek tool calls extraction (may modify body)
         body_with_tool_calls =
           case extract_deepseek_tool_calls(body) do
             {:ok, updated_body} -> updated_body
             :no_tool_calls -> body
           end
 
-        # Decode using default decoder
         {req, resp_with_decoded} =
           ReqLLM.Provider.Defaults.default_decode_response(
             {req, %{resp | body: body_with_tool_calls}}
           )
 
-        # Attach reasoning_details to the message if present
         updated_resp = attach_reasoning_details_to_response(resp_with_decoded, reasoning_details)
 
         {req, updated_resp}

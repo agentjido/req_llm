@@ -1448,6 +1448,15 @@ defmodule ReqLLM do
           ReqLLM.Response.t() | no_return()
   defdelegate evaluate!(model_spec, state, questions, opts \\ []), to: Evaluation
 
+  @doc """
+  Lists catalog model specs with a callable evaluation adapter.
+
+  Use this list to select a model for `evaluate/4`. A full inline model spec
+  can also describe an unlisted model with a supported execution contract.
+  """
+  @spec evaluation_models() :: [String.t()]
+  defdelegate evaluation_models(), to: Evaluation, as: :models
+
   # ===========================================================================
   # OCR API - Delegated to ReqLLM.OCR
   # ===========================================================================

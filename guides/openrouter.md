@@ -14,6 +14,82 @@ For the full model-spec workflow, see [Model Specs](model-specs.md).
 
 Use exact OpenRouter model IDs from [LLM Catalog](https://llmcatalog.dev) when possible. If you need to route to a model that is not in the registry yet, use `ReqLLM.model!/1` and provide the full explicit model spec.
 
+## Jev evaluation
+
+OpenRouter serves Jev through its [Decisions API](https://openrouter.ai/docs/api/api-reference/alphadecisions/submit-a-decisions-questions-and-answers-request).
+Set `OPENROUTER_API_KEY`, then use `ReqLLM.evaluate/4`. The operation sends a
+POST request to `/api/alpha/decisions`. It does not use chat completions.
+
+```elixir
+ReqLLM.evaluation_models()
+
+questions = %{
+  department: %{
+    type: :choice,
+    instructions: "Which team should handle this?",
+    criteria: %{billing: "Billing", support: "Other requests"}
+  },
+  severity: %{
+    type: :score,
+    instructions: "How severe is this?",
+    criteria: ["low", "medium", "high"]
+  },
+  urgent: %{type: :boolean, instructions: "Is this urgent?"}
+}
+
+{:ok, pinned} =
+  ReqLLM.evaluate("openrouter:typesafe/jev-1.13", "Please refund me", questions)
+
+{:ok, moving} =
+  ReqLLM.evaluate("openrouter:~typesafe/jev-latest", "Please refund me", questions)
+
+pinned.object["department"]["choice"]
+pinned.object["severity"]["score"]
+moving.object["urgent"]["probability"]
+moving.usage.input_tokens
+```
+
+The `~typesafe/jev-latest` ID stays in the request. The response `model` field
+reports the model that OpenRouter resolved. `object` contains named answers
+with string keys. A `:boolean` question uses the provider's `noul` wire type;
+the answer becomes `%{"type" => "boolean", "probability" => value}`.
+`provider_meta.raw_response` keeps the original response.
+
+`ReqLLM.evaluation_models/0` includes only catalog models with a ReqLLM
+evaluation adapter. LLMDB can also list evaluation models on other gateways.
+For example, Cloudflare has an executable `cloudflare_ai_run` contract in the
+catalog, but ReqLLM has no Cloudflare evaluation adapter. Vercel's Jev entry
+is catalog only. These specs cannot use the OpenRouter adapter. Netlify's
+TypeSafe gateway also needs its own verified provider model ID, endpoint,
+authentication, and response mapping before ReqLLM can call it.
+
+An unlisted model can use an explicit inline spec when it uses a supported
+execution contract:
+
+```elixir
+model =
+  ReqLLM.model!(%{
+    provider: :openrouter,
+    id: "typesafe/jev-next",
+    capabilities: %{chat: false, evaluate: true},
+    execution: %{
+      evaluate: %{
+        supported: true,
+        family: "openrouter_decisions",
+        wire_protocol: "openrouter_decisions",
+        path: "/api/alpha/decisions",
+        provider_model_id: "typesafe/jev-next"
+      }
+    }
+  })
+
+ReqLLM.evaluate(model, "Please refund me", questions)
+```
+
+The adapter requires `capabilities.evaluate: true` and matching `execution.evaluate`
+metadata before it reads the API key or sends HTTP. An inline spec cannot make
+a catalog model with no evaluation support callable.
+
 ## Provider Options
 
 Passed via `:provider_options` keyword:
