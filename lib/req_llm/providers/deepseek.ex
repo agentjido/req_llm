@@ -73,15 +73,13 @@ defmodule ReqLLM.Providers.Deepseek do
 
   ### Reasoning Effort
 
-  The `reasoning_effort` option controls the depth of reasoning. For compatibility,
-  `:low` and `:medium` are mapped to `"high"`, and `:xhigh` is mapped to `"max"`.
+  The `reasoning_effort` option controls the depth of reasoning. DeepSeek supports
+  `"low"`, `"high"`, and `"max"` effort levels:
 
-  Only `"high"` and `"max"` are the meaningful values sent to the API:
-
-  - `:low` → mapped to `"high"`
-  - `:medium` → mapped to `"high"`
+  - `:low` → `"low"`
+  - `:medium` → `"high"` (compatibility mapping)
   - `:high` → `"high"` (default for thinking mode)
-  - `:xhigh` → mapped to `"max"` (maximum effort for complex tasks)
+  - `:xhigh` → `"max"` (maximum effort for complex tasks)
 
   See https://platform.deepseek.com/docs for full model documentation.
   """
@@ -111,7 +109,7 @@ defmodule ReqLLM.Providers.Deepseek do
 
     opts =
       case reasoning_effort do
-        :low -> Keyword.put(opts, :reasoning_effort, "high")
+        :low -> Keyword.put(opts, :reasoning_effort, "low")
         :medium -> Keyword.put(opts, :reasoning_effort, "high")
         :high -> Keyword.put(opts, :reasoning_effort, "high")
         :xhigh -> Keyword.put(opts, :reasoning_effort, "max")
