@@ -59,6 +59,8 @@ defmodule ReqLLM.Usage.Normalize do
       input_tokens: input,
       output_tokens: output,
       total_tokens: total_tokens,
+      cache_read_tokens: cached_input,
+      cache_write_tokens: cache_creation,
       cached_tokens: cached_input,
       cache_creation_tokens: cache_creation,
       reasoning_tokens: reasoning
@@ -196,7 +198,9 @@ defmodule ReqLLM.Usage.Normalize do
 
   defp get_cached_input_tokens(usage, input, input_includes_cached) do
     cached =
-      MapAccess.get(usage, :cache_read_input_tokens) ||
+      MapAccess.get(usage, :cache_read_tokens) ||
+        MapAccess.get(usage, "cache_read_tokens") ||
+        MapAccess.get(usage, :cache_read_input_tokens) ||
         MapAccess.get(usage, "cache_read_input_tokens") ||
         MapAccess.get(usage, :cacheReadInputTokens) ||
         MapAccess.get(usage, "cacheReadInputTokens") ||
@@ -220,9 +224,10 @@ defmodule ReqLLM.Usage.Normalize do
 
   defp get_cache_creation_tokens(usage, input, input_includes_cached) do
     creation =
-      MapAccess.get(usage, :cache_creation_tokens) ||
+      MapAccess.get(usage, :cache_write_tokens) ||
+        MapAccess.get(usage, "cache_write_tokens") ||
+        MapAccess.get(usage, :cache_creation_tokens) ||
         MapAccess.get(usage, :cache_creation) ||
-        MapAccess.get(usage, :cache_write_tokens) ||
         MapAccess.get(usage, :cache_creation_input_tokens) ||
         MapAccess.get(usage, "cache_creation_input_tokens") ||
         MapAccess.get(usage, :cacheWriteInputTokens) ||

@@ -322,8 +322,10 @@ The `usage` field contains normalized usage data with token counts, costs, and t
   output_tokens: 200,
   total_tokens: 350,
   reasoning_tokens: 0,        # For reasoning models (o1, o3, gpt-5)
-  cached_tokens: 100,         # Cached input tokens
-  cache_creation_tokens: 0,   # Tokens used to create cache
+  cache_read_tokens: 100,     # Input tokens read from cache
+  cache_write_tokens: 0,      # Input tokens written to cache
+  cached_tokens: 100,         # Compatibility alias for cache_read_tokens
+  cache_creation_tokens: 0,   # Compatibility alias for cache_write_tokens
 
   # Cost breakdown (USD)
   input_cost: 0.00045,

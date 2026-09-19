@@ -72,17 +72,17 @@ The `reasoning_tokens` field tracks tokens used for chain-of-thought reasoning. 
 
 ### Cached Tokens
 
-For providers that support prompt caching (Anthropic, OpenAI):
+For providers that support prompt caching (Amazon Bedrock, Anthropic, OpenAI):
 
 ```elixir
-response.usage.cached_tokens
+response.usage.cache_read_tokens
 #=> 500  # Input tokens served from cache
 
-response.usage.cache_creation_tokens
+response.usage.cache_write_tokens
 #=> 0    # Tokens used to create new cache entries
 ```
 
-Cached tokens are typically billed at a reduced rate. See [Anthropic Prompt Caching](anthropic.md#anthropic_prompt_cache) for details.
+Cache reads and writes have separate counters because providers can bill them at different rates. The `cached_tokens` and `cache_creation_tokens` fields remain as compatibility aliases. See [Anthropic Prompt Caching](anthropic.md#anthropic_prompt_cache) for details.
 
 ## Tool Usage
 

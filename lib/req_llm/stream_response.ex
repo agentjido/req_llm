@@ -487,9 +487,11 @@ defmodule ReqLLM.StreamResponse do
   Blocks until the metadata collection task completes and returns the usage map
   containing token counts and cost information.
 
-  Provider-native cache reads surface as non-zero `cached_tokens`. When the
-  result came from ReqLLM's application-layer response cache instead, this
-  function returns a zeroed usage map and the materialized response includes
+  Provider-native cache reads and writes surface separately as
+  `cache_read_tokens` and `cache_write_tokens`. The `cached_tokens` and
+  `cache_creation_tokens` fields are compatibility aliases. When the result
+  came from ReqLLM's application-layer response cache instead, this function
+  returns a zeroed usage map and the materialized response includes
   `provider_meta.response_cache_hit == true`.
 
   ## Parameters

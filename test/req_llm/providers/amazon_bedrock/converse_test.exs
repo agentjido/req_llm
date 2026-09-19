@@ -966,6 +966,8 @@ defmodule ReqLLM.Providers.AmazonBedrock.ConverseTest do
                input_tokens: 10,
                output_tokens: 5,
                total_tokens: 15,
+               cache_read_tokens: 0,
+               cache_write_tokens: 0,
                cached_tokens: 0,
                cache_creation_tokens: 0,
                reasoning_tokens: 0,
@@ -1093,6 +1095,8 @@ defmodule ReqLLM.Providers.AmazonBedrock.ConverseTest do
       {:ok, result} = Converse.parse_response(response_body, model: "test")
 
       assert result.usage.input_tokens == 12
+      assert result.usage.cache_read_tokens == 4000
+      assert result.usage.cache_write_tokens == 900
       assert result.usage.cached_tokens == 4000
       assert result.usage.cache_creation_tokens == 900
       assert result.usage.total_tokens == 17
@@ -1191,6 +1195,8 @@ defmodule ReqLLM.Providers.AmazonBedrock.ConverseTest do
 
       {:ok, result} = Converse.parse_stream_chunk(chunk, "test-model")
 
+      assert result.metadata.usage.cache_read_tokens == 4000
+      assert result.metadata.usage.cache_write_tokens == 900
       assert result.metadata.usage.cached_tokens == 4000
       assert result.metadata.usage.cache_creation_tokens == 900
 

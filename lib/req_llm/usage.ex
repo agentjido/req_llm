@@ -15,6 +15,8 @@ defmodule ReqLLM.Usage do
     :total_tokens,
     :input,
     :output,
+    :cache_read_tokens,
+    :cache_write_tokens,
     :cached_tokens,
     :reasoning_tokens,
     :cache_creation_tokens,
@@ -29,6 +31,8 @@ defmodule ReqLLM.Usage do
     total_tokens: 0,
     input: 0,
     output: 0,
+    cache_read_tokens: 0,
+    cache_write_tokens: 0,
     cached_tokens: 0,
     reasoning_tokens: 0,
     cache_creation_tokens: 0
@@ -45,6 +49,12 @@ defmodule ReqLLM.Usage do
   Also guarantees compatibility aliases:
   - `:input`
   - `:output`
+  - `:cached_tokens` for `:cache_read_tokens`
+  - `:cache_creation_tokens` for `:cache_write_tokens`
+
+  Prompt cache reads and writes are available as separate counters:
+  - `:cache_read_tokens`
+  - `:cache_write_tokens`
 
   Canonical counters accept numbers and base-10 integer strings. Malformed
   component counters remain visible instead of becoming zero. A malformed
@@ -75,7 +85,17 @@ defmodule ReqLLM.Usage do
   end
 
   def normalize(_) do
-    Map.take(@zero_usage, [:input_tokens, :output_tokens, :total_tokens, :input, :output])
+    Map.take(@zero_usage, [
+      :input_tokens,
+      :output_tokens,
+      :total_tokens,
+      :input,
+      :output,
+      :cache_read_tokens,
+      :cache_write_tokens,
+      :cached_tokens,
+      :cache_creation_tokens
+    ])
   end
 
   @doc """

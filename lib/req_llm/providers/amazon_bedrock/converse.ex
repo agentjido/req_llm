@@ -1390,13 +1390,17 @@ defmodule ReqLLM.Providers.AmazonBedrock.Converse do
   defp parse_usage(usage) do
     input = usage["inputTokens"] || 0
     output = usage["outputTokens"] || 0
+    cache_read = usage["cacheReadInputTokens"] || 0
+    cache_write = usage["cacheWriteInputTokens"] || 0
 
     %{
       input_tokens: input,
       output_tokens: output,
       total_tokens: input + output,
-      cached_tokens: usage["cacheReadInputTokens"] || 0,
-      cache_creation_tokens: usage["cacheWriteInputTokens"] || 0,
+      cache_read_tokens: cache_read,
+      cache_write_tokens: cache_write,
+      cached_tokens: cache_read,
+      cache_creation_tokens: cache_write,
       reasoning_tokens: 0,
       input_includes_cached: false
     }
