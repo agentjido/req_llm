@@ -387,16 +387,15 @@ defmodule ReqLLM.ContextTest do
 
   describe "Collectable protocol" do
     test "into/1 allows collecting messages" do
-      context = Context.new([Context.system("Start")])
-      new_messages = [Context.user("Hello"), Context.assistant("Hi")]
+      system = Context.system("Start")
+      user = Context.user("Hello")
+      assistant = Context.assistant("Hi")
+      tool = %{name: "lookup"}
+      context = %Context{messages: [system], tools: [tool]}
 
-      result = Enum.into(new_messages, context)
+      result = Enum.into([user, assistant], context)
 
-      assert %Context{messages: messages} = result
-      assert length(messages) == 3
-      # New messages are appended to original messages
-      roles = Enum.map(messages, & &1.role)
-      assert roles == [:system, :user, :assistant]
+      assert %Context{messages: [^system, ^user, ^assistant], tools: [^tool]} = result
     end
 
     test "into/1 with empty context preserves order" do
@@ -412,7 +411,6 @@ defmodule ReqLLM.ContextTest do
       result = Enum.into(messages, empty_context)
 
       roles = Enum.map(result.messages, & &1.role)
-      # With empty context, messages are collected then reversed, preserving order
       assert roles == [:system, :user, :assistant, :user]
     end
   end
@@ -835,6 +833,17 @@ defmodule ReqLLM.ContextTest do
 
       assert [%ReqLLM.Tool{name: "weather"}] = context.tools
     end
+
+    test "adding a system prompt preserves Context.tools" do
+      tool = %{name: "lookup"}
+      original = %Context{messages: [Context.user("Hello")], tools: [tool]}
+
+      {:ok, context} =
+        Context.normalize(original, system_prompt: "System", validate: false)
+
+      assert Enum.map(context.messages, & &1.role) == [:system, :user]
+      assert context.tools == [tool]
+    end
   end
 
   describe "normalize!/2" do
@@ -855,12 +864,15 @@ defmodule ReqLLM.ContextTest do
   describe "JSON serialization" do
     test "serializes context with all message types" do
       original_context =
-        Context.new([
-          Context.system("You are a helpful assistant"),
-          Context.user("Hello, how are you?"),
-          Context.assistant("I'm doing well, thank you! How can I help you today?"),
-          Context.text(:user, "What's the weather like?", %{timestamp: "2023-01-01"})
-        ])
+        %Context{
+          messages: [
+            Context.system("You are a helpful assistant"),
+            Context.user("Hello, how are you?"),
+            Context.assistant("I'm doing well, thank you! How can I help you today?"),
+            Context.text(:user, "What's the weather like?", %{timestamp: "2023-01-01"})
+          ],
+          tools: [%{name: "lookup"}]
+        }
 
       json_string = Jason.encode!(original_context)
       assert is_binary(json_string)
@@ -868,7 +880,8 @@ defmodule ReqLLM.ContextTest do
       decoded_map = Jason.decode!(json_string)
 
       assert is_map(decoded_map)
-      assert Map.has_key?(decoded_map, "messages")
+      assert decoded_map |> Map.keys() |> Enum.sort() == ["messages", "tools"]
+      assert decoded_map["tools"] == [%{"name" => "lookup"}]
       assert length(decoded_map["messages"]) == 4
 
       system_msg = Enum.at(decoded_map["messages"], 0)
@@ -891,7 +904,7 @@ defmodule ReqLLM.ContextTest do
       json_string = Jason.encode!(original_context)
       decoded_map = Jason.decode!(json_string)
 
-      assert %{"messages" => []} = decoded_map
+      assert decoded_map == %{"messages" => [], "tools" => []}
     end
   end
 

@@ -2553,17 +2553,16 @@ defmodule ReqLLM.Providers.Google do
   # with N functionResponse parts.
   defp merge_consecutive_roles([]), do: []
 
-  defp merge_consecutive_roles([first | rest]) do
-    {merged, last} =
-      Enum.reduce(rest, {[], first}, fn
-        %{role: role, parts: parts}, {acc, %{role: role} = current} ->
-          {acc, %{current | parts: current.parts ++ parts}}
+  defp merge_consecutive_roles(entries) do
+    entries
+    |> Enum.chunk_by(& &1.role)
+    |> Enum.map(&merge_role_group/1)
+  end
 
-        entry, {acc, current} ->
-          {acc ++ [current], entry}
-      end)
+  defp merge_role_group([entry]), do: entry
 
-    merged ++ [last]
+  defp merge_role_group([first | _rest] = entries) do
+    %{first | parts: Enum.flat_map(entries, & &1.parts)}
   end
 
   defp encode_reasoning_details_for_gemini(message) do

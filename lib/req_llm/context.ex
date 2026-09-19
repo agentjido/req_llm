@@ -75,7 +75,8 @@ defmodule ReqLLM.Context do
   The public `messages` field is a chronological Elixir list. Appending one
   message therefore copies the existing list. When several messages are ready
   at the same time, pass them as one list so the existing history is copied
-  only once.
+  only once. `Enum.into(messages, context)` provides the same batching for an
+  enumerable source.
   """
   @spec append(t(), Message.t() | [Message.t()]) :: t()
   def append(%__MODULE__{} = ctx, %Message{} = msg), do: append(ctx, [msg])
@@ -705,10 +706,10 @@ defmodule ReqLLM.Context do
   end
 
   defimpl Collectable do
-    def into(%ReqLLM.Context{messages: messages}) do
+    def into(%ReqLLM.Context{} = context) do
       collector = fn
         list, {:cont, message} -> [message | list]
-        list, :done -> %ReqLLM.Context{messages: messages ++ Enum.reverse(list)}
+        list, :done -> ReqLLM.Context.append(context, Enum.reverse(list))
         _list, :halt -> :ok
       end
 
@@ -875,22 +876,10 @@ defmodule ReqLLM.Context do
   end
 
   defp to_context(list, convert_loose?) when is_list(list) do
-    list
-    |> Enum.reduce_while({:ok, []}, fn item, {:ok, reversed_messages} ->
-      case convert_item(item, convert_loose?) do
-        {:ok, msg} when is_struct(msg, Message) ->
-          {:cont, {:ok, [msg | reversed_messages]}}
-
-        {:ok, msgs} when is_list(msgs) ->
-          {:cont, {:ok, Enum.reverse(msgs, reversed_messages)}}
-
-        {:error, _} = err ->
-          {:halt, err}
-      end
-    end)
-    |> case do
-      {:ok, reversed_messages} -> {:ok, new(Enum.reverse(reversed_messages))}
-      error -> error
+    if Enum.all?(list, &is_struct(&1, Message)) do
+      {:ok, new(list)}
+    else
+      convert_items(list, convert_loose?, [])
     end
   end
 
@@ -902,6 +891,37 @@ defmodule ReqLLM.Context do
   end
 
   defp to_context(_prompt, _convert_loose?), do: {:error, :invalid_prompt}
+
+  defp convert_items([], _convert_loose?, reversed_messages) do
+    {:ok, new(Enum.reverse(reversed_messages))}
+  end
+
+  defp convert_items([item], convert_loose?, reversed_messages) do
+    case convert_item(item, convert_loose?) do
+      {:ok, msg} when is_struct(msg, Message) ->
+        {:ok, new(Enum.reverse(reversed_messages, [msg]))}
+
+      {:ok, msgs} when is_list(msgs) ->
+        _ = length(msgs)
+        {:ok, new(Enum.reverse(reversed_messages, msgs))}
+
+      {:error, _} = error ->
+        error
+    end
+  end
+
+  defp convert_items([item | rest], convert_loose?, reversed_messages) do
+    case convert_item(item, convert_loose?) do
+      {:ok, msg} when is_struct(msg, Message) ->
+        convert_items(rest, convert_loose?, [msg | reversed_messages])
+
+      {:ok, msgs} when is_list(msgs) ->
+        convert_items(rest, convert_loose?, Enum.reverse(msgs, reversed_messages))
+
+      {:error, _} = error ->
+        error
+    end
+  end
 
   defp convert_item(%__MODULE__{} = context, _convert_loose?) do
     case to_list(context) do
@@ -1338,7 +1358,7 @@ defmodule ReqLLM.Context do
     if has_system? do
       context
     else
-      %__MODULE__{messages: [system(system_prompt) | messages]}
+      %{context | messages: [system(system_prompt) | messages]}
     end
   end
 

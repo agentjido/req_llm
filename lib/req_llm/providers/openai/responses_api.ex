@@ -748,8 +748,8 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
 
     include_reasoning? = previous_response_id == nil
 
-    {input, _tool_messages} =
-      Enum.reduce(context.messages, {[], []}, fn msg, {input_acc, tool_acc} ->
+    reversed_input =
+      Enum.reduce(context.messages, [], fn msg, input_acc ->
         case msg.role do
           :tool when is_binary(msg.tool_call_id) ->
             # Encode tool results inline as function_call_output items so that
@@ -760,10 +760,10 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
             # tool calling with the Responses API.
             encoded = encode_tool_message_inline(msg)
 
-            {input_acc ++ [encoded], tool_acc}
+            [encoded | input_acc]
 
           :tool ->
-            {input_acc, [msg | tool_acc]}
+            input_acc
 
           :assistant ->
             reasoning =
@@ -774,7 +774,13 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
             assistant_items = encode_assistant_message_items(msg)
             function_calls = encode_tool_calls_as_function_calls(msg.tool_calls || [])
 
-            {input_acc ++ reasoning ++ assistant_items ++ function_calls, tool_acc}
+            reversed_input =
+              input_acc
+              |> push_input_items(reasoning)
+              |> push_input_items(assistant_items)
+              |> push_input_items(function_calls)
+
+            reversed_input
 
           _ ->
             content =
@@ -783,16 +789,17 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
               end)
 
             if content == [] do
-              {input_acc, tool_acc}
+              input_acc
             else
               updates = ReqLLM.Providers.OpenAI.Astra.configuration_items(msg, model_name)
 
-              {input_acc ++
-                 updates ++ [%{"role" => Atom.to_string(msg.role), "content" => content}],
-               tool_acc}
+              encoded = %{"role" => Atom.to_string(msg.role), "content" => content}
+              [encoded | push_input_items(input_acc, updates)]
             end
         end
       end)
+
+    input = Enum.reverse(reversed_input)
 
     # Only append explicit provider-supplied tool_outputs (e.g. for manual overrides).
     # Context-based tool outputs are now encoded inline above.
@@ -851,6 +858,10 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     else
       body
     end
+  end
+
+  defp push_input_items(reversed_input, items) do
+    Enum.reverse(items, reversed_input)
   end
 
   defp include_previous_response_id?(false, %{responses_transport: :websocket}), do: true
