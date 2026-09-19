@@ -188,6 +188,7 @@ defmodule ReqLLM.Message.ContentPart do
           :video_url -> "url: #{part.url}"
           :image -> "#{part.media_type} (#{byte_size(part.data || <<>>)} bytes)"
           :file -> inspect_file(part)
+          :provider_block -> inspect_provider_block(part)
         end
 
       Inspect.Algebra.concat([
@@ -217,6 +218,12 @@ defmodule ReqLLM.Message.ContentPart do
     end
 
     defp inspect_file(part), do: "#{part.media_type} (#{byte_size(part.data || <<>>)} bytes)"
+
+    defp inspect_provider_block(part) do
+      provider = Map.get(part.metadata, :provider) || Map.get(part.metadata, "provider")
+      block_type = Map.get(part.metadata, :block_type) || Map.get(part.metadata, "block_type")
+      "provider: #{provider}, block_type: #{block_type}"
+    end
   end
 
   defimpl Jason.Encoder do

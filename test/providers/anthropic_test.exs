@@ -2050,6 +2050,48 @@ defmodule ReqLLM.Providers.AnthropicTest do
       assert assistant[:content] == [@search_use]
     end
 
+    test "redacted thinking blocks remain in their original position" do
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
+      redacted = %{"type" => "redacted_thinking", "data" => "opaque"}
+      later_thinking = %{"type" => "thinking", "thinking" => "Later.", "signature" => "sig"}
+
+      {:ok, response} =
+        ReqLLM.Providers.Anthropic.Response.decode_response(
+          %{
+            "id" => "msg_05",
+            "role" => "assistant",
+            "model" => model.id,
+            "content" => [redacted, later_thinking, %{"type" => "text", "text" => "Done."}],
+            "stop_reason" => "end_turn"
+          },
+          model
+        )
+
+      encoded = ReqLLM.Providers.Anthropic.Context.encode_request(response.context, model)
+      [assistant] = encoded[:messages]
+
+      assert assistant[:content] == [redacted, later_thinking, %{type: "text", text: "Done."}]
+
+      events = [
+        %{"type" => "content_block_start", "index" => 0, "content_block" => redacted},
+        %{
+          "type" => "content_block_start",
+          "index" => 1,
+          "content_block" => later_thinking
+        },
+        %{"type" => "content_block_stop", "index" => 1}
+      ]
+
+      {chunks, _state} =
+        Enum.reduce(events, {[], Anthropic.init_stream_state(model)}, fn data, {acc, state} ->
+          {next, state} = Anthropic.decode_stream_event(%{data: data}, model, state)
+          {acc ++ next, state}
+        end)
+
+      assert Enum.filter(chunks, &(&1.type == :content_part))
+             |> Enum.map(& &1.content_part.data) == [redacted, later_thinking]
+    end
+
     test "streamed search blocks arrive whole, with the input assembled from deltas" do
       {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
 

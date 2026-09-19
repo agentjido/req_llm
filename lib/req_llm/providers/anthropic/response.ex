@@ -222,6 +222,7 @@ defmodule ReqLLM.Providers.Anthropic.Response do
   end
 
   defp server_tool_block?(%{"type" => "server_tool_use"}), do: true
+  defp server_tool_block?(%{"type" => "redacted_thinking"}), do: true
   defp server_tool_block?(block), do: server_tool_result?(block)
 
   defp server_tool_result?(%{"type" => type}) when is_binary(type),
@@ -388,7 +389,7 @@ defmodule ReqLLM.Providers.Anthropic.Response do
   end
 
   defp decode_content_block_start(block, index, state) do
-    if server_tool_result?(block) do
+    if server_tool_block?(block) do
       {[server_tool_block_chunk(block)], %{state | after_server_tool?: true}}
     else
       {decode_content_block_start(block, index), state}

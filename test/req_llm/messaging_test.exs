@@ -35,6 +35,12 @@ defmodule ReqLLM.MessagingTest do
 
       assert inspect(ContentPart.image(<<1, 2, 3>>, "image/png")) =~
                "#ContentPart<:image image/png (3 bytes)>"
+
+      provider_block =
+        ContentPart.provider_block(:anthropic, %{"type" => "server_tool_use", "input" => %{}})
+
+      assert inspect(provider_block) =~
+               "#ContentPart<:provider_block provider: anthropic, block_type: server_tool_use>"
     end
 
     test "supports metadata" do
