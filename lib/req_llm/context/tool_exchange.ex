@@ -14,8 +14,8 @@ defmodule ReqLLM.Context.ToolExchange do
     with {:ok, assistant} <- assistant(source),
          {:ok, calls} <- calls(assistant),
          {:ok, ordered_results} <- results(calls, results),
-         {:ok, context} <- append_assistant(context, source, assistant) do
-      {:ok, Context.append(context, ordered_results)}
+         {:ok, exchange_messages} <- exchange_messages(context, assistant, ordered_results) do
+      {:ok, Context.append(context, exchange_messages)}
     end
   end
 
@@ -206,10 +206,10 @@ defmodule ReqLLM.Context.ToolExchange do
 
   defp duplicates(ids), do: (ids -- Enum.uniq(ids)) |> Enum.uniq()
 
-  defp append_assistant(%Context{messages: messages} = context, source, assistant) do
+  defp exchange_messages(%Context{messages: messages}, assistant, ordered_results) do
     case List.last(messages) do
       ^assistant ->
-        {:ok, context}
+        {:ok, ordered_results}
 
       last_message ->
         if pending_calls?(last_message) do
@@ -218,16 +218,10 @@ defmodule ReqLLM.Context.ToolExchange do
             "Context already ends with a different unresolved assistant tool-call message"
           )
         else
-          {:ok, append_source(context, source, assistant)}
+          {:ok, [assistant | ordered_results]}
         end
     end
   end
-
-  defp append_source(context, %Response{} = response, _assistant) do
-    Context.merge_response(context, response).context
-  end
-
-  defp append_source(context, _source, assistant), do: Context.append(context, assistant)
 
   defp pending_calls?(%Message{role: :assistant, tool_calls: tool_calls})
        when is_list(tool_calls) do
