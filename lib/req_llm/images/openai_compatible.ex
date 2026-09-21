@@ -23,15 +23,15 @@ defmodule ReqLLM.Images.OpenAICompatible do
   rejected, and everything else is a lossy-but-valid transformation reported as
   a warning through `:on_unsupported`.
 
-  `translate_options/2` also scopes the gpt-image-only fields: `:background`,
-  `:moderation`, `:output_compression`, and `:input_fidelity` are dropped with a
-  warning when the target model or endpoint has no field for them.
+  `translate_options/2` also scopes the model-specific fields: the gpt-image-only
+  `:background`, `:moderation`, `:output_compression`, and `:input_fidelity`, and
+  the DALL-E-only `response_format: :url`, are dropped with a warning when the
+  target model or endpoint has no field for them.
 
   ## Wire format
 
   Generation is a JSON POST to `path(:generation)`; editing is a multipart POST
-  to `path(:edit)`, signalled by a non-nil `:source_image`. The streaming fields
-  (`stream`, `partial_images`) are reserved for `ReqLLM.stream_image/3`.
+  to `path(:edit)`, signalled by a non-nil `:source_image`.
   """
 
   alias ReqLLM.Context
@@ -220,7 +220,8 @@ defmodule ReqLLM.Images.OpenAICompatible do
   `:moderation`, `:output_compression`, and `:input_fidelity` are dropped for
   DALL-E; `:output_compression` is dropped for `:png` output; `:moderation` is
   dropped for edits (the edits endpoint has no such field); `:input_fidelity` is
-  dropped for generations and for gpt-image-1-mini.
+  dropped for generations and for gpt-image-1-mini; `response_format: :url` is
+  dropped for gpt-image, which only ever returns image bytes.
 
   Assumes `validate_options/1` has already run: a malformed `:aspect_ratio` is
   left untouched rather than raising, since it should never get this far.
@@ -239,6 +240,7 @@ defmodule ReqLLM.Images.OpenAICompatible do
     |> drop_output_compression_for_png()
     |> drop_generation_only_options()
     |> drop_edit_only_options(model_id)
+    |> drop_url_response_format(model_id)
   end
 
   defp drop_unsupported_options({opts, warnings}) do
@@ -293,6 +295,19 @@ defmodule ReqLLM.Images.OpenAICompatible do
 
       true ->
         {opts, warnings}
+    end
+  end
+
+  defp drop_url_response_format({opts, warnings}, model_id) do
+    if Keyword.get(opts, :response_format) in [:url, "url"] and
+         not supports_response_format?(model_id) do
+      {Keyword.delete(opts, :response_format),
+       warnings ++
+         [
+           ":response_format :url dropped - only DALL-E models return URLs; gpt-image models always return image bytes"
+         ]}
+    else
+      {opts, warnings}
     end
   end
 

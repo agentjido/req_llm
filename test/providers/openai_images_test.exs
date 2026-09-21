@@ -352,6 +352,20 @@ defmodule ReqLLM.Providers.OpenAIImagesTest do
       assert warning =~ ":moderation dropped"
     end
 
+    test "drops response_format :url for gpt-image and keeps it for DALL-E" do
+      assert {translated, [warning]} =
+               OpenAICompatible.translate_options([response_format: :url], "gpt-image-1.5")
+
+      refute Keyword.has_key?(translated, :response_format)
+      assert warning =~ ":response_format :url dropped"
+
+      assert {[response_format: :url], []} =
+               OpenAICompatible.translate_options([response_format: :url], "dall-e-3")
+
+      assert {[response_format: :binary], []} =
+               OpenAICompatible.translate_options([response_format: :binary], "gpt-image-1.5")
+    end
+
     test "keeps input_fidelity only for edits on models that support it" do
       assert {translated, [warning]} =
                OpenAICompatible.translate_options([input_fidelity: :high], "gpt-image-1.5")
@@ -417,7 +431,7 @@ defmodule ReqLLM.Providers.OpenAIImagesTest do
                response_format: :url
              )
 
-    assert request.options[:response_format] == :url
+    refute Map.has_key?(request.options, :response_format)
     assert request.options[:provider_options][:response_format] == nil
 
     body = request |> ImagesAPI.encode_body() |> ReqLLM.Test.Helpers.json_body()

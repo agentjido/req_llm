@@ -48,7 +48,7 @@ These options are supported across providers (where the model allows):
 | `size` | string or tuple | Image dimensions, e.g., `"1024x1024"` or `{1024, 1024}` |
 | `aspect_ratio` | string | Aspect ratio, e.g., `"16:9"` or `"1:1"` (on OpenAI and Azure this resolves to the nearest supported `size` — see below) |
 | `output_format` | atom | Image format: `:png`, `:jpeg`, or `:webp` (Azure: `:png` and `:jpeg` only) |
-| `response_format` | atom | Return type: `:binary` (default) or `:url` (URL responses are DALL-E only; GPT Image models always return bytes) |
+| `response_format` | atom | Return type: `:binary` (default) or `:url` (URL responses are DALL-E only; on GPT Image `:url` is dropped with a warning, since those models always return bytes) |
 | `quality` | atom/string | Image quality: `:auto`, `:low`, `:medium`, `:high` for GPT Image; `:standard`, `:hd` for DALL-E 3 (translated with a warning on GPT Image) |
 | `background` | atom/string | `:auto`, `:transparent`, or `:opaque`; `:transparent` needs `:png` or `:webp` output (GPT Image on OpenAI and Azure only) |
 | `moderation` | atom/string | `:auto` or `:low`; generations only (GPT Image on OpenAI; forwarded on Azure) |

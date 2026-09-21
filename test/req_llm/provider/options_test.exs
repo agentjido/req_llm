@@ -184,7 +184,7 @@ defmodule ReqLLM.Provider.OptionsTest do
     end
 
     test "does not hoist image schema keys that collide with OpenAI chat options" do
-      model = %LLMDB.Model{provider: :openai, id: "gpt-image-1.5"}
+      model = %LLMDB.Model{provider: :openai, id: "dall-e-3"}
       opts = [response_format: :url, context: ReqLLM.Context.new()]
 
       assert {:ok, processed} = Options.process(OpenAI, :image, model, opts)

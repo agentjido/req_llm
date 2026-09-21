@@ -24,6 +24,7 @@ defmodule ReqLLM.Images do
   @input_fidelities [:high, :low]
   @gpt_image_qualities [:auto, :low, :medium, :high]
   @dall_e_qualities [:standard, :hd]
+  @openai_only_options [:background, :moderation, :output_compression, :input_fidelity]
 
   @base_schema NimbleOptions.new!(
                  n: [
@@ -170,6 +171,33 @@ defmodule ReqLLM.Images do
   """
   @spec schema :: NimbleOptions.t()
   def schema, do: @base_schema
+
+  @doc """
+  Drops the options only the OpenAI Images wire format has fields for.
+
+  `:background`, `:moderation`, `:output_compression`, and `:input_fidelity` are
+  part of this shared schema, so every provider's image path accepts them. A
+  provider whose endpoint has no such field must drop them in its
+  `c:ReqLLM.Provider.translate_options/3` image clause: an option that survives
+  translation reaches the Req pipeline unregistered and raises there, instead of
+  surfacing through `:on_unsupported` like any other lossy translation.
+
+  Returns `{opts, warnings}`, with `provider_label` naming the provider in each
+  warning.
+  """
+  @spec drop_openai_only_options(keyword(), String.t()) :: {keyword(), [String.t()]}
+  def drop_openai_only_options(opts, provider_label) when is_list(opts) do
+    Enum.reduce(@openai_only_options, {opts, []}, fn key, {acc_opts, warnings} ->
+      case Keyword.pop(acc_opts, key) do
+        {nil, remaining} ->
+          {remaining, warnings}
+
+        {_value, remaining} ->
+          {remaining,
+           warnings ++ [":#{key} dropped - #{provider_label} image models have no such field"]}
+      end
+    end)
+  end
 
   @doc false
   def validate_binary(value) when is_binary(value), do: {:ok, value}

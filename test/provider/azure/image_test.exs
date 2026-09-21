@@ -219,10 +219,11 @@ defmodule ReqLLM.Providers.Azure.ImageTest do
       assert Exception.message(error) =~ "background"
     end
 
-    test "keeps a top-level response_format on the image schema" do
+    test "validates response_format against the image schema and drops :url for gpt-image" do
       request = prepare!(base_url: @traditional_base_url, response_format: :url)
 
-      assert request.options[:response_format] == :url
+      refute Map.has_key?(request.options, :response_format)
+      assert request.options[:provider_options][:response_format] == nil
       refute Map.has_key?(request.options[:json], "response_format")
     end
 

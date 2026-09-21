@@ -140,6 +140,43 @@ defmodule ReqLLM.ImagesTest do
     assert Keyword.get(processed, :mask_media_type) == "image/png"
   end
 
+  describe "OpenAI-only image options on other providers" do
+    @openai_only [background: :transparent, moderation: :low, output_compression: 50]
+
+    for {provider_mod, provider_id, model_id} <- [
+          {ReqLLM.Providers.Google, :google, "gemini-2.5-flash-image"},
+          {ReqLLM.Providers.XAI, :xai, "grok-2-image-1212"},
+          {ReqLLM.Providers.Minimax, :minimax, "image-01"}
+        ] do
+      test "#{provider_id} prepares a request instead of raising on them" do
+        model = %LLMDB.Model{id: unquote(model_id), provider: unquote(provider_id)}
+
+        for {key, value} <- @openai_only ++ [input_fidelity: :high] do
+          assert {:ok, request} =
+                   unquote(provider_mod).prepare_request(:image, model, "a fox", [
+                     {:api_key, "test-key"},
+                     {key, value}
+                   ])
+
+          refute Map.has_key?(request.options, key)
+        end
+      end
+
+      test "#{provider_id} escalates them under on_unsupported: :error" do
+        model = %LLMDB.Model{id: unquote(model_id), provider: unquote(provider_id)}
+
+        assert {:error, %ReqLLM.Error.Validation.Error{reason: reason}} =
+                 unquote(provider_mod).prepare_request(:image, model, "a fox",
+                   api_key: "test-key",
+                   background: :transparent,
+                   on_unsupported: :error
+                 )
+
+        assert reason =~ ":background"
+      end
+    end
+  end
+
   defp google_image_model_spec do
     Images.supported_models()
     |> Enum.find(&google_image_model_spec?/1)
