@@ -1,5 +1,7 @@
 # Jev as a ReqLLM model router
 
+## Section
+
 This local Livebook uses the router spike from the current ReqLLM checkout. It shows a small separation of responsibilities:
 
 1. Jev evaluates the request and returns probabilities.
@@ -156,10 +158,10 @@ The expected selections are Luna for the direct request and Sol for the deep req
 
 Add two Livebook secrets:
 
-- `TYPESAFE_API_KEY` for Jev.
-- `OPENAI_API_KEY` for the selected generation model.
+* `TYPESAFE_API_KEY` for Jev.
+* `OPENAI_API_KEY` for the selected generation model.
 
-Livebook exposes them with the `LB_` prefix. This cell reports status only. It does not display either key.
+Livebook exposes them with the `LB_` prefix. ReqLLM does not read that prefix directly, so this cell registers each present secret with `ReqLLM.Keys`. It reports status only and does not display either key.
 
 ```elixir
 typesafe_key = System.get_env("LB_TYPESAFE_API_KEY")
@@ -167,9 +169,13 @@ openai_key = System.get_env("LB_OPENAI_API_KEY")
 
 key_ready? = fn key -> is_binary(key) and key != "" end
 
+for {provider, key} <- [typesafe: typesafe_key, openai: openai_key], key_ready?.(key) do
+  ReqLLM.put_key(ReqLLM.Keys.config_key(provider), key)
+end
+
 %{
-  typesafe: key_ready?.(typesafe_key),
-  openai: key_ready?.(openai_key)
+  typesafe: match?({:ok, _key, :application}, ReqLLM.Keys.get(:typesafe)),
+  openai: match?({:ok, _key, :application}, ReqLLM.Keys.get(:openai))
 }
 ```
 
@@ -253,8 +259,8 @@ For a direct call, tuple defaults work as expected:
 
 ```elixir
 # test:skip
-ReqLLM.generate_text(sol_xhigh, "Solve the hard problem")
-ReqLLM.generate_text(luna_medium, "Answer the direct question")
+ReqLLM.generate_text(sol_xhigh, "Solve the hard problem", api_key: openai_key)
+ReqLLM.generate_text(luna_medium, "Answer the direct question", api_key: openai_key)
 ```
 
 Strings such as `"openai:sol-xhigh"` and `"openai:luna-medium"` do not encode reasoning settings. Use the full catalog model ID and pass `reasoning_effort` separately.
@@ -263,7 +269,12 @@ The current router can accept one effort from the caller:
 
 ```elixir
 # test:skip
-ReqLLM.generate_text(live_router, live_prompt, reasoning_effort: :xhigh)
+ReqLLM.generate_text(
+  live_router,
+  live_prompt,
+  api_key: openai_key,
+  reasoning_effort: :xhigh
+)
 ```
 
 That effort applies to whichever model the router selects. The callback cannot select Sol with `:xhigh` and Luna with `:medium` in one dynamic policy. The callback returns a model spec, and `ReqLLM.Router.resolve/4` reduces it to `%LLMDB.Model{}`. It does not return or merge generation options.
@@ -272,7 +283,9 @@ This is the useful design pressure from the example: model identity and inferenc
 
 ## What to test next
 
-- Replace the example probability limits with limits measured on labeled prompts.
-- Add cost and latency facts to the local policy. Do not ask Jev to remember current prices.
-- Decide whether route-specific generation options belong in this router contract.
-- Keep a fixed Jev model version when routing behavior must be repeatable.
+* Replace the example probability limits with limits measured on labeled prompts.
+* Add cost and latency facts to the local policy. Do not ask Jev to remember current prices.
+* Decide whether route-specific generation options belong in this router contract.
+* Keep a fixed Jev model version when routing behavior must be repeatable.
+
+<!-- livebook:{"offset":9689,"stamp":{"token":"XCP.G-7BpxDK676R0lm5u4ytKiSbptQPEL9EVFt4rlJGW8YBYqgRUvBjg2PwH3rFFL11xvWoCNVMSCjfepr9pqiMJ7LsIdOxZFIJXUht3iISS2rCev7pGm24Mm5Fv6YrQDU9qQ4gvlPc7YZJA20HC8YZwH8fxsAFXfJojP5_4SzzHc8dkigD","version":2}} -->
