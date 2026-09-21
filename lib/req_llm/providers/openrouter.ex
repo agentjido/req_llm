@@ -224,6 +224,14 @@ defmodule ReqLLM.Providers.OpenRouter do
       http_opts = Keyword.get(opts, :req_http_options, [])
       execution = model.execution.evaluate
 
+      body =
+        %{
+          model: execution.provider_model_id,
+          state: state,
+          questions: EvaluationCodec.normalize_questions(questions)
+        }
+        |> maybe_put(:provider, Keyword.get(opts, :openrouter_provider))
+
       request =
         Req.new(
           [
@@ -232,11 +240,7 @@ defmodule ReqLLM.Providers.OpenRouter do
             base_url:
               Keyword.get(opts, :base_url, execution[:base_url] || "https://openrouter.ai"),
             receive_timeout: timeout,
-            json: %{
-              model: execution.provider_model_id,
-              state: state,
-              questions: EvaluationCodec.normalize_questions(questions)
-            }
+            json: body
           ] ++ ReqLLM.Provider.Defaults.merge_finch_options(http_opts, pool_timeout: timeout)
         )
         |> Req.Request.register_options([:operation])

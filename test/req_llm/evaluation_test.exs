@@ -134,6 +134,7 @@ defmodule ReqLLM.EvaluationTest do
       assert conn.body_params == %{
                "model" => "typesafe/jev-1.13",
                "state" => %{"ticket" => "Please refund me today"},
+               "provider" => %{"zdr" => true},
                "questions" => %{
                  "department" => %{
                    "type" => "choice",
@@ -182,6 +183,7 @@ defmodule ReqLLM.EvaluationTest do
                %{ticket: "Please refund me today"},
                @questions,
                api_key: "openrouter-test-key",
+               openrouter_provider: %{zdr: true},
                req_http_options: [plug: {Req.Test, __MODULE__.OpenRouterSuccess}]
              )
 
@@ -204,6 +206,7 @@ defmodule ReqLLM.EvaluationTest do
     Req.Test.stub(__MODULE__.OpenRouterMoving, fn conn ->
       assert conn.request_path == "/api/alpha/decisions"
       assert conn.body_params["model"] == "~typesafe/jev-latest"
+      refute Map.has_key?(conn.body_params, "provider")
 
       Req.Test.json(conn, %{
         "model" => "typesafe/jev-1.13",
@@ -400,12 +403,14 @@ defmodule ReqLLM.EvaluationTest do
                receive_timeout: 1_000,
                total_timeout: :infinity,
                max_retries: 0,
+               openrouter_provider: %{zdr: true},
                req_http_options: [plug: {Req.Test, __MODULE__.Success}],
                fixture: {:typesafe, "basic"},
                telemetry: %{test: true}
              )
 
     assert opts[:total_timeout] == :infinity
+    assert opts[:openrouter_provider] == %{zdr: true}
     assert opts[:req_http_options] == [plug: {Req.Test, __MODULE__.Success}]
     assert opts[:telemetry] == %{test: true}
     assert {:ok, [telemetry: [test: true]]} = Zoi.parse(schema, telemetry: [test: true])
@@ -416,6 +421,7 @@ defmodule ReqLLM.EvaluationTest do
       [receive_timeout: 0],
       [total_timeout: 0],
       [max_retries: -1],
+      [openrouter_provider: []],
       [req_http_options: [1]],
       [req_http_options: [{"plug", :invalid}]],
       [fixture: {:typesafe, 123}],
