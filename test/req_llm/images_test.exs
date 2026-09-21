@@ -78,6 +78,64 @@ defmodule ReqLLM.ImagesTest do
     assert Keyword.get(processed, :aspect_ratio) == "16:9"
   end
 
+  test "process/4 accepts the gpt-image parameter set" do
+    model = %LLMDB.Model{id: "gpt-image-1.5", provider: :openai}
+
+    {:ok, processed} =
+      ReqLLM.Provider.Options.process(
+        ReqLLM.Providers.OpenAI,
+        :image,
+        model,
+        background: :transparent,
+        moderation: "low",
+        output_compression: 50,
+        output_format: :webp,
+        quality: :low,
+        context: Context.new()
+      )
+
+    assert Keyword.get(processed, :background) == :transparent
+    assert Keyword.get(processed, :moderation) == "low"
+    assert Keyword.get(processed, :output_compression) == 50
+    assert Keyword.get(processed, :quality) == :low
+  end
+
+  test "process/4 accepts every gpt-image quality tier as an atom" do
+    model = %LLMDB.Model{id: "gpt-image-2.5-sunburst", provider: :openai}
+
+    for quality <- [:auto, :low, :medium, :high, :xhigh, :max] do
+      {:ok, processed} =
+        ReqLLM.Provider.Options.process(
+          ReqLLM.Providers.OpenAI,
+          :image,
+          model,
+          quality: quality,
+          context: Context.new()
+        )
+
+      assert Keyword.get(processed, :quality) == quality
+    end
+  end
+
+  test "process/4 rejects gpt-image parameters outside their allowed values" do
+    model = %LLMDB.Model{id: "gpt-image-1.5", provider: :openai}
+
+    for opts <- [
+          [background: :blurred],
+          [moderation: :off],
+          [output_compression: 101],
+          [input_fidelity: :medium]
+        ] do
+      assert {:error, _} =
+               ReqLLM.Provider.Options.process(
+                 ReqLLM.Providers.OpenAI,
+                 :image,
+                 model,
+                 opts ++ [context: Context.new()]
+               )
+    end
+  end
+
   test "process/4 accepts image edit source and mask options" do
     model = %LLMDB.Model{id: "gpt-image-1.5", provider: :openai}
 
@@ -97,6 +155,43 @@ defmodule ReqLLM.ImagesTest do
     assert Keyword.get(processed, :source_image_media_type) == "image/jpeg"
     assert Keyword.get(processed, :mask) == <<4, 5, 6>>
     assert Keyword.get(processed, :mask_media_type) == "image/png"
+  end
+
+  describe "OpenAI-only image options on other providers" do
+    @openai_only [background: :transparent, moderation: :low, output_compression: 50]
+
+    for {provider_mod, provider_id, model_id} <- [
+          {ReqLLM.Providers.Google, :google, "gemini-2.5-flash-image"},
+          {ReqLLM.Providers.XAI, :xai, "grok-2-image-1212"},
+          {ReqLLM.Providers.Minimax, :minimax, "image-01"}
+        ] do
+      test "#{provider_id} prepares a request instead of raising on them" do
+        model = %LLMDB.Model{id: unquote(model_id), provider: unquote(provider_id)}
+
+        for {key, value} <- @openai_only ++ [input_fidelity: :high] do
+          assert {:ok, request} =
+                   unquote(provider_mod).prepare_request(:image, model, "a fox", [
+                     {:api_key, "test-key"},
+                     {key, value}
+                   ])
+
+          refute Map.has_key?(request.options, key)
+        end
+      end
+
+      test "#{provider_id} escalates them under on_unsupported: :error" do
+        model = %LLMDB.Model{id: unquote(model_id), provider: unquote(provider_id)}
+
+        assert {:error, %ReqLLM.Error.Validation.Error{reason: reason}} =
+                 unquote(provider_mod).prepare_request(:image, model, "a fox",
+                   api_key: "test-key",
+                   background: :transparent,
+                   on_unsupported: :error
+                 )
+
+        assert reason =~ ":background"
+      end
+    end
   end
 
   defp google_image_model_spec do

@@ -23,6 +23,11 @@ defmodule ReqLLM.Images.OpenAICompatible do
   rejected, and everything else is a lossy-but-valid transformation reported as
   a warning through `:on_unsupported`.
 
+  `translate_options/2` also scopes the model-specific fields: the gpt-image-only
+  `:background`, `:moderation`, `:output_compression`, and `:input_fidelity`, and
+  the DALL-E-only `response_format: :url`, are dropped with a warning when the
+  target model or endpoint has no field for them.
+
   ## Wire format
 
   Generation is a JSON POST to `path(:generation)`; editing is a multipart POST
@@ -52,6 +57,15 @@ defmodule ReqLLM.Images.OpenAICompatible do
       "the Images API has no negative prompt - describe what to avoid in the prompt itself"
   ]
 
+  # Fields only the gpt-image family accepts; DALL-E rejects the whole request
+  # when they are present.
+  @gpt_image_only_options [
+    background: "only gpt-image models accept a background",
+    moderation: "only gpt-image models accept a moderation level",
+    output_compression: "only gpt-image models accept output compression",
+    input_fidelity: "only gpt-image models accept input fidelity"
+  ]
+
   # Image parameters that can reach the wire, listed explicitly rather than
   # derived by subtracting plumbing keys from the schema. A denylist would make
   # any new plumbing option added to ReqLLM.Images silently become a request
@@ -64,6 +78,10 @@ defmodule ReqLLM.Images.OpenAICompatible do
     :response_format,
     :quality,
     :style,
+    :background,
+    :moderation,
+    :output_compression,
+    :input_fidelity,
     :seed,
     :negative_prompt,
     :source_image,
@@ -128,13 +146,30 @@ defmodule ReqLLM.Images.OpenAICompatible do
 
   Run this *before* `ReqLLM.Provider.Options.process/4`, so that
   `translate_options/2` receives only representable input. Rejects a malformed
-  `:aspect_ratio` and a `:mask` without a `:source_image`; a well-formed
+  `:aspect_ratio`, a `:mask` without a `:source_image`, and a `:transparent`
+  background with `:jpeg` output (JPEG has no alpha channel); a well-formed
   `:aspect_ratio` is left for `translate_options/2` to resolve.
   """
   @spec validate_options(keyword()) :: :ok | {:error, Exception.t()}
   def validate_options(opts) when is_list(opts) do
-    with :ok <- validate_mask(opts) do
+    with :ok <- validate_mask(opts),
+         :ok <- validate_background(opts) do
       validate_aspect_ratio(opts)
+    end
+  end
+
+  defp validate_background(opts) do
+    background = Keyword.get(opts, :background)
+    output_format = Keyword.get(opts, :output_format)
+
+    if background in [:transparent, "transparent"] and output_format in [:jpeg, "jpeg"] do
+      {:error,
+       ReqLLM.Error.Invalid.Parameter.exception(
+         parameter:
+           "background: :transparent requires output_format :png or :webp, got #{inspect(output_format)}"
+       )}
+    else
+      :ok
     end
   end
 
@@ -181,6 +216,14 @@ defmodule ReqLLM.Images.OpenAICompatible do
   onto the gpt-image ones, and resolves `:aspect_ratio` into the nearest `:size`
   the model offers — the only place that resolution happens.
 
+  The gpt-image-only fields are scoped the same way: `:background`,
+  `:moderation`, `:output_compression`, and `:input_fidelity` are dropped for
+  DALL-E; `:output_compression` is dropped for `:png` output; `:moderation` is
+  dropped for edits (the edits endpoint has no such field); `:input_fidelity` is
+  dropped for generations and for gpt-image-1-mini (gpt-image-2 accepts and
+  ignores it); `response_format: :url` is dropped for gpt-image, which only ever
+  returns image bytes.
+
   Assumes `validate_options/1` has already run: a malformed `:aspect_ratio` is
   left untouched rather than raising, since it should never get this far.
 
@@ -194,10 +237,86 @@ defmodule ReqLLM.Images.OpenAICompatible do
     |> translate_quality(model_id)
     |> drop_unsupported_style(model_id)
     |> translate_aspect_ratio(model_id)
+    |> drop_gpt_image_only_options(model_id)
+    |> drop_output_compression_for_png()
+    |> drop_generation_only_options()
+    |> drop_edit_only_options(model_id)
+    |> drop_url_response_format(model_id)
   end
 
   defp drop_unsupported_options({opts, warnings}) do
-    Enum.reduce(@unsupported_options, {opts, warnings}, fn {key, reason}, {opts, warnings} ->
+    drop_with_reasons({opts, warnings}, @unsupported_options)
+  end
+
+  defp drop_gpt_image_only_options({opts, warnings}, model_id) do
+    if model_family(model_id) == "gpt-image" do
+      {opts, warnings}
+    else
+      drop_with_reasons({opts, warnings}, @gpt_image_only_options)
+    end
+  end
+
+  defp drop_output_compression_for_png({opts, warnings}) do
+    compression = Keyword.get(opts, :output_compression)
+    output_format = Keyword.get(opts, :output_format)
+
+    if is_nil(compression) or output_format in [:jpeg, "jpeg", :webp, "webp"] do
+      {opts, warnings}
+    else
+      {Keyword.delete(opts, :output_compression),
+       warnings ++
+         [
+           ":output_compression dropped - only :jpeg and :webp output is compressed; pass output_format: :jpeg or :webp"
+         ]}
+    end
+  end
+
+  defp drop_generation_only_options({opts, warnings}) do
+    if image_edit?(opts) and not is_nil(Keyword.get(opts, :moderation)) do
+      {Keyword.delete(opts, :moderation),
+       warnings ++ [":moderation dropped - the Images edits endpoint has no moderation field"]}
+    else
+      {opts, warnings}
+    end
+  end
+
+  defp drop_edit_only_options({opts, warnings}, model_id) do
+    cond do
+      is_nil(Keyword.get(opts, :input_fidelity)) ->
+        {opts, warnings}
+
+      not image_edit?(opts) ->
+        {Keyword.delete(opts, :input_fidelity),
+         warnings ++
+           [":input_fidelity dropped - it only applies to image edits (pass :source_image)"]}
+
+      mini_model?(model_id) ->
+        {Keyword.delete(opts, :input_fidelity),
+         warnings ++ [":input_fidelity dropped - gpt-image-1-mini does not support it"]}
+
+      true ->
+        {opts, warnings}
+    end
+  end
+
+  defp drop_url_response_format({opts, warnings}, model_id) do
+    if Keyword.get(opts, :response_format) in [:url, "url"] and
+         not supports_response_format?(model_id) do
+      {Keyword.delete(opts, :response_format),
+       warnings ++
+         [
+           ":response_format :url dropped - only DALL-E models return URLs; gpt-image models always return image bytes"
+         ]}
+    else
+      {opts, warnings}
+    end
+  end
+
+  defp mini_model?(model_id) when is_binary(model_id), do: String.contains?(model_id, "mini")
+  defp mini_model?(_model_id), do: false
+
+  defp drop_with_reasons({opts, warnings}, reasons) do
+    Enum.reduce(reasons, {opts, warnings}, fn {key, reason}, {opts, warnings} ->
       if is_nil(Keyword.get(opts, key)) do
         {opts, warnings}
       else
@@ -206,8 +325,9 @@ defmodule ReqLLM.Images.OpenAICompatible do
     end)
   end
 
-  # gpt-image models take low/medium/high, not the DALL-E standard/hd names the
-  # generic schema also allows; map them the same way the usage decoder does.
+  # gpt-image models take auto/low/medium/high (gpt-image-2.5 adds xhigh/max),
+  # not the DALL-E standard/hd names the generic schema also allows; map those
+  # the same way the usage decoder does.
   defp translate_quality({opts, warnings}, model_id) do
     quality = Keyword.get(opts, :quality)
     mapped = dall_e_quality_to_gpt_image(quality)
@@ -216,7 +336,7 @@ defmodule ReqLLM.Images.OpenAICompatible do
       {Keyword.put(opts, :quality, mapped),
        warnings ++
          [
-           ":quality #{inspect(quality)} translated to #{inspect(mapped)} - gpt-image models take low/medium/high"
+           ":quality #{inspect(quality)} translated to #{inspect(mapped)} - gpt-image models take :low/:medium/:high"
          ]}
     else
       {opts, warnings}
@@ -400,7 +520,8 @@ defmodule ReqLLM.Images.OpenAICompatible do
 
   Accepts a map or keyword list with `:model`, `:prompt`, and the optional
   image generation options (`:n`, `:size`, `:quality`, `:style`, `:user`,
-  `:output_format`, `:response_format`).
+  `:output_format`, `:response_format`, `:background`, `:moderation`,
+  `:output_compression`).
 
   Expects options that have already been through `translate_options/2`, which
   resolves `:aspect_ratio` into `:size` and drops options the Images API has no
@@ -426,14 +547,18 @@ defmodule ReqLLM.Images.OpenAICompatible do
     |> maybe_put_string("style", opts[:style])
     |> maybe_put_string("user", opts[:user])
     |> maybe_put_output_format(opts[:output_format])
+    |> maybe_put_string("background", opts[:background])
+    |> maybe_put_string("moderation", opts[:moderation])
+    |> maybe_put_integer("output_compression", opts[:output_compression])
   end
 
   @doc """
   Builds the Req `:form_multipart` keyword list for the edits endpoint.
 
   Required keys in `opts`: `:model`, `:prompt`, `:source_image`. Optional keys
-  (`:mask`, `:n`, `:size`, `:quality`, `:output_format`, `:user`, and the
-  `*_media_type` companions) are added only when present.
+  (`:mask`, `:n`, `:size`, `:quality`, `:output_format`, `:user`, `:background`,
+  `:input_fidelity`, `:output_compression`, and the `*_media_type` companions)
+  are added only when present.
   """
   @spec edit_image_form_multipart(keyword()) :: keyword()
   def edit_image_form_multipart(opts) do
@@ -457,6 +582,9 @@ defmodule ReqLLM.Images.OpenAICompatible do
     |> maybe_add_form_part(:quality, Keyword.get(opts, :quality))
     |> maybe_add_form_part(:output_format, Keyword.get(opts, :output_format))
     |> maybe_add_form_part(:user, Keyword.get(opts, :user))
+    |> maybe_add_form_part(:background, Keyword.get(opts, :background))
+    |> maybe_add_form_part(:input_fidelity, Keyword.get(opts, :input_fidelity))
+    |> maybe_add_form_part(:output_compression, Keyword.get(opts, :output_compression))
   end
 
   @doc """
@@ -504,11 +632,9 @@ defmodule ReqLLM.Images.OpenAICompatible do
     data = Map.get(body, "data", [])
 
     media_type =
-      case req.options[:output_format] do
-        :jpeg -> "image/jpeg"
-        :webp -> "image/webp"
-        _ -> "image/png"
-      end
+      media_type_for_output_format(
+        echoed_option(body, "output_format") || req.options[:output_format]
+      )
 
     parts =
       data
@@ -637,6 +763,20 @@ defmodule ReqLLM.Images.OpenAICompatible do
   end
 
   defp maybe_put_string(body, _key, _), do: body
+
+  defp maybe_put_integer(body, key, value) when is_integer(value), do: Map.put(body, key, value)
+  defp maybe_put_integer(body, _key, _), do: body
+
+  @doc """
+  MIME type for an image `output_format` given as an atom or wire string.
+
+  Defaults to `"image/png"`, the format every Images API model emits unless told
+  otherwise.
+  """
+  @spec media_type_for_output_format(atom() | String.t() | nil) :: String.t()
+  def media_type_for_output_format(format) when format in [:jpeg, "jpeg"], do: "image/jpeg"
+  def media_type_for_output_format(format) when format in [:webp, "webp"], do: "image/webp"
+  def media_type_for_output_format(_format), do: "image/png"
 
   defp maybe_put_output_format(body, nil), do: body
   defp maybe_put_output_format(body, :png), do: Map.put(body, "output_format", "png")

@@ -5,6 +5,9 @@ defmodule ReqLLM.Images do
   This module provides image generation capabilities with support for:
   - Prompt-based image generation (`generate_image/3`)
   - Model validation for image support
+  - The full gpt-image parameter set on OpenAI and Azure: quality tiers,
+    `:background`, `:moderation`, `:output_compression`, and `:input_fidelity`
+    (see `schema/0` for the per-option rules)
 
   Image results are returned as canonical `ReqLLM.Response` structs where the
   assistant message contains `ReqLLM.Message.ContentPart` entries of type
@@ -16,6 +19,12 @@ defmodule ReqLLM.Images do
 
   @output_formats [:png, :jpeg, :webp]
   @response_formats [:binary, :url]
+  @backgrounds [:auto, :transparent, :opaque]
+  @moderations [:auto, :low]
+  @input_fidelities [:high, :low]
+  @gpt_image_qualities [:auto, :low, :medium, :high, :xhigh, :max]
+  @dall_e_qualities [:standard, :hd]
+  @openai_only_options [:background, :moderation, :output_compression, :input_fidelity]
 
   @base_schema NimbleOptions.new!(
                  n: [
@@ -25,7 +34,8 @@ defmodule ReqLLM.Images do
                  ],
                  size: [
                    type: {:or, [:string, {:tuple, [:pos_integer, :pos_integer]}]},
-                   doc: "Requested pixel size, e.g. \"1024x1024\" or {1024, 1024}"
+                   doc:
+                     "Requested pixel size, e.g. \"1024x1024\" or {1024, 1024}; gpt-image models also accept \"auto\""
                  ],
                  aspect_ratio: [
                    type: :string,
@@ -36,7 +46,7 @@ defmodule ReqLLM.Images do
                    type: {:in, @output_formats},
                    default: :png,
                    doc:
-                     "Requested output image encoding (provider dependent; Azure supports :png and :jpeg)"
+                     "Requested output image encoding (provider dependent; Azure supports :png and :jpeg, :webp is OpenAI only)"
                  ],
                  response_format: [
                    type: {:in, @response_formats},
@@ -49,9 +59,38 @@ defmodule ReqLLM.Images do
                      "Random seed for deterministic image generation (provider dependent; dropped with a warning by OpenAI and Azure image models, subject to :on_unsupported)"
                  ],
                  quality: [
-                   type: {:or, [{:in, [:standard, :hd]}, :string]},
+                   type: {:or, [{:in, @dall_e_qualities ++ @gpt_image_qualities}, :string]},
                    doc:
-                     "Requested quality (provider dependent; gpt-image models take low/medium/high, so :standard/:hd are translated with a warning)"
+                     "Requested quality (provider dependent; gpt-image models take :auto/:low/:medium/:high, gpt-image-2.5 also :xhigh/:max, and translate :standard/:hd with a warning; DALL-E 3 takes :standard/:hd)"
+                 ],
+                 background: [
+                   type:
+                     {:or,
+                      [{:in, @backgrounds}, {:in, Enum.map(@backgrounds, &Atom.to_string/1)}]},
+                   doc:
+                     "Background handling for gpt-image models: :auto, :transparent, or :opaque. :transparent requires output_format :png or :webp (OpenAI and Azure image models only; Azure offers :png)"
+                 ],
+                 moderation: [
+                   type:
+                     {:or,
+                      [{:in, @moderations}, {:in, Enum.map(@moderations, &Atom.to_string/1)}]},
+                   doc:
+                     "Content moderation strictness for gpt-image generation: :auto or :low (OpenAI image models; forwarded unchanged on Azure; dropped with a warning for image edits and DALL-E)"
+                 ],
+                 output_compression: [
+                   type: {:in, 0..100},
+                   doc:
+                     "Compression level (0-100) for :jpeg and :webp output; dropped with a warning when output_format is :png (OpenAI and Azure image models only)"
+                 ],
+                 input_fidelity: [
+                   type:
+                     {:or,
+                      [
+                        {:in, @input_fidelities},
+                        {:in, Enum.map(@input_fidelities, &Atom.to_string/1)}
+                      ]},
+                   doc:
+                     "How closely image edits preserve the source image: :high or :low. Edits only (requires :source_image); dropped with a warning for gpt-image-1-mini, and gpt-image-2 ignores it (OpenAI and Azure image models only)"
                  ],
                  style: [
                    type: {:or, [{:in, [:vivid, :natural]}, :string]},
@@ -132,6 +171,33 @@ defmodule ReqLLM.Images do
   """
   @spec schema :: NimbleOptions.t()
   def schema, do: @base_schema
+
+  @doc """
+  Drops the options only the OpenAI Images wire format has fields for.
+
+  `:background`, `:moderation`, `:output_compression`, and `:input_fidelity` are
+  part of this shared schema, so every provider's image path accepts them. A
+  provider whose endpoint has no such field must drop them in its
+  `c:ReqLLM.Provider.translate_options/3` image clause: an option that survives
+  translation reaches the Req pipeline unregistered and raises there, instead of
+  surfacing through `:on_unsupported` like any other lossy translation.
+
+  Returns `{opts, warnings}`, with `provider_label` naming the provider in each
+  warning.
+  """
+  @spec drop_openai_only_options(keyword(), String.t()) :: {keyword(), [String.t()]}
+  def drop_openai_only_options(opts, provider_label) when is_list(opts) do
+    Enum.reduce(@openai_only_options, {opts, []}, fn key, {acc_opts, warnings} ->
+      case Keyword.pop(acc_opts, key) do
+        {nil, remaining} ->
+          {remaining, warnings}
+
+        {_value, remaining} ->
+          {remaining,
+           warnings ++ [":#{key} dropped - #{provider_label} image models have no such field"]}
+      end
+    end)
+  end
 
   @doc false
   def validate_binary(value) when is_binary(value), do: {:ok, value}

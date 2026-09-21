@@ -182,6 +182,15 @@ defmodule ReqLLM.Provider.OptionsTest do
       assert {:error, %ReqLLM.Error.Unknown.Unknown{}} =
                Options.process(OpenAI, :chat, model, opts)
     end
+
+    test "does not hoist image schema keys that collide with OpenAI chat options" do
+      model = %LLMDB.Model{provider: :openai, id: "dall-e-3"}
+      opts = [response_format: :url, context: ReqLLM.Context.new()]
+
+      assert {:ok, processed} = Options.process(OpenAI, :image, model, opts)
+      assert processed[:response_format] == :url
+      assert processed[:provider_options][:response_format] == nil
+    end
   end
 
   describe "Options.process/4 - provider-specific options" do

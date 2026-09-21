@@ -768,7 +768,8 @@ defmodule ReqLLM.Providers.XAI do
   def translate_options(:image, _model, opts) do
     explicit_keys = Process.delete(:req_llm_xai_image_explicit_opts) || MapSet.new()
     {opts, warnings} = drop_image_unsupported(opts, explicit_keys)
-    {opts, Enum.reverse(warnings)}
+    {opts, openai_warnings} = ReqLLM.Images.drop_openai_only_options(opts, "xAI")
+    {opts, Enum.reverse(warnings) ++ openai_warnings}
   end
 
   def translate_options(_operation, model, opts) do

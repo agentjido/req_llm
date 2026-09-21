@@ -20,7 +20,11 @@ defmodule Mix.Tasks.ReqLlm.ModelCompatTest do
     end
 
     test "expands specialty capability groups" do
-      assert ModelCompat.scenarios_for_opts([capability: "image"], :image) == ["image_basic"]
+      assert ModelCompat.scenarios_for_opts([capability: "image"], :image) == [
+               "image_basic",
+               "image_transparent_background"
+             ]
+
       assert ModelCompat.scenarios_for_opts([capability: "speech"], :speech) == ["speech_basic"]
 
       assert ModelCompat.scenarios_for_opts([capability: "transcription"], :transcription) == [

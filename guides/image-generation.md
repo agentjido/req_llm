@@ -47,9 +47,13 @@ These options are supported across providers (where the model allows):
 | `n` | integer | Number of images to generate (provider-dependent; gemini-2.5-flash-image and gemini-3-pro-image-preview reject `n`) |
 | `size` | string or tuple | Image dimensions, e.g., `"1024x1024"` or `{1024, 1024}` |
 | `aspect_ratio` | string | Aspect ratio, e.g., `"16:9"` or `"1:1"` (on OpenAI and Azure this resolves to the nearest supported `size` — see below) |
-| `output_format` | atom | Image format: `:png`, `:jpeg`, or `:webp` |
-| `response_format` | atom | Return type: `:binary` (default) or `:url` |
-| `quality` | atom/string | Image quality (provider-dependent) |
+| `output_format` | atom | Image format: `:png`, `:jpeg`, or `:webp` (Azure: `:png` and `:jpeg` only) |
+| `response_format` | atom | Return type: `:binary` (default) or `:url` (URL responses are DALL-E only; on GPT Image `:url` is dropped with a warning, since those models always return bytes) |
+| `quality` | atom/string | Image quality: `:auto`, `:low`, `:medium`, `:high` for GPT Image (`:xhigh`, `:max` on gpt-image-2.5); `:standard`, `:hd` for DALL-E 3 (translated with a warning on GPT Image) |
+| `background` | atom/string | `:auto`, `:transparent`, or `:opaque`; `:transparent` needs `:png` or `:webp` output (GPT Image on OpenAI and Azure only) |
+| `moderation` | atom/string | `:auto` or `:low`; generations only (GPT Image on OpenAI; forwarded on Azure) |
+| `output_compression` | integer | `0`-`100`; only with `output_format: :jpeg` or `:webp`, dropped with a warning for PNG (GPT Image on OpenAI and Azure only) |
+| `input_fidelity` | atom/string | `:high` or `:low`; edits only, dropped on `gpt-image-1-mini`, ignored by `gpt-image-2` (GPT Image on OpenAI and Azure only) |
 | `seed` | integer | Random seed for reproducibility (provider-dependent; **not supported by OpenAI or Azure**) |
 | `negative_prompt` | string | What to avoid in the image (provider-dependent; **not supported by OpenAI or Azure**) |
 | `source_image` | binary | Source image bytes for editing or reference generation (OpenAI and Azure image models only) |
@@ -119,14 +123,14 @@ source_image = File.read!("source.png")
 image_data = ReqLLM.Response.image_data(response)
 ```
 
-OpenAI GPT Image quality values such as `"low"`, `"medium"`, `"high"`, and `"auto"` should be passed as strings:
+GPT Image quality tiers are accepted as atoms or strings:
 
 ```elixir
 {:ok, response} = ReqLLM.generate_image(
   "openai:gpt-image-1.5",
   "Edit this image as a watercolor illustration",
   source_image: File.read!("source.png"),
-  quality: "medium"
+  quality: :medium
 )
 ```
 
@@ -170,6 +174,8 @@ OpenAI's Images API accepts a **single text prompt** plus optional image edit in
 - `"1024x1536"` (portrait)
 - `"auto"` (default)
 
+gpt-image-2 and later also accept any `"WIDTHxHEIGHT"` with both sides divisible by 16 and a ratio between 1:3 and 3:1, e.g. `"1536x864"`. Pass such a size explicitly; `aspect_ratio` still snaps to the three standard sizes above.
+
 **dall-e-3:**
 
 - `"1024x1024"`
@@ -180,33 +186,62 @@ OpenAI's Images API accepts a **single text prompt** plus optional image edit in
 
 - `"256x256"`, `"512x512"`, `"1024x1024"`
 
-### OpenAI-Specific Options
+### GPT Image Options
+
+Every parameter the Images API documents for the GPT Image family is a top-level option:
 
 ```elixir
-# gpt-image-1 with transparency
+# A cutout for a slide: transparent PNG at the cheapest tier
 {:ok, response} = ReqLLM.generate_image(
-  "openai:gpt-image-1",
-  "A golden retriever puppy, isolated on transparent background",
-  output_format: :png,
-  provider_options: [background: "transparent"]
+  "openai:gpt-image-1.5",
+  "A golden retriever puppy sticker, isolated on a transparent background",
+  background: :transparent,
+  quality: :low
 )
 
-# dall-e-3 with style
+# A compressed JPEG with relaxed moderation
+{:ok, response} = ReqLLM.generate_image(
+  "openai:gpt-image-1.5",
+  "A watercolor lighthouse",
+  output_format: :jpeg,
+  output_compression: 70,
+  moderation: :low
+)
+
+# An edit that stays close to the source
+{:ok, response} = ReqLLM.generate_image(
+  "openai:gpt-image-1.5",
+  "Turn this photo into a line drawing",
+  source_image: File.read!("photo.png"),
+  input_fidelity: :high
+)
+```
+
+| Option | Values | Description |
+|--------|--------|-------------|
+| `quality` | `:auto`, `:low`, `:medium`, `:high`, `:xhigh`, `:max` | Generation tier; `:xhigh` and `:max` are gpt-image-2.5 only and rejected by the API elsewhere; `:standard`/`:hd` are translated to `:medium`/`:high` with a warning |
+| `size` | `"1024x1024"`, `"1536x1024"`, `"1024x1536"`, `"auto"` | See [Size Options](#size-options) |
+| `background` | `:auto`, `:transparent`, `:opaque` | `:transparent` requires `output_format: :png` (default) or `:webp`; JPEG is rejected before the request is sent |
+| `moderation` | `:auto`, `:low` | Generations only; dropped with a warning on edits |
+| `output_compression` | `0`-`100` | Only with `output_format: :jpeg` or `:webp`; dropped with a warning for PNG |
+| `input_fidelity` | `:high`, `:low` | Edits only (needs `source_image`); dropped with a warning on generations and on `gpt-image-1-mini`; `gpt-image-2` accepts it but ignores it |
+
+Every drop is reported through `on_unsupported` (`:warn` by default, `:error` to fail instead). A value the model itself rejects comes back as `ReqLLM.Error.API.Request` carrying the HTTP status and the provider's message in `response_body`, never silently.
+
+The response echoes what was produced under `response.provider_meta["openai"]` (`"background"`, `"output_format"`, `"quality"`, `"size"`), and each image part's `media_type` follows the echoed `output_format`.
+
+### DALL-E Options
+
+```elixir
 {:ok, response} = ReqLLM.generate_image(
   "openai:dall-e-3",
   "A mountain landscape at sunset",
   size: "1792x1024",
   quality: :hd,
-  style: :vivid  # or :natural for more realistic
+  style: :vivid,
+  response_format: :url
 )
 ```
-
-**GPT Image specific options** (via `provider_options`):
-
-| Option | Values | Description |
-|--------|--------|-------------|
-| `background` | `"transparent"`, `"opaque"`, `"auto"` | Background transparency (use PNG/WebP format) |
-| `moderation` | `"auto"`, `"low"` | Content moderation strictness |
 
 **dall-e-3 specific options:**
 
@@ -263,6 +298,7 @@ Notes:
 - GPT Image models always return base64 image data (`:binary`); URL responses are not available.
 - Option handling matches OpenAI's exactly, including `aspect_ratio` resolving to the nearest supported size and `seed`/`negative_prompt` being rejected — see [Sizes and Aspect Ratios](#sizes-and-aspect-ratios).
 - Azure supports `output_format: :png` and `output_format: :jpeg`. It does not support `:webp`, and ReqLLM rejects that value before it sends the request.
+- The [GPT Image options](#gpt-image-options) apply unchanged: `background: :transparent` (with the default PNG output), `output_compression` with `output_format: :jpeg`, `input_fidelity` on edits, and the `quality` tiers. `moderation` is forwarded as-is; Azure does not document it, so a deployment that rejects it returns an API error.
 - DALL-E models are retired on Azure — use gpt-image models.
 - Only `gpt-image-*` model ids are accepted. Chat models (e.g. `azure:gpt-4o`) are rejected locally with a `ReqLLM.Error.Invalid.Parameter` before any HTTP call, rather than failing at the API.
 - The `deployment` name is free-form and affects only the URL/body identifier. Option handling is keyed off the catalog model id, so a deployment named after a different model does not change which options are sent.

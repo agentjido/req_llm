@@ -830,6 +830,8 @@ response.usage.cost
 #=> %{tokens: 0.0, tools: 0.0, images: 0.04, total: 0.04}
 ```
 
+GPT Image models accept the full Images API parameter set as top-level options (`quality` tiers, `background`, `moderation`, `output_compression`, `input_fidelity`); see [GPT Image Options](image-generation.md#gpt-image-options).
+
 See the [Image Generation Guide](image-generation.md) for more details.
 
 ## Resources

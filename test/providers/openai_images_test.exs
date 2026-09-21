@@ -137,6 +137,27 @@ defmodule ReqLLM.Providers.OpenAIImagesTest do
       assert :ok = OpenAICompatible.validate_options([])
       assert :ok = OpenAICompatible.validate_options(size: "1024x1024", quality: :hd)
     end
+
+    test "rejects a transparent background with JPEG output" do
+      for background <- [:transparent, "transparent"], format <- [:jpeg, "jpeg"] do
+        assert {:error, %ReqLLM.Error.Invalid.Parameter{parameter: message}} =
+                 OpenAICompatible.validate_options(background: background, output_format: format)
+
+        assert message =~ "background"
+        assert message =~ ":png or :webp"
+      end
+    end
+
+    test "accepts a transparent background with PNG or WebP output, and opaque with JPEG" do
+      assert :ok =
+               OpenAICompatible.validate_options(background: :transparent, output_format: :png)
+
+      assert :ok =
+               OpenAICompatible.validate_options(background: :transparent, output_format: :webp)
+
+      assert :ok = OpenAICompatible.validate_options(background: :transparent)
+      assert :ok = OpenAICompatible.validate_options(background: :opaque, output_format: :jpeg)
+    end
   end
 
   describe "translate_options/2" do
@@ -256,6 +277,277 @@ defmodule ReqLLM.Providers.OpenAIImagesTest do
       assert {[aspect_ratio: "wide"], []} =
                OpenAICompatible.translate_options([aspect_ratio: "wide"], "gpt-image-1")
     end
+
+    test "passes the gpt-image quality tiers through untouched" do
+      for quality <- [:auto, :low, :medium, :high, :xhigh, :max] do
+        assert {[quality: ^quality], []} =
+                 OpenAICompatible.translate_options([quality: quality], "gpt-image-1.5")
+      end
+    end
+
+    test "keeps background and moderation for gpt-image generations" do
+      assert {opts, []} =
+               OpenAICompatible.translate_options(
+                 [background: :transparent, moderation: :low],
+                 "gpt-image-1.5"
+               )
+
+      assert opts[:background] == :transparent
+      assert opts[:moderation] == :low
+    end
+
+    test "drops the gpt-image-only options for DALL-E with a warning each" do
+      opts = [
+        background: :transparent,
+        moderation: :low,
+        output_compression: 50,
+        input_fidelity: :high,
+        output_format: :webp,
+        source_image: <<1>>
+      ]
+
+      assert {translated, warnings} = OpenAICompatible.translate_options(opts, "dall-e-3")
+
+      for key <- [:background, :moderation, :output_compression, :input_fidelity] do
+        refute Keyword.has_key?(translated, key)
+        assert Enum.any?(warnings, &String.starts_with?(&1, ":#{key} dropped"))
+      end
+    end
+
+    test "drops output_compression unless the output is JPEG or WebP" do
+      assert {translated, [warning]} =
+               OpenAICompatible.translate_options([output_compression: 50], "gpt-image-1.5")
+
+      refute Keyword.has_key?(translated, :output_compression)
+      assert warning =~ ":output_compression dropped"
+
+      assert {translated, [warning]} =
+               OpenAICompatible.translate_options(
+                 [output_compression: 50, output_format: :png],
+                 "gpt-image-1.5"
+               )
+
+      refute Keyword.has_key?(translated, :output_compression)
+      assert warning =~ ":output_compression dropped"
+
+      for format <- [:jpeg, :webp, "jpeg", "webp"] do
+        assert {translated, []} =
+                 OpenAICompatible.translate_options(
+                   [output_compression: 50, output_format: format],
+                   "gpt-image-1.5"
+                 )
+
+        assert translated[:output_compression] == 50
+      end
+    end
+
+    test "drops moderation for image edits" do
+      assert {translated, [warning]} =
+               OpenAICompatible.translate_options(
+                 [moderation: :low, source_image: <<1>>],
+                 "gpt-image-1.5"
+               )
+
+      refute Keyword.has_key?(translated, :moderation)
+      assert warning =~ ":moderation dropped"
+    end
+
+    test "drops response_format :url for gpt-image and keeps it for DALL-E" do
+      assert {translated, [warning]} =
+               OpenAICompatible.translate_options([response_format: :url], "gpt-image-1.5")
+
+      refute Keyword.has_key?(translated, :response_format)
+      assert warning =~ ":response_format :url dropped"
+
+      assert {[response_format: :url], []} =
+               OpenAICompatible.translate_options([response_format: :url], "dall-e-3")
+
+      assert {[response_format: :binary], []} =
+               OpenAICompatible.translate_options([response_format: :binary], "gpt-image-1.5")
+    end
+
+    test "keeps input_fidelity only for edits on models that support it" do
+      assert {translated, [warning]} =
+               OpenAICompatible.translate_options([input_fidelity: :high], "gpt-image-1.5")
+
+      refute Keyword.has_key?(translated, :input_fidelity)
+      assert warning =~ "only applies to image edits"
+
+      assert {translated, [warning]} =
+               OpenAICompatible.translate_options(
+                 [input_fidelity: :high, source_image: <<1>>],
+                 "gpt-image-1-mini"
+               )
+
+      refute Keyword.has_key?(translated, :input_fidelity)
+      assert warning =~ "gpt-image-1-mini"
+
+      assert {translated, []} =
+               OpenAICompatible.translate_options(
+                 [input_fidelity: :high, source_image: <<1>>],
+                 "gpt-image-1.5"
+               )
+
+      assert translated[:input_fidelity] == :high
+    end
+  end
+
+  test "encode_body/1 sends background, moderation, and output_compression" do
+    request =
+      Req.new(url: ImagesAPI.path())
+      |> Req.Request.register_options([
+        :model,
+        :prompt,
+        :output_format,
+        :background,
+        :moderation,
+        :output_compression,
+        :context
+      ])
+      |> Req.Request.merge_options(
+        model: "gpt-image-1.5",
+        prompt: "A sticker of a fox",
+        output_format: :jpeg,
+        background: :opaque,
+        moderation: "low",
+        output_compression: 80,
+        context: %Context{messages: []}
+      )
+
+    body = request |> ImagesAPI.encode_body() |> ReqLLM.Test.Helpers.json_body()
+
+    assert body["background"] == "opaque"
+    assert body["moderation"] == "low"
+    assert body["output_compression"] == 80
+    assert body["output_format"] == "jpeg"
+  end
+
+  test "prepare_request/4 keeps response_format on the image schema instead of hoisting it" do
+    model = %LLMDB.Model{id: "gpt-image-1.5", provider: :openai}
+
+    assert {:ok, request} =
+             OpenAI.prepare_request(:image, model, "A lighthouse",
+               api_key: "test-key",
+               response_format: :url
+             )
+
+    refute Map.has_key?(request.options, :response_format)
+    assert request.options[:provider_options][:response_format] == nil
+
+    body = request |> ImagesAPI.encode_body() |> ReqLLM.Test.Helpers.json_body()
+    refute Map.has_key?(body, "response_format")
+
+    dall_e = %LLMDB.Model{id: "dall-e-3", provider: :openai}
+
+    assert {:ok, request} =
+             OpenAI.prepare_request(:image, dall_e, "A lighthouse",
+               api_key: "test-key",
+               response_format: :url
+             )
+
+    body = request |> ImagesAPI.encode_body() |> ReqLLM.Test.Helpers.json_body()
+    assert body["response_format"] == "url"
+  end
+
+  test "prepare_request/4 sends a transparent background for gpt-image generations" do
+    model = %LLMDB.Model{id: "gpt-image-1.5", provider: :openai}
+
+    assert {:ok, request} =
+             OpenAI.prepare_request(:image, model, "A sticker of a fox",
+               api_key: "test-key",
+               background: :transparent,
+               moderation: :low,
+               quality: :low
+             )
+
+    body = request |> ImagesAPI.encode_body() |> ReqLLM.Test.Helpers.json_body()
+    assert body["background"] == "transparent"
+    assert body["moderation"] == "low"
+    assert body["quality"] == "low"
+    assert body["output_format"] == "png"
+  end
+
+  test "prepare_request/4 rejects a transparent background with JPEG output" do
+    model = %LLMDB.Model{id: "gpt-image-1.5", provider: :openai}
+
+    assert {:error, %ReqLLM.Error.Invalid.Parameter{parameter: message}} =
+             OpenAI.prepare_request(:image, model, "A sticker of a fox",
+               api_key: "test-key",
+               background: :transparent,
+               output_format: :jpeg
+             )
+
+    assert message =~ "background"
+  end
+
+  test "prepare_request/4 with on_unsupported: :error rejects output_compression on PNG" do
+    model = %LLMDB.Model{id: "gpt-image-1.5", provider: :openai}
+
+    assert {:error, %ReqLLM.Error.Validation.Error{reason: reason}} =
+             OpenAI.prepare_request(:image, model, "A lighthouse",
+               api_key: "test-key",
+               output_compression: 50,
+               on_unsupported: :error
+             )
+
+    assert reason =~ ":output_compression"
+  end
+
+  test "prepare_request/4 puts the edit-only gpt-image options into the multipart form" do
+    model = %LLMDB.Model{id: "gpt-image-1.5", provider: :openai}
+
+    assert {:ok, request} =
+             OpenAI.prepare_request(:image, model, "Make this a sticker",
+               api_key: "test-key",
+               source_image: <<1, 2, 3>>,
+               background: :transparent,
+               input_fidelity: :high,
+               output_compression: 60,
+               output_format: :webp,
+               moderation: :low
+             )
+
+    form_parts = request.options.form_multipart
+    assert form_parts[:background] == "transparent"
+    assert form_parts[:input_fidelity] == "high"
+    assert form_parts[:output_compression] == "60"
+    refute Keyword.has_key?(form_parts, :moderation)
+  end
+
+  test "decode_response/1 takes the media type from the echoed output_format" do
+    req =
+      Req.new(url: ImagesAPI.path())
+      |> Req.Request.register_options([:model, :output_format, :context])
+      |> Req.Request.merge_options(
+        model: "gpt-image-1.5",
+        output_format: :png,
+        context: %Context{messages: []}
+      )
+
+    resp = %Req.Response{
+      status: 200,
+      headers: [],
+      body: %{
+        "created" => 1_234,
+        "background" => "transparent",
+        "output_format" => "webp",
+        "quality" => "low",
+        "size" => "1024x1024",
+        "data" => [%{"b64_json" => Base.encode64("abc")}]
+      }
+    }
+
+    {_req, updated} = ImagesAPI.decode_response({req, resp})
+
+    [part] = Response.images(updated.body)
+    assert part.media_type == "image/webp"
+
+    meta = updated.body.provider_meta["openai"]
+    assert meta["background"] == "transparent"
+    assert meta["output_format"] == "webp"
+    assert meta["quality"] == "low"
+    assert meta["size"] == "1024x1024"
+    refute Map.has_key?(meta, "data")
   end
 
   describe "request_option_keys/0" do
@@ -272,6 +564,10 @@ defmodule ReqLLM.Providers.OpenAIImagesTest do
                  :response_format,
                  :quality,
                  :style,
+                 :background,
+                 :moderation,
+                 :output_compression,
+                 :input_fidelity,
                  :seed,
                  :negative_prompt,
                  :source_image,

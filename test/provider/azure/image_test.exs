@@ -149,6 +149,84 @@ defmodule ReqLLM.Providers.Azure.ImageTest do
       assert request.options[:json]["quality"] == "high"
     end
 
+    test "passes the gpt-image quality tiers through as strings" do
+      for quality <- [:auto, :low, :medium, :high, :xhigh, :max] do
+        request = prepare!(base_url: @traditional_base_url, quality: quality)
+
+        assert request.options[:json]["quality"] == Atom.to_string(quality)
+      end
+    end
+
+    for base_url <- [@traditional_base_url, @v1_ga_base_url] do
+      test "sends a transparent background with PNG output (#{base_url})" do
+        request =
+          prepare!(base_url: unquote(base_url), background: :transparent, output_format: :png)
+
+        assert request.options[:json]["background"] == "transparent"
+        assert request.options[:json]["output_format"] == "png"
+      end
+
+      test "forwards moderation for Azure to accept or reject (#{base_url})" do
+        request = prepare!(base_url: unquote(base_url), moderation: :low)
+
+        assert request.options[:json]["moderation"] == "low"
+      end
+
+      test "sends output_compression with JPEG output (#{base_url})" do
+        request =
+          prepare!(base_url: unquote(base_url), output_compression: 70, output_format: :jpeg)
+
+        assert request.options[:json]["output_compression"] == 70
+        assert request.options[:json]["output_format"] == "jpeg"
+      end
+    end
+
+    test "drops output_compression for the default PNG output" do
+      request = prepare!(base_url: @traditional_base_url, output_compression: 70)
+
+      refute Map.has_key?(request.options[:json], "output_compression")
+    end
+
+    test "output_compression on PNG with on_unsupported: :error is a hard error" do
+      assert {:error, %ReqLLM.Error.Validation.Error{reason: reason}} =
+               Azure.prepare_request(
+                 :image,
+                 "azure:gpt-image-1",
+                 "A simple red square",
+                 api_key: "test-api-key",
+                 deployment: "my-image-deploy",
+                 base_url: @traditional_base_url,
+                 output_compression: 70,
+                 on_unsupported: :error
+               )
+
+      assert reason =~ ":output_compression"
+    end
+
+    test "rejects a transparent background with JPEG output" do
+      assert {:error, %ReqLLM.Error.Invalid.Parameter{} = error} =
+               Azure.prepare_request(
+                 :image,
+                 "azure:gpt-image-1",
+                 "A simple red square",
+                 api_key: "test-api-key",
+                 deployment: "my-image-deploy",
+                 base_url: @traditional_base_url,
+                 background: :transparent,
+                 output_format: :jpeg
+               )
+
+      assert Exception.message(error) =~ "background"
+    end
+
+    test "validates response_format against the image schema and drops :url for gpt-image" do
+      request = prepare!(base_url: @traditional_base_url, response_format: :url)
+
+      refute Map.has_key?(request.options, :response_format)
+      assert request.options[:provider_options][:response_format] == nil
+      refute Map.has_key?(request.options[:json], "response_format")
+    end
+
     test "drops :style, which gpt-image models do not accept" do
       request = prepare!(base_url: @traditional_base_url, style: "vivid")
 
@@ -306,6 +384,22 @@ defmodule ReqLLM.Providers.Azure.ImageTest do
       assert Keyword.has_key?(parts, :mask)
       assert parts[:prompt] == "Make the square blue"
       refute Keyword.has_key?(parts, :model)
+    end
+
+    test "puts input_fidelity and background into the form and drops moderation" do
+      request =
+        prepare!(
+          base_url: @traditional_base_url,
+          source_image: @png_bytes,
+          input_fidelity: :high,
+          background: :transparent,
+          moderation: :low
+        )
+
+      form_parts = request.options[:form_multipart]
+      assert form_parts[:input_fidelity] == "high"
+      assert form_parts[:background] == "transparent"
+      refute Keyword.has_key?(form_parts, :moderation)
     end
 
     test "multipart requests do not get a JSON content-type header" do

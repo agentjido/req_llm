@@ -316,7 +316,8 @@ defmodule ReqLLM.Providers.Minimax do
   end
 
   @impl ReqLLM.Provider
-  def translate_options(:image, _model, opts), do: {opts, []}
+  def translate_options(:image, _model, opts),
+    do: ReqLLM.Images.drop_openai_only_options(opts, "MiniMax")
 
   def translate_options(:video, _model, opts), do: {opts, []}
 

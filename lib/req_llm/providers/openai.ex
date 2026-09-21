@@ -45,7 +45,10 @@ defmodule ReqLLM.Providers.OpenAI do
   - Image generation and edit with gpt-image-* models
   - Multiple output formats: PNG, JPEG, WebP (gpt-image-* only)
   - Size and aspect ratio control
-  - Quality and style options (DALL-E 3)
+  - gpt-image quality tiers (`:auto`, `:low`, `:medium`, `:high`), `:background`
+    (`:transparent` needs PNG or WebP output), `:moderation`, `:output_compression`
+    (JPEG/WebP), and `:input_fidelity` on edits
+  - Quality and style options (DALL-E 3); `response_format: :url` is DALL-E only
   - Returns images as `ReqLLM.Message.ContentPart` with `:image` or `:image_url` type
   - Streaming not supported
 

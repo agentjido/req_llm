@@ -960,7 +960,7 @@ defmodule ReqLLM.Providers.Google do
           opts
       end
 
-    {opts, []}
+    ReqLLM.Images.drop_openai_only_options(opts, "Google")
   end
 
   def translate_options(_operation, model, opts) do
