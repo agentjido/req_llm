@@ -282,10 +282,18 @@ ReqLLM.generate_text(router, "Hello",
 )
 ```
 
-The request contains the normalized context and the explicit
-`:routing_context` map. It does not contain generation options, provider
-credentials, or transport options. The callback can use local rules, Jev, or
-another service. ReqLLM does not include a built-in model-selection policy.
+The request has only two fields:
+
+- `context` contains the normalized conversation and tools.
+- `routing_context` contains opaque application data for model selection.
+
+ReqLLM passes `routing_context` unchanged. It does not add the generation
+operation, streaming state, output schema, provider credentials, generation
+options, or transport options. If model selection needs one of these values,
+the application must include it explicitly in `routing_context`.
+
+The callback can use local rules, Jev, or another service. ReqLLM does not
+include a built-in model-selection policy.
 
 ## Features
 

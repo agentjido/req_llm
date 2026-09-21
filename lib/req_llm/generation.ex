@@ -62,8 +62,9 @@ defmodule ReqLLM.Generation do
     * `:total_timeout` - Optional whole-call deadline in milliseconds, including retries
     * `:stream_idle_timeout` - Optional semantic-progress timeout for streaming calls
     * `:provider_options` - Provider-specific options
-    * `:routing_context` - Application data for a `ReqLLM.Router` callback. It
-      must be a map and is not sent to the selected provider
+    * `:routing_context` - Opaque application data for a `ReqLLM.Router`
+      callback. It must be a map. ReqLLM passes it unchanged to the router and
+      does not send it to the selected provider
 
   ## Examples
 
@@ -334,8 +335,9 @@ defmodule ReqLLM.Generation do
     * `:total_timeout` - Optional whole-call deadline in milliseconds, including retries
     * `:stream_idle_timeout` - Optional semantic-progress timeout for streaming calls
     * `:provider_options` - Provider-specific options
-    * `:routing_context` - Application data for a `ReqLLM.Router` callback. It
-      must be a map and is not sent to the selected provider
+    * `:routing_context` - Opaque application data for a `ReqLLM.Router`
+      callback. It must be a map. ReqLLM passes it unchanged to the router and
+      does not send it to the selected provider
     * `:output_validation` - Final validation policy: `:compatible`, `:warn`, or
       `:strict`; omitted calls preserve current V1 behavior
     * `:output_repair` - Optional one-argument local repair callback invoked at

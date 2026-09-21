@@ -101,6 +101,12 @@ defmodule ReqLLM.RouterTest do
     assert error.tag == :invalid_routing_context
   end
 
+  test "request schema requires a normalized context" do
+    request = %Request{context: "Hello", routing_context: %{}}
+
+    assert {:error, _errors} = Zoi.parse(Request.schema(), request)
+  end
+
   test "generate_text continues through the existing provider path after routing" do
     router = %StaticRouter{model_spec: "openai:gpt-4o-mini"}
 
@@ -125,7 +131,7 @@ defmodule ReqLLM.RouterTest do
     assert response.model == "gpt-4o-mini"
   end
 
-  test "all generation forms send a normalized request to the router" do
+  test "all generation forms send the same minimal request to the router" do
     router = %InspectingRouter{test_pid: self()}
     routing_context = %{speed: :fast}
 

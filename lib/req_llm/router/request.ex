@@ -2,19 +2,29 @@ defmodule ReqLLM.Router.Request do
   @moduledoc """
   The normalized input for an application model router.
 
-  The request contains a normalized context and explicit application routing
-  data. Provider credentials, generation options, and transport options are not
-  included.
+  The request has two fields:
+
+    * `context` is the normalized conversation and tools.
+    * `routing_context` is opaque application data for model selection.
+
+  ReqLLM passes `routing_context` unchanged and does not add derived values such
+  as the generation operation, streaming state, output schema, provider
+  credentials, generation options, or transport options. Applications that need
+  one of these values for routing must include it explicitly in
+  `routing_context`.
   """
 
   @schema Zoi.struct(__MODULE__, %{
-            context: Zoi.any() |> Zoi.required(),
+            context: Zoi.struct(ReqLLM.Context) |> Zoi.required(),
             routing_context: Zoi.map() |> Zoi.default(%{})
           })
 
+  @typedoc "Opaque application data used to select a model."
+  @type routing_context :: map()
+
   @type t :: %__MODULE__{
           context: ReqLLM.Context.t(),
-          routing_context: map()
+          routing_context: routing_context()
         }
 
   @enforce_keys Zoi.Struct.enforce_keys(@schema)

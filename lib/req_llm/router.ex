@@ -6,6 +6,10 @@ defmodule ReqLLM.Router do
   callback a normalized `ReqLLM.Router.Request`. The callback must return a
   concrete `%LLMDB.Model{}`.
 
+  The request contains only the normalized conversation context and an opaque
+  application `routing_context` map. ReqLLM does not infer routing policy from
+  the generation function or its options.
+
       defmodule MyApp.ModelRouter do
         @behaviour ReqLLM.Router
 
@@ -25,7 +29,7 @@ defmodule ReqLLM.Router do
       end
 
       router = %MyApp.ModelRouter{}
-      ReqLLM.generate_text(router, "Hello")
+      ReqLLM.generate_text(router, "Hello", routing_context: %{mode: :fast})
 
   ReqLLM does not provide a routing policy. The callback can use local rules,
   an evaluation model, or another service.
