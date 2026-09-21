@@ -103,12 +103,22 @@ defmodule ReqLLM do
   Strings and tuples resolve through the LLMDB catalog. `%LLMDB.Model{}` values and
   plain maps are treated as inline model specs and bypass catalog lookup.
   """
-  @type model_input ::
+  @type static_model_input ::
           String.t()
           | map()
           | {atom(), String.t(), keyword()}
           | {atom(), keyword()}
           | LLMDB.Model.t()
+
+  @type model_input :: static_model_input()
+
+  @typedoc """
+  Model input for generation APIs.
+
+  In addition to a static model input, generation accepts an application struct
+  whose module implements `ReqLLM.Router`.
+  """
+  @type generation_model_input :: model_input() | ReqLLM.Router.t()
 
   @typedoc """
   Redacted, JSON-serializable diagnostic returned by `plan/3`.
@@ -309,7 +319,7 @@ defmodule ReqLLM do
       #=> %LLMDB.Model{provider: :anthropic, model: "claude-3-sonnet"}
 
   """
-  @spec model(model_input()) :: {:ok, LLMDB.Model.t()} | {:error, term()}
+  @spec model(static_model_input()) :: {:ok, LLMDB.Model.t()} | {:error, term()}
   def model(%LLMDB.Model{} = model) do
     model
     |> Map.from_struct()
