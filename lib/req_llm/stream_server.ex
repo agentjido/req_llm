@@ -89,11 +89,13 @@ defmodule ReqLLM.StreamServer do
     :protocol_parser,
     :protocol_state,
     :provider_state,
+    :transport_cancel,
     :telemetry,
     :pending_http_exit,
     pending_http_events: [],
     pending_retry_events: [],
     telemetry_pending?: false,
+    canonical_stream?: false,
     queue: :queue.new(),
     status: :init,
     consumer_refs: MapSet.new(),
@@ -159,8 +161,10 @@ defmodule ReqLLM.StreamServer do
     model = Keyword.fetch!(opts, :model)
     high_watermark = validate_high_watermark!(Keyword.get(opts, :high_watermark, 500))
 
+    canonical_stream? = Keyword.get(opts, :canonical_stream?, false)
+
     provider_state =
-      if function_exported?(provider_mod, :init_stream_state, 1) do
+      if not canonical_stream? and function_exported?(provider_mod, :init_stream_state, 1) do
         provider_mod.init_stream_state(model)
       end
 
@@ -181,7 +185,8 @@ defmodule ReqLLM.StreamServer do
       total_timeout_deadline:
         Keyword.get(opts, :total_timeout_deadline, Keyword.get(opts, :total_timeout, :infinity)),
       stream_idle_timeout: Keyword.get(opts, :stream_idle_timeout),
-      high_watermark: high_watermark
+      high_watermark: high_watermark,
+      canonical_stream?: canonical_stream?
     }
 
     GenServer.start_link(__MODULE__, state, opts)
@@ -295,6 +300,17 @@ defmodule ReqLLM.StreamServer do
     )
   end
 
+  @doc false
+  @spec start_in_process(server(), module(), LLMDB.Model.t(), ReqLLM.Context.t(), keyword()) ::
+          {:ok, pid(), nil, map()} | {:error, term()}
+  def start_in_process(server, provider_mod, model, context, opts) do
+    GenServer.call(
+      server,
+      {:start_in_process, provider_mod, model, context, opts},
+      :infinity
+    )
+  end
+
   @doc """
   Attach an HTTP task to the server for monitoring.
 
@@ -339,6 +355,12 @@ defmodule ReqLLM.StreamServer do
   @spec http_event(server(), term()) :: :ok
   def http_event(server, event) do
     GenServer.call(server, {:http_event, event}, :infinity)
+  end
+
+  @doc false
+  @spec in_process_event(server(), term()) :: :ok
+  def in_process_event(server, event) do
+    GenServer.call(server, {:http_event, normalize_in_process_event(event)}, :infinity)
   end
 
   @doc """
@@ -533,6 +555,41 @@ defmodule ReqLLM.StreamServer do
         }
 
         {:reply, {:ok, task_pid, http_context, canonical_json}, new_state}
+
+      {:error, reason} ->
+        {:reply, {:error, reason}, state}
+    end
+  end
+
+  @impl GenServer
+  def handle_call({:start_in_process, provider_mod, model, context, opts}, _from, state) do
+    defer_events? = Keyword.get(opts, :defer_http_events_until_telemetry?, false)
+    streamer_opts = Keyword.delete(opts, :defer_http_events_until_telemetry?)
+
+    case ReqLLM.Streaming.InProcessClient.start_stream(
+           provider_mod,
+           model,
+           context,
+           streamer_opts,
+           self()
+         ) do
+      {:ok, task_pid, cancel} ->
+        Process.monitor(task_pid)
+
+        new_state = %{
+          state
+          | http_task: task_pid,
+            transport_cancel: cancel,
+            status: :streaming,
+            http_context: nil,
+            canonical_json: %{},
+            object_json_mode?: false,
+            object_acc: [],
+            pending_http_events: [],
+            telemetry_pending?: defer_events?
+        }
+
+        {:reply, {:ok, task_pid, nil, %{}}, new_state}
 
       {:error, reason} ->
         {:reply, {:error, reason}, state}
@@ -766,6 +823,10 @@ defmodule ReqLLM.StreamServer do
     active_stream?(state) and backpressure_saturated?(state)
   end
 
+  defp backpressure_required?({:canonical_chunk, _chunk}, state) do
+    active_stream?(state) and backpressure_saturated?(state)
+  end
+
   defp backpressure_required?(_event, _state), do: false
 
   defp active_stream?(%{status: :done}), do: false
@@ -892,6 +953,36 @@ defmodule ReqLLM.StreamServer do
     else
       process_data_chunk(chunk, state)
     end
+  end
+
+  defp process_http_event({:canonical_chunk, %StreamChunk{} = chunk}, state) do
+    chunks = [chunk]
+
+    new_state =
+      state
+      |> then(&enqueue_chunks(chunks, &1))
+      |> reset_metadata_waiter_timeouts(chunks)
+      |> reset_stream_idle_timeout(chunks)
+
+    new_state =
+      if terminal_chunk?(chunk) do
+        finalize_stream_with_fixture(%{new_state | terminated?: true})
+      else
+        new_state
+      end
+
+    {:reply, :ok, reply_to_waiting_callers(new_state)}
+  end
+
+  defp process_http_event({:canonical_chunk, value}, state) do
+    reason = {:invalid_in_process_stream_item, value}
+
+    new_state =
+      state
+      |> finalize_failed_stream(reason)
+      |> reply_to_waiting_callers()
+
+    {:reply, :ok, new_state}
   end
 
   defp process_http_event(:done, %{http_status: status} = state)
@@ -1263,7 +1354,7 @@ defmodule ReqLLM.StreamServer do
   end
 
   defp finalize_stream(state) do
-    state = state |> flush_protocol_state() |> flush_provider_state()
+    state = flush_stream_state(state)
 
     extra_flush_chunks =
       if state.object_json_mode? do
@@ -1307,7 +1398,7 @@ defmodule ReqLLM.StreamServer do
   defp finalize_cancelled_stream(%{status: {:error, _reason}} = state), do: state
 
   defp finalize_cancelled_stream(state) do
-    state = state |> flush_protocol_state() |> flush_provider_state()
+    state = flush_stream_state(state)
 
     metadata =
       state
@@ -1333,6 +1424,12 @@ defmodule ReqLLM.StreamServer do
     state
     |> Map.put(:provider_state, new_provider_state)
     |> then(&enqueue_chunks(flush_chunks, &1))
+  end
+
+  defp flush_stream_state(%{canonical_stream?: true} = state), do: state
+
+  defp flush_stream_state(state) do
+    state |> flush_protocol_state() |> flush_provider_state()
   end
 
   defp flush_protocol_state(state) do
@@ -1591,7 +1688,11 @@ defmodule ReqLLM.StreamServer do
   end
 
   defp cleanup_resources(state) do
-    state = state |> release_http_event_callers() |> cancel_timeout_budgets()
+    state =
+      state
+      |> release_http_event_callers()
+      |> cancel_timeout_budgets()
+      |> run_transport_cancel()
 
     # Kill HTTP task if running
     if state.http_task && Process.alive?(state.http_task) do
@@ -1599,6 +1700,21 @@ defmodule ReqLLM.StreamServer do
     end
 
     cancel_completion_cleanup(state)
+  end
+
+  defp run_transport_cancel(%{transport_cancel: nil} = state), do: state
+
+  defp run_transport_cancel(%{transport_cancel: cancel} = state) do
+    try do
+      cancel.()
+    rescue
+      error -> Logger.warning("In-process stream cancellation failed: #{inspect(error)}")
+    catch
+      kind, reason ->
+        Logger.warning("In-process stream cancellation failed: #{inspect({kind, reason})}")
+    end
+
+    %{state | transport_cancel: nil}
   end
 
   defp handle_timeout_budget(state, kind, timeout) do
@@ -1808,4 +1924,8 @@ defmodule ReqLLM.StreamServer do
   defp normalize_telemetry_stream_finish_reason("cancelled"), do: :cancelled
   defp normalize_telemetry_stream_finish_reason("incomplete"), do: :incomplete
   defp normalize_telemetry_stream_finish_reason(finish_reason), do: finish_reason
+
+  defp normalize_in_process_event({:chunk, chunk}), do: {:canonical_chunk, chunk}
+  defp normalize_in_process_event({:error, reason}), do: {:error, reason}
+  defp normalize_in_process_event(:done), do: :done
 end

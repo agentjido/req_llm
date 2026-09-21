@@ -215,7 +215,7 @@ defmodule ReqLLM.Provider.Options do
 
                                # Internal streaming orchestration options
                                stream_transport: [
-                                 type: {:in, [:http, :websocket]},
+                                 type: {:in, [:http, :websocket, :in_process]},
                                  doc: "Internal streaming transport selected by ReqLLM.Streaming"
                                ],
                                defer_http_events_until_telemetry?: [
