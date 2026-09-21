@@ -134,6 +134,7 @@ defmodule ReqLLM.EvaluationTest do
       assert conn.body_params == %{
                "model" => "typesafe/jev-1.13",
                "state" => %{"ticket" => "Please refund me today"},
+               "provider" => %{"zdr" => true},
                "questions" => %{
                  "department" => %{
                    "type" => "choice",
@@ -182,6 +183,7 @@ defmodule ReqLLM.EvaluationTest do
                %{ticket: "Please refund me today"},
                @questions,
                api_key: "openrouter-test-key",
+               provider_options: [openrouter_provider: %{zdr: true}],
                req_http_options: [plug: {Req.Test, __MODULE__.OpenRouterSuccess}]
              )
 
@@ -204,6 +206,7 @@ defmodule ReqLLM.EvaluationTest do
     Req.Test.stub(__MODULE__.OpenRouterMoving, fn conn ->
       assert conn.request_path == "/api/alpha/decisions"
       assert conn.body_params["model"] == "~typesafe/jev-latest"
+      refute Map.has_key?(conn.body_params, "provider")
 
       Req.Test.json(conn, %{
         "model" => "typesafe/jev-1.13",
@@ -400,12 +403,14 @@ defmodule ReqLLM.EvaluationTest do
                receive_timeout: 1_000,
                total_timeout: :infinity,
                max_retries: 0,
+               provider_options: [openrouter_provider: %{zdr: true}],
                req_http_options: [plug: {Req.Test, __MODULE__.Success}],
                fixture: {:typesafe, "basic"},
                telemetry: %{test: true}
              )
 
     assert opts[:total_timeout] == :infinity
+    assert opts[:provider_options] == [openrouter_provider: %{zdr: true}]
     assert opts[:req_http_options] == [plug: {Req.Test, __MODULE__.Success}]
     assert opts[:telemetry] == %{test: true}
     assert {:ok, [telemetry: [test: true]]} = Zoi.parse(schema, telemetry: [test: true])
@@ -416,6 +421,8 @@ defmodule ReqLLM.EvaluationTest do
       [receive_timeout: 0],
       [total_timeout: 0],
       [max_retries: -1],
+      [provider_options: :invalid],
+      [openrouter_provider: %{zdr: true}],
       [req_http_options: [1]],
       [req_http_options: [{"plug", :invalid}]],
       [fixture: {:typesafe, 123}],
@@ -431,6 +438,15 @@ defmodule ReqLLM.EvaluationTest do
 
     assert {:error, %ReqLLM.Error.Invalid.Parameter{}} =
              ReqLLM.evaluate("typesafe:jev-latest", "text", @questions, [1])
+
+    assert {:error, %ReqLLM.Error.Invalid.Parameter{parameter: provider_error}} =
+             ReqLLM.evaluate("openrouter:typesafe/jev-1.13", "text", @questions,
+               api_key: "openrouter-test-key",
+               provider_options: [openrouter_provider: []],
+               req_http_options: [plug: fn _conn -> flunk("unexpected HTTP request") end]
+             )
+
+    assert provider_error =~ "provider_options[:openrouter_provider] must be a map"
   end
 
   test "reports unsupported operations without a chat request" do

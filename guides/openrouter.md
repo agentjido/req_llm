@@ -38,7 +38,9 @@ questions = %{
 }
 
 {:ok, pinned} =
-  ReqLLM.evaluate("openrouter:typesafe/jev-1.13", "Please refund me", questions)
+  ReqLLM.evaluate("openrouter:typesafe/jev-1.13", "Please refund me", questions,
+    provider_options: [openrouter_provider: %{zdr: true}]
+  )
 
 {:ok, moving} =
   ReqLLM.evaluate("openrouter:~typesafe/jev-latest", "Please refund me", questions)
@@ -50,8 +52,10 @@ moving.usage.input_tokens
 ```
 
 The `~typesafe/jev-latest` ID stays in the request. The response `model` field
-reports the model that OpenRouter resolved. `object` contains named answers
-with string keys. A `:boolean` question uses the provider's `noul` wire type;
+reports the model that OpenRouter resolved. `provider_options[:openrouter_provider]`
+forwards provider-routing preferences to the Decisions request, including
+zero-data-retention routing with `%{zdr: true}`. `object` contains named answers with
+string keys. A `:boolean` question uses the provider's `noul` wire type;
 the answer becomes `%{"type" => "boolean", "probability" => value}`.
 `provider_meta.raw_response` keeps the original response.
 

@@ -18,6 +18,8 @@ defmodule ReqLLM.Evaluation do
                       total_timeout:
                         Zoi.union([Zoi.integer() |> Zoi.positive(), Zoi.literal(:infinity)]),
                       max_retries: Zoi.integer() |> Zoi.min(0),
+                      provider_options:
+                        Zoi.union([Zoi.map(Zoi.any(), Zoi.any()), @keyword_options]),
                       req_http_options: @keyword_options,
                       fixture: Zoi.union([Zoi.string(), Zoi.tuple({Zoi.atom(), Zoi.string()})]),
                       telemetry: Zoi.union([Zoi.map(Zoi.any(), Zoi.any()), @keyword_options])
@@ -42,8 +44,10 @@ defmodule ReqLLM.Evaluation do
       result.object["urgent"]["probability"]
 
   Choice and score answers may include probabilities and confidence. Providers
-  may support more question types. The response stores named answers in `object`
-  with string keys. `provider_meta.raw_response` keeps the original provider data.
+  may support more question types. OpenRouter evaluations accept routing preferences
+  such as `provider_options: [openrouter_provider: %{zdr: true}]`. The response stores
+  named answers in `object` with string keys. `provider_meta.raw_response` keeps the
+  original provider data.
   """
   @spec evaluate(ReqLLM.model_input(), String.t() | map() | list(), map(), keyword()) ::
           {:ok, Response.t()} | {:error, term()}
@@ -59,6 +63,13 @@ defmodule ReqLLM.Evaluation do
          {:ok, model} <- resolve_model(model_spec),
          :ok <- validate_support(model),
          {:ok, provider} <- ReqLLM.provider(model.provider),
+         {:ok, opts} <-
+           ReqLLM.Provider.Options.normalize_namespaced_provider_options(
+             provider,
+             :evaluate,
+             model,
+             opts
+           ),
          {:ok, request} <-
            provider.prepare_request(:evaluate, model, %{state: state, questions: questions}, opts),
          {:ok, response} <-
