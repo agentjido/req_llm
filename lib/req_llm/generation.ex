@@ -81,7 +81,7 @@ defmodule ReqLLM.Generation do
   """
 
   @spec generate_text(
-          ReqLLM.model_input(),
+          ReqLLM.generation_model_input(),
           Context.prompt(),
           keyword()
         ) :: {:ok, Response.t()} | {:error, term()}
@@ -102,6 +102,12 @@ defmodule ReqLLM.Generation do
         :object ->
           generate_output_response(model_spec, messages, contract, opts, runtime_config)
       end
+    end
+  end
+
+  defp generate_text_response(%ReqLLM.Router{} = router, messages, opts) do
+    with {:ok, model} <- ReqLLM.Router.resolve(router, :chat, messages, opts) do
+      generate_text_response(model, messages, opts)
     end
   end
 
@@ -164,7 +170,7 @@ defmodule ReqLLM.Generation do
 
   """
   @spec generate_text!(
-          ReqLLM.model_input(),
+          ReqLLM.generation_model_input(),
           Context.prompt(),
           keyword()
         ) :: String.t() | no_return()
@@ -204,7 +210,7 @@ defmodule ReqLLM.Generation do
 
   """
   @spec stream_text(
-          ReqLLM.model_input(),
+          ReqLLM.generation_model_input(),
           Context.prompt(),
           keyword()
         ) :: {:ok, ReqLLM.StreamResponse.t()} | {:error, term()}
@@ -225,6 +231,12 @@ defmodule ReqLLM.Generation do
         :object ->
           stream_output_response(model_spec, messages, contract, opts, runtime_config)
       end
+    end
+  end
+
+  defp stream_text_response(%ReqLLM.Router{} = router, messages, opts) do
+    with {:ok, model} <- ReqLLM.Router.resolve(router, :chat, messages, opts) do
+      stream_text_response(model, messages, opts)
     end
   end
 
@@ -281,7 +293,7 @@ defmodule ReqLLM.Generation do
   """
   @deprecated "Use stream_text/3 with StreamResponse instead"
   @spec stream_text!(
-          ReqLLM.model_input(),
+          ReqLLM.generation_model_input(),
           Context.prompt(),
           keyword()
         ) :: Enumerable.t() | no_return()
@@ -347,7 +359,7 @@ defmodule ReqLLM.Generation do
 
   """
   @spec generate_object(
-          ReqLLM.model_input(),
+          ReqLLM.generation_model_input(),
           Context.prompt(),
           keyword() | map() | Zoi.Type.t(),
           keyword()
@@ -366,6 +378,26 @@ defmodule ReqLLM.Generation do
         {:schema, object_schema},
         opts,
         ReqLLM.Output.object(object_schema),
+        runtime_config
+      )
+    end
+  end
+
+  defp generate_object_response(
+         %ReqLLM.Router{} = router,
+         messages,
+         schema_source,
+         opts,
+         descriptor,
+         runtime_config
+       ) do
+    with {:ok, model} <- ReqLLM.Router.resolve(router, :object, messages, opts) do
+      generate_object_response(
+        model,
+        messages,
+        schema_source,
+        opts,
+        descriptor,
         runtime_config
       )
     end
@@ -652,7 +684,7 @@ defmodule ReqLLM.Generation do
 
   """
   @spec stream_object(
-          ReqLLM.model_input(),
+          ReqLLM.generation_model_input(),
           Context.prompt(),
           keyword() | Zoi.Type.t(),
           keyword()
@@ -671,6 +703,26 @@ defmodule ReqLLM.Generation do
         {:schema, object_schema},
         opts,
         ReqLLM.Output.object(object_schema),
+        runtime_config
+      )
+    end
+  end
+
+  defp stream_object_response(
+         %ReqLLM.Router{} = router,
+         messages,
+         schema_source,
+         opts,
+         descriptor,
+         runtime_config
+       ) do
+    with {:ok, model} <- ReqLLM.Router.resolve(router, :object, messages, opts) do
+      stream_object_response(
+        model,
+        messages,
+        schema_source,
+        opts,
+        descriptor,
         runtime_config
       )
     end
@@ -745,7 +797,7 @@ defmodule ReqLLM.Generation do
   """
   @deprecated "Use stream_object/4 with StreamResponse instead"
   @spec stream_object!(
-          ReqLLM.model_input(),
+          ReqLLM.generation_model_input(),
           Context.prompt(),
           keyword() | Zoi.Type.t(),
           keyword()

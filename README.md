@@ -249,6 +249,35 @@ model example.
 Use `generate_object/4` for text models that generate JSON objects; it is not a
 Jev endpoint. Jev does not support text generation or streaming.
 
+## Model routers
+
+`ReqLLM.Router` is a dynamic model input for text and object generation. A
+router module implements one callback that returns a normal model spec. ReqLLM
+resolves that spec to `%LLMDB.Model{}` and continues through the same provider
+path as a directly supplied model.
+
+```elixir
+defmodule MyApp.ModelRouter do
+  @behaviour ReqLLM.Router
+
+  @impl true
+  def resolve(_router, :chat, prompt, _opts) do
+    if String.length(prompt) < 200 do
+      {:ok, "openai:gpt-4o-mini"}
+    else
+      {:ok, "anthropic:claude-sonnet-4-5"}
+    end
+  end
+end
+
+router = ReqLLM.Router.new!(MyApp.ModelRouter)
+ReqLLM.generate_text(router, "Hello")
+```
+
+The callback can use any routing method. `ReqLLM.Router.Trie` is an optional
+guarded trie with exact paths, `*` and `**` wildcards, priorities, and generic
+targets. ReqLLM does not include a built-in model-selection policy.
+
 ## Features
 
 - **Provider-agnostic model registry**
