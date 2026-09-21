@@ -5,6 +5,9 @@ defmodule ReqLLM.Images do
   This module provides image generation capabilities with support for:
   - Prompt-based image generation (`generate_image/3`)
   - Model validation for image support
+  - The full gpt-image parameter set on OpenAI and Azure: quality tiers,
+    `:background`, `:moderation`, `:output_compression`, and `:input_fidelity`
+    (see `schema/0` for the per-option rules)
 
   Image results are returned as canonical `ReqLLM.Response` structs where the
   assistant message contains `ReqLLM.Message.ContentPart` entries of type
@@ -16,6 +19,11 @@ defmodule ReqLLM.Images do
 
   @output_formats [:png, :jpeg, :webp]
   @response_formats [:binary, :url]
+  @backgrounds [:auto, :transparent, :opaque]
+  @moderations [:auto, :low]
+  @input_fidelities [:high, :low]
+  @gpt_image_qualities [:auto, :low, :medium, :high]
+  @dall_e_qualities [:standard, :hd]
 
   @base_schema NimbleOptions.new!(
                  n: [
@@ -25,7 +33,8 @@ defmodule ReqLLM.Images do
                  ],
                  size: [
                    type: {:or, [:string, {:tuple, [:pos_integer, :pos_integer]}]},
-                   doc: "Requested pixel size, e.g. \"1024x1024\" or {1024, 1024}"
+                   doc:
+                     "Requested pixel size, e.g. \"1024x1024\" or {1024, 1024}; gpt-image models also accept \"auto\""
                  ],
                  aspect_ratio: [
                    type: :string,
@@ -36,7 +45,7 @@ defmodule ReqLLM.Images do
                    type: {:in, @output_formats},
                    default: :png,
                    doc:
-                     "Requested output image encoding (provider dependent; Azure supports :png and :jpeg)"
+                     "Requested output image encoding (provider dependent; Azure supports :png and :jpeg, :webp is OpenAI only)"
                  ],
                  response_format: [
                    type: {:in, @response_formats},
@@ -49,9 +58,38 @@ defmodule ReqLLM.Images do
                      "Random seed for deterministic image generation (provider dependent; dropped with a warning by OpenAI and Azure image models, subject to :on_unsupported)"
                  ],
                  quality: [
-                   type: {:or, [{:in, [:standard, :hd]}, :string]},
+                   type: {:or, [{:in, @dall_e_qualities ++ @gpt_image_qualities}, :string]},
                    doc:
-                     "Requested quality (provider dependent; gpt-image models take low/medium/high, so :standard/:hd are translated with a warning)"
+                     "Requested quality (provider dependent; gpt-image models take :auto/:low/:medium/:high and translate :standard/:hd with a warning, DALL-E 3 takes :standard/:hd)"
+                 ],
+                 background: [
+                   type:
+                     {:or,
+                      [{:in, @backgrounds}, {:in, Enum.map(@backgrounds, &Atom.to_string/1)}]},
+                   doc:
+                     "Background handling for gpt-image models: :auto, :transparent, or :opaque. :transparent requires output_format :png or :webp (OpenAI and Azure image models only; Azure offers :png)"
+                 ],
+                 moderation: [
+                   type:
+                     {:or,
+                      [{:in, @moderations}, {:in, Enum.map(@moderations, &Atom.to_string/1)}]},
+                   doc:
+                     "Content moderation strictness for gpt-image generation: :auto or :low (OpenAI image models; forwarded unchanged on Azure; dropped with a warning for image edits and DALL-E)"
+                 ],
+                 output_compression: [
+                   type: {:in, 0..100},
+                   doc:
+                     "Compression level (0-100) for :jpeg and :webp output; dropped with a warning when output_format is :png (OpenAI and Azure image models only)"
+                 ],
+                 input_fidelity: [
+                   type:
+                     {:or,
+                      [
+                        {:in, @input_fidelities},
+                        {:in, Enum.map(@input_fidelities, &Atom.to_string/1)}
+                      ]},
+                   doc:
+                     "How closely image edits preserve the source image: :high or :low. Edits only (requires :source_image); gpt-image-1 and gpt-image-1.5, not gpt-image-1-mini (OpenAI and Azure image models only)"
                  ],
                  style: [
                    type: {:or, [{:in, [:vivid, :natural]}, :string]},

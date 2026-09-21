@@ -1329,7 +1329,7 @@ defmodule ReqLLM.Providers.Azure do
         {:error,
          ReqLLM.Error.Invalid.Parameter.exception(
            parameter:
-             "output_format: #{inspect(format)} is not supported for Azure image models; use :png or :jpeg"
+             "output_format: #{inspect(format)} is not supported for Azure image models; use :png or :jpeg (:webp is OpenAI only)"
          )}
     end
   end

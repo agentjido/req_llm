@@ -78,6 +78,47 @@ defmodule ReqLLM.ImagesTest do
     assert Keyword.get(processed, :aspect_ratio) == "16:9"
   end
 
+  test "process/4 accepts the gpt-image parameter set" do
+    model = %LLMDB.Model{id: "gpt-image-1.5", provider: :openai}
+
+    {:ok, processed} =
+      ReqLLM.Provider.Options.process(
+        ReqLLM.Providers.OpenAI,
+        :image,
+        model,
+        background: :transparent,
+        moderation: "low",
+        output_compression: 50,
+        output_format: :webp,
+        quality: :low,
+        context: Context.new()
+      )
+
+    assert Keyword.get(processed, :background) == :transparent
+    assert Keyword.get(processed, :moderation) == "low"
+    assert Keyword.get(processed, :output_compression) == 50
+    assert Keyword.get(processed, :quality) == :low
+  end
+
+  test "process/4 rejects gpt-image parameters outside their allowed values" do
+    model = %LLMDB.Model{id: "gpt-image-1.5", provider: :openai}
+
+    for opts <- [
+          [background: :blurred],
+          [moderation: :off],
+          [output_compression: 101],
+          [input_fidelity: :medium]
+        ] do
+      assert {:error, _} =
+               ReqLLM.Provider.Options.process(
+                 ReqLLM.Providers.OpenAI,
+                 :image,
+                 model,
+                 opts ++ [context: Context.new()]
+               )
+    end
+  end
+
   test "process/4 accepts image edit source and mask options" do
     model = %LLMDB.Model{id: "gpt-image-1.5", provider: :openai}
 

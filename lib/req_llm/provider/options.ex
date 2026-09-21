@@ -380,7 +380,7 @@ defmodule ReqLLM.Provider.Options do
     check_provider_key_collisions!(provider_mod, user_opts)
 
     # Auto-hoist provider-specific top-level options into :provider_options
-    user_opts = auto_hoist_provider_options(provider_mod, user_opts)
+    user_opts = auto_hoist_provider_options(provider_mod, operation, user_opts)
 
     reasoning_advisory_options = flatten_options_for_advisories(user_opts)
 
@@ -881,10 +881,10 @@ defmodule ReqLLM.Provider.Options do
     end
   end
 
-  defp auto_hoist_provider_options(provider_mod, opts) do
+  defp auto_hoist_provider_options(provider_mod, operation, opts) do
     if function_exported?(provider_mod, :provider_schema, 0) do
       provider_schema = provider_mod.provider_schema()
-      provider_keys = Keyword.keys(provider_schema.schema)
+      provider_keys = Keyword.keys(provider_schema.schema) -- hoist_protected_keys(operation)
 
       {provider_specific, rest} = Keyword.split(opts, provider_keys)
 
@@ -899,6 +899,12 @@ defmodule ReqLLM.Provider.Options do
       opts
     end
   end
+
+  # Image options such as :response_format share a name with chat-only provider
+  # options; on the image path they must stay top-level and validate against
+  # the image schema instead of being hoisted into :provider_options.
+  defp hoist_protected_keys(:image), do: Keyword.keys(ReqLLM.Images.schema().schema)
+  defp hoist_protected_keys(_operation), do: []
 
   defp compose_schema_internal(base_schema, provider_mod) do
     if function_exported?(provider_mod, :provider_schema, 0) do
