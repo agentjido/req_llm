@@ -64,6 +64,55 @@ defmodule ReqLLM.InProcessStreamingTest do
             end)
 
           {:ok, stream}
+
+        :success_with_cancel ->
+          test_pid = Keyword.fetch!(opts, :test_pid)
+
+          {:ok,
+           InProcessStream.new(
+             [StreamChunk.text("done"), StreamChunk.meta(%{terminal?: true})],
+             cancel: fn -> send(test_pid, :provider_cancelled) end
+           )}
+
+        :slow_cancel ->
+          test_pid = Keyword.fetch!(opts, :test_pid)
+
+          stream =
+            Stream.repeatedly(fn ->
+              send(test_pid, :producer_waiting)
+
+              receive do
+                {:chunk, chunk} -> chunk
+              end
+            end)
+
+          {:ok,
+           InProcessStream.new(stream,
+             cancel: fn ->
+               send(test_pid, {:provider_cancel_started, self()})
+
+               receive do
+                 :finish_cancel -> send(test_pid, :provider_cancel_finished)
+               end
+             end
+           )}
+
+        :invalid_stream ->
+          test_pid = Keyword.fetch!(opts, :test_pid)
+
+          {:ok,
+           InProcessStream.new(:not_enumerable,
+             cancel: fn -> send(test_pid, :provider_cancelled) end
+           )}
+
+        :invalid_item ->
+          {:ok, [:not_a_chunk]}
+
+        :raise ->
+          {:ok, Stream.map([:item], fn _item -> raise "producer failed" end)}
+
+        :throw ->
+          {:ok, Stream.map([:item], fn _item -> throw(:producer_failed) end)}
       end
     end
   end
@@ -110,6 +159,83 @@ defmodule ReqLLM.InProcessStreamingTest do
 
     assert :ok = StreamResponse.close(response)
     assert_receive :provider_cancelled
+  end
+
+  test "successful completion does not invoke provider cancellation" do
+    {:ok, response} = start_stream(test_mode: :success_with_cancel, test_pid: self())
+
+    assert StreamResponse.text(response) == "done"
+    refute_receive :provider_cancelled, 50
+  end
+
+  test "provider cancellation cannot block stream shutdown" do
+    {:ok, response} = start_stream(test_mode: :slow_cancel, test_pid: self())
+    assert_receive :producer_waiting
+
+    assert :ok = StreamResponse.close(response)
+    assert_receive {:provider_cancel_started, cancel_pid}
+    refute_receive :provider_cancel_finished, 20
+
+    send(cancel_pid, :finish_cancel)
+    assert_receive :provider_cancel_finished
+  end
+
+  test "invalid provider streams invoke provider cleanup" do
+    assert {:error,
+            {:in_process_streaming_failed,
+             {:provider_build_failed, {:invalid_in_process_stream, :not_enumerable}}}} =
+             start_stream(test_mode: :invalid_stream, test_pid: self())
+
+    assert_receive :provider_cancelled
+  end
+
+  test "task startup failures invoke provider cleanup" do
+    {:ok, context} = Context.normalize("Hello")
+
+    assert {:error, {:task_start_failed, _reason}} =
+             ReqLLM.Streaming.InProcessClient.start_stream(
+               CanonicalProvider,
+               model(),
+               context,
+               [test_mode: :success_with_cancel, test_pid: self()],
+               self(),
+               :missing_task_supervisor
+             )
+
+    assert_receive :provider_cancelled
+  end
+
+  test "invalid producer items fail through the canonical error path" do
+    {:ok, response} = start_stream(test_mode: :invalid_item)
+
+    error =
+      assert_raise ReqLLM.Error.API.Stream, fn ->
+        Enum.to_list(response.stream)
+      end
+
+    assert error.cause == {:invalid_in_process_stream_item, :not_a_chunk}
+  end
+
+  test "producer exceptions fail through the canonical error path" do
+    {:ok, response} = start_stream(test_mode: :raise)
+
+    error =
+      assert_raise ReqLLM.Error.API.Stream, fn ->
+        Enum.to_list(response.stream)
+      end
+
+    assert %RuntimeError{message: "producer failed"} = error.cause
+  end
+
+  test "producer throws fail through the canonical error path" do
+    {:ok, response} = start_stream(test_mode: :throw)
+
+    error =
+      assert_raise ReqLLM.Error.API.Stream, fn ->
+        Enum.to_list(response.stream)
+      end
+
+    assert error.cause == {:throw, :producer_failed}
   end
 
   test "total timeout stops the producer and invokes provider cleanup" do

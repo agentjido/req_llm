@@ -1688,34 +1688,33 @@ defmodule ReqLLM.StreamServer do
   end
 
   defp cleanup_resources(state) do
-    state =
+    {transport_cancel, state} =
       state
       |> release_http_event_callers()
       |> cancel_timeout_budgets()
-      |> run_transport_cancel()
+      |> pop_transport_cancel()
 
     # Kill HTTP task if running
     if state.http_task && Process.alive?(state.http_task) do
       Process.exit(state.http_task, :cancelled)
     end
 
+    ReqLLM.Streaming.InProcessClient.cancel_stream(transport_cancel)
     cancel_completion_cleanup(state)
   end
 
-  defp run_transport_cancel(%{transport_cancel: nil} = state), do: state
+  defp pop_transport_cancel(%{transport_cancel: nil} = state), do: {nil, state}
 
-  defp run_transport_cancel(%{transport_cancel: cancel} = state) do
-    try do
-      cancel.()
-    rescue
-      error -> Logger.warning("In-process stream cancellation failed: #{inspect(error)}")
-    catch
-      kind, reason ->
-        Logger.warning("In-process stream cancellation failed: #{inspect({kind, reason})}")
-    end
-
-    %{state | transport_cancel: nil}
+  defp pop_transport_cancel(%{transport_cancel: cancel} = state) do
+    callback = if transport_cancel_required?(state), do: cancel
+    {callback, %{state | transport_cancel: nil}}
   end
+
+  defp transport_cancel_required?(%{status: :done, metadata: metadata}) do
+    Map.get(metadata, :finish_reason) == :cancelled
+  end
+
+  defp transport_cancel_required?(_state), do: true
 
   defp handle_timeout_budget(state, kind, timeout) do
     error = ReqLLM.TimeoutBudget.error(kind, timeout)
