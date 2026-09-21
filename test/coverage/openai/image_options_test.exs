@@ -14,12 +14,15 @@ defmodule ReqLLM.Coverage.OpenAI.ImageOptionsTest do
 
   import ReqLLM.Test.Helpers
 
+  alias ReqLLM.Test.ModelMatrix
+
   @moduletag :coverage
   @moduletag category: :image
   @moduletag provider: "openai"
   @moduletag timeout: 180_000
 
-  @model_spec "openai:gpt-image-1.5"
+  @provider :openai
+  @models ModelMatrix.models_for_provider(@provider, operation: :image)
 
   @png_signature <<0x89, "PNG", 0x0D, 0x0A, 0x1A, 0x0A>>
   @png_color_types_with_alpha [4, 6]
@@ -29,37 +32,44 @@ defmodule ReqLLM.Coverage.OpenAI.ImageOptionsTest do
     :ok
   end
 
-  @tag ReqLLM.Test.CompatibilityScenario.tag!(:image_transparent_background)
-  @tag model: "gpt-image-1.5"
-  test "a transparent background produces a PNG with an alpha channel" do
-    opts =
-      fixture_opts(ReqLLM.Test.CompatibilityScenario.fixture!(:image_transparent_background),
-        background: :transparent,
-        quality: :low,
-        size: "1024x1024"
-      )
+  for model_spec <- @models do
+    @model_spec model_spec
 
-    {:ok, response} =
-      ReqLLM.generate_image(
-        @model_spec,
-        "A single red circle sticker, isolated on a fully transparent background",
-        opts
-      )
+    describe "#{model_spec}" do
+      @describetag model: model_spec |> String.split(":", parts: 2) |> List.last()
 
-    [part] = ReqLLM.Response.images(response)
+      @tag ReqLLM.Test.CompatibilityScenario.tag!(:image_transparent_background)
+      test "a transparent background produces a PNG with an alpha channel" do
+        opts =
+          fixture_opts(ReqLLM.Test.CompatibilityScenario.fixture!(:image_transparent_background),
+            background: :transparent,
+            quality: :low,
+            size: "1024x1024"
+          )
 
-    assert part.type == :image
-    assert part.media_type == "image/png"
+        {:ok, response} =
+          ReqLLM.generate_image(
+            @model_spec,
+            "A single red circle sticker, isolated on a fully transparent background",
+            opts
+          )
 
-    assert <<@png_signature, _length::32, "IHDR", _width::32, _height::32, _bit_depth, color_type,
-             _rest::binary>> = part.data
+        [part] = ReqLLM.Response.images(response)
 
-    assert color_type in @png_color_types_with_alpha
+        assert part.type == :image
+        assert part.media_type == "image/png"
 
-    meta = response.provider_meta["openai"]
-    assert meta["background"] == "transparent"
-    assert meta["output_format"] == "png"
-    assert meta["quality"] == "low"
-    assert meta["size"] == "1024x1024"
+        assert <<@png_signature, _length::32, "IHDR", _width::32, _height::32, _bit_depth,
+                 color_type, _rest::binary>> = part.data
+
+        assert color_type in @png_color_types_with_alpha
+
+        meta = response.provider_meta["openai"]
+        assert meta["background"] == "transparent"
+        assert meta["output_format"] == "png"
+        assert meta["quality"] == "low"
+        assert meta["size"] == "1024x1024"
+      end
+    end
   end
 end
