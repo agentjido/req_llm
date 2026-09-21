@@ -251,32 +251,43 @@ Jev endpoint. Jev does not support text generation or streaming.
 
 ## Model routers
 
-`ReqLLM.Router` is a dynamic model input for text and object generation. A
-router module implements one callback that returns a normal model spec. ReqLLM
-resolves that spec to `%LLMDB.Model{}` and continues through the same provider
-path as a directly supplied model.
+`ReqLLM.Router` is a behaviour for application-defined model routers. The
+application router is a struct that implements one callback. ReqLLM gives it a
+normalized request, and the callback returns a concrete `%LLMDB.Model{}`.
 
 ```elixir
 defmodule MyApp.ModelRouter do
   @behaviour ReqLLM.Router
 
+  defstruct fast_model: "openai:gpt-4o-mini",
+            deep_model: "anthropic:claude-sonnet-4-5"
+
   @impl true
-  def resolve(_router, :chat, prompt, _opts) do
-    if String.length(prompt) < 200 do
-      {:ok, "openai:gpt-4o-mini"}
-    else
-      {:ok, "anthropic:claude-sonnet-4-5"}
-    end
+  def resolve(router, %ReqLLM.Router.Request{} = request) do
+    model_spec =
+      if request.requirements.reasoning_effort in [:high, :xhigh] do
+        router.deep_model
+      else
+        router.fast_model
+      end
+
+    ReqLLM.model(model_spec)
   end
 end
 
-router = ReqLLM.Router.new!(MyApp.ModelRouter)
-ReqLLM.generate_text(router, "Hello")
+router = %MyApp.ModelRouter{}
+
+ReqLLM.generate_text(router, "Hello",
+  reasoning_effort: :medium,
+  routing_context: %{request_class: :interactive}
+)
 ```
 
-The callback can use any routing method. `ReqLLM.Router.Trie` is an optional
-guarded trie with exact paths, `*` and `**` wildcards, priorities, and generic
-targets. ReqLLM does not include a built-in model-selection policy.
+The request contains the API surface, provider operation, normalized context,
+derived requirements, and the explicit `:routing_context` map. It does not
+contain provider credentials or transport options. The callback can use local
+rules, Jev, or another service. ReqLLM does not include a built-in
+model-selection policy.
 
 ## Features
 

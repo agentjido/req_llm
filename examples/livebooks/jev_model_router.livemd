@@ -1,19 +1,22 @@
 # Jev as a ReqLLM model router
 
-## Section
+This local Livebook uses the router spike from the current ReqLLM checkout. It
+shows a small separation of responsibilities:
 
-This local Livebook uses the router spike from the current ReqLLM checkout. It shows a small separation of responsibilities:
+1. ReqLLM normalizes the generation request.
+2. An application router asks Jev for evidence.
+3. The application applies its own deterministic policy.
+4. The callback returns a concrete `%LLMDB.Model{}`.
+5. ReqLLM continues through its normal provider path.
 
-1. Jev evaluates the request and returns probabilities.
-2. A local guarded trie applies the routing policy.
-3. `ReqLLM.Router` resolves the selected model spec to `%LLMDB.Model{}`.
-4. `ReqLLM.generate_text/3` continues through its normal provider path.
-
-The notebook has an offline path and a live path. The offline path makes no network calls. The live path needs TypeSafe and OpenAI keys and can make two paid calls: one call to Jev and one call to the selected OpenAI model.
+The offline path makes no network calls. The live path needs TypeSafe and
+OpenAI keys. It can make two paid calls: one call to Jev and one call to the
+selected OpenAI model.
 
 ## 1. Install the local ReqLLM checkout
 
-Open this file from its location in the ReqLLM repository. The relative path loads the current branch, including the router spike.
+Open this file from its location in the ReqLLM repository. The relative path
+loads the current branch, including the router spike.
 
 ```elixir
 req_llm_path = System.get_env("REQ_LLM_PATH") || Path.expand("../..", __DIR__)
@@ -25,7 +28,8 @@ Mix.install([
 
 ## 2. Define the evaluation questions
 
-Jev supplies evidence. It does not select a vendor model directly. The local policy uses two dimensions so that the model names and thresholds stay in application code.
+Jev supplies evidence. It does not select a vendor model directly. The
+application owns the model names and probability limits.
 
 ```elixir
 defmodule JevRouterDemo.Questions do
@@ -54,66 +58,77 @@ end
 JevRouterDemo.Questions.all()
 ```
 
-Jev returns a probability from 0 to 1 for each Boolean answer. These thresholds are example policy values. They are not claims about model quality.
+Jev returns a probability from 0 to 1 for each Boolean answer. The limits below
+are example policy values. They are not claims about model quality.
 
-## 3. Define the guarded routing policy
+## 3. Implement the application router
 
-The first route selects Sol when either Jev probability crosses its limit. The second route is the Luna fallback. The trie checks path specificity, priority, and registration order. It runs guards only after the path matches.
-
-```elixir
-deep_or_high_stakes? = fn answers ->
-  deep = get_in(answers, ["deep_reasoning", "probability"])
-  stakes = get_in(answers, ["high_stakes", "probability"])
-
-  (is_number(deep) and deep >= 0.65) or
-    (is_number(stakes) and stakes >= 0.50)
-end
-
-trie =
-  ReqLLM.Router.Trie.new!([
-    {"chat", deep_or_high_stakes?, "openai:gpt-5.6-sol", 10},
-    {"chat", "openai:gpt-5.6-luna"},
-    {"object", deep_or_high_stakes?, "openai:gpt-5.6-sol", 10},
-    {"object", "openai:gpt-5.6-luna"}
-  ])
-```
-
-## 4. Implement the custom router callback
-
-This is the only Jev-specific code. ReqLLM does not need a Jev router type. The callback calls `ReqLLM.evaluate/4`, passes the answers to the trie, and returns the first model spec.
-
-The evaluator is injectable. The offline example can use a fixed function, while the live example uses `ReqLLM.evaluate/4`.
+The router is the application struct. It implements `ReqLLM.Router` directly.
+There is no ReqLLM router wrapper and no built-in trie. The callback can call
+Jev, apply a small local policy, and use `ReqLLM.model/1` to return the required
+`%LLMDB.Model{}`.
 
 ```elixir
 defmodule JevRouterDemo.Router do
   @behaviour ReqLLM.Router
 
-  alias ReqLLM.Router.Trie
+  defstruct evaluate: nil,
+            jev_model: "typesafe:jev-latest",
+            jev_opts: [],
+            fast_model: "openai:gpt-5.6-luna",
+            deep_model: "openai:gpt-5.6-sol",
+            deep_limit: 0.65,
+            stakes_limit: 0.50
 
   @impl true
-  def resolve(%ReqLLM.Router{options: config}, operation, prompt, _request_opts)
-      when operation in [:chat, :object] and is_binary(prompt) do
-    evaluator = Map.get(config, :evaluate, &ReqLLM.evaluate/4)
-    jev_model = Map.get(config, :jev_model, "typesafe:jev-latest")
-    jev_opts = Map.get(config, :jev_opts, [])
-    state = %{operation: Atom.to_string(operation), prompt: prompt}
+  def resolve(%__MODULE__{} = router, %ReqLLM.Router.Request{} = request) do
+    evaluator = router.evaluate || &ReqLLM.evaluate/4
+    state = request_state(request)
 
     with {:ok, response} <-
-           evaluator.(jev_model, state, JevRouterDemo.Questions.all(), jev_opts),
-         {:ok, [model_spec | _rest]} <-
-           Trie.route(config.trie, Atom.to_string(operation), response.object) do
-      {:ok, model_spec}
+           evaluator.(router.jev_model, state, JevRouterDemo.Questions.all(), router.jev_opts) do
+      response.object
+      |> select_model(router)
+      |> ReqLLM.model()
     end
   end
 
-  def resolve(_router, _operation, _prompt, _request_opts),
-    do: {:error, :jev_router_requires_a_text_prompt}
+  defp request_state(request) do
+    %{
+      surface: Atom.to_string(request.surface),
+      operation: Atom.to_string(request.operation),
+      prompt: prompt_text(request.context),
+      routing_context: request.routing_context
+    }
+  end
+
+  defp prompt_text(context) do
+    context.messages
+    |> Enum.flat_map(fn message ->
+      for %{type: :text, text: text} <- message.content, is_binary(text), do: text
+    end)
+    |> Enum.join("\n")
+  end
+
+  defp select_model(answers, router) do
+    deep = get_in(answers, ["deep_reasoning", "probability"])
+    stakes = get_in(answers, ["high_stakes", "probability"])
+
+    if above?(deep, router.deep_limit) or above?(stakes, router.stakes_limit) do
+      router.deep_model
+    else
+      router.fast_model
+    end
+  end
+
+  defp above?(value, limit), do: is_number(value) and value >= limit
 end
 ```
 
-## 5. Run the router without network calls
+## 4. Run the router without network calls
 
-The fixed evaluator simulates the shape of a Jev response. This tests the callback and the real ReqLLM model resolution path without a key.
+The fixed evaluator simulates the shape of a Jev response. This tests the
+callback and the real ReqLLM model resolution path without a key.
 
 ```elixir
 fake_evaluate = fn _model, %{prompt: prompt}, _questions, _opts ->
@@ -134,34 +149,38 @@ fake_evaluate = fn _model, %{prompt: prompt}, _questions, _opts ->
   {:ok, %{object: probabilities}}
 end
 
-offline_router =
-  ReqLLM.Router.new!(JevRouterDemo.Router, %{
-    evaluate: fake_evaluate,
-    trie: trie
-  })
+offline_router = %JevRouterDemo.Router{evaluate: fake_evaluate}
 
 offline_results =
   for prompt <- [
         "Give me three names for a coffee shop.",
         "Analyze the architecture and prove that the retry rule cannot duplicate a reply."
       ] do
-    {:ok, model} = ReqLLM.Router.resolve(offline_router, :chat, prompt, [])
+    {:ok, request} =
+      ReqLLM.Router.Request.new(:generate_text, :chat, prompt,
+        routing_context: %{source: :livebook}
+      )
+
+    {:ok, model} = ReqLLM.Router.resolve(offline_router, request)
     %{prompt: prompt, selected_model: "#{model.provider}:#{model.id}"}
   end
 
 offline_results
 ```
 
-The expected selections are Luna for the direct request and Sol for the deep request.
+The expected selections are Luna for the direct request and Sol for the deep
+request.
 
-## 6. Configure the live keys
+## 5. Configure the live keys
 
 Add two Livebook secrets:
 
 * `TYPESAFE_API_KEY` for Jev.
 * `OPENAI_API_KEY` for the selected generation model.
 
-Livebook exposes them with the `LB_` prefix. ReqLLM does not read that prefix directly, so this cell registers each present secret with `ReqLLM.Keys`. It reports status only and does not display either key.
+Livebook exposes them with the `LB_` prefix. ReqLLM does not read that prefix
+directly, so this cell registers each present secret with `ReqLLM.Keys`. It
+reports status only and does not display either key.
 
 ```elixir
 typesafe_key = System.get_env("LB_TYPESAFE_API_KEY")
@@ -179,28 +198,31 @@ end
 }
 ```
 
-## 7. Ask Jev to select a model
+## 6. Ask Jev to select a model
 
-This cell makes one paid Jev call when the TypeSafe key is present. It stops after resolution and does not call OpenAI.
+This cell makes one paid Jev call when the TypeSafe key is present. It stops
+after resolution and does not call OpenAI.
 
 ```elixir
-live_router =
-  ReqLLM.Router.new!(JevRouterDemo.Router, %{
-    trie: trie,
-    jev_model: "typesafe:jev-latest",
-    jev_opts: [
-      api_key: typesafe_key,
-      receive_timeout: 30_000,
-      total_timeout: 60_000,
-      max_retries: 1
-    ]
-  })
+live_router = %JevRouterDemo.Router{
+  jev_opts: [
+    api_key: typesafe_key,
+    receive_timeout: 30_000,
+    total_timeout: 60_000,
+    max_retries: 1
+  ]
+}
 
 live_prompt = "Compare two durable job designs and explain the failure trade-offs."
 
 live_route_result =
   if key_ready?.(typesafe_key) do
-    case ReqLLM.Router.resolve(live_router, :chat, live_prompt, []) do
+    {:ok, request} =
+      ReqLLM.Router.Request.new(:generate_text, :chat, live_prompt,
+        routing_context: %{source: :livebook}
+      )
+
+    case ReqLLM.Router.resolve(live_router, request) do
       {:ok, model} -> {:ok, "#{model.provider}:#{model.id}"}
       {:error, reason} -> {:error, reason}
     end
@@ -211,9 +233,10 @@ live_route_result =
 live_route_result
 ```
 
-## 8. Run the full routed request
+## 7. Run the full routed request
 
-This cell makes one Jev call and one OpenAI call when both keys are present. The normal `ReqLLM.generate_text/3` API stays unchanged.
+This cell makes one Jev call and one OpenAI call when both keys are present.
+The normal `ReqLLM.generate_text/3` API stays unchanged.
 
 ```elixir
 live_generation_result =
@@ -223,6 +246,7 @@ live_generation_result =
       live_prompt,
       api_key: openai_key,
       reasoning_effort: :medium,
+      routing_context: %{source: :livebook},
       receive_timeout: 60_000,
       total_timeout: 120_000,
       max_retries: 1
@@ -244,9 +268,10 @@ case live_generation_result do
 end
 ```
 
-## 9. Reasoning effort in the current API
+## 8. Reasoning effort in the current API
 
-Reasoning effort is a generation option. It is not part of the model ID. These are valid direct model inputs:
+Reasoning effort is a generation option. It is not part of the model ID. These
+are valid direct model inputs:
 
 ```elixir
 sol_xhigh = {:openai, "gpt-5.6-sol", reasoning_effort: :xhigh}
@@ -263,9 +288,11 @@ ReqLLM.generate_text(sol_xhigh, "Solve the hard problem", api_key: openai_key)
 ReqLLM.generate_text(luna_medium, "Answer the direct question", api_key: openai_key)
 ```
 
-Strings such as `"openai:sol-xhigh"` and `"openai:luna-medium"` do not encode reasoning settings. Use the full catalog model ID and pass `reasoning_effort` separately.
+Strings such as `"openai:sol-xhigh"` and `"openai:luna-medium"` do not encode
+reasoning settings. Use the full catalog model ID and pass `reasoning_effort`
+separately.
 
-The current router can accept one effort from the caller:
+The caller can set one effort for a routed call:
 
 ```elixir
 # test:skip
@@ -277,15 +304,13 @@ ReqLLM.generate_text(
 )
 ```
 
-That effort applies to whichever model the router selects. The callback cannot select Sol with `:xhigh` and Luna with `:medium` in one dynamic policy. The callback returns a model spec, and `ReqLLM.Router.resolve/4` reduces it to `%LLMDB.Model{}`. It does not return or merge generation options.
-
-This is the useful design pressure from the example: model identity and inference settings are separate values. If the router must select both, the router result needs a small execution selection such as `{model, generation_opts}`, or the generation boundary needs a separate callback that can change options. Putting `xhigh` into an LLMDB model ID would mix request policy with model identity.
+The normalized request exposes that value as
+`request.requirements.reasoning_effort`, so it can influence model selection.
+The callback cannot change the value. It returns only a concrete
+`%LLMDB.Model{}`. Model identity and inference settings remain separate.
 
 ## What to test next
 
 * Replace the example probability limits with limits measured on labeled prompts.
 * Add cost and latency facts to the local policy. Do not ask Jev to remember current prices.
-* Decide whether route-specific generation options belong in this router contract.
 * Keep a fixed Jev model version when routing behavior must be repeatable.
-
-<!-- livebook:{"offset":9689,"stamp":{"token":"XCP.G-7BpxDK676R0lm5u4ytKiSbptQPEL9EVFt4rlJGW8YBYqgRUvBjg2PwH3rFFL11xvWoCNVMSCjfepr9pqiMJ7LsIdOxZFIJXUht3iISS2rCev7pGm24Mm5Fv6YrQDU9qQ4gvlPc7YZJA20HC8YZwH8fxsAFXfJojP5_4SzzHc8dkigD","version":2}} -->

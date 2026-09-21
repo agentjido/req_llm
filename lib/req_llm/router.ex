@@ -1,124 +1,91 @@
 defmodule ReqLLM.Router do
   @moduledoc """
-  A dynamic model input that resolves through application code.
+  A behaviour for application-defined model routers.
 
-  A router module implements `c:resolve/4` and returns any normal ReqLLM model
-  specification. ReqLLM validates that specification and continues the request
-  with the resulting `%LLMDB.Model{}`.
+  A router is any struct whose module implements `c:resolve/2`. ReqLLM gives the
+  callback a normalized `ReqLLM.Router.Request`. The callback must return a
+  concrete `%LLMDB.Model{}`.
 
       defmodule MyApp.ModelRouter do
         @behaviour ReqLLM.Router
 
+        defstruct fast_model: "openai:gpt-4o-mini",
+                  deep_model: "anthropic:claude-sonnet-4-5"
+
         @impl true
-        def resolve(_router, :chat, prompt, _opts) do
-          if String.length(prompt) < 200 do
-            {:ok, "openai:gpt-4o-mini"}
-          else
-            {:ok, "anthropic:claude-sonnet-4-5"}
-          end
+        def resolve(router, %ReqLLM.Router.Request{} = request) do
+          model_spec =
+            if request.requirements.reasoning_effort in [:high, :xhigh] do
+              router.deep_model
+            else
+              router.fast_model
+            end
+
+          ReqLLM.model(model_spec)
         end
       end
 
-      router = ReqLLM.Router.new!(MyApp.ModelRouter)
+      router = %MyApp.ModelRouter{}
       ReqLLM.generate_text(router, "Hello")
 
-  The callback is fully application-defined. It can use local rules, a trie,
-  an evaluation model, or another service. It must return a concrete model
-  specification, not another router.
+  ReqLLM does not provide a routing policy. The callback can use local rules,
+  an evaluation model, or another service.
   """
 
-  @schema Zoi.struct(__MODULE__, %{
-            module: Zoi.atom() |> Zoi.required(),
-            options: Zoi.any() |> Zoi.default([])
-          })
+  alias ReqLLM.Router.Request
 
-  @type operation :: :chat | :object
-  @type t :: unquote(Zoi.type_spec(@schema))
+  @type t :: struct()
 
-  @callback resolve(t(), operation(), term(), keyword()) ::
-              {:ok, ReqLLM.static_model_input()} | {:error, term()}
+  @callback resolve(t(), Request.t()) ::
+              {:ok, LLMDB.Model.t()} | {:error, term()}
 
-  @enforce_keys Zoi.Struct.enforce_keys(@schema)
-  defstruct Zoi.Struct.struct_fields(@schema)
-
-  @doc "Returns the Zoi schema for a router."
-  @spec schema() :: Zoi.schema()
-  def schema, do: @schema
-
-  @doc "Creates a router backed by a module that implements this behaviour."
-  @spec new(module(), term()) :: {:ok, t()} | {:error, term()}
-  def new(module, options \\ []) do
-    with {:ok, router} <- Zoi.parse(@schema, %__MODULE__{module: module, options: options}),
-         :ok <- validate_module(router.module) do
-      {:ok, router}
-    end
+  @doc "Returns true when a struct implements the router behaviour."
+  @spec implementation?(term()) :: boolean()
+  def implementation?(%{__struct__: module}) when is_atom(module) do
+    Code.ensure_loaded?(module) and
+      function_exported?(module, :resolve, 2) and
+      __MODULE__ in behaviours(module)
   end
 
-  @doc "Creates a router and raises when its module is invalid."
-  @spec new!(module(), term()) :: t()
-  def new!(module, options \\ []) do
-    case new(module, options) do
-      {:ok, router} -> router
-      {:error, error} -> raise ArgumentError, format_error(error)
-    end
-  end
+  def implementation?(_value), do: false
 
-  @doc false
-  @spec resolve(t(), operation(), term(), keyword()) ::
-          {:ok, LLMDB.Model.t()} | {:error, term()}
-  def resolve(%__MODULE__{module: module} = router, operation, input, opts)
-      when operation in [:chat, :object] and is_list(opts) do
-    with :ok <- validate_module(module),
-         {:ok, model_spec} <- module.resolve(router, operation, input, opts),
-         :ok <- reject_nested_router(model_spec) do
-      ReqLLM.model(model_spec)
+  @doc "Resolves an application router to a concrete LLMDB model."
+  @spec resolve(t(), Request.t()) :: {:ok, LLMDB.Model.t()} | {:error, term()}
+  def resolve(%{__struct__: module} = router, %Request{} = request) do
+    if implementation?(router) do
+      case module.resolve(router, request) do
+        {:ok, %LLMDB.Model{} = model} -> {:ok, model}
+        {:error, _reason} = error -> error
+        other -> invalid_callback_result(module, other)
+      end
     else
-      {:error, _reason} = error -> error
-      other -> invalid_callback_result(module, other)
+      invalid_router(router)
     end
   end
 
-  defp validate_module(module) when is_atom(module) do
-    if Code.ensure_loaded?(module) and function_exported?(module, :resolve, 4) do
-      :ok
-    else
-      {:error,
-       ReqLLM.Error.validation_error(
-         :invalid_router_module,
-         "router module must export resolve/4",
-         module: module
-       )}
-    end
+  def resolve(router, %Request{}), do: invalid_router(router)
+
+  defp behaviours(module) do
+    module.module_info(:attributes)
+    |> Keyword.get_values(:behaviour)
+    |> List.flatten()
+  rescue
+    _error -> []
   end
 
-  defp validate_module(module) do
+  defp invalid_router(_router) do
     {:error,
      ReqLLM.Error.validation_error(
-       :invalid_router_module,
-       "router module must be an atom",
-       module: module
+       :invalid_router,
+       "router must be a struct whose module implements ReqLLM.Router"
      )}
   end
 
-  defp reject_nested_router(%__MODULE__{}) do
-    {:error,
-     ReqLLM.Error.validation_error(
-       :nested_router,
-       "router callbacks must return a concrete model specification"
-     )}
-  end
-
-  defp reject_nested_router(_model_spec), do: :ok
-
-  defp invalid_callback_result(module, result) do
+  defp invalid_callback_result(module, _result) do
     {:error,
      ReqLLM.Error.validation_error(
        :invalid_router_result,
-       "#{inspect(module)}.resolve/4 must return {:ok, model_spec} or {:error, reason}",
-       result: result
+       "#{inspect(module)}.resolve/2 must return {:ok, %LLMDB.Model{}} or {:error, reason}"
      )}
   end
-
-  defp format_error(error) when is_exception(error), do: Exception.message(error)
-  defp format_error(error), do: inspect(error)
 end

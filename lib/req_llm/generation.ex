@@ -62,6 +62,8 @@ defmodule ReqLLM.Generation do
     * `:total_timeout` - Optional whole-call deadline in milliseconds, including retries
     * `:stream_idle_timeout` - Optional semantic-progress timeout for streaming calls
     * `:provider_options` - Provider-specific options
+    * `:routing_context` - Application data for a `ReqLLM.Router` callback. It
+      must be a map and is not sent to the selected provider
 
   ## Examples
 
@@ -100,19 +102,21 @@ defmodule ReqLLM.Generation do
           |> ReqLLM.Output.Validation.finalize_result(contract, runtime_config)
 
         :object ->
-          generate_output_response(model_spec, messages, contract, opts, runtime_config)
+          generate_output_response(
+            model_spec,
+            messages,
+            contract,
+            opts,
+            runtime_config,
+            :generate_text
+          )
       end
     end
   end
 
-  defp generate_text_response(%ReqLLM.Router{} = router, messages, opts) do
-    with {:ok, model} <- ReqLLM.Router.resolve(router, :chat, messages, opts) do
-      generate_text_response(model, messages, opts)
-    end
-  end
-
-  defp generate_text_response(model_spec, messages, opts) do
-    with {:ok, model} <- ReqLLM.model(model_spec),
+  defp generate_text_response(model_input, messages, opts) do
+    with {:ok, model, messages, opts} <-
+           resolve_model_input(model_input, :generate_text, :chat, messages, opts),
          {:ok, provider_module} <- ReqLLM.ProviderDispatch.get(model, :chat),
          {:ok, opts} <-
            ReqLLM.Provider.Options.normalize_namespaced_provider_options(
@@ -140,14 +144,22 @@ defmodule ReqLLM.Generation do
     end
   end
 
-  defp generate_output_response(model_spec, messages, contract, opts, runtime_config) do
+  defp generate_output_response(
+         model_spec,
+         messages,
+         contract,
+         opts,
+         runtime_config,
+         surface
+       ) do
     generate_object_response(
       model_spec,
       messages,
       {:compiled, contract.compiled_schema},
       opts,
       contract.descriptor,
-      runtime_config
+      runtime_config,
+      surface
     )
   end
 
@@ -229,19 +241,21 @@ defmodule ReqLLM.Generation do
           |> ReqLLM.Output.Validation.attach_stream_result(contract, runtime_config)
 
         :object ->
-          stream_output_response(model_spec, messages, contract, opts, runtime_config)
+          stream_output_response(
+            model_spec,
+            messages,
+            contract,
+            opts,
+            runtime_config,
+            :stream_text
+          )
       end
     end
   end
 
-  defp stream_text_response(%ReqLLM.Router{} = router, messages, opts) do
-    with {:ok, model} <- ReqLLM.Router.resolve(router, :chat, messages, opts) do
-      stream_text_response(model, messages, opts)
-    end
-  end
-
-  defp stream_text_response(model_spec, messages, opts) do
-    with {:ok, model} <- ReqLLM.model(model_spec),
+  defp stream_text_response(model_input, messages, opts) do
+    with {:ok, model, messages, opts} <-
+           resolve_model_input(model_input, :stream_text, :chat, messages, opts),
          {:ok, provider_module} <- ReqLLM.ProviderDispatch.get(model, :chat, stream: true),
          {:ok, opts} <-
            ReqLLM.Provider.Options.normalize_namespaced_provider_options(
@@ -267,14 +281,22 @@ defmodule ReqLLM.Generation do
     end
   end
 
-  defp stream_output_response(model_spec, messages, contract, opts, runtime_config) do
+  defp stream_output_response(
+         model_spec,
+         messages,
+         contract,
+         opts,
+         runtime_config,
+         surface
+       ) do
     stream_object_response(
       model_spec,
       messages,
       {:compiled, contract.compiled_schema},
       opts,
       contract.descriptor,
-      runtime_config
+      runtime_config,
+      surface
     )
   end
 
@@ -342,6 +364,8 @@ defmodule ReqLLM.Generation do
     * `:total_timeout` - Optional whole-call deadline in milliseconds, including retries
     * `:stream_idle_timeout` - Optional semantic-progress timeout for streaming calls
     * `:provider_options` - Provider-specific options
+    * `:routing_context` - Application data for a `ReqLLM.Router` callback. It
+      must be a map and is not sent to the selected provider
     * `:output_validation` - Final validation policy: `:compatible`, `:warn`, or
       `:strict`; omitted calls preserve current V1 behavior
     * `:output_repair` - Optional one-argument local repair callback invoked at
@@ -378,40 +402,23 @@ defmodule ReqLLM.Generation do
         {:schema, object_schema},
         opts,
         ReqLLM.Output.object(object_schema),
-        runtime_config
+        runtime_config,
+        :generate_object
       )
     end
   end
 
   defp generate_object_response(
-         %ReqLLM.Router{} = router,
+         model_input,
          messages,
          schema_source,
          opts,
          descriptor,
-         runtime_config
+         runtime_config,
+         surface
        ) do
-    with {:ok, model} <- ReqLLM.Router.resolve(router, :object, messages, opts) do
-      generate_object_response(
-        model,
-        messages,
-        schema_source,
-        opts,
-        descriptor,
-        runtime_config
-      )
-    end
-  end
-
-  defp generate_object_response(
-         model_spec,
-         messages,
-         schema_source,
-         opts,
-         descriptor,
-         runtime_config
-       ) do
-    with {:ok, model} <- ReqLLM.model(model_spec),
+    with {:ok, model, messages, opts} <-
+           resolve_model_input(model_input, surface, :object, messages, opts),
          {:ok, provider_module} <- ReqLLM.ProviderDispatch.get(model, :object),
          {:ok, opts} <-
            ReqLLM.Provider.Options.normalize_namespaced_provider_options(
@@ -444,6 +451,20 @@ defmodule ReqLLM.Generation do
         end
 
       ReqLLM.Output.Validation.finalize_result(result, contract, runtime_config)
+    end
+  end
+
+  defp resolve_model_input(model_input, surface, operation, messages, opts) do
+    if ReqLLM.Router.implementation?(model_input) do
+      with {:ok, request, request_opts} <-
+             ReqLLM.Router.Request.build(surface, operation, messages, opts),
+           {:ok, model} <- ReqLLM.Router.resolve(model_input, request) do
+        {:ok, model, request.context, request_opts}
+      end
+    else
+      with {:ok, model} <- ReqLLM.model(model_input) do
+        {:ok, model, messages, opts}
+      end
     end
   end
 
@@ -703,40 +724,23 @@ defmodule ReqLLM.Generation do
         {:schema, object_schema},
         opts,
         ReqLLM.Output.object(object_schema),
-        runtime_config
+        runtime_config,
+        :stream_object
       )
     end
   end
 
   defp stream_object_response(
-         %ReqLLM.Router{} = router,
+         model_input,
          messages,
          schema_source,
          opts,
          descriptor,
-         runtime_config
+         runtime_config,
+         surface
        ) do
-    with {:ok, model} <- ReqLLM.Router.resolve(router, :object, messages, opts) do
-      stream_object_response(
-        model,
-        messages,
-        schema_source,
-        opts,
-        descriptor,
-        runtime_config
-      )
-    end
-  end
-
-  defp stream_object_response(
-         model_spec,
-         messages,
-         schema_source,
-         opts,
-         descriptor,
-         runtime_config
-       ) do
-    with {:ok, model} <- ReqLLM.model(model_spec),
+    with {:ok, model, messages, opts} <-
+           resolve_model_input(model_input, surface, :object, messages, opts),
          {:ok, provider_module} <- ReqLLM.ProviderDispatch.get(model, :object, stream: true),
          {:ok, opts} <-
            ReqLLM.Provider.Options.normalize_namespaced_provider_options(

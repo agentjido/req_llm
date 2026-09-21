@@ -111,6 +111,13 @@ defmodule ReqLLM do
           | LLMDB.Model.t()
 
   @type model_input :: static_model_input()
+
+  @typedoc """
+  Model input for generation APIs.
+
+  In addition to a static model input, generation accepts an application struct
+  whose module implements `ReqLLM.Router`.
+  """
   @type generation_model_input :: model_input() | ReqLLM.Router.t()
 
   @typedoc """
