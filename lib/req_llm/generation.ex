@@ -102,21 +102,14 @@ defmodule ReqLLM.Generation do
           |> ReqLLM.Output.Validation.finalize_result(contract, runtime_config)
 
         :object ->
-          generate_output_response(
-            model_spec,
-            messages,
-            contract,
-            opts,
-            runtime_config,
-            :generate_text
-          )
+          generate_output_response(model_spec, messages, contract, opts, runtime_config)
       end
     end
   end
 
   defp generate_text_response(model_input, messages, opts) do
     with {:ok, model, messages, opts} <-
-           resolve_model_input(model_input, :generate_text, :chat, messages, opts),
+           resolve_model_input(model_input, messages, opts),
          {:ok, provider_module} <- ReqLLM.ProviderDispatch.get(model, :chat),
          {:ok, opts} <-
            ReqLLM.Provider.Options.normalize_namespaced_provider_options(
@@ -144,22 +137,14 @@ defmodule ReqLLM.Generation do
     end
   end
 
-  defp generate_output_response(
-         model_spec,
-         messages,
-         contract,
-         opts,
-         runtime_config,
-         surface
-       ) do
+  defp generate_output_response(model_spec, messages, contract, opts, runtime_config) do
     generate_object_response(
       model_spec,
       messages,
       {:compiled, contract.compiled_schema},
       opts,
       contract.descriptor,
-      runtime_config,
-      surface
+      runtime_config
     )
   end
 
@@ -241,21 +226,14 @@ defmodule ReqLLM.Generation do
           |> ReqLLM.Output.Validation.attach_stream_result(contract, runtime_config)
 
         :object ->
-          stream_output_response(
-            model_spec,
-            messages,
-            contract,
-            opts,
-            runtime_config,
-            :stream_text
-          )
+          stream_output_response(model_spec, messages, contract, opts, runtime_config)
       end
     end
   end
 
   defp stream_text_response(model_input, messages, opts) do
     with {:ok, model, messages, opts} <-
-           resolve_model_input(model_input, :stream_text, :chat, messages, opts),
+           resolve_model_input(model_input, messages, opts),
          {:ok, provider_module} <- ReqLLM.ProviderDispatch.get(model, :chat, stream: true),
          {:ok, opts} <-
            ReqLLM.Provider.Options.normalize_namespaced_provider_options(
@@ -281,22 +259,14 @@ defmodule ReqLLM.Generation do
     end
   end
 
-  defp stream_output_response(
-         model_spec,
-         messages,
-         contract,
-         opts,
-         runtime_config,
-         surface
-       ) do
+  defp stream_output_response(model_spec, messages, contract, opts, runtime_config) do
     stream_object_response(
       model_spec,
       messages,
       {:compiled, contract.compiled_schema},
       opts,
       contract.descriptor,
-      runtime_config,
-      surface
+      runtime_config
     )
   end
 
@@ -402,8 +372,7 @@ defmodule ReqLLM.Generation do
         {:schema, object_schema},
         opts,
         ReqLLM.Output.object(object_schema),
-        runtime_config,
-        :generate_object
+        runtime_config
       )
     end
   end
@@ -414,11 +383,10 @@ defmodule ReqLLM.Generation do
          schema_source,
          opts,
          descriptor,
-         runtime_config,
-         surface
+         runtime_config
        ) do
     with {:ok, model, messages, opts} <-
-           resolve_model_input(model_input, surface, :object, messages, opts),
+           resolve_model_input(model_input, messages, opts),
          {:ok, provider_module} <- ReqLLM.ProviderDispatch.get(model, :object),
          {:ok, opts} <-
            ReqLLM.Provider.Options.normalize_namespaced_provider_options(
@@ -454,10 +422,10 @@ defmodule ReqLLM.Generation do
     end
   end
 
-  defp resolve_model_input(model_input, surface, operation, messages, opts) do
+  defp resolve_model_input(model_input, messages, opts) do
     if ReqLLM.Router.implementation?(model_input) do
       with {:ok, request, request_opts} <-
-             ReqLLM.Router.Request.build(surface, operation, messages, opts),
+             ReqLLM.Router.Request.build(messages, opts),
            {:ok, model} <- ReqLLM.Router.resolve(model_input, request) do
         {:ok, model, request.context, request_opts}
       end
@@ -724,8 +692,7 @@ defmodule ReqLLM.Generation do
         {:schema, object_schema},
         opts,
         ReqLLM.Output.object(object_schema),
-        runtime_config,
-        :stream_object
+        runtime_config
       )
     end
   end
@@ -736,11 +703,10 @@ defmodule ReqLLM.Generation do
          schema_source,
          opts,
          descriptor,
-         runtime_config,
-         surface
+         runtime_config
        ) do
     with {:ok, model, messages, opts} <-
-           resolve_model_input(model_input, surface, :object, messages, opts),
+           resolve_model_input(model_input, messages, opts),
          {:ok, provider_module} <- ReqLLM.ProviderDispatch.get(model, :object, stream: true),
          {:ok, opts} <-
            ReqLLM.Provider.Options.normalize_namespaced_provider_options(

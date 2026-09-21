@@ -15,10 +15,9 @@ defmodule ReqLLM.Router do
         @impl true
         def resolve(router, %ReqLLM.Router.Request{} = request) do
           model_spec =
-            if request.requirements.reasoning_effort in [:high, :xhigh] do
-              router.deep_model
-            else
-              router.fast_model
+            case request.routing_context do
+              %{mode: :deep} -> router.deep_model
+              _other -> router.fast_model
             end
 
           ReqLLM.model(model_spec)

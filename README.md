@@ -265,10 +265,9 @@ defmodule MyApp.ModelRouter do
   @impl true
   def resolve(router, %ReqLLM.Router.Request{} = request) do
     model_spec =
-      if request.requirements.reasoning_effort in [:high, :xhigh] do
-        router.deep_model
-      else
-        router.fast_model
+      case request.routing_context do
+        %{mode: :deep} -> router.deep_model
+        _other -> router.fast_model
       end
 
     ReqLLM.model(model_spec)
@@ -279,15 +278,14 @@ router = %MyApp.ModelRouter{}
 
 ReqLLM.generate_text(router, "Hello",
   reasoning_effort: :medium,
-  routing_context: %{request_class: :interactive}
+  routing_context: %{mode: :fast}
 )
 ```
 
-The request contains the API surface, provider operation, normalized context,
-derived requirements, and the explicit `:routing_context` map. It does not
-contain provider credentials or transport options. The callback can use local
-rules, Jev, or another service. ReqLLM does not include a built-in
-model-selection policy.
+The request contains the normalized context and the explicit
+`:routing_context` map. It does not contain generation options, provider
+credentials, or transport options. The callback can use local rules, Jev, or
+another service. ReqLLM does not include a built-in model-selection policy.
 
 ## Features
 

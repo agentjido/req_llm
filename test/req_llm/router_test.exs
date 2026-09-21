@@ -46,14 +46,14 @@ defmodule ReqLLM.RouterTest do
     refute Router.implementation?(%CallbackOnly{})
     refute Router.implementation?("openai:gpt-4o-mini")
 
-    assert {:ok, request} = Request.new(:generate_text, :chat, "Hello")
+    assert {:ok, request} = Request.new("Hello")
 
     assert {:ok, %LLMDB.Model{provider: :openai, id: "gpt-4o-mini"}} =
              Router.resolve(router, request)
   end
 
   test "router callbacks must return a concrete LLMDB model" do
-    assert {:ok, request} = Request.new(:generate_text, :chat, "Hello")
+    assert {:ok, request} = Request.new("Hello")
 
     assert {:error, error} = Router.resolve(%InvalidResultRouter{}, request)
     assert error.tag == :invalid_router_result
@@ -73,7 +73,7 @@ defmodule ReqLLM.RouterTest do
       )
 
     assert {:ok, request} =
-             Request.new(:stream_text, :chat, "Hello",
+             Request.new("Hello",
                system_prompt: "Be brief",
                tools: [tool],
                reasoning_effort: :high,
@@ -86,20 +86,17 @@ defmodule ReqLLM.RouterTest do
     assert request.context.tools == [tool]
     assert request.routing_context == %{tenant: "acme"}
 
-    assert request.requirements == %{
-             streaming?: true,
-             structured_output?: false,
-             tools?: true,
-             reasoning_effort: :high
-           }
+    assert request |> Map.from_struct() |> Map.keys() |> Enum.sort() == [
+             :context,
+             :routing_context
+           ]
 
-    refute Map.has_key?(Map.from_struct(request), :opts)
     refute inspect(request) =~ "secret"
   end
 
   test "routing_context must be a map" do
     assert {:error, error} =
-             Request.new(:generate_text, :chat, "Hello", routing_context: [:not, :a, :map])
+             Request.new("Hello", routing_context: [:not, :a, :map])
 
     assert error.tag == :invalid_routing_context
   end
@@ -130,67 +127,65 @@ defmodule ReqLLM.RouterTest do
 
   test "all generation forms send a normalized request to the router" do
     router = %InspectingRouter{test_pid: self()}
+    routing_context = %{speed: :fast}
 
     assert {:error, :stopped_after_routing} =
              ReqLLM.generate_text(router, "text prompt",
                reasoning_effort: :medium,
-               routing_context: %{speed: :fast}
+               routing_context: routing_context
              )
 
     assert_receive {:resolve,
                     %Request{
-                      surface: :generate_text,
-                      operation: :chat,
                       context: %ReqLLM.Context{},
-                      routing_context: %{speed: :fast},
-                      requirements: %{
-                        streaming?: false,
-                        structured_output?: false,
-                        reasoning_effort: :medium
-                      }
+                      routing_context: ^routing_context
                     }}
 
-    assert {:error, :stopped_after_routing} = ReqLLM.stream_text(router, "stream prompt")
+    assert {:error, :stopped_after_routing} =
+             ReqLLM.stream_text(router, "stream prompt", routing_context: routing_context)
 
     assert_receive {:resolve,
                     %Request{
-                      surface: :stream_text,
-                      operation: :chat,
-                      requirements: %{streaming?: true, structured_output?: false}
+                      context: %ReqLLM.Context{},
+                      routing_context: ^routing_context
                     }}
 
     schema = [name: [type: :string, required: true]]
 
     assert {:error, :stopped_after_routing} =
-             ReqLLM.generate_object(router, "object prompt", schema)
+             ReqLLM.generate_object(router, "object prompt", schema,
+               routing_context: routing_context
+             )
 
     assert_receive {:resolve,
                     %Request{
-                      surface: :generate_object,
-                      operation: :object,
-                      requirements: %{streaming?: false, structured_output?: true}
+                      context: %ReqLLM.Context{},
+                      routing_context: ^routing_context
                     }}
 
     assert {:error, :stopped_after_routing} =
-             ReqLLM.stream_object(router, "stream object prompt", schema)
+             ReqLLM.stream_object(router, "stream object prompt", schema,
+               routing_context: routing_context
+             )
 
     assert_receive {:resolve,
                     %Request{
-                      surface: :stream_object,
-                      operation: :object,
-                      requirements: %{streaming?: true, structured_output?: true}
+                      context: %ReqLLM.Context{},
+                      routing_context: ^routing_context
                     }}
 
     output = ReqLLM.Output.object(schema)
 
     assert {:error, :stopped_after_routing} =
-             ReqLLM.generate_text(router, "output prompt", output: output)
+             ReqLLM.generate_text(router, "output prompt",
+               output: output,
+               routing_context: routing_context
+             )
 
     assert_receive {:resolve,
                     %Request{
-                      surface: :generate_text,
-                      operation: :object,
-                      requirements: %{streaming?: false, structured_output?: true}
+                      context: %ReqLLM.Context{},
+                      routing_context: ^routing_context
                     }}
   end
 end
