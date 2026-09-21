@@ -22,7 +22,7 @@ defmodule ReqLLM.Images do
   @backgrounds [:auto, :transparent, :opaque]
   @moderations [:auto, :low]
   @input_fidelities [:high, :low]
-  @gpt_image_qualities [:auto, :low, :medium, :high]
+  @gpt_image_qualities [:auto, :low, :medium, :high, :xhigh, :max]
   @dall_e_qualities [:standard, :hd]
   @openai_only_options [:background, :moderation, :output_compression, :input_fidelity]
 
@@ -61,7 +61,7 @@ defmodule ReqLLM.Images do
                  quality: [
                    type: {:or, [{:in, @dall_e_qualities ++ @gpt_image_qualities}, :string]},
                    doc:
-                     "Requested quality (provider dependent; gpt-image models take :auto/:low/:medium/:high and translate :standard/:hd with a warning, DALL-E 3 takes :standard/:hd)"
+                     "Requested quality (provider dependent; gpt-image models take :auto/:low/:medium/:high, gpt-image-2.5 also :xhigh/:max, and translate :standard/:hd with a warning; DALL-E 3 takes :standard/:hd)"
                  ],
                  background: [
                    type:
@@ -90,7 +90,7 @@ defmodule ReqLLM.Images do
                         {:in, Enum.map(@input_fidelities, &Atom.to_string/1)}
                       ]},
                    doc:
-                     "How closely image edits preserve the source image: :high or :low. Edits only (requires :source_image); gpt-image-1 and gpt-image-1.5, not gpt-image-1-mini (OpenAI and Azure image models only)"
+                     "How closely image edits preserve the source image: :high or :low. Edits only (requires :source_image); dropped with a warning for gpt-image-1-mini, and gpt-image-2 ignores it (OpenAI and Azure image models only)"
                  ],
                  style: [
                    type: {:or, [{:in, [:vivid, :natural]}, :string]},

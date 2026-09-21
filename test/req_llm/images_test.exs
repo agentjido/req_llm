@@ -100,6 +100,23 @@ defmodule ReqLLM.ImagesTest do
     assert Keyword.get(processed, :quality) == :low
   end
 
+  test "process/4 accepts every gpt-image quality tier as an atom" do
+    model = %LLMDB.Model{id: "gpt-image-2.5-sunburst", provider: :openai}
+
+    for quality <- [:auto, :low, :medium, :high, :xhigh, :max] do
+      {:ok, processed} =
+        ReqLLM.Provider.Options.process(
+          ReqLLM.Providers.OpenAI,
+          :image,
+          model,
+          quality: quality,
+          context: Context.new()
+        )
+
+      assert Keyword.get(processed, :quality) == quality
+    end
+  end
+
   test "process/4 rejects gpt-image parameters outside their allowed values" do
     model = %LLMDB.Model{id: "gpt-image-1.5", provider: :openai}
 

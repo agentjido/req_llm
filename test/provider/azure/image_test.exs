@@ -150,7 +150,7 @@ defmodule ReqLLM.Providers.Azure.ImageTest do
     end
 
     test "passes the gpt-image quality tiers through as strings" do
-      for quality <- [:auto, :low, :medium, :high] do
+      for quality <- [:auto, :low, :medium, :high, :xhigh, :max] do
         request = prepare!(base_url: @traditional_base_url, quality: quality)
 
         assert request.options[:json]["quality"] == Atom.to_string(quality)

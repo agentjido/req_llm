@@ -279,7 +279,7 @@ defmodule ReqLLM.Providers.OpenAIImagesTest do
     end
 
     test "passes the gpt-image quality tiers through untouched" do
-      for quality <- [:auto, :low, :medium, :high] do
+      for quality <- [:auto, :low, :medium, :high, :xhigh, :max] do
         assert {[quality: ^quality], []} =
                  OpenAICompatible.translate_options([quality: quality], "gpt-image-1.5")
       end

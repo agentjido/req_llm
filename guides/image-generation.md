@@ -49,11 +49,11 @@ These options are supported across providers (where the model allows):
 | `aspect_ratio` | string | Aspect ratio, e.g., `"16:9"` or `"1:1"` (on OpenAI and Azure this resolves to the nearest supported `size` — see below) |
 | `output_format` | atom | Image format: `:png`, `:jpeg`, or `:webp` (Azure: `:png` and `:jpeg` only) |
 | `response_format` | atom | Return type: `:binary` (default) or `:url` (URL responses are DALL-E only; on GPT Image `:url` is dropped with a warning, since those models always return bytes) |
-| `quality` | atom/string | Image quality: `:auto`, `:low`, `:medium`, `:high` for GPT Image; `:standard`, `:hd` for DALL-E 3 (translated with a warning on GPT Image) |
+| `quality` | atom/string | Image quality: `:auto`, `:low`, `:medium`, `:high` for GPT Image (`:xhigh`, `:max` on gpt-image-2.5); `:standard`, `:hd` for DALL-E 3 (translated with a warning on GPT Image) |
 | `background` | atom/string | `:auto`, `:transparent`, or `:opaque`; `:transparent` needs `:png` or `:webp` output (GPT Image on OpenAI and Azure only) |
 | `moderation` | atom/string | `:auto` or `:low`; generations only (GPT Image on OpenAI; forwarded on Azure) |
 | `output_compression` | integer | `0`-`100`; only with `output_format: :jpeg` or `:webp`, dropped with a warning for PNG (GPT Image on OpenAI and Azure only) |
-| `input_fidelity` | atom/string | `:high` or `:low`; edits only, not `gpt-image-1-mini` (GPT Image on OpenAI and Azure only) |
+| `input_fidelity` | atom/string | `:high` or `:low`; edits only, dropped on `gpt-image-1-mini`, ignored by `gpt-image-2` (GPT Image on OpenAI and Azure only) |
 | `seed` | integer | Random seed for reproducibility (provider-dependent; **not supported by OpenAI or Azure**) |
 | `negative_prompt` | string | What to avoid in the image (provider-dependent; **not supported by OpenAI or Azure**) |
 | `source_image` | binary | Source image bytes for editing or reference generation (OpenAI and Azure image models only) |
@@ -174,6 +174,8 @@ OpenAI's Images API accepts a **single text prompt** plus optional image edit in
 - `"1024x1536"` (portrait)
 - `"auto"` (default)
 
+gpt-image-2 and later also accept any `"WIDTHxHEIGHT"` with both sides divisible by 16 and a ratio between 1:3 and 3:1, e.g. `"1536x864"`. Pass such a size explicitly; `aspect_ratio` still snaps to the three standard sizes above.
+
 **dall-e-3:**
 
 - `"1024x1024"`
@@ -217,12 +219,12 @@ Every parameter the Images API documents for the GPT Image family is a top-level
 
 | Option | Values | Description |
 |--------|--------|-------------|
-| `quality` | `:auto`, `:low`, `:medium`, `:high` | Generation tier; `:standard`/`:hd` are translated to `:medium`/`:high` with a warning |
+| `quality` | `:auto`, `:low`, `:medium`, `:high`, `:xhigh`, `:max` | Generation tier; `:xhigh` and `:max` are gpt-image-2.5 only and rejected by the API elsewhere; `:standard`/`:hd` are translated to `:medium`/`:high` with a warning |
 | `size` | `"1024x1024"`, `"1536x1024"`, `"1024x1536"`, `"auto"` | See [Size Options](#size-options) |
 | `background` | `:auto`, `:transparent`, `:opaque` | `:transparent` requires `output_format: :png` (default) or `:webp`; JPEG is rejected before the request is sent |
 | `moderation` | `:auto`, `:low` | Generations only; dropped with a warning on edits |
 | `output_compression` | `0`-`100` | Only with `output_format: :jpeg` or `:webp`; dropped with a warning for PNG |
-| `input_fidelity` | `:high`, `:low` | Edits only (needs `source_image`); dropped with a warning on generations and on `gpt-image-1-mini` |
+| `input_fidelity` | `:high`, `:low` | Edits only (needs `source_image`); dropped with a warning on generations and on `gpt-image-1-mini`; `gpt-image-2` accepts it but ignores it |
 
 Every drop is reported through `on_unsupported` (`:warn` by default, `:error` to fail instead). A value the model itself rejects comes back as `ReqLLM.Error.API.Request` carrying the HTTP status and the provider's message in `response_body`, never silently.
 

@@ -220,8 +220,9 @@ defmodule ReqLLM.Images.OpenAICompatible do
   `:moderation`, `:output_compression`, and `:input_fidelity` are dropped for
   DALL-E; `:output_compression` is dropped for `:png` output; `:moderation` is
   dropped for edits (the edits endpoint has no such field); `:input_fidelity` is
-  dropped for generations and for gpt-image-1-mini; `response_format: :url` is
-  dropped for gpt-image, which only ever returns image bytes.
+  dropped for generations and for gpt-image-1-mini (gpt-image-2 accepts and
+  ignores it); `response_format: :url` is dropped for gpt-image, which only ever
+  returns image bytes.
 
   Assumes `validate_options/1` has already run: a malformed `:aspect_ratio` is
   left untouched rather than raising, since it should never get this far.
@@ -324,8 +325,9 @@ defmodule ReqLLM.Images.OpenAICompatible do
     end)
   end
 
-  # gpt-image models take low/medium/high, not the DALL-E standard/hd names the
-  # generic schema also allows; map them the same way the usage decoder does.
+  # gpt-image models take auto/low/medium/high (gpt-image-2.5 adds xhigh/max),
+  # not the DALL-E standard/hd names the generic schema also allows; map those
+  # the same way the usage decoder does.
   defp translate_quality({opts, warnings}, model_id) do
     quality = Keyword.get(opts, :quality)
     mapped = dall_e_quality_to_gpt_image(quality)
@@ -334,7 +336,7 @@ defmodule ReqLLM.Images.OpenAICompatible do
       {Keyword.put(opts, :quality, mapped),
        warnings ++
          [
-           ":quality #{inspect(quality)} translated to #{inspect(mapped)} - gpt-image models take low/medium/high"
+           ":quality #{inspect(quality)} translated to #{inspect(mapped)} - gpt-image models take :low/:medium/:high"
          ]}
     else
       {opts, warnings}
