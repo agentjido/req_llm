@@ -282,6 +282,7 @@ defmodule ReqLLM.Providers.OpenAICodex do
     ResponsesAPI.decode_stream_event(normalized_event, model, state)
   end
 
+  @impl ReqLLM.Provider
   def stream_transport(_model, opts) do
     provider_opts = Keyword.get(opts, :provider_options, [])
     session = Keyword.get(provider_opts, :openai_websocket_session)

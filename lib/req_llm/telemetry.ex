@@ -105,7 +105,7 @@ defmodule ReqLLM.Telemetry do
 
   @type payload_mode :: :none | :raw
   @type lifecycle_mode :: :sync | :stream
-  @type transport :: :req | :finch
+  @type transport :: :req | :finch | :websocket | :in_process
   @type reasoning_contract ::
           :openai_effort
           | :openai_or_thinking
