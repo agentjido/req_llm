@@ -249,6 +249,52 @@ model example.
 Use `generate_object/4` for text models that generate JSON objects; it is not a
 Jev endpoint. Jev does not support text generation or streaming.
 
+## Model routers
+
+`ReqLLM.Router` is a behaviour for application-defined model routers. The
+application router is a struct that implements one callback. ReqLLM gives it a
+normalized request, and the callback returns a concrete `%LLMDB.Model{}`.
+
+```elixir
+defmodule MyApp.ModelRouter do
+  @behaviour ReqLLM.Router
+
+  defstruct fast_model: "openai:gpt-4o-mini",
+            deep_model: "anthropic:claude-sonnet-4-5"
+
+  @impl true
+  def resolve(router, %ReqLLM.Router.Request{} = request) do
+    model_spec =
+      case request.routing_context do
+        %{mode: :deep} -> router.deep_model
+        _other -> router.fast_model
+      end
+
+    ReqLLM.model(model_spec)
+  end
+end
+
+router = %MyApp.ModelRouter{}
+
+ReqLLM.generate_text(router, "Hello",
+  reasoning_effort: :medium,
+  routing_context: %{mode: :fast}
+)
+```
+
+The request has only two fields:
+
+- `context` contains the normalized conversation and tools.
+- `routing_context` contains opaque application data for model selection.
+
+ReqLLM passes `routing_context` unchanged. It does not add the generation
+operation, streaming state, output schema, provider credentials, generation
+options, or transport options. If model selection needs one of these values,
+the application must include it explicitly in `routing_context`.
+
+The callback can use local rules, Jev, or another service. ReqLLM does not
+include a built-in model-selection policy.
+
 ## Features
 
 - **Provider-agnostic model registry**
