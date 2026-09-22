@@ -1353,9 +1353,25 @@ defmodule ReqLLM.StreamServer do
     }
   end
 
+  # The start of a server-side builtin tool call (e.g. a web search) stays
+  # visible to stream consumers as `builtin_tool_started: %{id, name, index}`
+  # so they can say what the model is doing while the call runs; the
+  # timestamp is telemetry-internal and never leaves the server.
   defp public_stream_chunk(%ReqLLM.StreamChunk{type: :meta, metadata: meta} = chunk)
        when is_map(meta) do
+    started = MapAccess.get(meta, :builtin_tool_started)
     metadata = Map.drop(meta, [:builtin_tool_started, "builtin_tool_started"])
+
+    metadata =
+      if is_map(started) do
+        Map.put(metadata, :builtin_tool_started, %{
+          id: MapAccess.get(started, :id),
+          name: MapAccess.get(started, :name),
+          index: MapAccess.get(started, :index)
+        })
+      else
+        metadata
+      end
 
     if map_size(metadata) == 0 do
       nil

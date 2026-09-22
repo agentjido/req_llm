@@ -433,7 +433,7 @@ defmodule ReqLLM.StreamServer.TelemetryTest do
     StreamServer.cancel(server)
   end
 
-  test "emits builtin tool timing without leaking internal timing chunks" do
+  test "emits builtin tool timing without leaking internal timing fields" do
     model = reasoning_model()
     server = start_server(provider_mod: ReqLLM.StreamServer.TelemetryProvider, model: model)
     _task = mock_http_task(server)
@@ -480,6 +480,13 @@ defmodule ReqLLM.StreamServer.TelemetryTest do
 
     [tool_call] = stop_meta.response_payload.message.tool_calls
     assert ReqLLM.ToolCall.builtin?(tool_call)
+
+    assert {:ok, %ReqLLM.StreamChunk{type: :meta, metadata: start_meta}} =
+             StreamServer.next(server)
+
+    assert start_meta == %{
+             builtin_tool_started: %{id: "ws_1", name: "web_search_call", index: 0}
+           }
 
     assert {:ok, %ReqLLM.StreamChunk{type: :tool_call, metadata: tool_meta}} =
              StreamServer.next(server)
@@ -529,12 +536,20 @@ defmodule ReqLLM.StreamServer.TelemetryTest do
 
     StreamServer.http_event(server, :done)
 
-    assert {:ok, _metadata} = StreamServer.await_metadata(server, 500)
+    assert {:ok, metadata} = StreamServer.await_metadata(server, 500)
+    refute Map.has_key?(metadata, "builtin_tool_started")
     assert_receive {:telemetry_event, [:req_llm, :request, :start], _, _}
     assert_receive {:telemetry_event, [:req_llm, :request, :stop], _, stop_meta}
 
     assert stop_meta.builtin_tool_timing == %{
              "ws_1" => %{start_unix_nano: 1_000, end_unix_nano: 2_000}
+           }
+
+    assert {:ok, %ReqLLM.StreamChunk{type: :meta, metadata: start_meta}} =
+             StreamServer.next(server)
+
+    assert start_meta == %{
+             builtin_tool_started: %{id: "ws_1", name: "web_search_call", index: 0}
            }
   end
 
