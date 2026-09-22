@@ -10785,15 +10785,13 @@
       }
     },
     "openrouter:mistralai/mistral-large-2512": {
-      "catalog_status": "present",
-      "declared_operations": [
-        "text"
-      ],
+      "catalog_status": "missing",
+      "declared_operations": [],
       "model": "mistralai/mistral-large-2512",
       "provider": "openrouter",
       "surfaces": {
         "openrouter.chat_completions": {
-          "declaration": "declared",
+          "declaration": "unknown",
           "operation": "text",
           "provider": "openrouter",
           "scenarios": {
@@ -16103,15 +16101,13 @@
       }
     },
     "venice:mistral-small-2603": {
-      "catalog_status": "present",
-      "declared_operations": [
-        "text"
-      ],
+      "catalog_status": "missing",
+      "declared_operations": [],
       "model": "mistral-small-2603",
       "provider": "venice",
       "surfaces": {
         "venice.chat_completions": {
-          "declaration": "declared",
+          "declaration": "unknown",
           "operation": "text",
           "provider": "venice",
           "scenarios": {
@@ -22661,15 +22657,13 @@
       }
     },
     "zenmux:x-ai/grok-4": {
-      "catalog_status": "present",
-      "declared_operations": [
-        "text"
-      ],
+      "catalog_status": "missing",
+      "declared_operations": [],
       "model": "x-ai/grok-4",
       "provider": "zenmux",
       "surfaces": {
         "zenmux.unrecorded_text": {
-          "declaration": "declared",
+          "declaration": "unknown",
           "operation": "text",
           "provider": "zenmux",
           "scenarios": {
@@ -22693,15 +22687,13 @@
       }
     },
     "zenmux:x-ai/grok-4-fast": {
-      "catalog_status": "present",
-      "declared_operations": [
-        "text"
-      ],
+      "catalog_status": "missing",
+      "declared_operations": [],
       "model": "x-ai/grok-4-fast",
       "provider": "zenmux",
       "surfaces": {
         "zenmux.unrecorded_text": {
-          "declaration": "declared",
+          "declaration": "unknown",
           "operation": "text",
           "provider": "zenmux",
           "scenarios": {
@@ -22725,15 +22717,13 @@
       }
     },
     "zenmux:x-ai/grok-4.1-fast": {
-      "catalog_status": "present",
-      "declared_operations": [
-        "text"
-      ],
+      "catalog_status": "missing",
+      "declared_operations": [],
       "model": "x-ai/grok-4.1-fast",
       "provider": "zenmux",
       "surfaces": {
         "zenmux.unrecorded_text": {
-          "declaration": "declared",
+          "declaration": "unknown",
           "operation": "text",
           "provider": "zenmux",
           "scenarios": {
@@ -22757,15 +22747,13 @@
       }
     },
     "zenmux:x-ai/grok-4.1-fast-non-reasoning": {
-      "catalog_status": "present",
-      "declared_operations": [
-        "text"
-      ],
+      "catalog_status": "missing",
+      "declared_operations": [],
       "model": "x-ai/grok-4.1-fast-non-reasoning",
       "provider": "zenmux",
       "surfaces": {
         "zenmux.unrecorded_text": {
-          "declaration": "declared",
+          "declaration": "unknown",
           "operation": "text",
           "provider": "zenmux",
           "scenarios": {
@@ -22885,15 +22873,13 @@
       }
     },
     "zenmux:x-ai/grok-code-fast-1": {
-      "catalog_status": "present",
-      "declared_operations": [
-        "text"
-      ],
+      "catalog_status": "missing",
+      "declared_operations": [],
       "model": "x-ai/grok-code-fast-1",
       "provider": "zenmux",
       "surfaces": {
         "zenmux.unrecorded_text": {
-          "declaration": "declared",
+          "declaration": "unknown",
           "operation": "text",
           "provider": "zenmux",
           "scenarios": {
