@@ -1501,11 +1501,7 @@ defmodule ReqLLM.StreamResponseTest do
           metadata: %{partial?: true, partial_image_index: index}
         }
 
-        StreamChunk.content_part(part, %{
-          partial?: true,
-          partial_image_index: index,
-          stream_only?: true
-        })
+        StreamChunk.content_part(part, %{stream_only?: true})
       end
 
     final = %ReqLLM.Message.ContentPart{
@@ -1523,7 +1519,7 @@ defmodule ReqLLM.StreamResponseTest do
       })
 
     if Keyword.get(opts, :final?, true) do
-      partials ++ [StreamChunk.content_part(final, %{partial?: false}), terminal]
+      partials ++ [StreamChunk.content_part(final), terminal]
     else
       partials
     end

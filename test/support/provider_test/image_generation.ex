@@ -88,20 +88,23 @@ defmodule ReqLLM.ProviderTest.ImageGeneration do
 
               chunks = Enum.to_list(stream_response.stream)
               image_chunks = Enum.filter(chunks, &(&1.type == :content_part))
-              {partials, finals} = Enum.split_with(image_chunks, & &1.metadata[:partial?])
 
-              refute Enum.empty?(partials)
+              {partials, finals} =
+                Enum.split_with(image_chunks, & &1.content_part.metadata[:partial?])
+
+              assert length(partials) <= 2
 
               partials
               |> Enum.with_index()
               |> Enum.each(fn {chunk, index} ->
                 assert chunk.metadata[:stream_only?] == true
-                assert chunk.metadata[:partial_image_index] == index
+                assert chunk.content_part.metadata[:partial_image_index] == index
                 assert chunk.content_part.type == :image
                 assert byte_size(chunk.content_part.data) > 0
               end)
 
               assert [final] = finals
+              refute Map.has_key?(final.metadata, :stream_only?)
               assert final.content_part.type == :image
               assert byte_size(final.content_part.data) > 0
               assert final.content_part.media_type == "image/png"

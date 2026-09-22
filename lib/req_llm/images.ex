@@ -138,7 +138,7 @@ defmodule ReqLLM.Images do
                  partial_images: [
                    type: {:in, 0..3},
                    doc:
-                     "Preview frames to stream before the final image (0-3, provider default when unset; stream_image/3 on OpenAI and Azure gpt-image models only)"
+                     "Maximum preview frames to stream before the final image (0-3, provider default when unset; fast generations may send fewer or none; stream_image/3 on OpenAI and Azure gpt-image models only)"
                  ],
                  provider_options: [
                    type: {:or, [:map, {:list, :any}]},
@@ -231,7 +231,7 @@ defmodule ReqLLM.Images do
     opts = ReqLLM.ModelInput.merge_tuple_defaults(model_spec, :image, opts)
     deadline = ReqLLM.TimeoutBudget.deadline(opts)
 
-    with :ok <- reject_stream_option(opts),
+    with :ok <- reject_stream_options(opts),
          {:ok, model} <- ReqLLM.model(model_spec),
          {:ok, provider_module} <- ReqLLM.provider(model.provider),
          {:ok, opts} <-
@@ -299,11 +299,29 @@ defmodule ReqLLM.Images do
     end
   end
 
-  defp validate_streaming_model(%Model{provider: provider} = model) do
-    model_id = model.provider_model_id || model.id
+  @doc """
+  Streams image generation, raising on error.
 
+  Same as `stream_image/3` but raises the error struct instead of returning
+  `{:error, error}`. Only errors raised before the request starts are surfaced
+  here; failures mid-stream still surface while enumerating or through
+  `ReqLLM.StreamResponse.to_response/1`.
+  """
+  @spec stream_image!(
+          ReqLLM.model_input(),
+          String.t() | list() | ReqLLM.Context.t(),
+          keyword()
+        ) :: ReqLLM.StreamResponse.t() | no_return()
+  def stream_image!(model_spec, prompt_or_messages, opts \\ []) do
+    case stream_image(model_spec, prompt_or_messages, opts) do
+      {:ok, stream_response} -> stream_response
+      {:error, error} -> raise error
+    end
+  end
+
+  defp validate_streaming_model(%Model{provider: provider} = model) do
     if provider in @image_streaming_providers and
-         ReqLLM.Images.OpenAICompatible.image_model?(model_id) do
+         ReqLLM.Images.OpenAICompatible.gpt_image_model?(model) do
       :ok
     else
       {:error,
@@ -314,9 +332,10 @@ defmodule ReqLLM.Images do
     end
   end
 
-  defp stream_opts(opts) do
+  @doc false
+  @spec stream_opts(keyword()) :: keyword()
+  def stream_opts(opts) do
     opts
-    |> Keyword.delete(:context)
     |> Keyword.put(:operation, :image)
     |> Keyword.put(:stream, true)
     |> Keyword.put_new(
@@ -362,14 +381,22 @@ defmodule ReqLLM.Images do
     end
   end
 
-  defp reject_stream_option(opts) do
-    if Keyword.get(opts, :stream) == true do
-      {:error,
-       ReqLLM.Error.Invalid.Parameter.exception(
-         parameter: "stream: use stream_image/3 to stream image generation"
-       )}
-    else
-      :ok
+  defp reject_stream_options(opts) do
+    cond do
+      Keyword.get(opts, :stream) == true ->
+        {:error,
+         ReqLLM.Error.Invalid.Parameter.exception(
+           parameter: "stream: use stream_image/3 to stream image generation"
+         )}
+
+      not is_nil(Keyword.get(opts, :partial_images)) ->
+        {:error,
+         ReqLLM.Error.Invalid.Parameter.exception(
+           parameter: "partial_images: preview frames are only streamed; use stream_image/3"
+         )}
+
+      true ->
+        :ok
     end
   end
 

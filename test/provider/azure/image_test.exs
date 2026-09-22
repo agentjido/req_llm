@@ -629,11 +629,16 @@ defmodule ReqLLM.Providers.Azure.ImageTest do
       assert message =~ "output_format"
     end
 
-    test "rejects edits" do
-      assert {:error, %ReqLLM.Error.Invalid.Parameter{parameter: message}} =
-               attach_image_stream(base_url: @traditional_base_url, source_image: @png_bytes)
+    test "rejects multi-image and edit requests" do
+      assert {:error, %ReqLLM.Error.Invalid.Parameter{parameter: n_message}} =
+               attach_image_stream(base_url: @traditional_base_url, n: 2)
 
-      assert message =~ "streaming image edits are not supported"
+      assert n_message =~ "single image"
+
+      assert {:error, %ReqLLM.Error.Invalid.Parameter{parameter: edit_message}} =
+               attach_image_stream(base_url: @traditional_base_url, source_image: "png-bytes")
+
+      assert edit_message =~ "streaming image edits are not supported"
     end
 
     test "rejects chat models" do
@@ -664,8 +669,13 @@ defmodule ReqLLM.Providers.Azure.ImageTest do
         }
       }
 
-      assert [%ReqLLM.StreamChunk{type: :content_part, metadata: %{partial?: true}}] =
-               Azure.decode_stream_event(event, model)
+      assert [
+               %ReqLLM.StreamChunk{
+                 type: :content_part,
+                 metadata: %{stream_only?: true},
+                 content_part: %ReqLLM.Message.ContentPart{metadata: %{partial?: true}}
+               }
+             ] = Azure.decode_stream_event(event, model)
 
       assert {[%ReqLLM.StreamChunk{type: :content_part}], nil} =
                Azure.decode_stream_event(event, model, nil)

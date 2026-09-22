@@ -57,7 +57,7 @@ defmodule ReqLLM.Images.OpenAICompatibleStreamTest do
       assert [%StreamChunk{type: :content_part} = chunk] =
                OpenAICompatible.decode_stream_event(partial_event(0), @model)
 
-      assert chunk.metadata == %{partial?: true, partial_image_index: 0, stream_only?: true}
+      assert chunk.metadata == %{stream_only?: true}
 
       assert %ContentPart{type: :image, data: @png_bytes, media_type: "image/png"} =
                chunk.content_part
@@ -80,7 +80,7 @@ defmodule ReqLLM.Images.OpenAICompatibleStreamTest do
         )
 
       assert chunk.content_part.media_type == "image/jpeg"
-      assert chunk.metadata.partial_image_index == 1
+      assert chunk.content_part.metadata.partial_image_index == 1
     end
 
     test "ignores non-binary echoed fields" do
@@ -96,7 +96,7 @@ defmodule ReqLLM.Images.OpenAICompatibleStreamTest do
       assert [%StreamChunk{type: :content_part} = image, %StreamChunk{type: :meta} = meta] =
                OpenAICompatible.decode_stream_event(completed_event(), @model)
 
-      assert image.metadata == %{partial?: false}
+      assert image.metadata == %{}
       assert image.content_part.metadata.partial? == false
       assert image.content_part.data == @png_bytes
 
@@ -179,44 +179,75 @@ defmodule ReqLLM.Images.OpenAICompatibleStreamTest do
       assert chunk.metadata == %{terminal?: true, finish_reason: :error, error: "bad request"}
     end
 
+    test "a completed event without image data ends the stream with an error" do
+      event = %{data: Map.delete(completed_event().data, "b64_json")}
+
+      assert [%StreamChunk{type: :meta, metadata: meta}] =
+               OpenAICompatible.decode_stream_event(event, @model)
+
+      assert meta.terminal? == true
+      assert meta.finish_reason == :error
+      assert meta.error =~ "image_generation.completed"
+    end
+
+    test "a completed event with undecodable image data ends the stream with an error" do
+      event = completed_event(%{"b64_json" => "not base64!"})
+
+      assert [%StreamChunk{type: :meta, metadata: %{finish_reason: :error, terminal?: true}}] =
+               OpenAICompatible.decode_stream_event(event, @model)
+    end
+
+    test "a partial event with undecodable image data ends the stream with an error" do
+      assert [%StreamChunk{type: :meta, metadata: meta}] =
+               OpenAICompatible.decode_stream_event(
+                 partial_event(0, %{"b64_json" => "not base64!"}),
+                 @model
+               )
+
+      assert meta.terminal? == true
+      assert meta.error =~ "image_generation.partial_image"
+
+      assert [%StreamChunk{type: :meta, metadata: %{finish_reason: :error}}] =
+               OpenAICompatible.decode_stream_event(
+                 %{data: Map.delete(partial_event(0).data, "b64_json")},
+                 @model
+               )
+    end
+
     test "unknown events decode to nothing" do
       assert OpenAICompatible.decode_stream_event(%{data: %{"type" => "ping"}}, @model) == []
       assert OpenAICompatible.decode_stream_event(%{data: "[DONE]"}, @model) == []
-
-      assert OpenAICompatible.decode_stream_event(
-               %{data: %{"type" => "image_generation.completed"}},
-               @model
-             ) == []
     end
   end
 
-  describe "image_model?/1" do
-    test "matches the gpt-image family by catalog metadata" do
-      assert OpenAICompatible.image_model?(%LLMDB.Model{
+  describe "gpt_image_model?/1" do
+    test "matches the gpt-image family by catalog metadata and id prefix" do
+      assert OpenAICompatible.gpt_image_model?("gpt-image-2.5-flare")
+
+      assert OpenAICompatible.gpt_image_model?(%LLMDB.Model{
+               id: "gpt-image-1.5",
+               provider: :openai
+             })
+
+      assert OpenAICompatible.gpt_image_model?(%LLMDB.Model{
                id: "custom-deploy",
                provider: :azure,
                extra: %{family: "gpt-image"}
              })
-    end
 
-    test "matches image model ids by prefix" do
-      assert OpenAICompatible.image_model?("gpt-image-1.5")
-      assert OpenAICompatible.image_model?("dall-e-3")
-      assert OpenAICompatible.image_model?("chatgpt-image-latest")
-      assert OpenAICompatible.image_model?(%LLMDB.Model{id: "gpt-image-2", provider: :openai})
-
-      assert OpenAICompatible.image_model?(%LLMDB.Model{
+      assert OpenAICompatible.gpt_image_model?(%LLMDB.Model{
                id: "alias",
                provider: :openai,
                provider_model_id: "gpt-image-1"
              })
     end
 
-    test "rejects chat models and nil" do
-      refute OpenAICompatible.image_model?("gpt-4o")
-      refute OpenAICompatible.image_model?("gpt-5.4")
-      refute OpenAICompatible.image_model?(%LLMDB.Model{id: "gpt-4o", provider: :openai})
-      refute OpenAICompatible.image_model?(nil)
+    test "rejects DALL-E, chatgpt-image, chat models, and nil" do
+      refute OpenAICompatible.gpt_image_model?("dall-e-3")
+      refute OpenAICompatible.gpt_image_model?("chatgpt-image-latest")
+      refute OpenAICompatible.gpt_image_model?("gpt-5.4")
+      refute OpenAICompatible.gpt_image_model?(%LLMDB.Model{id: "gpt-4o", provider: :openai})
+      refute OpenAICompatible.gpt_image_model?(nil)
     end
   end
 

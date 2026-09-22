@@ -80,16 +80,20 @@ OpenAI offers several image generation models through the Images API.
 
 ### Supported Models
 
-The GPT Image family provides superior instruction following, text rendering, detailed editing, and real-world knowledge. We recommend `gpt-image-2` for the latest image generation model, or `gpt-image-1-mini` for cost-effective generation when image quality isn't the priority.
+The GPT Image family provides superior instruction following, text rendering, detailed editing, and real-world knowledge. We recommend `gpt-image-2.5-flare` as the default, `gpt-image-2.5-sunburst` when output quality matters more than latency, or `gpt-image-1-mini` for cost-effective generation when image quality isn't the priority.
 
 | Model | Notes |
 |-------|-------|
-| `gpt-image-2` | Latest GPT Image model |
-| `gpt-image-1.5` | State-of-the-art, best overall quality |
+| `gpt-image-2.5-flare` | Latest generation, released September 8, 2026; the fast default at quality comparable to `gpt-image-2` |
+| `gpt-image-2.5-sunburst` | Latest generation, released September 8, 2026; slower and precision-focused for generation and editing |
+| `gpt-image-2` | Previous generation |
+| `gpt-image-1.5` | Previous generation, best overall quality before 2.5 |
 | `gpt-image-1` | Deprecated; scheduled for removal on October 23, 2026 |
 | `gpt-image-1-mini` | Cost-effective option for simpler use cases |
 | `dall-e-3` | Removed from the OpenAI API on May 12, 2026; use GPT Image models instead |
 | `dall-e-2` | Removed from the OpenAI API on May 12, 2026; use GPT Image models instead |
+
+Both `gpt-image-2.5` variants share one price list (twice the `gpt-image-2` token rates), accept `quality: :xhigh` and `:max`, and are also available as dated snapshots (`gpt-image-2.5-flare-2026-09-08`, `gpt-image-2.5-sunburst-2026-09-08`). `ReqLLM.stream_image/3` streams both. The model registry currently carries no pricing metadata for them, so `usage` cost fields are `nil` until it does.
 
 ### Sizes and Aspect Ratios
 
@@ -167,13 +171,21 @@ stream
 end)
 ```
 
-`ReqLLM.StreamResponse.images/1` yields `ReqLLM.Message.ContentPart` structs in arrival order: each preview frame carries `metadata.partial?` `true` and its `partial_image_index`, and the final image carries `partial?` `false`. The chunks also echo the resolved `size`, `quality`, `background`, and `output_format`. Preview frames are opaque even with `background: :transparent`; only the final image has an alpha channel.
+`ReqLLM.StreamResponse.images/1` yields `ReqLLM.Message.ContentPart` structs in arrival order: each preview frame carries `metadata.partial?` `true` and its `partial_image_index`, and the final image carries `partial?` `false`. Part metadata also echoes the resolved `size`, `quality`, `background`, and `output_format`. Preview frames are opaque even with `background: :transparent`; only the final image has an alpha channel.
+
+If you consume `stream_response.stream` directly instead, preview chunks are flagged `metadata.stream_only?` `true` at the `ReqLLM.StreamChunk` level; the `partial?` flag lives on `chunk.content_part.metadata`.
 
 `ReqLLM.StreamResponse.to_response/1` builds a `ReqLLM.Response` holding only the final image, with `usage.image_usage` and token counts populated as for `generate_image/3`. Preview frames never reach the response.
 
+Hosts that render through `ReqLLM.StreamResponse.events/1` receive each preview frame as an `:output_item` event of type `:image` whose metadata carries `partial?: true`, its `partial_image_index`, and `stream_only?: true`; the final image arrives as an `:output_item` with `partial?: false`. Render previews live from those events, and skip items flagged `stream_only?` when persisting outputs.
+
+`ReqLLM.stream_image!/3` raises instead of returning `{:error, error}` for failures before the request starts.
+
 Notes:
 
-- Streaming is generation-only. `source_image` (edits) and `n` greater than 1 return a `ReqLLM.Error.Invalid.Parameter` before any request is made, as do models outside the gpt-image family.
+- Streaming is generation-only. `source_image` (edits) and `n` greater than 1 return a `ReqLLM.Error.Invalid.Parameter` before any request is made, as do models outside the gpt-image family (DALL-E ids included). Conversely, `generate_image/3` rejects `stream: true` and `partial_images` and points at `stream_image/3`.
+- `partial_images` is an upper bound. The API sends fewer preview frames when the picture finishes quickly, and possibly none: at `quality: :low` and `1024x1024`, `gpt-image-2.5-flare` sent no previews and `gpt-image-2.5-sunburst` sent one for a request of two. Treat previews as optional and always handle the final image.
+- A provider event that carries no decodable image data, or an SSE error event, ends the stream with a terminal error: `to_response/1` returns `{:error, message}` rather than waiting for the receive timeout.
 - `receive_timeout` defaults to the image timeout (`:image_receive_timeout`, 120 s) rather than the 30 s streaming default: the first preview can take longer than 30 s at `:high` quality. If you configure `stream_idle_timeout`, set it above the gap between frames (several seconds).
 - Each frame is a fully decoded binary, so collecting a `partial_images: 3` high-quality stream with `Enum.to_list/1` holds four images in memory at once.
 

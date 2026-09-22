@@ -914,19 +914,12 @@ defmodule ReqLLM.Providers.OpenAIImagesTest do
       refute Map.has_key?(body, "response_format")
     end
 
-    test "ImagesAPI.attach_stream/4 rejects edits" do
+    test "ImagesAPI.attach_stream/4 rejects a context without user text" do
       model = %LLMDB.Model{id: "gpt-image-1.5", provider: :openai}
-      context = Context.new([Context.user("A red square")])
+      context = Context.new([Context.system("Be helpful")])
 
-      assert {:error, %ReqLLM.Error.Invalid.Parameter{parameter: message}} =
-               ImagesAPI.attach_stream(
-                 model,
-                 context,
-                 [api_key: "test-key", source_image: @png_bytes],
-                 nil
-               )
-
-      assert message =~ "streaming image edits are not supported"
+      assert {:error, %ReqLLM.Error.Invalid.Parameter{}} =
+               ImagesAPI.attach_stream(model, context, [api_key: "test-key"], nil)
     end
 
     test "OpenAI.attach_stream/4 routes the :image operation to the images driver" do
@@ -949,6 +942,40 @@ defmodule ReqLLM.Providers.OpenAIImagesTest do
       refute Map.has_key?(body, "messages")
     end
 
+    test "OpenAI.attach_stream/4 rejects edits and multi-image requests without a facade" do
+      model = %LLMDB.Model{id: "gpt-image-1.5", provider: :openai}
+      context = Context.new([Context.user("A red square")])
+
+      assert {:error, %ReqLLM.Error.Invalid.Parameter{parameter: n_message}} =
+               OpenAI.attach_stream(model, context, [api_key: "k", operation: :image, n: 2], nil)
+
+      assert n_message =~ "single image"
+
+      assert {:error, %ReqLLM.Error.Invalid.Parameter{parameter: edit_message}} =
+               OpenAI.attach_stream(
+                 model,
+                 context,
+                 [api_key: "k", operation: :image, source_image: "png-bytes"],
+                 nil
+               )
+
+      assert edit_message =~ "streaming image edits are not supported"
+    end
+
+    test "OpenAI.decode_stream_event does not route DALL-E ids to the image decoder" do
+      model = %LLMDB.Model{id: "dall-e-3", provider: :openai}
+
+      event = %{
+        data: %{
+          "type" => "image_generation.partial_image",
+          "b64_json" => Base.encode64(@png_bytes),
+          "partial_image_index" => 0
+        }
+      }
+
+      assert {[], _state} = OpenAI.decode_stream_event(event, model, %{})
+    end
+
     test "OpenAI.decode_stream_event routes image models to the image decoder" do
       model = %LLMDB.Model{id: "gpt-image-1.5", provider: :openai}
 
@@ -960,8 +987,13 @@ defmodule ReqLLM.Providers.OpenAIImagesTest do
         }
       }
 
-      assert [%ReqLLM.StreamChunk{type: :content_part, metadata: %{partial?: true}}] =
-               OpenAI.decode_stream_event(event, model)
+      assert [
+               %ReqLLM.StreamChunk{
+                 type: :content_part,
+                 metadata: %{stream_only?: true},
+                 content_part: %ReqLLM.Message.ContentPart{metadata: %{partial?: true}}
+               }
+             ] = OpenAI.decode_stream_event(event, model)
 
       assert {[%ReqLLM.StreamChunk{type: :content_part}], nil} =
                OpenAI.decode_stream_event(event, model, nil)

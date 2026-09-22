@@ -1266,9 +1266,10 @@ defmodule ReqLLM do
   Supported for OpenAI and Azure gpt-image models. Returns a
   `ReqLLM.StreamResponse` whose stream carries, in order:
 
-    * zero or more `:content_part` chunks with an `:image` part and metadata
-      `partial?: true`, `partial_image_index: n` (up to `:partial_images` of them)
-    * one `:content_part` chunk with the final `:image` part and `partial?: false`
+    * zero or more `:content_part` chunks (up to `:partial_images` of them) whose
+      `:image` part has metadata `partial?: true` and `partial_image_index: n`;
+      the chunk itself is flagged `stream_only?: true`
+    * one `:content_part` chunk whose `:image` part has metadata `partial?: false`
     * a terminal `:meta` chunk with `usage` and `finish_reason: :stop`
 
   `ReqLLM.StreamResponse.images/1` yields just the image parts, and
@@ -1276,13 +1277,21 @@ defmodule ReqLLM do
   the final image. Preview frames are opaque even with `background: :transparent`;
   only the final image carries alpha.
 
-  Options are those of `generate_image/3` plus `:partial_images` (0-3).
-  `:source_image` (edits) and `n > 1` are rejected. `:receive_timeout` defaults
+  Options are those of `generate_image/3` plus `:partial_images` (0-3), an
+  upper bound: fast generations may send fewer preview frames, or none.
+  `:source_image` (edits) and `n > 1` are rejected, and `generate_image/3`
+  rejects `:stream` and `:partial_images` in turn. `:receive_timeout` defaults
   to the image timeout (120 s) rather than the streaming default, since the first
   frame can take longer than 30 s at higher quality tiers.
 
   Errors before the request starts return `{:error, error}`; failures mid-stream
   surface through `to_response/1` as `{:error, _}` or raise while enumerating.
+  A provider event that carries no decodable image data ends the stream with an
+  error rather than waiting for the receive timeout.
+
+  Hosts that consume `ReqLLM.StreamResponse.events/1` see every preview frame as
+  an `:output_item` event carrying `partial?: true` and `stream_only?: true` in
+  its metadata, so they can render previews live and skip them when persisting.
 
   ## Examples
 
@@ -1302,6 +1311,20 @@ defmodule ReqLLM do
           keyword()
         ) :: {:ok, ReqLLM.StreamResponse.t()} | {:error, term()}
   defdelegate stream_image(model_spec, prompt_or_messages, opts \\ []), to: Images
+
+  @doc """
+  Streams image generation, raising on error.
+
+  See `stream_image/3`. Only errors raised before the request starts are
+  surfaced here; failures mid-stream still surface while enumerating or through
+  `ReqLLM.StreamResponse.to_response/1`.
+  """
+  @spec stream_image!(
+          String.t() | {atom(), keyword()} | struct(),
+          String.t() | list() | ReqLLM.Context.t(),
+          keyword()
+        ) :: ReqLLM.StreamResponse.t() | no_return()
+  defdelegate stream_image!(model_spec, prompt_or_messages, opts \\ []), to: Images
 
   # ===========================================================================
   # Video Generation API - Delegated to ReqLLM.Video

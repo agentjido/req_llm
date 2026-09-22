@@ -50,26 +50,24 @@ defmodule ReqLLM.Providers.OpenAI.ImagesAPI do
   Builds the Finch request for a streaming `/images/generations` call.
 
   Expects options already processed by `ReqLLM.Provider.Options.process_stream!/5`
-  for the `:image` operation. Streaming is generation-only: edits (`:source_image`)
-  and `n > 1` are rejected before any request is built.
+  for the `:image` operation and already checked by
+  `ReqLLM.Images.OpenAICompatible.validate_stream_options/1`; the provider's
+  `attach_stream/4` does both before delegating here.
   """
   @impl true
   def attach_stream(model, context, opts, _finch_name) do
-    with :ok <- OpenAICompatible.validate_stream_options(opts),
-         {:ok, prompt} <- OpenAICompatible.prompt_from_context(context) do
+    with {:ok, prompt} <- OpenAICompatible.prompt_from_context(context) do
       base_url = ReqLLM.Provider.Options.effective_base_url(ReqLLM.Providers.OpenAI, model, opts)
 
-      headers =
+      auth_headers =
         ReqLLM.Providers.OpenAI.auth_header_list(
           ReqLLM.Providers.OpenAI.resolve_request_credential!(model, opts)
-        ) ++
-          [{"Content-Type", "application/json"}, {"Accept", "text/event-stream"}] ++
-          ReqLLM.Provider.Utils.extract_custom_headers(opts[:req_http_options])
+        )
+
+      headers = OpenAICompatible.stream_request_headers(auth_headers, opts)
 
       body =
-        opts
-        |> Keyword.merge(prompt: prompt, model: model.provider_model_id || model.id, stream: true)
-        |> OpenAICompatible.build_generation_body()
+        OpenAICompatible.stream_generation_body(opts, prompt, model.provider_model_id || model.id)
 
       {:ok, Finch.build(:post, base_url <> path(), headers, Jason.encode!(body))}
     end

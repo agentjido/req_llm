@@ -733,7 +733,8 @@ defmodule ReqLLM.Providers.OpenAI do
   end
 
   defp attach_image_stream(model, context, opts, finch_name) do
-    with :ok <- ReqLLM.Images.OpenAICompatible.validate_options(opts) do
+    with :ok <- ReqLLM.Images.OpenAICompatible.validate_options(opts),
+         :ok <- ReqLLM.Images.OpenAICompatible.validate_stream_options(opts) do
       processed_opts =
         ReqLLM.Provider.Options.process_stream!(__MODULE__, :image, model, context, opts)
 
@@ -941,7 +942,7 @@ defmodule ReqLLM.Providers.OpenAI do
   @impl ReqLLM.Provider
   def decode_stream_event(event, model, state) do
     cond do
-      ReqLLM.Images.OpenAICompatible.image_model?(model) ->
+      ReqLLM.Images.OpenAICompatible.gpt_image_model?(model) ->
         {ReqLLM.Images.OpenAICompatible.decode_stream_event(event, model), state}
 
       responses_api?(model) ->

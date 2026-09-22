@@ -727,10 +727,8 @@ defmodule ReqLLM.Provider.ChunkAccumulatorTest do
 
       acc =
         ChunkAccumulator.new()
-        |> ChunkAccumulator.push(
-          StreamChunk.content_part(preview, %{partial?: true, stream_only?: true})
-        )
-        |> ChunkAccumulator.push(StreamChunk.content_part(final, %{partial?: false}))
+        |> ChunkAccumulator.push(StreamChunk.content_part(preview, %{stream_only?: true}))
+        |> ChunkAccumulator.push(StreamChunk.content_part(final))
 
       assert ChunkAccumulator.finalize_content_parts(acc) == [final]
       assert %Message{content: [^final]} = ChunkAccumulator.finalize_message(acc)

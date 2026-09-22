@@ -226,6 +226,13 @@ defmodule ReqLLM.ImagesTest do
       assert message =~ "gpt-4o"
     end
 
+    test "rejects DALL-E models" do
+      assert {:error, %ReqLLM.Error.Invalid.Parameter{parameter: message}} =
+               Images.stream_image("openai:dall-e-3", "A red square")
+
+      assert message =~ "dall-e-3"
+    end
+
     test "rejects edits and multi-image requests" do
       assert {:error, %ReqLLM.Error.Invalid.Parameter{parameter: edit_message}} =
                Images.stream_image("openai:gpt-image-1.5", "A red square", source_image: "png")
@@ -251,10 +258,63 @@ defmodule ReqLLM.ImagesTest do
     end
   end
 
+  describe "stream_opts/1" do
+    test "marks the stream as an image operation with the image receive timeout" do
+      opts = Images.stream_opts(partial_images: 2)
+
+      assert opts[:operation] == :image
+      assert opts[:stream] == true
+      assert opts[:partial_images] == 2
+
+      assert opts[:receive_timeout] ==
+               Application.get_env(:req_llm, :image_receive_timeout, 120_000)
+    end
+
+    test "keeps an explicit receive_timeout" do
+      assert Images.stream_opts(receive_timeout: 5_000)[:receive_timeout] == 5_000
+    end
+
+    test "uses the configured image receive timeout" do
+      previous = Application.get_env(:req_llm, :image_receive_timeout)
+      Application.put_env(:req_llm, :image_receive_timeout, 240_000)
+
+      on_exit(fn ->
+        case previous do
+          nil -> Application.delete_env(:req_llm, :image_receive_timeout)
+          value -> Application.put_env(:req_llm, :image_receive_timeout, value)
+        end
+      end)
+
+      assert Images.stream_opts([])[:receive_timeout] == 240_000
+    end
+  end
+
   test "generate_image/3 rejects stream: true" do
     assert {:error, %ReqLLM.Error.Invalid.Parameter{parameter: message}} =
              Images.generate_image("openai:gpt-image-1.5", "A red square", stream: true)
 
     assert message =~ "stream_image/3"
+  end
+
+  test "generate_image/3 rejects partial_images" do
+    assert {:error, %ReqLLM.Error.Invalid.Parameter{parameter: message}} =
+             Images.generate_image("openai:gpt-image-1.5", "A red square", partial_images: 2)
+
+    assert message =~ "partial_images"
+    assert message =~ "stream_image/3"
+  end
+
+  describe "stream_image!/3" do
+    test "raises the validation error" do
+      assert_raise ReqLLM.Error.Invalid.Parameter, ~r/gpt-4o/, fn ->
+        Images.stream_image!("openai:gpt-4o", "A red square")
+      end
+    end
+
+    test "is exposed on the ReqLLM facade" do
+      assert_raise ReqLLM.Error.Invalid.Parameter, ~r/single image/, fn ->
+        ReqLLM.stream_image!("openai:gpt-image-1.5", "A red square", n: 2)
+      end
+    end
   end
 end

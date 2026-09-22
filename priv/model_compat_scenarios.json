@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-04T19:26:34Z",
+  "generated_at": "2026-09-22T11:59:03Z",
   "models": {
     "anthropic:claude-haiku-4-5-20251001": {
       "catalog_status": "present",
@@ -426,6 +426,53 @@
                     "usage"
                   ],
                   "mode": "record",
+                  "status": "pass"
+                }
+              ],
+              "proof": "fixture_replay"
+            }
+          }
+        }
+      }
+    },
+    "azure:gpt-image-2": {
+      "catalog_status": "present",
+      "declared_operations": [
+        "image"
+      ],
+      "model": "gpt-image-2",
+      "provider": "azure",
+      "surfaces": {
+        "azure.image": {
+          "declaration": "declared",
+          "operation": "image",
+          "provider": "azure",
+          "scenarios": {
+            "image_basic": {
+              "observations": [
+                {
+                  "checked_at": "2026-09-22T10:08:29Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "image_basic"
+                  ],
+                  "mode": "replay",
+                  "status": "pass"
+                }
+              ],
+              "proof": "fixture_replay"
+            },
+            "image_streaming": {
+              "observations": [
+                {
+                  "checked_at": "2026-09-22T10:08:29Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "image_streaming"
+                  ],
+                  "mode": "replay",
                   "status": "pass"
                 }
               ],
@@ -6790,6 +6837,46 @@
                   ],
                   "mode": "record",
                   "status": "pass"
+                },
+                {
+                  "checked_at": "2026-09-22T10:08:06Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "image_basic"
+                  ],
+                  "mode": "replay",
+                  "status": "pass"
+                }
+              ],
+              "proof": "fixture_replay"
+            },
+            "image_streaming": {
+              "observations": [
+                {
+                  "checked_at": "2026-09-22T10:08:06Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "image_streaming"
+                  ],
+                  "mode": "replay",
+                  "status": "pass"
+                }
+              ],
+              "proof": "fixture_replay"
+            },
+            "image_transparent_background": {
+              "observations": [
+                {
+                  "checked_at": "2026-09-22T10:08:06Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "image_transparent_background"
+                  ],
+                  "mode": "replay",
+                  "status": "pass"
                 }
               ],
               "proof": "fixture_replay"
@@ -6853,6 +6940,210 @@
                     "image_basic"
                   ],
                   "mode": "record",
+                  "status": "pass"
+                }
+              ],
+              "proof": "fixture_replay"
+            }
+          }
+        }
+      }
+    },
+    "openai:gpt-image-2.5-flare": {
+      "catalog_status": "present",
+      "declared_operations": [
+        "image"
+      ],
+      "model": "gpt-image-2.5-flare",
+      "provider": "openai",
+      "surfaces": {
+        "openai.image": {
+          "declaration": "declared",
+          "operation": "image",
+          "provider": "openai",
+          "scenarios": {
+            "image_basic": {
+              "observations": [
+                {
+                  "checked_at": "2026-09-22T11:56:56Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "image_basic"
+                  ],
+                  "mode": "replay",
+                  "status": "pass"
+                },
+                {
+                  "checked_at": "2026-09-22T11:58:43Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "image_basic"
+                  ],
+                  "mode": "replay",
+                  "status": "pass"
+                }
+              ],
+              "proof": "fixture_replay"
+            },
+            "image_streaming": {
+              "observations": [
+                {
+                  "checked_at": "2026-09-22T11:56:56Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "image_streaming"
+                  ],
+                  "mode": "replay",
+                  "status": "pass"
+                },
+                {
+                  "checked_at": "2026-09-22T11:58:43Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "image_streaming"
+                  ],
+                  "mode": "replay",
+                  "status": "pass"
+                }
+              ],
+              "proof": "fixture_replay"
+            },
+            "image_transparent_background": {
+              "observations": [
+                {
+                  "checked_at": "2026-09-22T11:56:56Z",
+                  "error": "     ** (RuntimeError) Fixture not found: /Users/vasilisspilka/Work/oss/req_llm/test/support/fixtures/openai/gpt_image_2_",
+                  "failure_layer": "assertion",
+                  "fixtures": [
+                    "image_transparent_background"
+                  ],
+                  "mode": "replay",
+                  "status": "fail"
+                },
+                {
+                  "checked_at": "2026-09-22T11:58:01Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "image_transparent_background"
+                  ],
+                  "mode": "record",
+                  "status": "pass"
+                },
+                {
+                  "checked_at": "2026-09-22T11:58:43Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "image_transparent_background"
+                  ],
+                  "mode": "replay",
+                  "status": "pass"
+                }
+              ],
+              "proof": "fixture_replay"
+            }
+          }
+        }
+      }
+    },
+    "openai:gpt-image-2.5-sunburst": {
+      "catalog_status": "present",
+      "declared_operations": [
+        "image"
+      ],
+      "model": "gpt-image-2.5-sunburst",
+      "provider": "openai",
+      "surfaces": {
+        "openai.image": {
+          "declaration": "declared",
+          "operation": "image",
+          "provider": "openai",
+          "scenarios": {
+            "image_basic": {
+              "observations": [
+                {
+                  "checked_at": "2026-09-22T11:57:17Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "image_basic"
+                  ],
+                  "mode": "replay",
+                  "status": "pass"
+                },
+                {
+                  "checked_at": "2026-09-22T11:59:03Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "image_basic"
+                  ],
+                  "mode": "replay",
+                  "status": "pass"
+                }
+              ],
+              "proof": "fixture_replay"
+            },
+            "image_streaming": {
+              "observations": [
+                {
+                  "checked_at": "2026-09-22T11:57:17Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "image_streaming"
+                  ],
+                  "mode": "replay",
+                  "status": "pass"
+                },
+                {
+                  "checked_at": "2026-09-22T11:59:03Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "image_streaming"
+                  ],
+                  "mode": "replay",
+                  "status": "pass"
+                }
+              ],
+              "proof": "fixture_replay"
+            },
+            "image_transparent_background": {
+              "observations": [
+                {
+                  "checked_at": "2026-09-22T11:57:17Z",
+                  "error": "     ** (RuntimeError) Fixture not found: /Users/vasilisspilka/Work/oss/req_llm/test/support/fixtures/openai/gpt_image_2_",
+                  "failure_layer": "assertion",
+                  "fixtures": [
+                    "image_transparent_background"
+                  ],
+                  "mode": "replay",
+                  "status": "fail"
+                },
+                {
+                  "checked_at": "2026-09-22T11:58:21Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "image_transparent_background"
+                  ],
+                  "mode": "record",
+                  "status": "pass"
+                },
+                {
+                  "checked_at": "2026-09-22T11:59:03Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "image_transparent_background"
+                  ],
+                  "mode": "replay",
                   "status": "pass"
                 }
               ],
