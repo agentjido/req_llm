@@ -32,12 +32,22 @@ defmodule ReqLLM.Images.OpenAICompatible do
 
   Generation is a JSON POST to `path(:generation)`; editing is a multipart POST
   to `path(:edit)`, signalled by a non-nil `:source_image`.
+
+  Streaming generation is the same POST with `"stream": true` and an optional
+  `"partial_images"` count, answered as SSE. Each `data:` line is a JSON object:
+  `image_generation.partial_image` events carry a preview frame
+  (`b64_json`, `partial_image_index`, and the echoed `size`, `quality`,
+  `background`, `output_format`), and the terminal `image_generation.completed`
+  event carries the final image plus `usage`. Preview frames are opaque even
+  when `background` is `transparent`. `decode_stream_event/2` turns those
+  events into `ReqLLM.StreamChunk`s.
   """
 
   alias ReqLLM.Context
   alias ReqLLM.Message
   alias ReqLLM.Message.ContentPart
   alias ReqLLM.Response
+  alias ReqLLM.StreamChunk
 
   # The Images API exposes orientation through a fixed set of sizes rather than a
   # free-form aspect ratio, so a requested ratio is resolved to the nearest size
@@ -88,7 +98,9 @@ defmodule ReqLLM.Images.OpenAICompatible do
     :source_image_media_type,
     :mask,
     :mask_media_type,
-    :user
+    :user,
+    :stream,
+    :partial_images
   ]
 
   @plumbing_option_keys [
@@ -157,6 +169,56 @@ defmodule ReqLLM.Images.OpenAICompatible do
       validate_aspect_ratio(opts)
     end
   end
+
+  @doc """
+  Rejects image options the streaming generations endpoint cannot serve.
+
+  Streaming is generation-only (`:source_image` selects the multipart edits
+  endpoint, which has no SSE form) and single-image (`:n` must be 1 when set).
+  """
+  @spec validate_stream_options(keyword()) :: :ok | {:error, Exception.t()}
+  def validate_stream_options(opts) when is_list(opts) do
+    cond do
+      image_edit?(opts) ->
+        {:error,
+         ReqLLM.Error.Invalid.Parameter.exception(
+           parameter:
+             "source_image: streaming image edits are not supported; use generate_image/3"
+         )}
+
+      Keyword.get(opts, :n) not in [nil, 1] ->
+        {:error,
+         ReqLLM.Error.Invalid.Parameter.exception(
+           parameter:
+             "n: streaming generates a single image, got #{inspect(Keyword.get(opts, :n))}"
+         )}
+
+      true ->
+        :ok
+    end
+  end
+
+  @doc """
+  Whether a model id (or `LLMDB.Model`) targets the Images API rather than a
+  chat surface.
+
+  Matches the gpt-image family by catalog metadata or id prefix, plus the
+  DALL-E and chatgpt-image ids.
+  """
+  @spec image_model?(LLMDB.Model.t() | String.t() | nil) :: boolean()
+  def image_model?(%LLMDB.Model{} = model) do
+    family = model.extra |> map_get(:family) |> to_string()
+    family == "gpt-image" or image_model?(model.provider_model_id || model.id)
+  end
+
+  def image_model?(model_id) when is_binary(model_id) do
+    String.starts_with?(model_id, ["gpt-image", "dall-e", "chatgpt-image"])
+  end
+
+  def image_model?(_), do: false
+
+  defp map_get(%{} = map, key), do: Map.get(map, key) || Map.get(map, Atom.to_string(key))
+  defp map_get(_, _key), do: nil
 
   defp validate_background(opts) do
     background = Keyword.get(opts, :background)
@@ -476,12 +538,14 @@ defmodule ReqLLM.Images.OpenAICompatible do
       end
 
     with {:ok, context} <- context_result,
-         {:ok, prompt} <- extract_image_prompt(context) do
+         {:ok, prompt} <- prompt_from_context(context) do
       {:ok, context, prompt}
     end
   end
 
-  defp extract_image_prompt(%Context{messages: messages}) do
+  @doc false
+  @spec prompt_from_context(Context.t()) :: {:ok, String.t()} | {:error, Exception.t()}
+  def prompt_from_context(%Context{messages: messages}) do
     last_user =
       messages
       |> Enum.reverse()
@@ -550,7 +614,16 @@ defmodule ReqLLM.Images.OpenAICompatible do
     |> maybe_put_string("background", opts[:background])
     |> maybe_put_string("moderation", opts[:moderation])
     |> maybe_put_integer("output_compression", opts[:output_compression])
+    |> maybe_put_stream(opts[:stream], opts[:partial_images])
   end
+
+  defp maybe_put_stream(body, true, partial_images) do
+    body
+    |> Map.put("stream", true)
+    |> maybe_put_integer("partial_images", partial_images)
+  end
+
+  defp maybe_put_stream(body, _stream, _partial_images), do: body
 
   @doc """
   Builds the Req `:form_multipart` keyword list for the edits endpoint.
@@ -614,6 +687,92 @@ defmodule ReqLLM.Images.OpenAICompatible do
         {req, err}
     end
   end
+
+  @doc """
+  Decodes one streaming generations SSE event into `ReqLLM.StreamChunk`s.
+
+  `image_generation.partial_image` becomes a `:content_part` chunk carrying the
+  preview frame, flagged `partial?: true` and `stream_only?: true` so it reaches
+  live consumers but not the assembled response. `image_generation.completed`
+  becomes the final `:content_part` (`partial?: false`) followed by a terminal
+  `:meta` chunk with usage and provider metadata, which ends the stream. Error
+  events become a terminal error meta; anything else decodes to nothing.
+  """
+  @spec decode_stream_event(map(), LLMDB.Model.t() | nil) :: [StreamChunk.t()]
+  def decode_stream_event(
+        %{data: %{"type" => "image_generation.partial_image", "b64_json" => b64} = data},
+        _model
+      )
+      when is_binary(b64) do
+    flags = %{partial?: true, partial_image_index: Map.get(data, "partial_image_index")}
+    part = stream_image_part(data, flags)
+    [StreamChunk.content_part(part, Map.put(flags, :stream_only?, true))]
+  end
+
+  def decode_stream_event(
+        %{data: %{"type" => "image_generation.completed", "b64_json" => b64} = data},
+        model
+      )
+      when is_binary(b64) do
+    part = stream_image_part(data, %{partial?: false})
+    size_class = image_size_class(echoed_option(data, "size"), echoed_option(data, "quality"))
+    usage = image_response_usage(data, ReqLLM.Usage.Image.build_generated(1, size_class))
+
+    meta = %{
+      terminal?: true,
+      finish_reason: :stop,
+      usage: usage,
+      provider_meta: %{stream_provider_key(model) => Map.delete(data, "b64_json")}
+    }
+
+    [StreamChunk.content_part(part, %{partial?: false}), StreamChunk.meta(meta)]
+  end
+
+  def decode_stream_event(%{data: %{"type" => "error"} = data}, _model) do
+    [stream_error_meta(stream_error_message(data))]
+  end
+
+  def decode_stream_event(%{data: %{"error" => %{"message" => message}}}, _model)
+      when is_binary(message) do
+    [stream_error_meta(message)]
+  end
+
+  def decode_stream_event(_event, _model), do: []
+
+  defp stream_image_part(data, flags) do
+    echoed =
+      ~w(size quality background output_format)
+      |> Enum.reduce(%{}, fn key, acc ->
+        case Map.get(data, key) do
+          value when is_binary(value) -> Map.put(acc, String.to_atom(key), value)
+          _ -> acc
+        end
+      end)
+
+    %ContentPart{
+      type: :image,
+      data: Base.decode64!(data["b64_json"]),
+      media_type: media_type_for_output_format(Map.get(data, "output_format")),
+      metadata: Map.merge(echoed, flags)
+    }
+  end
+
+  defp stream_error_message(%{"error" => %{"message" => message}}) when is_binary(message),
+    do: message
+
+  defp stream_error_message(%{"message" => message}) when is_binary(message), do: message
+  defp stream_error_message(%{"code" => code}) when is_binary(code), do: code
+  defp stream_error_message(_data), do: "image stream error"
+
+  defp stream_error_meta(message) do
+    StreamChunk.meta(%{terminal?: true, finish_reason: :error, error: message})
+  end
+
+  defp stream_provider_key(%LLMDB.Model{provider: provider})
+       when is_atom(provider) and not is_nil(provider),
+       do: Atom.to_string(provider)
+
+  defp stream_provider_key(_model), do: "openai"
 
   # This codec is shared with providers that reuse the OpenAI Images wire
   # format, so provider_meta is keyed by whichever provider actually served the

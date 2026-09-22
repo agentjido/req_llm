@@ -574,7 +574,9 @@ defmodule ReqLLM.Providers.OpenAIImagesTest do
                  :source_image_media_type,
                  :mask,
                  :mask_media_type,
-                 :user
+                 :user,
+                 :stream,
+                 :partial_images
                ])
     end
 
@@ -870,5 +872,108 @@ defmodule ReqLLM.Providers.OpenAIImagesTest do
 
     assert %Response{} = updated.body
     assert Response.image_data(updated.body) == "edit-bytes"
+  end
+
+  describe "streaming image generation" do
+    @png_bytes <<137, 80, 78, 71, 13, 10, 26, 10>>
+
+    test "ImagesAPI.attach_stream/4 builds a streaming generations request" do
+      model = %LLMDB.Model{id: "gpt-image-1.5", provider: :openai}
+      context = Context.new([Context.user("A red square")])
+
+      {:ok, request} =
+        ImagesAPI.attach_stream(
+          model,
+          context,
+          [
+            api_key: "test-key",
+            stream: true,
+            partial_images: 2,
+            size: "1024x1024",
+            quality: :low,
+            output_format: :png,
+            req_http_options: [headers: [{"x-custom", "yes"}]]
+          ],
+          nil
+        )
+
+      assert %Finch.Request{method: "POST", host: "api.openai.com"} = request
+      assert request.path == "/v1/images/generations"
+      assert header(request, "authorization") == "Bearer test-key"
+      assert header(request, "accept") == "text/event-stream"
+      assert header(request, "content-type") == "application/json"
+      assert header(request, "x-custom") == "yes"
+
+      body = Jason.decode!(request.body)
+      assert body["stream"] == true
+      assert body["partial_images"] == 2
+      assert body["prompt"] == "A red square"
+      assert body["model"] == "gpt-image-1.5"
+      assert body["quality"] == "low"
+      assert body["size"] == "1024x1024"
+      refute Map.has_key?(body, "response_format")
+    end
+
+    test "ImagesAPI.attach_stream/4 rejects edits" do
+      model = %LLMDB.Model{id: "gpt-image-1.5", provider: :openai}
+      context = Context.new([Context.user("A red square")])
+
+      assert {:error, %ReqLLM.Error.Invalid.Parameter{parameter: message}} =
+               ImagesAPI.attach_stream(
+                 model,
+                 context,
+                 [api_key: "test-key", source_image: @png_bytes],
+                 nil
+               )
+
+      assert message =~ "streaming image edits are not supported"
+    end
+
+    test "OpenAI.attach_stream/4 routes the :image operation to the images driver" do
+      model = %LLMDB.Model{id: "gpt-image-1.5", provider: :openai}
+      context = Context.new([Context.user("A red square")])
+
+      {:ok, request} =
+        OpenAI.attach_stream(
+          model,
+          context,
+          [api_key: "test-key", operation: :image, partial_images: 2, quality: :low],
+          nil
+        )
+
+      assert request.path == "/v1/images/generations"
+      body = Jason.decode!(request.body)
+      assert body["stream"] == true
+      assert body["partial_images"] == 2
+      assert body["prompt"] == "A red square"
+      refute Map.has_key?(body, "messages")
+    end
+
+    test "OpenAI.decode_stream_event routes image models to the image decoder" do
+      model = %LLMDB.Model{id: "gpt-image-1.5", provider: :openai}
+
+      event = %{
+        data: %{
+          "type" => "image_generation.partial_image",
+          "b64_json" => Base.encode64(@png_bytes),
+          "partial_image_index" => 0
+        }
+      }
+
+      assert [%ReqLLM.StreamChunk{type: :content_part, metadata: %{partial?: true}}] =
+               OpenAI.decode_stream_event(event, model)
+
+      assert {[%ReqLLM.StreamChunk{type: :content_part}], nil} =
+               OpenAI.decode_stream_event(event, model, nil)
+
+      chat_model = %LLMDB.Model{id: "gpt-4o", provider: :openai}
+      assert [] = OpenAI.decode_stream_event(event, chat_model)
+    end
+  end
+
+  defp header(%Finch.Request{headers: headers}, name) do
+    Enum.find_value(headers, fn {key, value} ->
+      if String.downcase(key) == name, do: value
+    end)
   end
 end

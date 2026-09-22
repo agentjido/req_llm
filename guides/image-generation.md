@@ -145,12 +145,44 @@ For inpainting-style edits, include `mask`:
 )
 ```
 
+### Streaming
+
+`ReqLLM.stream_image/3` streams a generation as Server-Sent Events, so a chat turn can show preview frames while the final picture renders. Pass `partial_images` (0-3) to ask for previews:
+
+```elixir
+{:ok, stream} = ReqLLM.stream_image(
+  "openai:gpt-image-1.5",
+  "A watercolor painting of a lighthouse",
+  partial_images: 2,
+  quality: :medium
+)
+
+stream
+|> ReqLLM.StreamResponse.images()
+|> Enum.each(fn part ->
+  case part.metadata do
+    %{partial?: true, partial_image_index: index} -> show_preview(index, part.data)
+    %{partial?: false} -> show_final(part.data)
+  end
+end)
+```
+
+`ReqLLM.StreamResponse.images/1` yields `ReqLLM.Message.ContentPart` structs in arrival order: each preview frame carries `metadata.partial?` `true` and its `partial_image_index`, and the final image carries `partial?` `false`. The chunks also echo the resolved `size`, `quality`, `background`, and `output_format`. Preview frames are opaque even with `background: :transparent`; only the final image has an alpha channel.
+
+`ReqLLM.StreamResponse.to_response/1` builds a `ReqLLM.Response` holding only the final image, with `usage.image_usage` and token counts populated as for `generate_image/3`. Preview frames never reach the response.
+
+Notes:
+
+- Streaming is generation-only. `source_image` (edits) and `n` greater than 1 return a `ReqLLM.Error.Invalid.Parameter` before any request is made, as do models outside the gpt-image family.
+- `receive_timeout` defaults to the image timeout (`:image_receive_timeout`, 120 s) rather than the 30 s streaming default: the first preview can take longer than 30 s at `:high` quality. If you configure `stream_idle_timeout`, set it above the gap between frames (several seconds).
+- Each frame is a fully decoded binary, so collecting a `partial_images: 3` high-quality stream with `Enum.to_list/1` holds four images in memory at once.
+
 ### Current Limitations
 
 The following OpenAI features are not yet exposed by ReqLLM:
 
 - **Responses API image generation tool** (generates images inline during chat)
-- **Streaming image generation/editing** via the OpenAI Images API
+- **Streaming image edits**; only generations stream
 
 ### Prompt Format
 
@@ -303,6 +335,7 @@ Notes:
 - Only `gpt-image-*` model ids are accepted. Chat models (e.g. `azure:gpt-4o`) are rejected locally with a `ReqLLM.Error.Invalid.Parameter` before any HTTP call, rather than failing at the API.
 - The `deployment` name is free-form and affects only the URL/body identifier. Option handling is keyed off the catalog model id, so a deployment named after a different model does not change which options are sent.
 - Responses carry provider metadata under `response.provider_meta["azure"]`, and `response.usage.image_usage` is populated the same way as for OpenAI.
+- [Streaming](#streaming) works through `ReqLLM.stream_image/3` with the same `base_url` and `deployment` options, on both the traditional (`/deployments/<deployment>/images/generations?api-version=...`) and v1 GA endpoint formats; Foundry endpoints are rejected as for non-streaming. Image SSE needs api-version `2025-04-01-preview` (the default) or later on traditional URLs. Streamed responses carry `provider_meta["azure"]` from the completion event.
 
 See the [Azure guide](azure.md) for authentication and deployment configuration.
 

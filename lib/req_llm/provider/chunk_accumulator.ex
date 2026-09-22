@@ -147,6 +147,9 @@ defmodule ReqLLM.Provider.ChunkAccumulator do
     }
   end
 
+  def push(%__MODULE__{} = acc, %StreamChunk{type: :content_part, metadata: %{stream_only?: true}}),
+      do: acc
+
   def push(
         %__MODULE__{} = acc,
         %StreamChunk{type: :content_part, content_part: %ContentPart{} = content_part}

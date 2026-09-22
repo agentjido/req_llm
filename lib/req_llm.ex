@@ -1260,6 +1260,49 @@ defmodule ReqLLM do
     end
   end
 
+  @doc """
+  Streams image generation, yielding preview frames before the final image.
+
+  Supported for OpenAI and Azure gpt-image models. Returns a
+  `ReqLLM.StreamResponse` whose stream carries, in order:
+
+    * zero or more `:content_part` chunks with an `:image` part and metadata
+      `partial?: true`, `partial_image_index: n` (up to `:partial_images` of them)
+    * one `:content_part` chunk with the final `:image` part and `partial?: false`
+    * a terminal `:meta` chunk with `usage` and `finish_reason: :stop`
+
+  `ReqLLM.StreamResponse.images/1` yields just the image parts, and
+  `ReqLLM.StreamResponse.to_response/1` builds a `ReqLLM.Response` holding only
+  the final image. Preview frames are opaque even with `background: :transparent`;
+  only the final image carries alpha.
+
+  Options are those of `generate_image/3` plus `:partial_images` (0-3).
+  `:source_image` (edits) and `n > 1` are rejected. `:receive_timeout` defaults
+  to the image timeout (120 s) rather than the streaming default, since the first
+  frame can take longer than 30 s at higher quality tiers.
+
+  Errors before the request starts return `{:error, error}`; failures mid-stream
+  surface through `to_response/1` as `{:error, _}` or raise while enumerating.
+
+  ## Examples
+
+      {:ok, stream} = ReqLLM.stream_image("openai:gpt-image-1.5", "A red fox", partial_images: 2)
+
+      stream
+      |> ReqLLM.StreamResponse.images()
+      |> Enum.each(fn part -> IO.inspect(part.metadata) end)
+
+      {:ok, response} = ReqLLM.StreamResponse.to_response(stream)
+      [final] = ReqLLM.Response.images(response)
+
+  """
+  @spec stream_image(
+          String.t() | {atom(), keyword()} | struct(),
+          String.t() | list() | ReqLLM.Context.t(),
+          keyword()
+        ) :: {:ok, ReqLLM.StreamResponse.t()} | {:error, term()}
+  defdelegate stream_image(model_spec, prompt_or_messages, opts \\ []), to: Images
+
   # ===========================================================================
   # Video Generation API - Delegated to ReqLLM.Video
   # ===========================================================================

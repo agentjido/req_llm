@@ -1418,4 +1418,114 @@ defmodule ReqLLM.StreamResponseTest do
       end
     end
   end
+
+  describe "images/1 and streamed image responses" do
+    test "images/1 yields partial frames then the final image" do
+      stream_response =
+        create_stream_response(stream: image_stream_chunks(2), model: image_model())
+
+      parts = StreamResponse.images(stream_response) |> Enum.to_list()
+
+      assert length(parts) == 3
+      assert Enum.all?(parts, &(&1.type == :image))
+      assert Enum.map(parts, & &1.metadata.partial?) == [true, true, false]
+      assert Enum.map(parts, &Map.get(&1.metadata, :partial_image_index)) == [0, 1, nil]
+    end
+
+    test "images/1 ignores text and meta chunks" do
+      chunks = [StreamChunk.text("hi"), StreamChunk.meta(%{usage: %{}})] ++ image_stream_chunks(0)
+      stream_response = create_stream_response(stream: chunks, model: image_model())
+
+      assert [%ReqLLM.Message.ContentPart{type: :image, data: "final"}] =
+               StreamResponse.images(stream_response) |> Enum.to_list()
+    end
+
+    test "to_response/1 keeps only the final image and carries image usage" do
+      usage = %{
+        input_tokens: 20,
+        output_tokens: 100,
+        total_tokens: 120,
+        image_usage: %{generated: %{count: 1, size_class: "1024x1024:low"}}
+      }
+
+      stream_response =
+        create_stream_response(
+          stream: image_stream_chunks(2),
+          metadata_handle: create_metadata_handle(%{usage: usage, finish_reason: :stop}),
+          model: image_model()
+        )
+
+      {:ok, response} = StreamResponse.to_response(stream_response)
+
+      assert [%ReqLLM.Message.ContentPart{type: :image, data: "final"} = final] =
+               Response.images(response)
+
+      assert final.metadata.partial? == false
+      assert response.usage.image_usage == %{generated: %{count: 1, size_class: "1024x1024:low"}}
+      assert response.usage.input_tokens == 20
+      assert response.finish_reason == :stop
+    end
+
+    test "to_response/1 surfaces a stream that ended in an error" do
+      chunks =
+        image_stream_chunks(1, final?: false) ++
+          [
+            StreamChunk.meta(%{
+              terminal?: true,
+              finish_reason: :error,
+              error: "moderation blocked"
+            })
+          ]
+
+      stream_response =
+        create_stream_response(
+          stream: chunks,
+          metadata_handle:
+            create_metadata_handle(%{finish_reason: :error, error: "moderation blocked"}),
+          model: image_model()
+        )
+
+      assert {:error, "moderation blocked"} = StreamResponse.to_response(stream_response)
+    end
+  end
+
+  defp image_model, do: %LLMDB.Model{provider: :openai, id: "gpt-image-1.5"}
+
+  defp image_stream_chunks(partial_count, opts \\ []) do
+    partials =
+      for index <- 0..(partial_count - 1)//1 do
+        part = %ReqLLM.Message.ContentPart{
+          type: :image,
+          data: "preview-#{index}",
+          media_type: "image/png",
+          metadata: %{partial?: true, partial_image_index: index}
+        }
+
+        StreamChunk.content_part(part, %{
+          partial?: true,
+          partial_image_index: index,
+          stream_only?: true
+        })
+      end
+
+    final = %ReqLLM.Message.ContentPart{
+      type: :image,
+      data: "final",
+      media_type: "image/png",
+      metadata: %{partial?: false}
+    }
+
+    terminal =
+      StreamChunk.meta(%{
+        terminal?: true,
+        finish_reason: :stop,
+        usage: %{image_usage: %{generated: %{count: 1, size_class: "1024x1024:low"}}}
+      })
+
+    if Keyword.get(opts, :final?, true) do
+      partials ++ [StreamChunk.content_part(final, %{partial?: false}), terminal]
+    else
+      partials
+    end
+  end
 end

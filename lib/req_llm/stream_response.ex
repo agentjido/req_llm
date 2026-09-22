@@ -141,6 +141,41 @@ defmodule ReqLLM.StreamResponse do
   end
 
   @doc """
+  Extract generated images from the stream response.
+
+  Returns a lazy stream of `ReqLLM.Message.ContentPart` structs of type `:image`
+  or `:image_url`, in arrival order. For `ReqLLM.stream_image/3` that is every
+  preview frame (`metadata.partial?` true, with `partial_image_index`) followed by
+  the final image (`metadata.partial?` false). Only the final image reaches
+  `to_response/1`.
+
+  Consumes the underlying chunk stream like `tokens/1`, so use one or the other.
+
+  ## Examples
+
+      {:ok, stream_response} = ReqLLM.stream_image("openai:gpt-image-1.5", "A red fox", partial_images: 2)
+
+      stream_response
+      |> ReqLLM.StreamResponse.images()
+      |> Enum.each(fn part -> render_preview(part.data, part.metadata) end)
+
+  """
+  @spec images(t()) :: Enumerable.t()
+  def images(%__MODULE__{stream: stream}) do
+    stream
+    |> Stream.filter(&image_chunk?/1)
+    |> Stream.map(& &1.content_part)
+  end
+
+  defp image_chunk?(%ReqLLM.StreamChunk{
+         type: :content_part,
+         content_part: %ReqLLM.Message.ContentPart{type: type}
+       }),
+       do: type in [:image, :image_url]
+
+  defp image_chunk?(_chunk), do: false
+
+  @doc """
   Project the one consumable chunk stream into canonical tagged events.
 
   This is a lazy view over `stream_response.stream`; it does not create or

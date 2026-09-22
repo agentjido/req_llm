@@ -207,4 +207,54 @@ defmodule ReqLLM.ImagesTest do
     String.starts_with?(model_spec, "google:") and
       (String.contains?(model_spec, "image") or String.contains?(model_spec, "imagen"))
   end
+
+  describe "stream_image/3" do
+    test "rejects providers without image streaming" do
+      assert {:error, %ReqLLM.Error.Invalid.Parameter{parameter: message}} =
+               Images.stream_image(%{provider: :xai, id: "grok-2-image"}, "A red square")
+
+      assert message =~ "image streaming is only supported for OpenAI and Azure"
+
+      assert {:error, %ReqLLM.Error.Invalid.Parameter{}} =
+               Images.stream_image("google:gemini-2.5-flash-image", "A red square")
+    end
+
+    test "rejects OpenAI models outside the image families" do
+      assert {:error, %ReqLLM.Error.Invalid.Parameter{parameter: message}} =
+               Images.stream_image("openai:gpt-4o", "A red square")
+
+      assert message =~ "gpt-4o"
+    end
+
+    test "rejects edits and multi-image requests" do
+      assert {:error, %ReqLLM.Error.Invalid.Parameter{parameter: edit_message}} =
+               Images.stream_image("openai:gpt-image-1.5", "A red square", source_image: "png")
+
+      assert edit_message =~ "streaming image edits are not supported"
+
+      assert {:error, %ReqLLM.Error.Invalid.Parameter{parameter: n_message}} =
+               Images.stream_image("openai:gpt-image-1.5", "A red square", n: 2)
+
+      assert n_message =~ "single image"
+    end
+
+    test "rejects a context without user text" do
+      context = Context.new([Context.system("You are helpful.")])
+
+      assert {:error, %ReqLLM.Error.Invalid.Parameter{}} =
+               Images.stream_image("openai:gpt-image-1.5", context, api_key: "test-key")
+    end
+
+    test "is exposed on the ReqLLM facade" do
+      assert {:error, %ReqLLM.Error.Invalid.Parameter{}} =
+               ReqLLM.stream_image("openai:gpt-4o", "A red square")
+    end
+  end
+
+  test "generate_image/3 rejects stream: true" do
+    assert {:error, %ReqLLM.Error.Invalid.Parameter{parameter: message}} =
+             Images.generate_image("openai:gpt-image-1.5", "A red square", stream: true)
+
+    assert message =~ "stream_image/3"
+  end
 end

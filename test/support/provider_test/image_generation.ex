@@ -66,6 +66,63 @@ defmodule ReqLLM.ProviderTest.ImageGeneration do
               end
             end)
           end
+
+          if provider in [:openai, :azure] do
+            @tag category: :image
+            @tag ReqLLM.Test.CompatibilityScenario.tag!(:image_streaming)
+            @tag model: model_spec |> String.split(":", parts: 2) |> List.last()
+            test "streaming image generation with partial frames" do
+              {:ok, stream_response} =
+                ReqLLM.stream_image(
+                  @model_spec,
+                  ReqLLM.ProviderTest.ImageGeneration.prompt(@provider),
+                  fixture_opts(
+                    @provider,
+                    ReqLLM.Test.CompatibilityScenario.fixture!(:image_streaming),
+                    ReqLLM.ProviderTest.ImageGeneration.provider_opts(@provider) ++
+                      [partial_images: 2, quality: :low, size: "1024x1024"]
+                  )
+                )
+
+              assert %ReqLLM.StreamResponse{} = stream_response
+
+              chunks = Enum.to_list(stream_response.stream)
+              image_chunks = Enum.filter(chunks, &(&1.type == :content_part))
+              {partials, finals} = Enum.split_with(image_chunks, & &1.metadata[:partial?])
+
+              refute Enum.empty?(partials)
+
+              partials
+              |> Enum.with_index()
+              |> Enum.each(fn {chunk, index} ->
+                assert chunk.metadata[:stream_only?] == true
+                assert chunk.metadata[:partial_image_index] == index
+                assert chunk.content_part.type == :image
+                assert byte_size(chunk.content_part.data) > 0
+              end)
+
+              assert [final] = finals
+              assert final.content_part.type == :image
+              assert byte_size(final.content_part.data) > 0
+              assert final.content_part.media_type == "image/png"
+
+              assert [terminal] =
+                       Enum.filter(chunks, &(&1.type == :meta and &1.metadata[:terminal?]))
+
+              assert terminal.metadata[:finish_reason] == :stop
+              assert terminal.metadata[:usage][:image_usage][:generated][:count] == 1
+
+              {:ok, response} =
+                ReqLLM.StreamResponse.to_response(%{stream_response | stream: chunks})
+
+              assert [%ReqLLM.Message.ContentPart{type: :image} = image] =
+                       ReqLLM.Response.images(response)
+
+              assert image.metadata[:partial?] == false
+              assert response.usage[:image_usage][:generated][:count] == 1
+              assert response.finish_reason == :stop
+            end
+          end
         end
       end
     end
