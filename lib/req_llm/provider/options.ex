@@ -278,6 +278,7 @@ defmodule ReqLLM.Provider.Options do
 
   # Internal keys that bypass validation (framework concerns)
   @internal_keys [
+    :pricing_context,
     :api_key,
     :access_token,
     :on_finch_request,

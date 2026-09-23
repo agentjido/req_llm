@@ -162,6 +162,19 @@ defmodule ReqLLM.Usage do
     end
   end
 
+  defp merge_value(:usage_reported, existing, incoming) do
+    Map.merge(existing, incoming, fn _key, old, new -> old or new end)
+  end
+
+  defp merge_value(:billing_usage_complete, existing, incoming) do
+    existing and incoming
+  end
+
+  defp merge_value(:cache_write_tokens_by_ttl, existing, incoming)
+       when is_map(existing) and is_map(incoming) do
+    Map.merge(existing, incoming, fn _key, old, new -> max(old, new) end)
+  end
+
   defp merge_value(_key, existing, incoming) do
     if is_number(existing) and is_number(incoming), do: max(existing, incoming), else: incoming
   end

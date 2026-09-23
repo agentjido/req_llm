@@ -31,6 +31,7 @@ response.usage
 #     total_tokens: 20,
 #
 #     # Cost summary (USD)
+#     pricing: %{status: :priced, currency: "USD", total: 0.0006},
 #     input_cost: 0.00024,
 #     output_cost: 0.00036,
 #     total_cost: 0.0006,
@@ -44,6 +45,57 @@ response.usage
 #     }
 #   }
 ```
+
+## Conditional tariffs and unknown pricing
+
+Pass confirmed billing facts through `pricing_context` for conditional tariffs:
+
+```elixir
+{:ok, response} = ReqLLM.generate_text("openai:gpt-6-sol", prompt,
+  pricing_context: %{
+    api: "responses",
+    service_tier: "default",
+    regional_processing: false
+  }
+)
+
+response.usage.pricing
+#=> %{status: :priced, currency: "USD", total: 0.012345}
+```
+
+The same option works with `stream_text/3`; read the final value with
+`ReqLLM.StreamResponse.usage/1`. The context is local billing input. ReqLLM
+derives the prompt size from returned usage, including cached prompt tokens,
+then uses LLMDB's component selector. It charges uncached input, cache reads,
+cache writes, output, and storage through separate meters. A selected context
+tier applies to the whole request when LLMDB marks it `full_request`.
+
+Supply the actual billed service tier after any provider fallback. `"auto"`
+does not confirm one. Time-dependent tariffs require an explicit
+`pricing_period: "peak"` or `"off_peak"` chosen by the caller from provider
+billing evidence; ReqLLM does not choose a period from a clock or response
+timestamp. For a current Coding Plan credit tariff, also supply
+`billing_product: "coding_plan"` and `plan_generation: "token_credits"`.
+Cache writes with mixed durations use reported
+`cache_write_tokens_by_ttl: %{"5m" => count, "1h" => count}` usage; if the
+durations cannot be reconciled with the total, pricing stays unknown.
+
+When the tariff or usage is incomplete, `usage.pricing` is
+`%{status: :unknown}` and ReqLLM omits `total_cost`, `input_cost`,
+`output_cost`, `reasoning_cost`, and `cost`. This includes missing token counts,
+unresolved conditions, unsupported modifiers, incomplete bands, missing
+cache/storage rates, and unpriced gateway usage. A zero charge is reported only
+when a complete selected tariff and usage establish zero billable quantity.
+If a provider returns no usage payload at all, `response.usage` may remain
+`nil`; that also means the price is unknown.
+The legacy flat `cost` map remains a model metadata summary; it does not select
+a conditional period or supply a missing rate.
+
+For non-USD tariffs, `usage.pricing` carries the denomination and amount. For
+example, Coding Plan returns `currency: "credits"` and never populates the USD
+`*_cost` fields. Existing clients reading `total_cost` continue to receive a
+number for complete USD flat tariffs. Clients should check
+`usage.pricing.status` before treating a missing `total_cost` as free usage.
 
 ## Token Usage
 
@@ -234,7 +286,7 @@ ReqLLM does not currently guarantee support for every provider billing surface. 
 
 - realtime audio/text billing is not modeled yet
 - video generation billing is not modeled yet
-- account-specific discounts, credits, taxes, and regional pricing are outside the public contract
+- account-specific discounts, taxes, and prices beyond an explicitly modeled tariff are outside the public contract
 
 ## Telemetry
 

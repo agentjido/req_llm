@@ -12,11 +12,13 @@ ReqLLM will:
 - calculate best-effort cost data from model metadata, pricing components, and provider response metadata
 - expose that data consistently through `response.usage`, telemetry events, and streaming metadata
 - let you override or patch pricing metadata locally when your deployment differs from the shared registry
+- report `usage.pricing.status` as `:unknown` when selected pricing or usage is incomplete, without emitting a numeric USD cost
 
 ReqLLM does not guarantee:
 
 - exact invoice parity with provider billing
-- enterprise contract pricing, regional overrides, taxes, credits, or other account-specific adjustments
+- enterprise contract pricing, taxes, or other account-specific adjustments beyond an explicitly modeled tariff
+- automatic selection of a billable time period or proof that a gateway charges the first-party tariff
 - immediate coverage for every newly launched model, tool, or billing mode
 - unmodeled charges such as realtime audio/text billing or video generation billing
 

@@ -81,6 +81,7 @@ defmodule ReqLLM.StreamServer do
   defstruct [
     :provider_mod,
     :model,
+    :pricing_context,
     :http_task,
     :fixture_path,
     :fixture_backend,
@@ -171,6 +172,7 @@ defmodule ReqLLM.StreamServer do
     state = %__MODULE__{
       provider_mod: provider_mod,
       model: model,
+      pricing_context: Keyword.get(opts, :pricing_context),
       protocol_parser: Keyword.get(opts, :protocol_parser),
       provider_state: provider_state,
       fixture_path: Keyword.get(opts, :fixture_path),
@@ -1209,10 +1211,16 @@ defmodule ReqLLM.StreamServer do
 
                 meta_with_usage =
                   if usage do
-                    normalized_usage = normalize_streaming_usage(usage, state.model)
+                    normalized_usage = ReqLLM.Usage.normalize(usage)
 
-                    Map.update(metadata, :usage, normalized_usage, fn existing ->
+                    metadata
+                    |> Map.update(:usage, normalized_usage, fn existing ->
                       ReqLLM.Usage.merge(existing, normalized_usage)
+                    end)
+                    |> Map.update!(:usage, fn merged ->
+                      ReqLLM.Usage.Cost.apply(merged, state.model,
+                        pricing_context: state.pricing_context
+                      )
                     end)
                   else
                     metadata
@@ -1849,16 +1857,6 @@ defmodule ReqLLM.StreamServer do
   defp build_http_error(status, chunk, headers) do
     Failure.api_error(status, chunk, headers)
   end
-
-  # Normalize streaming usage data from provider format to ReqLLM format
-  # This mirrors the logic in ReqLLM.Step.Usage.fallback_extract_usage/1
-  defp normalize_streaming_usage(usage, model) when is_map(usage) do
-    usage
-    |> ReqLLM.Usage.normalize()
-    |> ReqLLM.Usage.Cost.apply(model, original_usage: usage, preserve_total_cost: true)
-  end
-
-  defp normalize_streaming_usage(usage, _model), do: usage
 
   defp maybe_emit_stream_stop(%{telemetry: nil} = state, _finish_reason), do: state
 

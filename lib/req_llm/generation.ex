@@ -487,9 +487,22 @@ defmodule ReqLLM.Generation do
   defp execute_generate_text(provider_module, model, context, request_opts, cache_opts, cache_ref) do
     deadline = ReqLLM.TimeoutBudget.deadline(request_opts)
 
-    with {:ok, request} <- provider_module.prepare_request(:chat, model, context, request_opts),
+    with {:ok, request} <-
+           provider_module.prepare_request(
+             :chat,
+             model,
+             context,
+             Keyword.delete(request_opts, :pricing_context)
+           ),
          {:ok, %Req.Response{status: status, body: decoded_response}} when status in 200..299 <-
-           ReqLLM.TimeoutBudget.request(request, deadline) do
+           ReqLLM.TimeoutBudget.request(
+             Req.Request.put_private(
+               request,
+               :req_llm_pricing_context,
+               request_opts[:pricing_context]
+             ),
+             deadline
+           ) do
       {:ok, ReqLLM.Cache.store(cache_ref, decoded_response, cache_opts)}
     else
       {:ok, %Req.Response{status: status, body: body}} ->
@@ -517,9 +530,21 @@ defmodule ReqLLM.Generation do
     deadline = ReqLLM.TimeoutBudget.deadline(request_opts)
 
     with {:ok, request} <-
-           provider_module.prepare_request(:object, model, context, request_opts),
+           provider_module.prepare_request(
+             :object,
+             model,
+             context,
+             Keyword.delete(request_opts, :pricing_context)
+           ),
          {:ok, %Req.Response{status: status, body: decoded_response}} when status in 200..299 <-
-           ReqLLM.TimeoutBudget.request(request, deadline) do
+           ReqLLM.TimeoutBudget.request(
+             Req.Request.put_private(
+               request,
+               :req_llm_pricing_context,
+               request_opts[:pricing_context]
+             ),
+             deadline
+           ) do
       response =
         if ReqLLM.ModelHelpers.json_strict?(model) do
           decoded_response

@@ -25,7 +25,8 @@ defmodule ReqLLM.Coverage.OpenAI.WebSearchTest do
   test "web search reports tool usage and cost" do
     opts =
       fixture_opts(ReqLLM.Test.CompatibilityScenario.fixture!(:web_search_basic),
-        tools: [%{"type" => "web_search"}]
+        tools: [%{"type" => "web_search"}],
+        pricing_context: %{api: "responses", service_tier: "default"}
       )
 
     {:ok, response} =
@@ -37,6 +38,7 @@ defmodule ReqLLM.Coverage.OpenAI.WebSearchTest do
 
     assert response.usage.tool_usage.web_search.count > 0
     assert response.usage.cost.tools > 0
+    assert response.usage.pricing.status == :priced
 
     assert [%{"type" => "url_citation", "url" => url} | _] =
              ReqLLM.Response.annotations(response)
@@ -50,7 +52,8 @@ defmodule ReqLLM.Coverage.OpenAI.WebSearchTest do
     opts =
       fixture_opts(ReqLLM.Test.CompatibilityScenario.fixture!(:web_search_streaming),
         stream: true,
-        tools: [%{"type" => "web_search"}]
+        tools: [%{"type" => "web_search"}],
+        pricing_context: %{api: "responses", service_tier: "default"}
       )
 
     {:ok, stream_response} =
@@ -66,6 +69,7 @@ defmodule ReqLLM.Coverage.OpenAI.WebSearchTest do
 
     assert response.usage.tool_usage.web_search.count > 0
     assert response.usage.cost.tools > 0
+    assert response.usage.pricing.status == :priced
 
     assert [%{"type" => "url_citation", "url" => url} | _] =
              ReqLLM.Response.annotations(response)

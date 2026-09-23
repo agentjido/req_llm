@@ -437,6 +437,12 @@ defmodule ReqLLM.Providers.Anthropic.Response do
       reasoning_tokens: reasoning_tokens
     }
 
+    base =
+      case Map.get(usage, "cache_creation") do
+        %{} = groups -> Map.put(base, :cache_creation, groups)
+        _ -> base
+      end
+
     if map_size(tool_usage) > 0 do
       Map.put(base, :tool_usage, tool_usage)
     else

@@ -125,7 +125,14 @@ defmodule ReqLLM.Streaming do
              stream_idle_timeout
            ),
          {:ok, _http_task_pid, http_context, canonical_json} <-
-           start_transport_streaming(transport, provider_mod, model, context, opts, server_pid),
+           start_transport_streaming(
+             transport,
+             provider_mod,
+             model,
+             context,
+             Keyword.delete(opts, :pricing_context),
+             server_pid
+           ),
          :ok <- set_fixture_context_if_needed(server_pid, http_context, canonical_json) do
       stream_context =
         model
@@ -190,6 +197,7 @@ defmodule ReqLLM.Streaming do
     server_opts = [
       provider_mod: provider_mod,
       model: model,
+      pricing_context: Keyword.get(opts, :pricing_context),
       protocol_parser:
         protocol_parser_for_transport(transport) ||
           provider_protocol_parser(provider_mod, model, opts),

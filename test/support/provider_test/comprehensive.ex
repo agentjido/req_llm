@@ -348,13 +348,7 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
             assert is_number(response.usage.reasoning_tokens) and
                      response.usage.reasoning_tokens >= 0
 
-            case ReqLLM.model(@model_spec) do
-              {:ok, %LLMDB.Model{cost: cost_map}} when is_map(cost_map) ->
-                assert_usage_cost_fields(response.usage, true)
-
-              _ ->
-                assert_usage_cost_fields(response.usage, false)
-            end
+            assert_usage_cost_fields(response.usage)
           end
 
           @tag ReqLLM.Test.CompatibilityScenario.tag!(:context_append)
@@ -818,20 +812,21 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
         end
       end
 
-      defp assert_usage_cost_fields(usage, required?) do
-        present? =
-          Enum.any?([:input_cost, :output_cost, :total_cost], &Map.has_key?(usage, &1))
+      defp assert_usage_cost_fields(usage) do
+        case usage.pricing do
+          %{status: :priced, currency: "USD", total: total} ->
+            assert is_number(usage.input_cost) and usage.input_cost >= 0
+            assert is_number(usage.output_cost) and usage.output_cost >= 0
+            assert is_number(usage.total_cost) and usage.total_cost >= 0
+            assert usage.total_cost == total
 
-        if required? or present? do
-          assert is_number(usage.input_cost) and usage.input_cost >= 0
+          %{status: status} when status in [:priced, :unknown] ->
+            refute Map.has_key?(usage, :input_cost)
+            refute Map.has_key?(usage, :output_cost)
+            refute Map.has_key?(usage, :total_cost)
 
-          assert is_number(usage.output_cost) and
-                   usage.output_cost >= 0
-
-          assert is_number(usage.total_cost) and usage.total_cost >= 0
-
-          expected = usage.input_cost + usage.output_cost
-          assert abs(usage.total_cost - expected) < 0.00001
+          other ->
+            flunk("Expected known or unknown pricing, got: #{inspect(other)}")
         end
       end
 
