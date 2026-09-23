@@ -141,11 +141,13 @@ defmodule ReqLLM.Response.Stream do
        }}
   end
 
-  defp joined_content_parts(%{content_parts: []} = summary, _acc),
-    do: [%{type: :text, text: summary.text}]
-
-  defp joined_content_parts(_summary, acc),
-    do: ChunkAccumulator.finalize_ordered_content(acc, include_thinking?: false)
+  defp joined_content_parts(summary, acc) do
+    if ChunkAccumulator.ordered_content?(acc) do
+      ChunkAccumulator.finalize_ordered_content(acc, include_thinking?: false)
+    else
+      [%{type: :text, text: summary.text}]
+    end
+  end
 
   defp merge_usage(existing_usage, nil), do: existing_usage
 
