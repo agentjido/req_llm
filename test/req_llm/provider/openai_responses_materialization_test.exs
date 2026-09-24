@@ -33,7 +33,11 @@ defmodule ReqLLM.Provider.OpenAIResponsesMaterializationTest do
       provider: :openai,
       format: "openai-responses-v1",
       index: 0,
-      provider_data: %{"id" => "rs_1", "type" => "reasoning"}
+      provider_data: %{
+        "id" => "rs_1",
+        "type" => "reasoning",
+        "summary" => [%{"type" => "summary_text", "text" => "Plan"}]
+      }
     }
 
     usage = %{

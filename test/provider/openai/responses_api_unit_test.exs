@@ -1798,10 +1798,150 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
       assert [] = ResponsesAPI.decode_stream_event(event, model)
     end
 
-    test "ignores reasoning summary part done event", %{model: model} do
-      event = %{data: %{"event" => "response.reasoning_summary_part.done"}}
+    test "reasoning summary deltas carry the item id and part indexes", %{model: model} do
+      event = %{
+        data: %{
+          "event" => "response.reasoning_summary_text.delta",
+          "item_id" => "rs_123",
+          "output_index" => 0,
+          "summary_index" => 1,
+          "delta" => "Checking primality..."
+        }
+      }
 
-      assert [] = ResponsesAPI.decode_stream_event(event, model)
+      assert [chunk] = ResponsesAPI.decode_stream_event(event, model)
+      assert chunk.type == :thinking
+      assert chunk.metadata.item_id == "rs_123"
+      assert chunk.metadata.output_index == 0
+      assert chunk.metadata.summary_index == 1
+      assert chunk.metadata.provider_data == %{"type" => "reasoning", "id" => "rs_123"}
+      assert chunk.metadata.provider == :openai
+      assert chunk.metadata.format == "openai-responses-v1"
+    end
+
+    test "decodes reasoning_text delta as thinking", %{model: model} do
+      event = %{
+        data: %{
+          "event" => "response.reasoning_text.delta",
+          "item_id" => "rs_123",
+          "output_index" => 0,
+          "delta" => "Raw reasoning"
+        }
+      }
+
+      assert [chunk] = ResponsesAPI.decode_stream_event(event, model)
+      assert chunk.type == :thinking
+      assert chunk.text == "Raw reasoning"
+      assert chunk.metadata.item_id == "rs_123"
+      refute Map.has_key?(chunk.metadata, :summary_index)
+
+      assert [] =
+               ResponsesAPI.decode_stream_event(
+                 %{data: %{"event" => "response.reasoning_text.done"}},
+                 model
+               )
+    end
+
+    test "reasoning summary part added marks a part boundary", %{model: model} do
+      event = %{
+        data: %{
+          "event" => "response.reasoning_summary_part.added",
+          "item_id" => "rs_123",
+          "output_index" => 0,
+          "summary_index" => 2,
+          "part" => %{"type" => "summary_text", "text" => ""}
+        }
+      }
+
+      assert [chunk] = ResponsesAPI.decode_stream_event(event, model)
+      assert chunk.type == :meta
+
+      assert chunk.metadata.reasoning_summary_part == %{
+               status: :added,
+               item_id: "rs_123",
+               output_index: 0,
+               summary_index: 2,
+               text: ""
+             }
+    end
+
+    test "reasoning summary part done carries the completed part text", %{model: model} do
+      event = %{
+        data: %{
+          "event" => "response.reasoning_summary_part.done",
+          "item_id" => "rs_123",
+          "output_index" => 0,
+          "summary_index" => 0,
+          "part" => %{"type" => "summary_text", "text" => "Checked the constraints."}
+        }
+      }
+
+      assert [chunk] = ResponsesAPI.decode_stream_event(event, model)
+      assert chunk.type == :meta
+
+      assert chunk.metadata.reasoning_summary_part == %{
+               status: :done,
+               item_id: "rs_123",
+               output_index: 0,
+               summary_index: 0,
+               text: "Checked the constraints."
+             }
+    end
+
+    test "summary part meta chunks do not disturb the assembled response", %{model: model} do
+      chunks =
+        [
+          %{
+            "event" => "response.reasoning_summary_part.added",
+            "item_id" => "rs_1",
+            "summary_index" => 0,
+            "part" => %{"type" => "summary_text", "text" => ""}
+          },
+          %{
+            "event" => "response.reasoning_summary_text.delta",
+            "item_id" => "rs_1",
+            "summary_index" => 0,
+            "delta" => "Plan"
+          },
+          %{
+            "event" => "response.reasoning_summary_part.done",
+            "item_id" => "rs_1",
+            "summary_index" => 0,
+            "part" => %{"type" => "summary_text", "text" => "Plan"}
+          },
+          %{"event" => "response.output_text.delta", "delta" => "Answer"},
+          %{
+            "event" => "response.completed",
+            "response" => %{
+              "id" => "resp_1",
+              "output" => [
+                %{
+                  "id" => "rs_1",
+                  "type" => "reasoning",
+                  "summary" => [%{"type" => "summary_text", "text" => "Plan"}]
+                },
+                %{
+                  "type" => "message",
+                  "content" => [%{"type" => "output_text", "text" => "Answer"}]
+                }
+              ],
+              "usage" => %{"input_tokens" => 1, "output_tokens" => 2}
+            }
+          }
+        ]
+        |> Enum.flat_map(&ResponsesAPI.decode_stream_event(%{data: &1}, model))
+
+      {:ok, response} =
+        ReqLLM.Provider.Defaults.ResponseBuilder.build_response(
+          chunks,
+          %{id: "resp_1", model: "gpt-5"},
+          context: ReqLLM.Context.new([]),
+          model: model
+        )
+
+      assert ReqLLM.Response.text(response) == "Answer"
+      assert ReqLLM.Response.thinking(response) == "Plan"
+      assert [%ReqLLM.Message.ReasoningDetails{text: "Plan"}] = response.message.reasoning_details
     end
 
     test "decodes usage event", %{model: model} do
@@ -2222,7 +2362,12 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
       assert detail.provider == :openai
       assert detail.format == "openai-responses-v1"
       assert detail.index == 0
-      assert detail.provider_data == %{"id" => "rs_123", "type" => "reasoning"}
+
+      assert detail.provider_data == %{
+               "id" => "rs_123",
+               "type" => "reasoning",
+               "summary" => [%{"type" => "summary_text", "text" => "Checked constraints."}]
+             }
     end
 
     test "decodes incomplete event", %{model: model} do
@@ -2489,13 +2634,24 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
       assert %ReqLLM.Response{} = resp.body
       assert [reasoning_detail] = resp.body.message.reasoning_details
       assert %ReqLLM.Message.ReasoningDetails{} = reasoning_detail
-      assert reasoning_detail.text == "Analyzing the problem... Breaking it down..."
+      assert reasoning_detail.text == "Analyzing the problem...\n\n Breaking it down..."
       assert reasoning_detail.signature == "base64_encrypted_content_here"
       assert reasoning_detail.encrypted? == true
       assert reasoning_detail.provider == :openai
       assert reasoning_detail.format == "openai-responses-v1"
       assert reasoning_detail.index == 0
-      assert reasoning_detail.provider_data == %{"id" => "rs_abc123", "type" => "reasoning"}
+
+      assert reasoning_detail.provider_data == %{
+               "id" => "rs_abc123",
+               "type" => "reasoning",
+               "summary" => [
+                 %{"type" => "summary_text", "text" => "Analyzing the problem..."},
+                 %{"type" => "summary_text", "text" => " Breaking it down..."}
+               ]
+             }
+
+      assert ReqLLM.Response.thinking(resp.body) ==
+               "Analyzing the problem...\n\n Breaking it down..."
     end
 
     test "decodes reasoning items with string summary" do
@@ -3522,6 +3678,15 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
     }
   end
 
+  defp azure_model(id) do
+    %LLMDB.Model{
+      id: id,
+      provider: :azure,
+      capabilities: %{chat: true},
+      extra: %{wire: %{protocol: "openai_responses"}}
+    }
+  end
+
   defp maybe_put_responses_transport(opts, nil), do: opts
 
   defp maybe_put_responses_transport(opts, transport),
@@ -3545,6 +3710,296 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
     }
 
     {req, resp}
+  end
+
+  describe "reasoning context and context management - encode_body/1" do
+    test "encodes reasoning context alongside effort" do
+      request =
+        build_request(reasoning_effort: :high, provider_options: [reasoning_context: :all_turns])
+
+      body = request |> ResponsesAPI.encode_body() |> ReqLLM.Test.Helpers.json_body()
+
+      assert body["reasoning"] == %{"effort" => "high", "context" => "all_turns"}
+    end
+
+    test "encodes a string reasoning context without effort" do
+      request = build_request(provider_options: [reasoning_context: "current_turn"])
+
+      body = request |> ResponsesAPI.encode_body() |> ReqLLM.Test.Helpers.json_body()
+
+      assert body["reasoning"] == %{"context" => "current_turn"}
+    end
+
+    test "encodes context_management entries from maps and keyword lists" do
+      request =
+        build_request(
+          provider_options: [
+            context_management: [
+              %{type: "compaction", compact_threshold: 1000},
+              [type: "truncation", strategy: "auto"]
+            ]
+          ]
+        )
+
+      body = request |> ResponsesAPI.encode_body() |> ReqLLM.Test.Helpers.json_body()
+
+      assert body["context_management"] == [
+               %{"type" => "compaction", "compact_threshold" => 1000},
+               %{"type" => "truncation", "strategy" => "auto"}
+             ]
+    end
+
+    test "omits context_management when absent or empty" do
+      request = build_request(provider_options: [context_management: []])
+
+      body = request |> ResponsesAPI.encode_body() |> ReqLLM.Test.Helpers.json_body()
+
+      refute Map.has_key?(body, "context_management")
+    end
+  end
+
+  describe "compaction items" do
+    @compaction_item %{
+      "id" => "cmp_123",
+      "type" => "compaction",
+      "encrypted_content" => "opaque-compaction-payload"
+    }
+
+    test "decode_response/1 keeps compaction items as provider blocks on the message" do
+      response_body = %{
+        "id" => "resp_123",
+        "model" => "gpt-5.4",
+        "output" => [
+          @compaction_item,
+          %{"type" => "message", "content" => [%{"type" => "output_text", "text" => "Answer"}]}
+        ],
+        "usage" => %{"input_tokens" => 10, "output_tokens" => 5}
+      }
+
+      {_req, resp} = ResponsesAPI.decode_response(build_response(200, response_body))
+
+      assert %ReqLLM.Response{} = resp.body
+      assert ReqLLM.Response.text(resp.body) == "Answer"
+
+      assert [%ReqLLM.Message.ContentPart{type: :provider_block} = part | _] =
+               resp.body.message.content
+
+      assert part.data == @compaction_item
+      assert part.metadata.provider == :openai
+      assert part.metadata.block_type == "compaction"
+      assert ReqLLM.Compaction.compaction_message?(resp.body.message)
+
+      assert [%ReqLLM.Message.ContentPart{type: :provider_block}] =
+               ReqLLM.Response.provider_items(resp.body)
+    end
+
+    test "decode_stream_event/2 surfaces a completed compaction item once" do
+      {:ok, model} = ReqLLM.model("openai:gpt-5")
+
+      done_event = %{
+        data: %{
+          "event" => "response.output_item.done",
+          "output_index" => 0,
+          "item" => @compaction_item
+        }
+      }
+
+      assert [chunk] = ResponsesAPI.decode_stream_event(done_event, model)
+      assert chunk.type == :content_part
+      assert chunk.content_part.type == :provider_block
+      assert chunk.content_part.data == @compaction_item
+      assert chunk.content_part.metadata.provider == :openai
+
+      completed_event = %{
+        data: %{
+          "event" => "response.completed",
+          "response" => %{
+            "id" => "resp_123",
+            "output" => [@compaction_item],
+            "usage" => %{"input_tokens" => 1, "output_tokens" => 1}
+          }
+        }
+      }
+
+      assert [meta] = ResponsesAPI.decode_stream_event(completed_event, model)
+      assert meta.type == :meta
+
+      {:ok, response} =
+        ReqLLM.Provider.Defaults.ResponseBuilder.build_response(
+          [chunk, meta],
+          %{id: "resp_123", model: "gpt-5"},
+          context: ReqLLM.Context.new([]),
+          model: model
+        )
+
+      assert [%ReqLLM.Message.ContentPart{type: :provider_block}] = response.message.content
+    end
+
+    test "encode_body/1 replays compaction blocks as top-level input items before reasoning" do
+      reasoning_detail = %ReqLLM.Message.ReasoningDetails{
+        text: "Plan",
+        signature: "enc",
+        encrypted?: true,
+        provider: :openai,
+        format: "openai-responses-v1",
+        index: 0,
+        provider_data: %{"id" => "rs_1", "type" => "reasoning"}
+      }
+
+      assistant_msg = %ReqLLM.Message{
+        role: :assistant,
+        content: [
+          ReqLLM.Message.ContentPart.provider_block(:openai, @compaction_item),
+          %ReqLLM.Message.ContentPart{type: :text, text: "Answer"}
+        ],
+        reasoning_details: [reasoning_detail]
+      }
+
+      context =
+        ReqLLM.Context.new([
+          assistant_msg,
+          ReqLLM.Context.user("Add a booking form.")
+        ])
+
+      body =
+        build_request(context: context, provider_options: [store: false])
+        |> ResponsesAPI.encode_body()
+        |> ReqLLM.Test.Helpers.json_body()
+
+      assert [compaction, reasoning, assistant, user] = body["input"]
+      assert compaction == @compaction_item
+      assert reasoning["type"] == "reasoning"
+      assert assistant["role"] == "assistant"
+      assert assistant["content"] == [%{"type" => "output_text", "text" => "Answer"}]
+      assert user["role"] == "user"
+    end
+
+    test "encode_body/1 drops compaction blocks owned by another provider" do
+      assistant_msg = %ReqLLM.Message{
+        role: :assistant,
+        content: [
+          ReqLLM.Message.ContentPart.provider_block(:anthropic, @compaction_item),
+          %ReqLLM.Message.ContentPart{type: :text, text: "Answer"}
+        ]
+      }
+
+      body =
+        build_request(context: ReqLLM.Context.new([assistant_msg]))
+        |> ResponsesAPI.encode_body()
+        |> ReqLLM.Test.Helpers.json_body()
+
+      refute Enum.any?(body["input"], &(&1["type"] == "compaction"))
+    end
+
+    test "encode_body/1 skips compaction replay when chaining via previous_response_id" do
+      assistant_msg = %ReqLLM.Message{
+        role: :assistant,
+        content: [
+          ReqLLM.Message.ContentPart.provider_block(:openai, @compaction_item),
+          %ReqLLM.Message.ContentPart{type: :text, text: "Answer"}
+        ],
+        metadata: %{response_id: "resp_prev"}
+      }
+
+      body =
+        build_request(context: ReqLLM.Context.new([assistant_msg, ReqLLM.Context.user("Next")]))
+        |> ResponsesAPI.encode_body()
+        |> ReqLLM.Test.Helpers.json_body()
+
+      assert body["previous_response_id"] == "resp_prev"
+      refute Enum.any?(body["input"], &(&1["type"] == "compaction"))
+    end
+
+    test "encode_body/1 replays Azure-owned items into Azure requests" do
+      reasoning_detail = %ReqLLM.Message.ReasoningDetails{
+        text: "Plan",
+        signature: "enc",
+        encrypted?: true,
+        provider: :azure,
+        format: "openai-responses-v1",
+        index: 0,
+        provider_data: %{"id" => "rs_1", "type" => "reasoning"}
+      }
+
+      assistant_msg = %ReqLLM.Message{
+        role: :assistant,
+        content: [
+          ReqLLM.Message.ContentPart.provider_block(:azure, @compaction_item),
+          %ReqLLM.Message.ContentPart{type: :text, text: "Answer"}
+        ],
+        reasoning_details: [reasoning_detail]
+      }
+
+      request = build_request(context: ReqLLM.Context.new([assistant_msg]))
+
+      azure_request =
+        %{request | options: Map.put(request.options, :req_llm_model, azure_model("gpt-5"))}
+
+      azure_body = azure_request |> ResponsesAPI.encode_body() |> ReqLLM.Test.Helpers.json_body()
+      openai_body = request |> ResponsesAPI.encode_body() |> ReqLLM.Test.Helpers.json_body()
+
+      assert Enum.map(azure_body["input"], & &1["type"]) == ["compaction", "reasoning", nil]
+      refute Enum.any?(openai_body["input"], &(&1["type"] in ["compaction", "reasoning"]))
+    end
+  end
+
+  describe "build_compact_body/4" do
+    test "encodes the context as input with replayed output items" do
+      reasoning_detail = %ReqLLM.Message.ReasoningDetails{
+        text: "Plan",
+        signature: "enc",
+        encrypted?: true,
+        provider: :openai,
+        format: "openai-responses-v1",
+        index: 0,
+        provider_data: %{"id" => "rs_1", "type" => "reasoning"}
+      }
+
+      context =
+        ReqLLM.Context.new([
+          ReqLLM.Context.user("Create a landing page."),
+          %ReqLLM.Message{
+            role: :assistant,
+            content: [%ReqLLM.Message.ContentPart{type: :text, text: "Here it is."}],
+            reasoning_details: [reasoning_detail],
+            metadata: %{response_id: "resp_1"}
+          }
+        ])
+
+      body = ResponsesAPI.build_compact_body(context, "gpt-5.4", provider_options: [])
+
+      assert body["model"] == "gpt-5.4"
+
+      assert Enum.map(body["input"], &(&1["type"] || &1["role"])) == [
+               "user",
+               "reasoning",
+               "assistant"
+             ]
+
+      refute Map.has_key?(body, "previous_response_id")
+      refute Map.has_key?(body, "stream")
+      refute Map.has_key?(body, "store")
+    end
+
+    test "prefers previous_response_id over the context" do
+      context = ReqLLM.Context.new([ReqLLM.Context.user("Ignored")])
+
+      body =
+        ResponsesAPI.build_compact_body(context, "gpt-5.4",
+          provider_options: [previous_response_id: "resp_1"]
+        )
+
+      assert body == %{"model" => "gpt-5.4", "previous_response_id" => "resp_1"}
+    end
+
+    test "build_body/1 routes the compact operation" do
+      request = build_request(context: ReqLLM.Context.new([ReqLLM.Context.user("Hi")]))
+      request = %{request | options: Map.put(request.options, :operation, :compact)}
+
+      body = request |> ResponsesAPI.encode_body() |> ReqLLM.Test.Helpers.json_body()
+
+      assert Map.keys(body) == ["input", "model"]
+    end
   end
 
   describe "ResponseBuilder - streaming reasoning_details extraction" do
