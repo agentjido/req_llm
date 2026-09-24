@@ -70,7 +70,8 @@ defmodule ReqLLM.Compatibility.ScenarioCatalog do
     %{id: "request_metadata", operation: :text},
     %{id: "tool_id_compat", operation: :text},
     %{id: "streaming_structured_output", operation: :text},
-    %{id: "azure_streaming_structured_output", operation: :text}
+    %{id: "azure_streaming_structured_output", operation: :text},
+    %{id: "compaction", operation: :text}
   ]
 
   @scenario_defaults %{
@@ -168,6 +169,45 @@ defmodule ReqLLM.Compatibility.ScenarioCatalog do
                        transports: [:request_response, :server_sent_events],
                        applicability: :model_features,
                        fixtures: ["reasoning_basic", "reasoning_streaming"]},
+                      {"reasoning_summary", "reasoning",
+                       output_modalities: [:text, :reasoning],
+                       requirements: [:reasoning],
+                       transports: [:request_response, :server_sent_events],
+                       applicability: :focused,
+                       providers: [:openai, :azure],
+                       fixtures: ["reasoning_summary_basic", "reasoning_summary_streaming"]},
+                      {"reasoning_context", "reasoning",
+                       output_modalities: [:text, :reasoning],
+                       requirements: [:reasoning],
+                       applicability: :focused,
+                       providers: [:openai, :azure],
+                       fixtures: ["reasoning_context_1", "reasoning_context_2"]},
+                      {"compaction_manual", "compaction",
+                       requirements: [:reasoning],
+                       applicability: :focused,
+                       providers: [:openai, :azure],
+                       fixtures: [
+                         "compaction_manual_1",
+                         "compaction_manual_2",
+                         "compaction_manual_3"
+                       ]},
+                      {"compaction_previous_response", "compaction",
+                       requirements: [:reasoning],
+                       applicability: :focused,
+                       providers: [:openai, :azure],
+                       fixtures: [
+                         "compaction_previous_response_1",
+                         "compaction_previous_response_2"
+                       ]},
+                      {"compaction_server_side", "compaction",
+                       requirements: [:reasoning],
+                       transports: [:request_response, :server_sent_events],
+                       applicability: :focused,
+                       providers: [:openai, :azure],
+                       fixtures: [
+                         "compaction_server_side_basic",
+                         "compaction_server_side_streaming"
+                       ]},
                       {"embed_basic", "embedding",
                        output_modalities: [:embedding], requirements: [:embedding]},
                       {"embed_usage", "embedding",
@@ -327,6 +367,56 @@ defmodule ReqLLM.Compatibility.ScenarioCatalog do
              end)
 
   @routes [
+    %{
+      provider: :openai,
+      scenario: "reasoning_summary",
+      test_file: "test/coverage/openai/responses_context_test.exs"
+    },
+    %{
+      provider: :openai,
+      scenario: "reasoning_context",
+      test_file: "test/coverage/openai/responses_context_test.exs"
+    },
+    %{
+      provider: :openai,
+      scenario: "compaction_manual",
+      test_file: "test/coverage/openai/responses_context_test.exs"
+    },
+    %{
+      provider: :openai,
+      scenario: "compaction_previous_response",
+      test_file: "test/coverage/openai/responses_context_test.exs"
+    },
+    %{
+      provider: :openai,
+      scenario: "compaction_server_side",
+      test_file: "test/coverage/openai/responses_context_test.exs"
+    },
+    %{
+      provider: :azure,
+      scenario: "reasoning_summary",
+      test_file: "test/coverage/azure/responses_context_test.exs"
+    },
+    %{
+      provider: :azure,
+      scenario: "reasoning_context",
+      test_file: "test/coverage/azure/responses_context_test.exs"
+    },
+    %{
+      provider: :azure,
+      scenario: "compaction_manual",
+      test_file: "test/coverage/azure/responses_context_test.exs"
+    },
+    %{
+      provider: :azure,
+      scenario: "compaction_previous_response",
+      test_file: "test/coverage/azure/responses_context_test.exs"
+    },
+    %{
+      provider: :azure,
+      scenario: "compaction_server_side",
+      test_file: "test/coverage/azure/responses_context_test.exs"
+    },
     %{
       provider: :openai,
       scenario: "astra_async_tools",

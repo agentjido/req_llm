@@ -5,7 +5,7 @@ compatibility scenario catalog. It is a tooling snapshot, not a runtime model
 allowlist, and it does not change whether ReqLLM can resolve or call a model.
 
 - Evidence schema: `1`
-- Snapshot evaluated at: `2026-09-04T19:26:34Z`
+- Snapshot evaluated at: `2026-09-24T09:27:04Z`
 - Freshness window: `90 days`
 
 ## Conservative tier rules
@@ -32,9 +32,9 @@ provider-native feature and are not consulted by request routing.
 | --- | ---: |
 | First-class | 2 |
 | Best-effort | 0 |
-| Experimental | 599 |
+| Experimental | 600 |
 | Unsupported | 91 |
-| **Total recorded surfaces** | **692** |
+| **Total recorded surfaces** | **693** |
 
 ## anthropic
 
@@ -47,6 +47,12 @@ provider-native feature and are not consulted by request routing.
 | `claude-opus-4-8` | `text` | `anthropic.messages` | text → text | Experimental | 0/5 | 2026-05-29T17:14:45Z | missing or stale evidence |
 | `claude-sonnet-4-20250514` | `text` | `anthropic.messages` | text → text | Experimental | 0/5 | 2026-05-29T17:16:20Z | missing or stale evidence |
 | `claude-sonnet-4-5-20250929` | `text` | `anthropic.messages` | text → text | Experimental | 0/5 | 2026-05-29T17:17:58Z | missing or stale evidence |
+
+## azure
+
+| Model | Operation | Execution surface | Input → output | Tier | Baseline | Checked | Reason |
+| --- | --- | --- | --- | --- | ---: | --- | --- |
+| `gpt-5.4` | `text` | `azure.responses` | text → reasoning, text | Experimental | 0/5 | 2026-09-24T09:27:04Z | missing or stale evidence |
 
 ## cerebras
 

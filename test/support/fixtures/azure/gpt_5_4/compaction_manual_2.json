@@ -1,0 +1,173 @@
+{
+  "model_spec": "azure:gpt-5.4",
+  "provider": "azure",
+  "request": {
+    "body": {
+      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IkNyZWF0ZSBhIHNpbXBsZSBsYW5kaW5nIHBhZ2UgZm9yIGEgZG9nIGNhZmUuIEtlZXAgaXQgdW5kZXIgMjAwIHdvcmRzLiIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9LHsiY29udGVudCI6W3sidGV4dCI6IjwhRE9DVFlQRSBodG1sPlxuPGh0bWwgbGFuZz1cImVuXCI+XG48aGVhZD5cbiAgPG1ldGEgY2hhcnNldD1cIlVURi04XCIgLz5cbiAgPG1ldGEgbmFtZT1cInZpZXdwb3J0XCIgY29udGVudD1cIndpZHRoPWRldmljZS13aWR0aCwgaW5pdGlhbC1zY2FsZT0xLjBcIiAvPlxuICA8dGl0bGU+UGF3cyAmIExhdHRlczwvdGl0bGU+XG4gIDxzdHlsZT5cbiAgICBib2R5IHtcbiAgICAgIG1hcmdpbjogMDtcbiAgICAgIGZvbnQtZmFtaWx5OiBBcmlhbCwgc2Fucy1zZXJpZjtcbiAgICAgIGJhY2tncm91bmQ6ICNmZmY4ZjA7XG4gICAgICBjb2xvcjogIzRhMzQyODtcbiAgICAgIHRleHQtYWxpZ246IGNlbnRlcjtcbiAgICB9XG4gICAgLmhlcm8ge1xuICAgICAgcGFkZGluZzogODBweCAyMHB4O1xuICAgICAgYmFja2dyb3VuZDogbGluZWFyLWdyYWRpZW50KDEzNWRlZywgI2Y3ZDliMSwgI2ZmZWNjZCk7XG4gICAgfVxuICAgIGgxIHtcbiAgICAgIGZvbnQtc2l6ZTogM3JlbTtcbiAgICAgIG1hcmdpbi1ib3R0b206IDEwcHg7XG4gICAgfVxuICAgIHAge1xuICAgICAgZm9udC1zaXplOiAxLjFyZW07XG4gICAgICBtYXgtd2lkdGg6IDYwMHB4O1xuICAgICAgbWFyZ2luOiAwIGF1dG8gMjBweDtcbiAgICB9XG4gICAgLmJ0biB7XG4gICAgICBkaXNwbGF5OiBpbmxpbmUtYmxvY2s7XG4gICAgICBwYWRkaW5nOiAxMnB4IDI0cHg7XG4gICAgICBiYWNrZ3JvdW5kOiAjOGI1ZTNjO1xuICAgICAgY29sb3I6IHdoaXRlO1xuICAgICAgdGV4dC1kZWNvcmF0aW9uOiBub25lO1xuICAgICAgYm9yZGVyLXJhZGl1czogOHB4O1xuICAgICAgZm9udC13ZWlnaHQ6IGJvbGQ7XG4gICAgfVxuICAgIC5idG46aG92ZXIge1xuICAgICAgYmFja2dyb3VuZDogIzZmNDcyZDtcbiAgICB9XG4gIDwvc3R5bGU+XG48L2hlYWQ+XG48Ym9keT5cbiAgPHNlY3Rpb24gY2xhc3M9XCJoZXJvXCI+XG4gICAgPGgxPlBhd3MgJiBMYXR0ZXM8L2gxPlxuICAgIDxwPkVuam95IGhhbmRjcmFmdGVkIGNvZmZlZSwgZnJlc2ggcGFzdHJpZXMsIGFuZCB3YWdnaW5nIHRhaWxzIGFsbCBpbiBvbmUgY296eSBzcG90LiBNZWV0IGZyaWVuZGx5IHB1cHMsIHJlbGF4IHdpdGggZnJpZW5kcywgYW5kIG1ha2UgZXZlcnkgdmlzaXQgYSBsaXR0bGUgaGFwcGllci48L3A+XG4gICAgPGEgaHJlZj1cIiNcIiBjbGFzcz1cImJ0blwiPlZpc2l0IFVzIFRvZGF5PC9hPlxuICA8L3NlY3Rpb24+XG48L2JvZHk+XG48L2h0bWw+IiwidHlwZSI6Im91dHB1dF90ZXh0In1dLCJwaGFzZSI6ImZpbmFsX2Fuc3dlciIsInJvbGUiOiJhc3Npc3RhbnQifV0sIm1vZGVsIjoiZ3B0LTUuNCJ9"
+    },
+    "canonical_json": {
+      "input": [
+        {
+          "content": [
+            {
+              "text": "Create a simple landing page for a dog cafe. Keep it under 200 words.",
+              "type": "input_text"
+            }
+          ],
+          "role": "user"
+        },
+        {
+          "content": [
+            {
+              "text": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n  <title>Paws & Lattes</title>\n  <style>\n    body {\n      margin: 0;\n      font-family: Arial, sans-serif;\n      background: #fff8f0;\n      color: #4a3428;\n      text-align: center;\n    }\n    .hero {\n      padding: 80px 20px;\n      background: linear-gradient(135deg, #f7d9b1, #ffeccd);\n    }\n    h1 {\n      font-size: 3rem;\n      margin-bottom: 10px;\n    }\n    p {\n      font-size: 1.1rem;\n      max-width: 600px;\n      margin: 0 auto 20px;\n    }\n    .btn {\n      display: inline-block;\n      padding: 12px 24px;\n      background: #8b5e3c;\n      color: white;\n      text-decoration: none;\n      border-radius: 8px;\n      font-weight: bold;\n    }\n    .btn:hover {\n      background: #6f472d;\n    }\n  </style>\n</head>\n<body>\n  <section class=\"hero\">\n    <h1>Paws & Lattes</h1>\n    <p>Enjoy handcrafted coffee, fresh pastries, and wagging tails all in one cozy spot. Meet friendly pups, relax with friends, and make every visit a little happier.</p>\n    <a href=\"#\" class=\"btn\">Visit Us Today</a>\n  </section>\n</body>\n</html>",
+              "type": "output_text"
+            }
+          ],
+          "phase": "final_answer",
+          "role": "assistant"
+        }
+      ],
+      "model": "gpt-5.4"
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "api-key": "[REDACTED:api-key]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.7.4"
+      ]
+    },
+    "method": "post",
+    "url": "https://fixture.openai.azure.com/openai/v1/responses/compact"
+  },
+  "response": {
+    "body": {
+      "created_at": 1790241857,
+      "id": "resp_08a54d0022a705c9016ab4ec3efd9881959ad16cd63846c96f",
+      "object": "response.compaction",
+      "output": [
+        {
+          "content": [
+            {
+              "text": "Create a simple landing page for a dog cafe. Keep it under 200 words.",
+              "type": "input_text"
+            }
+          ],
+          "id": "msg_08a54d0022a705c9016ab4ec3f03748195a50b17677870d9b2",
+          "role": "user",
+          "status": "completed",
+          "type": "message"
+        },
+        {
+          "content": [
+            {
+              "annotations": [],
+              "logprobs": [],
+              "text": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n  <title>Paws & Lattes</title>\n  <style>\n    body {\n      margin: 0;\n      font-family: Arial, sans-serif;\n      background: #fff8f0;\n      color: #4a3428;\n      text-align: center;\n    }\n    .hero {\n      padding: 80px 20px;\n      background: linear-gradient(135deg, #f7d9b1, #ffeccd);\n    }\n    h1 {\n      font-size: 3rem;\n      margin-bottom: 10px;\n    }\n    p {\n      font-size: 1.1rem;\n      max-width: 600px;\n      margin: 0 auto 20px;\n    }\n    .btn {\n      display: inline-block;\n      padding: 12px 24px;\n      background: #8b5e3c;\n      color: white;\n      text-decoration: none;\n      border-radius: 8px;\n      font-weight: bold;\n    }\n    .btn:hover {\n      background: #6f472d;\n    }\n  </style>\n</head>\n<body>\n  <section class=\"hero\">\n    <h1>Paws & Lattes</h1>\n    <p>Enjoy handcrafted coffee, fresh pastries, and wagging tails all in one cozy spot. Meet friendly pups, relax with friends, and make every visit a little happier.</p>\n    <a href=\"#\" class=\"btn\">Visit Us Today</a>\n  </section>\n</body>\n</html>",
+              "type": "output_text"
+            }
+          ],
+          "id": "msg_08a54d0022a705c9016ab4ec3f03908195b7a9f50d60e074c4",
+          "phase": "final_answer",
+          "role": "assistant",
+          "status": "completed",
+          "type": "message"
+        },
+        {
+          "encrypted_content": "gAAAAABqtOxBylClEhDJ4eyzJmrln6360ab9TcvjmM8_-IWg3PZY1GFoyrfLtN3aa4y-ZbDOnYsyhFg1plp4zax7p8WALAsHwNdLFgt8gr2llGymVsEK0XP2dEnfgGbh9q03U5ROjyC1DuQ6-UqNMiTimyC54WTECKCYIgVuEhw6N1BdX9bDrOneKp2RADKU0EeMchVQ9FSTisMsvstJOcje_vVyAhqLxP466i3GKlKtUfkRm10RiAZVOSlY3mK6AUrrhvwrAMSnQx96_T1KgbQ_uai_oeJB6CWvlc_OCKO98crmU7pTXGt3Kyk77WdsxvlqX5qgjgqzhcvM4e1pTdBLzwpW0oLPHCrFqN_Ku4Khs5yWv-KvtsSRxSPWMFXlAsnzE63FukAAK5JkJI-6GN5KdPm0X51_PR9F7Ku7FaZPZUieE0wV1IYW1QNFsIEj351v0ekMn9DkdXId0CR9gI1ax-WcTGiP49nLLC1Id4XAb8Xc5MzZPCJV-9tqFiVhPIo5tysAxsOXKTQef-0sGak2SgZYgy9cX1x3tI2fMT25QvV89A4QmMvsTQVyC3db8QW8QzYbssnHxTlCLsqXFiYAa_GtvG76DlQgLEDU9ZNt7RivllPS7L_ZS0IC6zMTwwNSRAKgvI8tZziZhMHGOM0IIykjV5Ym5dDfw5HS-0U4sZvluviBnSVtLqH8ApwsutuhVYOpYVY3_TtGQEIdrmjdpmeWH1nXvu9aQ3oYxMBPJXdrWT_Ro_yg4Ynl8JOkmpu3x3vH2nZXSoFKDJQomvgQ3cnYOqW98fdlOcnjoK_UEYW_FJ5fSjRnl0LhyK4Qwlivtb1_RkUNi1BDGAn2bwVkxN7XMGA0N4ZbUgIAvrPCBYGA1jsnziE29MI1YMo3bymtn52mPiowVK_ARteZgr5-ruhgt2KH8lDnkGGrC3GVuHu8U-WPz3FGRz0KXNLe0DTVVGQPCH3HALXActGCG2sgkbm3Y9H6yvpaw3O8L98K60datOMBldrE_9izL_qGKnYqfMYTi14bblofFr2hK-MfdQdgGiocWqTx_4b_-jfK4FkbrK0Q8qJzg84eumuV7ge-oRaYgbffexilcBbyzQ0Yh8KSphL9UBLc3ZrZpjH7YAeQsRcMsOMGXgX3CK9RlSsDcmZf-vnH4b6u05mmY0McK8RGpdKQEuDaKZa1BRCnRCdQI_TO0vDlEXS8jx48znRO-uDv7W7FXG_c1olTirJmInLO5HEa2VDGfgiyUuPk4RBd3gKj_AxaDAlOeY2mV50j2M8AsUNKlIoNhXhKOMS1g8E4c_dJ9uUoHZLp_eiadE_7OHi6MA3DPfXLNcmg98gFDDojtE0TYzyhMAMXRYsvHHj4nV7mmyPRh51PuigOrp_irfoD_wEkI7y_P3A6qkShX8goFLvSYttTjHr0WQ6csCgseEzD_Q==",
+          "id": "cmp_08a54d0022a705c9016ab4ec3fbad08195bbb3f449e993eea1",
+          "type": "compaction"
+        }
+      ],
+      "usage": {
+        "input_tokens": 407,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 110,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 517
+      }
+    },
+    "headers": {
+      "apim-request-id": [
+        "86cc6d81-27b5-498b-98fe-e52710cfa10b"
+      ],
+      "azureai-fe-is-streaming": [
+        "False"
+      ],
+      "azureai-fe-offer-type": [
+        "paygo"
+      ],
+      "content-length": [
+        "3892"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Thu, 24 Sep 2026 09:24:14 GMT"
+      ],
+      "server": [
+        "istio-envoy"
+      ],
+      "skip-error-remapping": [
+        "true"
+      ],
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-ms-is-spilled-over": [
+        "false"
+      ],
+      "x-ms-region": [
+        "Sweden Central"
+      ],
+      "x-ratelimit-abusepenalty-active": [
+        "False"
+      ],
+      "x-ratelimit-key": [
+        "gpt-5.4"
+      ],
+      "x-ratelimit-limit-requests": [
+        "700"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "700000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "699"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "699692"
+      ],
+      "x-ratelimit-renewalperiod-requests": [
+        "60"
+      ],
+      "x-ratelimit-renewalperiod-tokens": [
+        "60"
+      ],
+      "x-ratelimit-reset-requests": [
+        "0"
+      ],
+      "x-ratelimit-reset-tokens": [
+        "0"
+      ],
+      "x-request-id": [
+        "0cdf0e6c-cf12-4e2a-8a39-c2f4a88190d4"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

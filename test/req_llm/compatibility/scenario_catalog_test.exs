@@ -24,7 +24,7 @@ defmodule ReqLLM.Compatibility.ScenarioCatalogTest do
     "tools" => ~w(tool_none tool_multi tool_round_trip),
     "prompt_cache" => ~w(sequential_tool_cache),
     "objects" => ~w(object_basic object_streaming),
-    "reasoning" => ~w(reasoning),
+    "reasoning" => ~w(reasoning reasoning_summary reasoning_context),
     "embedding" => ~w(embed_basic embed_usage embed_batch),
     "image" => ~w(image_basic image_transparent_background),
     "speech" => ~w(speech_basic),
@@ -44,7 +44,8 @@ defmodule ReqLLM.Compatibility.ScenarioCatalogTest do
     "streaming_structured_output" =>
       ~w(object_streaming_json_schema object_streaming_tool_strict object_streaming_auto streaming_error_handling),
     "azure_streaming_structured_output" =>
-      ~w(object_streaming_claude_tool object_streaming_claude_auto)
+      ~w(object_streaming_claude_tool object_streaming_claude_auto),
+    "compaction" => ~w(compaction_manual compaction_previous_response compaction_server_side)
   }
 
   describe "catalog" do
@@ -55,7 +56,7 @@ defmodule ReqLLM.Compatibility.ScenarioCatalogTest do
     test "represents every scenario once" do
       scenario_ids = Enum.map(ScenarioCatalog.scenarios(), & &1.id)
 
-      assert length(scenario_ids) == 47
+      assert length(scenario_ids) == 52
       assert length(scenario_ids) == MapSet.size(MapSet.new(scenario_ids))
     end
 

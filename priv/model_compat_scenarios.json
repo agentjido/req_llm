@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-04T19:26:34Z",
+  "generated_at": "2026-09-24T09:27:04Z",
   "models": {
     "anthropic:claude-haiku-4-5-20251001": {
       "catalog_status": "present",
@@ -426,6 +426,104 @@
                     "usage"
                   ],
                   "mode": "record",
+                  "status": "pass"
+                }
+              ],
+              "proof": "fixture_replay"
+            }
+          }
+        }
+      }
+    },
+    "azure:gpt-5.4": {
+      "catalog_status": "present",
+      "declared_operations": [
+        "text"
+      ],
+      "model": "gpt-5.4",
+      "provider": "azure",
+      "surfaces": {
+        "azure.responses": {
+          "declaration": "declared",
+          "operation": "text",
+          "provider": "azure",
+          "scenarios": {
+            "compaction_manual": {
+              "observations": [
+                {
+                  "checked_at": "2026-09-24T09:27:04Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "compaction_manual_1",
+                    "compaction_manual_2",
+                    "compaction_manual_3"
+                  ],
+                  "mode": "replay",
+                  "status": "pass"
+                }
+              ],
+              "proof": "fixture_replay"
+            },
+            "compaction_previous_response": {
+              "observations": [
+                {
+                  "checked_at": "2026-09-24T09:27:04Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "compaction_previous_response_1",
+                    "compaction_previous_response_2"
+                  ],
+                  "mode": "replay",
+                  "status": "pass"
+                }
+              ],
+              "proof": "fixture_replay"
+            },
+            "compaction_server_side": {
+              "observations": [
+                {
+                  "checked_at": "2026-09-24T09:27:04Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "compaction_server_side_basic",
+                    "compaction_server_side_streaming"
+                  ],
+                  "mode": "replay",
+                  "status": "pass"
+                }
+              ],
+              "proof": "fixture_replay"
+            },
+            "reasoning_context": {
+              "observations": [
+                {
+                  "checked_at": "2026-09-24T09:27:04Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "reasoning_context_1",
+                    "reasoning_context_2"
+                  ],
+                  "mode": "replay",
+                  "status": "pass"
+                }
+              ],
+              "proof": "fixture_replay"
+            },
+            "reasoning_summary": {
+              "observations": [
+                {
+                  "checked_at": "2026-09-24T09:27:04Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "reasoning_summary_basic",
+                    "reasoning_summary_streaming"
+                  ],
+                  "mode": "replay",
                   "status": "pass"
                 }
               ],
