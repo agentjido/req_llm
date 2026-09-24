@@ -241,4 +241,32 @@ defmodule ReqLLM.Response.StreamTest do
                is_binary(to_string(hd(summary.tool_calls).id))
     end
   end
+
+  describe "join/2" do
+    test "keeps phased output items as separate text parts" do
+      chunks = [
+        StreamChunk.text("Checking logs.", %{phase: "commentary", output_index: 0}),
+        StreamChunk.text("Done.", %{phase: "final_answer", output_index: 1})
+      ]
+
+      {:ok, response} = ResponseStream.join(chunks, base_response())
+
+      assert response.message.content == [
+               ContentPart.text("Checking logs.", %{phase: "commentary"}),
+               ContentPart.text("Done.", %{phase: "final_answer"})
+             ]
+    end
+
+    test "joins unphased text into one part" do
+      chunks = [StreamChunk.text("Hello, "), StreamChunk.text("world!")]
+
+      {:ok, response} = ResponseStream.join(chunks, base_response())
+
+      assert response.message.content == [%{type: :text, text: "Hello, world!"}]
+    end
+  end
+
+  defp base_response do
+    %ReqLLM.Response{id: "resp_1", model: "test-model", context: ReqLLM.Context.new([])}
+  end
 end

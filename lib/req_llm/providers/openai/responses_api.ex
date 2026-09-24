@@ -201,8 +201,17 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   def decode_stream_event(event, model, state) do
     state = ensure_stream_state(state)
     {event_type, data} = stream_event_type(event)
-    state = track_tool_call(state, event_type, data)
-    chunks = decode_stream_event_with_state(event, model, event_type, data, state)
+
+    state =
+      state
+      |> track_tool_call(event_type, data)
+      |> track_message_phase(event_type, data)
+
+    chunks =
+      event
+      |> decode_stream_event_with_state(model, event_type, data, state)
+      |> stamp_text_phase(event_type, data, state)
+
     state = track_emitted_tool_call_chunks(state, chunks, event_type, data)
     {updated_chunks, updated_state} = merge_tool_usage_into_chunks(chunks, state)
     {updated_chunks, updated_state}
@@ -214,7 +223,8 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
       usage_emitted?: false,
       emitted_tool_call_indexes: MapSet.new(),
       argument_fragment_indexes: MapSet.new(),
-      text_delta_indexes: MapSet.new()
+      text_delta_indexes: MapSet.new(),
+      message_phases: %{}
     }
   end
 
@@ -439,6 +449,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     |> Map.put_new(:emitted_tool_call_indexes, MapSet.new())
     |> Map.put_new(:argument_fragment_indexes, MapSet.new())
     |> Map.put_new(:text_delta_indexes, MapSet.new())
+    |> Map.put_new(:message_phases, %{})
   end
 
   defp track_emitted_tool_call_chunks(state, chunks, event_type, data) do
@@ -508,6 +519,37 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   end
 
   defp track_tool_call(state, _event_type, _data), do: state
+
+  defp track_message_phase(state, "response.output_item.added", data) when is_map(data) do
+    item = data["item"] || data[:item]
+
+    with %{} <- item,
+         "message" <- item["type"] || item[:type],
+         phase when phase in @assistant_phases <- item["phase"] || item[:phase] do
+      %{state | message_phases: Map.put(state.message_phases, stream_output_index(data), phase)}
+    else
+      _ -> state
+    end
+  end
+
+  defp track_message_phase(state, _event_type, _data), do: state
+
+  defp stamp_text_phase(chunks, "response.output_text.delta", data, state) when is_map(data) do
+    index = stream_output_index(data)
+
+    case Map.fetch(state.message_phases, index) do
+      {:ok, phase} -> Enum.map(chunks, &put_text_phase(&1, phase, index))
+      :error -> chunks
+    end
+  end
+
+  defp stamp_text_phase(chunks, _event_type, _data, _state), do: chunks
+
+  defp put_text_phase(%ReqLLM.StreamChunk{type: :content} = chunk, phase, index) do
+    %{chunk | metadata: Map.merge(chunk.metadata, %{phase: phase, output_index: index})}
+  end
+
+  defp put_text_phase(chunk, _phase, _index), do: chunk
 
   defp maybe_add_tool_call_from_item(state, item) do
     item_type = item["type"] || item[:type]
@@ -929,23 +971,52 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   defp encode_assistant_message_items(%ReqLLM.Message{} = msg) do
     phase_items = encode_phase_items_from_metadata(msg.metadata)
 
-    if phase_items == [] do
-      content =
-        Enum.flat_map(msg.content, fn part ->
-          encode_input_content_part(part, "output_text")
-        end)
+    cond do
+      phase_items != [] ->
+        phase_items
 
-      if content == [] do
-        []
-      else
-        [
-          %{"role" => "assistant", "content" => content}
-          |> maybe_put_assistant_phase(msg.metadata)
-        ]
-      end
-    else
-      phase_items
+      Enum.any?(msg.content, &phased_text_part?/1) ->
+        encode_phased_content_parts(msg.content)
+
+      true ->
+        content =
+          Enum.flat_map(msg.content, fn part ->
+            encode_input_content_part(part, "output_text")
+          end)
+
+        if content == [] do
+          []
+        else
+          [
+            %{"role" => "assistant", "content" => content}
+            |> maybe_put_assistant_phase(msg.metadata)
+          ]
+        end
     end
+  end
+
+  defp phased_text_part?(%ReqLLM.Message.ContentPart{type: :text, metadata: %{phase: phase}}),
+    do: valid_assistant_phase?(phase)
+
+  defp phased_text_part?(_part), do: false
+
+  defp encode_phased_content_parts(parts) do
+    parts
+    |> Enum.flat_map(fn part ->
+      case encode_input_content_part(part, "output_text") do
+        [] -> []
+        blocks -> [{content_part_phase(part), blocks}]
+      end
+    end)
+    |> Enum.chunk_by(&elem(&1, 0))
+    |> Enum.map(fn [{phase, _blocks} | _] = group ->
+      %{"role" => "assistant", "content" => Enum.flat_map(group, &elem(&1, 1))}
+      |> maybe_put_string("phase", phase)
+    end)
+  end
+
+  defp content_part_phase(part) do
+    if phased_text_part?(part), do: part.metadata.phase, else: nil
   end
 
   defp encode_phase_items_from_metadata(%{phase_items: items}) when is_list(items) do
@@ -1525,7 +1596,17 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
       []
     else
       text = message_item_text(item)
-      if text == "", do: [], else: [ReqLLM.StreamChunk.text(text)]
+
+      if text == "",
+        do: [],
+        else: [ReqLLM.StreamChunk.text(text, item_phase_metadata(item, index))]
+    end
+  end
+
+  defp item_phase_metadata(item, index) do
+    case item["phase"] || item[:phase] do
+      phase when phase in @assistant_phases -> %{phase: phase, output_index: index}
+      _ -> %{}
     end
   end
 
@@ -1995,7 +2076,8 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
       |> put_annotations_meta(extract_annotations_from_segments(output_segments))
 
     ctx = req.options[:context] || %ReqLLM.Context{messages: []}
-    chunks = buffered_response_chunks(text, thinking, tool_calls, reasoning_details)
+    text_chunks = buffered_text_chunks(text, output_segments)
+    chunks = buffered_response_chunks(text_chunks, thinking, tool_calls, reasoning_details)
 
     metadata = %{
       response_id: body["id"] || "unknown",
@@ -2018,9 +2100,50 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     end
   end
 
-  defp buffered_response_chunks(text, thinking, tool_calls, reasoning_details) do
+  defp buffered_text_chunks(text, output_segments) do
+    message_segments =
+      output_segments
+      |> Enum.filter(&assistant_message_segment?/1)
+      |> dedupe_phased_messages()
+
+    cond do
+      Enum.any?(message_segments, &valid_assistant_phase?(&1["phase"])) ->
+        phased_text_chunks(message_segments) ++
+          direct_text_chunks(extract_direct_output_text(output_segments))
+
+      text == "" ->
+        []
+
+      true ->
+        [ReqLLM.StreamChunk.text(text)]
+    end
+  end
+
+  defp phased_text_chunks(message_segments) do
+    Enum.flat_map(message_segments, fn segment ->
+      case message_item_text(segment) do
+        "" ->
+          []
+
+        text ->
+          part = ReqLLM.Message.ContentPart.text(text, segment_phase_metadata(segment))
+          [ReqLLM.StreamChunk.content_part(part)]
+      end
+    end)
+  end
+
+  defp segment_phase_metadata(%{"phase" => phase}) when phase in @assistant_phases,
+    do: %{phase: phase}
+
+  defp segment_phase_metadata(_segment), do: %{}
+
+  defp direct_text_chunks(nil), do: []
+
+  defp direct_text_chunks(text),
+    do: [ReqLLM.StreamChunk.content_part(ReqLLM.Message.ContentPart.text(text))]
+
+  defp buffered_response_chunks(text_chunks, thinking, tool_calls, reasoning_details) do
     thinking_chunks = if thinking == "", do: [], else: [ReqLLM.StreamChunk.thinking(thinking)]
-    text_chunks = if text == "", do: [], else: [ReqLLM.StreamChunk.text(text)]
 
     tool_chunks =
       tool_calls
