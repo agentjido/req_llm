@@ -52,6 +52,7 @@ defmodule ReqLLM.Providers.Azure.ResponsesAPI do
       options: %{
         model: model_id,
         id: model_id,
+        req_llm_model: request_model(model_id, opts),
         context: context,
         stream: opts[:stream],
         max_tokens: opts[:max_tokens],
@@ -66,6 +67,33 @@ defmodule ReqLLM.Providers.Azure.ResponsesAPI do
     }
 
     ResponsesAPI.build_body(fake_request)
+  end
+
+  @doc """
+  Formats a request body for the Azure Responses API compaction endpoint.
+
+  Delegates to `ReqLLM.Providers.OpenAI.ResponsesAPI.build_compact_body/4`.
+  """
+  def format_compact_request(model_id, context, opts) when is_list(opts) do
+    fake_request = %{
+      options: %{
+        model: model_id,
+        id: model_id,
+        req_llm_model: request_model(model_id, opts),
+        operation: :compact,
+        context: context,
+        provider_options: opts[:provider_options] || []
+      }
+    }
+
+    ResponsesAPI.build_compact_body(context, model_id, fake_request.options, fake_request)
+  end
+
+  defp request_model(model_id, opts) do
+    case opts[:req_llm_model] do
+      %LLMDB.Model{} = model -> model
+      _ -> %LLMDB.Model{provider: :azure, id: model_id}
+    end
   end
 
   defp fetch_first([]), do: nil
