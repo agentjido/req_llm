@@ -321,6 +321,7 @@ include a built-in model-selection policy.
 - **Provider-specific capabilities**
   - Anthropic web search for real-time content access (via `provider_options: [web_search: %{max_uses: 5}]`)
   - Extended thinking/reasoning for supported models
+  - OpenAI Responses reasoning summaries, `reasoning.context` and context compaction (`ReqLLM.compact_context/3`) on OpenAI and Azure
   - Prompt caching for cost optimization
   - All provider-specific options documented in provider guides
 

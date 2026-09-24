@@ -295,6 +295,25 @@ Passed via `:provider_options` keyword:
 - **Purpose**: Control reasoning effort
 - **Example**: `reasoning_effort: :high`
 
+### `reasoning_summary`
+
+- **Type**: `:auto` | `:concise` | `:detailed` | String
+- **Purpose**: Ask a Responses API reasoning model for a human-readable summary of its reasoning (`reasoning.summary`). GPT-5 models do not support `:concise`.
+- **Example**: `provider_options: [reasoning_summary: :auto]`
+- **Result**: Non-streaming responses carry the summary text on `message.reasoning_details` (parts joined by a blank line; the raw `summary` array is kept in `provider_data["summary"]` and replayed on later turns). Streaming responses emit each summary delta as a `:thinking` chunk whose metadata carries `item_id`, `output_index` and `summary_index`, and a `:meta` chunk with a `reasoning_summary_part` map (`status: :added | :done`, the same ids and the completed part `text`) at every part boundary.
+
+### `reasoning_context`
+
+- **Type**: `:current_turn` | `:all_turns` | String
+- **Purpose**: Choose which earlier reasoning items the model renders into context (`reasoning.context`, GPT-5.4 and later). GPT-5.6 defaults to `:all_turns`, which bills more tokens on multi-turn conversations; pin `:current_turn` to keep the earlier behaviour. The response echoes the effective mode in `provider_meta["reasoning"]["context"]`.
+- **Example**: `provider_options: [reasoning_context: :current_turn]`
+
+### `context_management`
+
+- **Type**: List of maps or keyword lists
+- **Purpose**: Enable server-side context management on ordinary requests, such as automatic compaction once the output token count crosses a threshold. Any `compaction` item the service emits lands on the response message as a `:provider_block` content part and is replayed automatically on the next request. See [Context Compaction](#context-compaction-responses-api).
+- **Example**: `provider_options: [context_management: [%{type: "compaction", compact_threshold: 200_000}]]`
+
 ### `service_tier`
 
 - **Type**: `:auto` | `:default` | `:flex` | `:priority` | String
@@ -368,6 +387,61 @@ Passed via `:provider_options` keyword:
 - **Type**: List of `%{call_id, output}` maps
 - **Purpose**: Provide tool execution results for resume flow
 - **Example**: `provider_options: [tool_outputs: [%{call_id: "call_1", output: "result"}]]`
+
+## Context Compaction (Responses API)
+
+Long conversations can be folded into opaque `compaction` items that carry the
+essential prior state (including reasoning) in far fewer tokens. ReqLLM keeps
+those items as `:provider_block` content parts on the assistant message and
+replays them verbatim, as top-level input items, on the next request.
+
+### Manual compaction
+
+`ReqLLM.compact_context/3` calls `POST /responses/compact`. The returned
+`ReqLLM.Response` has a `context` holding only the compacted assistant message,
+so the next user message can be appended directly:
+
+```elixir
+{:ok, first} = ReqLLM.generate_text("openai:gpt-5.4", "Draft a landing page for a dog cafe.")
+
+{:ok, compacted} = ReqLLM.compact_context("openai:gpt-5.4", first.context)
+
+next = ReqLLM.Context.append(compacted.context, ReqLLM.Context.user("Add a booking form."))
+{:ok, follow_up} = ReqLLM.generate_text("openai:gpt-5.4", next)
+```
+
+A stored response can be compacted by id instead of replaying its messages:
+
+```elixir
+{:ok, compacted} =
+  ReqLLM.compact_context("openai:gpt-5.4", nil, previous_response_id: first.id)
+```
+
+The compacted message keeps the compaction response id under
+`metadata.compaction_response_id` rather than `metadata.response_id`, so the
+next turn replays the compaction items instead of chaining through
+`previous_response_id`. `ReqLLM.Response.provider_items/1` returns the
+compaction parts, and `ReqLLM.Compaction.trim/1` drops every message before the
+most recent compaction item when you keep appending to an existing context.
+
+### Server-side compaction
+
+Pass `context_management` on ordinary requests and the service compacts on its
+own once the threshold is crossed. Compaction items arrive in the response
+output (streamed as `:content_part` chunks on `response.output_item.done`) and
+replay automatically:
+
+```elixir
+{:ok, response} =
+  ReqLLM.generate_text("openai:gpt-5.4", context,
+    provider_options: [
+      store: false,
+      context_management: [%{type: "compaction", compact_threshold: 200_000}]
+    ]
+  )
+```
+
+Compaction is available on OpenAI and Azure OpenAI Responses API models.
 
 ## WebSocket Mode
 
