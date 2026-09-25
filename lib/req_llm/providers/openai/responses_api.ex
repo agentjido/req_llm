@@ -1949,12 +1949,8 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     schema = ReqLLM.Tool.to_schema(tool)
     function_def = schema["function"]
 
-    params =
-      if strict do
-        normalize_parameters_for_strict(function_def["parameters"])
-      else
-        normalize_parameters(function_def["parameters"])
-      end
+    parameters = if tool.parameter_schema == [], do: nil, else: function_def["parameters"]
+    params = normalize_tool_parameters(parameters, strict)
 
     openai_options = ReqLLM.Tool.provider_options(tool, :openai)
 
@@ -1984,28 +1980,30 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
         name = function_def["name"]
         description = function_def["description"]
         raw_params = function_def["parameters"]
-        params = normalize_parameters_for_strict(raw_params)
+        strict = tool_strict_flag(function_def, tool_schema)
+        params = normalize_tool_parameters(raw_params, strict)
 
         %{
           "type" => "function",
           "name" => name,
           "description" => description,
           "parameters" => params,
-          "strict" => true
+          "strict" => strict
         }
         |> ReqLLM.Providers.OpenAI.Astra.put_async(Map.merge(tool_schema, function_def))
       else
         name = tool_schema["name"]
         description = tool_schema["description"]
         raw_params = tool_schema["parameters"]
-        params = normalize_parameters_for_strict(raw_params)
+        strict = tool_strict_flag(tool_schema, tool_schema)
+        params = normalize_tool_parameters(raw_params, strict)
 
         %{
           "type" => "function",
           "name" => name,
           "description" => description,
           "parameters" => params,
-          "strict" => true
+          "strict" => strict
         }
         |> ReqLLM.Providers.OpenAI.Astra.put_async(tool_schema)
       end
@@ -2021,6 +2019,16 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     do: Map.put(function, "defer_loading", true)
 
   defp put_defer_loading(function, _options), do: function
+
+  defp tool_strict_flag(function_def, tool_schema) do
+    case function_def["strict"] do
+      strict when is_boolean(strict) -> strict
+      _ -> tool_schema["strict"] != false
+    end
+  end
+
+  defp normalize_tool_parameters(params, true), do: normalize_parameters_for_strict(params)
+  defp normalize_tool_parameters(params, false), do: normalize_parameters(params)
 
   defp normalize_parameters_for_strict(nil) do
     %{
@@ -2045,17 +2053,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   end
 
   defp normalize_parameters(params) when is_map(params) do
-    params = stringify_keys(params)
-    properties = params["properties"] || %{}
-    ordering = params["propertyOrdering"]
-
-    result = %{
-      "type" => "object",
-      "properties" => stringify_keys(properties),
-      "additionalProperties" => false
-    }
-
-    if ordering, do: Map.put(result, "propertyOrdering", ordering), else: result
+    stringify_keys(params)
   end
 
   defp stringify_keys(map) when is_map(map) do

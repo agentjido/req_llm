@@ -32,6 +32,16 @@ defmodule ReqLLM.Tool do
         units: [type: :string, default: "celsius", doc: "Temperature units"]
       ]
 
+  Raw JSON Schema maps are also accepted. In Responses requests with
+  `strict: false`, the caller's schema is preserved. Required fields remain
+  required in the schema; optional fields remain optional. The provider uses
+  best-effort schema adherence and can reject invalid or unsupported schemas.
+
+  Set `"additionalProperties" => false` explicitly in a raw schema if extra
+  arguments must be excluded. Keyword schemas already include this setting.
+  Raw JSON Schema maps do not compile a local input validator; validate model
+  arguments in the application when needed.
+
   ## Callback Formats
 
   Multiple callback formats are supported:
