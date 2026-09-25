@@ -243,7 +243,7 @@ defmodule ReqLLM.Step.UsageTest do
       {"atom keys", %{input: 0.003, output: 0.015}, 1000, 500, 0.000011},
       {"string keys", %{"input" => 0.002, "output" => 0.004}, 1000, 1000, 0.000006},
       {"no cost", nil, 1000, 500, nil},
-      {"incomplete cost", %{input: 0.002}, 100, 50, 0.0}
+      {"incomplete cost", %{input: 0.002}, 100, 50, nil}
     ]
 
     for {description, cost_map, input_tokens, output_tokens, expected_cost} <- @cost_scenarios do
@@ -527,7 +527,7 @@ defmodule ReqLLM.Step.UsageTest do
       assert usage_data.output_cost == expected_cost.output_cost
     end
 
-    test "handles cached tokens without cached_input rate (uses input rate)" do
+    test "reports unknown pricing when cached tokens have no cache rate" do
       model = %LLMDB.Model{
         provider: :openai,
         id: "gpt-4",
@@ -550,12 +550,8 @@ defmodule ReqLLM.Step.UsageTest do
       usage_data = updated_resp.private[:req_llm][:usage]
       assert usage_data.tokens.cached_input == 500
 
-      # Both cached and uncached should use input rate when cached_input not specified
-      # Input cost: 1000 * 0.01 / 1000000 = 0.00001 (same as before)
-      expected_cost = billing_cost(model, response_body["usage"])
-
-      assert usage_data.input_cost == expected_cost.input_cost
-      assert usage_data.output_cost == expected_cost.output_cost
+      assert usage_data.cost == nil
+      assert usage_data.pricing.status == :unknown
     end
 
     test "handles Response struct with cached tokens" do
@@ -806,11 +802,8 @@ defmodule ReqLLM.Step.UsageTest do
       assert usage_data.tokens.input == 500
       assert usage_data.tokens.cached_input == 500
 
-      # Cost should reflect clamped cached tokens: all input tokens are cached
-      expected_input_cost = Float.round(500 * 0.005 / 1_000_000, 6)
-      expected_output_cost = Float.round(200 * 0.03 / 1_000_000, 6)
-      assert usage_data.input_cost == expected_input_cost
-      assert usage_data.output_cost == expected_output_cost
+      assert usage_data.pricing.status == :unknown
+      refute Map.has_key?(usage_data, :total_cost)
     end
 
     test "clamps cached tokens when less than 0" do
@@ -837,10 +830,8 @@ defmodule ReqLLM.Step.UsageTest do
       assert usage_data.tokens.input == 300
       assert usage_data.tokens.cached_input == 0
 
-      # Cost should reflect no cached tokens: all input tokens use regular rate
-      expected_input_cost = Float.round(300 * 0.01 / 1_000_000, 6)
-      assert usage_data.input_cost == expected_input_cost
-      assert usage_data.output_cost == 0.000004
+      assert usage_data.pricing.status == :unknown
+      refute Map.has_key?(usage_data, :total_cost)
     end
 
     test "handles input tokens = 0 with cached tokens set to 0" do
@@ -867,10 +858,8 @@ defmodule ReqLLM.Step.UsageTest do
       assert usage_data.tokens.input == 0
       assert usage_data.tokens.cached_input == 0
 
-      # No input cost, only output cost
-      assert usage_data.input_cost == 0.0
-      expected_output_cost = Float.round(100 * 0.03 / 1_000_000, 6)
-      assert usage_data.output_cost == expected_output_cost
+      assert usage_data.pricing.status == :unknown
+      refute Map.has_key?(usage_data, :total_cost)
     end
 
     test "handles invalid cached token values by defaulting to 0" do
@@ -900,11 +889,12 @@ defmodule ReqLLM.Step.UsageTest do
         assert usage_data.tokens.input == 200
         assert usage_data.tokens.cached_input == 0
 
-        # Should use regular input rate for all tokens
-        expected_input_cost = Float.round(200 * 0.01 / 1_000_000, 6)
-        expected_output_cost = Float.round(80 * 0.03 / 1_000_000, 6)
-        assert usage_data.input_cost == expected_input_cost
-        assert usage_data.output_cost == expected_output_cost
+        if is_nil(invalid_value) do
+          assert is_number(usage_data.total_cost)
+        else
+          assert usage_data.pricing.status == :unknown
+          refute Map.has_key?(usage_data, :total_cost)
+        end
       end
     end
 
@@ -940,9 +930,8 @@ defmodule ReqLLM.Step.UsageTest do
         assert usage_data.tokens.input == 1000
         assert usage_data.tokens.cached_input == expected_int
 
-        expected_cost = billing_cost(model, response_body["usage"])
-        assert usage_data.input_cost == expected_cost.input_cost
-        assert usage_data.output_cost == expected_cost.output_cost
+        assert usage_data.pricing.status == :unknown
+        refute Map.has_key?(usage_data, :total_cost)
       end
     end
 
@@ -1024,12 +1013,8 @@ defmodule ReqLLM.Step.UsageTest do
       # Should be clamped to input_tokens
       assert response_usage.cached_tokens == 250
 
-      # Cost should reflect all input tokens as cached
-      expected_input_cost = Float.round(250 * 0.005 / 1_000_000, 6)
-      expected_output_cost = Float.round(100 * 0.03 / 1_000_000, 6)
-
-      assert response_usage.input_cost == expected_input_cost
-      assert response_usage.output_cost == expected_output_cost
+      assert response_usage.pricing.status == :unknown
+      refute Map.has_key?(response_usage, :total_cost)
     end
   end
 

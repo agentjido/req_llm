@@ -314,10 +314,14 @@ Browse available models:
 
 ## Pricing
 
-Dynamic pricing based on underlying provider. Check response usage:
+OpenRouter's route and account may have prices that differ from a model's first-party tariff. Check the response pricing status before using a cost estimate:
 ```elixir
 {:ok, response} = ReqLLM.generate_text("openrouter:model", "Hello")
-IO.puts("Cost: $#{response.usage.total_cost}")
+
+case response.usage.pricing do
+  %{status: :priced, currency: "USD"} -> IO.puts("Estimated cost: $#{response.usage.total_cost}")
+  %{status: :unknown} -> IO.puts("Price unknown for this route")
+end
 ```
 
 ## Key Benefits

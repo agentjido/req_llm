@@ -608,6 +608,7 @@ defmodule ReqLLM.Provider.Defaults do
       :cache_key,
       :cache_ttl,
       :cache_options,
+      :pricing_context,
       :req_http_options,
       :telemetry
     ]

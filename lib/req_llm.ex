@@ -152,16 +152,6 @@ defmodule ReqLLM do
       input: {1.25, 2.5},
       output: {10.0, 15.0},
       cache_read: {0.125, 0.25}
-    },
-    "gemini-3.1-pro-preview" => %{
-      input: {2.0, 4.0},
-      output: {12.0, 18.0},
-      cache_read: {0.2, 0.4}
-    },
-    "gemini-3.1-pro-preview-customtools" => %{
-      input: {2.0, 4.0},
-      output: {12.0, 18.0},
-      cache_read: {0.2, 0.4}
     }
   }
 
@@ -593,11 +583,15 @@ defmodule ReqLLM do
       case Map.get(tiered_rates, key) do
         {standard_rate, long_context_rate} ->
           [
-            google_tiered_component("#{token_component_id(key)}.standard_context", standard_rate,
-              max_input_tokens: @google_long_context_threshold
+            google_tiered_component(
+              "#{token_component_id(key)}.standard_context",
+              standard_rate,
+              %{input_tokens: %{lte: @google_long_context_threshold}}
             ),
-            google_tiered_component("#{token_component_id(key)}.long_context", long_context_rate,
-              min_input_tokens: @google_long_context_threshold + 1
+            google_tiered_component(
+              "#{token_component_id(key)}.long_context",
+              long_context_rate,
+              %{input_tokens: %{gt: @google_long_context_threshold}}
             )
           ]
 
@@ -607,16 +601,16 @@ defmodule ReqLLM do
     end)
   end
 
-  defp google_tiered_component(id, rate, opts) do
+  defp google_tiered_component(id, rate, applies_when) do
     %{
       id: id,
       kind: "token",
       unit: "token",
       per: 1_000_000,
-      rate: rate
+      rate: rate,
+      applies_when: applies_when,
+      charge_scope: "full_request"
     }
-    |> maybe_put_map_value(:min_input_tokens, opts[:min_input_tokens])
-    |> maybe_put_map_value(:max_input_tokens, opts[:max_input_tokens])
   end
 
   defp normalize_google_cost(cost, tiered_rates) do
@@ -655,9 +649,6 @@ defmodule ReqLLM do
   defp token_component_id(:input), do: "token.input"
   defp token_component_id(:output), do: "token.output"
   defp token_component_id(:cache_read), do: "token.cache_read"
-
-  defp maybe_put_map_value(map, _key, nil), do: map
-  defp maybe_put_map_value(map, key, value), do: Map.put(map, key, value)
 
   defp resolve_catalog_model(provider, model_id) do
     case LLMDB.Spec.resolve({provider, model_id}) do
@@ -992,6 +983,9 @@ defmodule ReqLLM do
     * `:total_timeout` - Optional whole-call deadline in milliseconds, including retries
     * `:stream_idle_timeout` - Optional semantic-progress timeout for streaming calls
     * `:provider_options` - Provider-specific options
+    * `:pricing_context` - Caller-confirmed pricing facts, such as billing period,
+      actual service tier, region, account plan, and cache duration. Used only for
+      local usage pricing and never sent to the provider
 
   ## Examples
 

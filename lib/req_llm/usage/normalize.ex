@@ -44,9 +44,28 @@ defmodule ReqLLM.Usage.Normalize do
 
     cached_input = get_cached_input_tokens(usage, input, input_includes_cached)
     cache_creation = get_cache_creation_tokens(usage, input, input_includes_cached)
+    cache_write_tokens_by_ttl = cache_write_groups(usage)
     total_tokens = total_tokens_from_usage(usage, input, output)
 
-    %{
+    canonical = %{
+      billing_usage_complete:
+        Map.get(
+          usage,
+          :billing_usage_complete,
+          cache_counts_consistent?(usage, input, input_includes_cached)
+        ),
+      usage_reported:
+        MapAccess.get(usage, :usage_reported) ||
+          %{
+            input: reported?(usage, [:input, :prompt_tokens, :input_tokens, :promptTokenCount]),
+            output:
+              reported?(usage, [
+                :output,
+                :completion_tokens,
+                :output_tokens,
+                :candidatesTokenCount
+              ])
+          },
       input: input,
       output: output,
       reasoning: reasoning,
@@ -63,12 +82,62 @@ defmodule ReqLLM.Usage.Normalize do
       cache_write_tokens: cache_creation,
       cached_tokens: cached_input,
       cache_creation_tokens: cache_creation,
+      cache_write_tokens_by_ttl: cache_write_tokens_by_ttl,
       reasoning_tokens: reasoning
     }
+
+    usage
+    |> Map.take([:cache_storage_token_hours, "cache_storage_token_hours"])
+    |> Map.merge(canonical)
   end
 
   defp first_present(usage, keys) do
     Enum.find_value(keys, fn key -> MapAccess.get(usage, key) end)
+  end
+
+  defp reported?(usage, keys) do
+    Enum.any?(keys, &(not is_nil(MapAccess.get(usage, &1))))
+  end
+
+  defp cache_counts_consistent?(usage, input, includes_cached) do
+    read =
+      first_present(usage, [
+        :cache_read_tokens,
+        :cache_read_input_tokens,
+        :cached_tokens,
+        :cached_input
+      ]) ||
+        get_in(usage, ["prompt_tokens_details", "cached_tokens"]) ||
+        get_in(usage, ["input_tokens_details", "cached_tokens"])
+
+    write =
+      first_present(usage, [
+        :cache_write_tokens,
+        :cache_creation_tokens,
+        :cache_creation_input_tokens
+      ]) ||
+        get_in(usage, ["prompt_tokens_details", "cache_write_tokens"]) ||
+        get_in(usage, ["input_tokens_details", "cache_write_tokens"])
+
+    with {:ok, read_count} <- raw_count(read),
+         {:ok, write_count} <- raw_count(write),
+         true <- not includes_cached or not is_number(input) or read_count + write_count <= input do
+      true
+    else
+      _ -> false
+    end
+  end
+
+  defp raw_count(nil), do: {:ok, 0}
+
+  defp raw_count(value) do
+    case safe_to_number(value) do
+      {:ok, count} when count >= 0 and (not is_float(value) or value == count) ->
+        {:ok, count}
+
+      _ ->
+        :error
+    end
   end
 
   @doc false
@@ -227,9 +296,9 @@ defmodule ReqLLM.Usage.Normalize do
       MapAccess.get(usage, :cache_write_tokens) ||
         MapAccess.get(usage, "cache_write_tokens") ||
         MapAccess.get(usage, :cache_creation_tokens) ||
-        MapAccess.get(usage, :cache_creation) ||
         MapAccess.get(usage, :cache_creation_input_tokens) ||
         MapAccess.get(usage, "cache_creation_input_tokens") ||
+        MapAccess.get(usage, :cache_creation) ||
         MapAccess.get(usage, :cacheWriteInputTokens) ||
         MapAccess.get(usage, "cacheWriteInputTokens") ||
         MapAccess.get(usage, :cacheWriteInputTokenCount) ||
@@ -241,10 +310,36 @@ defmodule ReqLLM.Usage.Normalize do
         get_in(usage, ["input_tokens_details", "cache_write_tokens"]) ||
         get_in(usage, [:input_tokens_details, :cache_write_tokens])
 
+    creation =
+      case creation do
+        %{} = groups -> groups |> Map.values() |> Enum.map(&safe_to_int/1) |> Enum.sum()
+        value -> value
+      end
+
     if input_includes_cached do
       clamp_tokens(creation, input)
     else
       safe_to_int(creation)
+    end
+  end
+
+  defp cache_write_groups(usage) do
+    case MapAccess.get(usage, :cache_write_tokens_by_ttl) || MapAccess.get(usage, :cache_creation) do
+      %{} = groups ->
+        five_minutes = MapAccess.get(groups, :ephemeral_5m_input_tokens)
+        one_hour = MapAccess.get(groups, :ephemeral_1h_input_tokens)
+
+        if is_nil(five_minutes) and is_nil(one_hour) do
+          if Map.has_key?(groups, "5m") or Map.has_key?(groups, "1h") or
+               Map.has_key?(groups, :"5m") or Map.has_key?(groups, :"1h"),
+             do: groups,
+             else: nil
+        else
+          %{"5m" => five_minutes || 0, "1h" => one_hour || 0}
+        end
+
+      _ ->
+        nil
     end
   end
 

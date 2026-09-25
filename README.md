@@ -461,13 +461,14 @@ response.usage
 #     input_tokens: 8,
 #     output_tokens: 12,
 #     total_tokens: 20,
+#     pricing: %{status: :priced, currency: "USD", total: 0.0006},
 #     input_cost: 0.00024,
 #     output_cost: 0.00036,
 #     total_cost: 0.0006
 #   }
 ```
 
-ReqLLM treats pricing as an observability and estimation feature, not an invoice guarantee. When provider billing accuracy matters, compare these values against your own provider-side reporting. See the [Pricing Policy](guides/pricing-policy.md) guide for the full contract and known limitations.
+ReqLLM treats pricing as an observability and estimation feature, not an invoice guarantee. Conditional tariffs need caller-confirmed facts in `pricing_context`. If usage or tariff selection is incomplete, `pricing.status` is `:unknown` and numeric cost fields are absent; when the provider returns no usage, `response.usage` may be `nil`. When provider billing accuracy matters, compare these values against your own provider-side reporting. See the [Usage & Billing](guides/usage-and-billing.md) and [Pricing Policy](guides/pricing-policy.md) guides.
 
 ### Tool & Image Usage
 

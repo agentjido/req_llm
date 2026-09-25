@@ -397,7 +397,7 @@ provider-native feature and are not consulted by request routing.
 | `mistralai/mistral-large` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:38:18Z | missing or stale evidence |
 | `mistralai/mistral-large-2407` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:38:18Z | missing or stale evidence |
 | `mistralai/mistral-large-2411` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:38:18Z | surface declaration unknown |
-| `mistralai/mistral-large-2512` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:38:18Z | surface declaration unknown |
+| `mistralai/mistral-large-2512` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:38:18Z | missing or stale evidence |
 | `mistralai/mistral-medium-3` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:38:18Z | missing or stale evidence |
 | `mistralai/mistral-medium-3-5` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:38:18Z | missing or stale evidence |
 | `mistralai/mistral-medium-3.1` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:38:18Z | missing or stale evidence |
