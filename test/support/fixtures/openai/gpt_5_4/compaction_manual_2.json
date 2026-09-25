@@ -1,0 +1,168 @@
+{
+  "model_spec": "openai:gpt-5.4",
+  "provider": "openai",
+  "request": {
+    "body": {
+      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IkNyZWF0ZSBhIHNpbXBsZSBsYW5kaW5nIHBhZ2UgZm9yIGEgZG9nIGNhZmUuIEtlZXAgaXQgdW5kZXIgMjAwIHdvcmRzLiIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9LHsiY29udGVudCI6W3sidGV4dCI6IjwhRE9DVFlQRSBodG1sPlxuPGh0bWwgbGFuZz1cImVuXCI+XG48aGVhZD5cbiAgPG1ldGEgY2hhcnNldD1cIlVURi04XCIgLz5cbiAgPG1ldGEgbmFtZT1cInZpZXdwb3J0XCIgY29udGVudD1cIndpZHRoPWRldmljZS13aWR0aCwgaW5pdGlhbC1zY2FsZT0xLjBcIiAvPlxuICA8dGl0bGU+UGF3cyAmIENvZmZlZTwvdGl0bGU+XG4gIDxzdHlsZT5cbiAgICBib2R5IHtcbiAgICAgIG1hcmdpbjogMDtcbiAgICAgIGZvbnQtZmFtaWx5OiBBcmlhbCwgc2Fucy1zZXJpZjtcbiAgICAgIGJhY2tncm91bmQ6ICNmZmY4ZjA7XG4gICAgICBjb2xvcjogIzMzMztcbiAgICAgIHRleHQtYWxpZ246IGNlbnRlcjtcbiAgICB9XG4gICAgLmhlcm8ge1xuICAgICAgcGFkZGluZzogODBweCAyMHB4O1xuICAgICAgYmFja2dyb3VuZDogI2Y0ZDZhMDtcbiAgICB9XG4gICAgaDEge1xuICAgICAgZm9udC1zaXplOiAzcmVtO1xuICAgICAgbWFyZ2luLWJvdHRvbTogMTBweDtcbiAgICB9XG4gICAgcCB7XG4gICAgICBmb250LXNpemU6IDEuMXJlbTtcbiAgICAgIG1heC13aWR0aDogNjAwcHg7XG4gICAgICBtYXJnaW46IDAgYXV0byAyMHB4O1xuICAgIH1cbiAgICAuYnRuIHtcbiAgICAgIGRpc3BsYXk6IGlubGluZS1ibG9jaztcbiAgICAgIHBhZGRpbmc6IDEycHggMjRweDtcbiAgICAgIGJhY2tncm91bmQ6ICM4YjVlM2M7XG4gICAgICBjb2xvcjogd2hpdGU7XG4gICAgICB0ZXh0LWRlY29yYXRpb246IG5vbmU7XG4gICAgICBib3JkZXItcmFkaXVzOiA4cHg7XG4gICAgfVxuICAgIC5idG46aG92ZXIge1xuICAgICAgYmFja2dyb3VuZDogIzZmNDcyZDtcbiAgICB9XG4gIDwvc3R5bGU+XG48L2hlYWQ+XG48Ym9keT5cbiAgPHNlY3Rpb24gY2xhc3M9XCJoZXJvXCI+XG4gICAgPGgxPlBhd3MgJiBDb2ZmZWU8L2gxPlxuICAgIDxwPlJlbGF4IHdpdGggYSB3YXJtIGRyaW5rIHdoaWxlIHNwZW5kaW5nIHRpbWUgd2l0aCBmcmllbmRseSwgcGxheWZ1bCBkb2dzLiBFbmpveSBoYW5kY3JhZnRlZCBjb2ZmZWUsIGZyZXNoIHBhc3RyaWVzLCBhbmQgcGxlbnR5IG9mIHRhaWwgd2FncyBpbiBhIGNvenkgY2Fmw6kgbWFkZSBmb3IgZG9nIGxvdmVycy48L3A+XG4gICAgPGEgaHJlZj1cIiNcIiBjbGFzcz1cImJ0blwiPlZpc2l0IFVzPC9hPlxuICA8L3NlY3Rpb24+XG48L2JvZHk+XG48L2h0bWw+IiwidHlwZSI6Im91dHB1dF90ZXh0In1dLCJwaGFzZSI6ImZpbmFsX2Fuc3dlciIsInJvbGUiOiJhc3Npc3RhbnQifV0sIm1vZGVsIjoiZ3B0LTUuNCJ9"
+    },
+    "canonical_json": {
+      "input": [
+        {
+          "content": [
+            {
+              "text": "Create a simple landing page for a dog cafe. Keep it under 200 words.",
+              "type": "input_text"
+            }
+          ],
+          "role": "user"
+        },
+        {
+          "content": [
+            {
+              "text": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n  <title>Paws & Coffee</title>\n  <style>\n    body {\n      margin: 0;\n      font-family: Arial, sans-serif;\n      background: #fff8f0;\n      color: #333;\n      text-align: center;\n    }\n    .hero {\n      padding: 80px 20px;\n      background: #f4d6a0;\n    }\n    h1 {\n      font-size: 3rem;\n      margin-bottom: 10px;\n    }\n    p {\n      font-size: 1.1rem;\n      max-width: 600px;\n      margin: 0 auto 20px;\n    }\n    .btn {\n      display: inline-block;\n      padding: 12px 24px;\n      background: #8b5e3c;\n      color: white;\n      text-decoration: none;\n      border-radius: 8px;\n    }\n    .btn:hover {\n      background: #6f472d;\n    }\n  </style>\n</head>\n<body>\n  <section class=\"hero\">\n    <h1>Paws & Coffee</h1>\n    <p>Relax with a warm drink while spending time with friendly, playful dogs. Enjoy handcrafted coffee, fresh pastries, and plenty of tail wags in a cozy café made for dog lovers.</p>\n    <a href=\"#\" class=\"btn\">Visit Us</a>\n  </section>\n</body>\n</html>",
+              "type": "output_text"
+            }
+          ],
+          "phase": "final_answer",
+          "role": "assistant"
+        }
+      ],
+      "model": "gpt-5.4"
+    },
+    "headers": {
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.7.4"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.openai.com/v1/responses/compact"
+  },
+  "response": {
+    "body": {
+      "created_at": 1790343203,
+      "id": "resp_01744c0ab8d5e9b1016ab6781c65b487d1abcb6eba15788a79",
+      "object": "response.compaction",
+      "output": [
+        {
+          "content": [
+            {
+              "text": "Create a simple landing page for a dog cafe. Keep it under 200 words.",
+              "type": "input_text"
+            }
+          ],
+          "id": "msg_01744c0ab8d5e9b1016ab6781c6a5c87d1a1d91cdb4a6324c0",
+          "role": "user",
+          "status": "completed",
+          "type": "message"
+        },
+        {
+          "content": [
+            {
+              "annotations": [],
+              "logprobs": [],
+              "text": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n  <title>Paws & Coffee</title>\n  <style>\n    body {\n      margin: 0;\n      font-family: Arial, sans-serif;\n      background: #fff8f0;\n      color: #333;\n      text-align: center;\n    }\n    .hero {\n      padding: 80px 20px;\n      background: #f4d6a0;\n    }\n    h1 {\n      font-size: 3rem;\n      margin-bottom: 10px;\n    }\n    p {\n      font-size: 1.1rem;\n      max-width: 600px;\n      margin: 0 auto 20px;\n    }\n    .btn {\n      display: inline-block;\n      padding: 12px 24px;\n      background: #8b5e3c;\n      color: white;\n      text-decoration: none;\n      border-radius: 8px;\n    }\n    .btn:hover {\n      background: #6f472d;\n    }\n  </style>\n</head>\n<body>\n  <section class=\"hero\">\n    <h1>Paws & Coffee</h1>\n    <p>Relax with a warm drink while spending time with friendly, playful dogs. Enjoy handcrafted coffee, fresh pastries, and plenty of tail wags in a cozy café made for dog lovers.</p>\n    <a href=\"#\" class=\"btn\">Visit Us</a>\n  </section>\n</body>\n</html>",
+              "type": "output_text"
+            }
+          ],
+          "id": "msg_01744c0ab8d5e9b1016ab6781c6a7c87d19ec7023864520009",
+          "phase": "final_answer",
+          "role": "assistant",
+          "status": "completed",
+          "type": "message"
+        },
+        {
+          "encrypted_content": "gAAAAABqtngjjMRjXVAROg10zMS1AoFR702Rza3t_RLAPGDKukQCiXejovkvEn88y5u8XbGuzHbYrIEXeMv4V96kF2YwY8yrVFASFJI-xgfcC3q8iTDfNNsCQm7mDVrp06Dh4CPhbZFD0i4iv5hJlp92CGHcSF4PtOkMSit6vxU7ao1FHeaylhOnvc1ub4L-ynoSrat3oXiysqreIlKGMq9sN9AlZKAgJ7aTVINI072CfK8DXa9NKlONamJYfhV7FDf9tpJoLA7YFxLDbQgZaePEX0n65c-lw3nwVxghhOuKoMWj0_fbpzEZYtx7JzdxdzZwDSbt6iQcDBgbK3SLI5flcZWukvROJmEDN4ijBgIOZBVuhxTNRbsHzZbuSP3WBxiksUVoKCLmA83X2oN9rGnzTH8i_yloVjmDjwXP4phjD5ZUuLr8Ad0dOVHUl3911_ON84uUbh3DsUPQejq5TthOPerd0qQPzLS3jUsDQf3KjGc3tFHT3PbHSlDqwEhOuU7bZbETq8qqt6eVIxdbZ99M5Pz5VmeYSWwpQP4IYDiWquuUG4E-m4mz-J9oGlWw3Ya16hcI7nlVlG7Kip4UcAvo9rCcqHEkMYJ-HCqPIXSKo1Nd_OFSh2Wk_Nyl6xJSPFy6PtnDWgUwyzjOWLQ6rg_OxPqtzpfk2uLBNJQ2OwnYXy3YdDB7srWz_GntWc2CJ02FLrjH_02yUEl2eFNDpf0FimjXC7SV5UqTVeBunXL2e-1NJvlWuzACbhxSouHe8djFSPu-sgAGYNDXJw67bhSpidW_xhe1KzLgCWmug-n8Uc9MlwUlTVlEE4ptnJSNg8xYE4WIEm5jUb-iwWeHLtnrQ4tVYd563605QuZHqCb2yRUzoPfqcaK_r8gnHTTlo_3x5XDaWBpq-NrR9s1vaua1JyNV2ob_tplNRvGd2wvW2vIOcxBuqEokPmAYGauVUIAZ4znc612yhZt8um-82HM4iXwJx_LGLgCuXq1Ob8FU52-AnRK9vM7Lidt7z-QjEfcs0YGnEI6_uPy4WBJ_GI71cDMydsk_uyNWJktPpcGRZHCKRBaYjmEwZTK9gD89CHDUZVSgTDEvCJe58xIxZYRyxe9KXB3bIVNqml8jHGU7Uu4WhSjnaf1olqe6jYVq9kAHK2_TKMJXhuCvDPzvMlURJjY_1W3jwUmZZnEmRN-evVOJ6AiMMyNkdVo8cnDxLk1CIqhfJRJ0I6N2XDvSX0O0T83Q1mVHxu5aRAB5t1stPnMiwBfLDByxkWJuePUfAKHpw49-vt-jBM9W54BUZCT8q89CD6hkhSB6LfcEO7AUQSj2nZQUSvCiNgsQ674zX1saw2PJiMvx7SAbwr8XaiETWEOJFRGeX6LriIXLhoPDll6Z8tkUcMeEa-W2-B6bRIFjV1V3CB6QWaZ1k-7jJuyN6PIOmxjLS0bIExa9mOgHdGlYSnCQ0gvNzyBahCp8XhvTgLo80OpmfhTXFZgMii1crto_XL5lb5fZ2WX0MRrT5rhW50MBm4k70AB8s6Q4-cbySnBpC1kW9uWH7BPSxLqpw_MM0wuZ0QIXaq-CFVYJ9vc1aDiApRE-HMvuGt69fZ78CmrNLfQa5hSNBD5NfFgUyiJdQk4GfAc2LAepd327PjGQJsNZOa6CxZk8JxBLErxIJN52tCQok7IZfq7pY-K38U8-fZiCp8GfHqItzvX6z4iEelI92E_1zYzWNIE3Zzd6KeClcRdvV92_FHOy6Z7mMzB7nAbP_5B4Wij6SpDM-8wGR9ZgqpcsnyYOjqQRKNGwrT-qVkBBnQZvqTolbMoUJE_7lkimuL9wi6ucqRbPH5gnrWd_f2emzbEkyGidYzp3gLqtlrqMcXDhknQ2VavBq76WcC9HwdsMrS3QSBVnm2AvM5OgmxxPtYHObcoecNwa4bRMqonJjAYLDdsFH4LmhjDzpIuzcVIza_LDmy9kzM_rqVDI1UI6VA7GXiCOMB0wHteJYi1NfpEBIP4RIeEh_OJVB44grHYe3-TBm3hm3IErnFWXHHc_LeDFHw2WMRlr68xfDr5t--DEVm0M3LktgDcMiowbxvGzijZA-1Cb9D685U3LtW5FhwPprA_kHbFaEjAEw-LUBF5VMI9IyUfN_fLhJOBKsK1Rb-8eBtXrQiNELeSS6hbATx67PJXeFLbjPeys5U8YCtkMYDSrA-Aj1uSdM0pa7Dp3jsJDOSgDycGOnQ6NvIILQYzyeSinhxfoKxt0ierNP1E1cSmKwnFxseRtkZfWtRnAJNRg-ChfxalUYsnqrwST3r5equ3Fpv_LGJ8THJ6IPDi4qMLMiOphgKyL4gog-BaSSBiLKj9Dw1xmaHei7N_-00jxbnMZNbHbpLmEkrR7mpkKrMymsHm3I9wl0zLPKDsOkaqJEfBrTcGrxWrKnQ2ysa_Pas2G4Iee4KRsctYqYPXYK1LjogXzxtytxc23mbyJKxNfMvD1fGB05aGKD43gUXxFwlW59VllKHAtzUY8XMETKjK42viwM11w2ser9b5wGZAwnL0vOY6xwXBbAEQNskE5qpJYIpcWmUf-ES6QaEMV5Cdx-6LJyxJqy6309if6DHPkl5oyMrwXCcf8Hz8Tmz5c7jVX5ch8X2h_SSp5N4zC5779a3q6M9g_t8xIhPFjDpsQk0_t4NMIXd4DVfV0nmlkZLYzbseqOGlTTUDPl_FX9oGfMuPxEhHzrMYqfYo4HQvMbGtpYizyofm1cHhAXk-_NV6NMbzOflKPIHulg1H_jfSoeeKcRogRP9MXPGeIjCylMHbECNb1skpWM8pB0FsQwwkWsOiyyhOdxMvV9jExRYnPn9iI36azt-xGIFjJmOwyRCaQ1eM2CWZeLDzAumNITKtpAp9rdupzIijqj0kUj0UNdQH8w6bvBppxek427zltLK9B4W2Irctc3C9TmHoYLoHgbixs6QDbV9EF1-NJ6Cg2FarqNeJVGRnUM6bN8PcMfrcwm3OwgOYXMYAGAh4TaBUV4O5XcGANLWavkrKarzL_JFUJX9RPJjl9UQYnPb1GiLo-JQgVoIPlH01mWxO5YgErgaPWjgQ4cVmydleLpdR7Ey2pNPvEvuGTJkCd_TDTr7nJhV3ZRDxjIifc1MCCSMjvznrTVX8JvAaefe8Mk5wlUPjBJgNybpbMmeBuw06J9FEsL7rg-wdAd5uz_pim5HThd69TId2iDDOAACFTLgGnSMfhEjWsg2JKsiHvJQHpqXGtScIx8tPoZe0kp247N5wis8WX21-pHXDOtTjG0Gtbcg5nwBXmB7a8DgTqe4mAssdkwLiKQ1xk8S0i_To_zy3M8-wUsK9EBrFmOQSfHj5ItscwKNj2DbHgFQqBm_BMcGYfJExtlwLLvEFbOUimuFi-BMay-riv6JluiJrgEtaFsZGchYOklDNV4QMcpAiabV8Wg-PeJRHWBauK0l1RJ2KAo_y1kABGkDh1OrMGjS2UeA29els_NHLjBpAzp1F5ojCEDuw-MvNqWP7dkS8QxNccAFUoVQIWRCdlg5k7sM7b-QPqk7-ghxh_DAu1qP1LGImnv1dsgBjozW_2szp73eLh27ZH0_ana6JiK66panN6IPoJdxF-lPtJ2lpqLOkmT86CfeiRjnTJ8WYKxJkWC2Y1Jqgb50RMOuKwtAJGxQoRUaMe-9IgKIgbApEeuc_isfo42mzDgOzqAQ1j0fkEA6JwHDvKL25OK__1PL6Kc4mJRw-A_DcK-9qRfFzkDurwqE26e83otaAiKRE1jM-y9CUqDKUwAgst0Fe0ysGtwMat-11GZ2UA0O9TWPau6YEyKsrxJc5W8h5Ep2oSB7bso_j0DgwWymXAlxrg8jxKaRETsFfEzEXnU-8YI6N96k9d3w2UG4jURZlYgp6yPTR_YKDt0oqZdHqABSj4J9LR_qtztJZHP6gA3LoFsCtIXF6AJ25l57ZIsTpYvDC7hxaTyy20sRRflpYBWSFaLwvcnuV_EkQbfug9yx5S2meXvRSzOtXFRk2AWNIoYmQ=",
+          "id": "cmp_01744c0ab8d5e9b1016ab6781db90487d1ababdb2afbe2f50c",
+          "type": "compaction"
+        }
+      ],
+      "usage": {
+        "input_tokens": 388,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 659,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1047
+      }
+    },
+    "headers": {
+      "access-control-expose-headers": [
+        "X-Request-ID",
+        "CF-Ray",
+        "CF-Ray"
+      ],
+      "alt-svc": [
+        "h3=\":443\"; ma=86400"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a40a66508b4b2688-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-length": [
+        "6423"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 25 Sep 2026 13:33:23 GMT"
+      ],
+      "openai-organization": "[REDACTED:openai-organization]",
+      "openai-processing-ms": [
+        "7092"
+      ],
+      "openai-project": [
+        "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
+      ],
+      "openai-version": [
+        "2020-10-01"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": "[REDACTED:set-cookie]",
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-ratelimit-limit-requests": [
+        "10000"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "4000000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "9999"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "3999504"
+      ],
+      "x-ratelimit-reset-requests": [
+        "6ms"
+      ],
+      "x-ratelimit-reset-tokens": [
+        "7ms"
+      ],
+      "x-request-id": [
+        "req_08ba0ea34f9c486da7139d6bb44af491"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

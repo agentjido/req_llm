@@ -5,7 +5,7 @@ compatibility scenario catalog. It is a tooling snapshot, not a runtime model
 allowlist, and it does not change whether ReqLLM can resolve or call a model.
 
 - Evidence schema: `1`
-- Snapshot evaluated at: `2026-09-24T09:27:04Z`
+- Snapshot evaluated at: `2026-09-25T13:35:03Z`
 - Freshness window: `90 days`
 
 ## Conservative tier rules
@@ -52,7 +52,7 @@ provider-native feature and are not consulted by request routing.
 
 | Model | Operation | Execution surface | Input → output | Tier | Baseline | Checked | Reason |
 | --- | --- | --- | --- | --- | ---: | --- | --- |
-| `gpt-5.4` | `text` | `azure.responses` | text → reasoning, text | Experimental | 0/5 | 2026-09-24T09:27:04Z | missing or stale evidence |
+| `gpt-5.4` | `text` | `azure.responses` | text → reasoning, text | Experimental | 0/5 | 2026-09-25T13:35:03Z | missing or stale evidence |
 | `gpt-image-2` | `image` | `azure.image` | text → image | First-class | 1/1 | 2026-09-22T10:08:29Z | complete current baseline |
 
 ## cerebras
@@ -247,7 +247,7 @@ provider-native feature and are not consulted by request routing.
 | `gpt-5.3-chat-latest` | `text` | `openai.responses` | text → text | Experimental | 0/5 | 2026-05-29T19:05:58Z | missing or stale evidence |
 | `gpt-5.3-codex` | `text` | `openai.responses` | text → text | Experimental | 0/5 | 2026-05-29T19:06:08Z | missing or stale evidence |
 | `gpt-5.3-codex-spark` | `text` | `openai.unrecorded_text` | text → text | Unsupported | 0/5 | 2026-05-29T21:26:57Z | basic failed at provider_drift |
-| `gpt-5.4` | `text` | `openai.responses` | text → text | Experimental | 0/5 | 2026-05-29T19:06:26Z | missing or stale evidence |
+| `gpt-5.4` | `text` | `openai.responses` | text → reasoning, text | Experimental | 0/5 | 2026-09-25T13:34:34Z | missing or stale evidence |
 | `gpt-5.4-2026-03-05` | `text` | `openai.responses` | text → text | Experimental | 0/5 | 2026-05-29T19:06:35Z | missing or stale evidence |
 | `gpt-5.4-mini` | `text` | `openai.responses` | text → text | Experimental | 0/5 | 2026-05-29T19:06:44Z | missing or stale evidence |
 | `gpt-5.4-mini-2026-03-17` | `text` | `openai.responses` | text → text | Experimental | 0/5 | 2026-05-29T19:06:53Z | missing or stale evidence |
