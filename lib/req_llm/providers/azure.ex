@@ -805,11 +805,67 @@ defmodule ReqLLM.Providers.Azure do
       raise ReqLLM.Error.Invalid.Provider.exception(provider: model.provider)
     end
 
+    case opts[:operation] || :chat do
+      :image -> attach_image_stream(model, context, opts)
+      operation -> attach_chat_stream(model, context, opts, operation)
+    end
+  rescue
+    error ->
+      Logger.error(
+        "Failed to build Azure stream request: #{Exception.message(error)}\n" <>
+          "Stacktrace: #{Exception.format_stacktrace(__STACKTRACE__)}"
+      )
+
+      {:error,
+       ReqLLM.Error.API.Request.exception(
+         reason: "Failed to build Azure stream request: #{Exception.message(error)}"
+       )}
+  end
+
+  defp attach_image_stream(model, context, opts) do
+    model_id = effective_model_id(model)
+    model_family = get_model_family(model_id)
+
+    with :ok <- validate_image_model(model_id),
+         :ok <- ReqLLM.Images.OpenAICompatible.validate_options(opts),
+         :ok <- ReqLLM.Images.OpenAICompatible.validate_stream_options(opts),
+         {:ok, prompt} <- ReqLLM.Images.OpenAICompatible.prompt_from_context(context),
+         processed_opts = process_image_stream_options(model, model_family, context, opts),
+         :ok <- validate_image_output_format(processed_opts),
+         {api_version, deployment, base_url} = extract_azure_credentials(model, processed_opts),
+         {:ok, path} <- get_image_endpoint_path(:generation, deployment, api_version, base_url) do
+      {api_key, _extra_option_keys} = resolve_api_key(model_family, model, processed_opts)
+
+      headers =
+        ReqLLM.Images.OpenAICompatible.stream_request_headers(
+          [build_auth_header(api_key, model_family, base_url)],
+          processed_opts
+        )
+
+      body =
+        processed_opts
+        |> ReqLLM.Images.OpenAICompatible.stream_generation_body(prompt, model_id)
+        |> Map.delete("model")
+        |> maybe_add_model_for_foundry(deployment, base_url)
+
+      {:ok, Finch.build(:post, join_url(base_url, path), headers, Jason.encode!(body))}
+    end
+  end
+
+  defp process_image_stream_options(model, model_family, context, opts) do
+    ReqLLM.Provider.Options.process_stream!(
+      __MODULE__,
+      :image,
+      model,
+      context,
+      Keyword.put(opts, :base_url, resolve_base_url(model_family, opts))
+    )
+  end
+
+  defp attach_chat_stream(model, context, opts, operation) do
     model_id = effective_model_id(model)
     model_family = get_model_family(model_id)
     resolved_base_url = resolve_base_url(model_family, opts)
-
-    operation = opts[:operation] || :chat
 
     processed_opts =
       ReqLLM.Provider.Options.process_stream!(
@@ -866,17 +922,6 @@ defmodule ReqLLM.Providers.Azure do
     encoded = body |> ReqLLM.Schema.apply_property_ordering() |> Jason.encode!()
     finch_request = Finch.build(:post, url, headers, encoded)
     {:ok, finch_request}
-  rescue
-    error ->
-      Logger.error(
-        "Failed to build Azure stream request: #{Exception.message(error)}\n" <>
-          "Stacktrace: #{Exception.format_stacktrace(__STACKTRACE__)}"
-      )
-
-      {:error,
-       ReqLLM.Error.API.Request.exception(
-         reason: "Failed to build Azure stream request: #{Exception.message(error)}"
-       )}
   end
 
   @doc """
@@ -903,6 +948,15 @@ defmodule ReqLLM.Providers.Azure do
   @impl ReqLLM.Provider
   def decode_stream_event(event, model, state) do
     model_id = effective_model_id(model)
+
+    if ReqLLM.Images.OpenAICompatible.gpt_image_model?(model_id) do
+      {ReqLLM.Images.OpenAICompatible.decode_stream_event(event, model), state}
+    else
+      decode_formatter_stream_event(event, model, model_id, state)
+    end
+  end
+
+  defp decode_formatter_stream_event(event, model, model_id, state) do
     formatter = get_formatter(model_id, model)
 
     cond do

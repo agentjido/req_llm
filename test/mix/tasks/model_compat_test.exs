@@ -22,6 +22,7 @@ defmodule Mix.Tasks.ReqLlm.ModelCompatTest do
     test "expands specialty capability groups" do
       assert ModelCompat.scenarios_for_opts([capability: "image"], :image) == [
                "image_basic",
+               "image_streaming",
                "image_transparent_background"
              ]
 

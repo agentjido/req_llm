@@ -763,5 +763,31 @@ defmodule ReqLLM.Provider.ChunkAccumulatorTest do
     on_exit(fn -> :telemetry.detach(handler_id) end)
   end
 
+  describe "push/2 - stream-only content parts" do
+    test "skips content parts flagged stream_only? and keeps the rest" do
+      preview = %ContentPart{
+        type: :image,
+        data: "preview",
+        media_type: "image/png",
+        metadata: %{partial?: true}
+      }
+
+      final = %ContentPart{
+        type: :image,
+        data: "final",
+        media_type: "image/png",
+        metadata: %{partial?: false}
+      }
+
+      acc =
+        ChunkAccumulator.new()
+        |> ChunkAccumulator.push(StreamChunk.content_part(preview, %{stream_only?: true}))
+        |> ChunkAccumulator.push(StreamChunk.content_part(final))
+
+      assert ChunkAccumulator.finalize_content_parts(acc) == [final]
+      assert %Message{content: [^final]} = ChunkAccumulator.finalize_message(acc)
+    end
+  end
+
   defp phase_meta(phase, output_index), do: %{phase: phase, output_index: output_index}
 end

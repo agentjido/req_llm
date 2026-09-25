@@ -708,4 +708,36 @@ defmodule ReqLLM.TelemetryTest do
       assert context.first_chunk_at == first
     end
   end
+
+  describe "observe_stream_chunk/2 image response summary" do
+    test "counts final images and skips stream-only preview frames" do
+      preview = %ContentPart{
+        type: :image,
+        data: "preview",
+        media_type: "image/png",
+        metadata: %{partial?: true, partial_image_index: 0}
+      }
+
+      final = %ContentPart{
+        type: :image,
+        data: "final",
+        media_type: "image/png",
+        metadata: %{partial?: false}
+      }
+
+      context =
+        ReqLLM.Telemetry.new_context(
+          %LLMDB.Model{id: "gpt-image-1.5", provider: :openai},
+          [],
+          operation: :image,
+          mode: :stream
+        )
+        |> ReqLLM.Telemetry.observe_stream_chunk(
+          ReqLLM.StreamChunk.content_part(preview, %{stream_only?: true})
+        )
+        |> ReqLLM.Telemetry.observe_stream_chunk(ReqLLM.StreamChunk.content_part(final))
+
+      assert context.response_summary_state.image_count == 1
+    end
+  end
 end
