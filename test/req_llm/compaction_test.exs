@@ -73,7 +73,7 @@ defmodule ReqLLM.CompactionTest do
   end
 
   describe "compacted_message/1" do
-    test "keeps only compaction items and drops replayable leftovers" do
+    test "keeps retained content, tool calls, and reasoning for replay" do
       message = %Message{
         role: :assistant,
         content: [
@@ -97,10 +97,79 @@ defmodule ReqLLM.CompactionTest do
 
       compacted = Compaction.compacted_message(message)
 
-      assert [%ContentPart{type: :provider_block}] = compacted.content
-      assert compacted.tool_calls == nil
-      assert compacted.reasoning_details == nil
-      assert compacted.metadata == %{compaction_response_id: "resp_c"}
+      assert compacted == message
+    end
+  end
+
+  for provider <- [:openai, :azure] do
+    test "#{provider} compaction replays the complete returned window" do
+      provider = unquote(provider)
+
+      output = [
+        %{
+          "type" => "message",
+          "role" => "user",
+          "content" => [%{"type" => "input_text", "text" => "Keep this instruction."}]
+        },
+        %{
+          "id" => "msg_retained",
+          "type" => "message",
+          "role" => "assistant",
+          "phase" => "commentary",
+          "content" => [%{"type" => "output_text", "text" => "Retained answer"}]
+        },
+        %{
+          "type" => "function_call",
+          "call_id" => "call_1",
+          "name" => "lookup",
+          "arguments" => "{}"
+        },
+        %{"type" => "function_call_output", "call_id" => "call_1", "output" => "Found"},
+        @compaction_item
+      ]
+
+      Req.Test.stub(__MODULE__, fn conn ->
+        if String.ends_with?(conn.request_path, "/compact") do
+          Req.Test.json(conn, %{"id" => "cmp_response", "output" => output})
+        else
+          {:ok, body, conn} = Plug.Conn.read_body(conn)
+          request = Jason.decode!(body)
+          assert Enum.drop(request["input"], -1) == output
+          assert List.last(request["input"])["role"] == "user"
+          refute Map.has_key?(request, "previous_response_id")
+
+          Req.Test.json(conn, %{
+            "id" => "resp_next",
+            "output" => [
+              %{
+                "type" => "message",
+                "role" => "assistant",
+                "content" => [
+                  %{"type" => "output_text", "text" => "Continued"}
+                ]
+              }
+            ]
+          })
+        end
+      end)
+
+      opts = [api_key: "test-key", req_http_options: [plug: {Req.Test, __MODULE__}]]
+
+      opts =
+        opts ++
+          unquote(
+            if provider == :azure,
+              do: [base_url: "https://fixture.openai.azure.com/openai/v1", deployment: "gpt-5.4"],
+              else: []
+          )
+
+      assert {:ok, compacted} = ReqLLM.compact_context("#{provider}:gpt-5.4", "Old", opts)
+      assert compacted.message.metadata.responses_replay == %{provider: provider, items: output}
+      assert Compaction.trim(compacted.context) == compacted.context
+
+      next = Context.append(compacted.context, Context.user("Continue"))
+      assert {:ok, response} = ReqLLM.generate_text("#{provider}:gpt-5.4", next, opts)
+      assert ReqLLM.Response.text(response) == "Continued"
     end
   end
 

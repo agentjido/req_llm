@@ -300,7 +300,9 @@ Passed via `:provider_options` keyword:
 - **Type**: `:auto` | `:concise` | `:detailed` | String
 - **Purpose**: Ask a Responses API reasoning model for a human-readable summary of its reasoning (`reasoning.summary`). GPT-5 models do not support `:concise`.
 - **Example**: `provider_options: [reasoning_summary: :auto]`
-- **Result**: Non-streaming responses carry the summary text on `message.reasoning_details` (parts joined by a blank line; the raw `summary` array is kept in `provider_data["summary"]` and replayed on later turns). Streaming responses emit each summary delta as a `:thinking` chunk whose metadata carries `item_id`, `output_index` and `summary_index`, and a `:meta` chunk with a `reasoning_summary_part` map (`status: :added | :done`, the same ids and the completed part `text`) at every part boundary.
+- **Result**: Responses carry summary text on `message.reasoning_details` and `ReqLLM.Response.thinking/1`. Both buffered and collected streaming responses join nonempty summary parts with a blank line (`"\n\n"`). This is a display convention for separate paragraphs, not an API delimiter. Text and whitespace inside each part stay unchanged. The raw `summary` array remains in `provider_data["summary"]` and is replayed unchanged on later turns.
+
+Streaming emits raw summary deltas as `:thinking` chunks. These fragments have no added separators. Their metadata carries `item_id`, `output_index`, and `summary_index`; a `:meta` chunk with `reasoning_summary_part` marks each part boundary (`status: :added | :done`, the same IDs, and the completed part `text`). A live renderer can use those boundaries to choose its own layout. Do not insert blank lines between fragments of the same part.
 
 ### `reasoning_context`
 
@@ -419,9 +421,9 @@ A stored response can be compacted by id instead of replaying its messages:
 
 The compacted message keeps the compaction response id under
 `metadata.compaction_response_id` rather than `metadata.response_id`, so the
-next turn replays the compaction items instead of chaining through
+next turn replays the complete returned window instead of chaining through
 `previous_response_id`. `ReqLLM.Response.provider_items/1` returns the
-compaction parts, and `ReqLLM.Compaction.trim/1` drops every message before the
+compaction parts. Retained messages and tool items remain in `metadata.responses_replay` in their original order; do not remove them. `ReqLLM.Compaction.trim/1` drops every message before the
 most recent compaction item when you keep appending to an existing context.
 
 ### Server-side compaction

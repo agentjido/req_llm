@@ -17,11 +17,11 @@ defmodule ReqLLM.Compaction do
       next = ReqLLM.Context.append(compacted.context, ReqLLM.Context.user("Add a booking form."))
       {:ok, follow_up} = ReqLLM.generate_text(model, next)
 
-  `compacted.context` holds only the compacted assistant message, reduced to its
-  compaction items (the service also echoes the compacted messages in its
-  output; they stay on `compacted.message` but are not replayed, since the
-  compaction item already carries that state). Appending the next user message
-  and sending it is the whole continuation. The service can also compact a
+  `compacted.context` holds the complete returned window in one message. Its
+  `metadata.responses_replay` preserves all API items, including retained user
+  messages, assistant messages, and tool items, in their original order. Do not
+  prune this window: the next request must replay it as returned by the service.
+  Append the next user message to continue. The service can also compact a
   stored response instead of a replayed context:
 
       {:ok, compacted} = ReqLLM.compact_context(model, nil, previous_response_id: first.id)
@@ -78,7 +78,7 @@ defmodule ReqLLM.Compaction do
   `messages` is anything `ReqLLM.Context.normalize/2` accepts, or `nil` when
   `previous_response_id:` names the stored response to compact; passing both
   is an error. Returns a `ReqLLM.Response` whose `context` contains only the
-  compacted assistant message (see `compacted_message/1`).
+  returned window (see `compacted_message/1`).
   """
   @spec compact_context(
           ReqLLM.model_input(),
@@ -228,28 +228,22 @@ defmodule ReqLLM.Compaction do
   end
 
   defp finalize(%Response{message: %Message{} = message} = response) do
-    message = %{message | metadata: relabel_response_id(message.metadata)}
-    %{response | message: message, context: Context.new([compacted_message(message)])}
+    message = compacted_message(message)
+    %{response | message: message, context: Context.new([message])}
   end
 
   defp finalize(%Response{} = response), do: response
 
   @doc """
-  Reduces a compaction response message to what the next request should replay.
+  Prepares a compaction response message for replay without pruning its items.
 
-  Keeps only the compaction items: the echoed text, tool calls, reasoning
-  details and phase metadata that `POST /responses/compact` returns alongside
-  them are already folded into the compaction item and must not be replayed.
+  The complete output window in `metadata.responses_replay` is authoritative.
+  Retained messages and tool items must stay in their original order. The
+  compaction response ID cannot be used as a normal `previous_response_id`.
   """
   @spec compacted_message(Message.t()) :: Message.t()
   def compacted_message(%Message{} = message) do
-    %{
-      message
-      | content: Enum.filter(message.content, &compaction_part?/1),
-        tool_calls: nil,
-        reasoning_details: nil,
-        metadata: Map.drop(message.metadata, [:phase, :phase_items, "phase", "phase_items"])
-    }
+    %{message | metadata: relabel_response_id(message.metadata)}
   end
 
   defp relabel_response_id(metadata) when is_map(metadata) do

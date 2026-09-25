@@ -405,7 +405,10 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
         meta
       end
 
-    meta = Map.merge(meta, extract_assistant_phase_metadata(response_output))
+    meta =
+      meta
+      |> Map.merge(extract_assistant_phase_metadata(response_output))
+      |> put_compaction_replay(response_output, provider)
 
     meta =
       maybe_put_reasoning_details(
@@ -918,6 +921,19 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   end
 
   defp encode_input_message(
+         %ReqLLM.Message{
+           metadata: %{responses_replay: %{provider: provider, items: items}}
+         },
+         input_acc,
+         _model_name,
+         provider,
+         true
+       )
+       when is_list(items) and provider in @responses_item_providers do
+    push_input_items(input_acc, items)
+  end
+
+  defp encode_input_message(
          %ReqLLM.Message{role: :tool, tool_call_id: tool_call_id} = msg,
          input_acc,
          _model_name,
@@ -937,18 +953,21 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
          target_provider,
          replay_output_items?
        ) do
-    {provider_items, reasoning} =
+    {content_items, reasoning} =
       if replay_output_items? do
-        {encode_provider_block_items(msg, target_provider),
+        {encode_ordered_assistant_items(msg, target_provider),
          encode_reasoning_details_from_message(msg, target_provider)}
       else
-        {[], []}
+        {encode_assistant_message_items(msg), []}
       end
 
+    {leading_blocks, remaining_items} =
+      Enum.split_while(content_items, &(&1["type"] == "compaction"))
+
     input_acc
-    |> push_input_items(provider_items)
+    |> push_input_items(leading_blocks)
     |> push_input_items(reasoning)
-    |> push_input_items(encode_assistant_message_items(msg))
+    |> push_input_items(remaining_items)
     |> push_input_items(encode_tool_calls_as_function_calls(msg.tool_calls || []))
   end
 
@@ -964,19 +983,29 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     end
   end
 
-  defp encode_provider_block_items(%ReqLLM.Message{content: content}, target_provider)
-       when target_provider in @responses_item_providers do
-    Enum.flat_map(content, fn
-      %ReqLLM.Message.ContentPart{type: :provider_block, data: block, metadata: metadata}
-      when is_map(block) ->
-        if replayable_provider_block?(metadata, target_provider), do: [block], else: []
-
-      _part ->
-        []
-    end)
+  defp encode_ordered_assistant_items(msg, target_provider) do
+    if Enum.any?(msg.content, &ReqLLM.Compaction.compaction_part?/1) do
+      msg.content
+      |> Enum.chunk_by(&ReqLLM.Compaction.compaction_part?/1)
+      |> Enum.flat_map(fn [first | _] = parts ->
+        if ReqLLM.Compaction.compaction_part?(first) do
+          Enum.flat_map(parts, fn part ->
+            if replayable_provider_block?(part.metadata, target_provider),
+              do: [part.data],
+              else: []
+          end)
+        else
+          encode_assistant_message_items(%{
+            msg
+            | content: parts,
+              metadata: Map.delete(msg.metadata, :phase_items)
+          })
+        end
+      end)
+    else
+      encode_assistant_message_items(msg)
+    end
   end
-
-  defp encode_provider_block_items(_msg, _target_provider), do: []
 
   defp replayable_provider_block?(metadata, target_provider) do
     provider = Map.get(metadata, :provider) || Map.get(metadata, "provider")
@@ -1597,8 +1626,12 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     )
   end
 
-  defp extract_compaction_items(segments) when is_list(segments) do
-    Enum.filter(segments, &(&1["type"] == "compaction"))
+  defp put_compaction_replay(metadata, segments, provider) do
+    if Enum.any?(segments, &(&1["type"] == "compaction")) do
+      Map.put(metadata, :responses_replay, %{provider: provider, items: segments})
+    else
+      metadata
+    end
   end
 
   defp handle_builtin_call_item_done(item, data, state, type) do
@@ -2169,7 +2202,10 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     finish_reason =
       determine_finish_reason(body, Enum.reject(tool_calls, &ReqLLM.ToolCall.builtin?/1))
 
-    message_metadata = build_message_metadata(body["id"], output_segments)
+    message_metadata =
+      body["id"]
+      |> build_message_metadata(output_segments)
+      |> put_compaction_replay(output_segments, model.provider)
 
     {object, object_meta} = maybe_extract_object(req, text, tool_calls) || {nil, %{}}
 
@@ -2192,14 +2228,12 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     ctx = req.options[:context] || %ReqLLM.Context{messages: []}
     text_chunks = buffered_text_chunks(text, output_segments)
 
-    compaction_chunks =
-      output_segments
-      |> extract_compaction_items()
-      |> Enum.map(&compaction_part_chunk(&1, model.provider))
-
     chunks =
-      compaction_chunks ++
+      if Map.has_key?(message_metadata, :responses_replay) do
+        buffered_compaction_chunks(output_segments, model.provider)
+      else
         buffered_response_chunks(text_chunks, thinking, tool_calls, reasoning_details)
+      end
 
     metadata = %{
       response_id: body["id"] || "unknown",
@@ -2220,6 +2254,41 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
       {:ok, response} -> {req, %{resp | body: response}}
       {:error, error} -> {req, error}
     end
+  end
+
+  defp buffered_compaction_chunks(segments, provider) do
+    {content_chunks, _has_summary} =
+      Enum.map_reduce(segments, false, fn
+        %{"type" => "compaction"} = item, has_summary ->
+          {[compaction_part_chunk(item, provider)], has_summary}
+
+        item, has_summary ->
+          summary = extract_reasoning_summary([item])
+          thinking = aggregate_reasoning_segments([item])
+
+          thinking =
+            if has_summary and summary != nil,
+              do: @summary_part_separator <> thinking,
+              else: thinking
+
+          chunks =
+            buffered_response_chunks(
+              buffered_text_chunks(aggregate_output_segments(%{}, [item]), [item]),
+              thinking,
+              [],
+              []
+            )
+
+          {chunks, has_summary or summary != nil}
+      end)
+
+    List.flatten(content_chunks) ++
+      buffered_response_chunks(
+        [],
+        "",
+        extract_tool_calls_from_segments(segments),
+        extract_reasoning_details_from_segments(segments, provider)
+      )
   end
 
   defp buffered_text_chunks(text, output_segments) do
@@ -2528,7 +2597,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     |> Enum.filter(&(&1["type"] == "reasoning"))
     |> Enum.map(& &1["summary"])
     |> Enum.map(&extract_summary_text/1)
-    |> Enum.reject(&is_nil/1)
+    |> Enum.reject(&(&1 in [nil, ""]))
     |> Enum.join(@summary_part_separator)
     |> case do
       "" -> nil
@@ -2626,7 +2695,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     summary
     |> Enum.filter(&(&1["type"] == "summary_text"))
     |> Enum.map(& &1["text"])
-    |> Enum.reject(&is_nil/1)
+    |> Enum.reject(&(&1 in [nil, ""]))
     |> Enum.join(@summary_part_separator)
     |> case do
       "" -> nil

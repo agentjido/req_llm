@@ -305,11 +305,10 @@ defmodule ReqLLM.ProviderTest.ResponsesContext do
     assert [message] = response.context.messages
     assert message.role == :assistant
     assert ReqLLM.Compaction.compaction_message?(message)
-    assert Enum.all?(message.content, &ReqLLM.Compaction.compaction_part?/1)
-    assert message.tool_calls in [nil, []]
-    assert message.reasoning_details in [nil, []]
+    assert %{provider: provider, items: items} = message.metadata.responses_replay
+    assert provider in [:openai, :azure]
+    assert Enum.any?(items, &(&1["type"] == "compaction"))
     refute Map.has_key?(message.metadata, :response_id)
-    refute Map.has_key?(message.metadata, :phase)
     assert is_binary(message.metadata[:compaction_response_id])
 
     assert Enum.any?(Response.provider_items(response), fn

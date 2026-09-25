@@ -276,6 +276,8 @@ compaction:
 next = ReqLLM.Context.append(compacted.context, ReqLLM.Context.user("Add a booking form."))
 ```
 
+The compacted context preserves the complete returned API window, including retained messages and tool items, in its original order. Do not remove items from this window before the next request.
+
 Compaction items come back as `:provider_block` content parts and are replayed
 automatically on later requests. See the [OpenAI guide](openai.md#context-compaction-responses-api)
 for the full flow.
