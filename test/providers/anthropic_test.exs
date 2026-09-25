@@ -137,7 +137,7 @@ defmodule ReqLLM.Providers.AnthropicTest do
 
       assert request.headers["authorization"] == ["Bearer #{oauth_token}"]
       refute Map.has_key?(request.headers, "x-api-key")
-      assert request.headers["user-agent"] == ["claude-cli/2.1.112 (external, cli)"]
+      assert request.headers["user-agent"] == ["claude-cli/2.1.282 (external, cli)"]
       assert request.headers["x-app"] == ["claude-code"]
 
       assert request.headers["anthropic-beta"] == [
@@ -169,7 +169,7 @@ defmodule ReqLLM.Providers.AnthropicTest do
 
       assert String.starts_with?(
                billing_block["text"],
-               "x-anthropic-billing-header: cc_version=2.1.112."
+               "x-anthropic-billing-header: cc_version=2.1.282."
              )
 
       assert String.contains?(billing_block["text"], "cc_entrypoint=sdk-cli;")
@@ -287,7 +287,7 @@ defmodule ReqLLM.Providers.AnthropicTest do
 
       assert request.headers["authorization"] == ["Bearer oauth-prepared-token"]
       refute Map.has_key?(request.headers, "x-api-key")
-      assert request.headers["user-agent"] == ["claude-cli/2.1.112 (external, cli)"]
+      assert request.headers["user-agent"] == ["claude-cli/2.1.282 (external, cli)"]
       assert request.headers["x-app"] == ["claude-code"]
       assert request.options[:params][:beta] == "true"
 
@@ -306,7 +306,7 @@ defmodule ReqLLM.Providers.AnthropicTest do
 
       assert String.starts_with?(
                billing_block["text"],
-               "x-anthropic-billing-header: cc_version=2.1.112."
+               "x-anthropic-billing-header: cc_version=2.1.282."
              )
 
       assert identity_block["text"] ==
@@ -379,7 +379,7 @@ defmodule ReqLLM.Providers.AnthropicTest do
 
       assert headers["authorization"] == "Bearer oauth-stream-token"
       refute Map.has_key?(headers, "x-api-key")
-      assert headers["user-agent"] == "claude-cli/2.1.112 (external, cli)"
+      assert headers["user-agent"] == "claude-cli/2.1.282 (external, cli)"
       assert headers["x-app"] == "claude-code"
       assert query["beta"] == "true"
 
