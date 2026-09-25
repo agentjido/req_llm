@@ -424,6 +424,36 @@ config :req_llm,
 {:ok, response} = ReqLLM.stream_text(model, messages, finch_name: MyApp.CustomFinch)
 ```
 
+### HTTP Proxies for Streaming
+
+Set connection options for an HTTP stream through `req_http_options`:
+
+```elixir
+ReqLLM.stream_text(model, messages,
+  req_http_options: [
+    connect_options: [
+      proxy: {:http, "proxy.example.com", 8080, []},
+      proxy_headers: [
+        {"proxy-authorization", "Basic " <> Base.encode64("user:password")}
+      ]
+    ]
+  ]
+)
+```
+
+Omit `proxy_headers` when the proxy does not require authentication. HTTPS
+destinations use a `CONNECT` tunnel. TLS certificate checks remain enabled.
+To trust a private certificate authority, add
+`transport_opts: [cacertfile: "/path/to/ca.pem"]` to `connect_options`.
+
+Streaming uses Req's connection options to create a separate Finch pool.
+Requests with the same settings reuse the pool. Different proxy settings or
+credentials use separate pools. Retries use the same connection settings.
+These options replace the pool's configured connection options and protocols;
+the default protocol is HTTP/1. Requests without `connect_options` use the
+existing pool configuration. This applies to HTTP streaming, including the
+HTTP fallback from WebSocket streaming.
+
 ## Streaming Request Transforms
 
 ReqLLM provides two hooks for modifying a `Finch.Request` struct just before a streaming request is sent (to align with a similar ability present in `Req`) — useful for injecting headers, adding tracing metadata, or other environment-specific concerns.
