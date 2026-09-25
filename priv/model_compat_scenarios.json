@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-25T13:35:03Z",
+  "generated_at": "2026-09-25T13:44:53Z",
   "models": {
     "anthropic:claude-haiku-4-5-20251001": {
       "catalog_status": "present",
@@ -473,6 +473,18 @@
                   ],
                   "mode": "replay",
                   "status": "fail"
+                },
+                {
+                  "checked_at": "2026-09-25T13:44:53Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "compaction_manual_1",
+                    "compaction_manual_2",
+                    "compaction_manual_3"
+                  ],
+                  "mode": "replay",
+                  "status": "pass"
                 }
               ],
               "proof": "fixture_replay"

@@ -5,7 +5,7 @@ compatibility scenario catalog. It is a tooling snapshot, not a runtime model
 allowlist, and it does not change whether ReqLLM can resolve or call a model.
 
 - Evidence schema: `1`
-- Snapshot evaluated at: `2026-09-25T13:35:03Z`
+- Snapshot evaluated at: `2026-09-25T13:44:53Z`
 - Freshness window: `90 days`
 
 ## Conservative tier rules
@@ -52,7 +52,7 @@ provider-native feature and are not consulted by request routing.
 
 | Model | Operation | Execution surface | Input → output | Tier | Baseline | Checked | Reason |
 | --- | --- | --- | --- | --- | ---: | --- | --- |
-| `gpt-5.4` | `text` | `azure.responses` | text → reasoning, text | Experimental | 0/5 | 2026-09-25T13:35:03Z | missing or stale evidence |
+| `gpt-5.4` | `text` | `azure.responses` | text → reasoning, text | Experimental | 0/5 | 2026-09-25T13:44:53Z | missing or stale evidence |
 | `gpt-image-2` | `image` | `azure.image` | text → image | First-class | 1/1 | 2026-09-22T10:08:29Z | complete current baseline |
 
 ## cerebras

@@ -3,7 +3,7 @@
   "provider": "azure",
   "request": {
     "body": {
-      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IkNyZWF0ZSBhIHNpbXBsZSBsYW5kaW5nIHBhZ2UgZm9yIGEgZG9nIGNhZmUuIEtlZXAgaXQgdW5kZXIgMjAwIHdvcmRzLiIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9LHsiY29udGVudCI6W3sidGV4dCI6IjwhRE9DVFlQRSBodG1sPlxuPGh0bWwgbGFuZz1cImVuXCI+XG48aGVhZD5cbiAgPG1ldGEgY2hhcnNldD1cIlVURi04XCIgLz5cbiAgPG1ldGEgbmFtZT1cInZpZXdwb3J0XCIgY29udGVudD1cIndpZHRoPWRldmljZS13aWR0aCwgaW5pdGlhbC1zY2FsZT0xLjBcIiAvPlxuICA8dGl0bGU+UGF3cyAmIExhdHRlczwvdGl0bGU+XG4gIDxzdHlsZT5cbiAgICBib2R5IHtcbiAgICAgIG1hcmdpbjogMDtcbiAgICAgIGZvbnQtZmFtaWx5OiBBcmlhbCwgc2Fucy1zZXJpZjtcbiAgICAgIGJhY2tncm91bmQ6ICNmZmY4ZjA7XG4gICAgICBjb2xvcjogIzRhMzQyODtcbiAgICAgIHRleHQtYWxpZ246IGNlbnRlcjtcbiAgICB9XG4gICAgLmhlcm8ge1xuICAgICAgcGFkZGluZzogODBweCAyMHB4O1xuICAgICAgYmFja2dyb3VuZDogbGluZWFyLWdyYWRpZW50KDEzNWRlZywgI2Y3ZDliMSwgI2ZmZWNjZCk7XG4gICAgfVxuICAgIGgxIHtcbiAgICAgIGZvbnQtc2l6ZTogM3JlbTtcbiAgICAgIG1hcmdpbi1ib3R0b206IDEwcHg7XG4gICAgfVxuICAgIHAge1xuICAgICAgZm9udC1zaXplOiAxLjFyZW07XG4gICAgICBtYXgtd2lkdGg6IDYwMHB4O1xuICAgICAgbWFyZ2luOiAwIGF1dG8gMjBweDtcbiAgICB9XG4gICAgLmJ0biB7XG4gICAgICBkaXNwbGF5OiBpbmxpbmUtYmxvY2s7XG4gICAgICBwYWRkaW5nOiAxMnB4IDI0cHg7XG4gICAgICBiYWNrZ3JvdW5kOiAjOGI1ZTNjO1xuICAgICAgY29sb3I6IHdoaXRlO1xuICAgICAgdGV4dC1kZWNvcmF0aW9uOiBub25lO1xuICAgICAgYm9yZGVyLXJhZGl1czogOHB4O1xuICAgICAgZm9udC13ZWlnaHQ6IGJvbGQ7XG4gICAgfVxuICAgIC5idG46aG92ZXIge1xuICAgICAgYmFja2dyb3VuZDogIzZmNDcyZDtcbiAgICB9XG4gIDwvc3R5bGU+XG48L2hlYWQ+XG48Ym9keT5cbiAgPHNlY3Rpb24gY2xhc3M9XCJoZXJvXCI+XG4gICAgPGgxPlBhd3MgJiBMYXR0ZXM8L2gxPlxuICAgIDxwPkVuam95IGhhbmRjcmFmdGVkIGNvZmZlZSwgZnJlc2ggcGFzdHJpZXMsIGFuZCB3YWdnaW5nIHRhaWxzIGFsbCBpbiBvbmUgY296eSBzcG90LiBNZWV0IGZyaWVuZGx5IHB1cHMsIHJlbGF4IHdpdGggZnJpZW5kcywgYW5kIG1ha2UgZXZlcnkgdmlzaXQgYSBsaXR0bGUgaGFwcGllci48L3A+XG4gICAgPGEgaHJlZj1cIiNcIiBjbGFzcz1cImJ0blwiPlZpc2l0IFVzIFRvZGF5PC9hPlxuICA8L3NlY3Rpb24+XG48L2JvZHk+XG48L2h0bWw+IiwidHlwZSI6Im91dHB1dF90ZXh0In1dLCJwaGFzZSI6ImZpbmFsX2Fuc3dlciIsInJvbGUiOiJhc3Npc3RhbnQifV0sIm1vZGVsIjoiZ3B0LTUuNCJ9"
+      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IkNyZWF0ZSBhIHNpbXBsZSBsYW5kaW5nIHBhZ2UgZm9yIGEgZG9nIGNhZmUuIEtlZXAgaXQgdW5kZXIgMjAwIHdvcmRzLiIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9LHsiZW5jcnlwdGVkX2NvbnRlbnQiOiJnQUFBQUFCcXRucTB6d3dHQjhsOVl2MmJOT0tKM2VQUGlJeHZRc0h2a2R5OVRGdzZSa2hBVVBoV2lpMzk0TDZ5M3dNTVNLdU9Tc0VjZG8zSklBT1RUbXp6MzdZdXpPMkVTNG5iVjNfMjB4TE1ya2ZyYWNhTmFlYVRPZXpFZEpsb2JqcDdoX2Nfc2d6bUFXaDVKS2V5RWhjcHBhWHdCb1JFenBGNkMzQUV5X1pSYkhjeW1oS09IdV9UckRZclozN0NNeUxRTmlhWHhsSVNJUkRKdzdZd0tSVG9YZ252cE5qa0ZHLTl0TlZtdHk2aUxwR2ZGU3piZkRfaHh2MnJ6X0h4R2Zoelg4UXNRUW41emhLMjQ2M21YdlY0TkRJcW1jTlR1SElhUEhQT1ctTjhoNEk1aGNLbHdCLXROYlEwS29OSDc0SDBJZzNJZG9NUTFOMjdyc1llNXEtODZra3RwcWlkb2NIUVVEWWNfRmFWaXVLbEVQNUhITHhXVnlUYTR4ckZsU1NBTkR1R2diZFJuTzRmT3d2U1B6QW9SRkl0UkxTT3RvR1hWTmVidFEybXV5WVJKbW40em9RN0ltTmoyY0o1V0J2RG1ubzFKZ2ZNVUZyTklpVTR6eEpaQ3lqZmR2eHpuWmk1bXlDUkFMZUd1dTI5WXEyT3JOc0JvNUcxWFVJMVBzMFFUdjVjampvcnBIcVpZUUpsYm1qR0FpYUtMODBqUFVzQnE3YUd4cDFEZWZobHNKanV4R3Y2X2ZEak11SHVGTTVvcUlnSUJwNnRqQjZvMzBzOFZNOGctTlY1dTd0d1YzVWlPZGRQZWhzMXB5S0ZGTkZDX0NqTmtNNFFubkwyOU15aElWamtpclAtSkhTNTBMODdEMENsQms2MW5tWHJyamVMa29vQWhQNm8wVnhYbTVyWEpfUXhkc1lGcUhkdmRyYVhBSzZKdjhDZFdjYnQxbUl6VUduMGY0U0NKUEt1c1lpSEFTYTh3ZmZsSHFTUGNvbjhTVC1VZVFNRmJwS1I5VWwtaTZ4Z19EN0I2RmFndEJid2pPUXBVYUh2bXFXWDh4NkQ0UFNwZ3BhYllncGgzaHBqaWhGYnBDRGVZeHlaODFadjVGcTk5QVBwNzFGTHFzMXl2cUt5VjNPTTF6UXg5N1gxTm9sbzVrZlRVYVRSbFNyc2hEMHFHTGhHWU9qMndfRXI4dUZ5cEpWWmVLRHE5cGVXTmEtYzVRTFlFUHFRUXpBT2NXaXd2SlJBQjc4YTF3OFBDWjdnVVZRLXd5VWRsandjOW90VjNIcjlodG5TVGhicmpTOWRJRXJHbFVfajlHWndhd3gyTmdYZkFBQnRoR1BSOGstMDB0WGFGcTNxd28tVU1teTdQQWFhYnpxc09rclB4anhSdVNzZ3FQSnR0Uk5QWXF1LU1EeFZMYjBpWU9qSmxmM1ZaU3ZxZjRic3dFVjQ3bDc2amdiRDQta254amNOc1RyUEt0djdHMHpKbnN6VjdkM3l2TlROdUJHUnl5VTlta2g5ZlZRNHlMYVNtR09rOThiYWV1am4yY0tUbHBZX0tsTkt5by1IcTZ1TXZyVl9GVkJTeGM2anlER2FHam4yNTZNSk9SejVzUDN5UEpDZGxvcmx0Y1RyVWhhQXZVNm5ONkZ4LVF6TER0OFdKLWRjUDFlczJ1ZVU4d09TZk1QZ01mUy1sSWZ1UUo4bDZRMlozVzY1R2Z2V2dULVZ4SzdONHNfTk5uRUtOOU8tMzg5UnM0M1U0Z0hxNVJHZnZGMW1ycnM9IiwiaWQiOiJyc18wY2ExZDFkNGFjZGExMWZhMDE2YWI2N2FhZjlmMzg4MTk1YTQ3MmNkZGM1OTZiMDIwOSIsInN1bW1hcnkiOltdLCJ0eXBlIjoicmVhc29uaW5nIn0seyJjb250ZW50IjpbeyJ0ZXh0IjoiYGBgaHRtbFxuPCFET0NUWVBFIGh0bWw+XG48aHRtbCBsYW5nPVwiZW5cIj5cbjxoZWFkPlxuICA8bWV0YSBjaGFyc2V0PVwiVVRGLThcIiAvPlxuICA8bWV0YSBuYW1lPVwidmlld3BvcnRcIiBjb250ZW50PVwid2lkdGg9ZGV2aWNlLXdpZHRoLCBpbml0aWFsLXNjYWxlPTEuMFwiIC8+XG4gIDx0aXRsZT5QYXdzICYgTGF0dGVzPC90aXRsZT5cbiAgPHN0eWxlPlxuICAgIGJvZHkgeyBmb250LWZhbWlseTogQXJpYWwsIHNhbnMtc2VyaWY7IG1hcmdpbjogMDsgYmFja2dyb3VuZDogI2ZmZjhmMDsgY29sb3I6ICMzMzM7IHRleHQtYWxpZ246IGNlbnRlcjsgfVxuICAgIC5oZXJvIHsgcGFkZGluZzogODBweCAyMHB4OyBiYWNrZ3JvdW5kOiAjZjRkN2I4OyB9XG4gICAgaDEgeyBmb250LXNpemU6IDNyZW07IG1hcmdpbi1ib3R0b206IDEwcHg7IH1cbiAgICBwIHsgbWF4LXdpZHRoOiA1MDBweDsgbWFyZ2luOiAwIGF1dG8gMjBweDsgZm9udC1zaXplOiAxLjFyZW07IH1cbiAgICAuYnRuIHsgZGlzcGxheTogaW5saW5lLWJsb2NrOyBwYWRkaW5nOiAxMnB4IDI0cHg7IGJhY2tncm91bmQ6ICM4YjVlM2M7IGNvbG9yOiB3aGl0ZTsgdGV4dC1kZWNvcmF0aW9uOiBub25lOyBib3JkZXItcmFkaXVzOiA4cHg7IH1cbiAgICAuc2VjdGlvbiB7IHBhZGRpbmc6IDQwcHggMjBweDsgfVxuICA8L3N0eWxlPlxuPC9oZWFkPlxuPGJvZHk+XG4gIDxzZWN0aW9uIGNsYXNzPVwiaGVyb1wiPlxuICAgIDxoMT5QYXdzICYgTGF0dGVzPC9oMT5cbiAgICA8cD5Db2ZmZWUsIGN1ZGRsZXMsIGFuZCBoYXBweSB0YWlscy4gVmlzaXQgb3VyIGRvZy1mcmllbmRseSBjYWbDqSBmb3IgZnJlc2ggZHJpbmtzLCB0YXN0eSB0cmVhdHMsIGFuZCBwbGF5dGltZSB3aXRoIGFkb3JhYmxlIHB1cHMuPC9wPlxuICAgIDxhIGhyZWY9XCIjdmlzaXRcIiBjbGFzcz1cImJ0blwiPlZpc2l0IFVzPC9hPlxuICA8L3NlY3Rpb24+XG5cbiAgPHNlY3Rpb24gY2xhc3M9XCJzZWN0aW9uXCIgaWQ9XCJ2aXNpdFwiPlxuICAgIDxoMj5XaHkgWW914oCZbGwgTG92ZSBJdDwvaDI+XG4gICAgPHA+UmVsYXggd2l0aCBhIGxhdHRlLCBtZWV0IGZyaWVuZGx5IGRvZ3MsIGFuZCBlbmpveSBhIGNvenkgc3BhY2UgbWFkZSBmb3IgcGV0IGxvdmVycy48L3A+XG4gICAgPHA+PHN0cm9uZz5PcGVuIERhaWx5Ojwvc3Ryb25nPiA4IEFNIOKAkyA3IFBNPC9wPlxuICA8L3NlY3Rpb24+XG48L2JvZHk+XG48L2h0bWw+XG5gYGAiLCJ0eXBlIjoib3V0cHV0X3RleHQifV0sInBoYXNlIjoiZmluYWxfYW5zd2VyIiwicm9sZSI6ImFzc2lzdGFudCJ9XSwibW9kZWwiOiJncHQtNS40In0="
     },
     "canonical_json": {
       "input": [
@@ -17,9 +17,15 @@
           "role": "user"
         },
         {
+          "encrypted_content": "gAAAAABqtnq0zwwGB8l9Yv2bNOKJ3ePPiIxvQsHvkdy9TFw6RkhAUPhWii394L6y3wMMSKuOSsEcdo3JIAOTTmzz37YuzO2ES4nbV3_20xLMrkfracaNaeaTOezEdJlobjp7h_c_sgzmAWh5JKeyEhcppaXwBoREzpF6C3AEy_ZRbHcymhKOHu_TrDYrZ37CMyLQNiaXxlISIRDJw7YwKRToXgnvpNjkFG-9tNVmty6iLpGfFSzbfD_hxv2rz_HxGfhzX8QsQQn5zhK2463mXvV4NDIqmcNTuHIaPHPOW-N8h4I5hcKlwB-tNbQ0KoNH74H0Ig3IdoMQ1N27rsYe5q-86kktpqidocHQUDYc_FaViuKlEP5HHLxWVyTa4xrFlSSANDuGgbdRnO4fOwvSPzAoRFItRLSOtoGXVNebtQ2muyYRJmn4zoQ7ImNj2cJ5WBvDmno1JgfMUFrNIiU4zxJZCyjfdvxznZi5myCRALeGuu29Yq2OrNsBo5G1XUI1Ps0QTv5cjjorpHqZYQJlbmjGAiaKL80jPUsBq7aGxp1DefhlsJjuxGv6_fDjMuHuFM5oqIgIBp6tjB6o30s8VM8g-NV5u7twV3UiOddPehs1pyKFFNFC_CjNkM4QnnL29MyhIVjkirP-JHS50L87D0ClBk61nmXrrjeLkooAhP6o0VxXm5rXJ_QxdsYFqHdvdraXAK6Jv8CdWcbt1mIzUGn0f4SCJPKusYiHASa8wfflHqSPcon8ST-UeQMFbpKR9Ul-i6xg_D7B6FagtBbwjOQpUaHvmqWX8x6D4PSpgpabYgph3hpjihFbpCDeYxyZ81Zv5Fq99APp71FLqs1yvqKyV3OM1zQx97X1Nolo5kfTUaTRlSrshD0qGLhGYOj2w_Er8uFypJVZeKDq9peWNa-c5QLYEPqQQzAOcWiwvJRAB78a1w8PCZ7gUVQ-wyUdljwc9otV3Hr9htnSThbrjS9dIErGlU_j9GZwawx2NgXfAABthGPR8k-00tXaFq3qwo-UMmy7PAaabzqsOkrPxjxRuSsgqPJttRNPYqu-MDxVLb0iYOjJlf3VZSvqf4bswEV47l76jgbD4-knxjcNsTrPKtv7G0zJnszV7d3yvNTNuBGRyyU9mkh9fVQ4yLaSmGOk98baeujn2cKTlpY_KlNKyo-Hq6uMvrV_FVBSxc6jyDGaGjn256MJORz5sP3yPJCdlorltcTrUhaAvU6nN6Fx-QzLDt8WJ-dcP1es2ueU8wOSfMPgMfS-lIfuQJ8l6Q2Z3W65GfvWgT-VxK7N4s_NNnEKN9O-389Rs43U4gHq5RGfvF1mrrs=",
+          "id": "rs_0ca1d1d4acda11fa016ab67aaf9f388195a472cddc596b0209",
+          "summary": [],
+          "type": "reasoning"
+        },
+        {
           "content": [
             {
-              "text": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n  <title>Paws & Lattes</title>\n  <style>\n    body {\n      margin: 0;\n      font-family: Arial, sans-serif;\n      background: #fff8f0;\n      color: #4a3428;\n      text-align: center;\n    }\n    .hero {\n      padding: 80px 20px;\n      background: linear-gradient(135deg, #f7d9b1, #ffeccd);\n    }\n    h1 {\n      font-size: 3rem;\n      margin-bottom: 10px;\n    }\n    p {\n      font-size: 1.1rem;\n      max-width: 600px;\n      margin: 0 auto 20px;\n    }\n    .btn {\n      display: inline-block;\n      padding: 12px 24px;\n      background: #8b5e3c;\n      color: white;\n      text-decoration: none;\n      border-radius: 8px;\n      font-weight: bold;\n    }\n    .btn:hover {\n      background: #6f472d;\n    }\n  </style>\n</head>\n<body>\n  <section class=\"hero\">\n    <h1>Paws & Lattes</h1>\n    <p>Enjoy handcrafted coffee, fresh pastries, and wagging tails all in one cozy spot. Meet friendly pups, relax with friends, and make every visit a little happier.</p>\n    <a href=\"#\" class=\"btn\">Visit Us Today</a>\n  </section>\n</body>\n</html>",
+              "text": "```html\n<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n  <title>Paws & Lattes</title>\n  <style>\n    body { font-family: Arial, sans-serif; margin: 0; background: #fff8f0; color: #333; text-align: center; }\n    .hero { padding: 80px 20px; background: #f4d7b8; }\n    h1 { font-size: 3rem; margin-bottom: 10px; }\n    p { max-width: 500px; margin: 0 auto 20px; font-size: 1.1rem; }\n    .btn { display: inline-block; padding: 12px 24px; background: #8b5e3c; color: white; text-decoration: none; border-radius: 8px; }\n    .section { padding: 40px 20px; }\n  </style>\n</head>\n<body>\n  <section class=\"hero\">\n    <h1>Paws & Lattes</h1>\n    <p>Coffee, cuddles, and happy tails. Visit our dog-friendly café for fresh drinks, tasty treats, and playtime with adorable pups.</p>\n    <a href=\"#visit\" class=\"btn\">Visit Us</a>\n  </section>\n\n  <section class=\"section\" id=\"visit\">\n    <h2>Why You’ll Love It</h2>\n    <p>Relax with a latte, meet friendly dogs, and enjoy a cozy space made for pet lovers.</p>\n    <p><strong>Open Daily:</strong> 8 AM – 7 PM</p>\n  </section>\n</body>\n</html>\n```",
               "type": "output_text"
             }
           ],
@@ -46,8 +52,8 @@
   },
   "response": {
     "body": {
-      "created_at": 1790241857,
-      "id": "resp_08a54d0022a705c9016ab4ec3efd9881959ad16cd63846c96f",
+      "created_at": 1790343862,
+      "id": "resp_0ca1d1d4acda11fa016ab67ab4e6908195833afdc6239e89be",
       "object": "response.compaction",
       "output": [
         {
@@ -57,7 +63,7 @@
               "type": "input_text"
             }
           ],
-          "id": "msg_08a54d0022a705c9016ab4ec3f03748195a50b17677870d9b2",
+          "id": "msg_0ca1d1d4acda11fa016ab67ab4ec6c8195ae1c7c86673cfdb6",
           "role": "user",
           "status": "completed",
           "type": "message"
@@ -67,38 +73,38 @@
             {
               "annotations": [],
               "logprobs": [],
-              "text": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n  <title>Paws & Lattes</title>\n  <style>\n    body {\n      margin: 0;\n      font-family: Arial, sans-serif;\n      background: #fff8f0;\n      color: #4a3428;\n      text-align: center;\n    }\n    .hero {\n      padding: 80px 20px;\n      background: linear-gradient(135deg, #f7d9b1, #ffeccd);\n    }\n    h1 {\n      font-size: 3rem;\n      margin-bottom: 10px;\n    }\n    p {\n      font-size: 1.1rem;\n      max-width: 600px;\n      margin: 0 auto 20px;\n    }\n    .btn {\n      display: inline-block;\n      padding: 12px 24px;\n      background: #8b5e3c;\n      color: white;\n      text-decoration: none;\n      border-radius: 8px;\n      font-weight: bold;\n    }\n    .btn:hover {\n      background: #6f472d;\n    }\n  </style>\n</head>\n<body>\n  <section class=\"hero\">\n    <h1>Paws & Lattes</h1>\n    <p>Enjoy handcrafted coffee, fresh pastries, and wagging tails all in one cozy spot. Meet friendly pups, relax with friends, and make every visit a little happier.</p>\n    <a href=\"#\" class=\"btn\">Visit Us Today</a>\n  </section>\n</body>\n</html>",
+              "text": "```html\n<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n  <title>Paws & Lattes</title>\n  <style>\n    body { font-family: Arial, sans-serif; margin: 0; background: #fff8f0; color: #333; text-align: center; }\n    .hero { padding: 80px 20px; background: #f4d7b8; }\n    h1 { font-size: 3rem; margin-bottom: 10px; }\n    p { max-width: 500px; margin: 0 auto 20px; font-size: 1.1rem; }\n    .btn { display: inline-block; padding: 12px 24px; background: #8b5e3c; color: white; text-decoration: none; border-radius: 8px; }\n    .section { padding: 40px 20px; }\n  </style>\n</head>\n<body>\n  <section class=\"hero\">\n    <h1>Paws & Lattes</h1>\n    <p>Coffee, cuddles, and happy tails. Visit our dog-friendly café for fresh drinks, tasty treats, and playtime with adorable pups.</p>\n    <a href=\"#visit\" class=\"btn\">Visit Us</a>\n  </section>\n\n  <section class=\"section\" id=\"visit\">\n    <h2>Why You’ll Love It</h2>\n    <p>Relax with a latte, meet friendly dogs, and enjoy a cozy space made for pet lovers.</p>\n    <p><strong>Open Daily:</strong> 8 AM – 7 PM</p>\n  </section>\n</body>\n</html>\n```",
               "type": "output_text"
             }
           ],
-          "id": "msg_08a54d0022a705c9016ab4ec3f03908195b7a9f50d60e074c4",
+          "id": "msg_0ca1d1d4acda11fa016ab67ab4ec7c8195a43ffc57131fdbf0",
           "phase": "final_answer",
           "role": "assistant",
           "status": "completed",
           "type": "message"
         },
         {
-          "encrypted_content": "gAAAAABqtOxBylClEhDJ4eyzJmrln6360ab9TcvjmM8_-IWg3PZY1GFoyrfLtN3aa4y-ZbDOnYsyhFg1plp4zax7p8WALAsHwNdLFgt8gr2llGymVsEK0XP2dEnfgGbh9q03U5ROjyC1DuQ6-UqNMiTimyC54WTECKCYIgVuEhw6N1BdX9bDrOneKp2RADKU0EeMchVQ9FSTisMsvstJOcje_vVyAhqLxP466i3GKlKtUfkRm10RiAZVOSlY3mK6AUrrhvwrAMSnQx96_T1KgbQ_uai_oeJB6CWvlc_OCKO98crmU7pTXGt3Kyk77WdsxvlqX5qgjgqzhcvM4e1pTdBLzwpW0oLPHCrFqN_Ku4Khs5yWv-KvtsSRxSPWMFXlAsnzE63FukAAK5JkJI-6GN5KdPm0X51_PR9F7Ku7FaZPZUieE0wV1IYW1QNFsIEj351v0ekMn9DkdXId0CR9gI1ax-WcTGiP49nLLC1Id4XAb8Xc5MzZPCJV-9tqFiVhPIo5tysAxsOXKTQef-0sGak2SgZYgy9cX1x3tI2fMT25QvV89A4QmMvsTQVyC3db8QW8QzYbssnHxTlCLsqXFiYAa_GtvG76DlQgLEDU9ZNt7RivllPS7L_ZS0IC6zMTwwNSRAKgvI8tZziZhMHGOM0IIykjV5Ym5dDfw5HS-0U4sZvluviBnSVtLqH8ApwsutuhVYOpYVY3_TtGQEIdrmjdpmeWH1nXvu9aQ3oYxMBPJXdrWT_Ro_yg4Ynl8JOkmpu3x3vH2nZXSoFKDJQomvgQ3cnYOqW98fdlOcnjoK_UEYW_FJ5fSjRnl0LhyK4Qwlivtb1_RkUNi1BDGAn2bwVkxN7XMGA0N4ZbUgIAvrPCBYGA1jsnziE29MI1YMo3bymtn52mPiowVK_ARteZgr5-ruhgt2KH8lDnkGGrC3GVuHu8U-WPz3FGRz0KXNLe0DTVVGQPCH3HALXActGCG2sgkbm3Y9H6yvpaw3O8L98K60datOMBldrE_9izL_qGKnYqfMYTi14bblofFr2hK-MfdQdgGiocWqTx_4b_-jfK4FkbrK0Q8qJzg84eumuV7ge-oRaYgbffexilcBbyzQ0Yh8KSphL9UBLc3ZrZpjH7YAeQsRcMsOMGXgX3CK9RlSsDcmZf-vnH4b6u05mmY0McK8RGpdKQEuDaKZa1BRCnRCdQI_TO0vDlEXS8jx48znRO-uDv7W7FXG_c1olTirJmInLO5HEa2VDGfgiyUuPk4RBd3gKj_AxaDAlOeY2mV50j2M8AsUNKlIoNhXhKOMS1g8E4c_dJ9uUoHZLp_eiadE_7OHi6MA3DPfXLNcmg98gFDDojtE0TYzyhMAMXRYsvHHj4nV7mmyPRh51PuigOrp_irfoD_wEkI7y_P3A6qkShX8goFLvSYttTjHr0WQ6csCgseEzD_Q==",
-          "id": "cmp_08a54d0022a705c9016ab4ec3fbad08195bbb3f449e993eea1",
+          "encrypted_content": "gAAAAABqtnq2ctwskfRP691oZJVwkLq_bDYMOH_nEpEza5fAuYlmbUCGTAT0ezUWj3XjshLcVxI6qgszusW57TjFM__dArH3g7_bEAzpvsHhrCeqB4CYDuk0-86T-b8Si7pOJ9froKFimnpXX6cYOh2FeK2hkAz_F9y5hqpZt24hKdHddiPVJQWalieFV1hFxa3yMEljXheQK57srVyFEvrhi9vrQ3yH9_YqeIqFXcjykS4vPGw5jH8coegpdU1BnwXcTdc0Q8yjYroplGAhbtsREi366Rv6C6I6bpTcxun_9eAAHUJO_5wZl4WRf_3V_LTrsA2C6lH3wZTSb2WlyzrlXhygs-tZksm5ExhCl50XqUDAk68cO-axyF44oROn5LQPdM1UZlC7SglC2ob-TggHYtnHmOZlbFWvU2r7QsE58cUDigM8-zed7o4BlziT720RIsqWYjMEGQ5WLkFa5FpchozuRo8LTuqurNKiATqm9m8wv_UI4VXgRpvHjUiloforTDPquvKJJtYZ0y5JhMpD7-PMpgPORjY1HWrdQvYf20mhelSLRAcEoMQ20zxCRO3E5YtZbtBmwbb_wTAn-hIGmttgo0vxeNe4qYmk9ld9OVM0eStQ-L-lJQiPZWLnDOvWrALVwNIbvZyuYxAlxqeFmOHNLroom2MKqMd16_ZkshxbTNYj9-HUevJxzUqwIJvWUwE279Nx814o9PEZnLCO-cl8-CYJ0Sc6cMzZ3XMRokQeDBrM57Wg_dpzCDuSfXe9ezyS7qQvi5_NpmlyQ0Q2Fq3GNhS2vnV0GQxBRufiagAM6700JKw4lk6uVJt3_5Rpg4KnMFU42sg4RpB85UGDjqSHrKwPq0ZJMzUsCnweJi_RSRwYCVdqec-kLPWzQ31ydgv-pVaWJgzy0OPXZ3tVHWZSGV2AvC_IuKibl3v2FAUT6hIW2BVVEN_9TXgk6ushGaA9qxSy2S-QwcfZlsipGgXfPg-uTf_qWPNXXku4-nWxvaCcAyRbZdYy38h0T28FRRMxgEAcgHendNZrg-cDGGjIxcYaon7BmSX61mBDxkVrq-vfC2d9jWCGzX9umjV7Ecj358OCfYfvGXsbp0GUWz8Lmob_0a5eWFUcAFoRWWdGPCYhj_9YTbvzGqrcm0eGJzNTuv-ffd4RZrVOQ4wjb1VemdqMr97xi5TZkjWUTFNi9TdzN3dbVFqIjz8SyGBbg2MVjNldW64VgnG1ChZXXrOYx8klUJtcP44iprQLI2K2pCstfKdPe8DmuG9DByHFoAEZh-VOuXzcx2JPwyAAsnLFxkbZj3Ddr1j1ltCvtBVQApTqPhfd05dxhbFkN2nX4bLS8tdHQzjQpAdH3ZwTUMMpbwyRewmcGvvvkCGLOBOQD_DWRtjA-VzFMcBrklzT4mbYq4-f0pZDFHns_-gm6LGlog_PpLB-7jCCWm4kqyyKzaiKGq6ccPV9XOmW8WHSNXlsPN4cfkwt1mKQKCQT_ya15p3EMs5OV2zIVh2e1ABepqu8_N-KfgU5KCJXQ5N-UwIiz5DwX47nnC2RUOzgFrpLdxOwWjC2qQivYrCubimGVNroD_omU9SUmzTxsbj2hhfgq6fx_5U0Im3Hfps8_8mcYF8Fc9BXJjl8927KE6v6uAjD0kZIJW8oRJwIRRdRJ-5RENKaccAaSOgTNHbMJ5bS4aBbXDUVvoG5RuLp6grEIZlo2IPYfOHBgJ0fAJSh6Y1oa9EEJyLYyglKcMymgTpuLaYURg==",
+          "id": "cmp_0ca1d1d4acda11fa016ab67ab56ad48195826a8b48643b9830",
           "type": "compaction"
         }
       ],
       "usage": {
-        "input_tokens": 407,
+        "input_tokens": 477,
         "input_tokens_details": {
           "cache_write_tokens": 0,
           "cached_tokens": 0
         },
-        "output_tokens": 110,
+        "output_tokens": 172,
         "output_tokens_details": {
           "reasoning_tokens": 0
         },
-        "total_tokens": 517
+        "total_tokens": 649
       }
     },
     "headers": {
       "apim-request-id": [
-        "86cc6d81-27b5-498b-98fe-e52710cfa10b"
+        "35800b52-b63e-47db-8f29-e2e9f0d33aee"
       ],
       "azureai-fe-is-streaming": [
         "False"
@@ -107,13 +113,13 @@
         "paygo"
       ],
       "content-length": [
-        "3892"
+        "4219"
       ],
       "content-type": [
         "application/json"
       ],
       "date": [
-        "Thu, 24 Sep 2026 09:24:14 GMT"
+        "Fri, 25 Sep 2026 13:44:20 GMT"
       ],
       "server": [
         "istio-envoy"
@@ -149,7 +155,7 @@
         "699"
       ],
       "x-ratelimit-remaining-tokens": [
-        "699692"
+        "699653"
       ],
       "x-ratelimit-renewalperiod-requests": [
         "60"
@@ -164,7 +170,7 @@
         "0"
       ],
       "x-request-id": [
-        "0cdf0e6c-cf12-4e2a-8a39-c2f4a88190d4"
+        "48acf691-782b-4fae-a383-a276470caf14"
       ]
     },
     "status": 200
