@@ -174,12 +174,12 @@ defmodule ReqLLM.Providers.Anthropic do
   @anthropic_beta_prompt_caching "prompt-caching-2024-07-31"
   @anthropic_beta_files_api "files-api-2025-04-14"
   @claude_subscription_betas ["oauth-2025-04-20", "interleaved-thinking-2025-05-14"]
-  @claude_subscription_user_agent "claude-cli/2.1.112 (external, cli)"
   @claude_subscription_x_app "claude-code"
   @claude_subscription_identity "You are a Claude agent, built on Anthropic's Claude Agent SDK."
   @claude_subscription_billing_salt "59cf53e54c78"
   @claude_subscription_billing_positions [4, 7, 20]
-  @claude_subscription_code_version "2.1.112"
+  @claude_subscription_code_version "2.1.282"
+  @claude_subscription_user_agent "claude-cli/#{@claude_subscription_code_version} (external, cli)"
   @claude_subscription_entrypoint "sdk-cli"
 
   # Canonical reasoning effort token budgets for Anthropic models
