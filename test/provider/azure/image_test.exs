@@ -583,6 +583,20 @@ defmodule ReqLLM.Providers.Azure.ImageTest do
   end
 
   describe "streaming image generation" do
+    test "accepts idle timeouts without sending them to the API" do
+      for timeout <- [120_000, :infinity] do
+        assert {:ok, request} =
+                 attach_image_stream(
+                   base_url: @traditional_base_url,
+                   stream_idle_timeout: timeout
+                 )
+
+        body = Jason.decode!(request.body)
+        assert body["stream"] == true
+        refute Map.has_key?(body, "stream_idle_timeout")
+      end
+    end
+
     test "traditional format builds the deployment URL with api-version and SSE headers" do
       {:ok, request} = attach_image_stream(base_url: @traditional_base_url)
 

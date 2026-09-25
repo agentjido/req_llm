@@ -942,6 +942,25 @@ defmodule ReqLLM.Providers.OpenAIImagesTest do
       refute Map.has_key?(body, "messages")
     end
 
+    test "OpenAI.attach_stream/4 accepts idle timeouts without sending them to the API" do
+      model = %LLMDB.Model{id: "gpt-image-1.5", provider: :openai}
+      context = Context.new([Context.user("A red square")])
+
+      for timeout <- [120_000, :infinity] do
+        assert {:ok, request} =
+                 OpenAI.attach_stream(
+                   model,
+                   context,
+                   [api_key: "test-key", operation: :image, stream_idle_timeout: timeout],
+                   nil
+                 )
+
+        body = Jason.decode!(request.body)
+        assert body["stream"] == true
+        refute Map.has_key?(body, "stream_idle_timeout")
+      end
+    end
+
     test "OpenAI.attach_stream/4 rejects edits and multi-image requests without a facade" do
       model = %LLMDB.Model{id: "gpt-image-1.5", provider: :openai}
       context = Context.new([Context.user("A red square")])

@@ -109,6 +109,7 @@ defmodule ReqLLM.Images.OpenAICompatible do
     :telemetry,
     :receive_timeout,
     :total_timeout,
+    :stream_idle_timeout,
     :max_retries,
     :on_unsupported,
     :fixture

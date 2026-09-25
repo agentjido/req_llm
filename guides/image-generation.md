@@ -177,6 +177,27 @@ If you consume `stream_response.stream` directly instead, preview chunks are fla
 
 `ReqLLM.StreamResponse.to_response/1` builds a `ReqLLM.Response` holding only the final image, with `usage.image_usage` and token counts populated as for `generate_image/3`. Preview frames never reach the response.
 
+The stream can be consumed once. To show previews and build a response, attach a lazy callback before calling `to_response/1`:
+
+```elixir
+{:ok, stream} = ReqLLM.stream_image("openai:gpt-image-1.5", "A red fox", partial_images: 2)
+
+chunks =
+  Stream.each(stream.stream, fn
+    %ReqLLM.StreamChunk{type: :content_part, content_part: part} ->
+      case part.metadata do
+        %{partial?: true, partial_image_index: index} -> show_preview(index, part.data)
+        %{partial?: false} -> show_final(part.data)
+      end
+
+    _chunk ->
+      :ok
+  end)
+
+{:ok, response} = ReqLLM.StreamResponse.to_response(%{stream | stream: chunks})
+[final] = ReqLLM.Response.images(response)
+```
+
 Hosts that render through `ReqLLM.StreamResponse.events/1` receive each preview frame as an `:output_item` event of type `:image` whose metadata carries `partial?: true`, its `partial_image_index`, and `stream_only?: true`; the final image arrives as an `:output_item` with `partial?: false`. Render previews live from those events, and skip items flagged `stream_only?` when persisting outputs.
 
 `ReqLLM.stream_image!/3` raises instead of returning `{:error, error}` for failures before the request starts.

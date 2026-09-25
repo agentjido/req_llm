@@ -1297,12 +1297,22 @@ defmodule ReqLLM do
 
       {:ok, stream} = ReqLLM.stream_image("openai:gpt-image-1.5", "A red fox", partial_images: 2)
 
-      stream
-      |> ReqLLM.StreamResponse.images()
-      |> Enum.each(fn part -> IO.inspect(part.metadata) end)
+      chunks =
+        Stream.each(stream.stream, fn
+          %ReqLLM.StreamChunk{type: :content_part, content_part: part} ->
+            IO.inspect(part.metadata)
 
-      {:ok, response} = ReqLLM.StreamResponse.to_response(stream)
+          _chunk ->
+            :ok
+        end)
+
+      {:ok, response} = ReqLLM.StreamResponse.to_response(%{stream | stream: chunks})
       [final] = ReqLLM.Response.images(response)
+
+  The stream can be consumed once. `Stream.each/2` above processes image parts
+  as `ReqLLM.StreamResponse.to_response/1` consumes the chunks and builds the
+  final response. Use `ReqLLM.StreamResponse.images/1` when you only need the
+  image parts.
 
   """
   @spec stream_image(

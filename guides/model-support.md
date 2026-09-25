@@ -32,9 +32,9 @@ provider-native feature and are not consulted by request routing.
 | --- | ---: |
 | First-class | 6 |
 | Best-effort | 0 |
-| Experimental | 599 |
+| Experimental | 598 |
 | Unsupported | 91 |
-| **Total recorded surfaces** | **692** |
+| **Total recorded surfaces** | **695** |
 
 ## anthropic
 

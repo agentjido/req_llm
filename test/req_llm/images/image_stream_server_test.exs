@@ -11,6 +11,30 @@ defmodule ReqLLM.Images.ImageStreamServerTest do
   @azure_model LLMDB.Model.new!(%{id: "gpt-image-2", provider: :azure})
 
   describe "OpenAI image SSE through the stream server" do
+    test "processes previews and builds a response in one stream read" do
+      sse = [sse_event(partial_payload(0)), sse_event(completed_payload())]
+      {_server, stream_response} = start_stream(OpenAI, @openai_model, sse)
+      consumer = self()
+
+      chunks =
+        Stream.each(stream_response.stream, fn
+          %ReqLLM.StreamChunk{type: :content_part, content_part: part} ->
+            send(consumer, {:image, part})
+
+          _chunk ->
+            :ok
+        end)
+
+      refute_received {:image, _part}
+
+      assert {:ok, response} = StreamResponse.to_response(%{stream_response | stream: chunks})
+      assert_received {:image, %ContentPart{metadata: %{partial?: true}}}
+      assert_received {:image, %ContentPart{metadata: %{partial?: false}} = final}
+      refute_received {:image, _part}
+      assert Response.images(response) == [final]
+      assert response.usage.image_usage.generated.count == 1
+    end
+
     test "delivers previews live and assembles only the final image" do
       sse = [
         sse_event(partial_payload(0)),

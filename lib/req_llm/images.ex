@@ -163,6 +163,10 @@ defmodule ReqLLM.Images do
                    type: {:or, [:pos_integer, {:in, [:infinity]}]},
                    doc: "Optional total model-call timeout in milliseconds, including retries"
                  ],
+                 stream_idle_timeout: [
+                   type: {:or, [:pos_integer, {:in, [:infinity]}]},
+                   doc: "Optional timeout between semantic streaming updates in milliseconds"
+                 ],
                  max_retries: [
                    type: :non_neg_integer,
                    default: 3,
