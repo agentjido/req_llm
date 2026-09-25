@@ -104,6 +104,7 @@ defmodule ReqLLM.Streaming.FinchClient do
 
     with {:ok, finch_request} <- provider_mod.attach_stream(model, context, opts, finch_name),
          finch_request <- transform_request(finch_request, opts),
+         finch_request <- configure_connection_pool(finch_request, opts, finch_name),
          :ok <- validate_http2_body_size(finch_request, finch_name) do
       http_context = Fixtures.HTTPContext.from_finch_request(finch_request)
       canonical_json = Fixtures.canonical_json_from_finch_request(finch_request)
@@ -207,7 +208,14 @@ defmodule ReqLLM.Streaming.FinchClient do
     end
 
     try do
-      case Retry.stream(finch_request, finch_name, :ok, finch_stream_callback, stream_opts) do
+      case Retry.stream(
+             finch_request,
+             finch_name,
+             :ok,
+             finch_stream_callback,
+             stream_opts,
+             &stream_with_connection_pool/5
+           ) do
         {:ok, _} -> :ok
         {:error, reason, _callback_acc} -> forward_stream_failure(stream_server_pid, reason)
       end
@@ -215,6 +223,69 @@ defmodule ReqLLM.Streaming.FinchClient do
       :exit, reason -> forward_stream_failure(stream_server_pid, {:exit, reason})
       kind, reason -> forward_stream_failure(stream_server_pid, {kind, reason})
     end
+  end
+
+  defp configure_connection_pool(finch_request, opts, finch_name) do
+    http_options = Map.new(Keyword.get(opts, :req_http_options) || [])
+
+    case Map.get(http_options, :connect_options) do
+      nil ->
+        finch_request
+
+      connect_options ->
+        connect_options = proxy_connection_options(finch_request, connect_options)
+
+        pool_options =
+          finch_request
+          |> configured_pool_options(finch_name)
+          |> Keyword.drop([:conn_opts, :protocols])
+          |> Keyword.merge(Req.Finch.pool_options(%{connect_options: connect_options}))
+
+        hash = :crypto.hash(:sha256, :erlang.term_to_binary(pool_options))
+        pool_tag = {:req_llm, finch_request.pool_tag, hash}
+
+        %{finch_request | pool_tag: pool_tag}
+        |> Finch.Request.put_private(:req_llm_pool_options, pool_options)
+    end
+  end
+
+  defp proxy_connection_options(%{scheme: :http}, connect_options) do
+    case Keyword.get(connect_options, :proxy) do
+      {scheme, address, port, opts} ->
+        Keyword.put(
+          connect_options,
+          :proxy,
+          {scheme, address, port, Keyword.put(opts, :mode, :passive)}
+        )
+
+      _ ->
+        connect_options
+    end
+  end
+
+  defp proxy_connection_options(_request, connect_options), do: connect_options
+
+  defp configured_pool_options(finch_request, finch_name) do
+    config = ReqLLM.Application.get_finch_config()
+
+    if config[:name] == finch_name do
+      config
+      |> Keyword.get(:pools, %{})
+      |> matching_pool_config(finch_request)
+      |> then(&Enum.to_list(&1 || []))
+    else
+      []
+    end
+  end
+
+  defp stream_with_connection_pool(request, finch_name, acc, callback, opts) do
+    {pool_options, private} = Map.pop(request.private, :req_llm_pool_options)
+
+    if pool_options do
+      :ok = Finch.start_pool(finch_name, request_pool(request), pool_options)
+    end
+
+    Finch.stream(%{request | private: private}, finch_name, acc, callback, opts)
   end
 
   defp forward_stream_failure(stream_server_pid, reason) do
@@ -356,6 +427,10 @@ defmodule ReqLLM.Streaming.FinchClient do
 
   defp mixed_http2_protocols?(protocols) do
     :http1 in protocols and :http2 in protocols
+  end
+
+  defp get_pool_protocols(%{private: %{req_llm_pool_options: pool_options}}, _finch_name) do
+    {:ok, pool_protocols(pool_options)}
   end
 
   defp get_pool_protocols(finch_request, finch_name) do

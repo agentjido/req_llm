@@ -464,6 +464,49 @@ defmodule ReqLLM.Streaming.FinchClientTest do
       assert Enum.any?(EventStreamServer.events(stream_server), &match?({:status, 200}, &1))
     end
 
+    test "rejects large bodies with mixed protocols from request connection options" do
+      {:ok, context} = Context.normalize("Test")
+      opts = [req_http_options: [connect_options: [protocols: [:http1, :http2]]]]
+
+      assert {:error, {:provider_build_failed, {:http2_body_too_large, 70_000, [:http1, :http2]}}} =
+               FinchClient.build_stream_request(
+                 LargeBodyProvider,
+                 %LLMDB.Model{provider: :test, id: "test"},
+                 context,
+                 opts,
+                 ReqLLM.Finch
+               )
+    end
+
+    test "uses request connection protocols instead of the configured pool protocols" do
+      Application.put_env(:req_llm, :finch, pools: %{default: [protocols: [:http1, :http2]]})
+      {:ok, context} = Context.normalize("Test")
+      opts = [req_http_options: [connect_options: [protocols: [:http1]]]]
+
+      assert {:ok, _, _, _} =
+               FinchClient.build_stream_request(
+                 LargeBodyProvider,
+                 %LLMDB.Model{provider: :test, id: "test"},
+                 context,
+                 opts,
+                 ReqLLM.Finch
+               )
+    end
+
+    test "rejects invalid connection options before sending a request" do
+      {:ok, context} = Context.normalize("Test")
+      opts = [req_http_options: [connect_options: [invalid_connection_option: true]]]
+
+      assert {:error, {:build_request_failed, %ArgumentError{}}} =
+               FinchClient.build_stream_request(
+                 IodataBodyProvider,
+                 %LLMDB.Model{provider: :test, id: "test"},
+                 context,
+                 opts,
+                 ReqLLM.Finch
+               )
+    end
+
     test "allows large request bodies when finch pool config is missing" do
       Application.put_env(:req_llm, :finch, [])
 
