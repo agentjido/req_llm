@@ -343,9 +343,10 @@ defmodule ReqLLM.Provider.Defaults.ResponseBuilder do
   end
 
   defp materialize_content_parts(_profile, _chunks, acc, text, thinking, tool_calls) do
-    case ChunkAccumulator.finalize_content_parts(acc) do
-      [] -> build_content_parts(text, thinking, tool_calls)
-      _content_parts -> ChunkAccumulator.finalize_ordered_content(acc)
+    if ChunkAccumulator.ordered_content?(acc) do
+      ChunkAccumulator.finalize_ordered_content(acc)
+    else
+      build_content_parts(text, thinking, tool_calls)
     end
   end
 
