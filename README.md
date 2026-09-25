@@ -136,6 +136,10 @@ result.repairs      # visible legacy or callback repair attempts
 {:ok, image_response} = ReqLLM.generate_image("openai:gpt-image-1.5", "A simple red square")
 image_bytes = ReqLLM.Response.image_data(image_response)
 File.write!("red_square.png", image_bytes)
+
+# Stream preview frames while the final image renders (OpenAI and Azure gpt-image models)
+{:ok, image_stream} = ReqLLM.stream_image("openai:gpt-image-1.5", "A simple red square", partial_images: 2)
+image_stream |> ReqLLM.StreamResponse.images() |> Enum.each(&IO.inspect(&1.metadata))
 ```
 
 Note: Google image models gemini-2.5-flash-image and gemini-3-pro-image-preview reject :n; specify the image count in the prompt.

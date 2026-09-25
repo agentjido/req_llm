@@ -5,7 +5,7 @@ compatibility scenario catalog. It is a tooling snapshot, not a runtime model
 allowlist, and it does not change whether ReqLLM can resolve or call a model.
 
 - Evidence schema: `1`
-- Snapshot evaluated at: `2026-09-04T19:26:34Z`
+- Snapshot evaluated at: `2026-09-22T11:59:03Z`
 - Freshness window: `90 days`
 
 ## Conservative tier rules
@@ -30,11 +30,11 @@ provider-native feature and are not consulted by request routing.
 
 | Tier | Surfaces |
 | --- | ---: |
-| First-class | 2 |
+| First-class | 6 |
 | Best-effort | 0 |
-| Experimental | 599 |
+| Experimental | 598 |
 | Unsupported | 91 |
-| **Total recorded surfaces** | **692** |
+| **Total recorded surfaces** | **695** |
 
 ## anthropic
 
@@ -47,6 +47,12 @@ provider-native feature and are not consulted by request routing.
 | `claude-opus-4-8` | `text` | `anthropic.messages` | text → text | Experimental | 0/5 | 2026-05-29T17:14:45Z | missing or stale evidence |
 | `claude-sonnet-4-20250514` | `text` | `anthropic.messages` | text → text | Experimental | 0/5 | 2026-05-29T17:16:20Z | missing or stale evidence |
 | `claude-sonnet-4-5-20250929` | `text` | `anthropic.messages` | text → text | Experimental | 0/5 | 2026-05-29T17:17:58Z | missing or stale evidence |
+
+## azure
+
+| Model | Operation | Execution surface | Input → output | Tier | Baseline | Checked | Reason |
+| --- | --- | --- | --- | --- | ---: | --- | --- |
+| `gpt-image-2` | `image` | `azure.image` | text → image | First-class | 1/1 | 2026-09-22T10:08:29Z | complete current baseline |
 
 ## cerebras
 
@@ -256,9 +262,11 @@ provider-native feature and are not consulted by request routing.
 | `gpt-audio` | `text` | `openai.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T21:37:41Z | missing or stale evidence |
 | `gpt-audio-mini` | `text` | `openai.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T21:37:57Z | missing or stale evidence |
 | `gpt-image-1-mini` | `image` | `openai.image` | text → image | Experimental | 0/1 | 2026-05-29T21:25:04Z | missing or stale evidence |
-| `gpt-image-1.5` | `image` | `openai.image` | text → image | Experimental | 0/1 | 2026-05-29T20:45:07Z | missing or stale evidence |
+| `gpt-image-1.5` | `image` | `openai.image` | text → image | First-class | 1/1 | 2026-09-22T10:08:06Z | complete current baseline |
 | `gpt-image-2` | `image` | `openai.image` | text → image | Experimental | 0/1 | 2026-05-29T21:25:32Z | missing or stale evidence |
 | `gpt-image-2-2026-04-21` | `image` | `openai.image` | text → image | Experimental | 0/1 | 2026-05-29T21:26:05Z | missing or stale evidence |
+| `gpt-image-2.5-flare` | `image` | `openai.image` | text → image | First-class | 1/1 | 2026-09-22T11:58:43Z | complete current baseline |
+| `gpt-image-2.5-sunburst` | `image` | `openai.image` | text → image | First-class | 1/1 | 2026-09-22T11:59:03Z | complete current baseline |
 | `gpt-realtime-whisper` | `transcription` | `openai.unrecorded_transcription` | audio → text | Unsupported | 0/1 | 2026-05-29T21:20:41Z | transcription_basic failed at assertion |
 | `o3-2025-04-16` | `text` | `openai.responses` | text → text | Experimental | 0/5 | 2026-05-29T18:58:41Z | missing or stale evidence |
 | `o3-pro` | `text` | `openai.responses` | text → text | Experimental | 0/5 | 2026-05-29T18:59:52Z | missing or stale evidence |

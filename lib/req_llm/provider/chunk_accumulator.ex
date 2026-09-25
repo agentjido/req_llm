@@ -24,8 +24,8 @@ defmodule ReqLLM.Provider.ChunkAccumulator do
     * `finalize_message/1` — preserves the historical `StreamServer`
       contract: returns either `nil` (empty acc) or an assistant
       `%ReqLLM.Message{}` ready to attach to OTel content-capture metadata.
-      Text content becomes a single `:text` `ContentPart`; complete content
-      parts are retained; tool calls become `%ReqLLM.ToolCall{}` structs
+      Adjacent text chunks become a single `:text` `ContentPart`; complete
+      content parts are retained; tool calls become `%ReqLLM.ToolCall{}` structs
       (with builtin flag preserved).
 
   Reasoning text is intentionally not surfaced through `finalize_message/1`
@@ -41,6 +41,16 @@ defmodule ReqLLM.Provider.ChunkAccumulator do
   — also O(1) per chunk. Argument fragments are iodata buffers keyed by
   tool-call index, joined only at finalize time. A stream with N chunks
   costs O(N) total work, not O(N²).
+
+  ## Text boundaries
+
+  A `:content` chunk whose metadata carries both `:phase` and `:output_index`
+  belongs to one labelled output item (OpenAI Responses assistant phases).
+  Adjacent text chunks merge only when they share that boundary, so two
+  consecutive items stay separate parts and each part keeps `%{phase: phase}`
+  in its metadata. Chunks without a boundary merge with each other exactly as
+  plain text always does. `ordered_content?/1` reports when the accumulated
+  content needs `finalize_ordered_content/2` to keep that structure.
   """
 
   alias ReqLLM.{Message, ToolCall}
@@ -78,14 +88,19 @@ defmodule ReqLLM.Provider.ChunkAccumulator do
           optional(:metadata) => map()
         }
 
+  @type text_boundary :: {String.t(), non_neg_integer()} | nil
+
   @type content_event ::
-          {:text, String.t()} | {:thinking, String.t()} | {:content_part, ContentPart.t()}
+          {:text, iodata(), text_boundary()}
+          | {:thinking, iodata()}
+          | {:content_part, ContentPart.t()}
 
   @type t :: %__MODULE__{
           text_content: iodata(),
           thinking_content: iodata(),
           content_events: [content_event()],
           content_parts: [ContentPart.t()],
+          segmented_text?: boolean(),
           tool_calls: [tool_call_record()],
           arg_fragments: %{optional(non_neg_integer()) => iodata()},
           tool_call_metadata: %{optional(non_neg_integer()) => map()},
@@ -100,6 +115,7 @@ defmodule ReqLLM.Provider.ChunkAccumulator do
             thinking_content: [],
             content_events: [],
             content_parts: [],
+            segmented_text?: false,
             tool_calls: [],
             arg_fragments: %{},
             tool_call_metadata: %{},
@@ -126,12 +142,15 @@ defmodule ReqLLM.Provider.ChunkAccumulator do
   Folds a single chunk into the accumulator. Hot path — O(1) per chunk.
   """
   @spec push(t(), StreamChunk.t()) :: t()
-  def push(%__MODULE__{} = acc, %StreamChunk{type: :content, text: text})
+  def push(%__MODULE__{} = acc, %StreamChunk{type: :content, text: text} = chunk)
       when is_binary(text) and text != "" do
+    boundary = text_boundary(chunk.metadata)
+
     %{
       acc
       | text_content: [acc.text_content, text],
-        content_events: [{:text, text} | acc.content_events]
+        content_events: [{:text, text, boundary} | acc.content_events],
+        segmented_text?: acc.segmented_text? or boundary != nil
     }
   end
 
@@ -146,6 +165,9 @@ defmodule ReqLLM.Provider.ChunkAccumulator do
         content_events: [{:thinking, text} | acc.content_events]
     }
   end
+
+  def push(%__MODULE__{} = acc, %StreamChunk{type: :content_part, metadata: %{stream_only?: true}}),
+      do: acc
 
   def push(
         %__MODULE__{} = acc,
@@ -198,6 +220,12 @@ defmodule ReqLLM.Provider.ChunkAccumulator do
   end
 
   def push(%__MODULE__{} = acc, _chunk), do: acc
+
+  defp text_boundary(%{phase: phase, output_index: index})
+       when is_binary(phase) and is_integer(index),
+       do: {phase, index}
+
+  defp text_boundary(_metadata), do: nil
 
   defp push_tool_call_metadata(acc, %{tool_call_metadata: %{index: index, metadata: metadata}})
        when is_map(metadata) do
@@ -341,10 +369,22 @@ defmodule ReqLLM.Provider.ChunkAccumulator do
     do: Enum.reverse(content_parts)
 
   @doc """
+  Returns `true` when the accumulated content has structure that a single
+  aggregated text part would lose: a complete content part, or text chunks
+  that carry an output-item boundary. Callers use
+  `finalize_ordered_content/2` in that case.
+  """
+  @spec ordered_content?(t()) :: boolean()
+  def ordered_content?(%__MODULE__{content_parts: [], segmented_text?: false}), do: false
+  def ordered_content?(%__MODULE__{}), do: true
+
+  @doc """
   Returns text, thinking, and complete content parts in arrival order.
 
-  Adjacent text or thinking chunks become one content part. Set
-  `:include_thinking?` to `false` to omit thinking content.
+  Adjacent text or thinking chunks become one content part. Adjacent text
+  chunks with different boundaries stay separate, and a bounded text part
+  carries `%{phase: phase}` in its metadata. Set `:include_thinking?` to
+  `false` to omit thinking content.
   """
   @spec finalize_ordered_content(t(), keyword()) :: [ContentPart.t()]
   def finalize_ordered_content(%__MODULE__{content_events: content_events}, opts \\ []) do
@@ -355,11 +395,15 @@ defmodule ReqLLM.Provider.ChunkAccumulator do
     |> Enum.map(&materialize_content_event/1)
   end
 
-  defp prepend_content_event({:text, text}, [{:text, content} | rest], _include_thinking?),
-    do: [{:text, [text, content]} | rest]
+  defp prepend_content_event(
+         {:text, text, boundary},
+         [{:text, content, boundary} | rest],
+         _include_thinking?
+       ),
+       do: [{:text, [text, content], boundary} | rest]
 
-  defp prepend_content_event({:text, text}, content, _include_thinking?),
-    do: [{:text, text} | content]
+  defp prepend_content_event({:text, _text, _boundary} = event, content, _include_thinking?),
+    do: [event | content]
 
   defp prepend_content_event(
          {:thinking, thinking},
@@ -376,8 +420,11 @@ defmodule ReqLLM.Provider.ChunkAccumulator do
   defp prepend_content_event({:content_part, content_part}, content, _include_thinking?),
     do: [{:content_part, content_part} | content]
 
-  defp materialize_content_event({:text, content}),
+  defp materialize_content_event({:text, content, nil}),
     do: ContentPart.text(IO.iodata_to_binary(content))
+
+  defp materialize_content_event({:text, content, {phase, _output_index}}),
+    do: ContentPart.text(IO.iodata_to_binary(content), %{phase: phase})
 
   defp materialize_content_event({:thinking, content}),
     do: ContentPart.thinking(IO.iodata_to_binary(content))

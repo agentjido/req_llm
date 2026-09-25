@@ -178,6 +178,12 @@ defmodule ReqLLM.Compatibility.ScenarioCatalog do
                        output_modalities: [:embedding], requirements: [:embedding]},
                       {"image_basic", "image",
                        output_modalities: [:image], requirements: [:image_generation]},
+                      {"image_streaming", "image",
+                       output_modalities: [:image],
+                       requirements: [:image_generation],
+                       transports: [:server_sent_events],
+                       applicability: :focused,
+                       providers: [:openai, :azure]},
                       {"image_transparent_background", "image",
                        output_modalities: [:image],
                        requirements: [:image_generation],
@@ -351,6 +357,16 @@ defmodule ReqLLM.Compatibility.ScenarioCatalog do
       provider: :openai,
       scenario: "astra_steering_pending",
       test_file: "test/coverage/openai/astra_test.exs"
+    },
+    %{
+      provider: :openai,
+      scenario: "image_streaming",
+      test_file: "test/coverage/openai/image_generation_test.exs"
+    },
+    %{
+      provider: :azure,
+      scenario: "image_streaming",
+      test_file: "test/coverage/azure/image_generation_test.exs"
     },
     %{
       provider: :openai,

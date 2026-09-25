@@ -26,7 +26,7 @@ defmodule ReqLLM.Compatibility.ScenarioCatalogTest do
     "objects" => ~w(object_basic object_streaming),
     "reasoning" => ~w(reasoning),
     "embedding" => ~w(embed_basic embed_usage embed_batch),
-    "image" => ~w(image_basic image_transparent_background),
+    "image" => ~w(image_basic image_streaming image_transparent_background),
     "speech" => ~w(speech_basic),
     "transcription" => ~w(transcription_basic),
     "rerank" => ~w(rerank_basic),
@@ -55,7 +55,7 @@ defmodule ReqLLM.Compatibility.ScenarioCatalogTest do
     test "represents every scenario once" do
       scenario_ids = Enum.map(ScenarioCatalog.scenarios(), & &1.id)
 
-      assert length(scenario_ids) == 47
+      assert length(scenario_ids) == 48
       assert length(scenario_ids) == MapSet.size(MapSet.new(scenario_ids))
     end
 

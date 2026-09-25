@@ -336,15 +336,17 @@ defmodule ReqLLM.Provider.Defaults.ResponseBuilder do
     Enum.flat_map(chunks, fn
       %StreamChunk{type: :content, text: text} -> [%ContentPart{type: :text, text: text}]
       %StreamChunk{type: :thinking, text: text} -> [%ContentPart{type: :thinking, text: text}]
+      %StreamChunk{type: :content_part, metadata: %{stream_only?: true}} -> []
       %StreamChunk{type: :content_part, content_part: %ContentPart{} = part} -> [part]
       _chunk -> []
     end)
   end
 
   defp materialize_content_parts(_profile, _chunks, acc, text, thinking, tool_calls) do
-    case ChunkAccumulator.finalize_content_parts(acc) do
-      [] -> build_content_parts(text, thinking, tool_calls)
-      _content_parts -> ChunkAccumulator.finalize_ordered_content(acc)
+    if ChunkAccumulator.ordered_content?(acc) do
+      ChunkAccumulator.finalize_ordered_content(acc)
+    else
+      build_content_parts(text, thinking, tool_calls)
     end
   end
 
