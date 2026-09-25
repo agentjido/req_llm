@@ -123,13 +123,14 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
       assert encoded_tool["parameters"]["properties"]["location"]["type"] == "string"
     end
 
-    test "encodes non-strict tools without required field" do
+    test "preserves required and optional fields on non-strict tools" do
       tool =
         ReqLLM.Tool.new!(
           name: "get_weather",
           description: "Get weather",
           parameter_schema: [
-            location: [type: :string, required: true]
+            location: [type: :string, required: true],
+            units: [type: :string]
           ],
           callback: fn _ -> {:ok, "result"} end,
           strict: false
@@ -142,7 +143,66 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
 
       assert [encoded_tool] = body["tools"]
       assert encoded_tool["strict"] == false
-      refute Map.has_key?(encoded_tool["parameters"], "required")
+      assert encoded_tool["parameters"]["required"] == ["location"]
+      assert encoded_tool["parameters"]["additionalProperties"] == false
+      assert encoded_tool["parameters"]["properties"]["units"] == %{"type" => "string"}
+    end
+
+    test "preserves non-strict JSON schemas with definitions and root constraints" do
+      parameters = %{
+        "$schema" => "https://json-schema.org/draft/2020-12/schema",
+        "$defs" => %{"location" => %{"type" => "string", "minLength" => 1}},
+        "type" => "object",
+        "properties" => %{
+          "location" => %{"$ref" => "#/$defs/location"},
+          "units" => %{"type" => "string"}
+        },
+        "required" => ["location"],
+        "minProperties" => 1
+      }
+
+      tool =
+        ReqLLM.Tool.new!(
+          name: "get_weather",
+          description: "Get weather",
+          parameter_schema: parameters,
+          callback: fn _ -> {:ok, "result"} end
+        )
+
+      body =
+        build_request(tools: [tool])
+        |> ResponsesAPI.encode_body()
+        |> ReqLLM.Test.Helpers.json_body()
+
+      assert [encoded_tool] = body["tools"]
+      assert encoded_tool["strict"] == false
+      assert encoded_tool["parameters"] == parameters
+    end
+
+    test "preserves explicit additionalProperties values on non-strict tools" do
+      for additional_properties <- [false, true, %{"type" => "string"}] do
+        parameters = %{
+          "type" => "object",
+          "properties" => %{"location" => %{"type" => "string"}},
+          "additionalProperties" => additional_properties
+        }
+
+        tool =
+          ReqLLM.Tool.new!(
+            name: "get_weather",
+            description: "Get weather",
+            parameter_schema: parameters,
+            callback: fn _ -> {:ok, "result"} end
+          )
+
+        body =
+          build_request(tools: [tool])
+          |> ResponsesAPI.encode_body()
+          |> ReqLLM.Test.Helpers.json_body()
+
+        assert [encoded_tool] = body["tools"]
+        assert encoded_tool["parameters"] == parameters
+      end
     end
 
     test "encodes strict tools with required field listing all parameters" do
