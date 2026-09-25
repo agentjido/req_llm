@@ -479,12 +479,16 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
                 param_bundles().deterministic
                 |> Keyword.put(:max_tokens, tool_budget_for(@model_spec))
 
-              # Use forced tool choice if supported, otherwise fall back to "required"
               tool_choice =
-                if ReqLLM.ProviderTest.Comprehensive.supports_forced_tool_choice?(@model_spec) do
-                  %{type: "tool", name: "add"}
-                else
-                  "required"
+                cond do
+                  @provider == :meta ->
+                    :auto
+
+                  ReqLLM.ProviderTest.Comprehensive.supports_forced_tool_choice?(@model_spec) ->
+                    %{type: "tool", name: "add"}
+
+                  true ->
+                    "required"
                 end
 
               {:ok, resp1} =

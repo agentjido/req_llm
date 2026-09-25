@@ -3,7 +3,7 @@
   "provider": "openai",
   "request": {
     "body": {
-      "b64": "eyJpbmNsdWRlIjpbInJlYXNvbmluZy5lbmNyeXB0ZWRfY29udGVudCJdLCJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IlRlbGwgbWUgYSBqb2tlIGFib3V0IGNhdHMiLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjoyNTYwMCwibW9kZWwiOiJncHQtNSIsInJlYXNvbmluZyI6eyJlZmZvcnQiOiJsb3cifSwic3RyZWFtIjpmYWxzZSwidG9vbHMiOlt7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsIm5hbWUiOiJnZXRfd2VhdGhlciIsInBhcmFtZXRlcnMiOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifSwic3RyaWN0IjpmYWxzZSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
+      "b64": "eyJpbmNsdWRlIjpbInJlYXNvbmluZy5lbmNyeXB0ZWRfY29udGVudCJdLCJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IkNhbGwgZ2V0X3dlYXRoZXIgd2l0aCBsb2NhdGlvbiBMb25kb24uIiwidHlwZSI6ImlucHV0X3RleHQifV0sInJvbGUiOiJ1c2VyIn1dLCJtYXhfb3V0cHV0X3Rva2VucyI6MjA0OCwibW9kZWwiOiJncHQtNSIsInJlYXNvbmluZyI6eyJlZmZvcnQiOiJsb3cifSwic3RyZWFtIjpmYWxzZSwidG9vbF9jaG9pY2UiOiJhdXRvIiwidG9vbHMiOlt7ImRlc2NyaXB0aW9uIjoiR2V0IHdlYXRoZXIgZm9yIGEgbG9jYXRpb24iLCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJwYXJhbWV0ZXJzIjp7IiRkZWZzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifX0sIiRzY2hlbWEiOiJodHRwczovL2pzb24tc2NoZW1hLm9yZy9kcmFmdC8yMDIwLTEyL3NjaGVtYSIsImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjp0cnVlLCJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7IiRyZWYiOiIjLyRkZWZzL2xvY2F0aW9uIn0sInVuaXRzIjp7ImVudW0iOlsiY2Vsc2l1cyIsImZhaHJlbmhlaXQiXSwidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9LCJzdHJpY3QiOmZhbHNlLCJ0eXBlIjoiZnVuY3Rpb24ifV19"
     },
     "canonical_json": {
       "include": [
@@ -13,27 +13,41 @@
         {
           "content": [
             {
-              "text": "Tell me a joke about cats",
+              "text": "Call get_weather with location London.",
               "type": "input_text"
             }
           ],
           "role": "user"
         }
       ],
-      "max_output_tokens": 25600,
+      "max_output_tokens": 2048,
       "model": "gpt-5",
       "reasoning": {
         "effort": "low"
       },
       "stream": false,
+      "tool_choice": "auto",
       "tools": [
         {
-          "description": "Get current weather information for a location",
+          "description": "Get weather for a location",
           "name": "get_weather",
           "parameters": {
-            "additionalProperties": false,
+            "$defs": {
+              "location": {
+                "type": "string"
+              }
+            },
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": true,
             "properties": {
               "location": {
+                "$ref": "#/$defs/location"
+              },
+              "units": {
+                "enum": [
+                  "celsius",
+                  "fahrenheit"
+                ],
                 "type": "string"
               }
             },
@@ -64,7 +78,7 @@
       "safety_identifier": null,
       "store": true,
       "error": null,
-      "created_at": 1790350843,
+      "created_at": 1790350861,
       "presence_penalty": 0.0,
       "status": "completed",
       "tool_usage": {
@@ -91,7 +105,7 @@
         "payer": "developer"
       },
       "prompt_cache_retention": "in_memory",
-      "completed_at": 1790350845,
+      "completed_at": 1790350863,
       "temperature": 1.0,
       "text": {
         "format": {
@@ -110,16 +124,16 @@
         "summary": null
       },
       "usage": {
-        "input_tokens": 50,
+        "input_tokens": 67,
         "input_tokens_details": {
           "cache_write_tokens": 0,
           "cached_tokens": 0
         },
-        "output_tokens": 55,
+        "output_tokens": 97,
         "output_tokens_details": {
-          "reasoning_tokens": 0
+          "reasoning_tokens": 64
         },
-        "total_tokens": 105
+        "total_tokens": 164
       },
       "access_programs": null,
       "incomplete_details": null,
@@ -127,7 +141,7 @@
       "truncation": "disabled",
       "metadata": {},
       "service_tier": "default",
-      "id": "resp_03074216ebc797f7006ab695fbcf7c87d1a5cea0065887c2e6",
+      "id": "resp_0e712670fc06d57e006ab6960d8ebc87d1be72d23bb391ee45",
       "top_p": 1.0,
       "user": null,
       "prompt_cache_key": null,
@@ -135,39 +149,46 @@
       "object": "response",
       "background": false,
       "previous_response_id": null,
-      "max_output_tokens": 25600,
+      "max_output_tokens": 2048,
       "output": [
         {
           "content": [],
-          "encrypted_content": "gAAAAABqtpX9lvS0eWIwtr6MFP4TOYD6uzsR9GMm0Rbtedo_1ZFT0fXkYTAee4uStTBl-FnWUbTYiLOp87wcYmSqF_2ipfC5esV9bctsZc-hWxYYeS7wtLctC3zC6Puq22zNPkdPwb2ALFCCapHp2kTifUW984G2OlqNr0fZ168BC5OrNbXtoQ02fMdn9jlIbA6RKwU5rftyPZBjPjSsj_RHTp7JPwvgCByyttPnfAm3ZtojlGWfZO4euAcCTpxTodnhesRXr4RKIuHkZ8yVvtye9pcaKVnTX9tcqZJw1v83a0BvFhjWsr7ZJILYStpjtr2fNoxs7hJJ_Aw3Y2fF2rWHzcGZ9MeYxXN_3GOxY8yO0Mb5r-x8dXFLoz1CLxSSDxKqqgvY06Cv7LBvy8u3cFI2VFY6OZsn58hCW_6TWuD8MSD-bbq6QgsRbMeGI8uo3l6PsZMjNw656JswoXpaF2CL3qccwaCEOc0NbnvimL850tYmbEyLmn34YYJQZWIWLhDmix3YuMFufnl3bC55TbyIPlzdtIXuT13qfD-TXMHThV_nhAHMB1aYtTRIADIxP6Xc2mtGDrJKJ0ns-AApUnaF1F0MWHTzG2j_wjvNsfIlZHCxCyUB8diCyW_ILGKdDX92RdEApi4USaefZsffEJ34eP66tfubK9p8JVYjaAWYWcSb5oLVmQs91pSyrX2vNXFak45aMZiGtU9On7T6BaIQ2z_CkbCLdPOjTmuh_Zor-19iPhPMOi8aBZlx6Nciv7L6yumoqxRirDcYM68exCEBc4QlN3WspKuVTPvgCWO-_ZPF_Nz7M22Au5YfA3HM3a18LhcElHH6wI3K9LOSjrLb683aI2QQ81f5KdfX9R-FkzBy6nXduWtCdH89hc-5NxLLoDXLTmc0gBtdXOZXUGH52S8xto7a3dFrX5pSbjOsCMWboadNcL86iNt8hVodWGU6P0audcMeYKvac9xN8g3M6iKxteBbnhmiJZLNMPNh-yNM4SUHAcm_InOjvS4BQkCcHY-wrfnrlcEMVW0QzEXjO6vRdCajYc4h-4_l8CF6cbC6glVDivxsqNShAk4bTIeIEQX4EIzt5DqjmbX0z3unzDckj58Lmzn5SidgSQP6IyBNP3NgGwy84OxeOqMMOuUfDDXcOfJsUhKQILYZIM_FuJP8PYAXjq6GPoBFyX2S-PhK-dtmsVOgWVKSMfLI-6YoK_klYYp0iTN-Nm8a9jZSbHmjgm2sK71-UYZMnPY6eUfJHH9bAi0KU2TxBHhKNAHh9_KWJRIFmTTJu_AXYTYwYMPZRh13lTu8_y-zQj1nu7EtNVWeQUM=",
-          "id": "rs_03074216ebc797f7006ab695fc959887d19a781e4413cc5236",
+          "encrypted_content": "gAAAAABqtpYPBaGfMpSpKSd5crkr1LtDKZJcMy2f6LPN_ZgCyioRmhMlQZxTLTmJVq_oiW-mQ8_WAfXf-8NELYERppi0y1Y5E9dveK2e_zqwPB3S4arFbOnoSo5Oc12akE4cidTy-xdGY6GSxvOdtMzmLCr_rTUef8W0eAs_m3MHjgLDGRspWCDiexRX2uRDqwjOB-Ik5gtWMOhR_4_TGAZ2tl5exPpp9rJnc9lrhgcR3Oh0poyynKcg4-dKY_s5KTSAkOTiUVirP6idBfDkNlsoR9JNCI_ssZ1lHicZTAHHZHfXK4iwsk37PRfyuCrANW716mxYUVTUrxFkhRCwViOXe2KKGrAyi6NNoqjCvjpHiE-wn5_-LXd2SNI5Zgm5ynTG6MB4Gdj8Ohky6WGU1Mr3dmVnZzjE34_VMEoCZJ4pqjCCghzmKlo4y67yAosHjPdu0dAugGLXllf1WMtyL-1lrQfrEXbZuEPCNnGcYx9kBHnfc8m53i9NRVYGCvFa5Uom1_wssDL4i_dYVILnTwzcnXeLWH8Qoj_TuMLhtMKbss-IO5_q67dO6uRkpveORpMGrp1Yn9jWvr_FH_gHPagfIbgbJg32Z_A575QzdkHvD1EzKdd1qye7kZNJ1NY13Wilzs8IEdqq3V5tiwNzUA_XG8hcGn3TSIilyhGBhYYnWB4CMSOxMawLjrBSc2EOpzBUFvi5Ay-Eyc8WzOckw1g8O3BtfTpItYowGIv6_SqOJXfJboyytq7kIQvos7FxC9HYVP0IREdadSVGzTOWL2tPPTqILIixNtZ7kGbxqBWROdc_WcA60GBi0Yyp3V-Hr8HMp-M0jnuAERGgX7OYR-0jIfa93xkKvU9n33hekCM0zonApUsH6iFiuffWnAt08oknGgxcj2B5C6wJ8ihV4rghj80a87sPCyWJPquCYYgCFRc005G2zAHvoQX_eh7lMvo93n0Bktz3p3tjW-CCRYgb_zZ31qpaECMk3qnRJgkmqJ8SuNbg4tO40Uv6v0FhZH74mAtalcM12_aNO7Cf8MtUDmEpp_PsEEbZpIVK3IlvT1KkIUCIwKCviKd7sIZwi8LA_O9fzcQfaGuiUx2rmhZB4TRzVw-gdBDIA_oVtuZqngsgoTVjr2V2pDw0DFQr47sovU-YZbun6DBBsNKmuEZAmA5NktF3N7ETo5RaIaF4wGnaA4sufxLXkDkHPqeMFvDEtvWGrRXKrgOUywHgsGMyJXcBJt9XPQ1X6bQNh_wqDNetASwIBWryDdBA0L_a4rNTA_5g1yvv7eeg_a6m_07Dr1iMMvxAT2w7kXpa1Wg24xQidEGba4CM3AascMGkq3KcnEliCF16SpDXc9FQnKkaGX5dYs0unmq--QGKm4oET9jHx56lqZJlwnXAta5bzOFEF4vJo3Nm6F_Qc-ux4bzQHx6MOjLPRYiS2o4aDzDGk86zMK6Pei1pw63wnoid_X9IQhVli_cWPtWZZpTAo0vbOYlBfTeYLS8Le3PhYXfz_tldhtIEL62UxhlFMDIvDH3hVoPkp6k8Qd7PCpuoJGydPvIVo8rYVPjUHJcQWEcSIQMxmNYEJ8nUCZWO6bmTiVVn4-0mcct5TX6fI7D6qCUwg9SDt8bLB5yTMyzMmBOazajvf5eSSufPItE4gv8_gBHGWPPJWtzt",
+          "id": "rs_0e712670fc06d57e006ab6960e754887d1992775e1e3ac82a2",
           "summary": [],
           "type": "reasoning"
         },
         {
-          "content": [
-            {
-              "annotations": [],
-              "logprobs": [],
-              "text": "Why did the cat sit on the computer?\nIt wanted to keep an eye on the mouse!",
-              "type": "output_text"
-            }
-          ],
-          "id": "msg_03074216ebc797f7006ab695fcdc7c87d185529ea69920ee93",
-          "role": "assistant",
+          "arguments": "{\"location\":\"London\"}",
+          "call_id": "call_U4AA41Lgsa3X1IbeUmZISAOC",
+          "id": "fc_0e712670fc06d57e006ab6960f105487d19c4bfa78d8ff725c",
+          "name": "get_weather",
           "status": "completed",
-          "type": "message"
+          "type": "function_call"
         }
       ],
       "tools": [
         {
-          "description": "Get current weather information for a location",
+          "description": "Get weather for a location",
           "name": "get_weather",
           "output_schema": null,
           "parameters": {
-            "additionalProperties": false,
+            "$defs": {
+              "location": {
+                "type": "string"
+              }
+            },
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": true,
             "properties": {
               "location": {
+                "$ref": "#/$defs/location"
+              },
+              "units": {
+                "enum": [
+                  "celsius",
+                  "fahrenheit"
+                ],
                 "type": "string"
               }
             },
@@ -194,23 +215,23 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "a40b21051d910011-ORD"
+        "a40b21743bb6b1d6-ORD"
       ],
       "connection": [
         "keep-alive"
       ],
       "content-length": [
-        "4062"
+        "4577"
       ],
       "content-type": [
         "application/json"
       ],
       "date": [
-        "Fri, 25 Sep 2026 15:40:45 GMT"
+        "Fri, 25 Sep 2026 15:41:03 GMT"
       ],
       "openai-organization": "[REDACTED:openai-organization]",
       "openai-processing-ms": [
-        "1527"
+        "2262"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -247,7 +268,7 @@
         "0s"
       ],
       "x-request-id": [
-        "req_d467058f3a264090a88e811753b44ea1"
+        "req_f9ad557d5b12476eb738ba3081dddbef"
       ]
     },
     "status": 200
