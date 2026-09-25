@@ -11056,13 +11056,15 @@
       }
     },
     "openrouter:mistralai/mistral-large-2512": {
-      "catalog_status": "missing",
-      "declared_operations": [],
+      "catalog_status": "present",
+      "declared_operations": [
+        "text"
+      ],
       "model": "mistralai/mistral-large-2512",
       "provider": "openrouter",
       "surfaces": {
         "openrouter.chat_completions": {
-          "declaration": "unknown",
+          "declaration": "declared",
           "operation": "text",
           "provider": "openrouter",
           "scenarios": {

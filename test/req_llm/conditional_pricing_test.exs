@@ -61,6 +61,84 @@ defmodule ReqLLM.ConditionalPricingTest do
     assert Enum.find(separate.line_items, &(&1.id == "token.input.long_context")).count == 250_001
   end
 
+  test "image generation prices a per-image tariff without token usage" do
+    model = %LLMDB.Model{
+      provider: :openai,
+      id: "gpt-image-1.5",
+      pricing: %{
+        currency: "USD",
+        components: [
+          %{
+            id: "image.1024x1024.medium",
+            kind: "image",
+            per: 1,
+            rate: 0.04,
+            size_class: "1024x1024:medium"
+          }
+        ]
+      }
+    }
+
+    Req.Test.stub(__MODULE__, fn conn ->
+      Req.Test.json(conn, %{
+        "created" => 1234,
+        "data" => [%{"b64_json" => Base.encode64("image")}]
+      })
+    end)
+
+    assert {:ok, response} =
+             ReqLLM.generate_image(model, "A blue square",
+               api_key: "test-key",
+               req_http_options: [plug: {Req.Test, __MODULE__}]
+             )
+
+    assert response.usage.total_cost == 0.04
+    assert response.usage.pricing == %{status: :priced, currency: "USD", total: 0.04}
+  end
+
+  test "non-token charges do not infer a zero-token pricing band from missing usage" do
+    component = %{
+      id: "storage.cache",
+      kind: "storage",
+      meter: "cache_storage_token_hours",
+      per: 1_000_000,
+      rate: 2.0
+    }
+
+    model = %LLMDB.Model{
+      provider: :test,
+      id: "storage-only",
+      pricing: %{currency: "USD", components: [component]}
+    }
+
+    usage = %{cache_storage_token_hours: 1_000_000}
+    assert {:ok, charge} = Billing.calculate(usage, model)
+    assert charge.total == 2.0
+    assert {:ok, ^charge} = Billing.calculate(ReqLLM.Usage.normalize(usage), model)
+
+    conditional = Map.put(component, :applies_when, %{input_tokens: %{lte: 100}})
+    model = %{model | pricing: %{currency: "USD", components: [conditional]}}
+    assert {:ok, nil} = Billing.calculate(usage, model)
+    assert {:ok, nil} = Billing.calculate(ReqLLM.Usage.normalize(usage), model)
+  end
+
+  test "tool-only charges do not require token counters" do
+    model = %LLMDB.Model{
+      provider: :test,
+      id: "tool-only",
+      pricing: %{
+        currency: "USD",
+        components: [
+          %{id: "tool.web_search", kind: "tool", tool: "web_search", per: 1_000, rate: 10.0}
+        ]
+      }
+    }
+
+    usage = %{tool_usage: %{web_search: %{count: 2, unit: "call"}}}
+    assert {:ok, charge} = Billing.calculate(ReqLLM.Usage.normalize(usage), model)
+    assert charge.total == 0.02
+  end
+
   test "processing and regional modifiers target selected rates exactly once" do
     model = ReqLLM.model!("openai:gpt-6-sol")
     usage = %{input_tokens: 272_001, output_tokens: 100_000, cached_tokens: 20_000}

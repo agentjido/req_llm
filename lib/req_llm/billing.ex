@@ -63,13 +63,17 @@ defmodule ReqLLM.Billing do
       Map.get(usage, :input_includes_cached, Map.get(usage, "input_includes_cached", true))
 
     reported = MapAccess.get(usage, :usage_reported, %{})
+    input_reported = Map.get(reported, :input, Map.get(reported, "input", not is_nil(input)))
+    output_reported = Map.get(reported, :output, Map.get(reported, "output", not is_nil(output)))
+    input = input || 0
+    output = output || 0
     complete = Map.get(usage, :billing_usage_complete, true)
 
     if valid_token_count?(input) and valid_token_count?(output) and
          valid_token_count?(cache_read) and valid_token_count?(cache_write) and
          valid_token_count?(reasoning) and is_boolean(includes_cached) and
-         Map.get(reported, :input, Map.get(reported, "input", true)) and
-         (Map.get(reported, :output, Map.get(reported, "output", true)) or
+         (input_reported or not input_component?(model)) and
+         (output_reported or
             not token_component?(model, :output)) and complete do
       uncached = if includes_cached, do: input - cache_read - cache_write, else: input
       prompt = if includes_cached, do: input, else: input + cache_read + cache_write
@@ -82,7 +86,7 @@ defmodule ReqLLM.Billing do
            cache_read: cache_read,
            cache_write: cache_write,
            reasoning: reasoning,
-           prompt: prompt,
+           prompt: if(input_reported, do: prompt),
            add_reasoning: MapAccess.get(usage, :add_reasoning_to_cost, false)
          }}
       else
@@ -104,6 +108,10 @@ defmodule ReqLLM.Billing do
     |> Pricing.components()
     |> Enum.map(&Component.from/1)
     |> Enum.any?(&(meter_key(&1) == key))
+  end
+
+  defp input_component?(model) do
+    Enum.any?([:input, :cache_read, :cache_write], &token_component?(model, &1))
   end
 
   defp cache_write_groups(usage, meters) do

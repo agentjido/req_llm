@@ -236,9 +236,7 @@ defmodule ReqLLM.MixProject do
       {:websockex, "~> 0.5.1"},
       {:zoi, "~> 0.14"},
       {:jsv, "~> 0.11"},
-      {:llm_db,
-       git: "https://github.com/houllette/llmdb.git",
-       ref: "9953c5f96a3590313aa8b10aeed2e48b68a84a10"},
+      {:llm_db, "~> 2026.9.6"},
 
       # Dev/test dependencies
       {:bandit, "~> 1.8", only: [:dev, :test], runtime: false},
