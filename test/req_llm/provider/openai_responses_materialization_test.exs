@@ -33,7 +33,11 @@ defmodule ReqLLM.Provider.OpenAIResponsesMaterializationTest do
       provider: :openai,
       format: "openai-responses-v1",
       index: 0,
-      provider_data: %{"id" => "rs_1", "type" => "reasoning"}
+      provider_data: %{
+        "id" => "rs_1",
+        "type" => "reasoning",
+        "summary" => [%{"type" => "summary_text", "text" => "Plan"}]
+      }
     }
 
     usage = %{
@@ -346,6 +350,203 @@ defmodule ReqLLM.Provider.OpenAIResponsesMaterializationTest do
     cancelled = stream_response(model, [], %{finish_reason: :cancelled})
     assert {:ok, cancelled_response} = StreamResponse.to_response(cancelled)
     assert cancelled_response.finish_reason == :cancelled
+  end
+
+  for provider <- [:openai, :azure] do
+    test "#{provider} preserves output order across compaction in buffered and streamed replay",
+         %{model: model} do
+      model = %{model | provider: unquote(provider)}
+      compaction = %{"type" => "compaction", "id" => "cmp_1", "encrypted_content" => "opaque"}
+
+      output = [
+        %{
+          "type" => "message",
+          "role" => "assistant",
+          "phase" => "commentary",
+          "content" => [
+            %{"type" => "output_text", "text" => "Before"}
+          ]
+        },
+        %{
+          "type" => "reasoning",
+          "id" => "rs_1",
+          "summary" => [
+            %{"type" => "summary_text", "text" => "Plan"}
+          ],
+          "encrypted_content" => "encrypted-plan"
+        },
+        %{
+          "type" => "function_call",
+          "call_id" => "call_1",
+          "name" => "first",
+          "arguments" => ~s({"a":1})
+        },
+        compaction,
+        %{
+          "type" => "function_call",
+          "call_id" => "call_2",
+          "name" => "second",
+          "arguments" => ~s({"b":2})
+        },
+        %{
+          "type" => "message",
+          "role" => "assistant",
+          "phase" => "final_answer",
+          "content" => [
+            %{"type" => "output_text", "text" => "After"}
+          ]
+        }
+      ]
+
+      body = %{"id" => "resp_1", "model" => model.id, "status" => "completed", "output" => output}
+      buffered = decode(body, model)
+
+      events =
+        Enum.with_index(output, fn item, index ->
+          %{
+            data: %{
+              "type" => "response.output_item.done",
+              "output_index" => index,
+              "item" => item
+            }
+          }
+        end) ++ [%{data: %{"type" => "response.completed", "response" => body}}]
+
+      chunks = Enum.flat_map(events, &ResponsesAPI.decode_stream_event(&1, model))
+
+      metadata =
+        Enum.reduce(chunks, %{}, fn chunk, acc ->
+          if chunk.type == :meta, do: Map.merge(acc, chunk.metadata), else: acc
+        end)
+
+      assert {:ok, streamed} =
+               StreamResponse.to_response(stream_response(model, chunks, metadata))
+
+      for response <- [buffered, streamed] do
+        assert ResponsesAPI.encode_input_items(response.context, model.id, model.provider, true) ==
+                 output
+
+        assert Enum.map(response.message.tool_calls, &ToolCall.args_map/1) == [
+                 %{"a" => 1},
+                 %{"b" => 2}
+               ]
+
+        assert Enum.map(response.message.reasoning_details, & &1.provider) == [model.provider]
+
+        content = Enum.reject(response.message.content, &(&1.type == :thinking))
+
+        assert [
+                 %ContentPart{text: "Before"},
+                 %ContentPart{data: ^compaction},
+                 %ContentPart{text: "After"}
+               ] = content
+      end
+
+      other_provider = unquote(if provider == :openai, do: :azure, else: :openai)
+
+      other_input =
+        ResponsesAPI.encode_input_items(buffered.context, model.id, other_provider, true)
+
+      refute Enum.any?(other_input, &(&1["type"] == "compaction"))
+    end
+  end
+
+  test "summary display separates complete parts and preserves raw fragments and replay", %{
+    model: model
+  } do
+    parts = [
+      %{"type" => "summary_text", "text" => ""},
+      %{"type" => "summary_text", "text" => "**Plan**\n\nUse this."},
+      %{"type" => "summary_text", "text" => ""},
+      %{"type" => "summary_text", "text" => "Check\n- one\n- two"}
+    ]
+
+    output = [
+      %{
+        "type" => "reasoning",
+        "id" => "rs_1",
+        "summary" => parts,
+        "encrypted_content" => "enc_1"
+      },
+      %{
+        "type" => "reasoning",
+        "id" => "rs_2",
+        "summary" => [
+          %{"type" => "summary_text", "text" => "Finish."}
+        ],
+        "encrypted_content" => "enc_2"
+      }
+    ]
+
+    body = %{"id" => "resp_1", "model" => model.id, "status" => "completed", "output" => output}
+    buffered = decode(body, model)
+
+    deltas =
+      output
+      |> Enum.with_index()
+      |> Enum.flat_map(fn {item, output_index} ->
+        item["summary"]
+        |> Enum.with_index()
+        |> Enum.flat_map(fn {part, summary_index} ->
+          {first, second} = String.split_at(part["text"], 3)
+
+          Enum.map([first, second], fn delta ->
+            %{
+              data: %{
+                "type" => "response.reasoning_summary_text.delta",
+                "item_id" => item["id"],
+                "output_index" => output_index,
+                "summary_index" => summary_index,
+                "delta" => delta
+              }
+            }
+          end)
+        end)
+      end)
+
+    events = deltas ++ [%{data: %{"type" => "response.completed", "response" => body}}]
+    chunks = Enum.flat_map(events, &ResponsesAPI.decode_stream_event(&1, model))
+    metadata = List.last(chunks).metadata
+    assert {:ok, streamed} = StreamResponse.to_response(stream_response(model, chunks, metadata))
+
+    for response <- [buffered, streamed] do
+      assert ReqLLM.Response.thinking(response) ==
+               "**Plan**\n\nUse this.\n\nCheck\n- one\n- two\n\nFinish."
+
+      assert [first, second] = response.message.reasoning_details
+      assert first.text == "**Plan**\n\nUse this.\n\nCheck\n- one\n- two"
+      assert first.provider_data["summary"] == parts
+      assert second.text == "Finish."
+
+      replay = ResponsesAPI.encode_input_items(response.context, model.id, :openai, true)
+      assert Enum.map(replay, & &1["summary"]) == Enum.map(output, & &1["summary"])
+    end
+
+    raw_text = chunks |> Enum.filter(&(&1.type == :thinking)) |> Enum.map_join(& &1.text)
+    assert raw_text == "**Plan**\n\nUse this.Check\n- one\n- twoFinish."
+
+    compaction = %{"type" => "compaction", "encrypted_content" => "opaque"}
+    compacted = decode(%{body | "output" => List.insert_at(output, 1, compaction)}, model)
+    assert ReqLLM.Response.thinking(compacted) == ReqLLM.Response.thinking(buffered)
+  end
+
+  test "manually built messages keep text on each side of compaction", %{model: model} do
+    compaction = %{"type" => "compaction", "encrypted_content" => "opaque"}
+
+    message = %ReqLLM.Message{
+      role: :assistant,
+      content: [
+        ContentPart.text("Before"),
+        ContentPart.provider_block(:openai, compaction),
+        ContentPart.text("After")
+      ]
+    }
+
+    assert [before, ^compaction, after_item] =
+             ResponsesAPI.encode_input_items(Context.new([message]), model.id, :openai, true)
+
+    assert before["content"] == [%{"type" => "output_text", "text" => "Before"}]
+    assert after_item["content"] == [%{"type" => "output_text", "text" => "After"}]
   end
 
   defp decode(body, model, opts \\ []) do

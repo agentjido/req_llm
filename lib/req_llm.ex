@@ -83,6 +83,7 @@ defmodule ReqLLM do
 
   alias ReqLLM.{
     Availability,
+    Compaction,
     Embedding,
     Evaluation,
     Generation,
@@ -1507,6 +1508,50 @@ defmodule ReqLLM do
   """
   @spec rerank!(model_input(), keyword()) :: ReqLLM.RerankResponse.t() | no_return()
   defdelegate rerank!(model_spec, opts \\ []), to: Rerank
+
+  # ===========================================================================
+  # Context Compaction API - Delegated to ReqLLM.Compaction
+  # ===========================================================================
+
+  @doc """
+  Compacts a conversation through the OpenAI Responses API (`POST /responses/compact`).
+
+  Supported for OpenAI and Azure OpenAI Responses API models. The service folds
+  the conversation into opaque `compaction` items that carry the prior state in
+  fewer tokens. They come back as `:provider_block` content parts on the
+  assistant message of the returned `ReqLLM.Response`, whose `context` holds
+  only that message so the next user message can be appended directly:
+
+      {:ok, first} = ReqLLM.generate_text("openai:gpt-5.4", "Draft a landing page.")
+      {:ok, compacted} = ReqLLM.compact_context("openai:gpt-5.4", first.context)
+
+      next = ReqLLM.Context.append(compacted.context, ReqLLM.Context.user("Add a booking form."))
+      {:ok, follow_up} = ReqLLM.generate_text("openai:gpt-5.4", next)
+
+  A stored response can be compacted without replaying its messages:
+
+      {:ok, compacted} =
+        ReqLLM.compact_context("openai:gpt-5.4", nil, previous_response_id: first.id)
+
+  Server-side compaction during ordinary requests uses the `context_management`
+  provider option instead; see `ReqLLM.Compaction`.
+  """
+  @spec compact_context(
+          model_input(),
+          ReqLLM.Context.t() | ReqLLM.Message.t() | [term()] | String.t() | nil,
+          keyword()
+        ) :: {:ok, ReqLLM.Response.t()} | {:error, term()}
+  defdelegate compact_context(model_spec, messages, opts \\ []), to: Compaction
+
+  @doc """
+  Compacts a conversation, raising on error. See `compact_context/3`.
+  """
+  @spec compact_context!(
+          model_input(),
+          ReqLLM.Context.t() | ReqLLM.Message.t() | [term()] | String.t() | nil,
+          keyword()
+        ) :: ReqLLM.Response.t() | no_return()
+  defdelegate compact_context!(model_spec, messages, opts \\ []), to: Compaction
 
   # ==========================================================================
   # Evaluation API - Delegated to ReqLLM.Evaluation

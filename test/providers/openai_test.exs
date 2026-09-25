@@ -239,6 +239,43 @@ defmodule ReqLLM.Providers.OpenAITest do
       assert body["reasoning"] == %{"effort" => "high", "summary" => "auto"}
     end
 
+    test "prepare_request builds a compaction request for Responses API models" do
+      {:ok, model} = ReqLLM.model("openai:gpt-5.4")
+      context = Context.new([Context.user("Draft a landing page.")])
+
+      {:ok, request} =
+        OpenAI.prepare_request(:compact, model, context,
+          api_key: "test-key",
+          provider_options: [previous_response_id: "resp_1"]
+        )
+
+      assert request.url.path == "/responses/compact"
+      assert request.options[:operation] == :compact
+      assert request.options[:api_mod] == ReqLLM.Providers.OpenAI.ResponsesAPI
+      assert is_binary(request.options[:base_url])
+
+      body =
+        request
+        |> ReqLLM.Providers.OpenAI.ResponsesAPI.encode_body()
+        |> ReqLLM.Test.Helpers.json_body()
+
+      assert body == %{"model" => "gpt-5.4", "previous_response_id" => "resp_1"}
+    end
+
+    test "prepare_request rejects compaction for Chat Completions models" do
+      model = %LLMDB.Model{
+        provider: :openai,
+        id: "chat-test-model",
+        capabilities: %{chat: true},
+        extra: %{wire: %{protocol: "openai_chat"}}
+      }
+
+      assert {:error, %ReqLLM.Error.Invalid.Parameter{parameter: message}} =
+               OpenAI.prepare_request(:compact, model, "Hello", api_key: "test-key")
+
+      assert message =~ "Responses API model"
+    end
+
     test "attach_stream defaults chat max_tokens from model output limit" do
       model = %LLMDB.Model{
         provider: :openai,

@@ -1,0 +1,294 @@
+{
+  "model_spec": "azure:gpt-5.4",
+  "provider": "azure",
+  "request": {
+    "body": {
+      "b64": "eyJjb250ZXh0X21hbmFnZW1lbnQiOlt7ImNvbXBhY3RfdGhyZXNob2xkIjoxMDAwLCJ0eXBlIjoiY29tcGFjdGlvbiJ9XSwiaW5jbHVkZSI6WyJyZWFzb25pbmcuZW5jcnlwdGVkX2NvbnRlbnQiXSwiaW5wdXQiOlt7ImNvbnRlbnQiOlt7InRleHQiOiJTdW1tYXJpemUgdGhlIGZvbGxvd2luZyBub3RlcyBpbiB0aHJlZSBzZW50ZW5jZXMuIFRoZSBraXRjaGVuIHRlYW0gcmV2aWV3ZWQgdGhlIHdlZWtseSBtZW51LCBhZGp1c3RlZCBzdXBwbGllciBvcmRlcnMsIGFuZCBwbGFubmVkIHN0YWZmIHNoaWZ0cy4gVGhlIGtpdGNoZW4gdGVhbSByZXZpZXdlZCB0aGUgd2Vla2x5IG1lbnUsIGFkanVzdGVkIHN1cHBsaWVyIG9yZGVycywgYW5kIHBsYW5uZWQgc3RhZmYgc2hpZnRzLiBUaGUga2l0Y2hlbiB0ZWFtIHJldmlld2VkIHRoZSB3ZWVrbHkgbWVudSwgYWRqdXN0ZWQgc3VwcGxpZXIgb3JkZXJzLCBhbmQgcGxhbm5lZCBzdGFmZiBzaGlmdHMuIFRoZSBraXRjaGVuIHRlYW0gcmV2aWV3ZWQgdGhlIHdlZWtseSBtZW51LCBhZGp1c3RlZCBzdXBwbGllciBvcmRlcnMsIGFuZCBwbGFubmVkIHN0YWZmIHNoaWZ0cy4gVGhlIGtpdGNoZW4gdGVhbSByZXZpZXdlZCB0aGUgd2Vla2x5IG1lbnUsIGFkanVzdGVkIHN1cHBsaWVyIG9yZGVycywgYW5kIHBsYW5uZWQgc3RhZmYgc2hpZnRzLiBUaGUga2l0Y2hlbiB0ZWFtIHJldmlld2VkIHRoZSB3ZWVrbHkgbWVudSwgYWRqdXN0ZWQgc3VwcGxpZXIgb3JkZXJzLCBhbmQgcGxhbm5lZCBzdGFmZiBzaGlmdHMuIFRoZSBraXRjaGVuIHRlYW0gcmV2aWV3ZWQgdGhlIHdlZWtseSBtZW51LCBhZGp1c3RlZCBzdXBwbGllciBvcmRlcnMsIGFuZCBwbGFubmVkIHN0YWZmIHNoaWZ0cy4gVGhlIGtpdGNoZW4gdGVhbSByZXZpZXdlZCB0aGUgd2Vla2x5IG1lbnUsIGFkanVzdGVkIHN1cHBsaWVyIG9yZGVycywgYW5kIHBsYW5uZWQgc3RhZmYgc2hpZnRzLiBUaGUga2l0Y2hlbiB0ZWFtIHJldmlld2VkIHRoZSB3ZWVrbHkgbWVudSwgYWRqdXN0ZWQgc3VwcGxpZXIgb3JkZXJzLCBhbmQgcGxhbm5lZCBzdGFmZiBzaGlmdHMuIFRoZSBraXRjaGVuIHRlYW0gcmV2aWV3ZWQgdGhlIHdlZWtseSBtZW51LCBhZGp1c3RlZCBzdXBwbGllciBvcmRlcnMsIGFuZCBwbGFubmVkIHN0YWZmIHNoaWZ0cy4gVGhlIGtpdGNoZW4gdGVhbSByZXZpZXdlZCB0aGUgd2Vla2x5IG1lbnUsIGFkanVzdGVkIHN1cHBsaWVyIG9yZGVycywgYW5kIHBsYW5uZWQgc3RhZmYgc2hpZnRzLiBUaGUga2l0Y2hlbiB0ZWFtIHJldmlld2VkIHRoZSB3ZWVrbHkgbWVudSwgYWRqdXN0ZWQgc3VwcGxpZXIgb3JkZXJzLCBhbmQgcGxhbm5lZCBzdGFmZiBzaGlmdHMuIFRoZSBraXRjaGVuIHRlYW0gcmV2aWV3ZWQgdGhlIHdlZWtseSBtZW51LCBhZGp1c3RlZCBzdXBwbGllciBvcmRlcnMsIGFuZCBwbGFubmVkIHN0YWZmIHNoaWZ0cy4gVGhlIGtpdGNoZW4gdGVhbSByZXZpZXdlZCB0aGUgd2Vla2x5IG1lbnUsIGFkanVzdGVkIHN1cHBsaWVyIG9yZGVycywgYW5kIHBsYW5uZWQgc3RhZmYgc2hpZnRzLiBUaGUga2l0Y2hlbiB0ZWFtIHJldmlld2VkIHRoZSB3ZWVrbHkgbWVudSwgYWRqdXN0ZWQgc3VwcGxpZXIgb3JkZXJzLCBhbmQgcGxhbm5lZCBzdGFmZiBzaGlmdHMuIFRoZSBraXRjaGVuIHRlYW0gcmV2aWV3ZWQgdGhlIHdlZWtseSBtZW51LCBhZGp1c3RlZCBzdXBwbGllciBvcmRlcnMsIGFuZCBwbGFubmVkIHN0YWZmIHNoaWZ0cy4gVGhlIGtpdGNoZW4gdGVhbSByZXZpZXdlZCB0aGUgd2Vla2x5IG1lbnUsIGFkanVzdGVkIHN1cHBsaWVyIG9yZGVycywgYW5kIHBsYW5uZWQgc3RhZmYgc2hpZnRzLiBUaGUga2l0Y2hlbiB0ZWFtIHJldmlld2VkIHRoZSB3ZWVrbHkgbWVudSwgYWRqdXN0ZWQgc3VwcGxpZXIgb3JkZXJzLCBhbmQgcGxhbm5lZCBzdGFmZiBzaGlmdHMuIFRoZSBraXRjaGVuIHRlYW0gcmV2aWV3ZWQgdGhlIHdlZWtseSBtZW51LCBhZGp1c3RlZCBzdXBwbGllciBvcmRlcnMsIGFuZCBwbGFubmVkIHN0YWZmIHNoaWZ0cy4gVGhlIGtpdGNoZW4gdGVhbSByZXZpZXdlZCB0aGUgd2Vla2x5IG1lbnUsIGFkanVzdGVkIHN1cHBsaWVyIG9yZGVycywgYW5kIHBsYW5uZWQgc3RhZmYgc2hpZnRzLiBUaGUga2l0Y2hlbiB0ZWFtIHJldmlld2VkIHRoZSB3ZWVrbHkgbWVudSwgYWRqdXN0ZWQgc3VwcGxpZXIgb3JkZXJzLCBhbmQgcGxhbm5lZCBzdGFmZiBzaGlmdHMuIFRoZSBraXRjaGVuIHRlYW0gcmV2aWV3ZWQgdGhlIHdlZWtseSBtZW51LCBhZGp1c3RlZCBzdXBwbGllciBvcmRlcnMsIGFuZCBwbGFubmVkIHN0YWZmIHNoaWZ0cy4gVGhlIGtpdGNoZW4gdGVhbSByZXZpZXdlZCB0aGUgd2Vla2x5IG1lbnUsIGFkanVzdGVkIHN1cHBsaWVyIG9yZGVycywgYW5kIHBsYW5uZWQgc3RhZmYgc2hpZnRzLiBUaGUga2l0Y2hlbiB0ZWFtIHJldmlld2VkIHRoZSB3ZWVrbHkgbWVudSwgYWRqdXN0ZWQgc3VwcGxpZXIgb3JkZXJzLCBhbmQgcGxhbm5lZCBzdGFmZiBzaGlmdHMuIFRoZSBraXRjaGVuIHRlYW0gcmV2aWV3ZWQgdGhlIHdlZWtseSBtZW51LCBhZGp1c3RlZCBzdXBwbGllciBvcmRlcnMsIGFuZCBwbGFubmVkIHN0YWZmIHNoaWZ0cy4gVGhlIGtpdGNoZW4gdGVhbSByZXZpZXdlZCB0aGUgd2Vla2x5IG1lbnUsIGFkanVzdGVkIHN1cHBsaWVyIG9yZGVycywgYW5kIHBsYW5uZWQgc3RhZmYgc2hpZnRzLiBUaGUga2l0Y2hlbiB0ZWFtIHJldmlld2VkIHRoZSB3ZWVrbHkgbWVudSwgYWRqdXN0ZWQgc3VwcGxpZXIgb3JkZXJzLCBhbmQgcGxhbm5lZCBzdGFmZiBzaGlmdHMuIFRoZSBraXRjaGVuIHRlYW0gcmV2aWV3ZWQgdGhlIHdlZWtseSBtZW51LCBhZGp1c3RlZCBzdXBwbGllciBvcmRlcnMsIGFuZCBwbGFubmVkIHN0YWZmIHNoaWZ0cy4gVGhlIGtpdGNoZW4gdGVhbSByZXZpZXdlZCB0aGUgd2Vla2x5IG1lbnUsIGFkanVzdGVkIHN1cHBsaWVyIG9yZGVycywgYW5kIHBsYW5uZWQgc3RhZmYgc2hpZnRzLiBUaGUga2l0Y2hlbiB0ZWFtIHJldmlld2VkIHRoZSB3ZWVrbHkgbWVudSwgYWRqdXN0ZWQgc3VwcGxpZXIgb3JkZXJzLCBhbmQgcGxhbm5lZCBzdGFmZiBzaGlmdHMuIFRoZSBraXRjaGVuIHRlYW0gcmV2aWV3ZWQgdGhlIHdlZWtseSBtZW51LCBhZGp1c3RlZCBzdXBwbGllciBvcmRlcnMsIGFuZCBwbGFubmVkIHN0YWZmIHNoaWZ0cy4gVGhlIGtpdGNoZW4gdGVhbSByZXZpZXdlZCB0aGUgd2Vla2x5IG1lbnUsIGFkanVzdGVkIHN1cHBsaWVyIG9yZGVycywgYW5kIHBsYW5uZWQgc3RhZmYgc2hpZnRzLiBUaGUga2l0Y2hlbiB0ZWFtIHJldmlld2VkIHRoZSB3ZWVrbHkgbWVudSwgYWRqdXN0ZWQgc3VwcGxpZXIgb3JkZXJzLCBhbmQgcGxhbm5lZCBzdGFmZiBzaGlmdHMuIFRoZSBraXRjaGVuIHRlYW0gcmV2aWV3ZWQgdGhlIHdlZWtseSBtZW51LCBhZGp1c3RlZCBzdXBwbGllciBvcmRlcnMsIGFuZCBwbGFubmVkIHN0YWZmIHNoaWZ0cy4gVGhlIGtpdGNoZW4gdGVhbSByZXZpZXdlZCB0aGUgd2Vla2x5IG1lbnUsIGFkanVzdGVkIHN1cHBsaWVyIG9yZGVycywgYW5kIHBsYW5uZWQgc3RhZmYgc2hpZnRzLiBUaGUga2l0Y2hlbiB0ZWFtIHJldmlld2VkIHRoZSB3ZWVrbHkgbWVudSwgYWRqdXN0ZWQgc3VwcGxpZXIgb3JkZXJzLCBhbmQgcGxhbm5lZCBzdGFmZiBzaGlmdHMuIFRoZSBraXRjaGVuIHRlYW0gcmV2aWV3ZWQgdGhlIHdlZWtseSBtZW51LCBhZGp1c3RlZCBzdXBwbGllciBvcmRlcnMsIGFuZCBwbGFubmVkIHN0YWZmIHNoaWZ0cy4gVGhlIGtpdGNoZW4gdGVhbSByZXZpZXdlZCB0aGUgd2Vla2x5IG1lbnUsIGFkanVzdGVkIHN1cHBsaWVyIG9yZGVycywgYW5kIHBsYW5uZWQgc3RhZmYgc2hpZnRzLiBUaGUga2l0Y2hlbiB0ZWFtIHJldmlld2VkIHRoZSB3ZWVrbHkgbWVudSwgYWRqdXN0ZWQgc3VwcGxpZXIgb3JkZXJzLCBhbmQgcGxhbm5lZCBzdGFmZiBzaGlmdHMuIFRoZSBraXRjaGVuIHRlYW0gcmV2aWV3ZWQgdGhlIHdlZWtseSBtZW51LCBhZGp1c3RlZCBzdXBwbGllciBvcmRlcnMsIGFuZCBwbGFubmVkIHN0YWZmIHNoaWZ0cy4gIiwidHlwZSI6ImlucHV0X3RleHQifV0sInJvbGUiOiJ1c2VyIn1dLCJtYXhfb3V0cHV0X3Rva2VucyI6MTAyNCwibW9kZWwiOiJncHQtNS40IiwicmVhc29uaW5nIjp7ImVmZm9ydCI6ImxvdyJ9LCJzdG9yZSI6ZmFsc2UsInN0cmVhbSI6ZmFsc2V9"
+    },
+    "canonical_json": {
+      "context_management": [
+        {
+          "compact_threshold": 1000,
+          "type": "compaction"
+        }
+      ],
+      "include": [
+        "reasoning.encrypted_content"
+      ],
+      "input": [
+        {
+          "content": [
+            {
+              "text": "Summarize the following notes in three sentences. The kitchen team reviewed the weekly menu, adjusted supplier orders, and planned staff shifts. The kitchen team reviewed the weekly menu, adjusted supplier orders, and planned staff shifts. The kitchen team reviewed the weekly menu, adjusted supplier orders, and planned staff shifts. The kitchen team reviewed the weekly menu, adjusted supplier orders, and planned staff shifts. The kitchen team reviewed the weekly menu, adjusted supplier orders, and planned staff shifts. The kitchen team reviewed the weekly menu, adjusted supplier orders, and planned staff shifts. The kitchen team reviewed the weekly menu, adjusted supplier orders, and planned staff shifts. The kitchen team reviewed the weekly menu, adjusted supplier orders, and planned staff shifts. The kitchen team reviewed the weekly menu, adjusted supplier orders, and planned staff shifts. The kitchen team reviewed the weekly menu, adjusted supplier orders, and planned staff shifts. The kitchen team reviewed the weekly menu, adjusted supplier orders, and planned staff shifts. The kitchen team reviewed the weekly menu, adjusted supplier orders, and planned staff shifts. The kitchen team reviewed the weekly menu, adjusted supplier orders, and planned staff shifts. The kitchen team reviewed the weekly menu, adjusted supplier orders, and planned staff shifts. The kitchen team reviewed the weekly menu, adjusted supplier orders, and planned staff shifts. The kitchen team reviewed the weekly menu, adjusted supplier orders, and planned staff shifts. The kitchen team reviewed the weekly menu, adjusted supplier orders, and planned staff shifts. The kitchen team reviewed the weekly menu, adjusted supplier orders, and planned staff shifts. The kitchen team reviewed the weekly menu, adjusted supplier orders, and planned staff shifts. The kitchen team reviewed the weekly menu, adjusted supplier orders, and planned staff shifts. The kitchen team reviewed the weekly menu, adjusted supplier orders, and planned staff shifts. The kitchen team reviewed the weekly menu, adjusted supplier orders, and planned staff shifts. The kitchen team reviewed the weekly menu, adjusted supplier orders, and planned staff shifts. The kitchen team reviewed the weekly menu, adjusted supplier orders, and planned staff shifts. The kitchen team reviewed the weekly menu, adjusted supplier orders, and planned staff shifts. The kitchen team reviewed the weekly menu, adjusted supplier orders, and planned staff shifts. The kitchen team reviewed the weekly menu, adjusted supplier orders, and planned staff shifts. The kitchen team reviewed the weekly menu, adjusted supplier orders, and planned staff shifts. The kitchen team reviewed the weekly menu, adjusted supplier orders, and planned staff shifts. The kitchen team reviewed the weekly menu, adjusted supplier orders, and planned staff shifts. The kitchen team reviewed the weekly menu, adjusted supplier orders, and planned staff shifts. The kitchen team reviewed the weekly menu, adjusted supplier orders, and planned staff shifts. The kitchen team reviewed the weekly menu, adjusted supplier orders, and planned staff shifts. The kitchen team reviewed the weekly menu, adjusted supplier orders, and planned staff shifts. The kitchen team reviewed the weekly menu, adjusted supplier orders, and planned staff shifts. The kitchen team reviewed the weekly menu, adjusted supplier orders, and planned staff shifts. The kitchen team reviewed the weekly menu, adjusted supplier orders, and planned staff shifts. The kitchen team reviewed the weekly menu, adjusted supplier orders, and planned staff shifts. The kitchen team reviewed the weekly menu, adjusted supplier orders, and planned staff shifts. The kitchen team reviewed the weekly menu, adjusted supplier orders, and planned staff shifts. ",
+              "type": "input_text"
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "max_output_tokens": 1024,
+      "model": "gpt-5.4",
+      "reasoning": {
+        "effort": "low"
+      },
+      "store": false,
+      "stream": false
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "api-key": "[REDACTED:api-key]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.7.4"
+      ]
+    },
+    "method": "post",
+    "url": "https://fixture.openai.azure.com/openai/v1/responses"
+  },
+  "response": {
+    "body": {
+      "top_logprobs": 0,
+      "output": [
+        {
+          "content": [
+            {
+              "annotations": [],
+              "logprobs": [],
+              "text": "The kitchen team met to review the weekly menu. They also adjusted supplier orders to match upcoming needs. In addition, they planned staff shifts for the week.",
+              "type": "output_text"
+            }
+          ],
+          "id": "msg_0c879bfb7fa2377b016ab4ebdcafec81908492f6f8613b0b91",
+          "phase": "final_answer",
+          "role": "assistant",
+          "status": "completed",
+          "type": "message"
+        }
+      ],
+      "prompt_cache_retention": "in_memory",
+      "previous_response_id": null,
+      "id": "resp_0c879bfb7fa2377b016ab4ebdc51688190add69a62222d1445",
+      "max_output_tokens": 1024,
+      "model": "gpt-5.4",
+      "completed_at": 1790241757,
+      "parallel_tool_calls": true,
+      "status": "completed",
+      "instructions": null,
+      "user": null,
+      "moderation": null,
+      "created_at": 1790241756,
+      "incomplete_details": null,
+      "truncation": "disabled",
+      "frequency_penalty": 0.0,
+      "text": {
+        "format": {
+          "type": "text"
+        },
+        "verbosity": "medium"
+      },
+      "max_tool_calls": null,
+      "tools": [],
+      "content_filters": [
+        {
+          "blocked": false,
+          "content_filter_offsets": {
+            "check_offset": 0,
+            "end_offset": 3883,
+            "start_offset": 0
+          },
+          "content_filter_raw": [],
+          "content_filter_results": {
+            "hate": {
+              "filtered": false,
+              "severity": "safe"
+            },
+            "jailbreak": {
+              "detected": false,
+              "filtered": false
+            },
+            "self_harm": {
+              "filtered": false,
+              "severity": "safe"
+            },
+            "sexual": {
+              "filtered": false,
+              "severity": "safe"
+            },
+            "violence": {
+              "filtered": false,
+              "severity": "safe"
+            }
+          },
+          "source_type": "prompt"
+        },
+        {
+          "blocked": false,
+          "content_filter_offsets": {
+            "check_offset": 0,
+            "end_offset": 160,
+            "start_offset": 0
+          },
+          "content_filter_raw": [],
+          "content_filter_results": {
+            "hate": {
+              "filtered": false,
+              "severity": "safe"
+            },
+            "protected_material_code": {
+              "detected": false,
+              "filtered": false
+            },
+            "protected_material_text": {
+              "detected": false,
+              "filtered": false
+            },
+            "self_harm": {
+              "filtered": false,
+              "severity": "safe"
+            },
+            "sexual": {
+              "filtered": false,
+              "severity": "safe"
+            },
+            "violence": {
+              "filtered": false,
+              "severity": "safe"
+            }
+          },
+          "source_type": "completion"
+        }
+      ],
+      "temperature": 1.0,
+      "object": "response",
+      "tool_choice": "auto",
+      "background": false,
+      "usage": {
+        "input_tokens": 697,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 35,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 732
+      },
+      "top_p": 0.98,
+      "metadata": {},
+      "service_tier": "default",
+      "safety_identifier": null,
+      "store": false,
+      "reasoning": {
+        "context": "current_turn",
+        "effort": "low",
+        "mode": "standard",
+        "summary": null
+      },
+      "tool_usage": {
+        "image_gen": {
+          "input_tokens": 0,
+          "input_tokens_details": {
+            "image_tokens": 0,
+            "text_tokens": 0
+          },
+          "output_tokens": 0,
+          "output_tokens_details": {
+            "image_tokens": 0,
+            "text_tokens": 0
+          },
+          "total_tokens": 0
+        },
+        "web_search": {
+          "num_requests": 0
+        }
+      },
+      "presence_penalty": 0.0,
+      "prompt_cache_key": null,
+      "error": null
+    },
+    "headers": {
+      "apim-request-id": [
+        "6d5bffb9-80d1-49c1-a385-60c22ebed57d"
+      ],
+      "azureai-fe-is-streaming": [
+        "False"
+      ],
+      "azureai-fe-offer-type": [
+        "paygo"
+      ],
+      "content-length": [
+        "3719"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Thu, 24 Sep 2026 09:22:36 GMT"
+      ],
+      "server": [
+        "istio-envoy"
+      ],
+      "skip-error-remapping": [
+        "true"
+      ],
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-ms-aoai-configured-data-retention-days": [
+        "30"
+      ],
+      "x-ms-is-spilled-over": [
+        "false"
+      ],
+      "x-ms-region": [
+        "Sweden Central"
+      ],
+      "x-ms-served-model": [
+        "gpt-5.4-2026-03-05"
+      ],
+      "x-ratelimit-abusepenalty-active": [
+        "False"
+      ],
+      "x-ratelimit-key": [
+        "gpt-5.4"
+      ],
+      "x-ratelimit-limit-requests": [
+        "700"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "700000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "699"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "699038"
+      ],
+      "x-ratelimit-renewalperiod-requests": [
+        "60"
+      ],
+      "x-ratelimit-renewalperiod-tokens": [
+        "60"
+      ],
+      "x-ratelimit-reset-requests": [
+        "0"
+      ],
+      "x-ratelimit-reset-tokens": [
+        "0"
+      ],
+      "x-request-id": [
+        "cf1f81a8-33d7-4d28-863c-90be456f9988"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

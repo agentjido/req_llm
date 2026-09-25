@@ -1,0 +1,253 @@
+{
+  "model_spec": "azure:gpt-5.4",
+  "provider": "azure",
+  "request": {
+    "body": {
+      "b64": "eyJpbmNsdWRlIjpbInJlYXNvbmluZy5lbmNyeXB0ZWRfY29udGVudCJdLCJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IlBpY2sgYSB0d28tZGlnaXQgcHJpbWUgYW5kIGV4cGxhaW4gaW4gb25lIHNlbnRlbmNlIHdoeSBpdCBpcyBwcmltZS4iLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjoxMDI0LCJtb2RlbCI6ImdwdC01LjQiLCJyZWFzb25pbmciOnsiY29udGV4dCI6ImN1cnJlbnRfdHVybiIsImVmZm9ydCI6ImxvdyJ9LCJzdG9yZSI6ZmFsc2UsInN0cmVhbSI6ZmFsc2V9"
+    },
+    "canonical_json": {
+      "include": [
+        "reasoning.encrypted_content"
+      ],
+      "input": [
+        {
+          "content": [
+            {
+              "text": "Pick a two-digit prime and explain in one sentence why it is prime.",
+              "type": "input_text"
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "max_output_tokens": 1024,
+      "model": "gpt-5.4",
+      "reasoning": {
+        "context": "current_turn",
+        "effort": "low"
+      },
+      "store": false,
+      "stream": false
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "api-key": "[REDACTED:api-key]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.7.4"
+      ]
+    },
+    "method": "post",
+    "url": "https://fixture.openai.azure.com/openai/v1/responses"
+  },
+  "response": {
+    "body": {
+      "top_logprobs": 0,
+      "output": [
+        {
+          "content": [
+            {
+              "annotations": [],
+              "logprobs": [],
+              "text": "47 is prime because its only positive divisors are 1 and 47.",
+              "type": "output_text"
+            }
+          ],
+          "id": "msg_0381585a99ad5350016ab4ebe50bcc8190b03d46b25e7b2cc0",
+          "phase": "final_answer",
+          "role": "assistant",
+          "status": "completed",
+          "type": "message"
+        }
+      ],
+      "prompt_cache_retention": "in_memory",
+      "previous_response_id": null,
+      "id": "resp_0381585a99ad5350016ab4ebe4aacc8190913d4880b8a465e0",
+      "max_output_tokens": 1024,
+      "model": "gpt-5.4",
+      "completed_at": 1790241765,
+      "parallel_tool_calls": true,
+      "status": "completed",
+      "instructions": null,
+      "user": null,
+      "moderation": null,
+      "created_at": 1790241764,
+      "incomplete_details": null,
+      "truncation": "disabled",
+      "frequency_penalty": 0.0,
+      "text": {
+        "format": {
+          "type": "text"
+        },
+        "verbosity": "medium"
+      },
+      "max_tool_calls": null,
+      "tools": [],
+      "content_filters": [
+        {
+          "blocked": false,
+          "content_filter_offsets": {
+            "check_offset": 0,
+            "end_offset": 900,
+            "start_offset": 0
+          },
+          "content_filter_raw": [],
+          "content_filter_results": {
+            "hate": {
+              "filtered": false,
+              "severity": "safe"
+            },
+            "jailbreak": {
+              "detected": false,
+              "filtered": false
+            },
+            "self_harm": {
+              "filtered": false,
+              "severity": "safe"
+            },
+            "sexual": {
+              "filtered": false,
+              "severity": "safe"
+            },
+            "violence": {
+              "filtered": false,
+              "severity": "safe"
+            }
+          },
+          "source_type": "prompt"
+        }
+      ],
+      "temperature": 1.0,
+      "object": "response",
+      "tool_choice": "auto",
+      "background": false,
+      "usage": {
+        "input_tokens": 21,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 20,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 41
+      },
+      "top_p": 0.98,
+      "metadata": {},
+      "service_tier": "default",
+      "safety_identifier": null,
+      "store": false,
+      "reasoning": {
+        "context": "current_turn",
+        "effort": "low",
+        "mode": "standard",
+        "summary": null
+      },
+      "tool_usage": {
+        "image_gen": {
+          "input_tokens": 0,
+          "input_tokens_details": {
+            "image_tokens": 0,
+            "text_tokens": 0
+          },
+          "output_tokens": 0,
+          "output_tokens_details": {
+            "image_tokens": 0,
+            "text_tokens": 0
+          },
+          "total_tokens": 0
+        },
+        "web_search": {
+          "num_requests": 0
+        }
+      },
+      "presence_penalty": 0.0,
+      "prompt_cache_key": null,
+      "error": null
+    },
+    "headers": {
+      "apim-request-id": [
+        "fd96b7eb-5f4b-4688-811e-08d3f33ff1e4"
+      ],
+      "azureai-fe-is-streaming": [
+        "False"
+      ],
+      "azureai-fe-offer-type": [
+        "paygo"
+      ],
+      "content-length": [
+        "2779"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Thu, 24 Sep 2026 09:22:44 GMT"
+      ],
+      "server": [
+        "istio-envoy"
+      ],
+      "skip-error-remapping": [
+        "true"
+      ],
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-ms-aoai-configured-data-retention-days": [
+        "30"
+      ],
+      "x-ms-is-spilled-over": [
+        "false"
+      ],
+      "x-ms-region": [
+        "Sweden Central"
+      ],
+      "x-ms-served-model": [
+        "gpt-5.4-2026-03-05"
+      ],
+      "x-ratelimit-abusepenalty-active": [
+        "False"
+      ],
+      "x-ratelimit-key": [
+        "gpt-5.4"
+      ],
+      "x-ratelimit-limit-requests": [
+        "700"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "700000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "699"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "699984"
+      ],
+      "x-ratelimit-renewalperiod-requests": [
+        "60"
+      ],
+      "x-ratelimit-renewalperiod-tokens": [
+        "60"
+      ],
+      "x-ratelimit-reset-requests": [
+        "0"
+      ],
+      "x-ratelimit-reset-tokens": [
+        "0"
+      ],
+      "x-request-id": [
+        "24522a4a-bc52-49ba-8579-c1ceb16c5921"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

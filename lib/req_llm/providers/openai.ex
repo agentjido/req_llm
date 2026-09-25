@@ -187,6 +187,16 @@ defmodule ReqLLM.Providers.OpenAI do
       doc:
         "Controls whether the model returns a human-readable summary of its reasoning (auto, concise, detailed)"
     ],
+    reasoning_context: [
+      type: {:or, [{:in, [:current_turn, :all_turns]}, {:in, ["current_turn", "all_turns"]}]},
+      doc:
+        "Which earlier reasoning items the model renders into context (current_turn or all_turns). Responses API, GPT-5.4 and later."
+    ],
+    context_management: [
+      type: {:list, {:or, [{:map, {:or, [:atom, :string]}, :any}, :keyword_list]}},
+      doc:
+        "Responses API context_management entries, such as [%{type: \"compaction\", compact_threshold: 200_000}] for server-side compaction"
+    ],
     openai_structured_output_mode: [
       type: {:in, [:auto, :json_schema, :tool_strict]},
       default: :auto,
@@ -307,6 +317,18 @@ defmodule ReqLLM.Providers.OpenAI do
     case ReqLLM.RequestPlan.openai_surface(model) do
       {:ok, surface, _api_module, _warnings} -> surface == :openai_responses
       {:error, error} -> raise error
+    end
+  end
+
+  defp ensure_responses_model(model) do
+    if responses_api?(model) do
+      :ok
+    else
+      {:error,
+       ReqLLM.Error.Invalid.Parameter.exception(
+         parameter:
+           "model: compact_context requires an OpenAI Responses API model, got #{model.provider}:#{model.id}"
+       )}
     end
   end
 
@@ -554,6 +576,45 @@ defmodule ReqLLM.Providers.OpenAI do
           |> Keyword.put(:media_type, media_type)
         )
         |> ReqLLM.Step.Fixture.maybe_attach(model, opts)
+
+      {:ok, request}
+    end
+  end
+
+  def prepare_request(:compact, model_spec, context, opts) do
+    with {:ok, model} <- ReqLLM.model(model_spec),
+         :ok <- ensure_responses_model(model),
+         {:ok, context} <- ReqLLM.Context.normalize(context, opts),
+         opts_with_context =
+           opts |> Keyword.put(:context, context) |> Keyword.put(:operation, :compact),
+         http_opts = Keyword.get(opts, :req_http_options, []),
+         {:ok, processed_opts} <-
+           ReqLLM.Provider.Options.process(__MODULE__, :compact, model, opts_with_context) do
+      req_keys =
+        supported_provider_options() ++
+          [:context, :operation, :model, :provider_options, :api_mod, :receive_timeout]
+
+      timeout = get_timeout_for_model(ReqLLM.Providers.OpenAI.ResponsesAPI, processed_opts)
+
+      request =
+        Req.new(
+          [
+            url: ReqLLM.Providers.OpenAI.ResponsesAPI.compact_path(),
+            method: :post,
+            receive_timeout: timeout
+          ] ++ ReqLLM.Provider.Defaults.merge_finch_options(http_opts, pool_timeout: timeout)
+        )
+        |> Req.Request.register_options(req_keys)
+        |> Req.Request.merge_options(
+          Keyword.take(processed_opts, req_keys) ++
+            [
+              model: model.id,
+              base_url: Keyword.get(processed_opts, :base_url, base_url()),
+              api_mod: ReqLLM.Providers.OpenAI.ResponsesAPI,
+              operation: :compact
+            ]
+        )
+        |> attach(model, processed_opts)
 
       {:ok, request}
     end

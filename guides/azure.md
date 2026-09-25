@@ -226,6 +226,62 @@ schema = [
 )
 ```
 
+### Responses API (reasoning summaries, reasoning context, compaction)
+
+GPT-5 family and codex models are routed to the Responses API: `/responses` on
+the v1 GA base URL, or `/responses?api-version=...` on the legacy base URL. The
+request body is built by the same encoder as the OpenAI provider, so the
+Responses-only options work under the `azure:` namespace too:
+
+```elixir
+{:ok, response} =
+  ReqLLM.generate_text(
+    "azure:gpt-5.4",
+    "Solve this carefully",
+    base_url: "https://my-resource.openai.azure.com/openai",
+    deployment: "gpt-5.4",
+    reasoning_effort: :medium,
+    provider_options: [
+      reasoning_summary: :auto,
+      reasoning_context: :current_turn,
+      store: false
+    ]
+  )
+```
+
+- `reasoning_summary` (`:auto | :concise | :detailed`): summaries are decoded into
+  `message.reasoning_details`; streaming emits `:thinking` chunks with
+  `summary_index` metadata and `reasoning_summary_part` meta chunks at part
+  boundaries.
+- `reasoning_context` (`:current_turn | :all_turns`): which earlier reasoning items
+  the model renders (GPT-5.4 and later; GPT-5.6 defaults to `:all_turns`).
+- `store`, `previous_response_id`, `prompt_cache_key`: stateless replay and
+  response chaining.
+- `context_management`: server-side compaction, e.g.
+  `[%{type: "compaction", compact_threshold: 200_000}]`.
+
+Manual compaction uses `ReqLLM.compact_context/3`, which posts to
+`/responses/compact` on the v1 GA base URL (`https://<resource>.openai.azure.com/openai/v1`).
+The legacy `api-version` surface answers `/responses/compact?api-version=...`
+with a server error at the time of writing, so use the v1 GA base URL for
+compaction:
+
+```elixir
+{:ok, compacted} =
+  ReqLLM.compact_context("azure:gpt-5.4", first.context,
+    base_url: "https://my-resource.openai.azure.com/openai",
+    deployment: "gpt-5.4"
+  )
+
+next = ReqLLM.Context.append(compacted.context, ReqLLM.Context.user("Add a booking form."))
+```
+
+The compacted context preserves the complete returned API window, including retained messages and tool items, in its original order. Do not remove items from this window before the next request.
+
+Compaction items come back as `:provider_block` content parts and are replayed
+automatically on later requests. See the [OpenAI guide](openai.md#context-compaction-responses-api)
+for the full flow.
+
 ## Supported Models
 
 ### OpenAI GPT-4 Family
@@ -270,6 +326,7 @@ schema = [
 ### OpenAI Models
 - **Endpoint**: `/deployments/{deployment}/chat/completions`
 - **API**: OpenAI Chat Completions format (model field omitted)
+- **Responses API models**: `/responses` and `/responses/compact` (deployment sent as the body `model` on v1 GA and Foundry URLs)
 
 ### Anthropic Models
 - **Endpoint**: `/v1/messages` (model specified in request body)

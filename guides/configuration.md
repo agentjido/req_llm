@@ -110,7 +110,18 @@ provider_options: %{
 
 The namespace is always the actual ReqLLM provider identity. Use `azure:` for
 Azure-hosted models, `google_vertex:` for Vertex-hosted models, and
-`openrouter:` for OpenRouter models. Do not use `openai:` or `google:` merely
+`openrouter:` for OpenRouter models:
+
+```elixir
+ReqLLM.generate_text(
+  "azure:gpt-5.4",
+  "Solve this carefully",
+  base_url: "https://my-resource.openai.azure.com/openai",
+  provider_options: [
+    azure: [reasoning_summary: "auto"]
+  ]
+)
+``` Do not use `openai:` or `google:` merely
 because the hosted service uses an OpenAI- or Gemini-compatible wire format.
 Foreign namespaces fail before network I/O.
 
