@@ -244,6 +244,56 @@ remain in place. This is an internal refactor: Req remains the buffered
 transport, Finch remains the streaming transport, and the existing
 `ReqLLM.Provider` callbacks and request/response shapes are preserved.
 
+## Non-strict tool schemas
+
+`ReqLLM.Tool` uses `strict: false` by default. In Responses requests, this keeps
+the caller's required fields, optional fields, definitions, references, and
+other schema constraints. It asks the model to follow the schema on a
+best-effort basis. It does not disable schema validation by the provider.
+
+Use a valid JSON Schema for `parameter_schema`. For example, `required` must be
+an array of field names:
+
+```elixir
+tool = ReqLLM.Tool.new!(
+  name: "get_weather",
+  description: "Get weather",
+  parameter_schema: %{
+    "type" => "object",
+    "properties" => %{
+      "location" => %{"type" => "string"},
+      "units" => %{"type" => "string"}
+    },
+    "required" => ["location"],
+    "additionalProperties" => false
+  },
+  strict: false,
+  callback: fn args -> WeatherService.get_current_weather(args) end
+)
+```
+
+Here, `location` is required and `units` is optional. Set
+`additionalProperties: false` explicitly in a raw schema to forbid extra
+arguments. If that keyword is absent, JSON Schema permits extra properties.
+Keyword parameter schemas already set it to `false`. Tools with the default
+empty parameter list keep their empty object schema with extra properties
+disabled.
+
+Earlier versions of the Responses adapter removed root schema fields such as
+`required` and `$defs`, and forced `additionalProperties: false`. Requests that
+depended on this behavior can change after an upgrade. Correct invalid fields
+such as `"required" => "location"` to `"required" => ["location"]`. Providers
+can now reject invalid or unsupported schema fields that were previously
+removed. Schema support still depends on the provider.
+
+Raw function tool maps retain their strict default when `strict` is omitted.
+An explicit `false` selects non-strict encoding. For a nested `function` map,
+its boolean `strict` value takes precedence over the outer value.
+
+Strict tool normalization and structured output behavior are unchanged. This
+schema handling is also used by Azure Responses, Meta, xAI Responses, OpenAI
+Codex, and Bedrock Mantle Responses.
+
 ## Provider Options
 
 Passed via `:provider_options` keyword:

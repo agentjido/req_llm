@@ -205,6 +205,197 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
       end
     end
 
+    test "preserves atom-keyed non-strict schemas and nested constraints" do
+      parameters = %{
+        type: "object",
+        properties: %{
+          location: %{
+            anyOf: [
+              %{type: "string", minLength: 1},
+              %{
+                type: "object",
+                properties: %{city: %{type: "string"}},
+                required: ["city"],
+                additionalProperties: true
+              }
+            ]
+          }
+        },
+        required: ["location"],
+        additionalProperties: false
+      }
+
+      tool =
+        ReqLLM.Tool.new!(
+          name: "get_weather",
+          description: "Get weather",
+          parameter_schema: parameters,
+          callback: fn _ -> {:ok, "result"} end
+        )
+
+      body =
+        build_request(tools: [tool])
+        |> ResponsesAPI.encode_body()
+        |> ReqLLM.Test.Helpers.json_body()
+
+      assert [encoded_tool] = body["tools"]
+      assert encoded_tool["parameters"] == parameters |> Jason.encode!() |> Jason.decode!()
+    end
+
+    test "does not silently remove malformed non-strict schema fields" do
+      parameters = %{
+        "type" => "object",
+        "properties" => %{"location" => %{"type" => "string"}},
+        "required" => "location"
+      }
+
+      tool =
+        ReqLLM.Tool.new!(
+          name: "get_weather",
+          description: "Get weather",
+          parameter_schema: parameters,
+          callback: fn _ -> {:ok, "result"} end
+        )
+
+      body =
+        build_request(tools: [tool])
+        |> ResponsesAPI.encode_body()
+        |> ReqLLM.Test.Helpers.json_body()
+
+      assert [encoded_tool] = body["tools"]
+      assert encoded_tool["parameters"] == parameters
+    end
+
+    test "keeps the closed empty schema for parameterless tools" do
+      for strict <- [false, true] do
+        tool =
+          ReqLLM.Tool.new!(
+            name: "get_time",
+            description: "Get time",
+            strict: strict,
+            callback: fn _ -> {:ok, "result"} end
+          )
+
+        body =
+          build_request(tools: [tool])
+          |> ResponsesAPI.encode_body()
+          |> ReqLLM.Test.Helpers.json_body()
+
+        assert [encoded_tool] = body["tools"]
+        assert encoded_tool["strict"] == strict
+        assert encoded_tool["parameters"]["type"] == "object"
+        assert encoded_tool["parameters"]["properties"] == %{}
+        assert encoded_tool["parameters"]["additionalProperties"] == false
+        assert Map.has_key?(encoded_tool["parameters"], "required") == strict
+      end
+    end
+
+    test "respects explicit false on flat and nested raw tool maps" do
+      parameters = %{
+        "type" => "object",
+        "properties" => %{
+          "location" => %{"type" => "string"},
+          "units" => %{"type" => "string"}
+        },
+        "required" => ["location"],
+        "additionalProperties" => true
+      }
+
+      function = %{
+        "name" => "get_weather",
+        "description" => "Get weather",
+        "parameters" => parameters
+      }
+
+      for tool <- [
+            Map.merge(function, %{"type" => "function", "strict" => false}),
+            %{"type" => "function", "function" => Map.put(function, "strict", false)},
+            %{"type" => "function", "strict" => false, "function" => function},
+            %{
+              "type" => "function",
+              "strict" => true,
+              "function" => Map.put(function, "strict", false)
+            },
+            %{
+              type: :function,
+              strict: false,
+              function: %{name: "get_weather", parameters: parameters}
+            }
+          ] do
+        body =
+          build_request(tools: [tool])
+          |> ResponsesAPI.encode_body()
+          |> ReqLLM.Test.Helpers.json_body()
+
+        assert [encoded_tool] = body["tools"]
+        assert encoded_tool["strict"] == false
+        assert encoded_tool["parameters"] == parameters
+      end
+    end
+
+    test "keeps raw tool maps strict by default and honors nested explicit true" do
+      function = %{
+        "name" => "get_weather",
+        "parameters" => %{
+          "type" => "object",
+          "properties" => %{
+            "location" => %{"type" => "string"},
+            "units" => %{"type" => "string"}
+          },
+          "required" => ["location"],
+          "additionalProperties" => true
+        }
+      }
+
+      for tool <- [
+            Map.put(function, "type", "function"),
+            Map.merge(function, %{"type" => "function", "strict" => true}),
+            %{"type" => "function", "function" => function},
+            %{
+              "type" => "function",
+              "strict" => false,
+              "function" => Map.put(function, "strict", true)
+            }
+          ] do
+        body =
+          build_request(tools: [tool])
+          |> ResponsesAPI.encode_body()
+          |> ReqLLM.Test.Helpers.json_body()
+
+        assert [encoded_tool] = body["tools"]
+        assert encoded_tool["strict"] == true
+        assert Enum.sort(encoded_tool["parameters"]["required"]) == ["location", "units"]
+        assert encoded_tool["parameters"]["additionalProperties"] == false
+      end
+    end
+
+    test "retains defaults for raw tools without parameters and preserves explicit empty schemas" do
+      for strict <- [false, true] do
+        tool = %{"type" => "function", "name" => "get_time", "strict" => strict}
+
+        body =
+          build_request(tools: [tool])
+          |> ResponsesAPI.encode_body()
+          |> ReqLLM.Test.Helpers.json_body()
+
+        assert [encoded_tool] = body["tools"]
+        assert encoded_tool["parameters"]["type"] == "object"
+        assert encoded_tool["parameters"]["properties"] == %{}
+        assert encoded_tool["parameters"]["additionalProperties"] == false
+        assert Map.has_key?(encoded_tool["parameters"], "required") == strict
+      end
+
+      tool = %{"type" => "function", "name" => "get_time", "strict" => false, "parameters" => %{}}
+
+      body =
+        build_request(tools: [tool])
+        |> ResponsesAPI.encode_body()
+        |> ReqLLM.Test.Helpers.json_body()
+
+      assert [%{"parameters" => %{}}] = body["tools"]
+      assert hd(body["tools"])["parameters"] == %{}
+    end
+
     test "encodes strict tools with required field listing all parameters" do
       tool =
         ReqLLM.Tool.new!(
