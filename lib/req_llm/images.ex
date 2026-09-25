@@ -4,6 +4,8 @@ defmodule ReqLLM.Images do
 
   This module provides image generation capabilities with support for:
   - Prompt-based image generation (`generate_image/3`)
+  - Streaming generation with preview frames (`stream_image/3`, OpenAI and
+    Azure gpt-image models)
   - Model validation for image support
   - The full gpt-image parameter set on OpenAI and Azure: quality tiers,
     `:background`, `:moderation`, `:output_compression`, and `:input_fidelity`
@@ -25,6 +27,7 @@ defmodule ReqLLM.Images do
   @gpt_image_qualities [:auto, :low, :medium, :high, :xhigh, :max]
   @dall_e_qualities [:standard, :hd]
   @openai_only_options [:background, :moderation, :output_compression, :input_fidelity]
+  @image_streaming_providers [:openai, :azure]
 
   @base_schema NimbleOptions.new!(
                  n: [
@@ -126,6 +129,17 @@ defmodule ReqLLM.Images do
                    type: :string,
                    doc: "User identifier for tracking and abuse detection"
                  ],
+                 stream: [
+                   type: :boolean,
+                   default: false,
+                   doc:
+                     "Stream partial frames and the final image as SSE; set by stream_image/3, rejected by generate_image/3 (OpenAI and Azure gpt-image models only)"
+                 ],
+                 partial_images: [
+                   type: {:in, 0..3},
+                   doc:
+                     "Maximum preview frames to stream before the final image (0-3, provider default when unset; fast generations may send fewer or none; stream_image/3 on OpenAI and Azure gpt-image models only)"
+                 ],
                  provider_options: [
                    type: {:or, [:map, {:list, :any}]},
                    doc: "Provider-specific options (keyword list or map)",
@@ -148,6 +162,10 @@ defmodule ReqLLM.Images do
                  total_timeout: [
                    type: {:or, [:pos_integer, {:in, [:infinity]}]},
                    doc: "Optional total model-call timeout in milliseconds, including retries"
+                 ],
+                 stream_idle_timeout: [
+                   type: {:or, [:pos_integer, {:in, [:infinity]}]},
+                   doc: "Optional timeout between semantic streaming updates in milliseconds"
                  ],
                  max_retries: [
                    type: :non_neg_integer,
@@ -217,7 +235,8 @@ defmodule ReqLLM.Images do
     opts = ReqLLM.ModelInput.merge_tuple_defaults(model_spec, :image, opts)
     deadline = ReqLLM.TimeoutBudget.deadline(opts)
 
-    with {:ok, model} <- ReqLLM.model(model_spec),
+    with :ok <- reject_stream_options(opts),
+         {:ok, model} <- ReqLLM.model(model_spec),
          {:ok, provider_module} <- ReqLLM.provider(model.provider),
          {:ok, opts} <-
            ReqLLM.Provider.Options.normalize_namespaced_provider_options(
@@ -243,6 +262,90 @@ defmodule ReqLLM.Images do
       {:error, error} ->
         {:error, error}
     end
+  end
+
+  @doc """
+  Streams image generation, yielding preview frames before the final image.
+
+  See `ReqLLM.stream_image/3` for the chunk contract. Supported for OpenAI and
+  Azure gpt-image models; other providers return `ReqLLM.Error.Invalid.Parameter`.
+  """
+  @spec stream_image(
+          ReqLLM.model_input(),
+          String.t() | list() | ReqLLM.Context.t(),
+          keyword()
+        ) :: {:ok, ReqLLM.StreamResponse.t()} | {:error, term()}
+  def stream_image(model_spec, prompt_or_messages, opts \\ []) do
+    opts = ReqLLM.ModelInput.merge_tuple_defaults(model_spec, :image, opts)
+
+    with {:ok, model} <- ReqLLM.model(model_spec),
+         :ok <- validate_streaming_model(model),
+         :ok <- ReqLLM.Images.OpenAICompatible.validate_stream_options(opts),
+         {:ok, provider_module} <- ReqLLM.provider(model.provider),
+         {:ok, opts} <-
+           ReqLLM.Provider.Options.normalize_namespaced_provider_options(
+             provider_module,
+             :image,
+             model,
+             opts
+           ),
+         {:ok, context, _prompt} <-
+           ReqLLM.Images.OpenAICompatible.image_context(prompt_or_messages, opts),
+         {:ok, stream_response} <-
+           ReqLLM.Streaming.start_stream(provider_module, model, context, stream_opts(opts)) do
+      {:ok, stream_response}
+    else
+      {:error, {:http_streaming_failed, {:provider_build_failed, %{__exception__: true} = error}}} ->
+        {:error, error}
+
+      {:error, error} ->
+        {:error, error}
+    end
+  end
+
+  @doc """
+  Streams image generation, raising on error.
+
+  Same as `stream_image/3` but raises the error struct instead of returning
+  `{:error, error}`. Only errors raised before the request starts are surfaced
+  here; failures mid-stream still surface while enumerating or through
+  `ReqLLM.StreamResponse.to_response/1`.
+  """
+  @spec stream_image!(
+          ReqLLM.model_input(),
+          String.t() | list() | ReqLLM.Context.t(),
+          keyword()
+        ) :: ReqLLM.StreamResponse.t() | no_return()
+  def stream_image!(model_spec, prompt_or_messages, opts \\ []) do
+    case stream_image(model_spec, prompt_or_messages, opts) do
+      {:ok, stream_response} -> stream_response
+      {:error, error} -> raise error
+    end
+  end
+
+  defp validate_streaming_model(%Model{provider: provider} = model) do
+    if provider in @image_streaming_providers and
+         ReqLLM.Images.OpenAICompatible.gpt_image_model?(model) do
+      :ok
+    else
+      {:error,
+       ReqLLM.Error.Invalid.Parameter.exception(
+         parameter:
+           "model: image streaming is only supported for OpenAI and Azure gpt-image models, got #{LLMDB.Model.spec(model)}"
+       )}
+    end
+  end
+
+  @doc false
+  @spec stream_opts(keyword()) :: keyword()
+  def stream_opts(opts) do
+    opts
+    |> Keyword.put(:operation, :image)
+    |> Keyword.put(:stream, true)
+    |> Keyword.put_new(
+      :receive_timeout,
+      Application.get_env(:req_llm, :image_receive_timeout, 120_000)
+    )
   end
 
   @doc """
@@ -279,6 +382,25 @@ defmodule ReqLLM.Images do
            parameter: "model: #{model_string} does not appear to support image generation"
          )}
       end
+    end
+  end
+
+  defp reject_stream_options(opts) do
+    cond do
+      Keyword.get(opts, :stream) == true ->
+        {:error,
+         ReqLLM.Error.Invalid.Parameter.exception(
+           parameter: "stream: use stream_image/3 to stream image generation"
+         )}
+
+      not is_nil(Keyword.get(opts, :partial_images)) ->
+        {:error,
+         ReqLLM.Error.Invalid.Parameter.exception(
+           parameter: "partial_images: preview frames are only streamed; use stream_image/3"
+         )}
+
+      true ->
+        :ok
     end
   end
 

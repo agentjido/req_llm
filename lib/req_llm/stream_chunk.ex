@@ -133,6 +133,12 @@ defmodule ReqLLM.StreamChunk do
 
   This constructor carries non-text output, such as generated images, through
   streaming response assembly without converting it to provider metadata.
+
+  Chunk metadata `stream_only?: true` marks a part that is only for live
+  consumers and is left out of the assembled `ReqLLM.Response`. Image preview
+  frames from `ReqLLM.stream_image/3` use it; the frame's own
+  `ReqLLM.Message.ContentPart` metadata carries `partial?: true` and
+  `partial_image_index`.
   """
   @spec content_part(ReqLLM.Message.ContentPart.t(), map()) :: t()
   def content_part(%ReqLLM.Message.ContentPart{} = content_part, metadata \\ %{})

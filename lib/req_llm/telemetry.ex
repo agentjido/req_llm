@@ -2195,6 +2195,23 @@ defmodule ReqLLM.Telemetry do
     update_in(context.response_summary_state.tool_call_count, &((&1 || 0) + 1))
   end
 
+  defp update_response_summary_state(
+         context,
+         %ReqLLM.StreamChunk{type: :content_part, metadata: %{stream_only?: true}}
+       ),
+       do: context
+
+  defp update_response_summary_state(
+         context,
+         %ReqLLM.StreamChunk{
+           type: :content_part,
+           content_part: %ReqLLM.Message.ContentPart{type: part_type}
+         }
+       )
+       when part_type in [:image, :image_url] do
+    update_in(context.response_summary_state.image_count, &((&1 || 0) + 1))
+  end
+
   defp update_response_summary_state(context, %ReqLLM.StreamChunk{type: :meta, metadata: metadata}) do
     finish_reason = finish_reason_from_response(metadata)
 

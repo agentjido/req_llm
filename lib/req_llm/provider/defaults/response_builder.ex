@@ -336,6 +336,7 @@ defmodule ReqLLM.Provider.Defaults.ResponseBuilder do
     Enum.flat_map(chunks, fn
       %StreamChunk{type: :content, text: text} -> [%ContentPart{type: :text, text: text}]
       %StreamChunk{type: :thinking, text: text} -> [%ContentPart{type: :thinking, text: text}]
+      %StreamChunk{type: :content_part, metadata: %{stream_only?: true}} -> []
       %StreamChunk{type: :content_part, content_part: %ContentPart{} = part} -> [part]
       _chunk -> []
     end)

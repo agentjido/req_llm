@@ -50,7 +50,8 @@ defmodule ReqLLM.Providers.OpenAI do
     (JPEG/WebP), and `:input_fidelity` on edits
   - Quality and style options (DALL-E 3); `response_format: :url` is DALL-E only
   - Returns images as `ReqLLM.Message.ContentPart` with `:image` or `:image_url` type
-  - Streaming not supported
+  - Streaming generation via `ReqLLM.stream_image/3` (gpt-image-* only): preview
+    frames with `:partial_images`, then the final image; edits do not stream
 
   ## Explicit Prompt Caching
 
@@ -786,8 +787,23 @@ defmodule ReqLLM.Providers.OpenAI do
   """
   @impl ReqLLM.Provider
   def attach_stream(model, context, opts, finch_name) do
-    operation = opts[:operation] || :chat
+    case opts[:operation] || :chat do
+      :image -> attach_image_stream(model, context, opts, finch_name)
+      operation -> attach_planned_stream(model, context, opts, finch_name, operation)
+    end
+  end
 
+  defp attach_image_stream(model, context, opts, finch_name) do
+    with :ok <- ReqLLM.Images.OpenAICompatible.validate_options(opts),
+         :ok <- ReqLLM.Images.OpenAICompatible.validate_stream_options(opts) do
+      processed_opts =
+        ReqLLM.Provider.Options.process_stream!(__MODULE__, :image, model, context, opts)
+
+      ReqLLM.Providers.OpenAI.ImagesAPI.attach_stream(model, context, processed_opts, finch_name)
+    end
+  end
+
+  defp attach_planned_stream(model, context, opts, finch_name, operation) do
     with {:ok, plan} <-
            ReqLLM.RequestPlan.build(model, operation, Keyword.put(opts, :stream, true)) do
       processed_opts =
@@ -986,11 +1002,16 @@ defmodule ReqLLM.Providers.OpenAI do
 
   @impl ReqLLM.Provider
   def decode_stream_event(event, model, state) do
-    if responses_api?(model) do
-      ReqLLM.Providers.OpenAI.ResponsesAPI.decode_stream_event(event, model, state)
-    else
-      chunks = ReqLLM.Providers.OpenAI.ChatAPI.decode_stream_event(event, model)
-      {chunks, state}
+    cond do
+      ReqLLM.Images.OpenAICompatible.gpt_image_model?(model) ->
+        {ReqLLM.Images.OpenAICompatible.decode_stream_event(event, model), state}
+
+      responses_api?(model) ->
+        ReqLLM.Providers.OpenAI.ResponsesAPI.decode_stream_event(event, model, state)
+
+      true ->
+        chunks = ReqLLM.Providers.OpenAI.ChatAPI.decode_stream_event(event, model)
+        {chunks, state}
     end
   end
 
