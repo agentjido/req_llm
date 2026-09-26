@@ -14,6 +14,10 @@ defmodule ReqLLM.Streaming.FinchClient do
   - Handle connection errors and forward to StreamServer
   - Return HTTPContext for fixture capture
 
+  Pools with request connection settings are started before each attempt.
+  Automatic pool creation at checkout is disabled for these requests. This
+  prevents a stopped pool from being replaced with default connection settings.
+
   ## HTTPContext
 
   The HTTPContext struct provides minimal HTTP metadata needed for fixture
@@ -281,9 +285,13 @@ defmodule ReqLLM.Streaming.FinchClient do
   defp stream_with_connection_pool(request, finch_name, acc, callback, opts) do
     {pool_options, private} = Map.pop(request.private, :req_llm_pool_options)
 
-    if pool_options do
-      :ok = Finch.start_pool(finch_name, request_pool(request), pool_options)
-    end
+    opts =
+      if pool_options do
+        :ok = Finch.start_pool(finch_name, request_pool(request), pool_options)
+        Keyword.put(opts, :start_pool?, false)
+      else
+        opts
+      end
 
     Finch.stream(%{request | private: private}, finch_name, acc, callback, opts)
   end

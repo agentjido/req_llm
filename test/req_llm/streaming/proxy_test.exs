@@ -4,10 +4,10 @@ defmodule ReqLLM.Streaming.ProxyTest do
   alias ReqLLM.Streaming.FinchClient
   alias ReqLLM.StreamResponse
 
-  test "reuses the same pool for concurrent requests with the same connection settings" do
-    finch_name = ReqLLM.Finch
+  setup do
+    finch_config = [pools: %{default: [size: 1, count: 1]}]
     original_config = Application.fetch_env(:req_llm, :finch)
-    Application.put_env(:req_llm, :finch, pools: %{default: [size: 1, count: 1]})
+    Application.put_env(:req_llm, :finch, finch_config)
 
     on_exit(fn ->
       case original_config do
@@ -16,6 +16,11 @@ defmodule ReqLLM.Streaming.ProxyTest do
       end
     end)
 
+    :ok
+  end
+
+  test "creates and reuses one pool for concurrent requests with the same connection settings" do
+    finch_name = ReqLLM.Finch
     port = start_proxy(:reuse)
     http_options = [connect_options: [proxy: {:http, "127.0.0.1", port, []}]]
     opts = [req_http_options: http_options]
@@ -32,9 +37,7 @@ defmodule ReqLLM.Streaming.ProxyTest do
              )
 
     pool = Finch.Pool.new("http://provider.invalid", tag: request.pool_tag)
-    assert collect_stream("http://provider.invalid", opts) == "hello"
-    assert {:ok, pid} = Finch.find_pool(finch_name, pool)
-    assert {:ok, 1} = Finch.get_pool_count(finch_name, pool)
+    assert Finch.find_pool(finch_name, pool) == :error
 
     results =
       1..4
@@ -42,7 +45,37 @@ defmodule ReqLLM.Streaming.ProxyTest do
       |> Enum.to_list()
 
     assert results == List.duplicate({:ok, "hello"}, 4)
+    assert {:ok, pid} = Finch.find_pool(finch_name, pool)
+    assert {:ok, 1} = Finch.get_pool_count(finch_name, pool)
+    assert collect_stream("http://provider.invalid", opts) == "hello"
     assert {:ok, ^pid} = Finch.find_pool(finch_name, pool)
+  end
+
+  test "recreates a removed proxy pool without sending a request directly to the origin" do
+    origin = start_proxy(:origin)
+    proxy = start_proxy(:proxy)
+    attempts = remove_first_pool_before_checkout()
+
+    assert stream_text("http://127.0.0.1:#{origin}", proxy, [], max_retries: 1) == "hello"
+    assert_receive :proxy_pool_removed
+    assert_receive {:proxy_request, :proxy, _, _}
+    refute_received {:proxy_request, :origin, _, _}
+    assert :atomics.get(attempts, 1) == 2
+  end
+
+  test "a removed proxy pool fails without a direct request when retries are disabled" do
+    origin = start_proxy(:origin)
+    proxy = start_proxy(:proxy)
+    attempts = remove_first_pool_before_checkout()
+
+    assert_raise ReqLLM.Error.API.Stream, ~r/pool_not_available/, fn ->
+      stream_text("http://127.0.0.1:#{origin}", proxy, [])
+    end
+
+    assert_receive :proxy_pool_removed
+    refute_received {:proxy_request, :proxy, _, _}
+    refute_received {:proxy_request, :origin, _, _}
+    assert :atomics.get(attempts, 1) == 1
   end
 
   test "map HTTP options use the proxy without changing the direct pool" do
@@ -88,6 +121,33 @@ defmodule ReqLLM.Streaming.ProxyTest do
     assert headers["proxy-authorization"] == auth
     assert_receive {:tunnel_request, "POST /v1/chat/completions HTTP/1.1\r\n", origin_headers}
     refute Map.has_key?(origin_headers, "proxy-authorization")
+  end
+
+  test "rejects an untrusted certificate inside the CONNECT tunnel" do
+    {tls_options, _cacerts} = tls_options()
+    {_other_tls_options, other_cacerts} = tls_options()
+    port = start_proxy(:untrusted, tls_options: tls_options)
+
+    assert_raise ReqLLM.Error.API.Stream, ~r/tls_alert/, fn ->
+      stream_text("https://provider.invalid", port, transport_opts: [cacerts: other_cacerts])
+    end
+
+    assert_receive {:proxy_request, :untrusted, "CONNECT provider.invalid:443 HTTP/1.1\r\n", _}
+    assert_receive {:tunnel_error, _}
+    refute_received {:tunnel_request, _, _}
+  end
+
+  test "rejects a trusted certificate for the wrong destination" do
+    {tls_options, cacerts} = tls_options()
+    port = start_proxy(:wrong_host, tls_options: tls_options)
+
+    assert_raise ReqLLM.Error.API.Stream, ~r/hostname_check_failed/, fn ->
+      stream_text("https://other.invalid", port, transport_opts: [cacerts: cacerts])
+    end
+
+    assert_receive {:proxy_request, :wrong_host, "CONNECT other.invalid:443 HTTP/1.1\r\n", _}
+    assert_receive {:tunnel_error, _}
+    refute_received {:tunnel_request, _, _}
   end
 
   test "keeps different proxies and credentials separate for the same destination" do
@@ -142,6 +202,57 @@ defmodule ReqLLM.Streaming.ProxyTest do
 
     refute_received {:proxy_request, :origin, _, _}
   end
+
+  def remove_pool_before_checkout(
+        _event,
+        _measurements,
+        %{name: name, request: request},
+        %{finch_name: name, attempts: attempts, parent: parent}
+      ) do
+    if :atomics.add_get(attempts, 1, 1) == 1 do
+      pool = %Finch.Pool{
+        scheme: request.scheme,
+        host: request.host,
+        port: request.port,
+        tag: request.pool_tag
+      }
+
+      :ok = Finch.stop_pool(name, pool)
+      await_pool_stop(name, pool, 100)
+      send(parent, :proxy_pool_removed)
+    end
+  end
+
+  def remove_pool_before_checkout(_event, _measurements, _metadata, _config), do: :ok
+
+  defp remove_first_pool_before_checkout do
+    handler_id = {__MODULE__, make_ref()}
+    attempts = :atomics.new(1, [])
+
+    :ok =
+      :telemetry.attach(
+        handler_id,
+        [:finch, :request, :start],
+        &__MODULE__.remove_pool_before_checkout/4,
+        %{finch_name: ReqLLM.Finch, attempts: attempts, parent: self()}
+      )
+
+    on_exit(fn -> :telemetry.detach(handler_id) end)
+    attempts
+  end
+
+  defp await_pool_stop(name, pool, attempts) when attempts > 0 do
+    case Finch.find_pool(name, pool) do
+      :error ->
+        :ok
+
+      {:ok, _pid} ->
+        Process.sleep(5)
+        await_pool_stop(name, pool, attempts - 1)
+    end
+  end
+
+  defp await_pool_stop(name, pool, 0), do: assert(Finch.find_pool(name, pool) == :error)
 
   defp stream_text(base_url, port, connection_options, opts \\ []) do
     connection_options = Keyword.put(connection_options, :proxy, {:http, "127.0.0.1", port, []})
@@ -207,12 +318,16 @@ defmodule ReqLLM.Streaming.ProxyTest do
     :ok = :gen_tcp.send(socket, "HTTP/1.1 200 Connection Established\r\n\r\n")
     :ok = :inet.setopts(socket, packet: :raw)
 
-    {:ok, tls_socket} =
-      :ssl.handshake(socket, opts[:tls_options] ++ [active: false, packet: :line], 3_000)
+    case :ssl.handshake(socket, opts[:tls_options] ++ [active: false, packet: :line], 3_000) do
+      {:ok, tls_socket} ->
+        {line, headers} = read_request(tls_socket, :ssl)
+        send(parent, {:tunnel_request, line, headers})
+        send_response(tls_socket, :ssl, 200)
 
-    {line, headers} = read_request(tls_socket, :ssl)
-    send(parent, {:tunnel_request, line, headers})
-    send_response(tls_socket, :ssl, 200)
+      {:error, reason} ->
+        send(parent, {:tunnel_error, reason})
+        :gen_tcp.close(socket)
+    end
   end
 
   defp reply(socket, _parent, _line, opts, count) do

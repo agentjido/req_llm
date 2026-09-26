@@ -449,6 +449,8 @@ To trust a private certificate authority, add
 Streaming uses Req's connection options to create a separate Finch pool.
 Requests with the same settings reuse the pool. Different proxy settings or
 credentials use separate pools. Retries use the same connection settings.
+If a pool stops before request checkout, the stream returns an error or retries
+with the same proxy settings. It does not fall back to a direct connection.
 These options replace the pool's configured connection options and protocols;
 the default protocol is HTTP/1. Requests without `connect_options` use the
 existing pool configuration. This applies to HTTP streaming, including the
