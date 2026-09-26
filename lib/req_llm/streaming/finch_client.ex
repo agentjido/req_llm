@@ -15,6 +15,7 @@ defmodule ReqLLM.Streaming.FinchClient do
   - Return HTTPContext for fixture capture
 
   Pools with request connection settings are started before each attempt.
+  Concurrent requests wait for pool startup on the current node.
   Automatic pool creation at checkout is disabled for these requests. This
   prevents a stopped pool from being replaced with default connection settings.
 
@@ -287,13 +288,27 @@ defmodule ReqLLM.Streaming.FinchClient do
 
     opts =
       if pool_options do
-        :ok = Finch.start_pool(finch_name, request_pool(request), pool_options)
+        :ok = ensure_connection_pool(finch_name, request_pool(request), pool_options)
         Keyword.put(opts, :start_pool?, false)
       else
         opts
       end
 
     Finch.stream(%{request | private: private}, finch_name, acc, callback, opts)
+  end
+
+  defp ensure_connection_pool(finch_name, pool, pool_options) do
+    case Finch.find_pool(finch_name, pool) do
+      {:ok, _pid} ->
+        :ok
+
+      :error ->
+        :global.trans(
+          {{__MODULE__, finch_name, pool}, self()},
+          fn -> Finch.start_pool(finch_name, pool, pool_options) end,
+          [node()]
+        )
+    end
   end
 
   defp forward_stream_failure(stream_server_pid, reason) do
