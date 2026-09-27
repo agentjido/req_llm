@@ -842,7 +842,10 @@ defmodule ReqLLM.Providers.AmazonBedrock do
 
         reasoning_effort && reasoning_effort != :none ->
           budget = Anthropic.map_reasoning_effort_to_budget(reasoning_effort)
-          PlatformReasoning.add_reasoning_to_additional_fields(opts, budget, model)
+
+          opts
+          |> PlatformReasoning.add_reasoning_to_additional_fields(budget, model)
+          |> PlatformReasoning.maybe_add_effort_to_additional_fields(reasoning_effort, model)
 
         true ->
           opts

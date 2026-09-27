@@ -63,6 +63,41 @@ defmodule ReqLLM.Providers.Anthropic.PlatformReasoning do
   end
 
   @doc """
+  Adds `output_config.effort` to provider_options.additional_model_request_fields
+  for adaptive-thinking-only Claude models, where effort (not a token budget) is
+  what controls thinking depth. A no-op for budget-thinking models.
+  """
+  def maybe_add_effort_to_additional_fields(opts, reasoning_effort, model) do
+    if ReqLLM.ModelHelpers.adaptive_thinking_required?(model) do
+      provider_opts = Keyword.get(opts, :provider_options, [])
+
+      additional_fields =
+        provider_opts
+        |> Keyword.get(:additional_model_request_fields, %{})
+        |> Map.update(:output_config, %{effort: effort_value(reasoning_effort)}, fn
+          config when is_map(config) -> Map.put(config, :effort, effort_value(reasoning_effort))
+          _ -> %{effort: effort_value(reasoning_effort)}
+        end)
+
+      Keyword.put(
+        opts,
+        :provider_options,
+        Keyword.put(provider_opts, :additional_model_request_fields, additional_fields)
+      )
+    else
+      opts
+    end
+  end
+
+  defp effort_value(effort) do
+    case ReqLLM.Provider.Reasoning.normalize_effort(effort) do
+      :minimal -> "low"
+      effort when effort in [:low, :medium, :high, :xhigh, :max] -> Atom.to_string(effort)
+      _ -> "medium"
+    end
+  end
+
+  @doc """
   Removes thinking config when incompatible with other parameters.
 
   Extended thinking is incompatible with:
