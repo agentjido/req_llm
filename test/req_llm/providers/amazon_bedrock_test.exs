@@ -1077,6 +1077,95 @@ defmodule ReqLLM.Providers.AmazonBedrockTest do
       body = ReqLLM.Test.Helpers.json_body(request)
       refute Map.has_key?(body, "thinking")
     end
+
+    test "sends the requested effort as output_config.effort for adaptive-only models" do
+      for {effort, wire} <- [low: "low", medium: "medium", high: "high"] do
+        {:ok, request} =
+          AmazonBedrock.prepare_request(
+            :chat,
+            sparse_adaptive_opus(),
+            Context.new([Context.user("Hello")]),
+            bedrock_opts(reasoning_effort: effort)
+          )
+
+        body = ReqLLM.Test.Helpers.json_body(request)
+        assert body["thinking"] == %{"display" => "summarized", "type" => "adaptive"}
+        assert body["output_config"] == %{"effort" => wire}
+      end
+    end
+
+    test "sends output_config.effort on the bedrock-mantle Messages route too" do
+      {:ok, request} =
+        AmazonBedrock.prepare_request(
+          :chat,
+          sparse_adaptive_opus(),
+          Context.new([Context.user("Hello")]),
+          bedrock_opts(reasoning_effort: :low, provider_options: [endpoint: :mantle])
+        )
+
+      body = ReqLLM.Test.Helpers.json_body(request)
+      assert body["output_config"] == %{"effort" => "low"}
+    end
+
+    test "budget-thinking models get budget_tokens and no output_config" do
+      model = %LLMDB.Model{
+        id: "anthropic.claude-3-7-sonnet-20250219-v1:0",
+        model: "anthropic.claude-3-7-sonnet-20250219-v1:0",
+        provider: :amazon_bedrock,
+        provider_model_id: "us.anthropic.claude-3-7-sonnet-20250219-v1:0",
+        capabilities: %{chat: true, reasoning: %{enabled: true}},
+        extra: %{family: "claude-sonnet"}
+      }
+
+      {:ok, request} =
+        AmazonBedrock.prepare_request(
+          :chat,
+          model,
+          Context.new([Context.user("Hello")]),
+          bedrock_opts(reasoning_effort: :low, max_tokens: 8000)
+        )
+
+      body = ReqLLM.Test.Helpers.json_body(request)
+      assert %{"type" => "enabled", "budget_tokens" => _} = body["thinking"]
+      refute Map.has_key?(body, "output_config")
+    end
+
+    test "reasoning_effort :none leaves thinking and output_config off" do
+      {:ok, request} =
+        AmazonBedrock.prepare_request(
+          :chat,
+          sparse_adaptive_opus(),
+          Context.new([Context.user("Hello")]),
+          bedrock_opts(reasoning_effort: :none)
+        )
+
+      body = ReqLLM.Test.Helpers.json_body(request)
+      refute Map.has_key?(body, "thinking")
+      refute Map.has_key?(body, "output_config")
+    end
+
+    defp sparse_adaptive_opus do
+      %LLMDB.Model{
+        id: "anthropic.claude-opus-4-7-v1:0",
+        model: "anthropic.claude-opus-4-7-v1:0",
+        provider: :amazon_bedrock,
+        provider_model_id: "us.anthropic.claude-opus-4-7-v1:0",
+        capabilities: %{chat: true, reasoning: %{enabled: true}},
+        extra: %{family: "claude-opus"}
+      }
+    end
+
+    defp bedrock_opts(extra) do
+      Keyword.merge(
+        [
+          access_key_id: "AKIATEST",
+          secret_access_key: "secretTEST",
+          region: "us-east-1",
+          max_tokens: 2000
+        ],
+        extra
+      )
+    end
   end
 
   describe "service_tier parameter" do
