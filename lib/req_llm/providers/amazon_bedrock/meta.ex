@@ -33,8 +33,6 @@ defmodule ReqLLM.Providers.AmazonBedrock.Meta do
   Meta Llama models on Bedrock have a bug where they return empty content arrays
   when tool schemas include "additionalProperties": false. This function strips
   that field recursively from the schema.
-
-  See: https://github.com/agentjido/req_llm/issues/XXX
   """
   def normalize_tool_schema(json_schema) when is_map(json_schema) do
     strip_additional_properties(json_schema)
