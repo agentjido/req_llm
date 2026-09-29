@@ -56,9 +56,13 @@ defmodule ReqLLM.Providers.OpenAI.MultiAgent do
     attribution = agent(data) || agent(data["item"] || data[:item] || %{})
 
     if attribution do
-      Enum.map(chunks, fn chunk ->
-        %{chunk | metadata: Map.put(chunk.metadata, :agent, attribution)}
-      end)
+      if chunks == [] do
+        [ReqLLM.StreamChunk.meta(%{agent: attribution, multi_agent_event: data})]
+      else
+        Enum.map(chunks, fn chunk ->
+          %{chunk | metadata: Map.put(chunk.metadata, :agent, attribution)}
+        end)
+      end
     else
       chunks
     end
@@ -96,6 +100,10 @@ defmodule ReqLLM.Providers.OpenAI.MultiAgent do
         do: Astra.invalid!("Multi-agent requires GPT-6.1 Sol or GPT-5.6")
 
       if opts[:operation] == :compact, do: Astra.invalid!("Multi-agent does not support compact")
+
+      if opts[:max_tool_calls] != nil do
+        Astra.invalid!("Multi-agent does not support max_tool_calls")
+      end
 
       if opts[:reasoning_summary] != nil do
         Astra.invalid!("Multi-agent does not support reasoning summaries")

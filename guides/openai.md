@@ -1012,7 +1012,7 @@ ReqLLM.generate_text(model, "Compare these proposals",
 
 ReqLLM adds `OpenAI-Beta: responses_multi_agent=v1` to HTTP, SSE, and WebSocket
 requests. The concurrency limit must be a positive integer. OpenAI uses `3`
-when it is omitted. Reasoning summaries and explicit compact operations are
+when it is omitted. Reasoning summaries, `max_tool_calls`, and explicit compact operations are
 not supported in this mode.
 
 OpenAI executes hosted collaboration calls. The application executes function
@@ -1025,9 +1025,14 @@ They include encrypted agent messages and hosted collaboration items. Use the
 returned response context for the next turn. Token usage comes from the overall
 response. Do not add child-agent usage to that total a second time.
 
-This beta remains under rollout review. Stream completion and compaction checks
-are still required before shipment. See the [rollout checklist](openai-devday-rollout.md)
-and [OpenAI multi-agent guide](https://developers.openai.com/api/docs/guides/responses-multi-agent).
+Hosted agent events that have no portable content appear in meta chunks under
+`multi_agent_event`. Stream completion preserves the full output list, including
+encrypted agent messages and per-agent compaction items. Continue through the
+returned context after the response completes. Live WebSocket tool injection
+uses the native session interface and requires handling acknowledgement events.
+
+See the [rollout checklist](openai-devday-rollout.md) and
+[OpenAI multi-agent guide](https://developers.openai.com/api/docs/guides/responses-multi-agent).
 
 ## Decisions API rollout status
 
@@ -1036,4 +1041,16 @@ OpenAI announced a Luna-based Decisions API in limited preview on September 29,
 predefined answers. This rollout requires its official technical specification
 before implementation. OpenAI Decisions support is not available yet.
 
+The user removed Decisions support as a release requirement.
+[Issue #1062](https://github.com/agentjido/req_llm/issues/1062) tracks it.
 See the [direct announcement](https://openai.com/index/devday-2026-recap/).
+
+## Prompt cache diagnostics
+
+Pass `comparison_response_id` in `provider_options[:prompt_cache_options]` to
+compare a request with an earlier response. This option requests diagnostics;
+it does not restore the earlier conversation. Buffered and streaming Responses
+results retain `prompt_cache_diagnostics` in `response.provider_meta`. Use usage
+fields for billing. Diagnostic estimates are not billable token counts.
+
+See the [official diagnostics guide](https://developers.openai.com/api/docs/guides/prompt-caching/diagnostics).

@@ -136,6 +136,22 @@ defmodule ReqLLM.Providers.OpenAIMultiAgentTest do
       )
 
     assert replay == items
+
+    resumed =
+      OpenAI.ResponsesAPI.encode_input_items(
+        Context.new([response.message, Context.tool_result("lookup_child", "Found")]),
+        model.id,
+        :openai,
+        true
+      )
+
+    assert Enum.take(resumed, length(items)) == items
+
+    assert List.last(resumed) == %{
+             "type" => "function_call_output",
+             "call_id" => "lookup_child",
+             "output" => "Found"
+           }
   end
 
   test "stream deltas preserve agent attribution" do
@@ -171,5 +187,88 @@ defmodule ReqLLM.Providers.OpenAIMultiAgentTest do
              )
 
     assert ReqLLM.Response.text(response) == "Root answer"
+  end
+
+  test "stream completion keeps aggregate usage and encrypted replay items" do
+    model = ReqLLM.model!(%{provider: :openai, id: "gpt-6.1-sol"})
+    attribution = %{"agent_name" => "/root/reviewer"}
+
+    items = [
+      %{
+        "type" => "agent_message",
+        "id" => "msg_child",
+        "author" => "/root/reviewer",
+        "recipient" => "/root",
+        "content" => [%{"type" => "encrypted_content", "encrypted_content" => "opaque"}],
+        "agent" => %{"agent_name" => "/root"}
+      },
+      %{
+        "type" => "compaction",
+        "id" => "comp_child",
+        "encrypted_content" => "compact_opaque",
+        "agent" => attribution
+      }
+    ]
+
+    event = %{
+      data: %{
+        "type" => "response.completed",
+        "response" => %{
+          "id" => "resp_done",
+          "output" => items,
+          "usage" => %{
+            "input_tokens" => 100,
+            "output_tokens" => 40,
+            "input_tokens_details" => %{"cached_tokens" => 20},
+            "output_tokens_details" => %{"reasoning_tokens" => 10}
+          }
+        }
+      }
+    }
+
+    {chunks, _} = OpenAI.ResponsesAPI.decode_stream_event(event, model, nil)
+    assert [%{metadata: %{terminal?: true, responses_replay: %{items: ^items}}}] = chunks
+
+    assert {:ok, response} =
+             OpenAI.ResponsesAPI.ResponseBuilder.build_response(chunks, hd(chunks).metadata,
+               model: model,
+               context: Context.new([])
+             )
+
+    assert response.usage.input_tokens == 100
+    assert response.usage.output_tokens == 40
+    assert response.message.metadata.responses_replay.items == items
+
+    assert OpenAI.ResponsesAPI.encode_input_items(
+             Context.new([response.message]),
+             model.id,
+             :openai,
+             true
+           ) == items
+  end
+
+  test "hosted agent events remain visible without an application tool call" do
+    model = ReqLLM.model!(%{provider: :openai, id: "gpt-6.1-sol"})
+
+    data = %{
+      "type" => "response.output_item.done",
+      "agent" => %{"agent_name" => "/root"},
+      "item" => %{"type" => "multi_agent_call", "id" => "spawn_1", "action" => "spawn_agent"}
+    }
+
+    {chunks, _} = OpenAI.ResponsesAPI.decode_stream_event(%{data: data}, model, nil)
+    assert [%{type: :meta, metadata: %{multi_agent_event: ^data}}] = chunks
+  end
+
+  test "multi-agent rejects compact and max_tool_calls" do
+    opts = [multi_agent: %{enabled: true}]
+
+    assert_raise ReqLLM.Error.Invalid.Parameter, fn ->
+      OpenAI.MultiAgent.configuration(Keyword.put(opts, :max_tool_calls, 3), "gpt-6.1-sol")
+    end
+
+    assert_raise ReqLLM.Error.Invalid.Parameter, fn ->
+      OpenAI.ResponsesAPI.build_compact_body(Context.new([]), "gpt-6.1-sol", opts)
+    end
   end
 end

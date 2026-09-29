@@ -13,3 +13,17 @@ true = request.url.path == "/responses"
 true = body["model"] == "gpt-6.1-sol"
 true = model.cost.cache_read == 0.1
 IO.puts("Updated catalog model routes to Responses with the verified cache rate")
+
+for variant <- ["flare", "sunburst"], quality <- [:xhigh, :max] do
+  image_model = ReqLLM.model!("openai:gpt-image-2.5-#{variant}")
+
+  {:ok, image_request} =
+    ReqLLM.Providers.OpenAI.prepare_request(:image, image_model, "A lighthouse",
+      api_key: "test-key",
+      quality: quality
+    )
+
+  true = image_request.url.path == "/images/generations"
+end
+
+IO.puts("Image 2.5 catalog records prepare Images requests at xhigh and max quality")

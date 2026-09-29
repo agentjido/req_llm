@@ -13,19 +13,21 @@ The full rollout requires user review before shipment. Do not merge or release b
 
 ## Review checklist
 
-- [x] Recognize GPT-6.1 Sol as a reasoning model.
-- [x] Route explicit GPT-6 model specifications to Responses when wire metadata is absent.
-- [x] Validate GPT-6.1 Sol reasoning efforts and unsupported parameters.
-- [x] Document Fast and Ultrafast service-tier values in the option schema.
-- [ ] Complete transport checks. The first provider checks passed: 30 tests.
-- [x] Verify GPT-6.1 Sol routing and cache pricing with the updated llmdb snapshot.
-- [x] Check Sol and Luna sampling behavior at reasoning effort none. Sampling fields are retained at none and removed at higher efforts.
-- [x] Add multi-agent options and beta headers to HTTP, SSE, and WebSocket requests. Focused request tests pass. Output and history support remain incomplete.
-- [ ] Preserve agent identity in output, tool calls, history, and streaming events.
-- [ ] Verify root final-answer assembly and aggregate usage.
-- [x] Defer OpenAI Decisions support to [issue #1062](https://github.com/agentjido/req_llm/issues/1062). The user removed it as a release requirement.
-- [ ] Review September image quality, cache diagnostics, and voice support.
-- [x] Run required quality checks and prepare separate local commits for review. `mix quality` passed after the final code changes.
+- [x] Recognize Sol 6.1, validate its required reasoning efforts, and retain Sol and Luna sampling at effort none.
+- [x] Route explicit model specifications to Responses when wire metadata is absent.
+- [x] Document Fast and Ultrafast tiers.
+- [x] Add multi-agent configuration and beta headers for HTTP, SSE, and WebSocket.
+- [x] Keep agent identity on tool calls, stream chunks, and raw history.
+- [x] Keep root text in the final answer and overall usage totals.
+- [x] Replay encrypted agent messages, hosted calls, and per-agent compaction items.
+- [x] Return child-agent function results with the original call ID.
+- [x] Reject explicit compact, reasoning summaries, and max_tool_calls in multi-agent mode.
+- [x] Verify Image 2.5 quality values and catalog routing.
+- [x] Verify cache diagnostic request options and buffered and streamed results.
+- [x] Review voice changes and define separate session-client work.
+- [x] Defer Decisions to [issue #1062](https://github.com/agentjido/req_llm/issues/1062), as requested by the user.
+- [x] Run tests and quality checks, and prepare separate local commits.
+- [ ] User review and explicit approval to ship. This is the shipment gate.
 
 ## Decisions API: deferred contract
 
@@ -37,20 +39,38 @@ This missing contract does not prevent the independent model and Responses work.
 
 ## Separate proposed integrations
 
-Agents API computer use requires durable session handling, required-action events, browser access approvals, and authentication events. Propose a separate client module and tests after this rollout.
+These proposals are outside the current generation adapter changes.
 
-Bedrock Managed Agents requires an AWS-specific session client and authentication. It is not a model-name change in the existing Bedrock generation adapter.
+### Agents API computer use
 
-## Validation record
+Build a separate session client with create, run, continue, cancel, and close operations. Keep session IDs and required-action events. Expose browser approval and authentication events to the caller. Keep browser access decisions with the caller. Add tests for approval, rejection, authentication, continuation, cancellation, and stream recovery. Keep native event data available for the agent runtime.
 
-The model request checks passed 149 tests, including WebSocket checks. The multi-agent request checks and adjacent model checks passed 12 tests. These checks do not prove complete multi-agent support. Output, history, and usage work remains required.
+Source: [computer use](https://developers.openai.com/api/docs/guides/agents-api/tools/computer-use).
 
-The first multi-agent output checks passed 22 tests. Buffered output selects root text. Function calls retain agent attribution. Raw output items are kept for stateless replay. Stream chunks keep attribution and final response assembly excludes child text. Additional stream completion, compaction, and cross-repository checks remain required.
+### Bedrock Managed Agents
 
-Sampling and adjacent provider checks passed 120 tests. Run the cross-repository check with `MIX_ENV=test mix run scripts/check_devday_catalog.exs /absolute/path/to/llmdb/priv/llm_db/snapshot.json`. It loads the snapshot in a separate process and prepares a request without sending it.
+Build an AWS session adapter after verifying endpoint, signing, region, identity, and event contracts. Reuse AWS authentication code only where the contract matches. Add session continuation and cancellation, event decoding, required-action handling, and tests for signing, region selection, errors, and reconnection. Do not add session behavior to the existing Bedrock model-name mapping.
 
-## September review status
+Source: [Bedrock Managed Agents](https://developers.openai.com/api/docs/guides/agents-api/bedrock-managed-agents).
 
-ReqLLM already accepts Image 2.5 quality values `xhigh` and `max`. The local llmdb image records required correction. Prompt cache options and content breakpoints are already encoded in the request. Responses keeps additional response fields in provider metadata. The exact cache diagnostic response fields still need a direct source and focused checks.
+### GPT Live
 
-GPT Live 1 requires a session protocol and time-based usage accounting. This is separate client work. Do not route it through ordinary text generation based only on its model name. The catalog record needs further review.
+Build a Live session transport with bidirectional audio, interruption handling, and backend-agent delegation. Add per-second session accounting, with backend model and tool usage recorded separately. Test voice events, interruption, duration accounting, and connection loss. The llmdb rollout records the price and blocks incorrect text and Realtime routes. It does not add a Live client to ReqLLM.
+
+Source: [GPT Live 1](https://developers.openai.com/api/docs/models/gpt-live-1).
+
+## Validation
+
+The full ReqLLM suite passed 4,792 tests, with 11 skipped and 213 excluded. After adding hosted event preservation and completion checks, 82 focused image, Astra, multi-agent, and cache tests passed. `mix quality` passed after the code change. The cross-repository script prepared Sol 6.1 Responses and Image 2.5 Images requests without sending them.
+
+Run the integration check with `MIX_ENV=test mix run scripts/check_devday_catalog.exs /absolute/path/to/llmdb/priv/llm_db/snapshot.json`. Sol 6.1 catalog lookup needs the new llmdb data. Explicit model maps are supported before that data ships.
+
+The tests use mock requests and documented response shapes. No live beta API request was sent. Native live WebSocket tool injection requires caller handling through the session interface; the normal continuation path returns tool results after response completion.
+
+## September review
+
+Image 2.5 already accepts xhigh and max quality in ReqLLM. Catalog routing and prices needed correction in llmdb. Cache diagnostics use comparison_response_id in prompt_cache_options and remain in provider_meta for buffered and completed streamed Responses results. Diagnostic token estimates do not alter billable usage.
+
+Source: [cache diagnostics](https://developers.openai.com/api/docs/guides/prompt-caching/diagnostics).
+
+The September 25 image encoding fix is a server change. Re-run application image evaluations after release; no different client encoding is documented in the [API changelog](https://developers.openai.com/api/docs/changelog).
