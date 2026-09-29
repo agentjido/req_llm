@@ -912,6 +912,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
       |> maybe_put_string("stream", opts_map[:stream])
       |> maybe_put_string("max_output_tokens", max_output_tokens)
       |> maybe_put_string("reasoning", reasoning)
+      |> put_nonreasoning_sampling(model_name, opts_map)
       |> maybe_put_string("tools", tools)
       |> maybe_put_string("tool_choice", tool_choice)
       |> maybe_put_string("parallel_tool_calls", opts_map[:parallel_tool_calls])
@@ -940,6 +941,18 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
 
     if store == false do
       Map.put(body, "store", false)
+    else
+      body
+    end
+  end
+
+  defp put_nonreasoning_sampling(body, model_name, opts) do
+    if ReqLLM.Providers.OpenAI.AdapterHelpers.gpt6_model?(model_name) and
+         not ReqLLM.Providers.OpenAI.AdapterHelpers.required_reasoning_model?(model_name) and
+         get_in(body, ["reasoning", "effort"]) == "none" do
+      body
+      |> maybe_put_string("temperature", opts[:temperature])
+      |> maybe_put_string("top_p", opts[:top_p])
     else
       body
     end

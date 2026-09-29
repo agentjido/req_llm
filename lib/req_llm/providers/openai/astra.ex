@@ -13,11 +13,20 @@ defmodule ReqLLM.Providers.OpenAI.Astra do
     if AdapterHelpers.required_reasoning_model?(model.id) do
       effort = options[:reasoning_effort]
       if effort not in [nil, :default, "default"], do: validate_effort!(effort)
+    end
 
-      if options[:openai_logprobs] == true or
-           not is_nil(options[:openai_top_logprobs]) or
-           "message.output_text.logprobs" in (options[:include] || []) do
-        invalid!("GPT-6 Astra and GPT-6.1 Sol do not support logprobs")
+    if AdapterHelpers.gpt6_model?(model.id) do
+      effort = options[:reasoning_effort]
+
+      unless effort in [nil, :default, "default", :none, "none"] do
+        validate_effort!(effort)
+      end
+
+      if effort not in [:none, "none"] and
+           (options[:openai_logprobs] == true or
+              not is_nil(options[:openai_top_logprobs]) or
+              "message.output_text.logprobs" in (options[:include] || [])) do
+        invalid!("GPT-6 models do not support logprobs with reasoning enabled")
       end
     end
 

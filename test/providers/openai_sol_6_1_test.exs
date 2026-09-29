@@ -37,4 +37,28 @@ defmodule ReqLLM.Providers.OpenAISol61Test do
       OpenAI.Astra.require_astra!("gpt-6.1-sol", "Async tools")
     end
   end
+
+  test "Sol and Luna retain sampling only when reasoning is none" do
+    for id <- ["gpt-6-sol", "gpt-6-luna"], effort <- [:none, :low] do
+      model = ReqLLM.model!(%{provider: :openai, id: id})
+
+      assert {:ok, request} =
+               OpenAI.prepare_request(:chat, model, "Hello",
+                 api_key: "test-key",
+                 reasoning_effort: effort,
+                 temperature: 0.4,
+                 top_p: 0.8
+               )
+
+      body = request |> OpenAI.encode_body() |> Map.fetch!(:body) |> Jason.decode!()
+
+      if effort == :none do
+        assert body["temperature"] == 0.4
+        assert body["top_p"] == 0.8
+      else
+        refute Map.has_key?(body, "temperature")
+        refute Map.has_key?(body, "top_p")
+      end
+    end
+  end
 end

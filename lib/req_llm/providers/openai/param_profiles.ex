@@ -53,8 +53,8 @@ defmodule ReqLLM.Providers.OpenAI.ParamProfiles do
       iex> length(steps) > 0
       true
   """
-  def steps_for(operation, %LLMDB.Model{} = model) do
-    profiles = profiles_for(operation, model)
+  def steps_for(operation, %LLMDB.Model{} = model, opts \\ []) do
+    profiles = profiles_for(operation, model, opts)
 
     canonical_steps = [
       {:transform, :reasoning_effort, &translate_reasoning_effort/1, nil},
@@ -74,11 +74,11 @@ defmodule ReqLLM.Providers.OpenAI.ParamProfiles do
   defp translate_reasoning_effort(:default), do: nil
   defp translate_reasoning_effort(other), do: other
 
-  defp profiles_for(:chat, %LLMDB.Model{} = model) do
+  defp profiles_for(:chat, %LLMDB.Model{} = model, opts) do
     []
     |> add_if(reasoning_model?(model), :reasoning)
     |> add_if(max_completion_tokens_required?(model), :max_completion_tokens)
-    |> add_if(no_sampling_params?(model), :no_sampling_params)
+    |> add_if(no_sampling_params?(model, opts), :no_sampling_params)
     |> add_if(temperature_unsupported?(model), :no_temperature)
     |> add_if(temperature_fixed_one?(model), :temperature_fixed_1)
     |> add_if(chat_latest_model?(model), :temperature_fixed_1)
@@ -87,7 +87,7 @@ defmodule ReqLLM.Providers.OpenAI.ParamProfiles do
     |> Enum.uniq()
   end
 
-  defp profiles_for(_op, _model), do: []
+  defp profiles_for(_op, _model, _opts), do: []
 
   defp reasoning_model?(%LLMDB.Model{capabilities: caps, id: model_name}) when is_map(caps) do
     has_reasoning_capability?(caps) || AdapterHelpers.reasoning_model?(model_name)
@@ -112,9 +112,10 @@ defmodule ReqLLM.Providers.OpenAI.ParamProfiles do
     end
   end
 
-  defp no_sampling_params?(%LLMDB.Model{id: model_name}) do
+  defp no_sampling_params?(%LLMDB.Model{id: model_name}, opts) do
     AdapterHelpers.gpt5_model?(model_name) || AdapterHelpers.required_reasoning_model?(model_name) ||
-      AdapterHelpers.o_series_model?(model_name)
+      AdapterHelpers.o_series_model?(model_name) ||
+      (AdapterHelpers.gpt6_model?(model_name) and opts[:reasoning_effort] not in [:none, "none"])
   end
 
   defp gpt5_pro_model?(%LLMDB.Model{id: model_name}) do

@@ -735,7 +735,7 @@ defmodule ReqLLM.Providers.OpenAI do
   end
 
   def translate_options(op, %LLMDB.Model{} = model, opts) do
-    steps = ReqLLM.Providers.OpenAI.ParamProfiles.steps_for(op, model)
+    steps = ReqLLM.Providers.OpenAI.ParamProfiles.steps_for(op, model, opts)
     {opts1, warns} = ReqLLM.ParamTransform.apply(opts, steps)
 
     if responses_api?(model) do

@@ -18,8 +18,8 @@ The full rollout requires user review before shipment. Do not merge or release b
 - [x] Validate GPT-6.1 Sol reasoning efforts and unsupported parameters.
 - [x] Document Fast and Ultrafast service-tier values in the option schema.
 - [ ] Complete transport checks. The first provider checks passed: 30 tests.
-- [ ] Verify behavior with the updated llmdb catalog.
-- [ ] Check Sol and Luna sampling behavior at reasoning effort none.
+- [x] Verify GPT-6.1 Sol routing and cache pricing with the updated llmdb snapshot.
+- [x] Check Sol and Luna sampling behavior at reasoning effort none. Sampling fields are retained at none and removed at higher efforts.
 - [x] Add multi-agent options and beta headers to HTTP, SSE, and WebSocket requests. Focused request tests pass. Output and history support remain incomplete.
 - [ ] Preserve agent identity in output, tool calls, history, and streaming events.
 - [ ] Verify root final-answer assembly and aggregate usage.
@@ -46,3 +46,5 @@ Bedrock Managed Agents requires an AWS-specific session client and authenticatio
 The model request checks passed 149 tests, including WebSocket checks. The multi-agent request checks and adjacent model checks passed 12 tests. These checks do not prove complete multi-agent support. Output, history, and usage work remains required.
 
 The first multi-agent output checks passed 22 tests. Buffered output selects root text. Function calls retain agent attribution. Raw output items are kept for stateless replay. Stream chunks keep attribution and final response assembly excludes child text. Additional stream completion, compaction, and cross-repository checks remain required.
+
+Sampling and adjacent provider checks passed 120 tests. Run the cross-repository check with `MIX_ENV=test mix run scripts/check_devday_catalog.exs /absolute/path/to/llmdb/priv/llm_db/snapshot.json`. It loads the snapshot in a separate process and prepares a request without sending it.
