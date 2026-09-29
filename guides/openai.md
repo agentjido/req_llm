@@ -368,7 +368,7 @@ Streaming emits raw summary deltas as `:thinking` chunks. These fragments have n
 
 ### `service_tier`
 
-- **Type**: `:auto` | `:default` | `:flex` | `:priority` | String
+- **Type**: `:auto` | `:default` | `:flex` | `:fast` | `:priority` | `:ultrafast` | String
 - **Purpose**: Service tier for request prioritization
 - **Example**: `service_tier: :auto`
 
@@ -964,3 +964,76 @@ See the [Image Generation Guide](image-generation.md) for more details.
 
 - [OpenAI API Documentation](https://platform.openai.com/docs/api-reference)
 - [Model Overview](https://platform.openai.com/docs/models)
+
+## GPT-6.1 Sol
+
+Use `openai:gpt-6.1-sol` after installing the updated LLMDB catalog. Before that
+catalog is released, use an explicit model specification:
+
+```elixir
+model = ReqLLM.model!(%{provider: :openai, id: "gpt-6.1-sol"})
+ReqLLM.generate_text(model, "Review this code", reasoning_effort: :low)
+```
+
+ReqLLM selects Responses. Supported efforts are `low`, `medium`, `high`,
+`xhigh`, and `max`. OpenAI uses `medium` by default. `none` and `minimal` are
+invalid. Tool calls require Responses. Sampling controls are removed with a
+translation warning. Log-probability options are invalid when reasoning is
+active. GPT-6 Sol and Luna permit sampling controls at effort `none`.
+
+See the [model reference](https://developers.openai.com/api/docs/models/gpt-6.1-sol)
+and [migration guide](https://developers.openai.com/api/docs/guides/latest-model?model=gpt-6-astra).
+
+## Astra Ultrafast
+
+Set `service_tier: :ultrafast` for GPT-6 Astra. This tier has a separate price
+and rate limit. It supports global processing and US data residency. It does
+not support EU or other non-US regional processing. Check account access and
+pricing before use. GPT-6.1 Sol Ultrafast is not available in this rollout.
+
+```elixir
+ReqLLM.generate_text("openai:gpt-6-astra", "Review this code",
+  service_tier: :ultrafast,
+  reasoning_effort: :low
+)
+```
+
+See the [Ultrafast guide](https://developers.openai.com/api/docs/guides/ultrafast-mode).
+
+## Responses multi-agent beta
+
+The rollout adds request configuration for GPT-6.1 Sol and GPT-5.6 models:
+
+```elixir
+ReqLLM.generate_text(model, "Compare these proposals",
+  provider_options: [multi_agent: %{enabled: true, max_concurrent_subagents: 3}]
+)
+```
+
+ReqLLM adds `OpenAI-Beta: responses_multi_agent=v1` to HTTP, SSE, and WebSocket
+requests. The concurrency limit must be a positive integer. OpenAI uses `3`
+when it is omitted. Reasoning summaries and explicit compact operations are
+not supported in this mode.
+
+OpenAI executes hosted collaboration calls. The application executes function
+calls from any agent and returns outputs with the original call ID. Function
+call metadata keeps the `agent` attribute. Stream chunks also keep this
+attribute. Final response assembly excludes child-agent text.
+
+Raw response items are kept in message metadata for stateless history replay.
+They include encrypted agent messages and hosted collaboration items. Use the
+returned response context for the next turn. Token usage comes from the overall
+response. Do not add child-agent usage to that total a second time.
+
+This beta remains under rollout review. Stream completion and compaction checks
+are still required before shipment. See the [rollout checklist](openai-devday-rollout.md)
+and [OpenAI multi-agent guide](https://developers.openai.com/api/docs/guides/responses-multi-agent).
+
+## Decisions API rollout status
+
+OpenAI announced a Luna-based Decisions API in limited preview on September 29,
+2026. It accepts text or image context and answers questions with finite
+predefined answers. This rollout requires its official technical specification
+before implementation. OpenAI Decisions support is not available yet.
+
+See the [direct announcement](https://openai.com/index/devday-2026-recap/).
