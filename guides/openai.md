@@ -600,7 +600,7 @@ provider_options: [prompt_cache_options: %{ttl: "30m"}]
 The fixtures verify that the API accepts this option. They do not measure cache
 hits or cache cost savings.
 
-This feature requires Astra in standard single-agent mode. It cannot use
+This feature requires a GPT-6 model in standard single-agent mode. It cannot use
 automatic compaction or truncation. After explicit compaction, add a fresh
 update. Raw session requests reject adjacent updates and incompatible context
 settings. See [reasoning updates](https://developers.openai.com/api/docs/guides/reasoning#change-reasoning-mid-conversation).
@@ -1054,3 +1054,15 @@ results retain `prompt_cache_diagnostics` in `response.provider_meta`. Use usage
 fields for billing. Diagnostic estimates are not billable token counts.
 
 See the [official diagnostics guide](https://developers.openai.com/api/docs/guides/prompt-caching/diagnostics).
+
+## GPT-6 feature compatibility
+
+Async function tools, mid-turn steering, and reasoning configuration updates
+support the GPT-6 family, including Sol 6.1, Sol, and Luna. Configuration updates
+require standard single-agent mode. Sol and Luna also accept none effort in
+these updates. Async tools in multi-agent mode require parallel_tool_calls to
+be disabled.
+
+See [async tools](https://developers.openai.com/api/docs/guides/async-tool-calling),
+[steering](https://developers.openai.com/api/docs/guides/steering), and
+[configuration updates](https://developers.openai.com/api/docs/guides/reasoning#change-reasoning-mid-conversation).

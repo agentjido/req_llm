@@ -12,6 +12,25 @@ defmodule ReqLLM.Providers.OpenAI.MultiAgent do
     normalize(value, model_name, Map.merge(provider_opts, opts))
   end
 
+  def validate_body!(body, model_name) do
+    configuration(
+      %{
+        multi_agent: body["multi_agent"],
+        reasoning_summary: get_in(body, ["reasoning", "summary"]),
+        max_tool_calls: body["max_tool_calls"]
+      },
+      model_name
+    )
+
+    if get_in(body, ["multi_agent", "enabled"]) == true and
+         body["parallel_tool_calls"] == true and
+         Enum.any?(body["tools"] || [], &(&1["async"] == true)) do
+      Astra.invalid!("Multi-agent async tools cannot use parallel tool calls")
+    end
+
+    body
+  end
+
   def headers(opts, model_name) do
     case configuration(opts, model_name) do
       %{"enabled" => true} -> [{"OpenAI-Beta", @beta}]

@@ -271,4 +271,28 @@ defmodule ReqLLM.Providers.OpenAIMultiAgentTest do
       OpenAI.ResponsesAPI.build_compact_body(Context.new([]), "gpt-6.1-sol", opts)
     end
   end
+
+  test "native Responses validates multi-agent limits and async compatibility" do
+    for body <- [
+          %{"multi_agent" => %{"enabled" => true}, "max_tool_calls" => 2},
+          %{"multi_agent" => %{"enabled" => true}, "reasoning" => %{"summary" => "auto"}},
+          %{
+            "multi_agent" => %{"enabled" => true},
+            "parallel_tool_calls" => true,
+            "tools" => [%{"type" => "function", "name" => "lookup", "async" => true}]
+          }
+        ] do
+      assert_raise ReqLLM.Error.Invalid.Parameter, fn ->
+        OpenAI.Astra.validate_body!(body, "gpt-6.1-sol")
+      end
+    end
+
+    body = %{
+      "multi_agent" => %{"enabled" => true},
+      "parallel_tool_calls" => false,
+      "tools" => [%{"type" => "function", "name" => "lookup", "async" => true}]
+    }
+
+    assert OpenAI.Astra.validate_body!(body, "gpt-6.1-sol") == body
+  end
 end

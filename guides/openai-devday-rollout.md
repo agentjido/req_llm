@@ -14,6 +14,7 @@ The full rollout requires user review before shipment. Do not merge or release b
 ## Review checklist
 
 - [x] Recognize Sol 6.1, validate its required reasoning efforts, and retain Sol and Luna sampling at effort none.
+- [x] Permit documented async tools, steering, and configuration updates across GPT-6 models.
 - [x] Route explicit model specifications to Responses when wire metadata is absent.
 - [x] Document Fast and Ultrafast tiers.
 - [x] Add multi-agent configuration and beta headers for HTTP, SSE, and WebSocket.
@@ -74,3 +75,11 @@ Image 2.5 already accepts xhigh and max quality in ReqLLM. Catalog routing and p
 Source: [cache diagnostics](https://developers.openai.com/api/docs/guides/prompt-caching/diagnostics).
 
 The September 25 image encoding fix is a server change. Re-run application image evaluations after release; no different client encoding is documented in the [API changelog](https://developers.openai.com/api/docs/changelog).
+
+## GPT-6 feature review
+
+The current official guides apply steering and configuration updates to the GPT-6 family. Async tools support Astra and later models. The old Astra-only checks now permit Sol 6.1, Sol, and Luna. Sol and Luna configuration updates can select none; Astra and Sol 6.1 cannot. Multi-agent mode rejects async tools with parallel_tool_calls enabled. Native request maps receive the same multi-agent validation.
+
+Sources: [async tools](https://developers.openai.com/api/docs/guides/async-tool-calling), [steering](https://developers.openai.com/api/docs/guides/steering), and [reasoning configuration updates](https://developers.openai.com/api/docs/guides/reasoning#change-reasoning-mid-conversation).
+
+The final GPT-6 family, multi-agent, and Responses checks passed 210 tests. The transport checks passed 207 tests.

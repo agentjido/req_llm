@@ -32,9 +32,34 @@ defmodule ReqLLM.Providers.OpenAISol61Test do
     end
   end
 
-  test "Astra-only features remain restricted" do
+  test "GPT-6 models encode async tools and reasoning configuration updates" do
+    for id <- ["gpt-6.1-sol", "gpt-6-sol", "gpt-6-luna"] do
+      model = ReqLLM.model!(%{provider: :openai, id: id})
+      effort = if id == "gpt-6.1-sol", do: :low, else: :none
+
+      context =
+        ReqLLM.Context.new([
+          ReqLLM.Context.user("Review", metadata: %{openai_reasoning_effort: effort})
+        ])
+
+      assert {:ok, request} =
+               OpenAI.prepare_request(:chat, model, context,
+                 api_key: "test-key",
+                 tools: [%{type: "function", name: "lookup", async: true}]
+               )
+
+      body = request |> OpenAI.encode_body() |> Map.fetch!(:body) |> Jason.decode!()
+      assert [%{"async" => true}] = body["tools"]
+
+      assert [%{"type" => "configuration_update", "reasoning" => %{"effort" => encoded}} | _] =
+               body["input"]
+
+      assert encoded == to_string(effort)
+      assert is_nil(OpenAI.Astra.require_gpt6!(id, "Steering"))
+    end
+
     assert_raise ReqLLM.Error.Invalid.Parameter, fn ->
-      OpenAI.Astra.require_astra!("gpt-6.1-sol", "Async tools")
+      OpenAI.Astra.require_gpt6!("gpt-5.6-sol", "Steering")
     end
   end
 
