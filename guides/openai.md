@@ -1066,3 +1066,20 @@ be disabled.
 See [async tools](https://developers.openai.com/api/docs/guides/async-tool-calling),
 [steering](https://developers.openai.com/api/docs/guides/steering), and
 [configuration updates](https://developers.openai.com/api/docs/guides/reasoning#change-reasoning-mid-conversation).
+
+## Image 2.5 token billing
+
+Images results retain input_tokens_details and optional output_tokens_details
+in usage. Billing uses the catalog text and image token rates after checking
+that the split matches the aggregate counts. Image-only models can use the
+aggregate output count when output details are absent. Reported image counts
+are retained, but token-priced models do not receive an extra per-image charge.
+
+Missing or inconsistent counts return unknown cost. Reported cache usage with
+no modality allocation also returns unknown cost. If no cache use is reported,
+input uses the standard uncached rates. The catalog retains the published cache
+rates. ReqLLM does not infer undocumented cache allocations.
+
+Sources: [Images response schema](https://github.com/openai/openai-python/blob/main/src/openai/types/images_response.py),
+[Flare prices](https://developers.openai.com/api/docs/models/gpt-image-2.5-flare), and
+[Sunburst prices](https://developers.openai.com/api/docs/models/gpt-image-2.5-sunburst).

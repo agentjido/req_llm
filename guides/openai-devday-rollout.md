@@ -2,6 +2,8 @@
 
 The full rollout requires user review before shipment. Do not merge or release before approval.
 
+The [source and release review](openai-devday-news.md) lists relevant announcements and September changes.
+
 ## Direct sources
 
 - [DevDay announcement list and Decisions preview](https://openai.com/index/devday-2026-recap/)
@@ -24,7 +26,7 @@ The full rollout requires user review before shipment. Do not merge or release b
 - [x] Return child-agent function results with the original call ID.
 - [x] Reject explicit compact, reasoning summaries, and max_tool_calls in multi-agent mode.
 - [x] Verify Image 2.5 quality values and catalog routing.
-- [ ] Complete Image 2.5 modality token usage and billing. The final audit found that the Images decoder drops the input text/image split, usage normalization drops noncanonical meters, and Billing cannot price these meters.
+- [x] Complete Image 2.5 modality token usage and billing. Buffered and streamed Images retain the split, normalization preserves it, and Billing uses the new catalog rates.
 - [x] Verify cache diagnostic request options and buffered and streamed results.
 - [x] Review voice changes and define separate session-client work.
 - [x] Defer Decisions to [issue #1062](https://github.com/agentjido/req_llm/issues/1062), as requested by the user.
@@ -63,7 +65,7 @@ Source: [GPT Live 1](https://developers.openai.com/api/docs/models/gpt-live-1).
 
 ## Validation
 
-The full ReqLLM suite passed 4,792 tests, with 11 skipped and 213 excluded. After adding hosted event preservation and completion checks, 82 focused image, Astra, multi-agent, and cache tests passed. `mix quality` passed after the code change. The cross-repository script prepared Sol 6.1 Responses and Image 2.5 Images requests without sending them.
+The full ReqLLM suite passed 4,803 tests, with 11 skipped and 213 excluded. Final focused checks passed 82 billing, normalization, image decoder, and stream tests, and 79 image and usage tests. `mix quality` passed after the final code change. The cross-repository script checked Sol 6.1 Responses routing and all four Image 2.5 records, including modality costs, without sending requests.
 
 Run the integration check with `MIX_ENV=test mix run scripts/check_devday_catalog.exs /absolute/path/to/llmdb/priv/llm_db/snapshot.json`. Sol 6.1 catalog lookup needs the new llmdb data. Explicit model maps are supported before that data ships.
 
@@ -85,8 +87,12 @@ Sources: [async tools](https://developers.openai.com/api/docs/guides/async-tool-
 
 The final GPT-6 family, multi-agent, and Responses checks passed 210 tests. The transport checks passed 207 tests.
 
-## Final audit: image billing
+## Image billing validation
 
-The official SDK schema reports input_tokens_details.text_tokens and image_tokens, and optional output_tokens_details. ReqLLM currently retains only aggregate counts. Preserve the documented modality counts through normalization and let billing select the corresponding llmdb rates. Validate totals and cache allocation before calculating cost. If reported usage cannot support an exact calculation, return unknown cost. Do not invent cache counts or use the Image 2 calculator for Image 2.5.
+The official SDK schema reports input_tokens_details.text_tokens and image_tokens, and optional output_tokens_details. ReqLLM now preserves these fields for buffered and streamed Images. Billing checks the split against the aggregate counts, uses separate text and image rates, and avoids a second per-image charge. An image-only model can use aggregate output when optional output details are absent.
+
+Missing or inconsistent counts, partial rate coverage, mixed aggregate and modality rates, and reported cache usage without a modality allocation return unknown cost. When no cache use is reported, input uses the standard uncached rates. Cache prices remain in llmdb; no undocumented cache allocation is inferred.
+
+The 82 focused billing, normalization, image decoder, and stream tests passed. The integration script loaded all four Image 2.5 records from the new llmdb snapshot and checked request routing and modality costs.
 
 Source: [official Images response schema](https://github.com/openai/openai-python/blob/main/src/openai/types/images_response.py).
