@@ -27,6 +27,51 @@ defmodule ReqLLM.Providers.OpenAI.MultiAgent do
     end)
   end
 
+  def agent(item), do: item["agent"] || item[:agent]
+
+  def metadata(item) do
+    case agent(item) do
+      nil -> %{}
+      attribution -> %{agent: attribution}
+    end
+  end
+
+  def root_item?(item) do
+    case agent(item) do
+      %{"agent_name" => name} -> name == "/root"
+      %{agent_name: name} -> name == "/root"
+      _ -> true
+    end
+  end
+
+  def rendered_items(items) do
+    Enum.filter(items, fn item ->
+      item["type"] not in ["message", "reasoning"] or root_item?(item)
+    end)
+  end
+
+  def attributed?(items), do: Enum.any?(items, &(agent(&1) != nil))
+
+  def stamp_chunks(chunks, data) when is_map(data) do
+    attribution = agent(data) || agent(data["item"] || data[:item] || %{})
+
+    if attribution do
+      Enum.map(chunks, fn chunk ->
+        %{chunk | metadata: Map.put(chunk.metadata, :agent, attribution)}
+      end)
+    else
+      chunks
+    end
+  end
+
+  def stamp_chunks(chunks, _data), do: chunks
+
+  def rendered_chunks(chunks) do
+    Enum.filter(chunks, fn chunk ->
+      chunk.type not in [:content, :thinking, :content_part] or root_item?(chunk.metadata)
+    end)
+  end
+
   defp normalize(nil, _model, _opts), do: nil
 
   defp normalize(value, model, opts) when is_map(value) or is_list(value) do

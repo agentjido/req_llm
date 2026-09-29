@@ -177,11 +177,19 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   end
 
   @impl true
-  def decode_stream_event(%{data: "[DONE]"}, _model) do
+  def decode_stream_event(event, model) do
+    event
+    |> decode_single_stream_event(model)
+    |> ReqLLM.Providers.OpenAI.MultiAgent.stamp_chunks(
+      if(is_map(event), do: Map.get(event, :data), else: nil)
+    )
+  end
+
+  defp decode_single_stream_event(%{data: "[DONE]"}, _model) do
     [ReqLLM.StreamChunk.meta(%{terminal?: true})]
   end
 
-  def decode_stream_event(%{data: data} = event, model) when is_map(data) do
+  defp decode_single_stream_event(%{data: data} = event, model) when is_map(data) do
     event_type =
       Map.get(event, :event) || data["event"] || data["type"]
 
@@ -257,7 +265,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     end
   end
 
-  def decode_stream_event(_event, _model), do: []
+  defp decode_single_stream_event(_event, _model), do: []
 
   def decode_stream_event(event, model, state) do
     state = ensure_stream_state(state)
@@ -272,6 +280,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
       event
       |> decode_stream_event_with_state(model, event_type, data, state)
       |> stamp_text_phase(event_type, data, state)
+      |> ReqLLM.Providers.OpenAI.MultiAgent.stamp_chunks(data)
 
     state = track_emitted_tool_call_chunks(state, chunks, event_type, data)
     {updated_chunks, updated_state} = merge_tool_usage_into_chunks(chunks, state)
@@ -1652,7 +1661,8 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   end
 
   defp put_compaction_replay(metadata, segments, provider) do
-    if Enum.any?(segments, &(&1["type"] == "compaction")) do
+    if Enum.any?(segments, &(&1["type"] == "compaction")) or
+         ReqLLM.Providers.OpenAI.MultiAgent.attributed?(segments) do
       Map.put(metadata, :responses_replay, %{provider: provider, items: segments})
     else
       metadata
@@ -2207,7 +2217,12 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     model = response_materialization_model(req, body)
 
     text = aggregate_output_segments(body, output_segments)
-    thinking = aggregate_reasoning_segments(output_segments)
+
+    thinking =
+      aggregate_reasoning_segments(
+        ReqLLM.Providers.OpenAI.MultiAgent.rendered_items(output_segments)
+      )
+
     tool_calls = extract_tool_calls_from_segments(output_segments)
     reasoning_details = extract_reasoning_details_from_segments(output_segments, model.provider)
     code_interpreter_items = extract_code_interpreter_items(output_segments)
@@ -2281,7 +2296,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
 
   defp buffered_compaction_chunks(segments, provider) do
     {content_chunks, _has_summary} =
-      Enum.map_reduce(segments, false, fn
+      Enum.map_reduce(ReqLLM.Providers.OpenAI.MultiAgent.rendered_items(segments), false, fn
         %{"type" => "compaction"} = item, has_summary ->
           {[compaction_part_chunk(item, provider)], has_summary}
 
@@ -2317,6 +2332,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   defp buffered_text_chunks(text, output_segments) do
     message_segments =
       output_segments
+      |> ReqLLM.Providers.OpenAI.MultiAgent.rendered_items()
       |> Enum.filter(&assistant_message_segment?/1)
       |> dedupe_phased_messages()
 
@@ -2487,6 +2503,13 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   defp deep_atomize_keys(value), do: value
 
   defp aggregate_output_segments(body, segments) do
+    body =
+      if ReqLLM.Providers.OpenAI.MultiAgent.attributed?(segments),
+        do: Map.delete(body, "output_text"),
+        else: body
+
+    segments = ReqLLM.Providers.OpenAI.MultiAgent.rendered_items(segments)
+
     texts = [
       body["output_text"],
       extract_from_message_segments(segments),
@@ -2665,6 +2688,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
 
     ReqLLM.ToolCall.new(id, name, args_json)
     |> ReqLLM.ToolCall.put_metadata(ReqLLM.Providers.OpenAI.Astra.async_metadata(seg))
+    |> ReqLLM.ToolCall.put_metadata(ReqLLM.Providers.OpenAI.MultiAgent.metadata(seg))
   end
 
   defp builtin_call_segment_to_tool_call(seg, type) do
@@ -2677,6 +2701,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
 
     ReqLLM.ToolCall.new_builtin(id, type, args_json)
     |> ReqLLM.ToolCall.put_metadata(builtin_status_metadata(seg))
+    |> ReqLLM.ToolCall.put_metadata(ReqLLM.Providers.OpenAI.MultiAgent.metadata(seg))
   end
 
   # The provider's terminal status for a builtin call (`completed`,

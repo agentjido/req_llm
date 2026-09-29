@@ -64,4 +64,112 @@ defmodule ReqLLM.Providers.OpenAIMultiAgentTest do
                provider_options: [multi_agent: %{enabled: true}, reasoning_summary: :auto]
              )
   end
+
+  test "buffered output shows the root answer and replays every agent item" do
+    model = ReqLLM.model!(%{provider: :openai, id: "gpt-6.1-sol"})
+
+    assert {:ok, request} =
+             OpenAI.prepare_request(:chat, model, "Question",
+               api_key: "test-key",
+               provider_options: [store: false]
+             )
+
+    items = [
+      %{
+        "type" => "multi_agent_call",
+        "call_id" => "spawn",
+        "action" => "spawn_agent",
+        "agent" => %{"agent_name" => "/root"}
+      },
+      %{
+        "type" => "message",
+        "phase" => "final_answer",
+        "agent" => %{"agent_name" => "/root/reviewer"},
+        "content" => [%{"type" => "output_text", "text" => "Child answer"}]
+      },
+      %{
+        "type" => "message",
+        "phase" => "final_answer",
+        "agent" => %{"agent_name" => "/root"},
+        "content" => [%{"type" => "output_text", "text" => "Root answer"}]
+      }
+    ]
+
+    items =
+      items ++
+        [
+          %{
+            "type" => "function_call",
+            "call_id" => "lookup_child",
+            "name" => "lookup",
+            "arguments" => "{}",
+            "agent" => %{"agent_name" => "/root/reviewer"}
+          }
+        ]
+
+    body = %{
+      "id" => "resp_agents",
+      "model" => model.id,
+      "status" => "completed",
+      "output" => items,
+      "usage" => %{"input_tokens" => 10, "output_tokens" => 20}
+    }
+
+    {_, decoded} =
+      OpenAI.ResponsesAPI.decode_response({request, Req.Response.new(status: 200, body: body)})
+
+    response = decoded.body
+    assert ReqLLM.Response.text(response) == "Root answer"
+    assert [call] = response.message.tool_calls
+    assert call.id == "lookup_child"
+    assert ReqLLM.ToolCall.metadata(call).agent == %{"agent_name" => "/root/reviewer"}
+    assert response.usage.input_tokens == 10
+    assert response.usage.output_tokens == 20
+    assert response.message.metadata.responses_replay.items == items
+
+    replay =
+      OpenAI.ResponsesAPI.encode_input_items(
+        Context.new([response.message]),
+        model.id,
+        :openai,
+        true
+      )
+
+    assert replay == items
+  end
+
+  test "stream deltas preserve agent attribution" do
+    model = ReqLLM.model!(%{provider: :openai, id: "gpt-6.1-sol"})
+
+    event = %{
+      data: %{
+        "type" => "response.output_text.delta",
+        "delta" => "Child answer",
+        "output_index" => 1,
+        "agent" => %{"agent_name" => "/root/reviewer"}
+      }
+    }
+
+    {chunks, _state} = OpenAI.ResponsesAPI.decode_stream_event(event, model, nil)
+    assert [%{metadata: %{agent: %{"agent_name" => "/root/reviewer"}}}] = chunks
+
+    root_event = %{
+      data: %{
+        "type" => "response.output_text.delta",
+        "delta" => "Root answer",
+        "output_index" => 2,
+        "agent" => %{"agent_name" => "/root"}
+      }
+    }
+
+    {root_chunks, _state} = OpenAI.ResponsesAPI.decode_stream_event(root_event, model, nil)
+
+    assert {:ok, response} =
+             OpenAI.ResponsesAPI.ResponseBuilder.build_response(chunks ++ root_chunks, %{},
+               model: model,
+               context: Context.new([])
+             )
+
+    assert ReqLLM.Response.text(response) == "Root answer"
+  end
 end

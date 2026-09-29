@@ -44,3 +44,5 @@ Bedrock Managed Agents requires an AWS-specific session client and authenticatio
 ## Validation record
 
 The model request checks passed 149 tests, including WebSocket checks. The multi-agent request checks and adjacent model checks passed 12 tests. These checks do not prove complete multi-agent support. Output, history, and usage work remains required.
+
+The first multi-agent output checks passed 22 tests. Buffered output selects root text. Function calls retain agent attribution. Raw output items are kept for stateless replay. Stream chunks keep attribution and final response assembly excludes child text. Additional stream completion, compaction, and cross-repository checks remain required.
