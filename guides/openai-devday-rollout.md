@@ -24,6 +24,7 @@ The full rollout requires user review before shipment. Do not merge or release b
 - [x] Return child-agent function results with the original call ID.
 - [x] Reject explicit compact, reasoning summaries, and max_tool_calls in multi-agent mode.
 - [x] Verify Image 2.5 quality values and catalog routing.
+- [ ] Complete Image 2.5 modality token usage and billing. The final audit found that the Images decoder drops the input text/image split, usage normalization drops noncanonical meters, and Billing cannot price these meters.
 - [x] Verify cache diagnostic request options and buffered and streamed results.
 - [x] Review voice changes and define separate session-client work.
 - [x] Defer Decisions to [issue #1062](https://github.com/agentjido/req_llm/issues/1062), as requested by the user.
@@ -83,3 +84,9 @@ The current official guides apply steering and configuration updates to the GPT-
 Sources: [async tools](https://developers.openai.com/api/docs/guides/async-tool-calling), [steering](https://developers.openai.com/api/docs/guides/steering), and [reasoning configuration updates](https://developers.openai.com/api/docs/guides/reasoning#change-reasoning-mid-conversation).
 
 The final GPT-6 family, multi-agent, and Responses checks passed 210 tests. The transport checks passed 207 tests.
+
+## Final audit: image billing
+
+The official SDK schema reports input_tokens_details.text_tokens and image_tokens, and optional output_tokens_details. ReqLLM currently retains only aggregate counts. Preserve the documented modality counts through normalization and let billing select the corresponding llmdb rates. Validate totals and cache allocation before calculating cost. If reported usage cannot support an exact calculation, return unknown cost. Do not invent cache counts or use the Image 2 calculator for Image 2.5.
+
+Source: [official Images response schema](https://github.com/openai/openai-python/blob/main/src/openai/types/images_response.py).
