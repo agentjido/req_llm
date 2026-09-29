@@ -112,7 +112,10 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   def encode_body(request) do
     body = build_body(request)
     encoded = body |> ReqLLM.Schema.apply_property_ordering() |> Jason.encode!()
-    Map.put(request, :body, encoded)
+
+    request
+    |> ReqLLM.Providers.OpenAI.MultiAgent.put_http_header(body["model"])
+    |> Map.put(:body, encoded)
   end
 
   def build_body(request) do
@@ -139,6 +142,11 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   def build_compact_body(context, model_name, opts, request \\ nil) do
     opts_map = if is_map(opts), do: opts, else: Map.new(opts)
     provider_opts = opts_map[:provider_options] || []
+
+    ReqLLM.Providers.OpenAI.MultiAgent.configuration(
+      Map.put(opts_map, :operation, :compact),
+      model_name
+    )
 
     case provider_opts[:previous_response_id] do
       id when is_binary(id) and id != "" ->
@@ -831,7 +839,8 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     ReqLLM.Providers.OpenAI.auth_header_list(
       ReqLLM.Providers.OpenAI.resolve_request_credential!(model, opts)
     ) ++
-      [{"Content-Type", "application/json"}]
+      [{"Content-Type", "application/json"}] ++
+      ReqLLM.Providers.OpenAI.MultiAgent.headers(opts, model.provider_model_id || model.id)
   end
 
   defp build_request_url(opts) do
@@ -898,6 +907,10 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
       |> maybe_put_string("tool_choice", tool_choice)
       |> maybe_put_string("parallel_tool_calls", opts_map[:parallel_tool_calls])
       |> maybe_put_string("service_tier", service_tier)
+      |> maybe_put_string(
+        "multi_agent",
+        ReqLLM.Providers.OpenAI.MultiAgent.configuration(opts_map, model_name)
+      )
       |> maybe_put_string("prompt_cache_key", provider_opts[:prompt_cache_key])
       |> maybe_put_string("prompt_cache_options", provider_opts[:prompt_cache_options])
       |> maybe_put_string("include", include)

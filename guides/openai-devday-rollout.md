@@ -20,7 +20,7 @@ The full rollout requires user review before shipment. Do not merge or release b
 - [ ] Complete transport checks. The first provider checks passed: 30 tests.
 - [ ] Verify behavior with the updated llmdb catalog.
 - [ ] Check Sol and Luna sampling behavior at reasoning effort none.
-- [ ] Add multi-agent options and beta headers to HTTP, SSE, and WebSocket requests.
+- [x] Add multi-agent options and beta headers to HTTP, SSE, and WebSocket requests. Focused request tests pass. Output and history support remain incomplete.
 - [ ] Preserve agent identity in output, tool calls, history, and streaming events.
 - [ ] Verify root final-answer assembly and aggregate usage.
 - [ ] Add OpenAI Decisions support with a public operation, validated inputs, response types, tests, and documentation.
@@ -40,3 +40,7 @@ This missing contract does not prevent the independent model and Responses work.
 Agents API computer use requires durable session handling, required-action events, browser access approvals, and authentication events. Propose a separate client module and tests after this rollout.
 
 Bedrock Managed Agents requires an AWS-specific session client and authentication. It is not a model-name change in the existing Bedrock generation adapter.
+
+## Validation record
+
+The model request checks passed 149 tests, including WebSocket checks. The multi-agent request checks and adjacent model checks passed 12 tests. These checks do not prove complete multi-agent support. Output, history, and usage work remains required.
