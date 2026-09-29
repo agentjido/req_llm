@@ -60,6 +60,60 @@ defmodule ReqLLM.Provider.ChunkAccumulatorTest do
     end
   end
 
+  describe "finalize_ordered_content/2 - text boundaries" do
+    test "keeps adjacent text with different boundaries as separate parts" do
+      acc =
+        ChunkAccumulator.new()
+        |> ChunkAccumulator.push(StreamChunk.text("Checking ", phase_meta("commentary", 0)))
+        |> ChunkAccumulator.push(StreamChunk.text("logs.", phase_meta("commentary", 0)))
+        |> ChunkAccumulator.push(
+          StreamChunk.text("Checking events.", phase_meta("commentary", 1))
+        )
+        |> ChunkAccumulator.push(StreamChunk.text("Done.", phase_meta("final_answer", 2)))
+
+      assert ChunkAccumulator.ordered_content?(acc)
+      assert ChunkAccumulator.finalize_text(acc) == "Checking logs.Checking events.Done."
+
+      assert ChunkAccumulator.finalize_ordered_content(acc) == [
+               ContentPart.text("Checking logs.", %{phase: "commentary"}),
+               ContentPart.text("Checking events.", %{phase: "commentary"}),
+               ContentPart.text("Done.", %{phase: "final_answer"})
+             ]
+    end
+
+    test "merges adjacent text without a boundary" do
+      acc =
+        ChunkAccumulator.new()
+        |> ChunkAccumulator.push(StreamChunk.text("Hello, "))
+        |> ChunkAccumulator.push(StreamChunk.text("world!", %{token_count: 1}))
+
+      refute ChunkAccumulator.ordered_content?(acc)
+      assert ChunkAccumulator.finalize_ordered_content(acc) == [ContentPart.text("Hello, world!")]
+    end
+
+    test "separates bounded text from unbounded neighbours" do
+      acc =
+        ChunkAccumulator.new()
+        |> ChunkAccumulator.push(StreamChunk.text("Preamble.", phase_meta("commentary", 0)))
+        |> ChunkAccumulator.push(StreamChunk.text("Plain."))
+
+      assert ChunkAccumulator.finalize_ordered_content(acc) == [
+               ContentPart.text("Preamble.", %{phase: "commentary"}),
+               ContentPart.text("Plain.")
+             ]
+    end
+
+    test "ignores a phase without an output index" do
+      acc =
+        ChunkAccumulator.new()
+        |> ChunkAccumulator.push(StreamChunk.text("One ", %{phase: "commentary"}))
+        |> ChunkAccumulator.push(StreamChunk.text("part.", %{phase: "final_answer"}))
+
+      refute ChunkAccumulator.ordered_content?(acc)
+      assert ChunkAccumulator.finalize_ordered_content(acc) == [ContentPart.text("One part.")]
+    end
+  end
+
   describe "push/2 - tool calls" do
     test "captures tool call with provider-supplied id" do
       acc =
@@ -708,4 +762,32 @@ defmodule ReqLLM.Provider.ChunkAccumulatorTest do
 
     on_exit(fn -> :telemetry.detach(handler_id) end)
   end
+
+  describe "push/2 - stream-only content parts" do
+    test "skips content parts flagged stream_only? and keeps the rest" do
+      preview = %ContentPart{
+        type: :image,
+        data: "preview",
+        media_type: "image/png",
+        metadata: %{partial?: true}
+      }
+
+      final = %ContentPart{
+        type: :image,
+        data: "final",
+        media_type: "image/png",
+        metadata: %{partial?: false}
+      }
+
+      acc =
+        ChunkAccumulator.new()
+        |> ChunkAccumulator.push(StreamChunk.content_part(preview, %{stream_only?: true}))
+        |> ChunkAccumulator.push(StreamChunk.content_part(final))
+
+      assert ChunkAccumulator.finalize_content_parts(acc) == [final]
+      assert %Message{content: [^final]} = ChunkAccumulator.finalize_message(acc)
+    end
+  end
+
+  defp phase_meta(phase, output_index), do: %{phase: phase, output_index: output_index}
 end

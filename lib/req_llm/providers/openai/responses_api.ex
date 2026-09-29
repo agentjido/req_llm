@@ -54,7 +54,14 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   ### Streaming Events
 
   - `response.output_text.delta` → text chunks
-  - `response.reasoning.delta` → thinking chunks
+  - `response.reasoning.delta` / `response.reasoning_text.delta` → thinking chunks
+  - `response.reasoning_summary_text.delta` → thinking chunks whose metadata carries
+    `item_id`, `output_index` and `summary_index`
+  - `response.reasoning_summary_part.added` / `.done` → meta chunks with a
+    `reasoning_summary_part` map (`status`, `item_id`, `output_index`,
+    `summary_index`, `text`) marking summary part boundaries
+  - `response.output_item.done` with a `compaction` item → `:content_part` chunk
+    holding a `:provider_block` that later requests replay verbatim
   - `response.usage` → usage metrics with reasoning_tokens
   - `response.completed` → terminal event with finish_reason
   - `response.incomplete` → terminal event for truncated responses
@@ -91,9 +98,15 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   @tool_call_item_reserved_keys ["id", "call_id", "type", "status", :id, :call_id, :type, :status]
   @assistant_phases ["commentary", "final_answer"]
   @reasoning_encrypted_content_include ["reasoning.encrypted_content"]
+  @responses_item_providers [:openai, :azure, :meta]
+  @summary_part_separator "\n\n"
 
   @impl true
   def path, do: "/responses"
+
+  @doc "Path of the Responses API compaction endpoint."
+  @spec compact_path() :: String.t()
+  def compact_path, do: "/responses/compact"
 
   @impl true
   def encode_body(request) do
@@ -107,7 +120,34 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     model_name = request.options[:model] || request.options[:id]
     opts = request.options
 
-    build_request_body(context, model_name, opts, request)
+    if opts[:operation] == :compact do
+      build_compact_body(context, model_name, opts, request)
+    else
+      build_request_body(context, model_name, opts, request)
+    end
+  end
+
+  @doc """
+  Builds the request body for `POST /responses/compact`.
+
+  Uses `previous_response_id` from `provider_options` when present; otherwise
+  encodes the context into an `input` array, replaying reasoning and
+  compaction items so the service can compact the full prior state.
+  """
+  @spec build_compact_body(ReqLLM.Context.t(), String.t(), map() | keyword(), map() | nil) ::
+          map()
+  def build_compact_body(context, model_name, opts, request \\ nil) do
+    opts_map = if is_map(opts), do: opts, else: Map.new(opts)
+    provider_opts = opts_map[:provider_options] || []
+
+    case provider_opts[:previous_response_id] do
+      id when is_binary(id) and id != "" ->
+        %{"model" => model_name, "previous_response_id" => id}
+
+      _ ->
+        input = encode_input_items(context, model_name, request_provider(request), true)
+        %{"model" => model_name, "input" => input}
+    end
   end
 
   @impl true
@@ -156,6 +196,16 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
           do: [],
           else: [ReqLLM.StreamChunk.thinking(text, thinking_metadata(data, model.provider))]
 
+      "response.reasoning_text.delta" ->
+        text = data["delta"] || ""
+
+        if text == "",
+          do: [],
+          else: [ReqLLM.StreamChunk.thinking(text, thinking_metadata(data, model.provider))]
+
+      "response.reasoning_text.done" ->
+        []
+
       "response.reasoning_summary_text.delta" ->
         text = data["delta"] || ""
 
@@ -166,8 +216,11 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
       "response.reasoning_summary_text.done" ->
         []
 
+      "response.reasoning_summary_part.added" ->
+        reasoning_summary_part_chunk(data, :added)
+
       "response.reasoning_summary_part.done" ->
-        []
+        reasoning_summary_part_chunk(data, :done)
 
       "response.usage" ->
         usage_data = data["usage"] || %{}
@@ -201,8 +254,17 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   def decode_stream_event(event, model, state) do
     state = ensure_stream_state(state)
     {event_type, data} = stream_event_type(event)
-    state = track_tool_call(state, event_type, data)
-    chunks = decode_stream_event_with_state(event, model, event_type, data, state)
+
+    state =
+      state
+      |> track_tool_call(event_type, data)
+      |> track_message_phase(event_type, data)
+
+    chunks =
+      event
+      |> decode_stream_event_with_state(model, event_type, data, state)
+      |> stamp_text_phase(event_type, data, state)
+
     state = track_emitted_tool_call_chunks(state, chunks, event_type, data)
     {updated_chunks, updated_state} = merge_tool_usage_into_chunks(chunks, state)
     {updated_chunks, updated_state}
@@ -214,12 +276,13 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
       usage_emitted?: false,
       emitted_tool_call_indexes: MapSet.new(),
       argument_fragment_indexes: MapSet.new(),
-      text_delta_indexes: MapSet.new()
+      text_delta_indexes: MapSet.new(),
+      message_phases: %{}
     }
   end
 
-  defp decode_stream_event_with_state(_event, _model, "response.output_item.done", data, state) do
-    handle_output_item_done(data, state)
+  defp decode_stream_event_with_state(_event, model, "response.output_item.done", data, state) do
+    handle_output_item_done(data, state, model.provider)
   end
 
   defp decode_stream_event_with_state(
@@ -264,8 +327,8 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     handle_output_item_added(data)
   end
 
-  defp decode_output_or_terminal_event("response.output_item.done", data, _model) do
-    handle_output_item_done(data)
+  defp decode_output_or_terminal_event("response.output_item.done", data, model) do
+    handle_output_item_done(data, nil, model.provider)
   end
 
   defp decode_output_or_terminal_event("response.completed", data, model) do
@@ -354,7 +417,10 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
         meta
       end
 
-    meta = Map.merge(meta, extract_assistant_phase_metadata(response_output))
+    meta =
+      meta
+      |> Map.merge(extract_assistant_phase_metadata(response_output))
+      |> put_compaction_replay(response_output, provider)
 
     meta =
       maybe_put_reasoning_details(
@@ -451,6 +517,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     |> Map.put_new(:emitted_tool_call_indexes, MapSet.new())
     |> Map.put_new(:argument_fragment_indexes, MapSet.new())
     |> Map.put_new(:text_delta_indexes, MapSet.new())
+    |> Map.put_new(:message_phases, %{})
   end
 
   defp track_emitted_tool_call_chunks(state, chunks, event_type, data) do
@@ -520,6 +587,37 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   end
 
   defp track_tool_call(state, _event_type, _data), do: state
+
+  defp track_message_phase(state, "response.output_item.added", data) when is_map(data) do
+    item = data["item"] || data[:item]
+
+    with %{} <- item,
+         "message" <- item["type"] || item[:type],
+         phase when phase in @assistant_phases <- item["phase"] || item[:phase] do
+      %{state | message_phases: Map.put(state.message_phases, stream_output_index(data), phase)}
+    else
+      _ -> state
+    end
+  end
+
+  defp track_message_phase(state, _event_type, _data), do: state
+
+  defp stamp_text_phase(chunks, "response.output_text.delta", data, state) when is_map(data) do
+    index = stream_output_index(data)
+
+    case Map.fetch(state.message_phases, index) do
+      {:ok, phase} -> Enum.map(chunks, &put_text_phase(&1, phase, index))
+      :error -> chunks
+    end
+  end
+
+  defp stamp_text_phase(chunks, _event_type, _data, _state), do: chunks
+
+  defp put_text_phase(%ReqLLM.StreamChunk{type: :content} = chunk, phase, index) do
+    %{chunk | metadata: Map.merge(chunk.metadata, %{phase: phase, output_index: index})}
+  end
+
+  defp put_text_phase(chunk, _phase, _index), do: chunk
 
   defp maybe_add_tool_call_from_item(state, item) do
     item_type = item["type"] || item[:type]
@@ -758,53 +856,9 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
           extract_previous_response_id_from_context(context)
       end
 
-    include_reasoning? = previous_response_id == nil
+    replay_output_items? = previous_response_id == nil
 
-    {input, _tool_messages} =
-      Enum.reduce(context.messages, {[], []}, fn msg, {input_acc, tool_acc} ->
-        case msg.role do
-          :tool when is_binary(msg.tool_call_id) ->
-            # Encode tool results inline as function_call_output items so that
-            # every function_call in the input array has a matching output.
-            # Previously, tool messages were collected separately and only the
-            # most recent round's outputs were appended, which caused
-            # "No tool output found for function call" errors on multi-turn
-            # tool calling with the Responses API.
-            encoded = encode_tool_message_inline(msg)
-
-            {input_acc ++ [encoded], tool_acc}
-
-          :tool ->
-            {input_acc, [msg | tool_acc]}
-
-          :assistant ->
-            reasoning =
-              if include_reasoning?,
-                do: encode_reasoning_details_from_message(msg, target_provider),
-                else: []
-
-            assistant_items = encode_assistant_message_items(msg)
-            function_calls = encode_tool_calls_as_function_calls(msg.tool_calls || [])
-
-            {input_acc ++ reasoning ++ assistant_items ++ function_calls, tool_acc}
-
-          _ ->
-            content =
-              Enum.flat_map(msg.content, fn part ->
-                encode_input_content_part(part, "input_text")
-              end)
-
-            if content == [] do
-              {input_acc, tool_acc}
-            else
-              updates = ReqLLM.Providers.OpenAI.Astra.configuration_items(msg, model_name)
-
-              {input_acc ++
-                 updates ++ [%{"role" => Atom.to_string(msg.role), "content" => content}],
-               tool_acc}
-            end
-        end
-      end)
+    input = encode_input_items(context, model_name, target_provider, replay_output_items?)
 
     # Only append explicit provider-supplied tool_outputs (e.g. for manual overrides).
     # Context-based tool outputs are now encoded inline above.
@@ -848,6 +902,10 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
       |> maybe_put_string("prompt_cache_options", provider_opts[:prompt_cache_options])
       |> maybe_put_string("include", include)
       |> maybe_put_string("text", text_format)
+      |> maybe_put_string(
+        "context_management",
+        encode_context_management(provider_opts[:context_management])
+      )
 
     body =
       if previous_response_id do
@@ -863,6 +921,112 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     else
       body
     end
+  end
+
+  @doc false
+  def encode_input_items(context, model_name, target_provider, replay_output_items?) do
+    context.messages
+    |> Enum.reduce([], fn msg, input_acc ->
+      encode_input_message(msg, input_acc, model_name, target_provider, replay_output_items?)
+    end)
+    |> Enum.reverse()
+  end
+
+  defp encode_input_message(
+         %ReqLLM.Message{
+           metadata: %{responses_replay: %{provider: provider, items: items}}
+         },
+         input_acc,
+         _model_name,
+         provider,
+         true
+       )
+       when is_list(items) and provider in @responses_item_providers do
+    push_input_items(input_acc, items)
+  end
+
+  defp encode_input_message(
+         %ReqLLM.Message{role: :tool, tool_call_id: tool_call_id} = msg,
+         input_acc,
+         _model_name,
+         _target_provider,
+         _replay?
+       )
+       when is_binary(tool_call_id) do
+    [encode_tool_message_inline(msg) | input_acc]
+  end
+
+  defp encode_input_message(%ReqLLM.Message{role: :tool}, input_acc, _, _, _), do: input_acc
+
+  defp encode_input_message(
+         %ReqLLM.Message{role: :assistant} = msg,
+         input_acc,
+         _model_name,
+         target_provider,
+         replay_output_items?
+       ) do
+    {content_items, reasoning} =
+      if replay_output_items? do
+        {encode_ordered_assistant_items(msg, target_provider),
+         encode_reasoning_details_from_message(msg, target_provider)}
+      else
+        {encode_assistant_message_items(msg), []}
+      end
+
+    {leading_blocks, remaining_items} =
+      Enum.split_while(content_items, &(&1["type"] == "compaction"))
+
+    input_acc
+    |> push_input_items(leading_blocks)
+    |> push_input_items(reasoning)
+    |> push_input_items(remaining_items)
+    |> push_input_items(encode_tool_calls_as_function_calls(msg.tool_calls || []))
+  end
+
+  defp encode_input_message(%ReqLLM.Message{} = msg, input_acc, model_name, _target, _replay?) do
+    content = Enum.flat_map(msg.content, &encode_input_content_part(&1, "input_text"))
+
+    if content == [] do
+      input_acc
+    else
+      updates = ReqLLM.Providers.OpenAI.Astra.configuration_items(msg, model_name)
+      encoded = %{"role" => Atom.to_string(msg.role), "content" => content}
+      [encoded | push_input_items(input_acc, updates)]
+    end
+  end
+
+  defp encode_ordered_assistant_items(msg, target_provider) do
+    if Enum.any?(msg.content, &ReqLLM.Compaction.compaction_part?/1) do
+      msg.content
+      |> Enum.chunk_by(&ReqLLM.Compaction.compaction_part?/1)
+      |> Enum.flat_map(fn [first | _] = parts ->
+        if ReqLLM.Compaction.compaction_part?(first) do
+          Enum.flat_map(parts, fn part ->
+            if replayable_provider_block?(part.metadata, target_provider),
+              do: [part.data],
+              else: []
+          end)
+        else
+          encode_assistant_message_items(%{
+            msg
+            | content: parts,
+              metadata: Map.delete(msg.metadata, :phase_items)
+          })
+        end
+      end)
+    else
+      encode_assistant_message_items(msg)
+    end
+  end
+
+  defp replayable_provider_block?(metadata, target_provider) do
+    provider = Map.get(metadata, :provider) || Map.get(metadata, "provider")
+    block_type = Map.get(metadata, :block_type) || Map.get(metadata, "block_type")
+    provider == target_provider and block_type == "compaction"
+  end
+
+  defp push_input_items(reversed_input, items) do
+    Enum.reverse(items, reversed_input)
   end
 
   defp include_previous_response_id?(false, %{responses_transport: :websocket}), do: true
@@ -930,23 +1094,52 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   defp encode_assistant_message_items(%ReqLLM.Message{} = msg) do
     phase_items = encode_phase_items_from_metadata(msg.metadata)
 
-    if phase_items == [] do
-      content =
-        Enum.flat_map(msg.content, fn part ->
-          encode_input_content_part(part, "output_text")
-        end)
+    cond do
+      phase_items != [] ->
+        phase_items
 
-      if content == [] do
-        []
-      else
-        [
-          %{"role" => "assistant", "content" => content}
-          |> maybe_put_assistant_phase(msg.metadata)
-        ]
-      end
-    else
-      phase_items
+      Enum.any?(msg.content, &phased_text_part?/1) ->
+        encode_phased_content_parts(msg.content)
+
+      true ->
+        content =
+          Enum.flat_map(msg.content, fn part ->
+            encode_input_content_part(part, "output_text")
+          end)
+
+        if content == [] do
+          []
+        else
+          [
+            %{"role" => "assistant", "content" => content}
+            |> maybe_put_assistant_phase(msg.metadata)
+          ]
+        end
     end
+  end
+
+  defp phased_text_part?(%ReqLLM.Message.ContentPart{type: :text, metadata: %{phase: phase}}),
+    do: valid_assistant_phase?(phase)
+
+  defp phased_text_part?(_part), do: false
+
+  defp encode_phased_content_parts(parts) do
+    parts
+    |> Enum.flat_map(fn part ->
+      case encode_input_content_part(part, "output_text") do
+        [] -> []
+        blocks -> [{content_part_phase(part), blocks}]
+      end
+    end)
+    |> Enum.chunk_by(&elem(&1, 0))
+    |> Enum.map(fn [{phase, _blocks} | _] = group ->
+      %{"role" => "assistant", "content" => Enum.flat_map(group, &elem(&1, 1))}
+      |> maybe_put_string("phase", phase)
+    end)
+  end
+
+  defp content_part_phase(part) do
+    if phased_text_part?(part), do: part.metadata.phase, else: nil
   end
 
   defp encode_phase_items_from_metadata(%{phase_items: items}) when is_list(items) do
@@ -1112,9 +1305,9 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
 
   defp encode_single_reasoning_detail(
          %ReqLLM.Message.ReasoningDetails{provider: provider} = detail,
-         provider
+         target_provider
        )
-       when provider in [:openai, :meta] do
+       when provider == target_provider and provider in @responses_item_providers do
     encode_responses_reasoning_detail(detail)
   end
 
@@ -1148,15 +1341,24 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
         item
       end
 
-    item =
-      if detail.text do
-        Map.put(item, "summary", [%{"type" => "summary_text", "text" => detail.text}])
-      else
-        Map.put(item, "summary", [])
-      end
-
-    [item]
+    [Map.put(item, "summary", reasoning_summary_items(detail))]
   end
+
+  defp reasoning_summary_items(%ReqLLM.Message.ReasoningDetails{
+         provider_data: %{"summary" => parts}
+       })
+       when is_list(parts),
+       do: parts
+
+  defp reasoning_summary_items(%ReqLLM.Message.ReasoningDetails{text: text}) when is_binary(text),
+    do: [%{"type" => "summary_text", "text" => text}]
+
+  defp reasoning_summary_items(_detail), do: []
+
+  defp maybe_put_summary_parts(provider_data, parts) when is_list(parts) and parts != [],
+    do: Map.put(provider_data, "summary", parts)
+
+  defp maybe_put_summary_parts(provider_data, _parts), do: provider_data
 
   # ========================================================================
 
@@ -1396,19 +1598,17 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     end
   end
 
-  defp handle_output_item_done(data, state \\ nil)
-
-  defp handle_output_item_done(%{"item" => item} = data, state) when is_map(item) do
-    handle_output_item_done_item(item, data, state)
+  defp handle_output_item_done(%{"item" => item} = data, state, provider) when is_map(item) do
+    handle_output_item_done_item(item, data, state, provider)
   end
 
-  defp handle_output_item_done(%{item: item} = data, state) when is_map(item) do
-    handle_output_item_done_item(item, data, state)
+  defp handle_output_item_done(%{item: item} = data, state, provider) when is_map(item) do
+    handle_output_item_done_item(item, data, state, provider)
   end
 
-  defp handle_output_item_done(_, _), do: []
+  defp handle_output_item_done(_, _, _), do: []
 
-  defp handle_output_item_done_item(item, data, state) do
+  defp handle_output_item_done_item(item, data, state, provider) do
     type = item["type"] || item[:type]
 
     cond do
@@ -1418,6 +1618,9 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
       type == "message" ->
         handle_message_item_done(item, data, state)
 
+      type == "compaction" ->
+        [compaction_part_chunk(item, provider)]
+
       code_interpreter_item?(item) ->
         [ReqLLM.StreamChunk.meta(%{code_interpreter_item: item})]
 
@@ -1426,6 +1629,20 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
 
       true ->
         []
+    end
+  end
+
+  defp compaction_part_chunk(item, provider) do
+    ReqLLM.StreamChunk.content_part(
+      ReqLLM.Message.ContentPart.provider_block(provider, stringify_keys(item))
+    )
+  end
+
+  defp put_compaction_replay(metadata, segments, provider) do
+    if Enum.any?(segments, &(&1["type"] == "compaction")) do
+      Map.put(metadata, :responses_replay, %{provider: provider, items: segments})
+    else
+      metadata
     end
   end
 
@@ -1526,7 +1743,17 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
       []
     else
       text = message_item_text(item)
-      if text == "", do: [], else: [ReqLLM.StreamChunk.text(text)]
+
+      if text == "",
+        do: [],
+        else: [ReqLLM.StreamChunk.text(text, item_phase_metadata(item, index))]
+    end
+  end
+
+  defp item_phase_metadata(item, index) do
+    case item["phase"] || item[:phase] do
+      phase when phase in @assistant_phases -> %{phase: phase, output_index: index}
+      _ -> %{}
     end
   end
 
@@ -1734,12 +1961,8 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     schema = ReqLLM.Tool.to_schema(tool)
     function_def = schema["function"]
 
-    params =
-      if strict do
-        normalize_parameters_for_strict(function_def["parameters"])
-      else
-        normalize_parameters(function_def["parameters"])
-      end
+    parameters = if tool.parameter_schema == [], do: nil, else: function_def["parameters"]
+    params = normalize_tool_parameters(parameters, strict)
 
     openai_options = ReqLLM.Tool.provider_options(tool, :openai)
 
@@ -1769,28 +1992,30 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
         name = function_def["name"]
         description = function_def["description"]
         raw_params = function_def["parameters"]
-        params = normalize_parameters_for_strict(raw_params)
+        strict = tool_strict_flag(function_def, tool_schema)
+        params = normalize_tool_parameters(raw_params, strict)
 
         %{
           "type" => "function",
           "name" => name,
           "description" => description,
           "parameters" => params,
-          "strict" => true
+          "strict" => strict
         }
         |> ReqLLM.Providers.OpenAI.Astra.put_async(Map.merge(tool_schema, function_def))
       else
         name = tool_schema["name"]
         description = tool_schema["description"]
         raw_params = tool_schema["parameters"]
-        params = normalize_parameters_for_strict(raw_params)
+        strict = tool_strict_flag(tool_schema, tool_schema)
+        params = normalize_tool_parameters(raw_params, strict)
 
         %{
           "type" => "function",
           "name" => name,
           "description" => description,
           "parameters" => params,
-          "strict" => true
+          "strict" => strict
         }
         |> ReqLLM.Providers.OpenAI.Astra.put_async(tool_schema)
       end
@@ -1806,6 +2031,16 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     do: Map.put(function, "defer_loading", true)
 
   defp put_defer_loading(function, _options), do: function
+
+  defp tool_strict_flag(function_def, tool_schema) do
+    case function_def["strict"] do
+      strict when is_boolean(strict) -> strict
+      _ -> tool_schema["strict"] != false
+    end
+  end
+
+  defp normalize_tool_parameters(params, true), do: normalize_parameters_for_strict(params)
+  defp normalize_tool_parameters(params, false), do: normalize_parameters(params)
 
   defp normalize_parameters_for_strict(nil) do
     %{
@@ -1830,17 +2065,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   end
 
   defp normalize_parameters(params) when is_map(params) do
-    params = stringify_keys(params)
-    properties = params["properties"] || %{}
-    ordering = params["propertyOrdering"]
-
-    result = %{
-      "type" => "object",
-      "properties" => stringify_keys(properties),
-      "additionalProperties" => false
-    }
-
-    if ordering, do: Map.put(result, "propertyOrdering", ordering), else: result
+    stringify_keys(params)
   end
 
   defp stringify_keys(map) when is_map(map) do
@@ -1876,11 +2101,12 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   defp reasoning_input(opts_map, provider_opts) do
     effort = opts_map[:reasoning_effort]
     summary = provider_opts[:reasoning_summary]
+    context = provider_opts[:reasoning_context]
 
     cond do
-      is_nil(effort) and is_nil(summary) -> nil
-      is_nil(summary) -> effort
-      true -> %{effort: effort, summary: summary}
+      is_nil(effort) and is_nil(summary) and is_nil(context) -> nil
+      is_nil(summary) and is_nil(context) -> effort
+      true -> %{effort: effort, summary: summary, context: context}
     end
   end
 
@@ -1891,13 +2117,24 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
 
   defp encode_reasoning(effort) when is_binary(effort), do: %{"effort" => effort}
 
-  defp encode_reasoning(%{effort: effort, summary: summary}) do
+  defp encode_reasoning(%{effort: effort, summary: summary} = input) do
     %{}
     |> maybe_put_reasoning_key("effort", encode_reasoning_value(effort))
     |> maybe_put_reasoning_key("summary", encode_reasoning_value(summary))
+    |> maybe_put_reasoning_key("context", encode_reasoning_value(input[:context]))
+    |> case do
+      empty when map_size(empty) == 0 -> nil
+      reasoning -> reasoning
+    end
   end
 
   defp encode_reasoning(_), do: nil
+
+  defp encode_context_management(entries) when is_list(entries) and entries != [] do
+    Enum.map(entries, &stringify_keys(Map.new(&1)))
+  end
+
+  defp encode_context_management(_), do: nil
 
   defp encode_reasoning_value(nil), do: nil
   defp encode_reasoning_value(value) when is_atom(value), do: Atom.to_string(value)
@@ -1975,7 +2212,10 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     finish_reason =
       determine_finish_reason(body, Enum.reject(tool_calls, &ReqLLM.ToolCall.builtin?/1))
 
-    message_metadata = build_message_metadata(body["id"], output_segments)
+    message_metadata =
+      body["id"]
+      |> build_message_metadata(output_segments)
+      |> put_compaction_replay(output_segments, model.provider)
 
     {object, object_meta} = maybe_extract_object(req, text, tool_calls) || {nil, %{}}
 
@@ -1996,7 +2236,14 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
       |> put_annotations_meta(extract_annotations_from_segments(output_segments))
 
     ctx = req.options[:context] || %ReqLLM.Context{messages: []}
-    chunks = buffered_response_chunks(text, thinking, tool_calls, reasoning_details)
+    text_chunks = buffered_text_chunks(text, output_segments)
+
+    chunks =
+      if Map.has_key?(message_metadata, :responses_replay) do
+        buffered_compaction_chunks(output_segments, model.provider)
+      else
+        buffered_response_chunks(text_chunks, thinking, tool_calls, reasoning_details)
+      end
 
     metadata = %{
       response_id: body["id"] || "unknown",
@@ -2019,9 +2266,85 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     end
   end
 
-  defp buffered_response_chunks(text, thinking, tool_calls, reasoning_details) do
+  defp buffered_compaction_chunks(segments, provider) do
+    {content_chunks, _has_summary} =
+      Enum.map_reduce(segments, false, fn
+        %{"type" => "compaction"} = item, has_summary ->
+          {[compaction_part_chunk(item, provider)], has_summary}
+
+        item, has_summary ->
+          summary = extract_reasoning_summary([item])
+          thinking = aggregate_reasoning_segments([item])
+
+          thinking =
+            if has_summary and summary != nil,
+              do: @summary_part_separator <> thinking,
+              else: thinking
+
+          chunks =
+            buffered_response_chunks(
+              buffered_text_chunks(aggregate_output_segments(%{}, [item]), [item]),
+              thinking,
+              [],
+              []
+            )
+
+          {chunks, has_summary or summary != nil}
+      end)
+
+    List.flatten(content_chunks) ++
+      buffered_response_chunks(
+        [],
+        "",
+        extract_tool_calls_from_segments(segments),
+        extract_reasoning_details_from_segments(segments, provider)
+      )
+  end
+
+  defp buffered_text_chunks(text, output_segments) do
+    message_segments =
+      output_segments
+      |> Enum.filter(&assistant_message_segment?/1)
+      |> dedupe_phased_messages()
+
+    cond do
+      Enum.any?(message_segments, &valid_assistant_phase?(&1["phase"])) ->
+        phased_text_chunks(message_segments) ++
+          direct_text_chunks(extract_direct_output_text(output_segments))
+
+      text == "" ->
+        []
+
+      true ->
+        [ReqLLM.StreamChunk.text(text)]
+    end
+  end
+
+  defp phased_text_chunks(message_segments) do
+    Enum.flat_map(message_segments, fn segment ->
+      case message_item_text(segment) do
+        "" ->
+          []
+
+        text ->
+          part = ReqLLM.Message.ContentPart.text(text, segment_phase_metadata(segment))
+          [ReqLLM.StreamChunk.content_part(part)]
+      end
+    end)
+  end
+
+  defp segment_phase_metadata(%{"phase" => phase}) when phase in @assistant_phases,
+    do: %{phase: phase}
+
+  defp segment_phase_metadata(_segment), do: %{}
+
+  defp direct_text_chunks(nil), do: []
+
+  defp direct_text_chunks(text),
+    do: [ReqLLM.StreamChunk.content_part(ReqLLM.Message.ContentPart.text(text))]
+
+  defp buffered_response_chunks(text_chunks, thinking, tool_calls, reasoning_details) do
     thinking_chunks = if thinking == "", do: [], else: [ReqLLM.StreamChunk.thinking(thinking)]
-    text_chunks = if text == "", do: [], else: [ReqLLM.StreamChunk.text(text)]
 
     tool_chunks =
       tool_calls
@@ -2284,8 +2607,8 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     |> Enum.filter(&(&1["type"] == "reasoning"))
     |> Enum.map(& &1["summary"])
     |> Enum.map(&extract_summary_text/1)
-    |> Enum.reject(&is_nil/1)
-    |> Enum.join()
+    |> Enum.reject(&(&1 in [nil, ""]))
+    |> Enum.join(@summary_part_separator)
     |> case do
       "" -> nil
       text -> text
@@ -2368,7 +2691,9 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
         provider: provider,
         format: "openai-responses-v1",
         index: index,
-        provider_data: %{"id" => seg["id"], "type" => "reasoning"}
+        provider_data:
+          %{"id" => seg["id"], "type" => "reasoning"}
+          |> maybe_put_summary_parts(seg["summary"])
       }
     end)
   end
@@ -2380,8 +2705,8 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     summary
     |> Enum.filter(&(&1["type"] == "summary_text"))
     |> Enum.map(& &1["text"])
-    |> Enum.reject(&is_nil/1)
-    |> Enum.join()
+    |> Enum.reject(&(&1 in [nil, ""]))
+    |> Enum.join(@summary_part_separator)
     |> case do
       "" -> nil
       text -> text
@@ -2747,12 +3072,36 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   defp valid_assistant_phase?(_), do: false
 
   defp thinking_metadata(data, provider) do
+    item_id = data["item_id"] || data["id"]
+
     %{
       signature: data["encrypted_content"],
       encrypted?: data["encrypted_content"] != nil,
       provider: provider,
       format: "openai-responses-v1",
-      provider_data: %{"type" => "reasoning", "id" => data["id"]}
+      provider_data: %{"type" => "reasoning", "id" => item_id}
     }
+    |> maybe_put_present(:item_id, item_id)
+    |> maybe_put_present(:output_index, data["output_index"])
+    |> maybe_put_present(:summary_index, data["summary_index"])
+  end
+
+  defp maybe_put_present(map, _key, nil), do: map
+  defp maybe_put_present(map, key, value), do: Map.put(map, key, value)
+
+  defp reasoning_summary_part_chunk(data, status) do
+    part = data["part"] || %{}
+
+    [
+      ReqLLM.StreamChunk.meta(%{
+        reasoning_summary_part: %{
+          status: status,
+          item_id: data["item_id"],
+          output_index: data["output_index"],
+          summary_index: data["summary_index"],
+          text: part["text"]
+        }
+      })
+    ]
   end
 end

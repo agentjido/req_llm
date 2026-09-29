@@ -149,6 +149,84 @@ defmodule ReqLLM.Providers.Azure.ImageTest do
       assert request.options[:json]["quality"] == "high"
     end
 
+    test "passes the gpt-image quality tiers through as strings" do
+      for quality <- [:auto, :low, :medium, :high, :xhigh, :max] do
+        request = prepare!(base_url: @traditional_base_url, quality: quality)
+
+        assert request.options[:json]["quality"] == Atom.to_string(quality)
+      end
+    end
+
+    for base_url <- [@traditional_base_url, @v1_ga_base_url] do
+      test "sends a transparent background with PNG output (#{base_url})" do
+        request =
+          prepare!(base_url: unquote(base_url), background: :transparent, output_format: :png)
+
+        assert request.options[:json]["background"] == "transparent"
+        assert request.options[:json]["output_format"] == "png"
+      end
+
+      test "forwards moderation for Azure to accept or reject (#{base_url})" do
+        request = prepare!(base_url: unquote(base_url), moderation: :low)
+
+        assert request.options[:json]["moderation"] == "low"
+      end
+
+      test "sends output_compression with JPEG output (#{base_url})" do
+        request =
+          prepare!(base_url: unquote(base_url), output_compression: 70, output_format: :jpeg)
+
+        assert request.options[:json]["output_compression"] == 70
+        assert request.options[:json]["output_format"] == "jpeg"
+      end
+    end
+
+    test "drops output_compression for the default PNG output" do
+      request = prepare!(base_url: @traditional_base_url, output_compression: 70)
+
+      refute Map.has_key?(request.options[:json], "output_compression")
+    end
+
+    test "output_compression on PNG with on_unsupported: :error is a hard error" do
+      assert {:error, %ReqLLM.Error.Validation.Error{reason: reason}} =
+               Azure.prepare_request(
+                 :image,
+                 "azure:gpt-image-1",
+                 "A simple red square",
+                 api_key: "test-api-key",
+                 deployment: "my-image-deploy",
+                 base_url: @traditional_base_url,
+                 output_compression: 70,
+                 on_unsupported: :error
+               )
+
+      assert reason =~ ":output_compression"
+    end
+
+    test "rejects a transparent background with JPEG output" do
+      assert {:error, %ReqLLM.Error.Invalid.Parameter{} = error} =
+               Azure.prepare_request(
+                 :image,
+                 "azure:gpt-image-1",
+                 "A simple red square",
+                 api_key: "test-api-key",
+                 deployment: "my-image-deploy",
+                 base_url: @traditional_base_url,
+                 background: :transparent,
+                 output_format: :jpeg
+               )
+
+      assert Exception.message(error) =~ "background"
+    end
+
+    test "validates response_format against the image schema and drops :url for gpt-image" do
+      request = prepare!(base_url: @traditional_base_url, response_format: :url)
+
+      refute Map.has_key?(request.options, :response_format)
+      assert request.options[:provider_options][:response_format] == nil
+      refute Map.has_key?(request.options[:json], "response_format")
+    end
+
     test "drops :style, which gpt-image models do not accept" do
       request = prepare!(base_url: @traditional_base_url, style: "vivid")
 
@@ -306,6 +384,22 @@ defmodule ReqLLM.Providers.Azure.ImageTest do
       assert Keyword.has_key?(parts, :mask)
       assert parts[:prompt] == "Make the square blue"
       refute Keyword.has_key?(parts, :model)
+    end
+
+    test "puts input_fidelity and background into the form and drops moderation" do
+      request =
+        prepare!(
+          base_url: @traditional_base_url,
+          source_image: @png_bytes,
+          input_fidelity: :high,
+          background: :transparent,
+          moderation: :low
+        )
+
+      form_parts = request.options[:form_multipart]
+      assert form_parts[:input_fidelity] == "high"
+      assert form_parts[:background] == "transparent"
+      refute Keyword.has_key?(form_parts, :moderation)
     end
 
     test "multipart requests do not get a JSON content-type header" do
@@ -486,5 +580,139 @@ defmodule ReqLLM.Providers.Azure.ImageTest do
       assert %ReqLLM.Error.API.Response{} = error
       assert error.reason =~ "Bad prompt"
     end
+  end
+
+  describe "streaming image generation" do
+    test "accepts idle timeouts without sending them to the API" do
+      for timeout <- [120_000, :infinity] do
+        assert {:ok, request} =
+                 attach_image_stream(
+                   base_url: @traditional_base_url,
+                   stream_idle_timeout: timeout
+                 )
+
+        body = Jason.decode!(request.body)
+        assert body["stream"] == true
+        refute Map.has_key?(body, "stream_idle_timeout")
+      end
+    end
+
+    test "traditional format builds the deployment URL with api-version and SSE headers" do
+      {:ok, request} = attach_image_stream(base_url: @traditional_base_url)
+
+      assert %Finch.Request{method: "POST", host: "my-resource.openai.azure.com"} = request
+      assert request.path == "/openai/deployments/my-image-deploy/images/generations"
+      assert request.query == "api-version=2025-04-01-preview"
+
+      headers = Map.new(request.headers)
+      assert headers["api-key"] == "test-api-key"
+      assert headers["accept"] == "text/event-stream"
+      assert headers["content-type"] == "application/json"
+
+      body = Jason.decode!(request.body)
+      assert body["stream"] == true
+      assert body["partial_images"] == 2
+      assert body["prompt"] == "A simple red square"
+      assert body["quality"] == "low"
+      refute Map.has_key?(body, "model")
+      refute Map.has_key?(body, "response_format")
+    end
+
+    test "v1 GA format uses the flat generations path with the deployment as model" do
+      {:ok, request} = attach_image_stream(base_url: @v1_ga_base_url)
+
+      assert request.path == "/openai/v1/images/generations"
+      assert request.query in [nil, ""]
+
+      body = Jason.decode!(request.body)
+      assert body["model"] == "my-image-deploy"
+      assert body["stream"] == true
+    end
+
+    test "Foundry endpoints are rejected" do
+      assert {:error, %ReqLLM.Error.Invalid.Parameter{parameter: message}} =
+               attach_image_stream(base_url: @foundry_base_url)
+
+      assert message =~ "Foundry"
+    end
+
+    test "rejects webp output" do
+      assert {:error, %ReqLLM.Error.Invalid.Parameter{parameter: message}} =
+               attach_image_stream(base_url: @traditional_base_url, output_format: :webp)
+
+      assert message =~ "output_format"
+    end
+
+    test "rejects multi-image and edit requests" do
+      assert {:error, %ReqLLM.Error.Invalid.Parameter{parameter: n_message}} =
+               attach_image_stream(base_url: @traditional_base_url, n: 2)
+
+      assert n_message =~ "single image"
+
+      assert {:error, %ReqLLM.Error.Invalid.Parameter{parameter: edit_message}} =
+               attach_image_stream(base_url: @traditional_base_url, source_image: "png-bytes")
+
+      assert edit_message =~ "streaming image edits are not supported"
+    end
+
+    test "rejects chat models" do
+      assert {:error, %ReqLLM.Error.Invalid.Parameter{parameter: message}} =
+               Azure.attach_stream(
+                 ReqLLM.model!("azure:gpt-4o"),
+                 ReqLLM.Context.new([ReqLLM.Context.user("A simple red square")]),
+                 [
+                   api_key: "test-api-key",
+                   deployment: "my-deploy",
+                   base_url: @traditional_base_url,
+                   operation: :image
+                 ],
+                 :req_llm_finch
+               )
+
+      assert message =~ "does not support image generation on Azure"
+    end
+
+    test "decode_stream_event routes gpt-image models to the image decoder" do
+      model = ReqLLM.model!("azure:gpt-image-2")
+
+      event = %{
+        data: %{
+          "type" => "image_generation.partial_image",
+          "b64_json" => Base.encode64(@png_bytes),
+          "partial_image_index" => 0
+        }
+      }
+
+      assert [
+               %ReqLLM.StreamChunk{
+                 type: :content_part,
+                 metadata: %{stream_only?: true},
+                 content_part: %ReqLLM.Message.ContentPart{metadata: %{partial?: true}}
+               }
+             ] = Azure.decode_stream_event(event, model)
+
+      assert {[%ReqLLM.StreamChunk{type: :content_part}], nil} =
+               Azure.decode_stream_event(event, model, nil)
+
+      assert [] = Azure.decode_stream_event(event, ReqLLM.model!("azure:gpt-4o"))
+    end
+  end
+
+  defp attach_image_stream(opts) do
+    Azure.attach_stream(
+      ReqLLM.model!("azure:gpt-image-1"),
+      ReqLLM.Context.new([ReqLLM.Context.user("A simple red square")]),
+      Keyword.merge(
+        [
+          api_key: "test-api-key",
+          deployment: "my-image-deploy",
+          operation: :image,
+          partial_images: 2,
+          quality: :low
+        ],
+        opts
+      ),
+      :req_llm_finch
+    )
   end
 end

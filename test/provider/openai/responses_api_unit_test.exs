@@ -123,13 +123,14 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
       assert encoded_tool["parameters"]["properties"]["location"]["type"] == "string"
     end
 
-    test "encodes non-strict tools without required field" do
+    test "preserves required and optional fields on non-strict tools" do
       tool =
         ReqLLM.Tool.new!(
           name: "get_weather",
           description: "Get weather",
           parameter_schema: [
-            location: [type: :string, required: true]
+            location: [type: :string, required: true],
+            units: [type: :string]
           ],
           callback: fn _ -> {:ok, "result"} end,
           strict: false
@@ -142,7 +143,257 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
 
       assert [encoded_tool] = body["tools"]
       assert encoded_tool["strict"] == false
-      refute Map.has_key?(encoded_tool["parameters"], "required")
+      assert encoded_tool["parameters"]["required"] == ["location"]
+      assert encoded_tool["parameters"]["additionalProperties"] == false
+      assert encoded_tool["parameters"]["properties"]["units"] == %{"type" => "string"}
+    end
+
+    test "preserves non-strict JSON schemas with definitions and root constraints" do
+      parameters = %{
+        "$schema" => "https://json-schema.org/draft/2020-12/schema",
+        "$defs" => %{"location" => %{"type" => "string", "minLength" => 1}},
+        "type" => "object",
+        "properties" => %{
+          "location" => %{"$ref" => "#/$defs/location"},
+          "units" => %{"type" => "string"}
+        },
+        "required" => ["location"],
+        "minProperties" => 1
+      }
+
+      tool =
+        ReqLLM.Tool.new!(
+          name: "get_weather",
+          description: "Get weather",
+          parameter_schema: parameters,
+          callback: fn _ -> {:ok, "result"} end
+        )
+
+      body =
+        build_request(tools: [tool])
+        |> ResponsesAPI.encode_body()
+        |> ReqLLM.Test.Helpers.json_body()
+
+      assert [encoded_tool] = body["tools"]
+      assert encoded_tool["strict"] == false
+      assert encoded_tool["parameters"] == parameters
+    end
+
+    test "preserves explicit additionalProperties values on non-strict tools" do
+      for additional_properties <- [false, true, %{"type" => "string"}] do
+        parameters = %{
+          "type" => "object",
+          "properties" => %{"location" => %{"type" => "string"}},
+          "additionalProperties" => additional_properties
+        }
+
+        tool =
+          ReqLLM.Tool.new!(
+            name: "get_weather",
+            description: "Get weather",
+            parameter_schema: parameters,
+            callback: fn _ -> {:ok, "result"} end
+          )
+
+        body =
+          build_request(tools: [tool])
+          |> ResponsesAPI.encode_body()
+          |> ReqLLM.Test.Helpers.json_body()
+
+        assert [encoded_tool] = body["tools"]
+        assert encoded_tool["parameters"] == parameters
+      end
+    end
+
+    test "preserves atom-keyed non-strict schemas and nested constraints" do
+      parameters = %{
+        type: "object",
+        properties: %{
+          location: %{
+            anyOf: [
+              %{type: "string", minLength: 1},
+              %{
+                type: "object",
+                properties: %{city: %{type: "string"}},
+                required: ["city"],
+                additionalProperties: true
+              }
+            ]
+          }
+        },
+        required: ["location"],
+        additionalProperties: false
+      }
+
+      tool =
+        ReqLLM.Tool.new!(
+          name: "get_weather",
+          description: "Get weather",
+          parameter_schema: parameters,
+          callback: fn _ -> {:ok, "result"} end
+        )
+
+      body =
+        build_request(tools: [tool])
+        |> ResponsesAPI.encode_body()
+        |> ReqLLM.Test.Helpers.json_body()
+
+      assert [encoded_tool] = body["tools"]
+      assert encoded_tool["parameters"] == parameters |> Jason.encode!() |> Jason.decode!()
+    end
+
+    test "does not silently remove malformed non-strict schema fields" do
+      parameters = %{
+        "type" => "object",
+        "properties" => %{"location" => %{"type" => "string"}},
+        "required" => "location"
+      }
+
+      tool =
+        ReqLLM.Tool.new!(
+          name: "get_weather",
+          description: "Get weather",
+          parameter_schema: parameters,
+          callback: fn _ -> {:ok, "result"} end
+        )
+
+      body =
+        build_request(tools: [tool])
+        |> ResponsesAPI.encode_body()
+        |> ReqLLM.Test.Helpers.json_body()
+
+      assert [encoded_tool] = body["tools"]
+      assert encoded_tool["parameters"] == parameters
+    end
+
+    test "keeps the closed empty schema for parameterless tools" do
+      for strict <- [false, true] do
+        tool =
+          ReqLLM.Tool.new!(
+            name: "get_time",
+            description: "Get time",
+            strict: strict,
+            callback: fn _ -> {:ok, "result"} end
+          )
+
+        body =
+          build_request(tools: [tool])
+          |> ResponsesAPI.encode_body()
+          |> ReqLLM.Test.Helpers.json_body()
+
+        assert [encoded_tool] = body["tools"]
+        assert encoded_tool["strict"] == strict
+        assert encoded_tool["parameters"]["type"] == "object"
+        assert encoded_tool["parameters"]["properties"] == %{}
+        assert encoded_tool["parameters"]["additionalProperties"] == false
+        assert Map.has_key?(encoded_tool["parameters"], "required") == strict
+      end
+    end
+
+    test "respects explicit false on flat and nested raw tool maps" do
+      parameters = %{
+        "type" => "object",
+        "properties" => %{
+          "location" => %{"type" => "string"},
+          "units" => %{"type" => "string"}
+        },
+        "required" => ["location"],
+        "additionalProperties" => true
+      }
+
+      function = %{
+        "name" => "get_weather",
+        "description" => "Get weather",
+        "parameters" => parameters
+      }
+
+      for tool <- [
+            Map.merge(function, %{"type" => "function", "strict" => false}),
+            %{"type" => "function", "function" => Map.put(function, "strict", false)},
+            %{"type" => "function", "strict" => false, "function" => function},
+            %{
+              "type" => "function",
+              "strict" => true,
+              "function" => Map.put(function, "strict", false)
+            },
+            %{
+              type: :function,
+              strict: false,
+              function: %{name: "get_weather", parameters: parameters}
+            }
+          ] do
+        body =
+          build_request(tools: [tool])
+          |> ResponsesAPI.encode_body()
+          |> ReqLLM.Test.Helpers.json_body()
+
+        assert [encoded_tool] = body["tools"]
+        assert encoded_tool["strict"] == false
+        assert encoded_tool["parameters"] == parameters
+      end
+    end
+
+    test "keeps raw tool maps strict by default and honors nested explicit true" do
+      function = %{
+        "name" => "get_weather",
+        "parameters" => %{
+          "type" => "object",
+          "properties" => %{
+            "location" => %{"type" => "string"},
+            "units" => %{"type" => "string"}
+          },
+          "required" => ["location"],
+          "additionalProperties" => true
+        }
+      }
+
+      for tool <- [
+            Map.put(function, "type", "function"),
+            Map.merge(function, %{"type" => "function", "strict" => true}),
+            %{"type" => "function", "function" => function},
+            %{
+              "type" => "function",
+              "strict" => false,
+              "function" => Map.put(function, "strict", true)
+            }
+          ] do
+        body =
+          build_request(tools: [tool])
+          |> ResponsesAPI.encode_body()
+          |> ReqLLM.Test.Helpers.json_body()
+
+        assert [encoded_tool] = body["tools"]
+        assert encoded_tool["strict"] == true
+        assert Enum.sort(encoded_tool["parameters"]["required"]) == ["location", "units"]
+        assert encoded_tool["parameters"]["additionalProperties"] == false
+      end
+    end
+
+    test "retains defaults for raw tools without parameters and preserves explicit empty schemas" do
+      for strict <- [false, true] do
+        tool = %{"type" => "function", "name" => "get_time", "strict" => strict}
+
+        body =
+          build_request(tools: [tool])
+          |> ResponsesAPI.encode_body()
+          |> ReqLLM.Test.Helpers.json_body()
+
+        assert [encoded_tool] = body["tools"]
+        assert encoded_tool["parameters"]["type"] == "object"
+        assert encoded_tool["parameters"]["properties"] == %{}
+        assert encoded_tool["parameters"]["additionalProperties"] == false
+        assert Map.has_key?(encoded_tool["parameters"], "required") == strict
+      end
+
+      tool = %{"type" => "function", "name" => "get_time", "strict" => false, "parameters" => %{}}
+
+      body =
+        build_request(tools: [tool])
+        |> ResponsesAPI.encode_body()
+        |> ReqLLM.Test.Helpers.json_body()
+
+      assert [%{"parameters" => %{}}] = body["tools"]
+      assert hd(body["tools"])["parameters"] == %{}
     end
 
     test "encodes strict tools with required field listing all parameters" do
@@ -1043,9 +1294,10 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
       assert [part] = resp.body.message.content
       assert part.type == :text
       assert part.text == text
+      assert part.metadata == %{phase: "final_answer"}
     end
 
-    test "preserves distinct commentary and final_answer message segments" do
+    test "keeps distinct commentary and final_answer message segments as separate parts" do
       response_body = %{
         "id" => "resp_123",
         "model" => "gpt-5.4",
@@ -1066,9 +1318,12 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
 
       {_req, resp} = ResponsesAPI.decode_response(build_response(200, response_body))
 
-      assert [part] = resp.body.message.content
-      assert part.type == :text
-      assert part.text == "Let me check that. Here is the result."
+      assert resp.body.message.content == [
+               ReqLLM.Message.ContentPart.text("Let me check that. ", %{phase: "commentary"}),
+               ReqLLM.Message.ContentPart.text("Here is the result.", %{phase: "final_answer"})
+             ]
+
+      assert ReqLLM.Response.text(resp.body) == "Let me check that. Here is the result."
     end
 
     test "preserves single-message phase metadata" do
@@ -1794,10 +2049,150 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
       assert [] = ResponsesAPI.decode_stream_event(event, model)
     end
 
-    test "ignores reasoning summary part done event", %{model: model} do
-      event = %{data: %{"event" => "response.reasoning_summary_part.done"}}
+    test "reasoning summary deltas carry the item id and part indexes", %{model: model} do
+      event = %{
+        data: %{
+          "event" => "response.reasoning_summary_text.delta",
+          "item_id" => "rs_123",
+          "output_index" => 0,
+          "summary_index" => 1,
+          "delta" => "Checking primality..."
+        }
+      }
 
-      assert [] = ResponsesAPI.decode_stream_event(event, model)
+      assert [chunk] = ResponsesAPI.decode_stream_event(event, model)
+      assert chunk.type == :thinking
+      assert chunk.metadata.item_id == "rs_123"
+      assert chunk.metadata.output_index == 0
+      assert chunk.metadata.summary_index == 1
+      assert chunk.metadata.provider_data == %{"type" => "reasoning", "id" => "rs_123"}
+      assert chunk.metadata.provider == :openai
+      assert chunk.metadata.format == "openai-responses-v1"
+    end
+
+    test "decodes reasoning_text delta as thinking", %{model: model} do
+      event = %{
+        data: %{
+          "event" => "response.reasoning_text.delta",
+          "item_id" => "rs_123",
+          "output_index" => 0,
+          "delta" => "Raw reasoning"
+        }
+      }
+
+      assert [chunk] = ResponsesAPI.decode_stream_event(event, model)
+      assert chunk.type == :thinking
+      assert chunk.text == "Raw reasoning"
+      assert chunk.metadata.item_id == "rs_123"
+      refute Map.has_key?(chunk.metadata, :summary_index)
+
+      assert [] =
+               ResponsesAPI.decode_stream_event(
+                 %{data: %{"event" => "response.reasoning_text.done"}},
+                 model
+               )
+    end
+
+    test "reasoning summary part added marks a part boundary", %{model: model} do
+      event = %{
+        data: %{
+          "event" => "response.reasoning_summary_part.added",
+          "item_id" => "rs_123",
+          "output_index" => 0,
+          "summary_index" => 2,
+          "part" => %{"type" => "summary_text", "text" => ""}
+        }
+      }
+
+      assert [chunk] = ResponsesAPI.decode_stream_event(event, model)
+      assert chunk.type == :meta
+
+      assert chunk.metadata.reasoning_summary_part == %{
+               status: :added,
+               item_id: "rs_123",
+               output_index: 0,
+               summary_index: 2,
+               text: ""
+             }
+    end
+
+    test "reasoning summary part done carries the completed part text", %{model: model} do
+      event = %{
+        data: %{
+          "event" => "response.reasoning_summary_part.done",
+          "item_id" => "rs_123",
+          "output_index" => 0,
+          "summary_index" => 0,
+          "part" => %{"type" => "summary_text", "text" => "Checked the constraints."}
+        }
+      }
+
+      assert [chunk] = ResponsesAPI.decode_stream_event(event, model)
+      assert chunk.type == :meta
+
+      assert chunk.metadata.reasoning_summary_part == %{
+               status: :done,
+               item_id: "rs_123",
+               output_index: 0,
+               summary_index: 0,
+               text: "Checked the constraints."
+             }
+    end
+
+    test "summary part meta chunks do not disturb the assembled response", %{model: model} do
+      chunks =
+        [
+          %{
+            "event" => "response.reasoning_summary_part.added",
+            "item_id" => "rs_1",
+            "summary_index" => 0,
+            "part" => %{"type" => "summary_text", "text" => ""}
+          },
+          %{
+            "event" => "response.reasoning_summary_text.delta",
+            "item_id" => "rs_1",
+            "summary_index" => 0,
+            "delta" => "Plan"
+          },
+          %{
+            "event" => "response.reasoning_summary_part.done",
+            "item_id" => "rs_1",
+            "summary_index" => 0,
+            "part" => %{"type" => "summary_text", "text" => "Plan"}
+          },
+          %{"event" => "response.output_text.delta", "delta" => "Answer"},
+          %{
+            "event" => "response.completed",
+            "response" => %{
+              "id" => "resp_1",
+              "output" => [
+                %{
+                  "id" => "rs_1",
+                  "type" => "reasoning",
+                  "summary" => [%{"type" => "summary_text", "text" => "Plan"}]
+                },
+                %{
+                  "type" => "message",
+                  "content" => [%{"type" => "output_text", "text" => "Answer"}]
+                }
+              ],
+              "usage" => %{"input_tokens" => 1, "output_tokens" => 2}
+            }
+          }
+        ]
+        |> Enum.flat_map(&ResponsesAPI.decode_stream_event(%{data: &1}, model))
+
+      {:ok, response} =
+        ReqLLM.Provider.Defaults.ResponseBuilder.build_response(
+          chunks,
+          %{id: "resp_1", model: "gpt-5"},
+          context: ReqLLM.Context.new([]),
+          model: model
+        )
+
+      assert ReqLLM.Response.text(response) == "Answer"
+      assert ReqLLM.Response.thinking(response) == "Plan"
+      assert [%ReqLLM.Message.ReasoningDetails{text: "Plan"}] = response.message.reasoning_details
     end
 
     test "decodes usage event", %{model: model} do
@@ -2218,7 +2613,12 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
       assert detail.provider == :openai
       assert detail.format == "openai-responses-v1"
       assert detail.index == 0
-      assert detail.provider_data == %{"id" => "rs_123", "type" => "reasoning"}
+
+      assert detail.provider_data == %{
+               "id" => "rs_123",
+               "type" => "reasoning",
+               "summary" => [%{"type" => "summary_text", "text" => "Checked constraints."}]
+             }
     end
 
     test "decodes incomplete event", %{model: model} do
@@ -2508,13 +2908,24 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
       assert %ReqLLM.Response{} = resp.body
       assert [reasoning_detail] = resp.body.message.reasoning_details
       assert %ReqLLM.Message.ReasoningDetails{} = reasoning_detail
-      assert reasoning_detail.text == "Analyzing the problem... Breaking it down..."
+      assert reasoning_detail.text == "Analyzing the problem...\n\n Breaking it down..."
       assert reasoning_detail.signature == "base64_encrypted_content_here"
       assert reasoning_detail.encrypted? == true
       assert reasoning_detail.provider == :openai
       assert reasoning_detail.format == "openai-responses-v1"
       assert reasoning_detail.index == 0
-      assert reasoning_detail.provider_data == %{"id" => "rs_abc123", "type" => "reasoning"}
+
+      assert reasoning_detail.provider_data == %{
+               "id" => "rs_abc123",
+               "type" => "reasoning",
+               "summary" => [
+                 %{"type" => "summary_text", "text" => "Analyzing the problem..."},
+                 %{"type" => "summary_text", "text" => " Breaking it down..."}
+               ]
+             }
+
+      assert ReqLLM.Response.thinking(resp.body) ==
+               "Analyzing the problem...\n\n Breaking it down..."
     end
 
     test "decodes reasoning items with string summary" do
@@ -3102,6 +3513,410 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
     end
   end
 
+  describe "assistant phase on content parts" do
+    alias ReqLLM.Message.ContentPart
+    alias ReqLLM.Providers.OpenAI.ResponsesAPI.ResponseBuilder
+
+    @preamble "Progress 2/5: all checks point to the same issue, so I’m consolidating the diagnosis."
+    @answer "It failed because the image can’t be pulled.\n\nRoot cause: `ImagePullBackOff`"
+
+    setup do
+      {:ok, model} = ReqLLM.model("openai:gpt-5")
+      {:ok, model: model}
+    end
+
+    test "decodes each phased message item into its own text part" do
+      response_body = %{
+        "id" => "resp_phase_1",
+        "model" => "gpt-5.4",
+        "output" => [
+          phased_message_item("msg_1", "commentary", @preamble),
+          phased_message_item("msg_2", "final_answer", @answer)
+        ],
+        "usage" => %{"input_tokens" => 5, "output_tokens" => 10}
+      }
+
+      {_req, resp} = ResponsesAPI.decode_response(build_response(200, response_body))
+
+      assert resp.body.message.content == [
+               ContentPart.text(@preamble, %{phase: "commentary"}),
+               ContentPart.text(@answer, %{phase: "final_answer"})
+             ]
+
+      assert ReqLLM.Response.text(resp.body) == @preamble <> @answer
+
+      assert resp.body.message.metadata[:phase_items] == [
+               %{
+                 "phase" => "commentary",
+                 "content" => [%{"type" => "output_text", "text" => @preamble}]
+               },
+               %{
+                 "phase" => "final_answer",
+                 "content" => [%{"type" => "output_text", "text" => @answer}]
+               }
+             ]
+    end
+
+    test "keeps a single aggregated text part when no item carries a phase" do
+      response_body = %{
+        "id" => "resp_phase_2",
+        "model" => "gpt-5.4",
+        "output" => [
+          %{
+            "type" => "message",
+            "content" => [%{"type" => "output_text", "text" => "First item. "}]
+          },
+          %{
+            "type" => "message",
+            "content" => [%{"type" => "output_text", "text" => "Second item."}]
+          }
+        ],
+        "usage" => %{"input_tokens" => 5, "output_tokens" => 10}
+      }
+
+      {_req, resp} = ResponsesAPI.decode_response(build_response(200, response_body))
+
+      assert resp.body.message.content == [
+               %ContentPart{type: :text, text: "First item. Second item."}
+             ]
+    end
+
+    test "keeps interleaved commentary items separate and in order" do
+      response_body = %{
+        "id" => "resp_phase_3",
+        "model" => "gpt-5.6-terra",
+        "output" => [
+          phased_message_item(
+            "msg_1",
+            "commentary",
+            "I’ll investigate the failed deployment broadly."
+          ),
+          %{"id" => "rs_1", "type" => "reasoning", "summary" => [], "content" => []},
+          phased_message_item(
+            "msg_2",
+            "commentary",
+            "**Progress 1/5 — gathering the deployment evidence in parallel.**"
+          ),
+          %{
+            "id" => "fc_1",
+            "type" => "function_call",
+            "call_id" => "call_1",
+            "name" => "inspect_resource",
+            "arguments" => ~s({"resource":"deployment"}),
+            "status" => "completed"
+          },
+          %{
+            "id" => "fc_2",
+            "type" => "function_call",
+            "call_id" => "call_2",
+            "name" => "inspect_resource",
+            "arguments" => ~s({"resource":"pod_logs"}),
+            "status" => "completed"
+          }
+        ],
+        "usage" => %{"input_tokens" => 5, "output_tokens" => 10}
+      }
+
+      {_req, resp} = ResponsesAPI.decode_response(build_response(200, response_body))
+
+      assert resp.body.message.content == [
+               ContentPart.text(
+                 "I’ll investigate the failed deployment broadly.",
+                 %{phase: "commentary"}
+               ),
+               ContentPart.text(
+                 "**Progress 1/5 — gathering the deployment evidence in parallel.**",
+                 %{phase: "commentary"}
+               )
+             ]
+
+      assert [%{id: "call_1"}, %{id: "call_2"}] = resp.body.message.tool_calls
+    end
+
+    test "labels only the items that carry a phase in a mixed response" do
+      response_body = %{
+        "id" => "resp_phase_4",
+        "model" => "gpt-5.4",
+        "output" => [
+          phased_message_item("msg_1", "commentary", @preamble),
+          %{
+            "type" => "message",
+            "content" => [%{"type" => "output_text", "text" => @answer}]
+          }
+        ],
+        "usage" => %{"input_tokens" => 5, "output_tokens" => 10}
+      }
+
+      {_req, resp} = ResponsesAPI.decode_response(build_response(200, response_body))
+
+      assert resp.body.message.content == [
+               ContentPart.text(@preamble, %{phase: "commentary"}),
+               ContentPart.text(@answer)
+             ]
+
+      refute Map.has_key?(resp.body.message.metadata, :phase)
+      refute Map.has_key?(resp.body.message.metadata, :phase_items)
+    end
+
+    test "stamps streamed text with the phase and output index of its item", %{model: model} do
+      events =
+        phased_stream_events(0, "msg_1", "commentary", ["Progress 2/5: ", "consolidating."]) ++
+          phased_stream_events(1, "msg_2", "final_answer", ["It failed ", "to pull."])
+
+      chunks = decode_stream_events(events, model)
+      content_chunks = Enum.filter(chunks, &(&1.type == :content))
+
+      assert Enum.map(content_chunks, &{&1.text, &1.metadata}) == [
+               {"Progress 2/5: ", %{phase: "commentary", output_index: 0}},
+               {"consolidating.", %{phase: "commentary", output_index: 0}},
+               {"It failed ", %{phase: "final_answer", output_index: 1}},
+               {"to pull.", %{phase: "final_answer", output_index: 1}}
+             ]
+
+      {:ok, response} =
+        ResponseBuilder.build_response(chunks, %{finish_reason: :stop},
+          context: %ReqLLM.Context{messages: []},
+          model: model
+        )
+
+      assert response.message.content == [
+               ContentPart.text("Progress 2/5: consolidating.", %{phase: "commentary"}),
+               ContentPart.text("It failed to pull.", %{phase: "final_answer"})
+             ]
+    end
+
+    test "keeps consecutive streamed commentary items as separate parts", %{model: model} do
+      events =
+        phased_stream_events(0, "msg_1", "commentary", ["Checking logs."]) ++
+          phased_stream_events(1, "msg_2", "commentary", ["Checking events."])
+
+      chunks = decode_stream_events(events, model)
+
+      {:ok, response} =
+        ResponseBuilder.build_response(chunks, %{finish_reason: :stop},
+          context: %ReqLLM.Context{messages: []},
+          model: model
+        )
+
+      assert response.message.content == [
+               ContentPart.text("Checking logs.", %{phase: "commentary"}),
+               ContentPart.text("Checking events.", %{phase: "commentary"})
+             ]
+    end
+
+    test "leaves unphased streamed text unstamped and merged", %{model: model} do
+      events =
+        phased_stream_events(0, "msg_1", nil, ["Hello, "]) ++
+          phased_stream_events(1, "msg_2", nil, ["world."])
+
+      chunks = decode_stream_events(events, model)
+
+      assert chunks
+             |> Enum.filter(&(&1.type == :content))
+             |> Enum.all?(&(&1.metadata == %{}))
+
+      {:ok, response} =
+        ResponseBuilder.build_response(chunks, %{finish_reason: :stop},
+          context: %ReqLLM.Context{messages: []},
+          model: model
+        )
+
+      assert response.message.content == [%ContentPart{type: :text, text: "Hello, world."}]
+    end
+
+    test "stamps a message item that arrives only on output_item.done", %{model: model} do
+      done = %{
+        data: %{
+          "type" => "response.output_item.done",
+          "output_index" => 2,
+          "item" => phased_message_item("msg_1", "final_answer", @answer)
+        }
+      }
+
+      {chunks, _state} = ResponsesAPI.decode_stream_event(done, model, nil)
+
+      assert [%ReqLLM.StreamChunk{type: :content, text: @answer, metadata: metadata}] = chunks
+      assert metadata == %{phase: "final_answer", output_index: 2}
+    end
+
+    test "encodes consecutive text parts with the same phase as one item" do
+      assistant_msg = %ReqLLM.Message{
+        role: :assistant,
+        content: [
+          ContentPart.text("Checking logs. ", %{phase: "commentary"}),
+          ContentPart.thinking("Weighing causes."),
+          ContentPart.text("Checking events.", %{phase: "commentary"}),
+          ContentPart.text(@answer, %{phase: "final_answer"})
+        ]
+      }
+
+      assert encode_input([assistant_msg]) == [
+               %{
+                 "role" => "assistant",
+                 "phase" => "commentary",
+                 "content" => [
+                   %{"type" => "output_text", "text" => "Checking logs. "},
+                   %{"type" => "output_text", "text" => "Checking events."}
+                 ]
+               },
+               %{
+                 "role" => "assistant",
+                 "phase" => "final_answer",
+                 "content" => [%{"type" => "output_text", "text" => @answer}]
+               }
+             ]
+    end
+
+    test "encodes unphased parts beside phased ones as items without a phase" do
+      assistant_msg = %ReqLLM.Message{
+        role: :assistant,
+        content: [
+          ContentPart.text(@preamble, %{phase: "commentary"}),
+          ContentPart.text(@answer)
+        ]
+      }
+
+      assert encode_input([assistant_msg]) == [
+               %{
+                 "role" => "assistant",
+                 "phase" => "commentary",
+                 "content" => [%{"type" => "output_text", "text" => @preamble}]
+               },
+               %{
+                 "role" => "assistant",
+                 "content" => [%{"type" => "output_text", "text" => @answer}]
+               }
+             ]
+    end
+
+    test "encodes a message without phases as a single item" do
+      assistant_msg = %ReqLLM.Message{
+        role: :assistant,
+        content: [ContentPart.text("First item. "), ContentPart.text("Second item.")]
+      }
+
+      assert encode_input([assistant_msg]) == [
+               %{
+                 "role" => "assistant",
+                 "content" => [
+                   %{"type" => "output_text", "text" => "First item. "},
+                   %{"type" => "output_text", "text" => "Second item."}
+                 ]
+               }
+             ]
+    end
+
+    test "round-trips phased items through content parts alone" do
+      output = [
+        phased_message_item("msg_1", "commentary", @preamble),
+        phased_message_item("msg_2", "final_answer", @answer),
+        phased_message_item("msg_3", "commentary", "Progress 3/5: verifying.")
+      ]
+
+      response_body = %{
+        "id" => "resp_phase_5",
+        "model" => "gpt-5.4",
+        "output" => output,
+        "usage" => %{"input_tokens" => 5, "output_tokens" => 10}
+      }
+
+      {_req, resp} = ResponsesAPI.decode_response(build_response(200, response_body))
+      stripped = %{resp.body.message | metadata: %{}}
+
+      assert encode_input([stripped]) ==
+               Enum.map(output, fn item ->
+                 %{
+                   "role" => "assistant",
+                   "phase" => item["phase"],
+                   "content" => [
+                     %{"type" => "output_text", "text" => hd(item["content"])["text"]}
+                   ]
+                 }
+               end)
+    end
+
+    test "does not leak the phase into an Anthropic request" do
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
+
+      context =
+        ReqLLM.Context.new([
+          ReqLLM.Context.user("Why did it fail?"),
+          %ReqLLM.Message{
+            role: :assistant,
+            content: [
+              ContentPart.text(@preamble, %{phase: "commentary"}),
+              ContentPart.text(@answer, %{phase: "final_answer"})
+            ]
+          },
+          ReqLLM.Context.user("Continue")
+        ])
+
+      request = ReqLLM.Providers.Anthropic.Context.encode_request(context, model)
+      assistant = Enum.find(request[:messages], &(&1[:role] == "assistant"))
+
+      assert assistant[:content] == [
+               %{type: "text", text: @preamble},
+               %{type: "text", text: @answer}
+             ]
+    end
+  end
+
+  defp phased_message_item(id, phase, text) do
+    %{
+      "id" => id,
+      "type" => "message",
+      "role" => "assistant",
+      "status" => "completed",
+      "content" => [%{"type" => "output_text", "text" => text, "annotations" => []}]
+    }
+    |> then(fn item -> if phase, do: Map.put(item, "phase", phase), else: item end)
+  end
+
+  defp phased_stream_events(output_index, id, phase, deltas) do
+    item = phased_message_item(id, phase, Enum.join(deltas))
+    added_item = Map.merge(item, %{"status" => "in_progress", "content" => []})
+
+    [
+      %{
+        "type" => "response.output_item.added",
+        "output_index" => output_index,
+        "item" => added_item
+      }
+    ] ++
+      Enum.map(deltas, fn delta ->
+        %{
+          "type" => "response.output_text.delta",
+          "item_id" => id,
+          "output_index" => output_index,
+          "content_index" => 0,
+          "delta" => delta
+        }
+      end) ++
+      [%{"type" => "response.output_item.done", "output_index" => output_index, "item" => item}]
+  end
+
+  defp decode_stream_events(events, model) do
+    {chunks, _state} =
+      Enum.flat_map_reduce(events, nil, fn data, state ->
+        ResponsesAPI.decode_stream_event(%{data: data}, model, state)
+      end)
+
+    chunks
+  end
+
+  defp encode_input(messages) do
+    request =
+      build_request(
+        context: %ReqLLM.Context{messages: messages},
+        provider_options: [store: false]
+      )
+
+    request
+    |> ResponsesAPI.encode_body()
+    |> ReqLLM.Test.Helpers.json_body()
+    |> Map.fetch!("input")
+  end
+
   defp build_request(opts) do
     context = Keyword.get(opts, :context, %ReqLLM.Context{messages: []})
     provider_opts = Keyword.get(opts, :provider_options, [])
@@ -3137,6 +3952,15 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
     }
   end
 
+  defp azure_model(id) do
+    %LLMDB.Model{
+      id: id,
+      provider: :azure,
+      capabilities: %{chat: true},
+      extra: %{wire: %{protocol: "openai_responses"}}
+    }
+  end
+
   defp maybe_put_responses_transport(opts, nil), do: opts
 
   defp maybe_put_responses_transport(opts, transport),
@@ -3160,6 +3984,296 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
     }
 
     {req, resp}
+  end
+
+  describe "reasoning context and context management - encode_body/1" do
+    test "encodes reasoning context alongside effort" do
+      request =
+        build_request(reasoning_effort: :high, provider_options: [reasoning_context: :all_turns])
+
+      body = request |> ResponsesAPI.encode_body() |> ReqLLM.Test.Helpers.json_body()
+
+      assert body["reasoning"] == %{"effort" => "high", "context" => "all_turns"}
+    end
+
+    test "encodes a string reasoning context without effort" do
+      request = build_request(provider_options: [reasoning_context: "current_turn"])
+
+      body = request |> ResponsesAPI.encode_body() |> ReqLLM.Test.Helpers.json_body()
+
+      assert body["reasoning"] == %{"context" => "current_turn"}
+    end
+
+    test "encodes context_management entries from maps and keyword lists" do
+      request =
+        build_request(
+          provider_options: [
+            context_management: [
+              %{type: "compaction", compact_threshold: 1000},
+              [type: "truncation", strategy: "auto"]
+            ]
+          ]
+        )
+
+      body = request |> ResponsesAPI.encode_body() |> ReqLLM.Test.Helpers.json_body()
+
+      assert body["context_management"] == [
+               %{"type" => "compaction", "compact_threshold" => 1000},
+               %{"type" => "truncation", "strategy" => "auto"}
+             ]
+    end
+
+    test "omits context_management when absent or empty" do
+      request = build_request(provider_options: [context_management: []])
+
+      body = request |> ResponsesAPI.encode_body() |> ReqLLM.Test.Helpers.json_body()
+
+      refute Map.has_key?(body, "context_management")
+    end
+  end
+
+  describe "compaction items" do
+    @compaction_item %{
+      "id" => "cmp_123",
+      "type" => "compaction",
+      "encrypted_content" => "opaque-compaction-payload"
+    }
+
+    test "decode_response/1 keeps compaction items as provider blocks on the message" do
+      response_body = %{
+        "id" => "resp_123",
+        "model" => "gpt-5.4",
+        "output" => [
+          @compaction_item,
+          %{"type" => "message", "content" => [%{"type" => "output_text", "text" => "Answer"}]}
+        ],
+        "usage" => %{"input_tokens" => 10, "output_tokens" => 5}
+      }
+
+      {_req, resp} = ResponsesAPI.decode_response(build_response(200, response_body))
+
+      assert %ReqLLM.Response{} = resp.body
+      assert ReqLLM.Response.text(resp.body) == "Answer"
+
+      assert [%ReqLLM.Message.ContentPart{type: :provider_block} = part | _] =
+               resp.body.message.content
+
+      assert part.data == @compaction_item
+      assert part.metadata.provider == :openai
+      assert part.metadata.block_type == "compaction"
+      assert ReqLLM.Compaction.compaction_message?(resp.body.message)
+
+      assert [%ReqLLM.Message.ContentPart{type: :provider_block}] =
+               ReqLLM.Response.provider_items(resp.body)
+    end
+
+    test "decode_stream_event/2 surfaces a completed compaction item once" do
+      {:ok, model} = ReqLLM.model("openai:gpt-5")
+
+      done_event = %{
+        data: %{
+          "event" => "response.output_item.done",
+          "output_index" => 0,
+          "item" => @compaction_item
+        }
+      }
+
+      assert [chunk] = ResponsesAPI.decode_stream_event(done_event, model)
+      assert chunk.type == :content_part
+      assert chunk.content_part.type == :provider_block
+      assert chunk.content_part.data == @compaction_item
+      assert chunk.content_part.metadata.provider == :openai
+
+      completed_event = %{
+        data: %{
+          "event" => "response.completed",
+          "response" => %{
+            "id" => "resp_123",
+            "output" => [@compaction_item],
+            "usage" => %{"input_tokens" => 1, "output_tokens" => 1}
+          }
+        }
+      }
+
+      assert [meta] = ResponsesAPI.decode_stream_event(completed_event, model)
+      assert meta.type == :meta
+
+      {:ok, response} =
+        ReqLLM.Provider.Defaults.ResponseBuilder.build_response(
+          [chunk, meta],
+          %{id: "resp_123", model: "gpt-5"},
+          context: ReqLLM.Context.new([]),
+          model: model
+        )
+
+      assert [%ReqLLM.Message.ContentPart{type: :provider_block}] = response.message.content
+    end
+
+    test "encode_body/1 replays compaction blocks as top-level input items before reasoning" do
+      reasoning_detail = %ReqLLM.Message.ReasoningDetails{
+        text: "Plan",
+        signature: "enc",
+        encrypted?: true,
+        provider: :openai,
+        format: "openai-responses-v1",
+        index: 0,
+        provider_data: %{"id" => "rs_1", "type" => "reasoning"}
+      }
+
+      assistant_msg = %ReqLLM.Message{
+        role: :assistant,
+        content: [
+          ReqLLM.Message.ContentPart.provider_block(:openai, @compaction_item),
+          %ReqLLM.Message.ContentPart{type: :text, text: "Answer"}
+        ],
+        reasoning_details: [reasoning_detail]
+      }
+
+      context =
+        ReqLLM.Context.new([
+          assistant_msg,
+          ReqLLM.Context.user("Add a booking form.")
+        ])
+
+      body =
+        build_request(context: context, provider_options: [store: false])
+        |> ResponsesAPI.encode_body()
+        |> ReqLLM.Test.Helpers.json_body()
+
+      assert [compaction, reasoning, assistant, user] = body["input"]
+      assert compaction == @compaction_item
+      assert reasoning["type"] == "reasoning"
+      assert assistant["role"] == "assistant"
+      assert assistant["content"] == [%{"type" => "output_text", "text" => "Answer"}]
+      assert user["role"] == "user"
+    end
+
+    test "encode_body/1 drops compaction blocks owned by another provider" do
+      assistant_msg = %ReqLLM.Message{
+        role: :assistant,
+        content: [
+          ReqLLM.Message.ContentPart.provider_block(:anthropic, @compaction_item),
+          %ReqLLM.Message.ContentPart{type: :text, text: "Answer"}
+        ]
+      }
+
+      body =
+        build_request(context: ReqLLM.Context.new([assistant_msg]))
+        |> ResponsesAPI.encode_body()
+        |> ReqLLM.Test.Helpers.json_body()
+
+      refute Enum.any?(body["input"], &(&1["type"] == "compaction"))
+    end
+
+    test "encode_body/1 skips compaction replay when chaining via previous_response_id" do
+      assistant_msg = %ReqLLM.Message{
+        role: :assistant,
+        content: [
+          ReqLLM.Message.ContentPart.provider_block(:openai, @compaction_item),
+          %ReqLLM.Message.ContentPart{type: :text, text: "Answer"}
+        ],
+        metadata: %{response_id: "resp_prev"}
+      }
+
+      body =
+        build_request(context: ReqLLM.Context.new([assistant_msg, ReqLLM.Context.user("Next")]))
+        |> ResponsesAPI.encode_body()
+        |> ReqLLM.Test.Helpers.json_body()
+
+      assert body["previous_response_id"] == "resp_prev"
+      refute Enum.any?(body["input"], &(&1["type"] == "compaction"))
+    end
+
+    test "encode_body/1 replays Azure-owned items into Azure requests" do
+      reasoning_detail = %ReqLLM.Message.ReasoningDetails{
+        text: "Plan",
+        signature: "enc",
+        encrypted?: true,
+        provider: :azure,
+        format: "openai-responses-v1",
+        index: 0,
+        provider_data: %{"id" => "rs_1", "type" => "reasoning"}
+      }
+
+      assistant_msg = %ReqLLM.Message{
+        role: :assistant,
+        content: [
+          ReqLLM.Message.ContentPart.provider_block(:azure, @compaction_item),
+          %ReqLLM.Message.ContentPart{type: :text, text: "Answer"}
+        ],
+        reasoning_details: [reasoning_detail]
+      }
+
+      request = build_request(context: ReqLLM.Context.new([assistant_msg]))
+
+      azure_request =
+        %{request | options: Map.put(request.options, :req_llm_model, azure_model("gpt-5"))}
+
+      azure_body = azure_request |> ResponsesAPI.encode_body() |> ReqLLM.Test.Helpers.json_body()
+      openai_body = request |> ResponsesAPI.encode_body() |> ReqLLM.Test.Helpers.json_body()
+
+      assert Enum.map(azure_body["input"], & &1["type"]) == ["compaction", "reasoning", nil]
+      refute Enum.any?(openai_body["input"], &(&1["type"] in ["compaction", "reasoning"]))
+    end
+  end
+
+  describe "build_compact_body/4" do
+    test "encodes the context as input with replayed output items" do
+      reasoning_detail = %ReqLLM.Message.ReasoningDetails{
+        text: "Plan",
+        signature: "enc",
+        encrypted?: true,
+        provider: :openai,
+        format: "openai-responses-v1",
+        index: 0,
+        provider_data: %{"id" => "rs_1", "type" => "reasoning"}
+      }
+
+      context =
+        ReqLLM.Context.new([
+          ReqLLM.Context.user("Create a landing page."),
+          %ReqLLM.Message{
+            role: :assistant,
+            content: [%ReqLLM.Message.ContentPart{type: :text, text: "Here it is."}],
+            reasoning_details: [reasoning_detail],
+            metadata: %{response_id: "resp_1"}
+          }
+        ])
+
+      body = ResponsesAPI.build_compact_body(context, "gpt-5.4", provider_options: [])
+
+      assert body["model"] == "gpt-5.4"
+
+      assert Enum.map(body["input"], &(&1["type"] || &1["role"])) == [
+               "user",
+               "reasoning",
+               "assistant"
+             ]
+
+      refute Map.has_key?(body, "previous_response_id")
+      refute Map.has_key?(body, "stream")
+      refute Map.has_key?(body, "store")
+    end
+
+    test "prefers previous_response_id over the context" do
+      context = ReqLLM.Context.new([ReqLLM.Context.user("Ignored")])
+
+      body =
+        ResponsesAPI.build_compact_body(context, "gpt-5.4",
+          provider_options: [previous_response_id: "resp_1"]
+        )
+
+      assert body == %{"model" => "gpt-5.4", "previous_response_id" => "resp_1"}
+    end
+
+    test "build_body/1 routes the compact operation" do
+      request = build_request(context: ReqLLM.Context.new([ReqLLM.Context.user("Hi")]))
+      request = %{request | options: Map.put(request.options, :operation, :compact)}
+
+      body = request |> ResponsesAPI.encode_body() |> ReqLLM.Test.Helpers.json_body()
+
+      assert Map.keys(body) == ["input", "model"]
+    end
   end
 
   describe "ResponseBuilder - streaming reasoning_details extraction" do

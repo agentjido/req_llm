@@ -70,12 +70,38 @@ defmodule ReqLLM.Providers.DeepseekTest do
       assert request.method == :post
     end
 
-    test "prepare_request accepts reasoning_effort: :xhigh and encodes it as max" do
+    test "prepare_request maps reasoning_effort: :xhigh to high" do
       model = deepseek_model("deepseek-reasoner")
       prompt = "Hello world"
       opts = [reasoning_effort: :xhigh]
 
       {:ok, request} = Deepseek.prepare_request(:chat, model, prompt, opts)
+      assert request.options[:reasoning_effort] == "high"
+
+      encoded = Deepseek.encode_body(request)
+      body = ReqLLM.Test.Helpers.json_body(encoded)
+      assert body["reasoning_effort"] == "high"
+    end
+
+    test "prepare_request preserves reasoning_effort: :low in the encoded body" do
+      model = deepseek_model("deepseek-flash")
+      prompt = "Hello world"
+      opts = [reasoning_effort: :low]
+
+      {:ok, request} = Deepseek.prepare_request(:chat, model, prompt, opts)
+      assert request.options[:reasoning_effort] == "low"
+
+      encoded = Deepseek.encode_body(request)
+      body = ReqLLM.Test.Helpers.json_body(encoded)
+      assert body["reasoning_effort"] == "low"
+    end
+
+    test "prepare_request accepts :ultra and encodes max effort" do
+      model = deepseek_model("deepseek-flash")
+
+      {:ok, request} =
+        Deepseek.prepare_request(:chat, model, "Hello world", reasoning_effort: :ultra)
+
       assert request.options[:reasoning_effort] == "max"
 
       encoded = Deepseek.encode_body(request)
@@ -250,17 +276,28 @@ defmodule ReqLLM.Providers.DeepseekTest do
     test "maps reasoning_effort atoms to correct string values" do
       model = deepseek_model()
 
-      assert {opts, []} = Deepseek.translate_options(:chat, model, reasoning_effort: :low)
-      assert opts[:reasoning_effort] == "high"
+      for {effort, expected} <- [
+            {:none, "none"},
+            {:minimal, "low"},
+            {:low, "low"},
+            {:medium, "high"},
+            {:high, "high"},
+            {:xhigh, "high"},
+            {:max, "max"},
+            {:ultra, "max"}
+          ] do
+        assert {opts, []} =
+                 Deepseek.translate_options(:chat, model, reasoning_effort: effort)
 
-      assert {opts, []} = Deepseek.translate_options(:chat, model, reasoning_effort: :medium)
-      assert opts[:reasoning_effort] == "high"
+        assert opts[:reasoning_effort] == expected
+      end
+    end
 
-      assert {opts, []} = Deepseek.translate_options(:chat, model, reasoning_effort: :high)
-      assert opts[:reasoning_effort] == "high"
+    test "omits the API effort when the canonical default is requested" do
+      model = deepseek_model()
 
-      assert {opts, []} = Deepseek.translate_options(:chat, model, reasoning_effort: :xhigh)
-      assert opts[:reasoning_effort] == "max"
+      assert {opts, []} = Deepseek.translate_options(:chat, model, reasoning_effort: :default)
+      refute Keyword.has_key?(opts, :reasoning_effort)
     end
 
     test "passes through string reasoning_effort values unchanged" do

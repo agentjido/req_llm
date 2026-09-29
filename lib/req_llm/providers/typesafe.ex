@@ -7,7 +7,7 @@ defmodule ReqLLM.Providers.TypeSafe do
 
   import ReqLLM.Provider.Utils, only: [ensure_parsed_body: 1]
 
-  alias ReqLLM.Response
+  alias ReqLLM.Evaluation.Codec
 
   use ReqLLM.Provider,
     id: :typesafe,
@@ -84,7 +84,7 @@ defmodule ReqLLM.Providers.TypeSafe do
     %{
       model: request.options[:model],
       state: request.options[:state],
-      questions: normalize_questions(request.options[:questions])
+      questions: Codec.normalize_questions(request.options[:questions])
     }
   end
 
@@ -98,18 +98,8 @@ defmodule ReqLLM.Providers.TypeSafe do
       when status in 200..299 do
     body = ensure_parsed_body(response.body)
 
-    case body do
-      %{"model" => model, "answers" => answers, "usage" => usage}
-      when is_binary(model) and is_map(answers) and is_map(usage) ->
-        result = %Response{
-          id: "eval-#{System.unique_integer([:positive])}",
-          model: model,
-          context: ReqLLM.Context.new(),
-          object: normalize_answers(answers),
-          usage: ReqLLM.Usage.normalize(usage),
-          provider_meta: %{operation: :evaluate, raw_response: body}
-        }
-
+    case Codec.decode_response(body, :typesafe) do
+      {:ok, result} ->
         {request, %{response | body: result}}
 
       _ ->
@@ -134,38 +124,4 @@ defmodule ReqLLM.Providers.TypeSafe do
   @impl ReqLLM.Provider
   def extract_usage(%{"usage" => usage}, _model) when is_map(usage), do: {:ok, usage}
   def extract_usage(_, _), do: {:error, :no_usage_found}
-
-  defp normalize_questions(questions) do
-    Map.new(questions, fn {id, question} ->
-      {to_string(id), normalize_question(question)}
-    end)
-  end
-
-  defp normalize_question(question) do
-    case question[:type] || question["type"] do
-      type when type in [:boolean, "boolean"] ->
-        question
-        |> Map.drop([:type, "type"])
-        |> Map.put("type", "noul")
-
-      _ ->
-        question
-    end
-  end
-
-  defp normalize_answers(answers) do
-    Map.new(answers, fn {id, answer} ->
-      case answer do
-        %{"type" => "noul", "noul" => probability} ->
-          {id,
-           answer
-           |> Map.drop(["noul"])
-           |> Map.put("type", "boolean")
-           |> Map.put("probability", probability)}
-
-        _ ->
-          {id, answer}
-      end
-    end)
-  end
 end

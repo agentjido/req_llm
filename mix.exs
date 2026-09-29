@@ -1,7 +1,7 @@
 defmodule ReqLLM.MixProject do
   use Mix.Project
 
-  @version "1.24.0"
+  @version "1.25.0"
   @source_url "https://github.com/agentjido/req_llm"
 
   def project do
@@ -228,7 +228,8 @@ defmodule ReqLLM.MixProject do
       {:jason, "~> 1.4"},
       {:dotenvy, "~> 1.1"},
       {:nimble_options, "~> 1.1"},
-      {:req, "~> 0.5"},
+      {:req, "~> 0.6"},
+      {:finch, "~> 0.22"},
       {:goth, "~> 1.4", optional: true},
       {:ex_aws_auth, "~> 1.4", optional: true},
       {:server_sent_events, "~> 1.1.0"},
@@ -236,7 +237,7 @@ defmodule ReqLLM.MixProject do
       {:websockex, "~> 0.5.1"},
       {:zoi, "~> 0.14"},
       {:jsv, "~> 0.11"},
-      {:llm_db, ">= 2026.9.3 and < 2027.0.0"},
+      {:llm_db, "~> 2026.9.6"},
 
       # Dev/test dependencies
       {:bandit, "~> 1.8", only: [:dev, :test], runtime: false},

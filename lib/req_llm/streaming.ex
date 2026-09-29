@@ -2,7 +2,7 @@ defmodule ReqLLM.Streaming do
   @moduledoc """
   Main orchestration for ReqLLM streaming operations.
 
-  This module coordinates StreamServer, FinchClient, and StreamResponse to provide
+  This module coordinates StreamServer, transport clients, and StreamResponse to provide
   a cohesive streaming system. It serves as the entry point for all streaming
   operations and handles the complex coordination between components.
 
@@ -12,6 +12,7 @@ defmodule ReqLLM.Streaming do
 
   - `StreamServer` - GenServer managing stream state and event processing
   - `FinchClient` - HTTP transport layer using Finch for streaming requests
+  - `InProcessClient` - Provider-owned transport for canonical StreamChunk values
   - `StreamResponse` - User-facing API providing streams and metadata tasks
 
   ## Flow
@@ -124,7 +125,14 @@ defmodule ReqLLM.Streaming do
              stream_idle_timeout
            ),
          {:ok, _http_task_pid, http_context, canonical_json} <-
-           start_transport_streaming(transport, provider_mod, model, context, opts, server_pid),
+           start_transport_streaming(
+             transport,
+             provider_mod,
+             model,
+             context,
+             Keyword.delete(opts, :pricing_context),
+             server_pid
+           ),
          :ok <- set_fixture_context_if_needed(server_pid, http_context, canonical_json) do
       stream_context =
         model
@@ -157,7 +165,7 @@ defmodule ReqLLM.Streaming do
       next_timeout = stream_next_timeout(stream_idle_timeout, receive_timeout)
       metadata_handle = start_metadata_handle(server_pid, opts)
       cancel_fn = fn -> cancel_stream(server_pid, metadata_handle) end
-      stream = create_lazy_stream(server_pid, next_timeout, cancel_fn)
+      stream = create_lazy_stream(server_pid, next_timeout, cancel_fn, transport == :in_process)
 
       # Build StreamResponse
       stream_response = %StreamResponse{
@@ -189,6 +197,7 @@ defmodule ReqLLM.Streaming do
     server_opts = [
       provider_mod: provider_mod,
       model: model,
+      pricing_context: Keyword.get(opts, :pricing_context),
       protocol_parser:
         protocol_parser_for_transport(transport) ||
           provider_protocol_parser(provider_mod, model, opts),
@@ -196,6 +205,7 @@ defmodule ReqLLM.Streaming do
       total_timeout: total_timeout,
       total_timeout_deadline: total_timeout_deadline,
       stream_idle_timeout: configured_stream_idle_timeout(stream_idle_timeout),
+      canonical_stream?: transport == :in_process,
       completion_cleanup_after:
         Keyword.get(
           opts,
@@ -249,6 +259,31 @@ defmodule ReqLLM.Streaming do
     start_http_streaming(provider_mod, model, context, opts, stream_server_pid)
   end
 
+  defp start_transport_streaming(
+         :in_process,
+         provider_mod,
+         model,
+         context,
+         opts,
+         stream_server_pid
+       ) do
+    case StreamServer.start_in_process(
+           stream_server_pid,
+           provider_mod,
+           model,
+           context,
+           Keyword.put(opts, :defer_http_events_until_telemetry?, true)
+         ) do
+      {:ok, task_pid, stream_context, canonical_request} ->
+        {:ok, task_pid, stream_context, canonical_request}
+
+      {:error, reason} ->
+        :ok = StreamServer.cancel(stream_server_pid)
+        Logger.error("Failed to start in-process streaming: #{inspect(reason)}")
+        {:error, {:in_process_streaming_failed, reason}}
+    end
+  end
+
   # Start HTTP streaming through StreamServer
   defp start_http_streaming(provider_mod, model, context, opts, stream_server_pid) do
     finch_name = Keyword.get(opts, :finch_name, ReqLLM.Finch)
@@ -296,6 +331,7 @@ defmodule ReqLLM.Streaming do
   defp stream_next_timeout(:legacy, receive_timeout), do: receive_timeout
 
   defp telemetry_transport(:websocket), do: :websocket
+  defp telemetry_transport(:in_process), do: :in_process
   defp telemetry_transport(_transport), do: :finch
 
   defp protocol_parser_for_transport(:websocket),
@@ -352,7 +388,7 @@ defmodule ReqLLM.Streaming do
   end
 
   # Create lazy stream using Stream.resource that calls StreamServer.next/2
-  defp create_lazy_stream(server_pid, timeout, cancel) do
+  defp create_lazy_stream(server_pid, timeout, cancel, cancel_on_timeout?) do
     Stream.resource(
       fn ->
         :ok = StreamServer.monitor_consumer(server_pid, self())
@@ -368,7 +404,9 @@ defmodule ReqLLM.Streaming do
             {:halt, %{state | exhausted?: true}}
 
           {:error, reason} ->
-            Process.put(state.failure_ref, true)
+            if reason != :timeout or not cancel_on_timeout? do
+              Process.put(state.failure_ref, true)
+            end
 
             raise %ReqLLM.Error.API.Stream{
               reason: "Stream failed: #{inspect(reason)}",

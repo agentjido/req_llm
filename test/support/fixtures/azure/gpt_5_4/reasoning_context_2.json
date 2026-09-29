@@ -1,0 +1,315 @@
+{
+  "model_spec": "azure:gpt-5.4",
+  "provider": "azure",
+  "request": {
+    "body": {
+      "b64": "eyJpbmNsdWRlIjpbInJlYXNvbmluZy5lbmNyeXB0ZWRfY29udGVudCJdLCJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IlBpY2sgYSB0d28tZGlnaXQgcHJpbWUgYW5kIGV4cGxhaW4gaW4gb25lIHNlbnRlbmNlIHdoeSBpdCBpcyBwcmltZS4iLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifSx7ImNvbnRlbnQiOlt7InRleHQiOiI0NyBpcyBwcmltZSBiZWNhdXNlIGl0cyBvbmx5IHBvc2l0aXZlIGRpdmlzb3JzIGFyZSAxIGFuZCA0Ny4iLCJ0eXBlIjoib3V0cHV0X3RleHQifV0sInBoYXNlIjoiZmluYWxfYW5zd2VyIiwicm9sZSI6ImFzc2lzdGFudCJ9LHsiY29udGVudCI6W3sidGV4dCI6Ik5vdyBkb3VibGUgaXQgYW5kIHJlcGx5IHdpdGggdGhlIG51bWJlciBvbmx5LiIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9XSwibWF4X291dHB1dF90b2tlbnMiOjEwMjQsIm1vZGVsIjoiZ3B0LTUuNCIsInJlYXNvbmluZyI6eyJjb250ZXh0IjoiYWxsX3R1cm5zIiwiZWZmb3J0IjoibG93In0sInN0b3JlIjpmYWxzZSwic3RyZWFtIjpmYWxzZX0="
+    },
+    "canonical_json": {
+      "include": [
+        "reasoning.encrypted_content"
+      ],
+      "input": [
+        {
+          "content": [
+            {
+              "text": "Pick a two-digit prime and explain in one sentence why it is prime.",
+              "type": "input_text"
+            }
+          ],
+          "role": "user"
+        },
+        {
+          "content": [
+            {
+              "text": "47 is prime because its only positive divisors are 1 and 47.",
+              "type": "output_text"
+            }
+          ],
+          "phase": "final_answer",
+          "role": "assistant"
+        },
+        {
+          "content": [
+            {
+              "text": "Now double it and reply with the number only.",
+              "type": "input_text"
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "max_output_tokens": 1024,
+      "model": "gpt-5.4",
+      "reasoning": {
+        "context": "all_turns",
+        "effort": "low"
+      },
+      "store": false,
+      "stream": false
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "api-key": "[REDACTED:api-key]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.7.4"
+      ]
+    },
+    "method": "post",
+    "url": "https://fixture.openai.azure.com/openai/v1/responses"
+  },
+  "response": {
+    "body": {
+      "top_logprobs": 0,
+      "output": [
+        {
+          "content": [],
+          "encrypted_content": "gAAAAABqtOvmqgGt-qdT4m7t0xmlUprLCSTFF0w6t88yzltIsSL09Om4dstd24uPvnAFJd3CrrU0R2cHaIFKnk2NWHWXVs12xb473Pmv9UtrLw2t2F8dubT8Eu1D-UeXJqQpCUigHbDyNYYN_WtAYfqNSOa4sq6ZyIzXVlsnp4Ed5dz4hcrTnDYxNhYCeoaARywP9AkdxT-PL-4AdnO5BJvg74iRy6TG5AxlBeWohz43o6EcglTfrscsewZtfemOVj9i4UVR7jMtgEZsGKuJntZlEJ5M1c_BgCmr904yxKT7UlYAPrXk9dEn9Sv1e7PRE_1KIsKSVGfzTbTQfDQiQFlF3-m0JduWUfdh64um3_CUOKx5nNjEm8kNFaHXDKHS0KARpwj4MSlCjhR_fFOVnEKMqcQaiRWpzDFHcpUlhs8nSq3zOfPW6ehAaBWAkpjvX1OrY_9-HnkhuQLQZ3edKOuwj_C-mOK1-JYDYAUQRhCm7ZrE6mujxAH_cXmBEQXQJH_VfSHnoaUofXwRIODID7d-5F7GePNftb-uhgjCNhk8g17aCPJPizYQBwDB6VmJU4mX5Yf8YKtoMMPHsOHToVat5ZIA7e0RKWRAj0adOAiQ99jFJe9eNXOqiqX-q8oOurqU9T5qPmPKtsgB6HvmzuGG-dVu946ZzTLhWcmEjyLf_UrxXlvB0eQFErfqxr_EmFtxA7-FzmGPGqKtBLyCxQCRPqNItmEB57XDXKcWX8WzV9_QzD3Cb6WqXT3GvjSIyVRJ2YZUagbH-IJNcqADcLOlkZ-lI2F3XNWd08GMNxUhy1yLqDx41GEfvO7m4w8jJ14b14xsv3lByKOvLlSAsRO7f_KLraJyy8TIfzdhhSuuLgegB_23HOPEjhuaF_kPIWTiA9p1PgpUA0puzZIjAa14a6QkTPPZ3S2Mqn6a6SeH7osJMnJ0c0G8Lvly8yhmF83aeIs_MdLyMr9fT_egtUe5PCuflylIXjM_WkNjx2THYUlGQCQGdQEL4RffMuze5UKDVSSIlf1atMMaqUF84Ktel2pgDeNPf37quv-75zJ3jzLY-5cHML2dFmM694Z0C-8_RnRic6MFVLOQpJLJa8eB4B1etO--Jyt1BjDhhQaeuH6ELYdCBTLdBr94hsncqqprTI87WTITh1M2KaxqnXZ4eW6TRXSlJQ==",
+          "id": "rs_0008ab60a3454f79016ab4ebe64fd88196a3a6dd66e05e10df",
+          "summary": [],
+          "type": "reasoning"
+        },
+        {
+          "content": [
+            {
+              "annotations": [],
+              "logprobs": [],
+              "text": "94",
+              "type": "output_text"
+            }
+          ],
+          "id": "msg_0008ab60a3454f79016ab4ebe695d88196bbe180cb3598b37d",
+          "phase": "final_answer",
+          "role": "assistant",
+          "status": "completed",
+          "type": "message"
+        }
+      ],
+      "prompt_cache_retention": "in_memory",
+      "previous_response_id": null,
+      "id": "resp_0008ab60a3454f79016ab4ebe5f98481969a02d2bfe6f6727a",
+      "max_output_tokens": 1024,
+      "model": "gpt-5.4",
+      "completed_at": 1790241766,
+      "parallel_tool_calls": true,
+      "status": "completed",
+      "instructions": null,
+      "user": null,
+      "moderation": null,
+      "created_at": 1790241765,
+      "incomplete_details": null,
+      "truncation": "disabled",
+      "frequency_penalty": 0.0,
+      "text": {
+        "format": {
+          "type": "text"
+        },
+        "verbosity": "medium"
+      },
+      "max_tool_calls": null,
+      "tools": [],
+      "content_filters": [
+        {
+          "blocked": false,
+          "content_filter_offsets": {
+            "check_offset": 0,
+            "end_offset": 1076,
+            "start_offset": 0
+          },
+          "content_filter_raw": [],
+          "content_filter_results": {
+            "hate": {
+              "filtered": false,
+              "severity": "safe"
+            },
+            "jailbreak": {
+              "detected": false,
+              "filtered": false
+            },
+            "self_harm": {
+              "filtered": false,
+              "severity": "safe"
+            },
+            "sexual": {
+              "filtered": false,
+              "severity": "safe"
+            },
+            "violence": {
+              "filtered": false,
+              "severity": "safe"
+            }
+          },
+          "source_type": "prompt"
+        },
+        {
+          "blocked": false,
+          "content_filter_offsets": {
+            "check_offset": 0,
+            "end_offset": 29,
+            "start_offset": 0
+          },
+          "content_filter_raw": [],
+          "content_filter_results": {
+            "hate": {
+              "filtered": false,
+              "severity": "safe"
+            },
+            "protected_material_code": {
+              "detected": false,
+              "filtered": false
+            },
+            "protected_material_text": {
+              "detected": false,
+              "filtered": false
+            },
+            "self_harm": {
+              "filtered": false,
+              "severity": "safe"
+            },
+            "sexual": {
+              "filtered": false,
+              "severity": "safe"
+            },
+            "violence": {
+              "filtered": false,
+              "severity": "safe"
+            }
+          },
+          "source_type": "completion"
+        }
+      ],
+      "temperature": 1.0,
+      "object": "response",
+      "tool_choice": "auto",
+      "background": false,
+      "usage": {
+        "input_tokens": 57,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 18,
+        "output_tokens_details": {
+          "reasoning_tokens": 11
+        },
+        "total_tokens": 75
+      },
+      "top_p": 0.98,
+      "metadata": {},
+      "service_tier": "default",
+      "safety_identifier": null,
+      "store": false,
+      "reasoning": {
+        "context": "all_turns",
+        "effort": "low",
+        "mode": "standard",
+        "summary": null
+      },
+      "tool_usage": {
+        "image_gen": {
+          "input_tokens": 0,
+          "input_tokens_details": {
+            "image_tokens": 0,
+            "text_tokens": 0
+          },
+          "output_tokens": 0,
+          "output_tokens_details": {
+            "image_tokens": 0,
+            "text_tokens": 0
+          },
+          "total_tokens": 0
+        },
+        "web_search": {
+          "num_requests": 0
+        }
+      },
+      "presence_penalty": 0.0,
+      "prompt_cache_key": null,
+      "error": null
+    },
+    "headers": {
+      "apim-request-id": [
+        "6a5e390e-aa5a-49bb-beb3-0f2b4d379ba0"
+      ],
+      "azureai-fe-is-streaming": [
+        "False"
+      ],
+      "azureai-fe-offer-type": [
+        "paygo"
+      ],
+      "content-length": [
+        "4925"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Thu, 24 Sep 2026 09:22:45 GMT"
+      ],
+      "server": [
+        "istio-envoy"
+      ],
+      "skip-error-remapping": [
+        "true"
+      ],
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-ms-aoai-configured-data-retention-days": [
+        "30"
+      ],
+      "x-ms-is-spilled-over": [
+        "false"
+      ],
+      "x-ms-region": [
+        "Sweden Central"
+      ],
+      "x-ms-served-model": [
+        "gpt-5.4-2026-03-05"
+      ],
+      "x-ratelimit-abusepenalty-active": [
+        "False"
+      ],
+      "x-ratelimit-key": [
+        "gpt-5.4"
+      ],
+      "x-ratelimit-limit-requests": [
+        "700"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "700000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "699"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "699957"
+      ],
+      "x-ratelimit-renewalperiod-requests": [
+        "60"
+      ],
+      "x-ratelimit-renewalperiod-tokens": [
+        "60"
+      ],
+      "x-ratelimit-reset-requests": [
+        "0"
+      ],
+      "x-ratelimit-reset-tokens": [
+        "0"
+      ],
+      "x-request-id": [
+        "c576a39b-36e3-4211-80de-81dbecbf9ac6"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

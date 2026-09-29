@@ -14,7 +14,8 @@ defmodule ReqLLM.Provider do
   - **Body Construction**: Build request body maps via `build_body/1` (optional)
   - **Response Parsing**: Decode API responses via `decode_response/1`
   - **Usage Extraction**: Parse usage/cost data via `extract_usage/2` (optional)
-  - **Streaming Configuration**: Build complete streaming requests via `attach_stream/4` (recommended)
+  - **Streaming Configuration**: Build HTTP requests via `attach_stream/4` or provide
+    canonical in-process streams via `attach_in_process_stream/3`
 
   ## Implementation Pattern
 
@@ -509,6 +510,53 @@ defmodule ReqLLM.Provider do
               | nil
 
   @doc """
+  Selects the provider streaming transport.
+
+  The default transport is `:http`. Providers can return `:websocket` for the
+  OpenAI WebSocket path or `:in_process` when they produce canonical
+  `ReqLLM.StreamChunk` values without a network request.
+  """
+  @callback stream_transport(LLMDB.Model.t(), keyword()) ::
+              :http | :websocket | :in_process
+
+  @doc """
+  Builds a provider-owned stream of canonical chunks.
+
+  This callback is used when `stream_transport/2` returns `:in_process`. The
+  returned enumerable must emit `ReqLLM.StreamChunk` structs. It can emit
+  `{:error, reason}` to fail the stream.
+
+  Return an enumerable directly when task termination is enough for cleanup.
+  Return `ReqLLM.Provider.InProcessStream` when the provider also needs an
+  explicit callback for cancellation or timeouts.
+
+  ## Examples
+
+      def stream_transport(_model, _opts), do: :in_process
+
+      def attach_in_process_stream(model, context, opts) do
+        {:ok, canonical_chunk_stream(model, context, opts)}
+      end
+
+      def attach_in_process_stream(model, context, opts) do
+        subscription = subscribe(model, context, opts)
+
+        {:ok,
+         ReqLLM.Provider.InProcessStream.new(subscription,
+           cancel: fn -> cancel_subscription(subscription) end
+         )}
+      end
+
+  """
+  @callback attach_in_process_stream(
+              LLMDB.Model.t(),
+              ReqLLM.Context.t(),
+              keyword()
+            ) ::
+              {:ok, Enumerable.t() | ReqLLM.Provider.InProcessStream.t()}
+              | {:error, term()}
+
+  @doc """
   Build complete Finch request for streaming operations.
 
   This callback creates a complete Finch.Request struct for streaming operations,
@@ -643,6 +691,8 @@ defmodule ReqLLM.Provider do
     flush_stream_state: 2,
     parse_stream_protocol: 2,
     stream_protocol_parser: 2,
+    stream_transport: 2,
+    attach_in_process_stream: 3,
     attach_stream: 4,
     thinking_constraints: 0,
     credential_missing?: 1,

@@ -1,7 +1,7 @@
 defmodule ReqLLM.Release.LLMDBDependencyTest do
   use ExUnit.Case, async: false
 
-  @moduletag timeout: 180_000
+  @moduletag timeout: 300_000
 
   @project_root Path.expand("../..", __DIR__)
   @fixture_path Path.join(@project_root, "test/fixtures/llm_db_release")

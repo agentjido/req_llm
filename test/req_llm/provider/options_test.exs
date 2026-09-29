@@ -175,12 +175,29 @@ defmodule ReqLLM.Provider.OptionsTest do
       assert processed[:provider_options][:reasoning_summary] == "auto"
     end
 
+    test "validates and auto-hoists reasoning_summary for Azure" do
+      {:ok, model} = ReqLLM.model("azure:gpt-5.4")
+      opts = [reasoning_summary: "auto", base_url: "https://my-resource.openai.azure.com/openai"]
+
+      assert {:ok, processed} = Options.process(ReqLLM.Providers.Azure, :chat, model, opts)
+      assert processed[:provider_options][:reasoning_summary] == "auto"
+    end
+
     test "rejects invalid reasoning_summary values for OpenAI" do
       {:ok, model} = ReqLLM.model("openai:gpt-5")
       opts = [reasoning_summary: :invalid]
 
       assert {:error, %ReqLLM.Error.Unknown.Unknown{}} =
                Options.process(OpenAI, :chat, model, opts)
+    end
+
+    test "does not hoist image schema keys that collide with OpenAI chat options" do
+      model = %LLMDB.Model{provider: :openai, id: "dall-e-3"}
+      opts = [response_format: :url, context: ReqLLM.Context.new()]
+
+      assert {:ok, processed} = Options.process(OpenAI, :image, model, opts)
+      assert processed[:response_format] == :url
+      assert processed[:provider_options][:response_format] == nil
     end
   end
 

@@ -191,6 +191,12 @@ Passed via `:provider_options` keyword:
 - **Purpose**: How much guardrail assessment detail Bedrock returns
 - **Example**: `provider_options: [guardrail_identifier: "abc123def456", guardrail_version: "1", guardrail_trace: "enabled"]`
 
+### `service_tier`
+
+- **Type**: `"priority"` | `"default"` | `"flex"` | `"reserved"`
+- **Purpose**: [Service tier](https://docs.aws.amazon.com/bedrock/latest/userguide/service-tiers-inference.html) the request runs on; omitted when `"default"`
+- **Example**: `provider_options: [service_tier: "flex"]`
+
 ### Prompt Caching
 
 ReqLLM emits `cachePoint` blocks on Converse and `cache_control` on InvokeModel and the Mantle Messages API. On Converse, `cache_control` metadata on a content part or a message adds an explicit checkpoint without enabling automatic caching, and a hint on a tool result lands after the enclosing result. Automatic tools checkpoints are skipped for `amazon.*` model ids. Caching does not change routing. Cache reads appear in `usage.cached_tokens`, writes in `usage.cache_creation_tokens`, and AWS's `cacheDetails` under `provider_meta.cache_details`. The `anthropic_*` names remain aliases. Model support, limits and TTLs are in [AWS prompt caching](https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-caching.html).

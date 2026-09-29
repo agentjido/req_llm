@@ -21,7 +21,7 @@ defmodule ReqLLM.BillingTest do
     assert {:ok, nil} = Billing.calculate(usage, model)
   end
 
-  test "skips components missing per or rate" do
+  test "reports unknown when a used component has no rate" do
     model = %LLMDB.Model{
       provider: :test,
       id: "m1",
@@ -40,14 +40,10 @@ defmodule ReqLLM.BillingTest do
       output_tokens: 1_000_000
     }
 
-    assert {:ok, cost} = Billing.calculate(usage, model)
-    assert cost.tokens == 1.0
-    assert cost.total == 1.0
-    assert cost.input_cost == 1.0
-    assert cost.output_cost == 0.0
+    assert {:ok, nil} = Billing.calculate(usage, model)
   end
 
-  test "skips components with unsupported kinds" do
+  test "reports unknown for unsupported component kinds" do
     model = %LLMDB.Model{
       provider: :test,
       id: "m1",
@@ -58,13 +54,9 @@ defmodule ReqLLM.BillingTest do
       }
     }
 
-    usage = %{}
+    usage = %{input_tokens: 0, output_tokens: 0}
 
-    assert {:ok, cost} = Billing.calculate(usage, model)
-    assert cost.total == 0.0
-    assert cost.tokens == 0.0
-    assert cost.tools == 0.0
-    assert cost.images == 0.0
+    assert {:ok, nil} = Billing.calculate(usage, model)
   end
 
   test "calculates tool costs with string keys" do
@@ -85,14 +77,18 @@ defmodule ReqLLM.BillingTest do
       }
     }
 
-    usage = %{"tool_usage" => %{"web_search" => %{"count" => 2, "unit" => "query"}}}
+    usage = %{
+      "input_tokens" => 0,
+      "output_tokens" => 0,
+      "tool_usage" => %{"web_search" => %{"count" => 2, "unit" => "query"}}
+    }
 
     assert {:ok, cost} = Billing.calculate(usage, model)
     assert cost.tools == 1.0
     assert cost.total == 1.0
   end
 
-  test "skips tool costs when unit mismatches" do
+  test "reports unknown when tool unit mismatches" do
     model = %LLMDB.Model{
       provider: :test,
       id: "m1",
@@ -110,11 +106,13 @@ defmodule ReqLLM.BillingTest do
       }
     }
 
-    usage = %{tool_usage: %{web_search: %{count: 3, unit: :source}}}
+    usage = %{
+      input_tokens: 0,
+      output_tokens: 0,
+      tool_usage: %{web_search: %{count: 3, unit: :source}}
+    }
 
-    assert {:ok, cost} = Billing.calculate(usage, model)
-    assert cost.tools == 0.0
-    assert cost.total == 0.0
+    assert {:ok, nil} = Billing.calculate(usage, model)
   end
 
   test "subtracts cached tokens from input when input includes cached tokens" do
@@ -132,6 +130,7 @@ defmodule ReqLLM.BillingTest do
 
     usage = %{
       input_tokens: 1_000,
+      output_tokens: 0,
       cached_tokens: 200,
       cache_creation_tokens: 100,
       input_includes_cached: true
@@ -179,42 +178,42 @@ defmodule ReqLLM.BillingTest do
             kind: "token",
             per: 1_000_000,
             rate: 1.25,
-            max_input_tokens: 200_000
+            applies_when: %{input_tokens: %{lte: 200_000}}
           },
           %{
             id: "token.input.long_context",
             kind: "token",
             per: 1_000_000,
             rate: 2.5,
-            min_input_tokens: 200_001
+            applies_when: %{input_tokens: %{gt: 200_000}}
           },
           %{
             id: "token.output.standard_context",
             kind: "token",
             per: 1_000_000,
             rate: 10.0,
-            max_input_tokens: 200_000
+            applies_when: %{input_tokens: %{lte: 200_000}}
           },
           %{
             id: "token.output.long_context",
             kind: "token",
             per: 1_000_000,
             rate: 15.0,
-            min_input_tokens: 200_001
+            applies_when: %{input_tokens: %{gt: 200_000}}
           },
           %{
             id: "token.cache_read.standard_context",
             kind: "token",
             per: 1_000_000,
             rate: 0.125,
-            max_input_tokens: 200_000
+            applies_when: %{input_tokens: %{lte: 200_000}}
           },
           %{
             id: "token.cache_read.long_context",
             kind: "token",
             per: 1_000_000,
             rate: 0.25,
-            min_input_tokens: 200_001
+            applies_when: %{input_tokens: %{gt: 200_000}}
           }
         ]
       }
@@ -250,42 +249,42 @@ defmodule ReqLLM.BillingTest do
             kind: "token",
             per: 1_000_000,
             rate: 1.25,
-            max_input_tokens: 200_000
+            applies_when: %{input_tokens: %{lte: 200_000}}
           },
           %{
             id: "token.input.long_context",
             kind: "token",
             per: 1_000_000,
             rate: 2.5,
-            min_input_tokens: 200_001
+            applies_when: %{input_tokens: %{gt: 200_000}}
           },
           %{
             id: "token.output.standard_context",
             kind: "token",
             per: 1_000_000,
             rate: 10.0,
-            max_input_tokens: 200_000
+            applies_when: %{input_tokens: %{lte: 200_000}}
           },
           %{
             id: "token.output.long_context",
             kind: "token",
             per: 1_000_000,
             rate: 15.0,
-            min_input_tokens: 200_001
+            applies_when: %{input_tokens: %{gt: 200_000}}
           },
           %{
             id: "token.cache_read.standard_context",
             kind: "token",
             per: 1_000_000,
             rate: 0.125,
-            max_input_tokens: 200_000
+            applies_when: %{input_tokens: %{lte: 200_000}}
           },
           %{
             id: "token.cache_read.long_context",
             kind: "token",
             per: 1_000_000,
             rate: 0.25,
-            min_input_tokens: 200_001
+            applies_when: %{input_tokens: %{gt: 200_000}}
           }
         ]
       }

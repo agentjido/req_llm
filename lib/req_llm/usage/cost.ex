@@ -7,12 +7,10 @@ defmodule ReqLLM.Usage.Cost do
   def apply(usage, model, opts \\ [])
 
   def apply(usage, model, opts) when is_map(usage) do
-    usage = maybe_put_total_cost(usage, Keyword.get(opts, :original_usage))
-
     case model do
       %LLMDB.Model{} ->
-        case breakdown(usage, model) do
-          {:ok, nil} -> usage
+        case breakdown(usage, model, Keyword.get(opts, :pricing_context)) do
+          {:ok, nil} -> merge(usage, nil, opts)
           {:ok, cost_breakdown} -> merge(usage, cost_breakdown, opts)
         end
 
@@ -23,59 +21,61 @@ defmodule ReqLLM.Usage.Cost do
 
   def apply(usage, _model, _opts), do: usage
 
-  @spec breakdown(map(), LLMDB.Model.t()) :: {:ok, map() | nil}
-  def breakdown(usage, %LLMDB.Model{} = model) when is_map(usage) do
+  @spec breakdown(map(), LLMDB.Model.t(), map() | keyword() | nil) :: {:ok, map() | nil}
+  def breakdown(usage, model, context \\ nil)
+
+  def breakdown(usage, %LLMDB.Model{} = model, context) when is_map(usage) do
     if tokens_numeric?(usage) do
-      case ReqLLM.Billing.calculate(usage, model) do
+      case ReqLLM.Billing.calculate(usage, model, context || %{}) do
         {:ok, nil} ->
           {:ok, nil}
 
-        {:ok, cost} ->
+        {:ok, %{currency: "USD"} = cost} ->
           {:ok,
            %{
+             pricing: %{status: :priced, currency: "USD", total: cost.total},
              input_cost: cost.input_cost,
              output_cost: cost.output_cost,
              reasoning_cost: cost.reasoning_cost,
              total_cost: cost.total,
              cost: cost
            }}
+
+        {:ok, cost} ->
+          {:ok,
+           %{pricing: %{status: :priced, currency: cost.currency, total: cost.total}, cost: cost}}
       end
     else
       {:ok, nil}
     end
   end
 
-  def breakdown(_, _), do: {:ok, nil}
+  def breakdown(_, _, _), do: {:ok, nil}
 
   @spec merge(map(), map() | nil, keyword()) :: map()
   def merge(usage, cost_breakdown, opts \\ [])
 
-  def merge(usage, nil, _opts), do: usage
+  def merge(usage, nil, _opts) do
+    usage
+    |> Map.drop([:cost, :input_cost, :output_cost, :reasoning_cost, :total_cost])
+    |> Map.put(:pricing, %{status: :unknown})
+  end
 
-  def merge(usage, cost_breakdown, opts) do
-    usage =
+  def merge(usage, cost_breakdown, _opts) do
+    if cost_breakdown.pricing.currency == "USD" do
       usage
+      |> Map.put(:pricing, cost_breakdown.pricing)
       |> Map.put(:cost, cost_breakdown.cost)
       |> Map.put(:input_cost, cost_breakdown.input_cost)
       |> Map.put(:output_cost, cost_breakdown.output_cost)
       |> Map.put(:reasoning_cost, cost_breakdown.reasoning_cost)
-
-    if Keyword.get(opts, :preserve_total_cost, false) do
-      Map.put_new(usage, :total_cost, cost_breakdown.total_cost)
+      |> Map.put(:total_cost, cost_breakdown.total_cost)
     else
-      Map.put(usage, :total_cost, cost_breakdown.total_cost)
+      usage
+      |> Map.drop([:cost, :input_cost, :output_cost, :reasoning_cost, :total_cost])
+      |> Map.put(:pricing, cost_breakdown.pricing)
     end
   end
-
-  @spec maybe_put_total_cost(map(), map() | nil) :: map()
-  def maybe_put_total_cost(usage, original_usage) when is_map(original_usage) do
-    case MapAccess.get(original_usage, :total_cost) || MapAccess.get(original_usage, "total_cost") do
-      value when is_number(value) -> Map.put(usage, :total_cost, value)
-      _ -> usage
-    end
-  end
-
-  def maybe_put_total_cost(usage, _), do: usage
 
   defp tokens_numeric?(usage) do
     input = MapAccess.get(usage, :input_tokens) || MapAccess.get(usage, "input_tokens")

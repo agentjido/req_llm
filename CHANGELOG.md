@@ -9,6 +9,57 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- changelog -->
 
+## [v1.25.0](https://github.com/agentjido/req_llm/compare/v1.24.0...v1.25.0) (2026-09-25)
+
+
+
+
+### Features:
+
+* Responses API reasoning summaries, reasoning.context and compaction for OpenAI and Azure (#1048) by fv-teacherspace
+
+* price conditional LLMDB tariffs from complete usage (#1046) by houllette
+
+* Image streaming support for OpenAI (#1043) by Vasilis Spilka
+
+* openai: carry assistant phase on each output text part (#1047) by Mark Ericksen
+
+* streaming: support in-process providers (#1040) by mikehostetler
+
+* Add transparent option for openai images (#1037) by Vasilis Spilka
+
+* forward OpenRouter evaluation provider options (#1038) by fschucht
+
+* router: add dynamic model router spike (#1036) by mikehostetler
+
+* streaming: carry provider response ids on streamed responses (#1023) by dankentfield-sona
+
+* generation: dispatch catalog OpenAI chat gateways from execution metadata (#1028) by mikehostetler
+
+* support OpenRouter Jev evaluation (#1027) by mikehostetler
+
+### Bug Fixes:
+
+* anthropic: report Claude Code 2.1.282 on subscription OAuth requests (#1052) by neilberkman
+
+* preserve non-strict Responses tool schemas (#1049) by mikehostetler
+
+* deps: update Mint for security advisory by mikehostetler
+
+* usage: distinguish cache reads and writes (#1035) by mikehostetler
+
+* bedrock: surface mid-stream exceptions and map all Converse stop reasons (#1033) by adriencohen
+
+* bedrock: send serviceTier on Converse and honor explicit region (#1032) by adriencohen
+
+* anthropic: replay tool search blocks in place (#1034) by mikehostetler
+
+* deepseek: map reasoning effort levels to supported values (#1025) by Matthew Neel
+
+### Performance:
+
+* context: batch message assembly (#1031) by mikehostetler
+
 ## [v1.24.0](https://github.com/agentjido/req_llm/compare/v1.23.0...v1.24.0) (2026-09-17)
 
 

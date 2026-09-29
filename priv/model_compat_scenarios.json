@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-04T19:26:34Z",
+  "generated_at": "2026-09-25T13:44:53Z",
   "models": {
     "anthropic:claude-haiku-4-5-20251001": {
       "catalog_status": "present",
@@ -426,6 +426,175 @@
                     "usage"
                   ],
                   "mode": "record",
+                  "status": "pass"
+                }
+              ],
+              "proof": "fixture_replay"
+            }
+          }
+        }
+      }
+    },
+    "azure:gpt-5.4": {
+      "catalog_status": "present",
+      "declared_operations": [
+        "text"
+      ],
+      "model": "gpt-5.4",
+      "provider": "azure",
+      "surfaces": {
+        "azure.responses": {
+          "declaration": "declared",
+          "operation": "text",
+          "provider": "azure",
+          "scenarios": {
+            "compaction_manual": {
+              "observations": [
+                {
+                  "checked_at": "2026-09-24T09:27:04Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "compaction_manual_1",
+                    "compaction_manual_2",
+                    "compaction_manual_3"
+                  ],
+                  "mode": "replay",
+                  "status": "pass"
+                },
+                {
+                  "checked_at": "2026-09-25T13:35:03Z",
+                  "error": "     ** (RuntimeError) Fixture request mismatch: test/support/fixtures/azure/gpt_5_4/compaction_manual_3.json\n     Record",
+                  "failure_layer": "assertion",
+                  "fixtures": [
+                    "compaction_manual_1",
+                    "compaction_manual_2",
+                    "compaction_manual_3"
+                  ],
+                  "mode": "replay",
+                  "status": "fail"
+                },
+                {
+                  "checked_at": "2026-09-25T13:44:53Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "compaction_manual_1",
+                    "compaction_manual_2",
+                    "compaction_manual_3"
+                  ],
+                  "mode": "replay",
+                  "status": "pass"
+                }
+              ],
+              "proof": "fixture_replay"
+            },
+            "compaction_previous_response": {
+              "observations": [
+                {
+                  "checked_at": "2026-09-24T09:27:04Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "compaction_previous_response_1",
+                    "compaction_previous_response_2"
+                  ],
+                  "mode": "replay",
+                  "status": "pass"
+                }
+              ],
+              "proof": "fixture_replay"
+            },
+            "compaction_server_side": {
+              "observations": [
+                {
+                  "checked_at": "2026-09-24T09:27:04Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "compaction_server_side_basic",
+                    "compaction_server_side_streaming"
+                  ],
+                  "mode": "replay",
+                  "status": "pass"
+                }
+              ],
+              "proof": "fixture_replay"
+            },
+            "reasoning_context": {
+              "observations": [
+                {
+                  "checked_at": "2026-09-24T09:27:04Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "reasoning_context_1",
+                    "reasoning_context_2"
+                  ],
+                  "mode": "replay",
+                  "status": "pass"
+                }
+              ],
+              "proof": "fixture_replay"
+            },
+            "reasoning_summary": {
+              "observations": [
+                {
+                  "checked_at": "2026-09-24T09:27:04Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "reasoning_summary_basic",
+                    "reasoning_summary_streaming"
+                  ],
+                  "mode": "replay",
+                  "status": "pass"
+                }
+              ],
+              "proof": "fixture_replay"
+            }
+          }
+        }
+      }
+    },
+    "azure:gpt-image-2": {
+      "catalog_status": "present",
+      "declared_operations": [
+        "image"
+      ],
+      "model": "gpt-image-2",
+      "provider": "azure",
+      "surfaces": {
+        "azure.image": {
+          "declaration": "declared",
+          "operation": "image",
+          "provider": "azure",
+          "scenarios": {
+            "image_basic": {
+              "observations": [
+                {
+                  "checked_at": "2026-09-22T10:08:29Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "image_basic"
+                  ],
+                  "mode": "replay",
+                  "status": "pass"
+                }
+              ],
+              "proof": "fixture_replay"
+            },
+            "image_streaming": {
+              "observations": [
+                {
+                  "checked_at": "2026-09-22T10:08:29Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "image_streaming"
+                  ],
+                  "mode": "replay",
                   "status": "pass"
                 }
               ],
@@ -6015,6 +6184,87 @@
                 }
               ],
               "proof": "fixture_replay"
+            },
+            "compaction_manual": {
+              "observations": [
+                {
+                  "checked_at": "2026-09-25T13:34:34Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "compaction_manual_1",
+                    "compaction_manual_2",
+                    "compaction_manual_3"
+                  ],
+                  "mode": "replay",
+                  "status": "pass"
+                }
+              ],
+              "proof": "fixture_replay"
+            },
+            "compaction_previous_response": {
+              "observations": [
+                {
+                  "checked_at": "2026-09-25T13:34:34Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "compaction_previous_response_1",
+                    "compaction_previous_response_2"
+                  ],
+                  "mode": "replay",
+                  "status": "pass"
+                }
+              ],
+              "proof": "fixture_replay"
+            },
+            "compaction_server_side": {
+              "observations": [
+                {
+                  "checked_at": "2026-09-25T13:34:34Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "compaction_server_side_basic",
+                    "compaction_server_side_streaming"
+                  ],
+                  "mode": "replay",
+                  "status": "pass"
+                }
+              ],
+              "proof": "fixture_replay"
+            },
+            "reasoning_context": {
+              "observations": [
+                {
+                  "checked_at": "2026-09-25T13:34:34Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "reasoning_context_1",
+                    "reasoning_context_2"
+                  ],
+                  "mode": "replay",
+                  "status": "pass"
+                }
+              ],
+              "proof": "fixture_replay"
+            },
+            "reasoning_summary": {
+              "observations": [
+                {
+                  "checked_at": "2026-09-25T13:34:34Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "reasoning_summary_basic",
+                    "reasoning_summary_streaming"
+                  ],
+                  "mode": "replay",
+                  "status": "pass"
+                }
+              ],
+              "proof": "fixture_replay"
             }
           }
         }
@@ -6790,6 +7040,46 @@
                   ],
                   "mode": "record",
                   "status": "pass"
+                },
+                {
+                  "checked_at": "2026-09-22T10:08:06Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "image_basic"
+                  ],
+                  "mode": "replay",
+                  "status": "pass"
+                }
+              ],
+              "proof": "fixture_replay"
+            },
+            "image_streaming": {
+              "observations": [
+                {
+                  "checked_at": "2026-09-22T10:08:06Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "image_streaming"
+                  ],
+                  "mode": "replay",
+                  "status": "pass"
+                }
+              ],
+              "proof": "fixture_replay"
+            },
+            "image_transparent_background": {
+              "observations": [
+                {
+                  "checked_at": "2026-09-22T10:08:06Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "image_transparent_background"
+                  ],
+                  "mode": "replay",
+                  "status": "pass"
                 }
               ],
               "proof": "fixture_replay"
@@ -6853,6 +7143,190 @@
                     "image_basic"
                   ],
                   "mode": "record",
+                  "status": "pass"
+                }
+              ],
+              "proof": "fixture_replay"
+            }
+          }
+        }
+      }
+    },
+    "openai:gpt-image-2.5-flare": {
+      "catalog_status": "present",
+      "declared_operations": [
+        "image"
+      ],
+      "model": "gpt-image-2.5-flare",
+      "provider": "openai",
+      "surfaces": {
+        "openai.image": {
+          "declaration": "declared",
+          "operation": "image",
+          "provider": "openai",
+          "scenarios": {
+            "image_basic": {
+              "observations": [
+                {
+                  "checked_at": "2026-09-22T11:56:56Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "image_basic"
+                  ],
+                  "mode": "replay",
+                  "status": "pass"
+                },
+                {
+                  "checked_at": "2026-09-22T11:58:43Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "image_basic"
+                  ],
+                  "mode": "replay",
+                  "status": "pass"
+                }
+              ],
+              "proof": "fixture_replay"
+            },
+            "image_streaming": {
+              "observations": [
+                {
+                  "checked_at": "2026-09-22T11:56:56Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "image_streaming"
+                  ],
+                  "mode": "replay",
+                  "status": "pass"
+                },
+                {
+                  "checked_at": "2026-09-22T11:58:43Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "image_streaming"
+                  ],
+                  "mode": "replay",
+                  "status": "pass"
+                }
+              ],
+              "proof": "fixture_replay"
+            },
+            "image_transparent_background": {
+              "observations": [
+                {
+                  "checked_at": "2026-09-22T11:58:01Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "image_transparent_background"
+                  ],
+                  "mode": "record",
+                  "status": "pass"
+                },
+                {
+                  "checked_at": "2026-09-22T11:58:43Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "image_transparent_background"
+                  ],
+                  "mode": "replay",
+                  "status": "pass"
+                }
+              ],
+              "proof": "fixture_replay"
+            }
+          }
+        }
+      }
+    },
+    "openai:gpt-image-2.5-sunburst": {
+      "catalog_status": "present",
+      "declared_operations": [
+        "image"
+      ],
+      "model": "gpt-image-2.5-sunburst",
+      "provider": "openai",
+      "surfaces": {
+        "openai.image": {
+          "declaration": "declared",
+          "operation": "image",
+          "provider": "openai",
+          "scenarios": {
+            "image_basic": {
+              "observations": [
+                {
+                  "checked_at": "2026-09-22T11:57:17Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "image_basic"
+                  ],
+                  "mode": "replay",
+                  "status": "pass"
+                },
+                {
+                  "checked_at": "2026-09-22T11:59:03Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "image_basic"
+                  ],
+                  "mode": "replay",
+                  "status": "pass"
+                }
+              ],
+              "proof": "fixture_replay"
+            },
+            "image_streaming": {
+              "observations": [
+                {
+                  "checked_at": "2026-09-22T11:57:17Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "image_streaming"
+                  ],
+                  "mode": "replay",
+                  "status": "pass"
+                },
+                {
+                  "checked_at": "2026-09-22T11:59:03Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "image_streaming"
+                  ],
+                  "mode": "replay",
+                  "status": "pass"
+                }
+              ],
+              "proof": "fixture_replay"
+            },
+            "image_transparent_background": {
+              "observations": [
+                {
+                  "checked_at": "2026-09-22T11:58:21Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "image_transparent_background"
+                  ],
+                  "mode": "record",
+                  "status": "pass"
+                },
+                {
+                  "checked_at": "2026-09-22T11:59:03Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "image_transparent_background"
+                  ],
+                  "mode": "replay",
                   "status": "pass"
                 }
               ],
@@ -16103,15 +16577,13 @@
       }
     },
     "venice:mistral-small-2603": {
-      "catalog_status": "present",
-      "declared_operations": [
-        "text"
-      ],
+      "catalog_status": "missing",
+      "declared_operations": [],
       "model": "mistral-small-2603",
       "provider": "venice",
       "surfaces": {
         "venice.chat_completions": {
-          "declaration": "declared",
+          "declaration": "unknown",
           "operation": "text",
           "provider": "venice",
           "scenarios": {
@@ -22661,15 +23133,13 @@
       }
     },
     "zenmux:x-ai/grok-4": {
-      "catalog_status": "present",
-      "declared_operations": [
-        "text"
-      ],
+      "catalog_status": "missing",
+      "declared_operations": [],
       "model": "x-ai/grok-4",
       "provider": "zenmux",
       "surfaces": {
         "zenmux.unrecorded_text": {
-          "declaration": "declared",
+          "declaration": "unknown",
           "operation": "text",
           "provider": "zenmux",
           "scenarios": {
@@ -22693,15 +23163,13 @@
       }
     },
     "zenmux:x-ai/grok-4-fast": {
-      "catalog_status": "present",
-      "declared_operations": [
-        "text"
-      ],
+      "catalog_status": "missing",
+      "declared_operations": [],
       "model": "x-ai/grok-4-fast",
       "provider": "zenmux",
       "surfaces": {
         "zenmux.unrecorded_text": {
-          "declaration": "declared",
+          "declaration": "unknown",
           "operation": "text",
           "provider": "zenmux",
           "scenarios": {
@@ -22725,15 +23193,13 @@
       }
     },
     "zenmux:x-ai/grok-4.1-fast": {
-      "catalog_status": "present",
-      "declared_operations": [
-        "text"
-      ],
+      "catalog_status": "missing",
+      "declared_operations": [],
       "model": "x-ai/grok-4.1-fast",
       "provider": "zenmux",
       "surfaces": {
         "zenmux.unrecorded_text": {
-          "declaration": "declared",
+          "declaration": "unknown",
           "operation": "text",
           "provider": "zenmux",
           "scenarios": {
@@ -22757,15 +23223,13 @@
       }
     },
     "zenmux:x-ai/grok-4.1-fast-non-reasoning": {
-      "catalog_status": "present",
-      "declared_operations": [
-        "text"
-      ],
+      "catalog_status": "missing",
+      "declared_operations": [],
       "model": "x-ai/grok-4.1-fast-non-reasoning",
       "provider": "zenmux",
       "surfaces": {
         "zenmux.unrecorded_text": {
-          "declaration": "declared",
+          "declaration": "unknown",
           "operation": "text",
           "provider": "zenmux",
           "scenarios": {
@@ -22885,15 +23349,13 @@
       }
     },
     "zenmux:x-ai/grok-code-fast-1": {
-      "catalog_status": "present",
-      "declared_operations": [
-        "text"
-      ],
+      "catalog_status": "missing",
+      "declared_operations": [],
       "model": "x-ai/grok-code-fast-1",
       "provider": "zenmux",
       "surfaces": {
         "zenmux.unrecorded_text": {
-          "declaration": "declared",
+          "declaration": "unknown",
           "operation": "text",
           "provider": "zenmux",
           "scenarios": {

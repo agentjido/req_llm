@@ -1,0 +1,219 @@
+{
+  "model_spec": "openai:gpt-5.4",
+  "provider": "openai",
+  "request": {
+    "body": {
+      "b64": "eyJpbmNsdWRlIjpbInJlYXNvbmluZy5lbmNyeXB0ZWRfY29udGVudCJdLCJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IlRocmVlIGZyaWVuZHMgc3BsaXQgYSA0NyBldXJvIGJpbGwgc28gdGhhdCBBbmEgcGF5cyB0d2ljZSB3aGF0IEJlbiBwYXlzIGFuZCBDbGVvIHBheXMgNSBldXJvcyBtb3JlIHRoYW4gQmVuLiBIb3cgbXVjaCBkb2VzIGVhY2ggcGF5PyBTaG93IHRoZSBhbW91bnRzLiIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9XSwibWF4X291dHB1dF90b2tlbnMiOjEwMjQsIm1vZGVsIjoiZ3B0LTUuNCIsInJlYXNvbmluZyI6eyJlZmZvcnQiOiJsb3ciLCJzdW1tYXJ5IjoiYXV0byJ9LCJzdG9yZSI6ZmFsc2UsInN0cmVhbSI6ZmFsc2V9"
+    },
+    "canonical_json": {
+      "include": [
+        "reasoning.encrypted_content"
+      ],
+      "input": [
+        {
+          "content": [
+            {
+              "text": "Three friends split a 47 euro bill so that Ana pays twice what Ben pays and Cleo pays 5 euros more than Ben. How much does each pay? Show the amounts.",
+              "type": "input_text"
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "max_output_tokens": 1024,
+      "model": "gpt-5.4",
+      "reasoning": {
+        "effort": "low",
+        "summary": "auto"
+      },
+      "store": false,
+      "stream": false
+    },
+    "headers": {
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.7.4"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.openai.com/v1/responses"
+  },
+  "response": {
+    "body": {
+      "safety_identifier": null,
+      "store": false,
+      "error": null,
+      "created_at": 1790343178,
+      "presence_penalty": 0.0,
+      "status": "completed",
+      "tool_usage": {
+        "image_gen": {
+          "input_tokens": 0,
+          "input_tokens_details": {
+            "image_tokens": 0,
+            "text_tokens": 0
+          },
+          "output_tokens": 0,
+          "output_tokens_details": {
+            "image_tokens": 0,
+            "text_tokens": 0
+          },
+          "total_tokens": 0
+        },
+        "web_search": {
+          "num_requests": 0
+        }
+      },
+      "max_tool_calls": null,
+      "instructions": null,
+      "billing": {
+        "payer": "developer"
+      },
+      "prompt_cache_retention": "24h",
+      "completed_at": 1790343181,
+      "temperature": 1.0,
+      "text": {
+        "format": {
+          "type": "text"
+        },
+        "verbosity": "medium"
+      },
+      "parallel_tool_calls": true,
+      "tool_choice": "auto",
+      "frequency_penalty": 0.0,
+      "top_logprobs": 0,
+      "reasoning": {
+        "context": "current_turn",
+        "effort": "low",
+        "mode": "standard",
+        "summary": "detailed"
+      },
+      "usage": {
+        "input_tokens": 43,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 195,
+        "output_tokens_details": {
+          "reasoning_tokens": 10
+        },
+        "total_tokens": 238
+      },
+      "access_programs": null,
+      "incomplete_details": null,
+      "model": "gpt-5.4-2026-03-05",
+      "truncation": "disabled",
+      "metadata": {},
+      "service_tier": "default",
+      "id": "resp_059840a0122a321d016ab6780a1d5c87d1956222c78b6a8ece",
+      "top_p": 0.98,
+      "user": null,
+      "prompt_cache_key": null,
+      "moderation": null,
+      "object": "response",
+      "background": false,
+      "previous_response_id": null,
+      "max_output_tokens": 1024,
+      "output": [
+        {
+          "content": [],
+          "encrypted_content": "gAAAAABqtngN63CE5t5XOr-01E1MUvyc5dZSsU6gATKB0w_YGAVV5u1rjrwsc2RbHnkaUiHaAUMaUXcpDZcczf4i-ksHx9flCEsnw5lSdJhfVFs-8IzBjxUnGF8aM568Hwu62fhjPrCsI9UKHyWi-fR46DYpzmRnrBW-dCWiHGMhZB_y4tTZr2wpxCTSDjvvlPeOCwCOay2aWezfN9fe9Y8Il-lGH9eC9gX8XPwq7bQYU89Gi5QGgX3DR59QxIr654GgW0q-N4ld9OGjG1_fXYqyvBpe_2yUhptjeULhmClkiPgCvke77wTW_AJtCSxK6y6IipfN1WACuvSHryh29x7xc_XQ5q0kBICoZJsUm74mE_0j4KrDxcMG2clKI8ajcRMIluG26WcLPRjIwOoSS1ze7hexr_GE28x5_WxFf-G6oYA4uIicTNSwimryaTGkzXO8laMPDmm8JIImuDsPajegIpNGVuvZTZuvJ1LFkjEMi-rR1gXZYkD-yynAQZDNug2oFirCe-uNXQdjIdaaP_R0OTfjskeV8AEdsDFuqqDxPJIHJ5nNiQxoJpdP92EE7luEWJrJW7URH_8vLcg_SGWPL_gRED9miIKFVJzw1Yemo0E8zuk2XFLOS70eehW5AC5sSVWhg8uO9GepLdaMeZhpQeHsSeUQDVnOoPUj1W20VA3Qlm8udQp90O-s8ncNEHhKDVD2my3xF2lJcBDpky6m26w-5Q54iVnIljMkDyISoJdqbf-Z8o2m-NvRzAWzAgnLEoMhHNjK0au2ajocajUxGWzZTjmE793l9L4Nr9iaqJiQ6n3XSzG3PpeNzffBp0_4eiS6APD-QEalguHE7yUdkb5vjRKGiEF8ilSYyRqSKfp-__3SLgtCk8wXLaywXxE2JuX4E1mhuBp87a7ygR8iml3U-UHbb07EanJyNxgmh-Uu8SRgfzISI-UbG7u0c4yTKR8fszIUhxoBwfPhwLVtHiRTR9Z0Es_-mqSv3jlniJ0QrBwG30-l-SVP6LlbRQtuBWUV2UXZGaj37Y39FXV2iGXX7XKfcRFrd4sDClr2WbsjaCtqQrMk3WCqcSKutQFZw69P4PTaG4sZNqWgPset8fxmm8s2ex2EHWjHNkLoXWcUZb07hRRE3C8b8__i-rG1whIByzlIltMP_PpvgxfQI3HRlRaVL31lqIUlh17b-xmH8Uefdvq05K_6luSwVhSoTNnpCgMpnYacGn2wTx_sV-3GwNPnyg==",
+          "id": "rs_059840a0122a321d016ab6780c4b9c87d18f7b7cf5f326fde7",
+          "summary": [],
+          "type": "reasoning"
+        },
+        {
+          "content": [
+            {
+              "annotations": [],
+              "logprobs": [],
+              "text": "Let Ben pay \\(x\\) euros.\n\nThen:\n- Ana pays \\(2x\\)\n- Cleo pays \\(x + 5\\)\n\nTogether they pay 47 euros:\n\n\\[\nx + 2x + (x+5) = 47\n\\]\n\n\\[\n4x + 5 = 47\n\\]\n\n\\[\n4x = 42\n\\]\n\n\\[\nx = 10.5\n\\]\n\nSo:\n- **Ben** pays **€10.50**\n- **Ana** pays **€21.00**\n- **Cleo** pays **€15.50**\n\nCheck:\n\\[\n10.50 + 21.00 + 15.50 = 47.00\n\\]\n\nSo the amounts are **Ana: €21.00, Ben: €10.50, Cleo: €15.50**.",
+              "type": "output_text"
+            }
+          ],
+          "id": "msg_059840a0122a321d016ab6780d116087d1bc2160fdbf744955",
+          "phase": "final_answer",
+          "role": "assistant",
+          "status": "completed",
+          "type": "message"
+        }
+      ],
+      "tools": []
+    },
+    "headers": {
+      "access-control-expose-headers": [
+        "X-Request-ID",
+        "CF-Ray",
+        "CF-Ray"
+      ],
+      "alt-svc": [
+        "h3=\":443\"; ma=86400"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a40a65d8680161ae-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-length": [
+        "3946"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 25 Sep 2026 13:33:01 GMT"
+      ],
+      "openai-organization": "[REDACTED:openai-organization]",
+      "openai-processing-ms": [
+        "3849"
+      ],
+      "openai-project": [
+        "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
+      ],
+      "openai-version": [
+        "2020-10-01"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": "[REDACTED:set-cookie]",
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-ratelimit-limit-requests": [
+        "10000"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "4000000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "9999"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "3999968"
+      ],
+      "x-ratelimit-reset-requests": [
+        "6ms"
+      ],
+      "x-ratelimit-reset-tokens": [
+        "0s"
+      ],
+      "x-request-id": [
+        "req_e19b72e7dd2e4c279d310fa252e2ac94"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

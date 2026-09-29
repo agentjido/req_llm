@@ -242,10 +242,10 @@ defmodule ReqLLM.Providers.AmazonBedrock do
         "Beta feature flags for Anthropic models on Bedrock (e.g., [\"context-1m-2025-08-07\"])"
     ],
     service_tier: [
-      type: {:in, ["priority", "default", "flex"]},
+      type: {:in, ["priority", "default", "flex", "reserved"]},
       default: "default",
       doc:
-        "Service tier for request prioritization. Priority provides faster responses at higher cost, Flex is more cost-effective with longer latency."
+        "[Service tier](https://docs.aws.amazon.com/bedrock/latest/userguide/service-tiers-inference.html) the request runs on. Omitted when \"default\""
     ],
     input_type: [
       type: {:in, ["search_document", "search_query", "classification", "clustering"]},
@@ -389,15 +389,15 @@ defmodule ReqLLM.Providers.AmazonBedrock do
       raise Error.Invalid.Provider.exception(provider: model.provider)
     end
 
+    operation = user_opts[:operation] || :chat
+
     # Get AWS credentials
-    {aws_creds, other_opts} = extract_aws_credentials(user_opts)
+    {aws_creds, other_opts} = extract_aws_credentials(user_opts, model, operation)
 
     # Validate we have necessary AWS credentials
     validate_aws_credentials!(aws_creds)
 
     # Process options (validates, normalizes, and calls pre_validate_options)
-    operation = other_opts[:operation] || :chat
-
     opts =
       case ReqLLM.Provider.Options.process(__MODULE__, operation, model, other_opts) do
         {:ok, processed_opts} -> processed_opts
@@ -475,15 +475,9 @@ defmodule ReqLLM.Providers.AmazonBedrock do
       )
 
     model_body =
-      formatter.format_request(model_id, context, with_family_formatter(opts, model_id))
-
-    # Add service_tier if specified (default is already "default")
-    model_body =
-      if opts[:service_tier] && opts[:service_tier] != "default" do
-        Map.put(model_body, "service_tier", opts[:service_tier])
-      else
-        model_body
-      end
+      model_id
+      |> formatter.format_request(context, with_family_formatter(opts, model_id))
+      |> put_service_tier(model_family, opts[:service_tier])
 
     request_with_body =
       updated_request
@@ -514,7 +508,7 @@ defmodule ReqLLM.Providers.AmazonBedrock do
       raise Error.Invalid.Provider.exception(provider: model.provider)
     end
 
-    {aws_creds, other_opts} = extract_aws_credentials(user_opts)
+    {aws_creds, other_opts} = extract_aws_credentials(user_opts, model, :embedding)
     validate_aws_credentials!(aws_creds)
 
     processed_opts =
@@ -569,13 +563,13 @@ defmodule ReqLLM.Providers.AmazonBedrock do
 
   @impl ReqLLM.Provider
   def attach_stream(model, context, opts, _finch_name) do
+    operation = opts[:operation] || :chat
+
     # Get AWS credentials
-    {aws_creds, other_opts} = extract_aws_credentials(opts)
+    {aws_creds, other_opts} = extract_aws_credentials(opts, model, operation)
 
     # Validate we have necessary AWS credentials
     validate_aws_credentials!(aws_creds)
-
-    operation = other_opts[:operation] || :chat
 
     translated_opts =
       ReqLLM.Provider.Options.process_stream!(
@@ -612,19 +606,9 @@ defmodule ReqLLM.Providers.AmazonBedrock do
 
     # Build request body with translated options
     body =
-      formatter.format_request(
-        model_id,
-        context,
-        with_family_formatter(translated_opts, model_id)
-      )
-
-    # Add service_tier if specified (default is already "default")
-    body =
-      if translated_opts[:service_tier] && translated_opts[:service_tier] != "default" do
-        Map.put(body, "service_tier", translated_opts[:service_tier])
-      else
-        body
-      end
+      model_id
+      |> formatter.format_request(context, with_family_formatter(translated_opts, model_id))
+      |> put_service_tier(model_family, translated_opts[:service_tier])
 
     json_body = body |> ReqLLM.Schema.apply_property_ordering() |> Jason.encode!()
 
@@ -692,6 +676,10 @@ defmodule ReqLLM.Providers.AmazonBedrock do
   end
 
   @impl ReqLLM.Provider
+  def decode_stream_event(%{exception: type, payload: payload}, _model) do
+    [stream_exception_chunk(type, payload)]
+  end
+
   def decode_stream_event(%{data: _} = event, model) do
     {chunks, _state} = decode_stream_event(event, model, init_stream_state(model))
     chunks
@@ -726,6 +714,10 @@ defmodule ReqLLM.Providers.AmazonBedrock do
   end
 
   @impl ReqLLM.Provider
+  def decode_stream_event(%{exception: type, payload: payload}, _model, state) do
+    {[stream_exception_chunk(type, payload)], state}
+  end
+
   def decode_stream_event(%{data: %{"choices" => _}} = event, model, state) do
     model_id = model.provider_model_id || model.id
     openai = %{model | id: model_id, provider: :openai}
@@ -789,6 +781,17 @@ defmodule ReqLLM.Providers.AmazonBedrock do
 
   defp guardrail_stream_chunks(_event), do: []
 
+  defp stream_exception_chunk(type, payload) do
+    error =
+      ReqLLM.Error.API.Request.exception(
+        reason: payload["message"],
+        response_body: payload,
+        provider_code: type
+      )
+
+    ReqLLM.StreamChunk.meta(%{finish_reason: :error, error: error, terminal?: true})
+  end
+
   @impl ReqLLM.Provider
   def flush_stream_state(model, state) do
     model_id = model.provider_model_id || model.id
@@ -839,7 +842,10 @@ defmodule ReqLLM.Providers.AmazonBedrock do
 
         reasoning_effort && reasoning_effort != :none ->
           budget = Anthropic.map_reasoning_effort_to_budget(reasoning_effort)
-          PlatformReasoning.add_reasoning_to_additional_fields(opts, budget, model)
+
+          opts
+          |> PlatformReasoning.add_reasoning_to_additional_fields(budget, model)
+          |> PlatformReasoning.maybe_add_effort_to_additional_fields(reasoning_effort, model)
 
         true ->
           opts
@@ -893,10 +899,13 @@ defmodule ReqLLM.Providers.AmazonBedrock do
 
   def wrap_response(data), do: data
 
-  defp extract_aws_credentials(opts) do
-    aws_keys = [:api_key, :access_key_id, :secret_access_key, :session_token, :region]
+  @aws_credential_keys [:api_key, :access_key_id, :secret_access_key, :session_token, :region]
 
-    {passed_creds, other_opts} = Keyword.split(opts, aws_keys)
+  defp extract_aws_credentials(opts, model, operation) do
+    passed_creds =
+      opts |> normalize_provider_options!(model, operation) |> passed_aws_credentials()
+
+    other_opts = Keyword.drop(opts, @aws_credential_keys)
 
     creds =
       cond do
@@ -916,11 +925,35 @@ defmodule ReqLLM.Providers.AmazonBedrock do
           }
 
         true ->
-          AWSAuthAdapter.from_env()
+          with_region(AWSAuthAdapter.from_env(), passed_creds[:region])
       end
 
     {creds, other_opts}
   end
+
+  defp normalize_provider_options!(opts, model, operation) do
+    with {:ok, namespaced, _warnings} <-
+           ReqLLM.Provider.Options.Namespace.normalize(__MODULE__, operation, model, opts),
+         {:ok, normalized} <-
+           ReqLLM.Provider.Options.normalize_flat_provider_options(__MODULE__, namespaced) do
+      normalized
+    else
+      {:error, error} -> raise error
+    end
+  end
+
+  defp passed_aws_credentials(opts) do
+    Enum.flat_map(@aws_credential_keys, fn key ->
+      case opts[key] || get_in(opts, [:provider_options, key]) do
+        nil -> []
+        value -> [{key, value}]
+      end
+    end)
+  end
+
+  defp with_region(nil, _region), do: nil
+  defp with_region(creds, nil), do: creds
+  defp with_region(creds, region), do: %{creds | region: region}
 
   defp validate_aws_credentials!(nil) do
     raise ArgumentError, """
@@ -1193,6 +1226,13 @@ defmodule ReqLLM.Providers.AmazonBedrock do
 
   defp route_headers(:runtime, :converse, _opts), do: []
   defp route_headers(:runtime, _model_family, opts), do: guardrail_headers(opts)
+
+  defp put_service_tier(body, _model_family, tier) when tier in [nil, "default"], do: body
+
+  defp put_service_tier(body, :converse, tier),
+    do: Map.put(body, "serviceTier", %{"type" => tier})
+
+  defp put_service_tier(body, _model_family, tier), do: Map.put(body, "service_tier", tier)
 
   defp guardrail_headers(opts) do
     case provider_option(opts, :guardrail_identifier) do

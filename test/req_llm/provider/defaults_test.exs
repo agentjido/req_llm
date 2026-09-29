@@ -878,6 +878,41 @@ defmodule ReqLLM.Provider.DefaultsTest do
       assert chunk.metadata == %{id: "call_123"}
     end
 
+    test "carries the provider response id on finish and usage metadata", %{model: model} do
+      content_event = %{
+        data: %{"id" => "chatcmpl-123", "choices" => [%{"delta" => %{"content" => "Hello"}}]}
+      }
+
+      assert [%StreamChunk{type: :content, text: "Hello"}] =
+               Defaults.default_decode_stream_event(content_event, model)
+
+      finish_event = %{
+        data: %{
+          "id" => "chatcmpl-123",
+          "choices" => [%{"delta" => %{}, "finish_reason" => "stop"}]
+        }
+      }
+
+      assert [
+               %StreamChunk{
+                 type: :meta,
+                 metadata: %{response_id: "chatcmpl-123", finish_reason: :stop}
+               }
+             ] =
+               Defaults.default_decode_stream_event(finish_event, model)
+
+      usage_event = %{
+        data: %{
+          "id" => "chatcmpl-123",
+          "choices" => [],
+          "usage" => %{"prompt_tokens" => 1, "completion_tokens" => 1, "total_tokens" => 2}
+        }
+      }
+
+      assert [%StreamChunk{type: :meta, metadata: %{response_id: "chatcmpl-123", usage: _}}] =
+               Defaults.default_decode_stream_event(usage_event, model)
+    end
+
     test "handles edge cases gracefully", %{model: model} do
       assert Defaults.default_decode_stream_event(%{data: %{}}, model) == []
       assert Defaults.default_decode_stream_event(%{}, model) == []

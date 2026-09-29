@@ -1,0 +1,153 @@
+{
+  "model_spec": "azure:gpt-5.4",
+  "provider": "azure",
+  "request": {
+    "body": {
+      "b64": "eyJtb2RlbCI6ImdwdC01LjQiLCJwcmV2aW91c19yZXNwb25zZV9pZCI6InJlc3BfMGRmN2NlOTA5NWIzZDIzZDAwNmFiNGViZTI5NDYwODE5NWIyZjdkMTdkMjlkOTE1MjAifQ=="
+    },
+    "canonical_json": {
+      "model": "gpt-5.4",
+      "previous_response_id": "resp_0df7ce9095b3d23d006ab4ebe294608195b2f7d17d29d91520"
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "api-key": "[REDACTED:api-key]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.7.4"
+      ]
+    },
+    "method": "post",
+    "url": "https://fixture.openai.azure.com/openai/v1/responses/compact"
+  },
+  "response": {
+    "body": {
+      "created_at": 1790241764,
+      "id": "resp_0df7ce9095b3d23d016ab4ebe393848195a6d28b9d02fcc761",
+      "object": "response.compaction",
+      "output": [
+        {
+          "content": [
+            {
+              "text": "What is the approximate land area of France? One sentence.",
+              "type": "input_text"
+            }
+          ],
+          "id": "msg_0df7ce9095b3d23d006ab4ebe299cc8195a29f9fc16a283be1",
+          "role": "user",
+          "status": "completed",
+          "type": "message"
+        },
+        {
+          "content": [
+            {
+              "annotations": [],
+              "logprobs": [],
+              "text": "France has an approximate land area of 551,695 square kilometers (about 213,000 square miles).",
+              "type": "output_text"
+            }
+          ],
+          "id": "msg_0df7ce9095b3d23d006ab4ebe2e7d081958d4498db3d929a6c",
+          "phase": "final_answer",
+          "role": "assistant",
+          "status": "completed",
+          "type": "message"
+        },
+        {
+          "encrypted_content": "gAAAAABqtOvkn0WAh0Hqhjd0qcdTvmsy7peAvKOJ8TcyrZt3Z0u_LnYoosqGoSKNu5Bby-IVoUuK4GS56WY_Az0U8KHg49e8DxOyUaMeW9qkHeTizq-QxgNY64i9Awdmcs8vMUUL4b-HOIQD1WGcQVwUaq4xdrHDXIj2_ZIz0WD_y0JsFtpdrm10_h40jPFUH1QdokVzgDQ3isVvoy9vLvZKhxRDt59Jel_BppkhDDF7WXXu9cHRbsvoF3lL1OJ11rz0RMpvls0EcK_tv17DDlCc6RWVbzjpC844IEUm0WGNFRAw_PVIUzz-FUk0R6uDol6ALgAsG_Ffhddc24tn5Fh3zOGlyYUmuj_FxZVeFJi7VlT01fVEspzQ7DEi0IQKbOmp1lBTCJUvZYNoOvRo86UcWQpu3rFV9eiJklVozXLfJp-FO0kkGey14ODl57L1Yv25Az0vc3uY6NTyxj5VHWZfk7JlF0sI2TiJFMjdsWu_pyji-_RPwxCAhJRVQgq-bO_P81_dzBXSzM3Xn-T-jIJATcMgaCDbLXhhCDPdtOKqWF66tuA3Gs2lYcJkGJV2v2mhAKkbH1sdMBxuCS2LLnbu3R_iulDqxQPoEQkZOS6egeeWY_Lkk7kVw0DQGghfYWoONMzRWKzZOZ-pvF7JZ4rkJU452sojBySsym7VRHcRgzmSiDMwWqmHRjazeu7py2OnBsSIElrVWVFkEZvvtcUn6-zdS7a9RCePEaJPiWLZXND-WWjLLr2LUzWnAJ3DIRYHPS-Y69Qsfl2JNfwQr2aII-UQejm4FrFbciBJom5E3dzbbj86fTbs2W1zaZx6q5tM3ToSTMnN97yV7T0Y6P5GHZ5HWl9s684By8SYSlkhSt_O04STkNJNKFStt0aHxuf_5qf7wWly_UVCm8H1gBz-Ugmsr0el_Uf5IF6lr2Zpk7_qeR9sfb_cMT6i82mmv3VuJ18Es3AswC-gZ_Qn5E2fREQ0bmJzvqmFj8q-WB3dHSktg4Iv3xadYJ6GIQr8gT86IV17BYFUMRXOlTyYF49HtOSMOb0LYl9kBErBb8DAmN-b9upcy7NMv4n_7LzdvnClbtRRw8qNWiApwI9sVW5YbBIM_8KpONGs3Qind_toyAfqJEffwJM=",
+          "id": "cmp_0df7ce9095b3d23d016ab4ebe408388195847c00fd92f0752d",
+          "type": "compaction"
+        }
+      ],
+      "usage": {
+        "input_tokens": 64,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 51,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 115
+      }
+    },
+    "headers": {
+      "apim-request-id": [
+        "f95abe94-d46d-4f18-a80e-b42c145807d6"
+      ],
+      "azureai-fe-is-streaming": [
+        "False"
+      ],
+      "azureai-fe-offer-type": [
+        "paygo"
+      ],
+      "content-length": [
+        "2447"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Thu, 24 Sep 2026 09:22:40 GMT"
+      ],
+      "server": [
+        "istio-envoy"
+      ],
+      "skip-error-remapping": [
+        "true"
+      ],
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-ms-is-spilled-over": [
+        "false"
+      ],
+      "x-ms-region": [
+        "Sweden Central"
+      ],
+      "x-ratelimit-abusepenalty-active": [
+        "False"
+      ],
+      "x-ratelimit-key": [
+        "gpt-5.4"
+      ],
+      "x-ratelimit-limit-requests": [
+        "700"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "700000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "699"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "699962"
+      ],
+      "x-ratelimit-renewalperiod-requests": [
+        "60"
+      ],
+      "x-ratelimit-renewalperiod-tokens": [
+        "60"
+      ],
+      "x-ratelimit-reset-requests": [
+        "0"
+      ],
+      "x-ratelimit-reset-tokens": [
+        "0"
+      ],
+      "x-request-id": [
+        "8f45a66d-2a8c-4862-875e-e6501f99c8b0"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

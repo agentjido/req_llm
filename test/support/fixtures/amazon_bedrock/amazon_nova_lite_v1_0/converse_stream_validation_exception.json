@@ -1,0 +1,61 @@
+{
+  "captured_at": "2026-09-19T09:24:35.711918Z",
+  "chunks": [
+    {
+      "b64": "AAABHQAAAGEMuw4xDzpleGNlcHRpb24tdHlwZQcAE3ZhbGlkYXRpb25FeGNlcHRpb24NOmNvbnRlbnQtdHlwZQcAEGFwcGxpY2F0aW9uL2pzb24NOm1lc3NhZ2UtdHlwZQcACWV4Y2VwdGlvbnsibWVzc2FnZSI6IlRoZSBtb2RlbCByZXR1cm5lZCB0aGUgZm9sbG93aW5nIGVycm9yczogVGhlIGRldGVjdGVkIGZpbGUgTUlNRSB0eXBlIHRleHQvcGxhaW4gZG9lcyBub3QgbWF0Y2ggdGhlIGV4cGVjdGVkIHR5cGUgaW1hZ2UvcG5nLiBSZWZvcm1hdCB5b3VyIGlucHV0IGFuZCB0cnkgYWdhaW4uIn1RM9la"
+    }
+  ],
+  "model_spec": "amazon_bedrock:amazon.nova-lite-v1:0",
+  "provider": "amazon_bedrock",
+  "request": {
+    "body": {
+      "b64": "eyJpbmZlcmVuY2VDb25maWciOnsibWF4VG9rZW5zIjoxNn0sIm1lc3NhZ2VzIjpbeyJjb250ZW50IjpbeyJ0ZXh0IjoiRGVzY3JpYmUgdGhpcyBpbWFnZS4ifSx7ImltYWdlIjp7ImZvcm1hdCI6InBuZyIsInNvdXJjZSI6eyJieXRlcyI6ImRHaGxjMlVnWW5sMFpYTWdZWEpsSUc1dmRDQmhJRkJPUnlCcGJXRm5aUT09In19fV0sInJvbGUiOiJ1c2VyIn1dfQ=="
+    },
+    "canonical_json": {
+      "inferenceConfig": {
+        "maxTokens": 16
+      },
+      "messages": [
+        {
+          "content": [
+            {
+              "text": "Describe this image."
+            },
+            {
+              "image": {
+                "format": "png",
+                "source": {
+                  "bytes": "dGhlc2UgYnl0ZXMgYXJlIG5vdCBhIFBORyBpbWFnZQ=="
+                }
+              }
+            }
+          ],
+          "role": "user"
+        }
+      ]
+    },
+    "headers": {
+      "accept": "application/vnd.amazon.eventstream",
+      "authorization": "[REDACTED:authorization]",
+      "content-type": "application/json",
+      "host": "bedrock-runtime.us-east-1.amazonaws.com",
+      "x-amz-content-sha256": "0871b5065f1065cf65ed6d8dba149de3cd485e779f6d8070f3093de795d67350",
+      "x-amz-date": "20260919T092435Z",
+      "x-amz-security-token": "[REDACTED:x-amz-security-token]"
+    },
+    "method": "POST",
+    "url": "https://bedrock-runtime.us-east-1.amazonaws.com/model/amazon.nova-lite-v1:0/converse-stream"
+  },
+  "response": {
+    "body": null,
+    "headers": {
+      "connection": "keep-alive",
+      "content-type": "application/vnd.amazon.eventstream",
+      "date": "Sat, 19 Sep 2026 09:24:35 GMT",
+      "transfer-encoding": "chunked",
+      "x-amzn-requestid": "17a5a84f-f42a-4729-81da-bc9a19335fa0"
+    },
+    "status": 200
+  },
+  "streaming": true
+}

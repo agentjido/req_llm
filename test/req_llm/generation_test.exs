@@ -121,6 +121,45 @@ defmodule ReqLLM.GenerationTest do
   end
 
   describe "generate_text/3 core functionality" do
+    test "public pricing context selects a conditional tariff without changing the request" do
+      model = %LLMDB.Model{
+        provider: :openai,
+        id: "gpt-4-turbo",
+        pricing: %{
+          currency: "USD",
+          components: [
+            %{
+              id: "token.input",
+              kind: "token",
+              rate: 1.0,
+              per: 1_000_000,
+              applies_when: %{pricing_period: "peak"}
+            },
+            %{id: "token.output", kind: "token", rate: 2.0, per: 1_000_000}
+          ]
+        }
+      }
+
+      request_options = [
+        api_key: "test-key",
+        req_http_options: [plug: {Req.Test, ReqLLM.GenerationTest}]
+      ]
+
+      assert {:ok, priced} =
+               ReqLLM.generate_text(model, "Hello",
+                 pricing_context: %{pricing_period: "peak"},
+                 api_key: "test-key",
+                 req_http_options: [plug: {Req.Test, ReqLLM.GenerationTest}]
+               )
+
+      assert priced.usage.pricing.status == :priced
+      assert priced.usage.total_cost == 0.000028
+
+      assert {:ok, unknown} = ReqLLM.generate_text(model, "Hello", request_options)
+      assert unknown.usage.pricing.status == :unknown
+      refute Map.has_key?(unknown.usage, :total_cost)
+    end
+
     test "accepts string input format" do
       {:ok, response} =
         Generation.generate_text(

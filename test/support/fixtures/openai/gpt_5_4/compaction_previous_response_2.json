@@ -1,0 +1,148 @@
+{
+  "model_spec": "openai:gpt-5.4",
+  "provider": "openai",
+  "request": {
+    "body": {
+      "b64": "eyJtb2RlbCI6ImdwdC01LjQiLCJwcmV2aW91c19yZXNwb25zZV9pZCI6InJlc3BfMDllOTliMTk5NTM0YWIxOTAwNmFiNjc4MjY1ZGIwODdkMThlZDhhMTg5YWRmZDk2ODIifQ=="
+    },
+    "canonical_json": {
+      "model": "gpt-5.4",
+      "previous_response_id": "resp_09e99b199534ab19006ab678265db087d18ed8a189adfd9682"
+    },
+    "headers": {
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.7.4"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.openai.com/v1/responses/compact"
+  },
+  "response": {
+    "body": {
+      "created_at": 1790343209,
+      "id": "resp_09e99b199534ab19016ab678284d8c87d18dbb6db3cdc43615",
+      "object": "response.compaction",
+      "output": [
+        {
+          "content": [
+            {
+              "text": "What is the approximate land area of France? One sentence.",
+              "type": "input_text"
+            }
+          ],
+          "id": "msg_09e99b199534ab19006ab67826709487d1a36a273d4e7b97f7",
+          "role": "user",
+          "status": "completed",
+          "type": "message"
+        },
+        {
+          "content": [
+            {
+              "annotations": [],
+              "logprobs": [],
+              "text": "Metropolitan France covers approximately 551,700 square kilometers (about 213,000 square miles).",
+              "type": "output_text"
+            }
+          ],
+          "id": "msg_09e99b199534ab19006ab6782773dc87d1a9aa035d8770ab8a",
+          "phase": "final_answer",
+          "role": "assistant",
+          "status": "completed",
+          "type": "message"
+        },
+        {
+          "encrypted_content": "gAAAAABqtngpysCpdb8jWSZPH-GX_1V-0qx8BN3OKCYJpGykNddx_bmIwiFyw1RS6QmDaGMjzFMA9Bzeflz2GJxlmiNDeoA6iRbDs37Ma9l_7w9b_BoT60EDMzGBLDKmH4ihL8YU-3n3M3WBZVbOjAn0ikWxRqvEa-D53v5jl0ZoeOONcHBUQGfBJ3A1npPH-pktCekiW2697k51cmjFWp7a3u8wbMnpADnnnHrYXhjzTU1IMj8F6SHPe0XOYPXtfc0zNCXbZzEw-UHLn2oa614lxrqNA4mrjxyYjecy4wCeojEDimlvCIlAKnBO5nuBry3qadb8B0A5LJ6wY-ye2U42Udge0AnBvdBcnKKRSYY_KE1Zx4sc0smvXjUvdO58N-6JZiTRKSUTSVDva-j-hyx3NZtxJb7t0D8EYeOkPqzhLUhtLceJ1TqWf4uyz6LRbOoQJdn7_PTyNgAlQuX8Dgomr1-T09IxmwtMjkljgLweg8vslZeJh1ayelnpOLOkvE2z6XtZlxEGAsgyLvpy54KcFCq5XWVIyokahR_mHEutES8DZa2QgOl3p6EKhCjJ5qymKp0tBmhFqnPUXsC0sb9kZDm3wKr7eKGCOzyt0us__GtEogsccmZTaxe8ltQbFbUa9mp67hbtxlbtiSUeAUuWv6oTHNdwVhuHp_M-QrbwW03OMZymt2rcnIulJ_Arkzx1cHbxqa6jmJMVU8pap6qbQwbiXFnX4smu5khiuXKaakEzzKj5mi0vu7RKROwYGurzci77afiUSU1xcOaTDcC-jwEyGin5ALP4IueontrK3MRUQGHThiy0aMxQbP10ahFT50GP5OFreKdQdY23Ynqd8thNv6J_-d4YUXihrcn7rCc6gn85UFiMsw1HRKTHp4Xhyh97b8NipcjUH20MEOCQaoFBf5T-RyqHfDb_x2GP5bdaHGgcOB7gGBVqvFjJswvv7bc2INTbwz8ljnI4tuDaHUCkk_neGIYFrVQ-zGxiRQaq3PykDHKGA0rpUdvJXW-Q1Dzk9rYA5qMge__TfzNhM7SINTuhl4_xehNGCNA2SfS_h14mvvxq1rW6nWxMQZQwTf_OY4H3TcsDNUZowfZ2_A_ohJwPYAAoddMTYBYHLDC3UcivdkxAbRhswnN2YNFVTanQPWDY-rIsN3kekTEhbDv62ONDAbvQrFmet_8VvZ6ybectxiM=",
+          "id": "cmp_09e99b199534ab19016ab67828fffc87d1af3370eb405b11ab",
+          "type": "compaction"
+        }
+      ],
+      "usage": {
+        "input_tokens": 62,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 48,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 110
+      }
+    },
+    "headers": {
+      "access-control-expose-headers": [
+        "X-Request-ID",
+        "CF-Ray",
+        "CF-Ray"
+      ],
+      "alt-svc": [
+        "h3=\":443\"; ma=86400"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a40a669aee761409-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-length": [
+        "2513"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 25 Sep 2026 13:33:29 GMT"
+      ],
+      "openai-organization": "[REDACTED:openai-organization]",
+      "openai-processing-ms": [
+        "1075"
+      ],
+      "openai-project": [
+        "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
+      ],
+      "openai-version": [
+        "2020-10-01"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": "[REDACTED:set-cookie]",
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-ratelimit-limit-requests": [
+        "10000"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "4000000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "9999"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "4000000"
+      ],
+      "x-ratelimit-reset-requests": [
+        "6ms"
+      ],
+      "x-ratelimit-reset-tokens": [
+        "0s"
+      ],
+      "x-request-id": [
+        "req_ab169e6ba7d643e1a4c0e97f69bf4f6a"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

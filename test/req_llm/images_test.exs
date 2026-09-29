@@ -78,6 +78,64 @@ defmodule ReqLLM.ImagesTest do
     assert Keyword.get(processed, :aspect_ratio) == "16:9"
   end
 
+  test "process/4 accepts the gpt-image parameter set" do
+    model = %LLMDB.Model{id: "gpt-image-1.5", provider: :openai}
+
+    {:ok, processed} =
+      ReqLLM.Provider.Options.process(
+        ReqLLM.Providers.OpenAI,
+        :image,
+        model,
+        background: :transparent,
+        moderation: "low",
+        output_compression: 50,
+        output_format: :webp,
+        quality: :low,
+        context: Context.new()
+      )
+
+    assert Keyword.get(processed, :background) == :transparent
+    assert Keyword.get(processed, :moderation) == "low"
+    assert Keyword.get(processed, :output_compression) == 50
+    assert Keyword.get(processed, :quality) == :low
+  end
+
+  test "process/4 accepts every gpt-image quality tier as an atom" do
+    model = %LLMDB.Model{id: "gpt-image-2.5-sunburst", provider: :openai}
+
+    for quality <- [:auto, :low, :medium, :high, :xhigh, :max] do
+      {:ok, processed} =
+        ReqLLM.Provider.Options.process(
+          ReqLLM.Providers.OpenAI,
+          :image,
+          model,
+          quality: quality,
+          context: Context.new()
+        )
+
+      assert Keyword.get(processed, :quality) == quality
+    end
+  end
+
+  test "process/4 rejects gpt-image parameters outside their allowed values" do
+    model = %LLMDB.Model{id: "gpt-image-1.5", provider: :openai}
+
+    for opts <- [
+          [background: :blurred],
+          [moderation: :off],
+          [output_compression: 101],
+          [input_fidelity: :medium]
+        ] do
+      assert {:error, _} =
+               ReqLLM.Provider.Options.process(
+                 ReqLLM.Providers.OpenAI,
+                 :image,
+                 model,
+                 opts ++ [context: Context.new()]
+               )
+    end
+  end
+
   test "process/4 accepts image edit source and mask options" do
     model = %LLMDB.Model{id: "gpt-image-1.5", provider: :openai}
 
@@ -99,6 +157,43 @@ defmodule ReqLLM.ImagesTest do
     assert Keyword.get(processed, :mask_media_type) == "image/png"
   end
 
+  describe "OpenAI-only image options on other providers" do
+    @openai_only [background: :transparent, moderation: :low, output_compression: 50]
+
+    for {provider_mod, provider_id, model_id} <- [
+          {ReqLLM.Providers.Google, :google, "gemini-2.5-flash-image"},
+          {ReqLLM.Providers.XAI, :xai, "grok-2-image-1212"},
+          {ReqLLM.Providers.Minimax, :minimax, "image-01"}
+        ] do
+      test "#{provider_id} prepares a request instead of raising on them" do
+        model = %LLMDB.Model{id: unquote(model_id), provider: unquote(provider_id)}
+
+        for {key, value} <- @openai_only ++ [input_fidelity: :high] do
+          assert {:ok, request} =
+                   unquote(provider_mod).prepare_request(:image, model, "a fox", [
+                     {:api_key, "test-key"},
+                     {key, value}
+                   ])
+
+          refute Map.has_key?(request.options, key)
+        end
+      end
+
+      test "#{provider_id} escalates them under on_unsupported: :error" do
+        model = %LLMDB.Model{id: unquote(model_id), provider: unquote(provider_id)}
+
+        assert {:error, %ReqLLM.Error.Validation.Error{reason: reason}} =
+                 unquote(provider_mod).prepare_request(:image, model, "a fox",
+                   api_key: "test-key",
+                   background: :transparent,
+                   on_unsupported: :error
+                 )
+
+        assert reason =~ ":background"
+      end
+    end
+  end
+
   defp google_image_model_spec do
     Images.supported_models()
     |> Enum.find(&google_image_model_spec?/1)
@@ -111,5 +206,115 @@ defmodule ReqLLM.ImagesTest do
   defp google_image_model_spec?(model_spec) do
     String.starts_with?(model_spec, "google:") and
       (String.contains?(model_spec, "image") or String.contains?(model_spec, "imagen"))
+  end
+
+  describe "stream_image/3" do
+    test "rejects providers without image streaming" do
+      assert {:error, %ReqLLM.Error.Invalid.Parameter{parameter: message}} =
+               Images.stream_image(%{provider: :xai, id: "grok-2-image"}, "A red square")
+
+      assert message =~ "image streaming is only supported for OpenAI and Azure"
+
+      assert {:error, %ReqLLM.Error.Invalid.Parameter{}} =
+               Images.stream_image("google:gemini-2.5-flash-image", "A red square")
+    end
+
+    test "rejects OpenAI models outside the image families" do
+      assert {:error, %ReqLLM.Error.Invalid.Parameter{parameter: message}} =
+               Images.stream_image("openai:gpt-4o", "A red square")
+
+      assert message =~ "gpt-4o"
+    end
+
+    test "rejects DALL-E models" do
+      assert {:error, %ReqLLM.Error.Invalid.Parameter{parameter: message}} =
+               Images.stream_image("openai:dall-e-3", "A red square")
+
+      assert message =~ "dall-e-3"
+    end
+
+    test "rejects edits and multi-image requests" do
+      assert {:error, %ReqLLM.Error.Invalid.Parameter{parameter: edit_message}} =
+               Images.stream_image("openai:gpt-image-1.5", "A red square", source_image: "png")
+
+      assert edit_message =~ "streaming image edits are not supported"
+
+      assert {:error, %ReqLLM.Error.Invalid.Parameter{parameter: n_message}} =
+               Images.stream_image("openai:gpt-image-1.5", "A red square", n: 2)
+
+      assert n_message =~ "single image"
+    end
+
+    test "rejects a context without user text" do
+      context = Context.new([Context.system("You are helpful.")])
+
+      assert {:error, %ReqLLM.Error.Invalid.Parameter{}} =
+               Images.stream_image("openai:gpt-image-1.5", context, api_key: "test-key")
+    end
+
+    test "is exposed on the ReqLLM facade" do
+      assert {:error, %ReqLLM.Error.Invalid.Parameter{}} =
+               ReqLLM.stream_image("openai:gpt-4o", "A red square")
+    end
+  end
+
+  describe "stream_opts/1" do
+    test "marks the stream as an image operation with the image receive timeout" do
+      opts = Images.stream_opts(partial_images: 2)
+
+      assert opts[:operation] == :image
+      assert opts[:stream] == true
+      assert opts[:partial_images] == 2
+
+      assert opts[:receive_timeout] ==
+               Application.get_env(:req_llm, :image_receive_timeout, 120_000)
+    end
+
+    test "keeps an explicit receive_timeout" do
+      assert Images.stream_opts(receive_timeout: 5_000)[:receive_timeout] == 5_000
+    end
+
+    test "uses the configured image receive timeout" do
+      previous = Application.get_env(:req_llm, :image_receive_timeout)
+      Application.put_env(:req_llm, :image_receive_timeout, 240_000)
+
+      on_exit(fn ->
+        case previous do
+          nil -> Application.delete_env(:req_llm, :image_receive_timeout)
+          value -> Application.put_env(:req_llm, :image_receive_timeout, value)
+        end
+      end)
+
+      assert Images.stream_opts([])[:receive_timeout] == 240_000
+    end
+  end
+
+  test "generate_image/3 rejects stream: true" do
+    assert {:error, %ReqLLM.Error.Invalid.Parameter{parameter: message}} =
+             Images.generate_image("openai:gpt-image-1.5", "A red square", stream: true)
+
+    assert message =~ "stream_image/3"
+  end
+
+  test "generate_image/3 rejects partial_images" do
+    assert {:error, %ReqLLM.Error.Invalid.Parameter{parameter: message}} =
+             Images.generate_image("openai:gpt-image-1.5", "A red square", partial_images: 2)
+
+    assert message =~ "partial_images"
+    assert message =~ "stream_image/3"
+  end
+
+  describe "stream_image!/3" do
+    test "raises the validation error" do
+      assert_raise ReqLLM.Error.Invalid.Parameter, ~r/gpt-4o/, fn ->
+        Images.stream_image!("openai:gpt-4o", "A red square")
+      end
+    end
+
+    test "is exposed on the ReqLLM facade" do
+      assert_raise ReqLLM.Error.Invalid.Parameter, ~r/single image/, fn ->
+        ReqLLM.stream_image!("openai:gpt-image-1.5", "A red square", n: 2)
+      end
+    end
   end
 end

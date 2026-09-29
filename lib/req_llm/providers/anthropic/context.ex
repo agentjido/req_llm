@@ -9,6 +9,9 @@ defmodule ReqLLM.Providers.Anthropic.Context do
   - Uses content blocks instead of simple strings
   - System messages are extracted to top-level `system` parameter
   - Tool calls are represented as content blocks with type "tool_use"
+  - Server-side tool blocks the API returned (`server_tool_use`,
+    `tool_search_tool_result`) ride along as `ContentPart` `:provider_block`s
+    and are replayed verbatim in their original position
   - Tool results must be in "user" role messages (Anthropic only accepts "user" or "assistant" roles)
   - Different parameter names (stop_sequences vs stop)
 
@@ -349,6 +352,20 @@ defmodule ReqLLM.Providers.Anthropic.Context do
       }
     }
   end
+
+  # Provider-owned blocks (`server_tool_use`, `tool_search_tool_result`) go back
+  # exactly as they came — the API checks the replayed assistant turn against
+  # what it produced, and with extended thinking on it rejects a turn that
+  # lost them. Blocks another provider owns have no meaning here.
+  defp do_encode_content_part(%ReqLLM.Message.ContentPart{
+         type: :provider_block,
+         data: block,
+         metadata: %{provider: :anthropic}
+       })
+       when is_map(block),
+       do: block
+
+  defp do_encode_content_part(%ReqLLM.Message.ContentPart{type: :provider_block}), do: nil
 
   defp do_encode_content_part(_), do: nil
 

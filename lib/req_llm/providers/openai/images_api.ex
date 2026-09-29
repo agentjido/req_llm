@@ -7,6 +7,10 @@ defmodule ReqLLM.Providers.OpenAI.ImagesAPI do
   every provider that speaks the same wire format. Option translation,
   validation, and body construction live there; this module only binds them to
   the OpenAI provider's endpoint driver contract.
+
+  Streaming (`ReqLLM.stream_image/3`) is served by `attach_stream/4`, which
+  posts to `/images/generations` with `"stream": true`, and by
+  `decode_stream_event/2`, which delegates to the shared SSE decoder.
   """
 
   @behaviour ReqLLM.Providers.OpenAI.API
@@ -40,11 +44,38 @@ defmodule ReqLLM.Providers.OpenAI.ImagesAPI do
   defdelegate decode_response(request_response), to: OpenAICompatible
 
   @impl true
-  def decode_stream_event(_event, _model), do: []
+  defdelegate decode_stream_event(event, model), to: OpenAICompatible
 
+  @doc """
+  Builds the Finch request for a streaming `/images/generations` call.
+
+  Expects options already processed by `ReqLLM.Provider.Options.process_stream!/5`
+  for the `:image` operation and already checked by
+  `ReqLLM.Images.OpenAICompatible.validate_stream_options/1`; the provider's
+  `attach_stream/4` does both before delegating here.
+  """
   @impl true
-  def attach_stream(_model, _context, _opts, _finch_name) do
-    {:error,
-     ReqLLM.Error.Invalid.Parameter.exception(parameter: "streaming not supported for :image")}
+  def attach_stream(model, context, opts, _finch_name) do
+    with {:ok, prompt} <- OpenAICompatible.prompt_from_context(context) do
+      base_url = ReqLLM.Provider.Options.effective_base_url(ReqLLM.Providers.OpenAI, model, opts)
+
+      auth_headers =
+        ReqLLM.Providers.OpenAI.auth_header_list(
+          ReqLLM.Providers.OpenAI.resolve_request_credential!(model, opts)
+        )
+
+      headers = OpenAICompatible.stream_request_headers(auth_headers, opts)
+
+      body =
+        OpenAICompatible.stream_generation_body(opts, prompt, model.provider_model_id || model.id)
+
+      {:ok, Finch.build(:post, base_url <> path(), headers, Jason.encode!(body))}
+    end
+  rescue
+    error ->
+      {:error,
+       ReqLLM.Error.API.Request.exception(
+         reason: "Failed to build streaming image request: #{Exception.message(error)}"
+       )}
   end
 end

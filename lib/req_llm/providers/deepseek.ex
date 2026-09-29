@@ -41,7 +41,7 @@ defmodule ReqLLM.Providers.Deepseek do
 
       # With maximum reasoning effort for complex tasks
       ReqLLM.generate_text("deepseek:deepseek-v4-pro", "Complex reasoning task",
-        reasoning_effort: :xhigh
+        reasoning_effort: :max
       )
 
       # Disable thinking mode
@@ -73,15 +73,15 @@ defmodule ReqLLM.Providers.Deepseek do
 
   ### Reasoning Effort
 
-  The `reasoning_effort` option controls the depth of reasoning. For compatibility,
-  `:low` and `:medium` are mapped to `"high"`, and `:xhigh` is mapped to `"max"`.
+  The `reasoning_effort` option controls the depth of reasoning. DeepSeek supports
+  `"none"`, `"low"`, `"high"`, and `"max"` effort levels. ReqLLM effort levels
+  and DeepSeek's `:ultra` alias are mapped to the nearest DeepSeek value:
 
-  Only `"high"` and `"max"` are the meaningful values sent to the API:
-
-  - `:low` → mapped to `"high"`
-  - `:medium` → mapped to `"high"`
-  - `:high` → `"high"` (default for thinking mode)
-  - `:xhigh` → mapped to `"max"` (maximum effort for complex tasks)
+  - `:none` → `"none"`
+  - `:minimal` and `:low` → `"low"`
+  - `:medium`, `:high`, and `:xhigh` → `"high"` (default for thinking mode)
+  - `:max` and `:ultra` → `"max"`
+  - `:default` → omitted, allowing the API default
 
   See https://platform.deepseek.com/docs for full model documentation.
   """
@@ -105,16 +105,29 @@ defmodule ReqLLM.Providers.Deepseek do
     ]
   ]
 
+  @doc false
+  def pre_validate_options(_operation, _model, opts) do
+    case Keyword.get(opts, :reasoning_effort) do
+      :ultra -> Keyword.put(opts, :reasoning_effort, :max)
+      _ -> opts
+    end
+  end
+
   @impl ReqLLM.Provider
   def translate_options(_operation, _model, opts) do
     {reasoning_effort, opts} = Keyword.pop(opts, :reasoning_effort)
 
     opts =
       case reasoning_effort do
-        :low -> Keyword.put(opts, :reasoning_effort, "high")
+        :none -> Keyword.put(opts, :reasoning_effort, "none")
+        :minimal -> Keyword.put(opts, :reasoning_effort, "low")
+        :low -> Keyword.put(opts, :reasoning_effort, "low")
         :medium -> Keyword.put(opts, :reasoning_effort, "high")
         :high -> Keyword.put(opts, :reasoning_effort, "high")
-        :xhigh -> Keyword.put(opts, :reasoning_effort, "max")
+        :xhigh -> Keyword.put(opts, :reasoning_effort, "high")
+        :max -> Keyword.put(opts, :reasoning_effort, "max")
+        :ultra -> Keyword.put(opts, :reasoning_effort, "max")
+        :default -> Keyword.delete(opts, :reasoning_effort)
         nil -> opts
         other when is_binary(other) -> Keyword.put(opts, :reasoning_effort, other)
         other -> Keyword.put(opts, :reasoning_effort, to_string(other))

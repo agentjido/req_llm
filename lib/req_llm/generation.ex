@@ -62,6 +62,9 @@ defmodule ReqLLM.Generation do
     * `:total_timeout` - Optional whole-call deadline in milliseconds, including retries
     * `:stream_idle_timeout` - Optional semantic-progress timeout for streaming calls
     * `:provider_options` - Provider-specific options
+    * `:routing_context` - Opaque application data for a `ReqLLM.Router`
+      callback. It must be a map. ReqLLM passes it unchanged to the router and
+      does not send it to the selected provider
 
   ## Examples
 
@@ -81,7 +84,7 @@ defmodule ReqLLM.Generation do
   """
 
   @spec generate_text(
-          ReqLLM.model_input(),
+          ReqLLM.generation_model_input(),
           Context.prompt(),
           keyword()
         ) :: {:ok, Response.t()} | {:error, term()}
@@ -105,9 +108,10 @@ defmodule ReqLLM.Generation do
     end
   end
 
-  defp generate_text_response(model_spec, messages, opts) do
-    with {:ok, model} <- ReqLLM.model(model_spec),
-         {:ok, provider_module} <- ReqLLM.provider(model.provider),
+  defp generate_text_response(model_input, messages, opts) do
+    with {:ok, model, messages, opts} <-
+           resolve_model_input(model_input, messages, opts),
+         {:ok, provider_module} <- ReqLLM.ProviderDispatch.get(model, :chat),
          {:ok, opts} <-
            ReqLLM.Provider.Options.normalize_namespaced_provider_options(
              provider_module,
@@ -164,7 +168,7 @@ defmodule ReqLLM.Generation do
 
   """
   @spec generate_text!(
-          ReqLLM.model_input(),
+          ReqLLM.generation_model_input(),
           Context.prompt(),
           keyword()
         ) :: String.t() | no_return()
@@ -204,7 +208,7 @@ defmodule ReqLLM.Generation do
 
   """
   @spec stream_text(
-          ReqLLM.model_input(),
+          ReqLLM.generation_model_input(),
           Context.prompt(),
           keyword()
         ) :: {:ok, ReqLLM.StreamResponse.t()} | {:error, term()}
@@ -228,9 +232,10 @@ defmodule ReqLLM.Generation do
     end
   end
 
-  defp stream_text_response(model_spec, messages, opts) do
-    with {:ok, model} <- ReqLLM.model(model_spec),
-         {:ok, provider_module} <- ReqLLM.provider(model.provider),
+  defp stream_text_response(model_input, messages, opts) do
+    with {:ok, model, messages, opts} <-
+           resolve_model_input(model_input, messages, opts),
+         {:ok, provider_module} <- ReqLLM.ProviderDispatch.get(model, :chat, stream: true),
          {:ok, opts} <-
            ReqLLM.Provider.Options.normalize_namespaced_provider_options(
              provider_module,
@@ -281,7 +286,7 @@ defmodule ReqLLM.Generation do
   """
   @deprecated "Use stream_text/3 with StreamResponse instead"
   @spec stream_text!(
-          ReqLLM.model_input(),
+          ReqLLM.generation_model_input(),
           Context.prompt(),
           keyword()
         ) :: Enumerable.t() | no_return()
@@ -330,6 +335,9 @@ defmodule ReqLLM.Generation do
     * `:total_timeout` - Optional whole-call deadline in milliseconds, including retries
     * `:stream_idle_timeout` - Optional semantic-progress timeout for streaming calls
     * `:provider_options` - Provider-specific options
+    * `:routing_context` - Opaque application data for a `ReqLLM.Router`
+      callback. It must be a map. ReqLLM passes it unchanged to the router and
+      does not send it to the selected provider
     * `:output_validation` - Final validation policy: `:compatible`, `:warn`, or
       `:strict`; omitted calls preserve current V1 behavior
     * `:output_repair` - Optional one-argument local repair callback invoked at
@@ -347,7 +355,7 @@ defmodule ReqLLM.Generation do
 
   """
   @spec generate_object(
-          ReqLLM.model_input(),
+          ReqLLM.generation_model_input(),
           Context.prompt(),
           keyword() | map() | Zoi.Type.t(),
           keyword()
@@ -372,15 +380,16 @@ defmodule ReqLLM.Generation do
   end
 
   defp generate_object_response(
-         model_spec,
+         model_input,
          messages,
          schema_source,
          opts,
          descriptor,
          runtime_config
        ) do
-    with {:ok, model} <- ReqLLM.model(model_spec),
-         {:ok, provider_module} <- ReqLLM.provider(model.provider),
+    with {:ok, model, messages, opts} <-
+           resolve_model_input(model_input, messages, opts),
+         {:ok, provider_module} <- ReqLLM.ProviderDispatch.get(model, :object),
          {:ok, opts} <-
            ReqLLM.Provider.Options.normalize_namespaced_provider_options(
              provider_module,
@@ -412,6 +421,20 @@ defmodule ReqLLM.Generation do
         end
 
       ReqLLM.Output.Validation.finalize_result(result, contract, runtime_config)
+    end
+  end
+
+  defp resolve_model_input(model_input, messages, opts) do
+    if ReqLLM.Router.implementation?(model_input) do
+      with {:ok, request, request_opts} <-
+             ReqLLM.Router.Request.build(messages, opts),
+           {:ok, model} <- ReqLLM.Router.resolve(model_input, request) do
+        {:ok, model, request.context, request_opts}
+      end
+    else
+      with {:ok, model} <- ReqLLM.model(model_input) do
+        {:ok, model, messages, opts}
+      end
     end
   end
 
@@ -464,9 +487,22 @@ defmodule ReqLLM.Generation do
   defp execute_generate_text(provider_module, model, context, request_opts, cache_opts, cache_ref) do
     deadline = ReqLLM.TimeoutBudget.deadline(request_opts)
 
-    with {:ok, request} <- provider_module.prepare_request(:chat, model, context, request_opts),
+    with {:ok, request} <-
+           provider_module.prepare_request(
+             :chat,
+             model,
+             context,
+             Keyword.delete(request_opts, :pricing_context)
+           ),
          {:ok, %Req.Response{status: status, body: decoded_response}} when status in 200..299 <-
-           ReqLLM.TimeoutBudget.request(request, deadline) do
+           ReqLLM.TimeoutBudget.request(
+             Req.Request.put_private(
+               request,
+               :req_llm_pricing_context,
+               request_opts[:pricing_context]
+             ),
+             deadline
+           ) do
       {:ok, ReqLLM.Cache.store(cache_ref, decoded_response, cache_opts)}
     else
       {:ok, %Req.Response{status: status, body: body}} ->
@@ -494,9 +530,21 @@ defmodule ReqLLM.Generation do
     deadline = ReqLLM.TimeoutBudget.deadline(request_opts)
 
     with {:ok, request} <-
-           provider_module.prepare_request(:object, model, context, request_opts),
+           provider_module.prepare_request(
+             :object,
+             model,
+             context,
+             Keyword.delete(request_opts, :pricing_context)
+           ),
          {:ok, %Req.Response{status: status, body: decoded_response}} when status in 200..299 <-
-           ReqLLM.TimeoutBudget.request(request, deadline) do
+           ReqLLM.TimeoutBudget.request(
+             Req.Request.put_private(
+               request,
+               :req_llm_pricing_context,
+               request_opts[:pricing_context]
+             ),
+             deadline
+           ) do
       response =
         if ReqLLM.ModelHelpers.json_strict?(model) do
           decoded_response
@@ -652,7 +700,7 @@ defmodule ReqLLM.Generation do
 
   """
   @spec stream_object(
-          ReqLLM.model_input(),
+          ReqLLM.generation_model_input(),
           Context.prompt(),
           keyword() | Zoi.Type.t(),
           keyword()
@@ -677,15 +725,16 @@ defmodule ReqLLM.Generation do
   end
 
   defp stream_object_response(
-         model_spec,
+         model_input,
          messages,
          schema_source,
          opts,
          descriptor,
          runtime_config
        ) do
-    with {:ok, model} <- ReqLLM.model(model_spec),
-         {:ok, provider_module} <- ReqLLM.provider(model.provider),
+    with {:ok, model, messages, opts} <-
+           resolve_model_input(model_input, messages, opts),
+         {:ok, provider_module} <- ReqLLM.ProviderDispatch.get(model, :object, stream: true),
          {:ok, opts} <-
            ReqLLM.Provider.Options.normalize_namespaced_provider_options(
              provider_module,
@@ -745,7 +794,7 @@ defmodule ReqLLM.Generation do
   """
   @deprecated "Use stream_object/4 with StreamResponse instead"
   @spec stream_object!(
-          ReqLLM.model_input(),
+          ReqLLM.generation_model_input(),
           Context.prompt(),
           keyword() | Zoi.Type.t(),
           keyword()

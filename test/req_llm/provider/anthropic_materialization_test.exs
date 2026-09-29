@@ -263,6 +263,47 @@ defmodule ReqLLM.Provider.AnthropicMaterializationTest do
     assert cancelled_response.finish_reason == :cancelled
   end
 
+  test "message_start carries the provider message id and model" do
+    model = %LLMDB.Model{provider: :anthropic, id: "claude-test"}
+
+    events = [
+      %{
+        data: %{
+          "type" => "message_start",
+          "message" => %{
+            "id" => "msg_stream_1",
+            "model" => "claude-test-2026",
+            "usage" => %{"input_tokens" => 2, "output_tokens" => 1}
+          }
+        }
+      },
+      %{data: %{"type" => "message_stop"}}
+    ]
+
+    [start_meta | _rest] = decode_events(events, model)
+
+    assert %StreamChunk{
+             type: :meta,
+             metadata: %{
+               response_id: "msg_stream_1",
+               response_model: "claude-test-2026",
+               usage: %{input_tokens: 2}
+             }
+           } = start_meta
+  end
+
+  test "message_start without usage still carries the provider message id" do
+    model = %LLMDB.Model{provider: :anthropic, id: "claude-test"}
+
+    events = [
+      %{data: %{"type" => "message_start", "message" => %{"id" => "msg_stream_2"}}},
+      %{data: %{"type" => "message_stop"}}
+    ]
+
+    assert [%StreamChunk{type: :meta, metadata: %{response_id: "msg_stream_2"}} | _rest] =
+             decode_events(events, model)
+  end
+
   defp decode_events(events, model) do
     {chunks, state} =
       Enum.reduce(events, {[], Anthropic.init_stream_state(model)}, fn event, {chunks, state} ->

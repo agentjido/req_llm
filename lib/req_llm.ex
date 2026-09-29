@@ -83,6 +83,7 @@ defmodule ReqLLM do
 
   alias ReqLLM.{
     Availability,
+    Compaction,
     Embedding,
     Evaluation,
     Generation,
@@ -103,12 +104,22 @@ defmodule ReqLLM do
   Strings and tuples resolve through the LLMDB catalog. `%LLMDB.Model{}` values and
   plain maps are treated as inline model specs and bypass catalog lookup.
   """
-  @type model_input ::
+  @type static_model_input ::
           String.t()
           | map()
           | {atom(), String.t(), keyword()}
           | {atom(), keyword()}
           | LLMDB.Model.t()
+
+  @type model_input :: static_model_input()
+
+  @typedoc """
+  Model input for generation APIs.
+
+  In addition to a static model input, generation accepts an application struct
+  whose module implements `ReqLLM.Router`.
+  """
+  @type generation_model_input :: model_input() | ReqLLM.Router.t()
 
   @typedoc """
   Redacted, JSON-serializable diagnostic returned by `plan/3`.
@@ -142,16 +153,6 @@ defmodule ReqLLM do
       input: {1.25, 2.5},
       output: {10.0, 15.0},
       cache_read: {0.125, 0.25}
-    },
-    "gemini-3.1-pro-preview" => %{
-      input: {2.0, 4.0},
-      output: {12.0, 18.0},
-      cache_read: {0.2, 0.4}
-    },
-    "gemini-3.1-pro-preview-customtools" => %{
-      input: {2.0, 4.0},
-      output: {12.0, 18.0},
-      cache_read: {0.2, 0.4}
     }
   }
 
@@ -309,7 +310,7 @@ defmodule ReqLLM do
       #=> %LLMDB.Model{provider: :anthropic, model: "claude-3-sonnet"}
 
   """
-  @spec model(model_input()) :: {:ok, LLMDB.Model.t()} | {:error, term()}
+  @spec model(static_model_input()) :: {:ok, LLMDB.Model.t()} | {:error, term()}
   def model(%LLMDB.Model{} = model) do
     model
     |> Map.from_struct()
@@ -583,11 +584,15 @@ defmodule ReqLLM do
       case Map.get(tiered_rates, key) do
         {standard_rate, long_context_rate} ->
           [
-            google_tiered_component("#{token_component_id(key)}.standard_context", standard_rate,
-              max_input_tokens: @google_long_context_threshold
+            google_tiered_component(
+              "#{token_component_id(key)}.standard_context",
+              standard_rate,
+              %{input_tokens: %{lte: @google_long_context_threshold}}
             ),
-            google_tiered_component("#{token_component_id(key)}.long_context", long_context_rate,
-              min_input_tokens: @google_long_context_threshold + 1
+            google_tiered_component(
+              "#{token_component_id(key)}.long_context",
+              long_context_rate,
+              %{input_tokens: %{gt: @google_long_context_threshold}}
             )
           ]
 
@@ -597,16 +602,16 @@ defmodule ReqLLM do
     end)
   end
 
-  defp google_tiered_component(id, rate, opts) do
+  defp google_tiered_component(id, rate, applies_when) do
     %{
       id: id,
       kind: "token",
       unit: "token",
       per: 1_000_000,
-      rate: rate
+      rate: rate,
+      applies_when: applies_when,
+      charge_scope: "full_request"
     }
-    |> maybe_put_map_value(:min_input_tokens, opts[:min_input_tokens])
-    |> maybe_put_map_value(:max_input_tokens, opts[:max_input_tokens])
   end
 
   defp normalize_google_cost(cost, tiered_rates) do
@@ -645,9 +650,6 @@ defmodule ReqLLM do
   defp token_component_id(:input), do: "token.input"
   defp token_component_id(:output), do: "token.output"
   defp token_component_id(:cache_read), do: "token.cache_read"
-
-  defp maybe_put_map_value(map, _key, nil), do: map
-  defp maybe_put_map_value(map, key, value), do: Map.put(map, key, value)
 
   defp resolve_catalog_model(provider, model_id) do
     case LLMDB.Spec.resolve({provider, model_id}) do
@@ -982,6 +984,9 @@ defmodule ReqLLM do
     * `:total_timeout` - Optional whole-call deadline in milliseconds, including retries
     * `:stream_idle_timeout` - Optional semantic-progress timeout for streaming calls
     * `:provider_options` - Provider-specific options
+    * `:pricing_context` - Caller-confirmed pricing facts, such as billing period,
+      actual service tier, region, account plan, and cache duration. Used only for
+      local usage pricing and never sent to the provider
 
   ## Examples
 
@@ -1250,6 +1255,82 @@ defmodule ReqLLM do
     end
   end
 
+  @doc """
+  Streams image generation, yielding preview frames before the final image.
+
+  Supported for OpenAI and Azure gpt-image models. Returns a
+  `ReqLLM.StreamResponse` whose stream carries, in order:
+
+    * zero or more `:content_part` chunks (up to `:partial_images` of them) whose
+      `:image` part has metadata `partial?: true` and `partial_image_index: n`;
+      the chunk itself is flagged `stream_only?: true`
+    * one `:content_part` chunk whose `:image` part has metadata `partial?: false`
+    * a terminal `:meta` chunk with `usage` and `finish_reason: :stop`
+
+  `ReqLLM.StreamResponse.images/1` yields just the image parts, and
+  `ReqLLM.StreamResponse.to_response/1` builds a `ReqLLM.Response` holding only
+  the final image. Preview frames are opaque even with `background: :transparent`;
+  only the final image carries alpha.
+
+  Options are those of `generate_image/3` plus `:partial_images` (0-3), an
+  upper bound: fast generations may send fewer preview frames, or none.
+  `:source_image` (edits) and `n > 1` are rejected, and `generate_image/3`
+  rejects `:stream` and `:partial_images` in turn. `:receive_timeout` defaults
+  to the image timeout (120 s) rather than the streaming default, since the first
+  frame can take longer than 30 s at higher quality tiers.
+
+  Errors before the request starts return `{:error, error}`; failures mid-stream
+  surface through `to_response/1` as `{:error, _}` or raise while enumerating.
+  A provider event that carries no decodable image data ends the stream with an
+  error rather than waiting for the receive timeout.
+
+  Hosts that consume `ReqLLM.StreamResponse.events/1` see every preview frame as
+  an `:output_item` event carrying `partial?: true` and `stream_only?: true` in
+  its metadata, so they can render previews live and skip them when persisting.
+
+  ## Examples
+
+      {:ok, stream} = ReqLLM.stream_image("openai:gpt-image-1.5", "A red fox", partial_images: 2)
+
+      chunks =
+        Stream.each(stream.stream, fn
+          %ReqLLM.StreamChunk{type: :content_part, content_part: part} ->
+            IO.inspect(part.metadata)
+
+          _chunk ->
+            :ok
+        end)
+
+      {:ok, response} = ReqLLM.StreamResponse.to_response(%{stream | stream: chunks})
+      [final] = ReqLLM.Response.images(response)
+
+  The stream can be consumed once. `Stream.each/2` above processes image parts
+  as `ReqLLM.StreamResponse.to_response/1` consumes the chunks and builds the
+  final response. Use `ReqLLM.StreamResponse.images/1` when you only need the
+  image parts.
+
+  """
+  @spec stream_image(
+          String.t() | {atom(), keyword()} | struct(),
+          String.t() | list() | ReqLLM.Context.t(),
+          keyword()
+        ) :: {:ok, ReqLLM.StreamResponse.t()} | {:error, term()}
+  defdelegate stream_image(model_spec, prompt_or_messages, opts \\ []), to: Images
+
+  @doc """
+  Streams image generation, raising on error.
+
+  See `stream_image/3`. Only errors raised before the request starts are
+  surfaced here; failures mid-stream still surface while enumerating or through
+  `ReqLLM.StreamResponse.to_response/1`.
+  """
+  @spec stream_image!(
+          String.t() | {atom(), keyword()} | struct(),
+          String.t() | list() | ReqLLM.Context.t(),
+          keyword()
+        ) :: ReqLLM.StreamResponse.t() | no_return()
+  defdelegate stream_image!(model_spec, prompt_or_messages, opts \\ []), to: Images
+
   # ===========================================================================
   # Video Generation API - Delegated to ReqLLM.Video
   # ===========================================================================
@@ -1428,6 +1509,50 @@ defmodule ReqLLM do
   @spec rerank!(model_input(), keyword()) :: ReqLLM.RerankResponse.t() | no_return()
   defdelegate rerank!(model_spec, opts \\ []), to: Rerank
 
+  # ===========================================================================
+  # Context Compaction API - Delegated to ReqLLM.Compaction
+  # ===========================================================================
+
+  @doc """
+  Compacts a conversation through the OpenAI Responses API (`POST /responses/compact`).
+
+  Supported for OpenAI and Azure OpenAI Responses API models. The service folds
+  the conversation into opaque `compaction` items that carry the prior state in
+  fewer tokens. They come back as `:provider_block` content parts on the
+  assistant message of the returned `ReqLLM.Response`, whose `context` holds
+  only that message so the next user message can be appended directly:
+
+      {:ok, first} = ReqLLM.generate_text("openai:gpt-5.4", "Draft a landing page.")
+      {:ok, compacted} = ReqLLM.compact_context("openai:gpt-5.4", first.context)
+
+      next = ReqLLM.Context.append(compacted.context, ReqLLM.Context.user("Add a booking form."))
+      {:ok, follow_up} = ReqLLM.generate_text("openai:gpt-5.4", next)
+
+  A stored response can be compacted without replaying its messages:
+
+      {:ok, compacted} =
+        ReqLLM.compact_context("openai:gpt-5.4", nil, previous_response_id: first.id)
+
+  Server-side compaction during ordinary requests uses the `context_management`
+  provider option instead; see `ReqLLM.Compaction`.
+  """
+  @spec compact_context(
+          model_input(),
+          ReqLLM.Context.t() | ReqLLM.Message.t() | [term()] | String.t() | nil,
+          keyword()
+        ) :: {:ok, ReqLLM.Response.t()} | {:error, term()}
+  defdelegate compact_context(model_spec, messages, opts \\ []), to: Compaction
+
+  @doc """
+  Compacts a conversation, raising on error. See `compact_context/3`.
+  """
+  @spec compact_context!(
+          model_input(),
+          ReqLLM.Context.t() | ReqLLM.Message.t() | [term()] | String.t() | nil,
+          keyword()
+        ) :: ReqLLM.Response.t() | no_return()
+  defdelegate compact_context!(model_spec, messages, opts \\ []), to: Compaction
+
   # ==========================================================================
   # Evaluation API - Delegated to ReqLLM.Evaluation
   # ==========================================================================
@@ -1447,6 +1572,16 @@ defmodule ReqLLM do
   @spec evaluate!(model_input(), String.t() | map() | list(), map(), keyword()) ::
           ReqLLM.Response.t() | no_return()
   defdelegate evaluate!(model_spec, state, questions, opts \\ []), to: Evaluation
+
+  @doc """
+  Lists model specs with a callable evaluation adapter.
+
+  This includes confirmed OpenRouter Jev IDs missing from older LLMDB releases.
+  Use this list to select a model for `evaluate/4`. A full inline model spec
+  can describe another unlisted model with a supported execution contract.
+  """
+  @spec evaluation_models() :: [String.t()]
+  defdelegate evaluation_models(), to: Evaluation, as: :models
 
   # ===========================================================================
   # OCR API - Delegated to ReqLLM.OCR

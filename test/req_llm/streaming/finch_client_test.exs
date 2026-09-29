@@ -464,6 +464,49 @@ defmodule ReqLLM.Streaming.FinchClientTest do
       assert Enum.any?(EventStreamServer.events(stream_server), &match?({:status, 200}, &1))
     end
 
+    test "rejects large bodies with mixed protocols from request connection options" do
+      {:ok, context} = Context.normalize("Test")
+      opts = [req_http_options: [connect_options: [protocols: [:http1, :http2]]]]
+
+      assert {:error, {:provider_build_failed, {:http2_body_too_large, 70_000, [:http1, :http2]}}} =
+               FinchClient.build_stream_request(
+                 LargeBodyProvider,
+                 %LLMDB.Model{provider: :test, id: "test"},
+                 context,
+                 opts,
+                 ReqLLM.Finch
+               )
+    end
+
+    test "uses request connection protocols instead of the configured pool protocols" do
+      Application.put_env(:req_llm, :finch, pools: %{default: [protocols: [:http1, :http2]]})
+      {:ok, context} = Context.normalize("Test")
+      opts = [req_http_options: [connect_options: [protocols: [:http1]]]]
+
+      assert {:ok, _, _, _} =
+               FinchClient.build_stream_request(
+                 LargeBodyProvider,
+                 %LLMDB.Model{provider: :test, id: "test"},
+                 context,
+                 opts,
+                 ReqLLM.Finch
+               )
+    end
+
+    test "rejects invalid connection options before sending a request" do
+      {:ok, context} = Context.normalize("Test")
+      opts = [req_http_options: [connect_options: [invalid_connection_option: true]]]
+
+      assert {:error, {:build_request_failed, %ArgumentError{}}} =
+               FinchClient.build_stream_request(
+                 IodataBodyProvider,
+                 %LLMDB.Model{provider: :test, id: "test"},
+                 context,
+                 opts,
+                 ReqLLM.Finch
+               )
+    end
+
     test "allows large request bodies when finch pool config is missing" do
       Application.put_env(:req_llm, :finch, [])
 
@@ -520,6 +563,43 @@ defmodule ReqLLM.Streaming.FinchClientTest do
                )
 
       assert is_pid(task_pid)
+    end
+
+    test "uses the selected Finch instance and preserves tagged pool capacity" do
+      finch_name = __MODULE__.CustomFinch
+      port = reserve_port()
+      stream_url = "http://127.0.0.1:#{port}/stream"
+      original_pool = Finch.Pool.new(stream_url, tag: :custom)
+      pool_config = [size: 1, count: 2]
+      finch_config = [name: finch_name, pools: %{original_pool => pool_config}]
+
+      start_supervised!({Finch, finch_config})
+      start_supervised!({Bandit, plug: StreamingRouter, port: port})
+      Application.put_env(:req_llm, :finch, finch_config)
+
+      {:ok, stream_server} = EventStreamServer.start_link()
+      {:ok, context} = Context.normalize("Test")
+
+      assert {:ok, request, _, _} =
+               FinchClient.build_stream_request(
+                 LiveStreamProvider,
+                 %LLMDB.Model{provider: :test, id: "test"},
+                 context,
+                 [
+                   stream_url: stream_url,
+                   on_finch_request: &%{&1 | pool_tag: :custom},
+                   req_http_options: [connect_options: [timeout: 1_000]]
+                 ],
+                 finch_name
+               )
+
+      assert :ok = FinchClient.run_stream(request, stream_server, finch_name, max_retries: 0)
+      pool = Finch.Pool.new(stream_url, tag: request.pool_tag)
+      assert request.pool_tag != :custom
+      assert {:ok, _pid} = Finch.find_pool(finch_name, pool)
+      assert {:ok, 2} = Finch.get_pool_count(finch_name, pool)
+      assert :error = Finch.find_pool(ReqLLM.Finch, pool)
+      assert Enum.any?(EventStreamServer.events(stream_server), &match?({:data, _}, &1))
     end
 
     test "forwards successful HTTP streaming events through the stream server" do

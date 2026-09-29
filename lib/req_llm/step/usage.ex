@@ -69,12 +69,20 @@ defmodule ReqLLM.Step.Usage do
     with {:ok, model} <- fetch_model(req),
          provider_module = provider_module_from_model(model),
          {:ok, usage} <- extract_usage(resp.body, provider_module, model),
-         {:ok, cost_breakdown} <- Cost.breakdown(usage, model) do
-      total_cost = cost_breakdown && cost_breakdown.total_cost
-      meta = %{tokens: usage, cost: total_cost}
+         usage <- complete_operation_usage(usage, req.options[:operation]),
+         {:ok, cost_breakdown} <-
+           Cost.breakdown(usage, model, req.private[:req_llm_pricing_context]) do
+      total_cost = cost_breakdown && Map.get(cost_breakdown, :total_cost)
+
+      pricing =
+        if cost_breakdown,
+          do: cost_breakdown.pricing,
+          else: %{status: :unknown}
+
+      meta = %{tokens: usage, cost: total_cost, pricing: pricing}
 
       meta =
-        if cost_breakdown do
+        if total_cost do
           Map.merge(meta, %{
             input_cost: cost_breakdown.input_cost,
             output_cost: cost_breakdown.output_cost,
@@ -133,6 +141,13 @@ defmodule ReqLLM.Step.Usage do
       _ -> {req, resp}
     end
   end
+
+  defp complete_operation_usage(%{usage_reported: reported} = usage, operation)
+       when operation in [:rerank, :embedding] do
+    %{usage | usage_reported: Map.put(reported, :output, true)}
+  end
+
+  defp complete_operation_usage(usage, _operation), do: usage
 
   @spec provider_module_from_model(LLMDB.Model.t()) :: module() | nil
   defp provider_module_from_model(%LLMDB.Model{provider: provider_id}) do

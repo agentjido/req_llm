@@ -1,0 +1,307 @@
+{
+  "model_spec": "azure:gpt-5.4",
+  "provider": "azure",
+  "request": {
+    "body": {
+      "b64": "eyJpbmNsdWRlIjpbInJlYXNvbmluZy5lbmNyeXB0ZWRfY29udGVudCJdLCJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IkNyZWF0ZSBhIHNpbXBsZSBsYW5kaW5nIHBhZ2UgZm9yIGEgZG9nIGNhZmUuIEtlZXAgaXQgdW5kZXIgMjAwIHdvcmRzLiIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJpZCI6Im1zZ18wY2ExZDFkNGFjZGExMWZhMDE2YWI2N2FiNGVjNmM4MTk1YWUxYzdjODY2NzNjZmRiNiIsInJvbGUiOiJ1c2VyIiwic3RhdHVzIjoiY29tcGxldGVkIiwidHlwZSI6Im1lc3NhZ2UifSx7ImNvbnRlbnQiOlt7ImFubm90YXRpb25zIjpbXSwibG9ncHJvYnMiOltdLCJ0ZXh0IjoiYGBgaHRtbFxuPCFET0NUWVBFIGh0bWw+XG48aHRtbCBsYW5nPVwiZW5cIj5cbjxoZWFkPlxuICA8bWV0YSBjaGFyc2V0PVwiVVRGLThcIiAvPlxuICA8bWV0YSBuYW1lPVwidmlld3BvcnRcIiBjb250ZW50PVwid2lkdGg9ZGV2aWNlLXdpZHRoLCBpbml0aWFsLXNjYWxlPTEuMFwiIC8+XG4gIDx0aXRsZT5QYXdzICYgTGF0dGVzPC90aXRsZT5cbiAgPHN0eWxlPlxuICAgIGJvZHkgeyBmb250LWZhbWlseTogQXJpYWwsIHNhbnMtc2VyaWY7IG1hcmdpbjogMDsgYmFja2dyb3VuZDogI2ZmZjhmMDsgY29sb3I6ICMzMzM7IHRleHQtYWxpZ246IGNlbnRlcjsgfVxuICAgIC5oZXJvIHsgcGFkZGluZzogODBweCAyMHB4OyBiYWNrZ3JvdW5kOiAjZjRkN2I4OyB9XG4gICAgaDEgeyBmb250LXNpemU6IDNyZW07IG1hcmdpbi1ib3R0b206IDEwcHg7IH1cbiAgICBwIHsgbWF4LXdpZHRoOiA1MDBweDsgbWFyZ2luOiAwIGF1dG8gMjBweDsgZm9udC1zaXplOiAxLjFyZW07IH1cbiAgICAuYnRuIHsgZGlzcGxheTogaW5saW5lLWJsb2NrOyBwYWRkaW5nOiAxMnB4IDI0cHg7IGJhY2tncm91bmQ6ICM4YjVlM2M7IGNvbG9yOiB3aGl0ZTsgdGV4dC1kZWNvcmF0aW9uOiBub25lOyBib3JkZXItcmFkaXVzOiA4cHg7IH1cbiAgICAuc2VjdGlvbiB7IHBhZGRpbmc6IDQwcHggMjBweDsgfVxuICA8L3N0eWxlPlxuPC9oZWFkPlxuPGJvZHk+XG4gIDxzZWN0aW9uIGNsYXNzPVwiaGVyb1wiPlxuICAgIDxoMT5QYXdzICYgTGF0dGVzPC9oMT5cbiAgICA8cD5Db2ZmZWUsIGN1ZGRsZXMsIGFuZCBoYXBweSB0YWlscy4gVmlzaXQgb3VyIGRvZy1mcmllbmRseSBjYWbDqSBmb3IgZnJlc2ggZHJpbmtzLCB0YXN0eSB0cmVhdHMsIGFuZCBwbGF5dGltZSB3aXRoIGFkb3JhYmxlIHB1cHMuPC9wPlxuICAgIDxhIGhyZWY9XCIjdmlzaXRcIiBjbGFzcz1cImJ0blwiPlZpc2l0IFVzPC9hPlxuICA8L3NlY3Rpb24+XG5cbiAgPHNlY3Rpb24gY2xhc3M9XCJzZWN0aW9uXCIgaWQ9XCJ2aXNpdFwiPlxuICAgIDxoMj5XaHkgWW914oCZbGwgTG92ZSBJdDwvaDI+XG4gICAgPHA+UmVsYXggd2l0aCBhIGxhdHRlLCBtZWV0IGZyaWVuZGx5IGRvZ3MsIGFuZCBlbmpveSBhIGNvenkgc3BhY2UgbWFkZSBmb3IgcGV0IGxvdmVycy48L3A+XG4gICAgPHA+PHN0cm9uZz5PcGVuIERhaWx5Ojwvc3Ryb25nPiA4IEFNIOKAkyA3IFBNPC9wPlxuICA8L3NlY3Rpb24+XG48L2JvZHk+XG48L2h0bWw+XG5gYGAiLCJ0eXBlIjoib3V0cHV0X3RleHQifV0sImlkIjoibXNnXzBjYTFkMWQ0YWNkYTExZmEwMTZhYjY3YWI0ZWM3YzgxOTVhNDNmZmM1NzEzMWZkYmYwIiwicGhhc2UiOiJmaW5hbF9hbnN3ZXIiLCJyb2xlIjoiYXNzaXN0YW50Iiwic3RhdHVzIjoiY29tcGxldGVkIiwidHlwZSI6Im1lc3NhZ2UifSx7ImVuY3J5cHRlZF9jb250ZW50IjoiZ0FBQUFBQnF0bnEyY3R3c2tmUlA2OTFvWkpWd2tMcV9iRFlNT0hfbkVwRXphNWZBdVlsbWJVQ0dUQVQwZXpVV2ozWGpzaExjVnhJNnFnc3p1c1c1N1RqRk1fX2RBckgzZzdfYkVBenB2c0hockNlcUI0Q1lEdWswLTg2VC1iOFNpN3BPSjlmcm9LRmltbnBYWDZjWU9oMkZlSzJoa0F6X0Y5eTVocXBadDI0aEtkSGRkaVBWSlFXYWxpZUZWMWhGeGEzeU1FbGpYaGVRSzU3c3JWeUZFdnJoaTl2clEzeUg5X1lxZUlxRlhjanlrUzR2UEd3NWpIOGNvZWdwZFUxQm53WGNUZGMwUTh5allyb3BsR0FoYnRzUkVpMzY2UnY2QzZJNmJwVGN4dW5fOWVBQUhVSk9fNXdabDRXUmZfM1ZfTFRyc0EyQzZsSDN3WlRTYjJXbHl6cmxYaHlncy10WmtzbTVFeGhDbDUwWHFVREFrNjhjTy1heHlGNDRvUk9uNUxRUGRNMVVabEM3U2dsQzJvYi1UZ2dIWXRuSG1PWmxiRld2VTJyN1FzRTU4Y1VEaWdNOC16ZWQ3bzRCbHppVDcyMFJJc3FXWWpNRUdRNVdMa0ZhNUZwY2hvenVSbzhMVHVxdXJOS2lBVHFtOW04d3ZfVUk0VlhnUnB2SGpVaWxvZm9yVERQcXV2S0pKdFlaMHk1SmhNcEQ3LVBNcGdQT1JqWTFIV3JkUXZZZjIwbWhlbFNMUkFjRW9NUTIwenhDUk8zRTVZdFpidEJtd2JiX3dUQW4taElHbXR0Z28wdnhlTmU0cVltazlsZDlPVk0wZVN0US1MLWxKUWlQWldMbkRPdldyQUxWd05JYnZaeXVZeEFseHFlRm1PSE5Mcm9vbTJNS3FNZDE2X1prc2h4YlROWWo5LUhVZXZKeHpVcXdJSnZXVXdFMjc5Tng4MTRvOVBFWm5MQ08tY2w4LUNZSjBTYzZjTXpaM1hNUm9rUWVEQnJNNTdXZ19kcHpDRHVTZlhlOWV6eVM3cVF2aTVfTnBtbHlRMFEyRnEzR05oUzJ2blYwR1F4QlJ1ZmlhZ0FNNjcwMEpLdzRsazZ1Vkp0M181UnBnNEtuTUZVNDJzZzRScEI4NVVHRGpxU0hyS3dQcTBaSk16VXNDbndlSmlfUlNSd1lDVmRxZWMta0xQV3pRMzF5ZGd2LXBWYVdKZ3p5ME9QWFozdFZIV1pTR1YyQXZDX0l1S2libDN2MkZBVVQ2aElXMkJWVkVOXzlUWGdrNnVzaEdhQTlxeFN5MlMtUXdjZlpsc2lwR2dYZlBnLXVUZl9xV1BOWFhrdTQtbld4dmFDY0F5UmJaZFl5MzhoMFQyOEZSUk14Z0VBY2dIZW5kTlpyZy1jREdHakl4Y1lhb243Qm1TWDYxbUJEeGtWcnEtdmZDMmQ5aldDR3pYOXVtalY3RWNqMzU4T0NmWWZ2R1hzYnAwR1VXejhMbW9iXzBhNWVXRlVjQUZvUldXZEdQQ1loal85WVRidnpHcXJjbTBlR0p6TlR1di1mZmQ0UlpyVk9RNHdqYjFWZW1kcU1yOTd4aTVUWmtqV1VURk5pOVRkek4zZGJWRnFJano4U3lHQmJnMk1Wak5sZFc2NFZnbkcxQ2haWFhyT1l4OGtsVUp0Y1A0NGlwclFMSTJLMnBDc3RmS2RQZThEbXVHOURCeUhGb0FFWmgtVk91WHpjeDJKUHd5QUFzbkxGeGtiWmozRGRyMWoxbHRDdnRCVlFBcFRxUGhmZDA1ZHhoYkZrTjJuWDRiTFM4dGRIUXpqUXBBZEgzWndUVU1NcGJ3eVJld21jR3Z2dmtDR0xPQk9RRF9EV1J0akEtVnpGTWNCcmtselQ0bWJZcTQtZjBwWkRGSG5zXy1nbTZMR2xvZ19QcExCLTdqQ0NXbTRrcXl5S3phaUtHcTZjY1BWOVhPbVc4V0hTTlhsc1BONGNma3d0MW1LUUtDUVRfeWExNXAzRU1zNU9WMnpJVmgyZTFBQmVwcXU4X04tS2ZnVTVLQ0pYUTVOLVV3SWl6NUR3WDQ3bm5DMlJVT3pnRnJwTGR4T3dXakMycVFpdllyQ3ViaW1HVk5yb0Rfb21VOVNVbXpUeHNiajJoaGZncTZmeF81VTBJbTNIZnBzOF84bWNZRjhGYzlCWEpqbDg5MjdLRTZ2NnVBakQwa1pJSlc4b1JKd0lSUmRSSi01UkVOS2FjY0FhU09nVE5IYk1KNWJTNGFCYlhEVVZ2b0c1UnVMcDZnckVJWmxvMklQWWZPSEJnSjBmQUpTaDZZMW9hOUVFSnlMWXlnbEtjTXltZ1RwdUxhWVVSZz09IiwiaWQiOiJjbXBfMGNhMWQxZDRhY2RhMTFmYTAxNmFiNjdhYjU2YWQ0ODE5NTgyNmE4YjQ4NjQzYjk4MzAiLCJ0eXBlIjoiY29tcGFjdGlvbiJ9LHsiY29udGVudCI6W3sidGV4dCI6IkFkZCBhIGJvb2tpbmcgZm9ybS4gUmVwbHkgYnJpZWZseS4iLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjoxMDI0LCJtb2RlbCI6ImdwdC01LjQiLCJyZWFzb25pbmciOnsiZWZmb3J0IjoibG93In0sInN0b3JlIjpmYWxzZSwic3RyZWFtIjpmYWxzZX0="
+    },
+    "canonical_json": {
+      "include": [
+        "reasoning.encrypted_content"
+      ],
+      "input": [
+        {
+          "content": [
+            {
+              "text": "Create a simple landing page for a dog cafe. Keep it under 200 words.",
+              "type": "input_text"
+            }
+          ],
+          "id": "msg_0ca1d1d4acda11fa016ab67ab4ec6c8195ae1c7c86673cfdb6",
+          "role": "user",
+          "status": "completed",
+          "type": "message"
+        },
+        {
+          "content": [
+            {
+              "annotations": [],
+              "logprobs": [],
+              "text": "```html\n<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n  <title>Paws & Lattes</title>\n  <style>\n    body { font-family: Arial, sans-serif; margin: 0; background: #fff8f0; color: #333; text-align: center; }\n    .hero { padding: 80px 20px; background: #f4d7b8; }\n    h1 { font-size: 3rem; margin-bottom: 10px; }\n    p { max-width: 500px; margin: 0 auto 20px; font-size: 1.1rem; }\n    .btn { display: inline-block; padding: 12px 24px; background: #8b5e3c; color: white; text-decoration: none; border-radius: 8px; }\n    .section { padding: 40px 20px; }\n  </style>\n</head>\n<body>\n  <section class=\"hero\">\n    <h1>Paws & Lattes</h1>\n    <p>Coffee, cuddles, and happy tails. Visit our dog-friendly café for fresh drinks, tasty treats, and playtime with adorable pups.</p>\n    <a href=\"#visit\" class=\"btn\">Visit Us</a>\n  </section>\n\n  <section class=\"section\" id=\"visit\">\n    <h2>Why You’ll Love It</h2>\n    <p>Relax with a latte, meet friendly dogs, and enjoy a cozy space made for pet lovers.</p>\n    <p><strong>Open Daily:</strong> 8 AM – 7 PM</p>\n  </section>\n</body>\n</html>\n```",
+              "type": "output_text"
+            }
+          ],
+          "id": "msg_0ca1d1d4acda11fa016ab67ab4ec7c8195a43ffc57131fdbf0",
+          "phase": "final_answer",
+          "role": "assistant",
+          "status": "completed",
+          "type": "message"
+        },
+        {
+          "encrypted_content": "gAAAAABqtnq2ctwskfRP691oZJVwkLq_bDYMOH_nEpEza5fAuYlmbUCGTAT0ezUWj3XjshLcVxI6qgszusW57TjFM__dArH3g7_bEAzpvsHhrCeqB4CYDuk0-86T-b8Si7pOJ9froKFimnpXX6cYOh2FeK2hkAz_F9y5hqpZt24hKdHddiPVJQWalieFV1hFxa3yMEljXheQK57srVyFEvrhi9vrQ3yH9_YqeIqFXcjykS4vPGw5jH8coegpdU1BnwXcTdc0Q8yjYroplGAhbtsREi366Rv6C6I6bpTcxun_9eAAHUJO_5wZl4WRf_3V_LTrsA2C6lH3wZTSb2WlyzrlXhygs-tZksm5ExhCl50XqUDAk68cO-axyF44oROn5LQPdM1UZlC7SglC2ob-TggHYtnHmOZlbFWvU2r7QsE58cUDigM8-zed7o4BlziT720RIsqWYjMEGQ5WLkFa5FpchozuRo8LTuqurNKiATqm9m8wv_UI4VXgRpvHjUiloforTDPquvKJJtYZ0y5JhMpD7-PMpgPORjY1HWrdQvYf20mhelSLRAcEoMQ20zxCRO3E5YtZbtBmwbb_wTAn-hIGmttgo0vxeNe4qYmk9ld9OVM0eStQ-L-lJQiPZWLnDOvWrALVwNIbvZyuYxAlxqeFmOHNLroom2MKqMd16_ZkshxbTNYj9-HUevJxzUqwIJvWUwE279Nx814o9PEZnLCO-cl8-CYJ0Sc6cMzZ3XMRokQeDBrM57Wg_dpzCDuSfXe9ezyS7qQvi5_NpmlyQ0Q2Fq3GNhS2vnV0GQxBRufiagAM6700JKw4lk6uVJt3_5Rpg4KnMFU42sg4RpB85UGDjqSHrKwPq0ZJMzUsCnweJi_RSRwYCVdqec-kLPWzQ31ydgv-pVaWJgzy0OPXZ3tVHWZSGV2AvC_IuKibl3v2FAUT6hIW2BVVEN_9TXgk6ushGaA9qxSy2S-QwcfZlsipGgXfPg-uTf_qWPNXXku4-nWxvaCcAyRbZdYy38h0T28FRRMxgEAcgHendNZrg-cDGGjIxcYaon7BmSX61mBDxkVrq-vfC2d9jWCGzX9umjV7Ecj358OCfYfvGXsbp0GUWz8Lmob_0a5eWFUcAFoRWWdGPCYhj_9YTbvzGqrcm0eGJzNTuv-ffd4RZrVOQ4wjb1VemdqMr97xi5TZkjWUTFNi9TdzN3dbVFqIjz8SyGBbg2MVjNldW64VgnG1ChZXXrOYx8klUJtcP44iprQLI2K2pCstfKdPe8DmuG9DByHFoAEZh-VOuXzcx2JPwyAAsnLFxkbZj3Ddr1j1ltCvtBVQApTqPhfd05dxhbFkN2nX4bLS8tdHQzjQpAdH3ZwTUMMpbwyRewmcGvvvkCGLOBOQD_DWRtjA-VzFMcBrklzT4mbYq4-f0pZDFHns_-gm6LGlog_PpLB-7jCCWm4kqyyKzaiKGq6ccPV9XOmW8WHSNXlsPN4cfkwt1mKQKCQT_ya15p3EMs5OV2zIVh2e1ABepqu8_N-KfgU5KCJXQ5N-UwIiz5DwX47nnC2RUOzgFrpLdxOwWjC2qQivYrCubimGVNroD_omU9SUmzTxsbj2hhfgq6fx_5U0Im3Hfps8_8mcYF8Fc9BXJjl8927KE6v6uAjD0kZIJW8oRJwIRRdRJ-5RENKaccAaSOgTNHbMJ5bS4aBbXDUVvoG5RuLp6grEIZlo2IPYfOHBgJ0fAJSh6Y1oa9EEJyLYyglKcMymgTpuLaYURg==",
+          "id": "cmp_0ca1d1d4acda11fa016ab67ab56ad48195826a8b48643b9830",
+          "type": "compaction"
+        },
+        {
+          "content": [
+            {
+              "text": "Add a booking form. Reply briefly.",
+              "type": "input_text"
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "max_output_tokens": 1024,
+      "model": "gpt-5.4",
+      "reasoning": {
+        "effort": "low"
+      },
+      "store": false,
+      "stream": false
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "api-key": "[REDACTED:api-key]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.7.4"
+      ]
+    },
+    "method": "post",
+    "url": "https://fixture.openai.azure.com/openai/v1/responses"
+  },
+  "response": {
+    "body": {
+      "top_logprobs": 0,
+      "output": [
+        {
+          "content": [],
+          "encrypted_content": "gAAAAABqtnq56Rbi_OsKpdequ9vfeivEr8iMc3qVKAJ3_m5rBiq4UvftP6g4m8yztjDSCFZRdfzVWokPpyTEKqQeCKYn_rA0VFLJFU3Vm4PoOONTko5dCNjXltwHOYORsKltzbWh5gn1IU8JtxHfuucBIiKpLnIsXjWh8sNkZe6hBsG-pYtFoNxFjFZJCDmFAt1Kuc-Jk2vWle80way9e_amemDTnPEyD9t7SWYW0vLdnBso5itWljUfB7A3Ua1cTMMwLTb4v54soptgoU7Qa79hr4cZVsGbIIm0AmWv0Acg20RxgppcZpUjY6HnL8ytkIixsIur1JY8NZqIriSaaz0LndblVT-SVFzNsiHYDCHom6KOaNElo80x4GK9BkkHqyIuw4tRunWhys3T0RqpRlRRYDw2oybiLLJX-M4zNc4HocU-O0zcAu-BFMBgtnptDXObVcR0r0_wQAXoINECrXLhqkJDKrHibmvtR6VhDgqvrw8kpcxqz-ZFxq-NBKEjfFgtquBWMq-M_93W9F4dceEnVxNTBSyhKhBKJmeDBGAu_NXfkErUKZvTG_N3eDqXbJFMFRTk3k4-HAxVWEzQBUPyjKhFRs1X4BpF4RXdfU1rRsyk5DplZo_mFcQPZ6_EhxmNHBoS_P5EJx8DUA1rmoUwPmaPd9P-E-94REf03CsO7-612jIotxJyBr-wTfpk5m4Ak_Z4gTUNcrYcIBMQTQklOum6emtT4PItFDU5NoAG7dqBNohvNNMGC8kMhFUykXfC29z4k0D6qmFfG6xjZp4DM30OEWfAXIaTJCH7_DzuIQzpblfmBHv8ZScV_4og4u0jwSjMSguaom2xgjb2zsLl_8AOEICLDd92ZaS4xvw2YG6kCJwPLhXvb0I4jOQASkUphHdvCueoaH5mrokQQfnfmDGFN18EvcOhbdM1u7b1oF9v6WrlKkSQ8QjRj6bMSM-mN7EhotGdQMES897C-pT8dPCkUVExXFvK-DrIKcumBarYo3PEnBDckoHYmU5VgBB3RPM2CWP_ITBrRtSCgE0s51yfWuER2aQ4g9q7sa1qCYyvxi4866m60Wi7eAfN1A0Tw58PjvPkNnqdugR6nIjQskKcccjUo8Aggk3ht0Y1n1L4eek31o8xab7knN7chIZuX17vCVoyq0usrHLR6p5VWXm8_fWwSG7E7YMqJpxJaKrmMmXBFt3tWsBQAb7LmcV7YPxraO31",
+          "id": "rs_0ca1d1d4acda11fa016ab67ab7a78c81958498d73e7a1af04c",
+          "summary": [],
+          "type": "reasoning"
+        },
+        {
+          "content": [
+            {
+              "annotations": [],
+              "logprobs": [],
+              "text": "```html\n<section class=\"section\" id=\"booking\">\n  <h2>Book a Visit</h2>\n  <form>\n    <input type=\"text\" placeholder=\"Your Name\" required><br><br>\n    <input type=\"email\" placeholder=\"Your Email\" required><br><br>\n    <input type=\"date\" required><br><br>\n    <input type=\"time\" required><br><br>\n    <button type=\"submit\" class=\"btn\">Reserve Now</button>\n  </form>\n</section>\n```\n\nAdd this CSS too:\n\n```html\n<style>\n  input, button { padding: 10px; width: 250px; max-width: 90%; border-radius: 6px; border: 1px solid #ccc; }\n</style>\n```",
+              "type": "output_text"
+            }
+          ],
+          "id": "msg_0ca1d1d4acda11fa016ab67ab7d41c8195ad0b0aeb1be54bff",
+          "phase": "final_answer",
+          "role": "assistant",
+          "status": "completed",
+          "type": "message"
+        }
+      ],
+      "prompt_cache_retention": "in_memory",
+      "previous_response_id": null,
+      "id": "resp_0ca1d1d4acda11fa016ab67ab73a6c8195b17a287c16799dec",
+      "max_output_tokens": 1024,
+      "model": "gpt-5.4",
+      "completed_at": 1790343865,
+      "parallel_tool_calls": true,
+      "status": "completed",
+      "instructions": null,
+      "user": null,
+      "moderation": null,
+      "created_at": 1790343863,
+      "incomplete_details": null,
+      "truncation": "disabled",
+      "frequency_penalty": 0.0,
+      "text": {
+        "format": {
+          "type": "text"
+        },
+        "verbosity": "medium"
+      },
+      "max_tool_calls": null,
+      "tools": [],
+      "content_filters": [
+        {
+          "blocked": false,
+          "content_filter_offsets": {
+            "check_offset": 0,
+            "end_offset": 2912,
+            "start_offset": 0
+          },
+          "content_filter_raw": [],
+          "content_filter_results": {
+            "hate": {
+              "filtered": false,
+              "severity": "safe"
+            },
+            "jailbreak": {
+              "detected": false,
+              "filtered": false
+            },
+            "self_harm": {
+              "filtered": false,
+              "severity": "safe"
+            },
+            "sexual": {
+              "filtered": false,
+              "severity": "safe"
+            },
+            "violence": {
+              "filtered": false,
+              "severity": "safe"
+            }
+          },
+          "source_type": "prompt"
+        },
+        {
+          "blocked": false,
+          "content_filter_offsets": {
+            "check_offset": 0,
+            "end_offset": 599,
+            "start_offset": 0
+          },
+          "content_filter_raw": [],
+          "content_filter_results": {
+            "protected_material_code": {
+              "detected": false,
+              "filtered": false
+            }
+          },
+          "source_type": "completion"
+        }
+      ],
+      "temperature": 1.0,
+      "object": "response",
+      "tool_choice": "auto",
+      "background": false,
+      "usage": {
+        "input_tokens": 606,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 191,
+        "output_tokens_details": {
+          "reasoning_tokens": 16
+        },
+        "total_tokens": 797
+      },
+      "top_p": 0.98,
+      "metadata": {},
+      "service_tier": "default",
+      "safety_identifier": null,
+      "store": false,
+      "reasoning": {
+        "context": "current_turn",
+        "effort": "low",
+        "mode": "standard",
+        "summary": null
+      },
+      "tool_usage": {
+        "image_gen": {
+          "input_tokens": 0,
+          "input_tokens_details": {
+            "image_tokens": 0,
+            "text_tokens": 0
+          },
+          "output_tokens": 0,
+          "output_tokens_details": {
+            "image_tokens": 0,
+            "text_tokens": 0
+          },
+          "total_tokens": 0
+        },
+        "web_search": {
+          "num_requests": 0
+        }
+      },
+      "presence_penalty": 0.0,
+      "prompt_cache_key": null,
+      "error": null
+    },
+    "headers": {
+      "apim-request-id": [
+        "bb45396d-1bbc-48e1-9f73-faf72bda692b"
+      ],
+      "azureai-fe-is-streaming": [
+        "False"
+      ],
+      "azureai-fe-offer-type": [
+        "paygo"
+      ],
+      "content-length": [
+        "5080"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 25 Sep 2026 13:44:23 GMT"
+      ],
+      "server": [
+        "istio-envoy"
+      ],
+      "skip-error-remapping": [
+        "true"
+      ],
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-ms-aoai-configured-data-retention-days": [
+        "30"
+      ],
+      "x-ms-is-spilled-over": [
+        "false"
+      ],
+      "x-ms-region": [
+        "Sweden Central"
+      ],
+      "x-ms-served-model": [
+        "gpt-5.4-2026-03-05"
+      ],
+      "x-ratelimit-abusepenalty-active": [
+        "False"
+      ],
+      "x-ratelimit-key": [
+        "gpt-5.4"
+      ],
+      "x-ratelimit-limit-requests": [
+        "700"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "700000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "699"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "699524"
+      ],
+      "x-ratelimit-renewalperiod-requests": [
+        "60"
+      ],
+      "x-ratelimit-renewalperiod-tokens": [
+        "60"
+      ],
+      "x-ratelimit-reset-requests": [
+        "0"
+      ],
+      "x-ratelimit-reset-tokens": [
+        "0"
+      ],
+      "x-request-id": [
+        "392683d9-e931-4c29-abbc-23eca5cc6173"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

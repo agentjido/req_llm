@@ -1,0 +1,219 @@
+{
+  "model_spec": "meta:muse-spark-1.1",
+  "provider": "meta",
+  "request": {
+    "body": {
+      "b64": "eyJpbmNsdWRlIjpbInJlYXNvbmluZy5lbmNyeXB0ZWRfY29udGVudCJdLCJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IkNhbGwgZ2V0X3dlYXRoZXIgd2l0aCBsb2NhdGlvbiBMb25kb24uIiwidHlwZSI6ImlucHV0X3RleHQifV0sInJvbGUiOiJ1c2VyIn1dLCJtYXhfb3V0cHV0X3Rva2VucyI6MjA0OCwibW9kZWwiOiJtdXNlLXNwYXJrLTEuMSIsInJlYXNvbmluZyI6eyJlZmZvcnQiOiJsb3cifSwic3RvcmUiOmZhbHNlLCJzdHJlYW0iOmZhbHNlLCJ0b29sX2Nob2ljZSI6ImF1dG8iLCJ0b29scyI6W3siZGVzY3JpcHRpb24iOiJHZXQgd2VhdGhlciBmb3IgYSBsb2NhdGlvbiIsIm5hbWUiOiJnZXRfd2VhdGhlciIsInBhcmFtZXRlcnMiOnsiJGRlZnMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9fSwiJHNjaGVtYSI6Imh0dHBzOi8vanNvbi1zY2hlbWEub3JnL2RyYWZ0LzIwMjAtMTIvc2NoZW1hIiwiYWRkaXRpb25hbFByb3BlcnRpZXMiOnRydWUsInByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsiJHJlZiI6IiMvJGRlZnMvbG9jYXRpb24ifSwidW5pdHMiOnsiZW51bSI6WyJjZWxzaXVzIiwiZmFocmVuaGVpdCJdLCJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In0sInN0cmljdCI6ZmFsc2UsInR5cGUiOiJmdW5jdGlvbiJ9XX0="
+    },
+    "canonical_json": {
+      "include": [
+        "reasoning.encrypted_content"
+      ],
+      "input": [
+        {
+          "content": [
+            {
+              "text": "Call get_weather with location London.",
+              "type": "input_text"
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "max_output_tokens": 2048,
+      "model": "muse-spark-1.1",
+      "reasoning": {
+        "effort": "low"
+      },
+      "store": false,
+      "stream": false,
+      "tool_choice": "auto",
+      "tools": [
+        {
+          "description": "Get weather for a location",
+          "name": "get_weather",
+          "parameters": {
+            "$defs": {
+              "location": {
+                "type": "string"
+              }
+            },
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": true,
+            "properties": {
+              "location": {
+                "$ref": "#/$defs/location"
+              },
+              "units": {
+                "enum": [
+                  "celsius",
+                  "fahrenheit"
+                ],
+                "type": "string"
+              }
+            },
+            "required": [
+              "location"
+            ],
+            "type": "object"
+          },
+          "strict": false,
+          "type": "function"
+        }
+      ]
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.7.4"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.meta.ai/v1/responses"
+  },
+  "response": {
+    "body": {
+      "background": false,
+      "completed_at": 1790350865.0,
+      "created_at": 1790350865.0,
+      "error": null,
+      "id": "resp_6ab696113af5ea0a422e4053",
+      "incomplete_details": null,
+      "instructions": null,
+      "max_output_tokens": 2048,
+      "model": "muse-spark-1.1",
+      "object": "response",
+      "output": [
+        {
+          "encrypted_content": "Q-PaDgGZXDogSC06i6m-8eRWEsJs55IMRjjgzMcURozGIcaou2mSsAw5p8rwMbcDRNwmVZUqeljMKwWVVVkORCgzSi6XsXHp74K_3TOzUfNgvVNB04jpo-ks8EAlLHDAEhRhV-1yRPQfSoVnUFY7a_jL1jvi9UPPgsWdDIEotZxeYG3I-Q2zLFuvs8m4HzEbbt6-JA4Mrm0Zm-R8d_EbNgues37O7EEh2vkh3MAnXJr5xTRuhif2E88HHpYHhnh50G6AXA8aIIsTgHnmqfMAwfzC2V4tLubUgm1oEkj36ETJ9bNi1Vapqj3Ge8n5wujXpYeTGuT-CowiIurAKtj0V2GpbAcfDRY1LdFjD8isV03oolEgegL-dWNEahJV2WUZgqlgisvr3-JOQk2H4_-chNNXlGZVG0XCFiRKoQkROJ-u37ucvQvw-9iyzUbluflm6JECv4sX0EnZQf7-zpvaQzqOXwcyBZ0Sv_AbEoFT6lSGUl0gLz6QvOWo8l96pFxiEATENo3TvauqkcO04oPFjtntJD2U67NWztleGVBVsQhamouk5RlNMVtMecyGJBieLMNB01m4rMvAFnLVB9CGW63-PPfG0k6HP-fo5NJGABRiqqtxk_o_mbsW480Aq60y0wtUFAEOAEkQW8pyfKmA-zboWBFxyWR9DbWR1QC9f7taBbBMJGpGOh2B3UJqsp1GWRgykVNoPCX_x_2gAd7aqNVgpS6eoIhxIsB148n_nNRtQK5lFpm_8mULnNcLjanRcak5esbqGHCoZTd0Pkz5uOwV2Qw_C-U3XXA_AxNJ_gnjTRkd_T02zciB77YnhMHnCwpNJ_A1YdMuQVv4K3FC41gS_DDPsKcBnFqZL791Pz6I6xendN6GLk5wxJussvKeCYO_80Yv92wDYGDcMa4KSvkNpYwxZgrLSZxmrbPkAGuZcb6j0OFimA_W6IST_0DQ_WBX7qf3VyMLZ-fiqAbNuXZnj_ECZu7aaa5-vWOWJShYdrm4hvqDW9sAFWkQvv92lJhE4RImZkMfpsbNAU3ZdVr4cUuQB4Kj9MdHrqErzFBIH8agBggvdHsnjpOVuP9pBswVEgdNF3-v5Rb-j-qTjtJhIAwT8Fid82u0qr_7iOGYO6j5_W_kOuopld-aFsqkPyVuO5aUmBPja5gNwneX8wyTPV-_1HPGIwBrSXFw5tkdQmRjBOuNZCXzKfECAAor9LpKKIGp1WNUsjaf8OAqV9nYZIfGRL41dAAsPRC2R7EZkFHsXzYiTfk0iEey0o62_0TIf-XOuh_dZQmbMZ_Ry5ngphbOH37N4mBBlcktohSGxmbbmngJvxojP_WPLVVO1IhyJfa9m7muUo8WJ5Moy19s9bIloMQUG8hQ2cD5JylFIkh06E1iQM9QPaafuWF9eDQpmALtsxMNx4MaqQ",
+          "id": "rs_6ab696113af5ea0a422e4053:rs_6e42ea02-181a-4466-9a05-f19cde0727c3",
+          "status": "completed",
+          "summary": [],
+          "type": "reasoning"
+        },
+        {
+          "content": [
+            {
+              "annotations": [],
+              "logprobs": [],
+              "text": "Confirmed - I'll call get_weather for London.",
+              "type": "output_text"
+            }
+          ],
+          "id": "rs_35297820-5381-4f57-8c8f-6b5db59bccb1",
+          "phase": "commentary",
+          "role": "assistant",
+          "status": "completed",
+          "type": "message"
+        },
+        {
+          "arguments": "{\"location\":\"London\"}",
+          "call_id": "call_10f36c1b-5971-47aa-9035-d83756d44831",
+          "id": "fc_10f36c1b-5971-47aa-9035-d83756d44831",
+          "name": "get_weather",
+          "status": "completed",
+          "type": "function_call"
+        }
+      ],
+      "parallel_tool_calls": true,
+      "reasoning": {
+        "effort": "low"
+      },
+      "service_tier": "auto",
+      "status": "completed",
+      "store": false,
+      "temperature": 1.0,
+      "tool_choice": "auto",
+      "tools": [
+        {
+          "description": "Get weather for a location",
+          "name": "get_weather",
+          "parameters": {
+            "$defs": {
+              "location": {
+                "type": "string"
+              }
+            },
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": true,
+            "properties": {
+              "location": {
+                "$ref": "#/$defs/location"
+              },
+              "units": {
+                "enum": [
+                  "celsius",
+                  "fahrenheit"
+                ],
+                "type": "string"
+              }
+            },
+            "required": [
+              "location"
+            ],
+            "type": "object"
+          },
+          "strict": false,
+          "type": "function"
+        }
+      ],
+      "top_logprobs": 0,
+      "top_p": 1.0,
+      "truncation": "disabled",
+      "usage": {
+        "input_tokens": 596,
+        "input_tokens_details": {
+          "cached_tokens": 113
+        },
+        "output_tokens": 163,
+        "output_tokens_details": {
+          "reasoning_tokens": 95
+        },
+        "total_tokens": 759
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-length": [
+        "3052"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 25 Sep 2026 15:41:05 GMT"
+      ],
+      "x-ratelimit-limit-requests": [
+        "60"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "2100000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "57"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "2095901"
+      ],
+      "x-request-id": [
+        "71d3c141-49bb-48bd-97c4-ed79d00e5fb9"
+      ],
+      "x-route": [
+        "model-api-rust"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

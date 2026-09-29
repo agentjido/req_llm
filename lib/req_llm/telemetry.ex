@@ -105,7 +105,7 @@ defmodule ReqLLM.Telemetry do
 
   @type payload_mode :: :none | :raw
   @type lifecycle_mode :: :sync | :stream
-  @type transport :: :req | :finch
+  @type transport :: :req | :finch | :websocket | :in_process
   @type reasoning_contract ::
           :openai_effort
           | :openai_or_thinking
@@ -2193,6 +2193,23 @@ defmodule ReqLLM.Telemetry do
 
   defp update_response_summary_state(context, %ReqLLM.StreamChunk{type: :tool_call}) do
     update_in(context.response_summary_state.tool_call_count, &((&1 || 0) + 1))
+  end
+
+  defp update_response_summary_state(
+         context,
+         %ReqLLM.StreamChunk{type: :content_part, metadata: %{stream_only?: true}}
+       ),
+       do: context
+
+  defp update_response_summary_state(
+         context,
+         %ReqLLM.StreamChunk{
+           type: :content_part,
+           content_part: %ReqLLM.Message.ContentPart{type: part_type}
+         }
+       )
+       when part_type in [:image, :image_url] do
+    update_in(context.response_summary_state.image_count, &((&1 || 0) + 1))
   end
 
   defp update_response_summary_state(context, %ReqLLM.StreamChunk{type: :meta, metadata: metadata}) do

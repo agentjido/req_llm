@@ -31,6 +31,10 @@ defmodule ReqLLM.Providers.AmazonBedrock.AWSEventStream do
      (`{\"bytes\": \"base64...\"}`) and the `ConverseStream` direct JSON format,
      returning ready-to-use Elixir maps.
 
+  Exception and error messages decode to `%{exception: type, payload: payload}`, with
+  `type` taken from the `:exception-type` or `:error-code` header
+  ([event stream message types](https://smithy.io/2.0/aws/amazon-eventstream.html#modeled-error-events)).
+
   ## Non-Goals
 
   Because of this specialization, this parser is **not suitable** for other AWS services
@@ -155,7 +159,7 @@ defmodule ReqLLM.Providers.AmazonBedrock.AWSEventStream do
             parsed_headers = parse_headers(headers)
 
             # Parse the body - typically JSON with base64-encoded content
-            case decode_body(body, parsed_headers) do
+            case decode_message(parsed_headers, body) do
               {:ok, decoded} ->
                 {:ok, decoded, remaining}
 
@@ -219,6 +223,21 @@ defmodule ReqLLM.Providers.AmazonBedrock.AWSEventStream do
         acc
     end
   end
+
+  defp decode_message(%{":message-type" => "exception", ":exception-type" => type}, body) do
+    with {:ok, payload} <- Jason.decode(body) do
+      {:ok, %{exception: type, payload: payload}}
+    end
+  end
+
+  defp decode_message(
+         %{":message-type" => "error", ":error-code" => code, ":error-message" => message},
+         _body
+       ) do
+    {:ok, %{exception: code, payload: %{"message" => message}}}
+  end
+
+  defp decode_message(headers, body), do: decode_body(body, headers)
 
   defp decode_body(body, headers) do
     # AWS event streams for Bedrock typically have {"bytes": "base64_content"}

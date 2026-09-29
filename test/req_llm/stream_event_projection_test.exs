@@ -483,6 +483,44 @@ defmodule ReqLLM.StreamEventProjectionTest do
              } = Enum.find(events, &(&1.type == :output_item))
     end
 
+    test "projects image preview frames as output items flagged partial and stream-only" do
+      preview = %ContentPart{
+        type: :image,
+        data: <<1>>,
+        media_type: "image/png",
+        metadata: %{partial?: true, partial_image_index: 0}
+      }
+
+      final = %ContentPart{
+        type: :image,
+        data: <<2>>,
+        media_type: "image/png",
+        metadata: %{partial?: false}
+      }
+
+      chunks = [
+        StreamChunk.content_part(preview, %{stream_only?: true}),
+        StreamChunk.content_part(final),
+        StreamChunk.meta(%{terminal?: true, finish_reason: :stop})
+      ]
+
+      response = stream_response(chunks, %{finish_reason: :stop})
+      items = response |> StreamResponse.events() |> Enum.filter(&(&1.type == :output_item))
+
+      assert [
+               %StreamEvent{
+                 data: %OutputItem{type: :image, data: ^preview, metadata: preview_meta}
+               },
+               %StreamEvent{data: %OutputItem{type: :image, data: ^final, metadata: final_meta}}
+             ] = items
+
+      assert preview_meta.partial? == true
+      assert preview_meta.stream_only? == true
+      assert preview_meta.partial_image_index == 0
+      assert final_meta.partial? == false
+      refute Map.has_key?(final_meta, :stream_only?)
+    end
+
     test "keeps the StreamResponse struct and legacy projections unchanged" do
       chunks = [StreamChunk.text("hello"), StreamChunk.meta(%{finish_reason: :stop})]
       response = stream_response(chunks, %{finish_reason: :stop})

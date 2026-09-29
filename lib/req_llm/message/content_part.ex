@@ -9,6 +9,8 @@ defmodule ReqLLM.Message.ContentPart do
   - `:image` - Image from binary data
   - `:file` - File attachment or uploaded file reference
   - `:thinking` - Chain-of-thought thinking content
+  - `:provider_block` - An opaque, provider-owned block that must be replayed
+    unchanged (e.g. Anthropic `server_tool_use` / `tool_search_tool_result`)
 
   Provider-owned file references are opt-in through `owned_file_id/3`. Legacy
   `file_id/1` values remain unowned and preserve their existing behavior.
@@ -19,7 +21,8 @@ defmodule ReqLLM.Message.ContentPart do
   """
 
   @schema Zoi.struct(__MODULE__, %{
-            type: Zoi.enum([:text, :image_url, :video_url, :image, :file, :thinking]),
+            type:
+              Zoi.enum([:text, :image_url, :video_url, :image, :file, :thinking, :provider_block]),
             text: Zoi.string() |> Zoi.nullable() |> Zoi.default(nil),
             url: Zoi.string() |> Zoi.nullable() |> Zoi.default(nil),
             data: Zoi.any() |> Zoi.nullable() |> Zoi.default(nil),
@@ -53,6 +56,29 @@ defmodule ReqLLM.Message.ContentPart do
   @spec thinking(String.t(), map()) :: t()
   def thinking(content, metadata),
     do: %__MODULE__{type: :thinking, text: content, metadata: metadata}
+
+  @doc """
+  Wraps a provider-owned content block that ReqLLM does not model itself.
+
+  The raw block lives in `:data` exactly as the provider returned it, and
+  `:metadata` carries the owning `:provider` (plus a `:block_type` for
+  inspection). The owning provider's encoder replays the block verbatim in
+  the assistant turn; every other provider drops it. Anthropic's tool-search
+  blocks (`server_tool_use`, `tool_search_tool_result`) are the first case —
+  the API rejects a replayed assistant turn that lost them when extended
+  thinking is on ("thinking blocks … cannot be modified").
+  """
+  @spec provider_block(atom(), map(), map()) :: t()
+  def provider_block(provider, block, metadata \\ %{})
+      when is_atom(provider) and is_map(block) and is_map(metadata) do
+    block_type = Map.get(block, "type") || Map.get(block, :type)
+
+    %__MODULE__{
+      type: :provider_block,
+      data: block,
+      metadata: Map.merge(metadata, %{provider: provider, block_type: block_type})
+    }
+  end
 
   @spec image_url(String.t()) :: t()
   def image_url(url), do: %__MODULE__{type: :image_url, url: url}
@@ -162,6 +188,7 @@ defmodule ReqLLM.Message.ContentPart do
           :video_url -> "url: #{part.url}"
           :image -> "#{part.media_type} (#{byte_size(part.data || <<>>)} bytes)"
           :file -> inspect_file(part)
+          :provider_block -> inspect_provider_block(part)
         end
 
       Inspect.Algebra.concat([
@@ -191,6 +218,12 @@ defmodule ReqLLM.Message.ContentPart do
     end
 
     defp inspect_file(part), do: "#{part.media_type} (#{byte_size(part.data || <<>>)} bytes)"
+
+    defp inspect_provider_block(part) do
+      provider = Map.get(part.metadata, :provider) || Map.get(part.metadata, "provider")
+      block_type = Map.get(part.metadata, :block_type) || Map.get(part.metadata, "block_type")
+      "provider: #{provider}, block_type: #{block_type}"
+    end
   end
 
   defimpl Jason.Encoder do

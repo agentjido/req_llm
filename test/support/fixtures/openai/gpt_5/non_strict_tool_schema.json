@@ -1,0 +1,277 @@
+{
+  "model_spec": "openai:gpt-5",
+  "provider": "openai",
+  "request": {
+    "body": {
+      "b64": "eyJpbmNsdWRlIjpbInJlYXNvbmluZy5lbmNyeXB0ZWRfY29udGVudCJdLCJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IkNhbGwgZ2V0X3dlYXRoZXIgd2l0aCBsb2NhdGlvbiBMb25kb24uIiwidHlwZSI6ImlucHV0X3RleHQifV0sInJvbGUiOiJ1c2VyIn1dLCJtYXhfb3V0cHV0X3Rva2VucyI6MjA0OCwibW9kZWwiOiJncHQtNSIsInJlYXNvbmluZyI6eyJlZmZvcnQiOiJsb3cifSwic3RyZWFtIjpmYWxzZSwidG9vbF9jaG9pY2UiOiJhdXRvIiwidG9vbHMiOlt7ImRlc2NyaXB0aW9uIjoiR2V0IHdlYXRoZXIgZm9yIGEgbG9jYXRpb24iLCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJwYXJhbWV0ZXJzIjp7IiRkZWZzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifX0sIiRzY2hlbWEiOiJodHRwczovL2pzb24tc2NoZW1hLm9yZy9kcmFmdC8yMDIwLTEyL3NjaGVtYSIsImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjp0cnVlLCJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7IiRyZWYiOiIjLyRkZWZzL2xvY2F0aW9uIn0sInVuaXRzIjp7ImVudW0iOlsiY2Vsc2l1cyIsImZhaHJlbmhlaXQiXSwidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9LCJzdHJpY3QiOmZhbHNlLCJ0eXBlIjoiZnVuY3Rpb24ifV19"
+    },
+    "canonical_json": {
+      "include": [
+        "reasoning.encrypted_content"
+      ],
+      "input": [
+        {
+          "content": [
+            {
+              "text": "Call get_weather with location London.",
+              "type": "input_text"
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "max_output_tokens": 2048,
+      "model": "gpt-5",
+      "reasoning": {
+        "effort": "low"
+      },
+      "stream": false,
+      "tool_choice": "auto",
+      "tools": [
+        {
+          "description": "Get weather for a location",
+          "name": "get_weather",
+          "parameters": {
+            "$defs": {
+              "location": {
+                "type": "string"
+              }
+            },
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": true,
+            "properties": {
+              "location": {
+                "$ref": "#/$defs/location"
+              },
+              "units": {
+                "enum": [
+                  "celsius",
+                  "fahrenheit"
+                ],
+                "type": "string"
+              }
+            },
+            "required": [
+              "location"
+            ],
+            "type": "object"
+          },
+          "strict": false,
+          "type": "function"
+        }
+      ]
+    },
+    "headers": {
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.7.4"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.openai.com/v1/responses"
+  },
+  "response": {
+    "body": {
+      "safety_identifier": null,
+      "store": true,
+      "error": null,
+      "created_at": 1790350861,
+      "presence_penalty": 0.0,
+      "status": "completed",
+      "tool_usage": {
+        "image_gen": {
+          "input_tokens": 0,
+          "input_tokens_details": {
+            "image_tokens": 0,
+            "text_tokens": 0
+          },
+          "output_tokens": 0,
+          "output_tokens_details": {
+            "image_tokens": 0,
+            "text_tokens": 0
+          },
+          "total_tokens": 0
+        },
+        "web_search": {
+          "num_requests": 0
+        }
+      },
+      "max_tool_calls": null,
+      "instructions": null,
+      "billing": {
+        "payer": "developer"
+      },
+      "prompt_cache_retention": "in_memory",
+      "completed_at": 1790350863,
+      "temperature": 1.0,
+      "text": {
+        "format": {
+          "type": "text"
+        },
+        "verbosity": "medium"
+      },
+      "parallel_tool_calls": true,
+      "tool_choice": "auto",
+      "frequency_penalty": 0.0,
+      "top_logprobs": 0,
+      "reasoning": {
+        "context": "current_turn",
+        "effort": "low",
+        "mode": "standard",
+        "summary": null
+      },
+      "usage": {
+        "input_tokens": 67,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 97,
+        "output_tokens_details": {
+          "reasoning_tokens": 64
+        },
+        "total_tokens": 164
+      },
+      "access_programs": null,
+      "incomplete_details": null,
+      "model": "gpt-5-2025-08-07",
+      "truncation": "disabled",
+      "metadata": {},
+      "service_tier": "default",
+      "id": "resp_0e712670fc06d57e006ab6960d8ebc87d1be72d23bb391ee45",
+      "top_p": 1.0,
+      "user": null,
+      "prompt_cache_key": null,
+      "moderation": null,
+      "object": "response",
+      "background": false,
+      "previous_response_id": null,
+      "max_output_tokens": 2048,
+      "output": [
+        {
+          "content": [],
+          "encrypted_content": "gAAAAABqtpYPBaGfMpSpKSd5crkr1LtDKZJcMy2f6LPN_ZgCyioRmhMlQZxTLTmJVq_oiW-mQ8_WAfXf-8NELYERppi0y1Y5E9dveK2e_zqwPB3S4arFbOnoSo5Oc12akE4cidTy-xdGY6GSxvOdtMzmLCr_rTUef8W0eAs_m3MHjgLDGRspWCDiexRX2uRDqwjOB-Ik5gtWMOhR_4_TGAZ2tl5exPpp9rJnc9lrhgcR3Oh0poyynKcg4-dKY_s5KTSAkOTiUVirP6idBfDkNlsoR9JNCI_ssZ1lHicZTAHHZHfXK4iwsk37PRfyuCrANW716mxYUVTUrxFkhRCwViOXe2KKGrAyi6NNoqjCvjpHiE-wn5_-LXd2SNI5Zgm5ynTG6MB4Gdj8Ohky6WGU1Mr3dmVnZzjE34_VMEoCZJ4pqjCCghzmKlo4y67yAosHjPdu0dAugGLXllf1WMtyL-1lrQfrEXbZuEPCNnGcYx9kBHnfc8m53i9NRVYGCvFa5Uom1_wssDL4i_dYVILnTwzcnXeLWH8Qoj_TuMLhtMKbss-IO5_q67dO6uRkpveORpMGrp1Yn9jWvr_FH_gHPagfIbgbJg32Z_A575QzdkHvD1EzKdd1qye7kZNJ1NY13Wilzs8IEdqq3V5tiwNzUA_XG8hcGn3TSIilyhGBhYYnWB4CMSOxMawLjrBSc2EOpzBUFvi5Ay-Eyc8WzOckw1g8O3BtfTpItYowGIv6_SqOJXfJboyytq7kIQvos7FxC9HYVP0IREdadSVGzTOWL2tPPTqILIixNtZ7kGbxqBWROdc_WcA60GBi0Yyp3V-Hr8HMp-M0jnuAERGgX7OYR-0jIfa93xkKvU9n33hekCM0zonApUsH6iFiuffWnAt08oknGgxcj2B5C6wJ8ihV4rghj80a87sPCyWJPquCYYgCFRc005G2zAHvoQX_eh7lMvo93n0Bktz3p3tjW-CCRYgb_zZ31qpaECMk3qnRJgkmqJ8SuNbg4tO40Uv6v0FhZH74mAtalcM12_aNO7Cf8MtUDmEpp_PsEEbZpIVK3IlvT1KkIUCIwKCviKd7sIZwi8LA_O9fzcQfaGuiUx2rmhZB4TRzVw-gdBDIA_oVtuZqngsgoTVjr2V2pDw0DFQr47sovU-YZbun6DBBsNKmuEZAmA5NktF3N7ETo5RaIaF4wGnaA4sufxLXkDkHPqeMFvDEtvWGrRXKrgOUywHgsGMyJXcBJt9XPQ1X6bQNh_wqDNetASwIBWryDdBA0L_a4rNTA_5g1yvv7eeg_a6m_07Dr1iMMvxAT2w7kXpa1Wg24xQidEGba4CM3AascMGkq3KcnEliCF16SpDXc9FQnKkaGX5dYs0unmq--QGKm4oET9jHx56lqZJlwnXAta5bzOFEF4vJo3Nm6F_Qc-ux4bzQHx6MOjLPRYiS2o4aDzDGk86zMK6Pei1pw63wnoid_X9IQhVli_cWPtWZZpTAo0vbOYlBfTeYLS8Le3PhYXfz_tldhtIEL62UxhlFMDIvDH3hVoPkp6k8Qd7PCpuoJGydPvIVo8rYVPjUHJcQWEcSIQMxmNYEJ8nUCZWO6bmTiVVn4-0mcct5TX6fI7D6qCUwg9SDt8bLB5yTMyzMmBOazajvf5eSSufPItE4gv8_gBHGWPPJWtzt",
+          "id": "rs_0e712670fc06d57e006ab6960e754887d1992775e1e3ac82a2",
+          "summary": [],
+          "type": "reasoning"
+        },
+        {
+          "arguments": "{\"location\":\"London\"}",
+          "call_id": "call_U4AA41Lgsa3X1IbeUmZISAOC",
+          "id": "fc_0e712670fc06d57e006ab6960f105487d19c4bfa78d8ff725c",
+          "name": "get_weather",
+          "status": "completed",
+          "type": "function_call"
+        }
+      ],
+      "tools": [
+        {
+          "description": "Get weather for a location",
+          "name": "get_weather",
+          "output_schema": null,
+          "parameters": {
+            "$defs": {
+              "location": {
+                "type": "string"
+              }
+            },
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": true,
+            "properties": {
+              "location": {
+                "$ref": "#/$defs/location"
+              },
+              "units": {
+                "enum": [
+                  "celsius",
+                  "fahrenheit"
+                ],
+                "type": "string"
+              }
+            },
+            "required": [
+              "location"
+            ],
+            "type": "object"
+          },
+          "strict": false,
+          "type": "function"
+        }
+      ]
+    },
+    "headers": {
+      "access-control-expose-headers": [
+        "X-Request-ID",
+        "CF-Ray",
+        "CF-Ray"
+      ],
+      "alt-svc": [
+        "h3=\":443\"; ma=86400"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a40b21743bb6b1d6-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-length": [
+        "4577"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 25 Sep 2026 15:41:03 GMT"
+      ],
+      "openai-organization": "[REDACTED:openai-organization]",
+      "openai-processing-ms": [
+        "2262"
+      ],
+      "openai-project": [
+        "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
+      ],
+      "openai-version": [
+        "2020-10-01"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": "[REDACTED:set-cookie]",
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-ratelimit-limit-requests": [
+        "10000"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "4000000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "9999"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "4000000"
+      ],
+      "x-ratelimit-reset-requests": [
+        "6ms"
+      ],
+      "x-ratelimit-reset-tokens": [
+        "0s"
+      ],
+      "x-request-id": [
+        "req_f9ad557d5b12476eb738ba3081dddbef"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

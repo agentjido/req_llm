@@ -7,6 +7,11 @@
 - Non-streaming requests run through Req with `attach/3` + `encode_body/1` + `decode_response/1`; streaming runs through Finch with `attach_stream/4` + `decode_stream_event/2` or `/3`.
 - Add models via `priv/models_local/` when you want shared registry coverage, then add tests using the three-tier strategy and record fixtures with `LIVE=true`. For one-off invocation or early development, ReqLLM can also use explicit model specs; see [Model Specs](model-specs.md).
 
+For a provider that uses plain OpenAI Chat Completions with bearer
+authentication, LLMDB execution and runtime metadata can enable the shared
+catalog adapter. Add a provider module when the API needs other auth, headers,
+options, or response handling. See the [Model Specs](model-specs.md) guide.
+
 ReqLLM 1.x intentionally keeps provider extensions as plain modules and data.
 See the [provider extension manifest decision](provider-extension-decision.md)
 for the evidence and V2 reconsideration criteria.

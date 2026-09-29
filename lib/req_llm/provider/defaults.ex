@@ -608,6 +608,7 @@ defmodule ReqLLM.Provider.Defaults do
       :cache_key,
       :cache_ttl,
       :cache_options,
+      :pricing_context,
       :req_http_options,
       :telemetry
     ]
@@ -626,6 +627,15 @@ defmodule ReqLLM.Provider.Defaults do
     {api_key, extra_option_keys} =
       fetch_api_key_and_extra_options(provider_mod, model_input, user_opts)
 
+    attach_with_api_key(provider_mod, request, model, user_opts, api_key, extra_option_keys)
+  end
+
+  @doc false
+  @spec attach_with_api_key(module(), Req.Request.t(), LLMDB.Model.t(), keyword(), binary(), [
+          atom()
+        ]) ::
+          Req.Request.t()
+  def attach_with_api_key(provider_mod, request, model, user_opts, api_key, extra_option_keys) do
     request
     |> Req.Request.put_header("content-type", "application/json")
     |> Req.Request.put_header("authorization", "Bearer #{api_key}")
@@ -1272,6 +1282,15 @@ defmodule ReqLLM.Provider.Defaults do
   end
 
   def default_decode_stream_event(%{data: data}, model) when is_map(data) do
+    # 0. Carry the provider response id on the finish and usage metadata so the
+    #    streamed response keeps it instead of a generated one. Content deltas
+    #    stay unchanged; the stream server merges metadata across chunks.
+    response_id_meta =
+      case Map.get(data, "id") do
+        id when is_binary(id) and id != "" -> %{response_id: id}
+        _ -> %{}
+      end
+
     # 1. Handle choices (content + finish_reason + reasoning_details)
     choices_chunks =
       case Map.get(data, "choices") do
@@ -1310,7 +1329,11 @@ defmodule ReqLLM.Provider.Defaults do
 
             if finish_reason do
               normalized_reason = parse_openai_finish_reason(finish_reason)
-              meta_chunk = ReqLLM.StreamChunk.meta(%{finish_reason: normalized_reason})
+
+              meta_chunk =
+                ReqLLM.StreamChunk.meta(
+                  Map.put(response_id_meta, :finish_reason, normalized_reason)
+                )
 
               content_chunks ++
                 reasoning_details_chunks ++ logprobs_chunks ++ annotation_chunks ++ [meta_chunk]
@@ -1330,7 +1353,7 @@ defmodule ReqLLM.Provider.Defaults do
           # Check if this is a final usage chunk (empty choices) to mark terminal
           is_final = match?(%{"choices" => []}, data)
           normalized_usage = parse_openai_usage(usage)
-          meta = %{usage: normalized_usage, model: model.id}
+          meta = Map.merge(response_id_meta, %{usage: normalized_usage, model: model.id})
           meta = if is_final, do: Map.put(meta, :terminal?, true), else: meta
 
           [ReqLLM.StreamChunk.meta(meta)]
@@ -1933,9 +1956,15 @@ defmodule ReqLLM.Provider.Defaults do
           {model_struct.provider, model_struct, model_struct.model}
 
         model_name when is_binary(model_name) ->
-          provider_id = provider_id_from_model_name(model_name)
-          model = %LLMDB.Model{id: model_name, provider: provider_id}
-          {provider_id, model, model_name}
+          case req.private[:req_llm_model] do
+            %LLMDB.Model{} = stored_model ->
+              {stored_model.provider, stored_model, model_name}
+
+            _ ->
+              provider_id = provider_id_from_model_name(model_name)
+              model = %LLMDB.Model{id: model_name, provider: provider_id}
+              {provider_id, model, model_name}
+          end
       end
 
     is_streaming = req.options[:stream] == true
@@ -2069,7 +2098,7 @@ defmodule ReqLLM.Provider.Defaults do
     # Create a temporary Req request to use existing encode_body logic
     req_opts =
       [
-        model: model.id,
+        model: model.provider_model_id || model.id,
         context: context,
         stream: true
       ] ++ Keyword.delete(opts, :finch_name)
@@ -2115,7 +2144,7 @@ defmodule ReqLLM.Provider.Defaults do
       end)
 
     body = %{
-      model: model.id,
+      model: model.provider_model_id || model.id,
       messages: messages,
       stream: true
     }

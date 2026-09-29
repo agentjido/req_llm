@@ -48,7 +48,7 @@ defmodule ReqLLM.Providers.Anthropic.ResponseBuilder do
   end
 
   defp message_chunk?(%ReqLLM.StreamChunk{type: type})
-       when type in [:content, :thinking, :tool_call],
+       when type in [:content, :content_part, :thinking, :tool_call],
        do: true
 
   defp message_chunk?(_chunk), do: false

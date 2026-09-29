@@ -1,0 +1,224 @@
+{
+  "model_spec": "openai:gpt-5.4",
+  "provider": "openai",
+  "request": {
+    "body": {
+      "b64": "eyJjb250ZXh0X21hbmFnZW1lbnQiOlt7ImNvbXBhY3RfdGhyZXNob2xkIjoxMDAwLCJ0eXBlIjoiY29tcGFjdGlvbiJ9XSwiaW5jbHVkZSI6WyJyZWFzb25pbmcuZW5jcnlwdGVkX2NvbnRlbnQiXSwiaW5wdXQiOlt7ImNvbnRlbnQiOlt7InRleHQiOiJTdW1tYXJpemUgdGhlIGZvbGxvd2luZyBub3RlcyBpbiB0aHJlZSBzZW50ZW5jZXMuIFRoZSBraXRjaGVuIHRlYW0gcmV2aWV3ZWQgdGhlIHdlZWtseSBtZW51LCBhZGp1c3RlZCBzdXBwbGllciBvcmRlcnMsIGFuZCBwbGFubmVkIHN0YWZmIHNoaWZ0cy4gVGhlIGtpdGNoZW4gdGVhbSByZXZpZXdlZCB0aGUgd2Vla2x5IG1lbnUsIGFkanVzdGVkIHN1cHBsaWVyIG9yZGVycywgYW5kIHBsYW5uZWQgc3RhZmYgc2hpZnRzLiBUaGUga2l0Y2hlbiB0ZWFtIHJldmlld2VkIHRoZSB3ZWVrbHkgbWVudSwgYWRqdXN0ZWQgc3VwcGxpZXIgb3JkZXJzLCBhbmQgcGxhbm5lZCBzdGFmZiBzaGlmdHMuIFRoZSBraXRjaGVuIHRlYW0gcmV2aWV3ZWQgdGhlIHdlZWtseSBtZW51LCBhZGp1c3RlZCBzdXBwbGllciBvcmRlcnMsIGFuZCBwbGFubmVkIHN0YWZmIHNoaWZ0cy4gVGhlIGtpdGNoZW4gdGVhbSByZXZpZXdlZCB0aGUgd2Vla2x5IG1lbnUsIGFkanVzdGVkIHN1cHBsaWVyIG9yZGVycywgYW5kIHBsYW5uZWQgc3RhZmYgc2hpZnRzLiBUaGUga2l0Y2hlbiB0ZWFtIHJldmlld2VkIHRoZSB3ZWVrbHkgbWVudSwgYWRqdXN0ZWQgc3VwcGxpZXIgb3JkZXJzLCBhbmQgcGxhbm5lZCBzdGFmZiBzaGlmdHMuIFRoZSBraXRjaGVuIHRlYW0gcmV2aWV3ZWQgdGhlIHdlZWtseSBtZW51LCBhZGp1c3RlZCBzdXBwbGllciBvcmRlcnMsIGFuZCBwbGFubmVkIHN0YWZmIHNoaWZ0cy4gVGhlIGtpdGNoZW4gdGVhbSByZXZpZXdlZCB0aGUgd2Vla2x5IG1lbnUsIGFkanVzdGVkIHN1cHBsaWVyIG9yZGVycywgYW5kIHBsYW5uZWQgc3RhZmYgc2hpZnRzLiBUaGUga2l0Y2hlbiB0ZWFtIHJldmlld2VkIHRoZSB3ZWVrbHkgbWVudSwgYWRqdXN0ZWQgc3VwcGxpZXIgb3JkZXJzLCBhbmQgcGxhbm5lZCBzdGFmZiBzaGlmdHMuIFRoZSBraXRjaGVuIHRlYW0gcmV2aWV3ZWQgdGhlIHdlZWtseSBtZW51LCBhZGp1c3RlZCBzdXBwbGllciBvcmRlcnMsIGFuZCBwbGFubmVkIHN0YWZmIHNoaWZ0cy4gVGhlIGtpdGNoZW4gdGVhbSByZXZpZXdlZCB0aGUgd2Vla2x5IG1lbnUsIGFkanVzdGVkIHN1cHBsaWVyIG9yZGVycywgYW5kIHBsYW5uZWQgc3RhZmYgc2hpZnRzLiBUaGUga2l0Y2hlbiB0ZWFtIHJldmlld2VkIHRoZSB3ZWVrbHkgbWVudSwgYWRqdXN0ZWQgc3VwcGxpZXIgb3JkZXJzLCBhbmQgcGxhbm5lZCBzdGFmZiBzaGlmdHMuIFRoZSBraXRjaGVuIHRlYW0gcmV2aWV3ZWQgdGhlIHdlZWtseSBtZW51LCBhZGp1c3RlZCBzdXBwbGllciBvcmRlcnMsIGFuZCBwbGFubmVkIHN0YWZmIHNoaWZ0cy4gVGhlIGtpdGNoZW4gdGVhbSByZXZpZXdlZCB0aGUgd2Vla2x5IG1lbnUsIGFkanVzdGVkIHN1cHBsaWVyIG9yZGVycywgYW5kIHBsYW5uZWQgc3RhZmYgc2hpZnRzLiBUaGUga2l0Y2hlbiB0ZWFtIHJldmlld2VkIHRoZSB3ZWVrbHkgbWVudSwgYWRqdXN0ZWQgc3VwcGxpZXIgb3JkZXJzLCBhbmQgcGxhbm5lZCBzdGFmZiBzaGlmdHMuIFRoZSBraXRjaGVuIHRlYW0gcmV2aWV3ZWQgdGhlIHdlZWtseSBtZW51LCBhZGp1c3RlZCBzdXBwbGllciBvcmRlcnMsIGFuZCBwbGFubmVkIHN0YWZmIHNoaWZ0cy4gVGhlIGtpdGNoZW4gdGVhbSByZXZpZXdlZCB0aGUgd2Vla2x5IG1lbnUsIGFkanVzdGVkIHN1cHBsaWVyIG9yZGVycywgYW5kIHBsYW5uZWQgc3RhZmYgc2hpZnRzLiBUaGUga2l0Y2hlbiB0ZWFtIHJldmlld2VkIHRoZSB3ZWVrbHkgbWVudSwgYWRqdXN0ZWQgc3VwcGxpZXIgb3JkZXJzLCBhbmQgcGxhbm5lZCBzdGFmZiBzaGlmdHMuIFRoZSBraXRjaGVuIHRlYW0gcmV2aWV3ZWQgdGhlIHdlZWtseSBtZW51LCBhZGp1c3RlZCBzdXBwbGllciBvcmRlcnMsIGFuZCBwbGFubmVkIHN0YWZmIHNoaWZ0cy4gVGhlIGtpdGNoZW4gdGVhbSByZXZpZXdlZCB0aGUgd2Vla2x5IG1lbnUsIGFkanVzdGVkIHN1cHBsaWVyIG9yZGVycywgYW5kIHBsYW5uZWQgc3RhZmYgc2hpZnRzLiBUaGUga2l0Y2hlbiB0ZWFtIHJldmlld2VkIHRoZSB3ZWVrbHkgbWVudSwgYWRqdXN0ZWQgc3VwcGxpZXIgb3JkZXJzLCBhbmQgcGxhbm5lZCBzdGFmZiBzaGlmdHMuIFRoZSBraXRjaGVuIHRlYW0gcmV2aWV3ZWQgdGhlIHdlZWtseSBtZW51LCBhZGp1c3RlZCBzdXBwbGllciBvcmRlcnMsIGFuZCBwbGFubmVkIHN0YWZmIHNoaWZ0cy4gVGhlIGtpdGNoZW4gdGVhbSByZXZpZXdlZCB0aGUgd2Vla2x5IG1lbnUsIGFkanVzdGVkIHN1cHBsaWVyIG9yZGVycywgYW5kIHBsYW5uZWQgc3RhZmYgc2hpZnRzLiBUaGUga2l0Y2hlbiB0ZWFtIHJldmlld2VkIHRoZSB3ZWVrbHkgbWVudSwgYWRqdXN0ZWQgc3VwcGxpZXIgb3JkZXJzLCBhbmQgcGxhbm5lZCBzdGFmZiBzaGlmdHMuIFRoZSBraXRjaGVuIHRlYW0gcmV2aWV3ZWQgdGhlIHdlZWtseSBtZW51LCBhZGp1c3RlZCBzdXBwbGllciBvcmRlcnMsIGFuZCBwbGFubmVkIHN0YWZmIHNoaWZ0cy4gVGhlIGtpdGNoZW4gdGVhbSByZXZpZXdlZCB0aGUgd2Vla2x5IG1lbnUsIGFkanVzdGVkIHN1cHBsaWVyIG9yZGVycywgYW5kIHBsYW5uZWQgc3RhZmYgc2hpZnRzLiBUaGUga2l0Y2hlbiB0ZWFtIHJldmlld2VkIHRoZSB3ZWVrbHkgbWVudSwgYWRqdXN0ZWQgc3VwcGxpZXIgb3JkZXJzLCBhbmQgcGxhbm5lZCBzdGFmZiBzaGlmdHMuIFRoZSBraXRjaGVuIHRlYW0gcmV2aWV3ZWQgdGhlIHdlZWtseSBtZW51LCBhZGp1c3RlZCBzdXBwbGllciBvcmRlcnMsIGFuZCBwbGFubmVkIHN0YWZmIHNoaWZ0cy4gVGhlIGtpdGNoZW4gdGVhbSByZXZpZXdlZCB0aGUgd2Vla2x5IG1lbnUsIGFkanVzdGVkIHN1cHBsaWVyIG9yZGVycywgYW5kIHBsYW5uZWQgc3RhZmYgc2hpZnRzLiBUaGUga2l0Y2hlbiB0ZWFtIHJldmlld2VkIHRoZSB3ZWVrbHkgbWVudSwgYWRqdXN0ZWQgc3VwcGxpZXIgb3JkZXJzLCBhbmQgcGxhbm5lZCBzdGFmZiBzaGlmdHMuIFRoZSBraXRjaGVuIHRlYW0gcmV2aWV3ZWQgdGhlIHdlZWtseSBtZW51LCBhZGp1c3RlZCBzdXBwbGllciBvcmRlcnMsIGFuZCBwbGFubmVkIHN0YWZmIHNoaWZ0cy4gVGhlIGtpdGNoZW4gdGVhbSByZXZpZXdlZCB0aGUgd2Vla2x5IG1lbnUsIGFkanVzdGVkIHN1cHBsaWVyIG9yZGVycywgYW5kIHBsYW5uZWQgc3RhZmYgc2hpZnRzLiBUaGUga2l0Y2hlbiB0ZWFtIHJldmlld2VkIHRoZSB3ZWVrbHkgbWVudSwgYWRqdXN0ZWQgc3VwcGxpZXIgb3JkZXJzLCBhbmQgcGxhbm5lZCBzdGFmZiBzaGlmdHMuIFRoZSBraXRjaGVuIHRlYW0gcmV2aWV3ZWQgdGhlIHdlZWtseSBtZW51LCBhZGp1c3RlZCBzdXBwbGllciBvcmRlcnMsIGFuZCBwbGFubmVkIHN0YWZmIHNoaWZ0cy4gVGhlIGtpdGNoZW4gdGVhbSByZXZpZXdlZCB0aGUgd2Vla2x5IG1lbnUsIGFkanVzdGVkIHN1cHBsaWVyIG9yZGVycywgYW5kIHBsYW5uZWQgc3RhZmYgc2hpZnRzLiBUaGUga2l0Y2hlbiB0ZWFtIHJldmlld2VkIHRoZSB3ZWVrbHkgbWVudSwgYWRqdXN0ZWQgc3VwcGxpZXIgb3JkZXJzLCBhbmQgcGxhbm5lZCBzdGFmZiBzaGlmdHMuIFRoZSBraXRjaGVuIHRlYW0gcmV2aWV3ZWQgdGhlIHdlZWtseSBtZW51LCBhZGp1c3RlZCBzdXBwbGllciBvcmRlcnMsIGFuZCBwbGFubmVkIHN0YWZmIHNoaWZ0cy4gVGhlIGtpdGNoZW4gdGVhbSByZXZpZXdlZCB0aGUgd2Vla2x5IG1lbnUsIGFkanVzdGVkIHN1cHBsaWVyIG9yZGVycywgYW5kIHBsYW5uZWQgc3RhZmYgc2hpZnRzLiBUaGUga2l0Y2hlbiB0ZWFtIHJldmlld2VkIHRoZSB3ZWVrbHkgbWVudSwgYWRqdXN0ZWQgc3VwcGxpZXIgb3JkZXJzLCBhbmQgcGxhbm5lZCBzdGFmZiBzaGlmdHMuIFRoZSBraXRjaGVuIHRlYW0gcmV2aWV3ZWQgdGhlIHdlZWtseSBtZW51LCBhZGp1c3RlZCBzdXBwbGllciBvcmRlcnMsIGFuZCBwbGFubmVkIHN0YWZmIHNoaWZ0cy4gIiwidHlwZSI6ImlucHV0X3RleHQifV0sInJvbGUiOiJ1c2VyIn1dLCJtYXhfb3V0cHV0X3Rva2VucyI6MTAyNCwibW9kZWwiOiJncHQtNS40IiwicmVhc29uaW5nIjp7ImVmZm9ydCI6ImxvdyJ9LCJzdG9yZSI6ZmFsc2UsInN0cmVhbSI6ZmFsc2V9"
+    },
+    "canonical_json": {
+      "context_management": [
+        {
+          "compact_threshold": 1000,
+          "type": "compaction"
+        }
+      ],
+      "include": [
+        "reasoning.encrypted_content"
+      ],
+      "input": [
+        {
+          "content": [
+            {
+              "text": "Summarize the following notes in three sentences. The kitchen team reviewed the weekly menu, adjusted supplier orders, and planned staff shifts. The kitchen team reviewed the weekly menu, adjusted supplier orders, and planned staff shifts. The kitchen team reviewed the weekly menu, adjusted supplier orders, and planned staff shifts. The kitchen team reviewed the weekly menu, adjusted supplier orders, and planned staff shifts. The kitchen team reviewed the weekly menu, adjusted supplier orders, and planned staff shifts. The kitchen team reviewed the weekly menu, adjusted supplier orders, and planned staff shifts. The kitchen team reviewed the weekly menu, adjusted supplier orders, and planned staff shifts. The kitchen team reviewed the weekly menu, adjusted supplier orders, and planned staff shifts. The kitchen team reviewed the weekly menu, adjusted supplier orders, and planned staff shifts. The kitchen team reviewed the weekly menu, adjusted supplier orders, and planned staff shifts. The kitchen team reviewed the weekly menu, adjusted supplier orders, and planned staff shifts. The kitchen team reviewed the weekly menu, adjusted supplier orders, and planned staff shifts. The kitchen team reviewed the weekly menu, adjusted supplier orders, and planned staff shifts. The kitchen team reviewed the weekly menu, adjusted supplier orders, and planned staff shifts. The kitchen team reviewed the weekly menu, adjusted supplier orders, and planned staff shifts. The kitchen team reviewed the weekly menu, adjusted supplier orders, and planned staff shifts. The kitchen team reviewed the weekly menu, adjusted supplier orders, and planned staff shifts. The kitchen team reviewed the weekly menu, adjusted supplier orders, and planned staff shifts. The kitchen team reviewed the weekly menu, adjusted supplier orders, and planned staff shifts. The kitchen team reviewed the weekly menu, adjusted supplier orders, and planned staff shifts. The kitchen team reviewed the weekly menu, adjusted supplier orders, and planned staff shifts. The kitchen team reviewed the weekly menu, adjusted supplier orders, and planned staff shifts. The kitchen team reviewed the weekly menu, adjusted supplier orders, and planned staff shifts. The kitchen team reviewed the weekly menu, adjusted supplier orders, and planned staff shifts. The kitchen team reviewed the weekly menu, adjusted supplier orders, and planned staff shifts. The kitchen team reviewed the weekly menu, adjusted supplier orders, and planned staff shifts. The kitchen team reviewed the weekly menu, adjusted supplier orders, and planned staff shifts. The kitchen team reviewed the weekly menu, adjusted supplier orders, and planned staff shifts. The kitchen team reviewed the weekly menu, adjusted supplier orders, and planned staff shifts. The kitchen team reviewed the weekly menu, adjusted supplier orders, and planned staff shifts. The kitchen team reviewed the weekly menu, adjusted supplier orders, and planned staff shifts. The kitchen team reviewed the weekly menu, adjusted supplier orders, and planned staff shifts. The kitchen team reviewed the weekly menu, adjusted supplier orders, and planned staff shifts. The kitchen team reviewed the weekly menu, adjusted supplier orders, and planned staff shifts. The kitchen team reviewed the weekly menu, adjusted supplier orders, and planned staff shifts. The kitchen team reviewed the weekly menu, adjusted supplier orders, and planned staff shifts. The kitchen team reviewed the weekly menu, adjusted supplier orders, and planned staff shifts. The kitchen team reviewed the weekly menu, adjusted supplier orders, and planned staff shifts. The kitchen team reviewed the weekly menu, adjusted supplier orders, and planned staff shifts. The kitchen team reviewed the weekly menu, adjusted supplier orders, and planned staff shifts. ",
+              "type": "input_text"
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "max_output_tokens": 1024,
+      "model": "gpt-5.4",
+      "reasoning": {
+        "effort": "low"
+      },
+      "store": false,
+      "stream": false
+    },
+    "headers": {
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.7.4"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.openai.com/v1/responses"
+  },
+  "response": {
+    "body": {
+      "safety_identifier": null,
+      "store": false,
+      "error": null,
+      "created_at": 1790343182,
+      "presence_penalty": 0.0,
+      "status": "completed",
+      "tool_usage": {
+        "image_gen": {
+          "input_tokens": 0,
+          "input_tokens_details": {
+            "image_tokens": 0,
+            "text_tokens": 0
+          },
+          "output_tokens": 0,
+          "output_tokens_details": {
+            "image_tokens": 0,
+            "text_tokens": 0
+          },
+          "total_tokens": 0
+        },
+        "web_search": {
+          "num_requests": 0
+        }
+      },
+      "max_tool_calls": null,
+      "instructions": null,
+      "billing": {
+        "payer": "developer"
+      },
+      "prompt_cache_retention": "24h",
+      "completed_at": 1790343183,
+      "temperature": 1.0,
+      "text": {
+        "format": {
+          "type": "text"
+        },
+        "verbosity": "medium"
+      },
+      "parallel_tool_calls": true,
+      "tool_choice": "auto",
+      "frequency_penalty": 0.0,
+      "top_logprobs": 0,
+      "reasoning": {
+        "context": "current_turn",
+        "effort": "low",
+        "mode": "standard",
+        "summary": null
+      },
+      "usage": {
+        "input_tokens": 697,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 50,
+        "output_tokens_details": {
+          "reasoning_tokens": 13
+        },
+        "total_tokens": 747
+      },
+      "access_programs": null,
+      "incomplete_details": null,
+      "model": "gpt-5.4-2026-03-05",
+      "truncation": "disabled",
+      "metadata": {},
+      "service_tier": "default",
+      "id": "resp_0f7b95a68199afea016ab6780e222c87d1b602c3e0724f75dc",
+      "top_p": 0.98,
+      "user": null,
+      "prompt_cache_key": null,
+      "moderation": null,
+      "object": "response",
+      "background": false,
+      "previous_response_id": null,
+      "max_output_tokens": 1024,
+      "output": [
+        {
+          "content": [],
+          "encrypted_content": "gAAAAABqtngP8tVrqbYnkU4JirwQIuesYyKyTNOU-AGFx3OPaxR1on-HllZgxh2f2HtgxTL-pyptSWJqOrFJaiKyhiCgL1y5DmlpoM4Kj_YJuWM2-ppb2Tsr0tSxrpiCbBxxlhoFuqTXnEf3U1JcY3I8kLng6zs9X9ckhTWQhViGbEkL3XoDj_HooIRbZ_zwujn-FNH_PhKn1f11ne8f-WnF74Br31mJKYeR3Uwsrf4gTLEcOcRDUBJVVB4edFkYDhRwadpCJ3pTcAmk59MfokmXk7HGZiCtQSJX5gMV2rxngHycfSk5-6Zu3VSYHljXmaQY0E2fdya-9OUBEJufrRUna_xDsC34wEDikR0auPRJR5Pm3imLOPqDBslPhPeIAmFXWlGg4xuOy9qGWUXMHRV-kEvDdtWf0a4Wz58jRZUNTiDqGuwuurGMZtyLXvxBS14plTXo2uTrBkwc8Mu12S7yY1QvyGsq_G358e1sVks7N1fnEUWhzmWq8V4-Y5FdLKsoLpVA7GvDeNcVDUFjD3WNob646dYsid4AFrFPB9OUEIV48hu0nOFYqKEZC2eHVC_b8776wxpoBtKTAi3SJjYou7wNiLIrpBKWYxw9Ze4WXHXU3TwfiFiqyTsrUMgjWqSXCYhkU7ENdsyqlUyMUzT3zug3UF7-yx1wvHdWDAI_j1B7zrTvjkCkNTkftT0MhmvSrzmFAEuADNFYnGi3nzX3Z5WuX30qAMGzziWWVp68dAZpDOZbJhjwcAJ8dgBTxbYsPrDVGxV-Fhf_9ZxcVLM8lAtBbYv84sFFA5Dzk8aS-kg41MON9vFRiblzqFMgVRuqZqtw4aWSnyXT0U9rYNjD4l1diZwV6A4W9dMU5KzN5SJNmC1RuaNcmpsVBuDx9LWiN9PHZ2Im-SauDQj9clIqiH1qn7OjU8GXGnXF7150PenniRAWq3jVgFoxZdU-UxZahyuJ2pglW8l-WnGBSWWT8cTLP6zp_-nZeoDqCWIiM10eKZoTSLZs7JPdal0rwPNWLNVD2hsYBy9ZHeCZZJRWjo7l0BqmTL5xWTcJk7RDIvggDLbP6VTrsgk66mColgl29mZ0ODAk5jiwHsGUz52BUOJO9IQGCC7Pbu3vZRSETqow9Ah0SyZOgSHyg15HFQ_fe1qDefhIosSxVW3z-7lKIEDYY5TX-G0NjWTOP9vRoZ7suB_r0gblHzVEqEQklzwVKqrvyoLWAtJpMH5Ad9YvwfBBvQQacOxAiF_hZ3yVKaXopoXTu1s=",
+          "id": "rs_0f7b95a68199afea016ab6780f283c87d18ff2b394b626e5fb",
+          "summary": [],
+          "type": "reasoning"
+        },
+        {
+          "content": [
+            {
+              "annotations": [],
+              "logprobs": [],
+              "text": "The kitchen team met to review the weekly menu. They also adjusted supplier orders to match upcoming needs. In addition, they planned staff shifts for the week.",
+              "type": "output_text"
+            }
+          ],
+          "id": "msg_0f7b95a68199afea016ab6780f3dd487d19ed58ec40dd4e98a",
+          "phase": "final_answer",
+          "role": "assistant",
+          "status": "completed",
+          "type": "message"
+        }
+      ],
+      "tools": []
+    },
+    "headers": {
+      "access-control-expose-headers": [
+        "X-Request-ID",
+        "CF-Ray",
+        "CF-Ray"
+      ],
+      "alt-svc": [
+        "h3=\":443\"; ma=86400"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a40a65f7eb7e2688-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-length": [
+        "3671"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 25 Sep 2026 13:33:03 GMT"
+      ],
+      "openai-organization": "[REDACTED:openai-organization]",
+      "openai-processing-ms": [
+        "1438"
+      ],
+      "openai-project": [
+        "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
+      ],
+      "openai-version": [
+        "2020-10-01"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": "[REDACTED:set-cookie]",
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-ratelimit-limit-requests": [
+        "10000"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "4000000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "9999"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "4000000"
+      ],
+      "x-ratelimit-reset-requests": [
+        "6ms"
+      ],
+      "x-ratelimit-reset-tokens": [
+        "0s"
+      ],
+      "x-request-id": [
+        "req_4f41f009a5ab400d975c845dfb0a0498"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

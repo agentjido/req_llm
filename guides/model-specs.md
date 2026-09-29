@@ -168,6 +168,42 @@ This path is best when:
 
 This is the key point: you do not need the model to exist in LLMDB before ReqLLM can use it, as long as you provide a complete enough model spec.
 
+### OpenAI Chat Completions providers without a ReqLLM module
+
+ReqLLM can use the shared Chat Completions adapter when a provider has no
+registered ReqLLM module. The model must declare a supported `execution.text`
+contract with the `openai_chat_compatible` family and `openai_chat` wire protocol.
+The provider must declare bearer authentication in LLMDB. A full base URL can
+come from the operation, model, provider runtime, or request option.
+For object generation, the model must also declare `execution.object`. Text
+streaming needs `capabilities.streaming.text: true`.
+
+You can use a full model spec before the model is in the catalog. For example,
+LLMDB has Perplexity runtime metadata, so this spec can use the shared adapter:
+
+```elixir
+model =
+  ReqLLM.model!(%{
+    provider: :perplexity,
+    id: "sonar",
+    execution: %{
+      text: %{
+        supported: true,
+        family: "openai_chat_compatible",
+        wire_protocol: "openai_chat",
+        path: "/chat/completions"
+      }
+    }
+  })
+
+ReqLLM.generate_text(model, "Hello", api_key: "your-key")
+```
+
+When the model is in LLMDB with this metadata, use its normal string spec.
+ReqLLM uses the provider's declared API key environment variables or the
+per-request `:api_key` option. A registered provider module keeps priority.
+Missing or unsupported execution metadata returns an error before the request.
+
 ## Inspect Request Routing Without Executing
 
 `ReqLLM.plan/3` provides an experimental, redacted view of text-request routing before

@@ -7,7 +7,7 @@ defmodule ReqLLM.ModelInput do
     rerank: [:query, :documents]
   }
 
-  @spec merge_tuple_defaults(ReqLLM.model_input(), atom(), keyword()) :: keyword()
+  @spec merge_tuple_defaults(ReqLLM.generation_model_input(), atom(), keyword()) :: keyword()
   def merge_tuple_defaults(model_input, operation, call_opts) do
     {merged, warnings} = merge_tuple_defaults_with_warnings(model_input, operation, call_opts)
     Enum.each(warnings, &IO.warn/1)
@@ -15,7 +15,7 @@ defmodule ReqLLM.ModelInput do
   end
 
   @doc false
-  @spec merge_tuple_defaults_with_warnings(ReqLLM.model_input(), atom(), keyword()) ::
+  @spec merge_tuple_defaults_with_warnings(ReqLLM.generation_model_input(), atom(), keyword()) ::
           {keyword(), [binary()]}
   def merge_tuple_defaults_with_warnings(
         {provider, model_id, tuple_opts},
@@ -83,6 +83,7 @@ defmodule ReqLLM.ModelInput do
   defp option_schema(:transcription), do: ReqLLM.Transcription.schema()
   defp option_schema(:speech), do: ReqLLM.Speech.schema()
   defp option_schema(:rerank), do: ReqLLM.Rerank.schema()
+  defp option_schema(:compact), do: ReqLLM.Compaction.schema()
   defp option_schema(:evaluate), do: ReqLLM.Evaluation.schema()
   defp option_schema(:ocr), do: ReqLLM.OCR.schema()
   defp option_schema(:video), do: ReqLLM.Video.schema()
