@@ -228,7 +228,7 @@ defmodule ReqLLM.Providers.OpenAI.AdapterHelpers do
   """
   @spec reasoning_model?(term()) :: boolean()
   def reasoning_model?(model_id) when is_binary(model_id) do
-    o_series_model?(model_id) || gpt5_model?(model_id) || gpt6_astra_model?(model_id) ||
+    o_series_model?(model_id) || gpt5_model?(model_id) || gpt6_model?(model_id) ||
       codex_model?(model_id)
   end
 
@@ -263,6 +263,22 @@ defmodule ReqLLM.Providers.OpenAI.AdapterHelpers do
   def gpt6_astra_model?("gpt-6-astra"), do: true
   def gpt6_astra_model?(<<"gpt-6-astra-", _::binary>>), do: true
   def gpt6_astra_model?(_), do: false
+
+  @doc "Checks if a model is in the GPT-6 reasoning family."
+  @spec gpt6_model?(term()) :: boolean()
+  def gpt6_model?("gpt-6-sol"), do: true
+  def gpt6_model?("gpt-6-luna"), do: true
+  def gpt6_model?("gpt-6.1-sol"), do: true
+  def gpt6_model?(<<"gpt-6-sol-", _::binary>>), do: true
+  def gpt6_model?(<<"gpt-6-luna-", _::binary>>), do: true
+  def gpt6_model?(<<"gpt-6.1-sol-", _::binary>>), do: true
+  def gpt6_model?(model_id), do: gpt6_astra_model?(model_id)
+
+  @doc "Checks if a GPT-6 model requires a nonzero reasoning effort."
+  @spec required_reasoning_model?(term()) :: boolean()
+  def required_reasoning_model?("gpt-6.1-sol"), do: true
+  def required_reasoning_model?(<<"gpt-6.1-sol-", _::binary>>), do: true
+  def required_reasoning_model?(model_id), do: gpt6_astra_model?(model_id)
 
   @doc "Checks if model is a GPT-5 Pro model."
   @spec gpt5_pro_model?(term()) :: boolean()

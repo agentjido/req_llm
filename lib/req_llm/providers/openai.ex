@@ -276,7 +276,8 @@ defmodule ReqLLM.Providers.OpenAI do
     ],
     service_tier: [
       type: {:or, [:atom, :string]},
-      doc: "Service tier for request prioritization ('auto', 'default', 'flex' or 'priority')"
+      doc:
+        "Service tier for request prioritization ('auto', 'default', 'flex', 'fast', 'priority', or 'ultrafast')"
     ],
     verbosity: [
       type: {:or, [:atom, :string]},

@@ -10,14 +10,14 @@ defmodule ReqLLM.Providers.OpenAI.Astra do
     provider_opts = Keyword.get(opts, :provider_options, [])
     options = Keyword.merge(provider_opts, Keyword.delete(opts, :provider_options))
 
-    if AdapterHelpers.gpt6_astra_model?(model.id) do
+    if AdapterHelpers.required_reasoning_model?(model.id) do
       effort = options[:reasoning_effort]
       if effort not in [nil, :default, "default"], do: validate_effort!(effort)
 
       if options[:openai_logprobs] == true or
            not is_nil(options[:openai_top_logprobs]) or
            "message.output_text.logprobs" in (options[:include] || []) do
-        invalid!("GPT-6 Astra does not support logprobs")
+        invalid!("GPT-6 Astra and GPT-6.1 Sol do not support logprobs")
       end
     end
 
@@ -27,20 +27,22 @@ defmodule ReqLLM.Providers.OpenAI.Astra do
 
   def validate_effort!(effort) do
     if not (is_atom(effort) or is_binary(effort)) or to_string(effort) not in @efforts do
-      invalid!("GPT-6 Astra reasoning effort must be low, medium, high, xhigh, or max")
+      invalid!(
+        "GPT-6 Astra and GPT-6.1 Sol reasoning effort must be low, medium, high, xhigh, or max"
+      )
     end
 
     to_string(effort)
   end
 
   def validate_body!(body, model_name) do
-    if AdapterHelpers.gpt6_astra_model?(model_name) do
+    if AdapterHelpers.required_reasoning_model?(model_name) do
       effort = get_in(body, ["reasoning", "effort"])
       if effort, do: validate_effort!(effort)
 
       if Enum.any?(["temperature", "top_p", "top_logprobs", "logprobs"], &Map.has_key?(body, &1)) or
            "message.output_text.logprobs" in (body["include"] || []) do
-        invalid!("GPT-6 Astra does not support sampling parameters or logprobs")
+        invalid!("GPT-6 Astra and GPT-6.1 Sol do not support sampling parameters or logprobs")
       end
     end
 
