@@ -41,6 +41,6 @@ Scope decision: these product and plugin changes do not add a supported generati
 
 The [ReqLLM checklist](openai-devday-rollout.md) records tests, compatibility limits, and separate integration proposals. The llmdb worktree has its own rollout checklist.
 
-Review both local feat/openai-devday-2026 branches before shipment. The llmdb review base is 8e5fa1f. The ReqLLM review base is 30b54901. These bases retain the existing work in each repository. No package release, snapshot publication, merge, or deployment was performed.
+Review both local feat/openai-devday-2026 branches before shipment. The llmdb changes passed GitHub CI and merged in [PR #341](https://github.com/agentjido/llmdb/pull/341) after the user approved shipment. [llm_db 2026.9.8](https://hex.pm/packages/llm_db/2026.9.8) is published. The ReqLLM review base is 7e77fe89. It retains current main changes and requires the published catalog version. ReqLLM has not been merged or published.
 
-After approval, release the llmdb data before callers depend on new catalog lookup. Explicit ReqLLM model maps work before the new catalog ships. Decisions support is no longer a release requirement, as directed by the user.
+The published llmdb data now supports new catalog lookup. Explicit ReqLLM model maps work before the new catalog ships. Decisions support is no longer a release requirement, as directed by the user.

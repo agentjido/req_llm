@@ -211,8 +211,8 @@ defmodule ReqLLM.CatalogGatewayTest do
     assert {:error, error} = ReqLLM.ProviderDispatch.get(model, :chat)
     assert Exception.message(error) =~ "openai_chat_compatible"
 
-    orca = model(:orcarouter, @chat_contract)
-    assert {:error, error} = ReqLLM.ProviderDispatch.get(orca, :chat)
+    missing_runtime = %{model(:orcarouter, @chat_contract) | provider: :missing_catalog_runtime}
+    assert {:error, error} = ReqLLM.ProviderDispatch.get(missing_runtime, :chat)
     assert Exception.message(error) =~ "runtime metadata"
 
     catalog_only = %{model(:perplexity, @chat_contract) | catalog_only: true}

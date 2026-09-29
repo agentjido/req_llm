@@ -1439,15 +1439,13 @@
       }
     },
     "fireworks_ai:accounts/fireworks/models/deepseek-v4-pro": {
-      "catalog_status": "present",
-      "declared_operations": [
-        "text"
-      ],
+      "catalog_status": "missing",
+      "declared_operations": [],
       "model": "accounts/fireworks/models/deepseek-v4-pro",
       "provider": "fireworks_ai",
       "surfaces": {
         "fireworks_ai.chat_completions": {
-          "declaration": "declared",
+          "declaration": "unknown",
           "operation": "text",
           "provider": "fireworks_ai",
           "scenarios": {
@@ -1593,15 +1591,13 @@
       }
     },
     "fireworks_ai:accounts/fireworks/models/kimi-k2p6": {
-      "catalog_status": "present",
-      "declared_operations": [
-        "text"
-      ],
+      "catalog_status": "missing",
+      "declared_operations": [],
       "model": "accounts/fireworks/models/kimi-k2p6",
       "provider": "fireworks_ai",
       "surfaces": {
         "fireworks_ai.chat_completions": {
-          "declaration": "declared",
+          "declaration": "unknown",
           "operation": "text",
           "provider": "fireworks_ai",
           "scenarios": {
@@ -1655,15 +1651,13 @@
       }
     },
     "fireworks_ai:accounts/fireworks/models/minimax-m2p7": {
-      "catalog_status": "present",
-      "declared_operations": [
-        "text"
-      ],
+      "catalog_status": "missing",
+      "declared_operations": [],
       "model": "accounts/fireworks/models/minimax-m2p7",
       "provider": "fireworks_ai",
       "surfaces": {
         "fireworks_ai.chat_completions": {
-          "declaration": "declared",
+          "declaration": "unknown",
           "operation": "text",
           "provider": "fireworks_ai",
           "scenarios": {
@@ -8723,15 +8717,13 @@
       }
     },
     "openrouter:deepseek/deepseek-r1-distill-llama-70b": {
-      "catalog_status": "present",
-      "declared_operations": [
-        "text"
-      ],
+      "catalog_status": "missing",
+      "declared_operations": [],
       "model": "deepseek/deepseek-r1-distill-llama-70b",
       "provider": "openrouter",
       "surfaces": {
         "openrouter.chat_completions": {
-          "declaration": "declared",
+          "declaration": "unknown",
           "operation": "text",
           "provider": "openrouter",
           "scenarios": {

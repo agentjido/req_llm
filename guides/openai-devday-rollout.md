@@ -65,7 +65,7 @@ Source: [GPT Live 1](https://developers.openai.com/api/docs/models/gpt-live-1).
 
 ## Validation
 
-The full ReqLLM suite passed 4,803 tests, with 11 skipped and 213 excluded. Final focused checks passed 82 billing, normalization, image decoder, and stream tests, and 79 image and usage tests. `mix quality` passed after the final code change. The cross-repository script checked Sol 6.1 Responses routing and all four Image 2.5 records, including modality costs, without sending requests.
+The full ReqLLM suite passed 4,808 tests, with 11 skipped and 213 excluded. Final focused checks passed 82 billing, normalization, image decoder, and stream tests, and 79 image and usage tests. `mix quality` passed after the final code change. The cross-repository script checked Sol 6.1 Responses routing and all four Image 2.5 records, including modality costs, without sending requests.
 
 Run the integration check with `MIX_ENV=test mix run scripts/check_devday_catalog.exs /absolute/path/to/llmdb/priv/llm_db/snapshot.json`. Sol 6.1 catalog lookup needs the new llmdb data. Explicit model maps are supported before that data ships.
 
@@ -96,3 +96,9 @@ Missing or inconsistent counts, partial rate coverage, mixed aggregate and modal
 The 82 focused billing, normalization, image decoder, and stream tests passed. The integration script loaded all four Image 2.5 records from the new llmdb snapshot and checked request routing and modality costs.
 
 Source: [official Images response schema](https://github.com/openai/openai-python/blob/main/src/openai/types/images_response.py).
+
+## Published catalog dependency
+
+The user approved llmdb shipment on September 29, 2026. [PR #341](https://github.com/agentjido/llmdb/pull/341) passed GitHub CI and merged. The release workflow published [llm_db 2026.9.8](https://hex.pm/packages/llm_db/2026.9.8). ReqLLM now requires that version or later in the same minor series, and its lock file selects 2026.9.8. Other dependency versions are retained.
+
+The integration script passed with the snapshot in the downloaded Hex package. The full suite passed 4,808 tests, with 11 skipped and 213 excluded. Quality checks passed. Catalog evidence was regenerated, and the missing-runtime test now uses an absent provider because OrcaRouter has runtime metadata. ReqLLM remains pending user review and has not been merged or published.
