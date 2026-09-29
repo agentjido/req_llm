@@ -305,13 +305,25 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     )
   end
 
+  # The Responses API nests the details under "error"
+  # (`{"type":"error","error":{"code":...,"message":...}}`); older payloads put
+  # them at the top level. Read both so a context overflow or rate limit is not
+  # reported as a bare "stream error".
   defp decode_output_or_terminal_event("error", data, _model) do
-    message = data["message"] || data["code"] || "stream error"
+    details = error_details(data)
+    code = data["code"] || details["code"]
+    message = data["message"] || details["message"] || code || "stream error"
 
-    [ReqLLM.StreamChunk.meta(%{terminal?: true, finish_reason: :error, error: message})]
+    meta = %{terminal?: true, finish_reason: :error, error: message}
+    meta = if code, do: Map.put(meta, :error_code, code), else: meta
+
+    [ReqLLM.StreamChunk.meta(meta)]
   end
 
   defp decode_output_or_terminal_event(_event_type, _data, _model), do: []
+
+  defp error_details(%{"error" => %{} = details}), do: details
+  defp error_details(_data), do: %{}
 
   defp capture_completion_metadata(data, meta, provider) do
     usage_data = get_in(data, ["response", "usage"])
