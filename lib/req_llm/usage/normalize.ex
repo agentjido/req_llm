@@ -87,8 +87,22 @@ defmodule ReqLLM.Usage.Normalize do
     }
 
     usage
-    |> Map.take([:cache_storage_token_hours, "cache_storage_token_hours"])
+    |> Map.take([
+      :cache_storage_token_hours,
+      "cache_storage_token_hours",
+      :input_tokens_details,
+      "input_tokens_details",
+      :output_tokens_details,
+      "output_tokens_details"
+    ])
     |> Map.merge(canonical)
+  end
+
+  defp detail_count(usage, field, key) do
+    case MapAccess.get(usage, field) do
+      details when is_map(details) -> Map.get(details, key, Map.get(details, Atom.to_string(key)))
+      _ -> nil
+    end
   end
 
   defp first_present(usage, keys) do
@@ -108,7 +122,7 @@ defmodule ReqLLM.Usage.Normalize do
         :cached_input
       ]) ||
         get_in(usage, ["prompt_tokens_details", "cached_tokens"]) ||
-        get_in(usage, ["input_tokens_details", "cached_tokens"])
+        detail_count(usage, :input_tokens_details, :cached_tokens)
 
     write =
       first_present(usage, [
@@ -117,7 +131,7 @@ defmodule ReqLLM.Usage.Normalize do
         :cache_creation_input_tokens
       ]) ||
         get_in(usage, ["prompt_tokens_details", "cache_write_tokens"]) ||
-        get_in(usage, ["input_tokens_details", "cache_write_tokens"])
+        detail_count(usage, :input_tokens_details, :cache_write_tokens)
 
     with {:ok, read_count} <- raw_count(read),
          {:ok, write_count} <- raw_count(write),
@@ -179,8 +193,7 @@ defmodule ReqLLM.Usage.Normalize do
     has_openai_format =
       get_in(usage, ["prompt_tokens_details", "cached_tokens"]) != nil or
         get_in(usage, [:prompt_tokens_details, :cached_tokens]) != nil or
-        get_in(usage, ["input_tokens_details", "cached_tokens"]) != nil or
-        get_in(usage, [:input_tokens_details, :cached_tokens]) != nil
+        detail_count(usage, :input_tokens_details, :cached_tokens) != nil
 
     has_anthropic_format =
       Map.has_key?(usage, "cache_read_input_tokens") or
@@ -250,10 +263,8 @@ defmodule ReqLLM.Usage.Normalize do
     reasoning =
       get_in(usage, ["completion_tokens_details", "reasoning_tokens"]) ||
         get_in(usage, [:completion_tokens_details, :reasoning_tokens]) ||
-        get_in(usage, ["output_tokens_details", "reasoning_tokens"]) ||
-        get_in(usage, [:output_tokens_details, :reasoning_tokens]) ||
-        get_in(usage, ["output_tokens_details", "thinking_tokens"]) ||
-        get_in(usage, [:output_tokens_details, :thinking_tokens]) ||
+        detail_count(usage, :output_tokens_details, :reasoning_tokens) ||
+        detail_count(usage, :output_tokens_details, :thinking_tokens) ||
         MapAccess.get(usage, "reasoning_tokens") ||
         MapAccess.get(usage, :reasoning_tokens) ||
         MapAccess.get(usage, "reasoning_output_tokens") ||
@@ -281,8 +292,7 @@ defmodule ReqLLM.Usage.Normalize do
         MapAccess.get(usage, "cached_tokens") ||
         get_in(usage, ["prompt_tokens_details", "cached_tokens"]) ||
         get_in(usage, [:prompt_tokens_details, :cached_tokens]) ||
-        get_in(usage, ["input_tokens_details", "cached_tokens"]) ||
-        get_in(usage, [:input_tokens_details, :cached_tokens])
+        detail_count(usage, :input_tokens_details, :cached_tokens)
 
     if input_includes_cached do
       clamp_tokens(cached, input)
@@ -307,8 +317,7 @@ defmodule ReqLLM.Usage.Normalize do
         MapAccess.get(usage, "cache_write_input_tokens") ||
         get_in(usage, ["prompt_tokens_details", "cache_write_tokens"]) ||
         get_in(usage, [:prompt_tokens_details, :cache_write_tokens]) ||
-        get_in(usage, ["input_tokens_details", "cache_write_tokens"]) ||
-        get_in(usage, [:input_tokens_details, :cache_write_tokens])
+        detail_count(usage, :input_tokens_details, :cache_write_tokens)
 
     creation =
       case creation do

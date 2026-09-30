@@ -112,7 +112,10 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   def encode_body(request) do
     body = build_body(request)
     encoded = body |> ReqLLM.Schema.apply_property_ordering() |> Jason.encode!()
-    Map.put(request, :body, encoded)
+
+    request
+    |> ReqLLM.Providers.OpenAI.MultiAgent.put_http_header(body["model"])
+    |> Map.put(:body, encoded)
   end
 
   def build_body(request) do
@@ -139,6 +142,11 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   def build_compact_body(context, model_name, opts, request \\ nil) do
     opts_map = if is_map(opts), do: opts, else: Map.new(opts)
     provider_opts = opts_map[:provider_options] || []
+
+    ReqLLM.Providers.OpenAI.MultiAgent.configuration(
+      Map.put(opts_map, :operation, :compact),
+      model_name
+    )
 
     case provider_opts[:previous_response_id] do
       id when is_binary(id) and id != "" ->
@@ -169,11 +177,19 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   end
 
   @impl true
-  def decode_stream_event(%{data: "[DONE]"}, _model) do
+  def decode_stream_event(event, model) do
+    event
+    |> decode_single_stream_event(model)
+    |> ReqLLM.Providers.OpenAI.MultiAgent.stamp_chunks(
+      if(is_map(event), do: Map.get(event, :data), else: nil)
+    )
+  end
+
+  defp decode_single_stream_event(%{data: "[DONE]"}, _model) do
     [ReqLLM.StreamChunk.meta(%{terminal?: true})]
   end
 
-  def decode_stream_event(%{data: data} = event, model) when is_map(data) do
+  defp decode_single_stream_event(%{data: data} = event, model) when is_map(data) do
     event_type =
       Map.get(event, :event) || data["event"] || data["type"]
 
@@ -249,7 +265,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     end
   end
 
-  def decode_stream_event(_event, _model), do: []
+  defp decode_single_stream_event(_event, _model), do: []
 
   def decode_stream_event(event, model, state) do
     state = ensure_stream_state(state)
@@ -264,6 +280,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
       event
       |> decode_stream_event_with_state(model, event_type, data, state)
       |> stamp_text_phase(event_type, data, state)
+      |> ReqLLM.Providers.OpenAI.MultiAgent.stamp_chunks(data)
 
     state = track_emitted_tool_call_chunks(state, chunks, event_type, data)
     {updated_chunks, updated_state} = merge_tool_usage_into_chunks(chunks, state)
@@ -368,13 +385,25 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     )
   end
 
+  # The Responses API nests the details under "error"
+  # (`{"type":"error","error":{"code":...,"message":...}}`); older payloads put
+  # them at the top level. Read both so a context overflow or rate limit is not
+  # reported as a bare "stream error".
   defp decode_output_or_terminal_event("error", data, _model) do
-    message = data["message"] || data["code"] || "stream error"
+    details = error_details(data)
+    code = data["code"] || details["code"]
+    message = data["message"] || details["message"] || code || "stream error"
 
-    [ReqLLM.StreamChunk.meta(%{terminal?: true, finish_reason: :error, error: message})]
+    meta = %{terminal?: true, finish_reason: :error, error: message}
+    meta = if code, do: Map.put(meta, :error_code, code), else: meta
+
+    [ReqLLM.StreamChunk.meta(meta)]
   end
 
   defp decode_output_or_terminal_event(_event_type, _data, _model), do: []
+
+  defp error_details(%{"error" => %{} = details}), do: details
+  defp error_details(_data), do: %{}
 
   defp capture_completion_metadata(data, meta, provider) do
     usage_data = get_in(data, ["response", "usage"])
@@ -819,7 +848,8 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     ReqLLM.Providers.OpenAI.auth_header_list(
       ReqLLM.Providers.OpenAI.resolve_request_credential!(model, opts)
     ) ++
-      [{"Content-Type", "application/json"}]
+      [{"Content-Type", "application/json"}] ++
+      ReqLLM.Providers.OpenAI.MultiAgent.headers(opts, model.provider_model_id || model.id)
   end
 
   defp build_request_url(opts) do
@@ -882,10 +912,15 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
       |> maybe_put_string("stream", opts_map[:stream])
       |> maybe_put_string("max_output_tokens", max_output_tokens)
       |> maybe_put_string("reasoning", reasoning)
+      |> put_nonreasoning_sampling(model_name, opts_map)
       |> maybe_put_string("tools", tools)
       |> maybe_put_string("tool_choice", tool_choice)
       |> maybe_put_string("parallel_tool_calls", opts_map[:parallel_tool_calls])
       |> maybe_put_string("service_tier", service_tier)
+      |> maybe_put_string(
+        "multi_agent",
+        ReqLLM.Providers.OpenAI.MultiAgent.configuration(opts_map, model_name)
+      )
       |> maybe_put_string("prompt_cache_key", provider_opts[:prompt_cache_key])
       |> maybe_put_string("prompt_cache_options", provider_opts[:prompt_cache_options])
       |> maybe_put_string("include", include)
@@ -906,6 +941,18 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
 
     if store == false do
       Map.put(body, "store", false)
+    else
+      body
+    end
+  end
+
+  defp put_nonreasoning_sampling(body, model_name, opts) do
+    if ReqLLM.Providers.OpenAI.AdapterHelpers.gpt6_model?(model_name) and
+         not ReqLLM.Providers.OpenAI.AdapterHelpers.required_reasoning_model?(model_name) and
+         get_in(body, ["reasoning", "effort"]) == "none" do
+      body
+      |> maybe_put_string("temperature", opts[:temperature])
+      |> maybe_put_string("top_p", opts[:top_p])
     else
       body
     end
@@ -1627,7 +1674,8 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   end
 
   defp put_compaction_replay(metadata, segments, provider) do
-    if Enum.any?(segments, &(&1["type"] == "compaction")) do
+    if Enum.any?(segments, &(&1["type"] == "compaction")) or
+         ReqLLM.Providers.OpenAI.MultiAgent.attributed?(segments) do
       Map.put(metadata, :responses_replay, %{provider: provider, items: segments})
     else
       metadata
@@ -2182,7 +2230,12 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     model = response_materialization_model(req, body)
 
     text = aggregate_output_segments(body, output_segments)
-    thinking = aggregate_reasoning_segments(output_segments)
+
+    thinking =
+      aggregate_reasoning_segments(
+        ReqLLM.Providers.OpenAI.MultiAgent.rendered_items(output_segments)
+      )
+
     tool_calls = extract_tool_calls_from_segments(output_segments)
     reasoning_details = extract_reasoning_details_from_segments(output_segments, model.provider)
     code_interpreter_items = extract_code_interpreter_items(output_segments)
@@ -2256,7 +2309,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
 
   defp buffered_compaction_chunks(segments, provider) do
     {content_chunks, _has_summary} =
-      Enum.map_reduce(segments, false, fn
+      Enum.map_reduce(ReqLLM.Providers.OpenAI.MultiAgent.rendered_items(segments), false, fn
         %{"type" => "compaction"} = item, has_summary ->
           {[compaction_part_chunk(item, provider)], has_summary}
 
@@ -2292,6 +2345,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   defp buffered_text_chunks(text, output_segments) do
     message_segments =
       output_segments
+      |> ReqLLM.Providers.OpenAI.MultiAgent.rendered_items()
       |> Enum.filter(&assistant_message_segment?/1)
       |> dedupe_phased_messages()
 
@@ -2462,6 +2516,13 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   defp deep_atomize_keys(value), do: value
 
   defp aggregate_output_segments(body, segments) do
+    body =
+      if ReqLLM.Providers.OpenAI.MultiAgent.attributed?(segments),
+        do: Map.delete(body, "output_text"),
+        else: body
+
+    segments = ReqLLM.Providers.OpenAI.MultiAgent.rendered_items(segments)
+
     texts = [
       body["output_text"],
       extract_from_message_segments(segments),
@@ -2640,6 +2701,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
 
     ReqLLM.ToolCall.new(id, name, args_json)
     |> ReqLLM.ToolCall.put_metadata(ReqLLM.Providers.OpenAI.Astra.async_metadata(seg))
+    |> ReqLLM.ToolCall.put_metadata(ReqLLM.Providers.OpenAI.MultiAgent.metadata(seg))
   end
 
   defp builtin_call_segment_to_tool_call(seg, type) do
@@ -2652,6 +2714,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
 
     ReqLLM.ToolCall.new_builtin(id, type, args_json)
     |> ReqLLM.ToolCall.put_metadata(builtin_status_metadata(seg))
+    |> ReqLLM.ToolCall.put_metadata(ReqLLM.Providers.OpenAI.MultiAgent.metadata(seg))
   end
 
   # The provider's terminal status for a builtin call (`completed`,

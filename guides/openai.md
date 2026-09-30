@@ -368,7 +368,7 @@ Streaming emits raw summary deltas as `:thinking` chunks. These fragments have n
 
 ### `service_tier`
 
-- **Type**: `:auto` | `:default` | `:flex` | `:priority` | String
+- **Type**: `:auto` | `:default` | `:flex` | `:fast` | `:priority` | `:ultrafast` | String
 - **Purpose**: Service tier for request prioritization
 - **Example**: `service_tier: :auto`
 
@@ -600,7 +600,7 @@ provider_options: [prompt_cache_options: %{ttl: "30m"}]
 The fixtures verify that the API accepts this option. They do not measure cache
 hits or cache cost savings.
 
-This feature requires Astra in standard single-agent mode. It cannot use
+This feature requires a GPT-6 model in standard single-agent mode. It cannot use
 automatic compaction or truncation. After explicit compaction, add a fresh
 update. Raw session requests reject adjacent updates and incompatible context
 settings. See [reasoning updates](https://developers.openai.com/api/docs/guides/reasoning#change-reasoning-mid-conversation).
@@ -964,3 +964,122 @@ See the [Image Generation Guide](image-generation.md) for more details.
 
 - [OpenAI API Documentation](https://platform.openai.com/docs/api-reference)
 - [Model Overview](https://platform.openai.com/docs/models)
+
+## GPT-6.1 Sol
+
+Use `openai:gpt-6.1-sol` after installing the updated LLMDB catalog. Before that
+catalog is released, use an explicit model specification:
+
+```elixir
+model = ReqLLM.model!(%{provider: :openai, id: "gpt-6.1-sol"})
+ReqLLM.generate_text(model, "Review this code", reasoning_effort: :low)
+```
+
+ReqLLM selects Responses. Supported efforts are `low`, `medium`, `high`,
+`xhigh`, and `max`. OpenAI uses `medium` by default. `none` and `minimal` are
+invalid. Tool calls require Responses. Sampling controls are removed with a
+translation warning. Log-probability options are invalid when reasoning is
+active. GPT-6 Sol and Luna permit sampling controls at effort `none`.
+
+See the [model reference](https://developers.openai.com/api/docs/models/gpt-6.1-sol)
+and [migration guide](https://developers.openai.com/api/docs/guides/latest-model?model=gpt-6-astra).
+
+## Astra Ultrafast
+
+Set `service_tier: :ultrafast` for GPT-6 Astra. This tier has a separate price
+and rate limit. It supports global processing and US data residency. It does
+not support EU or other non-US regional processing. Check account access and
+pricing before use. GPT-6.1 Sol Ultrafast is not available in this rollout.
+
+```elixir
+ReqLLM.generate_text("openai:gpt-6-astra", "Review this code",
+  service_tier: :ultrafast,
+  reasoning_effort: :low
+)
+```
+
+See the [Ultrafast guide](https://developers.openai.com/api/docs/guides/ultrafast-mode).
+
+## Responses multi-agent beta
+
+The rollout adds request configuration for GPT-6.1 Sol and GPT-5.6 models:
+
+```elixir
+ReqLLM.generate_text(model, "Compare these proposals",
+  provider_options: [multi_agent: %{enabled: true, max_concurrent_subagents: 3}]
+)
+```
+
+ReqLLM adds `OpenAI-Beta: responses_multi_agent=v1` to HTTP, SSE, and WebSocket
+requests. The concurrency limit must be a positive integer. OpenAI uses `3`
+when it is omitted. Reasoning summaries, `max_tool_calls`, and explicit compact operations are
+not supported in this mode.
+
+OpenAI executes hosted collaboration calls. The application executes function
+calls from any agent and returns outputs with the original call ID. Function
+call metadata keeps the `agent` attribute. Stream chunks also keep this
+attribute. Final response assembly excludes child-agent text.
+
+Raw response items are kept in message metadata for stateless history replay.
+They include encrypted agent messages and hosted collaboration items. Use the
+returned response context for the next turn. Token usage comes from the overall
+response. Do not add child-agent usage to that total a second time.
+
+Hosted agent events that have no portable content appear in meta chunks under
+`multi_agent_event`. Stream completion preserves the full output list, including
+encrypted agent messages and per-agent compaction items. Continue through the
+returned context after the response completes. Live WebSocket tool injection
+uses the native session interface and requires handling acknowledgement events.
+
+See the [rollout checklist](openai-devday-rollout.md) and
+[OpenAI multi-agent guide](https://developers.openai.com/api/docs/guides/responses-multi-agent).
+
+## Decisions API rollout status
+
+OpenAI announced a Luna-based Decisions API in limited preview on September 29,
+2026. It accepts text or image context and answers questions with finite
+predefined answers. This rollout requires its official technical specification
+before implementation. OpenAI Decisions support is not available yet.
+
+The user removed Decisions support as a release requirement.
+[Issue #1062](https://github.com/agentjido/req_llm/issues/1062) tracks it.
+See the [direct announcement](https://openai.com/index/devday-2026-recap/).
+
+## Prompt cache diagnostics
+
+Pass `comparison_response_id` in `provider_options[:prompt_cache_options]` to
+compare a request with an earlier response. This option requests diagnostics;
+it does not restore the earlier conversation. Buffered and streaming Responses
+results retain `prompt_cache_diagnostics` in `response.provider_meta`. Use usage
+fields for billing. Diagnostic estimates are not billable token counts.
+
+See the [official diagnostics guide](https://developers.openai.com/api/docs/guides/prompt-caching/diagnostics).
+
+## GPT-6 feature compatibility
+
+Async function tools, mid-turn steering, and reasoning configuration updates
+support the GPT-6 family, including Sol 6.1, Sol, and Luna. Configuration updates
+require standard single-agent mode. Sol and Luna also accept none effort in
+these updates. Async tools in multi-agent mode require parallel_tool_calls to
+be disabled.
+
+See [async tools](https://developers.openai.com/api/docs/guides/async-tool-calling),
+[steering](https://developers.openai.com/api/docs/guides/steering), and
+[configuration updates](https://developers.openai.com/api/docs/guides/reasoning#change-reasoning-mid-conversation).
+
+## Image 2.5 token billing
+
+Images results retain input_tokens_details and optional output_tokens_details
+in usage. Billing uses the catalog text and image token rates after checking
+that the split matches the aggregate counts. Image-only models can use the
+aggregate output count when output details are absent. Reported image counts
+are retained, but token-priced models do not receive an extra per-image charge.
+
+Missing or inconsistent counts return unknown cost. Reported cache usage with
+no modality allocation also returns unknown cost. If no cache use is reported,
+input uses the standard uncached rates. The catalog retains the published cache
+rates. ReqLLM does not infer undocumented cache allocations.
+
+Sources: [Images response schema](https://github.com/openai/openai-python/blob/main/src/openai/types/images_response.py),
+[Flare prices](https://developers.openai.com/api/docs/models/gpt-image-2.5-flare), and
+[Sunburst prices](https://developers.openai.com/api/docs/models/gpt-image-2.5-sunburst).

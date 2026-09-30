@@ -86,7 +86,7 @@ defmodule ReqLLM.OpenAI.Responses do
   end
 
   @doc """
-  Queues user input for an active Astra response.
+  Queues user input for an active GPT-6 response.
 
   Wait for `response.created` before sending its ID. Input can be a nonempty
   string or a list of native user messages. Read all `response.steer.*` events
@@ -94,7 +94,7 @@ defmodule ReqLLM.OpenAI.Responses do
   """
   @spec steer(Session.t(), String.t(), String.t() | [map()]) :: :ok | {:error, term()}
   def steer(%Session{} = session, previous_response_id, input) do
-    Astra.require_astra!(session.model.id, "Steering")
+    Astra.require_gpt6!(session.model.id, "Steering")
 
     unless is_binary(previous_response_id) and previous_response_id != "" do
       Astra.invalid!("Steering requires the active response ID")

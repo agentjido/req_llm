@@ -10,14 +10,23 @@ defmodule ReqLLM.Providers.OpenAI.Astra do
     provider_opts = Keyword.get(opts, :provider_options, [])
     options = Keyword.merge(provider_opts, Keyword.delete(opts, :provider_options))
 
-    if AdapterHelpers.gpt6_astra_model?(model.id) do
+    if AdapterHelpers.required_reasoning_model?(model.id) do
       effort = options[:reasoning_effort]
       if effort not in [nil, :default, "default"], do: validate_effort!(effort)
+    end
 
-      if options[:openai_logprobs] == true or
-           not is_nil(options[:openai_top_logprobs]) or
-           "message.output_text.logprobs" in (options[:include] || []) do
-        invalid!("GPT-6 Astra does not support logprobs")
+    if AdapterHelpers.gpt6_model?(model.id) do
+      effort = options[:reasoning_effort]
+
+      unless effort in [nil, :default, "default", :none, "none"] do
+        validate_effort!(effort)
+      end
+
+      if effort not in [:none, "none"] and
+           (options[:openai_logprobs] == true or
+              not is_nil(options[:openai_top_logprobs]) or
+              "message.output_text.logprobs" in (options[:include] || [])) do
+        invalid!("GPT-6 models do not support logprobs with reasoning enabled")
       end
     end
 
@@ -27,23 +36,26 @@ defmodule ReqLLM.Providers.OpenAI.Astra do
 
   def validate_effort!(effort) do
     if not (is_atom(effort) or is_binary(effort)) or to_string(effort) not in @efforts do
-      invalid!("GPT-6 Astra reasoning effort must be low, medium, high, xhigh, or max")
+      invalid!(
+        "GPT-6 Astra and GPT-6.1 Sol reasoning effort must be low, medium, high, xhigh, or max"
+      )
     end
 
     to_string(effort)
   end
 
   def validate_body!(body, model_name) do
-    if AdapterHelpers.gpt6_astra_model?(model_name) do
+    if AdapterHelpers.required_reasoning_model?(model_name) do
       effort = get_in(body, ["reasoning", "effort"])
       if effort, do: validate_effort!(effort)
 
       if Enum.any?(["temperature", "top_p", "top_logprobs", "logprobs"], &Map.has_key?(body, &1)) or
            "message.output_text.logprobs" in (body["include"] || []) do
-        invalid!("GPT-6 Astra does not support sampling parameters or logprobs")
+        invalid!("GPT-6 Astra and GPT-6.1 Sol do not support sampling parameters or logprobs")
       end
     end
 
+    ReqLLM.Providers.OpenAI.MultiAgent.validate_body!(body, model_name)
     Enum.each(body["tools"] || [], &validate_tool!(&1, model_name))
     validate_configuration!(body, model_name)
     body
@@ -53,9 +65,10 @@ defmodule ReqLLM.Providers.OpenAI.Astra do
     updates = Enum.filter(input, &configuration_update?/1)
 
     if updates != [] do
-      require_astra!(model_name, "configuration_update")
+      require_gpt6!(model_name, "configuration_update")
 
-      if body["context_management"] not in [nil, []] or
+      if get_in(body, ["reasoning", "mode"]) not in [nil, "standard"] or
+           body["context_management"] not in [nil, []] or
            body["truncation"] not in [nil, "disabled"] or
            get_in(body, ["multi_agent", "enabled"]) == true do
         invalid!(
@@ -63,7 +76,7 @@ defmodule ReqLLM.Providers.OpenAI.Astra do
         )
       end
 
-      Enum.each(updates, &validate_effort!(get_in(&1, ["reasoning", "effort"])))
+      Enum.each(updates, &validate_model_effort!(get_in(&1, ["reasoning", "effort"]), model_name))
 
       if input
          |> Enum.chunk_every(2, 1, :discard)
@@ -99,12 +112,12 @@ defmodule ReqLLM.Providers.OpenAI.Astra do
         []
 
       effort ->
-        require_astra!(model_name, "configuration_update")
+        require_gpt6!(model_name, "configuration_update")
 
         [
           %{
             "type" => "configuration_update",
-            "reasoning" => %{"effort" => validate_effort!(effort)}
+            "reasoning" => %{"effort" => validate_model_effort!(effort, model_name)}
           }
         ]
     end
@@ -112,9 +125,17 @@ defmodule ReqLLM.Providers.OpenAI.Astra do
 
   def configuration_items(_message, _model_name), do: []
 
-  def require_astra!(model_name, feature) do
-    unless AdapterHelpers.gpt6_astra_model?(model_name) do
-      invalid!("#{feature} requires GPT-6 Astra")
+  defp validate_model_effort!(effort, model_name) do
+    if effort in [:none, "none"] and not AdapterHelpers.required_reasoning_model?(model_name) do
+      "none"
+    else
+      validate_effort!(effort)
+    end
+  end
+
+  def require_gpt6!(model_name, feature) do
+    unless AdapterHelpers.gpt6_model?(model_name) do
+      invalid!("#{feature} requires a GPT-6 model")
     end
   end
 
@@ -137,7 +158,7 @@ defmodule ReqLLM.Providers.OpenAI.Astra do
     if Map.has_key?(options, :async) or Map.has_key?(options, "async") do
       unless is_boolean(value), do: invalid!("Tool async must be a boolean")
       unless type == "function", do: invalid!("Async tool encoding supports function tools only")
-      require_astra!(model_name, "Async tools")
+      require_gpt6!(model_name, "Async tools")
     end
   end
 

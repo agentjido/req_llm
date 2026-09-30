@@ -890,8 +890,10 @@ defmodule ReqLLM.Images.OpenAICompatible do
   end
 
   defp image_token_usage(%{} = usage) do
+    details = Map.take(usage, ["input_tokens_details", "output_tokens_details"])
+
     %{input_tokens: "input_tokens", output_tokens: "output_tokens", total_tokens: "total_tokens"}
-    |> Enum.reduce(%{}, fn {key, wire_key}, acc ->
+    |> Enum.reduce(details, fn {key, wire_key}, acc ->
       case Map.get(usage, wire_key) do
         count when is_integer(count) -> Map.put(acc, key, count)
         _ -> acc

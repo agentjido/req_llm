@@ -24,7 +24,9 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI.ResponseBuilder do
   def build_response(chunks, metadata, opts) do
     with {:ok, response} <-
            DefaultBuilder.build_response(
-             render_summary_boundaries(chunks),
+             render_summary_boundaries(
+               ReqLLM.Providers.OpenAI.MultiAgent.rendered_chunks(chunks)
+             ),
              normalize_metadata(chunks, metadata),
              opts
            ) do

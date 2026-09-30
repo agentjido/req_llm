@@ -9,6 +9,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- changelog -->
 
+## [v1.26.0](https://github.com/agentjido/req_llm/compare/v1.25.0...v1.26.0) (2026-09-29)
+
+
+
+
+### Features:
+
+* openai: add DevDay Responses and model support (#1063) by mikehostetler
+
+### Bug Fixes:
+
+* openai: read nested error details from Responses stream error events (#1061) by Diaphel Thompson
+
+* bedrock: send output_config.effort for adaptive-thinking Claude models (#1055) by jhlee111
+
+* streaming: honor per-request proxy connection options (#1054) by mikehostetler
+
 ## [v1.25.0](https://github.com/agentjido/req_llm/compare/v1.24.0...v1.25.0) (2026-09-25)
 
 

@@ -192,6 +192,10 @@ defmodule ReqLLM.Providers.OpenAI do
       doc:
         "Which earlier reasoning items the model renders into context (current_turn or all_turns). Responses API, GPT-5.4 and later."
     ],
+    multi_agent: [
+      type: {:or, [:map, :keyword_list]},
+      doc: "Responses beta configuration: %{enabled: true, max_concurrent_subagents: 3}."
+    ],
     context_management: [
       type: {:list, {:or, [{:map, {:or, [:atom, :string]}, :any}, :keyword_list]}},
       doc:
@@ -276,7 +280,8 @@ defmodule ReqLLM.Providers.OpenAI do
     ],
     service_tier: [
       type: {:or, [:atom, :string]},
-      doc: "Service tier for request prioritization ('auto', 'default', 'flex' or 'priority')"
+      doc:
+        "Service tier for request prioritization ('auto', 'default', 'flex', 'fast', 'priority', or 'ultrafast')"
     ],
     verbosity: [
       type: {:or, [:atom, :string]},
@@ -376,9 +381,16 @@ defmodule ReqLLM.Providers.OpenAI do
   end
 
   @doc false
-  def pre_validate_options(_operation, model, opts) do
+  def pre_validate_options(operation, model, opts) do
     opts = ReqLLM.Provider.Reasoning.normalize_effort_option(opts)
     ReqLLM.Providers.OpenAI.Astra.validate_options!(model, opts)
+
+    ReqLLM.Providers.OpenAI.MultiAgent.configuration(
+      Keyword.put(opts, :operation, operation),
+      model.provider_model_id || model.id
+    )
+
+    opts
   end
 
   @impl ReqLLM.Provider
@@ -723,7 +735,7 @@ defmodule ReqLLM.Providers.OpenAI do
   end
 
   def translate_options(op, %LLMDB.Model{} = model, opts) do
-    steps = ReqLLM.Providers.OpenAI.ParamProfiles.steps_for(op, model)
+    steps = ReqLLM.Providers.OpenAI.ParamProfiles.steps_for(op, model, opts)
     {opts1, warns} = ReqLLM.ParamTransform.apply(opts, steps)
 
     if responses_api?(model) do

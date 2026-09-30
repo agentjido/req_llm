@@ -101,14 +101,14 @@ provider-native feature and are not consulted by request routing.
 | Model | Operation | Execution surface | Input → output | Tier | Baseline | Checked | Reason |
 | --- | --- | --- | --- | --- | ---: | --- | --- |
 | `accounts/fireworks/models/deepseek-v4-flash` | `text` | `fireworks_ai.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:30:47Z | surface declaration unknown |
-| `accounts/fireworks/models/deepseek-v4-pro` | `text` | `fireworks_ai.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:30:47Z | missing or stale evidence |
+| `accounts/fireworks/models/deepseek-v4-pro` | `text` | `fireworks_ai.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:30:47Z | surface declaration unknown |
 | `accounts/fireworks/models/glm-5p1` | `text` | `fireworks_ai.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:30:47Z | surface declaration unknown |
 | `accounts/fireworks/models/gpt-oss-120b` | `text` | `fireworks_ai.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:30:47Z | missing or stale evidence |
 | `accounts/fireworks/models/gpt-oss-20b` | `text` | `fireworks_ai.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:30:47Z | surface declaration unknown |
 | `accounts/fireworks/models/kimi-k2p5` | `text` | `fireworks_ai.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:30:47Z | surface declaration unknown |
-| `accounts/fireworks/models/kimi-k2p6` | `text` | `fireworks_ai.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:30:47Z | missing or stale evidence |
+| `accounts/fireworks/models/kimi-k2p6` | `text` | `fireworks_ai.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:30:47Z | surface declaration unknown |
 | `accounts/fireworks/models/minimax-m2p5` | `text` | `fireworks_ai.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:30:47Z | surface declaration unknown |
-| `accounts/fireworks/models/minimax-m2p7` | `text` | `fireworks_ai.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:30:47Z | missing or stale evidence |
+| `accounts/fireworks/models/minimax-m2p7` | `text` | `fireworks_ai.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:30:47Z | surface declaration unknown |
 | `accounts/fireworks/models/qwen3p6-plus` | `text` | `fireworks_ai.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:30:47Z | surface declaration unknown |
 | `accounts/fireworks/routers/glm-5p1-fast` | `text` | `fireworks_ai.unrecorded_text` | text → text | Experimental | 0/5 | 2026-05-29T23:30:47Z | surface declaration unknown |
 | `accounts/fireworks/routers/kimi-k2p6-turbo` | `text` | `fireworks_ai.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:30:47Z | surface declaration unknown |
@@ -317,7 +317,7 @@ provider-native feature and are not consulted by request routing.
 | `deepseek/deepseek-chat-v3-0324` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:35:21Z | missing or stale evidence |
 | `deepseek/deepseek-r1` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:35:21Z | missing or stale evidence |
 | `deepseek/deepseek-r1-0528` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:35:21Z | missing or stale evidence |
-| `deepseek/deepseek-r1-distill-llama-70b` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:35:21Z | missing or stale evidence |
+| `deepseek/deepseek-r1-distill-llama-70b` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:35:21Z | surface declaration unknown |
 | `deepseek/deepseek-r1-distill-qwen-32b` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:35:21Z | surface declaration unknown |
 | `deepseek/deepseek-v3.2` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:35:21Z | missing or stale evidence |
 | `deepseek/deepseek-v3.2-exp` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:35:21Z | missing or stale evidence |

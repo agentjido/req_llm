@@ -8,6 +8,7 @@ defmodule ReqLLM.Billing do
   alias ReqLLM.Usage.Tool
 
   @token_meters [:input, :output, :reasoning, :cache_read, :cache_write]
+  @modality_meters ~w(text_input_tokens image_input_tokens text_cache_read_tokens image_cache_read_tokens image_output_tokens)
 
   @spec calculate(map(), LLMDB.Model.t() | nil, map() | keyword()) :: {:ok, map() | nil}
   def calculate(usage, model, context \\ %{})
@@ -16,6 +17,8 @@ defmodule ReqLLM.Billing do
   def calculate(usage, %LLMDB.Model{} = model, context) when is_map(usage) do
     with true <- Pricing.components(model) != [],
          {:ok, meters} <- meters(usage, model),
+         {:ok, modality} <- modality_counts(usage, model, meters),
+         meters <- Map.put(meters, :modality, modality),
          {:ok, write_groups} <- cache_write_groups(usage, meters),
          {:ok, context} <- selection_context(context, meters),
          selection <- LLMDB.Pricing.components_for(model, context),
@@ -87,6 +90,8 @@ defmodule ReqLLM.Billing do
            cache_write: cache_write,
            reasoning: reasoning,
            prompt: if(input_reported, do: prompt),
+           input_reported: input_reported,
+           output_reported: output_reported,
            add_reasoning: MapAccess.get(usage, :add_reasoning_to_cost, false)
          }}
       else
@@ -94,6 +99,50 @@ defmodule ReqLLM.Billing do
       end
     else
       :error
+    end
+  end
+
+  defp modality_counts(usage, model, meters) do
+    components = Pricing.components(model) |> Enum.map(&Component.from/1)
+
+    if Enum.any?(components, &(&1.meter in @modality_meters)) do
+      input_details = MapAccess.get(usage, :input_tokens_details, %{})
+      output_details = MapAccess.get(usage, :output_tokens_details)
+      text = MapAccess.get(input_details, :text_tokens)
+      image = MapAccess.get(input_details, :image_tokens)
+
+      output =
+        if is_map(output_details),
+          do: MapAccess.get(output_details, :image_tokens),
+          else: meters.output
+
+      output_text =
+        if is_map(output_details), do: MapAccess.get(output_details, :text_tokens), else: 0
+
+      total = usage_number(usage, [:total_tokens])
+
+      if model.modalities[:output] == [:image] and meters.input_reported and
+           meters.output_reported and
+           (is_nil(total) or total == meters.prompt + meters.output) and
+           (is_nil(output_details) or is_map(output_details)) and
+           not Enum.any?(components, &(meter_key(&1) in @token_meters)) and
+           valid_token_count?(text) and valid_token_count?(image) and
+           text + image == meters.input and valid_token_count?(output) and
+           output == meters.output and output_text == 0 and
+           meters.cache_read == 0 and meters.cache_write == 0 and meters.reasoning == 0 do
+        {:ok,
+         %{
+           "text_input_tokens" => text,
+           "image_input_tokens" => image,
+           "image_output_tokens" => output,
+           "text_cache_read_tokens" => 0,
+           "image_cache_read_tokens" => 0
+         }}
+      else
+        :error
+      end
+    else
+      {:ok, nil}
     end
   end
 
@@ -249,6 +298,14 @@ defmodule ReqLLM.Billing do
       |> Enum.filter(&(Map.fetch!(meters, &1) > 0))
       |> Enum.reject(&(&1 == :reasoning and :reasoning not in candidate_keys))
 
+    required_keys =
+      if meters.modality do
+        Enum.reject(required_keys, &(&1 in [:input, :output, :cache_read])) ++
+          for {key, count} <- meters.modality, count > 0, do: key
+      else
+        required_keys
+      end
+
     active_keys =
       rates
       |> Enum.filter(&relevant?(&1, meters, usage))
@@ -346,9 +403,17 @@ defmodule ReqLLM.Billing do
 
   defp component_count(%Component{kind: :tokens} = component, meters, _usage) do
     case meter_key(component) do
-      :output -> {:ok, meters.output + if(meters.add_reasoning, do: meters.reasoning, else: 0)}
-      key when key in @token_meters -> {:ok, Map.fetch!(meters, key)}
-      _ -> :error
+      :output ->
+        {:ok, meters.output + if(meters.add_reasoning, do: meters.reasoning, else: 0)}
+
+      key when key in @token_meters ->
+        {:ok, Map.fetch!(meters, key)}
+
+      key when key in @modality_meters and is_map(meters.modality) ->
+        Map.fetch(meters.modality, key)
+
+      _ ->
+        :error
     end
   end
 
@@ -422,9 +487,18 @@ defmodule ReqLLM.Billing do
               "token.input",
               "token.cache_read",
               "token.cache_write",
-              "token.cache"
+              "token.cache",
+              "token.text_input_tokens",
+              "token.image_input_tokens",
+              "token.text_cache_read_tokens",
+              "token.image_cache_read_tokens"
             ]),
-          output_cost: sum_items(token_items, ["token.output", "token.reasoning"]),
+          output_cost:
+            sum_items(token_items, [
+              "token.output",
+              "token.reasoning",
+              "token.image_output_tokens"
+            ]),
           reasoning_cost: sum_items(token_items, ["token.reasoning"])
         }
       else

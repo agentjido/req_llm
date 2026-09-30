@@ -11,6 +11,7 @@ defmodule ReqLLM.Providers.OpenAI.WebSocket do
     ReqLLM.Providers.OpenAI.auth_header_list(
       ReqLLM.Providers.OpenAI.resolve_request_credential!(model, opts)
     ) ++
+      ReqLLM.Providers.OpenAI.MultiAgent.headers(opts, model.provider_model_id || model.id) ++
       custom_headers
   end
 

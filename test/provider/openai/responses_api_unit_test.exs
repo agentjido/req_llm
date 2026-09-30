@@ -2741,6 +2741,29 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
       assert chunk.metadata.error == "server_error"
     end
 
+    test "decodes error event with nested error details", %{model: model} do
+      event = %{
+        data: %{
+          "event" => "error",
+          "type" => "error",
+          "error" => %{
+            "type" => "invalid_request_error",
+            "code" => "context_length_exceeded",
+            "message" =>
+              "Your input exceeds the context window of this model. Please adjust your input and try again.",
+            "param" => "input"
+          },
+          "sequence_number" => 2
+        }
+      }
+
+      assert [chunk] = ResponsesAPI.decode_stream_event(event, model)
+      assert chunk.metadata.terminal? == true
+      assert chunk.metadata.finish_reason == :error
+      assert chunk.metadata.error =~ "exceeds the context window"
+      assert chunk.metadata.error_code == "context_length_exceeded"
+    end
+
     test "decodes error event without details", %{model: model} do
       event = %{data: %{"event" => "error"}}
 
