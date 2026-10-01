@@ -1268,6 +1268,107 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
       assert part.text == "Part 1 Part 2"
     end
 
+    test "decodes a refusal as text with content_filter and the refusal retained" do
+      refusal = "I'm sorry, I can't help with that."
+
+      response_body = %{
+        "id" => "resp_123",
+        "model" => "gpt-5",
+        "status" => "completed",
+        "output" => [refusal_message_item("msg_1", refusal)],
+        "usage" => %{"input_tokens" => 5, "output_tokens" => 10}
+      }
+
+      {_req, resp} = ResponsesAPI.decode_response(build_response(200, response_body))
+
+      assert [%ReqLLM.Message.ContentPart{type: :text, text: ^refusal}] =
+               resp.body.message.content
+
+      assert resp.body.finish_reason == :content_filter
+      assert resp.body.provider_meta["refusals"] == [refusal]
+      assert ReqLLM.Response.refusals(resp.body) == [refusal]
+    end
+
+    test "a refusal takes precedence over tool calls for the finish reason" do
+      response_body = %{
+        "id" => "resp_123",
+        "model" => "gpt-5",
+        "status" => "completed",
+        "output" => [
+          refusal_message_item("msg_1", "I can't help with that."),
+          %{
+            "type" => "function_call",
+            "call_id" => "call_1",
+            "name" => "lookup",
+            "arguments" => ~s({"q":"docs"})
+          }
+        ],
+        "usage" => %{"input_tokens" => 5, "output_tokens" => 10}
+      }
+
+      {_req, resp} = ResponsesAPI.decode_response(build_response(200, response_body))
+
+      assert resp.body.finish_reason == :content_filter
+    end
+
+    test "generate_object with a refusal skips object extraction" do
+      {:ok, compiled_schema} = ReqLLM.Schema.compile(name: [type: :string, required: true])
+      refusal = "I'm sorry, I can't help with that."
+
+      response_body = %{
+        "id" => "resp_123",
+        "model" => "gpt-5",
+        "status" => "completed",
+        "output" => [refusal_message_item("msg_1", refusal)],
+        "usage" => %{"input_tokens" => 5, "output_tokens" => 10}
+      }
+
+      req = %Req.Request{
+        method: :post,
+        url: URI.parse("https://api.openai.com/v1/responses"),
+        headers: %{},
+        body: {:json, %{}},
+        options: %{id: "gpt-5", operation: :object, compiled_schema: compiled_schema}
+      }
+
+      resp = %Req.Response{status: 200, headers: %{}, body: response_body}
+
+      {_req, decoded_resp} = ResponsesAPI.decode_response({req, resp})
+
+      assert %ReqLLM.Response{object: nil, finish_reason: :content_filter} = decoded_resp.body
+      refute Map.has_key?(decoded_resp.body.provider_meta, :object_parse_error)
+      assert ReqLLM.Response.refusals(decoded_resp.body) == [refusal]
+    end
+
+    test "decodes a phased refusal as text with the phase" do
+      refusal = "I can't help with that."
+
+      item =
+        "msg_1"
+        |> refusal_message_item(refusal)
+        |> Map.put("phase", "final_answer")
+
+      response_body = %{
+        "id" => "resp_123",
+        "model" => "gpt-5.4",
+        "status" => "completed",
+        "output" => [item],
+        "usage" => %{"input_tokens" => 5, "output_tokens" => 10}
+      }
+
+      {_req, resp} = ResponsesAPI.decode_response(build_response(200, response_body))
+
+      assert [
+               %ReqLLM.Message.ContentPart{
+                 type: :text,
+                 text: ^refusal,
+                 metadata: %{phase: "final_answer"}
+               }
+             ] = resp.body.message.content
+
+      assert resp.body.finish_reason == :content_filter
+    end
+
     test "deduplicates identical commentary and final_answer message segments" do
       text = "Do you want a shortcut for all users or just the current user?"
 
@@ -2764,6 +2865,194 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
       assert chunk.metadata.error_code == "context_length_exceeded"
     end
 
+    test "decodes refusal delta as text", %{model: model} do
+      event = %{
+        data: %{
+          "type" => "response.refusal.delta",
+          "item_id" => "msg_1",
+          "output_index" => 0,
+          "content_index" => 0,
+          "delta" => "I can't help with that."
+        }
+      }
+
+      assert [%ReqLLM.StreamChunk{type: :content, text: "I can't help with that."}] =
+               ResponsesAPI.decode_stream_event(event, model)
+
+      assert [] =
+               ResponsesAPI.decode_stream_event(
+                 %{data: %{"type" => "response.refusal.delta", "delta" => ""}},
+                 model
+               )
+    end
+
+    test "refusal done emits nothing", %{model: model} do
+      event = %{
+        data: %{
+          "type" => "response.refusal.done",
+          "item_id" => "msg_1",
+          "output_index" => 0,
+          "content_index" => 0,
+          "refusal" => "I can't help with that."
+        }
+      }
+
+      assert [] = ResponsesAPI.decode_stream_event(event, model)
+    end
+
+    test "response.completed with a refusal reports content_filter and the refusal", %{
+      model: model
+    } do
+      event = %{
+        data: %{
+          "type" => "response.completed",
+          "response" => %{
+            "id" => "resp_1",
+            "status" => "completed",
+            "output" => [refusal_message_item("msg_1", "I can't help with that.")]
+          }
+        }
+      }
+
+      assert [%ReqLLM.StreamChunk{type: :meta, metadata: metadata}] =
+               ResponsesAPI.decode_stream_event(event, model)
+
+      assert %{terminal?: true, finish_reason: :content_filter} = metadata
+      assert metadata.provider_meta["refusals"] == ["I can't help with that."]
+    end
+
+    test "response.completed without a refusal still reports stop", %{model: model} do
+      event = %{
+        data: %{
+          "type" => "response.completed",
+          "response" => %{
+            "id" => "resp_1",
+            "status" => "completed",
+            "output" => [phased_message_item("msg_1", nil, "Hello")]
+          }
+        }
+      }
+
+      assert [%ReqLLM.StreamChunk{type: :meta, metadata: metadata}] =
+               ResponsesAPI.decode_stream_event(event, model)
+
+      assert metadata.finish_reason == :stop
+      refute Map.has_key?(metadata[:provider_meta] || %{}, "refusals")
+    end
+
+    test "response.incomplete with a refusal keeps its finish reason", %{model: model} do
+      event = %{
+        data: %{
+          "type" => "response.incomplete",
+          "response" => %{
+            "id" => "resp_1",
+            "status" => "incomplete",
+            "incomplete_details" => %{"reason" => "max_output_tokens"},
+            "output" => [refusal_message_item("msg_1", "I can't help")]
+          }
+        }
+      }
+
+      assert [%ReqLLM.StreamChunk{type: :meta, metadata: metadata}] =
+               ResponsesAPI.decode_stream_event(event, model)
+
+      assert metadata.finish_reason == :length
+      assert metadata.provider_meta["refusals"] == ["I can't help"]
+    end
+
+    test "stateful decoding stamps the message phase on refusal deltas", %{model: model} do
+      item =
+        "msg_1"
+        |> refusal_message_item("I can't help with that.")
+        |> Map.put("phase", "final_answer")
+
+      events = [
+        %{
+          "type" => "response.output_item.added",
+          "output_index" => 0,
+          "item" => Map.merge(item, %{"status" => "in_progress", "content" => []})
+        },
+        %{
+          "type" => "response.refusal.delta",
+          "item_id" => "msg_1",
+          "output_index" => 0,
+          "content_index" => 0,
+          "delta" => "I can't help with that."
+        },
+        %{"type" => "response.output_item.done", "output_index" => 0, "item" => item}
+      ]
+
+      assert [
+               %ReqLLM.StreamChunk{
+                 type: :content,
+                 text: "I can't help with that.",
+                 metadata: %{phase: "final_answer", output_index: 0}
+               }
+             ] = decode_stream_events(events, model)
+    end
+
+    test "stateful decoding streams a refusal once and ends with content_filter", %{
+      model: model
+    } do
+      item = refusal_message_item("msg_1", "I'm sorry, I can't help with that.")
+
+      events = [
+        %{
+          "type" => "response.output_item.added",
+          "output_index" => 0,
+          "item" => Map.merge(item, %{"status" => "in_progress", "content" => []})
+        },
+        %{
+          "type" => "response.refusal.delta",
+          "item_id" => "msg_1",
+          "output_index" => 0,
+          "content_index" => 0,
+          "delta" => "I'm sorry, "
+        },
+        %{
+          "type" => "response.refusal.delta",
+          "item_id" => "msg_1",
+          "output_index" => 0,
+          "content_index" => 0,
+          "delta" => "I can't help with that."
+        },
+        %{
+          "type" => "response.refusal.done",
+          "item_id" => "msg_1",
+          "output_index" => 0,
+          "content_index" => 0,
+          "refusal" => "I'm sorry, I can't help with that."
+        },
+        %{"type" => "response.output_item.done", "output_index" => 0, "item" => item},
+        %{
+          "type" => "response.completed",
+          "response" => %{"id" => "resp_1", "status" => "completed", "output" => [item]}
+        }
+      ]
+
+      assert [
+               %ReqLLM.StreamChunk{type: :content, text: "I'm sorry, "},
+               %ReqLLM.StreamChunk{type: :content, text: "I can't help with that."},
+               %ReqLLM.StreamChunk{
+                 type: :meta,
+                 metadata: %{terminal?: true, finish_reason: :content_filter}
+               }
+             ] = decode_stream_events(events, model)
+    end
+
+    test "stateful decoding emits refusal text from the done item when no deltas arrived", %{
+      model: model
+    } do
+      item = refusal_message_item("msg_1", "I can't help with that.")
+
+      events = [
+        %{"type" => "response.output_item.done", "output_index" => 0, "item" => item}
+      ]
+
+      assert [%ReqLLM.StreamChunk{type: :content, text: "I can't help with that."}] =
+               decode_stream_events(events, model)
+    end
+
     test "decodes error event without details", %{model: model} do
       event = %{data: %{"event" => "error"}}
 
@@ -3872,6 +4161,16 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
     |> then(fn item -> if phase, do: Map.put(item, "phase", phase), else: item end)
   end
 
+  defp refusal_message_item(id, refusal) do
+    %{
+      "id" => id,
+      "type" => "message",
+      "role" => "assistant",
+      "status" => "completed",
+      "content" => [%{"type" => "refusal", "refusal" => refusal}]
+    }
+  end
+
   defp phased_stream_events(output_index, id, phase, deltas) do
     item = phased_message_item(id, phase, Enum.join(deltas))
     added_item = Map.merge(item, %{"status" => "in_progress", "content" => []})
@@ -4298,6 +4597,59 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
 
       assert response.finish_reason == :tool_calls
       assert [%ReqLLM.ToolCall{function: %{name: "get_weather"}}] = response.message.tool_calls
+    end
+
+    test "keeps a streamed refusal's content_filter finish reason when tool chunks are present" do
+      {:ok, model} = ReqLLM.model("openai:gpt-5")
+      context = %ReqLLM.Context{messages: []}
+
+      refusal_item = refusal_message_item("msg_1", "I can't help with that.")
+
+      function_item = %{
+        "type" => "function_call",
+        "call_id" => "call_1",
+        "name" => "lookup",
+        "arguments" => ~s({"q":"docs"})
+      }
+
+      events = [
+        %{
+          "type" => "response.refusal.delta",
+          "output_index" => 0,
+          "content_index" => 0,
+          "delta" => "I can't help with that."
+        },
+        %{"type" => "response.output_item.done", "output_index" => 1, "item" => function_item},
+        %{
+          "type" => "response.completed",
+          "response" => %{
+            "id" => "resp_1",
+            "status" => "completed",
+            "output" => [refusal_item, function_item]
+          }
+        }
+      ]
+
+      {chunks, _state} =
+        Enum.flat_map_reduce(events, nil, fn data, state ->
+          ResponsesAPI.decode_stream_event(%{data: data}, model, state)
+        end)
+
+      {terminal, content_chunks} = List.pop_at(chunks, -1)
+
+      assert %ReqLLM.StreamChunk{type: :meta, metadata: %{finish_reason: :content_filter}} =
+               terminal
+
+      {:ok, response} =
+        ResponseBuilder.build_response(
+          content_chunks,
+          %{finish_reason: terminal.metadata.finish_reason},
+          context: context,
+          model: model
+        )
+
+      assert response.finish_reason == :content_filter
+      assert [%ReqLLM.ToolCall{function: %{name: "lookup"}}] = response.message.tool_calls
     end
 
     test "preserves stop finish reason when only builtin tool chunks are present" do

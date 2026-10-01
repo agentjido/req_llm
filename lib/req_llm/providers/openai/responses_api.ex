@@ -50,10 +50,13 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   - `output_text` segments → text content
   - `reasoning` segments (summary + content) → thinking content
   - `function_call` segments → tool_call parts
+  - `refusal` message parts → text content, `finish_reason: :content_filter`, and
+    the refusal texts in `provider_meta["refusals"]` (see `ReqLLM.Response.refusals/1`)
 
   ### Streaming Events
 
   - `response.output_text.delta` → text chunks
+  - `response.refusal.delta` → text chunks; `response.refusal.done` emits nothing
   - `response.reasoning.delta` / `response.reasoning_text.delta` → thinking chunks
   - `response.reasoning_summary_text.delta` → thinking chunks whose metadata carries
     `item_id`, `output_index` and `summary_index`
@@ -63,7 +66,8 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   - `response.output_item.done` with a `compaction` item → `:content_part` chunk
     holding a `:provider_block` that later requests replay verbatim
   - `response.usage` → usage metrics with reasoning_tokens
-  - `response.completed` → terminal event with finish_reason
+  - `response.completed` → terminal event with finish_reason, `:content_filter` when the
+    output holds a refusal, whose texts are also put in `provider_meta["refusals"]`
   - `response.incomplete` → terminal event for truncated responses
   - `response.failed` → terminal event with `finish_reason: :error` and the failure message
   - `error` → terminal event with `finish_reason: :error` and the error message
@@ -97,6 +101,8 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   }
   @tool_call_item_reserved_keys ["id", "call_id", "type", "status", :id, :call_id, :type, :status]
   @assistant_phases ["commentary", "final_answer"]
+  @text_delta_events ["response.output_text.delta", "response.refusal.delta"]
+  @message_text_types ["output_text", "text", "refusal"]
   @reasoning_encrypted_content_include ["reasoning.encrypted_content"]
   @responses_item_providers [:openai, :azure, :meta]
   @summary_part_separator "\n\n"
@@ -201,7 +207,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     )
 
     case event_type do
-      "response.output_text.delta" ->
+      type when type in @text_delta_events ->
         text = data["delta"] || ""
         if text == "", do: [], else: [ReqLLM.StreamChunk.text(text)]
 
@@ -451,8 +457,30 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
 
     meta = merge_annotations_meta(meta, response_output)
 
+    meta = merge_refusals_meta(meta, response_output)
+
     [ReqLLM.StreamChunk.meta(meta)]
   end
+
+  # A refusal completes with status "completed", so a `:stop` finish reason is
+  # upgraded to `:content_filter` here, the way `ResponseBuilder` upgrades
+  # `:stop` to `:tool_calls`.
+  defp merge_refusals_meta(meta, response_output) do
+    case extract_refusals_from_segments(response_output) do
+      [] ->
+        meta
+
+      refusals ->
+        provider_meta = Map.get(meta, :provider_meta, %{})
+
+        meta
+        |> Map.put(:provider_meta, put_refusals_meta(provider_meta, refusals))
+        |> Map.replace_lazy(:finish_reason, &refusal_finish_reason/1)
+    end
+  end
+
+  defp refusal_finish_reason(:stop), do: :content_filter
+  defp refusal_finish_reason(finish_reason), do: finish_reason
 
   # The incremental `response.output_text.annotation.added` chunks are
   # event-only; the completed/incomplete response's full output is the
@@ -554,7 +582,8 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     end)
   end
 
-  defp track_text_delta_event(state, "response.output_text.delta", data) when is_map(data) do
+  defp track_text_delta_event(state, event_type, data)
+       when event_type in @text_delta_events and is_map(data) do
     index = stream_output_index(data)
     delta = data["delta"] || data[:delta] || ""
 
@@ -619,7 +648,8 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
 
   defp track_message_phase(state, _event_type, _data), do: state
 
-  defp stamp_text_phase(chunks, "response.output_text.delta", data, state) when is_map(data) do
+  defp stamp_text_phase(chunks, event_type, data, state)
+       when event_type in @text_delta_events and is_map(data) do
     index = stream_output_index(data)
 
     case Map.fetch(state.message_phases, index) do
@@ -1797,13 +1827,13 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
 
   defp message_item_text(%{"content" => content}) when is_list(content) do
     content
-    |> Enum.filter(&(&1["type"] in ["output_text", "text"]))
+    |> Enum.filter(&(&1["type"] in @message_text_types))
     |> Enum.map_join("", &extract_text_field/1)
   end
 
   defp message_item_text(%{content: content}) when is_list(content) do
     content
-    |> Enum.filter(&((Map.get(&1, :type) || Map.get(&1, "type")) in ["output_text", "text"]))
+    |> Enum.filter(&((Map.get(&1, :type) || Map.get(&1, "type")) in @message_text_types))
     |> Enum.map_join("", &extract_text_field/1)
   end
 
@@ -2252,15 +2282,21 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
 
     usage = normalize_responses_usage(base_usage, body)
 
+    refusals = extract_refusals_from_segments(output_segments)
+
     finish_reason =
-      determine_finish_reason(body, Enum.reject(tool_calls, &ReqLLM.ToolCall.builtin?/1))
+      determine_finish_reason(
+        body,
+        Enum.reject(tool_calls, &ReqLLM.ToolCall.builtin?/1),
+        refusals
+      )
 
     message_metadata =
       body["id"]
       |> build_message_metadata(output_segments)
       |> put_compaction_replay(output_segments, model.provider)
 
-    {object, object_meta} = maybe_extract_object(req, text, tool_calls) || {nil, %{}}
+    {object, object_meta} = maybe_extract_object(req, text, tool_calls, refusals) || {nil, %{}}
 
     # Stamp `api_type` so Azure Responses (which calls this decoder
     # directly via `Azure.ResponsesAPI.parse_response/3`, bypassing the
@@ -2277,6 +2313,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
       |> Map.merge(object_meta)
       |> put_code_interpreter_meta(code_interpreter_items)
       |> put_annotations_meta(extract_annotations_from_segments(output_segments))
+      |> put_refusals_meta(refusals)
 
     ctx = req.options[:context] || %ReqLLM.Context{messages: []}
     text_chunks = buffered_text_chunks(text, output_segments)
@@ -2427,7 +2464,9 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     |> Map.merge(extract_assistant_phase_metadata(output_segments))
   end
 
-  defp maybe_extract_object(req, text, tool_calls) do
+  defp maybe_extract_object(_req, _text, _tool_calls, [_ | _]), do: nil
+
+  defp maybe_extract_object(req, text, tool_calls, _refusals) do
     case req.options[:operation] do
       :object ->
         compiled_schema = req.options[:compiled_schema]
@@ -2542,7 +2581,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     |> dedupe_phased_messages()
     |> Enum.flat_map(fn seg ->
       (seg["content"] || [])
-      |> Enum.filter(&(&1["type"] in ["output_text", "text"]))
+      |> Enum.filter(&(&1["type"] in @message_text_types))
       |> Enum.map(&extract_text_field/1)
     end)
     |> Enum.join()
@@ -2616,6 +2655,10 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
 
   defp extract_text_field(%{"text" => text}) when is_binary(text), do: text
   defp extract_text_field(%{"content" => content}) when is_binary(content), do: content
+
+  defp extract_text_field(%{"type" => "refusal", "refusal" => refusal}) when is_binary(refusal),
+    do: refusal
+
   defp extract_text_field(_), do: ""
 
   defp normalize_phase_item_content(content) when is_list(content) do
@@ -2626,7 +2669,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
       %{type: :text, text: text} when is_binary(text) and text != "" ->
         [%{"type" => "output_text", "text" => text}]
 
-      %{"type" => type} = part when type in ["output_text", "text"] ->
+      %{"type" => type} = part when type in @message_text_types ->
         text = extract_text_field(part)
 
         if text == "" do
@@ -2802,6 +2845,22 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     Map.put(provider_meta, "annotations", annotations)
   end
 
+  defp extract_refusals_from_segments(segments) when is_list(segments) do
+    for %{"type" => "message"} = segment <- segments,
+        ReqLLM.Providers.OpenAI.MultiAgent.root_item?(segment),
+        %{"type" => "refusal", "refusal" => refusal} <- segment["content"] || [],
+        is_binary(refusal) and refusal != "",
+        do: refusal
+  end
+
+  defp extract_refusals_from_segments(_), do: []
+
+  defp put_refusals_meta(provider_meta, []), do: provider_meta
+
+  defp put_refusals_meta(provider_meta, refusals) when is_list(refusals) do
+    Map.put(provider_meta, "refusals", refusals)
+  end
+
   defp normalize_arguments_json(nil), do: "{}"
   defp normalize_arguments_json(""), do: "{}"
 
@@ -2850,16 +2909,15 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   defp maybe_put_cache_creation_tokens(usage, tokens),
     do: Map.put(usage, :cache_creation_tokens, tokens)
 
-  # The Responses API returns "completed" status even when tool calls are present.
-  # We need to check for tool calls and return :tool_calls in that case.
-  defp determine_finish_reason(body, tool_calls) do
+  # The Responses API returns "completed" status even when the model refused or
+  # called tools, so both are read from the output instead.
+  defp determine_finish_reason(body, tool_calls, refusals) do
     case body["status"] do
       "completed" ->
-        # If tool calls are present, return :tool_calls instead of :stop
-        if tool_calls == [] do
-          :stop
-        else
-          :tool_calls
+        cond do
+          refusals != [] -> :content_filter
+          tool_calls != [] -> :tool_calls
+          true -> :stop
         end
 
       "incomplete" ->
