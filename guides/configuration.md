@@ -15,8 +15,8 @@ config :req_llm,
   # total_timeout: 180_000,          # Optional whole-call deadline
   # stream_idle_timeout: 60_000,     # Optional semantic-progress deadline
   stream_pool_protocols: [:http1],   # Default stream pool protocols
-  stream_pool_size: 1,               # HTTP/1 connections per stream pool worker
-  stream_pool_count: 8,              # Stream pool workers per origin
+  stream_pool_size: 8,               # HTTP/1 connections per shared pool worker
+  stream_pool_count: 1,              # Shared pool workers per origin
   stream_pool_strategy: nil,         # Finch shard selection strategy
   metadata_timeout: 120_000,         # Streaming metadata collection timeout
   thinking_timeout: 300_000,         # Extended timeout for reasoning models
@@ -229,9 +229,26 @@ Per-request override:
 ReqLLM.stream_text(model, messages, pool_timeout: 300_000)
 ```
 
+Non-streaming calls use `receive_timeout` as the default connection wait timeout.
+If `receive_timeout` is `:infinity`, the connection wait timeout defaults to 30 seconds.
+`stream_pool_timeout` applies only to streaming calls. Set a non-streaming override
+with `req_http_options`:
+
+```elixir
+ReqLLM.generate_text(model, messages,
+  req_http_options: [finch: [name: ReqLLM.Finch, pool_timeout: 120_000]]
+)
+```
+
+An explicit `req_http_options[:finch][:pool_timeout]` also takes precedence over
+the default. A non-streaming connection wait timeout returns
+`{:error, %ReqLLM.Error.API.Request{}}`. The error's `cause` contains the Finch
+exception. A finite `total_timeout` can end the call before the connection wait
+timeout expires.
+
 ### `stream_pool_protocols` (default: `[:http1]`)
 
-Protocols for ReqLLM's default Finch stream pool. Use HTTP/1 for broad provider compatibility, or HTTP/2-only when all target providers support HTTP/2.
+Protocols for ReqLLM's default Finch pool. Streaming and non-streaming calls share this pool. Use HTTP/1 for broad provider compatibility, or HTTP/2-only when all target providers support HTTP/2.
 
 ```elixir
 config :req_llm, stream_pool_protocols: [:http2]
@@ -239,20 +256,24 @@ config :req_llm, stream_pool_protocols: [:http2]
 
 Avoid mixed HTTP/1+HTTP/2 ALPN pools for large prompts. Due to a Finch flow-control issue, `[:http2, :http1]` and `[:http1, :http2]` may fail when request bodies exceed 64KB.
 
-### `stream_pool_size` (default: 1)
+### `stream_pool_size` (default: 8)
 
-Maximum HTTP/1 connections per stream pool worker. With the default HTTP/1 transport, concurrent streams per origin are roughly `stream_pool_size * stream_pool_count`.
+Maximum HTTP/1 connections per shared pool worker. Each origin can use up to
+`stream_pool_size * stream_pool_count` connections for streaming and non-streaming calls.
 
 ```elixir
-config :req_llm, stream_pool_size: 2
+config :req_llm, stream_pool_size: 32
 ```
 
-### `stream_pool_count` (default: 8)
+### `stream_pool_count` (default: 1)
 
-Number of stream pool workers per origin. Increase this when high concurrent streaming load produces Finch checkout queue timeouts and the downstream provider can handle more simultaneous streams.
+Number of shared pool workers per origin. The default uses one pool, so each
+request can use any free connection. With multiple pools, Finch selects one pool
+for each request. A request can wait in that pool while another pool has free
+connections. Increase `stream_pool_size` first when more connections are needed.
 
 ```elixir
-config :req_llm, stream_pool_count: 32
+config :req_llm, stream_pool_count: 2
 ```
 
 ### `stream_pool_strategy` (default: `nil`)
@@ -337,15 +358,17 @@ config :req_llm, image_receive_timeout: 180_000
 
 ReqLLM uses Finch for HTTP connections. By default, HTTP/1-only pools are used because Finch's mixed HTTP/1+HTTP/2 ALPN pools have a [known large-body flow-control issue](https://github.com/sneako/finch/issues/265).
 
-Streaming responses hold a connection until the stream completes. With the default HTTP/1 configuration, each origin can run up to `size * count` concurrent checked-out connections before new streams wait in Finch's checkout queue.
+Streaming and non-streaming responses hold a connection until the response
+completes. The default HTTP/1 configuration uses one pool with eight connections
+per origin. Requests wait only when all eight connections are in use.
 
 ### Default Configuration
 
 ```elixir
 config :req_llm,
   stream_pool_protocols: [:http1],
-  stream_pool_size: 1,
-  stream_pool_count: 8
+  stream_pool_size: 8,
+  stream_pool_count: 1
 ```
 
 ### High-Concurrency Configuration
@@ -353,15 +376,11 @@ config :req_llm,
 For applications making many concurrent requests:
 
 ```elixir
-# config/runtime.exs
-round_robin = Finch.Pool.Strategy.RoundRobin.new()
-
 config :req_llm,
   stream_pool_timeout: 300_000,
   stream_pool_protocols: [:http1],
-  stream_pool_size: 1,
-  stream_pool_count: 32,
-  stream_pool_strategy: {Finch.Pool.Strategy.RoundRobin, round_robin}
+  stream_pool_size: 32,
+  stream_pool_count: 1
 ```
 
 When this is not enough or when you need origin-specific settings, replace the full Finch pool configuration:
@@ -371,7 +390,7 @@ config :req_llm,
   finch: [
     name: ReqLLM.Finch,
     pools: %{
-      :default => [protocols: [:http1], size: 1, count: 32]
+      :default => [protocols: [:http1], size: 32, count: 1]
     }
   ]
 ```
@@ -379,21 +398,17 @@ config :req_llm,
 If you see `Finch was unable to provide a connection within the timeout due to excess queuing for connections`, tune both sides of the limit:
 
 - Raise `stream_pool_timeout` when bursty workloads can safely wait for an existing stream to finish.
-- Increase `stream_pool_count` or `stream_pool_size` when the downstream provider and your rate limits can handle more simultaneous streams.
+- Increase `stream_pool_size` when the downstream provider and your rate limits can handle more simultaneous calls.
 - Add application-level concurrency limits when provider rate limits, costs, or latency make unbounded queueing unsafe.
 
 For example, to allow roughly 32 concurrent HTTP/1 streams per provider origin:
 
 ```elixir
-# config/runtime.exs
-round_robin = Finch.Pool.Strategy.RoundRobin.new()
-
 config :req_llm,
   stream_pool_timeout: 300_000,
   stream_pool_protocols: [:http1],
-  stream_pool_size: 1,
-  stream_pool_count: 32,
-  stream_pool_strategy: {Finch.Pool.Strategy.RoundRobin, round_robin}
+  stream_pool_size: 32,
+  stream_pool_count: 1
 ```
 
 ### HTTP/2 Configuration (Advanced)

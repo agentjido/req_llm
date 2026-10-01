@@ -2,8 +2,8 @@ defmodule ReqLLM.Application do
   @moduledoc false
 
   @default_stream_pool_protocols [:http1]
-  @default_stream_pool_size 1
-  @default_stream_pool_count 8
+  @default_stream_pool_size 8
+  @default_stream_pool_count 1
 
   # Application supervisor for ReqLLM.
 
@@ -56,8 +56,8 @@ defmodule ReqLLM.Application do
 
       config :req_llm,
         stream_pool_protocols: [:http1],
-        stream_pool_size: 1,
-        stream_pool_count: 16
+        stream_pool_size: 32,
+        stream_pool_count: 1
 
   Advanced users can replace the full Finch configuration by setting:
 
