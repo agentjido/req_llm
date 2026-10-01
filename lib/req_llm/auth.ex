@@ -3,10 +3,11 @@ defmodule ReqLLM.Auth do
 
   # Resolves authentication credentials for provider requests.
 
-  # Supports two credential modes:
+  # Supports three credential modes:
 
   # - API key (`:api_key`) via `ReqLLM.Keys`
   # - OAuth access token (`:oauth_access_token`) via `:access_token`
+  # - Anonymous access (`:none`) without credential lookup
 
   # Access token lookup precedence:
 
@@ -14,6 +15,7 @@ defmodule ReqLLM.Auth do
   # 2. `:provider_options[:access_token]`
 
   # If `:auth_mode` is set to `:oauth`, an `:access_token` is required.
+  # If it is set to `:none`, credential sources are not read.
 
   @type credential_kind :: :api_key | :oauth_access_token
 
@@ -24,7 +26,7 @@ defmodule ReqLLM.Auth do
           account_id: String.t() | nil
         }
 
-  @spec resolve!(LLMDB.Model.t() | atom, keyword() | map()) :: credential() | no_return()
+  @spec resolve!(LLMDB.Model.t() | atom, keyword() | map()) :: credential() | :none | no_return()
   def resolve!(provider_or_model, opts \\ []) do
     case resolve(provider_or_model, opts) do
       {:ok, credential} -> credential
@@ -33,11 +35,14 @@ defmodule ReqLLM.Auth do
   end
 
   @spec resolve(LLMDB.Model.t() | atom, keyword() | map()) ::
-          {:ok, credential()} | {:error, String.t()}
+          {:ok, credential() | :none} | {:error, String.t()}
   def resolve(provider_or_model, opts \\ []) do
     provider_opts = get_option(opts, :provider_options) || []
 
     case auth_mode(opts, provider_opts) do
+      :none ->
+        resolve_anonymous(provider_or_model, opts)
+
       :oauth ->
         case fetch_access_token(opts, provider_opts) do
           {:ok, token, source} ->
@@ -110,13 +115,48 @@ defmodule ReqLLM.Auth do
     end
   end
 
+  defp resolve_anonymous(%LLMDB.Model{provider: provider}, opts),
+    do: resolve_anonymous(provider, opts)
+
+  defp resolve_anonymous(:openai, opts) do
+    http_opts = get_option(opts, :req_http_options) || []
+
+    if authenticated_http_options?(opts) or authenticated_http_options?(http_opts) do
+      {:error,
+       "Anonymous authentication cannot include HTTP authentication options or Authorization headers"}
+    else
+      {:ok, :none}
+    end
+  end
+
+  defp resolve_anonymous(_provider, _opts),
+    do: {:error, "Anonymous authentication is supported only by the OpenAI provider"}
+
+  defp authenticated_http_options?(opts) do
+    get_option(opts, :auth) != nil or authorization_headers?(get_option(opts, :headers))
+  end
+
+  defp authorization_headers?(nil), do: false
+
+  defp authorization_headers?(headers) when is_list(headers) or is_map(headers) do
+    Enum.any?(headers, fn
+      {name, _value} when is_binary(name) or is_atom(name) ->
+        String.downcase(to_string(name)) == "authorization"
+
+      _ ->
+        true
+    end)
+  end
+
+  defp authorization_headers?(_), do: true
+
   defp auth_mode(opts, provider_opts) do
     mode = get_option(opts, :auth_mode) || get_option(provider_opts, :auth_mode) || :api_key
 
     case mode do
-      :oauth -> :oauth
-      "oauth" -> :oauth
-      _ -> :api_key
+      mode when mode in [:none, "none"] -> :none
+      mode when mode in [:oauth, "oauth"] -> :oauth
+      _mode -> :api_key
     end
   end
 

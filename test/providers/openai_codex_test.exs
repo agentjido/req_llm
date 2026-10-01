@@ -104,6 +104,16 @@ defmodule ReqLLM.Providers.OpenAICodexTest do
         )
       end
     end
+
+    test "attach rejects anonymous auth modes" do
+      {:ok, model} = ReqLLM.model("openai_codex:gpt-5.3-codex-spark")
+
+      for mode <- [:none, "none"] do
+        assert_raise ReqLLM.Error.Invalid.Parameter, ~r/requires.*:oauth/, fn ->
+          OpenAICodex.attach(Req.new(), model, provider_options: [auth_mode: mode])
+        end
+      end
+    end
   end
 
   describe "session and prompt cache identity" do

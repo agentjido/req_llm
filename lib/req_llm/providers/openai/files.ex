@@ -352,7 +352,7 @@ defmodule ReqLLM.Providers.OpenAI.Files do
 
       request =
         Req.new(request_options)
-        |> Req.Request.put_header("authorization", "Bearer #{credential.token}")
+        |> put_authorization_headers(credential)
         |> Req.Request.put_private(@request_private_key, %{
           operation: operation,
           fallback: fallback
@@ -365,6 +365,12 @@ defmodule ReqLLM.Providers.OpenAI.Files do
 
       {:ok, request}
     end
+  end
+
+  defp put_authorization_headers(request, credential) do
+    Enum.reduce(OpenAI.auth_header_list(credential), request, fn {name, value}, request ->
+      Req.Request.put_header(request, name, value)
+    end)
   end
 
   defp resolve_upload(%ContentPart{type: :file, data: data} = part, opts)

@@ -101,8 +101,9 @@ defmodule ReqLLM.Providers.OpenAI.ChatAPI do
       |> Keyword.delete(:compiled_schema)
       |> Keyword.put(:stream, true)
       |> Keyword.put(:base_url, base_url)
+      |> Keyword.put(:req_llm_model, model)
 
-    body = Request.build_body(context, model.id, cleaned_opts, :chat)
+    body = Request.build_body(context, model.provider_model_id || model.id, cleaned_opts, :chat)
     url = build_request_url(cleaned_opts)
 
     encoded = body |> ReqLLM.Schema.apply_property_ordering() |> Jason.encode!()

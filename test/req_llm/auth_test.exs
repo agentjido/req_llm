@@ -13,6 +13,59 @@ defmodule ReqLLM.AuthTest do
     {:ok, tmp_dir: tmp_dir}
   end
 
+  describe "resolve/2 with anonymous auth" do
+    test "returns the anonymous sentinel without resolving configured credentials", %{
+      tmp_dir: tmp_dir
+    } do
+      opts = [
+        auth_mode: :none,
+        api_key: "synthetic-configured-api-key",
+        access_token: "synthetic-configured-oauth-token",
+        oauth_file: Path.join(tmp_dir, "missing-oauth.json")
+      ]
+
+      assert Auth.resolve(:openai, opts) == {:ok, :none}
+    end
+
+    test "accepts the string mode from string-keyed provider options", %{tmp_dir: tmp_dir} do
+      opts = %{
+        "api_key" => "synthetic-configured-api-key",
+        "provider_options" => %{
+          "auth_mode" => "none",
+          "access_token" => "synthetic-configured-oauth-token",
+          "oauth_file" => Path.join(tmp_dir, "missing-oauth.json")
+        }
+      }
+
+      assert Auth.resolve(:openai, opts) == {:ok, :none}
+    end
+
+    test "rejects anonymous mode for providers that require credentials" do
+      for provider <- [:anthropic, :google, :openai_codex],
+          mode <- [:none, "none"],
+          target <- [provider, %LLMDB.Model{provider: provider, id: "selected"}] do
+        assert {:error, _} =
+                 Auth.resolve(target, auth_mode: mode, api_key: "synthetic-must-not-leak")
+      end
+    end
+
+    test "rejects contradictory HTTP credentials before anonymous requests can send them" do
+      for http_opts <- [
+            [auth: {:bearer, "synthetic-must-not-leak"}],
+            [headers: [{"Authorization", "Bearer synthetic-must-not-leak"}]],
+            [headers: %{"aUtHoRiZaTiOn" => "Bearer synthetic-must-not-leak"}]
+          ],
+          opts <- [
+            [auth_mode: :none, req_http_options: http_opts],
+            [auth_mode: :none] ++ http_opts
+          ] do
+        assert {:error, message} = Auth.resolve(:openai, opts)
+
+        refute message =~ "synthetic-must-not-leak"
+      end
+    end
+  end
+
   describe "resolve/2 with oauth files" do
     test "loads oauth credentials from oauth.json", %{tmp_dir: tmp_dir} do
       {:ok, model} = ReqLLM.model("openai:gpt-4o")

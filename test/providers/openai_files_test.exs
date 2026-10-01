@@ -9,6 +9,18 @@ defmodule ReqLLM.Providers.OpenAI.FilesTest do
   @api_key "test-openai-file-key"
   @http_opts [plug: {Req.Test, __MODULE__}]
 
+  test "anonymous file requests omit authorization even when an API key exists" do
+    Req.Test.stub(__MODULE__, fn conn ->
+      assert conn.method == "GET"
+      assert conn.request_path == "/v1/files"
+      assert Plug.Conn.get_req_header(conn, "authorization") == []
+      Req.Test.json(conn, %{"object" => "list", "data" => [], "has_more" => false})
+    end)
+
+    assert {:ok, %Files.Page{files: [], has_more: false}} =
+             Files.list(auth_mode: :none, api_key: @api_key, req_http_options: @http_opts)
+  end
+
   test "uploads once, preserves lifecycle metadata, and reuses the reference" do
     Req.Test.stub(__MODULE__, fn conn ->
       assert conn.method == "POST"

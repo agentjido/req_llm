@@ -148,9 +148,9 @@ defmodule ReqLLM.Providers.OpenAI do
       doc: "OAuth access token used as Authorization Bearer credential"
     ],
     auth_mode: [
-      type: {:in, [:api_key, :oauth]},
+      type: {:in, [:api_key, :oauth, :none, "none"]},
       default: :api_key,
-      doc: "Authentication mode: :api_key (default) or :oauth"
+      doc: "Authentication mode: :api_key (default), :oauth, or :none"
     ],
     oauth_file: [
       type: :string,
@@ -1115,7 +1115,14 @@ defmodule ReqLLM.Providers.OpenAI do
   defp maybe_add_transcription_part(parts, _key, nil), do: parts
   defp maybe_add_transcription_part(parts, key, value), do: parts ++ [{key, to_string(value)}]
 
-  defp maybe_put_authorization_header(request, :none), do: request
+  defp maybe_put_authorization_header(request, :none) do
+    if request.options[:auth] != nil or Req.Request.get_header(request, "authorization") != [] do
+      raise ReqLLM.Error.Invalid.Parameter,
+        parameter: "Anonymous authentication cannot use a preconfigured authenticated request"
+    end
+
+    request
+  end
 
   defp maybe_put_authorization_header(request, credential) do
     Req.Request.put_header(request, "authorization", "Bearer #{credential.token}")
@@ -1127,9 +1134,9 @@ defmodule ReqLLM.Providers.OpenAI do
 
   defp auth_mode(opts) do
     case option_value(opts, :auth_mode) || provider_option_value(opts, :auth_mode) || :api_key do
-      :oauth -> :oauth
-      "oauth" -> :oauth
-      _ -> :api_key
+      mode when mode in [:none, "none"] -> :none
+      mode when mode in [:oauth, "oauth"] -> :oauth
+      _mode -> :api_key
     end
   end
 

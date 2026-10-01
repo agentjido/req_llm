@@ -1411,11 +1411,12 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
       |> Keyword.delete(:compiled_schema)
       |> Keyword.put(:provider_options, Keyword.get(opts, :provider_options, []))
       |> Keyword.put(:stream, true)
-      |> Keyword.put(:model, model.id)
+      |> Keyword.put(:model, model.provider_model_id || model.id)
       |> Keyword.put(:context, context)
       |> Keyword.put(:base_url, base_url)
+      |> Keyword.put(:req_llm_model, model)
 
-    body = build_request_body(context, model.id, cleaned_opts, nil)
+    body = build_request_body(context, model.provider_model_id || model.id, cleaned_opts, nil)
     url = build_request_url(cleaned_opts)
 
     encoded = body |> ReqLLM.Schema.apply_property_ordering() |> Jason.encode!()
@@ -1440,14 +1441,15 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
       |> Keyword.put(:provider_options, Keyword.get(opts, :provider_options, []))
       |> Keyword.put(:stream, nil)
       |> Keyword.put(:responses_transport, :websocket)
-      |> Keyword.put(:model, model.id)
+      |> Keyword.put(:model, model.provider_model_id || model.id)
       |> Keyword.put(:context, context)
       |> Keyword.put(
         :base_url,
         ReqLLM.Provider.Options.effective_base_url(ReqLLM.Providers.OpenAI, model, opts)
       )
+      |> Keyword.put(:req_llm_model, model)
 
-    body = build_request_body(context, model.id, cleaned_opts, nil)
+    body = build_request_body(context, model.provider_model_id || model.id, cleaned_opts, nil)
     create_event = Map.put(body, "type", "response.create")
 
     {:ok,
