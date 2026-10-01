@@ -540,7 +540,7 @@ defmodule ReqLLM.Provider.Defaults do
         |> maybe_put(:speed, speed)
         |> maybe_put_speech_provider_options(provider_options)
 
-      api_key = ReqLLM.Keys.get!(model, opts)
+      credential = ReqLLM.Auth.resolve!(model, opts)
 
       request =
         Req.new(
@@ -550,13 +550,14 @@ defmodule ReqLLM.Provider.Defaults do
             base_url: Keyword.get(opts, :base_url, provider_mod.default_base_url()),
             receive_timeout: timeout,
             body: Jason.encode!(body),
-            auth: {:bearer, api_key},
             # Disable Req's automatic JSON decoding — response is raw audio binary
             decode_body: false
-          ] ++ merge_finch_options(http_opts, pool_timeout: timeout)
+          ] ++
+            speech_auth_options(credential) ++
+            merge_finch_options(http_opts, pool_timeout: timeout)
         )
         |> Req.Request.put_header("content-type", "application/json")
-        |> Req.Request.put_header("authorization", "Bearer #{api_key}")
+        |> put_speech_authorization_header(credential)
         |> ReqLLM.Step.Retry.attach(opts)
         |> ReqLLM.Step.Error.attach()
         |> ReqLLM.Step.Telemetry.attach(
@@ -571,6 +572,15 @@ defmodule ReqLLM.Provider.Defaults do
 
       {:ok, request}
     end
+  end
+
+  defp speech_auth_options(:none), do: []
+  defp speech_auth_options(credential), do: [auth: {:bearer, credential.token}]
+
+  defp put_speech_authorization_header(request, :none), do: request
+
+  defp put_speech_authorization_header(request, credential) do
+    Req.Request.put_header(request, "authorization", "Bearer #{credential.token}")
   end
 
   defp maybe_put_speech_provider_options(body, opts) when is_list(opts) do

@@ -566,6 +566,70 @@ defmodule ReqLLM.Providers.OpenAITest do
       refute request.options[:auth]
     end
 
+    test "anonymous speech omits credentials on the public request path" do
+      model = %LLMDB.Model{provider: :openai, id: "anonymous-tts-model"}
+
+      Req.Test.stub(__MODULE__, fn conn ->
+        assert conn.request_path == "/v1/audio/speech"
+        assert Plug.Conn.get_req_header(conn, "authorization") == []
+
+        conn
+        |> Plug.Conn.put_resp_content_type("audio/mpeg")
+        |> Plug.Conn.send_resp(200, "synthetic-audio")
+      end)
+
+      for mode <- [:none, "none"],
+          auth_opts <- [[auth_mode: mode], [provider_options: [auth_mode: mode]]],
+          api_key <- ["synthetic-configured-api-key", ""] do
+        opts =
+          auth_opts ++
+            [
+              api_key: api_key,
+              oauth_file: "/missing/synthetic-oauth.json",
+              base_url: "http://example.invalid/v1",
+              req_http_options: [plug: {Req.Test, __MODULE__}]
+            ]
+
+        assert {:ok, %ReqLLM.Speech.Result{audio: "synthetic-audio"}} =
+                 ReqLLM.speak(model, "Hello", opts)
+      end
+    end
+
+    test "anonymous speech rejects contradictory HTTP authentication" do
+      model = %LLMDB.Model{provider: :openai, id: "anonymous-tts-model"}
+
+      for http_opts <- [
+            [auth: {:bearer, "synthetic-must-not-leak"}],
+            [headers: [{"Authorization", "Bearer synthetic-must-not-leak"}]]
+          ] do
+        assert_raise ReqLLM.Error.Invalid.Parameter, ~r/Anonymous authentication/, fn ->
+          OpenAI.prepare_request(:speech, model, "Hello",
+            auth_mode: :none,
+            req_http_options: http_opts
+          )
+        end
+      end
+    end
+
+    test "speech keeps bearer authentication by default" do
+      model = %LLMDB.Model{provider: :openai, id: "anonymous-tts-model"}
+
+      Req.Test.stub(__MODULE__, fn conn ->
+        assert Plug.Conn.get_req_header(conn, "authorization") == ["Bearer synthetic-api-key"]
+
+        conn
+        |> Plug.Conn.put_resp_content_type("audio/mpeg")
+        |> Plug.Conn.send_resp(200, "synthetic-audio")
+      end)
+
+      assert {:ok, %ReqLLM.Speech.Result{audio: "synthetic-audio"}} =
+               ReqLLM.speak(model, "Hello",
+                 api_key: "synthetic-api-key",
+                 base_url: "http://example.invalid/v1",
+                 req_http_options: [plug: {Req.Test, __MODULE__}]
+               )
+    end
+
     test "prepare_request supports oauth credentials loaded from file" do
       {:ok, model} = ReqLLM.model("openai:gpt-4o")
 
