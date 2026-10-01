@@ -1115,14 +1115,8 @@ defmodule ReqLLM.Providers.OpenAI do
   defp maybe_add_transcription_part(parts, _key, nil), do: parts
   defp maybe_add_transcription_part(parts, key, value), do: parts ++ [{key, to_string(value)}]
 
-  defp maybe_put_authorization_header(request, :none) do
-    if request.options[:auth] != nil or Req.Request.get_header(request, "authorization") != [] do
-      raise ReqLLM.Error.Invalid.Parameter,
-        parameter: "Anonymous authentication cannot use a preconfigured authenticated request"
-    end
-
-    request
-  end
+  defp maybe_put_authorization_header(request, :none),
+    do: ReqLLM.Auth.validate_request!(request, :none)
 
   defp maybe_put_authorization_header(request, credential) do
     Req.Request.put_header(request, "authorization", "Bearer #{credential.token}")

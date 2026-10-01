@@ -417,7 +417,7 @@ ReqLLM.generate_text!(
 )
 ```
 
-Use `auth_mode: :none` only for OpenAI-compatible endpoints that deliberately accept anonymous requests. The OpenAI provider skips API key and OAuth credential lookup and sends no `Authorization` header. It rejects contradictory authentication in `req_http_options` or a preconfigured request rather than forwarding or silently removing it. Providers that require credentials, including OpenAI Codex, reject anonymous mode.
+Use `auth_mode: :none` only for OpenAI-compatible endpoints that deliberately accept anonymous requests. The OpenAI provider skips API key and OAuth credential lookup and sends no `Authorization` header. It rejects contradictory authentication in `req_http_options`, global `Req` defaults, or a preconfigured request rather than forwarding or silently removing it. Providers that require credentials, including OpenAI Codex, reject anonymous mode.
 
 ### Azure
 

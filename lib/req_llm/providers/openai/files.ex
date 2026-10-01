@@ -352,6 +352,7 @@ defmodule ReqLLM.Providers.OpenAI.Files do
 
       request =
         Req.new(request_options)
+        |> ReqLLM.Auth.validate_request!(credential)
         |> put_authorization_headers(credential)
         |> Req.Request.put_private(@request_private_key, %{
           operation: operation,

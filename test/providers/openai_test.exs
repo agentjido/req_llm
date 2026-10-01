@@ -611,6 +611,38 @@ defmodule ReqLLM.Providers.OpenAITest do
       end
     end
 
+    test "anonymous speech and Files reject authenticated Req defaults" do
+      defaults = Req.default_options()
+      on_exit(fn -> Req.default_options(defaults) end)
+      model = %LLMDB.Model{provider: :openai, id: "anonymous-tts-model"}
+
+      Req.Test.stub(__MODULE__, fn _conn ->
+        flunk("Anonymous requests must reject inherited credentials before HTTP dispatch")
+      end)
+
+      opts = [
+        auth_mode: :none,
+        api_key: "synthetic-configured-api-key",
+        base_url: "http://example.invalid/v1",
+        req_http_options: [plug: {Req.Test, __MODULE__}]
+      ]
+
+      for http_auth <- [
+            [auth: {:bearer, "synthetic-inherited-credential"}],
+            [headers: [{"Authorization", "Bearer synthetic-inherited-credential"}]]
+          ] do
+        Req.default_options(Keyword.merge(defaults, http_auth))
+
+        assert_raise ReqLLM.Error.Invalid.Parameter, ~r/Anonymous authentication/, fn ->
+          ReqLLM.speak(model, "Hello", opts)
+        end
+
+        assert_raise ReqLLM.Error.Invalid.Parameter, ~r/Anonymous authentication/, fn ->
+          ReqLLM.Providers.OpenAI.Files.list(opts)
+        end
+      end
+    end
+
     test "speech keeps bearer authentication by default" do
       model = %LLMDB.Model{provider: :openai, id: "anonymous-tts-model"}
 

@@ -556,6 +556,7 @@ defmodule ReqLLM.Provider.Defaults do
             speech_auth_options(credential) ++
             merge_finch_options(http_opts, pool_timeout: timeout)
         )
+        |> ReqLLM.Auth.validate_request!(credential)
         |> Req.Request.put_header("content-type", "application/json")
         |> put_speech_authorization_header(credential)
         |> ReqLLM.Step.Retry.attach(opts)

@@ -90,6 +90,19 @@ defmodule ReqLLM.Auth do
     end
   end
 
+  @doc false
+  @spec validate_request!(Req.Request.t(), credential() | :none) :: Req.Request.t()
+  def validate_request!(%Req.Request{} = request, :none) do
+    if request.options[:auth] != nil or Req.Request.get_header(request, "authorization") != [] do
+      raise ReqLLM.Error.Invalid.Parameter,
+        parameter: "Anonymous authentication cannot use a preconfigured authenticated request"
+    end
+
+    request
+  end
+
+  def validate_request!(%Req.Request{} = request, _credential), do: request
+
   defp fetch_access_token(opts, provider_opts) do
     cond do
       is_binary(get_option(opts, :access_token)) ->
