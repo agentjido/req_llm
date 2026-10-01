@@ -30,10 +30,14 @@ defmodule ReqLLM.ApplicationTest do
 
   describe "load_dotenv configuration" do
     test "get_finch_config/0 returns default configuration" do
+      for key <- [:finch, :stream_pool_protocols, :stream_pool_size, :stream_pool_count] do
+        Application.delete_env(:req_llm, key)
+      end
+
       config = ReqLLM.Application.get_finch_config()
 
       assert Keyword.get(config, :name) == ReqLLM.Finch
-      assert is_map(Keyword.get(config, :pools))
+      assert config[:pools][:default] == [protocols: [:http1], size: 8, count: 1]
     end
 
     test "get_finch_config/0 uses stream pool sizing configuration" do

@@ -45,13 +45,16 @@ defmodule ReqLLM.TimeoutBudget do
 
   @spec request(Req.Request.t(), deadline()) ::
           {:ok, Req.Response.t()} | {:error, Exception.t()}
-  def request(%Req.Request{} = request, :infinity), do: Req.request(request)
+  def request(%Req.Request{} = request, :infinity) do
+    request |> ReqLLM.Transport.attach() |> Req.request()
+  end
 
   def request(%Req.Request{} = request, %{timeout: timeout} = deadline) do
     capture_ref = make_ref()
 
     request =
       request
+      |> ReqLLM.Transport.attach()
       |> Req.Request.put_private(@capture_key, %{owner: self(), ref: capture_ref})
       |> Req.Request.append_request_steps(
         llm_timeout_capture: &__MODULE__.capture_request_context/1
