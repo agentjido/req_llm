@@ -25,6 +25,8 @@ defmodule ReqLLM.Billing do
          main_meters <- if(write_groups, do: %{meters | cache_write: 0}, else: meters),
          {:ok, rates, modifiers} <- selected_components(selection, main_meters, usage),
          :ok <- validate_coverage(rates, selection, main_meters, usage),
+         true <-
+           tool_coverage?(rates, usage) and image_coverage?(rates, main_meters, usage, model),
          main_rates <-
            if(write_groups, do: Enum.reject(rates, &(meter_key(&1) == :cache_write)), else: rates),
          {:ok, items} <- price_components(main_rates, modifiers, main_meters, usage, rates),
@@ -316,6 +318,54 @@ defmodule ReqLLM.Billing do
       :ok
     else
       :error
+    end
+  end
+
+  defp tool_coverage?(rates, usage) do
+    usage
+    |> MapAccess.get(:tool_usage, %{})
+    |> Tool.normalize()
+    |> Enum.all?(fn {tool, entry} ->
+      count = MapAccess.get(entry, :count)
+      unit = Tool.normalize_unit(MapAccess.get(entry, :unit))
+
+      valid_count?(count) and
+        (count == 0 or
+           Enum.any?(rates, fn
+             %Component{kind: :tools, tool: rate_tool, unit: rate_unit} ->
+               to_string(rate_tool) == to_string(tool) and rate_unit in [nil, unit]
+
+             _ ->
+               false
+           end))
+    end)
+  end
+
+  defp image_coverage?(rates, meters, usage, model) do
+    generated =
+      usage
+      |> MapAccess.get(:image_usage, %{})
+      |> Image.normalize()
+      |> MapAccess.get(:generated, %{})
+
+    count = MapAccess.get(generated, :count, 0)
+    size = MapAccess.get(generated, :size_class)
+
+    valid_count?(count) and
+      (count == 0 or
+         image_token_coverage?(rates, meters, model) or
+         Enum.any?(rates, fn
+           %Component{kind: :images, size_class: rate_size} -> rate_size in [nil, size]
+           _ -> false
+         end))
+  end
+
+  defp image_token_coverage?(rates, meters, model) do
+    if is_map(meters.modality) do
+      Map.get(meters.modality, "image_output_tokens", 0) > 0
+    else
+      model.modalities[:output] == [:image] and meters.output > 0 and
+        Enum.any?(rates, &(meter_key(&1) == :output))
     end
   end
 

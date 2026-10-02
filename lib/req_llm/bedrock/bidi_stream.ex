@@ -70,10 +70,16 @@ defmodule ReqLLM.Bedrock.BidiStream do
   def send_event(%Conn{pid: pid}, event) when is_map(event),
     do: GenServer.call(pid, {:send_event, event})
 
-  @doc "Pull the next decoded inbound event. `:halt` once the stream ends."
+  @doc """
+  Pull the next decoded inbound event. Returns `:halt` once the stream ends.
+
+  The timeout can be a non-negative number of milliseconds or `:infinity`.
+  A finite wait that expires returns `{:error, %ReqLLM.Error.API.Timeout{}}`.
+  Later events remain available to the next caller.
+  """
   @spec next_event(Conn.t(), timeout()) :: {:ok, map()} | :halt | {:error, term()}
   def next_event(%Conn{pid: pid}, timeout \\ 30_000),
-    do: GenServer.call(pid, {:next_event, timeout}, timeout + 1000)
+    do: GenServer.call(pid, {:next_event, timeout}, :infinity)
 
   @doc "Signal end of the outbound stream (half-close the request body)."
   @spec done_sending(Conn.t()) :: :ok | {:error, term()}
@@ -128,7 +134,7 @@ defmodule ReqLLM.Bedrock.BidiStream do
     end
   end
 
-  def handle_call({:next_event, _timeout}, from, state) do
+  def handle_call({:next_event, timeout}, from, state) do
     case :queue.out(state.queue) do
       {{:value, event}, queue} ->
         {:reply, {:ok, event}, %{state | queue: queue}}
@@ -137,7 +143,7 @@ defmodule ReqLLM.Bedrock.BidiStream do
         case state.status do
           :closed -> {:reply, :halt, state}
           {:error, reason} -> {:reply, {:error, reason}, state}
-          :open -> {:noreply, %{state | waiting: state.waiting ++ [from]}}
+          :open -> {:noreply, %{state | waiting: state.waiting ++ [new_waiter(from, timeout)]}}
         end
     end
   end
@@ -149,7 +155,7 @@ defmodule ReqLLM.Bedrock.BidiStream do
 
   def handle_call(:close, _from, state) do
     Session.close(state.session)
-    {:stop, :normal, :ok, state}
+    {:stop, :normal, :ok, finish(state, :closed)}
   end
 
   # Inbound data pushed from the transport — decode and dispatch (never blocks sends).
@@ -165,20 +171,66 @@ defmodule ReqLLM.Bedrock.BidiStream do
   def handle_info({:http2_duplex, _pid, {:error, reason}}, state),
     do: {:noreply, finish(state, {:error, reason})}
 
+  def handle_info({:waiter_timeout, monitor, timeout}, state) do
+    {expired, remaining} = Enum.split_with(state.waiting, &(&1.monitor == monitor))
+
+    Enum.each(expired, fn waiter ->
+      reply_waiter(
+        waiter,
+        {:error, ReqLLM.Error.API.Timeout.exception(kind: :receive, timeout: timeout)}
+      )
+    end)
+
+    {:noreply, %{state | waiting: remaining}}
+  end
+
+  def handle_info({:DOWN, monitor, :process, _pid, _reason}, state) do
+    {removed, remaining} = Enum.split_with(state.waiting, &(&1.monitor == monitor))
+    Enum.each(removed, &cancel_waiter/1)
+    {:noreply, %{state | waiting: remaining}}
+  end
+
   def handle_info(_msg, state), do: {:noreply, state}
 
   # Hand a decoded event to a parked next_event caller, else queue it.
-  defp dispatch(%{waiting: [from | rest]} = state, event) do
-    GenServer.reply(from, {:ok, event})
-    %{state | waiting: rest}
+  defp dispatch(%{waiting: [waiter | rest]} = state, event) do
+    cancel_waiter(waiter)
+    state = %{state | waiting: rest}
+
+    if Process.alive?(elem(waiter.from, 0)) do
+      GenServer.reply(waiter.from, {:ok, event})
+      state
+    else
+      dispatch(state, event)
+    end
   end
 
   defp dispatch(state, event), do: %{state | queue: :queue.in(event, state.queue)}
 
   defp finish(state, status) do
     reply = if status == :closed, do: :halt, else: status
-    Enum.each(state.waiting, &GenServer.reply(&1, reply))
+    Enum.each(state.waiting, &reply_waiter(&1, reply))
     %{state | waiting: [], status: status}
+  end
+
+  defp new_waiter(from, timeout) do
+    monitor = Process.monitor(elem(from, 0))
+    %{from: from, monitor: monitor, timer: waiter_timer(timeout, monitor)}
+  end
+
+  defp waiter_timer(:infinity, _monitor), do: nil
+
+  defp waiter_timer(timeout, monitor),
+    do: Process.send_after(self(), {:waiter_timeout, monitor, timeout}, timeout)
+
+  defp cancel_waiter(waiter) do
+    if waiter.timer, do: Process.cancel_timer(waiter.timer, async: true, info: false)
+    Process.demonitor(waiter.monitor, [:flush])
+  end
+
+  defp reply_waiter(waiter, reply) do
+    cancel_waiter(waiter)
+    GenServer.reply(waiter.from, reply)
   end
 
   # --- AWS event-stream encoding (request side) ---

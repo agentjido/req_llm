@@ -27,21 +27,19 @@ defmodule ReqLLM.Providers do
         {provider_id, module}
       end
 
-    :persistent_term.put(@registry_key, registry)
+    configured =
+      :req_llm
+      |> Application.get_env(:custom_providers, [])
+      |> Enum.flat_map(fn module ->
+        case validate_provider_module(module) do
+          {:ok, id} -> [{id, module}]
+          {:error, _error} -> []
+        end
+      end)
+      |> Map.new()
 
-    load_custom_providers()
-
-    :ok
-  end
-
-  defp load_custom_providers do
-    custom_providers = Application.get_env(:req_llm, :custom_providers, [])
-
-    Enum.each(custom_providers, fn module ->
-      case register(module) do
-        {:ok, _provider_id} -> :ok
-        {:error, _error} -> :ok
-      end
+    mutate_registry(fn current ->
+      registry |> Map.merge(current) |> Map.merge(configured)
     end)
   end
 
@@ -80,10 +78,7 @@ defmodule ReqLLM.Providers do
   end
 
   def unregister(provider_id) when is_atom(provider_id) do
-    current_registry = :persistent_term.get(@registry_key, %{})
-    updated_registry = Map.delete(current_registry, provider_id)
-    :persistent_term.put(@registry_key, updated_registry)
-    :ok
+    mutate_registry(&Map.delete(&1, provider_id))
   end
 
   def get_env_key(provider_id) do
@@ -155,9 +150,18 @@ defmodule ReqLLM.Providers do
   end
 
   defp update_registry(provider_id, module) do
-    current_registry = :persistent_term.get(@registry_key, %{})
-    updated_registry = Map.put(current_registry, provider_id, module)
-    :persistent_term.put(@registry_key, updated_registry)
-    :ok
+    mutate_registry(&Map.put(&1, provider_id, module))
+  end
+
+  defp mutate_registry(update) do
+    :global.trans(
+      {{__MODULE__, :registry}, self()},
+      fn ->
+        current = :persistent_term.get(@registry_key, %{})
+        :persistent_term.put(@registry_key, update.(current))
+        :ok
+      end,
+      [node()]
+    )
   end
 end

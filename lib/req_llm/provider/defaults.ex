@@ -2106,73 +2106,23 @@ defmodule ReqLLM.Provider.Defaults do
   # Helper functions for default stream request building
 
   defp build_streaming_body(provider_mod, model, context, opts) do
-    # Create a temporary Req request to use existing encode_body logic
     req_opts =
-      [
-        model: model.provider_model_id || model.id,
-        context: context,
-        stream: true
-      ] ++ Keyword.delete(opts, :finch_name)
+      [model: model.provider_model_id || model.id, context: context, stream: true] ++
+        Keyword.delete(opts, :finch_name)
 
-    # Create minimal request struct with required fields
     temp_request = %Req.Request{
       method: :post,
       url: URI.parse("https://example.com/temp"),
       headers: %{},
       body: nil,
-      options: Map.new(req_opts)
+      options: Map.new(req_opts),
+      private: %{req_llm_model: model}
     }
 
-    # Use provider's encode_body to build the JSON
-    encoded_request =
-      temp_request
-      |> provider_mod.encode_body()
-      |> Req.Steps.encode_body()
-
-    # Return the encoded body (should be JSON string)
-    encoded_request.body
-  rescue
-    _error ->
-      # Fallback to basic OpenAI-compatible streaming body structure
-      build_fallback_streaming_body(model, context, opts)
-  end
-
-  defp build_fallback_streaming_body(model, context, opts) do
-    # Convert context to basic OpenAI-compatible format
-    messages =
-      context.messages
-      |> Enum.map(fn message ->
-        # Extract text content from ContentPart list
-        text_content =
-          message.content
-          |> Enum.filter(&(&1.type == :text))
-          |> Enum.map_join("", & &1.text)
-
-        %{
-          role: message.role,
-          content: text_content
-        }
-      end)
-
-    body = %{
-      model: model.provider_model_id || model.id,
-      messages: messages,
-      stream: true
-    }
-
-    # Add optional parameters
-    body
-    |> maybe_add_streaming_param(:temperature, opts)
-    |> maybe_add_streaming_param(:max_tokens, opts)
-    |> maybe_add_streaming_param(:top_p, opts)
-    |> Jason.encode!()
-  end
-
-  defp maybe_add_streaming_param(body, key, opts) do
-    case Keyword.get(opts, key) do
-      nil -> body
-      value -> Map.put(body, key, value)
-    end
+    temp_request
+    |> provider_mod.encode_body()
+    |> Req.Steps.encode_body()
+    |> Map.fetch!(:body)
   end
 
   # Helper function to get provider display name using display_name/0 callback

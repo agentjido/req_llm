@@ -139,7 +139,7 @@ defmodule ReqLLM.Provider.Options.NamespaceTest do
                  provider_options: [mock_namespace: [unknown: true]]
                )
 
-      assert Exception.message(unknown_error) =~ "unknown provider option :unknown"
+      assert Exception.message(unknown_error) =~ "unknown provider option"
 
       assert {:error, %ReqLLM.Error.Invalid.Parameter{} = canonical_error} =
                Namespace.normalize(MockProvider, :chat, model(:mock_namespace),

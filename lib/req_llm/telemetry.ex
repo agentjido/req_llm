@@ -925,7 +925,7 @@ defmodule ReqLLM.Telemetry do
       stream?: response.stream?,
       usage: response.usage,
       finish_reason: response.finish_reason,
-      provider_meta: response.provider_meta,
+      provider_meta: sanitize_generic_payload(response.provider_meta),
       error: response.error
     }
   end
@@ -939,7 +939,7 @@ defmodule ReqLLM.Telemetry do
       name: message.name,
       tool_call_id: message.tool_call_id,
       tool_calls: message.tool_calls,
-      metadata: message.metadata,
+      metadata: sanitize_generic_payload(message.metadata),
       reasoning_details: sanitize_reasoning_details(message.reasoning_details)
     }
   end
@@ -1000,7 +1000,30 @@ defmodule ReqLLM.Telemetry do
   end
 
   defp sanitize_generic_payload(value) when is_map(value) do
-    Map.new(value, fn {key, entry} -> {key, sanitize_generic_payload(entry)} end)
+    type = Map.get(value, :type) || Map.get(value, "type")
+
+    if type in [:thinking, :reasoning, :summary_text, "thinking", "reasoning", "summary_text"] do
+      sanitize_reasoning(value)
+    else
+      Map.new(value, fn
+        {key, entry} when key in [:reasoning_details, "reasoning_details"] ->
+          {key, sanitize_reasoning_details(entry)}
+
+        {key, entry}
+        when key in [
+               :thinking,
+               "thinking",
+               :reasoning,
+               "reasoning",
+               :reasoning_content,
+               "reasoning_content"
+             ] and is_binary(entry) ->
+          {key, %{redacted?: true, text_bytes: reasoning_text_bytes(entry)}}
+
+        {key, entry} ->
+          {key, sanitize_generic_payload(entry)}
+      end)
+    end
   end
 
   defp sanitize_generic_payload(value) when is_list(value) do
@@ -1017,19 +1040,13 @@ defmodule ReqLLM.Telemetry do
 
   defp sanitize_generic_payload(value), do: value
 
-  defp sanitize_content_part(%ContentPart{type: :thinking, text: text} = part) do
-    part
-    |> Map.from_struct()
-    |> Map.put(:text, nil)
-    |> Map.put(:redacted?, true)
-    |> Map.put(:text_bytes, byte_size(to_string(text || "")))
-  end
+  defp sanitize_content_part(%ContentPart{type: :thinking} = part),
+    do: part |> Map.from_struct() |> sanitize_reasoning()
 
-  defp sanitize_content_part(%{type: :thinking, text: text} = part) when is_map(part) do
-    part
-    |> Map.put(:text, nil)
-    |> Map.put(:redacted?, true)
-    |> Map.put(:text_bytes, byte_size(to_string(text || "")))
+  defp sanitize_content_part(%{type: :thinking} = part), do: sanitize_reasoning(part)
+
+  defp sanitize_content_part(%ContentPart{type: :provider_block} = part) do
+    part |> Map.from_struct() |> sanitize_generic_payload()
   end
 
   defp sanitize_content_part(%ContentPart{type: :image} = part) do
@@ -1066,10 +1083,10 @@ defmodule ReqLLM.Telemetry do
   end
 
   defp sanitize_content_part(part) when is_struct(part) do
-    Map.from_struct(part)
+    part |> Map.from_struct() |> sanitize_generic_payload()
   end
 
-  defp sanitize_content_part(part), do: part
+  defp sanitize_content_part(part), do: sanitize_generic_payload(part)
 
   defp binary_size_or_nil(nil), do: nil
   defp binary_size_or_nil(data) when is_binary(data), do: byte_size(data)
@@ -1078,27 +1095,59 @@ defmodule ReqLLM.Telemetry do
 
   defp sanitize_reasoning_details(nil), do: nil
 
-  defp sanitize_reasoning_details(details) when is_list(details) do
-    Enum.map(details, fn
-      %{text: text} = detail when is_struct(detail) ->
-        detail
-        |> Map.from_struct()
-        |> Map.put(:text, nil)
-        |> Map.put(:redacted?, true)
-        |> Map.put(:text_bytes, byte_size(to_string(text || "")))
+  defp sanitize_reasoning_details(details) when is_list(details),
+    do: Enum.map(details, &sanitize_reasoning/1)
 
-      %{text: text} = detail ->
-        detail
-        |> Map.put(:text, nil)
-        |> Map.put(:redacted?, true)
-        |> Map.put(:text_bytes, byte_size(to_string(text || "")))
+  defp sanitize_reasoning_details(details), do: sanitize_reasoning(details)
 
-      detail ->
-        detail
-    end)
+  defp sanitize_reasoning(value) when is_struct(value),
+    do: value |> Map.from_struct() |> sanitize_reasoning()
+
+  defp sanitize_reasoning(value) when is_map(value) do
+    value
+    |> Map.take([
+      :type,
+      :id,
+      :provider,
+      :format,
+      :index,
+      :encrypted?,
+      "type",
+      "id",
+      "provider",
+      "format",
+      "index",
+      "encrypted?"
+    ])
+    |> Map.merge(%{text: nil, redacted?: true, text_bytes: reasoning_text_bytes(value)})
   end
 
-  defp sanitize_reasoning_details(details), do: details
+  defp sanitize_reasoning(value),
+    do: %{text: nil, redacted?: true, text_bytes: reasoning_text_bytes(value)}
+
+  defp reasoning_text_bytes(value) when is_binary(value), do: byte_size(value)
+
+  defp reasoning_text_bytes(value) when is_struct(value),
+    do: value |> Map.from_struct() |> reasoning_text_bytes()
+
+  defp reasoning_text_bytes(value) when is_map(value) do
+    direct =
+      [:text, :thinking, :reasoning_content, "text", "thinking", "reasoning_content"]
+      |> Enum.map(&reasoning_text_bytes(Map.get(value, &1)))
+      |> Enum.sum()
+
+    nested =
+      [:summary, :content, :provider_data, "summary", "content", "provider_data"]
+      |> Enum.map(&reasoning_text_bytes(Map.get(value, &1)))
+      |> Enum.sum()
+
+    max(direct, nested)
+  end
+
+  defp reasoning_text_bytes(value) when is_list(value),
+    do: value |> Enum.map(&reasoning_text_bytes/1) |> Enum.sum()
+
+  defp reasoning_text_bytes(_value), do: 0
 
   defp summarize_response(_operation, %Response{} = response) do
     %{

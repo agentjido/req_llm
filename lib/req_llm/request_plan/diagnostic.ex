@@ -237,7 +237,7 @@ defmodule ReqLLM.RequestPlan.Diagnostic do
           parameter
 
         String.contains?(parameter, "provider option") ->
-          parameter
+          "provider option is invalid; verify option names and types"
 
         true ->
           "request plan is invalid; verify provider, operation, and transport metadata"

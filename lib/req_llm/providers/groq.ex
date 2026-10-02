@@ -158,36 +158,6 @@ defmodule ReqLLM.Providers.Groq do
     |> maybe_put(:logit_bias, request.options[:logit_bias])
   end
 
-  @doc """
-  Custom attach_stream that ensures translate_options is called for streaming requests.
-
-  This is necessary because the default streaming path doesn't call translate_options,
-  which means model-specific option normalization (like omitting reasoning_effort for qwen models)
-  wouldn't be applied to streaming requests.
-  """
-  @impl ReqLLM.Provider
-  def attach_stream(model, context, opts, finch_name) do
-    processed_opts =
-      ReqLLM.Provider.Options.process_stream!(
-        __MODULE__,
-        opts[:operation] || :chat,
-        model,
-        context,
-        opts
-      )
-
-    base_url = ReqLLM.Provider.Options.effective_base_url(__MODULE__, model, processed_opts)
-    opts_with_base_url = Keyword.put(processed_opts, :base_url, base_url)
-
-    ReqLLM.Provider.Defaults.default_attach_stream(
-      __MODULE__,
-      model,
-      context,
-      opts_with_base_url,
-      finch_name
-    )
-  end
-
   defp strip_message_reasoning_fields(%{messages: messages} = body) when is_list(messages) do
     Map.put(body, :messages, Enum.map(messages, &strip_reasoning_fields/1))
   end

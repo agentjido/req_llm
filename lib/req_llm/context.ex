@@ -562,6 +562,15 @@ defmodule ReqLLM.Context do
     end
   end
 
+  defp tool_error_message(%{state: :unknown, name: name}), do: "Tool #{name} not found"
+
+  defp tool_error_message(%{state: state, error: nil})
+       when state in [:provider_executed, :provider_native],
+       do: "Tool call is #{state} and cannot be executed locally"
+
+  defp tool_error_message(%{state: state, error: error}) when state in [:invalid, :unknown],
+    do: tool_error_message(error)
+
   defp tool_error_message(error) when is_exception(error), do: Exception.message(error)
 
   defp tool_error_message(error) do
@@ -575,11 +584,10 @@ defmodule ReqLLM.Context do
   defp extract_tool_call_info(%{name: name, id: id}), do: {name, id}
 
   defp find_and_execute_tool(
-         %ReqLLM.ToolCall{function: %{name: name, arguments: args_json}},
+         %ReqLLM.ToolCall{} = tool_call,
          available_tools
        ) do
-    args = Jason.decode!(args_json)
-    execute_tool_by_name(name, args, available_tools)
+    ReqLLM.ToolCall.execute(tool_call, available_tools)
   end
 
   defp find_and_execute_tool(%{name: name, arguments: args}, available_tools) do

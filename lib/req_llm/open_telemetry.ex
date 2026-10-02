@@ -275,23 +275,7 @@ defmodule ReqLLM.OpenTelemetry.OTelAdapter do
   end
 
   defp ensure_instrument_table do
-    case :ets.whereis(@instrument_table) do
-      :undefined ->
-        :ets.new(@instrument_table, [
-          :named_table,
-          :public,
-          :set,
-          {:read_concurrency, true},
-          {:write_concurrency, true}
-        ])
-
-      _ ->
-        @instrument_table
-    end
-
-    :ok
-  rescue
-    ArgumentError -> :ok
+    ReqLLM.OpenTelemetry.Storage.ensure_tables()
   end
 
   defp instrument_config(record) do
@@ -486,6 +470,10 @@ defmodule ReqLLM.OpenTelemetry do
   (e.g. an `:erlang.send_after/3` loop or a periodic GenServer tick) to
   contain the ETS table when requests start without a matching stop or
   exception event.
+
+  The application supervisor owns the table through `ReqLLM.OpenTelemetry.Storage`.
+  If that owner restarts, active span records and cached instruments are cleared.
+  Terminal events for cleared spans are ignored. New requests start new spans.
   """
   @spec prune_stale_spans(term(), non_neg_integer()) :: non_neg_integer()
   def prune_stale_spans(handler_id \\ @default_handler_id, ttl_ms)
@@ -588,23 +576,7 @@ defmodule ReqLLM.OpenTelemetry do
   end
 
   defp ensure_span_table do
-    case :ets.whereis(@span_table) do
-      :undefined ->
-        :ets.new(@span_table, [
-          :named_table,
-          :public,
-          :set,
-          {:read_concurrency, true},
-          {:write_concurrency, true}
-        ])
-
-      _ ->
-        @span_table
-    end
-
-    :ok
-  rescue
-    ArgumentError -> :ok
+    ReqLLM.OpenTelemetry.Storage.ensure_tables()
   end
 
   defp span_key(config, request_id) do
@@ -612,6 +584,7 @@ defmodule ReqLLM.OpenTelemetry do
   end
 
   defp take_span(config, request_id) do
+    ensure_span_table()
     key = span_key(config, request_id)
 
     case :ets.lookup(@span_table, key) do

@@ -422,29 +422,6 @@ defmodule ReqLLM.Providers.Minimax do
   end
 
   @impl ReqLLM.Provider
-  def attach_stream(model, context, opts, finch_name) do
-    processed_opts =
-      ReqLLM.Provider.Options.process_stream!(
-        __MODULE__,
-        opts[:operation] || :chat,
-        model,
-        context,
-        opts
-      )
-
-    base_url = ReqLLM.Provider.Options.effective_base_url(__MODULE__, model, processed_opts)
-    opts_with_base_url = Keyword.put(processed_opts, :base_url, base_url)
-
-    ReqLLM.Provider.Defaults.default_attach_stream(
-      __MODULE__,
-      model,
-      context,
-      opts_with_base_url,
-      finch_name
-    )
-  end
-
-  @impl ReqLLM.Provider
   def decode_stream_event(event, model) do
     event
     |> ReqLLM.Provider.Defaults.default_decode_stream_event(model)

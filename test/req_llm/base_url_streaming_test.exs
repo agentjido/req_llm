@@ -362,4 +362,59 @@ defmodule ReqLLM.BaseURLStreamingTest do
       assert {"X-Test-Header", "present"} in finch_request.headers
     end
   end
+
+  test "call, model, application, registry, and default URLs use one order" do
+    providers = [
+      ReqLLM.Providers.Deepseek,
+      ReqLLM.Providers.Groq,
+      ReqLLM.Providers.Mistral,
+      ReqLLM.Providers.Minimax,
+      ReqLLM.Providers.ZaiCodingPlan,
+      ReqLLM.Providers.Cerebras
+    ]
+
+    context = Context.new([Context.user("probe")])
+
+    for provider <- providers do
+      model = %LLMDB.Model{
+        provider: provider.provider_id(),
+        id: "probe",
+        base_url: "https://model.example.com/v1"
+      }
+
+      Application.put_env(:req_llm, model.provider, base_url: "https://config.example.com/v1")
+
+      for {model, options, expected} <- [
+            {model, [base_url: "https://call.example.com/v1"], "https://call.example.com/v1"},
+            {model, [], "https://model.example.com/v1"},
+            {%{model | base_url: nil}, [], "https://config.example.com/v1"}
+          ] do
+        opts = [api_key: "probe"] ++ options
+        assert ReqLLM.Provider.Options.effective_base_url(provider, model, opts) == expected
+        assert {:ok, prepared} = provider.prepare_request(:chat, model, context, opts)
+        assert prepared.options[:base_url] == expected
+        assert {:ok, streamed} = provider.attach_stream(model, context, opts, ReqLLM.Finch)
+        assert streamed.host == URI.parse(expected).host
+      end
+
+      Application.delete_env(:req_llm, model.provider)
+      model = %{model | base_url: nil}
+      {:ok, registry} = LLMDB.provider(model.provider)
+      expected = registry.base_url || provider.default_base_url()
+
+      assert ReqLLM.Provider.Options.effective_base_url(provider, model, []) == expected
+      assert {:ok, prepared} = provider.prepare_request(:chat, model, context, api_key: "probe")
+      assert prepared.options[:base_url] == expected
+
+      assert {:ok, streamed} =
+               provider.attach_stream(model, context, [api_key: "probe"], ReqLLM.Finch)
+
+      assert streamed.host == URI.parse(expected).host
+    end
+
+    model = %LLMDB.Model{provider: :uncataloged_provider, id: "probe"}
+
+    assert ReqLLM.Provider.Options.effective_base_url(ReqLLM.Providers.Cerebras, model, []) ==
+             ReqLLM.Providers.Cerebras.default_base_url()
+  end
 end

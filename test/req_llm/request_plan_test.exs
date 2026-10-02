@@ -201,4 +201,22 @@ defmodule ReqLLM.RequestPlanTest do
       assert Exception.message(transport_error) =~ "unsupported internal stream transport"
     end
   end
+
+  test "malformed provider keys do not expose protected values" do
+    marker = "PRIVATE_DIAGNOSTIC_VALUE"
+
+    for key <- [%{api_key: marker}, {marker, :key}, [marker], marker] do
+      assert {:error, error} =
+               ReqLLM.plan("openai:gpt-4o", :chat, provider_options: [openai: %{key => true}])
+
+      refute Exception.message(error) =~ marker
+    end
+
+    assert {:error, error} =
+             ReqLLM.plan("openai:gpt-4o", :chat,
+               provider_options: [openai: %{"unknown_normal_name" => true}]
+             )
+
+    assert Exception.message(error) =~ "provider option"
+  end
 end

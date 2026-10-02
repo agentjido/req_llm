@@ -323,6 +323,10 @@ If it can be derived, ReqLLM and LLMDB will fill it in for you.
 
 Per-model endpoint metadata.
 
+The endpoint order is: call `:base_url`, model `base_url`, application setting,
+provider registry URL, then provider default. Buffered and streaming requests
+use this order. A call URL can override the model URL.
+
 This is especially useful for:
 
 - local OpenAI-compatible servers

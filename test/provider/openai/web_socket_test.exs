@@ -20,14 +20,14 @@ defmodule Provider.OpenAI.WebSocketTest do
   end
 
   describe "responses_url/2" do
-    test "prefers model base_url over request options" do
+    test "prefers request options over model base_url" do
       url =
         WebSocket.responses_url(
           model(base_url: "http://localhost:4010/custom/"),
-          base_url: "https://ignored.example.com/v1"
+          base_url: "https://call.example.com/v1"
         )
 
-      assert url == "ws://localhost:4010/custom/responses"
+      assert url == "wss://call.example.com/v1/responses"
     end
   end
 

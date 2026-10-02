@@ -469,11 +469,19 @@ defmodule ReqLLM.StreamResponse do
     callbacks = extract_callbacks(opts)
 
     chunks = process_stream_with_callbacks(stream_response.stream, callbacks)
-    materialize_chunks(stream_response, chunks)
+
+    stream_response
+    |> materialize_chunks(chunks)
+    |> finish_conversion(stream_response)
   rescue
-    error -> {:error, error}
+    error -> finish_conversion({:error, error}, stream_response)
   catch
-    :exit, reason -> {:error, reason}
+    :exit, reason ->
+      finish_conversion({:error, reason}, stream_response)
+
+    kind, reason ->
+      finish_conversion({:error, reason}, stream_response)
+      :erlang.raise(kind, reason, __STACKTRACE__)
   after
     MetadataHandle.stop(stream_response.metadata_handle)
   end
@@ -687,14 +695,36 @@ defmodule ReqLLM.StreamResponse do
   @spec to_response(t()) :: {:ok, Response.t()} | {:error, term()}
   def to_response(%__MODULE__{} = stream_response) do
     chunks = Enum.to_list(stream_response.stream)
-    materialize_chunks(stream_response, chunks)
+
+    stream_response
+    |> materialize_chunks(chunks)
+    |> finish_conversion(stream_response)
   rescue
-    error -> {:error, error}
+    error -> finish_conversion({:error, error}, stream_response)
   catch
-    :exit, reason -> {:error, reason}
+    :exit, reason ->
+      finish_conversion({:error, reason}, stream_response)
+
+    kind, reason ->
+      finish_conversion({:error, reason}, stream_response)
+      :erlang.raise(kind, reason, __STACKTRACE__)
   after
     MetadataHandle.stop(stream_response.metadata_handle)
   end
+
+  defp finish_conversion({:error, _reason} = result, stream_response) do
+    try do
+      close(stream_response)
+    rescue
+      _error -> :ok
+    catch
+      _kind, _reason -> :ok
+    end
+
+    result
+  end
+
+  defp finish_conversion(result, _stream_response), do: result
 
   defp materialize_chunks(stream_response, chunks) do
     metadata = MetadataHandle.await(stream_response.metadata_handle)

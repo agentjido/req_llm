@@ -39,6 +39,7 @@ defmodule ReqLLM.Application do
       [
         {Finch, finch_config},
         {Task.Supervisor, name: ReqLLM.TaskSupervisor},
+        ReqLLM.OpenTelemetry.Storage,
         ReqLLM.Providers.GoogleVertex.TokenCache
       ] ++ dev_children()
 

@@ -207,10 +207,8 @@ defmodule ReqLLM.Provider.Options.Namespace do
     )
   end
 
-  defp unknown_provider_option(key, provider) do
-    invalid_parameter(
-      "unknown provider option #{inspect(key)} in the #{inspect(provider)} namespace"
-    )
+  defp unknown_provider_option(_key, provider) do
+    invalid_parameter("unknown provider option in the #{inspect(provider)} namespace")
   end
 
   defp reject_duplicate_keys(entries, provider) do

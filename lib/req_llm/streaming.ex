@@ -123,8 +123,33 @@ defmodule ReqLLM.Streaming do
              total_timeout,
              total_timeout_deadline,
              stream_idle_timeout
-           ),
-         {:ok, _http_task_pid, http_context, canonical_json} <-
+           ) do
+      build_stream_response(
+        provider_mod,
+        model,
+        context,
+        opts,
+        transport,
+        server_pid,
+        stream_idle_timeout
+      )
+    else
+      {:error, reason} ->
+        Logger.error("Failed to start streaming: #{inspect(reason)}")
+        {:error, reason}
+    end
+  end
+
+  defp build_stream_response(
+         provider_mod,
+         model,
+         context,
+         opts,
+         transport,
+         server_pid,
+         stream_idle_timeout
+       ) do
+    with {:ok, _http_task_pid, http_context, canonical_json} <-
            start_transport_streaming(
              transport,
              provider_mod,
@@ -153,7 +178,6 @@ defmodule ReqLLM.Streaming do
 
       :ok = StreamServer.set_telemetry_context(server_pid, stream_context)
 
-      # Create lazy stream using Stream.resource
       default_timeout =
         Application.get_env(
           :req_llm,
@@ -167,7 +191,6 @@ defmodule ReqLLM.Streaming do
       cancel_fn = fn -> cancel_stream(server_pid, metadata_handle) end
       stream = create_lazy_stream(server_pid, next_timeout, cancel_fn, transport == :in_process)
 
-      # Build StreamResponse
       stream_response = %StreamResponse{
         stream: stream,
         metadata_handle: metadata_handle,
@@ -179,9 +202,26 @@ defmodule ReqLLM.Streaming do
       {:ok, stream_response}
     else
       {:error, reason} ->
+        cancel_failed_setup(server_pid)
         Logger.error("Failed to start streaming: #{inspect(reason)}")
         {:error, reason}
     end
+  rescue
+    error ->
+      cancel_failed_setup(server_pid)
+      reraise error, __STACKTRACE__
+  catch
+    kind, reason ->
+      cancel_failed_setup(server_pid)
+      :erlang.raise(kind, reason, __STACKTRACE__)
+  end
+
+  defp cancel_failed_setup(server_pid) do
+    StreamServer.cancel(server_pid)
+  rescue
+    _error -> :ok
+  catch
+    _kind, _reason -> :ok
   end
 
   # Start StreamServer with provider configuration
@@ -278,7 +318,6 @@ defmodule ReqLLM.Streaming do
         {:ok, task_pid, stream_context, canonical_request}
 
       {:error, reason} ->
-        :ok = StreamServer.cancel(stream_server_pid)
         Logger.error("Failed to start in-process streaming: #{inspect(reason)}")
         {:error, {:in_process_streaming_failed, reason}}
     end

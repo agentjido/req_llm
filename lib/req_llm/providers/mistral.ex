@@ -128,29 +128,6 @@ defmodule ReqLLM.Providers.Mistral do
     end
   end
 
-  @impl ReqLLM.Provider
-  def attach_stream(model, context, opts, finch_name) do
-    processed_opts =
-      ReqLLM.Provider.Options.process_stream!(
-        __MODULE__,
-        opts[:operation] || :chat,
-        model,
-        context,
-        opts
-      )
-
-    base_url = ReqLLM.Provider.Options.effective_base_url(__MODULE__, model, processed_opts)
-    opts_with_base_url = Keyword.put(processed_opts, :base_url, base_url)
-
-    ReqLLM.Provider.Defaults.default_attach_stream(
-      __MODULE__,
-      model,
-      context,
-      opts_with_base_url,
-      finch_name
-    )
-  end
-
   defp build_chat_body(request) do
     ReqLLM.Provider.Defaults.default_build_body(request)
     |> Map.delete(:seed)
