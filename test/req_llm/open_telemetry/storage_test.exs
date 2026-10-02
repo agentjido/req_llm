@@ -102,4 +102,65 @@ defmodule ReqLLM.OpenTelemetry.StorageTest do
     assert_receive {:span_ended, ^new_span}
     assert OpenTelemetry.prune_stale_spans(id, 0) == 0
   end
+
+  test "concurrent terminal events end each span once" do
+    id = "storage-terminal-race"
+    :ok = OpenTelemetry.attach(id, adapter: Adapter, test_pid: self())
+    on_exit(fn -> OpenTelemetry.detach(id) end)
+
+    metadata =
+      for n <- 1..20 do
+        meta = %{request_id: "terminal-#{n}", provider: :openai, model: "probe", operation: :chat}
+        :telemetry.execute([:req_llm, :request, :start], %{}, meta)
+        assert_receive {:span_started, span}
+        {meta, span}
+      end
+
+    for _ <- 1..32, {meta, _span} <- metadata do
+      meta
+    end
+    |> Task.async_stream(
+      fn meta -> :telemetry.execute([:req_llm, :request, :stop], %{duration: 1}, meta) end,
+      max_concurrency: 32
+    )
+    |> Enum.each(fn result -> assert result == {:ok, :ok} end)
+
+    for {_meta, span} <- metadata, do: assert_receive({:span_ended, ^span})
+    refute_received {:span_ended, _span}
+  end
+
+  test "prune and detach treat handler IDs as values instead of ETS patterns" do
+    for id <- [:_, "$1", {:nested, :_}, "other-handler"] do
+      :ok = OpenTelemetry.attach(id, adapter: Adapter, test_pid: self())
+      on_exit(fn -> OpenTelemetry.detach(id) end)
+    end
+
+    :telemetry.execute([:req_llm, :request, :start], %{}, %{request_id: "same-request"})
+
+    assert OpenTelemetry.prune_stale_spans(:_, 0) == 1
+    assert :ok = OpenTelemetry.detach({:nested, :_})
+    assert OpenTelemetry.prune_stale_spans("$1", 0) == 1
+    assert OpenTelemetry.prune_stale_spans("other-handler", 0) == 1
+  end
+
+  test "ready ETS tables do not require a call to the storage owner" do
+    id = "storage-table-hot-path"
+    :ok = OpenTelemetry.attach(id, adapter: Adapter, test_pid: self())
+    on_exit(fn -> OpenTelemetry.detach(id) end)
+    storage = Process.whereis(Storage)
+    :ok = :sys.suspend(storage)
+    on_exit(fn -> :sys.resume(storage) end)
+
+    task =
+      Task.async(fn ->
+        meta = %{request_id: "hot-path", provider: :openai, model: "probe", operation: :chat}
+        :telemetry.execute([:req_llm, :request, :start], %{}, meta)
+        :telemetry.execute([:req_llm, :request, :stop], %{duration: 1}, meta)
+      end)
+
+    result = Task.yield(task, 500) || Task.shutdown(task, :brutal_kill)
+    assert result == {:ok, :ok}
+    assert_receive {:span_started, span}
+    assert_receive {:span_ended, ^span}
+  end
 end

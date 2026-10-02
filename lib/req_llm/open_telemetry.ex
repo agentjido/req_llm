@@ -459,8 +459,9 @@ defmodule ReqLLM.OpenTelemetry do
   @spec detach(term()) :: :ok
   def detach(handler_id \\ @default_handler_id) do
     ensure_span_table()
-    :ets.match_delete(@span_table, {{handler_id, :_}, :_, :_})
     :telemetry.detach(handler_id)
+    delete_spans(handler_id)
+    :ok
   end
 
   @doc """
@@ -481,16 +482,7 @@ defmodule ReqLLM.OpenTelemetry do
     ensure_span_table()
     cutoff_ms = System.monotonic_time(:millisecond) - ttl_ms
 
-    @span_table
-    |> :ets.match_object({{handler_id, :_}, :_, :_})
-    |> Enum.reduce(0, fn {key, _span, inserted_at_ms}, acc ->
-      if inserted_at_ms <= cutoff_ms do
-        :ets.delete(@span_table, key)
-        acc + 1
-      else
-        acc
-      end
-    end)
+    delete_spans(handler_id, cutoff_ms)
   end
 
   @doc """
@@ -587,13 +579,18 @@ defmodule ReqLLM.OpenTelemetry do
     ensure_span_table()
     key = span_key(config, request_id)
 
-    case :ets.lookup(@span_table, key) do
+    case :ets.take(@span_table, key) do
       [{^key, span, _inserted_at}] ->
-        :ets.delete(@span_table, key)
         {:ok, span}
 
       [] ->
         :error
     end
+  end
+
+  defp delete_spans(handler_id, cutoff_ms \\ nil) do
+    guards = [{:"=:=", :"$1", {:const, handler_id}}]
+    guards = if is_nil(cutoff_ms), do: guards, else: guards ++ [{:"=<", :"$2", cutoff_ms}]
+    :ets.select_delete(@span_table, [{{{:"$1", :_}, :_, :"$2"}, guards, [true]}])
   end
 end

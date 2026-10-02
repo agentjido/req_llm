@@ -10,7 +10,9 @@ defmodule ReqLLM.OpenTelemetry.Storage do
   end
 
   def ensure_tables do
-    GenServer.call(__MODULE__, :ensure_tables)
+    if Enum.all?(@tables, &(:ets.whereis(&1) != :undefined)),
+      do: :ok,
+      else: GenServer.call(__MODULE__, :ensure_tables)
   end
 
   @impl true

@@ -123,7 +123,7 @@ defmodule ReqLLM.BillingCoverageTest do
       &Map.put(&1, :input_tokens_details, %{cache_write_tokens: &2})
     ]
 
-    for set_field <- readers ++ writers, raw <- ["bad", -1, 2.5, "2", 2] do
+    for set_field <- readers ++ writers, raw <- [false, "bad", -1, 2.5, "2", 2] do
       usage = %{input_tokens: 100, output_tokens: 10} |> set_field.(raw) |> Normalize.normalize()
       valid? = raw in ["2", 2]
       assert usage.billing_usage_complete == valid?
@@ -152,6 +152,67 @@ defmodule ReqLLM.BillingCoverageTest do
     refute usage.billing_usage_complete
     assert usage.cache_read_tokens == 0
     assert Cost.apply(usage, token_model()).pricing.status == :unknown
+  end
+
+  test "false cache counts and claimed completeness cannot produce a price" do
+    for field <- [:cached_tokens, :cacheReadInputTokens, "cacheWriteInputTokens"],
+        value <- [false, "bad", -1, 2.5],
+        flag <- [:billing_usage_complete, "billing_usage_complete"] do
+      usage =
+        %{input_tokens: 100, output_tokens: 10}
+        |> Map.put(field, value)
+        |> Map.put(flag, true)
+        |> Normalize.normalize()
+
+      refute usage.billing_usage_complete
+      assert Cost.apply(usage, token_model()).pricing.status == :unknown
+      refute Normalize.normalize(usage).billing_usage_complete
+    end
+  end
+
+  test "malformed tool names and quantities remain unknown through normalization" do
+    model = token_model()
+    rate = %{id: "tool.search", kind: "tool", tool: "web_search", per: 1, rate: 0.1}
+    model = %{model | pricing: %{components: model.pricing.components ++ [rate]}}
+
+    for tools <- [
+          %{%{bad: "name"} => %{count: 1}},
+          %{["web_search"] => %{count: 1}},
+          %{web_search: %{count: false}},
+          %{web_search: %{count: 1, unit: %{bad: "unit"}}},
+          "bad"
+        ] do
+      usage = %{input_tokens: 100, output_tokens: 10, tool_usage: tools}
+
+      for usage <- [usage, Normalize.normalize(usage)] do
+        assert Cost.apply(usage, model).pricing.status == :unknown
+        refute Map.has_key?(Cost.apply(usage, model), :total_cost)
+      end
+    end
+
+    usage = %{input_tokens: 100, output_tokens: 10, tool_usage: %{web_search: %{count: 1}}}
+    malformed_rate = %{rate | tool: %{bad: "tariff name"}}
+
+    model = %{
+      model
+      | pricing: %{components: token_model().pricing.components ++ [malformed_rate]}
+    }
+
+    assert Cost.apply(usage, model).pricing.status == :unknown
+  end
+
+  test "false and malformed image quantities cannot be priced as zero" do
+    model = token_model()
+    rate = %{id: "image.generated", kind: "image", per: 1, rate: 0.1}
+    model = %{model | pricing: %{components: model.pricing.components ++ [rate]}}
+
+    for images <- [%{generated: %{count: false}}, %{generated: "bad"}, "bad"] do
+      usage = %{input_tokens: 100, output_tokens: 10, image_usage: images}
+
+      for usage <- [usage, Normalize.normalize(usage)] do
+        assert Cost.apply(usage, model).pricing.status == :unknown
+      end
+    end
   end
 
   test "sync and stream usage retain unknown pricing for incomplete tool and image tariffs" do

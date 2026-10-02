@@ -16,6 +16,9 @@ defmodule ReqLLM.Billing do
 
   def calculate(usage, %LLMDB.Model{} = model, context) when is_map(usage) do
     with true <- Pricing.components(model) != [],
+         true <-
+           Tool.valid_usage?(MapAccess.get_raw(usage, :tool_usage)) and
+             Image.valid_usage?(MapAccess.get_raw(usage, :image_usage)),
          {:ok, meters} <- meters(usage, model),
          {:ok, modality} <- modality_counts(usage, model, meters),
          meters <- Map.put(meters, :modality, modality),
@@ -72,7 +75,7 @@ defmodule ReqLLM.Billing do
     output_reported = Map.get(reported, :output, Map.get(reported, "output", not is_nil(output)))
     input = input || 0
     output = output || 0
-    complete = Map.get(usage, :billing_usage_complete, true)
+    complete = MapAccess.get_raw(usage, :billing_usage_complete) in [nil, true]
 
     if valid_token_count?(input) and valid_token_count?(output) and
          valid_token_count?(cache_read) and valid_token_count?(cache_write) and
@@ -332,7 +335,8 @@ defmodule ReqLLM.Billing do
       valid_count?(count) and
         (count == 0 or
            Enum.any?(rates, fn
-             %Component{kind: :tools, tool: rate_tool, unit: rate_unit} ->
+             %Component{kind: :tools, tool: rate_tool, unit: rate_unit}
+             when (is_atom(rate_tool) or is_binary(rate_tool)) and not is_nil(rate_tool) ->
                to_string(rate_tool) == to_string(tool) and rate_unit in [nil, unit]
 
              _ ->

@@ -49,11 +49,10 @@ defmodule ReqLLM.Usage.Normalize do
 
     canonical = %{
       billing_usage_complete:
-        Map.get(
-          usage,
-          :billing_usage_complete,
-          cache_counts_consistent?(usage, input, input_includes_cached)
-        ),
+        MapAccess.get_raw(usage, :billing_usage_complete) in [nil, true] and
+          cache_counts_consistent?(usage, input, input_includes_cached) and
+          Tool.valid_usage?(MapAccess.get_raw(usage, :tool_usage)) and
+          Image.valid_usage?(MapAccess.get_raw(usage, :image_usage)),
       usage_reported:
         MapAccess.get(usage, :usage_reported) ||
           %{
@@ -186,8 +185,7 @@ defmodule ReqLLM.Usage.Normalize do
 
   defp detect_input_includes_cached_from_format(usage) do
     has_openai_format =
-      get_in(usage, ["prompt_tokens_details", "cached_tokens"]) != nil or
-        get_in(usage, [:prompt_tokens_details, :cached_tokens]) != nil or
+      detail_count(usage, :prompt_tokens_details, :cached_tokens) != nil or
         detail_count(usage, :input_tokens_details, :cached_tokens) != nil
 
     has_anthropic_format =
@@ -298,39 +296,45 @@ defmodule ReqLLM.Usage.Normalize do
   end
 
   defp raw_cache_read(usage) do
-    MapAccess.get(usage, :cache_read_tokens) ||
-      MapAccess.get(usage, "cache_read_tokens") ||
-      MapAccess.get(usage, :cache_read_input_tokens) ||
-      MapAccess.get(usage, "cache_read_input_tokens") ||
-      MapAccess.get(usage, :cacheReadInputTokens) ||
-      MapAccess.get(usage, "cacheReadInputTokens") ||
-      MapAccess.get(usage, :cacheReadInputTokenCount) ||
-      MapAccess.get(usage, "cacheReadInputTokenCount") ||
-      MapAccess.get(usage, :cached_input) ||
-      MapAccess.get(usage, "cached_input") ||
-      MapAccess.get(usage, :cached_tokens) ||
-      MapAccess.get(usage, "cached_tokens") ||
-      get_in(usage, ["prompt_tokens_details", "cached_tokens"]) ||
-      get_in(usage, [:prompt_tokens_details, :cached_tokens]) ||
-      detail_count(usage, :input_tokens_details, :cached_tokens)
+    raw_cache_field(
+      usage,
+      [
+        :cache_read_tokens,
+        :cache_read_input_tokens,
+        :cacheReadInputTokens,
+        :cacheReadInputTokenCount,
+        :cached_input,
+        :cached_tokens
+      ],
+      :cached_tokens
+    )
   end
 
   defp raw_cache_write(usage) do
-    MapAccess.get(usage, :cache_write_tokens) ||
-      MapAccess.get(usage, "cache_write_tokens") ||
-      MapAccess.get(usage, :cache_creation_tokens) ||
-      MapAccess.get(usage, :cache_creation_input_tokens) ||
-      MapAccess.get(usage, "cache_creation_input_tokens") ||
-      MapAccess.get(usage, :cache_creation) ||
-      MapAccess.get(usage, :cacheWriteInputTokens) ||
-      MapAccess.get(usage, "cacheWriteInputTokens") ||
-      MapAccess.get(usage, :cacheWriteInputTokenCount) ||
-      MapAccess.get(usage, "cacheWriteInputTokenCount") ||
-      MapAccess.get(usage, :cache_write_input_tokens) ||
-      MapAccess.get(usage, "cache_write_input_tokens") ||
-      get_in(usage, ["prompt_tokens_details", "cache_write_tokens"]) ||
-      get_in(usage, [:prompt_tokens_details, :cache_write_tokens]) ||
-      detail_count(usage, :input_tokens_details, :cache_write_tokens)
+    raw_cache_field(
+      usage,
+      [
+        :cache_write_tokens,
+        :cache_creation_tokens,
+        :cache_creation_input_tokens,
+        :cache_creation,
+        :cacheWriteInputTokens,
+        :cacheWriteInputTokenCount,
+        :cache_write_input_tokens
+      ],
+      :cache_write_tokens
+    )
+  end
+
+  defp raw_cache_field(usage, aliases, detail_key) do
+    values = Enum.map(aliases, &MapAccess.get_raw(usage, &1))
+
+    details =
+      Enum.map([:prompt_tokens_details, :input_tokens_details], fn field ->
+        usage |> MapAccess.get_raw(field) |> MapAccess.get_raw(detail_key)
+      end)
+
+    Enum.find(values ++ details, &(not is_nil(&1)))
   end
 
   defp cache_write_groups(usage) do

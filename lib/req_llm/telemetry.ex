@@ -1002,7 +1002,7 @@ defmodule ReqLLM.Telemetry do
   defp sanitize_generic_payload(value) when is_map(value) do
     type = Map.get(value, :type) || Map.get(value, "type")
 
-    if type in [:thinking, :reasoning, :summary_text, "thinking", "reasoning", "summary_text"] do
+    if reasoning_payload?(value, type) do
       sanitize_reasoning(value)
     else
       Map.new(value, fn
@@ -1017,8 +1017,8 @@ defmodule ReqLLM.Telemetry do
                "reasoning",
                :reasoning_content,
                "reasoning_content"
-             ] and is_binary(entry) ->
-          {key, %{redacted?: true, text_bytes: reasoning_text_bytes(entry)}}
+             ] ->
+          {key, sanitize_reasoning_field(entry)}
 
         {key, entry} ->
           {key, sanitize_generic_payload(entry)}
@@ -1039,6 +1039,32 @@ defmodule ReqLLM.Telemetry do
   end
 
   defp sanitize_generic_payload(value), do: value
+
+  defp reasoning_payload?(value, type) do
+    type in [
+      :thinking,
+      :thinking_delta,
+      :reasoning,
+      :reasoning_text,
+      :summary_text,
+      "thinking",
+      "thinking_delta",
+      "reasoning",
+      "reasoning_text",
+      "summary_text",
+      "reasoning.text",
+      "reasoning.summary",
+      "reasoning.encrypted"
+    ] or Map.get(value, :thought) == true or Map.get(value, "thought") == true
+  end
+
+  defp sanitize_reasoning_field(entry) when is_binary(entry), do: sanitize_reasoning(entry)
+
+  defp sanitize_reasoning_field(entry) do
+    if reasoning_text_bytes(entry) > 0,
+      do: sanitize_reasoning(entry),
+      else: sanitize_generic_payload(entry)
+  end
 
   defp sanitize_content_part(%ContentPart{type: :thinking} = part),
     do: part |> Map.from_struct() |> sanitize_reasoning()

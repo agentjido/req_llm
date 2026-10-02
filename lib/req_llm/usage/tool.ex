@@ -8,6 +8,22 @@ defmodule ReqLLM.Usage.Tool do
   def normalize(usage) when is_map(usage), do: usage
   def normalize(_), do: %{}
 
+  @spec valid_usage?(any()) :: boolean()
+  def valid_usage?(nil), do: true
+
+  def valid_usage?(usage) when is_map(usage) do
+    Enum.all?(usage, fn {name, entry} ->
+      (is_atom(name) or is_binary(name)) and not is_nil(name) and is_map(entry) and
+        valid_count?(MapAccess.get_raw(entry, :count)) and
+        valid_unit?(MapAccess.get_raw(entry, :unit))
+    end)
+  end
+
+  def valid_usage?(_), do: false
+
+  defp valid_count?(count), do: is_number(count) and count >= 0
+  defp valid_unit?(unit), do: is_nil(unit) or is_atom(unit) or is_binary(unit)
+
   @spec entry(map(), atom() | String.t()) :: map()
   def entry(tool_usage, tool) when is_map(tool_usage) and (is_atom(tool) or is_binary(tool)) do
     tool_usage

@@ -8,6 +8,25 @@ defmodule ReqLLM.Usage.Image do
   def normalize(usage) when is_map(usage), do: usage
   def normalize(_), do: %{}
 
+  @spec valid_usage?(any()) :: boolean()
+  def valid_usage?(nil), do: true
+
+  def valid_usage?(usage) when is_map(usage) do
+    case MapAccess.get_raw(usage, :generated) do
+      nil ->
+        true
+
+      generated when is_map(generated) ->
+        count = MapAccess.get_raw(generated, :count)
+        is_number(count) and count >= 0
+
+      _ ->
+        false
+    end
+  end
+
+  def valid_usage?(_), do: false
+
   @spec count_generated(map(), any()) :: number()
   def count_generated(usage, size_class \\ nil) do
     usage_map = MapAccess.get(usage, :image_usage, %{}) |> normalize()

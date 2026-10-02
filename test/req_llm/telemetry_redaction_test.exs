@@ -128,7 +128,9 @@ defmodule ReqLLM.TelemetryRedactionTest do
       role: :assistant,
       content: [
         ContentPart.provider_block(:anthropic, %{"type" => "thinking", "thinking" => marker}),
-        ContentPart.provider_block(:openai, %{"type" => "reasoning", "text" => marker})
+        ContentPart.provider_block(:openai, %{"type" => "reasoning", "text" => marker}),
+        ContentPart.provider_block(:openrouter, %{"type" => "reasoning.text", "text" => marker}),
+        ContentPart.provider_block(:google, %{"text" => marker, "thought" => true})
       ],
       reasoning_details: [
         %{
@@ -147,7 +149,10 @@ defmodule ReqLLM.TelemetryRedactionTest do
       model: "probe",
       context: Context.new([message]),
       message: message,
-      provider_meta: %{reasoning: %{"type" => "reasoning", "summary" => [%{"text" => marker}]}}
+      provider_meta: %{
+        "nested" => %{"thinking" => [%{"text" => marker}]},
+        reasoning: %{"summary" => [%{"text" => marker}]}
+      }
     }
 
     model = %LLMDB.Model{provider: :openai, id: "probe"}
