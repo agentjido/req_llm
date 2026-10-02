@@ -471,7 +471,7 @@ defmodule ReqLLM.OpenTelemetry do
   contain the ETS table when requests start without a matching stop or
   exception event.
 
-  The application supervisor owns the table through `ReqLLM.OpenTelemetry.Storage`.
+  A supervised storage process owns the table for the application.
   If that owner restarts, active span records and cached instruments are cleared.
   Terminal events for cleared spans are ignored. New requests start new spans.
   """
