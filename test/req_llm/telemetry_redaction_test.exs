@@ -151,7 +151,8 @@ defmodule ReqLLM.TelemetryRedactionTest do
       message: message,
       provider_meta: %{
         "nested" => %{"thinking" => [%{"text" => marker}]},
-        reasoning: %{"summary" => [%{"text" => marker}]}
+        reasoning: %{"summary" => [%{"text" => marker}]},
+        "reasoning" => %{"provider_specific_reasoning" => "OPAQUE_REASONING_SECRET"}
       }
     }
 
@@ -166,6 +167,7 @@ defmodule ReqLLM.TelemetryRedactionTest do
     for event <- [[:req_llm, :request, :start], [:req_llm, :request, :stop]] do
       assert_receive {:telemetry_probe, ^event, metadata}
       refute inspect(metadata, structs: false, limit: :infinity) =~ marker
+      refute inspect(metadata, structs: false, limit: :infinity) =~ "OPAQUE_REASONING_SECRET"
     end
 
     sanitized = telemetry.request_payload.messages |> hd()
