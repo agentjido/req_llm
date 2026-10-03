@@ -1058,13 +1058,7 @@ defmodule ReqLLM.Telemetry do
     ] or Map.get(value, :thought) == true or Map.get(value, "thought") == true
   end
 
-  defp sanitize_reasoning_field(entry) when is_binary(entry), do: sanitize_reasoning(entry)
-
-  defp sanitize_reasoning_field(entry) do
-    if reasoning_text_bytes(entry) > 0,
-      do: sanitize_reasoning(entry),
-      else: sanitize_generic_payload(entry)
-  end
+  defp sanitize_reasoning_field(entry), do: sanitize_reasoning(entry)
 
   defp sanitize_content_part(%ContentPart{type: :thinking} = part),
     do: part |> Map.from_struct() |> sanitize_reasoning()
