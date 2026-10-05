@@ -151,7 +151,7 @@ defmodule ReqLLM.TelemetryRedactionTest do
       message: message,
       provider_meta: %{
         "nested" => %{"thinking" => [%{"text" => marker}]},
-        reasoning: %{"summary" => [%{"text" => marker}]},
+        :reasoning => %{"summary" => [%{"text" => marker}]},
         "reasoning" => %{"provider_specific_reasoning" => "OPAQUE_REASONING_SECRET"}
       }
     }
