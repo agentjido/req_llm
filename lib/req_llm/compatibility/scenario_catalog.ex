@@ -314,7 +314,7 @@ defmodule ReqLLM.Compatibility.ScenarioCatalog do
                        requirements: [:logprobs],
                        proof: :declared,
                        applicability: :focused,
-                       providers: [:openai]},
+                       providers: [:azure, :openai]},
                       {"labels_basic", "request_metadata",
                        requirements: [:request_labels],
                        applicability: :focused,
@@ -462,6 +462,11 @@ defmodule ReqLLM.Compatibility.ScenarioCatalog do
       provider: :openai,
       scenario: "image_transparent_background",
       test_file: "test/coverage/openai/image_options_test.exs"
+    },
+    %{
+      provider: :azure,
+      scenario: "logprobs_non_streaming",
+      test_file: "test/coverage/azure/logprobs_test.exs"
     },
     %{
       provider: :openai,

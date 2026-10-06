@@ -324,6 +324,15 @@ defmodule ReqLLM.Providers.Azure do
       type: {:or, [:atom, :string]},
       doc:
         "Constrains the verbosity of the model's response. Supported values: 'low', 'medium', 'high'. Defaults to 'medium'. (OpenAI models only)"
+    ],
+    openai_logprobs: [
+      type: :boolean,
+      doc: "Whether to return log probabilities of output tokens"
+    ],
+    openai_top_logprobs: [
+      type: {:in, 0..20},
+      doc:
+        "Number of most likely tokens to return at each position (0–20, requires openai_logprobs: true)"
     ]
   ]
 
@@ -1150,22 +1159,69 @@ defmodule ReqLLM.Providers.Azure do
   Delegates to the model-specific formatter (Azure.OpenAI or Azure.Anthropic).
   This handles model-specific requirements like reasoning parameter translation.
 
+  `openai_logprobs` and `openai_top_logprobs` are only sent on Azure OpenAI Chat
+  Completions. Other Azure paths (Responses API, Claude, embeddings, images)
+  emit a warning and drop the options instead of rejecting the request.
+
   Note: This is not yet a formal Provider callback but is called by
   Options.process/4 if the provider exports it.
   """
   def pre_validate_options(operation, model, opts) do
     model_id = effective_model_id(model)
     formatter = get_formatter(model_id, model)
+    {opts, logprobs_warnings} = unsupported_logprobs(operation, formatter, opts)
 
-    if function_exported?(formatter, :pre_validate_options, 3) do
-      call_formatter(formatter, :pre_validate_options, [operation, model, opts])
+    {opts, formatter_warnings} =
+      if function_exported?(formatter, :pre_validate_options, 3) do
+        call_formatter(formatter, :pre_validate_options, [operation, model, opts])
+      else
+        {opts, []}
+      end
+
+    {opts, logprobs_warnings ++ formatter_warnings}
+  end
+
+  @logprobs_option_keys [:openai_logprobs, :openai_top_logprobs]
+  @unsupported_logprobs_warning "openai_logprobs and openai_top_logprobs apply only to Azure OpenAI Chat Completions. This request uses a different Azure path, so logprobs will be ignored."
+
+  defp call_formatter(formatter, function, args) do
+    apply(formatter, function, args)
+  end
+
+  defp unsupported_logprobs(operation, formatter, opts) do
+    if logprobs_requested?(opts) and not azure_openai_chat_completions?(operation, formatter) do
+      {drop_logprobs_options(opts), [@unsupported_logprobs_warning]}
     else
       {opts, []}
     end
   end
 
-  defp call_formatter(formatter, function, args) do
-    apply(formatter, function, args)
+  defp azure_openai_chat_completions?(operation, formatter)
+       when operation in [:chat, :object] do
+    formatter == __MODULE__.OpenAI
+  end
+
+  defp azure_openai_chat_completions?(_operation, _formatter), do: false
+
+  defp logprobs_requested?(opts) do
+    provider_opts = Keyword.get(opts, :provider_options, [])
+
+    Keyword.get(opts, :openai_logprobs) == true or
+      Keyword.get(provider_opts, :openai_logprobs) == true or
+      Keyword.has_key?(opts, :openai_top_logprobs) or
+      Keyword.has_key?(provider_opts, :openai_top_logprobs)
+  end
+
+  defp drop_logprobs_options(opts) do
+    opts = Keyword.drop(opts, @logprobs_option_keys)
+
+    case Keyword.get(opts, :provider_options) do
+      provider_opts when is_list(provider_opts) ->
+        Keyword.put(opts, :provider_options, Keyword.drop(provider_opts, @logprobs_option_keys))
+
+      _ ->
+        opts
+    end
   end
 
   @doc """

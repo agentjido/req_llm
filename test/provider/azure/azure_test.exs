@@ -31,6 +31,8 @@ defmodule ReqLLM.Providers.AzureTest do
   end
 
   describe "prepare_request/4" do
+    import ExUnit.CaptureLog
+
     test "constructs URL with deployment from options" do
       model = traditional_openai_model()
 
@@ -77,6 +79,30 @@ defmodule ReqLLM.Providers.AzureTest do
 
       url_string = URI.to_string(request.url)
       assert url_string =~ "api-version=2023-05-15"
+    end
+
+    test "passes logprobs options to Azure Chat Completions" do
+      {{:ok, request}, log} =
+        with_log(fn -> prepare_chat_with_logprobs(traditional_openai_model()) end)
+
+      refute log =~ "logprobs will be ignored"
+      assert request.options[:json][:logprobs] == true
+      assert request.options[:json][:top_logprobs] == 3
+    end
+
+    test "warns and ignores logprobs options on Responses API requests" do
+      {:ok, model} = ReqLLM.model("azure:gpt-4o")
+      {{:ok, request}, log} = with_log(fn -> prepare_chat_with_logprobs(model) end)
+
+      assert log =~ "openai_logprobs"
+      assert log =~ "Chat Completions"
+      assert log =~ "logprobs will be ignored"
+
+      for key <- [:logprobs, "logprobs", :top_logprobs, "top_logprobs"] do
+        refute Map.has_key?(request.options[:json], key)
+      end
+
+      assert URI.to_string(request.url) =~ "/responses"
     end
 
     test "preserves custom finch from req_http_options" do
@@ -2365,5 +2391,15 @@ defmodule ReqLLM.Providers.AzureTest do
       capabilities: %{chat: true},
       extra: %{}
     }
+  end
+
+  defp prepare_chat_with_logprobs(model) do
+    Azure.prepare_request(
+      :chat,
+      model,
+      "Hello",
+      base_url: "https://my-resource.openai.azure.com/openai",
+      provider_options: [openai_logprobs: true, openai_top_logprobs: 3]
+    )
   end
 end

@@ -194,6 +194,18 @@ defmodule ReqLLM.Providers.Azure.OpenAITest do
 
       assert body[:reasoning_effort] == "high"
     end
+
+    test "includes top-level reasoning_effort" do
+      context = ReqLLM.Context.new([ReqLLM.Context.user("Complex problem")])
+
+      body =
+        Azure.OpenAI.format_request("gpt-5.6-luna", context,
+          stream: false,
+          reasoning_effort: :none
+        )
+
+      assert body[:reasoning_effort] == :none
+    end
   end
 
   describe "format_embedding_request/3" do
@@ -502,6 +514,28 @@ defmodule ReqLLM.Providers.Azure.OpenAITest do
       body = Azure.OpenAI.format_request("gpt-4o", context, opts)
 
       assert body[:parallel_tool_calls] == true
+    end
+
+    test "includes logprobs options" do
+      context = ReqLLM.Context.new([ReqLLM.Context.user("Hello")])
+
+      body =
+        Azure.OpenAI.format_request("gpt-4o", context,
+          stream: false,
+          provider_options: [openai_logprobs: true, openai_top_logprobs: 3]
+        )
+
+      assert body[:logprobs] == true
+      assert body[:top_logprobs] == 3
+    end
+
+    test "omits logprobs options when not provided" do
+      context = ReqLLM.Context.new([ReqLLM.Context.user("Hello")])
+
+      body = Azure.OpenAI.format_request("gpt-4o", context, stream: false)
+
+      refute Map.has_key?(body, :logprobs)
+      refute Map.has_key?(body, :top_logprobs)
     end
   end
 

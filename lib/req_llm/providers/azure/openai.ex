@@ -156,7 +156,7 @@ defmodule ReqLLM.Providers.Azure.OpenAI do
   applies Azure-specific modifications:
   - Removes `model` field (Azure uses deployment-based routing)
   - Adds token limits appropriate for model type (reasoning vs standard)
-  - Adds Azure-specific options (service_tier, reasoning_effort)
+  - Adds Azure-specific options (service_tier, reasoning_effort, logprobs)
 
   Returns a map ready to be JSON-encoded for the Azure OpenAI API.
   """
@@ -186,8 +186,10 @@ defmodule ReqLLM.Providers.Azure.OpenAI do
       |> Map.drop([:model, "model"])
       |> AdapterHelpers.add_token_limits(model_id, opts)
       |> maybe_put(:n, opts[:n])
-      |> maybe_put(:reasoning_effort, provider_opts[:reasoning_effort])
+      |> maybe_put(:reasoning_effort, provider_opts[:reasoning_effort] || opts[:reasoning_effort])
       |> maybe_put(:service_tier, provider_opts[:service_tier])
+      |> maybe_put(:logprobs, provider_opts[:openai_logprobs])
+      |> maybe_put(:top_logprobs, provider_opts[:openai_top_logprobs])
       |> add_verbosity(provider_opts)
       |> add_stream_options(opts)
       |> add_deepseek_thinking(model_id, provider_opts)

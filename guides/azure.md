@@ -77,6 +77,25 @@ Passed via `:provider_options` keyword or as top-level options:
 - **Fallback**: `AZURE_OPENAI_API_KEY` env var
 - **Example**: `api_key: "your-api-key"`
 
+### `openai_logprobs`
+
+- **Type**: Boolean
+- **Purpose**: Return output-token log probabilities from Azure OpenAI Chat Completions
+- **Scope**: Chat Completions only. Catalog specs such as `"azure:gpt-4o"` currently
+  route to the Responses API, which does not send these fields. Use an explicit
+  Chat Completions model spec (`%{provider: :azure, id: "gpt-4o"}`) so the request
+  hits `/chat/completions`. Other Azure paths (Responses, Claude, embeddings,
+  images) continue without logprobs after a warning.
+- **Example**: `provider_options: [openai_logprobs: true]`
+
+### `openai_top_logprobs`
+
+- **Type**: Integer from 0 to 20
+- **Purpose**: Return the most likely tokens at each output position
+- **Requires**: `openai_logprobs: true`
+- **Scope**: Same Chat Completions limitation as `openai_logprobs`
+- **Example**: `provider_options: [openai_logprobs: true, openai_top_logprobs: 3]`
+
 ## Examples
 
 ### Basic Usage (OpenAI)
@@ -88,6 +107,24 @@ Passed via `:provider_options` keyword or as top-level options:
   base_url: "https://my-resource.openai.azure.com/openai",
   deployment: "my-gpt4-deployment"
 )
+```
+
+### Chat Completions logprobs
+
+Catalog specs such as `"azure:gpt-4o"` may route to the Responses API. Pass an
+explicit Chat Completions model spec so `openai_logprobs` reaches
+`/chat/completions`:
+
+```elixir
+{:ok, response} = ReqLLM.generate_text(
+  %{provider: :azure, id: "gpt-4o"},
+  "Reply with one word.",
+  base_url: "https://my-resource.openai.azure.com/openai",
+  deployment: "my-gpt4-deployment",
+  provider_options: [openai_logprobs: true, openai_top_logprobs: 3]
+)
+
+response.provider_meta[:logprobs]
 ```
 
 ### Basic Usage (Anthropic Claude)

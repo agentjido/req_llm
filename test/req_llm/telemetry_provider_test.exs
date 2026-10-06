@@ -118,8 +118,8 @@ defmodule ReqLLM.TelemetryProviderTest do
       expected: %{
         requested_mode: :enabled,
         requested_effort: :high,
-        effective_mode: :disabled,
-        effective_effort: nil
+        effective_mode: :enabled,
+        effective_effort: :high
       }
     },
     %{

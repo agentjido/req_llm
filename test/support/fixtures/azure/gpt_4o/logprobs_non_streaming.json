@@ -1,0 +1,162 @@
+{
+  "model_spec": "azure:gpt-4o",
+  "provider": "azure",
+  "request": {
+    "body": {
+      "b64": "eyJsb2dwcm9icyI6dHJ1ZSwibWF4X3Rva2VucyI6MywibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJSZXBseSB3aXRoIG9uZSB3b3JkLiIsInJvbGUiOiJ1c2VyIn1dLCJuIjoxLCJzdHJlYW0iOmZhbHNlLCJ0b3BfbG9ncHJvYnMiOjN9"
+    },
+    "canonical_json": {
+      "logprobs": true,
+      "max_tokens": 3,
+      "messages": [
+        {
+          "content": "Reply with one word.",
+          "role": "user"
+        }
+      ],
+      "n": 1,
+      "stream": false,
+      "top_logprobs": 3
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "api-key": "[REDACTED:api-key]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.7.4"
+      ]
+    },
+    "method": "post",
+    "url": "https://fixture.openai.azure.com/openai/deployments/gpt-4o/chat/completions?api-version=2025-03-01-preview"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "content_filter_results": {},
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": {
+            "content": [
+              {
+                "bytes": [
+                  79,
+                  107,
+                  97,
+                  121
+                ],
+                "logprob": -0.43864789605140686,
+                "token": "Okay",
+                "top_logprobs": [
+                  {
+                    "bytes": [
+                      79,
+                      107,
+                      97,
+                      121
+                    ],
+                    "logprob": -0.43864789605140686,
+                    "token": "Okay"
+                  },
+                  {
+                    "bytes": [
+                      85,
+                      110,
+                      100,
+                      101,
+                      114
+                    ],
+                    "logprob": -1.4386478662490845,
+                    "token": "Under"
+                  },
+                  {
+                    "bytes": [
+                      83,
+                      117,
+                      114,
+                      101
+                    ],
+                    "logprob": -2.188647985458374,
+                    "token": "Sure"
+                  }
+                ]
+              },
+              {
+                "bytes": [
+                  46
+                ],
+                "logprob": -0.0010731808142736554,
+                "token": ".",
+                "top_logprobs": [
+                  {
+                    "bytes": [
+                      46
+                    ],
+                    "logprob": -0.0010731808142736554,
+                    "token": "."
+                  },
+                  {
+                    "bytes": [
+                      33
+                    ],
+                    "logprob": -6.876073360443115,
+                    "token": "!"
+                  },
+                  {
+                    "bytes": null,
+                    "logprob": -10.376072883605957,
+                    "token": "<|end|>"
+                  }
+                ]
+              }
+            ],
+            "refusal": null
+          },
+          "message": {
+            "annotations": [],
+            "content": "Okay.",
+            "refusal": null,
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1791250012,
+      "model": "gpt-4o-2024-08-06",
+      "object": "chat.completion",
+      "prompt_filter_results": [
+        {
+          "content_filter_results": {},
+          "prompt_index": 0
+        }
+      ],
+      "service_tier": "default",
+      "system_fingerprint": "fp_91c2c6d730",
+      "usage": {
+        "completion_tokens": 2,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "prompt_tokens": 12,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 0
+        },
+        "total_tokens": 14
+      }
+    },
+    "headers": {
+      "content-type": [
+        "application/json"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}
