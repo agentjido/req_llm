@@ -217,12 +217,14 @@ is required.
 See the [OpenAI Files API reference](https://platform.openai.com/docs/api-reference/files)
 for current purposes, retention rules, and service limits.
 
-## Dual API Architecture
+## API Architecture
 
-OpenAI provider automatically routes between two APIs based on model metadata:
+OpenAI text generation automatically routes between two APIs based on model metadata:
 
 - **Chat Completions API**: Standard GPT models (gpt-4o, gpt-4-turbo, gpt-3.5-turbo)
 - **Responses API**: Reasoning models (o1, o3, o4-mini, gpt-5) with extended thinking
+
+Evaluation is a separate operation. Eligible models use the Decisions API.
 
 ### Chat Completions responsibilities
 
@@ -701,6 +703,11 @@ OpenAI provides comprehensive usage data including:
 - `reasoning_tokens` - For reasoning models (o1, o3, gpt-5)
 - `cached_tokens` - Cached input tokens
 - Standard input/output/total tokens and costs
+- `compute_units` - Decisions work units when the service reports them
+
+A positive or invalid `compute_units` value makes billing usage incomplete. ReqLLM keeps the raw
+value, but it does not calculate a total cost until LLMDB has a supported tariff. A missing or zero
+value does not change the current token-cost behavior.
 
 ### Web Search (Responses API)
 
@@ -1034,16 +1041,50 @@ uses the native session interface and requires handling acknowledgement events.
 See the [rollout checklist](openai-devday-rollout.md) and
 [OpenAI multi-agent guide](https://developers.openai.com/api/docs/guides/responses-multi-agent).
 
-## Decisions API rollout status
+## Decisions API
 
-OpenAI announced a Luna-based Decisions API in limited preview on September 29,
-2026. It accepts text or image context and answers questions with finite
-predefined answers. This rollout requires its official technical specification
-before implementation. OpenAI Decisions support is not available yet.
+Use `ReqLLM.evaluate/4` with a model returned by `ReqLLM.evaluation_models/0`:
 
-The user removed Decisions support as a release requirement.
-[Issue #1062](https://github.com/agentjido/req_llm/issues/1062) tracks it.
-See the [direct announcement](https://openai.com/index/devday-2026-recap/).
+```elixir
+questions = %{
+  department: %{
+    type: :choice,
+    instructions: "Which team should handle this?",
+    criteria: %{billing: "Billing and refunds", support: "Other requests"}
+  },
+  severity: %{
+    type: :score,
+    instructions: "How severe is this?",
+    criteria: ["low", "medium", "high"]
+  },
+  urgent: %{type: :boolean, instructions: "Is this urgent?"}
+}
+
+{:ok, result} =
+  ReqLLM.evaluate("openai:gpt-6-luna", %{ticket: "Refund me today"}, questions,
+    provider_options: [openai: [safety_identifier: "tenant-123"]]
+  )
+
+result.object["urgent"]
+#=> %{"type" => "boolean", "probability" => 0.91}
+```
+
+The first release accepts string, map, and list state. Maps and lists become stable JSON text.
+Supported question types are boolean, choice, and score. Multimodal state, streaming, Batch API
+submission, and OpenAI Evals are not part of this interface.
+
+LLMDB is the model eligibility source. ReqLLM does not keep a second model-ID list. A model must
+have `evaluate: true` and the OpenAI Decisions execution contract. Calls with excluded or invalid
+records fail before authentication and HTTP work.
+
+Answers remain a map keyed by the question name. Choice values keep their string or boolean type,
+probability lists stay available, and a provider refusal appears as `%{"type" => "refusal"}`. The
+complete provider body remains in `response.provider_meta.raw_response`.
+
+`safety_identifier` is optional and must be a string with at most 128 characters. Put it under the
+OpenAI provider namespace as shown above.
+
+See the [OpenAI Decisions API reference](https://developers.openai.com/api/reference/resources/decisions/methods/create).
 
 ## Prompt cache diagnostics
 

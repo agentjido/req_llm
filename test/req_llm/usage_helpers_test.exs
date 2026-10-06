@@ -230,6 +230,17 @@ defmodule ReqLLM.UsageHelpersTest do
       assert merged.total_tokens == 12
     end
 
+    test "merge keeps the largest numeric compute unit count" do
+      merged =
+        ReqLLM.Usage.merge(
+          %{compute_units: "2", billing_usage_complete: false},
+          %{compute_units: 5, billing_usage_complete: false}
+        )
+
+      assert merged.compute_units == 5
+      refute merged.billing_usage_complete
+    end
+
     test "callers can add usage from separate model calls" do
       calls = [
         ReqLLM.Usage.merge(%{}, %{input_tokens: "3", output_tokens: "1"}),

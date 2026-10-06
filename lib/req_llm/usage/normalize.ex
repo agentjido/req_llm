@@ -14,6 +14,7 @@ defmodule ReqLLM.Usage.Normalize do
   @spec normalize(map()) :: map()
   def normalize(usage) when is_map(usage) do
     input_includes_cached = detect_input_includes_cached(usage)
+    compute_units = MapAccess.get_raw(usage, :compute_units)
 
     input =
       (first_present(usage, [
@@ -50,6 +51,7 @@ defmodule ReqLLM.Usage.Normalize do
     canonical = %{
       billing_usage_complete:
         MapAccess.get_raw(usage, :billing_usage_complete) in [nil, true] and
+          compute_units_billable?(compute_units) and
           cache_counts_consistent?(usage, input, input_includes_cached) and
           Tool.valid_usage?(MapAccess.get_raw(usage, :tool_usage)) and
           Image.valid_usage?(MapAccess.get_raw(usage, :image_usage)),
@@ -85,16 +87,29 @@ defmodule ReqLLM.Usage.Normalize do
       reasoning_tokens: reasoning
     }
 
-    usage
-    |> Map.take([
-      :cache_storage_token_hours,
-      "cache_storage_token_hours",
-      :input_tokens_details,
-      "input_tokens_details",
-      :output_tokens_details,
-      "output_tokens_details"
-    ])
-    |> Map.merge(canonical)
+    retained =
+      usage
+      |> Map.take([
+        :cache_storage_token_hours,
+        "cache_storage_token_hours",
+        :input_tokens_details,
+        "input_tokens_details",
+        :output_tokens_details,
+        "output_tokens_details"
+      ])
+      |> Map.merge(canonical)
+
+    if is_nil(compute_units) do
+      retained
+    else
+      Map.put(retained, :compute_units, normalize_counter(compute_units))
+    end
+  end
+
+  defp compute_units_billable?(nil), do: true
+
+  defp compute_units_billable?(value) do
+    normalize_counter(value) == 0
   end
 
   defp detail_count(usage, field, key) do

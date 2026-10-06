@@ -1,6 +1,6 @@
 defmodule ReqLLM.Evaluation do
   @moduledoc """
-  Evaluates one text or JSON state against named questions.
+  Evaluates one text or JSON-compatible state against named questions.
 
   This is a model call, not a test run. Providers handle their own request and
   answer formats. An evaluation model does not need to support chat generation.
@@ -45,9 +45,12 @@ defmodule ReqLLM.Evaluation do
 
   Choice and score answers may include probabilities and confidence. Providers
   may support more question types. OpenRouter evaluations accept routing preferences
-  such as `provider_options: [openrouter_provider: %{zdr: true}]`. The response stores
-  named answers in `object` with string keys. `provider_meta.raw_response` keeps the
-  original provider data.
+  such as `provider_options: [openrouter_provider: %{zdr: true}]`. Eligible OpenAI
+  models use the Decisions API. They support boolean, choice, and score questions;
+  `provider_options: [openai: [safety_identifier: "tenant-123"]]` adds the optional
+  safety identifier. OpenAI refusals stay in the result as `%{"type" => "refusal"}`.
+  The response stores named answers in `object` with string keys.
+  `provider_meta.raw_response` keeps the original provider data.
   """
   @spec evaluate(ReqLLM.model_input(), String.t() | map() | list(), map(), keyword()) ::
           {:ok, Response.t()} | {:error, term()}
@@ -251,6 +254,9 @@ defmodule ReqLLM.Evaluation do
 
       :openrouter ->
         contract?(execution, "openrouter_decisions", "/api/alpha/decisions")
+
+      :openai ->
+        contract?(execution, "openai_decisions", "/decisions")
 
       _ ->
         false

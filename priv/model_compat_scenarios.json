@@ -791,15 +791,13 @@
       }
     },
     "cohere:c4ai-aya-expanse-8b": {
-      "catalog_status": "present",
-      "declared_operations": [
-        "text"
-      ],
+      "catalog_status": "missing",
+      "declared_operations": [],
       "model": "c4ai-aya-expanse-8b",
       "provider": "cohere",
       "surfaces": {
         "cohere.unrecorded_text": {
-          "declaration": "declared",
+          "declaration": "unknown",
           "operation": "text",
           "provider": "cohere",
           "scenarios": {
@@ -851,15 +849,13 @@
       }
     },
     "cohere:c4ai-aya-vision-8b": {
-      "catalog_status": "present",
-      "declared_operations": [
-        "text"
-      ],
+      "catalog_status": "missing",
+      "declared_operations": [],
       "model": "c4ai-aya-vision-8b",
       "provider": "cohere",
       "surfaces": {
         "cohere.unrecorded_text": {
-          "declaration": "declared",
+          "declaration": "unknown",
           "operation": "text",
           "provider": "cohere",
           "scenarios": {
@@ -22237,15 +22233,13 @@
       }
     },
     "zenmux:qwen/qwen3-14b": {
-      "catalog_status": "present",
-      "declared_operations": [
-        "text"
-      ],
+      "catalog_status": "missing",
+      "declared_operations": [],
       "model": "qwen/qwen3-14b",
       "provider": "zenmux",
       "surfaces": {
         "zenmux.chat_completions": {
-          "declaration": "declared",
+          "declaration": "unknown",
           "operation": "text",
           "provider": "zenmux",
           "scenarios": {
@@ -22269,15 +22263,13 @@
       }
     },
     "zenmux:qwen/qwen3-235b-a22b-2507": {
-      "catalog_status": "present",
-      "declared_operations": [
-        "text"
-      ],
+      "catalog_status": "missing",
+      "declared_operations": [],
       "model": "qwen/qwen3-235b-a22b-2507",
       "provider": "zenmux",
       "surfaces": {
         "zenmux.chat_completions": {
-          "declaration": "declared",
+          "declaration": "unknown",
           "operation": "text",
           "provider": "zenmux",
           "scenarios": {
@@ -22301,15 +22293,13 @@
       }
     },
     "zenmux:qwen/qwen3-235b-a22b-thinking-2507": {
-      "catalog_status": "present",
-      "declared_operations": [
-        "text"
-      ],
+      "catalog_status": "missing",
+      "declared_operations": [],
       "model": "qwen/qwen3-235b-a22b-thinking-2507",
       "provider": "zenmux",
       "surfaces": {
         "zenmux.chat_completions": {
-          "declaration": "declared",
+          "declaration": "unknown",
           "operation": "text",
           "provider": "zenmux",
           "scenarios": {
@@ -22333,15 +22323,13 @@
       }
     },
     "zenmux:qwen/qwen3-coder": {
-      "catalog_status": "present",
-      "declared_operations": [
-        "text"
-      ],
+      "catalog_status": "missing",
+      "declared_operations": [],
       "model": "qwen/qwen3-coder",
       "provider": "zenmux",
       "surfaces": {
         "zenmux.chat_completions": {
-          "declaration": "declared",
+          "declaration": "unknown",
           "operation": "text",
           "provider": "zenmux",
           "scenarios": {

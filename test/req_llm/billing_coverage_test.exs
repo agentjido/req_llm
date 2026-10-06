@@ -154,6 +154,23 @@ defmodule ReqLLM.BillingCoverageTest do
     assert Cost.apply(usage, token_model()).pricing.status == :unknown
   end
 
+  test "unpriced compute units keep billing unknown" do
+    model = token_model()
+
+    for compute_units <- [1, "1", "unknown"] do
+      usage =
+        Normalize.normalize(%{
+          input_tokens: 100,
+          output_tokens: 10,
+          compute_units: compute_units
+        })
+
+      refute usage.billing_usage_complete
+      assert Cost.apply(usage, model).pricing.status == :unknown
+      refute Map.has_key?(Cost.apply(usage, model), :total_cost)
+    end
+  end
+
   test "false cache counts and claimed completeness cannot produce a price" do
     for field <- [:cached_tokens, :cacheReadInputTokens, "cacheWriteInputTokens"],
         value <- [false, "bad", -1, 2.5],

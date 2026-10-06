@@ -1560,7 +1560,8 @@ defmodule ReqLLM do
   @doc """
   Evaluates one state against named questions with an evaluation model.
 
-  This call does not use chat or `generate_object/4`.
+  This call does not use chat or `generate_object/4`. OpenAI evaluation models
+  use the Decisions API and accept text or JSON-compatible state.
   """
   @spec evaluate(model_input(), String.t() | map() | list(), map(), keyword()) ::
           {:ok, ReqLLM.Response.t()} | {:error, term()}
@@ -1576,9 +1577,9 @@ defmodule ReqLLM do
   @doc """
   Lists model specs with a callable evaluation adapter.
 
-  This includes confirmed OpenRouter Jev IDs missing from older LLMDB releases.
-  Use this list to select a model for `evaluate/4`. A full inline model spec
-  can describe another unlisted model with a supported execution contract.
+  Use this list to select a model for `evaluate/4`. LLMDB capability and
+  execution metadata control model eligibility. A full inline model spec can
+  describe another unlisted model with a supported execution contract.
   """
   @spec evaluation_models() :: [String.t()]
   defdelegate evaluation_models(), to: Evaluation, as: :models

@@ -21,5 +21,15 @@ defmodule ReqLLM.EvaluationFilterTest do
              )
 
     assert message =~ "unavailable under the current catalog filter"
+
+    assert {:error, %ReqLLM.Error.Invalid.Parameter{parameter: openai_message}} =
+             ReqLLM.evaluate(
+               "openai:gpt-6-luna",
+               "text",
+               %{urgent: %{type: :boolean, instructions: "Is this urgent?"}},
+               req_http_options: [plug: fn _conn -> flunk("unexpected HTTP request") end]
+             )
+
+    assert openai_message =~ "unavailable under the current catalog filter"
   end
 end

@@ -22,7 +22,8 @@ defmodule ReqLLM.Usage do
     :cache_creation_tokens,
     :reasoning,
     :cached_input,
-    :cache_creation
+    :cache_creation,
+    :compute_units
   ]
 
   @zero_usage %{

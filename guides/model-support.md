@@ -32,8 +32,8 @@ provider-native feature and are not consulted by request routing.
 | --- | ---: |
 | First-class | 6 |
 | Best-effort | 0 |
-| Experimental | 599 |
-| Unsupported | 91 |
+| Experimental | 601 |
+| Unsupported | 89 |
 | **Total recorded surfaces** | **696** |
 
 ## anthropic
@@ -70,9 +70,9 @@ provider-native feature and are not consulted by request routing.
 | Model | Operation | Execution surface | Input → output | Tier | Baseline | Checked | Reason |
 | --- | --- | --- | --- | --- | ---: | --- | --- |
 | `c4ai-aya-expanse-32b` | `text` | `cohere.unrecorded_text` | text → text | Unsupported | 0/5 | 2026-05-29T23:28:02Z | basic failed at assertion |
-| `c4ai-aya-expanse-8b` | `text` | `cohere.unrecorded_text` | text → text | Unsupported | 0/5 | 2026-05-29T23:28:02Z | basic failed at assertion |
+| `c4ai-aya-expanse-8b` | `text` | `cohere.unrecorded_text` | text → text | Experimental | 0/5 | 2026-05-29T23:28:02Z | surface declaration unknown |
 | `c4ai-aya-vision-32b` | `text` | `cohere.unrecorded_text` | text → text | Unsupported | 0/5 | 2026-05-29T23:28:02Z | basic failed at assertion |
-| `c4ai-aya-vision-8b` | `text` | `cohere.unrecorded_text` | text → text | Unsupported | 0/5 | 2026-05-29T23:28:02Z | basic failed at assertion |
+| `c4ai-aya-vision-8b` | `text` | `cohere.unrecorded_text` | text → text | Experimental | 0/5 | 2026-05-29T23:28:02Z | surface declaration unknown |
 | `command-a-03-2025` | `text` | `cohere.unrecorded_text` | text → text | Unsupported | 0/5 | 2026-05-29T23:28:02Z | basic failed at assertion |
 | `command-a-reasoning-08-2025` | `text` | `cohere.unrecorded_text` | text → text | Unsupported | 0/5 | 2026-05-29T23:28:02Z | basic failed at assertion |
 | `command-a-translate-08-2025` | `text` | `cohere.unrecorded_text` | text → text | Unsupported | 0/5 | 2026-05-29T23:28:02Z | basic failed at assertion |
@@ -772,10 +772,10 @@ provider-native feature and are not consulted by request routing.
 | `openai/o4-mini` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
 | `openai/text-embedding-3-large` | `text` | `zenmux.unrecorded_text` | text → text | Unsupported | 0/5 | 2026-05-30T00:10:17Z | basic failed at provider_drift |
 | `openai/text-embedding-3-small` | `text` | `zenmux.unrecorded_text` | text → text | Unsupported | 0/5 | 2026-05-30T00:10:17Z | basic failed at provider_drift |
-| `qwen/qwen3-14b` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
-| `qwen/qwen3-235b-a22b-2507` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
-| `qwen/qwen3-235b-a22b-thinking-2507` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
-| `qwen/qwen3-coder` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
+| `qwen/qwen3-14b` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | surface declaration unknown |
+| `qwen/qwen3-235b-a22b-2507` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | surface declaration unknown |
+| `qwen/qwen3-235b-a22b-thinking-2507` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | surface declaration unknown |
+| `qwen/qwen3-coder` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | surface declaration unknown |
 | `qwen/qwen3-coder-plus` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
 | `qwen/qwen3-max` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
 | `qwen/qwen3-vl-plus` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |

@@ -1104,6 +1104,32 @@ defmodule ReqLLM.Step.UsageTest do
       assert is_number(response_usage.total_cost)
     end
 
+    test "preserves compute units and does not price incomplete usage" do
+      model = %LLMDB.Model{
+        provider: :openai,
+        id: "gpt-6-luna",
+        pricing: pricing_from_cost(%{input: 0.01, output: 0.03})
+      }
+
+      request = mock_request(model: model)
+
+      response_body = %ReqLLM.Response{
+        id: "decision-id",
+        model: "gpt-6-luna",
+        context: ReqLLM.Context.new(),
+        object: %{"urgent" => %{"type" => "boolean", "probability" => 0.9}},
+        usage: ReqLLM.Usage.normalize(%{input_tokens: 100, output_tokens: 5, compute_units: 2})
+      }
+
+      {_request, updated_response} = Usage.handle({request, mock_response(response_body)})
+      response_usage = updated_response.body.usage
+
+      assert response_usage.compute_units == 2
+      refute response_usage.billing_usage_complete
+      assert response_usage.pricing.status == :unknown
+      refute Map.has_key?(response_usage, :total_cost)
+    end
+
     test "handles Response struct with malformed usage gracefully" do
       {:ok, model} = ReqLLM.model("openai:gpt-4")
       request = mock_request(model: model)

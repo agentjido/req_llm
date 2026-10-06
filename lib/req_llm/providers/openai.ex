@@ -1,6 +1,7 @@
 defmodule ReqLLM.Providers.OpenAI do
   @moduledoc """
-  OpenAI provider implementation with multi-driver architecture for Chat, Responses, and Images APIs.
+  OpenAI provider implementation with multi-driver architecture for Chat, Responses, Decisions,
+  and Images APIs.
 
   ## Architecture
 
@@ -12,6 +13,9 @@ defmodule ReqLLM.Providers.OpenAI do
 
   - **ResponsesAPI** (`ReqLLM.Providers.OpenAI.ResponsesAPI`) - Handles `/v1/responses` endpoint
     for models such as GPT-4.1, GPT-4o, o-series, and GPT-5.
+
+  - **DecisionsAPI** (`ReqLLM.Providers.OpenAI.DecisionsAPI`) - Handles `/v1/decisions` for
+    provider-neutral evaluation calls.
 
   - **ImagesAPI** (`ReqLLM.Providers.OpenAI.ImagesAPI`) - Handles `/v1/images/generations` endpoint
     for image generation models (DALL-E 2, DALL-E 3, gpt-image-*). A thin adapter over
@@ -313,6 +317,10 @@ defmodule ReqLLM.Providers.OpenAI do
         "Chat Completions web search configuration, forwarded as the `web_search_options` body field. " <>
           "Required to enable web search on `*-search-preview` models; pass `%{}` for defaults. " <>
           "The Responses API takes web search as a tool instead (`tools: [%{\"type\" => \"web_search\"}]`)."
+    ],
+    safety_identifier: [
+      type: :string,
+      doc: "Stable safety identifier for OpenAI Decisions requests, with at most 128 characters"
     ]
   ]
 
@@ -538,6 +546,58 @@ defmodule ReqLLM.Providers.OpenAI do
 
       :tool_strict ->
         prepare_strict_tool_request(model_spec, prompt, compiled_schema, opts)
+    end
+  end
+
+  def prepare_request(:evaluate, model_spec, %{state: state, questions: questions}, opts) do
+    with {:ok, model} <- ReqLLM.model(model_spec),
+         execution = model.execution.evaluate,
+         safety_identifier = decisions_safety_identifier(opts),
+         {:ok, body, contract} <-
+           ReqLLM.Providers.OpenAI.DecisionsAPI.compile_request(
+             execution.provider_model_id,
+             state,
+             questions,
+             safety_identifier
+           ) do
+      api_mod = ReqLLM.Providers.OpenAI.DecisionsAPI
+      timeout = get_timeout_for_operation(:evaluate, opts)
+      http_opts = Keyword.get(opts, :req_http_options, [])
+
+      req_keys =
+        supported_provider_options() ++
+          [
+            :operation,
+            :model,
+            :provider_options,
+            :api_mod,
+            :decisions_body,
+            :base_url
+          ]
+
+      request =
+        Req.new(
+          [
+            url: api_mod.path(),
+            method: :post,
+            receive_timeout: timeout
+          ] ++ ReqLLM.Provider.Defaults.merge_finch_options(http_opts, pool_timeout: timeout)
+        )
+        |> Req.Request.register_options(req_keys)
+        |> Req.Request.merge_options(
+          Keyword.take(opts, req_keys) ++
+            [
+              operation: :evaluate,
+              model: execution.provider_model_id,
+              base_url: Keyword.get(opts, :base_url, base_url()),
+              api_mod: api_mod,
+              decisions_body: body
+            ]
+        )
+        |> Req.Request.put_private(api_mod.request_private_key(), contract)
+        |> attach(model, opts)
+
+      {:ok, request}
     end
   end
 
@@ -970,6 +1030,7 @@ defmodule ReqLLM.Providers.OpenAI do
     case body do
       %{"object" => "response"} -> ReqLLM.Providers.OpenAI.ResponsesAPI
       %{"object" => "chat.completion"} -> ReqLLM.Providers.OpenAI.ChatAPI
+      %{"answers" => _answers} -> ReqLLM.Providers.OpenAI.DecisionsAPI
       %ReqLLM.Response{} -> ReqLLM.Providers.OpenAI.ChatAPI
       _ -> ReqLLM.Providers.OpenAI.ChatAPI
     end
@@ -982,7 +1043,22 @@ defmodule ReqLLM.Providers.OpenAI do
   # at the dispatcher is cheap and avoids brittle URL-path inference.
   defp api_type_for_mod(ReqLLM.Providers.OpenAI.ResponsesAPI), do: "responses"
   defp api_type_for_mod(ReqLLM.Providers.OpenAI.ChatAPI), do: "chat_completions"
+  defp api_type_for_mod(ReqLLM.Providers.OpenAI.DecisionsAPI), do: "decisions"
   defp api_type_for_mod(_), do: nil
+
+  defp decisions_safety_identifier(opts) do
+    case Keyword.get(opts, :provider_options, []) do
+      provider_options when is_list(provider_options) ->
+        Keyword.get(provider_options, :safety_identifier)
+
+      provider_options when is_map(provider_options) ->
+        Map.get(provider_options, :safety_identifier) ||
+          Map.get(provider_options, "safety_identifier")
+
+      _provider_options ->
+        nil
+    end
+  end
 
   defp stamp_api_type_on_response(resp, nil), do: resp
 

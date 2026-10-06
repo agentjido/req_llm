@@ -71,4 +71,49 @@ defmodule ReqLLM.Usage.NormalizeTest do
       assert Normalize.normalize(anthropic).input_includes_cached == false
     end
   end
+
+  describe "compute_units" do
+    test "keeps zero compute units without making billing incomplete" do
+      normalized =
+        Normalize.normalize(%{
+          input_tokens: 10,
+          output_tokens: 2,
+          compute_units: 0
+        })
+
+      assert normalized.compute_units == 0
+      assert normalized.billing_usage_complete
+    end
+
+    test "keeps positive compute units and marks billing incomplete" do
+      normalized =
+        Normalize.normalize(%{
+          "input_tokens" => 10,
+          "output_tokens" => 2,
+          "compute_units" => 7
+        })
+
+      assert normalized.compute_units == 7
+      refute normalized.billing_usage_complete
+      refute Normalize.normalize(normalized).billing_usage_complete
+    end
+
+    test "keeps malformed compute units and marks billing incomplete" do
+      normalized =
+        Normalize.normalize(%{
+          input_tokens: 10,
+          output_tokens: 2,
+          compute_units: "unknown"
+        })
+
+      assert normalized.compute_units == "unknown"
+      refute normalized.billing_usage_complete
+    end
+
+    test "does not add compute units when the provider omits them" do
+      normalized = Normalize.normalize(%{input_tokens: 10, output_tokens: 2})
+
+      refute Map.has_key?(normalized, :compute_units)
+    end
+  end
 end

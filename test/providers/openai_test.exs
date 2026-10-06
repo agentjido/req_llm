@@ -2198,4 +2198,78 @@ defmodule ReqLLM.Providers.OpenAITest do
       assert deferred_encoded["defer_loading"] == true
     end
   end
+
+  describe "Decisions routing" do
+    test "provider schema accepts safety identifiers" do
+      schema = OpenAI.provider_schema()
+
+      assert {:ok, _opts} = NimbleOptions.validate([safety_identifier: "tenant-123"], schema)
+      assert {:error, _error} = NimbleOptions.validate([safety_identifier: 123], schema)
+    end
+
+    test "raw response detection selects Decisions after existing object discriminators" do
+      decisions = %{
+        "model" => "gpt-6-luna",
+        "answers" => [%{"name" => "urgent", "type" => "predicate", "probability" => 0.9}],
+        "usage" => %{"input_tokens" => 1, "output_tokens" => 1}
+      }
+
+      request = %Req.Request{options: %{model: "gpt-6-luna"}, private: %{}}
+      response = %Req.Response{status: 200, body: decisions}
+      {_request, decoded} = OpenAI.decode_response({request, response})
+
+      assert decoded.body.object["urgent"] == %{"type" => "boolean", "probability" => 0.9}
+      assert decoded.body.provider_meta["api_type"] == "decisions"
+
+      chat = %{
+        "object" => "chat.completion",
+        "id" => "chat-1",
+        "model" => "gpt-4o",
+        "answers" => [],
+        "choices" => [
+          %{
+            "message" => %{"role" => "assistant", "content" => "chat"},
+            "finish_reason" => "stop"
+          }
+        ],
+        "usage" => %{"prompt_tokens" => 1, "completion_tokens" => 1, "total_tokens" => 2}
+      }
+
+      chat_request = %Req.Request{
+        options: %{model: "gpt-4o", context: ReqLLM.Context.new()},
+        private: %{}
+      }
+
+      {_request, chat_decoded} =
+        OpenAI.decode_response({chat_request, %Req.Response{status: 200, body: chat}})
+
+      assert ReqLLM.Response.text(chat_decoded.body) == "chat"
+      assert chat_decoded.body.provider_meta["api_type"] == "chat_completions"
+
+      responses = %{
+        "object" => "response",
+        "id" => "resp-1",
+        "model" => "gpt-5",
+        "answers" => [],
+        "output" => [
+          %{
+            "type" => "message",
+            "content" => [%{"type" => "output_text", "text" => "response"}]
+          }
+        ],
+        "usage" => %{"input_tokens" => 1, "output_tokens" => 1}
+      }
+
+      responses_request = %Req.Request{
+        options: %{model: "gpt-5", context: ReqLLM.Context.new()},
+        private: %{}
+      }
+
+      {_request, responses_decoded} =
+        OpenAI.decode_response({responses_request, %Req.Response{status: 200, body: responses}})
+
+      assert ReqLLM.Response.text(responses_decoded.body) == "response"
+      assert responses_decoded.body.provider_meta["api_type"] == "responses"
+    end
+  end
 end

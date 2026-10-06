@@ -220,7 +220,7 @@ usage = ReqLLM.StreamResponse.usage(response)
 
 Evaluation models answer named questions about one text or JSON state. They do
 not need to support chat. `ReqLLM.evaluation_models/0` lists specs that
-ReqLLM can call. Set `TYPESAFE_API_KEY` or `OPENROUTER_API_KEY` in `.env`:
+ReqLLM can call. Set `TYPESAFE_API_KEY`, `OPENROUTER_API_KEY`, or `OPENAI_API_KEY` in `.env`:
 
 ```elixir
 questions = %{
@@ -235,6 +235,10 @@ questions = %{
 {:ok, result} = ReqLLM.evaluate("typesafe:jev-latest", %{message: "Refund me today"}, questions)
 {:ok, routed} = ReqLLM.evaluate("openrouter:typesafe/jev-1.13", "Refund me today", questions)
 {:ok, moving} = ReqLLM.evaluate("openrouter:~typesafe/jev-latest", "Refund me today", questions)
+{:ok, decision} =
+  ReqLLM.evaluate("openai:gpt-6-luna", %{message: "Refund me today"}, questions,
+    provider_options: [openai: [safety_identifier: "tenant-123"]]
+  )
 result.object["department"]["choice"]
 result.object["department"]["probabilities"]
 result.object["urgent"]["probability"]
@@ -248,8 +252,11 @@ the common ReqLLM name for that question. The moving OpenRouter ID keeps its
 leading `~` in the request. An unknown model ID requires a full inline model
 spec with evaluation capability and execution metadata. Catalog models without
 evaluation support and gateways without an adapter return an error before HTTP.
-See [OpenRouter](guides/openrouter.md) for the gateway contract and an inline
-model example.
+OpenAI Decisions accepts string, map, and list state with boolean, choice, and score questions.
+It returns refusals as `%{"type" => "refusal"}`. If OpenAI reports positive compute units without a
+known tariff, ReqLLM keeps the count and leaves the cost unknown.
+See [OpenRouter](guides/openrouter.md) for the gateway contract and an inline model example. See
+[OpenAI](guides/openai.md) for the Decisions contract.
 Use `generate_object/4` for text models that generate JSON objects; it is not a
 Jev endpoint. Jev does not support text generation or streaming.
 
