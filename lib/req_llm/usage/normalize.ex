@@ -109,7 +109,7 @@ defmodule ReqLLM.Usage.Normalize do
   defp compute_units_billable?(nil), do: true
 
   defp compute_units_billable?(value) do
-    normalize_counter(value) == 0
+    normalize_counter(value) === 0
   end
 
   defp detail_count(usage, field, key) do

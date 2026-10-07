@@ -157,7 +157,7 @@ defmodule ReqLLM.BillingCoverageTest do
   test "unpriced compute units keep billing unknown" do
     model = token_model()
 
-    for compute_units <- [1, "1", "unknown"] do
+    for compute_units <- [1, "1", "unknown", -1, 0.0] do
       usage =
         Normalize.normalize(%{
           input_tokens: 100,

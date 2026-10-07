@@ -172,11 +172,17 @@ defmodule Provider.OpenAI.DecisionsAPIUnitTest do
 
     matching = matching_answers()
 
+    duplicate_choice_probability =
+      matching
+      |> get_in([Access.at(0), "probabilities"])
+      |> then(fn [billing, support] -> [billing, billing, support] end)
+
     for answers <- [
           Enum.drop(matching, -1),
           Enum.reverse(matching),
           List.update_at(matching, 0, &Map.put(&1, "type", "score")),
           List.update_at(matching, 0, &Map.put(&1, "choice", "unknown")),
+          put_in(matching, [Access.at(0), "probabilities"], duplicate_choice_probability),
           List.update_at(matching, 1, &Map.put(&1, "score", 10.0))
         ] do
       {_req, error} =
@@ -195,7 +201,7 @@ defmodule Provider.OpenAI.DecisionsAPIUnitTest do
     end
   end
 
-  test "structural decoding accepts valid raw data and rejects duplicate names" do
+  test "structural decoding validates standalone answer consistency" do
     body = %{
       "model" => "gpt-6-luna",
       "answers" => matching_answers(),
@@ -206,8 +212,52 @@ defmodule Provider.OpenAI.DecisionsAPIUnitTest do
     assert %Req.Response{body: %ReqLLM.Response{} = result} = response
     assert Map.keys(result.object) |> Enum.sort() == ["department", "severity", "urgent"]
 
+    [choice, score, predicate] = body["answers"]
+    rest = [score, predicate]
+
+    {_req, error} = DecisionsAPI.decode_response(build_response(%{body | "answers" => []}, nil))
+    assert %ReqLLM.Error.API.Response{} = error
+
     duplicate = %{body | "answers" => [hd(body["answers"]), hd(body["answers"])]}
     {_req, error} = DecisionsAPI.decode_response(build_response(duplicate, nil))
+    assert %ReqLLM.Error.API.Response{} = error
+
+    inconsistent_choice = %{choice | "choice" => "unknown"}
+
+    {_req, error} =
+      DecisionsAPI.decode_response(
+        build_response(%{body | "answers" => [inconsistent_choice | rest]}, nil)
+      )
+
+    assert %ReqLLM.Error.API.Response{} = error
+
+    [billing, support] = choice["probabilities"]
+    duplicated_values = %{choice | "probabilities" => [billing, billing, support]}
+
+    {_req, error} =
+      DecisionsAPI.decode_response(
+        build_response(%{body | "answers" => [duplicated_values | rest]}, nil)
+      )
+
+    assert %ReqLLM.Error.API.Response{} = error
+
+    [low, medium, high] = score["probabilities"]
+    duplicated_labels = %{score | "probabilities" => [low, %{medium | "label" => "low"}, high]}
+
+    {_req, error} =
+      DecisionsAPI.decode_response(
+        build_response(%{body | "answers" => [choice, duplicated_labels, predicate]}, nil)
+      )
+
+    assert %ReqLLM.Error.API.Response{} = error
+
+    out_of_range_score = %{score | "score" => 10.0}
+
+    {_req, error} =
+      DecisionsAPI.decode_response(
+        build_response(%{body | "answers" => [choice, out_of_range_score, predicate]}, nil)
+      )
+
     assert %ReqLLM.Error.API.Response{} = error
   end
 

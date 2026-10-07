@@ -26,18 +26,13 @@ defmodule ReqLLM.Providers.OpenAI.DecisionsAPI do
          {:ok, input} <- compile_state(state),
          {:ok, compiled_questions, contract} <- compile_questions(questions),
          :ok <- validate_safety_identifier(safety_identifier) do
-      body = %{
-        "model" => model,
-        "input" => input,
-        "questions" => compiled_questions
-      }
-
       body =
-        if is_nil(safety_identifier) do
-          body
-        else
-          Map.put(body, "safety_identifier", safety_identifier)
-        end
+        %{
+          "model" => model,
+          "input" => input,
+          "questions" => compiled_questions
+        }
+        |> maybe_put("safety_identifier", safety_identifier)
 
       {:ok, body, contract}
     end
@@ -54,7 +49,7 @@ defmodule ReqLLM.Providers.OpenAI.DecisionsAPI do
     body = ensure_parsed_body(response.body)
     contract = request.private[@request_private_key]
 
-    case decode_success(body, request.options[:model], contract) do
+    case decode_success(body, contract) do
       {:ok, result} ->
         {request, %{response | body: result}}
 
@@ -339,7 +334,7 @@ defmodule ReqLLM.Providers.OpenAI.DecisionsAPI do
     invalid("OpenAI safety_identifier must be a string")
   end
 
-  defp decode_success(body, _request_model, contract) when is_map(body) do
+  defp decode_success(body, contract) when is_map(body) do
     with model when is_binary(model) <- field(body, :model),
          answers when is_list(answers) <- field(body, :answers),
          usage when is_map(usage) <- field(body, :usage),
@@ -366,7 +361,9 @@ defmodule ReqLLM.Providers.OpenAI.DecisionsAPI do
     end
   end
 
-  defp decode_success(_body, _request_model, _contract), do: {:error, "expected an object"}
+  defp decode_success(_body, _contract), do: {:error, "expected an object"}
+
+  defp validate_answers([], _contract), do: {:error, "answers must not be empty"}
 
   defp validate_answers(answers, nil) do
     answers
@@ -440,7 +437,8 @@ defmodule ReqLLM.Providers.OpenAI.DecisionsAPI do
 
     with true <- is_binary(choice) or is_boolean(choice),
          true <- probability?(confidence),
-         {:ok, probabilities} <- normalize_choice_probabilities(probabilities) do
+         {:ok, probabilities} <- normalize_choice_probabilities(probabilities),
+         true <- Enum.any?(probabilities, &(&1["value"] === choice)) do
       {:ok,
        answer
        |> string_key_map()
@@ -459,7 +457,8 @@ defmodule ReqLLM.Providers.OpenAI.DecisionsAPI do
 
     with true <- is_number(score),
          true <- probability?(confidence),
-         {:ok, probabilities} <- normalize_score_probabilities(probabilities) do
+         {:ok, probabilities} <- normalize_score_probabilities(probabilities),
+         true <- score_in_probability_range?(score, probabilities) do
       {:ok,
        answer
        |> string_key_map()
@@ -475,35 +474,46 @@ defmodule ReqLLM.Providers.OpenAI.DecisionsAPI do
   defp normalize_answer(_type, _answer), do: {:error, "answer type is invalid"}
 
   defp normalize_choice_probabilities(values) when is_list(values) and values != [] do
-    normalize_probability_list(values, fn item ->
-      value = field(item, :value)
-      probability = field(item, :probability)
-
-      if (is_binary(value) or is_boolean(value)) and probability?(probability) do
-        {:ok, %{"value" => value, "probability" => probability}}
-      else
-        {:error, "choice probability entry is invalid"}
-      end
-    end)
+    with {:ok, probabilities} <- normalize_probability_list(values, &normalize_choice_entry/1),
+         :ok <- unique_probability_field(probabilities, "value", "choice values") do
+      {:ok, probabilities}
+    end
   end
 
   defp normalize_choice_probabilities(_values), do: {:error, "choice probabilities are invalid"}
 
   defp normalize_score_probabilities(values) when is_list(values) and values != [] do
-    normalize_probability_list(values, fn item ->
-      label = field(item, :label)
-      value = field(item, :value)
-      probability = field(item, :probability)
-
-      if is_binary(label) and is_integer(value) and probability?(probability) do
-        {:ok, %{"label" => label, "value" => value, "probability" => probability}}
-      else
-        {:error, "score probability entry is invalid"}
-      end
-    end)
+    with {:ok, probabilities} <- normalize_probability_list(values, &normalize_score_entry/1),
+         :ok <- unique_probability_field(probabilities, "label", "score labels"),
+         :ok <- unique_probability_field(probabilities, "value", "score values") do
+      {:ok, probabilities}
+    end
   end
 
   defp normalize_score_probabilities(_values), do: {:error, "score probabilities are invalid"}
+
+  defp normalize_choice_entry(item) do
+    value = field(item, :value)
+    probability = field(item, :probability)
+
+    if (is_binary(value) or is_boolean(value)) and probability?(probability) do
+      {:ok, %{"value" => value, "probability" => probability}}
+    else
+      {:error, "choice probability entry is invalid"}
+    end
+  end
+
+  defp normalize_score_entry(item) do
+    label = field(item, :label)
+    value = field(item, :value)
+    probability = field(item, :probability)
+
+    if is_binary(label) and is_integer(value) and probability?(probability) do
+      {:ok, %{"label" => label, "value" => value, "probability" => probability}}
+    else
+      {:error, "score probability entry is invalid"}
+    end
+  end
 
   defp normalize_probability_list(values, normalize) do
     values
@@ -521,6 +531,21 @@ defmodule ReqLLM.Providers.OpenAI.DecisionsAPI do
       {:ok, result} -> {:ok, Enum.reverse(result)}
       error -> error
     end
+  end
+
+  defp unique_probability_field(probabilities, field, description) do
+    values = Enum.map(probabilities, &Map.fetch!(&1, field))
+
+    if MapSet.size(MapSet.new(values)) == length(values) do
+      :ok
+    else
+      {:error, "#{description} must be unique"}
+    end
+  end
+
+  defp score_in_probability_range?(score, probabilities) do
+    values = Enum.map(probabilities, & &1["value"])
+    score >= Enum.min(values) and score <= Enum.max(values)
   end
 
   defp validate_expected_answer(answer, name, expected) do
@@ -551,7 +576,8 @@ defmodule ReqLLM.Providers.OpenAI.DecisionsAPI do
     choice = field(answer, :choice)
     values = Enum.map(field(answer, :probabilities), &field(&1, :value))
 
-    if choice in allowed_values and MapSet.new(values) == MapSet.new(allowed_values) do
+    if choice in allowed_values and length(values) == length(allowed_values) and
+         MapSet.new(values) == MapSet.new(allowed_values) do
       :ok
     else
       {:error, "choice answer contains a value that was not requested"}
@@ -577,6 +603,9 @@ defmodule ReqLLM.Providers.OpenAI.DecisionsAPI do
   defp string_key_map(map) do
     Map.new(map, fn {key, value} -> {to_string(key), value} end)
   end
+
+  defp maybe_put(map, _key, nil), do: map
+  defp maybe_put(map, key, value), do: Map.put(map, key, value)
 
   defp field(map, key) when is_map(map) do
     case Map.fetch(map, key) do

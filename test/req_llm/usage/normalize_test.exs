@@ -74,15 +74,17 @@ defmodule ReqLLM.Usage.NormalizeTest do
 
   describe "compute_units" do
     test "keeps zero compute units without making billing incomplete" do
-      normalized =
-        Normalize.normalize(%{
-          input_tokens: 10,
-          output_tokens: 2,
-          compute_units: 0
-        })
+      for value <- [0, "0"] do
+        normalized =
+          Normalize.normalize(%{
+            input_tokens: 10,
+            output_tokens: 2,
+            compute_units: value
+          })
 
-      assert normalized.compute_units == 0
-      assert normalized.billing_usage_complete
+        assert normalized.compute_units == 0
+        assert normalized.billing_usage_complete
+      end
     end
 
     test "keeps positive compute units and marks billing incomplete" do
@@ -99,15 +101,17 @@ defmodule ReqLLM.Usage.NormalizeTest do
     end
 
     test "keeps malformed compute units and marks billing incomplete" do
-      normalized =
-        Normalize.normalize(%{
-          input_tokens: 10,
-          output_tokens: 2,
-          compute_units: "unknown"
-        })
+      for value <- ["unknown", -1, 0.0] do
+        normalized =
+          Normalize.normalize(%{
+            input_tokens: 10,
+            output_tokens: 2,
+            compute_units: value
+          })
 
-      assert normalized.compute_units == "unknown"
-      refute normalized.billing_usage_complete
+        assert normalized.compute_units == value
+        refute normalized.billing_usage_complete
+      end
     end
 
     test "does not add compute units when the provider omits them" do
