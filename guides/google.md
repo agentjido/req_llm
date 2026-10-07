@@ -30,6 +30,23 @@ ReqLLM.generate_text("google:gemini-2.5-flash", "What is the weather in Madrid?"
 The same option works with `ReqLLM.stream_text/3`. See Google's
 [function-calling modes reference](https://ai.google.dev/gemini-api/docs/generate-content/function-calling#function-calling-modes).
 
+Gemini 3 can return a tool call and, on a later turn, a final answer that
+matches a response schema. Pass both `tools` and `output: ReqLLM.Output.object(...)`
+to `ReqLLM.generate_text/3`:
+
+```elixir
+ReqLLM.generate_text(
+  "google:gemini-3-flash",
+  "Look up the weather in Madrid, then return a summary.",
+  tools: tools,
+  output: ReqLLM.Output.object(summary: [type: :string, required: true])
+)
+```
+
+A tool-call turn exposes tool calls and leaves the object unset. A JSON turn
+exposes the object. Models before Gemini 3 still return a parameter error
+(`tools are not supported`).
+
 ## Provider Options
 
 Passed via `:provider_options` keyword:

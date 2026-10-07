@@ -276,91 +276,84 @@ defmodule ReqLLM.Providers.Google do
   end
 
   def prepare_request(:object, model_spec, prompt, opts) do
-    if Keyword.has_key?(opts, :tools) and Keyword.get(opts, :tools) != [] do
-      {:error,
-       ReqLLM.Error.Invalid.Parameter.exception(
-         parameter:
-           "tools are not supported with :object operation on Google (JSON mode and tool calling are mutually exclusive on Gemini 2.5)"
-       )}
-    else
-      with {:ok, model} <- ReqLLM.model(model_spec),
-           {:ok, context} <- ReqLLM.Context.normalize(prompt, opts) do
-        opts_with_tokens =
-          ReqLLM.Provider.Options.put_model_max_tokens_default(opts, model, fallback: 4096)
+    with {:ok, model} <- ReqLLM.model(model_spec),
+         :ok <- reject_object_tools_before_gemini_3(model, opts),
+         {:ok, context} <- ReqLLM.Context.normalize(prompt, opts) do
+      opts_with_tokens =
+        ReqLLM.Provider.Options.put_model_max_tokens_default(opts, model, fallback: 4096)
 
-        opts_with_tokens =
-          case Keyword.get(opts_with_tokens, :max_tokens) do
-            tokens when is_integer(tokens) and tokens < 200 ->
-              Keyword.put(opts_with_tokens, :max_tokens, 200)
+      opts_with_tokens =
+        case Keyword.get(opts_with_tokens, :max_tokens) do
+          tokens when is_integer(tokens) and tokens < 200 ->
+            Keyword.put(opts_with_tokens, :max_tokens, 200)
 
-            _tokens ->
-              opts_with_tokens
+          _tokens ->
+            opts_with_tokens
+        end
+
+      opts_with_context =
+        opts_with_tokens
+        |> Keyword.put(:context, context)
+        |> Keyword.put(:operation, :object)
+
+      case ReqLLM.Provider.Options.process(__MODULE__, :object, model, opts_with_context) do
+        {:ok, processed_opts0} ->
+          with :ok <- validate_version_feature_compat(processed_opts0) do
+            processed_opts =
+              Keyword.put(processed_opts0, :base_url, effective_base_url(processed_opts0))
+
+            http_opts = Keyword.get(processed_opts, :req_http_options, [])
+
+            endpoint =
+              if processed_opts[:stream], do: ":streamGenerateContent", else: ":generateContent"
+
+            req_keys =
+              __MODULE__.supported_provider_options() ++
+                [
+                  :context,
+                  :operation,
+                  :compiled_schema,
+                  :text,
+                  :stream,
+                  :model,
+                  :provider_options,
+                  :tools,
+                  :tool_choice
+                ]
+
+            base_params = if processed_opts[:stream], do: [alt: "sse"], else: []
+
+            timeout =
+              Keyword.get(
+                processed_opts,
+                :receive_timeout,
+                Application.get_env(:req_llm, :receive_timeout, 30_000)
+              )
+
+            request =
+              Req.new(
+                [
+                  url: "/models/#{model.id}#{endpoint}",
+                  method: :post,
+                  params: base_params,
+                  receive_timeout: timeout
+                ] ++ http_opts
+              )
+              |> Req.Request.register_options(req_keys)
+              |> Req.Request.merge_options(
+                Keyword.take(processed_opts, req_keys) ++
+                  [
+                    model: model.id,
+                    base_url: processed_opts[:base_url]
+                  ]
+              )
+              |> attach(model, processed_opts)
+
+            {:ok, request}
           end
 
-        opts_with_context =
-          opts_with_tokens
-          |> Keyword.put(:context, context)
-          |> Keyword.put(:operation, :object)
-
-        case ReqLLM.Provider.Options.process(__MODULE__, :object, model, opts_with_context) do
-          {:ok, processed_opts0} ->
-            with :ok <- validate_version_feature_compat(processed_opts0) do
-              processed_opts =
-                Keyword.put(processed_opts0, :base_url, effective_base_url(processed_opts0))
-
-              http_opts = Keyword.get(processed_opts, :req_http_options, [])
-
-              endpoint =
-                if processed_opts[:stream], do: ":streamGenerateContent", else: ":generateContent"
-
-              req_keys =
-                __MODULE__.supported_provider_options() ++
-                  [
-                    :context,
-                    :operation,
-                    :compiled_schema,
-                    :text,
-                    :stream,
-                    :model,
-                    :provider_options,
-                    :tools,
-                    :tool_choice
-                  ]
-
-              base_params = if processed_opts[:stream], do: [alt: "sse"], else: []
-
-              timeout =
-                Keyword.get(
-                  processed_opts,
-                  :receive_timeout,
-                  Application.get_env(:req_llm, :receive_timeout, 30_000)
-                )
-
-              request =
-                Req.new(
-                  [
-                    url: "/models/#{model.id}#{endpoint}",
-                    method: :post,
-                    params: base_params,
-                    receive_timeout: timeout
-                  ] ++ http_opts
-                )
-                |> Req.Request.register_options(req_keys)
-                |> Req.Request.merge_options(
-                  Keyword.take(processed_opts, req_keys) ++
-                    [
-                      model: model.id,
-                      base_url: processed_opts[:base_url]
-                    ]
-                )
-                |> attach(model, processed_opts)
-
-              {:ok, request}
-            end
-
-          {:error, reason} ->
-            {:error, reason}
-        end
+        {:error, reason} ->
+          {:error, reason}
       end
     end
   end
@@ -1331,9 +1324,49 @@ defmodule ReqLLM.Providers.Google do
     |> maybe_put(:cachedContent, request.options[:cached_content])
     |> maybe_put(:systemInstruction, system_instruction)
     |> Map.put(:contents, contents)
+    |> Map.merge(gemini_3_object_tools(model_name, request))
     |> maybe_put(:generationConfig, generation_config)
     |> maybe_put(:safetySettings, request.options[:google_safety_settings])
     |> maybe_put(:labels, request.options[:labels])
+  end
+
+  defp gemini_3_object_tools(model_name, request) do
+    tools = request.options[:tools]
+
+    if gemini_3_or_later?(model_name) and is_list(tools) and tools != [] do
+      %{
+        tools: [
+          %{functionDeclarations: Enum.map(tools, &ReqLLM.Tool.to_schema(&1, :google))}
+        ]
+      }
+      |> maybe_put(:toolConfig, build_google_tool_config(request.options[:tool_choice]))
+    else
+      %{}
+    end
+  end
+
+  defp reject_object_tools_before_gemini_3(%LLMDB.Model{} = model, opts) do
+    if Keyword.has_key?(opts, :tools) and Keyword.get(opts, :tools) != [] and
+         not gemini_3_or_later?(model) do
+      {:error,
+       ReqLLM.Error.Invalid.Parameter.exception(
+         parameter: pre_gemini_3_object_tools_message(model)
+       )}
+    else
+      :ok
+    end
+  end
+
+  defp pre_gemini_3_object_tools_message(model) do
+    "tools are not supported with :object operation on pre-Gemini-3 models (#{object_tools_model_name(model)})"
+  end
+
+  defp object_tools_model_name(%LLMDB.Model{} = model) do
+    [model.provider_model_id, model.model, model.id]
+    |> Enum.find_value(fn
+      id when is_binary(id) and id != "" -> google_model_name(id)
+      _ -> nil
+    end)
   end
 
   defp gemini_3_or_later?(%LLMDB.Model{} = model) do
@@ -1481,21 +1514,17 @@ defmodule ReqLLM.Providers.Google do
             model = LLMDB.Model.new!(%{id: model_name, provider: :google})
             body = ensure_parsed_body(resp.body)
 
-            openai_format = convert_google_json_mode_to_openai_format(body)
-
-            {:ok, response} =
-              ReqLLM.Provider.Defaults.decode_response_body_openai_format(openai_format, model)
-
-            response_with_object =
-              case ReqLLM.Response.unwrap_object(response, req.options) do
-                {:ok, object} -> %{response | object: object}
-                {:error, _} -> response
+            response =
+              if object_response_has_function_call?(body) do
+                decode_object_function_call_response(body, model)
+              else
+                decode_object_json_response(body, model, req.options)
               end
 
             merged_response =
               ReqLLM.Context.merge_response(
                 req.options[:context] || %ReqLLM.Context{messages: []},
-                response_with_object
+                response
               )
 
             {req, %{resp | body: merged_response}}
@@ -1945,6 +1974,94 @@ defmodule ReqLLM.Providers.Google do
 
   defp convert_google_json_mode_to_openai_format(body) when is_map(body), do: body
   defp convert_google_json_mode_to_openai_format(_body), do: %{}
+
+  defp decode_object_json_response(body, model, opts) do
+    openai_format = convert_google_json_mode_to_openai_format(body)
+
+    {:ok, response} =
+      ReqLLM.Provider.Defaults.decode_response_body_openai_format(openai_format, model)
+
+    case ReqLLM.Response.unwrap_object(response, opts) do
+      {:ok, object} -> %{response | object: object}
+      {:error, _} -> response
+    end
+  end
+
+  defp decode_object_function_call_response(body, model) do
+    openai_format = convert_google_to_openai_format(body)
+
+    {:ok, response} =
+      ReqLLM.Provider.Defaults.decode_response_body_openai_format(openai_format, model)
+
+    attach_function_call_thought_signatures(response, body)
+  end
+
+  defp object_response_has_function_call?(body) do
+    body
+    |> first_candidate_parts()
+    |> Enum.any?(&function_call_part?/1)
+  end
+
+  defp first_candidate_parts(%{"candidates" => [%{"content" => %{"parts" => parts}} | _]})
+       when is_list(parts), do: parts
+
+  defp first_candidate_parts(_body), do: []
+
+  defp function_call_part?(%{"functionCall" => %{}}), do: true
+  defp function_call_part?(_part), do: false
+
+  defp attach_function_call_thought_signatures(%ReqLLM.Response{} = response, body) do
+    parts = body |> first_candidate_parts() |> Enum.filter(&function_call_part?/1)
+
+    case response.message do
+      %ReqLLM.Message{tool_calls: tool_calls} = message when is_list(tool_calls) ->
+        {updated_calls, _remaining} =
+          Enum.map_reduce(tool_calls, parts, fn call, remaining ->
+            {part, rest} = take_function_call_part(call, remaining)
+            {put_part_thought_signature(call, part), rest}
+          end)
+
+        %{response | message: %{message | tool_calls: updated_calls}}
+
+      _message ->
+        response
+    end
+  end
+
+  defp take_function_call_part(%ReqLLM.ToolCall{} = call, parts) do
+    index =
+      Enum.find_index(parts, &(function_call_id(&1) == call.id)) ||
+        Enum.find_index(parts, &(function_call_name(&1) == tool_call_name(call)))
+
+    case index do
+      nil -> {nil, parts}
+      index -> List.pop_at(parts, index)
+    end
+  end
+
+  defp take_function_call_part(_call, parts), do: {nil, parts}
+
+  defp function_call_id(%{"functionCall" => %{"id" => id}}) when is_binary(id) and id != "",
+    do: id
+
+  defp function_call_id(_part), do: nil
+
+  defp function_call_name(%{"functionCall" => %{"name" => name}}) when is_binary(name), do: name
+  defp function_call_name(_part), do: nil
+
+  defp tool_call_name(%ReqLLM.ToolCall{function: %{name: name}}) when is_binary(name), do: name
+
+  defp tool_call_name(%ReqLLM.ToolCall{function: %{"name" => name}}) when is_binary(name),
+    do: name
+
+  defp tool_call_name(_call), do: nil
+
+  defp put_part_thought_signature(%ReqLLM.ToolCall{} = call, %{"thoughtSignature" => signature})
+       when is_binary(signature) and signature != "" do
+    ReqLLM.ToolCall.put_metadata(call, %{thought_signature: signature})
+  end
+
+  defp put_part_thought_signature(call, _part), do: call
 
   defp convert_google_parts_to_content(parts) do
     content_parts =
