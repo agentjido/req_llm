@@ -235,7 +235,7 @@ defmodule ReqLLM.MixProject do
       {:server_sent_events, "~> 1.1.0"},
       {:splode, "~> 0.3.0"},
       {:websockex, "~> 0.5.1"},
-      {:zoi, "~> 0.14"},
+      {:zoi, "~> 0.18.11"},
       {:jsv, "~> 0.11"},
       {:llm_db, "~> 2026.10.0"},
 
