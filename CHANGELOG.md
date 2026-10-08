@@ -10,6 +10,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 * Preserve previously reported cache-write duration counts when a later streamed usage delta omits them. This keeps five-minute and one-hour cache-write tariffs intact when final output usage arrives.
+* Exclude caller-executed Responses `function_call` items from supplier-hosted tool meters without changing function decoding or dropping unknown hosted calls.
+* Price buffered and streamed OpenAI usage with the physical API endpoint, confirmed global/regional processing, and returned service tier before usage/terminal telemetry. Missing or `auto` returned tiers stay unknown; request preferences cannot establish a billed tier. Chat Completions streaming now retains returned-tier metadata.
+* Keep absent or malformed OpenAI token usage explicitly unreported, rather than turning decoder zero placeholders into a known zero charge.
+
+Verification: format and warnings-as-errors compilation passed; the focused native response/pricing/usage/stream suites passed **347 tests, 0 failures** (`--seed 0`); strict Credo found no issues across 580 source files. A real local HTTP wire smoke exercised buffered and streamed GPT-5 Nano/GPT-6 Luna generation: four HTTP 200 Responses, client tool calls retained, no hosted-function meter, and matching native costs in both modes ($0.000003/$0.000004 respectively). This was a local supplier fixture, not a live OpenAI provider request. The earlier unchanged upstream Mint HTTP2 opaque-type Dialyzer finding remains tracked in issue #1080.
 
 <!-- changelog -->
 

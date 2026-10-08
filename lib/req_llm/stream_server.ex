@@ -1187,6 +1187,29 @@ defmodule ReqLLM.StreamServer do
 
   defp terminal_chunk?(_chunk), do: false
 
+  defp price_stream_usage(%{usage: usage} = metadata, state) do
+    context =
+      if state.model.provider == :openai do
+        url = state.http_context && state.http_context.url
+
+        ReqLLM.PricingContext.from_openai(
+          url,
+          Map.get(metadata, :provider_meta),
+          state.pricing_context
+        )
+      else
+        state.pricing_context
+      end
+
+    Map.put(
+      metadata,
+      :usage,
+      ReqLLM.Usage.Cost.apply(usage, state.model, pricing_context: context)
+    )
+  end
+
+  defp price_stream_usage(metadata, _state), do: metadata
+
   defp enqueue_chunks(chunks, state) do
     {new_queue, updated_metadata, new_obj_acc, telemetry, message_acc, builtin_timing} =
       Enum.reduce(
@@ -1209,32 +1232,55 @@ defmodule ReqLLM.StreamServer do
 
                 usage = Map.get(chunk_meta, :usage)
 
-                meta_with_usage =
-                  if usage do
-                    normalized_usage = ReqLLM.Usage.normalize(usage)
+                # Returned facts must be merged before pricing and terminal telemetry.
+                merged_metadata =
+                  Map.merge(
+                    metadata,
+                    Map.drop(chunk_meta, [
+                      :usage,
+                      "usage",
+                      :builtin_tool_started,
+                      "builtin_tool_started"
+                    ])
+                  )
 
-                    metadata
-                    |> Map.update(:usage, normalized_usage, fn existing ->
-                      ReqLLM.Usage.merge(existing, normalized_usage)
-                    end)
-                    |> Map.update!(:usage, fn merged ->
-                      ReqLLM.Usage.Cost.apply(merged, state.model,
-                        pricing_context: state.pricing_context
+                merged_metadata =
+                  if state.model.provider == :openai do
+                    provider_meta =
+                      Map.merge(
+                        Map.get(metadata, :provider_meta, %{}),
+                        Map.get(chunk_meta, :provider_meta, %{})
                       )
-                    end)
+
+                    Map.put(merged_metadata, :provider_meta, provider_meta)
                   else
-                    metadata
+                    merged_metadata
                   end
 
-                Map.merge(
-                  meta_with_usage,
-                  Map.drop(chunk_meta, [
-                    :usage,
-                    "usage",
-                    :builtin_tool_started,
-                    "builtin_tool_started"
-                  ])
-                )
+                if usage do
+                  normalized_usage = ReqLLM.Usage.normalize(usage)
+
+                  merged_metadata
+                  |> Map.update(:usage, normalized_usage, fn existing ->
+                    ReqLLM.Usage.merge(existing, normalized_usage)
+                  end)
+                  |> price_stream_usage(state)
+                else
+                  provider_meta = Map.get(chunk_meta, :provider_meta, %{})
+
+                  if state.model.provider == :openai and
+                       ReqLLM.MapAccess.get(provider_meta, :service_tier) !=
+                         ReqLLM.MapAccess.get(
+                           Map.get(metadata, :provider_meta, %{}),
+                           :service_tier
+                         ) and
+                       (Map.has_key?(provider_meta, :service_tier) or
+                          Map.has_key?(provider_meta, "service_tier")) do
+                    price_stream_usage(merged_metadata, state)
+                  else
+                    merged_metadata
+                  end
+                end
 
               _ ->
                 metadata

@@ -692,6 +692,9 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     end
   end
 
+  # Client functions are executed by the caller, not supplier-hosted tools.
+  defp tool_usage_key_from_call_type("function_call"), do: nil
+
   defp tool_usage_key_from_call_type(call_type) when is_binary(call_type) do
     if String.ends_with?(call_type, "_call") do
       base = String.replace_suffix(call_type, "_call", "")
@@ -2889,10 +2892,23 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
       get_in(response_data, ["usage", "input_tokens_details", "cache_write_tokens"]) ||
         get_in(response_data, ["usage", "prompt_tokens_details", "cache_write_tokens"])
 
+    reported =
+      case Map.get(response_data, "usage") do
+        raw when is_map(raw) ->
+          %{
+            input: not is_nil(Map.get(raw, "input_tokens")),
+            output: not is_nil(Map.get(raw, "output_tokens"))
+          }
+
+        nil ->
+          %{input: false, output: false}
+      end
+
     usage =
       usage
       |> Map.put(:cached_tokens, cached_tokens)
       |> Map.put(:reasoning_tokens, reasoning_tokens)
+      |> Map.put(:usage_reported, reported)
       |> maybe_put_cache_creation_tokens(cache_creation_tokens)
 
     tool_call_counts = extract_tool_call_counts(response_data)

@@ -1774,7 +1774,8 @@ defmodule ReqLLM.Provider.Defaults do
       output_tokens: 0,
       total_tokens: 0,
       cached_tokens: 0,
-      reasoning_tokens: 0
+      reasoning_tokens: 0,
+      usage_reported: %{input: false, output: false}
     }
 
   defp maybe_put_cache_creation_tokens(usage, nil), do: usage

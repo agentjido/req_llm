@@ -70,7 +70,15 @@ defmodule ReqLLM.Providers.OpenAI.ChatAPI do
 
   @impl true
   def decode_stream_event(event, model) do
-    ReqLLM.Provider.Defaults.default_decode_stream_event(event, model)
+    chunks = ReqLLM.Provider.Defaults.default_decode_stream_event(event, model)
+
+    case event do
+      %{data: %{"service_tier" => tier}} ->
+        [ReqLLM.StreamChunk.meta(%{provider_meta: %{"service_tier" => tier}}) | chunks]
+
+      _ ->
+        chunks
+    end
   end
 
   defp build_request_headers(model, opts) do

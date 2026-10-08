@@ -1877,6 +1877,7 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
       assert part.text == "The result is 4."
 
       assert [%ReqLLM.ToolCall{function: %{name: "get_weather"}}] = resp.body.message.tool_calls
+      assert resp.body.usage.tool_usage == %{code_interpreter: %{count: 1, unit: :call}}
 
       assert [call] = get_in(resp.body.provider_meta, ["code_interpreter", "items"])
       assert call["type"] == "code_interpreter_call"
