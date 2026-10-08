@@ -73,6 +73,7 @@ defmodule ReqLLM.MixProject do
           "guides/amazon_bedrock.md",
           "guides/cerebras.md",
           "guides/deepseek.md",
+          "guides/stepfun.md",
           "guides/fireworks_ai.md",
           "guides/meta.md",
           "guides/github_copilot.md",
@@ -128,6 +129,7 @@ defmodule ReqLLM.MixProject do
             "guides/amazon_bedrock.md",
             "guides/cerebras.md",
             "guides/deepseek.md",
+            "guides/stepfun.md",
             "guides/fireworks_ai.md",
             "guides/meta.md",
             "guides/github_copilot.md",
@@ -237,7 +239,7 @@ defmodule ReqLLM.MixProject do
       {:websockex, "~> 0.5.1"},
       {:zoi, "~> 0.18.11"},
       {:jsv, "~> 0.11"},
-      {:llm_db, "~> 2026.10.0"},
+      {:llm_db, "~> 2026.10.1"},
 
       # Dev/test dependencies
       {:bandit, "~> 1.8", only: [:dev, :test], runtime: false},
