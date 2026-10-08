@@ -1269,6 +1269,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
 
     block =
       %{"type" => "input_image", "image_url" => "data:#{media_type};base64,#{base64}"}
+      |> maybe_put_image_detail(metadata)
       |> maybe_put_prompt_cache_breakpoint(metadata)
 
     [block]
@@ -1280,6 +1281,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
        ) do
     block =
       %{"type" => "input_image", "image_url" => url}
+      |> maybe_put_image_detail(metadata)
       |> maybe_put_prompt_cache_breakpoint(metadata)
 
     [block]
@@ -1340,6 +1342,14 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   end
 
   defp maybe_put_prompt_cache_breakpoint(block, _metadata), do: block
+
+  defp maybe_put_image_detail(block, %{detail: detail}) when not is_nil(detail),
+    do: Map.put(block, "detail", to_string(detail))
+
+  defp maybe_put_image_detail(block, %{"detail" => detail}) when not is_nil(detail),
+    do: Map.put(block, "detail", to_string(detail))
+
+  defp maybe_put_image_detail(block, _metadata), do: block
 
   defp provider_file_id(part, provider, legacy_file_id) do
     case ReqLLM.ProviderFileReference.reference_id(part, provider) do

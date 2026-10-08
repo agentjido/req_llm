@@ -1076,11 +1076,13 @@ defmodule ReqLLM.Provider.Defaults do
        }) do
     base64 = Base.encode64(data)
 
+    image_url =
+      %{url: "data:#{media_type};base64,#{base64}"}
+      |> maybe_put_image_detail(metadata)
+
     %{
       type: "image_url",
-      image_url: %{
-        url: "data:#{media_type};base64,#{base64}"
-      }
+      image_url: image_url
     }
     |> merge_content_metadata(metadata)
   end

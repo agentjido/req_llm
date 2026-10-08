@@ -339,6 +339,21 @@ defmodule ReqLLM.Provider.DefaultsTest do
              }
     end
 
+    test "preserves OpenAI image detail inside inline image payload" do
+      image = ContentPart.image(<<1, 2, 3>>, "image/png", %{detail: "high"})
+      message = %Message{role: :user, content: [image]}
+      context = %Context{messages: [message]}
+
+      result = Defaults.encode_context_to_openai_format(context, "gpt-4")
+      [encoded_message] = result.messages
+      [image_block] = encoded_message.content
+
+      assert image_block == %{
+               type: "image_url",
+               image_url: %{url: "data:image/png;base64,AQID", detail: "high"}
+             }
+    end
+
     test "encodes file id content parts to OpenAI file blocks" do
       file = ContentPart.file_id("file_123")
       message = %Message{role: :user, content: [file]}
