@@ -3,8 +3,8 @@ defmodule ReqLLM.ModelOperation do
 
   @operations ~w(text embedding image speech transcription rerank ocr video all)a
   @image_providers ~w(openai google xai minimax azure)a
-  @speech_providers ~w(openai elevenlabs)a
-  @transcription_providers ~w(openai groq elevenlabs openrouter)a
+  @speech_providers ~w(openai elevenlabs stepfun stepfun_ai)a
+  @transcription_providers ~w(openai groq elevenlabs openrouter stepfun stepfun_ai)a
   @rerank_providers ~w(cohere)a
   @video_providers ~w(minimax)a
   @operation_map for operation <- @operations,
@@ -98,11 +98,26 @@ defmodule ReqLLM.ModelOperation do
   end
 
   defp speech?(model) do
-    provider?(model, @speech_providers) and speech_model?(model)
+    provider?(model, @speech_providers) and speech_model?(model) and
+      stepfun_operation?(model, :speech)
   end
 
   defp transcription?(model) do
-    provider?(model, @transcription_providers) and transcription_model?(model)
+    provider?(model, @transcription_providers) and transcription_model?(model) and
+      stepfun_operation?(model, :transcription)
+  end
+
+  defp stepfun_operation?(model, operation) do
+    if provider?(model, [:stepfun, :stepfun_ai]) do
+      id = field(model, :provider_model_id) || field(model, :id)
+
+      case operation do
+        :speech -> id in ~w(stepaudio-3-tts stepaudio-2.5-tts)
+        :transcription -> id in ~w(stepaudio-3-asr-max stepaudio-2.5-asr)
+      end
+    else
+      true
+    end
   end
 
   defp rerank?(model) do

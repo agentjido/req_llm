@@ -140,6 +140,12 @@ defmodule ReqLLM.Step.Fixture.Backend do
     content_type_streaming or body_streaming
   end
 
+  defp buffered_response?(%Req.Request{options: %{decode_body: false}}, %Req.Response{body: body})
+       when is_binary(body),
+       do: true
+
+  defp buffered_response?(_req, _resp), do: false
+
   defp insert_save_step(%Req.Request{} = req) do
     steps = req.response_steps
     save = {:llm_fixture_save, &save_fixture_response/1}
@@ -444,7 +450,8 @@ defmodule ReqLLM.Step.Fixture.Backend do
     dbug(fn -> "[Fixture] Model: #{model_spec}" end, component: :fixtures)
     Logger.debug("Fixture model_spec: #{model_spec}")
 
-    if streaming_response?(resp) and req.private[:real_time_stream] == nil do
+    if streaming_response?(resp) and req.private[:real_time_stream] == nil and
+         not buffered_response?(req, resp) do
       raise """
       Legacy streaming path detected in RECORD mode for #{path}
       This should not happen - all streaming should use :real_time_stream/StreamServer.

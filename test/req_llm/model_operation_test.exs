@@ -22,6 +22,32 @@ defmodule ReqLLM.ModelOperationTest do
   end
 
   describe "supported?/2" do
+    test "selects current StepFun speech and transcription models only" do
+      for provider <- [:stepfun, :stepfun_ai] do
+        assert ModelOperation.supported?(model("stepaudio-3-tts", provider: provider), :speech)
+
+        assert ModelOperation.supported?(
+                 model("stepaudio-3-asr-max", provider: provider),
+                 :transcription
+               )
+
+        refute ModelOperation.supported?(
+                 model("stepaudio-2.5-asr-stream", provider: provider),
+                 :transcription
+               )
+
+        refute ModelOperation.supported?(
+                 model("stepaudio-3-gen-preview",
+                   provider: provider,
+                   modalities: %{input: [:text], output: [:audio]}
+                 ),
+                 :speech
+               )
+
+        refute ModelOperation.supported?(model("step-tts-2", provider: provider), :speech)
+      end
+    end
+
     test "classifies image models by output modality" do
       model =
         model("gpt-image-1.5", provider: :openai, modalities: %{input: [:text], output: [:image]})

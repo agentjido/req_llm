@@ -53,6 +53,9 @@ That breadth extends well beyond chat: ReqLLM tracks **92 non-text operation mod
 | [Z.AI Coding Plan](https://llmcatalog.dev/?providers=zai_coding_plan) | `zai_coding_plan` | 5 | text | 4 | — |
 | [Zenmux](https://llmcatalog.dev/?providers=zenmux) | `zenmux` | 149 | text, image 2 | 107 | [Guide](guides/zenmux.md) |
 
+StepFun chat, speech, and transcription use the `stepfun_ai` (Global) and
+`stepfun` (China) providers. See the [StepFun guide](guides/stepfun.md).
+
 Local inference is also supported through [Ollama](guides/ollama.md) and
 [LM Studio](guides/lmstudio.md), using model identifiers from your local server
 without requiring LLMDB catalog entries.
