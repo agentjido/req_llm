@@ -2771,6 +2771,7 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
       assert chunk.metadata.terminal? == true
       assert chunk.metadata.finish_reason == :error
       assert chunk.metadata.error == "The model run failed"
+      assert chunk.metadata.error_code == "server_error"
       assert chunk.metadata.response_id == "resp_123"
     end
 
@@ -2804,6 +2805,7 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
       assert chunk.metadata.terminal? == true
       assert chunk.metadata.finish_reason == :error
       assert chunk.metadata.error == "server_error"
+      assert chunk.metadata.error_code == "server_error"
     end
 
     test "decodes failed event without error details", %{model: model} do
