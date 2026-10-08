@@ -260,6 +260,34 @@ defmodule ReqLLM.ConditionalPricingTest do
              Billing.calculate(incomplete, model, %{api: "chat", inference_geo: "global"})
   end
 
+  test "output-only stream usage preserves previously reported cache write tariffs" do
+    model = ReqLLM.model!("anthropic:claude-fable-5-1")
+
+    start =
+      ReqLLM.Usage.normalize(%{
+        input_tokens: 1_000_000,
+        output_tokens: 0,
+        cache_creation_input_tokens: 10_000,
+        cache_creation: %{ephemeral_5m_input_tokens: 4_000, ephemeral_1h_input_tokens: 6_000},
+        input_includes_cached: false
+      })
+
+    delta =
+      ReqLLM.Usage.normalize(%{output_tokens: 1_000, input_includes_cached: false})
+
+    priced =
+      start
+      |> ReqLLM.Usage.merge(delta)
+      |> Cost.apply(model, pricing_context: %{api: "chat", inference_geo: "global"})
+
+    assert priced.cache_write_tokens_by_ttl == %{"5m" => 4_000, "1h" => 6_000}
+    assert priced.pricing.status == :priced
+    assert priced.total_cost == 10.22
+
+    writes = Enum.filter(priced.cost.line_items, &String.starts_with?(&1.id, "token.cache_write"))
+    assert Enum.map(writes, & &1.cost) |> Enum.sort() == [0.05, 0.12]
+  end
+
   test "time-dependent tariffs need a confirmed period", %{deepseek: model} do
     usage = %{input_tokens: 1_000_000, output_tokens: 1_000_000}
 

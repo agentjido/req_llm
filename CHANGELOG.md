@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+* Preserve previously reported cache-write duration counts when a later streamed usage delta omits them. This keeps five-minute and one-hour cache-write tariffs intact when final output usage arrives.
+
 <!-- changelog -->
 
 ## [v1.27.0](https://github.com/agentjido/req_llm/compare/v1.26.0...v1.27.0) (2026-10-08)

@@ -176,6 +176,9 @@ defmodule ReqLLM.Usage do
     Map.merge(existing, incoming, fn _key, old, new -> max(old, new) end)
   end
 
+  defp merge_value(:cache_write_tokens_by_ttl, existing, nil) when is_map(existing),
+    do: existing
+
   defp merge_value(_key, existing, incoming) do
     if is_number(existing) and is_number(incoming), do: max(existing, incoming), else: incoming
   end
