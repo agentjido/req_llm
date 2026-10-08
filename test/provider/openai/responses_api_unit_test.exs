@@ -100,6 +100,27 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
       assert file_block["prompt_cache_breakpoint"] == %{"mode" => "explicit"}
     end
 
+    test "encodes image detail from content part metadata" do
+      context =
+        ReqLLM.Context.new([
+          ReqLLM.Context.user([
+            ReqLLM.Message.ContentPart.image_url("https://example.com/low.png", %{detail: :low}),
+            ReqLLM.Message.ContentPart.image(<<1, 2, 3>>, "image/png", %{"detail" => "high"}),
+            ReqLLM.Message.ContentPart.image_url("https://example.com/plain.png")
+          ])
+        ])
+
+      body =
+        build_request(context: context)
+        |> ResponsesAPI.encode_body()
+        |> ReqLLM.Test.Helpers.json_body()
+
+      assert [%{"content" => [low_block, high_block, plain_block]}] = body["input"]
+      assert low_block["detail"] == "low"
+      assert high_block["detail"] == "high"
+      refute Map.has_key?(plain_block, "detail")
+    end
+
     test "encodes tools when present" do
       tool =
         ReqLLM.Tool.new!(
@@ -2788,6 +2809,7 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
       assert chunk.metadata.terminal? == true
       assert chunk.metadata.finish_reason == :error
       assert chunk.metadata.error == "The model run failed"
+      assert chunk.metadata.error_code == "server_error"
       assert chunk.metadata.response_id == "resp_123"
     end
 
@@ -2821,6 +2843,7 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
       assert chunk.metadata.terminal? == true
       assert chunk.metadata.finish_reason == :error
       assert chunk.metadata.error == "server_error"
+      assert chunk.metadata.error_code == "server_error"
     end
 
     test "decodes failed event without error details", %{model: model} do

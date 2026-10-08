@@ -641,19 +641,85 @@ defmodule ReqLLM.Providers.OpenAICodexTest do
       assert metadata[:finish_reason] == :stop
     end
 
-    test "raises on response.failed events" do
+    test "decodes response.failed into a terminal error chunk" do
       {:ok, model} = ReqLLM.model("openai_codex:gpt-5.3-codex-spark")
 
       event = %{
         data: %{
           "type" => "response.failed",
-          "response" => %{"error" => %{"message" => "Codex response failed"}}
+          "response" => %{
+            "error" => %{"code" => "server_error", "message" => "Codex response failed"}
+          }
         }
       }
 
-      assert_raise RuntimeError, "Codex response failed", fn ->
-        OpenAICodex.decode_stream_event(event, model, nil)
-      end
+      assert {[%ReqLLM.StreamChunk{type: :meta, metadata: metadata}], _state} =
+               OpenAICodex.decode_stream_event(event, model, nil)
+
+      assert metadata.terminal? == true
+      assert metadata.finish_reason == :error
+      assert metadata.error == "Codex response failed"
+      assert metadata.error_code == "server_error"
+    end
+
+    test "decodes nested error details into a terminal error chunk" do
+      {:ok, model} = ReqLLM.model("openai_codex:gpt-5.3-codex-spark")
+
+      event = %{
+        event: "error",
+        data: %{
+          "type" => "error",
+          "error" => %{
+            "code" => "cyber_policy",
+            "type" => "invalid_request",
+            "message" => "This content was flagged for possible cybersecurity risk."
+          }
+        }
+      }
+
+      assert {[%ReqLLM.StreamChunk{type: :meta, metadata: metadata}], _state} =
+               OpenAICodex.decode_stream_event(event, model, nil)
+
+      assert metadata.terminal? == true
+      assert metadata.finish_reason == :error
+      assert metadata.error == "This content was flagged for possible cybersecurity risk."
+      assert metadata.error_code == "cyber_policy"
+    end
+
+    test "keeps StreamServer alive when the provider returns an error event" do
+      {:ok, model} = ReqLLM.model("openai_codex:gpt-5.3-codex-spark")
+
+      {:ok, server} =
+        ReqLLM.StreamServer.start_link(provider_mod: OpenAICodex, model: model)
+
+      on_exit(fn ->
+        if Process.alive?(server), do: GenServer.stop(server)
+      end)
+
+      payload = %{
+        "type" => "error",
+        "error" => %{
+          "code" => "cyber_policy",
+          "type" => "invalid_request",
+          "message" => "This content was flagged for possible cybersecurity risk."
+        }
+      }
+
+      assert :ok =
+               ReqLLM.StreamServer.http_event(
+                 server,
+                 {:data, "event: error\ndata: #{Jason.encode!(payload)}\n\n"}
+               )
+
+      assert Process.alive?(server)
+
+      assert {:ok, %ReqLLM.StreamChunk{type: :meta, metadata: metadata}} =
+               ReqLLM.StreamServer.next(server)
+
+      assert metadata.terminal? == true
+      assert metadata.finish_reason == :error
+      assert metadata.error == "This content was flagged for possible cybersecurity risk."
+      assert metadata.error_code == "cyber_policy"
     end
   end
 

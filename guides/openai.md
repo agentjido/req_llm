@@ -156,6 +156,18 @@ OpenAI Chat Completions API only supports image attachments (JPEG, PNG, GIF, Web
 OpenAI Responses models also support image and PDF file inputs. Inline and URL
 attachments continue to work as before.
 
+Image parts accept a `detail` entry in their metadata (`"low"`, `"high"` or
+`"auto"`) to pick the resolution the model reads the image at. It is sent as
+`image_url.detail` on Chat Completions and as `detail` on a Responses
+`input_image` block; left out, the API applies its own default.
+
+```elixir
+ReqLLM.Context.user([
+  ContentPart.text("What does the sign say?"),
+  ContentPart.image(jpeg_bytes, "image/jpeg", %{detail: :high})
+])
+```
+
 ### Reusable OpenAI files
 
 `ReqLLM.Providers.OpenAI.Files` exposes the OpenAI Files lifecycle without

@@ -1,5 +1,5 @@
 defmodule ReqLLM.BillingCoverageTest do
-  use ExUnit.Case, async: true
+  use ExUnit.Case, async: false
 
   alias ReqLLM.Usage.{Cost, Normalize}
 
