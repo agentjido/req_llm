@@ -78,6 +78,12 @@ defmodule ReqLLM.Schema do
 
   """
 
+  require Logger
+
+  @schema_cache :req_llm_schema_cache
+  @default_schema_cache_max_bytes 16 * 1024 * 1024
+  @default_schema_cache_eviction_strategy ReqLLM.Schema.EvictionStrategy.FIFO
+
   @doc """
   Compiles a keyword schema to a NimbleOptions compiled schema.
 
@@ -860,17 +866,163 @@ defmodule ReqLLM.Schema do
   end
 
   defp get_or_build_jsv_schema(schema) do
-    cache_key = :erlang.phash2(schema)
-
-    case :ets.lookup(:req_llm_schema_cache, cache_key) do
-      [{^cache_key, cached_root}] ->
+    case :ets.lookup(@schema_cache, schema) do
+      [{^schema, cached_root, _inserted_at, _last_access}] ->
+        touch_schema_cache_entry(schema)
         cached_root
 
       [] ->
         built = JSV.build!(schema)
-        :ets.insert(:req_llm_schema_cache, {cache_key, built})
+        cache_jsv_schema(schema, built)
         built
     end
+  end
+
+  defp touch_schema_cache_entry(schema) do
+    :ets.update_element(@schema_cache, schema, {4, next_schema_cache_sequence()})
+  end
+
+  defp cache_jsv_schema(schema, built) do
+    sequence = next_schema_cache_sequence()
+
+    if :ets.insert_new(@schema_cache, {schema, built, sequence, sequence}) do
+      trim_schema_cache()
+    else
+      touch_existing_schema_cache_entry(schema)
+    end
+  end
+
+  defp touch_existing_schema_cache_entry(schema) do
+    case :ets.lookup(@schema_cache, schema) do
+      [{^schema, _cached_root, _inserted_at, _last_access}] ->
+        touch_schema_cache_entry(schema)
+
+      [] ->
+        false
+    end
+  end
+
+  defp trim_schema_cache do
+    max_bytes = schema_cache_max_bytes()
+
+    cond do
+      :ets.info(@schema_cache, :size) == 0 ->
+        :ok
+
+      schema_cache_bytes() <= max_bytes ->
+        :ok
+
+      true ->
+        evict_schema_cache_entry()
+        trim_schema_cache()
+    end
+  end
+
+  defp evict_schema_cache_entry do
+    entries = schema_cache_entries()
+
+    case entries do
+      [] ->
+        :ok
+
+      [_ | _] ->
+        entries
+        |> select_schema_cache_victim()
+        |> delete_schema_cache_entry()
+    end
+  end
+
+  defp schema_cache_entries do
+    @schema_cache
+    |> :ets.select([
+      {{:"$1", :_, :"$2", :"$3"}, [], [{{:"$1", :"$2", :"$3"}}]}
+    ])
+    |> Enum.map(fn {schema, inserted_at, last_access} ->
+      %{schema: schema, inserted_at: inserted_at, last_access: last_access}
+    end)
+  end
+
+  defp select_schema_cache_victim(entries) do
+    strategy =
+      Application.get_env(
+        :req_llm,
+        :schema_cache_eviction_strategy,
+        @default_schema_cache_eviction_strategy
+      )
+
+    try do
+      selected = strategy.select_victim(entries)
+
+      if selected in entries do
+        selected
+      else
+        warn_invalid_schema_cache_strategy(strategy)
+        @default_schema_cache_eviction_strategy.select_victim(entries)
+      end
+    rescue
+      exception ->
+        warn_failed_schema_cache_strategy(strategy, Exception.message(exception))
+        @default_schema_cache_eviction_strategy.select_victim(entries)
+    catch
+      kind, reason ->
+        warn_failed_schema_cache_strategy(strategy, "#{kind}: #{inspect(reason)}")
+        @default_schema_cache_eviction_strategy.select_victim(entries)
+    end
+  end
+
+  defp delete_schema_cache_entry(%{
+         schema: schema,
+         inserted_at: inserted_at,
+         last_access: last_access
+       }) do
+    case :ets.lookup(@schema_cache, schema) do
+      [{^schema, cached_root, ^inserted_at, ^last_access}] ->
+        :ets.delete_object(
+          @schema_cache,
+          {schema, cached_root, inserted_at, last_access}
+        )
+
+      _changed_or_removed ->
+        false
+    end
+  end
+
+  defp schema_cache_max_bytes do
+    case Application.get_env(
+           :req_llm,
+           :schema_cache_max_bytes,
+           @default_schema_cache_max_bytes
+         ) do
+      max_bytes when is_integer(max_bytes) and max_bytes >= 0 ->
+        max_bytes
+
+      invalid ->
+        Logger.warning(
+          "Invalid :schema_cache_max_bytes value #{inspect(invalid)}; using #{@default_schema_cache_max_bytes}"
+        )
+
+        @default_schema_cache_max_bytes
+    end
+  end
+
+  defp schema_cache_bytes do
+    :ets.info(@schema_cache, :memory) * :erlang.system_info(:wordsize)
+  end
+
+  defp next_schema_cache_sequence do
+    System.unique_integer([:monotonic, :positive])
+  end
+
+  defp warn_invalid_schema_cache_strategy(strategy) do
+    Logger.warning(
+      "Schema cache eviction strategy #{inspect(strategy)} returned an unknown entry; using FIFO"
+    )
+  end
+
+  defp warn_failed_schema_cache_strategy(strategy, reason) do
+    Logger.warning(
+      "Schema cache eviction strategy #{inspect(strategy)} failed (#{reason}); using FIFO"
+    )
   end
 
   @doc false

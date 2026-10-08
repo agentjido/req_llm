@@ -37,9 +37,60 @@ config :req_llm,
   # Warnings
   warn_unverified_models: true,      # Warn when a model spec is not in the LLMDB catalog
 
+  # JSON Schema validator cache
+  schema_cache_max_bytes: 16 * 1024 * 1024,
+  schema_cache_eviction_strategy: ReqLLM.Schema.EvictionStrategy.FIFO,
+
   # Debugging
   debug: false                       # Enable verbose logging
 ```
+
+## JSON Schema Validator Cache
+
+ReqLLM caches compiled JSON Schema validators in ETS. The cache uses the full
+schema as its key, records insertion and access order with monotonic sequences,
+and limits retained ETS memory to 16 MiB by default. Cache hits update the
+last-access sequence without rebuilding the validator.
+
+The default FIFO strategy removes the entry with the oldest insertion sequence:
+
+```elixir
+config :req_llm,
+  schema_cache_max_bytes: 16 * 1024 * 1024,
+  schema_cache_eviction_strategy: ReqLLM.Schema.EvictionStrategy.FIFO
+```
+
+Use the built-in LRU strategy to remove the entry with the oldest access
+sequence:
+
+```elixir
+config :req_llm,
+  schema_cache_eviction_strategy: ReqLLM.Schema.EvictionStrategy.LRU
+```
+
+Applications can implement `ReqLLM.Schema.EvictionStrategy` when they need a
+different policy. The callback receives schema metadata, not the compiled
+validator or ETS table:
+
+```elixir
+defmodule MyApp.SchemaEviction do
+  @behaviour ReqLLM.Schema.EvictionStrategy
+
+  @impl true
+  def select_victim(entries) do
+    Enum.min_by(entries, & &1.inserted_at)
+  end
+end
+
+config :req_llm,
+  schema_cache_eviction_strategy: MyApp.SchemaEviction
+```
+
+The callback must return one entry from the supplied list. ReqLLM falls back to
+FIFO if the callback fails or returns an unknown entry. Eviction continues until
+the table is below `:schema_cache_max_bytes` or has no entries. A value of zero
+keeps compiled validators for the active validation call but does not retain
+them in the cache.
 
 ## Canonical Reasoning Options
 

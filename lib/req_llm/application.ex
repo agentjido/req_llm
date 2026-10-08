@@ -178,7 +178,8 @@ defmodule ReqLLM.Application do
       :set,
       :public,
       :named_table,
-      read_concurrency: true
+      read_concurrency: true,
+      write_concurrency: true
     ])
   end
 
