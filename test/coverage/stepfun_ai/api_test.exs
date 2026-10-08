@@ -7,10 +7,10 @@ defmodule ReqLLM.Coverage.StepFunAI.APITest do
   @moduletag provider: :stepfun_ai
   @moduletag timeout: 120_000
 
-  @chat_model %{provider: :stepfun_ai, id: "step-3.5-flash"}
-  @audio_chat_model %{provider: :stepfun_ai, id: "stepaudio-3-chat-preview"}
-  @speech_model %{provider: :stepfun_ai, id: "stepaudio-3-tts"}
-  @asr_model %{provider: :stepfun_ai, id: "stepaudio-3-asr-max"}
+  @chat_model "stepfun_ai:step-3.5-flash"
+  @audio_chat_model "stepfun_ai:stepaudio-3-chat-preview"
+  @speech_model "stepfun_ai:stepaudio-3-tts"
+  @asr_model "stepfun_ai:stepaudio-3-asr-max"
   @sample_audio Path.expand("../../support/audio/stepfun_hello.wav", __DIR__)
 
   @tag ReqLLM.Test.CompatibilityScenario.tag!(:basic)

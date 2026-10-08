@@ -13,14 +13,13 @@ Use the provider that matches the account which issued the key:
 | `stepfun_ai` (Global) | `https://api.stepfun.ai/v1` |
 | `stepfun` (China) | `https://api.stepfun.com/v1` |
 
-The examples use full model specifications. These work before the new LLMDB
-catalog is released. With the updated catalog, you can also use strings such as
-`"stepfun_ai:stepaudio-3-tts"`.
+StepFun models are included in LLMDB `2026.10.1` and later. Use catalog model
+strings as shown below. Full model specifications also remain supported.
 
 ## Chat
 
 ```elixir
-model = ReqLLM.model!(%{provider: :stepfun_ai, id: "step-3.5-flash"})
+model = ReqLLM.model!("stepfun_ai:step-3.5-flash")
 
 {:ok, response} = ReqLLM.generate_text(model, "Hello!", max_tokens: 512)
 text = ReqLLM.Response.text(response)
@@ -48,7 +47,7 @@ these bytes as an `input_audio` data URI. Video inputs use
 Supported models: `stepaudio-3-tts` and `stepaudio-2.5-tts`.
 
 ```elixir
-model = ReqLLM.model!(%{provider: :stepfun_ai, id: "stepaudio-3-tts"})
+model = ReqLLM.model!("stepfun_ai:stepaudio-3-tts")
 
 {:ok, result} = ReqLLM.speak(model, "Hello from StepFun.",
   output_format: :wav,
@@ -75,7 +74,7 @@ and `stream_format: "sse"`, which return different response types.
 Supported models: `stepaudio-3-asr-max` and `stepaudio-2.5-asr`.
 
 ```elixir
-model = ReqLLM.model!(%{provider: :stepfun_ai, id: "stepaudio-3-asr-max"})
+model = ReqLLM.model!("stepfun_ai:stepaudio-3-asr-max")
 
 {:ok, result} = ReqLLM.transcribe(model, "speech.wav", language: "en")
 IO.puts(result.text)

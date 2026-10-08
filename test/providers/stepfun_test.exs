@@ -18,6 +18,19 @@ defmodule ReqLLM.Providers.StepFunTest do
     assert StepFunAI.default_env_key() == "STEPFUN_API_KEY"
   end
 
+  test "resolves released audio models from the catalog" do
+    for provider <- [:stepfun, :stepfun_ai],
+        {id, operation} <- [
+          {"stepaudio-3-tts", :speech},
+          {"stepaudio-3-asr-max", :transcription},
+          {"stepaudio-3-chat-preview", :text}
+        ] do
+      assert {:ok, catalog_model} = LLMDB.model(provider, id)
+      assert ReqLLM.model!("#{provider}:#{id}") == catalog_model
+      assert ReqLLM.ModelOperation.supported?(catalog_model, operation)
+    end
+  end
+
   test "generates text with bearer authentication and reasoning options" do
     Req.Test.stub(HTTP, fn conn ->
       assert conn.request_path == "/v1/chat/completions"
