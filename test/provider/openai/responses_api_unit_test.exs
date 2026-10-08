@@ -1748,6 +1748,22 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
       assert resp.body.usage.total_tokens == 0
     end
 
+    test "handles malformed usage gracefully" do
+      response_body = %{
+        "id" => "resp_123",
+        "model" => "gpt-5",
+        "output_text" => "Hello",
+        "usage" => "invalid"
+      }
+
+      {_req, resp} = ResponsesAPI.decode_response(build_response(200, response_body))
+
+      assert resp.body.usage.input_tokens == 0
+      assert resp.body.usage.output_tokens == 0
+      assert resp.body.usage.total_tokens == 0
+      assert resp.body.usage.usage_reported == %{input: false, output: false}
+    end
+
     test "collects code_interpreter output items in provider_meta" do
       response_body = %{
         "id" => "resp_123",

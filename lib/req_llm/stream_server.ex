@@ -1232,7 +1232,6 @@ defmodule ReqLLM.StreamServer do
 
                 usage = Map.get(chunk_meta, :usage)
 
-                # Returned facts must be merged before pricing and terminal telemetry.
                 merged_metadata =
                   Map.merge(
                     metadata,

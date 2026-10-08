@@ -245,7 +245,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
         reasoning_summary_part_chunk(data, :done)
 
       "response.usage" ->
-        usage_data = data["usage"] || %{}
+        usage_data = response_usage(data)
 
         raw_usage = %{
           input_tokens: usage_data["input_tokens"] || 0,
@@ -412,7 +412,8 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   defp error_details(_data), do: %{}
 
   defp capture_completion_metadata(data, meta, provider) do
-    usage_data = get_in(data, ["response", "usage"])
+    response_data = data["response"] || %{}
+    usage_data = response_usage(response_data)
     response_id = get_in(data, ["response", "id"])
     response_output = get_in(data, ["response", "output"]) || []
 
@@ -424,7 +425,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
       end
 
     meta =
-      if usage_data do
+      if Map.has_key?(response_data, "usage") do
         raw_usage = %{
           input_tokens: usage_data["input_tokens"] || 0,
           output_tokens: usage_data["output_tokens"] || 0,
@@ -433,7 +434,6 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
               (usage_data["input_tokens"] || 0) + (usage_data["output_tokens"] || 0)
         }
 
-        response_data = data["response"] || %{}
         usage = normalize_responses_usage(raw_usage, response_data)
         Map.put(meta, :usage, usage)
       else
@@ -2260,6 +2260,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
 
   defp decode_responses_success({req, resp}) do
     body = ReqLLM.Provider.Utils.ensure_parsed_body(resp.body)
+    usage_data = response_usage(body)
 
     output_segments = body["output"] || []
     model = response_materialization_model(req, body)
@@ -2276,11 +2277,11 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     code_interpreter_items = extract_code_interpreter_items(output_segments)
 
     base_usage = %{
-      input_tokens: get_in(body, ["usage", "input_tokens"]) || 0,
-      output_tokens: get_in(body, ["usage", "output_tokens"]) || 0,
+      input_tokens: usage_data["input_tokens"] || 0,
+      output_tokens: usage_data["output_tokens"] || 0,
       total_tokens:
-        (get_in(body, ["usage", "input_tokens"]) || 0) +
-          (get_in(body, ["usage", "output_tokens"]) || 0)
+        (usage_data["input_tokens"] || 0) +
+          (usage_data["output_tokens"] || 0)
     }
 
     usage = normalize_responses_usage(base_usage, body)
@@ -2879,30 +2880,25 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   defp normalize_arguments_json(_), do: "{}"
 
   defp normalize_responses_usage(usage, response_data) do
+    usage_data = response_usage(response_data)
+
     reasoning_tokens =
-      get_in(response_data, ["usage", "reasoning_tokens"]) ||
-        get_in(response_data, ["usage", "output_tokens_details", "reasoning_tokens"]) ||
-        get_in(response_data, ["usage", "completion_tokens_details", "reasoning_tokens"]) || 0
+      usage_data["reasoning_tokens"] ||
+        get_in(usage_data, ["output_tokens_details", "reasoning_tokens"]) ||
+        get_in(usage_data, ["completion_tokens_details", "reasoning_tokens"]) || 0
 
     cached_tokens =
-      get_in(response_data, ["usage", "input_tokens_details", "cached_tokens"]) ||
-        get_in(response_data, ["usage", "prompt_tokens_details", "cached_tokens"]) || 0
+      get_in(usage_data, ["input_tokens_details", "cached_tokens"]) ||
+        get_in(usage_data, ["prompt_tokens_details", "cached_tokens"]) || 0
 
     cache_creation_tokens =
-      get_in(response_data, ["usage", "input_tokens_details", "cache_write_tokens"]) ||
-        get_in(response_data, ["usage", "prompt_tokens_details", "cache_write_tokens"])
+      get_in(usage_data, ["input_tokens_details", "cache_write_tokens"]) ||
+        get_in(usage_data, ["prompt_tokens_details", "cache_write_tokens"])
 
-    reported =
-      case Map.get(response_data, "usage") do
-        raw when is_map(raw) ->
-          %{
-            input: not is_nil(Map.get(raw, "input_tokens")),
-            output: not is_nil(Map.get(raw, "output_tokens"))
-          }
-
-        nil ->
-          %{input: false, output: false}
-      end
+    reported = %{
+      input: not is_nil(Map.get(usage_data, "input_tokens")),
+      output: not is_nil(Map.get(usage_data, "output_tokens"))
+    }
 
     usage =
       usage
@@ -2972,7 +2968,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   end
 
   defp extract_tool_calls_from_usage(response_data) do
-    usage = response_data["usage"] || %{}
+    usage = response_usage(response_data)
 
     details =
       Map.get(usage, "server_side_tool_usage_details") ||
@@ -2985,6 +2981,9 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     counts_from_requests = extract_tool_counts_from_map(server_tool_use, "_requests")
     merge_tool_counts(counts_from_details, counts_from_requests)
   end
+
+  defp response_usage(%{"usage" => usage}) when is_map(usage), do: usage
+  defp response_usage(_response_data), do: %{}
 
   defp extract_tool_counts_from_map(map, suffix) when is_map(map) and is_binary(suffix) do
     Enum.reduce(map, %{}, fn {key, value}, acc ->
