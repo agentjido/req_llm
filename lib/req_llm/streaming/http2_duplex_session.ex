@@ -78,9 +78,9 @@ defmodule ReqLLM.Streaming.HTTP2DuplexSession do
     req_headers = Enum.reject(headers, fn {k, _} -> String.downcase(k) == "host" end)
 
     with {:ok, conn} <-
-           Mint.HTTP.connect(:https, uri.host, port, protocols: [:http2], mode: :active),
+           Mint.HTTP2.connect(:https, uri.host, port, mode: :active),
          {:ok, conn, ref} <-
-           Mint.HTTP.request(conn, String.upcase(method), path, req_headers, :stream) do
+           Mint.HTTP2.request(conn, String.upcase(method), path, req_headers, :stream) do
       {:ok, %__MODULE__{conn: conn, ref: ref, owner: owner, status: :open}}
     else
       {:error, reason} -> {:stop, reason}
@@ -113,13 +113,13 @@ defmodule ReqLLM.Streaming.HTTP2DuplexSession do
   end
 
   def handle_call(:close, _from, state) do
-    if state.conn, do: Mint.HTTP.close(state.conn)
+    if state.conn, do: Mint.HTTP2.close(state.conn)
     {:stop, :normal, :ok, %{state | status: :closed, conn: nil}}
   end
 
   @impl GenServer
   def handle_info(message, %{conn: conn} = state) when not is_nil(conn) do
-    case Mint.HTTP.stream(conn, message) do
+    case Mint.HTTP2.stream(conn, message) do
       {:ok, conn, responses} ->
         # Incoming frames may include WINDOW_UPDATEs — try to drain the outbound buffer.
         {:noreply, flush(apply_responses(%{state | conn: conn}, responses))}
@@ -183,7 +183,7 @@ defmodule ReqLLM.Streaming.HTTP2DuplexSession do
         state
 
       {:value, :eof} ->
-        case Mint.HTTP.stream_request_body(state.conn, state.ref, :eof) do
+        case Mint.HTTP2.stream_request_body(state.conn, state.ref, :eof) do
           {:ok, conn} ->
             %{state | conn: conn, eof_sent: true, out_buffer: :queue.drop(state.out_buffer)}
 
@@ -214,7 +214,7 @@ defmodule ReqLLM.Streaming.HTTP2DuplexSession do
   end
 
   defp send_chunk(state, chunk, rest_buffer) do
-    case Mint.HTTP.stream_request_body(state.conn, state.ref, chunk) do
+    case Mint.HTTP2.stream_request_body(state.conn, state.ref, chunk) do
       {:ok, conn} -> flush(%{state | conn: conn, out_buffer: rest_buffer})
       {:error, conn, _reason} -> %{state | conn: conn}
     end
