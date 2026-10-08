@@ -70,8 +70,16 @@ then uses LLMDB's component selector. It charges uncached input, cache reads,
 cache writes, output, and storage through separate meters. A selected context
 tier applies to the whole request when LLMDB marks it `full_request`.
 
-Supply the actual billed service tier after any provider fallback. `"auto"`
-does not confirm one. Time-dependent tariffs require an explicit
+For OpenAI, ReqLLM uses the physical endpoint and the returned service tier
+for both buffered and streamed prices. The returned tier replaces
+`pricing_context.service_tier`; a missing, invalid, or `"auto"` returned tier
+does not confirm a billed tier. Known OpenAI hosts confirm global or regional
+processing. Other hosts require an independently confirmed processing fact.
+Standalone compact and Decisions endpoints do not establish a Responses
+tariff.
+
+For other providers, supply the actual billed service tier after any provider
+fallback. `"auto"` does not confirm one. Time-dependent tariffs require an explicit
 `pricing_period: "peak"` or `"off_peak"` chosen by the caller from provider
 billing evidence; ReqLLM does not choose a period from a clock or response
 timestamp. For a current Coding Plan credit tariff, also supply

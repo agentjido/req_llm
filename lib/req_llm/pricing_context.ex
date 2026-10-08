@@ -8,8 +8,6 @@ defmodule ReqLLM.PricingContext do
   any caller preference. A missing or `auto` tier is unknown, never `default`.
   """
 
-  alias ReqLLM.MapAccess
-
   @doc """
   Merges confirmed OpenAI endpoint and returned metadata into explicit context.
 
@@ -43,17 +41,21 @@ defmodule ReqLLM.PricingContext do
   defp api(%URI{path: "/v1/batches/" <> id}) when id != "", do: "batch"
   defp api(_), do: nil
 
-  defp regional_processing(%URI{host: "api.openai.com"}), do: false
-
-  defp regional_processing(%URI{host: host})
-       when host in ["us.api.openai.com", "eu.api.openai.com"],
-       do: true
+  defp regional_processing(%URI{host: host}) when is_binary(host) do
+    case String.downcase(host) do
+      "api.openai.com" -> false
+      host when host in ["us.api.openai.com", "eu.api.openai.com"] -> true
+      _ -> nil
+    end
+  end
 
   defp regional_processing(_), do: nil
 
   defp returned_tier(metadata) when is_map(metadata) do
-    case MapAccess.get(metadata, :service_tier) do
-      tier when is_atom(tier) and tier not in [nil, :auto] -> Atom.to_string(tier)
+    tier = Map.get(metadata, :service_tier, Map.get(metadata, "service_tier"))
+
+    case tier do
+      tier when is_atom(tier) and tier not in [nil, true, false, :auto] -> Atom.to_string(tier)
       tier when is_binary(tier) and tier not in ["", "auto"] -> tier
       _ -> nil
     end

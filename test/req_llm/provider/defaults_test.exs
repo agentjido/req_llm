@@ -9,6 +9,17 @@ defmodule ReqLLM.Provider.DefaultsTest do
   alias ReqLLM.Provider.Defaults.ResponseBuilder
   alias ReqLLM.StreamChunk
 
+  @billing_model %LLMDB.Model{
+    provider: :openai,
+    id: "parser-test",
+    pricing: %{
+      components: [
+        %{id: "token.input", kind: "token", per: 1_000_000, rate: 1.0},
+        %{id: "token.output", kind: "token", per: 1_000_000, rate: 1.0}
+      ]
+    }
+  }
+
   describe "Finch options" do
     test "builds current Req options for the application pool and timeout" do
       merged = Defaults.merge_finch_options([], pool_timeout: 30_000)
@@ -703,6 +714,93 @@ defmodule ReqLLM.Provider.DefaultsTest do
       assert {:ok, response} = Defaults.decode_response_body_openai_format(response_data, model)
       assert response.usage.cached_tokens == 1_200
       assert response.usage.cache_creation_tokens == 800
+    end
+
+    test "keeps partial token usage in buffered and streamed responses", %{model: model} do
+      for {usage, input, output, reported} <- [
+            {%{"prompt_tokens" => 7}, 7, 0, %{input: true, output: false}},
+            {%{"completion_tokens" => 3}, 0, 3, %{input: false, output: true}},
+            {%{"prompt_tokens" => nil, "completion_tokens" => 3, "total_tokens" => 3}, 0, 3,
+             %{input: false, output: true}},
+            {%{"prompt_tokens" => "7", "completion_tokens" => "3"}, 7, 3,
+             %{input: true, output: true}}
+          ] do
+        {:ok, response} =
+          Defaults.decode_response_body_openai_format(%{"usage" => usage}, model)
+
+        [chunk] =
+          Defaults.default_decode_stream_event(
+            %{data: %{"choices" => [], "usage" => usage}},
+            model
+          )
+
+        assert response.usage == chunk.metadata.usage
+        assert response.usage.input_tokens == input
+        assert response.usage.output_tokens == output
+        assert response.usage.total_tokens == input + output
+        assert ReqLLM.Usage.normalize(response.usage).usage_reported == reported
+      end
+    end
+
+    test "keeps invalid counters and marks malformed details as incomplete", %{model: model} do
+      for usage <- [
+            %{"prompt_tokens" => "invalid", "completion_tokens" => 3},
+            %{"prompt_tokens" => false, "completion_tokens" => 3},
+            %{
+              "prompt_tokens" => 7,
+              "completion_tokens" => 3,
+              "prompt_tokens_details" => "invalid"
+            },
+            %{
+              "prompt_tokens" => 7,
+              "completion_tokens" => 3,
+              "completion_tokens_details" => false
+            },
+            %{
+              "prompt_tokens" => 7,
+              "completion_tokens" => 3,
+              "prompt_tokens_details" => %{"cached_tokens" => false}
+            }
+          ] do
+        {:ok, response} =
+          Defaults.decode_response_body_openai_format(%{"usage" => usage}, model)
+
+        [chunk] =
+          Defaults.default_decode_stream_event(
+            %{data: %{"choices" => [], "usage" => usage}},
+            model
+          )
+
+        assert response.usage == chunk.metadata.usage
+        normalized = ReqLLM.Usage.normalize(response.usage)
+        assert {:ok, nil} = ReqLLM.Billing.calculate(normalized, @billing_model)
+      end
+    end
+
+    test "provider extras cannot replace canonical token or billing facts", %{model: model} do
+      usage = %{
+        "prompt_tokens" => false,
+        "completion_tokens" => 3,
+        "prompt_tokens_details" => "invalid",
+        "input" => 0,
+        "input_tokens" => 0,
+        "output" => 0,
+        "usage_reported" => %{input: true, output: true},
+        "billing_usage_complete" => true,
+        "cost" => 0.25,
+        "cache_storage_token_hours" => 10
+      }
+
+      {:ok, response} = Defaults.decode_response_body_openai_format(%{"usage" => usage}, model)
+      normalized = ReqLLM.Usage.normalize(response.usage)
+
+      assert normalized.input_tokens == false
+      assert normalized.output_tokens == 3
+      assert normalized.billing_usage_complete == false
+      assert response.usage["cost"] == 0.25
+      assert response.usage["cache_storage_token_hours"] == 10
+      refute Map.has_key?(response.usage, "usage_reported")
+      assert {:ok, nil} = ReqLLM.Billing.calculate(normalized, @billing_model)
     end
 
     test "decodes reasoning_details to normalized structs", %{model: model} do

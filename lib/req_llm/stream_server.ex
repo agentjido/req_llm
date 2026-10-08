@@ -1210,6 +1210,32 @@ defmodule ReqLLM.StreamServer do
 
   defp price_stream_usage(metadata, _state), do: metadata
 
+  defp provider_metadata(metadata) do
+    case ReqLLM.MapAccess.get_raw(metadata, :provider_meta) do
+      provider_meta when is_map(provider_meta) -> provider_meta
+      _ -> %{}
+    end
+  end
+
+  defp returned_service_tier?(provider_meta) do
+    Map.has_key?(provider_meta, :service_tier) or Map.has_key?(provider_meta, "service_tier")
+  end
+
+  defp merge_provider_metadata(existing, incoming) do
+    if returned_service_tier?(incoming) do
+      existing = Map.drop(existing, [:service_tier, "service_tier"])
+
+      incoming =
+        if Map.has_key?(incoming, :service_tier),
+          do: Map.delete(incoming, "service_tier"),
+          else: incoming
+
+      Map.merge(existing, incoming)
+    else
+      Map.merge(existing, incoming)
+    end
+  end
+
   defp enqueue_chunks(chunks, state) do
     {new_queue, updated_metadata, new_obj_acc, telemetry, message_acc, builtin_timing} =
       Enum.reduce(
@@ -1246,12 +1272,14 @@ defmodule ReqLLM.StreamServer do
                 merged_metadata =
                   if state.model.provider == :openai do
                     provider_meta =
-                      Map.merge(
-                        Map.get(metadata, :provider_meta, %{}),
-                        Map.get(chunk_meta, :provider_meta, %{})
+                      merge_provider_metadata(
+                        provider_metadata(metadata),
+                        provider_metadata(chunk_meta)
                       )
 
-                    Map.put(merged_metadata, :provider_meta, provider_meta)
+                    merged_metadata
+                    |> Map.delete("provider_meta")
+                    |> Map.put(:provider_meta, provider_meta)
                   else
                     merged_metadata
                   end
@@ -1265,16 +1293,8 @@ defmodule ReqLLM.StreamServer do
                   end)
                   |> price_stream_usage(state)
                 else
-                  provider_meta = Map.get(chunk_meta, :provider_meta, %{})
-
                   if state.model.provider == :openai and
-                       ReqLLM.MapAccess.get(provider_meta, :service_tier) !=
-                         ReqLLM.MapAccess.get(
-                           Map.get(metadata, :provider_meta, %{}),
-                           :service_tier
-                         ) and
-                       (Map.has_key?(provider_meta, :service_tier) or
-                          Map.has_key?(provider_meta, "service_tier")) do
+                       returned_service_tier?(provider_metadata(chunk_meta)) do
                     price_stream_usage(merged_metadata, state)
                   else
                     merged_metadata

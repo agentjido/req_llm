@@ -56,7 +56,7 @@ defmodule ReqLLM.OpenAIPricingContextTest do
 
     assert PricingContext.from_openai(nil, nil) == %{}
 
-    for tier <- [nil, "auto", :auto, ""] do
+    for tier <- [nil, "auto", :auto, "", true, false, 1, [], %{}] do
       context =
         PricingContext.from_openai("https://api.openai.com/v1/responses", %{service_tier: tier},
           service_tier: "default"
@@ -65,6 +65,33 @@ defmodule ReqLLM.OpenAIPricingContextTest do
       refute Map.has_key?(context, :service_tier)
       refute Map.has_key?(context, "service_tier")
     end
+  end
+
+  test "endpoint variants confirm only facts that the physical URL provides" do
+    for {url, expected} <- [
+          {"https://API.OPENAI.COM/v1/responses?include=usage",
+           %{api: "responses", regional_processing: false}},
+          {"wss://EU.API.OPENAI.COM/v1/responses",
+           %{api: "responses", regional_processing: true}},
+          {"https://US.API.OPENAI.COM/v1/chat/completions?stream=true",
+           %{api: "chat_completions", regional_processing: true}},
+          {"https://api.openai.com/v1/responses/compact", %{regional_processing: false}},
+          {"https://api.openai.com/v1/decisions", %{regional_processing: false}}
+        ] do
+      assert PricingContext.from_openai(url, nil) == expected
+    end
+  end
+
+  test "invalid metadata does not use the requested service tier" do
+    for metadata <- [nil, true, false, [], "default", %{service_tier: true}] do
+      assert PricingContext.from_openai(nil, metadata, service_tier: "default") == %{}
+    end
+
+    assert PricingContext.from_openai(nil, %{"service_tier" => "default", service_tier: false}) ==
+             %{}
+
+    assert PricingContext.from_openai(nil, %{"service_tier" => "default", service_tier: nil}) ==
+             %{}
   end
 
   test "buffered client functions retain arguments and ordinary token charges" do
@@ -175,6 +202,17 @@ defmodule ReqLLM.OpenAIPricingContextTest do
     end
   end
 
+  test "standalone compact requests do not borrow a Responses tariff" do
+    model = ReqLLM.model!("openai:gpt-6-sol")
+    body = responses_body(1_200, "default") |> Map.put("object", "response.compaction")
+
+    response =
+      buffered(model, body, "https://api.openai.com/v1/responses/compact")
+
+    assert response.body.usage.pricing.status == :unknown
+    refute Map.has_key?(response.body.usage, :total_cost)
+  end
+
   test "stream terminal token telemetry carries the conditional physical cost" do
     model = ReqLLM.model!("openai:gpt-6-sol")
     server = stream_server(model, endpoint("eu.api.openai.com", "responses"), %{})
@@ -220,9 +258,9 @@ defmodule ReqLLM.OpenAIPricingContextTest do
     StreamServer.cancel(server)
   end
 
-  test "missing or auto returned tier cannot borrow requested default; missing usage is not zero" do
+  test "invalid returned tier cannot borrow requested default; missing usage is not zero" do
     for {id, api} <- [{"gpt-6-sol", "responses"}, {"gpt-5.6-luna", "chat_completions"}],
-        tier <- [nil, "auto"] do
+        tier <- [nil, "auto", true, false, 1, [], %{}] do
       model = ReqLLM.model!("openai:#{id}")
       body = wire_body(api, 1_200, tier)
       explicit = %{service_tier: "default"}
@@ -330,9 +368,11 @@ defmodule ReqLLM.OpenAIPricingContextTest do
   defp endpoint(host, "chat_completions"), do: "https://#{host}/v1/chat/completions"
 
   defp buffered(model, body, url \\ "https://api.openai.com/v1/responses", explicit \\ %{}) do
+    api_mod = if body["object"] == "response.compaction", do: ResponsesAPI
+
     request = %Req.Request{
       url: URI.parse(url),
-      options: %{model: model.id, context: %ReqLLM.Context{messages: []}},
+      options: %{model: model.id, context: %ReqLLM.Context{messages: []}, api_mod: api_mod},
       private: %{req_llm_model: model, req_llm_pricing_context: explicit}
     }
 
