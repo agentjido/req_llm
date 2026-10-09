@@ -160,8 +160,8 @@ defmodule ReqLLM.Streaming.FinchClient do
          finch_request,
          stream_server_pid,
          finch_name,
-         _http_context,
-         _fixture_path,
+         http_context,
+         fixture_path,
          opts
        ) do
     stream_opts =
@@ -172,7 +172,16 @@ defmodule ReqLLM.Streaming.FinchClient do
 
     task_pid =
       Task.Supervisor.async(ReqLLM.TaskSupervisor, fn ->
-        run_stream_with_options(finch_request, stream_server_pid, finch_name, stream_opts)
+        observer = fixture_observer(fixture_path, http_context, finch_request)
+        observer.(:request)
+
+        run_stream_with_options(
+          finch_request,
+          stream_server_pid,
+          finch_name,
+          stream_opts,
+          observer
+        )
       end)
 
     {:ok, task_pid.pid}
@@ -193,21 +202,47 @@ defmodule ReqLLM.Streaming.FinchClient do
     run_stream_with_options(finch_request, stream_server_pid, finch_name, stream_opts)
   end
 
-  defp run_stream_with_options(finch_request, stream_server_pid, finch_name, stream_opts) do
+  defp fixture_observer(nil, _context, _request), do: fn _event -> :ok end
+
+  defp fixture_observer(path, context, request) do
+    backend = ReqLLM.Step.Fixture.Backend
+
+    if Code.ensure_loaded?(backend) and function_exported?(backend, :observe_stream_event, 4) do
+      body = Fixtures.canonical_json_from_finch_request(request)
+
+      fn event ->
+        Function.capture(backend, :observe_stream_event, 4).(path, context, body, event)
+      end
+    else
+      fn _event -> :ok end
+    end
+  end
+
+  defp run_stream_with_options(
+         finch_request,
+         stream_server_pid,
+         finch_name,
+         stream_opts,
+         observer \\ fn _ -> :ok end
+       ) do
     finch_stream_callback = fn
       {:status, status}, acc ->
+        observer.({:status, status})
         safe_http_event(stream_server_pid, {:status, status})
         acc
 
       {:headers, headers}, acc ->
+        observer.({:headers, headers})
         safe_http_event(stream_server_pid, {:headers, headers})
         acc
 
       {:data, chunk}, acc ->
+        observer.({:data, chunk})
         safe_http_event(stream_server_pid, {:data, chunk})
         acc
 
       :done, acc ->
+        observer.(:done)
         safe_http_event(stream_server_pid, :done)
         acc
     end
@@ -221,8 +256,12 @@ defmodule ReqLLM.Streaming.FinchClient do
              stream_opts,
              &stream_with_connection_pool/5
            ) do
-        {:ok, _} -> :ok
-        {:error, reason, _callback_acc} -> forward_stream_failure(stream_server_pid, reason)
+        {:ok, _} ->
+          :ok
+
+        {:error, reason, _callback_acc} ->
+          observer.({:error, reason})
+          forward_stream_failure(stream_server_pid, reason)
       end
     catch
       :exit, reason -> forward_stream_failure(stream_server_pid, {:exit, reason})

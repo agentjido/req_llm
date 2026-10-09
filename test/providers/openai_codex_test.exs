@@ -689,12 +689,7 @@ defmodule ReqLLM.Providers.OpenAICodexTest do
     test "keeps StreamServer alive when the provider returns an error event" do
       {:ok, model} = ReqLLM.model("openai_codex:gpt-5.3-codex-spark")
 
-      {:ok, server} =
-        ReqLLM.StreamServer.start_link(provider_mod: OpenAICodex, model: model)
-
-      on_exit(fn ->
-        if Process.alive?(server), do: GenServer.stop(server)
-      end)
+      server = start_supervised!({ReqLLM.StreamServer, provider_mod: OpenAICodex, model: model})
 
       payload = %{
         "type" => "error",

@@ -937,6 +937,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
       |> maybe_put_string("tool_choice", tool_choice)
       |> maybe_put_string("parallel_tool_calls", opts_map[:parallel_tool_calls])
       |> maybe_put_string("service_tier", service_tier)
+      |> maybe_put_string("max_tool_calls", provider_opts[:openai_max_tool_calls])
       |> maybe_put_string(
         "multi_agent",
         ReqLLM.Providers.OpenAI.MultiAgent.configuration(opts_map, model_name)

@@ -1,0 +1,266 @@
+{
+  "captured_at": "2026-10-09T01:14:55.925284Z",
+  "model_spec": "openai:gpt-6-luna",
+  "provider": "openai",
+  "request": {
+    "body": {
+      "b64": "eyJpbmNsdWRlIjpbInJlYXNvbmluZy5lbmNyeXB0ZWRfY29udGVudCJdLCJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IkNhbGwgYmlsbGluZ19lY2hvIHdpdGggdmFsdWUgT0suIEFmdGVyIHJlY2VpdmluZyB0aGUgcmVzdWx0LCByZXBseSBPSyBvbmx5LiIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9LHsiYXJndW1lbnRzIjoie1widmFsdWVcIjpcIk9LXCJ9IiwiY2FsbF9pZCI6ImNhbGxfY3d3S01jVWtjdVFoclNVRVlPekxQY0R4IiwibmFtZSI6ImJpbGxpbmdfZWNobyIsInR5cGUiOiJmdW5jdGlvbl9jYWxsIn0seyJjYWxsX2lkIjoiY2FsbF9jd3dLTWNVa2N1UWhyU1VFWU96TFBjRHgiLCJvdXRwdXQiOiJPSyIsInR5cGUiOiJmdW5jdGlvbl9jYWxsX291dHB1dCJ9XSwibWF4X291dHB1dF90b2tlbnMiOjUxMiwibW9kZWwiOiJncHQtNi1sdW5hIiwicHJldmlvdXNfcmVzcG9uc2VfaWQiOiJyZXNwXzBmNGEyMjA4NzQ3OGVhNjMwMDZhYzg0MDBkZjc0Yzg3ZDE5ZWQzYTQzNWYzZmQ4MGRmIiwicmVhc29uaW5nIjp7ImVmZm9ydCI6Im5vbmUifSwic2VydmljZV90aWVyIjoiZGVmYXVsdCIsInN0b3JlIjp0cnVlLCJzdHJlYW0iOmZhbHNlLCJ0b29sX2Nob2ljZSI6Im5vbmUiLCJ0b29scyI6W3siZGVzY3JpcHRpb24iOiJSZXR1cm4gdGhlIHN1cHBsaWVkIHRlc3QgdmFsdWUgbG9jYWxseS4iLCJuYW1lIjoiYmlsbGluZ19lY2hvIiwicGFyYW1ldGVycyI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnsidmFsdWUiOnsidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsidmFsdWUiXSwidHlwZSI6Im9iamVjdCJ9LCJzdHJpY3QiOmZhbHNlLCJ0eXBlIjoiZnVuY3Rpb24ifV19"
+    },
+    "canonical_json": {
+      "include": [
+        "reasoning.encrypted_content"
+      ],
+      "input": [
+        {
+          "content": [
+            {
+              "text": "Call billing_echo with value OK. After receiving the result, reply OK only.",
+              "type": "input_text"
+            }
+          ],
+          "role": "user"
+        },
+        {
+          "arguments": "{\"value\":\"OK\"}",
+          "call_id": "call_cwwKMcUkcuQhrSUEYOzLPcDx",
+          "name": "billing_echo",
+          "type": "function_call"
+        },
+        {
+          "call_id": "call_cwwKMcUkcuQhrSUEYOzLPcDx",
+          "output": "OK",
+          "type": "function_call_output"
+        }
+      ],
+      "max_output_tokens": 512,
+      "model": "gpt-6-luna",
+      "previous_response_id": "resp_0f4a22087478ea63006ac8400df74c87d19ed3a435f3fd80df",
+      "reasoning": {
+        "effort": "none"
+      },
+      "service_tier": "default",
+      "store": true,
+      "stream": false,
+      "tool_choice": "none",
+      "tools": [
+        {
+          "description": "Return the supplied test value locally.",
+          "name": "billing_echo",
+          "parameters": {
+            "additionalProperties": false,
+            "properties": {
+              "value": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "value"
+            ],
+            "type": "object"
+          },
+          "strict": false,
+          "type": "function"
+        }
+      ]
+    },
+    "headers": {
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.7.4"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.openai.com/v1/responses"
+  },
+  "response": {
+    "body": {
+      "safety_identifier": null,
+      "store": true,
+      "error": null,
+      "created_at": 1791508495,
+      "presence_penalty": 0.0,
+      "status": "completed",
+      "tool_usage": {
+        "image_gen": {
+          "input_tokens": 0,
+          "input_tokens_details": {
+            "image_tokens": 0,
+            "text_tokens": 0
+          },
+          "output_tokens": 0,
+          "output_tokens_details": {
+            "image_tokens": 0,
+            "text_tokens": 0
+          },
+          "total_tokens": 0
+        },
+        "web_search": {
+          "num_requests": 0
+        }
+      },
+      "max_tool_calls": null,
+      "instructions": null,
+      "billing": {
+        "payer": "developer"
+      },
+      "prompt_cache_retention": "24h",
+      "completed_at": 1791508495,
+      "temperature": 1.0,
+      "text": {
+        "format": {
+          "type": "text"
+        },
+        "verbosity": "medium"
+      },
+      "parallel_tool_calls": true,
+      "tool_choice": "none",
+      "frequency_penalty": 0.0,
+      "top_logprobs": 0,
+      "reasoning": {
+        "context": "all_turns",
+        "effort": "none",
+        "mode": "standard",
+        "summary": null
+      },
+      "usage": {
+        "input_tokens": 129,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 5,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 134
+      },
+      "access_programs": null,
+      "incomplete_details": null,
+      "model": "gpt-6-luna",
+      "truncation": "disabled",
+      "metadata": {},
+      "service_tier": "default",
+      "id": "resp_0f4a22087478ea63006ac8400ee5d887d1842ae802706b7f5e",
+      "top_p": 0.98,
+      "user": null,
+      "prompt_cache_key": null,
+      "moderation": null,
+      "object": "response",
+      "background": false,
+      "previous_response_id": "resp_0f4a22087478ea63006ac8400df74c87d19ed3a435f3fd80df",
+      "max_output_tokens": 512,
+      "output": [
+        {
+          "content": [
+            {
+              "annotations": [],
+              "logprobs": [],
+              "text": "OK",
+              "type": "output_text"
+            }
+          ],
+          "id": "msg_0f4a22087478ea63006ac8400fa8e087d1bb66b7205c5f5a25",
+          "phase": "final_answer",
+          "role": "assistant",
+          "status": "completed",
+          "type": "message"
+        }
+      ],
+      "tools": [
+        {
+          "description": "Return the supplied test value locally.",
+          "name": "billing_echo",
+          "output_schema": null,
+          "parameters": {
+            "additionalProperties": false,
+            "properties": {
+              "value": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "value"
+            ],
+            "type": "object"
+          },
+          "strict": false,
+          "type": "function"
+        }
+      ]
+    },
+    "headers": {
+      "access-control-expose-headers": [
+        "X-Request-ID",
+        "CF-Ray",
+        "CF-Ray"
+      ],
+      "alt-svc": [
+        "h3=\":443\"; ma=86400"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a47987fca93b123f-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-length": [
+        "2528"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 09 Oct 2026 01:14:55 GMT"
+      ],
+      "openai-organization": "[REDACTED:openai-organization]",
+      "openai-processing-ms": [
+        "1042"
+      ],
+      "openai-project": [
+        "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
+      ],
+      "openai-version": [
+        "2020-10-01"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": "[REDACTED:set-cookie]",
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-ratelimit-limit-requests": [
+        "10000"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "10000000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "9998"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "10000000"
+      ],
+      "x-ratelimit-reset-requests": [
+        "12ms"
+      ],
+      "x-ratelimit-reset-tokens": [
+        "0s"
+      ],
+      "x-request-id": [
+        "req_acf7a354ecae4c1596bc0d4e5e15dc70"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

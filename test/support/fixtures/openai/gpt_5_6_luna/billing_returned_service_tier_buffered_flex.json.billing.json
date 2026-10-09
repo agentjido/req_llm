@@ -1,0 +1,149 @@
+{
+  "attempt": {
+    "attempt_id": "attempt_9",
+    "capture_complete": true,
+    "capture_origin": "live",
+    "captured_at": "2026-10-09T01:18:45.265748Z",
+    "case_id": "returned_service_tier",
+    "estimated_micros": 12789,
+    "expected_pricing": "priced",
+    "finished_at": "2026-10-09T01:18:45.312371Z",
+    "fixture": "billing_attempt_9",
+    "mode": "buffered",
+    "model": "openai:gpt-5.6-luna",
+    "phase": "flex",
+    "reconciled_micros": 6,
+    "started_at": "2026-10-09T01:18:44.402922Z",
+    "state": "complete",
+    "transcript": "transcripts/openai/gpt_5_6_luna/billing_attempt_9.json",
+    "transcript_sha256": "8e7432dca940df6d4023a2d938d81cbd115a91dcf919625899cf1d7b8c385d1b"
+  },
+  "calculation": {
+    "counts": {
+      "cache_read": 0,
+      "input": 25,
+      "input_source": "/usage/input_tokens",
+      "output": 5,
+      "output_source": "/usage/output_tokens",
+      "prompt": 25,
+      "read_source": "/usage/input_tokens_details/cached_tokens",
+      "tools": 0,
+      "write_source": "/usage/input_tokens_details/cache_write_tokens",
+      "writes": {
+        "cache_write": 0
+      }
+    },
+    "currency": "USD",
+    "line_items": [
+      {
+        "band_multiplier": "1",
+        "effective_rate_micros": 100000,
+        "expected_micros": 3,
+        "expected_usd": "0.000003",
+        "formula": "25 * 0.20 / 1000000 * 1 * 0.5 * 1",
+        "meter": "input",
+        "per": 1000000,
+        "quantity": 25,
+        "rate": "0.20",
+        "regional_multiplier": "1",
+        "source": "/usage/input_tokens",
+        "tier_multiplier": "0.5",
+        "unrounded_fraction": {
+          "denominator": 1000000000000000,
+          "numerator": 2500000000
+        },
+        "unrounded_usd": "0.000002500000"
+      },
+      {
+        "band_multiplier": "1",
+        "effective_rate_micros": 600000,
+        "expected_micros": 3,
+        "expected_usd": "0.000003",
+        "formula": "5 * 1.20 / 1000000 * 1 * 0.5 * 1",
+        "meter": "output",
+        "per": 1000000,
+        "quantity": 5,
+        "rate": "1.20",
+        "regional_multiplier": "1",
+        "source": "/usage/output_tokens",
+        "tier_multiplier": "0.5",
+        "unrounded_fraction": {
+          "denominator": 1000000000000000,
+          "numerator": 3000000000
+        },
+        "unrounded_usd": "0.000003000000"
+      },
+      {
+        "band_multiplier": "1",
+        "effective_rate_micros": 10000,
+        "expected_micros": 0,
+        "expected_usd": "0.000000",
+        "formula": "0 * 0.02 / 1000000 * 1 * 0.5 * 1",
+        "meter": "cache_read",
+        "per": 1000000,
+        "quantity": 0,
+        "rate": "0.02",
+        "regional_multiplier": "1",
+        "source": "/usage/input_tokens_details/cached_tokens",
+        "tier_multiplier": "0.5",
+        "unrounded_fraction": {
+          "denominator": 1000000000000000,
+          "numerator": 0
+        },
+        "unrounded_usd": "0.000000000000"
+      },
+      {
+        "band_multiplier": "1",
+        "effective_rate_micros": 125000,
+        "expected_micros": 0,
+        "expected_usd": "0.000000",
+        "formula": "0 * 0.25 / 1000000 * 1 * 0.5 * 1",
+        "meter": "cache_write",
+        "per": 1000000,
+        "quantity": 0,
+        "rate": "0.25",
+        "regional_multiplier": "1",
+        "source": "/usage/input_tokens_details/cache_write_tokens",
+        "tier_multiplier": "0.5",
+        "unrounded_fraction": {
+          "denominator": 1000000000000000,
+          "numerator": 0
+        },
+        "unrounded_usd": "0.000000000000"
+      }
+    ],
+    "rate_source": "https://developers.openai.com/api/docs/models/gpt-5.6-luna",
+    "rates_checked_at": "2026-10-08",
+    "status": "priced",
+    "total": "0.000006",
+    "total_micros": 6
+  },
+  "rate_book": {
+    "models": {
+      "openai:gpt-5.6-luna": {
+        "cache_read": "0.02",
+        "cache_write": "0.25",
+        "checked_at": "2026-10-08",
+        "input": "0.20",
+        "long_input_multiplier": "2",
+        "long_output_multiplier": "1.5",
+        "output": "1.20",
+        "regional_required": true,
+        "source": "https://developers.openai.com/api/docs/models/gpt-5.6-luna",
+        "threshold": 272000,
+        "tier_required": true,
+        "web_search": "10.00"
+      }
+    },
+    "schema_version": 1,
+    "version": "2026-10-08"
+  },
+  "schema_version": 1,
+  "source": {
+    "catalog_version": "2026.10.1",
+    "created_at": "2026-10-09T01:18:31.444537Z",
+    "git_revision": "8ac02d74cbc484122e1039dab17b5d39ee7d7de5",
+    "origin": "live",
+    "run_id": "live-openai-tiers"
+  }
+}
