@@ -9,6 +9,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- changelog -->
 
+## [v1.28.0](https://github.com/agentjido/req_llm/compare/v1.27.0...v1.28.0) (2026-10-09)
+
+
+
+
+### Features:
+
+* add StepFun chat and audio providers (#1087) by mikehostetler
+
+* openai: honour image detail on Responses API input_image parts (#1084) by KLoevengreen
+
+### Bug Fixes:
+
+* preserve Codex reasoning across tool turns (#1090) by mikehostetler
+
+* coverage: validate catalog community providers with live LLM API fixtures (#1089) by denys-rekun
+
+* preserve streamed cache TTLs and native OpenAI billing facts (#1081) by Matthew Neel
+
+* streaming: use concrete Mint HTTP2 type (#1083) by mikehostetler
+
+* openai_codex: decode terminal stream errors (#1082) by mikehostetler
+
+* deps: update Zoi and compatible Jido dependencies by mikehostetler
+
 ## [v1.27.0](https://github.com/agentjido/req_llm/compare/v1.26.0...v1.27.0) (2026-10-08)
 
 
