@@ -22,7 +22,7 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
     If not configured, falls back to one model per provider.
 
   **Important**:
-  - Only **implemented providers** are included (registry models without implementation are skipped)
+  - Registered providers and catalog models with a shared adapter execution contract are included
   - Config lists (`:sample_*_models`) are defaults only, not hard filters
   - Explicit specs like `"anthropic:*"` test ALL registry models for that provider
 
@@ -35,7 +35,7 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
       ### Test using local fixtures
       mix req_llm.model_compat "anthropic:*"      # ALL Anthropic text models from registry
       mix req_llm.model_compat "openai:gpt-4o"    # Specific model
-      mix req_llm.model_compat "*:*"              # ALL models from implemented providers
+      mix req_llm.model_compat "*:*"              # All models with an execution route
 
       ### Test by operation type
       mix req_llm.model_compat "google:*" --type all        # Google models across operations
@@ -68,8 +68,8 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
 
   ## Notes
 
-  - When no spec is provided (or `"*:*"` is used), only implemented providers are considered
-  - If a spec refers to an unimplemented provider, it will be skipped with a warning
+  - Models need a registered provider or a valid shared adapter execution contract
+  - Providers without an execution route are skipped with a warning
   - The final model list is deterministic and stable
   """
 

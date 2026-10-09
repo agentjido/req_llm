@@ -1,0 +1,110 @@
+{
+  "captured_at": "2026-10-09T17:33:18.704351Z",
+  "model_spec": "llmapi:gpt-4o-mini",
+  "provider": "llmapi",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoxMDI0LCJtZXNzYWdlcyI6W3siY29udGVudCI6IlJlc3BvbmQgd2l0aCBhIHNpbmdsZSB3b3JkICdIaScuIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiZ3B0LTRvLW1pbmkiLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+    },
+    "canonical_json": {
+      "max_tokens": 1024,
+      "messages": [
+        {
+          "content": "Respond with a single word 'Hi'.",
+          "role": "user"
+        }
+      ],
+      "model": "gpt-4o-mini",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.7.4"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.llmapi.ai/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "content": "Hi.",
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1791567198,
+      "id": "req_20261009173318_c98b895d",
+      "model": "gpt-4o-mini",
+      "object": "chat.completion",
+      "system_fingerprint": "fp_d310707fb5",
+      "usage": {
+        "completion_tokens": 2,
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "cost_usd_input": 2.25e-6,
+        "cost_usd_output": 1.2e-6,
+        "prompt_tokens": 15,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 0
+        },
+        "total_tokens": 17
+      }
+    },
+    "headers": {
+      "connection": [
+        "keep-alive"
+      ],
+      "content-length": [
+        "474"
+      ],
+      "content-type": [
+        "application/json; charset=utf-8"
+      ],
+      "date": [
+        "Fri, 09 Oct 2026 17:33:18 GMT"
+      ],
+      "x-llm-fallback-hops": [
+        "1"
+      ],
+      "x-llm-fallback-triggered": [
+        "false"
+      ],
+      "x-llm-served-by": [
+        "openai/gpt-4o-mini"
+      ],
+      "x-provider": [
+        "openai"
+      ],
+      "x-ratelimit-limit-requests": [
+        "30"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "25"
+      ],
+      "x-ratelimit-reset-requests": [
+        "42"
+      ],
+      "x-request-id": [
+        "req_20261009173318_c98b895d"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

@@ -58,6 +58,36 @@ mix mc --sample
 mix mc --sample anthropic
 ```
 
+### Catalog community providers
+
+The shared coverage suite can test a provider without a registered provider
+module. The model must have an LLMDB execution contract. The provider must have
+a base URL and bearer authentication metadata. Registered modules take priority.
+
+LLM API uses this path with `llm_db` 2026.10.2 or later. Set `LLMAPI_API_KEY`
+or `LLM_API_KEY` in the local `.env` file. The development catalog filter includes
+`llmapi`. Use one exact model to keep a live run small:
+
+```bash
+mix mc "llmapi:gpt-4o-mini" --scenario basic --record --max-concurrency 1
+mix mc "llmapi:gpt-4o-mini" \
+  --scenario basic,streaming,usage,token_limit,context_append,tool_multi,tool_none,tool_round_trip,object_basic \
+  --max-concurrency 1
+```
+
+The second command replays the committed fixtures. To record those scenarios,
+add `--record`. Do not use `llmapi:* --record` for a small validation run.
+Catalog entries can describe an API contract before the provider accepts the
+model. On 2026-10-09, all nine listed GPT-4o mini scenarios passed live. The
+published ID `qwen/qwen3.8-flash` returned `404 model_not_found`; its unprefixed
+ID also failed. The adapter keeps the declared wire ID and reports the error.
+It does not infer another model ID from an upstream route.
+
+The tests in `test/req_llm/llmapi_catalog_billing_test.exs` run without API calls.
+They compare buffered and streamed usage, provider identity in telemetry,
+independent decimal rates, and the provider's cost fields. Text streaming needs
+a streaming contract. Object tests need a separate object execution contract.
+
 ### GPT-6 Astra Launch Fixtures
 
 Use `llm_db` 2026.9.1 or later to resolve `openai:gpt-6-astra`. Run the standard

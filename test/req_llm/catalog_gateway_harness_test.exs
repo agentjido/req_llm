@@ -156,6 +156,15 @@ defmodule ReqLLM.CatalogGatewayHarnessTest do
            )
   end
 
+  test "streaming coverage requires a catalog streaming contract", %{model: model} do
+    assert ReqLLM.ProviderTest.Comprehensive.supports_text_streaming?(model)
+
+    model = %{model | capabilities: put_in(model.capabilities, [:streaming, :text], false)}
+    refute ReqLLM.ProviderTest.Comprehensive.supports_text_streaming?(model)
+    assert ReqLLM.ProviderDispatch.executable?(model, :text)
+    refute ReqLLM.ProviderTest.Comprehensive.supports_text_streaming?("llmapi:missing-contract")
+  end
+
   test "streaming fixture replay dispatches an unregistered provider through its catalog contract",
        %{
          model: model
