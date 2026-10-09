@@ -239,7 +239,7 @@ defmodule ReqLLM.MixProject do
       {:websockex, "~> 0.5.1"},
       {:zoi, "~> 0.18.11"},
       {:jsv, "~> 0.11"},
-      {:llm_db, "~> 2026.10.1"},
+      {:llm_db, "~> 2026.10.2"},
 
       # Dev/test dependencies
       {:bandit, "~> 1.8", only: [:dev, :test], runtime: false},

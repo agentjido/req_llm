@@ -87,6 +87,9 @@ timestamp. For a current Coding Plan credit tariff, also supply
 Cache writes with mixed durations use reported
 `cache_write_tokens_by_ttl: %{"5m" => count, "1h" => count}` usage; if the
 durations cannot be reconciled with the total, pricing stays unknown.
+ReqLLM requires LLMDB 2026.10.2 or later for the reviewed Anthropic cache
+tariffs. This includes Haiku 5.5's separate five-minute and one-hour rates,
+its full-prompt threshold, and the Sonnet 5.5 one-hour rate.
 
 When the tariff or usage is incomplete, `usage.pricing` is
 `%{status: :unknown}` and ReqLLM omits `total_cost`, `input_cost`,
