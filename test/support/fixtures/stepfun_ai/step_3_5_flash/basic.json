@@ -1,0 +1,103 @@
+{
+  "model_spec": "stepfun_ai:step-3.5-flash",
+  "provider": "stepfun_ai",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjo1MTIsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiUmVwbHkgd2l0aCBvbmx5IHRoZSB3b3JkIE9LLiIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6InN0ZXAtMy41LWZsYXNoIiwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInJlYXNvbmluZ19mb3JtYXQiOiJkZWVwc2Vlay1zdHlsZSIsInN0cmVhbSI6ZmFsc2V9"
+    },
+    "canonical_json": {
+      "max_tokens": 512,
+      "messages": [
+        {
+          "content": "Reply with only the word OK.",
+          "role": "user"
+        }
+      ],
+      "model": "step-3.5-flash",
+      "reasoning_effort": "low",
+      "reasoning_format": "deepseek-style",
+      "stream": false
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.7.4"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.stepfun.ai/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "content": "OK",
+            "reasoning": "The user asks: \"Reply with only the word OK.\" This is a straightforward request. According to the instructions, we need to comply with user requests. However, we must also be mindful of safety and ethical guidelines. There's no conflict here. The user wants a single-word response \"OK\". So the assistant should output just \"OK\". But we have to check if any policy prevents that. It's a simple request. So the answer is \"OK\".",
+            "reasoning_content": "The user asks: \"Reply with only the word OK.\" This is a straightforward request. According to the instructions, we need to comply with user requests. However, we must also be mindful of safety and ethical guidelines. There's no conflict here. The user wants a single-word response \"OK\". So the assistant should output just \"OK\". But we have to check if any policy prevents that. It's a simple request. So the answer is \"OK\".",
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1791494334,
+      "id": "chatcmpl-373279f754863eccda439d90e5c06dfa.01a11d62248e77f999fa869271d12ac2",
+      "model": "step-3.5-flash",
+      "object": "chat.completion",
+      "usage": {
+        "completion_tokens": 97,
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "prompt_tokens": 29,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "total_tokens": 126
+      }
+    },
+    "headers": {
+      "cache-control": [
+        "no-cache"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-length": [
+        "1317"
+      ],
+      "content-type": [
+        "application/json; charset=utf-8"
+      ],
+      "date": [
+        "Thu, 08 Oct 2026 21:18:55 GMT"
+      ],
+      "set-cookie": "[REDACTED:set-cookie]",
+      "vary": [
+        "Accept-Encoding",
+        "Accept-Encoding"
+      ],
+      "x-proxy-latency": [
+        "259570"
+      ],
+      "x-router-id": [
+        "path:/v1/chat/"
+      ],
+      "x-trace-id": [
+        "373279f754863eccda439d90e5c06dfa"
+      ],
+      "x-upstream-latency": [
+        "0"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

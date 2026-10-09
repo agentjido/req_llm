@@ -1,0 +1,141 @@
+{
+  "model_spec": "stepfun_ai:step-3.5-flash",
+  "provider": "stepfun_ai",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjo1MTIsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiUmV0dXJuIGFuIG9iamVjdCB3aXRoIGdyZWV0aW5nIHNldCB0byBoZWxsby4iLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJzdGVwLTMuNS1mbGFzaCIsInJlYXNvbmluZ19lZmZvcnQiOiJsb3ciLCJyZWFzb25pbmdfZm9ybWF0IjoiZGVlcHNlZWstc3R5bGUiLCJzdHJlYW0iOmZhbHNlLCJ0b29sX2Nob2ljZSI6eyJmdW5jdGlvbiI6eyJuYW1lIjoic3RydWN0dXJlZF9vdXRwdXQifSwidHlwZSI6ImZ1bmN0aW9uIn0sInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdlbmVyYXRlIHN0cnVjdHVyZWQgb3V0cHV0IG1hdGNoaW5nIHRoZSBwcm92aWRlZCBzY2hlbWEiLCJuYW1lIjoic3RydWN0dXJlZF9vdXRwdXQiLCJwYXJhbWV0ZXJzIjp7ImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjpmYWxzZSwicHJvcGVydGllcyI6eyJncmVldGluZyI6eyJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJncmVldGluZyJdLCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifV19"
+    },
+    "canonical_json": {
+      "max_tokens": 512,
+      "messages": [
+        {
+          "content": "Return an object with greeting set to hello.",
+          "role": "user"
+        }
+      ],
+      "model": "step-3.5-flash",
+      "reasoning_effort": "low",
+      "reasoning_format": "deepseek-style",
+      "stream": false,
+      "tool_choice": {
+        "function": {
+          "name": "structured_output"
+        },
+        "type": "function"
+      },
+      "tools": [
+        {
+          "function": {
+            "description": "Generate structured output matching the provided schema",
+            "name": "structured_output",
+            "parameters": {
+              "additionalProperties": false,
+              "properties": {
+                "greeting": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "greeting"
+              ],
+              "type": "object"
+            }
+          },
+          "type": "function"
+        }
+      ]
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.7.4"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.stepfun.ai/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "tool_calls",
+          "index": 0,
+          "message": {
+            "content": "",
+            "reasoning": "The user wants me to return an object with greeting set to \"hello\". I have access to a function called `structured_output` that takes a `greeting` parameter (required, string). I need to call this function with `greeting: \"hello\"`.\n\nLet me use the function.",
+            "reasoning_content": "The user wants me to return an object with greeting set to \"hello\". I have access to a function called `structured_output` that takes a `greeting` parameter (required, string). I need to call this function with `greeting: \"hello\"`.\n\nLet me use the function.",
+            "role": "assistant",
+            "tool_calls": [
+              {
+                "function": {
+                  "arguments": "{\"greeting\": \"hello\"}",
+                  "name": "structured_output"
+                },
+                "id": "chatcmpl-tool-a4d704bd2f4faf15",
+                "index": 0,
+                "type": "function"
+              }
+            ]
+          }
+        }
+      ],
+      "created": 1791494330,
+      "id": "chatcmpl-9a43f263c39dff63fc03a8b08297bfdd.01a11d62139972c8966c2b0f27529797",
+      "model": "step-3.5-flash",
+      "object": "chat.completion",
+      "usage": {
+        "completion_tokens": 86,
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "prompt_tokens": 240,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "total_tokens": 326
+      }
+    },
+    "headers": {
+      "cache-control": [
+        "no-cache"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-length": [
+        "1147"
+      ],
+      "content-type": [
+        "application/json; charset=utf-8"
+      ],
+      "date": [
+        "Thu, 08 Oct 2026 21:18:51 GMT"
+      ],
+      "set-cookie": "[REDACTED:set-cookie]",
+      "vary": [
+        "Accept-Encoding",
+        "Accept-Encoding"
+      ],
+      "x-proxy-latency": [
+        "57017"
+      ],
+      "x-router-id": [
+        "path:/v1/chat/"
+      ],
+      "x-trace-id": [
+        "9a43f263c39dff63fc03a8b08297bfdd"
+      ],
+      "x-upstream-latency": [
+        "0"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}
