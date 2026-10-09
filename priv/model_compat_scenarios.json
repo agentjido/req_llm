@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-25T13:44:53Z",
+  "generated_at": "2026-10-09T17:42:12Z",
   "models": {
     "anthropic:claude-haiku-4-5-20251001": {
       "catalog_status": "present",
@@ -4758,6 +4758,160 @@
                     "transcription_basic"
                   ],
                   "mode": "record",
+                  "status": "pass"
+                }
+              ],
+              "proof": "fixture_replay"
+            }
+          }
+        }
+      }
+    },
+    "llmapi:gpt-4o-mini": {
+      "catalog_status": "present",
+      "declared_operations": [
+        "text"
+      ],
+      "model": "gpt-4o-mini",
+      "provider": "llmapi",
+      "surfaces": {
+        "llmapi.chat_completions": {
+          "declaration": "declared",
+          "operation": "text",
+          "provider": "llmapi",
+          "scenarios": {
+            "basic": {
+              "observations": [
+                {
+                  "checked_at": "2026-10-09T17:42:12Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "basic"
+                  ],
+                  "mode": "replay",
+                  "status": "pass"
+                }
+              ],
+              "proof": "fixture_replay"
+            },
+            "context_append": {
+              "observations": [
+                {
+                  "checked_at": "2026-10-09T17:42:12Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "context_append_1",
+                    "context_append_2"
+                  ],
+                  "mode": "replay",
+                  "status": "pass"
+                }
+              ],
+              "proof": "fixture_replay"
+            },
+            "object_basic": {
+              "observations": [
+                {
+                  "checked_at": "2026-10-09T17:42:12Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "object_basic"
+                  ],
+                  "mode": "replay",
+                  "status": "pass"
+                }
+              ],
+              "proof": "fixture_replay"
+            },
+            "streaming": {
+              "observations": [
+                {
+                  "checked_at": "2026-10-09T17:42:12Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "streaming"
+                  ],
+                  "mode": "replay",
+                  "status": "pass"
+                }
+              ],
+              "proof": "fixture_replay"
+            },
+            "token_limit": {
+              "observations": [
+                {
+                  "checked_at": "2026-10-09T17:42:12Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "token_limit"
+                  ],
+                  "mode": "replay",
+                  "status": "pass"
+                }
+              ],
+              "proof": "fixture_replay"
+            },
+            "tool_multi": {
+              "observations": [
+                {
+                  "checked_at": "2026-10-09T17:42:12Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "multi_tool"
+                  ],
+                  "mode": "replay",
+                  "status": "pass"
+                }
+              ],
+              "proof": "fixture_replay"
+            },
+            "tool_none": {
+              "observations": [
+                {
+                  "checked_at": "2026-10-09T17:42:12Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "no_tool"
+                  ],
+                  "mode": "replay",
+                  "status": "pass"
+                }
+              ],
+              "proof": "fixture_replay"
+            },
+            "tool_round_trip": {
+              "observations": [
+                {
+                  "checked_at": "2026-10-09T17:42:12Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "tool_round_trip_1",
+                    "tool_round_trip_2"
+                  ],
+                  "mode": "replay",
+                  "status": "pass"
+                }
+              ],
+              "proof": "fixture_replay"
+            },
+            "usage": {
+              "observations": [
+                {
+                  "checked_at": "2026-10-09T17:42:12Z",
+                  "error": null,
+                  "failure_layer": null,
+                  "fixtures": [
+                    "usage"
+                  ],
+                  "mode": "replay",
                   "status": "pass"
                 }
               ],

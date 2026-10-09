@@ -5,7 +5,7 @@ compatibility scenario catalog. It is a tooling snapshot, not a runtime model
 allowlist, and it does not change whether ReqLLM can resolve or call a model.
 
 - Evidence schema: `1`
-- Snapshot evaluated at: `2026-09-25T13:44:53Z`
+- Snapshot evaluated at: `2026-10-09T17:42:12Z`
 - Freshness window: `90 days`
 
 ## Conservative tier rules
@@ -30,11 +30,11 @@ provider-native feature and are not consulted by request routing.
 
 | Tier | Surfaces |
 | --- | ---: |
-| First-class | 6 |
+| First-class | 7 |
 | Best-effort | 0 |
 | Experimental | 601 |
 | Unsupported | 89 |
-| **Total recorded surfaces** | **696** |
+| **Total recorded surfaces** | **697** |
 
 ## anthropic
 
@@ -194,6 +194,12 @@ provider-native feature and are not consulted by request routing.
 | `qwen/qwen3-32b` | `text` | `groq.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:26:10Z | surface declaration unknown |
 | `whisper-large-v3` | `transcription` | `groq.transcription` | audio → text | Experimental | 0/1 | 2026-05-29T23:26:29Z | missing or stale evidence |
 | `whisper-large-v3-turbo` | `transcription` | `groq.transcription` | audio → text | Experimental | 0/1 | 2026-05-29T23:26:29Z | missing or stale evidence |
+
+## llmapi
+
+| Model | Operation | Execution surface | Input → output | Tier | Baseline | Checked | Reason |
+| --- | --- | --- | --- | --- | ---: | --- | --- |
+| `gpt-4o-mini` | `text` | `llmapi.chat_completions` | text, tool_result → structured_object, text, tool_call | First-class | 5/5 | 2026-10-09T17:42:12Z | complete current baseline |
 
 ## meta
 
