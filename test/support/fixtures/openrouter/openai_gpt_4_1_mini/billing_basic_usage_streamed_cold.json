@@ -1,0 +1,67 @@
+{
+  "captured_at": "2026-10-09T01:05:03.097785Z",
+  "chunks": [
+    {
+      "b64": "ZGF0YTogeyJpZCI6Imdlbi0xNzkxNTA3OTAyLWFra1NubjJFMTd0cE9zR0xtbVNZIiwib2JqZWN0IjoiY2hhdC5jb21wbGV0aW9uLmNodW5rIiwiY3JlYXRlZCI6MTc5MTUwNzkwMiwibW9kZWwiOiJvcGVuYWkvZ3B0LTQuMS1taW5pIiwicHJvdmlkZXIiOiJPcGVuQUkiLCJjaG9pY2VzIjpbeyJpbmRleCI6MCwiZGVsdGEiOnsiY29udGVudCI6Ik9LIiwicm9sZSI6ImFzc2lzdGFudCJ9LCJmaW5pc2hfcmVhc29uIjpudWxsLCJuYXRpdmVfZmluaXNoX3JlYXNvbiI6bnVsbH1dfQoK"
+    },
+    {
+      "b64": "ZGF0YTogeyJpZCI6Imdlbi0xNzkxNTA3OTAyLWFra1NubjJFMTd0cE9zR0xtbVNZIiwib2JqZWN0IjoiY2hhdC5jb21wbGV0aW9uLmNodW5rIiwiY3JlYXRlZCI6MTc5MTUwNzkwMiwibW9kZWwiOiJvcGVuYWkvZ3B0LTQuMS1taW5pIiwicHJvdmlkZXIiOiJPcGVuQUkiLCJjaG9pY2VzIjpbeyJpbmRleCI6MCwiZGVsdGEiOnsiY29udGVudCI6IiIsInJvbGUiOiJhc3Npc3RhbnQifSwiZmluaXNoX3JlYXNvbiI6InN0b3AiLCJuYXRpdmVfZmluaXNoX3JlYXNvbiI6ImNvbXBsZXRlZCJ9XX0KCg=="
+    },
+    {
+      "b64": "ZGF0YTogeyJpZCI6Imdlbi0xNzkxNTA3OTAyLWFra1NubjJFMTd0cE9zR0xtbVNZIiwib2JqZWN0IjoiY2hhdC5jb21wbGV0aW9uLmNodW5rIiwiY3JlYXRlZCI6MTc5MTUwNzkwMiwibW9kZWwiOiJvcGVuYWkvZ3B0LTQuMS1taW5pIiwicHJvdmlkZXIiOiJPcGVuQUkiLCJzZXJ2aWNlX3RpZXIiOiJkZWZhdWx0IiwiY2hvaWNlcyI6W3siaW5kZXgiOjAsImRlbHRhIjp7ImNvbnRlbnQiOiIiLCJyb2xlIjoiYXNzaXN0YW50In0sImZpbmlzaF9yZWFzb24iOiJzdG9wIiwibmF0aXZlX2ZpbmlzaF9yZWFzb24iOiJjb21wbGV0ZWQifV0sInVzYWdlIjp7InByb21wdF90b2tlbnMiOjIzLCJjb21wbGV0aW9uX3Rva2VucyI6MiwidG90YWxfdG9rZW5zIjoyNSwiY29zdCI6MC4wMDAwMTI0LCJpc19ieW9rIjpmYWxzZSwicHJvbXB0X3Rva2Vuc19kZXRhaWxzIjp7ImNhY2hlZF90b2tlbnMiOjAsImNhY2hlX3dyaXRlX3Rva2VucyI6MCwiYXVkaW9fdG9rZW5zIjowLCJ2aWRlb190b2tlbnMiOjB9LCJjb3N0X2RldGFpbHMiOnsidXBzdHJlYW1faW5mZXJlbmNlX2Nvc3QiOjAuMDAwMDEyNCwidXBzdHJlYW1faW5mZXJlbmNlX3Byb21wdF9jb3N0IjowLjAwMDAwOTIsInVwc3RyZWFtX2luZmVyZW5jZV9jb21wbGV0aW9uc19jb3N0IjowLjAwMDAwMzJ9LCJjb21wbGV0aW9uX3Rva2Vuc19kZXRhaWxzIjp7InJlYXNvbmluZ190b2tlbnMiOjAsImltYWdlX3Rva2VucyI6MCwiYXVkaW9fdG9rZW5zIjowfX19Cgo="
+    },
+    {
+      "b64": "ZGF0YTogW0RPTkVdCgo="
+    }
+  ],
+  "model_spec": "openrouter:openai/gpt-4.1-mini",
+  "provider": "openrouter",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjo1MTIsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiUmVwbHkgT0sgb25seS4gQmlsbGluZyBydW4gbGl2ZS1vcGVucm91dGVyLWJhc2ljOmJhc2ljX3VzYWdlOnN0cmVhbWVkIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoib3BlbmFpL2dwdC00LjEtbWluaSIsIm4iOjEsInN0cmVhbSI6dHJ1ZSwic3RyZWFtX29wdGlvbnMiOnsiaW5jbHVkZV91c2FnZSI6dHJ1ZX19"
+    },
+    "canonical_json": {
+      "max_tokens": 512,
+      "messages": [
+        {
+          "content": "Reply OK only. Billing run live-openrouter-basic:basic_usage:streamed",
+          "role": "user"
+        }
+      ],
+      "model": "openai/gpt-4.1-mini",
+      "n": 1,
+      "stream": true,
+      "stream_options": {
+        "include_usage": true
+      }
+    },
+    "headers": {
+      "accept": "text/event-stream",
+      "authorization": "[REDACTED:authorization]",
+      "content-type": "application/json"
+    },
+    "method": "POST",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": null,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "X-Generation-Id,X-Provider-Name,request-id,cf-ray",
+      "cache-control": "no-cache",
+      "cf-ray": "a47979870dc9986a-ORD",
+      "connection": "keep-alive",
+      "content-type": "text/event-stream",
+      "date": "Fri, 09 Oct 2026 01:05:03 GMT",
+      "permissions-policy": "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")",
+      "referrer-policy": "no-referrer, strict-origin-when-cross-origin",
+      "server": "cloudflare",
+      "set-cookie": "[REDACTED:set-cookie]",
+      "transfer-encoding": "chunked",
+      "x-content-type-options": "nosniff",
+      "x-generation-id": "gen-1791507902-akkSnn2E17tpOsGLmmSY"
+    },
+    "status": 200
+  },
+  "streaming": true
+}

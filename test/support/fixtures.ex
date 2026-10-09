@@ -45,7 +45,7 @@ defmodule ReqLLM.Test.Fixtures do
           :no_fixture
 
         {:replay, test_name} when is_binary(test_name) ->
-          path = ReqLLM.Test.FixturePath.file(model_or_spec, test_name)
+          path = replay_file(model_or_spec, test_name)
 
           if File.exists?(path) do
             {:fixture, path}
@@ -145,6 +145,16 @@ defmodule ReqLLM.Test.Fixtures do
 
   defp capture_fixture_file(model_or_spec, test_name) do
     case System.get_env("REQ_LLM_FIXTURE_RECORD_ROOT") do
+      root when is_binary(root) and root != "" ->
+        ReqLLM.Test.FixturePath.file_under(root, normalize_model(model_or_spec), test_name)
+
+      _ ->
+        ReqLLM.Test.FixturePath.file(model_or_spec, test_name)
+    end
+  end
+
+  def replay_file(model_or_spec, test_name) do
+    case System.get_env("REQ_LLM_FIXTURE_REPLAY_ROOT") do
       root when is_binary(root) and root != "" ->
         ReqLLM.Test.FixturePath.file_under(root, normalize_model(model_or_spec), test_name)
 

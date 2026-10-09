@@ -1,0 +1,161 @@
+{
+  "attempt": {
+    "attempt_id": "attempt_2",
+    "capture_complete": true,
+    "capture_origin": "live",
+    "captured_at": "2026-10-09T01:24:32.442504Z",
+    "case_id": "hosted_web_search",
+    "estimated_micros": 589626,
+    "expected_pricing": "priced",
+    "finished_at": "2026-10-09T01:24:32.520301Z",
+    "fixture": "billing_attempt_2",
+    "mode": "streamed",
+    "model": "openai:gpt-6-luna",
+    "phase": "search",
+    "reconciled_micros": 10499,
+    "started_at": "2026-10-09T01:24:27.852907Z",
+    "state": "complete",
+    "transcript": "transcripts/openai/gpt_6_luna/billing_attempt_2.json",
+    "transcript_sha256": "fa60d78018b7a979d08acf1ac3656515d3994c1da599d35a1e451dc28a546a0a"
+  },
+  "calculation": {
+    "counts": {
+      "cache_read": 4336,
+      "input": 4359,
+      "input_source": "/usage/input_tokens",
+      "output": 40,
+      "output_source": "/usage/output_tokens",
+      "prompt": 8695,
+      "read_source": "/usage/input_tokens_details/cached_tokens",
+      "tools": 1,
+      "write_source": "/usage/input_tokens_details/cache_write_tokens",
+      "writes": {
+        "cache_write": 0
+      }
+    },
+    "currency": "USD",
+    "line_items": [
+      {
+        "band_multiplier": "1",
+        "effective_rate_micros": 100000,
+        "expected_micros": 436,
+        "expected_usd": "0.000436",
+        "formula": "4359 * 0.10 / 1000000 * 1 * 1 * 1",
+        "meter": "input",
+        "per": 1000000,
+        "quantity": 4359,
+        "rate": "0.10",
+        "regional_multiplier": "1",
+        "source": "/usage/input_tokens",
+        "tier_multiplier": "1",
+        "unrounded_fraction": {
+          "denominator": 100000000000000,
+          "numerator": 43590000000
+        },
+        "unrounded_usd": "0.000435900000"
+      },
+      {
+        "band_multiplier": "1",
+        "effective_rate_micros": 500000,
+        "expected_micros": 20,
+        "expected_usd": "0.000020",
+        "formula": "40 * 0.50 / 1000000 * 1 * 1 * 1",
+        "meter": "output",
+        "per": 1000000,
+        "quantity": 40,
+        "rate": "0.50",
+        "regional_multiplier": "1",
+        "source": "/usage/output_tokens",
+        "tier_multiplier": "1",
+        "unrounded_fraction": {
+          "denominator": 100000000000000,
+          "numerator": 2000000000
+        },
+        "unrounded_usd": "0.000020000000"
+      },
+      {
+        "band_multiplier": "1",
+        "effective_rate_micros": 10000,
+        "expected_micros": 43,
+        "expected_usd": "0.000043",
+        "formula": "4336 * 0.01 / 1000000 * 1 * 1 * 1",
+        "meter": "cache_read",
+        "per": 1000000,
+        "quantity": 4336,
+        "rate": "0.01",
+        "regional_multiplier": "1",
+        "source": "/usage/input_tokens_details/cached_tokens",
+        "tier_multiplier": "1",
+        "unrounded_fraction": {
+          "denominator": 100000000000000,
+          "numerator": 4336000000
+        },
+        "unrounded_usd": "0.000043360000"
+      },
+      {
+        "band_multiplier": "1",
+        "effective_rate_micros": 125000,
+        "expected_micros": 0,
+        "expected_usd": "0.000000",
+        "formula": "0 * 0.125 / 1000000 * 1 * 1 * 1",
+        "meter": "cache_write",
+        "per": 1000000,
+        "quantity": 0,
+        "rate": "0.125",
+        "regional_multiplier": "1",
+        "source": "/usage/input_tokens_details/cache_write_tokens",
+        "tier_multiplier": "1",
+        "unrounded_fraction": {
+          "denominator": 1000000000000000,
+          "numerator": 0
+        },
+        "unrounded_usd": "0.000000000000"
+      },
+      {
+        "effective_rate_micros": 10000000,
+        "expected_micros": 10000,
+        "expected_usd": "0.010000",
+        "formula": "1 * 10.00 / 1000",
+        "meter": "web_search",
+        "per": 1000,
+        "quantity": 1,
+        "rate": "10.00",
+        "source": "/output/*/web_search_call",
+        "unrounded_usd": "0.010000000000"
+      }
+    ],
+    "rate_source": "https://developers.openai.com/api/docs/models/gpt-6-luna",
+    "rates_checked_at": "2026-10-08",
+    "status": "priced",
+    "total": "0.010499",
+    "total_micros": 10499
+  },
+  "rate_book": {
+    "models": {
+      "openai:gpt-6-luna": {
+        "cache_read": "0.01",
+        "cache_write": "0.125",
+        "checked_at": "2026-10-08",
+        "input": "0.10",
+        "long_input_multiplier": "2",
+        "long_output_multiplier": "1.5",
+        "output": "0.50",
+        "regional_required": true,
+        "source": "https://developers.openai.com/api/docs/models/gpt-6-luna",
+        "threshold": 272000,
+        "tier_required": true,
+        "web_search": "10.00"
+      }
+    },
+    "schema_version": 1,
+    "version": "2026-10-08"
+  },
+  "schema_version": 1,
+  "source": {
+    "catalog_version": "2026.10.1",
+    "created_at": "2026-10-09T01:24:19.143162Z",
+    "git_revision": "8ac02d74cbc484122e1039dab17b5d39ee7d7de5",
+    "origin": "live",
+    "run_id": "live-openai-search"
+  }
+}

@@ -1,0 +1,247 @@
+{
+  "captured_at": "2026-10-09T01:24:27.627384Z",
+  "model_spec": "openai:gpt-6-luna",
+  "provider": "openai",
+  "request": {
+    "body": {
+      "b64": "eyJpbmNsdWRlIjpbInJlYXNvbmluZy5lbmNyeXB0ZWRfY29udGVudCJdLCJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IlVzZSB3ZWIgc2VhcmNoIGV4YWN0bHkgb25jZSB0byBmaW5kIHRoZSBvZmZpY2lhbCBFbGl4aXIgbGFuZ3VhZ2Ugd2Vic2l0ZS4gUmVwbHkgd2l0aCBpdHMgVVJMIG9ubHkuIiwidHlwZSI6ImlucHV0X3RleHQifV0sInJvbGUiOiJ1c2VyIn1dLCJtYXhfb3V0cHV0X3Rva2VucyI6NTEyLCJtYXhfdG9vbF9jYWxscyI6MSwibW9kZWwiOiJncHQtNi1sdW5hIiwicmVhc29uaW5nIjp7ImVmZm9ydCI6Im5vbmUifSwic2VydmljZV90aWVyIjoiZGVmYXVsdCIsInN0cmVhbSI6ZmFsc2UsInRvb2xfY2hvaWNlIjoicmVxdWlyZWQiLCJ0b29scyI6W3sidHlwZSI6IndlYl9zZWFyY2gifV19"
+    },
+    "canonical_json": {
+      "include": [
+        "reasoning.encrypted_content"
+      ],
+      "input": [
+        {
+          "content": [
+            {
+              "text": "Use web search exactly once to find the official Elixir language website. Reply with its URL only.",
+              "type": "input_text"
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "max_output_tokens": 512,
+      "max_tool_calls": 1,
+      "model": "gpt-6-luna",
+      "reasoning": {
+        "effort": "none"
+      },
+      "service_tier": "default",
+      "stream": false,
+      "tool_choice": "required",
+      "tools": [
+        {
+          "type": "web_search"
+        }
+      ]
+    },
+    "headers": {
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.7.4"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.openai.com/v1/responses"
+  },
+  "response": {
+    "body": {
+      "safety_identifier": null,
+      "store": true,
+      "error": null,
+      "created_at": 1791509063,
+      "presence_penalty": 0.0,
+      "status": "completed",
+      "tool_usage": {
+        "image_gen": {
+          "input_tokens": 0,
+          "input_tokens_details": {
+            "image_tokens": 0,
+            "text_tokens": 0
+          },
+          "output_tokens": 0,
+          "output_tokens_details": {
+            "image_tokens": 0,
+            "text_tokens": 0
+          },
+          "total_tokens": 0
+        },
+        "web_search": {
+          "num_requests": 1
+        }
+      },
+      "max_tool_calls": 1,
+      "instructions": null,
+      "billing": {
+        "payer": "developer"
+      },
+      "prompt_cache_retention": "24h",
+      "completed_at": 1791509067,
+      "temperature": 1.0,
+      "text": {
+        "format": {
+          "type": "text"
+        },
+        "verbosity": "medium"
+      },
+      "parallel_tool_calls": true,
+      "tool_choice": "required",
+      "frequency_penalty": 0.0,
+      "top_logprobs": 0,
+      "reasoning": {
+        "context": "all_turns",
+        "effort": "none",
+        "mode": "standard",
+        "summary": null
+      },
+      "usage": {
+        "input_tokens": 8653,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 4336
+        },
+        "output_tokens": 40,
+        "output_tokens_details": {
+          "reasoning_tokens": 29
+        },
+        "total_tokens": 8693
+      },
+      "access_programs": null,
+      "incomplete_details": null,
+      "model": "gpt-6-luna",
+      "truncation": "disabled",
+      "metadata": {},
+      "service_tier": "default",
+      "id": "resp_08aae8a8cfd2cdb0006ac84247551c87d1840251e37ad2ecfc",
+      "top_p": 0.98,
+      "user": null,
+      "prompt_cache_key": null,
+      "moderation": null,
+      "object": "response",
+      "background": false,
+      "previous_response_id": null,
+      "max_output_tokens": 512,
+      "output": [
+        {
+          "action": {
+            "queries": [
+              "official Elixir programming language website"
+            ],
+            "query": "official Elixir programming language website",
+            "type": "search"
+          },
+          "id": "ws_08aae8a8cfd2cdb0006ac84247f97c87d1afe5483bbaa153eb",
+          "status": "completed",
+          "type": "web_search_call"
+        },
+        {
+          "content": [
+            {
+              "annotations": [],
+              "logprobs": [],
+              "text": "https://elixir-lang.org/",
+              "type": "output_text"
+            }
+          ],
+          "id": "msg_08aae8a8cfd2cdb0006ac8424aeba887d1bc620ba65ebcf5c9",
+          "phase": "final_answer",
+          "role": "assistant",
+          "status": "completed",
+          "type": "message"
+        }
+      ],
+      "tools": [
+        {
+          "return_token_budget": "default",
+          "search_content_types": [
+            "text"
+          ],
+          "search_context_size": "medium",
+          "type": "web_search",
+          "user_location": {
+            "city": null,
+            "country": "US",
+            "region": null,
+            "timezone": null,
+            "type": "approximate"
+          }
+        }
+      ]
+    },
+    "headers": {
+      "access-control-expose-headers": [
+        "X-Request-ID",
+        "CF-Ray",
+        "CF-Ray"
+      ],
+      "alt-svc": [
+        "h3=\":443\"; ma=86400"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a47995dcc9300262-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-length": [
+        "2763"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 09 Oct 2026 01:24:27 GMT"
+      ],
+      "openai-organization": "[REDACTED:openai-organization]",
+      "openai-processing-ms": [
+        "4302"
+      ],
+      "openai-project": [
+        "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
+      ],
+      "openai-version": [
+        "2020-10-01"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": "[REDACTED:set-cookie]",
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-ratelimit-limit-requests": [
+        "10000"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "10000000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "9999"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "9996260"
+      ],
+      "x-ratelimit-reset-requests": [
+        "6ms"
+      ],
+      "x-ratelimit-reset-tokens": [
+        "22ms"
+      ],
+      "x-request-id": [
+        "req_9215c35967d8440fa4ff3d0f7843a086"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

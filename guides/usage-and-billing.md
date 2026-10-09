@@ -423,3 +423,80 @@ end
 - [xAI Guide](xai.md) - Grok web search
 - [Google Guide](google.md) - Grounding and search
 - [Image Generation Guide](image-generation.md) - Image costs
+
+## Billing validation suite
+
+ExUnit owns billing assertions. The `req_llm.billing` Mix task selects cases,
+records provider evidence, and exports independent calculation worksheets.
+Normal tests and `check` are offline. Live recording requires explicit limits.
+After a successful live run, `record` runs an offline ExUnit audit of its saved
+capture. This second check makes no provider calls.
+
+```sh
+mix test --only billing
+mix req_llm.billing list
+mix req_llm.billing check
+mix req_llm.billing check --case mixed_cache_ttl --layer pricing
+mix req_llm.billing record --model openai:gpt-6-luna --case basic_usage --budget-usd 0.50 --max-requests 2
+mix req_llm.billing audit --run tmp/billing/RUN
+mix req_llm.billing promote --run tmp/billing/RUN --case basic_usage
+```
+
+The suite has capture, normalization, pricing, pipeline, and adversarial layers.
+Stable case IDs include `basic_usage`, `cache_5m`, `cache_1h`, `mixed_cache_ttl`,
+`client_function`, `hosted_web_search`, `returned_service_tier`, `long_context`,
+`compact_unknown`, and `websocket_usage`. `list` shows provider and phase support.
+For recording and audit, use `--mode buffered`, `streamed`, or `both`; compact is buffered only and the
+native session case is streamed only. The first rate book supports selected
+OpenAI and Anthropic models and the OpenRouter GPT-4.1 Mini gateway case.
+
+A live run writes a new directory under `tmp/billing/`. It retains failed
+attempts and disables credential fallback and automatic retries. The USD limit
+controls admission using conservative estimates; it is not a supplier invoice
+limit. Each actual model call has its own attempt ID. Confirmed usage can
+reconcile its reservation. Failed calls retain their reservation.
+
+| Artifact | Review purpose |
+|---|---|
+| `manifest.json` | Selection, limits, rate-book and model metadata snapshots, code/catalog identity, and attempt state |
+| `raw.jsonl` | Encoded request JSON, provider response JSON, HTTP metadata, and attempt events |
+| `stream_events.jsonl` | Ordered source chunks and provider events, or native session frames |
+| `observed.jsonl` | ReqLLM usage, costs, provider metadata, reported gateway charges, and telemetry |
+| `billing.jsonl` | Raw source pointers, quantities, documented rates, formulas, exact fractions, expected charges, and observed values |
+| `transcripts/` | VCR source files used by offline replay |
+| `summary.md` | Per-case and per-layer results |
+
+The raw representation is provider-shaped JSON before ReqLLM response and usage
+normalization. JSON serialization can change whitespace or key order. Stream
+source bytes remain available as base64 chunks. Credentials are redacted.
+Legacy captures without a date remain legacy; export time does not prove a new
+provider call. Native session observations are labeled `native_session_replay`
+because the public session API returns provider events rather than a priced
+`ReqLLM.Response`.
+
+Reference calculations read provider counters and reviewed decimal rates from
+`test/support/billing/rates/book.json`. They do not use the production billing
+engine or the LLMDB rate selector as their expected-result calculator. Worksheets
+retain unrounded amounts and fractions as well as six-decimal totals. For
+example, an output charge of `39 * 0.50 / 1_000_000` is exactly `0.0000195` USD.
+ReqLLM uses float arithmetic, so the check reports and permits at most one
+microdollar of rounding difference per active line when quantities and effective
+rates agree. A larger difference, wrong quantity, wrong rate, or false known
+price fails. Equivalent per-call and per-thousand rates are compared by units.
+
+Review rate sources and routing before recording. OpenAI context-band tests use
+the supplier's returned input count. Separate live calls can have different
+outputs and cache states. Exact mode agreement uses the same source data in
+replay. Mixed Anthropic cache entries put the one-hour prefix first and repeat
+each cold prefix for a warm check. A zero cache hit does not pass a warm case.
+
+Recording never overwrites committed fixtures. Inspect the raw and calculation
+records, run `audit`, and then explicitly `promote` selected cases. Promotion
+rejects incomplete or synthetic source captures and existing targets. Selected
+transcripts and their independent rate/calculation sidecars become default CI
+baselines. Each sidecar stores one calculation, one model's frozen rates, the
+source hash, and the code/catalog identity. CI checks the source hash and the
+frozen calculation before comparing current ReqLLM pricing.
+The full capture directory remains outside Git. Large context-band
+request bodies can remain as local evidence instead of enlarging the fixture
+repository.

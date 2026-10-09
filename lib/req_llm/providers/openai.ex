@@ -287,6 +287,10 @@ defmodule ReqLLM.Providers.OpenAI do
       doc:
         "Service tier for request prioritization ('auto', 'default', 'flex', 'fast', 'priority', or 'ultrafast')"
     ],
+    openai_max_tool_calls: [
+      type: :pos_integer,
+      doc: "Maximum total built-in tool calls in a Responses API request"
+    ],
     verbosity: [
       type: {:or, [:atom, :string]},
       doc:

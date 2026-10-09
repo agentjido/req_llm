@@ -204,6 +204,7 @@ defmodule ReqLLM.MixProject do
   def cli do
     [
       preferred_envs: [
+        "req_llm.billing": :test,
         coveralls: :test,
         "coveralls.detail": :test,
         "coveralls.post": :test,
