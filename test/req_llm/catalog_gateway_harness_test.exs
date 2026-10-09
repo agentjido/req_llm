@@ -252,4 +252,27 @@ defmodule ReqLLM.CatalogGatewayHarnessTest do
     ReqLLM.TestSupport.FakeKeys.install!()
     assert System.get_env("LLM_API_KEY") == nil
   end
+
+  test "an empty primary credential does not hide a valid alternate catalog key", %{model: model} do
+    ReqLLM.Test.Env.isolate!(["LLM_API_KEY", "LLMAPI_API_KEY"])
+    System.put_env("LLM_API_KEY", "")
+    System.put_env("LLMAPI_API_KEY", "alternate-fixture-key")
+
+    Req.Test.stub(__MODULE__.AlternateKeyHTTP, fn conn ->
+      assert Plug.Conn.get_req_header(conn, "authorization") == ["Bearer alternate-fixture-key"]
+
+      Req.Test.json(conn, %{
+        "choices" => [%{"message" => %{"role" => "assistant", "content" => "Hello"}}]
+      })
+    end)
+
+    assert {:ok, _response} =
+             ReqLLM.generate_text(model, "Hi",
+               req_http_options: [plug: {Req.Test, __MODULE__.AlternateKeyHTTP}]
+             )
+
+    assert {:ok, context} = ReqLLM.Context.normalize("Hi", [])
+    assert {:ok, request} = CatalogGateway.attach_stream(model, context, [], nil)
+    assert {"Authorization", "Bearer alternate-fixture-key"} in request.headers
+  end
 end
