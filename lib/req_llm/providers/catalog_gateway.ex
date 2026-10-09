@@ -248,7 +248,12 @@ defmodule ReqLLM.Providers.CatalogGateway do
     api_key =
       opts[:api_key] ||
         Application.get_env(:req_llm, ReqLLM.Keys.config_key(provider)) ||
-        Enum.find_value(env_names, &System.get_env/1)
+        Enum.find_value(env_names, fn name ->
+          case System.get_env(name) do
+            key when is_binary(key) and key != "" -> key
+            _ -> nil
+          end
+        end)
 
     if is_binary(api_key) && api_key != "" do
       {:ok, api_key}

@@ -1,0 +1,133 @@
+{
+  "captured_at": "2026-10-09T17:33:21.894019Z",
+  "model_spec": "llmapi:gpt-4o-mini",
+  "provider": "llmapi",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoxNTAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiVXNlIHRoZSBhZGQgdG9vbCB0byBjb21wdXRlIDIgKyAzLiBBZnRlciB0aGUgdG9vbCByZXN1bHQgYXJyaXZlcywgcmVzcG9uZCB3aXRoICdzdW09PHZhbHVlPicuIiwicm9sZSI6InVzZXIifSx7ImNvbnRlbnQiOiIiLCJyb2xlIjoiYXNzaXN0YW50IiwidG9vbF9jYWxscyI6W3siZnVuY3Rpb24iOnsiYXJndW1lbnRzIjoie1wiYVwiOjIsXCJiXCI6M30iLCJuYW1lIjoiYWRkIn0sImlkIjoiY2FsbF82ekVwbEpyMVZFV1BzS0psY2NpYXpvemkiLCJ0eXBlIjoiZnVuY3Rpb24ifV19LHsiY29udGVudCI6IjUiLCJtZXRhZGF0YSI6eyJ0b29sX291dHB1dCI6NX0sIm5hbWUiOiJhZGQiLCJyb2xlIjoidG9vbCIsInRvb2xfY2FsbF9pZCI6ImNhbGxfNnpFcGxKcjFWRVdQc0tKbGNjaWF6b3ppIn1dLCJtb2RlbCI6ImdwdC00by1taW5pIiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+    },
+    "canonical_json": {
+      "max_tokens": 150,
+      "messages": [
+        {
+          "content": "Use the add tool to compute 2 + 3. After the tool result arrives, respond with 'sum=<value>'.",
+          "role": "user"
+        },
+        {
+          "content": "",
+          "role": "assistant",
+          "tool_calls": [
+            {
+              "function": {
+                "arguments": "{\"a\":2,\"b\":3}",
+                "name": "add"
+              },
+              "id": "call_6zEplJr1VEWPsKJlcciazozi",
+              "type": "function"
+            }
+          ]
+        },
+        {
+          "content": "5",
+          "metadata": {
+            "tool_output": 5
+          },
+          "name": "add",
+          "role": "tool",
+          "tool_call_id": "call_6zEplJr1VEWPsKJlcciazozi"
+        }
+      ],
+      "model": "gpt-4o-mini",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.7.4"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.llmapi.ai/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "content": "sum=5",
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1791567201,
+      "id": "req_20261009173321_fed974cb",
+      "model": "gpt-4o-mini",
+      "object": "chat.completion",
+      "system_fingerprint": "fp_da26e938b7",
+      "usage": {
+        "completion_tokens": 3,
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "cost_usd_input": 8.55e-6,
+        "cost_usd_output": 1.8e-6,
+        "prompt_tokens": 57,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 0
+        },
+        "total_tokens": 60
+      }
+    },
+    "headers": {
+      "connection": [
+        "keep-alive"
+      ],
+      "content-length": [
+        "476"
+      ],
+      "content-type": [
+        "application/json; charset=utf-8"
+      ],
+      "date": [
+        "Fri, 09 Oct 2026 17:33:21 GMT"
+      ],
+      "x-llm-fallback-hops": [
+        "1"
+      ],
+      "x-llm-fallback-triggered": [
+        "false"
+      ],
+      "x-llm-served-by": [
+        "openai/gpt-4o-mini"
+      ],
+      "x-provider": [
+        "openai"
+      ],
+      "x-ratelimit-limit-requests": [
+        "30"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "21"
+      ],
+      "x-ratelimit-reset-requests": [
+        "39"
+      ],
+      "x-request-id": [
+        "req_20261009173321_fed974cb"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

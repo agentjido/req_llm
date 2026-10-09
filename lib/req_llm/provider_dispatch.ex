@@ -19,6 +19,16 @@ defmodule ReqLLM.ProviderDispatch do
     end
   end
 
+  @doc false
+  @spec executable?(LLMDB.Model.t(), atom()) :: boolean()
+  def executable?(%LLMDB.Model{} = model, operation \\ :text) do
+    case ReqLLM.Providers.get(model.provider) do
+      {:ok, _module} -> true
+      {:error, _} when operation in [:text, :all] -> match?({:ok, _}, get(model, :chat))
+      {:error, _} -> false
+    end
+  end
+
   @spec unsupported(LLMDB.Model.t(), atom(), String.t()) :: {:error, Exception.t()}
   def unsupported(model, operation, reason) do
     {:error,

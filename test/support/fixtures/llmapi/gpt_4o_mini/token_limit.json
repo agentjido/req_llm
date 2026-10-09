@@ -1,0 +1,109 @@
+{
+  "captured_at": "2026-10-09T17:33:17.226061Z",
+  "model_spec": "llmapi:gpt-4o-mini",
+  "provider": "llmapi",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoxMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiV3JpdGUgYSB2ZXJ5IGxvbmcgc3RvcnkgYWJvdXQgZHJhZ29ucyBhbmQgYWR2ZW50dXJlcyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImdwdC00by1taW5pIiwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuNX0="
+    },
+    "canonical_json": {
+      "max_tokens": 100,
+      "messages": [
+        {
+          "content": "Write a very long story about dragons and adventures",
+          "role": "user"
+        }
+      ],
+      "model": "gpt-4o-mini",
+      "stream": false,
+      "temperature": 0.5
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.7.4"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.llmapi.ai/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "length",
+          "index": 0,
+          "message": {
+            "content": "**Title: The Chronicles of Eldoria: The Rise of the Draconic Alliance**\n\n**Chapter 1: The Whispering Winds of Eldoria**\n\nIn a time long forgotten, in the realm of Eldoria, where the skies were painted with hues of violet and gold, dragons soared majestically above the sprawling landscapes. Eldoria was a land of magic, where rivers sparkled with the essence of life and mountains pierced the heavens. The dragons, revered as the guardians of this realm, lived",
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1791567196,
+      "id": "req_20261009173315_c5bdb8a7",
+      "model": "gpt-4o-mini",
+      "object": "chat.completion",
+      "system_fingerprint": "fp_7231a6dfee",
+      "usage": {
+        "completion_tokens": 100,
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "cost_usd_input": 2.4e-6,
+        "cost_usd_output": 6.0e-5,
+        "prompt_tokens": 16,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 0
+        },
+        "total_tokens": 116
+      }
+    },
+    "headers": {
+      "connection": [
+        "keep-alive"
+      ],
+      "content-length": [
+        "937"
+      ],
+      "content-type": [
+        "application/json; charset=utf-8"
+      ],
+      "date": [
+        "Fri, 09 Oct 2026 17:33:17 GMT"
+      ],
+      "x-llm-fallback-hops": [
+        "1"
+      ],
+      "x-llm-fallback-triggered": [
+        "false"
+      ],
+      "x-llm-served-by": [
+        "openai/gpt-4o-mini"
+      ],
+      "x-provider": [
+        "openai"
+      ],
+      "x-ratelimit-limit-requests": [
+        "30"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "27"
+      ],
+      "x-ratelimit-reset-requests": [
+        "45"
+      ],
+      "x-request-id": [
+        "req_20261009173315_c5bdb8a7"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}
