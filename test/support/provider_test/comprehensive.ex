@@ -48,7 +48,8 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
         supports_object = supports_object_generation?(model_spec)
         supports_streaming = get_in(caps, [:streaming, :tool_calls]) != false
 
-        supports_object && supports_streaming
+        (supports_object && supports_streaming) and
+          match?({:ok, _}, ReqLLM.ProviderDispatch.get(model, :object, stream: true))
 
       {:error, _} ->
         false
@@ -77,7 +78,8 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
   end
 
   defp object_generation_supported?(%LLMDB.Model{} = model) do
-    structured_outputs_supported?(model) and
+    match?({:ok, _}, ReqLLM.ProviderDispatch.get(model, :object)) and
+      structured_outputs_supported?(model) and
       (execution_object_supported?(model) or
          json_output_supported?(model) or
          strict_tool_output_supported?(model) or

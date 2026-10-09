@@ -185,7 +185,7 @@ defmodule ReqLLM.Step.Fixture.Backend do
 
         body =
           if ReqLLM.Test.VCR.streaming?(transcript) do
-            provider_mod = provider_module(model.provider)
+            provider_mod = provider_module(model, request)
             ReqLLM.Test.VCR.replay_as_stream(transcript, provider_mod, model)
           else
             ReqLLM.Test.VCR.replay_response_body(transcript)
@@ -320,7 +320,12 @@ defmodule ReqLLM.Step.Fixture.Backend do
     |> String.slice(0, 300)
   end
 
-  defp provider_module(provider), do: ReqLLM.Providers.get!(provider)
+  defp provider_module(model, request) do
+    {:ok, provider_module} =
+      ReqLLM.ProviderDispatch.get(model, request.options[:operation] || :chat)
+
+    provider_module
+  end
 
   defp req_response_headers(headers) do
     Map.new(headers, fn {key, value} ->
@@ -665,7 +670,7 @@ defmodule ReqLLM.Step.Fixture.Backend do
   defp handle_credential_error(request, exception, fixture_path, model) do
     # Get provider module to check if this is a credential error
     provider_id = model.provider
-    {:ok, provider_module} = ReqLLM.Providers.get(provider_id)
+    provider_module = provider_module(model, request)
 
     is_credential_error =
       function_exported?(provider_module, :credential_missing?, 1) and

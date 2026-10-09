@@ -22,6 +22,21 @@ defmodule ReqLLM.TestSupport.FakeKeys do
       for provider <- providers do
         install_fake_key_for_provider(provider)
       end
+
+      for provider <- LLMDB.providers(), provider.id not in providers do
+        install_catalog_key(provider)
+      end
+    end
+  end
+
+  defp install_catalog_key(provider) do
+    env_vars = get_in(provider.runtime || %{}, [:auth, :env]) || []
+    config_key = ReqLLM.Keys.config_key(provider.id)
+
+    if env_vars != [] and
+         Enum.all?(env_vars, &(System.get_env(&1) in [nil, ""])) and
+         Application.get_env(:req_llm, config_key) in [nil, ""] do
+      System.put_env(hd(env_vars), "test-key-#{provider.id}")
     end
   end
 

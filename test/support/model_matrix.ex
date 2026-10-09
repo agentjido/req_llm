@@ -181,19 +181,11 @@ defmodule ReqLLM.Test.ModelMatrix do
   end
 
   defp allowed_model_specs(nil) do
-    # Get providers that have both implementation and models
-    implemented_providers = ReqLLM.Providers.list() |> MapSet.new()
-
-    llmdb_providers =
-      LLMDB.providers()
-      |> MapSet.new(& &1.id)
-
-    providers = MapSet.intersection(implemented_providers, llmdb_providers)
-
-    providers
+    LLMDB.providers()
     |> Enum.flat_map(fn provider ->
-      models = LLMDB.models(provider)
-      Enum.map(models, &"#{provider}:#{&1.id}")
+      LLMDB.models(provider.id)
+      |> Enum.filter(&ReqLLM.ProviderDispatch.executable?/1)
+      |> Enum.map(&LLMDB.Model.spec/1)
     end)
   end
 
@@ -229,16 +221,18 @@ defmodule ReqLLM.Test.ModelMatrix do
     Application.get_env(:req_llm, ReqLLM.ModelOperation.config_key(operation)) || []
   end
 
-  defp filter_by_operation(specs, :all, _registry), do: specs
-
   defp filter_by_operation(specs, operation, registry) do
     Enum.filter(specs, &supports_operation?(&1, operation, registry))
   end
 
   defp supports_operation?(spec, operation, nil) do
     case LLMDB.model(spec) do
-      {:ok, model} -> ReqLLM.ModelOperation.supported?(model, operation)
-      {:error, _} -> false
+      {:ok, model} ->
+        ReqLLM.ModelOperation.supported?(model, operation) and
+          ReqLLM.ProviderDispatch.executable?(model, operation)
+
+      {:error, _} ->
+        false
     end
   end
 
@@ -278,12 +272,7 @@ defmodule ReqLLM.Test.ModelMatrix do
   end
 
   defp resolve_allowed_specs(nil) do
-    ReqLLM.Providers.list()
-    |> Enum.flat_map(fn provider ->
-      models = LLMDB.models(provider)
-      Enum.map(models, fn model -> LLMDB.Model.spec(model) end)
-    end)
-    |> Enum.sort()
+    allowed_model_specs(nil) |> Enum.sort()
   end
 
   defp resolve_allowed_specs(registry) do

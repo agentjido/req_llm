@@ -516,7 +516,17 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
   @doc false
   def test_args_for(provider, operation, scenario \\ nil) do
     provider = normalize_provider(provider)
-    args = ["test", ScenarioCatalog.test_file(provider, operation, scenario)]
+
+    test_file =
+      case {ReqLLM.Providers.get(provider), operation} do
+        {{:error, _}, operation} when operation in [:text, :all] ->
+          "test/coverage/catalog_gateway/comprehensive_test.exs"
+
+        _ ->
+          ScenarioCatalog.test_file(provider, operation, scenario)
+      end
+
+    args = ["test", test_file]
 
     if scenario do
       args ++ ["--only", "scenario:#{scenario}"]
@@ -1226,7 +1236,8 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
     )
   end
 
-  defp select_models(registry, raw_spec, opts) do
+  @doc false
+  def select_models(registry, raw_spec, opts) do
     operation = parse_operation_type(opts[:type])
     implemented = get_implemented_providers()
 
@@ -1245,6 +1256,14 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
           model_supports_operation?(registry, p, m, operation)
         end)
       end
+
+    candidates =
+      Enum.filter(candidates, fn {provider, id} ->
+        case LLMDB.model("#{provider}:#{id}") do
+          {:ok, model} -> ReqLLM.ProviderDispatch.executable?(model, operation)
+          {:error, _} -> false
+        end
+      end)
 
     final =
       if opts[:sample] do
@@ -1631,8 +1650,14 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
   defp header(_), do: "Model Coverage"
 
   defp get_implemented_providers do
-    providers = ReqLLM.Providers.list()
-    MapSet.new(providers)
+    catalog_providers =
+      LLMDB.providers()
+      |> Enum.filter(fn provider ->
+        Enum.any?(LLMDB.models(provider.id), &ReqLLM.ProviderDispatch.executable?/1)
+      end)
+      |> Enum.map(& &1.id)
+
+    MapSet.new(ReqLLM.Providers.list() ++ catalog_providers)
   end
 
   defp load_excluded_models do
