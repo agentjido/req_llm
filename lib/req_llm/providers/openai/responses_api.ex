@@ -104,7 +104,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   @text_delta_events ["response.output_text.delta", "response.refusal.delta"]
   @message_text_types ["output_text", "text", "refusal"]
   @reasoning_encrypted_content_include ["reasoning.encrypted_content"]
-  @responses_item_providers [:openai, :azure, :meta]
+  @responses_item_providers [:openai, :openai_codex, :azure, :meta]
   @summary_part_separator "\n\n"
 
   @impl true
@@ -881,10 +881,14 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
 
   @doc false
   def build_request_body(context, model_name, opts, request) do
+    build_request_body(context, model_name, opts, request, request_provider(request))
+  end
+
+  @doc false
+  def build_request_body(context, model_name, opts, request, target_provider) do
     opts_map = if is_map(opts), do: opts, else: Map.new(opts)
     ReqLLM.Providers.OpenAI.Astra.validate_options!(%{id: model_name}, Map.to_list(opts_map))
     provider_opts = opts_map[:provider_options] || []
-    target_provider = request_provider(request)
 
     store = Keyword.get(provider_opts, :store, default_store(model_name))
 

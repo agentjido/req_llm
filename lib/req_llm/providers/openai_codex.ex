@@ -439,8 +439,22 @@ defmodule ReqLLM.Providers.OpenAICodex do
 
   defp build_codex_body(context, %LLMDB.Model{} = model, opts, request) do
     opts = opts |> ensure_provider_options() |> force_store_false()
-    body = ResponsesAPI.build_request_body(context, effective_model_id(model), opts, request)
     provider_opts = provider_options(opts)
+
+    body_opts =
+      if tool_resume_context?(context, provider_opts),
+        do: opts |> Map.new() |> Map.delete(:responses_transport),
+        else: opts
+
+    body =
+      ResponsesAPI.build_request_body(
+        context,
+        effective_model_id(model),
+        body_opts,
+        request,
+        model.provider
+      )
+
     instructions = extract_instructions(context) || ""
 
     body =
@@ -487,6 +501,15 @@ defmodule ReqLLM.Providers.OpenAICodex do
     do: provider_opts |> Map.to_list() |> Keyword.put(:store, false)
 
   defp provider_options_store_false(_provider_opts), do: [store: false]
+
+  defp tool_resume_context?(context, provider_opts) do
+    tool_outputs = provider_opts[:tool_outputs]
+
+    Enum.any?(context.messages, fn
+      %{role: :tool, tool_call_id: id} when is_binary(id) -> true
+      _ -> false
+    end) or (is_list(tool_outputs) and tool_outputs != [])
+  end
 
   defp tool_resume_body?(%{"input" => input}) when is_list(input) do
     Enum.any?(input, fn

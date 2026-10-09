@@ -747,6 +747,257 @@ defmodule ReqLLM.Providers.OpenAICodexTest do
     end
   end
 
+  describe "reasoning replay across transports" do
+    for transport <- [:buffered, :sse, :websocket] do
+      @replay_transport transport
+
+      test "#{transport} replays decoded Codex reasoning before the tool call and result" do
+        for model_id <- ["gpt-5.3-codex-spark", "gpt-6.1-sol"] do
+          model = ReqLLM.model!("openai_codex:#{model_id}")
+
+          request = %Req.Request{
+            options: %{model: model.id, context: ReqLLM.context("Add 2 and 3")}
+          }
+
+          reasoning = codex_reasoning_item()
+          call = codex_function_call_item()
+
+          event = %{
+            "type" => "response.done",
+            "response" => %{
+              "id" => "resp_reasoning",
+              "status" => "completed",
+              "output" => [reasoning, call],
+              "usage" => %{"input_tokens" => 10, "output_tokens" => 4, "total_tokens" => 14}
+            }
+          }
+
+          call_event = %{
+            "type" => "response.output_item.done",
+            "output_index" => 1,
+            "item" => call
+          }
+
+          sse =
+            "data: #{Jason.encode!(call_event)}\n\ndata: #{Jason.encode!(event)}\n\ndata: [DONE]\n\n"
+
+          {_, decoded} =
+            OpenAICodex.decode_response({request, %Req.Response{status: 200, body: sse}})
+
+          response = decoded.body
+          assert %ReqLLM.Response{} = response
+          assert [%{id: "call_add"}] = response.message.tool_calls
+
+          assert [%{provider: :openai_codex, signature: "codex-encrypted"}] =
+                   response.message.reasoning_details
+
+          context =
+            ReqLLM.Context.append(
+              response.context,
+              ReqLLM.Context.tool_result("call_add", "add", "5")
+            )
+
+          body = codex_replay_body(@replay_transport, model, context)
+          assert body["store"] == false
+          assert body["include"] == ["reasoning.encrypted_content"]
+          refute Map.has_key?(body, "previous_response_id")
+
+          items =
+            Enum.filter(
+              body["input"],
+              &(&1["type"] in ["reasoning", "function_call", "function_call_output"])
+            )
+
+          assert [replayed_reasoning, replayed_call, result] = items
+          assert replayed_reasoning == reasoning
+          assert replayed_call["call_id"] == "call_add"
+          assert replayed_call["name"] == "add"
+          assert Jason.decode!(replayed_call["arguments"]) == %{"a" => 2, "b" => 3}
+
+          assert result == %{
+                   "type" => "function_call_output",
+                   "call_id" => "call_add",
+                   "output" => "5"
+                 }
+        end
+      end
+
+      test "#{transport} preserves Codex output replay items without duplicating them" do
+        model = ReqLLM.model!("openai_codex:gpt-5.3-codex-spark")
+        items = [codex_reasoning_item(), codex_function_call_item()]
+
+        assistant =
+          ReqLLM.Context.assistant("",
+            metadata: %{
+              response_id: "resp_reasoning",
+              responses_replay: %{provider: :openai_codex, items: items}
+            }
+          )
+
+        context = ReqLLM.context([assistant, ReqLLM.Context.tool_result("call_add", "add", "5")])
+        body = codex_replay_body(@replay_transport, model, context)
+        assert Enum.take(body["input"], 2) == items
+        assert Enum.count(body["input"], &(&1["type"] == "reasoning")) == 1
+        assert Enum.count(body["input"], &(&1["type"] == "function_call")) == 1
+        refute Map.has_key?(body, "previous_response_id")
+      end
+
+      test "#{transport} does not replay reasoning or raw items from another provider" do
+        model = ReqLLM.model!("openai_codex:gpt-5.3-codex-spark")
+
+        for provider <- [:openai, :azure, :meta, :anthropic] do
+          detail = %ReqLLM.Message.ReasoningDetails{
+            provider: provider,
+            format: "openai-responses-v1",
+            index: 0,
+            encrypted?: true,
+            signature: "foreign-encrypted",
+            provider_data: %{"id" => "rs_foreign", "type" => "reasoning"}
+          }
+
+          assistant =
+            ReqLLM.Context.assistant("Previous answer",
+              reasoning_details: [detail],
+              metadata: %{
+                responses_replay: %{provider: provider, items: [codex_reasoning_item()]}
+              }
+            )
+
+          context = ReqLLM.context([assistant, ReqLLM.Context.user("Continue")])
+          body = codex_replay_body(@replay_transport, model, context)
+          refute Enum.any?(body["input"], &(&1["type"] == "reasoning"))
+          refute Jason.encode!(body) =~ "foreign-encrypted"
+          refute Jason.encode!(body) =~ "codex-encrypted"
+        end
+      end
+    end
+
+    test "websocket tool_outputs replay prior reasoning after response chaining is removed" do
+      model = ReqLLM.model!("openai_codex:gpt-5.3-codex-spark")
+
+      assistant =
+        ReqLLM.Context.assistant("",
+          metadata: %{
+            response_id: "resp_reasoning",
+            responses_replay: %{
+              provider: :openai_codex,
+              items: [codex_reasoning_item(), codex_function_call_item()]
+            }
+          }
+        )
+
+      body =
+        codex_replay_body(:websocket, model, ReqLLM.context([assistant]),
+          previous_response_id: "resp_override",
+          tool_outputs: [[call_id: "call_add", output: "5"]]
+        )
+
+      refute Map.has_key?(body, "previous_response_id")
+
+      assert Enum.map(body["input"], & &1["type"]) == [
+               "reasoning",
+               "function_call",
+               "function_call_output"
+             ]
+
+      assert hd(body["input"]) == codex_reasoning_item()
+    end
+
+    test "websocket follow-ups without tool results retain response chaining" do
+      model = ReqLLM.model!("openai_codex:gpt-5.3-codex-spark")
+
+      assistant =
+        ReqLLM.Context.assistant("Previous answer",
+          metadata: %{
+            response_id: "resp_reasoning",
+            responses_replay: %{provider: :openai_codex, items: [codex_reasoning_item()]}
+          }
+        )
+
+      context = ReqLLM.context([assistant, ReqLLM.Context.user("Continue")])
+      body = codex_replay_body(:websocket, model, context)
+      assert body["previous_response_id"] == "resp_reasoning"
+      refute Enum.any?(body["input"], &(&1["type"] == "reasoning"))
+    end
+
+    test "OpenAI requests continue to exclude Codex-owned reasoning and raw replay items" do
+      model = ReqLLM.model!("openai_codex:gpt-5.3-codex-spark")
+
+      detail = %ReqLLM.Message.ReasoningDetails{
+        provider: :openai_codex,
+        format: "openai-responses-v1",
+        index: 0,
+        encrypted?: true,
+        signature: "codex-encrypted",
+        provider_data: %{"id" => "rs_codex", "type" => "reasoning"}
+      }
+
+      for metadata <- [
+            %{},
+            %{responses_replay: %{provider: :openai_codex, items: [codex_reasoning_item()]}}
+          ] do
+        assistant =
+          ReqLLM.Context.assistant("Previous answer",
+            reasoning_details: [detail],
+            metadata: metadata
+          )
+
+        context = ReqLLM.context([assistant, ReqLLM.Context.user("Continue")])
+
+        body =
+          ReqLLM.Providers.OpenAI.ResponsesAPI.build_request_body(
+            context,
+            model.id,
+            [provider_options: [store: false]],
+            nil
+          )
+
+        refute Enum.any?(body["input"], &(&1["type"] == "reasoning"))
+        refute Jason.encode!(body) =~ "codex-encrypted"
+      end
+    end
+  end
+
+  defp codex_replay_body(transport, model, context, extra_provider_opts \\ []) do
+    opts = [
+      provider_options:
+        Keyword.merge([access_token: jwt_with_account_id("acct_replay")], extra_provider_opts)
+    ]
+
+    case transport do
+      :buffered ->
+        {:ok, request} = OpenAICodex.prepare_request(:chat, model, context, opts)
+        request |> OpenAICodex.encode_body() |> ReqLLM.Test.Helpers.json_body()
+
+      :sse ->
+        {:ok, request} = OpenAICodex.attach_stream(model, context, opts, nil)
+        ReqLLM.Test.Helpers.json_body(request)
+
+      :websocket ->
+        {:ok, config} = OpenAICodex.attach_websocket_stream(model, context, opts)
+        config.initial_messages |> hd() |> Jason.decode!()
+    end
+  end
+
+  defp codex_reasoning_item do
+    %{
+      "id" => "rs_codex",
+      "type" => "reasoning",
+      "encrypted_content" => "codex-encrypted",
+      "summary" => [%{"type" => "summary_text", "text" => "Use the add tool."}]
+    }
+  end
+
+  defp codex_function_call_item do
+    %{
+      "id" => "fc_add",
+      "type" => "function_call",
+      "call_id" => "call_add",
+      "name" => "add",
+      "arguments" => ~s({"a":2,"b":3})
+    }
+  end
+
   defp jwt_with_account_id(account_id) do
     header =
       %{"alg" => "none", "typ" => "JWT"} |> Jason.encode!() |> Base.url_encode64(padding: false)
