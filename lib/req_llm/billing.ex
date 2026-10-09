@@ -70,16 +70,19 @@ defmodule ReqLLM.Billing do
     includes_cached =
       Map.get(usage, :input_includes_cached, Map.get(usage, "input_includes_cached", true))
 
-    reported = MapAccess.get(usage, :usage_reported, %{})
-    input_reported = Map.get(reported, :input, Map.get(reported, "input", not is_nil(input)))
-    output_reported = Map.get(reported, :output, Map.get(reported, "output", not is_nil(output)))
-    input = input || 0
-    output = output || 0
+    reported = MapAccess.get_raw(usage, :usage_reported, %{})
+    input_reported = MapAccess.get_raw(reported, :input, not is_nil(input))
+    output_reported = MapAccess.get_raw(reported, :output, not is_nil(output))
+    input = if is_nil(input), do: 0, else: input
+    output = if is_nil(output), do: 0, else: output
     complete = MapAccess.get_raw(usage, :billing_usage_complete) in [nil, true]
+    add_reasoning = MapAccess.get_raw(usage, :add_reasoning_to_cost, false)
 
-    if valid_token_count?(input) and valid_token_count?(output) and
+    if is_map(reported) and is_boolean(input_reported) and is_boolean(output_reported) and
+         valid_token_count?(input) and valid_token_count?(output) and
          valid_token_count?(cache_read) and valid_token_count?(cache_write) and
          valid_token_count?(reasoning) and is_boolean(includes_cached) and
+         is_boolean(add_reasoning) and
          (input_reported or not input_component?(model)) and
          (output_reported or
             not token_component?(model, :output)) and complete do
@@ -97,7 +100,7 @@ defmodule ReqLLM.Billing do
            prompt: if(input_reported, do: prompt),
            input_reported: input_reported,
            output_reported: output_reported,
-           add_reasoning: MapAccess.get(usage, :add_reasoning_to_cost, false)
+           add_reasoning: add_reasoning
          }}
       else
         :error
@@ -151,8 +154,12 @@ defmodule ReqLLM.Billing do
     end
   end
 
-  defp usage_number(usage, keys, default \\ nil),
-    do: Enum.find_value(keys, default, &MapAccess.get(usage, &1))
+  defp usage_number(usage, keys, default \\ nil) do
+    case keys |> Enum.map(&MapAccess.get_raw(usage, &1)) |> Enum.find(&(not is_nil(&1))) do
+      nil -> default
+      value -> value
+    end
+  end
 
   defp valid_count?(value), do: is_number(value) and value >= 0
   defp valid_token_count?(value), do: is_integer(value) and value >= 0

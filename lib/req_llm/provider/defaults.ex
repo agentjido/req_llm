@@ -1728,25 +1728,26 @@ defmodule ReqLLM.Provider.Defaults do
 
   defp parse_openai_usage(usage, choices \\ [])
 
-  defp parse_openai_usage(
-         %{"prompt_tokens" => input, "completion_tokens" => output, "total_tokens" => total} =
-           usage,
-         choices
-       ) do
-    reasoning_from_details =
-      get_in(usage, ["completion_tokens_details", "reasoning_tokens"]) || 0
+  defp parse_openai_usage(usage, choices) when is_map(usage) do
+    input = openai_usage_counter(usage, "prompt_tokens")
+    output = openai_usage_counter(usage, "completion_tokens")
+    total = openai_usage_counter(usage, "total_tokens", openai_total_tokens(input, output))
 
-    # For DeepSeek R1 models, Azure returns reasoning_content in message
-    # but doesn't provide reasoning_tokens in usage details
+    reasoning_from_details =
+      openai_usage_detail(usage, "completion_tokens_details", "reasoning_tokens")
+
     reasoning_tokens =
-      if reasoning_from_details > 0 do
-        reasoning_from_details
-      else
-        infer_reasoning_from_choices(choices, output)
+      case ReqLLM.Usage.Normalize.normalize_counter(reasoning_from_details) do
+        value when value in [nil, 0] -> infer_reasoning_from_choices(choices, output)
+        value -> value
       end
 
-    cached_tokens = get_in(usage, ["prompt_tokens_details", "cached_tokens"]) || 0
-    cache_creation_tokens = get_in(usage, ["prompt_tokens_details", "cache_write_tokens"])
+    cached_tokens =
+      openai_usage_detail(usage, "prompt_tokens_details", "cached_tokens")
+      |> openai_usage_default(0)
+
+    cache_creation_tokens =
+      openai_usage_detail(usage, "prompt_tokens_details", "cache_write_tokens")
 
     base = %{
       input_tokens: input,
@@ -1756,16 +1757,23 @@ defmodule ReqLLM.Provider.Defaults do
       reasoning_tokens: reasoning_tokens
     }
 
-    base = maybe_put_cache_creation_tokens(base, cache_creation_tokens)
+    base =
+      base
+      |> maybe_put_cache_creation_tokens(cache_creation_tokens)
+      |> maybe_put_openai_usage_reported(usage)
+      |> maybe_mark_invalid_openai_details(usage)
 
     extra =
-      Map.drop(usage, [
-        "prompt_tokens",
-        "completion_tokens",
-        "total_tokens",
-        "prompt_tokens_details",
-        "completion_tokens_details"
-      ])
+      Map.drop(
+        usage,
+        [
+          "prompt_tokens",
+          "completion_tokens",
+          "total_tokens",
+          "prompt_tokens_details",
+          "completion_tokens_details"
+        ] ++ openai_internal_usage_keys()
+      )
 
     Map.merge(base, extra)
   end
@@ -1776,8 +1784,77 @@ defmodule ReqLLM.Provider.Defaults do
       output_tokens: 0,
       total_tokens: 0,
       cached_tokens: 0,
-      reasoning_tokens: 0
+      reasoning_tokens: 0,
+      usage_reported: %{input: false, output: false}
     }
+
+  defp openai_usage_counter(usage, key, default \\ 0) do
+    usage
+    |> Map.get(key)
+    |> openai_usage_default(default)
+    |> ReqLLM.Usage.Normalize.normalize_counter()
+  end
+
+  defp openai_usage_default(nil, default), do: default
+  defp openai_usage_default(value, _default), do: value
+
+  defp openai_usage_detail(usage, key, field) do
+    case Map.get(usage, key) do
+      details when is_map(details) -> Map.get(details, field)
+      _ -> nil
+    end
+  end
+
+  defp openai_total_tokens(input, output) when is_number(input) and is_number(output),
+    do: input + output
+
+  defp openai_total_tokens(_input, _output), do: nil
+
+  defp maybe_mark_invalid_openai_details(base, usage) do
+    valid? =
+      Enum.all?(["prompt_tokens_details", "completion_tokens_details"], fn key ->
+        value = Map.get(usage, key)
+        is_nil(value) or is_map(value)
+      end)
+
+    if valid?, do: base, else: Map.put(base, :billing_usage_complete, false)
+  end
+
+  defp maybe_put_openai_usage_reported(base, usage) do
+    reported = %{
+      input: not is_nil(Map.get(usage, "prompt_tokens")),
+      output: not is_nil(Map.get(usage, "completion_tokens"))
+    }
+
+    if reported.input and reported.output,
+      do: base,
+      else: Map.put(base, :usage_reported, reported)
+  end
+
+  defp openai_internal_usage_keys do
+    keys = [
+      :input,
+      :output,
+      :reasoning,
+      :cached_input,
+      :cache_creation,
+      :input_tokens,
+      :output_tokens,
+      :total_tokens,
+      :cache_read_tokens,
+      :cache_write_tokens,
+      :cached_tokens,
+      :cache_creation_tokens,
+      :reasoning_tokens,
+      :cache_write_tokens_by_ttl,
+      :usage_reported,
+      :billing_usage_complete,
+      :input_includes_cached,
+      :add_reasoning_to_cost
+    ]
+
+    keys ++ Enum.map(keys, &Atom.to_string/1)
+  end
 
   defp maybe_put_cache_creation_tokens(usage, nil), do: usage
 

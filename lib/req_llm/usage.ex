@@ -66,10 +66,8 @@ defmodule ReqLLM.Usage do
   def normalize(usage) when is_map(usage) do
     normalized = Normalize.normalize(usage)
 
-    input_tokens = MapAccess.get(normalized, :input_tokens) || MapAccess.get(normalized, :input)
-
-    output_tokens =
-      MapAccess.get(normalized, :output_tokens) || MapAccess.get(normalized, :output)
+    input_tokens = Map.fetch!(normalized, :input_tokens)
+    output_tokens = Map.fetch!(normalized, :output_tokens)
 
     total_tokens =
       case MapAccess.get(normalized, :total_tokens) do
@@ -148,8 +146,15 @@ defmodule ReqLLM.Usage do
 
   defp normalize_counter_values(usage) do
     Map.new(usage, fn
-      {key, value} when key in @counter_keys -> {key, Normalize.normalize_counter(value)}
-      entry -> entry
+      {key, value} when key in @counter_keys ->
+        {key, Normalize.normalize_counter(value)}
+
+      {:cache_write_tokens_by_ttl, groups} when is_map(groups) ->
+        {:cache_write_tokens_by_ttl,
+         Map.new(groups, fn {ttl, count} -> {ttl, Normalize.normalize_counter(count)} end)}
+
+      entry ->
+        entry
     end)
   end
 
@@ -173,8 +178,15 @@ defmodule ReqLLM.Usage do
 
   defp merge_value(:cache_write_tokens_by_ttl, existing, incoming)
        when is_map(existing) and is_map(incoming) do
-    Map.merge(existing, incoming, fn _key, old, new -> max(old, new) end)
+    Map.merge(existing, incoming, fn
+      _key, old, new when is_number(old) and is_number(new) -> max(old, new)
+      _key, old, nil -> old
+      _key, _old, new -> new
+    end)
   end
+
+  defp merge_value(:cache_write_tokens_by_ttl, existing, nil) when is_map(existing),
+    do: existing
 
   defp merge_value(_key, existing, incoming) do
     if is_number(existing) and is_number(incoming), do: max(existing, incoming), else: incoming

@@ -430,7 +430,11 @@ defmodule ReqLLM.Providers.Anthropic.Response do
     base = %{
       input_tokens: input,
       output_tokens: output,
-      total_tokens: input + output,
+      total_tokens:
+        if(is_integer(input) and input >= 0 and is_integer(output) and output >= 0,
+          do: input + output,
+          else: nil
+        ),
       cached_tokens: cache_read,
       cache_read_input_tokens: cache_read,
       cache_creation_input_tokens: cache_creation,

@@ -1198,6 +1198,36 @@ defmodule ReqLLM.Providers.AnthropicTest do
   end
 
   describe "response decoding & normalization" do
+    test "malformed token counters survive decoding and remain unpriced" do
+      model = ReqLLM.model!("anthropic:claude-haiku-4-5-20251001")
+
+      for key <- ["input_tokens", "output_tokens"],
+          invalid <- [nil, false, -1, "invalid", [], %{}] do
+        body = %{
+          "id" => "msg_invalid_usage",
+          "type" => "message",
+          "role" => "assistant",
+          "content" => [%{"type" => "text", "text" => "OK"}],
+          "stop_reason" => "end_turn",
+          "usage" => Map.put(%{"input_tokens" => 11, "output_tokens" => 4}, key, invalid)
+        }
+
+        assert {:ok, response} = ReqLLM.Providers.Anthropic.Response.decode_response(body, model)
+        assert response.usage[String.to_existing_atom(key)] == invalid
+        assert response.usage.total_tokens == nil
+
+        usage = ReqLLM.Usage.normalize(response.usage)
+
+        priced =
+          ReqLLM.Usage.Cost.apply(usage, model,
+            pricing_context: %{api: "chat", inference_geo: "global"}
+          )
+
+        assert priced.pricing.status == :unknown
+        refute Map.has_key?(priced, :total_cost)
+      end
+    end
+
     test "decode_response handles non-streaming responses" do
       # Create a mock Anthropic-format response
       mock_json_response = anthropic_format_json_fixture()
