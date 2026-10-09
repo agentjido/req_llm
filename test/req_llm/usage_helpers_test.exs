@@ -140,6 +140,36 @@ defmodule ReqLLM.UsageHelpersTest do
       assert merged.total_tokens == 1893
     end
 
+    test "merge keeps cache durations across missing, empty and partial updates" do
+      initial =
+        ReqLLM.Usage.normalize(%{
+          input_tokens: 100,
+          output_tokens: 0,
+          cache_creation_tokens: 30,
+          cache_write_tokens_by_ttl: %{"5m" => "10", "1h" => "20"},
+          input_includes_cached: false
+        })
+
+      merged =
+        Enum.reduce(
+          [
+            %{output_tokens: 1},
+            %{output_tokens: 2, cache_write_tokens_by_ttl: %{}},
+            %{output_tokens: 3, cache_write_tokens_by_ttl: %{"5m" => "9"}}
+          ],
+          initial,
+          fn update, usage ->
+            normalized = ReqLLM.Usage.normalize(Map.put(update, :input_includes_cached, false))
+            ReqLLM.Usage.merge(usage, normalized)
+          end
+        )
+
+      assert merged.cache_write_tokens_by_ttl == %{"5m" => 10, "1h" => 20}
+      assert merged.cache_write_tokens == 30
+      assert merged.output_tokens == 3
+      assert merged.billing_usage_complete
+    end
+
     test "merge handles cumulative usage from later events" do
       message_start = %{input_tokens: 2679, output_tokens: 3, total_tokens: 2682}
       message_delta = %{input_tokens: 10_682, output_tokens: 510, total_tokens: 11_192}

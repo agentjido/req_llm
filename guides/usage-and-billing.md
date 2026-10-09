@@ -70,8 +70,16 @@ then uses LLMDB's component selector. It charges uncached input, cache reads,
 cache writes, output, and storage through separate meters. A selected context
 tier applies to the whole request when LLMDB marks it `full_request`.
 
-Supply the actual billed service tier after any provider fallback. `"auto"`
-does not confirm one. Time-dependent tariffs require an explicit
+For OpenAI, ReqLLM uses the physical endpoint and the returned service tier
+for both buffered and streamed prices. The returned tier replaces
+`pricing_context.service_tier`; a missing, invalid, or `"auto"` returned tier
+does not confirm a billed tier. Known OpenAI hosts confirm global or regional
+processing. Other hosts require an independently confirmed processing fact.
+Standalone compact and Decisions endpoints do not establish a Responses
+tariff.
+
+For other providers, supply the actual billed service tier after any provider
+fallback. `"auto"` does not confirm one. Time-dependent tariffs require an explicit
 `pricing_period: "peak"` or `"off_peak"` chosen by the caller from provider
 billing evidence; ReqLLM does not choose a period from a clock or response
 timestamp. For a current Coding Plan credit tariff, also supply
@@ -79,6 +87,9 @@ timestamp. For a current Coding Plan credit tariff, also supply
 Cache writes with mixed durations use reported
 `cache_write_tokens_by_ttl: %{"5m" => count, "1h" => count}` usage; if the
 durations cannot be reconciled with the total, pricing stays unknown.
+ReqLLM requires LLMDB 2026.10.2 or later for the reviewed Anthropic cache
+tariffs. This includes Haiku 5.5's separate five-minute and one-hour rates,
+its full-prompt threshold, and the Sonnet 5.5 one-hour rate.
 
 When the tariff or usage is incomplete, `usage.pricing` is
 `%{status: :unknown}` and ReqLLM omits `total_cost`, `input_cost`,

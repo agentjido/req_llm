@@ -46,7 +46,7 @@ defmodule ReqLLM.Provider.OpenAIResponsesMaterializationTest do
       total_tokens: 12,
       cached_tokens: 2,
       reasoning_tokens: 3,
-      tool_usage: %{"function" => %{count: 1, unit: :call}}
+      usage_reported: %{input: true, output: true}
     }
 
     provider_meta = %{

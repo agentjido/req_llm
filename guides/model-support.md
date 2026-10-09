@@ -304,7 +304,7 @@ provider-native feature and are not consulted by request routing.
 | `baidu/ernie-4.5-21b-a3b-thinking` | `text` | `openrouter.unrecorded_text` | text → text | Experimental | 0/5 | 2026-05-30T00:14:36Z | surface declaration unknown |
 | `baidu/ernie-4.5-300b-a47b` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:14:36Z | surface declaration unknown |
 | `baidu/ernie-4.5-vl-28b-a3b` | `text` | `openrouter.unrecorded_text` | text → text | Experimental | 0/5 | 2026-05-30T00:14:36Z | surface declaration unknown |
-| `baidu/ernie-4.5-vl-424b-a47b` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:14:36Z | missing or stale evidence |
+| `baidu/ernie-4.5-vl-424b-a47b` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:14:36Z | surface declaration unknown |
 | `bytedance-seed/seed-1.6` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:15:07Z | missing or stale evidence |
 | `bytedance-seed/seed-1.6-flash` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:15:07Z | missing or stale evidence |
 | `bytedance-seed/seed-2.0-lite` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:15:07Z | missing or stale evidence |
