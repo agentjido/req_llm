@@ -115,6 +115,18 @@ defmodule ReqLLM.Test.Billing.CLI do
     {args, env}
   end
 
+  def require_case_rates!(id, pricing) when id in ~w(cache_1h mixed_cache_ttl) do
+    unless Enum.any?(pricing[:components] || [], fn component ->
+             String.starts_with?(component[:id] || "", "token.cache_write") and
+               get_in(component, [:applies_when, "cache_ttl"]) == "1h"
+           end),
+           do: raise(ArgumentError, "#{id} requires duration-specific one-hour catalog rates")
+
+    :ok
+  end
+
+  def require_case_rates!(_id, _pricing), do: :ok
+
   defp dispatch(%{command: "list"}) do
     Enum.each(Cases.all(), fn item ->
       Mix.shell().info(
@@ -230,8 +242,11 @@ defmodule ReqLLM.Test.Billing.CLI do
       Reference.rates!(spec)
 
       case ReqLLM.model(spec) do
-        {:ok, %LLMDB.Model{pricing: pricing}} when is_map(pricing) -> :ok
-        _ -> raise ArgumentError, "model requires confirmed catalog metadata: #{spec}"
+        {:ok, %LLMDB.Model{pricing: pricing}} when is_map(pricing) ->
+          Enum.each(ids, &require_case_rates!(&1, pricing))
+
+        _ ->
+          raise ArgumentError, "model requires confirmed catalog metadata: #{spec}"
       end
 
       [provider, _] = String.split(spec, ":", parts: 2)

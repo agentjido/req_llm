@@ -303,25 +303,37 @@ defmodule ReqLLM.Test.Billing.Live do
 
   defp phase_context(_, _, context), do: context
 
-  defp verify_case!(%{"case_id" => id}, phase, body, response)
+  def verify_case!(selection, phase, body, response) do
+    verify_case_facts!(selection, phase, body, response)
+    :ok
+  end
+
+  defp verify_case_facts!(%{"case_id" => id}, phase, body, response)
        when id in ~w(cache_5m cache_1h mixed_cache_ttl) do
     usage = body["usage"]
 
     if phase == "warm" do
-      assert usage["cache_read_input_tokens"] > 0, "warm request did not establish a cache hit"
+      assert is_integer(usage["cache_read_input_tokens"]) and usage["cache_read_input_tokens"] > 0,
+             "warm request did not establish a cache hit"
     else
-      assert usage["cache_creation_input_tokens"] > 0,
+      assert is_integer(usage["cache_creation_input_tokens"]) and
+               usage["cache_creation_input_tokens"] > 0,
              "cold request did not establish a cache write"
 
       if id == "mixed_cache_ttl" do
         assert get_in(usage, ["cache_creation", "ephemeral_5m_input_tokens"]) > 0
         assert get_in(usage, ["cache_creation", "ephemeral_1h_input_tokens"]) > 0
-        assert map_size(response.usage.cache_write_tokens_by_ttl) == 2
+        assert map_size(ReqLLM.Usage.normalize(response.usage).cache_write_tokens_by_ttl) == 2
       end
     end
   end
 
-  defp verify_case!(%{"case_id" => "long_context", "model" => model}, phase, body, _response) do
+  defp verify_case_facts!(
+         %{"case_id" => "long_context", "model" => model},
+         phase,
+         body,
+         _response
+       ) do
     usage = body["usage"]
     count = usage["input_tokens"] || usage["prompt_tokens"]
     threshold = Reference.rates!(model)["threshold"]
@@ -330,18 +342,18 @@ defmodule ReqLLM.Test.Billing.Live do
            "supplier token count did not reach the selected context band"
   end
 
-  defp verify_case!(%{"case_id" => "hosted_web_search"}, _phase, _body, response),
+  defp verify_case_facts!(%{"case_id" => "hosted_web_search"}, _phase, _body, response),
     do: assert(response.usage.tool_usage.web_search.count == 1)
 
-  defp verify_case!(%{"case_id" => "returned_service_tier"}, "flex", body, _response),
+  defp verify_case_facts!(%{"case_id" => "returned_service_tier"}, "flex", body, _response),
     do: assert(body["service_tier"] == "flex", "request did not establish a returned flex tier")
 
-  defp verify_case!(%{"case_id" => "client_function"}, "call", _body, response) do
+  defp verify_case_facts!(%{"case_id" => "client_function"}, "call", _body, response) do
     assert [%ReqLLM.ToolCall{}] = response.message.tool_calls
     assert response.usage.tool_usage == %{}
   end
 
-  defp verify_case!(_, _, _body, _response), do: :ok
+  defp verify_case_facts!(_, _, _body, _response), do: :ok
 
   defp next_context(%{"case_id" => "client_function"}, "call", context, response) do
     calls = ReqLLM.Response.tool_calls(response)

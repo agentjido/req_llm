@@ -3,7 +3,7 @@ defmodule ReqLLM.Billing.RunAuditTest do
   @moduletag :billing
 
   if System.get_env("REQ_LLM_BILLING_MODE") == "audit" do
-    alias ReqLLM.Test.Billing.{Audit, Reference, Run, Samples}
+    alias ReqLLM.Test.Billing.{Audit, Live, Reference, Run, Samples}
     dir = System.fetch_env!("REQ_LLM_BILLING_RUN")
 
     for attempt <- Run.load!(dir)["attempts"],
@@ -65,6 +65,20 @@ defmodule ReqLLM.Billing.RunAuditTest do
           assert Samples.reference(changed)["status"] == "unknown"
           assert Samples.buffered(changed).usage.pricing.status == :unknown
         end
+      end
+
+      @tag billing_case: attempt["case_id"], billing_layer: "pipeline", model: attempt["model"]
+      test "#{attempt["attempt_id"]}: saved provider facts establish the selected phase" do
+        attempt = unquote(Macro.escape(attempt))
+        sample = sample(attempt)
+
+        assert :ok ==
+                 Live.verify_case!(
+                   attempt,
+                   attempt["phase"],
+                   sample.body,
+                   Samples.buffered(sample)
+                 )
       end
 
       if attempt["mode"] == "streamed" do

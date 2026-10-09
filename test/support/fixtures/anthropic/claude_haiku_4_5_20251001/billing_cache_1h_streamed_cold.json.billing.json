@@ -1,0 +1,166 @@
+{
+  "attempt": {
+    "attempt_id": "attempt_1",
+    "capture_complete": true,
+    "capture_origin": "live",
+    "captured_at": "2026-10-09T01:59:07.529200Z",
+    "case_id": "cache_1h",
+    "estimated_micros": 180152,
+    "expected_pricing": "priced",
+    "finished_at": "2026-10-09T01:59:07.591631Z",
+    "fixture": "billing_attempt_1",
+    "mode": "streamed",
+    "model": "anthropic:claude-haiku-4-5-20251001",
+    "phase": "cold",
+    "reconciled_micros": 33075,
+    "started_at": "2026-10-09T01:59:06.728768Z",
+    "state": "complete",
+    "transcript": "transcripts/anthropic/claude_haiku_4_5_20251001/billing_attempt_1.json",
+    "transcript_sha256": "5ff191d6aa5f73b491b0419721800e16b08479802f151ef3533916ff48f5c4a5"
+  },
+  "calculation": {
+    "counts": {
+      "cache_read": 0,
+      "input": 11,
+      "input_source": "/usage/input_tokens",
+      "output": 4,
+      "output_source": "/usage/output_tokens",
+      "prompt": 16533,
+      "read_source": "/usage/cache_read_input_tokens",
+      "tools": 0,
+      "write_source": "/usage/cache_creation",
+      "writes": {
+        "cache_1h": 16522,
+        "cache_5m": 0
+      }
+    },
+    "currency": "USD",
+    "line_items": [
+      {
+        "band_multiplier": "1",
+        "effective_rate_micros": 1000000,
+        "expected_micros": 11,
+        "expected_usd": "0.000011",
+        "formula": "11 * 1.00 / 1000000 * 1 * 1 * 1",
+        "meter": "input",
+        "per": 1000000,
+        "quantity": 11,
+        "rate": "1.00",
+        "regional_multiplier": "1",
+        "source": "/usage/input_tokens",
+        "tier_multiplier": "1",
+        "unrounded_fraction": {
+          "denominator": 100000000000000,
+          "numerator": 1100000000
+        },
+        "unrounded_usd": "0.000011000000"
+      },
+      {
+        "band_multiplier": "1",
+        "effective_rate_micros": 5000000,
+        "expected_micros": 20,
+        "expected_usd": "0.000020",
+        "formula": "4 * 5.00 / 1000000 * 1 * 1 * 1",
+        "meter": "output",
+        "per": 1000000,
+        "quantity": 4,
+        "rate": "5.00",
+        "regional_multiplier": "1",
+        "source": "/usage/output_tokens",
+        "tier_multiplier": "1",
+        "unrounded_fraction": {
+          "denominator": 100000000000000,
+          "numerator": 2000000000
+        },
+        "unrounded_usd": "0.000020000000"
+      },
+      {
+        "band_multiplier": "1",
+        "effective_rate_micros": 100000,
+        "expected_micros": 0,
+        "expected_usd": "0.000000",
+        "formula": "0 * 0.10 / 1000000 * 1 * 1 * 1",
+        "meter": "cache_read",
+        "per": 1000000,
+        "quantity": 0,
+        "rate": "0.10",
+        "regional_multiplier": "1",
+        "source": "/usage/cache_read_input_tokens",
+        "tier_multiplier": "1",
+        "unrounded_fraction": {
+          "denominator": 100000000000000,
+          "numerator": 0
+        },
+        "unrounded_usd": "0.000000000000"
+      },
+      {
+        "band_multiplier": "1",
+        "effective_rate_micros": 2000000,
+        "expected_micros": 33044,
+        "expected_usd": "0.033044",
+        "formula": "16522 * 2.00 / 1000000 * 1 * 1 * 1",
+        "meter": "cache_1h",
+        "per": 1000000,
+        "quantity": 16522,
+        "rate": "2.00",
+        "regional_multiplier": "1",
+        "source": "/usage/cache_creation/ephemeral_1h_input_tokens",
+        "tier_multiplier": "1",
+        "unrounded_fraction": {
+          "denominator": 100000000000000,
+          "numerator": 3304400000000
+        },
+        "unrounded_usd": "0.033044000000"
+      },
+      {
+        "band_multiplier": "1",
+        "effective_rate_micros": 1250000,
+        "expected_micros": 0,
+        "expected_usd": "0.000000",
+        "formula": "0 * 1.25 / 1000000 * 1 * 1 * 1",
+        "meter": "cache_5m",
+        "per": 1000000,
+        "quantity": 0,
+        "rate": "1.25",
+        "regional_multiplier": "1",
+        "source": "/usage/cache_creation/ephemeral_5m_input_tokens",
+        "tier_multiplier": "1",
+        "unrounded_fraction": {
+          "denominator": 100000000000000,
+          "numerator": 0
+        },
+        "unrounded_usd": "0.000000000000"
+      }
+    ],
+    "rate_source": "https://platform.claude.com/docs/en/build-with-claude/prompt-caching",
+    "rates_checked_at": "2026-10-08",
+    "status": "priced",
+    "total": "0.033075",
+    "total_micros": 33075
+  },
+  "rate_book": {
+    "models": {
+      "anthropic:claude-haiku-4-5-20251001": {
+        "cache_1h": "2.00",
+        "cache_5m": "1.25",
+        "cache_read": "0.10",
+        "checked_at": "2026-10-08",
+        "input": "1.00",
+        "output": "5.00",
+        "source": "https://platform.claude.com/docs/en/build-with-claude/prompt-caching"
+      }
+    },
+    "schema_version": 1,
+    "version": "2026-10-08"
+  },
+  "schema_version": 1,
+  "source": {
+    "catalog_version": "2026.10.1",
+    "created_at": "2026-10-09T01:59:02.852197Z",
+    "git_dirty": true,
+    "git_revision": "8ac02d74cbc484122e1039dab17b5d39ee7d7de5",
+    "origin": "live",
+    "run_id": "live-anthropic-streamed-ttl",
+    "suite_sources_sha256": "194a76f9a5873e5922175306d2eb2faa23c62aedfefd507dc0130579c7662b6f"
+  }
+}

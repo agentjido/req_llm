@@ -23,6 +23,20 @@ defmodule ReqLLM.Billing.ContractsTest do
     assert ReqLLM.Test.Billing.Live.estimate(selection, context) >= 55_000
   end
 
+  test "mixed TTL facts use normalized groups from a buffered response" do
+    sample = Samples.sample("mixed_cache_ttl", "anthropic:claude-haiku-4-5-20251001")
+    response = Samples.buffered(sample)
+    refute Map.has_key?(response.usage, :cache_write_tokens_by_ttl)
+
+    assert :ok ==
+             ReqLLM.Test.Billing.Live.verify_case!(
+               %{"case_id" => sample.case_id},
+               "cold",
+               sample.body,
+               response
+             )
+  end
+
   test "a reported estimate overrun halts all later requests", %{dir: dir} do
     Run.create!(dir, [], origin: "synthetic", budget_micros: 100, max_requests: 4)
 

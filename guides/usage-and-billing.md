@@ -489,6 +489,10 @@ the supplier's returned input count. Separate live calls can have different
 outputs and cache states. Exact mode agreement uses the same source data in
 replay. Mixed Anthropic cache entries put the one-hour prefix first and repeat
 each cold prefix for a warm check. A zero cache hit does not pass a warm case.
+One-hour and mixed cache recording requires a duration-specific one-hour catalog
+rule. A generic five-minute write rate is not sufficient. The live run found
+this missing rule in the Haiku 5.5 metadata from LLMDB 2026.10.1. Those captures
+remain failed evidence; the Haiku 4.5 TTL cases have complete catalog rules.
 
 Recording never overwrites committed fixtures. Inspect the raw and calculation
 records, run `audit`, and then explicitly `promote` selected cases. Promotion

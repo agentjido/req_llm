@@ -6,7 +6,7 @@ defmodule Mix.Tasks.ReqLlm.Billing do
       mix req_llm.billing list
       mix req_llm.billing check
       mix req_llm.billing check --case mixed_cache_ttl --layer pricing
-      mix req_llm.billing record --model anthropic:claude-haiku-5-5 --case mixed_cache_ttl --budget-usd 5.00 --max-requests 12
+      mix req_llm.billing record --model anthropic:claude-haiku-4-5-20251001 --case mixed_cache_ttl --budget-usd 5.00 --max-requests 12
       mix req_llm.billing audit --run tmp/billing/RUN
       mix req_llm.billing promote --run tmp/billing/RUN --case mixed_cache_ttl
 

@@ -11,6 +11,25 @@ defmodule Mix.Tasks.ReqLlm.BillingTest do
     assert {"REQ_LLM_FIXTURE_ALLOW_CREDENTIAL_FALLBACK", "0"} in env
   end
 
+  test "one-hour cases cannot use a generic five-minute catalog rate" do
+    generic = %{components: [%{id: "token.cache_write", rate: 0.125}]}
+
+    assert_raise ArgumentError, ~r/duration-specific/, fn ->
+      CLI.require_case_rates!("cache_1h", generic)
+    end
+
+    assert_raise ArgumentError, fn -> CLI.require_case_rates!("mixed_cache_ttl", generic) end
+
+    specific = %{
+      components: [
+        %{id: "token.cache_write.1h", rate: 0.20, applies_when: %{"cache_ttl" => "1h"}}
+      ]
+    }
+
+    assert :ok == CLI.require_case_rates!("cache_1h", specific)
+    assert :ok == CLI.require_case_rates!("basic_usage", generic)
+  end
+
   test "a layer filter uses one ExUnit include expression" do
     {args, _env} = CLI.command(CLI.parse!(["check", "--layer", "pricing"]), "/tmp/billing-check")
     assert Enum.count(args, &(&1 == "--only")) == 1
