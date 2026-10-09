@@ -8297,15 +8297,13 @@
       }
     },
     "openrouter:baidu/ernie-4.5-vl-424b-a47b": {
-      "catalog_status": "present",
-      "declared_operations": [
-        "text"
-      ],
+      "catalog_status": "missing",
+      "declared_operations": [],
       "model": "baidu/ernie-4.5-vl-424b-a47b",
       "provider": "openrouter",
       "surfaces": {
         "openrouter.chat_completions": {
-          "declaration": "declared",
+          "declaration": "unknown",
           "operation": "text",
           "provider": "openrouter",
           "scenarios": {

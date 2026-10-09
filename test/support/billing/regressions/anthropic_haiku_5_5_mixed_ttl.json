@@ -1,0 +1,338 @@
+{
+  "schema_version": 1,
+  "case_id": "mixed_cache_ttl",
+  "model": "anthropic:claude-haiku-5-5",
+  "source": {
+    "kind": "response_extract",
+    "original_run_id": "live-anthropic-mixed-ttl",
+    "origin": "live",
+    "created_at": "2026-10-09T01:52:49.842567Z",
+    "catalog_version": "2026.10.1",
+    "git_revision": "8ac02d74cbc484122e1039dab17b5d39ee7d7de5"
+  },
+  "rate_book": {
+    "schema_version": 1,
+    "version": "2026-10-08",
+    "models": {
+      "anthropic:claude-haiku-5-5": {
+        "cache_1h": "0.20",
+        "cache_5m": "0.125",
+        "cache_read": "0.01",
+        "checked_at": "2026-10-08",
+        "input": "0.10",
+        "long_multiplier": "5",
+        "output": "0.50",
+        "source": "https://platform.claude.com/docs/en/models/haiku-5-5/overview",
+        "threshold": 100000
+      }
+    }
+  },
+  "attempts": [
+    {
+      "attempt_id": "attempt_1",
+      "mode": "buffered",
+      "phase": "cold",
+      "captured_at": "2026-10-09T01:52:55.799890Z",
+      "original_transcript_sha256": "92ebe13cbff9071b74077f086d77de9b3610bb10987ecb50f5aef4e0e2422a9b",
+      "original_state": "failed",
+      "original_observed_total_cost": "0.008261",
+      "raw": {
+        "streaming": false,
+        "response": {
+          "body": {
+            "container": null,
+            "content": [
+              {
+                "text": "OK",
+                "type": "text"
+              }
+            ],
+            "diagnostics": null,
+            "id": "msg_011CfqpxpV5AgqPCf3mTy2AM",
+            "model": "claude-haiku-5-5",
+            "role": "assistant",
+            "stop_details": null,
+            "stop_reason": "end_turn",
+            "stop_sequence": null,
+            "type": "message",
+            "usage": {
+              "cache_creation": {
+                "ephemeral_1h_input_tokens": 33034,
+                "ephemeral_5m_input_tokens": 33031
+              },
+              "cache_creation_input_tokens": 66065,
+              "cache_read_input_tokens": 0,
+              "inference_geo": "global",
+              "input_tokens": 14,
+              "output_tokens": 4,
+              "output_tokens_details": {
+                "thinking_tokens": 0
+              },
+              "service_tier": "standard"
+            }
+          }
+        }
+      },
+      "calculation": {
+        "status": "priced",
+        "currency": "USD",
+        "total": "0.010739",
+        "total_micros": 10739,
+        "line_items": [
+          {
+            "band_multiplier": "1",
+            "effective_rate_micros": 100000,
+            "expected_micros": 1,
+            "expected_usd": "0.000001",
+            "formula": "14 * 0.10 / 1000000 * 1 * 1 * 1",
+            "meter": "input",
+            "per": 1000000,
+            "quantity": 14,
+            "rate": "0.10",
+            "regional_multiplier": "1",
+            "source": "/usage/input_tokens",
+            "tier_multiplier": "1",
+            "unrounded_fraction": {
+              "denominator": 100000000000000,
+              "numerator": 140000000
+            },
+            "unrounded_usd": "0.000001400000"
+          },
+          {
+            "band_multiplier": "1",
+            "effective_rate_micros": 500000,
+            "expected_micros": 2,
+            "expected_usd": "0.000002",
+            "formula": "4 * 0.50 / 1000000 * 1 * 1 * 1",
+            "meter": "output",
+            "per": 1000000,
+            "quantity": 4,
+            "rate": "0.50",
+            "regional_multiplier": "1",
+            "source": "/usage/output_tokens",
+            "tier_multiplier": "1",
+            "unrounded_fraction": {
+              "denominator": 100000000000000,
+              "numerator": 200000000
+            },
+            "unrounded_usd": "0.000002000000"
+          },
+          {
+            "band_multiplier": "1",
+            "effective_rate_micros": 10000,
+            "expected_micros": 0,
+            "expected_usd": "0.000000",
+            "formula": "0 * 0.01 / 1000000 * 1 * 1 * 1",
+            "meter": "cache_read",
+            "per": 1000000,
+            "quantity": 0,
+            "rate": "0.01",
+            "regional_multiplier": "1",
+            "source": "/usage/cache_read_input_tokens",
+            "tier_multiplier": "1",
+            "unrounded_fraction": {
+              "denominator": 100000000000000,
+              "numerator": 0
+            },
+            "unrounded_usd": "0.000000000000"
+          },
+          {
+            "band_multiplier": "1",
+            "effective_rate_micros": 200000,
+            "expected_micros": 6607,
+            "expected_usd": "0.006607",
+            "formula": "33034 * 0.20 / 1000000 * 1 * 1 * 1",
+            "meter": "cache_1h",
+            "per": 1000000,
+            "quantity": 33034,
+            "rate": "0.20",
+            "regional_multiplier": "1",
+            "source": "/usage/cache_creation/ephemeral_1h_input_tokens",
+            "tier_multiplier": "1",
+            "unrounded_fraction": {
+              "denominator": 100000000000000,
+              "numerator": 660680000000
+            },
+            "unrounded_usd": "0.006606800000"
+          },
+          {
+            "band_multiplier": "1",
+            "effective_rate_micros": 125000,
+            "expected_micros": 4129,
+            "expected_usd": "0.004129",
+            "formula": "33031 * 0.125 / 1000000 * 1 * 1 * 1",
+            "meter": "cache_5m",
+            "per": 1000000,
+            "quantity": 33031,
+            "rate": "0.125",
+            "regional_multiplier": "1",
+            "source": "/usage/cache_creation/ephemeral_5m_input_tokens",
+            "tier_multiplier": "1",
+            "unrounded_fraction": {
+              "denominator": 1000000000000000,
+              "numerator": 4128875000000
+            },
+            "unrounded_usd": "0.004128875000"
+          }
+        ],
+        "counts": {
+          "cache_read": 0,
+          "input": 14,
+          "input_source": "/usage/input_tokens",
+          "output": 4,
+          "output_source": "/usage/output_tokens",
+          "prompt": 66079,
+          "read_source": "/usage/cache_read_input_tokens",
+          "tools": 0,
+          "write_source": "/usage/cache_creation",
+          "writes": {
+            "cache_1h": 33034,
+            "cache_5m": 33031
+          }
+        },
+        "rate_source": "https://platform.claude.com/docs/en/models/haiku-5-5/overview",
+        "rates_checked_at": "2026-10-08"
+      }
+    },
+    {
+      "attempt_id": "attempt_2",
+      "mode": "streamed",
+      "phase": "cold",
+      "captured_at": "2026-10-09T01:52:57.240752Z",
+      "original_transcript_sha256": "eab8f3535b9e65d8969562f3477d9ea3cfc20619841dee5fd7fb3b55184fb8a9",
+      "original_state": "failed",
+      "original_observed_total_cost": "0.008261",
+      "raw": {
+        "streaming": true,
+        "chunks": [
+          {
+            "b64": "ZXZlbnQ6IG1lc3NhZ2Vfc3RhcnQKZGF0YTogeyJ0eXBlIjoibWVzc2FnZV9zdGFydCIsIm1lc3NhZ2UiOnsibW9kZWwiOiJjbGF1ZGUtaGFpa3UtNS01IiwiaWQiOiJtc2dfMDExQ2ZxcHh3dVpYcEE0amg1MmozTGNwIiwidHlwZSI6Im1lc3NhZ2UiLCJyb2xlIjoiYXNzaXN0YW50IiwiY29udGVudCI6W10sImNvbnRhaW5lciI6bnVsbCwic3RvcF9yZWFzb24iOm51bGwsInN0b3Bfc2VxdWVuY2UiOm51bGwsInN0b3BfZGV0YWlscyI6bnVsbCwidXNhZ2UiOnsiaW5wdXRfdG9rZW5zIjoxNCwiY2FjaGVfY3JlYXRpb25faW5wdXRfdG9rZW5zIjo2NjA2NSwiY2FjaGVfcmVhZF9pbnB1dF90b2tlbnMiOjAsImNhY2hlX2NyZWF0aW9uIjp7ImVwaGVtZXJhbF81bV9pbnB1dF90b2tlbnMiOjMzMDMxLCJlcGhlbWVyYWxfMWhfaW5wdXRfdG9rZW5zIjozMzAzNH0sIm91dHB1dF90b2tlbnMiOjQsInNlcnZpY2VfdGllciI6InN0YW5kYXJkIiwiaW5mZXJlbmNlX2dlbyI6Imdsb2JhbCJ9LCJkaWFnbm9zdGljcyI6bnVsbH0gIH0KCmV2ZW50OiBjb250ZW50X2Jsb2NrX3N0YXJ0CmRhdGE6IHsidHlwZSI6ImNvbnRlbnRfYmxvY2tfc3RhcnQiLCJpbmRleCI6MCwiY29udGVudF9ibG9jayI6eyJ0eXBlIjoidGV4dCIsInRleHQiOiIifSAgfQoKZXZlbnQ6IHBpbmcKZGF0YTogeyJ0eXBlIjogInBpbmcifQoKZXZlbnQ6IGNvbnRlbnRfYmxvY2tfZGVsdGEKZGF0YTogeyJ0eXBlIjoiY29udGVudF9ibG9ja19kZWx0YSIsImluZGV4IjowLCJkZWx0YSI6eyJ0eXBlIjoidGV4dF9kZWx0YSIsInRleHQiOiJPSyJ9ICAgICAgICAgICAgICAgfQoK"
+          },
+          {
+            "b64": "ZXZlbnQ6IGNvbnRlbnRfYmxvY2tfc3RvcApkYXRhOiB7InR5cGUiOiJjb250ZW50X2Jsb2NrX3N0b3AiLCJpbmRleCI6MCAgICAgIH0KCmV2ZW50OiBtZXNzYWdlX2RlbHRhCmRhdGE6IHsidHlwZSI6Im1lc3NhZ2VfZGVsdGEiLCJkZWx0YSI6eyJzdG9wX3JlYXNvbiI6ImVuZF90dXJuIiwic3RvcF9zZXF1ZW5jZSI6bnVsbCwic3RvcF9kZXRhaWxzIjpudWxsLCJjb250YWluZXIiOm51bGx9LCJ1c2FnZSI6eyJpbnB1dF90b2tlbnMiOjE0LCJjYWNoZV9jcmVhdGlvbl9pbnB1dF90b2tlbnMiOjY2MDY1LCJjYWNoZV9yZWFkX2lucHV0X3Rva2VucyI6MCwib3V0cHV0X3Rva2VucyI6NCwib3V0cHV0X3Rva2Vuc19kZXRhaWxzIjp7InRoaW5raW5nX3Rva2VucyI6MH19ICB9CgpldmVudDogbWVzc2FnZV9zdG9wCmRhdGE6IHsidHlwZSI6Im1lc3NhZ2Vfc3RvcCIgIH0KCg=="
+          }
+        ]
+      },
+      "calculation": {
+        "status": "priced",
+        "currency": "USD",
+        "total": "0.010739",
+        "total_micros": 10739,
+        "line_items": [
+          {
+            "band_multiplier": "1",
+            "effective_rate_micros": 100000,
+            "expected_micros": 1,
+            "expected_usd": "0.000001",
+            "formula": "14 * 0.10 / 1000000 * 1 * 1 * 1",
+            "meter": "input",
+            "per": 1000000,
+            "quantity": 14,
+            "rate": "0.10",
+            "regional_multiplier": "1",
+            "source": "/usage/input_tokens",
+            "tier_multiplier": "1",
+            "unrounded_fraction": {
+              "denominator": 100000000000000,
+              "numerator": 140000000
+            },
+            "unrounded_usd": "0.000001400000"
+          },
+          {
+            "band_multiplier": "1",
+            "effective_rate_micros": 500000,
+            "expected_micros": 2,
+            "expected_usd": "0.000002",
+            "formula": "4 * 0.50 / 1000000 * 1 * 1 * 1",
+            "meter": "output",
+            "per": 1000000,
+            "quantity": 4,
+            "rate": "0.50",
+            "regional_multiplier": "1",
+            "source": "/usage/output_tokens",
+            "tier_multiplier": "1",
+            "unrounded_fraction": {
+              "denominator": 100000000000000,
+              "numerator": 200000000
+            },
+            "unrounded_usd": "0.000002000000"
+          },
+          {
+            "band_multiplier": "1",
+            "effective_rate_micros": 10000,
+            "expected_micros": 0,
+            "expected_usd": "0.000000",
+            "formula": "0 * 0.01 / 1000000 * 1 * 1 * 1",
+            "meter": "cache_read",
+            "per": 1000000,
+            "quantity": 0,
+            "rate": "0.01",
+            "regional_multiplier": "1",
+            "source": "/usage/cache_read_input_tokens",
+            "tier_multiplier": "1",
+            "unrounded_fraction": {
+              "denominator": 100000000000000,
+              "numerator": 0
+            },
+            "unrounded_usd": "0.000000000000"
+          },
+          {
+            "band_multiplier": "1",
+            "effective_rate_micros": 200000,
+            "expected_micros": 6607,
+            "expected_usd": "0.006607",
+            "formula": "33034 * 0.20 / 1000000 * 1 * 1 * 1",
+            "meter": "cache_1h",
+            "per": 1000000,
+            "quantity": 33034,
+            "rate": "0.20",
+            "regional_multiplier": "1",
+            "source": "/usage/cache_creation/ephemeral_1h_input_tokens",
+            "tier_multiplier": "1",
+            "unrounded_fraction": {
+              "denominator": 100000000000000,
+              "numerator": 660680000000
+            },
+            "unrounded_usd": "0.006606800000"
+          },
+          {
+            "band_multiplier": "1",
+            "effective_rate_micros": 125000,
+            "expected_micros": 4129,
+            "expected_usd": "0.004129",
+            "formula": "33031 * 0.125 / 1000000 * 1 * 1 * 1",
+            "meter": "cache_5m",
+            "per": 1000000,
+            "quantity": 33031,
+            "rate": "0.125",
+            "regional_multiplier": "1",
+            "source": "/usage/cache_creation/ephemeral_5m_input_tokens",
+            "tier_multiplier": "1",
+            "unrounded_fraction": {
+              "denominator": 1000000000000000,
+              "numerator": 4128875000000
+            },
+            "unrounded_usd": "0.004128875000"
+          }
+        ],
+        "counts": {
+          "cache_read": 0,
+          "input": 14,
+          "input_source": "/usage/input_tokens",
+          "output": 4,
+          "output_source": "/usage/output_tokens",
+          "prompt": 66079,
+          "read_source": "/usage/cache_read_input_tokens",
+          "tools": 0,
+          "write_source": "/usage/cache_creation",
+          "writes": {
+            "cache_1h": 33034,
+            "cache_5m": 33031
+          }
+        },
+        "rate_source": "https://platform.claude.com/docs/en/models/haiku-5-5/overview",
+        "rates_checked_at": "2026-10-08"
+      }
+    }
+  ]
+}

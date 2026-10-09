@@ -490,9 +490,12 @@ outputs and cache states. Exact mode agreement uses the same source data in
 replay. Mixed Anthropic cache entries put the one-hour prefix first and repeat
 each cold prefix for a warm check. A zero cache hit does not pass a warm case.
 One-hour and mixed cache recording requires a duration-specific one-hour catalog
-rule. A generic five-minute write rate is not sufficient. The live run found
-this missing rule in the Haiku 5.5 metadata from LLMDB 2026.10.1. Those captures
-remain failed evidence; the Haiku 4.5 TTL cases have complete catalog rules.
+rule. A generic five-minute write rate is not sufficient. ReqLLM requires
+LLMDB 2026.10.2 or later, which includes the Haiku 5.5 duration rules and its
+full-prompt context band, plus the reviewed Anthropic model tariffs. The saved
+Haiku 5.5 calls originally failed against LLMDB 2026.10.1. Their recorded price
+and failed result remain unchanged. Small response extracts replay those calls
+against the independent reference in CI; they are not promoted live baselines.
 
 Recording never overwrites committed fixtures. Inspect the raw and calculation
 records, run `audit`, and then explicitly `promote` selected cases. Promotion

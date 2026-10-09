@@ -36,6 +36,12 @@ defmodule Mix.Tasks.ReqLlm.BillingTest do
     assert "billing_layer:pricing" in args
   end
 
+  test "released Haiku 5.5 catalog permits one-hour and mixed recording" do
+    model = ReqLLM.model!("anthropic:claude-haiku-5-5")
+    assert :ok == CLI.require_case_rates!("cache_1h", model.pricing)
+    assert :ok == CLI.require_case_rates!("mixed_cache_ttl", model.pricing)
+  end
+
   test "audit selects saved capture tests in an offline child" do
     config =
       CLI.parse!([
