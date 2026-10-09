@@ -1,0 +1,125 @@
+{
+  "captured_at": "2026-10-09T01:05:02.382039Z",
+  "model_spec": "openrouter:openai/gpt-4.1-mini",
+  "provider": "openrouter",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjo1MTIsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiUmVwbHkgT0sgb25seS4gQmlsbGluZyBydW4gbGl2ZS1vcGVucm91dGVyLWJhc2ljOmJhc2ljX3VzYWdlOmJ1ZmZlcmVkIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoib3BlbmFpL2dwdC00LjEtbWluaSIsIm4iOjEsInN0cmVhbSI6ZmFsc2V9"
+    },
+    "canonical_json": {
+      "max_tokens": 512,
+      "messages": [
+        {
+          "content": "Reply OK only. Billing run live-openrouter-basic:basic_usage:buffered",
+          "role": "user"
+        }
+      ],
+      "model": "openai/gpt-4.1-mini",
+      "n": 1,
+      "stream": false
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.7.4"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "OK",
+            "reasoning": null,
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "completed"
+        }
+      ],
+      "created": 1791507901,
+      "id": "gen-1791507901-LDa8jvPUxrdBhEWQxQNi",
+      "model": "openai/gpt-4.1-mini",
+      "object": "chat.completion",
+      "provider": "OpenAI",
+      "service_tier": "default",
+      "system_fingerprint": null,
+      "usage": {
+        "completion_tokens": 2,
+        "completion_tokens_details": {
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "reasoning_tokens": 0
+        },
+        "cost": 1.24e-5,
+        "cost_details": {
+          "upstream_inference_completions_cost": 3.2e-6,
+          "upstream_inference_cost": 1.24e-5,
+          "upstream_inference_prompt_cost": 9.2e-6
+        },
+        "is_byok": false,
+        "prompt_tokens": 23,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 0,
+          "video_tokens": 0
+        },
+        "total_tokens": 25
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "X-Generation-Id,X-Provider-Name,request-id,cf-ray"
+      ],
+      "cf-ray": [
+        "a4797981791b986a-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 09 Oct 2026 01:05:02 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": "[REDACTED:set-cookie]",
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-generation-id": [
+        "gen-1791507901-LDa8jvPUxrdBhEWQxQNi"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

@@ -131,6 +131,7 @@ defmodule ReqLLM.Test.VCR do
       :ok ->
         ensure_directory(path)
         Transcript.write!(transcript, path)
+        ReqLLM.Test.Billing.Capture.notify(path, transcript)
         :ok
 
       {:error, reason} ->

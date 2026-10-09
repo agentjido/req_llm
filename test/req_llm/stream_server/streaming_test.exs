@@ -316,8 +316,10 @@ defmodule ReqLLM.StreamServer.StreamingTest do
         Task.async(fn ->
           stream_fun = fn _request, _finch_name, acc, _callback, _opts ->
             send(test_pid, :stream_budget_attempt)
-            Process.sleep(150)
-            {:error, %Mint.TransportError{reason: :closed}, acc}
+
+            receive do
+              :return_transport_error -> {:error, %Mint.TransportError{reason: :closed}, acc}
+            end
           end
 
           ReqLLM.Streaming.Retry.stream(
@@ -333,9 +335,10 @@ defmodule ReqLLM.StreamServer.StreamingTest do
       StreamServer.attach_http_task(server, task.pid)
 
       assert_receive :stream_budget_attempt, 1_000
+      send(task.pid, :return_transport_error)
+      assert_receive :stream_budget_attempt, 1_000
       :ok = StreamServer.set_telemetry_context(server, nil)
-      assert_receive :stream_budget_attempt, 300
-      assert {:ok, metadata} = StreamServer.await_metadata(server, 500)
+      assert {:ok, metadata} = StreamServer.await_metadata(server, 1_000)
       assert %ReqLLM.Error.API.Timeout{kind: :total, timeout: 250} = metadata.error
       refute_received :stream_budget_attempt
       refute Process.alive?(task.pid)

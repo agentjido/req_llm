@@ -568,3 +568,18 @@ The fixture-based testing system provides:
 - **Easy provider addition** with minimal boilerplate
 
 This system is how ReqLLM backs up the claim of "135+ supported models" - each one has fixture evidence of passing comprehensive capability tests.
+
+## Billing evidence recording
+
+Use `mix req_llm.billing record` for bounded billing-specific live work.
+It runs ExUnit cases, writes JSONL evidence to a new run directory, and retains
+failures for review. `mix req_llm.billing audit --run ...` checks saved data
+offline. `promote` is a separate action after manual review. See the
+[Usage and Billing guide](usage-and-billing.md#billing-validation-suite) for
+commands, artifact fields, and reference calculations.
+
+`REQ_LLM_FIXTURE_REPLAY_ROOT` is an explicit test-only override for buffered
+and streamed fixture lookup. It permits review of a staged run without copying
+it into the committed fixture tree. Missing staged files fail; they do not
+start a provider request. Existing replay requests still have to match their
+recorded method, URL, and canonical JSON.

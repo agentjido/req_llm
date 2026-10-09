@@ -70,8 +70,16 @@ then uses LLMDB's component selector. It charges uncached input, cache reads,
 cache writes, output, and storage through separate meters. A selected context
 tier applies to the whole request when LLMDB marks it `full_request`.
 
-Supply the actual billed service tier after any provider fallback. `"auto"`
-does not confirm one. Time-dependent tariffs require an explicit
+For OpenAI, ReqLLM uses the physical endpoint and the returned service tier
+for both buffered and streamed prices. The returned tier replaces
+`pricing_context.service_tier`; a missing, invalid, or `"auto"` returned tier
+does not confirm a billed tier. Known OpenAI hosts confirm global or regional
+processing. Other hosts require an independently confirmed processing fact.
+Standalone compact and Decisions endpoints do not establish a Responses
+tariff.
+
+For other providers, supply the actual billed service tier after any provider
+fallback. `"auto"` does not confirm one. Time-dependent tariffs require an explicit
 `pricing_period: "peak"` or `"off_peak"` chosen by the caller from provider
 billing evidence; ReqLLM does not choose a period from a clock or response
 timestamp. For a current Coding Plan credit tariff, also supply
@@ -79,6 +87,9 @@ timestamp. For a current Coding Plan credit tariff, also supply
 Cache writes with mixed durations use reported
 `cache_write_tokens_by_ttl: %{"5m" => count, "1h" => count}` usage; if the
 durations cannot be reconciled with the total, pricing stays unknown.
+ReqLLM requires LLMDB 2026.10.2 or later for the reviewed Anthropic cache
+tariffs. This includes Haiku 5.5's separate five-minute and one-hour rates,
+its full-prompt threshold, and the Sonnet 5.5 one-hour rate.
 
 When the tariff or usage is incomplete, `usage.pricing` is
 `%{status: :unknown}` and ReqLLM omits `total_cost`, `input_cost`,
@@ -423,3 +434,87 @@ end
 - [xAI Guide](xai.md) - Grok web search
 - [Google Guide](google.md) - Grounding and search
 - [Image Generation Guide](image-generation.md) - Image costs
+
+## Billing validation suite
+
+ExUnit owns billing assertions. The `req_llm.billing` Mix task selects cases,
+records provider evidence, and exports independent calculation worksheets.
+Normal tests and `check` are offline. Live recording requires explicit limits.
+After a successful live run, `record` runs an offline ExUnit audit of its saved
+capture. This second check makes no provider calls.
+
+```sh
+mix test --only billing
+mix req_llm.billing list
+mix req_llm.billing check
+mix req_llm.billing check --case mixed_cache_ttl --layer pricing
+mix req_llm.billing record --model openai:gpt-6-luna --case basic_usage --budget-usd 0.50 --max-requests 2
+mix req_llm.billing audit --run tmp/billing/RUN
+mix req_llm.billing promote --run tmp/billing/RUN --case basic_usage
+```
+
+The suite has capture, normalization, pricing, pipeline, and adversarial layers.
+Stable case IDs include `basic_usage`, `cache_5m`, `cache_1h`, `mixed_cache_ttl`,
+`client_function`, `hosted_web_search`, `returned_service_tier`, `long_context`,
+`compact_unknown`, and `websocket_usage`. `list` shows provider and phase support.
+For recording and audit, use `--mode buffered`, `streamed`, or `both`; compact is buffered only and the
+native session case is streamed only. The first rate book supports selected
+OpenAI and Anthropic models and the OpenRouter GPT-4.1 Mini gateway case.
+
+A live run writes a new directory under `tmp/billing/`. It retains failed
+attempts and disables credential fallback and automatic retries. The USD limit
+controls admission using conservative estimates; it is not a supplier invoice
+limit. Each actual model call has its own attempt ID. Confirmed usage can
+reconcile its reservation. Failed calls retain their reservation.
+
+| Artifact | Review purpose |
+|---|---|
+| `manifest.json` | Selection, limits, rate-book and model metadata snapshots, code/catalog identity, and attempt state |
+| `raw.jsonl` | Encoded request JSON, provider response JSON, HTTP metadata, and attempt events |
+| `stream_events.jsonl` | Ordered source chunks and provider events, or native session frames |
+| `observed.jsonl` | ReqLLM usage, costs, provider metadata, reported gateway charges, and telemetry |
+| `billing.jsonl` | Raw source pointers, quantities, documented rates, formulas, exact fractions, expected charges, and observed values |
+| `transcripts/` | VCR source files used by offline replay |
+| `summary.md` | Per-case and per-layer results |
+
+The raw representation is provider-shaped JSON before ReqLLM response and usage
+normalization. JSON serialization can change whitespace or key order. Stream
+source bytes remain available as base64 chunks. Credentials are redacted.
+Legacy captures without a date remain legacy; export time does not prove a new
+provider call. Native session observations are labeled `native_session_replay`
+because the public session API returns provider events rather than a priced
+`ReqLLM.Response`.
+
+Reference calculations read provider counters and reviewed decimal rates from
+`test/support/billing/rates/book.json`. They do not use the production billing
+engine or the LLMDB rate selector as their expected-result calculator. Worksheets
+retain unrounded amounts and fractions as well as six-decimal totals. For
+example, an output charge of `39 * 0.50 / 1_000_000` is exactly `0.0000195` USD.
+ReqLLM uses float arithmetic, so the check reports and permits at most one
+microdollar of rounding difference per active line when quantities and effective
+rates agree. A larger difference, wrong quantity, wrong rate, or false known
+price fails. Equivalent per-call and per-thousand rates are compared by units.
+
+Review rate sources and routing before recording. OpenAI context-band tests use
+the supplier's returned input count. Separate live calls can have different
+outputs and cache states. Exact mode agreement uses the same source data in
+replay. Mixed Anthropic cache entries put the one-hour prefix first and repeat
+each cold prefix for a warm check. A zero cache hit does not pass a warm case.
+One-hour and mixed cache recording requires a duration-specific one-hour catalog
+rule. A generic five-minute write rate is not sufficient. ReqLLM requires
+LLMDB 2026.10.2 or later, which includes the Haiku 5.5 duration rules and its
+full-prompt context band, plus the reviewed Anthropic model tariffs. The saved
+Haiku 5.5 calls originally failed against LLMDB 2026.10.1. Their recorded price
+and failed result remain unchanged. Small response extracts replay those calls
+against the independent reference in CI; they are not promoted live baselines.
+
+Recording never overwrites committed fixtures. Inspect the raw and calculation
+records, run `audit`, and then explicitly `promote` selected cases. Promotion
+rejects incomplete or synthetic source captures and existing targets. Selected
+transcripts and their independent rate/calculation sidecars become default CI
+baselines. Each sidecar stores one calculation, one model's frozen rates, the
+source hash, and the code/catalog identity. CI checks the source hash and the
+frozen calculation before comparing current ReqLLM pricing.
+The full capture directory remains outside Git. Large context-band
+request bodies can remain as local evidence instead of enlarging the fixture
+repository.

@@ -157,7 +157,8 @@ defmodule ReqLLM.Test.Transcript do
       "model_spec" => t.model_spec,
       "streaming" => false,
       "request" => build_request_map(t),
-      "response" => build_non_streaming_response_map(t)
+      "response" => build_non_streaming_response_map(t),
+      "captured_at" => if(t.captured_at, do: DateTime.to_iso8601(t.captured_at), else: nil)
     }
   end
 
@@ -291,7 +292,7 @@ defmodule ReqLLM.Test.Transcript do
     new(
       provider: provider,
       model_spec: model_spec,
-      captured_at: DateTime.utc_now(),
+      captured_at: parse_datetime(m["captured_at"]),
       request: normalize_request(request),
       response_meta: normalize_response(response, false),
       events: events
@@ -539,6 +540,8 @@ defmodule ReqLLM.Test.Transcript do
 
   defp normalize_headers(h) when is_list(h), do: h
   defp normalize_headers(h) when is_map(h), do: Enum.to_list(h)
+
+  defp parse_datetime(nil), do: nil
 
   defp parse_datetime(iso) do
     {:ok, dt, 0} = DateTime.from_iso8601(iso)

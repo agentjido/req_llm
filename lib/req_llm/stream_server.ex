@@ -1187,6 +1187,55 @@ defmodule ReqLLM.StreamServer do
 
   defp terminal_chunk?(_chunk), do: false
 
+  defp price_stream_usage(%{usage: usage} = metadata, state) do
+    context =
+      if state.model.provider == :openai do
+        url = state.http_context && state.http_context.url
+
+        ReqLLM.PricingContext.from_openai(
+          url,
+          Map.get(metadata, :provider_meta),
+          state.pricing_context
+        )
+      else
+        state.pricing_context
+      end
+
+    Map.put(
+      metadata,
+      :usage,
+      ReqLLM.Usage.Cost.apply(usage, state.model, pricing_context: context)
+    )
+  end
+
+  defp price_stream_usage(metadata, _state), do: metadata
+
+  defp provider_metadata(metadata) do
+    case ReqLLM.MapAccess.get_raw(metadata, :provider_meta) do
+      provider_meta when is_map(provider_meta) -> provider_meta
+      _ -> %{}
+    end
+  end
+
+  defp returned_service_tier?(provider_meta) do
+    Map.has_key?(provider_meta, :service_tier) or Map.has_key?(provider_meta, "service_tier")
+  end
+
+  defp merge_provider_metadata(existing, incoming) do
+    if returned_service_tier?(incoming) do
+      existing = Map.drop(existing, [:service_tier, "service_tier"])
+
+      incoming =
+        if Map.has_key?(incoming, :service_tier),
+          do: Map.delete(incoming, "service_tier"),
+          else: incoming
+
+      Map.merge(existing, incoming)
+    else
+      Map.merge(existing, incoming)
+    end
+  end
+
   defp enqueue_chunks(chunks, state) do
     {new_queue, updated_metadata, new_obj_acc, telemetry, message_acc, builtin_timing} =
       Enum.reduce(
@@ -1209,32 +1258,48 @@ defmodule ReqLLM.StreamServer do
 
                 usage = Map.get(chunk_meta, :usage)
 
-                meta_with_usage =
-                  if usage do
-                    normalized_usage = ReqLLM.Usage.normalize(usage)
+                merged_metadata =
+                  Map.merge(
+                    metadata,
+                    Map.drop(chunk_meta, [
+                      :usage,
+                      "usage",
+                      :builtin_tool_started,
+                      "builtin_tool_started"
+                    ])
+                  )
 
-                    metadata
-                    |> Map.update(:usage, normalized_usage, fn existing ->
-                      ReqLLM.Usage.merge(existing, normalized_usage)
-                    end)
-                    |> Map.update!(:usage, fn merged ->
-                      ReqLLM.Usage.Cost.apply(merged, state.model,
-                        pricing_context: state.pricing_context
+                merged_metadata =
+                  if state.model.provider == :openai do
+                    provider_meta =
+                      merge_provider_metadata(
+                        provider_metadata(metadata),
+                        provider_metadata(chunk_meta)
                       )
-                    end)
+
+                    merged_metadata
+                    |> Map.delete("provider_meta")
+                    |> Map.put(:provider_meta, provider_meta)
                   else
-                    metadata
+                    merged_metadata
                   end
 
-                Map.merge(
-                  meta_with_usage,
-                  Map.drop(chunk_meta, [
-                    :usage,
-                    "usage",
-                    :builtin_tool_started,
-                    "builtin_tool_started"
-                  ])
-                )
+                if usage do
+                  normalized_usage = ReqLLM.Usage.normalize(usage)
+
+                  merged_metadata
+                  |> Map.update(:usage, normalized_usage, fn existing ->
+                    ReqLLM.Usage.merge(existing, normalized_usage)
+                  end)
+                  |> price_stream_usage(state)
+                else
+                  if state.model.provider == :openai and
+                       returned_service_tier?(provider_metadata(chunk_meta)) do
+                    price_stream_usage(merged_metadata, state)
+                  else
+                    merged_metadata
+                  end
+                end
 
               _ ->
                 metadata

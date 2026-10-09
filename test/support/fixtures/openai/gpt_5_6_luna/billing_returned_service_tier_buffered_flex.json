@@ -1,0 +1,212 @@
+{
+  "captured_at": "2026-10-09T01:18:45.265748Z",
+  "model_spec": "openai:gpt-5.6-luna",
+  "provider": "openai",
+  "request": {
+    "body": {
+      "b64": "eyJpbmNsdWRlIjpbInJlYXNvbmluZy5lbmNyeXB0ZWRfY29udGVudCJdLCJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IlJlcGx5IE9LIG9ubHkuIEJpbGxpbmcgcnVuIGxpdmUtb3BlbmFpLXRpZXJzOnJldHVybmVkX3NlcnZpY2VfdGllcjpidWZmZXJlZCIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9XSwibWF4X291dHB1dF90b2tlbnMiOjUxMiwibW9kZWwiOiJncHQtNS42LWx1bmEiLCJyZWFzb25pbmciOnsiZWZmb3J0Ijoibm9uZSJ9LCJzZXJ2aWNlX3RpZXIiOiJmbGV4Iiwic3RyZWFtIjpmYWxzZX0="
+    },
+    "canonical_json": {
+      "include": [
+        "reasoning.encrypted_content"
+      ],
+      "input": [
+        {
+          "content": [
+            {
+              "text": "Reply OK only. Billing run live-openai-tiers:returned_service_tier:buffered",
+              "type": "input_text"
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "max_output_tokens": 512,
+      "model": "gpt-5.6-luna",
+      "reasoning": {
+        "effort": "none"
+      },
+      "service_tier": "flex",
+      "stream": false
+    },
+    "headers": {
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.7.4"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.openai.com/v1/responses"
+  },
+  "response": {
+    "body": {
+      "safety_identifier": null,
+      "store": true,
+      "error": null,
+      "created_at": 1791508724,
+      "presence_penalty": 0.0,
+      "status": "completed",
+      "tool_usage": {
+        "image_gen": {
+          "input_tokens": 0,
+          "input_tokens_details": {
+            "image_tokens": 0,
+            "text_tokens": 0
+          },
+          "output_tokens": 0,
+          "output_tokens_details": {
+            "image_tokens": 0,
+            "text_tokens": 0
+          },
+          "total_tokens": 0
+        },
+        "web_search": {
+          "num_requests": 0
+        }
+      },
+      "max_tool_calls": null,
+      "instructions": null,
+      "billing": {
+        "payer": "developer"
+      },
+      "prompt_cache_retention": "24h",
+      "completed_at": 1791508725,
+      "temperature": 1.0,
+      "text": {
+        "format": {
+          "type": "text"
+        },
+        "verbosity": "medium"
+      },
+      "parallel_tool_calls": true,
+      "tool_choice": "auto",
+      "frequency_penalty": 0.0,
+      "top_logprobs": 0,
+      "reasoning": {
+        "context": "all_turns",
+        "effort": "none",
+        "mode": "standard",
+        "summary": null
+      },
+      "usage": {
+        "input_tokens": 25,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 5,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 30
+      },
+      "access_programs": null,
+      "incomplete_details": null,
+      "model": "gpt-5.6-luna",
+      "truncation": "disabled",
+      "metadata": {},
+      "service_tier": "flex",
+      "id": "resp_07d57889a5d05662006ac840f48b0c87d1b0b4973d17f292f8",
+      "top_p": 0.98,
+      "user": null,
+      "prompt_cache_key": null,
+      "moderation": null,
+      "object": "response",
+      "background": false,
+      "previous_response_id": null,
+      "max_output_tokens": 512,
+      "output": [
+        {
+          "content": [
+            {
+              "annotations": [],
+              "logprobs": [],
+              "text": "OK",
+              "type": "output_text"
+            }
+          ],
+          "id": "msg_07d57889a5d05662006ac840f4fb8087d18b285b637e2a1b32",
+          "phase": "final_answer",
+          "role": "assistant",
+          "status": "completed",
+          "type": "message"
+        }
+      ],
+      "tools": []
+    },
+    "headers": {
+      "access-control-expose-headers": [
+        "X-Request-ID",
+        "CF-Ray",
+        "CF-Ray"
+      ],
+      "alt-svc": [
+        "h3=\":443\"; ma=86400"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a4798d97f9dd7dd6-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-length": [
+        "2043"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 09 Oct 2026 01:18:45 GMT"
+      ],
+      "openai-organization": "[REDACTED:openai-organization]",
+      "openai-processing-ms": [
+        "737"
+      ],
+      "openai-project": [
+        "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
+      ],
+      "openai-version": [
+        "2020-10-01"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": "[REDACTED:set-cookie]",
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-ratelimit-limit-requests": [
+        "10000"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "10000000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "9997"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "10000000"
+      ],
+      "x-ratelimit-reset-requests": [
+        "18ms"
+      ],
+      "x-ratelimit-reset-tokens": [
+        "0s"
+      ],
+      "x-request-id": [
+        "req_f7b38cd8b8c649d190f0e1d1a903f07f"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}
