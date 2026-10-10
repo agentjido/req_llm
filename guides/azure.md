@@ -1,6 +1,6 @@
 # Azure
 
-Access AI models through Microsoft Azure's enterprise cloud platform. Supports OpenAI models (GPT-4, GPT-4o, o1, o3 series) and Anthropic Claude models with full tool calling and streaming support.
+Access AI models through Microsoft Azure's enterprise cloud platform. Supports OpenAI models (GPT-4, GPT-4o, o1, o3 series), Anthropic Claude models with tool calling and streaming support, and Microsoft Decision models for evaluation.
 
 ## Configuration
 
@@ -97,6 +97,70 @@ Passed via `:provider_options` keyword or as top-level options:
 - **Example**: `provider_options: [openai_logprobs: true, openai_top_logprobs: 3]`
 
 ## Examples
+
+### Microsoft-Decision-1 evaluation
+
+Microsoft-Decision-1 scores a state against named boolean, choice, and score
+questions. Call `ReqLLM.evaluate/4` with your Foundry **resource root** as
+`base_url` and your deployment name in `provider_options`:
+
+```elixir
+model = ReqLLM.model!(%{
+  provider: :azure,
+  id: "microsoft-decision-1",
+  provider_model_id: "Microsoft-Decision-1",
+  capabilities: %{chat: false, evaluate: true},
+  execution: %{
+    evaluate: %{
+      supported: true,
+      family: "typesafe_systemone",
+      wire_protocol: "typesafe_systemone",
+      path: "/providers/microsoft/v1/systemone",
+      provider_model_id: "Microsoft-Decision-1"
+    }
+  }
+})
+
+{:ok, response} = ReqLLM.evaluate(
+  model,
+  %{ticket: "Checkout fails for every customer"},
+  %{
+    urgent: %{type: :boolean, instructions: "Does this require immediate attention?"},
+    team: %{
+      type: :choice,
+      instructions: "Which team should handle this?",
+      criteria: %{engineering: "Software defects", billing: "Payments and refunds"}
+    }
+  },
+  base_url: "https://my-resource.services.ai.azure.com",
+  api_key: System.fetch_env!("AZURE_API_KEY"),
+  provider_options: [azure: [deployment: "my-decision-deployment"]]
+)
+
+response.object["urgent"]["probability"]
+response.object["team"]["choice"]
+response.usage
+```
+
+Once your LLMDB snapshot includes the model, replace the explicit `model` with
+`"azure:microsoft-decision-1"`. `ReqLLM.evaluation_models/0` lists available
+catalog entries that have an evaluation adapter.
+
+The endpoint is `/providers/microsoft/v1/systemone`, with the deployment name
+in the request body. Use a resource root without `/openai`, `/models`, or a
+project path. This API does not use an `api-version` query parameter. API keys
+use the `api-key` header; pass `api_key: "Bearer #{token}"` for an Entra ID
+token. `AZURE_BASE_URL`, `AZURE_API_KEY`, and the usual Azure application
+configuration are also supported.
+
+The adapter maps boolean questions to the API's `noul` format and returns their
+scores as `probability`. Choice and score answers retain their probabilities,
+confidence, and score legends. The original data is available in
+`response.provider_meta.raw_response`. This model supports evaluation rather
+than chat generation or streaming.
+
+See [Microsoft's deployment and API guide](https://learn.microsoft.com/en-us/azure/foundry/foundry-models/how-to/use-foundry-models-microsoft-decision)
+for question definitions and deployment instructions.
 
 ### Basic Usage (OpenAI)
 

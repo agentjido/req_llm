@@ -49,6 +49,9 @@ defmodule ReqLLM.Evaluation do
   models use the Decisions API. They support boolean, choice, and score questions;
   `provider_options: [openai: [safety_identifier: "tenant-123"]]` adds the optional
   safety identifier. OpenAI refusals stay in the result as `%{"type" => "refusal"}`.
+  Azure Microsoft Decision models use a Foundry resource root as `base_url` and
+  `provider_options: [azure: [deployment: "my-decision-deployment"]]` to select
+  the deployment. They support boolean, choice, and score questions.
   The response stores named answers in `object` with string keys.
   `provider_meta.raw_response` keeps the original provider data.
   """
@@ -195,7 +198,7 @@ defmodule ReqLLM.Evaluation do
   end
 
   defp unavailable_catalog_error(model) do
-    if model.catalog_only == true do
+    if model.catalog_only == true and not callable?(model) do
       invalid_parameter(
         "Catalog-only evaluation model #{LLMDB.Model.spec(model)} has no ReqLLM evaluation adapter"
       )
@@ -257,6 +260,9 @@ defmodule ReqLLM.Evaluation do
 
       :openai ->
         contract?(execution, "openai_decisions", "/decisions")
+
+      :azure ->
+        contract?(execution, "typesafe_systemone", "/providers/microsoft/v1/systemone")
 
       _ ->
         false
