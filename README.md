@@ -692,9 +692,11 @@ mix test
 # Run quality checks
 mix quality  # format, compile, credo --strict, dialyzer
 
-# Generate documentation
+# Generate HTML and Markdown documentation
 mix docs
 ```
+
+Documentation is generated in `doc/`, including Markdown pages and `llms.txt`.
 
 ### Testing with Fixtures
 
