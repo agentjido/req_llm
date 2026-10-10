@@ -245,7 +245,7 @@ defmodule ReqLLM.MixProject do
       # Dev/test dependencies
       {:bandit, "~> 1.8", only: [:dev, :test], runtime: false},
       {:tidewave, "~> 0.5", only: :dev, runtime: false},
-      {:ex_doc, "~> 0.31", only: :dev, runtime: false},
+      {:ex_doc, "~> 0.40.4", only: :dev, runtime: false},
       {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false},
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
       {:excoveralls, "~> 0.18", only: [:dev, :test], runtime: false},
@@ -286,7 +286,7 @@ defmodule ReqLLM.MixProject do
         "dialyzer"
       ],
       q: ["quality"],
-      docs: ["docs --formatter html"],
+      docs: ["docs --formatter html --formatter markdown"],
       mc: ["req_llm.model_compat"],
       llm: ["req_llm.gen"],
       "test.livebooks": ["test.livebooks"]
