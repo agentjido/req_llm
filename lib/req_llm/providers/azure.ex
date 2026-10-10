@@ -24,6 +24,7 @@ defmodule ReqLLM.Providers.Azure do
   - Multi-modal inputs (text and images)
   - Structured output generation
   - Extended thinking (Claude models)
+  - Decision evaluation (Microsoft-Decision models)
 
   ## Key Differences from Direct Provider APIs
 
@@ -213,6 +214,7 @@ defmodule ReqLLM.Providers.Azure do
     default_base_url: "",
     default_env_key: "AZURE_API_KEY"
 
+  alias ReqLLM.Evaluation.Codec
   alias ReqLLM.Providers.Anthropic.PlatformReasoning
   alias ReqLLM.Providers.OpenAI.AdapterHelpers
 
@@ -221,6 +223,11 @@ defmodule ReqLLM.Providers.Azure do
   @default_api_version "2025-04-01-preview"
   @default_foundry_api_version "2024-05-01-preview"
   @anthropic_version "2023-06-01"
+
+  @evaluation_provider_schema Zoi.keyword(
+                                [deployment: Zoi.string() |> Zoi.min(1)],
+                                unrecognized_keys: :error
+                              )
 
   @provider_schema [
     api_version: [
@@ -400,6 +407,7 @@ defmodule ReqLLM.Providers.Azure do
   - `:object` - Structured output generation (uses tools for OpenAI, native for Claude)
   - `:embedding` - Vector embeddings (OpenAI embedding models only)
   - `:image` - Image generation and editing (gpt-image models only)
+  - `:evaluate` - Decision evaluation via Microsoft's Foundry SystemOne endpoint
   """
   @impl ReqLLM.Provider
   def prepare_request(:chat, model_spec, prompt, opts) do
@@ -457,6 +465,10 @@ defmodule ReqLLM.Providers.Azure do
     do_prepare_image_request(model_spec, prompt, opts)
   end
 
+  def prepare_request(:evaluate, model_spec, input, opts) do
+    do_prepare_evaluation_request(model_spec, input, opts)
+  end
+
   def prepare_request(:compact, model_spec, context, opts) do
     with {:ok, model} <- ReqLLM.model(model_spec),
          :ok <- ensure_responses_model(model),
@@ -499,6 +511,70 @@ defmodule ReqLLM.Providers.Azure do
 
   def prepare_request(operation, model_spec, input, opts) do
     ReqLLM.Provider.Defaults.prepare_request(__MODULE__, operation, model_spec, input, opts)
+  end
+
+  defp do_prepare_evaluation_request(model_spec, %{state: state, questions: questions}, opts) do
+    with {:ok, model} <- ReqLLM.model(model_spec),
+         {:ok, opts} <- ReqLLM.Provider.Options.normalize_flat_provider_options(__MODULE__, opts),
+         :ok <- validate_evaluation_options(opts) do
+      opts = Keyword.put_new(opts, :base_url, model.base_url)
+      base_url = resolve_base_url("microsoft-decision", opts)
+      validate_base_url!(base_url)
+      deployment = get_deployment_with_warning(model, opts)
+      {api_key, _option_keys} = resolve_api_key("microsoft-decision", model, opts)
+      {header, value} = build_auth_header(api_key, "microsoft-decision", base_url)
+      timeout = Keyword.get(opts, :receive_timeout, 30_000)
+      http_opts = Keyword.get(opts, :req_http_options, [])
+
+      request =
+        Req.new(
+          [
+            url: "/providers/microsoft/v1/systemone",
+            base_url: base_url,
+            method: :post,
+            receive_timeout: timeout,
+            json: %{
+              model: deployment,
+              state: state,
+              questions: Codec.normalize_questions(questions)
+            }
+          ] ++ ReqLLM.Provider.Defaults.merge_finch_options(http_opts, pool_timeout: timeout)
+        )
+        |> Req.Request.register_options([:operation, :model])
+        |> Req.Request.merge_options(operation: :evaluate, model: model.id)
+        |> Req.Request.put_private(:model, model)
+        |> Req.Request.put_header(header, value)
+        |> ReqLLM.Step.Retry.attach(opts)
+        |> ReqLLM.Step.Error.attach()
+        |> Req.Request.append_response_steps(llm_decode_response: &decode_response/1)
+        |> ReqLLM.Step.Usage.attach(model)
+        |> ReqLLM.Step.Telemetry.attach(model, opts)
+        |> ReqLLM.Step.Fixture.maybe_attach(model, opts)
+
+      {:ok, request}
+    end
+  rescue
+    error in ReqLLM.Error.Invalid.Parameter ->
+      {:error, error}
+
+    error in ArgumentError ->
+      {:error, ReqLLM.Error.Invalid.Parameter.exception(parameter: Exception.message(error))}
+  end
+
+  defp validate_evaluation_options(opts) do
+    provider_options = Keyword.get(opts, :provider_options, [])
+
+    case Zoi.parse(@evaluation_provider_schema, provider_options) do
+      {:ok, _validated} ->
+        :ok
+
+      {:error, _errors} ->
+        {:error,
+         ReqLLM.Error.Invalid.Parameter.exception(
+           parameter:
+             "Azure evaluation provider_options only accepts a non-empty deployment string"
+         )}
+    end
   end
 
   defp compact_request_opts(model, context, opts) do
@@ -811,6 +887,24 @@ defmodule ReqLLM.Providers.Azure do
   """
   @impl ReqLLM.Provider
   def decode_response(
+        {%Req.Request{options: %{operation: :evaluate}} = request, %{status: status} = response}
+      )
+      when status in 200..299 do
+    decode_evaluation_response(request, response)
+  end
+
+  def decode_response(
+        {%Req.Request{
+           private: %{
+             req_llm_model: %LLMDB.Model{capabilities: %{evaluate: true, chat: false}}
+           }
+         } = request, %{status: status} = response}
+      )
+      when status in 200..299 do
+    decode_evaluation_response(request, response)
+  end
+
+  def decode_response(
         {%Req.Request{options: %{operation: :image}} = request, %{status: status} = response}
       )
       when status in 200..299 do
@@ -865,6 +959,23 @@ defmodule ReqLLM.Providers.Azure do
        status: response.status,
        response_body: response.body
      )}
+  end
+
+  defp decode_evaluation_response(request, response) do
+    body = ReqLLM.Provider.Utils.ensure_parsed_body(response.body)
+
+    case Codec.decode_response(body, :azure) do
+      {:ok, result} ->
+        {request, %{response | body: result}}
+
+      :error ->
+        {request,
+         ReqLLM.Error.API.Response.exception(
+           reason: "Invalid Azure evaluation response",
+           status: response.status,
+           response_body: body
+         )}
+    end
   end
 
   defp extract_error_message(body) when is_map(body) do
@@ -1089,6 +1200,20 @@ defmodule ReqLLM.Providers.Azure do
   Delegates to the model-family formatter for provider-specific usage extraction.
   """
   @impl ReqLLM.Provider
+  def extract_usage(
+        %ReqLLM.Response{provider_meta: %{operation: :evaluate}, usage: usage},
+        _model
+      )
+      when is_map(usage),
+      do: {:ok, usage}
+
+  def extract_usage(
+        %{"answers" => _answers, "usage" => usage},
+        %LLMDB.Model{capabilities: %{evaluate: true}}
+      )
+      when is_map(usage),
+      do: {:ok, usage}
+
   def extract_usage(body, model) do
     model_id = effective_model_id(model)
     formatter = get_formatter(model_id, model)
@@ -1383,6 +1508,8 @@ defmodule ReqLLM.Providers.Azure do
         {"authorization", "Bearer #{token}"}
     end
   end
+
+  defp build_auth_header(api_key, "microsoft-decision", _base_url), do: {"api-key", api_key}
 
   defp build_auth_header(api_key, "claude", _base_url) do
     {"x-api-key", api_key}
