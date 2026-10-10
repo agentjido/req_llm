@@ -320,6 +320,7 @@ defmodule ReqLLM.EvaluationTest do
 
   test "lists only evaluation specs with a callable adapter" do
     assert ReqLLM.evaluation_models() == [
+             "azure:microsoft-decision-1",
              "openai:gpt-6-luna",
              "openrouter:typesafe/jev-1.13",
              "openrouter:~typesafe/jev-latest",

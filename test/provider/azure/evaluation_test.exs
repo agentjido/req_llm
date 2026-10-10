@@ -1,6 +1,8 @@
 defmodule ReqLLM.Providers.Azure.EvaluationTest do
   use ExUnit.Case, async: false
 
+  import ExUnit.CaptureLog
+
   alias ReqLLM.Providers.Azure
   alias ReqLLM.Response
 
@@ -41,10 +43,8 @@ defmodule ReqLLM.Providers.Azure.EvaluationTest do
     custom = Application.get_env(:llm_db, :custom, %{})
     on_exit(fn -> LLMDB.load(custom: custom) end)
 
-    models = %{@model.id => Map.drop(@model, [:provider, :id])}
-    evaluation_catalog = Map.put(custom, :azure, models: models)
-    assert {:ok, _} = LLMDB.load(custom: evaluation_catalog)
-    %{evaluation_catalog: evaluation_catalog}
+    assert {:ok, _} = LLMDB.load(custom: custom)
+    %{custom_catalog: custom}
   end
 
   test "discovers the catalog model with its Azure evaluation contract" do
@@ -55,7 +55,7 @@ defmodule ReqLLM.Providers.Azure.EvaluationTest do
   end
 
   test "respects catalog filters even when the Azure adapter is installed", %{
-    evaluation_catalog: custom
+    custom_catalog: custom
   } do
     on_exit(fn -> LLMDB.load(custom: custom) end)
     assert {:ok, _} = LLMDB.load(custom: custom, allow: [:typesafe])
@@ -155,12 +155,22 @@ defmodule ReqLLM.Providers.Azure.EvaluationTest do
     Application.put_env(:req_llm, :azure, base_url: @base_url)
     Application.put_env(:req_llm, :azure_api_key, "configured-key")
 
-    assert {:ok, request} =
-             Azure.prepare_request(:evaluate, @model, %{state: "text", questions: @questions}, [])
+    log =
+      capture_log(fn ->
+        assert {:ok, request} =
+                 Azure.prepare_request(
+                   :evaluate,
+                   @model,
+                   %{state: "text", questions: @questions},
+                   []
+                 )
 
-    assert request.options.base_url == @base_url
-    assert request.options.json.model == @model.id
-    assert Req.Request.get_header(request, "api-key") == ["configured-key"]
+        assert request.options.base_url == @base_url
+        assert request.options.json.model == @model.id
+        assert Req.Request.get_header(request, "api-key") == ["configured-key"]
+      end)
+
+    assert log =~ ~s(provider_options: [azure: [deployment: "your-deployment-name"]])
   end
 
   test "rejects incompatible evaluation contracts before HTTP" do

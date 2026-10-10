@@ -520,7 +520,7 @@ defmodule ReqLLM.Providers.Azure do
       opts = Keyword.put_new(opts, :base_url, model.base_url)
       base_url = resolve_base_url("microsoft-decision", opts)
       validate_base_url!(base_url)
-      deployment = get_deployment_with_warning(model, opts)
+      deployment = get_evaluation_deployment_with_warning(model, opts)
       {api_key, _option_keys} = resolve_api_key("microsoft-decision", model, opts)
       {header, value} = build_auth_header(api_key, "microsoft-decision", base_url)
       timeout = Keyword.get(opts, :receive_timeout, 30_000)
@@ -1537,6 +1537,23 @@ defmodule ReqLLM.Providers.Azure do
       )
 
       model.id
+    end
+  end
+
+  defp get_evaluation_deployment_with_warning(model, opts) do
+    case get_in(opts, [:provider_options, :deployment]) do
+      deployment when is_binary(deployment) ->
+        deployment
+
+      _ ->
+        Logger.warning(
+          "No deployment specified for Azure evaluation model '#{model.id}'. " <>
+            "Defaulting to '#{model.id}' as deployment name. " <>
+            "Set provider_options: [azure: [deployment: \"your-deployment-name\"]] " <>
+            "to avoid this warning."
+        )
+
+        model.id
     end
   end
 

@@ -240,7 +240,7 @@ defmodule ReqLLM.MixProject do
       {:websockex, "~> 0.5.1"},
       {:zoi, "~> 0.18.11"},
       {:jsv, "~> 0.11"},
-      {:llm_db, "~> 2026.10.2"},
+      {:llm_db, github: "agentjido/llmdb", ref: "9369cc7210e3a3fe02baf78608f59b053bfac8cf"},
 
       # Dev/test dependencies
       {:bandit, "~> 1.8", only: [:dev, :test], runtime: false},

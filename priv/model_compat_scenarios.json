@@ -13289,15 +13289,13 @@
       }
     },
     "openrouter:qwen/qwen-plus-2025-07-28": {
-      "catalog_status": "present",
-      "declared_operations": [
-        "text"
-      ],
+      "catalog_status": "missing",
+      "declared_operations": [],
       "model": "qwen/qwen-plus-2025-07-28",
       "provider": "openrouter",
       "surfaces": {
         "openrouter.chat_completions": {
-          "declaration": "declared",
+          "declaration": "unknown",
           "operation": "text",
           "provider": "openrouter",
           "scenarios": {
@@ -13383,15 +13381,13 @@
       }
     },
     "openrouter:qwen/qwen3-235b-a22b": {
-      "catalog_status": "present",
-      "declared_operations": [
-        "text"
-      ],
+      "catalog_status": "missing",
+      "declared_operations": [],
       "model": "qwen/qwen3-235b-a22b",
       "provider": "openrouter",
       "surfaces": {
         "openrouter.chat_completions": {
-          "declaration": "declared",
+          "declaration": "unknown",
           "operation": "text",
           "provider": "openrouter",
           "scenarios": {
@@ -13543,15 +13539,13 @@
       }
     },
     "openrouter:qwen/qwen3-30b-a3b-thinking-2507": {
-      "catalog_status": "present",
-      "declared_operations": [
-        "text"
-      ],
+      "catalog_status": "missing",
+      "declared_operations": [],
       "model": "qwen/qwen3-30b-a3b-thinking-2507",
       "provider": "openrouter",
       "surfaces": {
         "openrouter.chat_completions": {
-          "declaration": "declared",
+          "declaration": "unknown",
           "operation": "text",
           "provider": "openrouter",
           "scenarios": {
@@ -13607,15 +13601,13 @@
       }
     },
     "openrouter:qwen/qwen3-8b": {
-      "catalog_status": "present",
-      "declared_operations": [
-        "text"
-      ],
+      "catalog_status": "missing",
+      "declared_operations": [],
       "model": "qwen/qwen3-8b",
       "provider": "openrouter",
       "surfaces": {
         "openrouter.chat_completions": {
-          "declaration": "declared",
+          "declaration": "unknown",
           "operation": "text",
           "provider": "openrouter",
           "scenarios": {
@@ -13735,15 +13727,13 @@
       }
     },
     "openrouter:qwen/qwen3-coder-plus": {
-      "catalog_status": "present",
-      "declared_operations": [
-        "text"
-      ],
+      "catalog_status": "missing",
+      "declared_operations": [],
       "model": "qwen/qwen3-coder-plus",
       "provider": "openrouter",
       "surfaces": {
         "openrouter.chat_completions": {
-          "declaration": "declared",
+          "declaration": "unknown",
           "operation": "text",
           "provider": "openrouter",
           "scenarios": {
@@ -13831,15 +13821,13 @@
       }
     },
     "openrouter:qwen/qwen3-max-thinking": {
-      "catalog_status": "present",
-      "declared_operations": [
-        "text"
-      ],
+      "catalog_status": "missing",
+      "declared_operations": [],
       "model": "qwen/qwen3-max-thinking",
       "provider": "openrouter",
       "surfaces": {
         "openrouter.chat_completions": {
-          "declaration": "declared",
+          "declaration": "unknown",
           "operation": "text",
           "provider": "openrouter",
           "scenarios": {
@@ -13957,15 +13945,13 @@
       }
     },
     "openrouter:qwen/qwen3-vl-235b-a22b-thinking": {
-      "catalog_status": "present",
-      "declared_operations": [
-        "text"
-      ],
+      "catalog_status": "missing",
+      "declared_operations": [],
       "model": "qwen/qwen3-vl-235b-a22b-thinking",
       "provider": "openrouter",
       "surfaces": {
         "openrouter.chat_completions": {
-          "declaration": "declared",
+          "declaration": "unknown",
           "operation": "text",
           "provider": "openrouter",
           "scenarios": {
@@ -14053,15 +14039,13 @@
       }
     },
     "openrouter:qwen/qwen3-vl-32b-instruct": {
-      "catalog_status": "present",
-      "declared_operations": [
-        "text"
-      ],
+      "catalog_status": "missing",
+      "declared_operations": [],
       "model": "qwen/qwen3-vl-32b-instruct",
       "provider": "openrouter",
       "surfaces": {
         "openrouter.chat_completions": {
-          "declaration": "declared",
+          "declaration": "unknown",
           "operation": "text",
           "provider": "openrouter",
           "scenarios": {
@@ -14117,15 +14101,13 @@
       }
     },
     "openrouter:qwen/qwen3-vl-8b-thinking": {
-      "catalog_status": "present",
-      "declared_operations": [
-        "text"
-      ],
+      "catalog_status": "missing",
+      "declared_operations": [],
       "model": "qwen/qwen3-vl-8b-thinking",
       "provider": "openrouter",
       "surfaces": {
         "openrouter.chat_completions": {
-          "declaration": "declared",
+          "declaration": "unknown",
           "operation": "text",
           "provider": "openrouter",
           "scenarios": {
@@ -14501,15 +14483,13 @@
       }
     },
     "openrouter:qwen/qwen3.6-max-preview": {
-      "catalog_status": "present",
-      "declared_operations": [
-        "text"
-      ],
+      "catalog_status": "missing",
+      "declared_operations": [],
       "model": "qwen/qwen3.6-max-preview",
       "provider": "openrouter",
       "surfaces": {
         "openrouter.chat_completions": {
-          "declaration": "declared",
+          "declaration": "unknown",
           "operation": "text",
           "provider": "openrouter",
           "scenarios": {
@@ -20125,15 +20105,13 @@
       }
     },
     "zenmux:deepseek/deepseek-chat-v3.1": {
-      "catalog_status": "present",
-      "declared_operations": [
-        "text"
-      ],
+      "catalog_status": "missing",
+      "declared_operations": [],
       "model": "deepseek/deepseek-chat-v3.1",
       "provider": "zenmux",
       "surfaces": {
         "zenmux.chat_completions": {
-          "declaration": "declared",
+          "declaration": "unknown",
           "operation": "text",
           "provider": "zenmux",
           "scenarios": {
@@ -20157,15 +20135,13 @@
       }
     },
     "zenmux:deepseek/deepseek-r1-0528": {
-      "catalog_status": "present",
-      "declared_operations": [
-        "text"
-      ],
+      "catalog_status": "missing",
+      "declared_operations": [],
       "model": "deepseek/deepseek-r1-0528",
       "provider": "zenmux",
       "surfaces": {
         "zenmux.chat_completions": {
-          "declaration": "declared",
+          "declaration": "unknown",
           "operation": "text",
           "provider": "zenmux",
           "scenarios": {
@@ -22697,15 +22673,13 @@
       }
     },
     "zenmux:qwen/qwen3.6-max-preview": {
-      "catalog_status": "present",
-      "declared_operations": [
-        "text"
-      ],
+      "catalog_status": "missing",
+      "declared_operations": [],
       "model": "qwen/qwen3.6-max-preview",
       "provider": "zenmux",
       "surfaces": {
         "zenmux.chat_completions": {
-          "declaration": "declared",
+          "declaration": "unknown",
           "operation": "text",
           "provider": "zenmux",
           "scenarios": {

@@ -464,33 +464,33 @@ provider-native feature and are not consulted by request routing.
 | `qwen/qwen-2.5-7b-instruct` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:21:54Z | missing or stale evidence |
 | `qwen/qwen-2.5-coder-32b-instruct` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:21:54Z | missing or stale evidence |
 | `qwen/qwen-plus` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:22:16Z | missing or stale evidence |
-| `qwen/qwen-plus-2025-07-28` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:22:16Z | missing or stale evidence |
+| `qwen/qwen-plus-2025-07-28` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:22:16Z | surface declaration unknown |
 | `qwen/qwen-plus-2025-07-28:thinking` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:22:16Z | surface declaration unknown |
 | `qwen/qwen3-14b` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:42:04Z | missing or stale evidence |
-| `qwen/qwen3-235b-a22b` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:42:04Z | missing or stale evidence |
+| `qwen/qwen3-235b-a22b` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:42:04Z | surface declaration unknown |
 | `qwen/qwen3-235b-a22b-2507` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:42:04Z | missing or stale evidence |
 | `qwen/qwen3-235b-a22b-thinking-2507` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:42:04Z | missing or stale evidence |
 | `qwen/qwen3-30b-a3b` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:42:04Z | missing or stale evidence |
 | `qwen/qwen3-30b-a3b-instruct-2507` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:42:04Z | missing or stale evidence |
-| `qwen/qwen3-30b-a3b-thinking-2507` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:42:04Z | missing or stale evidence |
+| `qwen/qwen3-30b-a3b-thinking-2507` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:42:04Z | surface declaration unknown |
 | `qwen/qwen3-32b` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:42:04Z | missing or stale evidence |
-| `qwen/qwen3-8b` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:42:04Z | missing or stale evidence |
+| `qwen/qwen3-8b` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:42:04Z | surface declaration unknown |
 | `qwen/qwen3-coder-30b-a3b-instruct` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:42:04Z | missing or stale evidence |
 | `qwen/qwen3-coder-flash` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:42:04Z | missing or stale evidence |
 | `qwen/qwen3-coder-next` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:42:04Z | missing or stale evidence |
-| `qwen/qwen3-coder-plus` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:42:04Z | missing or stale evidence |
+| `qwen/qwen3-coder-plus` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:42:04Z | surface declaration unknown |
 | `qwen/qwen3-embedding-4b` | `embedding` | `openrouter.embedding` | text → embedding | Experimental | 0/3 | 2026-05-30T00:56:13Z | missing or stale evidence |
 | `qwen/qwen3-embedding-8b` | `embedding` | `openrouter.embedding` | text → embedding | Experimental | 0/3 | 2026-05-30T00:56:13Z | missing or stale evidence |
-| `qwen/qwen3-max-thinking` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:42:04Z | missing or stale evidence |
+| `qwen/qwen3-max-thinking` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:42:04Z | surface declaration unknown |
 | `qwen/qwen3-next-80b-a3b-instruct:free` | `text` | `openrouter.unrecorded_text` | text → text | Experimental | 0/5 | 2026-05-29T23:42:04Z | surface declaration unknown |
 | `qwen/qwen3-next-80b-a3b-thinking` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:42:04Z | missing or stale evidence |
 | `qwen/qwen3-vl-235b-a22b-instruct` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:42:04Z | missing or stale evidence |
-| `qwen/qwen3-vl-235b-a22b-thinking` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:42:04Z | missing or stale evidence |
+| `qwen/qwen3-vl-235b-a22b-thinking` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:42:04Z | surface declaration unknown |
 | `qwen/qwen3-vl-30b-a3b-instruct` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:42:04Z | missing or stale evidence |
 | `qwen/qwen3-vl-30b-a3b-thinking` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:42:04Z | missing or stale evidence |
-| `qwen/qwen3-vl-32b-instruct` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:42:04Z | missing or stale evidence |
+| `qwen/qwen3-vl-32b-instruct` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:42:04Z | surface declaration unknown |
 | `qwen/qwen3-vl-8b-instruct` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:42:04Z | missing or stale evidence |
-| `qwen/qwen3-vl-8b-thinking` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:42:04Z | missing or stale evidence |
+| `qwen/qwen3-vl-8b-thinking` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:42:04Z | surface declaration unknown |
 | `qwen/qwen3.5-122b-a10b` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:42:04Z | missing or stale evidence |
 | `qwen/qwen3.5-27b` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:42:04Z | missing or stale evidence |
 | `qwen/qwen3.5-35b-a3b` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:42:04Z | missing or stale evidence |
@@ -502,7 +502,7 @@ provider-native feature and are not consulted by request routing.
 | `qwen/qwen3.6-27b` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:42:04Z | missing or stale evidence |
 | `qwen/qwen3.6-35b-a3b` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:42:04Z | missing or stale evidence |
 | `qwen/qwen3.6-flash` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:42:04Z | missing or stale evidence |
-| `qwen/qwen3.6-max-preview` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:42:04Z | missing or stale evidence |
+| `qwen/qwen3.6-max-preview` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:42:04Z | surface declaration unknown |
 | `qwen/qwen3.6-plus` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:42:04Z | missing or stale evidence |
 | `qwen/qwen3.7-max` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:42:04Z | missing or stale evidence |
 | `rekaai/reka-edge` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:21:19Z | missing or stale evidence |
@@ -707,8 +707,8 @@ provider-native feature and are not consulted by request routing.
 | `bytedance/doubao-seed-2.0-pro` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
 | `bytedance/doubao-seed-code` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
 | `deepseek/deepseek-chat` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
-| `deepseek/deepseek-chat-v3.1` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
-| `deepseek/deepseek-r1-0528` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
+| `deepseek/deepseek-chat-v3.1` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | surface declaration unknown |
+| `deepseek/deepseek-r1-0528` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | surface declaration unknown |
 | `deepseek/deepseek-reasoner` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | surface declaration unknown |
 | `deepseek/deepseek-v3.2` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
 | `deepseek/deepseek-v3.2-exp` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
@@ -788,7 +788,7 @@ provider-native feature and are not consulted by request routing.
 | `qwen/qwen3.5-flash` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
 | `qwen/qwen3.5-plus` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
 | `qwen/qwen3.6-flash` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
-| `qwen/qwen3.6-max-preview` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
+| `qwen/qwen3.6-max-preview` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | surface declaration unknown |
 | `qwen/qwen3.6-plus` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
 | `qwen/qwen3.7-max` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
 | `sapiens-ai/agnes-1.5-flash` | `text` | `zenmux.unrecorded_text` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | surface declaration unknown |
