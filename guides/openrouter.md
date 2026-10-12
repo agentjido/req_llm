@@ -136,6 +136,15 @@ Passed via `:provider_options` keyword:
   ]
   ```
 
+#### `openrouter_prompt_cache_key`
+- **Type**: String
+- **Purpose**: Group requests that share a prompt prefix so they are routed to keep that prefix cached
+- **Example**: `provider_options: [openrouter_prompt_cache_key: "support-agent-v1"]`
+
+Sent as the top-level `prompt_cache_key` body field. OpenRouter uses it as the
+sticky routing key when no `session_id` is set. See OpenRouter's
+[prompt caching guide](https://openrouter.ai/docs/guides/best-practices/prompt-caching#using-session_id-for-sticky-sessions).
+
 ### Prompt Transforms
 
 #### `openrouter_transforms`

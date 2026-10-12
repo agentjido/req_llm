@@ -871,7 +871,10 @@ defmodule ReqLLM.Providers.OpenRouterTest do
         {[openrouter_top_a: 0.2], fn json -> assert json["top_a"] == 0.2 end},
         {[openrouter_top_logprobs: 5], fn json -> assert json["top_logprobs"] == 5 end},
         {[openrouter_session_id: "req-llm-test-session"],
-         fn json -> assert json["session_id"] == "req-llm-test-session" end}
+         fn json -> assert json["session_id"] == "req-llm-test-session" end},
+        {[openrouter_prompt_cache_key: "req-llm-test-cache-key"],
+         fn json -> assert json["prompt_cache_key"] == "req-llm-test-cache-key" end},
+        {[], fn json -> refute Map.has_key?(json, "prompt_cache_key") end}
       ]
 
       for {opts, assertion} <- test_cases do
