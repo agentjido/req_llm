@@ -142,7 +142,7 @@ response.object["team"]["choice"]
 response.usage
 ```
 
-Once your LLMDB snapshot includes the model, replace the explicit `model` with
+LLMDB 2026.10.3 includes this model. You can replace the explicit `model` with
 `"azure:microsoft-decision-1"`. `ReqLLM.evaluation_models/0` lists available
 catalog entries that have an evaluation adapter.
 
