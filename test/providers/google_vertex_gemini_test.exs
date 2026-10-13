@@ -628,8 +628,9 @@ defmodule ReqLLM.Providers.GoogleVertex.GeminiTest do
 
       body = request.options[:json]
       assert body[:thinking] == %{type: "adaptive", display: "summarized"}
-      assert body[:temperature] == 1.0
-      assert body[:max_tokens] == 4297
+      refute Map.has_key?(body, :temperature)
+      assert body[:output_config][:effort] == "high"
+      assert body[:max_tokens] == 2000
     end
 
     test "prepared request does not auto-enable adaptive thinking" do

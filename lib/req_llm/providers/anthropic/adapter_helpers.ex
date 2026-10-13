@@ -112,6 +112,19 @@ defmodule ReqLLM.Providers.Anthropic.AdapterHelpers do
     end
   end
 
+  @doc """
+  Adds platform output configuration while preserving existing body entries.
+  """
+  def maybe_add_output_config(body, opts) do
+    case get_in(opts, [:provider_options, :additional_model_request_fields, :output_config]) do
+      config when is_map(config) ->
+        Map.update(body, :output_config, config, &Map.merge(&1, config))
+
+      _ ->
+        body
+    end
+  end
+
   defp put_adaptive_display(%{display: _} = thinking), do: thinking
   defp put_adaptive_display(%{"display" => _} = thinking), do: thinking
 

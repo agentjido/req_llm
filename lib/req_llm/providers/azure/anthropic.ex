@@ -62,8 +62,14 @@ defmodule ReqLLM.Providers.Azure.Anthropic do
   Handles reasoning_effort/reasoning_token_budget translation to thinking config.
   Warns if json_schema response_format is attempted (not supported on Azure).
   """
-  def pre_validate_options(_operation, model, opts) do
-    opts = maybe_translate_reasoning_params(model, opts)
+  def pre_validate_options(operation, model, opts) do
+    opts =
+      if ModelHelpers.adaptive_thinking_required?(model) do
+        PlatformReasoning.prepare_adaptive_options(operation, model, opts)
+      else
+        maybe_translate_reasoning_params(model, opts)
+      end
+
     opts = warn_if_json_schema_response_format(opts)
     opts = warn_if_openai_specific_options(opts)
     {opts, []}
@@ -149,6 +155,7 @@ defmodule ReqLLM.Providers.Azure.Anthropic do
     |> AdapterHelpers.maybe_add_param(:stop_sequences, opts[:stop_sequences])
     |> AdapterHelpers.maybe_add_param(:stream, opts[:stream])
     |> AdapterHelpers.maybe_add_thinking(opts)
+    |> AdapterHelpers.maybe_add_output_config(opts)
     |> maybe_add_tools(opts)
     |> Anthropic.maybe_apply_prompt_caching(opts)
   end

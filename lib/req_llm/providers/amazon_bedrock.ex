@@ -816,9 +816,15 @@ defmodule ReqLLM.Providers.AmazonBedrock do
 
   # Note: pre_validate_options is not yet a formal Provider callback
   # It's called by Options.process/4 if the provider exports it
-  def pre_validate_options(_operation, model, opts) do
+  def pre_validate_options(operation, model, opts) do
     # Handle reasoning parameters for Claude models on Bedrock
-    opts = maybe_translate_reasoning_params(model, opts)
+    opts =
+      if ModelHelpers.adaptive_thinking_required?(model) do
+        PlatformReasoning.prepare_adaptive_options(operation, model, opts)
+      else
+        maybe_translate_reasoning_params(model, opts)
+      end
+
     {opts, []}
   end
 
@@ -1376,26 +1382,7 @@ defmodule ReqLLM.Providers.AmazonBedrock do
   end
 
   # Move :thinking from top-level opts to additionalModelRequestFields for Bedrock
-  defp move_thinking_to_additional_fields(opts) do
-    case Keyword.pop(opts, :thinking) do
-      {nil, opts} ->
-        # No thinking field, return as-is
-        opts
-
-      {thinking_config, opts} ->
-        # Move thinking to provider_options -> additional_model_request_fields
-        provider_opts = Keyword.get(opts, :provider_options, [])
-
-        additional_fields =
-          Keyword.get(provider_opts, :additional_model_request_fields, %{})
-          |> Map.put(:thinking, thinking_config)
-
-        updated_provider_opts =
-          Keyword.put(provider_opts, :additional_model_request_fields, additional_fields)
-
-        Keyword.put(opts, :provider_options, updated_provider_opts)
-    end
-  end
+  defp move_thinking_to_additional_fields(opts), do: PlatformReasoning.move_fields(opts)
 
   @impl ReqLLM.Provider
   def encode_body(request) do

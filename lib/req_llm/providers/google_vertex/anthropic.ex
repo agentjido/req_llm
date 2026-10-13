@@ -28,9 +28,15 @@ defmodule ReqLLM.Providers.GoogleVertex.Anthropic do
   Pre-validates and transforms options for Claude models on Vertex AI.
   Handles reasoning_effort/reasoning_token_budget translation to thinking config.
   """
-  def pre_validate_options(_operation, model, opts) do
+  def pre_validate_options(operation, model, opts) do
     # Handle reasoning parameters for Claude models
-    opts = maybe_translate_reasoning_params(model, opts)
+    opts =
+      if ModelHelpers.adaptive_thinking_required?(model) do
+        PlatformReasoning.prepare_adaptive_options(operation, model, opts)
+      else
+        maybe_translate_reasoning_params(model, opts)
+      end
+
     {opts, []}
   end
 
@@ -82,6 +88,7 @@ defmodule ReqLLM.Providers.GoogleVertex.Anthropic do
     |> AdapterHelpers.maybe_add_param(:top_k, opts[:top_k])
     |> AdapterHelpers.maybe_add_param(:stop_sequences, opts[:stop_sequences])
     |> AdapterHelpers.maybe_add_thinking(opts)
+    |> AdapterHelpers.maybe_add_output_config(opts)
     |> maybe_add_tools(opts)
     |> maybe_add_output_format(operation, mode, opts)
     |> Anthropic.maybe_apply_prompt_caching(opts)
@@ -90,12 +97,12 @@ defmodule ReqLLM.Providers.GoogleVertex.Anthropic do
   defp maybe_add_output_format(body, :object, :json_schema, opts) do
     compiled_schema = Keyword.fetch!(opts, :compiled_schema)
 
-    Map.put(body, :output_config, %{
-      format: %{
-        type: "json_schema",
-        schema: AdapterHelpers.strict_json_schema(compiled_schema)
-      }
-    })
+    format = %{
+      type: "json_schema",
+      schema: AdapterHelpers.strict_json_schema(compiled_schema)
+    }
+
+    Map.update(body, :output_config, %{format: format}, &Map.put(&1, :format, format))
   end
 
   defp maybe_add_output_format(body, _operation, _mode, _opts), do: body

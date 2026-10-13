@@ -224,3 +224,14 @@ All differences handled automatically by ReqLLM.
 - [Vertex AI Documentation](https://cloud.google.com/vertex-ai/docs)
 - [Claude on Vertex AI](https://cloud.google.com/vertex-ai/generative-ai/docs/partner-models/use-claude)
 - [Service Account Setup](https://cloud.google.com/iam/docs/service-accounts-create)
+
+### Adaptive Claude reasoning
+
+For Claude models that require adaptive thinking, `reasoning_effort` controls
+`output_config.effort`. ReqLLM uses the same effort mapping as the native
+Anthropic provider. It omits sampling parameters and preserves the requested
+`max_tokens` limit.
+
+With `anthropic_structured_output_mode: :json_schema`, the request keeps both
+`output_config.effort` and `output_config.format`. The forced-tool output mode
+removes thinking and effort because forced tool choice cannot use thinking.

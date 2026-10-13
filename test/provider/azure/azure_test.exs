@@ -1262,8 +1262,9 @@ defmodule ReqLLM.Providers.AzureTest do
 
       body = request.options[:json]
       assert body[:thinking] == %{type: "adaptive", display: "summarized"}
-      assert body[:temperature] == 1.0
-      assert body[:max_tokens] == 4297
+      refute Map.has_key?(body, :temperature)
+      assert body[:output_config][:effort] == "high"
+      assert body[:max_tokens] == 2000
     end
 
     test "Claude adaptive-only platform models do not auto-enable thinking" do
