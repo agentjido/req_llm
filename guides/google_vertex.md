@@ -229,7 +229,8 @@ All differences handled automatically by ReqLLM.
 
 For Claude models that require adaptive thinking, `reasoning_effort` controls
 `output_config.effort`. ReqLLM uses the same effort mapping as the native
-Anthropic provider. It omits sampling parameters and preserves the requested
+Anthropic provider. Missing cloud effort limits are read from the native
+Claude metadata; explicit platform limits take precedence. It omits sampling parameters and preserves the requested
 `max_tokens` limit.
 
 With `anthropic_structured_output_mode: :json_schema`, the request keeps both

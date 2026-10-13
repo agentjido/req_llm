@@ -66,6 +66,49 @@ defmodule ReqLLM.Providers.ClaudePlatformReasoningTest do
     end
   end
 
+  test "sparse hosted metadata preserves native max and xhigh levels" do
+    native = ReqLLM.model!("anthropic:claude-opus-4-7")
+
+    for {provider, id} <- [
+          {Azure, "claude-opus-4-7"},
+          {GoogleVertex, "claude-opus-4-7@default"},
+          {AmazonBedrock, "us.anthropic.claude-opus-4-7"}
+        ],
+        effort <- [:xhigh, :max] do
+      model =
+        LLMDB.Model.new!(%{
+          provider: provider.provider_id(),
+          id: id,
+          capabilities: %{reasoning: %{enabled: true}}
+        })
+
+      opts = ReqLLM.Provider.Options.process!(provider, :chat, model, reasoning_effort: effort)
+      {native_opts, []} = Anthropic.translate_options(:chat, native, reasoning_effort: effort)
+
+      assert opts[:provider_options][:additional_model_request_fields][:output_config] ==
+               native_opts[:output_config]
+    end
+  end
+
+  test "explicit platform effort limits override native metadata" do
+    model =
+      LLMDB.Model.new!(%{
+        provider: :google_vertex,
+        id: "claude-opus-4-7@default",
+        capabilities: %{
+          reasoning: %{
+            enabled: true,
+            effort: %{supported: true, values: ["low", "medium", "high"]}
+          }
+        }
+      })
+
+    opts = ReqLLM.Provider.Options.process!(GoogleVertex, :chat, model, reasoning_effort: :max)
+
+    assert opts[:provider_options][:additional_model_request_fields][:output_config][:effort] ==
+             "high"
+  end
+
   test "Vertex structured output preserves adaptive thinking and effort" do
     model = model(:google_vertex)
     {:ok, schema} = ReqLLM.Schema.compile(name: [type: :string, required: true])

@@ -100,7 +100,11 @@ defmodule ReqLLM.Providers.Anthropic.PlatformReasoning do
         opts
       end
 
-    {opts, _warnings} = ReqLLM.Providers.Anthropic.translate_options(operation, model, opts)
+    translation_model = ReqLLM.ModelHelpers.with_anthropic_effort_metadata(model)
+
+    {opts, _warnings} =
+      ReqLLM.Providers.Anthropic.translate_options(operation, translation_model, opts)
+
     move_fields(opts)
   end
 

@@ -25,7 +25,7 @@ defmodule ReqLLM.Providers.Azure.Anthropic do
   Enable with `reasoning_effort: :low | :medium | :high` option.
 
   **Important constraints:**
-  - Temperature is automatically set to 1.0 when reasoning is enabled, overriding any user-provided value (required by Anthropic)
+  - Budget-thinking models use temperature 1.0; adaptive-only models omit sampling parameters
   - If provider option translation changes temperature after reasoning is enabled, thinking will be disabled
   - Models without reasoning capability will log a warning and ignore reasoning params
 

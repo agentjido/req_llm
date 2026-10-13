@@ -98,6 +98,43 @@ defmodule ReqLLM.ModelHelpers do
 
   def adaptive_thinking_required?(_), do: false
 
+  @doc """
+  Fills missing hosted Claude effort metadata from the native Anthropic model.
+  Explicit platform effort capabilities take precedence.
+  """
+  @spec with_anthropic_effort_metadata(LLMDB.Model.t()) :: LLMDB.Model.t()
+  def with_anthropic_effort_metadata(%LLMDB.Model{} = model) do
+    configured = [
+      nested_value(model.capabilities, [:reasoning, :effort]),
+      nested_value(model.extra, [:provider_capabilities, :effort]),
+      nested_value(model.extra, [:capabilities, :effort])
+    ]
+
+    effort =
+      if Enum.all?(configured, &is_nil/1) do
+        model
+        |> hosted_anthropic_model_ids()
+        |> Enum.find_value(fn id ->
+          case LLMDB.model(:anthropic, id) do
+            {:ok, native} -> nested_value(native.capabilities, [:reasoning, :effort])
+            _ -> nil
+          end
+        end)
+      end
+
+    if is_map(effort) do
+      capabilities = model.capabilities || %{}
+      reasoning = nested_value(capabilities, [:reasoning]) || %{}
+
+      %{
+        model
+        | capabilities: Map.put(capabilities, :reasoning, Map.put(reasoning, :effort, effort))
+      }
+    else
+      model
+    end
+  end
+
   defp model_adaptive_thinking_required?(%LLMDB.Model{} = model) do
     adaptive_thinking_types_required?(
       nested_value(model.capabilities, [:reasoning, :thinking, :types])
