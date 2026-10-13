@@ -93,10 +93,23 @@ Passed via `:provider_options` keyword:
   ]
   ```
 
+### Model compatibility
+
+Gemini 3 and later do not support `google_candidate_count`. ReqLLM omits
+`candidateCount` for these models and rejects an explicit value.
+
+Gemini 3.6 and later, and Gemini 3.5 Flash-Lite, do not accept `temperature`,
+`top_p`, `top_k`, `reasoning_token_budget`, or `google_thinking_budget` in text
+and structured-output requests. Use `reasoning_effort` or
+`google_thinking_level` to control reasoning. Gemini 3.8 Flash supports `low`,
+`medium`, and `high`; an explicit `minimal` level is rejected.
+
+These checks also apply to Gemini models on Google Vertex AI.
+
 ### `google_candidate_count`
 - **Type**: Positive integer
 - **Default**: `1`
-- **Purpose**: Generate multiple candidates (only first returned)
+- **Purpose**: Generate multiple candidates on Gemini 2.x (only first returned)
 - **Example**: `provider_options: [google_candidate_count: 3]`
 
 ### Embedding Options

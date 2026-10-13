@@ -97,8 +97,7 @@ defmodule ReqLLM.Providers.Google do
     ],
     google_candidate_count: [
       type: :pos_integer,
-      default: 1,
-      doc: "Number of response candidates to generate"
+      doc: "Number of response candidates to generate (Gemini 2.x only; defaults to 1)"
     ],
     google_thinking_budget: [
       type: :non_neg_integer,
@@ -745,7 +744,8 @@ defmodule ReqLLM.Providers.Google do
     end
   end
 
-  def pre_validate_options(_operation, model, opts) do
+  def pre_validate_options(operation, model, opts) do
+    validate_gemini_options!(operation, model, opts)
     {provider_opts, rest} = Keyword.pop(opts, :provider_options, [])
 
     {effort, provider_opts} = Keyword.pop(provider_opts, :reasoning_effort)
@@ -902,6 +902,7 @@ defmodule ReqLLM.Providers.Google do
     model_name = google_model_name(model_id)
 
     cond do
+      model_name_matches?(model_name, "gemini-3.8-flash") -> [:low, :medium, :high]
       model_name_matches?(model_name, "gemini-3.7-flash") -> [:low, :medium, :high]
       model_name_matches?(model_name, "gemini-3.1-pro") -> [:low, :medium, :high]
       true -> nil
@@ -956,7 +957,8 @@ defmodule ReqLLM.Providers.Google do
     ReqLLM.Images.drop_openai_only_options(opts, "Google")
   end
 
-  def translate_options(_operation, model, opts) do
+  def translate_options(operation, model, opts) do
+    validate_gemini_options!(operation, model, opts)
     {reasoning_budget, opts} = Keyword.pop(opts, :reasoning_token_budget)
     {reasoning_effort, opts} = Keyword.pop(opts, :reasoning_effort)
 
@@ -989,6 +991,12 @@ defmodule ReqLLM.Providers.Google do
   # Req pipeline steps
   @impl ReqLLM.Provider
   def encode_body(request) do
+    validate_gemini_options!(
+      request.options[:operation] || :chat,
+      request.options[:model],
+      Enum.to_list(request.options)
+    )
+
     body =
       case request.options[:operation] do
         :embedding ->
@@ -1242,7 +1250,7 @@ defmodule ReqLLM.Providers.Google do
       |> maybe_put(:maxOutputTokens, request.options[:max_tokens])
       |> maybe_put(:topP, request.options[:top_p])
       |> maybe_put(:topK, request.options[:top_k])
-      |> maybe_put(:candidateCount, request.options[:google_candidate_count] || 1)
+      |> maybe_put(:candidateCount, candidate_count(model_name, request.options))
       |> maybe_add_thinking_config(
         request.options[:google_thinking_budget],
         request.options[:google_thinking_level]
@@ -1305,10 +1313,8 @@ defmodule ReqLLM.Providers.Google do
     end
 
     generation_config =
-      %{
-        candidateCount: 1,
-        responseMimeType: "application/json"
-      }
+      %{responseMimeType: "application/json"}
+      |> maybe_put(:candidateCount, candidate_count(model_name, []))
       |> maybe_put(:temperature, request.options[:temperature])
       |> maybe_put(:maxOutputTokens, request.options[:max_tokens])
       |> maybe_put(:topP, request.options[:top_p])
@@ -1369,13 +1375,80 @@ defmodule ReqLLM.Providers.Google do
     end)
   end
 
+  defp candidate_count(model, opts) do
+    if gemini_3_or_later?(model), do: nil, else: opts[:google_candidate_count] || 1
+  end
+
+  defp validate_gemini_options!(operation, model, opts) when operation in [:chat, :object] do
+    provider_opts = Keyword.get(opts, :provider_options, [])
+    all_opts = Keyword.merge(opts, provider_opts)
+
+    unsupported =
+      if gemini_3_or_later?(model), do: [:google_candidate_count], else: []
+
+    unsupported =
+      if modern_gemini_parameters?(model) do
+        unsupported ++
+          [:temperature, :top_p, :top_k, :reasoning_token_budget, :google_thinking_budget]
+      else
+        unsupported
+      end
+
+    Enum.each(unsupported, fn key ->
+      if Keyword.has_key?(all_opts, key) do
+        raise ReqLLM.Error.Invalid.Parameter,
+          parameter: "#{key} is not supported for this Gemini model"
+      end
+    end)
+
+    levels = known_thinking_levels(model) || []
+    level = Keyword.get(all_opts, :google_thinking_level)
+
+    if level != nil and levels != [] and
+         ReqLLM.Provider.Reasoning.normalize_effort(level) not in levels do
+      raise ReqLLM.Error.Invalid.Parameter,
+        parameter:
+          "google_thinking_level #{inspect(level)} is not supported for this Gemini model"
+    end
+  end
+
+  defp validate_gemini_options!(_operation, _model, _opts), do: :ok
+
+  defp modern_gemini_parameters?(%LLMDB.Model{} = model) do
+    [model.provider_model_id, model.model, model.id]
+    |> Enum.any?(&modern_gemini_parameters?/1)
+  end
+
+  defp modern_gemini_parameters?(id) when is_binary(id) do
+    name = google_model_name(id)
+
+    case Regex.run(~r/^gemini-(\d+)(?:\.(\d+))?/, name) do
+      [_, major, minor] ->
+        String.to_integer(major) > 3 or
+          (String.to_integer(major) == 3 and String.to_integer(minor) >= 6) or
+          model_name_matches?(name, "gemini-3.5-flash-lite")
+
+      [_, major] ->
+        String.to_integer(major) > 3
+
+      _ ->
+        false
+    end
+  end
+
+  defp modern_gemini_parameters?(_), do: false
+
   defp gemini_3_or_later?(%LLMDB.Model{} = model) do
     [model.provider_model_id, model.model, model.id, model.family]
     |> Enum.any?(&gemini_3_or_later?/1)
   end
 
-  defp gemini_3_or_later?(id) when is_binary(id),
-    do: id |> google_model_name() |> String.starts_with?("gemini-3")
+  defp gemini_3_or_later?(id) when is_binary(id) do
+    case Regex.run(~r/^gemini-(\d+)/, google_model_name(id)) do
+      [_, major] -> String.to_integer(major) >= 3
+      _ -> false
+    end
+  end
 
   defp gemini_3_or_later?(_), do: false
 
