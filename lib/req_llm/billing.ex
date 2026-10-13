@@ -11,10 +11,19 @@ defmodule ReqLLM.Billing do
   @modality_meters ~w(text_input_tokens image_input_tokens text_cache_read_tokens image_cache_read_tokens image_output_tokens)
 
   @spec calculate(map(), LLMDB.Model.t() | nil, map() | keyword()) :: {:ok, map() | nil}
-  def calculate(usage, model, context \\ %{})
-  def calculate(_usage, nil, _context), do: {:ok, nil}
+  def calculate(usage, model, context \\ %{}) do
+    case calculate_with_diagnostics(usage, model, context) do
+      {:error, _reason} -> {:ok, nil}
+      result -> result
+    end
+  end
 
-  def calculate(usage, %LLMDB.Model{} = model, context) when is_map(usage) do
+  @spec calculate_with_diagnostics(map(), LLMDB.Model.t() | nil, map() | keyword()) ::
+          {:ok, map() | nil} | {:error, {:missing_component, atom() | String.t()}}
+  def calculate_with_diagnostics(usage, model, context \\ %{})
+  def calculate_with_diagnostics(_usage, nil, _context), do: {:ok, nil}
+
+  def calculate_with_diagnostics(usage, %LLMDB.Model{} = model, context) when is_map(usage) do
     with true <- Pricing.components(model) != [],
          true <-
            Tool.valid_usage?(MapAccess.get_raw(usage, :tool_usage)) and
@@ -37,6 +46,7 @@ defmodule ReqLLM.Billing do
            price_cache_write_groups(model, context, meters, usage, write_groups) do
       {:ok, cost_summary(items ++ write_items, model)}
     else
+      {:error, {:missing_component, _meter}} = error -> error
       _ -> {:ok, nil}
     end
   end
@@ -323,11 +333,12 @@ defmodule ReqLLM.Billing do
       |> Enum.filter(&relevant?(&1, meters, usage))
       |> Enum.map(&meter_key/1)
 
-    if Enum.all?(required_keys, &(&1 in selected_keys)) and
-         length(active_keys) == length(Enum.uniq(active_keys)) do
-      :ok
-    else
-      :error
+    missing_keys = Enum.reject(required_keys, &(&1 in selected_keys))
+
+    cond do
+      missing_keys != [] -> {:error, {:missing_component, hd(missing_keys)}}
+      length(active_keys) != length(Enum.uniq(active_keys)) -> :error
+      true -> :ok
     end
   end
 

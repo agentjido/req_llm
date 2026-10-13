@@ -99,6 +99,13 @@ cache/storage rates, and unpriced gateway usage. A zero charge is reported only
 when a complete selected tariff and usage establish zero billable quantity.
 If a provider returns no usage payload at all, `response.usage` may remain
 `nil`; that also means the price is unknown.
+When a used token meter has no selected pricing component, `usage.pricing`
+also includes the reason. For example, cached tokens without a cache-read rate
+produce `%{status: :unknown, reason: {:missing_component, :cache_read}}`.
+The reason is also included in streaming usage and token-usage telemetry.
+ReqLLM does not substitute the input rate for a missing cache-read rate.
+Update or override the model metadata when the provider's rate is known.
+
 The legacy flat `cost` map remains a model metadata summary; it does not select
 a conditional period or supply a missing rate.
 

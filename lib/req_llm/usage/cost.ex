@@ -26,7 +26,10 @@ defmodule ReqLLM.Usage.Cost do
 
   def breakdown(usage, %LLMDB.Model{} = model, context) when is_map(usage) do
     if tokens_numeric?(usage) do
-      case ReqLLM.Billing.calculate(usage, model, context || %{}) do
+      case ReqLLM.Billing.calculate_with_diagnostics(usage, model, context || %{}) do
+        {:error, {:missing_component, _meter} = reason} ->
+          {:ok, %{pricing: %{status: :unknown, reason: reason}}}
+
         {:ok, nil} ->
           {:ok, nil}
 
@@ -59,6 +62,12 @@ defmodule ReqLLM.Usage.Cost do
     usage
     |> Map.drop([:cost, :input_cost, :output_cost, :reasoning_cost, :total_cost])
     |> Map.put(:pricing, %{status: :unknown})
+  end
+
+  def merge(usage, %{pricing: %{status: :unknown} = pricing}, _opts) do
+    usage
+    |> Map.drop([:cost, :input_cost, :output_cost, :reasoning_cost, :total_cost])
+    |> Map.put(:pricing, pricing)
   end
 
   def merge(usage, cost_breakdown, _opts) do
