@@ -70,7 +70,7 @@ defmodule ReqLLM.Providers.Anthropic.Response do
       response_model: model_name,
       usage: usage,
       finish_reason: finish_reason,
-      provider_meta: Map.drop(data, ["id", "model", "content", "usage", "stop_reason"])
+      provider_meta: Map.drop(data, ["id", "model", "content", "usage"])
     }
 
     ReqLLM.Providers.Anthropic.ResponseBuilder.build_buffered_response(
@@ -112,19 +112,7 @@ defmodule ReqLLM.Providers.Anthropic.Response do
         [ReqLLM.StreamChunk.meta(%{terminal?: true})]
 
       %{"type" => "message_delta", "delta" => delta} ->
-        finish_reason = parse_finish_reason(Map.get(delta, "stop_reason")) || :unknown
-
-        raw_usage = Map.get(data, "usage", %{})
-
-        chunks = [ReqLLM.StreamChunk.meta(%{finish_reason: finish_reason, terminal?: true})]
-
-        # Add usage chunk if present
-        if raw_usage == %{} do
-          chunks
-        else
-          usage_chunk = ReqLLM.StreamChunk.meta(%{usage: parse_usage(raw_usage)})
-          [usage_chunk | chunks]
-        end
+        message_delta_chunks(data, delta)
 
       %{"type" => "ping"} ->
         [ReqLLM.StreamChunk.meta(%{keepalive?: true, provider_event: :ping})]
@@ -530,10 +518,16 @@ defmodule ReqLLM.Providers.Anthropic.Response do
   defp maybe_put_meta(meta, _key, _value), do: meta
 
   defp message_delta_chunks(data, delta) do
-    finish_reason = parse_finish_reason(Map.get(delta, "stop_reason")) || :unknown
+    stop_reason = Map.get(delta, "stop_reason")
+    finish_reason = parse_finish_reason(stop_reason) || :unknown
 
     raw_usage = Map.get(data, "usage", %{})
-    chunks = [ReqLLM.StreamChunk.meta(%{finish_reason: finish_reason, terminal?: true})]
+
+    chunks = [
+      %{finish_reason: finish_reason, terminal?: true}
+      |> put_stop_reason_meta(stop_reason)
+      |> ReqLLM.StreamChunk.meta()
+    ]
 
     if raw_usage == %{} do
       chunks
@@ -542,6 +536,11 @@ defmodule ReqLLM.Providers.Anthropic.Response do
       [usage_chunk | chunks]
     end
   end
+
+  defp put_stop_reason_meta(meta, stop_reason) when is_binary(stop_reason),
+    do: Map.put(meta, :provider_meta, %{"stop_reason" => stop_reason})
+
+  defp put_stop_reason_meta(meta, _stop_reason), do: meta
 
   defp start_thinking_block(state, index, block) do
     text = extract_thinking_text(block)

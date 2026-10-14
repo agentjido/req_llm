@@ -62,6 +62,7 @@ defmodule ReqLLM.Provider.AnthropicMaterializationTest do
           provider_meta: %{
             "type" => "message",
             "role" => "assistant",
+            "stop_reason" => "tool_use",
             "stop_sequence" => nil
           }
         },
@@ -77,6 +78,17 @@ defmodule ReqLLM.Provider.AnthropicMaterializationTest do
     assert Enum.any?(chunks, fn
              %StreamChunk{type: :meta, metadata: %{terminal?: true}} -> true
              _chunk -> false
+           end)
+
+    assert Enum.any?(chunks, fn
+             %StreamChunk{
+               type: :meta,
+               metadata: %{terminal?: true, provider_meta: %{"stop_reason" => "tool_use"}}
+             } ->
+               true
+
+             _chunk ->
+               false
            end)
 
     assert Enum.any?(chunks, fn
@@ -142,6 +154,7 @@ defmodule ReqLLM.Provider.AnthropicMaterializationTest do
     assert response.provider_meta == %{
              "type" => "message",
              "role" => "assistant",
+             "stop_reason" => "future_stop_reason",
              "stop_sequence" => "END",
              "custom" => %{"trace" => "trace_123"}
            }

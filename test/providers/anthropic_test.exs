@@ -1301,6 +1301,31 @@ defmodule ReqLLM.Providers.AnthropicTest do
       assert decode.("some_future_reason") == :unknown
     end
 
+    test "decode_response keeps the provider's stop_reason in provider_meta" do
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
+
+      data = %{
+        "id" => "msg_01ABC123",
+        "type" => "message",
+        "role" => "assistant",
+        "content" => [
+          %{
+            "type" => "server_tool_use",
+            "id" => "srvtoolu_1",
+            "name" => "web_search",
+            "input" => %{"query" => "weather"}
+          }
+        ],
+        "stop_reason" => "pause_turn",
+        "usage" => %{"input_tokens" => 5, "output_tokens" => 2}
+      }
+
+      {:ok, response} = ReqLLM.Providers.Anthropic.Response.decode_response(data, model)
+
+      assert response.finish_reason == :incomplete
+      assert response.provider_meta["stop_reason"] == "pause_turn"
+    end
+
     test "decode_response reads thinking tokens from output_tokens_details" do
       {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
 
@@ -1369,6 +1394,76 @@ defmodule ReqLLM.Providers.AnthropicTest do
   end
 
   describe "streaming response decoding" do
+    test "a message_delta carries the provider's stop_reason on its terminal chunk" do
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
+
+      event = %{
+        data: %{
+          "type" => "message_delta",
+          "delta" => %{"stop_reason" => "pause_turn"},
+          "usage" => %{"output_tokens" => 7}
+        }
+      }
+
+      for chunks <- [
+            Anthropic.decode_stream_event(event, model),
+            event |> Anthropic.Response.decode_stream_event(model, nil) |> elem(0)
+          ] do
+        assert [%ReqLLM.StreamChunk{type: :meta, metadata: %{usage: _}}, terminal] = chunks
+
+        assert terminal.metadata == %{
+                 finish_reason: :incomplete,
+                 terminal?: true,
+                 provider_meta: %{"stop_reason" => "pause_turn"}
+               }
+      end
+    end
+
+    test "a streamed paused turn reports its stop_reason in the stream's provider_meta" do
+      Process.flag(:trap_exit, true)
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
+
+      server =
+        ReqLLM.Test.StreamServerHelpers.start_server(
+          provider_mod: ReqLLM.Providers.Anthropic,
+          model: model
+        )
+
+      _task = ReqLLM.Test.StreamServerHelpers.mock_http_task(server)
+
+      events = [
+        %{
+          "type" => "message_start",
+          "message" => %{
+            "id" => "msg_1",
+            "type" => "message",
+            "role" => "assistant",
+            "content" => [],
+            "usage" => %{"input_tokens" => 5, "output_tokens" => 1}
+          }
+        },
+        %{
+          "type" => "message_delta",
+          "delta" => %{"stop_reason" => "pause_turn"},
+          "usage" => %{"output_tokens" => 7}
+        },
+        %{"type" => "message_stop"}
+      ]
+
+      for event <- events do
+        sse = "event: #{event["type"]}\ndata: #{Jason.encode!(event)}\n\n"
+        ReqLLM.StreamServer.http_event(server, {:data, sse})
+      end
+
+      ReqLLM.StreamServer.http_event(server, :done)
+
+      assert {:ok, metadata} = ReqLLM.StreamServer.await_metadata(server, 1_000)
+      assert metadata.finish_reason == :incomplete
+      assert metadata.provider_meta == %{"stop_reason" => "pause_turn"}
+
+      ReqLLM.StreamServer.cancel(server)
+    end
+
     test "decode_stream_event returns keepalive meta chunk for ping events" do
       {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
       event = %{data: %{"type" => "ping"}}

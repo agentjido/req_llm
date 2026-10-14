@@ -218,6 +218,29 @@ response.usage.cost
 
 Web search is billed at **$10 per 1,000 searches** plus standard token costs.
 
+## Paused Turns
+
+A long-running server tool, such as web search or tool search, can stop a response with
+`stop_reason: "pause_turn"`. The model has not finished its turn. To let it continue, send the
+request again with the paused assistant message appended unchanged.
+
+ReqLLM reports a paused turn with `finish_reason: :incomplete`. Anthropic's own stop reason is
+kept in `provider_meta["stop_reason"]`, so a caller can tell a paused turn from other incomplete
+responses:
+
+```elixir
+{:ok, response} = ReqLLM.generate_text("anthropic:claude-sonnet-4-5", context, opts)
+
+if response.provider_meta["stop_reason"] == "pause_turn" do
+  context = ReqLLM.Context.append(context, response.message)
+  ReqLLM.generate_text("anthropic:claude-sonnet-4-5", context, opts)
+end
+```
+
+When streaming, the stop reason arrives on the terminal metadata chunk as
+`provider_meta: %{"stop_reason" => "pause_turn"}`, and is in the stream's final
+`provider_meta`.
+
 ## Wire Format Notes
 
 - Endpoint: `/v1/messages`
