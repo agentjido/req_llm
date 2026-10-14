@@ -590,6 +590,19 @@ defmodule ReqLLM.Context do
     ReqLLM.ToolCall.execute(tool_call, available_tools)
   end
 
+  defp find_and_execute_tool(
+         %{id: id, name: name, arguments: args, metadata: metadata},
+         available_tools
+       )
+       when is_map(metadata) do
+    arguments = if is_binary(args), do: args, else: Jason.encode!(args)
+
+    id
+    |> ReqLLM.ToolCall.new(name, arguments)
+    |> ReqLLM.ToolCall.put_metadata(metadata)
+    |> ReqLLM.ToolCall.execute(available_tools)
+  end
+
   defp find_and_execute_tool(%{name: name, arguments: args}, available_tools) do
     execute_tool_by_name(name, args, available_tools)
   end

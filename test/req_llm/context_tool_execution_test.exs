@@ -96,4 +96,28 @@ defmodule ReqLLM.ContextToolExecutionTest do
     assert message.metadata.is_error
     assert Jason.decode!(hd(message.content).text) == %{"error" => "permission_denied"}
   end
+
+  test "struct calls and normalized maps select the matching namespace" do
+    first =
+      tool("list", fn _ -> flunk("executed the devices tool") end)
+      |> Map.put(:provider_options, openai: [namespace: "devices"])
+
+    selected =
+      tool("list", fn _ -> {:ok, "billing result"} end)
+      |> Map.put(:provider_options, openai: [namespace: "billing"])
+
+    call =
+      "namespaced"
+      |> ToolCall.new("list", "{}")
+      |> ToolCall.put_metadata(%{namespace: "billing"})
+
+    for input <- [call, ToolCall.to_map(call)] do
+      result = Context.execute_and_append_tools(Context.new([]), [input], [first, selected])
+      [message] = result.messages
+
+      refute message.metadata[:is_error]
+      assert message.tool_call_id == call.id
+      assert hd(message.content).text == "billing result"
+    end
+  end
 end

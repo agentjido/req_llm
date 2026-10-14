@@ -233,6 +233,62 @@ defmodule ReqLLM.ToolCallTest do
       assert {:error, :permission_denied} = ToolCall.execute(call, [tool])
     end
 
+    test "selects the matching namespace when function names repeat", %{tool: tool} do
+      first = %{tool | provider_options: [openai: [namespace: "crm"]]}
+
+      selected = %{
+        tool
+        | provider_options: %{"openai" => %{"namespace" => "support"}},
+          callback: fn _ -> {:ok, :support} end
+      }
+
+      for metadata <- [%{namespace: "support"}, %{"namespace" => "support"}] do
+        call =
+          "call_namespaced"
+          |> ToolCall.new("search", ~s({"query":"elixir"}))
+          |> ToolCall.put_metadata(metadata)
+
+        assert %{state: :valid, tool: ^selected} = ToolCall.resolve(call, [first, selected])
+        assert {:ok, :support} = ToolCall.execute(call, [first, selected])
+      end
+
+      refute_received {:tool_executed, _args}
+    end
+
+    test "does not execute a same-name tool from another namespace", %{tool: tool} do
+      tools = [tool, %{tool | provider_options: [openai: [namespace: "crm"]]}]
+
+      call =
+        "call_missing_namespace"
+        |> ToolCall.new("search", ~s({"query":"elixir"}))
+        |> ToolCall.put_metadata(%{namespace: "support"})
+
+      assert {:error, %{state: :unknown, tool: nil}} = ToolCall.execute(call, tools)
+      refute_received {:tool_executed, _args}
+    end
+
+    test "uses the function name as the namespace for an ungrouped deferred tool", %{tool: tool} do
+      grouped = %{tool | provider_options: [openai: [namespace: "crm"]]}
+      deferred = %{tool | provider_options: [openai: [defer_loading: true]]}
+
+      call =
+        "call_deferred"
+        |> ToolCall.new("search", ~s({"query":"elixir"}))
+        |> ToolCall.put_metadata(%{namespace: "search"})
+
+      assert %{state: :valid, tool: ^deferred} = ToolCall.resolve(call, [grouped, deferred])
+      assert {:ok, %{matches: 5}} = ToolCall.execute(call, [grouped, deferred])
+      assert_received {:tool_executed, %{query: "elixir", limit: 5}}
+      refute_received {:tool_executed, _args}
+    end
+
+    test "preserves name-only matching when calls have no namespace", %{tool: tool} do
+      tool = %{tool | provider_options: [openai: [namespace: "crm"]]}
+      call = ToolCall.new("call_no_namespace", "search", ~s({"query":"elixir"}))
+
+      assert %{state: :valid, tool: ^tool} = ToolCall.resolve(call, [tool])
+    end
+
     test "keeps invalid schema input inspectable and does not execute", %{tool: tool} do
       call = ToolCall.new("call_invalid", "search", ~s({"limit":"many"}))
 

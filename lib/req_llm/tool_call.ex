@@ -244,6 +244,11 @@ defmodule ReqLLM.ToolCall do
 
   JSON repair follows `args_map/2` and can be disabled with
   `json_repair: false`.
+
+  Calls carrying an OpenAI namespace match the tool's `openai.namespace`
+  provider option. Deferred functions without an explicit namespace use the
+  function name as their namespace. Calls without namespace metadata retain
+  name-only matching.
   """
   @spec resolve(t(), [ReqLLM.Tool.t()], keyword()) :: resolution()
   def resolve(%__MODULE__{} = call, available_tools, opts \\ [])
@@ -302,7 +307,7 @@ defmodule ReqLLM.ToolCall do
   end
 
   defp resolve_application_call(resolution, available_tools, opts) do
-    case find_tool(available_tools, resolution.name) do
+    case find_tool(available_tools, resolution.name, resolution.metadata) do
       nil -> resolve_unknown_call(resolution, opts)
       tool -> resolve_known_call(resolution, tool, opts)
     end
@@ -362,11 +367,24 @@ defmodule ReqLLM.ToolCall do
     end
   end
 
-  defp find_tool(available_tools, name) do
+  defp find_tool(available_tools, name, metadata) do
+    namespace = Map.get(metadata, :namespace) || Map.get(metadata, "namespace")
+
     Enum.find(available_tools, fn
-      %ReqLLM.Tool{name: ^name} -> true
+      %ReqLLM.Tool{name: ^name} = tool -> matching_namespace?(tool, namespace)
       _tool -> false
     end)
+  end
+
+  defp matching_namespace?(_tool, nil), do: true
+
+  defp matching_namespace?(%ReqLLM.Tool{name: name} = tool, namespace) do
+    options = ReqLLM.Tool.provider_options(tool, :openai)
+
+    case Map.get(options, :namespace) || Map.get(options, "namespace") do
+      configured when is_binary(configured) and configured != "" -> configured == namespace
+      _ -> name == namespace
+    end
   end
 
   defp decode_arguments_or_nil(raw_arguments, opts) do

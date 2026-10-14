@@ -4828,7 +4828,18 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
       [tool_call] = resp.body.message.tool_calls
 
       assert %{state: :valid, arguments: %{"site" => "hq"}} =
-               ReqLLM.ToolCall.resolve(tool_call, [list_tool([])])
+               ReqLLM.ToolCall.resolve(tool_call, [list_tool(openai: [namespace: "devices"])])
+    end
+
+    test "a decoded namespaced call executes the matching tool when names repeat" do
+      {_req, resp} = ResponsesAPI.decode_response(build_response(200, search_response()))
+      [tool_call] = resp.body.message.tool_calls
+
+      billing = list_tool(openai: [namespace: "billing"])
+      billing = %{billing | callback: fn _ -> flunk("executed the billing tool") end}
+      devices = list_tool(openai: [namespace: "devices"])
+
+      assert {:ok, "17"} = ReqLLM.ToolCall.execute(tool_call, [billing, devices])
     end
 
     test "streamed search items and the call's namespace match the decoded response" do
