@@ -136,7 +136,9 @@ defmodule ReqLLM.Tool do
                    type: :any,
                    default: %{},
                    doc:
-                     "Provider-specific tool options keyed by provider, e.g. [anthropic: [defer_loading: true]]"
+                     "Provider-specific tool options keyed by provider, e.g. [anthropic: [defer_loading: true]]. " <>
+                       "OpenAI Responses also reads `namespace` and `namespace_description` " <>
+                       "to group deferred functions for tool search."
                  ]
                )
 

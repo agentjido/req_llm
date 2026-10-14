@@ -4710,6 +4710,337 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
     end
   end
 
+  describe "tool search items" do
+    @search_call %{
+      "arguments" => %{"paths" => ["devices"]},
+      "call_id" => nil,
+      "execution" => "server",
+      "id" => "tsc_123",
+      "status" => "completed",
+      "type" => "tool_search_call"
+    }
+
+    @search_output %{
+      "call_id" => nil,
+      "execution" => "server",
+      "id" => "tso_123",
+      "status" => "completed",
+      "tools" => [
+        %{
+          "type" => "namespace",
+          "name" => "devices",
+          "description" => "Device tools.",
+          "tools" => [
+            %{
+              "defer_loading" => true,
+              "description" => "List managed devices at a site.",
+              "name" => "list",
+              "output_schema" => nil,
+              "parameters" => %{
+                "additionalProperties" => false,
+                "properties" => %{"site" => %{"type" => "string"}},
+                "required" => ["site"],
+                "type" => "object"
+              },
+              "strict" => true,
+              "type" => "function"
+            }
+          ]
+        }
+      ],
+      "type" => "tool_search_output"
+    }
+
+    @namespaced_call %{
+      "arguments" => ~s({"site":"hq"}),
+      "call_id" => "call_123",
+      "id" => "fc_123",
+      "name" => "list",
+      "namespace" => "devices",
+      "status" => "completed",
+      "type" => "function_call"
+    }
+
+    @commentary %{
+      "type" => "message",
+      "role" => "assistant",
+      "content" => [%{"type" => "output_text", "text" => "Looking up the device tools."}]
+    }
+
+    defp search_response do
+      %{
+        "id" => "resp_123",
+        "model" => "gpt-5.4",
+        "status" => "completed",
+        "output" => [@commentary, @search_call, @search_output, @namespaced_call],
+        "usage" => %{"input_tokens" => 10, "output_tokens" => 5}
+      }
+    end
+
+    defp list_tool(provider_options) do
+      ReqLLM.Tool.new!(
+        name: "list",
+        description: "List managed devices at a site.",
+        parameter_schema: [site: [type: :string, required: true]],
+        callback: fn _ -> {:ok, "17"} end,
+        provider_options: provider_options
+      )
+    end
+
+    defp encode_tools(tools) do
+      context = ReqLLM.Context.new([ReqLLM.Context.user("hi")])
+
+      %Req.Request{
+        url: URI.parse("https://api.openai.com/v1/responses"),
+        method: :post,
+        options: [context: context, model: "gpt-5.4", tools: tools]
+      }
+      |> ResponsesAPI.encode_body()
+      |> ReqLLM.Test.Helpers.json_body()
+      |> Map.fetch!("tools")
+    end
+
+    test "decode_response/1 keeps search items as provider blocks in output order" do
+      {_req, resp} = ResponsesAPI.decode_response(build_response(200, search_response()))
+
+      assert [
+               %ReqLLM.Message.ContentPart{type: :text, text: "Looking up the device tools."},
+               %ReqLLM.Message.ContentPart{type: :provider_block, data: @search_call} = call_part,
+               %ReqLLM.Message.ContentPart{type: :provider_block, data: @search_output}
+             ] = resp.body.message.content
+
+      assert call_part.metadata.provider == :openai
+      assert call_part.metadata.block_type == "tool_search_call"
+      refute Map.has_key?(resp.body.message.metadata, :responses_replay)
+    end
+
+    test "decode_response/1 keeps a function call's namespace in its metadata" do
+      {_req, resp} = ResponsesAPI.decode_response(build_response(200, search_response()))
+
+      assert [tool_call] = resp.body.message.tool_calls
+      assert ReqLLM.ToolCall.name(tool_call) == "list"
+      assert ReqLLM.ToolCall.metadata(tool_call) == %{namespace: "devices"}
+      assert resp.body.finish_reason == :tool_calls
+    end
+
+    test "a namespaced call still resolves as an application tool call" do
+      {_req, resp} = ResponsesAPI.decode_response(build_response(200, search_response()))
+      [tool_call] = resp.body.message.tool_calls
+
+      assert %{state: :valid, arguments: %{"site" => "hq"}} =
+               ReqLLM.ToolCall.resolve(tool_call, [list_tool([])])
+    end
+
+    test "streamed search items and the call's namespace match the decoded response" do
+      {:ok, model} = ReqLLM.model("openai:gpt-5.4")
+
+      events = [
+        %{
+          "type" => "response.output_item.added",
+          "output_index" => 0,
+          "item" => %{@search_call | "arguments" => %{}, "status" => "in_progress"}
+        },
+        %{"type" => "response.output_item.done", "output_index" => 0, "item" => @search_call},
+        %{
+          "type" => "response.output_item.added",
+          "output_index" => 1,
+          "item" => %{@search_output | "status" => "in_progress"}
+        },
+        %{"type" => "response.output_item.done", "output_index" => 1, "item" => @search_output},
+        %{
+          "type" => "response.output_item.added",
+          "output_index" => 2,
+          "item" => %{@namespaced_call | "arguments" => "", "status" => "in_progress"}
+        },
+        %{
+          "type" => "response.function_call_arguments.delta",
+          "output_index" => 2,
+          "item_id" => "fc_123",
+          "delta" => ~s({"site":"hq"})
+        },
+        %{
+          "type" => "response.function_call_arguments.done",
+          "output_index" => 2,
+          "item_id" => "fc_123",
+          "arguments" => ~s({"site":"hq"})
+        },
+        %{"type" => "response.output_item.done", "output_index" => 2, "item" => @namespaced_call}
+      ]
+
+      {chunks, _state} =
+        Enum.flat_map_reduce(events, ResponsesAPI.init_stream_state(), fn event, state ->
+          ResponsesAPI.decode_stream_event(%{data: event}, model, state)
+        end)
+
+      {:ok, response} =
+        ReqLLM.Provider.ResponseBuilder.for_model(model).build_response(
+          chunks,
+          %{id: "resp_123", model: "gpt-5.4", finish_reason: :tool_calls},
+          context: ReqLLM.Context.new([]),
+          model: model
+        )
+
+      assert [
+               %ReqLLM.Message.ContentPart{type: :provider_block, data: @search_call},
+               %ReqLLM.Message.ContentPart{type: :provider_block, data: @search_output}
+             ] = response.message.content
+
+      assert [tool_call] = response.message.tool_calls
+      assert ReqLLM.ToolCall.args_map(tool_call) == %{"site" => "hq"}
+      assert ReqLLM.ToolCall.metadata(tool_call) == %{namespace: "devices"}
+    end
+
+    test "encode_body/1 replays a decoded search turn as the items the API returned" do
+      {_req, resp} = ResponsesAPI.decode_response(build_response(200, search_response()))
+
+      context =
+        ReqLLM.Context.new([
+          ReqLLM.Context.user("How many devices at hq?"),
+          resp.body.message,
+          ReqLLM.Context.tool_result("call_123", "17 devices.")
+        ])
+
+      body =
+        build_request(context: context, provider_options: [store: false])
+        |> ResponsesAPI.encode_body()
+        |> ReqLLM.Test.Helpers.json_body()
+
+      assert [user, commentary, search_call, search_output, function_call, output] =
+               body["input"]
+
+      assert user["role"] == "user"
+      assert commentary["role"] == "assistant"
+      assert search_call == @search_call
+      assert search_output == @search_output
+
+      assert function_call == %{
+               "type" => "function_call",
+               "call_id" => "call_123",
+               "name" => "list",
+               "namespace" => "devices",
+               "arguments" => ~s({"site":"hq"})
+             }
+
+      assert output["type"] == "function_call_output"
+    end
+
+    test "encode_body/1 sends a call without a namespace without the key" do
+      tool_call = ReqLLM.ToolCall.new("call_1", "get_time", "{}")
+
+      context =
+        ReqLLM.Context.new([
+          ReqLLM.Context.user("Time?"),
+          ReqLLM.Context.assistant("", tool_calls: [tool_call])
+        ])
+
+      body =
+        build_request(context: context)
+        |> ResponsesAPI.encode_body()
+        |> ReqLLM.Test.Helpers.json_body()
+
+      assert [_user, function_call] = body["input"]
+      refute Map.has_key?(function_call, "namespace")
+    end
+
+    test "encode_body/1 drops search items owned by another provider" do
+      assistant_msg = %ReqLLM.Message{
+        role: :assistant,
+        content: [
+          ReqLLM.Message.ContentPart.provider_block(:anthropic, @search_call),
+          %ReqLLM.Message.ContentPart{type: :text, text: "Answer"}
+        ]
+      }
+
+      body =
+        build_request(context: ReqLLM.Context.new([assistant_msg]))
+        |> ResponsesAPI.encode_body()
+        |> ReqLLM.Test.Helpers.json_body()
+
+      refute Enum.any?(body["input"], &(&1["type"] in ["tool_search_call", "tool_search_output"]))
+    end
+
+    test "encode_body/1 skips search items when chaining via previous_response_id" do
+      assistant_msg = %ReqLLM.Message{
+        role: :assistant,
+        content: [
+          ReqLLM.Message.ContentPart.provider_block(:openai, @search_call),
+          ReqLLM.Message.ContentPart.provider_block(:openai, @search_output)
+        ],
+        metadata: %{response_id: "resp_prev"}
+      }
+
+      body =
+        build_request(context: ReqLLM.Context.new([assistant_msg, ReqLLM.Context.user("Next")]))
+        |> ResponsesAPI.encode_body()
+        |> ReqLLM.Test.Helpers.json_body()
+
+      assert body["previous_response_id"] == "resp_prev"
+      refute Enum.any?(body["input"], &(&1["type"] in ["tool_search_call", "tool_search_output"]))
+    end
+
+    test "functions sharing a namespace are sent as one namespace tool in place of the first" do
+      direct =
+        ReqLLM.Tool.new!(
+          name: "get_time",
+          description: "Get the time.",
+          parameter_schema: [],
+          callback: fn _ -> {:ok, "now"} end
+        )
+
+      restart =
+        ReqLLM.Tool.new!(
+          name: "restart",
+          description: "Restart a device.",
+          parameter_schema: [id: [type: :string, required: true]],
+          callback: fn _ -> {:ok, "ok"} end,
+          provider_options: [
+            openai: [
+              defer_loading: true,
+              namespace: "devices",
+              namespace_description: "Inspect and manage devices."
+            ]
+          ]
+        )
+
+      invoices =
+        ReqLLM.Tool.new!(
+          name: "invoices",
+          description: "List invoices.",
+          parameter_schema: [],
+          callback: fn _ -> {:ok, "none"} end,
+          provider_options: %{openai: %{"defer_loading" => true, "namespace" => "billing"}}
+        )
+
+      tools = [
+        direct,
+        list_tool(openai: [defer_loading: true, namespace: "devices"]),
+        %{type: "tool_search"},
+        invoices,
+        restart
+      ]
+
+      assert [
+               %{"type" => "function", "name" => "get_time"},
+               %{
+                 "type" => "namespace",
+                 "name" => "devices",
+                 "description" => "Inspect and manage devices.",
+                 "tools" => [
+                   %{"type" => "function", "name" => "list", "defer_loading" => true},
+                   %{"type" => "function", "name" => "restart", "defer_loading" => true}
+                 ]
+               },
+               %{"type" => "tool_search"},
+               %{
+                 "type" => "namespace",
+                 "name" => "billing",
+                 "description" => "Tools for billing.",
+                 "tools" => [%{"type" => "function", "name" => "invoices"}]
+               }
+             ] = encode_tools(tools)
+    end
+  end
+
   describe "build_compact_body/4" do
     test "encodes the context as input with replayed output items" do
       reasoning_detail = %ReqLLM.Message.ReasoningDetails{

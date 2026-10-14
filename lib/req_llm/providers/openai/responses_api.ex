@@ -105,6 +105,8 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   @message_text_types ["output_text", "text", "refusal"]
   @reasoning_encrypted_content_include ["reasoning.encrypted_content"]
   @responses_item_providers [:openai, :openai_codex, :azure, :meta]
+  @tool_search_item_types ["tool_search_call", "tool_search_output"]
+  @replayed_item_types ["compaction" | @tool_search_item_types]
   @summary_part_separator "\n\n"
 
   @impl true
@@ -1056,11 +1058,11 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   end
 
   defp encode_ordered_assistant_items(msg, target_provider) do
-    if Enum.any?(msg.content, &ReqLLM.Compaction.compaction_part?/1) do
+    if Enum.any?(msg.content, &replayed_item_part?/1) do
       msg.content
-      |> Enum.chunk_by(&ReqLLM.Compaction.compaction_part?/1)
+      |> Enum.chunk_by(&replayed_item_part?/1)
       |> Enum.flat_map(fn [first | _] = parts ->
-        if ReqLLM.Compaction.compaction_part?(first) do
+        if replayed_item_part?(first) do
           Enum.flat_map(parts, fn part ->
             if replayable_provider_block?(part.metadata, target_provider),
               do: [part.data],
@@ -1082,8 +1084,18 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   defp replayable_provider_block?(metadata, target_provider) do
     provider = Map.get(metadata, :provider) || Map.get(metadata, "provider")
     block_type = Map.get(metadata, :block_type) || Map.get(metadata, "block_type")
-    provider == target_provider and block_type == "compaction"
+    provider == target_provider and block_type in @replayed_item_types
   end
+
+  # Output items the API expects back unchanged and in place: compaction
+  # items, and the `tool_search_call` / `tool_search_output` pair a hosted
+  # tool search produces.
+  defp replayed_item_part?(%ReqLLM.Message.ContentPart{type: :provider_block, metadata: metadata}) do
+    block_type = Map.get(metadata, :block_type) || Map.get(metadata, "block_type")
+    block_type in @replayed_item_types
+  end
+
+  defp replayed_item_part?(_part), do: false
 
   defp push_input_items(reversed_input, items) do
     Enum.reverse(items, reversed_input)
@@ -1636,7 +1648,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
                   index: index,
                   expects_arg_fragments: true
                 },
-                ReqLLM.Providers.OpenAI.Astra.async_metadata(item)
+                function_call_item_metadata(item)
               )
             )
           ]
@@ -1690,8 +1702,8 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
       type == "message" ->
         handle_message_item_done(item, data, state)
 
-      type == "compaction" ->
-        [compaction_part_chunk(item, provider)]
+      type in @replayed_item_types ->
+        [provider_block_chunk(item, provider)]
 
       code_interpreter_item?(item) ->
         [ReqLLM.StreamChunk.meta(%{code_interpreter_item: item})]
@@ -1704,7 +1716,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     end
   end
 
-  defp compaction_part_chunk(item, provider) do
+  defp provider_block_chunk(item, provider) do
     ReqLLM.StreamChunk.content_part(
       ReqLLM.Message.ContentPart.provider_block(provider, stringify_keys(item))
     )
@@ -1779,7 +1791,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
                 index: index,
                 expects_arg_fragments: true
               },
-              ReqLLM.Providers.OpenAI.Astra.async_metadata(item)
+              function_call_item_metadata(item)
             )
           )
         ]
@@ -1787,7 +1799,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
         []
       end
 
-    metadata = ReqLLM.Providers.OpenAI.Astra.async_metadata(item)
+    metadata = function_call_item_metadata(item)
 
     chunks =
       if map_size(metadata) > 0 do
@@ -1942,15 +1954,111 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
         "arguments" => ReqLLM.ToolCall.args_json(tc)
       }
       |> ReqLLM.Providers.OpenAI.Astra.put_async(ReqLLM.ToolCall.metadata(tc))
+      |> put_namespace(ReqLLM.ToolCall.metadata(tc))
     end)
+  end
+
+  # A call to a function that tool search loaded carries the namespace it was
+  # loaded under: the namespace's name, or the function's own name when it has
+  # none. Once the search items are replayed, the API rejects the call unless
+  # the namespace comes back with it.
+  defp namespace_metadata(item) do
+    case item["namespace"] || item[:namespace] do
+      namespace when is_binary(namespace) and namespace != "" -> %{namespace: namespace}
+      _ -> %{}
+    end
+  end
+
+  defp put_namespace(item, metadata) do
+    case Map.get(metadata, :namespace) || Map.get(metadata, "namespace") do
+      namespace when is_binary(namespace) and namespace != "" ->
+        Map.put(item, "namespace", namespace)
+
+      _ ->
+        item
+    end
+  end
+
+  defp function_call_item_metadata(item) do
+    item
+    |> ReqLLM.Providers.OpenAI.Astra.async_metadata()
+    |> Map.merge(namespace_metadata(item))
   end
 
   defp encode_tools_if_any(request) do
     case request.options[:tools] do
       nil -> nil
       [] -> nil
-      tools -> Enum.map(tools, &encode_tool_for_responses_api/1)
+      tools -> encode_tools_for_responses_api(tools)
     end
+  end
+
+  # Functions that share an OpenAI `namespace` provider option are sent as one
+  # `namespace` tool, in the position of the first of them. Every other tool
+  # keeps its place, so the tool list is identical on every request.
+  defp encode_tools_for_responses_api(tools) do
+    {entries, namespaces} =
+      Enum.reduce(tools, {[], %{}}, fn tool, {entries, namespaces} ->
+        encoded = encode_tool_for_responses_api(tool)
+
+        case tool_namespace(tool) do
+          nil ->
+            {[{:tool, encoded} | entries], namespaces}
+
+          {name, description} ->
+            case Map.fetch(namespaces, name) do
+              {:ok, {group_description, group_tools}} ->
+                {entries,
+                 Map.put(
+                   namespaces,
+                   name,
+                   {group_description || description, [encoded | group_tools]}
+                 )}
+
+              :error ->
+                {[{:namespace, name} | entries],
+                 Map.put(namespaces, name, {description, [encoded]})}
+            end
+        end
+      end)
+
+    entries
+    |> Enum.reverse()
+    |> Enum.map(fn
+      {:tool, encoded} -> encoded
+      {:namespace, name} -> encode_namespace_tool(name, Map.fetch!(namespaces, name))
+    end)
+  end
+
+  defp tool_namespace(%ReqLLM.Tool{} = tool) do
+    options = ReqLLM.Tool.provider_options(tool, :openai)
+
+    case option_value(options, :namespace) do
+      name when is_binary(name) and name != "" ->
+        {name, non_blank(option_value(options, :namespace_description))}
+
+      _ ->
+        nil
+    end
+  end
+
+  defp tool_namespace(_tool), do: nil
+
+  defp option_value(options, key),
+    do: Map.get(options, key) || Map.get(options, Atom.to_string(key))
+
+  defp non_blank(value) when is_binary(value) and value != "", do: value
+  defp non_blank(_value), do: nil
+
+  # The API requires a description on every namespace. Without a
+  # `namespace_description` option, the namespace's name stands in.
+  defp encode_namespace_tool(name, {description, tools}) do
+    %{
+      "type" => "namespace",
+      "name" => name,
+      "description" => description || "Tools for #{name}.",
+      "tools" => Enum.reverse(tools)
+    }
   end
 
   defp ensure_deep_research_tools(tools, request) do
@@ -2319,8 +2427,9 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     text_chunks = buffered_text_chunks(text, output_segments)
 
     chunks =
-      if Map.has_key?(message_metadata, :responses_replay) do
-        buffered_compaction_chunks(output_segments, model.provider)
+      if Map.has_key?(message_metadata, :responses_replay) or
+           Enum.any?(output_segments, &tool_search_item?/1) do
+        buffered_ordered_chunks(output_segments, model.provider)
       else
         buffered_response_chunks(text_chunks, thinking, tool_calls, reasoning_details)
       end
@@ -2346,11 +2455,17 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     end
   end
 
-  defp buffered_compaction_chunks(segments, provider) do
+  defp tool_search_item?(%{"type" => type}), do: type in @tool_search_item_types
+  defp tool_search_item?(_segment), do: false
+
+  # Builds the message content in output order, so an item that must be
+  # replayed in place, such as a compaction or tool search item, keeps its
+  # position among the text and reasoning around it.
+  defp buffered_ordered_chunks(segments, provider) do
     {content_chunks, _has_summary} =
       Enum.map_reduce(ReqLLM.Providers.OpenAI.MultiAgent.rendered_items(segments), false, fn
-        %{"type" => "compaction"} = item, has_summary ->
-          {[compaction_part_chunk(item, provider)], has_summary}
+        %{"type" => type} = item, has_summary when type in @replayed_item_types ->
+          {[provider_block_chunk(item, provider)], has_summary}
 
         item, has_summary ->
           summary = extract_reasoning_summary([item])
@@ -2745,7 +2860,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     name = seg["name"] || "unknown"
 
     ReqLLM.ToolCall.new(id, name, args_json)
-    |> ReqLLM.ToolCall.put_metadata(ReqLLM.Providers.OpenAI.Astra.async_metadata(seg))
+    |> ReqLLM.ToolCall.put_metadata(function_call_item_metadata(seg))
     |> ReqLLM.ToolCall.put_metadata(ReqLLM.Providers.OpenAI.MultiAgent.metadata(seg))
   end
 

@@ -509,6 +509,69 @@ replay automatically:
 
 Compaction is available on OpenAI and Azure OpenAI Responses API models.
 
+## Tool Search (Responses API)
+
+Tool search keeps most tools out of the model's context until it needs them.
+Every tool is declared on every request, so the prompt prefix stays cacheable.
+Tools marked `defer_loading: true` are loaded only when the model finds them
+with the hosted `tool_search` tool. Tool search is a Responses API feature;
+Chat Completions rejects the `tool_search` tool.
+
+```elixir
+list_devices =
+  ReqLLM.Tool.new!(
+    name: "list",
+    description: "List the managed devices at a site.",
+    parameter_schema: [site: [type: :string, required: true]],
+    callback: &MyApp.Devices.list/1,
+    provider_options: [
+      openai: [
+        defer_loading: true,
+        namespace: "devices",
+        namespace_description: "Inspect and manage devices."
+      ]
+    ]
+  )
+
+{:ok, response} =
+  ReqLLM.generate_text("openai:gpt-5.4", context,
+    tools: [%{type: "tool_search"}, get_time, list_devices, restart_device],
+    provider_options: [store: false]
+  )
+```
+
+OpenAI tool options:
+
+- `defer_loading: true` keeps the function out of context until a search
+  loads it. The API rejects deferred functions unless the request also
+  includes the `tool_search` tool.
+- `namespace` groups related functions. Functions that share a namespace are
+  sent as one `namespace` tool, in the position of the first of them, so the
+  model can load the whole group at once. The function keeps its own name, and
+  calls come back under that name.
+- `namespace_description` describes the group. The API requires a description
+  on every namespace. Set it on any one function in the group. Without it, the
+  description is `"Tools for <namespace>."`.
+
+A search adds `tool_search_call` and `tool_search_output` items to the
+response. They arrive as `:provider_block` content parts on the assistant
+message, in their output position; when streaming, they arrive as
+`:content_part` chunks on `response.output_item.done`. Each call to a function
+the search loaded carries a `namespace`: the group's name, or the function's
+own name when it has no group. It is kept in the tool call's metadata:
+
+```elixir
+[call] = response.message.tool_calls
+ReqLLM.ToolCall.metadata(call)
+#=> %{namespace: "devices"}
+```
+
+Keep the message as returned. On the next request, the search items replay
+unchanged in place, and each function call replays with its `namespace`. The
+API rejects a replayed history that holds the search items but drops a call's
+namespace. When a request chains through `previous_response_id`, the service
+already holds these items and they are not sent again.
+
 ## WebSocket Mode
 
 ReqLLM keeps SSE as the default transport for OpenAI streaming, but Responses models can opt into OpenAI WebSocket mode per request:

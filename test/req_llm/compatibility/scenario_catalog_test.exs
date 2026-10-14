@@ -21,7 +21,7 @@ defmodule ReqLLM.Compatibility.ScenarioCatalogTest do
     "core" => ~w(basic usage token_limit),
     "conversation" => ~w(context_append),
     "streaming" => ~w(streaming),
-    "tools" => ~w(tool_none tool_multi tool_round_trip),
+    "tools" => ~w(tool_none tool_multi tool_round_trip tool_search),
     "prompt_cache" => ~w(sequential_tool_cache),
     "objects" => ~w(object_basic object_streaming),
     "reasoning" => ~w(reasoning reasoning_summary reasoning_context),
@@ -56,7 +56,7 @@ defmodule ReqLLM.Compatibility.ScenarioCatalogTest do
     test "represents every scenario once" do
       scenario_ids = Enum.map(ScenarioCatalog.scenarios(), & &1.id)
 
-      assert length(scenario_ids) == 53
+      assert length(scenario_ids) == 54
       assert length(scenario_ids) == MapSet.size(MapSet.new(scenario_ids))
     end
 

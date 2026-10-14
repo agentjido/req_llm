@@ -208,6 +208,19 @@ defmodule ReqLLM.Compatibility.ScenarioCatalog do
                          "compaction_server_side_basic",
                          "compaction_server_side_streaming"
                        ]},
+                      {"tool_search", "tools",
+                       applicability: :focused,
+                       providers: [:openai],
+                       input_modalities: [:text, :tool_result],
+                       output_modalities: [:text, :tool_call],
+                       requirements: [:tool_calling],
+                       transports: [:request_response, :server_sent_events],
+                       fixtures: [
+                         "tool_search_1",
+                         "tool_search_2",
+                         "tool_search_streaming_1",
+                         "tool_search_streaming_2"
+                       ]},
                       {"embed_basic", "embedding",
                        output_modalities: [:embedding], requirements: [:embedding]},
                       {"embed_usage", "embedding",
@@ -397,6 +410,11 @@ defmodule ReqLLM.Compatibility.ScenarioCatalog do
       provider: :openai,
       scenario: "compaction_server_side",
       test_file: "test/coverage/openai/responses_context_test.exs"
+    },
+    %{
+      provider: :openai,
+      scenario: "tool_search",
+      test_file: "test/coverage/openai/tool_search_test.exs"
     },
     %{
       provider: :azure,

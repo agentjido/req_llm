@@ -1,0 +1,475 @@
+{
+  "captured_at": "2026-10-14T21:57:33.651730Z",
+  "model_spec": "openai:gpt-5.4",
+  "provider": "openai",
+  "request": {
+    "body": {
+      "b64": "eyJpbmNsdWRlIjpbInJlYXNvbmluZy5lbmNyeXB0ZWRfY29udGVudCJdLCJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IkhvdyBtYW55IG1hbmFnZWQgZGV2aWNlcyBhcmUgYXQgdGhlIGhxIHNpdGU/IFVzZSB5b3VyIHRvb2xzOyBuZXZlciBndWVzcy4iLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifSx7ImVuY3J5cHRlZF9jb250ZW50IjoiZ0FBQUFBQnF6X3JNOXI4NzV0SXo1Vzh3YWxFOE9LTUNiYlRxQm0zUnlVM2Iwb2JXbkUyMEw0amNIdEdDSnIxc3psT3BKWTMtVGtGeU01clplT1VIUEdZUmFVZm5fZE9sV1UydWxGV2hLZENQNHJSMUVBQTlmdnZJU2VWYkxoUVBKOVdQb3JoN3hZbnZZWjRrdVc1NlJ3YTU3RmJnU3RLMThSUGFmSDdpejlVMEFnU0VOcWRLNXRmX2JDV0J6MmRHUXBfc0xERTlZWUszMHNQSFdZVm5EV1JlRGRZRlFSbFdIdm5sVmZQemZrdGZZY3daM0ZmXzU3b1pBQUdwT1hYX25JWERYZ2QzVEJ6Ty1LTXAySUtGMmQ2X1N5UFlWdlk3bGhpbVdhLXZpM00tNUhqcXZnM0xyNUxTVmItQVRvYnBXS2hqd3VaM2pNWWlaUEFMVDNMTzNncHdHdTdzeHZGN3hvTXp6cFQtQUpIYzY5Q2ctQ3ZzNUJDRnhGZEVJcFU2RUp5eXBocVlXNlRodkhIN21Od0FkRmF1VWtKVURyZHVKOS1kU3lsbjZFSkJMU1ZRUnpLb1Q3Wjd3b1VHZjNLZmNJdUNjTGcycDA2ZDI1RHlpTHROUlNseVE4anhIaWV3MGZJT1NqMDVjV0U5Y01RLWpLM0Q5c1BPY0E5am1sVU5tY0xqVmxZZ0gzWTFRaUphc1VXeFI1dWN0MVdyeUJDTUE5NUFtSTMtdGRjbWdnMTZ3RENzT0pXTlJweTBBal9hTXBLT0J6ZkZ0NDFOZ0Z5d3JYckFPTDBxa0lDSC1oaU5wX19UdWhRZjRVNTFBVEZ6c0tvVGlMODhfV0hiTzU2RENnTDJKLWp3SFI3WUt0WmNSbHYwN3J1R3QxRjJPa041d1FNUFNlYWlJaTFnaGJpdVpuUy1aNmY5X044eWJLVWhDR2tLWVpsYXhaN3ptLVI5VTBHTExpajRKcWFlV0NrUHBQTi14SUtfcU13NkJiLUFlTkd3dUYycWdNNFpBallMUU13VXlIdTloRlpCRlE1Yl9RWldPT1QwXzA0SG03TnA1clpIZkpOZnNzdnVnWm45QlU2a0Z6Q0ZWYWpOb3JsRGEwdlNOaVEwNnYxZDdWSGRjNWpoaG9rOEJRSHY3d0x6X3BmQVpxWVFma01CdVpmWlpONWw1bXVqUEp4UE5CX2V4Mk5zNVNEaDkyNkxKai1zaWtyOVBhclpEUUtGQl94QU1GVmRsQVFFa010dVUzRTRfMkhHODV2T1BYb3J1ZGZVRkllR09KSC1PVGdFX1FKS2RlajhWLTU1QjAzeXBDVmdzSU9ZTVU3RzF2TkFHb2ZlVkwya0c2Y0gxeG5zd1pFQ2tGeG9yNDFrSmJDanNSUzF3aGxJaUU2aHpJdEx0QjluTkszdlRfeEVqOTBRR0FwWGZFZlNDakcxampOYUZjT1JrQWxNeHdfTjhKWkZvQVVCSEpHSHp5eTNQb3UtMV91YkYyUWQwbFNrb1RXa0NHcE1FQ0EtTWJhNEZXZ2dFbFZIVlY3NTVxNVY5cjlBX1hRX2QxLTFhakoyRUlKV20yb1pSUGVYckl2R1hUQU9sbkx4ZUdfbG9QV2hJN2FUMERyVUJRNnREbVUzMzRacEZPRFkxcUU5aHFweTlrUTFSUDctenpKb3dzeHAybEtMeGtpNjdaSGp2ckh4ZFBxdENabkd3Z2U3cXF0REZETVl4TUlNb2tucmNGOGJibHBzVUhHME1yTE9rcXJraWlONl9sbTFwTWVGNk1SMVVhUWs0SDc5eGktNFdEby1zblNPZXJGdHJyTGhFWWltUV82SlRkdThHekN2NkltWnRnRS1uN2JZYlV4R1ZRSFQ5aGt6UFpoX25CNjkwcHdZN1dUUE9XRHJ0LUR2RGJLQ1pzWDBLYWZhdG5sSEpIZFUwUmwzbDJGaFJyN0tZNnRZR2h2bnA4RXpDU24tUEs2a1Q5NE9xdFVQdWRlcnpsWUJyb1hWaDlYaEhjZHhyMmxHNXFzTkswbk5QLUhHay1hRVJTNGZFZHNQYzlkVDh1X1VXOVFwLTRmc3Q0MkRrX0dNczZmNndZOG9zekpIOURQTGl6ZlExTmo2NE9UNUt4YjBlY1BadjdhUl9wb1VJSUFURDJOaCIsImlkIjoicnNfMDM2NjczODIwZWJjYmMwYzAxNmFjZmZhY2JiNWM0ODdkMDljYTIzMGNiMzU2ZjA3YmUiLCJzdW1tYXJ5IjpbXSwidHlwZSI6InJlYXNvbmluZyJ9LHsiYXJndW1lbnRzIjp7InBhdGhzIjpbImRldmljZXMiXX0sImNhbGxfaWQiOm51bGwsImV4ZWN1dGlvbiI6InNlcnZlciIsImlkIjoidHNjXzAzNjY3MzgyMGViY2JjMGMwMTZhY2ZmYWNiZmQ1NDg3ZDBiYzQxYjUyZTc2M2ZjOTg5Iiwic3RhdHVzIjoiY29tcGxldGVkIiwidHlwZSI6InRvb2xfc2VhcmNoX2NhbGwifSx7ImNhbGxfaWQiOm51bGwsImV4ZWN1dGlvbiI6InNlcnZlciIsImlkIjoidHNvXzAzNjY3MzgyMGViY2JjMGMwMTZhY2ZmYWNjMjRhMDg3ZDA5NDIwN2Q1MTZkM2QwMWE2Iiwic3RhdHVzIjoiY29tcGxldGVkIiwidG9vbHMiOlt7ImRlc2NyaXB0aW9uIjoiVG9vbHMgZm9yIGRldmljZXMgYXQgYSBzaXRlLiIsIm5hbWUiOiJkZXZpY2VzIiwidG9vbHMiOlt7ImRlZmVyX2xvYWRpbmciOnRydWUsImRlc2NyaXB0aW9uIjoiTGlzdCB0aGUgbWFuYWdlZCBkZXZpY2VzIGF0IGEgc2l0ZSwgd2l0aCB0aGUgZGV2aWNlIGNvdW50LiIsIm5hbWUiOiJsaXN0Iiwib3V0cHV0X3NjaGVtYSI6bnVsbCwicGFyYW1ldGVycyI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnsic2l0ZSI6eyJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJzaXRlIl0sInR5cGUiOiJvYmplY3QifSwic3RyaWN0IjpmYWxzZSwidHlwZSI6ImZ1bmN0aW9uIn0seyJkZWZlcl9sb2FkaW5nIjp0cnVlLCJkZXNjcmlwdGlvbiI6IlJlc3RhcnQgdGhlIG1hbmFnZWQgZGV2aWNlcyBhdCBhIHNpdGUuIiwibmFtZSI6InJlc3RhcnQiLCJvdXRwdXRfc2NoZW1hIjpudWxsLCJwYXJhbWV0ZXJzIjp7ImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjpmYWxzZSwicHJvcGVydGllcyI6eyJzaXRlIjp7InR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbInNpdGUiXSwidHlwZSI6Im9iamVjdCJ9LCJzdHJpY3QiOmZhbHNlLCJ0eXBlIjoiZnVuY3Rpb24ifV0sInR5cGUiOiJuYW1lc3BhY2UifV0sInR5cGUiOiJ0b29sX3NlYXJjaF9vdXRwdXQifSx7ImFyZ3VtZW50cyI6IntcInNpdGVcIjpcImhxXCJ9IiwiY2FsbF9pZCI6ImNhbGxfSlhWSUFNWEc4c2JRaUZPRktDQlhlMUFNIiwibmFtZSI6Imxpc3QiLCJuYW1lc3BhY2UiOiJkZXZpY2VzIiwidHlwZSI6ImZ1bmN0aW9uX2NhbGwifSx7ImNhbGxfaWQiOiJjYWxsX0pYVklBTVhHOHNiUWlGT0ZLQ0JYZTFBTSIsIm91dHB1dCI6IlNpdGUgaHEgaGFzIDE3IG1hbmFnZWQgZGV2aWNlcy4iLCJ0eXBlIjoiZnVuY3Rpb25fY2FsbF9vdXRwdXQifV0sIm1heF9vdXRwdXRfdG9rZW5zIjoxMDI0LCJtb2RlbCI6ImdwdC01LjQiLCJyZWFzb25pbmciOnsiZWZmb3J0IjoibG93In0sInN0b3JlIjpmYWxzZSwic3RyZWFtIjpmYWxzZSwidG9vbHMiOlt7InR5cGUiOiJ0b29sX3NlYXJjaCJ9LHsiZGVzY3JpcHRpb24iOiJHZXQgdGhlIGN1cnJlbnQgVVRDIHRpbWUuIiwibmFtZSI6ImdldF90aW1lIiwicGFyYW1ldGVycyI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnt9LCJ0eXBlIjoib2JqZWN0In0sInN0cmljdCI6ZmFsc2UsInR5cGUiOiJmdW5jdGlvbiJ9LHsiZGVzY3JpcHRpb24iOiJUb29scyBmb3IgZGV2aWNlcyBhdCBhIHNpdGUuIiwibmFtZSI6ImRldmljZXMiLCJ0b29scyI6W3siZGVmZXJfbG9hZGluZyI6dHJ1ZSwiZGVzY3JpcHRpb24iOiJMaXN0IHRoZSBtYW5hZ2VkIGRldmljZXMgYXQgYSBzaXRlLCB3aXRoIHRoZSBkZXZpY2UgY291bnQuIiwibmFtZSI6Imxpc3QiLCJwYXJhbWV0ZXJzIjp7ImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjpmYWxzZSwicHJvcGVydGllcyI6eyJzaXRlIjp7InR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbInNpdGUiXSwidHlwZSI6Im9iamVjdCJ9LCJzdHJpY3QiOmZhbHNlLCJ0eXBlIjoiZnVuY3Rpb24ifSx7ImRlZmVyX2xvYWRpbmciOnRydWUsImRlc2NyaXB0aW9uIjoiUmVzdGFydCB0aGUgbWFuYWdlZCBkZXZpY2VzIGF0IGEgc2l0ZS4iLCJuYW1lIjoicmVzdGFydCIsInBhcmFtZXRlcnMiOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7InNpdGUiOnsidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsic2l0ZSJdLCJ0eXBlIjoib2JqZWN0In0sInN0cmljdCI6ZmFsc2UsInR5cGUiOiJmdW5jdGlvbiJ9XSwidHlwZSI6Im5hbWVzcGFjZSJ9LHsiZGVzY3JpcHRpb24iOiJUb29scyBmb3IgYmlsbGluZyBhdCBhIHNpdGUuIiwibmFtZSI6ImJpbGxpbmciLCJ0b29scyI6W3siZGVmZXJfbG9hZGluZyI6dHJ1ZSwiZGVzY3JpcHRpb24iOiJMaXN0IHRoZSBpbnZvaWNlcyBmb3IgYSBzaXRlLiIsIm5hbWUiOiJpbnZvaWNlcyIsInBhcmFtZXRlcnMiOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7InNpdGUiOnsidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsic2l0ZSJdLCJ0eXBlIjoib2JqZWN0In0sInN0cmljdCI6ZmFsc2UsInR5cGUiOiJmdW5jdGlvbiJ9XSwidHlwZSI6Im5hbWVzcGFjZSJ9XX0="
+    },
+    "canonical_json": {
+      "include": [
+        "reasoning.encrypted_content"
+      ],
+      "input": [
+        {
+          "content": [
+            {
+              "text": "How many managed devices are at the hq site? Use your tools; never guess.",
+              "type": "input_text"
+            }
+          ],
+          "role": "user"
+        },
+        {
+          "encrypted_content": "gAAAAABqz_rM9r875tIz5W8walE8OKMCbbTqBm3RyU3b0obWnE20L4jcHtGCJr1szlOpJY3-TkFyM5rZeOUHPGYRaUfn_dOlWU2ulFWhKdCP4rR1EAA9fvvISeVbLhQPJ9WPorh7xYnvYZ4kuW56Rwa57FbgStK18RPafH7iz9U0AgSENqdK5tf_bCWBz2dGQp_sLDE9YYK30sPHWYVnDWReDdYFQRlWHvnlVfPzfktfYcwZ3Ff_57oZAAGpOXX_nIXDXgd3TBzO-KMp2IKF2d6_SyPYVvY7lhimWa-vi3M-5Hjqvg3Lr5LSVb-ATobpWKhjwuZ3jMYiZPALT3LO3gpwGu7sxvF7xoMzzpT-AJHc69Cg-Cvs5BCFxFdEIpU6EJyyphqYW6ThvHH7mNwAdFauUkJUDrduJ9-dSyln6EJBLSVQRzKoT7Z7woUGf3KfcIuCcLg2p06d25DyiLtNRSlyQ8jxHiew0fIOSj05cWE9cMQ-jK3D9sPOcA9jmlUNmcLjVlYgH3Y1QiJasUWxR5uct1WryBCMA95AmI3-tdcmgg16wDCsOJWNRpy0Aj_aMpKOBzfFt41NgFywrXrAOL0qkICH-hiNp__TuhQf4U51ATFzsKoTiL88_WHbO56DCgL2J-jwHR7YKtZcRlv07ruGt1F2OkN5wQMPSeaiIi1ghbiuZnS-Z6f9_N8ybKUhCGkKYZlaxZ7zm-R9U0GLLij4JqaeWCkPpPN-xIK_qMw6Bb-AeNGwuF2qgM4ZAjYLQMwUyHu9hFZBFQ5b_QZWOOT0_04Hm7Np5rZHfJNfssvugZn9BU6kFzCFVajNorlDa0vSNiQ06v1d7VHdc5jhhok8BQHv7wLz_pfAZqYQfkMBuZfZZN5l5mujPJxPNB_ex2Ns5SDh926LJj-sikr9ParZDQKFB_xAMFVdlAQEkMtuU3E4_2HG85vOPXorudfUFIeGOJH-OTgE_QJKdej8V-55B03ypCVgsIOYMU7G1vNAGofeVL2kG6cH1xnswZECkFxor41kJbCjsRS1whlIiE6hzItLtB9nNK3vT_xEj90QGApXfEfSCjG1jjNaFcORkAlMxw_N8JZFoAUBHJGHzyy3Pou-1_ubF2Qd0lSkoTWkCGpMECA-Mba4FWggElVHVV755q5V9r9A_XQ_d1-1ajJ2EIJWm2oZRPeXrIvGXTAOlnLxeG_loPWhI7aT0DrUBQ6tDmU334ZpFODY1qE9hqpy9kQ1RP7-zzJowsxp2lKLxki67ZHjvrHxdPqtCZnGwge7qqtDFDMYxMIMoknrcF8bblpsUHG0MrLOkqrkiiN6_lm1pMeF6MR1UaQk4H79xi-4WDo-snSOerFtrrLhEYimQ_6JTdu8GzCv6ImZtgE-n7bYbUxGVQHT9hkzPZh_nB690pwY7WTPOWDrt-DvDbKCZsX0KafatnlHJHdU0Rl3l2FhRr7KY6tYGhvnp8EzCSn-PK6kT94OqtUPuderzlYBroXVh9XhHcdxr2lG5qsNK0nNP-HGk-aERS4fEdsPc9dT8u_UW9Qp-4fst42Dk_GMs6f6wY8oszJH9DPLizfQ1Nj64OT5Kxb0ecPZv7aR_poUIIATD2Nh",
+          "id": "rs_036673820ebcbc0c016acffacbb5c487d09ca230cb356f07be",
+          "summary": [],
+          "type": "reasoning"
+        },
+        {
+          "arguments": {
+            "paths": [
+              "devices"
+            ]
+          },
+          "call_id": null,
+          "execution": "server",
+          "id": "tsc_036673820ebcbc0c016acffacbfd5487d0bc41b52e763fc989",
+          "status": "completed",
+          "type": "tool_search_call"
+        },
+        {
+          "call_id": null,
+          "execution": "server",
+          "id": "tso_036673820ebcbc0c016acffacc24a087d094207d516d3d01a6",
+          "status": "completed",
+          "tools": [
+            {
+              "description": "Tools for devices at a site.",
+              "name": "devices",
+              "tools": [
+                {
+                  "defer_loading": true,
+                  "description": "List the managed devices at a site, with the device count.",
+                  "name": "list",
+                  "output_schema": null,
+                  "parameters": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "site": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "site"
+                    ],
+                    "type": "object"
+                  },
+                  "strict": false,
+                  "type": "function"
+                },
+                {
+                  "defer_loading": true,
+                  "description": "Restart the managed devices at a site.",
+                  "name": "restart",
+                  "output_schema": null,
+                  "parameters": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "site": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "site"
+                    ],
+                    "type": "object"
+                  },
+                  "strict": false,
+                  "type": "function"
+                }
+              ],
+              "type": "namespace"
+            }
+          ],
+          "type": "tool_search_output"
+        },
+        {
+          "arguments": "{\"site\":\"hq\"}",
+          "call_id": "call_JXVIAMXG8sbQiFOFKCBXe1AM",
+          "name": "list",
+          "namespace": "devices",
+          "type": "function_call"
+        },
+        {
+          "call_id": "call_JXVIAMXG8sbQiFOFKCBXe1AM",
+          "output": "Site hq has 17 managed devices.",
+          "type": "function_call_output"
+        }
+      ],
+      "max_output_tokens": 1024,
+      "model": "gpt-5.4",
+      "reasoning": {
+        "effort": "low"
+      },
+      "store": false,
+      "stream": false,
+      "tools": [
+        {
+          "type": "tool_search"
+        },
+        {
+          "description": "Get the current UTC time.",
+          "name": "get_time",
+          "parameters": {
+            "additionalProperties": false,
+            "properties": {},
+            "type": "object"
+          },
+          "strict": false,
+          "type": "function"
+        },
+        {
+          "description": "Tools for devices at a site.",
+          "name": "devices",
+          "tools": [
+            {
+              "defer_loading": true,
+              "description": "List the managed devices at a site, with the device count.",
+              "name": "list",
+              "parameters": {
+                "additionalProperties": false,
+                "properties": {
+                  "site": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "site"
+                ],
+                "type": "object"
+              },
+              "strict": false,
+              "type": "function"
+            },
+            {
+              "defer_loading": true,
+              "description": "Restart the managed devices at a site.",
+              "name": "restart",
+              "parameters": {
+                "additionalProperties": false,
+                "properties": {
+                  "site": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "site"
+                ],
+                "type": "object"
+              },
+              "strict": false,
+              "type": "function"
+            }
+          ],
+          "type": "namespace"
+        },
+        {
+          "description": "Tools for billing at a site.",
+          "name": "billing",
+          "tools": [
+            {
+              "defer_loading": true,
+              "description": "List the invoices for a site.",
+              "name": "invoices",
+              "parameters": {
+                "additionalProperties": false,
+                "properties": {
+                  "site": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "site"
+                ],
+                "type": "object"
+              },
+              "strict": false,
+              "type": "function"
+            }
+          ],
+          "type": "namespace"
+        }
+      ]
+    },
+    "headers": {
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.7.5"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.openai.com/v1/responses"
+  },
+  "response": {
+    "body": {
+      "tool_usage": {
+        "image_gen": {
+          "input_tokens": 0,
+          "input_tokens_details": {
+            "image_tokens": 0,
+            "text_tokens": 0
+          },
+          "output_tokens": 0,
+          "output_tokens_details": {
+            "image_tokens": 0,
+            "text_tokens": 0
+          },
+          "total_tokens": 0
+        },
+        "web_search": {
+          "num_requests": 0
+        }
+      },
+      "background": false,
+      "text": {
+        "format": {
+          "type": "text"
+        },
+        "verbosity": "medium"
+      },
+      "moderation": null,
+      "top_logprobs": 0,
+      "previous_response_id": null,
+      "tool_choice": "auto",
+      "service_tier": "default",
+      "status": "completed",
+      "tools": [
+        {
+          "description": "Get the current UTC time.",
+          "name": "get_time",
+          "output_schema": null,
+          "parameters": {
+            "additionalProperties": false,
+            "properties": {},
+            "type": "object"
+          },
+          "strict": false,
+          "type": "function"
+        },
+        {
+          "description": null,
+          "parameters": null,
+          "type": "tool_search"
+        },
+        {
+          "description": "Tools for devices at a site.",
+          "name": "devices",
+          "tools": [
+            {
+              "description": "List the managed devices at a site, with the device count.",
+              "name": "list",
+              "output_schema": null,
+              "parameters": {
+                "additionalProperties": false,
+                "properties": {
+                  "site": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "site"
+                ],
+                "type": "object"
+              },
+              "strict": false,
+              "type": "function"
+            },
+            {
+              "description": "Restart the managed devices at a site.",
+              "name": "restart",
+              "output_schema": null,
+              "parameters": {
+                "additionalProperties": false,
+                "properties": {
+                  "site": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "site"
+                ],
+                "type": "object"
+              },
+              "strict": false,
+              "type": "function"
+            }
+          ],
+          "type": "namespace"
+        },
+        {
+          "description": "Tools for billing at a site.",
+          "name": "billing",
+          "tools": [
+            {
+              "defer_loading": true,
+              "description": "List the invoices for a site.",
+              "name": "invoices",
+              "output_schema": null,
+              "parameters": {
+                "additionalProperties": false,
+                "properties": {
+                  "site": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "site"
+                ],
+                "type": "object"
+              },
+              "strict": false,
+              "type": "function"
+            }
+          ],
+          "type": "namespace"
+        }
+      ],
+      "id": "resp_036673820ebcbc0c016acffaccc50087d0bd29cd0e9e27c143",
+      "temperature": 1.0,
+      "max_output_tokens": 1024,
+      "user": null,
+      "frequency_penalty": 0.0,
+      "error": null,
+      "model": "gpt-5.4-2026-03-05",
+      "usage": {
+        "input_tokens": 704,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 14,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 718
+      },
+      "safety_identifier": null,
+      "object": "response",
+      "parallel_tool_calls": true,
+      "output": [
+        {
+          "content": [
+            {
+              "annotations": [],
+              "logprobs": [],
+              "text": "The hq site has 17 managed devices.",
+              "type": "output_text"
+            }
+          ],
+          "id": "msg_036673820ebcbc0c016acffacd43ac87d0983246918a6b0843",
+          "phase": "final_answer",
+          "role": "assistant",
+          "status": "completed",
+          "type": "message"
+        }
+      ],
+      "instructions": null,
+      "store": false,
+      "presence_penalty": 0.0,
+      "access_programs": null,
+      "incomplete_details": null,
+      "reasoning": {
+        "context": "current_turn",
+        "effort": "low",
+        "mode": "standard",
+        "summary": null
+      },
+      "completed_at": 1792015053,
+      "truncation": "disabled",
+      "top_p": 0.98,
+      "billing": {
+        "payer": "developer"
+      },
+      "prompt_cache_retention": "24h",
+      "metadata": {},
+      "prompt_cache_key": null,
+      "created_at": 1792015052,
+      "max_tool_calls": null
+    },
+    "headers": {
+      "access-control-expose-headers": [
+        "X-Request-ID",
+        "CF-Ray",
+        "CF-Ray"
+      ],
+      "alt-svc": [
+        "h3=\":443\"; ma=86400"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a4a9d71f4a8be1ee-LAX"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-length": [
+        "4286"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Wed, 14 Oct 2026 21:57:33 GMT"
+      ],
+      "openai-organization": "[REDACTED:openai-organization]",
+      "openai-processing-ms": [
+        "809"
+      ],
+      "openai-project": [
+        "[REDACTED:openai-project]"
+      ],
+      "openai-version": [
+        "2020-10-01"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": "[REDACTED:set-cookie]",
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-ratelimit-limit-requests": [
+        "15000"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "40000000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "14997"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "40000000"
+      ],
+      "x-ratelimit-reset-requests": [
+        "12ms"
+      ],
+      "x-ratelimit-reset-tokens": [
+        "0s"
+      ],
+      "x-request-id": [
+        "req_1cdadf99d835483f9efe98f53c1a1168"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}
