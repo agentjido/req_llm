@@ -399,7 +399,7 @@ defmodule ReqLLM.Providers.GoogleVertex do
 
   defp validate_no_prefill(model, context) do
     case get_model_family(model) do
-      "gemini" -> ReqLLM.Providers.Google.validate_no_prefill(context)
+      "gemini" -> ReqLLM.Providers.Google.validate_no_prefill(model, context)
       _ -> :ok
     end
   end

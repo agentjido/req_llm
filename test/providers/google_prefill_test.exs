@@ -12,7 +12,7 @@ defmodule ReqLLM.Providers.GooglePrefillTest do
       ] do
     describe "#{provider_id} assistant prefill" do
       setup do
-        model = ReqLLM.model!(unquote("#{provider_id}:gemini-2.5-flash"))
+        model = ReqLLM.model!(unquote("#{provider_id}:gemini-3.8-flash"))
 
         context =
           Context.new([Context.user("Translate hello"), Context.assistant("Translation:")])
@@ -94,6 +94,85 @@ defmodule ReqLLM.Providers.GooglePrefillTest do
                  state.provider.attach_stream(state.model, context, state.opts, nil)
       end
 
+      test "an empty user turn cannot hide an assistant prefill", state do
+        context = Context.append(state.context, Context.user(""))
+
+        assert {:error, %Parameter{}} =
+                 state.provider.prepare_request(:chat, state.model, context, state.opts)
+
+        assert {:error, %Parameter{}} =
+                 state.provider.attach_stream(state.model, context, state.opts, nil)
+      end
+
+      test "ignores an empty assistant turn after a user turn", state do
+        context = Context.new([Context.user("Translate hello"), Context.assistant("")])
+
+        assert {:ok, %Req.Request{}} =
+                 state.provider.prepare_request(:chat, state.model, context, state.opts)
+
+        assert {:ok, %Finch.Request{}} =
+                 state.provider.attach_stream(state.model, context, state.opts, nil)
+      end
+
+      test "accepts an empty tool result as a user turn", state do
+        context = Context.append(tool_context(), Context.tool_result("call_1", "translate", ""))
+
+        assert {:ok, %Req.Request{}} =
+                 state.provider.prepare_request(:chat, state.model, context, state.opts)
+
+        assert {:ok, %Finch.Request{}} =
+                 state.provider.attach_stream(state.model, context, state.opts, nil)
+      end
+
+      test "counts an image as a non-empty user turn", state do
+        context =
+          Context.append(
+            state.context,
+            Context.user([ReqLLM.Message.ContentPart.image_url("https://example.com/image.png")])
+          )
+
+        assert {:ok, %Req.Request{}} =
+                 state.provider.prepare_request(:chat, state.model, context, state.opts)
+
+        assert {:ok, %Finch.Request{}} =
+                 state.provider.attach_stream(state.model, context, state.opts, nil)
+      end
+
+      for model_id <- [
+            "gemini-3.5-flash-lite",
+            "gemini-3.6-flash",
+            "gemini-3.7-flash",
+            "gemini-4-argon"
+          ] do
+        test "rejects prefill for #{model_id}", state do
+          model = %LLMDB.Model{id: unquote(model_id), provider: state.model.provider}
+
+          assert {:error, %Parameter{}} =
+                   state.provider.prepare_request(:chat, model, state.context, [])
+
+          assert {:error, %Parameter{}} =
+                   state.provider.attach_stream(model, state.context, [], nil)
+        end
+      end
+
+      for model_id <- [
+            "gemini-2.5-flash",
+            "gemini-3-flash-preview",
+            "gemini-3.1-pro-preview",
+            "gemini-3.1-flash-lite",
+            "gemini-3.5-flash"
+          ] do
+        test "keeps prefill support for #{model_id}", state do
+          model = %LLMDB.Model{id: unquote(model_id), provider: state.model.provider}
+
+          assert {:ok, %Req.Request{}} =
+                   state.provider.prepare_request(:chat, model, state.context, state.opts)
+
+          assert {:ok, %Finch.Request{}} =
+                   state.provider.attach_stream(model, state.context, state.opts, nil)
+        end
+      end
+
       test "validates explicit model specs for newer Gemini models", state do
         model = %{id: "gemini-3.8-flash", provider: state.model.provider}
 
@@ -141,11 +220,30 @@ defmodule ReqLLM.Providers.GooglePrefillTest do
   end
 
   test "Vertex validation uses Gemini family metadata" do
-    model = %LLMDB.Model{id: "custom-model", provider: :google_vertex, extra: %{family: "gemini"}}
+    model = %LLMDB.Model{
+      id: "custom-model",
+      provider: :google_vertex,
+      extra: %{family: "gemini-3.8-flash"}
+    }
+
     context = Context.new([Context.user("Translate hello"), Context.assistant("Translation:")])
 
     assert {:error, %Parameter{}} = GoogleVertex.prepare_request(:chat, model, context, [])
     assert {:error, %Parameter{}} = GoogleVertex.attach_stream(model, context, [], nil)
+  end
+
+  test "Vertex uses the target model version instead of the alias version" do
+    model = %LLMDB.Model{
+      id: "gemini-3.8-flash-alias",
+      provider: :google_vertex,
+      provider_model_id: "gemini-2.5-flash"
+    }
+
+    context = Context.new([Context.user("Translate hello"), Context.assistant("Translation:")])
+    opts = [access_token: "test-token", project_id: "test-project"]
+
+    assert {:ok, %Req.Request{}} = GoogleVertex.prepare_request(:chat, model, context, opts)
+    assert {:ok, %Finch.Request{}} = GoogleVertex.attach_stream(model, context, opts, nil)
   end
 
   for model_id <- ["claude-haiku-4-5@20251001", "mistral-small-2503", "zai-org/glm-4.7-maas"] do

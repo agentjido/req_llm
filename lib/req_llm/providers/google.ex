@@ -215,22 +215,67 @@ defmodule ReqLLM.Providers.Google do
   end
 
   @doc false
-  @spec validate_no_prefill(ReqLLM.Context.t()) :: :ok | {:error, struct()}
-  def validate_no_prefill(%ReqLLM.Context{messages: messages}) do
-    last_message = messages |> Enum.reject(&(&1.role == :system)) |> List.last()
+  @spec validate_no_prefill(LLMDB.Model.t(), ReqLLM.Context.t()) :: :ok | {:error, struct()}
+  def validate_no_prefill(model, %ReqLLM.Context{messages: messages}) do
+    if prefill_forbidden?(model) do
+      last_message =
+        Enum.reduce(messages, nil, fn message, last ->
+          if message.role != :system and nonempty_gemini_message?(message),
+            do: message,
+            else: last
+        end)
 
-    case last_message do
-      %{role: :assistant} ->
-        {:error,
-         ReqLLM.Error.Invalid.Parameter.exception(
-           parameter:
-             "Gemini does not support contexts ending with an assistant message (prefill). Append a user message or a tool result before requesting a response."
-         )}
+      case last_message do
+        %{role: :assistant} ->
+          {:error,
+           ReqLLM.Error.Invalid.Parameter.exception(
+             parameter:
+               "This Gemini model does not support contexts ending with a non-empty assistant message (prefill). Append a user message or a tool result before requesting a response."
+           )}
 
-      _ ->
-        :ok
+        _ ->
+          :ok
+      end
+    else
+      :ok
     end
   end
+
+  defp prefill_forbidden?(model) do
+    model_id =
+      if model.provider == :google_vertex,
+        do: model.provider_model_id || model.id,
+        else: model.id
+
+    if String.starts_with?(google_model_name(model_id), "gemini-") do
+      modern_gemini_parameters?(model_id)
+    else
+      modern_gemini_parameters?(model.family) or
+        modern_gemini_parameters?(get_nested(model.extra, [:family]))
+    end
+  end
+
+  defp nonempty_gemini_message?(%{role: :tool}), do: true
+
+  defp nonempty_gemini_message?(message) do
+    List.wrap(message.tool_calls) != [] or
+      Enum.any?(List.wrap(message.reasoning_details), fn
+        %ReqLLM.Message.ReasoningDetails{provider: :google, text: text, signature: signature} ->
+          text not in [nil, ""] or signature not in [nil, ""]
+
+        _ ->
+          false
+      end) or Enum.any?(message.content, &nonempty_gemini_part?/1)
+  end
+
+  defp nonempty_gemini_part?(%ReqLLM.Message.ContentPart{type: :text, text: text}),
+    do: is_binary(text) and String.trim(text) != ""
+
+  defp nonempty_gemini_part?(%ReqLLM.Message.ContentPart{type: type})
+       when type in [:image, :image_url, :video_url, :file],
+       do: true
+
+  defp nonempty_gemini_part?(_), do: false
 
   @doc """
   Custom prepare_request for chat operations to use Google's specific endpoints.
@@ -242,7 +287,7 @@ defmodule ReqLLM.Providers.Google do
   def prepare_request(:chat, model_spec, prompt, opts) do
     with {:ok, model} <- ReqLLM.model(model_spec),
          {:ok, context} <- ReqLLM.Context.normalize(prompt, opts),
-         :ok <- validate_no_prefill(context),
+         :ok <- validate_no_prefill(model, context),
          opts_with_context = Keyword.put(opts, :context, context),
          {:ok, processed_opts0} <-
            ReqLLM.Provider.Options.process(__MODULE__, :chat, model, opts_with_context),
@@ -297,7 +342,7 @@ defmodule ReqLLM.Providers.Google do
     with {:ok, model} <- ReqLLM.model(model_spec),
          :ok <- reject_object_tools_before_gemini_3(model, opts),
          {:ok, context} <- ReqLLM.Context.normalize(prompt, opts),
-         :ok <- validate_no_prefill(context) do
+         :ok <- validate_no_prefill(model, context) do
       opts_with_tokens =
         ReqLLM.Provider.Options.put_model_max_tokens_default(opts, model, fallback: 4096)
 
@@ -2385,7 +2430,7 @@ defmodule ReqLLM.Providers.Google do
 
   @impl ReqLLM.Provider
   def attach_stream(model, context, opts, _finch_name) do
-    with :ok <- validate_no_prefill(context) do
+    with :ok <- validate_no_prefill(model, context) do
       do_attach_stream(model, context, opts)
     end
   rescue
