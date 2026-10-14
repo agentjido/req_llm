@@ -245,12 +245,7 @@ defmodule ReqLLM.MixProject do
       {:llm_db, "~> 2026.10.4"},
 
       # Dev/test dependencies
-      {:bandit,
-       github: "mtrudel/bandit",
-       ref: "d88b21953c65061f21136ea76a89a4f95a2ac7a1",
-       only: [:dev, :test],
-       runtime: false,
-       override: true},
+      {:bandit, "~> 1.8", only: [:dev, :test], runtime: false},
       {:tidewave, "~> 0.5", only: :dev, runtime: false},
       {:ex_doc, "~> 0.40.4", only: :dev, runtime: false},
       {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false},
