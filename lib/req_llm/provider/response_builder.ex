@@ -110,6 +110,9 @@ defmodule ReqLLM.Provider.ResponseBuilder do
 
   def for_model(%LLMDB.Model{provider: :minimax}), do: ReqLLM.Providers.Minimax.ResponseBuilder
 
+  def for_model(%LLMDB.Model{provider: :reflection}),
+    do: ReqLLM.Providers.Reflection.ResponseBuilder
+
   def for_model(%LLMDB.Model{provider: :meta}),
     do: ReqLLM.Providers.OpenAI.ResponsesAPI.ResponseBuilder
 

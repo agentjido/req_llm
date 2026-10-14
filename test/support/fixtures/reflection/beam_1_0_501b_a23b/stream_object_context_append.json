@@ -1,0 +1,150 @@
+{
+  "captured_at": "2026-10-14T21:09:13.792700Z",
+  "model_spec": "reflection:Beam-1.0-501B-A23B",
+  "provider": "reflection",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjIwNDgsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiUmV0dXJuIGdyZWV0aW5nIHNldCB0byBoZWxsby4iLCJyb2xlIjoidXNlciJ9LHsiY29udGVudCI6IntcImdyZWV0aW5nXCI6IFwiaGVsbG9cIn0iLCJyZWFzb25pbmdfY29udGVudCI6IlRoZSB1c2VyIGlzIGFza2luZyBtZSB0byBcIlJldHVybiBncmVldGluZyBzZXQgdG8gaGVsbG8uXCIgVGhpcyBzZWVtcyBsaWtlIGEgc2ltcGxlIGluc3RydWN0aW9uLCBwb3NzaWJseSByZWxhdGVkIHRvIGEgc3BlY2lmaWMgZm9ybWF0IG9yIHZhcmlhYmxlLiBMZXQgbWUganVzdCByZXNwb25kIHdpdGggYSBncmVldGluZyBzZXQgdG8gaGVsbG8sIG9yIGFja25vd2xlZGdlIGl0LiBUaGUgcGhyYXNpbmcgXCJSZXR1cm4gZ3JlZXRpbmcgc2V0IHRvIGhlbGxvXCIgaXMgYSBiaXQgdW51c3VhbC4gSXQgY291bGQgbWVhbiB0aGV5IHdhbnQgbWUgdG8gb3V0cHV0IHNvbWV0aGluZyBsaWtlIFwiZ3JlZXRpbmcgPSBoZWxsb1wiIG9yIGp1c3Qgc2F5IGhlbGxvLiBJJ2xsIGp1c3QgcHJvdmlkZSBhIGNsZWFyIHJlc3BvbnNlLiIsInJvbGUiOiJhc3Npc3RhbnQifSx7ImNvbnRlbnQiOiJSZXBseSB3aXRoIHRoZSBncmVldGluZyBhcyBwbGFpbiB0ZXh0LiIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6IkJlYW0tMS4wLTUwMUItQTIzQiIsInJlYXNvbmluZ19lZmZvcnQiOiJsb3ciLCJzdHJlYW0iOmZhbHNlfQ=="
+    },
+    "canonical_json": {
+      "max_completion_tokens": 2048,
+      "messages": [
+        {
+          "content": "Return greeting set to hello.",
+          "role": "user"
+        },
+        {
+          "content": "{\"greeting\": \"hello\"}",
+          "reasoning_content": "The user is asking me to \"Return greeting set to hello.\" This seems like a simple instruction, possibly related to a specific format or variable. Let me just respond with a greeting set to hello, or acknowledge it. The phrasing \"Return greeting set to hello\" is a bit unusual. It could mean they want me to output something like \"greeting = hello\" or just say hello. I'll just provide a clear response.",
+          "role": "assistant"
+        },
+        {
+          "content": "Reply with the greeting as plain text.",
+          "role": "user"
+        }
+      ],
+      "model": "Beam-1.0-501B-A23B",
+      "reasoning_effort": "low",
+      "stream": false
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.7.5"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.reflection.ai/openai/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "hello",
+            "reasoning_content": "The user wants the greeting as plain text. So just \"hello\".",
+            "refusal": null,
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1792012154,
+      "id": "chatcmpl-668c0d3a-c42c-4835-8596-4dfdd15e5878",
+      "model": "Beam-1.0-501B-A23B",
+      "object": "chat.completion",
+      "usage": {
+        "completion_tokens": 25,
+        "completion_tokens_details": {
+          "reasoning_tokens": 21
+        },
+        "prompt_tokens": 169,
+        "total_tokens": 194
+      }
+    },
+    "headers": {
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a4a990579f86ead0-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Wed, 14 Oct 2026 21:09:13 GMT"
+      ],
+      "reflection-data-retention": [
+        "standard"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "strict-transport-security": [
+        "max-age=86400"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Origin"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-ratelimit-limit-requests": [
+        "30"
+      ],
+      "x-ratelimit-limit-requests-day": [
+        "20000"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "2500000"
+      ],
+      "x-ratelimit-limit-tokens-day": [
+        "100000000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "28"
+      ],
+      "x-ratelimit-remaining-requests-day": [
+        "19986"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "2499818"
+      ],
+      "x-ratelimit-remaining-tokens-day": [
+        "99998664"
+      ],
+      "x-ratelimit-reset-requests": [
+        "3.3s"
+      ],
+      "x-ratelimit-reset-requests-day": [
+        "10246.384s"
+      ],
+      "x-ratelimit-reset-tokens": [
+        "0.005s"
+      ],
+      "x-ratelimit-reset-tokens-day": [
+        "10246.384s"
+      ],
+      "x-request-id": [
+        "b89e9c0a-190e-435f-8775-1fa0d1b85c50"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

@@ -1,0 +1,141 @@
+{
+  "captured_at": "2026-10-14T21:09:15.727119Z",
+  "model_spec": "reflection:Beam-1.0-501B-A23B",
+  "provider": "reflection",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjIwNDgsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiV2hhdCBpcyAyICsgND8gQW5zd2VyIHdpdGggb25lIG51bWJlci4iLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJCZWFtLTEuMC01MDFCLUEyM0IiLCJyZWFzb25pbmdfZWZmb3J0IjoibG93Iiwic3RyZWFtIjpmYWxzZX0="
+    },
+    "canonical_json": {
+      "max_completion_tokens": 2048,
+      "messages": [
+        {
+          "content": "What is 2 + 4? Answer with one number.",
+          "role": "user"
+        }
+      ],
+      "model": "Beam-1.0-501B-A23B",
+      "reasoning_effort": "low",
+      "stream": false
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.7.5"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.reflection.ai/openai/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "6",
+            "reasoning_content": "The user asks: \"What is 2 + 4? Answer with one number.\"\n\nWe need to answer with one number. 2+4=6. So output should be \"6\" perhaps. Ensure no extra text? \"Answer with one number.\" So final: 6.\n\nNeed final only? Probably yes.",
+            "refusal": null,
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1792012156,
+      "id": "chatcmpl-f3dcbc30-1d4a-4146-a1f7-253136b30c19",
+      "model": "Beam-1.0-501B-A23B",
+      "object": "chat.completion",
+      "usage": {
+        "completion_tokens": 77,
+        "completion_tokens_details": {
+          "reasoning_tokens": 75
+        },
+        "prompt_tokens": 57,
+        "total_tokens": 134
+      }
+    },
+    "headers": {
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a4a99062ff2eead0-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Wed, 14 Oct 2026 21:09:15 GMT"
+      ],
+      "reflection-data-retention": [
+        "standard"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "strict-transport-security": [
+        "max-age=86400"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Origin"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-ratelimit-limit-requests": [
+        "30"
+      ],
+      "x-ratelimit-limit-requests-day": [
+        "20000"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "2500000"
+      ],
+      "x-ratelimit-limit-tokens-day": [
+        "100000000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "26"
+      ],
+      "x-ratelimit-remaining-requests-day": [
+        "19983"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "2499955"
+      ],
+      "x-ratelimit-remaining-tokens-day": [
+        "99998387"
+      ],
+      "x-ratelimit-reset-requests": [
+        "7.503s"
+      ],
+      "x-ratelimit-reset-requests-day": [
+        "10244.586s"
+      ],
+      "x-ratelimit-reset-tokens": [
+        "0.002s"
+      ],
+      "x-ratelimit-reset-tokens-day": [
+        "10244.586s"
+      ],
+      "x-request-id": [
+        "a77daacb-b68b-4b1a-b022-49ae69938c51"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

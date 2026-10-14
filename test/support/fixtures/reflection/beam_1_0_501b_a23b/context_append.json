@@ -1,0 +1,150 @@
+{
+  "captured_at": "2026-10-14T21:09:16.258814Z",
+  "model_spec": "reflection:Beam-1.0-501B-A23B",
+  "provider": "reflection",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjIwNDgsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiV2hhdCBpcyAyICsgND8gQW5zd2VyIHdpdGggb25lIG51bWJlci4iLCJyb2xlIjoidXNlciJ9LHsiY29udGVudCI6IjYiLCJyZWFzb25pbmdfY29udGVudCI6IlRoZSB1c2VyIGFza3M6IFwiV2hhdCBpcyAyICsgND8gQW5zd2VyIHdpdGggb25lIG51bWJlci5cIlxuXG5XZSBuZWVkIHRvIGFuc3dlciB3aXRoIG9uZSBudW1iZXIuIDIrND02LiBTbyBvdXRwdXQgc2hvdWxkIGJlIFwiNlwiIHBlcmhhcHMuIEVuc3VyZSBubyBleHRyYSB0ZXh0PyBcIkFuc3dlciB3aXRoIG9uZSBudW1iZXIuXCIgU28gZmluYWw6IDYuXG5cbk5lZWQgZmluYWwgb25seT8gUHJvYmFibHkgeWVzLiIsInJvbGUiOiJhc3Npc3RhbnQifSx7ImNvbnRlbnQiOiJBZGQgMS4gQW5zd2VyIHdpdGggb25lIG51bWJlci4iLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJCZWFtLTEuMC01MDFCLUEyM0IiLCJyZWFzb25pbmdfZWZmb3J0IjoibG93Iiwic3RyZWFtIjpmYWxzZX0="
+    },
+    "canonical_json": {
+      "max_completion_tokens": 2048,
+      "messages": [
+        {
+          "content": "What is 2 + 4? Answer with one number.",
+          "role": "user"
+        },
+        {
+          "content": "6",
+          "reasoning_content": "The user asks: \"What is 2 + 4? Answer with one number.\"\n\nWe need to answer with one number. 2+4=6. So output should be \"6\" perhaps. Ensure no extra text? \"Answer with one number.\" So final: 6.\n\nNeed final only? Probably yes.",
+          "role": "assistant"
+        },
+        {
+          "content": "Add 1. Answer with one number.",
+          "role": "user"
+        }
+      ],
+      "model": "Beam-1.0-501B-A23B",
+      "reasoning_effort": "low",
+      "stream": false
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.7.5"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.reflection.ai/openai/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "7",
+            "reasoning_content": "We need answer one number. Previous result 6, add 1 = 7. Output \"7\". Ensure no extra.",
+            "refusal": null,
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1792012157,
+      "id": "chatcmpl-1a62d389-8c48-4a41-a742-47f18e9596c9",
+      "model": "Beam-1.0-501B-A23B",
+      "object": "chat.completion",
+      "usage": {
+        "completion_tokens": 37,
+        "completion_tokens_details": {
+          "reasoning_tokens": 35
+        },
+        "prompt_tokens": 149,
+        "total_tokens": 186
+      }
+    },
+    "headers": {
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a4a99066286fead0-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Wed, 14 Oct 2026 21:09:16 GMT"
+      ],
+      "reflection-data-retention": [
+        "standard"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "strict-transport-security": [
+        "max-age=86400"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Origin"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-ratelimit-limit-requests": [
+        "30"
+      ],
+      "x-ratelimit-limit-requests-day": [
+        "20000"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "2500000"
+      ],
+      "x-ratelimit-limit-tokens-day": [
+        "100000000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "25"
+      ],
+      "x-ratelimit-remaining-requests-day": [
+        "19982"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "2499867"
+      ],
+      "x-ratelimit-remaining-tokens-day": [
+        "99998165"
+      ],
+      "x-ratelimit-reset-requests": [
+        "9.004s"
+      ],
+      "x-ratelimit-reset-requests-day": [
+        "10244.088s"
+      ],
+      "x-ratelimit-reset-tokens": [
+        "0.004s"
+      ],
+      "x-ratelimit-reset-tokens-day": [
+        "10244.088s"
+      ],
+      "x-request-id": [
+        "55f922e3-5ae1-43e4-99d3-43063cf56b72"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

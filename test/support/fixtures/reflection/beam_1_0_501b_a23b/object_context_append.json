@@ -1,0 +1,150 @@
+{
+  "captured_at": "2026-10-14T21:09:15.211962Z",
+  "model_spec": "reflection:Beam-1.0-501B-A23B",
+  "provider": "reflection",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjIwNDgsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiUmV0dXJuIGdyZWV0aW5nIHNldCB0byBoZWxsby4iLCJyb2xlIjoidXNlciJ9LHsiY29udGVudCI6IntcImdyZWV0aW5nXCI6IFwiaGVsbG9cIn0iLCJyZWFzb25pbmdfY29udGVudCI6IlRoZSB1c2VyIHdhbnRzIG1lIHRvIHJldHVybiBhIGdyZWV0aW5nIHNldCB0byBcImhlbGxvXCIuIFRoaXMgc2VlbXMgc3RyYWlnaHRmb3J3YXJkLiIsInJvbGUiOiJhc3Npc3RhbnQifSx7ImNvbnRlbnQiOiJSZXBseSB3aXRoIHRoZSBncmVldGluZyBhcyBwbGFpbiB0ZXh0LiIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6IkJlYW0tMS4wLTUwMUItQTIzQiIsInJlYXNvbmluZ19lZmZvcnQiOiJsb3ciLCJzdHJlYW0iOmZhbHNlfQ=="
+    },
+    "canonical_json": {
+      "max_completion_tokens": 2048,
+      "messages": [
+        {
+          "content": "Return greeting set to hello.",
+          "role": "user"
+        },
+        {
+          "content": "{\"greeting\": \"hello\"}",
+          "reasoning_content": "The user wants me to return a greeting set to \"hello\". This seems straightforward.",
+          "role": "assistant"
+        },
+        {
+          "content": "Reply with the greeting as plain text.",
+          "role": "user"
+        }
+      ],
+      "model": "Beam-1.0-501B-A23B",
+      "reasoning_effort": "low",
+      "stream": false
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.7.5"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.reflection.ai/openai/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "hello",
+            "reasoning_content": "The user is asking me to reply with the greeting that was set (hello) as plain text. So I just output \"hello\".",
+            "refusal": null,
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1792012156,
+      "id": "chatcmpl-f73c9d19-2366-4c51-be92-1ce5595112a5",
+      "model": "Beam-1.0-501B-A23B",
+      "object": "chat.completion",
+      "usage": {
+        "completion_tokens": 38,
+        "completion_tokens_details": {
+          "reasoning_tokens": 33
+        },
+        "prompt_tokens": 98,
+        "total_tokens": 136
+      }
+    },
+    "headers": {
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a4a990606859ead0-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Wed, 14 Oct 2026 21:09:15 GMT"
+      ],
+      "reflection-data-retention": [
+        "standard"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "strict-transport-security": [
+        "max-age=86400"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Origin"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-ratelimit-limit-requests": [
+        "30"
+      ],
+      "x-ratelimit-limit-requests-day": [
+        "20000"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "2500000"
+      ],
+      "x-ratelimit-limit-tokens-day": [
+        "100000000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "27"
+      ],
+      "x-ratelimit-remaining-requests-day": [
+        "19984"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "2499899"
+      ],
+      "x-ratelimit-remaining-tokens-day": [
+        "99998467"
+      ],
+      "x-ratelimit-reset-requests": [
+        "5.915s"
+      ],
+      "x-ratelimit-reset-requests-day": [
+        "10244.998s"
+      ],
+      "x-ratelimit-reset-tokens": [
+        "0.003s"
+      ],
+      "x-ratelimit-reset-tokens-day": [
+        "10244.998s"
+      ],
+      "x-request-id": [
+        "16f006b9-a1f5-41c2-a0d9-fa64d8f2d3de"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

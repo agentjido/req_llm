@@ -1,0 +1,150 @@
+{
+  "captured_at": "2026-10-14T21:09:18.885815Z",
+  "model_spec": "reflection:Beam-1.0-501B-A23B",
+  "provider": "reflection",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjIwNDgsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiV2hhdCBpcyAzICsgNT8gQW5zd2VyIHdpdGggb25lIG51bWJlci4iLCJyb2xlIjoidXNlciJ9LHsiY29udGVudCI6IjgiLCJyZWFzb25pbmdfY29udGVudCI6IlRoZSB1c2VyIGFza3MgXCJXaGF0IGlzIDMgKyA1PyBBbnN3ZXIgd2l0aCBvbmUgbnVtYmVyLlwiIFRoaXMgaXMgc2ltcGxlIGFyaXRobWV0aWMuIDMrNT04LiBOZWVkIHRvIGFuc3dlciB3aXRoIG9uZSBudW1iZXIuIFNob3VsZCBiZSBqdXN0IFwiOFwiLiBFbnN1cmUgbm8gZXh0cmEuIiwicm9sZSI6ImFzc2lzdGFudCJ9LHsiY29udGVudCI6IkFkZCAxLiBBbnN3ZXIgd2l0aCBvbmUgbnVtYmVyLiIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6IkJlYW0tMS4wLTUwMUItQTIzQiIsInJlYXNvbmluZ19lZmZvcnQiOiJsb3ciLCJzdHJlYW0iOmZhbHNlfQ=="
+    },
+    "canonical_json": {
+      "max_completion_tokens": 2048,
+      "messages": [
+        {
+          "content": "What is 3 + 5? Answer with one number.",
+          "role": "user"
+        },
+        {
+          "content": "8",
+          "reasoning_content": "The user asks \"What is 3 + 5? Answer with one number.\" This is simple arithmetic. 3+5=8. Need to answer with one number. Should be just \"8\". Ensure no extra.",
+          "role": "assistant"
+        },
+        {
+          "content": "Add 1. Answer with one number.",
+          "role": "user"
+        }
+      ],
+      "model": "Beam-1.0-501B-A23B",
+      "reasoning_effort": "low",
+      "stream": false
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.7.5"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.reflection.ai/openai/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "9",
+            "reasoning_content": "The user says \"Add 1. Answer with one number.\" This likely refers to the previous answer 8 + 1 = 9. Need to answer with one number: 9.",
+            "refusal": null,
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1792012159,
+      "id": "chatcmpl-1f6f2fb9-44a3-4d9c-803a-951ada94b6c1",
+      "model": "Beam-1.0-501B-A23B",
+      "object": "chat.completion",
+      "usage": {
+        "completion_tokens": 50,
+        "completion_tokens_details": {
+          "reasoning_tokens": 46
+        },
+        "prompt_tokens": 129,
+        "total_tokens": 179
+      }
+    },
+    "headers": {
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a4a990766e353443-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Wed, 14 Oct 2026 21:09:18 GMT"
+      ],
+      "reflection-data-retention": [
+        "standard"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "strict-transport-security": [
+        "max-age=86400"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Origin"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-ratelimit-limit-requests": [
+        "30"
+      ],
+      "x-ratelimit-limit-requests-day": [
+        "20000"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "2500000"
+      ],
+      "x-ratelimit-limit-tokens-day": [
+        "100000000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "21"
+      ],
+      "x-ratelimit-remaining-requests-day": [
+        "19977"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "2499885"
+      ],
+      "x-ratelimit-remaining-tokens-day": [
+        "99997497"
+      ],
+      "x-ratelimit-reset-requests": [
+        "16.384s"
+      ],
+      "x-ratelimit-reset-requests-day": [
+        "10241.468s"
+      ],
+      "x-ratelimit-reset-tokens": [
+        "0.003s"
+      ],
+      "x-ratelimit-reset-tokens-day": [
+        "10241.467s"
+      ],
+      "x-request-id": [
+        "0946faac-2d26-4179-95a9-4659d4c48161"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

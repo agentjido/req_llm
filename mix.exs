@@ -79,6 +79,7 @@ defmodule ReqLLM.MixProject do
           "guides/github_copilot.md",
           "guides/moonshot_ai.md",
           "guides/nearai.md",
+          "guides/reflection.md",
           "guides/zenmux.md",
           "guides/zai.md",
           "guides/zai_coder.md"
@@ -135,6 +136,7 @@ defmodule ReqLLM.MixProject do
             "guides/github_copilot.md",
             "guides/moonshot_ai.md",
             "guides/nearai.md",
+            "guides/reflection.md",
             "guides/zenmux.md",
             "guides/zai.md",
             "guides/zai_coder.md"

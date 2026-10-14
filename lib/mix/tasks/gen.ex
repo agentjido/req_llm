@@ -90,6 +90,7 @@ defmodule Mix.Tasks.ReqLlm.Gen do
       groq        - Groq models (fast inference)
       google      - Google Gemini models
       nearai      - NEAR AI Cloud TEE inference
+      reflection  - Reflection AI text and reasoning
       openrouter  - OpenRouter (access to multiple providers)
       xai         - xAI Grok models
 
@@ -137,6 +138,7 @@ defmodule Mix.Tasks.ReqLlm.Gen do
       groq        - Fast streaming, limited JSON support
       google      - Experimental JSON/streaming support
       nearai      - OpenAI-compatible TEE inference
+      reflection  - Reflection AI text and reasoning
       openrouter  - Depends on underlying model
       xai         - Basic support across modes
   """

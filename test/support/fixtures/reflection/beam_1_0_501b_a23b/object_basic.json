@@ -1,0 +1,159 @@
+{
+  "captured_at": "2026-10-14T21:09:14.785390Z",
+  "model_spec": "reflection:Beam-1.0-501B-A23B",
+  "provider": "reflection",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjIwNDgsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiUmV0dXJuIGdyZWV0aW5nIHNldCB0byBoZWxsby4iLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJCZWFtLTEuMC01MDFCLUEyM0IiLCJyZWFzb25pbmdfZWZmb3J0IjoibG93IiwicmVzcG9uc2VfZm9ybWF0Ijp7Impzb25fc2NoZW1hIjp7Im5hbWUiOiJzdHJ1Y3R1cmVkX291dHB1dCIsInNjaGVtYSI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnsiZ3JlZXRpbmciOnsidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsiZ3JlZXRpbmciXSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6Impzb25fc2NoZW1hIn0sInN0cmVhbSI6ZmFsc2V9"
+    },
+    "canonical_json": {
+      "max_completion_tokens": 2048,
+      "messages": [
+        {
+          "content": "Return greeting set to hello.",
+          "role": "user"
+        }
+      ],
+      "model": "Beam-1.0-501B-A23B",
+      "reasoning_effort": "low",
+      "response_format": {
+        "json_schema": {
+          "name": "structured_output",
+          "schema": {
+            "additionalProperties": false,
+            "properties": {
+              "greeting": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "greeting"
+            ],
+            "type": "object"
+          }
+        },
+        "type": "json_schema"
+      },
+      "stream": false
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.7.5"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.reflection.ai/openai/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "{\"greeting\": \"hello\"}",
+            "reasoning_content": "The user wants me to return a greeting set to \"hello\". This seems straightforward.",
+            "refusal": null,
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1792012155,
+      "id": "chatcmpl-006280b4-2fe9-44c2-a932-6a4edc80d5ce",
+      "model": "Beam-1.0-501B-A23B",
+      "object": "chat.completion",
+      "usage": {
+        "completion_tokens": 34,
+        "completion_tokens_details": {
+          "reasoning_tokens": 20
+        },
+        "prompt_tokens": 50,
+        "total_tokens": 84
+      }
+    },
+    "headers": {
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a4a9905a0e29ead0-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Wed, 14 Oct 2026 21:09:14 GMT"
+      ],
+      "reflection-data-retention": [
+        "standard"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "strict-transport-security": [
+        "max-age=86400"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Origin"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-ratelimit-limit-requests": [
+        "30"
+      ],
+      "x-ratelimit-limit-requests-day": [
+        "20000"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "2500000"
+      ],
+      "x-ratelimit-limit-tokens-day": [
+        "100000000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "27"
+      ],
+      "x-ratelimit-remaining-requests-day": [
+        "19985"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "2499905"
+      ],
+      "x-ratelimit-remaining-tokens-day": [
+        "99998557"
+      ],
+      "x-ratelimit-reset-requests": [
+        "4.916s"
+      ],
+      "x-ratelimit-reset-requests-day": [
+        "10246s"
+      ],
+      "x-ratelimit-reset-tokens": [
+        "0.003s"
+      ],
+      "x-ratelimit-reset-tokens-day": [
+        "10245.999s"
+      ],
+      "x-request-id": [
+        "1b203674-dae3-468d-8636-db472ff4e879"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

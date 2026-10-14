@@ -1,0 +1,184 @@
+{
+  "captured_at": "2026-10-14T21:09:17.245504Z",
+  "model_spec": "reflection:Beam-1.0-501B-A23B",
+  "provider": "reflection",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjIwNDgsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiVXNlIHRoZSB3ZWF0aGVyIHRvb2wgZm9yIFBhcmlzLiIsInJvbGUiOiJ1c2VyIn0seyJjb250ZW50IjoiIiwicmVhc29uaW5nX2NvbnRlbnQiOiJUaGUgdXNlciB3YW50cyBtZSB0byBnZXQgdGhlIHdlYXRoZXIgZm9yIFBhcmlzIHVzaW5nIHRoZSB3ZWF0aGVyIHRvb2wuIiwicm9sZSI6ImFzc2lzdGFudCIsInRvb2xfY2FsbHMiOlt7ImZ1bmN0aW9uIjp7ImFyZ3VtZW50cyI6IntcImNpdHlcIjpcIlBhcmlzXCJ9IiwibmFtZSI6IndlYXRoZXIifSwiaWQiOiJjYWxsLWE3ZDZhM2ZiLWRiOWQtNDAwMC04YTk0LWQ5MGQ0MWYxZmQzMCIsInR5cGUiOiJmdW5jdGlvbiJ9XX0seyJjb250ZW50Ijoic3VubnksIDE4IEMiLCJyb2xlIjoidG9vbCIsInRvb2xfY2FsbF9pZCI6ImNhbGwtYTdkNmEzZmItZGI5ZC00MDAwLThhOTQtZDkwZDQxZjFmZDMwIn1dLCJtb2RlbCI6IkJlYW0tMS4wLTUwMUItQTIzQiIsInJlYXNvbmluZ19lZmZvcnQiOiJsb3ciLCJzdHJlYW0iOmZhbHNlLCJ0b29sX2Nob2ljZSI6Im5vbmUiLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgdGhlIHdlYXRoZXIgZm9yIGEgY2l0eS4iLCJuYW1lIjoid2VhdGhlciIsInBhcmFtZXRlcnMiOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7ImNpdHkiOnsidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsiY2l0eSJdLCJ0eXBlIjoib2JqZWN0In0sInN0cmljdCI6dHJ1ZX0sInR5cGUiOiJmdW5jdGlvbiJ9XX0="
+    },
+    "canonical_json": {
+      "max_completion_tokens": 2048,
+      "messages": [
+        {
+          "content": "Use the weather tool for Paris.",
+          "role": "user"
+        },
+        {
+          "content": "",
+          "reasoning_content": "The user wants me to get the weather for Paris using the weather tool.",
+          "role": "assistant",
+          "tool_calls": [
+            {
+              "function": {
+                "arguments": "{\"city\":\"Paris\"}",
+                "name": "weather"
+              },
+              "id": "call-a7d6a3fb-db9d-4000-8a94-d90d41f1fd30",
+              "type": "function"
+            }
+          ]
+        },
+        {
+          "content": "sunny, 18 C",
+          "role": "tool",
+          "tool_call_id": "call-a7d6a3fb-db9d-4000-8a94-d90d41f1fd30"
+        }
+      ],
+      "model": "Beam-1.0-501B-A23B",
+      "reasoning_effort": "low",
+      "stream": false,
+      "tool_choice": "none",
+      "tools": [
+        {
+          "function": {
+            "description": "Get the weather for a city.",
+            "name": "weather",
+            "parameters": {
+              "additionalProperties": false,
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ],
+              "type": "object"
+            },
+            "strict": true
+          },
+          "type": "function"
+        }
+      ]
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.7.5"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.reflection.ai/openai/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "The weather in Paris is sunny with a temperature of 18°C.",
+            "reasoning_content": "The weather tool returned that it's sunny and 18°C in Paris. I'll share this with the user.",
+            "refusal": null,
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1792012158,
+      "id": "chatcmpl-9205ff91-4621-42ea-b903-7dbf4d101852",
+      "model": "Beam-1.0-501B-A23B",
+      "object": "chat.completion",
+      "usage": {
+        "completion_tokens": 49,
+        "completion_tokens_details": {
+          "reasoning_tokens": 31
+        },
+        "prompt_tokens": 105,
+        "total_tokens": 154
+      }
+    },
+    "headers": {
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a4a9906d3b10ead0-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Wed, 14 Oct 2026 21:09:17 GMT"
+      ],
+      "reflection-data-retention": [
+        "standard"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "strict-transport-security": [
+        "max-age=86400"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Origin"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-ratelimit-limit-requests": [
+        "30"
+      ],
+      "x-ratelimit-limit-requests-day": [
+        "20000"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "2500000"
+      ],
+      "x-ratelimit-limit-tokens-day": [
+        "100000000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "24"
+      ],
+      "x-ratelimit-remaining-requests-day": [
+        "19980"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "2499798"
+      ],
+      "x-ratelimit-remaining-tokens-day": [
+        "99997794"
+      ],
+      "x-ratelimit-reset-requests": [
+        "11.894s"
+      ],
+      "x-ratelimit-reset-requests-day": [
+        "10242.978s"
+      ],
+      "x-ratelimit-reset-tokens": [
+        "0.005s"
+      ],
+      "x-ratelimit-reset-tokens-day": [
+        "10242.977s"
+      ],
+      "x-request-id": [
+        "4ab766cd-401d-4dc5-a3e5-6ba82b37fef6"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}
