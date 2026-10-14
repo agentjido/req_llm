@@ -162,6 +162,17 @@ Google grounding uses `unit: "query"` to track the number of search queries perf
 
 All differences handled automatically by ReqLLM.
 
+## Assistant Prefill
+
+Gemini text and object requests cannot end with an assistant message. This also
+applies to streaming requests. The local error is `ReqLLM.Error.Invalid.Parameter`.
+ReqLLM checks the context before it sends the request. For `stream_text/3`, this
+error is inside the streaming error tuple. System messages do not count as
+conversation turns.
+
+Append a user message to request a response. For a tool call, append the tool
+result before you continue the conversation.
+
 ## Resources
 
 - [Google AI Documentation](https://ai.google.dev/docs)

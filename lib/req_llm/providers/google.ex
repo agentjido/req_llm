@@ -214,6 +214,24 @@ defmodule ReqLLM.Providers.Google do
     end
   end
 
+  @doc false
+  @spec validate_no_prefill(ReqLLM.Context.t()) :: :ok | {:error, struct()}
+  def validate_no_prefill(%ReqLLM.Context{messages: messages}) do
+    last_message = messages |> Enum.reject(&(&1.role == :system)) |> List.last()
+
+    case last_message do
+      %{role: :assistant} ->
+        {:error,
+         ReqLLM.Error.Invalid.Parameter.exception(
+           parameter:
+             "Gemini does not support contexts ending with an assistant message (prefill). Append a user message or a tool result before requesting a response."
+         )}
+
+      _ ->
+        :ok
+    end
+  end
+
   @doc """
   Custom prepare_request for chat operations to use Google's specific endpoints.
 
@@ -224,6 +242,7 @@ defmodule ReqLLM.Providers.Google do
   def prepare_request(:chat, model_spec, prompt, opts) do
     with {:ok, model} <- ReqLLM.model(model_spec),
          {:ok, context} <- ReqLLM.Context.normalize(prompt, opts),
+         :ok <- validate_no_prefill(context),
          opts_with_context = Keyword.put(opts, :context, context),
          {:ok, processed_opts0} <-
            ReqLLM.Provider.Options.process(__MODULE__, :chat, model, opts_with_context),
@@ -277,7 +296,8 @@ defmodule ReqLLM.Providers.Google do
   def prepare_request(:object, model_spec, prompt, opts) do
     with {:ok, model} <- ReqLLM.model(model_spec),
          :ok <- reject_object_tools_before_gemini_3(model, opts),
-         {:ok, context} <- ReqLLM.Context.normalize(prompt, opts) do
+         {:ok, context} <- ReqLLM.Context.normalize(prompt, opts),
+         :ok <- validate_no_prefill(context) do
       opts_with_tokens =
         ReqLLM.Provider.Options.put_model_max_tokens_default(opts, model, fallback: 4096)
 
@@ -2365,6 +2385,18 @@ defmodule ReqLLM.Providers.Google do
 
   @impl ReqLLM.Provider
   def attach_stream(model, context, opts, _finch_name) do
+    with :ok <- validate_no_prefill(context) do
+      do_attach_stream(model, context, opts)
+    end
+  rescue
+    error ->
+      {:error,
+       ReqLLM.Error.API.Request.exception(
+         reason: "Failed to build Google stream request: #{inspect(error)}"
+       )}
+  end
+
+  defp do_attach_stream(model, context, opts) do
     require Logger
 
     Logger.debug("Google attach_stream - model: #{inspect(model)}")
@@ -2425,12 +2457,6 @@ defmodule ReqLLM.Providers.Google do
       finch_request = Finch.build(:post, url, headers, body)
       {:ok, finch_request}
     end
-  rescue
-    error ->
-      {:error,
-       ReqLLM.Error.API.Request.exception(
-         reason: "Failed to build Google stream request: #{inspect(error)}"
-       )}
   end
 
   @impl ReqLLM.Provider

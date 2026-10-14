@@ -329,7 +329,8 @@ defmodule ReqLLM.Providers.GoogleVertex do
 
   defp do_prepare_request(model_input, input, opts) do
     with {:ok, model} <- ReqLLM.model(model_input),
-         {:ok, context} <- ReqLLM.Context.normalize(input, opts) do
+         {:ok, context} <- ReqLLM.Context.normalize(input, opts),
+         :ok <- validate_no_prefill(model, context) do
       # Process and validate options
       operation = opts[:operation] || :chat
 
@@ -393,6 +394,13 @@ defmodule ReqLLM.Providers.GoogleVertex do
         |> attach(model, other_opts)
 
       {:ok, request}
+    end
+  end
+
+  defp validate_no_prefill(model, context) do
+    case get_model_family(model) do
+      "gemini" -> ReqLLM.Providers.Google.validate_no_prefill(context)
+      _ -> :ok
     end
   end
 
@@ -970,6 +978,18 @@ defmodule ReqLLM.Providers.GoogleVertex do
 
   @impl ReqLLM.Provider
   def attach_stream(model, context, opts, _finch_name) do
+    with :ok <- validate_no_prefill(model, context) do
+      do_attach_stream(model, context, opts)
+    end
+  rescue
+    error ->
+      {:error,
+       ReqLLM.Error.API.Request.exception(
+         reason: "Failed to build Vertex stream request: #{inspect(error)}"
+       )}
+  end
+
+  defp do_attach_stream(model, context, opts) do
     # Process and validate options
     opts = ReqLLM.Provider.Options.strip_stream_request_options(opts)
     operation = opts[:operation] || :chat
@@ -1018,12 +1038,6 @@ defmodule ReqLLM.Providers.GoogleVertex do
            reason: "Failed to get GCP access token: #{inspect(reason)}"
          )}
     end
-  rescue
-    error ->
-      {:error,
-       ReqLLM.Error.API.Request.exception(
-         reason: "Failed to build Vertex stream request: #{inspect(error)}"
-       )}
   end
 
   @impl ReqLLM.Provider
