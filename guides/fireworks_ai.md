@@ -122,6 +122,14 @@ Passed at the top level or nested under `:provider_options`.
 - **Type**: map
 - **Purpose**: Arbitrary metadata stored on the request for tracing/distillation
 
+### `context_length_exceeded_behavior`
+- **Type**: `"truncate"` | `"error"`
+- **Purpose**: Control behavior when the request would exceed the model's context window
+- **Default**: `"truncate"`
+- **`"truncate"`** automatically limit `max_tokens` to fit within the model's context window
+- **`"error"`** return a request error
+- **Note**: Fireworks defaults to `"truncate"` which is an explicit difference from OpenAI's default behavior which matches `"error"`
+
 ### `reasoning_effort` (core option)
 - **Type**: `:none` | `:minimal` | `:low` | `:medium` | `:high` | `:xhigh` | `:default`
 - **Purpose**: Control reasoning depth on reasoning-capable models

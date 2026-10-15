@@ -86,7 +86,8 @@ defmodule ReqLLM.Providers.FireworksAITest do
           repetition_penalty: 1.1,
           prompt_cache_key: "user-42",
           prompt_truncate_len: 4000,
-          safe_tokenization: true
+          safe_tokenization: true,
+          context_length_exceeded_behavior: "error"
         )
 
       encoded = FireworksAI.encode_body(request)
@@ -102,6 +103,7 @@ defmodule ReqLLM.Providers.FireworksAITest do
       assert body["prompt_cache_key"] == "user-42"
       assert body["prompt_truncate_len"] == 4000
       assert body["safe_tokenization"] == true
+      assert body["context_length_exceeded_behavior"] == "error"
     end
 
     test "encode_body omits Fireworks extras when not provided" do

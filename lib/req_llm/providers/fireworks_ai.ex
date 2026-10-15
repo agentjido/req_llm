@@ -26,6 +26,7 @@ defmodule ReqLLM.Providers.FireworksAI do
   - `speculation` / `prediction` - Speculative decoding hints
   - `parallel_tool_calls` - Control concurrent tool invocations
   - `max_completion_tokens` - Reasoning-aware token budget
+  - `context_length_exceeded_behavior` - Behavior when a request would exceed the model's context window
 
   ## Structured Output
 
@@ -130,6 +131,15 @@ defmodule ReqLLM.Providers.FireworksAI do
     max_completion_tokens: [
       type: :pos_integer,
       doc: "Maximum number of tokens to generate (reasoning-aware budget)"
+    ],
+    context_length_exceeded_behavior: [
+      type: {:in, ["truncate", "error"]},
+      default: "truncate",
+      doc: """
+      What to do when the request would exceed the model's context window:
+      - `"truncate"` (default) — automatically limits `max_tokens` to fit within the model's context window.
+      - `"error"` — returns a request error.
+      """
     ],
     fireworks_reasoning_effort: [
       type: :string,
@@ -340,6 +350,10 @@ defmodule ReqLLM.Providers.FireworksAI do
     |> maybe_put(:parallel_tool_calls, request.options[:parallel_tool_calls])
     |> maybe_put(:max_completion_tokens, request.options[:max_completion_tokens])
     |> maybe_put(:response_format, request.options[:response_format])
+    |> maybe_put(
+      :context_length_exceeded_behavior,
+      request.options[:context_length_exceeded_behavior]
+    )
   end
 
   # Fireworks's strict OpenAI-compat envelope rejects anything outside the
