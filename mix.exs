@@ -4,9 +4,6 @@ defmodule ReqLLM.MixProject do
   @version "1.28.0"
   @source_url "https://github.com/agentjido/req_llm"
 
-  # Remove this Bandit dev/test exception when a fixed Hex release is available.
-  @temporary_hex_advisories ["CVE-2026-105659"]
-
   def project do
     [
       app: :req_llm,
@@ -14,7 +11,6 @@ defmodule ReqLLM.MixProject do
       elixir: "~> 1.15",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
-      hex: [ignore_advisories: @temporary_hex_advisories],
       aliases: aliases(),
       elixirc_paths: elixirc_paths(Mix.env()),
       test_ignore_filters: [&String.starts_with?(&1, "test/fixtures/")],
@@ -249,7 +245,7 @@ defmodule ReqLLM.MixProject do
       {:llm_db, "~> 2026.10.4"},
 
       # Dev/test dependencies
-      {:bandit, "~> 1.8", only: [:dev, :test], runtime: false},
+      {:bandit, "~> 1.13.1", only: [:dev, :test], runtime: false},
       {:tidewave, "~> 0.5", only: :dev, runtime: false},
       {:ex_doc, "~> 0.40.4", only: :dev, runtime: false},
       {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false},
