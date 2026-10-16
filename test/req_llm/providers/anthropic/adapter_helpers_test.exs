@@ -68,5 +68,71 @@ defmodule ReqLLM.Providers.Anthropic.AdapterHelpersTest do
       assert reduced["additionalProperties"] == false
       assert Enum.sort(reduced["required"]) == ["options", "question"]
     end
+
+    test "keeps the property order a keyword schema declares" do
+      {:ok, compiled} =
+        ReqLLM.Schema.compile(
+          type: [type: :string, required: true],
+          text: [type: :string],
+          apple: [type: :string]
+        )
+
+      reduced = AdapterHelpers.strict_json_schema(compiled)
+
+      assert property_names(reduced) == ["type", "text", "apple"]
+      assert reduced["required"] == ["type", "text", "apple"]
+    end
+
+    test "keeps the property order of an ordered JSON Schema" do
+      {:ok, compiled} =
+        ReqLLM.Schema.compile(%{
+          "type" => "object",
+          "properties" =>
+            Jason.OrderedObject.new([
+              {"type", %{"type" => "string"}},
+              {"text", %{"type" => "string", "maxLength" => 150}}
+            ])
+        })
+
+      reduced = AdapterHelpers.strict_json_schema(compiled)
+
+      assert property_names(reduced) == ["type", "text"]
+      assert reduced["properties"]["text"] == %{"type" => "string"}
+      assert reduced["required"] == ["type", "text"]
+    end
+
+    test "reduces an atom-keyed schema in its declared order" do
+      {:ok, compiled} =
+        ReqLLM.Schema.compile(%{
+          type: "object",
+          properties:
+            Jason.OrderedObject.new(
+              country: %{type: "string"},
+              cities: %{type: "array", items: %{"$ref": "#/$defs/city"}}
+            ),
+          "$defs": %{
+            city:
+              Jason.OrderedObject.new(
+                type: "object",
+                properties:
+                  Jason.OrderedObject.new(
+                    name: %{type: "string", maxLength: 150},
+                    area: %{type: "number"}
+                  )
+              )
+          }
+        })
+
+      reduced = AdapterHelpers.strict_json_schema(compiled)
+      city = reduced["$defs"]["city"]
+
+      assert property_names(reduced) == ["country", "cities"]
+      assert reduced["required"] == ["country", "cities"]
+      assert reduced["additionalProperties"] == false
+      assert property_names(city) == ["name", "area"]
+      assert city["properties"]["name"] == %{"type" => "string"}
+    end
   end
+
+  defp property_names(schema), do: Enum.map(schema["properties"], &elem(&1, 0))
 end

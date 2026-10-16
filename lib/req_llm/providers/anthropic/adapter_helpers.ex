@@ -59,7 +59,8 @@ defmodule ReqLLM.Providers.Anthropic.AdapterHelpers do
   @doc """
   Reduce a compiled schema to the subset that grammar-constrained
   (`output_config.format`) decoding supports: strip unsupported keywords and
-  force every property required with `additionalProperties: false`.
+  force every property required with `additionalProperties: false`. Properties
+  keep the order the schema declares.
 
   Array length (`minItems`/`maxItems`) cannot be expressed, so callers that need
   an exact count must re-validate it on the response.
@@ -67,9 +68,26 @@ defmodule ReqLLM.Providers.Anthropic.AdapterHelpers do
   def strict_json_schema(compiled_schema) do
     compiled_schema.schema
     |> ReqLLM.Schema.to_json()
+    |> string_keys()
+    |> ReqLLM.Schema.apply_property_ordering()
     |> strip_constraints_recursive()
     |> enforce_strict_schema_requirements()
   end
+
+  defp string_keys(%Jason.OrderedObject{values: entries}),
+    do: Map.new(entries, &string_key_entry/1)
+
+  defp string_keys(%{} = schema) when not is_struct(schema),
+    do: Map.new(schema, &string_key_entry/1)
+
+  defp string_keys(list) when is_list(list), do: Enum.map(list, &string_keys/1)
+  defp string_keys(value), do: value
+
+  defp string_key_entry({key, %Jason.OrderedObject{values: properties}})
+       when key in [:properties, "properties"],
+       do: {"properties", Jason.OrderedObject.new(Enum.map(properties, &string_key_entry/1))}
+
+  defp string_key_entry({key, value}), do: {to_string(key), string_keys(value)}
 
   defp get_opt(opts, key) when is_list(opts), do: Keyword.get(opts, key)
   defp get_opt(opts, key) when is_map(opts), do: Map.get(opts, key)
@@ -215,7 +233,7 @@ defmodule ReqLLM.Providers.Anthropic.AdapterHelpers do
     ])
     |> Map.new(fn
       {"properties", props} when is_map(props) ->
-        {"properties", Map.new(props, fn {k, v} -> {k, strip_constraints_recursive(v)} end)}
+        {"properties", strip_properties(props)}
 
       {"items", items} when is_map(items) ->
         {"items", strip_constraints_recursive(items)}
@@ -230,6 +248,13 @@ defmodule ReqLLM.Providers.Anthropic.AdapterHelpers do
 
   def strip_constraints_recursive(value), do: value
 
+  defp strip_properties(%Jason.OrderedObject{values: values} = properties),
+    do: %{properties | values: Enum.map(values, &strip_property/1)}
+
+  defp strip_properties(properties), do: Map.new(properties, &strip_property/1)
+
+  defp strip_property({name, schema}), do: {name, strip_constraints_recursive(schema)}
+
   @doc """
   Apply the object-level requirements strict decoding mandates: every property
   is marked required and `additionalProperties` is set to `false`.
@@ -238,7 +263,7 @@ defmodule ReqLLM.Providers.Anthropic.AdapterHelpers do
         %{"type" => "object", "properties" => properties} = schema
       ) do
     schema
-    |> Map.put("required", Map.keys(properties))
+    |> Map.put("required", Enum.map(properties, &elem(&1, 0)))
     |> Map.put("additionalProperties", false)
   end
 

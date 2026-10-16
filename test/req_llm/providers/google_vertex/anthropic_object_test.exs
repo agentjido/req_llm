@@ -22,8 +22,8 @@ defmodule ReqLLM.Providers.GoogleVertex.AnthropicObjectTest do
     "propertyOrdering" => ["options", "question"]
   }
 
-  defp build_body(extra_opts) do
-    {:ok, compiled} = ReqLLM.Schema.compile(@schema)
+  defp build_body(extra_opts, schema \\ @schema) do
+    {:ok, compiled} = ReqLLM.Schema.compile(schema)
     context = ReqLLM.Context.new([ReqLLM.Context.user("translate")])
 
     opts =
@@ -45,6 +45,19 @@ defmodule ReqLLM.Providers.GoogleVertex.AnthropicObjectTest do
       assert get_in(body, [:output_config, :format, :schema])["additionalProperties"] == false
 
       refute "structured_output" in tool_names(body)
+    end
+
+    test "json_schema mode sends the properties in the order the schema declares" do
+      body =
+        build_body([anthropic_structured_output_mode: :json_schema],
+          type: [type: :string, required: true],
+          text: [type: :string]
+        )
+
+      sent = body |> Jason.encode!() |> Jason.decode!(objects: :ordered_objects)
+      properties = sent["output_config"]["format"]["schema"]["properties"]
+
+      assert Enum.map(properties, &elem(&1, 0)) == ["type", "text"]
     end
 
     test "default mode injects a structured_output tool and no output_config" do
