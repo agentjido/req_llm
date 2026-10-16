@@ -68,26 +68,25 @@ defmodule ReqLLM.Providers.Anthropic.AdapterHelpers do
   def strict_json_schema(compiled_schema) do
     compiled_schema.schema
     |> ReqLLM.Schema.to_json()
-    |> string_keys()
-    |> ReqLLM.Schema.apply_property_ordering()
+    |> normalize_schema()
     |> strip_constraints_recursive()
     |> enforce_strict_schema_requirements()
   end
 
-  defp string_keys(%Jason.OrderedObject{values: entries}),
-    do: Map.new(entries, &string_key_entry/1)
+  defp normalize_schema(%Jason.OrderedObject{values: entries}),
+    do: entries |> Map.new(&normalize_entry/1) |> ReqLLM.Schema.apply_property_ordering()
 
-  defp string_keys(%{} = schema) when not is_struct(schema),
-    do: Map.new(schema, &string_key_entry/1)
+  defp normalize_schema(%{} = schema) when not is_struct(schema),
+    do: schema |> Map.new(&normalize_entry/1) |> ReqLLM.Schema.apply_property_ordering()
 
-  defp string_keys(list) when is_list(list), do: Enum.map(list, &string_keys/1)
-  defp string_keys(value), do: value
+  defp normalize_schema(list) when is_list(list), do: Enum.map(list, &normalize_schema/1)
+  defp normalize_schema(value), do: value
 
-  defp string_key_entry({key, %Jason.OrderedObject{values: properties}})
+  defp normalize_entry({key, %Jason.OrderedObject{values: properties}})
        when key in [:properties, "properties"],
-       do: {"properties", Jason.OrderedObject.new(Enum.map(properties, &string_key_entry/1))}
+       do: {"properties", Jason.OrderedObject.new(Enum.map(properties, &normalize_entry/1))}
 
-  defp string_key_entry({key, value}), do: {to_string(key), string_keys(value)}
+  defp normalize_entry({key, value}), do: {to_string(key), normalize_schema(value)}
 
   @doc """
   Add `output_config.format` for an `:object` request in `:json_schema` mode,

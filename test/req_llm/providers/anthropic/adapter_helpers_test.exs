@@ -101,6 +101,29 @@ defmodule ReqLLM.Providers.Anthropic.AdapterHelpersTest do
       assert reduced["required"] == ["type", "text"]
     end
 
+    test "keeps the order a nested schema declares inside ordered properties" do
+      {:ok, compiled} =
+        ReqLLM.Schema.compile(%{
+          "type" => "object",
+          "properties" =>
+            Jason.OrderedObject.new([
+              {"city",
+               %{
+                 "type" => "object",
+                 "properties" => %{
+                   "zebra" => %{"type" => "string"},
+                   "apple" => %{"type" => "string"}
+                 },
+                 "propertyOrdering" => ["zebra", "apple"]
+               }}
+            ])
+        })
+
+      reduced = AdapterHelpers.strict_json_schema(compiled)
+
+      assert property_names(reduced["properties"]["city"]) == ["zebra", "apple"]
+    end
+
     test "reduces an atom-keyed schema in its declared order" do
       {:ok, compiled} =
         ReqLLM.Schema.compile(%{
