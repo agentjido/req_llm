@@ -18,6 +18,54 @@ defmodule ReqLLM.Providers.AmazonBedrockTest do
     end
   end
 
+  describe "prepared object streaming" do
+    for use_converse <- [true, false], mode <- [:auto, :json_schema] do
+      test "builds a stream from prepared options with Converse=#{use_converse}, mode=#{mode}" do
+        {:ok, model} =
+          ReqLLM.model("amazon_bedrock:anthropic.claude-haiku-4-5-20251001-v1:0")
+
+        {:ok, schema} = ReqLLM.Schema.compile(name: [type: :string, required: true])
+        context = Context.new([Context.user("Describe a city")])
+
+        opts = [
+          compiled_schema: schema,
+          provider_options: [
+            access_key_id: "AKIATEST",
+            secret_access_key: "secretTEST",
+            region: "eu-west-1",
+            use_converse: unquote(use_converse),
+            anthropic_structured_output_mode: unquote(mode)
+          ]
+        ]
+
+        {:ok, prepared} = AmazonBedrock.prepare_request(:object, model, context, opts)
+
+        stream_opts =
+          opts
+          |> Keyword.merge(Map.to_list(prepared.options))
+          |> Keyword.put(:stream, true)
+
+        assert {:ok, stream} =
+                 AmazonBedrock.attach_stream(
+                   model,
+                   prepared.options[:context],
+                   stream_opts,
+                   ReqLLM.Finch
+                 )
+
+        assert stream.host == "bedrock-runtime.eu-west-1.amazonaws.com"
+        assert Map.new(stream.headers)["authorization"] =~ "AWS4-HMAC-SHA256"
+        assert Jason.decode!(stream.body) == Jason.decode!(prepared.body)
+
+        if unquote(use_converse) do
+          assert stream.path =~ "/converse-stream"
+        else
+          assert stream.path =~ "/invoke-with-response-stream"
+        end
+      end
+    end
+  end
+
   describe "parse_stream_protocol/2" do
     test "parses AWS Event Stream binary data" do
       # Create a simple AWS Event Stream message

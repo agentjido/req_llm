@@ -475,20 +475,23 @@ defmodule ReqLLM.Providers.AmazonBedrock do
       ])
       |> Req.Request.merge_options(
         ReqLLM.Provider.Defaults.finch_option(request) ++
-          [
-            base_url: base_url,
-            model: model_id,
-            inference_profile_arn: inference_profile_arn(opts),
-            endpoint: endpoint,
-            model_family: model_family,
-            context: opts[:context],
-            use_converse: use_converse,
-            operation: opts[:operation],
-            compiled_schema: opts[:compiled_schema],
-            tools: opts[:tools],
-            response_formatter: formatter,
-            anthropic_structured_output_mode: opts[:anthropic_structured_output_mode]
-          ]
+          Enum.reject(
+            [
+              base_url: base_url,
+              model: model_id,
+              inference_profile_arn: inference_profile_arn(opts),
+              endpoint: endpoint,
+              model_family: model_family,
+              context: opts[:context],
+              use_converse: use_converse,
+              operation: opts[:operation],
+              compiled_schema: opts[:compiled_schema],
+              tools: opts[:tools],
+              response_formatter: formatter,
+              anthropic_structured_output_mode: opts[:anthropic_structured_output_mode]
+            ],
+            fn {_key, value} -> is_nil(value) end
+          )
       )
 
     model_body =

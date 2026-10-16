@@ -466,6 +466,8 @@ defmodule ReqLLM.Provider.OptionsTest do
           finch: ReqLLM.Finch,
           json: %{},
           model: model,
+          model_family: "anthropic",
+          response_formatter: ReqLLM.Providers.AmazonBedrock.Anthropic,
           plug: {Req.Test, []},
           retry: :transient,
           temperature: 0.3
@@ -475,6 +477,8 @@ defmodule ReqLLM.Provider.OptionsTest do
       assert processed[:stream] == true
       assert processed[:max_tokens] == 1000
       assert processed[:temperature] == 0.3
+      refute Keyword.has_key?(processed, :model_family)
+      refute Keyword.has_key?(processed, :response_formatter)
       refute Keyword.has_key?(processed, :auth)
       refute Keyword.has_key?(processed, :json)
       refute Keyword.has_key?(processed, :retry)
