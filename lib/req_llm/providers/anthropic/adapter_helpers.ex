@@ -286,16 +286,36 @@ defmodule ReqLLM.Providers.Anthropic.AdapterHelpers do
   defp strip_property({name, schema}), do: {name, strip_constraints_recursive(schema)}
 
   @doc """
-  Apply the object-level requirements strict decoding mandates: every property
-  is marked required and `additionalProperties` is set to `false`.
+  Apply the object-level requirements strict decoding mandates to every object
+  in the schema: every property is marked required and `additionalProperties`
+  is set to `false`.
   """
-  def enforce_strict_schema_requirements(
-        %{"type" => "object", "properties" => properties} = schema
-      ) do
+  def enforce_strict_schema_requirements(%{} = schema) when not is_struct(schema) do
+    schema
+    |> Map.new(&enforce_entry/1)
+    |> require_every_property()
+  end
+
+  def enforce_strict_schema_requirements(list) when is_list(list),
+    do: Enum.map(list, &enforce_strict_schema_requirements/1)
+
+  def enforce_strict_schema_requirements(value), do: value
+
+  defp enforce_entry({"properties", %Jason.OrderedObject{values: values} = properties}),
+    do: {"properties", %{properties | values: Enum.map(values, &enforce_property/1)}}
+
+  defp enforce_entry({"properties", %{} = properties}),
+    do: {"properties", Map.new(properties, &enforce_property/1)}
+
+  defp enforce_entry({key, value}), do: {key, enforce_strict_schema_requirements(value)}
+
+  defp enforce_property({name, schema}), do: {name, enforce_strict_schema_requirements(schema)}
+
+  defp require_every_property(%{"type" => "object", "properties" => properties} = schema) do
     schema
     |> Map.put("required", Enum.map(properties, &elem(&1, 0)))
     |> Map.put("additionalProperties", false)
   end
 
-  def enforce_strict_schema_requirements(schema), do: schema
+  defp require_every_property(schema), do: schema
 end

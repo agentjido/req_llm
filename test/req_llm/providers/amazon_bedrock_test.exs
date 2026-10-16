@@ -2322,6 +2322,55 @@ defmodule ReqLLM.Providers.AmazonBedrockTest do
       assert invoke["output_config"]["format"]["type"] == "json_schema"
     end
 
+    test "holds nested objects to the strict requirements on Converse and InvokeModel", %{
+      claude: model,
+      context: context
+    } do
+      {:ok, compiled_schema} =
+        ReqLLM.Schema.compile(%{
+          "type" => "object",
+          "properties" => %{
+            "city" => %{
+              "type" => "object",
+              "properties" => %{"name" => %{"type" => "string"}},
+              "additionalProperties" => true
+            },
+            "stops" => %{
+              "type" => "array",
+              "items" => %{"type" => "object", "properties" => %{"id" => %{"type" => "string"}}}
+            },
+            "home" => %{"$ref" => "#/$defs/place"}
+          },
+          "$defs" => %{
+            "place" => %{
+              "type" => "object",
+              "properties" => %{"label" => %{"type" => "string"}},
+              "additionalProperties" => true
+            }
+          }
+        })
+
+      for provider_options <- [[use_converse: true], []] do
+        opts = json_schema_opts(compiled_schema, provider_options)
+        {:ok, request} = AmazonBedrock.prepare_request(:object, model, context, opts)
+        schema = request |> ReqLLM.Test.Helpers.json_body() |> sent_schema()
+
+        for object <- [
+              schema["properties"]["city"],
+              schema["properties"]["stops"]["items"],
+              schema["$defs"]["place"]
+            ] do
+          assert object["additionalProperties"] == false
+          assert object["required"] == Map.keys(object["properties"])
+        end
+      end
+    end
+
+    defp sent_schema(%{"outputConfig" => %{"textFormat" => text_format}}),
+      do: Jason.decode!(text_format["structure"]["jsonSchema"]["schema"])
+
+    defp sent_schema(%{"output_config" => %{"format" => %{"schema" => schema}}}), do: schema
+
     defp json_schema_opts(compiled_schema, provider_options) do
       bedrock_opts(
         operation: :object,
