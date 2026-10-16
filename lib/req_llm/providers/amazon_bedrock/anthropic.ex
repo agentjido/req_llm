@@ -41,7 +41,8 @@ defmodule ReqLLM.Providers.AmazonBedrock.Anthropic do
   version parameter.
 
   For :object operations, creates a synthetic "structured_output" tool to
-  leverage Claude's tool-calling for structured JSON output.
+  leverage Claude's tool-calling for structured JSON output, or sends
+  `output_config.format` with `anthropic_structured_output_mode: :json_schema`.
   """
   def format_request(model_id, context, opts) do
     body = messages_body(context, opts)
@@ -49,6 +50,7 @@ defmodule ReqLLM.Providers.AmazonBedrock.Anthropic do
     case get_in(opts, [:provider_options, :endpoint]) do
       :mantle ->
         body
+        |> ensure_no_output_format_on_mantle!()
         |> Map.put(:model, model_id)
         |> AdapterHelpers.maybe_add_param(:stream, opts[:stream])
 
@@ -73,10 +75,11 @@ defmodule ReqLLM.Providers.AmazonBedrock.Anthropic do
 
   defp messages_body(context, opts) do
     operation = opts[:operation]
+    mode = AdapterHelpers.structured_output_mode(opts)
 
     # For :object operation, we need to inject the structured_output tool
     {context, opts} =
-      if operation == :object do
+      if operation == :object and mode != :json_schema do
         AdapterHelpers.prepare_structured_output_context(context, opts)
       else
         {context, opts}
@@ -98,9 +101,18 @@ defmodule ReqLLM.Providers.AmazonBedrock.Anthropic do
     |> AdapterHelpers.maybe_add_param(:stop_sequences, opts[:stop_sequences])
     |> AdapterHelpers.maybe_add_thinking(opts)
     |> maybe_add_output_effort(opts)
+    |> AdapterHelpers.maybe_add_output_format(operation, mode, opts)
     |> maybe_add_tools(opts)
     |> Anthropic.maybe_apply_prompt_caching(PromptCache.to_anthropic_opts(opts))
   end
+
+  defp ensure_no_output_format_on_mantle!(%{output_config: %{format: _}}) do
+    raise ReqLLM.Error.Invalid.Parameter,
+      parameter:
+        "anthropic_structured_output_mode: :json_schema is not supported on the bedrock-mantle endpoint"
+  end
+
+  defp ensure_no_output_format_on_mantle!(body), do: body
 
   defp maybe_add_output_effort(body, opts) do
     case get_in(opts, [:provider_options, :additional_model_request_fields, :output_config]) do
@@ -179,7 +191,8 @@ defmodule ReqLLM.Providers.AmazonBedrock.Anthropic do
 
   Delegates to the native Anthropic.Response module.
 
-  For :object operations, extracts the structured output from the tool call.
+  For :object operations, extracts the structured output from the tool call, or
+  from the message text in `:json_schema` mode.
   """
   def parse_response(body, opts) when is_map(body) do
     # Create a model struct for Anthropic.Response.decode_response
@@ -193,10 +206,16 @@ defmodule ReqLLM.Providers.AmazonBedrock.Anthropic do
     merged_response = ReqLLM.Context.merge_response(input_context, response)
 
     final_response =
-      if opts[:operation] == :object do
-        AdapterHelpers.extract_and_set_object(merged_response)
-      else
-        merged_response
+      cond do
+        opts[:operation] == :object and
+            AdapterHelpers.structured_output_mode(opts) == :json_schema ->
+          AdapterHelpers.extract_object_from_text(merged_response, opts)
+
+        opts[:operation] == :object ->
+          AdapterHelpers.extract_and_set_object(merged_response)
+
+        true ->
+          merged_response
       end
 
     {:ok, final_response}

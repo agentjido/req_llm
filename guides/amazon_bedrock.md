@@ -197,6 +197,14 @@ Passed via `:provider_options` keyword:
 - **Purpose**: [Service tier](https://docs.aws.amazon.com/bedrock/latest/userguide/service-tiers-inference.html) the request runs on; omitted when `"default"`
 - **Example**: `provider_options: [service_tier: "flex"]`
 
+### `anthropic_structured_output_mode`
+
+- **Type**: `:auto` | `:json_schema`
+- **Purpose**: How Claude answers `generate_object/4`. `:auto` forces a `structured_output` tool; `:json_schema` sends the schema as [structured output](https://docs.aws.amazon.com/bedrock/latest/userguide/structured-output.html) (`outputConfig.textFormat` on Converse, `output_config.format` on InvokeModel), keeps the thinking and effort fields that the forced tool drops, and keeps the declared property order. It fails before sending on bedrock-mantle and on Converse with cited documents, which Bedrock does not combine with structured output. Bedrock compiles a new schema on its first use, which AWS says can take a few minutes: pass a longer `req_http_options: [receive_timeout: ...]` if that first request times out
+- **Tools**: in `:json_schema` mode the tools a request defines stay callable, so the model can answer with a tool call and no object. That includes the stub tools sent for a history that holds tool calls, which Bedrock requires. `:auto` forces the answer
+- **Default**: `:auto`
+- **Example**: `provider_options: [anthropic_structured_output_mode: :json_schema]`
+
 ### Prompt Caching
 
 ReqLLM emits `cachePoint` blocks on Converse and `cache_control` on InvokeModel and the Mantle Messages API. On Converse, `cache_control` metadata on a content part or a message adds an explicit checkpoint without enabling automatic caching, and a hint on a tool result lands after the enclosing result. Automatic tools checkpoints are skipped for `amazon.*` model ids. Caching does not change routing. Cache reads appear in `usage.cached_tokens`, writes in `usage.cache_creation_tokens`, and AWS's `cacheDetails` under `provider_meta.cache_details`. The `anthropic_*` names remain aliases. Model support, limits and TTLs are in [AWS prompt caching](https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-caching.html).

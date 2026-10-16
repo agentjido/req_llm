@@ -87,6 +87,7 @@ defmodule ReqLLM.Providers.AmazonBedrock.Converse do
   alias ReqLLM.Message.ContentPart
   alias ReqLLM.Message.ReasoningDetails
   alias ReqLLM.Providers.AmazonBedrock.PromptCache
+  alias ReqLLM.Providers.Anthropic.AdapterHelpers
   alias ReqLLM.ToolCall
 
   @reasoning_format "bedrock-converse-v1"
@@ -119,13 +120,13 @@ defmodule ReqLLM.Providers.AmazonBedrock.Converse do
 
   For :object operations, creates a synthetic "structured_output" tool to
   leverage unified tool calling for structured JSON output across all models.
+  With `anthropic_structured_output_mode: :json_schema`, sends the schema as
+  `outputConfig.textFormat` instead, and the model answers in the message text.
   """
   def format_request(model_id, context, opts) do
-    operation = opts[:operation]
-
     # For :object operation, inject the structured_output tool
     {context, opts} =
-      if operation == :object do
+      if opts[:operation] == :object and not json_schema_output?(opts) do
         prepare_structured_output_context(context, opts)
       else
         {context, opts}
@@ -167,6 +168,8 @@ defmodule ReqLLM.Providers.AmazonBedrock.Converse do
           add_tools(request, tools, opts[:formatter_module])
       end
 
+    request = define_history_tools(request, opts)
+
     # Add tool choice if specified
     # Note: Only some model families support toolChoice in Converse API
     request =
@@ -179,8 +182,76 @@ defmodule ReqLLM.Providers.AmazonBedrock.Converse do
     request
     |> add_inference_config(opts)
     |> add_additional_fields(opts)
+    |> add_output_config(opts)
     |> add_guardrail_config(opts)
     |> PromptCache.apply_converse(PromptCache.resolve(opts), model_id)
+  end
+
+  defp json_schema_output?(opts) do
+    opts[:operation] == :object and
+      AdapterHelpers.structured_output_mode(opts) == :json_schema
+  end
+
+  defp define_history_tools(%{"toolConfig" => _} = request, _opts), do: request
+
+  defp define_history_tools(%{"messages" => messages} = request, opts) do
+    with true <- json_schema_output?(opts),
+         [_ | _] = names <- messages |> Enum.flat_map(&tool_use_names/1) |> Enum.uniq() do
+      Map.put(request, "toolConfig", %{"tools" => Enum.map(names, &stub_tool_spec/1)})
+    else
+      _no_history_tools -> request
+    end
+  end
+
+  defp tool_use_names(%{"content" => content}),
+    do: for(%{"toolUse" => %{"name" => name}} <- content, do: name)
+
+  defp stub_tool_spec(name) do
+    %{
+      "toolSpec" => %{
+        "name" => name,
+        "description" => "Tool stub for multi-turn conversation",
+        "inputSchema" => %{"json" => %{"type" => "object", "properties" => %{}}}
+      }
+    }
+  end
+
+  defp add_output_config(request, opts) do
+    if json_schema_output?(opts) do
+      request
+      |> ensure_no_cited_documents!()
+      |> Map.put("outputConfig", output_config(opts))
+    else
+      request
+    end
+  end
+
+  defp ensure_no_cited_documents!(%{"messages" => messages} = request) do
+    if Enum.any?(messages, &cites_document?/1) do
+      invalid_part(
+        "anthropic_structured_output_mode: :json_schema cannot be combined with document citations"
+      )
+    else
+      request
+    end
+  end
+
+  defp cites_document?(%{"content" => content}),
+    do: Enum.any?(content, &match?(%{"document" => %{"citations" => %{"enabled" => true}}}, &1))
+
+  defp output_config(opts) do
+    schema =
+      opts
+      |> Keyword.fetch!(:compiled_schema)
+      |> AdapterHelpers.strict_json_schema()
+      |> Jason.encode!()
+
+    %{
+      "textFormat" => %{
+        "type" => "json_schema",
+        "structure" => %{"jsonSchema" => %{"schema" => schema}}
+      }
+    }
   end
 
   # Create the synthetic structured_output tool for :object operations
@@ -218,7 +289,8 @@ defmodule ReqLLM.Providers.AmazonBedrock.Converse do
   Converts Converse API response structure back to ReqLLM.Response with
   proper Message and ContentPart structures.
 
-  For :object operations, extracts the structured output from the tool call.
+  For :object operations, extracts the structured output from the tool call, or
+  from the message text in `:json_schema` mode.
   """
   def parse_response(response_body, opts) do
     message_data = get_in(response_body, ["output", "message"])
@@ -246,12 +318,11 @@ defmodule ReqLLM.Providers.AmazonBedrock.Converse do
     merge_opts = [tools: opts[:tools]]
     response = ReqLLM.Context.merge_response(original_context, initial_response, merge_opts)
 
-    # For :object operation, extract structured output from tool call
     final_response =
-      if opts[:operation] == :object do
-        extract_and_set_object(response, opts)
-      else
-        response
+      cond do
+        json_schema_output?(opts) -> AdapterHelpers.extract_object_from_text(response, opts)
+        opts[:operation] == :object -> extract_and_set_object(response, opts)
+        true -> response
       end
 
     {:ok, final_response}

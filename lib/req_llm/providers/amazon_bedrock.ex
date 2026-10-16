@@ -121,6 +121,7 @@ defmodule ReqLLM.Providers.AmazonBedrock do
   alias ReqLLM.Providers.AmazonBedrock.AWSAuthAdapter
   alias ReqLLM.Providers.AmazonBedrock.AWSEventStream
   alias ReqLLM.Providers.Anthropic
+  alias ReqLLM.Providers.Anthropic.AdapterHelpers
   alias ReqLLM.Providers.Anthropic.PlatformReasoning
   alias ReqLLM.Step
 
@@ -241,6 +242,20 @@ defmodule ReqLLM.Providers.AmazonBedrock do
       doc:
         "Beta feature flags for Anthropic models on Bedrock (e.g., [\"context-1m-2025-08-07\"])"
     ],
+    anthropic_structured_output_mode: [
+      type: {:in, [:auto, :json_schema]},
+      default: :auto,
+      doc: """
+      Structured output strategy for Claude `:object` generation:
+      - `:auto` (default) - best-effort tool calling
+      - `:json_schema` - grammar-constrained decoding via `outputConfig.textFormat` on Converse
+        and `output_config.format` on InvokeModel
+
+      `:json_schema` fails before the request is sent on the bedrock-mantle endpoint and on
+      Converse with cited documents, which Bedrock does not combine with structured output.
+      Defined tools stay callable, so the model can answer with a tool call and no object.
+      """
+    ],
     service_tier: [
       type: {:in, ["priority", "default", "flex", "reserved"]},
       default: "default",
@@ -316,8 +331,6 @@ defmodule ReqLLM.Providers.AmazonBedrock do
 
   @impl ReqLLM.Provider
   def prepare_request(:object, model_input, input, opts) do
-    # Structured output is implemented via tool calling for Claude models
-    # We leverage the existing Anthropic tool-based approach
     with {:ok, model} <- ReqLLM.model(model_input),
          {:ok, context} <- ReqLLM.Context.normalize(input, opts) do
       http_opts = Keyword.get(opts, :req_http_options, [])
@@ -404,6 +417,8 @@ defmodule ReqLLM.Providers.AmazonBedrock do
         {:error, error} -> raise error
       end
 
+    opts = put_structured_output_mode(opts, get_model_family(model.provider_model_id || model.id))
+
     # For Anthropic models: Remove thinking from additional_model_request_fields if it was removed by translate_options
     # This handles the case where thinking is incompatible with forced tool_choice
     opts =
@@ -455,7 +470,8 @@ defmodule ReqLLM.Providers.AmazonBedrock do
         :tools,
         :inference_profile_arn,
         :endpoint,
-        :response_formatter
+        :response_formatter,
+        :anthropic_structured_output_mode
       ])
       |> Req.Request.merge_options(
         ReqLLM.Provider.Defaults.finch_option(request) ++
@@ -470,7 +486,8 @@ defmodule ReqLLM.Providers.AmazonBedrock do
             operation: opts[:operation],
             compiled_schema: opts[:compiled_schema],
             tools: opts[:tools],
-            response_formatter: formatter
+            response_formatter: formatter,
+            anthropic_structured_output_mode: opts[:anthropic_structured_output_mode]
           ]
       )
 
@@ -593,6 +610,7 @@ defmodule ReqLLM.Providers.AmazonBedrock do
     translated_opts =
       translated_opts
       |> Keyword.put(:use_converse, use_converse)
+      |> put_structured_output_mode(get_model_family(model_id))
       |> maybe_clean_thinking_after_translation(get_model_family(model_id), operation)
 
     context =
@@ -1551,6 +1569,17 @@ defmodule ReqLLM.Providers.AmazonBedrock do
     # See: https://docs.claude.com/en/docs/build-with-claude/extended-thinking
     %{required_temperature: 1.0, min_max_tokens: 4001}
   end
+
+  defp put_structured_output_mode(opts, "anthropic"),
+    do:
+      Keyword.put(
+        opts,
+        :anthropic_structured_output_mode,
+        AdapterHelpers.structured_output_mode(opts)
+      )
+
+  defp put_structured_output_mode(opts, _model_family),
+    do: Keyword.put(opts, :anthropic_structured_output_mode, :auto)
 
   # Remove thinking from additional_model_request_fields after Options.process if needed
   # This is necessary because translate_options can't modify provider_options (they get restored)

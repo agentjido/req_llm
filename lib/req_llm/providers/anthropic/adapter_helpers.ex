@@ -89,6 +89,37 @@ defmodule ReqLLM.Providers.Anthropic.AdapterHelpers do
 
   defp string_key_entry({key, value}), do: {to_string(key), string_keys(value)}
 
+  @doc """
+  Add `output_config.format` for an `:object` request in `:json_schema` mode,
+  keeping any other `output_config` field such as `effort`.
+  """
+  def maybe_add_output_format(body, :object, :json_schema, opts) do
+    compiled_schema = Keyword.fetch!(opts, :compiled_schema)
+
+    format = %{
+      type: "json_schema",
+      schema: strict_json_schema(compiled_schema)
+    }
+
+    Map.update(body, :output_config, %{format: format}, &Map.put(&1, :format, format))
+  end
+
+  def maybe_add_output_format(body, _operation, _mode, _opts), do: body
+
+  @doc """
+  Set the response object from the message text, where `:json_schema` mode
+  returns it instead of a `structured_output` tool call.
+  """
+  def extract_object_from_text(response, opts) do
+    object =
+      case ReqLLM.JSON.decode(ReqLLM.Response.text(response), opts) do
+        {:ok, decoded} -> decoded
+        _ -> nil
+      end
+
+    %{response | object: object}
+  end
+
   defp get_opt(opts, key) when is_list(opts), do: Keyword.get(opts, key)
   defp get_opt(opts, key) when is_map(opts), do: Map.get(opts, key)
   defp get_opt(_opts, _key), do: nil

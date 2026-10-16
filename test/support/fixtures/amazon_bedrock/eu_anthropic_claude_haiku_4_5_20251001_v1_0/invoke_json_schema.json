@@ -1,0 +1,132 @@
+{
+  "captured_at": "2026-10-16T16:20:09.089443Z",
+  "model_spec": "amazon_bedrock:eu.anthropic.claude-haiku-4-5-20251001-v1:0",
+  "provider": "amazon_bedrock",
+  "request": {
+    "body": {
+      "b64": "eyJhbnRocm9waWNfdmVyc2lvbiI6ImJlZHJvY2stMjAyMy0wNS0zMSIsIm1heF90b2tlbnMiOjI1NiwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJEZXNjcmliZSBMeW9uIHdpdGggdGhyZWUgbGFuZG1hcmtzLiIsInJvbGUiOiJ1c2VyIn1dLCJvdXRwdXRfY29uZmlnIjp7ImZvcm1hdCI6eyJzY2hlbWEiOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7ImNvdW50cnkiOnsidHlwZSI6InN0cmluZyJ9LCJsYW5kbWFya3MiOnsiaXRlbXMiOnsidHlwZSI6InN0cmluZyJ9LCJ0eXBlIjoiYXJyYXkifSwibmFtZSI6eyJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJuYW1lIiwiY291bnRyeSIsImxhbmRtYXJrcyJdLCJ0eXBlIjoib2JqZWN0In0sInR5cGUiOiJqc29uX3NjaGVtYSJ9fX0="
+    },
+    "canonical_json": {
+      "anthropic_version": "bedrock-2023-05-31",
+      "max_tokens": 256,
+      "messages": [
+        {
+          "content": "Describe Lyon with three landmarks.",
+          "role": "user"
+        }
+      ],
+      "output_config": {
+        "format": {
+          "schema": {
+            "additionalProperties": false,
+            "properties": {
+              "country": {
+                "type": "string"
+              },
+              "landmarks": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "name": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "name",
+              "country",
+              "landmarks"
+            ],
+            "type": "object"
+          },
+          "type": "json_schema"
+        }
+      }
+    },
+    "headers": {
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "host": [
+        "bedrock-runtime.eu-west-1.amazonaws.com"
+      ],
+      "user-agent": [
+        "req/0.7.5"
+      ],
+      "x-amz-content-sha256": [
+        "16c1affe422c37090451a3394659c1f25e871210755fc6eecc0faf9d4b937276"
+      ],
+      "x-amz-date": [
+        "20261016T162005Z"
+      ],
+      "x-amz-security-token": [
+        "[REDACTED:x-amz-security-token]"
+      ]
+    },
+    "method": "post",
+    "url": "https://bedrock-runtime.eu-west-1.amazonaws.com/model/eu.anthropic.claude-haiku-4-5-20251001-v1:0/invoke"
+  },
+  "response": {
+    "body": {
+      "content": [
+        {
+          "text": "{\"name\": \"Lyon\", \"country\": \"France\", \"landmarks\": [\"Basilica of Notre-Dame de Fourvière\", \"Roman Theatres of Fourvière\", \"Confluence Museum\"]}",
+          "type": "text"
+        }
+      ],
+      "id": "msg_bdrk_011Cg6DksEAan1tmY6esoKPz",
+      "model": "claude-haiku-4-5-20251001",
+      "role": "assistant",
+      "stop_details": null,
+      "stop_reason": "end_turn",
+      "stop_sequence": null,
+      "type": "message",
+      "usage": {
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 0,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "input_tokens": 216,
+        "output_tokens": 49
+      }
+    },
+    "headers": {
+      "connection": [
+        "keep-alive"
+      ],
+      "content-length": [
+        "566"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 16 Oct 2026 16:20:09 GMT"
+      ],
+      "x-amzn-bedrock-cache-read-input-token-count": [
+        "0"
+      ],
+      "x-amzn-bedrock-cache-write-input-token-count": [
+        "0"
+      ],
+      "x-amzn-bedrock-input-token-count": [
+        "216"
+      ],
+      "x-amzn-bedrock-invocation-latency": [
+        "3075"
+      ],
+      "x-amzn-bedrock-output-token-count": [
+        "49"
+      ],
+      "x-amzn-requestid": [
+        "dd7ee882-fd85-448a-a975-5956d7136024"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}
