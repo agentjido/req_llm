@@ -10,7 +10,7 @@ defmodule ReqLLM.Providers.Anthropic do
   ## Key Differences from OpenAI
 
   - Uses `/v1/messages` endpoint instead of `/chat/completions`
-  - Different authentication: `x-api-key` header instead of `Authorization: Bearer`
+  - Uses `x-api-key` authentication by default; gateways can select `auth_scheme: :bearer`
   - Different message format with content blocks
   - Different response structure with top-level `role` and `content`
   - System messages are included in the messages array, not separate
@@ -33,6 +33,10 @@ defmodule ReqLLM.Providers.Anthropic do
   require Logger
 
   @provider_schema [
+    auth_scheme: [
+      type: {:in, [:x_api_key, :bearer]},
+      doc: "Header scheme for API keys: :x_api_key (default) or :bearer"
+    ],
     access_token: [
       type: :string,
       doc: "OAuth access token used as Authorization Bearer credential"
@@ -364,7 +368,7 @@ defmodule ReqLLM.Providers.Anthropic do
       raise ReqLLM.Error.Invalid.Provider.exception(provider: model.provider)
     end
 
-    credential = ReqLLM.Auth.resolve!(model, user_opts)
+    credential = resolve_credential(model, user_opts)
     extra_option_keys = ReqLLM.Provider.Defaults.extra_option_keys(__MODULE__)
 
     request
@@ -515,8 +519,26 @@ defmodule ReqLLM.Providers.Anthropic do
     [{"authorization", "Bearer #{token}"}]
   end
 
+  defp auth_header_list(%{kind: :api_key, token: token, auth_scheme: :bearer}) do
+    [{"authorization", "Bearer #{token}"}]
+  end
+
   defp auth_header_list(%{kind: :api_key, token: token}) do
     [{"x-api-key", token}]
+  end
+
+  defp resolve_credential(model, opts) do
+    scheme =
+      get_option(opts, :auth_scheme) ||
+        get_option(get_option(opts, :provider_options, []), :auth_scheme) ||
+        Application.get_env(:req_llm, :anthropic_auth_scheme, :x_api_key)
+
+    if scheme not in [:x_api_key, :bearer] do
+      raise ReqLLM.Error.Invalid.Parameter,
+        parameter: "Anthropic auth_scheme must be :x_api_key or :bearer"
+    end
+
+    model |> ReqLLM.Auth.resolve!(opts) |> Map.put(:auth_scheme, scheme)
   end
 
   defp subscription_header_list(credential, opts) do
@@ -760,7 +782,7 @@ defmodule ReqLLM.Providers.Anthropic do
       base_url = ReqLLM.Provider.Options.effective_base_url(__MODULE__, model, translated_opts)
       translated_opts = Keyword.put(translated_opts, :base_url, base_url)
 
-      credential = ReqLLM.Auth.resolve!(model, translated_opts)
+      credential = resolve_credential(model, translated_opts)
       headers = build_request_headers(translated_opts, credential)
       streaming_headers = [{"Accept", "text/event-stream"} | headers]
 

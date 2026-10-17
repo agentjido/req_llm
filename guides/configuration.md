@@ -719,3 +719,66 @@ config :req_llm,
   debug: true,
   load_dotenv: true
 ```
+
+## LLM Gateway Defaults
+
+Use the built-in provider with the gateway's base URL and API key. For an
+Anthropic-compatible gateway that requires Bearer authentication, set
+`auth_scheme: :bearer`. The credential remains an API key; OAuth and Claude
+subscription behavior are not enabled.
+
+Put model-specific provider defaults in `extra.provider_options`:
+
+```elixir
+anthropic = ReqLLM.model!(%{
+  provider: :anthropic,
+  id: "gateway-claude",
+  base_url: "http://localhost:4000",
+  extra: %{provider_options: %{auth_scheme: :bearer}}
+})
+
+openai = ReqLLM.model!(%{
+  provider: :openai,
+  id: "gateway-reasoning",
+  base_url: "http://localhost:4000/v1",
+  extra: %{
+    wire: %{protocol: "openai_responses"},
+    temperature: false,
+    provider_options: %{store: false}
+  }
+})
+
+ReqLLM.generate_text(anthropic, "Hello", api_key: gateway_key)
+ReqLLM.generate_text(openai, "Hello", api_key: gateway_key)
+```
+
+Alternatively, set provider-wide defaults in application configuration:
+
+```elixir
+config :req_llm, :anthropic,
+  provider_options: [auth_scheme: :bearer]
+
+config :req_llm, :openai,
+  provider_options: [store: false]
+```
+
+`config :req_llm, anthropic_auth_scheme: :bearer` also sets the default API-key
+header scheme. The built-in default is `:x_api_key`.
+
+Explicit call options override model defaults. Model defaults override
+application defaults. Provider options merge by key, so an unrelated call option
+does not remove `store: false` or `auth_scheme: :bearer`. An empty call container
+also retains these defaults. Values inside an individual option are replaced,
+not merged recursively. Keyword lists, maps, and provider-keyed containers use
+the same validation as call options. Model metadata maps can use atom or string
+keys. These defaults do not change the existing replacement rules for tuple
+model inputs.
+
+For Anthropic and OpenAI, `extra.temperature: false` removes `temperature`,
+`top_p`, and `top_k`. Use this hint when the gateway alias does not identify the
+model family. It does not copy catalog capabilities, limits, or prices.
+
+For OpenAI Responses over HTTP, `store: false` sends an explicit false value,
+omits `previous_response_id`, and sends the conversation history instead.
+The existing WebSocket continuation behavior is unchanged. These options apply
+to both normal and streaming generation requests.

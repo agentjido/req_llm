@@ -61,8 +61,20 @@ defmodule ReqLLM.Providers.OpenAI.ParamProfiles do
       {:drop, :reasoning_token_budget, nil}
     ]
 
-    canonical_steps ++ Enum.flat_map(profiles, &Map.get(@profiles, &1, []))
+    canonical_steps ++
+      Enum.flat_map(profiles, &Map.get(@profiles, &1, [])) ++
+      sampling_hint_steps(operation, model)
   end
+
+  defp sampling_hint_steps(operation, %LLMDB.Model{extra: extra})
+       when operation in [:chat, :object] and is_map(extra) do
+    case Map.get(extra, :temperature, Map.get(extra, "temperature")) do
+      false -> Map.fetch!(@profiles, :no_sampling_params)
+      _ -> []
+    end
+  end
+
+  defp sampling_hint_steps(_operation, _model), do: []
 
   defp translate_reasoning_effort(:none), do: "none"
   defp translate_reasoning_effort(:minimal), do: "minimal"

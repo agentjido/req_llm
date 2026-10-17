@@ -8,7 +8,16 @@ defmodule ReqLLM.Provider.Options.Namespace do
 
   @spec normalize(module(), atom(), LLMDB.Model.t(), keyword()) ::
           {:ok, keyword(), [warning()]} | {:error, Exception.t()}
-  def normalize(provider_mod, operation, %LLMDB.Model{} = model, opts)
+  def normalize(provider_mod, operation, model, opts) do
+    with {:ok, normalized, warnings} <- normalize_explicit(provider_mod, operation, model, opts),
+         {:ok, merged, default_warnings} <-
+           ReqLLM.Provider.Options.Defaults.merge(provider_mod, operation, model, normalized) do
+      {:ok, merged, warnings ++ default_warnings}
+    end
+  end
+
+  @doc false
+  def normalize_explicit(provider_mod, operation, %LLMDB.Model{} = model, opts)
       when is_atom(provider_mod) and is_atom(operation) and is_list(opts) do
     with :ok <- validate_keyword_options(opts),
          {:ok, normalized, warnings} <-
@@ -17,7 +26,7 @@ defmodule ReqLLM.Provider.Options.Namespace do
     end
   end
 
-  def normalize(_provider_mod, _operation, _model, _opts) do
+  def normalize_explicit(_provider_mod, _operation, _model, _opts) do
     invalid_parameter("options must be a keyword list")
   end
 
