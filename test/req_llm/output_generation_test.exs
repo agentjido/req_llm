@@ -236,8 +236,32 @@ defmodule ReqLLM.OutputGenerationTest do
       assert is_binary(value["occupation"])
       assert response.object == value
       assert streamed_json == value
+      assert Jason.decode!(Response.text(response)) == value
       assert response.provider_meta["status"] == "completed"
       assert Response.tool_calls(response) == []
+    end
+
+    test "stream_object/4 retains JSON text and its parsed object" do
+      schema = [
+        name: [type: :string, required: true],
+        age: [type: :pos_integer, required: true],
+        occupation: [type: :string, required: true]
+      ]
+
+      assert {:ok, stream} =
+               ReqLLM.stream_object(
+                 "openai:gpt-4o-mini",
+                 "Generate a software engineer profile",
+                 schema,
+                 max_tokens: 500,
+                 fixture: "object_streaming"
+               )
+
+      assert {:ok, response} = StreamResponse.process_stream(stream)
+      assert Jason.decode!(Response.text(response)) == response.object
+      assert is_binary(response.object["name"])
+      assert is_integer(response.object["age"])
+      assert is_binary(response.object["occupation"])
     end
   end
 

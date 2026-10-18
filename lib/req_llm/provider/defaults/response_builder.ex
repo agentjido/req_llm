@@ -221,33 +221,14 @@ defmodule ReqLLM.Provider.Defaults.ResponseBuilder do
   @doc """
   Build content parts from text, thinking, and tool calls.
 
-  Special case: if there are no tool calls and text looks like JSON,
-  it may be structured output and is parsed accordingly.
+  Keep the original text and thinking content, including JSON text.
+  Structured values are extracted separately into `Response.object`.
   """
-  @spec build_content_parts(String.t(), String.t(), [ToolCall.t()]) :: [ContentPart.t() | map()]
-  def build_content_parts(text_content, thinking_content, tool_calls) do
-    if tool_calls == [] and text_content != "" and looks_like_json?(text_content) do
-      case Jason.decode(text_content) do
-        {:ok, parsed_json} when is_map(parsed_json) ->
-          [%{type: :object, object: parsed_json}]
-
-        _ ->
-          build_standard_content_parts(text_content, thinking_content)
-      end
-    else
-      build_standard_content_parts(text_content, thinking_content)
-    end
-  end
-
-  defp build_standard_content_parts(text_content, thinking_content) do
+  @spec build_content_parts(String.t(), String.t(), [ToolCall.t()]) :: [ContentPart.t()]
+  def build_content_parts(text_content, thinking_content, _tool_calls) do
     []
     |> maybe_add_text_part(text_content)
     |> maybe_add_thinking_part(thinking_content)
-  end
-
-  defp looks_like_json?(text) do
-    trimmed = String.trim(text)
-    String.starts_with?(trimmed, "{") and String.ends_with?(trimmed, "}")
   end
 
   defp maybe_add_text_part(parts, ""), do: parts
@@ -267,8 +248,9 @@ defmodule ReqLLM.Provider.Defaults.ResponseBuilder do
   # ============================================================================
 
   defp extract_object_from_message(%Message{content: content, tool_calls: tool_calls}) do
-    with nil <- extract_from_tool_calls(tool_calls) do
-      extract_from_content(content)
+    with nil <- extract_from_tool_calls(tool_calls),
+         nil <- extract_from_content(content) do
+      extract_from_text(content, tool_calls)
     end
   end
 
@@ -296,6 +278,27 @@ defmodule ReqLLM.Provider.Defaults.ResponseBuilder do
       %{type: :object, object: obj} when is_map(obj) -> obj
       _ -> nil
     end)
+  end
+
+  defp extract_from_text(content, tool_calls) when tool_calls in [nil, []] do
+    text =
+      content
+      |> Enum.filter(&(&1.type == :text))
+      |> Enum.map_join("", & &1.text)
+
+    if looks_like_json?(text) do
+      case Jason.decode(text) do
+        {:ok, object} when is_map(object) -> object
+        _ -> nil
+      end
+    end
+  end
+
+  defp extract_from_text(_content, _tool_calls), do: nil
+
+  defp looks_like_json?(text) do
+    trimmed = String.trim(text)
+    String.starts_with?(trimmed, "{") and String.ends_with?(trimmed, "}")
   end
 
   defp accumulator_chunks(chunks, :buffered) do
