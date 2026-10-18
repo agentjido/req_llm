@@ -971,7 +971,7 @@ defmodule ReqLLM.OpenTelemetryTest do
         %{request_id: request_id, operation: :chat, provider: :openai, model: model}
       )
 
-      assert_receive {:start_span, span, _name, _attrs}
+      assert_receive {:start_span, span, _name, %{:"req_llm.request_id" => ^request_id}}
 
       :telemetry.execute(
         [:req_llm, :request, :stop],
@@ -1012,7 +1012,7 @@ defmodule ReqLLM.OpenTelemetryTest do
         %{request_id: request_id, operation: :chat, provider: :openai, model: model}
       )
 
-      assert_receive {:start_span, span, _name, _attrs}
+      assert_receive {:start_span, span, _name, %{:"req_llm.request_id" => ^request_id}}
 
       :telemetry.execute(
         [:req_llm, :request, :stop],
@@ -1034,6 +1034,7 @@ defmodule ReqLLM.OpenTelemetryTest do
     test "langfuse: true adds langfuse.observation.cost_details JSON" do
       handler_id = "req-llm-otel-#{System.unique_integer([:positive])}"
       request_id = "req-#{System.unique_integer([:positive])}"
+      unrelated_request_id = "unrelated-#{request_id}"
 
       assert :ok =
                OpenTelemetry.attach(handler_id,
@@ -1049,10 +1050,16 @@ defmodule ReqLLM.OpenTelemetryTest do
       :telemetry.execute(
         [:req_llm, :request, :start],
         %{system_time: System.system_time()},
+        %{request_id: unrelated_request_id, operation: :chat, provider: :openai, model: model}
+      )
+
+      :telemetry.execute(
+        [:req_llm, :request, :start],
+        %{system_time: System.system_time()},
         %{request_id: request_id, operation: :chat, provider: :openai, model: model}
       )
 
-      assert_receive {:start_span, span, _name, _attrs}
+      assert_receive {:start_span, span, _name, %{:"req_llm.request_id" => ^request_id}}
 
       :telemetry.execute(
         [:req_llm, :request, :stop],
@@ -1085,6 +1092,11 @@ defmodule ReqLLM.OpenTelemetryTest do
                "reasoning" => 0.0005,
                "total" => 0.0035
              }
+
+      assert_receive {:start_span, _span, _name,
+                      %{
+                        :"req_llm.request_id" => ^unrelated_request_id
+                      }}
     end
   end
 
