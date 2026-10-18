@@ -432,6 +432,8 @@ defmodule ReqLLM.Providers.Anthropic.Response do
       reasoning_tokens: reasoning_tokens
     }
 
+    base = maybe_put_usage_reported(base, usage)
+
     base =
       case Map.get(usage, "cache_creation") do
         %{} = groups -> Map.put(base, :cache_creation, groups)
@@ -451,8 +453,20 @@ defmodule ReqLLM.Providers.Anthropic.Response do
       output_tokens: 0,
       total_tokens: 0,
       cached_tokens: 0,
-      reasoning_tokens: 0
+      reasoning_tokens: 0,
+      usage_reported: %{input: false, output: false}
     }
+
+  defp maybe_put_usage_reported(base, usage) do
+    reported = %{
+      input: not is_nil(Map.get(usage, "input_tokens")),
+      output: not is_nil(Map.get(usage, "output_tokens"))
+    }
+
+    if reported.input and reported.output,
+      do: base,
+      else: Map.put(base, :usage_reported, reported)
+  end
 
   defp anthropic_tool_usage(usage) when is_map(usage) do
     server_tool_use = Map.get(usage, "server_tool_use", %{})

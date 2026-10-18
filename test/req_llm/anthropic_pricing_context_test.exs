@@ -71,12 +71,19 @@ defmodule ReqLLM.AnthropicPricingContextTest do
              %{inference_geo: "global"}
   end
 
-  test "first-party request speed is confirmed without assuming a gateway speed or region" do
+  test "only standard request speed is confirmed without returned speed" do
     assert PricingContext.from_anthropic(@url, nil, %{}, Jason.encode!(%{model: "test"})) ==
              %{api: "messages", request_body: %{speed: "standard"}}
 
     assert PricingContext.from_anthropic(@url, nil, %{}, %{speed: "fast"}) ==
-             %{api: "messages", request_body: %{speed: "fast"}}
+             %{api: "messages"}
+
+    assert PricingContext.from_anthropic(
+             @url,
+             nil,
+             %{request_body: %{speed: "standard"}},
+             %{speed: "fast"}
+           ) == %{api: "messages", request_body: %{speed: "standard"}}
 
     assert PricingContext.from_anthropic(@url, nil, %{}, %{speed: nil}) ==
              %{api: "messages", request_body: %{}}
@@ -104,6 +111,22 @@ defmodule ReqLLM.AnthropicPricingContextTest do
                },
                %{}
              ) == %{api: "messages", request_body: %{}}
+    end
+  end
+
+  test "present atom facts take precedence over string aliases, including nil" do
+    for invalid <- [nil, false, "future"] do
+      metadata =
+        Map.merge(@facts, %{inference_geo: invalid, speed: invalid, service_tier: invalid})
+
+      assert PricingContext.from_anthropic(@url, metadata, %{}, %{}) ==
+               %{api: "messages", request_body: %{}}
+
+      assert PricingContext.from_anthropic(@url, nil, %{}, %{
+               "speed" => "standard",
+               speed: invalid
+             }) ==
+               %{api: "messages", request_body: %{}}
     end
   end
 
@@ -187,6 +210,63 @@ defmodule ReqLLM.AnthropicPricingContextTest do
       assert_in_delta opus.total_cost, 0.0006, 1.0e-12
     end
 
+    test "#{path} pricing requires returned speed for a fast request" do
+      sample = sample("anthropic:claude-opus-5-5", %{"inference_geo" => "global"})
+      {usage, _} = usage_for(unquote(path), sample, %{}, %{"speed" => "fast"})
+
+      assert usage.pricing.status == :unknown
+      refute Map.has_key?(usage, :total_cost)
+
+      sample = %{sample | body: put_in(sample.body, ["usage", "speed"], "standard")}
+      {usage, _} = usage_for(unquote(path), sample, %{}, %{"speed" => "fast"})
+
+      assert usage.pricing.status == :priced
+      assert_in_delta usage.total_cost, 0.0006, 1.0e-12
+    end
+
+    test "#{path} pricing requires token counts and accepts reported zero counts" do
+      for raw_usage <- [
+            nil,
+            %{},
+            @facts,
+            Map.put(@facts, "input_tokens", 100),
+            Map.put(@facts, "output_tokens", 10),
+            Map.merge(@facts, %{"input_tokens" => 0, "output_tokens" => 0})
+          ] do
+        sample = sample("anthropic:claude-haiku-4-5", @facts)
+
+        body =
+          if is_nil(raw_usage),
+            do: Map.delete(sample.body, "usage"),
+            else: Map.put(sample.body, "usage", raw_usage)
+
+        sample = %{sample | body: body}
+
+        {usage, _} =
+          case unquote(path) do
+            :buffered ->
+              usage_for(:buffered, sample)
+
+            :streamed ->
+              events = [
+                %{"type" => "message_start", "message" => body},
+                %{"type" => "message_stop"}
+              ]
+
+              stream_usage(sample, events, %{})
+          end
+
+        if is_map(raw_usage) and Map.has_key?(raw_usage, "input_tokens") and
+             Map.has_key?(raw_usage, "output_tokens") do
+          assert usage.pricing.status == :priced
+          assert usage.total_cost == 0
+        else
+          assert get_in(usage, [:pricing, :status]) in [nil, :unknown]
+          refute Map.has_key?(usage, :total_cost)
+        end
+      end
+    end
+
     test "#{path} pricing retains cache duration facts without explicit context" do
       sample = Samples.sample("mixed_cache_ttl", "anthropic:claude-opus-5-5")
       sample = %{sample | body: Map.update!(sample.body, "usage", &Map.merge(&1, @facts))}
@@ -240,6 +320,33 @@ defmodule ReqLLM.AnthropicPricingContextTest do
     refute Map.has_key?(usage, :total_cost)
   end
 
+  test "metadata-only streamed facts recalculate the existing usage" do
+    metadata = canonical_usage([%{}, @facts, %{"speed" => "fast", "inference_geo" => "us"}])
+
+    assert metadata.usage.pricing.status == :priced
+    assert_in_delta metadata.usage.total_cost, 0.00132, 1.0e-12
+    assert metadata.usage.input_tokens == 100
+    assert metadata.usage.output_tokens == 10
+  end
+
+  test "later streamed facts replace both aliases and clear an old price" do
+    for key <- [:speed, :inference_geo], atom_first? <- [true, false] do
+      initial =
+        if atom_first?,
+          do: Map.new(@facts, fn {k, v} -> {String.to_existing_atom(k), v} end),
+          else: @facts
+
+      incoming_key = if atom_first?, do: Atom.to_string(key), else: key
+      stale_key = if atom_first?, do: key, else: Atom.to_string(key)
+      metadata = canonical_usage([initial, %{incoming_key => nil}])
+
+      assert metadata.usage.pricing.status == :unknown
+      refute Map.has_key?(metadata.usage, :total_cost)
+      assert Map.fetch!(metadata.provider_meta, incoming_key) == nil
+      refute Map.has_key?(metadata.provider_meta, stale_key)
+    end
+  end
+
   test "both stream decoder callbacks preserve returned pricing facts" do
     sample = sample("anthropic:claude-opus-5-5", @facts)
     model = ReqLLM.model!(sample.model)
@@ -258,14 +365,14 @@ defmodule ReqLLM.AnthropicPricingContextTest do
     %{sample | body: Map.update!(sample.body, "usage", &Map.merge(&1, facts))}
   end
 
-  defp usage_for(path, sample, explicit \\ %{})
+  defp usage_for(path, sample, explicit \\ %{}, request_body \\ %{})
 
-  defp usage_for(:buffered, sample, explicit) do
+  defp usage_for(:buffered, sample, explicit, request_body) do
     model = ReqLLM.model!(sample.model)
 
     request = %Req.Request{
       url: URI.parse(@url),
-      body: Jason.encode!(%{model: model.id}),
+      body: Jason.encode!(Map.merge(%{"model" => model.id}, request_body)),
       options: %{model: model.id, context: ReqLLM.Context.new([])},
       private: %{req_llm_model: model, req_llm_pricing_context: explicit}
     }
@@ -277,10 +384,10 @@ defmodule ReqLLM.AnthropicPricingContextTest do
     {response.body.usage, response.body.provider_meta}
   end
 
-  defp usage_for(:streamed, sample, explicit),
-    do: stream_usage(sample, Samples.events(sample), explicit)
+  defp usage_for(:streamed, sample, explicit, request_body),
+    do: stream_usage(sample, Samples.events(sample), explicit, request_body)
 
-  defp stream_usage(sample, events, explicit) do
+  defp stream_usage(sample, events, explicit, request_body \\ %{}) do
     server =
       start_server(
         provider_mod: Anthropic,
@@ -289,7 +396,12 @@ defmodule ReqLLM.AnthropicPricingContextTest do
       )
 
     mock_http_task(server)
-    StreamServer.set_fixture_context(server, %{url: @url}, %{"model" => sample.model})
+
+    StreamServer.set_fixture_context(
+      server,
+      %{url: @url},
+      Map.merge(%{"model" => sample.model}, request_body)
+    )
 
     for event <- events do
       assert :ok = StreamServer.http_event(server, {:data, "data: #{Jason.encode!(event)}\n\n"})
@@ -298,6 +410,33 @@ defmodule ReqLLM.AnthropicPricingContextTest do
     assert :ok = StreamServer.http_event(server, :done)
     assert {:ok, metadata} = StreamServer.await_metadata(server, 1000)
     StreamServer.cancel(server)
-    {metadata.usage, metadata.provider_meta}
+    {Map.get(metadata, :usage, %{}), metadata.provider_meta}
+  end
+
+  defp canonical_usage([initial | updates]) do
+    server =
+      start_server(
+        provider_mod: Anthropic,
+        model: ReqLLM.model!("anthropic:claude-opus-5-5"),
+        canonical_stream?: true
+      )
+
+    mock_http_task(server)
+
+    StreamServer.set_fixture_context(server, %{url: @url}, %{})
+
+    metadata = %{usage: %{input_tokens: 100, output_tokens: 10}, provider_meta: initial}
+    chunk = ReqLLM.StreamChunk.meta(metadata)
+    assert :ok = StreamServer.in_process_event(server, {:chunk, chunk})
+
+    for facts <- updates do
+      chunk = ReqLLM.StreamChunk.meta(%{provider_meta: facts})
+      assert :ok = StreamServer.in_process_event(server, {:chunk, chunk})
+    end
+
+    assert :ok = StreamServer.in_process_event(server, :done)
+    assert {:ok, metadata} = StreamServer.await_metadata(server, 1000)
+    StreamServer.cancel(server)
+    metadata
   end
 end

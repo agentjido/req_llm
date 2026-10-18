@@ -37,7 +37,9 @@ defmodule ReqLLM.PricingContext do
   Returned region, speed, and service tier replace conflicting explicit facts.
   Invalid returned facts clear the corresponding explicit value. Missing facts
   preserve independently confirmed explicit context. For first-party Messages
-  requests, an encoded request body without speed confirms standard speed.
+  requests, an encoded request body with omitted or standard speed confirms
+  standard speed. A fast request requires returned speed or independent context.
+  Present atom keys take precedence over string aliases, including nil values.
   """
   @spec from_anthropic(
           String.t() | URI.t() | nil,
@@ -65,7 +67,7 @@ defmodule ReqLLM.PricingContext do
     if has_fact?(metadata, key) do
       context
       |> Map.drop([key, Atom.to_string(key)])
-      |> put_fact(key, known_fact(ReqLLM.MapAccess.get_raw(metadata, key), allowed))
+      |> put_fact(key, known_fact(get_fact(metadata, key), allowed))
     else
       context
     end
@@ -74,17 +76,15 @@ defmodule ReqLLM.PricingContext do
   defp put_anthropic_speed(context, metadata, uri, request_body) do
     cond do
       has_fact?(metadata, :speed) ->
-        put_speed(context, ReqLLM.MapAccess.get_raw(metadata, :speed))
+        put_speed(context, get_fact(metadata, :speed))
 
       first_party_messages?(uri) ->
         case decoded_request_body(request_body) do
           body when is_map(body) ->
-            speed =
-              if has_fact?(body, :speed),
-                do: ReqLLM.MapAccess.get_raw(body, :speed),
-                else: "standard"
-
-            put_speed(context, speed)
+            case get_fact(body, :speed, "standard") do
+              speed when speed in ["fast", :fast] -> context
+              speed -> put_speed(context, speed)
+            end
 
           _ ->
             context
@@ -96,7 +96,7 @@ defmodule ReqLLM.PricingContext do
   end
 
   defp put_speed(context, value) do
-    body = ReqLLM.MapAccess.get_raw(context, :request_body, %{})
+    body = get_fact(context, :request_body, %{})
     body = if is_map(body), do: Map.drop(body, [:speed, "speed"]), else: %{}
     body = put_fact(body, :speed, known_fact(value, ["standard", "fast"]))
     put_fact(context, :request_body, body)
@@ -111,6 +111,9 @@ defmodule ReqLLM.PricingContext do
     do: Map.has_key?(metadata, key) or Map.has_key?(metadata, Atom.to_string(key))
 
   defp has_fact?(_metadata, _key), do: false
+
+  defp get_fact(metadata, key, default \\ nil),
+    do: Map.get(metadata, key, Map.get(metadata, Atom.to_string(key), default))
 
   defp first_party_messages?(%URI{host: host, path: "/v1/messages"}) when is_binary(host),
     do: String.downcase(host) == "api.anthropic.com"

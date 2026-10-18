@@ -1225,23 +1225,26 @@ defmodule ReqLLM.StreamServer do
     end
   end
 
-  defp returned_service_tier?(provider_meta) do
-    Map.has_key?(provider_meta, :service_tier) or Map.has_key?(provider_meta, "service_tier")
+  defp pricing_fact_keys(:openai), do: [:service_tier]
+  defp pricing_fact_keys(:anthropic), do: [:service_tier, :inference_geo, :speed]
+  defp pricing_fact_keys(_provider), do: []
+
+  defp returned_pricing_fact?(provider_meta, provider) do
+    Enum.any?(pricing_fact_keys(provider), fn key ->
+      Map.has_key?(provider_meta, key) or Map.has_key?(provider_meta, Atom.to_string(key))
+    end)
   end
 
-  defp merge_provider_metadata(existing, incoming) do
-    if returned_service_tier?(incoming) do
-      existing = Map.drop(existing, [:service_tier, "service_tier"])
+  defp merge_provider_metadata(existing, incoming, provider) do
+    Enum.reduce(pricing_fact_keys(provider), Map.merge(existing, incoming), fn key, merged ->
+      string_key = Atom.to_string(key)
 
-      incoming =
-        if Map.has_key?(incoming, :service_tier),
-          do: Map.delete(incoming, "service_tier"),
-          else: incoming
-
-      Map.merge(existing, incoming)
-    else
-      Map.merge(existing, incoming)
-    end
+      cond do
+        Map.has_key?(incoming, key) -> Map.delete(merged, string_key)
+        Map.has_key?(incoming, string_key) -> Map.delete(merged, key)
+        true -> merged
+      end
+    end)
   end
 
   defp enqueue_chunks(chunks, state) do
@@ -1282,7 +1285,8 @@ defmodule ReqLLM.StreamServer do
                     provider_meta =
                       merge_provider_metadata(
                         provider_metadata(metadata),
-                        provider_metadata(chunk_meta)
+                        provider_metadata(chunk_meta),
+                        state.model.provider
                       )
 
                     merged_metadata
@@ -1301,8 +1305,7 @@ defmodule ReqLLM.StreamServer do
                   end)
                   |> price_stream_usage(state)
                 else
-                  if state.model.provider == :openai and
-                       returned_service_tier?(provider_metadata(chunk_meta)) do
+                  if returned_pricing_fact?(provider_metadata(chunk_meta), state.model.provider) do
                     price_stream_usage(merged_metadata, state)
                   else
                     merged_metadata
