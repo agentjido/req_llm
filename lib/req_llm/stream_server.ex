@@ -1189,16 +1189,24 @@ defmodule ReqLLM.StreamServer do
 
   defp price_stream_usage(%{usage: usage} = metadata, state) do
     context =
-      if state.model.provider == :openai do
-        url = state.http_context && state.http_context.url
+      case state.model.provider do
+        :openai ->
+          ReqLLM.PricingContext.from_openai(
+            state.http_context && state.http_context.url,
+            Map.get(metadata, :provider_meta),
+            state.pricing_context
+          )
 
-        ReqLLM.PricingContext.from_openai(
-          url,
-          Map.get(metadata, :provider_meta),
+        :anthropic ->
+          ReqLLM.PricingContext.from_anthropic(
+            state.http_context && state.http_context.url,
+            Map.get(metadata, :provider_meta),
+            state.pricing_context,
+            state.canonical_json
+          )
+
+        _ ->
           state.pricing_context
-        )
-      else
-        state.pricing_context
       end
 
     Map.put(
@@ -1270,7 +1278,7 @@ defmodule ReqLLM.StreamServer do
                   )
 
                 merged_metadata =
-                  if state.model.provider == :openai do
+                  if state.model.provider in [:openai, :anthropic] do
                     provider_meta =
                       merge_provider_metadata(
                         provider_metadata(metadata),

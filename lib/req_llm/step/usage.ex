@@ -157,6 +157,22 @@ defmodule ReqLLM.Step.Usage do
     )
   end
 
+  defp pricing_context(req, body, %LLMDB.Model{provider: :anthropic}) do
+    metadata =
+      case body do
+        %ReqLLM.Response{provider_meta: meta} -> meta
+        %{"usage" => usage} -> usage
+        _ -> nil
+      end
+
+    ReqLLM.PricingContext.from_anthropic(
+      req.url,
+      metadata,
+      req.private[:req_llm_pricing_context],
+      req.body || req.options[:json]
+    )
+  end
+
   defp pricing_context(req, _body, _model), do: req.private[:req_llm_pricing_context]
 
   defp complete_operation_usage(%{usage_reported: reported} = usage, operation)
