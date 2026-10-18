@@ -87,19 +87,66 @@ defmodule ReqLLM.UsageHelpersTest do
     end
 
     test "returns zeroed canonical and alias keys for non-map values" do
-      usage = ReqLLM.Usage.normalize(nil)
+      for input <- [nil, false, 0, "invalid", [], [:invalid]] do
+        usage = ReqLLM.Usage.normalize(input)
 
-      assert usage == %{
-               input_tokens: 0,
-               output_tokens: 0,
-               total_tokens: 0,
-               input: 0,
-               output: 0,
-               cache_read_tokens: 0,
-               cache_write_tokens: 0,
-               cached_tokens: 0,
-               cache_creation_tokens: 0
-             }
+        assert usage == %{
+                 input_tokens: 0,
+                 output_tokens: 0,
+                 total_tokens: 0,
+                 input: 0,
+                 output: 0,
+                 cache_read_tokens: 0,
+                 cache_write_tokens: 0,
+                 cached_tokens: 0,
+                 cache_creation_tokens: 0,
+                 input_includes_cached: true
+               }
+
+        assert ReqLLM.Usage.normalize(usage).input_includes_cached == true
+      end
+    end
+
+    test "empty usage defaults to input that includes cached tokens" do
+      usage = ReqLLM.Usage.normalize(%{})
+
+      assert usage.input_includes_cached == true
+      assert usage.input_tokens == 0
+      assert usage.total_tokens == 0
+    end
+
+    test "provider cache counts retain their input and derived total rules" do
+      cases = [
+        {%{
+           "input_tokens" => 4,
+           "output_tokens" => 51,
+           "cache_read_input_tokens" => 1272,
+           "cache_creation_input_tokens" => 276
+         }, false, 4, 55},
+        {%{
+           "prompt_tokens" => 1552,
+           "completion_tokens" => 51,
+           "prompt_tokens_details" => %{"cached_tokens" => 1272, "cache_write_tokens" => 276}
+         }, true, 1552, 1603}
+      ]
+
+      for {raw, includes_cached, input, total} <- cases do
+        usage = ReqLLM.Usage.normalize(raw)
+
+        assert usage.input_includes_cached == includes_cached
+        assert usage.input_tokens == input
+        assert usage.output_tokens == 51
+        assert usage.cache_read_tokens == 1272
+        assert usage.cache_write_tokens == 276
+        assert usage.total_tokens == total
+        assert ReqLLM.Usage.normalize(usage) == usage
+
+        explicit_total = raw |> Map.put("total_tokens", 1603) |> ReqLLM.Usage.normalize()
+
+        assert explicit_total.total_tokens == 1603
+        assert explicit_total.input_tokens == input
+        assert explicit_total.input_includes_cached == includes_cached
+      end
     end
 
     test "normalize handles mixed, missing, and malformed counters safely" do

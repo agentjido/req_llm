@@ -42,10 +42,11 @@ defmodule ReqLLM.Usage do
   @doc """
   Normalize usage into a canonical map.
 
-  Guarantees canonical token keys:
+  Guarantees these canonical keys:
   - `:input_tokens`
   - `:output_tokens`
   - `:total_tokens`
+  - `:input_includes_cached`
 
   Also guarantees compatibility aliases:
   - `:input`
@@ -56,6 +57,24 @@ defmodule ReqLLM.Usage do
   Prompt cache reads and writes are available as separate counters:
   - `:cache_read_tokens`
   - `:cache_write_tokens`
+
+  `:input_tokens` keeps the provider's counting rules. Read
+  `:input_includes_cached` to determine how the cache counters relate to it:
+
+  - `true`: input includes cache reads and writes, as in OpenAI usage.
+  - `false`: input excludes cache reads and writes, as in Anthropic usage.
+    Add `:cache_read_tokens` and `:cache_write_tokens` to obtain the full
+    prompt count.
+
+  An explicit `:input_includes_cached` value is preserved. Otherwise, the
+  flag is inferred from the usage format and defaults to `true` when the
+  format is unknown. Non-map inputs return zero counters and this flag set
+  to `true`.
+
+  A valid explicit `:total_tokens` value is preserved. When no total is
+  supplied, the total is `:input_tokens + :output_tokens`. This derived
+  total excludes cache reads and writes when `:input_includes_cached` is
+  `false`. It is therefore not always the full token count for the request.
 
   Canonical counters accept numbers and base-10 integer strings. Malformed
   component counters remain visible instead of becoming zero. A malformed
@@ -95,6 +114,7 @@ defmodule ReqLLM.Usage do
       :cached_tokens,
       :cache_creation_tokens
     ])
+    |> Map.put(:input_includes_cached, true)
   end
 
   @doc """
