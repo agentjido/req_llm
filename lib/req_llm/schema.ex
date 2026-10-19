@@ -1198,7 +1198,7 @@ defmodule ReqLLM.Schema do
   end
 
   defp remaining_ordered_values(properties, ordered_keys) do
-    ordered_key_set = MapSet.new(Enum.map(ordered_keys, &to_string/1))
+    ordered_key_set = MapSet.new(ordered_keys, &to_string/1)
 
     properties
     |> Enum.reduce([], fn {key, value}, acc ->
