@@ -1,16 +1,17 @@
 defmodule ReqLLM.Step.Retry do
   @moduledoc """
-  Req step that handles automatic retries for transient network errors.
+  Req step that handles automatic retries for transient failures.
 
   This step configures Req's built-in retry mechanism to automatically retry
-  requests that fail due to transient network issues that are likely to succeed
-  on immediate retry:
+  requests that fail for a reason likely to succeed on retry. The policy is
+  Req's `:transient` set, plus 529, the overloaded response Anthropic, Bedrock and TypeSafe document:
 
   * Socket closed errors (`:closed`)
   * Connection timeout errors (`:timeout`)
   * Connection refused errors (`:econnrefused`)
+  * HTTP 408, 429, 500, 502, 503, 504 and 529 responses
 
-  These errors typically indicate temporary network issues that resolve quickly,
+  Transport errors typically indicate temporary network issues that resolve quickly,
   so they are retried instantly (with no delay) up to 3 times.
 
   ## Usage
@@ -20,11 +21,13 @@ defmodule ReqLLM.Step.Retry do
 
   ## Retry Behavior
 
-  - **Max retries**: 3 attempts (4 total requests including initial)
-  - **Retry delay**: 0ms (instant retry)
-  - **Retryable errors**: Transient transport errors, whether they arrive as a bare
-    `Req.TransportError` or wrapped in a `ReqLLM.Error.API.Request`
-  - **Non-retryable errors**: Application errors, HTTP errors, etc. are not retried
+  - **Max retries**: 3 attempts (4 total requests including initial); `:max_retries`
+    overrides it and `0` disables retries
+  - **Retry delay**: 0ms for transport errors; the `Retry-After` header when the
+    response carries one, otherwise exponential backoff with jitter (about 1s, 2s, 4s)
+  - **Retryable errors**: the list above, whether they arrive as a bare
+    `Req.TransportError` / `Req.Response` or wrapped in a `ReqLLM.Error.API.Request`
+  - **Non-retryable errors**: application errors and every other HTTP status
 
   ## Examples
 
@@ -33,18 +36,15 @@ defmodule ReqLLM.Step.Retry do
       |> ReqLLM.Step.Retry.attach()
       |> Req.request()
 
-      # The step will automatically retry on socket closed errors
-      # If a request fails with {:error, %Req.TransportError{reason: :closed}},
-      # it will be retried up to 3 times before giving up.
+      # A request that fails with {:error, %Req.TransportError{reason: :closed}}
+      # or a 503 response is retried up to 3 times before giving up.
   """
 
-  # Transient transport reasons retried instantly (`{:delay, 0}`), whether the error
-  # arrives as a bare `Req.TransportError` or wrapped in a `ReqLLM.Error.API.Request`.
   @transient_reasons [:closed, :timeout, :econnrefused]
+  @transient_statuses [408, 429, 500, 502, 503, 504, 529]
 
   @doc """
   Attaches the Retry configuration to a Req request struct.
-
 
   ## Parameters
   - `req` - The Req request struct
@@ -61,8 +61,7 @@ defmodule ReqLLM.Step.Retry do
     |> Req.Request.merge_options(
       retry: &should_retry?/2,
       max_retries: max_retries,
-      # Don't set retry_delay since should_retry?/2 returns {:delay, ms}
-      # Setting both causes ArgumentError in Req 0.5.15+
+      # Req raises when :retry_delay is set and the retry function answers {:delay, ms}.
       retry_log_level: false
     )
     |> Req.Request.append_request_steps(llm_retry_attempt: &mark_attempt_start/1)
@@ -82,16 +81,18 @@ defmodule ReqLLM.Step.Retry do
   - `{:delay, milliseconds}` - Retry with a specific delay
   - `false` - Do not retry
 
-  For transient network errors, we return `{:delay, 0}` for instant retry.
+  For transient transport errors, we return `{:delay, 0}` for instant retry.
+  For HTTP 408, 429, 500, 502, 503, 504 and 529 responses, the delay is the
+  `Retry-After` header when present, otherwise exponential backoff with jitter.
 
   ## Parameters
 
-  - `_request` - The Req.Request struct (unused but available for extension)
+  - `request` - The Req.Request struct, read for the retry count
   - `response_or_exception` - Either a Req.Response or an Exception
 
   ## Returns
 
-  `{:delay, 0}` if the error is retryable (instant retry), `false` otherwise
+  `{:delay, milliseconds}` if the error is retryable, `false` otherwise
 
   ## Examples
 
@@ -104,6 +105,9 @@ defmodule ReqLLM.Step.Retry do
       iex> ReqLLM.Step.Retry.should_retry?(%Req.Request{}, %ReqLLM.Error.API.Request{cause: %Req.TransportError{reason: :closed}})
       {:delay, 0}
 
+      iex> ReqLLM.Step.Retry.should_retry?(%Req.Request{}, Req.Response.new(status: 503, headers: [{"retry-after", "2"}]))
+      {:delay, 2000}
+
       iex> ReqLLM.Step.Retry.should_retry?(%Req.Request{}, %RuntimeError{})
       false
   """
@@ -115,22 +119,16 @@ defmodule ReqLLM.Step.Retry do
   end
 
   def should_retry?(request, %Req.Response{status: status} = response)
-      when status in [429, 529] do
-    retry_after = extract_retry_after_delay(response.headers)
-    retry(request, retry_after, status)
+      when status in @transient_statuses do
+    retry(request, Req.Response.get_retry_after(response), status)
   end
 
   def should_retry?(request, %ReqLLM.Error.API.Request{status: status, headers: headers})
-      when status in [429, 529] do
-    retry_after = extract_retry_after_delay(headers)
-    retry(request, retry_after, status)
+      when status in @transient_statuses do
+    retry(request, retry_after(headers), status)
   end
 
-  # Transport failures often surface wrapped in a ReqLLM.Error.API.Request rather than
-  # as a bare Req.TransportError — e.g. a stale pooled connection closed on reuse
-  # arrives as %ReqLLM.Error.API.Request{cause: %Finch.TransportError{reason: :closed}}.
-  # Retry the same transient reasons so these aren't silently dropped by the clause
-  # below despite matching the retry intent.
+  # ReqLLM.Step.Error wraps a transport error that hits a stale pooled connection.
   def should_retry?(request, %ReqLLM.Error.API.Request{
         cause: %{__struct__: mod, reason: reason}
       })
@@ -145,6 +143,7 @@ defmodule ReqLLM.Step.Retry do
     retry_count = Req.Request.get_private(request, :req_retry_count, 0)
     max_retries = Req.Request.get_option(request, :max_retries, 3)
     started_at = Req.Request.get_private(request, :req_llm_attempt_started_at)
+    delay = delay || backoff(retry_count)
 
     duration =
       if is_integer(started_at) do
@@ -167,66 +166,11 @@ defmodule ReqLLM.Step.Retry do
     {:delay, delay}
   end
 
-  defp extract_retry_after_delay(headers) when is_list(headers) do
-    retry_after =
-      Enum.find_value(headers, fn
-        {name, value} when is_binary(name) ->
-          if String.downcase(name) == "retry-after" do
-            if is_list(value), do: List.first(value), else: value
-          else
-            nil
-          end
-
-        _ ->
-          nil
-      end)
-
-    case retry_after do
-      nil ->
-        1000
-
-      value when is_binary(value) ->
-        case Integer.parse(value) do
-          {seconds, _} -> seconds * 1000
-          :error -> 1000
-        end
-
-      value when is_integer(value) and value > 0 ->
-        value * 1000
-
-      _ ->
-        1000
-    end
+  # Req's own curve: about 0.95 s, 1.9 s, 3.8 s.
+  defp backoff(retry_count) do
+    trunc(Integer.pow(2, retry_count) * 1000 * (1 - 0.1 * :rand.uniform()))
   end
 
-  defp extract_retry_after_delay(headers) when is_map(headers) do
-    retry_after =
-      Enum.find_value(headers, fn
-        {name, value} ->
-          if String.downcase(to_string(name)) == "retry-after" do
-            if is_list(value), do: List.first(value), else: value
-          else
-            nil
-          end
-      end)
-
-    case retry_after do
-      nil ->
-        1000
-
-      value when is_binary(value) ->
-        case Integer.parse(value) do
-          {seconds, _} -> seconds * 1000
-          :error -> 1000
-        end
-
-      value when is_integer(value) and value > 0 ->
-        value * 1000
-
-      _ ->
-        1000
-    end
-  end
-
-  defp extract_retry_after_delay(_), do: 1000
+  defp retry_after(nil), do: nil
+  defp retry_after(headers), do: Req.Response.get_retry_after(Req.Response.new(headers: headers))
 end

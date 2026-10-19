@@ -59,7 +59,7 @@ defmodule ReqLLM.Step.RetryProviderIntegrationTest do
       assert retry_fn.(request, %Req.TransportError{reason: :econnrefused}) == {:delay, 0}
 
       assert retry_fn.(request, %RuntimeError{message: "error"}) == false
-      assert retry_fn.(request, %Req.Response{status: 500}) == false
+      assert retry_fn.(request, %Req.Response{status: 400}) == false
       assert retry_fn.(request, %Req.Response{status: 200}) == false
     end
   end
@@ -99,7 +99,7 @@ defmodule ReqLLM.Step.RetryProviderIntegrationTest do
       assert retry_fn.(request, %Req.TransportError{reason: :econnrefused}) == {:delay, 0}
 
       assert retry_fn.(request, %RuntimeError{message: "error"}) == false
-      assert retry_fn.(request, %Req.Response{status: 500}) == false
+      assert retry_fn.(request, %Req.Response{status: 400}) == false
       assert retry_fn.(request, %Req.Response{status: 200}) == false
     end
   end
@@ -145,7 +145,7 @@ defmodule ReqLLM.Step.RetryProviderIntegrationTest do
       assert retry_fn.(request, %Req.TransportError{reason: :econnrefused}) == {:delay, 0}
 
       assert retry_fn.(request, %RuntimeError{message: "error"}) == false
-      assert retry_fn.(request, %Req.Response{status: 500}) == false
+      assert retry_fn.(request, %Req.Response{status: 400}) == false
       assert retry_fn.(request, %Req.Response{status: 200}) == false
     end
   end
@@ -227,7 +227,7 @@ defmodule ReqLLM.Step.RetryProviderIntegrationTest do
         %Req.TransportError{reason: :nxdomain},
         %RuntimeError{message: "error"},
         %Req.Response{status: 200},
-        %Req.Response{status: 500}
+        %Req.Response{status: 400}
       ]
 
       for error <- retryable_errors do

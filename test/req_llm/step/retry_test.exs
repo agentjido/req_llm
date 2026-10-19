@@ -187,30 +187,68 @@ defmodule ReqLLM.Step.RetryTest do
       assert Retry.should_retry?(request, error) == false
     end
 
-    test "returns false for HTTP error responses" do
+    test "returns false for a client error" do
       request = Req.new()
-      response = %Req.Response{status: 500, body: "Internal Server Error"}
 
-      assert Retry.should_retry?(request, response) == false
+      for status <- [400, 424] do
+        assert Retry.should_retry?(request, %Req.Response{status: status}) == false
+      end
+    end
+
+    test "backs off from one second on a transient server error" do
+      request = Req.new()
+
+      for status <- [408, 500, 502, 503, 504] do
+        assert {:delay, delay} = Retry.should_retry?(request, %Req.Response{status: status})
+        assert delay in 900..1000
+      end
+    end
+
+    test "backs off exponentially across retries" do
+      request = Req.Request.put_private(Req.new(), :req_retry_count, 2)
+
+      assert {:delay, delay} = Retry.should_retry?(request, %Req.Response{status: 500})
+      assert delay in 3600..4000
+    end
+
+    test "waits for Retry-After on a 503" do
+      request = Req.new()
+      response = Req.Response.new(status: 503, headers: [{"retry-after", "7"}])
+
+      assert Retry.should_retry?(request, response) == {:delay, 7_000}
+    end
+
+    test "backs off on a 429 without Retry-After" do
+      request = Req.new()
+
+      assert {:delay, delay} = Retry.should_retry?(request, %Req.Response{status: 429})
+      assert delay in 900..1000
+    end
+
+    test "retries a transient status wrapped in ReqLLM.Error.API.Request" do
+      request = Req.new()
+      wrapped = %ReqLLM.Error.API.Request{status: 502, headers: [{"retry-after", "2"}]}
+
+      assert Retry.should_retry?(request, wrapped) == {:delay, 2_000}
     end
 
     test "returns retry-after delay for 429 responses with list headers" do
       request = Req.new()
-      response = %Req.Response{status: 429, headers: [{"retry-after", "2"}]}
+      response = Req.Response.new(status: 429, headers: [{"retry-after", "2"}])
 
       assert Retry.should_retry?(request, response) == {:delay, 2_000}
     end
 
     test "returns retry-after delay for 429 responses with map headers" do
       request = Req.new()
-      response = %Req.Response{status: 429, headers: %{"retry-after" => ["3"]}}
+      response = Req.Response.new(status: 429, headers: %{"retry-after" => ["3"]})
 
       assert Retry.should_retry?(request, response) == {:delay, 3_000}
     end
 
     test "returns retry-after delay for 529 overload responses" do
       request = Req.new()
-      response = %Req.Response{status: 529, headers: [{"retry-after", "2"}]}
+      response = Req.Response.new(status: 529, headers: [{"retry-after", "2"}])
 
       assert Retry.should_retry?(request, response) == {:delay, 2_000}
     end
@@ -293,7 +331,7 @@ defmodule ReqLLM.Step.RetryTest do
 
       # Test non-retryable errors
       assert retry_fn.(request, %RuntimeError{message: "error"}) == false
-      assert retry_fn.(request, %Req.Response{status: 500}) == false
+      assert retry_fn.(request, %Req.Response{status: 400}) == false
     end
   end
 end
