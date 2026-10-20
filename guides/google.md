@@ -52,7 +52,6 @@ exposes the object. Models before Gemini 3 still return a parameter error
 Passed via `:provider_options` keyword:
 
 ### `google_api_version`
-
 - **Type**: `"v1"` | `"v1beta"`
 - **Default**: `"v1"`
 - **Purpose**: Select API version (v1beta required for grounding)
@@ -60,7 +59,6 @@ Passed via `:provider_options` keyword:
 - **Note**: Auto-set to v1beta when `google_grounding` is used
 
 ### `google_grounding`
-
 - **Type**: Map
 - **Purpose**: Enable Google Search grounding (requires v1beta)
 - **Modern (Gemini 2.5)**: `%{enable: true}`
@@ -69,14 +67,12 @@ Passed via `:provider_options` keyword:
 - **Cost tracking**: Usage tracked in `response.usage.tool_usage.web_search` with `unit: "query"`
 
 ### `google_url_context`
-
 - **Type**: `boolean` | `map`
 - **Purpose**: Enable URL context grounding - allows model to fetch and use content from specific URLs
 - **Example**: `provider_options: [google_url_context: true]`
 - **Note**: Requires v1beta (default)
 
 ### `google_thinking_budget`
-
 - **Type**: Non-negative integer
 - **Purpose**: Control thinking tokens for Gemini 2.5 models
 - **`0`**: Disable thinking
@@ -84,17 +80,11 @@ Passed via `:provider_options` keyword:
 - **Example**: `provider_options: [google_thinking_budget: 4096]`
 
 ### `google_safety_settings`
-
 - **Type**: List of maps
-
 - **Purpose**: Configure content safety filters
-
 - **Categories**: `HARM_CATEGORY_HATE_SPEECH`, `HARM_CATEGORY_DANGEROUS_CONTENT`, `HARM_CATEGORY_HARASSMENT`, `HARM_CATEGORY_SEXUALLY_EXPLICIT`
-
 - **Thresholds**: `BLOCK_NONE`, `BLOCK_ONLY_HIGH`, `BLOCK_MEDIUM_AND_ABOVE`, `BLOCK_LOW_AND_ABOVE`
-
 - **Example**:
-
   ```elixir
   provider_options: [
     google_safety_settings: [
@@ -117,7 +107,6 @@ and structured-output requests. Use `reasoning_effort` or
 These checks also apply to Gemini models on Google Vertex AI.
 
 ### `google_candidate_count`
-
 - **Type**: Positive integer
 - **Default**: `1`
 - **Purpose**: Generate multiple candidates on Gemini 2.x (only first returned)
@@ -126,21 +115,18 @@ These checks also apply to Gemini models on Google Vertex AI.
 ### Embedding Options
 
 #### `dimensions`
-
 - **Type**: `128..3072`
 - **Purpose**: Control embedding vector dimensions
 - **Recommended**: `768`, `1536`, or `3072`
 - **Example**: `provider_options: [dimensions: 768]`
 
 #### `task_type`
-
 - **Type**: String
 - **Purpose**: Specify embedding task type
 - **Values**: `RETRIEVAL_QUERY`, `RETRIEVAL_DOCUMENT`, `SEMANTIC_SIMILARITY`, `CLASSIFICATION`
 - **Example**: `provider_options: [task_type: "RETRIEVAL_QUERY"]`
 
 #### `title`
-
 - **Type**: String
 - **Purpose**: Document title for better embedding quality
 - **Example**: `provider_options: [title: "Product Documentation", task_type: "RETRIEVAL_DOCUMENT"]`
