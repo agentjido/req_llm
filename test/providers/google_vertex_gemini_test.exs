@@ -212,6 +212,52 @@ defmodule ReqLLM.Providers.GoogleVertex.GeminiTest do
     end
   end
 
+  test "buffered and public streamed Vertex text signatures survive native replay" do
+    model = %LLMDB.Model{id: "gemini-2.5-flash", provider: :google_vertex}
+    context = Context.new([Context.user("Question")])
+
+    parts = [
+      %{"text" => "First", "thoughtSignature" => "vertex-first-signature"},
+      %{"text" => "", "thoughtSignature" => "vertex-empty-signature"},
+      %{"text" => "Last", "thoughtSignature" => "vertex-last-signature"}
+    ]
+
+    body = %{
+      "candidates" => [
+        %{"content" => %{"role" => "model", "parts" => parts}, "finishReason" => "STOP"}
+      ]
+    }
+
+    assert {:ok, buffered} = Gemini.parse_response(body, model, context: context)
+    chunks = Gemini.decode_stream_event(%{data: body}, model)
+
+    for consume <- [:to_response, :process_stream] do
+      {:ok, handle} =
+        ReqLLM.StreamResponse.MetadataHandle.start_link(fn -> %{finish_reason: :stop} end)
+
+      stream = %ReqLLM.StreamResponse{
+        stream: chunks,
+        metadata_handle: handle,
+        cancel: fn -> :ok end,
+        model: model,
+        context: context
+      }
+
+      assert {:ok, streamed} = apply(ReqLLM.StreamResponse, consume, [stream])
+      assert streamed.message.content == buffered.message.content
+
+      for response <- [buffered, streamed] do
+        assert List.last(response.context.messages) == response.message
+        assert ReqLLM.Response.text(response) == "FirstLast"
+
+        replay_context = Context.new(response.context.messages ++ [Context.user("Continue")])
+        encoded = Gemini.format_request(model.id, replay_context, [])
+        [assistant] = Enum.filter(encoded["contents"], &(&1["role"] == "model"))
+        assert assistant["parts"] == parts
+      end
+    end
+  end
+
   describe "ResponseBuilder - streaming reasoning_details extraction" do
     alias ReqLLM.Providers.Google.ResponseBuilder
 
