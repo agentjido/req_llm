@@ -2745,6 +2745,11 @@ defmodule ReqLLM.Providers.Google do
         tool_result? ->
           []
 
+        raw_content == "" and role == "model" and
+            (match?(%{tool_calls: [_ | _]}, message) or
+               match?(%{"tool_calls" => [_ | _]}, message)) ->
+          []
+
         is_binary(raw_content) ->
           [%{text: raw_content}]
 
