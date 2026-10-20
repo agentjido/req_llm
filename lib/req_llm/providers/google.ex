@@ -24,6 +24,20 @@ defmodule ReqLLM.Providers.Google do
   See `provider_schema/0` for the complete Google-specific schema and
   `ReqLLM.Provider.Options` for inherited OpenAI parameters.
 
+  ## Text Thought Signatures
+
+  Gemini can attach `thoughtSignature` to ordinary text as well as thinking
+  and function-call parts. Text signatures are retained in
+  `ReqLLM.Message.ContentPart` metadata under `:thought_signature` and in
+  decoded text `ReqLLM.StreamChunk` metadata under the same key.
+
+  Signed text parts retain their boundaries, including empty text parts that
+  carry only a signature. Buffered and assembled streaming responses keep
+  these parts in both `response.message` and `response.context`. Reusing the
+  context sends each signature back on its original text part. Google Vertex
+  AI Gemini uses the same behavior. Rebuilding history from `Response.text/1`
+  alone discards signatures and part boundaries.
+
   ## Context Caching
 
   Gemini models support explicit context caching to reduce costs by up to 90% when reusing large amounts of content:
@@ -1687,6 +1701,8 @@ defmodule ReqLLM.Providers.Google do
             {:ok, response} =
               ReqLLM.Provider.Defaults.decode_response_body_openai_format(openai_format, model)
 
+            response = attach_text_thought_signatures(response, body)
+
             response_with_reasoning = attach_reasoning_details(response, reasoning_details)
             tool_usage = google_tool_usage(body, model)
             image_usage = google_image_usage(body)
@@ -2121,6 +2137,8 @@ defmodule ReqLLM.Providers.Google do
     {:ok, response} =
       ReqLLM.Provider.Defaults.decode_response_body_openai_format(openai_format, model)
 
+    response = attach_text_thought_signatures(response, body)
+
     case ReqLLM.Response.unwrap_object(response, opts) do
       {:ok, object} -> %{response | object: object}
       {:error, _} -> response
@@ -2132,6 +2150,8 @@ defmodule ReqLLM.Providers.Google do
 
     {:ok, response} =
       ReqLLM.Provider.Defaults.decode_response_body_openai_format(openai_format, model)
+
+    response = attach_text_thought_signatures(response, body)
 
     attach_function_call_thought_signatures(response, body)
   end
@@ -2202,6 +2222,37 @@ defmodule ReqLLM.Providers.Google do
   end
 
   defp put_part_thought_signature(call, _part), do: call
+
+  defp attach_text_thought_signatures(response, body) do
+    parts = first_candidate_parts(body)
+
+    if Enum.any?(parts, &signed_text_part?/1) do
+      content =
+        for %{"text" => text} = part <- parts, text != "" or signed_text_part?(part) do
+          %ReqLLM.Message.ContentPart{
+            type: if(Map.get(part, "thought", false), do: :thinking, else: :text),
+            text: text,
+            metadata: text_thought_signature_metadata(part)
+          }
+        end
+
+      message = %{response.message | content: content}
+
+      %{response | message: message}
+    else
+      response
+    end
+  end
+
+  defp signed_text_part?(%{"text" => _, "thoughtSignature" => signature} = part)
+       when is_binary(signature) and signature != "",
+       do: not Map.get(part, "thought", false)
+
+  defp signed_text_part?(_part), do: false
+
+  defp text_thought_signature_metadata(part) do
+    if signed_text_part?(part), do: %{thought_signature: part["thoughtSignature"]}, else: %{}
+  end
 
   defp convert_google_parts_to_content(parts) do
     content_parts =
@@ -2544,7 +2595,43 @@ defmodule ReqLLM.Providers.Google do
     encoded
     |> Map.get(:messages, [])
     |> preserve_tool_call_metadata_in_messages(normalized_context)
+    |> preserve_text_thought_signatures_in_messages(normalized_context)
     |> preserve_provider_file_metadata_in_messages(normalized_context)
+  end
+
+  defp preserve_text_thought_signatures_in_messages(messages, context) do
+    Enum.zip_with(messages, context.messages, fn message, original ->
+      signatures =
+        for %{type: :text, metadata: metadata} <- List.wrap(original.content) do
+          Map.get(metadata, :thought_signature) || Map.get(metadata, "thought_signature")
+        end
+
+      if Enum.any?(signatures, &(is_binary(&1) and &1 != "")) do
+        content =
+          case message.content do
+            text when is_binary(text) -> [%{type: "text", text: text}]
+            parts -> parts
+          end
+
+        {content, _} =
+          Enum.map_reduce(content, signatures, fn
+            %{type: "text"} = part, [signature | rest] ->
+              part =
+                if is_binary(signature) and signature != "",
+                  do: Map.put(part, :thought_signature, signature),
+                  else: part
+
+              {part, rest}
+
+            part, rest ->
+              {part, rest}
+          end)
+
+        %{message | content: content}
+      else
+        message
+      end
+    end)
   end
 
   defp preserve_provider_file_metadata_in_messages(messages, %ReqLLM.Context{
@@ -3090,6 +3177,10 @@ defmodule ReqLLM.Providers.Google do
   end
 
   # Specific text patterns
+  defp convert_content_part(%{text: text, thought_signature: signature})
+       when is_binary(signature) and signature != "",
+       do: %{text: text, thoughtSignature: signature}
+
   defp convert_content_part(%{type: :text, content: text}), do: %{text: text}
   defp convert_content_part(%{"type" => "text", "text" => text}), do: %{text: text}
 
@@ -3523,16 +3614,21 @@ defmodule ReqLLM.Providers.Google do
         Map.has_key?(part, "text") ->
           text = Map.get(part, "text")
 
-          if text == "" do
-            []
-          else
-            if Map.get(part, "thought", false) do
-              signature = Map.get(part, "thoughtSignature")
+          signature = Map.get(part, "thoughtSignature")
+
+          cond do
+            Map.get(part, "thought", false) and text != "" ->
               meta = if signature, do: %{signature: signature}, else: %{}
               [ReqLLM.StreamChunk.thinking(text, meta)]
-            else
+
+            signed_text_part?(part) ->
+              [ReqLLM.StreamChunk.text(text, text_thought_signature_metadata(part))]
+
+            text != "" ->
               [ReqLLM.StreamChunk.text(text)]
-            end
+
+            true ->
+              []
           end
 
         Map.has_key?(part, "functionCall") ->

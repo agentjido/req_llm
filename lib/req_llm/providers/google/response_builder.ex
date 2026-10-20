@@ -6,6 +6,7 @@ defmodule ReqLLM.Providers.Google.ResponseBuilder do
   - Detects `functionCall` in parts to set correct finish_reason
   - Google returns "STOP" even when function calls are made
   - Extracts reasoning_details with thought signatures from thinking chunks
+  - Preserves text thought signatures and their original part boundaries
 
   This fixes bug #271 where streaming responses with tool calls
   had `:stop` finish_reason instead of `:tool_calls`.
@@ -27,11 +28,27 @@ defmodule ReqLLM.Providers.Google.ResponseBuilder do
         metadata
       end
 
-    with {:ok, response} <- DefaultBuilder.build_response(chunks, metadata, opts) do
+    with {:ok, response} <-
+           DefaultBuilder.build_response(preserve_signed_text_parts(chunks), metadata, opts) do
       reasoning_details = extract_google_reasoning_details(chunks)
       response_with_reasoning = attach_reasoning_details(response, reasoning_details)
       {:ok, response_with_reasoning}
     end
+  end
+
+  defp preserve_signed_text_parts(chunks) do
+    Enum.map(chunks, fn
+      %StreamChunk{type: :content, text: text, metadata: %{thought_signature: signature}}
+      when is_binary(signature) and signature != "" ->
+        StreamChunk.content_part(%ReqLLM.Message.ContentPart{
+          type: :text,
+          text: text,
+          metadata: %{thought_signature: signature}
+        })
+
+      chunk ->
+        chunk
+    end)
   end
 
   defp finish_reason_is_stop?(:stop), do: true
