@@ -41,6 +41,7 @@ That breadth extends well beyond chat: ReqLLM tracks **92 non-text operation mod
 | [Google Gemini](https://llmcatalog.dev/?providers=google) | `google` | 50 | text, embedding 2, image 8 | 24 | [Guide](guides/google.md) |
 | [Google Vertex AI](https://llmcatalog.dev/?providers=google_vertex) | `google_vertex` | 40 | text | 11 | [Guide](guides/google_vertex.md) |
 | [Groq](https://llmcatalog.dev/?providers=groq) | `groq` | 18 | text, speech 2, transcription 2 | 11 | [Guide](guides/groq.md) |
+| [LLM API](https://app.llmapi.ai/?utm_source=ff0a247d-c8ab-4f19-a982-c4ff915da268) | `llmapi` | 404 | text | 1 | — |
 | [Meta Model API](https://llmcatalog.dev/?providers=meta) | `meta` | 1 | text | 1 | [Guide](guides/meta.md) |
 | [MiniMax](https://llmcatalog.dev/?providers=minimax) | `minimax` | 6 | text, video 2 | 6 | — |
 | [Moonshot AI](https://llmcatalog.dev/?providers=moonshotai) | `moonshotai` | 1 | text | 1 | [Guide](guides/moonshot_ai.md) |
@@ -715,7 +716,15 @@ LIVE=true mix test --only "provider:anthropic"
 
 ## Contributing
 
-We welcome contributions! ReqLLM uses a fixture-based testing approach to ensure reliability across all providers.
+Provider APIs change continuously. Models, wire formats, and edge cases can
+shift without notice, so ReqLLM depends on builders who find those changes in
+real applications. Bug reports and patches are welcome, even when the first
+version is small or unpolished. Maintainers can help refine the implementation.
+
+When a change fixes provider behavior, include a focused regression test. If
+provider access permits, record the smallest live API fixture that proves the
+behavior. ReqLLM can then replay that real response without credentials and
+keep the edge case covered.
 
 Please read [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines on:
 
@@ -729,9 +738,9 @@ Quick start:
 
 1. Fork the repository
 2. Create a feature branch
-3. Add tests with fixtures for your changes
-4. Run `mix test` and `mix quality` to ensure standards
-5. Verify `mix mc "*:*"` passes for affected providers
+3. Add a focused test that reproduces the behavior
+4. Record a live fixture for provider API changes
+5. Run the relevant tests and `mix quality`
 6. Submit a pull request
 
 ## License

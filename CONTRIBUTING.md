@@ -1,6 +1,18 @@
 # Contributing to ReqLLM
 
-Thank you for your interest in contributing to ReqLLM! This guide outlines the expectations and requirements for different types of contributions.
+Thank you for your interest in ReqLLM. Provider APIs change continuously, and
+real applications find combinations and edge cases that provider documentation
+does not show. ReqLLM improves when builders bring those cases back to the
+project as reports, tests, and patches.
+
+Do not wait for a perfect patch. Small fixes, partial fixes, and agent-assisted
+pull requests are welcome. Keep the change focused, explain the observed API
+behavior, and be available to answer review questions. Maintainers can help
+with structure, style, and cleanup.
+
+For provider behavior changes, the most valuable evidence is a focused test and
+a fixture recorded from the real API. The test turns one user's edge case into
+coverage that all users can replay without provider credentials.
 
 ## Table of Contents
 
@@ -8,6 +20,7 @@ Thank you for your interest in contributing to ReqLLM! This guide outlines the e
   - [Table of Contents](#table-of-contents)
   - [Core Principles](#core-principles)
   - [Types of Contributions](#types-of-contributions)
+    - [Provider Edge Cases](#provider-edge-cases)
     - [Core Library Contributions](#core-library-contributions)
     - [New Provider Contributions](#new-provider-contributions)
     - [Provider Feature Extensions](#provider-feature-extensions)
@@ -28,14 +41,37 @@ Thank you for your interest in contributing to ReqLLM! This guide outlines the e
 
 ## Core Principles
 
-ReqLLM is built on two foundational commitments:
+ReqLLM uses these principles:
 
-1. **Fixture-Based Reliability**: All functionality must be validated against cached fixtures. This ensures reproducible tests without hitting live APIs and maintains reliability across provider changes.
-2. **Quality Over Speed**: Code must pass all quality checks (formatting, compilation, dialyzer, credo) before review.
+1. **Fast, Tested Fixes**: A focused patch is better than a workaround that
+   stays in one application. Add a regression test that shows the failure and
+   the fix.
+2. **Real API Evidence**: When a change depends on provider behavior, record the
+   smallest live API fixture that proves it. If you cannot access the model or
+   feature, state that clearly and include a sanitized reproduction.
+3. **Replayable Reliability**: Committed fixtures let the test suite reproduce
+   real provider responses without credentials or repeated API cost.
+4. **Focused Quality**: Run the tests for the changed behavior and run
+   `mix quality`. Run broad model checks when the change has broad effects.
 
-These principles keep the project maintainable and the maintainers sane.
+Never include API keys, private prompts, or other sensitive data in a fixture.
 
 ## Types of Contributions
+
+### Provider Edge Cases
+
+Provider APIs can change after a fixture is recorded. If you find an edge case,
+open an issue or a pull request and include:
+
+- The provider, model, and operation
+- A minimal request or reproduction
+- The expected and observed behavior
+- A sanitized response or error when it helps explain the problem
+
+A pull request that changes provider behavior must include a focused regression
+test. Record a live fixture when provider access permits. See the
+[Fixture Testing Guide](guides/fixture-testing.md) for focused record and replay
+commands.
 
 ### Core Library Contributions
 
@@ -251,6 +287,7 @@ Fixtures are the backbone of ReqLLM's reliability:
 - **Generated with LIVE=true**: Set `LIVE=true` to hit real APIs and regenerate fixtures
 - **Stored alongside tests**: Fixtures live in `test/.../fixtures/provider/test_name.json`
 - **Required for all new features**: Every new capability must have fixture coverage
+- **Focused for bug fixes**: Start with the affected model and scenario to limit cost and unrelated fixture changes
 
 ```bash
 # Generate fixtures for a new test
@@ -271,15 +308,16 @@ mix mc "provider:specific-model" --record
    ```
 
 2. **Develop with Tests**
-   - Write tests first (TDD encouraged)
-   - Ensure tests pass with fixtures
+   - Add a test that reproduces the reported edge case
+   - Include the exact provider, model, and scenario when relevant
+   - Ensure the test passes with the recorded fixture
    - Run quality checks frequently
 
 3. **Generate/Update Fixtures**
    ```bash
    # For new features
    LIVE=true mix test test/path/to/your_test.exs
-   
+
    # For new providers
    mix mc "your_provider:*" --record
    ```
@@ -299,8 +337,9 @@ mix mc "provider:specific-model" --record
 6. **Submit Pull Request**
    - Use descriptive title
    - Reference related issues
+   - Describe the observed and expected API behavior
    - Include checklist from relevant contribution type above
-   - **Include output of `mix mc "*:*"` (or provider-specific pattern) showing passing models**
+   - Include output from the focused test or model compatibility command
 
 7. **Review Process**
    - Maintainer will run `mix mc "*:*"` (or provider-specific) to verify fixtures
