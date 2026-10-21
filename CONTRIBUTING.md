@@ -21,6 +21,7 @@ coverage that all users can replay without provider credentials.
   - [Core Principles](#core-principles)
   - [Types of Contributions](#types-of-contributions)
     - [Provider Edge Cases](#provider-edge-cases)
+    - [ReqLLM and LLMDB](#reqllm-and-llmdb)
     - [Core Library Contributions](#core-library-contributions)
     - [New Provider Contributions](#new-provider-contributions)
     - [Provider Feature Extensions](#provider-feature-extensions)
@@ -72,6 +73,23 @@ A pull request that changes provider behavior must include a focused regression
 test. Record a live fixture when provider access permits. See the
 [Fixture Testing Guide](guides/fixture-testing.md) for focused record and replay
 commands.
+
+### ReqLLM and LLMDB
+
+ReqLLM and [LLMDB](https://github.com/agentjido/llmdb) are separate projects,
+but they work closely together. Consider both projects when you prepare a
+provider or model pull request:
+
+- **ReqLLM** owns request and response handling, authentication, streaming,
+  provider-specific behavior, and fixture-backed API tests.
+- **LLMDB** owns provider and model metadata, aliases, pricing, limits,
+  capabilities, and execution contracts.
+
+Some fixes need linked pull requests in both repositories. For example, a new
+execution contract can need an LLMDB change and a ReqLLM live API test. Link the
+pull requests so that reviewers can validate the complete change. See the
+[LLMDB contribution guide](https://github.com/agentjido/llmdb/blob/main/CONTRIBUTING.md)
+for its source and snapshot workflow.
 
 ### Core Library Contributions
 
