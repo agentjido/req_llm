@@ -1901,6 +1901,7 @@ defmodule ReqLLM.Providers.AnthropicTest do
           temperature: 0.5,
           top_p: 0.8,
           top_k: 10,
+          anthropic_top_k: 11,
           max_tokens: 8000
         )
 
@@ -1913,7 +1914,14 @@ defmodule ReqLLM.Providers.AnthropicTest do
              )
 
       assert Enum.any?(warnings, &(&1 =~ ":top_k is not compatible with extended thinking"))
+
+      assert Enum.any?(
+               warnings,
+               &(&1 =~ ":anthropic_top_k is not compatible with extended thinking")
+             )
+
       assert Enum.any?(warnings, &(&1 =~ ":top_p was changed from 0.8 to 0.95"))
+      refute Keyword.has_key?(translated_opts, :anthropic_top_k)
     end
 
     test "dropped sampling parameters are logged by default and raise with on_unsupported: :error" do

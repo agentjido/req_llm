@@ -1810,6 +1810,7 @@ defmodule ReqLLM.Providers.Anthropic do
     end)
     |> Keyword.delete(:temperature)
     |> Keyword.delete(:top_k)
+    |> Keyword.delete(:anthropic_top_k)
   end
 
   defp remove_adaptive_thinking_sampling_params(opts) do
@@ -1817,6 +1818,7 @@ defmodule ReqLLM.Providers.Anthropic do
     |> Keyword.delete(:temperature)
     |> Keyword.delete(:top_p)
     |> Keyword.delete(:top_k)
+    |> Keyword.delete(:anthropic_top_k)
   end
 
   defp adjust_parameter(opts, key, fun) do
