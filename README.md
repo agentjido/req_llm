@@ -101,7 +101,7 @@ dependencies:
 
 | Provider | Add to `deps` | Used for |
 | --- | --- | --- |
-| `amazon_bedrock` | `{:ex_aws_auth, "~> 1.4"}` | AWS Signature V4 request signing (IAM credentials, STS, bidirectional streaming) |
+| `amazon_bedrock` | `{:ex_aws_auth, "~> 1.5"}` | AWS Signature V4 request signing (IAM credentials, STS, bidirectional streaming) |
 | `google_vertex` | `{:goth, "~> 1.4"}` | Google Cloud OAuth via Application Default Credentials, refresh tokens, workload identity, and the metadata server |
 
 If you use one of these providers without the corresponding dependency, ReqLLM

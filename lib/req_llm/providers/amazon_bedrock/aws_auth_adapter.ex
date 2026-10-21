@@ -8,7 +8,7 @@ defmodule ReqLLM.Providers.AmazonBedrock.AWSAuthAdapter do
 
   @dependency_error """
   AWS Bedrock IAM, STS, and bidirectional streaming require the ex_aws_auth dependency.
-  Please add {:ex_aws_auth, "~> 1.4"} to your mix.exs dependencies.
+  Please add {:ex_aws_auth, "~> 1.5"} to your mix.exs dependencies.
   """
 
   def dependency_error, do: @dependency_error

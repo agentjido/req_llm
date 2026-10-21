@@ -236,7 +236,7 @@ defmodule ReqLLM.MixProject do
       {:req, "~> 0.6"},
       {:finch, "~> 0.22"},
       {:goth, "~> 1.4", optional: true},
-      {:ex_aws_auth, "~> 1.4", optional: true},
+      {:ex_aws_auth, "~> 1.5", optional: true},
       {:server_sent_events, "~> 1.1.0"},
       {:splode, "~> 0.3.0"},
       {:websockex, "~> 0.5.1"},
