@@ -21,11 +21,25 @@ LLM APIs are inconsistent. ReqLLM provides a unified, idiomatic Elixir interface
 - **High-level API** – Vercel AI SDK-inspired functions (`generate_text/3`, `stream_text/3`, `generate_object/4` and more) that normalize requests and responses across providers.
 - **Provider transports** – Req powers request/response calls; Finch powers streaming. Provider callbacks translate model metadata, options, bodies, and responses behind the same public API.
 
-**Model Support Snapshot**
+### Model Support Snapshot
 
-ReqLLM currently exposes **1,205 models across 21 implemented provider integrations** from [LLMDB](https://llmcatalog.dev), the model catalog maintained through `llm_db`. Counting the cataloged-but-not-separate `google_vertex_anthropic` namespace, the registry contains **1,218 models across 22 provider namespaces**.
+ReqLLM combines model metadata from [LLMDB](https://llmcatalog.dev), provider
+integrations, and live fixture evidence. A model can be present in the catalog
+before its API behavior is verified. **Catalog models** shows catalog breadth,
+while **Recorded specs** shows exact model identifiers with fixture evidence.
+Catalog counts can change when `llm_db` is updated.
 
-That breadth extends well beyond chat: ReqLLM tracks **92 non-text operation models** across embedding, image generation, text-to-speech, transcription, rerank, and OCR APIs. The fixture suite currently contains **622 unique recorded model specs**, giving ReqLLM a compatibility ledger for text and multi-modal provider behavior.
+ReqLLM has two provider integration types:
+
+- **Built-in provider integration**: A dedicated ReqLLM provider module handles
+  provider-specific protocols and features.
+- **Catalog community compatibility**: LLMDB execution contracts route requests
+  through ReqLLM's shared OpenAI-compatible adapter.
+
+Support tiers such as **First-class** describe fixture evidence for an exact
+model surface. They do not mean that the provider has a dedicated module.
+
+#### Built-in Provider Integrations
 
 | Provider | ID | Catalog models | Operation surface | Recorded specs | Guide |
 |---|---|---:|---|---:|---|
@@ -41,7 +55,6 @@ That breadth extends well beyond chat: ReqLLM tracks **92 non-text operation mod
 | [Google Gemini](https://llmcatalog.dev/?providers=google) | `google` | 50 | text, embedding 2, image 8 | 24 | [Guide](guides/google.md) |
 | [Google Vertex AI](https://llmcatalog.dev/?providers=google_vertex) | `google_vertex` | 40 | text | 11 | [Guide](guides/google_vertex.md) |
 | [Groq](https://llmcatalog.dev/?providers=groq) | `groq` | 18 | text, speech 2, transcription 2 | 11 | [Guide](guides/groq.md) |
-| [LLM API](https://app.llmapi.ai/?utm_source=ff0a247d-c8ab-4f19-a982-c4ff915da268) | `llmapi` | 404 | text | 1 | — |
 | [Meta Model API](https://llmcatalog.dev/?providers=meta) | `meta` | 1 | text | 1 | [Guide](guides/meta.md) |
 | [MiniMax](https://llmcatalog.dev/?providers=minimax) | `minimax` | 6 | text, video 2 | 6 | — |
 | [Moonshot AI](https://llmcatalog.dev/?providers=moonshotai) | `moonshotai` | 1 | text | 1 | [Guide](guides/moonshot_ai.md) |
@@ -55,10 +68,20 @@ That breadth extends well beyond chat: ReqLLM tracks **92 non-text operation mod
 | [Zenmux](https://llmcatalog.dev/?providers=zenmux) | `zenmux` | 149 | text, image 2 | 107 | [Guide](guides/zenmux.md) |
 
 StepFun chat, speech, and transcription use the `stepfun_ai` (Global) and
-`stepfun` (China) providers. See the [StepFun guide](guides/stepfun.md).
+`stepfun` (China) built-in integrations. See the
+[StepFun guide](guides/stepfun.md).
 
 Reflection AI text, reasoning, tools, and JSON output use the `reflection`
-provider. See the [Reflection guide](guides/reflection.md).
+built-in integration. See the [Reflection guide](guides/reflection.md).
+
+#### Catalog Community Providers
+
+These providers do not have dedicated ReqLLM modules. Support is limited to the
+LLMDB execution contracts and the recorded fixture evidence.
+
+| Provider | ID | Catalog models | Operation surface | Recorded specs | Evidence |
+|---|---|---:|---|---:|---|
+| [LLM API](https://app.llmapi.ai/?utm_source=ff0a247d-c8ab-4f19-a982-c4ff915da268) | `llmapi` | 405 | text | 1 | [Evidence](guides/model-support.md#llmapi) |
 
 Local inference is also supported through [Ollama](guides/ollama.md) and
 [LM Studio](guides/lmstudio.md), using model identifiers from your local server
