@@ -1,5 +1,5 @@
 defmodule ReqLLM.OpenTelemetryTest do
-  use ExUnit.Case, async: true
+  use ExUnit.Case, async: false
 
   alias ReqLLM.OpenTelemetry
 
