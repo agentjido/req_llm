@@ -32,9 +32,6 @@ request through one of two integration paths:
   LLMDB supplies an execution contract, and ReqLLM sends the request through
   its shared OpenAI Chat Completions adapter.
 
-Local and self-hosted runtimes use dedicated modules, but they are in a separate
-table because their model IDs come from the user's server.
-
 These paths describe request routing. They do not describe support quality. A
 model can be in LLMDB before ReqLLM has verified its API behavior. Support tiers
 such as **First-class** describe fixture evidence for an exact model and
