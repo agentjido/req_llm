@@ -119,6 +119,8 @@ defmodule ReqLLM.Telemetry do
 
   @reasoning_operations [:chat, :object]
   @canonical_reasoning_efforts [:minimal, :low, :medium, :high, :xhigh, :max, :default]
+  @anthropic_thinking_on_types ["enabled", "adaptive"]
+  @anthropic_thinking_off_types ["disabled", "between_tools"]
   @openai_reasoning_providers [:openai, :groq, :openrouter, :xai]
   @thinking_toggle_providers [:zai, :zai_coder]
   @alibaba_providers [:alibaba, :alibaba_cn]
@@ -1431,12 +1433,12 @@ defmodule ReqLLM.Telemetry do
 
     disable? =
       effort == :none or
-        fetch_value(thinking, :type) == "disabled" or
+        fetch_value(thinking, :type) in @anthropic_thinking_off_types or
         budget_tokens == 0
 
     enable? =
       effort in @canonical_reasoning_efforts or
-        fetch_value(thinking, :type) == "enabled" or
+        fetch_value(thinking, :type) in @anthropic_thinking_on_types or
         enabled_budget?(budget_tokens)
 
     reasoning_shape(
@@ -1459,11 +1461,11 @@ defmodule ReqLLM.Telemetry do
       budget_tokens = fetch_value(additional_thinking, :budget_tokens)
 
       disable? =
-        fetch_value(additional_thinking, :type) == "disabled" or
+        fetch_value(additional_thinking, :type) in @anthropic_thinking_off_types or
           budget_tokens == 0
 
       enable? =
-        fetch_value(additional_thinking, :type) == "enabled" or
+        fetch_value(additional_thinking, :type) in @anthropic_thinking_on_types or
           enabled_budget?(budget_tokens)
 
       merge_reasoning_shapes(
@@ -1600,16 +1602,16 @@ defmodule ReqLLM.Telemetry do
     budget_tokens = fetch_value(thinking, :budget_tokens)
 
     disable? =
-      fetch_value(thinking, :type) == "disabled" or
+      fetch_value(thinking, :type) in @anthropic_thinking_off_types or
         budget_tokens == 0
 
     enable? =
-      fetch_value(thinking, :type) == "enabled" or
+      fetch_value(thinking, :type) in @anthropic_thinking_on_types or
         enabled_budget?(budget_tokens)
 
     reasoning_shape(
       mode_from_signals(enable?, disable?),
-      nil,
+      adaptive_thinking_effort(thinking, body),
       normalize_budget(budget_tokens),
       enable? or disable?
     )
@@ -1617,31 +1619,40 @@ defmodule ReqLLM.Telemetry do
 
   defp normalize_thinking_effective(_body), do: disabled_reasoning_shape()
 
+  defp adaptive_thinking_effort(thinking, container) do
+    if fetch_value(thinking, :type) == "adaptive" do
+      container
+      |> fetch_value(:output_config, :effort)
+      |> normalize_reasoning_effort()
+    end
+  end
+
   defp normalize_platform_anthropic_effective(body) do
     shape = normalize_thinking_effective(body)
 
     if shape.mode == :enabled do
       shape
     else
-      thinking =
-        fetch_value(body, :additionalModelRequestFields, :thinking) ||
-          fetch_value(body, :additional_model_request_fields, :thinking)
+      fields =
+        fetch_value(body, :additionalModelRequestFields) ||
+          fetch_value(body, :additional_model_request_fields)
 
+      thinking = fetch_value(fields, :thinking)
       budget_tokens = fetch_value(thinking, :budget_tokens)
 
       disable? =
-        fetch_value(thinking, :type) == "disabled" or
+        fetch_value(thinking, :type) in @anthropic_thinking_off_types or
           budget_tokens == 0
 
       enable? =
-        fetch_value(thinking, :type) == "enabled" or
+        fetch_value(thinking, :type) in @anthropic_thinking_on_types or
           enabled_budget?(budget_tokens)
 
       merge_reasoning_shapes(
         shape,
         reasoning_shape(
           mode_from_signals(enable?, disable?),
-          nil,
+          adaptive_thinking_effort(thinking, fields),
           normalize_budget(budget_tokens),
           enable? or disable?
         )

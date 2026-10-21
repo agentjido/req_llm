@@ -1701,13 +1701,17 @@ defmodule ReqLLM.Providers.AnthropicTest do
       {:ok, model} = ReqLLM.model("anthropic:claude-opus-4-8")
 
       for effort <- [:xhigh, :max] do
-        {translated_opts, []} =
+        {translated_opts, warnings} =
           Anthropic.translate_options(:chat, model,
             reasoning_effort: effort,
             temperature: 0.0,
             top_p: 0.5,
             max_tokens: 100
           )
+
+        assert [temperature_warning, top_p_warning] = warnings
+        assert temperature_warning =~ "does not accept :temperature"
+        assert top_p_warning =~ "does not accept :top_p"
 
         assert Keyword.get(translated_opts, :thinking) == %{
                  type: "adaptive",
@@ -1729,13 +1733,14 @@ defmodule ReqLLM.Providers.AnthropicTest do
       ]
 
       for {thinking, expected} <- cases do
-        {translated_opts, []} =
+        {translated_opts, [warning]} =
           Anthropic.translate_options(:chat, model,
             thinking: thinking,
             temperature: 0.0,
             max_tokens: 100
           )
 
+        assert warning =~ "does not accept :temperature"
         assert Keyword.get(translated_opts, :thinking) == expected
         refute Keyword.has_key?(translated_opts, :temperature)
       end
@@ -1744,7 +1749,7 @@ defmodule ReqLLM.Providers.AnthropicTest do
     test "translate_options removes Claude Opus 4.8 sampling params without reasoning" do
       {:ok, model} = ReqLLM.model("anthropic:claude-opus-4-8")
 
-      {translated_opts, []} =
+      {translated_opts, warnings} =
         Anthropic.translate_options(:chat, model,
           max_tokens: 100,
           temperature: 0.0,
@@ -1752,6 +1757,12 @@ defmodule ReqLLM.Providers.AnthropicTest do
           top_k: 10,
           anthropic_top_k: 10
         )
+
+      assert length(warnings) == 4
+
+      for key <- [":temperature", ":top_p", ":top_k", ":anthropic_top_k"] do
+        assert Enum.any?(warnings, &(&1 =~ "does not accept #{key},"))
+      end
 
       assert Keyword.get(translated_opts, :max_tokens) == 100
       refute Keyword.has_key?(translated_opts, :temperature)
@@ -1774,6 +1785,154 @@ defmodule ReqLLM.Providers.AnthropicTest do
       assert Keyword.get(translated_opts, :tool_choice) == %{type: "tool", name: "add"}
       refute Keyword.has_key?(translated_opts, :thinking)
       refute Keyword.has_key?(translated_opts, :output_config)
+    end
+  end
+
+  describe "turning thinking off" do
+    test "reasoning_effort :none sends each model's thinking-off type" do
+      cases = [
+        {"anthropic:claude-sonnet-5-5", %{type: "between_tools"}},
+        {"anthropic:claude-opus-5", %{type: "disabled"}},
+        {"anthropic:claude-haiku-5-5", %{type: "disabled"}},
+        {"anthropic:claude-opus-4-8", %{type: "disabled"}}
+      ]
+
+      for {spec, expected} <- cases do
+        {:ok, model} = ReqLLM.model(spec)
+
+        {translated_opts, []} =
+          Anthropic.translate_options(:chat, model, reasoning_effort: :none, max_tokens: 100)
+
+        assert Keyword.get(translated_opts, :thinking) == expected, spec
+        refute Keyword.has_key?(translated_opts, :output_config), spec
+      end
+    end
+
+    test "reasoning_effort :none leaves budget-thinking models without a thinking field" do
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-6")
+
+      {translated_opts, []} =
+        Anthropic.translate_options(:chat, model, reasoning_effort: :none, max_tokens: 100)
+
+      refute Keyword.has_key?(translated_opts, :thinking)
+    end
+
+    test "reasoning_effort :none warns when the model cannot turn thinking off" do
+      {:ok, model} = ReqLLM.model("anthropic:claude-opus-5-5")
+
+      {translated_opts, [warning]} =
+        Anthropic.translate_options(:chat, model, reasoning_effort: :none, max_tokens: 100)
+
+      refute Keyword.has_key?(translated_opts, :thinking)
+      assert warning =~ "cannot turn thinking off, so reasoning_effort: :none was not applied"
+    end
+
+    test "an explicit thinking-off config becomes the type the model accepts" do
+      cases = [
+        {"anthropic:claude-sonnet-5-5", %{type: "disabled"}, %{type: "between_tools"}},
+        {"anthropic:claude-sonnet-5-5", %{"type" => "between_tools", "display" => "summarized"},
+         %{type: "between_tools"}},
+        {"anthropic:claude-opus-5", %{type: "between_tools"}, %{type: "disabled"}}
+      ]
+
+      for {spec, thinking, expected} <- cases do
+        {:ok, model} = ReqLLM.model(spec)
+
+        {translated_opts, []} =
+          Anthropic.translate_options(:chat, model, thinking: thinking, max_tokens: 100)
+
+        assert Keyword.get(translated_opts, :thinking) == expected, spec
+      end
+    end
+
+    test "an explicit thinking-off config is passed through and warned about when the model cannot turn thinking off" do
+      {:ok, model} = ReqLLM.model("anthropic:claude-opus-5-5")
+
+      {translated_opts, [warning]} =
+        Anthropic.translate_options(:chat, model, thinking: %{type: "disabled"}, max_tokens: 100)
+
+      assert Keyword.get(translated_opts, :thinking) == %{type: "disabled"}
+      assert warning =~ "cannot turn thinking off and does not accept thinking type \"disabled\""
+    end
+
+    test "forced tool choice keeps thinking off and the tool choice" do
+      {:ok, model} = ReqLLM.model("anthropic:claude-opus-4-8")
+
+      for tool_choice <- [%{type: "tool", name: "add"}, %{type: "any"}] do
+        {translated_opts, []} =
+          Anthropic.translate_options(:chat, model,
+            reasoning_effort: :none,
+            tool_choice: tool_choice
+          )
+
+        assert Keyword.get(translated_opts, :thinking) == %{type: "disabled"}
+        assert Keyword.get(translated_opts, :tool_choice) == tool_choice
+      end
+    end
+  end
+
+  describe "sampling parameter warnings" do
+    test "accepted sampling parameters produce no warning" do
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-6")
+
+      {translated_opts, []} =
+        Anthropic.translate_options(:chat, model, temperature: 0.0, max_tokens: 100)
+
+      assert Keyword.get(translated_opts, :temperature) == 0.0
+    end
+
+    test "top_p dropped alongside temperature is reported" do
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-6")
+
+      {translated_opts, [warning]} =
+        Anthropic.translate_options(:chat, model, temperature: 0.2, top_p: 0.9)
+
+      assert Keyword.get(translated_opts, :temperature) == 0.2
+      refute Keyword.has_key?(translated_opts, :top_p)
+      assert warning =~ ":top_p was dropped because :temperature is also set"
+    end
+
+    test "budget thinking reports dropped and adjusted sampling parameters" do
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-6")
+
+      {translated_opts, warnings} =
+        Anthropic.translate_options(:chat, model,
+          reasoning_effort: :low,
+          temperature: 0.5,
+          top_p: 0.8,
+          top_k: 10,
+          max_tokens: 8000
+        )
+
+      assert %{type: "enabled"} = Keyword.get(translated_opts, :thinking)
+      assert Keyword.get(translated_opts, :top_p) == 0.95
+
+      assert Enum.any?(
+               warnings,
+               &(&1 =~ ":temperature is not compatible with extended thinking")
+             )
+
+      assert Enum.any?(warnings, &(&1 =~ ":top_k is not compatible with extended thinking"))
+      assert Enum.any?(warnings, &(&1 =~ ":top_p was changed from 0.8 to 0.95"))
+    end
+
+    test "dropped sampling parameters are logged by default and raise with on_unsupported: :error" do
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-5-5")
+
+      log =
+        ExUnit.CaptureLog.capture_log(fn ->
+          opts = ReqLLM.Provider.Options.process!(Anthropic, :chat, model, temperature: 0.0)
+          refute Keyword.has_key?(opts, :temperature)
+        end)
+
+      assert log =~ "does not accept :temperature"
+
+      assert_raise ReqLLM.Error.Validation.Error, ~r/does not accept :temperature/, fn ->
+        ReqLLM.Provider.Options.process!(Anthropic, :chat, model,
+          temperature: 0.0,
+          on_unsupported: :error
+        )
+      end
     end
   end
 

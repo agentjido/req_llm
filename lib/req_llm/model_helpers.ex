@@ -34,7 +34,9 @@ defmodule ReqLLM.ModelHelpers do
     {:chat?, [:chat]}
   ]
 
-  @bedrock_inference_prefixes ~w(us eu ap apac ca au jp us-gov global)
+  @bedrock_inference_prefixes ~w(us eu ap apac ca au jp in us-gov global)
+
+  @anthropic_thinking_off_types ["disabled", "between_tools"]
 
   for {function_name, path} <- @capability_checks do
     path_str = Enum.map_join(path, ".", &to_string/1)
@@ -134,6 +136,108 @@ defmodule ReqLLM.ModelHelpers do
       model
     end
   end
+
+  @doc """
+  Returns the thinking types a Claude model accepts, such as `"adaptive"`,
+  `"enabled"`, `"disabled"` or `"between_tools"`.
+
+  The model's own reasoning metadata is read first. Hosted Claude models on
+  Amazon Bedrock, Google Vertex AI and Azure often carry no thinking metadata,
+  so the native Anthropic model is consulted when the hosted entry has none.
+  Returns `[]` when no metadata is available.
+
+  ## Examples
+
+      iex> model = %LLMDB.Model{provider: :anthropic, id: "claude-example", capabilities: %{reasoning: %{thinking: %{types: ["adaptive", "between_tools"]}}}}
+      iex> ReqLLM.ModelHelpers.anthropic_thinking_types(model)
+      ["adaptive", "between_tools"]
+  """
+  @spec anthropic_thinking_types(LLMDB.Model.t() | term()) :: [String.t()]
+  def anthropic_thinking_types(%LLMDB.Model{} = model) do
+    model_thinking_types(model) || hosted_anthropic_thinking_types(model) || []
+  end
+
+  def anthropic_thinking_types(_), do: []
+
+  @doc """
+  Returns the thinking type that turns thinking off for a Claude model, or `nil`
+  when the model cannot turn thinking off or its thinking types are unknown.
+
+  `"disabled"` is preferred where the model accepts it. Claude Sonnet 5.5 turns
+  thinking off with `"between_tools"` instead, and Claude Opus 5.5 cannot turn
+  it off at all.
+
+  ## Examples
+
+      iex> model = %LLMDB.Model{provider: :anthropic, id: "claude-example", capabilities: %{reasoning: %{thinking: %{types: ["adaptive", "between_tools"]}}}}
+      iex> ReqLLM.ModelHelpers.anthropic_thinking_off_type(model)
+      "between_tools"
+
+      iex> model = %LLMDB.Model{provider: :anthropic, id: "claude-example", capabilities: %{reasoning: %{thinking: %{types: ["adaptive"]}}}}
+      iex> ReqLLM.ModelHelpers.anthropic_thinking_off_type(model)
+      nil
+  """
+  @spec anthropic_thinking_off_type(LLMDB.Model.t() | term()) :: String.t() | nil
+  def anthropic_thinking_off_type(model) do
+    types = anthropic_thinking_types(model)
+    Enum.find(@anthropic_thinking_off_types, &(&1 in types))
+  end
+
+  @doc """
+  Whether an Anthropic thinking config turns thinking off, with either
+  `type: "disabled"` or `type: "between_tools"`.
+
+  ## Examples
+
+      iex> ReqLLM.ModelHelpers.anthropic_thinking_off?(%{type: "between_tools"})
+      true
+
+      iex> ReqLLM.ModelHelpers.anthropic_thinking_off?(%{"type" => "adaptive"})
+      false
+  """
+  @spec anthropic_thinking_off?(term()) :: boolean()
+  def anthropic_thinking_off?(thinking) when is_map(thinking) do
+    normalize_thinking_type(nested_value(thinking, [:type])) in @anthropic_thinking_off_types
+  end
+
+  def anthropic_thinking_off?(_thinking), do: false
+
+  defp model_thinking_types(%LLMDB.Model{} = model) do
+    [
+      nested_value(model.capabilities, [:reasoning, :thinking, :types]),
+      nested_value(model.extra, [:provider_capabilities, :thinking, :types]),
+      nested_value(model.extra, [:capabilities, :thinking, :types])
+    ]
+    |> Enum.find_value(&thinking_type_names/1)
+  end
+
+  defp hosted_anthropic_thinking_types(model) do
+    model
+    |> hosted_anthropic_model_ids()
+    |> Enum.find_value(fn id ->
+      case LLMDB.model(:anthropic, id) do
+        {:ok, %LLMDB.Model{} = native} -> model_thinking_types(native)
+        _ -> nil
+      end
+    end)
+  end
+
+  defp thinking_type_names([_ | _] = types) do
+    types
+    |> Enum.map(&normalize_thinking_type/1)
+    |> Enum.reject(&is_nil/1)
+  end
+
+  defp thinking_type_names(types) when is_map(types) and map_size(types) > 0 do
+    types
+    |> Map.keys()
+    |> Enum.filter(&(thinking_type_supported?(types, &1) == true))
+    |> Enum.map(&normalize_thinking_type/1)
+    |> Enum.reject(&is_nil/1)
+    |> Enum.sort()
+  end
+
+  defp thinking_type_names(_types), do: nil
 
   defp model_adaptive_thinking_required?(%LLMDB.Model{} = model) do
     adaptive_thinking_types_required?(

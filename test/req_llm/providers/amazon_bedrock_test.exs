@@ -1178,7 +1178,7 @@ defmodule ReqLLM.Providers.AmazonBedrockTest do
       refute Map.has_key?(body, "output_config")
     end
 
-    test "reasoning_effort :none leaves thinking and output_config off" do
+    test "reasoning_effort :none sends thinking disabled and no output_config" do
       {:ok, request} =
         AmazonBedrock.prepare_request(
           :chat,
@@ -1188,7 +1188,7 @@ defmodule ReqLLM.Providers.AmazonBedrockTest do
         )
 
       body = ReqLLM.Test.Helpers.json_body(request)
-      refute Map.has_key?(body, "thinking")
+      assert body["thinking"] == %{"type" => "disabled"}
       refute Map.has_key?(body, "output_config")
     end
 

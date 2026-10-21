@@ -838,15 +838,11 @@ defmodule ReqLLM.Providers.AmazonBedrock do
   # Note: pre_validate_options is not yet a formal Provider callback
   # It's called by Options.process/4 if the provider exports it
   def pre_validate_options(operation, model, opts) do
-    # Handle reasoning parameters for Claude models on Bedrock
-    opts =
-      if ModelHelpers.adaptive_thinking_required?(model) do
-        PlatformReasoning.prepare_adaptive_options(operation, model, opts)
-      else
-        maybe_translate_reasoning_params(model, opts)
-      end
-
-    {opts, []}
+    if ModelHelpers.adaptive_thinking_required?(model) do
+      PlatformReasoning.prepare_adaptive_options(operation, model, opts)
+    else
+      {maybe_translate_reasoning_params(model, opts), []}
+    end
   end
 
   # Translate reasoning_effort/reasoning_token_budget to Bedrock additionalModelRequestFields

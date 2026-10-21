@@ -124,7 +124,11 @@ defmodule ReqLLM.Providers.Anthropic.AdapterHelpers do
   defp get_opt(_opts, _key), do: nil
 
   @doc """
-  Add extended thinking configuration to request body if enabled.
+  Add the thinking configuration to the request body.
+
+  Thinking that is turned off (`type: "disabled"` or `type: "between_tools"`)
+  is always sent, as the bare type, since those types take no other field and
+  are compatible with forced tool choice.
 
   Extended thinking doesn't work when tool_choice forces a specific tool.
   See: https://docs.claude.com/en/docs/build-with-claude/extended-thinking
@@ -133,8 +137,14 @@ defmodule ReqLLM.Providers.Anthropic.AdapterHelpers do
     thinking_config =
       get_in(opts, [:provider_options, :additional_model_request_fields, :thinking])
 
-    tool_choice = opts[:tool_choice]
+    if ReqLLM.ModelHelpers.anthropic_thinking_off?(thinking_config) do
+      Map.put(body, :thinking, %{type: ReqLLM.MapAccess.get(thinking_config, :type)})
+    else
+      maybe_add_thinking_on(body, thinking_config, opts[:tool_choice])
+    end
+  end
 
+  defp maybe_add_thinking_on(body, thinking_config, tool_choice) do
     forced_tool_choice? =
       case tool_choice do
         %{type: "tool", name: _} -> true

@@ -64,6 +64,10 @@ defmodule ReqLLM.Providers.Anthropic.PlatformReasoning do
   @doc """
   Applies native Anthropic adaptive reasoning rules and stores the translated
   thinking and output configuration in the platform request fields.
+
+  Returns `{opts, warnings}`, where `warnings` are the lossy-translation
+  warnings from `ReqLLM.Providers.Anthropic.translate_options/3`, such as a
+  dropped `:temperature`, for the caller's `pre_validate_options/3` to return.
   """
   def prepare_adaptive_options(operation, model, opts) do
     {provider_opts, opts} = Keyword.pop(opts, :provider_options, [])
@@ -102,10 +106,10 @@ defmodule ReqLLM.Providers.Anthropic.PlatformReasoning do
 
     translation_model = ReqLLM.ModelHelpers.with_anthropic_effort_metadata(model)
 
-    {opts, _warnings} =
+    {opts, warnings} =
       ReqLLM.Providers.Anthropic.translate_options(operation, translation_model, opts)
 
-    move_fields(opts)
+    {move_fields(opts), warnings}
   end
 
   defp put_default_option(opts, _key, nil), do: opts
@@ -206,6 +210,9 @@ defmodule ReqLLM.Providers.Anthropic.PlatformReasoning do
   @doc """
   Removes thinking config when incompatible with other parameters.
 
+  Thinking that is turned off (`type: "disabled"` or `type: "between_tools"`)
+  is kept, since it is compatible with forced tool choice and any temperature.
+
   Extended thinking is incompatible with:
   - Forced tool choice (`tool_choice: %{type: "tool"}`)
   - `:object` operations using forced tools (JSON schema mode keeps thinking)
@@ -230,7 +237,13 @@ defmodule ReqLLM.Providers.Anthropic.PlatformReasoning do
     temperature = opts[:temperature]
     incompatible_temperature = temperature != nil and temperature != 1.0
 
-    if has_forced_tool or incompatible_temperature do
+    thinking_off =
+      opts
+      |> get_in([:provider_options, :additional_model_request_fields])
+      |> ReqLLM.MapAccess.get(:thinking)
+      |> ReqLLM.ModelHelpers.anthropic_thinking_off?()
+
+    if (has_forced_tool or incompatible_temperature) and not thinking_off do
       update_in(opts, [:provider_options, :additional_model_request_fields], fn
         nil ->
           nil

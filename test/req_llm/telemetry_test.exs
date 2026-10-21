@@ -100,6 +100,53 @@ defmodule ReqLLM.TelemetryTest do
     assert google_reasoning.effective_budget_tokens == 8192
   end
 
+  test "reports adaptive Anthropic thinking as enabled and between_tools as disabled" do
+    opts = [context: ReqLLM.Context.new([user("hello")])]
+
+    effective = fn provider, id, body ->
+      provider
+      |> reasoning_model(id)
+      |> ReqLLM.Telemetry.new_context(opts, operation: :chat)
+      |> ReqLLM.Telemetry.start_request(body)
+      |> ReqLLM.Telemetry.reasoning_metadata()
+      |> Map.fetch!(:reasoning)
+    end
+
+    adaptive =
+      effective.(:anthropic, "claude-sonnet-5-5", %{
+        "thinking" => %{"type" => "adaptive"},
+        "output_config" => %{"effort" => "high"}
+      })
+
+    assert adaptive.effective_mode == :enabled
+    assert adaptive.effective_effort == :high
+
+    for body <- [
+          %{"thinking" => %{"type" => "between_tools"}},
+          %{"thinking" => %{"type" => "disabled"}}
+        ] do
+      assert effective.(:anthropic, "claude-sonnet-5-5", body).effective_mode == :disabled
+    end
+
+    converse_adaptive =
+      effective.(:amazon_bedrock, "anthropic.claude-sonnet-5-5", %{
+        "additionalModelRequestFields" => %{
+          "thinking" => %{"type" => "adaptive"},
+          "output_config" => %{"effort" => "low"}
+        }
+      })
+
+    assert converse_adaptive.effective_mode == :enabled
+    assert converse_adaptive.effective_effort == :low
+
+    converse_off =
+      effective.(:amazon_bedrock, "anthropic.claude-sonnet-5-5", %{
+        "additionalModelRequestFields" => %{"thinking" => %{"type" => "between_tools"}}
+      })
+
+    assert converse_off.effective_mode == :disabled
+  end
+
   test "preserves max as a canonical reasoning effort" do
     reasoning =
       reasoning_model(:openai, "gpt-5.6-sol")

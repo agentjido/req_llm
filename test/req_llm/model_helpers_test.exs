@@ -442,4 +442,73 @@ defmodule ReqLLM.ModelHelpersTest do
       refute ModelHelpers.adaptive_thinking_required?(%{})
     end
   end
+
+  describe "anthropic_thinking_types/1 and anthropic_thinking_off_type/1" do
+    test "reads list and map thinking type metadata" do
+      list_model = %LLMDB.Model{
+        provider: :anthropic,
+        id: "claude-example",
+        capabilities: %{reasoning: %{thinking: %{types: ["adaptive", "between_tools"]}}}
+      }
+
+      map_model = %LLMDB.Model{
+        provider: :anthropic,
+        id: "claude-example",
+        extra: %{
+          capabilities: %{
+            thinking: %{
+              types: %{adaptive: %{supported: true}, disabled: %{supported: true}, enabled: false}
+            }
+          }
+        }
+      }
+
+      assert ModelHelpers.anthropic_thinking_types(list_model) == ["adaptive", "between_tools"]
+      assert ModelHelpers.anthropic_thinking_types(map_model) == ["adaptive", "disabled"]
+      assert ModelHelpers.anthropic_thinking_off_type(list_model) == "between_tools"
+      assert ModelHelpers.anthropic_thinking_off_type(map_model) == "disabled"
+    end
+
+    test "falls back to the native Anthropic catalog for sparse hosted Claude models" do
+      cases = [
+        {:amazon_bedrock, "anthropic.claude-sonnet-5-5", "global.anthropic.claude-sonnet-5-5",
+         "between_tools"},
+        {:amazon_bedrock, "anthropic.claude-opus-5", "in.anthropic.claude-opus-5", "disabled"},
+        {:google_vertex_anthropic, "claude-opus-5-5@default", nil, nil},
+        {:azure, "claude-haiku-5-5", nil, "disabled"}
+      ]
+
+      for {provider, id, provider_model_id, off_type} <- cases do
+        model = %LLMDB.Model{
+          id: id,
+          provider: provider,
+          provider_model_id: provider_model_id,
+          capabilities: %{reasoning: %{enabled: true}}
+        }
+
+        assert ModelHelpers.anthropic_thinking_types(model) != [], id
+        assert ModelHelpers.anthropic_thinking_off_type(model) == off_type, id
+      end
+    end
+
+    test "returns no types and no off type when metadata is unavailable" do
+      model = %LLMDB.Model{
+        provider: :anthropic,
+        id: "claude-unknown",
+        capabilities: %{reasoning: %{enabled: true}}
+      }
+
+      assert ModelHelpers.anthropic_thinking_types(model) == []
+      assert ModelHelpers.anthropic_thinking_off_type(model) == nil
+      assert ModelHelpers.anthropic_thinking_types(%{}) == []
+    end
+
+    test "anthropic_thinking_off?/1 recognizes disabled and between_tools in either key style" do
+      assert ModelHelpers.anthropic_thinking_off?(%{type: "disabled"})
+      assert ModelHelpers.anthropic_thinking_off?(%{"type" => "between_tools"})
+      refute ModelHelpers.anthropic_thinking_off?(%{type: "adaptive"})
+      refute ModelHelpers.anthropic_thinking_off?(%{"type" => "enabled", "budget_tokens" => 1024})
+      refute ModelHelpers.anthropic_thinking_off?(nil)
+    end
+  end
 end

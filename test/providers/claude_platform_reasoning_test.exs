@@ -223,4 +223,119 @@ defmodule ReqLLM.Providers.ClaudePlatformReasoningTest do
     assert fields.output_config.format.type == "json_schema"
     assert fields.other
   end
+
+  defp sparse_hosted(provider, id) do
+    LLMDB.Model.new!(%{
+      provider: provider.provider_id(),
+      id: id,
+      capabilities: %{reasoning: %{enabled: true}}
+    })
+  end
+
+  defp formatter(Azure), do: Azure.Anthropic
+  defp formatter(GoogleVertex), do: GoogleVertex.Anthropic
+  defp formatter(AmazonBedrock), do: AmazonBedrock.Anthropic
+
+  test "reasoning_effort :none turns thinking off on every cloud provider" do
+    for {provider, sonnet_id, opus_id} <- [
+          {Azure, "claude-sonnet-5-5", "claude-opus-5"},
+          {GoogleVertex, "claude-sonnet-5-5@default", "claude-opus-5@default"},
+          {AmazonBedrock, "us.anthropic.claude-sonnet-5-5", "in.anthropic.claude-opus-5"}
+        ],
+        {id, expected} <- [{sonnet_id, "between_tools"}, {opus_id, "disabled"}] do
+      model = sparse_hosted(provider, id)
+
+      opts =
+        ReqLLM.Provider.Options.process!(provider, :chat, model,
+          reasoning_effort: :none,
+          max_tokens: 512
+        )
+
+      fields = opts[:provider_options][:additional_model_request_fields]
+      assert fields.thinking == %{type: expected}, id
+      refute Map.has_key?(fields, :output_config), id
+
+      body =
+        formatter(provider).format_request(
+          model.id,
+          Context.new([Context.user("Hello")]),
+          Keyword.merge(opts, operation: :chat)
+        )
+
+      assert body.thinking == %{type: expected}, id
+      refute Map.has_key?(body, :output_config), id
+    end
+  end
+
+  test "explicit thinking off in platform request fields reaches the request body" do
+    model = sparse_hosted(AmazonBedrock, "us.anthropic.claude-sonnet-5-5")
+
+    opts =
+      ReqLLM.Provider.Options.process!(AmazonBedrock, :chat, model,
+        max_tokens: 512,
+        provider_options: [
+          additional_model_request_fields: %{"thinking" => %{"type" => "between_tools"}}
+        ]
+      )
+
+    body =
+      AmazonBedrock.Anthropic.format_request(
+        model.id,
+        Context.new([Context.user("Hello")]),
+        Keyword.merge(opts, operation: :chat)
+      )
+
+    assert body.thinking == %{type: "between_tools"}
+  end
+
+  test "thinking that is off survives forced tool choice and temperature cleanup" do
+    opts = [
+      temperature: 0.0,
+      tool_choice: %{type: "tool", name: "add"},
+      provider_options: [
+        additional_model_request_fields: %{thinking: %{type: "disabled"}, other: true}
+      ]
+    ]
+
+    cleaned = PlatformReasoning.maybe_clean_thinking_after_translation(opts, :chat)
+    fields = cleaned[:provider_options][:additional_model_request_fields]
+    assert fields.thinking == %{type: "disabled"}
+    assert fields.other
+  end
+
+  test "platform pre-validation reports dropped sampling parameters and unsupported thinking off" do
+    for provider <- [Azure, GoogleVertex, AmazonBedrock] do
+      sonnet =
+        sparse_hosted(
+          provider,
+          if(provider == AmazonBedrock,
+            do: "us.anthropic.claude-sonnet-5-5",
+            else: "claude-sonnet-5-5"
+          )
+        )
+
+      {opts, warnings} = provider.pre_validate_options(:chat, sonnet, temperature: 0.0)
+      refute Keyword.has_key?(opts, :temperature)
+      assert Enum.any?(warnings, &(&1 =~ "does not accept :temperature")), inspect(provider)
+
+      opus =
+        sparse_hosted(
+          provider,
+          if(provider == AmazonBedrock,
+            do: "us.anthropic.claude-opus-5-5",
+            else: "claude-opus-5-5"
+          )
+        )
+
+      {_opts, warnings} = provider.pre_validate_options(:chat, opus, reasoning_effort: :none)
+      assert Enum.any?(warnings, &(&1 =~ "cannot turn thinking off")), inspect(provider)
+
+      log =
+        ExUnit.CaptureLog.capture_log(fn ->
+          ReqLLM.Provider.Options.process!(provider, :chat, sonnet, temperature: 0.0)
+        end)
+
+      assert log =~ "does not accept :temperature", inspect(provider)
+    end
+  end
 end

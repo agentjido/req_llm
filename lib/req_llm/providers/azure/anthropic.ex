@@ -63,16 +63,16 @@ defmodule ReqLLM.Providers.Azure.Anthropic do
   Warns if json_schema response_format is attempted (not supported on Azure).
   """
   def pre_validate_options(operation, model, opts) do
-    opts =
+    {opts, warnings} =
       if ModelHelpers.adaptive_thinking_required?(model) do
         PlatformReasoning.prepare_adaptive_options(operation, model, opts)
       else
-        maybe_translate_reasoning_params(model, opts)
+        {maybe_translate_reasoning_params(model, opts), []}
       end
 
     opts = warn_if_json_schema_response_format(opts)
     opts = warn_if_openai_specific_options(opts)
-    {opts, []}
+    {opts, warnings}
   end
 
   defp warn_if_json_schema_response_format(opts) do

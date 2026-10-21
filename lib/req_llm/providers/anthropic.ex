@@ -169,6 +169,8 @@ defmodule ReqLLM.Providers.Anthropic do
     temperature top_p stop_sequences thinking output_config
   )a
 
+  @sampling_parameters [:temperature, :top_p, :top_k, :anthropic_top_k]
+
   @unsupported_parameters ~w(
     presence_penalty frequency_penalty logprobs top_logprobs response_format
   )a
@@ -876,7 +878,6 @@ defmodule ReqLLM.Providers.Anthropic do
 
   @impl ReqLLM.Provider
   def translate_options(operation, model, opts) do
-    # Anthropic-specific parameter translation
     translated_opts =
       opts
       |> translate_stop_parameter()
@@ -887,7 +888,11 @@ defmodule ReqLLM.Providers.Anthropic do
       |> remove_conflicting_sampling_params()
       |> translate_unsupported_parameters()
 
-    {translated_opts, []}
+    warnings =
+      thinking_off_warnings(opts, model) ++
+        sampling_parameter_warnings(opts, translated_opts, model)
+
+    {translated_opts, warnings}
   end
 
   @impl ReqLLM.Provider
@@ -1459,7 +1464,7 @@ defmodule ReqLLM.Providers.Anthropic do
 
     case reasoning_effort do
       :none ->
-        opts
+        put_thinking_off(opts, model)
 
       :minimal ->
         put_reasoning_effort(opts, model, :minimal, reasoning_budget)
@@ -1486,6 +1491,96 @@ defmodule ReqLLM.Providers.Anthropic do
         opts
     end
   end
+
+  defp put_thinking_off(opts, model) do
+    case adaptive_thinking_off_type(model) do
+      nil -> opts
+      type -> Keyword.put(opts, :thinking, %{type: type})
+    end
+  end
+
+  defp adaptive_thinking_off_type(model) do
+    if ReqLLM.ModelHelpers.adaptive_thinking_required?(model) do
+      ReqLLM.ModelHelpers.anthropic_thinking_off_type(model)
+    end
+  end
+
+  defp thinking_off_warnings(opts, model) do
+    explicit_thinking = Keyword.get(opts, :thinking)
+
+    cond do
+      not thinking_off_unavailable?(model) ->
+        []
+
+      ReqLLM.ModelHelpers.anthropic_thinking_off?(explicit_thinking) ->
+        [
+          "#{model_name(model)} cannot turn thinking off and does not accept thinking type " <>
+            "#{inspect(ReqLLM.MapAccess.get(explicit_thinking, :type))}. " <>
+            "Use a lower reasoning_effort, such as :low, to reduce thinking."
+        ]
+
+      Keyword.get(opts, :reasoning_effort) == :none ->
+        [
+          "#{model_name(model)} cannot turn thinking off, so reasoning_effort: :none was not applied " <>
+            "and the model thinks at its default effort. " <>
+            "Use a lower reasoning_effort, such as :low, to reduce thinking."
+        ]
+
+      true ->
+        []
+    end
+  end
+
+  defp thinking_off_unavailable?(model) do
+    ReqLLM.ModelHelpers.adaptive_thinking_required?(model) and
+      ReqLLM.ModelHelpers.anthropic_thinking_types(model) != [] and
+      is_nil(ReqLLM.ModelHelpers.anthropic_thinking_off_type(model))
+  end
+
+  defp sampling_parameter_warnings(opts, translated_opts, model) do
+    Enum.flat_map(@sampling_parameters, fn key ->
+      before = Keyword.get(opts, key)
+      after_translation = Keyword.get(translated_opts, key)
+
+      cond do
+        is_nil(before) -> []
+        is_nil(after_translation) -> [sampling_drop_warning(key, translated_opts, model)]
+        after_translation != before -> [sampling_change_warning(key, before, after_translation)]
+        true -> []
+      end
+    end)
+  end
+
+  defp sampling_drop_warning(key, translated_opts, model) do
+    cond do
+      sampling_unsupported?(model) ->
+        "#{model_name(model)} does not accept #{inspect(key)}, so it was dropped from the request."
+
+      thinking_on?(Keyword.get(translated_opts, :thinking)) ->
+        "#{inspect(key)} is not compatible with extended thinking on #{model_name(model)}, " <>
+          "so it was dropped from the request."
+
+      key == :top_p ->
+        ":top_p was dropped because :temperature is also set, and #{model_name(model)} " <>
+          "accepts only one of them."
+
+      true ->
+        "#{inspect(key)} was dropped from the request to #{model_name(model)}."
+    end
+  end
+
+  defp sampling_change_warning(key, before, after_translation) do
+    "#{inspect(key)} was changed from #{inspect(before)} to #{inspect(after_translation)} " <>
+      "because extended thinking requires it."
+  end
+
+  defp thinking_on?(thinking) when is_map(thinking),
+    do: not ReqLLM.ModelHelpers.anthropic_thinking_off?(thinking)
+
+  defp thinking_on?(_thinking), do: false
+
+  defp model_name(%LLMDB.Model{} = model), do: model.provider_model_id || model.id || "This model"
+  defp model_name(_model), do: "This model"
 
   defp put_reasoning_effort(opts, model, effort, reasoning_budget) do
     if ReqLLM.ModelHelpers.adaptive_thinking_required?(model) do
@@ -1541,11 +1636,20 @@ defmodule ReqLLM.Providers.Anthropic do
           |> Keyword.put(:thinking, put_default_adaptive_thinking_display(thinking))
           |> remove_adaptive_thinking_sampling_params()
 
-        _ ->
-          opts
+        thinking ->
+          normalize_thinking_off(opts, thinking, model)
       end
     else
       opts
+    end
+  end
+
+  defp normalize_thinking_off(opts, thinking, model) do
+    with true <- ReqLLM.ModelHelpers.anthropic_thinking_off?(thinking),
+         type when is_binary(type) <- ReqLLM.ModelHelpers.anthropic_thinking_off_type(model) do
+      Keyword.put(opts, :thinking, %{type: type})
+    else
+      _ -> opts
     end
   end
 
@@ -1622,11 +1726,16 @@ defmodule ReqLLM.Providers.Anthropic do
   defp normalized_effort_values(_values), do: []
 
   defp remove_model_unsupported_parameters(opts, model) do
-    if model_extra(model, [:temperature]) == false do
+    if sampling_unsupported?(model) do
       Keyword.drop(opts, [:temperature, :top_p, :top_k, :anthropic_top_k])
     else
       opts
     end
+  end
+
+  defp sampling_unsupported?(model) do
+    model_extra(model, [:temperature]) == false or
+      ReqLLM.ModelHelpers.adaptive_thinking_required?(model)
   end
 
   defp model_capability(%LLMDB.Model{capabilities: capabilities}, path),
@@ -1668,6 +1777,9 @@ defmodule ReqLLM.Providers.Anthropic do
 
     cond do
       is_nil(thinking) ->
+        opts
+
+      ReqLLM.ModelHelpers.anthropic_thinking_off?(thinking) ->
         opts
 
       operation == :object and match?(%{type: "tool"}, tool_choice) ->

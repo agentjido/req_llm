@@ -29,15 +29,11 @@ defmodule ReqLLM.Providers.GoogleVertex.Anthropic do
   Handles reasoning_effort/reasoning_token_budget translation to thinking config.
   """
   def pre_validate_options(operation, model, opts) do
-    # Handle reasoning parameters for Claude models
-    opts =
-      if ModelHelpers.adaptive_thinking_required?(model) do
-        PlatformReasoning.prepare_adaptive_options(operation, model, opts)
-      else
-        maybe_translate_reasoning_params(model, opts)
-      end
-
-    {opts, []}
+    if ModelHelpers.adaptive_thinking_required?(model) do
+      PlatformReasoning.prepare_adaptive_options(operation, model, opts)
+    else
+      {maybe_translate_reasoning_params(model, opts), []}
+    end
   end
 
   @doc """

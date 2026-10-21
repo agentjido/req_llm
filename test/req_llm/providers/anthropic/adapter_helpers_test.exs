@@ -158,4 +158,34 @@ defmodule ReqLLM.Providers.Anthropic.AdapterHelpersTest do
   end
 
   defp property_names(schema), do: Enum.map(schema["properties"], &elem(&1, 0))
+
+  describe "maybe_add_thinking/2 with thinking turned off" do
+    test "sends the bare off type even with forced tool choice" do
+      for thinking <- [
+            %{type: "disabled"},
+            %{"type" => "between_tools", "display" => "summarized"}
+          ],
+          tool_choice <- [nil, %{type: "tool", name: "add"}] do
+        opts = [
+          tool_choice: tool_choice,
+          provider_options: [additional_model_request_fields: %{thinking: thinking}]
+        ]
+
+        body = AdapterHelpers.maybe_add_thinking(%{}, opts)
+        expected = ReqLLM.MapAccess.get(thinking, :type)
+        assert body.thinking == %{type: expected}
+      end
+    end
+
+    test "still omits enabled thinking under forced tool choice" do
+      opts = [
+        tool_choice: %{type: "tool", name: "add"},
+        provider_options: [
+          additional_model_request_fields: %{thinking: %{type: "adaptive"}}
+        ]
+      ]
+
+      refute Map.has_key?(AdapterHelpers.maybe_add_thinking(%{}, opts), :thinking)
+    end
+  end
 end
