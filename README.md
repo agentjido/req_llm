@@ -736,9 +736,16 @@ If you run into anything or have suggestions, please open an issue or PR.
 
 ### Test Coverage & Quality Commitment
 
-ReqLLM uses fixture-backed compatibility tests as a practical map of provider behavior. The current suite includes **160 passing model-compat entries** across 13 providers and **622 unique recorded fixture model specs** across text, streaming, tool calling, structured output, embeddings, image generation, speech, transcription, rerank, and OCR.
+ReqLLM tracks support evidence for **600+ models** across text, streaming, tool
+calling, structured output, embeddings, image generation, speech,
+transcription, rerank, and OCR. This count is from the October 9, 2026 evidence
+snapshot.
 
-Catalog support and fixture-verified coverage are tracked separately on purpose: provider catalogs move quickly, account access varies, and some modalities need specialized tests. ReqLLM makes that state visible through `mix mc "*:*"` and lets you narrow checks by provider or operation type when you need to validate the exact models your application uses.
+Catalog support and fixture-verified coverage are tracked separately on purpose:
+provider catalogs move quickly, account access varies, and some modalities need
+specialized tests. See [Model Support Evidence](guides/model-support.md) for the
+dated status of each exact model and operation. You can also use
+`mix req_llm.model_support` or `mix mc "*:*"` to inspect current evidence.
 
 **We welcome bug reports and feedback!** If you encounter issues with any supported model, please open a GitHub issue with details. The more feedback we receive, the stronger the code will be!
 
