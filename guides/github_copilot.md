@@ -10,12 +10,21 @@ Use a GitHub token that has access to Copilot:
 export COPILOT_GITHUB_TOKEN=gho_...
 ```
 
-If no token is configured, ReqLLM falls back to:
+By default, `github_copilot_auth` is `:token`. ReqLLM checks these token sources in order:
 
-1. `COPILOT_GITHUB_TOKEN`
-2. `GH_TOKEN`
-3. `GITHUB_TOKEN`
-4. `gh auth token`
+1. The `:api_key` request option
+2. Application config `config :req_llm, :github_copilot_api_key, token`
+3. `COPILOT_GITHUB_TOKEN`
+4. `GH_TOKEN`
+5. `GITHUB_TOKEN`
+
+If none is configured, ReqLLM returns an error. Running `gh auth token` requires an explicit opt-in:
+
+```elixir
+ReqLLM.generate_text("github_copilot:gpt-4o-mini", "Hello!", github_copilot_auth: :auto)
+```
+
+Use `:auto` to check configured tokens first and then fall back to the GitHub CLI, or `:gh` to use only the GitHub CLI. Both modes execute the `gh` executable found on `PATH`.
 
 You can also pass a token per request:
 
@@ -48,7 +57,7 @@ ReqLLM.stream_text(
   "Hello!",
   provider_options: [
     github_copilot_integration_id: "vscode-chat",
-    github_copilot_auth: :auto
+    github_copilot_auth: :token
   ]
 )
 ```
@@ -62,10 +71,10 @@ ReqLLM.stream_text(
 ### `github_copilot_auth`
 
 - **Type**: `:auto` | `:token` | `:gh`
-- **Default**: `:auto`
+- **Default**: `:token`
 - **Purpose**: Controls credential lookup.
 
-`auto` checks configured token sources first and then falls back to `gh auth token`. `token` only uses configured token sources. `gh` only uses the GitHub CLI.
+`:token` only uses configured token sources and returns an error if none is available. Explicitly set `github_copilot_auth: :auto` to check configured tokens first and then fall back to `gh auth token`, or `github_copilot_auth: :gh` to use only the GitHub CLI.
 
 ## Model Specs
 

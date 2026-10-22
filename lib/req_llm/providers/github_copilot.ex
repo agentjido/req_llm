@@ -10,8 +10,9 @@ defmodule ReqLLM.Providers.GitHubCopilot do
 
       COPILOT_GITHUB_TOKEN=gho_...
 
-  When no explicit token or environment token is configured, the provider falls
-  back to `gh auth token`, matching GitHub Copilot CLI's GitHub CLI fallback.
+  Authentication defaults to `github_copilot_auth: :token`, which only uses
+  configured tokens. Set `github_copilot_auth: :auto` to fall back to `gh auth token`
+  when no token is configured, or `:gh` to use only the GitHub CLI.
 
   ## Examples
 
@@ -37,8 +38,10 @@ defmodule ReqLLM.Providers.GitHubCopilot do
   @provider_schema [
     github_copilot_auth: [
       type: {:in, [:auto, :token, :gh]},
-      default: :auto,
-      doc: "Authentication source. :auto checks configured tokens first, then gh auth token."
+      default: :token,
+      doc:
+        "Authentication source. Defaults to :token (configured tokens only). " <>
+          "Opt in with :auto to fall back to gh auth token, or :gh to use only the GitHub CLI."
     ],
     github_copilot_integration_id: [
       type: :string,
@@ -163,12 +166,22 @@ defmodule ReqLLM.Providers.GitHubCopilot do
 
       true ->
         {:error,
-         ":api_key option, config :req_llm, :github_copilot_api_key, COPILOT_GITHUB_TOKEN, GH_TOKEN, or GITHUB_TOKEN"}
+         "Set :api_key, config :req_llm, :github_copilot_api_key, COPILOT_GITHUB_TOKEN, GH_TOKEN, or GITHUB_TOKEN. " <>
+           "To enable the `gh auth token` fallback, set github_copilot_auth: :auto (or :gh to use only the GitHub CLI)."}
     end
   end
 
   defp gh_token do
-    case System.cmd("gh", ["auth", "token"], stderr_to_stdout: true) do
+    case System.find_executable("gh") do
+      nil -> gh_unavailable()
+      executable -> gh_token(executable)
+    end
+  rescue
+    ErlangError -> gh_unavailable()
+  end
+
+  defp gh_token(executable) do
+    case System.cmd(executable, ["auth", "token"], stderr_to_stdout: true) do
       {token, 0} ->
         token = String.trim(token)
 
@@ -182,21 +195,22 @@ defmodule ReqLLM.Providers.GitHubCopilot do
         {:error,
          "GitHub Copilot credentials were not found and `gh auth token` failed: #{String.trim(output)}"}
     end
-  rescue
-    ErlangError ->
-      {:error,
-       "GitHub Copilot credentials were not found and the `gh` executable is unavailable. Set COPILOT_GITHUB_TOKEN or pass :api_key."}
+  end
+
+  defp gh_unavailable do
+    {:error,
+     "GitHub Copilot credentials were not found and the `gh` executable is unavailable. Set COPILOT_GITHUB_TOKEN or pass :api_key."}
   end
 
   defp auth_mode(opts, provider_opts) do
-    mode = provider_option(opts, provider_opts, :github_copilot_auth, :auto)
+    mode = provider_option(opts, provider_opts, :github_copilot_auth, :token)
 
     case mode do
       "token" -> :token
       "gh" -> :gh
       "auto" -> :auto
       other when other in [:token, :gh, :auto] -> other
-      _ -> :auto
+      _ -> :token
     end
   end
 
