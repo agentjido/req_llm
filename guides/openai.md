@@ -806,6 +806,8 @@ response.usage.cost
 
 Responses API server-side tools may also appear in `response.message.tool_calls` as builtin records (for example `web_search_call` or `file_search_call`). They are preserved for observability, but the provider already executed them: do not replay them as local tool calls. `ReqLLM.Response.classify/1` and `ReqLLM.StreamResponse.classify/1` treat builtin-only responses as final answers.
 
+When streaming, a builtin call is announced before it finishes: as soon as the provider adds the call, the stream emits a `:meta` chunk with `builtin_tool_started: %{id: id, name: name, index: index}` (for example `name: "web_search_call"`). The finished builtin `:tool_call` chunk, whose `metadata.id` matches, follows when the call completes, so the pair can drive progress UI such as "Searching the web…" while the provider works.
+
 ### Citations
 
 When a model cites its sources — web search being the common case — the citations
