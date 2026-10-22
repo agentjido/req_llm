@@ -41,7 +41,7 @@ defmodule ReqLLM.RedirectTest do
 
   for {provider, model, header, extra_opts} <- [
         {:anthropic, "claude-sonnet-4-5", "x-api-key", []},
-        {:google, "gemini-2.5-flash", nil, []},
+        {:google, "gemini-2.5-flash", "x-goog-api-key", []},
         {:azure, "gpt-4o", "api-key", [provider_options: [deployment: "test"]]},
         {:azure, "claude-sonnet-4-5", "x-api-key", [provider_options: [deployment: "test"]]}
       ] do
