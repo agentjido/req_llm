@@ -202,7 +202,7 @@ defmodule ReqLLM.Providers.AmazonBedrock.OpenAI do
 
     # Build message with tool_calls if present
     message = %ReqLLM.Message{
-      role: String.to_existing_atom(role),
+      role: parse_role(role),
       content: content_parts
     }
 
@@ -212,6 +212,12 @@ defmodule ReqLLM.Providers.AmazonBedrock.OpenAI do
       message
     end
   end
+
+  defp parse_role("assistant"), do: :assistant
+  defp parse_role("user"), do: :user
+  defp parse_role("system"), do: :system
+  defp parse_role("tool"), do: :tool
+  defp parse_role(_), do: :assistant
 
   defp parse_usage(%{"prompt_tokens" => input, "completion_tokens" => output} = usage) do
     cached = get_in(usage, ["prompt_tokens_details", "cached_tokens"]) || 0
