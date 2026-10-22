@@ -4,7 +4,10 @@ defmodule ReqLLM.Keys do
 
   1. `:api_key` option (per-request override)
   2. `Application.get_env(:req_llm, config_key)`
-  3. `System.get_env(env_var)` (dotenvy loads .env at startup)
+  3. `System.get_env(env_var)`
+
+  Under Mix, `.env` is loaded at startup; releases skip it unless
+  `config :req_llm, load_dotenv: true` is set.
 
   Happy path: works with ReqLLM.Model structs and provider atoms.
   Uses each provider's `default_env_key/0` callback when available.

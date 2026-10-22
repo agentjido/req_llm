@@ -452,7 +452,7 @@ ReqLLM.generate_text("anthropic:claude-haiku-4-5", "Hello", api_key: "sk-ant-...
 {:ok, response} = ReqLLM.stream_text("anthropic:claude-haiku-4-5", "Story", api_key: "sk-ant-...")
 ```
 
-By default, ReqLLM loads `.env` files from the current working directory at startup. To disable this behavior (e.g., if you manage environment variables yourself):
+By default, ReqLLM loads `.env` from the current working directory at startup when Mix is available (`mix run`, `mix test`, `iex -S mix`), and skips it in releases unless `load_dotenv: true` is explicitly configured. To disable loading under Mix as well:
 
 ```elixir
 config :req_llm, load_dotenv: false

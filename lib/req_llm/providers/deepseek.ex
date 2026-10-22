@@ -13,7 +13,7 @@ defmodule ReqLLM.Providers.Deepseek do
 
   ## Configuration
 
-      # Add to .env file (automatically loaded)
+      # Add to .env file
       DEEPSEEK_API_KEY=your-api-key
 
   ## Examples

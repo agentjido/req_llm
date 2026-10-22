@@ -21,7 +21,7 @@ defmodule ReqLLM.Providers.ElevenLabs do
 
   ## Configuration
 
-      # Add to .env file (automatically loaded)
+      # Add to .env file
       ELEVENLABS_API_KEY=sk_...
 
   ## Usage

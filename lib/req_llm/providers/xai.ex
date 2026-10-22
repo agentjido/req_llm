@@ -68,7 +68,7 @@ defmodule ReqLLM.Providers.XAI do
 
   ## Configuration
 
-      # Add to .env file (automatically loaded)
+      # Add to .env file
       XAI_API_KEY=xai-...
 
   ## Examples

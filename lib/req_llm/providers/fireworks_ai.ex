@@ -51,7 +51,7 @@ defmodule ReqLLM.Providers.FireworksAI do
 
   ## Configuration
 
-      # Add to .env file (automatically loaded)
+      # Add to .env file
       FIREWORKS_API_KEY=fw_...
   """
 

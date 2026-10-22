@@ -22,7 +22,7 @@ defmodule ReqLLM.Providers.Groq do
 
   ## Configuration
 
-      # Add to .env file (automatically loaded)
+      # Add to .env file
       GROQ_API_KEY=gsk_...
   """
 

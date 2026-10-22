@@ -69,7 +69,7 @@ defmodule ReqLLM.Providers.Google do
 
   ## Configuration
 
-      # Add to .env file (automatically loaded)
+      # Add to .env file
       GOOGLE_API_KEY=AIza...
   """
 

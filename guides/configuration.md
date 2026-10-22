@@ -26,7 +26,7 @@ config :req_llm,
   finch_request_adapter: MyApp.FinchAdapter,  # Module implementing ReqLLM.FinchRequestAdapter
 
   # Key management
-  load_dotenv: true,                 # Auto-load .env files at startup
+  # load_dotenv: false,              # Optional override; defaults to true under Mix, false in releases.
 
   # Telemetry
   telemetry: [payloads: :none],      # Request payload policy (:none or :raw)
@@ -585,7 +585,9 @@ See the [Telemetry Guide](telemetry.md) for the full event model, payload semant
 
 Keys are loaded with clear precedence: per-request → in-memory → app config → env vars → .env files.
 
-### .env Files (Recommended)
+### .env Files
+
+By default, `.env` is loaded from the current working directory at startup when Mix is available (`mix run`, `mix test`, `iex -S mix`), and skipped in releases unless `load_dotenv: true` is explicitly configured.
 
 ```bash
 # .env
@@ -594,7 +596,7 @@ OPENAI_API_KEY=sk-...
 GOOGLE_API_KEY=...
 ```
 
-Disable automatic .env loading:
+Set `load_dotenv: false` to disable loading in every environment, or `true` to enable it explicitly:
 
 ```elixir
 config :req_llm, load_dotenv: false
@@ -702,7 +704,7 @@ config :req_llm,
   thinking_timeout: 300_000,
   metadata_timeout: 120_000,
   telemetry: [payloads: :none],
-  load_dotenv: false  # Use proper secrets management in production
+  load_dotenv: false  # Already the default in releases; also disables loading under Mix.
 ```
 
 Set `compile_embed` in the root application before dependencies compile. This
@@ -717,7 +719,7 @@ this compile-time option for applications that install ReqLLM from Hex.
 config :req_llm,
   receive_timeout: 60_000,
   debug: true,
-  load_dotenv: true
+  load_dotenv: true  # Already the default under Mix; also enables loading in releases.
 ```
 
 ## LLM Gateway Defaults

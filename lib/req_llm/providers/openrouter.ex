@@ -38,7 +38,7 @@ defmodule ReqLLM.Providers.OpenRouter do
 
   ## Configuration
 
-      # Add to .env file (automatically loaded)
+      # Add to .env file
       OPENROUTER_API_KEY=sk-or-...
   """
 

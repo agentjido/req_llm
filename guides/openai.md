@@ -78,6 +78,8 @@ When `auth_mode: :oauth` is enabled and no explicit `access_token` is passed, Re
 - refresh expired `openai-codex` credentials automatically and persist the updated file
 - reuse `accountId` from the file or derive it from the refreshed access token for Codex requests
 
+Without an explicit path, `oauth.json` or `auth.json` is looked up relative to the current working directory; deployments should set `REQ_LLM_OAUTH_FILE` or `config :req_llm, :oauth_file, "/absolute/path/to/oauth.json"` explicitly.
+
 Example:
 
 ```elixir

@@ -26,7 +26,7 @@ defmodule ReqLLM.Providers.VLLM do
 
   ## Configuration
 
-      # Add to .env file (automatically loaded)
+      # Add to .env file
       OPENAI_API_KEY=any-value-for-vllm
 
   ## Examples

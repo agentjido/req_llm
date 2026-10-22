@@ -15,8 +15,8 @@ defmodule ReqLLM.Application do
   # ## Configuration
 
   # - `:load_dotenv` - Whether to automatically load `.env` files from the current
-  #   working directory at startup. Defaults to `true`. Set to `false` if you prefer
-  #   to manage environment variables yourself or use a different `.env` loading strategy.
+  #   working directory at startup. Defaults to `true` when Mix is available and
+  #   `false` in releases; an explicit `true` or `false` overrides this default.
 
   #       config :req_llm, load_dotenv: false
 
@@ -24,7 +24,7 @@ defmodule ReqLLM.Application do
 
   @impl true
   def start(_type, _args) do
-    req_llm_load_dotenv = Application.get_env(:req_llm, :load_dotenv, true)
+    req_llm_load_dotenv = Application.get_env(:req_llm, :load_dotenv, Code.ensure_loaded?(Mix))
 
     if req_llm_load_dotenv do
       load_dotenv()

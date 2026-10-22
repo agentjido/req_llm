@@ -6,8 +6,9 @@ defmodule ReqLLM.Release.LLMDBDependencyTest do
   @project_root Path.expand("../..", __DIR__)
   @fixture_path Path.join(@project_root, "test/fixtures/llm_db_release")
   @release_name "req_llm_llm_db_release_fixture"
+  @dotenv_key "REQ_LLM_RELEASE_DOTENV_KEY"
 
-  test "builds and boots with an embedded LLMDB catalog" do
+  test "builds and boots with an embedded LLMDB catalog without loading .env by default" do
     temporary_path =
       Path.join(
         System.tmp_dir!(),
@@ -39,7 +40,8 @@ defmodule ReqLLM.Release.LLMDBDependencyTest do
 
     assert_regular_llm_db_dependency(build_path)
     remove_packaged_catalog(release_path)
-    assert_release_boots(release_path)
+    File.write!(Path.join(temporary_path, ".env"), "#{@dotenv_key}=from_file\n")
+    assert_release_boots(release_path, temporary_path)
   end
 
   defp assert_regular_llm_db_dependency(build_path) do
@@ -58,17 +60,25 @@ defmodule ReqLLM.Release.LLMDBDependencyTest do
     File.rm!(snapshot)
   end
 
-  defp assert_release_boots(release_path) do
+  defp assert_release_boots(release_path, working_directory) do
     executable = Path.join([release_path, "bin", @release_name])
 
     expression =
-      "{:ok, started} = Application.ensure_all_started(:req_llm_llm_db_release_fixture); " <>
+      "false = Code.ensure_loaded?(Mix); " <>
+        "Application.load(:req_llm); " <>
+        "Application.delete_env(:req_llm, :load_dotenv); " <>
+        "{:ok, started} = Application.ensure_all_started(:req_llm_llm_db_release_fixture); " <>
         "true = Enum.member?(started, :llm_db); " <>
+        "nil = System.get_env(#{inspect(@dotenv_key)}); " <>
         "{:ok, model} = ReqLLM.model(\"openai:gpt-4o-mini\"); " <>
         "IO.puts(Atom.to_string(model.provider) <> \":\" <> model.id)"
 
     {output, status} =
-      System.cmd(executable, ["eval", expression], stderr_to_stdout: true)
+      System.cmd(executable, ["eval", expression],
+        cd: working_directory,
+        env: [{@dotenv_key, nil}],
+        stderr_to_stdout: true
+      )
 
     assert status == 0, output
     assert output =~ "openai:gpt-4o-mini"

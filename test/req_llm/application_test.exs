@@ -10,6 +10,7 @@ defmodule ReqLLM.ApplicationTest do
     original_stream_pool_protocols = Application.get_env(:req_llm, :stream_pool_protocols)
     original_stream_pool_size = Application.get_env(:req_llm, :stream_pool_size)
     original_stream_pool_count = Application.get_env(:req_llm, :stream_pool_count)
+    original_dotenv_value = System.get_env(@dotenv_key)
 
     on_exit(fn ->
       stop_app(:req_llm)
@@ -20,7 +21,13 @@ defmodule ReqLLM.ApplicationTest do
       restore_app_env(:req_llm, :stream_pool_protocols, original_stream_pool_protocols)
       restore_app_env(:req_llm, :stream_pool_size, original_stream_pool_size)
       restore_app_env(:req_llm, :stream_pool_count, original_stream_pool_count)
-      System.delete_env(@dotenv_key)
+
+      if original_dotenv_value do
+        System.put_env(@dotenv_key, original_dotenv_value)
+      else
+        System.delete_env(@dotenv_key)
+      end
+
       Application.ensure_all_started(:req_llm)
       LLMDB.load(custom: Application.get_env(:llm_db, :custom, %{}))
     end)
@@ -96,32 +103,34 @@ defmodule ReqLLM.ApplicationTest do
       assert ReqLLM.Application.finch_name() == ReqLLM.Finch
     end
 
-    test "load_dotenv defaults to true" do
-      original = Application.get_env(:req_llm, :load_dotenv)
+    test "load_dotenv defaults to loading .env during startup under Mix" do
+      assert Code.ensure_loaded?(Mix)
 
-      try do
-        Application.delete_env(:req_llm, :load_dotenv)
-        assert Application.get_env(:req_llm, :load_dotenv, true) == true
-      after
-        if original do
-          Application.put_env(:req_llm, :load_dotenv, original)
-        end
-      end
+      with_apps_stopped(fn ->
+        with_temp_dir(fn ->
+          File.write!(".env", "#{@dotenv_key}=from_file\n")
+          System.delete_env(@dotenv_key)
+          Application.delete_env(:req_llm, :load_dotenv)
+          Application.delete_env(:llm_db, :load_dotenv)
+
+          assert {:ok, _} = Application.ensure_all_started(:req_llm)
+          assert System.get_env(@dotenv_key) == "from_file"
+        end)
+      end)
     end
 
-    test "load_dotenv can be set to false" do
-      original = Application.get_env(:req_llm, :load_dotenv)
+    test "load_dotenv true loads .env during startup" do
+      with_apps_stopped(fn ->
+        with_temp_dir(fn ->
+          File.write!(".env", "#{@dotenv_key}=from_file\n")
+          System.delete_env(@dotenv_key)
+          Application.put_env(:req_llm, :load_dotenv, true)
+          Application.delete_env(:llm_db, :load_dotenv)
 
-      try do
-        Application.put_env(:req_llm, :load_dotenv, false)
-        assert Application.get_env(:req_llm, :load_dotenv, true) == false
-      after
-        if original do
-          Application.put_env(:req_llm, :load_dotenv, original)
-        else
-          Application.delete_env(:req_llm, :load_dotenv)
-        end
-      end
+          assert {:ok, _} = Application.ensure_all_started(:req_llm)
+          assert System.get_env(@dotenv_key) == "from_file"
+        end)
+      end)
     end
 
     test "load_dotenv false prevents ReqLLM from loading .env during startup" do
