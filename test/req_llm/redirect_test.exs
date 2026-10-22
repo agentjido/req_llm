@@ -41,7 +41,7 @@ defmodule ReqLLM.RedirectTest do
 
   for {provider, model, header, extra_opts} <- [
         {:anthropic, "claude-sonnet-4-5", "x-api-key", []},
-        {:google, "gemini-2.5-flash", nil, []},
+        {:google, "gemini-2.5-flash", "x-goog-api-key", []},
         {:azure, "gpt-4o", "api-key", [provider_options: [deployment: "test"]]},
         {:azure, "claude-sonnet-4-5", "x-api-key", [provider_options: [deployment: "test"]]}
       ] do
@@ -61,13 +61,9 @@ defmodule ReqLLM.RedirectTest do
                  opts
                )
 
-      assert_receive {:request, :origin, "127.0.0.1", headers, query}
+      assert_receive {:request, :origin, "127.0.0.1", headers, _query}
 
-      if context.auth_header do
-        assert {context.auth_header, "redirect-test-secret"} in headers
-      else
-        assert URI.decode_query(query)["key"] == "redirect-test-secret"
-      end
+      assert {context.auth_header, "redirect-test-secret"} in headers
 
       refute_received {:request, :destination, _, _, _}
     end
