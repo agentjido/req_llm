@@ -69,6 +69,22 @@ defmodule ReqLLM.Streaming.WebSocketTLSTest do
     assert :ok = WebSocketSession.close(session)
   end
 
+  test "rejects an untrusted certificate for an HTTPS URL", %{url: url} do
+    https_url = String.replace_prefix(url, "wss://", "https://")
+
+    {:ok, session} =
+      WebSocketSession.start_link(https_url,
+        headers: [{"authorization", "Bearer test-token"}],
+        connect_timeout: 1_000
+      )
+
+    assert {:error, %WebSockex.ConnError{original: {:tls_alert, _alert}}} =
+             WebSocketSession.await_connected(session, 1_000)
+
+    refute_received {:web_socket_tls_request, _headers}
+    assert :ok = WebSocketSession.close(session)
+  end
+
   test "rejects a trusted certificate for the wrong host", %{url: url, cacerts: cacerts} do
     wrong_host_url = String.replace(url, "localhost", "127.0.0.1")
 

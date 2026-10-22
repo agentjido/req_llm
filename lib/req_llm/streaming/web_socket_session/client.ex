@@ -38,7 +38,9 @@ defmodule ReqLLM.Streaming.WebSocketSession.Client do
     end
   end
 
-  defp secure_scheme?(scheme) when is_binary(scheme), do: String.downcase(scheme) == "wss"
+  defp secure_scheme?(scheme) when is_binary(scheme),
+    do: String.downcase(scheme) in ["wss", "https"]
+
   defp secure_scheme?(_scheme), do: false
 
   defp ssl_options(opts) do
