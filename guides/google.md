@@ -153,6 +153,28 @@ response.usage.cost
 
 Google grounding uses `unit: "query"` to track the number of search queries performed.
 
+## Text thought signatures
+
+Gemini can return `thoughtSignature` on ordinary text parts, even without
+`thought: true`. ReqLLM stores these signatures in each text content part's
+`metadata[:thought_signature]`. Decoded streaming text chunks use the same
+metadata key.
+
+Buffered responses and assembled streaming responses preserve signed text
+parts in both `response.message` and `response.context`. Distinct signed parts
+stay separate. An empty text part with a signature also stays in the message,
+but does not add visible text to `ReqLLM.Response.text/1`.
+
+To continue a conversation, reuse `response.context` and append the next user
+message or tool result. ReqLLM sends each text signature back on its original
+part. Rebuilding history from `ReqLLM.Response.text/1` alone loses the signatures
+and part boundaries. Treat signatures as opaque values. Do not edit them or
+merge signed text parts.
+
+This behavior also applies to Gemini on Google Vertex AI. Thinking signatures
+remain in `message.reasoning_details`; text signatures do not create reasoning
+details.
+
 ## Wire Format Notes
 
 - Endpoint: `/models/{model}:generateContent`
