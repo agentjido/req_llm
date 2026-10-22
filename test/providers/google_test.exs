@@ -236,6 +236,8 @@ defmodule ReqLLM.Providers.GoogleTest do
       assert %Req.Request{} = request
       assert request.url.path == "/models/#{model.model}:streamGenerateContent"
       assert request.method == :post
+      assert request.options[:params] == [alt: "sse"]
+      assert Req.Request.get_header(request, "x-goog-api-key") == ["test-key-12345"]
     end
 
     test "attach configures authentication and pipeline" do
@@ -249,8 +251,8 @@ defmodule ReqLLM.Providers.GoogleTest do
       assert request.options[:temperature] == 0.5
       assert request.options[:max_tokens] == 50
 
-      # Google uses query parameter authentication
-      assert request.options[:params][:key] != nil
+      assert Req.Request.get_header(request, "x-goog-api-key") == ["test-key-12345"]
+      refute Keyword.has_key?(request.options[:params] || [], :key)
 
       # Verify pipeline steps
       request_steps = Keyword.keys(request.request_steps)
@@ -3381,14 +3383,13 @@ defmodule ReqLLM.Providers.GoogleTest do
       {:ok, model: model, context: context}
     end
 
-    test "default streaming uses query param auth", %{model: model, context: context} do
+    test "default streaming uses header auth", %{model: model, context: context} do
       opts = [api_key: "test-api-key"]
 
       {:ok, finch_request} = Google.attach_stream(model, context, opts, nil)
 
-      assert finch_request.query =~ "key=test-api-key"
-      assert finch_request.query =~ "alt=sse"
-      refute has_header?(finch_request.headers, "x-goog-api-key")
+      assert finch_request.query == "alt=sse"
+      assert has_header_value?(finch_request.headers, "x-goog-api-key", "test-api-key")
     end
 
     test "google_auth_header: true uses header auth instead of query param", %{
@@ -3407,7 +3408,7 @@ defmodule ReqLLM.Providers.GoogleTest do
       assert has_header_value?(finch_request.headers, "x-goog-api-key", "test-api-key")
     end
 
-    test "google_auth_header: false behaves same as default", %{model: model, context: context} do
+    test "google_auth_header: false opts into query auth", %{model: model, context: context} do
       opts = [
         api_key: "test-api-key",
         provider_options: [google_auth_header: false]
@@ -3416,7 +3417,38 @@ defmodule ReqLLM.Providers.GoogleTest do
       {:ok, finch_request} = Google.attach_stream(model, context, opts, nil)
 
       assert finch_request.query =~ "key=test-api-key"
+      assert finch_request.query =~ "alt=sse"
       refute has_header?(finch_request.headers, "x-goog-api-key")
+    end
+
+    test "debug logging redacts query auth", %{model: model, context: context} do
+      log =
+        ExUnit.CaptureLog.capture_log([level: :debug], fn ->
+          assert {:ok, _request} =
+                   Google.attach_stream(
+                     model,
+                     context,
+                     [
+                       api_key: "query-auth-secret",
+                       provider_options: [google_auth_header: false]
+                     ],
+                     nil
+                   )
+        end)
+
+      assert log =~ "key=[REDACTED]"
+      refute log =~ "query-auth-secret"
+    end
+
+    test "debug logging excludes the default auth credential", %{model: model, context: context} do
+      log =
+        ExUnit.CaptureLog.capture_log([level: :debug], fn ->
+          assert {:ok, _request} =
+                   Google.attach_stream(model, context, [api_key: "header-auth-secret"], nil)
+        end)
+
+      assert log =~ "alt=sse"
+      refute log =~ "header-auth-secret"
     end
 
     test "google_auth_header works with custom base_url for proxies", %{

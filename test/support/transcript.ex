@@ -37,7 +37,7 @@ defmodule ReqLLM.Test.Transcript do
 
   def schema, do: @schema
 
-  @sensitive_headers ~w(authorization x-api-key api-key cookie set-cookie anthropic-organization-id openai-organization)
+  @sensitive_headers ~w(authorization x-api-key x-goog-api-key api-key cookie set-cookie anthropic-organization-id openai-organization)
   # Use exact matches to avoid false positives (e.g., max_tokens matching "token")
   @sensitive_json_keys ~w(api_key apiKey authorization access_token auth_token bearer_token)
 

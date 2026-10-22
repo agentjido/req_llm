@@ -8,6 +8,14 @@ Access Gemini models with built-in web grounding and thinking capabilities.
 GOOGLE_API_KEY=AIza...
 ```
 
+Requests send the API key in the `x-goog-api-key` header by default, including
+streaming, embeddings, image generation, and cached-content operations. This
+keeps the credential out of request URLs and URL-based logs.
+
+For proxies that require query authentication, pass
+`provider_options: [google_auth_header: false]`. For `Google.CachedContent`
+functions, pass `google_auth_header: false` directly in the options.
+
 ## Model Specs
 
 For the full model-spec workflow, see [Model Specs](model-specs.md).
@@ -50,6 +58,13 @@ exposes the object. Models before Gemini 3 still return a parameter error
 ## Provider Options
 
 Passed via `:provider_options` keyword:
+
+### `google_auth_header`
+- **Type**: Boolean
+- **Default**: `true`
+- **Purpose**: Send the API key in the `x-goog-api-key` header
+- **Compatibility**: Set to `false` to send the credential in the `key` URL query parameter
+- **Example**: `provider_options: [google_auth_header: false]`
 
 ### `google_api_version`
 - **Type**: `"v1"` | `"v1beta"`

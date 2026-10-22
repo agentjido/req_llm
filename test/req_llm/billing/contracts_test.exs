@@ -148,13 +148,16 @@ defmodule ReqLLM.Billing.ContractsTest do
 
     Run.append!(dir, "raw.jsonl", attempt, %{
       "kind" => "request",
-      "body" => %{"api_key" => "secret", "input_tokens" => false}
+      "body" => %{"api_key" => "secret", "input_tokens" => false},
+      "headers" => %{"X-Goog-Api-Key" => ["google-auth-secret"]}
     })
 
     assert_raise ArgumentError, fn -> Run.reserve!(dir, %{}, 1) end
     [row] = Run.records(dir, "raw.jsonl")
     assert row["body"]["api_key"] == "[REDACTED]"
     assert row["body"]["input_tokens"] == false
+    assert row["headers"]["X-Goog-Api-Key"] == "[REDACTED]"
+    refute File.read!(Path.join(dir, "raw.jsonl")) =~ "google-auth-secret"
     assert_raise ArgumentError, fn -> Run.create!(dir, []) end
   end
 

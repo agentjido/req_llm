@@ -1,6 +1,8 @@
 defmodule ReqLLM.Providers.Google.CachedContentTest do
   use ExUnit.Case, async: true
 
+  @moduletag provider: :google
+
   alias ReqLLM.Providers.Google.CachedContent
 
   describe "create/1" do
@@ -100,6 +102,8 @@ defmodule ReqLLM.Providers.Google.CachedContentTest do
         assert conn.method == "POST"
         assert conn.host == "generativelanguage.googleapis.com"
         assert conn.request_path == "/v1beta/cachedContents"
+        assert Plug.Conn.get_req_header(conn, "x-goog-api-key") == ["test-key"]
+        assert conn.query_string == ""
 
         Req.Test.json(conn, %{"name" => "cachedContents/test-cache"})
       end)
@@ -122,7 +126,8 @@ defmodule ReqLLM.Providers.Google.CachedContentTest do
         assert conn.host == "localhost"
         assert conn.port == 9999
         assert conn.request_path == "/custom/v1beta/cachedContents"
-        assert %{"key" => "test-key"} = URI.decode_query(conn.query_string)
+        assert Plug.Conn.get_req_header(conn, "x-goog-api-key") == ["test-key"]
+        assert conn.query_string == ""
 
         {:ok, body, conn} = Plug.Conn.read_body(conn)
         payload = Jason.decode!(body)
@@ -156,7 +161,8 @@ defmodule ReqLLM.Providers.Google.CachedContentTest do
         assert conn.method == "GET"
         assert conn.host == "localhost"
         assert conn.request_path == "/custom/v1beta/cachedContents/abc123"
-        assert %{"key" => "test-key"} = URI.decode_query(conn.query_string)
+        assert Plug.Conn.get_req_header(conn, "x-goog-api-key") == ["test-key"]
+        assert conn.query_string == ""
 
         Req.Test.json(conn, %{"name" => "cachedContents/abc123"})
       end)
@@ -179,8 +185,8 @@ defmodule ReqLLM.Providers.Google.CachedContentTest do
         assert conn.host == "localhost"
         assert conn.request_path == "/custom/v1beta/cachedContents"
 
-        assert %{"key" => "test-key", "pageSize" => "5"} =
-                 URI.decode_query(conn.query_string)
+        assert Plug.Conn.get_req_header(conn, "x-goog-api-key") == ["test-key"]
+        assert URI.decode_query(conn.query_string) == %{"pageSize" => "5", "pageToken" => "next"}
 
         Req.Test.json(conn, %{"cachedContents" => [%{"name" => "cachedContents/abc123"}]})
       end)
@@ -190,6 +196,7 @@ defmodule ReqLLM.Providers.Google.CachedContentTest do
                  provider: :google,
                  api_key: "test-key",
                  page_size: 5,
+                 page_token: "next",
                  base_url: "http://localhost/custom/v1beta",
                  req_http_options: [plug: {Req.Test, __MODULE__}]
                )
@@ -203,8 +210,8 @@ defmodule ReqLLM.Providers.Google.CachedContentTest do
         assert conn.host == "localhost"
         assert conn.request_path == "/custom/v1beta/cachedContents/abc123"
 
-        assert %{"key" => "test-key", "updateMask" => "ttl"} =
-                 URI.decode_query(conn.query_string)
+        assert Plug.Conn.get_req_header(conn, "x-goog-api-key") == ["test-key"]
+        assert URI.decode_query(conn.query_string) == %{"updateMask" => "ttl"}
 
         {:ok, body, conn} = Plug.Conn.read_body(conn)
         assert %{"ttl" => "7200s"} = Jason.decode!(body)
@@ -230,7 +237,8 @@ defmodule ReqLLM.Providers.Google.CachedContentTest do
         assert conn.method == "DELETE"
         assert conn.host == "localhost"
         assert conn.request_path == "/custom/v1beta/cachedContents/abc123"
-        assert %{"key" => "test-key"} = URI.decode_query(conn.query_string)
+        assert Plug.Conn.get_req_header(conn, "x-goog-api-key") == ["test-key"]
+        assert conn.query_string == ""
 
         Req.Test.json(conn, %{})
       end)
@@ -243,6 +251,47 @@ defmodule ReqLLM.Providers.Google.CachedContentTest do
                  base_url: "http://localhost/custom/v1beta",
                  req_http_options: [plug: {Req.Test, __MODULE__}]
                )
+    end
+  end
+
+  describe "query authentication opt-out" do
+    for operation <- [:create, :list, :get, :update, :delete] do
+      test "#{operation}/1 accepts google_auth_header: false" do
+        operation = unquote(operation)
+
+        Req.Test.stub(__MODULE__, fn conn ->
+          assert Plug.Conn.get_req_header(conn, "x-goog-api-key") == []
+          params = URI.decode_query(conn.query_string)
+          assert params["key"] == "test-key"
+
+          if operation == :list do
+            assert params["pageSize"] == "5"
+            assert params["pageToken"] == "next"
+          end
+
+          if operation == :update, do: assert(params["updateMask"] == "ttl")
+
+          Req.Test.json(conn, %{"name" => "cachedContents/test-cache"})
+        end)
+
+        opts = [
+          provider: :google,
+          api_key: "test-key",
+          google_auth_header: false,
+          model: "gemini-2.5-flash",
+          contents: [%{role: "user", parts: [%{text: "Content to cache"}]}],
+          name: "cachedContents/test-cache",
+          ttl: "7200s",
+          page_size: 5,
+          page_token: "next",
+          req_http_options: [plug: {Req.Test, __MODULE__}]
+        ]
+
+        case operation do
+          :delete -> assert :ok = CachedContent.delete(opts)
+          _ -> assert {:ok, _response} = apply(CachedContent, operation, [opts])
+        end
+      end
     end
   end
 

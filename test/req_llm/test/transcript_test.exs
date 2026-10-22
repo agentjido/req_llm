@@ -220,7 +220,8 @@ defmodule ReqLLM.Test.TranscriptTest do
             url: "https://api.anthropic.com/v1/messages",
             headers: [
               {"authorization", "Bearer sk-secret-key"},
-              {"x-api-key", "my-api-key"}
+              {"x-api-key", "my-api-key"},
+              {"X-Goog-Api-Key", "google-auth-secret"}
             ],
             canonical_json: %{}
           }
@@ -232,6 +233,8 @@ defmodule ReqLLM.Test.TranscriptTest do
       assert is_map(headers)
       assert headers["authorization"] =~ "REDACTED"
       assert headers["x-api-key"] =~ "REDACTED"
+      assert headers["X-Goog-Api-Key"] =~ "REDACTED"
+      refute Jason.encode!(json_map) =~ "google-auth-secret"
     end
 
     test "sanitizes sensitive response headers" do

@@ -4,7 +4,7 @@ defmodule ReqLLM.Test.Billing.Run do
   alias ReqLLM.Test.Billing.{Money, Reference}
 
   @files ~w(raw.jsonl stream_events.jsonl observed.jsonl billing.jsonl)
-  @secret_keys ~w(authorization x-api-key api-key api_key apiKey access_token cookie set-cookie x-amz-security-token)
+  @secret_keys ~w(authorization x-api-key x-goog-api-key api-key api_key apiKey access_token cookie set-cookie x-amz-security-token)
 
   def create!(dir, selection, opts \\ []) do
     dir = Path.expand(dir)
