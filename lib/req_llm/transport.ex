@@ -22,6 +22,7 @@ defmodule ReqLLM.Transport do
 
     request
     |> Req.Request.merge_options(finch_options)
+    |> Req.Request.merge_options(redirect: Map.get(request.options, :redirect, false))
     |> Req.Request.put_private(@adapter_key, original_adapter)
     |> Map.put(:adapter, adapter)
   end

@@ -112,7 +112,7 @@ defmodule ReqLLM.Providers.AmazonBedrock.STS do
       )
 
     # Make HTTP request (disable auto-decode to get raw XML)
-    case Req.post(endpoint, headers: signed_headers, body: body, raw: true) do
+    case Req.post(endpoint, headers: signed_headers, body: body, raw: true, redirect: false) do
       {:ok, %{status: 200, body: response_body}} ->
         {:ok, response_body}
 

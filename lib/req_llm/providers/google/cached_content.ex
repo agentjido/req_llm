@@ -612,6 +612,7 @@ defmodule ReqLLM.Providers.Google.CachedContent do
 
     [
       base_url: Keyword.get(opts, :base_url, default_base_url),
+      redirect: false,
       receive_timeout: receive_timeout
     ] ++
       request_options ++

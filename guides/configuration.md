@@ -297,6 +297,8 @@ the default. A non-streaming connection wait timeout returns
 exception. A finite `total_timeout` can end the call before the connection wait
 timeout expires.
 
+ReqLLM disables HTTP redirects by default to avoid forwarding provider credentials to another origin; set `req_http_options: [redirect: true]` to enable them explicitly.
+
 ### `stream_pool_protocols` (default: `[:http1]`)
 
 Protocols for ReqLLM's default Finch pool. Streaming and non-streaming calls share this pool. Use HTTP/1 for broad provider compatibility, or HTTP/2-only when all target providers support HTTP/2.

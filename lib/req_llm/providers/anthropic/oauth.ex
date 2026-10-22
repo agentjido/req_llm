@@ -16,6 +16,7 @@ defmodule ReqLLM.Providers.Anthropic.OAuth do
       case Req.post(
              [
                url: @token_url,
+               redirect: false,
                headers: [{"content-type", "application/json"}],
                json: %{
                  grant_type: "refresh_token",

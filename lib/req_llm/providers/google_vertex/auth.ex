@@ -202,6 +202,7 @@ defmodule ReqLLM.Providers.GoogleVertex.Auth do
     request =
       Req.new(
         finch: [name: ReqLLM.Application.finch_name()],
+        redirect: false,
         url: @token_uri,
         method: :post,
         body: body,
