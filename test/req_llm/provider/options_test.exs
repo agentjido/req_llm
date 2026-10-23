@@ -141,6 +141,25 @@ defmodule ReqLLM.Provider.OptionsTest do
       end
     end
 
+    test "accepts retry_statuses for chat and rerank" do
+      model = %LLMDB.Model{provider: :mock, id: "test-model"}
+
+      for {operation, opts} <- [chat: [], rerank: [query: "q", documents: ["d"]]] do
+        assert {:ok, processed} =
+                 Options.process(
+                   MockProvider,
+                   operation,
+                   model,
+                   [retry_statuses: [429, 529]] ++ opts
+                 )
+
+        assert processed[:retry_statuses] == [429, 529]
+      end
+
+      assert {:error, %ReqLLM.Error.Unknown.Unknown{}} =
+               Options.process(MockProvider, :chat, model, retry_statuses: [0])
+    end
+
     test "returns error for invalid generation options" do
       model = %LLMDB.Model{provider: :mock, id: "test-model"}
       opts = [temperature: "invalid"]

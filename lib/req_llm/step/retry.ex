@@ -26,7 +26,8 @@ defmodule ReqLLM.Step.Retry do
   - **Retry delay**: 0ms for transport errors; the `Retry-After` header when the
     response carries one, otherwise exponential backoff with jitter (about 1s, 2s, 4s)
   - **Retryable errors**: the list above, whether they arrive as a bare
-    `Req.TransportError` / `Req.Response` or wrapped in a `ReqLLM.Error.API.Request`
+    `Req.TransportError` / `Req.Response` or wrapped in a `ReqLLM.Error.API.Request`;
+    `:retry_statuses` replaces the HTTP status list, and `[]` retries transport errors only
   - **Non-retryable errors**: application errors and every other HTTP status
 
   ## Examples
@@ -38,6 +39,11 @@ defmodule ReqLLM.Step.Retry do
 
       # A request that fails with {:error, %Req.TransportError{reason: :closed}}
       # or a 503 response is retried up to 3 times before giving up.
+
+      # Retry rate limits only, and leave server errors to a caller-side fallback
+      request
+      |> ReqLLM.Step.Retry.attach(retry_statuses: [429, 529])
+      |> Req.request()
   """
 
   @transient_reasons [:closed, :timeout, :econnrefused]
@@ -48,7 +54,9 @@ defmodule ReqLLM.Step.Retry do
 
   ## Parameters
   - `req` - The Req request struct
-  - `opts` - Options keyword list, may contain `:max_retries` (defaults to 3)
+  - `opts` - Options keyword list, may contain `:max_retries` (defaults to 3) and
+    `:retry_statuses`, the HTTP statuses to retry (defaults to
+    `#{inspect(@transient_statuses)}`)
 
   ## Returns
   - Updated Req request struct with the step attached
@@ -57,7 +65,12 @@ defmodule ReqLLM.Step.Retry do
   def attach(%Req.Request{} = req, opts \\ []) do
     max_retries = Keyword.get(opts, :max_retries, Map.get(req.options, :max_retries, 3))
 
+    retry_statuses =
+      Keyword.get(opts, :retry_statuses) ||
+        Req.Request.get_private(req, :req_llm_retry_statuses, @transient_statuses)
+
     req
+    |> Req.Request.put_private(:req_llm_retry_statuses, retry_statuses)
     |> Req.Request.merge_options(
       retry: &should_retry?/2,
       max_retries: max_retries,
@@ -84,10 +97,11 @@ defmodule ReqLLM.Step.Retry do
   For transient transport errors, we return `{:delay, 0}` for instant retry.
   For HTTP 408, 429, 500, 502, 503, 504 and 529 responses, the delay is the
   `Retry-After` header when present, otherwise exponential backoff with jitter.
+  The `:retry_statuses` option of `attach/2` replaces that status list.
 
   ## Parameters
 
-  - `request` - The Req.Request struct, read for the retry count
+  - `request` - The Req.Request struct, read for the retry count and retry statuses
   - `response_or_exception` - Either a Req.Response or an Exception
 
   ## Returns
@@ -119,13 +133,13 @@ defmodule ReqLLM.Step.Retry do
   end
 
   def should_retry?(request, %Req.Response{status: status} = response)
-      when status in @transient_statuses do
-    retry(request, Req.Response.get_retry_after(response), status)
+      when is_integer(status) do
+    retry_status(request, status, fn -> Req.Response.get_retry_after(response) end)
   end
 
   def should_retry?(request, %ReqLLM.Error.API.Request{status: status, headers: headers})
-      when status in @transient_statuses do
-    retry(request, retry_after(headers), status)
+      when is_integer(status) do
+    retry_status(request, status, fn -> retry_after(headers) end)
   end
 
   # ReqLLM.Step.Error wraps a transport error that hits a stale pooled connection.
@@ -138,6 +152,14 @@ defmodule ReqLLM.Step.Retry do
   end
 
   def should_retry?(_request, _response_or_exception), do: false
+
+  defp retry_status(request, status, delay_fun) do
+    if status in Req.Request.get_private(request, :req_llm_retry_statuses, @transient_statuses) do
+      retry(request, delay_fun.(), status)
+    else
+      false
+    end
+  end
 
   defp retry(request, delay, http_status) do
     retry_count = Req.Request.get_private(request, :req_retry_count, 0)

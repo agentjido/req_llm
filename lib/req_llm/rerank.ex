@@ -81,6 +81,11 @@ defmodule ReqLLM.Rerank do
                    doc:
                      "Maximum number of retry attempts for transient network errors. Set to 0 to disable retries."
                  ],
+                 retry_statuses: [
+                   type: {:list, :pos_integer},
+                   doc:
+                     "HTTP statuses that non-streaming requests retry. Defaults to [408, 429, 500, 502, 503, 504, 529]; [] retries transport errors only."
+                 ],
                  on_unsupported: [
                    type: {:in, [:warn, :error, :ignore]},
                    default: :warn,
