@@ -225,8 +225,8 @@ defmodule ReqLLM.Step.Fixture.Backend do
   end
 
   defp verify_replay_request!(transcript, request, path) do
-    recorded = comparable_recorded_request(transcript.request)
-    current = comparable_current_request(request)
+    recorded = comparable_recorded_request(transcript.request, transcript.provider)
+    current = comparable_current_request(request, transcript.provider)
 
     case first_difference(recorded, current, "$") do
       nil ->
@@ -243,10 +243,10 @@ defmodule ReqLLM.Step.Fixture.Backend do
     end
   end
 
-  defp comparable_recorded_request(request) do
+  defp comparable_recorded_request(request, provider) do
     %{
       "method" => normalize_method(request_value(request, :method)),
-      "url" => normalize_url(request_value(request, :url)),
+      "url" => normalize_url(request_value(request, :url), provider),
       "canonical_json" =>
         request
         |> request_value(:canonical_json)
@@ -255,10 +255,10 @@ defmodule ReqLLM.Step.Fixture.Backend do
     }
   end
 
-  defp comparable_current_request(request) do
+  defp comparable_current_request(request, provider) do
     %{
       "method" => normalize_method(request.method),
-      "url" => normalize_url(request.url),
+      "url" => normalize_url(request.url, provider),
       "canonical_json" => normalize_json(request.private[:llm_canonical_json])
     }
   end
@@ -276,10 +276,21 @@ defmodule ReqLLM.Step.Fixture.Backend do
 
   defp unwrap_legacy_canonical_json(json), do: json
 
-  defp normalize_url(url) do
-    url
-    |> to_string()
-    |> ReqLLM.Provider.Utils.sanitize_url()
+  defp normalize_url(url, provider) do
+    sanitized_url = url |> to_string() |> ReqLLM.Provider.Utils.sanitize_url()
+    uri = URI.parse(sanitized_url)
+
+    if provider == :google and uri.query do
+      query =
+        uri.query
+        |> URI.query_decoder()
+        |> Enum.reject(fn {name, _value} -> name == "key" end)
+        |> URI.encode_query()
+
+      URI.to_string(%{uri | query: if(query == "", do: nil, else: query)})
+    else
+      sanitized_url
+    end
   end
 
   defp normalize_json(json) when is_binary(json) do
@@ -624,6 +635,7 @@ defmodule ReqLLM.Step.Fixture.Backend do
     sensitive_keys = [
       "authorization",
       "x-api-key",
+      "x-goog-api-key",
       "x-amz-security-token",
       "anthropic-api-key",
       "openai-api-key",

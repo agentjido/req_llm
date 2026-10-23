@@ -86,7 +86,7 @@ ReqLLM.generate_text(model, "Hello")
 ### Key Management
 
 ```elixir
-# Keys auto-loaded from .env files via dotenvy at startup
+# Keys loaded from .env under Mix
 # ANTHROPIC_API_KEY=sk-ant-...
 # OPENAI_API_KEY=sk-...
 

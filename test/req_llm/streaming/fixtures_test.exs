@@ -4,6 +4,20 @@ defmodule ReqLLM.Streaming.FixturesTest do
   alias ReqLLM.Streaming.Fixtures
   alias ReqLLM.Streaming.Fixtures.HTTPContext
 
+  test "HTTPContext redacts Google authentication headers" do
+    request =
+      Finch.build(:post, "https://generativelanguage.googleapis.com/v1beta/models/gemini", [
+        {"X-Goog-Api-Key", "google-auth-secret"},
+        {"content-type", "application/json"}
+      ])
+
+    context = HTTPContext.from_finch_request(request)
+
+    assert context.req_headers["x-goog-api-key"] == "[REDACTED:x-goog-api-key]"
+    assert context.req_headers["content-type"] == "application/json"
+    refute Jason.encode!(context) =~ "google-auth-secret"
+  end
+
   describe "HTTPContext.from_finch_request/1" do
     test "omits default ports and preserves non-default ports" do
       default_https = Finch.build(:get, "https://api.example.com/v1/chat")

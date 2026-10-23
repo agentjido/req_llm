@@ -13,6 +13,7 @@ defmodule ReqLLM.Providers.OpenAI.OAuth do
     case Req.post(
            [
              url: @token_url,
+             redirect: false,
              headers: [{"content-type", "application/x-www-form-urlencoded"}],
              form: [
                grant_type: "refresh_token",

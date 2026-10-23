@@ -19,7 +19,8 @@ defmodule ReqLLM.Providers.OpenAI.WebSocket do
   def start_responses_session(%LLMDB.Model{} = model, opts \\ []) do
     WebSocketSession.start_link(responses_url(model, opts),
       headers: headers(model, opts),
-      connect_timeout: Keyword.get(opts, :connect_timeout, 10_000)
+      connect_timeout: Keyword.get(opts, :connect_timeout, 10_000),
+      req_http_options: Keyword.get(opts, :req_http_options)
     )
   end
 

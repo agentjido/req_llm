@@ -29,7 +29,7 @@ defmodule ReqLLM.Providers.Alibaba do
 
   ## Configuration
 
-      # Add to .env file (automatically loaded)
+      # Add to .env file
       DASHSCOPE_API_KEY=your-api-key
 
   ## Examples

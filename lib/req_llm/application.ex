@@ -15,8 +15,8 @@ defmodule ReqLLM.Application do
   # ## Configuration
 
   # - `:load_dotenv` - Whether to automatically load `.env` files from the current
-  #   working directory at startup. Defaults to `true`. Set to `false` if you prefer
-  #   to manage environment variables yourself or use a different `.env` loading strategy.
+  #   working directory at startup. Defaults to `true` when Mix is available and
+  #   `false` in releases; an explicit `true` or `false` overrides this default.
 
   #       config :req_llm, load_dotenv: false
 
@@ -24,7 +24,7 @@ defmodule ReqLLM.Application do
 
   @impl true
   def start(_type, _args) do
-    req_llm_load_dotenv = Application.get_env(:req_llm, :load_dotenv, true)
+    req_llm_load_dotenv = Application.get_env(:req_llm, :load_dotenv, Code.ensure_loaded?(Mix))
 
     if req_llm_load_dotenv do
       load_dotenv()
@@ -150,23 +150,26 @@ defmodule ReqLLM.Application do
           )
   end
 
-  defp dev_children do
-    case System.get_env("TIDEWAVE_REPL") do
-      "true" ->
+  if Code.ensure_loaded?(Mix) and Mix.env() == :dev do
+    defp dev_children do
+      if System.get_env("TIDEWAVE_REPL") == "true" and Code.ensure_loaded?(Tidewave) and
+           Code.ensure_loaded?(Bandit) do
         ensure_tidewave_started()
         port = String.to_integer(System.get_env("TIDEWAVE_PORT", "10001"))
         [{Bandit, plug: Tidewave, port: port}]
-
-      _ ->
+      else
         []
+      end
     end
-  end
 
-  defp ensure_tidewave_started do
-    case Application.ensure_all_started(:tidewave) do
-      {:ok, _} -> :ok
-      {:error, _} -> :ok
+    defp ensure_tidewave_started do
+      case Application.ensure_all_started(:tidewave) do
+        {:ok, _} -> :ok
+        {:error, _} -> :ok
+      end
     end
+  else
+    defp dev_children, do: []
   end
 
   defp initialize_registry do

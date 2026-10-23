@@ -23,6 +23,10 @@ defmodule ReqLLM.Providers.GitHubCopilotTest do
              "Schema overlap detected: #{inspect(MapSet.to_list(overlap))}"
     end
 
+    test "provider schema defaults authentication to token-only mode" do
+      assert GitHubCopilot.provider_schema().schema[:github_copilot_auth][:default] == :token
+    end
+
     test "model string fallback resolves Copilot models without catalog warnings" do
       test_pid = self()
 
@@ -39,33 +43,132 @@ defmodule ReqLLM.Providers.GitHubCopilotTest do
   end
 
   describe "authentication" do
+    @describetag :tmp_dir
+
+    setup %{tmp_dir: tmp_dir} do
+      env_keys = ["COPILOT_GITHUB_TOKEN", "GH_TOKEN", "GITHUB_TOKEN", "PATH"]
+      original_env = Map.new(env_keys, &{&1, System.get_env(&1)})
+      original_config = Application.fetch_env(:req_llm, :github_copilot_api_key)
+
+      on_exit(fn ->
+        Enum.each(original_env, fn
+          {key, nil} -> System.delete_env(key)
+          {key, value} -> System.put_env(key, value)
+        end)
+
+        case original_config do
+          {:ok, value} -> Application.put_env(:req_llm, :github_copilot_api_key, value)
+          :error -> Application.delete_env(:req_llm, :github_copilot_api_key)
+        end
+      end)
+
+      Enum.each(env_keys, &System.delete_env/1)
+      Application.delete_env(:req_llm, :github_copilot_api_key)
+      System.put_env("PATH", tmp_dir)
+
+      gh_path = Path.join(tmp_dir, "gh")
+
+      File.write!(gh_path, """
+      #!/bin/sh
+      printf '%s\\n' "$*" > "$0.called"
+      printf '  cli-token \\n'
+      """)
+
+      File.chmod!(gh_path, 0o700)
+
+      {:ok, gh_path: gh_path}
+    end
+
     test "resolves explicit api_key before environment tokens" do
+      System.put_env("COPILOT_GITHUB_TOKEN", "environment-token")
+
       assert {:ok, "explicit-token", :api_key} =
                GitHubCopilot.resolve_token(api_key: "explicit-token")
     end
 
     test "resolves GH_TOKEN when Copilot token is absent" do
-      with_env("COPILOT_GITHUB_TOKEN", nil, fn ->
-        with_env("GH_TOKEN", "gh-token", fn ->
-          assert {:ok, "gh-token", :gh_token} =
-                   GitHubCopilot.resolve_token(github_copilot_auth: :token)
-        end)
-      end)
+      System.put_env("GH_TOKEN", "gh-token")
+
+      assert {:ok, "gh-token", :gh_token} =
+               GitHubCopilot.resolve_token(github_copilot_auth: :token)
     end
 
-    test "token-only mode reports configured credential sources" do
-      with_env("COPILOT_GITHUB_TOKEN", nil, fn ->
-        with_env("GH_TOKEN", nil, fn ->
-          with_env("GITHUB_TOKEN", nil, fn ->
-            assert {:error, message} =
-                     GitHubCopilot.resolve_token(github_copilot_auth: :token)
+    test "default mode returns an error without running gh", %{gh_path: gh_path} do
+      assert {:error, message} = GitHubCopilot.resolve_token([])
+      assert message =~ "Set :api_key"
+      refute File.exists?(gh_path <> ".called")
+    end
 
-            assert message =~ "COPILOT_GITHUB_TOKEN"
-            assert message =~ "GH_TOKEN"
-            assert message =~ "GITHUB_TOKEN"
-          end)
-        end)
-      end)
+    test "token-only mode reports credential sources and CLI opt-in", %{gh_path: gh_path} do
+      assert {:error, message} = GitHubCopilot.resolve_token(github_copilot_auth: :token)
+
+      assert message =~ ":api_key"
+      assert message =~ "config :req_llm, :github_copilot_api_key"
+      assert message =~ "COPILOT_GITHUB_TOKEN"
+      assert message =~ "GH_TOKEN"
+      assert message =~ "GITHUB_TOKEN"
+      assert message =~ "github_copilot_auth: :auto"
+      assert message =~ ":gh"
+      refute File.exists?(gh_path <> ".called")
+    end
+
+    test "auto mode falls back to gh auth token", %{gh_path: gh_path} do
+      assert {:ok, "cli-token", :gh_cli} = GitHubCopilot.resolve_token(github_copilot_auth: :auto)
+      assert File.read!(gh_path <> ".called") == "auth token\n"
+    end
+
+    test "auto mode prefers configured tokens over gh", %{gh_path: gh_path} do
+      System.put_env("COPILOT_GITHUB_TOKEN", "environment-token")
+
+      assert {:ok, "environment-token", :copilot_github_token} =
+               GitHubCopilot.resolve_token(github_copilot_auth: :auto)
+
+      refute File.exists?(gh_path <> ".called")
+    end
+
+    test "gh mode uses the CLI even when a token is configured" do
+      assert {:ok, "cli-token", :gh_cli} =
+               GitHubCopilot.resolve_token(api_key: "explicit-token", github_copilot_auth: :gh)
+    end
+
+    test "nested and string auth options allow explicit CLI opt-in" do
+      for opts <- [
+            [provider_options: [github_copilot_auth: :auto]],
+            [provider_options: %{"github_copilot_auth" => "auto"}],
+            [github_copilot_auth: "gh"]
+          ] do
+        assert {:ok, "cli-token", :gh_cli} = GitHubCopilot.resolve_token(opts)
+      end
+    end
+
+    test "unrecognized auth modes use token-only mode", %{gh_path: gh_path} do
+      assert {:error, message} = GitHubCopilot.resolve_token(github_copilot_auth: :unknown)
+      assert message =~ "Set :api_key"
+      refute File.exists?(gh_path <> ".called")
+    end
+
+    test "CLI opt-in reports an unavailable executable when gh is absent", %{gh_path: gh_path} do
+      File.rm!(gh_path)
+      assert System.find_executable("gh") == nil
+
+      for mode <- [:auto, :gh] do
+        assert {:error, message} = GitHubCopilot.resolve_token(github_copilot_auth: mode)
+        assert message =~ "the `gh` executable is unavailable"
+      end
+    end
+
+    test "CLI opt-in reports an empty token", %{gh_path: gh_path} do
+      File.write!(gh_path, "#!/bin/sh\nprintf ' \\n'\n")
+
+      assert {:error, "`gh auth token` returned an empty token"} =
+               GitHubCopilot.resolve_token(github_copilot_auth: :auto)
+    end
+
+    test "CLI opt-in reports command failures", %{gh_path: gh_path} do
+      File.write!(gh_path, "#!/bin/sh\nprintf 'not logged in\\n' >&2\nexit 1\n")
+
+      assert {:error, message} = GitHubCopilot.resolve_token(github_copilot_auth: :auto)
+      assert message =~ "`gh auth token` failed: not logged in"
     end
   end
 
@@ -168,26 +271,6 @@ defmodule ReqLLM.Providers.GitHubCopilotTest do
     case value do
       [single] -> single
       other -> other
-    end
-  end
-
-  defp with_env(key, value, fun) do
-    old_value = System.get_env(key)
-
-    if is_nil(value) do
-      System.delete_env(key)
-    else
-      System.put_env(key, value)
-    end
-
-    try do
-      fun.()
-    after
-      if is_nil(old_value) do
-        System.delete_env(key)
-      else
-        System.put_env(key, old_value)
-      end
     end
   end
 end

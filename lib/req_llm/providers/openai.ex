@@ -91,7 +91,7 @@ defmodule ReqLLM.Providers.OpenAI do
 
   Set your OpenAI API key via environment variable or application config:
 
-      # Option 1: Environment variable (automatically loaded from .env via dotenvy)
+      # Option 1: Environment variable (loaded from .env under Mix)
       OPENAI_API_KEY=sk-...
 
       # Option 2: Store in application config

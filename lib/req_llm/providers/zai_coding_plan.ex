@@ -22,7 +22,7 @@ defmodule ReqLLM.Providers.ZaiCodingPlan do
 
   ## Configuration
 
-      # Add to .env file (automatically loaded)
+      # Add to .env file
       ZAI_API_KEY=your-api-key
 
   ## Provider Options

@@ -6,6 +6,9 @@ Security fixes are provided for the latest released version of ReqLLM.
 Published security advisories identify the affected versions and the version
 that contains the fix.
 
+See the list of
+[published security advisories](https://github.com/agentjido/req_llm/security/advisories).
+
 ## Report a Vulnerability
 
 Report a suspected vulnerability with

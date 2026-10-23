@@ -425,7 +425,8 @@ defmodule ReqLLM.Providers.OpenAICodex do
 
     ReqLLM.Streaming.WebSocketSession.start_link(codex_websocket_url(base_url),
       headers: websocket_headers(model, credential.token, account_id, opts),
-      connect_timeout: Keyword.get(opts, :connect_timeout, 10_000)
+      connect_timeout: Keyword.get(opts, :connect_timeout, 10_000),
+      req_http_options: Keyword.get(opts, :req_http_options)
     )
   end
 

@@ -9,6 +9,79 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- changelog -->
 
+## [1.29.0](https://github.com/agentjido/req_llm/compare/v1.28.0...v1.29.0) (2026-10-22)
+
+
+
+
+### Features:
+
+* streaming: expose builtin tool start chunks to stream consumers (#1133) by Vasilis Spilka
+
+* retry: retry transient HTTP statuses with exponential backoff (#1124) by redac
+
+* support gateway auth and model provider defaults (#1116) by mikehostetler
+
+* bedrock: grammar-constrained structured output for Claude (#1113) by Max
+
+* fireworks: support context_length_exceeded_behavior request parameter (#1110) by green-david
+
+* openai: keep tool search items and namespaces on the Responses API (#1109) by Mark Ericksen
+
+* reflection: add Reflection AI provider (#1108) by mikehostetler
+
+* openrouter: support prompt_cache_key option (#1094) by deepfates
+
+* azure: support Microsoft-Decision-1 evaluation (#1092) by neilberkman
+
+### Bug Fixes:
+
+* streaming: verify TLS for HTTPS WebSocket URLs (#1140) by mikehostetler
+
+* google: omit empty text from tool-only continuations (#1128) by Gabriel Rinaldi
+
+* google: use header authentication by default (#1139) by neilberkman
+
+* bedrock: map response roles explicitly (#1138) by neilberkman
+
+* config: skip dotenv loading by default in releases (#1137) by neilberkman
+
+* http: disable redirects by default (#1136) by neilberkman
+
+* application: restrict Tidewave REPL to development (#1135) by neilberkman
+
+* github_copilot: make gh token lookup opt-in (#1134) by neilberkman
+
+* anthropic: make thinking off reachable and report dropped sampling params (#1131) by neilberkman
+
+* anthropic: derive pricing context from confirmed request and usage facts (#1122) by mikehostetler
+
+* usage: document cached input counts and retain fallback flag (#1118) by mikehostetler
+
+* streaming: preserve JSON text and thinking content (#1120) by mikehostetler
+
+* bedrock: validate prepared object stream options (#1114) by mikehostetler
+
+* anthropic: reduce grammar-constrained schemas in their declared order, atom keys included (#1112) by Max
+
+* deps: update Bandit and remove temporary CVE exception by mikehostetler
+
+* ci: temporarily exempt the Bandit timeout advisory by mikehostetler
+
+* anthropic: keep stop_reason in provider_meta so a paused turn is identifiable (#1107) by Mark Ericksen
+
+* google: validate assistant prefill before sending requests (#1106) by mikehostetler
+
+* billing: explain missing cached-token pricing (#1100) by mikehostetler
+
+* anthropic: preserve adaptive reasoning on cloud providers (#1099) by mikehostetler
+
+* google: enforce newer Gemini parameter constraints (#1098) by mikehostetler
+
+### Refactoring:
+
+* schema: use MapSet transform constructor (#1123) by mikehostetler
+
 ## [v1.28.0](https://github.com/agentjido/req_llm/compare/v1.27.0...v1.28.0) (2026-10-09)
 
 

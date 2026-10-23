@@ -69,7 +69,7 @@ defmodule ReqLLM.Providers.Google do
 
   ## Configuration
 
-      # Add to .env file (automatically loaded)
+      # Add to .env file
       GOOGLE_API_KEY=AIza...
   """
 
@@ -136,9 +136,9 @@ defmodule ReqLLM.Providers.Google do
     ],
     google_auth_header: [
       type: :boolean,
-      default: false,
+      default: true,
       doc:
-        "Use x-goog-api-key header for authentication instead of URL query parameter. Required for OpenAI-compatible API proxies."
+        "Use x-goog-api-key header for authentication (default). Set to false to use the URL query parameter for compatibility with proxies that require it."
     ],
     response_modalities: [
       type: {:list, {:in, ["TEXT", "IMAGE"]}},
@@ -599,10 +599,10 @@ defmodule ReqLLM.Providers.Google do
 
     api_key = ReqLLM.Keys.get!(model, user_opts)
 
-    # Filter out internal keys before passing to Req
     req_opts = ReqLLM.Provider.Defaults.filter_req_opts(user_opts)
 
-    # Register extra options that might be passed but aren't standard Req options
+    auth_opts = if use_header_auth?(user_opts), do: [], else: [params: [key: api_key]]
+
     extra_option_keys =
       [
         :model,
@@ -644,11 +644,13 @@ defmodule ReqLLM.Providers.Google do
         __MODULE__.supported_provider_options()
 
     request
-    # Google uses query parameter for API key, not Authorization header
     |> Req.Request.register_options(extra_option_keys)
     |> Req.Request.merge_options(
       ReqLLM.Provider.Defaults.finch_option(request) ++
-        [model: model.id, params: [key: api_key]] ++ req_opts
+        [model: model.id] ++ auth_opts ++ req_opts
+    )
+    |> Req.Request.put_headers(
+      if use_header_auth?(user_opts), do: [{"x-goog-api-key", api_key}], else: []
     )
     |> ReqLLM.Step.Error.attach()
     |> ReqLLM.Step.Retry.attach(user_opts)
@@ -2390,7 +2392,7 @@ defmodule ReqLLM.Providers.Google do
 
   defp use_header_auth?(opts) do
     provider_options = Keyword.get(opts, :provider_options, [])
-    Keyword.get(provider_options, :google_auth_header, false)
+    Keyword.get(provider_options, :google_auth_header, true)
   end
 
   defp maybe_add_auth_header(headers, opts) do
@@ -2743,6 +2745,11 @@ defmodule ReqLLM.Providers.Google do
           |> Enum.map(&convert_content_part/1)
 
         tool_result? ->
+          []
+
+        raw_content == "" and role == "model" and
+            (match?(%{tool_calls: [_ | _]}, message) or
+               match?(%{"tool_calls" => [_ | _]}, message)) ->
           []
 
         is_binary(raw_content) ->

@@ -56,10 +56,17 @@ defmodule ReqLLM.OpenAI.Realtime do
          {:ok, pid} <-
            WebSocketSession.start_link(url,
              headers: headers,
-             connect_timeout: connect_timeout
-           ),
-         :ok <- WebSocketSession.await_connected(pid, connect_timeout) do
-      {:ok, %Session{pid: pid, model: model}}
+             connect_timeout: connect_timeout,
+             req_http_options: Keyword.get(opts, :req_http_options)
+           ) do
+      case WebSocketSession.await_connected(pid, connect_timeout) do
+        :ok ->
+          {:ok, %Session{pid: pid, model: model}}
+
+        {:error, _reason} = error ->
+          WebSocketSession.close(pid)
+          error
+      end
     end
   end
 

@@ -83,8 +83,9 @@ See the [Model Specs](model-specs.md) guide for the full model-spec workflow, in
 Keys are loaded with clear precedence: per-request → in-memory → app config → env vars → .env files:
 
 ```elixir
-# Recommended: .env files (automatically loaded via dotenvy at startup)
-# Add to your .env file and they're picked up automatically:
+# By default, .env loads at startup under Mix and is skipped in releases.
+# Set config :req_llm, load_dotenv: true or false to override in any environment.
+# Add to your .env file for local development:
 # ANTHROPIC_API_KEY=sk-ant-...
 # OPENAI_API_KEY=sk-...
 

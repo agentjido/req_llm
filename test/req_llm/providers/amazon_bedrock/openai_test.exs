@@ -131,6 +131,36 @@ defmodule ReqLLM.Providers.AmazonBedrock.OpenAITest do
   end
 
   describe "parse_response/2" do
+    test "maps known response roles to atoms" do
+      for {role, expected_role} <- [
+            {"assistant", :assistant},
+            {"user", :user},
+            {"system", :system},
+            {"tool", :tool}
+          ] do
+        response_body = %{
+          "choices" => [%{"message" => %{"role" => role, "content" => "Hello"}}]
+        }
+
+        assert {:ok, parsed} = OpenAI.parse_response(response_body, [])
+        assert parsed.message.role == expected_role
+        assert parsed.context.messages == [parsed.message]
+      end
+    end
+
+    test "defaults unknown response roles to assistant" do
+      for role <- ["unknown_bedrock_response_role", "error", nil] do
+        response_body = %{
+          "choices" => [%{"message" => %{"role" => role, "content" => "Hello"}}]
+        }
+
+        assert {:ok, parsed} = OpenAI.parse_response(response_body, [])
+        assert parsed.message.role == :assistant
+        assert ReqLLM.Response.text(parsed) == "Hello"
+        assert parsed.context.messages == [parsed.message]
+      end
+    end
+
     test "parses basic OpenAI response" do
       response_body = %{
         "id" => "chatcmpl-123",

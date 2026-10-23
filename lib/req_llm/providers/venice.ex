@@ -25,7 +25,7 @@ defmodule ReqLLM.Providers.Venice do
 
   ## Configuration
 
-      # Add to .env file (automatically loaded)
+      # Add to .env file
       VENICE_API_KEY=your-api-key
 
   ## Examples

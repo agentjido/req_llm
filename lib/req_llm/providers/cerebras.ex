@@ -24,7 +24,7 @@ defmodule ReqLLM.Providers.Cerebras do
 
   ## Configuration
 
-      # Add to .env file (automatically loaded)
+      # Add to .env file
       CEREBRAS_API_KEY=csk_...
   """
 

@@ -56,6 +56,8 @@ endpoint, and the rotated access and refresh tokens are persisted to the same
 file. Use `:auth_file` as an alias for `:oauth_file`; `:oauth_http_options`
 forwards Req options to the refresh request.
 
+Without an explicit path, `oauth.json` or `auth.json` is looked up relative to the current working directory; deployments should set `REQ_LLM_OAUTH_FILE` or `config :req_llm, :oauth_file, "/absolute/path/to/oauth.json"` explicitly.
+
 ## Provider Options
 
 Passed via `:provider_options` keyword:

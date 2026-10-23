@@ -236,6 +236,8 @@ defmodule ReqLLM.Providers.GoogleTest do
       assert %Req.Request{} = request
       assert request.url.path == "/models/#{model.model}:streamGenerateContent"
       assert request.method == :post
+      assert request.options[:params] == [alt: "sse"]
+      assert Req.Request.get_header(request, "x-goog-api-key") == ["test-key-12345"]
     end
 
     test "attach configures authentication and pipeline" do
@@ -249,8 +251,8 @@ defmodule ReqLLM.Providers.GoogleTest do
       assert request.options[:temperature] == 0.5
       assert request.options[:max_tokens] == 50
 
-      # Google uses query parameter authentication
-      assert request.options[:params][:key] != nil
+      assert Req.Request.get_header(request, "x-goog-api-key") == ["test-key-12345"]
+      refute Keyword.has_key?(request.options[:params] || [], :key)
 
       # Verify pipeline steps
       request_steps = Keyword.keys(request.request_steps)
@@ -3381,14 +3383,13 @@ defmodule ReqLLM.Providers.GoogleTest do
       {:ok, model: model, context: context}
     end
 
-    test "default streaming uses query param auth", %{model: model, context: context} do
+    test "default streaming uses header auth", %{model: model, context: context} do
       opts = [api_key: "test-api-key"]
 
       {:ok, finch_request} = Google.attach_stream(model, context, opts, nil)
 
-      assert finch_request.query =~ "key=test-api-key"
-      assert finch_request.query =~ "alt=sse"
-      refute has_header?(finch_request.headers, "x-goog-api-key")
+      assert finch_request.query == "alt=sse"
+      assert has_header_value?(finch_request.headers, "x-goog-api-key", "test-api-key")
     end
 
     test "google_auth_header: true uses header auth instead of query param", %{
@@ -3407,7 +3408,7 @@ defmodule ReqLLM.Providers.GoogleTest do
       assert has_header_value?(finch_request.headers, "x-goog-api-key", "test-api-key")
     end
 
-    test "google_auth_header: false behaves same as default", %{model: model, context: context} do
+    test "google_auth_header: false opts into query auth", %{model: model, context: context} do
       opts = [
         api_key: "test-api-key",
         provider_options: [google_auth_header: false]
@@ -3416,7 +3417,38 @@ defmodule ReqLLM.Providers.GoogleTest do
       {:ok, finch_request} = Google.attach_stream(model, context, opts, nil)
 
       assert finch_request.query =~ "key=test-api-key"
+      assert finch_request.query =~ "alt=sse"
       refute has_header?(finch_request.headers, "x-goog-api-key")
+    end
+
+    test "debug logging redacts query auth", %{model: model, context: context} do
+      log =
+        ExUnit.CaptureLog.capture_log([level: :debug], fn ->
+          assert {:ok, _request} =
+                   Google.attach_stream(
+                     model,
+                     context,
+                     [
+                       api_key: "query-auth-secret",
+                       provider_options: [google_auth_header: false]
+                     ],
+                     nil
+                   )
+        end)
+
+      assert log =~ "key=[REDACTED]"
+      refute log =~ "query-auth-secret"
+    end
+
+    test "debug logging excludes the default auth credential", %{model: model, context: context} do
+      log =
+        ExUnit.CaptureLog.capture_log([level: :debug], fn ->
+          assert {:ok, _request} =
+                   Google.attach_stream(model, context, [api_key: "header-auth-secret"], nil)
+        end)
+
+      assert log =~ "alt=sse"
+      refute log =~ "header-auth-secret"
     end
 
     test "google_auth_header works with custom base_url for proxies", %{
@@ -3525,5 +3557,155 @@ defmodule ReqLLM.Providers.GoogleTest do
       user_entries = Enum.filter(contents, &(&1["role"] == "user"))
       assert length(user_entries) == 2
     end
+  end
+
+  describe "tool-only assistant history" do
+    test "omits synthetic empty text while preserving signed calls, reasoning and results" do
+      weather_call =
+        "call_weather"
+        |> ReqLLM.ToolCall.new("get_weather", ~s({"location":"SF"}))
+        |> ReqLLM.ToolCall.put_metadata(%{thought_signature: "weather_signature"})
+
+      time_call =
+        "call_time"
+        |> ReqLLM.ToolCall.new("get_time", ~s({"location":"NYC"}))
+        |> ReqLLM.ToolCall.put_metadata(%{thought_signature: "time_signature"})
+
+      call_parts = [
+        %{
+          "functionCall" => %{"name" => "get_weather", "args" => %{"location" => "SF"}},
+          "thoughtSignature" => "weather_signature"
+        },
+        %{
+          "functionCall" => %{"name" => "get_time", "args" => %{"location" => "NYC"}},
+          "thoughtSignature" => "time_signature"
+        }
+      ]
+
+      reasoning = %ReqLLM.Message.ReasoningDetails{
+        text: "Check both cities.",
+        signature: "reasoning_signature",
+        encrypted?: true,
+        provider: :google,
+        format: "google-gemini-v1",
+        index: 0,
+        provider_data: %{"thought" => true}
+      }
+
+      for reasoning_details <- [nil, [reasoning]] do
+        assistant = %ReqLLM.Message{
+          role: :assistant,
+          content: [],
+          tool_calls: [weather_call, time_call],
+          reasoning_details: reasoning_details
+        }
+
+        context =
+          Context.new([
+            Context.user("Check SF weather and NYC time."),
+            assistant,
+            Context.tool_result("call_weather", "get_weather", "sunny"),
+            Context.tool_result("call_time", "get_time", "noon")
+          ])
+
+        thought_parts =
+          if reasoning_details do
+            [
+              %{
+                "text" => "Check both cities.",
+                "thought" => true,
+                "thoughtSignature" => "reasoning_signature"
+              }
+            ]
+          else
+            []
+          end
+
+        for body <- google_chat_bodies(context) do
+          assert body["contents"] == [
+                   %{
+                     "role" => "user",
+                     "parts" => [%{"text" => "Check SF weather and NYC time."}]
+                   },
+                   %{"role" => "model", "parts" => thought_parts ++ call_parts},
+                   %{
+                     "role" => "user",
+                     "parts" => [
+                       %{
+                         "functionResponse" => %{
+                           "name" => "get_weather",
+                           "response" => %{"content" => "sunny"}
+                         }
+                       },
+                       %{
+                         "functionResponse" => %{
+                           "name" => "get_time",
+                           "response" => %{"content" => "noon"}
+                         }
+                       }
+                     ]
+                   }
+                 ]
+        end
+      end
+    end
+
+    test "preserves visible text and real empty text parts alongside tool calls" do
+      call =
+        "call_1"
+        |> ReqLLM.ToolCall.new("get_weather", ~s({"location":"SF"}))
+        |> ReqLLM.ToolCall.put_metadata(%{thought_signature: "call_signature"})
+
+      visible = ReqLLM.Message.ContentPart.text("Checking.")
+      empty = ReqLLM.Message.ContentPart.text("")
+
+      for {content, text_parts} <- [
+            {"Checking.", [%{"text" => "Checking."}]},
+            {[empty, visible], [%{"text" => ""}, %{"text" => "Checking."}]}
+          ] do
+        context = Context.new([Context.assistant(content, tool_calls: [call])])
+
+        for body <- google_chat_bodies(context) do
+          assert body["contents"] == [
+                   %{
+                     "role" => "model",
+                     "parts" =>
+                       text_parts ++
+                         [
+                           %{
+                             "functionCall" => %{
+                               "name" => "get_weather",
+                               "args" => %{"location" => "SF"}
+                             },
+                             "thoughtSignature" => "call_signature"
+                           }
+                         ]
+                   }
+                 ]
+        end
+      end
+    end
+
+    test "preserves empty text for ordinary user and non-tool assistant messages" do
+      context = Context.new([Context.user(""), Context.assistant([])])
+
+      for body <- google_chat_bodies(context) do
+        assert body["contents"] == [
+                 %{"role" => "user", "parts" => [%{"text" => ""}]},
+                 %{"role" => "model", "parts" => [%{"text" => ""}]}
+               ]
+      end
+    end
+  end
+
+  defp google_chat_bodies(context) do
+    model = ReqLLM.model!("google:gemini-2.5-flash")
+    opts = [api_key: "test"]
+
+    {:ok, request} = Google.prepare_request(:chat, model, context, opts)
+    body = request |> Google.encode_body() |> ReqLLM.Test.Helpers.json_body()
+    {:ok, stream_request} = Google.attach_stream(model, context, opts, nil)
+
+    [body, Jason.decode!(stream_request.body)]
   end
 end

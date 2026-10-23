@@ -78,6 +78,8 @@ When `auth_mode: :oauth` is enabled and no explicit `access_token` is passed, Re
 - refresh expired `openai-codex` credentials automatically and persist the updated file
 - reuse `accountId` from the file or derive it from the refreshed access token for Codex requests
 
+Without an explicit path, `oauth.json` or `auth.json` is looked up relative to the current working directory; deployments should set `REQ_LLM_OAUTH_FILE` or `config :req_llm, :oauth_file, "/absolute/path/to/oauth.json"` explicitly.
+
 Example:
 
 ```elixir
@@ -805,6 +807,8 @@ response.usage.cost
 ```
 
 Responses API server-side tools may also appear in `response.message.tool_calls` as builtin records (for example `web_search_call` or `file_search_call`). They are preserved for observability, but the provider already executed them: do not replay them as local tool calls. `ReqLLM.Response.classify/1` and `ReqLLM.StreamResponse.classify/1` treat builtin-only responses as final answers.
+
+When streaming, a builtin call is announced before it finishes: as soon as the provider adds the call, the stream emits a `:meta` chunk with `builtin_tool_started: %{id: id, name: name, index: index}` (for example `name: "web_search_call"`). The finished builtin `:tool_call` chunk, whose `metadata.id` matches, follows when the call completes, so the pair can drive progress UI such as "Searching the web…" while the provider works.
 
 ### Citations
 

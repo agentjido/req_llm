@@ -59,7 +59,8 @@ defmodule ReqLLM do
       ANTHROPIC_API_KEY=sk-ant-...
       OPENAI_API_KEY=sk-...
 
-  Keys are automatically loaded at startup via dotenvy.
+  Under Mix, `.env` is loaded at startup; releases skip it unless
+  `config :req_llm, load_dotenv: true` is set.
 
   For programmatic key management:
 
@@ -163,7 +164,8 @@ defmodule ReqLLM do
   @doc """
   Stores an API key in application configuration.
 
-  Keys from .env files are automatically loaded via dotenvy at startup.
+  Under Mix, `.env` is loaded at startup; releases skip it unless
+  `config :req_llm, load_dotenv: true` is set.
   This function is useful for programmatic key management in tests or at runtime.
 
   ## Parameters
@@ -189,7 +191,8 @@ defmodule ReqLLM do
   @doc """
   Gets an API key from application config or system environment.
 
-  Keys from .env files are automatically loaded via dotenvy at startup.
+  Under Mix, `.env` is loaded at startup; releases skip it unless
+  `config :req_llm, load_dotenv: true` is set.
 
   ## Parameters
 

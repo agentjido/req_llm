@@ -36,7 +36,7 @@ defmodule ReqLLM.Providers.Zenmux do
 
   ## Configuration
 
-      # Add to .env file (automatically loaded)
+      # Add to .env file
       ZENMUX_API_KEY=sk-ai-v1-...
   """
 

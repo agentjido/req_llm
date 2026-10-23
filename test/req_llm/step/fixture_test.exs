@@ -99,13 +99,79 @@ defmodule ReqLLM.Step.FixtureTest do
     assert {:ok, %Req.Response{status: 200}} = Backend.handle_replay(path, model, request)
   end
 
-  defp record_fixture(path, canonical_json) do
+  for {recorded_query, current_query} <- [
+        {"?key=legacy-secret", ""},
+        {"?key=legacy-secret&alt=sse", "?alt=sse"},
+        {"?alt=sse&key=legacy-secret", "?alt=sse"},
+        {"", "?key=opt-out-secret"}
+      ] do
+    @tag provider: :google
+    test "Google replay ignores authentication placement: #{recorded_query} to #{current_query}" do
+      path = Path.join(@fixture_dir, "google_auth.json")
+      model = %LLMDB.Model{id: "gemini-2.5-flash", provider: :google}
+
+      url =
+        "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent"
+
+      record_fixture(path, %{}, provider: :google, url: url <> unquote(recorded_query))
+
+      request =
+        Req.new(
+          method: :post,
+          url: url <> unquote(current_query),
+          headers: [
+            {"x-goog-api-key", "header-auth-secret"}
+          ]
+        )
+        |> Req.Request.put_private(:llm_canonical_json, %{})
+
+      assert {:ok, %Req.Response{status: 200}} = Backend.handle_replay(path, model, request)
+    end
+  end
+
+  @tag provider: :google
+  test "Google replay still rejects changes to non-authentication request fields" do
+    path = Path.join(@fixture_dir, "google_request.json")
+    model = %LLMDB.Model{id: "gemini-2.5-flash", provider: :google}
+
+    url =
+      "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent"
+
+    record_fixture(path, %{}, provider: :google, url: url <> "?key=legacy-secret&alt=sse")
+
+    for {method, current_url, body} <- [
+          {:get, url <> "?alt=sse", %{}},
+          {:post, url <> "?alt=json", %{}},
+          {:post, url <> "?alt=sse", %{"contents" => []}},
+          {:post, url <> "Changed?alt=sse", %{}}
+        ] do
+      request =
+        Req.new(method: method, url: current_url)
+        |> Req.Request.put_private(:llm_canonical_json, body)
+
+      assert_raise RuntimeError, ~r/Fixture request mismatch/, fn ->
+        Backend.handle_replay(path, model, request)
+      end
+    end
+  end
+
+  test "replay preserves key query parameter comparisons for other providers" do
+    path = Path.join(@fixture_dir, "non_google_auth.json")
+    model = %LLMDB.Model{id: "gpt-4", provider: :openai}
+    record_fixture(path, %{}, url: "https://api.openai.com/v1/chat/completions?key=secret")
+
+    assert_raise RuntimeError, ~r/Fixture request mismatch:.*Field: \$\.url/s, fn ->
+      Backend.handle_replay(path, model, replay_request(%{}))
+    end
+  end
+
+  defp record_fixture(path, canonical_json, opts \\ []) do
     VCR.record(path,
-      provider: :openai,
+      provider: Keyword.get(opts, :provider, :openai),
       model: "gpt-4",
       request: %{
         method: "POST",
-        url: "https://api.openai.com/v1/chat/completions",
+        url: Keyword.get(opts, :url, "https://api.openai.com/v1/chat/completions"),
         headers: [],
         canonical_json: canonical_json
       },

@@ -68,11 +68,7 @@ defmodule ReqLLM.Streaming.WebSocketSession do
     initial_messages = Keyword.get(opts, :initial_messages, [])
     connect_timeout = Keyword.get(opts, :connect_timeout, 10_000)
 
-    case Client.start(url, self(),
-           headers: Keyword.get(opts, :headers, []),
-           socket_connect_timeout: connect_timeout,
-           socket_recv_timeout: connect_timeout
-         ) do
+    case Client.start(url, self(), client_options(opts, connect_timeout)) do
       {:ok, client_pid} ->
         client_ref = Process.monitor(client_pid)
 
@@ -89,6 +85,28 @@ defmodule ReqLLM.Streaming.WebSocketSession do
         {:stop, reason}
     end
   end
+
+  defp client_options(opts, connect_timeout) do
+    [
+      headers: Keyword.get(opts, :headers, []),
+      socket_connect_timeout: connect_timeout,
+      socket_recv_timeout: connect_timeout
+    ]
+    |> Keyword.merge(req_http_tls_options(Keyword.get(opts, :req_http_options)))
+    |> Keyword.merge(Keyword.take(opts, [:cacerts, :ssl_options]))
+  end
+
+  defp req_http_tls_options(req_http_options) do
+    case req_http_options |> option(:connect_options) |> option(:transport_opts) do
+      transport_opts when is_list(transport_opts) -> [ssl_options: transport_opts]
+      transport_opts when is_map(transport_opts) -> [ssl_options: Map.to_list(transport_opts)]
+      _ -> []
+    end
+  end
+
+  defp option(options, key) when is_list(options), do: Keyword.get(options, key)
+  defp option(options, key) when is_map(options), do: Map.get(options, key)
+  defp option(_options, _key), do: nil
 
   @impl GenServer
   def handle_call({:await_connected, _timeout}, _from, %{status: :open} = state) do

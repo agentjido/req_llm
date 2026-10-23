@@ -113,6 +113,12 @@ user's server, so the models do not need LLMDB catalog entries.
 
 ## Installation
 
+> **Security update:** ReqLLM 1.29.0 fixes
+> [GHSA-6vww-5m28-f26v](https://github.com/agentjido/req_llm/security/advisories/GHSA-6vww-5m28-f26v).
+> Versions 1.9.0 through 1.28.0 did not verify TLS certificates for affected
+> WebSocket sessions. Users of OpenAI Responses WebSocket, Realtime, or Codex
+> WebSocket sessions should upgrade. HTTP streaming is not affected.
+
 ### Igniter Installation (Recommended)
 
 The fastest way to get started is with [Igniter](https://hex.pm/packages/igniter):
@@ -128,7 +134,7 @@ Add `req_llm` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:req_llm, "~> 1.6"}
+    {:req_llm, "~> 1.29"}
   ]
 end
 ```
@@ -453,7 +459,7 @@ ReqLLM.generate_text("anthropic:claude-haiku-4-5", "Hello", api_key: "sk-ant-...
 {:ok, response} = ReqLLM.stream_text("anthropic:claude-haiku-4-5", "Story", api_key: "sk-ant-...")
 ```
 
-By default, ReqLLM loads `.env` files from the current working directory at startup. To disable this behavior (e.g., if you manage environment variables yourself):
+By default, ReqLLM loads `.env` from the current working directory at startup when Mix is available (`mix run`, `mix test`, `iex -S mix`), and skips it in releases unless `load_dotenv: true` is explicitly configured. To disable loading under Mix as well:
 
 ```elixir
 config :req_llm, load_dotenv: false

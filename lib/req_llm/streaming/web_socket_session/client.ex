@@ -23,9 +23,65 @@ defmodule ReqLLM.Streaming.WebSocketSession.Client do
           :socket_recv_timeout
         ])
       )
+      |> maybe_put_tls_options(url, opts)
 
     WebSockex.start(url, __MODULE__, state, ws_opts)
   end
+
+  defp maybe_put_tls_options(ws_opts, url, opts) do
+    if url |> URI.parse() |> Map.get(:scheme) |> secure_scheme?() do
+      ws_opts
+      |> Keyword.put(:insecure, false)
+      |> Keyword.put(:ssl_options, ssl_options(opts))
+    else
+      ws_opts
+    end
+  end
+
+  defp secure_scheme?(scheme) when is_binary(scheme),
+    do: String.downcase(scheme) in ["wss", "https"]
+
+  defp secure_scheme?(_scheme), do: false
+
+  defp ssl_options(opts) do
+    defaults = [
+      verify: :verify_peer,
+      depth: 4,
+      customize_hostname_check: [
+        match_fun: :public_key.pkix_verify_hostname_match_fun(:https)
+      ]
+    ]
+
+    defaults
+    |> Keyword.merge(trust_store_options(opts))
+    |> Keyword.merge(user_ssl_options(opts))
+  end
+
+  defp trust_store_options(opts) do
+    user_ssl_options = user_ssl_options(opts)
+
+    cond do
+      Keyword.has_key?(user_ssl_options, :cacerts) ->
+        []
+
+      Keyword.has_key?(user_ssl_options, :cacertfile) ->
+        []
+
+      Keyword.has_key?(opts, :cacerts) ->
+        [cacerts: Keyword.fetch!(opts, :cacerts)]
+
+      true ->
+        default_trust_store_options()
+    end
+  end
+
+  defp default_trust_store_options do
+    [cacerts: :public_key.cacerts_get()]
+  rescue
+    _error -> []
+  end
+
+  defp user_ssl_options(opts), do: Keyword.get(opts, :ssl_options, [])
 
   @spec send_frame(pid(), WebSockex.frame()) :: :ok
   def send_frame(client, frame) do

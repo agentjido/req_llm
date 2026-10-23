@@ -147,7 +147,8 @@ defmodule ReqLLM.Streaming.WebSocketClient do
            config.url,
            headers: config.headers,
            initial_messages: config.initial_messages,
-           connect_timeout: connect_timeout
+           connect_timeout: connect_timeout,
+           req_http_options: Keyword.get(opts, :req_http_options)
          ) do
       {:ok, session_pid} ->
         result =

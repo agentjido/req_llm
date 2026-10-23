@@ -31,6 +31,9 @@ defmodule ReqLLM.Providers.Google.CachedContent do
     resource path.
   - `:receive_timeout` - Timeout for receiving the response in milliseconds
     (defaults to `120_000`).
+  - `:google_auth_header` - Send the Google AI Studio API key in the
+    `x-goog-api-key` header (defaults to `true`). Set to `false` to use the
+    `key` query parameter. This option does not affect Vertex AI authentication.
   - `:req_http_options` - Keyword list of `Req` options merged into the underlying
     request (e.g. `finch: [name: MyFinch]`, `retry: false`, or
     `plug: {Req.Test, MyStub}` for testing). Requests run through ReqLLM's Finch
@@ -297,7 +300,6 @@ defmodule ReqLLM.Providers.Google.CachedContent do
   # Private functions for Google AI Studio
 
   defp create_google_ai_studio(opts) do
-    api_key = Keyword.fetch!(opts, :api_key)
     model = Keyword.fetch!(opts, :model)
     contents = Keyword.fetch!(opts, :contents)
 
@@ -318,8 +320,7 @@ defmodule ReqLLM.Providers.Google.CachedContent do
       |> maybe_put(:toolConfig, tool_config)
       |> maybe_put(:displayName, display_name)
 
-    request_options =
-      http_options(@google_ai_studio_base_url, [json: body, params: [key: api_key]], opts)
+    request_options = google_ai_studio_http_options([json: body], opts)
 
     case Req.post("/cachedContents", request_options) do
       {:ok, %{status: 200, body: response}} ->
@@ -334,16 +335,15 @@ defmodule ReqLLM.Providers.Google.CachedContent do
   end
 
   defp list_google_ai_studio(opts) do
-    api_key = Keyword.fetch!(opts, :api_key)
     page_size = Keyword.get(opts, :page_size)
     page_token = Keyword.get(opts, :page_token)
 
     params =
-      [key: api_key]
+      []
       |> maybe_put_param(:pageSize, page_size)
       |> maybe_put_param(:pageToken, page_token)
 
-    request_options = http_options(@google_ai_studio_base_url, [params: params], opts)
+    request_options = google_ai_studio_http_options([params: params], opts)
 
     case Req.get("/cachedContents", request_options) do
       {:ok, %{status: 200, body: response}} ->
@@ -358,10 +358,9 @@ defmodule ReqLLM.Providers.Google.CachedContent do
   end
 
   defp get_google_ai_studio(opts) do
-    api_key = Keyword.fetch!(opts, :api_key)
     name = Keyword.fetch!(opts, :name)
 
-    request_options = http_options(@google_ai_studio_base_url, [params: [key: api_key]], opts)
+    request_options = google_ai_studio_http_options([], opts)
 
     case Req.get("/#{name}", request_options) do
       {:ok, %{status: 200, body: response}} ->
@@ -376,16 +375,14 @@ defmodule ReqLLM.Providers.Google.CachedContent do
   end
 
   defp update_google_ai_studio(opts) do
-    api_key = Keyword.fetch!(opts, :api_key)
     name = Keyword.fetch!(opts, :name)
     ttl = Keyword.fetch!(opts, :ttl)
 
     body = %{ttl: ttl}
 
     request_options =
-      http_options(
-        @google_ai_studio_base_url,
-        [json: body, params: [key: api_key, updateMask: "ttl"]],
+      google_ai_studio_http_options(
+        [json: body, params: [updateMask: "ttl"]],
         opts
       )
 
@@ -402,10 +399,9 @@ defmodule ReqLLM.Providers.Google.CachedContent do
   end
 
   defp delete_google_ai_studio(opts) do
-    api_key = Keyword.fetch!(opts, :api_key)
     name = Keyword.fetch!(opts, :name)
 
-    request_options = http_options(@google_ai_studio_base_url, [params: [key: api_key]], opts)
+    request_options = google_ai_studio_http_options([], opts)
 
     case Req.delete("/#{name}", request_options) do
       {:ok, %{status: 200}} ->
@@ -606,12 +602,26 @@ defmodule ReqLLM.Providers.Google.CachedContent do
 
   defp vertex_regional_base_url(region), do: "https://#{region}-aiplatform.googleapis.com/v1"
 
+  defp google_ai_studio_http_options(request_options, opts) do
+    api_key = Keyword.fetch!(opts, :api_key)
+
+    authenticated_options =
+      if Keyword.get(opts, :google_auth_header, true) do
+        Keyword.put(request_options, :headers, [{"x-goog-api-key", api_key}])
+      else
+        Keyword.update(request_options, :params, [key: api_key], &Keyword.put(&1, :key, api_key))
+      end
+
+    http_options(@google_ai_studio_base_url, authenticated_options, opts)
+  end
+
   defp http_options(default_base_url, request_options, opts) do
     http_opts = Keyword.get(opts, :req_http_options, [])
     receive_timeout = Keyword.get(opts, :receive_timeout, @default_receive_timeout)
 
     [
       base_url: Keyword.get(opts, :base_url, default_base_url),
+      redirect: false,
       receive_timeout: receive_timeout
     ] ++
       request_options ++
