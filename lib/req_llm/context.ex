@@ -977,7 +977,8 @@ defmodule ReqLLM.Context do
        metadata: meta,
        tool_calls: normalize_tool_calls(tool_calls),
        reasoning_details: reasoning_details
-     }}
+     }
+     |> maybe_put_name(Map.get(msg, :name))}
   end
 
   defp convert_loose_map(%{role: :tool, tool_call_id: id, content: content} = msg)
@@ -1018,6 +1019,7 @@ defmodule ReqLLM.Context do
        content: to_parts(content),
        metadata: Map.get(msg, :metadata, %{})
      }
+     |> maybe_put_name(Map.get(msg, :name))
      |> maybe_put_reasoning_details(Map.get(msg, :reasoning_details))}
   end
 
@@ -1025,6 +1027,7 @@ defmodule ReqLLM.Context do
        when is_atom(role) and is_binary(content) do
     {:ok,
      text(role, content, Map.get(msg, :metadata, %{}))
+     |> maybe_put_name(Map.get(msg, :name))
      |> maybe_put_reasoning_details(Map.get(msg, :reasoning_details))}
   end
 
@@ -1034,7 +1037,8 @@ defmodule ReqLLM.Context do
       role,
       content,
       Map.get(msg, :metadata, %{}),
-      Map.get(msg, :reasoning_details)
+      Map.get(msg, :reasoning_details),
+      Map.get(msg, :name)
     )
   end
 
@@ -1045,14 +1049,16 @@ defmodule ReqLLM.Context do
 
     case role do
       "user" ->
-        {:ok, text(:user, content, metadata)}
+        {:ok, text(:user, content, metadata) |> maybe_put_name(Map.get(msg, :name))}
 
       "assistant" ->
         {:ok,
-         text(:assistant, content, metadata) |> maybe_put_reasoning_details(reasoning_details)}
+         text(:assistant, content, metadata)
+         |> maybe_put_name(Map.get(msg, :name))
+         |> maybe_put_reasoning_details(reasoning_details)}
 
       "system" ->
-        {:ok, text(:system, content, metadata)}
+        {:ok, text(:system, content, metadata) |> maybe_put_name(Map.get(msg, :name))}
 
       _ ->
         {:error, ReqLLM.Error.Invalid.Role.exception(role: role)}
@@ -1065,7 +1071,8 @@ defmodule ReqLLM.Context do
       role,
       content,
       Map.get(msg, "metadata", %{}),
-      Map.get(msg, "reasoning_details")
+      Map.get(msg, "reasoning_details"),
+      Map.get(msg, "name")
     )
   end
 
@@ -1076,14 +1083,16 @@ defmodule ReqLLM.Context do
 
     case role do
       "user" ->
-        {:ok, text(:user, content, metadata)}
+        {:ok, text(:user, content, metadata) |> maybe_put_name(Map.get(msg, "name"))}
 
       "assistant" ->
         {:ok,
-         text(:assistant, content, metadata) |> maybe_put_reasoning_details(reasoning_details)}
+         text(:assistant, content, metadata)
+         |> maybe_put_name(Map.get(msg, "name"))
+         |> maybe_put_reasoning_details(reasoning_details)}
 
       "system" ->
-        {:ok, text(:system, content, metadata)}
+        {:ok, text(:system, content, metadata) |> maybe_put_name(Map.get(msg, "name"))}
 
       _ ->
         {:error, ReqLLM.Error.Invalid.Role.exception(role: role)}
@@ -1352,18 +1361,23 @@ defmodule ReqLLM.Context do
     end)
   end
 
-  defp convert_loose_role_list_content(role, content, metadata, reasoning_details) do
+  defp convert_loose_role_list_content(role, content, metadata, reasoning_details, name) do
     case role do
       "user" ->
-        {:ok, %Message{role: :user, content: to_parts(content), metadata: metadata}}
+        {:ok,
+         %Message{role: :user, content: to_parts(content), metadata: metadata}
+         |> maybe_put_name(name)}
 
       "assistant" ->
         {:ok,
          %Message{role: :assistant, content: to_parts(content), metadata: metadata}
+         |> maybe_put_name(name)
          |> maybe_put_reasoning_details(reasoning_details)}
 
       "system" ->
-        {:ok, %Message{role: :system, content: to_parts(content), metadata: metadata}}
+        {:ok,
+         %Message{role: :system, content: to_parts(content), metadata: metadata}
+         |> maybe_put_name(name)}
 
       _ ->
         {:error, ReqLLM.Error.Invalid.Role.exception(role: role)}
@@ -1487,4 +1501,9 @@ defmodule ReqLLM.Context do
   defp maybe_put_reasoning_details(%Message{} = message, reasoning_details) do
     %{message | reasoning_details: reasoning_details}
   end
+
+  defp maybe_put_name(%Message{} = message, name) when is_binary(name),
+    do: %{message | name: name}
+
+  defp maybe_put_name(%Message{} = message, _name), do: message
 end
