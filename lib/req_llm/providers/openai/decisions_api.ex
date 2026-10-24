@@ -130,6 +130,9 @@ defmodule ReqLLM.Providers.OpenAI.DecisionsAPI do
   defp compile_state(_state),
     do: invalid("OpenAI Decisions state must be text, JSON data, or a ReqLLM.Context")
 
+  defp compile_message(%ReqLLM.Message{tool_calls: [_ | _]}),
+    do: invalid("OpenAI Decisions context state does not support tool calls")
+
   defp compile_message(%ReqLLM.Message{role: role, content: [_ | _] = content})
        when role in [:user, :system, :assistant] do
     content

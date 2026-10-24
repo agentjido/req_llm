@@ -1169,7 +1169,8 @@ context =
 ```
 
 The Decisions API does not accept files, so a PDF has to be rendered to page images first. Tool
-messages and file parts fail before HTTP, and other evaluation providers reject a context state.
+calls, tool messages, and file parts fail before HTTP, and other evaluation providers reject a
+context state.
 Supported question types are boolean, choice, and score. Streaming, Batch API submission, and
 OpenAI Evals are not part of this interface.
 

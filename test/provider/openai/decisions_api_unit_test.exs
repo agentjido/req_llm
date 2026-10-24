@@ -102,6 +102,9 @@ defmodule Provider.OpenAI.DecisionsAPIUnitTest do
     rejects = [
       {ReqLLM.Context.new([]), "at least one message"},
       {ReqLLM.Context.new([ReqLLM.Context.user([])]), "user messages must have content"},
+      {ReqLLM.Context.new([
+         ReqLLM.Context.assistant("Checking", tool_calls: [{"lookup", %{}, [id: "call_1"]}])
+       ]), "does not support tool calls"},
       {ReqLLM.Context.new([ReqLLM.Context.tool_result("call_1", "done")]),
        "does not support tool messages"},
       {ReqLLM.Context.new([
