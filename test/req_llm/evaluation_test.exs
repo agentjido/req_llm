@@ -293,6 +293,50 @@ defmodule ReqLLM.EvaluationTest do
     assert decoded.object == result.object
   end
 
+  test "sends context state with images to OpenAI Decisions as input messages" do
+    Req.Test.stub(__MODULE__.OpenAIDecisionsContext, fn conn ->
+      assert conn.body_params["input"] == [
+               %{
+                 "role" => "user",
+                 "content" => [
+                   %{"type" => "input_text", "text" => "Is this ticket a refund request?"},
+                   %{"type" => "input_image", "image_url" => "data:image/png;base64,iVBORw=="}
+                 ]
+               }
+             ]
+
+      Req.Test.json(conn, openai_decisions_body())
+    end)
+
+    context =
+      ReqLLM.Context.new([
+        ReqLLM.Context.user([
+          ReqLLM.Message.ContentPart.text("Is this ticket a refund request?"),
+          ReqLLM.Message.ContentPart.image(<<137, 80, 78, 71>>, "image/png")
+        ])
+      ])
+
+    assert {:ok, result} =
+             ReqLLM.evaluate("openai:gpt-6-luna", context, @questions,
+               api_key: "openai-test-key",
+               req_http_options: [plug: {Req.Test, __MODULE__.OpenAIDecisionsContext}]
+             )
+
+    assert result.object["urgent"] == %{"type" => "boolean", "probability" => 0.91}
+  end
+
+  test "rejects context state for evaluators other than OpenAI Decisions before HTTP" do
+    context = ReqLLM.Context.new([ReqLLM.Context.user("Please refund me")])
+
+    assert {:error, %ReqLLM.Error.Invalid.Parameter{parameter: message}} =
+             ReqLLM.evaluate("typesafe:jev-latest", context, @questions,
+               api_key: "test-key",
+               req_http_options: [plug: fn _conn -> flunk("unexpected HTTP request") end]
+             )
+
+    assert message =~ "ReqLLM.Context state requires OpenAI Decisions"
+  end
+
   test "rejects invalid OpenAI Decisions input before authentication or HTTP" do
     no_http = [plug: fn _conn -> flunk("unexpected HTTP request") end]
 

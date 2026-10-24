@@ -1,12 +1,14 @@
 defmodule ReqLLM.Evaluation do
   @moduledoc """
-  Evaluates one text or JSON-compatible state against named questions.
+  Evaluates one text, JSON-compatible, or context state against named questions.
 
   This is a model call, not a test run. Providers handle their own request and
   answer formats. An evaluation model does not need to support chat generation.
   """
 
   alias ReqLLM.Response
+
+  @type state :: String.t() | map() | list() | ReqLLM.Context.t()
 
   @keyword_options Zoi.array(Zoi.tuple({Zoi.atom(), Zoi.any()}))
 
@@ -49,13 +51,27 @@ defmodule ReqLLM.Evaluation do
   models use the Decisions API. They support boolean, choice, and score questions;
   `provider_options: [openai: [safety_identifier: "tenant-123"]]` adds the optional
   safety identifier. OpenAI refusals stay in the result as `%{"type" => "refusal"}`.
-  Azure Microsoft Decision models use a Foundry resource root as `base_url` and
+  OpenAI Decisions also accepts a `ReqLLM.Context` state of system, user, and
+  assistant text, with images in user messages:
+
+      context =
+        ReqLLM.Context.new([
+          ReqLLM.Context.user([
+            ReqLLM.Message.ContentPart.text("Inspect the product in this photo."),
+            ReqLLM.Message.ContentPart.image(png_bytes, "image/png")
+          ])
+        ])
+
+      ReqLLM.evaluate("openai:gpt-6-luna", context, questions)
+
+  Other providers accept only text or JSON state. Azure Microsoft Decision
+  models use a Foundry resource root as `base_url` and
   `provider_options: [azure: [deployment: "my-decision-deployment"]]` to select
   the deployment. They support boolean, choice, and score questions.
   The response stores named answers in `object` with string keys.
   `provider_meta.raw_response` keeps the original provider data.
   """
-  @spec evaluate(ReqLLM.model_input(), String.t() | map() | list(), map(), keyword()) ::
+  @spec evaluate(ReqLLM.model_input(), state(), map(), keyword()) ::
           {:ok, Response.t()} | {:error, term()}
   def evaluate(model_spec, state, questions, opts \\ [])
 
@@ -64,10 +80,11 @@ defmodule ReqLLM.Evaluation do
 
     with :ok <- validate_state(state),
          :ok <- validate_questions(questions),
-         :ok <- validate_json(%{state: state, questions: questions}),
+         :ok <- validate_json(json_input(state, questions)),
          {:ok, opts} <- validate_options(opts),
          {:ok, model} <- resolve_model(model_spec),
          :ok <- validate_support(model),
+         :ok <- validate_state_support(model, state),
          {:ok, provider} <- ReqLLM.provider(model.provider),
          {:ok, opts} <-
            ReqLLM.Provider.Options.normalize_namespaced_provider_options(
@@ -114,7 +131,7 @@ defmodule ReqLLM.Evaluation do
   @doc """
   Same as `evaluate/4`, but raises on error.
   """
-  @spec evaluate!(ReqLLM.model_input(), String.t() | map() | list(), map(), keyword()) ::
+  @spec evaluate!(ReqLLM.model_input(), state(), map(), keyword()) ::
           Response.t() | no_return()
   def evaluate!(model_spec, state, questions, opts \\ []) do
     case evaluate(model_spec, state, questions, opts) do
@@ -284,7 +301,23 @@ defmodule ReqLLM.Evaluation do
   end
 
   defp validate_state(state) when is_binary(state) or is_map(state) or is_list(state), do: :ok
-  defp validate_state(_), do: {:error, invalid_parameter("state must be text or JSON data")}
+
+  defp validate_state(_),
+    do: {:error, invalid_parameter("state must be text, JSON data, or a ReqLLM.Context")}
+
+  defp json_input(%ReqLLM.Context{}, questions), do: %{questions: questions}
+  defp json_input(state, questions), do: %{state: state, questions: questions}
+
+  defp validate_state_support(%LLMDB.Model{provider: :openai}, _state), do: :ok
+
+  defp validate_state_support(model, %ReqLLM.Context{}) do
+    {:error,
+     invalid_parameter(
+       "#{LLMDB.Model.spec(model)} accepts text or JSON state; ReqLLM.Context state requires OpenAI Decisions"
+     )}
+  end
+
+  defp validate_state_support(_model, _state), do: :ok
 
   defp validate_questions(questions) when is_map(questions) and map_size(questions) > 0 do
     if Enum.all?(questions, fn {id, question} ->
