@@ -1564,16 +1564,17 @@ defmodule ReqLLM do
   Evaluates one state against named questions with an evaluation model.
 
   This call does not use chat or `generate_object/4`. OpenAI evaluation models
-  use the Decisions API and accept text or JSON-compatible state.
+  use the Decisions API and accept text, JSON-compatible, or `ReqLLM.Context`
+  state; a context can carry images in user messages.
   """
-  @spec evaluate(model_input(), String.t() | map() | list(), map(), keyword()) ::
+  @spec evaluate(model_input(), Evaluation.state(), map(), keyword()) ::
           {:ok, ReqLLM.Response.t()} | {:error, term()}
   defdelegate evaluate(model_spec, state, questions, opts \\ []), to: Evaluation
 
   @doc """
   Same as `evaluate/4`, but raises on error.
   """
-  @spec evaluate!(model_input(), String.t() | map() | list(), map(), keyword()) ::
+  @spec evaluate!(model_input(), Evaluation.state(), map(), keyword()) ::
           ReqLLM.Response.t() | no_return()
   defdelegate evaluate!(model_spec, state, questions, opts \\ []), to: Evaluation
 

@@ -275,7 +275,7 @@ usage = ReqLLM.StreamResponse.usage(response)
 
 ## Evaluation models
 
-Evaluation models answer named questions about one text or JSON state. They do
+Evaluation models answer named questions about one text, JSON, or context state. They do
 not need to support chat. `ReqLLM.evaluation_models/0` lists specs that
 ReqLLM can call. Set `TYPESAFE_API_KEY`, `OPENROUTER_API_KEY`, or `OPENAI_API_KEY` in `.env`:
 
@@ -309,7 +309,8 @@ the common ReqLLM name for that question. The moving OpenRouter ID keeps its
 leading `~` in the request. An unknown model ID requires a full inline model
 spec with evaluation capability and execution metadata. Catalog models without
 evaluation support and gateways without an adapter return an error before HTTP.
-OpenAI Decisions accepts string, map, and list state with boolean, choice, and score questions.
+OpenAI Decisions accepts string, map, list, and `ReqLLM.Context` state with boolean, choice, and
+score questions. A context can carry images in user messages.
 It returns refusals as `%{"type" => "refusal"}`. If OpenAI reports positive compute units without a
 known tariff, ReqLLM keeps the count and leaves the cost unknown.
 See [OpenRouter](guides/openrouter.md) for the gateway contract and an inline model example. See
