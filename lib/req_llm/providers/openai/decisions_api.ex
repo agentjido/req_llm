@@ -19,7 +19,12 @@ defmodule ReqLLM.Providers.OpenAI.DecisionsAPI do
   def path, do: "/decisions"
 
   @doc false
-  @spec compile_request(String.t(), String.t() | map() | list(), map(), String.t() | nil) ::
+  @spec compile_request(
+          String.t(),
+          String.t() | map() | list() | ReqLLM.Context.t(),
+          map(),
+          String.t() | nil
+        ) ::
           {:ok, map(), [map()]} | {:error, Exception.t()}
   def compile_request(model, state, questions, safety_identifier) do
     with :ok <- validate_model(model),
@@ -99,13 +104,94 @@ defmodule ReqLLM.Providers.OpenAI.DecisionsAPI do
 
   defp compile_state(state) when is_binary(state), do: {:ok, state}
 
+  defp compile_state(%ReqLLM.Context{messages: []}),
+    do: invalid("OpenAI Decisions context state must contain at least one message")
+
+  defp compile_state(%ReqLLM.Context{messages: messages}) do
+    messages
+    |> Enum.reduce_while({:ok, []}, fn message, {:ok, compiled} ->
+      case compile_message(message) do
+        {:ok, input_message} -> {:cont, {:ok, [input_message | compiled]}}
+        {:error, _error} = error -> {:halt, error}
+      end
+    end)
+    |> case do
+      {:ok, compiled} -> {:ok, Enum.reverse(compiled)}
+      error -> error
+    end
+  end
+
   defp compile_state(state) when is_map(state) or is_list(state) do
     with {:ok, ordered} <- canonical_json_value(state, "state") do
       {:ok, Jason.encode!(ordered)}
     end
   end
 
-  defp compile_state(_state), do: invalid("OpenAI Decisions state must be text or JSON data")
+  defp compile_state(_state),
+    do: invalid("OpenAI Decisions state must be text, JSON data, or a ReqLLM.Context")
+
+  defp compile_message(%ReqLLM.Message{tool_calls: [_ | _]}),
+    do: invalid("OpenAI Decisions context state does not support tool calls")
+
+  defp compile_message(%ReqLLM.Message{role: role, content: [_ | _] = content})
+       when role in [:user, :system, :assistant] do
+    content
+    |> Enum.reduce_while({:ok, []}, fn part, {:ok, parts} ->
+      case compile_content_part(role, part) do
+        {:ok, input_part} -> {:cont, {:ok, [input_part | parts]}}
+        {:error, _error} = error -> {:halt, error}
+      end
+    end)
+    |> case do
+      {:ok, parts} -> {:ok, %{"role" => Atom.to_string(role), "content" => Enum.reverse(parts)}}
+      error -> error
+    end
+  end
+
+  defp compile_message(%ReqLLM.Message{role: role, content: []})
+       when role in [:user, :system, :assistant],
+       do: invalid("OpenAI Decisions #{role} messages must have content")
+
+  defp compile_message(%ReqLLM.Message{role: role}),
+    do: invalid("OpenAI Decisions context state does not support #{role} messages")
+
+  defp compile_message(_message),
+    do: invalid("OpenAI Decisions context messages must be ReqLLM.Message structs")
+
+  defp compile_content_part(:assistant, %ReqLLM.Message.ContentPart{type: :text, text: text})
+       when is_binary(text),
+       do: {:ok, %{"type" => "output_text", "text" => text}}
+
+  defp compile_content_part(_role, %ReqLLM.Message.ContentPart{type: :text, text: text})
+       when is_binary(text),
+       do: {:ok, %{"type" => "input_text", "text" => text}}
+
+  defp compile_content_part(:user, %ReqLLM.Message.ContentPart{
+         type: :image,
+         data: data,
+         media_type: media_type
+       })
+       when is_binary(data) and is_binary(media_type),
+       do:
+         {:ok,
+          %{
+            "type" => "input_image",
+            "image_url" => "data:#{media_type};base64,#{Base.encode64(data)}"
+          }}
+
+  defp compile_content_part(:user, %ReqLLM.Message.ContentPart{type: :image_url, url: url})
+       when is_binary(url),
+       do: {:ok, %{"type" => "input_image", "image_url" => url}}
+
+  defp compile_content_part(role, %ReqLLM.Message.ContentPart{type: type})
+       when type in [:image, :image_url],
+       do: invalid("OpenAI Decisions accepts images only in user messages, not #{role} messages")
+
+  defp compile_content_part(_role, %ReqLLM.Message.ContentPart{type: type}),
+    do: invalid("OpenAI Decisions context state does not support #{type} content")
+
+  defp compile_content_part(_role, _part),
+    do: invalid("OpenAI Decisions message content must be ReqLLM.Message.ContentPart structs")
 
   defp canonical_json_value(value, path) when is_map(value) do
     value

@@ -570,6 +570,76 @@ defmodule ReqLLM.ContextTest do
       end
     end
 
+    test "preserves participant names across loose map formats" do
+      test_cases = [
+        {%{role: :user, content: "User message", name: "person_42"}, :user, "person_42"},
+        {%{role: :assistant, content: [ContentPart.text("Assistant message")], name: "agent_7"},
+         :assistant, "agent_7"},
+        {%{role: "assistant", content: "String role text", name: "agent_8"}, :assistant,
+         "agent_8"},
+        {%{role: "user", content: [ContentPart.text("String role")], name: "person_43"}, :user,
+         "person_43"},
+        {%{"role" => "assistant", "content" => "String key", "name" => "agent_9"}, :assistant,
+         "agent_9"},
+        {%{
+           "role" => "user",
+           "content" => [%{"type" => "text", "text" => "JSON content"}],
+           "name" => "person_44"
+         }, :user, "person_44"},
+        {%{role: :user, content: "No name"}, :user, nil},
+        {%{"role" => "assistant", "content" => "Null name", "name" => nil}, :assistant, nil},
+        {%{role: :user, content: [ContentPart.text("Invalid name")], name: 42}, :user, nil}
+      ]
+
+      for {input, expected_role, expected_name} <- test_cases do
+        {:ok, context} = Context.normalize(input, validate: false)
+
+        assert [%Message{role: ^expected_role, name: ^expected_name}] = context.messages
+      end
+    end
+
+    test "preserves named multimodal message content" do
+      image_url = "https://example.com/image.png"
+
+      input = %{
+        "role" => "user",
+        "content" => [ContentPart.text("Describe this image"), ContentPart.image_url(image_url)],
+        "name" => "person_45"
+      }
+
+      {:ok, context} = Context.normalize(input, validate: false)
+
+      assert [
+               %Message{
+                 role: :user,
+                 name: "person_45",
+                 content: [
+                   %ContentPart{type: :text, text: "Describe this image"},
+                   %ContentPart{type: :image_url, url: ^image_url}
+                 ]
+               }
+             ] = context.messages
+    end
+
+    test "preserves assistant names and tool calls together" do
+      input = %{
+        role: :assistant,
+        content: "",
+        name: "agent_10",
+        tool_calls: [%{id: "call_456", name: "lookup", arguments: %{query: "temperature"}}]
+      }
+
+      {:ok, context} = Context.normalize(input, validate: false)
+
+      assert [
+               %Message{
+                 role: :assistant,
+                 name: "agent_10",
+                 tool_calls: [%ReqLLM.ToolCall{id: "call_456", function: %{name: "lookup"}}]
+               }
+             ] = context.messages
+    end
+
     test "handles system prompts correctly" do
       # Adds system prompt when none exists
       {:ok, context1} =

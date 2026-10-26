@@ -1148,9 +1148,31 @@ result.object["urgent"]
 #=> %{"type" => "boolean", "probability" => 0.91}
 ```
 
-The first release accepts string, map, and list state. Maps and lists become stable JSON text.
-Supported question types are boolean, choice, and score. Multimodal state, streaming, Batch API
-submission, and OpenAI Evals are not part of this interface.
+State can be a string, a map, a list, or a `ReqLLM.Context`. Maps and lists become stable JSON
+text. A context becomes the Decisions `input` message array: system, user, and assistant text, and
+images in user messages, either inline (`ContentPart.image/2`, sent as a base64 data URL) or by URL
+(`ContentPart.image_url/1`):
+
+```elixir
+context =
+  ReqLLM.Context.new([
+    ReqLLM.Context.user([
+      ReqLLM.Message.ContentPart.text("Inspect the product in this photo."),
+      ReqLLM.Message.ContentPart.image(File.read!("product.png"), "image/png")
+    ])
+  ])
+
+{:ok, result} =
+  ReqLLM.evaluate("openai:gpt-6-luna", context, %{
+    visible_damage: %{type: :boolean, instructions: "Does the product have visible damage?"}
+  })
+```
+
+The Decisions API does not accept files, so a PDF has to be rendered to page images first. Tool
+calls, tool messages, and file parts fail before HTTP, and other evaluation providers reject a
+context state.
+Supported question types are boolean, choice, and score. Streaming, Batch API submission, and
+OpenAI Evals are not part of this interface.
 
 LLMDB is the model eligibility source. ReqLLM does not keep a second model-ID list. A model must
 have `evaluate: true` and the OpenAI Decisions execution contract. Calls with excluded or invalid

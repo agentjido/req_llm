@@ -48,6 +48,55 @@ defmodule ReqLLM.Step.RetryTest do
       end
     end
 
+    test "retries only the HTTP statuses given in retry_statuses" do
+      parent = self()
+
+      request =
+        Req.new(
+          url: "https://example.invalid",
+          adapter: fn request ->
+            send(parent, :attempt)
+            {request, Req.Response.new(status: 503, headers: [{"retry-after", "0"}])}
+          end
+        )
+        |> Retry.attach(max_retries: 2, retry_statuses: [429, 529])
+
+      assert {:ok, %Req.Response{status: 503}} = Req.request(request)
+      assert_receive :attempt
+      refute_received :attempt
+    end
+
+    test "still retries a listed status when retry_statuses is given" do
+      {:ok, counter} = Agent.start_link(fn -> 0 end)
+
+      request =
+        Req.new(
+          url: "https://example.invalid",
+          adapter: fn request ->
+            case Agent.get_and_update(counter, fn value -> {value, value + 1} end) do
+              0 -> {request, Req.Response.new(status: 429, headers: [{"retry-after", "0"}])}
+              _attempt -> {request, Req.Response.new(status: 200, body: "ok")}
+            end
+          end
+        )
+        |> Retry.attach(max_retries: 1, retry_statuses: [429, 529])
+
+      assert {:ok, %Req.Response{status: 200}} = Req.request(request)
+      assert Agent.get(counter, & &1) == 2
+    end
+
+    test "an empty retry_statuses list still retries transport errors" do
+      request =
+        Req.new()
+        |> Retry.attach(retry_statuses: [])
+
+      assert Retry.should_retry?(request, %Req.TransportError{reason: :closed}) == {:delay, 0}
+      assert Retry.should_retry?(request, Req.Response.new(status: 429)) == false
+
+      assert Retry.should_retry?(request, %ReqLLM.Error.API.Request{status: 503, headers: []}) ==
+               false
+    end
+
     test "emits completed attempt timing before a retry" do
       test_pid = self()
       handler_id = {__MODULE__, self(), make_ref()}
@@ -309,6 +358,29 @@ defmodule ReqLLM.Step.RetryTest do
         )
 
       assert request.options[:max_retries] == 0
+    end
+
+    test "default_attach honors caller retry_statuses" do
+      {:ok, model} = ReqLLM.model("openai:gpt-4")
+
+      request =
+        ReqLLM.Provider.Defaults.default_attach(
+          ReqLLM.Providers.OpenAI,
+          Req.new(),
+          model,
+          api_key: "test-key",
+          retry_statuses: [429]
+        )
+
+      retry_fn = request.options[:retry]
+
+      assert retry_fn.(request, Req.Response.new(status: 503)) == false
+      assert {:delay, _delay} = retry_fn.(request, Req.Response.new(status: 429))
+
+      refute Keyword.has_key?(
+               ReqLLM.Provider.Defaults.filter_req_opts(retry_statuses: [429]),
+               :retry_statuses
+             )
     end
 
     test "retry function correctly identifies retryable errors" do

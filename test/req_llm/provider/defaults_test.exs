@@ -113,6 +113,15 @@ defmodule ReqLLM.Provider.DefaultsTest do
   end
 
   describe "encode_context_to_openai_format/2" do
+    test "encodes participant names normalized from generic message maps" do
+      {:ok, context} =
+        Context.normalize(%{role: :user, content: "Hello", name: "person_42"}, validate: false)
+
+      assert Defaults.encode_context_to_openai_format(context, "gpt-4") == %{
+               messages: [%{role: "user", content: "Hello", name: "person_42"}]
+             }
+    end
+
     test "encodes text content correctly" do
       test_cases = [
         # Simple string content

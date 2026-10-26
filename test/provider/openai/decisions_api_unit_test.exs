@@ -1,6 +1,7 @@
 defmodule Provider.OpenAI.DecisionsAPIUnitTest do
   use ExUnit.Case, async: true
 
+  alias ReqLLM.Message.ContentPart
   alias ReqLLM.Providers.OpenAI.DecisionsAPI
 
   @questions %{
@@ -58,6 +59,68 @@ defmodule Provider.OpenAI.DecisionsAPIUnitTest do
 
     assert body["input"] == "raw text"
     refute Map.has_key?(body, "safety_identifier")
+  end
+
+  test "compiles context state into ordered input messages" do
+    context =
+      ReqLLM.Context.new([
+        ReqLLM.Context.system("You review product photos."),
+        ReqLLM.Context.user([
+          ContentPart.text("Inspect the product in these photos."),
+          ContentPart.image(<<137, 80, 78, 71>>, "image/png"),
+          ContentPart.image_url("https://example.com/side.jpg")
+        ]),
+        ReqLLM.Context.assistant("The left corner looks dented.")
+      ])
+
+    assert {:ok, body, _contract} =
+             DecisionsAPI.compile_request("gpt-6-luna", context, @questions, nil)
+
+    assert body["input"] == [
+             %{
+               "role" => "system",
+               "content" => [%{"type" => "input_text", "text" => "You review product photos."}]
+             },
+             %{
+               "role" => "user",
+               "content" => [
+                 %{"type" => "input_text", "text" => "Inspect the product in these photos."},
+                 %{"type" => "input_image", "image_url" => "data:image/png;base64,iVBORw=="},
+                 %{"type" => "input_image", "image_url" => "https://example.com/side.jpg"}
+               ]
+             },
+             %{
+               "role" => "assistant",
+               "content" => [
+                 %{"type" => "output_text", "text" => "The left corner looks dented."}
+               ]
+             }
+           ]
+  end
+
+  test "rejects context state the Decisions API does not accept" do
+    rejects = [
+      {ReqLLM.Context.new([]), "at least one message"},
+      {ReqLLM.Context.new([ReqLLM.Context.user([])]), "user messages must have content"},
+      {ReqLLM.Context.new([
+         ReqLLM.Context.assistant("Checking", tool_calls: [{"lookup", %{}, [id: "call_1"]}])
+       ]), "does not support tool calls"},
+      {ReqLLM.Context.new([ReqLLM.Context.tool_result("call_1", "done")]),
+       "does not support tool messages"},
+      {ReqLLM.Context.new([
+         ReqLLM.Context.system([ContentPart.image(<<1>>, "image/png")])
+       ]), "images only in user messages"},
+      {ReqLLM.Context.new([
+         ReqLLM.Context.user([ContentPart.file(<<1>>, "doc.pdf", "application/pdf")])
+       ]), "does not support file content"}
+    ]
+
+    for {context, message} <- rejects do
+      assert {:error, %ReqLLM.Error.Invalid.Parameter{parameter: parameter}} =
+               DecisionsAPI.compile_request("gpt-6-luna", context, @questions, nil)
+
+      assert parameter =~ message
+    end
   end
 
   test "rejects normalized state, question, and choice collisions" do

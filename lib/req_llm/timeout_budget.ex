@@ -102,9 +102,37 @@ defmodule ReqLLM.TimeoutBudget do
   end
 
   defp run_request_task(request, timeout) do
-    task = Task.Supervisor.async_nolink(ReqLLM.TaskSupervisor, fn -> Req.request(request) end)
+    otel_ctx = current_otel_ctx()
+
+    task =
+      Task.Supervisor.async_nolink(ReqLLM.TaskSupervisor, fn ->
+        attach_otel_ctx(otel_ctx)
+        Req.request(request)
+      end)
+
     {task, Task.yield(task, timeout)}
   end
+
+  # The request runs in a task, and OpenTelemetry keeps its context in the process
+  # dictionary. Without the caller's context, the request span starts a new trace
+  # instead of a child of the caller's span.
+  defp current_otel_ctx do
+    if otel_ctx_available?(), do: call(:otel_ctx, :get_current, []), else: nil
+  end
+
+  defp attach_otel_ctx(nil), do: :ok
+
+  defp attach_otel_ctx(ctx) do
+    call(:otel_ctx, :attach, [ctx])
+    :ok
+  end
+
+  defp otel_ctx_available? do
+    Code.ensure_loaded?(:otel_ctx) and function_exported?(:otel_ctx, :get_current, 0) and
+      function_exported?(:otel_ctx, :attach, 1)
+  end
+
+  defp call(module, function, arguments), do: apply(module, function, arguments)
 
   defp resolve_request_task({_task, {:ok, result}}, _request, capture_ref, _timeout) do
     discard_captured_context(capture_ref)
