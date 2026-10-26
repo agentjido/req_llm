@@ -516,6 +516,38 @@ defmodule ReqLLM.Providers.Azure.OpenAITest do
       assert body[:parallel_tool_calls] == true
     end
 
+    test "keeps an explicit parallel_tool_calls false from provider_options" do
+      context = ReqLLM.Context.new([ReqLLM.Context.user("Hello")])
+
+      opts = [stream: false, provider_options: [openai_parallel_tool_calls: false]]
+
+      body = Azure.OpenAI.format_request("gpt-4o", context, opts)
+
+      assert body[:parallel_tool_calls] == false
+    end
+
+    test "top-level parallel_tool_calls takes precedence over provider_options" do
+      context = ReqLLM.Context.new([ReqLLM.Context.user("Hello")])
+
+      opts = [
+        stream: false,
+        parallel_tool_calls: false,
+        provider_options: [openai_parallel_tool_calls: true]
+      ]
+
+      body = Azure.OpenAI.format_request("gpt-4o", context, opts)
+
+      assert body[:parallel_tool_calls] == false
+    end
+
+    test "omits parallel_tool_calls when none is set" do
+      context = ReqLLM.Context.new([ReqLLM.Context.user("Hello")])
+
+      body = Azure.OpenAI.format_request("gpt-4o", context, stream: false)
+
+      refute Map.has_key?(body, :parallel_tool_calls)
+    end
+
     test "includes logprobs options" do
       context = ReqLLM.Context.new([ReqLLM.Context.user("Hello")])
 

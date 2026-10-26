@@ -27,7 +27,9 @@ defmodule ReqLLM.Providers.Azure.OpenAI do
   - Makes all properties required
 
   For structured output generation, use `ReqLLM.generate_object/4` which creates
-  a synthetic tool to enforce the output schema.
+  a synthetic tool to enforce the output schema. That tool is not strict by default.
+  Pass `provider_options: [openai_structured_output_mode: :tool_strict]` to send it with
+  `strict: true` and `parallel_tool_calls: false`.
 
   ## Additional Options
 
@@ -193,7 +195,7 @@ defmodule ReqLLM.Providers.Azure.OpenAI do
       |> add_verbosity(provider_opts)
       |> add_stream_options(opts)
       |> add_deepseek_thinking(model_id, provider_opts)
-      |> AdapterHelpers.add_parallel_tool_calls(opts, provider_opts)
+      |> add_parallel_tool_calls(opts, provider_opts)
       |> AdapterHelpers.translate_tool_choice_format()
       |> AdapterHelpers.add_strict_to_tools()
       |> AdapterHelpers.add_response_format(provider_opts)
@@ -213,6 +215,30 @@ defmodule ReqLLM.Providers.Azure.OpenAI do
           "Expected prefix: #{Enum.join(@openai_compatible_prefixes, ", ")}. " <>
           "Proceeding with OpenAI formatting (may fail)."
       )
+    end
+  end
+
+  # AdapterHelpers.add_parallel_tool_calls/3 chains its sources with `||`, so an explicit
+  # `false` falls through to nil and the field is omitted. Azure needs `false` to reach the
+  # request body for strict structured output, so this keeps the first present value instead.
+  # The shared helper is left unchanged because other providers' request bodies depend on it.
+  defp add_parallel_tool_calls(body, opts, provider_opts) do
+    value =
+      first_present([
+        {opts, :parallel_tool_calls},
+        {provider_opts, :openai_parallel_tool_calls},
+        {provider_opts, :parallel_tool_calls}
+      ])
+
+    maybe_put(body, :parallel_tool_calls, value)
+  end
+
+  defp first_present([]), do: nil
+
+  defp first_present([{source, key} | rest]) do
+    case Keyword.fetch(source, key) do
+      {:ok, value} -> value
+      :error -> first_present(rest)
     end
   end
 

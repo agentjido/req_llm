@@ -279,7 +279,10 @@ defmodule ReqLLM.Providers.Azure do
     ],
     openai_structured_output_mode: [
       type: :any,
-      doc: "Structured output strategy for OpenAI models"
+      doc:
+        "Structured output strategy for OpenAI models. Azure currently honors `:tool_strict`, " <>
+          "which sends the `structured_output` tool with `strict: true` and " <>
+          "`parallel_tool_calls: false`. Other values keep the non-strict tool."
     ],
     openai_parallel_tool_calls: [
       type: :any,
@@ -431,11 +434,15 @@ defmodule ReqLLM.Providers.Azure do
       _ ->
         compiled_schema = Keyword.fetch!(opts, :compiled_schema)
 
+        strict_tool? =
+          get_provider_option(opts, :openai_structured_output_mode, nil) == :tool_strict
+
         structured_output_tool =
           ReqLLM.Tool.new!(
             name: "structured_output",
             description: "Generate structured output matching the provided schema",
             parameter_schema: compiled_schema.schema,
+            strict: strict_tool?,
             callback: fn _args -> {:ok, "structured output generated"} end
           )
 
@@ -452,6 +459,7 @@ defmodule ReqLLM.Providers.Azure do
           opts_for_object
           |> Keyword.update(:tools, [structured_output_tool], &[structured_output_tool | &1])
           |> Keyword.put(:tool_choice, tool_choice)
+          |> disable_parallel_tool_calls(strict_tool?)
 
         do_prepare_chat_request(model_spec, prompt, opts_with_tool)
     end
@@ -1573,6 +1581,17 @@ defmodule ReqLLM.Providers.Azure do
   end
 
   defp validate_base_url!(_base_url), do: :ok
+
+  defp disable_parallel_tool_calls(opts, false), do: opts
+
+  defp disable_parallel_tool_calls(opts, true) do
+    Keyword.update(
+      opts,
+      :provider_options,
+      [openai_parallel_tool_calls: false],
+      &Keyword.put(&1, :openai_parallel_tool_calls, false)
+    )
+  end
 
   # Retrieves an option with provider_options taking precedence over top-level opts.
   # This allows users to specify options either at the top level or nested under provider_options.

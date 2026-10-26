@@ -96,6 +96,17 @@ Passed via `:provider_options` keyword or as top-level options:
 - **Scope**: Same Chat Completions limitation as `openai_logprobs`
 - **Example**: `provider_options: [openai_logprobs: true, openai_top_logprobs: 3]`
 
+### `openai_structured_output_mode`
+
+- **Type**: Atom
+- **Default**: unset, which sends the non-strict `structured_output` tool
+- **Purpose**: Opt in to strict structured output for `generate_object` and `stream_object`
+- **Values**: Azure currently honors `:tool_strict`. Other values keep the non-strict tool.
+- **Scope**: Non-Claude models (GPT, o-series, Codex, DeepSeek, Grok, Kimi, Mistral).
+  Claude on Azure is unchanged.
+- **Example**: `provider_options: [openai_structured_output_mode: :tool_strict]`
+- **See**: [Structured Output](#structured-output)
+
 ## Examples
 
 ### Microsoft-Decision-1 evaluation
@@ -314,6 +325,54 @@ schema = [
   deployment: "my-gpt4-deployment"
 )
 ```
+
+By default, ReqLLM adds a `structured_output` tool that is not strict, so Azure does not
+hold the model to the schema and the returned object can omit required properties.
+
+To opt in to strict output, set `openai_structured_output_mode: :tool_strict`. ReqLLM then
+sends the tool with `strict: true` and sets `parallel_tool_calls: false`. Microsoft's
+[structured outputs guide](https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/structured-outputs)
+says Azure OpenAI does not support parallel function calls with structured outputs.
+
+```elixir
+{:ok, person} = ReqLLM.generate_object(
+  "azure:gpt-4o",
+  "Generate a fictional person",
+  schema,
+  base_url: "https://my-resource.openai.azure.com/openai",
+  deployment: "my-gpt4-deployment",
+  provider_options: [openai_structured_output_mode: :tool_strict],
+  output_validation: :strict
+)
+```
+
+`output_validation: :strict` is a separate, existing option. It checks the returned object
+against your original schema and returns an error if it does not match. It is off unless
+you pass it, and pairing it with `:tool_strict` is recommended.
+
+With `:tool_strict`:
+
+- The schema sent to Azure is rewritten to the strict subset: every property is listed in
+  `required` and `additionalProperties` is `false` at every object level. Optional
+  properties become required, so the model must return every key. A key can be `null` only
+  if its type allows `null`. Otherwise the model must supply a value, which may be an empty
+  string.
+- Azure can return HTTP 400 for schema keywords or shapes outside the strict subset.
+- `output_validation` still checks against your original schema, not the rewritten one.
+
+#### API version
+
+ReqLLM does not check `api_version` for this option. Microsoft's
+[structured outputs guide](https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/structured-outputs)
+lists `2024-08-01-preview` as the first version that supports structured outputs, and the
+[`2024-02-01` inference spec](https://github.com/Azure/azure-rest-api-specs/blob/main/specification/cognitiveservices/data-plane/AzureOpenAI/inference/stable/2024-02-01/inference.yaml)
+has no `strict` field on a function definition.
+
+In practice, an Azure OpenAI deployment behind API Management (`gpt-4.1-mini-2025-04-14`)
+accepted and enforced strict function tools with `api-version` `2024-02-01`, `2024-06-01`,
+and `2025-03-01-preview`. A schema missing a property from `required` returned HTTP 400 on
+all three, and a valid strict schema returned 200 on `2024-06-01` and `2025-03-01-preview`.
+Other deployments or versions may differ.
 
 ### Extended Thinking (Claude)
 

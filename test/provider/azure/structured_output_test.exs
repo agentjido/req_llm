@@ -218,6 +218,195 @@ defmodule ReqLLM.Providers.Azure.StructuredOutputTest do
     end
   end
 
+  describe "openai_structured_output_mode :tool_strict on prepare_request :object" do
+    @object_schema %{
+      "type" => "object",
+      "properties" => %{
+        "filename" => %{"type" => "string"},
+        "pages" => %{"type" => "integer"},
+        "meta" => %{
+          "type" => "object",
+          "properties" => %{"owner" => %{"type" => "string"}}
+        }
+      },
+      "required" => ["filename"]
+    }
+
+    defp object_model(protocol) do
+      LLMDB.Model.new!(%{
+        provider: :azure,
+        id: "gpt-4o",
+        extra: %{wire: %{protocol: protocol}}
+      })
+    end
+
+    defp prepare_object(protocol, extra_opts) do
+      {:ok, request} =
+        Azure.prepare_request(
+          :object,
+          object_model(protocol),
+          "Return the filename.",
+          [
+            api_key: "test-key",
+            base_url: "https://my-resource.openai.azure.com/openai",
+            deployment: "gpt-4o",
+            compiled_schema: %{schema: @object_schema}
+          ] ++ extra_opts
+        )
+
+      request
+    end
+
+    @strict_mode [provider_options: [openai_structured_output_mode: :tool_strict]]
+
+    defp assert_strict_parameters(parameters) do
+      assert Enum.sort(parameters["required"]) == ["filename", "meta", "pages"]
+      assert parameters["additionalProperties"] == false
+
+      meta = parameters["properties"]["meta"]
+      assert meta["required"] == ["owner"]
+      assert meta["additionalProperties"] == false
+    end
+
+    test "default request keeps the non-strict tool and omits parallel_tool_calls" do
+      body = prepare_object("openai_chat", []).options[:json]
+
+      [tool] = body[:tools]
+      refute Map.has_key?(tool["function"], "strict")
+      assert tool["function"]["parameters"]["required"] == ["filename"]
+      refute Map.has_key?(tool["function"]["parameters"], "additionalProperties")
+      refute Map.has_key?(body, :parallel_tool_calls)
+    end
+
+    test "other mode values keep the non-strict tool" do
+      for mode <- [:auto, :json_schema] do
+        request =
+          prepare_object("openai_chat", provider_options: [openai_structured_output_mode: mode])
+
+        body = request.options[:json]
+        [tool] = body[:tools]
+        refute Map.has_key?(tool["function"], "strict")
+        refute Map.has_key?(body, :parallel_tool_calls)
+      end
+    end
+
+    test "Chat Completions sends a strict tool and parallel_tool_calls false" do
+      body = prepare_object("openai_chat", @strict_mode).options[:json]
+
+      [tool] = body[:tools]
+      assert tool["function"]["strict"] == true
+      assert_strict_parameters(tool["function"]["parameters"])
+      assert body[:parallel_tool_calls] == false
+      assert body[:tool_choice] == %{type: "function", function: %{name: "structured_output"}}
+    end
+
+    test "Responses API sends a strict tool and parallel_tool_calls false" do
+      body = prepare_object("openai_responses", @strict_mode).options[:json]
+
+      [tool] = body["tools"]
+      assert tool["strict"] == true
+      assert_strict_parameters(tool["parameters"])
+      assert body["parallel_tool_calls"] == false
+    end
+
+    test "the top-level option behaves like provider_options" do
+      body =
+        prepare_object("openai_chat", openai_structured_output_mode: :tool_strict).options[:json]
+
+      [tool] = body[:tools]
+      assert tool["function"]["strict"] == true
+      assert body[:parallel_tool_calls] == false
+    end
+
+    defp stream_body(protocol, extra_opts) do
+      request = prepare_object(protocol, extra_opts)
+
+      stream_opts =
+        request.options
+        |> Map.to_list()
+        |> Keyword.put(:stream, true)
+
+      {:ok, finch_request} =
+        Azure.attach_stream(
+          object_model(protocol),
+          request.options[:context],
+          stream_opts,
+          nil
+        )
+
+      Jason.decode!(finch_request.body)
+    end
+
+    test "streaming Chat Completions sends a strict tool and parallel_tool_calls false" do
+      body = stream_body("openai_chat", @strict_mode)
+
+      [tool] = body["tools"]
+      assert tool["function"]["strict"] == true
+      assert_strict_parameters(tool["function"]["parameters"])
+      assert body["parallel_tool_calls"] == false
+
+      assert body["tool_choice"] == %{
+               "type" => "function",
+               "function" => %{"name" => "structured_output"}
+             }
+    end
+
+    test "streaming Responses API sends a strict tool and parallel_tool_calls false" do
+      body = stream_body("openai_responses", @strict_mode)
+
+      [tool] = body["tools"]
+      assert tool["strict"] == true
+      assert_strict_parameters(tool["parameters"])
+      assert body["parallel_tool_calls"] == false
+    end
+
+    test "streaming without the option keeps the non-strict tool" do
+      body = stream_body("openai_chat", [])
+
+      [tool] = body["tools"]
+      refute Map.has_key?(tool["function"], "strict")
+      assert tool["function"]["parameters"]["required"] == ["filename"]
+      refute Map.has_key?(body, "parallel_tool_calls")
+    end
+
+    test "decodes the structured_output tool call from a strict request" do
+      request = prepare_object("openai_chat", @strict_mode)
+
+      response_body = %{
+        "id" => "chatcmpl-1",
+        "object" => "chat.completion",
+        "model" => "gpt-4o",
+        "choices" => [
+          %{
+            "index" => 0,
+            "message" => %{
+              "role" => "assistant",
+              "content" => nil,
+              "tool_calls" => [
+                %{
+                  "id" => "call_1",
+                  "type" => "function",
+                  "function" => %{
+                    "name" => "structured_output",
+                    "arguments" => Jason.encode!(%{"filename" => "report.pdf", "pages" => nil})
+                  }
+                }
+              ]
+            },
+            "finish_reason" => "tool_calls"
+          }
+        ],
+        "usage" => %{"prompt_tokens" => 10, "completion_tokens" => 5, "total_tokens" => 15}
+      }
+
+      {_request, result} =
+        Azure.decode_response({request, %Req.Response{status: 200, body: response_body}})
+
+      assert %Req.Response{body: %ReqLLM.Response{} = response} = result
+      assert ReqLLM.Response.object(response) == %{"filename" => "report.pdf", "pages" => nil}
+    end
+  end
+
   describe "map-based parameter schemas" do
     test "map schema passes through correctly for Azure OpenAI" do
       context = ReqLLM.Context.new([ReqLLM.Context.user("Test")])
