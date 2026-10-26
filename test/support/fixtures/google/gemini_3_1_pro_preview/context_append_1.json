@@ -3,7 +3,7 @@
   "provider": "google",
   "request": {
     "body": {
-      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJSZXNwb25kIHdpdGggYSBzaW5nbGUgd29yZCAnSGknLiJ9XSwicm9sZSI6InVzZXIifV0sImdlbmVyYXRpb25Db25maWciOnsiY2FuZGlkYXRlQ291bnQiOjEsIm1heE91dHB1dFRva2VucyI6MTAyNCwidGVtcGVyYXR1cmUiOjAuMH19"
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJSZXNwb25kIHdpdGggYSBzaW5nbGUgd29yZCAnSGknLiJ9XSwicm9sZSI6InVzZXIifV0sImdlbmVyYXRpb25Db25maWciOnsibWF4T3V0cHV0VG9rZW5zIjoxMDI0LCJ0ZW1wZXJhdHVyZSI6MC4wfX0="
     },
     "canonical_json": {
       "contents": [
@@ -17,7 +17,6 @@
         }
       ],
       "generationConfig": {
-        "candidateCount": 1,
         "maxOutputTokens": 1024,
         "temperature": 0.0
       }

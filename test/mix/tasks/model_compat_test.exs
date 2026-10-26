@@ -132,6 +132,57 @@ defmodule Mix.Tasks.ReqLlm.ModelCompatTest do
     end
   end
 
+  describe "coverage_specs/3" do
+    test "keeps only active models with fixtures for broad replay" do
+      specs = [
+        {:google, "gemini-2.0-flash"},
+        {:google, "gemini-2.5-flash"},
+        {:google, "gemini-3.8-flash"}
+      ]
+
+      assert ModelCompat.coverage_specs(specs, "google:*", []) == [
+               {:google, "gemini-2.5-flash"}
+             ]
+    end
+
+    test "keeps exact selections so missing fixtures fail clearly" do
+      specs = [{:google, "gemini-3.8-flash"}]
+
+      assert ModelCompat.coverage_specs(specs, "google:gemini-3.8-flash", []) == specs
+    end
+
+    test "keeps all selections during recording" do
+      specs = [
+        {:google, "gemini-2.0-flash"},
+        {:google, "gemini-3.8-flash"}
+      ]
+
+      assert ModelCompat.coverage_specs(specs, "google:*", record: true) == specs
+    end
+
+    test "filters broad replay when state updates are enabled" do
+      specs = [
+        {:google, "gemini-2.5-flash"},
+        {:google, "gemini-3.8-flash"}
+      ]
+
+      assert ModelCompat.coverage_specs(specs, "google:*", update_state: true) == [
+               {:google, "gemini-2.5-flash"}
+             ]
+    end
+  end
+
+  describe "available_scenarios_for/3" do
+    test "returns only scenarios with complete fixture contracts" do
+      scenarios =
+        ModelCompat.available_scenarios_for(:google, "gemini-pro-latest", :text)
+
+      assert scenarios == ["basic", "usage", "token_limit", "context_append", "streaming"]
+      refute "object_basic" in scenarios
+      refute "reasoning" in scenarios
+    end
+  end
+
   describe "test_args_for/3" do
     test "routes generic text scenarios to comprehensive tests" do
       assert ModelCompat.test_args_for(:google, :text, "basic") == [

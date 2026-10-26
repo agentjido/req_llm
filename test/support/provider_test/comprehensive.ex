@@ -323,11 +323,21 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
             )
 
             max_tokens =
-              case ReqLLM.model(@model_spec) do
-                {:ok, %{capabilities: %{reasoning: true}}} -> 500
-                {:ok, %{model: "gpt-4.1" <> _}} -> 16
-                {:ok, %{extra: %{wire: %{protocol: "openai_responses"}}}} -> 200
-                _ -> 10
+              cond do
+                ReqLLM.ProviderTest.Comprehensive.supports_reasoning?(@model_spec) ->
+                  500
+
+                match?({:ok, %{model: "gpt-4.1" <> _}}, ReqLLM.model(@model_spec)) ->
+                  16
+
+                match?(
+                  {:ok, %{extra: %{wire: %{protocol: "openai_responses"}}}},
+                  ReqLLM.model(@model_spec)
+                ) ->
+                  200
+
+                true ->
+                  10
               end
 
             {:ok, response} =

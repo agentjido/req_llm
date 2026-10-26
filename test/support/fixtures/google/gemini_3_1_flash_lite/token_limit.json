@@ -3,7 +3,7 @@
   "provider": "google",
   "request": {
     "body": {
-      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJXcml0ZSBhIHZlcnkgbG9uZyBzdG9yeSBhYm91dCBkcmFnb25zIGFuZCBhZHZlbnR1cmVzIn1dLCJyb2xlIjoidXNlciJ9XSwiZ2VuZXJhdGlvbkNvbmZpZyI6eyJjYW5kaWRhdGVDb3VudCI6MSwibWF4T3V0cHV0VG9rZW5zIjozMDAwLCJ0ZW1wZXJhdHVyZSI6MC41LCJ0aGlua2luZ0NvbmZpZyI6eyJpbmNsdWRlVGhvdWdodHMiOnRydWUsInRoaW5raW5nTGV2ZWwiOiJsb3cifX19"
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJXcml0ZSBhIHZlcnkgbG9uZyBzdG9yeSBhYm91dCBkcmFnb25zIGFuZCBhZHZlbnR1cmVzIn1dLCJyb2xlIjoidXNlciJ9XSwiZ2VuZXJhdGlvbkNvbmZpZyI6eyJtYXhPdXRwdXRUb2tlbnMiOjMwMDAsInRlbXBlcmF0dXJlIjowLjUsInRoaW5raW5nQ29uZmlnIjp7ImluY2x1ZGVUaG91Z2h0cyI6dHJ1ZSwidGhpbmtpbmdMZXZlbCI6ImxvdyJ9fX0="
     },
     "canonical_json": {
       "contents": [
@@ -17,7 +17,6 @@
         }
       ],
       "generationConfig": {
-        "candidateCount": 1,
         "maxOutputTokens": 3000,
         "temperature": 0.5,
         "thinkingConfig": {

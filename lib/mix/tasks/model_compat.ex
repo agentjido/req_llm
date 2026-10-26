@@ -24,7 +24,10 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
   **Important**:
   - Registered providers and catalog models with a shared adapter execution contract are included
   - Config lists (`:sample_*_models`) are defaults only, not hard filters
-  - Explicit specs like `"anthropic:*"` test ALL registry models for that provider
+  - Explicit specs like `"anthropic:*"` select all registry models for that provider
+  - Broad replay runs test active models with fixtures and complete scenario contracts
+  - Broad replay reports models without fixtures as untested and does not run retired models
+  - Recording and exact model specs keep the full requested selection
 
   ## Usage
 
@@ -345,9 +348,11 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
     models = load_registry()
 
     selected_specs = select_models(models, model_spec, opts)
-    specs = filter_capability_specs(selected_specs, opts)
 
-    if Enum.empty?(specs) do
+    capability_specs = filter_capability_specs(selected_specs, opts)
+    specs = coverage_specs(capability_specs, model_spec, opts)
+
+    if Enum.empty?(capability_specs) do
       raise_for_empty_specs(selected_specs, model_spec, opts)
     end
 
@@ -391,9 +396,11 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
     models = load_registry()
 
     selected_specs = select_models(models, nil, opts)
-    specs = filter_capability_specs(selected_specs, opts)
 
-    if Enum.empty?(specs) do
+    capability_specs = filter_capability_specs(selected_specs, opts)
+    specs = coverage_specs(capability_specs, nil, opts)
+
+    if Enum.empty?(capability_specs) do
       raise_for_empty_specs(selected_specs, nil, opts)
     end
 
@@ -432,13 +439,53 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
   defp test_model(provider, model_id, opts) do
     scenarios = scenarios_for_opts(opts, parse_operation_type(opts[:type]), provider)
 
-    if Enum.empty?(scenarios) do
-      run_test_invocation(provider, model_id, opts, nil)
+    if Enum.empty?(scenarios) and not recording?(opts) do
+      replay_scenarios =
+        available_scenarios_for(provider, model_id, parse_operation_type(opts[:type]))
+
+      run_test_invocation(provider, model_id, opts, replay_scenarios)
     else
-      scenarios
-      |> Enum.map(&run_test_invocation(provider, model_id, opts, &1))
-      |> aggregate_scenario_results(provider, model_id)
+      run_scenarios(provider, model_id, opts, scenarios)
     end
+  end
+
+  defp run_scenarios(provider, model_id, opts, []) do
+    run_test_invocation(provider, model_id, opts, nil)
+  end
+
+  defp run_scenarios(provider, model_id, opts, scenarios) do
+    scenarios
+    |> Enum.map(&run_test_invocation(provider, model_id, opts, &1))
+    |> aggregate_scenario_results(provider, model_id)
+  end
+
+  @doc false
+  def available_scenarios_for(provider, model_id, operation) do
+    fixture_names = fixture_names(provider, model_id)
+
+    ScenarioCatalog.scenarios()
+    |> Enum.filter(fn scenario ->
+      scenario.operation == operation and scenario.proof == :fixture_replay and
+        scenario.applicability in [:operation, :model_features] and
+        provider_applies?(scenario.providers, provider) and
+        ScenarioCatalog.scenario_test_file(provider, scenario.id) == nil and
+        Enum.all?(scenario.fixtures, &MapSet.member?(fixture_names, &1))
+    end)
+    |> Enum.map(& &1.id)
+  end
+
+  defp provider_applies?(:all, _provider), do: true
+  defp provider_applies?(providers, provider), do: provider in providers
+
+  defp fixture_names(provider, model_id) do
+    model_dir = model_id_to_fixture_dir(model_id)
+    fixture_path = Path.join([fixture_path_root(), to_string(provider), model_dir])
+
+    fixture_path
+    |> Path.join("*.json")
+    |> Path.wildcard()
+    |> Enum.map(&Path.basename(&1, ".json"))
+    |> MapSet.new()
   end
 
   defp run_test_invocation(provider, model_id, opts, scenario) do
@@ -489,7 +536,13 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
           spec
       end
 
-    scenario_text = if scenario, do: ", scenario=#{scenario}", else: ""
+    scenario_text =
+      case scenario do
+        scenarios when is_list(scenarios) -> ", scenarios=#{Enum.join(scenarios, ",")}"
+        scenario when is_binary(scenario) -> ", scenario=#{scenario}"
+        nil -> ""
+      end
+
     Mix.shell().info("  Testing #{display_spec} (#{operation}#{scenario_text})...")
 
     test_args =
@@ -536,7 +589,17 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
   end
 
   defp build_test_args(provider, _category, operation, scenario) do
-    test_args_for(provider, operation, scenario)
+    case scenario do
+      scenarios when is_list(scenarios) ->
+        base_args = test_args_for(provider, operation) |> Enum.take(2)
+
+        Enum.reduce(scenarios, base_args, fn scenario, args ->
+          args ++ ["--only", "scenario:#{scenario}"]
+        end)
+
+      scenario ->
+        test_args_for(provider, operation, scenario)
+    end
   end
 
   defp normalize_provider(provider) when is_atom(provider), do: provider
@@ -659,6 +722,35 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
       Enum.filter(specs, fn {provider, _model_id} ->
         scenarios_for_opts(opts, operation, provider) != []
       end)
+    end
+  end
+
+  @doc false
+  def coverage_specs(specs, model_spec, opts) do
+    if recording?(opts) or exact_model_spec?(model_spec) do
+      specs
+    else
+      Enum.filter(specs, fn {provider, model_id} ->
+        replayable_model?(provider, model_id)
+      end)
+    end
+  end
+
+  defp exact_model_spec?(nil), do: false
+  defp exact_model_spec?("*:*"), do: false
+
+  defp exact_model_spec?(model_spec),
+    do: String.contains?(model_spec, ":") and not String.contains?(model_spec, "*")
+
+  defp recording?(opts), do: opts[:record_all] == true or opts[:record] == true
+
+  defp replayable_model?(provider, model_id) do
+    case fetch_model_metadata("#{provider}:#{model_id}") do
+      {:ok, model} ->
+        get_lifecycle_status(model) != :retired and has_fixtures?(provider, model_id)
+
+      {:error, _} ->
+        false
     end
   end
 
@@ -794,6 +886,17 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
       {:ok, metadata} -> metadata.fixtures
       :error -> []
     end
+  end
+
+  defp fallback_scenario_fixtures([], scenarios) when is_list(scenarios) do
+    scenarios
+    |> Enum.flat_map(fn scenario ->
+      case ScenarioCatalog.fetch_scenario(scenario) do
+        {:ok, metadata} -> metadata.fixtures
+        :error -> []
+      end
+    end)
+    |> Enum.uniq()
   end
 
   defp fallback_scenario_fixtures(fixtures, _scenario), do: fixtures

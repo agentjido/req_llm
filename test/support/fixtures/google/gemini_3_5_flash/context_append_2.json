@@ -3,7 +3,7 @@
   "provider": "google",
   "request": {
     "body": {
-      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJSZXNwb25kIHdpdGggYSBzaW5nbGUgd29yZCAnSGknLiJ9XSwicm9sZSI6InVzZXIifSx7InBhcnRzIjpbeyJ0ZXh0IjoiSGkifV0sInJvbGUiOiJtb2RlbCJ9LHsicGFydHMiOlt7InRleHQiOiJIaSBhZ2FpbiJ9XSwicm9sZSI6InVzZXIifV0sImdlbmVyYXRpb25Db25maWciOnsiY2FuZGlkYXRlQ291bnQiOjEsIm1heE91dHB1dFRva2VucyI6MTAyNCwidGVtcGVyYXR1cmUiOjAuMH19"
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJSZXNwb25kIHdpdGggYSBzaW5nbGUgd29yZCAnSGknLiJ9XSwicm9sZSI6InVzZXIifSx7InBhcnRzIjpbeyJ0ZXh0IjoiSGkiLCJ0aG91Z2h0U2lnbmF0dXJlIjoiRW80Q0Nvc0NBUXc1MXNkUFB3QXNUY2Evc2NFRFFvMmtqa2JaRXRsNzVZa1NTWU9jSmxST0F6MjV2N1lxbDc2UjlwTDJEOWhWS3o4V3FlQlVIR01MTTZDNkk2SUhSc241K2piRE9HVVRpcWJzVlkxWm5Lejdka0gxTEx4MUQxZ1FNZ1JlOW1xblpmQ05LNFMwcnVIaHYzMHJoaThkemw4TG1lRmpkTW13WGtGMUFLQkNBcHo2dThHOUNSWThaT0RtRE4wSWNnYWFlMThyZlVVOEdCN2FFREVGQkx1SStYNjdjcC9nbnhnY1pjNjY5blAwa2Q5c2ZDKy9qeFpwck41QmFiUnJFYmxKczgwTUNaVERPK1BVWFJDU3pjaGxvc2FveG1WLzFraXpNYWZNZFlBeXRuS2d4WVVLdkhaMngrNFByZE1ubkVPbnNsUW4vTSs5MDllYWNLZW9GZ2p0c3EzQkVpeFAwYTZ1V2FzUCJ9XSwicm9sZSI6Im1vZGVsIn0seyJwYXJ0cyI6W3sidGV4dCI6IkhpIGFnYWluIn1dLCJyb2xlIjoidXNlciJ9XSwiZ2VuZXJhdGlvbkNvbmZpZyI6eyJtYXhPdXRwdXRUb2tlbnMiOjEwMjQsInRlbXBlcmF0dXJlIjowLjB9fQ=="
     },
     "canonical_json": {
       "contents": [
@@ -18,7 +18,8 @@
         {
           "parts": [
             {
-              "text": "Hi"
+              "text": "Hi",
+              "thoughtSignature": "Eo4CCosCAQw51sdPPwAsTca/scEDQo2kjkbZEtl75YkSSYOcJlROAz25v7Yql76R9pL2D9hVKz8WqeBUHGMLM6C6I6IHRsn5+jbDOGUTiqbsVY1ZnKz7dkH1LLx1D1gQMgRe9mqnZfCNK4S0ruHhv30rhi8dzl8LmeFjdMmwXkF1AKBCApz6u8G9CRY8ZODmDN0Icgaae18rfUU8GB7aEDEFBLuI+X67cp/gnxgcZc669nP0kd9sfC+/jxZprN5BabRrEblJs80MCZTDO+PUXRCSzchlosaoxmV/1kizMafMdYAytnKgxYUKvHZ2x+4PrdMnnEOnslQn/M+909eacKeoFgjtsq3BEixP0a6uWasP"
             }
           ],
           "role": "model"
@@ -33,7 +34,6 @@
         }
       ],
       "generationConfig": {
-        "candidateCount": 1,
         "maxOutputTokens": 1024,
         "temperature": 0.0
       }

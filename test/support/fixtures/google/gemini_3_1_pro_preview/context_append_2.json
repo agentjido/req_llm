@@ -3,7 +3,7 @@
   "provider": "google",
   "request": {
     "body": {
-      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJSZXNwb25kIHdpdGggYSBzaW5nbGUgd29yZCAnSGknLiJ9XSwicm9sZSI6InVzZXIifSx7InBhcnRzIjpbeyJ0ZXh0IjoiSGkifV0sInJvbGUiOiJtb2RlbCJ9LHsicGFydHMiOlt7InRleHQiOiJIaSBhZ2FpbiJ9XSwicm9sZSI6InVzZXIifV0sImdlbmVyYXRpb25Db25maWciOnsiY2FuZGlkYXRlQ291bnQiOjEsIm1heE91dHB1dFRva2VucyI6MTAyNCwidGVtcGVyYXR1cmUiOjAuMH19"
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJSZXNwb25kIHdpdGggYSBzaW5nbGUgd29yZCAnSGknLiJ9XSwicm9sZSI6InVzZXIifSx7InBhcnRzIjpbeyJ0ZXh0IjoiSGkiLCJ0aG91Z2h0U2lnbmF0dXJlIjoiRW9rRENvWURBUXc1MXNlazlOWDZMbmhHVGlYdXc1dUxlUWNIemNmTWFEVnQ0azJSVmI2dDdVQmM0UmFrcUp2K216TXBxNnYzemM0ZVZKdUxuVXFhc29KQlF5dEtNclpDNGVzZnVVeWJJNmhsdEpLRjBvYlY5QmhVZUVpaTdNY0F4dU80UitkUDZlZDl6RDBEcGRnR1FqZmZXbThuVzRyYVBieTZ6enBTeWowZE5jQ2EwT1JteWU2TmkxOHRBZ2VkL0lZL1JyRW9MYmtIOEg0QlBnbFdmYlUyd0VTM3cvYjhiNGJZNmE2K3ZyVG9XaE1OUFVwbks3dzdzMWZwUWJTWFBFeE5vT3dESmFYWTQ3Q29Vc3VPRDBZU3ZpZlZaQ3JIWTJlSkNIa0NMY1hSalI3ME1LVGJBcTdlMFZSNU5pVXZPL2RkSVZ1ci9iQkFWOTQwTWZXbFZnZ0hPNXR4TGV2UStxVWhudGluZUxmczNVcmJ2cE9hd0Z5MkdXRFpheFlrRVR1QlQ2YkNhd01ja1BkUGdWVTIzRGduVE8xVEorWDNSdlpEMWNpOG1yQnBqeXBpR1h3dlhSZ2kzbWUyaEIwSFlrZzhYc2hIR0dsY2szbGJnbmR4NFc5YzlUZUdleWhEOWNYbExRdTUrbUN6NG9PNkcxdUpPeVZxSm9jYWRtSkRYUnM2S2dsbmw4eHM3TVdYIn1dLCJyb2xlIjoibW9kZWwifSx7InBhcnRzIjpbeyJ0ZXh0IjoiSGkgYWdhaW4ifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7Im1heE91dHB1dFRva2VucyI6MTAyNCwidGVtcGVyYXR1cmUiOjAuMH19"
     },
     "canonical_json": {
       "contents": [
@@ -18,7 +18,8 @@
         {
           "parts": [
             {
-              "text": "Hi"
+              "text": "Hi",
+              "thoughtSignature": "EokDCoYDAQw51sek9NX6LnhGTiXuw5uLeQcHzcfMaDVt4k2RVb6t7UBc4RakqJv+mzMpq6v3zc4eVJuLnUqasoJBQytKMrZC4esfuUybI6hltJKF0obV9BhUeEii7McAxuO4R+dP6ed9zD0DpdgGQjffWm8nW4raPby6zzpSyj0dNcCa0ORmye6Ni18tAged/IY/RrEoLbkH8H4BPglWfbU2wES3w/b8b4bY6a6+vrToWhMNPUpnK7w7s1fpQbSXPExNoOwDJaXY47CoUsuOD0YSvifVZCrHY2eJCHkCLcXRjR70MKTbAq7e0VR5NiUvO/ddIVur/bBAV940MfWlVggHO5txLevQ+qUhntineLfs3UrbvpOawFy2GWDZaxYkETuBT6bCawMckPdPgVU23DgnTO1TJ+X3RvZD1ci8mrBpjypiGXwvXRgi3me2hB0HYkg8XshHGGlck3lbgndx4W9c9TeGeyhD9cXlLQu5+mCz4oO6G1uJOyVqJocadmJDXRs6Kglnl8xs7MWX"
             }
           ],
           "role": "model"
@@ -33,7 +34,6 @@
         }
       ],
       "generationConfig": {
-        "candidateCount": 1,
         "maxOutputTokens": 1024,
         "temperature": 0.0
       }

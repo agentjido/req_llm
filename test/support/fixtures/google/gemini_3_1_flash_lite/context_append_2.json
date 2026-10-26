@@ -3,7 +3,7 @@
   "provider": "google",
   "request": {
     "body": {
-      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJSZXNwb25kIHdpdGggYSBzaW5nbGUgd29yZCAnSGknLiJ9XSwicm9sZSI6InVzZXIifSx7InBhcnRzIjpbeyJ0ZXh0IjoiSGkifV0sInJvbGUiOiJtb2RlbCJ9LHsicGFydHMiOlt7InRleHQiOiJIaSBhZ2FpbiJ9XSwicm9sZSI6InVzZXIifV0sImdlbmVyYXRpb25Db25maWciOnsiY2FuZGlkYXRlQ291bnQiOjEsIm1heE91dHB1dFRva2VucyI6MTAyNCwidGVtcGVyYXR1cmUiOjAuMH19"
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJSZXNwb25kIHdpdGggYSBzaW5nbGUgd29yZCAnSGknLiJ9XSwicm9sZSI6InVzZXIifSx7InBhcnRzIjpbeyJ0ZXh0IjoiSGkiLCJ0aG91Z2h0U2lnbmF0dXJlIjoiRWpRS01nRU1PZGJIaHJLZWg3K0NQZ2JJUUxvS0ZnQnpCOHp6cDFMTzNwUkZzblZoV01XNHJiL01Rb0dWUngrMElzSHhYOFQ1In1dLCJyb2xlIjoibW9kZWwifSx7InBhcnRzIjpbeyJ0ZXh0IjoiSGkgYWdhaW4ifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7Im1heE91dHB1dFRva2VucyI6MTAyNCwidGVtcGVyYXR1cmUiOjAuMH19"
     },
     "canonical_json": {
       "contents": [
@@ -18,7 +18,8 @@
         {
           "parts": [
             {
-              "text": "Hi"
+              "text": "Hi",
+              "thoughtSignature": "EjQKMgEMOdbHhrKeh7+CPgbIQLoKFgBzB8zzp1LO3pRFsnVhWMW4rb/MQoGVRx+0IsHxX8T5"
             }
           ],
           "role": "model"
@@ -33,7 +34,6 @@
         }
       ],
       "generationConfig": {
-        "candidateCount": 1,
         "maxOutputTokens": 1024,
         "temperature": 0.0
       }

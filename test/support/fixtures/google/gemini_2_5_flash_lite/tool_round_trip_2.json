@@ -3,7 +3,7 @@
   "provider": "google",
   "request": {
     "body": {
-      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJVc2UgdGhlIGFkZCB0b29sIHRvIGNvbXB1dGUgMiArIDMuIEFmdGVyIHRoZSB0b29sIHJlc3VsdCBhcnJpdmVzLCByZXNwb25kIHdpdGggJ3N1bT08dmFsdWU+Jy4ifV0sInJvbGUiOiJ1c2VyIn0seyJwYXJ0cyI6W3sidGV4dCI6IiJ9LHsiZnVuY3Rpb25DYWxsIjp7ImFyZ3MiOnsiYSI6MiwiYiI6M30sIm5hbWUiOiJhZGQifSwidGhvdWdodFNpZ25hdHVyZSI6ImMydHBjRjkwYUc5MVoyaDBYM05wWjI1aGRIVnlaVjkyWVd4cFpHRjBiM0k9In1dLCJyb2xlIjoibW9kZWwifSx7InBhcnRzIjpbeyJ0ZXh0IjoiNSJ9LHsiZnVuY3Rpb25SZXNwb25zZSI6eyJuYW1lIjoiYWRkIiwicmVzcG9uc2UiOnsiY29udGVudCI6IjUifX19XSwicm9sZSI6InVzZXIifV0sImdlbmVyYXRpb25Db25maWciOnsiY2FuZGlkYXRlQ291bnQiOjEsIm1heE91dHB1dFRva2VucyI6NjU1MywidGVtcGVyYXR1cmUiOjAuMH19"
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJVc2UgdGhlIGFkZCB0b29sIHRvIGNvbXB1dGUgMiArIDMuIEFmdGVyIHRoZSB0b29sIHJlc3VsdCBhcnJpdmVzLCByZXNwb25kIHdpdGggJ3N1bT08dmFsdWU+Jy4ifV0sInJvbGUiOiJ1c2VyIn0seyJwYXJ0cyI6W3siZnVuY3Rpb25DYWxsIjp7ImFyZ3MiOnsiYSI6MiwiYiI6M30sIm5hbWUiOiJhZGQifSwidGhvdWdodFNpZ25hdHVyZSI6ImMydHBjRjkwYUc5MVoyaDBYM05wWjI1aGRIVnlaVjkyWVd4cFpHRjBiM0k9In1dLCJyb2xlIjoibW9kZWwifSx7InBhcnRzIjpbeyJmdW5jdGlvblJlc3BvbnNlIjp7Im5hbWUiOiJhZGQiLCJyZXNwb25zZSI6eyJjb250ZW50IjoiNSJ9fX1dLCJyb2xlIjoidXNlciJ9XSwiZ2VuZXJhdGlvbkNvbmZpZyI6eyJjYW5kaWRhdGVDb3VudCI6MSwibWF4T3V0cHV0VG9rZW5zIjo2NTUzLCJ0ZW1wZXJhdHVyZSI6MC4wfX0="
     },
     "canonical_json": {
       "contents": [
@@ -17,9 +17,6 @@
         },
         {
           "parts": [
-            {
-              "text": ""
-            },
             {
               "functionCall": {
                 "args": {
@@ -35,9 +32,6 @@
         },
         {
           "parts": [
-            {
-              "text": "5"
-            },
             {
               "functionResponse": {
                 "name": "add",

@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJVc2UgdGhlIGFkZCB0b29sIHRvIGNvbXB1dGUgMiArIDMuIEFmdGVyIHRoZSB0b29sIHJlc3VsdCBhcnJpdmVzLCByZXNwb25kIHdpdGggJ3N1bT08dmFsdWU+Jy4ifV0sInJvbGUiOiJ1c2VyIn0seyJwYXJ0cyI6W3siZnVuY3Rpb25DYWxsIjp7ImFyZ3MiOnsiYSI6MiwiYiI6M30sImlkIjoidG9vbF9jYWxsXzMwNzUiLCJuYW1lIjoiYWRkIn19XSwicm9sZSI6Im1vZGVsIn0seyJwYXJ0cyI6W3sidGV4dCI6IjUifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7ImNhbmRpZGF0ZUNvdW50IjoxLCJtYXhPdXRwdXRUb2tlbnMiOjY1NTMsInRlbXBlcmF0dXJlIjowLjB9fQ=="
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJVc2UgdGhlIGFkZCB0b29sIHRvIGNvbXB1dGUgMiArIDMuIEFmdGVyIHRoZSB0b29sIHJlc3VsdCBhcnJpdmVzLCByZXNwb25kIHdpdGggJ3N1bT08dmFsdWU+Jy4ifV0sInJvbGUiOiJ1c2VyIn0seyJwYXJ0cyI6W3siZnVuY3Rpb25DYWxsIjp7ImFyZ3MiOnsiYSI6MiwiYiI6M30sIm5hbWUiOiJhZGQifSwidGhvdWdodFNpZ25hdHVyZSI6ImMydHBjRjkwYUc5MVoyaDBYM05wWjI1aGRIVnlaVjkyWVd4cFpHRjBiM0k9In1dLCJyb2xlIjoibW9kZWwifSx7InBhcnRzIjpbeyJmdW5jdGlvblJlc3BvbnNlIjp7Im5hbWUiOiJhZGQiLCJyZXNwb25zZSI6eyJjb250ZW50IjoiNSJ9fX1dLCJyb2xlIjoidXNlciJ9XSwiZ2VuZXJhdGlvbkNvbmZpZyI6eyJjYW5kaWRhdGVDb3VudCI6MSwibWF4T3V0cHV0VG9rZW5zIjo2NTUzLCJ0ZW1wZXJhdHVyZSI6MC4wfX0="
     },
     "canonical_json": {
       "contents": [
@@ -21,9 +21,9 @@
                   "a": 2,
                   "b": 3
                 },
-                "id": "tool_call_3075",
                 "name": "add"
-              }
+              },
+              "thoughtSignature": "c2tpcF90aG91Z2h0X3NpZ25hdHVyZV92YWxpZGF0b3I="
             }
           ],
           "role": "model"
@@ -31,7 +31,12 @@
         {
           "parts": [
             {
-              "text": "5"
+              "functionResponse": {
+                "name": "add",
+                "response": {
+                  "content": "5"
+                }
+              }
             }
           ],
           "role": "user"

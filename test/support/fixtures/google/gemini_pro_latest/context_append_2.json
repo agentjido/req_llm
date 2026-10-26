@@ -3,7 +3,7 @@
   "provider": "google",
   "request": {
     "body": {
-      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJSZXNwb25kIHdpdGggYSBzaW5nbGUgd29yZCAnSGknLiJ9XSwicm9sZSI6InVzZXIifSx7InBhcnRzIjpbeyJ0ZXh0IjoiSGkifV0sInJvbGUiOiJtb2RlbCJ9LHsicGFydHMiOlt7InRleHQiOiJIaSBhZ2FpbiJ9XSwicm9sZSI6InVzZXIifV0sImdlbmVyYXRpb25Db25maWciOnsiY2FuZGlkYXRlQ291bnQiOjEsIm1heE91dHB1dFRva2VucyI6MTAyNCwidGVtcGVyYXR1cmUiOjAuMH19"
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJSZXNwb25kIHdpdGggYSBzaW5nbGUgd29yZCAnSGknLiJ9XSwicm9sZSI6InVzZXIifSx7InBhcnRzIjpbeyJ0ZXh0IjoiSGkiLCJ0aG91Z2h0U2lnbmF0dXJlIjoiRW9NRENvQURBUXc1MXNmNHN6Rm0weE9CSGdOeDFhc2Z6VkJTOHU0UGhtanB4bkUwZ3NEMndTbVZXT1Y4eVRKb2g5KzNnNFJIMjN1SW9FalVCcDdrNzRBaUZXNHI5Qy8yNXgrN3BYc3VzbEphejV3NnE0REh4QTRmbWVSbVFseVp0VXBsRGlwZXU1YWJzbjFCcGIxZWVHemQ4QjlVaXp1YjRBdXlmZXpqS09ybnc2S0QyV0dDWWhSMUM4QnB0UG1YaHhSMGU2TzhaMDRyTllUcmRzQjR6TzU2dm13ODN4b3ZTVXNvTFZ6bEhDZU9GeUpjYm1RNmxqamFvZit0N24rZjBZZEZSdlRYZHNJYWE1bFBpSjBRQVF4ZFJxVnl2S1BYLzNsNWQzRmsrdytTOENPa21BZWJqQ0RMMTFuL2ZqNjBmbUs4cytrbXVoTVNCTGJ6cjNNZlJhV1hIVFNsS0lMNmNGQzNNODl5alBacjB2MU1SN2FYbnRZdTkrZkhIanRNcHFpQTd2dkh4NnpkZFVYSitXSUZldnBMRFNlQnNDaXF4VllCbG9VL2hTaHZyUUVYeWJjRmpMajlBcjUwOGtIZ2UyNkVvY3hGcTVVOVF5Y0FyK04wc0FXWUlLNFhFSjkzcjlFN2E3emVub3QyREtwMUphZzBranM0NGRtNldHTWJJamVqQ0FzZSJ9XSwicm9sZSI6Im1vZGVsIn0seyJwYXJ0cyI6W3sidGV4dCI6IkhpIGFnYWluIn1dLCJyb2xlIjoidXNlciJ9XSwiZ2VuZXJhdGlvbkNvbmZpZyI6eyJjYW5kaWRhdGVDb3VudCI6MSwibWF4T3V0cHV0VG9rZW5zIjoxMDI0LCJ0ZW1wZXJhdHVyZSI6MC4wfX0="
     },
     "canonical_json": {
       "contents": [
@@ -18,7 +18,8 @@
         {
           "parts": [
             {
-              "text": "Hi"
+              "text": "Hi",
+              "thoughtSignature": "EoMDCoADAQw51sf4szFm0xOBHgNx1asfzVBS8u4PhmjpxnE0gsD2wSmVWOV8yTJoh9+3g4RH23uIoEjUBp7k74AiFW4r9C/25x+7pXsuslJaz5w6q4DHxA4fmeRmQlyZtUplDipeu5absn1Bpb1eeGzd8B9Uizub4AuyfezjKOrnw6KD2WGCYhR1C8BptPmXhxR0e6O8Z04rNYTrdsB4zO56vmw83xovSUsoLVzlHCeOFyJcbmQ6ljjaof+t7n+f0YdFRvTXdsIaa5lPiJ0QAQxdRqVyvKPX/3l5d3Fk+w+S8COkmAebjCDL11n/fj60fmK8s+kmuhMSBLbzr3MfRaWXHTSlKIL6cFC3M89yjPZr0v1MR7aXntYu9+fHHjtMpqiA7vvHx6zddUXJ+WIFevpLDSeBsCiqxVYBloU/hShvrQEXybcFjLj9Ar508kHge26EocxFq5U9QycAr+N0sAWYIK4XEJ93r9E7a7zenot2DKp1Jag0kjs44dm6WGMbIjejCAse"
             }
           ],
           "role": "model"
