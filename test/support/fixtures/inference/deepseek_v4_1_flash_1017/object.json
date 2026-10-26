@@ -1,0 +1,179 @@
+{
+  "captured_at": "2026-10-26T21:38:42.035156Z",
+  "model_spec": "inference:deepseek-v4.1-flash-1017",
+  "provider": "inference",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyNTYsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiUmV0dXJuIHN0YXR1cyByZWFkeSBhbmQgY291bnQgNy4iLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJkZWVwc2Vlay12NC4xLWZsYXNoLTEwMTciLCJyZWFzb25pbmdfZWZmb3J0Ijoibm9uZSIsInJlc3BvbnNlX2Zvcm1hdCI6eyJqc29uX3NjaGVtYSI6eyJuYW1lIjoic3RydWN0dXJlZF9vdXRwdXQiLCJzY2hlbWEiOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7ImNvdW50Ijp7InR5cGUiOiJpbnRlZ2VyIn0sInN0YXR1cyI6eyJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJjb3VudCIsInN0YXR1cyJdLCJ0eXBlIjoib2JqZWN0In0sInN0cmljdCI6dHJ1ZX0sInR5cGUiOiJqc29uX3NjaGVtYSJ9LCJzdHJlYW0iOmZhbHNlfQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 256,
+      "messages": [
+        {
+          "content": "Return status ready and count 7.",
+          "role": "user"
+        }
+      ],
+      "model": "deepseek-v4.1-flash-1017",
+      "reasoning_effort": "none",
+      "response_format": {
+        "json_schema": {
+          "name": "structured_output",
+          "schema": {
+            "additionalProperties": false,
+            "properties": {
+              "count": {
+                "type": "integer"
+              },
+              "status": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "count",
+              "status"
+            ],
+            "type": "object"
+          },
+          "strict": true
+        },
+        "type": "json_schema"
+      },
+      "stream": false
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.7.5"
+      ],
+      "x-inference-environment": [
+        "fixture"
+      ],
+      "x-inference-task-id": [
+        "reqllm-deepseek-object"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.inference.net/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "{\"status\": \"ready\", \"count\": 7}",
+            "reasoning_content": "",
+            "role": "assistant",
+            "tool_calls": []
+          }
+        }
+      ],
+      "created": 1793050721,
+      "id": "gv2_cg0zlqzEFbSOu8DhlLqHo",
+      "model": "deepseek-v4.1-flash-1017",
+      "object": "chat.completion",
+      "system_fingerprint": "inference.net",
+      "usage": {
+        "completion_tokens": 13,
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "prompt_tokens": 12,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "created_cache_tokens": 0
+        },
+        "reasoning_tokens": 0,
+        "total_tokens": 25
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "X-Trace-Id"
+      ],
+      "cache-control": [
+        "max-age=0, private, must-revalidate"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a50c9c01d915b475-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-length": [
+        "548"
+      ],
+      "content-security-policy": [
+        "frame-ancestors 'none'"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Mon, 26 Oct 2026 21:38:42 GMT"
+      ],
+      "ratelimit-limit": [
+        "250"
+      ],
+      "ratelimit-remaining": [
+        "249"
+      ],
+      "ratelimit-reset": [
+        "1793050740"
+      ],
+      "referrer-policy": [
+        "strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains"
+      ],
+      "vary": [
+        "accept-encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-frame-options": [
+        "DENY"
+      ],
+      "x-inference-id": [
+        "gv2_cg0zlqzEFbSOu8DhlLqHo"
+      ],
+      "x-inference-sticky-routing": [
+        "hit"
+      ],
+      "x-inference-sticky-routing-depth": [
+        "1"
+      ],
+      "x-inference-sticky-routing-enabled": [
+        "true"
+      ],
+      "x-request-id": [
+        "66ace286-90d3-4104-a481-2eb1b3bf6e57"
+      ],
+      "x-trace-id": [
+        "723b0c5b29df9ec0e6cedf76bb064002"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

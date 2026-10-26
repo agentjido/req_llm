@@ -1,0 +1,157 @@
+{
+  "captured_at": "2026-10-26T21:38:49.792255Z",
+  "model_spec": "inference:gpt-5-nano",
+  "provider": "inference",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyNTYsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiV2hhdCBpcyAxNyBwbHVzIDI1PyBSZXBseSB3aXRoIG9ubHkgdGhlIG51bWJlci4iLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJncHQtNS1uYW5vIiwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInN0cmVhbSI6ZmFsc2V9"
+    },
+    "canonical_json": {
+      "max_tokens": 256,
+      "messages": [
+        {
+          "content": "What is 17 plus 25? Reply with only the number.",
+          "role": "user"
+        }
+      ],
+      "model": "gpt-5-nano",
+      "reasoning_effort": "low",
+      "stream": false
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.7.5"
+      ],
+      "x-inference-environment": [
+        "fixture"
+      ],
+      "x-inference-task-id": [
+        "reqllm-reasoning_basic"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.inference.net/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "annotations": [],
+            "content": "42",
+            "provider_specific_fields": {
+              "refusal": null
+            },
+            "role": "assistant"
+          },
+          "provider_specific_fields": {
+            "content_filter_results": {}
+          }
+        }
+      ],
+      "created": 1793050729,
+      "id": "chatcmpl-EdMgzCKF94kRGy0kBlJMXTIbzGpRj",
+      "model": "gpt-5-nano",
+      "object": "chat.completion",
+      "routing": {
+        "serving_pipereplica": "d20260925092650-949df6a0-default-r2-dp0-default"
+      },
+      "service_tier": "default",
+      "usage": {
+        "completion_tokens": 10,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "latency_checkpoint": {
+          "engine_tbt_ms": 4,
+          "engine_ttft_ms": 17,
+          "engine_ttlt_ms": 142,
+          "pre_inference_ms": 92,
+          "service_tbt_ms": 6,
+          "service_ttft_ms": 345,
+          "service_ttlt_ms": 539,
+          "user_visible_ttft_ms": 253
+        },
+        "prompt_tokens": 20,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 0
+        },
+        "total_tokens": 30
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "X-Trace-Id"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a50c9c2c3f27844d-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-length": [
+        "891"
+      ],
+      "content-security-policy": [
+        "frame-ancestors 'none'"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Mon, 26 Oct 2026 21:38:49 GMT"
+      ],
+      "ratelimit-limit": [
+        "250"
+      ],
+      "ratelimit-remaining": [
+        "242"
+      ],
+      "ratelimit-reset": [
+        "1793050740"
+      ],
+      "referrer-policy": [
+        "strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-frame-options": [
+        "DENY"
+      ],
+      "x-request-id": [
+        "0e04946c-3256-4002-b2de-b2d2f26aa085"
+      ],
+      "x-trace-id": [
+        "218ab0bb0fc4e0d56bdb7f2885cc7833"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

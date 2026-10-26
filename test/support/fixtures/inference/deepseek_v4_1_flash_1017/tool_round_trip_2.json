@@ -1,0 +1,203 @@
+{
+  "captured_at": "2026-10-26T21:38:45.069046Z",
+  "model_spec": "inference:deepseek-v4.1-flash-1017",
+  "provider": "inference",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyNTYsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiQ2FsbCBtdWx0aXBseV9udW1iZXJzIHdpdGggYT02IGFuZCBiPTcuIiwicm9sZSI6InVzZXIifSx7ImNvbnRlbnQiOiIiLCJyb2xlIjoiYXNzaXN0YW50IiwidG9vbF9jYWxscyI6W3siZnVuY3Rpb24iOnsiYXJndW1lbnRzIjoie1wiYVwiOjYsXCJiXCI6N30iLCJuYW1lIjoibXVsdGlwbHlfbnVtYmVycyJ9LCJpZCI6ImNoYXRjbXBsLXRvb2wtYmE1YjI0YmE4OTUzNTAxMyIsInR5cGUiOiJmdW5jdGlvbiJ9XX0seyJjb250ZW50IjoiNDIiLCJuYW1lIjoibXVsdGlwbHlfbnVtYmVycyIsInJvbGUiOiJ0b29sIiwidG9vbF9jYWxsX2lkIjoiY2hhdGNtcGwtdG9vbC1iYTViMjRiYTg5NTM1MDEzIn1dLCJtb2RlbCI6ImRlZXBzZWVrLXY0LjEtZmxhc2gtMTAxNyIsInJlYXNvbmluZ19lZmZvcnQiOiJub25lIiwic3RyZWFtIjpmYWxzZSwidG9vbF9jaG9pY2UiOiJub25lIiwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiTXVsdGlwbHkgdHdvIGludGVnZXJzIiwibmFtZSI6Im11bHRpcGx5X251bWJlcnMiLCJwYXJhbWV0ZXJzIjp7ImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjpmYWxzZSwicHJvcGVydGllcyI6eyJhIjp7InR5cGUiOiJpbnRlZ2VyIn0sImIiOnsidHlwZSI6ImludGVnZXIifX0sInJlcXVpcmVkIjpbImEiLCJiIl0sInR5cGUiOiJvYmplY3QifSwic3RyaWN0Ijp0cnVlfSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 256,
+      "messages": [
+        {
+          "content": "Call multiply_numbers with a=6 and b=7.",
+          "role": "user"
+        },
+        {
+          "content": "",
+          "role": "assistant",
+          "tool_calls": [
+            {
+              "function": {
+                "arguments": "{\"a\":6,\"b\":7}",
+                "name": "multiply_numbers"
+              },
+              "id": "chatcmpl-tool-ba5b24ba89535013",
+              "type": "function"
+            }
+          ]
+        },
+        {
+          "content": "42",
+          "name": "multiply_numbers",
+          "role": "tool",
+          "tool_call_id": "chatcmpl-tool-ba5b24ba89535013"
+        }
+      ],
+      "model": "deepseek-v4.1-flash-1017",
+      "reasoning_effort": "none",
+      "stream": false,
+      "tool_choice": "none",
+      "tools": [
+        {
+          "function": {
+            "description": "Multiply two integers",
+            "name": "multiply_numbers",
+            "parameters": {
+              "additionalProperties": false,
+              "properties": {
+                "a": {
+                  "type": "integer"
+                },
+                "b": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "a",
+                "b"
+              ],
+              "type": "object"
+            },
+            "strict": true
+          },
+          "type": "function"
+        }
+      ]
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.7.5"
+      ],
+      "x-inference-environment": [
+        "fixture"
+      ],
+      "x-inference-task-id": [
+        "reqllm-deepseek-tool_round_trip_2"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.inference.net/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "The result of calling `multiply_numbers` with a=6 and b=7 is **42**.",
+            "reasoning_content": "",
+            "role": "assistant",
+            "tool_calls": []
+          }
+        }
+      ],
+      "created": 1793050724,
+      "id": "gv2_UVgGg1N3cLwkdaPlkRdyS",
+      "model": "deepseek-v4.1-flash-1017",
+      "object": "chat.completion",
+      "system_fingerprint": "inference.net",
+      "usage": {
+        "completion_tokens": 22,
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "prompt_tokens": 83,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "created_cache_tokens": 0
+        },
+        "reasoning_tokens": 0,
+        "total_tokens": 105
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "X-Trace-Id"
+      ],
+      "cache-control": [
+        "max-age=0, private, must-revalidate"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a50c9c1569a8844d-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-length": [
+        "580"
+      ],
+      "content-security-policy": [
+        "frame-ancestors 'none'"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Mon, 26 Oct 2026 21:38:45 GMT"
+      ],
+      "ratelimit-limit": [
+        "250"
+      ],
+      "ratelimit-remaining": [
+        "241"
+      ],
+      "ratelimit-reset": [
+        "1793050740"
+      ],
+      "referrer-policy": [
+        "strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains"
+      ],
+      "vary": [
+        "accept-encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-frame-options": [
+        "DENY"
+      ],
+      "x-inference-id": [
+        "gv2_UVgGg1N3cLwkdaPlkRdyS"
+      ],
+      "x-inference-sticky-routing": [
+        "fallback"
+      ],
+      "x-inference-sticky-routing-depth": [
+        "1"
+      ],
+      "x-inference-sticky-routing-enabled": [
+        "true"
+      ],
+      "x-request-id": [
+        "418991a9-8bbc-4594-a905-e82f4370f4a6"
+      ],
+      "x-trace-id": [
+        "77285cdcefaa3c329c52a644327f2b2a"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

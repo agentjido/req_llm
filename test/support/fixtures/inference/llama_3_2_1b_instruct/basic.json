@@ -1,0 +1,154 @@
+{
+  "captured_at": "2026-10-26T21:38:41.462864Z",
+  "model_spec": "inference:llama-3.2-1b-instruct",
+  "provider": "inference",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoxMjgsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiU2F5IGhlbGxvIGluIG9uZSBzaG9ydCBzZW50ZW5jZS4iLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJsbGFtYS0zLjItMWItaW5zdHJ1Y3QiLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 128,
+      "messages": [
+        {
+          "content": "Say hello in one short sentence.",
+          "role": "user"
+        }
+      ],
+      "model": "llama-3.2-1b-instruct",
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.7.5"
+      ],
+      "x-inference-environment": [
+        "fixture"
+      ],
+      "x-inference-task-id": [
+        "reqllm-llama-basic"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.inference.net/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Hello!",
+            "reasoning": null,
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "stop"
+        }
+      ],
+      "created": 1793050721,
+      "id": "gen-1793050721-MoaEimuQjW4UbIJVzj2V",
+      "model": "llama-3.2-1b-instruct",
+      "object": "chat.completion",
+      "provider": "Cloudflare",
+      "service_tier": null,
+      "system_fingerprint": null,
+      "usage": {
+        "completion_tokens": 3,
+        "completion_tokens_details": {
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "reasoning_tokens": 0
+        },
+        "cost": 1.089e-6,
+        "cost_details": {
+          "upstream_inference_completions_cost": 6.03e-7,
+          "upstream_inference_cost": 1.089e-6,
+          "upstream_inference_prompt_cost": 4.86e-7
+        },
+        "is_byok": false,
+        "prompt_tokens": 18,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 0,
+          "video_tokens": 0
+        },
+        "total_tokens": 21
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "X-Trace-Id"
+      ],
+      "cf-ray": [
+        "a50c9bfe6d96b475-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-length": [
+        "801"
+      ],
+      "content-security-policy": [
+        "frame-ancestors 'none'"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Mon, 26 Oct 2026 21:38:41 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "ratelimit-limit": [
+        "250"
+      ],
+      "ratelimit-remaining": [
+        "244"
+      ],
+      "ratelimit-reset": [
+        "1793050740"
+      ],
+      "referrer-policy": [
+        "strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-frame-options": [
+        "DENY"
+      ],
+      "x-generation-id": [
+        "gen-1793050721-MoaEimuQjW4UbIJVzj2V"
+      ],
+      "x-request-id": [
+        "b9ed386a-a3a1-4545-b574-ec11fb0a1190"
+      ],
+      "x-trace-id": [
+        "407801aaf1326ae896aaeb4ddbd2968e"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

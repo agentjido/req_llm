@@ -1,0 +1,72 @@
+{
+  "captured_at": "2026-10-26T21:38:51.221746Z",
+  "chunks": [
+    {
+      "b64": "ZGF0YTogeyJpZCI6IiIsImNyZWF0ZWQiOjE3OTMwNTA3MzAsIm1vZGVsIjoiZ3B0LTUtbmFubyIsIm9iamVjdCI6ImNoYXQuY29tcGxldGlvbi5jaHVuayIsImNob2ljZXMiOltdfQoKZGF0YTogeyJpZCI6ImNoYXRjbXBsLUVkTWgwQlBBSXBLUDFnSlRQSzhyVDh6VFNPMUVwIiwib2JqZWN0IjoiY2hhdC5jb21wbGV0aW9uLmNodW5rIiwiY3JlYXRlZCI6MTc5MzA1MDczMCwibW9kZWwiOiJncHQtNS1uYW5vIiwiY2hvaWNlcyI6W3siaW5kZXgiOjAsImRlbHRhIjp7InJvbGUiOiJhc3Npc3RhbnQiLCJjb250ZW50IjoiIn19XX0KCg=="
+    },
+    {
+      "b64": "ZGF0YTogeyJpZCI6ImNoYXRjbXBsLUVkTWgwQlBBSXBLUDFnSlRQSzhyVDh6VFNPMUVwIiwib2JqZWN0IjoiY2hhdC5jb21wbGV0aW9uLmNodW5rIiwiY3JlYXRlZCI6MTc5MzA1MDczMCwibW9kZWwiOiJncHQtNS1uYW5vIiwiY2hvaWNlcyI6W3siaW5kZXgiOjAsImRlbHRhIjp7ImNvbnRlbnQiOiI0MyJ9fV19CgpkYXRhOiB7ImlkIjoiY2hhdGNtcGwtRWRNaDBCUEFJcEtQMWdKVFBLOHJUOHpUU08xRXAiLCJvYmplY3QiOiJjaGF0LmNvbXBsZXRpb24uY2h1bmsiLCJjcmVhdGVkIjoxNzkzMDUwNzMwLCJtb2RlbCI6ImdwdC01LW5hbm8iLCJjaG9pY2VzIjpbeyJpbmRleCI6MCwiZGVsdGEiOnt9LCJmaW5pc2hfcmVhc29uIjoic3RvcCJ9XX0KCg=="
+    },
+    {
+      "b64": "ZGF0YTogeyJpZCI6ImNoYXRjbXBsLUVkTWgwQlBBSXBLUDFnSlRQSzhyVDh6VFNPMUVwIiwiY3JlYXRlZCI6MTc5MzA1MDczMCwibW9kZWwiOiJncHQtNS1uYW5vIiwib2JqZWN0IjoiY2hhdC5jb21wbGV0aW9uLmNodW5rIiwiY2hvaWNlcyI6W3siaW5kZXgiOjAsImRlbHRhIjp7fX1dLCJ1c2FnZSI6eyJjb21wbGV0aW9uX3Rva2VucyI6MTAsInByb21wdF90b2tlbnMiOjIwLCJ0b3RhbF90b2tlbnMiOjMwLCJjb21wbGV0aW9uX3Rva2Vuc19kZXRhaWxzIjp7ImFjY2VwdGVkX3ByZWRpY3Rpb25fdG9rZW5zIjowLCJhdWRpb190b2tlbnMiOjAsInJlYXNvbmluZ190b2tlbnMiOjAsInJlamVjdGVkX3ByZWRpY3Rpb25fdG9rZW5zIjowfSwicHJvbXB0X3Rva2Vuc19kZXRhaWxzIjp7ImF1ZGlvX3Rva2VucyI6MCwiY2FjaGVkX3Rva2VucyI6MH0sImNvc3QiOjQuOTk5OTk5OTk5OTk5OTk5NmUtNn19CgpkYXRhOiBbRE9ORV0KCg=="
+    }
+  ],
+  "model_spec": "inference:gpt-5-nano",
+  "provider": "inference",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyNTYsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiV2hhdCBpcyAxOCBwbHVzIDI1PyBSZXBseSB3aXRoIG9ubHkgdGhlIG51bWJlci4iLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJncHQtNS1uYW5vIiwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInN0cmVhbSI6dHJ1ZSwic3RyZWFtX29wdGlvbnMiOnsiaW5jbHVkZV91c2FnZSI6dHJ1ZX19"
+    },
+    "canonical_json": {
+      "max_tokens": 256,
+      "messages": [
+        {
+          "content": "What is 18 plus 25? Reply with only the number.",
+          "role": "user"
+        }
+      ],
+      "model": "gpt-5-nano",
+      "reasoning_effort": "low",
+      "stream": true,
+      "stream_options": {
+        "include_usage": true
+      }
+    },
+    "headers": {
+      "accept": "text/event-stream",
+      "authorization": "[REDACTED:authorization]",
+      "content-type": "application/json",
+      "x-inference-environment": "fixture",
+      "x-inference-task-id": "reqllm-reasoning_streaming"
+    },
+    "method": "POST",
+    "url": "https://api.inference.net/v1/chat/completions"
+  },
+  "response": {
+    "body": null,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "X-Trace-Id",
+      "cache-control": "no-cache",
+      "cf-cache-status": "DYNAMIC",
+      "cf-ray": "a50c9c35e8b7844d-ORD",
+      "connection": "keep-alive",
+      "content-security-policy": "frame-ancestors 'none'",
+      "content-type": "text/event-stream; charset=utf-8",
+      "date": "Mon, 26 Oct 2026 21:38:50 GMT",
+      "ratelimit-limit": "250",
+      "ratelimit-remaining": "241",
+      "ratelimit-reset": "1793050740",
+      "referrer-policy": "strict-origin-when-cross-origin",
+      "server": "cloudflare",
+      "strict-transport-security": "max-age=31536000; includeSubDomains",
+      "transfer-encoding": "chunked",
+      "x-content-type-options": "nosniff",
+      "x-frame-options": "DENY",
+      "x-request-id": "ec1f2336-047f-4847-b2a9-a5d5003d7474",
+      "x-trace-id": "f099f4fb588822aefd92b10e472a8dae"
+    },
+    "status": 200
+  },
+  "streaming": true
+}

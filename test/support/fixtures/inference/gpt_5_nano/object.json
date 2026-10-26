@@ -1,0 +1,180 @@
+{
+  "captured_at": "2026-10-26T21:38:48.224778Z",
+  "model_spec": "inference:gpt-5-nano",
+  "provider": "inference",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyNTYsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiUmV0dXJuIHN0YXR1cyByZWFkeSBhbmQgY291bnQgMy4iLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJncHQtNS1uYW5vIiwicmVhc29uaW5nX2VmZm9ydCI6Im1pbmltYWwiLCJyZXNwb25zZV9mb3JtYXQiOnsianNvbl9zY2hlbWEiOnsibmFtZSI6InN0cnVjdHVyZWRfb3V0cHV0Iiwic2NoZW1hIjp7ImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjpmYWxzZSwicHJvcGVydGllcyI6eyJjb3VudCI6eyJ0eXBlIjoiaW50ZWdlciJ9LCJzdGF0dXMiOnsidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsiY291bnQiLCJzdGF0dXMiXSwidHlwZSI6Im9iamVjdCJ9LCJzdHJpY3QiOnRydWV9LCJ0eXBlIjoianNvbl9zY2hlbWEifSwic3RyZWFtIjpmYWxzZX0="
+    },
+    "canonical_json": {
+      "max_tokens": 256,
+      "messages": [
+        {
+          "content": "Return status ready and count 3.",
+          "role": "user"
+        }
+      ],
+      "model": "gpt-5-nano",
+      "reasoning_effort": "minimal",
+      "response_format": {
+        "json_schema": {
+          "name": "structured_output",
+          "schema": {
+            "additionalProperties": false,
+            "properties": {
+              "count": {
+                "type": "integer"
+              },
+              "status": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "count",
+              "status"
+            ],
+            "type": "object"
+          },
+          "strict": true
+        },
+        "type": "json_schema"
+      },
+      "stream": false
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.7.5"
+      ],
+      "x-inference-environment": [
+        "fixture"
+      ],
+      "x-inference-task-id": [
+        "reqllm-object"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.inference.net/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "annotations": [],
+            "content": "{\"status\":\"ready\",\"count\":3}",
+            "provider_specific_fields": {
+              "refusal": null
+            },
+            "role": "assistant"
+          },
+          "provider_specific_fields": {
+            "content_filter_results": {}
+          }
+        }
+      ],
+      "created": 1793050727,
+      "id": "chatcmpl-EdMgxwNrzQP9mXyxx7c0AlVcjpgWp",
+      "model": "gpt-5-nano",
+      "object": "chat.completion",
+      "routing": {
+        "serving_pipereplica": "d20260925092650-949df6a0-default-r2-dp0-default"
+      },
+      "service_tier": "default",
+      "usage": {
+        "completion_tokens": 22,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "latency_checkpoint": {
+          "engine_tbt_ms": 3,
+          "engine_ttft_ms": 17,
+          "engine_ttlt_ms": 125,
+          "pre_inference_ms": 128,
+          "service_tbt_ms": 7,
+          "service_ttft_ms": 397,
+          "service_ttlt_ms": 602,
+          "user_visible_ttft_ms": 269
+        },
+        "prompt_tokens": 47,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 0
+        },
+        "total_tokens": 69
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "X-Trace-Id"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a50c9c22abab844d-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-length": [
+        "924"
+      ],
+      "content-security-policy": [
+        "frame-ancestors 'none'"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Mon, 26 Oct 2026 21:38:48 GMT"
+      ],
+      "ratelimit-limit": [
+        "250"
+      ],
+      "ratelimit-remaining": [
+        "243"
+      ],
+      "ratelimit-reset": [
+        "1793050740"
+      ],
+      "referrer-policy": [
+        "strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-frame-options": [
+        "DENY"
+      ],
+      "x-request-id": [
+        "1a484f30-dabc-4798-93cc-b2fac7c9eda5"
+      ],
+      "x-trace-id": [
+        "9b83b26f16c75c86a6e4ef3df8a22f01"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

@@ -1,0 +1,204 @@
+{
+  "captured_at": "2026-10-26T21:38:58.071177Z",
+  "model_spec": "inference:gpt-5-nano",
+  "provider": "inference",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyNTYsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiQ2FsbCBhZGRfbnVtYmVycyB3aXRoIGE9MiBhbmQgYj0zLiIsInJvbGUiOiJ1c2VyIn0seyJjb250ZW50IjoiIiwicm9sZSI6ImFzc2lzdGFudCIsInRvb2xfY2FsbHMiOlt7ImZ1bmN0aW9uIjp7ImFyZ3VtZW50cyI6IntcImFcIjoyLFwiYlwiOjN9IiwibmFtZSI6ImFkZF9udW1iZXJzIn0sImlkIjoiY2FsbF9NMWtTbDZzSlVFWExDeWRPR2kwY2lNb2YiLCJ0eXBlIjoiZnVuY3Rpb24ifV19LHsiY29udGVudCI6IjUiLCJuYW1lIjoiYWRkX251bWJlcnMiLCJyb2xlIjoidG9vbCIsInRvb2xfY2FsbF9pZCI6ImNhbGxfTTFrU2w2c0pVRVhMQ3lkT0dpMGNpTW9mIn1dLCJtb2RlbCI6ImdwdC01LW5hbm8iLCJyZWFzb25pbmdfZWZmb3J0IjoibWluaW1hbCIsInN0cmVhbSI6ZmFsc2UsInRvb2xfY2hvaWNlIjoibm9uZSIsInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkFkZCB0d28gaW50ZWdlcnMiLCJuYW1lIjoiYWRkX251bWJlcnMiLCJwYXJhbWV0ZXJzIjp7ImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjpmYWxzZSwicHJvcGVydGllcyI6eyJhIjp7InR5cGUiOiJpbnRlZ2VyIn0sImIiOnsidHlwZSI6ImludGVnZXIifX0sInJlcXVpcmVkIjpbImEiLCJiIl0sInR5cGUiOiJvYmplY3QifSwic3RyaWN0Ijp0cnVlfSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 256,
+      "messages": [
+        {
+          "content": "Call add_numbers with a=2 and b=3.",
+          "role": "user"
+        },
+        {
+          "content": "",
+          "role": "assistant",
+          "tool_calls": [
+            {
+              "function": {
+                "arguments": "{\"a\":2,\"b\":3}",
+                "name": "add_numbers"
+              },
+              "id": "call_M1kSl6sJUEXLCydOGi0ciMof",
+              "type": "function"
+            }
+          ]
+        },
+        {
+          "content": "5",
+          "name": "add_numbers",
+          "role": "tool",
+          "tool_call_id": "call_M1kSl6sJUEXLCydOGi0ciMof"
+        }
+      ],
+      "model": "gpt-5-nano",
+      "reasoning_effort": "minimal",
+      "stream": false,
+      "tool_choice": "none",
+      "tools": [
+        {
+          "function": {
+            "description": "Add two integers",
+            "name": "add_numbers",
+            "parameters": {
+              "additionalProperties": false,
+              "properties": {
+                "a": {
+                  "type": "integer"
+                },
+                "b": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "a",
+                "b"
+              ],
+              "type": "object"
+            },
+            "strict": true
+          },
+          "type": "function"
+        }
+      ]
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.7.5"
+      ],
+      "x-inference-environment": [
+        "fixture"
+      ],
+      "x-inference-task-id": [
+        "reqllm-tool_round_trip_2"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.inference.net/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "annotations": [],
+            "content": "I’m currently unable to perform that calculation directly. However, if you add 2 and 3, the result is 5. If you’d like, I can show you simple ways to verify this yourself.",
+            "provider_specific_fields": {
+              "refusal": null
+            },
+            "role": "assistant"
+          },
+          "provider_specific_fields": {
+            "content_filter_results": {}
+          }
+        }
+      ],
+      "created": 1793050737,
+      "id": "chatcmpl-EdMh7oNZZOQ6HvbPGEVBRQwXdmBoo",
+      "model": "gpt-5-nano",
+      "object": "chat.completion",
+      "routing": {
+        "serving_pipereplica": "d20260928093615-c368571a-default-r0-dp0-default"
+      },
+      "service_tier": "default",
+      "usage": {
+        "completion_tokens": 52,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "latency_checkpoint": {
+          "engine_tbt_ms": 4,
+          "engine_ttft_ms": 22,
+          "engine_ttlt_ms": 289,
+          "pre_inference_ms": 226,
+          "service_tbt_ms": 5,
+          "service_ttft_ms": 426,
+          "service_ttlt_ms": 705,
+          "user_visible_ttft_ms": 200
+        },
+        "prompt_tokens": 171,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 0
+        },
+        "total_tokens": 223
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "X-Trace-Id"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a50c9c60a9dd870a-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-length": [
+        "1067"
+      ],
+      "content-security-policy": [
+        "frame-ancestors 'none'"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Mon, 26 Oct 2026 21:38:58 GMT"
+      ],
+      "ratelimit-limit": [
+        "250"
+      ],
+      "ratelimit-remaining": [
+        "236"
+      ],
+      "ratelimit-reset": [
+        "1793050740"
+      ],
+      "referrer-policy": [
+        "strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-frame-options": [
+        "DENY"
+      ],
+      "x-request-id": [
+        "79787578-edea-40d5-971c-d1aa2a35d603"
+      ],
+      "x-trace-id": [
+        "6961002ef5456c987281e7887928de95"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

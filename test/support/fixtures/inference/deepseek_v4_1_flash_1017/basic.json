@@ -1,0 +1,157 @@
+{
+  "captured_at": "2026-10-26T21:38:46.715095Z",
+  "model_spec": "inference:deepseek-v4.1-flash-1017",
+  "provider": "inference",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyNTYsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiUmVwbHkgd2l0aCBvbmx5IERFRVBTRUVLX09LLiIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImRlZXBzZWVrLXY0LjEtZmxhc2gtMTAxNyIsInJlYXNvbmluZ19lZmZvcnQiOiJub25lIiwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+    },
+    "canonical_json": {
+      "max_tokens": 256,
+      "messages": [
+        {
+          "content": "Reply with only DEEPSEEK_OK.",
+          "role": "user"
+        }
+      ],
+      "model": "deepseek-v4.1-flash-1017",
+      "reasoning_effort": "none",
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.7.5"
+      ],
+      "x-inference-environment": [
+        "fixture"
+      ],
+      "x-inference-task-id": [
+        "reqllm-deepseek-basic"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.inference.net/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "DEEPSEEK_OK",
+            "reasoning_content": "",
+            "role": "assistant",
+            "tool_calls": []
+          }
+        }
+      ],
+      "created": 1793050726,
+      "id": "gv2_qp2OyxsgLcpn4oQr107w9",
+      "model": "deepseek-v4.1-flash-1017",
+      "object": "chat.completion",
+      "system_fingerprint": "inference.net",
+      "usage": {
+        "completion_tokens": 6,
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "prompt_tokens": 13,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "created_cache_tokens": 0
+        },
+        "reasoning_tokens": 0,
+        "total_tokens": 19
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "X-Trace-Id"
+      ],
+      "cache-control": [
+        "max-age=0, private, must-revalidate"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a50c9c1daca7844d-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-length": [
+        "521"
+      ],
+      "content-security-policy": [
+        "frame-ancestors 'none'"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Mon, 26 Oct 2026 21:38:46 GMT"
+      ],
+      "ratelimit-limit": [
+        "250"
+      ],
+      "ratelimit-remaining": [
+        "239"
+      ],
+      "ratelimit-reset": [
+        "1793050740"
+      ],
+      "referrer-policy": [
+        "strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains"
+      ],
+      "vary": [
+        "accept-encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-frame-options": [
+        "DENY"
+      ],
+      "x-inference-id": [
+        "gv2_qp2OyxsgLcpn4oQr107w9"
+      ],
+      "x-inference-sticky-routing": [
+        "hit"
+      ],
+      "x-inference-sticky-routing-depth": [
+        "1"
+      ],
+      "x-inference-sticky-routing-enabled": [
+        "true"
+      ],
+      "x-request-id": [
+        "9c47f7cf-d349-45e9-862e-0aa204ce9ea1"
+      ],
+      "x-trace-id": [
+        "982936a26d0de471b8e52a00d9bf10a7"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

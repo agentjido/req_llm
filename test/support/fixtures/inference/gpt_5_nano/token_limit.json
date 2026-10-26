@@ -1,0 +1,157 @@
+{
+  "captured_at": "2026-10-26T21:38:59.174893Z",
+  "model_spec": "inference:gpt-5-nano",
+  "provider": "inference",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoxNiwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJXcml0ZSBhIGxvbmcgbGlzdCBvZiBudW1iZXJzLiIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImdwdC01LW5hbm8iLCJyZWFzb25pbmdfZWZmb3J0IjoibWluaW1hbCIsInN0cmVhbSI6ZmFsc2V9"
+    },
+    "canonical_json": {
+      "max_tokens": 16,
+      "messages": [
+        {
+          "content": "Write a long list of numbers.",
+          "role": "user"
+        }
+      ],
+      "model": "gpt-5-nano",
+      "reasoning_effort": "minimal",
+      "stream": false
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.7.5"
+      ],
+      "x-inference-environment": [
+        "fixture"
+      ],
+      "x-inference-task-id": [
+        "reqllm-token_limit"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.inference.net/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "length",
+          "index": 0,
+          "message": {
+            "annotations": [],
+            "content": "",
+            "provider_specific_fields": {
+              "refusal": null
+            },
+            "role": "assistant"
+          },
+          "provider_specific_fields": {
+            "content_filter_results": {}
+          }
+        }
+      ],
+      "created": 1793050738,
+      "id": "chatcmpl-EdMh85oOjwjEKVKIz2BT3OPwTcxQ8",
+      "model": "gpt-5-nano",
+      "object": "chat.completion",
+      "routing": {
+        "serving_pipereplica": "d20260925092650-949df6a0-default-r1-dp0-default"
+      },
+      "service_tier": "default",
+      "usage": {
+        "completion_tokens": 16,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "reasoning_tokens": 16,
+          "rejected_prediction_tokens": 0
+        },
+        "latency_checkpoint": {
+          "engine_tbt_ms": 3,
+          "engine_ttft_ms": 15,
+          "engine_ttlt_ms": 69,
+          "pre_inference_ms": 92,
+          "service_tbt_ms": 7,
+          "service_ttft_ms": 339,
+          "service_ttlt_ms": 439,
+          "user_visible_ttft_ms": 247
+        },
+        "prompt_tokens": 13,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 0
+        },
+        "total_tokens": 29
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "X-Trace-Id"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a50c9c699b40870a-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-length": [
+        "891"
+      ],
+      "content-security-policy": [
+        "frame-ancestors 'none'"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Mon, 26 Oct 2026 21:38:59 GMT"
+      ],
+      "ratelimit-limit": [
+        "250"
+      ],
+      "ratelimit-remaining": [
+        "235"
+      ],
+      "ratelimit-reset": [
+        "1793050740"
+      ],
+      "referrer-policy": [
+        "strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-frame-options": [
+        "DENY"
+      ],
+      "x-request-id": [
+        "05ad2a4a-2ff9-4f11-a62d-041d7efd3d6f"
+      ],
+      "x-trace-id": [
+        "8f7c005f0542c146fffbb9a0b1394ce2"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

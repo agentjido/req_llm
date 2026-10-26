@@ -1,0 +1,156 @@
+{
+  "captured_at": "2026-10-26T21:38:45.913455Z",
+  "model_spec": "inference:deepseek-v4.1-flash-1017",
+  "provider": "inference",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoxNiwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJXcml0ZSBhIGxvbmcgbGlzdCBvZiBudW1iZXJzLiIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImRlZXBzZWVrLXY0LjEtZmxhc2gtMTAxNyIsInJlYXNvbmluZ19lZmZvcnQiOiJub25lIiwic3RyZWFtIjpmYWxzZX0="
+    },
+    "canonical_json": {
+      "max_tokens": 16,
+      "messages": [
+        {
+          "content": "Write a long list of numbers.",
+          "role": "user"
+        }
+      ],
+      "model": "deepseek-v4.1-flash-1017",
+      "reasoning_effort": "none",
+      "stream": false
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.7.5"
+      ],
+      "x-inference-environment": [
+        "fixture"
+      ],
+      "x-inference-task-id": [
+        "reqllm-deepseek-token_limit"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.inference.net/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "length",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Here's a long list of numbers, starting from 1 and going up to",
+            "reasoning_content": "",
+            "role": "assistant",
+            "tool_calls": []
+          }
+        }
+      ],
+      "created": 1793050725,
+      "id": "gv2_EmVtOqPdmyWMnhxlMzUuc",
+      "model": "deepseek-v4.1-flash-1017",
+      "object": "chat.completion",
+      "system_fingerprint": "inference.net",
+      "usage": {
+        "completion_tokens": 16,
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "prompt_tokens": 11,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "created_cache_tokens": 0
+        },
+        "reasoning_tokens": 0,
+        "total_tokens": 27
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "X-Trace-Id"
+      ],
+      "cache-control": [
+        "max-age=0, private, must-revalidate"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "a50c9c185dfd844d-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-length": [
+        "575"
+      ],
+      "content-security-policy": [
+        "frame-ancestors 'none'"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Mon, 26 Oct 2026 21:38:45 GMT"
+      ],
+      "ratelimit-limit": [
+        "250"
+      ],
+      "ratelimit-remaining": [
+        "240"
+      ],
+      "ratelimit-reset": [
+        "1793050740"
+      ],
+      "referrer-policy": [
+        "strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains"
+      ],
+      "vary": [
+        "accept-encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-frame-options": [
+        "DENY"
+      ],
+      "x-inference-id": [
+        "gv2_EmVtOqPdmyWMnhxlMzUuc"
+      ],
+      "x-inference-sticky-routing": [
+        "hit"
+      ],
+      "x-inference-sticky-routing-depth": [
+        "1"
+      ],
+      "x-inference-sticky-routing-enabled": [
+        "true"
+      ],
+      "x-request-id": [
+        "a64a5d37-0b38-4d5e-969d-7def75ff8de9"
+      ],
+      "x-trace-id": [
+        "d17c4ece214be04a2b10f4e14687aa2a"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}
