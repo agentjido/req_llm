@@ -25,25 +25,26 @@ defmodule ReqLLM.Providers.CheaperInference do
 
   use ReqLLM.Provider.Defaults
 
+  alias ReqLLM.Provider.Defaults
+
   @provider_schema []
+  @supported_operations [:chat, :object]
 
   @impl ReqLLM.Provider
-  def prepare_request(operation, _model_spec, _input, _opts)
-      when operation in [:embedding, :transcription, :speech] do
+  def prepare_request(operation, model_spec, input, opts)
+      when operation in @supported_operations do
+    Defaults.prepare_request(__MODULE__, operation, model_spec, input, opts)
+  end
+
+  def prepare_request(operation, _model_spec, _input, _opts) do
     unsupported_operation(operation)
   end
 
-  def prepare_request(operation, model_spec, input, opts) do
-    ReqLLM.Provider.Defaults.prepare_request(__MODULE__, operation, model_spec, input, opts)
-  end
-
   defp unsupported_operation(operation) do
-    supported_operations = [:chat, :object]
-
     {:error,
      ReqLLM.Error.Invalid.Parameter.exception(
        parameter:
-         "operation: #{inspect(operation)} not supported by #{inspect(__MODULE__)}. Supported operations: #{inspect(supported_operations)}"
+         "operation: #{inspect(operation)} not supported by #{inspect(__MODULE__)}. Supported operations: #{inspect(@supported_operations)}"
      )}
   end
 end

@@ -73,29 +73,51 @@ defmodule ReqLLM.Providers.CheaperInferenceTest do
       assert request.options[:base_url] == "https://api.cheaperinference.com/v1"
     end
 
-    test "prepare_request rejects non-chat operations Cheaper Inference does not expose here" do
+    test "prepare_request for :object creates a tool-based chat request" do
       model = cheaperinference_model()
+      {:ok, schema} = ReqLLM.Schema.compile(answer: [type: :string, required: true])
 
-      {:error, error} = CheaperInference.prepare_request(:embedding, model, "Hello", [])
-      assert %ReqLLM.Error.Invalid.Parameter{} = error
+      {:ok, request} =
+        CheaperInference.prepare_request(:object, model, "Return an answer",
+          compiled_schema: schema
+        )
+
+      assert request.url.path == "/chat/completions"
+      assert request.options[:operation] == :object
+      assert [%ReqLLM.Tool{name: "structured_output"}] = request.options[:tools]
     end
 
-    test "prepare_request rejects unsupported operations" do
+    test "prepare_request rejects every unsupported operation with an accurate error" do
       model = cheaperinference_model()
       context = context_fixture()
 
-      {:error, error} = CheaperInference.prepare_request(:unsupported, model, context, [])
-      assert %ReqLLM.Error.Invalid.Parameter{} = error
+      for operation <- [
+            :embedding,
+            :image,
+            :speech,
+            :transcription,
+            :rerank,
+            :ocr,
+            :video,
+            :compact,
+            :evaluate,
+            :unsupported
+          ] do
+        assert {:error, %ReqLLM.Error.Invalid.Parameter{} = error} =
+                 CheaperInference.prepare_request(operation, model, context, [])
+
+        assert error.parameter =~ "operation: #{inspect(operation)} not supported"
+        assert error.parameter =~ "Supported operations: [:chat, :object]"
+      end
     end
   end
 
   describe "authentication wiring" do
     test "attach adds Bearer authorization header" do
-      attached = CheaperInference.attach(Req.new(), cheaperinference_model(), [])
+      attached =
+        CheaperInference.attach(Req.new(), cheaperinference_model(), api_key: "test-api-key")
 
-      auth_header = attached.headers["authorization"]
-      assert auth_header != nil
-      assert String.starts_with?(List.first(auth_header), "Bearer ")
+      assert attached.headers["authorization"] == ["Bearer test-api-key"]
     end
 
     test "attach adds pipeline steps" do

@@ -55,7 +55,7 @@ show the module's broad scope. The selected model can support fewer operations.
 | Atlas Cloud | `atlascloud` | text | — |
 | [Azure OpenAI](https://llmcatalog.dev/?providers=azure) | `azure` | text, embedding, image | [Guide](guides/azure.md) |
 | [Cerebras](https://llmcatalog.dev/?providers=cerebras) | `cerebras` | text | [Guide](guides/cerebras.md) |
-| Cheaper Inference | `cheaperinference` | text | — |
+| [Cheaper Inference](https://api.cheaperinference.com/docs) | `cheaperinference` | text | — |
 | [Cohere](https://llmcatalog.dev/?providers=cohere) | `cohere` | text, rerank | — |
 | [DeepSeek](https://llmcatalog.dev/?providers=deepseek) | `deepseek` | text | [Guide](guides/deepseek.md) |
 | [ElevenLabs](https://llmcatalog.dev/?providers=elevenlabs) | `elevenlabs` | speech | — |
