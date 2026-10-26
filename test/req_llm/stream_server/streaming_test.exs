@@ -332,6 +332,7 @@ defmodule ReqLLM.StreamServer.StreamingTest do
           )
         end)
 
+      task_ref = Process.monitor(task.pid)
       StreamServer.attach_http_task(server, task.pid)
 
       assert_receive :stream_budget_attempt, 1_000
@@ -340,8 +341,12 @@ defmodule ReqLLM.StreamServer.StreamingTest do
       :ok = StreamServer.set_telemetry_context(server, nil)
       assert {:ok, metadata} = StreamServer.await_metadata(server, 1_000)
       assert %ReqLLM.Error.API.Timeout{kind: :total, timeout: 250} = metadata.error
+
+      assert_receive {:DOWN, ^task_ref, :process, task_pid, :cancelled}
+                     when task_pid == task.pid,
+                     1_000
+
       refute_received :stream_budget_attempt
-      refute Process.alive?(task.pid)
     end
 
     test "stream idle timeout finalizes after semantic inactivity" do
