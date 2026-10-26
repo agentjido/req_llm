@@ -325,13 +325,26 @@ defmodule ReqLLM.Providers.FireworksAI do
   atoms to the strings Fireworks expects, and forwards the full
   Fireworks-specific parameter surface (sampling, prompt cache keys,
   speculation, response_format, etc.). `stream_options.include_usage` is
-  added by `default_build_body/1` for streaming requests.
+  added by `default_build_body/1` for streaming requests. Embedding requests
+  keep the shared OpenAI-compatible body without these generation options.
   """
   @impl ReqLLM.Provider
   def build_body(request) do
-    ReqLLM.Provider.Defaults.default_build_body(request)
-    |> ReqLLM.Providers.OpenAI.AdapterHelpers.translate_tool_choice_format()
-    |> strip_rejected_message_fields()
+    body =
+      request
+      |> ReqLLM.Provider.Defaults.default_build_body()
+      |> ReqLLM.Providers.OpenAI.AdapterHelpers.translate_tool_choice_format()
+      |> strip_rejected_message_fields()
+
+    if request.options[:operation] == :embedding do
+      body
+    else
+      put_generation_options(body, request)
+    end
+  end
+
+  defp put_generation_options(body, request) do
+    body
     |> maybe_put(:reasoning_effort, fireworks_reasoning_effort(request))
     |> maybe_put(:prompt_cache_key, request.options[:prompt_cache_key])
     |> maybe_put(:prompt_cache_isolation_key, request.options[:prompt_cache_isolation_key])

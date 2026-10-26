@@ -121,6 +121,25 @@ defmodule ReqLLM.Providers.FireworksAITest do
       refute Map.has_key?(body, "metadata")
     end
 
+    test "encode_body omits chat-only Fireworks extras for embeddings" do
+      model = %LLMDB.Model{
+        id: "accounts/fireworks/models/qwen3-embedding-8b",
+        provider: :fireworks_ai,
+        capabilities: %{embeddings: true}
+      }
+
+      {:ok, request} =
+        FireworksAI.prepare_request(:embedding, model, "Hello", prompt_cache_key: "user-42")
+
+      body = request |> FireworksAI.encode_body() |> ReqLLM.Test.Helpers.json_body()
+
+      assert request.options[:context_length_exceeded_behavior] == "truncate"
+      assert body["model"] == "accounts/fireworks/models/qwen3-embedding-8b"
+      assert body["input"] == "Hello"
+      refute Map.has_key?(body, "prompt_cache_key")
+      refute Map.has_key?(body, "context_length_exceeded_behavior")
+    end
+
     test "encode_body strips reasoning_details, reasoning_content, and metadata from messages" do
       {:ok, model} =
         ReqLLM.model("fireworks_ai:accounts/fireworks/models/kimi-k2-instruct")
