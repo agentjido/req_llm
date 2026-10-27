@@ -418,50 +418,60 @@ defmodule ReqLLM.Providers.Azure do
   end
 
   def prepare_request(:object, model_spec, prompt, opts) do
-    {:ok, model} = ReqLLM.model(model_spec)
-    model_id = effective_model_id(model)
-    model_family = get_model_family(model_id)
+    with {:ok, model} <- ReqLLM.model(model_spec),
+         {:ok, opts} <-
+           ReqLLM.Provider.Options.normalize_namespaced_provider_options(
+             __MODULE__,
+             :object,
+             model,
+             opts
+           ),
+         {:ok, opts} <-
+           ReqLLM.Provider.Options.normalize_flat_provider_options(__MODULE__, opts) do
+      model_id = effective_model_id(model)
+      model_family = get_model_family(model_id)
 
-    opts_for_object =
-      opts
-      |> ReqLLM.Provider.Options.put_model_max_tokens_default(model, fallback: 4096)
-      |> Keyword.put(:operation, :object)
+      opts_for_object =
+        opts
+        |> ReqLLM.Provider.Options.put_model_max_tokens_default(model, fallback: 4096)
+        |> Keyword.put(:operation, :object)
 
-    case model_family do
-      "claude" ->
-        do_prepare_chat_request(model_spec, prompt, opts_for_object)
+      case model_family do
+        "claude" ->
+          do_prepare_chat_request(model_spec, prompt, opts_for_object)
 
-      _ ->
-        compiled_schema = Keyword.fetch!(opts, :compiled_schema)
+        _ ->
+          compiled_schema = Keyword.fetch!(opts, :compiled_schema)
 
-        strict_tool? =
-          get_provider_option(opts, :openai_structured_output_mode, nil) == :tool_strict
+          strict_tool? =
+            get_provider_option(opts, :openai_structured_output_mode, nil) == :tool_strict
 
-        structured_output_tool =
-          ReqLLM.Tool.new!(
-            name: "structured_output",
-            description: "Generate structured output matching the provided schema",
-            parameter_schema: compiled_schema.schema,
-            strict: strict_tool?,
-            callback: fn _args -> {:ok, "structured output generated"} end
-          )
+          structured_output_tool =
+            ReqLLM.Tool.new!(
+              name: "structured_output",
+              description: "Generate structured output matching the provided schema",
+              parameter_schema: compiled_schema.schema,
+              strict: strict_tool?,
+              callback: fn _args -> {:ok, "structured output generated"} end
+            )
 
-        # Check if model supports forced tool choice (specific tool by name)
-        # If not, fall back to "required" which just requires *some* tool call
-        tool_choice =
-          if get_in(model.capabilities, [:tools, :forced_choice]) == false do
-            "required"
-          else
-            %{type: "function", function: %{name: "structured_output"}}
-          end
+          # Check if model supports forced tool choice (specific tool by name)
+          # If not, fall back to "required" which just requires *some* tool call
+          tool_choice =
+            if get_in(model.capabilities, [:tools, :forced_choice]) == false do
+              "required"
+            else
+              %{type: "function", function: %{name: "structured_output"}}
+            end
 
-        opts_with_tool =
-          opts_for_object
-          |> Keyword.update(:tools, [structured_output_tool], &[structured_output_tool | &1])
-          |> Keyword.put(:tool_choice, tool_choice)
-          |> disable_parallel_tool_calls(strict_tool?)
+          opts_with_tool =
+            opts_for_object
+            |> Keyword.update(:tools, [structured_output_tool], &[structured_output_tool | &1])
+            |> Keyword.put(:tool_choice, tool_choice)
+            |> disable_parallel_tool_calls(strict_tool?)
 
-        do_prepare_chat_request(model_spec, prompt, opts_with_tool)
+          do_prepare_chat_request(model_spec, prompt, opts_with_tool)
+      end
     end
   end
 

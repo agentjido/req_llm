@@ -318,6 +318,23 @@ defmodule ReqLLM.Providers.Azure.StructuredOutputTest do
       assert body[:parallel_tool_calls] == false
     end
 
+    test "map provider_options support strict mode" do
+      provider_options = [
+        %{openai_structured_output_mode: :tool_strict},
+        %{"openai_structured_output_mode" => :tool_strict},
+        %{azure: %{openai_structured_output_mode: :tool_strict}},
+        %{"azure" => %{"openai_structured_output_mode" => :tool_strict}}
+      ]
+
+      for options <- provider_options do
+        body = prepare_object("openai_chat", provider_options: options).options[:json]
+
+        [tool] = body[:tools]
+        assert tool["function"]["strict"] == true
+        assert body[:parallel_tool_calls] == false
+      end
+    end
+
     defp stream_body(protocol, extra_opts) do
       request = prepare_object(protocol, extra_opts)
 
