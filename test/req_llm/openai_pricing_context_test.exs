@@ -235,7 +235,7 @@ defmodule ReqLLM.OpenAIPricingContextTest do
         handler_id,
         [:req_llm, :token_usage],
         fn _event, measurements, metadata, _config ->
-          if metadata.request_id == request_id do
+          if Map.get(metadata, :request_id) == request_id do
             send(pid, {:physical_usage, measurements})
           end
         end,
