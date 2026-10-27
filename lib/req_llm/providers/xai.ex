@@ -832,6 +832,8 @@ defmodule ReqLLM.Providers.XAI do
         end
       end)
 
+    {opts, warnings} = drop_reasoning_model_params(model, opts, warnings)
+
     {reasoning_effort, opts} = Keyword.pop(opts, :reasoning_effort)
 
     {opts, warnings} =
@@ -850,6 +852,32 @@ defmodule ReqLLM.Providers.XAI do
       end
 
     {opts, Enum.reverse(warnings)}
+  end
+
+  defp drop_reasoning_model_params(model, opts, warnings) do
+    if reasoning_model_rejects_sampling_params?(model) do
+      Enum.reduce([:stop, :presence_penalty, :frequency_penalty], {opts, warnings}, fn param,
+                                                                                       {acc_opts,
+                                                                                        acc_warnings} ->
+        case Keyword.pop(acc_opts, param) do
+          {nil, remaining_opts} ->
+            {remaining_opts, acc_warnings}
+
+          {_value, remaining_opts} ->
+            warning = "#{param} is not supported by #{model.id} and will be ignored"
+            {remaining_opts, [warning | acc_warnings]}
+        end
+      end)
+    else
+      {opts, warnings}
+    end
+  end
+
+  # xAI rejects `stop`, `presence_penalty` and `frequency_penalty` on reasoning models
+  # (https://docs.x.ai/developers/model-capabilities/text/reasoning).
+  defp reasoning_model_rejects_sampling_params?(%{id: id}) do
+    not String.contains?(id, "non-reasoning") and
+      (String.starts_with?(id, "grok-4") or String.starts_with?(id, "grok-3-mini"))
   end
 
   defp reasoning_effort_supported?(%{id: "grok-build-" <> _}), do: false

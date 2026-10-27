@@ -742,6 +742,36 @@ defmodule ReqLLM.Providers.XAITest do
       assert length(warnings) == 2
     end
 
+    test "drops stop, presence_penalty and frequency_penalty on reasoning models" do
+      opts = [temperature: 0.7, stop: ["END"], presence_penalty: 0.5, frequency_penalty: 0.5]
+
+      for id <- ["grok-4", "grok-4.20-0309-reasoning", "grok-3-mini"] do
+        {:ok, model} = ReqLLM.model("xai:#{id}")
+        {translated_opts, warnings} = XAI.translate_options(:chat, model, opts)
+
+        refute Keyword.has_key?(translated_opts, :stop)
+        refute Keyword.has_key?(translated_opts, :presence_penalty)
+        refute Keyword.has_key?(translated_opts, :frequency_penalty)
+        assert Keyword.get(translated_opts, :temperature) == 0.7
+        assert "stop is not supported by #{id} and will be ignored" in warnings
+        assert length(warnings) == 3
+      end
+    end
+
+    test "keeps stop and penalties on models that are not reasoning models" do
+      opts = [stop: ["END"], presence_penalty: 0.5, frequency_penalty: 0.5]
+
+      for id <- ["grok-3", "grok-4.20-0309-non-reasoning"] do
+        {:ok, model} = ReqLLM.model("xai:#{id}")
+        {translated_opts, warnings} = XAI.translate_options(:chat, model, opts)
+
+        assert Keyword.get(translated_opts, :stop) == ["END"]
+        assert Keyword.get(translated_opts, :presence_penalty) == 0.5
+        assert Keyword.get(translated_opts, :frequency_penalty) == 0.5
+        assert warnings == []
+      end
+    end
+
     test "validates reasoning_effort model compatibility" do
       {:ok, grok_3_mini} = ReqLLM.model("xai:grok-3-mini")
       opts = [reasoning_effort: "high"]
