@@ -87,6 +87,20 @@ defmodule ReqLLM.Providers.GoogleVertex.GeminiTest do
       assert Enum.any?(tools, &Map.has_key?(&1, "functionDeclarations"))
     end
 
+    test "includes url_context tool when google_url_context is enabled" do
+      context = context_fixture("Summarise https://example.com/terms")
+
+      opts = [
+        google_url_context: true,
+        max_tokens: 1000
+      ]
+
+      body = Gemini.format_request("gemini-2.5-flash", context, opts)
+
+      assert %{"tools" => tools} = body
+      assert Enum.any?(tools, &match?(%{"url_context" => %{}}, &1))
+    end
+
     test "format_request without grounding produces no grounding tools" do
       context = context_fixture()
 
@@ -714,6 +728,11 @@ defmodule ReqLLM.Providers.GoogleVertex.GeminiTest do
     test "google_thinking_level is in the Vertex provider schema" do
       schema_keys = GoogleVertex.provider_schema().schema |> Keyword.keys()
       assert :google_thinking_level in schema_keys
+    end
+
+    test "google_url_context is in the Vertex provider schema" do
+      schema_keys = GoogleVertex.provider_schema().schema |> Keyword.keys()
+      assert :google_url_context in schema_keys
     end
 
     test "translate_options maps reasoning_token_budget to google_thinking_budget for Gemini 2.5 models" do

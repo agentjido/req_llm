@@ -181,6 +181,11 @@ defmodule ReqLLM.Providers.GoogleVertex do
       doc:
         "Enable Google Search grounding for Gemini models - allows model to search the web. Set to %{enable: true}."
     ],
+    google_url_context: [
+      type: {:or, [:boolean, :map]},
+      doc:
+        "Enable URL context for Gemini models - allows model to fetch and use content from specific URLs. Pass `true` or a map with options."
+    ],
     dimensions: [
       type: :pos_integer,
       doc: "Number of dimensions for the embedding vector (model-dependent, e.g. 768, 1536, 3072)"

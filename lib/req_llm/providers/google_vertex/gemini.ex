@@ -20,6 +20,7 @@ defmodule ReqLLM.Providers.GoogleVertex.Gemini do
   - Extended thinking/reasoning via `google_thinking_budget`
   - Context caching (90% discount on cached tokens!)
   - Google Search grounding via `google_grounding: %{enable: true}`
+  - URL context via `google_url_context: true`
   - All standard Gemini options (safety settings, etc.)
   """
 
