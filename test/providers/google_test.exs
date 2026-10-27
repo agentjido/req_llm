@@ -1131,12 +1131,24 @@ defmodule ReqLLM.Providers.GoogleTest do
       assert tool["url_context"] == %{}
     end
 
-    test "provider schema rejects map options for google_url_context" do
-      assert {:error, %NimbleOptions.ValidationError{key: :google_url_context}} =
-               NimbleOptions.validate(
-                 [google_url_context: %{some_option: "value"}],
-                 Google.provider_schema()
-               )
+    test "options pipeline accepts an empty map and rejects a non-empty map" do
+      model = ReqLLM.model!("google:gemini-2.5-flash")
+
+      for opts <- [
+            [google_url_context: %{}],
+            [provider_options: [google_url_context: %{}]]
+          ] do
+        validated = ReqLLM.Provider.Options.process!(Google, :chat, model, opts)
+
+        assert validated[:google_url_context] == true
+        assert validated[:provider_options][:google_url_context] == true
+      end
+
+      assert_raise NimbleOptions.ValidationError, fn ->
+        ReqLLM.Provider.Options.process!(Google, :chat, model,
+          provider_options: [google_url_context: %{some_option: "value"}]
+        )
+      end
     end
 
     test "encode_body combines url_context with user tools" do

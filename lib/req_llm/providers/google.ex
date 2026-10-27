@@ -830,7 +830,11 @@ defmodule ReqLLM.Providers.Google do
     {provider_opts, rest} = Keyword.pop(opts, :provider_options, [])
 
     {effort, provider_opts} = Keyword.pop(provider_opts, :reasoning_effort)
-    provider_opts = normalize_response_modalities(provider_opts)
+
+    provider_opts =
+      provider_opts
+      |> normalize_response_modalities()
+      |> normalize_url_context()
 
     provider_opts =
       case {effort, gemini_3_or_later?(model)} do
@@ -863,6 +867,16 @@ defmodule ReqLLM.Providers.Google do
       end
 
     {Keyword.put(rest, :provider_options, provider_opts), []}
+  end
+
+  defp normalize_url_context(provider_opts) do
+    case Keyword.fetch(provider_opts, :google_url_context) do
+      {:ok, value} when is_map(value) and map_size(value) == 0 ->
+        Keyword.put(provider_opts, :google_url_context, true)
+
+      _ ->
+        provider_opts
+    end
   end
 
   defp normalize_response_modalities(provider_opts) do
