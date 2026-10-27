@@ -244,7 +244,7 @@ defmodule ReqLLM.MixProject do
       {:websockex, "~> 0.5.1"},
       {:zoi, "~> 0.18.11"},
       {:jsv, "~> 0.11"},
-      {:llm_db, "~> 2026.10.4"},
+      {:llm_db, "~> 2026.10.7"},
 
       # Dev/test dependencies
       {:opentelemetry_api, "~> 1.5", only: :test},
