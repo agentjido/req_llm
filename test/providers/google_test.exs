@@ -1131,27 +1131,12 @@ defmodule ReqLLM.Providers.GoogleTest do
       assert tool["url_context"] == %{}
     end
 
-    test "encode_body includes url_context tool with map options" do
-      {:ok, model} = ReqLLM.model("google:gemini-2.0-flash")
-      context = context_fixture()
-
-      mock_request = %Req.Request{
-        options: [
-          context: context,
-          model: model.model,
-          stream: false,
-          google_url_context: %{some_option: "value"}
-        ]
-      }
-
-      updated_request = Google.encode_body(mock_request)
-      decoded = ReqLLM.Test.Helpers.json_body(updated_request)
-
-      assert is_list(decoded["tools"])
-      assert length(decoded["tools"]) == 1
-      [tool] = decoded["tools"]
-      assert Map.has_key?(tool, "url_context")
-      assert tool["url_context"] == %{"some_option" => "value"}
+    test "provider schema rejects map options for google_url_context" do
+      assert {:error, %NimbleOptions.ValidationError{key: :google_url_context}} =
+               NimbleOptions.validate(
+                 [google_url_context: %{some_option: "value"}],
+                 Google.provider_schema()
+               )
     end
 
     test "encode_body combines url_context with user tools" do
