@@ -32,8 +32,8 @@ provider-native feature and are not consulted by request routing.
 | --- | ---: |
 | First-class | 7 |
 | Best-effort | 0 |
-| Experimental | 601 |
-| Unsupported | 89 |
+| Experimental | 613 |
+| Unsupported | 77 |
 | **Total recorded surfaces** | **697** |
 
 ## anthropic
@@ -170,17 +170,17 @@ provider-native feature and are not consulted by request routing.
 | `veo-2.0-generate-001` | `text` | `google.unrecorded_text` | text → text | Experimental | 0/5 | 2026-05-30T01:01:43Z | surface declaration unknown |
 | `veo-3.0-fast-generate-001` | `text` | `google.unrecorded_text` | text → text | Experimental | 0/5 | 2026-05-30T01:01:43Z | surface declaration unknown |
 | `veo-3.0-generate-001` | `text` | `google.unrecorded_text` | text → text | Experimental | 0/5 | 2026-05-30T01:01:43Z | surface declaration unknown |
-| `veo-3.1-fast-generate-preview` | `text` | `google.unrecorded_text` | text → text | Unsupported | 0/5 | 2026-05-30T01:01:43Z | operation not declared |
-| `veo-3.1-generate-preview` | `text` | `google.unrecorded_text` | text → text | Unsupported | 0/5 | 2026-05-30T01:01:43Z | operation not declared |
-| `veo-3.1-lite-generate-preview` | `text` | `google.unrecorded_text` | text → text | Unsupported | 0/5 | 2026-05-30T01:01:43Z | operation not declared |
+| `veo-3.1-fast-generate-preview` | `text` | `google.unrecorded_text` | text → text | Unsupported | 0/5 | 2026-05-30T01:01:43Z | basic failed at provider_drift |
+| `veo-3.1-generate-preview` | `text` | `google.unrecorded_text` | text → text | Unsupported | 0/5 | 2026-05-30T01:01:43Z | basic failed at provider_drift |
+| `veo-3.1-lite-generate-preview` | `text` | `google.unrecorded_text` | text → text | Unsupported | 0/5 | 2026-05-30T01:01:43Z | basic failed at provider_drift |
 
 ## groq
 
 | Model | Operation | Execution surface | Input → output | Tier | Baseline | Checked | Reason |
 | --- | --- | --- | --- | --- | ---: | --- | --- |
 | `allam-2-7b` | `text` | `groq.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:26:10Z | missing or stale evidence |
-| `groq/compound` | `text` | `groq.unrecorded_text` | text → text | Unsupported | 0/5 | 2026-05-29T23:26:10Z | basic failed at provider_drift |
-| `groq/compound-mini` | `text` | `groq.unrecorded_text` | text → text | Unsupported | 0/5 | 2026-05-29T23:26:10Z | basic failed at provider_drift |
+| `groq/compound` | `text` | `groq.unrecorded_text` | text → text | Experimental | 0/5 | 2026-05-29T23:26:10Z | surface declaration unknown |
+| `groq/compound-mini` | `text` | `groq.unrecorded_text` | text → text | Experimental | 0/5 | 2026-05-29T23:26:10Z | surface declaration unknown |
 | `llama-3.1-8b-instant` | `text` | `groq.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:26:10Z | missing or stale evidence |
 | `llama-3.3-70b-versatile` | `text` | `groq.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:26:10Z | missing or stale evidence |
 | `llama3-8b-8192` | `text` | `groq.unrecorded_text` | text → text | Experimental | 0/5 | 2026-05-29T23:26:10Z | surface declaration unknown |
@@ -321,7 +321,7 @@ provider-native feature and are not consulted by request routing.
 | `cohere/command-r7b-12-2024` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:15:25Z | missing or stale evidence |
 | `deepseek/deepseek-chat` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:35:21Z | missing or stale evidence |
 | `deepseek/deepseek-chat-v3-0324` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:35:21Z | missing or stale evidence |
-| `deepseek/deepseek-r1` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:35:21Z | missing or stale evidence |
+| `deepseek/deepseek-r1` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:35:21Z | surface declaration unknown |
 | `deepseek/deepseek-r1-0528` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:35:21Z | missing or stale evidence |
 | `deepseek/deepseek-r1-distill-llama-70b` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:35:21Z | surface declaration unknown |
 | `deepseek/deepseek-r1-distill-qwen-32b` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:35:21Z | surface declaration unknown |
@@ -384,7 +384,7 @@ provider-native feature and are not consulted by request routing.
 | `meta-llama/llama-guard-4-12b` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:37:04Z | missing or stale evidence |
 | `microsoft/phi-4` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:17:09Z | missing or stale evidence |
 | `microsoft/phi-4-mini-instruct` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:17:09Z | surface declaration unknown |
-| `microsoft/wizardlm-2-8x22b` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:17:09Z | missing or stale evidence |
+| `microsoft/wizardlm-2-8x22b` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:17:09Z | surface declaration unknown |
 | `minimax/minimax-m2` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:42:59Z | missing or stale evidence |
 | `minimax/minimax-m2-her` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:42:59Z | missing or stale evidence |
 | `minimax/minimax-m2.1` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:42:59Z | missing or stale evidence |
@@ -510,7 +510,7 @@ provider-native feature and are not consulted by request routing.
 | `sao10k/l3-lunaris-8b` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:25:35Z | missing or stale evidence |
 | `sao10k/l3.1-70b-hanami-x1` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:25:35Z | surface declaration unknown |
 | `sao10k/l3.1-euryale-70b` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:25:35Z | missing or stale evidence |
-| `sao10k/l3.3-euryale-70b` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:25:35Z | missing or stale evidence |
+| `sao10k/l3.3-euryale-70b` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:25:35Z | surface declaration unknown |
 | `sentence-transformers/all-minilm-l12-v2` | `embedding` | `openrouter.embedding` | text → embedding | Experimental | 0/3 | 2026-05-30T00:56:13Z | missing or stale evidence |
 | `sentence-transformers/all-minilm-l6-v2` | `embedding` | `openrouter.embedding` | text → embedding | Experimental | 0/3 | 2026-05-30T00:56:13Z | missing or stale evidence |
 | `sentence-transformers/all-mpnet-base-v2` | `embedding` | `openrouter.embedding` | text → embedding | Experimental | 0/3 | 2026-05-30T00:56:13Z | missing or stale evidence |
@@ -599,7 +599,7 @@ provider-native feature and are not consulted by request routing.
 | `qwen3-235b-a22b-thinking-2507` | `text` | `venice.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:55:12Z | missing or stale evidence |
 | `qwen3-5-35b-a3b` | `text` | `venice.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:55:12Z | missing or stale evidence |
 | `qwen3-5-397b-a17b` | `text` | `venice.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:55:12Z | missing or stale evidence |
-| `qwen3-5-9b` | `text` | `venice.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:55:12Z | missing or stale evidence |
+| `qwen3-5-9b` | `text` | `venice.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:55:12Z | surface declaration unknown |
 | `qwen3-6-27b` | `text` | `venice.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:55:12Z | missing or stale evidence |
 | `qwen3-coder-480b-a35b-instruct-turbo` | `text` | `venice.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:55:12Z | missing or stale evidence |
 | `qwen3-next-80b` | `text` | `venice.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:55:12Z | missing or stale evidence |
@@ -610,7 +610,7 @@ provider-native feature and are not consulted by request routing.
 | `z-ai-glm-5v-turbo` | `text` | `venice.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:55:12Z | missing or stale evidence |
 | `zai-org-glm-4.6` | `text` | `venice.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:55:12Z | missing or stale evidence |
 | `zai-org-glm-4.7` | `text` | `venice.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:55:12Z | missing or stale evidence |
-| `zai-org-glm-4.7-flash` | `text` | `venice.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:55:12Z | missing or stale evidence |
+| `zai-org-glm-4.7-flash` | `text` | `venice.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:55:12Z | surface declaration unknown |
 | `zai-org-glm-5` | `text` | `venice.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:55:12Z | missing or stale evidence |
 | `zai-org-glm-5-1` | `text` | `venice.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:55:12Z | missing or stale evidence |
 
@@ -685,16 +685,16 @@ provider-native feature and are not consulted by request routing.
 
 | Model | Operation | Execution surface | Input → output | Tier | Baseline | Checked | Reason |
 | --- | --- | --- | --- | --- | ---: | --- | --- |
-| `anthropic/claude-3.5-haiku` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
-| `anthropic/claude-3.7-sonnet` | `text` | `zenmux.unrecorded_text` | text → text | Unsupported | 0/5 | 2026-05-30T00:10:17Z | basic failed at provider_drift |
+| `anthropic/claude-3.5-haiku` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | surface declaration unknown |
+| `anthropic/claude-3.7-sonnet` | `text` | `zenmux.unrecorded_text` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | surface declaration unknown |
 | `anthropic/claude-haiku-4.5` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
-| `anthropic/claude-opus-4` | `text` | `zenmux.unrecorded_text` | text → text | Unsupported | 0/5 | 2026-05-30T00:10:17Z | basic failed at provider_drift |
+| `anthropic/claude-opus-4` | `text` | `zenmux.unrecorded_text` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | surface declaration unknown |
 | `anthropic/claude-opus-4.1` | `text` | `zenmux.unrecorded_text` | text → text | Unsupported | 0/5 | 2026-05-30T00:10:17Z | basic failed at provider_drift |
 | `anthropic/claude-opus-4.5` | `text` | `zenmux.unrecorded_text` | text → text | Unsupported | 0/5 | 2026-05-30T00:10:17Z | basic failed at provider_drift |
 | `anthropic/claude-opus-4.6` | `text` | `zenmux.unrecorded_text` | text → text | Unsupported | 0/5 | 2026-05-30T00:10:17Z | basic failed at provider_drift |
 | `anthropic/claude-opus-4.7` | `text` | `zenmux.unrecorded_text` | text → text | Unsupported | 0/5 | 2026-05-30T00:10:17Z | basic failed at provider_drift |
 | `anthropic/claude-opus-4.8` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
-| `anthropic/claude-sonnet-4` | `text` | `zenmux.unrecorded_text` | text → text | Unsupported | 0/5 | 2026-05-30T00:10:17Z | basic failed at provider_drift |
+| `anthropic/claude-sonnet-4` | `text` | `zenmux.unrecorded_text` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | surface declaration unknown |
 | `anthropic/claude-sonnet-4.5` | `text` | `zenmux.unrecorded_text` | text → text | Unsupported | 0/5 | 2026-05-30T00:10:17Z | basic failed at provider_drift |
 | `anthropic/claude-sonnet-4.6` | `text` | `zenmux.unrecorded_text` | text → text | Unsupported | 0/5 | 2026-05-30T00:10:17Z | basic failed at provider_drift |
 | `baidu/ernie-5.0-thinking-preview` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
@@ -706,7 +706,7 @@ provider-native feature and are not consulted by request routing.
 | `bytedance/doubao-seed-2.0-mini` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
 | `bytedance/doubao-seed-2.0-pro` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
 | `bytedance/doubao-seed-code` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
-| `deepseek/deepseek-chat` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
+| `deepseek/deepseek-chat` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | surface declaration unknown |
 | `deepseek/deepseek-chat-v3.1` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | surface declaration unknown |
 | `deepseek/deepseek-r1-0528` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | surface declaration unknown |
 | `deepseek/deepseek-reasoner` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | surface declaration unknown |
@@ -719,17 +719,17 @@ provider-native feature and are not consulted by request routing.
 | `google/gemini-2.5-pro` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
 | `google/gemini-3-flash-preview` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
 | `google/gemini-3.1-flash-lite` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
-| `google/gemini-3.1-flash-lite-preview` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
+| `google/gemini-3.1-flash-lite-preview` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | surface declaration unknown |
 | `google/gemini-3.1-pro-preview` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
 | `google/gemini-3.5-flash` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
 | `google/gemma-3-12b-it` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | surface declaration unknown |
-| `inclusionai/ling-1t` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
+| `inclusionai/ling-1t` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | surface declaration unknown |
 | `inclusionai/ling-2.6-1t` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
 | `inclusionai/ling-2.6-flash` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
 | `inclusionai/llada2.1-flash` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
-| `inclusionai/ring-1t` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
+| `inclusionai/ring-1t` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | surface declaration unknown |
 | `inclusionai/ring-2.6-1t` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
-| `kuaishou/kat-coder-pro-v2` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
+| `kuaishou/kat-coder-pro-v2` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | surface declaration unknown |
 | `meta/llama-3.3-70b-instruct` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
 | `meta/llama-4-scout-17b-16e-instruct` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
 | `minimax/minimax-m2` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
@@ -740,10 +740,10 @@ provider-native feature and are not consulted by request routing.
 | `minimax/minimax-m2.7` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
 | `minimax/minimax-m2.7-highspeed` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
 | `mistralai/mistral-large-2512` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
-| `moonshotai/kimi-k2-0905` | `text` | `zenmux.unrecorded_text` | text → text | Unsupported | 0/5 | 2026-05-30T00:10:17Z | basic failed at provider_drift |
-| `moonshotai/kimi-k2-thinking` | `text` | `zenmux.unrecorded_text` | text → text | Unsupported | 0/5 | 2026-05-30T00:10:17Z | basic failed at provider_drift |
-| `moonshotai/kimi-k2-thinking-turbo` | `text` | `zenmux.unrecorded_text` | text → text | Unsupported | 0/5 | 2026-05-30T00:10:17Z | basic failed at provider_drift |
-| `moonshotai/kimi-k2.5` | `text` | `zenmux.unrecorded_text` | text → text | Unsupported | 0/5 | 2026-05-30T00:10:17Z | basic failed at provider_drift |
+| `moonshotai/kimi-k2-0905` | `text` | `zenmux.unrecorded_text` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | surface declaration unknown |
+| `moonshotai/kimi-k2-thinking` | `text` | `zenmux.unrecorded_text` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | surface declaration unknown |
+| `moonshotai/kimi-k2-thinking-turbo` | `text` | `zenmux.unrecorded_text` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | surface declaration unknown |
+| `moonshotai/kimi-k2.5` | `text` | `zenmux.unrecorded_text` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | surface declaration unknown |
 | `moonshotai/kimi-k2.6` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
 | `openai/chat-latest` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
 | `openai/gpt-4` | `text` | `zenmux.unrecorded_text` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | surface declaration unknown |
@@ -759,14 +759,14 @@ provider-native feature and are not consulted by request routing.
 | `openai/gpt-5-nano` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
 | `openai/gpt-5-pro` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
 | `openai/gpt-5.1` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
-| `openai/gpt-5.1-chat` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
+| `openai/gpt-5.1-chat` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | surface declaration unknown |
 | `openai/gpt-5.1-codex` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
 | `openai/gpt-5.1-codex-mini` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
 | `openai/gpt-5.2` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
 | `openai/gpt-5.2-chat` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | surface declaration unknown |
 | `openai/gpt-5.2-codex` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
 | `openai/gpt-5.2-pro` | `text` | `zenmux.unrecorded_text` | text → text | Unsupported | 0/5 | 2026-05-30T00:10:17Z | basic failed at provider_drift |
-| `openai/gpt-5.3-chat` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
+| `openai/gpt-5.3-chat` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | surface declaration unknown |
 | `openai/gpt-5.3-codex` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
 | `openai/gpt-5.4` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
 | `openai/gpt-5.4-mini` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
@@ -792,14 +792,14 @@ provider-native feature and are not consulted by request routing.
 | `qwen/qwen3.6-plus` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
 | `qwen/qwen3.7-max` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
 | `sapiens-ai/agnes-1.5-flash` | `text` | `zenmux.unrecorded_text` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | surface declaration unknown |
-| `sapiens-ai/agnes-1.5-lite` | `text` | `zenmux.unrecorded_text` | text → text | Unsupported | 0/5 | 2026-05-30T00:10:17Z | basic failed at provider_drift |
-| `sapiens-ai/agnes-1.5-pro` | `text` | `zenmux.unrecorded_text` | text → text | Unsupported | 0/5 | 2026-05-30T00:10:17Z | basic failed at provider_drift |
+| `sapiens-ai/agnes-1.5-lite` | `text` | `zenmux.unrecorded_text` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | surface declaration unknown |
+| `sapiens-ai/agnes-1.5-pro` | `text` | `zenmux.unrecorded_text` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | surface declaration unknown |
 | `sapiens-ai/agnes-2.0-flash` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | surface declaration unknown |
-| `stepfun/step-3` | `text` | `zenmux.unrecorded_text` | text → text | Unsupported | 0/5 | 2026-05-30T00:10:17Z | basic failed at transport |
+| `stepfun/step-3` | `text` | `zenmux.unrecorded_text` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | surface declaration unknown |
 | `stepfun/step-3.5-flash` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
 | `stepfun/step-3.5-flash-free` | `text` | `zenmux.unrecorded_text` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | surface declaration unknown |
 | `tencent/hunyuan-2.0-thinking` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | surface declaration unknown |
-| `tencent/hy3-preview` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
+| `tencent/hy3-preview` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | surface declaration unknown |
 | `volcengine/doubao-seed-1.8` | `text` | `zenmux.unrecorded_text` | text → text | Unsupported | 0/5 | 2026-05-30T00:10:17Z | basic failed at provider_drift |
 | `volcengine/doubao-seed-2.0-code` | `text` | `zenmux.unrecorded_text` | text → text | Unsupported | 0/5 | 2026-05-30T00:10:17Z | basic failed at provider_drift |
 | `volcengine/doubao-seed-2.0-lite` | `text` | `zenmux.unrecorded_text` | text → text | Unsupported | 0/5 | 2026-05-30T00:10:17Z | basic failed at provider_drift |
@@ -814,9 +814,9 @@ provider-native feature and are not consulted by request routing.
 | `x-ai/grok-4.2-fast-non-reasoning` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
 | `x-ai/grok-4.3` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
 | `x-ai/grok-code-fast-1` | `text` | `zenmux.unrecorded_text` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | surface declaration unknown |
-| `xiaomi/mimo-v2-flash` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
-| `xiaomi/mimo-v2-omni` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
-| `xiaomi/mimo-v2-pro` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
+| `xiaomi/mimo-v2-flash` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | surface declaration unknown |
+| `xiaomi/mimo-v2-omni` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | surface declaration unknown |
+| `xiaomi/mimo-v2-pro` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | surface declaration unknown |
 | `xiaomi/mimo-v2.5` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
 | `xiaomi/mimo-v2.5-pro` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
 | `z-ai/glm-4.5` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
