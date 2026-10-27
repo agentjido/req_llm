@@ -98,7 +98,7 @@ defmodule ReqLLM.Providers.GoogleVertex.GeminiTest do
       body = Gemini.format_request("gemini-2.5-flash", context, opts)
 
       assert %{"tools" => tools} = body
-      assert Enum.any?(tools, &match?(%{"url_context" => %{}}, &1))
+      assert %{"url_context" => %{}} in tools
     end
 
     test "format_request without grounding produces no grounding tools" do
@@ -171,6 +171,54 @@ defmodule ReqLLM.Providers.GoogleVertex.GeminiTest do
       keys = Google.provider_schema().schema |> Keyword.keys()
       refute :labels in keys
     end
+  end
+
+  describe "prepare_request/4 Gemini provider options" do
+    test "google_url_context adds the url_context tool" do
+      body = prepare_gemini_body(google_url_context: true)
+
+      assert %{"url_context" => %{}} in body["tools"]
+    end
+
+    test "Google's Gemini options reach the request body" do
+      cache = "projects/test-project/locations/global/cachedContents/c1"
+
+      body =
+        prepare_gemini_body(
+          cached_content: cache,
+          google_candidate_count: 2,
+          google_safety_settings: [
+            %{category: "HARM_CATEGORY_HATE_SPEECH", threshold: "BLOCK_NONE"}
+          ]
+        )
+
+      assert body["cachedContent"] == cache
+      assert body["generationConfig"]["candidateCount"] == 2
+
+      assert body["safetySettings"] == [
+               %{"category" => "HARM_CATEGORY_HATE_SPEECH", "threshold" => "BLOCK_NONE"}
+             ]
+    end
+  end
+
+  defp prepare_gemini_body(provider_options) do
+    model = %LLMDB.Model{
+      id: "gemini-2.5-flash",
+      provider: :google_vertex,
+      capabilities: %{chat: true}
+    }
+
+    {:ok, request} =
+      GoogleVertex.prepare_request(
+        :chat,
+        model,
+        "Summarise https://example.com/terms",
+        access_token: "test-token",
+        project_id: "test-project",
+        provider_options: provider_options
+      )
+
+    request.options[:json]
   end
 
   describe "format_request/3 tool call ID compatibility" do

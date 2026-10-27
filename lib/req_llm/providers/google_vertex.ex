@@ -110,10 +110,21 @@ defmodule ReqLLM.Providers.GoogleVertex do
   import ReqLLM.Provider.Utils, only: [presence: 1, present_env: 1]
 
   alias ReqLLM.ModelHelpers
+  alias ReqLLM.Providers.Google
 
   require Logger
 
-  @provider_schema [
+  @gemini_option_keys [
+    :google_safety_settings,
+    :google_candidate_count,
+    :google_thinking_budget,
+    :google_thinking_level,
+    :google_grounding,
+    :google_url_context,
+    :cached_content
+  ]
+
+  @vertex_provider_schema [
     service_account_json: [
       type: {:or, [:string, :map]},
       doc: "Explicit service account credentials: file path, JSON string, or pre-parsed map"
@@ -167,25 +178,6 @@ defmodule ReqLLM.Providers.GoogleVertex do
       otherwise the request is rejected with HTTP 400 `FAILED_PRECONDITION`.
       """
     ],
-    google_thinking_budget: [
-      type: :non_neg_integer,
-      doc: "Thinking token budget for Gemini 2.5 models (0 disables thinking, omit for dynamic)"
-    ],
-    google_thinking_level: [
-      type: {:or, [:atom, :string]},
-      doc:
-        "Thinking level for Gemini 3+ models (e.g. :low, :medium, :high, or \"low\", \"medium\", \"high\"). Passed directly to the Gemini API. Cannot be combined with google_thinking_budget."
-    ],
-    google_grounding: [
-      type: :map,
-      doc:
-        "Enable Google Search grounding for Gemini models - allows model to search the web. Set to %{enable: true}."
-    ],
-    google_url_context: [
-      type: {:or, [:boolean, :map]},
-      doc:
-        "Enable URL context for Gemini models - allows model to fetch and use content from specific URLs. Pass `true` or a map with options."
-    ],
     dimensions: [
       type: :pos_integer,
       doc: "Number of dimensions for the embedding vector (model-dependent, e.g. 768, 1536, 3072)"
@@ -206,6 +198,9 @@ defmodule ReqLLM.Providers.GoogleVertex do
         "Custom metadata labels for the request as key-value string pairs. Used for billing and reporting."
     ]
   ]
+
+  @provider_schema @vertex_provider_schema ++
+                     Keyword.take(Google.provider_schema().schema, @gemini_option_keys)
 
   @default_region "global"
   @vertex_base_url_global "https://aiplatform.googleapis.com"
