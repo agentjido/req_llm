@@ -37,8 +37,26 @@ defmodule ReqLLM.UsageHelpersTest do
       assert usage.input_tokens == 10
       assert usage.output_tokens == 5
       assert usage.total_tokens == 15
+      assert usage.tool_use_input_tokens == 0
       assert usage.input == 10
       assert usage.output == 5
+    end
+
+    test "normalizes tool-use input tokens and includes them in derived totals" do
+      usage =
+        ReqLLM.Usage.normalize(%{
+          "promptTokenCount" => 31,
+          "candidatesTokenCount" => 73,
+          "toolUsePromptTokenCount" => "73",
+          input_tokens: 31,
+          output_tokens: 150
+        })
+
+      assert usage.input_tokens == 31
+      assert usage.output_tokens == 150
+      assert usage.tool_use_input_tokens == 73
+      assert usage.total_tokens == 254
+      assert ReqLLM.Usage.normalize(usage) == usage
     end
 
     test "preserves explicit total_tokens when provided" do
@@ -99,6 +117,7 @@ defmodule ReqLLM.UsageHelpersTest do
                  cache_read_tokens: 0,
                  cache_write_tokens: 0,
                  cached_tokens: 0,
+                 tool_use_input_tokens: 0,
                  cache_creation_tokens: 0,
                  input_includes_cached: true
                }
@@ -185,6 +204,24 @@ defmodule ReqLLM.UsageHelpersTest do
       assert merged.input_tokens == 1500
       assert merged.output_tokens == 393
       assert merged.total_tokens == 1893
+    end
+
+    test "merge preserves tool-use input tokens and provider totals" do
+      merged =
+        ReqLLM.Usage.merge(
+          %{input_tokens: 31, output_tokens: 0, total_tokens: 31},
+          %{
+            input_tokens: 31,
+            output_tokens: 150,
+            tool_use_input_tokens: "73",
+            total_tokens: 260
+          }
+        )
+
+      assert merged.input_tokens == 31
+      assert merged.output_tokens == 150
+      assert merged.tool_use_input_tokens == 73
+      assert merged.total_tokens == 260
     end
 
     test "merge keeps cache durations across missing, empty and partial updates" do

@@ -118,6 +118,7 @@ defmodule ReqLLM.Step.Usage do
               |> Map.put_new(:output_tokens, usage.output)
               |> maybe_put_total_tokens(usage.total_tokens)
               |> Map.put(:reasoning_tokens, usage.reasoning)
+              |> Map.put(:tool_use_input_tokens, usage.tool_use_input_tokens)
               |> Map.put(:cached_tokens, cached_read_tokens)
               |> Map.put(:cache_creation_tokens, cache_creation_tokens)
               |> Map.put(:tool_usage, usage.tool_usage)

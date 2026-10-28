@@ -715,16 +715,18 @@ defmodule ReqLLM.Providers.Google do
 
     total = google_metadata_count(usage_metadata, "totalTokenCount")
     reasoning = google_metadata_count(usage_metadata, "thoughtsTokenCount") || 0
+    tool_use_input = google_metadata_count(usage_metadata, "toolUsePromptTokenCount") || 0
     cached = google_metadata_count(usage_metadata, "cachedContentTokenCount") || 0
     candidates = google_metadata_count(usage_metadata, "candidatesTokenCount")
-    output = google_output_tokens(candidates, reasoning, total, input)
+    output = google_output_tokens(candidates, reasoning, total, input, tool_use_input)
 
     %{
       input_tokens: input,
       output_tokens: output,
-      total_tokens: total || input + output,
+      total_tokens: total || input + output + tool_use_input,
       cached_tokens: cached,
-      reasoning_tokens: reasoning
+      reasoning_tokens: reasoning,
+      tool_use_input_tokens: tool_use_input
     }
   end
 
@@ -754,19 +756,22 @@ defmodule ReqLLM.Providers.Google do
   defp add_google_token_count(nil, count), do: count
   defp add_google_token_count(total, count), do: total + count
 
-  defp google_output_tokens(candidates, reasoning, _total, _input) when is_integer(candidates) do
+  defp google_output_tokens(candidates, reasoning, _total, _input, _tool_use_input)
+       when is_integer(candidates) do
     candidates + reasoning
   end
 
-  defp google_output_tokens(_candidates, _reasoning, total, input) when is_integer(total) do
-    max(0, total - input)
+  defp google_output_tokens(_candidates, _reasoning, total, input, tool_use_input)
+       when is_integer(total) do
+    max(0, total - input - tool_use_input)
   end
 
-  defp google_output_tokens(_candidates, reasoning, _total, _input) when reasoning > 0 do
+  defp google_output_tokens(_candidates, reasoning, _total, _input, _tool_use_input)
+       when reasoning > 0 do
     reasoning
   end
 
-  defp google_output_tokens(_candidates, _reasoning, _total, _input), do: 0
+  defp google_output_tokens(_candidates, _reasoning, _total, _input, _tool_use_input), do: 0
 
   defp google_zero_usage do
     %{
@@ -774,7 +779,8 @@ defmodule ReqLLM.Providers.Google do
       output_tokens: 0,
       total_tokens: 0,
       cached_tokens: 0,
-      reasoning_tokens: 0
+      reasoning_tokens: 0,
+      tool_use_input_tokens: 0
     }
   end
 
@@ -2419,7 +2425,8 @@ defmodule ReqLLM.Providers.Google do
     base = %{
       "prompt_tokens" => normalized.input_tokens,
       "completion_tokens" => normalized.output_tokens,
-      "total_tokens" => normalized.total_tokens
+      "total_tokens" => normalized.total_tokens,
+      tool_use_input_tokens: normalized.tool_use_input_tokens
     }
 
     base =
@@ -3674,7 +3681,8 @@ defmodule ReqLLM.Providers.Google do
       output_tokens: 0,
       total_tokens: 0,
       cached_tokens: 0,
-      reasoning_tokens: 0
+      reasoning_tokens: 0,
+      tool_use_input_tokens: 0
     }
 
   defp convert_google_usage_for_streaming(usage_metadata) do

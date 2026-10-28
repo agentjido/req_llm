@@ -44,16 +44,26 @@ defmodule ReqLLM.Usage.Normalize do
         value -> normalize_counter(value)
       end
 
+    tool_use_input =
+      first_present(usage, [
+        :tool_use_input_tokens,
+        "tool_use_input_tokens",
+        :toolUsePromptTokenCount,
+        "toolUsePromptTokenCount"
+      ])
+      |> normalize_token_counter()
+
     cached_input = get_cached_input_tokens(usage, input, input_includes_cached)
     cache_creation = get_cache_creation_tokens(usage, input, input_includes_cached)
     cache_write_tokens_by_ttl = cache_write_groups(usage)
-    total_tokens = total_tokens_from_usage(usage, input, output)
+    total_tokens = total_tokens_from_usage(usage, input, output, tool_use_input)
 
     canonical = %{
       billing_usage_complete:
         MapAccess.get_raw(usage, :billing_usage_complete) in [nil, true] and
           valid_token_count?(input) and valid_token_count?(output) and
           valid_token_count?(reasoning) and
+          valid_token_count?(tool_use_input) and
           compute_units_billable?(compute_units) and
           usage_reported_valid?(MapAccess.get_raw(usage, :usage_reported)) and
           boolean_fact_valid?(MapAccess.get_raw(usage, :input_includes_cached)) and
@@ -66,6 +76,7 @@ defmodule ReqLLM.Usage.Normalize do
       input: input,
       output: output,
       reasoning: reasoning,
+      tool_use_input_tokens: tool_use_input,
       cached_input: cached_input,
       cache_creation: cache_creation,
       input_includes_cached: input_includes_cached,
@@ -212,22 +223,23 @@ defmodule ReqLLM.Usage.Normalize do
 
   def normalize_counter(value), do: value
 
-  defp total_tokens_from_usage(usage, input, output) do
+  defp total_tokens_from_usage(usage, input, output, tool_use_input) do
     total =
       first_present(usage, [:total_tokens, "total_tokens", :totalTokenCount, "totalTokenCount"])
 
     case normalize_counter(total) do
       value when is_number(value) -> value
-      nil -> safe_total_tokens(input, output)
-      _invalid -> safe_total_tokens(input, output) || total
+      nil -> safe_total_tokens(input, output, tool_use_input)
+      _invalid -> safe_total_tokens(input, output, tool_use_input) || total
     end
   end
 
-  defp safe_total_tokens(input, output) when is_number(input) and is_number(output) do
-    input + output
+  defp safe_total_tokens(input, output, tool_use_input)
+       when is_number(input) and is_number(output) and is_number(tool_use_input) do
+    input + output + tool_use_input
   end
 
-  defp safe_total_tokens(_input, _output), do: nil
+  defp safe_total_tokens(_input, _output, _tool_use_input), do: nil
 
   defp detect_input_includes_cached(usage) do
     case Map.get(usage, :input_includes_cached, Map.get(usage, "input_includes_cached")) do

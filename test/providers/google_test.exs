@@ -1652,6 +1652,29 @@ defmodule ReqLLM.Providers.GoogleTest do
       assert meta_chunk.metadata[:usage][:reasoning_tokens] == 5
     end
 
+    test "streaming usageMetadata exposes tool-use input tokens", %{model: model} do
+      event = %{
+        data: %{
+          "candidates" => [%{"finishReason" => "STOP", "index" => 0}],
+          "usageMetadata" => %{
+            "promptTokenCount" => 31,
+            "candidatesTokenCount" => 73,
+            "thoughtsTokenCount" => 77,
+            "toolUsePromptTokenCount" => 73,
+            "totalTokenCount" => 254
+          }
+        }
+      }
+
+      [meta_chunk] = Google.decode_stream_event(event, model)
+      usage = meta_chunk.metadata.usage
+
+      assert usage.input_tokens == 31
+      assert usage.output_tokens == 150
+      assert usage.tool_use_input_tokens == 73
+      assert usage.total_tokens == 254
+    end
+
     test "streaming usageMetadata derives totals from partial counts", %{model: model} do
       event = %{
         data: %{
@@ -2032,6 +2055,78 @@ defmodule ReqLLM.Providers.GoogleTest do
       assert usage.input_tokens == 10
       assert usage.output_tokens == 20
       assert usage.total_tokens == 30
+    end
+
+    test "extract_usage exposes tool-use input tokens" do
+      model = ReqLLM.model!("google:gemini-2.5-flash")
+
+      body = %{
+        "usageMetadata" => %{
+          "promptTokenCount" => 31,
+          "candidatesTokenCount" => 73,
+          "thoughtsTokenCount" => 77,
+          "toolUsePromptTokenCount" => 73,
+          "totalTokenCount" => 254
+        }
+      }
+
+      assert {:ok, usage} = Google.extract_usage(body, model)
+      assert usage.input_tokens == 31
+      assert usage.output_tokens == 150
+      assert usage.tool_use_input_tokens == 73
+      assert usage.total_tokens == 254
+    end
+
+    test "extract_usage excludes tool-use input from fallback output tokens" do
+      model = ReqLLM.model!("google:gemini-2.5-flash")
+
+      body = %{
+        "usageMetadata" => %{
+          "promptTokenCount" => 31,
+          "toolUsePromptTokenCount" => 73,
+          "totalTokenCount" => 254
+        }
+      }
+
+      assert {:ok, usage} = Google.extract_usage(body, model)
+      assert usage.input_tokens == 31
+      assert usage.output_tokens == 150
+      assert usage.tool_use_input_tokens == 73
+      assert usage.total_tokens == 254
+    end
+
+    test "decode_response exposes tool-use input tokens" do
+      model = ReqLLM.model!("google:gemini-2.5-flash")
+
+      body = %{
+        "candidates" => [
+          %{
+            "content" => %{"parts" => [%{"text" => "Grounded answer"}], "role" => "model"},
+            "finishReason" => "STOP"
+          }
+        ],
+        "usageMetadata" => %{
+          "promptTokenCount" => 31,
+          "candidatesTokenCount" => 73,
+          "thoughtsTokenCount" => 77,
+          "toolUsePromptTokenCount" => 73,
+          "totalTokenCount" => 254
+        }
+      }
+
+      request = %Req.Request{
+        options: [context: context_fixture(), stream: false, model: model.model]
+      }
+
+      {_request, response} =
+        Google.decode_response({request, %Req.Response{status: 200, body: body}})
+
+      usage = response.body.usage
+
+      assert usage.input_tokens == 31
+      assert usage.output_tokens == 150
+      assert usage.tool_use_input_tokens == 73
+      assert usage.total_tokens == 254
     end
 
     test "extract_usage with missing usage data" do

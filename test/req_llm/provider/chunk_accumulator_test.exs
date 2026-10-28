@@ -672,6 +672,30 @@ defmodule ReqLLM.Provider.ChunkAccumulatorTest do
       assert usage.total_tokens == 30
     end
 
+    test "preserves tool-use input tokens and the provider total" do
+      acc =
+        ChunkAccumulator.push(
+          ChunkAccumulator.new(),
+          %StreamChunk{
+            type: :meta,
+            metadata: %{
+              usage: %{
+                input_tokens: 31,
+                output_tokens: 150,
+                tool_use_input_tokens: 73,
+                total_tokens: 254
+              }
+            }
+          }
+        )
+
+      usage = ChunkAccumulator.finalize_usage(acc)
+      assert usage.input_tokens == 31
+      assert usage.output_tokens == 150
+      assert usage.tool_use_input_tokens == 73
+      assert usage.total_tokens == 254
+    end
+
     test "returns nil when no meta chunk surfaced usage" do
       acc =
         ChunkAccumulator.push(ChunkAccumulator.new(), %StreamChunk{type: :content, text: "hi"})

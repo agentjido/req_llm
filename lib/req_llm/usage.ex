@@ -19,6 +19,7 @@ defmodule ReqLLM.Usage do
     :cache_write_tokens,
     :cached_tokens,
     :reasoning_tokens,
+    :tool_use_input_tokens,
     :cache_creation_tokens,
     :reasoning,
     :cached_input,
@@ -36,6 +37,7 @@ defmodule ReqLLM.Usage do
     cache_write_tokens: 0,
     cached_tokens: 0,
     reasoning_tokens: 0,
+    tool_use_input_tokens: 0,
     cache_creation_tokens: 0
   }
 
@@ -46,6 +48,7 @@ defmodule ReqLLM.Usage do
   - `:input_tokens`
   - `:output_tokens`
   - `:total_tokens`
+  - `:tool_use_input_tokens`
   - `:input_includes_cached`
 
   Also guarantees compatibility aliases:
@@ -57,6 +60,10 @@ defmodule ReqLLM.Usage do
   Prompt cache reads and writes are available as separate counters:
   - `:cache_read_tokens`
   - `:cache_write_tokens`
+
+  `:tool_use_input_tokens` reports input tokens that provider tools add to the
+  model context. It remains separate from `:input_tokens` because billing rules
+  can differ by provider and tool.
 
   `:input_tokens` keeps the provider's counting rules. Read
   `:input_includes_cached` to determine how the cache counters relate to it:
@@ -72,9 +79,10 @@ defmodule ReqLLM.Usage do
   to `true`.
 
   A valid explicit `:total_tokens` value is preserved. When no total is
-  supplied, the total is `:input_tokens + :output_tokens`. This derived
-  total excludes cache reads and writes when `:input_includes_cached` is
-  `false`. It is therefore not always the full token count for the request.
+  supplied, the total is `:input_tokens + :output_tokens +
+  :tool_use_input_tokens`. This derived total excludes cache reads and writes
+  when `:input_includes_cached` is `false`. It is therefore not always the
+  full token count for the request.
 
   Canonical counters accept numbers and base-10 integer strings. Malformed
   component counters remain visible instead of becoming zero. A malformed
@@ -90,8 +98,15 @@ defmodule ReqLLM.Usage do
 
     total_tokens =
       case MapAccess.get(normalized, :total_tokens) do
-        nil -> derive_total_tokens(input_tokens, output_tokens)
-        value -> value
+        nil ->
+          derive_total_tokens(
+            input_tokens,
+            output_tokens,
+            Map.fetch!(normalized, :tool_use_input_tokens)
+          )
+
+        value ->
+          value
       end
 
     normalized
@@ -112,6 +127,7 @@ defmodule ReqLLM.Usage do
       :cache_read_tokens,
       :cache_write_tokens,
       :cached_tokens,
+      :tool_use_input_tokens,
       :cache_creation_tokens
     ])
     |> Map.put(:input_includes_cached, true)
@@ -138,7 +154,9 @@ defmodule ReqLLM.Usage do
   integer strings are normalized before cumulative values are compared.
   Malformed counters remain visible when no valid value exists, but they do
   not replace an earlier valid counter and are not used to recompute totals.
-  Missing input or output counters keep the existing zero default.
+  Missing input or output counters keep the existing zero default. The total
+  is the larger of the reported total and the sum of input, output, and
+  tool-use input tokens.
   """
   @spec merge(map(), map()) :: map()
   def merge(existing, incoming) when is_map(existing) and is_map(incoming) do
@@ -151,10 +169,19 @@ defmodule ReqLLM.Usage do
   defp recompute_totals(usage) do
     input = Map.get(usage, :input_tokens, 0)
     output = Map.get(usage, :output_tokens, 0)
+    tool_use_input = Map.get(usage, :tool_use_input_tokens, 0)
 
     usage =
-      if is_number(input) and is_number(output) do
-        Map.put(usage, :total_tokens, input + output)
+      if is_number(input) and is_number(output) and is_number(tool_use_input) do
+        derived_total = input + output + tool_use_input
+
+        total =
+          case Map.get(usage, :total_tokens) do
+            reported when is_number(reported) -> max(reported, derived_total)
+            _ -> derived_total
+          end
+
+        Map.put(usage, :total_tokens, total)
       else
         usage
       end
@@ -212,11 +239,12 @@ defmodule ReqLLM.Usage do
     if is_number(existing) and is_number(incoming), do: max(existing, incoming), else: incoming
   end
 
-  defp derive_total_tokens(input_tokens, output_tokens)
-       when is_number(input_tokens) and is_number(output_tokens),
-       do: input_tokens + output_tokens
+  defp derive_total_tokens(input_tokens, output_tokens, tool_use_input_tokens)
+       when is_number(input_tokens) and is_number(output_tokens) and
+              is_number(tool_use_input_tokens),
+       do: input_tokens + output_tokens + tool_use_input_tokens
 
-  defp derive_total_tokens(_, _), do: nil
+  defp derive_total_tokens(_, _, _), do: nil
 
   defp zero_usage_map(usage) do
     Map.new(usage, fn {key, value} -> {key, zero_usage_value(value)} end)
