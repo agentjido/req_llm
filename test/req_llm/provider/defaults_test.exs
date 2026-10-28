@@ -619,6 +619,75 @@ defmodule ReqLLM.Provider.DefaultsTest do
       [encoded_message] = result.messages
       assert encoded_message.content == ""
     end
+
+    test "leaves message metadata out of a tool result built from a map" do
+      tool_message =
+        Context.tool_result("call_1", "identify_patient", %{found: false, patients: []})
+
+      result =
+        Defaults.encode_context_to_openai_format(%Context{messages: [tool_message]}, "gpt-4")
+
+      [encoded_message] = result.messages
+      refute Map.has_key?(encoded_message, :metadata)
+      assert encoded_message.name == "identify_patient"
+      assert Jason.decode!(encoded_message.content) == %{"found" => false, "patients" => []}
+      assert ReqLLM.ToolResult.output_from_message(tool_message) == %{found: false, patients: []}
+    end
+
+    test "keeps message metadata when include_metadata? is true" do
+      tool_message =
+        Context.tool_result("call_1", "identify_patient", %{found: false, patients: []})
+
+      result =
+        Defaults.encode_context_to_openai_format(
+          %Context{messages: [tool_message]},
+          "gemini-2.5-flash",
+          include_metadata?: true
+        )
+
+      [encoded_message] = result.messages
+
+      assert ReqLLM.ToolResult.output_from_message(encoded_message) == %{
+               found: false,
+               patients: []
+             }
+    end
+  end
+
+  describe "default_build_body/1 tool results" do
+    test "sends no message metadata for a tool result built from a map" do
+      context =
+        Context.new([
+          Context.user("Find the patient"),
+          Context.assistant("",
+            tool_calls: [
+              %ReqLLM.ToolCall{
+                id: "call_1",
+                type: "function",
+                function: %{name: "identify_patient", arguments: ~s({"name":"Ana"})}
+              }
+            ]
+          ),
+          Context.tool_result("call_1", "identify_patient", %{found: false, patients: []})
+        ])
+
+      request = %Req.Request{
+        options: %{operation: :chat, model: "gpt-4o", context: context, stream: false}
+      }
+
+      body = request |> Defaults.default_build_body() |> Jason.encode!() |> Jason.decode!()
+
+      refute Enum.any?(body["messages"], &Map.has_key?(&1, "metadata"))
+
+      assert %{
+               "role" => "tool",
+               "tool_call_id" => "call_1",
+               "name" => "identify_patient",
+               "content" => content
+             } = List.last(body["messages"])
+
+      assert Jason.decode!(content) == %{"found" => false, "patients" => []}
+    end
   end
 
   describe "decode_response_body_openai_format/2" do

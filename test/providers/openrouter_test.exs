@@ -1637,6 +1637,57 @@ defmodule ReqLLM.Providers.OpenRouterTest do
       assert detail["text"] == "Let me break down 12 * 7..."
     end
 
+    test "sends no message metadata for a tool result built from a map" do
+      context =
+        Context.new([
+          Context.user("Find the patient"),
+          %ReqLLM.Message{
+            role: :assistant,
+            content: [],
+            tool_calls: [
+              %ReqLLM.ToolCall{
+                id: "call_1",
+                type: "function",
+                function: %{name: "identify_patient", arguments: ~s({"name":"Ana"})}
+              }
+            ],
+            reasoning_details: [
+              %ReqLLM.Message.ReasoningDetails{
+                text: "I should look the patient up.",
+                provider: :openrouter,
+                format: "unknown",
+                index: 0,
+                provider_data: %{"type" => "reasoning.text"}
+              }
+            ]
+          },
+          Context.tool_result("call_1", "identify_patient", %{found: false, patients: []})
+        ])
+
+      mock_request = %Req.Request{
+        options: [
+          context: context,
+          model: "z-ai/glm-4.6",
+          stream: false,
+          openrouter_provider: %{only: ["z-ai"], allow_fallbacks: false}
+        ]
+      }
+
+      decoded = mock_request |> OpenRouter.encode_body() |> ReqLLM.Test.Helpers.json_body()
+
+      refute Enum.any?(decoded["messages"], &Map.has_key?(&1, "metadata"))
+
+      [_user, assistant_message, tool_message] = decoded["messages"]
+
+      assert [%{"text" => "I should look the patient up."}] =
+               assistant_message["reasoning_details"]
+
+      assert %{"role" => "tool", "tool_call_id" => "call_1", "name" => "identify_patient"} =
+               tool_message
+
+      assert Jason.decode!(tool_message["content"]) == %{"found" => false, "patients" => []}
+    end
+
     test "reasoning_details preserved in full round-trip" do
       # This is the key integration test: decode -> encode -> verify preservation
 

@@ -915,6 +915,12 @@ defmodule ReqLLM.Provider.Defaults do
 
   This function moves the logic from ReqLLM.Context.Codec.Map directly into
   Provider.Defaults for the protocol removal refactoring.
+
+  Message `metadata` is ReqLLM's internal record (for example the raw tool
+  output under `ReqLLM.ToolResult.metadata_key/0`) and is not part of the Chat
+  Completions message shape, so it is left out by default. Pass
+  `include_metadata?: true` only when the encoded messages stay in process and
+  are converted further, never when they are sent as-is.
   """
   @spec encode_context_to_openai_format(ReqLLM.Context.t(), String.t()) :: map()
   def encode_context_to_openai_format(context, model_name) do
@@ -957,8 +963,13 @@ defmodule ReqLLM.Provider.Defaults do
     |> maybe_add_field(:name, name)
     |> maybe_add_assistant_reasoning(r, reasoning_content)
     |> maybe_add_reasoning_details(rd, Keyword.get(opts, :encode_reasoning_details?, false))
-    |> maybe_add_field(:metadata, metadata)
+    |> maybe_add_metadata(metadata, Keyword.get(opts, :include_metadata?, false))
   end
+
+  defp maybe_add_metadata(message, metadata, true),
+    do: maybe_add_field(message, :metadata, metadata)
+
+  defp maybe_add_metadata(message, _metadata, false), do: message
 
   # Extract thinking content parts and return {reasoning_content_string, content_without_thinking_parts}
   defp extract_reasoning_content(nil), do: {nil, nil}

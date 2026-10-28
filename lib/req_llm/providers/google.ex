@@ -2603,7 +2603,9 @@ defmodule ReqLLM.Providers.Google do
     normalized_context = normalize_context_video_urls(ctx)
 
     encoded =
-      ReqLLM.Provider.Defaults.encode_context_to_openai_format(normalized_context, model_name)
+      ReqLLM.Provider.Defaults.encode_context_to_openai_format(normalized_context, model_name,
+        include_metadata?: true
+      )
 
     encoded
     |> Map.get(:messages, [])
