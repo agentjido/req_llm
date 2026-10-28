@@ -2426,7 +2426,7 @@ defmodule ReqLLM.Providers.Google do
       "prompt_tokens" => normalized.input_tokens,
       "completion_tokens" => normalized.output_tokens,
       "total_tokens" => normalized.total_tokens,
-      tool_use_input_tokens: normalized.tool_use_input_tokens
+      "tool_use_input_tokens" => normalized.tool_use_input_tokens
     }
 
     base =

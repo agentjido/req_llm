@@ -1745,6 +1745,7 @@ defmodule ReqLLM.Provider.Defaults do
     input = openai_usage_counter(usage, "prompt_tokens")
     output = openai_usage_counter(usage, "completion_tokens")
     total = openai_usage_counter(usage, "total_tokens", openai_total_tokens(input, output))
+    tool_use_input_tokens = openai_usage_counter(usage, "tool_use_input_tokens", nil)
 
     reasoning_from_details =
       openai_usage_detail(usage, "completion_tokens_details", "reasoning_tokens")
@@ -1772,6 +1773,7 @@ defmodule ReqLLM.Provider.Defaults do
 
     base =
       base
+      |> maybe_put_tool_use_input_tokens(tool_use_input_tokens)
       |> maybe_put_cache_creation_tokens(cache_creation_tokens)
       |> maybe_put_openai_usage_reported(usage)
       |> maybe_mark_invalid_openai_details(usage)
@@ -1783,6 +1785,7 @@ defmodule ReqLLM.Provider.Defaults do
           "prompt_tokens",
           "completion_tokens",
           "total_tokens",
+          "tool_use_input_tokens",
           "prompt_tokens_details",
           "completion_tokens_details"
         ] ++ openai_internal_usage_keys()
@@ -1859,6 +1862,7 @@ defmodule ReqLLM.Provider.Defaults do
       :cached_tokens,
       :cache_creation_tokens,
       :reasoning_tokens,
+      :tool_use_input_tokens,
       :cache_write_tokens_by_ttl,
       :usage_reported,
       :billing_usage_complete,
@@ -1873,6 +1877,11 @@ defmodule ReqLLM.Provider.Defaults do
 
   defp maybe_put_cache_creation_tokens(usage, tokens),
     do: Map.put(usage, :cache_creation_tokens, tokens)
+
+  defp maybe_put_tool_use_input_tokens(usage, nil), do: usage
+
+  defp maybe_put_tool_use_input_tokens(usage, tokens),
+    do: Map.put(usage, :tool_use_input_tokens, tokens)
 
   # DeepSeek R1 models return reasoning in "reasoning_content" field
   # When present, we use completion_tokens as reasoning_tokens

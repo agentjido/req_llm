@@ -59,6 +59,20 @@ defmodule ReqLLM.UsageHelpersTest do
       assert ReqLLM.Usage.normalize(usage) == usage
     end
 
+    test "keeps malformed tool-use input tokens visible and marks usage incomplete" do
+      usage =
+        ReqLLM.Usage.normalize(%{
+          input_tokens: 31,
+          output_tokens: 150,
+          tool_use_input_tokens: "invalid"
+        })
+
+      assert usage.tool_use_input_tokens == "invalid"
+      assert usage.total_tokens == nil
+      assert usage.billing_usage_complete == false
+      assert ReqLLM.Usage.normalize(usage) == usage
+    end
+
     test "preserves explicit total_tokens when provided" do
       usage =
         ReqLLM.Usage.normalize(%{
@@ -124,6 +138,23 @@ defmodule ReqLLM.UsageHelpersTest do
 
         assert ReqLLM.Usage.normalize(usage).input_includes_cached == true
       end
+    end
+
+    test "zero resets numeric-string counters and keeps non-counter metadata" do
+      usage =
+        ReqLLM.Usage.zero(%{
+          "output_tokens" => "150",
+          input_tokens: "31",
+          tool_use_input_tokens: "73",
+          provider_id: "123",
+          prompt_tokens_details: %{"cached_tokens" => "12"}
+        })
+
+      assert usage.input_tokens == 0
+      assert usage.tool_use_input_tokens == 0
+      assert usage["output_tokens"] == 0
+      assert usage.prompt_tokens_details["cached_tokens"] == 0
+      assert usage.provider_id == "123"
     end
 
     test "empty usage defaults to input that includes cached tokens" do

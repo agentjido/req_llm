@@ -820,10 +820,37 @@ defmodule ReqLLM.Provider.DefaultsTest do
       end
     end
 
+    test "keeps tool-use input tokens in buffered and streamed responses", %{model: model} do
+      usage = %{
+        "prompt_tokens" => 31,
+        "completion_tokens" => 150,
+        "tool_use_input_tokens" => "73",
+        "total_tokens" => 254
+      }
+
+      {:ok, response} =
+        Defaults.decode_response_body_openai_format(%{"usage" => usage}, model)
+
+      [chunk] =
+        Defaults.default_decode_stream_event(
+          %{data: %{"choices" => [], "usage" => usage}},
+          model
+        )
+
+      assert response.usage == chunk.metadata.usage
+      assert response.usage.tool_use_input_tokens == 73
+      refute Map.has_key?(response.usage, "tool_use_input_tokens")
+    end
+
     test "keeps invalid counters and marks malformed details as incomplete", %{model: model} do
       for usage <- [
             %{"prompt_tokens" => "invalid", "completion_tokens" => 3},
             %{"prompt_tokens" => false, "completion_tokens" => 3},
+            %{
+              "prompt_tokens" => 7,
+              "completion_tokens" => 3,
+              "tool_use_input_tokens" => false
+            },
             %{
               "prompt_tokens" => 7,
               "completion_tokens" => 3,

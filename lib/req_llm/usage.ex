@@ -27,6 +27,8 @@ defmodule ReqLLM.Usage do
     :compute_units
   ]
 
+  @counter_key_strings Enum.map(@counter_keys, &Atom.to_string/1)
+
   @zero_usage %{
     input_tokens: 0,
     output_tokens: 0,
@@ -247,7 +249,11 @@ defmodule ReqLLM.Usage do
   defp derive_total_tokens(_, _, _), do: nil
 
   defp zero_usage_map(usage) do
-    Map.new(usage, fn {key, value} -> {key, zero_usage_value(value)} end)
+    Map.new(usage, fn
+      {key, _value} when key in @counter_keys -> {key, 0}
+      {key, _value} when key in @counter_key_strings -> {key, 0}
+      {key, value} -> {key, zero_usage_value(value)}
+    end)
   end
 
   defp zero_usage_value(value) when is_number(value), do: 0
