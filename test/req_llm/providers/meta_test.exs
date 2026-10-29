@@ -58,11 +58,6 @@ defmodule ReqLLM.Providers.MetaTest do
              ]
     end
 
-    test "prepare_request rejects unsupported operations" do
-      {:error, error} = Meta.prepare_request(:embedding, meta_model(), "Hello", [])
-      assert %ReqLLM.Error.Invalid.Parameter{} = error
-    end
-
     test "object requests use Responses JSON schema output" do
       {:ok, compiled_schema} =
         ReqLLM.Schema.compile(name: [type: :string, required: true])

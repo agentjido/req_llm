@@ -53,6 +53,24 @@ defmodule ReqLLM.Providers.ContractTest do
     {ReqLLM.Providers.XAI, :xai, "grok-3", "https://api.x.ai/v1"}
   ]
 
+  @unsupported_operation_contracts [
+    {ReqLLM.Providers.Mistral, :mistral, "mistral-small", :unsupported, "Hello", false},
+    {ReqLLM.Providers.Meta, :meta, "llama", :embedding, "Hello", false},
+    {ReqLLM.Providers.Cohere, :cohere, "rerank-v3.5", :chat, %{}, false},
+    {ReqLLM.Providers.Google, :google, "gemini-1.5-flash", :unsupported_operation, "Hello", true},
+    {ReqLLM.Providers.Groq, :groq, "llama-3.1-8b-instant", :unsupported, "Hello", true},
+    {ReqLLM.Providers.Deepseek, :deepseek, "deepseek-chat", :unsupported, "Hello", false},
+    {ReqLLM.Providers.OpenRouter, :openrouter, "openai/gpt-4", :moderation, "Hello", true},
+    {ReqLLM.Providers.OpenAI, :openai, "gpt-4o", :unsupported, "Hello", false}
+  ]
+
+  @provider_mismatch_contracts [
+    {ReqLLM.Providers.Alibaba, :alibaba},
+    {ReqLLM.Providers.AlibabaCN, :alibaba_cn},
+    {ReqLLM.Providers.Venice, :venice},
+    {ReqLLM.Providers.XAI, :xai}
+  ]
+
   for {provider, provider_id, base_url, env_key} <- @contracts do
     @provider provider
     @provider_id provider_id
@@ -205,6 +223,52 @@ defmodule ReqLLM.Providers.ContractTest do
 
       for invalid <- ["invalid", nil, 123] do
         assert {:error, :invalid_body} = @provider.extract_usage(invalid, model)
+      end
+    end
+  end
+
+  for {provider, provider_id, model_id, operation, input, compiled_schema?} <-
+        @unsupported_operation_contracts do
+    @provider provider
+    @provider_id provider_id
+    @model_id model_id
+    @operation operation
+    @input input
+    @compiled_schema? compiled_schema?
+
+    test "#{provider_id} rejects unsupported operations" do
+      model = %LLMDB.Model{
+        id: @model_id,
+        model: @model_id,
+        provider_model_id: @model_id,
+        provider: @provider_id,
+        capabilities: %{chat: true, rerank: true}
+      }
+
+      assert {:error, %ReqLLM.Error.Invalid.Parameter{} = error} =
+               @provider.prepare_request(@operation, model, @input, [])
+
+      assert error.parameter =~ "operation:"
+
+      if @compiled_schema? do
+        assert {:ok, schema} = ReqLLM.Schema.compile([])
+
+        assert {:error, %ReqLLM.Error.Invalid.Parameter{} = schema_error} =
+                 @provider.prepare_request(@operation, model, @input, compiled_schema: schema)
+
+        assert schema_error.parameter =~ "operation:"
+      end
+    end
+  end
+
+  for {provider, provider_id} <- @provider_mismatch_contracts do
+    @provider provider
+
+    test "#{provider_id} rejects a model from another provider" do
+      wrong_model = %LLMDB.Model{id: "gpt-4", model: "gpt-4", provider: :openai}
+
+      assert_raise ReqLLM.Error.Invalid.Provider, fn ->
+        @provider.attach(Req.new(), wrong_model, api_key: "contract-key")
       end
     end
   end

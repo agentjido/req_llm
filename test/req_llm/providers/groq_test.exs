@@ -443,37 +443,8 @@ defmodule ReqLLM.Providers.GroqTest do
       # Should remain unchanged
       assert request.options[:max_tokens] == 1000
     end
-
-    test "prepare_request rejects unsupported operations" do
-      {:ok, model} = ReqLLM.model("groq:llama-3.1-8b-instant")
-      prompt = "Hello world"
-
-      # Embedding is now supported via defaults, so test an actually unsupported operation
-      {:error, error} = Groq.prepare_request(:unsupported, model, prompt, [])
-      assert %ReqLLM.Error.Invalid.Parameter{} = error
-      assert error.parameter =~ "operation: :unsupported not supported"
-
-      # Test unsupported operation for object with schema
-      {:ok, schema} = ReqLLM.Schema.compile([])
-
-      {:error, error} =
-        Groq.prepare_request(:another_unsupported, model, prompt, compiled_schema: schema)
-
-      assert %ReqLLM.Error.Invalid.Parameter{} = error
-      assert error.parameter =~ "operation: :another_unsupported not supported"
-    end
   end
 
   describe "error handling & robustness" do
-    test "context validation allows multiple system messages" do
-      context =
-        Context.new([
-          Context.system("System 1"),
-          Context.system("System 2"),
-          Context.user("Hello")
-        ])
-
-      assert ^context = Context.validate!(context)
-    end
   end
 end

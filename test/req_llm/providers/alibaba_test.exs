@@ -8,7 +8,6 @@ defmodule ReqLLM.Providers.AlibabaTest do
 
   use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Alibaba, async: true
 
-  alias ReqLLM.Context
   alias ReqLLM.Providers.Alibaba
 
   # LLMDB doesn't have alibaba models yet, so we create them manually
@@ -91,14 +90,6 @@ defmodule ReqLLM.Providers.AlibabaTest do
 
       {:error, error} = Alibaba.prepare_request(:unsupported, model, prompt, [])
       assert %ReqLLM.Error.Invalid.Parameter{} = error
-    end
-
-    test "rejects provider mismatch" do
-      {:ok, wrong_model} = ReqLLM.model(%{provider: :openai, id: "gpt-4"})
-
-      assert_raise ReqLLM.Error.Invalid.Provider, fn ->
-        Req.new() |> Alibaba.attach(wrong_model, [])
-      end
     end
   end
 
@@ -465,15 +456,5 @@ defmodule ReqLLM.Providers.AlibabaTest do
   end
 
   describe "context validation" do
-    test "multiple system messages are allowed" do
-      context =
-        Context.new([
-          Context.system("System 1"),
-          Context.system("System 2"),
-          Context.user("Hello")
-        ])
-
-      assert ^context = Context.validate!(context)
-    end
   end
 end

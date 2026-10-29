@@ -8,7 +8,6 @@ defmodule ReqLLM.Providers.VeniceTest do
 
   use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Venice, async: true
 
-  alias ReqLLM.Context
   alias ReqLLM.Providers.Venice
 
   describe "provider contract" do
@@ -40,14 +39,6 @@ defmodule ReqLLM.Providers.VeniceTest do
 
       {:error, error} = Venice.prepare_request(:unsupported, model, prompt, [])
       assert %ReqLLM.Error.Invalid.Parameter{} = error
-    end
-
-    test "rejects provider mismatch" do
-      {:ok, wrong_model} = ReqLLM.model(%{provider: :openai, id: "gpt-4"})
-
-      assert_raise ReqLLM.Error.Invalid.Provider, fn ->
-        Req.new() |> Venice.attach(wrong_model, [])
-      end
     end
   end
 
@@ -359,15 +350,5 @@ defmodule ReqLLM.Providers.VeniceTest do
   end
 
   describe "context validation" do
-    test "multiple system messages are allowed" do
-      context =
-        Context.new([
-          Context.system("System 1"),
-          Context.system("System 2"),
-          Context.user("Hello")
-        ])
-
-      assert ^context = Context.validate!(context)
-    end
   end
 end

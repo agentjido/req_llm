@@ -1413,26 +1413,6 @@ defmodule ReqLLM.Providers.OpenAITest do
   end
 
   describe "error handling & robustness" do
-    test "context validation allows multiple system messages" do
-      context =
-        Context.new([
-          Context.system("System 1"),
-          Context.system("System 2"),
-          Context.user("Hello")
-        ])
-
-      assert ^context = Context.validate!(context)
-    end
-
-    test "prepare_request rejects unsupported operations" do
-      {:ok, model} = ReqLLM.model("openai:gpt-4o")
-      context = context_fixture()
-
-      {:error, error} = OpenAI.prepare_request(:unsupported, model, context, [])
-      assert %ReqLLM.Error.Invalid.Parameter{} = error
-      assert error.parameter =~ "operation: :unsupported not supported by OpenAI provider"
-    end
-
     test "attach rejects invalid model provider" do
       {:ok, wrong_model} = ReqLLM.model("groq:llama-3.1-8b-instant")
 

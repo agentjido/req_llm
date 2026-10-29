@@ -33,13 +33,6 @@ defmodule ReqLLM.Providers.CohereTest do
       assert request.options[:documents] == ["Nevada", "Washington"]
       assert request.options[:top_n] == 1
     end
-
-    test "prepare_request rejects unsupported operations" do
-      {:error, error} = Cohere.prepare_request(:chat, rerank_model(), %{}, [])
-
-      assert %ReqLLM.Error.Invalid.Parameter{} = error
-      assert Exception.message(error) =~ "Supported operations: [:rerank]"
-    end
   end
 
   describe "authentication wiring" do

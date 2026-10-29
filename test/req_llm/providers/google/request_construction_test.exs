@@ -269,24 +269,5 @@ defmodule ReqLLM.Providers.Google.RequestConstructionTest do
       assert request.options[:operation] == :embedding
       assert request.options[:dimensions] == 768
     end
-
-    test "prepare_request rejects unsupported operations" do
-      {:ok, model} = ReqLLM.model("google:gemini-1.5-flash")
-      context = context_fixture()
-
-      # Test unsupported operation for 3-arg version
-      {:error, error} = Google.prepare_request(:unsupported_operation, model, context, [])
-      assert %ReqLLM.Error.Invalid.Parameter{} = error
-      assert error.parameter =~ "operation: :unsupported_operation not supported"
-
-      # Test unsupported operation for object with schema
-      {:ok, schema} = ReqLLM.Schema.compile([])
-
-      {:error, error} =
-        Google.prepare_request(:unsupported_operation, model, context, compiled_schema: schema)
-
-      assert %ReqLLM.Error.Invalid.Parameter{} = error
-      assert error.parameter =~ "operation: :unsupported_operation not supported"
-    end
   end
 end

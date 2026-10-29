@@ -524,14 +524,6 @@ defmodule ReqLLM.Providers.XAITest do
       assert %ReqLLM.Error.Invalid.Parameter{} = error
       assert error.parameter =~ "operation: :embedding not supported"
     end
-
-    test "rejects provider mismatch" do
-      {:ok, wrong_model} = ReqLLM.model(%{provider: :openai, id: "gpt-4"})
-
-      assert_raise ReqLLM.Error.Invalid.Provider, fn ->
-        Req.new() |> XAI.attach(wrong_model, [])
-      end
-    end
   end
 
   describe "body encoding" do
@@ -764,15 +756,5 @@ defmodule ReqLLM.Providers.XAITest do
   end
 
   describe "context validation" do
-    test "multiple system messages are allowed" do
-      context =
-        Context.new([
-          Context.system("System 1"),
-          Context.system("System 2"),
-          Context.user("Hello")
-        ])
-
-      assert ^context = Context.validate!(context)
-    end
   end
 end

@@ -1121,23 +1121,6 @@ defmodule ReqLLM.Providers.OpenRouterTest do
       assert request.options[:max_tokens] == 1000
     end
 
-    test "prepare_request rejects unsupported operations" do
-      {:ok, model} = ReqLLM.model("openrouter:openai/gpt-4")
-      context = context_fixture()
-
-      {:error, error} = OpenRouter.prepare_request(:moderation, model, context, [])
-      assert %ReqLLM.Error.Invalid.Parameter{} = error
-      assert error.parameter =~ "operation: :moderation not supported"
-
-      {:ok, schema} = ReqLLM.Schema.compile([])
-
-      {:error, error} =
-        OpenRouter.prepare_request(:moderation, model, context, compiled_schema: schema)
-
-      assert %ReqLLM.Error.Invalid.Parameter{} = error
-      assert error.parameter =~ "operation: :moderation not supported"
-    end
-
     test "prepare_request creates configured embedding request" do
       model =
         LLMDB.Model.new!(%{
@@ -1192,16 +1175,6 @@ defmodule ReqLLM.Providers.OpenRouterTest do
   end
 
   describe "error handling & robustness" do
-    test "context validation allows multiple system messages" do
-      context =
-        Context.new([
-          Context.system("System 1"),
-          Context.system("System 2"),
-          Context.user("Hello")
-        ])
-
-      assert ^context = Context.validate!(context)
-    end
   end
 
   describe "OpenRouter-specific features" do

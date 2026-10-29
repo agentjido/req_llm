@@ -50,13 +50,6 @@ defmodule ReqLLM.Providers.MistralTest do
       assert request.url.path == "/embeddings"
       assert request.method == :post
     end
-
-    test "prepare_request rejects unsupported operations" do
-      {:error, error} =
-        Mistral.prepare_request(:unsupported, mistral_model(), context_fixture(), [])
-
-      assert %ReqLLM.Error.Invalid.Parameter{} = error
-    end
   end
 
   describe "authentication wiring" do

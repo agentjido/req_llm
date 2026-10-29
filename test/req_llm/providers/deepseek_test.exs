@@ -102,14 +102,6 @@ defmodule ReqLLM.Providers.DeepseekTest do
       body = ReqLLM.Test.Helpers.json_body(encoded)
       assert body["reasoning_effort"] == "max"
     end
-
-    test "prepare_request rejects unsupported operations" do
-      model = deepseek_model()
-      context = context_fixture()
-
-      {:error, error} = Deepseek.prepare_request(:unsupported, model, context, [])
-      assert %ReqLLM.Error.Invalid.Parameter{} = error
-    end
   end
 
   describe "authentication wiring" do
