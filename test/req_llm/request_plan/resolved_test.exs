@@ -4,6 +4,10 @@ defmodule ReqLLM.RequestPlan.ResolvedTest do
   alias ReqLLM.Providers
   alias ReqLLM.RequestPlan
 
+  defmodule StreamProvider do
+    def stream_transport(_model, opts), do: Keyword.fetch!(opts, :selected_transport)
+  end
+
   for {operation, provider, provider_module} <- [
         {:chat, :google, Providers.Google},
         {:object, :amazon_bedrock, Providers.AmazonBedrock},
@@ -198,6 +202,23 @@ defmodule ReqLLM.RequestPlan.ResolvedTest do
 
     assert plan.transport == :websocket
     assert plan.surface == :provider
+  end
+
+  test "selects the current provider stream transport in the plan" do
+    model = LLMDB.Model.new!(%{provider: :custom_provider, id: "private-model"})
+
+    for {selected, planned} <- [
+          {:http, :finch},
+          {:websocket, :websocket},
+          {:in_process, :in_process}
+        ] do
+      opts = [selected_transport: selected]
+
+      assert {:ok, plan} = RequestPlan.from_stream(model, :chat, StreamProvider, opts)
+      assert plan.transport == planned
+      assert plan.options == opts
+      assert plan.provider_module == StreamProvider
+    end
   end
 
   test "rejects unsupported operation and transport descriptors" do

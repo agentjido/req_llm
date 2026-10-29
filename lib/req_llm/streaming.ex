@@ -44,7 +44,9 @@ defmodule ReqLLM.Streaming do
 
   """
 
-  alias ReqLLM.{Context, StreamResponse, StreamResponse.MetadataHandle, StreamServer}
+  alias ReqLLM.{Context, RequestPlan, Runtime, StreamResponse, StreamResponse.MetadataHandle}
+  alias ReqLLM.Provider.Adapter
+  alias ReqLLM.StreamServer
 
   require Logger
 
@@ -108,31 +110,31 @@ defmodule ReqLLM.Streaming do
   @spec start_stream(module(), LLMDB.Model.t(), Context.t(), keyword()) ::
           {:ok, StreamResponse.t()} | {:error, term()}
   def start_stream(provider_mod, model, context, opts \\ []) do
-    transport = stream_transport(provider_mod, model, opts)
+    operation = Keyword.get(opts, :operation, :chat)
+
+    with {:ok, plan} <- RequestPlan.from_stream(model, operation, provider_mod, opts) do
+      Runtime.execute_stream(plan, context)
+    end
+  end
+
+  @doc false
+  @spec start_planned_stream(RequestPlan.t(), Context.t()) ::
+          {:ok, StreamResponse.t()} | {:error, term()}
+  def start_planned_stream(%RequestPlan{} = plan, %Context{} = context) do
+    opts = plan.options
     total_timeout = ReqLLM.TimeoutBudget.total_timeout(opts)
     total_timeout_deadline = ReqLLM.TimeoutBudget.deadline(opts)
     stream_idle_timeout = ReqLLM.TimeoutBudget.stream_idle_timeout(opts)
 
-    with :ok <- ReqLLM.ProviderFileReference.validate_context(context, model.provider),
+    with :ok <- ReqLLM.ProviderFileReference.validate_context(context, plan.model.provider),
          {:ok, server_pid} <-
            start_stream_server(
-             provider_mod,
-             model,
-             transport,
-             opts,
+             plan,
              total_timeout,
              total_timeout_deadline,
              stream_idle_timeout
            ) do
-      build_stream_response(
-        provider_mod,
-        model,
-        context,
-        opts,
-        transport,
-        server_pid,
-        stream_idle_timeout
-      )
+      build_stream_response(plan, context, server_pid, stream_idle_timeout)
     else
       {:error, reason} ->
         Logger.error("Failed to start streaming: #{inspect(reason)}")
@@ -141,34 +143,30 @@ defmodule ReqLLM.Streaming do
   end
 
   defp build_stream_response(
-         provider_mod,
-         model,
+         plan,
          context,
-         opts,
-         transport,
          server_pid,
          stream_idle_timeout
        ) do
+    opts = plan.options
+
     with {:ok, _http_task_pid, http_context, canonical_json} <-
            start_transport_streaming(
-             transport,
-             provider_mod,
-             model,
+             plan,
              context,
-             Keyword.delete(opts, :pricing_context),
              server_pid
            ),
          :ok <- set_fixture_context_if_needed(server_pid, http_context, canonical_json) do
       stream_context =
-        model
+        plan.model
         |> ReqLLM.Telemetry.new_context(
           Keyword.put_new(opts, :context, context),
           mode: :stream,
-          transport: telemetry_transport(transport),
-          operation: Keyword.get(opts, :operation, :chat),
+          transport: telemetry_transport(plan.transport),
+          operation: plan.operation,
           reasoning_contract:
             ReqLLM.Telemetry.reasoning_contract_for(
-              model,
+              plan.model,
               Keyword.put_new(opts, :context, context),
               canonical_json
             )
@@ -189,13 +187,15 @@ defmodule ReqLLM.Streaming do
       next_timeout = stream_next_timeout(stream_idle_timeout, receive_timeout)
       metadata_handle = start_metadata_handle(server_pid, opts)
       cancel_fn = fn -> cancel_stream(server_pid, metadata_handle) end
-      stream = create_lazy_stream(server_pid, next_timeout, cancel_fn, transport == :in_process)
+
+      stream =
+        create_lazy_stream(server_pid, next_timeout, cancel_fn, plan.transport == :in_process)
 
       stream_response = %StreamResponse{
         stream: stream,
         metadata_handle: metadata_handle,
         cancel: cancel_fn,
-        model: model,
+        model: plan.model,
         context: context
       }
 
@@ -226,26 +226,25 @@ defmodule ReqLLM.Streaming do
 
   # Start StreamServer with provider configuration
   defp start_stream_server(
-         provider_mod,
-         model,
-         transport,
-         opts,
+         plan,
          total_timeout,
          total_timeout_deadline,
          stream_idle_timeout
        ) do
+    opts = plan.options
+
     server_opts = [
-      provider_mod: provider_mod,
-      model: model,
+      provider_mod: plan.provider_module,
+      model: plan.model,
       pricing_context: Keyword.get(opts, :pricing_context),
       protocol_parser:
-        protocol_parser_for_transport(transport) ||
-          provider_protocol_parser(provider_mod, model, opts),
-      fixture_path: maybe_capture_fixture(model, opts),
+        protocol_parser_for_transport(plan.transport) ||
+          Adapter.stream_protocol_parser(plan.provider_module, plan.model, opts),
+      fixture_path: maybe_capture_fixture(plan.model, opts),
       total_timeout: total_timeout,
       total_timeout_deadline: total_timeout_deadline,
       stream_idle_timeout: configured_stream_idle_timeout(stream_idle_timeout),
-      canonical_stream?: transport == :in_process,
+      canonical_stream?: plan.transport == :in_process,
       completion_cleanup_after:
         Keyword.get(
           opts,
@@ -268,99 +267,46 @@ defmodule ReqLLM.Streaming do
     end
   end
 
-  defp start_transport_streaming(
-         :websocket,
-         provider_mod,
-         model,
-         context,
-         opts,
-         stream_server_pid
-       ) do
-    case StreamServer.start_http(
-           stream_server_pid,
-           provider_mod,
-           model,
-           context,
-           opts
-           |> Keyword.put(:stream_transport, :websocket)
-           |> Keyword.put(:defer_http_events_until_telemetry?, true),
-           ReqLLM.Finch
-         ) do
+  defp start_transport_streaming(plan, context, stream_server_pid) do
+    planned_start = %{
+      plan
+      | options:
+          plan.options
+          |> Keyword.delete(:pricing_context)
+          |> Keyword.put(:defer_http_events_until_telemetry?, true)
+    }
+
+    case StreamServer.start_stream(stream_server_pid, planned_start, context) do
       {:ok, task_pid, http_context, canonical_json} ->
         {:ok, task_pid, http_context, canonical_json}
 
       {:error, reason} ->
-        Logger.error("Failed to start WebSocket streaming: #{inspect(reason)}")
-        {:error, {:websocket_streaming_failed, reason}}
+        transport_start_error(plan.transport, reason)
     end
   end
 
-  defp start_transport_streaming(:http, provider_mod, model, context, opts, stream_server_pid) do
-    start_http_streaming(provider_mod, model, context, opts, stream_server_pid)
-  end
-
-  defp start_transport_streaming(
-         :in_process,
-         provider_mod,
-         model,
-         context,
-         opts,
-         stream_server_pid
+  defp transport_start_error(
+         :finch,
+         {:provider_build_failed, {:http2_body_too_large, body_size, protocols}}
        ) do
-    case StreamServer.start_in_process(
-           stream_server_pid,
-           provider_mod,
-           model,
-           context,
-           Keyword.put(opts, :defer_http_events_until_telemetry?, true)
-         ) do
-      {:ok, task_pid, stream_context, canonical_request} ->
-        {:ok, task_pid, stream_context, canonical_request}
-
-      {:error, reason} ->
-        Logger.error("Failed to start in-process streaming: #{inspect(reason)}")
-        {:error, {:in_process_streaming_failed, reason}}
-    end
+    message = format_http2_error_message(body_size, protocols)
+    Logger.error(message)
+    {:error, {:http2_body_too_large, message}}
   end
 
-  # Start HTTP streaming through StreamServer
-  defp start_http_streaming(provider_mod, model, context, opts, stream_server_pid) do
-    finch_name = Keyword.get(opts, :finch_name, ReqLLM.Finch)
-
-    case StreamServer.start_http(
-           stream_server_pid,
-           provider_mod,
-           model,
-           context,
-           Keyword.put(opts, :defer_http_events_until_telemetry?, true),
-           finch_name
-         ) do
-      {:ok, task_pid, http_context, canonical_json} ->
-        {:ok, task_pid, http_context, canonical_json}
-
-      {:error, {:provider_build_failed, {:http2_body_too_large, body_size, protocols}}} ->
-        message = format_http2_error_message(body_size, protocols)
-        Logger.error(message)
-        {:error, {:http2_body_too_large, message}}
-
-      {:error, reason} ->
-        Logger.error("Failed to start HTTP streaming: #{inspect(reason)}")
-        {:error, {:http_streaming_failed, reason}}
-    end
+  defp transport_start_error(:finch, reason) do
+    Logger.error("Failed to start HTTP streaming: #{inspect(reason)}")
+    {:error, {:http_streaming_failed, reason}}
   end
 
-  defp stream_transport(provider_mod, model, opts) do
-    if function_exported?(provider_mod, :stream_transport, 2) do
-      provider_mod.stream_transport(model, opts)
-    else
-      :http
-    end
+  defp transport_start_error(:websocket, reason) do
+    Logger.error("Failed to start WebSocket streaming: #{inspect(reason)}")
+    {:error, {:websocket_streaming_failed, reason}}
   end
 
-  defp provider_protocol_parser(provider_mod, model, opts) do
-    if function_exported?(provider_mod, :stream_protocol_parser, 2) do
-      provider_mod.stream_protocol_parser(model, opts)
-    end
+  defp transport_start_error(:in_process, reason) do
+    Logger.error("Failed to start in-process streaming: #{inspect(reason)}")
+    {:error, {:in_process_streaming_failed, reason}}
   end
 
   defp configured_stream_idle_timeout({:configured, timeout}), do: timeout
@@ -371,7 +317,7 @@ defmodule ReqLLM.Streaming do
 
   defp telemetry_transport(:websocket), do: :websocket
   defp telemetry_transport(:in_process), do: :in_process
-  defp telemetry_transport(_transport), do: :finch
+  defp telemetry_transport(:finch), do: :finch
 
   defp protocol_parser_for_transport(:websocket),
     do: &ReqLLM.Streaming.WebSocketProtocol.parse_message/2

@@ -1,6 +1,7 @@
 defmodule ReqLLM.Streaming.WebSocketClient do
   @moduledoc false
 
+  alias ReqLLM.Provider.Adapter
   alias ReqLLM.Streaming.Fixtures.HTTPContext
   alias ReqLLM.Streaming.WebSocketProtocol
   alias ReqLLM.Streaming.WebSocketSession
@@ -41,23 +42,23 @@ defmodule ReqLLM.Streaming.WebSocketClient do
   end
 
   defp build_stream_request(provider_mod, model, context, opts) do
-    with true <- function_exported?(provider_mod, :attach_websocket_stream, 3),
-         {:ok, config} <- provider_mod.attach_websocket_stream(model, context, opts) do
-      http_context =
-        Map.get_lazy(config, :http_context, fn ->
-          HTTPContext.new(config.url, :get, Map.new(config.headers || []))
-        end)
+    case Adapter.attach_websocket_stream(provider_mod, model, context, opts) do
+      {:ok, config} ->
+        http_context =
+          Map.get_lazy(config, :http_context, fn ->
+            HTTPContext.new(config.url, :get, Map.new(config.headers || []))
+          end)
 
-      {:ok,
-       %{
-         url: config.url,
-         headers: config.headers || [],
-         initial_messages: config.initial_messages || [],
-         http_context: http_context,
-         canonical_json: config.canonical_json || %{},
-         fallback_transport: Map.get(config, :fallback_transport)
-       }}
-    else
+        {:ok,
+         %{
+           url: config.url,
+           headers: config.headers || [],
+           initial_messages: config.initial_messages || [],
+           http_context: http_context,
+           canonical_json: config.canonical_json || %{},
+           fallback_transport: Map.get(config, :fallback_transport)
+         }}
+
       false ->
         {:error,
          ReqLLM.Error.API.Request.exception(

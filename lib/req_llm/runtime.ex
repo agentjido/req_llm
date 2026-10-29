@@ -49,6 +49,28 @@ defmodule ReqLLM.Runtime do
     )
   end
 
+  @doc false
+  @spec prepare_stream(RequestPlan.t(), term()) ::
+          {:ok, Req.Request.t()} | {:error, term()}
+  def prepare_stream(%RequestPlan{transport: transport} = plan, input)
+      when transport in [:finch, :websocket, :in_process] do
+    Adapter.prepare_request(
+      plan.provider_module,
+      plan.operation,
+      plan.model,
+      input,
+      plan.options
+    )
+  end
+
+  @doc false
+  @spec execute_stream(RequestPlan.t(), ReqLLM.Context.t()) ::
+          {:ok, ReqLLM.StreamResponse.t()} | {:error, term()}
+  def execute_stream(%RequestPlan{transport: transport} = plan, %ReqLLM.Context{} = context)
+      when transport in [:finch, :websocket, :in_process] do
+    ReqLLM.Streaming.start_planned_stream(plan, context)
+  end
+
   @doc """
   Sends an already prepared Req request using the supplied deadline.
 

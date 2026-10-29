@@ -13,6 +13,18 @@ defmodule ReqLLM.RuntimeTest do
     end
   end
 
+  defmodule StreamProvider do
+    def attach_in_process_stream(model, context, opts) do
+      send(opts[:owner], {:stream_started, model, context, opts})
+
+      {:ok,
+       [
+         ReqLLM.StreamChunk.text("planned stream"),
+         ReqLLM.StreamChunk.meta(%{finish_reason: :stop, terminal?: true})
+       ]}
+    end
+  end
+
   test "executes the provider's Req pipeline before applying the operation result policy" do
     model = %LLMDB.Model{provider: :runtime_test, id: "outside-the-catalog"}
     input = <<0, 1, 255>>
@@ -80,6 +92,20 @@ defmodule ReqLLM.RuntimeTest do
     end
 
     refute_received {:prepared, _, _, _, _}
+  end
+
+  test "executes a planned in-process stream through the runtime" do
+    model = %LLMDB.Model{provider: :runtime_test, id: "outside-the-catalog"}
+    {:ok, context} = ReqLLM.Context.normalize("Hello")
+    opts = [owner: self(), operation: :chat]
+
+    assert {:ok, plan} =
+             RequestPlan.from_resolved(model, :chat, StreamProvider, opts, :in_process)
+
+    assert {:ok, response} = Runtime.execute_stream(plan, context)
+    assert ReqLLM.StreamResponse.text(response) == "planned stream"
+    assert ReqLLM.StreamResponse.finish_reason(response) == :stop
+    assert_receive {:stream_started, ^model, ^context, ^opts}
   end
 
   test "passes completed HTTP errors to the result policy unchanged" do
