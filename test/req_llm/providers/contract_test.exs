@@ -36,6 +36,14 @@ defmodule ReqLLM.Providers.ContractTest do
     {ReqLLM.Providers.Zenmux, :zenmux, "https://zenmux.ai/api/v1", "ZENMUX_API_KEY"}
   ]
 
+  @openai_compatible_contracts [
+    {ReqLLM.Providers.AtlasCloud, :atlascloud, "qwen/qwen3.5-flash",
+     "https://api.atlascloud.ai/v1"},
+    {ReqLLM.Providers.CheaperInference, :cheaperinference, "gpt-5.4-mini",
+     "https://api.cheaperinference.com/v1"},
+    {ReqLLM.Providers.VLLM, :vllm, "test-model", "http://localhost:8000/v1"}
+  ]
+
   for {provider, provider_id, base_url, env_key} <- @contracts do
     @provider provider
     @provider_id provider_id
@@ -67,6 +75,94 @@ defmodule ReqLLM.Providers.ContractTest do
 
       assert missing_keys == [],
              "Extended provider schema is missing keys: #{inspect(missing_keys)}"
+    end
+  end
+
+  for {provider, provider_id, model_id, base_url} <- @openai_compatible_contracts do
+    @provider provider
+    @provider_id provider_id
+    @model_id model_id
+    @base_url base_url
+
+    defp compatible_model(unquote(provider_id), model_id) do
+      %LLMDB.Model{
+        id: model_id,
+        model: model_id,
+        provider_model_id: model_id,
+        provider: unquote(provider_id),
+        capabilities: %{chat: true, tools: %{enabled: true}},
+        extra: %{wire: %{protocol: "openai_chat"}}
+      }
+    end
+
+    test "#{provider_id} wires OpenAI-compatible chat requests" do
+      model = compatible_model(@provider_id, @model_id)
+
+      assert {:ok, %Req.Request{} = request} =
+               @provider.prepare_request(:chat, model, "Hello", temperature: 0.7)
+
+      assert request.method == :post
+      assert request.url.path == "/chat/completions"
+      assert request.options[:base_url] == @base_url
+
+      assert {:ok, overridden} =
+               @provider.prepare_request(:chat, model, "Hello",
+                 base_url: "https://proxy.example.com/v1"
+               )
+
+      assert overridden.options[:base_url] == "https://proxy.example.com/v1"
+    end
+
+    test "#{provider_id} wires OpenAI-compatible authentication and pipeline steps" do
+      model = compatible_model(@provider_id, @model_id)
+      request = @provider.attach(Req.new(), model, api_key: "contract-key")
+
+      assert request.headers["authorization"] == ["Bearer contract-key"]
+      assert :llm_encode_body in Keyword.keys(request.request_steps)
+      assert :llm_decode_response in Keyword.keys(request.response_steps)
+    end
+
+    test "#{provider_id} wires OpenAI-compatible request and response codecs" do
+      model = compatible_model(@provider_id, @model_id)
+
+      request = %Req.Request{
+        options: [
+          context: ReqLLM.ProviderCase.context_fixture(),
+          model: model.model,
+          stream: false,
+          temperature: 0.7
+        ]
+      }
+
+      encoded = @provider.encode_body(request)
+      body = ReqLLM.Test.Helpers.json_body(encoded)
+
+      assert body["model"] == @model_id
+      assert is_list(body["messages"])
+      assert body["stream"] == false
+      assert body["temperature"] == 0.7
+
+      response = %Req.Response{
+        status: 200,
+        body:
+          ReqLLM.ProviderCase.openai_format_json_fixture(
+            model: @model_id,
+            content: "contract response"
+          )
+      }
+
+      request = %Req.Request{
+        options: [
+          context: ReqLLM.ProviderCase.context_fixture(),
+          model: @model_id,
+          operation: :chat
+        ]
+      }
+
+      {_request, decoded} = @provider.decode_response({request, response})
+
+      assert %ReqLLM.Response{} = decoded.body
+      assert ReqLLM.Response.text(decoded.body) == "contract response"
     end
   end
 end
