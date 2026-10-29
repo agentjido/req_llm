@@ -152,8 +152,40 @@ defmodule ReqLLM.JSON do
   def encode_request_body(body) do
     body
     |> ReqLLM.Schema.apply_property_ordering()
+    |> encode_body_value()
+  end
+
+  @doc """
+  Encodes a body value that is already in wire shape.
+
+  Providers often keep the body as a map in `Req`'s `:json` option and let `Req`
+  encode it. This encodes that value with the configured codec without applying
+  property ordering, which Google must not do.
+  """
+  @spec encode_body_value(term()) :: binary()
+  def encode_body_value(value) do
+    value
     |> encode_ordered_body()
     |> IO.iodata_to_binary()
+  end
+
+  @doc """
+  Moves a pending `:json` option onto the request body when the codec is not Jason.
+
+  `Req` encodes its `:json` option with Jason, so requests that rely on it have to be
+  materialized before execution, and response decoding has to go through the codec
+  as well. Jason requests are returned untouched, keeping the default path identical.
+  """
+  @spec materialize_request(Req.Request.t()) :: Req.Request.t()
+  def materialize_request(%Req.Request{} = request) do
+    if json_library() == Jason do
+      request
+    else
+      case pending_json(request) do
+        nil -> request
+        body -> put_request_body(request, body)
+      end
+    end
   end
 
   @doc """
@@ -231,6 +263,26 @@ defmodule ReqLLM.JSON do
     else
       codec.encode_to_iodata!(body)
     end
+  end
+
+  defp pending_json(%Req.Request{options: options}) when is_map(options),
+    do: Map.get(options, :json)
+
+  defp pending_json(%Req.Request{options: options}) when is_list(options),
+    do: Keyword.get(options, :json)
+
+  defp pending_json(_request), do: nil
+
+  defp put_request_body(%Req.Request{options: options} = request, body) when is_map(options) do
+    request
+    |> Map.put(:body, encode_body_value(body))
+    |> Map.put(:options, options |> Map.delete(:json) |> Map.put(:decoders, decoders()))
+  end
+
+  defp put_request_body(%Req.Request{options: options} = request, body) when is_list(options) do
+    request
+    |> Map.put(:body, encode_body_value(body))
+    |> Map.put(:options, options |> Keyword.delete(:json) |> Keyword.put(:decoders, decoders()))
   end
 
   defp jason_decode_error?(%Jason.DecodeError{} = error),

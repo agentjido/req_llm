@@ -13,17 +13,20 @@ defmodule ReqLLM.Providers.Anthropic.OAuth do
     else
       http_options = Keyword.get(opts, :oauth_http_options, [])
 
+      body = %{
+        grant_type: "refresh_token",
+        client_id: @client_id,
+        refresh_token: refresh_token
+      }
+
       case Req.post(
              [
                url: @token_url,
                redirect: false,
-               headers: [{"content-type", "application/json"}],
-               json: %{
-                 grant_type: "refresh_token",
-                 client_id: @client_id,
-                 refresh_token: refresh_token
-               }
-             ] ++ http_options
+               headers: [{"content-type", "application/json"}]
+             ]
+             |> ReqLLM.Provider.Utils.put_json_options(body)
+             |> Kernel.++(http_options)
            ) do
         {:ok, %Req.Response{status: status, body: body}} when status in 200..299 ->
           decode_refresh_body(body)

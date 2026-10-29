@@ -2494,9 +2494,8 @@ defmodule ReqLLM.Providers.Google do
       Req.new(method: :post, url: URI.parse("https://example.com/temp"))
       |> Map.put(:options, Map.new(all_options))
 
-    request_with_json = encode_body(temp_request)
-    json_body = request_with_json.options[:json] || %{}
-    ReqLLM.JSON.encode_to_iodata!(json_body)
+    encoded = encode_body(temp_request)
+    ReqLLM.JSON.encode_body_value(encoded.options[:json] || %{})
   end
 
   @impl ReqLLM.Provider

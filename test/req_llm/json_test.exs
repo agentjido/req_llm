@@ -233,4 +233,72 @@ defmodule ReqLLM.JSONTest do
     def encode_to_iodata!(term), do: Jason.encode_to_iodata!(term)
     def decode(json), do: Jason.decode(json)
   end
+
+  describe "materialize_request/1" do
+    test "leaves Jason requests on Req's own encoder" do
+      Application.delete_env(:req_llm, :json_library)
+
+      request = %Req.Request{options: %{json: %{"a" => 1}}, body: nil}
+
+      assert JSON.materialize_request(request) == request
+    end
+
+    test "moves the pending body onto the request for other codecs" do
+      with_codec(JSONCodecStub, fn ->
+        Application.put_env(:req_llm, :json_codec_stub_pid, self())
+        on_exit(fn -> Application.delete_env(:req_llm, :json_codec_stub_pid) end)
+
+        request = %Req.Request{options: %{json: %{"a" => 1}}, body: nil}
+        materialized = JSON.materialize_request(request)
+
+        assert materialized.body == ~s({"a":1})
+        refute Map.has_key?(materialized.options, :json)
+        assert Keyword.keys(materialized.options.decoders) == [:json, :json_api]
+        assert_received {:json_codec, :encode_to_iodata!, %{"a" => 1}}
+      end)
+    end
+
+    test "keeps keyword-list options working" do
+      with_codec(JSONCodecStub, fn ->
+        request = %Req.Request{options: [json: %{"a" => 1}], body: nil}
+        materialized = JSON.materialize_request(request)
+
+        assert materialized.body == ~s({"a":1})
+        refute Keyword.has_key?(materialized.options, :json)
+        assert Keyword.has_key?(materialized.options, :decoders)
+      end)
+    end
+
+    test "does nothing when no body is pending" do
+      with_codec(JSONCodecStub, fn ->
+        request = %Req.Request{options: %{}, body: "{}"}
+
+        assert JSON.materialize_request(request) == request
+      end)
+    end
+  end
+
+  describe "encode_body_value/1" do
+    test "encodes a stored body without applying property ordering" do
+      Application.delete_env(:req_llm, :json_library)
+
+      body = %{
+        "properties" => %{"b" => %{}, "a" => %{}},
+        "propertyOrdering" => ["a", "b"]
+      }
+
+      encoded = JSON.encode_body_value(body)
+
+      assert encoded =~ ~s("propertyOrdering":["a","b"])
+      assert encoded =~ ~s("properties":{"a":{},"b":{}})
+    end
+
+    test "keeps ordered objects in declared order" do
+      Application.delete_env(:req_llm, :json_library)
+
+      encoded = JSON.encode_body_value(%{"properties" => OrderedObject.new([{"a", 1}, {"b", 2}])})
+
+      assert encoded =~ ~s("properties":{"a":1,"b":2})
+    end
+  end
 end

@@ -298,4 +298,23 @@ defmodule ReqLLM.Provider.Utils do
   end
 
   def extract_custom_headers(_), do: []
+
+  @doc """
+  Attaches a JSON body for code paths that pass Req options as a keyword list.
+
+  With Jason the body stays a map in `:json`; any other codec pre-encodes it and adds
+  `ReqLLM.JSON.decoders/0`, so `Req` does not encode or decode with Jason behind the
+  configured codec's back.
+  """
+  @spec put_json_options(keyword(), map()) :: keyword()
+  def put_json_options(options, body) do
+    if ReqLLM.JSON.json_library() == Jason do
+      Keyword.put(options, :json, body)
+    else
+      options
+      |> Keyword.delete(:json)
+      |> Keyword.put(:body, ReqLLM.JSON.encode!(body))
+      |> Keyword.put(:decoders, ReqLLM.JSON.decoders())
+    end
+  end
 end

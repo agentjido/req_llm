@@ -320,7 +320,11 @@ defmodule ReqLLM.Providers.Google.CachedContent do
       |> maybe_put(:toolConfig, tool_config)
       |> maybe_put(:displayName, display_name)
 
-    request_options = google_ai_studio_http_options([json: body], opts)
+    request_options =
+      google_ai_studio_http_options(
+        ReqLLM.Provider.Utils.put_json_options([], body),
+        opts
+      )
 
     case Req.post("/cachedContents", request_options) do
       {:ok, %{status: 200, body: response}} ->
@@ -382,7 +386,7 @@ defmodule ReqLLM.Providers.Google.CachedContent do
 
     request_options =
       google_ai_studio_http_options(
-        [json: body, params: [updateMask: "ttl"]],
+        ReqLLM.Provider.Utils.put_json_options([params: [updateMask: "ttl"]], body),
         opts
       )
 
@@ -466,7 +470,11 @@ defmodule ReqLLM.Providers.Google.CachedContent do
       headers = [{"authorization", "Bearer #{access_token}"}]
 
       request_options =
-        http_options(vertex_regional_base_url(region), [json: body, headers: headers], opts)
+        http_options(
+          vertex_regional_base_url(region),
+          ReqLLM.Provider.Utils.put_json_options([headers: headers], body),
+          opts
+        )
 
       case Req.post(url, request_options) do
         {:ok, %{status: 200, body: response}} ->
@@ -559,7 +567,10 @@ defmodule ReqLLM.Providers.Google.CachedContent do
       request_options =
         http_options(
           @vertex_global_base_url,
-          [json: body, params: [updateMask: "ttl"], headers: headers],
+          ReqLLM.Provider.Utils.put_json_options(
+            [params: [updateMask: "ttl"], headers: headers],
+            body
+          ),
           opts
         )
 
