@@ -1,5 +1,5 @@
 defmodule ReqLLM.Providers.CohereTest do
-  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Cohere
+  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Cohere, async: true
 
   alias ReqLLM.Providers.Cohere
 

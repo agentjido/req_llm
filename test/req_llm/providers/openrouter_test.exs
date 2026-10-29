@@ -6,7 +6,7 @@ defmodule ReqLLM.Providers.OpenRouterTest do
   Focus: prepare_request -> attach -> request -> decode pipeline.
   """
 
-  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.OpenRouter
+  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.OpenRouter, async: true
 
   alias ReqLLM.Context
   alias ReqLLM.Message.ContentPart

@@ -3,7 +3,7 @@ defmodule ReqLLM.Providers.Google.ObjectGenerationTest do
   Google native JSON mode requests, schemas, and object responses.
   """
 
-  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Google
+  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Google, async: true
 
   alias ReqLLM.Providers.Google
 

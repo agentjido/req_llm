@@ -1,5 +1,5 @@
 defmodule ReqLLM.Providers.MoonshotAITest do
-  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.MoonshotAI
+  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.MoonshotAI, async: true
 
   import ExUnit.CaptureIO
 

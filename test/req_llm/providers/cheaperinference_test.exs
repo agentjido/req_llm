@@ -7,7 +7,7 @@ defmodule ReqLLM.Providers.CheaperInferenceTest do
   without making live API calls.
   """
 
-  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.CheaperInference
+  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.CheaperInference, async: true
 
   alias ReqLLM.Providers.CheaperInference
 

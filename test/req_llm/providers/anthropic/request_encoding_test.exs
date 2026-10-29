@@ -3,7 +3,7 @@ defmodule ReqLLM.Providers.Anthropic.RequestEncodingTest do
   Tests Anthropic request preparation, context encoding, and structured output schemas.
   """
 
-  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Anthropic
+  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Anthropic, async: true
 
   alias ReqLLM.Message.ContentPart
   alias ReqLLM.Providers.Anthropic

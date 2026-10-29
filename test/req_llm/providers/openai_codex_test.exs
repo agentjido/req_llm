@@ -3,7 +3,7 @@ defmodule ReqLLM.Providers.OpenAICodexTest do
   Provider-level tests for the OpenAI Codex backend implementation.
   """
 
-  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.OpenAICodex
+  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.OpenAICodex, async: true
 
   alias ReqLLM.Providers.OpenAICodex
 

@@ -1,5 +1,5 @@
 defmodule ReqLLM.Providers.MistralTest do
-  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Mistral
+  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Mistral, async: true
 
   alias ReqLLM.Providers.Mistral
 
@@ -167,7 +167,12 @@ defmodule ReqLLM.Providers.MistralTest do
         Mistral.attach_stream(
           mistral_model(),
           context_fixture(),
-          [seed: 99, parallel_tool_calls: false, prompt_mode: :reasoning],
+          [
+            api_key: "test-key-12345",
+            seed: 99,
+            parallel_tool_calls: false,
+            prompt_mode: :reasoning
+          ],
           MyApp.Finch
         )
 

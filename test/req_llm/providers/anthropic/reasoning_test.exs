@@ -3,7 +3,7 @@ defmodule ReqLLM.Providers.Anthropic.ReasoningTest do
   Tests Anthropic thinking options, reasoning details, and thinking block replay.
   """
 
-  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Anthropic
+  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Anthropic, async: true
 
   alias ReqLLM.Providers.Anthropic
 

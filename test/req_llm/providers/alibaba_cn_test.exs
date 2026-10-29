@@ -7,7 +7,7 @@ defmodule ReqLLM.Providers.AlibabaCNTest do
   Mirrors the international provider tests with China-specific configuration.
   """
 
-  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.AlibabaCN
+  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.AlibabaCN, async: true
 
   alias ReqLLM.Providers.AlibabaCN
 

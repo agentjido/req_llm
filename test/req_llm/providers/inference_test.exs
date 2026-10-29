@@ -1,5 +1,5 @@
 defmodule ReqLLM.Providers.InferenceTest do
-  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Inference
+  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Inference, async: true
 
   alias ReqLLM.Providers.Inference
 

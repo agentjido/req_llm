@@ -6,7 +6,7 @@ defmodule ReqLLM.Providers.XAITest do
   structured output infrastructure without making live API calls.
   """
 
-  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.XAI
+  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.XAI, async: true
 
   alias ReqLLM.Context
   alias ReqLLM.Providers.XAI

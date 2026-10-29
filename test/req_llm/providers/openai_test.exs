@@ -6,7 +6,7 @@ defmodule ReqLLM.Providers.OpenAITest do
   Focus: prepare_request -> attach -> request -> decode pipeline.
   """
 
-  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.OpenAI
+  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.OpenAI, async: true
 
   alias ReqLLM.Context
   alias ReqLLM.Providers.OpenAI
@@ -472,7 +472,7 @@ defmodule ReqLLM.Providers.OpenAITest do
     test "prepare_request configures authentication and pipeline for chat" do
       {:ok, model} = ReqLLM.model(%{provider: :openai, id: "gpt-4-turbo"})
       prompt = "Hello, world!"
-      opts = [temperature: 0.5, max_tokens: 50]
+      opts = [api_key: "test-key-12345", temperature: 0.5, max_tokens: 50]
 
       {:ok, request} = OpenAI.prepare_request(:chat, model, prompt, opts)
 
@@ -480,7 +480,7 @@ defmodule ReqLLM.Providers.OpenAITest do
       assert request.options[:model] == model.model
       assert request.options[:temperature] == 0.5
       assert request.options[:max_tokens] == 50
-      assert String.starts_with?(List.first(request.headers["authorization"]), "Bearer test-key-")
+      assert request.headers["authorization"] == ["Bearer test-key-12345"]
 
       # Verify pipeline steps
       request_steps = Keyword.keys(request.request_steps)
@@ -493,7 +493,7 @@ defmodule ReqLLM.Providers.OpenAITest do
     test "prepare_request configures authentication and pipeline for embedding" do
       {:ok, model} = ReqLLM.model("openai:text-embedding-3-small")
       text = "Hello, world!"
-      opts = [provider_options: [dimensions: 512]]
+      opts = [api_key: "test-key-12345", provider_options: [dimensions: 512]]
 
       {:ok, request} = OpenAI.prepare_request(:embedding, model, text, opts)
 
@@ -504,7 +504,7 @@ defmodule ReqLLM.Providers.OpenAITest do
       assert request.options[:provider_options][:dimensions] == 512
 
       # Verify authentication
-      assert String.starts_with?(List.first(request.headers["authorization"]), "Bearer test-key-")
+      assert request.headers["authorization"] == ["Bearer test-key-12345"]
     end
 
     test "prepare_request supports oauth access_token auth" do

@@ -6,7 +6,7 @@ defmodule ReqLLM.Providers.DeepseekTest do
   request/response handling without making live API calls.
   """
 
-  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Deepseek
+  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Deepseek, async: true
 
   alias ReqLLM.Providers.Deepseek
 
@@ -413,7 +413,7 @@ defmodule ReqLLM.Providers.DeepseekTest do
     test "attach_stream builds streaming request" do
       model = deepseek_model()
       context = context_fixture()
-      opts = [temperature: 0.7]
+      opts = [api_key: "test-key-12345", temperature: 0.7]
 
       {:ok, finch_request} = Deepseek.attach_stream(model, context, opts, MyApp.Finch)
 

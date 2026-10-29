@@ -3,7 +3,7 @@ defmodule ReqLLM.Providers.Anthropic.ResponseDecodingTest do
   Tests Anthropic non-streaming response normalization and usage extraction.
   """
 
-  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Anthropic
+  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Anthropic, async: true
 
   alias ReqLLM.Providers.Anthropic
 

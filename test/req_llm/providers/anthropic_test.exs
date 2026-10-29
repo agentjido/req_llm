@@ -3,5 +3,5 @@ defmodule ReqLLM.Providers.AnthropicTest do
   Provider contract tests for the Anthropic implementation.
   """
 
-  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Anthropic
+  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Anthropic, async: true
 end

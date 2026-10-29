@@ -3,7 +3,7 @@ defmodule ReqLLM.Providers.Anthropic.AuthenticationTest do
   Tests Anthropic API-key authentication and subscription OAuth request shaping.
   """
 
-  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Anthropic
+  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Anthropic, async: true
 
   alias ReqLLM.Providers.Anthropic
 

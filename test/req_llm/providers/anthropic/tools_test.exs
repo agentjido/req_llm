@@ -3,7 +3,7 @@ defmodule ReqLLM.Providers.Anthropic.ToolsTest do
   Tests Anthropic client tool schemas, calls, and tool-result encoding.
   """
 
-  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Anthropic
+  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Anthropic, async: true
 
   alias ReqLLM.Message.ContentPart
   alias ReqLLM.Providers.Anthropic

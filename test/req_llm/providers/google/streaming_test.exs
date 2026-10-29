@@ -3,7 +3,7 @@ defmodule ReqLLM.Providers.Google.StreamingTest do
   Google stream protocol parsing, event decoding, and authentication.
   """
 
-  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Google
+  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Google, async: true
 
   alias ReqLLM.Context
   alias ReqLLM.Providers.Google

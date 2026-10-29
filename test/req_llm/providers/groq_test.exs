@@ -6,7 +6,7 @@ defmodule ReqLLM.Providers.GroqTest do
   Focus: prepare_request -> attach -> request -> decode pipeline.
   """
 
-  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Groq
+  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Groq, async: true
 
   alias ReqLLM.Context
   alias ReqLLM.Message

@@ -6,7 +6,7 @@ defmodule ReqLLM.Providers.VLLMTest do
   vLLM is OpenAI-compatible so tests focus on configuration and routing.
   """
 
-  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.VLLM
+  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.VLLM, async: true
 
   alias ReqLLM.Providers.VLLM
 

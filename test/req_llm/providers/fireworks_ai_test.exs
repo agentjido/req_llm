@@ -6,7 +6,7 @@ defmodule ReqLLM.Providers.FireworksAITest do
   base URL, and the encoding of Fireworks-specific options.
   """
 
-  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.FireworksAI
+  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.FireworksAI, async: true
 
   alias ReqLLM.Providers.FireworksAI
 

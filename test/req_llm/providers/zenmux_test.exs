@@ -3,7 +3,7 @@ defmodule ReqLLM.Providers.ZenmuxTest do
   Provider-level tests for Zenmux implementation.
   """
 
-  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Zenmux
+  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Zenmux, async: true
 
   alias ReqLLM.Providers.Zenmux
 

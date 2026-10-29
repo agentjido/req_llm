@@ -6,7 +6,7 @@ defmodule ReqLLM.Providers.VeniceTest do
   and Venice-specific extensions without making live API calls.
   """
 
-  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Venice
+  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Venice, async: true
 
   alias ReqLLM.Context
   alias ReqLLM.Providers.Venice

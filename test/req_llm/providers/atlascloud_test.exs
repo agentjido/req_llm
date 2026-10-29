@@ -7,7 +7,7 @@ defmodule ReqLLM.Providers.AtlasCloudTest do
   without making live API calls.
   """
 
-  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.AtlasCloud
+  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.AtlasCloud, async: true
 
   alias ReqLLM.Providers.AtlasCloud
 

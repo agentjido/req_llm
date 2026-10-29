@@ -3,7 +3,7 @@ defmodule ReqLLM.Providers.Google.AttachmentsTest do
   Google file, image, and video content encoding and URI handling.
   """
 
-  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Google
+  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Google, async: true
 
   alias ReqLLM.Providers.Google
 

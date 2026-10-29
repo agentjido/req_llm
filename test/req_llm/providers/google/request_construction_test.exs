@@ -3,7 +3,7 @@ defmodule ReqLLM.Providers.Google.RequestConstructionTest do
   Google provider contract, request preparation, and basic body construction.
   """
 
-  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Google
+  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Google, async: true
 
   alias ReqLLM.Providers.Google
 
@@ -47,7 +47,7 @@ defmodule ReqLLM.Providers.Google.RequestConstructionTest do
     test "prepare_request for streaming creates streaming endpoint" do
       {:ok, model} = ReqLLM.model("google:gemini-1.5-flash")
       context = context_fixture()
-      opts = [temperature: 0.7, max_tokens: 100, stream: true]
+      opts = [api_key: "test-key-12345", temperature: 0.7, max_tokens: 100, stream: true]
 
       {:ok, request} = Google.prepare_request(:chat, model, context, opts)
 
@@ -60,7 +60,7 @@ defmodule ReqLLM.Providers.Google.RequestConstructionTest do
 
     test "attach configures authentication and pipeline" do
       {:ok, model} = ReqLLM.model("google:gemini-1.5-flash")
-      opts = [temperature: 0.5, max_tokens: 50]
+      opts = [api_key: "test-key-12345", temperature: 0.5, max_tokens: 50]
 
       request = Req.new() |> Google.attach(model, opts)
 

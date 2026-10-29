@@ -1,5 +1,5 @@
 defmodule ReqLLM.VideoGenerationTest do
-  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Minimax
+  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Minimax, async: true
 
   alias ReqLLM.Providers.Minimax
   alias ReqLLM.Providers.Minimax.VideoAPI
@@ -566,7 +566,7 @@ defmodule ReqLLM.VideoGenerationTest do
 end
 
 defmodule ReqLLM.VideoGenerationV1Test do
-  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Minimax
+  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Minimax, async: true
 
   alias ReqLLM.Providers.Minimax
   alias ReqLLM.Providers.Minimax.VideoAPIV1

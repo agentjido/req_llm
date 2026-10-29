@@ -6,7 +6,7 @@ defmodule ReqLLM.Providers.AlibabaTest do
   and DashScope-specific extensions without making live API calls.
   """
 
-  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Alibaba
+  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Alibaba, async: true
 
   alias ReqLLM.Context
   alias ReqLLM.Providers.Alibaba

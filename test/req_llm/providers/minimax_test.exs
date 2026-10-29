@@ -1,5 +1,5 @@
 defmodule ReqLLM.Providers.MinimaxTest do
-  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Minimax
+  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Minimax, async: true
 
   alias ReqLLM.Context
   alias ReqLLM.Message.ReasoningDetails
@@ -279,7 +279,7 @@ defmodule ReqLLM.Providers.MinimaxTest do
         Minimax.attach_stream(
           minimax_model(),
           context_fixture(),
-          [max_tokens: 128, presence_penalty: 0.1],
+          [api_key: "test-key-12345", max_tokens: 128, presence_penalty: 0.1],
           MyApp.Finch
         )
 

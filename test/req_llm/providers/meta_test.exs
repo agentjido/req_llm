@@ -1,5 +1,5 @@
 defmodule ReqLLM.Providers.MetaTest do
-  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Meta
+  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Meta, async: true
 
   alias ReqLLM.Message
   alias ReqLLM.Message.ContentPart
@@ -208,7 +208,7 @@ defmodule ReqLLM.Providers.MetaTest do
 
   describe "authentication and streaming" do
     test "attach adds bearer authentication and Responses pipeline steps" do
-      attached = Meta.attach(Req.new(), meta_model(), [])
+      attached = Meta.attach(Req.new(), meta_model(), api_key: "test-key-12345")
 
       assert ["Bearer test-key-12345"] = attached.headers["authorization"]
       assert :llm_encode_body in Keyword.keys(attached.request_steps)
@@ -221,6 +221,7 @@ defmodule ReqLLM.Providers.MetaTest do
           meta_model(),
           context_fixture(),
           [
+            api_key: "test-key-12345",
             max_tokens: 128,
             reasoning_effort: :low,
             provider_options: [prompt_cache_retention: "in_memory"]

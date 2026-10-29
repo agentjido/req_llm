@@ -1,5 +1,5 @@
 defmodule ReqLLM.Providers.NearAITest do
-  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.NearAI
+  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.NearAI, async: true
 
   import ExUnit.CaptureIO
 

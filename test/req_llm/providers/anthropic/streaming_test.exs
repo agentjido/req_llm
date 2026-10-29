@@ -3,7 +3,7 @@ defmodule ReqLLM.Providers.Anthropic.StreamingTest do
   Tests Anthropic streaming requests, event decoding, and response assembly.
   """
 
-  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Anthropic
+  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Anthropic, async: true
 
   alias ReqLLM.Message.ContentPart
   alias ReqLLM.Providers.Anthropic

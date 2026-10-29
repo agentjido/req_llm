@@ -3,7 +3,7 @@ defmodule ReqLLM.Providers.Google.ResponseDecodingTest do
   Google response decoding and usage normalization.
   """
 
-  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Google
+  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Google, async: true
 
   alias ReqLLM.Providers.Google
 

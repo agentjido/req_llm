@@ -3,7 +3,7 @@ defmodule ReqLLM.Providers.Google.HistoryCompatibilityTest do
   Google context compatibility for role merging and assistant tool history.
   """
 
-  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Google
+  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Google, async: true
 
   alias ReqLLM.Context
   alias ReqLLM.Providers.Google

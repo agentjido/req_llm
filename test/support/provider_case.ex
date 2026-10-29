@@ -26,23 +26,31 @@ defmodule ReqLLM.ProviderCase do
 
   using(opts) do
     provider = Keyword.get(opts, :provider)
+    async? = Keyword.get(opts, :async, false)
+
+    setup =
+      unless async? do
+        quote do
+          setup do
+            if @provider do
+              env_key = ReqLLM.ProviderCase.env_key_for(@provider)
+              ReqLLM.Test.Env.isolate!([env_key])
+              System.put_env(env_key, "test-key-12345")
+            end
+
+            :ok
+          end
+        end
+      end
 
     quote do
-      use ExUnit.Case, async: false
+      use ExUnit.Case, async: unquote(async?)
 
       import ReqLLM.ProviderCase
 
       @provider unquote(provider)
 
-      setup do
-        if @provider do
-          env_key = ReqLLM.ProviderCase.env_key_for(@provider)
-          ReqLLM.Test.Env.isolate!([env_key])
-          System.put_env(env_key, "test-key-12345")
-        end
-
-        :ok
-      end
+      unquote(setup)
     end
   end
 
