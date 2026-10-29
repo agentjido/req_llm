@@ -169,8 +169,8 @@ defmodule ReqLLM.Providers.GoogleVertex.Auth do
       "iat" => now
     }
 
-    header_b64 = base64url_encode(Jason.encode!(header))
-    claims_b64 = base64url_encode(Jason.encode!(claims))
+    header_b64 = base64url_encode(ReqLLM.JSON.encode!(header))
+    claims_b64 = base64url_encode(ReqLLM.JSON.encode!(claims))
     message = "#{header_b64}.#{claims_b64}"
 
     case sign_message(message, service_account["private_key"]) do

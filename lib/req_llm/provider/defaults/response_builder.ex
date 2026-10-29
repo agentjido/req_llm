@@ -211,8 +211,8 @@ defmodule ReqLLM.Provider.Defaults.ResponseBuilder do
   end
 
   defp encode_tool_args(args) when is_binary(args), do: args
-  defp encode_tool_args(nil), do: Jason.encode!(%{})
-  defp encode_tool_args(args), do: Jason.encode!(args)
+  defp encode_tool_args(nil), do: ReqLLM.JSON.encode!(%{})
+  defp encode_tool_args(args), do: ReqLLM.JSON.encode!(args)
 
   # ============================================================================
   # Content Building

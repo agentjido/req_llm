@@ -549,7 +549,7 @@ defmodule ReqLLM.Provider.Defaults do
             method: :post,
             base_url: Keyword.get(opts, :base_url, provider_mod.default_base_url()),
             receive_timeout: timeout,
-            body: Jason.encode!(body),
+            body: ReqLLM.JSON.encode!(body),
             # Disable Req's automatic JSON decoding — response is raw audio binary
             decode_body: false
           ] ++
@@ -1923,7 +1923,7 @@ defmodule ReqLLM.Provider.Defaults do
 
         req
         |> Req.Request.put_header("content-type", "application/json")
-        |> Map.put(:body, Jason.encode!(body))
+        |> Map.put(:body, ReqLLM.JSON.encode!(body))
       end
   """
   def build_openai_chat_body(request), do: encode_chat_body(request)

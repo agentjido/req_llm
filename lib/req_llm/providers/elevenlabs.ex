@@ -110,7 +110,7 @@ defmodule ReqLLM.Providers.ElevenLabs do
             base_url: Keyword.get(opts, :base_url, default_base_url()),
             params: [output_format: format_string],
             receive_timeout: timeout,
-            body: Jason.encode!(body),
+            body: ReqLLM.JSON.encode!(body),
             decode_body: false
           ] ++ ReqLLM.Provider.Defaults.merge_finch_options(http_opts, pool_timeout: timeout)
         )
@@ -210,7 +210,7 @@ defmodule ReqLLM.Providers.ElevenLabs do
   end
 
   defp maybe_add_multipart_part(parts, key, value) when is_map(value) do
-    parts ++ [{key, Jason.encode!(value)}]
+    parts ++ [{key, ReqLLM.JSON.encode!(value)}]
   end
 
   defp maybe_add_multipart_part(parts, key, value), do: parts ++ [{key, to_string(value)}]

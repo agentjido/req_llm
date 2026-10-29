@@ -241,10 +241,11 @@ defmodule ReqLLM.Providers.AmazonBedrock.Converse do
 
   defp output_config(opts) do
     schema =
-      opts
-      |> Keyword.fetch!(:compiled_schema)
-      |> AdapterHelpers.strict_json_schema()
-      |> Jason.encode!()
+      ReqLLM.JSON.encode!(
+        ReqLLM.Providers.Anthropic.AdapterHelpers.strict_json_schema(
+          Keyword.fetch!(opts, :compiled_schema)
+        )
+      )
 
     %{
       "textFormat" => %{
@@ -1201,7 +1202,7 @@ defmodule ReqLLM.Providers.AmazonBedrock.Converse do
       "toolUse" => %{
         "toolUseId" => id,
         "name" => name,
-        "input" => Jason.decode!(args)
+        "input" => ReqLLM.JSON.decode!(args)
       }
     }
   end
@@ -1226,7 +1227,7 @@ defmodule ReqLLM.Providers.AmazonBedrock.Converse do
     }
   end
 
-  defp decode_tool_arguments(args) when is_binary(args), do: Jason.decode!(args)
+  defp decode_tool_arguments(args) when is_binary(args), do: ReqLLM.JSON.decode!(args)
   defp decode_tool_arguments(args) when is_map(args), do: args
   defp decode_tool_arguments(nil), do: %{}
 
@@ -1271,7 +1272,7 @@ defmodule ReqLLM.Providers.AmazonBedrock.Converse do
   defp encode_tool_output(output) when is_binary(output), do: output
 
   defp encode_tool_output(output) when is_map(output) or is_list(output),
-    do: Jason.encode!(output)
+    do: ReqLLM.JSON.encode!(output)
 
   defp encode_tool_output(output), do: to_string(output)
 
@@ -1332,7 +1333,7 @@ defmodule ReqLLM.Providers.AmazonBedrock.Converse do
             ToolCall.new(
               tool_use["toolUseId"],
               tool_use["name"],
-              Jason.encode!(tool_use["input"])
+              ReqLLM.JSON.encode!(tool_use["input"])
             )
 
           {[tool_call | tool_calls], content_parts}

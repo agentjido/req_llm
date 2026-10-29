@@ -69,7 +69,7 @@ defmodule ReqLLM.Providers.OpenAI.ImagesAPI do
       body =
         OpenAICompatible.stream_generation_body(opts, prompt, model.provider_model_id || model.id)
 
-      {:ok, Finch.build(:post, base_url <> path(), headers, Jason.encode!(body))}
+      {:ok, Finch.build(:post, base_url <> path(), headers, ReqLLM.JSON.encode!(body))}
     end
   rescue
     error ->

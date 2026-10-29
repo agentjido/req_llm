@@ -595,7 +595,7 @@ defmodule ReqLLM.Context do
          available_tools
        )
        when is_map(metadata) do
-    arguments = if is_binary(args), do: args, else: Jason.encode!(args)
+    arguments = if is_binary(args), do: args, else: ReqLLM.JSON.encode!(args)
 
     id
     |> ReqLLM.ToolCall.new(name, arguments)
@@ -884,7 +884,7 @@ defmodule ReqLLM.Context do
   end
 
   defp json(v) when is_binary(v), do: v
-  defp json(v), do: Jason.encode!(v)
+  defp json(v), do: ReqLLM.JSON.encode!(v)
 
   defp to_context(%__MODULE__{} = context, _convert_loose?), do: {:ok, context}
 
@@ -1492,7 +1492,7 @@ defmodule ReqLLM.Context do
   defp encode_tool_output(output) when is_binary(output), do: output
 
   defp encode_tool_output(output) when is_map(output) or is_list(output),
-    do: Jason.encode!(output)
+    do: ReqLLM.JSON.encode!(output)
 
   defp encode_tool_output(output), do: to_string(output)
 

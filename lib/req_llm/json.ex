@@ -93,10 +93,12 @@ defmodule ReqLLM.JSON do
 
   Returns `{:ok, term}` or `{:error, reason}`.
   """
-  @spec decode(term(), keyword()) :: {:ok, term()} | {:error, term()}
+  @spec decode(iodata(), keyword()) :: {:ok, term()} | {:error, term()}
   def decode(json, opts \\ [])
 
-  def decode(json, opts) when is_binary(json) do
+  def decode(json, opts) when is_binary(json) or is_list(json) do
+    json = IO.iodata_to_binary(json)
+
     case decode_once(json) do
       {:ok, _parsed} = ok ->
         ok
@@ -124,9 +126,10 @@ defmodule ReqLLM.JSON do
   Uses the codec's own `decode!/1` when it exports one, so the default keeps raising
   `Jason.DecodeError`.
   """
-  @spec decode!(binary()) :: term()
-  def decode!(json) when is_binary(json) do
+  @spec decode!(iodata()) :: term()
+  def decode!(json) when is_binary(json) or is_list(json) do
     codec = json_library()
+    json = IO.iodata_to_binary(json)
 
     if function_exported?(codec, :decode!, 1) do
       codec.decode!(json)
@@ -142,13 +145,15 @@ defmodule ReqLLM.JSON do
   Encodes a request body, keeping structured-output property order.
 
   Applies `ReqLLM.Schema.apply_property_ordering/1` and then encodes with the
-  configured codec.
+  configured codec. Returns a binary, because providers hand the result straight to
+  `Finch` and `Req`.
   """
-  @spec encode_request_body(term()) :: iodata()
+  @spec encode_request_body(term()) :: binary()
   def encode_request_body(body) do
     body
     |> ReqLLM.Schema.apply_property_ordering()
     |> encode_ordered_body()
+    |> IO.iodata_to_binary()
   end
 
   @doc """

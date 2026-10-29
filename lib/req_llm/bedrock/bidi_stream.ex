@@ -272,7 +272,9 @@ defmodule ReqLLM.Bedrock.BidiStream do
         AWSAuthAdapter.event_stream_encode_string_header(":event-type", "chunk") <>
         AWSAuthAdapter.event_stream_encode_string_header(":message-type", "event")
 
-    payload = Jason.encode!(%{"bytes" => Base.encode64(Jason.encode!(event))})
+    payload =
+      ReqLLM.JSON.encode!(%{"bytes" => Base.encode64(ReqLLM.JSON.encode!(event))})
+
     AWSAuthAdapter.event_stream_encode_message(headers, payload)
   end
 

@@ -45,7 +45,7 @@ defmodule ReqLLM.Providers.OpenAI.DecisionsAPI do
 
   @impl true
   def encode_body(request) do
-    Map.put(request, :body, Jason.encode!(request.options[:decisions_body]))
+    Map.put(request, :body, ReqLLM.JSON.encode!(request.options[:decisions_body]))
   end
 
   @impl true
@@ -123,7 +123,7 @@ defmodule ReqLLM.Providers.OpenAI.DecisionsAPI do
 
   defp compile_state(state) when is_map(state) or is_list(state) do
     with {:ok, ordered} <- canonical_json_value(state, "state") do
-      {:ok, Jason.encode!(ordered)}
+      {:ok, ReqLLM.JSON.encode!(ordered)}
     end
   end
 

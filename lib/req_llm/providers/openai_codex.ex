@@ -252,7 +252,7 @@ defmodule ReqLLM.Providers.OpenAICodex do
     context = request.options[:context] || %ReqLLM.Context{messages: []}
     model = request.options[@codex_model_option]
     body = build_codex_body(context, model, request.options, request)
-    encoded = body |> ReqLLM.Schema.apply_property_ordering() |> Jason.encode!()
+    encoded = ReqLLM.JSON.encode_request_body(body)
     Map.put(request, :body, encoded)
   end
 
@@ -345,7 +345,7 @@ defmodule ReqLLM.Providers.OpenAICodex do
       |> Kernel.++(identity_headers(opts))
       |> ResponsesLite.put_header(model)
 
-    encoded = body |> ReqLLM.Schema.apply_property_ordering() |> Jason.encode!()
+    encoded = ReqLLM.JSON.encode_request_body(body)
     {:ok, Finch.build(:post, url, headers, encoded)}
   rescue
     error ->
@@ -398,7 +398,7 @@ defmodule ReqLLM.Providers.OpenAICodex do
      %{
        url: url,
        headers: headers,
-       initial_messages: [Jason.encode!(create_event)],
+       initial_messages: [ReqLLM.JSON.encode!(create_event)],
        http_context: ReqLLM.Providers.OpenAI.WebSocket.http_context(url, headers),
        canonical_json: body,
        fallback_transport: :http

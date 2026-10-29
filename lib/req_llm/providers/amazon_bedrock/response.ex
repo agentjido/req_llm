@@ -28,12 +28,12 @@ defmodule ReqLLM.Providers.AmazonBedrock.Response do
       %{"chunk" => %{"bytes" => encoded}} ->
         # AWS SDK format: chunk wrapper with base64-encoded content (Anthropic)
         decoded = Base.decode64!(encoded)
-        {:ok, Jason.decode!(decoded)}
+        {:ok, ReqLLM.JSON.decode!(decoded)}
 
       %{"bytes" => encoded} ->
         # Direct bytes format: base64-encoded provider events
         decoded = Base.decode64!(encoded)
-        {:ok, Jason.decode!(decoded)}
+        {:ok, ReqLLM.JSON.decode!(decoded)}
 
       %{"type" => _} = event ->
         # Anthropic JSON event (already decoded by AWS event stream parser)

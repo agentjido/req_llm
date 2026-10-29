@@ -817,7 +817,7 @@ defmodule ReqLLM.Providers.Anthropic do
           request_path(plan)
         )
 
-      encoded = body |> ReqLLM.Schema.apply_property_ordering() |> Jason.encode!()
+      encoded = ReqLLM.JSON.encode_request_body(body)
 
       finch_request =
         :post
