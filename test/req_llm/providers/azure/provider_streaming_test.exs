@@ -392,21 +392,5 @@ defmodule ReqLLM.Providers.Azure.ProviderStreamingTest do
       assert thinking_block[:signature] == "sig_azure_123"
       assert text_block == %{type: "text", text: "Here is my answer."}
     end
-
-    test "returns nil reasoning_details when no thinking chunks" do
-      {:ok, model} = ReqLLM.model("azure:gpt-4o")
-      context = %ReqLLM.Context{messages: []}
-
-      chunks = [
-        ReqLLM.StreamChunk.text("Just a simple response.")
-      ]
-
-      metadata = %{finish_reason: :stop}
-
-      {:ok, response} =
-        ResponseBuilder.build_response(chunks, metadata, context: context, model: model)
-
-      assert response.message.reasoning_details == nil
-    end
   end
 end

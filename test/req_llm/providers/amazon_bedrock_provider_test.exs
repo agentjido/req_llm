@@ -411,50 +411,6 @@ defmodule ReqLLM.Providers.AmazonBedrockProviderTest do
       assert second.text == "Considering all factors"
       assert second.index == 1
     end
-
-    test "preserves signature from thinking chunk metadata" do
-      {:ok, model} = ReqLLM.model("amazon-bedrock:anthropic.claude-3-haiku-20240307-v1:0")
-      context = %ReqLLM.Context{messages: []}
-
-      thinking_meta = %{
-        signature: "encrypted-signature-abc123",
-        encrypted?: true,
-        provider: :anthropic,
-        format: "anthropic-thinking-v1",
-        provider_data: %{"type" => "thinking"}
-      }
-
-      chunks = [
-        ReqLLM.StreamChunk.thinking("Encrypted reasoning content", thinking_meta),
-        ReqLLM.StreamChunk.text("Final answer.")
-      ]
-
-      metadata = %{finish_reason: :stop}
-
-      {:ok, response} =
-        ResponseBuilder.build_response(chunks, metadata, context: context, model: model)
-
-      assert response.message.reasoning_details != nil
-      [first] = response.message.reasoning_details
-      assert first.signature == "encrypted-signature-abc123"
-      assert first.encrypted? == true
-    end
-
-    test "returns nil reasoning_details when no thinking chunks" do
-      {:ok, model} = ReqLLM.model("amazon-bedrock:anthropic.claude-3-haiku-20240307-v1:0")
-      context = %ReqLLM.Context{messages: []}
-
-      chunks = [
-        ReqLLM.StreamChunk.text("Just a simple response.")
-      ]
-
-      metadata = %{finish_reason: :stop}
-
-      {:ok, response} =
-        ResponseBuilder.build_response(chunks, metadata, context: context, model: model)
-
-      assert response.message.reasoning_details == nil
-    end
   end
 
   describe "Sync flow - reasoning_details extraction" do

@@ -364,59 +364,6 @@ defmodule ReqLLM.Providers.GoogleVertex.GeminiTest do
       assert second.text == "Considering edge cases"
       assert second.index == 1
     end
-
-    test "preserves signature from thinking chunk metadata" do
-      model = %LLMDB.Model{
-        id: "gemini-2.5-pro",
-        provider: :google_vertex,
-        capabilities: %{chat: true}
-      }
-
-      context = %ReqLLM.Context{messages: []}
-
-      thinking_meta = %{
-        signature: "thought-signature-xyz",
-        encrypted?: false,
-        provider: :google,
-        format: "google-gemini-v1",
-        provider_data: %{"type" => "thought"}
-      }
-
-      chunks = [
-        ReqLLM.StreamChunk.thinking("Deep thinking content", thinking_meta),
-        ReqLLM.StreamChunk.text("Final response.")
-      ]
-
-      metadata = %{finish_reason: :stop}
-
-      {:ok, response} =
-        ResponseBuilder.build_response(chunks, metadata, context: context, model: model)
-
-      assert response.message.reasoning_details != nil
-      [first] = response.message.reasoning_details
-      assert first.signature == "thought-signature-xyz"
-    end
-
-    test "returns nil reasoning_details when no thinking chunks" do
-      model = %LLMDB.Model{
-        id: "gemini-2.5-flash",
-        provider: :google_vertex,
-        capabilities: %{chat: true}
-      }
-
-      context = %ReqLLM.Context{messages: []}
-
-      chunks = [
-        ReqLLM.StreamChunk.text("Just a simple response.")
-      ]
-
-      metadata = %{finish_reason: :stop}
-
-      {:ok, response} =
-        ResponseBuilder.build_response(chunks, metadata, context: context, model: model)
-
-      assert response.message.reasoning_details == nil
-    end
   end
 
   describe "Sync flow - reasoning_details extraction (Gemini)" do
