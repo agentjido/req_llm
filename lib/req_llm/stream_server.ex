@@ -270,7 +270,7 @@ defmodule ReqLLM.StreamServer do
       if finch_name == ReqLLM.Finch, do: opts, else: Keyword.put(opts, :finch_name, finch_name)
 
     with {:ok, plan} <-
-           RequestPlan.from_resolved(model, operation, provider_module, opts, transport) do
+           RequestPlan.from_resolved_stream(model, operation, provider_module, opts, transport) do
       start_stream(server, plan, context)
     end
   end
@@ -282,7 +282,13 @@ defmodule ReqLLM.StreamServer do
     operation = Keyword.get(opts, :operation, :chat)
 
     with {:ok, plan} <-
-           RequestPlan.from_resolved(model, operation, provider_module, opts, :in_process) do
+           RequestPlan.from_resolved_stream(
+             model,
+             operation,
+             provider_module,
+             opts,
+             :in_process
+           ) do
       start_stream(server, plan, context)
     end
   end

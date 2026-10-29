@@ -15,21 +15,7 @@ defmodule ReqLLM.RequestPlan do
   ]
   defstruct @enforce_keys ++ [warnings: []]
 
-  @type operation ::
-          :chat
-          | :object
-          | :embedding
-          | :image
-          | :speech
-          | :transcription
-          | :rerank
-          | :ocr
-          | :video
-          | :video_query
-          | :video_upload
-          | :video_retrieve
-          | :compact
-          | :evaluate
+  @type operation :: atom()
 
   @operations [
     :chat,
@@ -166,7 +152,31 @@ defmodule ReqLLM.RequestPlan do
            normalize_stream_transport(
              ReqLLM.Provider.Adapter.stream_transport(provider_module, model, opts)
            ) do
-      from_resolved(model, operation, provider_module, opts, transport)
+      from_resolved_stream(model, operation, provider_module, opts, transport)
+    end
+  end
+
+  @doc false
+  @spec from_resolved_stream(LLMDB.Model.t(), operation(), module(), keyword(), transport()) ::
+          {:ok, t()} | {:error, term()}
+  def from_resolved_stream(%LLMDB.Model{} = model, operation, provider_module, opts, transport) do
+    with :ok <- validate_options(opts),
+         :ok <- validate_resolved_transport(transport) do
+      {surface, api_module, warnings} =
+        stream_surface(model, operation, provider_module)
+
+      {:ok,
+       %__MODULE__{
+         model: model,
+         operation: operation,
+         provider: model.provider,
+         surface: surface,
+         transport: transport,
+         options: opts,
+         provider_module: provider_module,
+         api_module: api_module,
+         warnings: warnings
+       }}
     end
   end
 
@@ -211,6 +221,13 @@ defmodule ReqLLM.RequestPlan do
 
   defp resolve_operation_surface(_model, _operation, provider_module),
     do: {:ok, :provider, provider_module, []}
+
+  defp stream_surface(model, operation, provider_module) do
+    case resolve_operation_surface(model, operation, provider_module) do
+      {:ok, surface, api_module, warnings} -> {surface, api_module, warnings}
+      {:error, _reason} -> {:provider, provider_module, []}
+    end
+  end
 
   defp validate_options(opts) do
     if Keyword.keyword?(opts) do
