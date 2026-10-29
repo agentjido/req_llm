@@ -23,6 +23,90 @@ defmodule ReqLLM.Parity.TestHelper do
   alias ReqLLM.Response
   alias ReqLLM.ToolCall
 
+  defmacro parity_contract(opts) do
+    model = Keyword.fetch!(opts, :model)
+    timeout = Keyword.get(opts, :timeout, 60_000)
+
+    text_prompt =
+      Keyword.get(opts, :text_prompt, "What is the capital of France? Answer in one word.")
+
+    text_opts = Keyword.get(opts, :text_opts, type: :contains, expected_terms: ["Paris"])
+
+    quote do
+      describe "streaming vs non-streaming parity" do
+        @describetag :integration
+        @describetag timeout: unquote(timeout)
+
+        test "tool responses have equivalent structure and state" do
+          tools = [add_tool()]
+
+          {non_streaming, streaming} =
+            response_pair!(unquote(model), "What is 5 + 7? Use the add tool.",
+              tools: tools,
+              tool_choice: :required
+            )
+
+          assert_tool_calls_equal(non_streaming, streaming)
+          assert_tool_calls_are_structs(non_streaming)
+          assert_tool_calls_are_structs(streaming)
+          assert_finish_reason_equal(non_streaming, streaming)
+          assert non_streaming.finish_reason == :tool_calls
+          assert_context_valid_for_next_turn(non_streaming)
+          assert_context_valid_for_next_turn(streaming)
+          assert_tool_call_content_valid(non_streaming)
+          assert_tool_call_content_valid(streaming)
+        end
+
+        test "normal responses have equivalent text, usage, and state" do
+          {non_streaming, streaming} = response_pair!(unquote(model), unquote(text_prompt))
+
+          assert_finish_reason_equal(non_streaming, streaming)
+          assert non_streaming.finish_reason == :stop
+          assert_text_semantically_equal(non_streaming, streaming, unquote(text_opts))
+          assert_usage_valid(non_streaming, streaming)
+          assert_context_valid_for_next_turn(non_streaming)
+          assert_context_valid_for_next_turn(streaming)
+        end
+
+        test "multi-turn tool calls complete in both paths" do
+          tools = [add_tool()]
+
+          {non_streaming, streaming} =
+            response_pair!(unquote(model), "What is 2 + 3? Use the add tool.",
+              tools: tools,
+              tool_choice: :required
+            )
+
+          non_streaming = complete_tool_turn!(unquote(model), non_streaming, tools)
+          streaming = complete_tool_turn!(unquote(model), streaming, tools)
+
+          assert non_streaming.finish_reason == :stop
+          assert streaming.finish_reason == :stop
+
+          assert_text_semantically_equal(non_streaming, streaming,
+            type: :math,
+            expected_values: [5]
+          )
+        end
+      end
+    end
+  end
+
+  def response_pair!(model, prompt, opts \\ []) do
+    {:ok, non_streaming} = ReqLLM.generate_text(model, prompt, opts)
+    {:ok, stream} = ReqLLM.stream_text(model, prompt, opts)
+    {:ok, streaming} = ReqLLM.StreamResponse.process_stream(stream)
+
+    {non_streaming, streaming}
+  end
+
+  def complete_tool_turn!(model, response, tools) do
+    tool_calls = Response.tool_calls(response)
+    context = ReqLLM.Context.execute_and_append_tools(response.context, tool_calls, tools)
+    {:ok, completed} = ReqLLM.generate_text(model, context)
+    completed
+  end
+
   # ============================================================================
   # Core Parity Assertions
   # ============================================================================
