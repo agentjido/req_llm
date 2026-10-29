@@ -9,7 +9,7 @@
 - `test/release/`: release construction tests.
 - `test/support/`: shared test code and fixtures.
 
-Run `mix test` to include existing top-level tests and Mix task tests in `test/mix/`. Release fixtures remain in `test/fixtures/`.
+Run `mix test` to include existing top-level tests and Mix task tests in `test/mix/`.
 
 Normal unit and mocked tests make no live API calls. Provider tests cover
 parameter translation, response parsing, and codecs alongside other library tests.

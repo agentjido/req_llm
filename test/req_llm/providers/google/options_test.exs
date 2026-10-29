@@ -3,7 +3,7 @@ defmodule ReqLLM.Providers.Google.OptionsTest do
   Google provider option validation, translation, and encoding.
   """
 
-  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Google
+  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Google, async: true
 
   alias ReqLLM.Providers.Google
 

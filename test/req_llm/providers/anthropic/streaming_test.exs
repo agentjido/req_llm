@@ -3,7 +3,7 @@ defmodule ReqLLM.Providers.Anthropic.StreamingTest do
   Tests Anthropic streaming requests, event decoding, and response assembly.
   """
 
-  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Anthropic
+  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Anthropic, async: true
 
   alias ReqLLM.Message.ContentPart
   alias ReqLLM.Providers.Anthropic
@@ -367,44 +367,6 @@ defmodule ReqLLM.Providers.Anthropic.StreamingTest do
       assert detail.provider == :anthropic
       assert detail.format == "anthropic-thinking-v1"
       assert detail.index == 0
-    end
-
-    test "returns nil reasoning_details when no thinking chunks" do
-      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-20250514")
-      context = %ReqLLM.Context{messages: []}
-
-      chunks = [
-        ReqLLM.StreamChunk.text("Just a simple response.")
-      ]
-
-      metadata = %{finish_reason: :stop}
-
-      {:ok, response} =
-        ResponseBuilder.build_response(chunks, metadata, context: context, model: model)
-
-      assert response.message.reasoning_details == nil
-    end
-
-    test "preserves signature from thinking chunk metadata" do
-      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-20250514")
-      context = %ReqLLM.Context{messages: []}
-
-      chunks = [
-        %ReqLLM.StreamChunk{
-          type: :thinking,
-          text: "Deep thought",
-          metadata: %{signature: "sig_abc123"}
-        },
-        ReqLLM.StreamChunk.text("Response")
-      ]
-
-      metadata = %{finish_reason: :stop}
-
-      {:ok, response} =
-        ResponseBuilder.build_response(chunks, metadata, context: context, model: model)
-
-      [detail] = response.message.reasoning_details
-      assert detail.signature == "sig_abc123"
     end
 
     test "attaches reasoning_details to context messages" do

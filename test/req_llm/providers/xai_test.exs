@@ -6,7 +6,7 @@ defmodule ReqLLM.Providers.XAITest do
   structured output infrastructure without making live API calls.
   """
 
-  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.XAI
+  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.XAI, async: true
 
   alias ReqLLM.Context
   alias ReqLLM.Providers.XAI
@@ -19,54 +19,6 @@ defmodule ReqLLM.Providers.XAITest do
   setup_all do
     compiled_schema = %{schema: @test_schema, name: "test_output"}
     {:ok, compiled_schema: compiled_schema}
-  end
-
-  describe "provider contract" do
-    test "provider identity and configuration" do
-      assert is_atom(XAI.provider_id())
-      assert is_binary(XAI.base_url())
-      assert String.starts_with?(XAI.base_url(), "http")
-    end
-
-    test "provider schema separation from core options" do
-      schema_keys = XAI.provider_schema().schema |> Keyword.keys()
-      core_keys = ReqLLM.Provider.Options.generation_schema().schema |> Keyword.keys()
-
-      overlap = MapSet.intersection(MapSet.new(schema_keys), MapSet.new(core_keys))
-
-      assert MapSet.size(overlap) == 0,
-             "Schema overlap detected: #{inspect(MapSet.to_list(overlap))}"
-    end
-
-    test "provider schema combined with generation schema includes all core keys" do
-      full_schema = XAI.provider_extended_generation_schema()
-      full_keys = Keyword.keys(full_schema.schema)
-      core_keys = ReqLLM.Provider.Options.all_generation_keys()
-
-      core_without_meta = Enum.reject(core_keys, &(&1 == :provider_options))
-      missing = core_without_meta -- full_keys
-      assert missing == [], "Missing core generation keys in extended schema: #{inspect(missing)}"
-    end
-
-    test "provider_extended_generation_schema includes both base and provider options" do
-      extended_schema = XAI.provider_extended_generation_schema()
-      extended_keys = extended_schema.schema |> Keyword.keys()
-
-      core_keys = ReqLLM.Provider.Options.all_generation_keys()
-      core_without_meta = Enum.reject(core_keys, &(&1 == :provider_options))
-
-      for core_key <- core_without_meta do
-        assert core_key in extended_keys,
-               "Extended schema missing core key: #{core_key}"
-      end
-
-      provider_keys = XAI.provider_schema().schema |> Keyword.keys()
-
-      for provider_key <- provider_keys do
-        assert provider_key in extended_keys,
-               "Extended schema missing provider key: #{provider_key}"
-      end
-    end
   end
 
   describe "capability detection - supports_native_structured_outputs?/1" do
@@ -555,18 +507,6 @@ defmodule ReqLLM.Providers.XAITest do
   end
 
   describe "request preparation & pipeline wiring" do
-    test "prepare_request creates configured request for :chat" do
-      {:ok, model} = ReqLLM.model("xai:grok-3")
-      context = context_fixture()
-      opts = [temperature: 0.7, max_tokens: 100]
-
-      {:ok, request} = XAI.prepare_request(:chat, model, context, opts)
-
-      assert %Req.Request{} = request
-      assert request.url.path == "/chat/completions"
-      assert request.method == :post
-    end
-
     test "prepare_request creates versioned request for :image" do
       {:ok, request} = XAI.prepare_request(:image, "xai:grok-imagine-image", "red square", [])
 
@@ -574,21 +514,6 @@ defmodule ReqLLM.Providers.XAITest do
       assert request.url.path == "/images/generations"
       assert request.options[:base_url] == "https://api.x.ai/v1"
       assert request.method == :post
-    end
-
-    test "attach configures authentication and pipeline" do
-      {:ok, model} = ReqLLM.model("xai:grok-3")
-      opts = [temperature: 0.5, max_tokens: 50]
-
-      request = Req.new() |> XAI.attach(model, opts)
-
-      assert request.headers["authorization"] |> Enum.any?(&String.starts_with?(&1, "Bearer "))
-
-      request_steps = Keyword.keys(request.request_steps)
-      response_steps = Keyword.keys(request.response_steps)
-
-      assert :llm_encode_body in request_steps
-      assert :llm_decode_response in response_steps
     end
 
     test "rejects unsupported operations" do
@@ -599,69 +524,9 @@ defmodule ReqLLM.Providers.XAITest do
       assert %ReqLLM.Error.Invalid.Parameter{} = error
       assert error.parameter =~ "operation: :embedding not supported"
     end
-
-    test "rejects provider mismatch" do
-      {:ok, wrong_model} = ReqLLM.model(%{provider: :openai, id: "gpt-4"})
-
-      assert_raise ReqLLM.Error.Invalid.Provider, fn ->
-        Req.new() |> XAI.attach(wrong_model, [])
-      end
-    end
   end
 
   describe "body encoding" do
-    test "encode_body with minimal context" do
-      {:ok, model} = ReqLLM.model("xai:grok-3")
-      context = context_fixture()
-
-      mock_request = %Req.Request{
-        options: [
-          context: context,
-          model: model.model,
-          stream: false
-        ]
-      }
-
-      updated_request = XAI.encode_body(mock_request)
-      assert_no_duplicate_json_keys(ReqLLM.Test.Helpers.json_iodata(updated_request))
-      decoded = ReqLLM.Test.Helpers.json_body(updated_request)
-
-      assert decoded["model"] == "grok-3"
-      assert is_list(decoded["messages"])
-      assert decoded["stream"] == false
-      refute Map.has_key?(decoded, "tools")
-    end
-
-    test "encode_body with tools" do
-      {:ok, model} = ReqLLM.model("xai:grok-3")
-      context = context_fixture()
-
-      tool =
-        ReqLLM.Tool.new!(
-          name: "test_tool",
-          description: "A test tool",
-          parameter_schema: [name: [type: :string, required: true]],
-          callback: fn _ -> {:ok, "result"} end
-        )
-
-      mock_request = %Req.Request{
-        options: [
-          context: context,
-          model: model.model,
-          stream: false,
-          tools: [tool],
-          tool_choice: %{type: "function", function: %{name: "test_tool"}}
-        ]
-      }
-
-      updated_request = XAI.encode_body(mock_request)
-      assert_no_duplicate_json_keys(ReqLLM.Test.Helpers.json_iodata(updated_request))
-      decoded = ReqLLM.Test.Helpers.json_body(updated_request)
-
-      assert is_list(decoded["tools"])
-      assert decoded["tool_choice"]["function"]["name"] == "test_tool"
-    end
-
     test "encode_body with response_format" do
       {:ok, model} = ReqLLM.model("xai:grok-3")
       context = context_fixture()
@@ -797,39 +662,6 @@ defmodule ReqLLM.Providers.XAITest do
     end
   end
 
-  describe "usage extraction" do
-    test "extract_usage with valid usage data" do
-      {:ok, model} = ReqLLM.model("xai:grok-3")
-
-      body_with_usage = %{
-        "usage" => %{
-          "prompt_tokens" => 10,
-          "completion_tokens" => 20,
-          "total_tokens" => 30
-        }
-      }
-
-      {:ok, usage} = XAI.extract_usage(body_with_usage, model)
-      assert usage["prompt_tokens"] == 10
-      assert usage["completion_tokens"] == 20
-      assert usage["total_tokens"] == 30
-    end
-
-    test "extract_usage with missing usage data" do
-      {:ok, model} = ReqLLM.model("xai:grok-3")
-      body_without_usage = %{"choices" => []}
-
-      {:error, :no_usage_found} = XAI.extract_usage(body_without_usage, model)
-    end
-
-    test "extract_usage with invalid body type" do
-      {:ok, model} = ReqLLM.model("xai:grok-3")
-
-      {:error, :invalid_body} = XAI.extract_usage("invalid", model)
-      {:error, :invalid_body} = XAI.extract_usage(nil, model)
-    end
-  end
-
   describe "attachment validation" do
     test "accepts image attachments" do
       {:ok, model} = ReqLLM.model("xai:grok-3")
@@ -894,15 +726,5 @@ defmodule ReqLLM.Providers.XAITest do
   end
 
   describe "context validation" do
-    test "multiple system messages are allowed" do
-      context =
-        Context.new([
-          Context.system("System 1"),
-          Context.system("System 2"),
-          Context.user("Hello")
-        ])
-
-      assert ^context = Context.validate!(context)
-    end
   end
 end

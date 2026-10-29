@@ -53,7 +53,7 @@ defmodule ReqLLM.Test.VCR do
 
   ## Examples
 
-      {:ok, transcript} = VCR.load("test/fixtures/openai/basic.json")
+      {:ok, transcript} = VCR.load("test/support/fixtures/openai/gpt_4o/basic.json")
       {:error, :enoent} = VCR.load("nonexistent.json")
   """
   @spec load(Path.t()) :: {:ok, Transcript.t()} | {:error, term()}
@@ -68,7 +68,7 @@ defmodule ReqLLM.Test.VCR do
 
   ## Examples
 
-      transcript = VCR.load!("test/fixtures/openai/basic.json")
+      transcript = VCR.load!("test/support/fixtures/openai/gpt_4o/basic.json")
   """
   @spec load!(Path.t()) :: Transcript.t()
   def load!(path), do: Transcript.read!(path)

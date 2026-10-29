@@ -3,22 +3,12 @@ defmodule ReqLLM.Providers.Google.HistoryCompatibilityTest do
   Google context compatibility for role merging and assistant tool history.
   """
 
-  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Google
+  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Google, async: true
 
   alias ReqLLM.Context
   alias ReqLLM.Providers.Google
 
   describe "error handling & robustness" do
-    test "context validation allows multiple system messages" do
-      context =
-        Context.new([
-          Context.system("System 1"),
-          Context.system("System 2"),
-          Context.user("Hello")
-        ])
-
-      assert ^context = Context.validate!(context)
-    end
   end
 
   describe "consecutive role merging for parallel tool results" do

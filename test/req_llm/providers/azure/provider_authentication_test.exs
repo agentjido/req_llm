@@ -48,11 +48,7 @@ defmodule ReqLLM.Providers.Azure.ProviderAuthenticationTest do
     end
 
     test "Bearer token takes precedence over model family for Claude models" do
-      model = %LLMDB.Model{
-        id: "claude-3-5-sonnet-20241022",
-        provider: :azure,
-        capabilities: %{chat: true}
-      }
+      model = ReqLLM.Test.AzureModelHelpers.chat_model("claude-3-5-sonnet-20241022")
 
       context = ReqLLM.Context.new([ReqLLM.Context.user("Hello")])
 

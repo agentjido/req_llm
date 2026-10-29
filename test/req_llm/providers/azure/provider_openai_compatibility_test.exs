@@ -316,11 +316,7 @@ defmodule ReqLLM.Providers.Azure.ProviderOpenAICompatibilityTest do
 
       assert message =~ "openai_responses"
 
-      claude = %LLMDB.Model{
-        id: "claude-sonnet-4-5",
-        provider: :azure,
-        capabilities: %{chat: true}
-      }
+      claude = ReqLLM.Test.AzureModelHelpers.chat_model("claude-sonnet-4-5")
 
       assert {:error, %ReqLLM.Error.Invalid.Parameter{}} =
                Azure.prepare_request(:compact, claude, context, opts)

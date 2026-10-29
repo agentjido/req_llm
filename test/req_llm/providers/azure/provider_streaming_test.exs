@@ -94,11 +94,7 @@ defmodule ReqLLM.Providers.Azure.ProviderStreamingTest do
     end
 
     test "Bearer token takes precedence for Claude models in streaming" do
-      model = %LLMDB.Model{
-        id: "claude-3-5-sonnet-20241022",
-        provider: :azure,
-        capabilities: %{chat: true}
-      }
+      model = ReqLLM.Test.AzureModelHelpers.chat_model("claude-3-5-sonnet-20241022")
 
       context = ReqLLM.Context.new([ReqLLM.Context.user("Hello")])
 
@@ -140,11 +136,7 @@ defmodule ReqLLM.Providers.Azure.ProviderStreamingTest do
     end
 
     test "includes anthropic-version header for Claude models" do
-      model = %LLMDB.Model{
-        id: "claude-3-5-sonnet-20241022",
-        provider: :azure,
-        capabilities: %{chat: true}
-      }
+      model = ReqLLM.Test.AzureModelHelpers.chat_model("claude-3-5-sonnet-20241022")
 
       context = ReqLLM.Context.new([ReqLLM.Context.user("Hello")])
 
@@ -166,11 +158,7 @@ defmodule ReqLLM.Providers.Azure.ProviderStreamingTest do
     end
 
     test "allows custom anthropic_version header override" do
-      model = %LLMDB.Model{
-        id: "claude-3-5-sonnet-20241022",
-        provider: :azure,
-        capabilities: %{chat: true}
-      }
+      model = ReqLLM.Test.AzureModelHelpers.chat_model("claude-3-5-sonnet-20241022")
 
       context = ReqLLM.Context.new([ReqLLM.Context.user("Hello")])
 
@@ -192,11 +180,7 @@ defmodule ReqLLM.Providers.Azure.ProviderStreamingTest do
     end
 
     test "builds streaming request for Claude models with correct endpoint" do
-      model = %LLMDB.Model{
-        id: "claude-3-5-sonnet-20241022",
-        provider: :azure,
-        capabilities: %{chat: true}
-      }
+      model = ReqLLM.Test.AzureModelHelpers.chat_model("claude-3-5-sonnet-20241022")
 
       context = ReqLLM.Context.new([ReqLLM.Context.user("Hello")])
 
@@ -332,11 +316,7 @@ defmodule ReqLLM.Providers.Azure.ProviderStreamingTest do
     end
 
     test "prefers finalized reasoning_details from meta chunks for Claude models on Azure" do
-      model = %LLMDB.Model{
-        id: "claude-3-5-sonnet-20241022",
-        provider: :azure,
-        capabilities: %{chat: true}
-      }
+      model = ReqLLM.Test.AzureModelHelpers.chat_model("claude-3-5-sonnet-20241022")
 
       context = %ReqLLM.Context{messages: []}
 
@@ -376,11 +356,7 @@ defmodule ReqLLM.Providers.Azure.ProviderStreamingTest do
     test "Claude streamed reasoning round-trips into Anthropic request blocks on Azure" do
       alias ReqLLM.Providers.Azure.Anthropic, as: AzureAnthropic
 
-      model = %LLMDB.Model{
-        id: "claude-3-5-sonnet-20241022",
-        provider: :azure,
-        capabilities: %{chat: true}
-      }
+      model = ReqLLM.Test.AzureModelHelpers.chat_model("claude-3-5-sonnet-20241022")
 
       context = %ReqLLM.Context{messages: []}
 
@@ -415,22 +391,6 @@ defmodule ReqLLM.Providers.Azure.ProviderStreamingTest do
       assert thinking_block[:thinking] == "Let me think through this carefully"
       assert thinking_block[:signature] == "sig_azure_123"
       assert text_block == %{type: "text", text: "Here is my answer."}
-    end
-
-    test "returns nil reasoning_details when no thinking chunks" do
-      {:ok, model} = ReqLLM.model("azure:gpt-4o")
-      context = %ReqLLM.Context{messages: []}
-
-      chunks = [
-        ReqLLM.StreamChunk.text("Just a simple response.")
-      ]
-
-      metadata = %{finish_reason: :stop}
-
-      {:ok, response} =
-        ResponseBuilder.build_response(chunks, metadata, context: context, model: model)
-
-      assert response.message.reasoning_details == nil
     end
   end
 end

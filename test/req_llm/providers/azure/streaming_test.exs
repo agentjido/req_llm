@@ -51,11 +51,7 @@ defmodule ReqLLM.Providers.Azure.StreamingTest do
     end
 
     test "decodes Anthropic SSE event for Claude models" do
-      model = %LLMDB.Model{
-        id: "claude-3-5-sonnet-20241022",
-        provider: :azure,
-        capabilities: %{chat: true}
-      }
+      model = ReqLLM.Test.AzureModelHelpers.chat_model("claude-3-5-sonnet-20241022")
 
       event = %{
         data: %{
@@ -73,11 +69,7 @@ defmodule ReqLLM.Providers.Azure.StreamingTest do
     end
 
     test "handles message_stop event for Claude models" do
-      model = %LLMDB.Model{
-        id: "claude-3-5-sonnet-20241022",
-        provider: :azure,
-        capabilities: %{chat: true}
-      }
+      model = ReqLLM.Test.AzureModelHelpers.chat_model("claude-3-5-sonnet-20241022")
 
       event = %{
         data: %{"type" => "message_stop"}
@@ -189,11 +181,7 @@ defmodule ReqLLM.Providers.Azure.StreamingTest do
     end
 
     test "Claude: ping event returns keepalive meta chunk" do
-      model = %LLMDB.Model{
-        id: "claude-3-5-sonnet-20241022",
-        provider: :azure,
-        capabilities: %{chat: true}
-      }
+      model = ReqLLM.Test.AzureModelHelpers.chat_model("claude-3-5-sonnet-20241022")
 
       event = %{data: %{"type" => "ping"}}
 
@@ -204,11 +192,7 @@ defmodule ReqLLM.Providers.Azure.StreamingTest do
     end
 
     test "Claude: unknown event type returns empty list" do
-      model = %LLMDB.Model{
-        id: "claude-3-5-sonnet-20241022",
-        provider: :azure,
-        capabilities: %{chat: true}
-      }
+      model = ReqLLM.Test.AzureModelHelpers.chat_model("claude-3-5-sonnet-20241022")
 
       event = %{data: %{"type" => "unknown_event_type", "data" => "something"}}
 
@@ -216,22 +200,14 @@ defmodule ReqLLM.Providers.Azure.StreamingTest do
     end
 
     test "Claude: empty event data returns empty list" do
-      model = %LLMDB.Model{
-        id: "claude-3-5-sonnet-20241022",
-        provider: :azure,
-        capabilities: %{chat: true}
-      }
+      model = ReqLLM.Test.AzureModelHelpers.chat_model("claude-3-5-sonnet-20241022")
 
       assert Azure.decode_stream_event(%{data: %{}}, model) == []
       assert Azure.decode_stream_event(%{}, model) == []
     end
 
     test "Claude: non-map event data returns empty list" do
-      model = %LLMDB.Model{
-        id: "claude-3-5-sonnet-20241022",
-        provider: :azure,
-        capabilities: %{chat: true}
-      }
+      model = ReqLLM.Test.AzureModelHelpers.chat_model("claude-3-5-sonnet-20241022")
 
       assert Azure.decode_stream_event("invalid", model) == []
       assert Azure.decode_stream_event(nil, model) == []
@@ -239,11 +215,7 @@ defmodule ReqLLM.Providers.Azure.StreamingTest do
     end
 
     test "Claude: message_delta with stop_reason but no usage" do
-      model = %LLMDB.Model{
-        id: "claude-3-5-sonnet-20241022",
-        provider: :azure,
-        capabilities: %{chat: true}
-      }
+      model = ReqLLM.Test.AzureModelHelpers.chat_model("claude-3-5-sonnet-20241022")
 
       event = %{
         data: %{
@@ -262,11 +234,7 @@ defmodule ReqLLM.Providers.Azure.StreamingTest do
     end
 
     test "Claude: content_block_delta with empty delta" do
-      model = %LLMDB.Model{
-        id: "claude-3-5-sonnet-20241022",
-        provider: :azure,
-        capabilities: %{chat: true}
-      }
+      model = ReqLLM.Test.AzureModelHelpers.chat_model("claude-3-5-sonnet-20241022")
 
       event = %{
         data: %{
@@ -384,11 +352,7 @@ defmodule ReqLLM.Providers.Azure.StreamingTest do
     end
 
     test "Claude: streaming finish_reason variations" do
-      model = %LLMDB.Model{
-        id: "claude-3-5-sonnet-20241022",
-        provider: :azure,
-        capabilities: %{chat: true}
-      }
+      model = ReqLLM.Test.AzureModelHelpers.chat_model("claude-3-5-sonnet-20241022")
 
       max_tokens_event = %{
         data: %{
@@ -414,11 +378,7 @@ defmodule ReqLLM.Providers.Azure.StreamingTest do
     end
 
     test "Claude: content_block_start event for tool use" do
-      model = %LLMDB.Model{
-        id: "claude-3-5-sonnet-20241022",
-        provider: :azure,
-        capabilities: %{chat: true}
-      }
+      model = ReqLLM.Test.AzureModelHelpers.chat_model("claude-3-5-sonnet-20241022")
 
       event = %{
         data: %{
@@ -439,11 +399,7 @@ defmodule ReqLLM.Providers.Azure.StreamingTest do
     end
 
     test "Claude: message_start event with usage" do
-      model = %LLMDB.Model{
-        id: "claude-3-5-sonnet-20241022",
-        provider: :azure,
-        capabilities: %{chat: true}
-      }
+      model = ReqLLM.Test.AzureModelHelpers.chat_model("claude-3-5-sonnet-20241022")
 
       event = %{
         data: %{
@@ -466,11 +422,7 @@ defmodule ReqLLM.Providers.Azure.StreamingTest do
     end
 
     test "Claude: error event in stream returns empty list (delegated to Anthropic handler)" do
-      model = %LLMDB.Model{
-        id: "claude-3-5-sonnet-20241022",
-        provider: :azure,
-        capabilities: %{chat: true}
-      }
+      model = ReqLLM.Test.AzureModelHelpers.chat_model("claude-3-5-sonnet-20241022")
 
       event = %{
         data: %{
@@ -644,11 +596,7 @@ defmodule ReqLLM.Providers.Azure.StreamingTest do
     end
 
     test "content_block_stop event returns empty list" do
-      model = %LLMDB.Model{
-        id: "claude-3-5-sonnet-20241022",
-        provider: :azure,
-        capabilities: %{chat: true}
-      }
+      model = ReqLLM.Test.AzureModelHelpers.chat_model("claude-3-5-sonnet-20241022")
 
       event = %{
         data: %{
@@ -662,11 +610,7 @@ defmodule ReqLLM.Providers.Azure.StreamingTest do
     end
 
     test "message_delta with incremental usage" do
-      model = %LLMDB.Model{
-        id: "claude-3-5-sonnet-20241022",
-        provider: :azure,
-        capabilities: %{chat: true}
-      }
+      model = ReqLLM.Test.AzureModelHelpers.chat_model("claude-3-5-sonnet-20241022")
 
       event = %{
         data: %{
@@ -696,11 +640,7 @@ defmodule ReqLLM.Providers.Azure.StreamingTest do
 
   describe "streaming prompt cache metrics" do
     test "Claude: message_start with cache_read_input_tokens" do
-      model = %LLMDB.Model{
-        id: "claude-3-5-sonnet-20241022",
-        provider: :azure,
-        capabilities: %{chat: true}
-      }
+      model = ReqLLM.Test.AzureModelHelpers.chat_model("claude-3-5-sonnet-20241022")
 
       event = %{
         data: %{
@@ -728,11 +668,7 @@ defmodule ReqLLM.Providers.Azure.StreamingTest do
     end
 
     test "Claude: message_delta with cache metrics in usage" do
-      model = %LLMDB.Model{
-        id: "claude-3-5-sonnet-20241022",
-        provider: :azure,
-        capabilities: %{chat: true}
-      }
+      model = ReqLLM.Test.AzureModelHelpers.chat_model("claude-3-5-sonnet-20241022")
 
       event = %{
         data: %{

@@ -277,7 +277,7 @@ ReqLLM uses the following canonical v1.x test layout:
 - `test/release/`: release construction tests.
 - `test/support/`: shared test code and fixtures.
 
-Run `mix test` to include existing top-level tests and Mix task tests in `test/mix/`. Release fixtures remain in `test/fixtures/`.
+Run `mix test` to include existing top-level tests and Mix task tests in `test/mix/`.
 
 `mix test` remains the normal test command. Integration and provider coverage
 tests are opt-in; the default exclusions are defined in `test/test_helper.exs`.

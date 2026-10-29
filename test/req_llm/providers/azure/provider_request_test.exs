@@ -100,11 +100,7 @@ defmodule ReqLLM.Providers.Azure.ProviderRequestTest do
     end
 
     test "embedding operation uses correct endpoint" do
-      model = %LLMDB.Model{
-        id: "text-embedding-3-small",
-        provider: :azure,
-        capabilities: %{embeddings: true}
-      }
+      model = ReqLLM.Test.AzureModelHelpers.embedding_model("text-embedding-3-small")
 
       {:ok, request} =
         Azure.prepare_request(
@@ -134,11 +130,7 @@ defmodule ReqLLM.Providers.Azure.ProviderRequestTest do
     end
 
     test "embedding operation returns an error tuple for invalid options" do
-      model = %LLMDB.Model{
-        id: "text-embedding-3-small",
-        provider: :azure,
-        capabilities: %{embeddings: true}
-      }
+      model = ReqLLM.Test.AzureModelHelpers.embedding_model("text-embedding-3-small")
 
       assert {:error, error} =
                Azure.prepare_request(

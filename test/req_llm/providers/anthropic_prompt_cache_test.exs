@@ -9,7 +9,7 @@ defmodule ReqLLM.Providers.AnthropicPromptCacheTest do
   - Message cache_control handling (conversation prefix caching)
   """
 
-  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Anthropic
+  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Anthropic, async: true
 
   alias ReqLLM.Context
   alias ReqLLM.Providers.Anthropic

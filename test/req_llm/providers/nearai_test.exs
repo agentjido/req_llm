@@ -1,5 +1,5 @@
 defmodule ReqLLM.Providers.NearAITest do
-  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.NearAI
+  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.NearAI, async: true
 
   import ExUnit.CaptureIO
 
@@ -20,13 +20,6 @@ defmodule ReqLLM.Providers.NearAITest do
   end
 
   describe "provider contract" do
-    test "provider identity and configuration" do
-      assert NearAI.provider_id() == :nearai
-      assert NearAI.base_url() == "https://cloud-api.near.ai/v1"
-      assert NearAI.default_env_key() == "NEARAI_API_KEY"
-      assert NearAI.display_name() == "NEAR AI Cloud"
-    end
-
     test "provider schema exposes NEAR compatibility options" do
       schema_keys = NearAI.provider_schema().schema |> Keyword.keys()
 

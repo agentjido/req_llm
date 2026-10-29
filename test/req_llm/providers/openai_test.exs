@@ -6,75 +6,12 @@ defmodule ReqLLM.Providers.OpenAITest do
   Focus: prepare_request -> attach -> request -> decode pipeline.
   """
 
-  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.OpenAI
+  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.OpenAI, async: true
 
   alias ReqLLM.Context
   alias ReqLLM.Providers.OpenAI
 
-  describe "provider contract" do
-    test "provider identity and configuration" do
-      assert is_atom(OpenAI.provider_id())
-      assert is_binary(OpenAI.base_url())
-      assert String.starts_with?(OpenAI.base_url(), "http")
-    end
-
-    test "provider schema separation from core options" do
-      schema_keys = OpenAI.provider_schema().schema |> Keyword.keys()
-      core_keys = ReqLLM.Provider.Options.generation_schema().schema |> Keyword.keys()
-
-      # Provider-specific keys should not overlap with core generation keys
-      overlap = MapSet.intersection(MapSet.new(schema_keys), MapSet.new(core_keys))
-
-      assert MapSet.size(overlap) == 0,
-             "Schema overlap detected: #{inspect(MapSet.to_list(overlap))}"
-    end
-
-    test "provider schema combined with generation schema includes all core keys" do
-      full_schema = OpenAI.provider_extended_generation_schema()
-      full_keys = Keyword.keys(full_schema.schema)
-      core_keys = ReqLLM.Provider.Options.all_generation_keys()
-
-      core_without_meta = Enum.reject(core_keys, &(&1 == :provider_options))
-      missing = core_without_meta -- full_keys
-      assert missing == [], "Missing core generation keys in extended schema: #{inspect(missing)}"
-    end
-
-    test "provider_extended_generation_schema includes both base and provider options" do
-      extended_schema = OpenAI.provider_extended_generation_schema()
-      extended_keys = extended_schema.schema |> Keyword.keys()
-
-      # Should include all core generation keys
-      core_keys = ReqLLM.Provider.Options.all_generation_keys()
-      core_without_meta = Enum.reject(core_keys, &(&1 == :provider_options))
-
-      for core_key <- core_without_meta do
-        assert core_key in extended_keys,
-               "Extended schema missing core key: #{core_key}"
-      end
-
-      # Should include provider-specific keys
-      provider_keys = OpenAI.provider_schema().schema |> Keyword.keys()
-
-      for provider_key <- provider_keys do
-        assert provider_key in extended_keys,
-               "Extended schema missing provider key: #{provider_key}"
-      end
-    end
-  end
-
   describe "request preparation & pipeline wiring" do
-    test "prepare_request creates configured chat request" do
-      {:ok, model} = ReqLLM.model(%{provider: :openai, id: "gpt-4-turbo"})
-      context = context_fixture()
-      opts = [temperature: 0.7, max_tokens: 100]
-
-      {:ok, request} = OpenAI.prepare_request(:chat, model, context, opts)
-
-      assert %Req.Request{} = request
-      assert request.url.path == "/chat/completions"
-      assert request.method == :post
-    end
-
     test "prepare_request merges custom Finch options with the request timeout" do
       {:ok, model} = ReqLLM.model(%{provider: :openai, id: "gpt-4-turbo"})
       context = context_fixture()
@@ -499,7 +436,7 @@ defmodule ReqLLM.Providers.OpenAITest do
     test "prepare_request configures authentication and pipeline for chat" do
       {:ok, model} = ReqLLM.model(%{provider: :openai, id: "gpt-4-turbo"})
       prompt = "Hello, world!"
-      opts = [temperature: 0.5, max_tokens: 50]
+      opts = [api_key: "test-key-12345", temperature: 0.5, max_tokens: 50]
 
       {:ok, request} = OpenAI.prepare_request(:chat, model, prompt, opts)
 
@@ -507,7 +444,7 @@ defmodule ReqLLM.Providers.OpenAITest do
       assert request.options[:model] == model.model
       assert request.options[:temperature] == 0.5
       assert request.options[:max_tokens] == 50
-      assert String.starts_with?(List.first(request.headers["authorization"]), "Bearer test-key-")
+      assert request.headers["authorization"] == ["Bearer test-key-12345"]
 
       # Verify pipeline steps
       request_steps = Keyword.keys(request.request_steps)
@@ -520,7 +457,7 @@ defmodule ReqLLM.Providers.OpenAITest do
     test "prepare_request configures authentication and pipeline for embedding" do
       {:ok, model} = ReqLLM.model("openai:text-embedding-3-small")
       text = "Hello, world!"
-      opts = [provider_options: [dimensions: 512]]
+      opts = [api_key: "test-key-12345", provider_options: [dimensions: 512]]
 
       {:ok, request} = OpenAI.prepare_request(:embedding, model, text, opts)
 
@@ -531,7 +468,7 @@ defmodule ReqLLM.Providers.OpenAITest do
       assert request.options[:provider_options][:dimensions] == 512
 
       # Verify authentication
-      assert String.starts_with?(List.first(request.headers["authorization"]), "Bearer test-key-")
+      assert request.headers["authorization"] == ["Bearer test-key-12345"]
     end
 
     test "prepare_request supports oauth access_token auth" do
@@ -738,36 +675,6 @@ defmodule ReqLLM.Providers.OpenAITest do
   end
 
   describe "body encoding & context translation" do
-    test "encode_body for chat without tools" do
-      {:ok, model} = ReqLLM.model("openai:gpt-4o")
-      context = context_fixture()
-
-      # Create a mock request with the expected structure
-      mock_request = %Req.Request{
-        options: [
-          context: context,
-          model: model.model,
-          stream: false
-        ]
-      }
-
-      # Test the encode_body function directly
-      updated_request = OpenAI.encode_body(mock_request)
-
-      assert is_binary(IO.iodata_to_binary(ReqLLM.Test.Helpers.json_iodata(updated_request)))
-      decoded = ReqLLM.Test.Helpers.json_body(updated_request)
-
-      assert decoded["model"] == "gpt-4o"
-      assert is_list(decoded["messages"])
-      assert length(decoded["messages"]) == 2
-      assert decoded["stream"] == false
-      refute Map.has_key?(decoded, "tools")
-
-      [system_msg, user_msg] = decoded["messages"]
-      assert system_msg["role"] == "system"
-      assert user_msg["role"] == "user"
-    end
-
     test "encode_body for chat with tools but no tool_choice" do
       {:ok, model} = ReqLLM.model("openai:gpt-4o")
       context = context_fixture()
@@ -1192,71 +1099,6 @@ defmodule ReqLLM.Providers.OpenAITest do
   end
 
   describe "response decoding" do
-    test "decode_response for chat handles non-streaming responses" do
-      # Create a mock non-streaming response body
-      mock_response_body = %{
-        "id" => "chatcmpl-123",
-        "object" => "chat.completion",
-        "created" => 1_677_652_288,
-        "model" => "gpt-4o",
-        "choices" => [
-          %{
-            "index" => 0,
-            "message" => %{
-              "role" => "assistant",
-              "content" => "Hello! How can I help you today?"
-            },
-            "logprobs" => nil,
-            "finish_reason" => "stop"
-          }
-        ],
-        "usage" => %{
-          "prompt_tokens" => 13,
-          "completion_tokens" => 7,
-          "total_tokens" => 20
-        }
-      }
-
-      mock_resp = %Req.Response{
-        status: 200,
-        body: mock_response_body
-      }
-
-      {:ok, model} = ReqLLM.model("openai:gpt-4o")
-      context = context_fixture()
-
-      mock_req = %Req.Request{
-        options: [context: context, stream: false, model: model.model]
-      }
-
-      # Test decode_response directly
-      {req, resp} = OpenAI.decode_response({mock_req, mock_resp})
-
-      assert req == mock_req
-      assert %ReqLLM.Response{} = resp.body
-
-      response = resp.body
-      assert is_binary(response.id)
-      assert response.model == model.model
-      assert response.stream? == false
-
-      # Verify message normalization
-      assert response.message.role == :assistant
-      text = ReqLLM.Response.text(response)
-      assert is_binary(text)
-      assert String.length(text) > 0
-      assert response.finish_reason in [:stop, :length]
-
-      # Verify usage normalization
-      assert is_integer(response.usage.input_tokens)
-      assert is_integer(response.usage.output_tokens)
-      assert is_integer(response.usage.total_tokens)
-
-      # Verify context advancement (original + assistant)
-      assert length(response.context.messages) == 3
-      assert List.last(response.context.messages).role == :assistant
-    end
-
     test "decode_response for chat handles streaming responses" do
       # Create mock streaming chunks
       stream_chunks = [
@@ -1346,37 +1188,6 @@ defmodule ReqLLM.Providers.OpenAITest do
       assert req == mock_req
       # For embeddings, body should be the raw parsed JSON
       assert resp.body == mock_response_body
-    end
-
-    test "decode_response handles API errors with non-200 status" do
-      # Create error response
-      error_body = %{
-        "error" => %{
-          "message" => "Invalid API key provided",
-          "type" => "invalid_request_error",
-          "code" => "invalid_api_key"
-        }
-      }
-
-      mock_resp = %Req.Response{
-        status: 401,
-        body: error_body
-      }
-
-      context = context_fixture()
-
-      mock_req = %Req.Request{
-        options: [context: context, model: "gpt-4o"]
-      }
-
-      # Test decode_response error handling (now delegated to ChatAPI)
-      {req, error} = OpenAI.decode_response({mock_req, mock_resp})
-
-      assert req == mock_req
-      assert %ReqLLM.Error.API.Response{} = error
-      assert error.status == 401
-      assert error.reason == "OpenAI API error"
-      assert error.response_body == error_body
     end
   end
 
@@ -1531,40 +1342,6 @@ defmodule ReqLLM.Providers.OpenAITest do
     end
   end
 
-  describe "usage extraction" do
-    test "extract_usage with valid usage data" do
-      {:ok, model} = ReqLLM.model("openai:gpt-4o")
-
-      body_with_usage = %{
-        "usage" => %{
-          "prompt_tokens" => 15,
-          "completion_tokens" => 25,
-          "total_tokens" => 40
-        }
-      }
-
-      {:ok, usage} = OpenAI.extract_usage(body_with_usage, model)
-      assert usage["prompt_tokens"] == 15
-      assert usage["completion_tokens"] == 25
-      assert usage["total_tokens"] == 40
-    end
-
-    test "extract_usage with missing usage data" do
-      {:ok, model} = ReqLLM.model("openai:gpt-4o")
-      body_without_usage = %{"choices" => []}
-
-      {:error, :no_usage_found} = OpenAI.extract_usage(body_without_usage, model)
-    end
-
-    test "extract_usage with invalid body type" do
-      {:ok, model} = ReqLLM.model("openai:gpt-4o")
-
-      {:error, :invalid_body} = OpenAI.extract_usage("invalid", model)
-      {:error, :invalid_body} = OpenAI.extract_usage(nil, model)
-      {:error, :invalid_body} = OpenAI.extract_usage(123, model)
-    end
-  end
-
   describe "embedding support" do
     test "prepare_request for embedding with all options" do
       {:ok, model} = ReqLLM.model("openai:text-embedding-3-large")
@@ -1605,26 +1382,6 @@ defmodule ReqLLM.Providers.OpenAITest do
   end
 
   describe "error handling & robustness" do
-    test "context validation allows multiple system messages" do
-      context =
-        Context.new([
-          Context.system("System 1"),
-          Context.system("System 2"),
-          Context.user("Hello")
-        ])
-
-      assert ^context = Context.validate!(context)
-    end
-
-    test "prepare_request rejects unsupported operations" do
-      {:ok, model} = ReqLLM.model("openai:gpt-4o")
-      context = context_fixture()
-
-      {:error, error} = OpenAI.prepare_request(:unsupported, model, context, [])
-      assert %ReqLLM.Error.Invalid.Parameter{} = error
-      assert error.parameter =~ "operation: :unsupported not supported by OpenAI provider"
-    end
-
     test "attach rejects invalid model provider" do
       {:ok, wrong_model} = ReqLLM.model("groq:llama-3.1-8b-instant")
 

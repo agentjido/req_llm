@@ -9,7 +9,7 @@ Run the audit from an application root:
 ```bash
 mix req_llm.migration_audit
 mix req_llm.migration_audit lib test
-mix req_llm.migration_audit --exclude test/fixtures
+mix req_llm.migration_audit --exclude test/support/fixtures
 mix req_llm.migration_audit --format json
 ```
 

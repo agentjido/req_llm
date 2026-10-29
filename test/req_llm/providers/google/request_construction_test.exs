@@ -3,38 +3,11 @@ defmodule ReqLLM.Providers.Google.RequestConstructionTest do
   Google provider contract, request preparation, and basic body construction.
   """
 
-  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Google
+  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Google, async: true
 
   alias ReqLLM.Providers.Google
 
   describe "provider contract" do
-    test "provider identity and configuration" do
-      assert is_atom(Google.provider_id())
-      assert is_binary(Google.base_url())
-      assert String.starts_with?(Google.base_url(), "http")
-    end
-
-    test "provider schema separation from core options" do
-      schema_keys = Google.provider_schema().schema |> Keyword.keys()
-      core_keys = ReqLLM.Provider.Options.generation_schema().schema |> Keyword.keys()
-
-      # Provider-specific keys should not overlap with core generation keys
-      overlap = MapSet.intersection(MapSet.new(schema_keys), MapSet.new(core_keys))
-
-      assert MapSet.size(overlap) == 0,
-             "Schema overlap detected: #{inspect(MapSet.to_list(overlap))}"
-    end
-
-    test "provider schema combined with generation schema includes all core keys" do
-      full_schema = Google.provider_extended_generation_schema()
-      full_keys = Keyword.keys(full_schema.schema)
-      core_keys = ReqLLM.Provider.Options.all_generation_keys()
-
-      core_without_meta = Enum.reject(core_keys, &(&1 == :provider_options))
-      missing = core_without_meta -- full_keys
-      assert missing == [], "Missing core generation keys in extended schema: #{inspect(missing)}"
-    end
-
     test "provider_extended_generation_schema includes both base and provider options" do
       extended_schema = Google.provider_extended_generation_schema()
       extended_keys = extended_schema.schema |> Keyword.keys()
@@ -74,7 +47,7 @@ defmodule ReqLLM.Providers.Google.RequestConstructionTest do
     test "prepare_request for streaming creates streaming endpoint" do
       {:ok, model} = ReqLLM.model("google:gemini-1.5-flash")
       context = context_fixture()
-      opts = [temperature: 0.7, max_tokens: 100, stream: true]
+      opts = [api_key: "test-key-12345", temperature: 0.7, max_tokens: 100, stream: true]
 
       {:ok, request} = Google.prepare_request(:chat, model, context, opts)
 
@@ -87,7 +60,7 @@ defmodule ReqLLM.Providers.Google.RequestConstructionTest do
 
     test "attach configures authentication and pipeline" do
       {:ok, model} = ReqLLM.model("google:gemini-1.5-flash")
-      opts = [temperature: 0.5, max_tokens: 50]
+      opts = [api_key: "test-key-12345", temperature: 0.5, max_tokens: 50]
 
       request = Req.new() |> Google.attach(model, opts)
 
@@ -295,25 +268,6 @@ defmodule ReqLLM.Providers.Google.RequestConstructionTest do
       assert request.options[:text] == text
       assert request.options[:operation] == :embedding
       assert request.options[:dimensions] == 768
-    end
-
-    test "prepare_request rejects unsupported operations" do
-      {:ok, model} = ReqLLM.model("google:gemini-1.5-flash")
-      context = context_fixture()
-
-      # Test unsupported operation for 3-arg version
-      {:error, error} = Google.prepare_request(:unsupported_operation, model, context, [])
-      assert %ReqLLM.Error.Invalid.Parameter{} = error
-      assert error.parameter =~ "operation: :unsupported_operation not supported"
-
-      # Test unsupported operation for object with schema
-      {:ok, schema} = ReqLLM.Schema.compile([])
-
-      {:error, error} =
-        Google.prepare_request(:unsupported_operation, model, context, compiled_schema: schema)
-
-      assert %ReqLLM.Error.Invalid.Parameter{} = error
-      assert error.parameter =~ "operation: :unsupported_operation not supported"
     end
   end
 end

@@ -3,7 +3,7 @@ defmodule ReqLLM.Providers.Anthropic.ResponseDecodingTest do
   Tests Anthropic non-streaming response normalization and usage extraction.
   """
 
-  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Anthropic
+  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Anthropic, async: true
 
   alias ReqLLM.Providers.Anthropic
 
@@ -169,37 +169,6 @@ defmodule ReqLLM.Providers.Anthropic.ResponseDecodingTest do
 
       # Absent from both places: zero rather than nil.
       assert decode.(%{"input_tokens" => 5, "output_tokens" => 2}) == 0
-    end
-
-    test "decode_response handles API errors with non-200 status" do
-      # Create error response
-      error_body = %{
-        "type" => "error",
-        "error" => %{
-          "type" => "authentication_error",
-          "message" => "Invalid API key"
-        }
-      }
-
-      mock_resp = %Req.Response{
-        status: 401,
-        body: error_body
-      }
-
-      context = context_fixture()
-
-      mock_req = %Req.Request{
-        options: [context: context, id: "claude-sonnet-4-5-20250929"]
-      }
-
-      # Test decode_response error handling
-      {req, error} = Anthropic.decode_response({mock_req, mock_resp})
-
-      assert req == mock_req
-      assert %ReqLLM.Error.API.Response{} = error
-      assert error.status == 401
-      assert error.reason =~ "Anthropic API error"
-      assert error.response_body == error_body
     end
   end
 

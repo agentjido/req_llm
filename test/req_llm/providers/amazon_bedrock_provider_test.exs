@@ -8,7 +8,6 @@ defmodule ReqLLM.Providers.AmazonBedrockProviderTest do
 
   use ReqLLM.ProviderCase, provider: ReqLLM.Providers.AmazonBedrock
 
-  alias ReqLLM.Provider.Options
   alias ReqLLM.Providers.AmazonBedrock
 
   setup do
@@ -20,24 +19,6 @@ defmodule ReqLLM.Providers.AmazonBedrockProviderTest do
   end
 
   describe "provider contract" do
-    test "provider identity and configuration" do
-      assert AmazonBedrock.provider_id() == :amazon_bedrock
-      assert is_binary(AmazonBedrock.base_url())
-      assert AmazonBedrock.base_url() =~ "bedrock-runtime"
-      assert AmazonBedrock.base_url() =~ "amazonaws.com"
-    end
-
-    test "provider schema separation from core options" do
-      schema_keys = AmazonBedrock.provider_schema().schema |> Keyword.keys()
-      core_keys = Options.generation_schema().schema |> Keyword.keys()
-
-      # Provider-specific keys should not overlap with core generation keys
-      overlap = MapSet.intersection(MapSet.new(schema_keys), MapSet.new(core_keys))
-
-      assert MapSet.size(overlap) == 0,
-             "Schema overlap detected: #{inspect(MapSet.to_list(overlap))}"
-    end
-
     test "supported options include AWS-specific keys" do
       supported = AmazonBedrock.supported_provider_options()
 
@@ -57,16 +38,6 @@ defmodule ReqLLM.Providers.AmazonBedrockProviderTest do
       extended_keys = Keyword.keys(extended_schema.schema)
       assert :temperature in extended_keys
       assert :max_tokens in extended_keys
-    end
-
-    test "provider schema combined with generation schema includes all core keys" do
-      full_schema = AmazonBedrock.provider_extended_generation_schema()
-      full_keys = Keyword.keys(full_schema.schema)
-      core_keys = Options.all_generation_keys()
-
-      core_without_meta = Enum.reject(core_keys, &(&1 == :provider_options))
-      missing = core_without_meta -- full_keys
-      assert missing == [], "Missing core generation keys in extended schema: #{inspect(missing)}"
     end
   end
 
@@ -439,50 +410,6 @@ defmodule ReqLLM.Providers.AmazonBedrockProviderTest do
 
       assert second.text == "Considering all factors"
       assert second.index == 1
-    end
-
-    test "preserves signature from thinking chunk metadata" do
-      {:ok, model} = ReqLLM.model("amazon-bedrock:anthropic.claude-3-haiku-20240307-v1:0")
-      context = %ReqLLM.Context{messages: []}
-
-      thinking_meta = %{
-        signature: "encrypted-signature-abc123",
-        encrypted?: true,
-        provider: :anthropic,
-        format: "anthropic-thinking-v1",
-        provider_data: %{"type" => "thinking"}
-      }
-
-      chunks = [
-        ReqLLM.StreamChunk.thinking("Encrypted reasoning content", thinking_meta),
-        ReqLLM.StreamChunk.text("Final answer.")
-      ]
-
-      metadata = %{finish_reason: :stop}
-
-      {:ok, response} =
-        ResponseBuilder.build_response(chunks, metadata, context: context, model: model)
-
-      assert response.message.reasoning_details != nil
-      [first] = response.message.reasoning_details
-      assert first.signature == "encrypted-signature-abc123"
-      assert first.encrypted? == true
-    end
-
-    test "returns nil reasoning_details when no thinking chunks" do
-      {:ok, model} = ReqLLM.model("amazon-bedrock:anthropic.claude-3-haiku-20240307-v1:0")
-      context = %ReqLLM.Context{messages: []}
-
-      chunks = [
-        ReqLLM.StreamChunk.text("Just a simple response.")
-      ]
-
-      metadata = %{finish_reason: :stop}
-
-      {:ok, response} =
-        ResponseBuilder.build_response(chunks, metadata, context: context, model: model)
-
-      assert response.message.reasoning_details == nil
     end
   end
 

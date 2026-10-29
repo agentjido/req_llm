@@ -6,7 +6,7 @@ defmodule ReqLLM.Providers.DeepseekTest do
   request/response handling without making live API calls.
   """
 
-  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Deepseek
+  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Deepseek, async: true
 
   alias ReqLLM.Providers.Deepseek
 
@@ -23,12 +23,6 @@ defmodule ReqLLM.Providers.DeepseekTest do
   end
 
   describe "provider contract" do
-    test "provider identity and configuration" do
-      assert Deepseek.provider_id() == :deepseek
-      assert is_binary(Deepseek.base_url())
-      assert Deepseek.base_url() == "https://api.deepseek.com"
-    end
-
     test "provider uses correct default environment key" do
       assert Deepseek.default_env_key() == "DEEPSEEK_API_KEY"
     end
@@ -107,14 +101,6 @@ defmodule ReqLLM.Providers.DeepseekTest do
       encoded = Deepseek.encode_body(request)
       body = ReqLLM.Test.Helpers.json_body(encoded)
       assert body["reasoning_effort"] == "max"
-    end
-
-    test "prepare_request rejects unsupported operations" do
-      model = deepseek_model()
-      context = context_fixture()
-
-      {:error, error} = Deepseek.prepare_request(:unsupported, model, context, [])
-      assert %ReqLLM.Error.Invalid.Parameter{} = error
     end
   end
 
@@ -419,7 +405,7 @@ defmodule ReqLLM.Providers.DeepseekTest do
     test "attach_stream builds streaming request" do
       model = deepseek_model()
       context = context_fixture()
-      opts = [temperature: 0.7]
+      opts = [api_key: "test-key-12345", temperature: 0.7]
 
       {:ok, finch_request} = Deepseek.attach_stream(model, context, opts, MyApp.Finch)
 

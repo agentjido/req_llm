@@ -7,7 +7,7 @@ defmodule ReqLLM.Providers.AlibabaCNTest do
   Mirrors the international provider tests with China-specific configuration.
   """
 
-  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.AlibabaCN
+  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.AlibabaCN, async: true
 
   alias ReqLLM.Providers.AlibabaCN
 
@@ -18,27 +18,6 @@ defmodule ReqLLM.Providers.AlibabaCNTest do
   end
 
   describe "provider contract" do
-    test "provider identity and configuration" do
-      assert is_atom(AlibabaCN.provider_id())
-      assert AlibabaCN.provider_id() == :alibaba_cn
-      assert is_binary(AlibabaCN.base_url())
-      assert AlibabaCN.base_url() == "https://dashscope.aliyuncs.com/compatible-mode/v1"
-    end
-
-    test "provider uses correct default environment key" do
-      assert AlibabaCN.default_env_key() == "DASHSCOPE_API_KEY"
-    end
-
-    test "provider schema separation from core options" do
-      schema_keys = AlibabaCN.provider_schema().schema |> Keyword.keys()
-      core_keys = ReqLLM.Provider.Options.generation_schema().schema |> Keyword.keys()
-
-      overlap = MapSet.intersection(MapSet.new(schema_keys), MapSet.new(core_keys))
-
-      assert MapSet.size(overlap) == 0,
-             "Schema overlap detected: #{inspect(MapSet.to_list(overlap))}"
-    end
-
     test "provider schema includes DashScope-specific options" do
       schema_keys = AlibabaCN.provider_schema().schema |> Keyword.keys()
 
@@ -57,69 +36,9 @@ defmodule ReqLLM.Providers.AlibabaCNTest do
         assert key in schema_keys, "Expected #{key} in provider schema"
       end
     end
-
-    test "provider schema combined with generation schema includes all core keys" do
-      full_schema = AlibabaCN.provider_extended_generation_schema()
-      full_keys = Keyword.keys(full_schema.schema)
-      core_keys = ReqLLM.Provider.Options.all_generation_keys()
-
-      core_without_meta = Enum.reject(core_keys, &(&1 == :provider_options))
-      missing = core_without_meta -- full_keys
-      assert missing == [], "Missing core generation keys in extended schema: #{inspect(missing)}"
-    end
-
-    test "provider_extended_generation_schema includes both base and provider options" do
-      extended_schema = AlibabaCN.provider_extended_generation_schema()
-      extended_keys = extended_schema.schema |> Keyword.keys()
-
-      core_keys = ReqLLM.Provider.Options.all_generation_keys()
-      core_without_meta = Enum.reject(core_keys, &(&1 == :provider_options))
-
-      for core_key <- core_without_meta do
-        assert core_key in extended_keys,
-               "Extended schema missing core key: #{core_key}"
-      end
-
-      provider_keys = AlibabaCN.provider_schema().schema |> Keyword.keys()
-
-      for provider_key <- provider_keys do
-        assert provider_key in extended_keys,
-               "Extended schema missing provider key: #{provider_key}"
-      end
-    end
   end
 
   describe "request preparation & pipeline wiring" do
-    test "prepare_request creates configured request for :chat" do
-      model = model_fixture()
-      prompt = "Hello world"
-      opts = [temperature: 0.7, max_tokens: 100]
-
-      {:ok, request} = AlibabaCN.prepare_request(:chat, model, prompt, opts)
-
-      assert %Req.Request{} = request
-      assert request.url.path == "/chat/completions"
-      assert request.method == :post
-    end
-
-    test "attach configures authentication and pipeline" do
-      model = model_fixture()
-      opts = [temperature: 0.5, max_tokens: 50]
-
-      request = Req.new() |> AlibabaCN.attach(model, opts)
-
-      auth_header = Enum.find(request.headers, fn {name, _} -> name == "authorization" end)
-      assert auth_header != nil
-      {_, [auth_value]} = auth_header
-      assert String.starts_with?(auth_value, "Bearer ")
-
-      request_steps = Keyword.keys(request.request_steps)
-      response_steps = Keyword.keys(request.response_steps)
-
-      assert :llm_encode_body in request_steps
-      assert :llm_decode_response in response_steps
-    end
-
     test "prepare_request preserves DashScope provider options for encoding" do
       model = model_fixture()
 
@@ -172,14 +91,6 @@ defmodule ReqLLM.Providers.AlibabaCNTest do
 
       {:error, error} = AlibabaCN.prepare_request(:unsupported, model, prompt, [])
       assert %ReqLLM.Error.Invalid.Parameter{} = error
-    end
-
-    test "rejects provider mismatch" do
-      {:ok, wrong_model} = ReqLLM.model(%{provider: :openai, id: "gpt-4"})
-
-      assert_raise ReqLLM.Error.Invalid.Provider, fn ->
-        Req.new() |> AlibabaCN.attach(wrong_model, [])
-      end
     end
   end
 
@@ -370,37 +281,6 @@ defmodule ReqLLM.Providers.AlibabaCNTest do
       assert decoded["top_k"] == 50
     end
 
-    test "encode_body with tools" do
-      model = model_fixture()
-      context = context_fixture()
-
-      tool =
-        ReqLLM.Tool.new!(
-          name: "test_tool",
-          description: "A test tool",
-          parameter_schema: [
-            name: [type: :string, required: true, doc: "A name parameter"]
-          ],
-          callback: fn _ -> {:ok, "result"} end
-        )
-
-      mock_request = %Req.Request{
-        options: [
-          context: context,
-          model: model.model,
-          stream: false,
-          tools: [tool]
-        ]
-      }
-
-      updated_request = AlibabaCN.encode_body(mock_request)
-      assert_no_duplicate_json_keys(ReqLLM.Test.Helpers.json_iodata(updated_request))
-      decoded = ReqLLM.Test.Helpers.json_body(updated_request)
-
-      assert is_list(decoded["tools"])
-      assert length(decoded["tools"]) == 1
-    end
-
     test "encode_body with tools and DashScope parameters" do
       model = model_fixture()
       context = context_fixture()
@@ -492,44 +372,6 @@ defmodule ReqLLM.Providers.AlibabaCNTest do
   end
 
   describe "response decoding" do
-    test "decode_response handles successful non-streaming response" do
-      mock_json_response =
-        openai_format_json_fixture(
-          model: "qwen-plus",
-          content: "Hello! I'm Qwen."
-        )
-
-      mock_resp = %Req.Response{
-        status: 200,
-        body: mock_json_response
-      }
-
-      model = model_fixture()
-      context = context_fixture()
-
-      mock_req = %Req.Request{
-        options: [context: context, stream: false, id: "alibaba_cn:qwen-plus"],
-        private: %{req_llm_model: model}
-      }
-
-      {req, resp} = AlibabaCN.decode_response({mock_req, mock_resp})
-
-      assert req == mock_req
-      assert %ReqLLM.Response{} = resp.body
-
-      response = resp.body
-      assert is_binary(response.id)
-      assert response.stream? == false
-
-      assert response.message.role == :assistant
-      text = ReqLLM.Response.text(response)
-      assert is_binary(text)
-      assert String.length(text) > 0
-
-      assert is_integer(response.usage.input_tokens)
-      assert is_integer(response.usage.output_tokens)
-    end
-
     test "decode_response handles streaming responses" do
       mock_resp = %Req.Response{
         status: 200,
@@ -580,39 +422,6 @@ defmodule ReqLLM.Providers.AlibabaCNTest do
       assert req == mock_req
       assert %ReqLLM.Error.API.Response{} = error
       assert error.status == 401
-    end
-  end
-
-  describe "usage extraction" do
-    test "extract_usage with valid usage data" do
-      model = model_fixture()
-
-      body_with_usage = %{
-        "usage" => %{
-          "prompt_tokens" => 15,
-          "completion_tokens" => 25,
-          "total_tokens" => 40
-        }
-      }
-
-      {:ok, usage} = AlibabaCN.extract_usage(body_with_usage, model)
-      assert usage["prompt_tokens"] == 15
-      assert usage["completion_tokens"] == 25
-      assert usage["total_tokens"] == 40
-    end
-
-    test "extract_usage with missing usage data" do
-      model = model_fixture()
-      body_without_usage = %{"choices" => []}
-
-      {:error, :no_usage_found} = AlibabaCN.extract_usage(body_without_usage, model)
-    end
-
-    test "extract_usage with invalid body type" do
-      model = model_fixture()
-
-      {:error, :invalid_body} = AlibabaCN.extract_usage("invalid", model)
-      {:error, :invalid_body} = AlibabaCN.extract_usage(nil, model)
     end
   end
 

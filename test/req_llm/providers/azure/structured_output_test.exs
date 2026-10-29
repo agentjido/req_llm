@@ -190,11 +190,7 @@ defmodule ReqLLM.Providers.Azure.StructuredOutputTest do
     end
 
     test "uses tool-based approach for Claude models" do
-      model = %LLMDB.Model{
-        id: "claude-3-5-sonnet-20241022",
-        provider: :azure,
-        capabilities: %{chat: true}
-      }
+      model = ReqLLM.Test.AzureModelHelpers.chat_model("claude-3-5-sonnet-20241022")
 
       schema = [
         name: [type: :string, required: true],
@@ -608,11 +604,7 @@ defmodule ReqLLM.Providers.Azure.StructuredOutputTest do
     end
 
     test "json_schema mode is rejected for Claude on Azure" do
-      model = %LLMDB.Model{
-        id: "claude-3-5-sonnet-20241022",
-        provider: :azure,
-        capabilities: %{chat: true}
-      }
+      model = ReqLLM.Test.AzureModelHelpers.chat_model("claude-3-5-sonnet-20241022")
 
       opts = [response_format: %{type: "json_schema", json_schema: %{}}]
 
@@ -627,11 +619,7 @@ defmodule ReqLLM.Providers.Azure.StructuredOutputTest do
     end
 
     test "json_schema via provider_options is also rejected" do
-      model = %LLMDB.Model{
-        id: "claude-3-5-sonnet-20241022",
-        provider: :azure,
-        capabilities: %{chat: true}
-      }
+      model = ReqLLM.Test.AzureModelHelpers.chat_model("claude-3-5-sonnet-20241022")
 
       opts = [provider_options: [response_format: %{type: "json_schema", json_schema: %{}}]]
 
@@ -795,11 +783,7 @@ defmodule ReqLLM.Providers.Azure.StructuredOutputTest do
 
   describe "cross-family option validation" do
     test "openai_structured_output_mode is ignored for Claude models" do
-      model = %LLMDB.Model{
-        id: "claude-3-5-sonnet-20241022",
-        provider: :azure,
-        capabilities: %{chat: true}
-      }
+      model = ReqLLM.Test.AzureModelHelpers.chat_model("claude-3-5-sonnet-20241022")
 
       opts = [provider_options: [openai_structured_output_mode: :json_schema]]
 
@@ -808,11 +792,7 @@ defmodule ReqLLM.Providers.Azure.StructuredOutputTest do
     end
 
     test "service_tier warns for Claude models" do
-      model = %LLMDB.Model{
-        id: "claude-3-5-sonnet-20241022",
-        provider: :azure,
-        capabilities: %{chat: true}
-      }
+      model = ReqLLM.Test.AzureModelHelpers.chat_model("claude-3-5-sonnet-20241022")
 
       opts = [provider_options: [service_tier: "priority"]]
 

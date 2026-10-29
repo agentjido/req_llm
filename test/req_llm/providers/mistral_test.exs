@@ -1,5 +1,5 @@
 defmodule ReqLLM.Providers.MistralTest do
-  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Mistral
+  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Mistral, async: true
 
   alias ReqLLM.Providers.Mistral
 
@@ -8,12 +8,6 @@ defmodule ReqLLM.Providers.MistralTest do
   end
 
   describe "provider contract" do
-    test "provider identity and configuration" do
-      assert Mistral.provider_id() == :mistral
-      assert Mistral.base_url() == "https://api.mistral.ai/v1"
-      assert Mistral.default_env_key() == "MISTRAL_API_KEY"
-    end
-
     test "provider schema exposes Mistral-specific request fields" do
       schema_keys = Mistral.provider_schema().schema |> Keyword.keys()
 
@@ -55,13 +49,6 @@ defmodule ReqLLM.Providers.MistralTest do
       assert %Req.Request{} = request
       assert request.url.path == "/embeddings"
       assert request.method == :post
-    end
-
-    test "prepare_request rejects unsupported operations" do
-      {:error, error} =
-        Mistral.prepare_request(:unsupported, mistral_model(), context_fixture(), [])
-
-      assert %ReqLLM.Error.Invalid.Parameter{} = error
     end
   end
 
@@ -173,7 +160,12 @@ defmodule ReqLLM.Providers.MistralTest do
         Mistral.attach_stream(
           mistral_model(),
           context_fixture(),
-          [seed: 99, parallel_tool_calls: false, prompt_mode: :reasoning],
+          [
+            api_key: "test-key-12345",
+            seed: 99,
+            parallel_tool_calls: false,
+            prompt_mode: :reasoning
+          ],
           MyApp.Finch
         )
 

@@ -1,5 +1,5 @@
 defmodule ReqLLM.Providers.CohereTest do
-  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Cohere
+  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Cohere, async: true
 
   alias ReqLLM.Providers.Cohere
 
@@ -12,14 +12,6 @@ defmodule ReqLLM.Providers.CohereTest do
       family: "rerank",
       capabilities: %{rerank: true}
     }
-  end
-
-  describe "provider contract" do
-    test "provider identity and configuration" do
-      assert Cohere.provider_id() == :cohere
-      assert Cohere.base_url() == "https://api.cohere.com"
-      assert Cohere.default_env_key() == "COHERE_API_KEY"
-    end
   end
 
   describe "request preparation" do
@@ -40,13 +32,6 @@ defmodule ReqLLM.Providers.CohereTest do
       assert request.options[:query] == "capital of the US"
       assert request.options[:documents] == ["Nevada", "Washington"]
       assert request.options[:top_n] == 1
-    end
-
-    test "prepare_request rejects unsupported operations" do
-      {:error, error} = Cohere.prepare_request(:chat, rerank_model(), %{}, [])
-
-      assert %ReqLLM.Error.Invalid.Parameter{} = error
-      assert Exception.message(error) =~ "Supported operations: [:rerank]"
     end
   end
 

@@ -83,7 +83,7 @@ published ID `qwen/qwen3.8-flash` returned `404 model_not_found`; its unprefixed
 ID also failed. The adapter keeps the declared wire ID and reports the error.
 It does not infer another model ID from an upstream route.
 
-The tests in `test/req_llm/llmapi_catalog_billing_test.exs` run without API calls.
+The tests in `test/req_llm/billing/llmapi_catalog_test.exs` run without API calls.
 They compare buffered and streamed usage, provider identity in telemetry,
 independent decimal rates, and the provider's cost fields. Text streaming needs
 a streaming contract. Object tests need a separate object execution contract.

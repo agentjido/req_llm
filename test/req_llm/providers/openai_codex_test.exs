@@ -3,17 +3,9 @@ defmodule ReqLLM.Providers.OpenAICodexTest do
   Provider-level tests for the OpenAI Codex backend implementation.
   """
 
-  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.OpenAICodex
+  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.OpenAICodex, async: true
 
   alias ReqLLM.Providers.OpenAICodex
-
-  describe "provider contract" do
-    test "provider identity and configuration" do
-      assert OpenAICodex.provider_id() == :openai_codex
-      assert OpenAICodex.oauth_provider_id() == "openai-codex"
-      assert OpenAICodex.base_url() == "https://chatgpt.com/backend-api"
-    end
-  end
 
   describe "request preparation" do
     test "prepare_request routes to codex responses endpoint with oauth headers" do

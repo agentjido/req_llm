@@ -3,7 +3,7 @@ defmodule ReqLLM.Providers.CerebrasTest do
   Provider-level tests for Cerebras implementation.
   """
 
-  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Cerebras
+  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Cerebras, async: true
 
   alias ReqLLM.Providers.Cerebras
 

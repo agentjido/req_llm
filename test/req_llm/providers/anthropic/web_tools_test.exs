@@ -3,7 +3,7 @@ defmodule ReqLLM.Providers.Anthropic.WebToolsTest do
   Tests Anthropic web fetch and web search tool configuration.
   """
 
-  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Anthropic
+  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Anthropic, async: true
 
   alias ReqLLM.Providers.Anthropic
 

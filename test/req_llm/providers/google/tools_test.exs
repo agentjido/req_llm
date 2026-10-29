@@ -3,7 +3,7 @@ defmodule ReqLLM.Providers.Google.ToolsTest do
   Google function calling, tool schema encoding, and tool result payloads.
   """
 
-  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Google
+  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Google, async: true
 
   alias ReqLLM.Context
   alias ReqLLM.Providers.Google

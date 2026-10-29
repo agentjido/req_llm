@@ -144,11 +144,7 @@ defmodule ReqLLM.Providers.Azure.ProviderRoutingTest do
     end
 
     test "uses Foundry URL path for embeddings on .services.ai.azure.com domain" do
-      model = %LLMDB.Model{
-        id: "text-embedding-3-small",
-        provider: :azure,
-        capabilities: %{embeddings: true}
-      }
+      model = ReqLLM.Test.AzureModelHelpers.embedding_model("text-embedding-3-small")
 
       {:ok, request} =
         Azure.prepare_request(
@@ -166,11 +162,7 @@ defmodule ReqLLM.Providers.Azure.ProviderRoutingTest do
     end
 
     test "uses traditional URL path for embeddings on .openai.azure.com domain" do
-      model = %LLMDB.Model{
-        id: "text-embedding-3-small",
-        provider: :azure,
-        capabilities: %{embeddings: true}
-      }
+      model = ReqLLM.Test.AzureModelHelpers.embedding_model("text-embedding-3-small")
 
       {:ok, request} =
         Azure.prepare_request(
@@ -452,11 +444,7 @@ defmodule ReqLLM.Providers.Azure.ProviderRoutingTest do
     end
 
     test "uses /embeddings path with no api-version for v1 GA" do
-      model = %LLMDB.Model{
-        id: "text-embedding-3-small",
-        provider: :azure,
-        capabilities: %{embeddings: true}
-      }
+      model = ReqLLM.Test.AzureModelHelpers.embedding_model("text-embedding-3-small")
 
       {:ok, request} =
         Azure.prepare_request(

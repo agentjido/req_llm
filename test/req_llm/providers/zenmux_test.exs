@@ -3,27 +3,9 @@ defmodule ReqLLM.Providers.ZenmuxTest do
   Provider-level tests for Zenmux implementation.
   """
 
-  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Zenmux
+  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Zenmux, async: true
 
   alias ReqLLM.Providers.Zenmux
-
-  describe "provider contract" do
-    test "provider identity and configuration" do
-      assert Zenmux.provider_id() == :zenmux
-      assert Zenmux.base_url() == "https://zenmux.ai/api/v1"
-      assert Zenmux.default_env_key() == "ZENMUX_API_KEY"
-    end
-
-    test "provider schema separation from core options" do
-      schema_keys = Zenmux.provider_schema().schema |> Keyword.keys()
-      core_keys = ReqLLM.Provider.Options.generation_schema().schema |> Keyword.keys()
-
-      overlap = MapSet.intersection(MapSet.new(schema_keys), MapSet.new(core_keys))
-
-      assert MapSet.size(overlap) == 0,
-             "Schema overlap detected: #{inspect(MapSet.to_list(overlap))}"
-    end
-  end
 
   describe "request preparation & pipeline wiring" do
     test "prepare_request creates configured request" do

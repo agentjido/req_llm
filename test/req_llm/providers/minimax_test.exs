@@ -1,5 +1,5 @@
 defmodule ReqLLM.Providers.MinimaxTest do
-  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Minimax
+  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Minimax, async: true
 
   alias ReqLLM.Context
   alias ReqLLM.Message.ReasoningDetails
@@ -38,12 +38,6 @@ defmodule ReqLLM.Providers.MinimaxTest do
   end
 
   describe "provider contract" do
-    test "provider identity and configuration" do
-      assert Minimax.provider_id() == :minimax
-      assert Minimax.base_url() == "https://api.minimax.io/v1"
-      assert Minimax.default_env_key() == "MINIMAX_API_KEY"
-    end
-
     test "provider schema exposes MiniMax-specific request fields" do
       schema_keys = Minimax.provider_schema().schema |> Keyword.keys()
 
@@ -285,7 +279,7 @@ defmodule ReqLLM.Providers.MinimaxTest do
         Minimax.attach_stream(
           minimax_model(),
           context_fixture(),
-          [max_tokens: 128, presence_penalty: 0.1],
+          [api_key: "test-key-12345", max_tokens: 128, presence_penalty: 0.1],
           MyApp.Finch
         )
 

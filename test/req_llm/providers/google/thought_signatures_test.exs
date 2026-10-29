@@ -3,7 +3,7 @@ defmodule ReqLLM.Providers.Google.ThoughtSignaturesTest do
   Google thought signature decoding, preservation, and replay.
   """
 
-  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Google
+  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Google, async: true
 
   alias ReqLLM.Context
   alias ReqLLM.Providers.Google

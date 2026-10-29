@@ -3,7 +3,7 @@ defmodule ReqLLM.Providers.Anthropic.PromptCacheBreakpointsTest do
   Tests Anthropic prompt-cache breakpoints for direct and deferred tool definitions.
   """
 
-  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Anthropic
+  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Anthropic, async: true
 
   import ReqLLM.Test.AnthropicToolHelpers,
     only: [deferred_tool: 1, direct_tool: 1, encode_tools: 3]

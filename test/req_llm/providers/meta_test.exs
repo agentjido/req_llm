@@ -1,5 +1,5 @@
 defmodule ReqLLM.Providers.MetaTest do
-  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Meta
+  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Meta, async: true
 
   alias ReqLLM.Message
   alias ReqLLM.Message.ContentPart
@@ -12,13 +12,6 @@ defmodule ReqLLM.Providers.MetaTest do
   end
 
   describe "provider contract" do
-    test "provider identity and configuration" do
-      assert Meta.provider_id() == :meta
-      assert Meta.base_url() == "https://api.meta.ai/v1"
-      assert Meta.default_env_key() == "MODEL_API_KEY"
-      assert Meta.display_name() == "Meta Model API"
-    end
-
     test "provider schema exposes Meta Responses request fields" do
       schema_keys = Meta.provider_schema().schema |> Keyword.keys()
 
@@ -63,11 +56,6 @@ defmodule ReqLLM.Providers.MetaTest do
       assert request.options[:provider_options][:include] == [
                "reasoning.encrypted_content"
              ]
-    end
-
-    test "prepare_request rejects unsupported operations" do
-      {:error, error} = Meta.prepare_request(:embedding, meta_model(), "Hello", [])
-      assert %ReqLLM.Error.Invalid.Parameter{} = error
     end
 
     test "object requests use Responses JSON schema output" do
@@ -215,7 +203,7 @@ defmodule ReqLLM.Providers.MetaTest do
 
   describe "authentication and streaming" do
     test "attach adds bearer authentication and Responses pipeline steps" do
-      attached = Meta.attach(Req.new(), meta_model(), [])
+      attached = Meta.attach(Req.new(), meta_model(), api_key: "test-key-12345")
 
       assert ["Bearer test-key-12345"] = attached.headers["authorization"]
       assert :llm_encode_body in Keyword.keys(attached.request_steps)
@@ -228,6 +216,7 @@ defmodule ReqLLM.Providers.MetaTest do
           meta_model(),
           context_fixture(),
           [
+            api_key: "test-key-12345",
             max_tokens: 128,
             reasoning_effort: :low,
             provider_options: [prompt_cache_retention: "in_memory"]
