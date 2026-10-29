@@ -291,8 +291,10 @@ defmodule ReqLLM.Images do
            ),
          {:ok, context, _prompt} <-
            ReqLLM.Images.OpenAICompatible.image_context(prompt_or_messages, opts),
-         {:ok, stream_response} <-
-           ReqLLM.Streaming.start_stream(provider_module, model, context, stream_opts(opts)) do
+         stream_opts = stream_opts(opts),
+         {:ok, plan} <-
+           RequestPlan.from_stream(model, :image, provider_module, stream_opts),
+         {:ok, stream_response} <- Runtime.execute_stream(plan, context) do
       {:ok, stream_response}
     else
       {:error, {:http_streaming_failed, {:provider_build_failed, %{__exception__: true} = error}}} ->

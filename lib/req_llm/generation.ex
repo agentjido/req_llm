@@ -248,9 +248,10 @@ defmodule ReqLLM.Generation do
           {:ok, ReqLLM.Cache.stream_response(response, model, context)}
 
         {:miss, _cache_ref} ->
-          ReqLLM.Streaming.start_stream(
+          execute_stream(
             provider_module,
             model,
+            :chat,
             context,
             ReqLLM.Cache.request_opts(opts)
           )
@@ -701,13 +702,11 @@ defmodule ReqLLM.Generation do
          {:ok, context} <- ReqLLM.Context.normalize(messages, opts),
          :ok <- ReqLLM.ProviderFileReference.validate_context(context, model.provider),
          {:ok, compiled_schema} <- compile_schema_source(schema_source),
+         preparation_opts = Keyword.put(opts, :compiled_schema, compiled_schema),
+         {:ok, preparation_plan} <-
+           RequestPlan.from_stream(model, :object, provider_module, preparation_opts),
          {:ok, prepared_req} <-
-           provider_module.prepare_request(
-             :object,
-             model,
-             messages,
-             Keyword.put(opts, :compiled_schema, compiled_schema)
-           ) do
+           Runtime.prepare_stream(preparation_plan, messages) do
       prepared_context = prepared_req.options[:context] || %ReqLLM.Context{messages: []}
 
       stream_opts =
@@ -719,9 +718,24 @@ defmodule ReqLLM.Generation do
 
       contract = ReqLLM.Output.Validation.validation_contract(descriptor, compiled_schema)
 
-      provider_module
-      |> ReqLLM.Streaming.start_stream(model, prepared_context, stream_opts)
-      |> ReqLLM.Output.Validation.attach_stream_result(contract, runtime_config)
+      with {:ok, execution_plan} <-
+             RequestPlan.from_resolved(
+               model,
+               :object,
+               provider_module,
+               stream_opts,
+               preparation_plan.transport
+             ) do
+        execution_plan
+        |> Runtime.execute_stream(prepared_context)
+        |> ReqLLM.Output.Validation.attach_stream_result(contract, runtime_config)
+      end
+    end
+  end
+
+  defp execute_stream(provider_module, model, operation, context, opts) do
+    with {:ok, plan} <- RequestPlan.from_stream(model, operation, provider_module, opts) do
+      Runtime.execute_stream(plan, context)
     end
   end
 

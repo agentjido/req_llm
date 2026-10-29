@@ -159,6 +159,18 @@ defmodule ReqLLM.RequestPlan do
   end
 
   @doc false
+  @spec from_stream(LLMDB.Model.t(), operation(), module(), keyword()) ::
+          {:ok, t()} | {:error, term()}
+  def from_stream(%LLMDB.Model{} = model, operation, provider_module, opts) do
+    with {:ok, transport} <-
+           normalize_stream_transport(
+             ReqLLM.Provider.Adapter.stream_transport(provider_module, model, opts)
+           ) do
+      from_resolved(model, operation, provider_module, opts, transport)
+    end
+  end
+
+  @doc false
   @spec openai_surface(LLMDB.Model.t()) ::
           {:ok, :openai_responses | :openai_chat_completions, module(), [binary()]}
           | {:error, term()}
@@ -181,6 +193,10 @@ defmodule ReqLLM.RequestPlan do
 
   defp validate_resolved_transport(transport),
     do: invalid_parameter("unsupported request-plan transport: #{inspect(transport)}")
+
+  defp normalize_stream_transport(:http), do: {:ok, :finch}
+  defp normalize_stream_transport(:websocket), do: {:ok, :websocket}
+  defp normalize_stream_transport(:in_process), do: {:ok, :in_process}
 
   defp validate_resolved_surface_transport(:provider, _transport), do: :ok
 

@@ -1,6 +1,7 @@
 defmodule ReqLLM.Streaming.InProcessClient do
   @moduledoc false
 
+  alias ReqLLM.Provider.Adapter
   alias ReqLLM.Provider.InProcessStream
   alias ReqLLM.StreamChunk
   alias ReqLLM.StreamServer
@@ -24,8 +25,8 @@ defmodule ReqLLM.Streaming.InProcessClient do
   @spec start_stream(module(), LLMDB.Model.t(), ReqLLM.Context.t(), keyword(), pid(), term()) ::
           {:ok, pid(), (-> any()) | nil} | {:error, term()}
   def start_stream(provider_mod, model, context, opts, stream_server_pid, task_supervisor) do
-    with :ok <- validate_callback(provider_mod),
-         {:ok, stream_result} <- provider_mod.attach_in_process_stream(model, context, opts),
+    with {:ok, stream_result} <-
+           Adapter.attach_in_process_stream(provider_mod, model, context, opts),
          {:ok, stream, cancel} <- normalize_stream(stream_result) do
       start_streaming_task(stream, stream_server_pid, task_supervisor, cancel)
     else
@@ -112,14 +113,6 @@ defmodule ReqLLM.Streaming.InProcessClient do
       failure = {kind, reason}
       :ok = safe_stream_event(stream_server_pid, {:error, failure})
       {:error, failure}
-  end
-
-  defp validate_callback(provider_mod) do
-    if function_exported?(provider_mod, :attach_in_process_stream, 3) do
-      :ok
-    else
-      {:error, {:missing_callback, :attach_in_process_stream, 3}}
-    end
   end
 
   defp normalize_stream(%InProcessStream{stream: stream, cancel: cancel}) do

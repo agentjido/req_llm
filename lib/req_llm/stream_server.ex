@@ -66,6 +66,7 @@ defmodule ReqLLM.StreamServer do
   use GenServer
 
   alias ReqLLM.MapAccess
+  alias ReqLLM.RequestPlan
   alias ReqLLM.StreamChunk
   alias ReqLLM.Streaming.Decoder
   alias ReqLLM.Streaming.Failure
@@ -249,58 +250,41 @@ defmodule ReqLLM.StreamServer do
     GenServer.call(server, {:monitor_consumer, consumer_pid})
   end
 
-  @doc """
-  Start HTTP streaming from within the StreamServer.
+  @doc false
+  @spec start_stream(server(), RequestPlan.t(), ReqLLM.Context.t()) ::
+          {:ok, pid(), any(), any()} | {:error, term()}
+  def start_stream(server, %RequestPlan{} = plan, %ReqLLM.Context{} = context) do
+    GenServer.call(server, {:start_stream, plan, context}, :infinity)
+  end
 
-  This method ensures proper lifecycle coupling by having the StreamServer
-  own and link to the HTTP streaming task. When the server exits, the task
-  automatically terminates, preventing orphaned callbacks.
-
-  ## Parameters
-
-    * `server` - StreamServer process
-    * `provider_mod` - Provider module (e.g., ReqLLM.Providers.OpenAI)
-    * `model` - ReqLLM.Model struct
-    * `context` - ReqLLM.Context with messages to stream
-    * `opts` - Additional options for the request
-    * `finch_name` - Finch process name (default: ReqLLM.Finch)
-
-  ## Returns
-
-    * `{:ok, task_pid, http_context, canonical_json}` - Successfully started
-    * `{:error, reason}` - Failed to start
-
-  ## Examples
-
-      {:ok, _task_pid, _http_context, _canonical_json} =
-        StreamServer.start_http(
-          server,
-          ReqLLM.Providers.OpenAI,
-          model,
-          context,
-          opts
-        )
-
-  """
+  @doc false
   @spec start_http(server(), module(), LLMDB.Model.t(), ReqLLM.Context.t(), keyword(), atom()) ::
           {:ok, pid(), any(), any()} | {:error, term()}
-  def start_http(server, provider_mod, model, context, opts, finch_name \\ ReqLLM.Finch) do
-    GenServer.call(
-      server,
-      {:start_http, provider_mod, model, context, opts, finch_name},
-      :infinity
-    )
+  def start_http(server, provider_module, model, context, opts, finch_name \\ ReqLLM.Finch) do
+    transport =
+      if Keyword.get(opts, :stream_transport) == :websocket, do: :websocket, else: :finch
+
+    operation = Keyword.get(opts, :operation, :chat)
+
+    opts =
+      if finch_name == ReqLLM.Finch, do: opts, else: Keyword.put(opts, :finch_name, finch_name)
+
+    with {:ok, plan} <-
+           RequestPlan.from_resolved(model, operation, provider_module, opts, transport) do
+      start_stream(server, plan, context)
+    end
   end
 
   @doc false
   @spec start_in_process(server(), module(), LLMDB.Model.t(), ReqLLM.Context.t(), keyword()) ::
           {:ok, pid(), nil, map()} | {:error, term()}
-  def start_in_process(server, provider_mod, model, context, opts) do
-    GenServer.call(
-      server,
-      {:start_in_process, provider_mod, model, context, opts},
-      :infinity
-    )
+  def start_in_process(server, provider_module, model, context, opts) do
+    operation = Keyword.get(opts, :operation, :chat)
+
+    with {:ok, plan} <-
+           RequestPlan.from_resolved(model, operation, provider_module, opts, :in_process) do
+      start_stream(server, plan, context)
+    end
   end
 
   @doc """
@@ -494,66 +478,13 @@ defmodule ReqLLM.StreamServer do
   end
 
   @impl GenServer
-  def handle_call({:start_http, provider_mod, model, context, opts, finch_name}, _from, state) do
+  def handle_call({:start_stream, plan, context}, _from, state) do
+    opts = plan.options
     defer_events? = Keyword.get(opts, :defer_http_events_until_telemetry?, false)
     streamer_opts = Keyword.delete(opts, :defer_http_events_until_telemetry?)
 
-    streamer_mod =
-      case Keyword.get(streamer_opts, :stream_transport) do
-        :websocket -> ReqLLM.Streaming.WebSocketClient
-        _ -> ReqLLM.Streaming.FinchClient
-      end
-
-    case streamer_mod.start_stream(
-           provider_mod,
-           model,
-           context,
-           streamer_opts,
-           self(),
-           finch_name
-         ) do
-      {:ok, task_pid, http_context, canonical_json} ->
-        Process.monitor(task_pid)
-
-        is_google = model.provider == :google
-
-        json_mode? =
-          is_google and
-            get_in(canonical_json, ["generationConfig", "responseMimeType"]) ==
-              "application/json"
-
-        new_state = %{
-          state
-          | http_task: task_pid,
-            status: :streaming,
-            http_context: http_context,
-            canonical_json: canonical_json,
-            object_json_mode?: json_mode?,
-            object_acc: [],
-            pending_http_events: [],
-            telemetry_pending?: defer_events?
-        }
-
-        {:reply, {:ok, task_pid, http_context, canonical_json}, new_state}
-
-      {:error, reason} ->
-        {:reply, {:error, reason}, state}
-    end
-  end
-
-  @impl GenServer
-  def handle_call({:start_in_process, provider_mod, model, context, opts}, _from, state) do
-    defer_events? = Keyword.get(opts, :defer_http_events_until_telemetry?, false)
-    streamer_opts = Keyword.delete(opts, :defer_http_events_until_telemetry?)
-
-    case ReqLLM.Streaming.InProcessClient.start_stream(
-           provider_mod,
-           model,
-           context,
-           streamer_opts,
-           self()
-         ) do
-      {:ok, task_pid, cancel} ->
+    case start_transport(plan, context, streamer_opts, self()) do
+      {:ok, task_pid, cancel, http_context, canonical_json} ->
         Process.monitor(task_pid)
 
         new_state = %{
@@ -561,15 +492,15 @@ defmodule ReqLLM.StreamServer do
           | http_task: task_pid,
             transport_cancel: cancel,
             status: :streaming,
-            http_context: nil,
-            canonical_json: %{},
-            object_json_mode?: false,
+            http_context: http_context,
+            canonical_json: canonical_json,
+            object_json_mode?: object_json_mode?(plan.model, canonical_json),
             object_acc: [],
             pending_http_events: [],
             telemetry_pending?: defer_events?
         }
 
-        {:reply, {:ok, task_pid, nil, %{}}, new_state}
+        {:reply, {:ok, task_pid, http_context, canonical_json}, new_state}
 
       {:error, reason} ->
         {:reply, {:error, reason}, state}
@@ -765,6 +696,59 @@ defmodule ReqLLM.StreamServer do
   end
 
   ## Private Functions
+
+  defp start_transport(
+         %RequestPlan{transport: transport} = plan,
+         context,
+         opts,
+         stream_server_pid
+       )
+       when transport in [:finch, :websocket] do
+    finch_name = Keyword.get(opts, :finch_name, ReqLLM.Finch)
+    client = stream_client(transport)
+
+    case client.start_stream(
+           plan.provider_module,
+           plan.model,
+           context,
+           opts,
+           stream_server_pid,
+           finch_name
+         ) do
+      {:ok, task_pid, http_context, canonical_json} ->
+        {:ok, task_pid, nil, http_context, canonical_json}
+
+      {:error, reason} ->
+        {:error, reason}
+    end
+  end
+
+  defp start_transport(
+         %RequestPlan{transport: :in_process} = plan,
+         context,
+         opts,
+         stream_server_pid
+       ) do
+    case ReqLLM.Streaming.InProcessClient.start_stream(
+           plan.provider_module,
+           plan.model,
+           context,
+           opts,
+           stream_server_pid
+         ) do
+      {:ok, task_pid, cancel} -> {:ok, task_pid, cancel, nil, %{}}
+      {:error, reason} -> {:error, reason}
+    end
+  end
+
+  defp stream_client(:finch), do: ReqLLM.Streaming.FinchClient
+  defp stream_client(:websocket), do: ReqLLM.Streaming.WebSocketClient
+
+  defp object_json_mode?(%LLMDB.Model{provider: :google}, canonical_json) do
+    get_in(canonical_json, ["generationConfig", "responseMimeType"]) == "application/json"
+  end
+
+  defp object_json_mode?(_model, _canonical_json), do: false
 
   defp validate_high_watermark!(high_watermark)
        when is_integer(high_watermark) and high_watermark > 0,
