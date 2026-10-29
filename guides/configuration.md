@@ -37,6 +37,9 @@ config :req_llm,
   # Warnings
   warn_unverified_models: true,      # Warn when a model spec is not in the LLMDB catalog
 
+  # JSON codec (defaults to Jason)
+  # json_library: MyApp.JSON,
+
   # JSON Schema validator cache
   schema_cache_max_bytes: 16 * 1024 * 1024,
   schema_cache_eviction_strategy: ReqLLM.Schema.EvictionStrategy.FIFO,
@@ -672,6 +675,63 @@ When disabled (the default), the full message preview is shown as normal:
 inspect(context)
 #=> "#Context<2 msgs: system:\"You are a helpful assistant\", user:\"Hello\">"
 ```
+
+## JSON Codec
+
+ReqLLM encodes request bodies and decodes response bodies with Jason by default. Set
+`:json_library` to use another JSON library, the way Phoenix configures
+`:json_library`:
+
+```elixir
+config :req_llm, json_library: MyApp.JSON
+```
+
+The module has to implement `ReqLLM.JSON.Codec`. `encode!/1`, `encode_to_iodata!/1`
+and `decode/1` are required, and the codec is read on every call, so tests can switch
+it at runtime. A module that misses a required callback raises `ArgumentError`
+naming the missing functions.
+
+```elixir
+defmodule MyApp.JSON do
+  @behaviour ReqLLM.JSON.Codec
+
+  def encode!(term), do: JSON.encode!(term)
+  def encode_to_iodata!(term), do: JSON.encode_to_iodata!(term)
+  def decode(binary), do: JSON.decode(binary)
+end
+```
+
+Two optional callbacks cover what a codec cannot express through the required ones:
+
+- `encode_ordered_to_iodata!/1` encodes an `ReqLLM.JSON.OrderedObject`, which carries
+  structured-output property order. Bodies with one fall back to Jason when the codec
+  does not support ordering.
+- `decode_error_position/1` reports the byte offset of a syntax error, which streaming
+  transports use to detect split frames. Without it, decode errors are treated as
+  fatal.
+
+Jason and the Elixir `JSON` module encode ordered objects out of the box. For Torque,
+convert the body to its jiffy-style proplist first:
+
+```elixir
+defmodule MyApp.TorqueJSON do
+  @behaviour ReqLLM.JSON.Codec
+
+  def encode!(term), do: term |> ReqLLM.JSON.to_jiffy_ordered() |> Torque.encode!()
+
+  def encode_to_iodata!(term) do
+    term |> ReqLLM.JSON.to_jiffy_ordered() |> Torque.encode_to_iodata() |> IO.iodata_to_binary()
+  end
+
+  def decode(binary), do: Torque.decode(binary)
+
+  def encode_ordered_to_iodata!(term), do: encode!(term)
+end
+```
+
+Some payloads always stay on Jason because they need Jason-specific behaviour rather
+than the wire codec: fixture recording, compatibility evidence, mix task output,
+pretty-printed debug strings and the unicode-escaped Codex turn metadata header.
 
 ## Unverified Model Warnings
 
