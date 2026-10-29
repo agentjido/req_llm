@@ -527,36 +527,6 @@ defmodule ReqLLM.Providers.XAITest do
   end
 
   describe "body encoding" do
-    test "encode_body with tools" do
-      {:ok, model} = ReqLLM.model("xai:grok-3")
-      context = context_fixture()
-
-      tool =
-        ReqLLM.Tool.new!(
-          name: "test_tool",
-          description: "A test tool",
-          parameter_schema: [name: [type: :string, required: true]],
-          callback: fn _ -> {:ok, "result"} end
-        )
-
-      mock_request = %Req.Request{
-        options: [
-          context: context,
-          model: model.model,
-          stream: false,
-          tools: [tool],
-          tool_choice: %{type: "function", function: %{name: "test_tool"}}
-        ]
-      }
-
-      updated_request = XAI.encode_body(mock_request)
-      assert_no_duplicate_json_keys(ReqLLM.Test.Helpers.json_iodata(updated_request))
-      decoded = ReqLLM.Test.Helpers.json_body(updated_request)
-
-      assert is_list(decoded["tools"])
-      assert decoded["tool_choice"]["function"]["name"] == "test_tool"
-    end
-
     test "encode_body with response_format" do
       {:ok, model} = ReqLLM.model("xai:grok-3")
       context = context_fixture()

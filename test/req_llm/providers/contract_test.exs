@@ -210,6 +210,67 @@ defmodule ReqLLM.Providers.ContractTest do
       assert length(response.context.messages) == 3
     end
 
+    test "#{provider_id} encodes OpenAI-compatible tools and tool choice" do
+      model = compatible_model(@provider_id, @model_id)
+
+      tool =
+        ReqLLM.Tool.new!(
+          name: "contract_tool",
+          description: "A contract tool",
+          parameter_schema: [name: [type: :string, required: true]],
+          callback: fn _ -> {:ok, "result"} end
+        )
+
+      request = %Req.Request{
+        options: [
+          context: ReqLLM.ProviderCase.context_fixture(),
+          model: model.model,
+          stream: false,
+          tools: [tool]
+        ]
+      }
+
+      encoded = @provider.encode_body(request)
+      body = ReqLLM.Test.Helpers.json_body(encoded)
+
+      ReqLLM.ProviderCase.assert_no_duplicate_json_keys(ReqLLM.Test.Helpers.json_iodata(encoded))
+      refute Map.has_key?(body, "tool_choice")
+
+      assert [
+               %{
+                 "type" => "function",
+                 "function" => %{
+                   "name" => "contract_tool",
+                   "description" => "A contract tool",
+                   "parameters" => %{
+                     "type" => "object",
+                     "properties" => %{"name" => %{"type" => "string"}},
+                     "required" => ["name"]
+                   }
+                 }
+               }
+             ] = body["tools"]
+
+      chosen_request = %{
+        request
+        | options:
+            Keyword.put(request.options, :tool_choice, %{
+              type: "function",
+              function: %{name: "contract_tool"}
+            })
+      }
+
+      chosen_body =
+        chosen_request
+        |> @provider.encode_body()
+        |> ReqLLM.Test.Helpers.json_body()
+
+      assert chosen_body["tool_choice"] == %{
+               "type" => "function",
+               "function" => %{"name" => "contract_tool"}
+             }
+    end
+
     test "#{provider_id} extracts OpenAI-compatible usage" do
       model = compatible_model(@provider_id, @model_id)
 

@@ -280,37 +280,6 @@ defmodule ReqLLM.Providers.AlibabaTest do
       assert decoded["top_k"] == 50
     end
 
-    test "encode_body with tools" do
-      model = model_fixture()
-      context = context_fixture()
-
-      tool =
-        ReqLLM.Tool.new!(
-          name: "test_tool",
-          description: "A test tool",
-          parameter_schema: [
-            name: [type: :string, required: true, doc: "A name parameter"]
-          ],
-          callback: fn _ -> {:ok, "result"} end
-        )
-
-      mock_request = %Req.Request{
-        options: [
-          context: context,
-          model: model.model,
-          stream: false,
-          tools: [tool]
-        ]
-      }
-
-      updated_request = Alibaba.encode_body(mock_request)
-      assert_no_duplicate_json_keys(ReqLLM.Test.Helpers.json_iodata(updated_request))
-      decoded = ReqLLM.Test.Helpers.json_body(updated_request)
-
-      assert is_list(decoded["tools"])
-      assert length(decoded["tools"]) == 1
-    end
-
     test "encode_body with tools and DashScope parameters" do
       model = model_fixture()
       context = context_fixture()

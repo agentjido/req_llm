@@ -212,37 +212,6 @@ defmodule ReqLLM.Providers.VeniceTest do
       assert venice_params["include_venice_system_prompt"] == false
     end
 
-    test "encode_body with tools" do
-      {:ok, model} = ReqLLM.model("venice:zai-org-glm-4.7")
-      context = context_fixture()
-
-      tool =
-        ReqLLM.Tool.new!(
-          name: "test_tool",
-          description: "A test tool",
-          parameter_schema: [
-            name: [type: :string, required: true, doc: "A name parameter"]
-          ],
-          callback: fn _ -> {:ok, "result"} end
-        )
-
-      mock_request = %Req.Request{
-        options: [
-          context: context,
-          model: model.model,
-          stream: false,
-          tools: [tool]
-        ]
-      }
-
-      updated_request = Venice.encode_body(mock_request)
-      assert_no_duplicate_json_keys(ReqLLM.Test.Helpers.json_iodata(updated_request))
-      decoded = ReqLLM.Test.Helpers.json_body(updated_request)
-
-      assert is_list(decoded["tools"])
-      assert length(decoded["tools"]) == 1
-    end
-
     test "encode_body with both tools and venice_parameters" do
       {:ok, model} = ReqLLM.model("venice:zai-org-glm-4.7")
       context = context_fixture()
