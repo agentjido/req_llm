@@ -6,9 +6,14 @@ defmodule ReqLLM.Providers.Minimax do
   This provider reuses the shared OpenAI wire-format implementation and adds
   MiniMax-specific option handling:
 
-  - `max_tokens` is translated to `max_completion_tokens`
+  - `max_tokens` is translated to `max_completion_tokens`; a limit inherited
+    from model metadata is capped at the MiniMax-recommended 131072 tokens
   - `reasoning_split` defaults to `true` so reasoning is returned as structured
     `reasoning_details` and can be preserved across turns
+  - `reasoning_effort` is forwarded for models that tune thinking depth
+    (`MiniMax-M3.1-Flash`: `:low`, `:medium`, `:high`, `:xhigh`, `:max`)
+  - `thinking` accepts `%{type: "adaptive"}` for every model, and
+    `%{type: "disabled"}` only where MiniMax allows skipping thinking
   - unsupported OpenAI parameters that MiniMax ignores are removed before the
     request is sent
 
@@ -18,7 +23,14 @@ defmodule ReqLLM.Providers.Minimax do
 
   ## Examples
 
-      ReqLLM.generate_text("minimax:MiniMax-M2.7", "Hello!")
+      ReqLLM.generate_text("minimax:MiniMax-M3.1-Flash", "Hello!",
+        reasoning_effort: :xhigh,
+        max_tokens: 4096
+      )
+
+      ReqLLM.generate_text("minimax:MiniMax-M3", "Hello!",
+        thinking: %{type: "disabled"}
+      )
 
       ReqLLM.stream_text("minimax:MiniMax-M2.7-highspeed", "Tell me a story",
         max_tokens: 512
@@ -32,6 +44,8 @@ defmodule ReqLLM.Providers.Minimax do
 
   import ReqLLM.Provider.Utils, only: [maybe_put: 3]
 
+  @recommended_max_completion_tokens 131_072
+
   @provider_schema [
     max_completion_tokens: [
       type: :pos_integer,
@@ -41,6 +55,11 @@ defmodule ReqLLM.Providers.Minimax do
       type: :boolean,
       default: true,
       doc: "Return thinking content in reasoning_details instead of inline <thinking> tags."
+    ],
+    thinking: [
+      type: :map,
+      doc:
+        ~s|Thinking mode, for example %{type: "adaptive"}. Set %{type: "disabled"} only on models that can skip thinking; MiniMax-M3.1-Flash always thinks and rejects it.|
     ],
     prompt_optimizer: [
       type: :boolean,
@@ -325,7 +344,7 @@ defmodule ReqLLM.Providers.Minimax do
 
   def translate_options(:video_upload, _model, opts), do: {opts, []}
 
-  def translate_options(_operation, _model, opts) do
+  def translate_options(_operation, model, opts) do
     warnings = []
 
     opts =
@@ -337,21 +356,12 @@ defmodule ReqLLM.Providers.Minimax do
       )
 
     {max_tokens, opts} = Keyword.pop(opts, :max_tokens)
-
-    {opts, warnings} =
-      if max_tokens && !Keyword.has_key?(opts, :max_completion_tokens) do
-        warning =
-          "MiniMax uses max_completion_tokens; translated max_tokens to max_completion_tokens."
-
-        {Keyword.put(opts, :max_completion_tokens, max_tokens), [warning | warnings]}
-      else
-        {opts, warnings}
-      end
+    opts = put_completion_token_limit(model, max_tokens, opts)
 
     {opts, warnings} = drop_ignored_option(opts, warnings, :presence_penalty)
     {opts, warnings} = drop_ignored_option(opts, warnings, :frequency_penalty)
     {opts, warnings} = drop_ignored_option(opts, warnings, :seed)
-    {opts, warnings} = drop_unsupported_reasoning_options(opts, warnings)
+    {opts, warnings} = normalize_reasoning(model, opts, warnings)
 
     {opts, Enum.reverse(warnings)}
   end
@@ -390,7 +400,16 @@ defmodule ReqLLM.Providers.Minimax do
     |> Map.delete("max_tokens")
     |> maybe_put(:max_completion_tokens, request.options[:max_completion_tokens])
     |> maybe_put(:reasoning_split, reasoning_split)
+    |> maybe_put(
+      :reasoning_effort,
+      wire_effort(provider_option(request.options, :reasoning_effort))
+    )
+    |> maybe_put(:thinking, provider_option(request.options, :thinking))
   end
+
+  defp wire_effort(nil), do: nil
+  defp wire_effort(effort) when is_atom(effort), do: Atom.to_string(effort)
+  defp wire_effort(effort), do: effort
 
   @impl ReqLLM.Provider
   def decode_response({req, resp} = _args) do
@@ -559,28 +578,186 @@ defmodule ReqLLM.Providers.Minimax do
     end
   end
 
-  defp drop_unsupported_reasoning_options(opts, warnings) do
-    {reasoning_effort, opts} = Keyword.pop(opts, :reasoning_effort)
-    {reasoning_token_budget, opts} = Keyword.pop(opts, :reasoning_token_budget)
+  defp put_completion_token_limit(_model, nil, opts), do: opts
 
-    warnings =
-      if reasoning_effort && reasoning_effort != :default do
-        ["MiniMax uses model-native thinking; reasoning_effort is not sent." | warnings]
-      else
-        warnings
-      end
+  defp put_completion_token_limit(model, max_tokens, opts) do
+    if Keyword.has_key?(opts, :max_completion_tokens) do
+      opts
+    else
+      Keyword.put(opts, :max_completion_tokens, cap_default_limit(model, max_tokens))
+    end
+  end
 
-    warnings =
-      if reasoning_token_budget do
-        [
-          "MiniMax does not expose reasoning_token_budget on the OpenAI-compatible endpoint."
-          | warnings
-        ]
-      else
-        warnings
-      end
+  defp cap_default_limit(%LLMDB.Model{limits: %{output: limit}}, value)
+       when is_integer(limit) and value == limit do
+    min(value, @recommended_max_completion_tokens)
+  end
 
-    {opts, warnings}
+  defp cap_default_limit(_model, value), do: value
+
+  defp normalize_reasoning(model, opts, warnings) do
+    effort_levels = minimax_effort_levels(model)
+
+    {opts, warnings} = normalize_reasoning_effort(model, effort_levels, opts, warnings)
+    {opts, warnings} = drop_reasoning_token_budget(opts, warnings)
+    {opts, warnings} = normalize_thinking(model, opts, warnings)
+    normalize_reasoning_split(model, opts, warnings)
+  end
+
+  defp normalize_reasoning_effort(model, effort_levels, opts, warnings) do
+    case Keyword.pop(opts, :reasoning_effort) do
+      {nil, opts} -> {opts, warnings}
+      {:default, opts} -> {opts, warnings}
+      {effort, opts} -> put_reasoning_effort(model, effort_levels, effort, opts, warnings)
+    end
+  end
+
+  defp put_reasoning_effort(model, [], effort, opts, warnings) do
+    {opts,
+     [
+       "#{model_label(model)} does not tune thinking depth; " <>
+         "reasoning_effort #{inspect(effort)} was removed from the request."
+       | warnings
+     ]}
+  end
+
+  defp put_reasoning_effort(model, effort_levels, effort, opts, warnings) do
+    effort = ReqLLM.Provider.Reasoning.normalize_effort(effort)
+
+    cond do
+      effort in effort_levels ->
+        {Keyword.put(opts, :reasoning_effort, effort), warnings}
+
+      effort in [:none, :minimal] ->
+        level = if :low in effort_levels, do: :low, else: hd(effort_levels)
+
+        {Keyword.put(opts, :reasoning_effort, level),
+         [
+           "#{model_label(model)} cannot skip thinking, so reasoning_effort #{inspect(effort)} " <>
+             "was raised to #{inspect(level)}."
+           | warnings
+         ]}
+
+      true ->
+        {opts,
+         [
+           "#{model_label(model)} does not support reasoning_effort #{inspect(effort)}; " <>
+             "the option was removed from the request."
+           | warnings
+         ]}
+    end
+  end
+
+  defp drop_reasoning_token_budget(opts, warnings) do
+    case Keyword.pop(opts, :reasoning_token_budget) do
+      {nil, opts} ->
+        {opts, warnings}
+
+      {_budget, opts} ->
+        {opts,
+         [
+           "MiniMax does not expose reasoning_token_budget on the OpenAI-compatible endpoint."
+           | warnings
+         ]}
+    end
+  end
+
+  defp normalize_thinking(model, opts, warnings) do
+    case Keyword.fetch(opts, :thinking) do
+      {:ok, thinking} when is_map(thinking) ->
+        if thinking_disabled?(thinking) and not thinking_off_supported?(model) do
+          {Keyword.delete(opts, :thinking),
+           ["#{model_label(model)} always thinks; thinking disabled was removed." | warnings]}
+        else
+          {opts, warnings}
+        end
+
+      _ ->
+        {opts, warnings}
+    end
+  end
+
+  defp normalize_reasoning_split(model, opts, warnings) do
+    if Keyword.get(opts, :reasoning_split) == false and m3_1_flash?(model) do
+      {Keyword.put(opts, :reasoning_split, true),
+       ["#{model_label(model)} requires reasoning_split: true; it was forced to true." | warnings]}
+    else
+      {opts, warnings}
+    end
+  end
+
+  defp thinking_disabled?(thinking) do
+    type = Map.get(thinking, :type) || Map.get(thinking, "type")
+    type in [:disabled, "disabled"]
+  end
+
+  defp thinking_off_supported?(%LLMDB.Model{} = model) do
+    case get_in(model.capabilities || %{}, [:reasoning, :thinking]) do
+      %{disable_supported: supported} when is_boolean(supported) -> supported
+      _ -> not m3_1_flash?(model)
+    end
+  end
+
+  defp thinking_off_supported?(_model), do: true
+
+  defp minimax_effort_levels(%LLMDB.Model{} = model) do
+    case effort_metadata(model) do
+      values when is_list(values) and values != [] ->
+        values
+        |> Enum.map(&ReqLLM.Provider.Reasoning.normalize_effort/1)
+        |> Enum.filter(&(is_atom(&1) and &1 != :default))
+
+      _ ->
+        if m3_1_flash?(model), do: [:low, :medium, :high, :xhigh, :max], else: []
+    end
+  end
+
+  defp minimax_effort_levels(_model), do: []
+
+  defp effort_metadata(model) do
+    case get_in(model.capabilities || %{}, [:reasoning, :effort]) do
+      %{values: values} = effort when is_list(values) ->
+        if Map.get(effort, :supported) == false, do: [], else: values
+
+      _ ->
+        reasoning_option_values(model)
+    end
+  end
+
+  defp reasoning_option_values(%LLMDB.Model{extra: extra}) when is_map(extra) do
+    extra
+    |> Map.get(:reasoning_options, Map.get(extra, "reasoning_options", []))
+    |> Enum.find_value(fn
+      %{"type" => "effort", "values" => values} when is_list(values) -> values
+      %{type: "effort", values: values} when is_list(values) -> values
+      _ -> nil
+    end)
+  end
+
+  defp reasoning_option_values(_model), do: nil
+
+  defp m3_1_flash?(%LLMDB.Model{} = model) do
+    model
+    |> model_id()
+    |> String.starts_with?("MiniMax-M3.1")
+  end
+
+  defp m3_1_flash?(_model), do: false
+
+  defp model_id(%LLMDB.Model{} = model), do: model.provider_model_id || model.id || ""
+
+  defp model_label(%LLMDB.Model{} = model) do
+    case model_id(model) do
+      "" -> "This MiniMax model"
+      id -> id
+    end
+  end
+
+  defp model_label(_model), do: "This MiniMax model"
+
+  defp provider_option(options, key) do
+    option_value(options, key, nil) ||
+      option_value(option_value(options, :provider_options, []), key, nil)
   end
 
   defp extract_reasoning_details(body) when is_map(body) do
