@@ -8,39 +8,6 @@ defmodule ReqLLM.Providers.Google.ObjectGenerationTest do
   alias ReqLLM.Providers.Google
 
   describe "object generation with native JSON mode" do
-    test "prepare_request for :object with low max_tokens gets adjusted" do
-      {:ok, model} = ReqLLM.model("google:gemini-1.5-flash")
-      context = context_fixture()
-      {:ok, schema} = ReqLLM.Schema.compile(name: [type: :string, required: true])
-
-      opts = [max_tokens: 50, compiled_schema: schema]
-      {:ok, request} = Google.prepare_request(:object, model, context, opts)
-
-      assert request.options[:max_tokens] == 200
-    end
-
-    test "prepare_request for :object with nil max_tokens gets default" do
-      {:ok, model} = ReqLLM.model("google:gemini-1.5-flash")
-      context = context_fixture()
-      {:ok, schema} = ReqLLM.Schema.compile([])
-
-      opts = [compiled_schema: schema]
-      {:ok, request} = Google.prepare_request(:object, model, context, opts)
-
-      assert request.options[:max_tokens] == model.limits.output
-    end
-
-    test "prepare_request for :object with sufficient max_tokens unchanged" do
-      {:ok, model} = ReqLLM.model("google:gemini-1.5-flash")
-      context = context_fixture()
-      {:ok, schema} = ReqLLM.Schema.compile(value: [type: :integer])
-
-      opts = [max_tokens: 1000, compiled_schema: schema]
-      {:ok, request} = Google.prepare_request(:object, model, context, opts)
-
-      assert request.options[:max_tokens] == 1000
-    end
-
     test "prepare_request for :object rejects tools" do
       {:ok, model} = ReqLLM.model("google:gemini-1.5-flash")
       context = context_fixture()

@@ -406,45 +406,6 @@ defmodule ReqLLM.Providers.GroqTest do
     end
   end
 
-  describe "object generation edge cases" do
-    test "prepare_request for :object with low max_tokens gets adjusted" do
-      {:ok, model} = ReqLLM.model("groq:llama-3.1-8b-instant")
-      prompt = "Generate a person"
-      {:ok, schema} = ReqLLM.Schema.compile(name: [type: :string, required: true])
-
-      # Test with max_tokens < 200
-      opts = [max_tokens: 50, compiled_schema: schema]
-      {:ok, request} = Groq.prepare_request(:object, model, prompt, opts)
-
-      # Should be adjusted to 200
-      assert request.options[:max_tokens] == 200
-    end
-
-    test "prepare_request for :object with nil max_tokens gets default" do
-      {:ok, model} = ReqLLM.model("groq:llama-3.1-8b-instant")
-      prompt = "Generate an object"
-      {:ok, schema} = ReqLLM.Schema.compile([])
-
-      # No max_tokens specified
-      opts = [compiled_schema: schema]
-      {:ok, request} = Groq.prepare_request(:object, model, prompt, opts)
-
-      assert request.options[:max_tokens] == model.limits.output
-    end
-
-    test "prepare_request for :object with sufficient max_tokens unchanged" do
-      {:ok, model} = ReqLLM.model("groq:llama-3.1-8b-instant")
-      prompt = "Generate data"
-      {:ok, schema} = ReqLLM.Schema.compile(value: [type: :integer])
-
-      opts = [max_tokens: 1000, compiled_schema: schema]
-      {:ok, request} = Groq.prepare_request(:object, model, prompt, opts)
-
-      # Should remain unchanged
-      assert request.options[:max_tokens] == 1000
-    end
-  end
-
   describe "error handling & robustness" do
   end
 end

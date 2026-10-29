@@ -71,6 +71,12 @@ defmodule ReqLLM.Providers.ContractTest do
     {ReqLLM.Providers.XAI, :xai}
   ]
 
+  @object_token_limit_contracts [
+    {ReqLLM.Providers.Google, :google, "google:gemini-1.5-flash"},
+    {ReqLLM.Providers.Groq, :groq, "groq:llama-3.1-8b-instant"},
+    {ReqLLM.Providers.OpenRouter, :openrouter, "openrouter:openai/gpt-4"}
+  ]
+
   for {provider, provider_id, base_url, env_key} <- @contracts do
     @provider provider
     @provider_id provider_id
@@ -270,6 +276,38 @@ defmodule ReqLLM.Providers.ContractTest do
       assert_raise ReqLLM.Error.Invalid.Provider, fn ->
         @provider.attach(Req.new(), wrong_model, api_key: "contract-key")
       end
+    end
+  end
+
+  for {provider, provider_id, model_spec} <- @object_token_limit_contracts do
+    @provider provider
+    @model_spec model_spec
+
+    test "#{provider_id} normalizes object generation token limits" do
+      assert {:ok, model} = ReqLLM.model(@model_spec)
+      assert {:ok, schema} = ReqLLM.Schema.compile(value: [type: :integer])
+      context = ReqLLM.ProviderCase.context_fixture()
+
+      assert {:ok, low_limit_request} =
+               @provider.prepare_request(:object, model, context,
+                 max_tokens: 50,
+                 compiled_schema: schema
+               )
+
+      assert low_limit_request.options[:max_tokens] == 200
+
+      assert {:ok, default_limit_request} =
+               @provider.prepare_request(:object, model, context, compiled_schema: schema)
+
+      assert default_limit_request.options[:max_tokens] == model.limits.output
+
+      assert {:ok, sufficient_limit_request} =
+               @provider.prepare_request(:object, model, context,
+                 max_tokens: 1000,
+                 compiled_schema: schema
+               )
+
+      assert sufficient_limit_request.options[:max_tokens] == 1000
     end
   end
 end
