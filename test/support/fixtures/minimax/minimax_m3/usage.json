@@ -1,0 +1,139 @@
+{
+  "captured_at": "2026-10-29T05:09:44.150270Z",
+  "model_spec": "minimax:MiniMax-M3",
+  "provider": "minimax",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjUwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJIaSB0aGVyZSEiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJNaW5pTWF4LU0zIiwicmVhc29uaW5nX3NwbGl0Ijp0cnVlLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+    },
+    "canonical_json": {
+      "max_completion_tokens": 500,
+      "messages": [
+        {
+          "content": "Hi there!",
+          "role": "user"
+        }
+      ],
+      "model": "MiniMax-M3",
+      "reasoning_split": true,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.7.5"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.minimax.io/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "base_resp": {
+        "status_code": 0,
+        "status_msg": ""
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "content": "Hi there! 👋 How can I help you today?",
+            "reasoning_content": "We need answer to greeting. Need be friendly. \"Hi there! How can I help you today?\" Maybe mention name? No need. Must answer concise.",
+            "reasoning_details": [
+              {
+                "format": "MiniMax-response-v1",
+                "id": "reasoning-text-1",
+                "index": 0,
+                "text": "We need answer to greeting. Need be friendly. \"Hi there! How can I help you today?\" Maybe mention name? No need. Must answer concise.",
+                "type": "reasoning.text"
+              }
+            ],
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1793250583,
+      "id": "07320816349f8e8eb5337cc7fc802545",
+      "input_sensitive": false,
+      "input_sensitive_type": 0,
+      "model": "MiniMax-M3",
+      "object": "chat.completion",
+      "output_sensitive": false,
+      "output_sensitive_int": 0,
+      "output_sensitive_type": 0,
+      "service_tier": "standard",
+      "usage": {
+        "completion_tokens": 47,
+        "completion_tokens_details": {
+          "reasoning_tokens": 32
+        },
+        "prompt_tokens": 201,
+        "prompt_tokens_details": {
+          "cached_tokens": 200
+        },
+        "total_characters": 0,
+        "total_tokens": 248
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "alb_receive_time": [
+        "1793250582.588"
+      ],
+      "alb_request_id": [
+        "4170c241042f6ef67f9a522b2a779fa2174c7d6a"
+      ],
+      "cache-control": [
+        "max-age=0, no-cache, no-store"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-length": [
+        "1046"
+      ],
+      "content-type": [
+        "application/json; charset=utf-8"
+      ],
+      "date": [
+        "Thu, 29 Oct 2026 05:09:44 GMT"
+      ],
+      "expires": [
+        "Thu, 29 Oct 2026 05:09:44 GMT"
+      ],
+      "minimax-request-id": [
+        "1c1aa5d0439eceb1501738bbec6d4ead"
+      ],
+      "pragma": [
+        "no-cache"
+      ],
+      "trace-id": [
+        "07320816349f8e8eb5337cc7fc802545"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-from": [
+        "ak"
+      ],
+      "x-mm-request-id": [
+        "2018237621766984259_179325058216qc3d"
+      ],
+      "x-session-id": [
+        "c2cb4eb3ec527360981e6644db16278c"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

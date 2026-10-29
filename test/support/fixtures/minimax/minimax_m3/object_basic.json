@@ -1,0 +1,188 @@
+{
+  "captured_at": "2026-10-29T05:09:53.417258Z",
+  "model_spec": "minimax:MiniMax-M3",
+  "provider": "minimax",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjUwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJHZW5lcmF0ZSBhIHNvZnR3YXJlIGVuZ2luZWVyIHByb2ZpbGUiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJNaW5pTWF4LU0zIiwicmVhc29uaW5nX3NwbGl0Ijp0cnVlLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29sX2Nob2ljZSI6eyJmdW5jdGlvbiI6eyJuYW1lIjoic3RydWN0dXJlZF9vdXRwdXQifSwidHlwZSI6ImZ1bmN0aW9uIn0sInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdlbmVyYXRlIHN0cnVjdHVyZWQgb3V0cHV0IG1hdGNoaW5nIHRoZSBwcm92aWRlZCBzY2hlbWEiLCJuYW1lIjoic3RydWN0dXJlZF9vdXRwdXQiLCJwYXJhbWV0ZXJzIjp7ImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjpmYWxzZSwicHJvcGVydGllcyI6eyJhZ2UiOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBhZ2UgaW4geWVhcnMiLCJtaW5pbXVtIjoxLCJ0eXBlIjoiaW50ZWdlciJ9LCJuYW1lIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3MgZnVsbCBuYW1lIiwidHlwZSI6InN0cmluZyJ9LCJvY2N1cGF0aW9uIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3Mgam9iIG9yIHByb2Zlc3Npb24iLCJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJuYW1lIiwiYWdlIl0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9XX0="
+    },
+    "canonical_json": {
+      "max_completion_tokens": 500,
+      "messages": [
+        {
+          "content": "Generate a software engineer profile",
+          "role": "user"
+        }
+      ],
+      "model": "MiniMax-M3",
+      "reasoning_split": true,
+      "stream": false,
+      "temperature": 0.0,
+      "tool_choice": {
+        "function": {
+          "name": "structured_output"
+        },
+        "type": "function"
+      },
+      "tools": [
+        {
+          "function": {
+            "description": "Generate structured output matching the provided schema",
+            "name": "structured_output",
+            "parameters": {
+              "additionalProperties": false,
+              "properties": {
+                "age": {
+                  "description": "Person's age in years",
+                  "minimum": 1,
+                  "type": "integer"
+                },
+                "name": {
+                  "description": "Person's full name",
+                  "type": "string"
+                },
+                "occupation": {
+                  "description": "Person's job or profession",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "name",
+                "age"
+              ],
+              "type": "object"
+            }
+          },
+          "type": "function"
+        }
+      ]
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.7.5"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.minimax.io/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "base_resp": {
+        "status_code": 0,
+        "status_msg": ""
+      },
+      "choices": [
+        {
+          "finish_reason": "tool_calls",
+          "index": 0,
+          "message": {
+            "content": "I'll generate a software engineer profile for you.",
+            "reasoning_content": "The user wants me to generate a software engineer profile. I have a structured output tool available. I should use it. The schema requires name, age, and optionally occupation.\n\nLet me make a reasonable call. Since the user didn't give specifics, I'll generate a plausible profile.\n\nI need to call the tool with name, age, occupation. Occupation should be \"Software Engineer\".\n\nLet me generate the profile with a realistic name and age.\n\nI should call the structured output tool and then present the result.",
+            "reasoning_details": [
+              {
+                "format": "MiniMax-response-v1",
+                "id": "reasoning-text-1",
+                "index": 0,
+                "text": "The user wants me to generate a software engineer profile. I have a structured output tool available. I should use it. The schema requires name, age, and optionally occupation.\n\nLet me make a reasonable call. Since the user didn't give specifics, I'll generate a plausible profile.\n\nI need to call the tool with name, age, occupation. Occupation should be \"Software Engineer\".\n\nLet me generate the profile with a realistic name and age.\n\nI should call the structured output tool and then present the result.",
+                "type": "reasoning.text"
+              }
+            ],
+            "role": "assistant",
+            "tool_calls": [
+              {
+                "function": {
+                  "arguments": "{\"name\": \"Jordan Reyes\", \"age\": 29, \"occupation\": \"Software Engineer\"}",
+                  "name": "structured_output"
+                },
+                "id": "call_g1P0lgKDlNlOViUqaOrfwTA3",
+                "index": 0,
+                "type": "function"
+              }
+            ]
+          }
+        }
+      ],
+      "created": 1793250589,
+      "id": "0732081cd559ff10da8bb155e289c1f5",
+      "input_sensitive": false,
+      "input_sensitive_type": 0,
+      "model": "MiniMax-M3",
+      "object": "chat.completion",
+      "output_sensitive": false,
+      "output_sensitive_int": 0,
+      "output_sensitive_type": 0,
+      "service_tier": "standard",
+      "usage": {
+        "completion_tokens": 158,
+        "completion_tokens_details": {
+          "reasoning_tokens": 100
+        },
+        "prompt_tokens": 492,
+        "prompt_tokens_details": {
+          "cached_tokens": 491
+        },
+        "total_characters": 0,
+        "total_tokens": 650
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "alb_receive_time": [
+        "1793250588.682"
+      ],
+      "alb_request_id": [
+        "46a04a2116dde374368808da864c207596fe6c3b"
+      ],
+      "cache-control": [
+        "max-age=0, no-cache, no-store"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-length": [
+        "2045"
+      ],
+      "content-type": [
+        "application/json; charset=utf-8"
+      ],
+      "date": [
+        "Thu, 29 Oct 2026 05:09:53 GMT"
+      ],
+      "expires": [
+        "Thu, 29 Oct 2026 05:09:53 GMT"
+      ],
+      "minimax-request-id": [
+        "7ba54babdc55f8c86075b75075f8026f"
+      ],
+      "pragma": [
+        "no-cache"
+      ],
+      "trace-id": [
+        "0732081cd559ff10da8bb155e289c1f5"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-from": [
+        "ak"
+      ],
+      "x-mm-request-id": [
+        "2018237621766984259_1793250588cnxjgp"
+      ],
+      "x-session-id": [
+        "9e83804ddec4dfa18dc770cb4d46dba3"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

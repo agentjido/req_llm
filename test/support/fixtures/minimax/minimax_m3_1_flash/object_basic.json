@@ -1,0 +1,174 @@
+{
+  "captured_at": "2026-10-29T05:09:30.842378Z",
+  "model_spec": "minimax:MiniMax-M3.1-Flash",
+  "provider": "minimax",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjUwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJHZW5lcmF0ZSBhIHNvZnR3YXJlIGVuZ2luZWVyIHByb2ZpbGUiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJNaW5pTWF4LU0zLjEtRmxhc2giLCJyZWFzb25pbmdfZWZmb3J0IjoibG93IiwicmVhc29uaW5nX3NwbGl0Ijp0cnVlLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29sX2Nob2ljZSI6eyJmdW5jdGlvbiI6eyJuYW1lIjoic3RydWN0dXJlZF9vdXRwdXQifSwidHlwZSI6ImZ1bmN0aW9uIn0sInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdlbmVyYXRlIHN0cnVjdHVyZWQgb3V0cHV0IG1hdGNoaW5nIHRoZSBwcm92aWRlZCBzY2hlbWEiLCJuYW1lIjoic3RydWN0dXJlZF9vdXRwdXQiLCJwYXJhbWV0ZXJzIjp7ImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjpmYWxzZSwicHJvcGVydGllcyI6eyJhZ2UiOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBhZ2UgaW4geWVhcnMiLCJtaW5pbXVtIjoxLCJ0eXBlIjoiaW50ZWdlciJ9LCJuYW1lIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3MgZnVsbCBuYW1lIiwidHlwZSI6InN0cmluZyJ9LCJvY2N1cGF0aW9uIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3Mgam9iIG9yIHByb2Zlc3Npb24iLCJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJuYW1lIiwiYWdlIl0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9XX0="
+    },
+    "canonical_json": {
+      "max_completion_tokens": 500,
+      "messages": [
+        {
+          "content": "Generate a software engineer profile",
+          "role": "user"
+        }
+      ],
+      "model": "MiniMax-M3.1-Flash",
+      "reasoning_effort": "low",
+      "reasoning_split": true,
+      "stream": false,
+      "temperature": 0.0,
+      "tool_choice": {
+        "function": {
+          "name": "structured_output"
+        },
+        "type": "function"
+      },
+      "tools": [
+        {
+          "function": {
+            "description": "Generate structured output matching the provided schema",
+            "name": "structured_output",
+            "parameters": {
+              "additionalProperties": false,
+              "properties": {
+                "age": {
+                  "description": "Person's age in years",
+                  "minimum": 1,
+                  "type": "integer"
+                },
+                "name": {
+                  "description": "Person's full name",
+                  "type": "string"
+                },
+                "occupation": {
+                  "description": "Person's job or profession",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "name",
+                "age"
+              ],
+              "type": "object"
+            }
+          },
+          "type": "function"
+        }
+      ]
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.7.5"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.minimax.io/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "base_resp": {
+        "status_code": 0,
+        "status_msg": ""
+      },
+      "choices": [
+        {
+          "finish_reason": "tool_calls",
+          "index": 0,
+          "message": {
+            "reasoning_content": "The user wants a software engineer profile using the structured output tool.",
+            "role": "assistant",
+            "tool_calls": [
+              {
+                "function": {
+                  "arguments": "{\"name\":\"Alex Rivera\",\"age\":32,\"occupation\":\"Software Engineer\"}",
+                  "name": "structured_output"
+                },
+                "id": "chatcmpl-tool-a5f93247fe75e6f1",
+                "type": "function"
+              }
+            ]
+          }
+        }
+      ],
+      "created": 1793250569,
+      "id": "073208085f3553cd70cc2b63929a664c",
+      "input_sensitive": false,
+      "input_sensitive_type": 0,
+      "model": "MiniMax-M3.1-Flash",
+      "object": "chat.completion",
+      "output_sensitive": false,
+      "output_sensitive_int": 0,
+      "output_sensitive_type": 0,
+      "usage": {
+        "completion_tokens": 62,
+        "completion_tokens_details": {
+          "reasoning_tokens": 13
+        },
+        "prompt_tokens": 497,
+        "prompt_tokens_details": {
+          "cached_tokens": 256
+        },
+        "total_characters": 0,
+        "total_tokens": 559
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "alb_receive_time": [
+        "1793250568.557"
+      ],
+      "alb_request_id": [
+        "0548ae8592341c03ea01a9b481a3540e5f89ec86"
+      ],
+      "cache-control": [
+        "max-age=0, no-cache, no-store"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-length": [
+        "866"
+      ],
+      "content-type": [
+        "application/json; charset=utf-8"
+      ],
+      "date": [
+        "Thu, 29 Oct 2026 05:09:30 GMT"
+      ],
+      "expires": [
+        "Thu, 29 Oct 2026 05:09:30 GMT"
+      ],
+      "minimax-request-id": [
+        "b4de3b5dad5e82c6f8d85d64cdabcbc3"
+      ],
+      "pragma": [
+        "no-cache"
+      ],
+      "trace-id": [
+        "073208085f3553cd70cc2b63929a664c"
+      ],
+      "x-from": [
+        "ak"
+      ],
+      "x-mm-request-id": [
+        "2018237621766984259_1793250568qt51w3"
+      ],
+      "x-session-id": [
+        "bca44b45e3298c7e915956d2ef91a3c3"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}
