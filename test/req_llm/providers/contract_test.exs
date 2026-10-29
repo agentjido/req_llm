@@ -128,7 +128,7 @@ defmodule ReqLLM.Providers.ContractTest do
       assert @provider.base_url() == @base_url
 
       if @env_key do
-        assert apply(@provider, :default_env_key, []) == @env_key
+        assert default_env_key(@provider) == @env_key
       else
         refute function_exported?(@provider, :default_env_key, 0)
       end
@@ -414,6 +414,7 @@ defmodule ReqLLM.Providers.ContractTest do
 
   defp private_for_model(nil), do: %{}
   defp private_for_model(model_spec), do: %{req_llm_model: ReqLLM.model!(model_spec)}
+  defp default_env_key(provider), do: provider.default_env_key()
 
   for {provider, provider_id, status, body, model_option, model_id, private_model_spec, reason} <-
         @api_error_contracts do
