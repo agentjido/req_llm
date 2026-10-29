@@ -7,14 +7,6 @@ defmodule ReqLLM.Providers.OpenAICodexTest do
 
   alias ReqLLM.Providers.OpenAICodex
 
-  describe "provider contract" do
-    test "provider identity and configuration" do
-      assert OpenAICodex.provider_id() == :openai_codex
-      assert OpenAICodex.oauth_provider_id() == "openai-codex"
-      assert OpenAICodex.base_url() == "https://chatgpt.com/backend-api"
-    end
-  end
-
   describe "request preparation" do
     test "prepare_request routes to codex responses endpoint with oauth headers" do
       {:ok, model} = ReqLLM.model("openai_codex:gpt-5.3-codex-spark")

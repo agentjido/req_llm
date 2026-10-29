@@ -3,7 +3,6 @@ defmodule ReqLLM.VideoGenerationTest do
 
   alias ReqLLM.Providers.Minimax
   alias ReqLLM.Providers.Minimax.VideoAPI
-  alias ReqLLM.Video
   alias ReqLLM.Video.Task
 
   defp minimax_video_model(model_id \\ "MiniMax-H3") do
@@ -77,7 +76,7 @@ defmodule ReqLLM.VideoGenerationTest do
   end
 
   describe "encode_body" do
-    defp video_request(content, opts \\ []) do
+    defp video_request(content, opts) do
       Req.new(url: VideoAPI.path())
       |> Req.Request.register_options([
         :model,

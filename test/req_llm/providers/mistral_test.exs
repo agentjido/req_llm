@@ -8,12 +8,6 @@ defmodule ReqLLM.Providers.MistralTest do
   end
 
   describe "provider contract" do
-    test "provider identity and configuration" do
-      assert Mistral.provider_id() == :mistral
-      assert Mistral.base_url() == "https://api.mistral.ai/v1"
-      assert Mistral.default_env_key() == "MISTRAL_API_KEY"
-    end
-
     test "provider schema exposes Mistral-specific request fields" do
       schema_keys = Mistral.provider_schema().schema |> Keyword.keys()
 

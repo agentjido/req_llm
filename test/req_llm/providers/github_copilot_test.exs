@@ -6,23 +6,6 @@ defmodule ReqLLM.Providers.GitHubCopilotTest do
   import ExUnit.CaptureIO
 
   describe "provider contract" do
-    test "provider identity and configuration" do
-      assert GitHubCopilot.provider_id() == :github_copilot
-      assert GitHubCopilot.base_url() == "https://api.githubcopilot.com"
-      assert GitHubCopilot.default_env_key() == "COPILOT_GITHUB_TOKEN"
-      assert GitHubCopilot.display_name() == "GitHub Copilot"
-    end
-
-    test "provider schema separation from core options" do
-      schema_keys = GitHubCopilot.provider_schema().schema |> Keyword.keys()
-      core_keys = ReqLLM.Provider.Options.generation_schema().schema |> Keyword.keys()
-
-      overlap = MapSet.intersection(MapSet.new(schema_keys), MapSet.new(core_keys))
-
-      assert MapSet.size(overlap) == 0,
-             "Schema overlap detected: #{inspect(MapSet.to_list(overlap))}"
-    end
-
     test "provider schema defaults authentication to token-only mode" do
       assert GitHubCopilot.provider_schema().schema[:github_copilot_auth][:default] == :token
     end

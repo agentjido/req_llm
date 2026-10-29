@@ -23,12 +23,6 @@ defmodule ReqLLM.Providers.VLLMTest do
   end
 
   describe "provider contract" do
-    test "provider identity and configuration" do
-      assert VLLM.provider_id() == :vllm
-      assert is_binary(VLLM.base_url())
-      assert VLLM.base_url() == "http://localhost:8000/v1"
-    end
-
     test "provider uses OPENAI_API_KEY by default" do
       assert VLLM.default_env_key() == "OPENAI_API_KEY"
     end

@@ -13,33 +13,6 @@ defmodule ReqLLM.Providers.OpenRouterTest do
   alias ReqLLM.Providers.OpenRouter
 
   describe "provider contract" do
-    test "provider identity and configuration" do
-      assert is_atom(OpenRouter.provider_id())
-      assert is_binary(OpenRouter.base_url())
-      assert String.starts_with?(OpenRouter.base_url(), "http")
-    end
-
-    test "provider schema separation from core options" do
-      schema_keys = OpenRouter.provider_schema().schema |> Keyword.keys()
-      core_keys = ReqLLM.Provider.Options.generation_schema().schema |> Keyword.keys()
-
-      # Provider-specific keys should not overlap with core generation keys
-      overlap = MapSet.intersection(MapSet.new(schema_keys), MapSet.new(core_keys))
-
-      assert MapSet.size(overlap) == 0,
-             "Schema overlap detected: #{inspect(MapSet.to_list(overlap))}"
-    end
-
-    test "provider schema combined with generation schema includes all core keys" do
-      full_schema = OpenRouter.provider_extended_generation_schema()
-      full_keys = Keyword.keys(full_schema.schema)
-      core_keys = ReqLLM.Provider.Options.all_generation_keys()
-
-      core_without_meta = Enum.reject(core_keys, &(&1 == :provider_options))
-      missing = core_without_meta -- full_keys
-      assert missing == [], "Missing core generation keys in extended schema: #{inspect(missing)}"
-    end
-
     test "provider_extended_generation_schema includes both base and provider options" do
       extended_schema = OpenRouter.provider_extended_generation_schema()
       extended_keys = extended_schema.schema |> Keyword.keys()

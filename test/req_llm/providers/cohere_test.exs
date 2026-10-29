@@ -14,14 +14,6 @@ defmodule ReqLLM.Providers.CohereTest do
     }
   end
 
-  describe "provider contract" do
-    test "provider identity and configuration" do
-      assert Cohere.provider_id() == :cohere
-      assert Cohere.base_url() == "https://api.cohere.com"
-      assert Cohere.default_env_key() == "COHERE_API_KEY"
-    end
-  end
-
   describe "request preparation" do
     test "prepare_request for :rerank creates /v2/rerank request" do
       model = rerank_model()

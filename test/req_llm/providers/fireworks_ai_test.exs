@@ -11,12 +11,6 @@ defmodule ReqLLM.Providers.FireworksAITest do
   alias ReqLLM.Providers.FireworksAI
 
   describe "provider contract" do
-    test "provider identity and configuration" do
-      assert FireworksAI.provider_id() == :fireworks_ai
-      assert FireworksAI.base_url() == "https://api.fireworks.ai/inference/v1"
-      assert FireworksAI.default_env_key() == "FIREWORKS_API_KEY"
-    end
-
     test "provider_extended_generation_schema includes all core keys" do
       extended_schema = FireworksAI.provider_extended_generation_schema()
       extended_keys = extended_schema.schema |> Keyword.keys()

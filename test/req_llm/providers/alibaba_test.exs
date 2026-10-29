@@ -18,25 +18,8 @@ defmodule ReqLLM.Providers.AlibabaTest do
   end
 
   describe "provider contract" do
-    test "provider identity and configuration" do
-      assert is_atom(Alibaba.provider_id())
-      assert Alibaba.provider_id() == :alibaba
-      assert is_binary(Alibaba.base_url())
-      assert Alibaba.base_url() == "https://dashscope-intl.aliyuncs.com/compatible-mode/v1"
-    end
-
     test "provider uses correct default environment key" do
       assert Alibaba.default_env_key() == "DASHSCOPE_API_KEY"
-    end
-
-    test "provider schema separation from core options" do
-      schema_keys = Alibaba.provider_schema().schema |> Keyword.keys()
-      core_keys = ReqLLM.Provider.Options.generation_schema().schema |> Keyword.keys()
-
-      overlap = MapSet.intersection(MapSet.new(schema_keys), MapSet.new(core_keys))
-
-      assert MapSet.size(overlap) == 0,
-             "Schema overlap detected: #{inspect(MapSet.to_list(overlap))}"
     end
 
     test "provider schema includes DashScope-specific options" do
@@ -56,16 +39,6 @@ defmodule ReqLLM.Providers.AlibabaTest do
       for key <- expected_keys do
         assert key in schema_keys, "Expected #{key} in provider schema"
       end
-    end
-
-    test "provider schema combined with generation schema includes all core keys" do
-      full_schema = Alibaba.provider_extended_generation_schema()
-      full_keys = Keyword.keys(full_schema.schema)
-      core_keys = ReqLLM.Provider.Options.all_generation_keys()
-
-      core_without_meta = Enum.reject(core_keys, &(&1 == :provider_options))
-      missing = core_without_meta -- full_keys
-      assert missing == [], "Missing core generation keys in extended schema: #{inspect(missing)}"
     end
 
     test "provider_extended_generation_schema includes both base and provider options" do

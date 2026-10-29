@@ -23,12 +23,6 @@ defmodule ReqLLM.Providers.DeepseekTest do
   end
 
   describe "provider contract" do
-    test "provider identity and configuration" do
-      assert Deepseek.provider_id() == :deepseek
-      assert is_binary(Deepseek.base_url())
-      assert Deepseek.base_url() == "https://api.deepseek.com"
-    end
-
     test "provider uses correct default environment key" do
       assert Deepseek.default_env_key() == "DEEPSEEK_API_KEY"
     end

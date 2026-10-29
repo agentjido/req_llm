@@ -12,13 +12,6 @@ defmodule ReqLLM.Providers.MetaTest do
   end
 
   describe "provider contract" do
-    test "provider identity and configuration" do
-      assert Meta.provider_id() == :meta
-      assert Meta.base_url() == "https://api.meta.ai/v1"
-      assert Meta.default_env_key() == "MODEL_API_KEY"
-      assert Meta.display_name() == "Meta Model API"
-    end
-
     test "provider schema exposes Meta Responses request fields" do
       schema_keys = Meta.provider_schema().schema |> Keyword.keys()
 

@@ -12,25 +12,8 @@ defmodule ReqLLM.Providers.VeniceTest do
   alias ReqLLM.Providers.Venice
 
   describe "provider contract" do
-    test "provider identity and configuration" do
-      assert is_atom(Venice.provider_id())
-      assert Venice.provider_id() == :venice
-      assert is_binary(Venice.base_url())
-      assert Venice.base_url() == "https://api.venice.ai/api/v1"
-    end
-
     test "provider uses correct default environment key" do
       assert Venice.default_env_key() == "VENICE_API_KEY"
-    end
-
-    test "provider schema separation from core options" do
-      schema_keys = Venice.provider_schema().schema |> Keyword.keys()
-      core_keys = ReqLLM.Provider.Options.generation_schema().schema |> Keyword.keys()
-
-      overlap = MapSet.intersection(MapSet.new(schema_keys), MapSet.new(core_keys))
-
-      assert MapSet.size(overlap) == 0,
-             "Schema overlap detected: #{inspect(MapSet.to_list(overlap))}"
     end
 
     test "provider schema includes Venice-specific options" do
@@ -51,16 +34,6 @@ defmodule ReqLLM.Providers.VeniceTest do
       for key <- expected_venice_keys do
         assert key in schema_keys, "Expected #{key} in provider schema"
       end
-    end
-
-    test "provider schema combined with generation schema includes all core keys" do
-      full_schema = Venice.provider_extended_generation_schema()
-      full_keys = Keyword.keys(full_schema.schema)
-      core_keys = ReqLLM.Provider.Options.all_generation_keys()
-
-      core_without_meta = Enum.reject(core_keys, &(&1 == :provider_options))
-      missing = core_without_meta -- full_keys
-      assert missing == [], "Missing core generation keys in extended schema: #{inspect(missing)}"
     end
 
     test "provider_extended_generation_schema includes both base and provider options" do

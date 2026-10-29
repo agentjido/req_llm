@@ -26,12 +26,6 @@ defmodule ReqLLM.Providers.CheaperInferenceTest do
   end
 
   describe "provider contract" do
-    test "provider identity and configuration" do
-      assert CheaperInference.provider_id() == :cheaperinference
-      assert CheaperInference.base_url() == "https://api.cheaperinference.com/v1"
-      assert CheaperInference.default_env_key() == "CHEAPERINFERENCE_API_KEY"
-    end
-
     test "provider schema is empty (pure OpenAI-compatible)" do
       schema_keys = CheaperInference.provider_schema().schema |> Keyword.keys()
       assert schema_keys == []

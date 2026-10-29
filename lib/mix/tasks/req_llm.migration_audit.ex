@@ -6,7 +6,7 @@ defmodule Mix.Tasks.ReqLlm.MigrationAudit do
 
       mix req_llm.migration_audit
       mix req_llm.migration_audit lib test
-      mix req_llm.migration_audit --exclude test/fixtures --format json
+      mix req_llm.migration_audit --exclude test/support/fixtures --format json
 
   Actionable findings exit with status 1, audit errors with status 2, and clean
   or advisory-only reports with status 0.

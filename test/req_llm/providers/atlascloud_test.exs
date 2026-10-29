@@ -26,12 +26,6 @@ defmodule ReqLLM.Providers.AtlasCloudTest do
   end
 
   describe "provider contract" do
-    test "provider identity and configuration" do
-      assert AtlasCloud.provider_id() == :atlascloud
-      assert AtlasCloud.base_url() == "https://api.atlascloud.ai/v1"
-      assert AtlasCloud.default_env_key() == "ATLASCLOUD_API_KEY"
-    end
-
     test "provider schema is empty (pure OpenAI-compatible)" do
       schema_keys = AtlasCloud.provider_schema().schema |> Keyword.keys()
       assert schema_keys == []

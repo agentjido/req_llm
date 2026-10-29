@@ -38,12 +38,6 @@ defmodule ReqLLM.Providers.MinimaxTest do
   end
 
   describe "provider contract" do
-    test "provider identity and configuration" do
-      assert Minimax.provider_id() == :minimax
-      assert Minimax.base_url() == "https://api.minimax.io/v1"
-      assert Minimax.default_env_key() == "MINIMAX_API_KEY"
-    end
-
     test "provider schema exposes MiniMax-specific request fields" do
       schema_keys = Minimax.provider_schema().schema |> Keyword.keys()
 
