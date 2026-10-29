@@ -32,7 +32,8 @@ defmodule ReqLLM.Providers.Minimax do
         thinking: %{type: "disabled"}
       )
 
-      ReqLLM.stream_text("minimax:MiniMax-M2.7-highspeed", "Tell me a story",
+      ReqLLM.stream_text("minimax:MiniMax-M3.1-Flash", "Tell me a story",
+        reasoning_effort: :low,
         max_tokens: 512
       )
   """
