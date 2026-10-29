@@ -899,40 +899,6 @@ defmodule ReqLLM.Providers.OpenRouterTest do
       assert response.finish_reason == nil
       assert response.provider_meta == %{}
     end
-
-    test "decode_response handles API errors with non-200 status" do
-      # Create error response
-      error_body = %{
-        "error" => %{
-          "message" => "Invalid API key",
-          "type" => "authentication_error",
-          "code" => "invalid_api_key"
-        }
-      }
-
-      mock_resp = %Req.Response{
-        status: 401,
-        body: error_body
-      }
-
-      context = context_fixture()
-
-      {:ok, model} = ReqLLM.model("openrouter:openai/gpt-4")
-
-      mock_req = %Req.Request{
-        options: [context: context, id: "openai/gpt-4"],
-        private: %{req_llm_model: model}
-      }
-
-      # Test decode_response error handling
-      {req, error} = OpenRouter.decode_response({mock_req, mock_resp})
-
-      assert req == mock_req
-      assert %ReqLLM.Error.API.Response{} = error
-      assert error.status == 401
-      assert error.reason == "Openrouter API error"
-      assert error.response_body == error_body
-    end
   end
 
   describe "option translation" do

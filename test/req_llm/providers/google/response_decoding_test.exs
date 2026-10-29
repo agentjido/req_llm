@@ -368,37 +368,6 @@ defmodule ReqLLM.Providers.Google.ResponseDecodingTest do
                }
              }
     end
-
-    test "decode_response handles API errors with non-200 status" do
-      # Create error response
-      error_body = %{
-        "error" => %{
-          "code" => 400,
-          "message" => "Invalid API key",
-          "status" => "INVALID_ARGUMENT"
-        }
-      }
-
-      mock_resp = %Req.Response{
-        status: 400,
-        body: error_body
-      }
-
-      context = context_fixture()
-
-      mock_req = %Req.Request{
-        options: [context: context, id: "gemini-1.5-flash"]
-      }
-
-      # Test decode_response error handling
-      {req, error} = Google.decode_response({mock_req, mock_resp})
-
-      assert req == mock_req
-      assert %ReqLLM.Error.API.Response{} = error
-      assert error.status == 400
-      assert error.reason == "Google API error"
-      assert error.response_body == error_body
-    end
   end
 
   describe "usage extraction" do

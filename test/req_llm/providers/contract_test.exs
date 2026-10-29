@@ -77,6 +77,46 @@ defmodule ReqLLM.Providers.ContractTest do
     {ReqLLM.Providers.OpenRouter, :openrouter, "openrouter:openai/gpt-4"}
   ]
 
+  @api_error_contracts [
+    {ReqLLM.Providers.Anthropic, :anthropic, 401,
+     %{
+       "type" => "error",
+       "error" => %{"type" => "authentication_error", "message" => "Invalid API key"}
+     }, :id, "claude-sonnet-4-5-20250929", nil, "Anthropic API error"},
+    {ReqLLM.Providers.Google, :google, 400,
+     %{
+       "error" => %{
+         "code" => 400,
+         "message" => "Invalid API key",
+         "status" => "INVALID_ARGUMENT"
+       }
+     }, :id, "gemini-1.5-flash", nil, "Google API error"},
+    {ReqLLM.Providers.Groq, :groq, 401,
+     %{
+       "error" => %{
+         "message" => "Invalid API key",
+         "type" => "authentication_error",
+         "code" => "invalid_api_key"
+       }
+     }, :id, "llama-3.1-8b-instant", nil, "OpenAI API error"},
+    {ReqLLM.Providers.OpenAI, :openai, 401,
+     %{
+       "error" => %{
+         "message" => "Invalid API key provided",
+         "type" => "invalid_request_error",
+         "code" => "invalid_api_key"
+       }
+     }, :model, "gpt-4o", nil, "OpenAI API error"},
+    {ReqLLM.Providers.OpenRouter, :openrouter, 401,
+     %{
+       "error" => %{
+         "message" => "Invalid API key",
+         "type" => "authentication_error",
+         "code" => "invalid_api_key"
+       }
+     }, :id, "openai/gpt-4", "openrouter:openai/gpt-4", "Openrouter API error"}
+  ]
+
   for {provider, provider_id, base_url, env_key} <- @contracts do
     @provider provider
     @provider_id provider_id
@@ -369,6 +409,43 @@ defmodule ReqLLM.Providers.ContractTest do
                )
 
       assert sufficient_limit_request.options[:max_tokens] == 1000
+    end
+  end
+
+  defp private_for_model(nil), do: %{}
+  defp private_for_model(model_spec), do: %{req_llm_model: ReqLLM.model!(model_spec)}
+
+  for {provider, provider_id, status, body, model_option, model_id, private_model_spec, reason} <-
+        @api_error_contracts do
+    @provider provider
+    @status status
+    @body body
+    @model_option model_option
+    @model_id model_id
+    @private_model_spec private_model_spec
+    @reason reason
+
+    test "#{provider_id} decodes non-success API responses" do
+      private = private_for_model(@private_model_spec)
+
+      request = %Req.Request{
+        options:
+          Keyword.put(
+            [context: ReqLLM.ProviderCase.context_fixture()],
+            @model_option,
+            @model_id
+          ),
+        private: private
+      }
+
+      response = %Req.Response{status: @status, body: @body}
+
+      assert {^request, %ReqLLM.Error.API.Response{} = error} =
+               @provider.decode_response({request, response})
+
+      assert error.status == @status
+      assert error.reason == @reason
+      assert error.response_body == @body
     end
   end
 end

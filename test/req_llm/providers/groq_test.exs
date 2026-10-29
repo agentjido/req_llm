@@ -280,37 +280,6 @@ defmodule ReqLLM.Providers.GroqTest do
       assert is_map(response.provider_meta)
       # In test scenario with mock stream, no http_task is created
     end
-
-    test "decode_response handles API errors with non-200 status" do
-      # Create error response
-      error_body = %{
-        "error" => %{
-          "message" => "Invalid API key",
-          "type" => "authentication_error",
-          "code" => "invalid_api_key"
-        }
-      }
-
-      mock_resp = %Req.Response{
-        status: 401,
-        body: error_body
-      }
-
-      context = context_fixture()
-
-      mock_req = %Req.Request{
-        options: [context: context, id: "llama-3.1-8b-instant"]
-      }
-
-      # Test decode_response error handling
-      {req, error} = Groq.decode_response({mock_req, mock_resp})
-
-      assert req == mock_req
-      assert %ReqLLM.Error.API.Response{} = error
-      assert error.status == 401
-      assert error.reason =~ " API error"
-      assert error.response_body == error_body
-    end
   end
 
   describe "option translation" do
