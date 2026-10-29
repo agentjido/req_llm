@@ -23,6 +23,7 @@ defmodule ReqLLM.Parity.TestHelper do
   alias ReqLLM.Response
   alias ReqLLM.ToolCall
 
+  # coveralls-ignore-start
   defmacro parity_contract(opts) do
     model = Keyword.fetch!(opts, :model)
     timeout = Keyword.get(opts, :timeout, 60_000)
@@ -106,6 +107,8 @@ defmodule ReqLLM.Parity.TestHelper do
     {:ok, completed} = ReqLLM.generate_text(model, context)
     completed
   end
+
+  # coveralls-ignore-stop
 
   # ============================================================================
   # Core Parity Assertions
