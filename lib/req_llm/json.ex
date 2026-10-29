@@ -1,11 +1,103 @@
 defmodule ReqLLM.JSON do
-  @moduledoc false
+  @moduledoc """
+  JSON codec and decode helpers.
 
+  ReqLLM encodes and decodes JSON with Jason by default. Set `:json_library` to any
+  module implementing `ReqLLM.JSON.Codec` to replace it:
+
+      config :req_llm, json_library: MyApp.JSON
+
+  The codec is read from the application environment on every call, so it can be
+  changed at runtime. A module that does not export `encode!/1`,
+  `encode_to_iodata!/1` and `decode/1` raises `ArgumentError` on first use.
+
+  ## Decoding model output
+
+  `decode/2` decodes JSON that a model produced. It repairs the common failure modes
+  (code fences, BOM, smart quotes, trailing commas, unbalanced delimiters) before
+  giving up, and `:json_repair` turns that off.
+
+  ## Structured output ordering
+
+  Structured-output schemas carry `ReqLLM.JSON.OrderedObject` values, because
+  property order has to survive encoding. Ordered bodies are encoded with
+  `c:ReqLLM.JSON.Codec.encode_ordered_to_iodata!/1` when the codec exports it, through
+  the codec's protocol implementation when it ships one (Jason and the Elixir `JSON`
+  module do), and through Jason otherwise.
+
+  ## Other codecs
+
+      defmodule MyApp.JSON do
+        @behaviour ReqLLM.JSON.Codec
+
+        def encode!(term), do: JSON.encode!(term)
+        def encode_to_iodata!(term), do: JSON.encode_to_iodata!(term)
+        def decode(binary), do: JSON.decode(binary)
+      end
+
+  For Torque, convert ordered bodies to its jiffy-style proplist first:
+
+      defmodule MyApp.TorqueJSON do
+        @behaviour ReqLLM.JSON.Codec
+
+        def encode!(term), do: term |> ReqLLM.JSON.to_jiffy_ordered() |> Torque.encode!()
+
+        def encode_to_iodata!(term) do
+          term |> ReqLLM.JSON.to_jiffy_ordered() |> Torque.encode_to_iodata() |> IO.iodata_to_binary()
+        end
+
+        def decode(binary), do: Torque.decode(binary)
+
+        def encode_ordered_to_iodata!(term), do: term |> encode!() |> IO.iodata_to_binary()
+      end
+  """
+
+  alias ReqLLM.JSON.OrderedObject
+
+  @default_codec Jason
+  @required_callbacks [encode!: 1, encode_to_iodata!: 1, decode: 1]
+
+  @doc """
+  Returns the configured JSON codec, raising when it cannot be used.
+
+  ## Examples
+
+      iex> ReqLLM.JSON.json_library()
+      Jason
+
+  """
+  @spec json_library() :: module()
+  def json_library do
+    Application.get_env(:req_llm, :json_library, @default_codec)
+    |> validate_codec!()
+  end
+
+  @doc """
+  Encodes a term to a JSON binary with the configured codec.
+  """
+  @spec encode!(term()) :: binary()
+  def encode!(term), do: json_library().encode!(term)
+
+  @doc """
+  Encodes a term to JSON iodata with the configured codec.
+  """
+  @spec encode_to_iodata!(term()) :: iodata()
+  def encode_to_iodata!(term), do: json_library().encode_to_iodata!(term)
+
+  @doc """
+  Decodes JSON produced by a model, repairing common malformed output.
+
+  Options:
+
+    * `:json_repair` - repairs malformed JSON before retrying (default `true`)
+
+  Returns `{:ok, term}` or `{:error, reason}`.
+  """
   @spec decode(term(), keyword()) :: {:ok, term()} | {:error, term()}
   def decode(json, opts \\ [])
 
   def decode(json, opts) when is_binary(json) do
-    case Jason.decode(json) do
+    case decode_once(json) do
       {:ok, _parsed} = ok ->
         ok
 
@@ -16,7 +108,7 @@ defmodule ReqLLM.JSON do
           if repaired == json do
             {:error, error}
           else
-            Jason.decode(repaired)
+            decode_once(repaired)
           end
         else
           {:error, error}
@@ -25,6 +117,149 @@ defmodule ReqLLM.JSON do
   end
 
   def decode(_json, _opts), do: {:error, :invalid_json}
+
+  @doc """
+  Decodes a JSON binary with the configured codec, raising on invalid input.
+
+  Uses the codec's own `decode!/1` when it exports one, so the default keeps raising
+  `Jason.DecodeError`.
+  """
+  @spec decode!(binary()) :: term()
+  def decode!(json) when is_binary(json) do
+    codec = json_library()
+
+    if function_exported?(codec, :decode!, 1) do
+      codec.decode!(json)
+    else
+      case codec.decode(json) do
+        {:ok, term} -> term
+        {:error, reason} -> raise ReqLLM.Error.Unknown.Unknown, error: reason
+      end
+    end
+  end
+
+  @doc """
+  Encodes a request body, keeping structured-output property order.
+
+  Applies `ReqLLM.Schema.apply_property_ordering/1` and then encodes with the
+  configured codec.
+  """
+  @spec encode_request_body(term()) :: iodata()
+  def encode_request_body(body) do
+    body
+    |> ReqLLM.Schema.apply_property_ordering()
+    |> encode_ordered_body()
+  end
+
+  @doc """
+  Request options that carry a JSON body and decode responses with the configured codec.
+
+  Returns `:body`, a JSON content type, and `:decoders` for Req.
+  """
+  @spec request_options(term()) :: keyword()
+  def request_options(body) do
+    [
+      body: encode_request_body(body),
+      headers: [{"content-type", "application/json"}],
+      decoders: decoders()
+    ]
+  end
+
+  @doc """
+  Req `:decoders` option that routes JSON response bodies through the configured codec.
+  """
+  @spec decoders() :: keyword()
+  def decoders do
+    decoder = fn json -> json_library().decode(json) end
+    [json: decoder, json_api: decoder]
+  end
+
+  @doc """
+  Returns the byte offset of a decode error, or `nil` when the codec cannot report one.
+
+  Codecs may implement `c:ReqLLM.JSON.Codec.decode_error_position/1`. Jason errors are
+  understood out of the box so the default keeps working.
+  """
+  @spec decode_error_position(term()) :: non_neg_integer() | nil
+  def decode_error_position(%{__struct__: codec} = error) do
+    cond do
+      function_exported?(codec, :decode_error_position, 1) ->
+        codec.decode_error_position(error)
+
+      jason_decode_error?(error) ->
+        Map.get(error, :position)
+
+      true ->
+        nil
+    end
+  end
+
+  def decode_error_position(_error), do: nil
+
+  @doc """
+  Converts ordered objects to Torque's jiffy-style `{[{key, value}]}` proplist.
+
+  Recurses through maps, lists and ordered objects; other terms are returned as is.
+  """
+  @spec to_jiffy_ordered(term()) :: term()
+  def to_jiffy_ordered(%OrderedObject{values: values}) do
+    {Enum.map(values, fn {key, value} -> {key, to_jiffy_ordered(value)} end)}
+  end
+
+  def to_jiffy_ordered(%{__struct__: _} = struct), do: struct
+
+  def to_jiffy_ordered(map) when is_map(map) do
+    Map.new(map, fn {key, value} -> {key, to_jiffy_ordered(value)} end)
+  end
+
+  def to_jiffy_ordered(list) when is_list(list), do: Enum.map(list, &to_jiffy_ordered/1)
+
+  def to_jiffy_ordered(other), do: other
+
+  defp decode_once(json), do: json_library().decode(json)
+
+  defp encode_ordered_body(body) do
+    codec = json_library()
+
+    if function_exported?(codec, :encode_ordered_to_iodata!, 1) do
+      codec.encode_ordered_to_iodata!(body)
+    else
+      codec.encode_to_iodata!(body)
+    end
+  end
+
+  defp jason_decode_error?(%Jason.DecodeError{} = error),
+    do: is_integer(Map.get(error, :position))
+
+  defp jason_decode_error?(_error), do: false
+
+  defp validate_codec!(codec) when is_atom(codec) and not is_nil(codec) do
+    loaded? = Code.ensure_loaded?(codec)
+
+    missing =
+      Enum.reject(@required_callbacks, fn {function, arity} ->
+        loaded? and function_exported?(codec, function, arity)
+      end)
+
+    if missing == [] do
+      codec
+    else
+      raise ArgumentError, """
+      #{inspect(codec)} cannot be used as config :req_llm, json_library: it does not \
+      implement #{Enum.map_join(missing, ", ", fn {function, arity} -> "#{function}/#{arity}" end)}.
+
+      See ReqLLM.JSON.Codec for the contract.\
+      """
+    end
+  end
+
+  defp validate_codec!(other) do
+    raise ArgumentError, """
+    config :req_llm, json_library: expects a module, got: #{inspect(other)}.
+
+    See ReqLLM.JSON.Codec for the contract.\
+    """
+  end
 
   defp json_repair_enabled?(opts) when is_list(opts), do: Keyword.get(opts, :json_repair, true)
   defp json_repair_enabled?(opts) when is_map(opts), do: Map.get(opts, :json_repair, true)

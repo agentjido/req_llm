@@ -88,7 +88,7 @@ defmodule ReqLLM.Providers.Anthropic.AdapterHelpersTest do
         ReqLLM.Schema.compile(%{
           "type" => "object",
           "properties" =>
-            Jason.OrderedObject.new([
+            ReqLLM.JSON.OrderedObject.new([
               {"type", %{"type" => "string"}},
               {"text", %{"type" => "string", "maxLength" => 150}}
             ])
@@ -106,7 +106,7 @@ defmodule ReqLLM.Providers.Anthropic.AdapterHelpersTest do
         ReqLLM.Schema.compile(%{
           "type" => "object",
           "properties" =>
-            Jason.OrderedObject.new([
+            ReqLLM.JSON.OrderedObject.new([
               {"city",
                %{
                  "type" => "object",
@@ -129,16 +129,16 @@ defmodule ReqLLM.Providers.Anthropic.AdapterHelpersTest do
         ReqLLM.Schema.compile(%{
           type: "object",
           properties:
-            Jason.OrderedObject.new(
+            ReqLLM.JSON.OrderedObject.new(
               country: %{type: "string"},
               cities: %{type: "array", items: %{"$ref": "#/$defs/city"}}
             ),
           "$defs": %{
             city:
-              Jason.OrderedObject.new(
+              ReqLLM.JSON.OrderedObject.new(
                 type: "object",
                 properties:
-                  Jason.OrderedObject.new(
+                  ReqLLM.JSON.OrderedObject.new(
                     name: %{type: "string", maxLength: 150},
                     area: %{type: "number"}
                   )

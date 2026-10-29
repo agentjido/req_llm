@@ -1299,7 +1299,7 @@ defmodule ReqLLM.SchemaTest do
 
       result = Schema.apply_property_ordering(schema)
 
-      assert %Jason.OrderedObject{} = result["properties"]
+      assert %ReqLLM.JSON.OrderedObject{} = result["properties"]
 
       assert result["properties"].values == [
                {"name", %{"type" => "string"}},
@@ -1331,11 +1331,11 @@ defmodule ReqLLM.SchemaTest do
       result = Schema.apply_property_ordering(schema)
 
       # Top level is ordered
-      assert %Jason.OrderedObject{} = result["properties"]
+      assert %ReqLLM.JSON.OrderedObject{} = result["properties"]
       {_, user_schema} = Enum.find(result["properties"].values, fn {k, _} -> k == "user" end)
 
       # Nested level is also ordered
-      assert %Jason.OrderedObject{} = user_schema["properties"]
+      assert %ReqLLM.JSON.OrderedObject{} = user_schema["properties"]
 
       assert user_schema["properties"].values == [
                {"first", %{"type" => "string"}},
@@ -1361,7 +1361,7 @@ defmodule ReqLLM.SchemaTest do
       json = Jason.encode!(result)
       decoded = Jason.decode!(json, objects: :ordered_objects)
 
-      assert %Jason.OrderedObject{} = result[:properties]
+      assert %ReqLLM.JSON.OrderedObject{} = result[:properties]
       refute Map.has_key?(result, :propertyOrdering)
       refute json =~ "propertyOrdering"
 
@@ -1447,7 +1447,7 @@ defmodule ReqLLM.SchemaTest do
       [result] = Schema.apply_property_ordering(tools)
       params = result["function"]["parameters"]
 
-      assert %Jason.OrderedObject{} = params["properties"]
+      assert %ReqLLM.JSON.OrderedObject{} = params["properties"]
       assert Enum.map(params["properties"].values, fn {k, _} -> k end) == ["query", "limit"]
       refute Map.has_key?(params, "propertyOrdering")
     end

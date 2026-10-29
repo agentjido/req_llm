@@ -870,10 +870,11 @@ defmodule ReqLLM.Compatibility.Evidence do
   defp maybe_put(map, key, value), do: Map.put(map, key, value)
 
   defp ordered(%{} = map) do
-    map
-    |> Enum.sort_by(fn {key, _value} -> to_string(key) end)
-    |> Enum.map(fn {key, value} -> {key, ordered(value)} end)
-    |> Jason.OrderedObject.new()
+    ReqLLM.JSON.OrderedObject.new(
+      Enum.map(Enum.sort_by(map, fn {key, _value} -> to_string(key) end), fn {key, value} ->
+        {key, ordered(value)}
+      end)
+    )
   end
 
   defp ordered(list) when is_list(list), do: Enum.map(list, &ordered/1)

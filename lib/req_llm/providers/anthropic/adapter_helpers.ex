@@ -73,7 +73,7 @@ defmodule ReqLLM.Providers.Anthropic.AdapterHelpers do
     |> enforce_strict_schema_requirements()
   end
 
-  defp normalize_schema(%Jason.OrderedObject{values: entries}),
+  defp normalize_schema(%ReqLLM.JSON.OrderedObject{values: entries}),
     do: entries |> Map.new(&normalize_entry/1) |> ReqLLM.Schema.apply_property_ordering()
 
   defp normalize_schema(%{} = schema) when not is_struct(schema),
@@ -82,9 +82,9 @@ defmodule ReqLLM.Providers.Anthropic.AdapterHelpers do
   defp normalize_schema(list) when is_list(list), do: Enum.map(list, &normalize_schema/1)
   defp normalize_schema(value), do: value
 
-  defp normalize_entry({key, %Jason.OrderedObject{values: properties}})
+  defp normalize_entry({key, %ReqLLM.JSON.OrderedObject{values: properties}})
        when key in [:properties, "properties"],
-       do: {"properties", Jason.OrderedObject.new(Enum.map(properties, &normalize_entry/1))}
+       do: {"properties", ReqLLM.JSON.OrderedObject.new(Enum.map(properties, &normalize_entry/1))}
 
   defp normalize_entry({key, value}), do: {to_string(key), normalize_schema(value)}
 
@@ -288,7 +288,7 @@ defmodule ReqLLM.Providers.Anthropic.AdapterHelpers do
 
   def strip_constraints_recursive(value), do: value
 
-  defp strip_properties(%Jason.OrderedObject{values: values} = properties),
+  defp strip_properties(%ReqLLM.JSON.OrderedObject{values: values} = properties),
     do: %{properties | values: Enum.map(values, &strip_property/1)}
 
   defp strip_properties(properties), do: Map.new(properties, &strip_property/1)
@@ -311,7 +311,7 @@ defmodule ReqLLM.Providers.Anthropic.AdapterHelpers do
 
   def enforce_strict_schema_requirements(value), do: value
 
-  defp enforce_entry({"properties", %Jason.OrderedObject{values: values} = properties}),
+  defp enforce_entry({"properties", %ReqLLM.JSON.OrderedObject{values: values} = properties}),
     do: {"properties", %{properties | values: Enum.map(values, &enforce_property/1)}}
 
   defp enforce_entry({"properties", %{} = properties}),

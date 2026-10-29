@@ -1133,13 +1133,12 @@ defmodule ReqLLM.Schema do
   defp maybe_put_nonempty(map, key, value), do: Map.put(map, key, value)
 
   @doc """
-  Converts `"properties"` maps to `Jason.OrderedObject` using `"propertyOrdering"`,
-  then strips the `"propertyOrdering"` annotation.
+  Converts `"properties"` maps to `ReqLLM.JSON.OrderedObject` using
+  `"propertyOrdering"`, then strips the `"propertyOrdering"` annotation.
 
-  This is intended to be called right before `Jason.encode!` so that the JSON
-  wire format has property keys in the declared order. Providers like OpenAI use
-  JSON key order (not a separate annotation) to determine structured output field
-  ordering.
+  This is intended to be called right before encoding so that the JSON wire format
+  has property keys in the declared order. Providers like OpenAI use JSON key order
+  (not a separate annotation) to determine structured output field ordering.
 
   Google providers should **not** call this — they read `propertyOrdering` natively.
   """
@@ -1168,7 +1167,7 @@ defmodule ReqLLM.Schema do
         processed
         |> Map.put(
           properties_key,
-          Jason.OrderedObject.new(stringify_ordered_keys(ordered_values))
+          ReqLLM.JSON.OrderedObject.new(stringify_ordered_keys(ordered_values))
         )
         |> Map.delete(ordering_key)
 

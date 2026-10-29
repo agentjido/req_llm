@@ -208,7 +208,7 @@ defmodule ReqLLM.Providers.OpenAI.DecisionsAPI do
     end)
     |> case do
       {:ok, fields} ->
-        ordered = fields |> Enum.sort_by(&elem(&1, 0)) |> Jason.OrderedObject.new()
+        ordered = ReqLLM.JSON.OrderedObject.new(Enum.sort_by(fields, &elem(&1, 0)))
         {:ok, ordered}
 
       error ->
