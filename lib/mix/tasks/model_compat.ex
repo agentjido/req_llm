@@ -478,7 +478,7 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
   defp provider_applies?(providers, provider), do: provider in providers
 
   defp fixture_names(provider, model_id) do
-    model_dir = model_id_to_fixture_dir(model_id)
+    model_dir = fixture_path_slug(model_id)
     fixture_path = Path.join([fixture_path_root(), to_string(provider), model_dir])
 
     fixture_path
@@ -1808,7 +1808,7 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
   defp operation_to_category(operation), do: ReqLLM.ModelOperation.category(operation)
 
   defp has_fixtures?(provider, model_id) do
-    model_dir = model_id_to_fixture_dir(model_id)
+    model_dir = fixture_path_slug(model_id)
     fixture_path = Path.join(["test", "support", "fixtures", to_string(provider), model_dir])
 
     if File.dir?(fixture_path) do
@@ -1824,13 +1824,5 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
     else
       false
     end
-  end
-
-  defp model_id_to_fixture_dir(model_id) do
-    model_id
-    |> String.replace("-", "_")
-    |> String.replace(".", "_")
-    |> String.replace(":", "_")
-    |> String.replace("/", "_")
   end
 end
