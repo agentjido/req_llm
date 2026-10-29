@@ -221,6 +221,63 @@ defmodule ReqLLM.RequestPlan.ResolvedTest do
     end
   end
 
+  test "describes a provider-owned stream without rejecting its validation errors" do
+    invalid_wire_model =
+      LLMDB.Model.new!(%{
+        provider: :openai,
+        id: "invalid-wire",
+        extra: %{wire: %{protocol: "unsupported"}}
+      })
+
+    assert {:ok, invalid_wire_plan} =
+             RequestPlan.from_resolved_stream(
+               invalid_wire_model,
+               :chat,
+               Providers.OpenAI,
+               [],
+               :finch
+             )
+
+    assert invalid_wire_plan.surface == :provider
+    assert invalid_wire_plan.api_module == Providers.OpenAI
+
+    chat_model =
+      LLMDB.Model.new!(%{
+        provider: :openai,
+        id: "gpt-4o",
+        extra: %{wire: %{protocol: "openai_chat"}}
+      })
+
+    assert {:ok, websocket_plan} =
+             RequestPlan.from_resolved_stream(
+               chat_model,
+               :chat,
+               Providers.OpenAI,
+               [],
+               :websocket
+             )
+
+    assert websocket_plan.surface == :openai_chat_completions
+    assert websocket_plan.transport == :websocket
+  end
+
+  test "retains a custom provider stream operation" do
+    model = LLMDB.Model.new!(%{provider: :custom_provider, id: "private-model"})
+
+    assert {:ok, plan} =
+             RequestPlan.from_resolved_stream(
+               model,
+               :custom_operation,
+               CustomProvider,
+               [],
+               :finch
+             )
+
+    assert plan.operation == :custom_operation
+    assert plan.surface == :provider
+    assert plan.provider_module == CustomProvider
+  end
+
   test "rejects unsupported operation and transport descriptors" do
     model = LLMDB.Model.new!(%{provider: :openai, id: "custom-model"})
 

@@ -719,7 +719,7 @@ defmodule ReqLLM.Generation do
       contract = ReqLLM.Output.Validation.validation_contract(descriptor, compiled_schema)
 
       with {:ok, execution_plan} <-
-             RequestPlan.from_resolved(
+             RequestPlan.from_resolved_stream(
                model,
                :object,
                provider_module,
