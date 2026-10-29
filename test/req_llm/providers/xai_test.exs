@@ -21,28 +21,6 @@ defmodule ReqLLM.Providers.XAITest do
     {:ok, compiled_schema: compiled_schema}
   end
 
-  describe "provider contract" do
-    test "provider_extended_generation_schema includes both base and provider options" do
-      extended_schema = XAI.provider_extended_generation_schema()
-      extended_keys = extended_schema.schema |> Keyword.keys()
-
-      core_keys = ReqLLM.Provider.Options.all_generation_keys()
-      core_without_meta = Enum.reject(core_keys, &(&1 == :provider_options))
-
-      for core_key <- core_without_meta do
-        assert core_key in extended_keys,
-               "Extended schema missing core key: #{core_key}"
-      end
-
-      provider_keys = XAI.provider_schema().schema |> Keyword.keys()
-
-      for provider_key <- provider_keys do
-        assert provider_key in extended_keys,
-               "Extended schema missing provider key: #{provider_key}"
-      end
-    end
-  end
-
   describe "capability detection - supports_native_structured_outputs?/1" do
     test "returns false for legacy grok-2 models" do
       assert XAI.supports_native_structured_outputs?("grok-2") == false
@@ -529,18 +507,6 @@ defmodule ReqLLM.Providers.XAITest do
   end
 
   describe "request preparation & pipeline wiring" do
-    test "prepare_request creates configured request for :chat" do
-      {:ok, model} = ReqLLM.model("xai:grok-3")
-      context = context_fixture()
-      opts = [temperature: 0.7, max_tokens: 100]
-
-      {:ok, request} = XAI.prepare_request(:chat, model, context, opts)
-
-      assert %Req.Request{} = request
-      assert request.url.path == "/chat/completions"
-      assert request.method == :post
-    end
-
     test "prepare_request creates versioned request for :image" do
       {:ok, request} = XAI.prepare_request(:image, "xai:grok-imagine-image", "red square", [])
 
@@ -548,21 +514,6 @@ defmodule ReqLLM.Providers.XAITest do
       assert request.url.path == "/images/generations"
       assert request.options[:base_url] == "https://api.x.ai/v1"
       assert request.method == :post
-    end
-
-    test "attach configures authentication and pipeline" do
-      {:ok, model} = ReqLLM.model("xai:grok-3")
-      opts = [temperature: 0.5, max_tokens: 50]
-
-      request = Req.new() |> XAI.attach(model, opts)
-
-      assert request.headers["authorization"] |> Enum.any?(&String.starts_with?(&1, "Bearer "))
-
-      request_steps = Keyword.keys(request.request_steps)
-      response_steps = Keyword.keys(request.response_steps)
-
-      assert :llm_encode_body in request_steps
-      assert :llm_decode_response in response_steps
     end
 
     test "rejects unsupported operations" do
@@ -584,28 +535,6 @@ defmodule ReqLLM.Providers.XAITest do
   end
 
   describe "body encoding" do
-    test "encode_body with minimal context" do
-      {:ok, model} = ReqLLM.model("xai:grok-3")
-      context = context_fixture()
-
-      mock_request = %Req.Request{
-        options: [
-          context: context,
-          model: model.model,
-          stream: false
-        ]
-      }
-
-      updated_request = XAI.encode_body(mock_request)
-      assert_no_duplicate_json_keys(ReqLLM.Test.Helpers.json_iodata(updated_request))
-      decoded = ReqLLM.Test.Helpers.json_body(updated_request)
-
-      assert decoded["model"] == "grok-3"
-      assert is_list(decoded["messages"])
-      assert decoded["stream"] == false
-      refute Map.has_key?(decoded, "tools")
-    end
-
     test "encode_body with tools" do
       {:ok, model} = ReqLLM.model("xai:grok-3")
       context = context_fixture()
@@ -768,39 +697,6 @@ defmodule ReqLLM.Providers.XAITest do
       assert warnings == [
                "reasoning_effort is not supported by grok-4.20-0309-reasoning and will be ignored"
              ]
-    end
-  end
-
-  describe "usage extraction" do
-    test "extract_usage with valid usage data" do
-      {:ok, model} = ReqLLM.model("xai:grok-3")
-
-      body_with_usage = %{
-        "usage" => %{
-          "prompt_tokens" => 10,
-          "completion_tokens" => 20,
-          "total_tokens" => 30
-        }
-      }
-
-      {:ok, usage} = XAI.extract_usage(body_with_usage, model)
-      assert usage["prompt_tokens"] == 10
-      assert usage["completion_tokens"] == 20
-      assert usage["total_tokens"] == 30
-    end
-
-    test "extract_usage with missing usage data" do
-      {:ok, model} = ReqLLM.model("xai:grok-3")
-      body_without_usage = %{"choices" => []}
-
-      {:error, :no_usage_found} = XAI.extract_usage(body_without_usage, model)
-    end
-
-    test "extract_usage with invalid body type" do
-      {:ok, model} = ReqLLM.model("xai:grok-3")
-
-      {:error, :invalid_body} = XAI.extract_usage("invalid", model)
-      {:error, :invalid_body} = XAI.extract_usage(nil, model)
     end
   end
 

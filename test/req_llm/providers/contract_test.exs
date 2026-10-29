@@ -37,11 +37,20 @@ defmodule ReqLLM.Providers.ContractTest do
   ]
 
   @openai_compatible_contracts [
+    {ReqLLM.Providers.Alibaba, :alibaba, "qwen-plus",
+     "https://dashscope-intl.aliyuncs.com/compatible-mode/v1"},
+    {ReqLLM.Providers.AlibabaCN, :alibaba_cn, "qwen-plus",
+     "https://dashscope.aliyuncs.com/compatible-mode/v1"},
     {ReqLLM.Providers.AtlasCloud, :atlascloud, "qwen/qwen3.5-flash",
      "https://api.atlascloud.ai/v1"},
     {ReqLLM.Providers.CheaperInference, :cheaperinference, "gpt-5.4-mini",
      "https://api.cheaperinference.com/v1"},
-    {ReqLLM.Providers.VLLM, :vllm, "test-model", "http://localhost:8000/v1"}
+    {ReqLLM.Providers.Groq, :groq, "llama-3.1-8b-instant", "https://api.groq.com"},
+    {ReqLLM.Providers.OpenAI, :openai, "gpt-4-turbo", "https://api.openai.com/v1"},
+    {ReqLLM.Providers.OpenRouter, :openrouter, "openai/gpt-4", "https://openrouter.ai/api/v1"},
+    {ReqLLM.Providers.Venice, :venice, "venice-uncensored", "https://api.venice.ai/api/v1"},
+    {ReqLLM.Providers.VLLM, :vllm, "test-model", "http://localhost:8000/v1"},
+    {ReqLLM.Providers.XAI, :xai, "grok-3", "https://api.x.ai/v1"}
   ]
 
   for {provider, provider_id, base_url, env_key} <- @contracts do
@@ -137,10 +146,13 @@ defmodule ReqLLM.Providers.ContractTest do
       encoded = @provider.encode_body(request)
       body = ReqLLM.Test.Helpers.json_body(encoded)
 
+      assert is_binary(IO.iodata_to_binary(ReqLLM.Test.Helpers.json_iodata(encoded)))
+      ReqLLM.ProviderCase.assert_no_duplicate_json_keys(ReqLLM.Test.Helpers.json_iodata(encoded))
       assert body["model"] == @model_id
-      assert is_list(body["messages"])
+      assert [%{"role" => "system"}, %{"role" => "user"}] = body["messages"]
       assert body["stream"] == false
       assert body["temperature"] == 0.7
+      refute Map.has_key?(body, "tools")
 
       response = %Req.Response{
         status: 200,
@@ -161,8 +173,39 @@ defmodule ReqLLM.Providers.ContractTest do
 
       {_request, decoded} = @provider.decode_response({request, response})
 
-      assert %ReqLLM.Response{} = decoded.body
-      assert ReqLLM.Response.text(decoded.body) == "contract response"
+      assert %ReqLLM.Response{} = response = decoded.body
+      assert is_binary(response.id)
+      assert response.model == @model_id
+      assert response.stream? == false
+      assert response.message.role == :assistant
+      assert response.finish_reason == :stop
+      assert ReqLLM.Response.text(response) == "contract response"
+      assert response.usage.input_tokens == 10
+      assert response.usage.output_tokens == 8
+      assert response.usage.total_tokens == 18
+      assert length(response.context.messages) == 3
+    end
+
+    test "#{provider_id} extracts OpenAI-compatible usage" do
+      model = compatible_model(@provider_id, @model_id)
+
+      usage = %{
+        "prompt_tokens" => 10,
+        "completion_tokens" => 20,
+        "total_tokens" => 30
+      }
+
+      assert {:ok, extracted} = @provider.extract_usage(%{"usage" => usage}, model)
+
+      for {key, value} <- usage do
+        assert extracted[key] == value
+      end
+
+      assert {:error, :no_usage_found} = @provider.extract_usage(%{"choices" => []}, model)
+
+      for invalid <- ["invalid", nil, 123] do
+        assert {:error, :invalid_body} = @provider.extract_usage(invalid, model)
+      end
     end
   end
 end

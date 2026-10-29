@@ -12,10 +12,6 @@ defmodule ReqLLM.Providers.VeniceTest do
   alias ReqLLM.Providers.Venice
 
   describe "provider contract" do
-    test "provider uses correct default environment key" do
-      assert Venice.default_env_key() == "VENICE_API_KEY"
-    end
-
     test "provider schema includes Venice-specific options" do
       schema_keys = Venice.provider_schema().schema |> Keyword.keys()
 
@@ -35,59 +31,9 @@ defmodule ReqLLM.Providers.VeniceTest do
         assert key in schema_keys, "Expected #{key} in provider schema"
       end
     end
-
-    test "provider_extended_generation_schema includes both base and provider options" do
-      extended_schema = Venice.provider_extended_generation_schema()
-      extended_keys = extended_schema.schema |> Keyword.keys()
-
-      core_keys = ReqLLM.Provider.Options.all_generation_keys()
-      core_without_meta = Enum.reject(core_keys, &(&1 == :provider_options))
-
-      for core_key <- core_without_meta do
-        assert core_key in extended_keys,
-               "Extended schema missing core key: #{core_key}"
-      end
-
-      provider_keys = Venice.provider_schema().schema |> Keyword.keys()
-
-      for provider_key <- provider_keys do
-        assert provider_key in extended_keys,
-               "Extended schema missing provider key: #{provider_key}"
-      end
-    end
   end
 
   describe "request preparation & pipeline wiring" do
-    test "prepare_request creates configured request for :chat" do
-      {:ok, model} = ReqLLM.model(%{provider: :venice, id: "venice-uncensored"})
-      prompt = "Hello world"
-      opts = [temperature: 0.7, max_tokens: 100]
-
-      {:ok, request} = Venice.prepare_request(:chat, model, prompt, opts)
-
-      assert %Req.Request{} = request
-      assert request.url.path == "/chat/completions"
-      assert request.method == :post
-    end
-
-    test "attach configures authentication and pipeline" do
-      {:ok, model} = ReqLLM.model(%{provider: :venice, id: "venice-uncensored"})
-      opts = [temperature: 0.5, max_tokens: 50]
-
-      request = Req.new() |> Venice.attach(model, opts)
-
-      auth_header = Enum.find(request.headers, fn {name, _} -> name == "authorization" end)
-      assert auth_header != nil
-      {_, [auth_value]} = auth_header
-      assert String.starts_with?(auth_value, "Bearer ")
-
-      request_steps = Keyword.keys(request.request_steps)
-      response_steps = Keyword.keys(request.response_steps)
-
-      assert :llm_encode_body in request_steps
-      assert :llm_decode_response in response_steps
-    end
-
     test "rejects unsupported operations" do
       {:ok, model} = ReqLLM.model(%{provider: :venice, id: "venice-uncensored"})
       prompt = "Hello world"
@@ -342,44 +288,6 @@ defmodule ReqLLM.Providers.VeniceTest do
   end
 
   describe "response decoding" do
-    test "decode_response handles successful non-streaming response" do
-      mock_json_response =
-        openai_format_json_fixture(
-          model: "venice-uncensored",
-          content: "Hello! I'm doing well."
-        )
-
-      mock_resp = %Req.Response{
-        status: 200,
-        body: mock_json_response
-      }
-
-      {:ok, model} = ReqLLM.model(%{provider: :venice, id: "venice-uncensored"})
-      context = context_fixture()
-
-      mock_req = %Req.Request{
-        options: [context: context, stream: false, id: "venice:venice-uncensored"],
-        private: %{req_llm_model: model}
-      }
-
-      {req, resp} = Venice.decode_response({mock_req, mock_resp})
-
-      assert req == mock_req
-      assert %ReqLLM.Response{} = resp.body
-
-      response = resp.body
-      assert is_binary(response.id)
-      assert response.stream? == false
-
-      assert response.message.role == :assistant
-      text = ReqLLM.Response.text(response)
-      assert is_binary(text)
-      assert String.length(text) > 0
-
-      assert is_integer(response.usage.input_tokens)
-      assert is_integer(response.usage.output_tokens)
-    end
-
     test "decode_response handles streaming responses" do
       mock_resp = %Req.Response{
         status: 200,
@@ -430,39 +338,6 @@ defmodule ReqLLM.Providers.VeniceTest do
       assert req == mock_req
       assert %ReqLLM.Error.API.Response{} = error
       assert error.status == 401
-    end
-  end
-
-  describe "usage extraction" do
-    test "extract_usage with valid usage data" do
-      {:ok, model} = ReqLLM.model(%{provider: :venice, id: "venice-uncensored"})
-
-      body_with_usage = %{
-        "usage" => %{
-          "prompt_tokens" => 15,
-          "completion_tokens" => 25,
-          "total_tokens" => 40
-        }
-      }
-
-      {:ok, usage} = Venice.extract_usage(body_with_usage, model)
-      assert usage["prompt_tokens"] == 15
-      assert usage["completion_tokens"] == 25
-      assert usage["total_tokens"] == 40
-    end
-
-    test "extract_usage with missing usage data" do
-      {:ok, model} = ReqLLM.model(%{provider: :venice, id: "venice-uncensored"})
-      body_without_usage = %{"choices" => []}
-
-      {:error, :no_usage_found} = Venice.extract_usage(body_without_usage, model)
-    end
-
-    test "extract_usage with invalid body type" do
-      {:ok, model} = ReqLLM.model(%{provider: :venice, id: "venice-uncensored"})
-
-      {:error, :invalid_body} = Venice.extract_usage("invalid", model)
-      {:error, :invalid_body} = Venice.extract_usage(nil, model)
     end
   end
 

@@ -12,63 +12,7 @@ defmodule ReqLLM.Providers.OpenRouterTest do
   alias ReqLLM.Message.ContentPart
   alias ReqLLM.Providers.OpenRouter
 
-  describe "provider contract" do
-    test "provider_extended_generation_schema includes both base and provider options" do
-      extended_schema = OpenRouter.provider_extended_generation_schema()
-      extended_keys = extended_schema.schema |> Keyword.keys()
-
-      # Should include all core generation keys
-      core_keys = ReqLLM.Provider.Options.all_generation_keys()
-      core_without_meta = Enum.reject(core_keys, &(&1 == :provider_options))
-
-      for core_key <- core_without_meta do
-        assert core_key in extended_keys,
-               "Extended schema missing core key: #{core_key}"
-      end
-
-      # Should include provider-specific keys
-      provider_keys = OpenRouter.provider_schema().schema |> Keyword.keys()
-
-      for provider_key <- provider_keys do
-        assert provider_key in extended_keys,
-               "Extended schema missing provider key: #{provider_key}"
-      end
-    end
-  end
-
   describe "request preparation & pipeline wiring" do
-    test "prepare_request creates configured request" do
-      {:ok, model} = ReqLLM.model("openrouter:openai/gpt-4")
-      context = context_fixture()
-      opts = [temperature: 0.7, max_tokens: 100]
-
-      {:ok, request} = OpenRouter.prepare_request(:chat, model, context, opts)
-
-      assert %Req.Request{} = request
-      assert request.url.path == "/chat/completions"
-      assert request.method == :post
-    end
-
-    test "attach configures authentication and pipeline" do
-      {:ok, model} = ReqLLM.model("openrouter:openai/gpt-4")
-      opts = [temperature: 0.5, max_tokens: 50]
-
-      request = Req.new() |> OpenRouter.attach(model, opts)
-
-      # Verify core options
-      assert request.options[:model] == model.model
-      assert request.options[:temperature] == 0.5
-      assert request.options[:max_tokens] == 50
-      assert {:bearer, _key} = request.options[:auth]
-
-      # Verify pipeline steps
-      request_steps = Keyword.keys(request.request_steps)
-      response_steps = Keyword.keys(request.response_steps)
-
-      assert :llm_encode_body in request_steps
-      assert :llm_decode_response in response_steps
-    end
-
     test "prepare_request uses JSON payload for transcription" do
       {:ok, model} = ReqLLM.model("openrouter:openai/gpt-4o-mini-transcribe")
 
@@ -118,37 +62,6 @@ defmodule ReqLLM.Providers.OpenRouterTest do
   end
 
   describe "body encoding & context translation" do
-    test "encode_body without tools" do
-      {:ok, model} = ReqLLM.model("openrouter:openai/gpt-4")
-      context = context_fixture()
-
-      # Create a mock request with the expected structure
-      mock_request = %Req.Request{
-        options: [
-          context: context,
-          model: model.model,
-          stream: false
-        ]
-      }
-
-      # Test the encode_body function directly
-      updated_request = OpenRouter.encode_body(mock_request)
-
-      assert is_binary(IO.iodata_to_binary(ReqLLM.Test.Helpers.json_iodata(updated_request)))
-      assert_no_duplicate_json_keys(ReqLLM.Test.Helpers.json_iodata(updated_request))
-      decoded = ReqLLM.Test.Helpers.json_body(updated_request)
-
-      assert decoded["model"] == "openai/gpt-4"
-      assert is_list(decoded["messages"])
-      assert length(decoded["messages"]) == 2
-      assert decoded["stream"] == false
-      refute Map.has_key?(decoded, "tools")
-
-      [system_msg, user_msg] = decoded["messages"]
-      assert system_msg["role"] == "system"
-      assert user_msg["role"] == "user"
-    end
-
     test "encode_body with tools but no tool_choice" do
       {:ok, model} = ReqLLM.model("openrouter:openai/gpt-4")
       context = context_fixture()
@@ -863,71 +776,6 @@ defmodule ReqLLM.Providers.OpenRouterTest do
   end
 
   describe "response decoding" do
-    test "decode_response handles non-streaming responses" do
-      # Create a mock OpenAI-style response body
-      response_body = %{
-        "id" => "chatcmpl-test123",
-        "object" => "chat.completion",
-        "created" => System.os_time(:second),
-        "model" => "openai/gpt-4",
-        "choices" => [
-          %{
-            "index" => 0,
-            "message" => %{
-              "role" => "assistant",
-              "content" => "Hello! How can I help you today?"
-            },
-            "finish_reason" => "stop"
-          }
-        ],
-        "usage" => %{
-          "prompt_tokens" => 12,
-          "completion_tokens" => 8,
-          "total_tokens" => 20
-        }
-      }
-
-      mock_resp = %Req.Response{
-        status: 200,
-        body: response_body
-      }
-
-      {:ok, model} = ReqLLM.model("openrouter:openai/gpt-4")
-      context = context_fixture()
-
-      mock_req = %Req.Request{
-        options: [context: context, stream: false],
-        private: %{req_llm_model: model}
-      }
-
-      # Test decode_response directly
-      {req, resp} = OpenRouter.decode_response({mock_req, mock_resp})
-
-      assert req == mock_req
-      assert %ReqLLM.Response{} = resp.body
-
-      response = resp.body
-      assert is_binary(response.id)
-      assert response.model == model.model
-      assert response.stream? == false
-
-      # Verify message normalization
-      assert response.message.role == :assistant
-      text = ReqLLM.Response.text(response)
-      assert is_binary(text)
-      assert String.length(text) > 0
-      assert response.finish_reason in [:stop, :length]
-
-      # Verify usage normalization
-      assert is_integer(response.usage.input_tokens)
-      assert is_integer(response.usage.output_tokens)
-      assert is_integer(response.usage.total_tokens)
-
-      # Verify context advancement (original + assistant)
-      assert length(response.context.messages) == 3
-      assert List.last(response.context.messages).role == :assistant
-    end
-
     test "decode_response normalizes nested url_citation annotations" do
       response_body = %{
         "id" => "gen-citations",
@@ -1232,40 +1080,6 @@ defmodule ReqLLM.Providers.OpenRouterTest do
         assert provider_option in supported_opts,
                "Expected #{provider_option} to be in supported options"
       end
-    end
-  end
-
-  describe "usage extraction" do
-    test "extract_usage with valid usage data" do
-      {:ok, model} = ReqLLM.model("openrouter:openai/gpt-4")
-
-      body_with_usage = %{
-        "usage" => %{
-          "prompt_tokens" => 10,
-          "completion_tokens" => 20,
-          "total_tokens" => 30
-        }
-      }
-
-      {:ok, usage} = OpenRouter.extract_usage(body_with_usage, model)
-      assert usage["prompt_tokens"] == 10
-      assert usage["completion_tokens"] == 20
-      assert usage["total_tokens"] == 30
-    end
-
-    test "extract_usage with missing usage data" do
-      {:ok, model} = ReqLLM.model("openrouter:openai/gpt-4")
-      body_without_usage = %{"choices" => []}
-
-      {:error, :no_usage_found} = OpenRouter.extract_usage(body_without_usage, model)
-    end
-
-    test "extract_usage with invalid body type" do
-      {:ok, model} = ReqLLM.model("openrouter:openai/gpt-4")
-
-      {:error, :invalid_body} = OpenRouter.extract_usage("invalid", model)
-      {:error, :invalid_body} = OpenRouter.extract_usage(nil, model)
-      {:error, :invalid_body} = OpenRouter.extract_usage(123, model)
     end
   end
 
