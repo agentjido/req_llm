@@ -138,11 +138,7 @@ defmodule ReqLLM.Providers.Azure.RoutingTest do
     end
 
     test "routes Claude models to messages endpoint" do
-      model = %LLMDB.Model{
-        id: "claude-3-5-sonnet-20241022",
-        provider: :azure,
-        capabilities: %{chat: true}
-      }
+      model = ReqLLM.Test.AzureModelHelpers.chat_model("claude-3-5-sonnet-20241022")
 
       {:ok, request} =
         Azure.prepare_request(
@@ -160,11 +156,7 @@ defmodule ReqLLM.Providers.Azure.RoutingTest do
     end
 
     test "routes Claude models to messages endpoint in streaming" do
-      model = %LLMDB.Model{
-        id: "claude-3-5-sonnet-20241022",
-        provider: :azure,
-        capabilities: %{chat: true}
-      }
+      model = ReqLLM.Test.AzureModelHelpers.chat_model("claude-3-5-sonnet-20241022")
 
       context = ReqLLM.Context.new([ReqLLM.Context.user("Hello")])
 
@@ -194,11 +186,7 @@ defmodule ReqLLM.Providers.Azure.RoutingTest do
     end
 
     test "uses correct headers for Claude models" do
-      model = %LLMDB.Model{
-        id: "claude-3-5-sonnet-20241022",
-        provider: :azure,
-        capabilities: %{chat: true}
-      }
+      model = ReqLLM.Test.AzureModelHelpers.chat_model("claude-3-5-sonnet-20241022")
 
       context = ReqLLM.Context.new([ReqLLM.Context.user("Hello")])
 
@@ -222,11 +210,7 @@ defmodule ReqLLM.Providers.Azure.RoutingTest do
 
   describe "model family validation" do
     test "raises error for unknown model family" do
-      model = %LLMDB.Model{
-        id: "unknown-model-xyz",
-        provider: :azure,
-        capabilities: %{chat: true}
-      }
+      model = ReqLLM.Test.AzureModelHelpers.chat_model("unknown-model-xyz")
 
       assert_raise ArgumentError, ~r/Unknown Azure model family.*unknown-model-xyz/, fn ->
         Azure.prepare_request(
@@ -254,11 +238,7 @@ defmodule ReqLLM.Providers.Azure.RoutingTest do
     end
 
     test "recognizes text-embedding family" do
-      model = %LLMDB.Model{
-        id: "text-embedding-3-small",
-        provider: :azure,
-        capabilities: %{embeddings: true}
-      }
+      model = ReqLLM.Test.AzureModelHelpers.embedding_model("text-embedding-3-small")
 
       {:ok, request} =
         Azure.prepare_request(
@@ -296,11 +276,7 @@ defmodule ReqLLM.Providers.Azure.RoutingTest do
 
   describe "cross-family model switching" do
     test "routes OpenAI models to chat/completions endpoint" do
-      model = %LLMDB.Model{
-        id: "gpt-4o",
-        provider: :azure,
-        capabilities: %{chat: true}
-      }
+      model = ReqLLM.Test.AzureModelHelpers.chat_model("gpt-4o")
 
       {:ok, request} =
         Azure.prepare_request(
@@ -317,11 +293,7 @@ defmodule ReqLLM.Providers.Azure.RoutingTest do
     end
 
     test "routes Claude models to messages endpoint" do
-      model = %LLMDB.Model{
-        id: "claude-3-5-sonnet-20241022",
-        provider: :azure,
-        capabilities: %{chat: true}
-      }
+      model = ReqLLM.Test.AzureModelHelpers.chat_model("claude-3-5-sonnet-20241022")
 
       {:ok, request} =
         Azure.prepare_request(
@@ -359,17 +331,9 @@ defmodule ReqLLM.Providers.Azure.RoutingTest do
     end
 
     test "uses correct api-key header for each model family" do
-      openai_model = %LLMDB.Model{
-        id: "gpt-4o",
-        provider: :azure,
-        capabilities: %{chat: true}
-      }
+      openai_model = ReqLLM.Test.AzureModelHelpers.chat_model("gpt-4o")
 
-      claude_model = %LLMDB.Model{
-        id: "claude-3-5-sonnet-20241022",
-        provider: :azure,
-        capabilities: %{chat: true}
-      }
+      claude_model = ReqLLM.Test.AzureModelHelpers.chat_model("claude-3-5-sonnet-20241022")
 
       {:ok, openai_request} =
         Azure.prepare_request(
@@ -399,17 +363,9 @@ defmodule ReqLLM.Providers.Azure.RoutingTest do
     end
 
     test "includes anthropic-version header only for Claude models" do
-      openai_model = %LLMDB.Model{
-        id: "gpt-4o",
-        provider: :azure,
-        capabilities: %{chat: true}
-      }
+      openai_model = ReqLLM.Test.AzureModelHelpers.chat_model("gpt-4o")
 
-      claude_model = %LLMDB.Model{
-        id: "claude-3-5-sonnet-20241022",
-        provider: :azure,
-        capabilities: %{chat: true}
-      }
+      claude_model = ReqLLM.Test.AzureModelHelpers.chat_model("claude-3-5-sonnet-20241022")
 
       {:ok, openai_request} =
         Azure.prepare_request(
@@ -441,11 +397,7 @@ defmodule ReqLLM.Providers.Azure.RoutingTest do
 
   describe "deployment name variations" do
     test "uses explicit deployment option over model ID" do
-      model = %LLMDB.Model{
-        id: "gpt-4o",
-        provider: :azure,
-        capabilities: %{chat: true}
-      }
+      model = ReqLLM.Test.AzureModelHelpers.chat_model("gpt-4o")
 
       {:ok, request} =
         Azure.prepare_request(
@@ -462,11 +414,7 @@ defmodule ReqLLM.Providers.Azure.RoutingTest do
     end
 
     test "handles deployment names with special characters" do
-      model = %LLMDB.Model{
-        id: "gpt-4o",
-        provider: :azure,
-        capabilities: %{chat: true}
-      }
+      model = ReqLLM.Test.AzureModelHelpers.chat_model("gpt-4o")
 
       {:ok, request} =
         Azure.prepare_request(
@@ -482,11 +430,7 @@ defmodule ReqLLM.Providers.Azure.RoutingTest do
     end
 
     test "falls back to model ID when deployment not specified" do
-      model = %LLMDB.Model{
-        id: "gpt-4o",
-        provider: :azure,
-        capabilities: %{chat: true}
-      }
+      model = ReqLLM.Test.AzureModelHelpers.chat_model("gpt-4o")
 
       {:ok, request} =
         Azure.prepare_request(

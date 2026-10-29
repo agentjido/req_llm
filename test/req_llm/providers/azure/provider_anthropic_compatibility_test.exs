@@ -123,11 +123,7 @@ defmodule ReqLLM.Providers.Azure.ProviderAnthropicCompatibilityTest do
     alias ReqLLM.Providers.Azure.Anthropic, as: AzureAnthropic
 
     test "extracts reasoning_details from Claude response on Azure (sync flow)" do
-      model = %LLMDB.Model{
-        id: "claude-3-5-sonnet-20241022",
-        provider: :azure,
-        capabilities: %{chat: true}
-      }
+      model = ReqLLM.Test.AzureModelHelpers.chat_model("claude-3-5-sonnet-20241022")
 
       anthropic_response_body = %{
         "id" => "msg_01XFDUDYJgAACzvnptvVoYEL",
@@ -162,11 +158,7 @@ defmodule ReqLLM.Providers.Azure.ProviderAnthropicCompatibilityTest do
     end
 
     test "returns nil reasoning_details when no thinking content (sync flow)" do
-      model = %LLMDB.Model{
-        id: "claude-3-5-sonnet-20241022",
-        provider: :azure,
-        capabilities: %{chat: true}
-      }
+      model = ReqLLM.Test.AzureModelHelpers.chat_model("claude-3-5-sonnet-20241022")
 
       anthropic_response_body = %{
         "id" => "msg_01XFDUDYJgAACzvnptvVoYEL",

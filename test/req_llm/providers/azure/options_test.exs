@@ -93,11 +93,7 @@ defmodule ReqLLM.Providers.Azure.OptionsTest do
     end
 
     test "service_tier warns when used with Claude models" do
-      model = %LLMDB.Model{
-        id: "claude-3-5-sonnet-20241022",
-        provider: :azure,
-        capabilities: %{chat: true}
-      }
+      model = ReqLLM.Test.AzureModelHelpers.chat_model("claude-3-5-sonnet-20241022")
 
       log =
         capture_log(fn ->
@@ -113,11 +109,7 @@ defmodule ReqLLM.Providers.Azure.OptionsTest do
     end
 
     test "response_format json_schema warns for Claude models" do
-      model = %LLMDB.Model{
-        id: "claude-3-5-sonnet-20241022",
-        provider: :azure,
-        capabilities: %{chat: true}
-      }
+      model = ReqLLM.Test.AzureModelHelpers.chat_model("claude-3-5-sonnet-20241022")
 
       log =
         capture_log(fn ->
@@ -154,11 +146,7 @@ defmodule ReqLLM.Providers.Azure.OptionsTest do
     end
 
     test "reasoning_effort is ignored for Claude non-reasoning models with warning" do
-      model = %LLMDB.Model{
-        id: "claude-3-haiku-20240307",
-        provider: :azure,
-        capabilities: %{chat: true}
-      }
+      model = ReqLLM.Test.AzureModelHelpers.chat_model("claude-3-haiku-20240307")
 
       log =
         capture_log(fn ->
@@ -301,11 +289,7 @@ defmodule ReqLLM.Providers.Azure.OptionsTest do
     end
 
     test "accepts dimensions for embedding models" do
-      model = %LLMDB.Model{
-        id: "text-embedding-3-small",
-        provider: :azure,
-        capabilities: %{embeddings: true}
-      }
+      model = ReqLLM.Test.AzureModelHelpers.embedding_model("text-embedding-3-small")
 
       {:ok, request} =
         Azure.prepare_request(
@@ -321,11 +305,7 @@ defmodule ReqLLM.Providers.Azure.OptionsTest do
     end
 
     test "accepts encoding_format for embedding models" do
-      model = %LLMDB.Model{
-        id: "text-embedding-3-small",
-        provider: :azure,
-        capabilities: %{embeddings: true}
-      }
+      model = ReqLLM.Test.AzureModelHelpers.embedding_model("text-embedding-3-small")
 
       {:ok, request} =
         Azure.prepare_request(
@@ -365,11 +345,7 @@ defmodule ReqLLM.Providers.Azure.OptionsTest do
     end
 
     test "accepts anthropic_prompt_cache for Claude models" do
-      model = %LLMDB.Model{
-        id: "claude-3-5-sonnet-20241022",
-        provider: :azure,
-        capabilities: %{chat: true}
-      }
+      model = ReqLLM.Test.AzureModelHelpers.chat_model("claude-3-5-sonnet-20241022")
 
       {:ok, request} =
         Azure.prepare_request(
@@ -386,11 +362,7 @@ defmodule ReqLLM.Providers.Azure.OptionsTest do
     end
 
     test "accepts anthropic_prompt_cache_ttl for Claude models" do
-      model = %LLMDB.Model{
-        id: "claude-3-5-sonnet-20241022",
-        provider: :azure,
-        capabilities: %{chat: true}
-      }
+      model = ReqLLM.Test.AzureModelHelpers.chat_model("claude-3-5-sonnet-20241022")
 
       {:ok, request} =
         Azure.prepare_request(

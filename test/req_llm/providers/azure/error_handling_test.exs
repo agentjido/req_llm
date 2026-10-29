@@ -351,11 +351,7 @@ defmodule ReqLLM.Providers.Azure.ErrorHandlingTest do
 
   describe "Azure-specific error handling" do
     test "raises ArgumentError when base_url is empty" do
-      model = %LLMDB.Model{
-        id: "gpt-4o",
-        provider: :azure,
-        capabilities: %{chat: true}
-      }
+      model = ReqLLM.Test.AzureModelHelpers.chat_model("gpt-4o")
 
       assert_raise ArgumentError, ~r/base_url/i, fn ->
         Azure.prepare_request(
@@ -369,11 +365,7 @@ defmodule ReqLLM.Providers.Azure.ErrorHandlingTest do
     end
 
     test "returns error for embeddings with Claude model" do
-      model = %LLMDB.Model{
-        id: "claude-3-5-sonnet-20241022",
-        provider: :azure,
-        capabilities: %{chat: true}
-      }
+      model = ReqLLM.Test.AzureModelHelpers.chat_model("claude-3-5-sonnet-20241022")
 
       result =
         Azure.prepare_request(

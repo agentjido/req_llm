@@ -179,11 +179,7 @@ defmodule ReqLLM.Providers.Azure.ProviderOptionsTest do
     end
 
     test "uses standard timeout for embedding models" do
-      model = %LLMDB.Model{
-        id: "text-embedding-3-small",
-        provider: :azure,
-        capabilities: %{embeddings: true}
-      }
+      model = ReqLLM.Test.AzureModelHelpers.embedding_model("text-embedding-3-small")
 
       {:ok, request} =
         Azure.prepare_request(
@@ -198,11 +194,7 @@ defmodule ReqLLM.Providers.Azure.ProviderOptionsTest do
     end
 
     test "custom timeout applies to Claude models" do
-      model = %LLMDB.Model{
-        id: "claude-3-5-sonnet-20241022",
-        provider: :azure,
-        capabilities: %{chat: true}
-      }
+      model = ReqLLM.Test.AzureModelHelpers.chat_model("claude-3-5-sonnet-20241022")
 
       {:ok, request} =
         Azure.prepare_request(
