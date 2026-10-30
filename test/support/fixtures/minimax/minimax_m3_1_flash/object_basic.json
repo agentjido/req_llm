@@ -1,9 +1,10 @@
 {
-  "model_spec": "minimax:MiniMax-M2.1",
+  "captured_at": "2026-10-29T05:09:30.842378Z",
+  "model_spec": "minimax:MiniMax-M3.1-Flash",
   "provider": "minimax",
   "request": {
     "body": {
-      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjUwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJHZW5lcmF0ZSBhIHNvZnR3YXJlIGVuZ2luZWVyIHByb2ZpbGUiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJNaW5pTWF4LU0yLjEiLCJyZWFzb25pbmdfc3BsaXQiOnRydWUsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjAsInRvb2xfY2hvaWNlIjp7ImZ1bmN0aW9uIjp7Im5hbWUiOiJzdHJ1Y3R1cmVkX291dHB1dCJ9LCJ0eXBlIjoiZnVuY3Rpb24ifSwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2VuZXJhdGUgc3RydWN0dXJlZCBvdXRwdXQgbWF0Y2hpbmcgdGhlIHByb3ZpZGVkIHNjaGVtYSIsIm5hbWUiOiJzdHJ1Y3R1cmVkX291dHB1dCIsInBhcmFtZXRlcnMiOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7ImFnZSI6eyJkZXNjcmlwdGlvbiI6IlBlcnNvbidzIGFnZSBpbiB5ZWFycyIsIm1pbmltdW0iOjEsInR5cGUiOiJpbnRlZ2VyIn0sIm5hbWUiOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBmdWxsIG5hbWUiLCJ0eXBlIjoic3RyaW5nIn0sIm9jY3VwYXRpb24iOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBqb2Igb3IgcHJvZmVzc2lvbiIsInR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbIm5hbWUiLCJhZ2UiXSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjUwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJHZW5lcmF0ZSBhIHNvZnR3YXJlIGVuZ2luZWVyIHByb2ZpbGUiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJNaW5pTWF4LU0zLjEtRmxhc2giLCJyZWFzb25pbmdfZWZmb3J0IjoibG93IiwicmVhc29uaW5nX3NwbGl0Ijp0cnVlLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29sX2Nob2ljZSI6eyJmdW5jdGlvbiI6eyJuYW1lIjoic3RydWN0dXJlZF9vdXRwdXQifSwidHlwZSI6ImZ1bmN0aW9uIn0sInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdlbmVyYXRlIHN0cnVjdHVyZWQgb3V0cHV0IG1hdGNoaW5nIHRoZSBwcm92aWRlZCBzY2hlbWEiLCJuYW1lIjoic3RydWN0dXJlZF9vdXRwdXQiLCJwYXJhbWV0ZXJzIjp7ImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjpmYWxzZSwicHJvcGVydGllcyI6eyJhZ2UiOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBhZ2UgaW4geWVhcnMiLCJtaW5pbXVtIjoxLCJ0eXBlIjoiaW50ZWdlciJ9LCJuYW1lIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3MgZnVsbCBuYW1lIiwidHlwZSI6InN0cmluZyJ9LCJvY2N1cGF0aW9uIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3Mgam9iIG9yIHByb2Zlc3Npb24iLCJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJuYW1lIiwiYWdlIl0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9XX0="
     },
     "canonical_json": {
       "max_completion_tokens": 500,
@@ -13,7 +14,8 @@
           "role": "user"
         }
       ],
-      "model": "MiniMax-M2.1",
+      "model": "MiniMax-M3.1-Flash",
+      "reasoning_effort": "low",
       "reasoning_split": true,
       "stream": false,
       "temperature": 0.0,
@@ -57,15 +59,15 @@
       ]
     },
     "headers": {
-      "accept-encoding": [
-        "gzip"
+      "accept": [
+        "application/json"
       ],
       "authorization": "[REDACTED:authorization]",
       "content-type": [
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.17"
+        "req/0.7.5"
       ]
     },
     "method": "post",
@@ -82,89 +84,91 @@
           "finish_reason": "tool_calls",
           "index": 0,
           "message": {
-            "audio_content": "",
-            "name": "MiniMax AI",
-            "reasoning_details": [
-              {
-                "format": "MiniMax-response-v1",
-                "id": "reasoning-text-1",
-                "index": 0,
-                "text": "The user wants me to generate a software engineer profile. I need to provide values for the required fields in the structured_output tool: \"name\" and \"age\". I should also provide values for the optional fields: \"occupation\".\n\nLet me create a realistic software engineer profile with appropriate values.\n",
-                "type": "reasoning.text"
-              }
-            ],
+            "reasoning_content": "The user wants a software engineer profile using the structured output tool.",
             "role": "assistant",
             "tool_calls": [
               {
                 "function": {
-                  "arguments": "{\"age\": 28, \"name\": \"Alex Chen\", \"occupation\": \"Software Engineer\"}",
+                  "arguments": "{\"name\":\"Alex Rivera\",\"age\":32,\"occupation\":\"Software Engineer\"}",
                   "name": "structured_output"
                 },
-                "id": "call_function_1ylnncgir80k_1",
-                "index": 0,
+                "id": "chatcmpl-tool-a5f93247fe75e6f1",
                 "type": "function"
               }
             ]
           }
         }
       ],
-      "created": 1777714129,
-      "id": "0644f6d19e73270ec022a73f1fe97c90",
+      "created": 1793250569,
+      "id": "073208085f3553cd70cc2b63929a664c",
       "input_sensitive": false,
       "input_sensitive_type": 0,
-      "model": "MiniMax-M2.1",
+      "model": "MiniMax-M3.1-Flash",
       "object": "chat.completion",
       "output_sensitive": false,
       "output_sensitive_int": 0,
       "output_sensitive_type": 0,
       "usage": {
-        "completion_tokens": 106,
+        "completion_tokens": 62,
         "completion_tokens_details": {
-          "reasoning_tokens": 78
+          "reasoning_tokens": 13
         },
-        "prompt_tokens": 259,
+        "prompt_tokens": 497,
         "prompt_tokens_details": {
           "cached_tokens": 256
         },
         "total_characters": 0,
-        "total_tokens": 365
+        "total_tokens": 559
       }
     },
     "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
       "alb_receive_time": [
-        "1777714129.384"
+        "1793250568.557"
       ],
       "alb_request_id": [
-        "34aea22cc0dcea1c8fb6ffe42a37efcee3836e9e"
+        "0548ae8592341c03ea01a9b481a3540e5f89ec86"
+      ],
+      "cache-control": [
+        "max-age=0, no-cache, no-store"
       ],
       "connection": [
         "keep-alive"
+      ],
+      "content-length": [
+        "866"
       ],
       "content-type": [
         "application/json; charset=utf-8"
       ],
       "date": [
-        "Sat, 02 May 2026 09:28:50 GMT"
+        "Thu, 29 Oct 2026 05:09:30 GMT"
+      ],
+      "expires": [
+        "Thu, 29 Oct 2026 05:09:30 GMT"
       ],
       "minimax-request-id": [
-        "08f9ab4461bf64abb3af20ab35aa4a81"
+        "b4de3b5dad5e82c6f8d85d64cdabcbc3"
+      ],
+      "pragma": [
+        "no-cache"
       ],
       "trace-id": [
-        "0644f6d19e73270ec022a73f1fe97c90"
+        "073208085f3553cd70cc2b63929a664c"
       ],
-      "transfer-encoding": [
-        "chunked"
-      ],
-      "vary": [
-        "Accept-Encoding"
+      "x-from": [
+        "ak"
       ],
       "x-mm-request-id": [
-        "2038858753192768005_1777714130dbilns"
+        "2018237621766984259_1793250568qt51w3"
       ],
       "x-session-id": [
-        "4b7aac6fb917a7965554f941f892d5fc"
+        "bca44b45e3298c7e915956d2ef91a3c3"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

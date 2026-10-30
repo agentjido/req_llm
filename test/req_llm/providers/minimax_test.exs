@@ -23,6 +23,32 @@ defmodule ReqLLM.Providers.MinimaxTest do
     }
   end
 
+  defp minimax_m3_1_model do
+    %LLMDB.Model{
+      id: "MiniMax-M3.1-Flash",
+      model: "MiniMax-M3.1-Flash",
+      provider_model_id: "MiniMax-M3.1-Flash",
+      provider: :minimax,
+      name: "MiniMax-M3.1-Flash",
+      family: "minimax",
+      capabilities: %{
+        chat: true,
+        tools: %{enabled: true},
+        reasoning: %{
+          enabled: true,
+          effort: %{
+            supported: true,
+            values: ["low", "medium", "high", "xhigh", "max"],
+            default: "max"
+          },
+          thinking: %{supported: true, types: ["adaptive"], disable_supported: false}
+        }
+      },
+      limits: %{context: 1_000_000, output: 524_288},
+      extra: %{wire: %{protocol: "openai_chat"}}
+    }
+  end
+
   defp minimax_image_model(model_id \\ "image-01") do
     %LLMDB.Model{
       id: model_id,
@@ -43,6 +69,7 @@ defmodule ReqLLM.Providers.MinimaxTest do
 
       assert :max_completion_tokens in schema_keys
       assert :reasoning_split in schema_keys
+      assert :thinking in schema_keys
       assert :prompt_optimizer in schema_keys
       assert :subject_reference in schema_keys
     end
@@ -78,6 +105,32 @@ defmodule ReqLLM.Providers.MinimaxTest do
       assert request.url.path == "/chat/completions"
       assert request.method == :post
       assert request.options[:base_url] == "https://api.minimax.io/v1"
+    end
+
+    test "prepare_request caps a metadata-derived token limit at the recommended value" do
+      {:ok, request} =
+        Minimax.prepare_request(:chat, minimax_m3_1_model(), "Hello world", [])
+
+      assert request.options[:max_completion_tokens] == 131_072
+    end
+
+    test "prepare_request preserves an explicit token limit at the model output budget" do
+      {:ok, request} =
+        Minimax.prepare_request(:chat, minimax_m3_1_model(), "Hello world", max_tokens: 524_288)
+
+      assert request.options[:max_completion_tokens] == 524_288
+    end
+
+    test "prepare_request caps the object-generation token default" do
+      {:ok, compiled_schema} =
+        ReqLLM.Schema.compile(answer: [type: :string, required: true])
+
+      {:ok, request} =
+        Minimax.prepare_request(:object, minimax_m3_1_model(), "Return an answer",
+          compiled_schema: compiled_schema
+        )
+
+      assert request.options[:max_completion_tokens] == 131_072
     end
 
     test "prepare_request rejects embedding operations" do
@@ -124,7 +177,117 @@ defmodule ReqLLM.Providers.MinimaxTest do
       refute Keyword.has_key?(translated, :seed)
       refute Keyword.has_key?(translated, :reasoning_effort)
       refute Keyword.has_key?(translated, :reasoning_token_budget)
-      assert length(warnings) == 6
+      assert length(warnings) == 5
+      refute Enum.any?(warnings, &String.contains?(&1, "max_completion_tokens"))
+    end
+
+    test "translate_options preserves an explicit token limit up to the model output budget" do
+      {translated, warnings} =
+        Minimax.translate_options(:chat, minimax_m3_1_model(), max_tokens: 524_288)
+
+      assert translated[:max_completion_tokens] == 524_288
+      assert warnings == []
+
+      {translated, warnings} =
+        Minimax.translate_options(:chat, minimax_m3_1_model(), max_tokens: 200_000)
+
+      assert translated[:max_completion_tokens] == 200_000
+      assert warnings == []
+    end
+
+    test "translate_options forwards every MiniMax-M3.1-Flash thinking level" do
+      for effort <- [:low, :medium, :high, :xhigh, :max] do
+        {translated, warnings} =
+          Minimax.translate_options(:chat, minimax_m3_1_model(), reasoning_effort: effort)
+
+        assert translated[:reasoning_effort] == effort
+        assert warnings == []
+      end
+
+      {translated, warnings} =
+        Minimax.translate_options(:chat, minimax_m3_1_model(), reasoning_effort: "xhigh")
+
+      assert translated[:reasoning_effort] == :xhigh
+      assert warnings == []
+    end
+
+    test "translate_options reads thinking levels from catalog metadata" do
+      model = ReqLLM.model!("minimax:MiniMax-M3.1-Flash")
+
+      {translated, warnings} = Minimax.translate_options(:chat, model, reasoning_effort: :xhigh)
+
+      assert translated[:reasoning_effort] == :xhigh
+      assert warnings == []
+    end
+
+    test "translate_options raises unsupported thinking levels to :low on MiniMax-M3.1-Flash" do
+      for effort <- [:none, :minimal] do
+        {translated, warnings} =
+          Minimax.translate_options(:chat, minimax_m3_1_model(), reasoning_effort: effort)
+
+        assert translated[:reasoning_effort] == :low
+        assert Enum.any?(warnings, &(&1 =~ "was raised to :low"))
+      end
+    end
+
+    test "translate_options omits the default thinking level" do
+      {translated, warnings} =
+        Minimax.translate_options(:chat, minimax_m3_1_model(), reasoning_effort: :default)
+
+      refute Keyword.has_key?(translated, :reasoning_effort)
+      assert warnings == []
+    end
+
+    test "translate_options is idempotent for reasoning controls" do
+      {first, []} =
+        Minimax.translate_options(:chat, minimax_m3_1_model(),
+          reasoning_effort: :xhigh,
+          thinking: %{type: "adaptive"}
+        )
+
+      {second, warnings} = Minimax.translate_options(:chat, minimax_m3_1_model(), first)
+
+      assert second[:reasoning_effort] == :xhigh
+      assert second[:thinking] == %{type: "adaptive"}
+      assert warnings == []
+    end
+
+    test "translate_options drops thinking levels for models that ignore them" do
+      {translated, warnings} =
+        Minimax.translate_options(:chat, minimax_model("MiniMax-M3"), reasoning_effort: :xhigh)
+
+      refute Keyword.has_key?(translated, :reasoning_effort)
+      assert Enum.any?(warnings, &(&1 =~ "does not tune thinking depth"))
+    end
+
+    test "translate_options keeps thinking disabled only where MiniMax allows it" do
+      {translated, warnings} =
+        Minimax.translate_options(:chat, minimax_m3_1_model(), thinking: %{type: "disabled"})
+
+      refute Keyword.has_key?(translated, :thinking)
+      assert Enum.any?(warnings, &(&1 =~ "always thinks"))
+
+      {translated, warnings} =
+        Minimax.translate_options(:chat, minimax_model("MiniMax-M3"),
+          thinking: %{type: "disabled"}
+        )
+
+      assert translated[:thinking] == %{type: "disabled"}
+      assert warnings == []
+    end
+
+    test "translate_options forces reasoning_split on MiniMax-M3.1-Flash" do
+      {translated, warnings} =
+        Minimax.translate_options(:chat, minimax_m3_1_model(), reasoning_split: false)
+
+      assert translated[:reasoning_split] == true
+      assert Enum.any?(warnings, &(&1 =~ "requires reasoning_split: true"))
+
+      {translated, warnings} =
+        Minimax.translate_options(:chat, minimax_model(), reasoning_split: false)
+
+      assert translated[:reasoning_split] == false
+      assert warnings == []
     end
 
     test "encode_body emits MiniMax-compatible chat body" do
@@ -163,6 +326,45 @@ defmodule ReqLLM.Providers.MinimaxTest do
       decoded = ReqLLM.Test.Helpers.json_body(encoded_request)
 
       assert decoded["reasoning_split"] == false
+    end
+
+    test "encode_body forwards reasoning_effort and thinking" do
+      request = %Req.Request{
+        options: [
+          context: context_fixture(),
+          model: "MiniMax-M3.1-Flash",
+          stream: false,
+          reasoning_effort: :xhigh,
+          thinking: %{type: "adaptive"}
+        ]
+      }
+
+      decoded =
+        request
+        |> Minimax.encode_body()
+        |> ReqLLM.Test.Helpers.json_body()
+
+      assert decoded["reasoning_effort"] == "xhigh"
+      assert decoded["thinking"] == %{"type" => "adaptive"}
+      assert decoded["reasoning_split"] == true
+    end
+
+    test "encode_body reads reasoning controls passed through provider_options" do
+      request = %Req.Request{
+        options: [
+          context: context_fixture(),
+          model: "MiniMax-M3.1-Flash",
+          stream: false,
+          provider_options: [reasoning_effort: "max"]
+        ]
+      }
+
+      decoded =
+        request
+        |> Minimax.encode_body()
+        |> ReqLLM.Test.Helpers.json_body()
+
+      assert decoded["reasoning_effort"] == "max"
     end
 
     test "encode_body converts normalized MiniMax reasoning_details back to provider wire shape" do
@@ -296,6 +498,32 @@ defmodule ReqLLM.Providers.MinimaxTest do
       assert decoded["max_completion_tokens"] == 128
       refute Map.has_key?(decoded, "max_tokens")
       refute Map.has_key?(decoded, "presence_penalty")
+    end
+
+    test "attach_stream caps the metadata-derived token limit at the recommended value" do
+      {:ok, finch_request} =
+        Minimax.attach_stream(
+          minimax_m3_1_model(),
+          context_fixture(),
+          [api_key: "test-key-12345"],
+          MyApp.Finch
+        )
+
+      decoded = Jason.decode!(finch_request.body)
+      assert decoded["max_completion_tokens"] == 131_072
+    end
+
+    test "attach_stream preserves an explicit token limit at the model output budget" do
+      {:ok, finch_request} =
+        Minimax.attach_stream(
+          minimax_m3_1_model(),
+          context_fixture(),
+          [api_key: "test-key-12345", max_tokens: 524_288],
+          MyApp.Finch
+        )
+
+      decoded = Jason.decode!(finch_request.body)
+      assert decoded["max_completion_tokens"] == 524_288
     end
 
     test "stream response builder assembles MiniMax reasoning fragments" do

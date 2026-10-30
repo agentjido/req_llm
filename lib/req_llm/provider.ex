@@ -273,6 +273,15 @@ defmodule ReqLLM.Provider do
               {keyword(), [String.t()]}
 
   @doc """
+  Normalizes a generated-token default before option validation (optional).
+
+  This callback applies only to limits that ReqLLM adds from model metadata or a
+  framework fallback. Explicit user limits do not pass through this callback.
+  """
+  @callback normalize_max_tokens_default(operation(), LLMDB.Model.t(), pos_integer()) ::
+              pos_integer()
+
+  @doc """
   Returns tool call ID compatibility policy for this provider (optional).
 
   Providers can enforce tool call ID constraints when a context built on one
@@ -696,6 +705,7 @@ defmodule ReqLLM.Provider do
     attach_stream: 4,
     thinking_constraints: 0,
     credential_missing?: 1,
+    normalize_max_tokens_default: 3,
     oauth_provider_id: 0,
     refresh_oauth_credentials: 2
   ]

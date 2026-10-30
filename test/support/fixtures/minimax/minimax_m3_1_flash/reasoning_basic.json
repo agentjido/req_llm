@@ -1,0 +1,127 @@
+{
+  "captured_at": "2026-10-29T05:09:55.435887Z",
+  "model_spec": "minimax:MiniMax-M3.1-Flash",
+  "provider": "minimax",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjUwMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiU29sdmUgMTIqNyBhbmQgc2hvdyB5b3VyIGludGVybmFsIHRoaW5raW5nIChicmllZikuIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiTWluaU1heC1NMy4xLUZsYXNoIiwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInJlYXNvbmluZ19zcGxpdCI6dHJ1ZSwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjEuMH0="
+    },
+    "canonical_json": {
+      "max_completion_tokens": 5000,
+      "messages": [
+        {
+          "content": "Solve 12*7 and show your internal thinking (brief).",
+          "role": "user"
+        }
+      ],
+      "model": "MiniMax-M3.1-Flash",
+      "reasoning_effort": "low",
+      "reasoning_split": true,
+      "stream": false,
+      "temperature": 1.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.7.5"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.minimax.io/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "base_resp": {
+        "status_code": 0,
+        "status_msg": ""
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "content": "12 × 7 = 84.",
+            "reasoning_content": "We need answer calculate, brief \"internal thinking\" shouldn't reveal hidden chain. Can give concise steps. 12*7=84.",
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1793250595,
+      "id": "07320822824214c2997589fb7fe7b06a",
+      "input_sensitive": false,
+      "input_sensitive_type": 0,
+      "model": "MiniMax-M3.1-Flash",
+      "object": "chat.completion",
+      "output_sensitive": false,
+      "output_sensitive_int": 0,
+      "output_sensitive_type": 0,
+      "usage": {
+        "completion_tokens": 38,
+        "completion_tokens_details": {
+          "reasoning_tokens": 27
+        },
+        "prompt_tokens": 215,
+        "prompt_tokens_details": {
+          "cached_tokens": 197
+        },
+        "total_characters": 0,
+        "total_tokens": 253
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "alb_receive_time": [
+        "1793250594.347"
+      ],
+      "alb_request_id": [
+        "1a88352fdc06ab1b3560bb2eb3dcdcd17ba78eee"
+      ],
+      "cache-control": [
+        "max-age=0, no-cache, no-store"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-length": [
+        "725"
+      ],
+      "content-type": [
+        "application/json; charset=utf-8"
+      ],
+      "date": [
+        "Thu, 29 Oct 2026 05:09:55 GMT"
+      ],
+      "expires": [
+        "Thu, 29 Oct 2026 05:09:55 GMT"
+      ],
+      "minimax-request-id": [
+        "1c7c6f28ac52d28a18f062840136d04f"
+      ],
+      "pragma": [
+        "no-cache"
+      ],
+      "trace-id": [
+        "07320822824214c2997589fb7fe7b06a"
+      ],
+      "x-from": [
+        "ak"
+      ],
+      "x-mm-request-id": [
+        "2018237621766984259_1793250594ykrbdv"
+      ],
+      "x-session-id": [
+        "8b8be042ed3288f0c180f778e54a6c0e"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

@@ -1,0 +1,130 @@
+{
+  "captured_at": "2026-10-29T05:08:26.878832Z",
+  "model_spec": "minimax:MiniMax-M3.1-Flash",
+  "provider": "minimax",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjMwMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiV3JpdGUgYSB2ZXJ5IGxvbmcgc3RvcnkgYWJvdXQgZHJhZ29ucyBhbmQgYWR2ZW50dXJlcyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Ik1pbmlNYXgtTTMuMS1GbGFzaCIsInJlYXNvbmluZ19lZmZvcnQiOiJsb3ciLCJyZWFzb25pbmdfc3BsaXQiOnRydWUsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjV9"
+    },
+    "canonical_json": {
+      "max_completion_tokens": 3000,
+      "messages": [
+        {
+          "content": "Write a very long story about dragons and adventures",
+          "role": "user"
+        }
+      ],
+      "model": "MiniMax-M3.1-Flash",
+      "reasoning_effort": "low",
+      "reasoning_split": true,
+      "stream": false,
+      "temperature": 0.5
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.7.5"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.minimax.io/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "base_resp": {
+        "status_code": 0,
+        "status_msg": ""
+      },
+      "choices": [
+        {
+          "finish_reason": "length",
+          "index": 0,
+          "message": {
+            "content": "# The Last Dragon of the Sapphire Vale\n\n## Chapter One: The Bell That Rang in the Sky\n\nLong before the kingdoms of men forgot the old songs, there lived a dragon in the mountains north of the Sapphire Vale.\n\nHer name was Eirlys, and her scales were the deep blue of a storm sky. She had once commanded the clouds above the valley, carried riders on her broad shoulders, and woven curtains of moonlight across the peaks. But in her later years, she flew less and feared less, and the songs that once celebrated her name grew rarer with every generation.\n\nThe eldest people of the Vale said that Eirlys had been born from the last thunderstorm before the world remembered itself. They said her mother had circled the moon while the sea froze, and that Eirlys had hatched from an egg of blue fire beneath a mountain that had never known sunlight.\n\nAll of this may have been true.\n\nAt least, Eirlys never denied it.\n\nOn the morning the bell rang in the sky, she was sleeping in a cavern high above the clouds.\n\nThe bell had no tower, no rope, and no visible clapper. It rang from nowhere and everywhere, a clear silver note that rolled across the mountains and entered the hollow places of the world. It passed through stone and snow, through the roots of ancient pines and the walls of distant castles. Even the rivers seemed to pause, as if the mountains themselves had paused to listen.\n\nEirlys opened one golden eye.\n\nThen the bell rang again.\n\nShe rose from her bed of black sand and moss, unfurling wings that spanned the width of the cavern. Dust cascaded from the ceiling. A dozen young goats used the cavern as a summer shelter screamed and scrambled toward the entrance.\n\n“Stay,” Eirlys said.\n\nHer voice rolled like distant thunder.\n\nThe goats did not understand words, but they understood her. They settled, trembling, while she stepped onto the ledge and looked out over the world.\n\nThe Sapphire Vale spread below her, green and silver beneath the morning mist. Rivers branched through it like veins of light. Forests covered the western hills, while the eastern plains held fields, villages, and roads. Far to the south, the great city of Caer Dalan crowned its hill, its white towers bright beneath the rising sun.\n\nAnd beyond it, on the edge of the world, fire was consuming the horizon.\n\nSmoke rose in black columns.\n\nEirlys knew what smoke meant. She knew the smell of cities burning and forests dying. She also knew the shape of the dark shapes moving among the flames.\n\nDragons.\n\nNot the solitary, ancient creatures who kept to the high mountains. Not the shy wyrmlings of the northern glens or the harmless sky-serpents that sailors mistook for streaks of lightning.\n\nThese were fire-dragons: red, cruel, and numerous. They had come in the night with their wings blotting out the stars. Their roar had shaken the palace of Caer Dalan. By dawn, three villages had vanished from the eastern plains.\n\nEirlys had not slept so deeply for three hundred years.\n\nShe launched herself from the ledge.\n\nThe wind caught beneath her wings and carried her upward. Ice crystals glittered around her as she climbed through the thin blue air. Below, the Vale shrank into a map of green and gold. Above, the sky became so bright and empty that a human eye would have been blinded.\n\nThe bell rang a third time.\n\nThis time Eirlys saw where the sound came from.\n\nA small light hung beyond the edge of the sky, pale as frost and no larger than a star. It descended slowly, leaving a trail of silver sparks.\n\nEirlys hovered and watched.\n\nThe light grew larger.\n\nIt was not a star.\n\nIt was a person.\n\nThe figure fell through the clouds with arms spread like wings. A cloak of deep green snapped behind them. Their hair streamed silver in the wind. They seemed neither falling nor flying, but moving with the calm certainty of one stepping down a staircase.\n\nEirlys caught them on the broad shelf of her back.\n\nThe stranger landed hard, staggered, and nearly fell. Eirlys lowered her head to study them.\n\nThey were young—perhaps twenty years old—with gray eyes and a scar running from the left temple to the corner of their mouth. They wore travel-stained leather and a blue cloak fastened with a silver badge shaped like an open book.\n\n“You caught me,” the stranger said.\n\n“I did,” Eirlys replied.\n\n“I did not expect that.”\n\n“Most people do not expect being caught by a dragon.”\n\n“I am not most people.”\n\nEirlys sniffed. Beneath the dust and wind, the stranger smelled of mountain herbs, horses, smoke, and something else: a sharp magical scent like lightning trapped in glass.\n\n“What are you?” the dragon asked.\n\nThe stranger glanced toward the horizon, where the smoke still rose. “A cartographer.”\n\n“You do not look like a cartographer.”\n\n“I am also a wardens’ apprentice, a mountain guide, a failed musician, and a very poor farmer. But yes, cartographer.”\n\n“Which of those professions brought you falling from the sky?”\n\nThe stranger raised one hand. “A question. A plea, perhaps. And a promise.”\n\nEirlys lowered herself toward the Vale. “People have asked me for many things.”\n\n“I am not asking you to save the world.”\n\n“That would be disappointing.”\n\n“It is asking you to fight.”\n\nThe dragon’s golden eyes narrowed. “That is worse.”\n\nThe stranger smiled. It was a tired smile, but it contained defiance. “The fire-dragons are crossing the Sundering Sea. Caer Dalan has fallen. The wardens are dead or scattered. The stones that once protected the Vale have cracked. You are the last dragon, Eirlys.”\n\nEirlys felt the old name stir memories in her chest.\n\n“How do you know my name?”\n\n“I found it in the Hall of Echoes.”\n\n“What else did you find there?”\n\nThe stranger became quiet.\n\nAs they descended over the forests of the Vale, Eirlys saw smoke rising from more than one place. A village near the River Alyn was burning. Farmers fled along muddy roads. Knights rode toward the distant battle, their banners snapping in the wind. Somewhere below, a mother called for children lost in the orchards.\n\nEirlys had watched such scenes before.\n\nIn her youth, she had intervened. She had broken the fire-dragons’ siege, crushed their nests, and chased them beyond the sea. But that had been when there were others like her. When the Wardens of the Four Winds still rode the great dragons, when the sky roads shone with golden stones, when the old songs were strong enough to call every dragon home.\n\nNow she was alone.\n\nOr so she had believed.\n\n“Why should I fight?” she asked. “One dragon against dozens.”\n\nThe stranger reached into a pouch at their belt and drew out a shard of blue crystal. It glowed faintly in the morning light, and within its depths Eirlys saw the moving image of a dragon.\n\nNot herself.\n\nA dragon with silver wings and a crown of horns.\n\n“A shard of memory,” said the stranger. “It belonged to your brother, Daenarth. He left it in the Hall of Echoes before the last war.”\n\nEirlys’s breath stirred the stranger’s hair.\n\n“My brother is dead.”\n\n“We do not know that.”\n\n“I know it. I felt him die.”\n\nThe stranger held up the shard. “And yet this shows a living dragon, six months ago, beyond the Cobalt Wastes.”\n\nEirlys stared.\n\nDaenarth had been the great storm dragon, the king of the northern skies. His wings had once covered entire valleys. He had carried the armies of the Silver Crown, challenged the Tyrant of the Black Crater, and vanished during the Burning of Nine Peaks.\n\nNo one had seen him since.\n\nEirlys had never forgiven him for leaving without saying farewell.\n\nShe had also never forgiven herself for surviving him.\n\n“Give me that,” she said.\n\nThe stranger handed over the crystal.\n\nThe moment Eirlys touched it, the world vanished.\n\nShe stood in darkness.\n\nAround her flickered memories: Daenarth as a young wyrmling, playfully biting her tail; Daenarth with silver fire around his jaws; Daenarth flying alone toward the northern horizon, his figure shrinking into a storm.\n\nThen she saw him as he was now—or as he had been six months before.\n\nHe was alive.\n\nHe was chained in a city beneath black mountains. His wings were pierced by iron spears. Ancient machines crawled over his scales. Men in red masks worked below him, carving glowing runes into the ground.\n\nAnd on his head, someone had placed a crown of black iron.\n\nDaenarth lifted his head.\n\nHis golden eyes met hers.\n\nHe spoke, though there was no sound. Eirlys read the shape of his words.\n\n**Find the Ember Crown.**\n\nThe vision shattered.\n\nEirlys returned to the present with a roar that split the clouds above the Vale. Thunder rolled across the sky. Lightning danced between her horns. The stranger grabbed one of her horns to keep from being thrown off.\n\n“Easy,” they shouted. “Easy!”\n\nEirlys steadied herself.\n\n“What is the Ember Crown?” she demanded.\n\n“I do not know exactly. The old histories call it a prison. The dragon-scholars call it a key. Some say it can command every dragon born of fire.”\n\n“Who made it?”\n\n“My grandfather believed the first king of men made it from the heart of a dead volcano, using dragonfire to forge the iron. It was used in the old war to bind Daenarth and the other great dragons.”\n\n“Then why does my brother tell me to find it?”\n\n“Perhaps to destroy it.”\n\n“Perhaps to use it.”\n\nThe stranger nodded. “That is why I came to you instead of the human king.”\n\n“You said he has fallen.”\n\n“Caer Dalan has fallen. King Ardan was captured when the city walls broke. The crown survives in some form, but the throne does not.”\n\nA cold wind passed over Eirlys’s scales.\n\n“Take me to the battle,” she said.\n\nThe stranger pointed toward the eastern smoke. “The fire-dragons are spreading across the Vale. Their leader calls himself Veyr, the Ember Drake. He wears a crown of black iron.”\n\nEirlys’s eyes burned.\n\n“Then we begin with Veyr.”\n\n---\n\n## Chapter Two: The Road of Fallen Kings\n\nThe stranger’s name was Seren.\n\nDespite Eirlys’s low opinion of humans who claimed to be cartographers, Seren possessed an excellent memory for roads. They sat behind Eirlys’s shoulders and directed her through narrow passes, over mist-covered ridges, and along valleys invisible from the air.\n\nThey descended near the village of Bellweather, which was no longer burning but had been emptied. The doors of its houses stood open. Flowerpots had been smashed in the streets. A child's wooden horse lay beneath a well.\n\nA black scorch mark extended from the village center to the river.\n\n“I told you,” Seren murmured. “Veyr’s breath.”\n\nEirlys sniffed the scorched earth. It smelled of sulfur, blood, and something unnatural: metal heated until it glowed.\n\n“Do not land,” Seren said. “There may be traps.”\n\n“I am not a lamb.”\n\n“You are also much larger than a lamb.”\n\nEirlys ignored the comment and landed with one foot in the river. The impact sent a wave crashing over the banks. She lowered her head to inspect the road.\n\nClaw marks had been cut into a stone marker. Beneath them, someone had carved a symbol in red paint: a circle split by a jagged line.\n\n“I have seen that mark,” Seren said.\n\n“Where?”\n\n“In the Hall of Echoes. In records of the Cinder Kings. It means ‘the chain is broken.’”\n\nEirlys felt a twitch of unease in her chest. “What chain?”\n\n“The chain of sky roads. The old magical roads between mountain peaks.” Seren pointed toward the distant eastern mountains. “They were created before the kingdoms, so dragons could travel safely between the high sanctuaries. If the fire-dragons broke those roads, they could move faster than any living army.”\n\n“Can they be restored?”\n\n“The stones are scattered. The song is nearly lost. The Wardens guarded both.”\n\n“And where are the stones?”\n\nScrolled in the leather case at Seren's side was a map of the Vale, covered in old ink and newer annotations. Eirlys could not read the human script, though she understood it in the way of dreams.\n\nSeren studied the map. “Some are in Caer Dalan, if the palace still stands. Others lie in the high passes. The largest—the Heartstone—is in the ruins of Asterfall.”\n\n“Asterfall was abandoned before my grandparents were hatched.”\n\n“It is called a ruin now, but it was built to last.”\n\nEirlys snorted. “Humans build for a hundred years and call themselves eternal.”\n\nA distant roar rolled across the fields.\n\nBoth of them turned east.\n\nThrough the smoke, a shape appeared. A dragon passed over a low hill, its wings broad and ragged. It was red as molten iron, with a row of black spines down its back. Unlike the elegant dragons of Eirlys’s youth, it moved with a mechanical awkwardness, as if someone had built it from parts that did not fit.\n\nThen another appeared.\n\nThen six more.\n\n“Veyr’s brood,” Seren said. “They are searching for something.”\n\nThe red dragons swept low over an orchard. They circled once, twice, then landed among the trees. Their heads dipped, and they began rooting through the soil with their snouts.\n\nEirlys watched them pull up stones from the earth. Each stone glowed faintly blue before one of the creatures swallowed it.\n\n“Road stones,” she said.\n\n“The fire-dragons are eating the sky roads?”\n\n“They are consuming them. Making the chains weak.”\n\nOne of the red dragons lifted its head. It had sensed Eirlys.\n\nIt roared.\n\nThe sound was harsh and grating, like a forge door dragged across stone. The others turned. Seven pairs of burning eyes fixed upon the",
+            "reasoning_content": "We need write long story. We should comply. Maybe substantial, not literally impossible. Need perhaps chapters, engaging. User asks very long. Let's craft maybe 5-7k words? Token budget unknown 8k. Could provide a long novella, around 4-5k words. Need no meta. Let's begin title and chapters. Ensure dragons/adventures.",
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1793250452,
+      "id": "073207940796ca579b81a38e092aeeb8",
+      "input_sensitive": false,
+      "input_sensitive_type": 0,
+      "model": "MiniMax-M3.1-Flash",
+      "object": "chat.completion",
+      "output_sensitive": false,
+      "output_sensitive_int": 0,
+      "output_sensitive_type": 0,
+      "usage": {
+        "completion_tokens": 3000,
+        "completion_tokens_details": {
+          "reasoning_tokens": 74
+        },
+        "prompt_tokens": 211,
+        "prompt_tokens_details": {
+          "cached_tokens": 210
+        },
+        "total_characters": 0,
+        "total_tokens": 3211
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "alb_receive_time": [
+        "1793250452.259"
+      ],
+      "alb_request_id": [
+        "aaa08eed29f3a34e6b5c058cac1b15f9e508c655"
+      ],
+      "cache-control": [
+        "max-age=0, no-cache, no-store"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-length": [
+        "14826"
+      ],
+      "content-type": [
+        "application/json; charset=utf-8"
+      ],
+      "date": [
+        "Thu, 29 Oct 2026 05:08:26 GMT"
+      ],
+      "expires": [
+        "Thu, 29 Oct 2026 05:08:26 GMT"
+      ],
+      "minimax-request-id": [
+        "318d05c37c7fdd8c4b443b46e08b6b3e"
+      ],
+      "pragma": [
+        "no-cache"
+      ],
+      "trace-id": [
+        "073207940796ca579b81a38e092aeeb8"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-from": [
+        "ak"
+      ],
+      "x-mm-request-id": [
+        "2018237621766984259_1793250452sxz30x"
+      ],
+      "x-session-id": [
+        "717829b78cfdb45492c3c7bd8d13af00"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

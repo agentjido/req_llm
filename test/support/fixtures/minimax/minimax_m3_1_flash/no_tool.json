@@ -1,0 +1,153 @@
+{
+  "captured_at": "2026-10-29T05:09:28.420042Z",
+  "model_spec": "minimax:MiniMax-M3.1-Flash",
+  "provider": "minimax",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjEwNDg1NiwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJUZWxsIG1lIGEgam9rZSBhYm91dCBjYXRzIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiTWluaU1heC1NMy4xLUZsYXNoIiwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInJlYXNvbmluZ19zcGxpdCI6dHJ1ZSwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMCwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsIm5hbWUiOiJnZXRfd2VhdGhlciIsInBhcmFtZXRlcnMiOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9XX0="
+    },
+    "canonical_json": {
+      "max_completion_tokens": 104856,
+      "messages": [
+        {
+          "content": "Tell me a joke about cats",
+          "role": "user"
+        }
+      ],
+      "model": "MiniMax-M3.1-Flash",
+      "reasoning_effort": "low",
+      "reasoning_split": true,
+      "stream": false,
+      "temperature": 0.0,
+      "tools": [
+        {
+          "function": {
+            "description": "Get current weather information for a location",
+            "name": "get_weather",
+            "parameters": {
+              "additionalProperties": false,
+              "properties": {
+                "location": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "location"
+              ],
+              "type": "object"
+            }
+          },
+          "type": "function"
+        }
+      ]
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.7.5"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.minimax.io/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "base_resp": {
+        "status_code": 0,
+        "status_msg": ""
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "audio_content": "",
+            "content": "Why did the cat climb to the top of the tree?\n\nBecause it wanted to look out over the \"whole *pur*rpose of its life... okay, honestly, it just wanted a better vantage point for napping.\n\nHere's another:\n\nA cat walks into a bar… and approaches the bartender and says, \"Give me a martini, and make it long.\"\n\n\"How long?\"\n\n\"Long enough for me to stretch out in the sun on the windowsill.\"\n\nWant more? I've got a whole arsenal of them — absurd, punny, or classic. Or, if you'd like, I can check the weather somewhere so you know whether it's a good day to leave a cat on a windowsill.",
+            "name": "MiniMax AI",
+            "reasoning_content": "The user wants a joke about cats. I could also use the weather tool... but it's not needed. The tool is available but the request doesn't require weather. Though maybe I could offer weather info. Let's just tell the joke. Maybe add a fun cat-themed weather twist. Just tell a joke.\n\nLet me give a couple of jokes.",
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1793250565,
+      "id": "07320805d9f706082458e930b339d64d",
+      "input_sensitive": false,
+      "input_sensitive_type": 0,
+      "model": "MiniMax-M3.1-Flash",
+      "object": "chat.completion",
+      "output_sensitive": false,
+      "output_sensitive_int": 0,
+      "output_sensitive_type": 0,
+      "usage": {
+        "completion_tokens": 212,
+        "completion_tokens_details": {
+          "reasoning_tokens": 68
+        },
+        "prompt_tokens": 442,
+        "prompt_tokens_details": {
+          "cached_tokens": 441
+        },
+        "total_characters": 0,
+        "total_tokens": 654
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "alb_receive_time": [
+        "1793250565.641"
+      ],
+      "alb_request_id": [
+        "1ec71b260bfc3e29e8cf05f08e74364f646583c4"
+      ],
+      "cache-control": [
+        "max-age=0, no-cache, no-store"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-length": [
+        "1553"
+      ],
+      "content-type": [
+        "application/json; charset=utf-8"
+      ],
+      "date": [
+        "Thu, 29 Oct 2026 05:09:28 GMT"
+      ],
+      "expires": [
+        "Thu, 29 Oct 2026 05:09:28 GMT"
+      ],
+      "minimax-request-id": [
+        "861982a5fd6769e3809102be23afe876"
+      ],
+      "pragma": [
+        "no-cache"
+      ],
+      "trace-id": [
+        "07320805d9f706082458e930b339d64d"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-from": [
+        "ak"
+      ],
+      "x-mm-request-id": [
+        "2018237621766984259_1793250568n4g6oj"
+      ],
+      "x-session-id": [
+        "68f0594eb0a9d27bb1327a16886bd336"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

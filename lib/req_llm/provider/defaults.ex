@@ -309,7 +309,11 @@ defmodule ReqLLM.Provider.Defaults do
       opts
       |> Keyword.update(:tools, [structured_output_tool], &[structured_output_tool | &1])
       |> Keyword.put(:tool_choice, tool_choice)
-      |> ReqLLM.Provider.Options.put_model_max_tokens_default(model_spec, fallback: 4096)
+      |> ReqLLM.Provider.Options.put_model_max_tokens_default(model_spec,
+        fallback: 4096,
+        provider_module: provider_mod,
+        operation: :object
+      )
       |> Keyword.put(:operation, :object)
 
     prepare_chat_request(provider_mod, model_spec, prompt, opts_with_tool)
@@ -341,7 +345,11 @@ defmodule ReqLLM.Provider.Defaults do
       object_opts =
         opts
         |> put_provider_option(:response_format, response_format)
-        |> ReqLLM.Provider.Options.put_model_max_tokens_default(model, fallback: 4096)
+        |> ReqLLM.Provider.Options.put_model_max_tokens_default(model,
+          fallback: 4096,
+          provider_module: provider_mod,
+          operation: :object
+        )
         |> Keyword.put(:operation, :object)
 
       prepare_chat_request(provider_mod, model, prompt, object_opts)

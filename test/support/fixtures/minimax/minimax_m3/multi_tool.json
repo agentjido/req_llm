@@ -1,19 +1,20 @@
 {
-  "model_spec": "minimax:MiniMax-M2",
+  "captured_at": "2026-10-29T05:10:05.609222Z",
+  "model_spec": "minimax:MiniMax-M3",
   "provider": "minimax",
   "request": {
     "body": {
-      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjI1NjAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IldoYXQncyB0aGUgd2VhdGhlciBsaWtlIGluIFBhcmlzLCBGcmFuY2U/Iiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiTWluaU1heC1NMiIsInJlYXNvbmluZ19zcGxpdCI6dHJ1ZSwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMCwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsIm5hbWUiOiJnZXRfd2VhdGhlciIsInBhcmFtZXRlcnMiOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifSwidW5pdCI6eyJlbnVtIjpbImNlbHNpdXMiLCJmYWhyZW5oZWl0Il0sInR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9LHsiZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJUZWxsIGEgZnVubnkgam9rZSIsIm5hbWUiOiJ0ZWxsX2pva2UiLCJwYXJhbWV0ZXJzIjp7ImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjpmYWxzZSwicHJvcGVydGllcyI6eyJ0b3BpYyI6eyJkZXNjcmlwdGlvbiI6IlRvcGljIGZvciB0aGUgam9rZSIsInR5cGUiOiJzdHJpbmcifX0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9LHsiZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgdGhlIGN1cnJlbnQgdGltZSIsIm5hbWUiOiJnZXRfdGltZSIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6e30sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9XX0="
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjEwNDg1NiwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJXaGF0J3MgdGhlIHdlYXRoZXIgbGlrZSBpbiBQYXJpcywgRnJhbmNlPyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Ik1pbmlNYXgtTTMiLCJyZWFzb25pbmdfc3BsaXQiOnRydWUsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjAsInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJwYXJhbWV0ZXJzIjp7ImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjpmYWxzZSwicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJ0eXBlIjoic3RyaW5nIn0sInVuaXQiOnsiZW51bSI6WyJjZWxzaXVzIiwiZmFocmVuaGVpdCJdLCJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifSx7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiVGVsbCBhIGZ1bm55IGpva2UiLCJuYW1lIjoidGVsbF9qb2tlIiwicGFyYW1ldGVycyI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnsidG9waWMiOnsiZGVzY3JpcHRpb24iOiJUb3BpYyBmb3IgdGhlIGpva2UiLCJ0eXBlIjoic3RyaW5nIn19LCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifSx7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IHRoZSBjdXJyZW50IHRpbWUiLCJuYW1lIjoiZ2V0X3RpbWUiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnt9LCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifV19"
     },
     "canonical_json": {
-      "max_completion_tokens": 25600,
+      "max_completion_tokens": 104856,
       "messages": [
         {
           "content": "What's the weather like in Paris, France?",
           "role": "user"
         }
       ],
-      "model": "MiniMax-M2",
+      "model": "MiniMax-M3",
       "reasoning_split": true,
       "stream": false,
       "temperature": 0.0,
@@ -75,15 +76,15 @@
       ]
     },
     "headers": {
-      "accept-encoding": [
-        "gzip"
+      "accept": [
+        "application/json"
       ],
       "authorization": "[REDACTED:authorization]",
       "content-type": [
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.17"
+        "req/0.7.5"
       ]
     },
     "method": "post",
@@ -100,15 +101,13 @@
           "finish_reason": "tool_calls",
           "index": 0,
           "message": {
-            "audio_content": "",
-            "name": "MiniMax AI",
-            "reasoning_content": "The user is asking about the weather in Paris, France. I should use the get_weather function to retrieve current weather information for Paris.",
+            "reasoning_content": "We need answer weather Paris France. Need call tool get_weather location Paris, France unit perhaps celsius or fahrenheit. User didn't specify. Could use celsius default? Tool requires unit enum. Need choose maybe celsius common. We can call get_weather. Need perhaps parallel? Only one relevant tool. Call.",
             "reasoning_details": [
               {
                 "format": "MiniMax-response-v1",
                 "id": "reasoning-text-1",
                 "index": 0,
-                "text": "The user is asking about the weather in Paris, France. I should use the get_weather function to retrieve current weather information for Paris.",
+                "text": "We need answer weather Paris France. Need call tool get_weather location Paris, France unit perhaps celsius or fahrenheit. User didn't specify. Could use celsius default? Tool requires unit enum. Need choose maybe celsius common. We can call get_weather. Need perhaps parallel? Only one relevant tool. Call.",
                 "type": "reasoning.text"
               }
             ],
@@ -116,71 +115,90 @@
             "tool_calls": [
               {
                 "function": {
-                  "arguments": "{\"location\": \"Paris, France\"}",
+                  "arguments": "{\"location\":\"Paris, France\",\"unit\":\"celsius\"}",
                   "name": "get_weather"
                 },
-                "id": "call_function_7vewv0bdlwc8_1",
-                "index": 0,
+                "id": "call-e0f92102-0046-4585-8627-df6478caaf3e",
                 "type": "function"
               }
             ]
           }
         }
       ],
-      "created": 1777714153,
-      "id": "0644f6e9750bded58a2356634bd23ef9",
+      "created": 1793250599,
+      "id": "073208262c69ef431969e55783ca2e4a",
       "input_sensitive": false,
       "input_sensitive_type": 0,
-      "model": "MiniMax-M2",
+      "model": "MiniMax-M3",
       "object": "chat.completion",
       "output_sensitive": false,
       "output_sensitive_int": 0,
       "output_sensitive_type": 0,
+      "service_tier": "standard",
       "usage": {
-        "completion_tokens": 58,
+        "completion_tokens": 106,
         "completion_tokens_details": {
-          "reasoning_tokens": 32
+          "reasoning_tokens": 67
         },
-        "prompt_tokens": 319,
+        "prompt_tokens": 543,
+        "prompt_tokens_details": {
+          "cached_tokens": 128
+        },
         "total_characters": 0,
-        "total_tokens": 377
+        "total_tokens": 649
       }
     },
     "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
       "alb_receive_time": [
-        "1777714153.799"
+        "1793250598.779"
       ],
       "alb_request_id": [
-        "299191bdcbd72b2e10f2a501f23f343de94f30be"
+        "f677775dfdf302bf08797337bf7784153a5e8862"
+      ],
+      "cache-control": [
+        "max-age=0, no-cache, no-store"
       ],
       "connection": [
         "keep-alive"
+      ],
+      "content-length": [
+        "1530"
       ],
       "content-type": [
         "application/json; charset=utf-8"
       ],
       "date": [
-        "Sat, 02 May 2026 09:29:14 GMT"
+        "Thu, 29 Oct 2026 05:10:05 GMT"
+      ],
+      "expires": [
+        "Thu, 29 Oct 2026 05:10:05 GMT"
       ],
       "minimax-request-id": [
-        "9c9a11726d101419e4aec6ffd638ec37"
+        "22be6e7baf5730a70b6f0ef1864312b5"
+      ],
+      "pragma": [
+        "no-cache"
       ],
       "trace-id": [
-        "0644f6e9750bded58a2356634bd23ef9"
-      ],
-      "transfer-encoding": [
-        "chunked"
+        "073208262c69ef431969e55783ca2e4a"
       ],
       "vary": [
         "Accept-Encoding"
       ],
+      "x-from": [
+        "ak"
+      ],
       "x-mm-request-id": [
-        "2038858753192768005_1777714153s58h4u"
+        "2018237621766984259_1793250598ygezmj"
       ],
       "x-session-id": [
-        "02a1b7027b71e12cd2d000091e1e2721"
+        "f5c838efcfec359c3ff0b8df7f348269"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }
