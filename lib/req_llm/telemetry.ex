@@ -135,6 +135,7 @@ defmodule ReqLLM.Telemetry do
           reasoning_contract: reasoning_contract(),
           original_opts: keyword(),
           request_options: map(),
+          extra_metadata: map() | nil,
           server: map(),
           request_summary: map(),
           request_payload: any(),
@@ -210,6 +211,7 @@ defmodule ReqLLM.Telemetry do
       reasoning_contract: reasoning_contract,
       original_opts: opts,
       request_options: ReqLLM.Telemetry.RequestOptions.extract(mode, opts),
+      extra_metadata: extra_metadata(opts),
       server: %{},
       request_summary: summarize_request(operation, request_input),
       request_payload: request_payload(operation, request_input, payload_mode),
@@ -603,6 +605,7 @@ defmodule ReqLLM.Telemetry do
     |> maybe_put(:request_payload, context.request_payload, include_payloads?(context))
     |> maybe_put(:response_payload, extra[:response_payload], include_payloads?(context))
     |> maybe_put(:error, extra[:error], not is_nil(extra[:error]))
+    |> maybe_put(:extra_metadata, context.extra_metadata)
     |> maybe_put(
       :builtin_tool_timing,
       extra[:builtin_tool_timing],
@@ -666,20 +669,32 @@ defmodule ReqLLM.Telemetry do
     end
   end
 
+  defp extra_metadata(opts) do
+    case Keyword.fetch(opts, :telemetry) do
+      {:ok, value} -> Map.get(parse_telemetry_opt(value), :extra_metadata)
+      :error -> nil
+    end
+  end
+
   defp parse_telemetry_opt(opts) when is_list(opts), do: parse_telemetry_opt(Map.new(opts))
 
   defp parse_telemetry_opt(opts) when is_map(opts) do
     %{
       payloads: parse_payload_mode(Map.get(opts, :payloads, Map.get(opts, "payloads"))),
-      conversation_id: Map.get(opts, :conversation_id, Map.get(opts, "conversation_id"))
+      conversation_id: Map.get(opts, :conversation_id, Map.get(opts, "conversation_id")),
+      extra_metadata:
+        parse_extra_metadata(Map.get(opts, :extra_metadata, Map.get(opts, "extra_metadata")))
     }
   end
 
-  defp parse_telemetry_opt(_), do: %{payloads: :none, conversation_id: nil}
+  defp parse_telemetry_opt(_), do: %{payloads: :none, conversation_id: nil, extra_metadata: nil}
 
   defp parse_payload_mode(:raw), do: :raw
   defp parse_payload_mode("raw"), do: :raw
   defp parse_payload_mode(_), do: :none
+
+  defp parse_extra_metadata(extra_metadata) when is_map(extra_metadata), do: extra_metadata
+  defp parse_extra_metadata(_), do: nil
 
   defp request_input(:embedding, opts) do
     opts[:text]

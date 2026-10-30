@@ -70,6 +70,7 @@ does not change the meaning of these keys.
 | `request_payload` | Payload mode `:raw` only; sanitized request data. | Stable opt-in container; operation detail may grow. |
 | `response_payload` | Payload mode `:raw` only; sanitized response data. | Stable opt-in container; operation detail may grow. |
 | `error` | Exception events only; the existing exception or error term. | Stable |
+| `extra_metadata` | Only when the caller passes `telemetry: [extra_metadata: map]`; that map, unchanged. | Stable |
 | `retry` | Retry events only; `attempt`, `next_attempt`, `max_retries`, `delay` in milliseconds, and optional `http_status`. | Experimental |
 | `builtin_tool_timing` | Terminal events only when timings exist; call-id keys with native Unix nanosecond start/end values. | Experimental |
 

@@ -13,6 +13,7 @@ defmodule ReqLLM.TelemetryTest do
 
   @events [
     [:req_llm, :request, :start],
+    [:req_llm, :request, :retry],
     [:req_llm, :request, :stop],
     [:req_llm, :request, :exception],
     [:req_llm, :reasoning, :start],
@@ -594,6 +595,46 @@ defmodule ReqLLM.TelemetryTest do
              port: 443,
              path: "/v1/chat/completions"
            }
+  end
+
+  test "Req-backed public requests attach extra_metadata to request events" do
+    run_req_backed_request(telemetry: [extra_metadata: %{feature: :summary}])
+
+    events = collect_events()
+    start_meta = single_event_metadata(events, [:req_llm, :request, :start])
+    stop_meta = single_event_metadata(events, [:req_llm, :request, :stop])
+
+    assert start_meta.extra_metadata == %{feature: :summary}
+    assert stop_meta.extra_metadata == %{feature: :summary}
+  end
+
+  test "attaches extra_metadata to retry and exception metadata" do
+    model = %LLMDB.Model{provider: :openai, id: "gpt-5"}
+    opts = [telemetry: [extra_metadata: %{feature: :summary}]]
+
+    context =
+      model
+      |> ReqLLM.Telemetry.new_context(opts, operation: :chat)
+      |> ReqLLM.Telemetry.start_request(%{})
+
+    :ok = ReqLLM.Telemetry.retry_request(context, %{duration: 17, attempt: 1})
+    ReqLLM.Telemetry.exception_request(context, %Req.TransportError{reason: :timeout})
+
+    assert_receive {:telemetry_event, [:req_llm, :request, :retry], _, retry_meta}
+    assert_receive {:telemetry_event, [:req_llm, :request, :exception], _, exception_meta}
+    assert retry_meta.extra_metadata == %{feature: :summary}
+    assert exception_meta.extra_metadata == %{feature: :summary}
+  end
+
+  test "leaves extra_metadata out of request events when it is not a map" do
+    model = %LLMDB.Model{provider: :openai, id: "gpt-5"}
+
+    model
+    |> ReqLLM.Telemetry.new_context([telemetry: [extra_metadata: "summary"]], operation: :chat)
+    |> ReqLLM.Telemetry.start_request(%{})
+
+    assert_receive {:telemetry_event, [:req_llm, :request, :start], _, metadata}
+    refute Map.has_key?(metadata, :extra_metadata)
   end
 
   test "captures service_tier into request_options for OpenAI extension attributes" do

@@ -126,7 +126,8 @@ Every request lifecycle event includes these base keys:
 Streaming requests additionally include `streaming`. When payload capture is
 enabled, `request_payload` and `response_payload` are also included. Retry events
 add `retry`, exception events add `error`, and terminal streaming events may add
-`builtin_tool_timing` when server-side builtin tool timings are available.
+`builtin_tool_timing` when server-side builtin tool timings are available. If you
+pass `telemetry: [extra_metadata: map]`, all request events also include `extra_metadata`.
 
 `request_options` is a compact map of normalized inference parameters extracted from the original call: `temperature`, `top_p`, `top_k`, `max_tokens`, `frequency_penalty`, `presence_penalty`, `stop_sequences`, `seed`, `n` (choice count), `stream?`, `encoding_formats`, `conversation_id`, `service_tier`, `receive_timeout`, `total_timeout`, `stream_idle_timeout`, and `max_retries`. Nil values are dropped.
 
@@ -340,6 +341,12 @@ The `telemetry:` option also accepts `:conversation_id`, which flows through to 
 
 ```elixir
 ReqLLM.generate_text(model, prompt, telemetry: [conversation_id: "thread-42"])
+```
+
+To label a call for your own handlers, for example with the feature that made it, pass a map as `:extra_metadata`. ReqLLM adds it unchanged to all request events as `extra_metadata`. Values that are not a map are ignored, and the map is not exported to the OpenTelemetry bridge:
+
+```elixir
+ReqLLM.generate_text(model, prompt, telemetry: [extra_metadata: %{feature: :summary}])
 ```
 
 Raw payload mode is still sanitized:
