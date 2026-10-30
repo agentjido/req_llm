@@ -121,6 +121,18 @@ defmodule ReqLLM.Providers.MinimaxTest do
       assert request.options[:max_completion_tokens] == 524_288
     end
 
+    test "prepare_request caps the object-generation token default" do
+      {:ok, compiled_schema} =
+        ReqLLM.Schema.compile(answer: [type: :string, required: true])
+
+      {:ok, request} =
+        Minimax.prepare_request(:object, minimax_m3_1_model(), "Return an answer",
+          compiled_schema: compiled_schema
+        )
+
+      assert request.options[:max_completion_tokens] == 131_072
+    end
+
     test "prepare_request rejects embedding operations" do
       {:error, error} = Minimax.prepare_request(:embedding, minimax_model(), "Hello", [])
       assert %ReqLLM.Error.Invalid.Parameter{} = error

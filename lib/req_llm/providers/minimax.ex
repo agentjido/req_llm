@@ -329,38 +329,17 @@ defmodule ReqLLM.Providers.Minimax do
     end
   end
 
-  def prepare_request(operation, model_spec, input, opts) when operation in [:chat, :object] do
-    with {:ok, model} <- ReqLLM.model(model_spec) do
-      opts = put_recommended_token_default(opts, model)
-      ReqLLM.Provider.Defaults.prepare_request(__MODULE__, operation, model, input, opts)
-    end
-  end
-
   def prepare_request(operation, model_spec, input, opts) do
     ReqLLM.Provider.Defaults.prepare_request(__MODULE__, operation, model_spec, input, opts)
   end
 
   @impl ReqLLM.Provider
-  def attach_stream(model, context, opts, finch_name) do
-    opts = put_recommended_token_default(opts, model)
-
-    processed_opts =
-      ReqLLM.Provider.Options.process_stream!(
-        __MODULE__,
-        opts[:operation] || :chat,
-        model,
-        context,
-        opts
-      )
-
-    ReqLLM.Provider.Defaults.default_attach_stream(
-      __MODULE__,
-      model,
-      context,
-      processed_opts,
-      finch_name
-    )
+  def normalize_max_tokens_default(operation, _model, limit)
+      when operation in [:chat, :object] do
+    min(limit, @recommended_max_completion_tokens)
   end
+
+  def normalize_max_tokens_default(_operation, _model, limit), do: limit
 
   @impl ReqLLM.Provider
   def translate_options(:image, _model, opts),
@@ -615,19 +594,6 @@ defmodule ReqLLM.Providers.Minimax do
       opts
     else
       Keyword.put(opts, :max_completion_tokens, max_tokens)
-    end
-  end
-
-  defp put_recommended_token_default(opts, model) do
-    defaulted_opts =
-      ReqLLM.Provider.Options.put_model_max_tokens_default(opts, model, fallback: 4096)
-
-    if defaulted_opts == opts do
-      opts
-    else
-      Keyword.update!(defaulted_opts, :max_tokens, fn limit ->
-        min(limit, @recommended_max_completion_tokens)
-      end)
     end
   end
 
