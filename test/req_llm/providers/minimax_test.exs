@@ -155,17 +155,15 @@ defmodule ReqLLM.Providers.MinimaxTest do
       refute Enum.any?(warnings, &String.contains?(&1, "max_completion_tokens"))
     end
 
-    test "translate_options caps a metadata-derived token limit at the recommended value" do
-      model = %{minimax_m3_1_model() | limits: %{context: 1_000_000, output: 524_288}}
-
+    test "translate_options preserves an explicit token limit up to the model output budget" do
       {translated, warnings} =
-        Minimax.translate_options(:chat, model, max_tokens: 524_288)
+        Minimax.translate_options(:chat, minimax_m3_1_model(), max_tokens: 524_288)
 
-      assert translated[:max_completion_tokens] == 131_072
+      assert translated[:max_completion_tokens] == 524_288
       assert warnings == []
 
       {translated, warnings} =
-        Minimax.translate_options(:chat, model, max_tokens: 200_000)
+        Minimax.translate_options(:chat, minimax_m3_1_model(), max_tokens: 200_000)
 
       assert translated[:max_completion_tokens] == 200_000
       assert warnings == []
@@ -474,6 +472,19 @@ defmodule ReqLLM.Providers.MinimaxTest do
       assert decoded["max_completion_tokens"] == 128
       refute Map.has_key?(decoded, "max_tokens")
       refute Map.has_key?(decoded, "presence_penalty")
+    end
+
+    test "attach_stream keeps the metadata-derived token limit at the model output budget" do
+      {:ok, finch_request} =
+        Minimax.attach_stream(
+          minimax_m3_1_model(),
+          context_fixture(),
+          [api_key: "test-key-12345"],
+          MyApp.Finch
+        )
+
+      decoded = Jason.decode!(finch_request.body)
+      assert decoded["max_completion_tokens"] == 524_288
     end
 
     test "stream response builder assembles MiniMax reasoning fragments" do

@@ -6,8 +6,8 @@ defmodule ReqLLM.Providers.Minimax do
   This provider reuses the shared OpenAI wire-format implementation and adds
   MiniMax-specific option handling:
 
-  - `max_tokens` is translated to `max_completion_tokens`; a limit inherited
-    from model metadata is capped at the MiniMax-recommended 131072 tokens
+  - `max_tokens` is translated to `max_completion_tokens` and never clamped, so
+    an explicit limit up to the model's supported output budget is preserved
   - `reasoning_split` defaults to `true` so reasoning is returned as structured
     `reasoning_details` and can be preserved across turns
   - `reasoning_effort` is forwarded for models that tune thinking depth
@@ -44,8 +44,6 @@ defmodule ReqLLM.Providers.Minimax do
     default_env_key: "MINIMAX_API_KEY"
 
   import ReqLLM.Provider.Utils, only: [maybe_put: 3]
-
-  @recommended_max_completion_tokens 131_072
 
   @provider_schema [
     max_completion_tokens: [
@@ -357,7 +355,7 @@ defmodule ReqLLM.Providers.Minimax do
       )
 
     {max_tokens, opts} = Keyword.pop(opts, :max_tokens)
-    opts = put_completion_token_limit(model, max_tokens, opts)
+    opts = put_completion_token_limit(max_tokens, opts)
 
     {opts, warnings} = drop_ignored_option(opts, warnings, :presence_penalty)
     {opts, warnings} = drop_ignored_option(opts, warnings, :frequency_penalty)
@@ -579,22 +577,15 @@ defmodule ReqLLM.Providers.Minimax do
     end
   end
 
-  defp put_completion_token_limit(_model, nil, opts), do: opts
+  defp put_completion_token_limit(nil, opts), do: opts
 
-  defp put_completion_token_limit(model, max_tokens, opts) do
+  defp put_completion_token_limit(max_tokens, opts) do
     if Keyword.has_key?(opts, :max_completion_tokens) do
       opts
     else
-      Keyword.put(opts, :max_completion_tokens, cap_default_limit(model, max_tokens))
+      Keyword.put(opts, :max_completion_tokens, max_tokens)
     end
   end
-
-  defp cap_default_limit(%LLMDB.Model{limits: %{output: limit}}, value)
-       when is_integer(limit) and value == limit do
-    min(value, @recommended_max_completion_tokens)
-  end
-
-  defp cap_default_limit(_model, value), do: value
 
   defp normalize_reasoning(model, opts, warnings) do
     effort_levels = minimax_effort_levels(model)
