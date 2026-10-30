@@ -1,0 +1,135 @@
+{
+  "captured_at": "2026-10-29T05:09:33.350315Z",
+  "model_spec": "minimax:MiniMax-M3.1-Flash",
+  "provider": "minimax",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjEwMjQsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiUmVzcG9uZCB3aXRoIGEgc2luZ2xlIHdvcmQgJ0hpJy4iLCJyb2xlIjoidXNlciJ9LHsiY29udGVudCI6IkhpIiwicmVhc29uaW5nX2NvbnRlbnQiOiJXZSBuZWVkIGFuc3dlciBleGFjdGx5IHNpbmdsZSB3b3JkIEhpLiBOZWVkIGNvbXBseS4iLCJyb2xlIjoiYXNzaXN0YW50In0seyJjb250ZW50IjoiSGkgYWdhaW4iLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJNaW5pTWF4LU0zLjEtRmxhc2giLCJyZWFzb25pbmdfc3BsaXQiOnRydWUsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+    },
+    "canonical_json": {
+      "max_completion_tokens": 1024,
+      "messages": [
+        {
+          "content": "Respond with a single word 'Hi'.",
+          "role": "user"
+        },
+        {
+          "content": "Hi",
+          "reasoning_content": "We need answer exactly single word Hi. Need comply.",
+          "role": "assistant"
+        },
+        {
+          "content": "Hi again",
+          "role": "user"
+        }
+      ],
+      "model": "MiniMax-M3.1-Flash",
+      "reasoning_split": true,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.7.5"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.minimax.io/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "base_resp": {
+        "status_code": 0,
+        "status_msg": ""
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "content": "Hi",
+            "reasoning_content": "We need respond perhaps single word? User initially requested single word 'Hi', then says Hi again. We should likely respond \"Hi\" single word.",
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1793250572,
+      "id": "0732080cffa226f33688b41a1ca3336d",
+      "input_sensitive": false,
+      "input_sensitive_type": 0,
+      "model": "MiniMax-M3.1-Flash",
+      "object": "chat.completion",
+      "output_sensitive": false,
+      "output_sensitive_int": 0,
+      "output_sensitive_type": 0,
+      "usage": {
+        "completion_tokens": 34,
+        "completion_tokens_details": {
+          "reasoning_tokens": 30
+        },
+        "prompt_tokens": 236,
+        "prompt_tokens_details": {
+          "cached_tokens": 210
+        },
+        "total_characters": 0,
+        "total_tokens": 270
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "alb_receive_time": [
+        "1793250572.546"
+      ],
+      "alb_request_id": [
+        "05c72852263935aa168feef2decf86e9e5a304f1"
+      ],
+      "cache-control": [
+        "max-age=0, no-cache, no-store"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-length": [
+        "741"
+      ],
+      "content-type": [
+        "application/json; charset=utf-8"
+      ],
+      "date": [
+        "Thu, 29 Oct 2026 05:09:33 GMT"
+      ],
+      "expires": [
+        "Thu, 29 Oct 2026 05:09:33 GMT"
+      ],
+      "minimax-request-id": [
+        "344cac80bd85f33e9023fb25a3e8065b"
+      ],
+      "pragma": [
+        "no-cache"
+      ],
+      "trace-id": [
+        "0732080cffa226f33688b41a1ca3336d"
+      ],
+      "x-from": [
+        "ak"
+      ],
+      "x-mm-request-id": [
+        "2018237621766984259_1793250572sq1nb5"
+      ],
+      "x-session-id": [
+        "aa55e27e12ac3151d404c0311ce1cac6"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

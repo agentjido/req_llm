@@ -1,0 +1,139 @@
+{
+  "captured_at": "2026-10-29T05:07:31.535566Z",
+  "model_spec": "minimax:MiniMax-M3",
+  "provider": "minimax",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjUwMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiU29sdmUgMTIqNyBhbmQgc2hvdyB5b3VyIGludGVybmFsIHRoaW5raW5nIChicmllZikuIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiTWluaU1heC1NMyIsInJlYXNvbmluZ19zcGxpdCI6dHJ1ZSwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjEuMH0="
+    },
+    "canonical_json": {
+      "max_completion_tokens": 5000,
+      "messages": [
+        {
+          "content": "Solve 12*7 and show your internal thinking (brief).",
+          "role": "user"
+        }
+      ],
+      "model": "MiniMax-M3",
+      "reasoning_split": true,
+      "stream": false,
+      "temperature": 1.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.7.5"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.minimax.io/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "base_resp": {
+        "status_code": 0,
+        "status_msg": ""
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "content": "12 × 7 = (10 × 7) + (2 × 7) = 70 + 14 = **84**.",
+            "reasoning_content": "We need answer solve 12*7 and show internal thinking brief. Need not reveal hidden chain? We can provide brief computation. 12*7 = 84. We should phrase \"12 × 7 = 84.\" Maybe brief thinking: \"Multiply 12 by 7: 10×7=70, 2×7=14, add to 84.\" Need be careful request show internal thinking, we can give concise reasoning, not hidden chain. Fine.",
+            "reasoning_details": [
+              {
+                "format": "MiniMax-response-v1",
+                "id": "reasoning-text-1",
+                "index": 0,
+                "text": "We need answer solve 12*7 and show internal thinking brief. Need not reveal hidden chain? We can provide brief computation. 12*7 = 84. We should phrase \"12 × 7 = 84.\" Maybe brief thinking: \"Multiply 12 by 7: 10×7=70, 2×7=14, add to 84.\" Need be careful request show internal thinking, we can give concise reasoning, not hidden chain. Fine.",
+                "type": "reasoning.text"
+              }
+            ],
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1793250449,
+      "id": "0732079158210bd25af99ce90fcf817e",
+      "input_sensitive": false,
+      "input_sensitive_type": 0,
+      "model": "MiniMax-M3",
+      "object": "chat.completion",
+      "output_sensitive": false,
+      "output_sensitive_int": 0,
+      "output_sensitive_type": 0,
+      "service_tier": "standard",
+      "usage": {
+        "completion_tokens": 128,
+        "completion_tokens_details": {
+          "reasoning_tokens": 97
+        },
+        "prompt_tokens": 211,
+        "prompt_tokens_details": {
+          "cached_tokens": 210
+        },
+        "total_characters": 0,
+        "total_tokens": 339
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "alb_receive_time": [
+        "1793250449.286"
+      ],
+      "alb_request_id": [
+        "a3621a44047dfcc1e1cb69874d61f25a6d5bfa84"
+      ],
+      "cache-control": [
+        "max-age=0, no-cache, no-store"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-length": [
+        "1479"
+      ],
+      "content-type": [
+        "application/json; charset=utf-8"
+      ],
+      "date": [
+        "Thu, 29 Oct 2026 05:07:31 GMT"
+      ],
+      "expires": [
+        "Thu, 29 Oct 2026 05:07:31 GMT"
+      ],
+      "minimax-request-id": [
+        "e9400f1493475ea1fb710fa9c7116d95"
+      ],
+      "pragma": [
+        "no-cache"
+      ],
+      "trace-id": [
+        "0732079158210bd25af99ce90fcf817e"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-from": [
+        "ak"
+      ],
+      "x-mm-request-id": [
+        "2018237621766984259_1793250449x25ox3"
+      ],
+      "x-session-id": [
+        "f70b967c73277962ab7ca3b6bd42510f"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

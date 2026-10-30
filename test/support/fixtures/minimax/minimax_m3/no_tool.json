@@ -1,0 +1,160 @@
+{
+  "captured_at": "2026-10-29T05:09:58.527284Z",
+  "model_spec": "minimax:MiniMax-M3",
+  "provider": "minimax",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjEwNDg1NiwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJUZWxsIG1lIGEgam9rZSBhYm91dCBjYXRzIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiTWluaU1heC1NMyIsInJlYXNvbmluZ19zcGxpdCI6dHJ1ZSwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMCwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsIm5hbWUiOiJnZXRfd2VhdGhlciIsInBhcmFtZXRlcnMiOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9XX0="
+    },
+    "canonical_json": {
+      "max_completion_tokens": 104856,
+      "messages": [
+        {
+          "content": "Tell me a joke about cats",
+          "role": "user"
+        }
+      ],
+      "model": "MiniMax-M3",
+      "reasoning_split": true,
+      "stream": false,
+      "temperature": 0.0,
+      "tools": [
+        {
+          "function": {
+            "description": "Get current weather information for a location",
+            "name": "get_weather",
+            "parameters": {
+              "additionalProperties": false,
+              "properties": {
+                "location": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "location"
+              ],
+              "type": "object"
+            }
+          },
+          "type": "function"
+        }
+      ]
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.7.5"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.minimax.io/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "base_resp": {
+        "status_code": 0,
+        "status_msg": ""
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "content": "Why did the cat sit on the computer?\n\nBecause it wanted to keep an eye on the mouse! 🐱",
+            "reasoning_content": "We need answer a joke about cats. No need tools. We should just tell a concise joke. Need maybe avoid tool. \"Why did the cat sit on the computer? Because it wanted to keep an eye on the mouse!\" Classic. Or \"What do cats love most? A nap in a sunbeam and plotting world domination.\" One joke sufficient. Ensure not overdo.",
+            "reasoning_details": [
+              {
+                "format": "MiniMax-response-v1",
+                "id": "reasoning-text-1",
+                "index": 0,
+                "text": "We need answer a joke about cats. No need tools. We should just tell a concise joke. Need maybe avoid tool. \"Why did the cat sit on the computer? Because it wanted to keep an eye on the mouse!\" Classic. Or \"What do cats love most? A nap in a sunbeam and plotting world domination.\" One joke sufficient. Ensure not overdo.",
+                "type": "reasoning.text"
+              }
+            ],
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1793250597,
+      "id": "0732082560a19b2f271c6c496afa7c0d",
+      "input_sensitive": false,
+      "input_sensitive_type": 0,
+      "model": "MiniMax-M3",
+      "object": "chat.completion",
+      "output_sensitive": false,
+      "output_sensitive_int": 0,
+      "output_sensitive_type": 0,
+      "service_tier": "standard",
+      "usage": {
+        "completion_tokens": 102,
+        "completion_tokens_details": {
+          "reasoning_tokens": 78
+        },
+        "prompt_tokens": 425,
+        "prompt_tokens_details": {
+          "cached_tokens": 384
+        },
+        "total_characters": 0,
+        "total_tokens": 527
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "alb_receive_time": [
+        "1793250597.075"
+      ],
+      "alb_request_id": [
+        "7cdd3054d783f8cf282f2c5605796fe2e2067c1e"
+      ],
+      "cache-control": [
+        "max-age=0, no-cache, no-store"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-length": [
+        "1478"
+      ],
+      "content-type": [
+        "application/json; charset=utf-8"
+      ],
+      "date": [
+        "Thu, 29 Oct 2026 05:09:58 GMT"
+      ],
+      "expires": [
+        "Thu, 29 Oct 2026 05:09:58 GMT"
+      ],
+      "minimax-request-id": [
+        "8d90d7927839c00741fe74f3a5011292"
+      ],
+      "pragma": [
+        "no-cache"
+      ],
+      "trace-id": [
+        "0732082560a19b2f271c6c496afa7c0d"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-from": [
+        "ak"
+      ],
+      "x-mm-request-id": [
+        "2018237621766984259_17932505974lqlfq"
+      ],
+      "x-session-id": [
+        "bcc3dc5db02f0ad07f147c2139331241"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

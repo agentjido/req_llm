@@ -1,19 +1,21 @@
 {
-  "model_spec": "minimax:MiniMax-M2.1",
+  "captured_at": "2026-10-29T05:08:28.634769Z",
+  "model_spec": "minimax:MiniMax-M3.1-Flash",
   "provider": "minimax",
   "request": {
     "body": {
-      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjI2MjE0LCJtZXNzYWdlcyI6W3siY29udGVudCI6IldoYXQncyB0aGUgd2VhdGhlciBsaWtlIGluIFBhcmlzLCBGcmFuY2U/Iiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiTWluaU1heC1NMi4xIiwicmVhc29uaW5nX3NwbGl0Ijp0cnVlLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9LCJ1bml0Ijp7ImVudW0iOlsiY2Vsc2l1cyIsImZhaHJlbmhlaXQiXSwidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn0seyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IlRlbGwgYSBmdW5ueSBqb2tlIiwibmFtZSI6InRlbGxfam9rZSIsInBhcmFtZXRlcnMiOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7InRvcGljIjp7ImRlc2NyaXB0aW9uIjoiVG9waWMgZm9yIHRoZSBqb2tlIiwidHlwZSI6InN0cmluZyJ9fSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn0seyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCB0aGUgY3VycmVudCB0aW1lIiwibmFtZSI6ImdldF90aW1lIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7fSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjEwNDg1NiwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJXaGF0J3MgdGhlIHdlYXRoZXIgbGlrZSBpbiBQYXJpcywgRnJhbmNlPyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Ik1pbmlNYXgtTTMuMS1GbGFzaCIsInJlYXNvbmluZ19lZmZvcnQiOiJsb3ciLCJyZWFzb25pbmdfc3BsaXQiOnRydWUsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjAsInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJwYXJhbWV0ZXJzIjp7ImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjpmYWxzZSwicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJ0eXBlIjoic3RyaW5nIn0sInVuaXQiOnsiZW51bSI6WyJjZWxzaXVzIiwiZmFocmVuaGVpdCJdLCJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifSx7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiVGVsbCBhIGZ1bm55IGpva2UiLCJuYW1lIjoidGVsbF9qb2tlIiwicGFyYW1ldGVycyI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnsidG9waWMiOnsiZGVzY3JpcHRpb24iOiJUb3BpYyBmb3IgdGhlIGpva2UiLCJ0eXBlIjoic3RyaW5nIn19LCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifSx7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IHRoZSBjdXJyZW50IHRpbWUiLCJuYW1lIjoiZ2V0X3RpbWUiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnt9LCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifV19"
     },
     "canonical_json": {
-      "max_completion_tokens": 26214,
+      "max_completion_tokens": 104856,
       "messages": [
         {
           "content": "What's the weather like in Paris, France?",
           "role": "user"
         }
       ],
-      "model": "MiniMax-M2.1",
+      "model": "MiniMax-M3.1-Flash",
+      "reasoning_effort": "low",
       "reasoning_split": true,
       "stream": false,
       "temperature": 0.0,
@@ -75,15 +77,15 @@
       ]
     },
     "headers": {
-      "accept-encoding": [
-        "gzip"
+      "accept": [
+        "application/json"
       ],
       "authorization": "[REDACTED:authorization]",
       "content-type": [
         "application/json"
       ],
       "user-agent": [
-        "req/0.5.17"
+        "req/0.7.5"
       ]
     },
     "method": "post",
@@ -102,23 +104,14 @@
           "message": {
             "audio_content": "",
             "name": "MiniMax AI",
-            "reasoning_details": [
-              {
-                "format": "MiniMax-response-v1",
-                "id": "reasoning-text-1",
-                "index": 0,
-                "text": "The user is asking about the weather in Paris, France. I should use the get_weather function to retrieve this information.\n",
-                "type": "reasoning.text"
-              }
-            ],
             "role": "assistant",
             "tool_calls": [
               {
                 "function": {
-                  "arguments": "{\"location\": \"Paris, France\"}",
+                  "arguments": "{\"location\":\"Paris, France\"}",
                   "name": "get_weather"
                 },
-                "id": "call_function_76g8orejome2_1",
+                "id": "call_01a1860f3b7d7693aff5015f",
                 "index": 0,
                 "type": "function"
               }
@@ -126,57 +119,76 @@
           }
         }
       ],
-      "created": 1777714102,
-      "id": "0644f6b63dd5f5c1982e94fc671eb912",
+      "created": 1793250507,
+      "id": "073207cb57c753215578ce69022594ee",
       "input_sensitive": false,
       "input_sensitive_type": 0,
-      "model": "MiniMax-M2.1",
+      "model": "MiniMax-M3.1-Flash",
       "object": "chat.completion",
       "output_sensitive": false,
       "output_sensitive_int": 0,
       "output_sensitive_type": 0,
       "usage": {
-        "completion_tokens": 54,
+        "completion_tokens": 31,
         "completion_tokens_details": {
-          "reasoning_tokens": 32
+          "reasoning_tokens": 0
         },
-        "prompt_tokens": 323,
+        "prompt_tokens": 560,
         "prompt_tokens_details": {
-          "cached_tokens": 0
+          "cached_tokens": 559
         },
         "total_characters": 0,
-        "total_tokens": 377
+        "total_tokens": 591
       }
     },
     "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
       "alb_receive_time": [
-        "1777714102.026"
+        "1793250507.026"
       ],
       "alb_request_id": [
-        "53bf909736bb917dd344220ce2936d403dacb49a"
+        "5043396ff577ffdc6d1032f10c722f65d947a9ef"
+      ],
+      "cache-control": [
+        "max-age=0, no-cache, no-store"
       ],
       "connection": [
         "keep-alive"
+      ],
+      "content-length": [
+        "766"
       ],
       "content-type": [
         "application/json; charset=utf-8"
       ],
       "date": [
-        "Sat, 02 May 2026 09:28:22 GMT"
+        "Thu, 29 Oct 2026 05:08:28 GMT"
+      ],
+      "expires": [
+        "Thu, 29 Oct 2026 05:08:28 GMT"
       ],
       "minimax-request-id": [
-        "bc440818da5df27e19de3e23838d9f3b"
+        "ea3f04cc1717aaf42d9f4fb93dd9d368"
+      ],
+      "pragma": [
+        "no-cache"
       ],
       "trace-id": [
-        "0644f6b63dd5f5c1982e94fc671eb912"
+        "073207cb57c753215578ce69022594ee"
+      ],
+      "x-from": [
+        "ak"
       ],
       "x-mm-request-id": [
-        "2038858753192768005_1777714102r5fkrc"
+        "2018237621766984259_1793250507d0mp1g"
       ],
       "x-session-id": [
-        "951c0c8b2e49c84734fed62254ca4d9a"
+        "af7004e80529d674dcf59977c1999be0"
       ]
     },
     "status": 200
-  }
+  },
+  "streaming": false
 }

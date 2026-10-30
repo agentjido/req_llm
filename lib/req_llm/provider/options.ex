@@ -382,7 +382,7 @@ defmodule ReqLLM.Provider.Options do
     user_opts = normalize_legacy_options(user_opts)
 
     # Extract model options (e.g. max_tokens) if present
-    user_opts = maybe_extract_model_options(operation, model, user_opts)
+    user_opts = maybe_extract_model_options(provider_mod, operation, model, user_opts)
 
     # Check for key collisions before schema validation
     check_provider_key_collisions!(provider_mod, user_opts)
@@ -697,10 +697,10 @@ defmodule ReqLLM.Provider.Options do
         opts
 
       is_integer(output_limit) and output_limit > 0 ->
-        Keyword.put(opts, key, output_limit)
+        Keyword.put(opts, key, normalize_max_tokens_default(model, output_limit, options))
 
       is_integer(fallback) and fallback > 0 ->
-        Keyword.put(opts, key, fallback)
+        Keyword.put(opts, key, normalize_max_tokens_default(model, fallback, options))
 
       true ->
         opts
@@ -784,20 +784,28 @@ defmodule ReqLLM.Provider.Options do
     end
   end
 
-  defp extract_model_options(%LLMDB.Model{} = model, opts) do
-    maybe_extract_max_tokens(model, opts)
+  defp maybe_extract_model_options(_provider_mod, :image, _model, opts), do: opts
+  defp maybe_extract_model_options(_provider_mod, :embedding, _model, opts), do: opts
+  defp maybe_extract_model_options(_provider_mod, :rerank, _model, opts), do: opts
+  defp maybe_extract_model_options(_provider_mod, :video, _model, opts), do: opts
+
+  defp maybe_extract_model_options(provider_mod, operation, model, opts) do
+    put_model_max_tokens_default(opts, model,
+      provider_module: provider_mod,
+      operation: operation
+    )
   end
 
-  defp maybe_extract_model_options(:image, _model, opts), do: opts
-  defp maybe_extract_model_options(:embedding, _model, opts), do: opts
-  defp maybe_extract_model_options(:rerank, _model, opts), do: opts
-  defp maybe_extract_model_options(:video, _model, opts), do: opts
+  defp normalize_max_tokens_default(model, limit, options) do
+    provider_mod = Keyword.get(options, :provider_module)
+    operation = Keyword.get(options, :operation, :chat)
 
-  defp maybe_extract_model_options(_operation, model, opts),
-    do: extract_model_options(model, opts)
-
-  defp maybe_extract_max_tokens(%LLMDB.Model{} = model, opts) do
-    put_model_max_tokens_default(opts, model)
+    if is_atom(provider_mod) and
+         function_exported?(provider_mod, :normalize_max_tokens_default, 3) do
+      provider_mod.normalize_max_tokens_default(operation, model, limit)
+    else
+      limit
+    end
   end
 
   defp token_limit_present?(opts) do

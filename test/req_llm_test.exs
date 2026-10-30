@@ -154,6 +154,23 @@ defmodule ReqLLMTest do
 
       assert get_in(model.capabilities, [:embeddings]) == true
     end
+
+    test "resolves MiniMax-M3.1-Flash with catalog metadata" do
+      assert {:ok, %LLMDB.Model{} = model} = ReqLLM.model("minimax:MiniMax-M3.1-Flash")
+
+      assert model.provider == :minimax
+      assert model.id == "MiniMax-M3.1-Flash"
+      assert model.limits.context == 1_000_000
+      assert model.limits.output == 524_288
+      assert model.cost.input == 0.15
+      assert model.cost.output == 0.6
+      assert model.cost.cache_read == 0.015
+      assert get_in(model.capabilities, [:reasoning, :enabled]) == true
+
+      assert get_in(model, [Access.key(:extra, %{}), "reasoning_options"]) == [
+               %{"type" => "effort", "values" => ["low", "medium", "high", "xhigh", "max"]}
+             ]
+    end
   end
 
   describe "model/1 with map-based specs (custom providers)" do
