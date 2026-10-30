@@ -244,7 +244,7 @@ defmodule ReqLLM.Provider.Options do
                                telemetry: [
                                  type: {:or, [:map, :keyword_list]},
                                  doc:
-                                   "ReqLLM telemetry options. Currently supports [payloads: :none | :raw]"
+                                   "ReqLLM telemetry options. Currently supports [payloads: :none | :raw, conversation_id: String.t(), extra_metadata: map()]"
                                ],
 
                                # Transport options
