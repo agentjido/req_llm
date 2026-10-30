@@ -6,9 +6,8 @@ defmodule ReqLLM.Providers.Google.CachedContentTest do
   alias ReqLLM.Providers.Google.CachedContent
 
   describe "create/1" do
-    @tag :skip
+    @tag :integration
     test "creates cached content for Google AI Studio" do
-      # Skip in CI - requires API key
       opts = [
         provider: :google,
         model: "gemini-2.5-flash",
@@ -38,9 +37,8 @@ defmodule ReqLLM.Providers.Google.CachedContentTest do
       assert cache.expire_time
     end
 
-    @tag :skip
+    @tag :integration
     test "creates cached content for Vertex AI" do
-      # Skip in CI - requires service account
       opts = [
         provider: :google_vertex,
         model: "gemini-2.5-flash",
@@ -256,20 +254,44 @@ defmodule ReqLLM.Providers.Google.CachedContentTest do
 
   describe "query authentication opt-out" do
     for operation <- [:create, :list, :get, :update, :delete] do
-      test "#{operation}/1 accepts google_auth_header: false" do
-        operation = unquote(operation)
+      parameter_assertions =
+        case operation do
+          :list ->
+            quote do
+              assert var!(params)["pageSize"] == "5"
+              assert var!(params)["pageToken"] == "next"
+            end
 
+          :update ->
+            quote do
+              assert var!(params)["updateMask"] == "ttl"
+            end
+
+          _other ->
+            quote do
+              :ok
+            end
+        end
+
+      operation_assertion =
+        if operation == :delete do
+          quote do
+            assert :ok = CachedContent.delete(var!(opts))
+          end
+        else
+          quote do
+            assert {:ok, _response} =
+                     apply(CachedContent, unquote(operation), [var!(opts)])
+          end
+        end
+
+      test "#{operation}/1 accepts google_auth_header: false" do
         Req.Test.stub(__MODULE__, fn conn ->
           assert Plug.Conn.get_req_header(conn, "x-goog-api-key") == []
           params = URI.decode_query(conn.query_string)
           assert params["key"] == "test-key"
 
-          if operation == :list do
-            assert params["pageSize"] == "5"
-            assert params["pageToken"] == "next"
-          end
-
-          if operation == :update, do: assert(params["updateMask"] == "ttl")
+          unquote(parameter_assertions)
 
           Req.Test.json(conn, %{"name" => "cachedContents/test-cache"})
         end)
@@ -287,10 +309,7 @@ defmodule ReqLLM.Providers.Google.CachedContentTest do
           req_http_options: [plug: {Req.Test, __MODULE__}]
         ]
 
-        case operation do
-          :delete -> assert :ok = CachedContent.delete(opts)
-          _ -> assert {:ok, _response} = apply(CachedContent, operation, [opts])
-        end
+        unquote(operation_assertion)
       end
     end
   end
@@ -299,13 +318,6 @@ defmodule ReqLLM.Providers.Google.CachedContentTest do
     test "Google provider schema accepts cached_content option" do
       # Verify the provider schema accepts cached_content
       assert :cached_content in ReqLLM.Providers.Google.supported_provider_options()
-    end
-
-    @tag :skip
-    test "Vertex provider schema accepts cached_content option" do
-      # NOTE: This will be enabled when Vertex Gemini support is added
-      # Vertex caching requires Gemini models (not Claude models)
-      assert :cached_content in ReqLLM.Providers.GoogleVertex.supported_provider_options()
     end
   end
 end

@@ -1,429 +1,456 @@
-defmodule ReqLLM.Providers.AlibabaTest do
-  @moduledoc """
-  Provider-level tests for Alibaba Cloud Bailian (DashScope) international implementation.
+defmodule ReqLLM.Providers.AlibabaContract do
+  defmacro __using__(opts) do
+    provider = Keyword.fetch!(opts, :provider)
+    provider_id = Keyword.fetch!(opts, :provider_id)
+    search_strategy = Keyword.fetch!(opts, :search_strategy)
+    thinking_budget = Keyword.fetch!(opts, :thinking_budget)
+    repetition_penalty = Keyword.fetch!(opts, :repetition_penalty)
 
-  Tests the provider contract, parameter translation, body encoding,
-  and DashScope-specific extensions without making live API calls.
-  """
+    quote do
+      use ReqLLM.ProviderCase, provider: unquote(provider), async: true
 
-  use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Alibaba, async: true
+      @provider unquote(provider)
+      @provider_id unquote(provider_id)
+      @search_strategy unquote(search_strategy)
+      @thinking_budget unquote(thinking_budget)
+      @repetition_penalty unquote(repetition_penalty)
 
-  alias ReqLLM.Providers.Alibaba
+      defp model_fixture do
+        ReqLLM.model!(%{provider: @provider_id, id: "qwen-plus"})
+      end
 
-  # LLMDB doesn't have alibaba models yet, so we create them manually
-  defp model_fixture do
-    {:ok, model} = ReqLLM.model(%{provider: :alibaba, id: "qwen-plus"})
-    model
-  end
+      describe "provider contract" do
+        test "provider schema includes DashScope-specific options" do
+          schema_keys = @provider.provider_schema().schema |> Keyword.keys()
 
-  describe "provider contract" do
-    test "provider schema includes DashScope-specific options" do
-      schema_keys = Alibaba.provider_schema().schema |> Keyword.keys()
+          expected_keys = [
+            :enable_search,
+            :search_options,
+            :enable_thinking,
+            :thinking_budget,
+            :repetition_penalty,
+            :enable_code_interpreter,
+            :vl_high_resolution_images,
+            :incremental_output
+          ]
 
-      expected_keys = [
-        :enable_search,
-        :search_options,
-        :enable_thinking,
-        :thinking_budget,
-        :repetition_penalty,
-        :enable_code_interpreter,
-        :vl_high_resolution_images,
-        :incremental_output
-      ]
+          for key <- expected_keys do
+            assert key in schema_keys, "Expected #{key} in provider schema"
+          end
+        end
+      end
 
-      for key <- expected_keys do
-        assert key in schema_keys, "Expected #{key} in provider schema"
+      describe "request preparation & pipeline wiring" do
+        test "prepare_request preserves DashScope provider options for encoding" do
+          model = model_fixture()
+
+          {:ok, request} =
+            @provider.prepare_request(:chat, model, "Hello world",
+              provider_options: [enable_search: true, enable_thinking: true]
+            )
+
+          assert request.options[:dashscope_parameters] == %{
+                   enable_search: true,
+                   enable_thinking: true
+                 }
+
+          encoded_request = @provider.encode_body(request)
+          decoded = ReqLLM.Test.Helpers.json_body(encoded_request)
+
+          assert decoded["enable_search"] == true
+          assert decoded["enable_thinking"] == true
+        end
+
+        test "prepare_request for :object includes response_format in final http request" do
+          model = model_fixture()
+
+          {:ok, compiled_schema} =
+            ReqLLM.Schema.compile(
+              name: [type: :string, required: true],
+              age: [type: :integer]
+            )
+
+          {:ok, request} =
+            @provider.prepare_request(:object, model, "Generate a person",
+              compiled_schema: Map.put(compiled_schema, :name, "person_schema")
+            )
+
+          encoded_request = @provider.encode_body(request)
+          decoded = ReqLLM.Test.Helpers.json_body(encoded_request)
+
+          assert decoded["response_format"]["type"] == "json_schema"
+          assert decoded["response_format"]["json_schema"]["name"] == "person_schema"
+          assert decoded["response_format"]["json_schema"]["strict"] == true
+
+          assert decoded["response_format"]["json_schema"]["schema"]["additionalProperties"] ==
+                   false
+
+          assert Enum.sort(decoded["response_format"]["json_schema"]["schema"]["required"]) ==
+                   ["age", "name"]
+        end
+
+        test "rejects unsupported operations" do
+          model = model_fixture()
+          prompt = "Hello world"
+
+          {:error, error} = @provider.prepare_request(:unsupported, model, prompt, [])
+          assert %ReqLLM.Error.Invalid.Parameter{} = error
+        end
+      end
+
+      describe "translate_options/3" do
+        test "extracts DashScope-specific options into dashscope_parameters" do
+          opts = [
+            enable_search: true,
+            enable_thinking: true,
+            temperature: 0.7
+          ]
+
+          {translated, warnings} = @provider.translate_options(:chat, nil, opts)
+
+          assert warnings == []
+
+          assert translated[:dashscope_parameters] == %{
+                   enable_search: true,
+                   enable_thinking: true
+                 }
+
+          assert translated[:temperature] == 0.7
+          refute Keyword.has_key?(translated, :enable_search)
+          refute Keyword.has_key?(translated, :enable_thinking)
+        end
+
+        test "handles all DashScope-specific options" do
+          opts = [
+            enable_search: true,
+            search_options: %{search_strategy: @search_strategy, enable_source: true},
+            enable_thinking: true,
+            thinking_budget: @thinking_budget,
+            repetition_penalty: @repetition_penalty,
+            enable_code_interpreter: true,
+            vl_high_resolution_images: true,
+            incremental_output: true
+          ]
+
+          {translated, warnings} = @provider.translate_options(:chat, nil, opts)
+
+          assert warnings == []
+          dashscope_params = translated[:dashscope_parameters]
+          assert dashscope_params[:enable_search] == true
+
+          assert dashscope_params[:search_options] == %{
+                   search_strategy: @search_strategy,
+                   enable_source: true
+                 }
+
+          assert dashscope_params[:enable_thinking] == true
+          assert dashscope_params[:thinking_budget] == @thinking_budget
+          assert dashscope_params[:repetition_penalty] == @repetition_penalty
+          assert dashscope_params[:enable_code_interpreter] == true
+          assert dashscope_params[:vl_high_resolution_images] == true
+          assert dashscope_params[:incremental_output] == true
+        end
+
+        test "passes through non-DashScope options unchanged" do
+          opts = [
+            temperature: 0.7,
+            max_tokens: 100,
+            top_p: 0.9,
+            seed: 42
+          ]
+
+          {translated, warnings} = @provider.translate_options(:chat, nil, opts)
+
+          assert warnings == []
+          assert translated[:temperature] == 0.7
+          assert translated[:max_tokens] == 100
+          assert translated[:top_p] == 0.9
+          assert translated[:seed] == 42
+          refute Keyword.has_key?(translated, :dashscope_parameters)
+        end
+
+        test "filters out nil DashScope option values" do
+          opts = [
+            enable_search: nil,
+            enable_thinking: true,
+            temperature: 0.5
+          ]
+
+          {translated, _warnings} = @provider.translate_options(:chat, nil, opts)
+
+          dashscope_params = translated[:dashscope_parameters]
+          refute Map.has_key?(dashscope_params, :enable_search)
+          assert dashscope_params[:enable_thinking] == true
+        end
+
+        test "returns no dashscope_parameters when no DashScope options provided" do
+          opts = [temperature: 0.7, max_tokens: 100]
+
+          {translated, warnings} = @provider.translate_options(:chat, nil, opts)
+
+          assert warnings == []
+          refute Keyword.has_key?(translated, :dashscope_parameters)
+          assert translated[:temperature] == 0.7
+          assert translated[:max_tokens] == 100
+        end
+      end
+
+      describe "body encoding" do
+        test "encode_body with minimal context" do
+          model = model_fixture()
+          context = context_fixture()
+
+          mock_request = %Req.Request{
+            options: [
+              context: context,
+              model: model.model,
+              stream: false
+            ]
+          }
+
+          updated_request = @provider.encode_body(mock_request)
+          assert_no_duplicate_json_keys(ReqLLM.Test.Helpers.json_iodata(updated_request))
+          decoded = ReqLLM.Test.Helpers.json_body(updated_request)
+
+          assert decoded["model"] == "qwen-plus"
+          assert is_list(decoded["messages"])
+          assert decoded["stream"] == false
+          refute Map.has_key?(decoded, "enable_search")
+          refute Map.has_key?(decoded, "enable_thinking")
+        end
+
+        test "encode_body with search parameters" do
+          model = model_fixture()
+          context = context_fixture()
+
+          mock_request = %Req.Request{
+            options: [
+              context: context,
+              model: model.model,
+              stream: false,
+              dashscope_parameters: %{
+                enable_search: true,
+                search_options: %{search_strategy: @search_strategy, enable_source: true}
+              }
+            ]
+          }
+
+          updated_request = @provider.encode_body(mock_request)
+          assert_no_duplicate_json_keys(ReqLLM.Test.Helpers.json_iodata(updated_request))
+          decoded = ReqLLM.Test.Helpers.json_body(updated_request)
+
+          assert decoded["enable_search"] == true
+          assert Map.has_key?(decoded, "search_options")
+          search_opts = decoded["search_options"]
+          assert search_opts["search_strategy"] == @search_strategy
+          assert search_opts["enable_source"] == true
+        end
+
+        test "encode_body with thinking parameters" do
+          model = model_fixture()
+          context = context_fixture()
+
+          mock_request = %Req.Request{
+            options: [
+              context: context,
+              model: model.model,
+              stream: false,
+              dashscope_parameters: %{
+                enable_thinking: true,
+                thinking_budget: @thinking_budget
+              }
+            ]
+          }
+
+          updated_request = @provider.encode_body(mock_request)
+          assert_no_duplicate_json_keys(ReqLLM.Test.Helpers.json_iodata(updated_request))
+          decoded = ReqLLM.Test.Helpers.json_body(updated_request)
+
+          assert decoded["enable_thinking"] == true
+          assert decoded["thinking_budget"] == @thinking_budget
+        end
+
+        test "encode_body with top_k sampling" do
+          model = model_fixture()
+          context = context_fixture()
+
+          mock_request = %Req.Request{
+            options: [
+              context: context,
+              model: model.model,
+              stream: false,
+              top_k: 50
+            ]
+          }
+
+          updated_request = @provider.encode_body(mock_request)
+          assert_no_duplicate_json_keys(ReqLLM.Test.Helpers.json_iodata(updated_request))
+          decoded = ReqLLM.Test.Helpers.json_body(updated_request)
+
+          assert decoded["top_k"] == 50
+        end
+
+        test "encode_body with tools and DashScope parameters" do
+          model = model_fixture()
+          context = context_fixture()
+
+          tool =
+            ReqLLM.Tool.new!(
+              name: "search_tool",
+              description: "Search the web",
+              parameter_schema: [query: [type: :string, required: true]],
+              callback: fn _ -> {:ok, "result"} end
+            )
+
+          mock_request = %Req.Request{
+            options: [
+              context: context,
+              model: model.model,
+              stream: false,
+              tools: [tool],
+              dashscope_parameters: %{
+                enable_search: true,
+                repetition_penalty: @repetition_penalty
+              }
+            ]
+          }
+
+          updated_request = @provider.encode_body(mock_request)
+          decoded = ReqLLM.Test.Helpers.json_body(updated_request)
+
+          assert is_list(decoded["tools"])
+          assert decoded["enable_search"] == true
+          assert decoded["repetition_penalty"] == @repetition_penalty
+        end
+      end
+
+      describe "streaming request encoding" do
+        test "attach_stream translates DashScope options before encoding" do
+          model = model_fixture()
+          context = context_fixture()
+
+          {:ok, request} =
+            @provider.attach_stream(
+              model,
+              context,
+              [
+                enable_search: true,
+                enable_thinking: true,
+                incremental_output: true,
+                top_k: 50
+              ],
+              ReqLLM.Finch
+            )
+
+          decoded = ReqLLM.Test.Helpers.json_body(request)
+
+          assert decoded["enable_search"] == true
+          assert decoded["enable_thinking"] == true
+          assert decoded["incremental_output"] == true
+          assert decoded["top_k"] == 50
+          assert decoded["stream"] == true
+        end
+
+        test "attach_stream honors nested provider_options" do
+          model = model_fixture()
+          context = context_fixture()
+
+          {:ok, request} =
+            @provider.attach_stream(
+              model,
+              context,
+              [
+                provider_options: [
+                  enable_search: true,
+                  enable_thinking: true,
+                  incremental_output: true
+                ],
+                top_k: 50
+              ],
+              ReqLLM.Finch
+            )
+
+          decoded = ReqLLM.Test.Helpers.json_body(request)
+
+          assert decoded["enable_search"] == true
+          assert decoded["enable_thinking"] == true
+          assert decoded["incremental_output"] == true
+          assert decoded["top_k"] == 50
+          assert decoded["stream"] == true
+        end
+      end
+
+      describe "response decoding" do
+        test "decode_response handles streaming responses" do
+          mock_resp = %Req.Response{
+            status: 200,
+            body: []
+          }
+
+          context = context_fixture()
+          model_id = "qwen-plus"
+          mock_stream = ["Hello", " world", "!"]
+
+          mock_req = %Req.Request{
+            options: [context: context, stream: true, model: model_id],
+            private: %{real_time_stream: mock_stream}
+          }
+
+          {req, resp} = @provider.decode_response({mock_req, mock_resp})
+
+          assert req == mock_req
+          assert %ReqLLM.Response{} = resp.body
+
+          response = resp.body
+          assert response.stream? == true
+          assert response.stream == mock_stream
+          assert response.model == model_id
+        end
+
+        test "decode_response handles API errors" do
+          error_body = %{
+            "error" => %{
+              "message" => "Invalid API key",
+              "type" => "authentication_error"
+            }
+          }
+
+          mock_resp = %Req.Response{
+            status: 401,
+            body: error_body
+          }
+
+          context = context_fixture()
+
+          mock_req = %Req.Request{
+            options: [context: context, id: "qwen-plus"]
+          }
+
+          {req, error} = @provider.decode_response({mock_req, mock_resp})
+
+          assert req == mock_req
+          assert %ReqLLM.Error.API.Response{} = error
+          assert error.status == 401
+        end
       end
     end
   end
-
-  describe "request preparation & pipeline wiring" do
-    test "prepare_request preserves DashScope provider options for encoding" do
-      model = model_fixture()
-
-      {:ok, request} =
-        Alibaba.prepare_request(:chat, model, "Hello world",
-          provider_options: [enable_search: true, enable_thinking: true]
-        )
-
-      assert request.options[:dashscope_parameters] == %{
-               enable_search: true,
-               enable_thinking: true
-             }
-
-      encoded_request = Alibaba.encode_body(request)
-      decoded = ReqLLM.Test.Helpers.json_body(encoded_request)
-
-      assert decoded["enable_search"] == true
-      assert decoded["enable_thinking"] == true
-    end
-
-    test "prepare_request for :object includes response_format in final http request" do
-      model = model_fixture()
-
-      {:ok, compiled_schema} =
-        ReqLLM.Schema.compile(
-          name: [type: :string, required: true],
-          age: [type: :integer]
-        )
-
-      {:ok, request} =
-        Alibaba.prepare_request(:object, model, "Generate a person",
-          compiled_schema: Map.put(compiled_schema, :name, "person_schema")
-        )
-
-      encoded_request = Alibaba.encode_body(request)
-      decoded = ReqLLM.Test.Helpers.json_body(encoded_request)
-
-      assert decoded["response_format"]["type"] == "json_schema"
-      assert decoded["response_format"]["json_schema"]["name"] == "person_schema"
-      assert decoded["response_format"]["json_schema"]["strict"] == true
-      assert decoded["response_format"]["json_schema"]["schema"]["additionalProperties"] == false
-
-      assert Enum.sort(decoded["response_format"]["json_schema"]["schema"]["required"]) ==
-               ["age", "name"]
-    end
-
-    test "rejects unsupported operations" do
-      model = model_fixture()
-      prompt = "Hello world"
-
-      {:error, error} = Alibaba.prepare_request(:unsupported, model, prompt, [])
-      assert %ReqLLM.Error.Invalid.Parameter{} = error
-    end
-  end
-
-  describe "translate_options/3" do
-    test "extracts DashScope-specific options into dashscope_parameters" do
-      opts = [
-        enable_search: true,
-        enable_thinking: true,
-        temperature: 0.7
-      ]
-
-      {translated, warnings} = Alibaba.translate_options(:chat, nil, opts)
-
-      assert warnings == []
-
-      assert translated[:dashscope_parameters] == %{
-               enable_search: true,
-               enable_thinking: true
-             }
-
-      assert translated[:temperature] == 0.7
-      refute Keyword.has_key?(translated, :enable_search)
-      refute Keyword.has_key?(translated, :enable_thinking)
-    end
-
-    test "handles all DashScope-specific options" do
-      opts = [
-        enable_search: true,
-        search_options: %{search_strategy: "agent", enable_source: true},
-        enable_thinking: true,
-        thinking_budget: 4096,
-        repetition_penalty: 1.1,
-        enable_code_interpreter: true,
-        vl_high_resolution_images: true,
-        incremental_output: true
-      ]
-
-      {translated, warnings} = Alibaba.translate_options(:chat, nil, opts)
-
-      assert warnings == []
-      dashscope_params = translated[:dashscope_parameters]
-      assert dashscope_params[:enable_search] == true
-      assert dashscope_params[:search_options] == %{search_strategy: "agent", enable_source: true}
-      assert dashscope_params[:enable_thinking] == true
-      assert dashscope_params[:thinking_budget] == 4096
-      assert dashscope_params[:repetition_penalty] == 1.1
-      assert dashscope_params[:enable_code_interpreter] == true
-      assert dashscope_params[:vl_high_resolution_images] == true
-      assert dashscope_params[:incremental_output] == true
-    end
-
-    test "passes through non-DashScope options unchanged" do
-      opts = [
-        temperature: 0.7,
-        max_tokens: 100,
-        top_p: 0.9,
-        seed: 42
-      ]
-
-      {translated, warnings} = Alibaba.translate_options(:chat, nil, opts)
-
-      assert warnings == []
-      assert translated[:temperature] == 0.7
-      assert translated[:max_tokens] == 100
-      assert translated[:top_p] == 0.9
-      assert translated[:seed] == 42
-      refute Keyword.has_key?(translated, :dashscope_parameters)
-    end
-
-    test "filters out nil DashScope option values" do
-      opts = [
-        enable_search: nil,
-        enable_thinking: true,
-        temperature: 0.5
-      ]
-
-      {translated, _warnings} = Alibaba.translate_options(:chat, nil, opts)
-
-      dashscope_params = translated[:dashscope_parameters]
-      refute Map.has_key?(dashscope_params, :enable_search)
-      assert dashscope_params[:enable_thinking] == true
-    end
-
-    test "returns no dashscope_parameters when no DashScope options provided" do
-      opts = [temperature: 0.7, max_tokens: 100]
-
-      {translated, warnings} = Alibaba.translate_options(:chat, nil, opts)
-
-      assert warnings == []
-      refute Keyword.has_key?(translated, :dashscope_parameters)
-      assert translated[:temperature] == 0.7
-      assert translated[:max_tokens] == 100
-    end
-  end
-
-  describe "body encoding" do
-    test "encode_body with minimal context" do
-      model = model_fixture()
-      context = context_fixture()
-
-      mock_request = %Req.Request{
-        options: [
-          context: context,
-          model: model.model,
-          stream: false
-        ]
-      }
-
-      updated_request = Alibaba.encode_body(mock_request)
-      assert_no_duplicate_json_keys(ReqLLM.Test.Helpers.json_iodata(updated_request))
-      decoded = ReqLLM.Test.Helpers.json_body(updated_request)
-
-      assert decoded["model"] == "qwen-plus"
-      assert is_list(decoded["messages"])
-      assert decoded["stream"] == false
-      refute Map.has_key?(decoded, "enable_search")
-      refute Map.has_key?(decoded, "enable_thinking")
-    end
-
-    test "encode_body with search parameters" do
-      model = model_fixture()
-      context = context_fixture()
-
-      mock_request = %Req.Request{
-        options: [
-          context: context,
-          model: model.model,
-          stream: false,
-          dashscope_parameters: %{
-            enable_search: true,
-            search_options: %{search_strategy: "agent", enable_source: true}
-          }
-        ]
-      }
-
-      updated_request = Alibaba.encode_body(mock_request)
-      assert_no_duplicate_json_keys(ReqLLM.Test.Helpers.json_iodata(updated_request))
-      decoded = ReqLLM.Test.Helpers.json_body(updated_request)
-
-      assert decoded["enable_search"] == true
-      assert Map.has_key?(decoded, "search_options")
-      search_opts = decoded["search_options"]
-      assert search_opts["search_strategy"] == "agent"
-      assert search_opts["enable_source"] == true
-    end
-
-    test "encode_body with thinking parameters" do
-      model = model_fixture()
-      context = context_fixture()
-
-      mock_request = %Req.Request{
-        options: [
-          context: context,
-          model: model.model,
-          stream: false,
-          dashscope_parameters: %{
-            enable_thinking: true,
-            thinking_budget: 4096
-          }
-        ]
-      }
-
-      updated_request = Alibaba.encode_body(mock_request)
-      assert_no_duplicate_json_keys(ReqLLM.Test.Helpers.json_iodata(updated_request))
-      decoded = ReqLLM.Test.Helpers.json_body(updated_request)
-
-      assert decoded["enable_thinking"] == true
-      assert decoded["thinking_budget"] == 4096
-    end
-
-    test "encode_body with top_k sampling" do
-      model = model_fixture()
-      context = context_fixture()
-
-      mock_request = %Req.Request{
-        options: [
-          context: context,
-          model: model.model,
-          stream: false,
-          top_k: 50
-        ]
-      }
-
-      updated_request = Alibaba.encode_body(mock_request)
-      assert_no_duplicate_json_keys(ReqLLM.Test.Helpers.json_iodata(updated_request))
-      decoded = ReqLLM.Test.Helpers.json_body(updated_request)
-
-      assert decoded["top_k"] == 50
-    end
-
-    test "encode_body with tools and DashScope parameters" do
-      model = model_fixture()
-      context = context_fixture()
-
-      tool =
-        ReqLLM.Tool.new!(
-          name: "search_tool",
-          description: "Search the web",
-          parameter_schema: [query: [type: :string, required: true]],
-          callback: fn _ -> {:ok, "result"} end
-        )
-
-      mock_request = %Req.Request{
-        options: [
-          context: context,
-          model: model.model,
-          stream: false,
-          tools: [tool],
-          dashscope_parameters: %{
-            enable_search: true,
-            repetition_penalty: 1.1
-          }
-        ]
-      }
-
-      updated_request = Alibaba.encode_body(mock_request)
-      decoded = ReqLLM.Test.Helpers.json_body(updated_request)
-
-      assert is_list(decoded["tools"])
-      assert decoded["enable_search"] == true
-      assert decoded["repetition_penalty"] == 1.1
-    end
-  end
-
-  describe "streaming request encoding" do
-    test "attach_stream translates DashScope options before encoding" do
-      model = model_fixture()
-      context = context_fixture()
-
-      {:ok, request} =
-        Alibaba.attach_stream(
-          model,
-          context,
-          [
-            enable_search: true,
-            enable_thinking: true,
-            incremental_output: true,
-            top_k: 50
-          ],
-          ReqLLM.Finch
-        )
-
-      decoded = ReqLLM.Test.Helpers.json_body(request)
-
-      assert decoded["enable_search"] == true
-      assert decoded["enable_thinking"] == true
-      assert decoded["incremental_output"] == true
-      assert decoded["top_k"] == 50
-      assert decoded["stream"] == true
-    end
-
-    test "attach_stream honors nested provider_options" do
-      model = model_fixture()
-      context = context_fixture()
-
-      {:ok, request} =
-        Alibaba.attach_stream(
-          model,
-          context,
-          [
-            provider_options: [
-              enable_search: true,
-              enable_thinking: true,
-              incremental_output: true
-            ],
-            top_k: 50
-          ],
-          ReqLLM.Finch
-        )
-
-      decoded = ReqLLM.Test.Helpers.json_body(request)
-
-      assert decoded["enable_search"] == true
-      assert decoded["enable_thinking"] == true
-      assert decoded["incremental_output"] == true
-      assert decoded["top_k"] == 50
-      assert decoded["stream"] == true
-    end
-  end
-
-  describe "response decoding" do
-    test "decode_response handles streaming responses" do
-      mock_resp = %Req.Response{
-        status: 200,
-        body: []
-      }
-
-      context = context_fixture()
-      model_id = "qwen-plus"
-      mock_stream = ["Hello", " world", "!"]
-
-      mock_req = %Req.Request{
-        options: [context: context, stream: true, model: model_id],
-        private: %{real_time_stream: mock_stream}
-      }
-
-      {req, resp} = Alibaba.decode_response({mock_req, mock_resp})
-
-      assert req == mock_req
-      assert %ReqLLM.Response{} = resp.body
-
-      response = resp.body
-      assert response.stream? == true
-      assert response.stream == mock_stream
-      assert response.model == model_id
-    end
-
-    test "decode_response handles API errors" do
-      error_body = %{
-        "error" => %{
-          "message" => "Invalid API key",
-          "type" => "authentication_error"
-        }
-      }
-
-      mock_resp = %Req.Response{
-        status: 401,
-        body: error_body
-      }
-
-      context = context_fixture()
-
-      mock_req = %Req.Request{
-        options: [context: context, id: "qwen-plus"]
-      }
-
-      {req, error} = Alibaba.decode_response({mock_req, mock_resp})
-
-      assert req == mock_req
-      assert %ReqLLM.Error.API.Response{} = error
-      assert error.status == 401
-    end
-  end
-
-  describe "context validation" do
-  end
+end
+
+defmodule ReqLLM.Providers.AlibabaTest do
+  use ReqLLM.Providers.AlibabaContract,
+    provider: ReqLLM.Providers.Alibaba,
+    provider_id: :alibaba,
+    search_strategy: "agent",
+    thinking_budget: 4096,
+    repetition_penalty: 1.1
+end
+
+defmodule ReqLLM.Providers.AlibabaCNTest do
+  use ReqLLM.Providers.AlibabaContract,
+    provider: ReqLLM.Providers.AlibabaCN,
+    provider_id: :alibaba_cn,
+    search_strategy: "agent_max",
+    thinking_budget: 8192,
+    repetition_penalty: 1.2
 end

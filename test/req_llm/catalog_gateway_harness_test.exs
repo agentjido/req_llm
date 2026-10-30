@@ -6,7 +6,7 @@ defmodule ReqLLM.CatalogGatewayHarnessTest do
   alias ReqLLM.Step.Fixture.Backend
   alias ReqLLM.Test.{CatalogGatewayCatalog, ChunkCollector, ModelMatrix, VCR}
 
-  setup do
+  setup_all do
     CatalogGatewayCatalog.install!()
   end
 

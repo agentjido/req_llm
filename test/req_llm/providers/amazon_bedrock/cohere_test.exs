@@ -140,13 +140,11 @@ defmodule ReqLLM.Providers.AmazonBedrock.CohereTest do
 
   describe "schema accessors" do
     test "embedding_request_schema returns Zoi schema" do
-      schema = Cohere.embedding_request_schema()
-      assert is_struct(schema)
+      assert %Zoi.Types.Map{} = Cohere.embedding_request_schema()
     end
 
     test "embedding_response_schema returns Zoi schema" do
-      schema = Cohere.embedding_response_schema()
-      assert is_struct(schema)
+      assert %Zoi.Types.Map{} = Cohere.embedding_response_schema()
     end
   end
 end

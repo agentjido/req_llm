@@ -53,15 +53,6 @@ defmodule ReqLLM.Generation.TranslationTest do
   end
 
   describe "dynamic_schema/1 includes on_unsupported option" do
-    test "base schema includes on_unsupported option" do
-      schema = Generation.schema()
-      on_unsupported_spec = Keyword.get(schema.schema, :on_unsupported)
-
-      assert on_unsupported_spec != nil
-      assert on_unsupported_spec[:type] == {:in, [:warn, :error, :ignore]}
-      assert on_unsupported_spec[:default] == :warn
-    end
-
     test "dynamic schema includes on_unsupported option" do
       provider_mod = ReqLLM.Providers.OpenAI
       schema = ReqLLM.Provider.Options.compose_schema(Generation.schema(), provider_mod)

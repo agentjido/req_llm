@@ -14,22 +14,38 @@ defmodule ReqLLM.Providers.GoogleAuthTest do
         {:image, "imagen-4.0-generate-001", "A cat", "predict"}
       ],
       mode <- [:default, true, false] do
+    provider_options =
+      if mode == :default,
+        do: [],
+        else: [provider_options: [google_auth_header: mode]]
+
+    authentication_assertions =
+      if mode == false do
+        quote do
+          assert var!(request).options[:params][:key] == "google-auth-secret"
+          assert Req.Request.get_header(var!(request), "x-goog-api-key") == []
+        end
+      else
+        quote do
+          refute Keyword.has_key?(var!(request).options[:params] || [], :key)
+
+          assert Req.Request.get_header(var!(request), "x-goog-api-key") == [
+                   "google-auth-secret"
+                 ]
+        end
+      end
+
     test "#{operation} #{model_id} #{endpoint} authentication with #{mode}" do
       model_id = unquote(model_id)
-      mode = unquote(mode)
       {:ok, schema} = ReqLLM.Schema.compile(name: [type: :string, required: true])
 
-      opts = [
-        api_key: "google-auth-secret",
-        compiled_schema: schema,
-        base_url: "https://proxy.example.com/v1beta",
-        req_http_options: [headers: [{"x-custom-header", "preserved"}]]
-      ]
-
       opts =
-        if mode == :default,
-          do: opts,
-          else: Keyword.put(opts, :provider_options, google_auth_header: mode)
+        [
+          api_key: "google-auth-secret",
+          compiled_schema: schema,
+          base_url: "https://proxy.example.com/v1beta",
+          req_http_options: [headers: [{"x-custom-header", "preserved"}]]
+        ] ++ unquote(provider_options)
 
       assert {:ok, request} =
                Google.prepare_request(
@@ -43,13 +59,7 @@ defmodule ReqLLM.Providers.GoogleAuthTest do
       assert request.options[:base_url] == "https://proxy.example.com/v1beta"
       assert Req.Request.get_header(request, "x-custom-header") == ["preserved"]
 
-      if mode == false do
-        assert request.options[:params][:key] == "google-auth-secret"
-        assert Req.Request.get_header(request, "x-goog-api-key") == []
-      else
-        refute Keyword.has_key?(request.options[:params] || [], :key)
-        assert Req.Request.get_header(request, "x-goog-api-key") == ["google-auth-secret"]
-      end
+      unquote(authentication_assertions)
     end
   end
 end

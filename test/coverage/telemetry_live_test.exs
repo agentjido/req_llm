@@ -18,16 +18,8 @@ defmodule ReqLLM.Coverage.TelemetryLiveTest do
   ]
 
   @moduletag :coverage
+  @moduletag :integration
   @moduletag timeout: 300_000
-
-  if ReqLLM.Test.Env.fixtures_mode() != :record do
-    @moduletag skip: "telemetry live smoke tests only run in record mode"
-  end
-
-  setup_all do
-    LLMDB.load(allow: :all, custom: %{})
-    :ok
-  end
 
   setup do
     test_pid = self()

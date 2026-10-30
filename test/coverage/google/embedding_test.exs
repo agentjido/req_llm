@@ -6,5 +6,5 @@ defmodule ReqLLM.Coverage.Google.EmbeddingTest do
   Otherwise uses fixtures for fast, reliable testing.
   """
 
-  use ReqLLM.ProviderTest.Embedding, provider: :google
+  use ReqLLM.ProviderTest.Embedding, provider: :google, integration: true
 end

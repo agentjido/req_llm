@@ -340,11 +340,11 @@ defmodule ReqLLM.GenerationTest do
         })
       end)
 
-      assert {:error, %ReqLLM.Error.API.Timeout{kind: :total, timeout: 60}} =
+      assert {:error, %ReqLLM.Error.API.Timeout{kind: :total, timeout: 20}} =
                Generation.generate_text(
                  @chat_model,
                  "Hello",
-                 total_timeout: 60,
+                 total_timeout: 20,
                  telemetry: [conversation_id: conversation_id],
                  req_http_options: [plug: {Req.Test, SlowHTTP}]
                )

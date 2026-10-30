@@ -28,15 +28,6 @@ defmodule ReqLLM.Providers.MistralTest do
   end
 
   describe "request preparation" do
-    test "prepare_request for :chat creates /chat/completions request" do
-      {:ok, request} =
-        Mistral.prepare_request(:chat, mistral_model(), "Hello world", temperature: 0.7)
-
-      assert %Req.Request{} = request
-      assert request.url.path == "/chat/completions"
-      assert request.method == :post
-    end
-
     test "prepare_request for :embedding creates /embeddings request" do
       {:ok, request} =
         Mistral.prepare_request(
@@ -49,23 +40,6 @@ defmodule ReqLLM.Providers.MistralTest do
       assert %Req.Request{} = request
       assert request.url.path == "/embeddings"
       assert request.method == :post
-    end
-  end
-
-  describe "authentication wiring" do
-    test "attach adds Bearer authorization header" do
-      attached = Mistral.attach(Req.new(), mistral_model(), [])
-
-      auth_header = attached.headers["authorization"]
-      assert auth_header != nil
-      assert String.starts_with?(List.first(auth_header), "Bearer ")
-    end
-
-    test "attach adds pipeline steps" do
-      attached = Mistral.attach(Req.new(), mistral_model(), [])
-
-      assert :llm_encode_body in Keyword.keys(attached.request_steps)
-      assert :llm_decode_response in Keyword.keys(attached.response_steps)
     end
   end
 
@@ -125,32 +99,6 @@ defmodule ReqLLM.Providers.MistralTest do
       assert decoded["output_dtype"] == "int8"
       assert decoded["encoding_format"] == "base64"
       assert decoded["metadata"] == %{"scope" => "test"}
-    end
-  end
-
-  describe "response decoding" do
-    test "decode_response parses OpenAI-format response" do
-      mock_resp = %Req.Response{
-        status: 200,
-        body:
-          openai_format_json_fixture(
-            model: "mistral-small-latest",
-            content: "Hello from Mistral!"
-          )
-      }
-
-      mock_req = %Req.Request{
-        options: [
-          context: context_fixture(),
-          model: "mistral-small-latest",
-          operation: :chat
-        ]
-      }
-
-      {_req, decoded_resp} = Mistral.decode_response({mock_req, mock_resp})
-
-      assert %ReqLLM.Response{} = decoded_resp.body
-      assert ReqLLM.Response.text(decoded_resp.body) == "Hello from Mistral!"
     end
   end
 

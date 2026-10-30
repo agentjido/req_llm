@@ -21,11 +21,6 @@ defmodule ReqLLM.Coverage.Google.MultimodalToolResultTest do
 
   @model_spec "google:gemini-3.1-pro-preview"
 
-  setup_all do
-    LLMDB.load(allow: :all, custom: %{})
-    :ok
-  end
-
   @tag ReqLLM.Test.CompatibilityScenario.tag!(:multimodal_tool_result)
   @tag model: "gemini-3.1-pro-preview"
   test "tool result with PDF and accompanying text reaches the model" do

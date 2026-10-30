@@ -81,7 +81,7 @@ defmodule ReqLLM.StreamResponseTest do
 
   describe "struct validation and defaults" do
     test "exposes schema metadata" do
-      refute is_nil(StreamResponse.schema())
+      assert %Zoi.Types.Struct{} = StreamResponse.schema()
     end
 
     test "creates stream response with required fields" do

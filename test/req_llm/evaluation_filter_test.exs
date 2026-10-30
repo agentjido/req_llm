@@ -2,9 +2,7 @@ defmodule ReqLLM.EvaluationFilterTest do
   use ExUnit.Case, async: false
 
   test "OpenRouter evaluation models respect the LLMDB model filter" do
-    on_exit(fn -> LLMDB.load() end)
-
-    assert {:ok, _snapshot} = LLMDB.load(allow: [:typesafe])
+    ReqLLM.Test.CatalogFilter.allow_providers!([:typesafe])
 
     assert ReqLLM.evaluation_models() == [
              "typesafe:jev-1.13.0",

@@ -39,14 +39,6 @@ defmodule ReqLLM.Providers.Azure.EvaluationTest do
     }
   }
 
-  setup_all do
-    custom = Application.get_env(:llm_db, :custom, %{})
-    on_exit(fn -> LLMDB.load(custom: custom) end)
-
-    assert {:ok, _} = LLMDB.load(custom: custom)
-    %{custom_catalog: custom}
-  end
-
   test "discovers the catalog model with its Azure evaluation contract" do
     assert "azure:microsoft-decision-1" in ReqLLM.evaluation_models()
     assert {:ok, model} = ReqLLM.model("azure:Microsoft-Decision-1")
@@ -54,11 +46,8 @@ defmodule ReqLLM.Providers.Azure.EvaluationTest do
     assert model.catalog_only
   end
 
-  test "respects catalog filters even when the Azure adapter is installed", %{
-    custom_catalog: custom
-  } do
-    on_exit(fn -> LLMDB.load(custom: custom) end)
-    assert {:ok, _} = LLMDB.load(custom: custom, allow: [:typesafe])
+  test "respects catalog filters even when the Azure adapter is installed" do
+    ReqLLM.Test.CatalogFilter.allow_providers!([:typesafe])
     refute "azure:microsoft-decision-1" in ReqLLM.evaluation_models()
 
     assert {:error, %ReqLLM.Error.Invalid.Parameter{parameter: message}} =

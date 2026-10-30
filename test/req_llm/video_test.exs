@@ -115,8 +115,8 @@ defmodule ReqLLM.VideoTest do
          end)}
       end
 
-      assert {:error, %ReqLLM.Error.API.Timeout{kind: :total, timeout: 50}} =
-               call(@operation, prepare: prepare, total_timeout: 50)
+      assert {:error, %ReqLLM.Error.API.Timeout{kind: :total, timeout: 20}} =
+               call(@operation, prepare: prepare, total_timeout: 20)
     end
   end
 
@@ -202,8 +202,8 @@ defmodule ReqLLM.VideoTest do
        end)}
     end
 
-    assert {:error, %ReqLLM.Error.API.Timeout{kind: :total, timeout: 100}} =
-             call(:video_wait, prepare: prepare, poll_interval: 10_000, timeout: 100)
+    assert {:error, %ReqLLM.Error.API.Timeout{kind: :total, timeout: 30}} =
+             call(:video_wait, prepare: prepare, poll_interval: 10_000, timeout: 30)
 
     assert_receive :poll
     refute_received :poll
@@ -216,7 +216,7 @@ defmodule ReqLLM.VideoTest do
       {:ok,
        WorkflowHTTP.request(fn request ->
          :counters.add(counter, 1, 1)
-         Process.sleep(80)
+         Process.sleep(25)
          status = if :counters.get(counter, 1) == 2, do: :succeeded, else: :running
 
          {request,
@@ -228,7 +228,7 @@ defmodule ReqLLM.VideoTest do
              call(:video_wait,
                prepare: prepare,
                poll_interval: 0,
-               total_timeout: 140,
+               total_timeout: 40,
                timeout: 2_000
              )
 
@@ -296,12 +296,12 @@ defmodule ReqLLM.VideoTest do
         :video_upload ->
           {:ok,
            WorkflowHTTP.request(fn request ->
-             Process.sleep(300)
+             Process.sleep(15)
              {request, %Req.Response{status: 200, body: @video_file}}
            end)}
 
         :video ->
-          Process.sleep(300)
+          Process.sleep(15)
 
           {:ok,
            WorkflowHTTP.request(fn request ->
@@ -311,13 +311,13 @@ defmodule ReqLLM.VideoTest do
       end
     end
 
-    assert {:error, %ReqLLM.Error.API.Timeout{kind: :total, timeout: 500}} =
+    assert {:error, %ReqLLM.Error.API.Timeout{kind: :total, timeout: 25}} =
              Video.generate_video(
                @model,
                [prompt: "A cat", first_frame_image: {:upload, "bytes", "image/png"}],
                prepare: prepare,
                req_http_options: [prepare: prepare],
-               total_timeout: 500
+               total_timeout: 25
              )
 
     assert_receive {:prepared, :video_upload}

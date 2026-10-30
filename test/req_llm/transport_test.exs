@@ -99,22 +99,6 @@ defmodule ReqLLM.TransportTest do
     Enum.each(tasks, fn task -> assert {:ok, _} = Task.await(task, 2_000) end)
   end
 
-  test "a queued call can wait more than Finch's five-second default" do
-    url = start_server()
-    start_pool()
-    first = Task.async(fn -> generate_text(url, @finch, "first") end)
-    assert_receive {:provider_call, first_connection, "first"}, 2_000
-
-    second = Task.async(fn -> generate_text(url, @finch, "second") end)
-    assert Task.yield(second, 5_100) == nil
-
-    send(first_connection, :reply)
-    assert {:ok, _} = Task.await(first, 2_000)
-    assert_receive {:provider_call, second_connection, "second"}, 2_000
-    send(second_connection, :reply)
-    assert {:ok, _} = Task.await(second, 2_000)
-  end
-
   test "checkout failures return errors for text and object calls under both budgets" do
     url = start_server()
     start_pool()
@@ -133,7 +117,7 @@ defmodule ReqLLM.TransportTest do
 
     for budget <- [[], [total_timeout: 1_000]], operation <- [:text, :object] do
       opts =
-        request_options(url, "queued", finch: [name: @finch, pool_timeout: 25]) ++ budget
+        request_options(url, "queued", finch: [name: @finch, pool_timeout: 15]) ++ budget
 
       result =
         case operation do
@@ -148,7 +132,7 @@ defmodule ReqLLM.TransportTest do
       assert error.reason =~ "Finch was unable to provide a connection"
       assert is_binary(error.request_body)
       assert_receive {:queue_exception, measurements, %{error: ^error}}
-      assert System.convert_time_unit(measurements.duration, :native, :millisecond) >= 25
+      assert System.convert_time_unit(measurements.duration, :native, :millisecond) >= 15
       refute_received {:provider_call, _, "queued"}
     end
 

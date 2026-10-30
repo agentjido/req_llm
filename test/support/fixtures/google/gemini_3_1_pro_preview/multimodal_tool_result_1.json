@@ -3,7 +3,7 @@
   "provider": "google",
   "request": {
     "body": {
-      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJDYWxsIGdldF9kb2N1bWVudCB3aXRoIG5hbWU9XCJ0ZXN0LnBkZlwiIHRvIGZldGNoIHRoZSBmaWxlLCB0aGVuIHF1b3RlIHRoZSB0ZXh0IGl0IGNvbnRhaW5zIGluIGZ1bGwuIn1dLCJyb2xlIjoidXNlciJ9XSwiZ2VuZXJhdGlvbkNvbmZpZyI6eyJjYW5kaWRhdGVDb3VudCI6MSwibWF4T3V0cHV0VG9rZW5zIjoyNTYsInRlbXBlcmF0dXJlIjowLjB9LCJ0b29scyI6W3siZnVuY3Rpb25EZWNsYXJhdGlvbnMiOlt7ImRlc2NyaXB0aW9uIjoiRmV0Y2ggdGhlIHJlcXVlc3RlZCBkb2N1bWVudCBhbmQgcmV0dXJuIGl0cyByYXcgY29udGVudHMuIiwibmFtZSI6ImdldF9kb2N1bWVudCIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJuYW1lIjp7InR5cGUiOiJzdHJpbmcifX0sInByb3BlcnR5T3JkZXJpbmciOlsibmFtZSJdLCJyZXF1aXJlZCI6WyJuYW1lIl0sInR5cGUiOiJvYmplY3QifX1dfV19"
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJDYWxsIGdldF9kb2N1bWVudCB3aXRoIG5hbWU9XCJ0ZXN0LnBkZlwiIHRvIGZldGNoIHRoZSBmaWxlLCB0aGVuIHF1b3RlIHRoZSB0ZXh0IGl0IGNvbnRhaW5zIGluIGZ1bGwuIn1dLCJyb2xlIjoidXNlciJ9XSwiZ2VuZXJhdGlvbkNvbmZpZyI6eyJtYXhPdXRwdXRUb2tlbnMiOjI1NiwidGVtcGVyYXR1cmUiOjAuMH0sInRvb2xzIjpbeyJmdW5jdGlvbkRlY2xhcmF0aW9ucyI6W3siZGVzY3JpcHRpb24iOiJGZXRjaCB0aGUgcmVxdWVzdGVkIGRvY3VtZW50IGFuZCByZXR1cm4gaXRzIHJhdyBjb250ZW50cy4iLCJuYW1lIjoiZ2V0X2RvY3VtZW50IiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7Im5hbWUiOnsidHlwZSI6InN0cmluZyJ9fSwicHJvcGVydHlPcmRlcmluZyI6WyJuYW1lIl0sInJlcXVpcmVkIjpbIm5hbWUiXSwidHlwZSI6Im9iamVjdCJ9fV19XX0="
     },
     "canonical_json": {
       "contents": [
@@ -17,9 +17,8 @@
         }
       ],
       "generationConfig": {
-        "candidateCount": 1,
         "maxOutputTokens": 256,
-        "temperature": 0.0
+        "temperature": 0
       },
       "tools": [
         {
@@ -61,7 +60,7 @@
       ]
     },
     "method": "post",
-    "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-pro-preview:generateContent?key=[REDACTED]"
+    "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-pro-preview:generateContent"
   },
   "response": {
     "body": {

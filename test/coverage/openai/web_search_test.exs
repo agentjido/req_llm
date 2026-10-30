@@ -13,12 +13,7 @@ defmodule ReqLLM.Coverage.OpenAI.WebSearchTest do
   # enables it through the `web_search_options` body field rather than a tool.
   # This is the surface that returns citations in the nested `url_citation`
   # shape, so it proves normalization against real payloads.
-  @chat_model_spec "openai:gpt-4o-mini-search-preview"
-
-  setup_all do
-    LLMDB.load(allow: :all, custom: %{})
-    :ok
-  end
+  @chat_model_spec %{provider: :openai, id: "gpt-4o-mini-search-preview"}
 
   @tag ReqLLM.Test.CompatibilityScenario.tag!(:web_search_basic)
   @tag model: "gpt-5-mini"

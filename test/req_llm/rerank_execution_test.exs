@@ -161,12 +161,12 @@ defmodule ReqLLM.RerankExecutionTest do
         ["one"] ->
           {:ok,
            WorkflowHTTP.request(fn request ->
-             Process.sleep(300)
+             Process.sleep(50)
              {request, %Req.Response{status: 200, body: %{"results" => []}}}
            end)}
 
         ["two"] ->
-          Process.sleep(300)
+          Process.sleep(50)
 
           {:ok,
            WorkflowHTTP.request(fn request ->
@@ -176,12 +176,12 @@ defmodule ReqLLM.RerankExecutionTest do
       end
     end
 
-    assert {:error, %ReqLLM.Error.API.Timeout{kind: :total, timeout: 500}} =
+    assert {:error, %ReqLLM.Error.API.Timeout{kind: :total, timeout: 80}} =
              ReqLLM.rerank(@model,
                query: "rank",
                documents: ["one", "two"],
                batch_size: 1,
-               total_timeout: 500,
+               total_timeout: 80,
                prepare: prepare
              )
 

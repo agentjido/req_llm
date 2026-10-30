@@ -13,8 +13,20 @@ defmodule Mix.Tasks.ReqLlm.ModelSupportTest do
 
   test "checks the deterministic evidence and reference artifacts" do
     Mix.Task.reenable("req_llm.model_support")
+    expected = ReqLLM.Compatibility.Evidence.load!(ModelSupport.evidence_path())
+    loaded_resolver = LLMDB.Store.snapshot() |> ModelSupport.catalog_resolver()
 
-    output = capture_io(fn -> ModelSupport.run(["--check"]) end)
+    catalog_resolver = fn model_spec ->
+      case get_in(expected, ["models", model_spec, "catalog_status"]) do
+        "missing" -> {:error, :unknown_model}
+        _status -> loaded_resolver.(model_spec)
+      end
+    end
+
+    output =
+      capture_io(fn ->
+        ModelSupport.run(["--check"], catalog_resolver: catalog_resolver)
+      end)
 
     assert output =~ "Compatibility evidence and support reference are current"
   end
@@ -33,7 +45,15 @@ defmodule Mix.Tasks.ReqLlm.ModelSupportTest do
         "unknown"
       )
 
-    refreshed = ModelSupport.refresh_evidence(stale)
+    catalog_resolver = fn
+      "openai:gpt-4o-mini" ->
+        ReqLLM.model("openai:gpt-4o-mini")
+
+      _model_spec ->
+        {:error, :unknown_model}
+    end
+
+    refreshed = ModelSupport.refresh_evidence(stale, catalog_resolver)
 
     assert get_in(refreshed, ["models", "openai:gpt-4o-mini", "catalog_status"]) == "present"
 

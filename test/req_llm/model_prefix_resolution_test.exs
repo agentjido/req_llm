@@ -11,7 +11,7 @@ defmodule ReqLLM.ModelPrefixResolutionTest do
   @sonnet "anthropic.claude-sonnet-4-5-20250929-v1:0"
   @opus "anthropic.claude-opus-4-7"
 
-  setup do
+  setup_all do
     snapshot = Store.snapshot()
     opts = Store.last_opts()
     warn_unverified_models = Application.fetch_env(:req_llm, :warn_unverified_models)

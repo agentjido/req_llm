@@ -530,7 +530,7 @@ defmodule ReqLLM.TelemetryTest do
         [context: ReqLLM.Context.new([user("hello")]), reasoning_effort: :high],
         operation: :chat
       )
-      |> Map.put(:adapter, fn req ->
+      |> ReqLLM.Test.HTTPAdapter.attach(fn req ->
         attempt = Agent.get_and_update(counter, fn current -> {current, current + 1} end)
 
         case attempt do

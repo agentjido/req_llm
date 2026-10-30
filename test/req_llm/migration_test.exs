@@ -59,7 +59,12 @@ defmodule ReqLLM.MigrationTest do
 
     compiled_contracts =
       modules
-      |> Enum.flat_map(&deprecated_contracts/1)
+      |> Task.async_stream(&deprecated_contracts/1,
+        max_concurrency: System.schedulers_online(),
+        ordered: false,
+        timeout: :infinity
+      )
+      |> Enum.flat_map(fn {:ok, contracts} -> contracts end)
       |> Enum.sort()
 
     ledger_contracts =

@@ -29,11 +29,6 @@ defmodule ReqLLM.Coverage.Anthropic.StreamingStructuredOutputTest do
   # Use the latest Sonnet model which supports structured outputs
   @model "anthropic:claude-sonnet-4-5-20250929"
 
-  setup_all do
-    LLMDB.load(allow: :all, custom: %{})
-    :ok
-  end
-
   describe "streaming with json_schema mode" do
     @tag ReqLLM.Test.CompatibilityScenario.tag!(:object_streaming_json_schema)
 
@@ -100,7 +95,11 @@ defmodule ReqLLM.Coverage.Anthropic.StreamingStructuredOutputTest do
 
       # Verify it used a tool call
       assert response.message.tool_calls != nil
-      assert Enum.any?(response.message.tool_calls, fn tc -> tc.name == "structured_output" end)
+
+      assert Enum.any?(
+               response.message.tool_calls,
+               &(ReqLLM.ToolCall.name(&1) == "structured_output")
+             )
     end
   end
 
@@ -162,7 +161,11 @@ defmodule ReqLLM.Coverage.Anthropic.StreamingStructuredOutputTest do
 
       # Should have used tool_strict because other tools exist
       assert response.message.tool_calls != nil
-      assert Enum.any?(response.message.tool_calls, fn tc -> tc.name == "structured_output" end)
+
+      assert Enum.any?(
+               response.message.tool_calls,
+               &(ReqLLM.ToolCall.name(&1) == "structured_output")
+             )
     end
   end
 end

@@ -154,10 +154,11 @@ defmodule ReqLLM.Compatibility.ScenarioCatalogTest do
     end
 
     test "fixture-backed contracts have evidence and focused routes exist" do
+      fixture_root = Path.expand("../../support/fixtures", __DIR__)
+
       fixture_files =
-        Path.expand("../../support/fixtures", __DIR__)
-        |> Path.join("**/*.json")
-        |> Path.wildcard()
+        (Path.wildcard(Path.join(fixture_root, "*/*.json")) ++
+           Path.wildcard(Path.join(fixture_root, "*/*/*.json")))
         |> Enum.map(&Path.basename(&1, ".json"))
         |> MapSet.new()
 
@@ -176,7 +177,8 @@ defmodule ReqLLM.Compatibility.ScenarioCatalogTest do
 
     test "every current coverage scenario tag resolves through the catalog" do
       sources =
-        Path.wildcard("test/coverage/**/*.exs") ++
+        Path.wildcard("test/coverage/*.exs") ++
+          Path.wildcard("test/coverage/*/*.exs") ++
           Path.wildcard("test/support/provider_test/*.ex")
 
       source = Enum.map_join(sources, "\n", &File.read!/1)

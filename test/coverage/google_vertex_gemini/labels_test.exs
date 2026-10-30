@@ -30,11 +30,6 @@ defmodule ReqLLM.Coverage.GoogleVertexGemini.LabelsTest do
           |> ModelMatrix.models_for_provider(operation: :text)
           |> Enum.filter(&String.contains?(&1, "gemini"))
 
-  setup_all do
-    LLMDB.load(allow: :all, custom: %{})
-    :ok
-  end
-
   for model_spec <- @models do
     @model_spec model_spec
 

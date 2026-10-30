@@ -1,0 +1,130 @@
+{
+  "model_spec": "amazon_bedrock:global.anthropic.claude-haiku-4-5-20251001-v1:0",
+  "provider": "amazon_bedrock",
+  "request": {
+    "body": {
+      "b64": "eyJpbmZlcmVuY2VDb25maWciOnsibWF4VG9rZW5zIjoyNTZ9LCJtZXNzYWdlcyI6W3siY29udGVudCI6W3sidGV4dCI6IldoYXQncyBpbiB0aGlzIGRvY3VtZW50PyBRdW90ZSBpdHMgdGV4dC4ifSx7ImRvY3VtZW50Ijp7ImNpdGF0aW9ucyI6eyJlbmFibGVkIjp0cnVlfSwiZm9ybWF0IjoicGRmIiwibmFtZSI6Ik15RG9jdW1lbnQiLCJzb3VyY2UiOnsiYnl0ZXMiOiJKVkJFUmkweExqUUtNU0F3SUc5aWFnbzhQQW92Vkhsd1pTQXZRMkYwWVd4dlp3b3ZVR0ZuWlhNZ01pQXdJRklLUGo0S1pXNWtiMkpxQ2pJZ01DQnZZbW9LUER3S0wxUjVjR1VnTDFCaFoyVnpDaTlMYVdSeklGc3pJREFnVWwwS0wwTnZkVzUwSURFS1BqNEtaVzVrYjJKcUNqTWdNQ0J2WW1vS1BEd0tMMVI1Y0dVZ0wxQmhaMlVLTDFCaGNtVnVkQ0F5SURBZ1Vnb3ZVbVZ6YjNWeVkyVnpJRHc4Q2k5R2IyNTBJRHc4Q2k5R01TQThQQW92Vkhsd1pTQXZSbTl1ZEFvdlUzVmlkSGx3WlNBdlZIbHdaVEVLTDBKaGMyVkdiMjUwSUM5SVpXeDJaWFJwWTJFS1BqNEtQajRLUGo0S0wwMWxaR2xoUW05NElGc3dJREFnTmpFeUlEYzVNbDBLTDBOdmJuUmxiblJ6SURRZ01DQlNDajQrQ21WdVpHOWlhZ28wSURBZ2IySnFDanc4Q2k5TVpXNW5kR2dnTkRRS1BqNEtjM1J5WldGdENrSlVDaTlHTVNBeE1pQlVaZ294TURBZ056QXdJRlJrQ2loVVpYTjBJRkJFUmlCRWIyTjFiV1Z1ZENrZ1ZHb0tSVlFLWlc1a2MzUnlaV0Z0Q21WdVpHOWlhZ3A0Y21WbUNqQWdOUW93TURBd01EQXdNREF3SURZMU5UTTFJR1lLTURBd01EQXdNREF3T1NBd01EQXdNQ0J1Q2pBd01EQXdNREF3TlRnZ01EQXdNREFnYmdvd01EQXdNREF3TVRFMUlEQXdNREF3SUc0S01EQXdNREF3TURNeE5DQXdNREF3TUNCdUNuUnlZV2xzWlhJS1BEd0tMMU5wZW1VZ05Rb3ZVbTl2ZENBeElEQWdVZ28rUGdwemRHRnlkSGh5WldZS05EQTNDaVVsUlU5R0NnPT0ifX19XSwicm9sZSI6InVzZXIifV19"
+    },
+    "canonical_json": {
+      "inferenceConfig": {
+        "maxTokens": 256
+      },
+      "messages": [
+        {
+          "content": [
+            {
+              "text": "What's in this document? Quote its text."
+            },
+            {
+              "document": {
+                "citations": {
+                  "enabled": true
+                },
+                "format": "pdf",
+                "name": "MyDocument",
+                "source": {
+                  "bytes": "JVBERi0xLjQKMSAwIG9iago8PAovVHlwZSAvQ2F0YWxvZwovUGFnZXMgMiAwIFIKPj4KZW5kb2JqCjIgMCBvYmoKPDwKL1R5cGUgL1BhZ2VzCi9LaWRzIFszIDAgUl0KL0NvdW50IDEKPj4KZW5kb2JqCjMgMCBvYmoKPDwKL1R5cGUgL1BhZ2UKL1BhcmVudCAyIDAgUgovUmVzb3VyY2VzIDw8Ci9Gb250IDw8Ci9GMSA8PAovVHlwZSAvRm9udAovU3VidHlwZSAvVHlwZTEKL0Jhc2VGb250IC9IZWx2ZXRpY2EKPj4KPj4KPj4KL01lZGlhQm94IFswIDAgNjEyIDc5Ml0KL0NvbnRlbnRzIDQgMCBSCj4+CmVuZG9iago0IDAgb2JqCjw8Ci9MZW5ndGggNDQKPj4Kc3RyZWFtCkJUCi9GMSAxMiBUZgoxMDAgNzAwIFRkCihUZXN0IFBERiBEb2N1bWVudCkgVGoKRVQKZW5kc3RyZWFtCmVuZG9iagp4cmVmCjAgNQowMDAwMDAwMDAwIDY1NTM1IGYKMDAwMDAwMDAwOSAwMDAwMCBuCjAwMDAwMDAwNTggMDAwMDAgbgowMDAwMDAwMTE1IDAwMDAwIG4KMDAwMDAwMDMxNCAwMDAwMCBuCnRyYWlsZXIKPDwKL1NpemUgNQovUm9vdCAxIDAgUgo+PgpzdGFydHhyZWYKNDA3CiUlRU9GCg=="
+                }
+              }
+            }
+          ],
+          "role": "user"
+        }
+      ]
+    },
+    "headers": {
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "host": [
+        "bedrock-runtime.us-east-1.amazonaws.com"
+      ],
+      "user-agent": [
+        "req/0.7.4"
+      ],
+      "x-amz-content-sha256": [
+        "5d14b8269b676e87d4b1668fe05b491630bcbb9e4ff1b8f8492835c946c70af3"
+      ],
+      "x-amz-date": [
+        "20260912T143447Z"
+      ],
+      "x-amz-security-token": [
+        "[REDACTED:x-amz-security-token]"
+      ]
+    },
+    "method": "post",
+    "url": "https://bedrock-runtime.us-east-1.amazonaws.com/model/global.anthropic.claude-haiku-4-5-20251001-v1:0/converse"
+  },
+  "response": {
+    "body": {
+      "metrics": {
+        "latencyMs": 1467
+      },
+      "output": {
+        "message": {
+          "content": [
+            {
+              "citationsContent": {
+                "citations": [
+                  {
+                    "location": {
+                      "documentPage": {
+                        "documentIndex": 0,
+                        "end": 2,
+                        "start": 1
+                      }
+                    },
+                    "sourceContent": [
+                      {
+                        "text": "Test PDF Document"
+                      }
+                    ],
+                    "title": "MyDocument"
+                  }
+                ],
+                "content": [
+                  {
+                    "text": "This document is titled \"Test PDF Document\""
+                  }
+                ]
+              }
+            },
+            {
+              "text": ". The document appears to be quite minimal, containing only this title text on page 1. There is no additional content visible in the document."
+            }
+          ],
+          "role": "assistant"
+        }
+      },
+      "stopReason": "end_turn",
+      "usage": {
+        "cacheReadInputTokenCount": 0,
+        "cacheReadInputTokens": 0,
+        "inputTokens": 2105,
+        "outputTokens": 58,
+        "serverToolUsage": {},
+        "totalTokens": 2163
+      }
+    },
+    "headers": {
+      "connection": [
+        "keep-alive"
+      ],
+      "content-length": [
+        "645"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Sat, 12 Sep 2026 14:34:50 GMT"
+      ],
+      "x-amzn-requestid": [
+        "a7a94b51-2e45-4b91-bd15-1e19e2328716"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

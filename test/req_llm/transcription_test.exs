@@ -142,8 +142,6 @@ defmodule ReqLLM.TranscriptionTest do
 
   describe "transcribe/3 - ElevenLabs compatibility" do
     setup do
-      System.put_env("ELEVENLABS_API_KEY", "test-key-123")
-
       Req.Test.stub(__MODULE__, fn conn ->
         Req.Test.json(conn, %{
           "language_code" => "eng",
@@ -155,8 +153,6 @@ defmodule ReqLLM.TranscriptionTest do
         })
       end)
 
-      on_exit(fn -> System.delete_env("ELEVENLABS_API_KEY") end)
-
       :ok
     end
 
@@ -165,6 +161,7 @@ defmodule ReqLLM.TranscriptionTest do
                Transcription.transcribe(
                  %{id: "scribe_v2", provider: :elevenlabs},
                  {:binary, "fake audio", "audio/mpeg"},
+                 api_key: "test-key-123",
                  req_http_options: [plug: {Req.Test, __MODULE__}]
                )
 

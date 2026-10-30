@@ -7,7 +7,7 @@ defmodule ReqLLM.ToolResultTest do
 
   describe "schema helpers" do
     test "exposes schema and metadata key" do
-      refute is_nil(ToolResult.schema())
+      assert %Zoi.Types.Struct{} = ToolResult.schema()
       assert ToolResult.metadata_key() == :tool_output
     end
   end

@@ -27,11 +27,6 @@ defmodule ReqLLM.ProviderTest.OCR do
       @provider provider
       @models models
 
-      setup_all do
-        LLMDB.load(allow: :all, custom: Application.get_env(:llm_db, :custom, %{}))
-        :ok
-      end
-
       for model_spec <- @models do
         @model_spec model_spec
 

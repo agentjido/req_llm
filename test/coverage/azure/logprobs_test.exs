@@ -21,11 +21,6 @@ defmodule ReqLLM.Coverage.Azure.LogprobsTest do
   @fixture_base_url "https://fixture.openai.azure.com/openai"
   @model_spec %{provider: :azure, id: "gpt-4o"}
 
-  setup_all do
-    LLMDB.load(allow: :all, custom: %{})
-    :ok
-  end
-
   @tag ReqLLM.Test.CompatibilityScenario.tag!(:logprobs_non_streaming)
   @tag model: "gpt-4o"
   test "returns requested logprobs in provider metadata" do

@@ -27,11 +27,6 @@ defmodule ReqLLM.Coverage.OpenAI.ImageOptionsTest do
   @png_signature <<0x89, "PNG", 0x0D, 0x0A, 0x1A, 0x0A>>
   @png_color_types_with_alpha [4, 6]
 
-  setup_all do
-    LLMDB.load(allow: :all, custom: %{})
-    :ok
-  end
-
   for model_spec <- @models do
     @model_spec model_spec
 

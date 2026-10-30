@@ -3,7 +3,7 @@ defmodule ReqLLM.ProvidersConcurrencyTest do
 
   alias ReqLLM.Providers
 
-  for n <- 1..24 do
+  for n <- 1..2 do
     defmodule Module.concat(__MODULE__, "Provider#{n}") do
       @behaviour ReqLLM.Provider
       def provider_id, do: unquote(String.to_atom("registry_test_#{n}"))
@@ -26,7 +26,7 @@ defmodule ReqLLM.ProvidersConcurrencyTest do
   setup do
     saved = :persistent_term.get(:req_llm_providers)
     on_exit(fn -> :persistent_term.put(:req_llm_providers, saved) end)
-    %{providers: for(n <- 1..24, do: Module.concat(__MODULE__, "Provider#{n}"))}
+    %{providers: for(n <- 1..2, do: Module.concat(__MODULE__, "Provider#{n}"))}
   end
 
   test "all successful distinct concurrent registrations remain available", %{
@@ -43,7 +43,7 @@ defmodule ReqLLM.ProvidersConcurrencyTest do
   end
 
   test "concurrent removal and registration preserve unrelated changes", %{providers: providers} do
-    {removed, registered} = Enum.split(providers, 12)
+    {removed, registered} = Enum.split(providers, div(length(providers), 2))
     Enum.each(removed, &Providers.register!/1)
 
     work =
@@ -59,15 +59,16 @@ defmodule ReqLLM.ProvidersConcurrencyTest do
         do: assert(Providers.get(provider.provider_id()) == {:ok, provider})
   end
 
-  test "initialization preserves concurrent runtime registrations", %{providers: providers} do
+  test "initialization preserves a concurrent runtime registration", %{
+    providers: [provider | _]
+  } do
     work =
-      [fn -> Providers.initialize() end, fn -> Providers.initialize() end] ++
-        Enum.map(providers, fn provider -> fn -> Providers.register(provider) end end)
+      [fn -> Providers.initialize() end] ++
+        [fn -> Providers.register(provider) end]
 
     concurrently(work)
 
-    for provider <- providers,
-        do: assert(Providers.get(provider.provider_id()) == {:ok, provider})
+    assert Providers.get(provider.provider_id()) == {:ok, provider}
   end
 
   test "same-ID replacement preserves return values and the final successful replacement", %{

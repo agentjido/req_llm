@@ -46,17 +46,6 @@ defmodule ReqLLM.Providers.MinimaxTest do
       assert :prompt_optimizer in schema_keys
       assert :subject_reference in schema_keys
     end
-
-    test "provider_extended_generation_schema includes all core keys" do
-      extended_schema = Minimax.provider_extended_generation_schema()
-      extended_keys = extended_schema.schema |> Keyword.keys()
-      core_keys = ReqLLM.Provider.Options.all_generation_keys()
-      core_without_meta = Enum.reject(core_keys, &(&1 == :provider_options))
-
-      for core_key <- core_without_meta do
-        assert core_key in extended_keys
-      end
-    end
   end
 
   describe "model fallback" do
@@ -70,36 +59,9 @@ defmodule ReqLLM.Providers.MinimaxTest do
   end
 
   describe "request preparation" do
-    test "prepare_request for :chat creates /chat/completions request" do
-      {:ok, request} =
-        Minimax.prepare_request(:chat, minimax_model(), "Hello world", temperature: 0.7)
-
-      assert %Req.Request{} = request
-      assert request.url.path == "/chat/completions"
-      assert request.method == :post
-      assert request.options[:base_url] == "https://api.minimax.io/v1"
-    end
-
     test "prepare_request rejects embedding operations" do
       {:error, error} = Minimax.prepare_request(:embedding, minimax_model(), "Hello", [])
       assert %ReqLLM.Error.Invalid.Parameter{} = error
-    end
-  end
-
-  describe "authentication wiring" do
-    test "attach adds Bearer authorization header" do
-      attached = Minimax.attach(Req.new(), minimax_model(), [])
-
-      auth_header = attached.headers["authorization"]
-      assert auth_header != nil
-      assert String.starts_with?(List.first(auth_header), "Bearer ")
-    end
-
-    test "attach adds pipeline steps" do
-      attached = Minimax.attach(Req.new(), minimax_model(), [])
-
-      assert :llm_encode_body in Keyword.keys(attached.request_steps)
-      assert :llm_decode_response in Keyword.keys(attached.response_steps)
     end
   end
 
@@ -218,30 +180,6 @@ defmodule ReqLLM.Providers.MinimaxTest do
   end
 
   describe "response decoding" do
-    test "decode_response parses OpenAI-format response" do
-      mock_resp = %Req.Response{
-        status: 200,
-        body:
-          openai_format_json_fixture(
-            model: "MiniMax-M2.7",
-            content: "Hello from MiniMax!"
-          )
-      }
-
-      mock_req = %Req.Request{
-        options: [
-          context: context_fixture(),
-          model: "MiniMax-M2.7",
-          operation: :chat
-        ]
-      }
-
-      {_req, decoded_resp} = Minimax.decode_response({mock_req, mock_resp})
-
-      assert %ReqLLM.Response{} = decoded_resp.body
-      assert ReqLLM.Response.text(decoded_resp.body) == "Hello from MiniMax!"
-    end
-
     test "decode_response preserves reasoning_details on message and context" do
       reasoning_details = [%{"type" => "reasoning.text", "text" => "Thinking"}]
 

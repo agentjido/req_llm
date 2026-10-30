@@ -3,13 +3,30 @@
   "provider": "openai",
   "request": {
     "body": {
-      "b64": "eyJfZml4dHVyZV9ib2R5Ijoibm9uX2pzb24iLCJieXRlX3NpemUiOjMxNjk2LCJjb250ZW50X3R5cGUiOiJtdWx0aXBhcnQvZm9ybS1kYXRhOyBib3VuZGFyeT1iM2QzZjczNTdjMmNiNGViYWZhZGVhOTM4OWZmN2Y5YiJ9"
+      "b64": "W3sibmFtZSI6ImZpbGUiLCJmaWxlIjp7ImZpbGVuYW1lIjoiYXVkaW8ud2F2IiwiYnl0ZXMiOjMxMjMyLCJjb250ZW50X3R5cGUiOiJhdWRpby93YXYifX0seyJuYW1lIjoibW9kZWwiLCJ2YWx1ZSI6IndoaXNwZXItMSJ9LHsibmFtZSI6InJlc3BvbnNlX2Zvcm1hdCIsInZhbHVlIjoidmVyYm9zZV9qc29uIn0seyJuYW1lIjoibGFuZ3VhZ2UiLCJ2YWx1ZSI6ImVuIn1d"
     },
-    "canonical_json": {
-      "_fixture_body": "non_json",
-      "byte_size": 31696,
-      "content_type": "multipart/form-data; boundary=b3d3f7357c2cb4ebafadea9389ff7f9b"
-    },
+    "canonical_json": [
+      {
+        "name": "file",
+        "file": {
+          "filename": "audio.wav",
+          "bytes": 31232,
+          "content_type": "audio/wav"
+        }
+      },
+      {
+        "name": "model",
+        "value": "whisper-1"
+      },
+      {
+        "name": "response_format",
+        "value": "verbose_json"
+      },
+      {
+        "name": "language",
+        "value": "en"
+      }
+    ],
     "headers": {
       "accept-encoding": [
         "gzip"

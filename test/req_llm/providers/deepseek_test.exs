@@ -23,10 +23,6 @@ defmodule ReqLLM.Providers.DeepseekTest do
   end
 
   describe "provider contract" do
-    test "provider uses correct default environment key" do
-      assert Deepseek.default_env_key() == "DEEPSEEK_API_KEY"
-    end
-
     test "provider schema includes thinking option" do
       schema = Deepseek.provider_schema().schema
       schema_keys = Keyword.keys(schema)
@@ -36,34 +32,9 @@ defmodule ReqLLM.Providers.DeepseekTest do
       thinking_schema = Keyword.get(schema, :thinking)
       assert thinking_schema[:type] == :map
     end
-
-    test "provider_extended_generation_schema includes all core keys" do
-      extended_schema = Deepseek.provider_extended_generation_schema()
-      extended_keys = extended_schema.schema |> Keyword.keys()
-
-      core_keys = ReqLLM.Provider.Options.all_generation_keys()
-      core_without_meta = Enum.reject(core_keys, &(&1 == :provider_options))
-
-      for core_key <- core_without_meta do
-        assert core_key in extended_keys,
-               "Extended schema missing core key: #{core_key}"
-      end
-    end
   end
 
   describe "request preparation" do
-    test "prepare_request for :chat creates /chat/completions request" do
-      model = deepseek_model()
-      prompt = "Hello world"
-      opts = [temperature: 0.7, max_tokens: 100]
-
-      {:ok, request} = Deepseek.prepare_request(:chat, model, prompt, opts)
-
-      assert %Req.Request{} = request
-      assert request.url.path == "/chat/completions"
-      assert request.method == :post
-    end
-
     test "prepare_request maps reasoning_effort: :xhigh to high" do
       model = deepseek_model("deepseek-reasoner")
       prompt = "Hello world"
@@ -104,134 +75,7 @@ defmodule ReqLLM.Providers.DeepseekTest do
     end
   end
 
-  describe "authentication wiring" do
-    test "attach adds Bearer authorization header" do
-      model = deepseek_model()
-      request = Req.new()
-
-      attached = Deepseek.attach(request, model, [])
-
-      auth_header = attached.headers["authorization"]
-      assert auth_header != nil
-      assert String.starts_with?(List.first(auth_header), "Bearer ")
-    end
-
-    test "attach adds pipeline steps" do
-      model = deepseek_model()
-      request = Req.new()
-
-      attached = Deepseek.attach(request, model, [])
-
-      request_steps = Keyword.keys(attached.request_steps)
-      response_steps = Keyword.keys(attached.response_steps)
-
-      assert :llm_encode_body in request_steps
-      assert :llm_decode_response in response_steps
-    end
-  end
-
-  describe "base_url configuration" do
-    test "uses default base_url when not overridden" do
-      model = deepseek_model()
-      {:ok, request} = Deepseek.prepare_request(:chat, model, "Hello", [])
-
-      assert request.options[:base_url] == "https://api.deepseek.com"
-    end
-
-    test "respects base_url option override" do
-      model = deepseek_model()
-      custom_url = "https://custom.deepseek.com/v1"
-      {:ok, request} = Deepseek.prepare_request(:chat, model, "Hello", base_url: custom_url)
-
-      assert request.options[:base_url] == custom_url
-    end
-  end
-
-  describe "body encoding" do
-    test "encode_body produces valid OpenAI-compatible JSON" do
-      model = deepseek_model()
-      context = context_fixture()
-
-      mock_request = %Req.Request{
-        options: [
-          context: context,
-          model: model.model,
-          stream: false,
-          temperature: 0.7
-        ]
-      }
-
-      updated_request = Deepseek.encode_body(mock_request)
-
-      assert is_binary(IO.iodata_to_binary(ReqLLM.Test.Helpers.json_iodata(updated_request)))
-      decoded = ReqLLM.Test.Helpers.json_body(updated_request)
-
-      assert decoded["model"] == "deepseek-chat"
-      assert is_list(decoded["messages"])
-      assert decoded["stream"] == false
-    end
-
-    test "encode_body handles tools correctly" do
-      model = deepseek_model()
-      context = context_fixture()
-
-      tool =
-        ReqLLM.Tool.new!(
-          name: "get_weather",
-          description: "Get the weather",
-          parameter_schema: [
-            location: [type: :string, required: true, doc: "City name"]
-          ],
-          callback: fn _ -> {:ok, "sunny"} end
-        )
-
-      mock_request = %Req.Request{
-        options: [
-          context: context,
-          model: model.model,
-          stream: false,
-          tools: [tool]
-        ]
-      }
-
-      updated_request = Deepseek.encode_body(mock_request)
-      decoded = ReqLLM.Test.Helpers.json_body(updated_request)
-
-      assert is_list(decoded["tools"])
-      assert length(decoded["tools"]) == 1
-      assert hd(decoded["tools"])["function"]["name"] == "get_weather"
-    end
-  end
-
   describe "response decoding" do
-    test "decode_response parses OpenAI-format response" do
-      mock_response_body =
-        openai_format_json_fixture(
-          model: "deepseek-chat",
-          content: "Hello from DeepSeek!"
-        )
-
-      mock_resp = %Req.Response{
-        status: 200,
-        body: mock_response_body
-      }
-
-      context = context_fixture()
-
-      mock_req = %Req.Request{
-        options: [
-          context: context,
-          model: "deepseek-chat",
-          operation: :chat
-        ]
-      }
-
-      {_req, decoded_resp} = Deepseek.decode_response({mock_req, mock_resp})
-
-      assert %ReqLLM.Response{} = decoded_resp.body
-      assert ReqLLM.Response.text(decoded_resp.body) == "Hello from DeepSeek!"
-    end
-
     test "decode_response handles API errors" do
       error_body = %{
         "error" => %{

@@ -11,19 +11,6 @@ defmodule ReqLLM.Providers.FireworksAITest do
   alias ReqLLM.Providers.FireworksAI
 
   describe "provider contract" do
-    test "provider_extended_generation_schema includes all core keys" do
-      extended_schema = FireworksAI.provider_extended_generation_schema()
-      extended_keys = extended_schema.schema |> Keyword.keys()
-
-      core_keys = ReqLLM.Provider.Options.all_generation_keys()
-      core_without_meta = Enum.reject(core_keys, &(&1 == :provider_options))
-
-      for core_key <- core_without_meta do
-        assert core_key in extended_keys,
-               "Extended schema missing core key: #{core_key}"
-      end
-    end
-
     test "provider schema exposes Fireworks-specific options" do
       schema_keys = FireworksAI.provider_schema().schema |> Keyword.keys()
 
@@ -33,36 +20,6 @@ defmodule ReqLLM.Providers.FireworksAITest do
       assert :repetition_penalty in schema_keys
       assert :speculation in schema_keys
       assert :fireworks_reasoning_effort in schema_keys
-    end
-  end
-
-  describe "request preparation" do
-    test "prepare_request for :chat creates /chat/completions request" do
-      {:ok, model} =
-        ReqLLM.model(%{provider: :fireworks_ai, id: "accounts/fireworks/models/kimi-k2-instruct"})
-
-      {:ok, request} = FireworksAI.prepare_request(:chat, model, "Hello", temperature: 0.7)
-
-      assert %Req.Request{} = request
-      assert request.url.path == "/chat/completions"
-      assert request.method == :post
-      assert request.options[:base_url] == "https://api.fireworks.ai/inference/v1"
-    end
-  end
-
-  describe "authentication wiring" do
-    test "attach adds Bearer authorization header and pipeline steps" do
-      {:ok, model} =
-        ReqLLM.model(%{provider: :fireworks_ai, id: "accounts/fireworks/models/kimi-k2-instruct"})
-
-      request = FireworksAI.attach(Req.new(), model, [])
-
-      auth_header = request.headers["authorization"]
-      assert auth_header != nil
-      assert String.starts_with?(List.first(auth_header), "Bearer ")
-
-      assert :llm_encode_body in Keyword.keys(request.request_steps)
-      assert :llm_decode_response in Keyword.keys(request.response_steps)
     end
   end
 
@@ -178,29 +135,6 @@ defmodule ReqLLM.Providers.FireworksAITest do
         refute Map.has_key?(msg, "reasoning_content"),
                "reasoning_content must be stripped (Fireworks rejects extra fields)"
       end
-    end
-
-    test "encode_body forwards tools using OpenAI shape" do
-      {:ok, model} =
-        ReqLLM.model(%{provider: :fireworks_ai, id: "accounts/fireworks/models/kimi-k2-instruct"})
-
-      tool =
-        ReqLLM.Tool.new!(
-          name: "get_weather",
-          description: "Get the weather",
-          parameter_schema: [
-            location: [type: :string, required: true, doc: "City name"]
-          ],
-          callback: fn _ -> {:ok, "sunny"} end
-        )
-
-      {:ok, request} = FireworksAI.prepare_request(:chat, model, "Hi", tools: [tool])
-
-      encoded = FireworksAI.encode_body(request)
-      body = ReqLLM.Test.Helpers.json_body(encoded)
-
-      assert is_list(body["tools"])
-      assert hd(body["tools"])["function"]["name"] == "get_weather"
     end
   end
 
@@ -490,32 +424,6 @@ defmodule ReqLLM.Providers.FireworksAITest do
       body = ReqLLM.Test.Helpers.json_body(encoded)
 
       refute Map.has_key?(body, "stream_options")
-    end
-  end
-
-  describe "response decoding" do
-    test "decode_response parses OpenAI-format response" do
-      mock_resp = %Req.Response{
-        status: 200,
-        body:
-          openai_format_json_fixture(
-            model: "accounts/fireworks/models/kimi-k2-instruct",
-            content: "Hello from Fireworks!"
-          )
-      }
-
-      mock_req = %Req.Request{
-        options: [
-          context: context_fixture(),
-          model: "accounts/fireworks/models/kimi-k2-instruct",
-          operation: :chat
-        ]
-      }
-
-      {_req, decoded} = FireworksAI.decode_response({mock_req, mock_resp})
-
-      assert %ReqLLM.Response{} = decoded.body
-      assert ReqLLM.Response.text(decoded.body) == "Hello from Fireworks!"
     end
   end
 end

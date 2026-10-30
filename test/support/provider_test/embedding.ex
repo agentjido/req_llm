@@ -21,8 +21,9 @@ defmodule ReqLLM.ProviderTest.Embedding do
 
   defmacro __using__(opts) do
     provider = Keyword.fetch!(opts, :provider)
+    integration? = Keyword.get(opts, :integration, false)
 
-    quote bind_quoted: [provider: provider] do
+    quote bind_quoted: [provider: provider, integration?: integration?] do
       use ExUnit.Case, async: false
 
       import ExUnit.Case
@@ -34,14 +35,10 @@ defmodule ReqLLM.ProviderTest.Embedding do
       @moduletag :coverage
       @moduletag category: :embedding
       @moduletag provider: provider
+      if integration?, do: @moduletag(:integration)
 
       @provider provider
       @models ModelMatrix.models_for_provider(provider, operation: :embedding)
-
-      setup_all do
-        LLMDB.load(allow: :all, custom: Application.get_env(:llm_db, :custom, %{}))
-        :ok
-      end
 
       for model_spec <- @models do
         @model_spec model_spec

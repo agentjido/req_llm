@@ -11,18 +11,13 @@ defmodule ReqLLM.Coverage.AmazonBedrock.StrictToolTest do
   @moduletag timeout: 180_000
 
   @runtime_model "amazon_bedrock:eu.anthropic.claude-haiku-4-5-20251001-v1:0"
-  @mantle_model "amazon_bedrock:anthropic.claude-haiku-4-5"
+  @mantle_model %{provider: :amazon_bedrock, id: "anthropic.claude-haiku-4-5"}
 
   @routes [
     converse: {@runtime_model, [use_converse: true]},
     invoke: {@runtime_model, [use_converse: false]},
     mantle: {@mantle_model, [endpoint: :mantle]}
   ]
-
-  setup_all do
-    LLMDB.load(allow: :all, custom: %{})
-    :ok
-  end
 
   defp weather_tool do
     ReqLLM.Tool.new!(

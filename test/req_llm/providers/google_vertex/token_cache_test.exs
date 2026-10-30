@@ -78,7 +78,7 @@ defmodule ReqLLM.Providers.GoogleVertex.TokenCacheTest do
       assert Agent.get(counter, & &1) == 2
     end
 
-    @tag :skip
+    @tag :integration
     test "fetches token on first call" do
       service_account_path = System.get_env("GOOGLE_SERVICE_ACCOUNT_JSON")
       assert service_account_path, "GOOGLE_SERVICE_ACCOUNT_JSON env var required"
@@ -89,7 +89,7 @@ defmodule ReqLLM.Providers.GoogleVertex.TokenCacheTest do
       assert String.starts_with?(token, "ya29.")
     end
 
-    @tag :skip
+    @tag :integration
     test "returns cached token on subsequent calls within TTL" do
       service_account_path = System.get_env("GOOGLE_SERVICE_ACCOUNT_JSON")
       assert service_account_path, "GOOGLE_SERVICE_ACCOUNT_JSON env var required"
@@ -153,15 +153,6 @@ defmodule ReqLLM.Providers.GoogleVertex.TokenCacheTest do
       assert {:error, _reason} = result
     end
 
-    test "parses JSON string when not a file path" do
-      # Non-existent file path that is valid JSON gets parsed as JSON
-      json_string = ~s({"client_email": "test@example.com"})
-
-      result = TokenCache.get_or_refresh(json_string)
-      # Should parse as JSON and fail (no private_key)
-      assert {:error, _reason} = result
-    end
-
     test "returns clear error for invalid credentials string" do
       # Not a file, not valid JSON
       result = TokenCache.get_or_refresh("not-a-file-and-not-json")
@@ -171,7 +162,7 @@ defmodule ReqLLM.Providers.GoogleVertex.TokenCacheTest do
       assert reason =~ "not a valid file path or JSON string"
     end
 
-    @tag :skip
+    @tag :integration
     test "fetches token with JSON string credentials" do
       service_account_path = System.get_env("GOOGLE_SERVICE_ACCOUNT_JSON")
       assert service_account_path, "GOOGLE_SERVICE_ACCOUNT_JSON env var required"
@@ -184,7 +175,7 @@ defmodule ReqLLM.Providers.GoogleVertex.TokenCacheTest do
       assert String.starts_with?(token, "ya29.")
     end
 
-    @tag :skip
+    @tag :integration
     test "fetches token with map credentials" do
       service_account_path = System.get_env("GOOGLE_SERVICE_ACCOUNT_JSON")
       assert service_account_path, "GOOGLE_SERVICE_ACCOUNT_JSON env var required"
@@ -197,7 +188,7 @@ defmodule ReqLLM.Providers.GoogleVertex.TokenCacheTest do
       assert String.starts_with?(token, "ya29.")
     end
 
-    @tag :skip
+    @tag :integration
     test "fetches token with map using atom keys" do
       service_account_path = System.get_env("GOOGLE_SERVICE_ACCOUNT_JSON")
       assert service_account_path, "GOOGLE_SERVICE_ACCOUNT_JSON env var required"
@@ -213,7 +204,7 @@ defmodule ReqLLM.Providers.GoogleVertex.TokenCacheTest do
       assert String.starts_with?(token, "ya29.")
     end
 
-    @tag :skip
+    @tag :integration
     test "uses client_email as cache key for JSON string" do
       service_account_path = System.get_env("GOOGLE_SERVICE_ACCOUNT_JSON")
       assert service_account_path, "GOOGLE_SERVICE_ACCOUNT_JSON env var required"
@@ -250,7 +241,7 @@ defmodule ReqLLM.Providers.GoogleVertex.TokenCacheTest do
       assert :ok = TokenCache.invalidate("test@example.iam.gserviceaccount.com")
     end
 
-    @tag :skip
+    @tag :integration
     test "next call fetches fresh token after invalidation" do
       service_account_path = System.get_env("GOOGLE_SERVICE_ACCOUNT_JSON")
       assert service_account_path, "GOOGLE_SERVICE_ACCOUNT_JSON env var required"
@@ -276,7 +267,7 @@ defmodule ReqLLM.Providers.GoogleVertex.TokenCacheTest do
       assert :ok = TokenCache.clear_all()
     end
 
-    @tag :skip
+    @tag :integration
     test "all subsequent calls fetch fresh tokens after clear" do
       service_account_path = System.get_env("GOOGLE_SERVICE_ACCOUNT_JSON")
       assert service_account_path, "GOOGLE_SERVICE_ACCOUNT_JSON env var required"

@@ -20,11 +20,6 @@ defmodule ReqLLM.Coverage.AmazonBedrock.ConverseReasoningTest do
     provider_options: [use_converse: true]
   ]
 
-  setup_all do
-    LLMDB.load(allow: :all, custom: %{})
-    :ok
-  end
-
   test "replays signed reasoning across a tool round-trip" do
     tool =
       ReqLLM.tool(

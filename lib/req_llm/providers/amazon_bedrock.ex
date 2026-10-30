@@ -1199,7 +1199,7 @@ defmodule ReqLLM.Providers.AmazonBedrock do
     model_id = request_model_id(model)
     openai_model_id = openai_model_id(model_id)
 
-    if String.starts_with?(openai_model_id, "gpt-oss") do
+    if mantle_chat_completions_model?(model_id, openai_model_id) do
       false
     else
       case provider_shape(model) do
@@ -1209,6 +1209,11 @@ defmodule ReqLLM.Providers.AmazonBedrock do
         _ -> ReqLLM.Providers.OpenAI.AdapterHelpers.responses_model?(openai_model_id)
       end
     end
+  end
+
+  defp mantle_chat_completions_model?(model_id, openai_model_id) do
+    String.starts_with?(openai_model_id, "gpt-oss") or
+      String.starts_with?(model_id, "google.gemma-4")
   end
 
   defp provider_shape(%LLMDB.Model{extra: extra}) when is_map(extra) do

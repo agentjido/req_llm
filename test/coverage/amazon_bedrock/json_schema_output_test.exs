@@ -11,18 +11,13 @@ defmodule ReqLLM.Coverage.AmazonBedrock.JsonSchemaOutputTest do
   @moduletag timeout: 180_000
 
   @model "amazon_bedrock:eu.anthropic.claude-haiku-4-5-20251001-v1:0"
-  @mantle_model "amazon_bedrock:anthropic.claude-haiku-4-5"
+  @mantle_model %{provider: :amazon_bedrock, id: "anthropic.claude-haiku-4-5"}
   @prompt "Describe Lyon with three landmarks."
   @schema [
     name: [type: :string, required: true],
     country: [type: :string, required: true],
     landmarks: [type: {:list, :string}, required: true]
   ]
-
-  setup_all do
-    LLMDB.load(allow: :all, custom: %{})
-    :ok
-  end
 
   defp opts(provider_options) do
     [

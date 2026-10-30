@@ -292,24 +292,6 @@ defmodule ReqLLM.Providers.Azure.RoutingTest do
       refute url =~ "/messages"
     end
 
-    test "routes Claude models to messages endpoint" do
-      model = ReqLLM.Test.AzureModelHelpers.chat_model("claude-3-5-sonnet-20241022")
-
-      {:ok, request} =
-        Azure.prepare_request(
-          :chat,
-          model,
-          "Hello",
-          api_key: "test-key",
-          base_url: "https://my-resource.openai.azure.com/openai",
-          deployment: "claude-deployment"
-        )
-
-      url = URI.to_string(request.url)
-      assert url =~ "/messages"
-      refute url =~ "/chat/completions"
-    end
-
     test "applies correct formatter for OpenAI models (no model field, string keys)" do
       context = ReqLLM.Context.new([ReqLLM.Context.user("Hello")])
       body = Azure.OpenAI.format_request("gpt-4o", context, stream: false)

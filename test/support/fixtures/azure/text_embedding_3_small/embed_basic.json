@@ -3,10 +3,11 @@
   "provider": "azure",
   "request": {
     "body": {
-      "b64": "eyJpbnB1dCI6IkhlbGxvIHdvcmxkIn0="
+      "b64": "eyJpbnB1dCI6IkhlbGxvIHdvcmxkIiwibW9kZWwiOiJ0ZXh0LWVtYmVkZGluZy0zLXNtYWxsIn0="
     },
     "canonical_json": {
-      "input": "Hello world"
+      "input": "Hello world",
+      "model": "text-embedding-3-small"
     },
     "headers": {
       "accept": [
@@ -24,7 +25,7 @@
       ]
     },
     "method": "post",
-    "url": "https://shelvick-test.cognitiveservices.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2025-04-01-preview"
+    "url": "https://fixture.services.ai.azure.com/models/embeddings?api-version=2024-05-01-preview"
   },
   "response": {
     "body": {

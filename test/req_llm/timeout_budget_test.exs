@@ -57,14 +57,14 @@ defmodule ReqLLM.TimeoutBudgetTest do
         url: "https://example.invalid",
         adapter: fn request ->
           :atomics.add(attempts, 1, 1)
-          Process.sleep(120)
+          Process.sleep(50)
           {request, %Req.TransportError{reason: :closed}}
         end
       )
       |> ReqLLM.Step.Retry.attach(max_retries: 3)
 
-    assert {:error, %ReqLLM.Error.API.Timeout{kind: :total, timeout: 200}} =
-             TimeoutBudget.request(request, TimeoutBudget.deadline(total_timeout: 200))
+    assert {:error, %ReqLLM.Error.API.Timeout{kind: :total, timeout: 80}} =
+             TimeoutBudget.request(request, TimeoutBudget.deadline(total_timeout: 80))
 
     assert :atomics.get(attempts, 1) == 2
     refute_received {ReqLLM.TimeoutBudget, _capture_ref, _context}
