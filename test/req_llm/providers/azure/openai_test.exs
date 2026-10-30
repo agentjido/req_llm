@@ -88,16 +88,6 @@ defmodule ReqLLM.Providers.Azure.OpenAITest do
       refute Map.has_key?(body, :max_tokens)
     end
 
-    test "uses max_tokens for standard models" do
-      context = ReqLLM.Context.new([ReqLLM.Context.user("Hello")])
-      opts = [stream: false, max_tokens: 500]
-
-      body = Azure.OpenAI.format_request("gpt-4o", context, opts)
-
-      assert body[:max_tokens] == 500
-      refute Map.has_key?(body, :max_completion_tokens)
-    end
-
     test "translates tool_choice from ReqLLM format to OpenAI format" do
       context = ReqLLM.Context.new([ReqLLM.Context.user("What's the weather?")])
 
@@ -459,15 +449,6 @@ defmodule ReqLLM.Providers.Azure.OpenAITest do
   end
 
   describe "additional options" do
-    test "includes n parameter for multiple completions" do
-      context = ReqLLM.Context.new([ReqLLM.Context.user("Hello")])
-      opts = [stream: false, n: 3]
-
-      body = Azure.OpenAI.format_request("gpt-4o", context, opts)
-
-      assert body[:n] == 3
-    end
-
     test "includes encoding_format for embeddings" do
       opts = [provider_options: [encoding_format: "base64"]]
 

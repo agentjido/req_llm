@@ -174,15 +174,6 @@ defmodule ReqLLM.Providers.Azure.OptionsTest do
       assert provider_opts[:reasoning_effort] == "medium"
     end
 
-    test "n parameter is ignored for Claude models (OpenAI-specific)" do
-      context = ReqLLM.Context.new([ReqLLM.Context.user("Hello")])
-
-      body = Azure.Anthropic.format_request("claude-3-sonnet", context, stream: false, n: 3)
-
-      refute Map.has_key?(body, :n)
-      refute Map.has_key?(body, "n")
-    end
-
     test "parallel_tool_calls is ignored for Claude models (OpenAI-specific)" do
       context = ReqLLM.Context.new([ReqLLM.Context.user("Hello")])
 

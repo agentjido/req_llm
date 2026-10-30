@@ -17,11 +17,6 @@ defmodule ReqLLM.Coverage.AmazonBedrock.PromptCacheTest do
   @nova %{provider: :amazon_bedrock, id: "us.amazon.nova-pro-v1:0"}
   @padding String.duplicate("Stable reference sentence for the prompt cache fixture. ", 450)
 
-  setup_all do
-    LLMDB.load(allow: :all, custom: %{})
-    :ok
-  end
-
   test "explicit cache_control checkpoint on Converse" do
     context =
       Context.new([

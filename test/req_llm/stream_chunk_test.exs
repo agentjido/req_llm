@@ -206,22 +206,21 @@ defmodule ReqLLM.StreamChunkTest do
 
   describe "constructor guard clauses" do
     test "enforces parameter type guards" do
-      # text/2 guards
-      assert_raise FunctionClauseError, fn -> StreamChunk.text(123) end
-      assert_raise FunctionClauseError, fn -> StreamChunk.text("hello", "not a map") end
+      invalid_calls = [
+        {:text, [123]},
+        {:text, ["hello", "not a map"]},
+        {:thinking, [:not_binary]},
+        {:thinking, ["thinking", :not_map]},
+        {:tool_call, [:not_binary, %{}]},
+        {:tool_call, ["name", :not_map]},
+        {:tool_call, ["name", %{}, :not_map]},
+        {:meta, [:not_map]},
+        {:meta, [%{}, :not_map]}
+      ]
 
-      # thinking/2 guards
-      assert_raise FunctionClauseError, fn -> StreamChunk.thinking(:not_binary) end
-      assert_raise FunctionClauseError, fn -> StreamChunk.thinking("thinking", :not_map) end
-
-      # tool_call/3 guards
-      assert_raise FunctionClauseError, fn -> StreamChunk.tool_call(:not_binary, %{}) end
-      assert_raise FunctionClauseError, fn -> StreamChunk.tool_call("name", :not_map) end
-      assert_raise FunctionClauseError, fn -> StreamChunk.tool_call("name", %{}, :not_map) end
-
-      # meta/2 guards
-      assert_raise FunctionClauseError, fn -> StreamChunk.meta(:not_map) end
-      assert_raise FunctionClauseError, fn -> StreamChunk.meta(%{}, :not_map) end
+      for {function, arguments} <- invalid_calls do
+        assert_raise FunctionClauseError, fn -> apply(StreamChunk, function, arguments) end
+      end
     end
   end
 

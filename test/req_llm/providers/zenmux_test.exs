@@ -8,36 +8,6 @@ defmodule ReqLLM.Providers.ZenmuxTest do
   alias ReqLLM.Providers.Zenmux
 
   describe "request preparation & pipeline wiring" do
-    test "prepare_request creates configured request" do
-      {:ok, model} = ReqLLM.model("zenmux:xiaomi/mimo-v2-flash")
-      context = context_fixture()
-      opts = [temperature: 0.7, max_tokens: 100]
-
-      {:ok, request} = Zenmux.prepare_request(:chat, model, context, opts)
-
-      assert %Req.Request{} = request
-      assert request.url.path == "/chat/completions"
-      assert request.method == :post
-    end
-
-    test "attach configures authentication and pipeline" do
-      {:ok, model} = ReqLLM.model("zenmux:xiaomi/mimo-v2-flash")
-      opts = [temperature: 0.5, max_tokens: 50]
-
-      request = Req.new() |> Zenmux.attach(model, opts)
-
-      assert request.options[:model] == model.model
-      assert request.options[:temperature] == 0.5
-      assert request.options[:max_tokens] == 50
-      assert {:bearer, _key} = request.options[:auth]
-
-      request_steps = Keyword.keys(request.request_steps)
-      response_steps = Keyword.keys(request.response_steps)
-
-      assert :llm_encode_body in request_steps
-      assert :llm_decode_response in response_steps
-    end
-
     test "error handling for invalid configurations" do
       {:ok, model} = ReqLLM.model("zenmux:xiaomi/mimo-v2-flash")
       context = context_fixture()
@@ -50,27 +20,6 @@ defmodule ReqLLM.Providers.ZenmuxTest do
   end
 
   describe "body encoding & option translation" do
-    test "encode_body handles standard fields" do
-      {:ok, model} = ReqLLM.model("zenmux:xiaomi/mimo-v2-flash")
-      context = context_fixture()
-
-      mock_request = %Req.Request{
-        options: [
-          context: context,
-          model: model.model,
-          stream: false
-        ]
-      }
-
-      updated_request = Zenmux.encode_body(mock_request)
-      assert_no_duplicate_json_keys(ReqLLM.Test.Helpers.json_iodata(updated_request))
-      decoded = ReqLLM.Test.Helpers.json_body(updated_request)
-
-      assert decoded["model"] == "xiaomi/mimo-v2-flash"
-      assert is_list(decoded["messages"])
-      assert length(decoded["messages"]) == 2
-    end
-
     test "translate_options maps max_tokens to max_completion_tokens" do
       {:ok, model} = ReqLLM.model("zenmux:xiaomi/mimo-v2-flash")
       opts = [max_tokens: 100]

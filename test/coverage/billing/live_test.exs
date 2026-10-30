@@ -1,6 +1,7 @@
 defmodule ReqLLM.Coverage.Billing.LiveTest do
   use ExUnit.Case, async: false
   @moduletag :coverage
+  @moduletag :integration
   @moduletag :billing
   @moduletag billing_layer: "pipeline"
   @moduletag timeout: 600_000
@@ -16,7 +17,6 @@ defmodule ReqLLM.Coverage.Billing.LiveTest do
       end
     end
   else
-    @tag skip: "use mix req_llm.billing record with explicit selections and limits"
     test "live billing requires its explicit run contract", do: :ok
   end
 end

@@ -14,15 +14,11 @@ defmodule ReqLLM.Coverage.OpenAI.LogprobsTest do
   import ReqLLM.Test.Helpers
 
   @moduletag :coverage
+  @moduletag :integration
   @moduletag provider: "openai"
   @moduletag timeout: 60_000
 
   @model_spec "openai:gpt-3.5-turbo"
-
-  setup_all do
-    LLMDB.load(allow: :all, custom: %{})
-    :ok
-  end
 
   @tag ReqLLM.Test.CompatibilityScenario.tag!(:logprobs_non_streaming)
   @tag model: "gpt-3.5-turbo"

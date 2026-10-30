@@ -61,7 +61,8 @@ defmodule ReqLLM.Providers.OpenAITest do
         end
 
         opts =
-          [max_retries: max_retries, req_http_options: [adapter: adapter]] ++ extra_opts
+          [max_retries: max_retries, req_http_options: ReqLLM.Test.HTTPAdapter.options(adapter)] ++
+            extra_opts
 
         {:ok, request} = OpenAI.prepare_request(operation, model, "Hello", opts)
         assert {:error, _reason} = Req.request(request)

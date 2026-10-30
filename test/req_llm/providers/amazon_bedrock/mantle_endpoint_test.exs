@@ -97,6 +97,21 @@ defmodule ReqLLM.Providers.AmazonBedrock.MantleEndpointTest do
       end
     end
 
+    test "catalog shape does not move Gemma to Responses", %{
+      context: context,
+      opts: opts
+    } do
+      model =
+        LLMDB.Model.new!(%{
+          provider: :amazon_bedrock,
+          id: "google.gemma-4-31b",
+          extra: %{provider: %{shape: "responses"}}
+        })
+
+      {:ok, request} = AmazonBedrock.prepare_request(:chat, model, context, opts)
+      assert request.url.path == "/openai/v1/chat/completions"
+    end
+
     test "routes GPT-6 models on /openai/v1", %{context: context, opts: opts} do
       for id <- ["openai.gpt-6.1-sol", "openai.gpt-6-luna"] do
         {:ok, model} = ReqLLM.model(%{provider: :amazon_bedrock, id: id})

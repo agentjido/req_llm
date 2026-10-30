@@ -29,7 +29,7 @@ defmodule ReqLLM.Providers.Google.ObjectGenerationTest do
     end
 
     test "prepare_request for :object allows tools on Gemini 3" do
-      {:ok, model} = ReqLLM.model("google:gemini-3-flash")
+      {:ok, model} = ReqLLM.model(%{provider: :google, id: "gemini-3-flash"})
       context = context_fixture()
       {:ok, schema} = ReqLLM.Schema.compile(name: [type: :string])
 
@@ -129,7 +129,7 @@ defmodule ReqLLM.Providers.Google.ObjectGenerationTest do
     end
 
     test "encode_object_body disables thought summaries when thinking is enabled" do
-      {:ok, model} = ReqLLM.model("google:gemini-3-flash")
+      {:ok, model} = ReqLLM.model(%{provider: :google, id: "gemini-3-flash"})
       context = context_fixture()
       {:ok, schema} = ReqLLM.Schema.compile(name: [type: :string, required: true])
 

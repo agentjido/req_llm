@@ -3,21 +3,6 @@ defmodule ReqLLM.Providers.AmazonBedrock.AdditionalTest do
 
   alias ReqLLM.{Context, Providers.AmazonBedrock}
 
-  describe "provider_id" do
-    test "returns :amazon_bedrock" do
-      assert AmazonBedrock.provider_id() == :amazon_bedrock
-    end
-  end
-
-  describe "default_base_url" do
-    test "returns bedrock endpoint format with region placeholder" do
-      url = AmazonBedrock.base_url()
-      assert url =~ "bedrock-runtime"
-      assert url =~ "amazonaws.com"
-      assert url =~ "{region}"
-    end
-  end
-
   describe "response wrapping" do
     test "wraps map in Response struct" do
       data = %{"test" => "value"}
@@ -201,71 +186,6 @@ defmodule ReqLLM.Providers.AmazonBedrock.AdditionalTest do
       assert body["system"] == "Be helpful"
       assert [%{"role" => "user", "content" => _}] = body["messages"]
     end
-  end
-
-  describe "parse_stream_protocol" do
-    test "parses valid AWS Event Stream message" do
-      # Create a JSON payload that will be parsed
-      payload = Jason.encode!(%{"test" => "data"})
-      message = build_event_stream_message(payload)
-
-      # Parser returns decoded JSON objects
-      assert {:ok, [decoded], <<>>} = AmazonBedrock.parse_stream_protocol(message, <<>>)
-      assert decoded == %{"test" => "data"}
-    end
-
-    test "handles incomplete data" do
-      # Just a few bytes, not enough for a message
-      partial = <<0, 0, 0, 50>>
-
-      assert {:incomplete, ^partial} = AmazonBedrock.parse_stream_protocol(partial, <<>>)
-    end
-
-    test "accumulates across chunks" do
-      payload = Jason.encode!(%{"complete" => true})
-      message = build_event_stream_message(payload)
-
-      # Split in half
-      mid = div(byte_size(message), 2)
-      part1 = binary_part(message, 0, mid)
-      part2 = binary_part(message, mid, byte_size(message) - mid)
-
-      # First part incomplete
-      assert {:incomplete, buffer} = AmazonBedrock.parse_stream_protocol(part1, <<>>)
-
-      # Second part completes
-      assert {:ok, [decoded], <<>>} = AmazonBedrock.parse_stream_protocol(part2, buffer)
-      assert decoded == %{"complete" => true}
-    end
-  end
-
-  # Build a valid AWS Event Stream message
-  defp build_event_stream_message(payload) when is_binary(payload) do
-    headers = <<>>
-    headers_length = 0
-    payload_length = byte_size(payload)
-    total_length = 16 + headers_length + payload_length
-
-    prelude = <<total_length::32-big, headers_length::32-big>>
-    prelude_crc = :erlang.crc32(prelude)
-
-    message_without_crc = <<
-      prelude::binary,
-      prelude_crc::32,
-      headers::binary,
-      payload::binary
-    >>
-
-    message_crc = :erlang.crc32(message_without_crc)
-
-    <<
-      total_length::32-big,
-      headers_length::32-big,
-      prelude_crc::32,
-      headers::binary,
-      payload::binary,
-      message_crc::32
-    >>
   end
 end
 

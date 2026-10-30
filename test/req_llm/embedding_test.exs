@@ -141,19 +141,6 @@ defmodule ReqLLM.EmbeddingTest do
   end
 
   describe "embed/3 - basic functionality" do
-    test "validates model before attempting embedding" do
-      # Should work with valid embedding model
-      case Embedding.validate_model("openai:text-embedding-3-small") do
-        {:ok, _model} ->
-          # Model validation works
-          :ok
-
-        {:error, _error} ->
-          # Model or provider not available in test environment
-          :ok
-      end
-    end
-
     test "rejects non-embedding models" do
       assert {:error, error} = Embedding.embed("openai:gpt-4o", "Hello")
       assert Exception.message(error) =~ "does not support embedding operations"
@@ -173,12 +160,12 @@ defmodule ReqLLM.EmbeddingTest do
         })
       end)
 
-      assert {:error, %ReqLLM.Error.API.Timeout{kind: :total, timeout: 50}} =
+      assert {:error, %ReqLLM.Error.API.Timeout{kind: :total, timeout: 20}} =
                Embedding.embed(
                  "openai:text-embedding-3-small",
                  "Hello",
                  api_key: "test-key",
-                 total_timeout: 50,
+                 total_timeout: 20,
                  req_http_options: [plug: {Req.Test, SlowHTTP}]
                )
     end
@@ -426,18 +413,6 @@ defmodule ReqLLM.EmbeddingTest do
   end
 
   describe "embed_many/3 - basic functionality" do
-    test "validates model before attempting embedding" do
-      case Embedding.validate_model("openai:text-embedding-3-small") do
-        {:ok, _model} ->
-          # Model validation works
-          :ok
-
-        {:error, _error} ->
-          # Model or provider not available in test environment
-          :ok
-      end
-    end
-
     test "handles empty list" do
       # This should fail at validation stage due to model validation
       assert {:error, _error} = Embedding.embed("openai:text-embedding-3-small", [])

@@ -188,14 +188,14 @@ defmodule ReqLLM.SingleRequestParityTest do
 
     test "#{kind} preserves when its deadline starts relative to preparation" do
       opts =
-        request_options(success_response(@kind), preparation_delay: 250)
-        |> Keyword.put(:total_timeout, 100)
+        request_options(success_response(@kind), preparation_delay: 50)
+        |> Keyword.put(:total_timeout, 15)
 
       if @kind == :evaluation do
         assert call(@kind, opts) == {:ok, expected_result(@kind)}
         assert_receive :sent
       else
-        assert {:error, %ReqLLM.Error.API.Timeout{kind: :total, timeout: 100}} = call(@kind, opts)
+        assert {:error, %ReqLLM.Error.API.Timeout{kind: :total, timeout: 15}} = call(@kind, opts)
         refute_received :sent
       end
     end
@@ -239,7 +239,7 @@ defmodule ReqLLM.SingleRequestParityTest do
     @kind kind
 
     test "detailed #{kind} preserves its result, post-preparation usage step and timing" do
-      opts = request_options(success_response(@kind), preparation_delay: 250)
+      opts = request_options(success_response(@kind), preparation_delay: 25)
 
       result =
         case @kind do

@@ -24,6 +24,7 @@ defmodule ReqLLM.Coverage.Azure.StreamingStructuredOutputTest do
   import ReqLLM.Test.Helpers
 
   @moduletag :coverage
+  @moduletag :integration
   @moduletag provider: "azure"
   @moduletag timeout: 180_000
 
@@ -36,18 +37,13 @@ defmodule ReqLLM.Coverage.Azure.StreamingStructuredOutputTest do
   @openai_model "azure:gpt-4o"
   @claude_model "azure:claude-3-5-sonnet-20241022"
 
-  setup_all do
-    custom = Application.get_env(:llm_db, :custom, %{})
-    LLMDB.load(allow: :all, custom: custom)
-    :ok
-  end
-
   describe "streaming with auto mode selection" do
     @tag ReqLLM.Test.CompatibilityScenario.tag!(:object_streaming_auto)
 
     test "auto-selects appropriate mode for OpenAI models (defaults to json_schema)" do
       opts =
         fixture_opts(
+          :azure,
           ReqLLM.Test.CompatibilityScenario.fixture!(:object_streaming_auto),
           param_bundles().deterministic
           |> Keyword.put(:max_tokens, 500)
@@ -78,6 +74,7 @@ defmodule ReqLLM.Coverage.Azure.StreamingStructuredOutputTest do
     test "streams object with native response_format json_schema" do
       opts =
         fixture_opts(
+          :azure,
           ReqLLM.Test.CompatibilityScenario.fixture!(:object_streaming_json_schema),
           param_bundles().deterministic
           |> Keyword.put(:max_tokens, 500)
@@ -116,6 +113,7 @@ defmodule ReqLLM.Coverage.Azure.StreamingStructuredOutputTest do
     test "streams object with strict tool calling" do
       opts =
         fixture_opts(
+          :azure,
           ReqLLM.Test.CompatibilityScenario.fixture!(:object_streaming_tool_strict),
           param_bundles().deterministic
           |> Keyword.put(:max_tokens, 500)
@@ -149,7 +147,7 @@ defmodule ReqLLM.Coverage.Azure.StreamingStructuredOutputTest do
 
       tool_calls = ReqLLM.Response.tool_calls(response)
       assert is_list(tool_calls)
-      assert Enum.any?(tool_calls, fn tc -> tc.name == "structured_output" end)
+      assert Enum.any?(tool_calls, &(ReqLLM.ToolCall.name(&1) == "structured_output"))
     end
   end
 
@@ -160,6 +158,7 @@ defmodule ReqLLM.Coverage.Azure.StreamingStructuredOutputTest do
     test "streams object using tool calling for Claude (json_schema not supported)" do
       opts =
         fixture_opts(
+          :azure,
           ReqLLM.Test.CompatibilityScenario.fixture!(:object_streaming_claude_tool),
           param_bundles().deterministic
           |> Keyword.put(:max_tokens, 500)
@@ -192,7 +191,7 @@ defmodule ReqLLM.Coverage.Azure.StreamingStructuredOutputTest do
 
       tool_calls = ReqLLM.Response.tool_calls(response)
       assert is_list(tool_calls)
-      assert Enum.any?(tool_calls, fn tc -> tc.name == "structured_output" end)
+      assert Enum.any?(tool_calls, &(ReqLLM.ToolCall.name(&1) == "structured_output"))
     end
   end
 
@@ -203,6 +202,7 @@ defmodule ReqLLM.Coverage.Azure.StreamingStructuredOutputTest do
     test "auto-selects tool mode for Claude models (json_schema unavailable on Azure)" do
       opts =
         fixture_opts(
+          :azure,
           ReqLLM.Test.CompatibilityScenario.fixture!(:object_streaming_claude_auto),
           param_bundles().deterministic
           |> Keyword.put(:max_tokens, 500)
@@ -233,6 +233,7 @@ defmodule ReqLLM.Coverage.Azure.StreamingStructuredOutputTest do
     test "handles truncated stream gracefully" do
       opts =
         fixture_opts(
+          :azure,
           ReqLLM.Test.CompatibilityScenario.fixture!(:streaming_error_handling),
           param_bundles().deterministic
           |> Keyword.put(:max_tokens, 10)

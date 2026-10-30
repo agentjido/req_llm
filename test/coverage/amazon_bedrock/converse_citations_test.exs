@@ -16,11 +16,6 @@ defmodule ReqLLM.Coverage.AmazonBedrock.ConverseCitationsTest do
   @model "amazon_bedrock:global.anthropic.claude-haiku-4-5-20251001-v1:0"
   @opts [max_tokens: 256, provider_options: [use_converse: true]]
 
-  setup_all do
-    LLMDB.load(allow: :all, custom: %{})
-    :ok
-  end
-
   defp context do
     pdf = File.read!("priv/examples/test.pdf")
 

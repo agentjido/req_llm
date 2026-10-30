@@ -310,7 +310,7 @@ defmodule ReqLLM.StreamServer.StreamingTest do
 
     test "total timeout stops streaming retries" do
       test_pid = self()
-      server = start_server(total_timeout: 250)
+      server = start_server(total_timeout: 80)
 
       task =
         Task.async(fn ->
@@ -340,7 +340,7 @@ defmodule ReqLLM.StreamServer.StreamingTest do
       assert_receive :stream_budget_attempt, 1_000
       :ok = StreamServer.set_telemetry_context(server, nil)
       assert {:ok, metadata} = StreamServer.await_metadata(server, 1_000)
-      assert %ReqLLM.Error.API.Timeout{kind: :total, timeout: 250} = metadata.error
+      assert %ReqLLM.Error.API.Timeout{kind: :total, timeout: 80} = metadata.error
 
       assert_receive {:DOWN, ^task_ref, :process, task_pid, :cancelled}
                      when task_pid == task.pid,
@@ -366,37 +366,37 @@ defmodule ReqLLM.StreamServer.StreamingTest do
     end
 
     test "semantic progress resets the stream idle budget" do
-      server = start_server(stream_idle_timeout: 120)
+      server = start_server(stream_idle_timeout: 60)
       _task = mock_http_task(server)
       :ok = StreamServer.set_telemetry_context(server, nil)
 
-      Process.sleep(80)
+      Process.sleep(35)
 
       StreamServer.http_event(
         server,
         {:data, ~s(data: {"choices": [{"delta": {"content": "progress"}}]}\n\n)}
       )
 
-      assert {:error, :timeout} = StreamServer.await_metadata(server, 60)
-      assert {:ok, chunk} = StreamServer.next(server, 100)
+      assert {:error, :timeout} = StreamServer.await_metadata(server, 20)
+      assert {:ok, chunk} = StreamServer.next(server, 80)
       assert chunk.text == "progress"
 
-      assert {:ok, metadata} = StreamServer.await_metadata(server, 200)
+      assert {:ok, metadata} = StreamServer.await_metadata(server, 90)
       assert %ReqLLM.Error.API.Timeout{kind: :stream_idle} = metadata.error
     end
 
     test "keepalive metadata does not reset the stream idle budget" do
-      server = start_server(stream_idle_timeout: 200)
+      server = start_server(stream_idle_timeout: 70)
       _task = mock_http_task(server)
       :ok = StreamServer.set_telemetry_context(server, nil)
 
       for _iteration <- 1..3 do
-        Process.sleep(50)
+        Process.sleep(18)
         StreamServer.http_event(server, {:data, ~s(data: {"event": "keepalive"}\n\n)})
       end
 
-      assert {:ok, metadata} = StreamServer.await_metadata(server, 120)
-      assert %ReqLLM.Error.API.Timeout{kind: :stream_idle, timeout: 200} = metadata.error
+      assert {:ok, metadata} = StreamServer.await_metadata(server, 40)
+      assert %ReqLLM.Error.API.Timeout{kind: :stream_idle, timeout: 70} = metadata.error
     end
 
     test "next/2 respects timeout parameter" do
@@ -443,26 +443,26 @@ defmodule ReqLLM.StreamServer.StreamingTest do
       server = start_server()
       _task = mock_http_task(server)
 
-      metadata_task = Task.async(fn -> StreamServer.await_metadata(server, 250) end)
+      metadata_task = Task.async(fn -> StreamServer.await_metadata(server, 50) end)
 
-      Process.sleep(150)
+      Process.sleep(30)
 
       StreamServer.http_event(
         server,
         {:data, ~s(data: {"choices": [{"delta": {"content": "one"}}]}\n\n)}
       )
 
-      Process.sleep(150)
+      Process.sleep(30)
 
       StreamServer.http_event(
         server,
         {:data, ~s(data: {"choices": [{"delta": {"content": "two"}}]}\n\n)}
       )
 
-      Process.sleep(150)
+      Process.sleep(30)
       StreamServer.http_event(server, :done)
 
-      assert {:ok, metadata} = Task.await(metadata_task, 500)
+      assert {:ok, metadata} = Task.await(metadata_task, 150)
       assert metadata.finish_reason == :incomplete
 
       StreamServer.cancel(server)

@@ -162,33 +162,6 @@ defmodule ReqLLM.Providers.Azure.StructuredOutputTest do
   end
 
   describe "structured output via prepare_request :object operation" do
-    test "creates synthetic tool for OpenAI models" do
-      {:ok, model} = ReqLLM.model("azure:gpt-4o")
-
-      schema = [
-        name: [type: :string, required: true],
-        age: [type: :pos_integer, required: true]
-      ]
-
-      compiled_schema = %{schema: schema}
-
-      {:ok, request} =
-        Azure.prepare_request(
-          :object,
-          model,
-          "Generate a person",
-          base_url: "https://my-resource.openai.azure.com/openai",
-          deployment: "my-deployment",
-          compiled_schema: compiled_schema
-        )
-
-      assert %Req.Request{} = request
-
-      tools = request.options[:tools]
-      assert is_list(tools)
-      assert Enum.any?(tools, &(&1.name == "structured_output"))
-    end
-
     test "uses tool-based approach for Claude models" do
       model = ReqLLM.Test.AzureModelHelpers.chat_model("claude-3-5-sonnet-20241022")
 

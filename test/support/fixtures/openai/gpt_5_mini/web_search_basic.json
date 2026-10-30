@@ -3,7 +3,7 @@
   "provider": "openai",
   "request": {
     "body": {
-      "b64": "eyJpbmNsdWRlIjpbInJlYXNvbmluZy5lbmNyeXB0ZWRfY29udGVudCJdLCJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IlVzZSB3ZWIgc2VhcmNoIHRvIGZpbmQgb25lIHJlY2VudCBBSSBtb2RlbCBhbm5vdW5jZW1lbnQgYW5kIGNpdGUgdGhlIHNvdXJjZS4iLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjoxMjgwMDAsIm1vZGVsIjoiZ3B0LTUtbWluaSIsInN0cmVhbSI6ZmFsc2UsInRvb2xzIjpbeyJ0eXBlIjoid2ViX3NlYXJjaCJ9XX0="
+      "b64": "eyJpbmNsdWRlIjpbInJlYXNvbmluZy5lbmNyeXB0ZWRfY29udGVudCJdLCJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IlVzZSB3ZWIgc2VhcmNoIHRvIGZpbmQgb25lIHJlY2VudCBBSSBtb2RlbCBhbm5vdW5jZW1lbnQgYW5kIGNpdGUgdGhlIHNvdXJjZS4iLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjoxNjM4NCwibW9kZWwiOiJncHQtNS1taW5pIiwic3RyZWFtIjpmYWxzZSwidG9vbHMiOlt7InR5cGUiOiJ3ZWJfc2VhcmNoIn1dfQ=="
     },
     "canonical_json": {
       "include": [
@@ -20,7 +20,7 @@
           "role": "user"
         }
       ],
-      "max_output_tokens": 128000,
+      "max_output_tokens": 16384,
       "model": "gpt-5-mini",
       "stream": false,
       "tools": [

@@ -1,0 +1,164 @@
+{
+  "model_spec": "amazon_bedrock:global.anthropic.claude-haiku-4-5-20251001-v1:0",
+  "provider": "amazon_bedrock",
+  "request": {
+    "body": {
+      "b64": "eyJhZGRpdGlvbmFsTW9kZWxSZXF1ZXN0RmllbGRzIjp7InRoaW5raW5nIjp7ImJ1ZGdldF90b2tlbnMiOjEwMjQsInR5cGUiOiJlbmFibGVkIn19LCJpbmZlcmVuY2VDb25maWciOnsibWF4VG9rZW5zIjoyMDQ4fSwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOlt7InRleHQiOiJXaGF0IGlzIHRoZSBiYWxhbmNlIG9mIGFjY291bnQgYWNjXzE/In1dLCJyb2xlIjoidXNlciJ9LHsiY29udGVudCI6W3sicmVhc29uaW5nQ29udGVudCI6eyJyZWFzb25pbmdUZXh0Ijp7InNpZ25hdHVyZSI6IkV1b0RDb1FCQ0JFUUFSZ0NLa0NnejNaOUNqMkhYV291S0lZbkhUUEdzOERnSkd4dUw2N3J4S0dUR3lGWTBjU0Z5dW4yZGFsUG1vd2F0dHRjYzN1WnpkWGlucnczREhuZzNVeCtxMHhwTWhsamJHRjFaR1V0YUdGcGEzVXROQzAxTFRJd01qVXhNREF4T0FCQ0NIUm9hVzVyYVc1bldnd3hNak0wTlRZM09Ea3dNVEtvQWZuMmc5VUdFZ3phOU03T2Zvam52VkNCK3FrYURBaHJNZlpjNldlWlJPYjJSQ0l3Um1uYVVGYzBSSGtDbDJiNmtadDB3OWNpWld6RzBXM0xjb1JWMDlhVEdKMVhyUjhuRERUTE5RODk3Q3AvbGlLWUtwSUNQSzBLQWx4a05OVHZlM3lrTFJJbW00cDBJRXVYckR3aE1uUllPakdLcjFkMVRVTC9sdDhDMHB2SDRlWE5rcThodGtkeDhDWEFqSkNZUGgwV3dqVUNyb2o0cXJxcWxSUnRGakJUWTJxRXdmNVpBWFVKWnk0UjdZMVc1bGVNYnducnltYjRiNFVOb2crbUpHV3o1ekZ5S0NydmRVeVlhUUVnaGl1eTBHYXQ3YWpkaVZtSlpoZXBpTENod0lGbUlzc0xNRlVjNWFkTTN4UEtEenpTelE2QnEvM3Z6eEl0V0hPV0RXSy9IY0dDVWtaTzAzTDgxekpYVUhFZ3R4Qk1nRmp0bWVaajNSd3BTbVFSN3FiQlNhOURvRys4NldYbWNUQ0oxdEltMWRZRStoTjRFSWh1YlhnWU9NVjNLWkxPdmNadnQzemVyWnVtRHR4MlkwVXdCWUFBTEZqeWhJOE56RkhDcTNOOGtjUTIrM1pVTUJnQiIsInRleHQiOiJUaGUgdXNlciBpcyBhc2tpbmcgZm9yIHRoZSBiYWxhbmNlIG9mIGFjY291bnQgXCJhY2NfMVwiLiBJIGhhdmUgYSBmdW5jdGlvbiBhdmFpbGFibGUgY2FsbGVkIFwiZ2V0X2JhbGFuY2VcIiB0aGF0IHRha2VzIGFuIGFjY291bnRfaWQgYXMgYSBwYXJhbWV0ZXIuIFRoZSB1c2VyIGhhcyBwcm92aWRlZCB0aGUgYWNjb3VudF9pZCBhcyBcImFjY18xXCIsIHNvIEkgaGF2ZSBhbGwgdGhlIGluZm9ybWF0aW9uIEkgbmVlZCB0byBtYWtlIHRoaXMgZnVuY3Rpb24gY2FsbC4ifX19LHsidG9vbFVzZSI6eyJpbnB1dCI6eyJhY2NvdW50X2lkIjoiYWNjXzEifSwibmFtZSI6ImdldF9iYWxhbmNlIiwidG9vbFVzZUlkIjoidG9vbHVzZV9kRVNUSUZGaWRVNU5jZ1hUaHZpd1FmIn19XSwicm9sZSI6ImFzc2lzdGFudCJ9LHsiY29udGVudCI6W3sidG9vbFJlc3VsdCI6eyJjb250ZW50IjpbeyJ0ZXh0IjoiNDIifV0sInRvb2xVc2VJZCI6InRvb2x1c2VfZEVTVElGRmlkVTVOY2dYVGh2aXdRZiJ9fV0sInJvbGUiOiJ1c2VyIn1dLCJzeXN0ZW0iOlt7InRleHQiOiJVc2UgdGhlIHRvb2wsIHRoZW4gYW5zd2VyIHdpdGggdGhlIG51bWJlciBvbmx5LiJ9XSwidG9vbENvbmZpZyI6eyJ0b29scyI6W3sidG9vbFNwZWMiOnsiZGVzY3JpcHRpb24iOiJDdXJyZW50IGJhbGFuY2UgZm9yIGFuIGFjY291bnQgaWQiLCJpbnB1dFNjaGVtYSI6eyJqc29uIjp7ImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjpmYWxzZSwicHJvcGVydGllcyI6eyJhY2NvdW50X2lkIjp7InR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImFjY291bnRfaWQiXSwidHlwZSI6Im9iamVjdCJ9fSwibmFtZSI6ImdldF9iYWxhbmNlIn19XX19"
+    },
+    "canonical_json": {
+      "additionalModelRequestFields": {
+        "thinking": {
+          "budget_tokens": 1024,
+          "type": "enabled"
+        }
+      },
+      "inferenceConfig": {
+        "maxTokens": 2048
+      },
+      "messages": [
+        {
+          "content": [
+            {
+              "text": "What is the balance of account acc_1?"
+            }
+          ],
+          "role": "user"
+        },
+        {
+          "content": [
+            {
+              "reasoningContent": {
+                "reasoningText": {
+                  "signature": "EuoDCoQBCBEQARgCKkCgz3Z9Cj2HXWouKIYnHTPGs8DgJGxuL67rxKGTGyFY0cSFyun2dalPmowatttcc3uZzdXinrw3DHng3Ux+q0xpMhljbGF1ZGUtaGFpa3UtNC01LTIwMjUxMDAxOABCCHRoaW5raW5nWgwxMjM0NTY3ODkwMTKoAfn2g9UGEgza9M7OfojnvVCB+qkaDAhrMfZc6WeZROb2RCIwRmnaUFc0RHkCl2b6kZt0w9ciZWzG0W3LcoRV09aTGJ1XrR8nDDTLNQ897Cp/liKYKpICPK0KAlxkNNTve3ykLRImm4p0IEuXrDwhMnRYOjGKr1d1TUL/lt8C0pvH4eXNkq8htkdx8CXAjJCYPh0WwjUCroj4qrqqlRRtFjBTY2qEwf5ZAXUJZy4R7Y1W5leMbwnrymb4b4UNog+mJGWz5zFyKCrvdUyYaQEghiuy0Gat7ajdiVmJZhepiLChwIFmIssLMFUc5adM3xPKDzzSzQ6Bq/3vzxItWHOWDWK/HcGCUkZO03L81zJXUHEgtxBMgFjtmeZj3RwpSmQR7qbBSa9DoG+86WXmcTCJ1tIm1dYE+hN4EIhubXgYOMV3KZLOvcZvt3zerZumDtx2Y0UwBYAALFjyhI8NzFHCq3N8kcQ2+3ZUMBgB",
+                  "text": "The user is asking for the balance of account \"acc_1\". I have a function available called \"get_balance\" that takes an account_id as a parameter. The user has provided the account_id as \"acc_1\", so I have all the information I need to make this function call."
+                }
+              }
+            },
+            {
+              "toolUse": {
+                "input": {
+                  "account_id": "acc_1"
+                },
+                "name": "get_balance",
+                "toolUseId": "tooluse_dESTIFFidU5NcgXThviwQf"
+              }
+            }
+          ],
+          "role": "assistant"
+        },
+        {
+          "content": [
+            {
+              "toolResult": {
+                "content": [
+                  {
+                    "text": "42"
+                  }
+                ],
+                "toolUseId": "tooluse_dESTIFFidU5NcgXThviwQf"
+              }
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "system": [
+        {
+          "text": "Use the tool, then answer with the number only."
+        }
+      ],
+      "toolConfig": {
+        "tools": [
+          {
+            "toolSpec": {
+              "description": "Current balance for an account id",
+              "inputSchema": {
+                "json": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "account_id": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "account_id"
+                  ],
+                  "type": "object"
+                }
+              },
+              "name": "get_balance"
+            }
+          }
+        ]
+      }
+    },
+    "headers": {
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "host": [
+        "bedrock-runtime.us-east-1.amazonaws.com"
+      ],
+      "user-agent": [
+        "req/0.7.4"
+      ],
+      "x-amz-content-sha256": [
+        "38a8aad1cf06f75848b5ce39267cef54dd3c9dcbf05ae3e82660552d7c520f4c"
+      ],
+      "x-amz-date": [
+        "20260909T062353Z"
+      ],
+      "x-amz-security-token": [
+        "[REDACTED:x-amz-security-token]"
+      ]
+    },
+    "method": "post",
+    "url": "https://bedrock-runtime.us-east-1.amazonaws.com/model/global.anthropic.claude-haiku-4-5-20251001-v1:0/converse"
+  },
+  "response": {
+    "body": {
+      "metrics": {
+        "latencyMs": 750
+      },
+      "output": {
+        "message": {
+          "content": [
+            {
+              "text": "42"
+            }
+          ],
+          "role": "assistant"
+        }
+      },
+      "stopReason": "end_turn",
+      "usage": {
+        "cacheReadInputTokenCount": 0,
+        "cacheReadInputTokens": 0,
+        "inputTokens": 761,
+        "outputTokens": 4,
+        "serverToolUsage": {},
+        "totalTokens": 765
+      }
+    },
+    "headers": {
+      "connection": [
+        "keep-alive"
+      ],
+      "content-length": [
+        "259"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Wed, 09 Sep 2026 06:23:54 GMT"
+      ],
+      "x-amzn-requestid": [
+        "add65afe-239b-40b9-98fd-5e21ab5654db"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}

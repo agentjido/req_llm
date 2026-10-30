@@ -3,10 +3,10 @@
   "provider": "anthropic",
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjo2NDAwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJGZXRjaCBodHRwczovL2V4YW1wbGUuY29tIGFuZCBzdW1tYXJpemUgd2hhdCB0aGUgcGFnZSBjb250YWlucy4iLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJjbGF1ZGUtc29ubmV0LTQtNS0yMDI1MDkyOSIsInN0cmVhbSI6ZmFsc2UsInRvb2xzIjpbeyJtYXhfdXNlcyI6MiwibmFtZSI6IndlYl9mZXRjaCIsInR5cGUiOiJ3ZWJfZmV0Y2hfMjAyNjAyMDkifV19"
+      "b64": "eyJtYXhfdG9rZW5zIjo4MTkyLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkZldGNoIGh0dHBzOi8vZXhhbXBsZS5jb20gYW5kIHN1bW1hcml6ZSB3aGF0IHRoZSBwYWdlIGNvbnRhaW5zLiIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImNsYXVkZS1zb25uZXQtNC01LTIwMjUwOTI5Iiwic3RyZWFtIjpmYWxzZSwidG9vbHMiOlt7Im1heF91c2VzIjoyLCJuYW1lIjoid2ViX2ZldGNoIiwidHlwZSI6IndlYl9mZXRjaF8yMDI2MDIwOSJ9XX0="
     },
     "canonical_json": {
-      "max_tokens": 64000,
+      "max_tokens": 8192,
       "messages": [
         {
           "content": "Fetch https://example.com and summarize what the page contains.",

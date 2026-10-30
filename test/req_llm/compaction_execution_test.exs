@@ -140,7 +140,7 @@ defmodule ReqLLM.CompactionExecutionTest do
     owner = self()
 
     prepare = fn :compact, _model, _input, _opts ->
-      Process.sleep(80)
+      Process.sleep(30)
 
       {:ok,
        WorkflowHTTP.request(fn request ->
@@ -154,8 +154,8 @@ defmodule ReqLLM.CompactionExecutionTest do
        end)}
     end
 
-    assert {:error, %ReqLLM.Error.API.Timeout{kind: :total, timeout: 50}} =
-             ReqLLM.compact_context(@model, "Hello", prepare: prepare, total_timeout: 50)
+    assert {:error, %ReqLLM.Error.API.Timeout{kind: :total, timeout: 20}} =
+             ReqLLM.compact_context(@model, "Hello", prepare: prepare, total_timeout: 20)
 
     refute_received :unexpected_compaction_request
   end

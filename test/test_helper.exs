@@ -10,13 +10,5 @@ ReqLLM.TestSupport.FakeKeys.install!()
 
 # Logger level is configured via config/config.exs based on REQ_LLM_DEBUG
 
-# Exclude :coverage and :integration by default
-# Run integration tests with: mix test --include integration
-excluded_tags =
-  if System.get_env("REQ_LLM_INCLUDE_COVERAGE") in ~w(1 true yes on) do
-    [:integration]
-  else
-    [:coverage, :integration]
-  end
-
-ExUnit.start(capture_log: true, exclude: excluded_tags)
+# Run all offline tests by default. Integration tests require live services.
+ExUnit.start(capture_log: true, exclude: [:integration])

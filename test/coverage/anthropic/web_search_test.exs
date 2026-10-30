@@ -9,11 +9,6 @@ defmodule ReqLLM.Coverage.Anthropic.WebSearchTest do
 
   @model_spec "anthropic:claude-sonnet-4-5"
 
-  setup_all do
-    LLMDB.load(allow: :all, custom: %{})
-    :ok
-  end
-
   @tag ReqLLM.Test.CompatibilityScenario.tag!(:web_search_basic)
   @tag model: "claude-sonnet-4-5"
   test "web search reports tool usage and cost" do

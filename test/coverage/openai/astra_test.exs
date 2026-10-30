@@ -17,15 +17,6 @@ defmodule ReqLLM.Coverage.OpenAI.AstraTest do
 
   @model "openai:gpt-6-astra"
 
-  unless @model in ReqLLM.Test.ModelMatrix.models_for_provider(:openai) do
-    @moduletag skip: "Astra is not selected"
-  end
-
-  setup_all do
-    LLMDB.load(allow: :all, custom: %{})
-    :ok
-  end
-
   @tag CompatibilityScenario.tag!(:astra_async_tools)
   test "async calls remain pending across a turn and accept a delayed result" do
     {:ok, first} = ReqLLM.generate_text(@model, async_prompt(), async_opts(:astra_async_tools, 0))
@@ -225,7 +216,7 @@ defmodule ReqLLM.Coverage.OpenAI.AstraTest do
   defp opts(scenario, index, extra) do
     common = [
       reasoning_effort: :low,
-      max_tokens: 1_024,
+      max_completion_tokens: 1_024,
       max_retries: 0,
       receive_timeout: 120_000,
       provider_options: [store: false]

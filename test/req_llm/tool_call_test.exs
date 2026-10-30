@@ -62,10 +62,12 @@ defmodule ReqLLM.ToolCallTest do
 
   describe "builtin_flag?/1 (deprecated alias)" do
     test "delegates to flagged_builtin?/1" do
-      assert ToolCall.builtin_flag?(%{builtin?: true}) ==
+      builtin_flag? = Function.capture(ToolCall, String.to_atom("builtin_flag?"), 1)
+
+      assert builtin_flag?.(%{builtin?: true}) ==
                ToolCall.flagged_builtin?(%{builtin?: true})
 
-      refute ToolCall.builtin_flag?(%{function: %{builtin?: true}})
+      refute builtin_flag?.(%{function: %{builtin?: true}})
     end
   end
 

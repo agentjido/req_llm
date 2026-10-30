@@ -14,7 +14,10 @@ defmodule Mix.Tasks.ReqLlm.ModelSupport do
   alias ReqLLM.Compatibility.{Evidence, SupportReference}
 
   @impl Mix.Task
-  def run(args) do
+  def run(args), do: run(args, [])
+
+  @doc false
+  def run(args, task_opts) do
     Application.ensure_all_started(:req_llm)
 
     {opts, _positional, invalid} =
@@ -25,8 +28,8 @@ defmodule Mix.Tasks.ReqLlm.ModelSupport do
     if invalid != [], do: Mix.raise("Invalid options: #{inspect(invalid)}")
 
     cond do
-      opts[:generate] -> generate(load_source_evidence())
-      opts[:check] -> check(load_source_evidence())
+      opts[:generate] -> generate(load_source_evidence(), task_opts[:catalog_resolver])
+      opts[:check] -> check(load_source_evidence(), task_opts[:catalog_resolver])
       opts[:model] -> print_model(Evidence.load!(), opts[:model])
       true -> print_summary(Evidence.load!())
     end
@@ -42,16 +45,16 @@ defmodule Mix.Tasks.ReqLlm.ModelSupport do
     Evidence.load!(evidence_path(), surface_resolver: surface_resolver())
   end
 
-  defp generate(evidence) do
-    evidence = refresh_evidence(evidence)
+  defp generate(evidence, catalog_resolver) do
+    evidence = refresh_evidence(evidence, catalog_resolver)
 
     Evidence.write!(evidence_path(), evidence)
     File.write!(reference_path(), SupportReference.render(evidence))
     Mix.shell().info("Generated #{evidence_path()} and #{reference_path()}")
   end
 
-  defp check(evidence) do
-    evidence = refresh_evidence(evidence)
+  defp check(evidence, catalog_resolver) do
+    evidence = refresh_evidence(evidence, catalog_resolver)
     expected_evidence = Evidence.canonical_json(evidence)
     expected_reference = SupportReference.render(evidence)
 
@@ -64,10 +67,12 @@ defmodule Mix.Tasks.ReqLlm.ModelSupport do
   end
 
   @doc false
-  def refresh_evidence(evidence) do
+  def refresh_evidence(evidence, catalog_resolver \\ nil) do
+    catalog_resolver = catalog_resolver || packaged_catalog_resolver()
+
     evidence
     |> Evidence.resolve_surfaces(surface_resolver())
-    |> Evidence.annotate_declarations(packaged_catalog_resolver())
+    |> Evidence.annotate_declarations(catalog_resolver)
   end
 
   defp print_summary(evidence) do
@@ -108,27 +113,32 @@ defmodule Mix.Tasks.ReqLlm.ModelSupport do
   defp packaged_catalog_resolver do
     case LLMDB.Loader.load(custom: %{}) do
       {:ok, snapshot} ->
-        direct_models =
-          Map.new(snapshot.models_by_key, fn {{provider, model_id}, model} ->
-            {"#{provider}:#{model_id}", model}
-          end)
-
-        alias_models =
-          Map.new(snapshot.aliases_by_key, fn {{provider, alias_id}, model_id} ->
-            {"#{provider}:#{alias_id}", Map.fetch!(snapshot.models_by_key, {provider, model_id})}
-          end)
-
-        models_by_spec = Map.merge(direct_models, alias_models)
-
-        fn model_spec ->
-          case Map.fetch(models_by_spec, model_spec) do
-            {:ok, model} -> {:ok, model}
-            :error -> {:error, :unknown_model}
-          end
-        end
+        catalog_resolver(snapshot)
 
       {:error, reason} ->
         raise ArgumentError, "cannot load packaged LLMDB catalog: #{inspect(reason)}"
+    end
+  end
+
+  @doc false
+  def catalog_resolver(snapshot) do
+    direct_models =
+      Map.new(snapshot.models_by_key, fn {{provider, model_id}, model} ->
+        {"#{provider}:#{model_id}", model}
+      end)
+
+    alias_models =
+      Map.new(snapshot.aliases_by_key, fn {{provider, alias_id}, model_id} ->
+        {"#{provider}:#{alias_id}", Map.fetch!(snapshot.models_by_key, {provider, model_id})}
+      end)
+
+    models_by_spec = Map.merge(direct_models, alias_models)
+
+    fn model_spec ->
+      case Map.fetch(models_by_spec, model_spec) do
+        {:ok, model} -> {:ok, model}
+        :error -> {:error, :unknown_model}
+      end
     end
   end
 end

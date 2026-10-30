@@ -28,11 +28,6 @@ defmodule ReqLLM.Coverage.OpenAI.ToolSearchTest do
 
   @prompt "How many managed devices are at the hq site? Use your tools; never guess."
 
-  setup_all do
-    LLMDB.load(allow: :all, custom: Application.get_env(:llm_db, :custom, %{}))
-    :ok
-  end
-
   defp tools do
     [
       %{type: "tool_search"},

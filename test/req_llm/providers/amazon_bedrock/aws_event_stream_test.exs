@@ -1,6 +1,7 @@
 defmodule ReqLLM.Providers.AmazonBedrock.AWSEventStreamTest do
   use ExUnit.Case, async: true
 
+  alias ReqLLM.Providers.AmazonBedrock
   alias ReqLLM.Providers.AmazonBedrock.AWSEventStream
 
   describe "parse_binary/1" do
@@ -204,6 +205,25 @@ defmodule ReqLLM.Providers.AmazonBedrock.AWSEventStreamTest do
       >>
 
       assert {:error, :no_valid_events} = AWSEventStream.parse_binary(bad_message)
+    end
+  end
+
+  describe "AmazonBedrock.parse_stream_protocol/2" do
+    test "parses complete messages and accumulates partial messages" do
+      payload = Jason.encode!(%{"complete" => true})
+      message = build_test_message(payload)
+
+      assert {:ok, [%{"complete" => true}], <<>>} =
+               AmazonBedrock.parse_stream_protocol(message, <<>>)
+
+      split_at = div(byte_size(message), 2)
+      first = binary_part(message, 0, split_at)
+      second = binary_part(message, split_at, byte_size(message) - split_at)
+
+      assert {:incomplete, buffer} = AmazonBedrock.parse_stream_protocol(first, <<>>)
+
+      assert {:ok, [%{"complete" => true}], <<>>} =
+               AmazonBedrock.parse_stream_protocol(second, buffer)
     end
   end
 

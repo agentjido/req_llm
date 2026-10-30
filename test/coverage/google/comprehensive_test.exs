@@ -6,5 +6,7 @@ defmodule ReqLLM.Coverage.Google.ComprehensiveTest do
   Otherwise uses fixtures for fast, reliable testing.
   """
 
-  use ReqLLM.ProviderTest.Comprehensive, provider: :google
+  use ReqLLM.ProviderTest.Comprehensive,
+    provider: :google,
+    integration_scenarios: [:context_append]
 end

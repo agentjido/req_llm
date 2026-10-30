@@ -30,11 +30,6 @@ defmodule ReqLLM.ProviderTest.ResponsesContext do
       @model_id ResponsesContext.model_id()
       @model_spec "#{provider}:#{@model_id}"
 
-      setup_all do
-        LLMDB.load(allow: :all, custom: Application.get_env(:llm_db, :custom, %{}))
-        :ok
-      end
-
       @tag CompatibilityScenario.tag!(:reasoning_summary)
       @tag model: @model_id
       test "reasoning summaries are requested and decoded" do

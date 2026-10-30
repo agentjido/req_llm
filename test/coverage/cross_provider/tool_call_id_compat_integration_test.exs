@@ -6,20 +6,16 @@ defmodule ReqLLM.Coverage.CrossProvider.ToolCallIdCompatIntegrationTest do
   @moduletag timeout: 300_000
 
   @openai_model System.get_env("REQ_LLM_COMPAT_OPENAI_MODEL") || "openai:gpt-4o"
-  @anthropic_model System.get_env("REQ_LLM_COMPAT_ANTHROPIC_MODEL")
+  @anthropic_model_env System.get_env("REQ_LLM_COMPAT_ANTHROPIC_MODEL")
+  @anthropic_model @anthropic_model_env || "anthropic:missing-live-model"
 
   @live_ready ReqLLM.Test.Env.fixtures_mode() == :record and
                 is_binary(@openai_model) and @openai_model != "" and
-                is_binary(@anthropic_model) and @anthropic_model != ""
+                is_binary(@anthropic_model_env) and @anthropic_model_env != ""
 
   if not @live_ready do
     @moduletag skip:
                  "Run with REQ_LLM_FIXTURES_MODE=record and set REQ_LLM_COMPAT_ANTHROPIC_MODEL"
-  end
-
-  setup_all do
-    LLMDB.load(allow: :all, custom: %{})
-    :ok
   end
 
   @tag provider: "openai"

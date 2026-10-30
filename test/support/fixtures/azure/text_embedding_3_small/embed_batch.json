@@ -3,14 +3,15 @@
   "provider": "azure",
   "request": {
     "body": {
-      "b64": "eyJpbnB1dCI6WyJIZWxsbyB3b3JsZCIsIkhvdyBhcmUgeW91PyIsIlRlc3RpbmcgZW1iZWRkaW5ncyJdfQ=="
+      "b64": "eyJpbnB1dCI6WyJIZWxsbyB3b3JsZCIsIkhvdyBhcmUgeW91PyIsIlRlc3RpbmcgZW1iZWRkaW5ncyJdLCJtb2RlbCI6InRleHQtZW1iZWRkaW5nLTMtc21hbGwifQ=="
     },
     "canonical_json": {
       "input": [
         "Hello world",
         "How are you?",
         "Testing embeddings"
-      ]
+      ],
+      "model": "text-embedding-3-small"
     },
     "headers": {
       "accept": [
@@ -28,7 +29,7 @@
       ]
     },
     "method": "post",
-    "url": "https://shelvick-test.cognitiveservices.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2025-04-01-preview"
+    "url": "https://fixture.services.ai.azure.com/models/embeddings?api-version=2024-05-01-preview"
   },
   "response": {
     "body": {

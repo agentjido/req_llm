@@ -25,11 +25,6 @@ defmodule ReqLLM.ProviderTest.ImageGeneration do
       @provider provider
       @models ModelMatrix.models_for_provider(provider, operation: :image)
 
-      setup_all do
-        LLMDB.load(allow: :all, custom: Application.get_env(:llm_db, :custom, %{}))
-        :ok
-      end
-
       for model_spec <- @models do
         @model_spec model_spec
 

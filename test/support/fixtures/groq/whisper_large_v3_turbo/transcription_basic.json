@@ -3,13 +3,30 @@
   "provider": "groq",
   "request": {
     "body": {
-      "b64": "eyJfZml4dHVyZV9ib2R5Ijoibm9uX2pzb24iLCJieXRlX3NpemUiOjMxNzA5LCJjb250ZW50X3R5cGUiOiJtdWx0aXBhcnQvZm9ybS1kYXRhOyBib3VuZGFyeT05OTcxMjQ0MDJkNzA3YjE0ZTEyOGE1ZTc5NGJlYmU1ZiJ9"
+      "b64": "W3sibmFtZSI6ImZpbGUiLCJmaWxlIjp7ImZpbGVuYW1lIjoiYXVkaW8ud2F2IiwiYnl0ZXMiOjMxMjMyLCJjb250ZW50X3R5cGUiOiJhdWRpby93YXYifX0seyJuYW1lIjoibW9kZWwiLCJ2YWx1ZSI6IndoaXNwZXItbGFyZ2UtdjMtdHVyYm8ifSx7Im5hbWUiOiJyZXNwb25zZV9mb3JtYXQiLCJ2YWx1ZSI6InZlcmJvc2VfanNvbiJ9LHsibmFtZSI6Imxhbmd1YWdlIiwidmFsdWUiOiJlbiJ9XQ=="
     },
-    "canonical_json": {
-      "_fixture_body": "non_json",
-      "byte_size": 31709,
-      "content_type": "multipart/form-data; boundary=997124402d707b14e128a5e794bebe5f"
-    },
+    "canonical_json": [
+      {
+        "name": "file",
+        "file": {
+          "filename": "audio.wav",
+          "bytes": 31232,
+          "content_type": "audio/wav"
+        }
+      },
+      {
+        "name": "model",
+        "value": "whisper-large-v3-turbo"
+      },
+      {
+        "name": "response_format",
+        "value": "verbose_json"
+      },
+      {
+        "name": "language",
+        "value": "en"
+      }
+    ],
     "headers": {
       "accept-encoding": [
         "gzip"

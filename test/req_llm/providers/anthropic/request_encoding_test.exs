@@ -100,7 +100,7 @@ defmodule ReqLLM.Providers.Anthropic.RequestEncodingTest do
       assert %ReqLLM.Error.Invalid.Parameter{} = error
 
       # Provider mismatch
-      {:ok, wrong_model} = ReqLLM.model("openai:gpt-4")
+      {:ok, wrong_model} = ReqLLM.model(%{provider: :openai, id: "gpt-4"})
 
       assert_raise ReqLLM.Error.Invalid.Provider, fn ->
         Req.new() |> Anthropic.attach(wrong_model, [])

@@ -13,11 +13,6 @@ defmodule ReqLLM.Coverage.AmazonBedrock.MantleGpt6Test do
   @model "amazon_bedrock:openai.gpt-6.1-sol"
   @opts [max_tokens: 64, provider_options: [endpoint: :mantle, region: "us-east-1"]]
 
-  setup_all do
-    LLMDB.load(allow: :all, custom: %{})
-    :ok
-  end
-
   test "answers on the /openai/v1 Responses route" do
     {:ok, response} =
       ReqLLM.generate_text(

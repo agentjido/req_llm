@@ -6,18 +6,6 @@ defmodule ReqLLM.Providers.AmazonBedrock.RequestRoutingTest do
   @arn "arn:aws:bedrock:us-east-1:123456789012:application-inference-profile/abcdef123456"
   @encoded_arn "arn%3Aaws%3Abedrock%3Aus-east-1%3A123456789012%3Aapplication-inference-profile%2Fabcdef123456"
 
-  describe "provider basics" do
-    test "provider_id returns :amazon_bedrock" do
-      assert AmazonBedrock.provider_id() == :amazon_bedrock
-    end
-
-    test "default_base_url returns Bedrock endpoint format" do
-      url = AmazonBedrock.base_url()
-      assert url =~ "bedrock-runtime"
-      assert url =~ "amazonaws.com"
-    end
-  end
-
   describe "attach/3 Finch pool routing" do
     test "routes chat requests to the configured Finch pool" do
       {:ok, model} = ReqLLM.model("amazon-bedrock:anthropic.claude-3-haiku-20240307-v1:0")

@@ -10,7 +10,7 @@ defmodule ReqLLM.ContextTest do
 
   describe "struct creation" do
     test "exposes the context schema" do
-      refute is_nil(Context.schema())
+      assert %Zoi.Types.Struct{} = Context.schema()
     end
 
     test "creates empty context by default" do

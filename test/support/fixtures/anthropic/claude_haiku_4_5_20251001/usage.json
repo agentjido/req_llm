@@ -3,10 +3,10 @@
   "provider": "anthropic",
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoxMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJIaSB0aGVyZSEiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJjbGF1ZGUtaGFpa3UtNC01LTIwMjUxMDAxIiwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+      "b64": "eyJtYXhfdG9rZW5zIjo1MDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiSGkgdGhlcmUhIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiY2xhdWRlLWhhaWt1LTQtNS0yMDI1MTAwMSIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
     },
     "canonical_json": {
-      "max_tokens": 10,
+      "max_tokens": 500,
       "messages": [
         {
           "content": "Hi there!",
@@ -15,7 +15,7 @@
       ],
       "model": "claude-haiku-4-5-20251001",
       "stream": false,
-      "temperature": 0.0
+      "temperature": 0
     },
     "headers": {
       "accept": [

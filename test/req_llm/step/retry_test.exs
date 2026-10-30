@@ -2,6 +2,7 @@ defmodule ReqLLM.Step.RetryTest do
   use ExUnit.Case, async: true
 
   alias ReqLLM.Step.Retry
+  alias ReqLLM.Test.HTTPAdapter
 
   describe "attach/1" do
     test "configures retry options on request" do
@@ -30,11 +31,11 @@ defmodule ReqLLM.Step.RetryTest do
 
         request =
           Req.new(
-            url: "https://example.invalid",
-            adapter: fn request ->
-              send(parent, :attempt)
-              {request, %Req.TransportError{reason: :closed}}
-            end
+            [url: "https://example.invalid"] ++
+              HTTPAdapter.options(fn request ->
+                send(parent, :attempt)
+                {request, %Req.TransportError{reason: :closed}}
+              end)
           )
           |> Retry.attach(max_retries: max_retries)
 
@@ -53,11 +54,11 @@ defmodule ReqLLM.Step.RetryTest do
 
       request =
         Req.new(
-          url: "https://example.invalid",
-          adapter: fn request ->
-            send(parent, :attempt)
-            {request, Req.Response.new(status: 503, headers: [{"retry-after", "0"}])}
-          end
+          [url: "https://example.invalid"] ++
+            HTTPAdapter.options(fn request ->
+              send(parent, :attempt)
+              {request, Req.Response.new(status: 503, headers: [{"retry-after", "0"}])}
+            end)
         )
         |> Retry.attach(max_retries: 2, retry_statuses: [429, 529])
 
@@ -71,13 +72,13 @@ defmodule ReqLLM.Step.RetryTest do
 
       request =
         Req.new(
-          url: "https://example.invalid",
-          adapter: fn request ->
-            case Agent.get_and_update(counter, fn value -> {value, value + 1} end) do
-              0 -> {request, Req.Response.new(status: 429, headers: [{"retry-after", "0"}])}
-              _attempt -> {request, Req.Response.new(status: 200, body: "ok")}
-            end
-          end
+          [url: "https://example.invalid"] ++
+            HTTPAdapter.options(fn request ->
+              case Agent.get_and_update(counter, fn value -> {value, value + 1} end) do
+                0 -> {request, Req.Response.new(status: 429, headers: [{"retry-after", "0"}])}
+                _attempt -> {request, Req.Response.new(status: 200, body: "ok")}
+              end
+            end)
         )
         |> Retry.attach(max_retries: 1, retry_statuses: [429, 529])
 
@@ -119,16 +120,16 @@ defmodule ReqLLM.Step.RetryTest do
 
       request =
         Req.new(
-          url: "https://example.invalid",
-          adapter: fn request ->
-            attempt = Agent.get_and_update(counter, fn value -> {value, value + 1} end)
+          [url: "https://example.invalid"] ++
+            HTTPAdapter.options(fn request ->
+              attempt = Agent.get_and_update(counter, fn value -> {value, value + 1} end)
 
-            if attempt == 0 do
-              {request, %Req.TransportError{reason: :closed}}
-            else
-              {request, %Req.Response{status: 200, body: "ok"}}
-            end
-          end
+              if attempt == 0 do
+                {request, %Req.TransportError{reason: :closed}}
+              else
+                {request, %Req.Response{status: 200, body: "ok"}}
+              end
+            end)
         )
         |> Retry.attach(max_retries: 1)
         |> ReqLLM.Step.Telemetry.attach(
@@ -169,8 +170,10 @@ defmodule ReqLLM.Step.RetryTest do
 
       request =
         Req.new(
-          url: "https://example.invalid",
-          adapter: fn request -> {request, %Req.TransportError{reason: :closed}} end
+          [url: "https://example.invalid"] ++
+            HTTPAdapter.options(fn request ->
+              {request, %Req.TransportError{reason: :closed}}
+            end)
         )
         |> Retry.attach(max_retries: 0)
         |> ReqLLM.Step.Telemetry.attach(

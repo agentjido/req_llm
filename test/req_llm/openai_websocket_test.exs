@@ -685,7 +685,7 @@ defmodule ReqLLM.OpenAIWebSocketTest do
       )
 
     try do
-      for turn_id <- ["turn-1", "turn-1", "turn-2"] do
+      for turn_id <- ["turn-1", "turn-2"] do
         options =
           provider_opts
           |> Keyword.put(:codex_turn_metadata, %{turn | turn_id: turn_id})

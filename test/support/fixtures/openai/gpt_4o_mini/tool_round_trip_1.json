@@ -3,7 +3,7 @@
   "provider": "openai",
   "request": {
     "body": {
-      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9XSwibWF4X291dHB1dF90b2tlbnMiOjE2MzgsIm1vZGVsIjoiZ3B0LTRvLW1pbmkiLCJzdHJlYW0iOmZhbHNlLCJ0b29scyI6W3siZGVzY3JpcHRpb24iOiJBZGQgdHdvIGludGVnZXJzIiwibmFtZSI6ImFkZCIsInBhcmFtZXRlcnMiOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7ImEiOnsidHlwZSI6ImludGVnZXIifSwiYiI6eyJ0eXBlIjoiaW50ZWdlciJ9fSwidHlwZSI6Im9iamVjdCJ9LCJzdHJpY3QiOmZhbHNlLCJ0eXBlIjoiZnVuY3Rpb24ifV19"
+      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9XSwibWF4X291dHB1dF90b2tlbnMiOjE2MzgsIm1vZGVsIjoiZ3B0LTRvLW1pbmkiLCJzdHJlYW0iOmZhbHNlLCJ0b29sX2Nob2ljZSI6eyJuYW1lIjoiYWRkIiwidHlwZSI6ImZ1bmN0aW9uIn0sInRvb2xzIjpbeyJkZXNjcmlwdGlvbiI6IkFkZCB0d28gaW50ZWdlcnMiLCJuYW1lIjoiYWRkIiwicGFyYW1ldGVycyI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnsiYSI6eyJ0eXBlIjoiaW50ZWdlciJ9LCJiIjp7InR5cGUiOiJpbnRlZ2VyIn19LCJyZXF1aXJlZCI6WyJhIiwiYiJdLCJ0eXBlIjoib2JqZWN0In0sInN0cmljdCI6ZmFsc2UsInR5cGUiOiJmdW5jdGlvbiJ9XX0="
     },
     "canonical_json": {
       "input": [
@@ -20,6 +20,10 @@
       "max_output_tokens": 1638,
       "model": "gpt-4o-mini",
       "stream": false,
+      "tool_choice": {
+        "name": "add",
+        "type": "function"
+      },
       "tools": [
         {
           "description": "Add two integers",
@@ -34,6 +38,10 @@
                 "type": "integer"
               }
             },
+            "required": [
+              "a",
+              "b"
+            ],
             "type": "object"
           },
           "strict": false,

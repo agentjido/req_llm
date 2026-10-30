@@ -3,7 +3,7 @@
   "provider": "openai",
   "request": {
     "body": {
-      "b64": "eyJpbmNsdWRlIjpbInJlYXNvbmluZy5lbmNyeXB0ZWRfY29udGVudCJdLCJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IkNhbGwgbG9va3VwX3JlcG9ydCBmb3IgcmVwb3J0IDEyMy4gQWxzbyB0ZWxsIG1lIHRoYXQgdGhlIGxvb2t1cCBzdGFydGVkLiBXaGVuIGl0cyByZXN1bHQgYXJyaXZlcywgaW5jbHVkZSB0aGUgcmVzdWx0IGNvZGUuIiwidHlwZSI6ImlucHV0X3RleHQifV0sInJvbGUiOiJ1c2VyIn1dLCJtYXhfb3V0cHV0X3Rva2VucyI6MTAyNCwibW9kZWwiOiJncHQtNi1hc3RyYSIsInJlYXNvbmluZyI6eyJlZmZvcnQiOiJsb3cifSwic3RvcmUiOmZhbHNlLCJzdHJlYW0iOmZhbHNlLCJ0b29sX2Nob2ljZSI6eyJuYW1lIjoibG9va3VwX3JlcG9ydCIsInR5cGUiOiJmdW5jdGlvbiJ9LCJ0b29scyI6W3siYXN5bmMiOnRydWUsImRlc2NyaXB0aW9uIjoiR2V0IGEgc2hvcnQgcHJvamVjdCByZXBvcnQgYnkgaXRzIElEIiwibmFtZSI6Imxvb2t1cF9yZXBvcnQiLCJwYXJhbWV0ZXJzIjp7ImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjpmYWxzZSwicHJvcGVydGllcyI6eyJyZXBvcnRfaWQiOnsidHlwZSI6InN0cmluZyJ9fSwidHlwZSI6Im9iamVjdCJ9LCJzdHJpY3QiOmZhbHNlLCJ0eXBlIjoiZnVuY3Rpb24ifV19"
+      "b64": "eyJpbmNsdWRlIjpbInJlYXNvbmluZy5lbmNyeXB0ZWRfY29udGVudCJdLCJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IkNhbGwgbG9va3VwX3JlcG9ydCBmb3IgcmVwb3J0IDEyMy4gQWxzbyB0ZWxsIG1lIHRoYXQgdGhlIGxvb2t1cCBzdGFydGVkLiBXaGVuIGl0cyByZXN1bHQgYXJyaXZlcywgaW5jbHVkZSB0aGUgcmVzdWx0IGNvZGUuIiwidHlwZSI6ImlucHV0X3RleHQifV0sInJvbGUiOiJ1c2VyIn1dLCJtYXhfb3V0cHV0X3Rva2VucyI6MTAyNCwibW9kZWwiOiJncHQtNi1hc3RyYSIsInJlYXNvbmluZyI6eyJlZmZvcnQiOiJsb3cifSwic3RvcmUiOmZhbHNlLCJzdHJlYW0iOmZhbHNlLCJ0b29sX2Nob2ljZSI6eyJuYW1lIjoibG9va3VwX3JlcG9ydCIsInR5cGUiOiJmdW5jdGlvbiJ9LCJ0b29scyI6W3siYXN5bmMiOnRydWUsImRlc2NyaXB0aW9uIjoiR2V0IGEgc2hvcnQgcHJvamVjdCByZXBvcnQgYnkgaXRzIElEIiwibmFtZSI6Imxvb2t1cF9yZXBvcnQiLCJwYXJhbWV0ZXJzIjp7ImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjpmYWxzZSwicHJvcGVydGllcyI6eyJyZXBvcnRfaWQiOnsidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsicmVwb3J0X2lkIl0sInR5cGUiOiJvYmplY3QifSwic3RyaWN0IjpmYWxzZSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
     },
     "canonical_json": {
       "include": [
@@ -43,6 +43,9 @@
                 "type": "string"
               }
             },
+            "required": [
+              "report_id"
+            ],
             "type": "object"
           },
           "strict": false,

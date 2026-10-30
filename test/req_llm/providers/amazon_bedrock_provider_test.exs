@@ -276,38 +276,6 @@ defmodule ReqLLM.Providers.AmazonBedrockProviderTest do
       assert headers_map["content-type"] == "application/json"
       assert headers_map["authorization"] == "Bearer test-api-key-streaming-123"
     end
-
-    test "parse_stream_protocol handles AWS Event Stream" do
-      # Build a valid AWS Event Stream message
-      payload = Jason.encode!(%{"test" => "data"})
-      message = build_event_stream_message(payload)
-
-      # The parser returns decoded JSON objects
-      assert {:ok, [decoded], <<>>} = AmazonBedrock.parse_stream_protocol(message, <<>>)
-      assert decoded == %{"test" => "data"}
-    end
-
-    test "parse_stream_protocol handles incomplete messages" do
-      partial = <<0, 0, 0, 100, 0, 0>>
-      assert {:incomplete, ^partial} = AmazonBedrock.parse_stream_protocol(partial, <<>>)
-    end
-
-    test "parse_stream_protocol accumulates across chunks" do
-      payload = Jason.encode!(%{"complete" => true})
-      message = build_event_stream_message(payload)
-
-      # Split message in half
-      mid = div(byte_size(message), 2)
-      part1 = binary_part(message, 0, mid)
-      part2 = binary_part(message, mid, byte_size(message) - mid)
-
-      # First part should be incomplete
-      assert {:incomplete, buffer} = AmazonBedrock.parse_stream_protocol(part1, <<>>)
-
-      # Second part should complete
-      assert {:ok, [decoded], <<>>} = AmazonBedrock.parse_stream_protocol(part2, buffer)
-      assert decoded == %{"complete" => true}
-    end
   end
 
   describe "response handling" do
@@ -342,35 +310,6 @@ defmodule ReqLLM.Providers.AmazonBedrockProviderTest do
 
     # decode_response is a step function that expects {req, resp} tuples
     # It's used internally by the request pipeline, not called directly
-  end
-
-  # Helper to build a valid AWS Event Stream message for testing
-  defp build_event_stream_message(payload) when is_binary(payload) do
-    headers = <<>>
-    headers_length = 0
-    payload_length = byte_size(payload)
-    total_length = 16 + headers_length + payload_length
-
-    prelude = <<total_length::32-big, headers_length::32-big>>
-    prelude_crc = :erlang.crc32(prelude)
-
-    message_without_crc = <<
-      prelude::binary,
-      prelude_crc::32,
-      headers::binary,
-      payload::binary
-    >>
-
-    message_crc = :erlang.crc32(message_without_crc)
-
-    <<
-      total_length::32-big,
-      headers_length::32-big,
-      prelude_crc::32,
-      headers::binary,
-      payload::binary,
-      message_crc::32
-    >>
   end
 
   describe "ResponseBuilder - streaming reasoning_details extraction" do

@@ -9,6 +9,8 @@ defmodule ReqLLM.Providers.ElevenLabsTest do
 
   alias ReqLLM.Providers.ElevenLabs
 
+  @api_key [api_key: "test-key-123"]
+
   describe "provider configuration" do
     test "has correct provider id" do
       assert ElevenLabs.provider_id() == :elevenlabs
@@ -47,17 +49,11 @@ defmodule ReqLLM.Providers.ElevenLabsTest do
   end
 
   describe "prepare_request(:speech, ...)" do
-    setup do
-      # Set a fake API key for testing
-      System.put_env("ELEVENLABS_API_KEY", "test-key-123")
-      on_exit(fn -> System.delete_env("ELEVENLABS_API_KEY") end)
-    end
-
     test "builds request with correct URL structure" do
       model = %LLMDB.Model{id: "eleven_multilingual_v2", provider: :elevenlabs}
 
       assert {:ok, request} =
-               ElevenLabs.prepare_request(:speech, model, "Hello world", [])
+               ElevenLabs.prepare_request(:speech, model, "Hello world", @api_key)
 
       url = URI.to_string(request.url)
       assert url =~ "/v1/text-to-speech/21m00Tcm4TlvDq8ikWAM"
@@ -67,7 +63,7 @@ defmodule ReqLLM.Providers.ElevenLabsTest do
       model = %LLMDB.Model{id: "eleven_multilingual_v2", provider: :elevenlabs}
 
       assert {:ok, request} =
-               ElevenLabs.prepare_request(:speech, model, "Hello world", [])
+               ElevenLabs.prepare_request(:speech, model, "Hello world", @api_key)
 
       assert Req.Request.get_header(request, "xi-api-key") == ["test-key-123"]
       assert Req.Request.get_header(request, "authorization") == []
@@ -77,7 +73,12 @@ defmodule ReqLLM.Providers.ElevenLabsTest do
       model = %LLMDB.Model{id: "eleven_multilingual_v2", provider: :elevenlabs}
 
       assert {:ok, request} =
-               ElevenLabs.prepare_request(:speech, model, "Hello", voice: "custom-voice-id")
+               ElevenLabs.prepare_request(
+                 :speech,
+                 model,
+                 "Hello",
+                 @api_key ++ [voice: "custom-voice-id"]
+               )
 
       url = URI.to_string(request.url)
       assert url =~ "/v1/text-to-speech/custom-voice-id"
@@ -87,7 +88,12 @@ defmodule ReqLLM.Providers.ElevenLabsTest do
       model = %LLMDB.Model{id: "eleven_multilingual_v2", provider: :elevenlabs}
 
       assert {:ok, request} =
-               ElevenLabs.prepare_request(:speech, model, "Hello", output_format: :mp3)
+               ElevenLabs.prepare_request(
+                 :speech,
+                 model,
+                 "Hello",
+                 @api_key ++ [output_format: :mp3]
+               )
 
       assert request.options.params == [output_format: "mp3_44100_128"]
     end
@@ -96,7 +102,12 @@ defmodule ReqLLM.Providers.ElevenLabsTest do
       model = %LLMDB.Model{id: "eleven_multilingual_v2", provider: :elevenlabs}
 
       assert {:ok, request} =
-               ElevenLabs.prepare_request(:speech, model, "Hello", output_format: :pcm)
+               ElevenLabs.prepare_request(
+                 :speech,
+                 model,
+                 "Hello",
+                 @api_key ++ [output_format: :pcm]
+               )
 
       assert request.options.params == [output_format: "pcm_44100"]
     end
@@ -105,7 +116,12 @@ defmodule ReqLLM.Providers.ElevenLabsTest do
       model = %LLMDB.Model{id: "eleven_multilingual_v2", provider: :elevenlabs}
 
       assert {:ok, request} =
-               ElevenLabs.prepare_request(:speech, model, "Hello", output_format: :opus)
+               ElevenLabs.prepare_request(
+                 :speech,
+                 model,
+                 "Hello",
+                 @api_key ++ [output_format: :opus]
+               )
 
       assert request.options.params == [output_format: "opus_48000_64"]
     end
@@ -114,7 +130,7 @@ defmodule ReqLLM.Providers.ElevenLabsTest do
       model = %LLMDB.Model{id: "eleven_multilingual_v2", provider: :elevenlabs}
 
       assert {:ok, request} =
-               ElevenLabs.prepare_request(:speech, model, "Hello world", [])
+               ElevenLabs.prepare_request(:speech, model, "Hello world", @api_key)
 
       body = ReqLLM.Test.Helpers.json_body(request)
       assert body["text"] == "Hello world"
@@ -125,7 +141,7 @@ defmodule ReqLLM.Providers.ElevenLabsTest do
       model = %LLMDB.Model{id: "eleven_multilingual_v2", provider: :elevenlabs}
 
       assert {:ok, request} =
-               ElevenLabs.prepare_request(:speech, model, "Hola", language: "es")
+               ElevenLabs.prepare_request(:speech, model, "Hola", @api_key ++ [language: "es"])
 
       body = ReqLLM.Test.Helpers.json_body(request)
       assert body["language_code"] == "es"
@@ -135,8 +151,12 @@ defmodule ReqLLM.Providers.ElevenLabsTest do
       model = %LLMDB.Model{id: "eleven_multilingual_v2", provider: :elevenlabs}
 
       assert {:ok, request} =
-               ElevenLabs.prepare_request(:speech, model, "Hello",
-                 provider_options: [stability: 0.5, similarity_boost: 0.8]
+               ElevenLabs.prepare_request(
+                 :speech,
+                 model,
+                 "Hello",
+                 @api_key ++
+                   [provider_options: [stability: 0.5, similarity_boost: 0.8]]
                )
 
       body = ReqLLM.Test.Helpers.json_body(request)
@@ -148,7 +168,7 @@ defmodule ReqLLM.Providers.ElevenLabsTest do
       model = %LLMDB.Model{id: "eleven_multilingual_v2", provider: :elevenlabs}
 
       assert {:ok, request} =
-               ElevenLabs.prepare_request(:speech, model, "Hello", [])
+               ElevenLabs.prepare_request(:speech, model, "Hello", @api_key)
 
       body = ReqLLM.Test.Helpers.json_body(request)
       refute Map.has_key?(body, "voice_settings")
@@ -158,8 +178,11 @@ defmodule ReqLLM.Providers.ElevenLabsTest do
       model = %LLMDB.Model{id: "eleven_multilingual_v2", provider: :elevenlabs}
 
       assert {:ok, request} =
-               ElevenLabs.prepare_request(:speech, model, "Hello",
-                 base_url: "https://custom.api.com"
+               ElevenLabs.prepare_request(
+                 :speech,
+                 model,
+                 "Hello",
+                 @api_key ++ [base_url: "https://custom.api.com"]
                )
 
       assert request.options.base_url == "https://custom.api.com"
@@ -167,16 +190,11 @@ defmodule ReqLLM.Providers.ElevenLabsTest do
   end
 
   describe "prepare_request(:transcription, ...)" do
-    setup do
-      System.put_env("ELEVENLABS_API_KEY", "test-key-123")
-      on_exit(fn -> System.delete_env("ELEVENLABS_API_KEY") end)
-    end
-
     test "builds request with correct transcription endpoint" do
       model = %LLMDB.Model{id: "scribe_v2", provider: :elevenlabs}
 
       assert {:ok, request} =
-               ElevenLabs.prepare_request(:transcription, model, "audio-bytes", [])
+               ElevenLabs.prepare_request(:transcription, model, "audio-bytes", @api_key)
 
       url = URI.to_string(request.url)
       assert url =~ "/v1/speech-to-text"
@@ -186,7 +204,7 @@ defmodule ReqLLM.Providers.ElevenLabsTest do
       model = %LLMDB.Model{id: "scribe_v2", provider: :elevenlabs}
 
       assert {:ok, request} =
-               ElevenLabs.prepare_request(:transcription, model, "audio-bytes", [])
+               ElevenLabs.prepare_request(:transcription, model, "audio-bytes", @api_key)
 
       assert Req.Request.get_header(request, "xi-api-key") == ["test-key-123"]
       assert Req.Request.get_header(request, "authorization") == []
@@ -196,7 +214,12 @@ defmodule ReqLLM.Providers.ElevenLabsTest do
       model = %LLMDB.Model{id: "scribe_v2", provider: :elevenlabs}
 
       assert {:ok, request} =
-               ElevenLabs.prepare_request(:transcription, model, "audio-bytes", language: "en")
+               ElevenLabs.prepare_request(
+                 :transcription,
+                 model,
+                 "audio-bytes",
+                 @api_key ++ [language: "en"]
+               )
 
       assert request.options.form_multipart[:model_id] == "scribe_v2"
       assert request.options.form_multipart[:language_code] == "en"
@@ -206,13 +229,19 @@ defmodule ReqLLM.Providers.ElevenLabsTest do
       model = %LLMDB.Model{id: "scribe_v2", provider: :elevenlabs}
 
       assert {:ok, request} =
-               ElevenLabs.prepare_request(:transcription, model, "audio-bytes",
-                 provider_options: [
-                   enable_logging: false,
-                   diarize: true,
-                   timestamps_granularity: "word",
-                   keyterms: ["ReqLLM", "ElevenLabs"]
-                 ]
+               ElevenLabs.prepare_request(
+                 :transcription,
+                 model,
+                 "audio-bytes",
+                 @api_key ++
+                   [
+                     provider_options: [
+                       enable_logging: false,
+                       diarize: true,
+                       timestamps_granularity: "word",
+                       keyterms: ["ReqLLM", "ElevenLabs"]
+                     ]
+                   ]
                )
 
       form_parts = request.options.form_multipart

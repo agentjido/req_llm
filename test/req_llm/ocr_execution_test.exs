@@ -125,10 +125,10 @@ defmodule ReqLLM.OCRExecutionTest do
       end
     end)
 
-    assert {:error, %ReqLLM.Error.API.Timeout{kind: :total, timeout: 200} = error} =
-             ReqLLM.ocr(model, "document", Keyword.put(opts, :total_timeout, 200))
+    assert {:error, %ReqLLM.Error.API.Timeout{kind: :total, timeout: 20} = error} =
+             ReqLLM.ocr(model, "document", Keyword.put(opts, :total_timeout, 20))
 
-    assert Exception.message(error) == "Model call exceeded the total timeout of 200ms"
+    assert Exception.message(error) == "Model call exceeded the total timeout of 20ms"
     assert_receive :ocr_request_started
     assert_receive {:ocr_event, [:req_llm, :request, :start], _, start_meta}
     assert_receive {:ocr_event, [:req_llm, :request, :exception], measurements, exception_meta}

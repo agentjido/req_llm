@@ -13,11 +13,6 @@ defmodule ReqLLM.Coverage.AmazonBedrock.SequentialToolCacheTest do
 
   @model "amazon_bedrock:global.anthropic.claude-haiku-4-5-20251001-v1:0"
 
-  setup_all do
-    LLMDB.load(allow: :all, custom: %{})
-    :ok
-  end
-
   @tag CompatibilityScenario.tag!(:sequential_tool_cache)
   test "three sequential tool rounds preserve the Bedrock Converse prompt cache" do
     SequentialToolCache.run(@model,

@@ -3,10 +3,10 @@
   "provider": "anthropic",
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjo2NDAwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJVc2Ugd2ViIHNlYXJjaCB0byBmaW5kIG9uZSByZWNlbnQgQUkgbW9kZWwgYW5ub3VuY2VtZW50IGFuZCBjaXRlIHRoZSBzb3VyY2UuIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiY2xhdWRlLXNvbm5ldC00LTUtMjAyNTA5MjkiLCJzdHJlYW0iOmZhbHNlLCJ0b29scyI6W3sibWF4X3VzZXMiOjIsIm5hbWUiOiJ3ZWJfc2VhcmNoIiwidHlwZSI6IndlYl9zZWFyY2hfMjAyNTAzMDUifV19"
+      "b64": "eyJtYXhfdG9rZW5zIjo4MTkyLCJtZXNzYWdlcyI6W3siY29udGVudCI6IlVzZSB3ZWIgc2VhcmNoIHRvIGZpbmQgb25lIHJlY2VudCBBSSBtb2RlbCBhbm5vdW5jZW1lbnQgYW5kIGNpdGUgdGhlIHNvdXJjZS4iLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJjbGF1ZGUtc29ubmV0LTQtNS0yMDI1MDkyOSIsInN0cmVhbSI6ZmFsc2UsInRvb2xzIjpbeyJtYXhfdXNlcyI6MiwibmFtZSI6IndlYl9zZWFyY2giLCJ0eXBlIjoid2ViX3NlYXJjaF8yMDI1MDMwNSJ9XX0="
     },
     "canonical_json": {
-      "max_tokens": 64000,
+      "max_tokens": 8192,
       "messages": [
         {
           "content": "Use web search to find one recent AI model announcement and cite the source.",

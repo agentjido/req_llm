@@ -164,8 +164,9 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
 
   defmacro __using__(opts) do
     provider = Keyword.fetch!(opts, :provider)
+    integration_scenarios = Keyword.get(opts, :integration_scenarios, [])
 
-    quote bind_quoted: [provider: provider] do
+    quote bind_quoted: [provider: provider, integration_scenarios: integration_scenarios] do
       use ExUnit.Case, async: false
 
       import ExUnit.Case
@@ -181,11 +182,7 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
 
       @provider provider
       @models ModelMatrix.models_for_provider(provider, operation: :text)
-
-      setup_all do
-        LLMDB.load(allow: :all, custom: %{})
-        :ok
-      end
+      @integration_scenarios integration_scenarios
 
       for model_spec <- @models do
         @model_spec model_spec
@@ -373,6 +370,8 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
           end
 
           @tag ReqLLM.Test.CompatibilityScenario.tag!(:context_append)
+          if :context_append in @integration_scenarios, do: @tag(:integration)
+
           test "context append continues conversation" do
             ctx = ReqLLM.Context.new([user("Respond with a single word 'Hi'.")])
 

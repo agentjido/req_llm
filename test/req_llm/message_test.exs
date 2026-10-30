@@ -9,8 +9,8 @@ defmodule ReqLLM.MessageTest do
 
   describe "struct creation and validation" do
     test "exposes message schemas" do
-      refute is_nil(Message.schema())
-      refute is_nil(ReasoningDetails.schema())
+      assert %Zoi.Types.Struct{} = Message.schema()
+      assert %Zoi.Types.Struct{} = ReasoningDetails.schema()
     end
 
     test "creates message with required role field" do

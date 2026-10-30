@@ -45,12 +45,19 @@ defmodule ReqLLM.Providers.ContractTest do
      "https://api.atlascloud.ai/v1"},
     {ReqLLM.Providers.CheaperInference, :cheaperinference, "gpt-5.4-mini",
      "https://api.cheaperinference.com/v1"},
+    {ReqLLM.Providers.Deepseek, :deepseek, "deepseek-chat", "https://api.deepseek.com"},
+    {ReqLLM.Providers.FireworksAI, :fireworks_ai,
+     "accounts/fireworks/models/llama-v3p1-8b-instruct", "https://api.fireworks.ai/inference/v1"},
     {ReqLLM.Providers.Groq, :groq, "llama-3.1-8b-instant", "https://api.groq.com"},
+    {ReqLLM.Providers.Minimax, :minimax, "MiniMax-M2.1", "https://api.minimax.io/v1"},
+    {ReqLLM.Providers.Mistral, :mistral, "mistral-small", "https://api.mistral.ai/v1"},
+    {ReqLLM.Providers.NearAI, :nearai, "openai/gpt-oss-120b", "https://cloud-api.near.ai/v1"},
     {ReqLLM.Providers.OpenAI, :openai, "gpt-4-turbo", "https://api.openai.com/v1"},
     {ReqLLM.Providers.OpenRouter, :openrouter, "openai/gpt-4", "https://openrouter.ai/api/v1"},
     {ReqLLM.Providers.Venice, :venice, "venice-uncensored", "https://api.venice.ai/api/v1"},
     {ReqLLM.Providers.VLLM, :vllm, "test-model", "http://localhost:8000/v1"},
-    {ReqLLM.Providers.XAI, :xai, "grok-3", "https://api.x.ai/v1"}
+    {ReqLLM.Providers.XAI, :xai, "grok-3", "https://api.x.ai/v1"},
+    {ReqLLM.Providers.Zenmux, :zenmux, "openai/gpt-4o", "https://zenmux.ai/api/v1"}
   ]
 
   @unsupported_operation_contracts [
@@ -188,9 +195,18 @@ defmodule ReqLLM.Providers.ContractTest do
 
     test "#{provider_id} wires OpenAI-compatible authentication and pipeline steps" do
       model = compatible_model(@provider_id, @model_id)
-      request = @provider.attach(Req.new(), model, api_key: "contract-key")
+
+      request =
+        @provider.attach(Req.new(), model,
+          api_key: "contract-key",
+          temperature: 0.5,
+          max_tokens: 50
+        )
 
       assert request.headers["authorization"] == ["Bearer contract-key"]
+      assert request.options[:model] == model.model
+      assert request.options[:temperature] == 0.5
+      assert request.options[:max_tokens] == 50
       assert :llm_encode_body in Keyword.keys(request.request_steps)
       assert :llm_decode_response in Keyword.keys(request.response_steps)
     end

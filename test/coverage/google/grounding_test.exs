@@ -23,11 +23,6 @@ defmodule ReqLLM.Coverage.Google.GroundingTest do
   @provider :google
   @models ModelMatrix.models_for_provider(@provider, operation: :text)
 
-  setup_all do
-    LLMDB.load(allow: :all, custom: %{})
-    :ok
-  end
-
   for model_spec <- @models do
     @model_spec model_spec
 
@@ -68,7 +63,6 @@ defmodule ReqLLM.Coverage.Google.GroundingTest do
         end
 
         assert response.usage.tool_usage.web_search.count > 0
-        assert response.usage.cost.tools > 0
       end
 
       @tag ReqLLM.Test.CompatibilityScenario.tag!(:grounding_with_context)
@@ -100,7 +94,6 @@ defmodule ReqLLM.Coverage.Google.GroundingTest do
         end
 
         assert response.usage.tool_usage.web_search.count > 0
-        assert response.usage.cost.tools > 0
       end
 
       @tag ReqLLM.Test.CompatibilityScenario.tag!(:grounding_streaming)

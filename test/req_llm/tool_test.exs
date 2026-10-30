@@ -623,8 +623,10 @@ defmodule ReqLLM.ToolTest do
     end
 
     test "raises for unknown provider", %{simple_tool: tool} do
+      provider = String.to_atom("unknown_provider")
+
       assert_raise ArgumentError, ~r/Unknown provider/, fn ->
-        Tool.to_schema(tool, :unknown_provider)
+        Tool.to_schema(tool, provider)
       end
     end
 

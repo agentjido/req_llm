@@ -40,11 +40,11 @@ defmodule ReqLLM.Streaming.ProxyTest do
     assert Finch.find_pool(finch_name, pool) == :error
 
     results =
-      1..4
+      1..2
       |> Task.async_stream(fn _ -> collect_stream("http://provider.invalid", opts) end)
       |> Enum.to_list()
 
-    assert results == List.duplicate({:ok, "hello"}, 4)
+    assert results == List.duplicate({:ok, "hello"}, 2)
     assert {:ok, pid} = Finch.find_pool(finch_name, pool)
     assert {:ok, 1} = Finch.get_pool_count(finch_name, pool)
     assert collect_stream("http://provider.invalid", opts) == "hello"

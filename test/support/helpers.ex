@@ -364,6 +364,13 @@ defmodule ReqLLM.Test.Helpers do
     |> Keyword.put(:fixture, name)
   end
 
+  def fixture_opts(:azure, name, extra_opts) do
+    fixture_opts(
+      name,
+      Keyword.put_new(extra_opts, :base_url, "https://fixture.services.ai.azure.com")
+    )
+  end
+
   def fixture_opts(_provider, name, extra_opts) do
     fixture_opts(name, extra_opts)
   end

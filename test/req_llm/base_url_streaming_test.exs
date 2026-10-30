@@ -10,6 +10,11 @@ defmodule ReqLLM.BaseURLStreamingTest do
     original_env = Application.get_all_env(:req_llm)
 
     on_exit(fn ->
+      :req_llm
+      |> Application.get_all_env()
+      |> Keyword.keys()
+      |> Enum.each(&Application.delete_env(:req_llm, &1))
+
       Application.put_all_env([{:req_llm, original_env}])
     end)
 

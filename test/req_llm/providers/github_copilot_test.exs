@@ -5,6 +5,10 @@ defmodule ReqLLM.Providers.GitHubCopilotTest do
 
   import ExUnit.CaptureIO
 
+  @echo_executable System.find_executable("echo")
+  @true_executable System.find_executable("true")
+  @false_executable System.find_executable("false")
+
   describe "provider contract" do
     test "provider schema defaults authentication to token-only mode" do
       assert GitHubCopilot.provider_schema().schema[:github_copilot_auth][:default] == :token
@@ -96,8 +100,10 @@ defmodule ReqLLM.Providers.GitHubCopilotTest do
     end
 
     test "auto mode falls back to gh auth token", %{gh_path: gh_path} do
-      assert {:ok, "cli-token", :gh_cli} = GitHubCopilot.resolve_token(github_copilot_auth: :auto)
-      assert File.read!(gh_path <> ".called") == "auth token\n"
+      use_executable(gh_path, @echo_executable)
+
+      assert {:ok, "auth token", :gh_cli} =
+               GitHubCopilot.resolve_token(github_copilot_auth: :auto)
     end
 
     test "auto mode prefers configured tokens over gh", %{gh_path: gh_path} do
@@ -109,18 +115,25 @@ defmodule ReqLLM.Providers.GitHubCopilotTest do
       refute File.exists?(gh_path <> ".called")
     end
 
-    test "gh mode uses the CLI even when a token is configured" do
-      assert {:ok, "cli-token", :gh_cli} =
-               GitHubCopilot.resolve_token(api_key: "explicit-token", github_copilot_auth: :gh)
+    test "gh mode uses the CLI even when a token is configured", %{gh_path: gh_path} do
+      use_executable(gh_path, @echo_executable)
+
+      assert {:ok, "auth token", :gh_cli} =
+               GitHubCopilot.resolve_token(
+                 api_key: "explicit-token",
+                 github_copilot_auth: :gh
+               )
     end
 
-    test "nested and string auth options allow explicit CLI opt-in" do
+    test "nested and string auth options allow explicit CLI opt-in", %{gh_path: gh_path} do
+      use_executable(gh_path, @echo_executable)
+
       for opts <- [
             [provider_options: [github_copilot_auth: :auto]],
             [provider_options: %{"github_copilot_auth" => "auto"}],
             [github_copilot_auth: "gh"]
           ] do
-        assert {:ok, "cli-token", :gh_cli} = GitHubCopilot.resolve_token(opts)
+        assert {:ok, "auth token", :gh_cli} = GitHubCopilot.resolve_token(opts)
       end
     end
 
@@ -141,18 +154,24 @@ defmodule ReqLLM.Providers.GitHubCopilotTest do
     end
 
     test "CLI opt-in reports an empty token", %{gh_path: gh_path} do
-      File.write!(gh_path, "#!/bin/sh\nprintf ' \\n'\n")
+      use_executable(gh_path, @true_executable)
 
       assert {:error, "`gh auth token` returned an empty token"} =
                GitHubCopilot.resolve_token(github_copilot_auth: :auto)
     end
 
     test "CLI opt-in reports command failures", %{gh_path: gh_path} do
-      File.write!(gh_path, "#!/bin/sh\nprintf 'not logged in\\n' >&2\nexit 1\n")
+      use_executable(gh_path, @false_executable)
 
       assert {:error, message} = GitHubCopilot.resolve_token(github_copilot_auth: :auto)
-      assert message =~ "`gh auth token` failed: not logged in"
+
+      assert message =~ "`gh auth token` failed:"
     end
+  end
+
+  defp use_executable(path, executable) do
+    File.rm!(path)
+    File.ln_s!(executable, path)
   end
 
   describe "request preparation and streaming" do

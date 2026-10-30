@@ -280,17 +280,25 @@ defmodule ReqLLM.Step.Fixture.Backend do
     sanitized_url = url |> to_string() |> ReqLLM.Provider.Utils.sanitize_url()
     uri = URI.parse(sanitized_url)
 
-    if provider == :google and uri.query do
-      query =
-        uri.query
-        |> URI.query_decoder()
-        |> Enum.reject(fn {name, _value} -> name == "key" end)
-        |> URI.encode_query()
+    uri =
+      if provider == :google and uri.query do
+        query =
+          uri.query
+          |> URI.query_decoder()
+          |> Enum.reject(fn {name, _value} -> name == "key" end)
+          |> URI.encode_query()
 
-      URI.to_string(%{uri | query: if(query == "", do: nil, else: query)})
-    else
-      sanitized_url
-    end
+        %{uri | query: if(query == "", do: nil, else: query)}
+      else
+        uri
+      end
+
+    uri =
+      if provider == :azure,
+        do: %{uri | scheme: "https", host: "fixture.azure.test", port: nil},
+        else: uri
+
+    URI.to_string(uri)
   end
 
   defp normalize_json(json) when is_binary(json) do

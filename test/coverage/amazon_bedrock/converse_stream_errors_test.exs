@@ -15,11 +15,6 @@ defmodule ReqLLM.Coverage.AmazonBedrock.ConverseStreamErrorsTest do
 
   @model "amazon_bedrock:amazon.nova-lite-v1:0"
 
-  setup_all do
-    LLMDB.load(allow: :all, custom: %{})
-    :ok
-  end
-
   test "surfaces a validation exception sent after the stream opens" do
     context =
       Context.new([
