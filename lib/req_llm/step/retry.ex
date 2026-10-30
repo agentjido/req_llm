@@ -23,8 +23,8 @@ defmodule ReqLLM.Step.Retry do
 
   - **Max retries**: 3 attempts (4 total requests including initial); `:max_retries`
     overrides it and `0` disables retries
-  - **Retry delay**: 0ms for transport errors; the `Retry-After` header when the
-    response carries one, otherwise exponential backoff with jitter (about 1s, 2s, 4s)
+  - **Retry delay**: 0ms for transport errors; a valid `Retry-After` header when
+    the response carries one, otherwise exponential backoff with jitter (about 1s, 2s, 4s)
   - **Retryable errors**: the list above, whether they arrive as a bare
     `Req.TransportError` / `Req.Response` or wrapped in a `ReqLLM.Error.API.Request`;
     `:retry_statuses` replaces the HTTP status list, and `[]` retries transport errors only
@@ -134,7 +134,7 @@ defmodule ReqLLM.Step.Retry do
 
   def should_retry?(request, %Req.Response{status: status} = response)
       when is_integer(status) do
-    retry_status(request, status, fn -> Req.Response.get_retry_after(response) end)
+    retry_status(request, status, fn -> retry_after(response) end)
   end
 
   def should_retry?(request, %ReqLLM.Error.API.Request{status: status, headers: headers})
@@ -194,5 +194,12 @@ defmodule ReqLLM.Step.Retry do
   end
 
   defp retry_after(nil), do: nil
-  defp retry_after(headers), do: Req.Response.get_retry_after(Req.Response.new(headers: headers))
+
+  defp retry_after(%Req.Response{} = response) do
+    Req.Response.get_retry_after(response)
+  rescue
+    _exception in [ArgumentError, CaseClauseError] -> nil
+  end
+
+  defp retry_after(headers), do: retry_after(Req.Response.new(headers: headers))
 end

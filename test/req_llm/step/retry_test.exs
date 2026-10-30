@@ -86,6 +86,26 @@ defmodule ReqLLM.Step.RetryTest do
       assert Agent.get(counter, & &1) == 2
     end
 
+    test "does not raise on an invalid Retry-After when retries are disabled" do
+      for retry_after <- ["soon", "5abc"] do
+        {:ok, counter} = Agent.start_link(fn -> 0 end)
+
+        request =
+          Req.new(
+            [url: "https://example.invalid"] ++
+              HTTPAdapter.options(fn request ->
+                Agent.update(counter, &(&1 + 1))
+
+                {request, Req.Response.new(status: 503, headers: [{"retry-after", retry_after}])}
+              end)
+          )
+          |> Retry.attach(max_retries: 0)
+
+        assert {:ok, %Req.Response{status: 503}} = Req.request(request)
+        assert Agent.get(counter, & &1) == 1
+      end
+    end
+
     test "an empty retry_statuses list still retries transport errors" do
       request =
         Req.new()
@@ -275,6 +295,21 @@ defmodule ReqLLM.Step.RetryTest do
 
       assert {:delay, delay} = Retry.should_retry?(request, %Req.Response{status: 429})
       assert delay in 900..1000
+    end
+
+    test "backs off when Retry-After is invalid" do
+      request = Req.new()
+
+      for retry_after <- ["soon", "5abc"] do
+        response = Req.Response.new(status: 503, headers: [{"retry-after", retry_after}])
+        wrapped = %ReqLLM.Error.API.Request{status: 503, headers: response.headers}
+
+        assert {:delay, response_delay} = Retry.should_retry?(request, response)
+        assert response_delay in 900..1000
+
+        assert {:delay, wrapped_delay} = Retry.should_retry?(request, wrapped)
+        assert wrapped_delay in 900..1000
+      end
     end
 
     test "retries a transient status wrapped in ReqLLM.Error.API.Request" do
