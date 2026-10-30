@@ -6,8 +6,8 @@ defmodule ReqLLM.Providers.Minimax do
   This provider reuses the shared OpenAI wire-format implementation and adds
   MiniMax-specific option handling:
 
-  - `max_tokens` is translated to `max_completion_tokens` and never clamped, so
-    an explicit limit up to the model's supported output budget is preserved
+  - `max_tokens` is translated to `max_completion_tokens`; explicit limits are
+    preserved, while library defaults are capped at the recommended 131072 tokens
   - `reasoning_split` defaults to `true` so reasoning is returned as structured
     `reasoning_details` and can be preserved across turns
   - `reasoning_effort` is forwarded for models that tune thinking depth
@@ -44,6 +44,8 @@ defmodule ReqLLM.Providers.Minimax do
     default_env_key: "MINIMAX_API_KEY"
 
   import ReqLLM.Provider.Utils, only: [maybe_put: 3]
+
+  @recommended_max_completion_tokens 131_072
 
   @provider_schema [
     max_completion_tokens: [
@@ -327,8 +329,37 @@ defmodule ReqLLM.Providers.Minimax do
     end
   end
 
+  def prepare_request(operation, model_spec, input, opts) when operation in [:chat, :object] do
+    with {:ok, model} <- ReqLLM.model(model_spec) do
+      opts = put_recommended_token_default(opts, model)
+      ReqLLM.Provider.Defaults.prepare_request(__MODULE__, operation, model, input, opts)
+    end
+  end
+
   def prepare_request(operation, model_spec, input, opts) do
     ReqLLM.Provider.Defaults.prepare_request(__MODULE__, operation, model_spec, input, opts)
+  end
+
+  @impl ReqLLM.Provider
+  def attach_stream(model, context, opts, finch_name) do
+    opts = put_recommended_token_default(opts, model)
+
+    processed_opts =
+      ReqLLM.Provider.Options.process_stream!(
+        __MODULE__,
+        opts[:operation] || :chat,
+        model,
+        context,
+        opts
+      )
+
+    ReqLLM.Provider.Defaults.default_attach_stream(
+      __MODULE__,
+      model,
+      context,
+      processed_opts,
+      finch_name
+    )
   end
 
   @impl ReqLLM.Provider
@@ -584,6 +615,19 @@ defmodule ReqLLM.Providers.Minimax do
       opts
     else
       Keyword.put(opts, :max_completion_tokens, max_tokens)
+    end
+  end
+
+  defp put_recommended_token_default(opts, model) do
+    defaulted_opts =
+      ReqLLM.Provider.Options.put_model_max_tokens_default(opts, model, fallback: 4096)
+
+    if defaulted_opts == opts do
+      opts
+    else
+      Keyword.update!(defaulted_opts, :max_tokens, fn limit ->
+        min(limit, @recommended_max_completion_tokens)
+      end)
     end
   end
 

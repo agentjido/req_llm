@@ -107,6 +107,20 @@ defmodule ReqLLM.Providers.MinimaxTest do
       assert request.options[:base_url] == "https://api.minimax.io/v1"
     end
 
+    test "prepare_request caps a metadata-derived token limit at the recommended value" do
+      {:ok, request} =
+        Minimax.prepare_request(:chat, minimax_m3_1_model(), "Hello world", [])
+
+      assert request.options[:max_completion_tokens] == 131_072
+    end
+
+    test "prepare_request preserves an explicit token limit at the model output budget" do
+      {:ok, request} =
+        Minimax.prepare_request(:chat, minimax_m3_1_model(), "Hello world", max_tokens: 524_288)
+
+      assert request.options[:max_completion_tokens] == 524_288
+    end
+
     test "prepare_request rejects embedding operations" do
       {:error, error} = Minimax.prepare_request(:embedding, minimax_model(), "Hello", [])
       assert %ReqLLM.Error.Invalid.Parameter{} = error
@@ -474,12 +488,25 @@ defmodule ReqLLM.Providers.MinimaxTest do
       refute Map.has_key?(decoded, "presence_penalty")
     end
 
-    test "attach_stream keeps the metadata-derived token limit at the model output budget" do
+    test "attach_stream caps the metadata-derived token limit at the recommended value" do
       {:ok, finch_request} =
         Minimax.attach_stream(
           minimax_m3_1_model(),
           context_fixture(),
           [api_key: "test-key-12345"],
+          MyApp.Finch
+        )
+
+      decoded = Jason.decode!(finch_request.body)
+      assert decoded["max_completion_tokens"] == 131_072
+    end
+
+    test "attach_stream preserves an explicit token limit at the model output budget" do
+      {:ok, finch_request} =
+        Minimax.attach_stream(
+          minimax_m3_1_model(),
+          context_fixture(),
+          [api_key: "test-key-12345", max_tokens: 524_288],
           MyApp.Finch
         )
 
