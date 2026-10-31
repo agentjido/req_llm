@@ -225,7 +225,7 @@ defmodule ReqLLM.Providers.AmazonBedrock.AWSEventStream do
   end
 
   defp decode_message(%{":message-type" => "exception", ":exception-type" => type}, body) do
-    with {:ok, payload} <- Jason.decode(body) do
+    with {:ok, payload} <- ReqLLM.JSON.decode_wire(body) do
       {:ok, %{exception: type, payload: payload}}
     end
   end
@@ -242,12 +242,12 @@ defmodule ReqLLM.Providers.AmazonBedrock.AWSEventStream do
   defp decode_body(body, headers) do
     # AWS event streams for Bedrock typically have {"bytes": "base64_content"}
     # where the base64 content is the actual JSON payload
-    case Jason.decode(body) do
+    case ReqLLM.JSON.decode_wire(body) do
       {:ok, %{"bytes" => encoded}} ->
         # Bedrock-specific: base64-encoded JSON
         case Base.decode64(encoded) do
           {:ok, decoded} ->
-            Jason.decode(decoded)
+            ReqLLM.JSON.decode_wire(decoded)
 
           :error ->
             {:error, :base64_decode_error}

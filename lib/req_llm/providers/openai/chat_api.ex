@@ -114,7 +114,7 @@ defmodule ReqLLM.Providers.OpenAI.ChatAPI do
     body = Request.build_body(context, model.provider_model_id || model.id, cleaned_opts, :chat)
     url = build_request_url(cleaned_opts)
 
-    encoded = body |> ReqLLM.Schema.apply_property_ordering() |> Jason.encode!()
+    encoded = ReqLLM.JSON.encode_request_body(body)
     {:ok, Finch.build(:post, url, headers, encoded)}
   rescue
     error ->

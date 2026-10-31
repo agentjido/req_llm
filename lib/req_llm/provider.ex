@@ -594,7 +594,7 @@ defmodule ReqLLM.Provider do
           {"Content-Type", "application/json"}
         ]
         
-        body = Jason.encode!(%{
+        body = ReqLLM.JSON.encode!(%{
           model: model.id,
           messages: encode_messages(context.messages),
           stream: true
@@ -614,7 +614,7 @@ defmodule ReqLLM.Provider do
           {"anthropic-version", "2023-06-01"}
         ]
         
-        body = Jason.encode!(%{
+        body = ReqLLM.JSON.encode!(%{
           model: model.id,
           messages: encode_anthropic_messages(context),
           stream: true

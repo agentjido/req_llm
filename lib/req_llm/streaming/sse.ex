@@ -31,7 +31,7 @@ defmodule ReqLLM.Streaming.SSE do
   """
   @spec process_sse_event(map()) :: map() | nil
   def process_sse_event(%{data: data} = event) when is_binary(data) do
-    case Jason.decode(data) do
+    case ReqLLM.JSON.decode_wire(data) do
       {:ok, parsed} when is_map(parsed) -> %{event | data: parsed}
       {:ok, _parsed} -> event
       {:error, _} -> event

@@ -681,7 +681,7 @@ defmodule ReqLLM.Providers.Anthropic.Response do
         block
 
       json ->
-        case Jason.decode(json) do
+        case ReqLLM.JSON.decode_wire(json) do
           {:ok, input} when is_map(input) -> Map.put(block, "input", input)
           _ -> block
         end

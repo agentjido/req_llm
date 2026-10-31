@@ -175,8 +175,7 @@ defmodule ReqLLM.Providers.Meta do
     body =
       %{options: processed_opts}
       |> build_body()
-      |> ReqLLM.Schema.apply_property_ordering()
-      |> Jason.encode!()
+      |> ReqLLM.JSON.encode_request_body()
 
     url = String.trim_trailing(base_url, "/") <> ResponsesAPI.path()
 

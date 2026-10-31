@@ -103,7 +103,7 @@ defmodule ReqLLM.Streaming.Failure do
   end
 
   defp normalize_response_body(body) when is_binary(body) do
-    case Jason.decode(body) do
+    case ReqLLM.JSON.decode_wire(body) do
       {:ok, decoded} -> decoded
       {:error, _reason} -> body
     end

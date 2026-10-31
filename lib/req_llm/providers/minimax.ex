@@ -1016,7 +1016,7 @@ defmodule ReqLLM.Providers.Minimax do
   defp attach_reasoning_details_to_context(context, _message, _details), do: context
 
   defp ensure_parsed_body(body) when is_binary(body) do
-    case Jason.decode(body) do
+    case ReqLLM.JSON.decode_wire(body) do
       {:ok, parsed} -> parsed
       {:error, _reason} -> body
     end

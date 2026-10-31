@@ -2293,10 +2293,7 @@ defmodule ReqLLM.Providers.Google do
     for %{"functionCall" => %{} = call} = part <- parts do
       call_id = Map.get(call, "id", "tool_call_#{System.unique_integer([:positive])}")
 
-      encoded_args =
-        call
-        |> Map.get("args", %{})
-        |> Jason.encode!()
+      encoded_args = ReqLLM.JSON.encode!(Map.get(call, "args", %{}))
 
       tc = %{
         "id" => call_id,
@@ -2498,7 +2495,7 @@ defmodule ReqLLM.Providers.Google do
 
     request_with_json = encode_body(temp_request)
     json_body = request_with_json.options[:json] || %{}
-    Jason.encode_to_iodata!(json_body)
+    ReqLLM.JSON.encode_to_iodata!(json_body)
   end
 
   @impl ReqLLM.Provider
@@ -2994,7 +2991,7 @@ defmodule ReqLLM.Providers.Google do
          } = tool_call
        ) do
     %{
-      functionCall: %{name: name, args: Jason.decode!(args)},
+      functionCall: %{name: name, args: ReqLLM.JSON.decode!(args)},
       thoughtSignature: tool_call_thought_signature(tool_call)
     }
   end
@@ -3006,7 +3003,7 @@ defmodule ReqLLM.Providers.Google do
          } = tool_call
        ) do
     %{
-      functionCall: %{name: name, args: Jason.decode!(args)},
+      functionCall: %{name: name, args: ReqLLM.JSON.decode!(args)},
       thoughtSignature: tool_call_thought_signature(tool_call)
     }
   end
@@ -3018,7 +3015,7 @@ defmodule ReqLLM.Providers.Google do
          } = tool_call
        ) do
     %{
-      functionCall: %{name: name, args: Jason.decode!(args)},
+      functionCall: %{name: name, args: ReqLLM.JSON.decode!(args)},
       thoughtSignature: tool_call_thought_signature(tool_call)
     }
   end
@@ -3517,7 +3514,7 @@ defmodule ReqLLM.Providers.Google do
   end
 
   defp decode_json_array_element(json, rest, state, events) do
-    case Jason.decode(json) do
+    case ReqLLM.JSON.decode_wire(json) do
       {:ok, event} when is_map(event) ->
         queue_json_array_event(event, rest, state, events)
 

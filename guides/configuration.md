@@ -37,6 +37,9 @@ config :req_llm,
   # Warnings
   warn_unverified_models: true,      # Warn when a model spec is not in the LLMDB catalog
 
+  # JSON codec (Jason by default)
+  json_library: Jason,
+
   # JSON Schema validator cache
   schema_cache_max_bytes: 16 * 1024 * 1024,
   schema_cache_eviction_strategy: ReqLLM.Schema.EvictionStrategy.FIFO,
@@ -672,6 +675,27 @@ When disabled (the default), the full message preview is shown as normal:
 inspect(context)
 #=> "#Context<2 msgs: system:\"You are a helpful assistant\", user:\"Hello\">"
 ```
+
+## JSON Library
+
+ReqLLM uses Jason by default. You can configure a different JSON module with
+the same setting and contract that Phoenix uses:
+
+```elixir
+config :req_llm, :json_library, JSON
+```
+
+The module must export `decode!/1`, `encode!/1`, and
+`encode_to_iodata!/1`. ReqLLM reads this setting at runtime and uses the module
+for normal request and response JSON.
+
+The built-in `JSON` module requires Elixir 1.18 or later. Applications that
+support older Elixir versions must keep Jason or configure another library.
+User structs must implement the encoder protocol for the configured library.
+
+Jason remains a runtime dependency and the default. This keeps existing JSON
+output unchanged. A different library can produce different key order, float
+formatting, or escape sequences.
 
 ## Unverified Model Warnings
 

@@ -503,7 +503,7 @@ defmodule ReqLLM.Providers.AmazonBedrock do
       updated_request
       |> Req.Request.put_header("content-type", "application/json")
       |> Req.Request.put_headers(route_headers(endpoint, model_family, opts))
-      |> Map.put(:body, model_body |> ReqLLM.Schema.apply_property_ordering() |> Jason.encode!())
+      |> Map.put(:body, ReqLLM.JSON.encode_request_body(model_body))
 
     request_with_body
     |> Step.Error.attach()
@@ -564,7 +564,7 @@ defmodule ReqLLM.Providers.AmazonBedrock do
           |> Req.Request.put_private(:req_llm_model, model)
           |> Map.put(
             :body,
-            model_body |> ReqLLM.Schema.apply_property_ordering() |> Jason.encode!()
+            ReqLLM.JSON.encode_request_body(model_body)
           )
 
         updated_request
@@ -631,7 +631,7 @@ defmodule ReqLLM.Providers.AmazonBedrock do
       |> formatter.format_request(context, with_family_formatter(translated_opts, model_id))
       |> put_service_tier(model_family, translated_opts[:service_tier])
 
-    json_body = body |> ReqLLM.Schema.apply_property_ordering() |> Jason.encode!()
+    json_body = ReqLLM.JSON.encode_request_body(body)
 
     # Ensure json_body is binary
     if !is_binary(json_body) do

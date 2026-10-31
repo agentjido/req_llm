@@ -511,7 +511,7 @@ defmodule ReqLLM.Providers.Anthropic.Context do
   defp encode_tool_output(output) when is_binary(output), do: output
 
   defp encode_tool_output(output) when is_map(output) or is_list(output),
-    do: Jason.encode!(output)
+    do: ReqLLM.JSON.encode!(output)
 
   defp encode_tool_output(output), do: to_string(output)
 

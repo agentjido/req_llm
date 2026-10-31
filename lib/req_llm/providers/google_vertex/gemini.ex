@@ -51,7 +51,7 @@ defmodule ReqLLM.Providers.GoogleVertex.Gemini do
       |> Google.encode_body()
       |> Req.Steps.encode_body()
 
-    body = Jason.decode!(encoded_body)
+    body = ReqLLM.JSON.decode!(encoded_body)
 
     ReqLLM.ToolCallIdCompat.apply_body(
       ReqLLM.Providers.GoogleVertex,

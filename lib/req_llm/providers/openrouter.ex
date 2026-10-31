@@ -1228,7 +1228,7 @@ defmodule ReqLLM.Providers.OpenRouter do
   defp attach_reasoning_details_to_response(resp, _details), do: resp
 
   defp ensure_parsed_body(body) when is_binary(body) do
-    case Jason.decode(body) do
+    case ReqLLM.JSON.decode_wire(body) do
       {:ok, parsed} -> parsed
       {:error, _} -> body
     end

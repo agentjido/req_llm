@@ -12,26 +12,34 @@ defmodule ReqLLM.Streaming.WebSocketProtocol do
   def parse_message(chunk, buffer) when is_binary(chunk) and is_binary(buffer) do
     payload = buffer <> chunk
 
-    case Jason.decode(payload) do
+    case ReqLLM.JSON.decode_wire(payload) do
       {:ok, data} when is_map(data) ->
         {:ok, [%{data: data, event: event_type(data)}], ""}
 
       {:ok, data} ->
         {:ok, [%{data: data}], ""}
 
-      {:error, %Jason.DecodeError{position: position}} when position >= byte_size(payload) ->
-        {:incomplete, payload}
-
       {:error, reason} ->
-        {:error, reason}
+        if incomplete_payload?(reason, payload) do
+          {:incomplete, payload}
+        else
+          {:error, reason}
+        end
     end
   end
 
   def parse_message(_chunk, buffer), do: {:incomplete, buffer}
 
+  defp incomplete_payload?(reason, payload) do
+    case ReqLLM.JSON.decode_error_position(reason) do
+      position when is_integer(position) -> position >= byte_size(payload)
+      _ -> false
+    end
+  end
+
   @spec terminal_message?(binary()) :: boolean()
   def terminal_message?(message) when is_binary(message) do
-    case Jason.decode(message) do
+    case ReqLLM.JSON.decode_wire(message) do
       {:ok, data} when is_map(data) ->
         terminal_event?(%{data: data})
 
@@ -42,7 +50,7 @@ defmodule ReqLLM.Streaming.WebSocketProtocol do
 
   @spec error_message?(binary()) :: boolean()
   def error_message?(message) when is_binary(message) do
-    case Jason.decode(message) do
+    case ReqLLM.JSON.decode_wire(message) do
       {:ok, data} when is_map(data) ->
         error_event?(%{data: data})
 
@@ -53,7 +61,7 @@ defmodule ReqLLM.Streaming.WebSocketProtocol do
 
   @spec decode_message(binary()) :: {:ok, map()} | {:error, term()}
   def decode_message(message) when is_binary(message) do
-    Jason.decode(message)
+    ReqLLM.JSON.decode_wire(message)
   end
 
   @spec event_type(map()) :: String.t() | nil

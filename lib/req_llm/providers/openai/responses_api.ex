@@ -119,7 +119,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   @impl true
   def encode_body(request) do
     body = build_body(request)
-    encoded = body |> ReqLLM.Schema.apply_property_ordering() |> Jason.encode!()
+    encoded = ReqLLM.JSON.encode_request_body(body)
 
     request
     |> ReqLLM.Providers.OpenAI.MultiAgent.put_http_header(body["model"])
@@ -1151,7 +1151,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
       output_string =
         cond do
           is_binary(output) -> output
-          is_map(output) or is_list(output) -> Jason.encode!(output)
+          is_map(output) or is_list(output) -> ReqLLM.JSON.encode!(output)
           true -> to_string(output)
         end
 
@@ -1466,7 +1466,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     body = build_request_body(context, model.provider_model_id || model.id, cleaned_opts, nil)
     url = build_request_url(cleaned_opts)
 
-    encoded = body |> ReqLLM.Schema.apply_property_ordering() |> Jason.encode!()
+    encoded = ReqLLM.JSON.encode_request_body(body)
     {:ok, Finch.build(:post, url, headers, encoded)}
   rescue
     error ->
@@ -1503,7 +1503,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
      %{
        url: url,
        headers: headers,
-       initial_messages: [Jason.encode!(create_event)],
+       initial_messages: [ReqLLM.JSON.encode!(create_event)],
        http_context: ReqLLM.Providers.OpenAI.WebSocket.http_context(url, headers),
        canonical_json: body,
        fallback_transport: :http
@@ -1736,10 +1736,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     status = builtin_status_metadata(item)
 
     if tool_call_emitted?(state, index) do
-      args =
-        item
-        |> Map.drop(@tool_call_item_reserved_keys)
-        |> Jason.encode!()
+      args = ReqLLM.JSON.encode!(Map.drop(item, @tool_call_item_reserved_keys))
 
       [
         ReqLLM.StreamChunk.meta(%{
@@ -1931,7 +1928,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
       output_string =
         cond do
           is_binary(raw_output) -> raw_output
-          is_map(raw_output) or is_list(raw_output) -> Jason.encode!(raw_output)
+          is_map(raw_output) or is_list(raw_output) -> ReqLLM.JSON.encode!(raw_output)
           true -> to_string(raw_output)
         end
 
@@ -2867,10 +2864,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   defp builtin_call_segment_to_tool_call(seg, type) do
     id = seg["id"] || seg["call_id"]
 
-    args_json =
-      seg
-      |> Map.drop(["id", "call_id", "type", "status"])
-      |> Jason.encode!()
+    args_json = ReqLLM.JSON.encode!(Map.drop(seg, ["id", "call_id", "type", "status"]))
 
     ReqLLM.ToolCall.new_builtin(id, type, args_json)
     |> ReqLLM.ToolCall.put_metadata(builtin_status_metadata(seg))
@@ -3372,7 +3366,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   end
 
   defp merge_tool_arguments(existing, new) when is_map(new) do
-    merge_tool_arguments(existing, Jason.encode!(new))
+    merge_tool_arguments(existing, ReqLLM.JSON.encode!(new))
   end
 
   defp merge_tool_arguments(existing, _new), do: existing

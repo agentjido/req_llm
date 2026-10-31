@@ -46,7 +46,10 @@ defmodule ReqLLM.TimeoutBudget do
   @spec request(Req.Request.t(), deadline()) ::
           {:ok, Req.Response.t()} | {:error, Exception.t()}
   def request(%Req.Request{} = request, :infinity) do
-    request |> ReqLLM.Transport.attach() |> Req.request()
+    request
+    |> ReqLLM.JSON.materialize_request()
+    |> ReqLLM.Transport.attach()
+    |> Req.request()
   end
 
   def request(%Req.Request{} = request, %{timeout: timeout} = deadline) do
@@ -54,6 +57,7 @@ defmodule ReqLLM.TimeoutBudget do
 
     request =
       request
+      |> ReqLLM.JSON.materialize_request()
       |> ReqLLM.Transport.attach()
       |> Req.Request.put_private(@capture_key, %{owner: self(), ref: capture_ref})
       |> Req.Request.append_request_steps(

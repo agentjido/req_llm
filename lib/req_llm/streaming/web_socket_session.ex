@@ -40,7 +40,7 @@ defmodule ReqLLM.Streaming.WebSocketSession do
 
   @spec send_json(t(), map()) :: :ok | {:error, term()}
   def send_json(server, payload) when is_map(payload) do
-    GenServer.call(server, {:send_text, Jason.encode!(payload)})
+    GenServer.call(server, {:send_text, ReqLLM.JSON.encode!(payload)})
   end
 
   @spec send_text(t(), binary()) :: :ok | {:error, term()}

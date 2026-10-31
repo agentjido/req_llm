@@ -211,8 +211,8 @@ defmodule ReqLLM.Provider.Defaults.ResponseBuilder do
   end
 
   defp encode_tool_args(args) when is_binary(args), do: args
-  defp encode_tool_args(nil), do: Jason.encode!(%{})
-  defp encode_tool_args(args), do: Jason.encode!(args)
+  defp encode_tool_args(nil), do: ReqLLM.JSON.encode!(%{})
+  defp encode_tool_args(args), do: ReqLLM.JSON.encode!(args)
 
   # ============================================================================
   # Content Building
@@ -287,7 +287,7 @@ defmodule ReqLLM.Provider.Defaults.ResponseBuilder do
       |> Enum.map_join("", & &1.text)
 
     if looks_like_json?(text) do
-      case Jason.decode(text) do
+      case ReqLLM.JSON.decode_wire(text) do
         {:ok, object} when is_map(object) -> object
         _ -> nil
       end
