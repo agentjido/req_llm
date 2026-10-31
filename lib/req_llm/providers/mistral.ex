@@ -90,7 +90,7 @@ defmodule ReqLLM.Providers.Mistral do
 
         nil ->
           warning =
-            "Mistral supports reasoning_effort values :high and :none; #{inspect(reasoning_effort)} will be ignored"
+            "Mistral supports reasoning_effort values :none, :low, :medium, and :high; #{inspect(reasoning_effort)} will be ignored"
 
           {Keyword.delete(opts, :reasoning_effort), [warning | warnings]}
 
@@ -186,10 +186,12 @@ defmodule ReqLLM.Providers.Mistral do
   defp normalize_prompt_mode("reasoning"), do: "reasoning"
   defp normalize_prompt_mode(_), do: nil
 
-  defp normalize_reasoning_effort(:high), do: "high"
-  defp normalize_reasoning_effort("high"), do: "high"
-  defp normalize_reasoning_effort(:none), do: "none"
-  defp normalize_reasoning_effort("none"), do: "none"
+  defp normalize_reasoning_effort(effort) when effort in [:none, :low, :medium, :high],
+    do: Atom.to_string(effort)
+
+  defp normalize_reasoning_effort(effort) when effort in ["none", "low", "medium", "high"],
+    do: effort
+
   defp normalize_reasoning_effort(_), do: nil
 
   defp normalize_nested_value(value) when is_list(value) do
