@@ -133,13 +133,34 @@ defmodule ReqLLM.Providers.MistralTest do
   end
 
   describe "option translation" do
+    test "preserves supported reasoning_effort values" do
+      for {effort, expected} <- [
+            {:none, "none"},
+            {:low, "low"},
+            {:medium, "medium"},
+            {:high, "high"},
+            {"none", "none"},
+            {"low", "low"},
+            {"medium", "medium"},
+            {"high", "high"}
+          ] do
+        {translated_opts, warnings} =
+          Mistral.translate_options(:chat, mistral_model(), reasoning_effort: effort)
+
+        assert translated_opts[:reasoning_effort] == expected
+        assert warnings == []
+      end
+    end
+
     test "drops unsupported reasoning_effort values with a warning" do
       {translated_opts, warnings} =
-        Mistral.translate_options(:chat, mistral_model(), reasoning_effort: :medium)
+        Mistral.translate_options(:chat, mistral_model(), reasoning_effort: :minimal)
 
       refute Keyword.has_key?(translated_opts, :reasoning_effort)
       assert length(warnings) == 1
-      assert hd(warnings) =~ "Mistral supports reasoning_effort values :high and :none"
+
+      assert hd(warnings) =~
+               "Mistral supports reasoning_effort values :none, :low, :medium, and :high"
     end
   end
 end
