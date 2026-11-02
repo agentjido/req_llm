@@ -153,6 +153,8 @@ defmodule ReqLLM.RerankExecutionTest do
 
   test "shares the original total timeout across batches and preparation" do
     owner = self()
+    total_timeout = 1_000
+    batch_delay = 600
 
     prepare = fn :rerank, _model, %{documents: documents}, _opts ->
       send(owner, {:prepared_batch, documents})
@@ -161,12 +163,12 @@ defmodule ReqLLM.RerankExecutionTest do
         ["one"] ->
           {:ok,
            WorkflowHTTP.request(fn request ->
-             Process.sleep(50)
+             Process.sleep(batch_delay)
              {request, %Req.Response{status: 200, body: %{"results" => []}}}
            end)}
 
         ["two"] ->
-          Process.sleep(50)
+          Process.sleep(batch_delay)
 
           {:ok,
            WorkflowHTTP.request(fn request ->
@@ -176,12 +178,12 @@ defmodule ReqLLM.RerankExecutionTest do
       end
     end
 
-    assert {:error, %ReqLLM.Error.API.Timeout{kind: :total, timeout: 80}} =
+    assert {:error, %ReqLLM.Error.API.Timeout{kind: :total, timeout: ^total_timeout}} =
              ReqLLM.rerank(@model,
                query: "rank",
                documents: ["one", "two"],
                batch_size: 1,
-               total_timeout: 80,
+               total_timeout: total_timeout,
                prepare: prepare
              )
 
