@@ -11,6 +11,12 @@ defmodule ReqLLM.Providers.AmazonBedrockProviderTest do
   alias ReqLLM.Providers.AmazonBedrock
 
   setup do
+    ReqLLM.Test.Env.isolate!([
+      "AWS_SECRET_ACCESS_KEY",
+      "AWS_BEARER_TOKEN_BEDROCK",
+      "AWS_REGION"
+    ])
+
     # Set up fake AWS credentials for testing
     System.put_env("AWS_ACCESS_KEY_ID", "AKIATESTKEY123")
     System.put_env("AWS_SECRET_ACCESS_KEY", "testSecretKey456")
