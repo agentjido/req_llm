@@ -10,6 +10,15 @@ defmodule ReqLLM.Response do
   This struct eliminates the need for manual message extraction and context building
   in multi-turn conversations and tool calling workflows.
 
+  ## Normalized Provider Metadata
+
+  Provider adapters may expose a normalized watermark observation in
+  `response.provider_meta[:watermarked]`. `true` means the provider explicitly
+  reported that watermarking was applied, while `false` means it explicitly
+  reported that it was not applied. The key is absent when the provider did not
+  report a recognized value. This distinction avoids treating missing or unknown
+  metadata as a negative result.
+
   ## Examples
 
       # Basic response usage
