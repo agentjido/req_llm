@@ -412,7 +412,12 @@ defmodule ReqLLM.Response do
   Provider-native cache reads and writes are reported separately in
   `usage.cache_read_tokens` and `usage.cache_write_tokens`. The
   `usage.cached_tokens` and `usage.cache_creation_tokens` fields are
-  compatibility aliases. Application-layer response cache hits instead return
+  compatibility aliases. When available, `usage.usage_reported.cache_read` and
+  `usage.usage_reported.cache_write` distinguish reported counts, including zero,
+  from omitted or nil counters. Anthropic supplies these flags; an absent flag
+  means that counter's presence is unknown. Presence does not validate its value.
+
+  Application-layer response cache hits instead return
   a zeroed usage map and set
   `response.provider_meta.response_cache_hit` to `true`.
 

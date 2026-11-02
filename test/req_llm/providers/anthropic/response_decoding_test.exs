@@ -7,6 +7,81 @@ defmodule ReqLLM.Providers.Anthropic.ResponseDecodingTest do
 
   alias ReqLLM.Providers.Anthropic
 
+  test "retains cache presence through decoding, normalization and streaming updates" do
+    model = ReqLLM.model!("anthropic:claude-haiku-4-5-20251001")
+
+    base = %{
+      "id" => "msg_cache_presence",
+      "type" => "message",
+      "role" => "assistant",
+      "content" => [%{"type" => "text", "text" => "OK"}],
+      "stop_reason" => "end_turn",
+      "usage" => %{"input_tokens" => 12, "output_tokens" => 4}
+    }
+
+    cases = [
+      {:missing, 0, false, true, 0, 0},
+      {0, :missing, true, false, 0, 0},
+      {nil, 0, false, true, 0, 0},
+      {0, nil, true, false, 0, 0},
+      {0, 0, true, true, 0, 0},
+      {3, 2, true, true, 3, 2}
+    ]
+
+    for {read, write, read_reported, write_reported, read_count, write_count} <- cases do
+      cache =
+        %{"cache_read_input_tokens" => read, "cache_creation_input_tokens" => write}
+        |> Map.reject(fn {_key, value} -> value == :missing end)
+
+      body = %{base | "usage" => Map.merge(base["usage"], cache)}
+      assert {:ok, response} = ReqLLM.Providers.Anthropic.Response.decode_response(body, model)
+      normalized = ReqLLM.Usage.normalize(response.usage)
+      assert normalized.usage_reported.cache_read == read_reported
+      assert normalized.usage_reported.cache_write == write_reported
+      assert normalized.usage_reported.input == true
+      assert normalized.usage_reported.output == true
+      assert ReqLLM.Usage.normalize(normalized) == normalized
+      assert normalized.cache_read_tokens == read_count
+      assert normalized.cache_write_tokens == write_count
+    end
+  end
+
+  test "stream metadata retains cache presence after an output-only delta" do
+    model = ReqLLM.model!("anthropic:claude-haiku-4-5-20251001")
+
+    start = %{
+      data: %{
+        "type" => "message_start",
+        "message" => %{
+          "usage" => %{"input_tokens" => 12, "output_tokens" => 0, "cache_read_input_tokens" => 0}
+        }
+      }
+    }
+
+    delta = %{
+      data: %{
+        "type" => "message_delta",
+        "delta" => %{"stop_reason" => "end_turn"},
+        "usage" => %{"output_tokens" => 4}
+      }
+    }
+
+    {initial, state} = ReqLLM.Providers.Anthropic.Response.decode_stream_event(start, model, nil)
+    {later, _state} = ReqLLM.Providers.Anthropic.Response.decode_stream_event(delta, model, state)
+    usages = for %{metadata: %{usage: usage}} <- initial ++ later, do: usage
+    assert length(usages) == 2
+    merged = Enum.reduce(usages, %{}, &ReqLLM.Usage.merge(&2, &1))
+    assert merged.input_tokens == 12
+    assert merged.output_tokens == 4
+
+    assert merged.usage_reported == %{
+             input: true,
+             output: true,
+             cache_read: true,
+             cache_write: false
+           }
+  end
+
   describe "response decoding & normalization" do
     test "malformed token counters survive decoding and remain unpriced" do
       model = ReqLLM.model!("anthropic:claude-haiku-4-5-20251001")
