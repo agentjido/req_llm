@@ -814,6 +814,18 @@ defmodule ReqLLM.Providers.GoogleVertex do
   defp auth_source(_access_token, _service_account_json), do: :adc
 
   # Decode response
+  def decode_response({request, %Req.Response{status: status} = response})
+      when status not in 200..299 do
+    error =
+      ReqLLM.Error.API.Response.exception(
+        reason: "Google Vertex API error",
+        status: status,
+        response_body: response.body
+      )
+
+    {request, error}
+  end
+
   def decode_response({request, response}) do
     # Get formatter for this model
     model = Req.Request.get_private(request, :model)
