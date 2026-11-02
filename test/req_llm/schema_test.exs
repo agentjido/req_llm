@@ -866,6 +866,37 @@ defmodule ReqLLM.SchemaTest do
   end
 
   describe "validate/2 with JSON Schema (JSV)" do
+    test "rejects indeterminate patternProperties matches" do
+      schema = %{
+        "type" => "object",
+        "patternProperties" => %{"^(?:(a+)+b|a+!)$" => %{"type" => "integer"}}
+      }
+
+      assert {:ok, %{"aaa!" => 1}} = Schema.validate(%{"aaa!" => 1}, schema)
+
+      assert {:error, %ReqLLM.Error.Validation.Error{tag: :json_schema_validation_failed}} =
+               Schema.validate(%{"aaa!" => "not an integer"}, schema)
+
+      key = String.duplicate("a", 20) <> "!"
+
+      assert {:error, %ReqLLM.Error.Validation.Error{tag: :json_schema_validation_failed}} =
+               Schema.validate(%{key => "not an integer"}, schema)
+    end
+
+    test "rejects indeterminate pattern matches under not" do
+      schema = %{"type" => "string", "not" => %{"pattern" => "^(?:(a+)+b|a+!)$"}}
+
+      assert {:ok, "hello"} = Schema.validate("hello", schema)
+
+      assert {:error, %ReqLLM.Error.Validation.Error{tag: :json_schema_validation_failed}} =
+               Schema.validate("aaa!", schema)
+
+      value = String.duplicate("a", 20) <> "!"
+
+      assert {:error, %ReqLLM.Error.Validation.Error{tag: :json_schema_validation_failed}} =
+               Schema.validate(value, schema)
+    end
+
     test "validates simple object with valid data" do
       schema = %{
         "type" => "object",

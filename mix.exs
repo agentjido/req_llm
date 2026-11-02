@@ -241,7 +241,7 @@ defmodule ReqLLM.MixProject do
       {:splode, "~> 0.3.0"},
       {:websockex, "~> 0.5.1"},
       {:zoi, "~> 0.18.11"},
-      {:jsv, "~> 0.11"},
+      {:jsv, "~> 0.26 and >= 0.26.2"},
       {:llm_db, "~> 2026.10.7"},
 
       # Dev/test dependencies
