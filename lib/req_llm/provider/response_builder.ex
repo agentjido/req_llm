@@ -24,6 +24,7 @@ defmodule ReqLLM.Provider.ResponseBuilder do
   - **Anthropic**: Ensures content blocks are never empty (API requirement)
   - **OpenAI Responses API**: Propagates `response_id` for stateless multi-turn
   - **Google**: Detects `functionCall` to set correct finish_reason
+  - **xAI**: Normalizes output watermark response metadata
   - **Default (OpenAI Chat)**: Standard handling for OpenAI-compatible providers
 
   ## Usage
@@ -89,6 +90,7 @@ defmodule ReqLLM.Provider.ResponseBuilder do
     * Google/Gemini models → `Google.ResponseBuilder`
     * Vertex Claude models → `Anthropic.ResponseBuilder`
     * OpenAI Responses API models → `OpenAI.ResponsesAPI.ResponseBuilder`
+    * xAI models → `XAI.ResponseBuilder`
     * All others → `Provider.Defaults.ResponseBuilder`
 
   ## Examples
@@ -112,6 +114,8 @@ defmodule ReqLLM.Provider.ResponseBuilder do
 
   def for_model(%LLMDB.Model{provider: :reflection}),
     do: ReqLLM.Providers.Reflection.ResponseBuilder
+
+  def for_model(%LLMDB.Model{provider: :xai}), do: ReqLLM.Providers.XAI.ResponseBuilder
 
   def for_model(%LLMDB.Model{provider: :meta}),
     do: ReqLLM.Providers.OpenAI.ResponsesAPI.ResponseBuilder

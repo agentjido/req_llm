@@ -44,6 +44,17 @@ defmodule ReqLLM.Providers.XAI do
   - `stream_options` - Streaming configuration (include_usage)
   - `xai_structured_output_mode` - Control structured output implementation (:auto, :json_schema, :tool_strict)
 
+  ## Watermark Metadata
+
+  xAI reports whether supported text output was watermarked in the `x-watermark`
+  response header. ReqLLM normalizes recognized `true` and `false` values to the
+  provider-neutral `response.provider_meta[:watermarked]` contract. A missing or
+  unrecognized value leaves the key absent.
+
+  Watermarking is controlled per model for the whole team in the xAI Console and
+  applies to every API key on that team. It is not a ReqLLM request option. See
+  [xAI's output watermarking documentation](https://docs.x.ai/developers/advanced-api-usage/watermarking).
+
   ## Model Compatibility Notes
 
   - Native structured outputs supported on models >= `grok-2-1212` and `grok-2-vision-1212`
@@ -1151,7 +1162,12 @@ defmodule ReqLLM.Providers.XAI do
 
         case ReqLLM.Providers.OpenAI.ResponsesAPI.decode_response({req, resp}) do
           {req, %Req.Response{} = decoded_resp} ->
-            {req, merge_responses_tool_usage(decoded_resp, raw_body)}
+            decoded_resp =
+              decoded_resp
+              |> merge_responses_tool_usage(raw_body)
+              |> put_watermark_metadata(resp.headers)
+
+            {req, decoded_resp}
 
           other ->
             other
@@ -1160,7 +1176,8 @@ defmodule ReqLLM.Providers.XAI do
       true ->
         case resp.status do
           200 ->
-            decode_success_response(req, resp)
+            {req, decoded_resp} = decode_success_response(req, resp)
+            {req, put_watermark_metadata(decoded_resp, resp.headers)}
 
           status ->
             decode_error_response(req, resp, status)
@@ -1188,6 +1205,18 @@ defmodule ReqLLM.Providers.XAI do
         resp
     end
   end
+
+  defp put_watermark_metadata(
+         %Req.Response{body: %ReqLLM.Response{} = response} = resp,
+         headers
+       ) do
+    provider_meta =
+      ReqLLM.Providers.XAI.Watermark.put_provider_metadata(response.provider_meta, headers)
+
+    %{resp | body: %{response | provider_meta: provider_meta}}
+  end
+
+  defp put_watermark_metadata(resp, _headers), do: resp
 
   defp decode_success_response(req, resp) do
     operation = req.options[:operation]
