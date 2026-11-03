@@ -4174,15 +4174,13 @@
       }
     },
     "google:veo-3.1-fast-generate-preview": {
-      "catalog_status": "present",
-      "declared_operations": [
-        "text"
-      ],
+      "catalog_status": "missing",
+      "declared_operations": [],
       "model": "veo-3.1-fast-generate-preview",
       "provider": "google",
       "surfaces": {
         "google.unrecorded_text": {
-          "declaration": "declared",
+          "declaration": "unknown",
           "operation": "text",
           "provider": "google",
           "scenarios": {
@@ -4206,15 +4204,13 @@
       }
     },
     "google:veo-3.1-generate-preview": {
-      "catalog_status": "present",
-      "declared_operations": [
-        "text"
-      ],
+      "catalog_status": "missing",
+      "declared_operations": [],
       "model": "veo-3.1-generate-preview",
       "provider": "google",
       "surfaces": {
         "google.unrecorded_text": {
-          "declaration": "declared",
+          "declaration": "unknown",
           "operation": "text",
           "provider": "google",
           "scenarios": {
@@ -4238,15 +4234,13 @@
       }
     },
     "google:veo-3.1-lite-generate-preview": {
-      "catalog_status": "present",
-      "declared_operations": [
-        "text"
-      ],
+      "catalog_status": "missing",
+      "declared_operations": [],
       "model": "veo-3.1-lite-generate-preview",
       "provider": "google",
       "surfaces": {
         "google.unrecorded_text": {
-          "declaration": "declared",
+          "declaration": "unknown",
           "operation": "text",
           "provider": "google",
           "scenarios": {
@@ -8145,15 +8139,13 @@
       }
     },
     "openrouter:arcee-ai/trinity-large-thinking": {
-      "catalog_status": "present",
-      "declared_operations": [
-        "text"
-      ],
+      "catalog_status": "missing",
+      "declared_operations": [],
       "model": "arcee-ai/trinity-large-thinking",
       "provider": "openrouter",
       "surfaces": {
         "openrouter.chat_completions": {
-          "declaration": "declared",
+          "declaration": "unknown",
           "operation": "text",
           "provider": "openrouter",
           "scenarios": {
@@ -9839,15 +9831,13 @@
       }
     },
     "openrouter:ibm-granite/granite-4.0-h-micro": {
-      "catalog_status": "present",
-      "declared_operations": [
-        "text"
-      ],
+      "catalog_status": "missing",
+      "declared_operations": [],
       "model": "ibm-granite/granite-4.0-h-micro",
       "provider": "openrouter",
       "surfaces": {
         "openrouter.chat_completions": {
-          "declaration": "declared",
+          "declaration": "unknown",
           "operation": "text",
           "provider": "openrouter",
           "scenarios": {
@@ -12341,15 +12331,13 @@
       }
     },
     "openrouter:nvidia/nemotron-3-super-120b-a12b:free": {
-      "catalog_status": "present",
-      "declared_operations": [
-        "text"
-      ],
+      "catalog_status": "missing",
+      "declared_operations": [],
       "model": "nvidia/nemotron-3-super-120b-a12b:free",
       "provider": "openrouter",
       "surfaces": {
         "openrouter.chat_completions": {
-          "declaration": "declared",
+          "declaration": "unknown",
           "operation": "text",
           "provider": "openrouter",
           "scenarios": {
@@ -13879,15 +13867,13 @@
       }
     },
     "openrouter:qwen/qwen3-next-80b-a3b-thinking": {
-      "catalog_status": "present",
-      "declared_operations": [
-        "text"
-      ],
+      "catalog_status": "missing",
+      "declared_operations": [],
       "model": "qwen/qwen3-next-80b-a3b-thinking",
       "provider": "openrouter",
       "surfaces": {
         "openrouter.chat_completions": {
-          "declaration": "declared",
+          "declaration": "unknown",
           "operation": "text",
           "provider": "openrouter",
           "scenarios": {
@@ -15925,15 +15911,13 @@
       }
     },
     "venice:claude-sonnet-4-5": {
-      "catalog_status": "present",
-      "declared_operations": [
-        "text"
-      ],
+      "catalog_status": "missing",
+      "declared_operations": [],
       "model": "claude-sonnet-4-5",
       "provider": "venice",
       "surfaces": {
         "venice.chat_completions": {
-          "declaration": "declared",
+          "declaration": "unknown",
           "operation": "text",
           "provider": "venice",
           "scenarios": {
@@ -19833,15 +19817,13 @@
       }
     },
     "zenmux:baidu/ernie-x1.1-preview": {
-      "catalog_status": "present",
-      "declared_operations": [
-        "text"
-      ],
+      "catalog_status": "missing",
+      "declared_operations": [],
       "model": "baidu/ernie-x1.1-preview",
       "provider": "zenmux",
       "surfaces": {
         "zenmux.chat_completions": {
-          "declaration": "declared",
+          "declaration": "unknown",
           "operation": "text",
           "provider": "zenmux",
           "scenarios": {

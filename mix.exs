@@ -240,9 +240,9 @@ defmodule ReqLLM.MixProject do
       {:server_sent_events, "~> 1.1.0"},
       {:splode, "~> 0.3.3"},
       {:websockex, "~> 0.5.1"},
-      {:zoi, "~> 0.19.0", override: true},
+      {:zoi, "~> 0.19.0"},
       {:jsv, "~> 0.26 and >= 0.26.2"},
-      {:llm_db, "~> 2026.10.7"},
+      {:llm_db, "~> 2026.11.0"},
 
       # Dev/test dependencies
       {:opentelemetry_api, "~> 1.5", only: :test},
