@@ -223,7 +223,7 @@ defmodule ReqLLM.Providers.GoogleVertex.TokenCache do
     if File.exists?(path_or_json) do
       {:ok, path_or_json}
     else
-      case Jason.decode(path_or_json) do
+      case ReqLLM.JSON.Codec.decode(path_or_json) do
         {:ok, parsed} ->
           service_account_cache_key(parsed)
 

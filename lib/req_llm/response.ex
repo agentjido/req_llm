@@ -832,7 +832,7 @@ defmodule ReqLLM.Response do
   defp parse_tool_call_arguments(arguments) when is_map(arguments), do: arguments
 
   defp parse_tool_call_arguments(arguments) when is_binary(arguments) do
-    case Jason.decode(arguments) do
+    case ReqLLM.JSON.Codec.decode(arguments) do
       {:ok, parsed} when is_map(parsed) -> parsed
       _ -> %{}
     end

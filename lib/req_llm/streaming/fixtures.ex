@@ -159,7 +159,7 @@ defmodule ReqLLM.Streaming.Fixtures do
   end
 
   defp decode_json_body(binary) do
-    case Jason.decode(binary) do
+    case ReqLLM.JSON.Codec.decode(binary) do
       {:ok, json} -> json
       {:error, _} -> %{raw_body: binary}
     end

@@ -201,7 +201,9 @@ defmodule ReqLLM.Providers.Azure.OpenAI do
       |> AdapterHelpers.add_response_format(provider_opts)
 
     Debug.dbug(
-      fn -> "Azure OpenAI request body: #{Jason.encode!(final_body, pretty: true)}" end,
+      fn ->
+        "Azure OpenAI request body: #{ReqLLM.JSON.Codec.encode!(final_body, pretty: true)}"
+      end,
       component: :provider
     )
 

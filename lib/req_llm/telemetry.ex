@@ -1329,7 +1329,7 @@ defmodule ReqLLM.Telemetry do
   defp request_body_source(body), do: decode_json_body(body)
 
   defp decode_json_body(body) when is_binary(body) do
-    case Jason.decode(body) do
+    case ReqLLM.JSON.Codec.decode(body) do
       {:ok, decoded} -> decoded
       {:error, _} -> body
     end

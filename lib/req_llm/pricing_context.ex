@@ -123,7 +123,7 @@ defmodule ReqLLM.PricingContext do
   defp decoded_request_body(body) when is_map(body), do: body
 
   defp decoded_request_body(body) when is_binary(body) do
-    case Jason.decode(body) do
+    case ReqLLM.JSON.Codec.decode(body) do
       {:ok, decoded} when is_map(decoded) -> decoded
       _ -> nil
     end

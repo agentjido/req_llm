@@ -56,7 +56,9 @@ defmodule ReqLLM.Providers.OpenAI.ChatAPI do
     enhanced_body = Request.build_body(context, model_name, opts, operation)
 
     Debug.dbug(
-      fn -> "OpenAI ChatAPI request body: #{Jason.encode!(enhanced_body, pretty: true)}" end,
+      fn ->
+        "OpenAI ChatAPI request body: #{ReqLLM.JSON.Codec.encode!(enhanced_body, pretty: true)}"
+      end,
       component: :provider
     )
 
@@ -114,7 +116,7 @@ defmodule ReqLLM.Providers.OpenAI.ChatAPI do
     body = Request.build_body(context, model.provider_model_id || model.id, cleaned_opts, :chat)
     url = build_request_url(cleaned_opts)
 
-    encoded = body |> ReqLLM.Schema.apply_property_ordering() |> Jason.encode!()
+    encoded = body |> ReqLLM.Schema.apply_property_ordering() |> ReqLLM.JSON.Codec.encode!()
     {:ok, Finch.build(:post, url, headers, encoded)}
   rescue
     error ->

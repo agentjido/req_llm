@@ -28,7 +28,7 @@ defmodule ReqLLM.Compatibility.ProviderDrift do
     evidence = Keyword.get_lazy(opts, :evidence, &Evidence.load!/0)
 
     with {:ok, content} <- File.read(path),
-         {:ok, config} <- Jason.decode(content) do
+         {:ok, config} <- ReqLLM.JSON.Codec.decode(content) do
       validate_config!(config, evidence)
     else
       {:error, reason} ->

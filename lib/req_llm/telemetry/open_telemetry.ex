@@ -268,7 +268,7 @@ defmodule ReqLLM.Telemetry.OpenTelemetry do
   end
 
   defp maybe_put_arguments(attrs, args) when is_map(args) and map_size(args) > 0 do
-    case Jason.encode(args) do
+    case ReqLLM.JSON.Codec.encode(args) do
       {:ok, json} -> Map.put(attrs, "gen_ai.tool.call.arguments", json)
       _ -> attrs
     end

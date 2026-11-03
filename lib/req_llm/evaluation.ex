@@ -334,7 +334,7 @@ defmodule ReqLLM.Evaluation do
     do: {:error, invalid_parameter("questions must be a non-empty map")}
 
   defp validate_json(value) do
-    case Jason.encode(value) do
+    case ReqLLM.JSON.Codec.encode(value) do
       {:ok, _} -> :ok
       {:error, _} -> {:error, invalid_parameter("state and questions must be JSON data")}
     end

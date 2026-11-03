@@ -817,7 +817,7 @@ defmodule ReqLLM.Providers.Anthropic do
           request_path(plan)
         )
 
-      encoded = body |> ReqLLM.Schema.apply_property_ordering() |> Jason.encode!()
+      encoded = body |> ReqLLM.Schema.apply_property_ordering() |> ReqLLM.JSON.Codec.encode!()
 
       finch_request =
         :post
@@ -1874,7 +1874,7 @@ defmodule ReqLLM.Providers.Anthropic do
   defp decode_error_response(req, resp, status) do
     reason =
       try do
-        case Jason.decode(resp.body) do
+        case ReqLLM.JSON.Codec.decode(resp.body) do
           {:ok, %{"error" => %{"message" => message}}} -> message
           {:ok, %{"error" => %{"type" => error_type}}} -> "#{error_type}"
           _ -> "Anthropic API error"

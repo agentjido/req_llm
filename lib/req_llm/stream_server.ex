@@ -1347,7 +1347,7 @@ defmodule ReqLLM.StreamServer do
           component: :stream_server
         )
 
-        case Jason.decode(full) do
+        case ReqLLM.JSON.Codec.decode(full) do
           {:ok, obj} ->
             Debug.dbug(fn -> "Parsed object: #{inspect(obj)}" end, component: :stream_server)
 

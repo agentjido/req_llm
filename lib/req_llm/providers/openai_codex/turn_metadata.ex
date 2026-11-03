@@ -87,7 +87,7 @@ defmodule ReqLLM.Providers.OpenAICodex.TurnMetadata do
         "thread_id" => options[:thread_id],
         "turn_id" => turn["turn_id"],
         "x-codex-window-id" => turn["window_id"],
-        "x-codex-turn-metadata" => Jason.encode!(turn, escape: :unicode_safe)
+        "x-codex-turn-metadata" => ReqLLM.JSON.Codec.encode!(turn, escape: :unicode_safe)
       }
       |> maybe_put_installation(turn["installation_id"])
     else

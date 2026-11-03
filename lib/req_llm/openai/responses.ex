@@ -115,7 +115,7 @@ defmodule ReqLLM.OpenAI.Responses do
   @spec next_event(Session.t(), timeout()) :: {:ok, map()} | :halt | {:error, term()}
   def next_event(%Session{pid: pid}, timeout \\ 30_000) do
     with {:ok, message} <- WebSocketSession.next_message(pid, timeout) do
-      Jason.decode(message)
+      ReqLLM.JSON.Codec.decode(message)
     end
   end
 

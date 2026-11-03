@@ -1076,7 +1076,8 @@ defmodule ReqLLM.Providers.Azure do
         |> Map.delete("model")
         |> maybe_add_model_for_foundry(deployment, base_url)
 
-      {:ok, Finch.build(:post, join_url(base_url, path), headers, Jason.encode!(body))}
+      {:ok,
+       Finch.build(:post, join_url(base_url, path), headers, ReqLLM.JSON.Codec.encode!(body))}
     end
   end
 
@@ -1147,7 +1148,7 @@ defmodule ReqLLM.Providers.Azure do
       )
       |> maybe_add_model_for_foundry(deployment, base_url)
 
-    encoded = body |> ReqLLM.Schema.apply_property_ordering() |> Jason.encode!()
+    encoded = body |> ReqLLM.Schema.apply_property_ordering() |> ReqLLM.JSON.Codec.encode!()
     finch_request = Finch.build(:post, url, headers, encoded)
     {:ok, finch_request}
   end

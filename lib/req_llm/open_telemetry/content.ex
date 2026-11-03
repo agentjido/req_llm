@@ -163,7 +163,7 @@ defmodule ReqLLM.OpenTelemetry.Content do
     |> Enum.reject(&is_nil/1)
   end
 
-  defp encode_all(entries), do: Enum.map(entries, &Jason.encode!/1)
+  defp encode_all(entries), do: Enum.map(entries, &ReqLLM.JSON.Codec.encode!/1)
 
   defp request_messages(metadata) do
     metadata
@@ -222,7 +222,7 @@ defmodule ReqLLM.OpenTelemetry.Content do
   defp maybe_put_parameters(map, _name, []), do: map
 
   defp maybe_put_parameters(map, name, value) do
-    case Jason.encode(value) do
+    case ReqLLM.JSON.Codec.encode(value) do
       {:ok, _json} ->
         Map.put(map, "parameters", value)
 
@@ -497,7 +497,7 @@ defmodule ReqLLM.OpenTelemetry.Content do
   defp message_finish_reason(reason), do: inspect(reason)
 
   defp decode_tool_arguments(arguments) when is_binary(arguments) do
-    case Jason.decode(arguments) do
+    case ReqLLM.JSON.Codec.decode(arguments) do
       {:ok, decoded} -> decoded
       {:error, _} -> arguments
     end

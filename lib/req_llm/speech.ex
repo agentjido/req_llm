@@ -308,7 +308,7 @@ defmodule ReqLLM.Speech do
   defp parse_error_body(body) when is_map(body), do: body
 
   defp parse_error_body(body) when is_binary(body) do
-    case Jason.decode(body) do
+    case ReqLLM.JSON.Codec.decode(body) do
       {:ok, decoded} -> decoded
       {:error, _} -> body
     end

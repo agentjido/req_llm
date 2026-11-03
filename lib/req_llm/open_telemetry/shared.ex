@@ -110,7 +110,7 @@ defmodule ReqLLM.OpenTelemetry.Shared do
   def error_message(error), do: inspect(error)
 
   defp put_langfuse_cost(attributes, breakdown) do
-    case Jason.encode(breakdown) do
+    case ReqLLM.JSON.Codec.encode(breakdown) do
       {:ok, json} ->
         Map.put(attributes, @langfuse_cost_attr, json)
 

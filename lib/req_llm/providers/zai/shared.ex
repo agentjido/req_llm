@@ -119,7 +119,8 @@ defmodule ReqLLM.Providers.Zai.Shared do
       end
 
     try do
-      encoded_body = body |> ReqLLM.Schema.apply_property_ordering() |> Jason.encode!()
+      encoded_body =
+        body |> ReqLLM.Schema.apply_property_ordering() |> ReqLLM.JSON.Codec.encode!()
 
       request
       |> Req.Request.put_header("content-type", "application/json")
@@ -162,7 +163,7 @@ defmodule ReqLLM.Providers.Zai.Shared do
   def extract_usage(_, _), do: {:error, :no_usage}
 
   defp ensure_parsed_body(body) when is_binary(body) do
-    case Jason.decode(body) do
+    case ReqLLM.JSON.Codec.decode(body) do
       {:ok, parsed} -> parsed
       {:error, _} -> %{}
     end
@@ -382,7 +383,7 @@ defmodule ReqLLM.Providers.Zai.Shared do
   defp encode_zai_tool_call(_), do: nil
 
   defp encode_tool_call_arguments(arguments) when is_binary(arguments), do: arguments
-  defp encode_tool_call_arguments(arguments), do: Jason.encode!(arguments)
+  defp encode_tool_call_arguments(arguments), do: ReqLLM.JSON.Codec.encode!(arguments)
 
   defp fetch_first(map, keys) do
     Enum.find_value(keys, fn key -> Map.get(map, key) end)

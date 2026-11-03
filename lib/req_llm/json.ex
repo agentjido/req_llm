@@ -5,7 +5,7 @@ defmodule ReqLLM.JSON do
   def decode(json, opts \\ [])
 
   def decode(json, opts) when is_binary(json) do
-    case Jason.decode(json) do
+    case ReqLLM.JSON.Codec.decode(json) do
       {:ok, _parsed} = ok ->
         ok
 
@@ -16,7 +16,7 @@ defmodule ReqLLM.JSON do
           if repaired == json do
             {:error, error}
           else
-            Jason.decode(repaired)
+            ReqLLM.JSON.Codec.decode(repaired)
           end
         else
           {:error, error}

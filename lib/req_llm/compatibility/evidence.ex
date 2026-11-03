@@ -30,7 +30,7 @@ defmodule ReqLLM.Compatibility.Evidence do
   @spec load(Path.t(), keyword()) :: {:ok, map()} | {:error, term()}
   def load(path \\ default_path(), opts \\ []) do
     with {:ok, content} <- File.read(path),
-         {:ok, decoded} <- Jason.decode(content) do
+         {:ok, decoded} <- ReqLLM.JSON.Codec.decode(content) do
       {:ok, migrate(decoded, opts)}
     end
   end
@@ -180,7 +180,7 @@ defmodule ReqLLM.Compatibility.Evidence do
   def canonical_json(evidence) do
     evidence
     |> ordered()
-    |> Jason.encode!(pretty: true)
+    |> ReqLLM.JSON.Codec.encode!(pretty: true)
     |> Kernel.<>("\n")
   end
 
@@ -776,7 +776,7 @@ defmodule ReqLLM.Compatibility.Evidence do
       ])
 
     with {:ok, content} <- File.read(path),
-         {:ok, fixture_data} <- Jason.decode(content) do
+         {:ok, fixture_data} <- ReqLLM.JSON.Codec.decode(content) do
       fixture_request_urls(fixture_data)
     else
       _error -> []

@@ -155,7 +155,7 @@ defmodule ReqLLM.Step.Error do
 
   @spec extract_api_error_message(any()) :: String.t() | nil
   defp extract_api_error_message(body) when is_binary(body) do
-    case Jason.decode(body) do
+    case ReqLLM.JSON.Codec.decode(body) do
       {:ok, decoded} -> extract_api_error_message(decoded)
       {:error, _} -> nil
     end

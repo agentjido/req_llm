@@ -147,7 +147,7 @@ defmodule ReqLLM.Provider.Utils do
   """
   @spec ensure_parsed_body(term()) :: term()
   def ensure_parsed_body(body) when is_binary(body) do
-    case Jason.decode(body) do
+    case ReqLLM.JSON.Codec.decode(body) do
       {:ok, parsed} -> parsed
       {:error, _} -> body
     end

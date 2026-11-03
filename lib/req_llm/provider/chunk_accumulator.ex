@@ -502,7 +502,7 @@ defmodule ReqLLM.Provider.ChunkAccumulator do
   end
 
   defp response_tool_call_from_json(tool_call, json) do
-    case Jason.decode(json) do
+    case ReqLLM.JSON.Codec.decode(json) do
       {:ok, args} ->
         tool_call
         |> Map.put(:arguments, args)
@@ -603,7 +603,7 @@ defmodule ReqLLM.Provider.ChunkAccumulator do
       iodata ->
         json = IO.iodata_to_binary(iodata)
 
-        case Jason.decode(json) do
+        case ReqLLM.JSON.Codec.decode(json) do
           {:ok, decoded} -> decoded
           {:error, _reason} -> arguments
         end
@@ -613,7 +613,7 @@ defmodule ReqLLM.Provider.ChunkAccumulator do
   defp encode_tool_call_args(args) when is_binary(args), do: args
 
   defp encode_tool_call_args(args) when is_map(args) or is_list(args) do
-    case Jason.encode(args) do
+    case ReqLLM.JSON.Codec.encode(args) do
       {:ok, json} -> json
       {:error, _reason} -> "{}"
     end

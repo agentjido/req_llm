@@ -545,7 +545,7 @@ defmodule ReqLLM.Doctor do
     if oauth_supported?(provider) do
       with path when is_binary(path) <- oauth_file_path(),
            {:ok, body} <- File.read(path),
-           {:ok, payload} when is_map(payload) <- Jason.decode(body) do
+           {:ok, payload} when is_map(payload) <- ReqLLM.JSON.Codec.decode(body) do
         oauth_provider_keys(provider)
         |> Enum.any?(fn key -> credential_record_present?(Map.get(payload, key)) end)
       else

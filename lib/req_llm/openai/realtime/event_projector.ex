@@ -115,7 +115,7 @@ defmodule ReqLLM.OpenAI.Realtime.EventProjector do
     with id when is_binary(id) and id != "" <- event_call_id(event),
          name when is_binary(name) and name != "" <- value(event, "name"),
          arguments when is_binary(arguments) <- value(event, "arguments"),
-         {:ok, decoded} when is_map(decoded) <- Jason.decode(arguments) do
+         {:ok, decoded} when is_map(decoded) <- ReqLLM.JSON.Codec.decode(arguments) do
       data = %{
         id: id,
         name: name,

@@ -64,7 +64,7 @@ defmodule ReqLLM.Providers.OpenAI.OAuth do
   defp ensure_map(body) when is_map(body), do: body
 
   defp ensure_map(body) when is_binary(body) do
-    case Jason.decode(body) do
+    case ReqLLM.JSON.Codec.decode(body) do
       {:ok, payload} -> payload
       {:error, _error} -> %{}
     end
@@ -93,7 +93,7 @@ defmodule ReqLLM.Providers.OpenAI.OAuth do
     case String.split(token, ".") do
       [_header, payload, _signature] ->
         with {:ok, decoded} <- Base.url_decode64(payload, padding: false),
-             {:ok, claims} <- Jason.decode(decoded),
+             {:ok, claims} <- ReqLLM.JSON.Codec.decode(decoded),
              %{"chatgpt_account_id" => account_id} when is_binary(account_id) <-
                get_in(claims, [@jwt_claim_path]) do
           account_id

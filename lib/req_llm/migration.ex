@@ -12,7 +12,7 @@ defmodule ReqLLM.Migration do
 
   @ledger_path Path.expand("../../priv/deprecations.json", __DIR__)
   @external_resource @ledger_path
-  @ledger @ledger_path |> File.read!() |> Jason.decode!()
+  @ledger @ledger_path |> File.read!() |> ReqLLM.JSON.Codec.decode!()
 
   @deprecation_keys ~w(id owner contract replacement introduced_version target_major v2_scope minimum_window guide detector)
   @migration_check_keys ~w(id owner contract replacement target_major v2_scope actionable guide detector)

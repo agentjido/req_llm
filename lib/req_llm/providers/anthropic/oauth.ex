@@ -67,7 +67,7 @@ defmodule ReqLLM.Providers.Anthropic.OAuth do
   defp ensure_map(body) when is_map(body), do: body
 
   defp ensure_map(body) when is_binary(body) do
-    case Jason.decode(body) do
+    case ReqLLM.JSON.Codec.decode(body) do
       {:ok, payload} -> payload
       {:error, _error} -> %{}
     end

@@ -557,7 +557,7 @@ defmodule ReqLLM.Provider.Defaults do
             method: :post,
             base_url: Keyword.get(opts, :base_url, provider_mod.default_base_url()),
             receive_timeout: timeout,
-            body: Jason.encode!(body),
+            body: ReqLLM.JSON.Codec.encode!(body),
             # Disable Req's automatic JSON decoding — response is raw audio binary
             decode_body: false
           ] ++
@@ -1716,7 +1716,7 @@ defmodule ReqLLM.Provider.Defaults do
   defp decode_openai_tool_call_delta(_), do: nil
 
   defp build_openai_tool_call_chunk(name, args_json, metadata) do
-    case Jason.decode(args_json || "{}") do
+    case ReqLLM.JSON.Codec.decode(args_json || "{}") do
       {:ok, decoded_args} ->
         {arguments, extra_metadata} = normalize_tool_call_arguments(decoded_args, args_json)
         ReqLLM.StreamChunk.tool_call(name, arguments, Map.merge(metadata, extra_metadata))
@@ -1931,7 +1931,7 @@ defmodule ReqLLM.Provider.Defaults do
 
         req
         |> Req.Request.put_header("content-type", "application/json")
-        |> Map.put(:body, Jason.encode!(body))
+        |> Map.put(:body, ReqLLM.JSON.Codec.encode!(body))
       end
   """
   def build_openai_chat_body(request), do: encode_chat_body(request)

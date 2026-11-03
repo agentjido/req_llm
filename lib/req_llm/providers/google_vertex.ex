@@ -530,7 +530,7 @@ defmodule ReqLLM.Providers.GoogleVertex do
       when status in 200..299 do
     body =
       case response.body do
-        b when is_binary(b) -> Jason.decode!(b)
+        b when is_binary(b) -> ReqLLM.JSON.Codec.decode!(b)
         b when is_map(b) -> b
       end
 
@@ -1041,7 +1041,7 @@ defmodule ReqLLM.Providers.GoogleVertex do
           {"Accept", "text/event-stream"}
         ]
 
-        finch_request = Finch.build(:post, url, headers, Jason.encode!(body))
+        finch_request = Finch.build(:post, url, headers, ReqLLM.JSON.Codec.encode!(body))
         {:ok, finch_request}
 
       {:error, reason} ->
