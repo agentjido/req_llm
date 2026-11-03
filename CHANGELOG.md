@@ -9,6 +9,97 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- changelog -->
 
+## [v1.30.0](https://github.com/agentjido/req_llm/compare/v1.29.0...v1.30.0) (2026-11-03)
+
+
+
+
+### Features:
+
+* xai: expose normalized watermark metadata (#1238) by mikehostetler
+
+* pass extra_metadata through to request telemetry events (#1223) by Amber-Cloud
+
+* minimax: forward reasoning effort and thinking controls (#1169) by Gilbert
+
+* bedrock: send structured output on the bedrock-mantle Messages API (#1167) by adriencohen
+
+* inference: add first-class Inference.net provider (#1154) by mikehostetler
+
+* cheaperinference: add Cheaper Inference provider (#1142) by aiapienthusiast
+
+* openai: accept context state with images in Decisions evaluations (#1147) by mhsdef
+
+* retry: let callers choose the HTTP statuses that requests retry (#1143) by Gilles Dubuc
+
+### Bug Fixes:
+
+* google_vertex: handle non-2xx responses (#1237) by mikehostetler
+
+* deps: require patched JSV and unblock offline CI (#1235) by mikehostetler
+
+* mistral: accept low and medium reasoning effort (#1228) by mikehostetler
+
+* ignore invalid retry-after headers (#1224) by mikehostetler
+
+* preserve streaming error compatibility (#1219) by mikehostetler
+
+* test: restore environment variables changed by ProviderCase (#1198) by Tom Jaster
+
+* bedrock: route GPT-6 models on /openai/v1 and accept every service tier (#1166) by adriencohen
+
+* google: expose tool-use input tokens (#1165) by mikehostetler
+
+* stop sending message metadata in OpenAI-compatible requests (#1163) by Gustavo Honorato
+
+* google: accept only a boolean for google_url_context (#1161) by Peter Hoeg
+
+* opentelemetry: count cache reads and writes in input tokens (#1160) by Yannis Weishaupt
+
+* honor openai_structured_output_mode :tool_strict on Azure (#1159) by Arton Ragsdale
+
+* xai: drop stop and penalty options on reasoning models (#1158) by pcbeingused333
+
+* google: preserve text thought signatures across continuations (#1127) by Gabriel Rinaldi
+
+* fireworks_ai: omit chat options from embeddings (#1152) by mikehostetler
+
+* timeout: preserve OpenTelemetry context in deadline tasks (#1149) by Gilles Dubuc
+
+* preserve message names in loose maps (#1146) by mikemikimike
+
+### Refactoring:
+
+* route streaming through request runtime (#1218) by mikehostetler
+
+* route workflow requests through v1 runtime (#1216) by Tom Jaster
+
+* migrate buffered generation to v1 runtime (#1214) by Tom Jaster
+
+* migrate single-request operations to v1 runtime (#1215) by Tom Jaster
+
+* add v1 runtime and migrate OCR execution (#1213) by Tom Jaster
+
+* add internal v1 provider adapter (#1212) by Tom Jaster
+
+* generalize request plans for v1 operations (#1203) by Tom Jaster
+
+* separate pure stream decoding from StreamServer (#1205) by Tom Jaster
+
+* test: split OpenAI Responses API tests by responsibility (#1210) by Tom Jaster
+
+* test: split Azure provider tests by responsibility (#1209) by Tom Jaster
+
+* test: split Bedrock provider tests by responsibility (#1208) by Tom Jaster
+
+* test: split Anthropic provider tests by responsibility (#1207) by Tom Jaster
+
+* test: split Google provider tests by responsibility (#1206) by Tom Jaster
+
+* test: normalize the canonical v1.x test layout (#1202) by Tom Jaster
+
+* providers: remove redundant defaults macro uses (#1199) by Tom Jaster
+
 ## [1.29.0](https://github.com/agentjido/req_llm/compare/v1.28.0...v1.29.0) (2026-10-22)
 
 
