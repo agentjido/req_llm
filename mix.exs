@@ -231,34 +231,34 @@ defmodule ReqLLM.MixProject do
   defp deps do
     [
       {:jason, "~> 1.4"},
-      {:dotenvy, "~> 1.1"},
-      {:nimble_options, "~> 1.1"},
-      {:req, "~> 0.6"},
-      {:finch, "~> 0.22"},
+      {:dotenvy, "~> 1.2"},
+      {:nimble_options, "~> 1.2"},
+      {:req, "~> 0.7"},
+      {:finch, "~> 0.24"},
       {:goth, "~> 1.4", optional: true},
       {:ex_aws_auth, "~> 1.5", optional: true},
       {:server_sent_events, "~> 1.1.0"},
-      {:splode, "~> 0.3.0"},
+      {:splode, "~> 0.3.3"},
       {:websockex, "~> 0.5.1"},
-      {:zoi, "~> 0.18.11"},
+      {:zoi, "~> 0.19.0"},
       {:jsv, "~> 0.26 and >= 0.26.2"},
-      {:llm_db, "~> 2026.10.7"},
+      {:llm_db, "~> 2026.11.0"},
 
       # Dev/test dependencies
       {:opentelemetry_api, "~> 1.5", only: :test},
       {:bandit, "~> 1.14.1", only: [:dev, :test], runtime: false},
-      {:tidewave, "~> 0.5", only: :dev, runtime: false},
+      {:tidewave, "~> 0.9", only: :dev, runtime: false},
       {:ex_doc, "~> 0.40.4", only: :dev, runtime: false},
       {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false},
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
       {:excoveralls, "~> 0.18", only: [:dev, :test], runtime: false},
-      {:plug, "~> 1.0", only: [:dev, :test], runtime: false},
+      {:plug, "~> 1.20", only: [:dev, :test], runtime: false},
       {:websock_adapter, "~> 0.7.0", only: [:dev, :test], runtime: false},
-      {:git_ops, "~> 2.9", only: :dev, runtime: false},
-      {:git_hooks, "~> 0.8", only: :dev, runtime: false},
+      {:git_ops, "~> 2.12", only: :dev, runtime: false},
+      {:git_hooks, "~> 0.9", only: :dev, runtime: false},
 
       # Optional
-      {:igniter, "~> 0.7", optional: true}
+      {:igniter, "~> 0.8", optional: true}
     ]
   end
 

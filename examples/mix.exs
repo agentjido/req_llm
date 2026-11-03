@@ -20,7 +20,7 @@ defmodule ReqLLMExamples.MixProject do
   defp deps do
     [
       {:req_llm, path: ".."},
-      {:phoenix_playground, "~> 0.1.8"}
+      {:phoenix_playground, "~> 0.1.9"}
     ]
   end
 end

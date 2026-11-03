@@ -32,8 +32,8 @@ provider-native feature and are not consulted by request routing.
 | --- | ---: |
 | First-class | 7 |
 | Best-effort | 0 |
-| Experimental | 613 |
-| Unsupported | 77 |
+| Experimental | 616 |
+| Unsupported | 74 |
 | **Total recorded surfaces** | **697** |
 
 ## anthropic
@@ -170,9 +170,9 @@ provider-native feature and are not consulted by request routing.
 | `veo-2.0-generate-001` | `text` | `google.unrecorded_text` | text → text | Experimental | 0/5 | 2026-05-30T01:01:43Z | surface declaration unknown |
 | `veo-3.0-fast-generate-001` | `text` | `google.unrecorded_text` | text → text | Experimental | 0/5 | 2026-05-30T01:01:43Z | surface declaration unknown |
 | `veo-3.0-generate-001` | `text` | `google.unrecorded_text` | text → text | Experimental | 0/5 | 2026-05-30T01:01:43Z | surface declaration unknown |
-| `veo-3.1-fast-generate-preview` | `text` | `google.unrecorded_text` | text → text | Unsupported | 0/5 | 2026-05-30T01:01:43Z | basic failed at provider_drift |
-| `veo-3.1-generate-preview` | `text` | `google.unrecorded_text` | text → text | Unsupported | 0/5 | 2026-05-30T01:01:43Z | basic failed at provider_drift |
-| `veo-3.1-lite-generate-preview` | `text` | `google.unrecorded_text` | text → text | Unsupported | 0/5 | 2026-05-30T01:01:43Z | basic failed at provider_drift |
+| `veo-3.1-fast-generate-preview` | `text` | `google.unrecorded_text` | text → text | Experimental | 0/5 | 2026-05-30T01:01:43Z | surface declaration unknown |
+| `veo-3.1-generate-preview` | `text` | `google.unrecorded_text` | text → text | Experimental | 0/5 | 2026-05-30T01:01:43Z | surface declaration unknown |
+| `veo-3.1-lite-generate-preview` | `text` | `google.unrecorded_text` | text → text | Experimental | 0/5 | 2026-05-30T01:01:43Z | surface declaration unknown |
 
 ## groq
 
@@ -300,7 +300,7 @@ provider-native feature and are not consulted by request routing.
 | `arcee-ai/coder-large` | `text` | `openrouter.unrecorded_text` | text → text | Experimental | 0/5 | 2026-05-30T00:13:54Z | surface declaration unknown |
 | `arcee-ai/maestro-reasoning` | `text` | `openrouter.unrecorded_text` | text → text | Experimental | 0/5 | 2026-05-30T00:13:54Z | surface declaration unknown |
 | `arcee-ai/spotlight` | `text` | `openrouter.unrecorded_text` | text → text | Experimental | 0/5 | 2026-05-30T00:13:54Z | surface declaration unknown |
-| `arcee-ai/trinity-large-thinking` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:13:54Z | missing or stale evidence |
+| `arcee-ai/trinity-large-thinking` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:13:54Z | surface declaration unknown |
 | `arcee-ai/trinity-mini` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:13:54Z | surface declaration unknown |
 | `arcee-ai/virtuoso-large` | `text` | `openrouter.unrecorded_text` | text → text | Experimental | 0/5 | 2026-05-30T00:13:54Z | surface declaration unknown |
 | `baai/bge-base-en-v1.5` | `embedding` | `openrouter.embedding` | text → embedding | Experimental | 0/3 | 2026-05-30T00:56:13Z | missing or stale evidence |
@@ -354,7 +354,7 @@ provider-native feature and are not consulted by request routing.
 | `google/gemma-4-26b-a4b-it:free` | `text` | `openrouter.unrecorded_text` | text → text | Unsupported | 0/5 | 2026-05-29T23:42:35Z | basic failed at provider_drift |
 | `google/gemma-4-31b-it` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:42:35Z | missing or stale evidence |
 | `google/gemma-4-31b-it:free` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:42:35Z | missing or stale evidence |
-| `ibm-granite/granite-4.0-h-micro` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:20:36Z | missing or stale evidence |
+| `ibm-granite/granite-4.0-h-micro` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:20:36Z | surface declaration unknown |
 | `ibm-granite/granite-4.1-8b` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:20:36Z | surface declaration unknown |
 | `inception/mercury-2` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:20:46Z | missing or stale evidence |
 | `inclusionai/ling-2.6-1t` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:16:15Z | surface declaration unknown |
@@ -434,7 +434,7 @@ provider-native feature and are not consulted by request routing.
 | `nvidia/nemotron-3-nano-30b-a3b:free` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:44:50Z | surface declaration unknown |
 | `nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:44:50Z | missing or stale evidence |
 | `nvidia/nemotron-3-super-120b-a12b` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:44:50Z | missing or stale evidence |
-| `nvidia/nemotron-3-super-120b-a12b:free` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:44:50Z | missing or stale evidence |
+| `nvidia/nemotron-3-super-120b-a12b:free` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:44:50Z | surface declaration unknown |
 | `nvidia/nemotron-nano-12b-v2-vl:free` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:44:50Z | surface declaration unknown |
 | `nvidia/nemotron-nano-9b-v2:free` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:44:50Z | surface declaration unknown |
 | `openai/gpt-4o-mini` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T16:17:31Z | missing or stale evidence |
@@ -483,7 +483,7 @@ provider-native feature and are not consulted by request routing.
 | `qwen/qwen3-embedding-8b` | `embedding` | `openrouter.embedding` | text → embedding | Experimental | 0/3 | 2026-05-30T00:56:13Z | missing or stale evidence |
 | `qwen/qwen3-max-thinking` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:42:04Z | surface declaration unknown |
 | `qwen/qwen3-next-80b-a3b-instruct:free` | `text` | `openrouter.unrecorded_text` | text → text | Experimental | 0/5 | 2026-05-29T23:42:04Z | surface declaration unknown |
-| `qwen/qwen3-next-80b-a3b-thinking` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:42:04Z | missing or stale evidence |
+| `qwen/qwen3-next-80b-a3b-thinking` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:42:04Z | surface declaration unknown |
 | `qwen/qwen3-vl-235b-a22b-instruct` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:42:04Z | missing or stale evidence |
 | `qwen/qwen3-vl-235b-a22b-thinking` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:42:04Z | surface declaration unknown |
 | `qwen/qwen3-vl-30b-a3b-instruct` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:42:04Z | missing or stale evidence |
@@ -553,7 +553,7 @@ provider-native feature and are not consulted by request routing.
 | `claude-opus-4-6-fast` | `text` | `venice.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:55:12Z | surface declaration unknown |
 | `claude-opus-4-7` | `text` | `venice.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:55:12Z | missing or stale evidence |
 | `claude-opus-4-7-fast` | `text` | `venice.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:55:12Z | surface declaration unknown |
-| `claude-sonnet-4-5` | `text` | `venice.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:55:12Z | missing or stale evidence |
+| `claude-sonnet-4-5` | `text` | `venice.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:55:12Z | surface declaration unknown |
 | `claude-sonnet-4-6` | `text` | `venice.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:55:12Z | missing or stale evidence |
 | `deepseek-v3.2` | `text` | `venice.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:55:12Z | missing or stale evidence |
 | `deepseek-v4-flash` | `text` | `venice.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:55:12Z | missing or stale evidence |
@@ -699,7 +699,7 @@ provider-native feature and are not consulted by request routing.
 | `anthropic/claude-sonnet-4.6` | `text` | `zenmux.unrecorded_text` | text → text | Unsupported | 0/5 | 2026-05-30T00:10:17Z | basic failed at provider_drift |
 | `baidu/ernie-5.0-thinking-preview` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
 | `baidu/ernie-5.1` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
-| `baidu/ernie-x1.1-preview` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
+| `baidu/ernie-x1.1-preview` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | surface declaration unknown |
 | `bytedance/doubao-seed-1.8` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
 | `bytedance/doubao-seed-2.0-code` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
 | `bytedance/doubao-seed-2.0-lite` | `text` | `zenmux.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:10:17Z | missing or stale evidence |
