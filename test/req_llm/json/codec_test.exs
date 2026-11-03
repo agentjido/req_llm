@@ -25,6 +25,13 @@ defmodule ReqLLM.JSON.CodecTest do
     assert Codec.decode(~s({"a":1})) == {:ok, %{"a" => 1}}
   end
 
+  test "uses Jason while the configured library can't be loaded" do
+    Application.put_env(:req_llm, :json_library, NotCompiledYet.JSON)
+
+    assert Codec.library() == Jason
+    assert Codec.decode(~s({"a":1})) == {:ok, %{"a" => 1}}
+  end
+
   describe "with a configured library" do
     setup do
       Application.put_env(:req_llm, :json_library, UpcaseCodec)

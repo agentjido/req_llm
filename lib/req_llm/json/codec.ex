@@ -11,9 +11,15 @@ defmodule ReqLLM.JSON.Codec do
   library rejects is retried with Jason. Calls passing Jason options always go to Jason.
   """
 
-  @doc "The configured JSON library, Jason by default."
+  @doc """
+  The configured JSON library, Jason by default or while the configured one can't be loaded: ReqLLM
+  decodes JSON at compile time, before the application configuring the library is compiled.
+  """
   @spec library() :: module()
-  def library, do: Application.get_env(:req_llm, :json_library, Jason)
+  def library do
+    library = Application.get_env(:req_llm, :json_library, Jason)
+    if Code.ensure_loaded?(library), do: library, else: Jason
+  end
 
   @spec encode(term(), keyword()) :: {:ok, binary()} | {:error, term()}
   def encode(term, opts \\ [])
