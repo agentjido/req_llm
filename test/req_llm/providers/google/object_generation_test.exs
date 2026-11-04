@@ -140,6 +140,7 @@ defmodule ReqLLM.Providers.Google.ObjectGenerationTest do
           operation: :object,
           compiled_schema: schema,
           google_thinking_level: :low,
+          google_include_thoughts: true,
           provider_options: [google_api_version: "v1beta"]
         ]
       }
