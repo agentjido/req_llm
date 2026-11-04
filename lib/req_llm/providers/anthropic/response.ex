@@ -454,18 +454,18 @@ defmodule ReqLLM.Providers.Anthropic.Response do
       total_tokens: 0,
       cached_tokens: 0,
       reasoning_tokens: 0,
-      usage_reported: %{input: false, output: false}
+      usage_reported: %{input: false, output: false, cache_read: false, cache_write: false}
     }
 
   defp maybe_put_usage_reported(base, usage) do
     reported = %{
       input: not is_nil(Map.get(usage, "input_tokens")),
-      output: not is_nil(Map.get(usage, "output_tokens"))
+      output: not is_nil(Map.get(usage, "output_tokens")),
+      cache_read: not is_nil(Map.get(usage, "cache_read_input_tokens")),
+      cache_write: not is_nil(Map.get(usage, "cache_creation_input_tokens"))
     }
 
-    if reported.input and reported.output,
-      do: base,
-      else: Map.put(base, :usage_reported, reported)
+    Map.put(base, :usage_reported, reported)
   end
 
   defp anthropic_tool_usage(usage) when is_map(usage) do

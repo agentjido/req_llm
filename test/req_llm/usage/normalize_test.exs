@@ -3,6 +3,43 @@ defmodule ReqLLM.Usage.NormalizeTest do
 
   alias ReqLLM.Usage.Normalize
 
+  test "preserves explicitly reported cache presence without inferring it from default counters" do
+    raw = %{input_tokens: 12, output_tokens: 4, cache_read_tokens: 0, cache_write_tokens: 0}
+    absent = ReqLLM.Usage.normalize(raw)
+    refute Map.has_key?(absent.usage_reported, :cache_read)
+    refute Map.has_key?(absent.usage_reported, :cache_write)
+
+    for reported <- [
+          %{input: true, output: true, cache_read: false, cache_write: true},
+          %{"input" => true, "output" => true, "cache_read" => false, "cache_write" => true}
+        ] do
+      normalized = ReqLLM.Usage.normalize(Map.put(raw, :usage_reported, reported))
+
+      assert normalized.usage_reported == %{
+               input: true,
+               output: true,
+               cache_read: false,
+               cache_write: true
+             }
+
+      assert ReqLLM.Usage.normalize(normalized) == normalized
+      assert normalized.cache_read_tokens == 0
+      assert normalized.cache_write_tokens == 0
+    end
+  end
+
+  test "malformed cache presence flags cannot become valid reported facts" do
+    for field <- [:cache_read, :cache_write], invalid <- [nil, "true", 1, [], %{}] do
+      reported = Map.put(%{input: true, output: true}, field, invalid)
+
+      normalized =
+        ReqLLM.Usage.normalize(%{input_tokens: 12, output_tokens: 4, usage_reported: reported})
+
+      refute normalized.billing_usage_complete
+      assert normalized.usage_reported == %{input: false, output: false}
+    end
+  end
+
   test "invalid reported flags remain unpriced and can merge without an error" do
     model = ReqLLM.model!("openai:gpt-5-nano")
 

@@ -157,6 +157,7 @@ defmodule ReqLLM.Usage.Normalize do
             reported?(usage, [:output, :completion_tokens, :output_tokens, :candidatesTokenCount])
           )
       }
+      |> Map.merge(cache_reported_flags(reported))
     else
       %{input: false, output: false}
     end
@@ -167,10 +168,20 @@ defmodule ReqLLM.Usage.Normalize do
   defp usage_reported_valid?(reported) when is_map(reported) do
     Enum.all?([:input, :output], fn key ->
       MapAccess.get_raw(reported, key, false) in [true, false]
-    end)
+    end) and Enum.all?(cache_reported_flags(reported), fn {_key, value} -> is_boolean(value) end)
   end
 
   defp usage_reported_valid?(_reported), do: false
+
+  defp cache_reported_flags(reported) when is_map(reported) do
+    for key <- [:cache_read, :cache_write],
+        Map.has_key?(reported, key) or Map.has_key?(reported, Atom.to_string(key)),
+        into: %{} do
+      {key, MapAccess.get_raw(reported, key)}
+    end
+  end
+
+  defp cache_reported_flags(_), do: %{}
 
   defp boolean_fact_valid?(value), do: value in [nil, true, false]
 
