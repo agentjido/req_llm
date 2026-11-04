@@ -172,7 +172,7 @@ config :llm_db,
     ],
     groq: [
       name: "Groq",
-      base_url: "https://api.groq.com",
+      base_url: "https://api.groq.com/openai/v1",
       env: ["GROQ_API_KEY"],
       models: %{
         "llama3-8b-8192" => %{
