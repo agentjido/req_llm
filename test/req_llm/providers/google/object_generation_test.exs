@@ -368,45 +368,52 @@ defmodule ReqLLM.Providers.Google.ObjectGenerationTest do
              end)
     end
 
-    test "decode_response for :object preserves function calls and thought signatures" do
-      google_response = %{
-        "candidates" => [
-          %{
-            "content" => %{
-              "parts" => [
-                %{
-                  "functionCall" => %{
-                    "name" => "get_weather",
-                    "args" => %{"city" => "Madrid"},
-                    "id" => "call-1"
-                  },
-                  "thoughtSignature" => "sig_abc"
-                }
-              ],
-              "role" => "model"
-            },
-            "finishReason" => "STOP"
-          }
-        ]
-      }
+    for operation <- [:chat, :object] do
+      test "decode_response for #{operation} preserves function calls and thought signatures" do
+        google_response = %{
+          "candidates" => [
+            %{
+              "content" => %{
+                "parts" => [
+                  %{
+                    "functionCall" => %{
+                      "name" => "get_weather",
+                      "args" => %{"city" => "Madrid"},
+                      "id" => "call-1"
+                    },
+                    "thoughtSignature" => "sig_abc"
+                  }
+                ],
+                "role" => "model"
+              },
+              "finishReason" => "STOP"
+            }
+          ]
+        }
 
-      mock_resp = %Req.Response{status: 200, body: google_response}
-      context = context_fixture()
+        mock_resp = %Req.Response{status: 200, body: google_response}
+        context = context_fixture()
 
-      mock_req = %Req.Request{
-        options: [context: context, stream: false, operation: :object, model: "gemini-3-flash"]
-      }
+        mock_req = %Req.Request{
+          options: [
+            context: context,
+            stream: false,
+            operation: unquote(operation),
+            model: "gemini-3-flash"
+          ]
+        }
 
-      {_req, resp} = Google.decode_response({mock_req, mock_resp})
-      response = resp.body
+        {_req, resp} = Google.decode_response({mock_req, mock_resp})
+        response = resp.body
 
-      assert [tool_call] = ReqLLM.Response.tool_calls(response)
-      assert tool_call.function.name == "get_weather"
-      assert tool_call.id == "call-1"
-      assert Jason.decode!(tool_call.function.arguments) == %{"city" => "Madrid"}
-      assert ReqLLM.Response.finish_reason(response) == :tool_calls
-      assert response.object == nil
-      assert ReqLLM.ToolCall.metadata(tool_call)[:thought_signature] == "sig_abc"
+        assert [tool_call] = ReqLLM.Response.tool_calls(response)
+        assert tool_call.function.name == "get_weather"
+        assert tool_call.id == "call-1"
+        assert Jason.decode!(tool_call.function.arguments) == %{"city" => "Madrid"}
+        assert ReqLLM.Response.finish_reason(response) == :tool_calls
+        assert response.object == nil
+        assert ReqLLM.ToolCall.metadata(tool_call)[:thought_signature] == "sig_abc"
+      end
     end
   end
 end

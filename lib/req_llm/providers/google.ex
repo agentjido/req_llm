@@ -1731,6 +1731,7 @@ defmodule ReqLLM.Providers.Google do
 
             response = attach_text_thought_signatures(response, body)
 
+            response = attach_function_call_thought_signatures(response, body)
             response_with_reasoning = attach_reasoning_details(response, reasoning_details)
             tool_usage = google_tool_usage(body, model)
             image_usage = google_image_usage(body)
