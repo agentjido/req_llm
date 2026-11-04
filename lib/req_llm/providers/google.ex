@@ -15,6 +15,7 @@ defmodule ReqLLM.Providers.Google do
   - `google_candidate_count` - Number of response candidates to generate (default: 1)
   - `google_grounding` - Enable Google Search grounding (built-in web search). Requires `google_api_version: "v1beta"`
   - `google_thinking_budget` - Thinking token budget for Gemini 2.5 models (cannot be combined with `google_thinking_level`)
+  - `google_include_thoughts` - Whether chat requests ask for thought summaries (default: `true`)
   - `google_thinking_level` - Thinking level for Gemini 3+ models (`:minimal`, `:low`, `:medium`, `:high`). Cannot be combined with `google_thinking_budget`
   - `cached_content` - Reference to cached content for 90% cost savings (see Context Caching below)
   - `dimensions` - Number of dimensions for embedding vectors
@@ -117,6 +118,12 @@ defmodule ReqLLM.Providers.Google do
       type: :non_neg_integer,
       doc:
         "Thinking token budget for Gemini 2.5 models (0 disables thinking, omit for dynamic). Cannot be combined with google_thinking_level."
+    ],
+    google_include_thoughts: [
+      type: :boolean,
+      default: true,
+      doc:
+        "Request thought summaries for chat when thinking is configured. Does not change the thinking budget or level."
     ],
     google_thinking_level: [
       type: {:or, [:atom, :string]},
@@ -1354,7 +1361,8 @@ defmodule ReqLLM.Providers.Google do
       |> maybe_put(:candidateCount, candidate_count(model_name, request.options))
       |> maybe_add_thinking_config(
         request.options[:google_thinking_budget],
-        request.options[:google_thinking_level]
+        request.options[:google_thinking_level],
+        Access.get(request.options, :google_include_thoughts, true)
       )
 
     %{}

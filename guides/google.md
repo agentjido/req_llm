@@ -94,6 +94,13 @@ Passed via `:provider_options` keyword:
 - **Omit**: Dynamic allocation (default)
 - **Example**: `provider_options: [google_thinking_budget: 4096]`
 
+### `google_include_thoughts`
+- **Type**: Boolean
+- **Default**: `true` for chat (including streaming); structured output always disables summaries
+- **Purpose**: Request thought summaries when a thinking budget or level is configured. Set to `false` when the caller does not consume summaries; this preserves the thinking budget/level.
+- **Example**: `provider_options: [google_thinking_budget: 2048, google_include_thoughts: false]`
+- **Note**: Has no effect when thinking is disabled or no thinking budget/level is configured.
+
 ### `google_safety_settings`
 - **Type**: List of maps
 - **Purpose**: Configure content safety filters
