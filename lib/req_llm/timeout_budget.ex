@@ -59,6 +59,7 @@ defmodule ReqLLM.TimeoutBudget do
       |> Req.Request.append_request_steps(
         llm_timeout_capture: &__MODULE__.capture_request_context/1
       )
+      |> stop_retries_at(deadline)
 
     case remaining(deadline) do
       0 ->
@@ -83,6 +84,30 @@ defmodule ReqLLM.TimeoutBudget do
     end
 
     request
+  end
+
+  # The caller enforces the deadline from Task.yield/2, but a busy scheduler can
+  # wake it late while the request task keeps running. An attempt that ends
+  # after the deadline (for example on its own receive timeout) must not start
+  # another one: nobody waits for its result, and it repeats a billed request.
+  defp stop_retries_at(%Req.Request{options: %{retry: retry}} = request, deadline)
+       when is_function(retry, 2) do
+    Req.Request.merge_options(request, retry: &retry_before_deadline(retry, deadline, &1, &2))
+  end
+
+  defp stop_retries_at(request, _deadline), do: request
+
+  defp retry_before_deadline(retry, deadline, request, response_or_exception) do
+    case remaining(deadline) do
+      0 ->
+        false
+
+      remaining ->
+        case retry.(request, response_or_exception) do
+          {:delay, delay} when delay >= remaining -> false
+          decision -> decision
+        end
+    end
   end
 
   defp configured_stream_idle_timeout do
