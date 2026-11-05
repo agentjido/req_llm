@@ -126,7 +126,7 @@ defmodule ReqLLM.Usage.ProviderCostTest do
                %{cost: 0.01, byok: true, upstream_cost: nil}
 
       usage = %{input_tokens: 10, output_tokens: 2, provider_cost: %{cost: -0.5, byok: false}}
-      refute Map.has_key?(Cost.apply_provider_cost(usage), :total_cost)
+      refute Map.has_key?(Cost.apply(usage, nil), :total_cost)
     end
 
     test "is read through string keys" do
