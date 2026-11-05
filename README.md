@@ -76,6 +76,7 @@ show the module's broad scope. The selected model can support fewer operations.
 | Reflection AI | `reflection` | text | [Guide](guides/reflection.md) |
 | [StepFun China](https://llmcatalog.dev/?providers=stepfun) | `stepfun` | text, speech, transcription | [Guide](guides/stepfun.md) |
 | [StepFun Global](https://llmcatalog.dev/?providers=stepfun_ai) | `stepfun_ai` | text, speech, transcription | [Guide](guides/stepfun.md) |
+| [Superlinked Inference Engine](https://console.superlinked.com/console) | `superlinked` | text, streaming, tools, embedding, rerank | [Guide](guides/superlinked.md) |
 | [TypeSafe](https://llmcatalog.dev/?providers=typesafe) | `typesafe` | evaluation | [Example](#evaluation-models) |
 | [Venice](https://llmcatalog.dev/?providers=venice) | `venice` | text | — |
 | [xAI](https://llmcatalog.dev/?providers=xai) | `xai` | text, image | [Guide](guides/xai.md) |
@@ -735,7 +736,7 @@ This approach gives you full control over the Req pipeline, allowing you to add 
 - [Mix Tasks](guides/mix-tasks.md) – model sync, compatibility testing, code generation
 - [Fixture Testing](guides/fixture-testing.md) – model validation and supported models
 - [Adding a Provider](guides/adding_a_provider.md) – extend with new providers
-- Provider Guides: [Amazon Bedrock](guides/amazon_bedrock.md), [Anthropic](guides/anthropic.md), [Azure](guides/azure.md), [Cerebras](guides/cerebras.md), [DeepSeek](guides/deepseek.md), [Fireworks AI](guides/fireworks_ai.md), [GitHub Copilot](guides/github_copilot.md), [Google](guides/google.md), [Google Vertex](guides/google_vertex.md), [Groq](guides/groq.md), [Inference.net](guides/inference.md), [LM Studio](guides/lmstudio.md), [Meta](guides/meta.md), [Moonshot AI](guides/moonshot_ai.md), [NEAR AI](guides/nearai.md), [Ollama](guides/ollama.md), [OpenAI](guides/openai.md), [OpenRouter](guides/openrouter.md), [Reflection AI](guides/reflection.md), [StepFun](guides/stepfun.md), [xAI](guides/xai.md), [Z.AI](guides/zai.md), [Z.AI Coder](guides/zai_coder.md), [Zenmux](guides/zenmux.md)
+- Provider Guides: [Amazon Bedrock](guides/amazon_bedrock.md), [Anthropic](guides/anthropic.md), [Azure](guides/azure.md), [Cerebras](guides/cerebras.md), [DeepSeek](guides/deepseek.md), [Fireworks AI](guides/fireworks_ai.md), [GitHub Copilot](guides/github_copilot.md), [Google](guides/google.md), [Google Vertex](guides/google_vertex.md), [Groq](guides/groq.md), [Inference.net](guides/inference.md), [LM Studio](guides/lmstudio.md), [Meta](guides/meta.md), [Moonshot AI](guides/moonshot_ai.md), [NEAR AI](guides/nearai.md), [Ollama](guides/ollama.md), [OpenAI](guides/openai.md), [OpenRouter](guides/openrouter.md), [Reflection AI](guides/reflection.md), [StepFun](guides/stepfun.md), [Superlinked](guides/superlinked.md), [xAI](guides/xai.md), [Z.AI](guides/zai.md), [Z.AI Coder](guides/zai_coder.md), [Zenmux](guides/zenmux.md)
 
 ## Roadmap & Status
 
