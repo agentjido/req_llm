@@ -46,6 +46,7 @@ defmodule ReqLLM.Coverage.GoogleVertexGemini.LabelsTest do
 
         opts =
           ReqLLM.Test.Helpers.fixture_opts(
+            @provider,
             ReqLLM.Test.CompatibilityScenario.fixture!(:labels_basic),
             provider_options: [labels: labels]
           )
