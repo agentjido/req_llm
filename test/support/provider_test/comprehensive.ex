@@ -209,7 +209,7 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
             ReqLLM.generate_text(
               @model_spec,
               "Hello world!",
-              fixture_opts(ReqLLM.Test.CompatibilityScenario.fixture!(:basic), opts)
+              fixture_opts(@provider, ReqLLM.Test.CompatibilityScenario.fixture!(:basic), opts)
             )
             |> assert_basic_response()
           end
@@ -342,6 +342,7 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
                 @model_spec,
                 "Hi there!",
                 fixture_opts(
+                  @provider,
                   ReqLLM.Test.CompatibilityScenario.fixture!(:usage),
                   Keyword.put(param_bundles().deterministic, :max_tokens, max_tokens)
                 )
@@ -458,6 +459,7 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
                   @model_spec,
                   "What's the weather like in Paris, France?",
                   fixture_opts(
+                    @provider,
                     ReqLLM.Test.CompatibilityScenario.fixture!(:tool_multi),
                     base_opts ++ [tools: tools]
                   )
@@ -516,6 +518,7 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
                   @model_spec,
                   "Use the add tool to compute 2 + 3. After the tool result arrives, respond with 'sum=<value>'.",
                   fixture_opts(
+                    @provider,
                     ReqLLM.Test.CompatibilityScenario.fixture!(:tool_round_trip, 0),
                     base_opts ++
                       [
@@ -535,6 +538,7 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
                   @model_spec,
                   ctx2,
                   fixture_opts(
+                    @provider,
                     ReqLLM.Test.CompatibilityScenario.fixture!(:tool_round_trip, 1),
                     base_opts
                   )
@@ -574,6 +578,7 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
                 @model_spec,
                 "Tell me a joke about cats",
                 fixture_opts(
+                  @provider,
                   ReqLLM.Test.CompatibilityScenario.fixture!(:tool_none),
                   base_opts ++ [tools: tools]
                 )

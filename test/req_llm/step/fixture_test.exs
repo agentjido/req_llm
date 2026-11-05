@@ -155,6 +155,54 @@ defmodule ReqLLM.Step.FixtureTest do
     end
   end
 
+  @tag provider: :google_vertex
+  test "Vertex replay ignores the Google Cloud project ID in the URL" do
+    path = Path.join(@fixture_dir, "vertex_project.json")
+    model = %LLMDB.Model{id: "gemini-2.5-flash", provider: :google_vertex}
+
+    record_fixture(path, %{},
+      provider: :google_vertex,
+      url: vertex_url("recording-project", "gemini-2.5-flash:generateContent")
+    )
+
+    request =
+      Req.new(
+        method: :post,
+        url: vertex_url("req-llm-fixture-project", "gemini-2.5-flash:generateContent")
+      )
+      |> Req.Request.put_private(:llm_canonical_json, %{})
+
+    assert {:ok, %Req.Response{status: 200}} = Backend.handle_replay(path, model, request)
+  end
+
+  @tag provider: :google_vertex
+  test "Vertex replay still rejects changes to the rest of the URL" do
+    path = Path.join(@fixture_dir, "vertex_url.json")
+    model = %LLMDB.Model{id: "gemini-2.5-flash", provider: :google_vertex}
+
+    record_fixture(path, %{},
+      provider: :google_vertex,
+      url: vertex_url("recording-project", "gemini-2.5-flash:generateContent")
+    )
+
+    for current_url <- [
+          vertex_url("req-llm-fixture-project", "gemini-2.5-pro:generateContent"),
+          String.replace(
+            vertex_url("req-llm-fixture-project", "gemini-2.5-flash:generateContent"),
+            "/locations/global/",
+            "/locations/us-central1/"
+          )
+        ] do
+      request =
+        Req.new(method: :post, url: current_url)
+        |> Req.Request.put_private(:llm_canonical_json, %{})
+
+      assert_raise RuntimeError, ~r/Fixture request mismatch:.*Field: \$\.url/s, fn ->
+        Backend.handle_replay(path, model, request)
+      end
+    end
+  end
+
   test "replay preserves key query parameter comparisons for other providers" do
     path = Path.join(@fixture_dir, "non_google_auth.json")
     model = %LLMDB.Model{id: "gpt-4", provider: :openai}
@@ -178,6 +226,10 @@ defmodule ReqLLM.Step.FixtureTest do
       response: %{status: 200, headers: [{"content-type", "application/json"}]},
       body: ~s({"ok":true})
     )
+  end
+
+  defp vertex_url(project_id, model_action) do
+    "https://aiplatform.googleapis.com/v1/projects/#{project_id}/locations/global/publishers/google/models/#{model_action}"
   end
 
   defp replay_request(canonical_json) do
