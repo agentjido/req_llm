@@ -37,7 +37,7 @@ defmodule ReqLLM.Provider.AdapterDispatchTest do
   end
 
   test "registered default and bare providers resolve without catalog execution metadata" do
-    for provider <- [DefaultProvider, BareProvider], operation <- [:chat, :object] do
+    for provider <- [DefaultProvider, BareProvider], operation <- [:chat, :object, :rerank] do
       model = %LLMDB.Model{provider: provider.provider_id(), id: "not-in-the-catalog"}
 
       assert Adapter.resolve(model, operation, stream: true) == {:ok, provider}
@@ -78,7 +78,6 @@ defmodule ReqLLM.Provider.AdapterDispatchTest do
           :image,
           :speech,
           :transcription,
-          :rerank,
           :ocr,
           :video,
           :video_query,

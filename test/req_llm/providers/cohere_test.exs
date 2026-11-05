@@ -33,6 +33,20 @@ defmodule ReqLLM.Providers.CohereTest do
       assert request.options[:documents] == ["Nevada", "Washington"]
       assert request.options[:top_n] == 1
     end
+
+    test "prepare_request honors an explicit rerank path" do
+      model = rerank_model()
+
+      {:ok, request} =
+        Cohere.prepare_request(
+          :rerank,
+          model,
+          %{query: "capital of the US", documents: ["Nevada", "Washington"]},
+          rerank_path: "/v1/rerank"
+        )
+
+      assert request.url.path == "/v1/rerank"
+    end
   end
 
   describe "authentication wiring" do

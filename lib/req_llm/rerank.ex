@@ -50,6 +50,10 @@ defmodule ReqLLM.Rerank do
                    doc:
                      "Maximum number of documents to send per request. Defaults to 1000 when batching is needed."
                  ],
+                 rerank_path: [
+                   type: :string,
+                   doc: "Explicit rerank endpoint path override"
+                 ],
                  max_tokens_per_doc: [
                    type: :pos_integer,
                    doc: "Maximum number of tokens to consider per document"
@@ -110,19 +114,11 @@ defmodule ReqLLM.Rerank do
   """
   @spec validate_model(ReqLLM.model_input()) ::
           {:ok, Model.t()} | {:error, term()}
-  def validate_model(model_spec) do
-    with {:ok, model} <- ReqLLM.model(model_spec),
-         {:ok, _provider_module} <- ReqLLM.provider(model.provider) do
-      model_string = LLMDB.Model.spec(model)
+  def validate_model(%Model{} = model), do: validate_resolved_model(model)
 
-      if rerank_capable_model?(model) do
-        {:ok, model}
-      else
-        {:error,
-         ReqLLM.Error.Invalid.Parameter.exception(
-           parameter: "model: #{model_string} does not support reranking operations"
-         )}
-      end
+  def validate_model(model_spec) do
+    with {:ok, model} <- ReqLLM.model(model_spec) do
+      validate_resolved_model(model)
     end
   end
 
@@ -143,7 +139,7 @@ defmodule ReqLLM.Rerank do
          :ok <- validate_documents(Keyword.get(opts, :documents)),
          :ok <- validate_batch_size(Keyword.get(opts, :batch_size)),
          {:ok, model} <- validate_model(model_spec),
-         {:ok, provider_module} <- ReqLLM.provider(model.provider),
+         {:ok, provider_module} <- ReqLLM.Provider.Adapter.resolve(model, :rerank),
          {:ok, opts} <-
            ReqLLM.Provider.Options.normalize_namespaced_provider_options(
              provider_module,
@@ -199,6 +195,21 @@ defmodule ReqLLM.Rerank do
   end
 
   defp rerank_enabled?(_), do: false
+
+  defp validate_resolved_model(%Model{} = model) do
+    with {:ok, _provider_module} <- ReqLLM.Provider.Adapter.resolve(model, :rerank) do
+      model_string = LLMDB.Model.spec(model)
+
+      if rerank_capable_model?(model) do
+        {:ok, model}
+      else
+        {:error,
+         ReqLLM.Error.Invalid.Parameter.exception(
+           parameter: "model: #{model_string} does not support reranking operations"
+         )}
+      end
+    end
+  end
 
   defp validate_query(query) when is_binary(query) and query != "", do: :ok
 
