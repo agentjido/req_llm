@@ -26,6 +26,7 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
   - Config lists (`:sample_*_models`) are defaults only, not hard filters
   - Explicit specs like `"anthropic:*"` select all registry models for that provider
   - Broad replay runs test active models with fixtures and complete scenario contracts
+  - Broad replay skips models whose fixtures only serve focused or special-purpose tests
   - Broad replay reports models without fixtures as untested and does not run retired models
   - Recording and exact model specs keep the full requested selection
 
@@ -437,16 +438,43 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
   end
 
   defp test_model(provider, model_id, opts) do
-    scenarios = scenarios_for_opts(opts, parse_operation_type(opts[:type]), provider)
+    operation = parse_operation_type(opts[:type])
+    scenarios = scenarios_for_opts(opts, operation, provider)
 
     if Enum.empty?(scenarios) and not recording?(opts) do
-      replay_scenarios =
-        available_scenarios_for(provider, model_id, parse_operation_type(opts[:type]))
+      case available_scenarios_for(provider, model_id, operation) do
+        [] when operation != :all ->
+          no_replay_scenarios_result(provider, model_id, operation)
 
-      run_test_invocation(provider, model_id, opts, replay_scenarios)
+        replay_scenarios ->
+          run_test_invocation(provider, model_id, opts, replay_scenarios)
+      end
     else
       run_scenarios(provider, model_id, opts, scenarios)
     end
+  end
+
+  @doc false
+  def no_replay_scenarios_result(provider, model_id, operation) do
+    error =
+      "No replayable #{operation} compatibility scenarios: the fixtures for #{provider}:#{model_id} " <>
+        "do not cover a complete scenario contract"
+
+    Mix.shell().info("  Skipping #{provider}:#{model_id} (#{operation}): #{error}")
+
+    %{
+      provider: provider,
+      model_id: model_id,
+      model_spec: "#{provider}:#{model_id}",
+      status: :fail,
+      passed: 0,
+      failed: 0,
+      total: 0,
+      error: error,
+      failure_layer: Evidence.classify_failure(error),
+      fixtures: [],
+      scenario: []
+    }
   end
 
   defp run_scenarios(provider, model_id, opts, []) do
@@ -730,10 +758,20 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
     if recording?(opts) or exact_model_spec?(model_spec) do
       specs
     else
+      operation = parse_operation_type(opts[:type])
+
       Enum.filter(specs, fn {provider, model_id} ->
-        replayable_model?(provider, model_id)
+        replayable_model?(provider, model_id) and
+          replayable_scenarios?(provider, model_id, operation, opts)
       end)
     end
+  end
+
+  defp replayable_scenarios?(_provider, _model_id, :all, _opts), do: true
+
+  defp replayable_scenarios?(provider, model_id, operation, opts) do
+    scenarios_for_opts(opts, operation, provider) != [] or
+      available_scenarios_for(provider, model_id, operation) != []
   end
 
   defp exact_model_spec?(nil), do: false

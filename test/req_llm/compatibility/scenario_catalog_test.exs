@@ -99,6 +99,49 @@ defmodule ReqLLM.Compatibility.ScenarioCatalogTest do
       assert ScenarioCatalog.operation_test_file(:google, :all) == "test/coverage/google"
     end
 
+    test "routes providers whose suites live outside the default layout" do
+      assert ScenarioCatalog.operation_test_file(:google_vertex, :text) ==
+               "test/coverage/google_vertex_gemini/comprehensive_test.exs"
+
+      assert ScenarioCatalog.operation_test_file(:google_vertex, :embedding) ==
+               "test/coverage/google_vertex_gemini/embedding_test.exs"
+
+      assert ScenarioCatalog.operation_test_file(:google_vertex, :all) ==
+               "test/coverage/google_vertex_gemini"
+
+      for operation <- [:text, :speech, :transcription] do
+        assert ScenarioCatalog.operation_test_file(:stepfun_ai, operation) ==
+                 "test/coverage/stepfun_ai/api_test.exs"
+      end
+
+      for route <- ScenarioCatalog.operation_routes() do
+        assert File.exists?(route.test_file),
+               "missing operation coverage route for #{route.provider}: #{route.test_file}"
+      end
+    end
+
+    test "text fixtures of registered providers route to an existing suite" do
+      fixture_root = Path.expand("../../support/fixtures", __DIR__)
+
+      providers =
+        fixture_root
+        |> Path.join("*/*/basic.json")
+        |> Path.wildcard()
+        |> Enum.map(&(&1 |> Path.dirname() |> Path.dirname() |> Path.basename()))
+        |> Enum.uniq()
+        |> Enum.map(&String.to_atom/1)
+        |> Enum.filter(&match?({:ok, _}, ReqLLM.Providers.get(&1)))
+
+      assert :google_vertex in providers
+
+      for provider <- providers do
+        test_file = ScenarioCatalog.operation_test_file(provider, :text)
+
+        assert File.exists?(test_file),
+               "missing text coverage suite for #{provider}: #{test_file}"
+      end
+    end
+
     test "preserves capability selection order and operation metadata" do
       actual =
         Map.new(ScenarioCatalog.capabilities(), fn capability ->
