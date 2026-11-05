@@ -49,6 +49,7 @@ defmodule ReqLLM.MixProject do
           "guides/model-specs.md",
           "guides/usage-and-billing.md",
           "guides/image-generation.md",
+          "guides/rerank.md",
           "guides/model-metadata.md",
           "guides/model-support.md",
           "guides/v2-migration-audit.md",
@@ -101,6 +102,7 @@ defmodule ReqLLM.MixProject do
             "guides/model-specs.md",
             "guides/usage-and-billing.md",
             "guides/image-generation.md",
+            "guides/rerank.md",
             "guides/model-metadata.md",
             "guides/model-support.md",
             "guides/v2-migration-audit.md"

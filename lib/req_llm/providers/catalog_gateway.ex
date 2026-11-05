@@ -1,12 +1,15 @@
 defmodule ReqLLM.Providers.CatalogGateway do
   @moduledoc """
-  Runs OpenAI Chat Completions models for providers with LLMDB execution metadata.
+  Runs shared wire protocols for providers with LLMDB execution metadata.
 
   Registered provider modules take priority. This adapter only uses explicit
-  model execution data and provider bearer authentication metadata.
+  model execution data and provider bearer authentication metadata. It supports
+  OpenAI Chat Completions and Cohere-compatible reranking.
   """
 
   use ReqLLM.Provider, id: :catalog_gateway, default_base_url: ""
+
+  import ReqLLM.Provider.Utils, only: [ensure_parsed_body: 1]
 
   alias ReqLLM.Provider.Defaults
   alias ReqLLM.ProviderDispatch
@@ -26,11 +29,58 @@ defmodule ReqLLM.Providers.CatalogGateway do
     end
   end
 
+  def prepare_request(:rerank, model_spec, %{query: query, documents: documents}, opts) do
+    with {:ok, model} <- resolve_model(model_spec),
+         {:ok, contract} <- contract(model, :rerank, opts),
+         {:ok, _api_key} <- credential(model.provider, contract.auth, opts),
+         opts_with_input =
+           opts
+           |> Keyword.put(:query, query)
+           |> Keyword.put(:documents, documents)
+           |> Keyword.put(:operation, :rerank),
+         http_opts = Keyword.get(opts, :req_http_options, []),
+         {:ok, processed_opts} <-
+           ReqLLM.Provider.Options.process(__MODULE__, :rerank, model, opts_with_input) do
+      req_keys = [
+        :operation,
+        :model,
+        :query,
+        :documents,
+        :top_n,
+        :max_tokens_per_doc,
+        :rerank_path,
+        :provider_options
+      ]
+
+      processed_opts =
+        processed_opts
+        |> Keyword.put(:base_url, contract.base_url)
+        |> Keyword.put(:rerank_path, contract.path)
+
+      request =
+        Req.new(
+          [
+            url: contract.path,
+            method: :post,
+            receive_timeout: Keyword.get(processed_opts, :receive_timeout, 30_000)
+          ] ++ http_opts
+        )
+        |> Req.Request.register_options(req_keys)
+        |> Req.Request.merge_options(
+          Keyword.take(processed_opts, req_keys) ++
+            [model: contract.provider_model_id, base_url: contract.base_url]
+        )
+        |> attach(model, processed_opts)
+
+      {:ok, request}
+    end
+  end
+
   def prepare_request(operation, model, _input, _opts) do
     ProviderDispatch.unsupported(
       model,
       operation,
-      "only chat and object operations are supported"
+      "only chat, object, and rerank operations are supported"
     )
   end
 
@@ -92,7 +142,7 @@ defmodule ReqLLM.Providers.CatalogGateway do
   end
 
   @doc false
-  @spec contract(LLMDB.Model.t(), :chat | :object, keyword()) ::
+  @spec contract(LLMDB.Model.t(), :chat | :object | :rerank, keyword()) ::
           {:ok, map()} | {:error, Exception.t()}
   def contract(%LLMDB.Model{} = model, operation, opts) do
     execution_operation = if operation == :chat, do: :text, else: operation
@@ -105,7 +155,7 @@ defmodule ReqLLM.Providers.CatalogGateway do
          {:ok, auth} <- require_bearer_auth(model, operation, provider),
          :ok <- require_plain_runtime(model, operation, provider),
          {:ok, base_url} <- require_base_url(model, operation, execution, provider, opts),
-         {:ok, path} <- require_path(model, operation, execution) do
+         {:ok, path} <- require_path(model, operation, execution, opts) do
       {:ok,
        %{
          auth: auth,
@@ -128,7 +178,8 @@ defmodule ReqLLM.Providers.CatalogGateway do
          operation,
          %{supported: true, family: "openai_chat_compatible", wire_protocol: "openai_chat"} =
            execution
-       ) do
+       )
+       when operation in [:chat, :object] do
     if Map.get(execution, :transport) in [nil, "http", "https"] do
       :ok
     else
@@ -140,11 +191,40 @@ defmodule ReqLLM.Providers.CatalogGateway do
     end
   end
 
+  defp require_execution(
+         model,
+         :rerank,
+         %{
+           supported: true,
+           family: "cohere_rerank_compatible",
+           wire_protocol: "cohere_rerank"
+         } = execution
+       ) do
+    if Map.get(execution, :transport) in [nil, "http", "https"] do
+      :ok
+    else
+      ProviderDispatch.unsupported(
+        model,
+        :rerank,
+        "transport #{inspect(Map.get(execution, :transport))} is not supported"
+      )
+    end
+  end
+
   defp require_execution(model, operation, _execution) do
+    requirement =
+      case operation do
+        :rerank ->
+          "rerank execution contract with family cohere_rerank_compatible and wire protocol cohere_rerank"
+
+        _other ->
+          "#{if operation == :chat, do: :text, else: operation} execution contract with family openai_chat_compatible and wire protocol openai_chat"
+      end
+
     ProviderDispatch.unsupported(
       model,
       operation,
-      "the model needs a supported #{if operation == :chat, do: :text, else: operation} execution contract with family openai_chat_compatible and wire protocol openai_chat"
+      "the model needs a supported #{requirement}"
     )
   end
 
@@ -217,23 +297,65 @@ defmodule ReqLLM.Providers.CatalogGateway do
     end
   end
 
-  defp require_path(model, operation, %{path: path})
-       when is_binary(path) and byte_size(path) > 1 do
-    if String.starts_with?(path, "/") && !String.starts_with?(path, "//") &&
-         !String.contains?(path, ["?", "#", "{", "}", "..", "\\"]) do
-      {:ok, path}
-    else
-      ProviderDispatch.unsupported(
-        model,
-        operation,
-        "the execution path must be a plain absolute path"
-      )
+  defp require_path(model, operation, execution, opts) do
+    path = opts[:rerank_path] || Map.get(execution, :path)
+
+    cond do
+      is_binary(path) && byte_size(path) > 1 && String.starts_with?(path, "/") &&
+        !String.starts_with?(path, "//") &&
+          !String.contains?(path, ["?", "#", "{", "}", "..", "\\"]) ->
+        {:ok, path}
+
+      is_nil(path) ->
+        ProviderDispatch.unsupported(model, operation, "the execution path is missing")
+
+      true ->
+        ProviderDispatch.unsupported(
+          model,
+          operation,
+          "the execution path must be a plain absolute path"
+        )
     end
   end
 
-  defp require_path(model, operation, _execution) do
-    ProviderDispatch.unsupported(model, operation, "the execution path is missing")
+  @impl ReqLLM.Provider
+  def build_body(%Req.Request{options: %{operation: :rerank}} = request) do
+    ReqLLM.Providers.CohereRerank.build_body(request)
   end
+
+  def build_body(request), do: Defaults.default_build_body(request)
+
+  @impl ReqLLM.Provider
+  def decode_response(
+        {%Req.Request{options: %{operation: :rerank}} = request,
+         %Req.Response{status: status} = response}
+      )
+      when status in 200..299 do
+    {request, %{response | body: ensure_parsed_body(response.body)}}
+  end
+
+  def decode_response(
+        {%Req.Request{options: %{operation: :rerank}} = request,
+         %Req.Response{status: status} = response}
+      ) do
+    error =
+      ReqLLM.Error.API.Response.exception(
+        reason: "Cohere-compatible rerank API error",
+        status: status,
+        response_body: ensure_parsed_body(response.body)
+      )
+
+    {request, error}
+  end
+
+  def decode_response(request_response), do: Defaults.default_decode_response(request_response)
+
+  @impl ReqLLM.Provider
+  def extract_usage(%{"meta" => _meta} = body, _model) do
+    ReqLLM.Providers.CohereRerank.extract_usage(body)
+  end
+
+  def extract_usage(body, model), do: Defaults.default_extract_usage(body, model)
 
   defp credential!(provider, auth, opts) do
     case credential(provider, auth, opts) do
@@ -265,4 +387,7 @@ defmodule ReqLLM.Providers.CatalogGateway do
        )}
     end
   end
+
+  defp resolve_model(%LLMDB.Model{} = model), do: {:ok, model}
+  defp resolve_model(model_spec), do: ReqLLM.model(model_spec)
 end

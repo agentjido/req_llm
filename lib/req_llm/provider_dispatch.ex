@@ -4,7 +4,7 @@ defmodule ReqLLM.ProviderDispatch do
   alias ReqLLM.Error.Invalid.Parameter
   alias ReqLLM.Providers.CatalogGateway
 
-  @spec get(LLMDB.Model.t(), :chat | :object, keyword()) ::
+  @spec get(LLMDB.Model.t(), :chat | :object | :rerank, keyword()) ::
           {:ok, module()} | {:error, Exception.t()}
   def get(%LLMDB.Model{} = model, operation, opts \\ []) do
     case ReqLLM.Providers.get(model.provider) do

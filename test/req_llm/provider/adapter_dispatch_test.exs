@@ -78,7 +78,6 @@ defmodule ReqLLM.Provider.AdapterDispatchTest do
           :image,
           :speech,
           :transcription,
-          :rerank,
           :ocr,
           :video,
           :video_query,

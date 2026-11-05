@@ -3,7 +3,7 @@ defmodule ReqLLM.Providers.Cohere do
   Cohere provider implementation for reranking operations.
   """
 
-  import ReqLLM.Provider.Utils, only: [ensure_parsed_body: 1, maybe_put: 3]
+  import ReqLLM.Provider.Utils, only: [ensure_parsed_body: 1]
 
   use ReqLLM.Provider,
     id: :cohere,
@@ -31,12 +31,21 @@ defmodule ReqLLM.Providers.Cohere do
            ReqLLM.Provider.Options.process(__MODULE__, :rerank, model, opts_with_input) do
       req_keys =
         supported_provider_options() ++
-          [:operation, :model, :query, :documents, :top_n, :max_tokens_per_doc, :provider_options]
+          [
+            :operation,
+            :model,
+            :query,
+            :documents,
+            :top_n,
+            :max_tokens_per_doc,
+            :rerank_path,
+            :provider_options
+          ]
 
       request =
         Req.new(
           [
-            url: "/v2/rerank",
+            url: Keyword.get(processed_opts, :rerank_path, "/v2/rerank"),
             method: :post,
             receive_timeout: Keyword.get(processed_opts, :receive_timeout, 30_000)
           ] ++ http_opts
@@ -96,14 +105,7 @@ defmodule ReqLLM.Providers.Cohere do
 
   @impl ReqLLM.Provider
   def build_body(request) do
-    %{
-      model: request.options[:model],
-      query: request.options[:query],
-      documents: request.options[:documents]
-    }
-    |> maybe_put(:top_n, request.options[:top_n])
-    |> maybe_put(:max_tokens_per_doc, request.options[:max_tokens_per_doc])
-    |> maybe_put(:priority, request.options[:priority])
+    ReqLLM.Providers.CohereRerank.build_body(request)
   end
 
   @impl ReqLLM.Provider
@@ -129,22 +131,5 @@ defmodule ReqLLM.Providers.Cohere do
   end
 
   @impl ReqLLM.Provider
-  def extract_usage(%{"meta" => meta}, _model) when is_map(meta) do
-    tokens = Map.get(meta, "tokens") || %{}
-    billed_units = Map.get(meta, "billed_units") || %{}
-    search_units = Map.get(billed_units, "search_units")
-
-    usage =
-      tokens
-      |> maybe_put(:billed_units, billed_units)
-      |> maybe_put(:search_units, search_units)
-
-    if usage == %{} do
-      {:error, :no_usage_found}
-    else
-      {:ok, usage}
-    end
-  end
-
-  def extract_usage(_, _), do: {:error, :invalid_body}
+  def extract_usage(body, _model), do: ReqLLM.Providers.CohereRerank.extract_usage(body)
 end
