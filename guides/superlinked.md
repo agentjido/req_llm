@@ -4,7 +4,7 @@ Use Superlinked Inference Engine (SIE) through its hosted, local, or cluster
 API. ReqLLM supports these SIE routes:
 
 - OpenAI-compatible chat, streaming, tools, and dense embeddings under `/v1`.
-- Cohere-compatible reranking at `/v2/rerank`.
+- Native reranking at `/v1/score/{model}`.
 
 Set the hosted-service key before you make a request:
 
@@ -78,9 +78,10 @@ native sparse or multivector embedding endpoints to `ReqLLM.embed/3`.
 response.results
 ```
 
-SIE implements a subset of the Cohere v2 rerank request. ReqLLM sends
-`model`, `query`, `documents`, and optional `top_n`. SIE does not accept a
-non-null `max_tokens_per_doc` or the Cohere `priority` field.
+ReqLLM maps its rerank request to the native SIE score route and converts the
+result to `ReqLLM.RerankResponse`. SIE does not accept the Cohere
+`max_tokens_per_doc` or `priority` fields on this route. ReqLLM applies `top_n`
+after it receives the scores.
 
 ## Local and cluster endpoints
 
@@ -93,8 +94,8 @@ ReqLLM.generate_text(model, "Hello",
 )
 ```
 
-ReqLLM uses that `/v1` base for chat and embeddings. It uses `/v2/rerank` at
-the same host for reranking.
+ReqLLM uses that `/v1` base for chat and embeddings. It appends
+`/score/{model}` to the same base for reranking.
 
 You can use an inline model when a local model is not in LLMDB:
 

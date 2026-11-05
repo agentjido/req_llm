@@ -110,14 +110,14 @@ defmodule ReqLLM.Providers.SuperlinkedTest do
     assert Jason.decode!(request.body)["stream"] == true
   end
 
-  test "uses the host-level v2 rerank path for hosted and custom base URLs" do
+  test "uses the native score path for hosted and custom base URLs" do
     input = %{query: "best city", documents: ["Paris", "Berlin"]}
 
     assert {:ok, hosted} =
              Superlinked.prepare_request(:rerank, rerank_model(), input, api_key: "test-key")
 
-    assert hosted.url.path == "/v2/rerank"
-    assert hosted.options[:base_url] == "https://api.superlinked.com"
+    assert hosted.url.path == "/score/Qwen%2FQwen3-Reranker-0.6B"
+    assert hosted.options[:base_url] == "https://api.superlinked.com/v1"
 
     assert {:ok, custom} =
              Superlinked.prepare_request(:rerank, rerank_model(), input,
@@ -125,23 +125,29 @@ defmodule ReqLLM.Providers.SuperlinkedTest do
                base_url: "http://sie.local:8080/v1/"
              )
 
-    assert custom.options[:base_url] == "http://sie.local:8080"
+    assert custom.options[:base_url] == "http://sie.local:8080/v1/"
   end
 
-  test "reranks documents with only the supported SIE v2 fields" do
+  test "reranks documents through the native SIE score contract" do
     Req.Test.stub(__MODULE__.RerankHTTP, fn conn ->
-      assert conn.request_path == "/v2/rerank"
+      assert conn.request_path == "/v1/score/Qwen%2FQwen3-Reranker-0.6B"
 
       assert conn.body_params == %{
-               "model" => "Qwen/Qwen3-Reranker-0.6B",
-               "query" => "best city",
-               "documents" => ["Paris", "Berlin"],
-               "top_n" => 1
+               "query" => %{"id" => "query", "text" => "best city"},
+               "items" => [
+                 %{"id" => "0", "text" => "Paris"},
+                 %{"id" => "1", "text" => "Berlin"}
+               ]
              }
 
       Req.Test.json(conn, %{
-        "id" => "rerank-sie",
-        "results" => [%{"index" => 0, "relevance_score" => 0.98}]
+        "model" => "Qwen/Qwen3-Reranker-0.6B",
+        "query_id" => "rerank-sie",
+        "scores" => [
+          %{"item_id" => "1", "rank" => 0, "score" => 0.99},
+          %{"item_id" => "0", "rank" => 1, "score" => 0.98}
+        ],
+        "usage" => %{"input_tokens" => 12}
       })
     end)
 
@@ -154,10 +160,10 @@ defmodule ReqLLM.Providers.SuperlinkedTest do
                req_http_options: [plug: {Req.Test, __MODULE__.RerankHTTP}]
              )
 
-    assert response.results == [%{index: 0, relevance_score: 0.98, document: "Paris"}]
+    assert response.results == [%{index: 1, relevance_score: 0.99, document: "Berlin"}]
   end
 
-  test "removes max_tokens_per_doc because SIE v2 does not accept it" do
+  test "removes max_tokens_per_doc because the native score route does not accept it" do
     input = %{query: "best city", documents: ["Paris", "Berlin"]}
 
     assert {:ok, request} =

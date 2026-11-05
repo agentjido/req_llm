@@ -3,7 +3,8 @@ defmodule ReqLLM.Providers.Superlinked do
   Superlinked Inference Engine provider.
 
   Chat, streaming, tools, and dense embeddings use the OpenAI-compatible SIE
-  endpoints. Reranking uses the Cohere-compatible SIE v2 endpoint.
+  endpoints. Reranking uses the native SIE score endpoint and returns ReqLLM's
+  canonical rerank response.
 
   The hosted service uses `https://api.superlinked.com/v1` and bearer
   authentication from `SIE_API_KEY`. Pass `:base_url` for SIE Local or SIE
@@ -15,7 +16,7 @@ defmodule ReqLLM.Providers.Superlinked do
   become ready.
   """
 
-  import ReqLLM.Provider.Utils, only: [ensure_parsed_body: 1, maybe_put: 3]
+  import ReqLLM.Provider.Utils, only: [ensure_parsed_body: 1]
 
   use ReqLLM.Provider,
     id: :superlinked,
@@ -34,30 +35,30 @@ defmodule ReqLLM.Providers.Superlinked do
            |> Keyword.put(:operation, :rerank),
          http_opts = Keyword.get(opts, :req_http_options, []),
          {:ok, processed_opts} <-
-           ReqLLM.Provider.Options.process(__MODULE__, :rerank, model, opts_with_input),
-         rerank_opts <-
-           Keyword.update!(processed_opts, :base_url, &rerank_base_url/1) do
+           ReqLLM.Provider.Options.process(__MODULE__, :rerank, model, opts_with_input) do
       req_keys =
         supported_provider_options() ++
           [:operation, :model, :query, :documents, :top_n, :provider_options]
 
+      provider_model_id = model.provider_model_id || model.id
+
       request =
         Req.new(
           [
-            url: "/v2/rerank",
+            url: "/score/#{URI.encode(provider_model_id, &URI.char_unreserved?/1)}",
             method: :post,
             receive_timeout: Keyword.get(processed_opts, :receive_timeout, 30_000)
           ] ++ http_opts
         )
         |> Req.Request.register_options(req_keys)
         |> Req.Request.merge_options(
-          Keyword.take(rerank_opts, req_keys) ++
+          Keyword.take(processed_opts, req_keys) ++
             [
-              model: model.provider_model_id || model.id,
-              base_url: Keyword.fetch!(rerank_opts, :base_url)
+              model: provider_model_id,
+              base_url: Keyword.fetch!(processed_opts, :base_url)
             ]
         )
-        |> attach(model, rerank_opts)
+        |> attach(model, processed_opts)
 
       {:ok, request}
     end
@@ -72,11 +73,14 @@ defmodule ReqLLM.Providers.Superlinked do
     case options[:operation] do
       :rerank ->
         %{
-          model: options[:model],
-          query: options[:query],
-          documents: options[:documents]
+          query: %{id: "query", text: options[:query]},
+          items:
+            options[:documents]
+            |> Enum.with_index()
+            |> Enum.map(fn {document, index} ->
+              %{id: Integer.to_string(index), text: document}
+            end)
         }
-        |> maybe_put(:top_n, options[:top_n])
 
       _operation ->
         ReqLLM.Provider.Defaults.default_build_body(request)
@@ -87,7 +91,8 @@ defmodule ReqLLM.Providers.Superlinked do
   def decode_response({%Req.Request{} = request, %Req.Response{} = response} = request_response) do
     case {request.options[:operation], response.status} do
       {:rerank, status} when status in 200..299 ->
-        {request, %{response | body: ensure_parsed_body(response.body)}}
+        body = response.body |> ensure_parsed_body() |> normalize_score_response()
+        {request, %{response | body: body}}
 
       {:rerank, _status} ->
         error =
@@ -124,7 +129,7 @@ defmodule ReqLLM.Providers.Superlinked do
 
       {_value, translated} ->
         {translated,
-         ["Superlinked SIE does not accept a non-null :max_tokens_per_doc on /v2/rerank"]}
+         ["Superlinked SIE does not accept :max_tokens_per_doc on its native score route"]}
     end
   end
 
@@ -132,13 +137,26 @@ defmodule ReqLLM.Providers.Superlinked do
     ReqLLM.Provider.Defaults.default_translate_options(operation, model, opts)
   end
 
-  defp rerank_base_url(base_url) do
-    uri = URI.parse(base_url)
-    path = uri.path || ""
-    normalized_path = path |> String.trim_trailing("/") |> String.replace_suffix("/v1", "")
+  defp normalize_score_response(%{"scores" => scores} = body) when is_list(scores) do
+    results =
+      Enum.map(scores, fn
+        %{"item_id" => item_id, "score" => score} when is_binary(item_id) ->
+          case Integer.parse(item_id) do
+            {index, ""} -> %{"index" => index, "relevance_score" => score}
+            _invalid -> %{}
+          end
 
-    %{uri | path: normalized_path}
-    |> URI.to_string()
-    |> String.trim_trailing("/")
+        _invalid ->
+          %{}
+      end)
+
+    %{
+      "id" => body["query_id"],
+      "model" => body["model"],
+      "results" => results,
+      "usage" => body["usage"]
+    }
   end
+
+  defp normalize_score_response(body), do: body
 end
