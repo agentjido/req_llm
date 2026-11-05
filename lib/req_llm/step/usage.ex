@@ -24,6 +24,8 @@ defmodule ReqLLM.Step.Usage do
 
   alias ReqLLM.Usage.Cost
 
+  @telemetry_cost_keys [:input_cost, :output_cost, :reasoning_cost, :total_cost]
+
   @doc """
   Attaches the Usage step to a Req request.
 
@@ -72,26 +74,7 @@ defmodule ReqLLM.Step.Usage do
          usage <- complete_operation_usage(usage, req.options[:operation]),
          {:ok, cost_breakdown} <-
            Cost.breakdown(usage, model, pricing_context(req, resp.body, model)) do
-      total_cost = cost_breakdown && Map.get(cost_breakdown, :total_cost)
-
-      pricing =
-        if cost_breakdown,
-          do: cost_breakdown.pricing,
-          else: %{status: :unknown}
-
-      meta = %{tokens: usage, cost: total_cost, pricing: pricing}
-
-      meta =
-        if total_cost do
-          Map.merge(meta, %{
-            input_cost: cost_breakdown.input_cost,
-            output_cost: cost_breakdown.output_cost,
-            reasoning_cost: cost_breakdown.reasoning_cost,
-            total_cost: cost_breakdown.total_cost
-          })
-        else
-          meta
-        end
+      meta = usage |> Cost.merge(cost_breakdown) |> telemetry_measurements(usage)
 
       ReqLLM.Telemetry.emit_token_usage(
         model,
@@ -123,6 +106,7 @@ defmodule ReqLLM.Step.Usage do
               |> Map.put(:cache_creation_tokens, cache_creation_tokens)
               |> Map.put(:tool_usage, usage.tool_usage)
               |> Map.put(:image_usage, usage.image_usage)
+              |> Map.merge(Map.take(usage, [:provider_cost]))
               |> Cost.merge(cost_breakdown)
 
             updated_body = %{resp.body | usage: augmented_usage}
@@ -232,6 +216,14 @@ defmodule ReqLLM.Step.Usage do
   end
 
   defp maybe_put_total_tokens(map, _total), do: map
+
+  defp telemetry_measurements(priced_usage, tokens) do
+    priced_usage
+    |> Map.take(@telemetry_cost_keys)
+    |> Map.put(:tokens, tokens)
+    |> Map.put(:cost, Map.get(priced_usage, :total_cost))
+    |> Map.put(:pricing, priced_usage.pricing)
+  end
 
   @spec fetch_model(Req.Request.t()) :: {:ok, LLMDB.Model.t()} | :error
   defp fetch_model(%Req.Request{private: private, options: options}) do

@@ -46,6 +46,9 @@ response.usage
 #   }
 ```
 
+A provider that reports its own charge adds a `provider_cost` entry and sets
+`total_cost` to it. See [Provider-Reported Cost](#provider-reported-cost).
+
 ## Conditional tariffs and unknown pricing
 
 Pass confirmed billing facts through `pricing_context` for conditional tariffs:
@@ -317,6 +320,24 @@ response.usage.cost
 #   }
 ```
 
+### Provider-Reported Cost
+
+OpenRouter reports what it charged for a request in `usage.cost`, which ReqLLM uses
+as the request's cost instead of the catalog estimate:
+
+```elixir
+response.usage.total_cost       #=> 0.01
+response.usage.provider_cost    #=> %{cost: 0.01, byok: true, upstream_cost: 0.002}
+```
+
+`total_cost` is the charge on the OpenRouter account. A BYOK request also bills the
+upstream provider; `provider_cost.upstream_cost` carries that share separately, and
+ReqLLM does not add the two, so a caller that bills both accounts combines them
+itself. `provider_cost` is present only when the provider reported a charge.
+
+The breakdown fields (`input_cost`, `output_cost`, `reasoning_cost`, and the
+`usage.cost` map) stay catalog estimates.
+
 ### Line Items
 
 For detailed billing analysis, `line_items` provides per-component costs:
@@ -428,10 +449,15 @@ When you audit reasoning-heavy workloads, prefer the normalized `reasoning` snap
 Event measurements include:
 
 - `tokens` — the normalized token map, including `input`, `output`,
-  `total_tokens`, and `reasoning` when available
-- `cost` — total USD cost or `nil`
+  `total_tokens`, and `reasoning` when available. It carries `provider_cost` when
+  the provider reported a charge.
+- `cost` — total USD cost or `nil`, the same number as `total_cost`
 - `input_cost`, `output_cost`, `reasoning_cost`, and `total_cost` when model
   pricing is available
+
+`cost` and `total_cost` carry the reported charge when the provider reports one,
+and the catalog estimate otherwise, so a stored series has one switch-over on the
+release that adopts this. The breakdown keys stay catalog estimates.
 
 See the [Telemetry Guide](telemetry.md) for the full event contract, reasoning lifecycle, milestone semantics, and payload capture options.
 

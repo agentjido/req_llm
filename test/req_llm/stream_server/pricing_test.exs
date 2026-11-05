@@ -27,6 +27,48 @@ defmodule ReqLLM.StreamServer.PricingTest do
     end
   end
 
+  test "a provider-reported charge replaces the catalog price of a streamed response" do
+    owner = self()
+    handler_id = {__MODULE__, make_ref()}
+
+    assert :ok =
+             :telemetry.attach(
+               handler_id,
+               [:req_llm, :token_usage],
+               fn _event, measurements, metadata, _config ->
+                 send(owner, {:stream_provider_cost, metadata[:request_id], measurements})
+               end,
+               nil
+             )
+
+    on_exit(fn -> :telemetry.detach(handler_id) end)
+
+    server = pricing_server()
+
+    telemetry =
+      pricing_model()
+      |> ReqLLM.Telemetry.new_context([], mode: :stream, transport: :finch, operation: :chat)
+      |> ReqLLM.Telemetry.start_request(%{})
+
+    request_id = telemetry.request_id
+    assert :ok = StreamServer.set_telemetry_context(server, telemetry)
+
+    send_meta(server, %{
+      usage: Map.merge(token_usage(), %{"cost" => 0.0042, "is_byok" => false})
+    })
+
+    metadata = complete(server)
+
+    assert metadata.usage.total_cost == 0.0042
+    assert metadata.usage.provider_cost == %{cost: 0.0042, byok: false, upstream_cost: nil}
+
+    assert_receive {:stream_provider_cost, ^request_id, measurements}
+    assert measurements.cost == 0.0042
+    assert measurements.total_cost == 0.0042
+    assert measurements.tokens.provider_cost == metadata.usage.provider_cost
+    refute Map.has_key?(measurements, :provider_cost)
+  end
+
   test "a later tier replaces the earlier tier across atom and string keys" do
     for {first_key, last_key} <- [
           {:service_tier, "service_tier"},

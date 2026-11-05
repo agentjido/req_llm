@@ -106,6 +106,15 @@ defmodule ReqLLM.CacheTest do
       model: model,
       response: response
     } do
+      response = %{
+        response
+        | usage:
+            Map.merge(response.usage, %{
+              total_cost: 0.0042,
+              provider_cost: %{cost: 0.0042, byok: false, upstream_cost: nil}
+            })
+      }
+
       key = {model.id, :chat, length(context.messages), nil}
       Agent.update(agent, &Map.put(&1, key, response))
 
@@ -121,6 +130,8 @@ defmodule ReqLLM.CacheTest do
       assert cached_response.provider_meta.response_cache_hit == true
       assert cached_response.usage.input_tokens == 0
       assert cached_response.usage.output_tokens == 0
+      assert cached_response.usage.total_cost == 0
+      refute Map.has_key?(cached_response.usage, :provider_cost)
       assert cached_response.context.messages |> List.last() |> Map.get(:role) == :assistant
     end
 

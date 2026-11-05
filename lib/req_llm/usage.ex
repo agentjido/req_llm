@@ -144,7 +144,10 @@ defmodule ReqLLM.Usage do
   """
   @spec zero(map() | any()) :: map()
   def zero(usage) when is_map(usage) do
-    Map.merge(@zero_usage, zero_usage_map(usage))
+    usage
+    |> Map.drop([:provider_cost, "provider_cost"])
+    |> zero_usage_map()
+    |> then(&Map.merge(@zero_usage, &1))
   end
 
   def zero(_), do: @zero_usage
@@ -235,6 +238,9 @@ defmodule ReqLLM.Usage do
   end
 
   defp merge_value(:cache_write_tokens_by_ttl, existing, nil) when is_map(existing),
+    do: existing
+
+  defp merge_value(:provider_cost, existing, nil) when is_map(existing),
     do: existing
 
   defp merge_value(_key, existing, incoming) do
