@@ -94,7 +94,7 @@ defmodule ReqLLM.Usage.Cost do
   @doc false
   @spec apply_provider_cost(map()) :: map()
   def apply_provider_cost(usage) when is_map(usage) do
-    case ProviderCost.validate(Map.get(usage, :provider_cost) || %{}) do
+    case validated_provider_cost(usage) do
       nil ->
         usage
 
@@ -107,6 +107,19 @@ defmodule ReqLLM.Usage.Cost do
   end
 
   def apply_provider_cost(usage), do: usage
+
+  defp validated_provider_cost(usage) do
+    case usage |> MapAccess.get_raw(:provider_cost) |> ProviderCost.validate() do
+      nil ->
+        usage
+        |> MapAccess.get_raw(:tokens, %{})
+        |> MapAccess.get_raw(:provider_cost)
+        |> ProviderCost.validate()
+
+      provider_cost ->
+        provider_cost
+    end
+  end
 
   defp put_reported_cost(%{cost: cost} = usage, total) when is_number(cost) or is_nil(cost),
     do: Map.put(usage, :cost, total)

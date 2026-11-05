@@ -157,6 +157,19 @@ defmodule ReqLLM.UsageHelpersTest do
       assert usage.provider_id == "123"
     end
 
+    test "zero removes provider-reported accounting from application-cache hits" do
+      for key <- [:provider_cost, "provider_cost"] do
+        usage =
+          %{input_tokens: 31, output_tokens: 12, total_cost: 0.0042}
+          |> Map.put(key, %{cost: 0.0042, byok: false, upstream_cost: nil})
+          |> ReqLLM.Usage.zero()
+
+        assert usage.total_cost == 0
+        refute Map.has_key?(usage, :provider_cost)
+        refute Map.has_key?(usage, "provider_cost")
+      end
+    end
+
     test "empty usage defaults to input that includes cached tokens" do
       usage = ReqLLM.Usage.normalize(%{})
 

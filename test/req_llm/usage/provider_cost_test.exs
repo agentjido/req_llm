@@ -235,6 +235,14 @@ defmodule ReqLLM.Usage.ProviderCostTest do
 
       assert measurements.cost == 0.0042
       assert measurements.total_cost == 0.0042
+
+      assert measurements.tokens.provider_cost == %{
+               cost: 0.0042,
+               byok: false,
+               upstream_cost: nil
+             }
+
+      refute Map.has_key?(measurements, :provider_cost)
     end
   end
 end

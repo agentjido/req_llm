@@ -93,7 +93,7 @@ defmodule ReqLLM.Step.Usage do
           meta
         end
 
-      meta = meta |> maybe_put_provider_cost(usage) |> Cost.apply_provider_cost()
+      meta = Cost.apply_provider_cost(meta)
 
       ReqLLM.Telemetry.emit_token_usage(
         model,
