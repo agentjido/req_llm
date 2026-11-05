@@ -27,6 +27,19 @@ defmodule ReqLLM.StreamServer.PricingTest do
     end
   end
 
+  test "a provider-reported charge replaces the catalog price of a streamed response" do
+    server = pricing_server()
+
+    send_meta(server, %{
+      usage: Map.merge(token_usage(), %{"cost" => 0.0042, "is_byok" => false})
+    })
+
+    metadata = complete(server)
+
+    assert metadata.usage.total_cost == 0.0042
+    assert metadata.usage.provider_cost == %{cost: 0.0042, byok: false, upstream_cost: nil}
+  end
+
   test "a later tier replaces the earlier tier across atom and string keys" do
     for {first_key, last_key} <- [
           {:service_tier, "service_tier"},

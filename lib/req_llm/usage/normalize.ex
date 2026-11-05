@@ -3,6 +3,7 @@ defmodule ReqLLM.Usage.Normalize do
 
   alias ReqLLM.MapAccess
   alias ReqLLM.Usage.Image
+  alias ReqLLM.Usage.ProviderCost
   alias ReqLLM.Usage.Tool
 
   @spec tool_usage(any()) :: map()
@@ -106,10 +107,16 @@ defmodule ReqLLM.Usage.Normalize do
       ])
       |> Map.merge(canonical)
 
-    if is_nil(compute_units) do
-      retained
-    else
-      Map.put(retained, :compute_units, normalize_counter(compute_units))
+    retained =
+      if is_nil(compute_units) do
+        retained
+      else
+        Map.put(retained, :compute_units, normalize_counter(compute_units))
+      end
+
+    case ProviderCost.from_usage(usage) do
+      nil -> retained
+      provider_cost -> Map.put(retained, :provider_cost, provider_cost)
     end
   end
 

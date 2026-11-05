@@ -2,6 +2,7 @@ defmodule ReqLLM.Usage.Cost do
   @moduledoc false
 
   alias ReqLLM.MapAccess
+  alias ReqLLM.Usage.ProviderCost
 
   @spec apply(map(), LLMDB.Model.t() | nil, keyword()) :: map()
   def apply(usage, model, opts \\ [])
@@ -15,7 +16,7 @@ defmodule ReqLLM.Usage.Cost do
         end
 
       _ ->
-        usage
+        apply_provider_cost(usage)
     end
   end
 
@@ -62,12 +63,14 @@ defmodule ReqLLM.Usage.Cost do
     usage
     |> Map.drop([:cost, :input_cost, :output_cost, :reasoning_cost, :total_cost])
     |> Map.put(:pricing, %{status: :unknown})
+    |> apply_provider_cost()
   end
 
   def merge(usage, %{pricing: %{status: :unknown} = pricing}, _opts) do
     usage
     |> Map.drop([:cost, :input_cost, :output_cost, :reasoning_cost, :total_cost])
     |> Map.put(:pricing, pricing)
+    |> apply_provider_cost()
   end
 
   def merge(usage, cost_breakdown, _opts) do
@@ -79,12 +82,42 @@ defmodule ReqLLM.Usage.Cost do
       |> Map.put(:output_cost, cost_breakdown.output_cost)
       |> Map.put(:reasoning_cost, cost_breakdown.reasoning_cost)
       |> Map.put(:total_cost, cost_breakdown.total_cost)
+      |> apply_provider_cost()
     else
       usage
       |> Map.drop([:cost, :input_cost, :output_cost, :reasoning_cost, :total_cost])
       |> Map.put(:pricing, cost_breakdown.pricing)
+      |> apply_provider_cost()
     end
   end
+
+  @doc false
+  @spec apply_provider_cost(map()) :: map()
+  def apply_provider_cost(usage) when is_map(usage) do
+    case ProviderCost.validate(Map.get(usage, :provider_cost) || %{}) do
+      nil ->
+        usage
+
+      provider_cost ->
+        usage
+        |> Map.put(:total_cost, provider_cost.cost)
+        |> put_reported_cost(provider_cost.cost)
+        |> Map.put(:pricing, provider_pricing(Map.get(usage, :pricing), provider_cost.cost))
+    end
+  end
+
+  def apply_provider_cost(usage), do: usage
+
+  defp put_reported_cost(%{cost: cost} = usage, total) when is_number(cost) or is_nil(cost),
+    do: Map.put(usage, :cost, total)
+
+  defp put_reported_cost(usage, _total), do: usage
+
+  defp provider_pricing(%{status: :priced, currency: "USD"} = pricing, total),
+    do: Map.put(pricing, :total, total)
+
+  defp provider_pricing(_pricing, total),
+    do: %{status: :priced, currency: "USD", total: total}
 
   defp tokens_numeric?(usage) do
     input = MapAccess.get(usage, :input_tokens) || MapAccess.get(usage, "input_tokens")

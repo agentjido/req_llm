@@ -93,6 +93,8 @@ defmodule ReqLLM.Step.Usage do
           meta
         end
 
+      meta = meta |> maybe_put_provider_cost(usage) |> Cost.apply_provider_cost()
+
       ReqLLM.Telemetry.emit_token_usage(
         model,
         meta,
@@ -123,6 +125,7 @@ defmodule ReqLLM.Step.Usage do
               |> Map.put(:cache_creation_tokens, cache_creation_tokens)
               |> Map.put(:tool_usage, usage.tool_usage)
               |> Map.put(:image_usage, usage.image_usage)
+              |> maybe_put_provider_cost(usage)
               |> Cost.merge(cost_breakdown)
 
             updated_body = %{resp.body | usage: augmented_usage}
@@ -232,6 +235,13 @@ defmodule ReqLLM.Step.Usage do
   end
 
   defp maybe_put_total_tokens(map, _total), do: map
+
+  defp maybe_put_provider_cost(map, usage) do
+    case Map.get(usage, :provider_cost) do
+      nil -> map
+      provider_cost -> Map.put(map, :provider_cost, provider_cost)
+    end
+  end
 
   @spec fetch_model(Req.Request.t()) :: {:ok, LLMDB.Model.t()} | :error
   defp fetch_model(%Req.Request{private: private, options: options}) do

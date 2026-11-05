@@ -237,6 +237,9 @@ defmodule ReqLLM.Usage do
   defp merge_value(:cache_write_tokens_by_ttl, existing, nil) when is_map(existing),
     do: existing
 
+  defp merge_value(:provider_cost, existing, nil) when is_map(existing),
+    do: existing
+
   defp merge_value(_key, existing, incoming) do
     if is_number(existing) and is_number(incoming), do: max(existing, incoming), else: incoming
   end
