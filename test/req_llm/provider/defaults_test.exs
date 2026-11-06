@@ -984,6 +984,43 @@ defmodule ReqLLM.Provider.DefaultsTest do
       assert tool_call.id == "lVauww8VE"
     end
 
+    test "marks non-object tool-call arguments as invalid in buffered responses", %{
+      model: model
+    } do
+      for raw <- [~s(["Paris"]), ~s("Paris"), "42", "null"] do
+        {:ok, result} =
+          Defaults.decode_response_body_openai_format(tool_call_response(raw), model)
+
+        assert [tool_call] = result.message.tool_calls
+        assert Jason.decode!(tool_call.function.arguments) == %{}
+
+        assert ReqLLM.ToolCall.metadata(tool_call) == %{invalid_arguments: true}
+      end
+    end
+
+    test "keeps object tool-call arguments unflagged in buffered responses", %{model: model} do
+      for raw <- [~s({"city":"Paris"}), "{}"] do
+        {:ok, result} =
+          Defaults.decode_response_body_openai_format(tool_call_response(raw), model)
+
+        assert [tool_call] = result.message.tool_calls
+        assert tool_call.function.arguments == raw
+        assert ReqLLM.ToolCall.metadata(tool_call) == %{}
+      end
+    end
+
+    test "keeps malformed tool-call arguments raw and flagged in buffered responses", %{
+      model: model
+    } do
+      raw = ~s({"city":)
+
+      {:ok, result} = Defaults.decode_response_body_openai_format(tool_call_response(raw), model)
+
+      assert [tool_call] = result.message.tool_calls
+      assert tool_call.function.arguments == raw
+      assert ReqLLM.ToolCall.metadata(tool_call) == %{invalid_arguments: true}
+    end
+
     test "decodes nested thinking chunks from Mistral responses" do
       model = %LLMDB.Model{provider: :mistral, id: "mistral-medium-2604"}
 
@@ -1968,5 +2005,25 @@ defmodule ReqLLM.Provider.DefaultsTest do
       assert returned_resp.body.finish_reason == :tool_calls
       assert returned_resp.body.message.metadata == %{}
     end
+  end
+
+  defp tool_call_response(arguments) do
+    %{
+      "id" => "chatcmpl-tool-arguments",
+      "choices" => [
+        %{
+          "message" => %{
+            "tool_calls" => [
+              %{
+                "id" => "call_arguments",
+                "type" => "function",
+                "function" => %{"name" => "get_weather", "arguments" => arguments}
+              }
+            ]
+          },
+          "finish_reason" => "tool_calls"
+        }
+      ]
+    }
   end
 end
