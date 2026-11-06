@@ -360,6 +360,50 @@ defmodule ReqLLM.Provider.OpenAIChatMaterializationTest do
     assert Response.annotations(response) == authoritative
   end
 
+  test "streamed tool calls take argument flags from the assembled fragments", %{model: model} do
+    streamed_tool_call = fn first, rest ->
+      function =
+        if first, do: %{"name" => "lookup", "arguments" => first}, else: %{"name" => "lookup"}
+
+      opening = %{"id" => "call-1", "type" => "function", "index" => 0, "function" => function}
+      continuations = Enum.map(rest, &%{"index" => 0, "function" => %{"arguments" => &1}})
+
+      chunks =
+        Enum.flat_map([opening | continuations], fn tool_call ->
+          Defaults.default_decode_stream_event(
+            %{data: %{"choices" => [%{"delta" => %{"tool_calls" => [tool_call]}}]}},
+            model
+          )
+        end)
+
+      {:ok, response} =
+        ResponseBuilder.build_response(chunks, %{finish_reason: :tool_calls},
+          context: Context.new(),
+          model: model
+        )
+
+      [tool_call] = Response.tool_calls(response)
+      {tool_call.function.arguments, ToolCall.metadata(tool_call)}
+    end
+
+    null_flags = %{invalid_arguments: true, raw_arguments: "null", decoded_arguments: nil}
+
+    assert streamed_tool_call.("", [~s({"city":), ~s("Paris"})]) == {~s({"city":"Paris"}), %{}}
+    assert streamed_tool_call.(~s({"city":), [~s("Paris"})]) == {~s({"city":"Paris"}), %{}}
+    assert streamed_tool_call.("", ["{}"]) == {"{}", %{}}
+    assert streamed_tool_call.("null", []) == {"{}", null_flags}
+    assert streamed_tool_call.("", ["null"]) == {"{}", null_flags}
+    assert streamed_tool_call.(nil, ["null"]) == {"{}", null_flags}
+
+    assert streamed_tool_call.("", [~s(["Paris"])]) ==
+             {~s(["Paris"]),
+              %{
+                invalid_arguments: true,
+                raw_arguments: ~s(["Paris"]),
+                decoded_arguments: ["Paris"]
+              }}
+  end
+
   test "StreamResponse helpers share terminal error materialization", %{model: model} do
     error = ReqLLM.Error.API.Stream.exception(reason: "provider failed", cause: :closed)
 

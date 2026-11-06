@@ -78,6 +78,13 @@ defmodule ReqLLM.Provider.ChunkAccumulator do
     "done_at_unix_nano"
   ]
 
+  @argument_flag_keys [
+    :invalid_arguments,
+    :unparseable_arguments,
+    :raw_arguments,
+    :decoded_arguments
+  ]
+
   @type tool_call_record :: %{
           required(:id) => String.t(),
           required(:name) => String.t(),
@@ -506,11 +513,42 @@ defmodule ReqLLM.Provider.ChunkAccumulator do
       {:ok, args} ->
         tool_call
         |> Map.put(:arguments, args)
+        |> put_argument_flags(json, args)
         |> drop_accumulator_fields()
 
       {:error, _} ->
         args_lost(tool_call, :json_decode_error, json)
     end
+  end
+
+  # The opening chunk's argument flags describe only its leading fragment,
+  # often `""` or partial JSON. Derive them from the assembled arguments
+  # instead, flagging a non-object value as the chunk decoder does for a
+  # complete one.
+  defp put_argument_flags(tool_call, json, args) do
+    metadata =
+      tool_call
+      |> Map.get(:metadata, %{})
+      |> drop_leading_argument_flags()
+      |> Map.merge(non_object_argument_flags(json, args))
+
+    if map_size(metadata) > 0 do
+      Map.put(tool_call, :metadata, metadata)
+    else
+      Map.delete(tool_call, :metadata)
+    end
+  end
+
+  defp drop_leading_argument_flags(%{invalid_arguments: true} = metadata) do
+    Map.drop(metadata, @argument_flag_keys)
+  end
+
+  defp drop_leading_argument_flags(metadata), do: metadata
+
+  defp non_object_argument_flags(_json, args) when is_map(args), do: %{}
+
+  defp non_object_argument_flags(json, args) do
+    %{invalid_arguments: true, raw_arguments: json, decoded_arguments: args}
   end
 
   defp args_lost(tool_call, reason, json \\ nil) do
