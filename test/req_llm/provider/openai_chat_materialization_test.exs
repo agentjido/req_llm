@@ -163,8 +163,8 @@ defmodule ReqLLM.Provider.OpenAIChatMaterializationTest do
 
     assert ToolCall.args_json(malformed_call) == "{not-json"
     assert ToolCall.args_json(scalar_call) == "{}"
-    assert ToolCall.metadata(malformed_call) == %{}
-    assert ToolCall.metadata(scalar_call) == %{}
+    assert ToolCall.metadata(malformed_call) == %{invalid_arguments: true}
+    assert ToolCall.metadata(scalar_call) == %{invalid_arguments: true}
     assert unknown_finish_response.finish_reason == :error
   end
 
