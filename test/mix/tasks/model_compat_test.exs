@@ -198,6 +198,19 @@ defmodule Mix.Tasks.ReqLlm.ModelCompatTest do
     end
   end
 
+  describe "missing_replay_scenarios/3" do
+    test "rejects a scenario whose fixture contract belongs to a different StepFun model" do
+      assert ModelCompat.missing_replay_scenarios(
+               :stepfun_ai,
+               "stepaudio-3-chat-preview",
+               ["basic"]
+             ) == ["basic"]
+
+      assert ModelCompat.missing_replay_scenarios(:stepfun_ai, "step-3.5-flash", ["basic"]) ==
+               []
+    end
+  end
+
   describe "no_replay_scenarios_result/3" do
     test "reports a planning failure without running the suite" do
       {result, output} =

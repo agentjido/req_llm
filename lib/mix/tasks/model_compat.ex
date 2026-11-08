@@ -441,24 +441,34 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
     operation = parse_operation_type(opts[:type])
     scenarios = scenarios_for_opts(opts, operation, provider)
 
-    if Enum.empty?(scenarios) and not recording?(opts) do
-      case available_scenarios_for(provider, model_id, operation) do
-        [] when operation != :all ->
-          no_replay_scenarios_result(provider, model_id, operation)
+    missing_scenarios =
+      if recording?(opts), do: [], else: missing_replay_scenarios(provider, model_id, scenarios)
 
-        replay_scenarios ->
-          run_test_invocation(provider, model_id, opts, replay_scenarios)
-      end
-    else
-      run_scenarios(provider, model_id, opts, scenarios)
+    cond do
+      missing_scenarios != [] ->
+        no_replay_scenarios_result(provider, model_id, operation, missing_scenarios)
+
+      Enum.empty?(scenarios) and not recording?(opts) ->
+        case available_scenarios_for(provider, model_id, operation) do
+          [] when operation != :all ->
+            no_replay_scenarios_result(provider, model_id, operation)
+
+          replay_scenarios ->
+            run_test_invocation(provider, model_id, opts, replay_scenarios)
+        end
+
+      true ->
+        run_scenarios(provider, model_id, opts, scenarios)
     end
   end
 
   @doc false
-  def no_replay_scenarios_result(provider, model_id, operation) do
+  def no_replay_scenarios_result(provider, model_id, operation, scenarios \\ []) do
+    requested = if scenarios == [], do: "", else: " Requested: #{Enum.join(scenarios, ", ")}."
+
     error =
       "No replayable #{operation} compatibility scenarios: the fixtures for #{provider}:#{model_id} " <>
-        "do not cover a complete scenario contract"
+        "do not cover a complete scenario contract." <> requested
 
     Mix.shell().info("  Skipping #{provider}:#{model_id} (#{operation}): #{error}")
 
@@ -473,7 +483,7 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
       error: error,
       failure_layer: Evidence.classify_failure(error),
       fixtures: [],
-      scenario: []
+      scenario: scenarios
     }
   end
 
@@ -500,6 +510,22 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
         Enum.all?(scenario.fixtures, &MapSet.member?(fixture_names, &1))
     end)
     |> Enum.map(& &1.id)
+  end
+
+  @doc false
+  def missing_replay_scenarios(provider, model_id, scenarios) do
+    fixture_names = fixture_names(provider, model_id)
+
+    Enum.filter(scenarios, fn scenario_id ->
+      case ScenarioCatalog.fetch_scenario(scenario_id) do
+        {:ok, scenario} ->
+          not provider_applies?(scenario.providers, provider) or
+            not Enum.all?(scenario.fixtures, &MapSet.member?(fixture_names, &1))
+
+        :error ->
+          true
+      end
+    end)
   end
 
   defp provider_applies?(:all, _provider), do: true
