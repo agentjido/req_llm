@@ -188,14 +188,17 @@ defmodule ReqLLM.Provider.Defaults.ResponseBuilder do
   end
 
   # Buffered responses keep only the markers the caller acts on: the
-  # async flag, and the provider status of a builtin call (so a failed
-  # `web_search_call` reaches the OTel tool span as an error).
+  # async flag, the provider status of a builtin call (so a failed
+  # `web_search_call` reaches the OTel tool span as an error), and the flag
+  # for arguments that were not a JSON object (normalized to `{}`).
   defp put_tool_call_metadata(%ToolCall{} = call, source, :buffered) do
     ToolCall.put_metadata(
       call,
       Map.take(ToolCall.metadata(source), [
         :async,
         "async",
+        :invalid_arguments,
+        "invalid_arguments",
         :status,
         "status",
         :agent,
@@ -338,7 +341,6 @@ defmodule ReqLLM.Provider.Defaults.ResponseBuilder do
   defp drop_buffered_argument_metadata(metadata) do
     Map.drop(metadata, [
       :decoded_arguments,
-      :invalid_arguments,
       :raw_arguments,
       :unparseable_arguments
     ])

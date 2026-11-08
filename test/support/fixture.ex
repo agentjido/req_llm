@@ -298,7 +298,16 @@ defmodule ReqLLM.Step.Fixture.Backend do
         do: %{uri | scheme: "https", host: "fixture.azure.test", port: nil},
         else: uri
 
+    uri =
+      if provider == :google_vertex and uri.path,
+        do: %{uri | path: normalize_vertex_project(uri.path)},
+        else: uri
+
     URI.to_string(uri)
+  end
+
+  defp normalize_vertex_project(path) do
+    String.replace(path, ~r{/projects/[^/]+/}, "/projects/fixture-project/")
   end
 
   defp normalize_json(json) when is_binary(json) do

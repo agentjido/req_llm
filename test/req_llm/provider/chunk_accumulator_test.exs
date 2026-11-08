@@ -287,6 +287,75 @@ defmodule ReqLLM.Provider.ChunkAccumulatorTest do
              ] = ChunkAccumulator.finalize_tool_calls_for_response(acc)
     end
 
+    test "drops the leading fragment's argument flags when the fragments decode to an object" do
+      acc =
+        ChunkAccumulator.new()
+        |> ChunkAccumulator.push(%StreamChunk{
+          type: :tool_call,
+          name: "get_weather",
+          arguments: %{},
+          metadata: %{
+            id: "call_1",
+            index: 0,
+            raw_arguments: "{",
+            invalid_arguments: true,
+            unparseable_arguments: true,
+            thought_signature: "sig_123"
+          }
+        })
+        |> ChunkAccumulator.push(%StreamChunk{
+          type: :meta,
+          metadata: %{tool_call_args: %{index: 0, fragment: ~s("city":"NYC"})}}
+        })
+
+      assert [%{arguments: %{"city" => "NYC"}, metadata: metadata}] =
+               ChunkAccumulator.finalize_tool_calls_for_response(acc)
+
+      assert metadata == %{thought_signature: "sig_123"}
+    end
+
+    test "flags argument fragments that decode to a non-object value" do
+      empty = %{raw_arguments: "", invalid_arguments: true, unparseable_arguments: true}
+      bracket = %{raw_arguments: "[", invalid_arguments: true, unparseable_arguments: true}
+      name_only = %{expects_arg_fragments: true}
+
+      cases = [
+        {empty, ["null"], "null", nil},
+        {empty, [~s("NYC")], ~s("NYC"), "NYC"},
+        {bracket, [~s("NYC"])], ~s(["NYC"]), ["NYC"]},
+        {name_only, ["null"], "null", nil},
+        {name_only, ["4", "2"], "42", 42}
+      ]
+
+      for {opening, fragments, json, decoded} <- cases do
+        acc =
+          Enum.reduce(
+            fragments,
+            ChunkAccumulator.push(ChunkAccumulator.new(), %StreamChunk{
+              type: :tool_call,
+              name: "get_weather",
+              arguments: %{},
+              metadata: Map.merge(%{id: "call_1", index: 0}, opening)
+            }),
+            fn fragment, acc ->
+              ChunkAccumulator.push(acc, %StreamChunk{
+                type: :meta,
+                metadata: %{tool_call_args: %{index: 0, fragment: fragment}}
+              })
+            end
+          )
+
+        assert [%{arguments: ^decoded, metadata: metadata}] =
+                 ChunkAccumulator.finalize_tool_calls_for_response(acc)
+
+        assert metadata == %{
+                 invalid_arguments: true,
+                 raw_arguments: json,
+                 decoded_arguments: decoded
+               }
+      end
+    end
+
     test "decodes argument fragments and drops :index" do
       acc =
         ChunkAccumulator.new()

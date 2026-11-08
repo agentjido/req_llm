@@ -371,8 +371,30 @@ defmodule ReqLLM.Test.Helpers do
     )
   end
 
+  def fixture_opts(:google_vertex, name, extra_opts) do
+    fixture_opts(name, put_vertex_replay_credentials(extra_opts))
+  end
+
   def fixture_opts(_provider, name, extra_opts) do
     fixture_opts(name, extra_opts)
+  end
+
+  @vertex_replay_credentials [
+    project_id: "req-llm-fixture-project",
+    access_token: "req-llm-fixture-access-token"
+  ]
+
+  defp put_vertex_replay_credentials(opts) do
+    if ReqLLM.Test.Env.fixtures_mode() == :replay do
+      Keyword.update(
+        opts,
+        :provider_options,
+        @vertex_replay_credentials,
+        &Keyword.merge(@vertex_replay_credentials, &1)
+      )
+    else
+      opts
+    end
   end
 
   defp cap_provider_drift_tokens(opts) do
