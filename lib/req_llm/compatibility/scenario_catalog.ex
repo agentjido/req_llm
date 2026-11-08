@@ -33,6 +33,26 @@ defmodule ReqLLM.Compatibility.ScenarioCatalog do
           required(:test_file) => binary()
         }
 
+  @coverage_directories %{google_vertex: "test/coverage/google_vertex_gemini"}
+
+  @operation_routes [
+    %{
+      provider: :stepfun_ai,
+      operation: :text,
+      test_file: "test/coverage/stepfun_ai/api_test.exs"
+    },
+    %{
+      provider: :stepfun_ai,
+      operation: :speech,
+      test_file: "test/coverage/stepfun_ai/api_test.exs"
+    },
+    %{
+      provider: :stepfun_ai,
+      operation: :transcription,
+      test_file: "test/coverage/stepfun_ai/api_test.exs"
+    }
+  ]
+
   @operations [
     %{id: :text, test_file: "comprehensive_test.exs"},
     %{id: :embedding, test_file: "embedding_test.exs"},
@@ -781,14 +801,28 @@ defmodule ReqLLM.Compatibility.ScenarioCatalog do
   def operation_test_file(provider, operation) when is_atom(provider) do
     case Enum.find(@operations, &(&1.id == operation)) do
       %{test_file: :provider_directory} ->
-        "test/coverage/#{provider}"
+        coverage_directory(provider)
 
       %{test_file: test_file} ->
-        "test/coverage/#{provider}/#{test_file}"
+        operation_route(provider, operation) || "#{coverage_directory(provider)}/#{test_file}"
 
       nil ->
         raise ArgumentError, "unknown compatibility operation: #{inspect(operation)}"
     end
+  end
+
+  @doc "Returns provider-specific operation routes for suites outside the default layout."
+  @spec operation_routes() :: [map()]
+  def operation_routes, do: @operation_routes
+
+  defp coverage_directory(provider) do
+    Map.get(@coverage_directories, provider, "test/coverage/#{provider}")
+  end
+
+  defp operation_route(provider, operation) do
+    Enum.find_value(@operation_routes, fn route ->
+      if route.provider == provider and route.operation == operation, do: route.test_file
+    end)
   end
 
   @doc false

@@ -160,6 +160,17 @@ defmodule Mix.Tasks.ReqLlm.ModelCompatTest do
       assert ModelCompat.coverage_specs(specs, "google:*", record: true) == specs
     end
 
+    test "skips models whose fixtures cover no complete scenario contract" do
+      specs = [
+        {:openai, "gpt-4o-mini"},
+        {:openai, "gpt-6-luna"}
+      ]
+
+      assert ModelCompat.coverage_specs(specs, "openai:*", []) == [{:openai, "gpt-4o-mini"}]
+
+      assert ModelCompat.coverage_specs(specs, "openai:*", scenario: "basic") == specs
+    end
+
     test "filters broad replay when state updates are enabled" do
       specs = [
         {:google, "gemini-2.5-flash"},
@@ -180,6 +191,39 @@ defmodule Mix.Tasks.ReqLlm.ModelCompatTest do
       assert scenarios == ["basic", "usage", "token_limit", "context_append", "streaming"]
       refute "object_basic" in scenarios
       refute "reasoning" in scenarios
+    end
+
+    test "returns no scenarios for models with only special-purpose fixtures" do
+      assert ModelCompat.available_scenarios_for(:openai, "gpt-6-luna", :text) == []
+    end
+  end
+
+  describe "missing_replay_scenarios/3" do
+    test "rejects a scenario whose fixture contract belongs to a different StepFun model" do
+      assert ModelCompat.missing_replay_scenarios(
+               :stepfun_ai,
+               "stepaudio-3-chat-preview",
+               ["basic"]
+             ) == ["basic"]
+
+      assert ModelCompat.missing_replay_scenarios(:stepfun_ai, "step-3.5-flash", ["basic"]) ==
+               []
+    end
+  end
+
+  describe "no_replay_scenarios_result/3" do
+    test "reports a planning failure without running the suite" do
+      {result, output} =
+        ExUnit.CaptureIO.with_io(fn ->
+          ModelCompat.no_replay_scenarios_result(:openai, "gpt-6-luna", :text)
+        end)
+
+      assert output =~ "Skipping openai:gpt-6-luna (text)"
+
+      assert result.status == :fail
+      assert result.total == 0
+      assert result.failure_layer == "planning"
+      assert result.error =~ "No replayable text compatibility scenarios"
     end
   end
 
@@ -245,6 +289,22 @@ defmodule Mix.Tasks.ReqLlm.ModelCompatTest do
                "test/coverage/azure/streaming_structured_output_test.exs",
                "--only",
                "scenario:object_streaming_claude_auto"
+             ]
+    end
+
+    test "routes providers whose suites live outside the default layout" do
+      assert ModelCompat.test_args_for(:google_vertex, :text, "basic") == [
+               "test",
+               "test/coverage/google_vertex_gemini/comprehensive_test.exs",
+               "--only",
+               "scenario:basic"
+             ]
+
+      assert ModelCompat.test_args_for(:stepfun_ai, :text, "basic") == [
+               "test",
+               "test/coverage/stepfun_ai/api_test.exs",
+               "--only",
+               "scenario:basic"
              ]
     end
 

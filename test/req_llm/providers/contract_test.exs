@@ -49,7 +49,7 @@ defmodule ReqLLM.Providers.ContractTest do
     {ReqLLM.Providers.Deepseek, :deepseek, "deepseek-chat", "https://api.deepseek.com"},
     {ReqLLM.Providers.FireworksAI, :fireworks_ai,
      "accounts/fireworks/models/llama-v3p1-8b-instruct", "https://api.fireworks.ai/inference/v1"},
-    {ReqLLM.Providers.Groq, :groq, "llama-3.1-8b-instant", "https://api.groq.com"},
+    {ReqLLM.Providers.Groq, :groq, "llama-3.1-8b-instant", "https://api.groq.com/openai/v1"},
     {ReqLLM.Providers.Minimax, :minimax, "MiniMax-M2.1", "https://api.minimax.io/v1"},
     {ReqLLM.Providers.Mistral, :mistral, "mistral-small", "https://api.mistral.ai/v1"},
     {ReqLLM.Providers.NearAI, :nearai, "openai/gpt-oss-120b", "https://cloud-api.near.ai/v1"},
