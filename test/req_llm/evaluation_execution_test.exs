@@ -65,6 +65,58 @@ defmodule ReqLLM.EvaluationExecutionTest do
     :ok
   end
 
+  test "loads an executable evaluation gateway from LLMDB custom configuration" do
+    custom = %{
+      configured_gateway: [
+        name: "Configured gateway",
+        catalog_only: false,
+        runtime: %{
+          base_url: "https://configured.example/v1",
+          auth: %{type: "bearer", env: []}
+        },
+        models: %{
+          "configured-evaluator" => %{
+            catalog_only: false,
+            capabilities: %{evaluate: true, chat: false},
+            execution: %{
+              evaluate: %{
+                supported: true,
+                family: "openrouter_decisions",
+                wire_protocol: "openrouter_decisions",
+                transport: "http",
+                path: "/v1/decisions",
+                provider_model_id: "wire-evaluator"
+              }
+            }
+          }
+        }
+      ]
+    }
+
+    assert {:ok, _} = LLMDB.load(allow: :all, custom: custom)
+    assert {:ok, provider} = LLMDB.provider(:configured_gateway)
+    assert provider.catalog_only == false
+    assert provider.runtime.base_url == "https://configured.example/v1"
+    assert provider.runtime.auth.type == "bearer"
+    assert "configured_gateway:configured-evaluator" in ReqLLM.evaluation_models()
+
+    Req.Test.stub(__MODULE__, fn conn ->
+      assert conn.host == "configured.example"
+      assert conn.request_path == "/v1/decisions"
+      assert Plug.Conn.get_req_header(conn, "authorization") == ["Bearer configured-key"]
+      Req.Test.json(conn, response())
+    end)
+
+    assert {:ok, result} =
+             ReqLLM.evaluate("configured_gateway:configured-evaluator", "refund", @questions,
+               api_key: "configured-key",
+               req_http_options: [plug: {Req.Test, __MODULE__}]
+             )
+
+    assert result.model == "wire-evaluator"
+    assert result.provider_meta.provider == :configured_gateway
+  end
+
   for provider <- [:custom_evaluator, :decision_gateway] do
     test "public evaluate reaches #{provider} with its contract and identity" do
       provider = unquote(provider)
