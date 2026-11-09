@@ -30,7 +30,7 @@ request through one of two integration paths:
   authentication, routes, wire format, and special behavior.
 - **Shared catalog gateway**: The provider has no dedicated ReqLLM module.
   LLMDB supplies an execution contract, and ReqLLM sends the request through
-  its shared OpenAI Chat Completions or Cohere-compatible rerank adapter.
+  its shared OpenAI Chat Completions, Cohere-compatible rerank, or decision evaluation adapter.
 
 These paths describe request routing. They do not describe support quality. A
 model can be in LLMDB before ReqLLM has verified its API behavior. Support tiers
@@ -87,8 +87,8 @@ show the module's broad scope. The selected model can support fewer operations.
 
 #### Shared Catalog Gateway: No Dedicated Module
 
-This path is for hosted APIs that use plain OpenAI Chat Completions or
-Cohere-compatible reranking with bearer authentication. LLMDB must supply the
+This path is for hosted APIs that use plain OpenAI Chat Completions,
+Cohere-compatible reranking, or supported decision protocols with bearer authentication. LLMDB must supply the
 base URL, route, wire protocol, and authentication contract. ReqLLM then uses
 `ReqLLM.Providers.CatalogGateway`. A dedicated provider module always takes
 priority when one is registered.
@@ -314,6 +314,9 @@ the common ReqLLM name for that question. The moving OpenRouter ID keeps its
 leading `~` in the request. An unknown model ID requires a full inline model
 spec with evaluation capability and execution metadata. Catalog models without
 evaluation support and gateways without an adapter return an error before HTTP.
+Custom providers and catalog gateways can evaluate through explicit execution
+contracts; see [Evaluation providers and gateways](guides/evaluation.md) for the
+metadata, adapter declaration, endpoint overrides, and authentication requirements.
 OpenAI Decisions accepts string, map, list, and `ReqLLM.Context` state with boolean, choice, and
 score questions. A context can carry images in user messages.
 It returns refusals as `%{"type" => "refusal"}`. If OpenAI reports positive compute units without a

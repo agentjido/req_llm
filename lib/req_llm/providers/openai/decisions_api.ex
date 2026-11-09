@@ -54,7 +54,9 @@ defmodule ReqLLM.Providers.OpenAI.DecisionsAPI do
     body = ensure_parsed_body(response.body)
     contract = request.private[@request_private_key]
 
-    case decode_success(body, contract) do
+    provider = request.private[:req_llm_evaluation_provider] || :openai
+
+    case decode_success(body, contract, provider) do
       {:ok, result} ->
         {request, %{response | body: result}}
 
@@ -420,7 +422,7 @@ defmodule ReqLLM.Providers.OpenAI.DecisionsAPI do
     invalid("OpenAI safety_identifier must be a string")
   end
 
-  defp decode_success(body, contract) when is_map(body) do
+  defp decode_success(body, contract, provider) when is_map(body) do
     with model when is_binary(model) <- field(body, :model),
          answers when is_list(answers) <- field(body, :answers),
          usage when is_map(usage) <- field(body, :usage),
@@ -437,7 +439,7 @@ defmodule ReqLLM.Providers.OpenAI.DecisionsAPI do
          provider_meta: %{
            "api_type" => "decisions",
            operation: :evaluate,
-           provider: :openai,
+           provider: provider,
            raw_response: body
          }
        }}
@@ -447,7 +449,7 @@ defmodule ReqLLM.Providers.OpenAI.DecisionsAPI do
     end
   end
 
-  defp decode_success(_body, _contract), do: {:error, "expected an object"}
+  defp decode_success(_body, _contract, _provider), do: {:error, "expected an object"}
 
   defp validate_answers([], _contract), do: {:error, "answers must not be empty"}
 

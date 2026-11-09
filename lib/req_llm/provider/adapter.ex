@@ -2,8 +2,8 @@ defmodule ReqLLM.Provider.Adapter do
   @moduledoc false
 
   @doc """
-  Selects the existing provider for an already resolved model. Chat, object, and
-  rerank requests can use the catalog gateway fallback; all other operations retain
+  Selects the existing provider for an already resolved model. Chat, object,
+  rerank, and evaluation requests can use the catalog gateway fallback; other operations retain
   the provider registry lookup. `dispatch_opts` are the existing dispatch options,
   currently `[]` for buffered requests or `[stream: true]` for streams, not the
   complete request options. Preserve each call site's dispatch options when
@@ -13,7 +13,7 @@ defmodule ReqLLM.Provider.Adapter do
   def resolve(model, operation, dispatch_opts \\ [])
 
   def resolve(%LLMDB.Model{} = model, operation, dispatch_opts)
-      when operation in [:chat, :object, :rerank] do
+      when operation in [:chat, :object, :rerank, :evaluate] do
     ReqLLM.ProviderDispatch.get(model, operation, dispatch_opts)
   end
 

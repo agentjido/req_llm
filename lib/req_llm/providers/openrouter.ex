@@ -54,6 +54,9 @@ defmodule ReqLLM.Providers.OpenRouter do
 
   require Logger
 
+  @impl ReqLLM.Provider
+  def evaluation_protocols, do: ["openrouter_decisions"]
+
   @provider_schema [
     openrouter_models: [
       type: {:list, :string},
@@ -226,7 +229,9 @@ defmodule ReqLLM.Providers.OpenRouter do
   def prepare_request(:evaluate, model_spec, %{state: state, questions: questions}, opts) do
     with {:ok, model} <- ReqLLM.model(model_spec),
          {:ok, api_key, _source} <- ReqLLM.Keys.get(model, opts),
-         {:ok, provider_preferences} <- evaluation_provider_preferences(opts) do
+         {:ok, provider_preferences} <- evaluation_provider_preferences(opts),
+         {:ok, endpoint} <-
+           ReqLLM.Evaluation.Execution.endpoint(model, "https://openrouter.ai", opts) do
       timeout = Keyword.get(opts, :receive_timeout, 30_000)
       http_opts = Keyword.get(opts, :req_http_options, [])
       execution = model.execution.evaluate
@@ -242,10 +247,8 @@ defmodule ReqLLM.Providers.OpenRouter do
       request =
         Req.new(
           [
-            url: execution.path,
+            url: ReqLLM.Evaluation.Execution.url(endpoint.base_url, endpoint.path),
             method: :post,
-            base_url:
-              Keyword.get(opts, :base_url, execution[:base_url] || "https://openrouter.ai"),
             receive_timeout: timeout,
             json: body
           ] ++ ReqLLM.Provider.Defaults.merge_finch_options(http_opts, pool_timeout: timeout)

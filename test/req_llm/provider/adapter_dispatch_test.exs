@@ -83,8 +83,7 @@ defmodule ReqLLM.Provider.AdapterDispatchTest do
           :video_query,
           :video_upload,
           :video_retrieve,
-          :compact,
-          :evaluate
+          :compact
         ] do
       for provider <- [DefaultProvider, BareProvider] do
         registered_model = %{model | provider: provider.provider_id()}
@@ -100,6 +99,34 @@ defmodule ReqLLM.Provider.AdapterDispatchTest do
       assert {:error, direct_error} = ReqLLM.provider(model.provider)
       assert %{error | stacktrace: direct_error.stacktrace} === direct_error
     end
+  end
+
+  test "evaluation requires an explicit compatible adapter or catalog contract", %{model: model} do
+    model = %{
+      model
+      | capabilities: %{evaluate: true},
+        execution: %{
+          evaluate: %{
+            supported: true,
+            family: "openrouter_decisions",
+            wire_protocol: "openrouter_decisions",
+            path: "/custom/decisions",
+            provider_model_id: "wire-evaluator"
+          }
+        }
+    }
+
+    assert Adapter.resolve(model, :evaluate) == {:ok, ReqLLM.Providers.CatalogGateway}
+
+    for provider <- [DefaultProvider, BareProvider] do
+      registered_model = %{model | provider: provider.provider_id()}
+
+      assert {:error, error} = Adapter.resolve(registered_model, :evaluate)
+      assert Exception.message(error) =~ "registered provider does not implement this protocol"
+    end
+
+    assert {:error, error} = Adapter.resolve(%{model | execution: %{}}, :evaluate)
+    assert Exception.message(error) =~ "execution.evaluate contract is required"
   end
 
   test "chat and object retain the catalog gateway and stream capability checks", %{model: model} do

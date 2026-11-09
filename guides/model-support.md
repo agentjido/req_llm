@@ -103,7 +103,7 @@ provider-native feature and are not consulted by request routing.
 | `accounts/fireworks/models/deepseek-v4-flash` | `text` | `fireworks_ai.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:30:47Z | surface declaration unknown |
 | `accounts/fireworks/models/deepseek-v4-pro` | `text` | `fireworks_ai.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:30:47Z | surface declaration unknown |
 | `accounts/fireworks/models/glm-5p1` | `text` | `fireworks_ai.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:30:47Z | surface declaration unknown |
-| `accounts/fireworks/models/gpt-oss-120b` | `text` | `fireworks_ai.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:30:47Z | missing or stale evidence |
+| `accounts/fireworks/models/gpt-oss-120b` | `text` | `fireworks_ai.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:30:47Z | surface declaration unknown |
 | `accounts/fireworks/models/gpt-oss-20b` | `text` | `fireworks_ai.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:30:47Z | surface declaration unknown |
 | `accounts/fireworks/models/kimi-k2p5` | `text` | `fireworks_ai.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:30:47Z | surface declaration unknown |
 | `accounts/fireworks/models/kimi-k2p6` | `text` | `fireworks_ai.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:30:47Z | surface declaration unknown |
@@ -356,7 +356,7 @@ provider-native feature and are not consulted by request routing.
 | `google/gemma-4-31b-it:free` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:42:35Z | missing or stale evidence |
 | `ibm-granite/granite-4.0-h-micro` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:20:36Z | surface declaration unknown |
 | `ibm-granite/granite-4.1-8b` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:20:36Z | surface declaration unknown |
-| `inception/mercury-2` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:20:46Z | missing or stale evidence |
+| `inception/mercury-2` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:20:46Z | surface declaration unknown |
 | `inclusionai/ling-2.6-1t` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:16:15Z | surface declaration unknown |
 | `inclusionai/ling-2.6-flash` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:16:15Z | surface declaration unknown |
 | `inclusionai/ring-2.6-1t` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:16:15Z | surface declaration unknown |
@@ -385,9 +385,9 @@ provider-native feature and are not consulted by request routing.
 | `microsoft/phi-4` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:17:09Z | missing or stale evidence |
 | `microsoft/phi-4-mini-instruct` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:17:09Z | surface declaration unknown |
 | `microsoft/wizardlm-2-8x22b` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:17:09Z | surface declaration unknown |
-| `minimax/minimax-m2` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:42:59Z | missing or stale evidence |
-| `minimax/minimax-m2-her` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:42:59Z | missing or stale evidence |
-| `minimax/minimax-m2.1` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:42:59Z | missing or stale evidence |
+| `minimax/minimax-m2` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:42:59Z | surface declaration unknown |
+| `minimax/minimax-m2-her` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:42:59Z | surface declaration unknown |
+| `minimax/minimax-m2.1` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:42:59Z | surface declaration unknown |
 | `minimax/minimax-m2.5` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:42:59Z | missing or stale evidence |
 | `minimax/minimax-m2.5:free` | `text` | `openrouter.unrecorded_text` | text → text | Experimental | 0/5 | 2026-05-29T23:42:59Z | surface declaration unknown |
 | `minimax/minimax-m2.7` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:42:59Z | missing or stale evidence |
@@ -424,9 +424,9 @@ provider-native feature and are not consulted by request routing.
 | `morph/morph-v3-large` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:20:57Z | missing or stale evidence |
 | `nex-agi/deepseek-v3.1-nex-n1` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:21:08Z | surface declaration unknown |
 | `nousresearch/hermes-2-pro-llama-3-8b` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:18:40Z | surface declaration unknown |
-| `nousresearch/hermes-3-llama-3.1-405b` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:18:40Z | missing or stale evidence |
+| `nousresearch/hermes-3-llama-3.1-405b` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:18:40Z | surface declaration unknown |
 | `nousresearch/hermes-3-llama-3.1-405b:free` | `text` | `openrouter.unrecorded_text` | text → text | Experimental | 0/5 | 2026-05-30T00:18:40Z | surface declaration unknown |
-| `nousresearch/hermes-3-llama-3.1-70b` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:18:40Z | missing or stale evidence |
+| `nousresearch/hermes-3-llama-3.1-70b` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:18:40Z | surface declaration unknown |
 | `nousresearch/hermes-4-70b` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-30T00:18:40Z | surface declaration unknown |
 | `nvidia/llama-3.3-nemotron-super-49b-v1.5` | `text` | `openrouter.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:44:50Z | surface declaration unknown |
 | `nvidia/llama-nemotron-embed-vl-1b-v2:free` | `embedding` | `openrouter.embedding` | text → embedding | Experimental | 0/3 | 2026-05-30T00:56:13Z | missing or stale evidence |
@@ -569,12 +569,12 @@ provider-native feature and are not consulted by request routing.
 | `grok-4-20-multi-agent` | `text` | `venice.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:55:12Z | missing or stale evidence |
 | `grok-4-3` | `text` | `venice.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:55:12Z | missing or stale evidence |
 | `grok-build-0-1` | `text` | `venice.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:55:12Z | missing or stale evidence |
-| `hermes-3-llama-3.1-405b` | `text` | `venice.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:55:12Z | missing or stale evidence |
+| `hermes-3-llama-3.1-405b` | `text` | `venice.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:55:12Z | surface declaration unknown |
 | `kimi-k2-5` | `text` | `venice.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:55:12Z | missing or stale evidence |
 | `kimi-k2-6` | `text` | `venice.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:55:12Z | missing or stale evidence |
 | `llama-3.2-3b` | `text` | `venice.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:55:12Z | missing or stale evidence |
 | `llama-3.3-70b` | `text` | `venice.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:55:12Z | missing or stale evidence |
-| `mercury-2` | `text` | `venice.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:55:12Z | missing or stale evidence |
+| `mercury-2` | `text` | `venice.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:55:12Z | surface declaration unknown |
 | `minimax-m25` | `text` | `venice.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:55:12Z | missing or stale evidence |
 | `minimax-m27` | `text` | `venice.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:55:12Z | missing or stale evidence |
 | `mistral-small-2603` | `text` | `venice.chat_completions` | text → text | Experimental | 0/5 | 2026-05-29T23:55:12Z | surface declaration unknown |

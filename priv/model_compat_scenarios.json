@@ -1495,15 +1495,13 @@
       }
     },
     "fireworks_ai:accounts/fireworks/models/gpt-oss-120b": {
-      "catalog_status": "present",
-      "declared_operations": [
-        "text"
-      ],
+      "catalog_status": "missing",
+      "declared_operations": [],
       "model": "accounts/fireworks/models/gpt-oss-120b",
       "provider": "fireworks_ai",
       "surfaces": {
         "fireworks_ai.chat_completions": {
-          "declaration": "declared",
+          "declaration": "unknown",
           "operation": "text",
           "provider": "fireworks_ai",
           "scenarios": {
@@ -9891,15 +9889,13 @@
       }
     },
     "openrouter:inception/mercury-2": {
-      "catalog_status": "present",
-      "declared_operations": [
-        "text"
-      ],
+      "catalog_status": "missing",
+      "declared_operations": [],
       "model": "inception/mercury-2",
       "provider": "openrouter",
       "surfaces": {
         "openrouter.chat_completions": {
-          "declaration": "declared",
+          "declaration": "unknown",
           "operation": "text",
           "provider": "openrouter",
           "scenarios": {
@@ -10789,15 +10785,13 @@
       }
     },
     "openrouter:minimax/minimax-m2": {
-      "catalog_status": "present",
-      "declared_operations": [
-        "text"
-      ],
+      "catalog_status": "missing",
+      "declared_operations": [],
       "model": "minimax/minimax-m2",
       "provider": "openrouter",
       "surfaces": {
         "openrouter.chat_completions": {
-          "declaration": "declared",
+          "declaration": "unknown",
           "operation": "text",
           "provider": "openrouter",
           "scenarios": {
@@ -10821,15 +10815,13 @@
       }
     },
     "openrouter:minimax/minimax-m2-her": {
-      "catalog_status": "present",
-      "declared_operations": [
-        "text"
-      ],
+      "catalog_status": "missing",
+      "declared_operations": [],
       "model": "minimax/minimax-m2-her",
       "provider": "openrouter",
       "surfaces": {
         "openrouter.chat_completions": {
-          "declaration": "declared",
+          "declaration": "unknown",
           "operation": "text",
           "provider": "openrouter",
           "scenarios": {
@@ -10853,15 +10845,13 @@
       }
     },
     "openrouter:minimax/minimax-m2.1": {
-      "catalog_status": "present",
-      "declared_operations": [
-        "text"
-      ],
+      "catalog_status": "missing",
+      "declared_operations": [],
       "model": "minimax/minimax-m2.1",
       "provider": "openrouter",
       "surfaces": {
         "openrouter.chat_completions": {
-          "declaration": "declared",
+          "declaration": "unknown",
           "operation": "text",
           "provider": "openrouter",
           "scenarios": {
@@ -12019,15 +12009,13 @@
       }
     },
     "openrouter:nousresearch/hermes-3-llama-3.1-405b": {
-      "catalog_status": "present",
-      "declared_operations": [
-        "text"
-      ],
+      "catalog_status": "missing",
+      "declared_operations": [],
       "model": "nousresearch/hermes-3-llama-3.1-405b",
       "provider": "openrouter",
       "surfaces": {
         "openrouter.chat_completions": {
-          "declaration": "declared",
+          "declaration": "unknown",
           "operation": "text",
           "provider": "openrouter",
           "scenarios": {
@@ -12081,15 +12069,13 @@
       }
     },
     "openrouter:nousresearch/hermes-3-llama-3.1-70b": {
-      "catalog_status": "present",
-      "declared_operations": [
-        "text"
-      ],
+      "catalog_status": "missing",
+      "declared_operations": [],
       "model": "nousresearch/hermes-3-llama-3.1-70b",
       "provider": "openrouter",
       "surfaces": {
         "openrouter.chat_completions": {
-          "declaration": "declared",
+          "declaration": "unknown",
           "operation": "text",
           "provider": "openrouter",
           "scenarios": {
@@ -16421,15 +16407,13 @@
       }
     },
     "venice:hermes-3-llama-3.1-405b": {
-      "catalog_status": "present",
-      "declared_operations": [
-        "text"
-      ],
+      "catalog_status": "missing",
+      "declared_operations": [],
       "model": "hermes-3-llama-3.1-405b",
       "provider": "venice",
       "surfaces": {
         "venice.chat_completions": {
-          "declaration": "declared",
+          "declaration": "unknown",
           "operation": "text",
           "provider": "venice",
           "scenarios": {
@@ -16581,15 +16565,13 @@
       }
     },
     "venice:mercury-2": {
-      "catalog_status": "present",
-      "declared_operations": [
-        "text"
-      ],
+      "catalog_status": "missing",
+      "declared_operations": [],
       "model": "mercury-2",
       "provider": "venice",
       "surfaces": {
         "venice.chat_completions": {
-          "declaration": "declared",
+          "declaration": "unknown",
           "operation": "text",
           "provider": "venice",
           "scenarios": {

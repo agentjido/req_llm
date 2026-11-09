@@ -146,6 +146,9 @@ defmodule ReqLLM.Providers.OpenAI do
   # The Responses API supports richer file types than the Chat Completions API.
   @responses_api_mimes ~w(image/jpeg image/png image/gif image/webp application/pdf)
 
+  @impl ReqLLM.Provider
+  def evaluation_protocols, do: ["openai_decisions"]
+
   @provider_schema [
     access_token: [
       type: :string,
@@ -555,6 +558,7 @@ defmodule ReqLLM.Providers.OpenAI do
 
   def prepare_request(:evaluate, model_spec, %{state: state, questions: questions}, opts) do
     with {:ok, model} <- ReqLLM.model(model_spec),
+         {:ok, endpoint} <- ReqLLM.Evaluation.Execution.endpoint(model, base_url(), opts),
          execution = model.execution.evaluate,
          safety_identifier = decisions_safety_identifier(opts),
          {:ok, body, contract} <-
@@ -576,13 +580,14 @@ defmodule ReqLLM.Providers.OpenAI do
             :provider_options,
             :api_mod,
             :decisions_body,
+            :evaluate_path,
             :base_url
           ]
 
       request =
         Req.new(
           [
-            url: api_mod.path(),
+            url: ReqLLM.Evaluation.Execution.url(endpoint.base_url, endpoint.path),
             method: :post,
             receive_timeout: timeout
           ] ++ ReqLLM.Provider.Defaults.merge_finch_options(http_opts, pool_timeout: timeout)
@@ -593,7 +598,7 @@ defmodule ReqLLM.Providers.OpenAI do
             [
               operation: :evaluate,
               model: execution.provider_model_id,
-              base_url: Keyword.get(opts, :base_url, base_url()),
+              base_url: endpoint.base_url,
               api_mod: api_mod,
               decisions_body: body
             ]

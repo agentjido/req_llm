@@ -163,7 +163,11 @@ defmodule ReqLLM.Providers.Azure.EvaluationTest do
   end
 
   test "rejects incompatible evaluation contracts before HTTP" do
-    for override <- [%{family: "openai_decisions"}, %{path: "/v1/systemone"}, %{supported: false}] do
+    for override <- [
+          %{family: "openai_decisions"},
+          %{path: "//other.example"},
+          %{supported: false}
+        ] do
       model =
         @model
         |> Map.put(:id, "decision-unlisted")
@@ -172,6 +176,30 @@ defmodule ReqLLM.Providers.Azure.EvaluationTest do
       assert {:error, %ReqLLM.Error.Invalid.Parameter{}} =
                ReqLLM.evaluate(model, "text", @questions, no_http_options())
     end
+  end
+
+  test "honors inline evaluation endpoint metadata and preserves Azure authentication" do
+    model =
+      @model
+      |> Map.put(:id, "decision-unlisted")
+      |> put_in([:execution, :evaluate, :path], "/v1/custom/systemone")
+      |> put_in([:execution, :evaluate, :base_url], @base_url <> "/v1")
+      |> put_in([:execution, :evaluate, :provider_model_id], "custom-wire-deployment")
+
+    Req.Test.stub(__MODULE__, fn conn ->
+      assert conn.host == "decision-resource.services.ai.azure.com"
+      assert conn.request_path == "/v1/custom/systemone"
+      assert Plug.Conn.get_req_header(conn, "api-key") == ["test-key"]
+      assert conn.body_params["model"] == "custom-wire-deployment"
+      Req.Test.json(conn, response_body())
+    end)
+
+    assert {:ok, _} =
+             ReqLLM.evaluate(model, "text", @questions,
+               api_key: "test-key",
+               provider_options: [azure: [deployment: "custom-wire-deployment"]],
+               req_http_options: [plug: {Req.Test, __MODULE__}]
+             )
   end
 
   test "rejects invalid configuration before HTTP" do
