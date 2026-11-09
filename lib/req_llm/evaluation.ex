@@ -19,6 +19,7 @@ defmodule ReqLLM.Evaluation do
                     [
                       api_key: Zoi.string(),
                       base_url: Zoi.string(),
+                      evaluate_path: Zoi.string(),
                       receive_timeout: Zoi.integer() |> Zoi.positive(),
                       total_timeout:
                         Zoi.union([Zoi.integer() |> Zoi.positive(), Zoi.literal(:infinity)]),
@@ -54,7 +55,7 @@ defmodule ReqLLM.Evaluation do
   models use the Decisions API. They support boolean, choice, and score questions;
   `provider_options: [openai: [safety_identifier: "tenant-123"]]` adds the optional
   safety identifier. OpenAI refusals stay in the result as `%{"type" => "refusal"}`.
-  OpenAI Decisions also accepts a `ReqLLM.Context` state of system, user, and
+  The OpenAI Decisions protocol also accepts a `ReqLLM.Context` state of system, user, and
   assistant text, with images in user messages:
 
       context =
@@ -86,9 +87,8 @@ defmodule ReqLLM.Evaluation do
          :ok <- validate_json(json_input(state, questions)),
          {:ok, opts} <- validate_options(opts),
          {:ok, model} <- resolve_model(model_spec),
-         :ok <- validate_support(model),
+         {:ok, provider} <- Adapter.resolve(model, :evaluate, opts),
          :ok <- validate_state_support(model, state),
-         {:ok, provider} <- Adapter.resolve(model, :evaluate),
          {:ok, opts} <-
            ReqLLM.Provider.Options.normalize_namespaced_provider_options(
              provider,
@@ -109,8 +109,9 @@ defmodule ReqLLM.Evaluation do
   @doc """
   Lists model specs that `evaluate/4` can call with an installed adapter.
 
-  Catalog evaluation metadata can also describe models for providers that
-  ReqLLM does not yet support. Those models are excluded.
+  Models need an explicitly supported evaluation execution contract and either
+  a registered provider declaring compatible decision protocols or executable
+  catalog gateway metadata. Discovery does not require credentials.
   """
   @spec models() :: [String.t()]
   def models do
@@ -251,48 +252,14 @@ defmodule ReqLLM.Evaluation do
   defp field(_, _), do: nil
 
   defp validate_support(model) do
-    cond do
-      field(model.capabilities, :evaluate) != true ->
-        {:error, invalid_parameter("#{LLMDB.Model.spec(model)} does not support evaluation")}
-
-      callable?(model) ->
-        :ok
-
-      true ->
-        {:error,
-         invalid_parameter(
-           "No evaluation adapter for #{LLMDB.Model.spec(model)} (provider #{inspect(model.provider)}, execution family #{inspect(field(field(model.execution, :evaluate), :family))})"
-         )}
+    case Adapter.resolve(model, :evaluate) do
+      {:ok, _provider} -> :ok
+      {:error, _} = error -> error
     end
   end
 
   defp callable?(model) do
-    execution = field(model.execution, :evaluate)
-
-    case model.provider do
-      :typesafe ->
-        contract?(execution, "typesafe_systemone", "/v1/systemone")
-
-      :openrouter ->
-        contract?(execution, "openrouter_decisions", "/api/alpha/decisions")
-
-      :openai ->
-        contract?(execution, "openai_decisions", "/decisions")
-
-      :azure ->
-        contract?(execution, "typesafe_systemone", "/providers/microsoft/v1/systemone")
-
-      _ ->
-        false
-    end
-  end
-
-  defp contract?(execution, family, path) do
-    field(execution, :supported) == true and
-      field(execution, :family) == family and
-      field(execution, :wire_protocol) == family and
-      field(execution, :path) == path and
-      (is_binary(field(execution, :provider_model_id)) or family == "typesafe_systemone")
+    match?({:ok, _provider}, Adapter.resolve(model, :evaluate))
   end
 
   defp unknown_model(spec) do
@@ -309,13 +276,15 @@ defmodule ReqLLM.Evaluation do
   defp json_input(%ReqLLM.Context{}, questions), do: %{questions: questions}
   defp json_input(state, questions), do: %{state: state, questions: questions}
 
-  defp validate_state_support(%LLMDB.Model{provider: :openai}, _state), do: :ok
-
   defp validate_state_support(model, %ReqLLM.Context{}) do
-    {:error,
-     invalid_parameter(
-       "#{LLMDB.Model.spec(model)} accepts text or JSON state; ReqLLM.Context state requires OpenAI Decisions"
-     )}
+    if ReqLLM.Evaluation.Execution.context_supported?(model) do
+      :ok
+    else
+      {:error,
+       invalid_parameter(
+         "#{LLMDB.Model.spec(model)} accepts text or JSON state; ReqLLM.Context state requires OpenAI Decisions"
+       )}
+    end
   end
 
   defp validate_state_support(_model, _state), do: :ok

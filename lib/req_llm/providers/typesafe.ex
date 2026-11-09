@@ -15,8 +15,13 @@ defmodule ReqLLM.Providers.TypeSafe do
     default_env_key: "TYPESAFE_API_KEY"
 
   @impl ReqLLM.Provider
+  def evaluation_protocols, do: ["typesafe_systemone"]
+
+  @impl ReqLLM.Provider
   def prepare_request(:evaluate, model_spec, %{state: state, questions: questions}, opts) do
     with {:ok, model} <- ReqLLM.model(model_spec),
+         {:ok, endpoint} <-
+           ReqLLM.Evaluation.Execution.endpoint(model, default_base_url(), opts),
          {:ok, api_key, _source} <- ReqLLM.Keys.get(model, opts) do
       timeout = Keyword.get(opts, :receive_timeout, 30_000)
       http_opts = Keyword.get(opts, :req_http_options, [])
@@ -24,7 +29,7 @@ defmodule ReqLLM.Providers.TypeSafe do
       request =
         Req.new(
           [
-            url: "/v1/systemone",
+            url: ReqLLM.Evaluation.Execution.url(endpoint.base_url, endpoint.path),
             method: :post,
             receive_timeout: timeout
           ] ++ ReqLLM.Provider.Defaults.merge_finch_options(http_opts, pool_timeout: timeout)
@@ -32,10 +37,11 @@ defmodule ReqLLM.Providers.TypeSafe do
         |> Req.Request.register_options([:operation, :model, :state, :questions])
         |> Req.Request.merge_options(
           operation: :evaluate,
-          model: model.provider_model_id || model.id,
+          model:
+            model.execution.evaluate[:provider_model_id] || model.provider_model_id || model.id,
           state: state,
           questions: questions,
-          base_url: Keyword.get(opts, :base_url, default_base_url())
+          base_url: endpoint.base_url
         )
         |> attach(model, Keyword.put(opts, :api_key, api_key))
 

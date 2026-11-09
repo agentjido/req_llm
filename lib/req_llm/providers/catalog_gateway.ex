@@ -4,7 +4,7 @@ defmodule ReqLLM.Providers.CatalogGateway do
 
   Registered provider modules take priority. This adapter only uses explicit
   model execution data and provider bearer authentication metadata. It supports
-  OpenAI Chat Completions and Cohere-compatible reranking.
+  OpenAI Chat Completions, Cohere-compatible reranking, and decision evaluation.
   """
 
   use ReqLLM.Provider, id: :catalog_gateway, default_base_url: ""
@@ -76,11 +76,19 @@ defmodule ReqLLM.Providers.CatalogGateway do
     end
   end
 
+  def prepare_request(:evaluate, model_spec, input, opts) do
+    with {:ok, model} <- resolve_model(model_spec),
+         {:ok, contract} <- contract(model, :evaluate, opts),
+         {:ok, api_key} <- credential(model.provider, contract.auth, opts) do
+      ReqLLM.Evaluation.Protocol.prepare_request(model, input, opts, contract, api_key)
+    end
+  end
+
   def prepare_request(operation, model, _input, _opts) do
     ProviderDispatch.unsupported(
       model,
       operation,
-      "only chat, object, and rerank operations are supported"
+      "only chat, object, rerank, and evaluate operations are supported"
     )
   end
 
@@ -142,7 +150,7 @@ defmodule ReqLLM.Providers.CatalogGateway do
   end
 
   @doc false
-  @spec contract(LLMDB.Model.t(), :chat | :object | :rerank, keyword()) ::
+  @spec contract(LLMDB.Model.t(), :chat | :object | :rerank | :evaluate, keyword()) ::
           {:ok, map()} | {:error, Exception.t()}
   def contract(%LLMDB.Model{} = model, operation, opts) do
     execution_operation = if operation == :chat, do: :text, else: operation
@@ -159,6 +167,7 @@ defmodule ReqLLM.Providers.CatalogGateway do
       {:ok,
        %{
          auth: auth,
+         wire_protocol: Map.get(execution, :wire_protocol),
          base_url: base_url,
          path: path,
          provider_model_id:
@@ -172,6 +181,13 @@ defmodule ReqLLM.Providers.CatalogGateway do
   end
 
   defp require_executable_model(_model, _operation), do: :ok
+
+  defp require_execution(model, :evaluate, _execution) do
+    case ReqLLM.Evaluation.Execution.contract(model) do
+      {:ok, _execution} -> :ok
+      {:error, _} = error -> error
+    end
+  end
 
   defp require_execution(
          model,
@@ -298,7 +314,11 @@ defmodule ReqLLM.Providers.CatalogGateway do
   end
 
   defp require_path(model, operation, execution, opts) do
-    path = opts[:rerank_path] || Map.get(execution, :path)
+    path =
+      case operation do
+        :evaluate -> opts[:evaluate_path] || Map.get(execution, :path)
+        _ -> opts[:rerank_path] || Map.get(execution, :path)
+      end
 
     cond do
       is_binary(path) && byte_size(path) > 1 && String.starts_with?(path, "/") &&

@@ -229,6 +229,9 @@ defmodule ReqLLM.Providers.Azure do
                                 unrecognized_keys: :error
                               )
 
+  @impl ReqLLM.Provider
+  def evaluation_protocols, do: ["typesafe_systemone"]
+
   @provider_schema [
     api_version: [
       type: :string,
@@ -534,8 +537,14 @@ defmodule ReqLLM.Providers.Azure do
   defp do_prepare_evaluation_request(model_spec, %{state: state, questions: questions}, opts) do
     with {:ok, model} <- ReqLLM.model(model_spec),
          {:ok, opts} <- ReqLLM.Provider.Options.normalize_flat_provider_options(__MODULE__, opts),
-         :ok <- validate_evaluation_options(opts) do
-      opts = Keyword.put_new(opts, :base_url, model.base_url)
+         :ok <- validate_evaluation_options(opts),
+         {:ok, endpoint} <-
+           ReqLLM.Evaluation.Execution.endpoint(
+             model,
+             resolve_base_url("microsoft-decision", opts),
+             opts
+           ) do
+      opts = Keyword.put(opts, :base_url, endpoint.base_url)
       base_url = resolve_base_url("microsoft-decision", opts)
       validate_base_url!(base_url)
       deployment = get_evaluation_deployment_with_warning(model, opts)
@@ -547,7 +556,7 @@ defmodule ReqLLM.Providers.Azure do
       request =
         Req.new(
           [
-            url: "/providers/microsoft/v1/systemone",
+            url: ReqLLM.Evaluation.Execution.url(base_url, endpoint.path),
             base_url: base_url,
             method: :post,
             receive_timeout: timeout,

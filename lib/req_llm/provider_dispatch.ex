@@ -4,9 +4,15 @@ defmodule ReqLLM.ProviderDispatch do
   alias ReqLLM.Error.Invalid.Parameter
   alias ReqLLM.Providers.CatalogGateway
 
-  @spec get(LLMDB.Model.t(), :chat | :object | :rerank, keyword()) ::
+  @spec get(LLMDB.Model.t(), :chat | :object | :rerank | :evaluate, keyword()) ::
           {:ok, module()} | {:error, Exception.t()}
-  def get(%LLMDB.Model{} = model, operation, opts \\ []) do
+  def get(model, operation, opts \\ [])
+
+  def get(%LLMDB.Model{} = model, :evaluate, opts) do
+    ReqLLM.Evaluation.Execution.resolve(model, opts)
+  end
+
+  def get(%LLMDB.Model{} = model, operation, opts) do
     case ReqLLM.Providers.get(model.provider) do
       {:ok, provider_module} ->
         {:ok, provider_module}
@@ -21,7 +27,12 @@ defmodule ReqLLM.ProviderDispatch do
 
   @doc false
   @spec executable?(LLMDB.Model.t(), atom()) :: boolean()
-  def executable?(%LLMDB.Model{} = model, operation \\ :text) do
+  def executable?(model, operation \\ :text)
+
+  def executable?(%LLMDB.Model{} = model, :evaluate),
+    do: match?({:ok, _}, get(model, :evaluate))
+
+  def executable?(%LLMDB.Model{} = model, operation) do
     case ReqLLM.Providers.get(model.provider) do
       {:ok, _module} -> true
       {:error, _} when operation in [:text, :all] -> match?({:ok, _}, get(model, :chat))

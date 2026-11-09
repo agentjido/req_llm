@@ -23,6 +23,9 @@ defmodule ReqLLM.SingleRequestParityTest do
     ]
 
     @impl ReqLLM.Provider
+    def evaluation_protocols, do: ["typesafe_systemone"]
+
+    @impl ReqLLM.Provider
     def prepare_request(operation, model, input, opts) do
       controls = Keyword.get(opts, :provider_options, [])
       send(controls[:owner], {:prepared, operation, model, input, opts})

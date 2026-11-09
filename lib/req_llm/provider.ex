@@ -687,7 +687,17 @@ defmodule ReqLLM.Provider do
   """
   @callback credential_missing?(Exception.t()) :: boolean()
 
+  @doc """
+  Declares the decision wire protocols implemented by this provider's evaluation
+  adapter. Evaluation requires both this declaration and a compatible, explicitly
+  supported model execution contract. Registration or `prepare_request/4` alone
+  does not enable evaluation. Supported protocols are `typesafe_systemone`,
+  `openrouter_decisions`, and `openai_decisions`.
+  """
+  @callback evaluation_protocols() :: [String.t()]
+
   @optional_callbacks [
+    evaluation_protocols: 0,
     normalize_model_id: 1,
     extract_usage: 2,
     default_env_key: 0,
