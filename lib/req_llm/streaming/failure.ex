@@ -87,6 +87,7 @@ defmodule ReqLLM.Streaming.Failure do
       response_body: error_body,
       headers: headers,
       provider_code: provider_code(error_body),
+      kind: error_kind(error_body),
       retryable: retryable_status?(status)
     )
   end
@@ -118,6 +119,13 @@ defmodule ReqLLM.Streaming.Failure do
     end
   end
 
+  defp error_body([body] = original_body) when is_map(body) do
+    case MapAccess.get(body, :error) do
+      error when is_map(error) -> error
+      _other -> original_body
+    end
+  end
+
   defp error_body(body), do: body
 
   defp error_message(body, status, _use_body_as_reason?) when is_map(body) do
@@ -135,6 +143,31 @@ defmodule ReqLLM.Streaming.Failure do
   end
 
   defp provider_code(_body), do: nil
+
+  defp error_kind(body) when is_map(body) do
+    if context_length_code?(provider_code(body)) or
+         (provider_code(body) == 400 and
+            context_length_message?(MapAccess.get(body, :message))) do
+      :context_length_exceeded
+    end
+  end
+
+  defp error_kind(_body), do: nil
+
+  defp context_length_code?(code)
+       when code in [:context_length_exceeded, "context_length_exceeded"],
+       do: true
+
+  defp context_length_code?(_code), do: false
+
+  defp context_length_message?(message) when is_binary(message) do
+    normalized_message = String.downcase(message)
+
+    String.contains?(normalized_message, "input token count") and
+      String.contains?(normalized_message, "exceeds the maximum number of tokens")
+  end
+
+  defp context_length_message?(_message), do: false
 
   defp retryable_status?(status) when status in [408, 409, 425, 429], do: true
   defp retryable_status?(status) when status in 500..599, do: true

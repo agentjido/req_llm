@@ -35,6 +35,66 @@ defmodule ReqLLM.Streaming.FailureTest do
     assert {:api, 503, "overloaded", true} = Failure.classify(error)
   end
 
+  test "unwraps an array-wrapped context length error" do
+    error =
+      Failure.api_error(
+        400,
+        Jason.encode!([
+          %{
+            "error" => %{
+              "code" => 400,
+              "message" =>
+                "The input token count exceeds the maximum number of tokens allowed 1048576.",
+              "status" => "INVALID_ARGUMENT"
+            }
+          }
+        ]),
+        []
+      )
+
+    assert error.reason ==
+             "The input token count exceeds the maximum number of tokens allowed 1048576."
+
+    assert error.provider_code == 400
+    assert error.kind == :context_length_exceeded
+
+    assert error.response_body == %{
+             "code" => 400,
+             "message" =>
+               "The input token count exceeds the maximum number of tokens allowed 1048576.",
+             "status" => "INVALID_ARGUMENT"
+           }
+  end
+
+  test "normalizes the OpenAI context length error code" do
+    error =
+      Failure.api_error(
+        400,
+        ~s({"error":{"code":"context_length_exceeded","message":"Input is too long"}}),
+        []
+      )
+
+    assert error.kind == :context_length_exceeded
+  end
+
+  test "preserves an unmatched singleton array body" do
+    error = Failure.api_error(400, ~s([{"message":"not an error wrapper"}]), [])
+
+    assert error.reason == "HTTP 400"
+    assert error.response_body == [%{"message" => "not an error wrapper"}]
+  end
+
+  test "does not classify an unrelated invalid request as a context length error" do
+    error =
+      Failure.api_error(
+        400,
+        ~s({"error":{"code":400,"message":"The request is invalid","status":"INVALID_ARGUMENT"}}),
+        []
+      )
+
+    assert error.kind == nil
+  end
+
   test "preserves a plain-text provider response as the failure reason" do
     error = Failure.api_error(429, "rate limit exceeded", [], use_body_as_reason?: true)
 
