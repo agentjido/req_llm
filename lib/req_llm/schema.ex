@@ -677,7 +677,7 @@ defmodule ReqLLM.Schema do
     %{
       "name" => tool.name,
       "description" => tool.description,
-      "parameters" => parameters
+      "parametersJsonSchema" => parameters
     }
   end
 

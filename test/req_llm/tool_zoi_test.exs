@@ -333,10 +333,10 @@ defmodule ReqLLM.Tool.ZoiTest do
 
       assert google_schema["name"] == "search"
       assert google_schema["description"] == "Search query"
-      assert google_schema["parameters"]["type"] == "object"
-      assert google_schema["parameters"]["properties"]["query"]["type"] == "string"
-      refute Map.has_key?(google_schema["parameters"], "$schema")
-      refute Map.has_key?(google_schema["parameters"], "additionalProperties")
+      assert google_schema["parametersJsonSchema"]["type"] == "object"
+      assert google_schema["parametersJsonSchema"]["properties"]["query"]["type"] == "string"
+      refute Map.has_key?(google_schema["parametersJsonSchema"], "$schema")
+      refute Map.has_key?(google_schema["parametersJsonSchema"], "additionalProperties")
     end
 
     test "removes additionalProperties recursively from nested objects" do
@@ -361,7 +361,7 @@ defmodule ReqLLM.Tool.ZoiTest do
         )
 
       google_schema = Schema.to_google_format(tool)
-      parameters = google_schema["parameters"]
+      parameters = google_schema["parametersJsonSchema"]
 
       refute Map.has_key?(parameters, "additionalProperties")
       refute Map.has_key?(parameters["properties"]["company"], "additionalProperties")
