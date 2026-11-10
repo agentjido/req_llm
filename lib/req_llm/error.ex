@@ -65,6 +65,7 @@ defmodule ReqLLM.Error do
         :cause,
         :headers,
         :provider_code,
+        :kind,
         :retryable
       ],
       class: :api
