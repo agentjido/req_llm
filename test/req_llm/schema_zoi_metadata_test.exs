@@ -224,7 +224,7 @@ defmodule ReqLLM.Schema.ZoiMetadataTest do
         )
 
       google_format = Schema.to_google_format(tool)
-      params = google_format["parameters"]
+      params = google_format["parametersJsonSchema"]
 
       assert params["properties"]["path"]["description"] == "File path"
       assert params["properties"]["operation"]["description"] == "File operation to perform"
