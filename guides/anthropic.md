@@ -62,6 +62,25 @@ Without an explicit path, `oauth.json` or `auth.json` is looked up relative to t
 
 Passed via `:provider_options` keyword:
 
+### `claude_code_version`
+
+- **Type**: String
+- **Default**: `"2.1.322"`
+- **Purpose**: Override the Claude Code version reported when `with_claude_subscription: true` is enabled with OAuth authentication. The user-agent, billing header, and billing checksum use the same version for streaming and non-streaming requests.
+
+```elixir
+ReqLLM.generate_text(
+  "anthropic:claude-sonnet-4-5",
+  "Summarize this",
+  provider_options: [
+    auth_mode: :oauth,
+    access_token: System.fetch_env!("ANTHROPIC_ACCESS_TOKEN"),
+    with_claude_subscription: true,
+    claude_code_version: "2.1.322"
+  ]
+)
+```
+
 ### `anthropic_top_k`
 
 - **Type**: `1..40`
