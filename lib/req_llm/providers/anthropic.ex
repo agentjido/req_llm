@@ -63,6 +63,10 @@ defmodule ReqLLM.Providers.Anthropic do
       default: false,
       doc: "Enable Claude Pro/Max subscription compatibility for Anthropic OAuth requests"
     ],
+    claude_code_version: [
+      type: :string,
+      doc: "Claude Code version reported in subscription OAuth user-agent and billing headers"
+    ],
     anthropic_top_k: [
       type: :pos_integer,
       doc: "Sample from the top K options for each subsequent token (1-40)"
@@ -184,8 +188,7 @@ defmodule ReqLLM.Providers.Anthropic do
   @claude_subscription_identity "You are a Claude agent, built on Anthropic's Claude Agent SDK."
   @claude_subscription_billing_salt "59cf53e54c78"
   @claude_subscription_billing_positions [4, 7, 20]
-  @claude_subscription_code_version "2.1.282"
-  @claude_subscription_user_agent "claude-cli/#{@claude_subscription_code_version} (external, cli)"
+  @claude_subscription_code_version "2.1.322"
   @claude_subscription_entrypoint "sdk-cli"
 
   # Canonical reasoning effort token budgets for Anthropic models
@@ -489,13 +492,9 @@ defmodule ReqLLM.Providers.Anthropic do
   end
 
   defp put_subscription_headers(request, credential, opts) do
-    if claude_subscription?(credential, opts) do
-      request
-      |> Req.Request.put_header("user-agent", @claude_subscription_user_agent)
-      |> Req.Request.put_header("x-app", @claude_subscription_x_app)
-    else
-      request
-    end
+    Enum.reduce(subscription_header_list(credential, opts), request, fn {name, value}, req ->
+      Req.Request.put_header(req, name, value)
+    end)
   end
 
   defp put_subscription_beta_param(request, credential, opts) do
@@ -545,7 +544,12 @@ defmodule ReqLLM.Providers.Anthropic do
 
   defp subscription_header_list(credential, opts) do
     if claude_subscription?(credential, opts) do
-      [{"user-agent", @claude_subscription_user_agent}, {"x-app", @claude_subscription_x_app}]
+      version = claude_subscription_code_version(opts)
+
+      [
+        {"user-agent", "claude-cli/#{version} (external, cli)"},
+        {"x-app", @claude_subscription_x_app}
+      ]
     else
       []
     end
@@ -573,31 +577,32 @@ defmodule ReqLLM.Providers.Anthropic do
 
   defp shape_subscription_body(body, %Req.Request{} = request) do
     case Req.Request.get_private(request, :req_llm_claude_subscription?) do
-      true -> do_shape_subscription_body(body)
+      true -> do_shape_subscription_body(body, request.options)
       _ -> body
     end
   end
 
   defp shape_subscription_body(body, {credential, opts}) do
     if claude_subscription?(credential, opts) do
-      do_shape_subscription_body(body)
+      do_shape_subscription_body(body, opts)
     else
       body
     end
   end
 
-  defp do_shape_subscription_body(body) do
+  defp do_shape_subscription_body(body, opts) do
     system = map_value(body, :system)
     messages = map_value(body, :messages) || []
+    version = claude_subscription_code_version(opts)
 
-    Map.put(body, :system, subscription_system_blocks(system, messages))
+    Map.put(body, :system, subscription_system_blocks(system, messages, version))
   end
 
-  defp subscription_system_blocks(system, messages) do
+  defp subscription_system_blocks(system, messages, version) do
     blocks = system_blocks(system)
     blocks = prepend_subscription_identity(blocks)
 
-    case subscription_billing_header(messages) do
+    case subscription_billing_header(messages, version) do
       nil ->
         blocks
 
@@ -639,7 +644,7 @@ defmodule ReqLLM.Providers.Anthropic do
     end
   end
 
-  defp subscription_billing_header(messages) when is_list(messages) do
+  defp subscription_billing_header(messages, version) when is_list(messages) do
     case first_subscription_user_text(messages) do
       "" ->
         nil
@@ -656,15 +661,15 @@ defmodule ReqLLM.Providers.Anthropic do
 
         suffix =
           sha256_prefix(
-            @claude_subscription_billing_salt <> sampled <> @claude_subscription_code_version,
+            @claude_subscription_billing_salt <> sampled <> version,
             3
           )
 
-        "x-anthropic-billing-header: cc_version=#{@claude_subscription_code_version}.#{suffix}; cc_entrypoint=#{@claude_subscription_entrypoint}; cch=#{cch};"
+        "x-anthropic-billing-header: cc_version=#{version}.#{suffix}; cc_entrypoint=#{@claude_subscription_entrypoint}; cch=#{cch};"
     end
   end
 
-  defp subscription_billing_header(_messages), do: nil
+  defp subscription_billing_header(_messages, _version), do: nil
 
   defp first_subscription_user_text(messages) do
     messages
@@ -918,6 +923,13 @@ defmodule ReqLLM.Providers.Anthropic do
   end
 
   defp claude_subscription?(_credential, _opts), do: false
+
+  defp claude_subscription_code_version(opts) do
+    provider_opts = get_option(opts, :provider_options, []) || []
+
+    get_option(opts, :claude_code_version) ||
+      get_option(provider_opts, :claude_code_version) || @claude_subscription_code_version
+  end
 
   defp put_beta_header(request, user_opts, credential) do
     case beta_features(user_opts, credential) do

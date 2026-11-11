@@ -74,7 +74,7 @@ defmodule ReqLLM.Providers.Anthropic.AuthenticationTest do
 
       assert request.headers["authorization"] == ["Bearer #{oauth_token}"]
       refute Map.has_key?(request.headers, "x-api-key")
-      assert request.headers["user-agent"] == ["claude-cli/2.1.282 (external, cli)"]
+      assert request.headers["user-agent"] == ["claude-cli/2.1.322 (external, cli)"]
       assert request.headers["x-app"] == ["claude-code"]
 
       assert request.headers["anthropic-beta"] == [
@@ -106,7 +106,7 @@ defmodule ReqLLM.Providers.Anthropic.AuthenticationTest do
 
       assert String.starts_with?(
                billing_block["text"],
-               "x-anthropic-billing-header: cc_version=2.1.282."
+               "x-anthropic-billing-header: cc_version=2.1.322."
              )
 
       assert String.contains?(billing_block["text"], "cc_entrypoint=sdk-cli;")
@@ -165,7 +165,7 @@ defmodule ReqLLM.Providers.Anthropic.AuthenticationTest do
 
       assert request.headers["authorization"] == ["Bearer oauth-prepared-token"]
       refute Map.has_key?(request.headers, "x-api-key")
-      assert request.headers["user-agent"] == ["claude-cli/2.1.282 (external, cli)"]
+      assert request.headers["user-agent"] == ["claude-cli/2.1.322 (external, cli)"]
       assert request.headers["x-app"] == ["claude-code"]
       assert request.options[:params][:beta] == "true"
 
@@ -184,7 +184,7 @@ defmodule ReqLLM.Providers.Anthropic.AuthenticationTest do
 
       assert String.starts_with?(
                billing_block["text"],
-               "x-anthropic-billing-header: cc_version=2.1.282."
+               "x-anthropic-billing-header: cc_version=2.1.322."
              )
 
       assert identity_block["text"] ==
@@ -223,7 +223,7 @@ defmodule ReqLLM.Providers.Anthropic.AuthenticationTest do
 
       assert headers["authorization"] == "Bearer oauth-stream-token"
       refute Map.has_key?(headers, "x-api-key")
-      assert headers["user-agent"] == "claude-cli/2.1.282 (external, cli)"
+      assert headers["user-agent"] == "claude-cli/2.1.322 (external, cli)"
       assert headers["x-app"] == "claude-code"
       assert query["beta"] == "true"
 
@@ -235,9 +235,117 @@ defmodule ReqLLM.Providers.Anthropic.AuthenticationTest do
 
       assert String.starts_with?(
                List.first(decoded["system"])["text"],
-               "x-anthropic-billing-header:"
+               "x-anthropic-billing-header: cc_version=2.1.322."
              )
     end
+  end
+
+  describe "Claude Code version override" do
+    setup do
+      model = ReqLLM.model!("anthropic:claude-sonnet-4-5-20250929")
+      context = ReqLLM.Context.new([ReqLLM.Context.user("Hello from oauth")])
+
+      opts = [
+        auth_mode: :oauth,
+        access_token: "oauth-version-token",
+        with_claude_subscription: true
+      ]
+
+      {:ok, model: model, context: context, opts: opts}
+    end
+
+    test "attach uses the nested version for headers and billing", %{
+      model: model,
+      context: context,
+      opts: opts
+    } do
+      request =
+        Req.new()
+        |> Req.Request.register_options([:context])
+        |> Anthropic.attach(model,
+          context: context,
+          provider_options: Keyword.put(opts, :claude_code_version, "2.1.999")
+        )
+
+      assert request.headers["user-agent"] == ["claude-cli/2.1.999 (external, cli)"]
+      body = request |> Anthropic.encode_body() |> ReqLLM.Test.Helpers.json_body()
+      assert_custom_billing_header(body)
+    end
+
+    test "prepare_request accepts top-level and nested version overrides", %{
+      model: model,
+      context: context,
+      opts: opts
+    } do
+      for version_opts <- [
+            [claude_code_version: "2.1.999"],
+            [provider_options: [claude_code_version: "2.1.999"]]
+          ] do
+        {:ok, request} = Anthropic.prepare_request(:chat, model, context, opts ++ version_opts)
+
+        assert request.headers["user-agent"] == ["claude-cli/2.1.999 (external, cli)"]
+        body = request |> Anthropic.encode_body() |> ReqLLM.Test.Helpers.json_body()
+        assert_custom_billing_header(body)
+      end
+    end
+
+    test "attach_stream uses the override for headers and billing", %{
+      model: model,
+      context: context,
+      opts: opts
+    } do
+      for version_opts <- [
+            [claude_code_version: "2.1.999"],
+            [provider_options: [claude_code_version: "2.1.999"]]
+          ] do
+        {:ok, request} = Anthropic.attach_stream(model, context, opts ++ version_opts, nil)
+
+        assert Map.new(request.headers)["user-agent"] == "claude-cli/2.1.999 (external, cli)"
+        assert_custom_billing_header(Jason.decode!(request.body))
+      end
+    end
+
+    test "version override does not enable subscription compatibility", %{
+      model: model,
+      context: context
+    } do
+      for auth_opts <- [
+            [api_key: "test-key", with_claude_subscription: true],
+            [auth_mode: :oauth, access_token: "oauth-version-token"]
+          ] do
+        opts = auth_opts ++ [provider_options: [claude_code_version: "2.1.999"]]
+        {:ok, request} = Anthropic.prepare_request(:chat, model, context, opts)
+
+        refute Map.has_key?(request.headers, "user-agent")
+        refute Map.has_key?(request.headers, "x-app")
+        body = request |> Anthropic.encode_body() |> ReqLLM.Test.Helpers.json_body()
+        refute Map.has_key?(body, "system")
+        refute Map.has_key?(body, "claude_code_version")
+
+        {:ok, stream_request} = Anthropic.attach_stream(model, context, opts, nil)
+        headers = Map.new(stream_request.headers)
+
+        refute Map.has_key?(headers, "user-agent")
+        refute Map.has_key?(headers, "x-app")
+        body = Jason.decode!(stream_request.body)
+        refute Map.has_key?(body, "system")
+        refute Map.has_key?(body, "claude_code_version")
+      end
+    end
+
+    test "rejects non-string versions", %{model: model, context: context, opts: opts} do
+      opts = opts ++ [provider_options: [claude_code_version: 123]]
+
+      assert {:error, _} = Anthropic.prepare_request(:chat, model, context, opts)
+      assert {:error, _} = Anthropic.attach_stream(model, context, opts, nil)
+    end
+  end
+
+  defp assert_custom_billing_header(body) do
+    assert List.first(body["system"])["text"] ==
+             "x-anthropic-billing-header: cc_version=2.1.999.8c7; cc_entrypoint=sdk-cli; cch=50206;"
+
+    refute Map.has_key?(body, "claude_code_version")
   end
 
   defp req_beta_features(%Req.Request{} = request) do
