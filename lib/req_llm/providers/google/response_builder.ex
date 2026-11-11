@@ -7,6 +7,8 @@ defmodule ReqLLM.Providers.Google.ResponseBuilder do
   - Google returns "STOP" even when function calls are made
   - Extracts reasoning_details with thought signatures from thinking chunks
   - Preserves text thought signatures and their original part boundaries
+  - Carries the raw `finishReason` and `finishMessage` into `provider_meta`,
+    as the non-streaming path does
 
   This fixes bug #271 where streaming responses with tool calls
   had `:stop` finish_reason instead of `:tool_calls`.
@@ -32,8 +34,17 @@ defmodule ReqLLM.Providers.Google.ResponseBuilder do
            DefaultBuilder.build_response(preserve_signed_text_parts(chunks), metadata, opts) do
       reasoning_details = extract_google_reasoning_details(chunks)
       response_with_reasoning = attach_reasoning_details(response, reasoning_details)
-      {:ok, response_with_reasoning}
+      {:ok, put_raw_finish(response_with_reasoning, metadata)}
     end
+  end
+
+  defp put_raw_finish(response, metadata) do
+    raw =
+      metadata
+      |> Map.take([:finish_reason_raw, :finish_message])
+      |> Map.new(fn {key, value} -> {Atom.to_string(key), value} end)
+
+    %{response | provider_meta: Map.merge(response.provider_meta, raw)}
   end
 
   defp preserve_signed_text_parts(chunks) do

@@ -342,6 +342,41 @@ defmodule ReqLLM.Providers.Google.StreamingTest do
       assert resp.body.provider_meta["finish_message"] == "Unexpected tool call"
     end
 
+    test "streamed responses carry the raw finishReason and finishMessage like buffered ones" do
+      event = %{
+        data: %{
+          "candidates" => [
+            %{
+              "content" => %{"parts" => [], "role" => "model"},
+              "finishReason" => "MALFORMED_FUNCTION_CALL",
+              "finishMessage" => "Malformed function call: Failed to parse function call.",
+              "index" => 0
+            }
+          ]
+        }
+      }
+
+      for provider <- [:google, :google_vertex], consume <- [:to_response, :process_stream] do
+        model = %LLMDB.Model{id: "gemini-2.5-flash", provider: provider}
+        chunks = Google.decode_stream_event(event, model)
+        %{metadata: metadata} = Enum.find(chunks, &(&1.type == :meta))
+        {:ok, handle} = ReqLLM.StreamResponse.MetadataHandle.start_link(fn -> metadata end)
+
+        stream = %ReqLLM.StreamResponse{
+          stream: chunks,
+          metadata_handle: handle,
+          cancel: fn -> :ok end,
+          model: model,
+          context: context_fixture()
+        }
+
+        assert {:ok, response} = apply(ReqLLM.StreamResponse, consume, [stream])
+        assert ReqLLM.Response.finish_reason(response) == :error
+        assert response.provider_meta["finish_reason_raw"] == "MALFORMED_FUNCTION_CALL"
+        assert response.provider_meta["finish_message"] =~ "Malformed function call"
+      end
+    end
+
     test "usageMetadata alone still has no finish_reason (unchanged)", %{model: model} do
       event = %{
         data: %{
