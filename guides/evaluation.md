@@ -59,10 +59,14 @@ Supported family/wire-protocol pairs are:
 - `typesafe_systemone` / `typesafe_systemone`
 - `openrouter_decisions` / `openrouter_decisions`
 - `openai_decisions` / `openai_decisions`
+- `google_decisions` / `google_decisions`
 
 The first two protocols accept text or JSON state and share question/answer
 normalization. OpenAI Decisions also accepts `ReqLLM.Context`, including supported
 images in user messages, and validates ordered answers against the request.
+Google Gemini Decisions accepts text, JSON data, or a single user context with
+text, image, audio, video, and PDF parts. See the [Google guide](google.md#decisions-api)
+for an explicit model spec and examples. Vertex AI does not yet offer this API.
 Protocol support is independent of the provider name. Alternative answer
 probabilities and fractional scores are retained.
 

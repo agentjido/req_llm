@@ -68,6 +68,12 @@ defmodule ReqLLM.Evaluation do
 
       ReqLLM.evaluate("openai:gpt-6-luna", context, questions)
 
+  Google Gemini Decisions supports boolean, choice, and score questions, plus a
+  single user message containing text, images, audio, video, or PDF files in a
+  `ReqLLM.Context`. It does not accept conversation history or tool messages.
+  Plain map and list states are serialized as JSON text. Gemini Decisions is
+  currently available through the direct Google API, not Vertex AI.
+
   Other providers accept only text or JSON state. Azure Microsoft Decision
   models use a Foundry resource root as `base_url` and
   `provider_options: [azure: [deployment: "my-decision-deployment"]]` to select
@@ -282,7 +288,7 @@ defmodule ReqLLM.Evaluation do
     else
       {:error,
        invalid_parameter(
-         "#{LLMDB.Model.spec(model)} accepts text or JSON state; ReqLLM.Context state requires OpenAI Decisions"
+         "#{LLMDB.Model.spec(model)} accepts text or JSON state; ReqLLM.Context state requires OpenAI Decisions or Google Gemini Decisions"
        )}
     end
   end

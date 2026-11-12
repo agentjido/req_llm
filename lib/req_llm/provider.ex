@@ -692,7 +692,7 @@ defmodule ReqLLM.Provider do
   adapter. Evaluation requires both this declaration and a compatible, explicitly
   supported model execution contract. Registration or `prepare_request/4` alone
   does not enable evaluation. Supported protocols are `typesafe_systemone`,
-  `openrouter_decisions`, and `openai_decisions`.
+  `openrouter_decisions`, `openai_decisions`, and `google_decisions`.
   """
   @callback evaluation_protocols() :: [String.t()]
 

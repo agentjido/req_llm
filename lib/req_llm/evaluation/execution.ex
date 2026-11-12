@@ -4,7 +4,12 @@ defmodule ReqLLM.Evaluation.Execution do
   alias ReqLLM.Error.Invalid.Parameter
   alias ReqLLM.Providers.CatalogGateway
 
-  @protocols ["typesafe_systemone", "openrouter_decisions", "openai_decisions"]
+  @protocols [
+    "typesafe_systemone",
+    "openrouter_decisions",
+    "openai_decisions",
+    "google_decisions"
+  ]
 
   @spec resolve(LLMDB.Model.t(), keyword()) :: {:ok, module()} | {:error, Exception.t()}
   def resolve(model, opts \\ []) do
@@ -59,7 +64,10 @@ defmodule ReqLLM.Evaluation.Execution do
 
   @spec context_supported?(LLMDB.Model.t()) :: boolean()
   def context_supported?(model) do
-    match?({:ok, %{wire_protocol: "openai_decisions"}}, contract(model))
+    case contract(model) do
+      {:ok, %{wire_protocol: protocol}} -> protocol in ["openai_decisions", "google_decisions"]
+      _ -> false
+    end
   end
 
   @spec endpoint(LLMDB.Model.t(), String.t(), keyword()) ::
@@ -99,7 +107,8 @@ defmodule ReqLLM.Evaluation.Execution do
       prefix != "" and (path == prefix or String.starts_with?(path, prefix <> "/")) ->
         path
 
-      Regex.match?(~r{^/v\d+$}, version) and String.starts_with?(path, version <> "/") ->
+      Regex.match?(~r{^/v\d+(?:(?:alpha|beta)\d*)?$}, version) and
+          String.starts_with?(path, version <> "/") ->
         prefix <> String.replace_prefix(path, version, "")
 
       true ->
