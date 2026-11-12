@@ -68,6 +68,15 @@ For the full model-spec workflow, see [Model Specs](model-specs.md).
 
 Use exact Vertex model IDs from [LLM Catalog](https://llmcatalog.dev) when possible. For MaaS and other OpenAI-compatible Vertex models that are not in the registry yet, build a full explicit model spec with `ReqLLM.model!/1`. Some MaaS model IDs also need `extra.family` when the family cannot be inferred from the ID alone.
 
+## Decisions API availability
+
+Gemini Decisions is currently available only through the direct Gemini API.
+Google lists Cloud support as coming soon in the
+[launch announcement](https://blog.google/innovation-and-ai/technology/developers-tools/gemini-decisions-api/).
+ReqLLM supports it through `ReqLLM.evaluate/4` with the `:google` provider; see
+the [Google Decisions guide](google.md#decisions-api). The `:google_vertex`
+provider does not advertise evaluation support or fall back to the direct API.
+
 ## Provider Options
 
 Passed via `:provider_options` keyword:

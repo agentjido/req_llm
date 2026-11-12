@@ -571,9 +571,58 @@ defmodule ReqLLM.Providers.Google do
     end
   end
 
+  def prepare_request(:evaluate, model_spec, input, opts) do
+    with {:ok, model} <- ReqLLM.model(model_spec),
+         {:ok, opts} <- ReqLLM.Provider.Options.normalize_flat_provider_options(__MODULE__, opts),
+         {:ok, endpoint} <- ReqLLM.Evaluation.Execution.endpoint(model, base_url(), opts),
+         :ok <- validate_decisions_protocol(model, opts),
+         {:ok, api_key, _source} <- ReqLLM.Keys.get(model, opts),
+         contract = Map.merge(model.execution.evaluate, endpoint),
+         {:ok, request} <-
+           ReqLLM.Evaluation.Protocol.prepare_request(
+             model,
+             input,
+             opts,
+             contract,
+             {"x-goog-api-key", api_key}
+           ) do
+      request =
+        if use_header_auth?(opts) do
+          request
+        else
+          request
+          |> Req.Request.delete_header("x-goog-api-key")
+          |> Req.Request.merge_options(params: [key: api_key])
+        end
+
+      {:ok, request}
+    else
+      {:error, message} when is_binary(message) ->
+        {:error, ReqLLM.Error.Invalid.Parameter.exception(parameter: message)}
+
+      {:error, _} = error ->
+        error
+    end
+  end
+
   # Delegate all other operations to defaults (which will return appropriate errors)
   def prepare_request(operation, model_spec, input, opts) do
     ReqLLM.Provider.Defaults.prepare_request(__MODULE__, operation, model_spec, input, opts)
+  end
+
+  @impl ReqLLM.Provider
+  def evaluation_protocols, do: ["google_decisions"]
+
+  defp validate_decisions_protocol(model, opts) do
+    if model.execution.evaluate.wire_protocol == "google_decisions" and
+         resolve_api_version(opts) in [nil, "v1beta"] do
+      :ok
+    else
+      {:error,
+       ReqLLM.Error.Invalid.Parameter.exception(
+         parameter: "Gemini evaluation requires the google_decisions protocol and v1beta API"
+       )}
+    end
   end
 
   defp image_context(prompt, opts) do
