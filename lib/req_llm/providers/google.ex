@@ -1612,7 +1612,7 @@ defmodule ReqLLM.Providers.Google do
 
   defp json_schema_supported?(model_name) when is_binary(model_name) do
     String.starts_with?(model_name, "gemini-2.5-") or model_name == "gemini-2.5" or
-      String.starts_with?(model_name, "gemini-3")
+      gemini_3_or_later?(model_name)
   end
 
   defp json_schema_supported?(_), do: false
