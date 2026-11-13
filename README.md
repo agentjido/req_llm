@@ -77,6 +77,7 @@ show the module's broad scope. The selected model can support fewer operations.
 | [StepFun China](https://llmcatalog.dev/?providers=stepfun) | `stepfun` | text, speech, transcription | [Guide](guides/stepfun.md) |
 | [StepFun Global](https://llmcatalog.dev/?providers=stepfun_ai) | `stepfun_ai` | text, speech, transcription | [Guide](guides/stepfun.md) |
 | [Superlinked Inference Engine](https://console.superlinked.com/console) | `superlinked` | text, streaming, tools, embedding, rerank | [Guide](guides/superlinked.md) |
+| [UberLLM](https://uberllm.dev/models) | `uberllm` | text | — |
 | [TypeSafe](https://llmcatalog.dev/?providers=typesafe) | `typesafe` | evaluation | [Example](#evaluation-models) |
 | [Venice](https://llmcatalog.dev/?providers=venice) | `venice` | text | — |
 | [xAI](https://llmcatalog.dev/?providers=xai) | `xai` | text, image | [Guide](guides/xai.md) |
