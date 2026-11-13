@@ -290,6 +290,33 @@ defmodule ReqLLM.Providers.Google.ObjectGenerationTest do
       refute Map.has_key?(decoded, "toolConfig")
     end
 
+    # A Zoi schema's JSON carries "$schema", which Vertex rejects inside the
+    # legacy responseSchema: "Unknown name \"$schema\" at 'generation_config.response_schema'".
+    for model <- ["gemini-4-argon", "gemini-4-hydrogen"] do
+      test "encode_object_body uses responseJsonSchema for #{model}" do
+        context = context_fixture()
+
+        {:ok, schema} =
+          ReqLLM.Schema.compile(Zoi.object(%{kind: Zoi.enum(["construction", "retail"])}))
+
+        mock_request = %Req.Request{
+          options: [
+            context: context,
+            model: unquote(model),
+            operation: :object,
+            compiled_schema: schema
+          ]
+        }
+
+        updated_request = Google.encode_body(mock_request)
+        decoded = ReqLLM.Test.Helpers.json_body(updated_request)
+
+        response_json_schema = decoded["generationConfig"]["responseJsonSchema"]
+        assert response_json_schema["properties"]["kind"]["enum"] == ["construction", "retail"]
+        refute Map.has_key?(decoded["generationConfig"], "responseSchema")
+      end
+    end
+
     test "encode_object_body includes tools and JSON schema for Gemini 3" do
       context = context_fixture()
 
