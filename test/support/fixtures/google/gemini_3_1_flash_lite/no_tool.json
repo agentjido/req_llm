@@ -30,7 +30,7 @@
             {
               "description": "Get current weather information for a location",
               "name": "get_weather",
-              "parameters": {
+              "parametersJsonSchema": {
                 "properties": {
                   "location": {
                     "type": "string"

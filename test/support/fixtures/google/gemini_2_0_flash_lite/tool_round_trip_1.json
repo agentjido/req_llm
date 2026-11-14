@@ -25,7 +25,7 @@
             {
               "description": "Add two integers",
               "name": "add",
-              "parameters": {
+              "parametersJsonSchema": {
                 "properties": {
                   "a": {
                     "type": "integer"

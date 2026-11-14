@@ -61,7 +61,7 @@
             {
               "description": "Fetch the requested document and return its raw contents.",
               "name": "get_document",
-              "parameters": {
+              "parametersJsonSchema": {
                 "properties": {
                   "name": {
                     "type": "string"
