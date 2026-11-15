@@ -6,7 +6,12 @@ last-reviewed: 2026-11-15
 
 # Documentation inbox
 
-The inbox is clear. It contains no unprocessed item.
+The inbox contains one unprocessed item:
+
+- [V2 ecosystem hardening ideas](2026-11-15-v2-ecosystem-hardening-ideas.md)
+  records additive integration ideas from ReqLLM consumers, Jido V3, and Tune.
+  It excludes deprecated third-party provider packages and does not change the
+  active V2 roadmap.
 
 ## Intake log
 
@@ -17,6 +22,7 @@ The inbox is clear. It contains no unprocessed item.
 | `guides/provider-extension-decision.md` | Retained at source; consolidated into the V2 documents | 2026-11-15 | placed | It remains the published V1 decision. |
 | GitHub issue `agentjido/req_llm#830` | `decisions/2026-11-15-v2-direction.md`, `plans/v2-scope.md`, `plans/v2-roadmap.md`, and `reference/v2-source-map.md` | 2026-11-15 | placed | The issue was closed on 2026-10-12. Its breaking scope is historical and is not part of the current stable-API architecture plan. |
 | GitHub repository `mikehostetler/reqllm_next` | `reference/v2-source-map.md` and the V2 direction | 2026-11-15 | placed | This is an experimental source, not current ReqLLM authority. |
+| ReqLLM consumer, Jido V3, and Tune alignment review | `inbox/2026-11-15-v2-ecosystem-hardening-ideas.md` | 2026-11-15 | new | Ordered additive candidates for errors, usage, structured output, streaming, metadata, prompt cache, planning, tests, value codecs, and Tune/Jido integration. These are not roadmap commitments. |
 
 ## Fixed-path exceptions
 

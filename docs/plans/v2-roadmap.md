@@ -89,6 +89,9 @@ execution path is V2-02 and V2-03 through V2-09D, V2-11, and V2-12.
 These items need a separate owner decision and new scope. They are not implied
 by the V2 name.
 
+The [ecosystem hardening ideas](../inbox/2026-11-15-v2-ecosystem-hardening-ideas.md)
+remain inbox candidates. They do not add steps to this roadmap.
+
 ## V2 completion gate
 
 - All current public operation families remain available.
