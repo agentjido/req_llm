@@ -726,6 +726,7 @@ This approach gives you full control over the Req pipeline, allowing you to add 
 
 ## Documentation
 
+- [Project Documentation](https://github.com/agentjido/req_llm/blob/main/docs/README.md) – contributor decisions, architecture sources, and active plans
 - [Compatibility Policy](COMPATIBILITY.md) – stable, experimental, deprecated, platform, and ReqLLM/Jido contracts
 - [Model Support Evidence](guides/model-support.md) – generated, surface-specific compatibility tiers
 - [Getting Started](guides/getting-started.md) – first call and basic concepts
@@ -747,6 +748,9 @@ This approach gives you full control over the Req pipeline, allowing you to add 
 
 ReqLLM has reached v1.0.0. Its [compatibility policy](COMPATIBILITY.md)
 protects the stable core API while the library continues to improve.
+The [V2 roadmap](https://github.com/agentjido/req_llm/blob/main/docs/plans/v2-roadmap.md)
+consolidates the internal architecture while it preserves the public API and
+observable behavior.
 If you run into anything or have suggestions, please open an issue or PR.
 
 ### Test Coverage & Quality Commitment
