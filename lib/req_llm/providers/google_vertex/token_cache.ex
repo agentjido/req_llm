@@ -23,8 +23,9 @@ defmodule ReqLLM.Providers.GoogleVertex.TokenCache do
   metadata server) so swapping credentials at runtime does not serve stale
   tokens.
   For service account file paths: the path string is used as the cache key.
-  For service account JSON strings or maps: the `client_email` field is used
-  as the cache key.
+  For service account JSON strings or maps: the `client_email` together with
+  a SHA-256 digest of the `private_key` is used as the cache key, so a cached
+  token is only returned to a caller that presents the key it was issued for.
 
   This allows ADC and multiple service accounts to be used simultaneously with
   independent token caches.
@@ -175,7 +176,7 @@ defmodule ReqLLM.Providers.GoogleVertex.TokenCache do
       {:ok, %{token: token, expires_at: expires_at}} ->
         :ets.insert(state.table, {cache_key, token, expires_at})
 
-        Logger.debug("Cached OAuth2 token for #{inspect(cache_key)}")
+        Logger.debug("Cached OAuth2 token for #{inspect(cache_key_label(cache_key))}")
 
         {:reply, {:ok, token}, state}
 
@@ -183,7 +184,7 @@ defmodule ReqLLM.Providers.GoogleVertex.TokenCache do
         expires_at = System.system_time(:second) + @cache_ttl_seconds
         :ets.insert(state.table, {cache_key, token, expires_at})
 
-        Logger.debug("Cached OAuth2 token for #{inspect(cache_key)}")
+        Logger.debug("Cached OAuth2 token for #{inspect(cache_key_label(cache_key))}")
 
         {:reply, {:ok, token}, state}
 
@@ -191,6 +192,11 @@ defmodule ReqLLM.Providers.GoogleVertex.TokenCache do
         {:reply, {:error, reason}, state}
     end
   end
+
+  defp cache_key_label({:service_account, {client_email, _private_key_digest}}),
+    do: {:service_account, client_email}
+
+  defp cache_key_label(cache_key), do: cache_key
 
   defp resolve_cache_key(:adc, opts) do
     {{:adc, ReqLLM.Providers.GoogleVertex.Auth.adc_cache_scope(opts)}, :adc}
@@ -210,12 +216,20 @@ defmodule ReqLLM.Providers.GoogleVertex.TokenCache do
     resolve_cache_key({:service_account, path_or_json}, opts)
   end
 
+  # The key includes a digest of the private key: `client_email` is an
+  # identifier, not a secret, and must not be enough to read a cached token.
   defp service_account_cache_key(service_account) when is_map(service_account) do
-    normalized = Utils.stringify_keys(service_account)
+    case Utils.stringify_keys(service_account) do
+      %{"client_email" => email, "private_key" => private_key}
+      when is_binary(email) and email != "" and is_binary(private_key) and private_key != "" ->
+        {:ok, {email, :crypto.hash(:sha256, private_key)}}
 
-    case normalized["client_email"] do
-      email when is_binary(email) and email != "" -> {:ok, email}
-      _ -> {:error, "Invalid service account credentials: missing client_email"}
+      %{"client_email" => email} when is_binary(email) and email != "" ->
+        {:error,
+         "Invalid service account credentials: missing required client_email or private_key fields"}
+
+      _ ->
+        {:error, "Invalid service account credentials: missing client_email"}
     end
   end
 
