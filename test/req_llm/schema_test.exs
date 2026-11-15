@@ -579,7 +579,7 @@ defmodule ReqLLM.SchemaTest do
       assert result == %{
                "name" => "search",
                "description" => "Search for items",
-               "parameters" => %{
+               "parametersJsonSchema" => %{
                  "type" => "object",
                  "properties" => %{
                    "query" => %{"type" => "string", "description" => "Search query"},
@@ -600,14 +600,14 @@ defmodule ReqLLM.SchemaTest do
       assert result == %{
                "name" => "ping",
                "description" => "Health check",
-               "parameters" => %{"type" => "object", "properties" => %{}}
+               "parametersJsonSchema" => %{"type" => "object", "properties" => %{}}
              }
 
       # Test complex types
       result = Schema.to_google_format(complex_tool)
-      assert result["parameters"]["properties"]["tags"]["type"] == "array"
-      assert result["parameters"]["properties"]["enabled"]["type"] == "boolean"
-      assert result["parameters"]["required"] == ["tags"]
+      assert result["parametersJsonSchema"]["properties"]["tags"]["type"] == "array"
+      assert result["parametersJsonSchema"]["properties"]["enabled"]["type"] == "boolean"
+      assert result["parametersJsonSchema"]["required"] == ["tags"]
     end
 
     test "to_google_format/1 strips atom-keyed forbidden fields recursively" do
@@ -642,7 +642,7 @@ defmodule ReqLLM.SchemaTest do
       }
 
       result = Schema.to_google_format(tool)
-      parameters = result["parameters"]
+      parameters = result["parametersJsonSchema"]
       company = parameters[:properties][:company]
       address = company[:properties][:address]
 
@@ -660,7 +660,7 @@ defmodule ReqLLM.SchemaTest do
       # All should have same core schema structure
       anthropic_schema = anthropic["input_schema"]
       openai_schema = openai["function"]["parameters"]
-      google_schema = google["parameters"]
+      google_schema = google["parametersJsonSchema"]
 
       assert anthropic_schema == openai_schema
 
@@ -1221,7 +1221,7 @@ defmodule ReqLLM.SchemaTest do
 
       # Test Google format (strips additionalProperties)
       google = Schema.to_google_format(tool)
-      assert google["parameters"] == Map.delete(json_schema, "additionalProperties")
+      assert google["parametersJsonSchema"] == Map.delete(json_schema, "additionalProperties")
 
       # Test Bedrock Converse format
       bedrock = Schema.to_bedrock_converse_format(tool)

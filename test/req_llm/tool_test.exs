@@ -832,7 +832,7 @@ defmodule ReqLLM.ToolTest do
 
       google = Tool.to_schema(tool, :google)
       # Google format strips additionalProperties
-      assert Map.has_key?(google, "parameters")
+      assert Map.has_key?(google, "parametersJsonSchema")
 
       bedrock = Tool.to_schema(tool, :amazon_bedrock_converse)
       assert bedrock["toolSpec"]["inputSchema"]["json"] == json_schema

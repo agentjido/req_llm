@@ -28,7 +28,7 @@
             {
               "description": "Get current weather information for a location",
               "name": "get_weather",
-              "parameters": {
+              "parametersJsonSchema": {
                 "properties": {
                   "location": {
                     "type": "string"
@@ -50,7 +50,7 @@
             {
               "description": "Tell a funny joke",
               "name": "tell_joke",
-              "parameters": {
+              "parametersJsonSchema": {
                 "properties": {
                   "topic": {
                     "description": "Topic for the joke",
@@ -63,7 +63,7 @@
             {
               "description": "Get the current time",
               "name": "get_time",
-              "parameters": {
+              "parametersJsonSchema": {
                 "properties": {},
                 "type": "object"
               }
