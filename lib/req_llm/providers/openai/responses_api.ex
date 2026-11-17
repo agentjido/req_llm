@@ -950,6 +950,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
       )
       |> maybe_put_string("prompt_cache_key", provider_opts[:prompt_cache_key])
       |> maybe_put_string("prompt_cache_options", provider_opts[:prompt_cache_options])
+      |> maybe_put_string("access_programs", provider_opts[:access_programs])
       |> maybe_put_string("include", include)
       |> maybe_put_string("text", text_format)
       |> maybe_put_string(
