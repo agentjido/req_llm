@@ -228,6 +228,37 @@ defmodule ReqLLM.Providers.Google.ToolsTest do
       assert function_response["response"]["temperature"] == 72
     end
 
+    test "encode_body orders parallel tool results by their calls" do
+      {:ok, model} = ReqLLM.model("google:gemini-2.5-flash")
+
+      context =
+        Context.new([
+          Context.user("Email Alice and Bob."),
+          Context.assistant("",
+            tool_calls: [
+              ReqLLM.ToolCall.new("call_alice", "send_email", ~s({"to":"alice"})),
+              ReqLLM.ToolCall.new("call_bob", "send_email", ~s({"to":"bob"}))
+            ]
+          ),
+          Context.tool_result("call_bob", "send_email", "bob rejected"),
+          Context.tool_result("call_alice", "send_email", "alice sent")
+        ])
+
+      decoded =
+        %Req.Request{
+          options: [context: context, model: model.model, stream: false, operation: :chat]
+        }
+        |> Google.encode_body()
+        |> ReqLLM.Test.Helpers.json_body()
+
+      results =
+        for %{"parts" => parts} <- decoded["contents"],
+            %{"functionResponse" => response} <- parts,
+            do: response["response"]["content"]
+
+      assert results == ["alice sent", "bob rejected"]
+    end
+
     test "encode_body emits text tool results only inside functionResponse" do
       {:ok, model} = ReqLLM.model("google:gemini-2.5-flash-lite")
 

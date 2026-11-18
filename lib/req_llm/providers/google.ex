@@ -2861,9 +2861,43 @@ defmodule ReqLLM.Providers.Google do
 
   defp convert_messages_to_gemini(messages, model) do
     messages
+    |> sort_tool_results_by_call_order()
     |> Enum.map(&convert_single_message_to_gemini(&1, model))
     |> merge_consecutive_roles()
   end
+
+  # Gemini pairs functionResponse parts with functionCall parts by position, so
+  # each run of tool results must follow the order of the calls they answer.
+  defp sort_tool_results_by_call_order(messages) do
+    call_order =
+      messages
+      |> Enum.flat_map(&message_tool_calls/1)
+      |> Enum.with_index(fn call, index -> {tool_call_id(call), index} end)
+      |> Map.new()
+
+    {sorted, run} =
+      Enum.reduce(messages, {[], []}, fn message, {sorted, run} ->
+        if tool_result_message?(message),
+          do: {sorted, [message | run]},
+          else: {[message | prepend_sorted_run(run, sorted, call_order)], []}
+      end)
+
+    run |> prepend_sorted_run(sorted, call_order) |> Enum.reverse()
+  end
+
+  defp prepend_sorted_run(run, sorted, call_order) do
+    run
+    |> Enum.reverse()
+    |> Enum.sort_by(&Map.get(call_order, tool_result_call_id(&1)))
+    |> Enum.reverse(sorted)
+  end
+
+  defp message_tool_calls(%{tool_calls: calls}) when is_list(calls), do: calls
+  defp message_tool_calls(%{"tool_calls" => calls}) when is_list(calls), do: calls
+  defp message_tool_calls(_), do: []
+
+  defp tool_result_call_id(%{tool_call_id: id}), do: id
+  defp tool_result_call_id(%{"tool_call_id" => id}), do: id
 
   defp convert_single_message_to_gemini(message, model) do
     raw_role =
