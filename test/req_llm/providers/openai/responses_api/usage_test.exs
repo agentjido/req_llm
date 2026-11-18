@@ -84,6 +84,34 @@ defmodule Provider.OpenAI.ResponsesAPI.UsageTest do
       end
     end
 
+    test "keeps a gateway-reported cost as the total" do
+      # Final usage of a LiteLLM 1.108.5 proxy stream on /v1/responses.
+      usage = %{
+        "input_tokens" => 8,
+        "input_tokens_details" => %{"cached_tokens" => 0, "cache_write_tokens" => 0},
+        "output_tokens" => 11,
+        "output_tokens_details" => %{"reasoning_tokens" => 0},
+        "total_tokens" => 19,
+        "cost" => 7.56e-6
+      }
+
+      for parsed <- parsed_response_usages(usage) do
+        assert parsed.provider_cost == %{cost: 7.56e-6, byok: false, upstream_cost: nil}
+
+        priced =
+          parsed |> ReqLLM.Usage.normalize() |> ReqLLM.Usage.Cost.apply(billing_model())
+
+        assert priced.total_cost == 7.56e-6
+      end
+    end
+
+    test "a null gateway cost is not a reported charge" do
+      for parsed <-
+            parsed_response_usages(%{"input_tokens" => 8, "output_tokens" => 6, "cost" => nil}) do
+        refute Map.has_key?(parsed, :provider_cost)
+      end
+    end
+
     test "streamed metadata preserves explicit invalid service tiers" do
       model = %LLMDB.Model{provider: :openai, id: "gpt-5"}
 
