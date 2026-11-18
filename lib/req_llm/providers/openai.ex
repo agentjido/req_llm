@@ -416,6 +416,12 @@ defmodule ReqLLM.Providers.OpenAI do
 
   @doc false
   def pre_validate_options(operation, model, opts) do
+    if Keyword.has_key?(opts[:provider_options] || [], :access_programs) and
+         (operation not in [:chat, :object] or not responses_api?(model)) do
+      raise ReqLLM.Error.Invalid.Parameter,
+        parameter: "access_programs requires an OpenAI Responses API generation request"
+    end
+
     opts = ReqLLM.Provider.Reasoning.normalize_effort_option(opts)
     ReqLLM.Providers.OpenAI.Astra.validate_options!(model, opts)
 

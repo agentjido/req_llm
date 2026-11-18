@@ -388,7 +388,7 @@ Streaming emits raw summary deltas as `:thinking` chunks. These fragments have n
 - **Purpose**: Select an [OpenAI Daybreak](https://developers.openai.com/api/docs/guides/daybreak) access program on an approved project and compatible Responses model. Omitted by default.
 - **Example**: `ReqLLM.generate_text("openai:gpt-6-sol", "Hello", provider_options: [access_programs: %{"cyber" => "daybreak_blue"}])`
 
-The `cyber` key also accepts an atom (`%{cyber: "daybreak_blue"}`). Use a concrete Responses model: the catalog's `gpt-daybreak-blue-latest` alias lacks Responses wire metadata and may route to Chat Completions. For projects requiring a regional endpoint, set `base_url` (for example, `"https://us.api.openai.com/v1"`).
+The `cyber` key also accepts an atom (`%{cyber: "daybreak_blue"}`). Use a concrete Responses model. The catalog's `gpt-daybreak-blue-latest` alias lacks Responses wire metadata and may route to Chat Completions. ReqLLM returns an error if you set `access_programs` for a Chat Completions model. For projects that require a regional endpoint, set `base_url` (for example, `"https://us.api.openai.com/v1"`).
 
 ### `service_tier`
 
