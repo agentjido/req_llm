@@ -3053,6 +3053,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
       |> Map.put(:reasoning_tokens, reasoning_tokens)
       |> Map.put(:usage_reported, reported)
       |> maybe_put_cache_creation_tokens(cache_creation_tokens)
+      |> maybe_put_provider_cost(usage_data)
       |> maybe_mark_invalid_usage_details(usage_data)
 
     tool_call_counts = extract_tool_call_counts(response_data)
@@ -3068,6 +3069,14 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
 
   defp maybe_put_cache_creation_tokens(usage, tokens),
     do: Map.put(usage, :cache_creation_tokens, tokens)
+
+  # Gateways such as LiteLLM report the request's charge in `usage.cost`.
+  defp maybe_put_provider_cost(usage, usage_data) do
+    case ReqLLM.Usage.ProviderCost.from_usage(usage_data) do
+      nil -> usage
+      provider_cost -> Map.put(usage, :provider_cost, provider_cost)
+    end
+  end
 
   # The Responses API returns "completed" status even when the model refused or
   # called tools, so both are read from the output instead.
