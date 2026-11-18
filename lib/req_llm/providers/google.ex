@@ -16,7 +16,7 @@ defmodule ReqLLM.Providers.Google do
   - `google_grounding` - Enable Google Search grounding (built-in web search). Requires `google_api_version: "v1beta"`.
     Gemini 3 and later can combine grounding with function tools. In this mode, `:auto`
     uses Gemini's `VALIDATED` mode. Reuse the response context to carry the tool history
-    into the next request.
+    into the next request. Keep the assistant message intact to replay its signed parts.
   - `google_thinking_budget` - Thinking token budget for Gemini 2.5 models (cannot be combined with `google_thinking_level`)
   - `google_include_thoughts` - Whether chat requests ask for thought summaries (default: `true`)
   - `google_thinking_level` - Thinking level for Gemini 3+ models (`:minimal`, `:low`, `:medium`, `:high`). Cannot be combined with `google_thinking_budget`
@@ -2738,6 +2738,17 @@ defmodule ReqLLM.Providers.Google do
     |> preserve_tool_call_metadata_in_messages(normalized_context)
     |> preserve_text_thought_signatures_in_messages(normalized_context)
     |> preserve_provider_file_metadata_in_messages(normalized_context)
+    |> attach_verified_tool_history(ctx, model_name)
+  end
+
+  defp attach_verified_tool_history(messages, context, model_name) do
+    if gemini_3_or_later?(model_name) do
+      Enum.zip_with(messages, context.messages, fn encoded, original ->
+        maybe_put(encoded, :google_tool_history, ToolHistory.parts(original))
+      end)
+    else
+      messages
+    end
   end
 
   defp preserve_text_thought_signatures_in_messages(messages, context) do
@@ -2930,7 +2941,7 @@ defmodule ReqLLM.Providers.Google do
   end
 
   defp convert_message_with_tool_history(
-         %{role: "assistant", metadata: %{"google_tool_history" => [_ | _] = parts}} = message,
+         %{role: "assistant", google_tool_history: [_ | _] = parts} = message,
          model,
          replay_function_history?,
          _call_ids
@@ -2949,23 +2960,15 @@ defmodule ReqLLM.Providers.Google do
          _replay_function_history?,
          call_ids
        ) do
-    content = convert_single_message_to_gemini(message, model)
-
-    content =
-      if MapSet.member?(call_ids, id) do
-        put_in(content, [:parts, Access.at(0), :functionResponse, :id], id)
-      else
-        content
-      end
-
-    {content, call_ids}
+    native_id = if MapSet.member?(call_ids, id), do: id
+    {convert_single_message_to_gemini(message, model, native_id), call_ids}
   end
 
   defp convert_message_with_tool_history(message, model, _replay_function_history?, _call_ids) do
     {convert_single_message_to_gemini(message, model), MapSet.new()}
   end
 
-  defp convert_single_message_to_gemini(message, model) do
+  defp convert_single_message_to_gemini(message, model, native_id \\ nil) do
     raw_role =
       case message do
         %{role: role} -> role
@@ -3043,7 +3046,7 @@ defmodule ReqLLM.Providers.Google do
 
     tool_result_parts =
       if tool_result? do
-        [build_tool_result_part(message, raw_content, nest_multimodal?)]
+        [build_tool_result_part(message, raw_content, nest_multimodal?, native_id)]
       else
         []
       end
@@ -3208,28 +3211,20 @@ defmodule ReqLLM.Providers.Google do
 
   defp extract_content_text(_), do: ""
 
-  defp build_tool_result_part(message, raw_content, false) do
-    %{
-      functionResponse: %{
-        name: tool_result_name(message),
-        response: tool_result_response(message, raw_content)
-      }
-    }
-  end
-
-  defp build_tool_result_part(message, raw_content, true) do
+  defp build_tool_result_part(message, raw_content, nest_multimodal?, native_id) do
     media_parts =
-      raw_content
-      |> Enum.filter(&multimodal_part?/1)
-      |> Enum.map(&convert_content_part/1)
+      if nest_multimodal? do
+        raw_content
+        |> Enum.filter(&multimodal_part?/1)
+        |> Enum.map(&convert_content_part/1)
+      end
 
-    %{
-      functionResponse: %{
-        name: tool_result_name(message),
-        response: tool_result_response(message, raw_content),
-        parts: media_parts
-      }
-    }
+    result =
+      %{name: tool_result_name(message), response: tool_result_response(message, raw_content)}
+      |> maybe_put(:id, native_id)
+      |> maybe_put(:parts, media_parts)
+
+    %{functionResponse: result}
   end
 
   defp tool_result_name(%{name: name}) when is_binary(name) and name != "", do: name

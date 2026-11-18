@@ -1,7 +1,7 @@
 defmodule ReqLLM.Providers.Google.GroundingToolsTest do
   use ExUnit.Case, async: true
 
-  alias ReqLLM.{Context, StreamResponse, StreamServer, Tool}
+  alias ReqLLM.{Context, StreamResponse, StreamServer, Tool, ToolCall}
   alias ReqLLM.Providers.Google
   alias ReqLLM.Test.Helpers
 
@@ -92,14 +92,96 @@ defmodule ReqLLM.Providers.Google.GroundingToolsTest do
     assert_round_trip(setup, [List.last(@parts)])
   end
 
+  test "matches parallel calls by ID after a JSON round trip of the history metadata",
+       %{model: model, context: context, opts: opts} do
+    second_call = %{
+      "functionCall" => %{
+        "id" => "weather-2",
+        "name" => "weather",
+        "args" => %{"city" => "Fairbanks"}
+      }
+    }
+
+    parts = @parts ++ [second_call]
+    response = buffered_response(model, context, opts, parts)
+    message = response.message
+    persisted = %{message | metadata: message.metadata |> Jason.encode!() |> Jason.decode!()}
+
+    results = [
+      Context.tool_result("weather-2", "weather", %{temperature: 29}),
+      Context.tool_result("weather-1", "weather", %{temperature: 22})
+    ]
+
+    assert {:ok, continued} = Context.append_tool_exchange(context, persisted, results)
+
+    for body <- request_bodies(model, continued, opts) do
+      assert [_, %{"role" => "model", "parts" => ^parts}, %{"role" => "user", "parts" => results}] =
+               body["contents"]
+
+      assert [
+               %{
+                 "functionResponse" => %{
+                   "id" => "weather-1",
+                   "response" => %{"temperature" => 22}
+                 }
+               },
+               %{
+                 "functionResponse" => %{
+                   "id" => "weather-2",
+                   "response" => %{"temperature" => 29}
+                 }
+               }
+             ] = results
+    end
+  end
+
+  test "uses the edited assistant message when the saved wire parts are stale",
+       %{model: model, context: context, opts: opts} do
+    response = buffered_response(model, context, opts, @parts)
+    assert [call] = response.message.tool_calls
+
+    edits = [
+      %{response.message | content: [ReqLLM.Message.ContentPart.text("Edited answer")]},
+      %{response.message | tool_calls: [ToolCall.new(call.id, "weather", ~s({"city":"Juneau"}))]},
+      %{response.message | reasoning_details: []}
+    ]
+
+    for message <- edits,
+        body <- request_bodies(model, Context.append(context, message), opts) do
+      assert [_, %{"role" => "model", "parts" => assistant_parts}] = body["contents"]
+
+      refute Enum.any?(assistant_parts, fn part ->
+               Map.has_key?(part, "toolCall") or Map.has_key?(part, "toolResponse")
+             end)
+
+      assert Enum.any?(assistant_parts, &Map.has_key?(&1, "functionCall"))
+    end
+
+    [edited_text, edited_call, edited_reasoning] = edits
+
+    for body <- request_bodies(model, Context.append(context, edited_text), opts) do
+      assert [%{"text" => "Edited answer"}] =
+               Enum.filter(
+                 List.last(body["contents"])["parts"],
+                 &(Map.has_key?(&1, "text") and &1["thought"] != true)
+               )
+    end
+
+    for body <- request_bodies(model, Context.append(context, edited_call), opts) do
+      assert [%{"functionCall" => %{"args" => %{"city" => "Juneau"}}}] =
+               Enum.filter(
+                 List.last(body["contents"])["parts"],
+                 &Map.has_key?(&1, "functionCall")
+               )
+    end
+
+    for body <- request_bodies(model, Context.append(context, edited_reasoning), opts) do
+      refute Enum.any?(List.last(body["contents"])["parts"], &(&1["thought"] == true))
+    end
+  end
+
   defp assert_round_trip(%{model: model, context: context, opts: opts}, parts) do
-    assert {:ok, request} = Google.prepare_request(:chat, model, context, opts)
-
-    {_, %{body: buffered}} =
-      Google.decode_response(
-        {request, %Req.Response{status: 200, body: candidate(parts, "STOP")}}
-      )
-
+    buffered = buffered_response(model, context, opts, parts)
     assert {:ok, streamed} = stream_response(model, context, parts)
 
     for response <- [buffered, streamed] do
@@ -127,6 +209,17 @@ defmodule ReqLLM.Providers.Google.GroundingToolsTest do
                }
       end
     end
+  end
+
+  defp buffered_response(model, context, opts, parts) do
+    assert {:ok, request} = Google.prepare_request(:chat, model, context, opts)
+
+    {_, %{body: response}} =
+      Google.decode_response(
+        {request, %Req.Response{status: 200, body: candidate(parts, "STOP")}}
+      )
+
+    response
   end
 
   defp request_bodies(model, context, opts) do
