@@ -9,6 +9,59 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- changelog -->
 
+## [v1.31.0](https://github.com/agentjido/req_llm/compare/v1.30.0...v1.31.0) (2026-11-18)
+
+
+
+
+### Features:
+
+* openai: support Daybreak access programs in Responses API (#1279) by houllette
+
+* google: support Gemini Decisions evaluation (#1267) by neilberkman
+
+* anthropic: allow overriding the Claude Code subscription version (#1265) by neilberkman
+
+* evaluation: support custom providers and catalog gateways (#1257) by Julien
+
+* route rerank from execution metadata (#1250) by mikehostetler
+
+* add Superlinked SIE provider (#1249) by mikehostetler
+
+* usage: prefer a provider-reported cost over the catalog estimate (#1242) by Gilbert
+
+* google: allow chat callers to disable thought summaries (#1243) by Gilles Dubuc
+
+### Bug Fixes:
+
+* openai: keep provider-reported cost in Responses usage (#1283) by Riezebos
+
+* usage: retain provider-reported USD cost (#1282) by mikehostetler
+
+* google: support grounding with Gemini function tools (#1280) by mikehostetler
+
+* google: pass tool parameters as JSON schema instead of OpenAPI schema (#1263) by green-david
+
+* google: update JSON schema fixture bodies (#1270) by mikehostetler
+
+* google: send responseJsonSchema to Gemini 4 models (#1269) by Dekkon
+
+* google: carry raw finish reason onto streamed responses (#1266) by Peter Hoeg
+
+* streaming: normalize context window errors (#1262) by mikehostetler
+
+* mc: repair Groq test URL and mix mc replay routing (#1251) by Gilles Dubuc
+
+* derive streamed tool-call argument flags from the assembled fragments (#1256) by azmaveth
+
+* keep the invalid_arguments flag on buffered tool calls (#1254) by azmaveth
+
+* google: preserve non-streaming function-call thought signatures (#1246) by Gilles Dubuc
+
+* timeout: stop retries after the total deadline (#1244) by Gilles Dubuc
+
+* anthropic: preserve cache counter presence (#1230) by cash-mckeeman
+
 ## [v1.30.0](https://github.com/agentjido/req_llm/compare/v1.29.0...v1.30.0) (2026-11-03)
 
 
