@@ -950,6 +950,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
       )
       |> maybe_put_string("prompt_cache_key", provider_opts[:prompt_cache_key])
       |> maybe_put_string("prompt_cache_options", provider_opts[:prompt_cache_options])
+      |> maybe_put_string("access_programs", access_programs!(opts_map, provider_opts))
       |> maybe_put_string("include", include)
       |> maybe_put_string("text", text_format)
       |> maybe_put_string(
@@ -1886,6 +1887,26 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
 
   defp maybe_put_string(map, _key, nil), do: map
   defp maybe_put_string(map, key, value), do: Map.put(map, key, value)
+
+  defp access_programs!(opts, provider_opts) do
+    selection =
+      case Keyword.fetch(provider_opts, :access_programs) do
+        :error -> Map.fetch(opts, :access_programs)
+        value -> value
+      end
+
+    with {:ok, programs} <- selection,
+         {:ok, normalized_programs} <- ReqLLM.Providers.OpenAI.validate_access_programs(programs) do
+      normalized_programs
+    else
+      :error ->
+        nil
+
+      {:error, message} ->
+        raise ReqLLM.Error.Invalid.Parameter,
+          parameter: "invalid access_programs value, #{message}"
+    end
+  end
 
   # Extract the most recent response_id from assistant messages.
   # This should be the LAST assistant message, not specifically one with tool_calls.

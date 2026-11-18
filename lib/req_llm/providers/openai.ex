@@ -145,6 +145,7 @@ defmodule ReqLLM.Providers.OpenAI do
 
   # The Responses API supports richer file types than the Chat Completions API.
   @responses_api_mimes ~w(image/jpeg image/png image/gif image/webp application/pdf)
+  @cyber_access_programs ~w(standard daybreak_blue daybreak_red)
 
   @impl ReqLLM.Provider
   def evaluation_protocols, do: ["openai_decisions"]
@@ -207,6 +208,10 @@ defmodule ReqLLM.Providers.OpenAI do
       type: {:list, {:or, [{:map, {:or, [:atom, :string]}, :any}, :keyword_list]}},
       doc:
         "Responses API context_management entries, such as [%{type: \"compaction\", compact_threshold: 200_000}] for server-side compaction"
+    ],
+    access_programs: [
+      type: {:custom, __MODULE__, :validate_access_programs, []},
+      doc: "Responses API access program selection, such as %{\"cyber\" => \"daybreak_blue\"}"
     ],
     openai_structured_output_mode: [
       type: {:in, [:auto, :json_schema, :tool_strict]},
@@ -331,6 +336,20 @@ defmodule ReqLLM.Providers.OpenAI do
     ]
   ]
 
+  @doc false
+  def validate_access_programs(%{cyber: cyber} = programs)
+      when map_size(programs) == 1 and cyber in @cyber_access_programs,
+      do: {:ok, %{"cyber" => cyber}}
+
+  def validate_access_programs(%{"cyber" => cyber} = programs)
+      when map_size(programs) == 1 and cyber in @cyber_access_programs,
+      do: {:ok, programs}
+
+  def validate_access_programs(_programs),
+    do:
+      {:error,
+       ~s(expected a map with only "cyber" set to "standard", "daybreak_blue", or "daybreak_red")}
+
   @compile {:no_warn_undefined, [{nil, :path, 0}, {nil, :attach_stream, 4}]}
 
   defp responses_api?(model) do
@@ -397,6 +416,12 @@ defmodule ReqLLM.Providers.OpenAI do
 
   @doc false
   def pre_validate_options(operation, model, opts) do
+    if Keyword.has_key?(opts[:provider_options] || [], :access_programs) and
+         (operation not in [:chat, :object] or not responses_api?(model)) do
+      raise ReqLLM.Error.Invalid.Parameter,
+        parameter: "access_programs requires an OpenAI Responses API generation request"
+    end
+
     opts = ReqLLM.Provider.Reasoning.normalize_effort_option(opts)
     ReqLLM.Providers.OpenAI.Astra.validate_options!(model, opts)
 
