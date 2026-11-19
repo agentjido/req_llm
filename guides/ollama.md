@@ -44,6 +44,38 @@ config :jido_ai,
 The existing model-struct approach (`provider: :openai, base_url: "..."`) continues to
 work unchanged.
 
+## Local decision models
+
+Ollama's [decision endpoint](https://docs.ollama.com/capabilities/decision)
+supports text and JSON state through `ReqLLM.evaluate/4`, using models such as
+Nimble. Start Ollama and run `ollama pull nimble`. Local decisions use the
+configured Ollama host without a bearer token.
+
+```elixir
+model =
+  ReqLLM.model!(%{
+    provider: :ollama,
+    id: "nimble:latest",
+    capabilities: %{evaluate: true, chat: false},
+    execution: %{
+      evaluate: %{
+        supported: true,
+        family: "typesafe_systemone",
+        wire_protocol: "typesafe_systemone",
+        path: "/v1/systemone",
+        provider_model_id: "nimble:latest"
+      }
+    }
+  })
+
+{:ok, response} =
+  ReqLLM.evaluate(model, "Please refund the duplicate charge", %{
+    refund: %{type: :boolean, instructions: "Is the customer requesting a refund?"}
+  })
+
+response.object["refund"]["probability"]
+```
+
 ## Configuration Boundaries
 
 ReqLLM owns provider connection settings. For Ollama, configure the host/base URL
