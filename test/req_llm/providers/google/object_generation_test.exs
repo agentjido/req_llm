@@ -443,4 +443,96 @@ defmodule ReqLLM.Providers.Google.ObjectGenerationTest do
       end
     end
   end
+
+  describe "object response finish metadata" do
+    defp decode_object_body(body) do
+      req = %Req.Request{
+        options: [
+          context: context_fixture(),
+          stream: false,
+          operation: :object,
+          model: "gemini-2.5-flash"
+        ]
+      }
+
+      {_req, resp} = Google.decode_response({req, %Req.Response{status: 200, body: body}})
+      resp.body
+    end
+
+    test "JSON object responses keep the raw finishReason and finishMessage" do
+      for {reason, normalized} <- [
+            {"STOP", :stop},
+            {"MAX_TOKENS", :length},
+            {"SAFETY", :content_filter},
+            {"UNEXPECTED_TOOL_CALL", :error},
+            {"TOO_MANY_TOOL_CALLS", :error}
+          ],
+          text <- [~s({"name":"Ada"}), "not JSON", nil] do
+        candidate = %{"finishReason" => reason, "finishMessage" => "Synthetic finish detail"}
+
+        candidate =
+          if text,
+            do: Map.put(candidate, "content", %{"parts" => [%{"text" => text}]}),
+            else: candidate
+
+        response =
+          decode_object_body(%{
+            "candidates" => [candidate],
+            "usageMetadata" => %{
+              "promptTokenCount" => 10,
+              "candidatesTokenCount" => 5,
+              "totalTokenCount" => 15
+            }
+          })
+
+        label = "#{reason} with text #{inspect(text)}"
+        assert ReqLLM.Response.finish_reason(response) == normalized, label
+        assert response.provider_meta["finish_reason_raw"] == reason, label
+        assert response.provider_meta["finish_message"] == "Synthetic finish detail", label
+        assert ReqLLM.Response.usage(response).total_tokens == 15, label
+
+        if text == ~s({"name":"Ada"}) do
+          assert {:ok, %{"name" => "Ada"}} = ReqLLM.Response.unwrap_object(response), label
+        else
+          assert {:error, _} = ReqLLM.Response.unwrap_object(response), label
+        end
+      end
+    end
+
+    test "function-call object responses keep the raw finishReason and finishMessage" do
+      response =
+        decode_object_body(%{
+          "candidates" => [
+            %{
+              "content" => %{
+                "parts" => [
+                  %{"functionCall" => %{"name" => "get_weather", "args" => %{"city" => "Madrid"}}}
+                ],
+                "role" => "model"
+              },
+              "finishReason" => "STOP",
+              "finishMessage" => "Synthetic finish detail"
+            }
+          ]
+        })
+
+      assert ReqLLM.Response.finish_reason(response) == :tool_calls
+      assert response.provider_meta["finish_reason_raw"] == "STOP"
+      assert response.provider_meta["finish_message"] == "Synthetic finish detail"
+    end
+
+    test "content-free object responses without a usable reason keep the default stop" do
+      for body <- [
+            %{"candidates" => []},
+            %{"candidates" => [%{}]},
+            %{"candidates" => [%{"finishReason" => nil}]}
+          ] do
+        response = decode_object_body(body)
+
+        assert ReqLLM.Response.finish_reason(response) == :stop, inspect(body)
+        refute Map.has_key?(response.provider_meta, "finish_reason_raw"), inspect(body)
+        assert {:error, _} = ReqLLM.Response.unwrap_object(response), inspect(body)
+      end
+    end
+  end
 end
