@@ -6,6 +6,7 @@ defmodule ReqLLM.Evaluation do
   answer formats. An evaluation model does not need to support chat generation.
   """
 
+  alias ReqLLM.Evaluation.AnswerValidation
   alias ReqLLM.Provider.Adapter
   alias ReqLLM.RequestPlan
   alias ReqLLM.Response
@@ -24,6 +25,7 @@ defmodule ReqLLM.Evaluation do
                       total_timeout:
                         Zoi.union([Zoi.integer() |> Zoi.positive(), Zoi.literal(:infinity)]),
                       max_retries: Zoi.integer() |> Zoi.min(0),
+                      answer_validation: Zoi.enum([:strict]),
                       provider_options:
                         Zoi.union([Zoi.map(Zoi.any(), Zoi.any()), @keyword_options]),
                       req_http_options: @keyword_options,
@@ -80,6 +82,9 @@ defmodule ReqLLM.Evaluation do
   the deployment. They support boolean, choice, and score questions.
   The response stores named answers in `object` with string keys.
   `provider_meta.raw_response` keeps the original provider data.
+
+  Pass `answer_validation: :strict` on TypeSafe System One or OpenRouter
+  Decisions to validate known answers against the submitted questions.
   """
   @spec evaluate(ReqLLM.model_input(), state(), map(), keyword()) ::
           {:ok, Response.t()} | {:error, term()}
@@ -93,6 +98,7 @@ defmodule ReqLLM.Evaluation do
          :ok <- validate_json(json_input(state, questions)),
          {:ok, opts} <- validate_options(opts),
          {:ok, model} <- resolve_model(model_spec),
+         :ok <- AnswerValidation.validate_protocol(model, opts[:answer_validation]),
          {:ok, provider} <- Adapter.resolve(model, :evaluate, opts),
          :ok <- validate_state_support(model, state),
          {:ok, opts} <-
@@ -104,7 +110,11 @@ defmodule ReqLLM.Evaluation do
            ),
          {:ok, plan} <- RequestPlan.from_resolved(model, :evaluate, provider, opts, :req),
          {:ok, request} <- Runtime.prepare(plan, %{state: state, questions: questions}) do
-      Runtime.execute_prepared(request, ReqLLM.TimeoutBudget.deadline(opts), &result/1)
+      Runtime.execute_prepared(
+        request,
+        ReqLLM.TimeoutBudget.deadline(opts),
+        &result(&1, opts[:answer_validation], questions)
+      )
     end
   end
 
@@ -340,11 +350,23 @@ defmodule ReqLLM.Evaluation do
     end)
   end
 
-  defp result(%Req.Response{status: status, body: %Response{} = body})
-       when status in 200..299,
-       do: {:ok, body}
+  defp result(%Req.Response{status: status, body: %Response{} = body}, validation, questions)
+       when status in 200..299 do
+    case AnswerValidation.validate(validation, questions, body.object) do
+      :ok ->
+        {:ok, body}
 
-  defp result(%Req.Response{status: status, body: body}) do
+      {:error, reason} ->
+        {:error,
+         ReqLLM.Error.API.Response.exception(
+           reason: reason,
+           status: status,
+           response_body: body.provider_meta[:raw_response] || body.object
+         )}
+    end
+  end
+
+  defp result(%Req.Response{status: status, body: body}, _validation, _questions) do
     {:error,
      ReqLLM.Error.API.Request.exception(
        reason: "Evaluation request failed",

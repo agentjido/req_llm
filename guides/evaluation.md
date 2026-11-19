@@ -134,3 +134,12 @@ The existing retries, total timeout, usage, and `ReqLLM.Response` contracts appl
 An execution contract describes client compatibility, not proof that a deployed
 gateway serves the endpoint. Confirm its route, authentication, request schema,
 and response schema separately before integration testing.
+
+## Strict validation for System One answers
+
+Pass `answer_validation: :strict` to a TypeSafe System One or OpenRouter
+Decisions call to require an answer for each submitted question. Known answers
+must match the question type. A Choice must select a submitted option, a Score
+must fit the submitted rubric, and reported probabilities must be in `[0, 1]`.
+The option keeps the same string-keyed answers and retains provider extensions
+on valid responses. The default continues to accept the provider's answer map.
