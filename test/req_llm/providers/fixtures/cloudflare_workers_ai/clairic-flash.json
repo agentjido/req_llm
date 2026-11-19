@@ -1,0 +1,69 @@
+{
+  "model": "clairic-flash",
+  "answers": {
+    "invoice_id": {
+      "type": "text",
+      "value": "INV-7",
+      "valid": true,
+      "complete": true,
+      "decoder": "parallel-ar-json-scalar-v1",
+      "tokens": 6,
+      "raw": "\"INV-7\"",
+      "span": [
+        8,
+        13
+      ],
+      "grounding_method": "literal_source",
+      "span_method": "unique_literal_match",
+      "p_null": 0.0001399017884104253,
+      "p_null_method": "ar_first_token_null_probability",
+      "confidence": 0.9996125569199422,
+      "log_probability": -0.00038751815552018343,
+      "confidence_method": "ar_sequence_probability"
+    },
+    "po_number": {
+      "type": "text",
+      "value": null,
+      "valid": true,
+      "complete": true,
+      "decoder": "parallel-ar-json-scalar-v1",
+      "tokens": 4,
+      "raw": "null",
+      "span": null,
+      "p_null": 0.9995325605549539,
+      "p_null_method": "ar_first_token_null_probability",
+      "confidence": 0.9995325605549539,
+      "log_probability": -0.00046754872892051935,
+      "confidence_method": "ar_sequence_probability",
+      "retry_input_tokens": 158
+    },
+    "total": {
+      "type": "number",
+      "value": 0.0,
+      "valid": true,
+      "complete": true,
+      "decoder": "parallel-ar-json-scalar-v1",
+      "tokens": 2,
+      "raw": "0",
+      "span": [
+        48,
+        53
+      ],
+      "p_null": 1.1677159262475687e-05,
+      "p_null_method": "ar_first_token_null_probability",
+      "confidence": 0.9997149273232803,
+      "log_probability": -0.00028511331765912473,
+      "confidence_method": "ar_sequence_probability",
+      "span_method": "unique_literal_match"
+    }
+  },
+  "truncated": false,
+  "usage": {
+    "state_tokens": 18,
+    "image_tokens": 0,
+    "schema_tokens": 492,
+    "input_tokens": 546,
+    "output_tokens": 12,
+    "passes": 6
+  }
+}
