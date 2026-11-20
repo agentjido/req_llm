@@ -44,7 +44,7 @@ The request base is present on request start, retry, stop, and exception:
 | Key | Value category and meaning |
 |---|---|
 | `request_id` | String correlation identifier shared by the logical request's lifecycle, reasoning, and usage events. |
-| `operation` | Atom such as `:chat`, `:object`, `:embedding`, `:rerank`, `:image`, `:speech`, or `:transcription`. |
+| `operation` | Atom such as `:chat`, `:object`, `:evaluate`, `:embedding`, `:rerank`, `:image`, `:speech`, or `:transcription`. |
 | `mode` | `:sync` or `:stream`. |
 | `provider` | Provider atom. |
 | `model` | `%LLMDB.Model{}` selected for the request. |
@@ -61,6 +61,10 @@ The request base is present on request start, retry, stop, and exception:
 
 The base keys remain present even when their value is `nil`. Additive metadata
 does not change the meaning of these keys.
+
+For `ReqLLM.evaluate/4`, `request_summary.question_count` counts submitted
+questions and `response_summary.answer_count` counts answers in the decoded
+result. The summaries include counts only for these fields.
 
 ### Conditional request metadata
 
