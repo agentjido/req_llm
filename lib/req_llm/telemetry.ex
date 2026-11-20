@@ -551,6 +551,21 @@ defmodule ReqLLM.Telemetry do
     |> Req.Request.put_private(:req_llm_request_id, context.request_id)
   end
 
+  @doc false
+  @spec put_evaluation_question_count(Req.Request.t(), non_neg_integer()) :: Req.Request.t()
+  def put_evaluation_question_count(%Req.Request{} = request, count) do
+    case request_context(request) do
+      %{operation: :evaluate, request_summary: summary} = context ->
+        put_request_context(request, %{
+          context
+          | request_summary: Map.put(summary, :question_count, count)
+        })
+
+      _ ->
+        request
+    end
+  end
+
   @doc """
   Stores telemetry context in a Req response private map.
   """
@@ -1186,14 +1201,18 @@ defmodule ReqLLM.Telemetry do
 
   defp reasoning_text_bytes(_value), do: 0
 
-  defp summarize_response(_operation, %Response{} = response) do
-    %{
+  defp summarize_response(operation, %Response{} = response) do
+    summary = %{
       text_bytes: byte_size(Response.text(response) || ""),
       thinking_bytes: byte_size(Response.thinking(response) || ""),
       tool_call_count: length(Response.tool_calls(response)),
       image_count: length(Response.images(response)),
       object?: is_map(response.object)
     }
+
+    if operation == :evaluate and is_map(response.object),
+      do: Map.put(summary, :answer_count, map_size(response.object)),
+      else: summary
   end
 
   defp summarize_response(:embedding, body) when is_map(body) do

@@ -306,17 +306,23 @@ defmodule ReqLLM.Evaluation do
   defp validate_state_support(_model, _state), do: :ok
 
   defp validate_questions(questions) when is_map(questions) and map_size(questions) > 0 do
-    if Enum.all?(questions, fn {id, question} ->
-         (is_atom(id) or is_binary(id)) and is_map(question)
-       end) do
-      :ok
-    else
-      {:error, invalid_parameter("questions must map names to question maps")}
+    cond do
+      not Enum.all?(questions, &valid_question_entry?/1) ->
+        {:error, invalid_parameter("questions must map names to question maps")}
+
+      MapSet.size(MapSet.new(Map.keys(questions), &to_string/1)) != map_size(questions) ->
+        {:error, invalid_parameter("question name collision after string normalization")}
+
+      true ->
+        :ok
     end
   end
 
   defp validate_questions(_),
     do: {:error, invalid_parameter("questions must be a non-empty map")}
+
+  defp valid_question_entry?({id, question}),
+    do: (is_atom(id) or is_binary(id)) and is_map(question)
 
   defp validate_json(value) do
     case Jason.encode(value) do

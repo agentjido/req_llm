@@ -230,6 +230,12 @@ must stay visible to their owner.
 
 ## Deciding where new capability belongs
 
+Cloudflare Workers AI's Clairic models take named field specifications and
+return values with source spans and field status. The experimental
+`ReqLLM.Providers.CloudflareWorkersAI.Clairic.extract/4` operation handles
+text and number extraction in one call. Its result retains Cloudflare's field
+metadata so callers can distinguish complete results from failed fields.
+
 Use this sequence for future proposals:
 
 1. If the capability only changes encoding or decoding for one provider, keep

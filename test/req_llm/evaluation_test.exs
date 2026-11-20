@@ -105,6 +105,22 @@ defmodule ReqLLM.EvaluationTest do
     assert decoded.object == result.object
   end
 
+  test "rejects colliding evaluation question names before sending a request" do
+    questions = %{"route" => %{type: :boolean, instructions: "Second"}, route: @questions.urgent}
+
+    opts = [
+      api_key: "fixture-only",
+      req_http_options: [plug: fn _conn -> flunk("unexpected HTTP") end]
+    ]
+
+    for model <- ["typesafe:jev-latest", "openrouter:typesafe/jev-1.13"] do
+      assert {:error, %ReqLLM.Error.Invalid.Parameter{parameter: message}} =
+               ReqLLM.evaluate(model, "Please refund me", questions, opts)
+
+      assert message =~ "question name collision after string normalization"
+    end
+  end
+
   test "resolves each Jev spec from LLMDB as an evaluation-only model" do
     for id <- ["jev-latest", "jev-preview", "jev-1.13.0"] do
       assert {:ok, model} = ReqLLM.model("typesafe:" <> id)

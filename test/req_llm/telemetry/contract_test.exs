@@ -46,6 +46,44 @@ defmodule ReqLLM.TelemetryContractTest do
     assert Enum.uniq(ReqLLM.Telemetry.events()) == ReqLLM.Telemetry.events()
   end
 
+  test "evaluation summaries count questions and answers without including their content" do
+    state = "fixture state"
+    questions = %{priority: %{type: :boolean, instructions: "fixture instructions"}}
+
+    Req.Test.stub(__MODULE__.Evaluation, fn conn ->
+      Req.Test.json(conn, %{
+        "model" => "jev-latest",
+        "answers" => %{"priority" => %{"type" => "noul", "noul" => 0.8}},
+        "usage" => %{"input_tokens" => 5, "output_tokens" => 0}
+      })
+    end)
+
+    assert {:ok, _response} =
+             ReqLLM.evaluate("typesafe:jev-latest", state, questions,
+               api_key: "fixture-only",
+               req_http_options: [plug: {Req.Test, __MODULE__.Evaluation}]
+             )
+
+    events = collect_events()
+    start = single_event(events, [:req_llm, :request, :start])
+    stop = single_event(events, [:req_llm, :request, :stop])
+
+    assert start.metadata.operation == :evaluate
+    assert start.metadata.request_summary == %{question_count: 1}
+    assert stop.metadata.request_summary == %{question_count: 1}
+
+    assert stop.metadata.response_summary == %{
+             answer_count: 1,
+             image_count: 0,
+             object?: true,
+             text_bytes: 0,
+             thinking_bytes: 0,
+             tool_call_count: 0
+           }
+
+    refute Map.has_key?(stop.metadata, :response_payload)
+  end
+
   test "preserves stable lifecycle, usage, streaming, and retry shapes" do
     model = %LLMDB.Model{provider: :openai, id: "gpt-5"}
     usage = %{tokens: %{input: 3, output: 2, total_tokens: 5, reasoning: 0}, cost: nil}
