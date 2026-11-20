@@ -6,7 +6,8 @@ defmodule ReqLLM.Kino.Comparison do
   See the [Livebook Tools example](livebook-model-picker.livemd).
   """
 
-  alias ReqLLM.Kino.{Form, Prompt, Request}
+  alias ReqLLM.Kino, as: Notebook
+  alias ReqLLM.Kino.{Prompt, Request}
   alias ReqLLM.Response
 
   @compile {:no_warn_undefined, [Kino.Layout, Kino.Text]}
@@ -29,12 +30,12 @@ defmodule ReqLLM.Kino.Comparison do
   def new(model_specs, opts \\ [])
 
   def new([_, _ | _] = model_specs, opts) do
-    Form.ensure_kino!()
+    Notebook.ensure_kino!()
     opts = Keyword.validate!(opts, default_prompt: "", system_message: "", request_options: [])
     requests = Enum.map(model_specs, &Request.resolve!(&1, :chat, opts[:request_options]))
     title = Enum.map_join(requests, "\n", fn {model, _} -> LLMDB.Model.spec(model) end)
 
-    Form.new(
+    Notebook.new(
       title,
       Prompt.fields(opts),
       "Run #{length(requests)} requests",

@@ -7,7 +7,8 @@ defmodule ReqLLM.Kino.Image do
   See the [Livebook Tools example](livebook-model-picker.livemd).
   """
 
-  alias ReqLLM.Kino.{Form, Request}
+  alias ReqLLM.Kino, as: Notebook
+  alias ReqLLM.Kino.Request
   alias ReqLLM.Response
 
   @compile {:no_warn_undefined, [Kino.Image, Kino.Input, Kino.Layout, Kino.Text]}
@@ -23,7 +24,7 @@ defmodule ReqLLM.Kino.Image do
   """
   @spec new(ReqLLM.model_input(), keyword()) :: ReqLLM.Kino.form()
   def new(model_spec, opts \\ []) do
-    Form.ensure_kino!()
+    Notebook.ensure_kino!()
     opts = Keyword.validate!(opts, default_prompt: "", request_options: [])
     {model, request_opts} = Request.resolve!(model_spec, :image, opts[:request_options])
 
@@ -31,7 +32,7 @@ defmodule ReqLLM.Kino.Image do
       [prompt: Kino.Input.textarea("Prompt", default: opts[:default_prompt])] ++
         aspect_ratio_field(model.provider, request_opts)
 
-    Form.new(
+    Notebook.new(
       LLMDB.Model.spec(model),
       fields,
       "Generate",

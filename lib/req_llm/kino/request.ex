@@ -25,6 +25,8 @@ defmodule ReqLLM.Kino.Request do
     end
   rescue
     _error -> {:error, "Could not complete the request."}
+  catch
+    :exit, _reason -> {:error, "Could not complete the request."}
   end
 
   def measurements(%Response{usage: usage}) do

@@ -12,7 +12,7 @@ defmodule ReqLLM.Kino.ModelPicker do
   See the [Model Picker Livebook](livebook-model-picker.livemd) for a complete example.
   """
 
-  alias ReqLLM.Kino.Form
+  alias ReqLLM.Kino, as: Notebook
   alias ReqLLM.Kino.ModelPicker.Source
 
   @compile {:no_warn_undefined, [Kino.Input, Kino.Layout, Kino.Markdown]}
@@ -24,19 +24,19 @@ defmodule ReqLLM.Kino.ModelPicker do
 
   @type provider :: :lmstudio | :anthropic | :openai | :google | :xai | :azure
   @type operation :: :text | :image
-  @opaque t :: %__MODULE__{
-            provider: provider(),
-            operation: operation(),
-            base_url: String.t() | nil,
-            model_input: struct(),
-            manual_input: struct(),
-            view: struct()
-          }
+  @type t :: %__MODULE__{
+          provider: provider(),
+          operation: operation(),
+          base_url: String.t() | nil,
+          model_input: Kino.Input.t(),
+          manual_input: Kino.Input.t(),
+          view: Kino.Layout.t()
+        }
 
   @doc "Creates a Kino input for the provider. Pass `operation: :image` for image generation."
-  @spec provider_input(keyword()) :: struct()
+  @spec provider_input(keyword()) :: Kino.Input.t()
   def provider_input(opts \\ []) do
-    Form.ensure_kino!()
+    Notebook.ensure_kino!()
     opts = Keyword.validate!(opts, operation: :text)
     Kino.Input.select("Provider", providers!(opts[:operation]))
   end
@@ -55,7 +55,7 @@ defmodule ReqLLM.Kino.ModelPicker do
   """
   @spec new(provider(), keyword()) :: t()
   def new(provider, opts \\ []) do
-    Form.ensure_kino!()
+    Notebook.ensure_kino!()
 
     allowed_opts =
       if provider == :lmstudio, do: [:base_url, operation: :text], else: [operation: :text]
@@ -84,7 +84,7 @@ defmodule ReqLLM.Kino.ModelPicker do
   end
 
   @doc "Returns the Kino layout for the picker. Render it before you call `read/1`."
-  @spec view(t()) :: struct()
+  @spec view(t()) :: Kino.Layout.t()
   def view(%__MODULE__{view: view}), do: view
 
   @doc """

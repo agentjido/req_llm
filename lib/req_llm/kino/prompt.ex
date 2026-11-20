@@ -7,7 +7,8 @@ defmodule ReqLLM.Kino.Prompt do
   """
 
   alias ReqLLM.{Context, Response}
-  alias ReqLLM.Kino.{Form, Request}
+  alias ReqLLM.Kino, as: Notebook
+  alias ReqLLM.Kino.Request
 
   @compile {:no_warn_undefined, [Kino.Input, Kino.Text]}
 
@@ -20,11 +21,11 @@ defmodule ReqLLM.Kino.Prompt do
   """
   @spec new(ReqLLM.model_input(), keyword()) :: ReqLLM.Kino.form()
   def new(model_spec, opts \\ []) do
-    Form.ensure_kino!()
+    Notebook.ensure_kino!()
     opts = Keyword.validate!(opts, default_prompt: "", system_message: "", request_options: [])
     {model, _options} = request = Request.resolve!(model_spec, :chat, opts[:request_options])
 
-    Form.new(
+    Notebook.new(
       LLMDB.Model.spec(model),
       fields(opts),
       "Run",
