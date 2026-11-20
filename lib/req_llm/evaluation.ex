@@ -110,11 +110,9 @@ defmodule ReqLLM.Evaluation do
            ),
          {:ok, plan} <- RequestPlan.from_resolved(model, :evaluate, provider, opts, :req),
          {:ok, request} <- Runtime.prepare(plan, %{state: state, questions: questions}) do
-      Runtime.execute_prepared(
-        request,
-        ReqLLM.TimeoutBudget.deadline(opts),
-        &result(&1, opts[:answer_validation], questions)
-      )
+      request
+      |> AnswerValidation.attach(opts[:answer_validation], questions)
+      |> Runtime.execute_prepared(ReqLLM.TimeoutBudget.deadline(opts), &result/1)
     end
   end
 
@@ -356,23 +354,11 @@ defmodule ReqLLM.Evaluation do
     end)
   end
 
-  defp result(%Req.Response{status: status, body: %Response{} = body}, validation, questions)
-       when status in 200..299 do
-    case AnswerValidation.validate(validation, questions, body.object) do
-      :ok ->
-        {:ok, body}
+  defp result(%Req.Response{status: status, body: %Response{} = body})
+       when status in 200..299,
+       do: {:ok, body}
 
-      {:error, reason} ->
-        {:error,
-         ReqLLM.Error.API.Response.exception(
-           reason: reason,
-           status: status,
-           response_body: body.provider_meta[:raw_response] || body.object
-         )}
-    end
-  end
-
-  defp result(%Req.Response{status: status, body: body}, _validation, _questions) do
+  defp result(%Req.Response{status: status, body: body}) do
     {:error,
      ReqLLM.Error.API.Request.exception(
        reason: "Evaluation request failed",

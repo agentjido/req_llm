@@ -1,6 +1,8 @@
 defmodule ReqLLM.EvaluationAnswerValidationTest do
   use ExUnit.Case, async: true
 
+  alias ReqLLM.Error.API.Request, as: RequestError
+  alias ReqLLM.Error.API.Response, as: ResponseError
   alias ReqLLM.Response
 
   @questions %{
@@ -26,7 +28,7 @@ defmodule ReqLLM.EvaluationAnswerValidationTest do
       assert {:ok, %Response{object: %{"department" => ^answer}}} =
                ReqLLM.evaluate(model, "Please refund me", questions, opts)
 
-      assert {:error, %ReqLLM.Error.API.Response{reason: reason}} =
+      assert {:error, %RequestError{cause: %ResponseError{reason: reason}}} =
                ReqLLM.evaluate(
                  model,
                  "Please refund me",
@@ -60,7 +62,7 @@ defmodule ReqLLM.EvaluationAnswerValidationTest do
         ] do
       opts = [answer_validation: :strict] ++ strict_fixture_options(answers)
 
-      assert {:error, %ReqLLM.Error.API.Response{reason: reason}} =
+      assert {:error, %RequestError{cause: %ResponseError{reason: reason}}} =
                ReqLLM.evaluate(
                  "typesafe:jev-latest",
                  "Please refund me",
@@ -89,6 +91,35 @@ defmodule ReqLLM.EvaluationAnswerValidationTest do
 
     assert {:ok, %Response{object: ^answers}} =
              ReqLLM.evaluate("typesafe:jev-latest", "Please refund me", questions, opts)
+  end
+
+  test "strict validation matches Choice keys as encoded in JSON" do
+    criteria = %{1 => "Billing", nil => "Other"}
+
+    for model <- ["typesafe:jev-latest", "openrouter:typesafe/jev-1.13"],
+        criteria <- [criteria, Jason.OrderedObject.new(Map.to_list(criteria))],
+        choice <- ["1", "nil"] do
+      questions = %{department: %{@questions.department | criteria: criteria}}
+      answers = %{"department" => %{"type" => "choice", "choice" => choice}}
+
+      plug = fn conn ->
+        {:ok, body, conn} = Plug.Conn.read_body(conn)
+
+        assert get_in(Jason.decode!(body), ["questions", "department", "criteria"]) == %{
+                 "1" => "Billing",
+                 "nil" => "Other"
+               }
+
+        Req.Test.json(conn, %{"model" => "jev-latest", "answers" => answers, "usage" => %{}})
+      end
+
+      assert {:ok, %Response{object: ^answers}} =
+               ReqLLM.evaluate(model, "Please refund me", questions,
+                 api_key: "fixture-only",
+                 answer_validation: :strict,
+                 req_http_options: [plug: plug]
+               )
+    end
   end
 
   test "strict validation is explicit about supported wire protocols" do

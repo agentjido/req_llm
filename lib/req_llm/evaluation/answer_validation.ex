@@ -1,7 +1,9 @@
 defmodule ReqLLM.Evaluation.AnswerValidation do
   @moduledoc false
 
+  alias ReqLLM.Error.API.Response, as: ResponseError
   alias ReqLLM.Error.Invalid.Parameter
+  alias ReqLLM.Response
 
   @protocols ["typesafe_systemone", "openrouter_decisions"]
 
@@ -19,9 +21,38 @@ defmodule ReqLLM.Evaluation.AnswerValidation do
     end
   end
 
-  def validate(nil, _questions, _answers), do: :ok
+  def attach(request, nil, _questions), do: request
 
-  def validate(:strict, questions, answers) when is_map(answers) do
+  def attach(request, :strict, questions) do
+    {leading, trailing} =
+      Enum.split_while(request.response_steps, fn {name, _step} -> name != :llm_telemetry_stop end)
+
+    step = {:llm_validate_evaluation_answers, &validate_response(&1, questions)}
+    %{request | response_steps: leading ++ [step | trailing]}
+  end
+
+  defp validate_response(
+         {request, %Req.Response{status: status, body: %Response{} = body}} = pair,
+         questions
+       )
+       when status in 200..299 do
+    case validate_answers(questions, body.object) do
+      :ok ->
+        pair
+
+      {:error, reason} ->
+        {request,
+         ResponseError.exception(
+           reason: reason,
+           status: status,
+           response_body: body.provider_meta[:raw_response] || body.object
+         )}
+    end
+  end
+
+  defp validate_response(pair, _questions), do: pair
+
+  defp validate_answers(questions, answers) when is_map(answers) do
     Enum.reduce_while(questions, :ok, fn {name, question}, :ok ->
       case validate_requested_answer(Map.fetch(answers, to_string(name)), question) do
         :ok ->
@@ -33,7 +64,7 @@ defmodule ReqLLM.Evaluation.AnswerValidation do
     end)
   end
 
-  def validate(:strict, _questions, _answers),
+  defp validate_answers(_questions, _answers),
     do: {:error, "Evaluation answers must be an object"}
 
   defp validate_requested_answer(:error, _question), do: {:error, "Answer is missing"}
@@ -60,7 +91,7 @@ defmodule ReqLLM.Evaluation.AnswerValidation do
   defp validate_choice(%{"type" => "choice", "choice" => choice} = answer, criteria) do
     with :ok <-
            require_valid(
-             is_binary(choice) and Enum.any?(choice_keys(criteria), &same_key?(&1, choice)),
+             is_binary(choice) and Enum.any?(choice_keys(criteria), &(json_key(&1) == choice)),
              "Choice was not in the submitted criteria"
            ) do
       validate_probabilities(answer)
@@ -86,8 +117,8 @@ defmodule ReqLLM.Evaluation.AnswerValidation do
   defp choice_keys(criteria) when is_map(criteria), do: Map.keys(criteria)
   defp choice_keys(_criteria), do: []
 
-  defp same_key?(key, value) when is_binary(key) or is_atom(key), do: to_string(key) == value
-  defp same_key?(_key, _value), do: false
+  defp json_key(key) when is_atom(key), do: Atom.to_string(key)
+  defp json_key(key), do: to_string(key)
 
   defp validate_probabilities(answer) do
     with :ok <-

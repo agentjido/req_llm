@@ -160,7 +160,10 @@ and response schema separately before integration testing.
 
 Pass `answer_validation: :strict` to a TypeSafe System One or OpenRouter
 Decisions call to require an answer for each submitted question. Known answers
-must match the question type. A Choice must select a submitted option, a Score
-must fit the submitted rubric, and reported probabilities must be in `[0, 1]`.
-The option keeps the same string-keyed answers and retains provider extensions
-on valid responses. The default continues to accept the provider's answer map.
+must match the question type. A Choice must match a submitted JSON key, such as
+`"1"` for an integer key of `1`. A Score must fit the submitted rubric, and
+reported probabilities must be in `[0, 1]`. Valid responses retain string-keyed
+answers and provider extensions. A rejected response emits
+`[:req_llm, :request, :exception]` and returns an `ReqLLM.Error.API.Request`
+with the validation error as its cause. The default continues to accept the
+provider's answer map.
