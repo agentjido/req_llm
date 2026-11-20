@@ -144,7 +144,7 @@ defmodule ReqLLM.Providers.Google.ToolsTest do
       decoded = ReqLLM.Test.Helpers.json_body(updated_request)
       [tool_def] = decoded["tools"]
       [function_def] = tool_def["functionDeclarations"]
-      parameters = function_def["parameters"]
+      parameters = function_def["parametersJsonSchema"]
       company = parameters["properties"]["company"]
       address = company["properties"]["address"]
 

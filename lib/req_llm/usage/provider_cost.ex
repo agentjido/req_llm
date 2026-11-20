@@ -2,9 +2,9 @@ defmodule ReqLLM.Usage.ProviderCost do
   @moduledoc """
   Normalizes the charge that a provider reports for a request.
 
-  Only `cost` is required. OpenRouter can also report whether the request used
-  BYOK and what the upstream provider charged. Missing or invalid optional values
-  are not estimated.
+  Reads the reported charge from `cost` or `cost_usd`. OpenRouter can also report
+  whether the request used BYOK and what the upstream provider charged. Missing
+  or invalid optional values are not estimated.
   """
 
   alias ReqLLM.MapAccess
@@ -37,7 +37,7 @@ defmodule ReqLLM.Usage.ProviderCost do
 
   defp from_raw_usage(usage) do
     build(
-      MapAccess.get_raw(usage, :cost),
+      MapAccess.get_raw(usage, :cost) || MapAccess.get_raw(usage, :cost_usd),
       MapAccess.get_raw(usage, :is_byok),
       upstream_cost(MapAccess.get_raw(usage, :cost_details))
     )

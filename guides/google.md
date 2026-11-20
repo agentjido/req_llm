@@ -22,6 +22,90 @@ For the full model-spec workflow, see [Model Specs](model-specs.md).
 
 Use exact Gemini IDs from [LLM Catalog](https://llmcatalog.dev) when possible. If you need to work ahead of the registry, use `ReqLLM.model!/1` to build a full explicit model spec.
 
+## Decisions API
+
+Use `ReqLLM.evaluate/4` with Gemini Decisions for boolean checks, choices, and
+rubric scores. Results include probabilities and confidence instead of generated
+text. The adapter calls `POST /v1beta/decisions` with the same `GOOGLE_API_KEY`
+configuration as other Google requests.
+
+For a model not yet included in your LLMDB catalog, use an explicit model spec:
+
+```elixir
+model = ReqLLM.model!(%{
+  provider: :google,
+  id: "gemini-decision-1",
+  capabilities: %{evaluate: true, chat: false},
+  execution: %{
+    evaluate: %{
+      supported: true,
+      family: "google_decisions",
+      wire_protocol: "google_decisions",
+      transport: "http",
+      path: "/decisions",
+      provider_model_id: "gemini-decision-1"
+    }
+  }
+})
+
+{:ok, result} = ReqLLM.evaluate(model, "The parcel arrived with a cracked mug.", %{
+  damaged: %{type: :boolean, instructions: "Is the item damaged?"},
+  team: %{
+    type: :choice,
+    instructions: "Which team should handle this?",
+    criteria: %{billing: "Payment problems", support: "Product problems"}
+  },
+  severity: %{
+    type: :score,
+    instructions: "How severe is the problem?",
+    criteria: ["Minor", "Major", "Critical"]
+  }
+})
+
+result.object["damaged"]["probability"]
+result.object["team"]["probabilities"]
+result.object["severity"]["score"]
+```
+
+Boolean questions map to Google's `noul` type; responses expose `type: "boolean"`
+and `"probability"`. Native `:noul` questions are accepted too. Choice and score
+answers retain `"confidence"`, `"probabilities"`, and the score's `"legend"`.
+Scores are weighted averages of zero-based rubric levels. Original response data,
+including usage by modality, remains in `result.provider_meta.raw_response`.
+
+Plain map and list states are serialized as JSON text. For multimodal evaluation,
+pass exactly one user message in a context:
+
+```elixir
+alias ReqLLM.Message.ContentPart
+
+context = ReqLLM.Context.new([
+  ReqLLM.Context.user([
+    ContentPart.text("Inspect the item in this photo.\n"),
+    ContentPart.image(File.read!("item.png"), "image/png", %{resolution: "low"}),
+    ContentPart.file(File.read!("receipt.pdf"), "receipt.pdf", "application/pdf")
+  ])
+])
+
+ReqLLM.evaluate(model, context, %{
+  damaged: %{type: :boolean, instructions: "Is the photographed item damaged?"}
+})
+```
+
+`ContentPart.file/4` accepts audio, video, and PDF bytes with their actual MIME
+type. Image and video URL parts support HTTPS URLs; use `mime_type` metadata if
+the URL does not identify its file format. `ContentPart.file_id/2` accepts a
+Google Files API URI. Image and video parts accept `resolution` metadata.
+Conversation history, system messages, tool calls, YouTube URLs, and `gs://`
+URIs are unsupported. The API requires `v1beta` and supports up to 1,000 questions
+per request, with 2–255 options per choice or score question. It has no streaming
+mode. See [Google's Decisions API documentation](https://aistudio.google.com/docs/decisions-api)
+for the current limits and supported media formats.
+
+**Vertex AI availability:** Google currently lists Cloud support as coming soon.
+Use the direct `:google` provider; `:google_vertex` cannot execute Decisions
+requests yet. See the [launch announcement](https://blog.google/innovation-and-ai/technology/developers-tools/gemini-decisions-api/).
+
 ## Function Calling
 
 Use `tool_choice: :validated` (or `"validated"`) with `tools` to enable Gemini's

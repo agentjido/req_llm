@@ -419,6 +419,39 @@ defmodule ReqLLM.EvaluationExecutionTest do
              )
   end
 
+  test "Google Decisions gateways retain bearer credentials and gateway identity" do
+    spec = model(:decision_gateway, "google-evaluator") |> with_protocol("google_decisions")
+    questions = %{urgent: %{type: :boolean, instructions: "Urgent?"}}
+    context = ReqLLM.Context.new([ReqLLM.Context.user("Refund me")])
+
+    Req.Test.stub(__MODULE__, fn conn ->
+      assert conn.host == "gateway.example"
+      assert conn.request_path == "/v1/custom/decide"
+      assert Plug.Conn.get_req_header(conn, "authorization") == ["Bearer gateway-key"]
+      assert Plug.Conn.get_req_header(conn, "x-goog-api-key") == []
+      assert conn.body_params["model"] == "wire-evaluator"
+      assert conn.body_params["input"] == [%{"type" => "text", "text" => "Refund me"}]
+      assert conn.body_params["questions"]["urgent"]["type"] == "noul"
+
+      Req.Test.json(conn, %{
+        "answers" => %{"urgent" => %{"type" => "noul", "noul" => 0.7, "confidence" => 0.7}},
+        "usage" => %{"total_input_tokens" => 8, "total_output_tokens" => 0, "total_tokens" => 8}
+      })
+    end)
+
+    assert {:ok, result} =
+             ReqLLM.evaluate(spec, context, questions,
+               api_key: "gateway-key",
+               req_http_options: [plug: {Req.Test, __MODULE__}]
+             )
+
+    assert result.provider_meta.provider == :decision_gateway
+    assert result.model == "wire-evaluator"
+    assert result.object["urgent"]["probability"] == 0.7
+    assert result.usage.input_tokens == 8
+    assert result.usage.output_tokens == 0
+  end
+
   test "gateway errors and malformed success bodies retain response errors" do
     for {status, body} <- [{401, %{"error" => "unauthorized"}}, {200, %{"answers" => %{}}}] do
       Req.Test.stub(__MODULE__, fn conn ->

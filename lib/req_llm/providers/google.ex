@@ -13,7 +13,10 @@ defmodule ReqLLM.Providers.Google do
     Set to "v1beta" to enable beta features like Google Search grounding.
   - `google_safety_settings` - List of safety filter configurations
   - `google_candidate_count` - Number of response candidates to generate (default: 1)
-  - `google_grounding` - Enable Google Search grounding (built-in web search). Requires `google_api_version: "v1beta"`
+  - `google_grounding` - Enable Google Search grounding (built-in web search). Requires `google_api_version: "v1beta"`.
+    Gemini 3 and later can combine grounding with function tools. In this mode, `:auto`
+    uses Gemini's `VALIDATED` mode. Reuse the response context to carry the tool history
+    into the next request. Keep the assistant message intact to replay its signed parts.
   - `google_thinking_budget` - Thinking token budget for Gemini 2.5 models (cannot be combined with `google_thinking_level`)
   - `google_include_thoughts` - Whether chat requests ask for thought summaries (default: `true`)
   - `google_thinking_level` - Thinking level for Gemini 3+ models (`:minimal`, `:low`, `:medium`, `:high`). Cannot be combined with `google_thinking_budget`
@@ -87,6 +90,8 @@ defmodule ReqLLM.Providers.Google do
       # Add to .env file
       GOOGLE_API_KEY=AIza...
   """
+
+  alias ReqLLM.Providers.Google.ToolHistory
 
   use ReqLLM.Provider,
     id: :google,
@@ -571,9 +576,58 @@ defmodule ReqLLM.Providers.Google do
     end
   end
 
+  def prepare_request(:evaluate, model_spec, input, opts) do
+    with {:ok, model} <- ReqLLM.model(model_spec),
+         {:ok, opts} <- ReqLLM.Provider.Options.normalize_flat_provider_options(__MODULE__, opts),
+         {:ok, endpoint} <- ReqLLM.Evaluation.Execution.endpoint(model, base_url(), opts),
+         :ok <- validate_decisions_protocol(model, opts),
+         {:ok, api_key, _source} <- ReqLLM.Keys.get(model, opts),
+         contract = Map.merge(model.execution.evaluate, endpoint),
+         {:ok, request} <-
+           ReqLLM.Evaluation.Protocol.prepare_request(
+             model,
+             input,
+             opts,
+             contract,
+             {"x-goog-api-key", api_key}
+           ) do
+      request =
+        if use_header_auth?(opts) do
+          request
+        else
+          request
+          |> Req.Request.delete_header("x-goog-api-key")
+          |> Req.Request.merge_options(params: [key: api_key])
+        end
+
+      {:ok, request}
+    else
+      {:error, message} when is_binary(message) ->
+        {:error, ReqLLM.Error.Invalid.Parameter.exception(parameter: message)}
+
+      {:error, _} = error ->
+        error
+    end
+  end
+
   # Delegate all other operations to defaults (which will return appropriate errors)
   def prepare_request(operation, model_spec, input, opts) do
     ReqLLM.Provider.Defaults.prepare_request(__MODULE__, operation, model_spec, input, opts)
+  end
+
+  @impl ReqLLM.Provider
+  def evaluation_protocols, do: ["google_decisions"]
+
+  defp validate_decisions_protocol(model, opts) do
+    if model.execution.evaluate.wire_protocol == "google_decisions" and
+         resolve_api_version(opts) in [nil, "v1beta"] do
+      :ok
+    else
+      {:error,
+       ReqLLM.Error.Invalid.Parameter.exception(
+         parameter: "Gemini evaluation requires the google_decisions protocol and v1beta API"
+       )}
+    end
   end
 
   defp image_context(prompt, opts) do
@@ -1311,22 +1365,10 @@ defmodule ReqLLM.Providers.Google do
   defp encode_chat_body(request) do
     model_name = request.options[:model]
 
-    {system_instruction, contents} =
-      case request.options[:context] do
-        %ReqLLM.Context{} = ctx ->
-          # Convert OpenAI-style context to Gemini format
-          messages = encode_context_messages_for_gemini(ctx, model_name)
-          split_messages_for_gemini(messages, model_name)
-
-        _ ->
-          split_messages_for_gemini(request.options[:messages] || [], model_name)
-      end
-
-    tool_config = build_google_tool_config(request.options[:tool_choice])
-
     grounding_tools = build_grounding_tools(request.options[:google_grounding])
     url_context_tools = build_url_context_tools(request.options[:google_url_context])
     builtin_tools = grounding_tools ++ url_context_tools
+    tool_config = build_google_tool_config(request.options[:tool_choice])
 
     tools_data =
       case request.options[:tools] do
@@ -1335,9 +1377,15 @@ defmodule ReqLLM.Providers.Google do
             %{functionDeclarations: Enum.map(tools, &ReqLLM.Tool.to_schema(&1, :google))}
           ]
 
-          all_tools = builtin_tools ++ user_tools
+          tool_config =
+            if grounding_tools != [] and
+                 gemini_3_or_later?(request.options[:model_struct] || model_name) do
+              enable_server_tool_history(tool_config)
+            else
+              tool_config
+            end
 
-          %{tools: all_tools}
+          %{tools: builtin_tools ++ user_tools}
           |> maybe_put(:toolConfig, tool_config)
 
         _ ->
@@ -1349,6 +1397,20 @@ defmodule ReqLLM.Providers.Google do
               %{tools: tools}
               |> maybe_put(:toolConfig, tool_config)
           end
+      end
+
+    replay_function_history? =
+      get_in(tools_data, [:toolConfig, :includeServerSideToolInvocations]) == true
+
+    {system_instruction, contents} =
+      case request.options[:context] do
+        %ReqLLM.Context{} = ctx ->
+          messages = encode_context_messages_for_gemini(ctx, model_name)
+          split_messages_for_gemini(messages, model_name, replay_function_history?)
+
+        _ ->
+          messages = request.options[:messages] || []
+          split_messages_for_gemini(messages, model_name, replay_function_history?)
       end
 
     # Build generationConfig with Gemini-specific parameter names
@@ -1563,7 +1625,7 @@ defmodule ReqLLM.Providers.Google do
 
   defp json_schema_supported?(model_name) when is_binary(model_name) do
     String.starts_with?(model_name, "gemini-2.5-") or model_name == "gemini-2.5" or
-      String.starts_with?(model_name, "gemini-3")
+      gemini_3_or_later?(model_name)
   end
 
   defp json_schema_supported?(_), do: false
@@ -1732,7 +1794,16 @@ defmodule ReqLLM.Providers.Google do
             response = attach_text_thought_signatures(response, body)
 
             response = attach_function_call_thought_signatures(response, body)
-            response_with_reasoning = attach_reasoning_details(response, reasoning_details)
+
+            replay_parts =
+              if gemini_3_or_later?(model),
+                do: ToolHistory.replay_parts(first_candidate_parts(body))
+
+            response_with_reasoning =
+              response
+              |> attach_reasoning_details(reasoning_details)
+              |> ToolHistory.preserve(replay_parts)
+
             tool_usage = google_tool_usage(body, model)
             image_usage = google_image_usage(body)
 
@@ -1917,6 +1988,17 @@ defmodule ReqLLM.Providers.Google do
     else
       %{response | usage: usage}
     end
+  end
+
+  defp enable_server_tool_history(%{functionCallingConfig: %{mode: "NONE"}} = tool_config),
+    do: tool_config
+
+  defp enable_server_tool_history(%{functionCallingConfig: %{mode: "AUTO"}}) do
+    %{includeServerSideToolInvocations: true, functionCallingConfig: %{mode: "VALIDATED"}}
+  end
+
+  defp enable_server_tool_history(tool_config) do
+    Map.put(tool_config || %{}, :includeServerSideToolInvocations, true)
   end
 
   # Helper to build Google toolConfig from OpenAI-style tool_choice
@@ -2607,6 +2689,34 @@ defmodule ReqLLM.Providers.Google do
   end
 
   @impl ReqLLM.Provider
+  def init_stream_state(model) do
+    if gemini_3_or_later?(model), do: []
+  end
+
+  @impl ReqLLM.Provider
+  def decode_stream_event(event, model, nil), do: {decode_stream_event(event, model), nil}
+
+  def decode_stream_event(event, model, reversed_parts) do
+    data =
+      case event do
+        %{data: data} -> data
+        data -> data
+      end
+
+    {decode_stream_event(event, model), Enum.reverse(first_candidate_parts(data), reversed_parts)}
+  end
+
+  @impl ReqLLM.Provider
+  def flush_stream_state(_model, nil), do: {[], nil}
+
+  def flush_stream_state(_model, reversed_parts) do
+    case ToolHistory.replay_parts(reversed_parts) do
+      nil -> {[], []}
+      parts -> {[ReqLLM.StreamChunk.meta(%{google_tool_history: Enum.reverse(parts)})], []}
+    end
+  end
+
+  @impl ReqLLM.Provider
   def decode_stream_event(event, model) do
     case event do
       %{data: data} when is_map(data) -> decode_google_event(data, model)
@@ -2628,6 +2738,17 @@ defmodule ReqLLM.Providers.Google do
     |> preserve_tool_call_metadata_in_messages(normalized_context)
     |> preserve_text_thought_signatures_in_messages(normalized_context)
     |> preserve_provider_file_metadata_in_messages(normalized_context)
+    |> attach_verified_tool_history(ctx, model_name)
+  end
+
+  defp attach_verified_tool_history(messages, context, model_name) do
+    if gemini_3_or_later?(model_name) do
+      Enum.zip_with(messages, context.messages, fn encoded, original ->
+        maybe_put(encoded, :google_tool_history, ToolHistory.parts(original))
+      end)
+    else
+      messages
+    end
   end
 
   defp preserve_text_thought_signatures_in_messages(messages, context) do
@@ -2780,7 +2901,7 @@ defmodule ReqLLM.Providers.Google do
   defp tool_call_id(_), do: nil
 
   # Split messages into system instruction and contents for Google Gemini
-  defp split_messages_for_gemini(messages, model) do
+  defp split_messages_for_gemini(messages, model, replay_function_history? \\ false) do
     {system_msgs, chat_msgs} =
       Enum.split_with(messages, fn message ->
         case message do
@@ -2805,18 +2926,49 @@ defmodule ReqLLM.Providers.Google do
           %{parts: [%{text: combined_text}]}
       end
 
-    contents = convert_messages_to_gemini(chat_msgs, model)
+    contents = convert_messages_to_gemini(chat_msgs, model, replay_function_history?)
 
     {system_instruction, contents}
   end
 
-  defp convert_messages_to_gemini(messages, model) do
-    messages
-    |> Enum.map(&convert_single_message_to_gemini(&1, model))
-    |> merge_consecutive_roles()
+  defp convert_messages_to_gemini(messages, model, replay_function_history?) do
+    {contents, _call_ids} =
+      Enum.map_reduce(messages, MapSet.new(), fn message, call_ids ->
+        convert_message_with_tool_history(message, model, replay_function_history?, call_ids)
+      end)
+
+    merge_consecutive_roles(contents)
   end
 
-  defp convert_single_message_to_gemini(message, model) do
+  defp convert_message_with_tool_history(
+         %{role: "assistant", google_tool_history: [_ | _] = parts} = message,
+         model,
+         replay_function_history?,
+         _call_ids
+       ) do
+    if replay_function_history? or ToolHistory.server_tools?(parts) do
+      call_ids = for %{"functionCall" => %{"id" => id}} <- parts, into: MapSet.new(), do: id
+      {%{role: "model", parts: parts}, call_ids}
+    else
+      {convert_single_message_to_gemini(message, model), MapSet.new()}
+    end
+  end
+
+  defp convert_message_with_tool_history(
+         %{role: "tool", tool_call_id: id} = message,
+         model,
+         _replay_function_history?,
+         call_ids
+       ) do
+    native_id = if MapSet.member?(call_ids, id), do: id
+    {convert_single_message_to_gemini(message, model, native_id), call_ids}
+  end
+
+  defp convert_message_with_tool_history(message, model, _replay_function_history?, _call_ids) do
+    {convert_single_message_to_gemini(message, model), MapSet.new()}
+  end
+
+  defp convert_single_message_to_gemini(message, model, native_id \\ nil) do
     raw_role =
       case message do
         %{role: role} -> role
@@ -2894,7 +3046,7 @@ defmodule ReqLLM.Providers.Google do
 
     tool_result_parts =
       if tool_result? do
-        [build_tool_result_part(message, raw_content, nest_multimodal?)]
+        [build_tool_result_part(message, raw_content, nest_multimodal?, native_id)]
       else
         []
       end
@@ -3059,28 +3211,20 @@ defmodule ReqLLM.Providers.Google do
 
   defp extract_content_text(_), do: ""
 
-  defp build_tool_result_part(message, raw_content, false) do
-    %{
-      functionResponse: %{
-        name: tool_result_name(message),
-        response: tool_result_response(message, raw_content)
-      }
-    }
-  end
-
-  defp build_tool_result_part(message, raw_content, true) do
+  defp build_tool_result_part(message, raw_content, nest_multimodal?, native_id) do
     media_parts =
-      raw_content
-      |> Enum.filter(&multimodal_part?/1)
-      |> Enum.map(&convert_content_part/1)
+      if nest_multimodal? do
+        raw_content
+        |> Enum.filter(&multimodal_part?/1)
+        |> Enum.map(&convert_content_part/1)
+      end
 
-    %{
-      functionResponse: %{
-        name: tool_result_name(message),
-        response: tool_result_response(message, raw_content),
-        parts: media_parts
-      }
-    }
+    result =
+      %{name: tool_result_name(message), response: tool_result_response(message, raw_content)}
+      |> maybe_put(:id, native_id)
+      |> maybe_put(:parts, media_parts)
+
+    %{functionResponse: result}
   end
 
   defp tool_result_name(%{name: name}) when is_binary(name) and name != "", do: name

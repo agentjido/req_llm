@@ -68,6 +68,12 @@ defmodule ReqLLM.Evaluation do
 
       ReqLLM.evaluate("openai:gpt-6-luna", context, questions)
 
+  Google Gemini Decisions supports boolean, choice, and score questions, plus a
+  single user message containing text, images, audio, video, or PDF files in a
+  `ReqLLM.Context`. It does not accept conversation history or tool messages.
+  Plain map and list states are serialized as JSON text. Gemini Decisions is
+  currently available through the direct Google API, not Vertex AI.
+
   Other providers accept only text or JSON state. Azure Microsoft Decision
   models use a Foundry resource root as `base_url` and
   `provider_options: [azure: [deployment: "my-decision-deployment"]]` to select
@@ -282,7 +288,7 @@ defmodule ReqLLM.Evaluation do
     else
       {:error,
        invalid_parameter(
-         "#{LLMDB.Model.spec(model)} accepts text or JSON state; ReqLLM.Context state requires OpenAI Decisions"
+         "#{LLMDB.Model.spec(model)} accepts text or JSON state; ReqLLM.Context state requires OpenAI Decisions or Google Gemini Decisions"
        )}
     end
   end
@@ -290,17 +296,23 @@ defmodule ReqLLM.Evaluation do
   defp validate_state_support(_model, _state), do: :ok
 
   defp validate_questions(questions) when is_map(questions) and map_size(questions) > 0 do
-    if Enum.all?(questions, fn {id, question} ->
-         (is_atom(id) or is_binary(id)) and is_map(question)
-       end) do
-      :ok
-    else
-      {:error, invalid_parameter("questions must map names to question maps")}
+    cond do
+      not Enum.all?(questions, &valid_question_entry?/1) ->
+        {:error, invalid_parameter("questions must map names to question maps")}
+
+      MapSet.size(MapSet.new(Map.keys(questions), &to_string/1)) != map_size(questions) ->
+        {:error, invalid_parameter("question name collision after string normalization")}
+
+      true ->
+        :ok
     end
   end
 
   defp validate_questions(_),
     do: {:error, invalid_parameter("questions must be a non-empty map")}
+
+  defp valid_question_entry?({id, question}),
+    do: (is_atom(id) or is_binary(id)) and is_map(question)
 
   defp validate_json(value) do
     case Jason.encode(value) do

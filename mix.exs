@@ -1,7 +1,7 @@
 defmodule ReqLLM.MixProject do
   use Mix.Project
 
-  @version "1.30.0"
+  @version "1.31.0"
   @source_url "https://github.com/agentjido/req_llm"
 
   def project do
@@ -246,7 +246,7 @@ defmodule ReqLLM.MixProject do
       {:websockex, "~> 0.5.1"},
       {:zoi, "~> 0.19.0"},
       {:jsv, "~> 0.26 and >= 0.26.2"},
-      {:llm_db, "~> 2026.11.0"},
+      {:llm_db, "~> 2026.11.4"},
 
       # Dev/test dependencies
       {:opentelemetry_api, "~> 1.5", only: :test},

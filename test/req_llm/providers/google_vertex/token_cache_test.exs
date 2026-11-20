@@ -339,6 +339,87 @@ defmodule ReqLLM.Providers.GoogleVertex.TokenCacheTest do
       assert :ok = TokenCache.invalidate("map-test@example.com")
     end
 
+    test "inline credentials share a cached token only when the private key matches" do
+      email = "shared@example.iam.gserviceaccount.com"
+      {:ok, fetches} = Agent.start_link(fn -> 0 end)
+
+      token_fetcher = fn {:service_account, credentials}, _opts ->
+        Agent.update(fetches, &(&1 + 1))
+
+        case credentials do
+          %{"private_key" => "key-a"} ->
+            {:ok, %{token: "token-a", expires_at: System.system_time(:second) + 3600}}
+
+          _other ->
+            {:error, :invalid_grant}
+        end
+      end
+
+      opts = [token_fetcher: token_fetcher]
+      holder = %{"client_email" => email, "private_key" => "key-a"}
+
+      assert {:ok, "token-a"} = TokenCache.get_or_refresh(holder, opts)
+
+      assert {:error, :invalid_grant} =
+               TokenCache.get_or_refresh(
+                 %{"client_email" => email, "private_key" => "key-b"},
+                 opts
+               )
+
+      assert {:error, reason} = TokenCache.get_or_refresh(%{"client_email" => email}, opts)
+      assert reason =~ "missing required client_email or private_key"
+
+      assert {:error, _} = TokenCache.get_or_refresh(~s({"client_email": "#{email}"}), opts)
+
+      assert {:error, _} =
+               TokenCache.get_or_refresh(%{client_email: email, private_key: ""}, opts)
+
+      assert {:error, _} =
+               TokenCache.get_or_refresh(%{client_email: email, private_key: nil}, opts)
+
+      assert {:ok, "token-a"} = TokenCache.get_or_refresh(holder, opts)
+      assert {:ok, "token-a"} = TokenCache.get_or_refresh(Jason.encode!(holder), opts)
+
+      assert {:ok, "token-a"} =
+               TokenCache.get_or_refresh(%{client_email: email, private_key: "key-a"}, opts)
+
+      assert Agent.get(fetches, & &1) == 2
+    end
+
+    test "inline credentials do not read a token cached for a file path" do
+      path =
+        Path.join(
+          System.tmp_dir!(),
+          "token-cache-path-#{System.unique_integer([:positive])}.json"
+        )
+
+      File.write!(
+        path,
+        Jason.encode!(%{"client_email" => "file@example.com", "private_key" => "key"})
+      )
+
+      on_exit(fn -> File.rm(path) end)
+
+      cached = fn _source, _opts ->
+        {:ok, %{token: "file-token", expires_at: System.system_time(:second) + 3600}}
+      end
+
+      denied = fn _source, _opts -> {:error, :invalid_grant} end
+
+      assert {:ok, "file-token"} = TokenCache.get_or_refresh(path, token_fetcher: cached)
+
+      assert {:error, _} =
+               TokenCache.get_or_refresh(%{"client_email" => path}, token_fetcher: denied)
+
+      assert {:error, :invalid_grant} =
+               TokenCache.get_or_refresh(
+                 %{"client_email" => path, "private_key" => "other"},
+                 token_fetcher: denied
+               )
+
+      assert {:ok, "file-token"} = TokenCache.get_or_refresh(path, token_fetcher: denied)
+    end
+
     test "map with atom keys normalizes to string keys" do
       map = %{client_email: "atom-test@example.com", private_key: "invalid"}
 

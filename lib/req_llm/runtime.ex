@@ -40,14 +40,22 @@ defmodule ReqLLM.Runtime do
   """
   @spec prepare(RequestPlan.t(), term()) :: {:ok, Req.Request.t()} | {:error, term()}
   def prepare(%RequestPlan{transport: :req} = plan, input) do
-    Adapter.prepare_request(
-      plan.provider_module,
-      plan.operation,
-      plan.model,
-      input,
-      plan.options
-    )
+    with {:ok, request} <-
+           Adapter.prepare_request(
+             plan.provider_module,
+             plan.operation,
+             plan.model,
+             input,
+             plan.options
+           ) do
+      {:ok, attach_input_summary(request, plan.operation, input)}
+    end
   end
+
+  defp attach_input_summary(request, :evaluate, %{questions: questions}) when is_map(questions),
+    do: ReqLLM.Telemetry.put_evaluation_question_count(request, map_size(questions))
+
+  defp attach_input_summary(request, _operation, _input), do: request
 
   @doc false
   @spec prepare_stream(RequestPlan.t(), term()) ::

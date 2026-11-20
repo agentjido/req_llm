@@ -950,6 +950,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
       )
       |> maybe_put_string("prompt_cache_key", provider_opts[:prompt_cache_key])
       |> maybe_put_string("prompt_cache_options", provider_opts[:prompt_cache_options])
+      |> maybe_put_string("access_programs", access_programs!(opts_map, provider_opts))
       |> maybe_put_string("include", include)
       |> maybe_put_string("text", text_format)
       |> maybe_put_string(
@@ -1886,6 +1887,26 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
 
   defp maybe_put_string(map, _key, nil), do: map
   defp maybe_put_string(map, key, value), do: Map.put(map, key, value)
+
+  defp access_programs!(opts, provider_opts) do
+    selection =
+      case Keyword.fetch(provider_opts, :access_programs) do
+        :error -> Map.fetch(opts, :access_programs)
+        value -> value
+      end
+
+    with {:ok, programs} <- selection,
+         {:ok, normalized_programs} <- ReqLLM.Providers.OpenAI.validate_access_programs(programs) do
+      normalized_programs
+    else
+      :error ->
+        nil
+
+      {:error, message} ->
+        raise ReqLLM.Error.Invalid.Parameter,
+          parameter: "invalid access_programs value, #{message}"
+    end
+  end
 
   # Extract the most recent response_id from assistant messages.
   # This should be the LAST assistant message, not specifically one with tool_calls.
@@ -3032,6 +3053,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
       |> Map.put(:reasoning_tokens, reasoning_tokens)
       |> Map.put(:usage_reported, reported)
       |> maybe_put_cache_creation_tokens(cache_creation_tokens)
+      |> maybe_put_provider_cost(usage_data)
       |> maybe_mark_invalid_usage_details(usage_data)
 
     tool_call_counts = extract_tool_call_counts(response_data)
@@ -3047,6 +3069,14 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
 
   defp maybe_put_cache_creation_tokens(usage, tokens),
     do: Map.put(usage, :cache_creation_tokens, tokens)
+
+  # Gateways such as LiteLLM report the request's charge in `usage.cost`.
+  defp maybe_put_provider_cost(usage, usage_data) do
+    case ReqLLM.Usage.ProviderCost.from_usage(usage_data) do
+      nil -> usage
+      provider_cost -> Map.put(usage, :provider_cost, provider_cost)
+    end
+  end
 
   # The Responses API returns "completed" status even when the model refused or
   # called tools, so both are read from the output instead.
