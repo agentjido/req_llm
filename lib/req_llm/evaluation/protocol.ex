@@ -10,7 +10,7 @@ defmodule ReqLLM.Evaluation.Protocol do
           map(),
           keyword(),
           map(),
-          String.t() | {String.t(), String.t()}
+          String.t() | {String.t(), String.t()} | nil
         ) ::
           {:ok, Req.Request.t()} | {:error, Exception.t()}
   def prepare_request(model, %{state: state, questions: questions}, opts, contract, credential) do
@@ -44,6 +44,8 @@ defmodule ReqLLM.Evaluation.Protocol do
       {:ok, request}
     end
   end
+
+  defp put_auth_header(request, nil), do: request
 
   defp put_auth_header(request, {header, value}),
     do: Req.Request.put_header(request, header, value)

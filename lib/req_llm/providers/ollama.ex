@@ -48,6 +48,8 @@ defmodule ReqLLM.Providers.Ollama do
     id: :ollama,
     default_base_url: "http://localhost:11434/v1"
 
+  alias ReqLLM.Evaluation.{Execution, Protocol}
+
   @reasoning_efforts [:none, :low, :medium, :high, :max]
   @reasoning_effort_strings Enum.map(@reasoning_efforts, &Atom.to_string/1)
 
@@ -92,6 +94,30 @@ defmodule ReqLLM.Providers.Ollama do
   end
 
   @impl ReqLLM.Provider
+  def evaluation_protocols, do: ["typesafe_systemone"]
+
+  @impl ReqLLM.Provider
+  def prepare_request(:evaluate, model_spec, input, opts) do
+    with {:ok, model} <- ReqLLM.model(model_spec),
+         {:ok, execution} <- Execution.contract(model),
+         {:ok, endpoint} <-
+           Execution.endpoint(
+             model,
+             ReqLLM.Provider.Options.effective_base_url(__MODULE__, model, []),
+             opts
+           ) do
+      contract =
+        endpoint
+        |> Map.put(:wire_protocol, execution.wire_protocol)
+        |> Map.put(
+          :provider_model_id,
+          execution[:provider_model_id] || model.provider_model_id || model.id
+        )
+
+      Protocol.prepare_request(model, input, opts, contract, nil)
+    end
+  end
+
   def prepare_request(:object, model_spec, prompt, opts) do
     ReqLLM.Provider.Defaults.prepare_json_schema_object_request(
       __MODULE__,

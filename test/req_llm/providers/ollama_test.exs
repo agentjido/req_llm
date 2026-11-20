@@ -3,6 +3,80 @@ defmodule ReqLLM.Providers.OllamaTest do
 
   alias ReqLLM.Providers.Ollama
 
+  @nimble_fixture Path.join(__DIR__, "fixtures/ollama/nimble-systemone.json")
+
+  test "evaluates a local decision model without sending an authorization header" do
+    model = %{
+      provider: :ollama,
+      id: "nimble:latest",
+      capabilities: %{chat: false, evaluate: true},
+      execution: %{
+        evaluate: %{
+          supported: true,
+          family: "typesafe_systemone",
+          wire_protocol: "typesafe_systemone",
+          path: "/v1/systemone",
+          provider_model_id: "nimble:latest"
+        }
+      }
+    }
+
+    state = "The customer requests a refund for a duplicate charge."
+
+    questions = %{
+      route: %{
+        type: :choice,
+        criteria: %{"z_billing" => "Billing and refunds", "a_other" => "Other"},
+        instructions: "Which department handles this?"
+      },
+      refund: %{type: :boolean, instructions: "Is the customer requesting a refund?"},
+      urgency: %{
+        type: :score,
+        instructions: "How urgent is this request?",
+        criteria: ["Routine", "Soon", "Immediate"]
+      }
+    }
+
+    body = @nimble_fixture |> File.read!() |> Jason.decode!()
+
+    Req.Test.stub(__MODULE__.Nimble, fn conn ->
+      assert conn.request_path == "/proxy/v1/systemone"
+      assert Plug.Conn.get_req_header(conn, "authorization") == []
+      assert conn.body_params["model"] == "nimble:latest"
+      assert conn.body_params["state"] == state
+      assert conn.body_params["questions"]["refund"]["type"] == "noul"
+
+      assert conn.body_params["questions"]["urgency"]["criteria"] == [
+               "Routine",
+               "Soon",
+               "Immediate"
+             ]
+
+      Req.Test.json(conn, body)
+    end)
+
+    assert {:ok, response} =
+             ReqLLM.evaluate(model, state, questions,
+               base_url: "http://localhost:11434/proxy/v1",
+               req_http_options: [plug: {Req.Test, __MODULE__.Nimble}]
+             )
+
+    assert response.object["refund"] == %{
+             "type" => "boolean",
+             "probability" => body["answers"]["refund"]["noul"]
+           }
+
+    assert response.object["route"]["choice"] == "z_billing"
+    assert response.object["urgency"] == body["answers"]["urgency"]
+    assert response.usage.input_tokens == body["usage"]["input_tokens"]
+
+    assert response.provider_meta == %{
+             provider: :ollama,
+             operation: :evaluate,
+             raw_response: body
+           }
+  end
+
   defp ollama_model do
     %LLMDB.Model{
       id: "qwen2.5-coder:14b",
