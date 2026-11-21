@@ -1,6 +1,6 @@
 # Google (Gemini)
 
-Access Gemini models with built-in web grounding and thinking capabilities.
+Access Gemini models with built-in web grounding, thinking capabilities, the Decisions API, and the Gemini Interactions API.
 
 ## Configuration
 
@@ -106,6 +106,110 @@ for the current limits and supported media formats.
 Use the direct `:google` provider; `:google_vertex` cannot execute Decisions
 requests yet. See the [launch announcement](https://blog.google/innovation-and-ai/technology/developers-tools/gemini-decisions-api/).
 
+## Interactions API
+
+Use the Gemini Interactions API (`/{api_version}/interactions`, `Api-Revision: 2026-05-20`)
+for stateful server-stored conversations, background and Managed Agent runs,
+resumable SSE streaming, and built-in server-side tools. Unlike `:generate_content`,
+Interactions defaults to `v1` for model requests (with function tools and grounding
+allowed on `v1`) and `v1beta` for Managed Agents (`agent`) or `v1beta_`-prefixed
+interaction IDs.
+
+Opt in explicitly via `provider_options: [google_api: :interactions]`, or
+automatically by passing any Interactions-only option (`previous_interaction_id`,
+`store`, `agent`, `agent_config`, `environment`, `background`, `service_tier`,
+`continuation_token`, `last_event_id`, `interactions_resume_id`, `google_file_search`,
+`google_mcp_servers`, `google_code_execution`, `google_search_types`, or `labels`).
+
+### Buffered, Streaming, and Structured Outputs
+
+```elixir
+# Buffered text with Gemini 4 :xhigh reasoning
+{:ok, response} = ReqLLM.generate_text(
+  "google:gemini-4-hydrogen",
+  "Summarize the key trade-offs of actor supervision.",
+  reasoning_effort: :xhigh,
+  provider_options: [google_api: :interactions]
+)
+
+# SSE streaming
+{:ok, stream_response} = ReqLLM.stream_text(
+  "google:gemini-4-hydrogen",
+  "Count from 1 to 3.",
+  provider_options: [google_api: :interactions]
+)
+
+{:ok, streamed} = ReqLLM.StreamResponse.to_response(stream_response)
+
+# Structured object output
+{:ok, structured} = ReqLLM.generate_object(
+  "google:gemini-4-hydrogen",
+  "Extract the city and country for Paris.",
+  [city: [type: :string, required: true], country: [type: :string, required: true]],
+  provider_options: [google_api: :interactions]
+)
+```
+
+### Stateful Chaining vs. Stateless Replay
+
+For server-stored turns (`store: true`, the server default), pass
+`previous_interaction_id: response.id` with the new user turn or tool results.
+When chaining is omitted (`store: false` or stateless replay), pass `response.context`:
+ReqLLM replays verified `steps`, signatures, and opaque `:provider_block` parts
+verbatim without leaking steps across turns.
+
+```elixir
+{:ok, turn1} = ReqLLM.generate_text(
+  "google:gemini-4-hydrogen",
+  "Remember the code word: cedar.",
+  provider_options: [google_api: :interactions]
+)
+
+{:ok, turn2} = ReqLLM.generate_text(
+  "google:gemini-4-hydrogen",
+  "What was the code word?",
+  provider_options: [previous_interaction_id: turn1.id]
+)
+```
+
+### Lifecycle Operations and Resumable Streaming
+
+`ReqLLM.Providers.Google.InteractionsAPI` provides lifecycle helpers that accept
+either an interaction ID or a `%ReqLLM.Response{}`:
+
+```elixir
+alias ReqLLM.Providers.Google.InteractionsAPI
+
+# Start an interaction or Managed Agent in the background
+{:ok, job} = ReqLLM.generate_text(
+  "google:gemini-4-hydrogen",
+  "Run a deep research pass on BEAM schedulers.",
+  provider_options: [
+    agent: "deep-research-pro-preview-12-2025",
+    background: true
+  ]
+)
+
+{:ok, current} = InteractionsAPI.get(job, api_key: api_key)
+{:ok, done} = InteractionsAPI.wait(job, api_key: api_key, poll_interval: 5_000, timeout: 600_000)
+{:ok, cancelled} = InteractionsAPI.cancel(job, api_key: api_key)
+:ok = InteractionsAPI.delete(job, api_key: api_key)
+
+# Resume or attach to an SSE stream (supports :last_event_id and v1 -> v1beta 404 fallback)
+{:ok, stream_resp} = InteractionsAPI.stream(job, api_key: api_key, last_event_id: "evt_10")
+```
+
+`wait/2` accepts `:poll_interval` (default `5_000`), `:timeout` (default `600_000`),
+and `:max_transient_retries` (default `3`).
+
+### Built-in Tools and Vertex AI Availability
+
+In Interactions mode you can enable built-in tools alongside `ReqLLM.tool/1`
+functions using `google_grounding`, `google_search_types`, `google_url_context`,
+`google_code_execution`, `google_file_search`, and `google_mcp_servers`.
+Interactions API is supported on the direct `:google` provider; `:google_vertex`
+remains on `:generate_content`.
+
 ## Function Calling
 
 Use `tool_choice: :validated` (or `"validated"`) with `tools` to enable Gemini's
@@ -152,10 +256,10 @@ Passed via `:provider_options` keyword:
 
 ### `google_api_version`
 - **Type**: `"v1"` | `"v1beta"`
-- **Default**: `"v1"`
-- **Purpose**: Select API version (v1beta required for grounding)
+- **Default**: `"v1beta"` (with tools/grounding on `:generate_content`) or `"v1"` (for model requests on `:interactions`)
+- **Purpose**: Select API version (`v1beta` required for `:generate_content` grounding and Managed Agents)
 - **Example**: `provider_options: [google_api_version: "v1beta"]`
-- **Note**: Auto-set to v1beta when `google_grounding` is used
+- **Note**: On `:generate_content`, auto-set to `v1beta` when `google_grounding` is used. On `:interactions`, defaults to `v1` for model requests (tools and grounding allowed on `v1`) and `v1beta` for Managed Agents (`agent`) or `v1beta_`-prefixed interaction IDs.
 
 ### `google_grounding`
 - **Type**: Map
@@ -185,6 +289,11 @@ Passed via `:provider_options` keyword:
 - **Example**: `provider_options: [google_thinking_budget: 2048, google_include_thoughts: false]`
 - **Note**: Has no effect when thinking is disabled or no thinking budget/level is configured.
 
+### `google_thinking_level`
+- **Type**: Atom or string (`:minimal`, `:low`, `:medium`, `:high`, `:xhigh`, or string equivalents)
+- **Purpose**: Control thinking level on Gemini 3+ models and Interactions API requests. Cannot be combined with `google_thinking_budget`.
+- **Example**: `provider_options: [google_thinking_level: :xhigh]`
+
 ### `google_safety_settings`
 - **Type**: List of maps
 - **Purpose**: Configure content safety filters
@@ -208,7 +317,11 @@ Gemini 3.6 and later, and Gemini 3.5 Flash-Lite, do not accept `temperature`,
 `top_p`, `top_k`, `reasoning_token_budget`, or `google_thinking_budget` in text
 and structured-output requests. Use `reasoning_effort` or
 `google_thinking_level` to control reasoning. Gemini 3.8 Flash supports `low`,
-`medium`, and `high`; an explicit `minimal` level is rejected.
+`medium`, and `high`; an explicit `minimal` level is rejected. Gemini 4 Hydrogen
+models additionally support `:xhigh` (`reasoning_effort: :xhigh` or
+`google_thinking_level: :xhigh`); on non-Hydrogen Gemini models, `:xhigh`
+`reasoning_effort` clamps to `:high` while explicit `google_thinking_level: :xhigh`
+is rejected.
 
 These checks also apply to Gemini models on Google Vertex AI.
 
@@ -217,6 +330,26 @@ These checks also apply to Gemini models on Google Vertex AI.
 - **Default**: `1`
 - **Purpose**: Generate multiple candidates on Gemini 2.x (only first returned)
 - **Example**: `provider_options: [google_candidate_count: 3]`
+
+### Interactions API Options
+
+- `google_api` (`:generate_content | :interactions | "generate_content" | "interactions"`): Select the Google API surface explicitly; defaults to `:generate_content` unless Interactions-only options are present.
+- `previous_interaction_id` (`String.t()`): Continue a stateful multi-turn conversation from an existing interaction ID.
+- `store` (`boolean()`): Control whether Google stores the interaction for retrieval and chaining.
+- `agent` (`String.t()`): Managed agent identifier (for example, `"deep-research-pro-preview-12-2025"`). Defaults to `v1beta`.
+- `agent_config` (`map()`): Managed agent configuration map.
+- `environment` (`String.t() | map()`): Environment identifier or configuration map for agent requests.
+- `background` (`boolean()`): Run the interaction asynchronously in the background.
+- `service_tier` (`atom() | String.t()`): Service tier (`:flex`, `:standard`, or `:priority`).
+- `continuation_token` (`String.t()`): Continuation token for multi-step Interactions calls.
+- `last_event_id` (`String.t()`): SSE event ID from which to resume an Interactions stream.
+- `interactions_resume_id` (`String.t()`): Interaction ID for `GET` stream resume routing.
+- `response_format` (`map() | [map()]`): Response format specification for Interactions requests.
+- `google_search_types` (`[atom() | String.t()]`): Search types for Google Search built-in tools (such as `web_search` and `image_search`).
+- `google_code_execution` (`boolean() | map()`): Enable or configure server-side code execution in Interactions requests.
+- `google_file_search` (`map()`): Configuration map for the `file_search` built-in tool.
+- `google_mcp_servers` (`[map()]`): List of MCP server tool configurations for Interactions requests.
+- `labels` (`map()`): Custom metadata labels as string key-value pairs.
 
 ### Embedding Options
 
