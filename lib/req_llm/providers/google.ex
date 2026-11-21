@@ -2939,12 +2939,42 @@ defmodule ReqLLM.Providers.Google do
 
   defp convert_messages_to_gemini(messages, model, replay_function_history?) do
     {contents, _call_ids} =
-      Enum.map_reduce(messages, MapSet.new(), fn message, call_ids ->
+      Enum.map_reduce(sort_tool_results_by_call_order(messages), MapSet.new(), fn message,
+                                                                                  call_ids ->
         convert_message_with_tool_history(message, model, replay_function_history?, call_ids)
       end)
 
     merge_consecutive_roles(contents)
   end
+
+  defp sort_tool_results_by_call_order(messages) do
+    messages
+    |> Enum.chunk_by(&tool_result_message?/1)
+    |> Enum.map_reduce(%{}, fn
+      [first | _] = group, call_order ->
+        if tool_result_message?(first) do
+          {Enum.sort_by(group, &Map.get(call_order, tool_result_call_id(&1))), %{}}
+        else
+          order =
+            group
+            |> List.last()
+            |> message_tool_calls()
+            |> Enum.with_index(fn call, index -> {tool_call_id(call), index} end)
+            |> Map.new()
+
+          {group, order}
+        end
+    end)
+    |> elem(0)
+    |> List.flatten()
+  end
+
+  defp message_tool_calls(%{tool_calls: calls}) when is_list(calls), do: calls
+  defp message_tool_calls(%{"tool_calls" => calls}) when is_list(calls), do: calls
+  defp message_tool_calls(_), do: []
+
+  defp tool_result_call_id(%{tool_call_id: id}), do: id
+  defp tool_result_call_id(%{"tool_call_id" => id}), do: id
 
   defp convert_message_with_tool_history(
          %{role: "assistant", google_tool_history: [_ | _] = parts} = message,
