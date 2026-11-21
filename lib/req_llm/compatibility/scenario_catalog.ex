@@ -91,7 +91,8 @@ defmodule ReqLLM.Compatibility.ScenarioCatalog do
     %{id: "tool_id_compat", operation: :text},
     %{id: "streaming_structured_output", operation: :text},
     %{id: "azure_streaming_structured_output", operation: :text},
-    %{id: "compaction", operation: :text}
+    %{id: "compaction", operation: :text},
+    %{id: "interactions", operation: :text}
   ]
 
   @scenario_defaults %{
@@ -386,7 +387,15 @@ defmodule ReqLLM.Compatibility.ScenarioCatalog do
                        transports: [:server_sent_events],
                        proof: :declared,
                        applicability: :focused,
-                       providers: [:azure]}
+                       providers: [:azure]},
+                      {"interactions_basic", "interactions",
+                       applicability: :focused, providers: [:google]},
+                      {"interactions_streaming", "interactions",
+                       transports: [:server_sent_events],
+                       applicability: :focused,
+                       providers: [:google]},
+                      {"interactions_xhigh", "interactions",
+                       requirements: [:reasoning], applicability: :focused, providers: [:google]}
                     ],
                     fn {id, capability, attrs} ->
                       @scenario_defaults
@@ -660,6 +669,21 @@ defmodule ReqLLM.Compatibility.ScenarioCatalog do
       provider: :xai,
       scenario: "streaming_error_handling",
       test_file: "test/coverage/xai/streaming_structured_output_test.exs"
+    },
+    %{
+      provider: :google,
+      scenario: "interactions_basic",
+      test_file: "test/coverage/google/interactions_test.exs"
+    },
+    %{
+      provider: :google,
+      scenario: "interactions_streaming",
+      test_file: "test/coverage/google/interactions_test.exs"
+    },
+    %{
+      provider: :google,
+      scenario: "interactions_xhigh",
+      test_file: "test/coverage/google/interactions_test.exs"
     }
   ]
 

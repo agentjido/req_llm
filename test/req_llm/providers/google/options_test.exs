@@ -342,4 +342,33 @@ defmodule ReqLLM.Providers.Google.OptionsTest do
       assert Keyword.get(translated_opts, :google_thinking_level) == nil
     end
   end
+
+  describe "supports_xhigh_thinking?/1" do
+    test "detects xhigh support across model structs, string IDs, and fallbacks" do
+      assert Google.supports_xhigh_thinking?(ReqLLM.model!("google:gemini-4-hydrogen"))
+      refute Google.supports_xhigh_thinking?(ReqLLM.model!("google:gemini-3.1-pro-preview"))
+
+      assert Google.supports_xhigh_thinking?(
+               LLMDB.Model.new!(%{provider: :google, id: "gemini-4-custom"})
+             )
+
+      refute Google.supports_xhigh_thinking?(
+               LLMDB.Model.new!(%{provider: :google, id: "gemini-2.5-custom"})
+             )
+
+      assert Google.supports_xhigh_thinking?("gemini-4-hydrogen")
+      assert Google.supports_xhigh_thinking?("models/gemini-4-hydrogen")
+      assert Google.supports_xhigh_thinking?("gemini-4-unlisted")
+      assert Google.supports_xhigh_thinking?("custom-model")
+
+      refute Google.supports_xhigh_thinking?("gemini-3.1-pro-preview")
+      refute Google.supports_xhigh_thinking?("gemini-3-flash")
+      refute Google.supports_xhigh_thinking?("gemini-2.5-flash")
+
+      refute Google.supports_xhigh_thinking?("")
+      refute Google.supports_xhigh_thinking?(nil)
+      refute Google.supports_xhigh_thinking?(:gemini_4_hydrogen)
+      refute Google.supports_xhigh_thinking?(123)
+    end
+  end
 end

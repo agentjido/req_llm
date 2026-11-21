@@ -40,7 +40,7 @@ defmodule ReqLLM.Providers.GoogleVertex.Gemini do
       rest
       |> Keyword.merge(provider_opts)
       |> Map.new()
-      |> Map.merge(%{context: context, model: model_id})
+      |> Map.merge(%{context: context, model: model_id, google_api_type: :generate_content})
 
     temp_request =
       Req.new(method: :post, url: URI.parse("https://example.com/temp"))

@@ -634,5 +634,28 @@ defmodule ReqLLM.Providers.Google.ResponseDecodingTest do
       assert usage[:tool_usage][:web_search][:count] == 1
       assert usage[:tool_usage][:web_search][:unit] == :call
     end
+
+    test "extract_usage returns usage map from ReqLLM.Response structs" do
+      {:ok, model} = ReqLLM.model("google:gemini-4-hydrogen")
+      expected_usage = %{input_tokens: 12, output_tokens: 8, total_tokens: 20}
+
+      resp_with_usage = %ReqLLM.Response{
+        id: "resp_1",
+        model: "gemini-4-hydrogen",
+        context: %ReqLLM.Context{},
+        usage: expected_usage
+      }
+
+      assert {:ok, ^expected_usage} = Google.extract_usage(resp_with_usage, model)
+
+      resp_without_usage = %ReqLLM.Response{
+        id: "resp_2",
+        model: "gemini-4-hydrogen",
+        context: %ReqLLM.Context{},
+        usage: nil
+      }
+
+      assert {:error, :no_usage_found} = Google.extract_usage(resp_without_usage, model)
+    end
   end
 end

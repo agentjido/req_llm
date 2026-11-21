@@ -25,7 +25,7 @@ defmodule ReqLLM.Provider.Reasoning do
     xai: "xAI"
   }
 
-  @google_thinking_levels [:minimal, :low, :medium, :high]
+  @google_thinking_levels [:minimal, :low, :medium, :high, :xhigh]
 
   @spec normalize_options(keyword()) :: keyword()
   def normalize_options(opts) do

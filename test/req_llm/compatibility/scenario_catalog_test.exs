@@ -45,7 +45,8 @@ defmodule ReqLLM.Compatibility.ScenarioCatalogTest do
       ~w(object_streaming_json_schema object_streaming_tool_strict object_streaming_auto streaming_error_handling),
     "azure_streaming_structured_output" =>
       ~w(object_streaming_claude_tool object_streaming_claude_auto),
-    "compaction" => ~w(compaction_manual compaction_previous_response compaction_server_side)
+    "compaction" => ~w(compaction_manual compaction_previous_response compaction_server_side),
+    "interactions" => ~w(interactions_basic interactions_streaming interactions_xhigh)
   }
 
   describe "catalog" do
@@ -56,7 +57,7 @@ defmodule ReqLLM.Compatibility.ScenarioCatalogTest do
     test "represents every scenario once" do
       scenario_ids = Enum.map(ScenarioCatalog.scenarios(), & &1.id)
 
-      assert length(scenario_ids) == 54
+      assert length(scenario_ids) == 57
       assert length(scenario_ids) == MapSet.size(MapSet.new(scenario_ids))
     end
 
@@ -174,6 +175,9 @@ defmodule ReqLLM.Compatibility.ScenarioCatalogTest do
     test "preserves provider-specific routes" do
       assert ScenarioCatalog.scenario_test_file(:google, "grounding_basic") ==
                "test/coverage/google/grounding_test.exs"
+
+      assert ScenarioCatalog.scenario_test_file(:google, :interactions_basic) ==
+               "test/coverage/google/interactions_test.exs"
 
       assert ScenarioCatalog.scenario_test_file(:xai, :object_streaming_auto) ==
                "test/coverage/xai/streaming_structured_output_test.exs"

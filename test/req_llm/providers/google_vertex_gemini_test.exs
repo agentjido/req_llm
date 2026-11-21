@@ -167,9 +167,9 @@ defmodule ReqLLM.Providers.GoogleVertex.GeminiTest do
       assert :labels in keys
     end
 
-    test "Google (direct API) schema does NOT declare :labels — Vertex-only feature" do
+    test "Google schema declares :labels for Interactions API" do
       keys = Google.provider_schema().schema |> Keyword.keys()
-      refute :labels in keys
+      assert :labels in keys
     end
   end
 
