@@ -696,7 +696,11 @@ defmodule ReqLLM.Provider do
   """
   @callback evaluation_protocols() :: [String.t()]
 
+  @doc "Returns the module implementing `ReqLLM.Batch.Adapter` for this provider."
+  @callback batch_adapter() :: module()
+
   @optional_callbacks [
+    batch_adapter: 0,
     evaluation_protocols: 0,
     normalize_model_id: 1,
     extract_usage: 2,
