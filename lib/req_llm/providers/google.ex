@@ -1608,6 +1608,11 @@ defmodule ReqLLM.Providers.Google do
   defp validate_gemini_options!(_operation, _model, _opts), do: :ok
 
   @doc false
+  def validate_interactions_gemini_options!(operation, model, opts) do
+    validate_gemini_options!(operation, model, opts)
+  end
+
+  @doc false
   def supports_xhigh_thinking?(%LLMDB.Model{} = model) do
     case supported_thinking_levels(model) do
       [] -> not known_pre_gemini_4?(model)
