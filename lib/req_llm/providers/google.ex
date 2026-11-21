@@ -19,7 +19,7 @@ defmodule ReqLLM.Providers.Google do
     into the next request. Keep the assistant message intact to replay its signed parts.
   - `google_thinking_budget` - Thinking token budget for Gemini 2.5 models (cannot be combined with `google_thinking_level`)
   - `google_include_thoughts` - Whether chat requests ask for thought summaries (default: `true`)
-  - `google_thinking_level` - Thinking level for Gemini 3+ models (`:minimal`, `:low`, `:medium`, `:high`). Cannot be combined with `google_thinking_budget`
+  - `google_thinking_level` - Thinking level for Gemini 3+ models (`:minimal`, `:low`, `:medium`, `:high`, and `:xhigh` on supported Gemini 4 Hydrogen models). Cannot be combined with `google_thinking_budget`
   - `cached_content` - Reference to cached content for 90% cost savings (see Context Caching below)
   - `dimensions` - Number of dimensions for embedding vectors
   - `task_type` - Task type for embeddings (e.g., RETRIEVAL_QUERY)
@@ -103,7 +103,7 @@ defmodule ReqLLM.Providers.Google do
 
   require Logger
 
-  @thinking_level_ranks %{minimal: 0, low: 1, medium: 2, high: 3}
+  @thinking_level_ranks %{minimal: 0, low: 1, medium: 2, high: 3, xhigh: 4}
 
   @provider_schema [
     google_api_version: [
@@ -133,7 +133,7 @@ defmodule ReqLLM.Providers.Google do
     google_thinking_level: [
       type: {:or, [:atom, :string]},
       doc:
-        "Thinking level for Gemini 3+ models (e.g. :low, :medium, :high, or \"low\", \"medium\", \"high\"). Passed directly to the Gemini API. Cannot be combined with google_thinking_budget."
+        "Thinking level for Gemini 3+ models (e.g. :minimal, :low, :medium, :high, :xhigh, or string equivalents). Cannot be combined with google_thinking_budget."
     ],
     google_grounding: [
       type: :map,
@@ -986,6 +986,9 @@ defmodule ReqLLM.Providers.Google do
   end
 
   defp translate_reasoning_effort_to_level(effort, model) do
+    supported = supported_thinking_levels(model)
+    xhigh_target = if(:xhigh in supported, do: :xhigh, else: :high)
+
     effort
     |> ReqLLM.Provider.Reasoning.normalize_effort()
     |> case do
@@ -994,8 +997,8 @@ defmodule ReqLLM.Providers.Google do
       :low -> :low
       :medium -> :medium
       :high -> :high
-      :xhigh -> :high
-      :max -> :high
+      :xhigh -> xhigh_target
+      :max -> xhigh_target
       _ -> :medium
     end
     |> closest_supported_thinking_level(model)
@@ -1064,24 +1067,30 @@ defmodule ReqLLM.Providers.Google do
     model_name = google_model_name(model_id)
 
     cond do
+      model_name_matches?(model_name, "gemini-4-hydrogen") -> [:low, :medium, :high, :xhigh]
+      model_name_matches?(model_name, "gemini-4-carbon") -> [:low, :medium, :high]
+      model_name_matches?(model_name, "gemini-4-argon") -> [:low, :medium, :high]
       model_name_matches?(model_name, "gemini-3.8-flash") -> [:low, :medium, :high]
       model_name_matches?(model_name, "gemini-3.7-flash") -> [:low, :medium, :high]
       model_name_matches?(model_name, "gemini-3.1-pro") -> [:low, :medium, :high]
+      model_name_matches?(model_name, "gemini-2.5-pro") -> [:low, :medium, :high]
       true -> nil
     end
   end
 
   defp known_thinking_levels(_model_id), do: nil
 
-  defp model_name_matches?(model_name, base_name),
-    do: model_name == base_name or String.starts_with?(model_name, base_name <> "-")
+  defp model_name_matches?(model_name, base_name) do
+    model_name == base_name or
+      String.starts_with?(model_name, base_name <> "-") or
+      String.starts_with?(model_name, base_name <> ":")
+  end
 
   defp google_model_name(model_id) do
     model_id
     |> String.split("/")
     |> List.last()
-    |> String.split(":", parts: 2)
-    |> List.last()
+    |> String.replace_prefix("google:", "")
   end
 
   defp get_nested(value, []), do: value
@@ -1572,7 +1581,20 @@ defmodule ReqLLM.Providers.Google do
       end
     end)
 
-    levels = known_thinking_levels(model) || []
+    supported = supported_thinking_levels(model)
+
+    levels =
+      cond do
+        supported != [] ->
+          supported
+
+        gemini_3_family?(model) ->
+          [:minimal, :low, :medium, :high]
+
+        true ->
+          []
+      end
+
     level = Keyword.get(all_opts, :google_thinking_level)
 
     if level != nil and levels != [] and
@@ -1584,6 +1606,51 @@ defmodule ReqLLM.Providers.Google do
   end
 
   defp validate_gemini_options!(_operation, _model, _opts), do: :ok
+
+  @doc false
+  def supports_xhigh_thinking?(%LLMDB.Model{} = model) do
+    case supported_thinking_levels(model) do
+      [] -> not known_pre_gemini_4?(model)
+      levels -> :xhigh in levels
+    end
+  end
+
+  def supports_xhigh_thinking?(model_id) when is_binary(model_id) and model_id != "" do
+    case known_thinking_levels(model_id) do
+      nil -> not known_pre_gemini_4?(model_id)
+      levels -> :xhigh in levels
+    end
+  end
+
+  def supports_xhigh_thinking?(_), do: false
+
+  defp known_pre_gemini_4?(%LLMDB.Model{} = model) do
+    [model.provider_model_id, model.model, model.id, model.family]
+    |> Enum.any?(&known_pre_gemini_4?/1)
+  end
+
+  defp known_pre_gemini_4?(id) when is_binary(id) do
+    case Regex.run(~r/^gemini-(\d+)/, google_model_name(id)) do
+      [_, major] -> String.to_integer(major) < 4
+      _ -> false
+    end
+  end
+
+  defp known_pre_gemini_4?(_), do: false
+
+  defp gemini_3_family?(%LLMDB.Model{} = model) do
+    [model.provider_model_id, model.model, model.id, model.family]
+    |> Enum.any?(&gemini_3_family?/1)
+  end
+
+  defp gemini_3_family?(id) when is_binary(id) do
+    case Regex.run(~r/^gemini-(\d+)/, google_model_name(id)) do
+      [_, major] -> String.to_integer(major) == 3
+      _ -> false
+    end
+  end
+
+  defp gemini_3_family?(_), do: false
 
   defp modern_gemini_parameters?(%LLMDB.Model{} = model) do
     [model.provider_model_id, model.model, model.id]
