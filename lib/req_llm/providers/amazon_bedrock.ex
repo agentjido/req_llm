@@ -125,6 +125,9 @@ defmodule ReqLLM.Providers.AmazonBedrock do
   alias ReqLLM.Providers.Anthropic.PlatformReasoning
   alias ReqLLM.Step
 
+  @impl ReqLLM.Provider
+  def batch_adapter, do: ReqLLM.Providers.AmazonBedrock.Batch
+
   @provider_schema [
     api_key: [
       type: :string,

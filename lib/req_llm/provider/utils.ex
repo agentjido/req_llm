@@ -42,7 +42,8 @@ defmodule ReqLLM.Provider.Utils do
       iex> ReqLLM.Provider.Utils.maybe_put(%{}, :name, nil)
       %{}
   """
-  @spec maybe_put(keyword() | map(), atom(), term()) :: keyword() | map()
+  @spec maybe_put(keyword(), atom(), term()) :: keyword()
+  @spec maybe_put(map(), term(), term()) :: map()
   def maybe_put(opts, _key, nil), do: opts
   def maybe_put(opts, key, value) when is_list(opts), do: Keyword.put(opts, key, value)
   def maybe_put(opts, key, value) when is_map(opts), do: Map.put(opts, key, value)

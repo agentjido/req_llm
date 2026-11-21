@@ -1,6 +1,9 @@
 defmodule ReqLLM.OpenAI.Responses do
   @moduledoc """
-  Experimental OpenAI Responses helpers and persistent WebSocket sessions.
+  OpenAI Responses helpers and experimental persistent WebSocket sessions.
+
+  Use `ReqLLM.OpenAI.Responses.Background` to submit, retrieve, and cancel
+  background responses over HTTP.
 
   Use `with_reasoning_effort/2` with a user message to change Astra reasoning
   effort within a conversation. The Responses encoder places the update just

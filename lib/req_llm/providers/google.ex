@@ -2158,7 +2158,7 @@ defmodule ReqLLM.Providers.Google do
             merged_response =
               ReqLLM.Context.merge_response(
                 req.options[:context] || %ReqLLM.Context{messages: []},
-                response
+                put_raw_finish_provider_meta(response, body)
               )
 
             {req, %{resp | body: merged_response}}
@@ -2612,6 +2612,12 @@ defmodule ReqLLM.Providers.Google do
               "content" => json_text
             },
             "finish_reason" => normalize_google_finish_reason(candidate["finishReason"])
+          }
+
+        %{"finishReason" => finish_reason} when is_binary(finish_reason) ->
+          %{
+            "message" => %{"role" => "assistant", "content" => ""},
+            "finish_reason" => normalize_google_finish_reason(finish_reason)
           }
 
         _ ->

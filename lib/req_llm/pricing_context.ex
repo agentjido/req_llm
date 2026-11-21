@@ -141,6 +141,7 @@ defmodule ReqLLM.PricingContext do
 
   defp api(%URI{path: "/v1/chat/completions"}), do: "chat_completions"
   defp api(%URI{path: "/v1/responses"}), do: "responses"
+  defp api(%URI{path: "/v1/responses/resp_" <> id}) when id != "", do: "responses"
   defp api(%URI{path: "/v1/batches"}), do: "batch"
   defp api(%URI{path: "/v1/batches/" <> id}) when id != "", do: "batch"
   defp api(_), do: nil
