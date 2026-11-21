@@ -13,6 +13,19 @@ defmodule ReqLLM.Providers.UberLLMTest do
     }
   end
 
+  test "resolves a known model from the default catalog" do
+    assert {:ok, catalog_model} = LLMDB.model(:uberllm, "deepseek/deepseek-v4.1-flash")
+
+    warning =
+      ExUnit.CaptureIO.capture_io(:stderr, fn ->
+        assert {:ok, model} = ReqLLM.model("uberllm:deepseek/deepseek-v4.1-flash")
+        assert model.limits == catalog_model.limits
+        assert model.id == catalog_model.id
+      end)
+
+    refute warning =~ "Using unverified model"
+  end
+
   test "resolves model strings before LLMDB catalog support" do
     warning =
       ExUnit.CaptureIO.capture_io(:stderr, fn ->
