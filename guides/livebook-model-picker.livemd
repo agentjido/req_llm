@@ -1,0 +1,116 @@
+# ReqLLM Livebook Tools
+
+```elixir
+Mix.install([
+  {:req_llm, github: "agentjido/req_llm"},
+  {:kino, "~> 0.14"}
+])
+```
+
+## Select a provider and model
+
+To use a local ReqLLM checkout, replace the ReqLLM entry in Setup with
+`{:req_llm, path: "/absolute/path/to/req_llm"}`.
+
+For Anthropic or OpenAI, add `ANTHROPIC_API_KEY` or `OPENAI_API_KEY` to Livebook
+secrets and grant this notebook access. For LM Studio, start its API server and
+download a text model. If the server requires a token, grant access to the
+`LMSTUDIO_API_KEY` secret. The picker uses the secret for the selected provider.
+
+```elixir
+alias ReqLLM.Kino, as: Notebook
+alias ReqLLM.Kino.{Comparison, Image, ModelPicker, Prompt}
+
+provider_input = ModelPicker.provider_input()
+```
+
+Select a provider, then run the next cell to show its models. Run the cell again
+after you change the provider or download a model in LM Studio. The LM Studio
+server URL is relative to the Livebook runtime. For a server at a different
+address, pass `base_url: "http://your-server:1234/v1"` to `ModelPicker.new/2`.
+
+```elixir
+picker = ModelPicker.new(Kino.Input.read(provider_input))
+ModelPicker.view(picker)
+```
+
+Select a model from the list or enter its ID. A manual ID takes precedence. The
+LM Studio server can also list embedding models. Choose a model that generates text.
+
+```elixir
+model =
+  case ModelPicker.read(picker) do
+    {:ok, model} -> model
+    {:error, message} -> Kino.interrupt!(:error, message)
+  end
+
+Kino.Text.new("Selected model #{model.provider}:#{model.id}")
+```
+
+## Send a text request
+
+Run this cell to show the form for your selected model. Click **Run** to send
+the prompt. The selected provider can charge for the request. In a shared
+notebook, all viewers can see the results.
+
+```elixir
+prompt_form = Prompt.new(model, default_prompt: "Explain recursion in one sentence.")
+Notebook.view(prompt_form)
+```
+
+After the response appears, run this cell to read the response. Run it again
+after each submission to get the latest result.
+
+```elixir
+case Notebook.result(prompt_form) do
+  {:ok, response} -> ReqLLM.Response.text(response)
+  status -> status
+end
+```
+
+## Generate an image
+
+For Google or xAI, grant the notebook access to `GOOGLE_API_KEY` or `XAI_API_KEY`.
+For Azure OpenAI, grant access to `AZURE_OPENAI_API_KEY` and pass the resource's
+`base_url` and `deployment` in the form's `:request_options`.
+
+```elixir
+image_provider_input = ModelPicker.provider_input(operation: :image)
+```
+
+Select a provider and run the next cell.
+
+```elixir
+image_picker = ModelPicker.new(Kino.Input.read(image_provider_input), operation: :image)
+ModelPicker.view(image_picker)
+```
+
+Select an image model and run the next cell. Click **Generate** to send the prompt.
+The form shows the images. Use `Notebook.result(image_form)` to get the response.
+
+```elixir
+image_model =
+  case ModelPicker.read(image_picker) do
+    {:ok, model} -> model
+    {:error, message} -> Kino.interrupt!(:error, message)
+  end
+
+image_form = Image.new(image_model, default_prompt: "A blue cube on a white table")
+Notebook.view(image_form)
+```
+
+## Compare text models
+
+Set the model list to the models you want to compare. The submit button shows
+how many requests it sends. The results include elapsed time, token usage, and
+cost when the data is available. Use `Notebook.result(comparison_form)` to get
+the rows for further analysis.
+
+```elixir
+comparison_form =
+  Comparison.new(["openai:gpt-4o-mini", "anthropic:claude-haiku-4-5"],
+    default_prompt: "Explain recursion in one sentence."
+  )
+
+Notebook.view(comparison_form)
+```
