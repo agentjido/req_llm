@@ -242,6 +242,69 @@ ReqLLM.generate_text(
 
 Text and PNG or JPEG image parts, in messages and system prompts. InvokeModel has no equivalent, so the hint is ignored there.
 
+## Batch inference
+
+Use `ReqLLM.Batch` to submit independent text-generation requests as a managed Bedrock
+job. Each input record has a unique string ID and a text prompt or a text-only
+`ReqLLM.Context`. The adapter uses Converse for all records in the job. Choose a
+[supported model or inference profile](https://docs.aws.amazon.com/bedrock/latest/userguide/batch-inference-supported.html)
+for your region and prepare enough records to meet the
+[Bedrock batch quotas](https://docs.aws.amazon.com/bedrock/latest/userguide/batch-inference-data.html).
+
+```elixir
+alias ReqLLM.{Batch, Context}
+
+model = "amazon_bedrock:amazon.nova-lite-v1:0"
+
+records =
+  Stream.map(documents, fn {id, text} ->
+    {id, Context.new([Context.system("Summarize this document."), Context.user(text)])}
+  end)
+
+{:ok, jsonl} = Batch.encode_jsonl(model, records, max_tokens: 256)
+File.write!("prompts.jsonl", jsonl)
+```
+
+Upload `prompts.jsonl` to S3 with your application's existing storage tools. Batch
+job requests use IAM credentials and the optional `ex_aws_auth` dependency. The
+[Bedrock service role](https://docs.aws.amazon.com/bedrock/latest/userguide/batch-iam-sr.html)
+needs access to the input and output locations.
+
+```elixir
+{:ok, job} =
+  Batch.submit(model, "s3://my-bucket/inputs/prompts.jsonl",
+    job_name: "document-summaries",
+    role_arn: "arn:aws:iam::123456789012:role/BedrockBatch",
+    output_uri: "s3://my-bucket/outputs/",
+    region: "us-east-1",
+    client_request_token: "document-summaries-run-1"
+  )
+```
+
+Pass `:inference_profile_arn` to submit through an eligible profile for the
+selected model. Req reuses the same submission token on transient retries. To
+retry across separate calls or process restarts, persist a unique token for the
+logical submission before the first call and pass it every time.
+
+Persist `job.provider` and `job.id` and reconstruct `%Batch.Job{provider: :amazon_bedrock, id: saved_arn}`
+to resume. `Batch.status/1` routes using the region in the ARN and returns the
+AWS status string and output URI. `Batch.cancel/1` requests a stop.
+
+Download a generated `.jsonl.out` file from the reported S3 location when
+results are available, including for a `PartiallyCompleted` job.
+
+```elixir
+{:ok, results} = Batch.decode_jsonl(model, File.stream!("prompts.jsonl.out"))
+
+Enum.each(results, fn
+  {id, {:ok, response}} -> IO.inspect({id, ReqLLM.Response.text(response)})
+  {id, {:error, error}} -> IO.inspect({id, Exception.message(error)})
+end)
+```
+
+Bedrock can write results in a different order from the input. Match each result
+by its ID and track any records that were never processed.
+
 ## Supported Model Families
 
 ### Anthropic Claude
