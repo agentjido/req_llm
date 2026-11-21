@@ -464,6 +464,66 @@ The `cyber` key also accepts an atom (`%{cyber: "daybreak_blue"}`). Use a concre
 - **Purpose**: Provide tool execution results for resume flow
 - **Example**: `provider_options: [tool_outputs: [%{call_id: "call_1", output: "result"}]]`
 
+## Background responses
+
+Use `ReqLLM.OpenAI.Responses.Background` to submit one long-running Responses
+request over HTTP. Save the returned response ID and the completion window, then
+retrieve the response with the same API project credentials after a restart or
+after handling a verified webhook.
+
+```elixir
+alias ReqLLM.OpenAI.Responses.Background
+
+model = "openai:gpt-6.1-terra"
+window = "8h"
+
+{:ok, submitted} =
+  Background.submit(model, "Review this document for missing approvals.",
+    background_options: [completion_window: window]
+  )
+
+saved_id = submitted.id
+
+{:ok, current} = Background.retrieve(saved_id, completion_window: window)
+status = current.provider_meta["status"]
+```
+
+`queued` and `in_progress` mean the host can check again. `completed`, `failed`,
+`incomplete`, and `cancelled` are terminal. `Background.cancel/2` returns the
+provider's current response and status. On completion, read the result using
+`ReqLLM.Response.text/1` or `ReqLLM.Response.tool_calls/1`. The raw output items,
+including reasoning returned by OpenAI, are available in `provider_meta["output"]`.
+Use `include: ["reasoning.encrypted_content"]` on lookup when archiving items
+for replay. Failed and incomplete responses retain the provider's `"error"` and
+`"incomplete_details"` metadata.
+
+Use `"soonest"` for the normal background queue. The `"2h"` and `"8h"` windows
+use Standard processing (`service_tier: "default"`) and offer discounted token
+rates on eligible models. ReqLLM applies the published token multiplier when it
+can resolve the window, Standard tier, and pricing. Usage remains available when
+pricing is unknown. [OpenAI background windows](https://developers.openai.com/api/docs/guides/background#use-discounted-completion-windows)
+
+For a dependent tool turn, pass a stable `continuation_id` in `background_options`
+on the first submission. Execute the requested tool in your application and send
+its result with the preceding response ID. Use the same model, window, project,
+and continuation ID on both submissions. The completion target applies to each
+response, and related follow-ups can qualify for higher queue priority.
+
+```elixir
+{:ok, next} =
+  Background.submit(model, ReqLLM.Context.tool_result(call.id, tool_output),
+    previous_response_id: current.id,
+    background_options: [completion_window: window, continuation_id: run_id]
+  )
+```
+
+Background submission defaults to `store: false`. OpenAI still temporarily
+stores response data for execution and retrieval, including for eligible Zero
+Data Retention projects. Retrieve and save results before that window expires.
+Save the original input and ordered output items if you may need to replay a
+tool turn after expiration. Pass `store: true` when you want standard retention
+and your project permits it. [OpenAI data controls](https://developers.openai.com/api/docs/guides/your-data#storage-requirements-and-retention-controls-per-endpoint)
+
 ## Context Compaction (Responses API)
 
 Long conversations can be folded into opaque `compaction` items that carry the
