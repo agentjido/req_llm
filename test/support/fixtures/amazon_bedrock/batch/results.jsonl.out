@@ -1,0 +1,2 @@
+{"recordId":"example-0002","modelInput":{"messages":[{"role":"user","content":[{"text":"Classify this:"}]}]},"error":{"errorCode":400,"errorMessage":"Input failed model validation"}}
+{"recordId":"example-0001","modelInput":{"system":[{"text":"Reply with one word."}],"messages":[{"role":"user","content":[{"text":"Name a color."}]}]},"modelOutput":{"output":{"message":{"role":"assistant","content":[{"text":"Blue"}]}},"stopReason":"end_turn","usage":{"inputTokens":12,"outputTokens":1,"totalTokens":13},"metrics":{"latencyMs":24}}}

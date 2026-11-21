@@ -342,6 +342,7 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
   end
 
   defp do_run_coverage(model_spec, opts) when is_binary(model_spec) do
+    now = DateTime.utc_now()
     Mix.shell().info("\n----------------------------------------------------")
     Mix.shell().info(header(opts[:sample]))
     Mix.shell().info("----------------------------------------------------\n")
@@ -351,7 +352,7 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
     selected_specs = select_models(models, model_spec, opts)
 
     capability_specs = filter_capability_specs(selected_specs, opts)
-    specs = coverage_specs(capability_specs, model_spec, opts)
+    specs = coverage_specs(capability_specs, model_spec, opts, now)
 
     if Enum.empty?(capability_specs) do
       raise_for_empty_specs(selected_specs, model_spec, opts)
@@ -386,7 +387,7 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
       save_state(results, run_ts, opts)
     end
 
-    print_enhanced_summary(model_spec, results, models, elapsed, opts)
+    print_enhanced_summary(model_spec, results, models, elapsed, opts, now)
   end
 
   defp do_run_coverage(nil, opts) do
@@ -780,14 +781,14 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
   end
 
   @doc false
-  def coverage_specs(specs, model_spec, opts) do
+  def coverage_specs(specs, model_spec, opts, now \\ DateTime.utc_now()) do
     if recording?(opts) or exact_model_spec?(model_spec) do
       specs
     else
       operation = parse_operation_type(opts[:type])
 
       Enum.filter(specs, fn {provider, model_id} ->
-        replayable_model?(provider, model_id) and
+        replayable_model?(provider, model_id, now) and
           replayable_scenarios?(provider, model_id, operation, opts)
       end)
     end
@@ -808,10 +809,10 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
 
   defp recording?(opts), do: opts[:record_all] == true or opts[:record] == true
 
-  defp replayable_model?(provider, model_id) do
+  defp replayable_model?(provider, model_id, now) do
     case fetch_model_metadata("#{provider}:#{model_id}") do
       {:ok, model} ->
-        get_lifecycle_status(model) != :retired and has_fixtures?(provider, model_id)
+        not LLMDB.Model.retired?(model, now) and has_fixtures?(provider, model_id)
 
       {:error, _} ->
         false
@@ -965,7 +966,7 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
 
   defp fallback_scenario_fixtures(fixtures, _scenario), do: fixtures
 
-  defp print_enhanced_summary(model_spec, results, registry, elapsed_ms, opts) do
+  defp print_enhanced_summary(model_spec, results, registry, elapsed_ms, opts, now) do
     Mix.shell().info("\n" <> String.duplicate("━", 60))
     Mix.shell().info("  Enhanced Coverage Report")
     Mix.shell().info(String.duplicate("━", 60) <> "\n")
@@ -979,10 +980,10 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
     |> Enum.group_by(fn {provider, _model_id, _model_data} -> provider end)
     |> Enum.sort_by(fn {provider, _} -> provider end)
     |> Enum.each(fn {provider, provider_models} ->
-      print_provider_enhanced_section(provider, provider_models, results, state)
+      print_provider_enhanced_section(provider, provider_models, results, state, now)
     end)
 
-    print_overall_coverage_stats(all_matching_models, results, state, elapsed_ms)
+    print_overall_coverage_stats(all_matching_models, results, elapsed_ms, now)
   end
 
   defp collect_all_matching_models(model_spec, registry, operation) do
@@ -1026,7 +1027,7 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
     end
   end
 
-  defp print_provider_enhanced_section(provider, provider_models, results, state) do
+  defp print_provider_enhanced_section(provider, provider_models, results, state, now) do
     Mix.shell().info(
       IO.ANSI.cyan() <>
         IO.ANSI.bright() <>
@@ -1037,18 +1038,18 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
 
     Mix.shell().info(String.duplicate("━", 60) <> "\n")
 
-    grouped = group_models_by_status(provider_models, results, state)
+    grouped = group_models_by_status(provider_models, results, state, now)
 
-    print_group("PASSING FIXTURES", grouped.passing, :pass)
-    print_group("FAILING FIXTURES", grouped.failing, :fail)
-    print_group("UNTESTED", grouped.untested, :untested)
-    print_group("RETIRED", grouped.retired, :retired)
+    print_group("PASSING FIXTURES", grouped.passing, :pass, now)
+    print_group("FAILING FIXTURES", grouped.failing, :fail, now)
+    print_group("UNTESTED", grouped.untested, :untested, now)
+    print_group("RETIRED", grouped.retired, :retired, now)
 
     print_provider_summary(grouped)
     Mix.shell().info("")
   end
 
-  defp group_models_by_status(provider_models, results, state) do
+  defp group_models_by_status(provider_models, results, state, now) do
     results_map = Map.new(results, fn r -> {{r.provider, r.model_id}, r} end)
 
     provider_models
@@ -1059,11 +1060,14 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
 
       case fetch_model_metadata(spec) do
         {:ok, llmdb_model} ->
-          lifecycle_status = get_lifecycle_status(llmdb_model)
-
           cond do
-            lifecycle_status == :retired ->
-              %{acc | retired: [{provider, model_id, model_data, llmdb_model} | acc.retired]}
+            LLMDB.Model.retired?(llmdb_model, now) ->
+              result = Map.get(results_map, {provider, model_id})
+
+              %{
+                acc
+                | retired: [{provider, model_id, model_data, llmdb_model, result} | acc.retired]
+              }
 
             Map.has_key?(results_map, {provider, model_id}) ->
               result = Map.get(results_map, {provider, model_id})
@@ -1116,32 +1120,34 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
     |> Map.update!(:retired, &Enum.reverse/1)
   end
 
-  defp print_group(_title, [], _status), do: :ok
+  defp print_group(_title, [], _status, _now), do: :ok
 
-  defp print_group(title, models, status) do
+  defp print_group(title, models, status, now) do
     Mix.shell().info(IO.ANSI.bright() <> title <> " (#{length(models)}):" <> IO.ANSI.reset())
 
     Enum.each(models, fn item ->
       case item do
-        {_provider, model_id, _model_data, llmdb_model, result} when status == :pass ->
-          print_model_entry(model_id, llmdb_model, result, "✓", IO.ANSI.green())
+        {_provider, model_id, _model_data, llmdb_model, result}
+        when status == :pass or (status == :retired and result.status == :pass) ->
+          print_model_entry(model_id, llmdb_model, result, "✓", IO.ANSI.green(), now)
 
-        {_provider, model_id, _model_data, llmdb_model, result} when status == :fail ->
-          print_model_entry(model_id, llmdb_model, result, "✗", IO.ANSI.red())
+        {_provider, model_id, _model_data, llmdb_model, result}
+        when status == :fail or (status == :retired and result.status == :fail) ->
+          print_model_entry(model_id, llmdb_model, result, "✗", IO.ANSI.red(), now)
 
         {_provider, model_id, _model_data, llmdb_model} when status == :untested ->
-          print_model_entry(model_id, llmdb_model, nil, "○", IO.ANSI.yellow())
+          print_model_entry(model_id, llmdb_model, nil, "○", IO.ANSI.yellow(), now)
 
-        {_provider, model_id, _model_data, llmdb_model} when status == :retired ->
-          print_model_entry(model_id, llmdb_model, nil, "❌", IO.ANSI.faint())
+        {_provider, model_id, _model_data, llmdb_model, result} when status == :retired ->
+          print_model_entry(model_id, llmdb_model, result, "❌", IO.ANSI.faint(), now)
       end
     end)
 
     Mix.shell().info("")
   end
 
-  defp print_model_entry(model_id, llmdb_model, result, icon, color) do
-    lifecycle_info = format_lifecycle_info(llmdb_model)
+  defp print_model_entry(model_id, llmdb_model, result, icon, color, now) do
+    lifecycle_info = format_lifecycle_info(llmdb_model, now)
 
     Mix.shell().info("  #{color}#{icon}#{IO.ANSI.reset()} #{model_id}#{lifecycle_info}")
 
@@ -1180,20 +1186,23 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
     end
   end
 
-  defp format_lifecycle_info(nil), do: ""
+  defp format_lifecycle_info(nil, _now), do: ""
 
-  defp format_lifecycle_info(llmdb_model) do
-    case llmdb_model.lifecycle do
-      %{status: "deprecated", retires_at: retires_at} when not is_nil(retires_at) ->
+  defp format_lifecycle_info(llmdb_model, now) do
+    status = LLMDB.Model.effective_status(llmdb_model, now)
+    retires_at = Map.get(llmdb_model.lifecycle || %{}, :retires_at)
+
+    case {status, retires_at} do
+      {"deprecated", retires_at} when not is_nil(retires_at) ->
         " #{IO.ANSI.yellow()}(deprecated, retires #{retires_at})#{IO.ANSI.reset()}"
 
-      %{status: "deprecated"} ->
+      {"deprecated", nil} ->
         " #{IO.ANSI.yellow()}(deprecated)#{IO.ANSI.reset()}"
 
-      %{status: "retired", retires_at: retires_at} when not is_nil(retires_at) ->
+      {"retired", retires_at} when not is_nil(retires_at) ->
         " #{IO.ANSI.faint()}(retired #{retires_at})#{IO.ANSI.reset()}"
 
-      %{status: "retired"} ->
+      {"retired", nil} ->
         " #{IO.ANSI.faint()}(retired)#{IO.ANSI.reset()}"
 
       _ ->
@@ -1215,18 +1224,26 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
     end
   end
 
-  defp print_overall_coverage_stats(all_models, results, _state, elapsed_ms) do
-    total_active =
-      Enum.count(all_models, fn {provider, model_id, _} ->
+  defp print_overall_coverage_stats(all_models, results, elapsed_ms, now) do
+    active_models =
+      all_models
+      |> Enum.reject(fn {provider, model_id, _} ->
         case fetch_model_metadata("#{provider}:#{model_id}") do
-          {:ok, model} -> get_lifecycle_status(model) != :retired
-          _ -> true
+          {:ok, model} -> LLMDB.Model.retired?(model, now)
+          _ -> false
         end
       end)
+      |> MapSet.new(fn {provider, model_id, _} -> {provider, model_id} end)
 
-    passing = Enum.count(results, &(&1.status == :pass))
+    total_active = MapSet.size(active_models)
 
     if total_active > 0 do
+      passing =
+        Enum.count(results, fn result ->
+          result.status == :pass and
+            MapSet.member?(active_models, {result.provider, result.model_id})
+        end)
+
       pct = Float.round(passing / total_active * 100, 1)
       color = if pct == 100.0, do: IO.ANSI.green(), else: IO.ANSI.yellow()
       elapsed_sec = Float.round(elapsed_ms / 1000, 1)
@@ -1238,19 +1255,14 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
           "Overall Coverage: #{passing}/#{total_active} active models passing (#{pct}%)" <>
           IO.ANSI.reset() <> " in #{elapsed_sec}s\n"
       )
-
-      if passing != length(results), do: System.halt(1)
     end
+
+    if Enum.any?(results, &(&1.status != :pass)), do: System.halt(1)
   end
 
   defp fetch_model_metadata(spec) do
     LLMDB.model(spec)
   end
-
-  defp get_lifecycle_status(%LLMDB.Model{lifecycle: nil}), do: :active
-  defp get_lifecycle_status(%LLMDB.Model{lifecycle: %{status: "retired"}}), do: :retired
-  defp get_lifecycle_status(%LLMDB.Model{lifecycle: %{status: "deprecated"}}), do: :deprecated
-  defp get_lifecycle_status(%LLMDB.Model{}), do: :active
 
   defp print_summary(results, elapsed_ms) do
     Mix.shell().info("\n----------------------------------------------------")

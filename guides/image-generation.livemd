@@ -2,6 +2,8 @@
 
 [![Run in Livebook](https://livebook.dev/badge/v1/blue.svg)](https://livebook.dev/run?url=https%3A%2F%2Fgithub.com%2Fagentjido%2Freq_llm%2Fblob%2Fmain%2Fguides%2Fimage-generation.livemd)
 
+For a reusable image generation form, see the [Livebook Tools example](livebook-model-picker.livemd).
+
 ```elixir
 Mix.install([
   {:req_llm, "~> 1.18"},
@@ -216,9 +218,7 @@ cond do
         Kino.Markdown.new("""
         **azure:gpt-image-1** failed after #{ImageGenerator.format_duration(data.duration_ms)}
 
-        ```
-        #{inspect(data.error)}
-        ```
+        > #{inspect(data.error)}
 
         Most common cause: `azure_deployment` above does not match a deployment on the resource
         (`DeploymentNotFound`). Deployment names are chosen at creation time and need not match

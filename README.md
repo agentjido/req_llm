@@ -50,7 +50,7 @@ show the module's broad scope. The selected model can support fewer operations.
 |---|---|---|---|
 | [Alibaba Cloud Bailian](https://llmcatalog.dev/?providers=alibaba) | `alibaba` | text, OCR, transcription | — |
 | [Alibaba Cloud Bailian (China)](https://llmcatalog.dev/?providers=alibaba_cn) | `alibaba_cn` | text, OCR, transcription | — |
-| [Amazon Bedrock](https://llmcatalog.dev/?providers=amazon_bedrock) | `amazon_bedrock` | text, embedding | [Guide](guides/amazon_bedrock.md) |
+| [Amazon Bedrock](https://llmcatalog.dev/?providers=amazon_bedrock) | `amazon_bedrock` | text, embedding, batch inference | [Guide](guides/amazon_bedrock.md) |
 | [Anthropic](https://llmcatalog.dev/?providers=anthropic) | `anthropic` | text | [Guide](guides/anthropic.md) |
 | Atlas Cloud | `atlascloud` | text | — |
 | [Azure OpenAI](https://llmcatalog.dev/?providers=azure) | `azure` | text, embedding, image | [Guide](guides/azure.md) |
@@ -390,6 +390,8 @@ include a built-in model-selection policy.
   - High-level Vercel-AI style helpers (`generate_text/3`, `stream_text/3`, `generate_object/4`, bang variants)
   - Req-backed request/response calls and Finch-backed streaming behind the same provider abstraction
   - Advanced Req request customization available for non-streaming use cases
+  - Provider-managed text generation batches with `ReqLLM.Batch`, starting with [Amazon Bedrock](guides/amazon_bedrock.md#batch-inference)
+  - Resumable [OpenAI background responses](guides/openai.md#background-responses) with completion-window selection
 
 - **Structured output generation**
   - `ReqLLM.Output` descriptors add text, object, array, choice, and arbitrary JSON contracts to `generate_text/3` and `stream_text/3`
@@ -730,6 +732,7 @@ This approach gives you full control over the Req pipeline, allowing you to add 
 - [Compatibility Policy](COMPATIBILITY.md) – stable, experimental, deprecated, platform, and ReqLLM/Jido contracts
 - [Model Support Evidence](guides/model-support.md) – generated, surface-specific compatibility tiers
 - [Getting Started](guides/getting-started.md) – first call and basic concepts
+- [Livebook Tools](guides/livebook-model-picker.livemd) – select models, run text and image prompts, and compare responses
 - [Configuration](guides/configuration.md) – timeouts, connection pools, and global settings
 - [Telemetry](guides/telemetry.md) – request lifecycle, reasoning lifecycle, payload capture
 - [Core Concepts](guides/core-concepts.md) – architecture & data model
