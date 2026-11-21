@@ -390,6 +390,7 @@ include a built-in model-selection policy.
   - Req-backed request/response calls and Finch-backed streaming behind the same provider abstraction
   - Advanced Req request customization available for non-streaming use cases
   - Provider-managed text generation batches with `ReqLLM.Batch`, starting with [Amazon Bedrock](guides/amazon_bedrock.md#batch-inference)
+  - Resumable [OpenAI background responses](guides/openai.md#background-responses) with completion-window selection
 
 - **Structured output generation**
   - `ReqLLM.Output` descriptors add text, object, array, choice, and arbitrary JSON contracts to `generate_text/3` and `stream_text/3`
