@@ -382,6 +382,14 @@ Streaming emits raw summary deltas as `:thinking` chunks. These fragments have n
 - **Purpose**: Enable server-side context management on ordinary requests, such as automatic compaction once the output token count crosses a threshold. Any `compaction` item the service emits lands on the response message as a `:provider_block` content part and is replayed automatically on the next request. See [Context Compaction](#context-compaction-responses-api).
 - **Example**: `provider_options: [context_management: [%{type: "compaction", compact_threshold: 200_000}]]`
 
+### `access_programs` (Responses API)
+
+- **Type**: Map with a `cyber` key set to `"standard"`, `"daybreak_blue"`, or `"daybreak_red"`
+- **Purpose**: Select an [OpenAI Daybreak](https://developers.openai.com/api/docs/guides/daybreak) access program on an approved project and compatible Responses model. Omitted by default.
+- **Example**: `ReqLLM.generate_text("openai:gpt-6-sol", "Hello", provider_options: [access_programs: %{"cyber" => "daybreak_blue"}])`
+
+The `cyber` key also accepts an atom (`%{cyber: "daybreak_blue"}`). Use a concrete Responses model. The catalog's `gpt-daybreak-blue-latest` alias lacks Responses wire metadata and may route to Chat Completions. ReqLLM returns an error if you set `access_programs` for a Chat Completions model. For projects that require a regional endpoint, set `base_url` (for example, `"https://us.api.openai.com/v1"`).
+
 ### `service_tier`
 
 - **Type**: `:auto` | `:default` | `:flex` | `:fast` | `:priority` | `:ultrafast` | String

@@ -6,7 +6,7 @@ defmodule ReqLLM.Bedrock.NovaSonic do
   bidirectional stream (see `ReqLLM.Bedrock.BidiStream`). This module provides the
   event builders and a small orchestration API on top:
 
-      {:ok, s} = NovaSonic.start("amazon.nova-sonic-v1:0",
+      {:ok, s} = NovaSonic.start("amazon.nova-2-sonic-v1:0",
                    system_prompt: "You are a terse assistant.",
                    region: "us-east-1")
 
@@ -22,9 +22,9 @@ defmodule ReqLLM.Bedrock.NovaSonic do
       Stream.repeatedly(fn -> NovaSonic.next(s) end)
       |> Enum.take_while(&match?({:ok, _}, &1))
 
-  Event schemas follow the Nova Sonic v1 bidirectional API:
-  https://docs.aws.amazon.com/nova/latest/userguide/input-events.html
-  https://docs.aws.amazon.com/nova/latest/userguide/output-events.html
+  Event schemas follow the Nova 2 Sonic bidirectional API.
+  See [input events](https://docs.aws.amazon.com/nova/latest/nova2-userguide/sonic-input-events.html)
+  and [output events](https://docs.aws.amazon.com/nova/latest/nova2-userguide/sonic-output-events.html).
   """
 
   alias ReqLLM.Bedrock.BidiStream
@@ -50,12 +50,14 @@ defmodule ReqLLM.Bedrock.NovaSonic do
   Opens a bidirectional stream and runs the opening handshake:
   `sessionStart`, `promptStart`, and the SYSTEM text prompt.
 
+  The default model is `amazon.nova-2-sonic-v1:0`.
+
   Options: `:system_prompt`, `:voice_id`, `:max_tokens`, `:top_p`, `:temperature`,
   `:output_sample_rate`, plus anything `BidiStream.connect/2` accepts
   (`:credentials`, `:region`).
   """
   @spec start(String.t(), keyword()) :: {:ok, Session.t()} | {:error, term()}
-  def start(model_id \\ "amazon.nova-sonic-v1:0", opts \\ []) do
+  def start(model_id \\ "amazon.nova-2-sonic-v1:0", opts \\ []) do
     with {:ok, conn} <- BidiStream.connect(model_id, opts) do
       prompt = ReqLLM.ID.uuid7()
       sys = ReqLLM.ID.uuid7()

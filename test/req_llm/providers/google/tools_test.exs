@@ -241,7 +241,16 @@ defmodule ReqLLM.Providers.Google.ToolsTest do
             ]
           ),
           Context.tool_result("call_bob", "send_email", "bob rejected"),
-          Context.tool_result("call_alice", "send_email", "alice sent")
+          Context.tool_result("call_alice", "send_email", "alice sent"),
+          Context.user("Email Alice and Carol."),
+          Context.assistant("",
+            tool_calls: [
+              ReqLLM.ToolCall.new("call_alice", "send_email", ~s({"to":"alice"})),
+              ReqLLM.ToolCall.new("call_carol", "send_email", ~s({"to":"carol"}))
+            ]
+          ),
+          Context.tool_result("call_carol", "send_email", "carol sent"),
+          Context.tool_result("call_alice", "send_email", "alice sent again")
         ])
 
       decoded =
@@ -256,7 +265,7 @@ defmodule ReqLLM.Providers.Google.ToolsTest do
             %{"functionResponse" => response} <- parts,
             do: response["response"]["content"]
 
-      assert results == ["alice sent", "bob rejected"]
+      assert results == ["alice sent", "bob rejected", "alice sent again", "carol sent"]
     end
 
     test "encode_body emits text tool results only inside functionResponse" do

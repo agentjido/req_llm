@@ -1,0 +1,11 @@
+{
+  "retry": {"message": "Service temporarily unavailable"},
+  "submitted": {
+    "jobArn": "arn:aws:bedrock:us-west-2:123456789012:model-invocation-job/abc123def456"
+  },
+  "status": {
+    "status": "PartiallyCompleted",
+    "modelInvocationType": "Converse",
+    "outputDataConfig": {"s3OutputDataConfig": {"s3Uri": "s3://batch-output/results/"}}
+  }
+}

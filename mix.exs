@@ -1,7 +1,7 @@
 defmodule ReqLLM.MixProject do
   use Mix.Project
 
-  @version "1.30.0"
+  @version "1.31.0"
   @source_url "https://github.com/agentjido/req_llm"
 
   def project do
@@ -55,6 +55,7 @@ defmodule ReqLLM.MixProject do
           "guides/v2-migration-audit.md",
           "guides/getting-started.livemd",
           "guides/image-generation.livemd",
+          "guides/livebook-model-picker.livemd",
           "guides/mix-tasks.md",
           "guides/fixture-testing.md",
           "guides/adding_a_provider.md",
@@ -110,7 +111,8 @@ defmodule ReqLLM.MixProject do
           ],
           Livebooks: [
             "guides/getting-started.livemd",
-            "guides/image-generation.livemd"
+            "guides/image-generation.livemd",
+            "guides/livebook-model-picker.livemd"
           ],
           "Development & Testing": [
             "guides/mix-tasks.md",
@@ -171,6 +173,13 @@ defmodule ReqLLM.MixProject do
             ReqLLM.Debug,
             ReqLLM.ParamTransform,
             ReqLLM.Migration
+          ],
+          Livebook: [
+            ReqLLM.Kino,
+            ReqLLM.Kino.ModelPicker,
+            ReqLLM.Kino.Prompt,
+            ReqLLM.Kino.Image,
+            ReqLLM.Kino.Comparison
           ],
           "Data Structures": [
             ReqLLM.Message,
@@ -246,7 +255,8 @@ defmodule ReqLLM.MixProject do
       {:websockex, "~> 0.5.1"},
       {:zoi, "~> 0.19.0"},
       {:jsv, "~> 0.26 and >= 0.26.2"},
-      {:llm_db, "~> 2026.11.3"},
+      {:llm_db, "~> 2026.11.4"},
+      {:kino, "~> 0.14", optional: true},
 
       # Dev/test dependencies
       {:opentelemetry_api, "~> 1.5", only: :test},

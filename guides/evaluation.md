@@ -76,6 +76,27 @@ runtime headers, default query parameters, and other authentication schemes
 require a dedicated provider adapter. Unsupported contracts fail before HTTP;
 there is no direct-provider or chat fallback.
 
+## Ordered System One Choice criteria
+
+Use `Jason.OrderedObject` for Choice criteria when a TypeSafe System One
+endpoint needs the options in a particular order. ReqLLM retains that order in
+the request JSON.
+
+```elixir
+criteria =
+  Jason.OrderedObject.new([
+    {"z_billing", "Billing and refunds"},
+    {"a_support", "Other requests"}
+  ])
+
+ReqLLM.evaluate("typesafe:jev-latest", "Please refund this charge", %{
+  department: %{type: :choice, instructions: "Which team should handle this?", criteria: criteria}
+})
+```
+
+Keep Score levels in a list in increasing score order. Each decision protocol
+defines its own Choice encoding.
+
 ## Registered evaluation adapters
 
 A registered provider must explicitly declare its implemented protocols:
@@ -134,3 +155,15 @@ The existing retries, total timeout, usage, and `ReqLLM.Response` contracts appl
 An execution contract describes client compatibility, not proof that a deployed
 gateway serves the endpoint. Confirm its route, authentication, request schema,
 and response schema separately before integration testing.
+
+## Strict validation for System One answers
+
+Pass `answer_validation: :strict` to a TypeSafe System One or OpenRouter
+Decisions call to require an answer for each submitted question. Known answers
+must match the question type. A Choice must match a submitted JSON key, such as
+`"1"` for an integer key of `1`. A Score must fit the submitted rubric, and
+reported probabilities must be in `[0, 1]`. Valid responses retain string-keyed
+answers and provider extensions. A rejected response emits
+`[:req_llm, :request, :exception]` and returns an `ReqLLM.Error.API.Request`
+with the validation error as its cause. The default continues to accept the
+provider's answer map.

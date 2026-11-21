@@ -17,6 +17,7 @@ defmodule ReqLLM.Providers.Google.ResponseBuilder do
   @behaviour ReqLLM.Provider.ResponseBuilder
 
   alias ReqLLM.Provider.Defaults.ResponseBuilder, as: DefaultBuilder
+  alias ReqLLM.Providers.Google.ToolHistory
   alias ReqLLM.StreamChunk
 
   @impl true
@@ -34,9 +35,19 @@ defmodule ReqLLM.Providers.Google.ResponseBuilder do
            DefaultBuilder.build_response(preserve_signed_text_parts(chunks), metadata, opts) do
       reasoning_details = extract_google_reasoning_details(chunks)
       response_with_reasoning = attach_reasoning_details(response, reasoning_details)
-      {:ok, put_raw_finish(response_with_reasoning, metadata)}
+      response = preserve_tool_history(response_with_reasoning, metadata, opts)
+      {:ok, put_raw_finish(response, metadata)}
     end
   end
+
+  defp preserve_tool_history(response, %{google_tool_history: parts}, opts) do
+    ReqLLM.Context.merge_response(
+      Keyword.fetch!(opts, :context),
+      ToolHistory.preserve(response, parts)
+    )
+  end
+
+  defp preserve_tool_history(response, _metadata, _opts), do: response
 
   defp put_raw_finish(response, metadata) do
     raw =

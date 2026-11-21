@@ -3,6 +3,7 @@ defmodule Provider.OpenAI.ResponsesAPI.RequestEncodingTest do
 
   import ReqLLM.Test.OpenAI.ResponsesAPIHelpers, only: [build_request: 1]
 
+  alias ReqLLM.Providers.OpenAI
   alias ReqLLM.Providers.OpenAI.ResponsesAPI
 
   describe "path/0" do
@@ -62,6 +63,127 @@ defmodule Provider.OpenAI.ResponsesAPI.RequestEncodingTest do
       body = ReqLLM.Test.Helpers.json_body(encoded)
 
       assert body["stream"] == true
+    end
+
+    test "omits access_programs unless explicitly selected" do
+      model = ReqLLM.model!("openai:gpt-5")
+      context = ReqLLM.Context.new([ReqLLM.Context.user("Hello")])
+      opts = [api_key: "test-key"]
+
+      assert {:ok, request} = OpenAI.prepare_request(:chat, model, context, opts)
+      body = request |> OpenAI.encode_body() |> ReqLLM.Test.Helpers.json_body()
+      refute Map.has_key?(body, "access_programs")
+
+      assert {:ok, stream} = OpenAI.attach_stream(model, context, opts, ReqLLM.Finch)
+      refute Map.has_key?(Jason.decode!(stream.body), "access_programs")
+
+      assert {:ok, %{initial_messages: [event]}} =
+               OpenAI.attach_websocket_stream(model, context, opts)
+
+      refute Map.has_key?(Jason.decode!(event), "access_programs")
+    end
+
+    test "encodes the validated access program on buffered and streaming Responses requests" do
+      model = ReqLLM.model!("openai:gpt-5")
+      context = ReqLLM.Context.new([ReqLLM.Context.user("Hello")])
+
+      for programs <- [%{cyber: "daybreak_blue"}, %{"cyber" => "daybreak_blue"}] do
+        opts = [api_key: "test-key", provider_options: [access_programs: programs]]
+
+        assert {:ok, request} = OpenAI.prepare_request(:chat, model, context, opts)
+        assert request.url.path == "/responses"
+
+        buffered = request |> OpenAI.encode_body() |> ReqLLM.Test.Helpers.json_body()
+        assert buffered["access_programs"] == %{"cyber" => "daybreak_blue"}
+
+        assert {:ok, stream} = OpenAI.attach_stream(model, context, opts, ReqLLM.Finch)
+        assert Jason.decode!(stream.body)["access_programs"] == %{"cyber" => "daybreak_blue"}
+      end
+    end
+
+    test "validates the access program and rejects unknown fields and invalid values" do
+      model = ReqLLM.model!("openai:gpt-5")
+
+      for program <- ~w(standard daybreak_blue daybreak_red) do
+        assert {:ok, request} =
+                 OpenAI.prepare_request(:chat, model, "Hello",
+                   api_key: "test-key",
+                   provider_options: [access_programs: %{"cyber" => program}]
+                 )
+
+        assert request
+               |> OpenAI.encode_body()
+               |> ReqLLM.Test.Helpers.json_body()
+               |> Map.get("access_programs") ==
+                 %{"cyber" => program}
+      end
+
+      for invalid <- [
+            nil,
+            [],
+            %{},
+            "daybreak_blue",
+            %{cyber: :daybreak_blue},
+            %{"cyber" => "unknown"},
+            %{"other" => "daybreak_blue"},
+            %{"cyber" => "standard", "other" => "daybreak_blue"},
+            %{"cyber" => "daybreak_red", cyber: "standard"}
+          ] do
+        assert {:error, error} =
+                 OpenAI.prepare_request(:chat, model, "Hello",
+                   api_key: "test-key",
+                   provider_options: [access_programs: invalid]
+                 )
+
+        assert Exception.message(error) =~ "access_programs"
+      end
+    end
+
+    test "rejects access_programs when the model routes to Chat Completions" do
+      model = %LLMDB.Model{
+        provider: :openai,
+        id: "gpt-4",
+        extra: %{wire: %{protocol: "openai_chat"}}
+      }
+
+      context = ReqLLM.Context.new([ReqLLM.Context.user("Hello")])
+      opts = [api_key: "test-key", provider_options: [access_programs: %{cyber: "standard"}]]
+
+      assert {:error, %ReqLLM.Error.Invalid.Parameter{parameter: parameter}} =
+               OpenAI.prepare_request(:chat, model, context, opts)
+
+      assert parameter =~ "access_programs requires an OpenAI Responses API generation request"
+
+      assert_raise ReqLLM.Error.Invalid.Parameter, ~r/access_programs requires/, fn ->
+        OpenAI.attach_stream(model, context, opts, ReqLLM.Finch)
+      end
+    end
+
+    test "encodes top-level and nested access_programs on WebSocket requests" do
+      model = ReqLLM.model!("openai:gpt-5")
+      context = ReqLLM.Context.new([ReqLLM.Context.user("Hello")])
+      programs = %{cyber: "standard"}
+
+      for opts <- [[access_programs: programs], [provider_options: [access_programs: programs]]] do
+        assert {:ok, %{initial_messages: [event]}} =
+                 OpenAI.attach_websocket_stream(model, context, [api_key: "test-key"] ++ opts)
+
+        assert Jason.decode!(event)["access_programs"] == %{"cyber" => "standard"}
+      end
+    end
+
+    test "rejects invalid access_programs before sending a WebSocket request" do
+      model = ReqLLM.model!("openai:gpt-5")
+      context = ReqLLM.Context.new([ReqLLM.Context.user("Hello")])
+
+      for invalid <- [nil, %{"cyber" => "unknown"}] do
+        opts = [api_key: "test-key", provider_options: [access_programs: invalid]]
+
+        assert {:error, %ReqLLM.Error.API.Request{reason: reason}} =
+                 OpenAI.attach_websocket_stream(model, context, opts)
+
+        assert reason =~ "access_programs"
+      end
     end
 
     test "encodes explicit prompt cache controls" do

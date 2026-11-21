@@ -6,6 +6,7 @@ defmodule ReqLLM.Evaluation do
   answer formats. An evaluation model does not need to support chat generation.
   """
 
+  alias ReqLLM.Evaluation.AnswerValidation
   alias ReqLLM.Provider.Adapter
   alias ReqLLM.RequestPlan
   alias ReqLLM.Response
@@ -24,6 +25,7 @@ defmodule ReqLLM.Evaluation do
                       total_timeout:
                         Zoi.union([Zoi.integer() |> Zoi.positive(), Zoi.literal(:infinity)]),
                       max_retries: Zoi.integer() |> Zoi.min(0),
+                      answer_validation: Zoi.enum([:strict]),
                       provider_options:
                         Zoi.union([Zoi.map(Zoi.any(), Zoi.any()), @keyword_options]),
                       req_http_options: @keyword_options,
@@ -80,6 +82,9 @@ defmodule ReqLLM.Evaluation do
   the deployment. They support boolean, choice, and score questions.
   The response stores named answers in `object` with string keys.
   `provider_meta.raw_response` keeps the original provider data.
+
+  Pass `answer_validation: :strict` on TypeSafe System One or OpenRouter
+  Decisions to validate known answers against the submitted questions.
   """
   @spec evaluate(ReqLLM.model_input(), state(), map(), keyword()) ::
           {:ok, Response.t()} | {:error, term()}
@@ -93,6 +98,7 @@ defmodule ReqLLM.Evaluation do
          :ok <- validate_json(json_input(state, questions)),
          {:ok, opts} <- validate_options(opts),
          {:ok, model} <- resolve_model(model_spec),
+         :ok <- AnswerValidation.validate_protocol(model, opts[:answer_validation]),
          {:ok, provider} <- Adapter.resolve(model, :evaluate, opts),
          :ok <- validate_state_support(model, state),
          {:ok, opts} <-
@@ -104,7 +110,9 @@ defmodule ReqLLM.Evaluation do
            ),
          {:ok, plan} <- RequestPlan.from_resolved(model, :evaluate, provider, opts, :req),
          {:ok, request} <- Runtime.prepare(plan, %{state: state, questions: questions}) do
-      Runtime.execute_prepared(request, ReqLLM.TimeoutBudget.deadline(opts), &result/1)
+      request
+      |> AnswerValidation.attach(opts[:answer_validation], questions)
+      |> Runtime.execute_prepared(ReqLLM.TimeoutBudget.deadline(opts), &result/1)
     end
   end
 
@@ -296,17 +304,23 @@ defmodule ReqLLM.Evaluation do
   defp validate_state_support(_model, _state), do: :ok
 
   defp validate_questions(questions) when is_map(questions) and map_size(questions) > 0 do
-    if Enum.all?(questions, fn {id, question} ->
-         (is_atom(id) or is_binary(id)) and is_map(question)
-       end) do
-      :ok
-    else
-      {:error, invalid_parameter("questions must map names to question maps")}
+    cond do
+      not Enum.all?(questions, &valid_question_entry?/1) ->
+        {:error, invalid_parameter("questions must map names to question maps")}
+
+      MapSet.size(MapSet.new(Map.keys(questions), &to_string/1)) != map_size(questions) ->
+        {:error, invalid_parameter("question name collision after string normalization")}
+
+      true ->
+        :ok
     end
   end
 
   defp validate_questions(_),
     do: {:error, invalid_parameter("questions must be a non-empty map")}
+
+  defp valid_question_entry?({id, question}),
+    do: (is_atom(id) or is_binary(id)) and is_map(question)
 
   defp validate_json(value) do
     case Jason.encode(value) do

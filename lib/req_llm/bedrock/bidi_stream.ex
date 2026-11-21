@@ -47,7 +47,7 @@ defmodule ReqLLM.Bedrock.BidiStream do
   end
 
   @doc """
-  Opens a bidirectional stream to `model_id` (e.g. `"amazon.nova-sonic-v1:0"`).
+  Opens a bidirectional stream to `model_id` (e.g. `"amazon.nova-2-sonic-v1:0"`).
 
   Options:
     * `:credentials` - an `%AWSAuth.Credentials{}` (defaults to `AWSAuth.Credentials.from_env/0`)

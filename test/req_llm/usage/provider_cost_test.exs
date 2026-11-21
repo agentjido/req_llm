@@ -99,6 +99,20 @@ defmodule ReqLLM.Usage.ProviderCostTest do
                %{cost: 0.01, byok: false, upstream_cost: nil}
     end
 
+    test "reads explicit USD charges and gives the existing cost field priority" do
+      for amount <- [0, 0.000012], key <- [:cost_usd, "cost_usd"] do
+        assert ProviderCost.from_usage(%{key => amount}) ==
+                 %{cost: amount, byok: false, upstream_cost: nil}
+      end
+
+      assert ProviderCost.from_usage(%{"cost" => 0, "cost_usd" => 0.01}) ==
+               %{cost: 0, byok: false, upstream_cost: nil}
+
+      for invalid <- [nil, -1, "0.01"] do
+        assert ProviderCost.from_usage(%{"cost_usd" => invalid}) == nil
+      end
+    end
+
     test "a usage map without a usable charge is left alone" do
       for overrides <- [
             %{},

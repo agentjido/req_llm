@@ -46,6 +46,74 @@ defmodule ReqLLM.TelemetryContractTest do
     assert Enum.uniq(ReqLLM.Telemetry.events()) == ReqLLM.Telemetry.events()
   end
 
+  test "evaluation summaries count questions and answers without including their content" do
+    state = "fixture state"
+    questions = %{priority: %{type: :boolean, instructions: "fixture instructions"}}
+
+    Req.Test.stub(__MODULE__.Evaluation, fn conn ->
+      Req.Test.json(conn, %{
+        "model" => "jev-latest",
+        "answers" => %{"priority" => %{"type" => "noul", "noul" => 0.8}},
+        "usage" => %{"input_tokens" => 5, "output_tokens" => 0}
+      })
+    end)
+
+    assert {:ok, _response} =
+             ReqLLM.evaluate("typesafe:jev-latest", state, questions,
+               api_key: "fixture-only",
+               req_http_options: [plug: {Req.Test, __MODULE__.Evaluation}]
+             )
+
+    events = collect_events()
+    start = single_event(events, [:req_llm, :request, :start])
+    stop = single_event(events, [:req_llm, :request, :stop])
+
+    assert start.metadata.operation == :evaluate
+    assert start.metadata.request_summary == %{question_count: 1}
+    assert stop.metadata.request_summary == %{question_count: 1}
+
+    assert stop.metadata.response_summary == %{
+             answer_count: 1,
+             image_count: 0,
+             object?: true,
+             text_bytes: 0,
+             thinking_bytes: 0,
+             tool_call_count: 0
+           }
+
+    refute Map.has_key?(stop.metadata, :response_payload)
+  end
+
+  test "strict evaluation rejection emits a correlated exception instead of a stop" do
+    questions = %{priority: %{type: :boolean, instructions: "Is it urgent?"}}
+
+    plug = fn conn ->
+      Req.Test.json(conn, %{
+        "model" => "jev-latest",
+        "answers" => %{"priority" => %{"type" => "noul", "noul" => 1.1}},
+        "usage" => %{}
+      })
+    end
+
+    assert {:error,
+            %ReqLLM.Error.API.Request{status: 200, cause: %ReqLLM.Error.API.Response{}} = error} =
+             ReqLLM.evaluate("typesafe:jev-latest", "fixture state", questions,
+               api_key: "fixture-only",
+               answer_validation: :strict,
+               req_http_options: [plug: plug]
+             )
+
+    events = collect_events()
+    start = single_event(events, [:req_llm, :request, :start])
+    exception = single_event(events, [:req_llm, :request, :exception])
+
+    assert exception.metadata.request_id == start.metadata.request_id
+    assert exception.metadata.operation == :evaluate
+    assert exception.metadata.http_status == 200
+    assert exception.metadata.error == error
+    refute Enum.any?(events, &(&1.name == [:req_llm, :request, :stop]))
+  end
+
   test "preserves stable lifecycle, usage, streaming, and retry shapes" do
     model = %LLMDB.Model{provider: :openai, id: "gpt-5"}
     usage = %{tokens: %{input: 3, output: 2, total_tokens: 5, reasoning: 0}, cost: nil}
