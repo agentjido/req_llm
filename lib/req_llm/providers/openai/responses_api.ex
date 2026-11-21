@@ -894,11 +894,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
 
     store = Keyword.get(provider_opts, :store, default_store(model_name))
 
-    previous_response_id =
-      if include_previous_response_id?(store, opts_map) do
-        provider_opts[:previous_response_id] ||
-          extract_previous_response_id_from_context(context)
-      end
+    previous_response_id = previous_response_id(store, opts_map, provider_opts, context)
 
     replay_output_items? = previous_response_id == nil
 
@@ -1105,6 +1101,15 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   defp include_previous_response_id?(false, %{responses_transport: :websocket}), do: true
   defp include_previous_response_id?(false, _opts), do: false
   defp include_previous_response_id?(_store, _opts), do: true
+
+  defp previous_response_id(false, %{responses_transport: :background}, provider_opts, _context),
+    do: provider_opts[:previous_response_id]
+
+  defp previous_response_id(store, opts, provider_opts, context) do
+    if include_previous_response_id?(store, opts) do
+      provider_opts[:previous_response_id] || extract_previous_response_id_from_context(context)
+    end
+  end
 
   defp maybe_put_store_true(body, false), do: body
   defp maybe_put_store_true(body, _store), do: Map.put(body, "store", true)

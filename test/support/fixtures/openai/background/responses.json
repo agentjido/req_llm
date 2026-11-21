@@ -1,0 +1,41 @@
+{
+  "queued": {
+    "id": "resp_lookup", "object": "response", "model": "gpt-6.1-terra",
+    "background": true, "status": "queued", "service_tier": "default", "output": [], "usage": null
+  },
+  "completed": {
+    "id": "resp_lookup", "object": "response", "model": "gpt-6.1-terra",
+    "background": true, "status": "completed", "service_tier": "default",
+    "output": [
+      {"id": "rs_lookup", "type": "reasoning", "summary": [], "encrypted_content": "encrypted-reasoning"},
+      {"id": "fc_lookup", "type": "function_call", "call_id": "call_lookup", "name": "lookup", "arguments": "{\"id\":\"doc1\"}", "status": "completed"}
+    ],
+    "usage": {
+      "input_tokens": 100, "input_tokens_details": {"cached_tokens": 0},
+      "output_tokens": 20, "output_tokens_details": {"reasoning_tokens": 5}, "total_tokens": 120
+    }
+  },
+  "follow_up": {
+    "id": "resp_follow_up", "object": "response", "model": "gpt-6.1-terra",
+    "background": true, "status": "in_progress", "service_tier": "default", "output": [], "usage": null
+  },
+  "cancelled": {
+    "id": "resp_lookup", "object": "response", "model": "gpt-6.1-terra",
+    "background": true, "status": "cancelled", "output": [], "usage": null
+  },
+  "failed": {
+    "id": "resp_failed", "object": "response", "model": "gpt-6.1-terra",
+    "background": true, "status": "failed", "output": [], "usage": null,
+    "error": {"code": "server_error", "message": "The response failed during execution."}
+  },
+  "incomplete": {
+    "id": "resp_incomplete", "object": "response", "model": "gpt-6.1-terra",
+    "background": true, "status": "incomplete", "service_tier": "default",
+    "incomplete_details": {"reason": "max_output_tokens"},
+    "output": [{"id": "msg_incomplete", "type": "message", "role": "assistant", "status": "incomplete", "content": [{"type": "output_text", "text": "Partial answer", "annotations": []}]}],
+    "usage": {"input_tokens": 100, "output_tokens": 20, "total_tokens": 120}
+  },
+  "discounted_window_rejected": {
+    "error": {"type": "invalid_request_error", "code": "unsupported_value", "param": "background_options.completion_window", "message": "This model does not support the requested completion window."}
+  }
+}
