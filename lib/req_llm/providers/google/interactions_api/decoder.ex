@@ -134,6 +134,12 @@ defmodule ReqLLM.Providers.Google.InteractionsAPI.Decoder do
             new_builtins =
               if(builtin_entry, do: [builtin_entry | builtins_acc], else: builtins_acc)
 
+            step_chunks =
+              if MapSet.member?(resolved_call_ids, normalized_step["id"]) and
+                   normalized_step["type"] == "function_call",
+                 do: [],
+                 else: step_chunks
+
             {Enum.reverse(step_chunks, chunks_acc), [normalized_step | steps_acc], new_builtins}
         end
       end)

@@ -30,7 +30,15 @@ defmodule ReqLLM.Test.Google.InteractionsAPIHelpers do
               Jason.encode!(%{"error" => %{"message" => "Not found"}})
             )
           else
-            send_sse(conn, resume_events)
+            case {conn.query_params["stream"], Keyword.get(opts, :lookup_body)} do
+              {nil, %{} = body} ->
+                conn
+                |> Plug.Conn.put_resp_content_type("application/json")
+                |> Plug.Conn.send_resp(200, Jason.encode!(body))
+
+              _ ->
+                send_sse(conn, resume_events)
+            end
           end
 
         {"GET", "/v1beta/interactions/" <> id} ->

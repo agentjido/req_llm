@@ -73,7 +73,7 @@ defmodule ReqLLM.Providers.Google.InteractionsAPI.Encoder do
         |> maybe_put_response_format(opts)
         |> Helpers.maybe_put_list(
           "safety_settings",
-          Helpers.get_opt(opts, :google_safety_settings)
+          encode_safety_settings(Helpers.get_opt(opts, :google_safety_settings))
         )
       end
 
@@ -568,6 +568,29 @@ defmodule ReqLLM.Providers.Google.InteractionsAPI.Encoder do
     end)
   end
 
+  defp encode_safety_settings(nil), do: nil
+
+  defp encode_safety_settings(settings) do
+    Enum.map(settings, fn setting ->
+      setting = Helpers.stringify_keys(setting)
+      {category, setting} = Map.pop(setting, "category")
+      type = setting["type"] || normalize_safety_enum(category, "harm_category_")
+
+      setting
+      |> Map.put("type", type)
+      |> Map.update("threshold", nil, fn
+        "BLOCK_NONE" -> "off"
+        threshold -> normalize_safety_enum(threshold, "")
+      end)
+      |> Map.replace_lazy("method", &normalize_safety_enum(&1, "harm_block_method_"))
+    end)
+  end
+
+  defp normalize_safety_enum(value, prefix) when is_binary(value),
+    do: value |> String.downcase() |> String.replace_prefix(prefix, "")
+
+  defp normalize_safety_enum(value, _prefix), do: value
+
   defp encode_function_result_step!(%Message{} = msg, all_messages) do
     call_id = msg.tool_call_id
 
@@ -613,7 +636,7 @@ defmodule ReqLLM.Providers.Google.InteractionsAPI.Encoder do
         encode_tool_result_content!(msg.content)
 
       is_map(output) ->
-        Helpers.stringify_keys(output)
+        [%{"type" => "text", "text" => output |> Helpers.stringify_keys() |> Jason.encode!()}]
 
       is_binary(output) ->
         output

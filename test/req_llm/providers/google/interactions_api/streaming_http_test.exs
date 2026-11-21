@@ -552,6 +552,55 @@ defmodule ReqLLM.Providers.Google.InteractionsAPI.StreamingHTTPTest do
       end
     end
 
+    test "recovers a pending tool call when resume skips step.start" do
+      id = "int_tool_resume"
+      interaction = %{"id" => id, "status" => "requires_action", "model" => "gemini-4-hydrogen"}
+
+      resume_events = [
+        sse_frame(%{"event_type" => "step.stop", "index" => 1}, "evt_2"),
+        sse_frame(
+          %{"event_type" => "interaction.completed", "interaction" => interaction},
+          "evt_3"
+        )
+      ]
+
+      lookup_body =
+        Map.put(interaction, "steps", [
+          %{"type" => "user_input", "content" => "Run tool"},
+          %{
+            "type" => "function_call",
+            "id" => "fc_1",
+            "name" => "lookup",
+            "arguments" => %{"q" => "a"}
+          }
+        ])
+
+      server =
+        start_supervised!(
+          {Bandit,
+           plug: {SSEPlug, owner: self(), resume_events: resume_events, lookup_body: lookup_body},
+           port: 0,
+           ip: {127, 0, 0, 1},
+           startup_log: false}
+        )
+
+      {:ok, {_addr, port}} = ThousandIsland.listener_info(server)
+
+      assert {:ok, stream} =
+               InteractionsAPI.stream(id,
+                 model: @model_id,
+                 api_key: @api_key,
+                 base_url: "http://127.0.0.1:#{port}/v1",
+                 last_event_id: "evt_1"
+               )
+
+      assert {:ok, response} = StreamResponse.to_response(stream)
+      assert response.finish_reason == :tool_calls
+      assert [%{id: "fc_1"}] = ReqLLM.Response.tool_calls(response)
+      assert_receive {:get_resume, ^id, %{"stream" => "true", "last_event_id" => "evt_1"}, _}
+      assert_receive {:get_resume, ^id, %{}, _}
+    end
+
     test "handles [DONE]-only resume streams without stale tool history" do
       server =
         start_supervised!(

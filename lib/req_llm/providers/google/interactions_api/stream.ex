@@ -287,7 +287,7 @@ defmodule ReqLLM.Providers.Google.InteractionsAPI.Stream do
 
   defp interactions_event_name?(_), do: false
 
-  def init_stream_state(_model \\ nil, opts \\ []) do
+  def init_stream_state(model \\ nil, opts \\ []) do
     resume_id = Helpers.get_opt(opts, :interactions_resume_id)
     interaction_id = if(Helpers.non_empty_binary?(resume_id), do: resume_id, else: nil)
     provider_meta = %{} |> Helpers.maybe_put_string("interaction_id", interaction_id)
@@ -306,6 +306,8 @@ defmodule ReqLLM.Providers.Google.InteractionsAPI.Stream do
       response_format: nil,
       expect_json_object?: expect_json_object?,
       resumed_with_last_event_id?: resumed_with_last_event_id?,
+      resume_lookup_opts: if(resumed_with_last_event_id?, do: Keyword.put(opts, :model, model)),
+      missing_step?: false,
       status: nil,
       steps: %{},
       completed_steps: %{},
@@ -738,6 +740,7 @@ defmodule ReqLLM.Providers.Google.InteractionsAPI.Stream do
     next_state = %{
       state
       | steps: remaining_steps,
+        missing_step?: state.missing_step? or (is_nil(entry) and is_nil(data["step"])),
         completed_steps: completed_steps,
         completed_builtins: completed_builtins,
         usage: usage,
@@ -799,6 +802,13 @@ defmodule ReqLLM.Providers.Google.InteractionsAPI.Stream do
         {[], state, chosen_steps, chosen_builtins}
       end
 
+    {recovered_chunks, final_steps, recovery_error} =
+      if raw_steps == [] do
+        recover_resumed_tool_calls(state, status, interaction_id, final_steps, resolved_call_ids)
+      else
+        {[], final_steps, nil}
+      end
+
     usage =
       normalize_usage_preserving_tokens(
         interaction["usage"],
@@ -817,6 +827,8 @@ defmodule ReqLLM.Providers.Google.InteractionsAPI.Stream do
           reason: Decoder.extract_failure_reason(interaction),
           response_body: interaction
         )
+      else
+        recovery_error
       end
 
     provider_meta =
@@ -860,7 +872,7 @@ defmodule ReqLLM.Providers.Google.InteractionsAPI.Stream do
         terminated?: true
     }
 
-    {open_chunks ++ snapshot_chunks ++ [StreamChunk.meta(meta)], next_state}
+    {open_chunks ++ snapshot_chunks ++ recovered_chunks ++ [StreamChunk.meta(meta)], next_state}
   end
 
   defp handle_stream_event("error", data, model, state) do
@@ -910,6 +922,45 @@ defmodule ReqLLM.Providers.Google.InteractionsAPI.Stream do
   end
 
   defp handle_stream_event(_event_type, _data, _model, state), do: {[], state}
+
+  defp recover_resumed_tool_calls(
+         %{missing_step?: true, resume_lookup_opts: opts, completed_steps: completed},
+         "requires_action",
+         id,
+         final_steps,
+         resolved_ids
+       )
+       when is_list(opts) and is_binary(id) do
+    case InteractionsAPI.get(id, opts) do
+      {:ok, %ReqLLM.Response{finish_reason: :tool_calls, message: message} = response} ->
+        pending = response |> ReqLLM.Response.tool_calls() |> MapSet.new(& &1.id)
+        observed = completed |> Map.values() |> MapSet.new(& &1["id"])
+        steps = InteractionsAPI.verified_interactions_steps(message) || []
+        first_recovered_index = Enum.max(Map.keys(completed), fn -> -1 end) + 1
+
+        chunks =
+          for {step, index} <- Enum.with_index(steps, first_recovered_index),
+              step["type"] == "function_call",
+              MapSet.member?(pending, step["id"]),
+              not MapSet.member?(resolved_ids, step["id"]),
+              not MapSet.member?(observed, step["id"]),
+              {chunks, _, _} <- [Decoder.decode_single_step(step, index, id)],
+              chunk <- chunks,
+              do: chunk
+
+        {chunks, steps, nil}
+
+      {:ok, _response} ->
+        {[], final_steps,
+         ResponseError.exception(reason: "The resumed interaction has no pending tool calls")}
+
+      {:error, error} ->
+        {[], final_steps, error}
+    end
+  end
+
+  defp recover_resumed_tool_calls(_state, _status, _id, final_steps, _resolved_ids),
+    do: {[], final_steps, nil}
 
   defp extract_stream_error_reason(%{"error" => %{"message" => message}}, _errors)
        when is_binary(message) and message != "",

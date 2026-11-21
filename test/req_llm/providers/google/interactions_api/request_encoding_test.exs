@@ -70,6 +70,23 @@ defmodule ReqLLM.Providers.Google.InteractionsAPI.RequestEncodingTest do
       assert Base.decode64!(base64_img) == <<1, 2, 3>>
     end
 
+    test "converts GenerateContent safety settings to Interactions settings" do
+      {:ok, request} =
+        Google.prepare_request(:chat, @model_id, "Hello",
+          api_key: @api_key,
+          google_api: :interactions,
+          google_safety_settings: [
+            %{category: "HARM_CATEGORY_HATE_SPEECH", threshold: "BLOCK_MEDIUM_AND_ABOVE"},
+            %{category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_NONE", method: "SEVERITY"}
+          ]
+        )
+
+      assert Google.encode_body(request).options[:json]["safety_settings"] == [
+               %{"type" => "hate_speech", "threshold" => "block_medium_and_above"},
+               %{"type" => "harassment", "threshold" => "off", "method" => "severity"}
+             ]
+    end
+
     test "isolates Managed Agent requests from model, generation_config, system_instruction, tools, response_format, and safety_settings" do
       {:ok, agent_req} =
         Google.prepare_request(:chat, @model_id, "Research Elixir",
@@ -192,7 +209,9 @@ defmodule ReqLLM.Providers.Google.InteractionsAPI.RequestEncodingTest do
       assert fs_step["type"] == "file_search_call"
       assert fc_step["type"] == "function_call"
 
-      assert fr_step["result"] == %{
+      assert [%{"type" => "text", "text" => result_json}] = fr_step["result"]
+
+      assert Jason.decode!(result_json) == %{
                "link" => %{
                  "authority" => "example.com",
                  "fragment" => nil,
@@ -441,13 +460,13 @@ defmodule ReqLLM.Providers.Google.InteractionsAPI.RequestEncodingTest do
                  "type" => "function_result",
                  "call_id" => "call_w1",
                  "name" => "get_weather",
-                 "result" => %{"temp_c" => 18}
+                 "result" => [%{"type" => "text", "text" => ~s({"temp_c":18})}]
                },
                %{
                  "type" => "function_result",
                  "call_id" => "call_w2",
                  "name" => "get_weather",
-                 "result" => %{"temp_c" => 22}
+                 "result" => [%{"type" => "text", "text" => ~s({"temp_c":22})}]
                }
              ]
 
@@ -508,7 +527,7 @@ defmodule ReqLLM.Providers.Google.InteractionsAPI.RequestEncodingTest do
                  "type" => "function_result",
                  "call_id" => "call_m1",
                  "name" => "lookup",
-                 "result" => %{"ok" => true}
+                 "result" => [%{"type" => "text", "text" => ~s({"ok":true})}]
                },
                %{
                  "type" => "user_input",
@@ -797,7 +816,7 @@ defmodule ReqLLM.Providers.Google.InteractionsAPI.RequestEncodingTest do
                  "type" => "function_result",
                  "call_id" => "call_1",
                  "name" => "calc",
-                 "result" => %{"value" => 4}
+                 "result" => [%{"type" => "text", "text" => ~s({"value":4})}]
                },
                %{
                  "type" => "thought",
@@ -1683,10 +1702,12 @@ defmodule ReqLLM.Providers.Google.InteractionsAPI.RequestEncodingTest do
 
       assert partial_parallel_resp.finish_reason == :tool_calls
 
-      assert Enum.map(ReqLLM.Response.tool_calls(partial_parallel_resp), & &1.id) == [
-               "fc_1",
-               "fc_2"
-             ]
+      assert Enum.map(ReqLLM.Response.tool_calls(partial_parallel_resp), & &1.id) == ["fc_2"]
+
+      assert Enum.any?(
+               InteractionsAPI.verified_interactions_steps(partial_parallel_resp.message),
+               &(&1["id"] == "fc_1")
+             )
 
       refute InteractionsAPI.explicit_option?(
                [google_include_thoughts: nil],
