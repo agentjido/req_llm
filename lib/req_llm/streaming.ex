@@ -251,7 +251,8 @@ defmodule ReqLLM.Streaming do
           :completion_cleanup_after,
           Application.get_env(:req_llm, :stream_completion_cleanup_after, 30_000)
         ),
-      high_watermark: Keyword.get(opts, :high_watermark, 500)
+      high_watermark: Keyword.get(opts, :high_watermark, 500),
+      provider_opts: opts
     ]
 
     genserver_opts = Keyword.take(opts, [:name, :timeout, :debug, :spawn_opt, :hibernate_after])
