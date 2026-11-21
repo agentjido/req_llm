@@ -1,5 +1,5 @@
 defmodule ReqLLM.BedrockBatchContractTest do
-  use ExUnit.Case, async: true
+  use ExUnit.Case, async: false
 
   alias ReqLLM.{Batch, Context, Error, Response}
   alias ReqLLM.Batch.Job
@@ -110,6 +110,41 @@ defmodule ReqLLM.BedrockBatchContractTest do
     assert response.model == @model.id
     assert response.finish_reason == :stop
     assert %{input_tokens: 12, output_tokens: 1} = response.usage
+  end
+
+  test "resolves the submission region independently of explicit IAM credentials" do
+    region_env = ~w(AWS_REGION AWS_DEFAULT_REGION)
+    original_env = Enum.map(region_env, &{&1, System.get_env(&1)})
+
+    on_exit(fn ->
+      Enum.each(original_env, fn
+        {name, nil} -> System.delete_env(name)
+        {name, value} -> System.put_env(name, value)
+      end)
+    end)
+
+    opts = Keyword.delete(@job_opts, :region) ++ @auth_opts
+
+    for {region, default_region, override, expected} <- [
+          {"us-west-2", "us-east-2", nil, "us-west-2"},
+          {nil, "us-east-2", nil, "us-east-2"},
+          {"us-west-2", "us-east-2", "eu-west-1", "eu-west-1"},
+          {nil, nil, nil, "us-east-1"}
+        ] do
+      Enum.each(region_env, &System.delete_env/1)
+      if region, do: System.put_env("AWS_REGION", region)
+      if default_region, do: System.put_env("AWS_DEFAULT_REGION", default_region)
+
+      Req.Test.expect(__MODULE__, fn conn ->
+        assert conn.host == "bedrock.#{expected}.amazonaws.com"
+        assert [authorization] = Plug.Conn.get_req_header(conn, "authorization")
+        assert authorization =~ "/#{expected}/bedrock/aws4_request"
+        Req.Test.json(conn, %{"jobArn" => @arn})
+      end)
+
+      submission_opts = if override, do: Keyword.put(opts, :region, override), else: opts
+      assert {:ok, %Job{}} = Batch.submit(@model, @input_uri, submission_opts)
+    end
   end
 
   test "uses a persisted client token across calls and returns the service error" do

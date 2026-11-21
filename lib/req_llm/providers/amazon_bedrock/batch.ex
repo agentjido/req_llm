@@ -43,9 +43,11 @@ defmodule ReqLLM.Providers.AmazonBedrock.Batch do
   Submits a Converse job for an S3 input URI. Requires `:job_name`, `:role_arn`,
   and `:output_uri`. Use `:inference_profile_arn` to target an eligible profile.
 
-  Provide `:region` and IAM credentials via the standard AWS environment
-  variables or the `:region`, `:access_key_id`, `:secret_access_key`, and
-  `:session_token` options. `:req_http_options` controls Req settings.
+  The submission region comes from `:region`, `AWS_REGION`, or
+  `AWS_DEFAULT_REGION`, in that order. It defaults to `us-east-1`.
+  Provide IAM credentials via the standard AWS environment variables or the
+  `:access_key_id`, `:secret_access_key`, and `:session_token` options.
+  `:req_http_options` controls Req settings.
 
   Req retries transient submission failures with the same token. Supply and
   persist `:client_request_token` before submission to reuse it across calls.
@@ -146,8 +148,12 @@ defmodule ReqLLM.Providers.AmazonBedrock.Batch do
     do: {:error, invalid_parameter("expected a Bedrock batch job ARN")}
 
   defp request(region, opts, request_opts) do
+    region =
+      region || System.get_env("AWS_REGION") || System.get_env("AWS_DEFAULT_REGION") ||
+        "us-east-1"
+
     with {:ok, credentials} <- credentials(opts),
-         {:ok, region} <- validate_region(region || credentials.region || "us-east-1") do
+         {:ok, region} <- validate_region(region) do
       {path, request_opts} = Keyword.pop!(request_opts, :path)
 
       suffix =
