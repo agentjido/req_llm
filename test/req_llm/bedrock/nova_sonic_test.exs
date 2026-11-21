@@ -1,15 +1,54 @@
 defmodule ReqLLM.Bedrock.NovaSonicTest do
   @moduledoc """
-  Unit tests for the Nova Sonic event builders and inbound normalization.
+  Offline tests for Nova Sonic model selection and event handling.
 
-  The on-the-wire bidirectional protocol (HTTP/2 duplex transport, SigV4
-  event-stream chunk signing, `{"bytes": base64}` framing) is validated
-  end-to-end against live Bedrock; these tests cover the pure event-shaping
-  logic that doesn't require a connection.
+  The model selection test removes the AWS access key so the transport stops
+  before opening a network connection.
   """
-  use ExUnit.Case, async: true
+  use ExUnit.Case, async: false
 
+  alias ReqLLM.Bedrock.BidiStream
   alias ReqLLM.Bedrock.NovaSonic
+
+  describe "start" do
+    test "passes the Nova 2 Sonic default and explicit model IDs to the transport" do
+      key = "AWS_ACCESS_KEY_ID"
+      previous_key = System.get_env(key)
+      System.delete_env(key)
+
+      pattern = {BidiStream, :connect, 2}
+      Code.ensure_loaded!(BidiStream)
+      :erlang.trace_pattern(pattern, true, [])
+
+      on_exit(fn ->
+        :erlang.trace_pattern(pattern, false, [])
+        if previous_key, do: System.put_env(key, previous_key)
+      end)
+
+      explicit_model = "amazon.nova-sonic-v1:0"
+
+      {worker, monitor} =
+        spawn_monitor(fn ->
+          Process.flag(:trap_exit, true)
+
+          receive do
+            :start ->
+              NovaSonic.start()
+              NovaSonic.start(explicit_model)
+          end
+        end)
+
+      :erlang.trace(worker, true, [:call, {:tracer, self()}])
+      send(worker, :start)
+
+      assert_receive {:trace, ^worker, :call,
+                      {BidiStream, :connect, ["amazon.nova-2-sonic-v1:0", []]}},
+                     1_000
+
+      assert_receive {:trace, ^worker, :call, {BidiStream, :connect, [^explicit_model, []]}}
+      assert_receive {:DOWN, ^monitor, :process, ^worker, :normal}, 1_000
+    end
+  end
 
   describe "input event builders" do
     test "session_start carries inference configuration" do
@@ -28,6 +67,16 @@ defmodule ReqLLM.Bedrock.NovaSonicTest do
     end
 
     test "prompt_start sets text + audio output configuration" do
+      default_prompt = NovaSonic.prompt_start("p1")
+
+      assert get_in(default_prompt, [
+               "event",
+               "promptStart",
+               "audioOutputConfiguration",
+               "voiceId"
+             ]) ==
+               "matthew"
+
       %{"event" => %{"promptStart" => ps}} = NovaSonic.prompt_start("p1", voice_id: "tiffany")
 
       assert ps["promptName"] == "p1"
@@ -99,8 +148,23 @@ defmodule ReqLLM.Bedrock.NovaSonicTest do
   describe "audio content lifecycle" do
     setup do
       {:ok, pid} = StubConn.start_link()
-      conn = %ReqLLM.Bedrock.BidiStream.Conn{pid: pid, model_id: "amazon.nova-sonic-v1:0"}
+      conn = %BidiStream.Conn{pid: pid, model_id: "amazon.nova-2-sonic-v1:0"}
       {:ok, session: %NovaSonic.Session{conn: conn, prompt_name: "p1"}, pid: pid}
+    end
+
+    test "audio_turn opens, sends and closes a single audio block", %{session: s, pid: pid} do
+      pcm = <<0, 1, 2, 3>>
+      encoded = Base.encode64(pcm)
+
+      assert {:ok, %NovaSonic.Session{audio_content_name: nil}} = NovaSonic.audio_turn(s, pcm)
+
+      assert [
+               %{"event" => %{"contentStart" => %{"type" => "AUDIO", "contentName" => content}}},
+               %{
+                 "event" => %{"audioInput" => %{"contentName" => content, "content" => ^encoded}}
+               },
+               %{"event" => %{"contentEnd" => %{"contentName" => content}}}
+             ] = StubConn.events(pid)
     end
 
     test "one audio container stays open across many send_audio calls", %{session: s, pid: pid} do
