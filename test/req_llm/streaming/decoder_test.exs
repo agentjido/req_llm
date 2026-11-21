@@ -49,6 +49,28 @@ defmodule ReqLLM.Streaming.DecoderTest do
     def init_stream_state(%LLMDB.Model{extra: %{wire: %{protocol: :legacy}}}), do: %{}
   end
 
+  defmodule OptionsAwareProvider do
+    @moduledoc false
+
+    def init_stream_state(model, opts), do: {model.id, Keyword.get(opts, :mode, :default), 0}
+
+    def init_stream_state(_model),
+      do: raise("two-arity init_stream_state must take precedence")
+
+    def parse_stream_protocol(chunk, state),
+      do: ReqLLM.Provider.parse_stream_protocol(chunk, state)
+
+    def decode_stream_event(%{data: text}, _model, {id, mode, count}) when is_binary(text) do
+      {[StreamChunk.text("#{id}:#{mode}:#{count + 1}:#{text}")], {id, mode, count + 1}}
+    end
+
+    def decode_stream_event(_, _, state), do: {[], state}
+
+    def flush_stream_state(_model, {id, mode, count}) do
+      {[StreamChunk.text("flush:#{id}:#{mode}:#{count}")], {id, mode, count + 1}}
+    end
+  end
+
   test "canonical streams skip legacy provider initialization" do
     decoder = new_decoder(provider_mod: LegacyProvider, canonical_stream?: true)
     assert {:ok, [], false, _decoder} = Decoder.decode("", decoder)
@@ -171,6 +193,112 @@ defmodule ReqLLM.Streaming.DecoderTest do
 
     assert content == StreamChunk.text("valid")
     assert count == StreamChunk.text("test:1")
+  end
+
+  test "forwards provider_opts to init_stream_state/2 when exported" do
+    decoder =
+      new_decoder(
+        provider_mod: OptionsAwareProvider,
+        provider_opts: [mode: :interactions]
+      )
+
+    assert decoder.provider_opts == [mode: :interactions]
+
+    assert {:ok, [chunk], false, decoder} = Decoder.decode("data: hi\n\n", decoder)
+    assert chunk == StreamChunk.text("test:interactions:1:hi")
+
+    assert {[flush], _decoder} = Decoder.flush_provider(decoder)
+    assert flush == StreamChunk.text("flush:test:interactions:1")
+  end
+
+  test "reset_http/1 preserves provider_opts and re-initializes via init_stream_state/2" do
+    parser = fn _, _ -> {:ok, [%{data: "override"}], :custom_state} end
+
+    decoder =
+      new_decoder(
+        provider_mod: OptionsAwareProvider,
+        provider_opts: [mode: :interactions],
+        protocol_parser: parser
+      )
+
+    assert {:ok, [override_chunk], false, decoder} = Decoder.decode("custom", decoder)
+    assert override_chunk == StreamChunk.text("test:interactions:1:override")
+
+    decoder = Decoder.reset_http(decoder)
+    assert decoder.provider_opts == [mode: :interactions]
+
+    assert {:ok, [http_chunk], false, decoder} = Decoder.decode("data: http\n\n", decoder)
+    assert http_chunk == StreamChunk.text("test:interactions:1:http")
+
+    nil_opts_decoder = Decoder.reset_http(%{decoder | provider_opts: nil})
+
+    assert {:ok, [fallback_chunk], false, _} =
+             Decoder.decode("data: fallback\n\n", nil_opts_decoder)
+
+    assert fallback_chunk == StreamChunk.text("test:default:1:fallback")
+  end
+
+  test "normalizes nil provider_opts to [] in new/1" do
+    decoder =
+      new_decoder(
+        provider_mod: OptionsAwareProvider,
+        provider_opts: nil
+      )
+
+    assert decoder.provider_opts == []
+    assert {:ok, [chunk], false, _} = Decoder.decode("data: hi\n\n", decoder)
+    assert chunk == StreamChunk.text("test:default:1:hi")
+  end
+
+  @tag :tmp_dir
+  test "loads unloaded provider_mod before checking init_stream_state/2", %{tmp_dir: tmp_dir} do
+    mod_name =
+      :"Elixir.ReqLLM.Streaming.DecoderTest.UnloadedProvider#{System.unique_integer([:positive])}"
+
+    source = """
+    defmodule #{inspect(mod_name)} do
+      def init_stream_state(model, opts) do
+        {model.id, Keyword.get(opts, :mode, :default), 0}
+      end
+
+      def decode_stream_event(%{data: text}, _model, {id, mode, count}) when is_binary(text) do
+        {[ReqLLM.StreamChunk.text("\#{id}:\#{mode}:\#{count + 1}:\#{text}")], {id, mode, count + 1}}
+      end
+
+      def decode_stream_event(_, _, state), do: {[], state}
+    end
+    """
+
+    [{^mod_name, bytecode}] = Code.compile_string(source)
+    beam_path = Path.join(tmp_dir, "#{Atom.to_string(mod_name)}.beam")
+    File.write!(beam_path, bytecode)
+
+    char_dir = String.to_charlist(tmp_dir)
+    true = :code.add_patha(char_dir)
+    :code.purge(mod_name)
+    :code.delete(mod_name)
+    :code.purge(mod_name)
+
+    on_exit(fn ->
+      :code.del_path(char_dir)
+      :code.purge(mod_name)
+      :code.delete(mod_name)
+      :code.purge(mod_name)
+    end)
+
+    assert :code.is_loaded(mod_name) == false
+
+    parser = fn chunk, state -> {:ok, [%{data: chunk}], state} end
+
+    decoder =
+      new_decoder(
+        provider_mod: mod_name,
+        provider_opts: [mode: :unloaded],
+        protocol_parser: parser
+      )
+
+    assert {:ok, [chunk], false, _} = Decoder.decode("ping", decoder)
+    assert chunk == StreamChunk.text("test:unloaded:1:ping")
   end
 
   defp new_decoder(opts \\ []) do

@@ -19,7 +19,8 @@ defmodule ReqLLM.Providers.Google do
     into the next request. Keep the assistant message intact to replay its signed parts.
   - `google_thinking_budget` - Thinking token budget for Gemini 2.5 models (cannot be combined with `google_thinking_level`)
   - `google_include_thoughts` - Whether chat requests ask for thought summaries (default: `true`)
-  - `google_thinking_level` - Thinking level for Gemini 3+ models (`:minimal`, `:low`, `:medium`, `:high`). Cannot be combined with `google_thinking_budget`
+  - `google_api` - Select Google API surface (`:generate_content` or `:interactions`). Defaults to `:generate_content` unless Interactions-only options (such as `previous_interaction_id`, `store`, `agent`, or `background`) are set.
+  - `google_thinking_level` - Thinking level for Gemini 3+ models (`:minimal`, `:low`, `:medium`, `:high`, and `:xhigh` on supported Gemini 4 Hydrogen models). Cannot be combined with `google_thinking_budget`
   - `cached_content` - Reference to cached content for 90% cost savings (see Context Caching below)
   - `dimensions` - Number of dimensions for embedding vectors
   - `task_type` - Task type for embeddings (e.g., RETRIEVAL_QUERY)
@@ -69,6 +70,24 @@ defmodule ReqLLM.Providers.Google do
 
   See `ReqLLM.Providers.Google.CachedContent` for full API documentation.
 
+  ## Interactions API
+
+  Opt into Google's stateful Interactions API (`/{api_version}/interactions`, `Api-Revision: 2026-05-20`) with `provider_options: [google_api: :interactions]` or by passing Interactions-only options such as `previous_interaction_id`, `store`, `agent`, or `background`:
+
+      {:ok, turn1} = ReqLLM.generate_text(
+        "google:gemini-4-hydrogen",
+        "My project is ReqLLM.",
+        provider_options: [google_api: :interactions]
+      )
+
+      {:ok, turn2} = ReqLLM.generate_text(
+        "google:gemini-4-hydrogen",
+        "What project did I mention?",
+        provider_options: [previous_interaction_id: turn1.id]
+      )
+
+  See `ReqLLM.Providers.Google.InteractionsAPI` for lifecycle operations (`get/2`, `cancel/2`, `delete/2`, `wait/2`, `stream/2`) and `guides/google.md` for all options.
+
   ## API Version Selection
 
   The provider defaults to Google's v1beta API which supports all features including function calling
@@ -91,6 +110,7 @@ defmodule ReqLLM.Providers.Google do
       GOOGLE_API_KEY=AIza...
   """
 
+  alias ReqLLM.Providers.Google.InteractionsAPI
   alias ReqLLM.Providers.Google.ToolHistory
 
   use ReqLLM.Provider,
@@ -103,7 +123,7 @@ defmodule ReqLLM.Providers.Google do
 
   require Logger
 
-  @thinking_level_ranks %{minimal: 0, low: 1, medium: 2, high: 3}
+  @thinking_level_ranks %{minimal: 0, low: 1, medium: 2, high: 3, xhigh: 4}
 
   @provider_schema [
     google_api_version: [
@@ -133,7 +153,7 @@ defmodule ReqLLM.Providers.Google do
     google_thinking_level: [
       type: {:or, [:atom, :string]},
       doc:
-        "Thinking level for Gemini 3+ models (e.g. :low, :medium, :high, or \"low\", \"medium\", \"high\"). Passed directly to the Gemini API. Cannot be combined with google_thinking_budget."
+        "Thinking level for Gemini 3+ models or Interactions API (e.g. :minimal, :low, :medium, :high, :xhigh, or string equivalents). Cannot be combined with google_thinking_budget."
     ],
     google_grounding: [
       type: :map,
@@ -170,11 +190,88 @@ defmodule ReqLLM.Providers.Google do
       type: {:list, {:in, ["TEXT", "IMAGE"]}},
       doc:
         "Control output modalities for image generation. List of \"TEXT\" and/or \"IMAGE\". Default is [\"TEXT\", \"IMAGE\"]. Use [\"IMAGE\"] for image-only responses."
+    ],
+    google_api: [
+      type: {:in, [:generate_content, :interactions, "generate_content", "interactions"]},
+      doc:
+        "Google API surface (:generate_content or :interactions). Defaults to :generate_content unless Interactions options are set."
+    ],
+    previous_interaction_id: [
+      type: :string,
+      doc:
+        "Prior interaction ID to continue a stateful multi-turn conversation via Interactions API."
+    ],
+    store: [
+      type: :boolean,
+      doc: "Whether Google stores the interaction for retrieval and chaining (Interactions API)."
+    ],
+    agent: [
+      type: :string,
+      doc:
+        "Managed agent identifier for Interactions API (for example, \"deep-research-pro-preview-12-2025\")."
+    ],
+    agent_config: [
+      type: {:map, {:or, [:atom, :string]}, :any},
+      doc: "Managed agent configuration map for Interactions API requests."
+    ],
+    environment: [
+      type: {:or, [:string, {:map, {:or, [:atom, :string]}, :any}]},
+      doc: "Environment identifier or configuration for agent Interactions requests."
+    ],
+    background: [
+      type: :boolean,
+      doc: "Run the interaction asynchronously in the background (Interactions API)."
+    ],
+    service_tier: [
+      type: {:or, [:atom, :string]},
+      doc: "Service tier for Interactions requests (:flex, :standard, or :priority)."
+    ],
+    continuation_token: [
+      type: :string,
+      doc: "Continuation token for multi-step Interactions API calls."
+    ],
+    last_event_id: [
+      type: :string,
+      doc: "SSE event ID from which to resume an Interactions stream."
+    ],
+    interactions_resume_id: [
+      type: :string,
+      doc: "Interaction ID for GET stream resume routing."
+    ],
+    response_format: [
+      type:
+        {:or,
+         [{:map, {:or, [:atom, :string]}, :any}, {:list, {:map, {:or, [:atom, :string]}, :any}}]},
+      doc: "Response format specification for Interactions API."
+    ],
+    google_search_types: [
+      type: {:list, {:or, [:atom, :string]}},
+      doc:
+        "Search types for Google Search built-in tool in Interactions API (web_search, image_search, etc.)."
+    ],
+    google_code_execution: [
+      type: {:or, [:boolean, {:map, {:or, [:atom, :string]}, :any}]},
+      doc: "Enable server-side code execution tool in Interactions API."
+    ],
+    google_file_search: [
+      type: {:map, {:or, [:atom, :string]}, :any},
+      doc: "Configuration map for file_search built-in tool in Interactions API."
+    ],
+    google_mcp_servers: [
+      type: {:list, {:map, {:or, [:atom, :string]}, :any}},
+      doc: "List of MCP server tool configurations for Interactions API."
+    ],
+    labels: [
+      type: {:map, {:or, [:atom, :string]}, :string},
+      doc: "Custom metadata labels for the request as key-value string pairs."
     ]
   ]
 
   defp has_grounding?(opts) do
-    provider = Keyword.get(opts, :provider_options, [])
+    provider =
+      opts
+      |> Keyword.get(:provider_options, [])
+      |> normalize_provider_opts_to_keyword()
 
     case Keyword.get(provider, :google_grounding) do
       m when is_map(m) and map_size(m) > 0 -> true
@@ -190,7 +287,10 @@ defmodule ReqLLM.Providers.Google do
   end
 
   defp resolve_api_version(opts) when is_list(opts) do
-    provider = Keyword.get(opts, :provider_options, [])
+    provider =
+      opts
+      |> Keyword.get(:provider_options, [])
+      |> normalize_provider_opts_to_keyword()
 
     case Keyword.get(provider, :google_api_version) do
       "v1" -> "v1"
@@ -311,139 +411,33 @@ defmodule ReqLLM.Providers.Google do
   """
   @impl ReqLLM.Provider
   def prepare_request(:chat, model_spec, prompt, opts) do
-    with {:ok, model} <- ReqLLM.model(model_spec),
-         {:ok, context} <- ReqLLM.Context.normalize(prompt, opts),
-         :ok <- validate_no_prefill(model, context),
-         opts_with_context = Keyword.put(opts, :context, context),
-         {:ok, processed_opts0} <-
-           ReqLLM.Provider.Options.process(__MODULE__, :chat, model, opts_with_context),
-         :ok <- validate_version_feature_compat(processed_opts0) do
-      processed_opts =
-        Keyword.put(processed_opts0, :base_url, effective_base_url(processed_opts0))
+    with {:ok, mode} <- InteractionsAPI.resolve_mode(opts),
+         :ok <- InteractionsAPI.validate_options(opts),
+         {:ok, model} <- ReqLLM.model(model_spec),
+         {:ok, context} <- ReqLLM.Context.normalize(prompt, opts) do
+      case mode do
+        :interactions ->
+          prepare_interactions_request(:chat, model, context, opts)
 
-      http_opts = Keyword.get(processed_opts, :req_http_options, [])
-
-      # Determine endpoint based on streaming
-      endpoint =
-        if processed_opts[:stream], do: ":streamGenerateContent", else: ":generateContent"
-
-      req_keys =
-        __MODULE__.supported_provider_options() ++
-          [:context, :operation, :text, :stream, :model, :provider_options, :tools, :tool_choice]
-
-      # Add alt=sse parameter for streaming requests
-      base_params = if processed_opts[:stream], do: [alt: "sse"], else: []
-
-      timeout =
-        Keyword.get(
-          processed_opts,
-          :receive_timeout,
-          Application.get_env(:req_llm, :receive_timeout, 30_000)
-        )
-
-      request =
-        Req.new(
-          [
-            url: "/models/#{model.id}#{endpoint}",
-            method: :post,
-            params: base_params,
-            receive_timeout: timeout
-          ] ++ http_opts
-        )
-        |> Req.Request.register_options(req_keys)
-        |> Req.Request.merge_options(
-          Keyword.take(processed_opts, req_keys) ++
-            [
-              model: model.id,
-              base_url: processed_opts[:base_url]
-            ]
-        )
-        |> attach(model, processed_opts)
-
-      {:ok, request}
+        :generate_content ->
+          prepare_generate_content_chat(model, context, opts)
+      end
     end
   end
 
   def prepare_request(:object, model_spec, prompt, opts) do
-    with {:ok, model} <- ReqLLM.model(model_spec),
-         :ok <- reject_object_tools_before_gemini_3(model, opts),
-         {:ok, context} <- ReqLLM.Context.normalize(prompt, opts),
-         :ok <- validate_no_prefill(model, context) do
-      opts_with_tokens =
-        ReqLLM.Provider.Options.put_model_max_tokens_default(opts, model, fallback: 4096)
-
-      opts_with_tokens =
-        case Keyword.get(opts_with_tokens, :max_tokens) do
-          tokens when is_integer(tokens) and tokens < 200 ->
-            Keyword.put(opts_with_tokens, :max_tokens, 200)
-
-          _tokens ->
-            opts_with_tokens
-        end
-
-      opts_with_context =
-        opts_with_tokens
-        |> Keyword.put(:context, context)
-        |> Keyword.put(:operation, :object)
-
-      case ReqLLM.Provider.Options.process(__MODULE__, :object, model, opts_with_context) do
-        {:ok, processed_opts0} ->
-          with :ok <- validate_version_feature_compat(processed_opts0) do
-            processed_opts =
-              Keyword.put(processed_opts0, :base_url, effective_base_url(processed_opts0))
-
-            http_opts = Keyword.get(processed_opts, :req_http_options, [])
-
-            endpoint =
-              if processed_opts[:stream], do: ":streamGenerateContent", else: ":generateContent"
-
-            req_keys =
-              __MODULE__.supported_provider_options() ++
-                [
-                  :context,
-                  :operation,
-                  :compiled_schema,
-                  :text,
-                  :stream,
-                  :model,
-                  :provider_options,
-                  :tools,
-                  :tool_choice
-                ]
-
-            base_params = if processed_opts[:stream], do: [alt: "sse"], else: []
-
-            timeout =
-              Keyword.get(
-                processed_opts,
-                :receive_timeout,
-                Application.get_env(:req_llm, :receive_timeout, 30_000)
-              )
-
-            request =
-              Req.new(
-                [
-                  url: "/models/#{model.id}#{endpoint}",
-                  method: :post,
-                  params: base_params,
-                  receive_timeout: timeout
-                ] ++ http_opts
-              )
-              |> Req.Request.register_options(req_keys)
-              |> Req.Request.merge_options(
-                Keyword.take(processed_opts, req_keys) ++
-                  [
-                    model: model.id,
-                    base_url: processed_opts[:base_url]
-                  ]
-              )
-              |> attach(model, processed_opts)
-
-            {:ok, request}
+    with {:ok, mode} <- InteractionsAPI.resolve_mode(opts),
+         :ok <- InteractionsAPI.validate_options(opts),
+         {:ok, model} <- ReqLLM.model(model_spec),
+         :ok <- reject_object_tools_before_gemini_3(model, opts) do
+      case mode do
+        :interactions ->
+          with {:ok, context} <- ReqLLM.Context.normalize(prompt, opts) do
+            prepare_interactions_request(:object, model, context, opts)
           end
 
-        {:error, reason} ->
-          {:error, reason}
+        :generate_content ->
+          prepare_generate_content_object(model, prompt, opts)
       end
     end
   end
@@ -460,7 +454,8 @@ defmodule ReqLLM.Providers.Google do
           Keyword.put(rest, :provider_options, updated_provider_options)
       end
 
-    with {:ok, model} <- ReqLLM.model(model_spec),
+    with :ok <- reject_interactions_for_operation(:embedding, opts_normalized),
+         {:ok, model} <- ReqLLM.model(model_spec),
          opts_with_text = Keyword.merge(opts_normalized, text: text, operation: :embedding),
          {:ok, processed_opts0} <-
            ReqLLM.Provider.Options.process(__MODULE__, :embedding, model, opts_with_text),
@@ -509,7 +504,8 @@ defmodule ReqLLM.Providers.Google do
   end
 
   def prepare_request(:image, model_spec, prompt, opts) do
-    with {:ok, model} <- ReqLLM.model(model_spec),
+    with :ok <- reject_interactions_for_operation(:image, opts),
+         {:ok, model} <- ReqLLM.model(model_spec),
          :ok <- validate_image_n(model, opts),
          {:ok, context} <- image_context(prompt, opts),
          opts_with_context = Keyword.put(opts, :context, context),
@@ -615,6 +611,160 @@ defmodule ReqLLM.Providers.Google do
     ReqLLM.Provider.Defaults.prepare_request(__MODULE__, operation, model_spec, input, opts)
   end
 
+  defp prepare_interactions_request(:chat, model, context, opts) do
+    opts_with_context = Keyword.put(opts, :context, context)
+
+    with {:ok, processed_opts} <-
+           ReqLLM.Provider.Options.process(__MODULE__, :chat, model, opts_with_context) do
+      InteractionsAPI.prepare_request(:chat, model, context, opts, processed_opts)
+    end
+  end
+
+  defp prepare_interactions_request(:object, model, context, opts) do
+    opts_with_context =
+      opts
+      |> Keyword.put(:context, context)
+      |> Keyword.put(:operation, :object)
+
+    with {:ok, processed_opts} <-
+           ReqLLM.Provider.Options.process(__MODULE__, :object, model, opts_with_context) do
+      InteractionsAPI.prepare_request(:object, model, context, opts, processed_opts)
+    end
+  end
+
+  defp prepare_generate_content_chat(model, context, opts) do
+    with :ok <- validate_no_prefill(model, context),
+         opts_with_context = Keyword.put(opts, :context, context),
+         {:ok, processed_opts0} <-
+           ReqLLM.Provider.Options.process(__MODULE__, :chat, model, opts_with_context),
+         :ok <- validate_version_feature_compat(processed_opts0) do
+      processed_opts =
+        Keyword.put(processed_opts0, :base_url, effective_base_url(processed_opts0))
+
+      http_opts = Keyword.get(processed_opts, :req_http_options, [])
+
+      endpoint =
+        if processed_opts[:stream], do: ":streamGenerateContent", else: ":generateContent"
+
+      req_keys =
+        __MODULE__.supported_provider_options() ++
+          [:context, :operation, :text, :stream, :model, :provider_options, :tools, :tool_choice]
+
+      base_params = if processed_opts[:stream], do: [alt: "sse"], else: []
+
+      timeout =
+        Keyword.get(
+          processed_opts,
+          :receive_timeout,
+          Application.get_env(:req_llm, :receive_timeout, 30_000)
+        )
+
+      request =
+        Req.new(
+          [
+            url: "/models/#{model.id}#{endpoint}",
+            method: :post,
+            params: base_params,
+            receive_timeout: timeout
+          ] ++ http_opts
+        )
+        |> Req.Request.register_options(req_keys)
+        |> Req.Request.merge_options(
+          Keyword.take(processed_opts, req_keys) ++
+            [
+              model: model.id,
+              base_url: processed_opts[:base_url]
+            ]
+        )
+        |> attach(model, processed_opts)
+
+      {:ok, request}
+    end
+  end
+
+  defp prepare_generate_content_object(model, prompt, opts) do
+    with :ok <- reject_object_tools_before_gemini_3(model, opts),
+         {:ok, context} <- ReqLLM.Context.normalize(prompt, opts),
+         :ok <- validate_no_prefill(model, context) do
+      opts_with_tokens =
+        ReqLLM.Provider.Options.put_model_max_tokens_default(opts, model, fallback: 4096)
+
+      opts_with_tokens =
+        case Keyword.get(opts_with_tokens, :max_tokens) do
+          tokens when is_integer(tokens) and tokens < 200 ->
+            Keyword.put(opts_with_tokens, :max_tokens, 200)
+
+          _tokens ->
+            opts_with_tokens
+        end
+
+      opts_with_context =
+        opts_with_tokens
+        |> Keyword.put(:context, context)
+        |> Keyword.put(:operation, :object)
+
+      case ReqLLM.Provider.Options.process(__MODULE__, :object, model, opts_with_context) do
+        {:ok, processed_opts0} ->
+          with :ok <- validate_version_feature_compat(processed_opts0) do
+            processed_opts =
+              Keyword.put(processed_opts0, :base_url, effective_base_url(processed_opts0))
+
+            http_opts = Keyword.get(processed_opts, :req_http_options, [])
+
+            endpoint =
+              if processed_opts[:stream], do: ":streamGenerateContent", else: ":generateContent"
+
+            req_keys =
+              __MODULE__.supported_provider_options() ++
+                [
+                  :context,
+                  :operation,
+                  :compiled_schema,
+                  :text,
+                  :stream,
+                  :model,
+                  :provider_options,
+                  :tools,
+                  :tool_choice
+                ]
+
+            base_params = if processed_opts[:stream], do: [alt: "sse"], else: []
+
+            timeout =
+              Keyword.get(
+                processed_opts,
+                :receive_timeout,
+                Application.get_env(:req_llm, :receive_timeout, 30_000)
+              )
+
+            request =
+              Req.new(
+                [
+                  url: "/models/#{model.id}#{endpoint}",
+                  method: :post,
+                  params: base_params,
+                  receive_timeout: timeout
+                ] ++ http_opts
+              )
+              |> Req.Request.register_options(req_keys)
+              |> Req.Request.merge_options(
+                Keyword.take(processed_opts, req_keys) ++
+                  [
+                    model: model.id,
+                    base_url: processed_opts[:base_url]
+                  ]
+              )
+              |> attach(model, processed_opts)
+
+            {:ok, request}
+          end
+
+        {:error, reason} ->
+          {:error, reason}
+      end
+    end
+  end
+
   @impl ReqLLM.Provider
   def evaluation_protocols, do: ["google_decisions"]
 
@@ -714,7 +864,9 @@ defmodule ReqLLM.Providers.Google do
         :stream,
         :provider_options,
         :dimensions,
-        :encoding_format
+        :encoding_format,
+        :google_api_type,
+        :interactions_resume_id
       ] ++
         __MODULE__.supported_provider_options()
 
@@ -737,6 +889,8 @@ defmodule ReqLLM.Providers.Google do
   end
 
   @impl ReqLLM.Provider
+  def extract_usage(%ReqLLM.Response{usage: usage}, _model) when is_map(usage), do: {:ok, usage}
+
   def extract_usage(body, model) when is_map(body) do
     case body do
       %{"usageMetadata" => usage_metadata} ->
@@ -751,18 +905,29 @@ defmodule ReqLLM.Providers.Google do
 
         {:ok, usage}
 
-      _ ->
-        image_usage = google_image_usage(body)
-
-        if map_size(image_usage) > 0 do
-          {:ok, %{image_usage: image_usage}}
+      %{"usage" => _} ->
+        if InteractionsAPI.interactions_usage_body?(body) do
+          InteractionsAPI.extract_usage(body, model)
         else
-          {:error, :no_usage_found}
+          extract_fallback_image_usage(body)
         end
+
+      _ ->
+        extract_fallback_image_usage(body)
     end
   end
 
   def extract_usage(_, _), do: {:error, :invalid_body}
+
+  defp extract_fallback_image_usage(body) do
+    image_usage = google_image_usage(body)
+
+    if map_size(image_usage) > 0 do
+      {:ok, %{image_usage: image_usage}}
+    else
+      {:error, :no_usage_found}
+    end
+  end
 
   defp normalize_google_usage(usage_metadata) do
     google_usage_from_metadata(usage_metadata)
@@ -894,7 +1059,8 @@ defmodule ReqLLM.Providers.Google do
 
   def pre_validate_options(operation, model, opts) do
     validate_gemini_options!(operation, model, opts)
-    {provider_opts, rest} = Keyword.pop(opts, :provider_options, [])
+    {raw_provider_opts, rest} = Keyword.pop(opts, :provider_options, [])
+    provider_opts = normalize_provider_opts_to_keyword(raw_provider_opts)
 
     {effort, provider_opts} = Keyword.pop(provider_opts, :reasoning_effort)
 
@@ -903,20 +1069,29 @@ defmodule ReqLLM.Providers.Google do
       |> normalize_response_modalities()
       |> normalize_url_context()
 
+    use_thinking_level? = gemini_3_or_later?(model) or InteractionsAPI.interactions_mode?(opts)
+
+    has_budget? =
+      Keyword.get(rest, :reasoning_token_budget) != nil or
+        Keyword.get(rest, :google_thinking_budget) != nil or
+        Keyword.get(provider_opts, :google_thinking_budget) != nil or
+        Keyword.get(provider_opts, :reasoning_token_budget) != nil
+
+    has_level? =
+      Keyword.get(rest, :google_thinking_level) != nil or
+        Keyword.get(provider_opts, :google_thinking_level) != nil
+
     provider_opts =
-      case {effort, gemini_3_or_later?(model)} do
+      case {effort, use_thinking_level?} do
         {nil, _} ->
           provider_opts
 
-        {effort_value, true} ->
-          case Keyword.fetch(provider_opts, :google_thinking_level) do
-            {:ok, _existing} ->
-              provider_opts
+        {_effort_value, true} when has_budget? or has_level? ->
+          provider_opts
 
-            :error ->
-              level = translate_reasoning_effort_to_level(effort_value, model)
-              Keyword.put(provider_opts, :google_thinking_level, level)
-          end
+        {effort_value, true} ->
+          level = translate_reasoning_effort_to_level(effort_value, model)
+          Keyword.put(provider_opts, :google_thinking_level, level)
 
         {effort_value, false} ->
           budget = translate_reasoning_effort_to_budget(effort_value, model)
@@ -986,6 +1161,9 @@ defmodule ReqLLM.Providers.Google do
   end
 
   defp translate_reasoning_effort_to_level(effort, model) do
+    supported = supported_thinking_levels(model)
+    xhigh_target = if(:xhigh in supported, do: :xhigh, else: :high)
+
     effort
     |> ReqLLM.Provider.Reasoning.normalize_effort()
     |> case do
@@ -994,8 +1172,8 @@ defmodule ReqLLM.Providers.Google do
       :low -> :low
       :medium -> :medium
       :high -> :high
-      :xhigh -> :high
-      :max -> :high
+      :xhigh -> xhigh_target
+      :max -> xhigh_target
       _ -> :medium
     end
     |> closest_supported_thinking_level(model)
@@ -1064,24 +1242,30 @@ defmodule ReqLLM.Providers.Google do
     model_name = google_model_name(model_id)
 
     cond do
+      model_name_matches?(model_name, "gemini-4-hydrogen") -> [:low, :medium, :high, :xhigh]
+      model_name_matches?(model_name, "gemini-4-carbon") -> [:low, :medium, :high]
+      model_name_matches?(model_name, "gemini-4-argon") -> [:low, :medium, :high]
       model_name_matches?(model_name, "gemini-3.8-flash") -> [:low, :medium, :high]
       model_name_matches?(model_name, "gemini-3.7-flash") -> [:low, :medium, :high]
       model_name_matches?(model_name, "gemini-3.1-pro") -> [:low, :medium, :high]
+      model_name_matches?(model_name, "gemini-2.5-pro") -> [:low, :medium, :high]
       true -> nil
     end
   end
 
   defp known_thinking_levels(_model_id), do: nil
 
-  defp model_name_matches?(model_name, base_name),
-    do: model_name == base_name or String.starts_with?(model_name, base_name <> "-")
+  defp model_name_matches?(model_name, base_name) do
+    model_name == base_name or
+      String.starts_with?(model_name, base_name <> "-") or
+      String.starts_with?(model_name, base_name <> ":")
+  end
 
   defp google_model_name(model_id) do
     model_id
     |> String.split("/")
     |> List.last()
-    |> String.split(":", parts: 2)
-    |> List.last()
+    |> String.replace_prefix("google:", "")
   end
 
   defp get_nested(value, []), do: value
@@ -1123,13 +1307,20 @@ defmodule ReqLLM.Providers.Google do
     validate_gemini_options!(operation, model, opts)
     {reasoning_budget, opts} = Keyword.pop(opts, :reasoning_token_budget)
     {reasoning_effort, opts} = Keyword.pop(opts, :reasoning_effort)
+    use_thinking_level? = gemini_3_or_later?(model) or InteractionsAPI.interactions_mode?(opts)
 
     opts =
       cond do
         reasoning_budget ->
           Keyword.put(opts, :google_thinking_budget, reasoning_budget)
 
-        reasoning_effort && gemini_3_or_later?(model) ->
+        reasoning_effort && use_thinking_level? && Keyword.has_key?(opts, :google_thinking_budget) ->
+          opts
+
+        reasoning_effort && use_thinking_level? && Keyword.has_key?(opts, :google_thinking_level) ->
+          opts
+
+        reasoning_effort && use_thinking_level? ->
           level = translate_reasoning_effort_to_level(reasoning_effort, model)
           Keyword.put(opts, :google_thinking_level, level)
 
@@ -1153,29 +1344,35 @@ defmodule ReqLLM.Providers.Google do
   # Req pipeline steps
   @impl ReqLLM.Provider
   def encode_body(request) do
-    validate_gemini_options!(
-      request.options[:operation] || :chat,
-      request.options[:model],
-      Enum.to_list(request.options)
-    )
+    if interactions_request?(request) do
+      InteractionsAPI.encode_body(request)
+    else
+      opts_list = Enum.to_list(request.options)
 
-    body =
-      case request.options[:operation] do
-        :embedding ->
-          encode_embedding_body(request)
+      validate_gemini_options!(
+        request.options[:operation] || :chat,
+        request.options[:model],
+        opts_list
+      )
 
-        :image ->
-          encode_image_body(request)
+      body =
+        case request.options[:operation] do
+          :embedding ->
+            encode_embedding_body(request)
 
-        :object ->
-          encode_object_body(request)
+          :image ->
+            encode_image_body(request)
 
-        _ ->
-          encode_chat_body(request)
-      end
+          :object ->
+            encode_object_body(request)
 
-    request
-    |> put_in([Access.key!(:options), :json], body)
+          _ ->
+            encode_chat_body(request)
+        end
+
+      request
+      |> put_in([Access.key!(:options), :json], body)
+    end
   end
 
   defp encode_image_body(request) do
@@ -1523,12 +1720,54 @@ defmodule ReqLLM.Providers.Google do
   end
 
   defp reject_object_tools_before_gemini_3(%LLMDB.Model{} = model, opts) do
-    if Keyword.has_key?(opts, :tools) and Keyword.get(opts, :tools) != [] and
+    if has_object_tools?(opts) and
+         not InteractionsAPI.explicit_option?(opts, :agent) and
          not gemini_3_or_later?(model) do
       {:error,
        ReqLLM.Error.Invalid.Parameter.exception(
          parameter: pre_gemini_3_object_tools_message(model)
        )}
+    else
+      :ok
+    end
+  end
+
+  defp has_object_tools?(opts) do
+    explicit_tools? =
+      case Keyword.get(opts, :tools) do
+        tools when is_list(tools) and tools != [] -> true
+        _ -> false
+      end
+
+    builtin_tools? =
+      InteractionsAPI.interactions_mode?(opts) and
+        (has_grounding?(opts) or
+           Enum.any?(
+             [
+               :google_code_execution,
+               :google_url_context,
+               :google_file_search,
+               :google_mcp_servers,
+               :google_search_types
+             ],
+             fn key ->
+               val =
+                 Keyword.get(opts, key) ||
+                   Keyword.get(
+                     normalize_provider_opts_to_keyword(Keyword.get(opts, :provider_options, [])),
+                     key
+                   )
+
+               val not in [nil, false, [], %{}]
+             end
+           ))
+
+    explicit_tools? or builtin_tools?
+  end
+
+  defp reject_object_tools_if_object(model, opts) do
+    if Keyword.get(opts, :operation) == :object do
+      reject_object_tools_before_gemini_3(model, opts)
     else
       :ok
     end
@@ -1551,9 +1790,57 @@ defmodule ReqLLM.Providers.Google do
   end
 
   defp validate_gemini_options!(operation, model, opts) when operation in [:chat, :object] do
-    provider_opts = Keyword.get(opts, :provider_options, [])
+    provider_opts =
+      opts
+      |> Keyword.get(:provider_options, [])
+      |> normalize_provider_opts_to_keyword()
+
     all_opts = Keyword.merge(opts, provider_opts)
 
+    case InteractionsAPI.validate_options(all_opts) do
+      {:error, exception} -> raise exception
+      :ok -> :ok
+    end
+
+    agent = Keyword.get(all_opts, :agent)
+
+    if is_binary(agent) and agent != "" do
+      :ok
+    else
+      validate_model_gemini_options!(model, all_opts)
+    end
+  end
+
+  defp validate_gemini_options!(_operation, _model, _opts), do: :ok
+
+  defp normalize_provider_opts_to_keyword(opts) when is_list(opts), do: opts
+
+  defp normalize_provider_opts_to_keyword(opts) when is_map(opts) do
+    known_keys =
+      Map.new(
+        __MODULE__.supported_provider_options() ++
+          [:reasoning_effort, :reasoning_token_budget, :temperature, :top_p, :top_k],
+        &{Atom.to_string(&1), &1}
+      )
+
+    Enum.flat_map(opts, fn
+      {k, v} when is_atom(k) ->
+        [{k, v}]
+
+      {k, v} when is_binary(k) ->
+        case Map.fetch(known_keys, k) do
+          {:ok, atom_key} -> [{atom_key, v}]
+          :error -> []
+        end
+
+      _ ->
+        []
+    end)
+  end
+
+  defp normalize_provider_opts_to_keyword(_), do: []
+
+  defp validate_model_gemini_options!(model, all_opts) do
     unsupported =
       if gemini_3_or_later?(model), do: [:google_candidate_count], else: []
 
@@ -1572,7 +1859,24 @@ defmodule ReqLLM.Providers.Google do
       end
     end)
 
-    levels = known_thinking_levels(model) || []
+    interactions? = InteractionsAPI.interactions_mode?(all_opts)
+    supported = supported_thinking_levels(model)
+
+    levels =
+      cond do
+        supported != [] ->
+          supported
+
+        interactions? and legacy_gemini_version?(model) ->
+          [:minimal, :low, :medium, :high]
+
+        gemini_3_family?(model) ->
+          [:minimal, :low, :medium, :high]
+
+        true ->
+          []
+      end
+
     level = Keyword.get(all_opts, :google_thinking_level)
 
     if level != nil and levels != [] and
@@ -1583,7 +1887,69 @@ defmodule ReqLLM.Providers.Google do
     end
   end
 
-  defp validate_gemini_options!(_operation, _model, _opts), do: :ok
+  @doc false
+  def validate_interactions_gemini_options!(operation, model, opts) do
+    validate_gemini_options!(operation, model, opts)
+  end
+
+  @doc false
+  def supports_xhigh_thinking?(%LLMDB.Model{} = model) do
+    case supported_thinking_levels(model) do
+      [] -> not known_pre_gemini_4?(model)
+      levels -> :xhigh in levels
+    end
+  end
+
+  def supports_xhigh_thinking?(model_id) when is_binary(model_id) and model_id != "" do
+    case known_thinking_levels(model_id) do
+      nil -> not known_pre_gemini_4?(model_id)
+      levels -> :xhigh in levels
+    end
+  end
+
+  def supports_xhigh_thinking?(_), do: false
+
+  defp known_pre_gemini_4?(%LLMDB.Model{} = model) do
+    [model.provider_model_id, model.model, model.id, model.family]
+    |> Enum.any?(&known_pre_gemini_4?/1)
+  end
+
+  defp known_pre_gemini_4?(id) when is_binary(id) do
+    case Regex.run(~r/^gemini-(\d+)/, google_model_name(id)) do
+      [_, major] -> String.to_integer(major) < 4
+      _ -> false
+    end
+  end
+
+  defp known_pre_gemini_4?(_), do: false
+
+  defp legacy_gemini_version?(%LLMDB.Model{} = model) do
+    [model.provider_model_id, model.model, model.id, model.family]
+    |> Enum.any?(&legacy_gemini_version?/1)
+  end
+
+  defp legacy_gemini_version?(id) when is_binary(id) do
+    case Regex.run(~r/^gemini-(\d+)/, google_model_name(id)) do
+      [_, major] -> String.to_integer(major) < 3
+      _ -> false
+    end
+  end
+
+  defp legacy_gemini_version?(_), do: false
+
+  defp gemini_3_family?(%LLMDB.Model{} = model) do
+    [model.provider_model_id, model.model, model.id, model.family]
+    |> Enum.any?(&gemini_3_family?/1)
+  end
+
+  defp gemini_3_family?(id) when is_binary(id) do
+    case Regex.run(~r/^gemini-(\d+)/, google_model_name(id)) do
+      [_, major] -> String.to_integer(major) == 3
+      _ -> false
+    end
+  end
+
+  defp gemini_3_family?(_), do: false
 
   defp modern_gemini_parameters?(%LLMDB.Model{} = model) do
     [model.provider_model_id, model.model, model.id]
@@ -1736,6 +2102,30 @@ defmodule ReqLLM.Providers.Google do
 
   @impl ReqLLM.Provider
   def decode_response({req, resp}) do
+    if interactions_request?(req) do
+      InteractionsAPI.decode_response({req, resp})
+    else
+      decode_generate_content_response({req, resp})
+    end
+  end
+
+  defp interactions_request?(%Req.Request{} = req) do
+    case req.options[:google_api_type] do
+      :interactions ->
+        true
+
+      :generate_content ->
+        false
+
+      _ ->
+        opts_list = Enum.to_list(req.options)
+
+        req.options[:operation] in [:chat, :object, nil] and
+          InteractionsAPI.interactions_mode?(opts_list)
+    end
+  end
+
+  defp decode_generate_content_response({req, resp}) do
     case resp.status do
       200 ->
         operation = req.options[:operation]
@@ -2593,15 +2983,29 @@ defmodule ReqLLM.Providers.Google do
   end
 
   @impl ReqLLM.Provider
-  def attach_stream(model, context, opts, _finch_name) do
-    with :ok <- validate_no_prefill(model, context) do
-      do_attach_stream(model, context, opts)
+  def attach_stream(model, context, opts, finch_name) do
+    with {:ok, mode} <- InteractionsAPI.resolve_mode(opts),
+         :ok <- InteractionsAPI.validate_options(opts),
+         :ok <- reject_object_tools_if_object(model, opts) do
+      case mode do
+        :interactions ->
+          InteractionsAPI.attach_stream(model, context, opts, finch_name)
+
+        :generate_content ->
+          with :ok <- validate_no_prefill(model, context) do
+            do_attach_stream(model, context, opts)
+          end
+      end
     end
   rescue
+    error in [ReqLLM.Error.Invalid.Parameter] ->
+      {:error, error}
+
     error ->
       {:error,
        ReqLLM.Error.API.Request.exception(
-         reason: "Failed to build Google stream request: #{inspect(error)}"
+         reason:
+           "Failed to build Google stream request: #{InteractionsAPI.redact_api_key(inspect(error))}"
        )}
   end
 
@@ -2618,7 +3022,9 @@ defmodule ReqLLM.Providers.Google do
       :fixture,
       :retry,
       :max_retries,
-      :retry_log_level
+      :retry_log_level,
+      :google_api_type,
+      :interactions_resume_id
     ]
 
     {req_opts, user_opts} = Keyword.split(opts, req_only_keys)
@@ -2693,10 +3099,44 @@ defmodule ReqLLM.Providers.Google do
     if gemini_3_or_later?(model), do: []
   end
 
+  @doc false
+  def init_stream_state(model, opts) when is_list(opts) do
+    if InteractionsAPI.interactions_mode?(opts) do
+      InteractionsAPI.init_stream_state(model, opts)
+    else
+      init_stream_state(model)
+    end
+  end
+
   @impl ReqLLM.Provider
-  def decode_stream_event(event, model, nil), do: {decode_stream_event(event, model), nil}
+  def decode_stream_event(event, model, %{__api__: :interactions} = state) do
+    InteractionsAPI.decode_stream_event(event, model, state)
+  end
+
+  def decode_stream_event(%{event: "done"}, _model, state), do: {[], state}
+  def decode_stream_event(%{data: "[DONE]"}, _model, state), do: {[], state}
+
+  def decode_stream_event(event, model, nil) do
+    if InteractionsAPI.stream_event?(event) do
+      InteractionsAPI.decode_stream_event(event, model, InteractionsAPI.init_stream_state(model))
+    else
+      {decode_stream_event(event, model), nil}
+    end
+  end
+
+  def decode_stream_event(event, model, []) do
+    if InteractionsAPI.stream_event?(event) do
+      InteractionsAPI.decode_stream_event(event, model, InteractionsAPI.init_stream_state(model))
+    else
+      decode_generate_content_stream_event(event, model, [])
+    end
+  end
 
   def decode_stream_event(event, model, reversed_parts) do
+    decode_generate_content_stream_event(event, model, reversed_parts)
+  end
+
+  defp decode_generate_content_stream_event(event, model, reversed_parts) do
     data =
       case event do
         %{data: data} -> data
@@ -2709,6 +3149,10 @@ defmodule ReqLLM.Providers.Google do
   @impl ReqLLM.Provider
   def flush_stream_state(_model, nil), do: {[], nil}
 
+  def flush_stream_state(model, %{__api__: :interactions} = state) do
+    InteractionsAPI.flush_stream_state(model, state)
+  end
+
   def flush_stream_state(_model, reversed_parts) do
     case ToolHistory.replay_parts(reversed_parts) do
       nil -> {[], []}
@@ -2718,10 +3162,38 @@ defmodule ReqLLM.Providers.Google do
 
   @impl ReqLLM.Provider
   def decode_stream_event(event, model) do
-    case event do
-      %{data: data} when is_map(data) -> decode_google_event(data, model)
-      data when is_map(data) -> decode_google_event(data, model)
-      _ -> []
+    if InteractionsAPI.stream_event?(event) do
+      InteractionsAPI.decode_stateless_stream_event(event, model)
+    else
+      case event do
+        %{data: data} when is_map(data) -> decode_google_event(data, model)
+        data when is_map(data) -> decode_google_event(data, model)
+        _ -> []
+      end
+    end
+  end
+
+  defp reject_interactions_for_operation(operation, opts) do
+    check_opts =
+      if operation == :image and is_list(opts) and not is_boolean(Keyword.get(opts, :background)) do
+        Keyword.delete(opts, :background)
+      else
+        opts
+      end
+
+    case InteractionsAPI.resolve_mode(check_opts) do
+      {:ok, :interactions} ->
+        {:error,
+         ReqLLM.Error.Invalid.Parameter.exception(
+           parameter:
+             "google_api: :interactions and Interactions-only options are only supported for :chat and :object operations"
+         )}
+
+      {:ok, :generate_content} ->
+        :ok
+
+      {:error, _} = error ->
+        error
     end
   end
 
