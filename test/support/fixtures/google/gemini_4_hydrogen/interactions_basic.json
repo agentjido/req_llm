@@ -1,0 +1,120 @@
+{
+  "captured_at": "2026-11-21T02:20:13.073785Z",
+  "model_spec": "google:gemini-4-hydrogen",
+  "provider": "google",
+  "request": {
+    "body": {
+      "b64": "eyJnZW5lcmF0aW9uX2NvbmZpZyI6eyJtYXhfb3V0cHV0X3Rva2VucyI6MjU2fSwiaW5wdXQiOiJSZXBseSB3aXRoIHRoZSBzaW5nbGUgd29yZDogcG9uZy4iLCJtb2RlbCI6ImdlbWluaS00LWh5ZHJvZ2VuIn0="
+    },
+    "canonical_json": {
+      "generation_config": {
+        "max_output_tokens": 256
+      },
+      "input": "Reply with the single word: pong.",
+      "model": "gemini-4-hydrogen"
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "api-revision": [
+        "2026-05-20"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.7.5"
+      ],
+      "x-goog-api-key": "[REDACTED:x-goog-api-key]"
+    },
+    "method": "post",
+    "url": "https://generativelanguage.googleapis.com/v1/interactions"
+  },
+  "response": {
+    "body": {
+      "created": "2026-11-21T02:20:09Z",
+      "id": "v1_ChYxXzhBYV9rSzdlUFY3d18xdDlDNUNBEhYxXzhBYV9rSzdlUFY3d18xdDlDNUNB",
+      "model": "gemini-4-hydrogen",
+      "object": "interaction",
+      "service_tier": "standard",
+      "status": "completed",
+      "steps": [
+        {
+          "signature": "Ep4DCpsDAWkUfRNFE2tyPTaD9I2l+UpE4RQvF7QmxoW+HPDPGsV6HF8PPhYZANYKb3YBNNFFTIZcKnJ+arJJQRrWe9gtKT8Wu2CujzPfrQfW5duYq6J0U5rb6fufetaoWar7VSsn1qVdH1zVq4CC70wzp86ViY57Aq/eMqKNvSIuC2eH6fsSaZmKczAEpdVUuCmIBkVpqcqoiMmjDdH5yaDWPLZIOy5EVGjLkt9GShASVFJjRv1ubC71Q/LmM6wrIznte0QIzq70ByvzlbpwpDvcjHYXxZ0l1Q1p12042llLwhwvWLrqTjVbWLIENPRnnn3BqyIPl681m1YgueRDJV44gCa+/r+rUtV+E8/TPNe7mWtfho3Z/LUggfki3Rt7mBUdT9DeS5E71c/CVsFXKYHw362d4TFTK6EuoCm0IiCrrLgoBP31xTL9BR1L6dJzxPm9dGohXE+K1fsSxqsXXAPjguqNwzqVLbkxacxH4/CiP16rzT1pIKombV/cVKlJ/aAVhuohvaFaYPRsq82yitpFj7ltOwfdxm7WOmtgbsS3",
+          "type": "thought"
+        },
+        {
+          "content": [
+            {
+              "text": "pong",
+              "type": "text"
+            }
+          ],
+          "type": "model_output"
+        }
+      ],
+      "updated": "2026-11-21T02:20:09Z",
+      "usage": {
+        "initial_input_tokens": 39,
+        "input_tokens_by_modality": [
+          {
+            "modality": "text",
+            "tokens": 39
+          }
+        ],
+        "output_tokens_by_modality": [
+          {
+            "modality": "text",
+            "tokens": 5
+          }
+        ],
+        "total_cached_tokens": 0,
+        "total_input_tokens": 39,
+        "total_output_tokens": 5,
+        "total_thought_tokens": 67,
+        "total_tokens": 111,
+        "total_tool_use_tokens": 0
+      }
+    },
+    "headers": {
+      "accept-ranges": [
+        "none"
+      ],
+      "alt-svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Sat, 21 Nov 2026 02:20:13 GMT"
+      ],
+      "server": [
+        "scaffolding on HTTPServer2"
+      ],
+      "server-timing": [
+        "gfet4t7; dur=6134"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "X-Origin",
+        "Referer",
+        "Origin,Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-frame-options": [
+        "SAMEORIGIN"
+      ],
+      "x-xss-protection": [
+        "0"
+      ]
+    },
+    "status": 200
+  },
+  "streaming": false
+}
