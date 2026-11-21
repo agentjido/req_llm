@@ -133,16 +133,46 @@ defmodule Mix.Tasks.ReqLlm.ModelCompatTest do
   end
 
   describe "coverage_specs/3" do
-    test "keeps only active models with fixtures for broad replay" do
+    test "keeps non-retired models with fixtures for broad replay" do
       specs = [
         {:google, "gemini-2.0-flash"},
         {:google, "gemini-2.5-flash"},
         {:google, "gemini-3.8-flash"}
       ]
 
-      assert ModelCompat.coverage_specs(specs, "google:*", []) == [
+      assert ModelCompat.coverage_specs(specs, "google:*", [], ~U[2026-10-15 00:00:00Z]) == [
                {:google, "gemini-2.5-flash"}
              ]
+    end
+
+    test "broad replay excludes models starting on their retirement date" do
+      specs = [{:minimax, "MiniMax-M2.5"}, {:minimax, "MiniMax-M2.5-highspeed"}]
+      opts = [scenario: "basic"]
+
+      assert ModelCompat.coverage_specs(
+               specs,
+               "minimax:MiniMax-M2.5*",
+               opts,
+               ~U[2026-11-17 23:59:59Z]
+             ) ==
+               specs
+
+      assert ModelCompat.coverage_specs(
+               specs,
+               "minimax:MiniMax-M2.5*",
+               opts,
+               ~U[2026-11-18 00:00:00Z]
+             ) ==
+               []
+    end
+
+    test "exact replay and both recording modes still select models past their retirement date" do
+      specs = [{:minimax, "MiniMax-M2.5"}]
+      now = ~U[2026-11-18 00:00:00Z]
+
+      assert ModelCompat.coverage_specs(specs, "minimax:MiniMax-M2.5", [], now) == specs
+      assert ModelCompat.coverage_specs(specs, "minimax:*", [record: true], now) == specs
+      assert ModelCompat.coverage_specs(specs, "minimax:*", [record_all: true], now) == specs
     end
 
     test "keeps exact selections so missing fixtures fail clearly" do
@@ -177,7 +207,9 @@ defmodule Mix.Tasks.ReqLlm.ModelCompatTest do
         {:google, "gemini-3.8-flash"}
       ]
 
-      assert ModelCompat.coverage_specs(specs, "google:*", update_state: true) == [
+      now = ~U[2026-10-15 00:00:00Z]
+
+      assert ModelCompat.coverage_specs(specs, "google:*", [update_state: true], now) == [
                {:google, "gemini-2.5-flash"}
              ]
     end
