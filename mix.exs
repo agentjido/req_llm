@@ -260,7 +260,7 @@ defmodule ReqLLM.MixProject do
 
       # Dev/test dependencies
       {:opentelemetry_api, "~> 1.5", only: :test},
-      {:bandit, "~> 1.14.1", only: [:dev, :test], runtime: false},
+      {:bandit, "~> 1.15.0", only: [:dev, :test], runtime: false},
       {:tidewave, "~> 0.9", only: :dev, runtime: false},
       {:ex_doc, "~> 0.40.4", only: :dev, runtime: false},
       {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false},
