@@ -10,4 +10,8 @@ updates:
       - "elixir"
     commit-message:
       prefix: "deps"
-      include: "scope" 
+      include: "scope"
+  - package-ecosystem: "mix"
+    directory: "/examples"
+    schedule:
+      interval: "weekly"
