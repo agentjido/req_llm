@@ -364,7 +364,7 @@ defmodule ReqLLM.Providers.GoogleVertex do
       # Reasoning models with extended thinking need longer timeouts
       http_opts = Keyword.get(other_opts, :req_http_options, [])
 
-      timeout =
+      default_timeout =
         if ModelHelpers.reasoning_enabled?(model) do
           180_000
         else
@@ -378,7 +378,7 @@ defmodule ReqLLM.Providers.GoogleVertex do
             url: url,
             method: :post,
             json: body,
-            receive_timeout: timeout,
+            receive_timeout: Keyword.get(other_opts, :receive_timeout, default_timeout),
             headers: [
               {"content-type", "application/json"}
             ]
