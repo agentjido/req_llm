@@ -91,6 +91,77 @@ defmodule ReqLLM.Providers.Google.HistoryCompatibilityTest do
       user_entries = Enum.filter(contents, &(&1["role"] == "user"))
       assert length(user_entries) == 2
     end
+
+    test "encode_body merges multiple tool results followed by multiple user messages into two separate user entries" do
+      {:ok, model} = ReqLLM.model("google:gemini-1.5-flash")
+
+      context =
+        Context.new([
+          Context.user("What's the weather in SF and NYC?"),
+          Context.assistant("",
+            tool_calls: [
+              %ReqLLM.ToolCall{
+                id: "call_1",
+                type: "function",
+                function: %{name: "get_weather", arguments: ~s({"location":"SF"})}
+              },
+              %ReqLLM.ToolCall{
+                id: "call_2",
+                type: "function",
+                function: %{name: "get_weather", arguments: ~s({"location":"NYC"})}
+              }
+            ]
+          ),
+          Context.tool_result("call_1", "get_weather", "72F sunny"),
+          Context.tool_result("call_2", "get_weather", "58F cloudy"),
+          Context.user("What happened?"),
+          Context.user("Did the tool calls succeed?")
+        ])
+
+      mock_request = %Req.Request{
+        options: [
+          context: context,
+          model: model.model,
+          stream: false,
+          operation: :chat
+        ]
+      }
+
+      updated_request = Google.encode_body(mock_request)
+      decoded = ReqLLM.Test.Helpers.json_body(updated_request)
+      contents = decoded["contents"]
+
+      tool_result_entries =
+        Enum.filter(contents, fn entry ->
+          Enum.any?(entry["parts"], &Map.has_key?(&1, "functionResponse"))
+        end)
+
+      assert length(tool_result_entries) == 1,
+             "Expected tool results merged into 1 entry, got #{length(tool_result_entries)}"
+
+      [merged_tool_results] = tool_result_entries
+      fn_parts = Enum.filter(merged_tool_results["parts"], &Map.has_key?(&1, "functionResponse"))
+      assert length(fn_parts) == 2
+
+      names = Enum.map(fn_parts, & &1["functionResponse"]["name"])
+      assert "get_weather" in names
+
+      non_tool_result_user_entries =
+        Enum.filter(contents, fn entry ->
+          entry["role"] == "user" and
+            not Enum.any?(entry["parts"], &Map.has_key?(&1, "functionResponse"))
+        end)
+
+      assert length(non_tool_result_user_entries) == 2,
+             "Expected 2 non-tool result user messages (initial message and merged follow-up messages), got #{length(non_tool_result_user_entries)}"
+
+      [initial_user, merged_follow_up_user] = non_tool_result_user_entries
+
+      ["What's the weather in SF and NYC?"] = Enum.map(initial_user["parts"], & &1["text"])
+
+      ["What happened?", "Did the tool calls succeed?"] =
+        Enum.map(merged_follow_up_user["parts"], & &1["text"])
+    end
   end
 
   describe "tool-only assistant history" do

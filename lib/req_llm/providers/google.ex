@@ -3597,11 +3597,16 @@ defmodule ReqLLM.Providers.Google do
   # into a single entry. This is critical for parallel tool calls: N separate
   # tool result messages (all mapped to role "user") must become one entry
   # with N functionResponse parts.
+  #
+  # However, even though functionResponse parts are mapped to role "user",
+  # a text user message immediately following a message with functionResponse
+  # parts should not be merged together. functionResponse user messages should
+  # contain only functionResponse parts.
   defp merge_consecutive_roles([]), do: []
 
   defp merge_consecutive_roles(entries) do
     entries
-    |> Enum.chunk_by(& &1.role)
+    |> Enum.chunk_by(&{&1.role, has_function_response_parts?(&1)})
     |> Enum.map(&merge_role_group/1)
   end
 
@@ -3609,6 +3614,10 @@ defmodule ReqLLM.Providers.Google do
 
   defp merge_role_group([first | _rest] = entries) do
     %{first | parts: Enum.flat_map(entries, & &1.parts)}
+  end
+
+  defp has_function_response_parts?(entry) do
+    Enum.any?(entry.parts, &match?(%{functionResponse: _}, &1))
   end
 
   defp encode_reasoning_details_for_gemini(message) do
