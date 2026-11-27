@@ -75,6 +75,23 @@ defmodule ReqLLM.Providers.MinimaxTest do
     end
   end
 
+  test "exposes chat application failures returned inside HTTP 200" do
+    body = %{
+      "choices" => nil,
+      "base_resp" => %{"status_code" => 1004, "status_msg" => "authentication failed"}
+    }
+
+    for encoded <- [body, Jason.encode!(body)] do
+      assert {_,
+              %ReqLLM.Error.API.Request{
+                status: 200,
+                provider_code: "1004",
+                reason: "authentication failed"
+              }} =
+               Minimax.decode_response({Req.new(), %Req.Response{status: 200, body: encoded}})
+    end
+  end
+
   describe "model fallback" do
     test "resolves native MiniMax model strings even before LLMDB catalog support" do
       assert {:ok, model} = ReqLLM.model("minimax:MiniMax-M2.7")

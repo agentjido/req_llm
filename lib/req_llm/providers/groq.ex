@@ -195,7 +195,7 @@ defmodule ReqLLM.Providers.Groq do
   """
   @impl ReqLLM.Provider
   def decode_stream_event(event, model, provider_state) do
-    chunks = ReqLLM.Provider.Defaults.default_decode_stream_event(event, model)
+    chunks = decode_stream_event(event, model)
 
     Enum.reduce(chunks, {[], provider_state}, fn chunk, {acc, state} ->
       case chunk.type do
@@ -208,6 +208,16 @@ defmodule ReqLLM.Providers.Groq do
       end
     end)
   end
+
+  @impl ReqLLM.Provider
+  def decode_stream_event(%{data: %{"x_groq" => %{"usage" => usage}} = data} = event, model)
+      when is_map(usage) do
+    data = if is_map(data["usage"]), do: data, else: Map.put(data, "usage", usage)
+    ReqLLM.Provider.Defaults.default_decode_stream_event(%{event | data: data}, model)
+  end
+
+  def decode_stream_event(event, model),
+    do: ReqLLM.Provider.Defaults.default_decode_stream_event(event, model)
 
   @doc """
   Flush any remaining buffered content when stream ends.

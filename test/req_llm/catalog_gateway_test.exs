@@ -47,6 +47,66 @@ defmodule ReqLLM.CatalogGatewayTest do
     assert response.model == "wire-model"
   end
 
+  test "named tool choice uses the OpenAI function shape on buffered and streamed requests" do
+    model = model(:perplexity, @chat_contract)
+
+    tool =
+      ReqLLM.tool(
+        name: "lookup",
+        description: "Look up a name",
+        parameter_schema: [],
+        callback: fn _ -> :ok end
+      )
+
+    options = [
+      api_key: "request-key",
+      tools: [tool],
+      tool_choice: %{type: "tool", name: "lookup"}
+    ]
+
+    expected = %{"type" => "function", "function" => %{"name" => "lookup"}}
+
+    plug = fn conn ->
+      assert conn.body_params["tool_choice"] == expected
+
+      Req.Test.json(conn, %{
+        "choices" => [%{"message" => %{"role" => "assistant", "content" => "ok"}}]
+      })
+    end
+
+    assert {:ok, _} =
+             ReqLLM.generate_text(
+               model,
+               "Hi",
+               Keyword.put(options, :req_http_options, plug: plug)
+             )
+
+    {:ok, context} = ReqLLM.Context.normalize("Hi", [])
+    assert {:ok, stream} = CatalogGateway.attach_stream(model, context, options, nil)
+    assert Jason.decode!(IO.iodata_to_binary(stream.body))["tool_choice"] == expected
+  end
+
+  test "buffered API errors preserve the retry deadline" do
+    model = model(:perplexity, @chat_contract)
+
+    plug = fn conn ->
+      conn
+      |> Plug.Conn.put_resp_header("retry-after", "11")
+      |> Plug.Conn.put_resp_header("x-private", "private")
+      |> Plug.Conn.send_resp(429, "busy")
+    end
+
+    assert {:error, error} =
+             ReqLLM.generate_text(model, "Hi",
+               api_key: "request-key",
+               max_retries: 0,
+               req_http_options: [plug: plug]
+             )
+
+    assert error.status == 429
+    assert error.headers == %{"retry-after" => ["11"]}
+  end
+
   test "object requests need their own execution contract and use its endpoint" do
     model = model(:perplexity, @chat_contract)
 

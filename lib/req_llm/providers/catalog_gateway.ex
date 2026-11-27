@@ -343,7 +343,11 @@ defmodule ReqLLM.Providers.CatalogGateway do
     ReqLLM.Providers.CohereRerank.build_body(request)
   end
 
-  def build_body(request), do: Defaults.default_build_body(request)
+  def build_body(request) do
+    request
+    |> Defaults.default_build_body()
+    |> ReqLLM.Providers.OpenAI.AdapterHelpers.translate_tool_choice_format()
+  end
 
   @impl ReqLLM.Provider
   def decode_response(
