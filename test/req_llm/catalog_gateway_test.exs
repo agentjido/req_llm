@@ -48,7 +48,7 @@ defmodule ReqLLM.CatalogGatewayTest do
   end
 
   test "named tool choice uses the OpenAI function shape on buffered and streamed requests" do
-    model = model(:perplexity, @chat_contract)
+    model = model(:perplexity, Map.put(@chat_contract, :transport, "http_request"))
 
     tool =
       ReqLLM.tool(
@@ -270,6 +270,10 @@ defmodule ReqLLM.CatalogGatewayTest do
 
     assert {:error, error} = ReqLLM.ProviderDispatch.get(model, :chat)
     assert Exception.message(error) =~ "openai_chat_compatible"
+
+    non_http = model(:perplexity, Map.put(@chat_contract, :transport, "websocket"))
+    assert {:error, error} = ReqLLM.ProviderDispatch.get(non_http, :chat)
+    assert Exception.message(error) =~ "transport"
 
     missing_runtime = %{model(:orcarouter, @chat_contract) | provider: :missing_catalog_runtime}
     assert {:error, error} = ReqLLM.ProviderDispatch.get(missing_runtime, :chat)

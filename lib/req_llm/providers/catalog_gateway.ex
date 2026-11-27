@@ -196,15 +196,7 @@ defmodule ReqLLM.Providers.CatalogGateway do
            execution
        )
        when operation in [:chat, :object] do
-    if Map.get(execution, :transport) in [nil, "http", "https"] do
-      :ok
-    else
-      ProviderDispatch.unsupported(
-        model,
-        operation,
-        "transport #{inspect(Map.get(execution, :transport))} is not supported"
-      )
-    end
+    require_http_transport(model, operation, execution)
   end
 
   defp require_execution(
@@ -216,15 +208,7 @@ defmodule ReqLLM.Providers.CatalogGateway do
            wire_protocol: "cohere_rerank"
          } = execution
        ) do
-    if Map.get(execution, :transport) in [nil, "http", "https"] do
-      :ok
-    else
-      ProviderDispatch.unsupported(
-        model,
-        :rerank,
-        "transport #{inspect(Map.get(execution, :transport))} is not supported"
-      )
-    end
+    require_http_transport(model, :rerank, execution)
   end
 
   defp require_execution(model, operation, _execution) do
@@ -242,6 +226,20 @@ defmodule ReqLLM.Providers.CatalogGateway do
       operation,
       "the model needs a supported #{requirement}"
     )
+  end
+
+  defp require_http_transport(model, operation, execution) do
+    case Map.get(execution, :transport) do
+      transport when transport in [nil, "http", "https", "http_request"] ->
+        :ok
+
+      transport ->
+        ProviderDispatch.unsupported(
+          model,
+          operation,
+          "transport #{inspect(transport)} is not supported"
+        )
+    end
   end
 
   defp require_streaming(model, operation, opts) do
