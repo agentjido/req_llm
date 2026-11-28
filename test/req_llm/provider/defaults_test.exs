@@ -794,6 +794,32 @@ defmodule ReqLLM.Provider.DefaultsTest do
       assert response.usage.cache_creation_tokens == 800
     end
 
+    test "preserves DeepSeek cache hits and prefers explicit Chat cache counters", %{model: model} do
+      usage = %{
+        "prompt_tokens" => 100,
+        "completion_tokens" => 12,
+        "prompt_cache_hit_tokens" => 60
+      }
+
+      for {reported, expected} <- [
+            {usage, 60},
+            {Map.put(usage, "prompt_tokens_details", %{"cached_tokens" => 0}), 0}
+          ] do
+        {:ok, response} =
+          Defaults.decode_response_body_openai_format(%{"usage" => reported}, model)
+
+        [chunk] =
+          Defaults.default_decode_stream_event(
+            %{data: %{"choices" => [], "usage" => reported}},
+            model
+          )
+
+        assert response.usage.cached_tokens == expected
+        assert chunk.metadata.usage.cached_tokens == expected
+        assert chunk.metadata.usage.input_tokens == 100
+      end
+    end
+
     test "keeps partial token usage in buffered and streamed responses", %{model: model} do
       for {usage, input, output, reported} <- [
             {%{"prompt_tokens" => 7}, 7, 0, %{input: true, output: false}},

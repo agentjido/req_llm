@@ -105,7 +105,8 @@ defmodule ReqLLM.Step.Error do
       status: exception.status,
       response_body: exception.response_body,
       request_body: request.body,
-      cause: exception
+      cause: exception,
+      headers: exception.headers
     )
   end
 

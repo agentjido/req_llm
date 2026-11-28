@@ -1765,8 +1765,10 @@ defmodule ReqLLM.Provider.Defaults do
       end
 
     cached_tokens =
-      openai_usage_detail(usage, "prompt_tokens_details", "cached_tokens")
-      |> openai_usage_default(0)
+      case openai_usage_detail(usage, "prompt_tokens_details", "cached_tokens") do
+        nil -> openai_usage_counter(usage, "prompt_cache_hit_tokens")
+        count -> count
+      end
 
     cache_creation_tokens =
       openai_usage_detail(usage, "prompt_tokens_details", "cache_write_tokens")
@@ -2045,6 +2047,7 @@ defmodule ReqLLM.Provider.Defaults do
       ReqLLM.Error.API.Response.exception(
         reason: "#{provider_name} API error",
         status: status,
+        headers: Map.take(resp.headers, ["retry-after"]),
         response_body: resp.body
       )
 

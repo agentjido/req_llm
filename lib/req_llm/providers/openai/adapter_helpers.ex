@@ -16,33 +16,20 @@ defmodule ReqLLM.Providers.OpenAI.AdapterHelpers do
   """
   @spec translate_tool_choice_format(map()) :: map()
   def translate_tool_choice_format(body) do
-    {tool_choice, body_key} =
-      cond do
-        Map.has_key?(body, :tool_choice) -> {Map.get(body, :tool_choice), :tool_choice}
-        Map.has_key?(body, "tool_choice") -> {Map.get(body, "tool_choice"), "tool_choice"}
-        true -> {nil, nil}
-      end
-
-    {type, name} =
-      if is_map(tool_choice) do
-        {tool_choice[:type], tool_choice[:name]}
-      else
-        {nil, nil}
-      end
-
-    if type == "tool" && name do
-      replacement =
-        if is_map_key(tool_choice, :type) do
-          %{type: "function", function: %{name: name}}
-        else
-          %{"type" => "function", "function" => %{"name" => name}}
-        end
-
-      Map.put(body, body_key, replacement)
-    else
-      body
+    case body do
+      %{tool_choice: choice} -> %{body | tool_choice: named_function_choice(choice)}
+      %{"tool_choice" => choice} -> %{body | "tool_choice" => named_function_choice(choice)}
+      _ -> body
     end
   end
+
+  defp named_function_choice(%{type: "tool", name: name}) when is_binary(name),
+    do: %{type: "function", function: %{name: name}}
+
+  defp named_function_choice(%{"type" => "tool", "name" => name}) when is_binary(name),
+    do: %{"type" => "function", "function" => %{"name" => name}}
+
+  defp named_function_choice(choice), do: choice
 
   @doc """
   Adds strict mode settings to tools that have `strict: true` on their function.

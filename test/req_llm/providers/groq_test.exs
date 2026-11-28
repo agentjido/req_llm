@@ -54,6 +54,19 @@ defmodule ReqLLM.Providers.GroqTest do
     }
   end
 
+  test "uses x_groq usage when the finish chunk omits top-level usage" do
+    model = groq_gpt_oss_model()
+    nested = %{"prompt_tokens" => 25, "completion_tokens" => 2}
+    event = %{data: %{"choices" => [], "x_groq" => %{"usage" => nested}, "usage" => nil}}
+    {[usage], _} = Groq.decode_stream_event(event, model, Groq.init_stream_state(model))
+    assert %{input_tokens: 25, output_tokens: 2} = usage.metadata.usage
+
+    [canonical] =
+      Groq.decode_stream_event(put_in(event, [:data, "usage"], %{"prompt_tokens" => 0}), model)
+
+    assert canonical.metadata.usage.input_tokens == 0
+  end
+
   describe "request preparation & pipeline wiring" do
     test "error handling for invalid configurations" do
       {:ok, model} = ReqLLM.model("groq:llama-3.1-8b-instant")

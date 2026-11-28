@@ -431,21 +431,30 @@ defmodule ReqLLM.Providers.Minimax do
     end
   end
 
-  defp decode_chat_response({req, resp} = args) do
-    case resp.status do
-      200 ->
-        body = ensure_parsed_body(resp.body)
+  defp decode_chat_response({req, %Req.Response{status: 200} = resp}) do
+    case ensure_parsed_body(resp.body) do
+      %{"base_resp" => %{"status_code" => code} = failure} = body
+      when is_integer(code) and code != 0 ->
+        {req,
+         ReqLLM.Error.API.Request.exception(
+           reason: failure["status_msg"] || "MiniMax chat error",
+           status: resp.status,
+           provider_code: to_string(code),
+           response_body: body,
+           headers: Map.take(resp.headers, ["retry-after"])
+         )}
+
+      body ->
         reasoning_details = extract_reasoning_details(body)
 
         {req, decoded_resp} =
           ReqLLM.Provider.Defaults.default_decode_response({req, %{resp | body: body}})
 
         {req, attach_reasoning_details_to_response(decoded_resp, reasoning_details)}
-
-      _ ->
-        ReqLLM.Provider.Defaults.default_decode_response(args)
     end
   end
+
+  defp decode_chat_response(args), do: ReqLLM.Provider.Defaults.default_decode_response(args)
 
   @impl ReqLLM.Provider
   def decode_stream_event(event, model) do

@@ -83,7 +83,7 @@ defmodule ReqLLM.Error do
   defmodule API.Response do
     @moduledoc "Error for provider response parsing failures and unexpected response formats."
     use Splode.Error,
-      fields: [:reason, :response_body, :status],
+      fields: [:reason, :response_body, :status, :headers],
       class: :api
 
     @spec message(map()) :: String.t()
